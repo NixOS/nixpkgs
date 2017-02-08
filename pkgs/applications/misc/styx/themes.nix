@@ -7,7 +7,7 @@ let
 
     src = fetchFromGitHub ({
       owner = "styx-static";
-      repo = "styx-theme-${args.themeName}";
+      repo  = "styx-theme-${args.themeName}";
     } // args.src);
 
     installPhase = ''
@@ -28,10 +28,10 @@ in
 {
   agency = mkThemeDrv {
     themeName = "agency";
-    version   = "2016-12-03";
+    version   = "2017-01-17";
     src = {
-      rev    = "3604239cc5d940eee9c14ad2540d68a53cfebd7e";
-      sha256 = "1kk8d5a3lb7fx1avivjd49gv0ffq7ppiswmwqlcsq87h2dbrqf61";
+      rev    = "3201f65841c9e7f97cc0ab0264cafb01b1620ed7";
+      sha256 = "1b3547lzmhs1lmr9gln1yvh5xrsg92m8ngrjwf0ny91y81x04da6";
     };
     meta = {
       license = stdenv.lib.licenses.asl20;
@@ -44,28 +44,40 @@ in
     };
   };
 
+  generic-templates = mkThemeDrv {
+    themeName = "generic-templates";
+    version   = "2017-01-18";
+    src = {
+      rev    = "af7cd527584322d8731a306a137a1794b18ad71a";
+      sha256 = "18zk4qihi8iw5dxkm9sf6cjai1mf22l6q1ykkrgaxjd5709is0li";
+    };
+    meta = {
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   hyde = mkThemeDrv {
     themeName = "hyde";
-    version   = "2016-12-03";
+    version   = "2017-01-17";
     src = {
-      rev    = "b6b9b77839959fbf3c9ca3a4488617fa1831cd28";
-      sha256 = "0d1k03mjn08s3rpc5rdivb8ahr345kblhqyihxnfgd1501ih9pg6";
+      rev    = "22caf4edc738f399bb1013d8e968d111c7fa2a59";
+      sha256 = "1a2j3m941vc2pyb1dz341ww5l3xblg527szfrfqh588lmsrkdqb6";
     };
     meta = {
       license = stdenv.lib.licenses.mit;
       longDescription = ''
-        Hyde is a brazen two-column Jekyll theme that pairs a prominent sidebar
-        with uncomplicated content.
+        Port of the Jekyll Hyde theme to styx; Hyde is a brazen two-column
+        Styx theme that pairs a prominent sidebar with uncomplicated content.
       '';
     };
   };
 
   orbit = mkThemeDrv {
     themeName = "orbit";
-    version   = "2016-12-03";
+    version   = "2017-01-17";
     src = {
-      rev    = "1d41745c689c4336d4e2bfbb2483b80e67ec96e4";
-      sha256 = "19pp9dykqxmrixn3cvqpdpcqy547y9n5izqhz0c4a11mmm0v3v64";
+      rev    = "b5896e25561f05e026b34d04ad95a647ddfc3d03";
+      sha256 = "11p11f2d0swgjil5hfx153yw13p7pcp6fwx1bnvxrlfmmx9x2yj5";
     };
     meta = {
       license = stdenv.lib.licenses.cc-by-30;
@@ -77,10 +89,10 @@ in
 
   showcase = mkThemeDrv {
     themeName = "showcase";
-    version   = "2016-12-04";
+    version   = "2017-01-17";
     src = {
-      rev    = "33feb0a09183e88d3580e9444ea36a255dffef60";
-      sha256 = "01ighlnrja442ip5fhllydl77bfdz8yig80spmizivdfxdrdiyyf";
+      rev    = "1b4b9d4af29c05aaadfd58233f0e3f61fac726af";
+      sha256 = "0mwd1ycwvlv15y431336wwlv8mdv0ikz1aymh3yxhjyxqllc2snk";
     };
     meta = {
       license = stdenv.lib.licenses.mit;

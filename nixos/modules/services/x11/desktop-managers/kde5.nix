@@ -229,6 +229,8 @@ in
       # Enable helpful DBus services.
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
+      services.dbus.packages =
+        mkIf config.services.printing.enable [ pkgs.system-config-printer ];
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [
@@ -246,6 +248,11 @@ in
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
+
+      # use kimpanel as the default IBus panel
+      i18n.inputMethod.ibus.panel =
+        lib.mkDefault
+        "${pkgs.kde5.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
 
     })
   ];

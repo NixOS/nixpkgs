@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
   postInstall = optionalString (!stdenv.isDarwin) ''
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
+    # The updater is needed for nixos env and it's tiny.
+    moveToOutput bin/gtk-update-icon-cache "$out"
   '';
 
   meta = with stdenv.lib; {

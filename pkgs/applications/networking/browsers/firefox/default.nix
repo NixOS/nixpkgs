@@ -151,8 +151,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "50.1.0";
-    sha512 = "370d2e9b8c4b1b59c3394659c3a7f0f79e6a911ccd9f32095b50b3a22d087132b1f7cb87b734f7497c4381b1df6df80d120b4b87c13eecc425cc66f56acccba5";
+    version = "51.0.1";
+    sha512 = "556e31b717c0640ef5e181e00b9d2a6ea0ace7c16ae04333d0f2e9e120d0ab9efe82a4ca314ef43594c080523edf37953e65dbf694c7428be0a024f3719d8312";
     updateScript = import ./update.nix {
         name = "firefox";
         inherit writeScript xidel coreutils gnused gnugrep curl ed;
@@ -161,8 +161,8 @@ in {
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.6.0esr";
-    sha512 = "b96c71aeed8a1185a085512f33d454a1735237cd9ddf37c8caa9cc91892eafab0615fc0ca6035f282ca8101489fa84c0de1087d1963c05b64df32b0c86446610";
+    version = "45.7.0esr";
+    sha512 = "6424101b6958191ce654d0619950dfbf98d4aa6bdd979306a2df8d6d30d3fecf1ab44638061a2b4fb1af85fe972f5ff49400e8eeda30cdcb9087c4b110b97a7d";
     updateScript = import ./update.nix {
         name = "firefox-esr";
         versionSuffix = "esr";

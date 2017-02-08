@@ -10,11 +10,11 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2016.11";
+    version = "2017.01";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1j6dkd9fqiibsdv0smq6q4x5zgyd4i1n4lk7prm47h6wcmjkx0a5";
+      sha256 = "1wpc51jm3zyibgcr78jng2yksqvrya76bxgsr4pcyjrsz5sm2hkc";
     };
 
     nativeBuildInputs = [ bc dtc ];
@@ -100,9 +100,15 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRaspberryPi3 = buildUBoot rec {
+  ubootRaspberryPi3_32bit = buildUBoot rec {
     defconfig = "rpi_3_32b_defconfig";
     targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3_64bit = buildUBoot rec {
+    defconfig = "rpi_3_defconfig";
+    targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 

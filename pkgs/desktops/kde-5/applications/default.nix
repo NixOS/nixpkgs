@@ -56,6 +56,7 @@ let
     khelpcenter = callPackage ./khelpcenter.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
     kmime = callPackage ./kmime.nix {};
+    kmix = callPackage ./kmix.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
     kwalletmanager = callPackage ./kwalletmanager.nix {};
@@ -64,6 +65,7 @@ let
     libkipi = callPackage ./libkipi.nix {};
     libkomparediff2 = callPackage ./libkomparediff2.nix {};
     marble = callPackage ./marble.nix {};
+    okteta = callPackage ./okteta.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
     spectacle = callPackage ./spectacle.nix {};

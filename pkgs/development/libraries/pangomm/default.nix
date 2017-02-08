@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm }:
+{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm
+, ApplicationServices }:
 
 let
   ver_maj = "2.40";
@@ -14,7 +15,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin [
+    ApplicationServices
+  ];
   propagatedBuildInputs = [ pango glibmm cairomm ];
 
   doCheck = true;

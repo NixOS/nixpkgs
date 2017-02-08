@@ -1,12 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "fping-3.13";
+  name = "fping-3.15";
 
   src = fetchurl {
     url = "http://www.fping.org/dist/${name}.tar.gz";
-    sha256 = "082pis2c2ad6kkj35zmsf6xb2lm8v8hdrnjiwl529ldk3kyqxcjb";
+    sha256 = "072jhm9wpz1bvwnwgvz24ijw0xwwnn3z3zan4mgr5s5y6ml8z54n";
   };
+
+  configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];
 
   meta = {
     homepage = "http://fping.org/";

@@ -14,7 +14,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.6.0"; in
+let version = "45.7.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "1f4579ac37b8ab98c91fe2e3e6742ba1b005ca9346d23f467d19e6af45eb457cab749bf91ed2a79f2058bd66f54da661da3ea5d5786f8c4b472d8a2a6c34db4b";
+    sha512 = "99cea54b553158c1e08cf19157ac2bb6822fd1fef0501d36f983e6b8d4f2143a2e6124d61297446944033d3fed9326fe0f12ca45db0b5815be71a0777e73ffb0";
   };
+
+  patches = [ ./gcc6.patch ];
 
   # New sed no longer tolerates this mistake.
   postPatch = ''

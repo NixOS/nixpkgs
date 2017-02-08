@@ -2,30 +2,25 @@
 
 stdenv.mkDerivation rec {
   name = "apktool-${version}";
-  version = "1.5.2";
+  version = "2.2.2";
 
   src = fetchurl {
-    url = "https://android-apktool.googlecode.com/files/apktool${version}.tar.bz2";
-    sha1 = "2dd828cf79467730c7406aa918f1da1bd21aaec8";
+    url = "https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_${version}.jar";
+    sha256 = "1a94jw0ml08xdwls1q9v5p1zak5qrbw2zyychnm5vch8znyws411";
   };
 
-  unpackCmd = ''
-    tar -xvf $src || true
-    cd apktool*
-  '';
+  phases = [ "installPhase" ];
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   sourceRoot = ".";
 
   installPhase = ''
-    install -D apktool.jar "$out/libexec/apktool/apktool.jar"
+    install -D ${src} "$out/libexec/apktool/apktool.jar"
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
-        --prefix PATH : "${buildTools}/build-tools/android-4.3/"
+        --prefix PATH : "${buildTools}/build-tools/25.0.1/"
   '';
 
   meta = with stdenv.lib; {
@@ -33,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage    = https://code.google.com/p/android-apktool/;
     license     = licenses.asl20;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; unix;
+    platforms   = with platforms; unix;
   };
 
 }

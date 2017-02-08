@@ -3,11 +3,9 @@
 bundlerEnv rec {
   name = "bitbucket-server-cli-${version}";
 
-  version = (import gemset).atlassian-stash.version;
+  version = (import ./gemset.nix).atlassian-stash.version;
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   pname = "atlassian-stash";
 

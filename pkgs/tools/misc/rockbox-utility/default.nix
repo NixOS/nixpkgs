@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb1, qt4, qmake4Hook }:
+{ stdenv, fetchurl, libusb1, qt5 }:
 
 stdenv.mkDerivation  rec {
   name = "rockbox-utility-${version}";
@@ -9,16 +9,15 @@ stdenv.mkDerivation  rec {
     sha256 = "0k3ycga3b0jnj13whwiip2l0gx32l50pnbh7kfima87nq65aaa5w";
   };
 
-  buildInputs = [ libusb1 qt4 ];
-  nativeBuildInputs = [ qmake4Hook ];
+  buildInputs = [ libusb1 ] ++ (with qt5; [ qtbase qttools ]);
+  nativeBuildInputs = [ qt5.qmakeHook ];
 
   preConfigure = ''
     cd rbutil/rbutilqt
   '';
 
   installPhase = ''
-    mkdir -p $out/bin 
-    cp RockboxUtility $out/bin
+    install -Dm755 RockboxUtility $out/bin/RockboxUtility
   '';
 
   meta = with stdenv.lib; {

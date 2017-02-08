@@ -1,21 +1,21 @@
-Index: kpackage-5.18.0/src/kpackage/packageloader.cpp
+Index: kpackage-5.30.0/src/kpackage/packageloader.cpp
 ===================================================================
---- kpackage-5.18.0.orig/src/kpackage/packageloader.cpp
-+++ kpackage-5.18.0/src/kpackage/packageloader.cpp
-@@ -241,7 +241,7 @@ QList<KPluginMetaData> PackageLoader::li
+--- kpackage-5.30.0.orig/src/kpackage/packageloader.cpp
++++ kpackage-5.30.0/src/kpackage/packageloader.cpp
+@@ -238,7 +238,7 @@ QList<KPluginMetaData> PackageLoader::li
          } else {
              //qDebug() << "Not cached";
              // If there's no cache file, fall back to listing the directory
 -            const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
 +            const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories | QDirIterator::FollowSymlinks;
-             const QStringList nameFilters = QStringList(QStringLiteral("metadata.desktop")) << QStringLiteral("metadata.json");
+             const QStringList nameFilters = { QStringLiteral("metadata.json"), QStringLiteral("metadata.desktop") };
  
              QDirIterator it(plugindir, nameFilters, QDir::Files, flags);
-Index: kpackage-5.18.0/src/kpackage/private/packagejobthread.cpp
+Index: kpackage-5.30.0/src/kpackage/private/packagejobthread.cpp
 ===================================================================
---- kpackage-5.18.0.orig/src/kpackage/private/packagejobthread.cpp
-+++ kpackage-5.18.0/src/kpackage/private/packagejobthread.cpp
-@@ -146,7 +146,7 @@ bool indexDirectory(const QString& dir,
+--- kpackage-5.30.0.orig/src/kpackage/private/packagejobthread.cpp
++++ kpackage-5.30.0/src/kpackage/private/packagejobthread.cpp
+@@ -121,7 +121,7 @@ bool indexDirectory(const QString& dir,
  
      QJsonArray plugins;
  

@@ -53,8 +53,7 @@ in rec {
 
   nixpkgs = {
     inherit (nixpkgs')
-      apacheHttpd_2_2
-      apacheHttpd_2_4
+      apacheHttpd
       cmake
       cryptsetup
       emacs
@@ -63,13 +62,12 @@ in rec {
       imagemagick
       jdk
       linux
-      mysql55
+      mysql
       nginx
       nodejs
       openssh
       php
-      postgresql92
-      postgresql93
+      postgresql
       python
       rsyslog
       stdenv

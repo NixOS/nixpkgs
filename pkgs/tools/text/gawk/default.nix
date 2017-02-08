@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
     || stdenv.isFreeBSD
   );
 
-  buildInputs = [ xz.bin ]
-    ++ stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
+  nativeBuildInputs = [ xz.bin ];
+  buildInputs =
+       stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
     ++ stdenv.lib.optional interactive readline
     ++ stdenv.lib.optional stdenv.isDarwin locale;
 

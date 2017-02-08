@@ -16,7 +16,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "5.4";
+  tag = "5.5";
 
 in
 

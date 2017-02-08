@@ -1,3 +1,5 @@
+# To build, use:
+# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 let

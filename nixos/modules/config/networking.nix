@@ -13,7 +13,7 @@ let
 
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "ends0";
+    ++ optional cfg.dnsExtensionMechanism "edns0";
 in
 
 {

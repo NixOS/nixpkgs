@@ -273,6 +273,7 @@ in rec {
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
   tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
+  tests.nat.firewall-conntrack = callTest tests/nat.nix { withFirewall = true; withConntrackHelpers = true; };
   tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };

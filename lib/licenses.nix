@@ -80,6 +80,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''BSD 3-clause "New" or "Revised" License'';
   };
 
+  bsd3-lbnl = spdx {
+    spdxId = "BSD-3-Clause-LBNL";
+    fullName = ''Lawrence Berkeley National Labs BSD variant license'';
+  };
+
   bsdOriginal = spdx {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
@@ -189,6 +194,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Seiko Epson Corporation Software License Agreement for Linux";
     url = https://download.ebz.epson.net/dsc/du/02/eula/global/LINUX_EN.html;
     free = false;
+  };
+
+  eupl11 = spdx {
+    spdxId = "EUPL-1.1";
+    fullname = "European Union Public License 1.1";
   };
 
   fdl12 = spdx {
@@ -372,6 +382,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   mpl20 = spdx {
     spdxId = "MPL-2.0";
     fullName = "Mozilla Public License 2.0";
+  };
+
+  mspl = spdx {
+    spdxId = "MS-PL";
+    fullName = "Microsoft Public License";
   };
 
   msrla = {

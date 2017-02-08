@@ -1,4 +1,4 @@
-{ stdenv, ghc, pkgconfig, glibcLocales }:
+{ stdenv, ghc, pkgconfig, glibcLocales, cacert }:
 
 with stdenv.lib;
 
@@ -26,6 +26,12 @@ stdenv.mkDerivation (args // {
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
   LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
                     # ^^^ Internally uses `getOutput "lib"` (equiv. to getLib)
+
+  # Non-NixOS git needs cert
+  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  # Fixes https://github.com/commercialhaskell/stack/issues/2358
+  LANG = "en_US.UTF-8";
 
   preferLocalBuild = true;
 

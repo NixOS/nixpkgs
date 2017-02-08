@@ -2,16 +2,27 @@
 , automake115x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, boto, pythonProtobuf, apr, subversion, gzip, systemd
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
-, ethtool, coreutils
+, ethtool, coreutils, which, iptables
 , bash
 }:
 
 let
   mavenRepo = import ./mesos-deps.nix { inherit stdenv curl; };
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
+  # `tar -z` requires gzip on $PATH, so wrap tar.
+  # At some point, we should try to patch mesos so we add gzip to the PATH when
+  # tar is invoked. I think that only needs to be done here:
+  #   src/common/command_utils.cpp
+  # https://github.com/NixOS/nixpkgs/issues/13783
+  tarWithGzip = lib.overrideDerivation gnutar (oldAttrs: {
+    buildInputs = (oldAttrs.buildInputs or []) ++ [ makeWrapper ];
+    postInstall = (oldAttrs.postInstall or "") + ''
+      wrapProgram $out/bin/tar --prefix PATH ":" "${gzip}/bin"
+    '';
+  });
 
 in stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.1.0";
   name = "mesos-${version}";
 
   enableParallelBuilding = true;
@@ -19,16 +30,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "1hdh2wh11ck98ycfrxfzgivgk2pjl3638vkyw14xj7faj9qxjlz0";
+    sha256 = "1hdjd4syyp88l0bnh88bhzvn9466ad2ysfp9pq3kwj3qzwg5jv8g";
   };
 
   patches = [
     # https://reviews.apache.org/r/36610/
+    # TODO: is this still needed?
     ./rb36610.patch
-
-    # https://issues.apache.org/jira/browse/MESOS-6013
-    ./rb51324.patch
-    ./rb51325.patch
 
     # see https://github.com/cstrahan/mesos/tree/nixos-${version}
     ./nixos.patch
@@ -46,33 +54,55 @@ in stdenv.mkDerivation rec {
     pythonProtobuf
   ];
 
+  # note that we *must* statically link libprotobuf.
+  # if we dynamically link the lib, we get these errors:
+  # https://github.com/NixOS/nixpkgs/pull/19064#issuecomment-255082684
   preConfigure = ''
+    substituteInPlace 3rdparty/stout/include/stout/os/posix/chown.hpp \
+      --subst-var-by chown ${coreutils}/bin/chown
+
+    substituteInPlace 3rdparty/stout/Makefile.am \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf.lib}/lib/libprotobuf.a"
+
     substituteInPlace 3rdparty/stout/include/stout/os/posix/fork.hpp \
       --subst-var-by sh ${bash}/bin/bash
 
-    substituteInPlace 3rdparty/stout/include/stout/os/posix/shell.hpp \
-      --subst-var-by sh ${bash}/bin/bash
-
-    substituteInPlace src/Makefile.am \
-      --subst-var-by mavenRepo ${mavenRepo}
+    substituteInPlace 3rdparty/stout/include/stout/posix/os.hpp \
+      --subst-var-by tar ${tarWithGzip}/bin/tar
 
     substituteInPlace src/cli/mesos-scp \
       --subst-var-by scp ${openssh}/bin/scp
 
+    substituteInPlace src/common/command_utils.cpp \
+      --subst-var-by curl      ${curl}/bin/curl \
+      --subst-var-by gzip      ${gzip}/bin/gzip \
+      --subst-var-by sha512sum ${coreutils}/bin/sha512sum \
+      --subst-var-by tar       ${tarWithGzip}/bin/tar
+
     substituteInPlace src/launcher/fetcher.cpp \
+      --subst-var-by cp    ${coreutils}/bin/cp \
       --subst-var-by gzip  ${gzip}/bin/gzip \
-      --subst-var-by tar   ${gnutar}/bin/tar \
+      --subst-var-by tar   ${tarWithGzip}/bin/tar \
       --subst-var-by unzip ${unzip}/bin/unzip
 
     substituteInPlace src/python/cli/src/mesos/cli.py \
       --subst-var-by mesos-resolve $out/bin/mesos-resolve
 
+    substituteInPlace src/python/native_common/ext_modules.py.in \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf.lib}/lib/libprotobuf.a"
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/gpu/volume.cpp \
+      --subst-var-by cp    ${coreutils}/bin/cp \
+      --subst-var-by which ${which}/bin/which
+
     substituteInPlace src/slave/containerizer/mesos/isolators/posix/disk.cpp \
-      --subst-var-by du ${coreutils}/bin/du \
-      --subst-var-by cp ${coreutils}/bin/cp
+      --subst-var-by du ${coreutils}/bin/du
 
     substituteInPlace src/slave/containerizer/mesos/provisioner/backends/copy.cpp \
-      --subst-var-by cp ${coreutils}/bin/cp
+      --subst-var-by cp ${coreutils}/bin/cp \
+      --subst-var-by rm ${coreutils}/bin/rm
 
     substituteInPlace src/uri/fetchers/copy.cpp \
       --subst-var-by cp ${coreutils}/bin/cp
@@ -83,23 +113,48 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/uri/fetchers/docker.cpp \
       --subst-var-by curl ${curl}/bin/curl
 
+    substituteInPlace src/Makefile.am \
+      --subst-var-by mavenRepo ${mavenRepo} \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf.lib}/lib/libprotobuf.a"
+
   '' + lib.optionalString stdenv.isLinux ''
 
     substituteInPlace src/linux/perf.cpp \
       --subst-var-by perf ${perf}/bin/perf
 
+    substituteInPlace src/slave/containerizer/mesos/isolators/docker/volume/isolator.cpp \
+      --subst-var-by mount ${utillinux}/bin/mount
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/filesystem/linux.cpp \
+      --subst-var-by mount ${utillinux}/bin/mount
+
     substituteInPlace src/slave/containerizer/mesos/isolators/filesystem/shared.cpp \
+      --subst-var-by mount ${utillinux}/bin/mount
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/gpu/isolator.cpp \
       --subst-var-by mount ${utillinux}/bin/mount
 
     substituteInPlace src/slave/containerizer/mesos/isolators/namespaces/pid.cpp \
       --subst-var-by mount ${utillinux}/bin/mount
 
+    substituteInPlace src/slave/containerizer/mesos/isolators/network/cni/cni.cpp \
+      --subst-var-by mount ${utillinux}/bin/mount
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/network/cni/plugins/port_mapper/port_mapper.cpp \
+      --subst-var-by iptables ${iptables}/bin/iptables
+
     substituteInPlace src/slave/containerizer/mesos/isolators/network/port_mapping.cpp \
-      --subst-var-by tc      ${iproute}/bin/tc \
+      --subst-var-by ethtool ${ethtool}/sbin/ethtool \
       --subst-var-by ip      ${iproute}/bin/ip \
       --subst-var-by mount   ${utillinux}/bin/mount \
-      --subst-var-by sh      ${stdenv.shell} \
-      --subst-var-by ethtool ${ethtool}/sbin/ethtool
+      --subst-var-by tc      ${iproute}/bin/tc
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/volume/image.cpp \
+      --subst-var-by mount   ${utillinux}/bin/mount
+
+    substituteInPlace src/slave/containerizer/mesos/isolators/volume/sandbox_path.cpp \
+      --subst-var-by mount   ${utillinux}/bin/mount
   '';
 
   configureFlags = [
@@ -107,7 +162,6 @@ in stdenv.mkDerivation rec {
     "--with-apr=${apr.dev}"
     "--with-svn=${subversion.dev}"
     "--with-leveldb=${leveldb}"
-    "--with-glog=${glog}"
     "--with-glog=${glog}"
     "--enable-optimize"
     "--disable-python-dependency-install"

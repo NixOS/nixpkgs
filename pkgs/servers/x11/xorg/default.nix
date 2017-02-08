@@ -602,17 +602,6 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
-  intelgputools = (mkDerivation "intelgputools" {
-    name = "intel-gpu-tools-1.15";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/app/intel-gpu-tools-1.15.tar.bz2;
-      sha256 = "1gb22hvj4gdjj92iqbwcp44kf2znk2l1fvbcrr4sm4i65l8mdwnw";
-    };
-    buildInputs = [pkgconfig dri2proto libdrm udev libpciaccess python libX11 libXext libXrandr libXv ];
-    meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit dri2proto libdrm udev libpciaccess python libX11 libXext libXrandr libXv ;};
-
   kbproto = (mkDerivation "kbproto" {
     name = "kbproto-1.0.7";
     builder = ./builder.sh;
@@ -1824,11 +1813,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videointel = (mkDerivation "xf86videointel" {
-    name = "xf86-video-intel-2016-12-06";
+    name = "xf86-video-intel-2017-02-05";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/169c74fa6c2cd9c28dd7bfacd9639cd245b8c8a8.tar.gz;
-      sha256 = "1ypfcxj45m867kvz0w171rr6p61mcdzjl9l20v3l2d1575gf39v0";
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/e4fe79cf0d9a05ee3f3a027148ef0aeb2b1b34e1.tar.gz;
+      sha256 = "1hzfz5m9iclxk55531nqmyn25a50ggibl1qb80l6742k25k211cr";
     };
     buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;

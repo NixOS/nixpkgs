@@ -386,11 +386,17 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestNoWarnings Moo TypeTiny ];
   };
 
-  ListCompare = buildPerlPackage {
-    name = "List-Compare-1.18";
+  ListCompare = buildPerlPackage rec {
+    name = "List-Compare-0.53";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.39.tar.gz;
-      sha256 = "1v4gn176faanzf1kr9axdp1220da7nkvz0d66mnk34nd0skjjxcl";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/${name}.tar.gz";
+      sha256 = "fdbf4ff67b3135d44475fef7fcac0cd4706407d5720d26dca914860eb10f8550";
+    };
+    buildInputs = [ IOCaptureOutput ];
+    meta = {
+      homepage = http://thenceforward.net/perl/modules/List-Compare/;
+      description = "Compare elements of two or more lists";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -2956,6 +2962,21 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = mirror://cpan/authors/id/R/RA/RAZINF/Data-Password-1.12.tar.gz;
       sha256 = "830cde81741ff384385412e16faba55745a54a7cc019dd23d7ed4f05d551a961";
+    };
+  };
+
+  DataPerl = buildPerlPackage rec {
+    name = "Data-Perl-0.002009";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTP/${name}.tar.gz";
+      sha256 = "b62b2225870c2c3b16fb78c429f8729ddb8ed0e342f4209ec3c261b764c36f8b";
+    };
+    buildInputs = [ TestDeep TestFatal TestOutput ];
+    propagatedBuildInputs = [ ClassMethodModifiers ListMoreUtils ModuleRuntime RoleTiny strictures ];
+    meta = {
+      homepage = https://github.com/mattp-/Data-Perl;
+      description = "Base classes wrapping fundamental Perl data types";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -5687,6 +5708,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  GnuPGInterface = buildPerlPackage rec {
+    name = "GnuPG-Interface-0.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AL/ALEXMV/${name}.tar.gz";
+      sha256 = "247a9f5a88bb6745281c00d0f7d5d94e8599a92396849fd9571356dda047fd35";
+    };
+    buildInputs = with pkgs; [ which gnupg1compat ];
+    propagatedBuildInputs = [ Moo MooXHandlesVia MooXlate ];
+    doCheck = false;
+    meta = {
+      description = "Supply object methods for interacting with GnuPG";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GoferTransporthttp = buildPerlPackage {
     name = "GoferTransport-http-1.017";
     src = fetchurl {
@@ -6227,7 +6263,11 @@ let self = _self // overrides; _self = with self; {
     name = "HTML-Tiny-1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/${name}.tar.gz";
-      sha256 = "18zxg7z51f5daidnwl9vxsrs3lz0y6n5ddqhpb748bjyk3awkkfp";
+      sha256 = "d7cdc9d5985e2e44ceba10b756acf1e0d3a1b3ee3b516e5b54adb850fe79fda3";
+    };
+    meta = {
+      description = "Lightweight, dependency free HTML/XML generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -6561,10 +6601,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOCaptureOutput = buildPerlPackage rec {
-    name = "IO-CaptureOutput-1.1103";
+    name = "IO-CaptureOutput-1.1104";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "1bcl7p87ysbzab6hssq19xn3djzc0yk9l4hk0a2mqbqb8hv6p0m5";
+      sha256 = "fcc732fcb438f97a72b30e8c7796484bef2562e374553b207028e2fbf73f8330";
+    };
+    meta = {
+      homepage = https://github.com/dagolden/IO-CaptureOutput;
+      description = "Capture STDOUT and STDERR from Perl code, subprocesses or XS";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -8545,6 +8590,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXHandlesVia = buildPerlPackage rec {
+    name = "MooX-HandlesVia-0.001008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTP/${name}.tar.gz";
+      sha256 = "b0946f23b3537763b8a96b8a83afcdaa64fce4b45235e98064845729acccfe8c";
+    };
+    buildInputs = [ MooXTypesMooseLike TestException TestFatal ];
+    propagatedBuildInputs = [ ClassMethodModifiers DataPerl ModuleRuntime Moo RoleTiny ];
+    meta = {
+      description = "NativeTrait-like behavior for Moo";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MooXTypesMooseLike = buildPerlPackage rec {
     name = "MooX-Types-MooseLike-0.27";
     src = fetchurl {
@@ -8555,17 +8614,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooXTypesMooseLikeNumeric = buildPerlPackage rec {
-    name = "MooX-Types-MooseLike-Numeric-1.02";
+    name = "MooX-Types-MooseLike-Numeric-1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
-      sha256 = "6186f75ab2747723fd979249ec6ee0c4550f5b47aa50c0d222cc7d3590182bb6";
+      sha256 = "16adeb617b963d010179922c2e4e8762df77c75232e17320b459868c4970c44b";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ Moo TestFatal ];
     propagatedBuildInputs = [ MooXTypesMooseLike ];
     meta = {
       description = "Moo types for numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -9094,18 +9152,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXTypesCommon = buildPerlPackage rec {
-    name = "MooseX-Types-Common-0.001013";
+    name = "MooseX-Types-Common-0.001014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "ff0c963f5e8304acb5f64bdf9ba1f19284311148e1a8f0d1f81f123f9950f5f2";
+      sha256 = "ef93718b6d2f240d50b5c3acb1a74b4c2a191869651470001a82be1f35d0ef0f";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestWarnings perl ];
-    propagatedBuildInputs = [ MooseXTypes ];
+    propagatedBuildInputs = [ MooseXTypes self."if" ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types-Common;
       description = "A library of commonly used type constraints";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -9568,6 +9625,18 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/libwww-perl/Net-HTTP;
       description = "Low-level HTTP connection (client)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetIDNEncode = buildPerlPackage {
+    name = "Net-IDN-Encode-2.400";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.400.tar.gz;
+      sha256 = "0a9knav5f9kjldrkxx1k47ivd3p23zkmi8aqgyhnxidhgasz1dlq";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Internationalizing Domain Names in Applications (IDNA)";
     };
   };
 

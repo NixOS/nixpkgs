@@ -126,7 +126,8 @@ rec {
   ];
 
   samba = [
-    http://samba.org/ftp/
+    https://www.samba.org/ftp/
+    http://ftp.riken.jp/net/samba
   ];
 
   # BitlBee mirrors, see http://www.bitlbee.org/main.php/mirrors.html .

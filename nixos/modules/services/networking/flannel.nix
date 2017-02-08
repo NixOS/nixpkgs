@@ -149,6 +149,6 @@ in {
       serviceConfig.ExecStart = "${cfg.package}/bin/flannel";
     };
 
-    services.etcd.enable = mkDefault cfg.etcd.endpoints == ["http://127.0.0.1:2379"];
+    services.etcd.enable = mkDefault (cfg.etcd.endpoints == ["http://127.0.0.1:2379"]);
   };
 }

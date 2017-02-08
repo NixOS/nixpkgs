@@ -49,12 +49,11 @@ index 71a6b73..a682d8a 100644
      char *x_argv[] = {
        XORG_BINARY,
        bb_config.x_display,
-@@ -153,24 +170,25 @@ bool start_secondary(bool need_secondary) {
+@@ -153,24 +170,24 @@ bool start_secondary(bool need_secondary) {
        "-sharevts",
        "-nolisten", "tcp",
        "-noreset",
 +      "-logfile", "/var/log/X.bumblebee.log",
-+      "-xkbdir", X_XKB_DIR,
        "-verbose", "3",
        "-isolateDevice", pci_id,
 -      "-modulepath", bb_config.mod_path, // keep last

@@ -1,24 +1,20 @@
 {stdenv, fetchurl, SDL, SDL_gfx, SDL_image, tremor, flac, mpg123, libmikmod
-, speex
-, keymap ? "newdefault"
+, speex, ncurses
+, keymap ? "default"
 , conf ? "unknown"
 }:
 
 stdenv.mkDerivation rec {
-  name = "gmu-0.7.2";
-  
+  name = "gmu-0.10.1";
+
   src = fetchurl {
-    url = http://wejp.k.vu/files/gmu-0.7.2.tar.gz;
-    sha256 = "0gvhwhhlj64lc425wqch4g6v59ldd5i3rxll3zdcrdgk2vkh8nys";
+    url = "http://wejp.k.vu/files/${name}.tar.gz";
+    sha256 = "03x0mc0xw2if0bpf0a15yprcyx1xccki039zvl2099dagwk6xskv";
   };
 
-  buildInputs = [ SDL SDL_gfx SDL_image tremor flac mpg123 libmikmod speex ];
+  buildInputs = [ SDL SDL_gfx SDL_image tremor flac mpg123 libmikmod speex ncurses ];
 
-  NIX_LDFLAGS = "-lgcc_s";
-
-  preBuild = ''
-    makeFlags="$makeFlags PREFIX=$out"
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     cp ${keymap}.keymap $out/share/gmu/default.keymap

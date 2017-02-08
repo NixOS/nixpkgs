@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "1was8g3ckghs6fb7zz6dlp506m65cfi6l7iyj0wp5cqc9cff05gk";
   };
 
-  patches = [ ./add-config-h-includes.patch ];
-
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     glib syslogng eventlog /* perl */ python

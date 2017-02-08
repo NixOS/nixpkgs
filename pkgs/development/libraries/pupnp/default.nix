@@ -1,27 +1,19 @@
-{ fetchFromGitHub, stdenv, autoconf, automake, libtool }:
+{ fetchFromGitHub, stdenv, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libupnp-${version}";
-  version = "1.6.20";
+  version = "1.6.21";
 
   src = fetchFromGitHub {
     owner = "mrjimenez";
     repo = "pupnp";
     rev = "release-${version}";
-    sha256 = "10583dkz1l5sjp2833smql8w428x2nbh1fni8j6h9rji6ma2yhs0";
+    sha256 = "07ksfhadinaa20542gblrxi9pqz0v6y70a836hp3qr4037id4nm9";
   };
 
-  buildInputs = [
-    autoconf
-    automake
-    libtool
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   hardeningDisable = [ "fortify" ];
-
-  preConfigure = ''
-    ./bootstrap
-  '';
 
   meta = {
     description = "libupnp, an open source UPnP development kit for Linux";

@@ -2,11 +2,11 @@
   }:
 
 stdenv.mkDerivation rec {
-  name = "i3status-2.10";
+  name = "i3status-2.11";
 
   src = fetchurl {
     url = "http://i3wm.org/i3status/${name}.tar.bz2";
-    sha256 = "1497dsvb32z9xljmxz95dnyvsbayn188ilm3l4ys8m5h25vd1xfs";
+    sha256 = "0pwcy599fw8by1a1sf91crkqba7679qhvhbacpmhis8c1xrpxnwq";
   };
 
   buildInputs = [ confuse yajl alsaLib libpulseaudio libnl pkgconfig ];

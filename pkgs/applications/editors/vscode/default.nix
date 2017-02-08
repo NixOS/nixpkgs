@@ -2,22 +2,26 @@
   makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.8.0";
-  rev = "38746938a4ab94f2f57d9e1309c51fd6fb37553d";
+  version = "1.9.0";
+  rev = "27240e71ef390bf2d66307e677c2a333cebf75af";
+  channel = "stable";
 
-  sha256 = if stdenv.system == "i686-linux"    then "0p7r1i71v2ab4dzlwh43hqih958a31cqskf64ds4vgc35x2mfjcq"
-      else if stdenv.system == "x86_64-linux"  then "1k15701jskk7w5kwzlzfri96vvw7fcinyfqqafls8nms8h5csv76"
-      else if stdenv.system == "x86_64-darwin" then "12fqz62gs2wcg2wwx1k6gv2gqil9c54yq254vk3rqdf82q9zyapk"
+  # The revision can be obtained with the following command (see https://github.com/NixOS/nixpkgs/issues/22465):
+  # curl -w "%{url_effective}\n" -I -L -s -S https://vscode-update.azurewebsites.net/latest/linux-x64/stable -o /dev/null
+
+  sha256 = if stdenv.system == "i686-linux"    then "05f1sk2lq2skp8fxq6q229kf89vi2sq3zz6lywq7nk81pwvp8jap"
+      else if stdenv.system == "x86_64-linux"  then "0wj17lwq8f88xvfa6wfbqm580kp0470ib2yxn15j9mv0iw7nzqry"
+      else if stdenv.system == "x86_64-darwin" then "1k067h099j6fv820nn6h4i8ax35yvd1h8f4h5216dm66cpikv7nd"
       else throw "Unsupported system: ${stdenv.system}";
 
-  urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
+  urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
 
   urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-stable-code_${version}-1481650382_i386.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1486024310_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-stable-code_${version}-1481651903_amd64.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1486023356_amd64.tar.gz"
       else if stdenv.system == "x86_64-darwin" then
-        urlBase + "VSCode-darwin-stable.zip"
+        urlBase + "VSCode-darwin-${channel}.zip"
       else throw "Unsupported system: ${stdenv.system}";
 in
   stdenv.mkDerivation rec {
@@ -33,10 +37,7 @@ in
       name = "code";
       exec = "code";
       icon = "code";
-      comment = ''
-        Code editor redefined and optimized for building and debugging modern
-        web and cloud applications
-      '';
+      comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
       desktopName = "Visual Studio Code";
       genericName = "Text Editor";
       categories = "GNOME;GTK;Utility;TextEditor;Development;";

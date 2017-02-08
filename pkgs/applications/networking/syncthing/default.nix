@@ -1,20 +1,19 @@
 { stdenv, lib, fetchFromGitHub, go, pkgs }:
+
 let
   removeExpr = ref: ''
     sed -i "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
   '';
 
-in
-
-stdenv.mkDerivation rec {
-  version = "0.14.18";
+in stdenv.mkDerivation rec {
+  version = "0.14.21";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "099r1n9awznv17ac1fm4ff6az40bvk6xxwaw8x8fx7ikqi1wv8vp";
+    sha256 = "0gxv4r7zg2rxjj0q8iiq3p5s75kwshcy6drjv65k8p2778bbvcjl";
   };
 
   buildInputs = [ go ];

@@ -11,7 +11,9 @@ has the following highlights: </para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>Nixpkgs is now extensible through overlays. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">Nixpkgs
+    manual</link> for more information.</para>
   </listitem>
 </itemizedlist>
 
@@ -28,6 +30,32 @@ has the following highlights: </para>
 following incompatible changes:</para>
 
 <itemizedlist>
+  <listitem>
+    <para>
+      Cross compilation has been rewritten. See the nixpkgs manual for
+      details. The most obvious breaking change is that derivations absent a
+      <literal>.nativeDrv</literal> or <literal>.crossDrv</literal> are now
+      cross by default, not native.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>stdenv.overrides</literal> is now expected to take <literal>self</literal>
+      and <literal>super</literal> arguments. See <literal>lib.trivial.extends</literal>
+      for what those parameters represent.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>ansible</literal> now defaults to ansible version 2 as version 1
+      has been removed due to a serious <link
+      xlink:href="https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt">
+      vulnerability</link> unpatched by upstream.
+    </para>
+  </listitem>
+
   <listitem>
     <para>
       <literal>gnome</literal> alias has been removed along with
@@ -88,6 +116,53 @@ following incompatible changes:</para>
      <literal>networking.timeServers</literal>.
    </para>
   </listitem>
+
+  <listitem>
+    <para><literal>overridePackages</literal> function no longer exists.
+    It is replaced by <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
+    overlays</link>.  For example, the following code:
+
+<programlisting>
+  let
+    pkgs = import &lt;nixpkgs&gt; {};
+  in
+    pkgs.overridePackages (self: super: ...)
+</programlisting>
+
+    should be replaced by:
+
+<programlisting>
+  let
+    pkgs = import &lt;nixpkgs&gt; {};
+  in
+    import pkgs.path { overlays = [(self: super: ...)] }
+</programlisting>
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      Autoloading connection tracking helpers is now disabled by default.
+      This default was also changed in the Linux kernel and is considered
+      insecure if not configured properly in your firewall. If you need
+      connection tracking helpers (i.e. for active FTP) please enable
+      <literal>networking.firewall.autoLoadConntrackHelpers</literal> and
+      tune <literal>networking.firewall.connectionTrackingModules</literal>
+      to suit your needs.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>local_recipient_maps</literal> is not set to empty value by
+      Postfix service. It's an insecure default as stated by Postfix
+      documentation. Those who want to retain this setting need to set it via
+      <literal>services.postfix.extraConfig</literal>.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 

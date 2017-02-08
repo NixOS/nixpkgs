@@ -5,8 +5,8 @@ assert stdenv.isLinux;
 
 let
   inherit (pythonPackages) python;
-  pythonpath = "${pythonPackages.dbus}/lib/${python.libPrefix}/site-packages:"
-    + "${pythonPackages.pygobject}/lib/${python.libPrefix}/site-packages";
+  pythonpath = "${pythonPackages.dbus-python}/lib/${python.libPrefix}/site-packages:"
+    + "${pythonPackages.pygobject2}/lib/${python.libPrefix}/site-packages";
 in stdenv.mkDerivation rec {
   name = "bluez-4.101";
    

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, imagemagickBig, pkgconfig, pythonPackages, perl
+{ stdenv, fetchurl, imagemagickBig, pkgconfig, python2Packages, perl
 , libX11, libv4l, qt4, lzma, gtk2, fetchpatch, autoreconfHook
 }:
 
 let
-  inherit (pythonPackages) pygtk python;
+  inherit (python2Packages) pygtk python;
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "zbar";

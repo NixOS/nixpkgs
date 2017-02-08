@@ -1,15 +1,15 @@
-{ stdenv, fetchzip, ocaml, findlib, oasis, ocaml_optcomp, camlp4 }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, oasis, ocaml_optcomp, camlp4 }:
 
-let version = "0.7"; in
+let version = "0.7.1"; in
 
 stdenv.mkDerivation {
   name = "ocsigen-deriving-${version}";
   src = fetchzip {
     url = "https://github.com/ocsigen/deriving/archive/${version}.tar.gz";
-    sha256 = "05z606gly1iyan292x3mflg3zasgg68n8i2mivz0zbshx2hz2jbw";
+    sha256 = "0gg3nr3iic4rwqrcc0qvfm9x0x57zclvdsnpy0z8rv2fl5isbzms";
     };
 
-  buildInputs = [ ocaml findlib oasis ocaml_optcomp camlp4 ];
+  buildInputs = [ ocaml findlib ocamlbuild oasis ocaml_optcomp camlp4 ];
 
   createFindlibDestdir = true;
 

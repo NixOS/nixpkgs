@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
     ++ optionals cupsSupport [ cups ]
-    ++ optionals (gdktarget == "quartz") [ AppKit Cocoa ];
+    ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
   configureFlags = [
     "--with-gdktarget=${gdktarget}"

@@ -17,7 +17,7 @@ let
     if buildKernel &&
        (incompatibleKernelVersion != null) &&
        versionAtLeast kernel.version incompatibleKernelVersion then
-      throw "linux v${kernel.version} is not yet supported by zfsonlinux v${version}"
+      throw "Linux v${kernel.version} is not yet supported by zfsonlinux v${version}. Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."
     else stdenv.mkDerivation rec {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
@@ -123,12 +123,12 @@ in
     # to be adapted
     zfsStable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.9";
+      incompatibleKernelVersion = "4.10";
 
-      version = "0.6.5.8";
+      version = "0.6.5.9";
 
       # this package should point to the latest release.
-      sha256 = "0qccz1832p3i80qlrrrypypspb9sy9hmpgcfx9vmhnqmkf0yri4a";
+      sha256 = "1m8q39j13k46fn0pw3adq87c20rpkg28llxgv2a90994p4127xh0";
       extraPatches = [
         (fetchpatch {
           url = "https://github.com/Mic92/zfs/compare/zfs-0.6.5.8...nixos-zfs-0.6.5.8.patch";
@@ -139,21 +139,16 @@ in
     };
     zfsUnstable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.10";
+      incompatibleKernelVersion = null;
 
-      version = "0.7.0-rc2";
+      version = "0.7.0-rc3";
 
       # this package should point to a version / git revision compatible with the latest kernel release
-      sha256 = "197y2jyav9h1ksri9kzqvrwmzpb58mlgw27vfvgd4bvxpwfxq53s";
+      sha256 = "0js3lazqq8wb4nklqxd6sgbvwqgwnjgz3xi3mm33xf4284gia6pc";
       extraPatches = [
         (fetchpatch {
-          url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc2...nixos-zfs-0.7.0-rc2.patch";
-          sha256 = "1p33bwd6p5r5phbqb657x8h9x3bd012k2mdmbzgnb09drh9v0r82";
-        })
-        (fetchpatch {
-          name = "Kernel_4.9_zfs_aio_fsync_removal.patch";
-          url = "https://github.com/zfsonlinux/zfs/commit/99ca173929cb693012dabe98bcee4f12ec7e6e92.patch";
-          sha256 = "10npvpj52rpq88vdsn7zkdhx2lphzvqypsd9abdadjbqkwxld9la";
+          url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";
+          sha256 = "1vlw98v8xvi8qapzl1jwm69qmfslwnbg3ry1lmacndaxnyckkvhh";
         })
       ];
       spl = splUnstable;

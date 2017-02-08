@@ -20,6 +20,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    apron = callPackage ../development/ocaml-modules/apron { };
+
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
     astring = callPackage ../development/ocaml-modules/astring { };
@@ -140,9 +142,13 @@ let
 
     csv = callPackage ../development/ocaml-modules/csv { };
 
+    curses = callPackage ../development/ocaml-modules/curses { };
+
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
+
+    dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
@@ -182,6 +188,8 @@ let
       inherit (pkgs) fontconfig;
     };
 
+    fpath = callPackage ../development/ocaml-modules/fpath { };
+
     functory = callPackage ../development/ocaml-modules/functory { };
 
     gen = callPackage ../development/ocaml-modules/gen { };
@@ -219,7 +227,9 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
-    lablgl = callPackage ../development/ocaml-modules/lablgl { };
+    lablgl = callPackage ../development/ocaml-modules/lablgl {
+      camlp5 = camlp5_strict;
+    };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;
@@ -263,6 +273,10 @@ let
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
+    mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
+
+    mtime =  callPackage ../development/ocaml-modules/mtime { };
+
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
       lwt = ocaml_lwt;
     };
@@ -297,9 +311,13 @@ let
 
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
+    ocaml_gettext = callPackage ../development/ocaml-modules/ocaml-gettext { };
+
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };
+
+    ocaml_libvirt = callPackage ../development/ocaml-modules/ocaml-libvirt { };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
@@ -347,6 +365,8 @@ let
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
+    omd = callPackage ../development/ocaml-modules/omd { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
@@ -365,6 +385,8 @@ let
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
+
+    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
@@ -413,6 +435,8 @@ let
     ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
       minimal = false;
     };
+
+    ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
@@ -717,7 +741,9 @@ in rec
 
   ocamlPackages_4_03 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.03.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_03;
+  ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
+
+  ocamlPackages_latest = ocamlPackages_4_04;
 
   ocamlPackages = ocamlPackages_4_01_0;
 }

@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, cmake, boost, miniupnpc, pkgconfig, unbound }:
 
 let
-  version = "0.9.4";
+  version = "0.10.1";
 in
 stdenv.mkDerivation {
   name = "monero-${version}";
 
   src = fetchFromGitHub {
     owner = "monero-project";
-    repo = "bitmonero";
+    repo = "monero";
     rev = "v${version}";
-    sha256 = "1qzpy1mxz0ky6hfk1gf67ybbr9xy6p6irh6zwri35h1gb97sbc3c";
+    sha256 = "1zngskpgxz3vqq348h0mab2kv95z6g9ckvqkr77mx15m5z3qi6aw";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -27,19 +27,17 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -Dt "$out/bin/" \
-        bin/bitmonerod \
-        bin/blockchain_converter \
-        bin/blockchain_dump \
-        bin/blockchain_export \
-        bin/blockchain_import \
-        bin/cn_deserialize \
-        bin/simpleminer \
-        bin/simplewallet
+        bin/monerod \
+        bin/monero-blockchain-export \
+        bin/monero-blockchain-import \
+        bin/monero-utils-deserialize \
+        bin/monero-wallet-cli \
+        bin/monero-wallet-rpc
   '';
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";
-    homepage = http://monero.cc/;
+    homepage = https://getmonero.org/;
     license = licenses.bsd3;
     maintainers = [ maintainers.ehmry ];
     platforms = [ "x86_64-linux" ];

@@ -56,6 +56,8 @@ stdenv.mkDerivation {
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
+                # TODO: Remove when fixed build with rustbuild
+                ++ [ "--disable-rustbuild" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
@@ -142,7 +144,9 @@ stdenv.mkDerivation {
   doCheck = true;
   dontSetConfigureCross = true;
 
-  enableParallelBuilding = true;
+  # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
+  # https://github.com/rust-lang/rust/issues/30181
+  # enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://www.rust-lang.org/;

@@ -4,19 +4,19 @@
 }:
 
 let
-  version = "0.4.14";
+  version = "0.4.15";
   sources = {
     src = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest";
       rev = "${version}";
-      sha256 = "1f74wsiqj8x1m8wqmxijb00df5ljlvy4ac0ahbh325vfzi0bjla3";
+      sha256 = "0bn4102d0hq774bn6hqhrs6qzl4sancrs4j15w4318bqdndk4676";
     };
     data = fetchFromGitHub {
       owner = "minetest";
       repo = "minetest_game";
       rev = "${version}";
-      sha256 = "1dc9zfbp603h2nlk39bw37kjbswrfmpd9yg3v72z1jb89pcxzsqs";
+      sha256 = "1mjj40slfiw0khg9nrq8yfmnay237z5jm1cg9hrsiq2fkjrr8w2m";
     };
   };
 in stdenv.mkDerivation {
@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
   cmakeFlags = [
     "-DENABLE_FREETYPE=1"
     "-DENABLE_GETTEXT=1"
+    "-DENABLE_SYSTEM_JSONCPP=1"
     "-DGETTEXT_INCLUDE_DIR=${gettext}/include/gettext"
     "-DCURL_INCLUDE_DIR=${curl.dev}/include/curl"
     "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"

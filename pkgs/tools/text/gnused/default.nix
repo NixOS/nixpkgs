@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   preConfigure = "patchShebangs ./build-aux/help2man";
 
+  crossAttrs = {
+    # The tarball ships with a fine prebuilt manpage, but the make rules try to rebuild it,
+    # which won't work when cross compiling as help2man needs to execute the binaries.
+    postConfigure = ''
+      sed -i Makefile -e 's|doc/sed\.1:|dummy:|'
+    '';
+  };
+
   meta = {
     homepage = http://www.gnu.org/software/sed/;
     description = "GNU sed, a batch stream editor";
