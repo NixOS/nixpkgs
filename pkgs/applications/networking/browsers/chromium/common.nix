@@ -1,4 +1,4 @@
-{ stdenv, gn, ninja, which
+{ stdenv, ninja, which
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -86,10 +86,8 @@ let
 
     src = upstream-info.main;
 
-    nativeBuildInputs = [ gn which python2Packages.python perl pkgconfig ];
-
     nativeBuildInputs = [
-      ninja which perl pkgconfig python
+      ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2
     ];
 
@@ -178,6 +176,10 @@ let
 
     configurePhase = ''
       runHook preConfigure
+
+      # Build gn
+      python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
+      PATH="$PWD/out/Release:$PATH"
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
