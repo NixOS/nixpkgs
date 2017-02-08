@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "059a9yc58wcicc6xxsjh1ph7k2yrag0spsahp1wqmsq6h7jwwyyq";
   };
 
+  patches = [ ./0001-bash-completion-quote-pattern-argument-to-grep.patch ];
+
   nativeBuildInputs = [ cmake libuuid gnutls ];
 
   postInstall = ''
