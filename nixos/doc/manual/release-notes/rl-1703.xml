@@ -118,6 +118,36 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para>
+      <literal>service.nylon</literal> is now declared using named instances.
+      As an example:
+
+<programlisting>
+  services.nylon = {
+    enable = true;
+    acceptInterface = "br0";
+    bindInterface = "tun1";
+    port = 5912;
+  };
+</programlisting>
+
+      should be replaced with:
+
+<programlisting>
+  services.nylon.myvpn = {
+    enable = true;
+    acceptInterface = "br0";
+    bindInterface = "tun1";
+    port = 5912;
+  };
+</programlisting>
+
+      this enables you to declare a SOCKS proxy for each uplink.
+
+    </para>
+  </listitem>
+
+  <listitem>
     <para><literal>overridePackages</literal> function no longer exists.
     It is replaced by <link
     xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
