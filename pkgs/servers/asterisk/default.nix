@@ -1,7 +1,7 @@
 { stdenv, pkgs, lib, fetchurl, fetchgit,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, binutils, newt,
-  lua,
+  lua, speex,
   srtp, wget, curl,
   subversionClient
 }:
@@ -11,7 +11,7 @@ let
     inherit version;
     name = "asterisk-${version}";
 
-    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua srtp wget curl subversionClient ];
+    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua speex srtp wget curl subversionClient ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
