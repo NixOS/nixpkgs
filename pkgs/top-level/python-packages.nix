@@ -31004,7 +31004,7 @@ EOF
 
   scrapy = buildPythonPackage rec {
     name = "Scrapy-${version}";
-    version = "1.1.2";
+    version = "1.3.1";
 
     buildInputs = with self; [ pkgs.glibcLocales mock pytest botocore testfixtures pillow ];
     propagatedBuildInputs = with self; [
@@ -31020,7 +31020,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "a0a8c7bccbd598d2731ec9f267b8efbd8fb99767f826f8f2924a5610707a03d4";
+      sha256 = "0s5qkxwfq842maxjd2j82ldp4dyb70kla3z5rr56z0p7ig53cbvk";
     };
 
     meta = {
