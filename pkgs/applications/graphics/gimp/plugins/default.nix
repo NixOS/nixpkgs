@@ -125,7 +125,7 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-2.0.1";
-    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook ] 
+    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook ]
       ++ gimp.nativeBuildInputs;
     makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
     src = fetchFromGitHub {
@@ -178,13 +178,13 @@ rec {
 
   gmic =
     pluginDerivation rec {
-      name = "gmic-1.6.5.0";
+      name = "gmic-1.7.8";
 
       buildInputs = [pkgconfig pkgs.fftw pkgs.opencv gimp] ++ gimp.nativeBuildInputs;
 
       src = fetchurl {
-        url = http://gmic.eu/files/source/gmic_1.6.5.0.tar.gz;
-        sha256 = "1vb6zm5zpqfnzxjvb9yfvczaqacm55rf010ib0yk9f28b17qrjgb";
+        url = "http://gmic.eu/files/source/gmic_1.7.8.tar.gz";
+        sha256 = "1921s0n2frj8q95l8lm8was64cypnychgcgcavx9q8qljzbk4brs";
       };
 
       sourceRoot = "${name}/src";
