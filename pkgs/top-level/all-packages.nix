@@ -783,6 +783,8 @@ with pkgs;
 
   datefudge = callPackage ../tools/system/datefudge { };
 
+  dateutils = callPackage ../tools/misc/dateutils { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   dehydrated = callPackage ../tools/admin/dehydrated { };
