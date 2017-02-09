@@ -3583,6 +3583,8 @@ with pkgs;
 
   redmine = callPackage ../applications/version-management/redmine { };
 
+  redsocks = callPackage ../tools/networking/redsocks { };
+
   rt = callPackage ../servers/rt { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
