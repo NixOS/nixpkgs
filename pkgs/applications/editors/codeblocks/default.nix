@@ -4,8 +4,6 @@
 
 with stdenv.lib;
 
-with { inherit (stdenv.lib) optionalString optional optionals; };
-
 stdenv.mkDerivation rec {
   name = "${pname}-${stdenv.lib.optionalString contribPlugins "full-"}${version}";
   version = "16.01";

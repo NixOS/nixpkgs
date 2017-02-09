@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
 , python, perl, gdk_pixbuf, libiconv, libintlOrEmpty }:
 
-with { inherit (stdenv.lib) optionals; };
+let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation rec {
   name = "libgsf-1.14.41";
