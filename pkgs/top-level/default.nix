@@ -55,7 +55,7 @@ in let
   # Allow setting the platform in the config file. Otherwise, let's use a
   # reasonable default.
   localSystem =
-    { platform = (import ./platforms.nix).selectPlatformBySystem args.localSystem.system; }
+    { platform = lib.systems.platforms.selectPlatformBySystem args.localSystem.system; }
     // builtins.intersectAttrs { platform = null; } config
     // args.localSystem;
 

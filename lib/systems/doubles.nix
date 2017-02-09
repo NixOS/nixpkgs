@@ -1,4 +1,4 @@
-let lists = import ./lists.nix; in
+let lists = import ../lists.nix; in
 
 rec {
   all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd ++ netbsd ++ illumos;

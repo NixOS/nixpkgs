@@ -1,9 +1,9 @@
 # Define the list of system with their properties.  Only systems tested for
 # Nixpkgs are listed below
 
-with import ./lists.nix;
-with import ./types.nix;
-with import ./attrsets.nix;
+with import ../lists.nix;
+with import ../types.nix;
+with import ../attrsets.nix;
 
 let
   lib = import ./default.nix;

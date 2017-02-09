@@ -136,7 +136,7 @@ in
       float = "hard";
       withTLS = true;
       libc = "glibc";
-      platform = pkgs.platforms.fuloong2f_n32;
+      platform = lib.platforms.fuloong2f_n32;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "loongson2f";
@@ -160,7 +160,7 @@ in
       fpu = "vfp";
       withTLS = true;
       libc = "glibc";
-      platform = pkgs.platforms.raspberrypi;
+      platform = lib.platforms.raspberrypi;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "armv6";
