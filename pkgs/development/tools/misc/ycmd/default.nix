@@ -1,21 +1,17 @@
-{ stdenv, fetchgit, cmake, llvmPackages, boost, python2Packages
-}:
+{ stdenv, fetchgit, cmake, llvmPackages, boost, python, python2Packages }:
 
-let
-  inherit (python2Packages) python mkPythonDerivation waitress frozendict bottle;
-in mkPythonDerivation rec {
-  name = "ycmd-2016-01-12";
+python2Packages.mkPythonDerivation rec {
+  name = "ycmd-${version}";
+  version = "2017-02-03";
   namePrefix = "";
 
   src = fetchgit {
     url = "git://github.com/Valloric/ycmd.git";
-    rev = "f982f6251c5ff85e3abe6e862aad8bcd19e85ece";
-    sha256 = "1g0hivv3wla7z5dgnkcn3ny38p089pjfj36nx6k29zmprgmjinyr";
+    rev = "ec7a154f8fe50c071ecd0ac6841de8a50ce92f5d";
+    sha256 = "0rzxgqqqmmrv9r4k2ji074iprhw6sb0jkvh84wvi45yfyphsh0xi";
   };
 
   buildInputs = [ cmake boost ];
-
-  propagatedBuildInputs = [ waitress frozendict bottle ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -26,7 +22,7 @@ in mkPythonDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib/ycmd/third_party $out/bin
-    cp -r ycmd/ CORE_VERSION libclang.so.* ycm_client_support.so ycm_core.so $out/lib/ycmd/
+    cp -r ycmd/ third_party/ CORE_VERSION libclang.so.* ycm_core.so $out/lib/ycmd/
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
   '';
 
