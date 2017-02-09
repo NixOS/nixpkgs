@@ -179,17 +179,19 @@ let
 
     # Accept packets on the extra allowed host+port combination.
     ${concatMapStrings (allowed:
-      if (allowed.useIPv4 || allowed.usedIPv6) then (
-        (if allowed.useIPv4 then (
-           if allowed.useIPv6 then ("ip46tables -A nixos-fw ") else ("iptables -A nixos-fw ")
-        ) else (
-           "ip6tables -A nixos-fw "
-        ))
-        + (if (allowed.source != "") then (" --source " + allowed.source) else "")
-        + (if (allowed.protocol != "") then (" -p " + allowed.protocol) else "")
-        + (if (allowed.dport != 0) then (" --dport " + toString allowed.dport) else "")
-        + " -j nixos-fw-accept\n"
-      ) else "") cfg.extraAllowed
+        concatMapStrings (addressFamily:
+        concatMapStrings (protocol:
+          (if addressFamily == "IPv4" then "iptables -A nixos-fw "
+           else "ip6tables -A nixos-fw ")
+          + (if allowed.sourceAddress != null then (" --source " + allowed.sourceAddress) else "")
+          + (if allowed.destAddress != null then (" --dest " + allowed.destAddress) else "")
+          + (if protocol != null then (" -p " + protocol) else "")
+          + (if allowed.dport != null then (" --dport " + toString allowed.dport) else "")
+          + (if allowed.sport != null then (" --sport " + toString allowed.sport) else "")
+          + " -j nixos-fw-accept\n"
+          ) (if allowed.protocols != null then allowed.protocols else [null])
+        ) allowed.addressFamily
+      ) cfg.extraAllowed
     }
 
     # Accept IPv4 multicast.  Not a big security risk since
@@ -510,14 +512,43 @@ in
 
     networking.firewall.extraAllowed = mkOption {
       type = types.listOf (types.submodule { options = {
-           source = mkOption { type = types.string; default = ""; example = "example.com"; description = "Source of the packets"; };
-           protocol = mkOption { type = types.enum ["tcp" "udp" "icmp"]; default = ""; example = "tcp"; description = "Protocol used."; };
-           dport = mkOption { type = types.int; default = 0; example = 22; description = "Destination port of the packet."; };
-           useIPv4 = mkOption { type = types.bool; default = true; description = "Use the IPv4 address of this host."; };
-           useIPv6 = mkOption { type = types.bool; default = true; description = "Use the IPv6 address of this host."; };
+           sourceAddress = mkOption {
+                type = types.nullOr types.string;
+                default = null;
+                example = "198.51.100.0";
+                description = "Source of the packets. According to the iptables manual, DNS host names might be used here, but their use is discouraged (in particular because this delegates the security rule to DNS servers). DNS host names are resolved only when the rule is loaded.";
+           };
+           destAddress = mkOption {
+                type = types.nullOr types.string;
+                default = null;
+                example = "198.51.100.0";
+                description = "Destination of the packets. Same comment as for the `sourceAddress` parameter.";
+           };
+           protocols = mkOption {
+                type = types.nullOr (types.listOf (types.enum ["tcp" "udp" "icmp"]));
+                default = null;
+                example = ["tcp"];
+                description = "Protocol used.";
+           };
+           sport = mkOption {
+                type = types.nullOr types.string;
+                default = null;
+                example = null;
+                description = "Source port of the packet. This might be either an integer port number, or the name of a protocol, such as \"http\" or \"ssh\".";
+           };
+           dport = mkOption {
+                type = types.nullOr types.string;
+                default = null;
+                example = "22";
+                description = "Destination port of the packet. This might be either an integer port number, or the name of a protocol, such as \"http\" or \"ssh\".";
+           };
+           addressFamily = mkOption {
+                type = types.listOf (types.enum ["IPv4" "IPv6"]);
+                default = ["IPv4"];
+                description = "The address family of the sourceAddress and destAddress parameters. If these addresses use a DNS lookup (despite recommendations), make sure the host has addresses in this family.";
+           };
       };});
       default = [];
-      example = [ { source = "example.com"; protocol = "tcp"; dport = 22; } ];
       description =
         ''
           Additional exceptions in the firewall.
