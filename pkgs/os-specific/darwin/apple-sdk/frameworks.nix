@@ -6,7 +6,7 @@
 
 with frameworks; with libs; {
   AGL                     = [ Carbon OpenGL ];
-  AVFoundation            = [ ApplicationServices CoreGraphics ];
+  AVFoundation            = [ ApplicationServices CoreGraphics CoreMedia MediaToolbox ];
   AVKit                   = [];
   Accounts                = [];
   AddressBook             = [ Carbon CF ];
@@ -68,7 +68,7 @@ with frameworks; with libs; {
   Kernel                  = [ CF IOKit ];
   LDAP                    = [];
   LatentSemanticMapping   = [ Carbon CF ];
-  MapKit                  = [];
+  MapKit                  = [ CoreLocation ];
   MediaAccessibility      = [ CF CoreGraphics CoreText QuartzCore ];
   MediaToolbox            = [ AudioToolbox CF CoreMedia ];
   NetFS                   = [ CF ];
@@ -85,7 +85,7 @@ with frameworks; with libs; {
   QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
   Ruby                    = [];
   RubyCocoa               = [];
-  SceneKit                = [];
+  SceneKit                = [ GLKit ];
   ScreenSaver             = [];
   Scripting               = [];
   ScriptingBridge         = [];
@@ -115,6 +115,6 @@ with frameworks; with libs; {
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];
-  Quartz              = [ QuickLook QTKit ];
+  Quartz              = [ QuickLook QTKit ImageCaptureCore ];
   QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
 }

@@ -807,6 +807,21 @@ in {
     };
   };
 
+  altgraph = buildPythonPackage rec {
+    name = "altgraph-0.13";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/altgraph/${name}.tar.gz";
+      sha256 = "0s5yfy9k6r3g7mh7578krg1xcrb5d5j7myjaz78iimwqapcfj445";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Python graph (network) package";
+      homepage = "http://pythonhosted.org/altgraph/";
+      license = licenses.mit;
+    };
+  };
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
@@ -14129,6 +14144,24 @@ in {
   };
 
 
+  macholib = buildPythonPackage rec {
+    name = "macholib-1.8";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/macholib/${name}.tar.gz";
+      sha256 = "0ng58bs0b2fw0hp15cbfma1wg4v3xl40h11w9dal90knhn5rqg1j";
+    };
+
+    propagatedBuildInputs = with self; [ altgraph ];
+
+    meta = {
+      description = "Mach-O header analysis and editing";
+      homepage = https://bitbucket.org/ronaldoussoren/macholib;
+      license = licenses.mit;
+    };
+  };
+
+
   Mako = buildPythonPackage rec {
     name = "Mako-1.0.4";
 
@@ -14487,6 +14520,25 @@ in {
     meta = {
       description = "A minimalistic mocking library for python";
       homepage = https://pypi.python.org/pypi/MiniMock;
+    };
+  };
+
+  modulegraph = buildPythonPackage rec {
+    name = "modulegraph-0.13";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/modulegraph/${name}.tar.gz";
+      sha256 = "1fp58318n7rabxakis5cw4z2lcyimsp167hlfl6y0mvf7zx8dxai";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ altgraph ];
+
+    meta = {
+      description = "Python module dependency analysis tool";
+      homepage = https://bitbucket.org/ronaldoussoren/modulegraph;
+      license = licenses.mit;
     };
   };
 
@@ -19390,6 +19442,27 @@ in {
       description = "Library with cross-python path, ini-parsing, io, code, log facilities";
       homepage = http://pylib.readthedocs.org/;
       license = licenses.mit;
+    };
+  };
+
+
+  py2app = buildPythonPackage rec {
+    name = "py2app-0.10";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/py2app/${name}.tar.gz";
+      sha256 = "0pmaxrvx2vnlgsdlbzqr32v2j0n81n07x4xrc2nigfdnrxsxvcc2";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ altgraph macholib modulegraph ];
+
+    meta = {
+      description = "Create standalone Mac OS X applications with Python";
+      homepage = "https://pythonhosted.org/py2app/";
+      license = licenses.mit;
+      platforms = platforms.darwin;
     };
   };
 
@@ -32130,6 +32203,8 @@ EOF
       maintainer = maintainers.fridh;
     };
   };
+
+  pyobjc = callPackage ../development/python-modules/pyobjc {};
 
 });
 
