@@ -538,10 +538,10 @@ in
         };
         protocols = mkOption {
           type = types.nullOr (types.listOf (types.enum
-            ["tcp" "udp" "icmp" "udplite" "esp" "ah" "sctp" ]
+            [ "tcp" "udp" "icmp" "udplite" "esp" "ah" "sctp" ]
           ));
           default = null;
-          example = ["tcp"];
+          example = [ "tcp" ];
           description = "Protocol used.";
         };
         sport = mkOption {
@@ -567,7 +567,7 @@ in
             '';
         };
         addressFamily = mkOption {
-          type = types.listOf (types.enum ["ipv4" "ipv6"]);
+          type = types.listOf (types.enum [ "ipv4" "ipv6" ]);
           default = ["ipv4"];
           description =
             ''
