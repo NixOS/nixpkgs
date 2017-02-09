@@ -16512,6 +16512,8 @@ with pkgs;
 
   zangband = callPackage ../games/zangband { };
 
+  zdbsp = callPackage ../games/zdoom/zdbsp.nix { };
+
   zdoom = callPackage ../games/zdoom { };
 
   zod = callPackage ../games/zod { };
