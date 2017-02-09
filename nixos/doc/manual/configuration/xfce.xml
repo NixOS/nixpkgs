@@ -34,7 +34,7 @@
         XFCE programs are not installed automatically.
         To install them manually (system wide), put them into your
         <literal>environment.systemPackages</literal>-
-    <para>
+       </para>
 
     <para>
         NixOS’s default <emphasis>display manager</emphasis> (the
