@@ -7,7 +7,7 @@ with lib;
 let
   cfg = config.services.buildbot-master;
   escapeStr = s: escape ["'"] s;
-  masterCfg = pkgs.writeText "master.cfg" ''
+  masterCfg = if cfg.masterCfg == null then pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
@@ -27,9 +27,8 @@ let
       factory.addStep(step)
 
     ${cfg.extraConfig}
-  '';
-
-  configFile = if cfg.masterCfg == null then masterCfg else cfg.masterCfg;
+  ''
+  else pkgs.writeText "master.cfg" cfg.masterCfg;
 
 in {
   options = {
@@ -67,15 +66,13 @@ in {
       };
 
       masterCfg = mkOption {
-        type = with types; nullOr path;
+        type = types.str;
         description = ''
-          Optionally pass path to raw master.cfg file.
+          Optionally pass raw master.cfg file as string.
           Other options in this configuration will be ignored.
         '';
         default = null;
-        example = literalExample ''
-          pkgs.writeText "master.cfg" "BuildmasterConfig = c = {}"
-        '';
+        example = "BuildmasterConfig = c = {}";
       };
 
       schedulers = mkOption {
@@ -99,9 +96,9 @@ in {
         type = types.listOf types.str;
         description = "List of Workers.";
         default = [
-          "worker.Worker('default-worker', 'password')"
+          "worker.Worker('example-worker', 'pass')"
         ];
-        example = [ "worker.LocalWorker('default-worker')" ];
+        example = [ "worker.LocalWorker('example-worker')" ];
       };
 
       status = mkOption {
@@ -209,7 +206,7 @@ in {
 
     users.extraUsers = optional (cfg.user == "buildbot") {
       name = "buildbot";
-      description = "buildbot user";
+      description = "Buildbot User.";
       isNormalUser = true;
       createHome = true;
       home = cfg.home;
@@ -219,7 +216,7 @@ in {
     };
 
     systemd.services.buildbot-master = {
-      description = "Buildbot Continuous Integration Server";
+      description = "Buildbot Continuous Integration Server.";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
@@ -233,9 +230,8 @@ in {
       };
 
       preStart = ''
-        mkdir -vp ${cfg.buildbotDir}
-        chown -c ${cfg.user}:${cfg.group} ${cfg.buildbotDir}
-        ln -sf ${configFile} ${cfg.buildbotDir}/master.cfg
+        ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
+        ${pkgs.coreutils}/bin/ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
         ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
       '';
 
@@ -246,5 +242,7 @@ in {
       '';
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ nand0p Mic92 ];
 
 }
