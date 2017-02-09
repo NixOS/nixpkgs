@@ -128,6 +128,16 @@ in
         '';
       };
 
+      firewallOpenPorts = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Specifies whether the ports the SSH daemon listens on must
+          be enabled in the firewall. Remember to open at least some
+          of them.
+        '';
+      };
+
       listenAddresses = mkOption {
         type = with types; listOf (submodule {
           options = {
@@ -308,7 +318,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = cfg.ports;
+    networking.firewall.allowedTCPPorts = if cfg.firewallOpenPorts then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;

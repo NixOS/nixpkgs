@@ -177,6 +177,21 @@ let
       ) cfg.allowedUDPPortRanges
     }
 
+    # Accept packets on the extra allowed host+port combination.
+    ${concatMapStrings (allowed:
+      if (allowed.useIPv4 || allowed.usedIPv6) then (
+        (if allowed.useIPv4 then (
+           if allowed.useIPv6 then ("ip46tables -A nixos-fw ") else ("iptables -A nixos-fw ")
+        ) else (
+           "ip6tables -A nixos-fw "
+        ))
+        + (if (allowed.source != "") then (" --source " + allowed.source) else "")
+        + (if (allowed.protocol != "") then (" -p " + allowed.protocol) else "")
+        + (if (allowed.dport != 0) then (" --dport " + toString allowed.dport) else "")
+        + " -j nixos-fw-accept\n"
+      ) else "") cfg.extraAllowed
+    }
+
     # Accept IPv4 multicast.  Not a big security risk since
     # probably nobody is listening anyway.
     #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
@@ -490,6 +505,22 @@ in
           shutdown script.  These are executed just after the removal
           of the NixOS input rule, or if the service enters a failed
           state.
+        '';
+    };
+
+    networking.firewall.extraAllowed = mkOption {
+      type = types.listOf (types.submodule { options = {
+           source = mkOption { type = types.string; default = ""; example = "example.com"; description = "Source of the packets"; };
+           protocol = mkOption { type = types.enum ["tcp" "udp" "icmp"]; default = ""; example = "tcp"; description = "Protocol used."; };
+           dport = mkOption { type = types.int; default = 0; example = 22; description = "Destination port of the packet."; };
+           useIPv4 = mkOption { type = types.bool; default = true; description = "Use the IPv4 address of this host."; };
+           useIPv6 = mkOption { type = types.bool; default = true; description = "Use the IPv6 address of this host."; };
+      };});
+      default = [];
+      example = [ { source = "example.com"; protocol = "tcp"; dport = 22; } ];
+      description =
+        ''
+          Additional exceptions in the firewall.
         '';
     };
 
