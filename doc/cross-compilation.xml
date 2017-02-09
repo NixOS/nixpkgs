@@ -25,7 +25,7 @@
 <!--============================================================-->
 
 <section xml:id="sec-cross-packaging">
-  <title>Packing in a cross-friendly manner</title>
+  <title>Packaging in a cross-friendly manner</title>
 
   <section>
     <title>Platform parameters</title>
@@ -132,9 +132,23 @@
 
 <section xml:id="sec-cross-usage">
   <title>Cross-building packages</title>
+  <note><para>
+    More information needs to moved from the old wiki, especially <link xlink:href="https://nixos.org/wiki/CrossCompiling" />, for this section.
+  </para></note>
   <para>
-    To be written.
-    This is basically unchanged so see the old wiki for now.
+    Many sources (manual, wiki, etc) probably mention passing <varname>system</varname>, <varname>platform</varname>, and, optionally, <varname>crossSystem</varname> to nixpkgs:
+    <literal>import &lt;nixpkgs&gt; { system = ..; platform = ..; crossSystem = ..; }</literal>.
+    <varname>system</varname> and <varname>platform</varname> together determine the system on which packages are built, and <varname>crossSystem</varname> specifies the platform on which packages are ultimately intended to run, if it is different.
+    This still works, but with more recent changes, one can alternatively pass <varname>localSystem</varname>, containing <varname>system</varname> and <varname>platform</varname>, for symmetry.
+  </para>
+  <para>
+    One would think that <varname>localSystem</varname> and <varname>crossSystem</varname> overlap horribly with the three <varname>*Platforms</varname> (<varname>buildPlatform</varname>, <varname>hostPlatform,</varname> and <varname>targetPlatform</varname>; see <varname>stage.nix</varname> or the manual).
+    Actually, those identifiers are purposefully not used here to draw a subtle but important distinction:
+    While the granularity of having 3 platforms is necessary to properly *build* packages, it is overkill for specifying the user's *intent* when making a build plan or package set.
+    A simple "build vs deploy" dichotomy is adequate: the sliding window principle described in the previous section shows how to interpolate between the these two "end points" to get the 3 platform triple for each bootstrapping stage.
+    That means for any package a given package set, even those not bound on the top level but only reachable via dependencies or <varname>buildPackages</varname>, the three platforms will be defined as one of <varname>localSystem</varname> or <varname>crossSystem</varname>, with the former replacing the latter as one traverses build-time dependencies.
+    A last simple difference then is <varname>crossSystem</varname> should be null when one doesn't want to cross-compile, while the <varname>*Platform</varname>s are always non-null.
+    <varname>localSystem</varname> is always non-null.
   </para>
 </section>
 
