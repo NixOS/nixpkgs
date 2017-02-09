@@ -30937,13 +30937,13 @@ EOF
 
   w3lib = buildPythonPackage rec {
     name = "w3lib-${version}";
-    version = "1.14.2";
+    version = "1.17.0";
 
     buildInputs = with self ; [ six pytest ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/w3lib/${name}.tar.gz";
-      sha256 = "bd87eae62d208eef70869951abf05e96a8ee559714074a485168de4c5b190004";
+      sha256 = "0vshh300ay5wn5hwl9qcb32m71pz5s6miy0if56vm4nggy159inq";
     };
 
     meta = {
