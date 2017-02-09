@@ -547,7 +547,7 @@ in
         sport = mkOption {
           type = types.nullOr types.string;
           default = null;
-          example = null;
+          example = "32219";
           description =
             ''
               Source port of the packet. This might be either an
@@ -578,7 +578,7 @@ in
             '';
         };
       };});
-      default = [];
+      default = [ ];
       description =
         ''
           Additional exceptions in the firewall.
