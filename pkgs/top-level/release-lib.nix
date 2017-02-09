@@ -46,6 +46,11 @@ rec {
   pkgs_x86_64_cygwin = allPackages { system = "x86_64-cygwin"; };
 
 
+  assertTrue = bool:
+    if bool
+    then pkgs.runCommand "evaluated-to-true" {} "touch $out"
+    else pkgs.runCommand "evaluated-to-false" {} "false";
+
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be
      interested in the result of cross building a package. */

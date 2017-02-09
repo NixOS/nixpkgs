@@ -47,11 +47,11 @@ in
     # cause false negatives.
     testEqualOne = path: system: let
       f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert
+    in assertTrue (
         f path { inherit system; }
         ==
         f (["buildPackages"] ++ path) { inherit system crossSystem; };
-      true;
+      );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 

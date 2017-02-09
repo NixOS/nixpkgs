@@ -26,7 +26,7 @@ let
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc;
-      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
+      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs supportedSystems scrubJobs; };
 
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
@@ -35,7 +35,6 @@ let
             [ jobs.tarball
               jobs.metrics
               jobs.manual
-              jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -62,7 +61,8 @@ let
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.vim.x86_64-darwin
-            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
+            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
+              ++ lib.collect lib.isDerivation jobs.lib-tests;
         };
     } // (lib.optionalAttrs (builtins.elem "i686-linux" supportedSystems) {
       stdenvBootstrapTools.i686-linux =
