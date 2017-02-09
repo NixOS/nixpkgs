@@ -227,9 +227,7 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
-    lablgl = callPackage ../development/ocaml-modules/lablgl {
-      camlp5 = camlp5_strict;
-    };
+    lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
       inherit (pkgs.gnome2) libgnomecanvas libglade gtksourceview;

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${name}.tar.xz";
-    sha256 = "431b7b4876638c6a537c8bf9c91a9250532b3d960b22b056df554695a81e4499";
+    sha256 = "09ijxicsqf39y6h8kwbfjyljfbqkkx4vrpyfn6gfg1h9mvp4cf39";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];

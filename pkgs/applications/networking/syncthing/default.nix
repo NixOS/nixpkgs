@@ -6,14 +6,14 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  version = "0.14.21";
+  version = "0.14.23";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "0gxv4r7zg2rxjj0q8iiq3p5s75kwshcy6drjv65k8p2778bbvcjl";
+    sha256 = "1himf8yhfpjsv5m068y2f6f696d7ip0jq7jmg69kn7035zlxicis";
   };
 
   buildInputs = [ go ];

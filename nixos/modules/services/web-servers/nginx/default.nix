@@ -417,7 +417,7 @@ in
         acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
-            group = cfg.group;
+            group = lib.mkDefault cfg.group;
             webroot = vhostConfig.acmeRoot;
             extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
             postRun = ''

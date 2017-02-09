@@ -169,12 +169,24 @@ following incompatible changes:</para>
 <para>Other notable improvements:</para>
 
 <itemizedlist>
+
   <listitem>
     <para>Module type system have a new extensible option types feature that
       allow to extend certain types, such as enum, through multiple option
       declarations of the same option across multiple modules.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      <literal>jre</literal> now defaults to GTK+ UI by default. This
+      improves visual consistency and makes Java follow system font style,
+      improving the situation on HighDPI displays. This has a cost of increased
+      closure size; for server and other headless workloads it's recommended to
+      use <literal>jre_headless</literal>.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 

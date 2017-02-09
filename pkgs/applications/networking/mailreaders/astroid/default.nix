@@ -1,30 +1,27 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, gnome3, gmime, webkitgtk24x
-  , libsass, notmuch, boost, makeWrapper }:
+, libsass, notmuch, boost, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "astroid-${version}";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "astroidmail";
     repo = "astroid";
     rev = "v${version}";
-    sha256 = "0zashjmqv8ips9q8ckyhgm9hfyf01wpgs6g21cwl05q5iklc5x7r";
+    sha256 = "0r3hqwwr68bjhqaa1r3l9brbmvdp11pf8vhsjlvm5zv520z5y1rf";
   };
 
   patches = [ ./propagate-environment.patch ];
 
-  buildInputs = [ scons pkgconfig gnome3.gtkmm gmime webkitgtk24x libsass
-                  gnome3.libpeas notmuch boost gnome3.gsettings_desktop_schemas
-                  makeWrapper ];
+  nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
+
+  buildInputs = [ gnome3.gtkmm gmime webkitgtk24x libsass gnome3.libpeas
+                  notmuch boost gnome3.gsettings_desktop_schemas
+                  gnome3.adwaita-icon-theme ];
 
   buildPhase = "scons --prefix=$out build";
   installPhase = "scons --prefix=$out install";
-
-  preFixup = ''
-    wrapProgram "$out/bin/astroid" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   meta = {
     homepage = "https://astroidmail.github.io/";
