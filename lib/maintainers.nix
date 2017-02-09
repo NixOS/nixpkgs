@@ -390,6 +390,7 @@
   psibi = "Sibi <sibi@psibi.in>";
   pstn = "Philipp Steinpaß <philipp@xndr.de>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
+  psychomario = "Rory McNamara <rory@rorym.cnamara.com>";
   puffnfresh = "Brian McKenna <brian@brianmckenna.org>";
   pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";

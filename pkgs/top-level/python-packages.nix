@@ -32131,6 +32131,20 @@ EOF
     };
   };
 
+  requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
+
+  pysigset = callPackage ../development/python-modules/pysigset { };
+
+  blessed = callPackage ../development/python-modules/blessed { };
+
+  Flask-RESTful = callPackage ../development/python-modules/Flask-RESTful { };
+
+  aniso8601 = callPackage ../development/python-modules/aniso8601 { };
+
+  scruffington = callPackage ../development/python-modules/scruffington { };
+
+  voltron = callPackage ../development/python-modules/voltron { };
+
 });
 
 in fix' (extends overrides packages)
