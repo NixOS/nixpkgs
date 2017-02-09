@@ -183,11 +183,11 @@ let
         concatMapStrings (protocol:
           (if addressFamily == "IPv4" then "iptables -A nixos-fw "
            else "ip6tables -A nixos-fw ")
-          + (if allowed.sourceAddress != null then (" --source " + allowed.sourceAddress) else "")
-          + (if allowed.destAddress != null then (" --dest " + allowed.destAddress) else "")
-          + (if protocol != null then (" -p " + protocol) else "")
-          + (if allowed.dport != null then (" --dport " + toString allowed.dport) else "")
-          + (if allowed.sport != null then (" --sport " + toString allowed.sport) else "")
+          + (lib.optionalString (allowed.sourceAddress != null) (" --source " + allowed.sourceAddress))
+          + (lib.optionalString (allowed.destAddress != null) (" --dest " + allowed.destAddress))
+          + (lib.optionalString (protocol != null) (" -p " + protocol))
+          + (lib.optionalString (allowed.dport != null) (" --dport " + toString allowed.dport))
+          + (lib.optionalString (allowed.sport != null) (" --sport " + toString allowed.sport))
           + " -j nixos-fw-accept\n"
           ) (if allowed.protocols != null then allowed.protocols else [null])
         ) allowed.addressFamily
@@ -543,8 +543,8 @@ in
                 description = "Destination port of the packet. This might be either an integer port number, or the name of a protocol, such as \"http\" or \"ssh\".";
            };
            addressFamily = mkOption {
-                type = types.listOf (types.enum ["IPv4" "IPv6"]);
-                default = ["IPv4"];
+                type = types.listOf (types.enum ["ipv4" "ipv6"]);
+                default = ["ipv4"];
                 description = "The address family of the sourceAddress and destAddress parameters. If these addresses use a DNS lookup (despite recommendations), make sure the host has addresses in this family.";
            };
       };});
