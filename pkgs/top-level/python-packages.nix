@@ -18146,11 +18146,11 @@ in {
 
   parsel = buildPythonPackage rec {
     name = "parsel-${version}";
-    version = "1.0.3";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/parsel/${name}.tar.gz";
-      sha256 = "9c12c370feda864c2f541cecce9bfb3a2a682c6c59c097a852e7b040dc6b8431";
+      sha256 = "0a34d1c0bj1fzb5dk5744m2ag6v3b8glk4xp0amqxdan9ldbcd97";
     };
 
     buildInputs = with self; [ pytest pytestrunner ];
