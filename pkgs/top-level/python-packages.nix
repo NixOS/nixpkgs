@@ -31906,6 +31906,8 @@ EOF
     };
   };
 
+  incremental = callPackage ../development/python-modules/incremental { };
+
 });
 
 in fix' (extends overrides packages)
