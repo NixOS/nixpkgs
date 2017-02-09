@@ -43,21 +43,17 @@ in
       let
 
         deviceDependency = dev:
-          if (config.boot.isContainer == false)
-          then
-            # Trust udev when not in the container
-            optional (dev != null) (subsystemDevice dev)
-          else
-            # When in the container, check whether the interface is built from other definitions
-            if (hasAttr dev cfg.bridges) ||
-               (hasAttr dev cfg.bonds) ||
-               (hasAttr dev cfg.macvlans) ||
-               (hasAttr dev cfg.sits) ||
-               (hasAttr dev cfg.vlans) ||
-               (hasAttr dev cfg.vswitches) ||
-               (hasAttr dev cfg.wlanInterfaces)
-            then [ "${dev}-netdev.service" ]
-            else [];
+          # Use systemd service if we manage device creation, else
+          # trust udev when not in the container
+          if (hasAttr dev cfg.bridges) ||
+             (hasAttr dev cfg.bonds) ||
+             (hasAttr dev cfg.macvlans) ||
+             (hasAttr dev cfg.sits) ||
+             (hasAttr dev cfg.vlans) ||
+             (hasAttr dev cfg.vswitches) ||
+             (hasAttr dev cfg.wlanInterfaces)
+          then [ "${dev}-netdev.service" ]
+          else optional (dev != null && !config.boot.isContainer) (subsystemDevice dev);
 
         networkLocalCommands = {
           after = [ "network-setup.service" ];
@@ -189,7 +185,7 @@ in
               user "${i.virtualOwner}"
             '';
             postStop = ''
-              ip link del ${i.name}
+              ip link del ${i.name} || true
             '';
           };
 
@@ -326,7 +322,7 @@ in
               ip link set "${n}" up
             '';
             postStop = ''
-              ip link delete "${n}"
+              ip link delete "${n}" || true
             '';
           });
 
@@ -354,7 +350,7 @@ in
               ip link set "${n}" up
             '';
             postStop = ''
-              ip link delete "${n}"
+              ip link delete "${n}" || true
             '';
           });
 
@@ -378,7 +374,7 @@ in
               ip link set "${n}" up
             '';
             postStop = ''
-              ip link delete "${n}"
+              ip link delete "${n}" || true
             '';
           });
 
