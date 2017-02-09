@@ -4,10 +4,10 @@
          version="5.0"
          xml:id="sec-xfce">
 
-    <title>XFCE Desktop Environment</title>
+    <title>Xfce Desktop Environment</title>
 
     <para>
-        To enable the XFCE Desktop Environment, set
+        To enable the Xfce Desktop Environment, set
         <programlisting>
             services.xserver.desktopManager = {
                 xfce.enable = true;
@@ -31,15 +31,16 @@
     </para>
 
     <para>
-        XFCE programs are not installed automatically.
+        Some Xfce programs are not installed automatically.
         To install them manually (system wide), put them into your
-        <literal>environment.systemPackages</literal>-
-    <para>
+        <literal>environment.systemPackages</literal>.
+	</para>
 
     <para>
-        NixOS’s default <emphasis>display manager</emphasis> (the
-        program that provides a graphical login prompt and manages the X
-        server) is SLiM. You can, for example, select KDE’s
+		NixOS’s default <emphasis>display manager</emphasis>is SLiM.
+		(DM is the program that provides a graphical login prompt
+		 and manages the X server.)
+	   	You can, for example, select KDE’s
         <command>kdm</command> instead:
         <programlisting>
             services.xserver.displayManager.kdm.enable = true;
@@ -66,7 +67,7 @@
 
         <para>
             There is no authentication agent automatically installed alongside
-            XFCE. To allow mounting of local (non-removable) filesystems, you
+            Xfce. To allow mounting of local (non-removable) filesystems, you
             will need to install one.
 
             Installing <emphasis>polkit_gnome</emphasis>, a rebuild, logout and
