@@ -14,7 +14,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.7.0"; in
+let version = "45.7.1"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "99cea54b553158c1e08cf19157ac2bb6822fd1fef0501d36f983e6b8d4f2143a2e6124d61297446944033d3fed9326fe0f12ca45db0b5815be71a0777e73ffb0";
+    sha512 = "aa1231169cfe243a257e6b9088281b85d0cf75207e3b9ebeda7792567a86f6098fb5c74dc397e3eeeb1925d221d2fb1b17df8762afd115eff9ad4d1370a49e56";
   };
 
   patches = [ ./gcc6.patch ];

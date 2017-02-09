@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "wavpack-${version}";
-  version = "4.80.0";
+  version = "5.1.0";
 
   enableParallelBuilding = true;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.wavpack.com/${name}.tar.bz2";
-    sha256 = "1sbbwvqixg87h02avg0d5r64mpjz8cmhcc6j3s9wmlbvbykjw63r";
+    sha256 = "0i19c6krc0p9krwrqy9s5xahaafigqzxcn31piidmlaqadyn4f8r";
   };
 
   meta = with stdenv.lib; {

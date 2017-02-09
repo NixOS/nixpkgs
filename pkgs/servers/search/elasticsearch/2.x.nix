@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qjq04sfqb35pf2xpvr8j5p27chfxpjp8ymrp1h5bfk5rbk9444q";
   };
 
-  patches = [ ./es-home-2.x.patch ];
+  patches = [ ./es-home-2.x.patch ./es-classpath-2.x.patch ];
 
   buildInputs = [ makeWrapper jre ] ++
     (if (!stdenv.isDarwin) then [utillinux] else [getopt]);
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
 
     # don't want to have binary with name plugin
     mv $out/bin/plugin $out/bin/elasticsearch-plugin
-    wrapProgram $out/bin/elasticsearch ${if (!stdenv.isDarwin)
+    wrapProgram $out/bin/elasticsearch \
+      --prefix ES_CLASSPATH : "$out/lib/${name}.jar":"$out/lib/*" \
+      ${if (!stdenv.isDarwin)
         then ''--prefix PATH : "${utillinux}/bin/"''
         else ''--prefix PATH : "${getopt}/bin"''} \
       --set JAVA_HOME "${jre}"

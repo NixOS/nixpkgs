@@ -18,8 +18,10 @@ with pkgs;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: nixpkgsFun {
-    inherit system;
-    platform = platform // { kernelArch = kernel; };
+    localSystem = {
+      inherit system;
+      platform = platform // { kernelArch = kernel; };
+    };
   };
 
   # Used by wine, firefox with debugging version of Flash, ...
@@ -3877,6 +3879,8 @@ with pkgs;
 
   sonata = callPackage ../applications/audio/sonata { };
 
+  souper = callPackage ../development/compilers/souper { };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spiped = callPackage ../tools/networking/spiped { };
@@ -4112,6 +4116,8 @@ with pkgs;
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
   tpm-luks = callPackage ../tools/security/tpm-luks { };
+
+  trezord = callPackage ../servers/trezord { };
 
   tthsum = callPackage ../applications/misc/tthsum { };
 
@@ -5207,6 +5213,7 @@ with pkgs;
 
   jdk = if stdenv.isDarwin then jdk7 else jdk8;
   jre = if stdenv.isDarwin then jre7 else jre8;
+  jre_headless = if stdenv.isDarwin then jre7 else jre8_headless;
 
   openshot-qt = callPackage ../applications/video/openshot-qt { };
 
@@ -8047,7 +8054,8 @@ with pkgs;
   libdvdread = callPackage ../development/libraries/libdvdread { };
   libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
 
-  libdwarf = callPackage ../development/libraries/libdwarf { };
+  inherit (callPackage ../development/libraries/libdwarf { })
+    libdwarf dwarfdump;
 
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
 
@@ -11224,8 +11232,6 @@ with pkgs;
     cross = assert targetPlatform != buildPlatform; targetPlatform;
   };
 
-  linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
-
   linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix { };
 
   # We can choose:
@@ -11277,17 +11283,6 @@ with pkgs;
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_3_18 = callPackage ../os-specific/linux/kernel/linux-3.18.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11514,7 +11509,6 @@ with pkgs;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10);
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12);
-  linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
@@ -16840,6 +16834,8 @@ with pkgs;
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg;
   };
+
+  redshift-plasma-applet = callPackage ../applications/misc/redshift-plasma-applet { };
 
   orion = callPackage ../misc/themes/orion {};
 

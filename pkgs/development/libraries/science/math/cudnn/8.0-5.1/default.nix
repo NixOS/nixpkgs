@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://developer.download.nvidia.com/compute/redist/cudnn/v5.1/cudnn-8.0-linux-x64-v5.1.tgz";
-    sha256 = "a87cb2df2e5e7cc0a05e266734e679ee1a2fadad6f06af82a76ed81a23b102c8";
+    sha256 = "1kj50smlkm347wfbfqvy09ylvad1zapqjc9yqvfykmiddyrij1y1";
   };
 
   installPhase = ''
