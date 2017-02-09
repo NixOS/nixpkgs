@@ -141,6 +141,7 @@
   ./services/computing/torque/mom.nix
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildbot/master.nix
+  ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
