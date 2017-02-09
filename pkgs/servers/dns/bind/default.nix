@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
 , libseccomp ? null }:
 
-let version = "9.10.4-P5"; in
+let version = "9.10.4-P6"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "1sqg7wg05h66vdjc8j215r04f8pg7lphkb93nsqxvzhk6r0ppi49";
+    sha256 = "0rgffdm0h6dks0np4h9q4kd8nyb3azrdxw2skqnjzd8ws78vzpx1";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
