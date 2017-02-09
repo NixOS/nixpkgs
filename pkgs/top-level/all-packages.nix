@@ -8945,6 +8945,8 @@ with pkgs;
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
+  olm = callPackage ../development/libraries/olm { };
+
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   openal = self.openalSoft;
