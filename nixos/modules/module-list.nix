@@ -197,6 +197,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
+  ./services/hardware/illum.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -205,6 +206,7 @@
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
+  ./services/hardware/trezord.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
@@ -339,6 +341,7 @@
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/drbd.nix
+  ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix

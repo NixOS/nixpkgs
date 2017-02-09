@@ -236,13 +236,13 @@ in
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "3.4.4";
+    version = "3.4.16";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
-      rev = "343ca980982d87c778696e42e52eff763cadee4a";
-      sha256 = "03jk45nk1c5j7zwj6l8s8jyf6ijhisp1r16xg6n5561bm3cfk0b9";
+      rev = "b39e4e9870d68841279cbc7d7214f3ad9b27f330";
+      sha256 = "0pmlgqr4kd0gvckz77mj6v42kcx6lb23anm8jnf2fbn877snnijx";
     };
 
     meta = with stdenv.lib; {

@@ -9,7 +9,7 @@
 assert withSystemLibav -> libav != null;
 
 stdenv.mkDerivation rec {
-  name = "gst-libav-1.10.2";
+  name = "gst-libav-1.10.3";
 
   meta = {
     homepage = "http://gstreamer.freedesktop.org";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-libav/${name}.tar.xz";
-    sha256 = "0g778j7w4vpbhwjzyrzpajvr26nxm6vqby84v8g1w1hz44v71pd3";
+    sha256 = "1aajayv63ardkbmcg7pnh2d87r067325a5wzinwihaw6n5jw2sws";
   };
 
   outputs = [ "out" "dev" ];

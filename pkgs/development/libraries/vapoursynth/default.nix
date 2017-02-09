@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
-  version = "R35";
+  version = "R36";
 
   src = fetchFromGitHub {
-    owner = "vapoursynth";
-    repo  = "vapoursynth";
-    rev    = "dcab1529d445776a5575859aea655e613c23c8bc";
-    sha256 = "0nhpqws91b19lql2alc5pxgzfgh1wjrws0kyvir41jhfxhhjaqpi";
+    owner  = "vapoursynth";
+    repo   = "vapoursynth";
+    rev    = version;
+    sha256 = "10yiccj7yd4bd3a6k15xahb5y3ymcagyaqavh0wal2rwzfck9k8c";
   };
 
   buildInputs = [
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
-    homepage = http://www.vapoursynth.com/;
-    license   = licenses.lgpl21;
-    platforms = platforms.unix;
+    homepage    = http://www.vapoursynth.com/;
+    license     = licenses.lgpl21;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 

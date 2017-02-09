@@ -18,7 +18,7 @@ let
       };
     };
 
-  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha256 }: rec {
+  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha512 }: rec {
     name = "grsecurity-${grver}-${kver}-${grrev}";
 
     # Pass these along to allow the caller to determine compatibility
@@ -32,7 +32,7 @@ let
         # source files immediately upon releasing a new version ...
         "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${kver}/${name}.patch"
       ];
-      inherit sha256;
+      inherit sha512;
     };
 
     features.grsecurity = true;
@@ -95,9 +95,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.8.17";
-      grrev  = "201701151620";
-      sha256 = "10gavcdby8aiylbx8afc1x4j0vzbb16bhlw39a7ibnav45scsr0p";
+    { kver   = "4.9.8";
+      grrev  = "201702071801";
+      sha512 = "05hxn9jzkywd15iqjd7lykj0f9czw0kq1rs7krxnrk4lhr4k4ahbhq4330mw4pwcvln4ys25dw7mbljn9zvymb7b1kc3m301rrbgj5f";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,

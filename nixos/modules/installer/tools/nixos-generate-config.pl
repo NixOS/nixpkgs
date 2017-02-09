@@ -208,9 +208,6 @@ foreach my $path (glob "/sys/bus/pci/devices/*") {
     pciCheck $path;
 }
 
-push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
-
-
 # Idem for USB devices.
 
 sub usbCheck {
@@ -277,6 +274,12 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
     push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
 
+# Also for Hyper-V.
+if ($virt eq "microsoft") {
+    push @initrdAvailableKernelModules, "hv_storvsc";
+    $videoDriver = "fbdev";
+}
+
 
 # Pull in NixOS configuration for containers.
 if ($virt eq "systemd-nspawn") {
@@ -307,6 +310,7 @@ sub findStableDevPath {
     return $dev;
 }
 
+push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDriver;
 
 # Generate the swapDevices option from the currently activated swap
 # devices.
@@ -587,6 +591,12 @@ $bootLoaderConfig
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;

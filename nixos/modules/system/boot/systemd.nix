@@ -42,7 +42,8 @@ let
       "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
-      "systemd-hwdb-update.service"
+      # hwdb.bin is managed by NixOS
+      # "systemd-hwdb-update.service"
 
       # Consoles.
       "getty.target"
@@ -61,7 +62,6 @@ let
       # Login stuff.
       "systemd-logind.service"
       "autovt@.service"
-      #"systemd-vconsole-setup.service"
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
@@ -313,7 +313,7 @@ let
     '';
 
   targetToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -322,7 +322,7 @@ let
     };
 
   serviceToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Service]
@@ -342,7 +342,7 @@ let
     };
 
   socketToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Socket]
@@ -352,7 +352,7 @@ let
     };
 
   timerToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Timer]
@@ -361,7 +361,7 @@ let
     };
 
   pathToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Path]
@@ -370,7 +370,7 @@ let
     };
 
   mountToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Mount]
@@ -379,7 +379,7 @@ let
     };
 
   automountToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Automount]
@@ -388,7 +388,7 @@ let
     };
 
   sliceToUnit = name: def:
-    { inherit (def) wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable;
       text = commonUnitText def +
         ''
           [Slice]
@@ -753,7 +753,8 @@ in
 
         # Keep a persistent journal. Note that systemd-tmpfiles will
         # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
+        # FIXME: revert to 0700 with systemd v233.
+        mkdir -m 0750 -p /var/log/journal
       '';
 
     users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;

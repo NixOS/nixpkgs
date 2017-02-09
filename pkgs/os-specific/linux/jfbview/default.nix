@@ -9,16 +9,16 @@ let
     then "jfbview"
     else "jfbpdf";
   binaries = if imageSupport
-    then [ "jfbview" "jpdfcat" "jpdfgrep" ]	# all require imlib2
-    else [ "jfbpdf" ];	       		  	# does not
+    then [ "jfbview" "jpdfcat" "jpdfgrep" ] # all require imlib2
+    else [ "jfbpdf" ]; # does not
 in
 
 stdenv.mkDerivation rec {
   name = "${package}-${version}";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
-    sha256 = "1vd2ndl4ar2bzqf0k11qid6gvma59qg62imsa81mgczsqw7kvbx6";
+    sha256 = "18iyvisslqp5ibhix00j4y7q8fmf2a79chflimc78xf52x4m2p5q";
     rev = version;
     repo = "JFBView";
     owner = "jichu4n";

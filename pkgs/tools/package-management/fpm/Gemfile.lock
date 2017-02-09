@@ -1,7 +1,12 @@
+GIT
+  remote: git://github.com/peterhoeg/archive-tar-minitar.git
+  revision: dae32ca550a87dba32597115ae18805db4782ebe
+  specs:
+    archive-tar-minitar (0.5.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    archive-tar-minitar (0.5.2)
     arr-pm (0.0.10)
       cabin (> 0)
     backports (3.6.8)
@@ -40,7 +45,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  archive-tar-minitar (>= 0.5.2.1)!
   fpm
 
 BUNDLED WITH
-   1.12.5
+   1.14.3

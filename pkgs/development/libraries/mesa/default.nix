@@ -4,6 +4,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python2
 , grsecEnabled ? false
+, enableRadv ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 }:
 
@@ -73,7 +74,7 @@ stdenv.mkDerivation {
   ] else [
       "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,swrast"
       "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
-      "--with-vulkan-drivers=intel"
+      ("--with-vulkan-drivers=intel" + optionalString enableRadv ",radeon")
   ]) ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")

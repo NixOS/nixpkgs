@@ -62,8 +62,8 @@ in
   assert buildKernel -> kernel != null;
   {
     splStable = common {
-      version = "0.6.5.8";
-      sha256 = "000yvaccqlkrq15sdz0734fp3lkmx58182cdcfpm4869i0q7rf0s";
+      version = "0.6.5.9";
+      sha256 = "15qpx2nhprmk14jgb7yqp9dvfb6i3hhhspi77kvian171b0a6112";
     };
     splUnstable = common {
       version = "0.7.0-rc3";
