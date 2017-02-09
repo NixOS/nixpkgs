@@ -318,7 +318,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = if cfg.firewallOpenPorts then cfg.ports else [];
+    networking.firewall.allowedTCPPorts = if cfg.openInFirewall then cfg.ports else [];
 
     security.pam.services.sshd =
       { startSession = true;
