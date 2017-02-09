@@ -128,13 +128,13 @@ in
         '';
       };
 
-      firewallOpenPorts = mkOption {
+      openInFirewall = mkOption {
         type = types.bool;
         default = true;
         description = ''
           Specifies whether the ports the SSH daemon listens on must
-          be enabled in the firewall. Remember to open at least some
-          of them.
+          be enabled in the firewall. If set to false, at least some
+          of them must be open using the firewall module.
         '';
       };
 
