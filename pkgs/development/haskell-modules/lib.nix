@@ -50,8 +50,8 @@ rec {
   enableSharedLibraries = drv: overrideCabal drv (drv: { enableSharedLibraries = true; });
   disableSharedLibraries = drv: overrideCabal drv (drv: { enableSharedLibraries = false; });
 
-  enableSplitObjs = drv: overrideCabal drv (drv: { enableSplitObjs = true; });
-  disableSplitObjs = drv: overrideCabal drv (drv: { enableSplitObjs = false; });
+  enableDeadCodeElimination = drv: overrideCabal drv (drv: { enableDeadCodeElimination = true; });
+  disableDeadCodeElimination = drv: overrideCabal drv (drv: { enableDeadCodeElimination = false; });
 
   enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
   disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
