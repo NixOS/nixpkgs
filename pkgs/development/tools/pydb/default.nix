@@ -12,10 +12,10 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     p="$(toPythonPath $out)"
-    configureFlags="$configureFlags --with-python=${python.interpreter} --with-site-packages=$p"
+    configureFlags="$configureFlags --with-python=${python2.interpreter} --with-site-packages=$p"
   '';
 
-  meta = { 
+  meta = {
     description = "Python debugger with GDB-like commands and Emacs bindings";
     homepage = http://bashdb.sourceforge.net/pydb/;
     license = stdenv.lib.licenses.gpl3;

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    ${python.interpreter} ./configure.py --prefix=$out
+    ${python2.interpreter} ./configure.py --prefix=$out
   '';
 
   meta = with stdenv.lib; {
