@@ -3330,6 +3330,8 @@ with pkgs;
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
+  pdf2htmlEX = callPackage ../tools/typesetting/pdf2htmlEX { };
+
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
@@ -3582,6 +3584,8 @@ with pkgs;
   redir = callPackage ../tools/networking/redir { };
 
   redmine = callPackage ../applications/version-management/redmine { };
+
+  redsocks = callPackage ../tools/networking/redsocks { };
 
   rt = callPackage ../servers/rt { };
 
@@ -6801,7 +6805,10 @@ with pkgs;
 
   yacc = bison;
 
-  ycmd = callPackage ../development/tools/misc/ycmd { };
+  ycmd = callPackage ../development/tools/misc/ycmd {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    python = python2;
+  };
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
@@ -8944,6 +8951,8 @@ with pkgs;
   ogre = callPackage ../development/libraries/ogre {};
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
+
+  olm = callPackage ../development/libraries/olm { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
@@ -12889,6 +12898,8 @@ with pkgs;
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
+
+  ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
   ed = callPackage ../applications/editors/ed { };
 

@@ -1,4 +1,6 @@
 { stdenv
+, lib
+, overrideDerivation
 
 # required for gcc plugins
 , gmp, libmpc, mpfr
@@ -17,22 +19,17 @@
 
 assert (kernel.version == grsecPatch.kver);
 
-(kernel.override {
+overrideDerivation (kernel.override {
   inherit modDirVersion;
-  # TODO: unique is a work-around
-  kernelPatches = stdenv.lib.unique ([ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []));
+  kernelPatches = lib.unique ([ grsecPatch ] ++ kernelPatches ++ (kernel.kernelPatches or []));
   extraConfig = ''
     GRKERNSEC y
     PAX y
     ${extraConfig}
   '';
-
-  # Enabling grsecurity/PaX deselects several other options implicitly,
-  # causing the configfile checker to fail (when it finds that options
-  # expected to be enabled are not).
   ignoreConfigErrors = true;
-}).overrideAttrs (attrs: {
-  nativeBuildInputs = (stdenv.lib.chooseDevOutputs [ gmp libmpc mpfr ]) ++ (attrs.nativeBuildInputs or []);
+}) (attrs: {
+  nativeBuildInputs = (lib.chooseDevOutputs [ gmp libmpc mpfr ]) ++ (attrs.nativeBuildInputs or []);
   preConfigure = ''
     echo ${localver} >localversion-grsec
     ${attrs.preConfigure or ""}

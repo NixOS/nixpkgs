@@ -18,6 +18,11 @@ in
   # so we do it now.
   localSystem ? builtins.intersectAttrs { system = null; platform = null; } args
 
+, # These are needed only because nix's `--arg` command-line logic doesn't work
+  # with unnamed parameters allowed by ...
+  system ? localSystem.system
+, platform ? localSystem.platform
+
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
   config ? let

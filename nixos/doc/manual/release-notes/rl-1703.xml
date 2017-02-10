@@ -99,6 +99,15 @@ following incompatible changes:</para>
 
   <listitem>
     <para>
+      Two lone top-level dict dbs moved into <literal>dictdDBs</literal>. This
+      affects: <literal>dictdWordnet</literal> which is now at
+      <literal>dictdDBs.wordnet</literal> and <literal>dictdWiktionary</literal>
+      which is now at <literal>dictdDBs.wiktionary</literal>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       Parsoid service now uses YAML configuration format.
      <literal>service.parsoid.interwikis</literal> is now called
      <literal>service.parsoid.wikis</literal> and is a list of either API URLs

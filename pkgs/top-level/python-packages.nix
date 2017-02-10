@@ -1554,11 +1554,11 @@ in {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.11.35";
+    version = "1.11.45";
       namePrefix = "";
       src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "0k6y8cg311bqak5x9pilg80w6f76dcbzm6xcdrw6rjnk6v4xwy70";
+      sha256 = "0sv9dw4zsra8fm7ddbnwhlh80w534z4h8llz2p8asssaaj5nq2ya";
     };
 
     # No tests included
@@ -3136,11 +3136,11 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.92"; # This version is required by awscli
+    version = "1.5.8"; # This version is required by awscli
     name = "botocore-${version}";
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "08rpsfqd2g4iqvi1id8yhmyz2mc299dnr4aikkwjm24rih75p9aj";
+      sha256 = "1qhrq2l9kvhi3gnrgwqhvy42aqbsk93j8mfr4ixqx18yqgbnylvz";
     };
 
     propagatedBuildInputs =
@@ -7853,7 +7853,7 @@ in {
   };
 
   jug = buildPythonPackage rec {
-    version = "1.3.0";
+    version = "1.4.0";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -7867,7 +7867,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "1262v63f1jljfd3rqvavzc2xfcray1m7vhqav3p6wlymgd342wrl";
+      sha256 = "0s9m34k8w59k32sjcg74qqdz8r492sxhsdmlhca1z7jazdk56dzb";
     };
 
     meta = {
@@ -8174,6 +8174,16 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "01nw6r08jkipx6v92kw49z34wmwikrpvc5j9xawdiyg1n2526wrx";
+    };
+
+    # Some sort of mysterious failure with lmdb.tool
+    doCheck = !isPy3k;
+
+    meta = {
+      description = "Universal Python binding for the LMDB 'Lightning' Database";
+      homepage = "https://github.com/dw/py-lmdb";
+      license = licenses.openldap;
+      maintainers = with maintainers; [ copumpkin ];
     };
   };
 
