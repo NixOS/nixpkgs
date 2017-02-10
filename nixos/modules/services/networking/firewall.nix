@@ -205,7 +205,7 @@ let
     ${concatMapStrings (allowed:
         concatMapStrings (addressFamily:
         concatMapStrings (protocol:
-          (if addressFamily == "IPv4" then "iptables -w -A nixos-fw "
+          (if addressFamily == "ipv4" then "iptables -w -A nixos-fw "
            else "ip6tables -w -A nixos-fw ")
           + (lib.optionalString (allowed.sourceAddress != null) (" --source " + allowed.sourceAddress))
           + (lib.optionalString (allowed.destAddress != null) (" --dest " + allowed.destAddress))
