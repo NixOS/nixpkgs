@@ -12,8 +12,8 @@ let
   { options, ... }:
   { options =
     { password = mkOption {
-      type = types.str;
-      description = "Authorized password to the opposite end of the tunnel.";
+        type = types.str;
+        description = "Authorized password to the opposite end of the tunnel.";
       };
       publicKey = mkOption {
         type = types.str;
@@ -28,6 +28,83 @@ let
     };
   };
 
+  udpSubmodule =
+  { options, ... }:
+  { options =
+    { bind = mkOption {
+        type = types.str;
+        default = "";
+        example = "192.168.1.32:43211";
+        description = ''
+          Address and port to bind UDP tunnels to.
+        '';
+       };
+      connectTo = mkOption {
+        type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+        default = { };
+        example = {
+          "192.168.1.1:27313" = {
+            hostname = "homer.hype";
+            password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+            publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+          };
+        };
+        description = ''
+          Credentials for making UDP tunnels.
+        '';
+      };
+    };
+  };
+
+  ethSubmodule =
+  { options, ... }:
+  { options =
+    { bind = mkOption {
+        type = types.str;
+        default = "";
+        example = "eth0";
+        description =
+          ''
+            Bind to this device for native ethernet operation.
+            <literal>all</literal> is a pseudo-name which will try to connect to all devices.
+          '';
+      };
+
+      beacon = mkOption {
+        type = types.int;
+        default = 2;
+        description = ''
+          Auto-connect to other cjdns nodes on the same network.
+          Options:
+            0: Disabled.
+            1: Accept beacons, this will cause cjdns to accept incoming
+               beacon messages and try connecting to the sender.
+            2: Accept and send beacons, this will cause cjdns to broadcast
+               messages on the local network which contain a randomly
+               generated per-session password, other nodes which have this
+               set to 1 or 2 will hear the beacon messages and connect
+               automatically.
+        '';
+      };
+
+      connectTo = mkOption {
+        type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
+        default = { };
+        example = {
+          "01:02:03:04:05:06" = {
+            hostname = "homer.hype";
+            password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+            publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+          };
+        };
+        description = ''
+          Credentials for connecting look similar to UDP credientials
+          except they begin with the mac address.
+        '';
+      };
+    };
+  };
+
   # Additional /etc/hosts entries for peers with an associated hostname
   cjdnsExtraHosts = import (pkgs.runCommand "cjdns-hosts" {}
     # Generate a builder that produces an output usable as a Nix string value
@@ -37,12 +114,12 @@ let
       ${concatStringsSep "\n" (mapAttrsToList (k: v:
           optionalString (v.hostname != "")
             "echo $(${pkgs.cjdns}/bin/publictoip6 ${v.publicKey}) ${v.hostname}")
-          (cfg.ETHInterface.connectTo // cfg.UDPInterface.connectTo))}
+          (foldl' (acc: iface: acc // iface.connectTo) {} (cfg.ETHInterfaces ++ cfg.UDPInterfaces)))}
       echo \'\'
     '');
 
-  parseModules = x:
-    x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
+  parseModule = x:
+    (removeAttrs x [ "_module" ]) // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
 
   # would be nice to  merge 'cfg' with a //,
   # but the json nesting is wacky.
@@ -53,8 +130,8 @@ let
     };
     authorizedPasswords = map (p: { password = p; }) cfg.authorizedPasswords;
     interfaces = {
-      ETHInterface = if (cfg.ETHInterface.bind != "") then [ (parseModules cfg.ETHInterface) ] else [ ];
-      UDPInterface = if (cfg.UDPInterface.bind != "") then [ (parseModules cfg.UDPInterface) ] else [ ];
+      ETHInterface = map parseModule cfg.ETHInterfaces;
+      UDPInterface = map parseModule cfg.UDPInterfaces;
     };
 
     privateKey = "@CJDNS_PRIVATE_KEY@";
@@ -124,75 +201,53 @@ in
         };
       };
 
-      UDPInterface = {
-        bind = mkOption {
-          type = types.str;
-          default = "";
-          example = "192.168.1.32:43211";
-          description = ''
-            Address and port to bind UDP tunnels to.
-          '';
-         };
-        connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
-          default = { };
-          example = {
-            "192.168.1.1:27313" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
-              publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+      UDPInterfaces = mkOption {
+        default = [];
+        example = [
+          {
+            bind = "192.168.1.32:43211";
+            connectTo = {
+              "192.168.1.1:27313" = {
+                hostname = "homer.hype";
+                password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+                publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+              };
             };
-          };
-          description = ''
-            Credentials for making UDP tunnels.
-          '';
-        };
+          }
+        ];
+        description = ''
+          List of UDP interfaces. Each element should be an attribute set
+          specifying the options for each UDP interface (i.e., for each
+          UDP port that you want to listen on).
+
+          Most users only need one UDP interface.
+        '';
+        type = types.listOf (types.submodule udpSubmodule);
       };
 
-      ETHInterface = {
-        bind = mkOption {
-          type = types.str;
-          default = "";
-          example = "eth0";
-          description =
-            ''
-              Bind to this device for native ethernet operation.
-              <literal>all</literal> is a pseudo-name which will try to connect to all devices.
-            '';
-        };
-
-        beacon = mkOption {
-          type = types.int;
-          default = 2;
-          description = ''
-            Auto-connect to other cjdns nodes on the same network.
-            Options:
-              0: Disabled.
-              1: Accept beacons, this will cause cjdns to accept incoming
-                 beacon messages and try connecting to the sender.
-              2: Accept and send beacons, this will cause cjdns to broadcast
-                 messages on the local network which contain a randomly
-                 generated per-session password, other nodes which have this
-                 set to 1 or 2 will hear the beacon messages and connect
-                 automatically.
-          '';
-        };
-
-        connectTo = mkOption {
-          type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
-          default = { };
-          example = {
-            "01:02:03:04:05:06" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
-              publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+      ETHInterfaces = mkOption {
+        default = [];
+        example = [
+          {
+            bind = "eth0";
+            connectTo = {
+              "01:02:03:04:05:06" = {
+                hostname = "homer.hype";
+                password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+                publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+              };
             };
-          };
-          description = ''
-            Credentials for connecting look similar to UDP credientials
-            except they begin with the mac address.
-          '';
-        };
+          }
+        ];
+        description = ''
+          List of native ethernet interfaces. Each element should be an
+          attribute set specifying the options for each native ethernet
+          interface that you want to listen on.
+
+          If you want to use all ethernet interfaces, you can define only one
+          element, binding to the pseudo-interface name <literal>all</literal>.
+        '';
+        type = types.listOf (types.submodule ethSubmodule);
       };
 
       addExtraHosts = mkOption {
@@ -269,8 +324,8 @@ in
     networking.extraHosts = mkIf cfg.addExtraHosts cjdnsExtraHosts;
 
     assertions = [
-      { assertion = ( cfg.ETHInterface.bind != "" || cfg.UDPInterface.bind != "" || cfg.confFile != null );
-        message = "Neither cjdns.ETHInterface.bind nor cjdns.UDPInterface.bind defined.";
+      { assertion = (length cfg.ETHInterfaces) != 0 || (length cfg.UDPInterfaces) != 0 || cfg.confFile != null;
+        message = "No element in cjdns.ETHInterfaces or cjdns.UDPInterfaces is defined.";
       }
       { assertion = config.networking.enableIPv6;
         message = "networking.enableIPv6 must be enabled for CJDNS to work";
