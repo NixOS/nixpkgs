@@ -17411,6 +17411,8 @@ with pkgs;
 
   areca = callPackage ../applications/backup/areca { };
 
+  attract-mode = callPackage ../misc/emulators/attract-mode { };
+
   beep = callPackage ../misc/beep { };
 
   blackbird = callPackage ../misc/themes/blackbird { };
