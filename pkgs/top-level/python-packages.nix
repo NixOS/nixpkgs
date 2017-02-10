@@ -21950,7 +21950,9 @@ in {
       sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
     };
 
-    nativeBuildInputs = [ self.pytest ];
+    checkInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ certifi cryptography idna pysocks ];
+
     # sadly, tests require networking
     doCheck = false;
 
