@@ -178,31 +178,16 @@ rec {
 
   gmic =
     pluginDerivation rec {
-      name = "gmic-1.7.8";
+      inherit (pkgs.gmic) name src meta;
 
-      buildInputs = [pkgconfig pkgs.fftw pkgs.opencv gimp] ++ gimp.nativeBuildInputs;
-
-      src = fetchurl {
-        url = "http://gmic.eu/files/source/gmic_1.7.8.tar.gz";
-        sha256 = "1921s0n2frj8q95l8lm8was64cypnychgcgcavx9q8qljzbk4brs";
-      };
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ pkgs.fftw pkgs.opencv gimp ] ++ gimp.nativeBuildInputs;
 
       sourceRoot = "${name}/src";
 
       buildFlags = "gimp";
 
       installPhase = "installPlugins gmic_gimp";
-
-      meta = {
-        description = "Script language for image processing which comes with its open-source interpreter";
-        homepage = http://gmic.eu/gimp.shtml;
-        license = stdenv.lib.licenses.cecill20;
-        /*
-        The purpose of this Free Software license agreement is to grant users
-        the right to modify and redistribute the software governed by this
-        license within the framework of an open source distribution model.
-        [ ... ] */
-      };
   };
 
   # this is more than a gimp plugin !
