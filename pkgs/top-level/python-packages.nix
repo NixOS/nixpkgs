@@ -653,6 +653,41 @@ in {
     };
   };
 
+  # it can deploy ssh keys and seems to work, but all the modules that rely on a shebang to python
+  # (like the setup module, which is used to gather facts and most playbooks depends upon) fail
+  # get patchShebangs to ignore some files might be a way to solve this
+  #
+  #ansible = buildPythonPackage rec {
+  #  name = "ansible-1.4.5";
+  #
+  #  src = fetchurl {
+  #    url = "http://pypi.python.org/packages/source/a/ansible/${name}.tar.gz";
+  #    md5 = "87d3d679e695d10cee35a204e04eb6a8";
+  #  };
+  #
+  #  propagatedBuildInputs = [paramiko jinja2 pyyaml];
+  #
+  #  installCommand = ''
+  #    export ANSIBLE_LIBRARY="$out/share/ansible";
+  #    ${python}/bin/${python.executable} setup.py install --prefix="$out"
+  #  '';
+  #
+  #  postInstall = ''
+  #    wrapProgram "$out/bin/ansible" --set ANSIBLE_LIBRARY "$out/share/ansible";
+  #    wrapProgram "$out/bin/ansible-doc" --set ANSIBLE_LIBRARY "$out/share/ansible";
+  #    wrapProgram "$out/bin/ansible-galaxy" --set ANSIBLE_LIBRARY "$out/share/ansible";
+  #    wrapProgram "$out/bin/ansible-playbook" --set ANSIBLE_LIBRARY "$out/share/ansible";
+  #    wrapProgram "$out/bin/ansible-pull" --set ANSIBLE_LIBRARY "$out/share/ansible";
+  #  '';
+  #
+  #  doCheck = false;
+  #
+  #  meta = {
+  #    homepage = "https://pypi.python.org/pypi/ansible/";
+  #    description = "Radically simple IT automation";
+  #  };
+  #};
+
 
   alembic = buildPythonPackage rec {
     name = "alembic-0.8.3";
