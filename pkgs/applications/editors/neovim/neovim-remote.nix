@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
+with stdenv.lib;
+
 pythonPackages.buildPythonPackage rec {
   name = "neovim-remote-${version}";
   version = "v1.4.0";
@@ -13,4 +15,12 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pythonPackages.neovim ];
+
+  meta = {
+    description = "A tool that helps controlling nvim processes from a terminal";
+    homepage = https://github.com/mhinz/neovim-remote/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ edanaher ];
+    platforms = platforms.unix;
+  };
 }
