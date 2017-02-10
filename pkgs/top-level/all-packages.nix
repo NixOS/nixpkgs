@@ -12894,6 +12894,8 @@ with pkgs;
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
+  ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
+
   ed = callPackage ../applications/editors/ed { };
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
