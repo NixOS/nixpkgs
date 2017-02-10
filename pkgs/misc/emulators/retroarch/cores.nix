@@ -170,6 +170,16 @@ in
     buildPhase = "make";
   };
 
+  mgba = mkLibRetroCore rec {
+    core = "mgba";
+    src = fetchRetro {
+      repo = core;
+      rev = "4000128339b535896615c994cafcd777637573f4";
+      sha256 = "1yar78rvgfqx7jdna9chkmmbnpcf7k9ckbzj506f7k7m7zv819fn";
+    };
+    description = "Port of mGBA to libretro";
+  };
+
   mupen64plus = (mkLibRetroCore rec {
     core = "mupen64plus";
     src = fetchRetro {

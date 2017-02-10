@@ -15593,6 +15593,7 @@ with pkgs;
       ++ optional (cfg.enableMAME or false) mame
       ++ optional (cfg.enableMednafenPCEFast or false) mednafen-pce-fast
       ++ optional (cfg.enableMednafenPSX or false) mednafen-psx
+      ++ optional (cfg.enableMGBA or false) mgba
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNestopia or false) nestopia
       ++ optional (cfg.enablePicodrive or false) picodrive
