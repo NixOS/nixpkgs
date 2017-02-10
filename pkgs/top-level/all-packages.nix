@@ -490,6 +490,8 @@ with pkgs;
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
+  dgsh = callPackage ../shells/dgsh { };
+
   elvish = callPackage ../shells/elvish { };
 
   encryptr = callPackage ../tools/security/encryptr {
