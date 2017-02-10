@@ -1,46 +1,46 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, pythonPackages, libmsgpack
-, makeWrapper, neovim
-}:
+{ stdenv, fetchFromGitHub, cmake, doxygen
+, libmsgpack, makeWrapper, neovim, pythonPackages, qtbase }:
 
-let # not very usable ATM
-  version = "0.2.4";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
-    owner = "equalsraf";
-    repo = "neovim-qt";
-    rev = "v${version}";
+    owner  = "equalsraf";
+    repo   = "neovim-qt";
+    rev    = "v${version}";
     sha256 = "0yf9wwkl0lbbj3vyf8hxnlsk7jhk5ggivszyqxply69dbar9ww59";
   };
 
-  # It tries to download libmsgpack; let's use ours.
-  postPatch = let use-msgpack = ''
-    cmake_minimum_required(VERSION 2.8.11)
-    project(neovim-qt-deps)
-
-    # Similar enough to FindMsgpack
-    set(MSGPACK_INCLUDE_DIRS ${libmsgpack}/include PARENT_SCOPE)
-    set(MSGPACK_LIBRARIES msgpackc PARENT_SCOPE)
-  '';
-    in "echo '${use-msgpack}' > third-party/CMakeLists.txt";
-
-  buildInputs = with pythonPackages; [
-    cmake qt5.qtbase
-    python msgpack jinja2 libmsgpack
-    makeWrapper
+  cmakeFlags = [
+    "-DMSGPACK_INCLUDE_DIRS=${libmsgpack}/include"
+    "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
   ];
 
+  doCheck = false; # 5 out of 7 fail
+
+  buildInputs = with pythonPackages; [
+    qtbase libmsgpack
+  ] ++ (with pythonPackages; [
+    jinja2 msgpack python
+  ]);
+
+  nativeBuildInputs = [ cmake doxygen makeWrapper ];
+
   enableParallelBuilding = true;
+
+  # avoid cmake trying to download libmsgpack
+  preConfigure = "echo \"\" > third-party/CMakeLists.txt";
 
   postInstall = ''
     wrapProgram "$out/bin/nvim-qt" --prefix PATH : "${neovim}/bin"
   '';
 
   meta = with stdenv.lib; {
-    description = "A prototype Qt5 GUI for neovim";
+    description = "Neovim client library and GUI, in Qt5";
     license = licenses.isc;
+    maintainers = with maintainers; [ peterhoeg ];
     inherit (neovim.meta) platforms;
+    inherit version;
   };
 }
