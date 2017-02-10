@@ -12450,6 +12450,8 @@ with pkgs;
 
   ao = callPackage ../applications/graphics/ao {};
 
+  aqemu = qt5.callPackage ../applications/virtualization/aqemu { };
+
   ardour = callPackage ../applications/audio/ardour {
     inherit (gnome2) libgnomecanvas libgnomecanvasmm;
     inherit (vamp) vampSDK;
