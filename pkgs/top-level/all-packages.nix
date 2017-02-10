@@ -1092,6 +1092,8 @@ with pkgs;
 
   cdecl = callPackage ../development/tools/cdecl { };
 
+  cdi2iso = callPackage ../tools/cd-dvd/cdi2iso { };
+
   cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
