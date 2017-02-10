@@ -248,6 +248,19 @@ in
     buildPhase = "make";
   };
 
+  reicast = (mkLibRetroCore rec {
+    core = "reicast";
+    src = fetchRetro {
+      repo = core + "-emulator";
+      rev = "ed47c72cf2e124d9d753285fd61d12ea8e071d0d";
+      sha256 = "05dw7qjnprf1lw3ps0sb7sp73hsh1a27rxbwjqd26j85zr84g3r9";
+    };
+    description = "Reicast libretro port";
+    extraBuildInputs = [ mesa ];
+  }).override {
+    buildPhase = "make";
+  };
+
   scummvm = (mkLibRetroCore rec {
     core = "scummvm";
     src = fetchRetro {
