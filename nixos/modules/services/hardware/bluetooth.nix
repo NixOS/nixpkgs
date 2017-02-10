@@ -22,7 +22,7 @@ in
   };
 
   ###### implementation
-  
+
   config = mkIf config.hardware.bluetooth.enable {
 
     environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
