@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.sqlalchemy
   ];
 
-  doCheck = true;
+  doCheck = !pythonPackages.isPy3k;
 
   meta = with stdenv.lib; {
     homepage = http://www.radicale.org/;
