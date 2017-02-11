@@ -99,6 +99,15 @@ following incompatible changes:</para>
 
   <listitem>
     <para>
+      Two lone top-level dict dbs moved into <literal>dictdDBs</literal>. This
+      affects: <literal>dictdWordnet</literal> which is now at
+      <literal>dictdDBs.wordnet</literal> and <literal>dictdWiktionary</literal>
+      which is now at <literal>dictdDBs.wiktionary</literal>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       Parsoid service now uses YAML configuration format.
      <literal>service.parsoid.interwikis</literal> is now called
      <literal>service.parsoid.wikis</literal> and is a list of either API URLs
@@ -115,6 +124,36 @@ following incompatible changes:</para>
      Upstream time servers for all NTP implementations are now configured using
      <literal>networking.timeServers</literal>.
    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>service.nylon</literal> is now declared using named instances.
+      As an example:
+
+<programlisting>
+  services.nylon = {
+    enable = true;
+    acceptInterface = "br0";
+    bindInterface = "tun1";
+    port = 5912;
+  };
+</programlisting>
+
+      should be replaced with:
+
+<programlisting>
+  services.nylon.myvpn = {
+    enable = true;
+    acceptInterface = "br0";
+    bindInterface = "tun1";
+    port = 5912;
+  };
+</programlisting>
+
+      this enables you to declare a SOCKS proxy for each uplink.
+
+    </para>
   </listitem>
 
   <listitem>

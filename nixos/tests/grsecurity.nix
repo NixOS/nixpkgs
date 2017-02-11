@@ -36,7 +36,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     # paxmark actually works (otherwise, the process should be terminated)
     subtest "tcc", sub {
       $machine->execute("echo -e '#include <stdio.h>\nint main(void) { puts(\"hello\"); return 0; }' >main.c");
-      $machine->succeed("${pkgs.tinycc.bin}/bin/tcc -run main.c");
+      $machine->succeed("${pkgs.tinycc}/bin/tcc -run main.c");
     };
 
     subtest "RBAC", sub {

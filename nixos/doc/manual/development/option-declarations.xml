@@ -65,22 +65,22 @@ options = {
 
 </para>
 
-<section xml:id="sec-option-declarations-eot"><title>Extensible Option 
+<section xml:id="sec-option-declarations-eot"><title>Extensible Option
     Types</title>
 
-  <para>Extensible option types is a feature that allow to extend certain types 
+  <para>Extensible option types is a feature that allow to extend certain types
     declaration through multiple module files.
-    This feature only work with a restricted set of types, namely 
+    This feature only work with a restricted set of types, namely
     <literal>enum</literal> and <literal>submodules</literal> and any composed
     forms of them.</para>
 
-  <para>Extensible option types can be used for <literal>enum</literal> options 
-    that affects multiple modules, or as an alternative to related 
+  <para>Extensible option types can be used for <literal>enum</literal> options
+    that affects multiple modules, or as an alternative to related
     <literal>enable</literal> options.</para>
 
   <para>As an example, we will take the case of display managers. There is a
     central display manager module for generic display manager options and a
-    module file per display manager backend (slim, kdm, gdm ...).
+    module file per display manager backend (slim, sddm, gdm ...).
   </para>
 
   <para>There are two approach to this module structure:
@@ -96,7 +96,7 @@ options = {
   </para>
 
   <para>Both approachs have problems.</para>
-    
+
   <para>Making backends independent can quickly become hard to manage. For
     display managers, there can be only one enabled at a time, but the type
     system can not enforce this restriction as there is no relation between
@@ -108,18 +108,18 @@ options = {
     central module will require to change the central module option every time
     a new backend is added or removed.</para>
 
-  <para>By using extensible option types, it is possible to create a placeholder 
-    option in the central module (<xref linkend='ex-option-declaration-eot-service' 
-      />), and to extend it in each backend module (<xref 
-      linkend='ex-option-declaration-eot-backend-slim' />, <xref 
-      linkend='ex-option-declaration-eot-backend-kdm' />).</para>
- 
+  <para>By using extensible option types, it is possible to create a placeholder
+    option in the central module (<xref linkend='ex-option-declaration-eot-service'
+      />), and to extend it in each backend module (<xref
+      linkend='ex-option-declaration-eot-backend-slim' />, <xref
+      linkend='ex-option-declaration-eot-backend-sddm' />).</para>
+
   <para>As a result, <literal>displayManager.enable</literal> option values can
   be added without changing the main service module file and the type system
   automatically enforce that there can only be a single display manager
   enabled.</para>
 
-<example xml:id='ex-option-declaration-eot-service'><title>Extensible type 
+<example xml:id='ex-option-declaration-eot-service'><title>Extensible type
     placeholder in the service module</title>
 <screen>
 services.xserver.displayManager.enable = mkOption {
@@ -127,29 +127,29 @@ services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ ]);
 };</screen></example>
 
-<example xml:id='ex-option-declaration-eot-backend-slim'><title>Extending 
-    <literal>services.xserver.displayManager.enable</literal> in the 
+<example xml:id='ex-option-declaration-eot-backend-slim'><title>Extending
+    <literal>services.xserver.displayManager.enable</literal> in the
     <literal>slim</literal> module</title>
 <screen>
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "slim" ]);
 };</screen></example>
 
-<example xml:id='ex-option-declaration-eot-backend-kdm'><title>Extending 
-    <literal>services.foo.backend</literal> in the <literal>kdm</literal> 
+<example xml:id='ex-option-declaration-eot-backend-sddm'><title>Extending
+    <literal>services.foo.backend</literal> in the <literal>sddm</literal>
     module</title>
 <screen>
 services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "kdm" ]);
+  type = with types; nullOr (enum [ "sddm" ]);
 };</screen></example>
 
-<para>The placeholder declaration is a standard <literal>mkOption</literal> 
-  declaration, but it is important that extensible option declarations only use 
+<para>The placeholder declaration is a standard <literal>mkOption</literal>
+  declaration, but it is important that extensible option declarations only use
   the <literal>type</literal> argument.</para>
 
-<para>Extensible option types work with any of the composed variants of 
-  <literal>enum</literal> such as 
-  <literal>with types; nullOr (enum [ "foo" "bar" ])</literal> 
+<para>Extensible option types work with any of the composed variants of
+  <literal>enum</literal> such as
+  <literal>with types; nullOr (enum [ "foo" "bar" ])</literal>
   or <literal>with types; listOf (enum [ "foo" "bar" ])</literal>.</para>
 
 </section>

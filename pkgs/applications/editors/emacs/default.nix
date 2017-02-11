@@ -3,8 +3,8 @@
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
-, withGTK2 ? true, gtk2 ? null
-, withGTK3 ? false, gtk3 ? null
+, withGTK2 ? false, gtk2 ? null
+, withGTK3 ? true, gtk3 ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
