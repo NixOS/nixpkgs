@@ -19,6 +19,15 @@ with lib;
       '';
     };
 
+    proxyWebsockets = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to supporty proxying websocket connections with HTTP/1.1.
+      '';
+    };
+
     index = mkOption {
       type = types.nullOr types.str;
       default = null;
