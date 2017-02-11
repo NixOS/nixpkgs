@@ -96,6 +96,11 @@ let
         include ${recommendedProxyConfig};
       ''}
 
+      # $connection_upgrade is used for websocket proxying
+      map $http_upgrade $connection_upgrade {
+          default upgrade;
+          '''      close;
+      }
       client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
@@ -195,6 +200,11 @@ let
       ${optionalString (config.proxyPass != null) ''
         proxy_pass ${config.proxyPass};
         ${optionalString cfg.recommendedProxySettings "include ${recommendedProxyConfig};"}
+      ''}
+      ${optionalString config.proxyWebsockets ''
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
       ''}
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
