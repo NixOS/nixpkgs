@@ -1,6 +1,8 @@
-{stdenv, fetchurl, fontforge, pythonPackages, python}:
+{stdenv, fetchurl, fontforge, python2}:
 
 let
+  inherit (python2.pkgs) fonttools;
+
   common =
     {version, url, sha256, buildInputs}:
     stdenv.mkDerivation rec {
@@ -47,7 +49,7 @@ in {
     version = "1.07.4";
     url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-${version}.tar.gz";
     sha256 = "01jlg88q2s6by7qv6fmnrlx0lwjarrjrpxv811zjz6f2im4vg65d";
-    buildInputs = [ fontforge pythonPackages.fonttools python ];
+    buildInputs = [ fontforge fonttools ];
   };
   liberation_ttf_v1_binary = common rec {
     version = "1.07.4";
@@ -59,7 +61,7 @@ in {
     version = "2.00.1";
     url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-${version}.tar.gz";
     sha256 = "1ymryvd2nw4jmw4w5y1i3ll2dn48rpkqzlsgv7994lk6qc9cdjvs";
-    buildInputs = [ fontforge pythonPackages.fonttools python ];
+    buildInputs = [ fontforge fonttools ];
   };
   liberation_ttf_v2_binary = common rec {
     version = "2.00.1";

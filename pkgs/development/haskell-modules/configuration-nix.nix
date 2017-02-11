@@ -384,4 +384,7 @@ self: super: builtins.intersectAttrs super {
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
   });
 
+  # Needs network in tests.
+  typed-process = dontCheck super.typed-process;
+
 }

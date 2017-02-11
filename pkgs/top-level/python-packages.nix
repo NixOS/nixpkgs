@@ -681,6 +681,13 @@ in {
       inherit version;
       sha256 = "02lmh2fbqcwr98cq13l9ql0fvyad1dcb3ap3c5xq9qwjp45m6r3n";
     };
+
+    meta = {
+      homepage = "https://github.com/verigak/colors/";
+      description = "ANSI colors for Python";
+      license = licenses.isc;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   asgiref = buildPythonPackage rec {
@@ -1547,11 +1554,11 @@ in {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.11.35";
+    version = "1.11.45";
       namePrefix = "";
       src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "0k6y8cg311bqak5x9pilg80w6f76dcbzm6xcdrw6rjnk6v4xwy70";
+      sha256 = "0sv9dw4zsra8fm7ddbnwhlh80w534z4h8llz2p8asssaaj5nq2ya";
     };
 
     # No tests included
@@ -3092,13 +3099,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.2";
+    version = "1.4.4";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "19hzxqr7ba07b3zg2wsrz6ic3g7pq50rrcp4616flfgny5vw42j3";
+      sha256 = "1zngj38a2dmc02p3ha9crzv9k682f0zgyyfx1bgg8hwwrnggikwl";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -3129,11 +3136,11 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.92"; # This version is required by awscli
+    version = "1.5.8"; # This version is required by awscli
     name = "botocore-${version}";
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "08rpsfqd2g4iqvi1id8yhmyz2mc299dnr4aikkwjm24rih75p9aj";
+      sha256 = "1qhrq2l9kvhi3gnrgwqhvy42aqbsk93j8mfr4ixqx18yqgbnylvz";
     };
 
     propagatedBuildInputs =
@@ -3662,11 +3669,11 @@ in {
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
-    version = "2016.2.28";
+    version = "2017.1.23";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/certifi/${name}.tar.gz";
-      sha256 = "5e8eccf95924658c97b990b50552addb64f55e1e3dfe4880456ac1f287dc79d0";
+      sha256 = "1klrzl3hgvcf2mjk00g0k3kk1p2z27vzwnxivwar4vhjmjvpz1w1";
     };
 
     meta = {
@@ -7846,7 +7853,7 @@ in {
   };
 
   jug = buildPythonPackage rec {
-    version = "1.3.0";
+    version = "1.4.0";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -7860,7 +7867,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "1262v63f1jljfd3rqvavzc2xfcray1m7vhqav3p6wlymgd342wrl";
+      sha256 = "0s9m34k8w59k32sjcg74qqdz8r492sxhsdmlhca1z7jazdk56dzb";
     };
 
     meta = {
@@ -8168,6 +8175,16 @@ in {
       inherit pname version;
       sha256 = "01nw6r08jkipx6v92kw49z34wmwikrpvc5j9xawdiyg1n2526wrx";
     };
+
+    # Some sort of mysterious failure with lmdb.tool
+    doCheck = !isPy3k;
+
+    meta = {
+      description = "Universal Python binding for the LMDB 'Lightning' Database";
+      homepage = "https://github.com/dw/py-lmdb";
+      license = licenses.openldap;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   logilab_astng = buildPythonPackage rec {
@@ -8360,7 +8377,7 @@ in {
   };
 
   ndg-httpsclient = buildPythonPackage rec {
-    version = "0.4.0";
+    version = "0.4.2";
     name = "ndg-httpsclient-${version}";
 
     propagatedBuildInputs = with self; [ pyopenssl ];
@@ -8368,8 +8385,8 @@ in {
     src = pkgs.fetchFromGitHub {
       owner = "cedadev";
       repo = "ndg_httpsclient";
-      rev = "v${version}";
-      sha256 = "1prv4j3wcy9kl5ndd5by543xp4cji9k35qncsl995w6sway34s1a";
+      rev = version;
+      sha256 = "1kk4knv029j0cicfiv23c1rayc1n3f1j3rhl0527gxiv0qv4jw8h";
     };
 
     # uses networking
@@ -8383,39 +8400,7 @@ in {
     };
   };
 
-  netcdf4 = buildPythonPackage rec {
-    name = "netCDF4-${version}";
-    version = "1.2.4";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-      sha256 = "0lakjix9dhc26f33f03c13ffwspqcrk5j3mnnjczwxbb23ppwwx6";
-    };
-
-    propagatedBuildInputs = with self ; [
-      numpy
-      pkgs.zlib
-      pkgs.netcdf
-      pkgs.hdf5
-      pkgs.curl
-      pkgs.libjpeg
-    ];
-
-    # Variables used to configure the build process
-    USE_NCCONFIG="0";
-    HDF5_DIR="${pkgs.hdf5}";
-    NETCDF4_DIR="${pkgs.netcdf}";
-    CURL_DIR="${pkgs.curl.dev}";
-    JPEG_DIR="${pkgs.libjpeg.dev}";
-
-    meta = {
-      description = "Interface to netCDF library (versions 3 and 4)";
-      homepage = https://pypi.python.org/pypi/netCDF4;
-      license = licenses.free;  # Mix of license (all MIT* like)
-    };
-  };
+  netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
 
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
@@ -8515,7 +8500,7 @@ in {
     '';
 
     # Unnecessary, and causes some really weird behavior around .class files, which
-    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520. 
+    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520.
     dontStrip = true;
 
     propagatedBuildInputs = with self; [
@@ -8525,6 +8510,13 @@ in {
       setproctitle setuptools six thrift wheel twitter-common-dirutil
       twitter-common-confluence twitter-common-collections
     ];
+
+    meta = {
+      description = "A build system for software projects in a variety of languages";
+      homepage = "http://www.pantsbuild.org/";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   paperwork-backend = buildPythonPackage rec {
@@ -8570,6 +8562,13 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
+    };
+
+    meta = {
+      description = "Utility library for gitignore-style pattern matching of file paths";
+      homepage = "https://github.com/cpburnz/python-path-specification";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ copumpkin ];
     };
   };
 
@@ -8723,6 +8722,13 @@ in {
 
     # A few more dependencies I don't want to handle right now...
     doCheck = false;
+
+    meta = {
+      description = "A library and tool for generating .pex (Python EXecutable) files";
+      homepage = "https://github.com/pantsbuild/pex";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   pies = buildPythonPackage rec {
@@ -11277,11 +11283,11 @@ in {
   };
 
   flask = buildPythonPackage {
-    name = "flask-0.11.1";
+    name = "flask-0.12";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask/Flask-0.11.1.tar.gz";
-      sha256 = "03kbfll4sj3v5z7r31c7bhfpi11r1np076d4p1k2kg4yzcmkywdl";
+      url = "mirror://pypi/F/Flask/Flask-0.12.tar.gz";
+      sha256 = "12yasybryp33rdchsqgckf15zj4pjfam7ly5spmn2sijpv6h7s4k";
     };
 
     propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
@@ -13971,11 +13977,11 @@ in {
 
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.7.0";
+    name = "lxml-3.7.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
-      sha256 = "9c62eb2a1862e1ae285d7e7e3b7dc8772d387b19258086afcec143c6b7b8a5c9";
+      sha256 = "02j1wf3sh2qmswcz3rh0xvsb8jm63ifaiz2bkng93hyvc1iignar";
     };
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
@@ -21029,11 +21035,11 @@ in {
 
   pysocks = buildPythonPackage rec {
     name = "pysocks-${version}";
-    version = "1.5.7";
+    version = "1.6.6";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/P/PySocks/PySocks-${version}.tar.gz";
-      sha256 = "124bydbcspzhkb6ynckvgqra1b79rh5mrq98kbyyd202n6a7c775";
+      sha256 = "0h9zwr8z9j6l313ns335irjrkk6qnk4qzvwmjqygrp7mbwi9lh82";
     };
 
     doCheck = false;
@@ -23065,12 +23071,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.1.9";
+    version = "0.1.10";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "0m67nhdnp2pd11j8h4bgz63zq0mvn2f205vrxmr3my8m45kpvb8p";
+      sha256 = "1h8g9bknvxflxkpbnxyfxmk8pvgykbbk9ljdvhqh6z4vjc2926ms";
     };
 
     foo = 1;
@@ -26035,6 +26041,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-lang ];
+
+    meta = {
+      description = "Twitter's common collections";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-confluence = buildPythonPackage rec {
@@ -26048,6 +26061,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-log ];
+
+    meta = {
+      description = "Twitter's API to the confluence wiki";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-dirutil = buildPythonPackage rec {
@@ -26061,6 +26081,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-lang ];
+
+    meta = {
+      description = "Utilities for manipulating and finding files and directories";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-lang = buildPythonPackage rec {
@@ -26071,6 +26098,13 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "1l8fmnsrx7hgg3ivslg588rnl9n1gfjn2w6224fr8rs7zmkd5lan";
+    };
+
+    meta = {
+      description = "Twitter's 2.x / 3.x compatibility swiss-army knife";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
     };
   };
 
@@ -26085,6 +26119,13 @@ in {
     };
 
     propagatedBuildInputs = with self; [ twitter-common-options twitter-common-dirutil ];
+
+    meta = {
+      description = "Twitter's common logging library";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
   };
 
   twitter-common-options = buildPythonPackage rec {
@@ -26095,6 +26136,13 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "0d1czag5mcxg0vcnlklspl2dvdab9kmznsycj04d3vggi158ljrd";
+    };
+
+    meta = {
+      description = "Twitter's optparse wrapper";
+      homepage    = "https://twitter.github.io/commons/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
     };
   };
 
@@ -28848,20 +28896,27 @@ EOF
 
   searx = buildPythonPackage rec {
     name = "searx-${version}";
-    version = "0.10.0";
+    version = "0.11.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "asciimoo";
       repo = "searx";
       rev = "v${version}";
-      sha256 = "0j9pnifcrm4kzziip43w2fgadsg1sqlcm7dfxhnshdx03nby2dy2";
+      sha256 = "1m6q7yd45lfk19yp30x1jmisff6npa1y348wqc9ixa3ywvb28ky8";
     };
 
-    patches = [ ../development/python-modules/searx.patch ];
+    postPatch = ''
+      substituteInPlace requirements.txt \
+        --replace 'certifi==2016.9.26' 'certifi' \
+        --replace 'pyyaml==3.11' 'pyyaml' \
+        --replace 'lxml==3.7.1' 'lxml' \
+        --replace 'pyopenssl==16.2.0' 'pyopenssl' \
+        --replace 'requests[socks]==2.12.4' 'requests[socks]'
+    '';
 
     propagatedBuildInputs = with self; [
-      pyyaml lxml_3_5 grequests flaskbabel flask requests2
-      gevent speaklater Babel pytz dateutil pygments_2_0
+      pyyaml lxml grequests flaskbabel flask requests2
+      gevent speaklater Babel pytz dateutil pygments
       pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
     ];
 
@@ -29944,23 +29999,6 @@ EOF
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
         --prefix PYTHONPATH : "${self.pygobject3}/lib/python2.7/site-packages:$PYTHONPATH"
     '';
-  };
-
-  neovim-remote = buildPythonPackage rec {
-    name = "neovim-remote-${version}";
-    version = "v1.4.0";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mhinz";
-      repo = "neovim-remote";
-      rev = version;
-      sha256 = "0msvfh27f56xj5ki59ikzavxz863nal5scm57n43618m49qzg8iz";
-    };
-
-    propagatedBuildInputs = [
-      self.neovim
-    ];
   };
 
   ghp-import = buildPythonPackage rec {
@@ -32053,6 +32091,10 @@ EOF
       maintainer = maintainers.fridh;
     };
   };
+
+  incremental = callPackage ../development/python-modules/incremental { };
+
+  treq = callPackage ../development/python-modules/treq { };
 
 });
 

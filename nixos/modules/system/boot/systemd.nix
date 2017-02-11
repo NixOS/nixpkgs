@@ -42,7 +42,8 @@ let
       "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
-      "systemd-hwdb-update.service"
+      # hwdb.bin is managed by NixOS
+      # "systemd-hwdb-update.service"
 
       # Consoles.
       "getty.target"
@@ -61,7 +62,6 @@ let
       # Login stuff.
       "systemd-logind.service"
       "autovt@.service"
-      #"systemd-vconsole-setup.service"
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
@@ -753,7 +753,8 @@ in
 
         # Keep a persistent journal. Note that systemd-tmpfiles will
         # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
+        # FIXME: revert to 0700 with systemd v233.
+        mkdir -m 0750 -p /var/log/journal
       '';
 
     users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;

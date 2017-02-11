@@ -1111,6 +1111,34 @@ functions.</para>
 <variablelist>
 
 
+  <varlistentry xml:id='fun-makeWrapper'>
+    <term><function>makeWrapper</function>
+    <replaceable>executable</replaceable>
+    <replaceable>wrapperfile</replaceable>
+    <replaceable>args</replaceable></term>
+    <listitem><para>Constructs a wrapper for a program with various
+    possible arguments. For example:
+
+<programlisting>
+# adds `FOOBAR=baz` to `$out/bin/foo`’s environment
+makeWrapper $out/bin/foo $wrapperfile --set FOOBAR baz
+
+# prefixes the binary paths of `hello` and `git`
+# Be advised that paths often should be patched in directly
+# (via string replacements or in `configurePhase`).
+makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello git ]}
+</programlisting>
+
+    There’s many more kinds of arguments, they are documented in
+    <literal>nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh</literal>.</para>
+
+    <para><literal>wrapProgram</literal> is a convenience function you probably
+    want to use most of the time.</para>
+
+    </listitem>
+  </varlistentry>
+  
+
   <varlistentry xml:id='fun-substitute'>
     <term><function>substitute</function>
     <replaceable>infile</replaceable>
@@ -1267,6 +1295,22 @@ someVar=$(stripHash $name)
 </programlisting>
 
     </para></listitem>
+  </varlistentry>
+  
+
+  <varlistentry xml:id='fun-wrapProgram'>
+    <term><function>wrapProgram</function>
+    <replaceable>executable</replaceable>
+    <replaceable>makeWrapperArgs</replaceable></term>
+    <listitem><para>Convenience function for <literal>makeWrapper</literal>
+    that automatically creates a sane wrapper file
+
+    It takes all the same arguments as <literal>makeWrapper</literal>,
+    except for <literal>--argv0</literal>.</para>
+
+    <para>It cannot be applied multiple times, since it will overwrite the wrapper
+    file.</para>
+    </listitem>
   </varlistentry>
 
 

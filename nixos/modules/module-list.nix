@@ -141,6 +141,7 @@
   ./services/computing/torque/mom.nix
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildbot/master.nix
+  ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
@@ -206,6 +207,7 @@
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
+  ./services/hardware/trezord.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
@@ -444,6 +446,7 @@
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
+  ./services/networking/redsocks.nix
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
@@ -642,6 +645,7 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
+  ./virtualisation/ecs-agent.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix

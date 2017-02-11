@@ -4,11 +4,11 @@ let
   buildbot-pkg = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-pkg";
-    version = "0.9.0.post1";
+    version = "0.9.3";
 
     src = fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0frmnc73dsyc9mjnrnpm4vdrwb7c63gc6maq6xvlp486v7sdhjbi";
+      sha256 = "02949cvmghyh313i1hmplwxp3nzq789kk85xjx2ir82cpr1d6h6j";
     };
 
     propagatedBuildInputs = with pythonPackages; [ setuptools ];
@@ -26,14 +26,15 @@ in {
   www = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot_www";
-    version = "0.9.0.post1";
+    version = "0.9.3";
 
     # NOTE: wheel is used due to buildbot circular dependency
     format = "wheel";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/02/d0/fc56ee27a09498638a47dcc5637ee5412ab7a67bfb4b3ff47e041f3d7b66/${name}-py2-none-any.whl";
-      sha256 = "14ghch67k6090736n89l401swz7r9hnk2zlmdb59niq8lg7dyg9q";
+    src = pythonPackages.fetchPypi {
+      inherit pname version format;
+      python = "py2";
+      sha256 = "0yggg6mcykcnv41srl2sp2zwx2r38vb6a8jgxh1a4825mspm2jf7";
     };
 
     meta = with stdenv.lib; {
@@ -48,14 +49,14 @@ in {
   console-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-console-view";
-    version = "0.9.0.post1";
+    version = "0.9.3";
 
     src = fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0dc7rb7mrpva5gj7l57i96a78d6yj28pkkj9hfim1955z9dgn58l";
+      sha256 = "1rkzakm05x72nvdivc5bc3gab3nyasdfvlwnwril90jj9q1b92dk";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
@@ -69,14 +70,14 @@ in {
   waterfall-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-waterfall-view";
-    version = "0.9.0.post1";
+    version = "0.9.3";
 
     src = fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0x9vvw15zzgj4w3qcxh8r10rb36ni0qh1215y7wbawh5lggnjm0g";
+      sha256 = "033x2cs0znhk1j0lw067nmjw2m7yy1fdq5qch0sx50jnpjiq6g6g";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;

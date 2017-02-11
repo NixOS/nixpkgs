@@ -822,10 +822,10 @@
     gnugo = callPackage ({ ascii-art-to-unicode, cl-lib ? null, elpaBuild, fetchurl, lib, xpm }:
     elpaBuild {
         pname = "gnugo";
-        version = "3.0.1";
+        version = "3.0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnugo-3.0.1.tar";
-          sha256 = "08z2hg9mvsxdznq027cmwhkb5i7n7s9r2kvd4jha9xskrcnzj3pp";
+          url = "https://elpa.gnu.org/packages/gnugo-3.0.2.tar";
+          sha256 = "12xm960awsn2k8ph1yibhrxdg8iz1icifdqimysg3qxljmhmnb3k";
         };
         packageRequires = [ ascii-art-to-unicode cl-lib xpm ];
         meta = {
