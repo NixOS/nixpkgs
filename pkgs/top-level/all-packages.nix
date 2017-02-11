@@ -9337,6 +9337,8 @@ with pkgs;
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
+  range-v3 = callPackage ../development/libraries/range-v3 {};
+
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
 
   raul = callPackage ../development/libraries/audio/raul { };
