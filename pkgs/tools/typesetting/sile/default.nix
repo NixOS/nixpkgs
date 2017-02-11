@@ -13,15 +13,17 @@ let
   getLuaCPath   = lib : getPath lib "so";
   luaPath       = concatStringsSep ";" (map getLuaPath libs);
   luaCPath      = concatStringsSep ";" (map getLuaCPath libs);
-  in
 
-  stdenv.mkDerivation rec {
-    name = "sile-${version}";
-    version = "0.9.4";
-    src = fetchurl {
-      url = "https://github.com/simoncozens/sile/releases/download/v${version}/${name}.tar.bz2";
-      sha256 = "1mald727hy9bi17rcaph8q400yn5xqkn5f2xf1408g94wmwncs8w";
-    };
+in
+
+stdenv.mkDerivation rec {
+  name = "sile-${version}";
+  version = "0.9.4";
+
+  src = fetchurl {
+    url = "https://github.com/simoncozens/sile/releases/download/v${version}/${name}.tar.bz2";
+    sha256 = "1mald727hy9bi17rcaph8q400yn5xqkn5f2xf1408g94wmwncs8w";
+  };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
   buildInputs = [ harfbuzz icu lua lpeg luaexpat luazlib luafilesystem fontconfig libiconv ];
@@ -38,8 +40,14 @@ let
   meta = {
     description = "A typesetting system";
     longDescription = ''
-      SILE is a typesetting system; its job is to produce beautiful printed documents.
-      Conceptually, SILE is similar to TeX—from which it borrows some concepts and even syntax and algorithms—but the similarities end there. Rather than being a derivative of the TeX family SILE is a new typesetting and layout engine written from the ground up using modern technologies and borrowing some ideas from graphical systems such as InDesign.
+      SILE is a typesetting system; its job is to produce beautiful
+      printed documents. Conceptually, SILE is similar to TeX—from
+      which it borrows some concepts and even syntax and
+      algorithms—but the similarities end there. Rather than being a
+      derivative of the TeX family SILE is a new typesetting and
+      layout engine written from the ground up using modern
+      technologies and borrowing some ideas from graphical systems
+      such as InDesign.
     '';
     homepage = "http://www.sile-typesetter.org";
     platforms = stdenv.lib.platforms.unix;
