@@ -214,10 +214,7 @@ let
   ) virtualHosts);
   mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
-      ${optionalString (config.proxyPass != null) ''
-        proxy_pass ${config.proxyPass};
-        ${optionalString cfg.recommendedProxySettings "include ${recommendedProxyConfig};"}
-      ''}
+      ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
       ${optionalString config.proxyWebsockets ''
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -228,6 +225,7 @@ let
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
+      ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') locations);
   mkBasicAuth = vhostName: authDef: let
