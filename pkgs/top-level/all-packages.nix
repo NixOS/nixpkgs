@@ -2130,6 +2130,8 @@ with pkgs;
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
+  pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
