@@ -135,8 +135,8 @@ services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "slim" ]);
 };</screen></example>
 
-<example xml:id='ex-option-declaration-eot-backend-sdm'><title>Extending
-    <literal>services.foo.backend</literal> in the <literal>sdm</literal>
+<example xml:id='ex-option-declaration-eot-backend-sddm'><title>Extending
+    <literal>services.foo.backend</literal> in the <literal>sddm</literal>
     module</title>
 <screen>
 services.xserver.displayManager.enable = mkOption {
