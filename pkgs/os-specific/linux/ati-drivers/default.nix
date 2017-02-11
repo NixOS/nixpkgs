@@ -80,7 +80,10 @@ stdenv.mkDerivation rec {
                  ./patches/kernel-4.6-page_cache_release-put_page.patch ]
   ++ optionals ( kernel != null &&
                  (lib.versionAtLeast kernel.version "4.7") )
-               [ ./patches/4.7-arch-cpu_has_pge-v2.patch ];
+               [ ./patches/4.7-arch-cpu_has_pge-v2.patch ]
+  ++ optionals ( kernel != null &&
+                 (lib.versionAtLeast kernel.version "4.9") )
+               [ ./patches/4.9-get_user_pages.patch ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
