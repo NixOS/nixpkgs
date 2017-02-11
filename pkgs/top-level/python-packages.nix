@@ -16679,22 +16679,23 @@ in {
     };
   });
 
-  osc = buildPythonPackage (rec {
-    name = "osc-0.133+git";
+  osc = buildPythonPackage {
+    name = "osc-0.156.0-16-g9e6d1a5";
     disabled = isPy3k;
-
-    src = pkgs.fetchgit {
-      url = https://github.com/openSUSE/osc;
-      rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
-      sha256 = "0bf0yc4y1q87k7hq40xnr687lyw3ma93b3zprjlgn9pr8s1cn9xw";
+    src = pkgs.fetchFromGitHub {
+      owner = "openSUSE";
+      repo = "osc";
+      rev = "9e6d1a592e89e8ee9fd40a96cfcf97bf74f68715";
+      sha256 = "13svha5zh1xn3jv4kn9h3d620p65qh5nnhhghjbscp9lzlwwba3g";
     };
-
-    doCheck = false;
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
     postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
-
-    propagatedBuildInputs = with self; [ self.m2crypto ];
-
-  });
+    meta = {
+      description = "opensuse-commander with svn like handling";
+      maintainers = [ maintainers.peti ];
+      license = licenses.gpl2;
+    };
+  };
 
   oslosphinx = buildPythonPackage rec {
     name = "oslosphinx-3.3.1";
