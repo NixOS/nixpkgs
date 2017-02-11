@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A set of modular code for creating linker tools";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };
 }
