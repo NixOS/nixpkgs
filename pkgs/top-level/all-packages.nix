@@ -16591,11 +16591,10 @@ with pkgs;
         };
         ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
         ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
-      }
-      ../desktops/kde-4.14;
+      };
 
 
-  kdePackagesFor = extra: dir:
+  kdePackagesFor = extra:
     let
       # list of extra packages not included in KDE
       # the real work in this function is done below this list
@@ -16771,12 +16770,9 @@ with pkgs;
       makePackages = extra:
         let
           callPackage = newScope (extra // self);
-          kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
           self =
-            kde4
-            // extraPackages callPackage
+            extraPackages callPackage
             // {
-              inherit kde4;
               wrapper = callPackage ../build-support/kdewrapper {};
               recurseForRelease = true;
             };
