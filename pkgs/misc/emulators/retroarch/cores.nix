@@ -170,6 +170,18 @@ in
     buildPhase = "make";
   };
 
+  mednafen-saturn = (mkLibRetroCore rec {
+    core = "mednafen-saturn";
+    src = fetchRetro {
+      repo = "beetle-saturn-libretro";
+      rev = "bb5d0c126feb25cf980f5cc1fc57d6a5a6f6e7ab";
+      sha256 = "0bnsdy27378b71y6aa65k4jxxy2xw6ky2ici3z53hkky2jnnjq0b";
+    };
+    description = "Port of Mednafen's Saturn core to libretro";
+  }).override {
+    buildPhase = "make";
+  };
+
   mupen64plus = (mkLibRetroCore rec {
     core = "mupen64plus";
     src = fetchRetro {
