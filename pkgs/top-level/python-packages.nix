@@ -98,8 +98,7 @@ in {
   aenum = callPackage ../development/python-modules/aenum { };
 
   agate = buildPythonPackage rec {
-    name = "agate-1.2.2";
-    disabled = isPy3k;
+    name = "agate-1.5.5";
 
     meta = {
       description = "A Python data analysis library that is optimized for humans instead of machines";
@@ -108,11 +107,13 @@ in {
       maintainers = with maintainers; [ vrthra ];
     };
 
-    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse awesome-slugify leather];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/agate/${name}.tar.gz";
-      sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
+      sha256 = "0rajv5zpnfkr5yr5bgr26rjs8yz6vj6mm57h4li2li2ayigdlq98";
     };
   };
 
