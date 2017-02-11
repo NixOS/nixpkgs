@@ -2488,8 +2488,6 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
-  libmarble-ssrf = qt55.callPackage ../development/libraries/libmarble-ssrf { };
-
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -3904,9 +3902,7 @@ with pkgs;
 
   su-exec = callPackage ../tools/security/su-exec {};
 
-  subsurface = qt55.callPackage ../applications/misc/subsurface {
-    libdivecomputer = libdivecomputer_ssrf;
-  };
+  subsurface = qt5.callPackage ../applications/misc/subsurface { };
 
   sudo = callPackage ../tools/security/sudo { };
 
@@ -8003,8 +7999,6 @@ with pkgs;
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
-
-  libdivecomputer_ssrf = callPackage ../development/libraries/libdivecomputer/subsurface.nix { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
