@@ -52,6 +52,7 @@ in
           # the .so It used to be a symlink, but now it is a script
           cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
       fi
+      set -x
     '';
 
     postInstall = ''
@@ -81,7 +82,7 @@ in
       # to bootstrap-tools; on cross-arm this stripping would break objects.
       if [ -z "$crossConfig" ]; then
         for i in "$out"/lib/*.a; do
-            strip -S "$i"
+            [ "$i" = "$out/lib/libm.a" ] || strip -S "$i"
         done
       fi
 
