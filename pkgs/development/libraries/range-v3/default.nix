@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/ericniebler/range-v3;
     license = licenses.boost;
     platforms = platforms.all;
+    maintainers = with maintainers; [ xwvvvvwx ];
   };
 }
