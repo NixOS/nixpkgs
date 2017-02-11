@@ -52,12 +52,12 @@ while [ "$#" -gt 0 ]; do
         repair=1
         extraBuildFlags+=("$i")
         ;;
-      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q)
-        extraBuildFlags+=("$i")
-        ;;
       --max-jobs|-j|--cores|-I)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
+        ;;
+      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*)
+        extraBuildFlags+=("$i")
         ;;
       --option)
         j="$1"; shift 1
