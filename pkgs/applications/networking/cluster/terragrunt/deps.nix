@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "4590e9b51cd6698144a025a75608fa7a90752d5d";
-      sha256 = "13hczsimaanfmbhj8aki8zib7fi161f7p7cjm7z9x8hwwa9q4nld";
+      rev = "63102d196e0996a2910839857c3584f62be907cc";
+      sha256 = "0n207g4bf5fjq23f63nkhh14shj7kjdrr4qn6h28d7x2vqfb9pss";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/go-getter";
-      rev = "cc80f38c726badeae53775d179755e1c4953d6cf";
-      sha256 = "1xbflbgg3gfh3zy5ibfzxv4gbzg62rkzr4l2i9igvz8m7sxgyy1f";
+      rev = "c3d66e76678dce180a7b452653472f949aedfbcd";
+      sha256 = "0ykpkiszcwp3hnvnnyl95zdrsziwrzr989ynyvbfkgpnkqfdhfy7";
     };
   }
   {
