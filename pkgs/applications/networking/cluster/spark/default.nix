@@ -6,15 +6,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "spark-${version}";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchzip {
     url    = "mirror://apache/spark/${name}/${name}-bin-cdh4.tgz";
-    sha256 = "19ycx1r8g82vkvzmn9wxkssmv2damrg72yfmrgzpc6xyh071g91c";
+    sha256 = "1wiwfz68npsznq63xyxghhn161ynhvyjwnspbr8cl7n101vm7ic7";
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
-    ++ optional mesosSupport mesos;
+  # remove mesos dependency temporarily as it is broken atm
+  # ++ optional mesosSupport mesos
+  ;
 
   untarDir = "${name}-bin-cdh4";
   installPhase = ''
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description      = "Lightning-fast cluster computing";
+    description      = "A fast and general engine for large-scale data processing. ";
     homepage         = "http://spark.apache.org";
     license          = stdenv.lib.licenses.asl20;
     platforms        = stdenv.lib.platforms.all;
