@@ -58,10 +58,19 @@ in import ./make-test.nix {
         radicaleOverlay
       ];
     };
+    py3 = { config, pkgs, ... }@args: (common args) // {
+      nixpkgs.overlays = [
+        (self: super: {
+          python = self.python3;
+          pythonPackages = self.python3.pkgs;
+        })
+        radicaleOverlay
+      ];
+    };
   };
 
   testScript = ''
-    for my $machine ($py2) {
+    for my $machine ($py2, $py3) {
       $machine->waitForUnit('radicale.service');
       $machine->waitForOpenPort(${builtins.toString port});
       $machine->succeed('curl -s http://someuser:really_secret_password@127.0.0.1:${builtins.toString port}/someuser/calendar.ics/');
