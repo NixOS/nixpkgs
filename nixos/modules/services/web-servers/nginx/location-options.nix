@@ -14,7 +14,8 @@ with lib;
       default = null;
       example = "http://www.example.org/";
       description = ''
-        Adds proxy_pass directive.
+        Adds proxy_pass directive and sets recommended proxy headers if
+        recommendedProxySettings is enabled.
       '';
     };
 
