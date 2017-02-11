@@ -17815,7 +17815,7 @@ with pkgs;
 
   tewi-font = callPackage ../data/fonts/tewi  {};
 
-  tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
+  tex4ht = callPackage ../tools/typesetting/tex/tex4ht { tetex = null; };
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
