@@ -38,6 +38,12 @@ stdenv.mkDerivation {
 
   programPath = stdenv.lib.makeLibraryPath [ gtk2 atk pango glib gdk_pixbuf xorg.libXv ];
 
+  passthru = {
+    settings = null;
+    persistenced = null;
+    useGLVND = false;
+  };
+
   meta = {
     homepage = http://www.nvidia.com/object/unix.html;
     description = "X.org driver and kernel module for Legacy NVIDIA graphics cards";

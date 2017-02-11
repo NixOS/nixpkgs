@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
+  buildInputs = [ lzo lzip libtasn1 libidn p11_kit zlib gmp autogen ]
     ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
@@ -46,6 +46,8 @@ stdenv.mkDerivation {
     ++ buildInputs;
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
+
+  propagatedBuildInputs = [ nettle ];
 
   inherit doCheck;
 

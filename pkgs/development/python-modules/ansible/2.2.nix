@@ -10,7 +10,8 @@
 , six
 , netaddr
 , dns
-, pywinrm
+, windowsSupport ? false
+, pywinrm ? null
 }:
 
 let
@@ -44,7 +45,6 @@ in buildPythonPackage rec {
   dontStrip = true;
   dontPatchELF = true;
   dontPatchShebangs = false;
-  windowsSupport = true;
 
   propagatedBuildInputs = [ pycrypto paramiko jinja pyyaml httplib2
     boto six netaddr dns ] ++ lib.optional windowsSupport pywinrm;

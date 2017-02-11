@@ -134,6 +134,13 @@ let
         description = "The default gateway interface.";
       };
 
+      metric = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 42;
+        description = "The default gateway metric/preference.";
+      };
+
     };
 
   };

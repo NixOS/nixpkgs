@@ -31,7 +31,6 @@ in {
 
       script = ''
         if [ ! -z "$ECS_DATADIR" ]; then
-          echo "FOOOO"
           mkdir -p "$ECS_DATADIR"
         fi
         ${cfg.package.bin}/bin/agent
