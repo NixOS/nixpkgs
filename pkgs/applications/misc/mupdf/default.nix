@@ -1,8 +1,15 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
+{ stdenv, fetchgit, fetchurl, fetchpatch, pkgconfig
 , zlib, freetype, libjpeg, jbig2dec, openjpeg
 , libX11, libXcursor, libXrandr, libXinerama, libXext, harfbuzz, mesa }:
 
-stdenv.mkDerivation rec {
+let
+  mujs = fetchgit {
+    url    = "http://git.ghostscript.com/mujs.git";
+    rev    = "4006739a28367c708dea19aeb19b8a1a9326ce08";
+    sha256 = "0wvjl8lkh0ga6fkmxgjqq77yagncbv1bdy6hpnxq31x3mkwn1s51";
+  };
+
+in stdenv.mkDerivation rec {
   version = "1.9a";
   name = "mupdf-${version}";
 
@@ -33,12 +40,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
+  buildInputs = [ mujs zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
   outputs = [ "bin" "dev" "out" "doc" ];
 
   preConfigure = ''
-    # Don't remove mujs because upstream version is incompatible
-    rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
+    rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,mujs,openjpeg,zlib}
+    cp -r ${mujs} thirdparty/mujs
   '';
 
   postInstall = ''
