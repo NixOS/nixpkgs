@@ -61,6 +61,7 @@ in
         User = "caddy";
         Group = "caddy";
         AmbientCapabilities = "cap_net_bind_service";
+        LimitNOFILE = 8192;
       };
     };
 

@@ -1,7 +1,7 @@
 { stdenv, pkgs, lib, fetchurl, fetchgit,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, binutils, newt,
-  lua,
+  lua, speex,
   srtp, wget, curl,
   subversionClient
 }:
@@ -11,7 +11,7 @@ let
     inherit version;
     name = "asterisk-${version}";
 
-    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua srtp wget curl subversionClient ];
+    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua speex srtp wget curl subversionClient ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -83,8 +83,8 @@ in
   };
 
   asterisk-stable = common {
-    version = "14.1.2";
-    sha256 = "0w9s4334rwvpyxm169grmnb4k9yq0l2al73dyh4cb8769qcs0ij8";
+    version = "14.2.1";
+    sha256 = "193yhyjn0fwrd7hsmr3qwcx3k2pc6cq70v1mnfdwidix4cqm32xj";
     externals = {
       "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
     };

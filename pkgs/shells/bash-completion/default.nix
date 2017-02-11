@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/scop/bash-completion;
     description = "Programmable completion for the bash shell";

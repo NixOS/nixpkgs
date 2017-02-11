@@ -104,15 +104,19 @@ in
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default via "${cfg.defaultGateway.address}" ${
+                  ip route add default ${optionalString (cfg.defaultGateway.metric != null)
+                      "metric ${toString cfg.defaultGateway.metric}"
+                    } via "${cfg.defaultGateway.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"}|| true
+                      "dev ${cfg.defaultGateway.interface}"} || true
                 ''}
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip -6 route add ::/0 via "${cfg.defaultGateway6.address}" ${
+                  ip -6 route add ::/0 ${optionalString (cfg.defaultGateway6.metric != null)
+                      "metric ${toString cfg.defaultGateway6.metric}"
+                    } via "${cfg.defaultGateway6.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway6.interface != null)

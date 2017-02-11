@@ -1,5 +1,5 @@
 # This module declares the options to define a *display manager*, the
-# program responsible for handling X logins (such as xdm, kdm, gdb, or
+# program responsible for handling X logins (such as xdm, gdb, or
 # SLiM).  The display manager allows the user to select a *session
 # type*.  When the user logs in, the display manager starts the
 # *session script* ("xsession" below) to launch the selected session
