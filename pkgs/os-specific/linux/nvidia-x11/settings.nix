@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];
 
+  postPatch = lib.optionalString nvidia_x11.useProfiles ''
+    sed -i 's,/usr/share/nvidia/,${nvidia_x11.bin}/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
+  '';
+
   preBuild = ''
     if [ -e src/libXNVCtrl/libXNVCtrl.a ]; then
       ( cd src/libXNVCtrl
