@@ -38,7 +38,7 @@ fileSystems."/".device = "/dev/mapper/crypted";
 </programlisting>
 
 If you are using grub as a boot loader, make sure to add the following configuration option
-<programlisting>boot.grub.enableCryptodisk = true;</programlisting>
+<programlisting>boot.loader.grub.enableCryptodisk = true;</programlisting>
 
 </para>
 
