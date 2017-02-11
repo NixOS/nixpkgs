@@ -256,8 +256,6 @@ else {
         # ‘grub-reboot’ sets a one-time saved entry, which we process here and
         # then delete.
         if [ \"\${next_entry}\" ]; then
-          # FIXME: KDM expects the next line to be present.
-          set default=\"\${saved_entry}\"
           set default=\"\${next_entry}\"
           set next_entry=
           save_env next_entry
