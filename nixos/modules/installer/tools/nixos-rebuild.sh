@@ -15,6 +15,7 @@ origArgs=("$@")
 extraBuildFlags=()
 action=
 buildNix=1
+fast=
 rollback=
 upgrade=
 repair=
@@ -66,6 +67,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --fast)
         buildNix=
+        fast=1
         extraBuildFlags+=(--show-trace)
         ;;
       --profile-name|-p)
@@ -217,7 +219,7 @@ if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
 fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
-if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then
+if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" -a -z "$fast" ]; then
     if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
         export _NIXOS_REBUILD_REEXEC=1
         exec $p/bin/nixos-rebuild "${origArgs[@]}"
