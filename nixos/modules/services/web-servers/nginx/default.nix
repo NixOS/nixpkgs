@@ -29,6 +29,16 @@ let
     cp nginx.conf $out
   '';
 
+  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+    proxy_set_header        X-Forwarded-Host $host;
+    proxy_set_header        X-Forwarded-Server $host;
+    proxy_set_header        Accept-Encoding "";
+  '';
+
   configFileUnformatted = pkgs.writeText "nginx.unformatted.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
@@ -78,19 +88,12 @@ let
       ''}
 
       ${optionalString (cfg.recommendedProxySettings) ''
-        proxy_set_header        Host $host;
-        proxy_set_header        X-Real-IP $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header        X-Forwarded-Proto $scheme;
-        proxy_set_header        X-Forwarded-Host $host;
-        proxy_set_header        X-Forwarded-Server $host;
-        proxy_set_header        Accept-Encoding "";
-
         proxy_redirect          off;
         proxy_connect_timeout   90;
         proxy_send_timeout      90;
         proxy_read_timeout      90;
         proxy_http_version      1.0;
+        include ${recommendedProxyConfig};
       ''}
 
       client_max_body_size ${cfg.clientMaxBodySize};
@@ -189,7 +192,10 @@ let
   ) virtualHosts);
   mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
-      ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
+      ${optionalString (config.proxyPass != null) ''
+        proxy_pass ${config.proxyPass};
+        ${optionalString cfg.recommendedProxySettings "include ${recommendedProxyConfig};"}
+      ''}
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
