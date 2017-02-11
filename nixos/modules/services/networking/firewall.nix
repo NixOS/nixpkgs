@@ -514,7 +514,7 @@ in
     networking.firewall.extraAllowed = mkOption {
       type = types.listOf (types.submodule { options = {
         sourceAddress = mkOption {
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           default = null;
           example = "198.51.100.0";
           description =
@@ -527,7 +527,7 @@ in
             '';
         };
         destAddress = mkOption {
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           default = null;
           example = "198.51.100.0";
           description =
@@ -545,7 +545,7 @@ in
           description = "Protocol used.";
         };
         sport = mkOption {
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           default = null;
           example = "32219";
           description =
@@ -556,7 +556,7 @@ in
             '';
         };
         dport = mkOption {
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           default = null;
           example = "22";
           description =
