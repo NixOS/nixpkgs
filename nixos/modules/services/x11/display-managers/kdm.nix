@@ -35,7 +35,7 @@ let
       ${optionalString (cfg.setupScript != "")
       ''
         Setup=${cfg.setupScript}
-      ''} 
+      ''}
 
       [X-*-Greeter]
       HiddenUsers=root,${concatStringsSep "," dmcfg.hiddenUsers}
@@ -128,6 +128,9 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    warnings = [
+      "KDM is long unmaintained and will be removed. Please update to SDDM."
+    ];
 
     services.xserver.displayManager.slim.enable = false;
 

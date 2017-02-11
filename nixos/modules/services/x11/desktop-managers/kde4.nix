@@ -87,6 +87,9 @@ in
 
 
   config = mkIf (xcfg.enable && cfg.enable) {
+    warnings = [
+      "KDE4 is long unmaintained and will be removed. Please update to KDE5."
+    ];
 
     # If KDE 4 is enabled, make it the default desktop manager (unless
     # overridden by the user's configuration).
