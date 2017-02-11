@@ -281,6 +281,28 @@ rec {
     sourceRoot = ".";
   };
 
+  vim-highlightedyank = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-highlightedyank-2017-01-04";
+    src = fetchgit {
+      url = "git://github.com/machakann/vim-highlightedyank";
+      rev = "17327fd1072ac15a30f596a2fc0b6cef122e0640";
+      sha256 = "08rc1br8npvkxxh3jn9hmn4yh4nlxy04c8nwyrnpndhw05kca33a";
+    };
+    dependencies = [];
+
+  };
+
+  alchemist-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "alchemist.vim-2017-01-02";
+    src = fetchgit {
+      url = "git://github.com/slashmili/alchemist.vim";
+      rev = "c22d4883b7e2bfed78b70b557d816bf0491d7dd4";
+      sha256 = "0iv91mfj3lxc41xb8sxhl9mby5dllzyvw8508igrj5lvyrd1ikkf";
+    };
+    dependencies = [];
+
+  };
+
   commentary = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "commentary-2016-03-10";
     src = fetchgit {
@@ -357,6 +379,17 @@ rec {
       url = "git://github.com/tpope/vim-fugitive";
       rev = "b754bc2031f21a532c083dd0d072ba373bbe3a37";
       sha256 = "1sig8dl3m1dw5zjxdsp00n1cacmcwdvas3iz04zk88v6xsm8rj22";
+    };
+    dependencies = [];
+
+  };
+
+  vim-lawrencium = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-lawrencium-2017-01-10";
+    src = fetchgit {
+      url = "git://github.com/ludovicchabant/vim-lawrencium";
+      rev = "88077183e1f5a9a1f741aeab7a1374cfed9e917f";
+      sha256 = "0z31v93wjycq4lqvbl1jzxi7i5i1vl919m4dyyzphybcqrjjpnab";
     };
     dependencies = [];
 
@@ -530,6 +563,17 @@ rec {
 
   };
 
+  vim-scala = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-scala-2016-08-02";
+    src = fetchgit {
+      url = "git://github.com/derekwyatt/vim-scala";
+      rev = "a6a350f7c632d0e640b57f9dcc7e123409a7bcd7";
+      sha256 = "108c5h02vcb3pnr3si8dhwq3mv2pj5d83mj1ljxdk9595xv8j2rp";
+    };
+    dependencies = [];
+
+  };
+
   vim-jade = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jade-2016-10-31";
     src = fetchgit {
@@ -558,6 +602,17 @@ rec {
       url = "git://github.com/eagletmt/neco-ghc";
       rev = "7f02a9c25fb272a87d2be092826e2cd3094c620d";
       sha256 = "1fcfk45qb96h6y4zb3p0104iyqc85q1synn9ah56zp6hnkkyffbw";
+    };
+    dependencies = [];
+
+  };
+
+  neco-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "neco-vim-2017-01-16";
+    src = fetchgit {
+      url = "git://github.com/shougo/neco-vim";
+      rev = "d28e1ea78f90d72636895dbd758de6b35aae2dfa";
+      sha256 = "1qsyicxykl350zz86j7k6k9rflcf5nwrc5jbk9135zs5i8g1lqf3";
     };
     dependencies = [];
 
@@ -2048,6 +2103,16 @@ rec {
     dependencies = [];
 
   };
+
+  vim-elixir = buildVimPluginFrom2Nix {
+      name = "vim-elixir-2017-02-01";
+      src = fetchgit {
+        url = "https://github.com/elixir-lang/vim-elixir";
+        rev = "9cbb3ee3865c594ed017f8118a80b355cd7e238f";
+        sha256 = "14mlnjpmgfal4vai2k8jjmhszwgyhnf3v75rssj05n47qnzlddk4";
+      };
+      dependencies = [];
+    };
 
   vim-gista = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-gista-2016-09-21";

@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Instant Terminal Sharing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ DamienCassou ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   name = "i3minator-${version}";
@@ -9,7 +9,12 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "11dn062788kwfs8k2ry4v8zr2gn40r6lsw770s9g2gvhl5n469dw";
   };
 
+  LC_ALL = "en_US.UTF-8";
+  buildInputs = [ glibcLocales ];
   propagatedBuildInputs = [ pythonPackages.pyyaml pythonPackages.i3-py ];
+
+  # No tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "i3 project manager similar to tmuxinator";

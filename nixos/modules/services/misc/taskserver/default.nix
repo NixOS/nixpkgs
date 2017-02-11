@@ -125,10 +125,10 @@ let
       server.key = ${cfg.dataDir}/keys/server.key
       server.crl = ${cfg.dataDir}/keys/server.crl
     '' else ''
-      ca.cert = ${cfg.pki.ca.cert}
-      server.cert = ${cfg.pki.server.cert}
-      server.key = ${cfg.pki.server.key}
-      server.crl = ${cfg.pki.server.crl}
+      ca.cert = ${cfg.pki.manual.ca.cert}
+      server.cert = ${cfg.pki.manual.server.cert}
+      server.key = ${cfg.pki.manual.server.key}
+      server.crl = ${cfg.pki.manual.server.crl}
     ''}
   '' + cfg.extraConfig);
 

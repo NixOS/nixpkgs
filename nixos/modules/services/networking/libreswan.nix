@@ -102,7 +102,7 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "always";
-        EnvironmentFile = "${pkgs.libreswan}/etc/sysconfig/pluto";
+        EnvironmentFile = "-${pkgs.libreswan}/etc/sysconfig/pluto";
         ExecStartPre = [
           "${libexec}/addconn --config ${configFile} --checkconfig"
           "${libexec}/_stackmanager start"

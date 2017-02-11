@@ -1,13 +1,15 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchFromGitHub }:
 
 let optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "lmdb-${version}";
-  version = "0.9.18";
+  version = "0.9.19";
 
-  src = fetchzip {
-    url = "https://github.com/LMDB/lmdb/archive/LMDB_${version}.tar.gz";
-    sha256 = "01j384kxg36kym060pybr5p6mjw0xv33bqbb8arncdkdq57xk8wg";
+  src = fetchFromGitHub {
+    owner = "LMDB";
+    repo = "lmdb";
+    rev = "LMDB_${version}";
+    sha256 = "04qx803jdmhkcam748fn0az3cyzvj91lw28kcvwfyq0al7pmjkfs";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
@@ -19,7 +21,7 @@ in stdenv.mkDerivation rec {
   checkPhase = "make test";
 
   preInstall = ''
-    mkdir -p $out/{man/man1,bin,lib,include}
+    mkdir -p $out/{bin,lib,include}
   '';
 
   meta = with stdenv.lib; {

@@ -44,9 +44,7 @@ in
         enable_uart=1
       '';
       in ''
-        for f in bootcode.bin fixup.dat start.elf; do
-          cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/$f boot/
-        done
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
         cp ${pkgs.ubootRaspberryPi2}/u-boot.bin boot/u-boot-rpi2.bin
         cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin boot/u-boot-rpi3.bin
         cp ${configTxt} boot/config.txt

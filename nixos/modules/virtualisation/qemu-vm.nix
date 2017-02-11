@@ -443,6 +443,13 @@ in
             options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
             neededForBoot = true;
           };
+        "/tmp" = mkIf config.boot.tmpOnTmpfs
+          { device = "tmpfs";
+            fsType = "tmpfs";
+            neededForBoot = true;
+            # Sync with systemd's tmp.mount;
+            options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
+          };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";

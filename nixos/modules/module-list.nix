@@ -141,6 +141,7 @@
   ./services/computing/torque/mom.nix
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildbot/master.nix
+  ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
@@ -197,6 +198,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
+  ./services/hardware/illum.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -205,6 +207,7 @@
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
+  ./services/hardware/trezord.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
@@ -261,7 +264,7 @@
   ./services/misc/gitolite.nix
   ./services/misc/gogs.nix
   ./services/misc/gpsd.nix
-  ./services/misc/ihaskell.nix
+  #./services/misc/ihaskell.nix
   ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
@@ -339,6 +342,7 @@
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/drbd.nix
+  ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
@@ -442,6 +446,7 @@
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
+  ./services/networking/redsocks.nix
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
@@ -498,7 +503,8 @@
   ./services/security/frandom.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
-  ./services/security/hologram.nix
+  ./services/security/hologram-server.nix
+  ./services/security/hologram-agent.nix
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
@@ -639,6 +645,7 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
+  ./virtualisation/ecs-agent.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix

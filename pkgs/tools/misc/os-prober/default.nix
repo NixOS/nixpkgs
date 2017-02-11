@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, 
+{ stdenv, fetchurl, makeWrapper,
 systemd, # udevadm
-busybox, 
+busybox,
 coreutils, # os-prober desn't seem to work with pure busybox
 devicemapper, # lvs
 # optional dependencies
@@ -11,11 +11,11 @@ ntfs3g ? null
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.65";
+  version = "1.73";
   name = "os-prober-${version}";
   src = fetchurl {
     url = "mirror://debian/pool/main/o/os-prober/os-prober_${version}.tar.xz";
-    sha256 = "c4a7661a52edae722f7e6bacb3f107cf7086cbe768275fadf5398d04360bfc84";
+    sha256 = "1prssbwdgj5c33zhl3ldgaxk7lab9qvs4zhyrhag88wiivirb0sq";
   };
 
   buildInputs = [ makeWrapper ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, xorg
+{ stdenv, fetchFromGitHub, xorg
 , autoconf, automake, cvs, libtool, nasm, pixman, xkeyboard_config
 , fontDirectories, libgcrypt, gnutls, pam, flex, bison, gettext
 , cmake, libjpeg_turbo, fltk, nettle, libiconv, libtasn1
@@ -7,13 +7,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.7.1";
   name = "tigervnc-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/TigerVNC/tigervnc/";
-    sha256 = "1b6n2gq6078x8dwz471a68jrkgpcxmbiivmlsakr42vrndm7niz3";
-    rev = "e25272fc74ef09987ccaa33b9bf1736397c76fdf";
+  src = fetchFromGitHub {
+    owner = "TigerVNC";
+    repo = "tigervnc";
+    sha256 = "0s2v1h24cl5ypnr35hima580xvvsh0cdqi501mvyvi7wz9cp33rj";
+    rev = "v1.7.1";
   };
 
   inherit fontDirectories;

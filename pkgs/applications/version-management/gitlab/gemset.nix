@@ -2579,10 +2579,10 @@
   test_after_commit = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fzg8qan6f0n0ynr594bld2k0rwwxj99yzhiga2f3pkj9ina1abb";
+      sha256 = "0s8pz00xq28lsa1rfczm83yqwk8wcb5dqw2imlj8gldnsdapcyc2";
       type = "gem";
     };
-    version = "0.4.2";
+    version = "1.1.0";
   };
   thin = {
     source = {

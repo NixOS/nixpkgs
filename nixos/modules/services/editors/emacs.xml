@@ -316,10 +316,10 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
       <para>
         If you are not on NixOS or want to install this particular
         Emacs only for yourself, you can do so by adding it to your
-        <filename>~/.nixpkgs/config.nix</filename>
+        <filename>~/.config/nixpkgs/config.nix</filename>
         (see <link xlink:href="http://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs manual</link>):
         <example>
-          <title>Custom Emacs in <filename>~/.nixpkgs/system.nix</filename></title>
+          <title>Custom Emacs in <filename>~/.config/nixpkgs/config.nix</filename></title>
           <programlisting><![CDATA[
 {
   packageOverrides = super: let self = super.pkgs; in {

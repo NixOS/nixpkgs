@@ -4,6 +4,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python2
 , grsecEnabled ? false
+, enableRadv ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 }:
 
@@ -26,7 +27,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "13.0.3";
+  version = "13.0.4";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "d9aa8be5c176d00d0cd503cb2f64a5a403ea471ec819c022581414860d7ba40e";
+    sha256 = "a95d7ce8f7bd5f88585e4be3144a341236d8c0fc91f6feaec59bb8ba3120e726";
   };
 
   prePatch = "patchShebangs .";
@@ -73,7 +74,7 @@ stdenv.mkDerivation {
   ] else [
       "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,swrast"
       "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
-      "--with-vulkan-drivers=intel"
+      ("--with-vulkan-drivers=intel" + optionalString enableRadv ",radeon")
   ]) ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")

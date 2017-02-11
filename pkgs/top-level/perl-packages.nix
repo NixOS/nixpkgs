@@ -11964,10 +11964,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Swim = buildPerlPackage rec {
-    name = "Swim-0.1.44";
+    name = "Swim-0.1.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "06aac148d7b1778028ffae657fdf79b1093b52035661fd8b9bdad729dc8741aa";
+      sha256 = "3755ba1a02aee933c8e1de3995aca1523d6175291a1fa60c3f7fd477f5bb2469";
     };
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];
@@ -13829,7 +13829,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ pkgs.glibc TextCharWidth ];
     preConfigure = ''
-      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc}/bin/locale'
+      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc.bin}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";

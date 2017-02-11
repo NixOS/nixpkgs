@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     install -m 444 -D ${zshCompletion} $out/share/zsh/site-functions/_tarsnap
   '';
 
-  buildInputs = [ openssl zlib e2fsprogs ];
+  buildInputs = [ openssl zlib ] ++ stdenv.lib.optional stdenv.isLinux e2fsprogs ;
 
   meta = {
     description = "Online backups for the truly paranoid";
     homepage    = "http://www.tarsnap.com/";
     license     = "tarsnap";
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice roconnor ];
   };
 }

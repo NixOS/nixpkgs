@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libjack2, dbus, qt5 }:
+{ stdenv, fetchurl, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras }:
 
 stdenv.mkDerivation rec {
   version = "0.4.3";
@@ -12,14 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt5.full
-    qt5.qtx11extras
+    qtbase
+    qtx11extras
+    qttools
     alsaLib
     libjack2
     dbus
   ];
 
-  configureFlags = "--enable-jack-version";
+  configureFlags = [ "--enable-jack-version" ];
 
   meta = with stdenv.lib; {
     description = "A Qt application to control the JACK sound server daemon";

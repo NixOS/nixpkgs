@@ -87,6 +87,9 @@ in
 
 
   config = mkIf (xcfg.enable && cfg.enable) {
+    warnings = [
+      "KDE4 is long unmaintained and will be removed. Please update to KDE5."
+    ];
 
     # If KDE 4 is enabled, make it the default desktop manager (unless
     # overridden by the user's configuration).
@@ -183,7 +186,10 @@ in
       GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
     };
 
-    services.xserver.exportConfiguration = true;
+    environment.etc = singleton
+      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        target = "X11/xkb";
+      };
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
