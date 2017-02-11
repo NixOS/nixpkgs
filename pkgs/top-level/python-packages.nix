@@ -16685,8 +16685,8 @@ in {
     src = pkgs.fetchFromGitHub {
       owner = "openSUSE";
       repo = "osc";
-      rev = "9e6d1a592e89e8ee9fd40a96cfcf97bf74f68715";
-      sha256 = "13svha5zh1xn3jv4kn9h3d620p65qh5nnhhghjbscp9lzlwwba3g";
+      rev = "64cbb10095cf9ef0270d65fff58085a13bc0abe9";
+      sha256 = "0s5kz5ln96ka0f1sa9nyp34c28mkxkrgcxbvysdawlppg7ay9s1z";
     };
     propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
     postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
