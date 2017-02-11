@@ -15405,7 +15405,7 @@ with pkgs;
 
   neovim = callPackage ../applications/editors/neovim { };
 
-  neovim-qt = callPackage ../applications/editors/neovim/qt.nix { };
+  neovim-qt = qt5.callPackage ../applications/editors/neovim/qt.nix { };
 
   neovim-pygui = pythonPackages.neovim_gui;
 
