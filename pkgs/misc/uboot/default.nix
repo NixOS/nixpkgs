@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bc, dtc }:
+{ stdenv, fetchurl, bc, dtc, python2 }:
 
 let
   buildUBoot = { targetPlatforms
@@ -17,7 +17,7 @@ let
       sha256 = "1wpc51jm3zyibgcr78jng2yksqvrya76bxgsr4pcyjrsz5sm2hkc";
     };
 
-    nativeBuildInputs = [ bc dtc ];
+    nativeBuildInputs = [ bc dtc python2 ];
 
     hardeningDisable = [ "all" ];
 
@@ -34,6 +34,7 @@ let
       runHook postInstall
     '';
 
+    enableParallelBuilding = true;
     dontStrip = true;
 
     crossAttrs = {
