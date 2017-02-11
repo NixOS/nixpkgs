@@ -17316,6 +17316,8 @@ in {
       url = "mirror://pypi/r/ryu/${name}.tar.gz";
       sha256 = "1fhriqi7qnvvx9mbvlfm94i5drh920lg204zy3v0qjz43sinkih6";
     };
+
+    meta.broken = true;
   };
 
   WSME = buildPythonPackage rec {
