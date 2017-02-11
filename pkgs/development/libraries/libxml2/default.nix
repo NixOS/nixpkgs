@@ -1,7 +1,10 @@
-{ stdenv, lib, fetchurl, zlib, xz, python, findXMLCatalogs, libiconv, fetchpatch
-, supportPython ? (! stdenv ? cross) }:
+{ stdenv, lib, fetchurl, fetchpatch
+, zlib, xz, python, findXMLCatalogs, libiconv
+, supportPython ? (! stdenv ? cross)
+, icuSupport ? false, icu ? null }:
 
 stdenv.mkDerivation rec {
+
   name = "libxml2-${version}";
   version = "2.9.4";
 
@@ -35,9 +38,11 @@ stdenv.mkDerivation rec {
     # RUNPATH for that, leading to undefined references for its users.
     ++ lib.optional stdenv.isFreeBSD xz;
 
-  propagatedBuildInputs = [ zlib findXMLCatalogs ];
+  propagatedBuildInputs = [ zlib findXMLCatalogs ] ++ lib.optional icuSupport icu;
 
-  configureFlags = lib.optional supportPython "--with-python=${python}"
+  configureFlags =
+       lib.optional supportPython "--with-python=${python}"
+    ++ lib.optional icuSupport    "--with-icu"
     ++ [ "--exec_prefix=$dev" ];
 
   enableParallelBuilding = true;
