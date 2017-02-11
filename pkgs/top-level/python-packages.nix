@@ -136,8 +136,7 @@ in {
   };
 
   agate-excel = buildPythonPackage rec {
-    name = "agate-excel-0.1.0";
-    disabled = isPy3k;
+    name = "agate-excel-0.2.0";
 
     meta = {
       description = "Adds read support for excel files to agate";
@@ -146,11 +145,13 @@ in {
       maintainers = with maintainers; [ vrthra ];
     };
 
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ agate openpyxl xlrd ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/agate-excel/${name}.tar.gz";
-      sha256 = "08zvj3pwqw8zhd58iyymiwblrk92y4gl6yyrb2svb0k8za7v0hak";
+      sha256 = "1lh6x0zbp8l5ba6i1zjbnzqb63n56y1v1vlmws7y3zz1xwplaxay";
     };
   };
 
