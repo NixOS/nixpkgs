@@ -428,6 +428,7 @@ in
         damageproto xcmiscproto  bigreqsproto
         inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        libXfont2
       ];
       # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
       commonPatches = [ ];
