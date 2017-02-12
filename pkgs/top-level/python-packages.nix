@@ -30186,7 +30186,7 @@ EOF
 
   poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.10";
+    version = "0.11";
 
     disabled = pythonOlder "3.4";
 
@@ -30194,13 +30194,12 @@ EOF
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/102/${name}.tar.gz";
-      sha256 = "1mm0c3250p0kh7lmmjlp05hbc7byn9lknafgb906xmp4vx1p4kjn";
+      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
+      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
     };
 
     patches = [
       ../development/python-modules/poezio/fix_gnupg_import.patch
-      ../development/python-modules/poezio/fix_plugins_imports.patch
     ];
 
     checkPhase = ''
