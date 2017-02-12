@@ -2,9 +2,7 @@
 
 with lib;
 let
-  isBluez4 = config.services.xserver.desktopManager.kde4.enable;
-  bluez-bluetooth = if isBluez4 then pkgs.bluez4 else pkgs.bluez;
-
+  bluez-bluetooth = pkgs.bluez;
 in
 
 {
@@ -38,7 +36,7 @@ in
       aliases = [ "dbus-org.bluez.service" ];
     };
 
-    systemd.user.services.obex = mkIf (!isBluez4) {
+    systemd.user.services.obex = {
       aliases = [ "dbus-org.bluez.obex.service" ];
     };
 
