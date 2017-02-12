@@ -15588,6 +15588,8 @@ with pkgs;
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
   wordnet = callPackage ../applications/misc/wordnet { };
+  
+  worker = callPackage ../applications/misc/worker { };
 
   workrave = callPackage ../applications/misc/workrave {
     inherit (gnome2) GConf gconfmm;
