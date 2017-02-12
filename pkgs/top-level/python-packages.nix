@@ -2502,15 +2502,17 @@ in {
 
   csvkit = buildPythonPackage rec {
     name = "csvkit-${version}";
-    version = "0.9.1";
-    disabled = isPy3k;
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/csvkit/${name}.tar.gz";
-      sha256 = "0fprr4wgp0bq8kl5qims88np11af7ahr5bxkrhfwpdgcgdjbiy4j";
+      sha256 = "1ldwwzc6m7b5k46lckc109hcla2f6n32fw7q8k9b94k83vkwcsq4";
     };
 
-    propagatedBuildInputs = with self; [ dateutil_2_2 dbf xlrd sqlalchemy openpyxl_2_2_0_b1 ];
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ dateutil dbf xlrd sqlalchemy
+      agate agate-sql agate-dbf  agate-excel openpyxl ];
 
     meta = {
       description = "A library of utilities for working with CSV, the king of tabular file formats";
