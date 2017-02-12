@@ -1978,6 +1978,17 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ;};
 
+  xf86videosisusb = (mkDerivation "xf86videosisusb" {
+    name = "xf86-video-sisusb-0.9.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-sisusb-0.9.7.tar.bz2;
+      sha256 = "090lfs3hjz3cjd016v5dybmcsigj6ffvjdhdsqv13k90p4b08h7l";
+    };
+    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xineramaproto xorgserver xproto ;};
+
   xf86videosuncg6 = (mkDerivation "xf86videosuncg6" {
     name = "xf86-video-suncg6-1.1.2";
     builder = ./builder.sh;
@@ -1999,6 +2010,17 @@ let
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto randrproto renderproto xextproto xorgserver xproto ;};
+
+  xf86videosunleo = (mkDerivation "xf86videosunleo" {
+    name = "xf86-video-sunleo-1.2.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-sunleo-1.2.2.tar.bz2;
+      sha256 = "1gacm0s6rii4x5sx9py5bhvs50jd4vs3nnbwjdjymyf31kpdirl3";
+    };
+    buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit fontsproto randrproto renderproto xorgserver xproto ;};
 
   xf86videotdfx = (mkDerivation "xf86videotdfx" {
     name = "xf86-video-tdfx-1.4.7";
