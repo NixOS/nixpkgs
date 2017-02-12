@@ -7155,6 +7155,26 @@ in {
     };
   };
 
+  garmin-uploader = buildPythonApplication rec {
+    name = "garmin-uploader-${version}";
+    version = "1.0.1";
+
+    meta = {
+      homepage = "https://github.com/La0/garmin-uploader";
+      description = "A tool to upload FIT, GPX, and TCX files to the Garmin Connect web site";
+      license = licenses.gpl2;
+    };
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/La0/garmin-uploader/archive/${version}.tar.gz";
+      sha256 = "1x8vqlx01m86kcj1lvr2g93qyrrgmj7227fwd8xm2d4bphrwxal6";
+    };
+
+    buildInputs = [ self.pytestrunner ];
+    propagatedBuildInputs = with self; [ requests2 six ];
+  };
+
+
   gateone = buildPythonPackage rec {
     name = "gateone-1.2-0d57c3";
     disabled = ! isPy27;
