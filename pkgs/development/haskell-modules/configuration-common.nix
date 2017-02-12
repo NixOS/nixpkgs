@@ -848,4 +848,7 @@ self: super: {
   uuid-types = doJailbreak super.uuid-types;
   uuid = doJailbreak super.uuid;
 
+  # https://github.com/hspec/hspec/issues/307
+  hspec-contrib = dontCheck super.hspec-contrib;
+
 }
