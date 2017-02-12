@@ -851,4 +851,7 @@ self: super: {
   # https://github.com/hspec/hspec/issues/307
   hspec-contrib = dontCheck super.hspec-contrib;
 
+  # https://github.com/ekmett/lens/issues/713
+  lens = disableCabalFlag super.lens "test-doctests";
+
 }
