@@ -1902,11 +1902,11 @@ let
   }) // {inherit fontsproto glproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ;};
 
   xf86videoqxl = (mkDerivation "xf86videoqxl" {
-    name = "xf86-video-qxl-0.1.3";
+    name = "xf86-video-qxl-0.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-qxl-0.1.3.tar.bz2;
-      sha256 = "1368dd5mihn3s098n7wa3fpjkp8pnamabfjjipkqs9zyrcvncy3m";
+      url = mirror://xorg/individual/driver/xf86-video-qxl-0.1.5.tar.bz2;
+      sha256 = "14jc24znnahhmz4kqalafmllsg8awlz0y6gpgdpk5ih38ph851mi";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
