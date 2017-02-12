@@ -6,9 +6,8 @@ let
   getDesktopFileName = drvName: (builtins.parseDrvName drvName).name;
 
   # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
-  extensionOf = filePath: 
-    lib.concatStringsSep "." (lib.tail (lib.splitString "." 
-      (builtins.baseNameOf filePath)));
+  extensionOf = filePath:
+    lib.concatStringsSep "." (lib.tail (lib.splitString "." (builtins.baseNameOf filePath)));
 
   installIcons = iconName: icons: lib.concatStringsSep "\n" (lib.mapAttrsToList (size: iconFile: ''
     mkdir -p "$out/share/icons/hicolor/${size}/apps"
@@ -68,14 +67,14 @@ let
 in rec {
 
   application = mkSweetHome3D rec {
-    version = "5.2";
+    version = "5.4";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "0vws3lj5lgix5fz2hpqvz6p79py5gbfpkhmqpfb1knx1a12310bb";
+      sha256 = "09sk4svmaiw8dabcya3407iq5yjwxbss8pik1rzalrlds2428vyw";
       module = module;
       tag = "V_" + d2u version;
     };
