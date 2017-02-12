@@ -844,4 +844,8 @@ self: super: {
   # https://github.com/aslatter/parsec/issues/68
   parsec = doJailbreak super.parsec;
 
+  # Don't depend on chell-quickcheck, which doesn't compile due to restricting
+  # QuickCheck to versions ">=2.3 && <2.9".
+  system-filepath = dontCheck super.system-filepath;
+
 }
