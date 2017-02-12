@@ -15268,16 +15268,15 @@ in {
   };
 
   pygal = buildPythonPackage rec {
-    version = "2.0.10";
-    name = "pygal-${version}";
+    pname = "pygal";
+    version = "2.3.1";
+    name = "${pname}-${version}";
 
-    doCheck = !isPyPy;  # one check fails with pypy
+    doCheck = true;
 
-    src = pkgs.fetchFromGitHub {
-      owner = "Kozea";
-      repo = "pygal";
-      rev = version;
-      sha256 = "1j7qjgraapvfc80yp8xcbddqrw8379gqi7pwkvfml3qcqm0z0d33";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0rq6hwd1vn44p3jx79wvln1p9mrbwh36plmlyj5js31x4f8s39bv";
     };
 
     buildInputs = with self; [ flask pyquery pytest ];
@@ -15287,7 +15286,7 @@ in {
       description = "Sexy and simple python charting";
       homepage = http://www.pygal.org;
       license = licenses.lgpl3;
-      maintainers = with maintainers; [ sjourdois ];
+      maintainers = with maintainers; [ sjourdois vrthra ];
     };
   };
 
