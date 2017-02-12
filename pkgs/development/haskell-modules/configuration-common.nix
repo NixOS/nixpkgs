@@ -841,4 +841,7 @@ self: super: {
   # https://github.com/basvandijk/lifted-base/issues/34
   lifted-base = doJailbreak super.lifted-base;
 
+  # https://github.com/aslatter/parsec/issues/68
+  parsec = doJailbreak super.parsec;
+
 }
