@@ -702,15 +702,8 @@ self: super: {
     '';
   });
 
-  # The most current version needs some packages to build that are not in LTS 7.x.
-  # stack = super.stack.overrideScope (self: super: {
-  #   http-client = self.http-client_0_5_5;
-  #   http-client-tls = self.http-client-tls_0_3_3_1;
-  #   http-conduit = self.http-conduit_2_2_3;
-  #   criterion = super.criterion.override { inherit (super) optparse-applicative; };
-  #   aeson = self.aeson_1_0_2_1;
-  #   hpack = self.hpack_0_15_0;
-  # });
+  # https://github.com/commercialhaskell/stack/issues/3001
+  stack = doJailbreak super.stack;
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
