@@ -95,6 +95,8 @@ in {
     };
   };
 
+  aenum = callPackage ../development/python-modules/aenum { };
+
   agate = buildPythonPackage rec {
     name = "agate-1.2.2";
     disabled = isPy3k;
