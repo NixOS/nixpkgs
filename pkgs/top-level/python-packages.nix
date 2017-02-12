@@ -180,8 +180,7 @@ in {
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   dbf = buildPythonPackage rec {
-    name = "dbf-0.94.003";
-    disabled = isPy3k;
+    name = "dbf-0.96.8";
 
     meta = {
       description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
@@ -190,9 +189,13 @@ in {
       maintainers = with maintainers; [ vrthra ];
     };
 
+    propagatedBuildInputs = with self; [ aenum ];
+
+    doCheck = false;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dbf/${name}.tar.gz";
-      sha256 = "0i2454hwg67079jb56x663wqmmwr55pcr6c76q2415185y6nhny9";
+      sha256 = "1z8n7s4cka6x9ybh4qpfhj51v2qrk38h2f06npizzhm0hmn6r3v1";
     };
   };
 
