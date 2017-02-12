@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1xw5f427xk9p2nbsj04j6m5zyjlyd66sbvl2bkg8hd1kx8pm9139";
   };
 
-  doCheck = true;
+  doCheck = stdenv.is64bit;
 
   meta = with stdenv.lib; {
     description = "Cartographic Projections Library";
