@@ -392,7 +392,6 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
-  vty_5_15 = dontCheck super.vty_5_15;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -472,11 +471,6 @@ self: super: {
     preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
   });
 
-  # Requires bower-json >= 1.0.0.1 && < 1.1
-  purescript_0_10_5 = super.purescript_0_10_5.overrideScope (self: super: {
-    bower-json = self.bower-json_1_0_0_1;
-  });
-
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
 
@@ -496,41 +490,6 @@ self: super: {
 
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
-
-  # Packages of the diagrams ecosystem that require:
-  #   diagrams-core ==1.4.*
-  #   diagrams-lib ==1.4.*
-  #   optparse-applicative ==0.13.*
-  diagrams_1_4 = super.diagrams_1_4.overrideScope (self: super: {
-    diagrams-contrib = self.diagrams-contrib_1_4_0_1;
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    diagrams-svg = self.diagrams-svg_1_4_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-contrib_1_4_0_1 = super.diagrams-contrib_1_4_0_1.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-  });
-  diagrams-lib_1_4_0_1 = super.diagrams-lib_1_4_0_1.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-pgf = super.diagrams-pgf.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-rasterific_1_4 = super.diagrams-rasterific_1_4.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-  diagrams-svg_1_4_1 = super.diagrams-svg_1_4_1.overrideScope (self: super: {
-    diagrams-core = self.diagrams-core_1_4;
-    diagrams-lib = self.diagrams-lib_1_4_0_1;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
@@ -744,15 +703,14 @@ self: super: {
   });
 
   # The most current version needs some packages to build that are not in LTS 7.x.
-  stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3_1;
-    http-conduit = self.http-conduit_2_2_3;
-    optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
-    criterion = super.criterion.override { inherit (super) optparse-applicative; };
-    aeson = self.aeson_1_0_2_1;
-    hpack = self.hpack_0_15_0;
-  });
+  # stack = super.stack.overrideScope (self: super: {
+  #   http-client = self.http-client_0_5_5;
+  #   http-client-tls = self.http-client-tls_0_3_3_1;
+  #   http-conduit = self.http-conduit_2_2_3;
+  #   criterion = super.criterion.override { inherit (super) optparse-applicative; };
+  #   aeson = self.aeson_1_0_2_1;
+  #   hpack = self.hpack_0_15_0;
+  # });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
@@ -776,9 +734,6 @@ self: super: {
   # Needs new version.
   haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
-  # Test suite fails a QuickCheck property.
-  optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
@@ -799,10 +754,6 @@ self: super: {
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
-
-  # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
-  # is hard because of transitive dependencies, so we just disable tests.
-  http-api-data_0_3_5 = dontCheck super.http-api-data_0_3_5;
 
   # Fix build for latest versions of servant and servant-client.
   servant_0_10 = super.servant_0_10.overrideScope (self: super: {
@@ -842,15 +793,8 @@ self: super: {
   # https://github.com/plow-technologies/servant-auth/issues/20
   servant-auth = dontCheck super.servant-auth;
 
-  servant-auth-server = super.servant-auth-server.overrideScope (self: super: {
-    jose = super.jose_0_5_0_2;
-  });
-
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
-
-  # Use proper store-core version.
-  store_0_3 = super.store_0_3.overrideScope (self: super: { store-core = self.store-core_0_3; });
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
@@ -885,21 +829,11 @@ self: super: {
   # https://github.com/josefs/STMonadTrans/issues/4
   STMonadTrans = dontCheck super.STMonadTrans;
 
-  socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
-
-  # requires most recent vty
-  brick = super.brick.overrideScope (self: super: { vty = self.vty_5_15; });
-
-  turtle_1_3_1 = super.turtle_1_3_1.overrideScope (self: super: {
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
-  });
-
   # No upstream issue tracker
   hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
 
   lentil = super.lentil.overrideScope (self: super: {
     pipes = self.pipes_4_3_2;
-    optparse-applicative = self.optparse-applicative_0_13_0_0;
     # https://github.com/roelvandijk/terminal-progress-bar/issues/14
     terminal-progress-bar = doJailbreak self.terminal-progress-bar_0_1_1;
   });
