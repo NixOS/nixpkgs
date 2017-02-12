@@ -16,13 +16,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake libusb1 ];
   patchPhase = ''
-sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
-sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt
-'';
+    sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
+    sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt
+  '';
   preInstall = ''
-mkdir -p $out/etc/udev/rules.d
-mkdir -p $out/etc/modprobe.d
-'';
+    mkdir -p $out/etc/udev/rules.d
+    mkdir -p $out/etc/modprobe.d
+  '';
 
   meta = with stdenv.lib; {
     description = "In-circuit debug and programming for ST-Link devices";
