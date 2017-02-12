@@ -28,7 +28,16 @@ stdenv.mkDerivation rec {
       src = ./config-compat.patch;
       inherit configVersion;
     })
+    (fetchpatch {
+      name = "glibc-2.25.diff";
+      url = "https://cgit.freedesktop.org/fontconfig/patch/?id=1ab5258f7c";
+      sha256 = "0x2a4qx51j3gqcp1kp4lisdzmhrkw1zw0r851d82ksgjlc0vkbaz";
+    })
   ];
+  # additionally required for the glibc-2.25 patch
+  postPatch = ''
+    sed s/CHAR_WIDTH/CHARWIDTH/g -i src/fcobjshash.{h,gperf}
+  '';
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
