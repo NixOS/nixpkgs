@@ -848,4 +848,7 @@ self: super: {
   # QuickCheck to versions ">=2.3 && <2.9".
   system-filepath = dontCheck super.system-filepath;
 
+  # https://github.com/basvandijk/case-insensitive/issues/24
+  case-insensitive = doJailbreak super.case-insensitive;
+
 }
