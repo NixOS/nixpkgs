@@ -5955,27 +5955,7 @@ in {
   };
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-${version}";
-    version = "2.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
-
-  # csvkit 0.9.1 needs dateutil==2.2
-  dateutil_2_2 = buildPythonPackage (rec {
-    name = "dateutil-2.2";
-    disabled = isPy3k;
+    name = "dateutil-2.6.0";
 
     propagatedBuildInputs = with self; [ self.six ];
 
@@ -5983,12 +5963,13 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "0s74ad6r789810s10dxgvaf48ni6adac2icrdad34zxygqq6bj7f";
+      sha256 = "1lhq0hxjc3cfha101q02ld5ijlpfyjn2w1yh7wvpiy367pgzi8k2";
     };
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
       homepage = http://pypi.python.org/pypi/python-dateutil;
+      maintainers = with maintainers; [ vrthra ];
       license = "BSD-style";
     };
   });
