@@ -155,6 +155,26 @@ in {
     };
   };
 
+
+  agate-sql = buildPythonPackage rec {
+    name = "agate-sql-0.5.0";
+
+    meta = {
+      description = "Adds SQL read/write support to agate";
+      homepage    = "https://github.com/wireservice/agate-sql";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ sqlalchemy agate ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate-sql/${name}.tar.gz";
+      sha256 = "1yrgncxfmpb8vcq25w5jz0nglc03hg6r99skfqy1vmy0sn6p5yp5";
+    };
+  };
+
+
   ansicolor = buildPythonPackage rec {
     name = "ansicolor-${version}";
     version = "0.2.4";
