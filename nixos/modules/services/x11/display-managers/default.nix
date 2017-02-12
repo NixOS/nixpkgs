@@ -55,9 +55,6 @@ let
         fi
       ''}
 
-      # Handle being called by kdm.
-      if test "''${1:0:1}" = /; then eval exec "$1"; fi
-
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
         ${optionalString (!config.hardware.pulseaudio.systemWide)

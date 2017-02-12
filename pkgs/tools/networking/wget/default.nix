@@ -5,11 +5,11 @@
 , openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.19";
+  name = "wget-1.19.1";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.xz";
-    sha256 = "1133c14g19ysv74j7am66jwgwrr0rdn0rdyxw7rikbnsyjxmf48g";
+    sha256 = "1ljcfhbkdsd0zjfm520rbl1ai62fc34i7c45sfj244l8f6b0p58c";
   };
 
   patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];

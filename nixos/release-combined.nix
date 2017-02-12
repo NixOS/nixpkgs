@@ -72,7 +72,6 @@ in rec {
         (all nixos.tests.ecryptfs)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
-        (all nixos.tests.kde4)
         (all nixos.tests.kde5)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
