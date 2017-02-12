@@ -9,10 +9,6 @@ stdenv.mkDerivation {
     url = "mirror://debian/pool/main/h/host/host_${version}.orig.tar.gz";
     sha256 = "1g352k80arhwyidsa95nk28xjvzyypmwv3kga2451m3g7fmdqki1";
   };
-  postPatch = ''
-    substituteInPlace port.h \
-      --replace 'typedef char	qbuf_t;' 'typedef unsigned char qbuf_t;'
-  '';
 
   preConfigure = ''
     makeFlagsArray=(DESTBIN=$out/bin DESTMAN=$out/share/man OWNER=$(id -u) GROUP=$(id -g))
