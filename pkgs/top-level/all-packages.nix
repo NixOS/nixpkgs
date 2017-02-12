@@ -5845,7 +5845,6 @@ with pkgs;
   # These are for compatibility and should not be used inside Nixpkgs.
   pythonFull = python.override{x11Support=true;};
   python2Full = python2.override{x11Support=true;};
-  python26Full = python26.override{includeModules=true;self=python26Full;};
   python27Full = python27.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
   python33Full = python33.override{x11Support=true;};
@@ -5858,10 +5857,6 @@ with pkgs;
   python2Packages = python27Packages;
   python3Packages = python35Packages;
 
-  python26 = callPackage ../development/interpreters/python/cpython/2.6 {
-    db = db4;
-    self = python26;
-  };
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
     inherit (darwin) CF configd;
@@ -10165,11 +10160,7 @@ with pkgs;
 
   ### DEVELOPMENT / PYTHON MODULES
 
-  # `nix-env -i python-nose` installs for 2.7, the default python.
-  # Therefore we do not recurse into attributes here, in contrast to
-  # python27Packages. `nix-env -iA python26Packages.nose` works
-  # regardless.
-  python26Packages = python26.pkgs;
+  # Python package sets.
 
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
 
