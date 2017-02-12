@@ -139,9 +139,9 @@ self: super: {
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
-  # https://github.com/haskell/vector/issues/47
-  # https://github.com/haskell/vector/issues/138
-  vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
+  # sse2 flag due to https://github.com/haskell/vector/issues/47.
+  # dontCheck due to https://github.com/haskell/vector/issues/138
+  vector = dontCheck (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
   # Fix Darwin build.
   halive = if pkgs.stdenv.isDarwin
