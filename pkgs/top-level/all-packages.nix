@@ -6336,10 +6336,13 @@ with pkgs;
 
   binutils = if stdenv.isDarwin then darwin.binutils else binutils-raw;
 
-  binutils-raw = callPackage ../development/tools/misc/binutils { inherit noSysDirs; };
+  binutils-raw = callPackage ../development/tools/misc/binutils {
+    # FHS sys dirs presumably only have stuff for the build platform
+    noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
+  };
 
-  binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
-    inherit noSysDirs;
+  binutils_nogold = lowPrio (binutils-raw.override {
     gold = false;
   });
 

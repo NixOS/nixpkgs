@@ -70,8 +70,6 @@ let
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
-  inherit (pkgs.buildPackages) stdenv nukeReferences cpio binutilsCross;
-
   glibc = pkgs.buildPackages.libcCross;
   bash = pkgs.bash;
   findutils = pkgs.findutils;
@@ -126,11 +124,15 @@ rec {
 
   build =
 
-    stdenv.mkDerivation {
+    pkgs.buildPackages.stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
       crossConfig = pkgs.hostPlatform.config;
 
-      buildInputs = [nukeReferences cpio binutilsCross];
+      buildInputs = [
+        pkgs.buildPackages.nukeReferences
+        pkgs.buildPackages.cpio
+        pkgs.buildPackages.binutils
+      ];
 
       buildCommand = ''
         set -x
@@ -261,7 +263,7 @@ rec {
       allowedReferences = [];
     };
 
-  dist = stdenv.mkDerivation {
+  dist = pkgs.buildPackages.stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools-cross";
 
     buildCommand = ''
