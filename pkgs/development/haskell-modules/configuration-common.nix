@@ -851,4 +851,8 @@ self: super: {
   # https://github.com/basvandijk/case-insensitive/issues/24
   case-insensitive = doJailbreak super.case-insensitive;
 
+  # https://github.com/hvr/uuid/issues/28
+  uuid-types = doJailbreak super.uuid-types;
+  uuid = doJailbreak super.uuid;
+
 }
