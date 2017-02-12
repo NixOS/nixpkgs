@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     description = "MPlayer front-end for KDE";
     license = "GPL";
     homepage = http://kmplayer.kde.org;
+    broken = true; # Also unavailable on this mirror
     maintainers = [ stdenv.lib.maintainers.sander ];
   };
 }
