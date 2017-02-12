@@ -510,6 +510,8 @@ in
 
         Restart = "on-failure";
 
+        TimeoutStartSec = 360;
+
         # Hack: we don't want to kill systemd-nspawn, since we call
         # "machinectl poweroff" in preStop to shut down the
         # container cleanly. But systemd requires sending a signal
