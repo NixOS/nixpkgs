@@ -201,8 +201,7 @@ in {
 
 
   dbfread = buildPythonPackage rec {
-    name = "dbfread-2.0.5";
-    disabled = isPy3k;
+    name = "dbfread-2.0.7";
 
     meta = {
       description = "Read DBF Files with Python";
@@ -213,7 +212,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dbfread/${name}.tar.gz";
-      sha256 = "0r5axq9ax0czyapm7b69krcv22r1nyb4vci7c5x8mx8pq1axim93";
+      sha256 = "0gdpwdzf1fngsi6jrdyj4qdf6cr7gnnr3zp80dpkzbgz0spskj07";
     };
   };
 
