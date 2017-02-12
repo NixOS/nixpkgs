@@ -6141,6 +6141,7 @@ with pkgs;
     pythonPackages = python2Packages;
   };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
+
     pythonPackages = python2Packages;
   };
   buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix {
