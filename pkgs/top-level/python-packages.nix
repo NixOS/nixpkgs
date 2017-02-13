@@ -1544,6 +1544,10 @@ in {
 
     propagatedBuildInputs = with self; [ unidecode regex ];
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
     meta = with stdenv.lib; {
       homepage = "https://github.com/dimka665/awesome-slugify";
       description = "Python flexible slugify function";
