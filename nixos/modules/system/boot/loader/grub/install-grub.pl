@@ -430,7 +430,7 @@ my $tmpFile = $confFile . ".tmp";
 writeFile($tmpFile, $conf);
 
 # Append entries detected by os-prober
-if (get("useOsprober") eq "true") {
+if (get("useOSProber") eq "true") {
     system(get("shell"), "-c", "pkgdatadir=$grub/share/grub $grub/etc/grub.d/30_os-prober >> $tmpFile");
 }
 
