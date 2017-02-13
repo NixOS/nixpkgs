@@ -508,7 +508,7 @@ sub screenshot {
 sub getTTYText {
     my ($self, $tty) = @_;
 
-    my ($status, $out) = $self->execute("fold -w 80 /dev/vcs${tty}");
+    my ($status, $out) = $self->execute("fold -w\$(stty -F /dev/tty${tty} size | awk '{print \$2}') /dev/vcs${tty}");
     return $out;
 }
 
