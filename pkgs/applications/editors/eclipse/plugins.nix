@@ -388,7 +388,7 @@ rec {
     version = "4.4.1.201605041056";
 
     src = fetchzip {
-      url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
+      url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/base-20160504-1321.zip";
       sha256 = "13xgx2rwlll0l4bs0g6gyvrx5gcc0125vzn501fdj0wv2fqxn5lw";
     };
 
