@@ -33,6 +33,7 @@
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lcov-result-merger"
 , "meat"
+, "mocha"
 , "nijs"
 , "node2nix"
 , "node-gyp"
