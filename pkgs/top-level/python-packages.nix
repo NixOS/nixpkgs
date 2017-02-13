@@ -3146,12 +3146,9 @@ in {
     '';
 
     meta = {
-      homepage = https://github.com/boto3/boto;
-
+      homepage = https://github.com/boto/boto3;
       license = stdenv.lib.licenses.asl20;
-
       description = "AWS SDK for Python";
-
       longDescription = ''
         Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for
         Python, which allows Python developers to write software that makes use of
