@@ -1,22 +1,38 @@
 { stdenv, fetchzip, makeWrapper, jre, pythonPackages
 , mesosSupport ? true, mesos
+, version
 }:
+
+let
+  versionMap = {
+    "1.6.0" = {
+                hadoopVersion = "cdh4";
+                sparkSha256 = "19ycx1r8g82vkvzmn9wxkssmv2damrg72yfmrgzpc6xyh071g91c";
+              };
+    "2.1.0" = {
+                hadoopVersion = "hadoop2.4";
+                sparkSha256 = "0pbsmbjwijsfgbnm56kgwnmnlqkz3w010ma0d7vzlkdklj40vqn2";
+              };
+  };
+in
+
+with versionMap.${version};
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name    = "spark-${version}";
-  version = "1.6.0";
+
+  name = "spark-${version}";
 
   src = fetchzip {
-    url    = "mirror://apache/spark/${name}/${name}-bin-cdh4.tgz";
-    sha256 = "19ycx1r8g82vkvzmn9wxkssmv2damrg72yfmrgzpc6xyh071g91c";
+    url    = "mirror://apache/spark/${name}/${name}-bin-${hadoopVersion}.tgz";
+    sha256 = sparkSha256;
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
     ++ optional mesosSupport mesos;
 
-  untarDir = "${name}-bin-cdh4";
+  untarDir = "${name}-bin-${hadoopVersion}";
   installPhase = ''
     mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
     mv * $out/lib/${untarDir}

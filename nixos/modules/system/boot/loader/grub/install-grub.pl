@@ -256,8 +256,6 @@ else {
         # ‘grub-reboot’ sets a one-time saved entry, which we process here and
         # then delete.
         if [ \"\${next_entry}\" ]; then
-          # FIXME: KDM expects the next line to be present.
-          set default=\"\${saved_entry}\"
           set default=\"\${next_entry}\"
           set next_entry=
           save_env next_entry
@@ -426,10 +424,17 @@ if ($extraPrepareConfig ne "") {
   system((get("shell"), "-c", $extraPrepareConfig));
 }
 
-# Atomically update the GRUB config.
+# write the GRUB config.
 my $confFile = $grubVersion == 1 ? "$bootPath/grub/menu.lst" : "$bootPath/grub/grub.cfg";
 my $tmpFile = $confFile . ".tmp";
 writeFile($tmpFile, $conf);
+
+# Append entries detected by os-prober
+if (get("useOSProber") eq "true") {
+    system(get("shell"), "-c", "pkgdatadir=$grub/share/grub $grub/etc/grub.d/30_os-prober >> $tmpFile");
+}
+
+# Atomically switch to the new config
 rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile\n";
 
 

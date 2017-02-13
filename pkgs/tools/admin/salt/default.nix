@@ -8,11 +8,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "salt-${version}";
-  version = "2016.3.3";
+  version = "2016.11.2";
 
   src = fetchurl {
     url = "mirror://pypi/s/salt/${name}.tar.gz";
-    sha256 = "1djjglnh6203y8dirziz5w6zh2lgszxp8ivi86nb7fgijj2h61jr";
+    sha256 = "0hrss5x47cr7ffyjl8jlkhf9j88lqvg7c33rjc5bimck8b7x7hzm";
   };
 
   propagatedBuildInputs = with python2Packages; [

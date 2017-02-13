@@ -36,7 +36,10 @@ to set a password, which is retained across invocations of
 and /etc/group will be congruent to your NixOS configuration. For instance,
 if you remove a user from users.extraUsers and run nixos-rebuild, the user
 account will cease to exist. Also, imperative commands for managing users
-and groups, such as useradd, are no longer available.</para>
+and groups, such as useradd, are no longer available. Passwords may still be
+assigned by setting the user's <literal>hashedPassword</literal> option. A
+hashed password can be generated using <command>mkpasswd -m sha-512</command>
+after installing the <literal>mkpasswd</literal> package.</para>
 
 <para>A user ID (uid) is assigned automatically.  You can also specify
 a uid manually by adding

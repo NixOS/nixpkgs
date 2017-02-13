@@ -133,13 +133,10 @@ in
       '';
 
     environment.sessionVariables.LD_LIBRARY_PATH =
-      [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
+      [ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib";
 
-    environment.extraInit = ''
-      export XDG_DATA_DIRS=$XDG_DATA_DIRS:/run/opengl-driver/share
-    '' + optionalString cfg.driSupport32Bit ''
-      export XDG_DATA_DIRS=$XDG_DATA_DIRS:/run/opengl-driver-32/share
-    '';
+    environment.variables.XDG_DATA_DIRS =
+      [ "/run/opengl-driver/share" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/share";
 
     hardware.opengl.package = mkDefault (makePackage pkgs);
     hardware.opengl.package32 = mkDefault (makePackage pkgs_i686);

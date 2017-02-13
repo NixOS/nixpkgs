@@ -38,9 +38,9 @@ let
 
   cfg = config.networking.firewall;
 
-  kernelPackages = config.boot.kernelPackages;
+  inherit (config.boot.kernelPackages) kernel;
 
-  kernelHasRPFilter = kernelPackages.kernel.features.netfilterRPFilter or false;
+  kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
   helpers =
     ''

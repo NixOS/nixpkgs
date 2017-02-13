@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gpsprune-${version}";
-  version = "18.5";
+  version = "18.6";
 
   src = fetchurl {
     url = "http://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "0xd97b7rs5i41hyih6zdbvls090903yfr1r9lflq93dyqhmzpdhn";
+    sha256 = "1ii9pkj24jcwzs225nyi17ks07dfc5x3940hpqrsb5xzxy2vkw7q";
   };
 
   phases = [ "installPhase" ];

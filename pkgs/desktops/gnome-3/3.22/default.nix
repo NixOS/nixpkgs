@@ -14,7 +14,7 @@ let
   callPackage = pkgs.newScope self;
 
   version = "3.22";
-  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds DamienCassou ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
 
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
@@ -233,6 +233,8 @@ let
   vte = callPackage ./core/vte { };
 
   vte_290 = callPackage ./core/vte/2.90.nix { };
+
+  vte-ng = callPackage ./core/vte/ng.nix { };
 
   vino = callPackage ./core/vino { };
 

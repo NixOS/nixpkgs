@@ -148,8 +148,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "51.0";
-    sha512 = "4406f840a7a2b4e76a74e846d702b717618fb5b677f1c6df864c3428033dd22aad295d656f1fc57e581fd202d894c5483a16691a60b6ca7710315b157b812467";
+    version = "51.0.1";
+    sha512 = "556e31b717c0640ef5e181e00b9d2a6ea0ace7c16ae04333d0f2e9e120d0ab9efe82a4ca314ef43594c080523edf37953e65dbf694c7428be0a024f3719d8312";
     updateScript = import ./update.nix {
         name = "firefox";
         inherit writeScript xidel coreutils gnused gnugrep curl ed;

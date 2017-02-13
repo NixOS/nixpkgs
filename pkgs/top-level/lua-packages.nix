@@ -14,6 +14,14 @@
 let
   isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+
+  platformString =
+    if stdenv.isDarwin then "macosx"
+    else if stdenv.isFreeBSD then "freebsd"
+    else if stdenv.isLinux then "linux"
+    else if stdenv.isSunOS then "solaris"
+    else throw "unsupported platform";
+
   self = _self;
   _self = with self; {
   inherit lua;
@@ -104,6 +112,11 @@ let
 
     buildInputs = [ expat ];
 
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile \
+      --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
+    '';
+
     preBuild = ''
       makeFlagsArray=(
         LUA_LDIR="$out/share/lua/${lua.luaversion}"
@@ -113,7 +126,7 @@ let
 
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
@@ -124,9 +137,16 @@ let
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
       sha256 = "134azkxw84xp9g5qmzjsmcva629jm7plwcmjxkdzdg05vyd7kig1";
     };
+    preConfigure = "substituteInPlace config --replace 'CC= gcc' '';"
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace config \
+      --replace 'LIB_OPTION= -shared' '###' \
+      --replace '#LIB_OPTION= -bundle' 'LIB_OPTION= -bundle'
+      substituteInPlace Makefile --replace '10.3' '10.5'
+    '';
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = stdenv.lib.platforms.unix;
       maintainers = with maintainers; [ flosse ];
     };
   };
@@ -155,19 +175,19 @@ let
   };
 
   luasec = buildLuaPackage rec {
-    name = "sec-0.6pre-2015-04-17";
+    name = "sec-0.6";
     src = fetchFromGitHub {
       owner = "brunoos";
       repo = "luasec";
-      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
-      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
+      rev = "lua${name}";
+      sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
     buildInputs = [ openssl ];
 
     preBuild = ''
       makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.isLinux "linux"}
+        ${platformString}
         LUAPATH="$out/lib/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INC_PATH="-I${lua}/include"
@@ -176,7 +196,7 @@ let
 
     meta = {
       homepage = "https://github.com/brunoos/luasec";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
@@ -197,11 +217,7 @@ let
     preBuild = ''
       makeFlagsArray=(
         LUAV=${lua.luaversion}
-        PLAT=${if stdenv.isDarwin then "macosx"
-               else if stdenv.isFreeBSD then "freebsd"
-               else if stdenv.isLinux then "linux"
-               else if stdenv.isSunOS then "solaris"
-               else throw "unsupported platform"}
+        PLAT=${platformString}
         prefix=$out
       );
     '';
@@ -233,29 +249,31 @@ let
 
   luazlib = buildLuaPackage rec {
     name = "zlib-${version}";
-    version = "0.4";
+    version = "1.1";
 
     src = fetchzip {
       url = "https://github.com/brimworks/lua-zlib/archive/v${version}.tar.gz";
-      sha256 = "1pgxnjc0gvk25wsr69nsm60y5ad86z1nlq7mzj3ckygzkgi782dd";
+      sha256 = "1520lk4xpf094xn2zallqgqhs0zb4w61l49knv9y8pmhkdkxzzgy";
     };
 
     buildInputs = [ zlib ];
 
+    preConfigure = "substituteInPlace Makefile --replace gcc cc --replace '-llua' ''";
+
     preBuild = ''
       makeFlagsArray=(
-        linux
+        ${platformString}
         LUAPATH="$out/share/lua/${lua.luaversion}"
         LUACPATH="$out/lib/lua/${lua.luaversion}"
         INCDIR="-I${lua}/include"
-        LIBDIR="-L$out/lib");
+        LIBDIR="-L${lua}/lib");
     '';
 
     preInstall = "mkdir -p $out/lib/lua/${lua.luaversion}";
 
     meta = with stdenv.lib; {
       homepage = https://github.com/brimworks/lua-zlib;
-      hydraPlatforms = platforms.linux;
+      hydraPlatforms = platforms.unix;
       license = licenses.mit;
       maintainers = [ maintainers.koral ];
     };
@@ -344,7 +362,7 @@ let
       makeFlagsArray=(CC=$CC);
     '';
 
-    buildFlags = if stdenv.isDarwin then "macosx" else "";
+    buildFlags = platformString;
 
     installPhase = ''
       mkdir -p $out/lib/lua/${lua.luaversion}

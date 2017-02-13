@@ -1,16 +1,16 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5 }:
+, gcc5, openssl, libpng, lua5 }:
 
 stdenv.mkDerivation rec {
-  name = "podofo-0.9.3";
+  name = "podofo-0.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/podofo/${name}.tar.gz";
-    sha256 = "1n12lbq9x15vqn7dc0hsccp56l5jdff1xrhvlfqlbklxx0qiw9pc";
+    sha256 = "0ngqgwl38afmzcj2zpf18a2g63vhm2fp45cbf9z62129rdgm1pyc";
   };
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gcc5 ];
   buildInputs = [ lua5 stdenv.cc.libc ];
 
   crossAttrs = {

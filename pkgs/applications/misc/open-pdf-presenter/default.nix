@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/olabini/open-pdf-presenter;
     description = "A program for presenting PDFs on multi-monitor settings (typically a laptop connected to a overhead projector)";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -100,15 +100,12 @@ in
       }
 
       (mkIf (!config.boot.earlyVconsoleSetup) {
-        # This is identical to the systemd-vconsole-setup.service unit
-        # shipped with systemd, except that it uses /dev/tty1 instead of
-        # /dev/tty0 to prevent putting the X server in non-raw mode, and
-        # it has a restart trigger.
         systemd.services."systemd-vconsole-setup" =
           { wantedBy = [ "sysinit.target" ];
             before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf kbdEnv ];
+            restartIfChanged = false; # fails when tty is inactive
           };
       })
 

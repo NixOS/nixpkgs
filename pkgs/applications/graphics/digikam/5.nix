@@ -45,11 +45,11 @@
 
 stdenv.mkDerivation rec {
   name    = "digikam-${version}";
-  version = "5.3.0";
+  version = "5.4.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/digikam/${name}.tar.xz";
-    sha256 = "0p1y5kgkz7lzzqpf7qd3mmg59zfdkkz9jg7knldd8dl94wkzlv5k";
+    sha256 = "0dgsgji14l5zvxny36hrfsp889fsfrsbbn9bg57m18404xp903kg";
   };
 
   nativeBuildInputs = [ cmake ecm makeQtWrapper ];

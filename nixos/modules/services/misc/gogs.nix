@@ -208,6 +208,7 @@ in
         group = "gogs";
         home = cfg.stateDir;
         createHome = true;
+        shell = pkgs.bash;
       };
       extraGroups.gogs.gid = config.ids.gids.gogs;
     };

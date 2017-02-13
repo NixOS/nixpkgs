@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, qt, cmake }:
+{ stdenv, fetchgit, cmake, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "speedcrunch-${version}";
-  version = "0.11";
+  version = "0.12.0";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/heldercorreia/speedcrunch/get/${version}.tar.gz";
-    sha256 = "0phba14z9jmbmax99klbxnffwzv3awlzyhpcwr1c9lmyqnbcsnkd";
+  src = fetchgit {
+    # the tagging is not standard, so you probably need to check this when updating
+    rev = "refs/tags/release-${version}";
+    url = "https://bitbucket.org/heldercorreia/speedcrunch";
+    sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
   };
 
-  buildInputs = [cmake qt];
+  buildInputs = [ qtbase qttools ];
 
-  dontUseCmakeBuildDir = true;
+  nativeBuildInputs = [ cmake ];
 
-  cmakeDir = "src";
+  preConfigure = ''
+    cd src
+  '';
 
   meta = with stdenv.lib; {
     homepage    = http://speedcrunch.org;
