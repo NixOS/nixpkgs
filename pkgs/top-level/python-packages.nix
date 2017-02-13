@@ -1321,7 +1321,7 @@ in {
 
   };
 
-  argparse = if (pythonAtLeast "2.7") then null else buildPythonPackage (rec {
+  argparse = buildPythonPackage (rec {
     name = "argparse-1.4.0";
 
     src = pkgs.fetchurl {
