@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, usbmuxd, glib, libgcrypt,
+{ stdenv, fetchurl, fetchpatch, python2, pkgconfig, usbmuxd, glib, libgcrypt,
   libtasn1, libplist, readline, libusbmuxd, openssl }:
 
 stdenv.mkDerivation rec {
   name = "libimobiledevice-1.2.0";
 
-  nativeBuildInputs = [ python libplist.swig pkgconfig ];
+  nativeBuildInputs = [ python2 libplist.swig pkgconfig ];
   buildInputs = [ readline ];
   propagatedBuildInputs = [ libusbmuxd glib libgcrypt libtasn1 libplist openssl ];
 

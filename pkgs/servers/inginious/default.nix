@@ -4,14 +4,14 @@ with lib;
 let
   pythonPackages = python2Packages;
 
-  docker_1_7_2 = pythonPackages.docker.override rec {
+  docker_1_7_2 = pythonPackages.docker.overrideAttrs (oldAttrs: rec {
     name = "docker-py-1.7.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
       sha256 = "0k6hm3vmqh1d3wr9rryyif5n4rzvcffdlb1k4jvzp7g4996d3ccm";
     };
-  };
+  });
 
   webpy-custom = pythonPackages.web.override {
     name = "web.py-INGI";

@@ -440,13 +440,20 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
+          };
+        "/tmp" = mkIf config.boot.tmpOnTmpfs
+          { device = "tmpfs";
+            fsType = "tmpfs";
+            neededForBoot = true;
+            # Sync with systemd's tmp.mount;
+            options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = [ "trans=virtio" "version=9p2000.L" "veryloose" ];
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =

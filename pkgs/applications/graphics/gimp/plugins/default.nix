@@ -125,7 +125,7 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-2.0.1";
-    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook ] 
+    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook ]
       ++ gimp.nativeBuildInputs;
     makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
     src = fetchFromGitHub {
@@ -178,31 +178,16 @@ rec {
 
   gmic =
     pluginDerivation rec {
-      name = "gmic-1.6.5.0";
+      inherit (pkgs.gmic) name src meta;
 
-      buildInputs = [pkgconfig pkgs.fftw pkgs.opencv gimp] ++ gimp.nativeBuildInputs;
-
-      src = fetchurl {
-        url = http://gmic.eu/files/source/gmic_1.6.5.0.tar.gz;
-        sha256 = "1vb6zm5zpqfnzxjvb9yfvczaqacm55rf010ib0yk9f28b17qrjgb";
-      };
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ pkgs.fftw pkgs.opencv gimp ] ++ gimp.nativeBuildInputs;
 
       sourceRoot = "${name}/src";
 
       buildFlags = "gimp";
 
       installPhase = "installPlugins gmic_gimp";
-
-      meta = {
-        description = "Script language for image processing which comes with its open-source interpreter";
-        homepage = http://gmic.eu/gimp.shtml;
-        license = stdenv.lib.licenses.cecill20;
-        /*
-        The purpose of this Free Software license agreement is to grant users
-        the right to modify and redistribute the software governed by this
-        license within the framework of an open source distribution model.
-        [ ... ] */
-      };
   };
 
   # this is more than a gimp plugin !

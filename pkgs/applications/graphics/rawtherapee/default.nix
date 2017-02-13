@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0";
+  version = "5.0-r1";
   name = "rawtherapee-" + version;
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "9fbbb052eefb739753f0f3d631e45694d659610a";
-    sha256 = "0r8wzxp7q77g3hjz7dr5lh5wih762pgjad3lkzjfhki9lxr7ii7q";
+    rev = "1077c4ba2e2dbe249884e6974c6050db8eb5e9c2";
+    sha256 = "1xqmkwprk3h9nhy6q562mkjdpynyg9ff7a92sdga50k56gi0aj0s";
   };
 
   buildInputs = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "minisign-${version}";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     repo = "minisign";
     owner = "jedisct1";
     rev = version;
-    sha256 = "1m71ngxaij3q1dw602kjgj22y5xfjlxrrkjdmx1v4p36y0n6wl92";
+    sha256 = "15w8fgplkxiw9757qahwmgnl4bwx9mm0rnwp1izs2jcy1wy35vp8";
   };
 
   nativeBuildInputs = [ cmake ];

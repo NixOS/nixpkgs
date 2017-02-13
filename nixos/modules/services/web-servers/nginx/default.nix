@@ -16,7 +16,20 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
-  configFile = pkgs.writeText "nginx.conf" ''
+  configFile = pkgs.runCommand "nginx.conf" {
+    inherit configFileUnformatted;
+    passAsFile = [ "configFileUnformatted" ];
+    # configFileUnformatted is created locally, therefore so should this be.
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  } ''
+    cp ${configFileUnformatted} nginx.conf
+    chmod u+w nginx.conf
+    ${pkgs.nginx-config-formatter}/bin/nginxfmt nginx.conf
+    cp nginx.conf $out
+  '';
+
+  configFileUnformatted = pkgs.writeText "nginx.unformatted.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
@@ -403,7 +416,7 @@ in
         acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
-            group = cfg.group;
+            group = lib.mkDefault cfg.group;
             webroot = vhostConfig.acmeRoot;
             extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
             postRun = ''

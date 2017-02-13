@@ -12,6 +12,15 @@ in stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
+  # Make sure that Python 2 is first in $PATH because gnome3.gnome_shell
+  # propagates python3Packages.python.  If we do not do this, autoconf will use
+  # Python 3 instead which gnome-tweak-tool does not support at this time.  See:
+  # https://github.com/NixOS/nixpkgs/issues/21851
+  # https://github.com/NixOS/nixpkgs/pull/22370
+  preConfigure = ''
+    PATH="${python}/bin:$PATH"
+  '';
+
   makeFlags = [ "DESTDIR=/" ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2

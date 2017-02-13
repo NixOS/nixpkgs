@@ -10,7 +10,13 @@ stdenv.mkDerivation rec {
     libpthreadstubs libXau libXdmcp libXrandr libXext libXinerama libXxf86vm
     libXcursor libXfixes
     ];
-  src = fetchgit (stdenv.lib.importJSON ./src.json);
+
+  src = fetchgit {
+    url = https://github.com/mkeeter/ao;
+    rev = "69fadb81543cc9031e4a7ec2036c7f2ab505a620";
+    sha256 = "1717k72vr0i5j7bvxmd6q16fpvkljnqfa1hr3i4yq8cjdsj69my7";
+  };
+
   cmakeFlags = "-G Ninja";
   buildPhase = "ninja";
   installPhase = ''

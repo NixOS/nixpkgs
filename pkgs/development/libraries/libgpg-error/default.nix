@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libgpg-error-${version}";
-  version = "1.24";
+  version = "1.26";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "0h75sf1ngr750c3fjfn4583q7wz40qm63jhg8vjfdrbx936f2s4j";
+    sha256 = "0sgfia0syq78k1c9h10rkhc1nfv5v097icrprlx2x4qn074wnjsc";
   };
 
   postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";

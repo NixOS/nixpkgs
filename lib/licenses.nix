@@ -379,6 +379,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Mozilla Public License 2.0";
   };
 
+  mspl = spdx {
+    spdxId = "MS-PL";
+    fullName = "Microsoft Public License";
+  };
+
   msrla = {
     fullName  = "Microsoft Research License Agreement";
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";

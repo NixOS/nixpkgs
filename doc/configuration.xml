@@ -2,12 +2,12 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-packageconfig">
 
-<title><filename>~/.nixpkgs/config.nix</filename>: global configuration</title>
+<title>Global configuration</title>
 
 <para>Nix packages can be configured to allow or deny certain options.</para>
 
 <para>To apply the configuration edit
-<filename>~/.nixpkgs/config.nix</filename> and set it like
+<filename>~/.config/nixpkgs/config.nix</filename> and set it like
 
 <programlisting>
 {
@@ -89,7 +89,7 @@ packages via <literal>packageOverrides</literal></title>
 
 <para>You can define a function called
 <varname>packageOverrides</varname> in your local
-<filename>~/.nixpkgs/config.nix</filename> to overide nix packages.  It
+<filename>~/.config/nixpkgs/config.nix</filename> to overide nix packages.  It
 must be a function that takes pkgs as an argument and return modified
 set of packages.
 

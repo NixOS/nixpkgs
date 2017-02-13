@@ -76,8 +76,8 @@ in
 
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
-    boot.kernelModules = optional useBbswitch [ "bbswitch" ];
-    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11;
+    boot.kernelModules = optional useBbswitch "bbswitch";
+    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
 
     environment.systemPackages = [ bumblebee primus ];
 

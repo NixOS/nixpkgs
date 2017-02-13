@@ -50,10 +50,6 @@ in
     })
 
     (mkIf (xcfg.enable && cfg.enable) {
-
-      warnings = optional config.services.xserver.desktopManager.kde4.enable
-        "KDE 4 should not be enabled at the same time as KDE 5";
-
       services.xserver.desktopManager.session = singleton {
         name = "kde5";
         bgSupport = true;
@@ -188,7 +184,10 @@ in
 
       environment.pathsToLink = [ "/share" ];
 
-      services.xserver.exportConfiguration = true;
+      environment.etc = singleton {
+        source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        target = "X11/xkb";
+      };
 
       environment.variables =
         {

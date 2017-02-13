@@ -2,14 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "gnu-efi-${version}";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${name}.tar.bz2";
-    sha256 = "1bzq5czw5dxlvpgs9ij2iz7q6krwhja87vc982r6vffcqcl0982i";
+    sha256 = "08hb2gpzcj5p743wcagm0j2m4gh100xv12llpbjc13zi2icwv3xx";
   };
-
-  patches = optional stdenv.isAarch64 ./aarch64-fix-discarded-qualifier.patch;
 
   buildInputs = [ pciutils ];
 

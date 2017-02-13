@@ -18,8 +18,9 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
   enableOCR = true;
 
-  machine.imports = [ ./common/x11.nix ];
+  machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
   machine.virtualisation.memorySize = 2047;
+  machine.services.xserver.displayManager.auto.user = "alice";
   machine.environment.systemPackages = [ chromiumPkg ];
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
@@ -43,14 +44,20 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
       xdoScript = pkgs.writeText "${name}.xdo" text;
     in "${pkgs.xdotool}/bin/xdotool '${xdoScript}'";
   in ''
+    # Run as user alice
+    sub ru ($) {
+      my $esc = $_[0] =~ s/'/'\\${"'"}'/gr;
+      return "su - alice -c '$esc'";
+    }
+
     sub createNewWin {
       $machine->nest("creating a new Chromium window", sub {
-        $machine->execute("${xdo "new-window" ''
+        $machine->execute(ru "${xdo "new-window" ''
           search --onlyvisible --name "startup done"
           windowfocus --sync
           windowactivate --sync
         ''}");
-        $machine->execute("${xdo "new-window" ''
+        $machine->execute(ru "${xdo "new-window" ''
           key Ctrl+n
         ''}");
       });
@@ -58,16 +65,16 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
     sub closeWin {
       Machine::retry sub {
-        $machine->execute("${xdo "close-window" ''
+        $machine->execute(ru "${xdo "close-window" ''
           search --onlyvisible --name "new tab"
           windowfocus --sync
           windowactivate --sync
         ''}");
-        $machine->execute("${xdo "close-window" ''
+        $machine->execute(ru "${xdo "close-window" ''
           key Ctrl+w
         ''}");
         for (1..20) {
-          my ($status, $out) = $machine->execute("${xdo "wait-for-close" ''
+          my ($status, $out) = $machine->execute(ru "${xdo "wait-for-close" ''
             search --onlyvisible --name "new tab"
           ''}");
           return 1 if $status != 0;
@@ -80,7 +87,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
       my $ret = 0;
       $machine->nest("waiting for new Chromium window to appear", sub {
         for (1..20) {
-          my ($status, $out) = $machine->execute("${xdo "wait-for-window" ''
+          my ($status, $out) = $machine->execute(ru "${xdo "wait-for-window" ''
             search --onlyvisible --name "new tab"
             windowfocus --sync
             windowactivate --sync
@@ -113,13 +120,9 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     $machine->waitForX;
 
     my $url = "file://${startupHTML}";
-    my $args = "--user-data-dir=/tmp/chromium-${channel}";
-    $machine->execute(
-      "ulimit -c unlimited; ".
-      "chromium $args \"$url\" & disown"
-    );
+    $machine->execute(ru "ulimit -c unlimited; chromium \"$url\" & disown");
     $machine->waitForText(qr/startup done/);
-    $machine->waitUntilSucceeds("${xdo "check-startup" ''
+    $machine->waitUntilSucceeds(ru "${xdo "check-startup" ''
       search --sync --onlyvisible --name "startup done"
       # close first start help popup
       key -delay 1000 Escape
@@ -134,13 +137,13 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     $machine->screenshot("startup_done");
 
     testNewWin "check sandbox", sub {
-      $machine->succeed("${xdo "type-url" ''
+      $machine->succeed(ru "${xdo "type-url" ''
         search --sync --onlyvisible --name "new tab"
         windowfocus --sync
         type --delay 1000 "chrome://sandbox"
       ''}");
 
-      $machine->succeed("${xdo "submit-url" ''
+      $machine->succeed(ru "${xdo "submit-url" ''
         search --sync --onlyvisible --name "new tab"
         windowfocus --sync
         key --delay 1000 Return
@@ -148,15 +151,15 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
       $machine->screenshot("sandbox_info");
 
-      $machine->succeed("${xdo "submit-url" ''
+      $machine->succeed(ru "${xdo "submit-url" ''
         search --sync --onlyvisible --name "sandbox status"
         windowfocus --sync
       ''}");
-      $machine->succeed("${xdo "submit-url" ''
+      $machine->succeed(ru "${xdo "submit-url" ''
         key --delay 1000 Ctrl+a Ctrl+c
       ''}");
 
-      my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
+      my $clipboard = $machine->succeed(ru "${pkgs.xclip}/bin/xclip -o");
       die "sandbox not working properly: $clipboard"
       unless $clipboard =~ /namespace sandbox.*yes/mi
           && $clipboard =~ /pid namespaces.*yes/mi

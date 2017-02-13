@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    ln -s $out/lib/libgdiplus.0.dylib $out/lib/libgdiplus.so
+  '';
+
   meta = {
     platforms = stdenv.lib.platforms.unix;
   };

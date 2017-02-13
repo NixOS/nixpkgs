@@ -1,0 +1,25 @@
+From ad3f6de6d16ea8ee76635dd39875eeab39def6e9 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sat, 28 Jan 2017 16:57:26 -0400
+Subject: [PATCH 1/4] disable firmware copy
+
+---
+ pre-build.sh | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/pre-build.sh b/pre-build.sh
+index 25e718f..e3cd009 100755
+--- a/pre-build.sh
++++ b/pre-build.sh
+@@ -35,8 +35,3 @@ find ttm -name '*.c' -exec grep EXPORT_SYMBOL {} + \
+     | sort -u \
+     | awk -F'[()]' '{print "#define "$2" amd"$2" //"$0}'\
+     > include/rename_symbol.h
+-
+-FW_DIR="/lib/firmware/$KERNELVER"
+-mkdir -p $FW_DIR
+-cp -ar /usr/src/amdgpu-pro-16.60-379184/firmware/radeon $FW_DIR
+-cp -ar /usr/src/amdgpu-pro-16.60-379184/firmware/amdgpu $FW_DIR
+-- 
+2.11.0
+

@@ -2,7 +2,7 @@
   kdeApp, lib, kdeWrapper,
   ecm, kdoctools,
   baloo, exiv2, kactivities, kdelibs4support, kio, kipi-plugins, lcms2,
-  libkdcraw, libkipi, phonon, qtsvg, qtx11extras
+  libkdcraw, libkipi, phonon, qtimageformats, qtsvg, qtx11extras
 }:
 
 let
@@ -15,8 +15,8 @@ let
       };
       nativeBuildInputs = [ ecm kdoctools ];
       propagatedBuildInputs = [
-        baloo kactivities kdelibs4support kio qtx11extras exiv2 lcms2 libkdcraw
-        libkipi phonon qtsvg
+        baloo kactivities kdelibs4support kio exiv2 lcms2 libkdcraw
+        libkipi phonon qtimageformats qtsvg qtx11extras
       ];
     };
 in

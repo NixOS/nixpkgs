@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, intltool, pkgconfig, python
+{ stdenv, fetchurl, gettext, intltool, pkgconfig, python2
 , avahi, bluez, boost, eigen, fftw, glib, glib_networking
 , glibmm, gsettings_desktop_schemas, gtkmm2, libjack2
 , ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qj3adjhg511jygbjkl9k5v0gcjmg6ifc479rspfyf45m383pp3p";
   };
 
-  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python ];
+  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 ];
 
   buildInputs = [
     avahi bluez boost eigen fftw glib glibmm glib_networking.out
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     "--no-faust" # todo: find out why --faust doesn't work
   ] ++ optional optimizationSupport "--optimization";
 
-  configurePhase = ''python waf configure --prefix=$out $configureFlags'';
+  configurePhase = ''python2 waf configure --prefix=$out $configureFlags'';
 
-  buildPhase = ''python waf build'';
+  buildPhase = ''python2 waf build'';
 
-  installPhase = ''python waf install'';
+  installPhase = ''python2 waf install'';
 
   meta = with stdenv.lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";

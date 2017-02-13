@@ -6,25 +6,24 @@
   nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson }:
 
 let
-  name = "sssd-${version}";
-  version = "1.14.2";
-
   docbookFiles = "${pkgs.docbook_xml_xslt}/share/xml/docbook-xsl/catalog.xml:${pkgs.docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
 in
-stdenv.mkDerivation {
-  inherit name;
-  inherit version;
+stdenv.mkDerivation rec {
+  name = "sssd-${version}";
+  version = "1.14.2";
 
   src = fetchurl {
     url = "https://fedorahosted.org/released/sssd/${name}.tar.gz";
     sha1 = "167b2216c536035175ff041d0449e0a874c68601";
   };
 
+  # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
     export PYTHONPATH=${ldap}/lib/python2.7/site-packages
     export PATH=$PATH:${pkgs.openldap}/libexec
-    export CPATH=${pkgs.libxml2.dev}/include/libxml2
 
     configureFlagsArray=(
       --prefix=$out
@@ -82,6 +81,7 @@ stdenv.mkDerivation {
     description = "System Security Services Daemon";
     homepage = https://fedorahosted.org/sssd/;
     license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ maintainers.e-user ];
   };
 }

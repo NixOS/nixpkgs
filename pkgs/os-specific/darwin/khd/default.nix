@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "khd-${version}";
-  version = "1.1.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "khd";
     rev = "v${version}";
-    sha256 = "1klia3fywl0c88zbp5wdn6kxhdwdry1jwmkj27vpv8vzvdfzwfmy";
+    sha256 = "02v2bq095h1ylx700kayakg7f9p43vrz6p9ry3g7lq37s6apgm8h";
   };
 
   buildInputs = [ Carbon Cocoa ];

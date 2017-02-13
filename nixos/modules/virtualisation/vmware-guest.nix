@@ -4,12 +4,19 @@ with lib;
 
 let
   cfg = config.services.vmwareGuest;
-  open-vm-tools = pkgs.open-vm-tools;
+  open-vm-tools = if cfg.headless then pkgs.open-vm-tools-headless else pkgs.open-vm-tools;
   xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
 {
   options = {
-    services.vmwareGuest.enable = mkEnableOption "VMWare Guest Support";
+    services.vmwareGuest = {
+      enable = mkEnableOption "VMWare Guest Support";
+      headless = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to disable X11-related features.";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -28,7 +35,7 @@ in
 
     environment.etc."vmware-tools".source = "${pkgs.open-vm-tools}/etc/vmware-tools/*";
 
-    services.xserver = {
+    services.xserver = mkIf (!cfg.headless) {
       videoDrivers = mkOverride 50 [ "vmware" ];
       modules = [ xf86inputvmmouse ];
 

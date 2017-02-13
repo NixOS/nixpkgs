@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     substituteInPlace ./configure --replace pl2 pl3
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'
-    ./configure -prefix $out -toolprefix ${tools}/bin/ '' +
+    ./configure -clightgen -prefix $out -toolprefix ${tools}/bin/ '' +
     (if stdenv.isDarwin then "ia32-macosx" else "ia32-linux");
 
   installTargets = "documentation install";
