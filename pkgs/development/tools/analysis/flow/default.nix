@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib, ocaml_4_02, libelf, cf-private, CoreServices }:
+{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices }:
 
 with lib;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp bin/flow $out/bin/
   '';
 
-  buildInputs = [ ocaml_4_02 libelf ]
+  buildInputs = [ ocaml libelf ]
     ++ optionals stdenv.isDarwin [ cf-private CoreServices ];
 
   meta = with stdenv.lib; {

@@ -6363,6 +6363,7 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
+    ocaml = ocaml_4_02;
   };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
@@ -15600,7 +15601,7 @@ with pkgs;
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
   wordnet = callPackage ../applications/misc/wordnet { };
-  
+
   worker = callPackage ../applications/misc/worker { };
 
   workrave = callPackage ../applications/misc/workrave {
