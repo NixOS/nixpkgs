@@ -5960,6 +5960,8 @@ with pkgs;
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
   spidermonkey = spidermonkey_31;
 
+  ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
+
   supercollider = callPackage ../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
   };
