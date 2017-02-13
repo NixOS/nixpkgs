@@ -16604,27 +16604,27 @@ with pkgs;
             ffmpeg = ffmpeg_2;
           };
 
-          bangarang = callPackage ../applications/video/bangarang { };
+          #bangarang = callPackage ../applications/video/bangarang { };
 
-          basket = callPackage ../applications/office/basket { };
+          #basket = callPackage ../applications/office/basket { };
 
           bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-          calligra = callPackage ../applications/office/calligra {
-            vc = vc_0_7;
-          };
+          #calligra = callPackage ../applications/office/calligra {
+          #  vc = vc_0_7;
+          #};
 
-          choqok = callPackage ../applications/networking/instant-messengers/choqok { };
+          #choqok = callPackage ../applications/networking/instant-messengers/choqok { };
 
           colord-kde = callPackage ../tools/misc/colord-kde { };
 
-          digikam = callPackage ../applications/graphics/digikam { };
+          #digikam = callPackage ../applications/graphics/digikam { };
 
-          eventlist = callPackage ../applications/office/eventlist {};
+          #eventlist = callPackage ../applications/office/eventlist {};
 
-          k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
+          #k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
 
-          k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
+          #k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
 
           kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
@@ -16636,11 +16636,11 @@ with pkgs;
 
           kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
 
-          kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
+          #kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
           kdesvn = callPackage ../applications/version-management/kdesvn { };
 
-          kdevelop = callPackage ../applications/editors/kdevelop { };
+          #kdevelop = callPackage ../applications/editors/kdevelop { };
 
           kdevplatform = callPackage ../development/libraries/kdevplatform {
             boost = boost155;
@@ -16654,11 +16654,11 @@ with pkgs;
 
           kmplayer = callPackage ../applications/video/kmplayer { };
 
-          kmymoney = callPackage ../applications/office/kmymoney { };
+          #kmymoney = callPackage ../applications/office/kmymoney { };
 
-          kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
+          #kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
-          konversation = callPackage ../applications/networking/irc/konversation { };
+          #konversation = callPackage ../applications/networking/irc/konversation { };
 
           ktikz = callPackage ../applications/graphics/ktikz { };
 
@@ -16668,11 +16668,11 @@ with pkgs;
             taglib = taglib_1_9;
           };
 
-          krusader = callPackage ../applications/misc/krusader { };
+          #krusader = callPackage ../applications/misc/krusader { };
 
           ksshaskpass = callPackage ../tools/security/ksshaskpass {};
 
-          ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
+          #ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
 
           kuickshow = callPackage ../applications/graphics/kuickshow { };
 
@@ -16692,7 +16692,7 @@ with pkgs;
 
           massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
-          partitionManager = callPackage ../tools/misc/partition-manager { };
+          # partitionManager = callPackage ../tools/misc/partition-manager { };
 
           plasma-nm = callPackage ../tools/networking/plasma-nm { };
 
@@ -16700,7 +16700,7 @@ with pkgs;
 
           psi = callPackage ../applications/networking/instant-messengers/psi { };
 
-          qtcurve = callPackage ../misc/themes/qtcurve { };
+          # qtcurve = callPackage ../misc/themes/qtcurve { };
 
           quassel = callPackage ../applications/networking/irc/quassel rec {
             monolithic = true;
@@ -16762,7 +16762,7 @@ with pkgs;
 
           zanshin = callPackage ../applications/office/zanshin { };
 
-          kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
+          # kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
         };
 
       callPackageOrig = newScope extra;
