@@ -6482,27 +6482,28 @@ in {
     };
   };
 
-  urllib3 = buildPythonPackage rec {
-    name = "urllib3-1.12";
+  urllib3 = let
+    disabled_tests = [
+      "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"
+      "test_timeout_errors_cause_retries" "test_select_multiple_interrupts_with_event"
+    ];
+  in buildPythonPackage rec {
+    pname = "urllib3";
+    version = "1.20";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/urllib3/${name}.tar.gz";
-      sha256 = "1ikj72kd4cdcq7pmmcd5p6s9dvp7wi0zw01635v4xzkid5vi598f";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0bx76if7shzlyykmaj4fhjkir5bswc4fdx5r4q0lrn3q51p2pvwp";
     };
 
-    doCheck = !isPy3k;  # lots of transient failures
-    checkPhase = ''
-      # Not worth the trouble
-      rm test/with_dummyserver/test_poolmanager.py
-      rm test/with_dummyserver/test_proxy_poolmanager.py
-      rm test/with_dummyserver/test_socketlevel.py
-      # pypy: https://github.com/shazow/urllib3/issues/736
-      rm test/with_dummyserver/test_connectionpool.py
+    NOSE_EXCLUDE=concatStringsSep "," disabled_tests;
 
+    checkPhase = ''
       nosetests -v --cover-min-percentage 1
     '';
 
-    buildInputs = with self; [ coverage tornado mock nose ];
+    buildInputs = with self; [ coverage tornado mock nose psutil pysocks ];
 
     meta = {
       description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
