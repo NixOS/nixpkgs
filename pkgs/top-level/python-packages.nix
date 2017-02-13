@@ -331,8 +331,9 @@ in {
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pytimeparse = buildPythonPackage rec {
-    name = "pytimeparse-1.1.5";
-    disabled = isPy3k;
+    pname = "pytimeparse";
+    version = "1.1.6";
+    name = "${pname}-${version}";
 
     meta = {
       description = "A small Python library to parse various kinds of time expressions";
@@ -343,9 +344,9 @@ in {
 
     propagatedBuildInputs = with self; [ nose ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytimeparse/${name}.tar.gz";
-      sha256 = "01xj31m5brydm4gvc6lwx26r74903wvm1jx3g05633k3mqlvvpcs";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0imbb68i5n5fm704gv47if1blpxd4f8g16qmp5ar07cavgh2mibl";
     };
   };
 
