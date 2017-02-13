@@ -29,6 +29,7 @@ let
     kdelibs = callPackage ./kdelibs {
       inherit (srcs.kdelibs) src version;
       inherit (pkgs) attica phonon;
+      openssl = pkgs.openssl_1_0_2;
     };
 
     akonadi = callPackage ./akonadi.nix {};

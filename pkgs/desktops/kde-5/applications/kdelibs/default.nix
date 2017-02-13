@@ -3,7 +3,7 @@
   automoc4, bison, cmake, flex, libxslt, perl, pkgconfig, shared_mime_info,
   attica, attr, avahi, docbook_xml_dtd_42, docbook_xsl, giflib, ilmbase,
   libdbusmenu_qt, libjpeg, libxml2, phonon, polkit_qt4, qca2, qt4,
-  shared_desktop_ontologies, soprano, strigi, udev, xz, pcre
+  shared_desktop_ontologies, soprano, strigi, udev, xz, pcre, openssl
 }:
 
 kdeApp {
@@ -19,7 +19,7 @@ kdeApp {
     automoc4 bison cmake flex libxslt perl pkgconfig shared_mime_info
   ];
   buildInputs = [
-    attica attr avahi giflib libdbusmenu_qt libjpeg libxml2
+    openssl attica attr avahi giflib libdbusmenu_qt libjpeg libxml2
     polkit_qt4 qca2 shared_desktop_ontologies udev xz pcre
   ];
   propagatedBuildInputs = [ qt4 soprano phonon strigi ];

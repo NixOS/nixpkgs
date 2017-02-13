@@ -370,7 +370,9 @@ let
 
   libgames-support = callPackage ./misc/libgames-support { };
 
-  libgda = callPackage ./misc/libgda { };
+  libgda = callPackage ./misc/libgda {
+    openssl = pkgs.openssl_1_0_2;
+  };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
 

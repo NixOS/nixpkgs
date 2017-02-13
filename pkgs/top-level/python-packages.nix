@@ -14115,10 +14115,10 @@ in {
       sha256 = "1s2y0pf2zg7xf4nfwrw7zhwbk615r5a7bgi5wwkwzh6jl50n99c0";
     };
 
-    buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
+    buildInputs = with self; [ pkgs.swig2 pkgs.openssl_1_0_2 ];
 
     preConfigure = ''
-      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl_1_0_2.dev}'"
     '';
 
     doCheck = false; # another test that depends on the network.
