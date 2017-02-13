@@ -53,14 +53,14 @@ let
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries forceInstall useOsprober
+        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
         pkgs.utillinux ]
         ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
-        ++ (optionals cfg.useOsprober [pkgs.busybox pkgs.os-prober])
+        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
@@ -267,7 +267,7 @@ in
         '';
       };
 
-      useOsprober = mkOption {
+      useOSProber = mkOption {
         default = false;
         type = types.bool;
         description = ''
