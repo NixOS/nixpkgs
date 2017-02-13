@@ -251,6 +251,12 @@ in
       }
     ];
 
+    users.extraUsers.geoip = {
+      group = "root";
+      description = "GeoIP database updater";
+      uid = config.ids.uids.geoip;
+    };
+
     systemd.timers.geoip-updater =
       { description = "GeoIP Updater Timer";
         partOf = [ "geoip-updater.service" ];
@@ -267,11 +273,11 @@ in
       preStart = ''
         mkdir -p "${cfg.databaseDir}"
         chmod 755 "${cfg.databaseDir}"
-        chown nobody:root "${cfg.databaseDir}"
+        chown geoip:root "${cfg.databaseDir}"
       '';
       serviceConfig = {
         ExecStart = "${geoip-updater}/bin/geoip-updater";
-        User = "nobody";
+        User = "geoip";
         PermissionsStartOnly = true;
       };
     };
@@ -285,11 +291,11 @@ in
       preStart = ''
         mkdir -p "${cfg.databaseDir}"
         chmod 755 "${cfg.databaseDir}"
-        chown nobody:root "${cfg.databaseDir}"
+        chown geoip:root "${cfg.databaseDir}"
       '';
       serviceConfig = {
         ExecStart = "${geoip-updater}/bin/geoip-updater --skip-existing";
-        User = "nobody";
+        User = "geoip";
         PermissionsStartOnly = true;
         # So it won't be (needlessly) restarted:
         RemainAfterExit = true;
