@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation  rec {
   name = "ingen-unstable-${rev}";
-  rev = "2016-10-29";
+  rev = "2017-01-18";
 
   src = fetchgit {
     url = "http://git.drobilla.net/cgit.cgi/ingen.git";
-    rev = "fd147d0b888090bfb897505852c1f25dbdf77e18";
-    sha256 = "1qmg79962my82c43vyrv5sxbqci9c7gc2s9bwaaqd0fcf08xcz1z";
+    rev = "02ae3e9d8bf3f6a5e844706721aad8c0ac9f4340";
+    sha256 = "15s8nrzn68hc2s6iw0zshbz3lfnsq0mr6gflq05xm911b7xbp74k";
   };
 
   buildInputs = [
