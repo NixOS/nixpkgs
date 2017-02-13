@@ -9,6 +9,8 @@ let
 in stdenv.mkDerivation {
   name = "mozart-binary-${version}";
 
+  preferLocalBuild = true;
+
   src = fetchurl {
     url = "mirror://sourceforge/project/mozart-oz/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";
     sha256 = "0rsfrjimjxqbwprpzzlmydl3z3aiwg5qkb052jixdxjyad7gyh5z";
