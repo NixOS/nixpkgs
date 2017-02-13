@@ -97,6 +97,10 @@ EOF
                   "registry+file:///dev/null"
     mv Cargo.lock $out/
 
+    # If there are no Cargo dependencies create an empty dummy rust registry
+    if [[ -z "$(echo $out/registry/cache/*)" ]]; then
+      mkdir -p $out/registry/cache/DUMMY
+    fi
 
     # Let's replace $indexHash with something more deterministic
     mv $out/registry/cache/* $out/registry/cache/HASH
