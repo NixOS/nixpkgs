@@ -5792,7 +5792,7 @@ with pkgs;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-  php = php70;
+  php = php71;
 
   phpPackages = php70Packages;
 
