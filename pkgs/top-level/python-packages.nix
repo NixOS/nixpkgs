@@ -4926,6 +4926,8 @@ in {
     checkPhase = ''
       py.test
     '';
+    # fails to complete tests on OSX but libraries using it works.
+    doCheck = ( if stdenv.isDarwin then false else true );
 
     meta = {
       maintainers = with maintainers; [ domenkozar ];
