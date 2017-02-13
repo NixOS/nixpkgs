@@ -748,6 +748,9 @@ self: super: {
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
+  # broken test suite
+  servant-server = dontCheck super.servant-server;
+
   # Fix build for latest versions of servant and servant-client.
   servant_0_10 = super.servant_0_10.overrideScope (self: super: {
     http-api-data = self.http-api-data_0_3_5;
