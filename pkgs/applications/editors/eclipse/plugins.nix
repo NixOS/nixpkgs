@@ -341,12 +341,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.6";
+    version = "4.6.2";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/org.eclipse.jdt-4.6.zip";
-      sha256 = "0raz8d09fnnx19l012l5frca97qavfivvygn3mvsllcyskhqc5hg";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/org.eclipse.jdt-4.6.2.zip";
+      sha256 = "1nnlrl05lh1hcsh14dlisnx0vwmj21agm4wia98rv0gl2gkp19n1";
     };
 
     meta = with stdenv.lib; {
