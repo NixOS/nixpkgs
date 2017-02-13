@@ -253,6 +253,8 @@ let
               "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+          ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
+              "auth requisite ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
         '' +
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
@@ -271,8 +273,6 @@ let
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
-              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${optionalString use_ldap
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.services.sssd.enable

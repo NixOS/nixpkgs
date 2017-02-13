@@ -1,11 +1,11 @@
 { stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp }:
 
 stdenv.mkDerivation {
-  name = "coq-interval-${coq.coq-version}-2.2.1";
+  name = "coq${coq.coq-version}-interval-3.1.1";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/35431/interval-2.2.1.tar.gz;
-    sha256 = "1i6v7da9mf6907sa803xa0llsf9lj4akxbrl8rma6gsdgff2d78n";
+    url = https://gforge.inria.fr/frs/download.php/file/36342/interval-3.1.1.tar.gz;
+    sha256 = "0jzkb0xykiz9bfaminy9yd88b5w0gxcpw506yaaqmnmb43gdksyf";
   };
 
   nativeBuildInputs = [ which ];

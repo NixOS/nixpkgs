@@ -31,23 +31,23 @@ in rec {
   };
 
   unstable = fetchurl rec {
-    version = "2.0";
-    url = "https://dl.winehq.org/wine/source/2.0/wine-${version}.tar.bz2";
-    sha256 = "1ik6q0h3ph3jizmp7bxhf6kcm1pzrdrn2m0yf2x86slv2aigamlp";
+    version = "2.1";
+    url = "https://dl.winehq.org/wine/source/2.x/wine-${version}.tar.xz";
+    sha256 = "0vhykmypv8zqdma7nfwv40klwaywcslam6cmipr3vjci6vvapfdz";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
     inherit (unstable) version;
-    sha256 = "02jrdm49zlc0f357m0z65pilmg4lxh16va32ll3p4y8vr13nwawk";
+    sha256 = "1r3mpdyhq3nmbqgj99bgrhx202k5c046bl8fhi5hr1x0adybb9hs";
     owner = "wine-compholio";
     repo = "wine-staging";
     rev = "v${version}";
   };
 
   winetricks = fetchFromGitHub rec {
-    version = "20170101";
-    sha256 = "0c2aam68x3nlvc6f4r6rnfw6y3a86644zb0qirwkmh3p04mpdl39";
+    version = "20170207";
+    sha256 = "1zmx041rxxawkv3ifsdjbmshp654bib75n5hll0g1f205arbahzw";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

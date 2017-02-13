@@ -551,13 +551,13 @@ in {
   };
 
   afew = buildPythonPackage rec {
-    rev = "b19a88fa1c06cc03ed6c636475cf4361b616d128";
-    name = "afew-git-2016-02-29";
+    name = "afew-git-2017-02-08";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "0idlyrk29bmjw3w74vn0c1a6s59phx9zhzghf2cpyqf9qdhxib8k";
+    src = pkgs.fetchFromGitHub {
+      owner = "afewmail";
+      repo = "afew";
+      rev = "889a3b966835c4d16aa1f24bb89f12945b9b2a67";
+      sha256 = "01gwrx1m3ka13ps3vj04a3y8llli2j2vkd3gcggcvxdphhpysckm";
     };
 
     buildInputs = with self; [ pkgs.dbacl ];
@@ -1600,10 +1600,10 @@ in {
         sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
         url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
+
     # Why does it propagate packages that are used for testing?
     propagatedBuildInputs = with self; [
-      configobj prompt_toolkit awscli boto3 pygments mock pytest
-      pytestcov unittest2 tox
+      awscli prompt_toolkit boto3 configobj pygments
     ];
 
     #Checks are failing due to missing TTY, which won't exist.
@@ -1706,6 +1706,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-compute/azure-mgmt-compute-0.20.0.zip;
       sha256 = "12hr5vxdg2sk2fzr608a37f4i8nbchca7dgdmly2w5fc7x88jx2v";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/compute/computemanagement.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -1726,6 +1731,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-network/azure-mgmt-network-0.20.1.zip;
       sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/network/networkresourceprovider.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -1762,6 +1772,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-resource/azure-mgmt-resource-0.20.1.zip;
       sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/resource/resourcemanagement.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -1782,6 +1797,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-storage/azure-mgmt-storage-0.20.0.zip;
       sha256 = "16iw7hqhq97vlzfwixarfnirc60l5mz951p57brpcwyylphl3yim";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/storage/storagemanagement.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -3099,13 +3119,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.2";
+    version = "1.4.4";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "19hzxqr7ba07b3zg2wsrz6ic3g7pq50rrcp4616flfgny5vw42j3";
+      sha256 = "1zngj38a2dmc02p3ha9crzv9k682f0zgyyfx1bgg8hwwrnggikwl";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -7713,15 +7733,16 @@ in {
 
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
-    version = "0.4.0";
+    version = "0.4.5-pre";
     disabled = isPy26 || isPy27;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipfsapi/${name}.tar.gz";
-      sha256 = "0mqqsihannxzaqi8zcj9nca7fxwg1c85bp7xxic3xqa5zslcdcc3";
+    src = pkgs.fetchFromGitHub {
+      owner = "ipfs";
+      repo = "py-ipfs-api";
+      rev = "bcce00e4a9b674d062729d82bd49a9ffbf76486f";
+      sha256 = "0cdmzpk5wvi6fyfmmn96vynqkb1p59wjqjdijhm1ixf7bfl9r126";
     };
 
-    buildInputs = with self; [ pkgs.pandoc ];
     propagatedBuildInputs = with self; [ six requests2 ];
 
     meta = {
@@ -8400,39 +8421,7 @@ in {
     };
   };
 
-  netcdf4 = buildPythonPackage rec {
-    name = "netCDF4-${version}";
-    version = "1.2.4";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-      sha256 = "0lakjix9dhc26f33f03c13ffwspqcrk5j3mnnjczwxbb23ppwwx6";
-    };
-
-    propagatedBuildInputs = with self ; [
-      numpy
-      pkgs.zlib
-      pkgs.netcdf
-      pkgs.hdf5
-      pkgs.curl
-      pkgs.libjpeg
-    ];
-
-    # Variables used to configure the build process
-    USE_NCCONFIG="0";
-    HDF5_DIR="${pkgs.hdf5}";
-    NETCDF4_DIR="${pkgs.netcdf}";
-    CURL_DIR="${pkgs.curl.dev}";
-    JPEG_DIR="${pkgs.libjpeg.dev}";
-
-    meta = {
-      description = "Interface to netCDF library (versions 3 and 4)";
-      homepage = https://pypi.python.org/pypi/netCDF4;
-      license = licenses.free;  # Mix of license (all MIT* like)
-    };
-  };
+  netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
 
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
@@ -9458,8 +9447,8 @@ in {
 
     buildInputs = with self; [ nose sphinx numpydoc ];
 
-    # Failing test on Python 3.x
-    postPatch = '''' + optionalString isPy3k ''
+    # Failing test on Python 3.x and Darwin
+    postPatch = '''' + optionalString (isPy3k || stdenv.isDarwin) ''
       sed -i -e '70,84d' joblib/test/test_format_stack.py
       # test_nested_parallel_warnings: ValueError: Non-zero return code: -9.
       # Not sure why but it's nix-specific. Try removing for new joblib releases.
@@ -14292,6 +14281,7 @@ in {
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
 
@@ -15584,13 +15574,13 @@ in {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.2.1";
+    version = "1.2.4.post1";
 
     disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "0fwngxf2pnmpk8vhv4pfxvl1ya3nxr4kc2z6jrh2imynbry3xfj9";
+      sha256 = "0v6430dczai8a2nmznhja2dxl6pxa8c5j20nhc5737bqjg7245jk";
     };
 
     patchPhase = ''
@@ -16711,22 +16701,23 @@ in {
     };
   });
 
-  osc = buildPythonPackage (rec {
-    name = "osc-0.133+git";
+  osc = buildPythonPackage {
+    name = "osc-0.156.0-16-g9e6d1a5";
     disabled = isPy3k;
-
-    src = pkgs.fetchgit {
-      url = https://github.com/openSUSE/osc;
-      rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
-      sha256 = "0bf0yc4y1q87k7hq40xnr687lyw3ma93b3zprjlgn9pr8s1cn9xw";
+    src = pkgs.fetchFromGitHub {
+      owner = "openSUSE";
+      repo = "osc";
+      rev = "64cbb10095cf9ef0270d65fff58085a13bc0abe9";
+      sha256 = "0s5kz5ln96ka0f1sa9nyp34c28mkxkrgcxbvysdawlppg7ay9s1z";
     };
-
-    doCheck = false;
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
     postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
-
-    propagatedBuildInputs = with self; [ self.m2crypto ];
-
-  });
+    meta = {
+      description = "opensuse-commander with svn like handling";
+      maintainers = [ maintainers.peti ];
+      license = licenses.gpl2;
+    };
+  };
 
   oslosphinx = buildPythonPackage rec {
     name = "oslosphinx-3.3.1";
@@ -17068,6 +17059,7 @@ in {
     meta = with stdenv.lib; {
       description = "Python bindings to the OpenStack Cinder API";
       homepage = "http://www.openstack.org/";
+      broken = true;
     };
   };
 
@@ -17347,6 +17339,8 @@ in {
       url = "mirror://pypi/r/ryu/${name}.tar.gz";
       sha256 = "1fhriqi7qnvvx9mbvlfm94i5drh920lg204zy3v0qjz43sinkih6";
     };
+
+    meta.broken = true;
   };
 
   WSME = buildPythonPackage rec {
@@ -18107,15 +18101,16 @@ in {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-${version}";
-    version = "2.0.2";
+    pname = "paramiko";
+    version = "2.1.1";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/paramiko/${name}.tar.gz";
-      sha256 = "1p21s7psqj18k9a97nq26yas058i5ivzk7pi7y98l1rbl87zj6s1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0xdmamqgx2ymhdm46q8flpj4fncj4wv2dqxzz0bc2dh7mnkss7fm";
     };
 
-    propagatedBuildInputs = with self; [ cryptography cryptography_vectors ];
+    propagatedBuildInputs = with self; [ cryptography pyasn1 ];
 
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
@@ -23103,12 +23098,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.1.9";
+    version = "0.1.10";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "0m67nhdnp2pd11j8h4bgz63zq0mvn2f205vrxmr3my8m45kpvb8p";
+      sha256 = "1h8g9bknvxflxkpbnxyfxmk8pvgykbbk9ljdvhqh6z4vjc2926ms";
     };
 
     foo = 1;
@@ -26334,14 +26329,17 @@ in {
     # # 1.0.0 and up create a circle dependency with traceback2/pbr
     doCheck = false;
 
-    patchPhase = ''
+    postPatch = ''
+      # argparse is needed for python < 2.7, which we do not support anymore.
+      substituteInPlace setup.py --replace "argparse"
+
       # # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
       sed -i '510i\        return None, False' unittest2/loader.py
       # https://github.com/pypa/packaging/pull/36
       sed -i 's/version=VERSION/version=str(VERSION)/' setup.py
     '';
 
-    propagatedBuildInputs = with self; [ six argparse traceback2 ];
+    propagatedBuildInputs = with self; [ six traceback2 ];
 
     meta = {
       description = "A backport of the new features added to the unittest testing framework";
@@ -28117,6 +28115,10 @@ EOF
     '';
 
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
+  };
+
+  libasyncns = callPackage ../development/python-modules/libasyncns.nix {
+    inherit (pkgs) libasyncns pkgconfig;
   };
 
   pybrowserid = buildPythonPackage rec {
@@ -30033,23 +30035,6 @@ EOF
     '';
   };
 
-  neovim-remote = buildPythonPackage rec {
-    name = "neovim-remote-${version}";
-    version = "v1.4.0";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mhinz";
-      repo = "neovim-remote";
-      rev = version;
-      sha256 = "0msvfh27f56xj5ki59ikzavxz863nal5scm57n43618m49qzg8iz";
-    };
-
-    propagatedBuildInputs = [
-      self.neovim
-    ];
-  };
-
   ghp-import = buildPythonPackage rec {
     version = "0.4.1";
     name = "ghp-import-${version}";
@@ -30210,7 +30195,7 @@ EOF
 
   poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.10";
+    version = "0.11";
 
     disabled = pythonOlder "3.4";
 
@@ -30218,13 +30203,12 @@ EOF
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/102/${name}.tar.gz";
-      sha256 = "1mm0c3250p0kh7lmmjlp05hbc7byn9lknafgb906xmp4vx1p4kjn";
+      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
+      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
     };
 
     patches = [
       ../development/python-modules/poezio/fix_gnupg_import.patch
-      ../development/python-modules/poezio/fix_plugins_imports.patch
     ];
 
     checkPhase = ''

@@ -41,9 +41,9 @@
 		(DM is the program that provides a graphical login prompt
 		 and manages the X server.)
 	   	You can, for example, select KDE’s
-        <command>kdm</command> instead:
+        <command>sddm</command> instead:
         <programlisting>
-            services.xserver.displayManager.kdm.enable = true;
+            services.xserver.displayManager.sddm.enable = true;
         </programlisting>
     </para>
 

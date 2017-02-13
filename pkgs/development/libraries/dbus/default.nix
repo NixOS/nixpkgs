@@ -9,8 +9,9 @@ let
   version = "1.10.14";
   sha256 = "10x0wvv2ly4lyyfd42k4xw0ar5qdbi9cksw3l5fcwf1y6mq8y8r3";
 
-self =  stdenv.mkDerivation {
+self = stdenv.mkDerivation {
     name = "dbus-${version}";
+    inherit version;
 
     src = fetchurl {
       url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
@@ -49,8 +50,6 @@ self =  stdenv.mkDerivation {
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-systemduserunitdir=$(out)/etc/systemd/user"
       "--enable-user-session"
-      # this package installs nothing into those dirs and they create a dependency
-      "--datadir=/run/current-system/sw/share"
       "--libexecdir=$(out)/libexec" # we don't need dbus-daemon-launch-helper
     ] ++ lib.optional (!x11Support) "--without-x";
 
@@ -64,7 +63,7 @@ self =  stdenv.mkDerivation {
 
     doCheck = true;
 
-    installFlags = "sysconfdir=$(out)/etc datadir=$(out)/share";
+    installFlags = [ "sysconfdir=$(out)/etc" ];
 
     # it's executed from $lib by absolute path
     postFixup = ''

@@ -56,7 +56,7 @@ let
   };
 
   melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
-    inherit lib;
+    inherit external lib;
   };
 
   orgPackages = import ../applications/editors/emacs-modes/org-packages.nix {

@@ -170,6 +170,28 @@ in
     buildPhase = "make";
   };
 
+  mednafen-saturn = (mkLibRetroCore rec {
+    core = "mednafen-saturn";
+    src = fetchRetro {
+      repo = "beetle-saturn-libretro";
+      rev = "bb5d0c126feb25cf980f5cc1fc57d6a5a6f6e7ab";
+      sha256 = "0bnsdy27378b71y6aa65k4jxxy2xw6ky2ici3z53hkky2jnnjq0b";
+    };
+    description = "Port of Mednafen's Saturn core to libretro";
+  }).override {
+    buildPhase = "make";
+  };
+
+  mgba = mkLibRetroCore rec {
+    core = "mgba";
+    src = fetchRetro {
+      repo = core;
+      rev = "4000128339b535896615c994cafcd777637573f4";
+      sha256 = "1yar78rvgfqx7jdna9chkmmbnpcf7k9ckbzj506f7k7m7zv819fn";
+    };
+    description = "Port of mGBA to libretro";
+  };
+
   mupen64plus = (mkLibRetroCore rec {
     core = "mupen64plus";
     src = fetchRetro {
@@ -244,6 +266,19 @@ in
       sha256 = "0jv1z65m4j3hbfnb3chklh0dhwlc4gdqr0asswdsc1y4iwp0331c";
     };
     description = "QuickNES libretro port";
+  }).override {
+    buildPhase = "make";
+  };
+
+  reicast = (mkLibRetroCore rec {
+    core = "reicast";
+    src = fetchRetro {
+      repo = core + "-emulator";
+      rev = "ed47c72cf2e124d9d753285fd61d12ea8e071d0d";
+      sha256 = "05dw7qjnprf1lw3ps0sb7sp73hsh1a27rxbwjqd26j85zr84g3r9";
+    };
+    description = "Reicast libretro port";
+    extraBuildInputs = [ mesa ];
   }).override {
     buildPhase = "make";
   };

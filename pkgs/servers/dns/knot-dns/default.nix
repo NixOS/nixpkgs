@@ -5,19 +5,12 @@
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "0y9nhp9lfmxv4iy1xg7l4lfxv4168qhag26wwg0dbi0zjpkd790b";
+    sha256 = "c064ddf99bf5fc24dd3c6a3a523394760357e204c8b69f0e691e49bc0d9b704c";
   };
-
-  patches = stdenv.lib.optional stdenv.isDarwin
-      (fetchpatch {
-        name = "before-sierra.diff";
-        url = "https://gitlab.labs.nic.cz/labs/knot/merge_requests/664.diff";
-        sha256 = "0g4gm2m3pi0lfpkp53xayf6jq6yn3ifidh40maiy1a46dfadvw6w";
-      });
 
   outputs = [ "bin" "out" "dev" ];
 

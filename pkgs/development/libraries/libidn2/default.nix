@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, libiconv, libunistring }:
+{ fetchurl, stdenv, libiconv, libunistring, help2man }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "libidn2-0.16";
@@ -10,8 +12,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
+  patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
+
   buildInputs = [ libunistring ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ optionals stdenv.isDarwin [ libiconv help2man ];
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/#libidn2";

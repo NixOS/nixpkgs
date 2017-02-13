@@ -22,6 +22,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # This service doesn't run if docker isn't running, and unlike potentially remote services like e.g., postgresql, docker has
+    # to be running locally so `docker.enable` will always be set if the ECS agent is enabled.
+    virtualisation.docker.enable = true;
+
     systemd.services.ecs-agent = {
       inherit (cfg.package.meta) description;
       after    = [ "network.target" ];
@@ -31,7 +35,6 @@ in {
 
       script = ''
         if [ ! -z "$ECS_DATADIR" ]; then
-          echo "FOOOO"
           mkdir -p "$ECS_DATADIR"
         fi
         ${cfg.package.bin}/bin/agent

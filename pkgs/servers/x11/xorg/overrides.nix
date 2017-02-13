@@ -338,7 +338,6 @@ in
   xf86videoark        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videogeode      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videoglide      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
-  xf86videoglint      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videoi128       = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videonewport    = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videoopenchrome = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
@@ -353,13 +352,6 @@ in
 
   xf86videoati = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-I${xorg.xorgserver.dev or xorg.xorgserver}/include/xorg";
-  };
-
-  xf86videonv = attrs: attrs // {
-    patches = [( args.fetchpatch {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/patch/?id=fc78fe98222b0204b8a2872a529763d6fe5048da;
-      sha256 = "0i2ddgqwj6cfnk8f4r73kkq3cna7hfnz7k3xj3ifx5v8mfiva6gw";
-    })];
   };
 
   xf86videovmware = attrs: attrs // {
@@ -436,6 +428,7 @@ in
         damageproto xcmiscproto  bigreqsproto
         inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        libXfont2
       ];
       # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
       commonPatches = [ ];
