@@ -175,13 +175,4 @@ rec {
       };
     };
 
-  p9_caching_4_9 = rec
-    { name = "9p-caching.patch";
-      patch = fetchpatch {
-        inherit name;
-        url = https://github.com/edolstra/linux/commit/7e20254412c780a2102761fee92cb1d32ceeaefd.patch;
-        sha256 = "001kf1sdy6pirn8sqnfgbfahvwwkc7n7vr5i8fy2n74xph1kks5a";
-      };
-    };
-
 }

@@ -9136,13 +9136,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXTypes = buildPerlPackage rec {
-    name = "MooseX-Types-0.46";
+    name = "MooseX-Types-0.50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "e9e8c36284cf1adc6563c980c0a4f0a7df720dbaaece0dd6be66b975dde5db7a";
+      sha256 = "9cd87b3492cbf0be9d2df9317b2adf9fc30663770e69906654bea3f41b17cb08";
     };
-    buildInputs = [ ModuleBuildTiny Moose TestFatal TestRequires ];
-    propagatedBuildInputs = [ CarpClan Moose SubExporterForMethods SubName namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny TestFatal TestRequires self."if" ];
+    propagatedBuildInputs = [ CarpClan ModuleRuntime Moose SubExporter SubExporterForMethods SubInstall SubName namespaceautoclean ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types;
       description = "Organise your Moose types in libraries";
@@ -11964,10 +11964,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Swim = buildPerlPackage rec {
-    name = "Swim-0.1.44";
+    name = "Swim-0.1.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "06aac148d7b1778028ffae657fdf79b1093b52035661fd8b9bdad729dc8741aa";
+      sha256 = "3755ba1a02aee933c8e1de3995aca1523d6175291a1fa60c3f7fd477f5bb2469";
     };
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];

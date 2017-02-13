@@ -331,8 +331,9 @@ in {
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pytimeparse = buildPythonPackage rec {
-    name = "pytimeparse-1.1.5";
-    disabled = isPy3k;
+    pname = "pytimeparse";
+    version = "1.1.6";
+    name = "${pname}-${version}";
 
     meta = {
       description = "A small Python library to parse various kinds of time expressions";
@@ -343,9 +344,9 @@ in {
 
     propagatedBuildInputs = with self; [ nose ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytimeparse/${name}.tar.gz";
-      sha256 = "01xj31m5brydm4gvc6lwx26r74903wvm1jx3g05633k3mqlvvpcs";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0imbb68i5n5fm704gv47if1blpxd4f8g16qmp5ar07cavgh2mibl";
     };
   };
 
@@ -551,13 +552,13 @@ in {
   };
 
   afew = buildPythonPackage rec {
-    rev = "b19a88fa1c06cc03ed6c636475cf4361b616d128";
-    name = "afew-git-2016-02-29";
+    name = "afew-git-2017-02-08";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "0idlyrk29bmjw3w74vn0c1a6s59phx9zhzghf2cpyqf9qdhxib8k";
+    src = pkgs.fetchFromGitHub {
+      owner = "afewmail";
+      repo = "afew";
+      rev = "889a3b966835c4d16aa1f24bb89f12945b9b2a67";
+      sha256 = "01gwrx1m3ka13ps3vj04a3y8llli2j2vkd3gcggcvxdphhpysckm";
     };
 
     buildInputs = with self; [ pkgs.dbacl ];
@@ -1543,6 +1544,10 @@ in {
 
     propagatedBuildInputs = with self; [ unidecode regex ];
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
     meta = with stdenv.lib; {
       homepage = "https://github.com/dimka665/awesome-slugify";
       description = "Python flexible slugify function";
@@ -1600,10 +1605,10 @@ in {
         sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
         url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
+
     # Why does it propagate packages that are used for testing?
     propagatedBuildInputs = with self; [
-      configobj prompt_toolkit awscli boto3 pygments mock pytest
-      pytestcov unittest2 tox
+      awscli prompt_toolkit boto3 configobj pygments
     ];
 
     #Checks are failing due to missing TTY, which won't exist.
@@ -1706,6 +1711,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-compute/azure-mgmt-compute-0.20.0.zip;
       sha256 = "12hr5vxdg2sk2fzr608a37f4i8nbchca7dgdmly2w5fc7x88jx2v";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/compute/computemanagement.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -1726,6 +1736,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-network/azure-mgmt-network-0.20.1.zip;
       sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/network/networkresourceprovider.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -1762,6 +1777,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-resource/azure-mgmt-resource-0.20.1.zip;
       sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/resource/resourcemanagement.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -1782,6 +1802,11 @@ in {
       url = mirror://pypi/a/azure-mgmt-storage/azure-mgmt-storage-0.20.0.zip;
       sha256 = "16iw7hqhq97vlzfwixarfnirc60l5mz951p57brpcwyylphl3yim";
     };
+    preConfigure = ''
+      # Patch to make this package work on requests >= 2.11.x
+      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
+      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/storage/storagemanagement.py
+    '';
     postInstall = ''
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
       echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
@@ -7713,15 +7738,16 @@ in {
 
   ipfsapi = buildPythonPackage rec {
     name = "ipfsapi-${version}";
-    version = "0.4.0";
+    version = "0.4.5-pre";
     disabled = isPy26 || isPy27;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipfsapi/${name}.tar.gz";
-      sha256 = "0mqqsihannxzaqi8zcj9nca7fxwg1c85bp7xxic3xqa5zslcdcc3";
+    src = pkgs.fetchFromGitHub {
+      owner = "ipfs";
+      repo = "py-ipfs-api";
+      rev = "bcce00e4a9b674d062729d82bd49a9ffbf76486f";
+      sha256 = "0cdmzpk5wvi6fyfmmn96vynqkb1p59wjqjdijhm1ixf7bfl9r126";
     };
 
-    buildInputs = with self; [ pkgs.pandoc ];
     propagatedBuildInputs = with self; [ six requests2 ];
 
     meta = {
@@ -9426,8 +9452,8 @@ in {
 
     buildInputs = with self; [ nose sphinx numpydoc ];
 
-    # Failing test on Python 3.x
-    postPatch = '''' + optionalString isPy3k ''
+    # Failing test on Python 3.x and Darwin
+    postPatch = '''' + optionalString (isPy3k || stdenv.isDarwin) ''
       sed -i -e '70,84d' joblib/test/test_format_stack.py
       # test_nested_parallel_warnings: ValueError: Non-zero return code: -9.
       # Not sure why but it's nix-specific. Try removing for new joblib releases.
@@ -14260,6 +14286,7 @@ in {
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
 
@@ -15552,13 +15579,13 @@ in {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.2.1";
+    version = "1.2.4.post1";
 
     disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "0fwngxf2pnmpk8vhv4pfxvl1ya3nxr4kc2z6jrh2imynbry3xfj9";
+      sha256 = "0v6430dczai8a2nmznhja2dxl6pxa8c5j20nhc5737bqjg7245jk";
     };
 
     patchPhase = ''
@@ -16679,22 +16706,23 @@ in {
     };
   });
 
-  osc = buildPythonPackage (rec {
-    name = "osc-0.133+git";
+  osc = buildPythonPackage {
+    name = "osc-0.156.0-16-g9e6d1a5";
     disabled = isPy3k;
-
-    src = pkgs.fetchgit {
-      url = https://github.com/openSUSE/osc;
-      rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
-      sha256 = "0bf0yc4y1q87k7hq40xnr687lyw3ma93b3zprjlgn9pr8s1cn9xw";
+    src = pkgs.fetchFromGitHub {
+      owner = "openSUSE";
+      repo = "osc";
+      rev = "64cbb10095cf9ef0270d65fff58085a13bc0abe9";
+      sha256 = "0s5kz5ln96ka0f1sa9nyp34c28mkxkrgcxbvysdawlppg7ay9s1z";
     };
-
-    doCheck = false;
+    propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
     postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
-
-    propagatedBuildInputs = with self; [ self.m2crypto ];
-
-  });
+    meta = {
+      description = "opensuse-commander with svn like handling";
+      maintainers = [ maintainers.peti ];
+      license = licenses.gpl2;
+    };
+  };
 
   oslosphinx = buildPythonPackage rec {
     name = "oslosphinx-3.3.1";
@@ -17036,6 +17064,7 @@ in {
     meta = with stdenv.lib; {
       description = "Python bindings to the OpenStack Cinder API";
       homepage = "http://www.openstack.org/";
+      broken = true;
     };
   };
 
@@ -17315,6 +17344,8 @@ in {
       url = "mirror://pypi/r/ryu/${name}.tar.gz";
       sha256 = "1fhriqi7qnvvx9mbvlfm94i5drh920lg204zy3v0qjz43sinkih6";
     };
+
+    meta.broken = true;
   };
 
   WSME = buildPythonPackage rec {
@@ -18075,15 +18106,16 @@ in {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-${version}";
-    version = "2.0.2";
+    pname = "paramiko";
+    version = "2.1.1";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/paramiko/${name}.tar.gz";
-      sha256 = "1p21s7psqj18k9a97nq26yas058i5ivzk7pi7y98l1rbl87zj6s1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0xdmamqgx2ymhdm46q8flpj4fncj4wv2dqxzz0bc2dh7mnkss7fm";
     };
 
-    propagatedBuildInputs = with self; [ cryptography cryptography_vectors ];
+    propagatedBuildInputs = with self; [ cryptography pyasn1 ];
 
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
@@ -28087,6 +28119,10 @@ EOF
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
   };
 
+  libasyncns = callPackage ../development/python-modules/libasyncns.nix {
+    inherit (pkgs) libasyncns pkgconfig;
+  };
+
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
     version = "0.9.2";
@@ -30161,7 +30197,7 @@ EOF
 
   poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.10";
+    version = "0.11";
 
     disabled = pythonOlder "3.4";
 
@@ -30169,13 +30205,12 @@ EOF
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/102/${name}.tar.gz";
-      sha256 = "1mm0c3250p0kh7lmmjlp05hbc7byn9lknafgb906xmp4vx1p4kjn";
+      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
+      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
     };
 
     patches = [
       ../development/python-modules/poezio/fix_gnupg_import.patch
-      ../development/python-modules/poezio/fix_plugins_imports.patch
     ];
 
     checkPhase = ''

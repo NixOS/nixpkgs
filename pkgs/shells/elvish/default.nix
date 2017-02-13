@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "elvish-${version}";
-  version = "0.1";
+  version = "0.5";
 
   goPackagePath = "github.com/elves/elvish";
 
   src = fetchFromGitHub {
     repo = "elvish";
     owner = "elves";
-    rev = "4125c2bb927330b0100b354817dd4ad252118ba6";
-    sha256 = "1xwhjbw0y6j5xy19hz39456l0v6vjg2icd7c1jx4h1cydk3yn39f";
+    rev = version;
+    sha256 = "1dk5f8a2wpgd5cw45ippvx46fxk0yap64skfpzpiqz8bkbnrwbz6";
   };
 
   goDeps = ./deps.nix;
@@ -20,6 +20,6 @@ buildGoPackage rec {
     homepage = https://github.com/elves/elvish;
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra ];
-    platforms = with platforms; [ linux ];
+    platforms = with platforms; linux;
   };
 }

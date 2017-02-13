@@ -39,6 +39,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0a4psqsf71vc6hfgyv55jclsx8yb7lf4w840qlq6cq8j3hsjaavi";
   };
 
+  patches = [ ./i386.patch ];
+
   buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd

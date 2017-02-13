@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://libcxxabi.llvm.org/;
     description = "A new implementation of low level support for a standard C++ library";
-    license = "BSD";
+    license = with stdenv.lib.licenses; [ ncsa mit ];
     maintainers = with stdenv.lib.maintainers; [ vlstill ];
     platforms = stdenv.lib.platforms.unix;
   };

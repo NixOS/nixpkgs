@@ -87,6 +87,7 @@
   cfouche = "Chaddaï Fouché <chaddai.fouche@gmail.com>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
+  changlinli = "Changlin Li <mail@changlinli.com>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
@@ -335,6 +336,7 @@
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
+  ndowens = "Nathan Owens <ndowens04@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
   nhooyr = "Anmol Sethi <anmol@aubble.com>";
@@ -523,6 +525,7 @@
   womfoo = "Kranium Gikos Mendoza <kranium@gikos.net>";
   wscott = "Wayne Scott <wsc9tt@gmail.com>";
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
+  xwvvvvwx = "David Terry <davidterry@posteo.de>";
   yarr = "Dmitry V. <savraz@gmail.com>";
   yochai = "Yochai <yochai@titat.info>";
   yorickvp = "Yorick van Pelt <yorickvanpelt@gmail.com>";

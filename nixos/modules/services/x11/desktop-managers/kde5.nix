@@ -50,10 +50,6 @@ in
     })
 
     (mkIf (xcfg.enable && cfg.enable) {
-
-      warnings = optional config.services.xserver.desktopManager.kde4.enable
-        "KDE 4 should not be enabled at the same time as KDE 5";
-
       services.xserver.desktopManager.session = singleton {
         name = "kde5";
         bgSupport = true;

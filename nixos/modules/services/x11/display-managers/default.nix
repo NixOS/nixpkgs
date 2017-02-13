@@ -32,6 +32,9 @@ let
     ''
       #! ${pkgs.bash}/bin/bash
 
+      # Handle being called by SDDM.
+      if test "''${1:0:1}" = / ; then eval exec $1 $2 ; fi
+
       ${optionalString cfg.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
           _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$@"
@@ -54,9 +57,6 @@ let
           exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$sessionType"
         fi
       ''}
-
-      # Handle being called by kdm.
-      if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
