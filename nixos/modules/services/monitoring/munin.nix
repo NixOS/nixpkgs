@@ -22,7 +22,7 @@ let
     buildCommand = ''
       mkdir -p $out
 
-      cp --preserve=mode ${pkgs.munin}/lib/plugins/* $out/
+      cp --preserve=mode ${cfg.package}/lib/plugins/* $out/
 
       for file in $out/*; do
         case "$file" in
@@ -35,7 +35,7 @@ let
 
         wrapProgram $file \
           --set PATH "/var/setuid-wrappers:/run/current-system/sw/bin:/run/current-system/sw/bin" \
-          --set MUNIN_LIBDIR "${pkgs.munin}/lib" \
+          --set MUNIN_LIBDIR "${cfg.package}/lib" \
           --set MUNIN_PLUGSTATE "/var/run/munin"
 
         # munin uses markers to tell munin-node-configure what a plugin can do
@@ -85,6 +85,13 @@ in
 {
 
   options = {
+  
+    services.munin.package = mkOption {
+      default = pkgs.munin;
+      example = "pkgs.muninUnstable";
+      defaultText = "pkgs.munin";
+      description = "Munin package to use";
+    };
 
     services.munin-node = {
 
@@ -156,7 +163,7 @@ in
 
   config = mkMerge [ (mkIf (nodeCfg.enable || cronCfg.enable)  {
 
-    environment.systemPackages = [ pkgs.munin ];
+    environment.systemPackages = [ cfg.package ];
 
     users.extraUsers = [{
       name = "munin";
@@ -176,24 +183,24 @@ in
       description = "Munin Node";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.munin ];
+      path = [ cfg.package ];
       environment.MUNIN_PLUGSTATE = "/var/run/munin";
       preStart = ''
         echo "updating munin plugins..."
 
         mkdir -p /etc/munin/plugins
         rm -rf /etc/munin/plugins/*
-        PATH="/var/setuid-wrappers:/run/current-system/sw/bin:/run/current-system/sw/bin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+        PATH="/var/setuid-wrappers:/run/current-system/sw/bin" ${cfg.package}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
       '';
       serviceConfig = {
-        ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
+        ExecStart = "${cfg.package}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
       };
     };
 
   }) (mkIf cronCfg.enable {
 
     services.cron.systemCronJobs = [
-      "*/5 * * * * munin ${pkgs.munin}/bin/munin-cron --config ${muninConf}"
+      "*/5 * * * * munin ${cfg.package}/bin/munin-cron --config ${muninConf}"
     ];
 
     system.activationScripts.munin-cron = stringAfter [ "users" "groups" ] ''

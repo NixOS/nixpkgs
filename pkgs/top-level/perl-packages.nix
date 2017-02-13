@@ -23,6 +23,13 @@ let self = _self // overrides; _self = with self; {
       checkPhase = "./Build test";
     });
 
+  # Create PERL5LIB path for a list of packages and their propagated dependencies
+  makeFullPerlPath = packages: stdenv.lib.fileContents ''${stdenv.mkDerivation {
+    name = "PERL5LIB";
+    buildInputs = [perl] ++ packages;
+    buildCommand = "echo $PERL5LIB > $out";
+  }}'';
+
 
   ack = buildPerlPackage rec {
     name = "ack-2.14";
@@ -6244,6 +6251,15 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CGI ];
   };
 
+  HTMLTemplatePro = pkgs.buildPerlPackage {
+      name = "HTML-Template-Pro-0.9510";
+      src = pkgs.fetchurl {
+        url = mirror://cpan/authors/id/V/VI/VIY/HTML-Template-Pro-0.9510.tar.gz;
+        sha256 = "11la3z0ajvm6mv1hjywwf7mj3ihdnx2xbkag2jfl7l80jvz7gjv7";
+      };
+      doCheck = false;
+  };
+
   HTMLTidy = buildPerlPackage rec {
     name = "HTML-Tidy-1.56";
     src = fetchurl {
@@ -6475,6 +6491,15 @@ let self = _self // overrides; _self = with self; {
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  HTTPServerSimpleCGI = pkgs.buildPerlPackage {
+      name = "HTTP-Server-Simple-0.51";
+      src = pkgs.fetchurl {
+        url = mirror://cpan/authors/id/B/BP/BPS/HTTP-Server-Simple-0.51.tar.gz;
+        sha256 = "1yvd2g57z2kq00q5i3zzfi15k98qgbif3vghjsda6v612agmrp5r";
+      };
+      doCheck = false;
   };
 
   HTTPServerSimpleMason = buildPerlPackage {
@@ -14609,6 +14634,15 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1jvqfi0jm8wh80rd5h9c3k72car8l7x1jywj8rck8w6rm1mlxldy";
     };
     propagatedBuildInputs = [XMLRegExp XMLParser LWP libxml_perl];
+  };
+
+  XMLDumper = pkgs.buildPerlPackage {
+      name = "XML-Dumper-0.81";
+      src = pkgs.fetchurl {
+        url = mirror://cpan/authors/id/M/MI/MIKEWONG/XML-Dumper-0.81.tar.gz;
+        sha256 = "1q7q0fs4dvfx3pq89pb2ynx89nrvwx7xsiswxfx624kf4fshw5zl";
+      };
+      doCheck = false;
   };
 
   XMLFilterBufferText = buildPerlPackage {
