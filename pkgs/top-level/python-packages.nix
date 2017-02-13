@@ -28117,6 +28117,10 @@ EOF
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
   };
 
+  libasyncns = callPackage ../development/python-modules/libasyncns.nix {
+    inherit (pkgs) libasyncns pkgconfig;
+  };
+
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
     version = "0.9.2";
