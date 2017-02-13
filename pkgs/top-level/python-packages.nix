@@ -26334,14 +26334,17 @@ in {
     # # 1.0.0 and up create a circle dependency with traceback2/pbr
     doCheck = false;
 
-    patchPhase = ''
+    postPatch = ''
+      # argparse is needed for python < 2.7, which we do not support anymore.
+      substituteInPlace setup.py --replace "argparse"
+
       # # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
       sed -i '510i\        return None, False' unittest2/loader.py
       # https://github.com/pypa/packaging/pull/36
       sed -i 's/version=VERSION/version=str(VERSION)/' setup.py
     '';
 
-    propagatedBuildInputs = with self; [ six argparse traceback2 ];
+    propagatedBuildInputs = with self; [ six traceback2 ];
 
     meta = {
       description = "A backport of the new features added to the unittest testing framework";
