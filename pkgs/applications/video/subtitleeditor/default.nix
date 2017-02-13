@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, desktop_file_utils,
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, desktop_file_utils,
   enchant, gnome3, gst_all_1, hicolor_icon_theme, libsigcxx, libxmlxx,
   xdg_utils, isocodes, wrapGAppsHook
 }:
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
     url = "http://download.gna.org/subtitleeditor/${ver_maj}/subtitleeditor-${ver_maj}.${ver_min}.tar.gz";
     sha256 = "087rxignjawby4z3lwnh9m6pcjphl3a0jf7gfp83h92mzcq79b4g";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/s/subtitleeditor/0.53.0-2/debian/patches/03-fix-build-gstreamermm-1.8.0.patch";
+      sha256 = "0di2i34id5dqnd3glibhifair1kdfnv8ay3k64lirad726ardw2c";
+    })
+  ];
 
   nativeBuildInputs =  [
     pkgconfig
