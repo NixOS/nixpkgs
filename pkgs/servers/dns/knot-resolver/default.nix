@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
 
-  buildInputs = [ knot-dns luajit libuv gnutls ]
-    # TODO: lmdb needs lmdb.pc; embedded for now
+  buildInputs = [ knot-dns lmdb luajit libuv gnutls ]
     ## optional dependencies
     ++ optional doInstallCheck cmocka
     ++ optional stdenv.isLinux systemd # socket activation
