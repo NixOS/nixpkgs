@@ -5,7 +5,7 @@
 
 let
   pname = "love";
-  version = "0.10.1";
+  version = "0.10.2";
 in
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "rude";
     repo = "love";
     rev = "${version}";
-    sha256 = "10a2kkyx7x9jkcj9xrqgmvp0b6gbapjqjx9fib9f6a0nbz0xaswj";
+    sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
   };
 
   buildInputs = [
