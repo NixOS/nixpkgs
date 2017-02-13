@@ -7,6 +7,7 @@
 , enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
 , enableQt ? false, pyqt4
 , libcxx
+, Cocoa
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -32,7 +33,8 @@ buildPythonPackage rec {
   XDG_RUNTIME_DIR = "/tmp";
 
   buildInputs = [ python which sphinx stdenv ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript;
+    ++ stdenv.lib.optional enableGhostscript ghostscript
+    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype
