@@ -46,7 +46,21 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  configureFlags = [ "--with-libreadline-prefix" ];
+  configureFlags = [ "--with-libreadline-prefix" ]
+    ++ stdenv.lib.optionals stdenv.isSunOS [
+      # Make sure the right <gmp.h> is found, and not the incompatible
+      # /usr/include/mp.h from OpenSolaris.  See
+      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+      # for details.
+      "--with-libgmp-prefix=${gmp.dev}"
+
+      # Same for these (?).
+      "--with-libreadline-prefix=${readline.dev}"
+      "--with-libunistring-prefix=${libunistring}"
+
+      # See below.
+      "--without-threads"
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -92,27 +106,6 @@
       processing.
     '';
   };
-}
-
-//
-
-(stdenv.lib.optionalAttrs stdenv.isSunOS {
-  # TODO: Move me above.
-  configureFlags =
-    [
-      # Make sure the right <gmp.h> is found, and not the incompatible
-      # /usr/include/mp.h from OpenSolaris.  See
-      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
-      # for details.
-      "--with-libgmp-prefix=${gmp.dev}"
-
-      # Same for these (?).
-      "--with-libreadline-prefix=${readline.dev}"
-      "--with-libunistring-prefix=${libunistring}"
-
-      # See below.
-      "--without-threads"
-    ];
 })
 
 //
@@ -121,4 +114,4 @@
   # Work around <http://bugs.gnu.org/14201>.
   SHELL = "/bin/sh";
   CONFIG_SHELL = "/bin/sh";
-}))
+})
