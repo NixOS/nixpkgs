@@ -6,7 +6,7 @@ let
 
   basicConfig =
     { config, pkgs, ... }:
-    { services.cjdns.enable = true;
+    { services.cjdns.networks.test.enable = true;
 
       # Turning off DHCP isn't very realistic but makes
       # the sequence of address assignment less stochastic.
@@ -34,7 +34,11 @@ import ./make-test.nix ({ pkgs, ...} : {
         { config, ... }:
         { imports = [ basicConfig ];
 
-          services.cjdns.ETHInterface.bind = "eth1";
+          services.cjdns.networks.test.ETHInterfaces = [
+            {
+              bind = "eth1";
+            }
+          ];
 
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
@@ -51,14 +55,14 @@ import ./make-test.nix ({ pkgs, ...} : {
 
           networking.interfaces.eth1.ipAddress = "192.168.0.2";
 
-          services.cjdns =
-            { UDPInterface =
+          services.cjdns.networks.test =
+            { UDPInterfaces = [
                 { bind = "0.0.0.0:1024";
                   connectTo."192.168.0.1:1024" =
                     { password = carolPassword;
                       publicKey = carolPubKey;
                     };
-                };
+                }];
             };
         };
 
@@ -71,17 +75,25 @@ import ./make-test.nix ({ pkgs, ...} : {
           in
           { imports = [ basicConfig ];
 
-          environment.etc."cjdns.keys".text = ''
+          environment.etc."cjdns-test.keys".text = ''
             CJDNS_PRIVATE_KEY=${carolKey}
             CJDNS_ADMIN_PASSWORD=FOOBAR
           '';
 
           networking.interfaces.eth1.ipAddress = "192.168.0.1";
 
-          services.cjdns =
+          services.cjdns.networks.test =
             { authorizedPasswords = [ carolPassword ];
-              ETHInterface.bind = "eth1";
-              UDPInterface.bind = "192.168.0.1:1024";
+              ETHInterfaces = [
+                {
+                  bind = "eth1";
+                }
+              ];
+              UDPInterfaces = [
+                {
+                  bind = "192.168.0.1:1024";
+                }
+              ];
             };
           networking.firewall.allowedUDPPorts = [ 1024 ];
         };
@@ -92,13 +104,13 @@ import ./make-test.nix ({ pkgs, ...} : {
     ''
       startAll;
 
-      $alice->waitForUnit("cjdns.service");
-      $bob->waitForUnit("cjdns.service");
-      $carol->waitForUnit("cjdns.service");
+      $alice->waitForUnit("cjdns-test.service");
+      $bob->waitForUnit("cjdns-test.service");
+      $carol->waitForUnit("cjdns-test.service");
 
       sub cjdnsIp {
           my ($machine) = @_;
-          my $ip = (split /[ \/]+/, $machine->succeed("ip -o -6 addr show dev tun0"))[3];
+          my $ip = (split /[ \/]+/, $machine->succeed("ip -o -6 addr show dev test"))[3];
           $machine->log("has ip $ip");
           return $ip;
       }
