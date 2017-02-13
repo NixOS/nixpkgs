@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu libidn
+    gnutls jansson liburcu libidn lmdb
     nettle libedit
     libiconv
     # without sphinx &al. for developer documentation
   ]
     # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd ]
     ++ stdenv.lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
+
+  configureFlags = [ "--with-lmdb=${stdenv.lib.getLib lmdb}"/*not perfect*/ ];
 
   enableParallelBuilding = true;
 
