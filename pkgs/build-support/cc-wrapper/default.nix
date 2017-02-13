@@ -10,7 +10,7 @@
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, targetPlatform
+, hostPlatform, targetPlatform
 }:
 
 with stdenv.lib;
@@ -24,6 +24,12 @@ assert !nativeLibc -> libc != null;
 assert cc.langVhdl or false -> zlib != null;
 
 let
+  # Prefix for binaries. Customarily ends with a dash separator.
+  #
+  # TODO(@Ericson2314) Make unconditional, or optional but always true by
+  # default.
+  prefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+                                     (targetPlatform.config + "-");
 
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
@@ -41,9 +47,9 @@ let
 in
 
 stdenv.mkDerivation {
-  name =
-    (if name != "" then name else ccName + "-wrapper") +
-    (if cc != null && ccVersion != "" then "-" + ccVersion else "");
+  name = prefix
+    + (if name != "" then name else "${ccName}-wrapper")
+    + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
 
   preferLocalBuild = true;
 
@@ -52,7 +58,8 @@ stdenv.mkDerivation {
 
 
   passthru = {
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
+            prefix;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -170,7 +177,7 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
       # Solaris needs an additional ld wrapper.
       ldPath="${nativePrefix}/bin"
-      exec="$ldPath/ld"
+      exec="$ldPath/${prefix}ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
@@ -178,72 +185,72 @@ stdenv.mkDerivation {
       # Create a symlink to as (the assembler).  This is useful when a
       # cc-wrapper is installed in a user environment, as it ensures that
       # the right assembler is called.
-      if [ -e $ldPath/as ]; then
-        ln -s $ldPath/as $out/bin/as
+      if [ -e $ldPath/${prefix}as ]; then
+        ln -s $ldPath/${prefix}as $out/bin/${prefix}as
       fi
 
-      wrap ld ${./ld-wrapper.sh} ''${ld:-$ldPath/ld}
+      wrap ${prefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${prefix}ld}
 
-      if [ -e ${binutils_bin}/bin/ld.gold ]; then
-        wrap ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/ld.gold
+      if [ -e ${binutils_bin}/bin/${prefix}ld.gold ]; then
+        wrap ${prefix}ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.gold
       fi
 
       if [ -e ${binutils_bin}/bin/ld.bfd ]; then
-        wrap ld.bfd ${./ld-wrapper.sh} ${binutils_bin}/bin/ld.bfd
+        wrap ${prefix}ld.bfd ${./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.bfd
       fi
 
-      export real_cc=cc
-      export real_cxx=c++
+      export real_cc=${prefix}cc
+      export real_cxx=${prefix}c++
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
-      if [ -e $ccPath/gcc ]; then
-        wrap gcc ${./cc-wrapper.sh} $ccPath/gcc
-        ln -s gcc $out/bin/cc
-        export real_cc=gcc
-        export real_cxx=g++
+      if [ -e $ccPath/${prefix}gcc ]; then
+        wrap ${prefix}gcc ${./cc-wrapper.sh} $ccPath/${prefix}gcc
+        ln -s ${prefix}gcc $out/bin/${prefix}cc
+        export real_cc=${prefix}gcc
+        export real_cxx=${prefix}g++
       elif [ -e $ccPath/clang ]; then
-        wrap clang ${./cc-wrapper.sh} $ccPath/clang
-        ln -s clang $out/bin/cc
+        wrap ${prefix}clang ${./cc-wrapper.sh} $ccPath/clang
+        ln -s ${prefix}clang $out/bin/${prefix}cc
         export real_cc=clang
         export real_cxx=clang++
       fi
 
-      if [ -e $ccPath/g++ ]; then
-        wrap g++ ${./cc-wrapper.sh} $ccPath/g++
-        ln -s g++ $out/bin/c++
+      if [ -e $ccPath/${prefix}g++ ]; then
+        wrap ${prefix}g++ ${./cc-wrapper.sh} $ccPath/${prefix}g++
+        ln -s ${prefix}g++ $out/bin/${prefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        wrap clang++ ${./cc-wrapper.sh} $ccPath/clang++
-        ln -s clang++ $out/bin/c++
+        wrap ${prefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+        ln -s ${prefix}clang++ $out/bin/${prefix}c++
       fi
 
       if [ -e $ccPath/cpp ]; then
-        wrap cpp ${./cc-wrapper.sh} $ccPath/cpp
+        wrap ${prefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
       fi
     ''
 
     + optionalString cc.langFortran or false ''
-      wrap gfortran ${./cc-wrapper.sh} $ccPath/gfortran
-      ln -sv gfortran $out/bin/g77
-      ln -sv gfortran $out/bin/f77
+      wrap ${prefix}gfortran ${./cc-wrapper.sh} $ccPath/${prefix}gfortran
+      ln -sv ${prefix}gfortran $out/bin/${prefix}g77
+      ln -sv ${prefix}gfortran $out/bin/${prefix}f77
     ''
 
     + optionalString cc.langJava or false ''
-      wrap gcj ${./cc-wrapper.sh} $ccPath/gcj
+      wrap ${prefix}gcj ${./cc-wrapper.sh} $ccPath/${prefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
-      wrap gccgo ${./cc-wrapper.sh} $ccPath/gccgo
+      wrap ${prefix}gccgo ${./cc-wrapper.sh} $ccPath/${prefix}gccgo
     ''
 
     + optionalString cc.langAda or false ''
-      wrap gnatgcc ${./cc-wrapper.sh} $ccPath/gnatgcc
-      wrap gnatmake ${./gnat-wrapper.sh} $ccPath/gnatmake
-      wrap gnatbind ${./gnat-wrapper.sh} $ccPath/gnatbind
-      wrap gnatlink ${./gnatlink-wrapper.sh} $ccPath/gnatlink
+      wrap ${prefix}gnatgcc ${./cc-wrapper.sh} $ccPath/${prefix}gnatgcc
+      wrap ${prefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${prefix}gnatmake
+      wrap ${prefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${prefix}gnatbind
+      wrap ${prefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/${prefix}gnatlink
     ''
 
     + optionalString cc.langVhdl or false ''
-      ln -s $ccPath/ghdl $out/bin/ghdl
+      ln -s $ccPath/${prefix}ghdl $out/bin/${prefix}ghdl
     ''
 
     + ''
@@ -253,10 +260,10 @@ stdenv.mkDerivation {
 
       # some linkers on some platforms don't support specific -z flags
       hardening_unsupported_flags=""
-      if [[ "$($ldPath/ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
+      if [[ "$($ldPath/${prefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
       fi
-      if [[ "$($ldPath/ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
+      if [[ "$($ldPath/${prefix}ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" relro"
       fi
 

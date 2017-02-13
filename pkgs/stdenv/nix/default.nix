@@ -30,6 +30,7 @@ bootStages ++ [
         nativeTools = false;
         nativePrefix = stdenv.lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
+        hostPlatform = localSystem;
         targetPlatform = localSystem;
         inherit stdenv;
         inherit (prevStage) binutils coreutils gnugrep;

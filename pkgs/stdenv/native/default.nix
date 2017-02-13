@@ -125,6 +125,7 @@ in
         "i686-solaris" = "/usr/gnu";
         "x86_64-solaris" = "/opt/local/gcc47";
       }.${system} or "/usr";
+      hostPlatform = localSystem;
       targetPlatform = localSystem;
       inherit stdenv;
     };

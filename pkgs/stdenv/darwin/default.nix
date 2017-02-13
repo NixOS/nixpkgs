@@ -73,6 +73,7 @@ in rec {
           nativeTools  = true;
           nativePrefix = bootstrapTools;
           nativeLibc   = false;
+          hostPlatform = localSystem;
           targetPlatform = localSystem;
           libc         = last.pkgs.darwin.Libsystem;
           isClang      = true;
@@ -296,6 +297,7 @@ in rec {
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
+      hostPlatform = localSystem;
       targetPlatform = localSystem;
       inherit (pkgs) coreutils binutils gnugrep;
       inherit (pkgs.darwin) dyld;
