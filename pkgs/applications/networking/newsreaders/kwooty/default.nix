@@ -34,5 +34,6 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Binary news reader of KDE";
+    broken = true;
   };
 }
