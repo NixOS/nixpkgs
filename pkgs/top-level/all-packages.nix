@@ -15354,6 +15354,8 @@ with pkgs;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
+  urh = callPackage ../applications/misc/urh { };
+
   uucp = callPackage ../tools/misc/uucp { };
 
   uvccapture = callPackage ../applications/video/uvccapture { };
