@@ -262,7 +262,7 @@ let
           # prompts the user for password so we run it once with 'required' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
-          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount)) ''
+          (optionalString (cfg.oathAuth || (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount))) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
