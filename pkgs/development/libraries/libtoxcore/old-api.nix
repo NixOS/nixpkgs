@@ -4,9 +4,9 @@
 let
   version = "4c220e336330213b151a0c20307d0a1fce04ac9e";
   date = "20150126";
-in
-stdenv.mkDerivation rec {
-  name = "tox-core-${date}-${builtins.substring 0 7 version}";
+
+in stdenv.mkDerivation rec {
+  name = "tox-core-old-${date}-${builtins.substring 0 7 version}";
 
   src = fetchFromGitHub {
     owner  = "irungentoo";

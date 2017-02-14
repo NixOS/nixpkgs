@@ -8581,9 +8581,11 @@ with pkgs;
 
   libtorrentRasterbar_1_0 = callPackage ../development/libraries/libtorrent-rasterbar/1.0.nix { };
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore/old-api { };
+  libtoxcore-old = callPackage ../development/libraries/libtoxcore/old-api.nix { };
 
-  libtoxcore-dev = callPackage ../development/libraries/libtoxcore/new-api { };
+  libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
+
+  libtoxcore = callPackage ../development/libraries/libtoxcore { };
 
   libtap = callPackage ../development/libraries/libtap { };
 
