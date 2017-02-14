@@ -21,9 +21,8 @@
 
 extern char **environ;
 
-// The SOURCE_PROG and WRAPPER_DIR macros are supplied at compile time
-// for a security reason: So they cannot be changed at runtime.
-static char * sourceProg = SOURCE_PROG;
+// The WRAPPER_DIR macro is supplied at compile time so that it cannot
+// be changed at runtime
 static char * wrapperDir = WRAPPER_DIR;
 
 // Wrapper debug variable name
@@ -207,14 +206,25 @@ int main(int argc, char * * argv)
     // And, of course, we shouldn't be writable.
     assert(!(st.st_mode & (S_IWGRP | S_IWOTH)));
 
-    struct stat stR;
-    stat(sourceProg, &stR);
+    // Read the path of the real (wrapped) program from <self>.real.
+    char realFN[PATH_MAX + 10];
+    int realFNSize = snprintf (realFN, sizeof(realFN), "%s.real", selfPath);
+    assert (realFNSize < sizeof(realFN));
 
-    // Make sure the program we're wrapping is non-zero
-    assert(stR.st_size > 0);
+    int fdSelf = open(realFN, O_RDONLY);
+    assert (fdSelf != -1);
 
-    // Read the capabilities set on the file and raise them in to the
-    // Ambient set so the program we're wrapping receives the
+    char sourceProg[PATH_MAX];
+    len = read(fdSelf, sourceProg, PATH_MAX);
+    assert (len != -1);
+    assert (len < sizeof(sourceProg));
+    assert (len > 0);
+    sourceProg[len] = 0;
+
+    close(fdSelf);
+
+    // Read the capabilities set on the wrapper and raise them in to
+    // the Ambient set so the program we're wrapping receives the
     // capabilities too!
     make_caps_ambient(selfPath);
 

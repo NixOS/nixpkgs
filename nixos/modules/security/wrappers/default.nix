@@ -8,24 +8,20 @@ let
       (n: v: (if v ? "program" then v else v // {program=n;}))
       wrappers);
 
-  mkWrapper = { program, source ? null, ...}:
-    let buildWrapper = ''
-          parentWrapperDir=$(dirname ${wrapperDir})
-          gcc -Wall -O2 -DSOURCE_PROG=\"${source}\" -DWRAPPER_DIR=\"$parentWrapperDir\" \
-              -Wformat -Wformat-security -Werror=format-security \
-              -fstack-protector-strong --param ssp-buffer-size=4 \
-              -D_FORTIFY_SOURCE=2 -fPIC \
-              -lcap-ng -lcap ${./wrapper.c} -o $out/bin/${program}.wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
-              -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
-        '';
-    in pkgs.stdenv.mkDerivation {
-      name         = "${program}-wrapper";
-      unpackPhase  = "true";
-      installPhase = ''
-        mkdir -p $out/bin
-        ${buildWrapper}
-      '';
-    };
+  securityWrapper = pkgs.stdenv.mkDerivation {
+    name         = "security-wrapper";
+    unpackPhase  = "true";
+    installPhase = ''
+      mkdir -p $out/bin
+      parentWrapperDir=$(dirname ${wrapperDir})
+      gcc -Wall -O2 -DWRAPPER_DIR=\"$parentWrapperDir\" \
+          -Wformat -Wformat-security -Werror=format-security \
+          -fstack-protector-strong --param ssp-buffer-size=4 \
+          -D_FORTIFY_SOURCE=2 -fPIC \
+          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
+          -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
+    '';
+  };
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
@@ -37,9 +33,9 @@ let
     , ...
     }:
     assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
-    let wrapperDrv = mkWrapper { inherit program source; };
-    in ''
-      cp ${wrapperDrv}/bin/${program}.wrapper $wrapperDir/${program}
+    ''
+      cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
+      echo -n "$source" > $wrapperDir/${program}.real
 
       # Prevent races
       chmod 0000 $wrapperDir/${program}
@@ -65,9 +61,9 @@ let
     , permissions ? "u+rx,g+x,o+x"
     , ...
     }:
-    let wrapperDrv = mkWrapper { inherit program source; };
-    in ''
-      cp ${wrapperDrv}/bin/${program}.wrapper $wrapperDir/${program}
+    ''
+      cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
+      echo -n "$source" > $wrapperDir/${program}.real
 
       # Prevent races
       chmod 0000 $wrapperDir/${program}
