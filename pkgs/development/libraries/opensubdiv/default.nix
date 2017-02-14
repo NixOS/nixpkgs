@@ -39,16 +39,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall =
-    ''
-      rm $out/lib/*.a
-    '' + lib.optionalString cudaSupport ''
-      # Drop cudatoolkit reference from the closure. We'll get
-      # libOpenCL from /run/opengl-driver.
-      s=${cudatoolkit}/lib
-      t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
-      sed -i $out/lib/libosdGPU.so.* -e "s|$s|$t|g"
-    '';
+  postInstall = "rm $out/lib/*.a";
 
   meta = {
     description = "An Open-Source subdivision surface library";
