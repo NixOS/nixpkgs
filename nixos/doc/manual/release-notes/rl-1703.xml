@@ -17,10 +17,8 @@ has the following highlights: </para>
   </listitem>
 
   <listitem>
-    <para>Setting capabilities on programs is now supported with a
-    <literal>setcap-wrapper</literal> functionality. This
-    functionality and the <literal>setuid-wrapper</literal> are merged
-    into a single "wrappers" module.</para>
+    <para>The setuid wrapper functionality now supports setting
+    capabilities.</para>
   </listitem>
 
   <listitem>

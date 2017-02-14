@@ -165,7 +165,7 @@ int main(int argc, char * * argv)
     // should safely fit within the PATH_MAX system limit. Though I'm
     // not positive it's safe...
     char selfPath[PATH_MAX];
-    int selfPathSize = readlink("/proc/self/exe", selfPath, sizeof(selfPath) - 1);
+    int selfPathSize = readlink("/proc/self/exe", selfPath, sizeof(selfPath));
 
     assert(selfPathSize > 0);
 
