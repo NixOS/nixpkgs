@@ -2190,6 +2190,8 @@ with pkgs;
 
   hecate = callPackage ../applications/editors/hecate { };
 
+  heaptrack = callPackage ../development/tools/profiling/heaptrack {};
+
   heimdall = callPackage ../tools/misc/heimdall { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
@@ -13156,7 +13158,7 @@ with pkgs;
   inherit (gnome3) epiphany;
 
   epic5 = callPackage ../applications/networking/irc/epic5 { };
-  
+
   eq10q = callPackage ../applications/audio/eq10q { };
 
   errbot = callPackage ../applications/networking/errbot {
