@@ -15565,6 +15565,8 @@ in {
     };
   };
 
+  snack = (pkgs.newt.override{pythonSupport=true; python=python;}).py;
+
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
     version = "1.3.1";
