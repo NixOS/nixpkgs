@@ -15343,8 +15343,6 @@ with pkgs;
 
   twmn = qt5.callPackage ../applications/misc/twmn { };
 
-  twinkle = callPackage ../applications/networking/instant-messengers/twinkle { };
-
   umurmur = callPackage ../applications/networking/umurmur { };
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
