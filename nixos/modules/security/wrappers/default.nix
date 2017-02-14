@@ -75,7 +75,7 @@ let
       (s: if (s ? "capabilities")
           then mkSetcapProgram
                  ({ owner = "root";
-                  , group = "root";
+                    group = "root";
                   } // s)
           else if 
              (s ? "setuid"  && s.setuid  == true) ||
