@@ -162,11 +162,11 @@ in
 
           # Remove the old /var/setuid-wrappers path from the system...
           #
-          # TDOO: this is only necessary for ugprades 16.09 => 17.x;
+          # TODO: this is only necessary for ugprades 16.09 => 17.x;
           # this conditional removal block needs to be removed after
           # the release.
-          if [ -d ${config.security.old-wrapperDir} ]; then
-            rm -rf ${config.security.old-wrapperDir}
+          if [ -d /var/setuid-wrappers ]; then
+            rm -rf /var/setuid-wrappers
           fi
 
           # Remove the old /run/setuid-wrappers-dir path from the
