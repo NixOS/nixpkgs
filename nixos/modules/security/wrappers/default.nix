@@ -9,17 +9,15 @@ let
       wrappers);
 
   securityWrapper = pkgs.stdenv.mkDerivation {
-    name         = "security-wrapper";
-    unpackPhase  = "true";
+    name            = "security-wrapper";
+    phases          = [ "installPhase" "fixupPhase" ];
+    buildInputs     = [ pkgs.libcap pkgs.libcap_ng pkgs.linuxHeaders ];
+    hardeningEnable = [ "pie" ];
     installPhase = ''
       mkdir -p $out/bin
       parentWrapperDir=$(dirname ${wrapperDir})
       gcc -Wall -O2 -DWRAPPER_DIR=\"$parentWrapperDir\" \
-          -Wformat -Wformat-security -Werror=format-security \
-          -fstack-protector-strong --param ssp-buffer-size=4 \
-          -D_FORTIFY_SOURCE=2 -fPIC \
-          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper -L ${pkgs.libcap.lib}/lib -L ${pkgs.libcap_ng}/lib \
-          -I ${pkgs.libcap.dev}/include -I ${pkgs.libcap_ng}/include -I ${pkgs.linuxHeaders}/include
+          -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper
     '';
   };
 
