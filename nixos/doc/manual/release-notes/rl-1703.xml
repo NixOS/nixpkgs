@@ -17,6 +17,11 @@ has the following highlights: </para>
   </listitem>
 
   <listitem>
+    <para>The setuid wrapper functionality now supports setting
+    capabilities.</para>
+  </listitem>
+
+  <listitem>
     <para>X.org server uses branch 1.19.  Due to ABI incompatibilities,
       <literal>ati_unfree</literal> keeps forcing 1.17
       and <literal>amdgpu-pro</literal> starts forcing 1.18.</para>

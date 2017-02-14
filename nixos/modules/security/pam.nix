@@ -472,18 +472,19 @@ in
       ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
       ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
 
-    security.setuidPrograms =
-        optionals config.security.pam.enableEcryptfs [ "mount.ecryptfs_private" "umount.ecryptfs_private" ];
+    security.wrappers = {
+      unix_chkpwd = {
+        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        owner = "root";
+        setuid = true;
+      };
+    } // (if config.security.pam.enableEcryptfs then {
+      "mount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
+       "umount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
+    } else {});
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
-
-    security.setuidOwners = [ {
-      program = "unix_chkpwd";
-      source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
-      owner = "root";
-      setuid = true;
-    } ];
 
     security.pam.services =
       { other.text =
