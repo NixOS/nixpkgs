@@ -6967,7 +6967,9 @@ with pkgs;
 
   cegui = callPackage ../development/libraries/cegui {};
 
-  certbot = callPackage ../tools/admin/certbot { };
+  certbot_0_9 = callPackage ../tools/admin/certbot/0.9.nix {};
+  certbot_0_10 = callPackage ../tools/admin/certbot/0.10.nix {};
+  certbot = certbot_0_9;
 
   cgal = callPackage ../development/libraries/CGAL {};
 
