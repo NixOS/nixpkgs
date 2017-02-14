@@ -27,7 +27,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "13.0.4";
+  version = "17.0.0";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "a95d7ce8f7bd5f88585e4be3144a341236d8c0fc91f6feaec59bb8ba3120e726";
+    sha256 = "10c4cvm6hhdch0idh2kn7qv1dq6zlw97sc3pz7bssn81f1ckvnrr";
   };
 
   prePatch = "patchShebangs .";
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
   ] ++ (if stdenv.isArm || stdenv.isAarch64 then [
-      "--with-gallium-drivers=nouveau,freedreno,vc4,swrast"
+      "--with-gallium-drivers=nouveau,freedreno,vc4,etnaviv,swrast"
       "--with-dri-drivers=nouveau,swrast"
   ] else [
       "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,swrast"
