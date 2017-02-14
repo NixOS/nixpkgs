@@ -208,5 +208,6 @@ in stdenv.mkDerivation {
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
       maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
+      priority = 10; # In case Python 2 and 3 are in one profile, we would like to have `/bin/python` refer to 2.
     };
   }
