@@ -274,6 +274,14 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para>Python 2.6 interpreter and package set have been removed.</para>
+  </listitem>
+
+  <listitem>
+    <para>The Python 2.7 interpreter does not use modules anymore. Instead, all CPython interpreters now include the whole standard library except for `tkinter`, which is available in the Python package set.</para>
+  </listitem>
+
+  <listitem>
     <para>
       Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
       Minor modifications had to be made to the interpreters in order to generate
@@ -284,8 +292,16 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
+    <para>The Python package sets now use a fixed-point combinator and the sets are available as attributes of the interpreters.</para>
+  </listitem>
+
+  <listitem>
+    <para>The Python function `buildPythonPackage` has been improved and can be used to build from Setuptools source, Flit source, and precompiled Wheels.</para>
+  </listitem>
+
+  <listitem>
     <para>
-      When adding new or updating current libraries, the expressions should be put
+      When adding new or updating current Python libraries, the expressions should be put
       in separate files in <literal>pkgs/development/python-modules</literal> and 
       called from <literal>python-packages.nix</literal>.
     </para>
