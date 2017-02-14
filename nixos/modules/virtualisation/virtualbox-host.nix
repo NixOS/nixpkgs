@@ -69,13 +69,14 @@ in
     environment.systemPackages = [ virtualbox ];
 
     security.wrappers = let
-      mkSuid = program: {"${program}" = {
+      mkSuid = program: {
         source = "${virtualbox}/libexec/virtualbox/${program}";
         owner = "root";
         group = "vboxusers";
         setuid = true;
-      };};
-    in mkIf cfg.enableHardening (map mkSuid [
+      };
+    in mkIf cfg.enableHardening
+      (builtins.listToAttrs (map (x: { name = x; value = mkSuid x; }) [
       "VBoxHeadless"
       "VBoxNetAdpCtl"
       "VBoxNetDHCP"
@@ -83,7 +84,7 @@ in
       "VBoxSDL"
       "VBoxVolInfo"
       "VirtualBox"
-    ]);
+    ]));
 
     users.extraGroups.vboxusers.gid = config.ids.gids.vboxusers;
 
