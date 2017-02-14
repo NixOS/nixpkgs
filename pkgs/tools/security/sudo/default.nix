@@ -50,6 +50,13 @@ stdenv.mkDerivation rec {
     rm -f $out/share/doc/sudo/ChangeLog
     '';
 
+  passthru = {
+    setuid = [
+      { program = "suid"; }
+      { program = "sudoedit"; }
+    ];
+  }
+
   meta = {
     description = "A command to run commands as root";
 

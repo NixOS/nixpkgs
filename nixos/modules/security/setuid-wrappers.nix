@@ -80,17 +80,20 @@ in
 
     system.activationScripts.setuid =
       let
+        withSource = pkg: map (setuid: { source = "${pkg}/bin/${setuid.program}"; } // setuid) (pkg.setuid or []);
+        setuidPackages = concatMap withSource environment.systemPackages;
         setuidPrograms =
-          (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
+          (map (x: { program = x; })
             config.security.setuidPrograms)
-          ++ config.security.setuidOwners;
+          ++ config.security.setuidOwners
+          ++ setuidPackages;
 
         makeSetuidWrapper =
           { program
           , source ? ""
-          , owner ? "nobody"
-          , group ? "nogroup"
-          , setuid ? false
+          , owner ? "root"
+          , group ? "root"
+          , setuid ? true
           , setgid ? false
           , permissions ? "u+rx,g+x,o+x"
           }:
