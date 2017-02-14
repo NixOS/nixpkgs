@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, buildFHSUserEnv, writeScript, jdk, zip, unzip,
+{ stdenv, fetchurl, buildFHSUserEnv, writeScript, jdk, zip, unzip,
   which, makeWrapper, binutils }:
 
 let
 
-  version = "0.3.2";
+  version = "0.4.4";
 
   meta = with stdenv.lib; {
     homepage = http://github.com/bazelbuild/bazel/;
@@ -22,14 +22,16 @@ let
   };
 
   bazelBinary = stdenv.mkDerivation rec {
+
     name = "bazel-${version}";
 
-    src = fetchFromGitHub {
-      owner = "bazelbuild";
-      repo = "bazel";
-      rev = version;
-      sha256 = "085cjz0qhm4a12jmhkjd9w3ic4a67035j01q111h387iklvgn6xg";
+    src = fetchurl {
+      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+      sha256 = "1fwfahkqi680zyxmdriqj603lpacyh6cg6ff25bn9bkilbfj2anm";
     };
+
+    sourceRoot = ".";
+
     patches = [ ./java_stub_template.patch ];
 
     packagesNotFromEnv = [
