@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, openssl}:
+{ stdenv, fetchurl, fetchpatch, pam, openssl }:
 
 stdenv.mkDerivation {
   name = "uw-imap-2007f";
@@ -19,7 +19,12 @@ stdenv.mkDerivation {
   buildInputs = [ openssl ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) pam;
 
-  patchPhase = ''
+  patches = [ (fetchpatch {
+    url = "https://anonscm.debian.org/cgit/collab-maint/uw-imap.git/plain/debian/patches/1006_openssl1.1_autoverify.patch?id=b4df81d246a6cdbfd035c21f43e844effda3582b";
+    sha256 = "09xb58awvkhzmmjhrkqgijzgv7ia381ablf0y7i1rvhcqkb5wga7";
+  }) ];
+
+  postPatch = ''
     sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
     sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
     sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${openssl.out}/lib,'
