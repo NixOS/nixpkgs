@@ -27,7 +27,7 @@ let
   mkSetcapProgram =
     { program
     , capabilities
-    , source ? null
+    , source
     , owner  ? "nobody"
     , group  ? "nogroup"
     , ...
@@ -35,7 +35,7 @@ let
     assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
     ''
       cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
-      echo -n "$source" > $wrapperDir/${program}.real
+      echo -n "${source}" > $wrapperDir/${program}.real
 
       # Prevent races
       chmod 0000 $wrapperDir/${program}
@@ -53,7 +53,7 @@ let
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
     { program
-    , source ? null
+    , source
     , owner  ? "nobody"
     , group  ? "nogroup"
     , setuid ? false
@@ -63,7 +63,7 @@ let
     }:
     ''
       cp ${securityWrapper}/bin/security-wrapper $wrapperDir/${program}
-      echo -n "$source" > $wrapperDir/${program}.real
+      echo -n "${source}" > $wrapperDir/${program}.real
 
       # Prevent races
       chmod 0000 $wrapperDir/${program}
