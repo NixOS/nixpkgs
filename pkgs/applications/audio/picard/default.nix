@@ -1,6 +1,7 @@
 { stdenv, python2Packages, fetchurl, gettext, chromaprint }:
 
 let
+  # ON UPDATE: remove mutagen_1_23 and update
   version = "1.3.2";
   pythonPackages = python2Packages;
 in pythonPackages.buildPythonApplication {
@@ -16,7 +17,7 @@ in pythonPackages.buildPythonApplication {
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt4
-    mutagen
+    mutagen_1_23
     discid
   ];
 

@@ -15156,6 +15156,28 @@ in {
     };
   });
 
+  # needed by picard
+  mutagen_1_23 = buildPythonPackage (rec {
+    name = "mutagen-1.23";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mutagen/${name}.tar.gz";
+      sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
+    };
+
+    # Needed for tests only
+    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
+      pkgs.glibcLocales
+    ];
+    LC_ALL = "en_US.UTF-8";
+
+    meta = {
+      description = "Python multimedia tagging library";
+      homepage = http://code.google.com/p/mutagen;
+      license = licenses.lgpl2;
+    };
+  });
+
 
   muttils = buildPythonPackage (rec {
     name = "muttils-1.3";
