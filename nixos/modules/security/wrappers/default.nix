@@ -109,26 +109,27 @@ in
         };
       };
       description = ''
-        This option allows the ownership and permissions on the setuid
-        wrappers for specific programs to be overridden from the
-        default (setuid root, but not setgid root).
+        <para>This option allows the ownership and permissions on the
+        setuid wrappers for specific programs to be overridden from
+        the default (setuid root, but not setgid root).</para>
 
-        Additionally, this option can set capabilities on a wrapper
-        program that propagates those capabilities down to the
-        wrapped, real program.
+        <para>Additionally, this option can set capabilities on a
+        wrapper program that propagates those capabilities down to the
+        wrapped, real program.</para>
 
-        The <literal>program</literal> attribute is the name of the
-        program to be wrapped. If no <literal>source</literal>
+        <para>The <literal>program</literal> attribute is the name of
+        the program to be wrapped. If no <literal>source</literal>
         attribute is provided, specifying the absolute path to the
         program, then the program will be searched for in the path
-        environment variable.
+        environment variable.</para>
 
-        NOTE: cap_setpcap, which is required for the wrapper program
-        to be able to raise caps into the Ambient set is NOT raised to
-        the Ambient set so that the real program cannot modify its own
-        capabilities!! This may be too restrictive for cases in which
-        the real program needs cap_setpcap but it at least leans on
-        the side security paranoid vs. too relaxed.
+        <para>NOTE: cap_setpcap, which is required for the wrapper
+        program to be able to raise caps into the Ambient set is NOT
+        raised to the Ambient set so that the real program cannot
+        modify its own capabilities!! This may be too restrictive for
+        cases in which the real program needs cap_setpcap but it at
+        least leans on the side security paranoid vs. too
+        relaxed.</para>
       '';
     };
 
