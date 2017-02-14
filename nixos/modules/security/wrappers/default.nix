@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
 
-  inherit (config.security) wrapperDir wrappers setuidPrograms;
+  inherit (config.security) wrapperDir wrappers;
 
   programs =
     (lib.mapAttrsToList
