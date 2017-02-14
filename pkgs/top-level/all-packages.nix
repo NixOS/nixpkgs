@@ -10625,6 +10625,8 @@ with pkgs;
     postgresql95
     postgresql96;
 
+  postgresql93 = callPackage ../servers/sql/postgresql/9.3.x.nix { };
+
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
