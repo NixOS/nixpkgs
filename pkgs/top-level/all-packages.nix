@@ -10352,7 +10352,9 @@ with pkgs;
 
   freeradius = callPackage ../servers/freeradius { };
 
-  freeswitch = callPackage ../servers/sip/freeswitch { };
+  freeswitch = callPackage ../servers/sip/freeswitch {
+    openssl = openssl_1_0_2;
+  };
 
   gatling = callPackage ../servers/http/gatling { };
 
