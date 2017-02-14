@@ -2419,6 +2419,8 @@ with pkgs;
 
   kbfs = callPackage ../tools/security/kbfs { };
 
+  keybase-gui = callPackage ../tools/security/keybase-gui { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
