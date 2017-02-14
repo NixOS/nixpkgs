@@ -861,4 +861,6 @@ self: super: {
   fgl = doJailbreak super.fgl;
   fgl-arbitrary = doJailbreak super.fgl-arbitrary;
 
+  # https://github.com/Gabriel439/Haskell-DirStream-Library/issues/8
+  dirstream = doJailbreak super.dirstream;
 }
