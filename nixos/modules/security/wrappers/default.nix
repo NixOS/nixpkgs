@@ -73,7 +73,10 @@ let
   mkWrappedPrograms =
     builtins.map
       (s: if (s ? "capabilities")
-          then mkSetcapProgram s
+          then mkSetcapProgram
+                 ({ owner = "root";
+                  , group = "root";
+                  } // s)
           else if 
              (s ? "setuid"  && s.setuid  == true) ||
              (s ? "setguid" && s.setguid == true) ||
