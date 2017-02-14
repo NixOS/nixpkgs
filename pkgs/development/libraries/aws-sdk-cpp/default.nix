@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, zlib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, curl, openssl, zlib
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -28,6 +28,11 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ cmake curl ];
+
+  patches = [ (fetchpatch {
+    url = "https://github.com/aws/aws-sdk-cpp/pull/362.patch";
+    sha256 = "1ij7jhnbln1w2r6y2x4208m4asw5jzz2y54wf5kd5k6fsrzkpshn";
+  }) ];
 
   cmakeFlags =
     lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
