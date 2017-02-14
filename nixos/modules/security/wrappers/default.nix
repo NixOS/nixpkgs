@@ -131,16 +131,6 @@ in
       '';
     };
 
-    security.old-wrapperDir = lib.mkOption {
-      type        = lib.types.path;
-      default     = "/var/setuid-wrappers";
-      internal    = true;
-      description = ''
-        This option defines the path to the wrapper programs. It
-        should not be overriden.
-      '';
-    };
-
     security.wrapperDir = lib.mkOption {
       type        = lib.types.path;
       default     = "/run/wrappers/bin";
