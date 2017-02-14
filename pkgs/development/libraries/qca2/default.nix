@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qt }:
+{ stdenv, fetchurl, openssl_1_0_2, cmake, pkgconfig, qt }:
 
 stdenv.mkDerivation rec {
   name = "qca-2.1.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt ];
+  buildInputs = [ openssl_1_0_2 qt ];
 
   enableParallelBuilding = true;
 
