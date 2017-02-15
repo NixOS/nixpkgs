@@ -869,6 +869,9 @@ self: super: {
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
 
+  # https://github.com/divipp/ActiveHs-misc/issues/10
+  data-pprint = doJailbreak super.data-pprint;
+
   # horribly outdated (X11 interface changed a lot)
   sindre = markBroken super.sindre;
 
