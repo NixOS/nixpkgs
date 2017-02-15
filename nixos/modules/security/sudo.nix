@@ -92,7 +92,10 @@ in
         ${cfg.extraConfig}
       '';
 
-    security.setuidPrograms = [ "sudo" "sudoedit" ];
+    security.wrappers = {
+      sudo.source = "${pkgs.sudo.out}/bin/sudo";
+      sudoedit.source = "${pkgs.sudo.out}/bin/sudoedit";
+    };
 
     environment.systemPackages = [ sudo ];
 

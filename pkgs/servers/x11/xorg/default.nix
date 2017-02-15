@@ -812,11 +812,11 @@ let
   }) // {inherit fontconfig freetype libX11 xproto libXrender ;};
 
   libXi = (mkDerivation "libXi" {
-    name = "libXi-1.7.8";
+    name = "libXi-1.7.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXi-1.7.8.tar.bz2;
-      sha256 = "1fr7mi4nbcxsa88qin9g2ipmzh595ydxy9qnabzl270laf6zmwnq";
+      url = mirror://xorg/individual/lib/libXi-1.7.9.tar.bz2;
+      sha256 = "0idg1wc01hndvaa820fvfs7phvd1ymf0lldmq6386i7rhkzvirn2";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto libXfixes xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -856,11 +856,11 @@ let
   }) // {inherit printproto libX11 libXau libXext xextproto ;};
 
   libXpm = (mkDerivation "libXpm" {
-    name = "libXpm-3.5.11";
+    name = "libXpm-3.5.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXpm-3.5.11.tar.bz2;
-      sha256 = "07041q4k8m4nirzl7lrqn8by2zylx0xvh6n0za301qqs3njszgf5";
+      url = mirror://xorg/individual/lib/libXpm-3.5.12.tar.bz2;
+      sha256 = "1v5xaiw4zlhxspvx76y3hq4wpxv7mpj6parqnwdqvpj8vbinsspx";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -1120,11 +1120,11 @@ let
   }) // {inherit libfontenc freetype xproto zlib ;};
 
   presentproto = (mkDerivation "presentproto" {
-    name = "presentproto-1.0";
+    name = "presentproto-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/presentproto-1.0.tar.bz2;
-      sha256 = "1kir51aqg9cwazs14ivcldcn3mzadqgykc9cg87rm40zf947sb41";
+      url = mirror://xorg/individual/proto/presentproto-1.1.tar.bz2;
+      sha256 = "1f96dlgfwhsd0834z8ydjzjnb0cwha5r6lxgia4say4zhsl276zn";
     };
     buildInputs = [pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -1241,11 +1241,11 @@ let
   }) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
 
   utilmacros = (mkDerivation "utilmacros" {
-    name = "util-macros-1.19.0";
+    name = "util-macros-1.19.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/util-macros-1.19.0.tar.bz2;
-      sha256 = "1fnhpryf55l0yqajxn0cxan3kvsjzi67nlanz8clwqzf54cb2d98";
+      url = mirror://xorg/individual/util/util-macros-1.19.1.tar.bz2;
+      sha256 = "19h6wflpmh7xxqr6lk5z8pds6r9r0dn7ijbvaacymx2q0m05km0q";
     };
     buildInputs = [pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -1285,11 +1285,11 @@ let
   }) // {inherit libX11 libXext libXft libXmu xproto libXrender ;};
 
   xauth = (mkDerivation "xauth" {
-    name = "xauth-1.0.9";
+    name = "xauth-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xauth-1.0.9.tar.bz2;
-      sha256 = "13y2invb0894b1in03jbglximbz6v31y2kr4yjjgica8xciibkjn";
+      url = mirror://xorg/individual/app/xauth-1.0.10.tar.bz2;
+      sha256 = "0kgwz9rmxjfdvi2syf8g0ms5rr5cgyqx4n0n1m960kyz7k745zjs";
     };
     buildInputs = [pkgconfig libX11 libXau libXext libXmu xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2254,11 +2254,11 @@ let
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.19";
+    name = "xkeyboard-config-2.20";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.19.tar.bz2;
-      sha256 = "09sqyi430bbg13pp8j0j60p9p9xn2lpqx38xw1lyv77bp63d3pw3";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.20.tar.bz2;
+      sha256 = "0d619g4r0w1f6q5qmaqjnsc0956gi02fqgpisqffzqy4acjwggyi";
     };
     buildInputs = [pkgconfig libX11 xproto ];
     meta.platforms = stdenv.lib.platforms.unix;

@@ -53,12 +53,14 @@ let
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries forceInstall 
+        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
-        pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
+        pkgs.utillinux ]
+        ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
+        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
@@ -262,6 +264,14 @@ in
           Each attribute name denotes the destination file name in
           <filename>/boot</filename>, while the corresponding
           attribute value specifies the source file.
+        '';
+      };
+
+      useOSProber = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set to true, append entries for other OSs detected by os-prober.
         '';
       };
 

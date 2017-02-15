@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
 
   buildInputs = [ knot-dns luajit libuv gnutls ]
-    # TODO: lmdb needs lmdb.pc; embedded for now
+    ++ optional stdenv.isLinux lmdb # system lmdb causes some problems on Darwin
     ## optional dependencies
     ++ optional doInstallCheck cmocka
     ++ optional stdenv.isLinux systemd # socket activation

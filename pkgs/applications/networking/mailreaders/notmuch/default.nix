@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     make install-man
   '';
+  dontGzipMan = true; # already compressed
 
   meta = {
     description = "Mail indexer";

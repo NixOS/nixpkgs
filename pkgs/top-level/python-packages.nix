@@ -95,6 +95,8 @@ in {
     };
   };
 
+  aenum = callPackage ../development/python-modules/aenum { };
+
   agate = buildPythonPackage rec {
     name = "agate-1.2.2";
     disabled = isPy3k;
@@ -331,8 +333,9 @@ in {
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pytimeparse = buildPythonPackage rec {
-    name = "pytimeparse-1.1.5";
-    disabled = isPy3k;
+    pname = "pytimeparse";
+    version = "1.1.6";
+    name = "${pname}-${version}";
 
     meta = {
       description = "A small Python library to parse various kinds of time expressions";
@@ -343,9 +346,9 @@ in {
 
     propagatedBuildInputs = with self; [ nose ];
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytimeparse/${name}.tar.gz";
-      sha256 = "01xj31m5brydm4gvc6lwx26r74903wvm1jx3g05633k3mqlvvpcs";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0imbb68i5n5fm704gv47if1blpxd4f8g16qmp5ar07cavgh2mibl";
     };
   };
 
@@ -1579,6 +1582,10 @@ in {
 
     propagatedBuildInputs = with self; [ unidecode regex ];
 
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
     meta = with stdenv.lib; {
       homepage = "https://github.com/dimka665/awesome-slugify";
       description = "Python flexible slugify function";
@@ -1636,10 +1643,10 @@ in {
         sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
         url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
+
     # Why does it propagate packages that are used for testing?
     propagatedBuildInputs = with self; [
-      configobj prompt_toolkit awscli boto3 pygments mock pytest
-      pytestcov unittest2 tox
+      awscli prompt_toolkit boto3 configobj pygments
     ];
 
     #Checks are failing due to missing TTY, which won't exist.
@@ -5681,6 +5688,8 @@ in {
     };
   };
 
+  leather = callPackage ../development/python-modules/leather { };
+
   libtmux = buildPythonPackage rec {
     name = "libtmux-${version}";
     version = "0.6.0";
@@ -9571,8 +9580,8 @@ in {
 
     buildInputs = with self; [ nose sphinx numpydoc ];
 
-    # Failing test on Python 3.x
-    postPatch = '''' + optionalString isPy3k ''
+    # Failing test on Python 3.x and Darwin
+    postPatch = '''' + optionalString (isPy3k || stdenv.isDarwin) ''
       sed -i -e '70,84d' joblib/test/test_format_stack.py
       # test_nested_parallel_warnings: ValueError: Non-zero return code: -9.
       # Not sure why but it's nix-specific. Try removing for new joblib releases.
@@ -14460,6 +14469,7 @@ in {
   matplotlib = callPackage ../development/python-modules/matplotlib/default.nix {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     enableGhostscript = true;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
 
@@ -28388,6 +28398,10 @@ EOF
     '';
 
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
+  };
+
+  libasyncns = callPackage ../development/python-modules/libasyncns.nix {
+    inherit (pkgs) libasyncns pkgconfig;
   };
 
   pybrowserid = buildPythonPackage rec {

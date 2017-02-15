@@ -10,7 +10,6 @@ with lib;
     (mkRenamedOptionModule [ "fonts" "enableFontConfig" ] [ "fonts" "fontconfig" "enable" ])
     (mkRenamedOptionModule [ "fonts" "extraFonts" ] [ "fonts" "fonts" ])
 
-    (mkRenamedOptionModule [ "security" "extraSetuidPrograms" ] [ "security" "setuidPrograms" ])
     (mkRenamedOptionModule [ "networking" "enableWLAN" ] [ "networking" "wireless" "enable" ])
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "networking" "enableRalinkFirmware" ])
 
@@ -32,6 +31,9 @@ with lib;
     (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
 
     (mkRenamedOptionModule [ "services" "clamav" "updater" "config" ] [ "services" "clamav" "updater" "extraConfig" ])
+
+    (mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
+    (mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
 
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])

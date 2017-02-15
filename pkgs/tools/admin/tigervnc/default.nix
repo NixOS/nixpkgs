@@ -7,14 +7,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.7.1";
+  version = "1.8.0pre20170211";
   name = "tigervnc-${version}";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    sha256 = "0s2v1h24cl5ypnr35hima580xvvsh0cdqi501mvyvi7wz9cp33rj";
-    rev = "v1.7.1";
+    sha256 = "10bs6394ya953gmak8g2d3n133vyfrryq9zq6dc27g8s6lw0mrbh";
+    rev = "b6c46a1a99a402d5d17b1afafc4784ce0958d6ec";
   };
 
   inherit fontDirectories;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir = true;
 
   postBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
     export CXXFLAGS="$CXXFLAGS -fpermissive"
     # Build Xvnc
     tar xf ${xorg.xorgserver.src}

@@ -4,7 +4,7 @@ Date: Thu, 26 Nov 2015 21:03:35 +0100
 Subject: [PATCH] Lookup dumpcap in PATH
 
 NixOS patch: Look for dumpcap in PATH first, because there may be a
-dumpcap setuid-wrapper that we want to use instead of the default
+dumpcap wrapper that we want to use instead of the default
 non-setuid dumpcap binary.
 
 Also change execv() to execvp() because we've set argv[0] to "dumpcap"
@@ -27,7 +27,7 @@ index 970688e..49914d5 100644
 -    exename = g_strdup_printf("%s/dumpcap", progfile_dir);
 +    /*
 +     * NixOS patch: Look for dumpcap in PATH first, because there may be a
-+     * dumpcap setuid-wrapper that we want to use instead of the default
++     * dumpcap wrapper that we want to use instead of the default
 +     * non-setuid dumpcap binary.
 +     */
 +    if (system("command -v dumpcap >/dev/null") == 0) {

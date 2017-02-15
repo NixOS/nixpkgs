@@ -253,6 +253,8 @@ let
               "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+          ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
+              "auth requisite ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
         '' +
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
@@ -271,8 +273,6 @@ let
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
-              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${optionalString use_ldap
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.services.sssd.enable
@@ -472,18 +472,19 @@ in
       ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
       ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
 
-    security.setuidPrograms =
-        optionals config.security.pam.enableEcryptfs [ "mount.ecryptfs_private" "umount.ecryptfs_private" ];
+    security.wrappers = {
+      unix_chkpwd = {
+        source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
+        owner = "root";
+        setuid = true;
+      };
+    } // (if config.security.pam.enableEcryptfs then {
+      "mount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
+       "umount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
+    } else {});
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
-
-    security.setuidOwners = [ {
-      program = "unix_chkpwd";
-      source = "${pkgs.pam}/sbin/unix_chkpwd.orig";
-      owner = "root";
-      setuid = true;
-    } ];
 
     security.pam.services =
       { other.text =

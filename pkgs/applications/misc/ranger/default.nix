@@ -15,7 +15,12 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "14j067n1azk6vc6cxlhi5w5bsn2wcz4hypvgxc0vjl9xp5n4f0nf";
   };
 
+  checkInputs = with pythonPackages; [ pytest ];
   propagatedBuildInputs = [ file ];
+
+  checkPhase = ''
+    py.test tests
+  '';
 
   preConfigure = ''
     substituteInPlace ranger/ext/img_display.py \

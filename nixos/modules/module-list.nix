@@ -113,7 +113,7 @@
   ./security/prey.nix
   ./security/rngd.nix
   ./security/rtkit.nix
-  ./security/setuid-wrappers.nix
+  ./security/wrappers/default.nix
   ./security/sudo.nix
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
@@ -296,6 +296,7 @@
   ./services/misc/siproxd.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
+  ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
