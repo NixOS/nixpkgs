@@ -8826,6 +8826,8 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
+  microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+
   minizip = callPackage ../development/libraries/minizip { };
 
   miro = callPackage ../applications/video/miro {
