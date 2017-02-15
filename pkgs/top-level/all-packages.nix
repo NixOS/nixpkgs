@@ -1870,12 +1870,6 @@ in
   };
 
   /* Readded by Michael Raskin. There are programs in the wild
-   * that do want 2.0 but not 2.22. Please give a day's notice for
-   * objections before removal. The feature is integer coordinates
-   */
-  graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { };
-
-  /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.32 but not 2.0 or 2.36. Please give a day's notice for
    * objections before removal. The feature is libgraph.
    */
