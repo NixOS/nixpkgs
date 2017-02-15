@@ -17474,6 +17474,8 @@ with pkgs;
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
 
+  cups-dymo = callPackage ../misc/cups/drivers/dymo {};
+
   crashplan = callPackage ../applications/backup/crashplan { };
 
   e17gtk = callPackage ../misc/themes/e17gtk { };
