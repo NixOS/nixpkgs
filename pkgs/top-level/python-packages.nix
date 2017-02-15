@@ -31247,41 +31247,7 @@ EOF
 
   tensorflowWithoutCuda = callPackage ../development/python-modules/tensorflow { };
 
-
-  tensorflowCuDNN = buildPythonPackage rec {
-    name = "tensorflow";
-    version = "0.11.0rc0";
-    format = "wheel";
-
-    src = pkgs.fetchurl {
-      url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = "1r8zlz95sw7bnjzg5zdbpa9dj8wmp8cvvgyl9sv3amsscagnnfj5";
-    };
-
-    buildInputs = with self; [ pkgs.swig ];
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.cudatoolkit75 pkgs.cudnn5_cudatoolkit75 pkgs.gcc49 self.mock ];
-
-    # Note that we need to run *after* the fixup phase because the
-    # libraries are loaded at runtime. If we run in preFixup then
-    # patchelf --shrink-rpath will remove the cuda libraries.
-    postFixup = let rpath = stdenv.lib.makeLibraryPath [
-      pkgs.gcc49.cc.lib
-      pkgs.zlib pkgs.cudatoolkit75
-      pkgs.cudnn5_cudatoolkit75
-      pkgs.linuxPackages.nvidia_x11
-    ]; in ''
-      find $out -name '*.so' -exec patchelf --set-rpath "${rpath}" {} \;
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "TensorFlow helps the tensors flow (no gpu support)";
-      homepage = http://tensorflow.org;
-      license = licenses.asl20;
-      platforms   = platforms.linux;
-    };
-  };
+  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow/cuda.nix { };
 
   tflearn = buildPythonPackage rec {
     name = "tflearn-0.2.1";
