@@ -13,19 +13,24 @@ rec {
 
   hardeningDisable = [ "fortify" ];
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2016-1248.diff";
+      url = https://github.com/vim/vim/commit/d0b5138b.diff;
+      sha256 = "057kg95ipjdirbkr082wbwrbz5l79mwxir8ymkxhma6l6wbxidif";
+    })
+    (fetchpatch {
+      name = "CVE-2017-5953.patch";
+      url = https://github.com/vim/vim/commit/399c297aa93afe2c0a39e2a1b3f972aebba44c9d.patch;
+      sha256 = "19i2m27czkm9di999nbf5mrvb9dx8w5r5169pakmljg4zzbc61g5";
+    })
+  ];
+
   postPatch =
     # Use man from $PATH; escape sequences are still problematic.
     ''
       substituteInPlace runtime/ftplugin/man.vim \
         --replace "/usr/bin/man " "man "
-
-      patch -p1 < '${
-        fetchpatch {
-          name = "cve-2016-1248.diff";
-          url = "https://github.com/vim/vim/commit/d0b5138b.diff";
-          sha256 = "057kg95ipjdirbkr082wbwrbz5l79mwxir8ymkxhma6l6wbxidif";
-        }
-      }'
     '';
 
   meta = with lib; {

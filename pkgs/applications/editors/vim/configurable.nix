@@ -61,7 +61,7 @@ composableDerivation {
           }.src;
       };
 
-    patches = [ ./cflags-prune.diff ];
+    patches = common.patches ++ [ ./cflags-prune.diff ];
 
     configureFlags
       = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
