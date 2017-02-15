@@ -1,0 +1,45 @@
+--- a/CMakeLists.txt	2017-02-15 01:15:44.920978809 -0200
++++ b/CMakeLists.txt	2017-02-15 01:15:44.920978809 -0200
+@@ -248,6 +248,23 @@
+         else (GTK2_FOUND)
+             message(FATAL_ERROR "Could not locate GTK.")
+         endif (GTK2_FOUND)
++        find_package(GLIB2)
++        if (GLIB2_FOUND)
++            include_directories(${GLIB2_INCLUDE_DIRS})
++#           add_${GLIB2_LIBRARIES}
++        else (GLIB2_FOUND)
++            message(FATAL_ERROR "Could not locate GLIB2.")
++        endif (GLIB2_FOUND)
++        find_path(GDK_I NAMES gdkconfig.h)
++        if(GDK_I)
++            include_directories(${GDK_I})
++        else(GDK_I)
++            message (FATAL_ERROR "gdk")
++        endif(GDK_I)
++        find_library(GTK_L libgdk-x11-2.0.so)
++        find_library(GDK_L libgdk-x11-2.0.so)
++        message (${GTK_L})
++        message (${GDK_L})
+     endif()
+ 
+ endif (UNIX AND NOT APPLE)
+--- a/codelitephp/CMakeLists.txt
++++ b/codelitephp/CMakeLists.txt
+@@ -103,4 +115,16 @@
+                      plugin 
+                      ${ADDITIONAL_LIBRARIES} 
+                      ${wxWidgets_LIBRARIES})
++find_library(GTK_L libgtk-x11-2.0)
++find_library(GDK_L libgdk-x11-2.0)
++if(GTK_L)
++  target_link_libraries(PHPUnitTests ${GTK_L})
++else(GTK_L)
++  message(FATAL_ERROR "GTK_L not found")
++endif(GTK_L)
++if(GDK_L)
++  target_link_libraries(PHPUnitTests ${GDK_L})
++else(GDK_L)
++  message(FATAL_ERROR "GDK_L not found")
++endif(GDK_L)
+ 
