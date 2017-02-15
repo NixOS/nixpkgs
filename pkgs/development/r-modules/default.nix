@@ -245,7 +245,6 @@ let
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl_1 ];
-    BNSP = [ pkgs.gsl_1 ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo.dev pkgs.x11 pkgs.fontconfig.lib ];
     Cardinal = [ pkgs.which ];
@@ -642,7 +641,6 @@ let
     "rsgcc"
     "RSurvey"
     "RunuranGUI"
-    "sdcMicroGUI"
     "sharpshootR"
     "simba"
     "Simile"
@@ -766,7 +764,6 @@ let
     "Metab" # broken build
     "Crossover" # broken build
     "CardinalWorkflows" # broken build
-    "spoccutils" # depends on broken package spocc
     "mapr" # depends on broken package spocc
     "vmsbase" # broken build
     "vcfR" # broken build
@@ -833,7 +830,6 @@ let
     "SQDA" # depends on broken package limma
     "ADaCGH2" # depends on broken package limma
     "snapCGH" # depends on broken package limma
-    "Shrinkage" # depends on broken package limma
     "SafeQuant" # depends on broken package limma
     "RTopper" # depends on broken package limma
     "RTCGAToolbox" # depends on broken package limma
@@ -875,7 +871,6 @@ let
     "stepNorm" # depends on broken package limma
     "RBM" # depends on broken package limma
     "saps" # depends on broken package limma
-    "PharmacoGx" # depends on broken package limma
     "piano" # depends on broken package limma
     "OLINgui" # depends on broken package limma
     "OLIN" # depends on broken package limma
@@ -993,7 +988,6 @@ let
     "clippda" # depends on broken package limma
     "REDseq" # depends on broken package limma
     "GUIDEseq" # depends on broken package limma
-    "ggtut" # depends on broken package limma
     "FunciSNP" # depends on broken package limma
     "ChIPpeakAnno" # depends on broken package limma
     "ChIPComp" # depends on broken package limma
@@ -1161,7 +1155,6 @@ let
     "tadaatoolbox" # depends on broken package car
     "lavaan_shiny" # depends on broken package car
     "RcmdrPlugin_GWRM" # depends on broken package car
-    "TextoMineR" # depends on broken package car
     "pcaBootPlot" # depends on broken package car
     "ClustGeo" # depends on broken package car
     "preproviz" # depends on broken package car
@@ -1278,7 +1271,6 @@ let
     "daff" # depends on broken package V8
     "dagbag" # build is broken
     "DAMisc" # depends on broken package nlopt
-    "datafsm" # depends on broken package caret
     "dbConnect" # broken build
     "DBKGrad" # depends on broken package rpanel
     #"dcmle" # broken build
@@ -1367,7 +1359,6 @@ let
     "gmatrix" # depends on broken package cudatoolkit
     "gMCP" # build is broken
     "gmum_r" # broken build
-    "Goslate" # depends on broken package PythonInR
     "GPC" # broken build
     "gplm" # depends on broken package nlopt
     "gpuR" # depends on GPU-specific header files
@@ -1687,7 +1678,6 @@ let
     "sampleSelection" # depends on broken package nlopt
     "sapFinder" # depends on broken package rTANDEM
     "sdcMicro" # depends on broken package nlopt
-    "sdcMicroGUI" # depends on broken package nlopt
     "SDD" # depends on broken package rpanel
     "seeg" # depends on broken package nlopt
     "Sejong" # broken build
@@ -1723,7 +1713,6 @@ let
     "specmine" # depends on broken package caret
     "splm" # depends on broken package car
     "spocc" # depends on broken package V8
-    "spoccutils" # depends on broken spocc
     "ssmrob" # depends on broken package nlopt
     "StatMethRank" # broken build
     "stepp" # depends on broken package nlopt
@@ -1734,7 +1723,6 @@ let
     "systemfit" # depends on broken package nlopt
     "TcGSA" # depends on broken package nlopt
     "TDMR" # depends on broken package nlopt
-    "TextoMineR"  # depends on broken package FactoMineR
     "TFBSTools" # depends on broken package DirichletMultinomial
     "tigerstats" # depends on broken package nlopt
     "TLBC" # depends on broken package caret
