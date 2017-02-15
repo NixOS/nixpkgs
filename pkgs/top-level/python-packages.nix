@@ -71,6 +71,8 @@ in {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { pythonPackages = self; };
+
   acoustics = buildPythonPackage rec {
     pname = "acoustics";
     version = "0.1.2";
