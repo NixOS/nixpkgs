@@ -99,15 +99,17 @@ in
     security.wrappers = lib.mkOption {
       type = lib.types.attrs;
       default = {};
-      example = {
-        sendmail.source = "/nix/store/.../bin/sendmail";
-        ping = {
-          source  = "${pkgs.iputils.out}/bin/ping";
-          owner   = "nobody";
-          group   = "nogroup";
-          capabilities = "cap_net_raw+ep";
-        };
-      };
+      example = lib.literalExample
+        ''
+          { sendmail.source = "/nix/store/.../bin/sendmail";
+            ping = {
+              source  = "${pkgs.iputils.out}/bin/ping";
+              owner   = "nobody";
+              group   = "nogroup";
+              capabilities = "cap_net_raw+ep";
+            };
+          }
+        '';
       description = ''
         This option allows the ownership and permissions on the setuid
         wrappers for specific programs to be overridden from the
