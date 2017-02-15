@@ -1,31 +1,33 @@
+diff --git a/src/XMonad/Core.hs b/src/XMonad/Core.hs
+index 138d735..65b5a84 100644
 --- a/src/XMonad/Core.hs
 +++ b/src/XMonad/Core.hs
-@@ -48,6 +48,7 @@ import System.Posix.Types (ProcessID)
+@@ -51,6 +51,7 @@ import System.Posix.Types (ProcessID)
  import System.Process
  import System.Directory
  import System.Exit
 +import System.Environment (lookupEnv)
  import Graphics.X11.Xlib
- import Graphics.X11.Xlib.Extras (Event)
+ import Graphics.X11.Xlib.Extras (getWindowAttributes, WindowAttributes, Event)
  import Data.Typeable
-@@ -463,6 +464,7 @@ recompile force = io $ do
-         err  = base ++ ".errors"
-         src  = base ++ ".hs"
-         lib  = dir </> "lib"
+@@ -571,6 +572,7 @@ recompile force = io $ do
+         lib  = cfgdir </> "lib"
+         buildscript = cfgdir </> "build"
+ 
 +    ghc <- fromMaybe "ghc" <$> liftIO (lookupEnv "NIX_GHC")
      libTs <- mapM getModTime . Prelude.filter isSource =<< allFiles lib
      srcT <- getModTime src
      binT <- getModTime bin
-@@ -471,7 +473,7 @@ recompile force = io $ do
-         -- temporarily disable SIGCHLD ignoring:
-         uninstallSignalHandlers
-         status <- bracket (openFile err WriteMode) hClose $ \h ->
--            waitForProcess =<< runProcess "ghc" ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
-+            waitForProcess =<< runProcess ghc ["--make", "xmonad.hs", "-i", "-ilib", "-fforce-recomp", "-main-is", "main", "-v0", "-o",binn] (Just dir)
-                                     Nothing Nothing Nothing (Just h)
+@@ -586,7 +588,7 @@ recompile force = io $ do
+         status <- bracket (openFile err WriteMode) hClose $ \errHandle ->
+             waitForProcess =<< if useBuildscript
+                                then compileScript bin cfgdir buildscript errHandle
+-                               else compileGHC bin cfgdir errHandle
++                               else compileGHC ghc bin cfgdir errHandle
  
          -- re-enable SIGCHLD:
-@@ -480,6 +482,7 @@ recompile force = io $ do
+         installSignalHandlers
+@@ -594,6 +596,7 @@ recompile force = io $ do
          -- now, if it fails, run xmessage to let the user know:
          when (status /= ExitSuccess) $ do
              ghcErr <- readFile err
@@ -33,12 +35,39 @@
              let msg = unlines $
                      ["Error detected while loading xmonad configuration file: " ++ src]
                      ++ lines (if null ghcErr then show status else ghcErr)
-@@ -487,7 +490,7 @@ recompile force = io $ do
+@@ -601,7 +604,7 @@ recompile force = io $ do
              -- nb, the ordering of printing, then forking, is crucial due to
              -- lazy evaluation
              hPutStrLn stderr msg
--            forkProcess $ executeFile "xmessage" True ["-default", "okay", msg] Nothing
-+            forkProcess $ executeFile xmessage True ["-default", "okay", msg] Nothing
+-            forkProcess $ executeFile "xmessage" True ["-default", "okay", replaceUnicode msg] Nothing
++            forkProcess $ executeFile xmessage True ["-default", "okay", replaceUnicode msg] Nothing
              return ()
          return (status == ExitSuccess)
        else return True
+@@ -619,16 +622,16 @@ recompile force = io $ do
+            '\8216' -> '`'  -- ‘
+            '\8217' -> '`'  -- ’
+            _ -> c
+-       compileGHC bin dir errHandle =
+-         runProcess "ghc" ["--make"
+-                          , "xmonad.hs"
+-                          , "-i"
+-                          , "-ilib"
+-                          , "-fforce-recomp"
+-                          , "-main-is", "main"
+-                          , "-v0"
+-                          , "-o", bin
+-                          ] (Just dir) Nothing Nothing Nothing (Just errHandle)
++       compileGHC ghc bin dir errHandle =
++         runProcess ghc ["--make"
++                        , "xmonad.hs"
++                        , "-i"
++                        , "-ilib"
++                        , "-fforce-recomp"
++                        , "-main-is", "main"
++                        , "-v0"
++                        , "-o", bin
++                        ] (Just dir) Nothing Nothing Nothing (Just errHandle)
+        compileScript bin dir script errHandle =
+          runProcess script [bin] (Just dir) Nothing Nothing Nothing (Just errHandle)
+ 

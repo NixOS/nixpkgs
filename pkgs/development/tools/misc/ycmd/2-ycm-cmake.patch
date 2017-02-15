@@ -2,30 +2,19 @@ diff --git a/cpp/ycm/CMakeLists.txt b/cpp/ycm/CMakeLists.txt
 index 2074c58e..9ecd6e57 100644
 --- a/cpp/ycm/CMakeLists.txt
 +++ b/cpp/ycm/CMakeLists.txt
-@@ -366,35 +366,6 @@ if( LIBCLANG_TARGET )
-       POST_BUILD
+@@ -335,7 +335,7 @@
        COMMAND ${CMAKE_COMMAND} -E copy "${LIBCLANG_TARGET}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
      )
--
+ 
 -    if( APPLE )
--      # In OS X El Capitan, Apple introduced System Integrity Protection.
--      # Amongst other things, this introduces features to the dynamic loader
--      # (dyld) which cause it to "sanitise" (and complain about) embedded
--      # LC_RPATH entries which contain @executable_path when then are loaded
--      # into "restricted" binaries.  For our purposes, "restricted" here means
--      # "supplied by Apple" and includes the system versions of python.  For
--      # unknown reasons, the libclang.dylib that comes from llvm.org includes an
--      # LC_RPATH entry '@executable_path/../lib' which causes the OS X dynamic
--      # loader to print a cryptic warning to stderr of the form:
--      #
--      #    dyld: warning, LC_RPATH @executable_path/../lib in
--      #    /path/to/ycmd/libclang.dylib being ignored in restricted program
--      #    because of @executable_path
--      #
--      # In order to prevent this harmless and annoying message appearing, we
--      # simply strip the rpath entry from the dylib.  There's no way any
--      # @executable_path that python might have could be in any way useful to
--      # libclang.dylib, so this seems perfectly safe.
++  #if( APPLE )
+       # In OS X El Capitan, Apple introduced System Integrity Protection.
+       # Amongst other things, this introduces features to the dynamic loader
+       # (dyld) which cause it to "sanitise" (and complain about) embedded
+@@ -354,15 +354,15 @@
+       # simply strip the rpath entry from the dylib.  There's no way any
+       # @executable_path that python might have could be in any way useful to
+       # libclang.dylib, so this seems perfectly safe.
 -      get_filename_component( LIBCLANG_TAIL ${LIBCLANG_TARGET} NAME )
 -      add_custom_command( TARGET ${PROJECT_NAME}
 -                          POST_BUILD
@@ -35,6 +24,14 @@ index 2074c58e..9ecd6e57 100644
 -                          "$<TARGET_FILE_DIR:${PROJECT_NAME}>/${LIBCLANG_TAIL}"
 -                        )
 -    endif()
++      #    get_filename_component( LIBCLANG_TAIL ${LIBCLANG_TARGET} NAME )
++      #add_custom_command( TARGET ${PROJECT_NAME}
++      #                    POST_BUILD
++      #                    COMMAND install_name_tool
++      #                    "-delete_rpath"
++      #                    "@executable_path/../lib"
++      #                    "$<TARGET_FILE_DIR:${PROJECT_NAME}>/${LIBCLANG_TAIL}"
++      #                  )
++      # endif()
    endif()
  endif()
- 

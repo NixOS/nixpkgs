@@ -2,6 +2,8 @@
 , systemd, nettle, libedit, zlib, libiconv, fetchpatch
 }:
 
+with { inherit (stdenv.lib) optional optionals; };
+
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
@@ -16,16 +18,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu libidn lmdb
+    gnutls jansson liburcu libidn
     nettle libedit
     libiconv
     # without sphinx &al. for developer documentation
   ]
     # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd ]
-    ++ stdenv.lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
+    ++ optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
-  configureFlags = [ "--with-lmdb=${stdenv.lib.getLib lmdb}"/*not perfect*/ ];
+  # Not ideal but seems to work on Linux.
+  configureFlags = optional stdenv.isLinux "--with-lmdb=${stdenv.lib.getLib lmdb}";
 
   enableParallelBuilding = true;
 

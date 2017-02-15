@@ -1993,8 +1993,6 @@ with pkgs;
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  grafana-old = callPackage ../development/tools/misc/grafana { };
-
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
   grails = callPackage ../development/web/grails { jdk = null; };
@@ -2189,6 +2187,8 @@ with pkgs;
   });
 
   hecate = callPackage ../applications/editors/hecate { };
+
+  heaptrack = callPackage ../development/tools/profiling/heaptrack {};
 
   heimdall = callPackage ../tools/misc/heimdall { };
 
@@ -5792,7 +5792,7 @@ with pkgs;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-  php = php70;
+  php = php71;
 
   phpPackages = php70Packages;
 
@@ -6813,6 +6813,7 @@ with pkgs;
 
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    llvmPackages = llvmPackages_39;
     python = python2;
   };
 
@@ -13155,6 +13156,8 @@ with pkgs;
 
   inherit (gnome3) epiphany;
 
+  epic5 = callPackage ../applications/networking/irc/epic5 { };
+
   eq10q = callPackage ../applications/audio/eq10q { };
 
   errbot = callPackage ../applications/networking/errbot {
@@ -15354,6 +15357,8 @@ with pkgs;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
+  urh = callPackage ../applications/misc/urh { };
+
   uucp = callPackage ../tools/misc/uucp { };
 
   uvccapture = callPackage ../applications/video/uvccapture { };
@@ -15935,6 +15940,9 @@ with pkgs;
 
   alienarena = callPackage ../games/alienarena { };
 
+  amoeba = callPackage ../games/amoeba { };
+  amoeba-data = callPackage ../games/amoeba/data.nix { };
+
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
   angband = callPackage ../games/angband { };
@@ -16483,7 +16491,7 @@ with pkgs;
   wesnoth-dev = callPackage ../games/wesnoth/dev.nix { };
 
   widelands = callPackage ../games/widelands {
-    lua = lua5_1;
+    lua = lua5_2;
   };
 
   worldofgoo_demo = callPackage ../games/worldofgoo {

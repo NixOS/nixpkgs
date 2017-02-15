@@ -226,7 +226,7 @@ in
       sendmail = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/setuid-wrappers/sendmail";
+        example = "/run/wrappers/bin/sendmail";
         description = "Use this sendmail compatible script to deliver alerts";
       };
       smokeMailTemplate = mkOption {
@@ -273,7 +273,10 @@ in
         message = "services.smokeping: sendmail and Mailhost cannot both be enabled.";
       }
     ];
-    security.setuidPrograms = [ "fping" "fping6" ];
+    security.wrappers = {
+      fping.source = "${pkgs.fping}/bin/fping";
+      "fping6".source = "${pkgs.fping}/bin/fping6";
+    };
     environment.systemPackages = [ pkgs.fping ];
     users.extraUsers = singleton {
       name = cfg.user;

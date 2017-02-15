@@ -187,7 +187,8 @@ in
       ];
 
      environment.systemPackages = [ pkgs.duo-unix ];
-     security.setuidPrograms    = [ "login_duo" ];
+
+     security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
      environment.etc = loginCfgFile ++ pamCfgFile;
 
      /* If PAM *and* SSH are enabled, then don't do anything special.
