@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Theano"; 
     repo = "libgpuarray";
-    rev = "fc36a40526c0a8303ace6c574ffdefba7feafe17"; 
-    sha256 = "1kb0k42addqjxiahlcbv6v6271yhsmz71j12186fpy60870i7zm7"; 
+    rev = "6779942f29ff56adff0ed7fbcdc5a41aeeeeda1c";
+    sha256 = "093m0g87myp8jajshp66swhjgxg485cpa857ydyyjmcbaknmry0w";
   }; 
 
   doCheck = true;
@@ -120,7 +120,7 @@ EOF
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Theano/libgpuarray;
-    description = "Library to manipulate tensors on GPU.";
+    description = "Library to manipulate tensors on the GPU";
     license = licenses.free;
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.linux;

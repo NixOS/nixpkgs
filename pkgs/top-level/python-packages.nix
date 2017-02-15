@@ -8977,7 +8977,7 @@ in {
   };
 
   pycuda = callPackage ../development/python-modules/pycuda rec {
-    cudatoolkit = pkgs.cudatoolkit75;
+    cudatoolkit = pkgs.cudatoolkit8;
     inherit (pkgs.stdenv) mkDerivation;
     inherit pythonOlder;
   };
@@ -13802,7 +13802,7 @@ in {
   libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
     inherit (self) numpy scipy;
     inherit (pkgs.linuxPackages) nvidia_x11;
-    cudatoolkit = pkgs.cudatoolkit75;
+    cudatoolkit = pkgs.cudatoolkit8;
     clblas = pkgs.clblas-cuda;
   };
 
@@ -23934,12 +23934,12 @@ in {
 
   TheanoWithCuda = callPackage ../development/python-modules/Theano/theano-with-cuda (
   let
-    boost = pkgs.boost159.override {
+    boost = pkgs.boost160.override {
       inherit (self) python numpy scipy;
     };
   in rec {
-    cudatoolkit = pkgs.cudatoolkit75;
-    cudnn = pkgs.cudnn5_cudatoolkit75;
+    cudatoolkit = pkgs.cudatoolkit8;
+    cudnn = pkgs.cudnn51_cudatoolkit80;
     inherit (self) numpy scipy;
     pycuda = self.pycuda.override { inherit boost; };
     libgpuarray = self.libgpuarray-cuda.override {
@@ -31102,20 +31102,22 @@ EOF
 
   Keras = buildPythonPackage rec {
     name = "Keras-${version}";
-    version = "1.0.3";
-    disabled = isPy3k;
+    version = "1.1.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/keras/${name}.tar.gz";
-      sha256 = "0wi826bvifvy12w490ghj1g45z5xb83q2cadqh425sg56p98khaq";
+      sha256 = "1di3phykbdya6jx0ddcp7flrlvbyqifqd6i39brgc6ai5vv6f6xy";
     };
+
+    # Tests fail without TensorFlow
+    doCheck = false;
 
     propagatedBuildInputs = with self; [
       six Theano pyyaml
     ];
 
     meta = {
-      description = "Deep Learning library for Theano and TensorFlow";
+      description = "High-level neural networks library for Theano and TensorFlow";
       homepage = "https://keras.io";
       license = licenses.mit;
       maintainers = with maintainers; [ NikolaMandic ];
