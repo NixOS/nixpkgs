@@ -54,11 +54,6 @@ stdenv.mkDerivation {
     ./symlink-drivers.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/egl/main/egldriver.c \
-      --replace _EGL_DRIVER_SEARCH_DIR '"${driverLink}"'
-  '';
-
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
