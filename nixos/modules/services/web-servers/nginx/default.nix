@@ -16,20 +16,7 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
-  configFile = pkgs.runCommand "nginx.conf" {
-    inherit configFileUnformatted;
-    passAsFile = [ "configFileUnformatted" ];
-    # configFileUnformatted is created locally, therefore so should this be.
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    cp ${configFileUnformatted} nginx.conf
-    chmod u+w nginx.conf
-    ${pkgs.nginx-config-formatter}/bin/nginxfmt nginx.conf
-    cp nginx.conf $out
-  '';
-
-  configFileUnformatted = pkgs.writeText "nginx.unformatted.conf" ''
+  configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
