@@ -723,7 +723,10 @@ let
       camlp5 = camlp5_transitional;
     };
 
-    prooftree = callPackage ../applications/science/logic/prooftree {
+    prooftree =
+      if lib.versionOlder "4.01" ocaml.version
+      then null
+      else callPackage ../applications/science/logic/prooftree {
       camlp5 = camlp5_transitional;
     };
   };
