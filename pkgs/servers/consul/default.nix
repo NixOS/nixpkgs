@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "consul-${version}";
-  version = "0.7.3";
+  version = "0.7.5";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/consul";
@@ -11,9 +11,17 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "consul";
     inherit rev;
-    sha256 = "0ab84sm281ibl9h6zfk17mr7yc9vxpi8i2xb4kzi8bg43n05lj4d";
+    sha256 = "0zh4j5p0v41v7i6v084dgsdchx1azjs2mjb3dlfdv671rsnwi54z";
   };
 
   # Keep consul.ui for backward compatability
   passthru.ui = consul-ui;
+
+  meta = with stdenv.lib; {
+    description = "Tool for service discovery, monitoring and configuration";
+    homepage = "https://www.consul.io/";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ pradeepchhetri ];
+  };
 }
