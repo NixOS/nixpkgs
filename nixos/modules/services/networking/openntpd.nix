@@ -11,6 +11,9 @@ let
     ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
     ${cfg.extraConfig}
   '';
+
+  pidFile = "/run/openntpd.pid";
+
 in
 {
   ###### interface
@@ -67,7 +70,11 @@ in
       wants = [ "network-online.target" "time-sync.target" ];
       before = [ "time-sync.target" ];
       after = [ "dnsmasq.service" "bind.service" "network-online.target" ];
-      serviceConfig.ExecStart = "${package}/sbin/ntpd -d -f ${cfgFile} ${cfg.extraOptions}";
+      serviceConfig = {
+        ExecStart = "${package}/sbin/ntpd -f ${cfgFile} -p ${pidFile} ${cfg.extraOptions}";
+        Type = "forking";
+        PIDFile = pidFile;
+      };
     };
   };
 }
