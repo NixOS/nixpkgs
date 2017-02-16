@@ -548,7 +548,7 @@ with pkgs;
   aria = aria2;
 
   aspcud = callPackage ../tools/misc/aspcud {
-    boost = boost155;
+    boost = boost163;
   };
 
   at = callPackage ../tools/system/at { };

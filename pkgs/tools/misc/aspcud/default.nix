@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.9.0";
+  version = "1.9.1";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/aspcud/${version}/aspcud-${version}-source.tar.gz";
-    sha256 = "029035vcdk527ssf126i8ipi5zs73gqpbrg019pvm9r24rf0m373";
+    sha256 = "09sqbshwrqz2fvlkz73mns5i3m70fh8mvwhz8450izy5lsligsg0";
   };
 
   buildInputs = [ boost clasp cmake gringo re2c ];
