@@ -18146,11 +18146,11 @@ in {
 
   parsel = buildPythonPackage rec {
     name = "parsel-${version}";
-    version = "1.0.3";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/parsel/${name}.tar.gz";
-      sha256 = "9c12c370feda864c2f541cecce9bfb3a2a682c6c59c097a852e7b040dc6b8431";
+      sha256 = "0a34d1c0bj1fzb5dk5744m2ag6v3b8glk4xp0amqxdan9ldbcd97";
     };
 
     buildInputs = with self; [ pytest pytestrunner ];
@@ -30937,13 +30937,13 @@ EOF
 
   w3lib = buildPythonPackage rec {
     name = "w3lib-${version}";
-    version = "1.14.2";
+    version = "1.17.0";
 
     buildInputs = with self ; [ six pytest ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/w3lib/${name}.tar.gz";
-      sha256 = "bd87eae62d208eef70869951abf05e96a8ee559714074a485168de4c5b190004";
+      sha256 = "0vshh300ay5wn5hwl9qcb32m71pz5s6miy0if56vm4nggy159inq";
     };
 
     meta = {
@@ -31002,35 +31002,8 @@ EOF
     };
   };
 
-  scrapy = buildPythonPackage rec {
-    name = "Scrapy-${version}";
-    version = "1.1.2";
+  scrapy = callPackage ../development/python-modules/scrapy { };
 
-    buildInputs = with self; [ pkgs.glibcLocales mock pytest botocore testfixtures pillow ];
-    propagatedBuildInputs = with self; [
-      six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
-    ];
-
-    LC_ALL="en_US.UTF-8";
-
-    checkPhase = ''
-      py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py
-      # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "a0a8c7bccbd598d2731ec9f267b8efbd8fb99767f826f8f2924a5610707a03d4";
-    };
-
-    meta = {
-      description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
-      homepage = "http://scrapy.org/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ drewkett ];
-      platforms = platforms.linux;
-    };
-  };
   pandocfilters = buildPythonPackage rec{
     version = "1.4.1";
     pname = "pandocfilters";
