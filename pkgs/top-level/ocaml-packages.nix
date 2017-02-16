@@ -96,7 +96,10 @@ let
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
     camomile = callPackage ../development/ocaml-modules/camomile { };
 
-    camlimages_4_0 = callPackage ../development/ocaml-modules/camlimages/4.0.nix {
+    camlimages_4_0 =
+      if lib.versionOlder "4.02" ocaml.version
+      then null
+      else callPackage ../development/ocaml-modules/camlimages/4.0.nix {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
     };
