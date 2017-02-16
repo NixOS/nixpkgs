@@ -51,7 +51,7 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
   # Not released yet
@@ -69,7 +69,7 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
   # No support for PHP 7 yet (and probably never will be)
