@@ -6256,7 +6256,9 @@ with pkgs;
   # Does not actually depend on Qt 5
   extra-cmake-modules = qt5.ecmNoHooks;
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocamlPackages_4_01_0;
+   };
 
   cpptest = callPackage ../development/libraries/cpptest { };
 
