@@ -25,12 +25,12 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.quasselDaemon_qt5;
-        defaultText = "pkgs.quasselDaemon_qt5";
+        default = pkgs.quasselDaemon;
+        defaultText = "pkgs.quasselDaemon";
         description = ''
           The package of the quassel daemon.
         '';
-        example = literalExample "pkgs.quasselDaemon_qt5";
+        example = literalExample "pkgs.quasselDaemon";
       };
 
       interfaces = mkOption {
