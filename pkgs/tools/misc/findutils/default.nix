@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
+  patches = [ (fetchurl {
+    # https://bugs.launchpad.net/ubuntu/+source/findutils/+bug/1364492
+    url = https://launchpadlibrarian.net/304000719/find_bug.patch;
+    sha256 = "0dpq2kxsl4lr5wqjqkdjsvskl06xnrrglz5z6w2k58kf7336gqad";
+  }) ];
+
   nativeBuildInputs = [ coreutils ];
 
   doCheck = !stdenv.isDarwin;
