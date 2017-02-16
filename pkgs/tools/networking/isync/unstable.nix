@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, openssl, pkgconfig, db, cyrus_sasl
+{ fetchgit, stdenv, openssl, pkgconfig, db, cyrus_sasl, zlib
 , autoconf, automake }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i21cgmgm8acvd7xwdk9pll3kl6cxj9s1hakqzbwks8j4ncygwkj";
   };
 
-  buildInputs = [ openssl pkgconfig db cyrus_sasl autoconf automake ];
+  buildInputs = [ openssl pkgconfig db cyrus_sasl zlib autoconf automake ];
 
   preConfigure = ''
     touch ChangeLog
