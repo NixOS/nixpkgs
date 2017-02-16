@@ -23,9 +23,10 @@ python2Packages.buildPythonApplication {
       azure-mgmt-resource
       azure-mgmt-storage
       adal
-      sqlite3
-      pysqlite  # Go back to builtin sqlite once Python 2.7.13 is released
+      # Go back to sqlite once Python 2.7.13 is released
+      pysqlite
       datadog
+      digital-ocean
     ];
 
   doCheck = false;
