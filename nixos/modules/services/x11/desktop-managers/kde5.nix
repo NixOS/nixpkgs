@@ -103,6 +103,8 @@ in
           kde5.kservice
           kde5.ktextwidgets
           kde5.kwallet
+          kde5.kwallet-pam
+          kde5.kwalletmanager
           kde5.kwayland
           kde5.kwidgetsaddons
           kde5.kxmlgui
@@ -233,6 +235,14 @@ in
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
+
+      # Doing these one by one seems silly, but we currently lack a better
+      # construct for handling common pam configs.
+      security.pam.services.gdm.enableKwallet = true;
+      security.pam.services.kdm.enableKwallet = true;
+      security.pam.services.lightdm.enableKwallet = true;
+      security.pam.services.sddm.enableKwallet = true;
+      security.pam.services.slim.enableKwallet = true;
 
       # use kimpanel as the default IBus panel
       i18n.inputMethod.ibus.panel =

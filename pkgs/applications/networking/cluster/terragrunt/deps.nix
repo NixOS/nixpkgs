@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "63102d196e0996a2910839857c3584f62be907cc";
-      sha256 = "0n207g4bf5fjq23f63nkhh14shj7kjdrr4qn6h28d7x2vqfb9pss";
+      rev = "f85f603a3e5b4d0eb9516dddb33778918f3b45c6";
+      sha256 = "10frgavkbsqpfninrlgwh64qjx9rwyjzbdfrikciv75v1gljh6zv";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/urfave/cli";
-      rev = "347a9884a87374d000eec7e6445a34487c1f4a2b";
-      sha256 = "0wii48b2g5dyp6bknnlgs3ln93qxz5jvi96420wnpkkz51nrcmbp";
+      rev = "2526b57c56f30b50466c96c4133b1a4ad0f0191f";
+      sha256 = "03vvr1wq4pw2fixxsbr1d623hwqxf93d07p8vjml6iyd6k97b15p";
     };
   }
 ]

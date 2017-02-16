@@ -387,6 +387,9 @@ rec {
 
   # Python PyPI mirrors
   pypi = [
+    https://files.pythonhosted.org/packages/source/
+    # pypi.io is a more semantic link, but atm it’s referencing
+    # files.pythonhosted.org over two redirects
     https://pypi.io/packages/source/
   ];
 

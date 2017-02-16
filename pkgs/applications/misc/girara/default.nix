@@ -1,29 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gettext, withBuildColors ? true, ncurses ? null}:
+{ stdenv, fetchurl, pkgconfig, gtk, gettext, ncurses
+, withBuildColors ? true
+}:
 
 assert withBuildColors -> ncurses != null;
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "girara-${version}";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "03wsxj27hvcbs3x96nah7j3paclifwlfag8kdph4kldl48srp9pb";
+    url    = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
+    sha256 = "1r9jbhf9n40zj4ddqv1q5spijpjm683nxg4hr5lnir4a551s7rlq";
   };
 
   preConfigure = ''
-    sed -i 's/ifdef TPUT_AVAILABLE/ifneq ($(TPUT_AVAILABLE), 0)/' colors.mk
+    substituteInPlace colors.mk \
+      --replace 'ifdef TPUT_AVAILABLE' 'ifneq ($(TPUT_AVAILABLE), 0)'
   '';
 
   buildInputs = [ pkgconfig gtk gettext ];
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ optional withBuildColors "TPUT=${ncurses.out}/bin/tput"
-    ++ optional (!withBuildColors) "TPUT_AVAILABLE=0"
-    ;
+  makeFlags = [
+    "PREFIX=$(out)"
+    (if withBuildColors
+      then "TPUT=${ncurses.out}/bin/tput"
+      else "TPUT_AVAILABLE=0")
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pwmt.org/projects/girara/;
     description = "User interface library";
     longDescription = ''

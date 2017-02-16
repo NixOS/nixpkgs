@@ -71,7 +71,7 @@ in
   ###### implementation
 
   config = mkMerge [
-    (mkIf (!setVconsole || (setVconsole && config.boot.earlyVconsoleSetup)) {
+    (mkIf (!setVconsole) {
       systemd.services."systemd-vconsole-setup".enable = false;
     })
 
@@ -97,17 +97,25 @@ in
             printf "${makeColorCS n color}" >> /dev/console
           '') config.i18n.consoleColors}
         '';
-      }
 
-      (mkIf (!config.boot.earlyVconsoleSetup) {
+        /* XXX: systemd-vconsole-setup needs a "main" terminal. By default
+         * /dev/tty0 is used which wouldn't work when the service is restarted
+         * from X11. We set this to /dev/tty1; not ideal because it may also be
+         * owned by X11 or something else.
+         *
+         * See #22470.
+         */
         systemd.services."systemd-vconsole-setup" =
           { wantedBy = [ "sysinit.target" ];
             before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf kbdEnv ];
-            restartIfChanged = false; # fails when tty is inactive
+            serviceConfig.ExecStart = [
+              ""
+              "${pkgs.systemd}/lib/systemd/systemd-vconsole-setup /dev/tty1"
+            ];
           };
-      })
+      }
 
       (mkIf config.boot.earlyVconsoleSetup {
         boot.initrd.extraUtilsCommands = ''
