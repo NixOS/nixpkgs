@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/jaagr/polybar";
       rev = "1f31870d43f5cd87a5529a55b1d2d3e64105e0af";
       sha256 = "1nhj4npqhs6zy161931sbdi52gz6163lik0wri9wr122sjf90jas";
-      fetchSubmodules = true;
     };
 
     meta = with stdenv.lib; {
