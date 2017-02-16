@@ -71,7 +71,7 @@ in
   ###### implementation
 
   config = mkMerge [
-    (mkIf (!setVconsole || (setVconsole && config.boot.earlyVconsoleSetup)) {
+    (mkIf (!setVconsole) {
       systemd.services."systemd-vconsole-setup".enable = false;
     })
 
@@ -97,9 +97,7 @@ in
             printf "${makeColorCS n color}" >> /dev/console
           '') config.i18n.consoleColors}
         '';
-      }
 
-      (mkIf (!config.boot.earlyVconsoleSetup) {
         systemd.services."systemd-vconsole-setup" =
           { wantedBy = [ "sysinit.target" ];
             before = [ "display-manager.service" ];
@@ -107,7 +105,7 @@ in
             restartTriggers = [ vconsoleConf kbdEnv ];
             restartIfChanged = false; # fails when tty is inactive
           };
-      })
+      }
 
       (mkIf config.boot.earlyVconsoleSetup {
         boot.initrd.extraUtilsCommands = ''
