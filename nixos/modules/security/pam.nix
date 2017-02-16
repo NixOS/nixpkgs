@@ -212,6 +212,17 @@ let
         '';
       };
 
+      enableKwallet = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If enabled, pam_wallet will attempt to automatically unlock the
+          user's default KDE wallet upon login. If the user has no wallet named
+          "kdewallet", or the login password does not match their wallet
+          password, KDE will prompt separately after login.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -262,12 +273,15 @@ let
           # prompts the user for password so we run it once with 'required' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
-          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount)) ''
+          (optionalString (cfg.unixAuth && (config.security.pam.enableEcryptfs || cfg.pamMount || cfg.enableKwallet)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
                 "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
+              ${optionalString cfg.enableKwallet
+                ("auth optional ${pkgs.kde5.kwallet-pam}/lib/security/pam_kwallet5.so" +
+                 " kwalletd=${pkgs.kde5.kwallet}/bin/kwalletd5")}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
@@ -334,6 +348,9 @@ let
               "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
+          ${optionalString (cfg.enableKwallet)
+              ("session optional ${pkgs.kde5.kwallet-pam}/lib/security/pam_kwallet5.so" +
+               " kwalletd=${pkgs.kde5.kwallet}/bin/kwalletd5")}
         '');
     };
 
