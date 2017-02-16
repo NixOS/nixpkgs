@@ -129,6 +129,9 @@ let
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
         --setenv PATH="$PATH" \
+        ${if cfg.additionalCapabilities != null then
+          ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
 
@@ -205,6 +208,41 @@ let
       ''
   );
 
+  serviceDirectives = cfg: {
+    ExecReload = pkgs.writeScript "reload-container"
+      ''
+        #! ${pkgs.stdenv.shell} -e
+        ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+          bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
+      '';
+
+    SyslogIdentifier = "container %i";
+
+    EnvironmentFile = "-/etc/containers/%i.conf";
+
+    Type = "notify";
+
+    # Note that on reboot, systemd-nspawn returns 133, so this
+    # unit will be restarted. On poweroff, it returns 0, so the
+    # unit won't be restarted.
+    RestartForceExitStatus = "133";
+    SuccessExitStatus = "133";
+
+    Restart = "on-failure";
+
+    # Hack: we don't want to kill systemd-nspawn, since we call
+    # "machinectl poweroff" in preStop to shut down the
+    # container cleanly. But systemd requires sending a signal
+    # (at least if we want remaining processes to be killed
+    # after the timeout). So send an ignored signal.
+    KillMode = "mixed";
+    KillSignal = "WINCH";
+
+    DevicePolicy = "closed";
+    DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
+  };
+
+
   system = config.nixpkgs.system;
 
   bindMountOpts = { name, config, ... }: {
@@ -234,6 +272,27 @@ let
     };
 
   };
+
+  allowedDeviceOpts = { name, config, ... }: {
+    options = {
+      node = mkOption {
+        example = "/dev/net/tun";
+        type = types.str;
+        description = "Path to device node";
+      };
+      modifier = mkOption {
+        example = "rw";
+        type = types.str;
+        description = ''
+          Device node access modifier. Takes a combination
+          <literal>r</literal> (read), <literal>w</literal> (write), and
+          <literal>m</literal> (mknod). See the
+          <literal>systemd.resource-control(5)</literal> man page for more
+          information.'';
+      };
+    };
+  };
+
 
   mkBindFlag = d:
                let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
@@ -302,6 +361,8 @@ let
   dummyConfig =
     {
       extraVeths = {};
+      additionalCapabilities = [];
+      allowedDevices = [];
       hostAddress = null;
       hostAddress6 = null;
       localAddress = null;
@@ -368,6 +429,26 @@ in
               '';
             };
 
+            additionalCapabilities = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
+              description = ''
+                Grant additional capabilities to the container.  See the
+                capabilities(7) and systemd-nspawn(1) man pages for more
+                information.
+              '';
+            };
+            enableTun = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Allows the container to create and setup tunnel interfaces
+                by granting the <literal>NET_ADMIN</literal> capability and
+                enabling access to <literal>/dev/net/tun</literal>.
+              '';
+            };
+
             privateNetwork = mkOption {
               type = types.bool;
               default = false;
@@ -420,6 +501,16 @@ in
                 ''
                   An extra list of directories that is bound to the container.
                 '';
+            };
+
+            allowedDevices = mkOption {
+              type = types.listOf types.optionSet;
+              options = [ allowedDeviceOpts ];
+              default = [];
+              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              description = ''
+                A list of device nodes to which the containers has access to.
+              '';
             };
 
           } // networkOptions;
@@ -488,59 +579,39 @@ in
 
       restartIfChanged = false;
 
-      serviceConfig = {
-        ExecReload = pkgs.writeScript "reload-container"
-          ''
-            #! ${pkgs.stdenv.shell} -e
-            ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
-              bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
-          '';
-
-        SyslogIdentifier = "container %i";
-
-        EnvironmentFile = "-/etc/containers/%i.conf";
-
-        Type = "notify";
-
-        # Note that on reboot, systemd-nspawn returns 133, so this
-        # unit will be restarted. On poweroff, it returns 0, so the
-        # unit won't be restarted.
-        RestartForceExitStatus = "133";
-        SuccessExitStatus = "133";
-
-        Restart = "on-failure";
-
-        # Hack: we don't want to kill systemd-nspawn, since we call
-        # "machinectl poweroff" in preStop to shut down the
-        # container cleanly. But systemd requires sending a signal
-        # (at least if we want remaining processes to be killed
-        # after the timeout). So send an ignored signal.
-        KillMode = "mixed";
-        KillSignal = "WINCH";
-
-        DevicePolicy = "closed";
-      };
+      serviceConfig = serviceDirectives dummyConfig;
     };
   in {
     systemd.services = listToAttrs (filter (x: x.value != null) (
       # The generic container template used by imperative containers
       [{ name = "container@"; value = unit; }]
       # declarative containers
-      ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (
-        unit // {
-          preStart = preStartScript cfg;
-          script = startScript cfg;
-          postStart = postStartScript cfg;
-        } // (
-        if cfg.autoStart then
-          {
-            wantedBy = [ "multi-user.target" ];
-            wants = [ "network.target" ];
-            after = [ "network.target" ];
-            restartTriggers = [ cfg.path ];
-            reloadIfChanged = true;
-          }
-        else {})
+      ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
+          config = cfg // (
+          if cfg.enableTun then
+            {
+              allowedDevices = cfg.allowedDevices
+                ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              additionalCapabilities = cfg.additionalCapabilities
+                ++ [ "CAP_NET_ADMIN" ];
+            }
+          else {});
+        in
+          unit // {
+            preStart = preStartScript config;
+            script = startScript config;
+            postStart = postStartScript config;
+            serviceConfig = serviceDirectives config;
+          } // (
+          if config.autoStart then
+            {
+              wantedBy = [ "multi-user.target" ];
+              wants = [ "network.target" ];
+              after = [ "network.target" ];
+              restartTriggers = [ config.path ];
+              reloadIfChanged = true;
+            }
+          else {})
       )) config.containers)
     ));
 
