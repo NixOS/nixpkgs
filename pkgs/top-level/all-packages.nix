@@ -14214,7 +14214,9 @@ with pkgs;
 
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
+    ocaml = ocamlPackages_4_01_0.ocaml;
+  };
 
   MMA = callPackage ../applications/audio/MMA { };
 
