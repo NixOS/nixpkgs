@@ -12,7 +12,7 @@ plasmaPackage {
     # Patch is in 5.9 and up.
     (fetchpatch {
       url = "https://cgit.kde.org/khotkeys.git/patch/?id=f8f7eaaf41e2b95ebfa4b2e35c6ee252524a471b";
-      sha256 = "1jpd9zwrvp7pwv6v5cx6aqr2p1zhismpig7xv71wfxi7skfh3389";
+      sha256 = "1wxx3qv16jd623jh728xcda8i4y1daq25skwilhv4cfvqxyzk7nn";
     })
   ];
   propagatedBuildInputs = [
