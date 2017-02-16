@@ -2,13 +2,13 @@
 , autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "isync-git-2015-11-08";
-  rev = "46e792";
+  name = "isync-git-20161218";
+  rev = "77acc268123b8233843ca9bc3dcf90669efde08f";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/isync/isync";
     inherit rev;
-    sha256 = "02bm5m3bwpfns7qdwfybyl4fwa146n55v67pdchkhxaqpa4ddws1";
+    sha256 = "0i21cgmgm8acvd7xwdk9pll3kl6cxj9s1hakqzbwks8j4ncygwkj";
   };
 
   buildInputs = [ openssl pkgconfig db cyrus_sasl autoconf automake ];
