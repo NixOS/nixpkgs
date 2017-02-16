@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://isync.sourceforge.net/;
     description = "Free IMAP and MailDir mailbox synchronizer";
     license = licenses.gpl2Plus;
-
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny ttuegel ];
     platforms = platforms.unix;
   };
 }
