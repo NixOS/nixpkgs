@@ -20,6 +20,7 @@
   adolfogc = "Adolfo E. García Castro <adolfo.garcia.cr@gmail.com>";
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
+  afldcr   = "James Alexander Feldman-Crough <alex@fldcr.com>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   afranchuk = "Alex Franchuk <alex.franchuk@gmail.com>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
