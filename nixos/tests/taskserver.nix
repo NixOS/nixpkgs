@@ -1,4 +1,62 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ... }: let
+  snakeOil = pkgs.runCommand "snakeoil-certs" {
+    outputs = [ "out" "cacert" "cert" "key" "crl" ];
+    buildInputs = [ pkgs.gnutls.bin ];
+    caTemplate = pkgs.writeText "snakeoil-ca.template" ''
+      cn = server
+      expiration_days = -1
+      cert_signing_key
+      ca
+    '';
+    certTemplate = pkgs.writeText "snakeoil-cert.template" ''
+      cn = server
+      expiration_days = -1
+      tls_www_server
+      encryption_key
+      signing_key
+    '';
+    crlTemplate = pkgs.writeText "snakeoil-crl.template" ''
+      expiration_days = -1
+    '';
+    userCertTemplace = pkgs.writeText "snakoil-user-cert.template" ''
+      organization = snakeoil
+      cn = server
+      expiration_days = -1
+      tls_www_client
+      encryption_key
+      signing_key
+    '';
+  } ''
+    certtool -p --bits 4096 --outfile ca.key
+    certtool -s --template "$caTemplate" --load-privkey ca.key \
+                --outfile "$cacert"
+    certtool -p --bits 4096 --outfile "$key"
+    certtool -c --template "$certTemplate" \
+                --load-ca-privkey ca.key \
+                --load-ca-certificate "$cacert" \
+                --load-privkey "$key" \
+                --outfile "$cert"
+    certtool --generate-crl --template "$crlTemplate" \
+                            --load-ca-privkey ca.key \
+                            --load-ca-certificate "$cacert" \
+                            --outfile "$crl"
+
+    mkdir "$out"
+
+    # Stripping key information before the actual PEM-encoded values is solely
+    # to make test output a bit less verbose when copying the client key to the
+    # actual client.
+    certtool -p --bits 4096 | sed -n \
+      -e '/^----* *BEGIN/,/^----* *END/p' > "$out/alice.key"
+
+    certtool -c --template "$userCertTemplace" \
+                --load-privkey "$out/alice.key" \
+                --load-ca-privkey ca.key \
+                --load-ca-certificate "$cacert" \
+                --outfile "$out/alice.cert"
+  '';
+
+in {
   name = "taskserver";
 
   nodes = rec {
@@ -9,6 +67,23 @@ import ./make-test.nix {
       services.taskserver.organisations = {
         testOrganisation.users = [ "alice" "foo" ];
         anotherOrganisation.users = [ "bob" ];
+      };
+    };
+
+    # New generation of the server with manual config
+    newServer = { lib, nodes, ... }: {
+      imports = [ server ];
+      services.taskserver.pki.manual = {
+        ca.cert = snakeOil.cacert;
+        server.cert = snakeOil.cert;
+        server.key = snakeOil.key;
+        server.crl = snakeOil.crl;
+      };
+      # This is to avoid assigning a different network address to the new
+      # generation.
+      networking = lib.mapAttrs (lib.const lib.mkForce) {
+        inherit (nodes.server.config.networking)
+          hostName interfaces primaryIPAddress extraHosts;
       };
     };
 
@@ -26,6 +101,8 @@ import ./make-test.nix {
   testScript = { nodes, ... }: let
     cfg = nodes.server.config.services.taskserver;
     portStr = toString cfg.listenPort;
+    newServerSystem = nodes.newServer.config.system.build.toplevel;
+    switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
   in ''
     sub su ($$) {
       my ($user, $cmd) = @_;
@@ -33,8 +110,8 @@ import ./make-test.nix {
       return "su - $user -c '$esc'";
     }
 
-    sub setupClientsFor ($$) {
-      my ($org, $user) = @_;
+    sub setupClientsFor ($$;$) {
+      my ($org, $user, $extraInit) = @_;
 
       for my $client ($client1, $client2) {
         $client->nest("initialize client for user $user", sub {
@@ -57,6 +134,8 @@ import ./make-test.nix {
               die "command `$cmd' did not succeed (exit code $status)\n";
             }
           });
+
+          eval { &$extraInit($client, $org, $user) };
 
           $client->succeed(su $user,
             "task config taskd.server server:${portStr} >&2"
@@ -104,7 +183,10 @@ import ./make-test.nix {
       return su $user, $cmd;
     }
 
-    startAll;
+    # Explicitly start the VMs so that we don't accidentally start newServer
+    $server->start;
+    $client1->start;
+    $client2->start;
 
     $server->waitForUnit("taskserver.service");
 
@@ -162,5 +244,42 @@ import ./make-test.nix {
       restartServer;
       testSync "bar";
     };
+
+    subtest "check manual configuration", sub {
+      $server->succeed('${switchToNewServer} >&2');
+      $server->waitForUnit("taskserver.service");
+      $server->waitForOpenPort(${portStr});
+
+      $server->succeed(
+        "nixos-taskserver org add manualOrg",
+        "nixos-taskserver user add manualOrg alice"
+      );
+
+      setupClientsFor "manualOrg", "alice", sub {
+        my ($client, $org, $user) = @_;
+        my $cfgpath = "/home/$user/.task";
+
+        $client->copyFileFromHost("${snakeOil.cacert}", "$cfgpath/ca.cert");
+        for my $file ('alice.key', 'alice.cert') {
+          $client->copyFileFromHost("${snakeOil}/$file", "$cfgpath/$file");
+        }
+
+        for my $file ("$user.key", "$user.cert") {
+          $client->copyFileFromHost(
+            "${snakeOil}/$file", "$cfgpath/$file"
+          );
+        }
+        $client->copyFileFromHost(
+          "${snakeOil.cacert}", "$cfgpath/ca.cert"
+        );
+        $client->succeed(
+          (su "alice", "task config taskd.ca $cfgpath/ca.cert"),
+          (su "alice", "task config taskd.key $cfgpath/$user.key"),
+          (su $user, "task config taskd.certificate $cfgpath/$user.cert")
+        );
+      };
+
+      testSync "alice";
+    };
   '';
-}
+})
