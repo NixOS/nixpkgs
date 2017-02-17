@@ -541,6 +541,7 @@
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
+  ./services/web-servers/hiawatha.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/default.nix
