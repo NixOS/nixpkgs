@@ -526,7 +526,7 @@ def export_user(organisation, user):
     userobj = organisation.get_user(user)
     if userobj is None:
         msg = "User {} doesn't exist in organisation {}."
-        sys.exit(msg.format(userobj.name, organisation.name))
+        sys.exit(msg.format(user, organisation.name))
 
     sys.stdout.write(userobj.export())
 
