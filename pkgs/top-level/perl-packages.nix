@@ -9640,6 +9640,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetIMAPClient = buildPerlPackage rec {
+    name = "Net-IMAP-Client-0.9505";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GANGLION/${name}.tar.gz";
+      sha256 = "d3f6a608b85e09a8080a67a9933837aae6f2cd0e8ee39df3380123dc5e3de912";
+    };
+    buildInputs = [TestPod TestPodCoverage];
+    propagatedBuildInputs = [ IOSocketSSL ListMoreUtils ];
+    meta = {
+      description = "Not so simple IMAP client library";
+    };
+  };
+
   NetIP = buildPerlPackage {
     name = "Net-IP-1.26";
     src = fetchurl {
