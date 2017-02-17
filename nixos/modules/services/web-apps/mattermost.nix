@@ -201,7 +201,8 @@ in
           Group = cfg.group;
           ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
           WorkingDirectory = "${cfg.statePath}";
-          PrivateTmp = false; # psql looks for unix domain socket in /tmp
+          PrivateTmp = true;
+          JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";
