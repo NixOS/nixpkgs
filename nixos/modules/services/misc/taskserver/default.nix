@@ -377,7 +377,7 @@ in {
 
   config = mkMerge [
     (mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.taskserver nixos-taskserver ];
+      environment.systemPackages = [ nixos-taskserver ];
 
       users.users = optional (cfg.user == "taskd") {
         name = "taskd";
