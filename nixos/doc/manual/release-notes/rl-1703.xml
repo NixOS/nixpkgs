@@ -30,6 +30,14 @@ has the following highlights: </para>
   <listitem>
     <para>PHP now defaults to PHP 7.1</para>
   </listitem>
+
+  <listitem>
+    <para>Packages in nixpkgs can be marked as insecure through listed
+    vulnerabilities. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-allow-insecure">Nixpkgs
+    manual</link> for more information.</para>
+  </listitem>
+
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>
