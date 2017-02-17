@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings_desktop_schemas, p7zip }:
-
+, gtk3, gsettings_desktop_schemas, p7zip, xorg }:
 let
-
   getDesktopFileName = drvName: (builtins.parseDrvName drvName).name;
 
   # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
@@ -28,6 +26,15 @@ let
       genericName = "Computer Aided (Interior) Design";
       categories = "Application;Graphics;2DGraphics;3DGraphics;";
     };
+
+    libXxf86vm = xorg.libXxf86vm;
+
+    patchPhase = ''
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_awt.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_x11.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_awt.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
+    '';
 
     buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings_desktop_schemas ];
 
