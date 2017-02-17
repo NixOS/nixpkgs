@@ -18,6 +18,8 @@ let
 
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
+    angstrom = callPackage ../development/ocaml-modules/angstrom { };
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
