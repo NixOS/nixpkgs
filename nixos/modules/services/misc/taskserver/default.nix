@@ -94,44 +94,6 @@ let
     in flatten (mapAttrsToList mkSublist attrs);
   in all isNull (findPkiDefinitions [] manualPkiOptions);
 
-  configFile = pkgs.writeText "taskdrc" (''
-    # systemd related
-    daemon = false
-    log = -
-
-    # logging
-    ${mkConfLine "debug" cfg.debug}
-    ${mkConfLine "ip.log" cfg.ipLog}
-
-    # general
-    ${mkConfLine "ciphers" cfg.ciphers}
-    ${mkConfLine "confirmation" cfg.confirmation}
-    ${mkConfLine "extensions" cfg.extensions}
-    ${mkConfLine "queue.size" cfg.queueSize}
-    ${mkConfLine "request.limit" cfg.requestLimit}
-
-    # client
-    ${mkConfLine "client.allow" cfg.allowedClientIDs}
-    ${mkConfLine "client.deny" cfg.disallowedClientIDs}
-
-    # server
-    server = ${cfg.listenHost}:${toString cfg.listenPort}
-    ${mkConfLine "trust" cfg.trust}
-
-    # PKI options
-    ${if needToCreateCA then ''
-      ca.cert = ${cfg.dataDir}/keys/ca.cert
-      server.cert = ${cfg.dataDir}/keys/server.cert
-      server.key = ${cfg.dataDir}/keys/server.key
-      server.crl = ${cfg.dataDir}/keys/server.crl
-    '' else ''
-      ca.cert = ${cfg.pki.manual.ca.cert}
-      server.cert = ${cfg.pki.manual.server.cert}
-      server.key = ${cfg.pki.manual.server.key}
-      server.crl = ${cfg.pki.manual.server.crl}
-    ''}
-  '' + cfg.extraConfig);
-
   orgOptions = { name, ... }: {
     options.users = mkOption {
       type = types.uniq (types.listOf types.str);
@@ -154,9 +116,8 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = pkgs.pythonPackages.buildPythonPackage {
+  nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
     name = "nixos-taskserver";
-    namePrefix = "";
 
     src = pkgs.runCommand "nixos-taskserver-src" {} ''
       mkdir -p "$out"
@@ -167,6 +128,7 @@ let
         certBits = cfg.pki.auto.bits;
         clientExpiration = cfg.pki.auto.expiration.client;
         crlExpiration = cfg.pki.auto.expiration.crl;
+        isAutoConfig = if needToCreateCA then "True" else "False";
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
       from setuptools import setup
@@ -365,20 +327,57 @@ in {
       pki.manual = manualPkiOptions;
       pki.auto = autoPkiOptions;
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        example = "client.cert = /tmp/debugging.cert";
+      config = mkOption {
+        type = types.attrs;
+        example.client.cert = "/tmp/debugging.cert";
         description = ''
-          Extra lines to append to the taskdrc configuration file.
+          Configuration options to pass to Taskserver.
+
+          The options here are the same as described in <citerefentry>
+            <refentrytitle>taskdrc</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>, but with one difference:
+
+          The <literal>server</literal> option is
+          <literal>server.listen</literal> here, because the
+          <literal>server</literal> option would collide with other options
+          like <literal>server.cert</literal> and we would run in a type error
+          (attribute set versus string).
+
+          Nix types like integers or booleans are automatically converted to
+          the right values Taskserver would expect.
         '';
+        apply = let
+          mkKey = path: if path == ["server" "listen"] then "server"
+                        else concatStringsSep "." path;
+          recurse = path: attrs: let
+            mapper = name: val: let
+              newPath = path ++ [ name ];
+              scalar = if val == true then "true"
+                       else if val == false then "false"
+                       else toString val;
+            in if isAttrs val then recurse newPath val
+               else [ "${mkKey newPath}=${scalar}" ];
+          in concatLists (mapAttrsToList mapper attrs);
+        in recurse [];
       };
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule ["services" "taskserver" "extraConfig"] ''
+      This option was removed in favor of `services.taskserver.config` with
+      different semantics (it's now a list of attributes instead of lines).
+
+      Please look up the documentation of `services.taskserver.config' to get
+      more information about the new way to pass additional configuration
+      options.
+    '')
+  ];
+
   config = mkMerge [
     (mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.taskserver nixos-taskserver ];
+      environment.systemPackages = [ nixos-taskserver ];
 
       users.users = optional (cfg.user == "taskd") {
         name = "taskd";
@@ -390,6 +389,44 @@ in {
       users.groups = optional (cfg.group == "taskd") {
         name = "taskd";
         gid = config.ids.gids.taskd;
+      };
+
+      services.taskserver.config = {
+        # systemd related
+        daemon = false;
+        log = "-";
+
+        # logging
+        debug = cfg.debug;
+        ip.log = cfg.ipLog;
+
+        # general
+        ciphers = cfg.ciphers;
+        confirmation = cfg.confirmation;
+        extensions = cfg.extensions;
+        queue.size = cfg.queueSize;
+        request.limit = cfg.requestLimit;
+
+        # client
+        client.allow = cfg.allowedClientIDs;
+        client.deny = cfg.disallowedClientIDs;
+
+        # server
+        trust = cfg.trust;
+        server = {
+          listen = "${cfg.listenHost}:${toString cfg.listenPort}";
+        } // (if needToCreateCA then {
+          cert = "${cfg.dataDir}/keys/server.cert";
+          key = "${cfg.dataDir}/keys/server.key";
+          crl = "${cfg.dataDir}/keys/server.crl";
+        } else {
+          cert = "${cfg.pki.manual.server.cert}";
+          key = "${cfg.pki.manual.server.key}";
+          crl = "${cfg.pki.manual.server.crl}";
+        });
+
+        ca.cert = if needToCreateCA then "${cfg.dataDir}/keys/ca.cert"
+                  else "${cfg.pki.manual.ca.cert}";
       };
 
       systemd.services.taskserver-init = {
@@ -404,7 +441,6 @@ in {
 
         script = ''
           ${taskd} init
-          echo "include ${configFile}" > "${cfg.dataDir}/config"
           touch "${cfg.dataDir}/.is_initialized"
         '';
 
@@ -436,7 +472,10 @@ in {
         in "${helperTool} process-json '${jsonFile}'";
 
         serviceConfig = {
-          ExecStart = "@${taskd} taskd server";
+          ExecStart = let
+            mkCfgFlag = flag: escapeShellArg "--${flag}";
+            cfgFlags = concatMapStringsSep " " mkCfgFlag cfg.config;
+          in "@${taskd} taskd server ${cfgFlags}";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
           Restart = "on-failure";
           PermissionsStartOnly = true;
