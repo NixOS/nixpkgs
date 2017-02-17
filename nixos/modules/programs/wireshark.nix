@@ -13,7 +13,7 @@ in {
         default = false;
         description = ''
           Whether to add Wireshark to the global environment and configure a
-          setcap wrapper for 'dumpcap'.
+          setcap wrapper for 'dumpcap' for users in the 'wireshark' group.
         '';
       };
       package = mkOption {
@@ -29,10 +29,14 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ wireshark ];
+    users.extraGroups.wireshark = {};
 
     security.wrappers.dumpcap = {
       source = "${wireshark}/bin/dumpcap";
       capabilities = "cap_net_raw+p";
+      owner = "root";
+      group = "wireshark";
+      permissions = "u+rx,g+x";
     };
   };
 }
