@@ -38,6 +38,13 @@ rec {
     platform = platforms.aarch64-multiplatform;
   };
 
+  aarch64-android-prebuilt = rec {
+    config = "aarch64-unknown-linux-android";
+    arch = "aarch64";
+    platform = platforms.aarch64-multiplatform;
+    useAndroidPrebuilt = true;
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // rec {
     platform = platforms.scaleway-c1;
     inherit (platform.gcc) fpu;

@@ -34,6 +34,7 @@ rec {
     Cygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     MinGW        = { kernel = kernels.windows; abi = abis.gnu; };
 
+    Android      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     Musl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf ];
 
     Kexecable    = map (family: { kernel = kernels.linux; cpu.family = family; })

@@ -93,6 +93,7 @@ in
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
   in mapTestEqual {
+    androidndk = nativePlatforms;
     boehmgc = nativePlatforms;
     libffi = nativePlatforms;
     libiconv = nativePlatforms;
@@ -125,11 +126,13 @@ in
   rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
   rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
 
-  /* Linux on Aarch64 (TODO make android for real)  */
-  android = mapTestOnCross lib.systems.examples.aarch64-multiplatform linuxCommon;
   aarch64-musl = mapTestOnCross lib.systems.examples.aarch64-multiplatform-musl linuxCommon;
 
   x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
+
+  /* Linux on Aarch64 */
+  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
+  });
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
