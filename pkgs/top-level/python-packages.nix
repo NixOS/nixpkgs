@@ -456,6 +456,7 @@ in {
       sha256 = "08k92afnk0bivm07h1l5nh26xl2rfp7qn03aq17q1hr3fs5r6cdm";
     };
 
+    buildInputs = [ self.pytest ];
     propagatedBuildInputs = with self; [ jupyter_core pandas ];
 
     meta = {
