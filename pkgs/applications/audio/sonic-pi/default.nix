@@ -11,14 +11,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.9.0";
+  version = "2.10.0";
   name = "sonic-pi-${version}";
 
   src = fetchFromGitHub {
     owner = "samaaron";
     repo = "sonic-pi";
     rev = "v${version}";
-    sha256 = "19db5dxrf6h1v2w3frds5g90nb6izd9ppp7cs2xi6i0m67l6jrwb";
+    sha256 = "01778znilsax01j1nwnmvgnn7rsfdhcbnpmqi98mryf8w2j2i3c4";
   };
 
   buildInputs = [

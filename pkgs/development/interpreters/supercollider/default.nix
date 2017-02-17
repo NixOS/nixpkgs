@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qt55, readline
 , useSCEL ? false, emacs
 }:
-
 let optional = stdenv.lib.optional;
 in
 
@@ -11,10 +10,11 @@ stdenv.mkDerivation rec {
   name = "supercollider-${version}";
   version = "3.7.2";
 
-
-  src = fetchurl {
-    url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source-linux.tar.bz2";
-    sha256 = "1mybxcnl7flliz74kdfnvh18v5dwd9zbdsw2kc7wpl4idcly1n0s";
+  src = fetchFromGitHub {
+    owner = "supercollider";
+    repo = "supercollider";
+    rev = "Version-${version}";
+    sha256 = "11khrv6jchs0vv0lv43am8lp0x1rr3h6l2xj9dmwrxcpdayfbalr";
   };
 
   hardeningDisable = [ "stackprotector" ];
