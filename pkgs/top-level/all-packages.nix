@@ -14089,6 +14089,8 @@ with pkgs;
     gtk = gtk2;
   };
 
+  lumail = callPackage ../applications/networking/mailreaders/lumail { };
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
