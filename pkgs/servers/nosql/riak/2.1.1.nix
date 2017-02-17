@@ -1,22 +1,22 @@
 { stdenv, lib, fetchurl, unzip, erlangR16, which, pam, coreutils }:
 
 let
-  solrName = "solr-4.7.0-yz-1.tgz";
-  yokozunaJarName = "yokozuna-2.jar";
+  solrName = "solr-4.10.4-yz-2.tgz";
+  yokozunaJarName = "yokozuna-3.jar";
   yzMonitorJarName = "yz_monitor-1.jar";
 
   srcs = {
     riak = fetchurl {
-      url = "http://s3.amazonaws.com/downloads.basho.com/riak/2.1/2.1.1/riak-2.1.1.tar.gz";
-      sha256 = "1bm5j3zknz82mkyh5zgaap73awflh4mkibdvdz164235mdxlwhdm";
+      url = "http://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
+      sha256 = "0kl28bpyzajcllybili46jfr1schl45w5ysii187jr0ssgls2c9p";
     };
     solr = fetchurl {
       url = "http://s3.amazonaws.com/files.basho.com/solr/${solrName}";
-      sha256 = "0brml3lb3xk26rmi05rrzpxrw92alfi9gi7p7537ny9lqg3808qp";
+      sha256 = "0fy5slnldn628gmr2kilyx606ph0iykf7pz6j0xjcc3wqvrixa2a";
     };
     yokozunaJar = fetchurl {
       url = "http://s3.amazonaws.com/files.basho.com/yokozuna/${yokozunaJarName}";
-      sha256 = "0xzfy181qxv27pc4f5xd0szn8vls5743273awr5rwv3608gkspj2";
+      sha256 = "17n6m100fz8affdcxsn4niw2lrpnswgfnd6aszgzipffwbg7v8v5";
     };
     yzMonitorJar = fetchurl {
       url = "http://s3.amazonaws.com/files.basho.com/yokozuna/${yzMonitorJarName}";
@@ -26,7 +26,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "riak-2.1.1";
+  name = "riak-2.2.0";
 
   buildInputs = [
     which unzip erlangR16 pam
