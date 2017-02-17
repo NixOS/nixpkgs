@@ -80,6 +80,7 @@
   ./programs/light.nix
   ./programs/man.nix
   ./programs/mosh.nix
+  ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/oblogout.nix
   ./programs/screen.nix
