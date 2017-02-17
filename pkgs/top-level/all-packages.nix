@@ -9279,6 +9279,8 @@ with pkgs;
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
+    libktorrent = callPackage ../development/libraries/libktorrent/5.nix { };
+
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
     };
@@ -13947,6 +13949,8 @@ with pkgs;
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
+  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent/5.nix { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = go_1_6;
   };
@@ -16845,9 +16849,12 @@ with pkgs;
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
       applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
-        { plasma = plasma self;
+        {
+          plasma = plasma self;
           frameworks = qt5.kdeFrameworks;
-          applications = applications self; }
+          applications = applications self;
+          kipi-plugins = self.callPackage ../applications/graphics/kipi-plugins/5.x.nix {};
+        }
         // qt5.kdeFrameworks
         // plasma self
         // applications self;
