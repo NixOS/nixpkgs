@@ -1,11 +1,13 @@
 {stdenv, fetchurl, autoconf, automake, pkgconfig, curl, openssl, libxml2, fuse}:
 
 stdenv.mkDerivation {
-  name = "s3fs-fuse-1.79";
+  name = "s3fs-fuse-1.80";
+
   src = fetchurl {
-    url = https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.79.tar.gz;
-    sha256 = "0rmzkngzq040g020pv75qqx3jy34vdxzqvxz29k6q8yfb3wpkhb1";
+    url = https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.80.tar.gz;
+    sha256 = "0ddx5khlyyrxm4s8is4gqbczmrcivj11hmkk9s893r3kpp4q30yy";
   };
+
   preConfigure = "./autogen.sh";
   buildInputs = [ autoconf automake pkgconfig curl openssl libxml2 fuse ];
 
