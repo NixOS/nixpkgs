@@ -154,9 +154,8 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = pkgs.pythonPackages.buildPythonPackage {
+  nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
     name = "nixos-taskserver";
-    namePrefix = "";
 
     src = pkgs.runCommand "nixos-taskserver-src" {} ''
       mkdir -p "$out"
@@ -167,6 +166,7 @@ let
         certBits = cfg.pki.auto.bits;
         clientExpiration = cfg.pki.auto.expiration.client;
         crlExpiration = cfg.pki.auto.expiration.crl;
+        isAutoConfig = if needToCreateCA then "True" else "False";
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
       from setuptools import setup
