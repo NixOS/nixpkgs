@@ -201,7 +201,7 @@ in
           Group = cfg.group;
           ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
           WorkingDirectory = "${cfg.statePath}";
-          PrivateTmp = true;
+          PrivateTmp = false; # psql looks for unix domain socket in /tmp
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";
