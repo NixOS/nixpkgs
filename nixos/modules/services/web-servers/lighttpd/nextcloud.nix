@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.lighttpd.nextcloud;
   phpfpmSocketName = "/run/phpfpm/nextcloud.sock";
+  phpfpmUser = "nextcloud";
+  phpfpmGroup = "nextcloud";
 in
 {
   options.services.lighttpd.nextcloud = {
@@ -56,13 +58,13 @@ in
         ${pkgs.rsync}/bin/rsync -a --checksum "${cfg.package}/" "${cfg.installPrefix}/"
 
         mkdir -p "${cfg.installPrefix}/data"
-        chown -R lighttpd:lighttpd "${cfg.installPrefix}"
-        chmod 775 "${cfg.installPrefix}"
-        chmod 770 "${cfg.installPrefix}/data"
-        chmod 770 "${cfg.installPrefix}/apps"
-        chmod 770 "${cfg.installPrefix}/config"
-        chmod 660 "${cfg.installPrefix}/.user.ini"
-        chmod 660 "${cfg.installPrefix}/.htaccess"
+        chown -R ${phpfpmUser}:${phpfpmUser} "${cfg.installPrefix}"
+        chmod 755 "${cfg.installPrefix}"
+        chmod 700 "${cfg.installPrefix}/data"
+        chmod 750 "${cfg.installPrefix}/apps"
+        chmod 700 "${cfg.installPrefix}/config"
+        chmod 600 "${cfg.installPrefix}/.user.ini"
+        chmod 600 "${cfg.installPrefix}/.htaccess"
       '';
 
     services.lighttpd = {
@@ -101,9 +103,10 @@ in
     services.phpfpm.poolConfigs = {
       nextcloud = ''
         listen = ${phpfpmSocketName}
+        listen.owner = lighttpd
         listen.group = lighttpd
-        user = lighttpd
-        group = lighttpd
+        user = ${phpfpmUser}
+        group = ${phpfpmGroup}
         pm = dynamic
         pm.max_children = 75
         pm.start_servers = 10
@@ -113,6 +116,15 @@ in
       '';
     };
 
+    users.extraUsers.lighttpd.extraGroups = [ phpfpmGroup ];
+
+    users.extraUsers."${phpfpmUser}" = {
+      group = phpfpmGroup;
+      description = "Nextcloud server user";
+      uid = config.ids.uids."${phpfpmUser}";
+    };
+
+    users.extraGroups."${phpfpmGroup}".gid = config.ids.gids."${phpfpmGroup}";
   };
 
 }
