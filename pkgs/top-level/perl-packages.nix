@@ -5611,6 +5611,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  GetoptTabular = buildPerlPackage rec {
+    name = "Getopt-Tabular-0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GW/GWARD/${name}.tar.gz";
+      sha256 = "0xskl9lcj07sdfx5dkma5wvhhgf5xlsq0khgh8kk34dm6dv0dpwv";
+    };
+  };
+
   GitPurePerl = buildPerlPackage {
     name = "Git-PurePerl-0.51";
     src = fetchurl {
