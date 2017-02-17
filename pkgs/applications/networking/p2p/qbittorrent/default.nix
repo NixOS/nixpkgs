@@ -10,11 +10,11 @@ assert guiSupport -> (dbus_libs != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.3.7";
+  version = "3.3.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "0h2ccqmjnm0x0qjvd0vz5hk7dy9qbqhiqvxywqjhip7sj1585p3j";
+    sha256 = "1lm8y5k9363gajbw0k9jb1cb7zg0lz5rw2ja0kd36h68rpm7qr9c";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Free Software alternative to µtorrent";
     homepage    = http://www.qbittorrent.org/;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
     platforms   = platforms.linux;
+    maintainers = with maintainers; [ viric ];
   };
 }

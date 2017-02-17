@@ -2,15 +2,16 @@
 
 buildGoPackage rec {
   name = "wuzz-${version}";
-  version = "2017-02-09";
+  version = "0.1.0";
+  rev = "v${version}";
 
   goPackagePath = "https://github.com/asciimoo/wuzz";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "wuzz";
-    rev = "dd696dc6e014e08b6042a71dca600356eb3156c2";
-    sha256 = "0m7jcb6rk0cb3giz1cbfhy3h4nzjl6qrk2k6czhn9267688rznpx";
+    inherit rev;
+    sha256 = "0n55y9dmx4rsccjscvbrgiq2g1qwqxj44lg90589i55b5f7r1ljd";
   };
 
   goDeps = ./deps.nix;

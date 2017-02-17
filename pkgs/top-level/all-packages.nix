@@ -468,6 +468,8 @@ with pkgs;
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
 
+  awless = callPackage ../tools/virtualization/awless { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -2430,6 +2432,8 @@ with pkgs;
   keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/kbfs { };
+
+  keybase-gui = callPackage ../tools/security/keybase-gui { };
 
   keychain = callPackage ../tools/misc/keychain { };
 
@@ -8861,6 +8865,8 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
+  microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+
   minizip = callPackage ../development/libraries/minizip { };
 
   miro = callPackage ../applications/video/miro {
@@ -14425,6 +14431,8 @@ with pkgs;
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
   };
+
+  polybar = callPackage ../applications/misc/polybar { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
