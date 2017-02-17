@@ -50,7 +50,8 @@ self = stdenv.mkDerivation {
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-systemduserunitdir=$(out)/etc/systemd/user"
       "--enable-user-session"
-      "--libexecdir=$(out)/libexec" # we don't need dbus-daemon-launch-helper
+      "--datadir=/etc"
+      "--libexecdir=$(out)/libexec"
     ] ++ lib.optional (!x11Support) "--without-x";
 
     # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
@@ -63,7 +64,12 @@ self = stdenv.mkDerivation {
 
     doCheck = true;
 
-    installFlags = [ "sysconfdir=$(out)/etc" ];
+    installFlags = [ "sysconfdir=$(out)/etc" "datadir=$(out)/share" ];
+
+    postInstall = ''
+      mkdir -p $doc/share/xml/dbus
+      cp doc/*.dtd $doc/share/xml/dbus
+    '';
 
     # it's executed from $lib by absolute path
     postFixup = ''
