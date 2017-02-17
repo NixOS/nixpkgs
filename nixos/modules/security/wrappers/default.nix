@@ -28,6 +28,7 @@ let
     , source
     , owner  ? "nobody"
     , group  ? "nogroup"
+    , permissions ? "u+rx,g+x,o+x"
     , ...
     }:
     assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
@@ -45,7 +46,7 @@ let
       ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" $wrapperDir/${program}
 
       # Set the executable bit
-      chmod u+rx,g+x,o+x $wrapperDir/${program}
+      chmod ${permissions} $wrapperDir/${program}
     '';
 
   ###### Activation script for the setuid wrappers
