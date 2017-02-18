@@ -16719,8 +16719,6 @@ with pkgs;
 
         krusader = callPackage ../applications/misc/krusader { };
 
-        kuickshow = callPackage ../applications/graphics/kuickshow { };
-
         libalkimia = callPackage ../development/libraries/libalkimia { };
 
         libktorrent = callPackage ../development/libraries/libktorrent {
