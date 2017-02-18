@@ -16721,8 +16721,6 @@ with pkgs;
 
         massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
-        psi = callPackage ../applications/networking/instant-messengers/psi { };
-
         semnotes = callPackage ../applications/misc/semnotes { };
 
         telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
