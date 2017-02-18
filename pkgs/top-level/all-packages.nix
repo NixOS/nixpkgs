@@ -10777,7 +10777,6 @@ with pkgs;
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   inherit (callPackages ../servers/http/tomcat { })
-    tomcat6
     tomcat7
     tomcat8
     tomcat85
