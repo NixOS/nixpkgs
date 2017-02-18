@@ -202,7 +202,12 @@ let
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
-    ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
+    ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
+
+    ipaddr =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/ipaddr { }
+      else ipaddr_p4;
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
