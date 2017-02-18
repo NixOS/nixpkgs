@@ -16701,8 +16701,6 @@ with pkgs;
           ffmpeg = ffmpeg_2;
         };
 
-        bangarang = callPackage ../applications/video/bangarang { };
-
         basket = callPackage ../applications/office/basket { };
 
         calligra = callPackage ../applications/office/calligra {
