@@ -257,6 +257,10 @@ let
       llvm = pkgs.llvm_37;
     };
 
+    logs = callPackage ../development/ocaml-modules/logs {
+      lwt = ocaml_lwt;
+    };
+
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
