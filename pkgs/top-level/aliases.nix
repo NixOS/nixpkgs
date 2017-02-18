@@ -63,6 +63,7 @@ doNotDisplayTwice rec {
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keybase-go = keybase;  # added 2016-08-24
+  krename-qt5 = krename; # added 2017-02-18
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29
