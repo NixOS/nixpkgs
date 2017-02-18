@@ -16717,8 +16717,6 @@ with pkgs;
 
         ktikz = callPackage ../applications/graphics/ktikz { };
 
-        kvirc = callPackage ../applications/networking/irc/kvirc { };
-
         krusader = callPackage ../applications/misc/krusader { };
 
         kuickshow = callPackage ../applications/graphics/kuickshow { };
