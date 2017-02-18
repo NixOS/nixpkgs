@@ -16414,11 +16414,11 @@ in {
   });
 
   oauth2client = buildPythonPackage rec {
-    name = "oauth2client-1.4.12";
+    name = "oauth2client-2.2.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/oauth2client/${name}.tar.gz";
-      sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
+      sha256 = "09mcrbjbj0s9882sqpxsa2n7kx1xfq6qm17li5id7ibz5md0pm2k";
     };
 
     propagatedBuildInputs = with self; [ six httplib2 pyasn1-modules rsa ];
@@ -29223,12 +29223,12 @@ EOF
     };
   };
 
-  boto-230 = buildPythonPackage rec {
-    name = "boto-2.30.0";
+  boto-242 = buildPythonPackage rec {
+    name = "boto-2.42.0";
     disabled = ! isPy27;
     src = pkgs.fetchurl {
-      url = mirror://pypi/b/boto/boto-2.30.0.tar.gz;
-      sha256 = "12gl8azmx1vv8dbv9jhnsbhjpc2dd1ng0jlbcg734k6ggwq1h6hh";
+      url = "mirror://pypi/b/boto/${name}.tar.gz";
+      sha256 = "1iss9pbx0mcbngx2gzvfqkv50kggdp0m05vd4vsvhnskrva41wfw";
     };
     doCheck = false;
     meta = {
@@ -29239,13 +29239,13 @@ EOF
   };
 
   gcs-oauth2-boto-plugin = buildPythonPackage rec {
-    name = "gcs-oauth2-boto-plugin-1.8";
+    name = "gcs-oauth2-boto-plugin-1.14";
     disabled = ! isPy27;
     src = pkgs.fetchurl {
-      url = mirror://pypi/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
-      sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
+      url = "mirror://pypi/g/gcs-oauth2-boto-plugin/${name}.tar.gz";
+      sha256 = "1gkzhf62177h1wa1qx38xnrb0rarfib2vgx554kp7902wl7aj1nx";
     };
-    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pyopenssl socksipy-branch ];
+    propagatedBuildInputs = with self; [ oauth2client boto-242 httplib2 google_api_python_client retry_decorator pyopenssl socksipy-branch ];
     meta = {
       homepage = https://developers.google.com/storage/docs/gspythonlibrary;
       description = "Provides OAuth 2.0 credentials that can be used with Google Cloud Storage";
@@ -29254,7 +29254,7 @@ EOF
   };
 
   gsutil = buildPythonPackage rec {
-    name = "gsutil-4.6";
+    name = "gsutil-4.22";
     disabled = ! isPy27;
     meta = {
       homepage = https://developers.google.com/storage/docs/gsutil;
@@ -29265,12 +29265,34 @@ EOF
     doCheck = false;
 
     src = pkgs.fetchurl {
-      url = mirror://pypi/g/gsutil/gsutil-4.6.tar.gz;
-      sha256 = "1i0clm60162rbk45ljr8nsw4ndkzjnwb7r440shcqjrvw8jq49mn";
+      url = "mirror://pypi/g/gsutil/${name}.tar.gz";
+      sha256 = "1j6mdw414njf0mc87fvk7lc6dbiwbwf6r3aa9brz31mavz75346q";
     };
 
-    propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
-                                         retry_decorator pyopenssl socksipy-branch crcmod ];
+    buildInputs = [ self.mock ];
+    propagatedBuildInputs = with self; [ boto-242 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
+                                         retry_decorator pyopenssl socksipy-branch crcmod google-apitools ];
+  };
+
+  google-apitools = buildPythonPackage rec {
+    name = "google-apitools-0.5.3";
+    meta = {
+      homepage = https://github.com/google/apitools;
+      description = "A collection of utilities to make it easier to build client-side tools, especially those that talk to Google APIs.";
+      license = licenses.asl20;
+    };
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/google-apitools/${name}.tar.gz";
+      sha256 = "0vrq4ggk1d4v7818gch7168xjc5yyvai706chah1pv1zfa37z6lf";
+    };
+    buildInputs = with self; [ mock unittest2 ];
+    propagatedBuildInputs = with self; [
+      gflags
+      google_apputils
+      httplib2
+      oauth2client
+      six
+    ];
   };
 
   svg2tikz = self.buildPythonPackage {
