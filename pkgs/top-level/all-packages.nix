@@ -16712,8 +16712,6 @@ with pkgs;
 
         kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
-        kbibtex = callPackage ../applications/office/kbibtex { };
-
         kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
         kdesvn = callPackage ../applications/version-management/kdesvn { };
