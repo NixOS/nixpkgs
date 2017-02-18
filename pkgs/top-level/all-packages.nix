@@ -15967,7 +15967,7 @@ with pkgs;
 
   yabar = callPackage ../applications/window-managers/yabar { };
 
-  yakuake = kde5.callPackage ../applications/misc/yakuake/3.0.nix {};
+  yakuake = kde5.callPackage ../applications/misc/yakuake {};
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
@@ -16793,8 +16793,6 @@ with pkgs;
         semnotes = callPackage ../applications/misc/semnotes { };
 
         telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
-
-        yakuake = callPackage ../applications/misc/yakuake { };
 
         zanshin = callPackage ../applications/office/zanshin { };
 
