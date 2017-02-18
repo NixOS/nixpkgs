@@ -16755,15 +16755,9 @@ with pkgs;
 
         liblikeback = callPackage ../development/libraries/liblikeback { };
 
-        libmm-qt = callPackage ../development/libraries/libmm-qt { };
-
-        libnm-qt = callPackage ../development/libraries/libnm-qt { };
-
         massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
         partitionManager = callPackage ../tools/misc/partition-manager { };
-
-        plasma-nm = callPackage ../tools/networking/plasma-nm { };
 
         polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
