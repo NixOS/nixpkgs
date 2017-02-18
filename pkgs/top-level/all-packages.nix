@@ -494,6 +494,8 @@ with pkgs;
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
+  dgsh = callPackage ../shells/dgsh { };
+
   elvish = callPackage ../shells/elvish { };
 
   encryptr = callPackage ../tools/security/encryptr {
@@ -5143,7 +5145,9 @@ with pkgs;
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
-  intercal = callPackage ../development/compilers/intercal { };
+  intercal = callPackage ../development/compilers/intercal {
+    flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
+  };
 
   irony-server = callPackage ../development/tools/irony-server/default.nix {
     # The repository of irony to use -- must match the version of the employed emacs
@@ -7100,6 +7104,11 @@ with pkgs;
   dbus_libs = dbus;
   dbus_daemon = dbus.daemon;
 
+  makeDBusConf = { suidHelper, serviceDirectories }:
+    callPackage ../development/libraries/dbus/make-dbus-conf.nix {
+      inherit suidHelper serviceDirectories;
+    };
+
   dee = callPackage ../development/libraries/dee { };
 
   dhex = callPackage ../applications/editors/dhex { };
@@ -8747,8 +8756,6 @@ with pkgs;
 
   libzdb = callPackage ../development/libraries/libzdb { };
 
-  libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
-
   libwacom = callPackage ../development/libraries/libwacom { };
 
   lightning = callPackage ../development/libraries/lightning { };
@@ -9036,7 +9043,7 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = libressl_2_5;
+  libressl = libressl_2_4;
   libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
     fetchurl = fetchurlBoot;
   };
@@ -9285,6 +9292,8 @@ with pkgs;
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
+    libktorrent = callPackage ../development/libraries/libktorrent/5.nix { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
@@ -10358,7 +10367,9 @@ with pkgs;
 
   freeradius = callPackage ../servers/freeradius { };
 
-  freeswitch = callPackage ../servers/sip/freeswitch { };
+  freeswitch = callPackage ../servers/sip/freeswitch {
+    openssl = openssl_1_0_2;
+  };
 
   gatling = callPackage ../servers/http/gatling { };
 
@@ -10633,6 +10644,7 @@ with pkgs;
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
+  prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
@@ -10775,7 +10787,6 @@ with pkgs;
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   inherit (callPackages ../servers/http/tomcat { })
-    tomcat6
     tomcat7
     tomcat8
     tomcat85
@@ -11294,6 +11305,7 @@ with pkgs;
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.sctp_bug_on_CVE_2017_5986
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11412,6 +11424,8 @@ with pkgs;
     jool = callPackage ../os-specific/linux/jool { };
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
+
+    mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
 
     mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
 
@@ -13956,6 +13970,8 @@ with pkgs;
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
+  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent/5.nix { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = go_1_6;
   };
@@ -14958,10 +14974,6 @@ with pkgs;
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
-  sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
-    gtk = gtk3;
-  };
-
   shfmt = callPackage ../tools/text/shfmt { };
 
   shutter = callPackage ../applications/graphics/shutter { };
@@ -15361,8 +15373,6 @@ with pkgs;
   };
 
   twmn = qt5.callPackage ../applications/misc/twmn { };
-
-  twinkle = callPackage ../applications/networking/instant-messengers/twinkle { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
@@ -16854,9 +16864,12 @@ with pkgs;
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
       applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
-        { plasma = plasma self;
+        {
+          plasma = plasma self;
           frameworks = qt5.kdeFrameworks;
-          applications = applications self; }
+          applications = applications self;
+          kipi-plugins = self.callPackage ../applications/graphics/kipi-plugins/5.x.nix {};
+        }
         // qt5.kdeFrameworks
         // plasma self
         // applications self;

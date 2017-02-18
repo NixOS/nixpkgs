@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSG_USE_SYSTEM_QXT=ON" "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+
   meta = with stdenv.lib; {
     description = "Crossplatform tool for fast making screenshots";
     homepage = https://github.com/lxde/screengrab;

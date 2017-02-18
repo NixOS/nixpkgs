@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig
 , fuse, curl, expat }:
-  
+
 stdenv.mkDerivation rec {
   name = "s3backer-${version}";
-  version = "1.4.2";
-  
+  version = "1.4.3";
+
   src = fetchFromGitHub {
-    sha256 = "0b9vmykrfpzs9is31pqb8xvgjraghnax1ph2jkbib1ya0vhxm8dj";
+    sha256 = "0fhkha5kap8dji3iy48cbszhq83b2anssscgjj9d5dsl5dj57zak";
     rev = version;
     repo = "s3backer";
     owner = "archiecobbs";

@@ -91,6 +91,26 @@ in
         '';
       };
 
+      enableNmbd = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Samba's nmbd, which replies to NetBIOS over IP name
+          service requests. It also participates in the browsing protocols
+          which make up the Windows "Network Neighborhood" view.
+        '';
+      };
+
+      enableWinbindd = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Samba's winbindd, which provides a number of services
+          to the Name Service Switch capability found in most modern C libraries,
+          to arbitrary applications via PAM and ntlm_auth and to Samba itself.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.samba;
@@ -185,7 +205,12 @@ in
   ###### implementation
 
   config = mkMerge
-    [ { # Always provide a smb.conf to shut up programs like smbclient and smbspool.
+    [ { assertions =
+          [ { assertion = cfg.nsswins -> cfg.enableWinbindd;
+              message   = "If samba.nsswins is enabled, then samba.enableWinbindd must also be enabled";
+            }
+          ];
+        # Always provide a smb.conf to shut up programs like smbclient and smbspool.
         environment.etc = singleton
           { source =
               if cfg.enable then configFile
@@ -194,7 +219,7 @@ in
           };
       }
 
-      (mkIf config.services.samba.enable {
+      (mkIf cfg.enable {
 
         system.nssModules = optional cfg.nsswins samba;
 
@@ -207,9 +232,9 @@ in
           };
 
           services = {
-            "samba-nmbd" = daemonService "nmbd" "-F";
             "samba-smbd" = daemonService "smbd" "-F";
-            "samba-winbindd" = daemonService "winbindd" "-F";
+            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "-F");
+            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "-F");
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;

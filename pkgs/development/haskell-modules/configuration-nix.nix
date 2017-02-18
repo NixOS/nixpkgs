@@ -167,6 +167,13 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  typed-process = dontCheck super.typed-process;
+  js-jquery = dontCheck super.js-jquery;
+  hPDB-examples = dontCheck super.hPDB-examples;
+  configuration-tools = dontCheck super.configuration-tools; # https://github.com/alephcloud/hs-configuration-tools/issues/40
+  tcp-streams = dontCheck super.tcp-streams;
+  holy-project = dontCheck super.holy-project;
+  mustache = dontCheck super.mustache;
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -378,13 +385,62 @@ self: super: builtins.intersectAttrs super {
   idris = overrideCabal super.idris (drv: {
     # https://github.com/idris-lang/Idris-dev/issues/2499
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+
+    # tests and build run executable, so need to set LD_LIBRARY_PATH
+    preBuild = ''
+      export LD_LIBRARY_PATH="$PWD/dist/build:$LD_LIBRARY_PATH"
+    '';
   });
 
   libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
   });
 
-  # Needs network in tests.
-  typed-process = dontCheck super.typed-process;
+  # does not specify tests in cabal file, instead has custom runTest cabal hook,
+  # so cabal2nix will not detect test dependencies.
+  either-unwrap = overrideCabal super.either-unwrap (drv: {
+    testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
+  });
 
+  hidapi = addExtraLibrary super.hidapi pkgs.libudev;
+
+  hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
+
+  discount = super.discount.override { markdown = pkgs.discount; };
+
+  # tests require working stack installation with all-cabal-hashes cloned in $HOME
+  stackage-curator = dontCheck super.stackage-curator;
+
+  # hardcodes /usr/bin/tr: https://github.com/snapframework/io-streams/pull/59
+  io-streams = enableCabalFlag super.io-streams "NoInteractiveTests";
+
+  # requires autotools to build
+  secp256k1 = addBuildTools super.secp256k1 [ pkgs.autoconf pkgs.automake pkgs.libtool ];
+
+  # tests require git
+  hapistrano = addBuildTool super.hapistrano pkgs.git;
+
+  # requires webkitgtk API version 3 (webkitgtk 2.4 is the latest webkit supporting that version)
+  gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
+  gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
+
+  # requires valid, writeable $HOME
+  hatex-guide = overrideCabal super.hatex-guide (drv: {
+    preConfigure = ''
+      ${drv.preConfigure or ""}
+      export HOME=$PWD
+    '';
+  });
+
+  # Fails to link against with newer gsl versions because a deprecrated function
+  # was removed
+  hmatrix-gsl = super.hmatrix-gsl.override { gsl = pkgs.gsl_1; };
+
+  # tests run executable, relying on PATH
+  # without this, tests fail with "Couldn't launch intero process"
+  intero = overrideCabal super.intero (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/intero:$PATH"
+    '';
+  });
 }

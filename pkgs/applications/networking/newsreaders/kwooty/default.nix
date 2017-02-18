@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://kde-apps.org/CONTENT/content-files/114385-${name}.tar.gz";
+    url = "https://dl.opendesktop.org/api/files/download/id/1466631747/114385-${name}.tar.gz";
     sha256 = "10a9asjv6ja1xdjli2399dyka2rbia3qdm5bdpmcng6xdsbhx3ap";
   };
 
@@ -34,5 +34,6 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Binary news reader of KDE";
+    broken = true;
   };
 }
