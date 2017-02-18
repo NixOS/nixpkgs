@@ -668,6 +668,8 @@ with pkgs;
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
   btrfs-progs_4_4_1 = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
 
+  btrfs-dedupe = callPackage ../tools/filesystems/btrfs-dedupe/default.nix {};
+
   btrbk = callPackage ../tools/backup/btrbk { };
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
