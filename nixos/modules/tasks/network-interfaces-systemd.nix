@@ -126,7 +126,7 @@ in
               ms    = trans (v: v + "ms");
               in {
                 Mode                       = simp "mode";
-                TransmitHashPolixy         = simp "xmit_hash_policy";
+                TransmitHashPolicy         = simp "xmit_hash_policy";
                 LACPTransmitRate           = simp "lacp_rate";
                 MIIMonitorSec              = ms "miimon";
                 UpDelaySec                 = ms "updelay";
