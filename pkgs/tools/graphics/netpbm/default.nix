@@ -1,13 +1,16 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
+{ lib, stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
 , makeWrapper, libtiff
 , enableX11 ? false, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "netpbm-10.70.00";
+  # Determine version and revision from:
+  # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
+  name = "netpbm-10.77.02";
 
-  src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.xz";
-    sha256 = "14vxmzbwsy4rzrqjnzr4cvz1s0amacq69faps3v1j1kr05lcns0j";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/netpbm/code/advanced";
+    rev = 2883;
+    sha256 = "1lxa5gasmqrwgihkk8ij7vb9kgdw3d5mp25kydkrf6x4wibg1w5f";
   };
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
