@@ -4730,6 +4730,7 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
+  clang_40 = llvmPackages_40.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5277,10 +5278,13 @@ with pkgs;
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
+  lld = llvmPackages_40.lld;
+
   lldb = llvmPackages.lldb;
 
   llvm = llvmPackages.llvm;
 
+  llvm_40 = llvmPackages_40.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5315,6 +5319,10 @@ with pkgs;
   };
 
   llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 {
+    inherit (stdenvAdapters) overrideCC;
+  };
+
+  llvmPackages_40 = callPackage ../development/compilers/llvm/4.0 {
     inherit (stdenvAdapters) overrideCC;
   };
 
