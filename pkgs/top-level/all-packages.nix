@@ -2301,6 +2301,8 @@ with pkgs;
 
   innoextract = callPackage ../tools/archivers/innoextract { };
 
+  intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
+
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
