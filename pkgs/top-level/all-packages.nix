@@ -16721,8 +16721,6 @@ with pkgs;
 
         kbibtex = callPackage ../applications/office/kbibtex { };
 
-        kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
-
         kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
         kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
