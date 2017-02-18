@@ -16802,12 +16802,6 @@ with pkgs;
 
   albatross = callPackage ../misc/themes/albatross { };
 
-  oxygen-gtk2 = callPackage ../misc/themes/gtk2/oxygen-gtk { };
-
-  oxygen-gtk3 = callPackage ../misc/themes/gtk3/oxygen-gtk3 { };
-
-  oxygen_gtk = oxygen-gtk2; # backwards compatibility
-
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
