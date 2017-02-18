@@ -860,6 +860,8 @@ with pkgs;
 
   ent = callPackage ../tools/misc/ent { };
 
+  epstool = callPackage ../applications/graphics/epstool { };
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
