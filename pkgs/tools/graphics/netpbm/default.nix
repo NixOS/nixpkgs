@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
+{ lib, stdenv, fetchsvn, pkgconfig, libjpeg, libpng, flex, zlib, perl, libxml2
 , makeWrapper, libtiff
 , enableX11 ? false, libX11 }:
 
-stdenv.mkDerivation rec {
-  name = "netpbm-10.70.00";
+let
+  version = "10.73.07";
+  rev = 2885;
 
-  src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.xz";
-    sha256 = "14vxmzbwsy4rzrqjnzr4cvz1s0amacq69faps3v1j1kr05lcns0j";
+in stdenv.mkDerivation rec {
+  name = "netpbm-${version}";
+
+  src = fetchsvn {
+    url    = "http://svn.code.sf.net/p/netpbm/code/stable";
+    inherit rev;
+    sha256 = "004p95769800zh9a2zzm41k8l29c5wnnk6viz9b4fgb2g4gl3sn1";
   };
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
@@ -52,10 +57,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://netpbm.sourceforge.net/;
     description = "Toolkit for manipulation of graphic images";
     license = "GPL,free";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with platforms; linux;
   };
 }
