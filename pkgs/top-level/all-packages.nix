@@ -16713,8 +16713,6 @@ with pkgs;
 
         choqok = callPackage ../applications/networking/instant-messengers/choqok { };
 
-        eventlist = callPackage ../applications/office/eventlist {};
-
         k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
 
         k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
