@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
-  nativeBuildInputs = [ coreutils ];
+  patches = [ ./memory-leak.patch ];
+
+  buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   doCheck = !stdenv.isDarwin;
 

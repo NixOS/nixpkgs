@@ -76,14 +76,6 @@ in
         '';
       };
 
-      stanchionSsl = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Tell stanchion to use SSL.
-        '';
-      };
-
       distributedCookie = mkOption {
         type = types.str;
         default = "riak";
@@ -147,8 +139,6 @@ in
       nodename = ${cfg.nodeName}
 
       distributed_cookie = ${cfg.distributedCookie}
-
-      stanchion_ssl=${if cfg.stanchionSsl then "on" else "off"}
 
       ${cfg.extraConfig}
     '';

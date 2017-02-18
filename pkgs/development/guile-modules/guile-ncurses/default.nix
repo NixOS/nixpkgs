@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, ncurses, libffi }:
+{ fetchurl, stdenv, pkgconfig, guile, ncurses, libffi }:
 
 stdenv.mkDerivation rec {
   name = "guile-ncurses-1.7";
@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "153vv75gb7l62sp3666rc97i63rnaqbx2rjar7d9b5w81fhwv4r5";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ guile ncurses libffi ];
 
   preConfigure =

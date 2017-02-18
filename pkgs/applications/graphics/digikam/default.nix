@@ -192,6 +192,7 @@ runCommand "${pName}" {
     homepage = http://www.digikam.org;
     maintainers = with stdenv.lib.maintainers; [ /*jraygauthier*/ ];
     inherit (kdelibs.meta) platforms;
+    broken = true;
   };
 
 } ''

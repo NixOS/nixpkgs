@@ -3349,7 +3349,7 @@ with pkgs;
   };
 
   pcsctools = callPackage ../tools/security/pcsctools {
-    inherit (perlPackages) pcscperl Glib Gtk2 Pango;
+    inherit (perlPackages) pcscperl Glib Gtk2 Pango Cairo;
   };
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
@@ -6286,6 +6286,13 @@ with pkgs;
 
   cppcheck = callPackage ../development/tools/analysis/cppcheck { };
 
+  creduce = callPackage ../development/tools/misc/creduce {
+    inherit (perlPackages) perl
+      ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
+    inherit (llvmPackages_39) llvm clang-unwrapped;
+    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
+  };
+
   cscope = callPackage ../development/tools/misc/cscope { };
 
   csslint = callPackage ../development/web/csslint { };
@@ -7124,6 +7131,11 @@ with pkgs;
   dbus_tools = dbus.out;
   dbus_libs = dbus;
   dbus_daemon = dbus.daemon;
+
+  makeDBusConf = { suidHelper, serviceDirectories }:
+    callPackage ../development/libraries/dbus/make-dbus-conf.nix {
+      inherit suidHelper serviceDirectories;
+    };
 
   dee = callPackage ../development/libraries/dee { };
 
@@ -8777,8 +8789,6 @@ with pkgs;
 
   libzdb = callPackage ../development/libraries/libzdb { };
 
-  libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
-
   libwacom = callPackage ../development/libraries/libwacom { };
 
   lightning = callPackage ../development/libraries/lightning { };
@@ -9316,6 +9326,8 @@ with pkgs;
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
+    libktorrent = callPackage ../development/libraries/libktorrent/5.nix { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
@@ -10393,7 +10405,9 @@ with pkgs;
 
   freeradius = callPackage ../servers/freeradius { };
 
-  freeswitch = callPackage ../servers/sip/freeswitch { };
+  freeswitch = callPackage ../servers/sip/freeswitch {
+    openssl = openssl_1_0_2;
+  };
 
   gatling = callPackage ../servers/http/gatling { };
 
@@ -10820,7 +10834,6 @@ with pkgs;
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   inherit (callPackages ../servers/http/tomcat { })
-    tomcat6
     tomcat7
     tomcat8
     tomcat85
@@ -11345,6 +11358,7 @@ with pkgs;
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.sctp_bug_on_CVE_2017_5986
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -14013,6 +14027,8 @@ with pkgs;
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
+  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent/5.nix { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = go_1_6;
   };
@@ -15017,10 +15033,6 @@ with pkgs;
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
-  sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
-    gtk = gtk3;
-  };
-
   shfmt = callPackage ../tools/text/shfmt { };
 
   shutter = callPackage ../applications/graphics/shutter { };
@@ -15420,8 +15432,6 @@ with pkgs;
   };
 
   twmn = qt5.callPackage ../applications/misc/twmn { };
-
-  twinkle = callPackage ../applications/networking/instant-messengers/twinkle { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
@@ -16917,9 +16927,12 @@ with pkgs;
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
       applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
-        { plasma = plasma self;
+        {
+          plasma = plasma self;
           frameworks = qt5.kdeFrameworks;
-          applications = applications self; }
+          applications = applications self;
+          kipi-plugins = self.callPackage ../applications/graphics/kipi-plugins/5.x.nix {};
+        }
         // qt5.kdeFrameworks
         // plasma self
         // applications self;

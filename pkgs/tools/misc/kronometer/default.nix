@@ -6,13 +6,13 @@
 
 let
   pname = "kronometer";
-  version = "2.1.0";
+  version = "2.1.3";
   unwrapped = kdeDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "1nh7y4c13rscy55f5n8s2v8jij27b55rwkxh9g8r0p7mdwmw8vri";
+      sha256 = "1z06gvaacm3d3a9smlmgg2vf0jdab5kqxx24r6v7iprqzgdpsn4i";
     };
 
     meta = with lib; {
