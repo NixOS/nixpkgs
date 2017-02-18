@@ -14009,6 +14009,8 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
+  kipi-plugins = kde5.callPackage ../applications/graphics/kipi-plugins {};
+
   kiwix = callPackage ../applications/misc/kiwix {
     stdenv = overrideCC stdenv gcc49;
   };
@@ -16713,8 +16715,6 @@ with pkgs;
 
         kmplayer = callPackage ../applications/video/kmplayer { };
 
-        kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
-
         ktikz = callPackage ../applications/graphics/ktikz { };
 
         kvirc = callPackage ../applications/networking/irc/kvirc { };
@@ -16789,7 +16789,6 @@ with pkgs;
           plasma = plasma self;
           frameworks = qt5.kdeFrameworks;
           applications = applications self;
-          kipi-plugins = self.callPackage ../applications/graphics/kipi-plugins/5.x.nix {};
         }
         // qt5.kdeFrameworks
         // plasma self
