@@ -14029,7 +14029,7 @@ with pkgs;
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
-  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent/5.nix { };
+  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = go_1_6;
@@ -16740,8 +16740,6 @@ with pkgs;
         kvirc = callPackage ../applications/networking/irc/kvirc { };
 
         krusader = callPackage ../applications/misc/krusader { };
-
-        ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
 
         kuickshow = callPackage ../applications/graphics/kuickshow { };
 
