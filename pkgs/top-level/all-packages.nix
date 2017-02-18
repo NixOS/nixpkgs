@@ -16719,8 +16719,6 @@ with pkgs;
 
         krusader = callPackage ../applications/misc/krusader { };
 
-        liblikeback = callPackage ../development/libraries/liblikeback { };
-
         massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
         partitionManager = callPackage ../tools/misc/partition-manager { };
