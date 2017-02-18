@@ -16674,212 +16674,197 @@ with pkgs;
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  kde4 = recurseIntoAttrs pkgs.kde414;
-
-  kde414 =
-    kdePackagesFor
-      {
+  kde4 =
+    let
+      deps = lib.makeScope newScope (self: {
         libusb = libusb1;
         python2Packages = python2Packages;
         inherit (python2Packages) python;
-        libcanberra = libcanberra_kde;
-        boost = boost155;
         kdelibs = kde5.kdelibs;
-        subversionClient = pkgs.subversion18.override {
+        boost = boost155;
+        subversionClient = subversion18.override {
           bdbSupport = false;
           perlBindings = true;
           pythonBindings = true;
         };
         ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
         ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
-      }
-      ../desktops/kde-4.14;
+      });
 
+      self = lib.makeScope deps.newScope (self: with self;
+        (deps.callPackage ../desktops/kde-4.14 {
+          callPackageOrig = pkgs.callPackage;
+          inherit (self) callPackage;
+        }) // {
 
-  kdePackagesFor = extra: dir:
-    let
-      # list of extra packages not included in KDE
-      # the real work in this function is done below this list
-      extraPackages = callPackage:
-        rec {
-          amarok = callPackage ../applications/audio/amarok {
-            ffmpeg = ffmpeg_2;
-          };
+        libcanberra = libcanberra_kde;
 
-          bangarang = callPackage ../applications/video/bangarang { };
-
-          basket = callPackage ../applications/office/basket { };
-
-          bluedevil = callPackage ../tools/bluetooth/bluedevil { };
-
-          calligra = callPackage ../applications/office/calligra {
-            vc = vc_0_7;
-          };
-
-          choqok = callPackage ../applications/networking/instant-messengers/choqok { };
-
-          colord-kde = callPackage ../tools/misc/colord-kde { };
-
-          digikam = callPackage ../applications/graphics/digikam { };
-
-          eventlist = callPackage ../applications/office/eventlist {};
-
-          k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
-
-          k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
-
-          kadu = callPackage ../applications/networking/instant-messengers/kadu { };
-
-          kbibtex = callPackage ../applications/office/kbibtex { };
-
-          kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
-
-          kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
-
-          kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
-
-          kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
-
-          kdesvn = callPackage ../applications/version-management/kdesvn { };
-
-          kdevelop = callPackage ../applications/editors/kdevelop { };
-
-          kdevplatform = callPackage ../development/libraries/kdevplatform {
-            boost = boost155;
-          };
-
-          kdiff3 = callPackage ../tools/text/kdiff3 { };
-
-          kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
-
-          kile = callPackage ../applications/editors/kile { };
-
-          kmplayer = callPackage ../applications/video/kmplayer { };
-
-          kmymoney = callPackage ../applications/office/kmymoney { };
-
-          kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
-
-          konversation = callPackage ../applications/networking/irc/konversation { };
-
-          kvirc = callPackage ../applications/networking/irc/kvirc { };
-
-          krename = callPackage ../applications/misc/krename/kde4.nix {
-            taglib = taglib_1_9;
-          };
-
-          krusader = callPackage ../applications/misc/krusader { };
-
-          ksshaskpass = callPackage ../tools/security/ksshaskpass {};
-
-          ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
-
-          kuickshow = callPackage ../applications/graphics/kuickshow { };
-
-          libalkimia = callPackage ../development/libraries/libalkimia { };
-
-          libktorrent = callPackage ../development/libraries/libktorrent {
-            boost = boost155;
-          };
-
-          libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
-
-          liblikeback = callPackage ../development/libraries/liblikeback { };
-
-          libmm-qt = callPackage ../development/libraries/libmm-qt { };
-
-          libnm-qt = callPackage ../development/libraries/libnm-qt { };
-
-          massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
-
-          partitionManager = callPackage ../tools/misc/partition-manager { };
-
-          plasma-nm = callPackage ../tools/networking/plasma-nm { };
-
-          polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
-
-          qtcurve = callPackage ../misc/themes/qtcurve { };
-
-          quassel = callPackage ../applications/networking/irc/quassel rec {
-            monolithic = true;
-            daemon = false;
-            client = false;
-            withKDE = stdenv.isLinux;
-            qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
-            dconf = gnome3.dconf;
-          };
-
-          quasselWithoutKDE = (quassel.override {
-            monolithic = true;
-            daemon = false;
-            client = false;
-            withKDE = false;
-            #qt = qt5;
-            tag = "-without-kde";
-          });
-
-          quasselDaemon = (quassel.override {
-            monolithic = false;
-            daemon = true;
-            client = false;
-            withKDE = false;
-            #qt = qt5;
-            tag = "-daemon";
-          });
-
-          quasselClient = (quassel.override {
-            monolithic = false;
-            daemon = false;
-            client = true;
-            tag = "-client";
-          });
-
-          quasselClientWithoutKDE = (quasselClient.override {
-            monolithic = false;
-            daemon = false;
-            client = true;
-            withKDE = false;
-            #qt = qt5;
-            tag = "-client-without-kde";
-          });
-
-          rekonq-unwrapped = callPackage ../applications/networking/browsers/rekonq { };
-          rekonq = wrapFirefox rekonq-unwrapped { };
-
-          kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
-
-          rsibreak = callPackage ../applications/misc/rsibreak { };
-
-          semnotes = callPackage ../applications/misc/semnotes { };
-
-          skrooge = callPackage ../applications/office/skrooge { };
-
-          telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
-
-          yakuake = callPackage ../applications/misc/yakuake { };
-
-          zanshin = callPackage ../applications/office/zanshin { };
-
-          kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
+        amarok = callPackage ../applications/audio/amarok {
+          ffmpeg = ffmpeg_2;
         };
 
-      callPackageOrig = newScope extra;
+        bangarang = callPackage ../applications/video/bangarang { };
 
-      makePackages = extra:
-        let
-          callPackage = newScope (extra // self);
-          kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
-          self =
-            kde4
-            // extraPackages callPackage
-            // {
-              inherit kde4;
-              wrapper = callPackage ../build-support/kdewrapper {};
-              recurseForRelease = true;
-            };
-        in self;
+        basket = callPackage ../applications/office/basket { };
 
-    in makeOverridable makePackages extra;
+        bluedevil = callPackage ../tools/bluetooth/bluedevil { };
+
+        calligra = callPackage ../applications/office/calligra {
+          vc = vc_0_7;
+        };
+
+        choqok = callPackage ../applications/networking/instant-messengers/choqok { };
+
+        colord-kde = callPackage ../tools/misc/colord-kde { };
+
+        digikam = callPackage ../applications/graphics/digikam { };
+
+        eventlist = callPackage ../applications/office/eventlist {};
+
+        k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
+
+        k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
+
+        kadu = callPackage ../applications/networking/instant-messengers/kadu { };
+
+        kbibtex = callPackage ../applications/office/kbibtex { };
+
+        kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
+
+        kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
+
+        kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
+
+        kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
+
+        kdesvn = callPackage ../applications/version-management/kdesvn { };
+
+        kdevelop = callPackage ../applications/editors/kdevelop { };
+
+        kdevplatform = callPackage ../development/libraries/kdevplatform {
+          boost = boost155;
+        };
+
+        kdiff3 = callPackage ../tools/text/kdiff3 { };
+
+        kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
+
+        kile = callPackage ../applications/editors/kile { };
+
+        kmplayer = callPackage ../applications/video/kmplayer { };
+
+        kmymoney = callPackage ../applications/office/kmymoney { };
+
+        kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
+
+        konversation = callPackage ../applications/networking/irc/konversation { };
+
+        ktikz = callPackage ../applications/graphics/ktikz { };
+
+        kvirc = callPackage ../applications/networking/irc/kvirc { };
+
+        krename = callPackage ../applications/misc/krename/kde4.nix {
+          taglib = taglib_1_9;
+        };
+
+        krusader = callPackage ../applications/misc/krusader { };
+
+        ksshaskpass = callPackage ../tools/security/ksshaskpass {};
+
+        ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
+
+        kuickshow = callPackage ../applications/graphics/kuickshow { };
+
+        libalkimia = callPackage ../development/libraries/libalkimia { };
+
+        libktorrent = callPackage ../development/libraries/libktorrent {
+          boost = boost155;
+        };
+
+        libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
+
+        liblikeback = callPackage ../development/libraries/liblikeback { };
+
+        libmm-qt = callPackage ../development/libraries/libmm-qt { };
+
+        libnm-qt = callPackage ../development/libraries/libnm-qt { };
+
+        massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
+
+        partitionManager = callPackage ../tools/misc/partition-manager { };
+
+        plasma-nm = callPackage ../tools/networking/plasma-nm { };
+
+        polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
+
+        psi = callPackage ../applications/networking/instant-messengers/psi { };
+
+        qtcurve = callPackage ../misc/themes/qtcurve { };
+
+        quassel = callPackage ../applications/networking/irc/quassel rec {
+          monolithic = true;
+          daemon = false;
+          client = false;
+          withKDE = stdenv.isLinux;
+          qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
+          dconf = gnome3.dconf;
+        };
+
+        quasselWithoutKDE = (quassel.override {
+          monolithic = true;
+          daemon = false;
+          client = false;
+          withKDE = false;
+          #qt = qt5;
+          tag = "-without-kde";
+        });
+
+        quasselDaemon = (quassel.override {
+          monolithic = false;
+          daemon = true;
+          client = false;
+          withKDE = false;
+          #qt = qt5;
+          tag = "-daemon";
+        });
+
+        quasselClient = (quassel.override {
+          monolithic = false;
+          daemon = false;
+          client = true;
+          tag = "-client";
+        });
+
+        quasselClientWithoutKDE = (quasselClient.override {
+          monolithic = false;
+          daemon = false;
+          client = true;
+          withKDE = false;
+          #qt = qt5;
+          tag = "-client-without-kde";
+        });
+
+        rekonq-unwrapped = callPackage ../applications/networking/browsers/rekonq { };
+        rekonq = wrapFirefox rekonq-unwrapped { };
+
+        kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
+
+        rsibreak = callPackage ../applications/misc/rsibreak { };
+
+        semnotes = callPackage ../applications/misc/semnotes { };
+
+        skrooge = callPackage ../applications/office/skrooge { };
+
+        telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
+
+        yakuake = callPackage ../applications/misc/yakuake { };
+
+        zanshin = callPackage ../applications/office/zanshin { };
+
+        kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
+      });
+
+    in recurseIntoAttrs self;
 
   lumina = callPackage ../desktops/lumina { };
 
