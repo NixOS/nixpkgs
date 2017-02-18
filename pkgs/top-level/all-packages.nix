@@ -16707,8 +16707,6 @@ with pkgs;
 
         kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
-        kdesvn = callPackage ../applications/version-management/kdesvn { };
-
         kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
 
         kile = callPackage ../applications/editors/kile { };
