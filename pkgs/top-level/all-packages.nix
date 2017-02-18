@@ -16125,7 +16125,7 @@ with pkgs;
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.nix {
+  digikam = kde5.callPackage ../applications/graphics/digikam {
     boost = boost160;
   };
 
@@ -16716,8 +16716,6 @@ with pkgs;
         choqok = callPackage ../applications/networking/instant-messengers/choqok { };
 
         colord-kde = callPackage ../tools/misc/colord-kde { };
-
-        digikam = callPackage ../applications/graphics/digikam { };
 
         eventlist = callPackage ../applications/office/eventlist {};
 
