@@ -5,11 +5,12 @@ stdenv.mkDerivation {
 
   src = fetch "libcxxabi" "09hlqlbxpnqi3449nrk43khp4jgd34xwx406mw6igwl8a673pa85";
 
-  buildInputs = [ cmake llvm ] ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
+  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    export cmakeFlags="-DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
+    unpackFile ${llvm.src}
+    export cmakeFlags="-DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '';
