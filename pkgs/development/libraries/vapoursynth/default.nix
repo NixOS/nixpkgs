@@ -1,7 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
-  glibc, zimg, imagemagick, libass, tesseract, yasm,
-  python3
+  glibc, zimg, imagemagick, libass, yasm, python3,
+  ocrSupport ? false, tesseract
 }:
+
+assert ocrSupport -> tesseract != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
@@ -18,14 +22,15 @@ stdenv.mkDerivation rec {
     pkgconfig autoreconfHook
     zimg imagemagick libass glibc tesseract yasm
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ];
+  ] ++ optional ocrSupport tesseract;
 
   configureFlags = [
     "--enable-imwri"
     "--disable-static"
+    (optionalString (!ocrSupport) "--disable-ocr")
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A video processing framework with the future in mind";
     homepage    = http://www.vapoursynth.com/;
     license     = licenses.lgpl21;
