@@ -850,4 +850,16 @@ self: super: {
     url = "https://github.com/bmillwood/pointfree/pull/22.patch";
     sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
   });
+
+  # https://github.com/int-e/QuickCheck-safe/issues/2
+  QuickCheck-safe = doJailbreak super.QuickCheck-safe;
+
+  # https://github.com/mokus0/dependent-sum-template/issues/7
+  dependent-sum-template = doJailbreak super.dependent-sum-template;
+
+  # https://github.com/jcristovao/newtype-generics/issues/13
+  newtype-generics = doJailbreak super.newtype-generics;
+
+  # https://github.com/lambdabot/lambdabot/issues/158
+  lambdabot-core = doJailbreak super.lambdabot-core;
 }
