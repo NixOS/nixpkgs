@@ -9319,7 +9319,7 @@ with pkgs;
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
-    libktorrent = callPackage ../development/libraries/libktorrent/5.nix { };
+    libktorrent = callPackage ../development/libraries/libktorrent { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
@@ -16718,10 +16718,6 @@ with pkgs;
         ktikz = callPackage ../applications/graphics/ktikz { };
 
         krusader = callPackage ../applications/misc/krusader { };
-
-        libktorrent = callPackage ../development/libraries/libktorrent {
-          boost = boost155;
-        };
 
         libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
 

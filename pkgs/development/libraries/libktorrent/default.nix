@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, kdelibs, cmake, gmp, qca2, boost, gettext, qt4, automoc4
-, phonon, libgcrypt }:
+{ stdenv, fetchurl, cmake, ecm
+, karchive, kcrash, ki18n, kio, solid
+, boost, gmp, qca-qt5, libgcrypt
+}:
 
-let
-  mp_ = "3.1";
-  version = "1.${mp_}";
-  version4 = "4.${mp_}";
-in
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
-  pname = "libktorrent";
+  name = "libktorrent-2.0.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/${version4}/${name}.tar.bz2";
-    sha256 = "2fe11ccb4bf2028c3da11e52cde890f1b3a90560e548eac89a4f8e1558b09725";
+    url = http://download.kde.org/stable/ktorrent/5.0/libktorrent-2.0.1.tar.xz;
+    sha256 = "0hiz4wm8jkymp24r6f1g8svj3pw9qspbjajf512m3j8s3bhrw3f7";
   };
 
-  nativeBuildInputs = [ cmake automoc4 gettext ];
-  buildInputs = [ kdelibs phonon gmp qca2 boost libgcrypt ];
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake ecm ];
+  buildInputs = [ karchive kcrash ki18n kio solid qca-qt5 libgcrypt ];
+
+  propagatedBuildInputs = [ gmp boost ];
 
   enableParallelBuilding = true;
 
   meta = {
     description = "A BitTorrent library used by KTorrent";
-    homepage = http://ktorrent.pwsp.net;
-    inherit (kdelibs.meta) platforms;
+    homepage = https://www.kde.org/applications/internet/ktorrent/;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
