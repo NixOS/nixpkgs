@@ -1,47 +1,63 @@
-{ stdenv, fetchurl, python, pyqt5, sip, poppler_utils, pkgconfig, libpng
+{ stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
-, makeWrapper, unrarSupport ? false, chmlib, pythonPackages, xz, libusb1, libmtp
+, makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
 , xdg_utils, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.64.0";
+  version = "2.76.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0jjbkhd3n7rh5q6cl6yy51hyjbxmgm6xj7i2a1d3h2ggrip1zmr9";
+    sha256 = "1xfm586n6gm44mkyn25mbiyhj6w9ji9yl6fvmnr4zk1q6qcga3v8";
   };
 
-  inherit python;
-
   patches = [
-    # Patch from Debian that switches the version update change from
-    # enabled by default to disabled by default.
-    ./no_updates_dialog.patch
+    # Patches from Debian that:
+    # - disable plugin installation (very insecure)
+    # - disables loading of web bug for privacy
+    # - switches the version update from enabled to disabled by default
+    (fetchpatch {
+      name = "disable_plugins.patch";
+      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/disable_plugins.py-20111220183043-dcl08ccfagjxt1dv-1/disable_plugins.py";
+      sha256 = "19spdx52dhbrfn9lm084yl3cfwm6f90imd51k97sf7flmpl569pk";
+    })
+    (fetchpatch {
+      name = "links_privacy.patch";
+      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/linksprivacy.patch-20160417214308-6hvive72pc0r4awc-1/links-privacy.patch";
+      sha256 = "0f6pq2b7q56pxrq2j8yqd7bksc623q2zgq29qcli30f13vga1w60";
+    })
+    (fetchpatch {
+      name = "no_updates_dialog.patch";
+      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/no_updates_dialog.pa-20081231120426-rzzufl0zo66t3mtc-16/no_updates_dialog.patch";
+      sha256 = "16xwa2fa47jvs954fjrwr8rhh89aljgi1d1wrfxa40sknlmfwxif";
+    })
+    # the unrar patch is not from debian
   ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${pyqt5}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
+
+    # Remove unneeded files and libs
+    rm -rf resources/calibre-portable.* \
+           src/{chardet,cherrypy,html5lib,odf,routes}
   '';
 
   dontUseQmakeConfigure = true;
-  # hack around a build problem
-  preBuild = ''
-    mkdir -p ../tmp.*/lib
-  '';
 
   nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
 
-  buildInputs =
-    [ python pyqt5 sip poppler_utils libpng imagemagick libjpeg
-      fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
-      pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
-      pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
-      pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw
-      pythonPackages.cssselect
-    ];
+  buildInputs = [
+    poppler_utils libpng imagemagick libjpeg
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
+  ] ++ (with python2Packages; [
+    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
+    python pyqt5 sip
+    # the following are distributed with calibre, but we use upstream instead
+    chardet cherrypy html5lib_0_9999999 odfpy routes
+  ]);
 
   installPhase = ''
     export HOME=$TMPDIR/fakehome
@@ -53,8 +69,8 @@ stdenv.mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo}/include/podofo
     export PODOFO_LIB_DIR=${podofo}/lib
-    export SIP_BIN=${sip}/bin/sip
-    python setup.py install --prefix=$out
+    export SIP_BIN=${python2Packages.sip}/bin/sip
+    ${python2Packages.python.interpreter} setup.py install --prefix=$out
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py
@@ -108,14 +124,14 @@ stdenv.mkDerivation rec {
     ];
     categories = "Office";
     extraEntries = ''
-      Actions=ebook-edit ebook-viewer
+      Actions=Edit;Viewer;
 
-      [Desktop Action ebook-edit]
+      [Desktop Action Edit]
       Name=Edit E-book
       Icon=@out@/share/calibre/images/tweak.png
       Exec=@out@/bin/ebook-edit --detach %F
 
-      [Desktop Action ebook-viewer]
+      [Desktop Action Viewer]
       Name=E-book Viewer
       Icon=@out@/share/calibre/images/viewer.png
       Exec=@out@/bin/ebook-viewer --detach %F
