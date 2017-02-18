@@ -746,7 +746,7 @@ with pkgs;
 
   clib = callPackage ../tools/package-management/clib { };
 
-  colord-kde = qt5.callPackage ../tools/misc/colord-kde/0.5.nix {};
+  colord-kde = qt5.callPackage ../tools/misc/colord-kde {};
 
   consul = callPackage ../servers/consul { };
 
@@ -16712,8 +16712,6 @@ with pkgs;
         };
 
         choqok = callPackage ../applications/networking/instant-messengers/choqok { };
-
-        colord-kde = callPackage ../tools/misc/colord-kde { };
 
         eventlist = callPackage ../applications/office/eventlist {};
 
