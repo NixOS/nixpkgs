@@ -4368,9 +4368,7 @@ with pkgs;
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
-  uim = callPackage ../tools/inputmethods/uim {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  uim = kde4.callPackage ../tools/inputmethods/uim { };
 
   uhub = callPackage ../servers/uhub { };
 
@@ -16709,6 +16707,7 @@ with pkgs;
 
         calligra = callPackage ../applications/office/calligra {
           vc = vc_0_7;
+          oxygen_icons = kde5.oxygen-icons5;
         };
 
         choqok = callPackage ../applications/networking/instant-messengers/choqok { };

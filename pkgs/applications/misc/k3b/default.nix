@@ -2,7 +2,7 @@
 , shared_mime_info, libvorbis, taglib, flac, libsamplerate
 , libdvdread, lame, libsndfile, libmad, gettext , transcode, cdrdao
 , dvdplusrwtools, vcdimager, cdparanoia, kdelibs, libdvdcss, ffmpeg
-, kdemultimedia, phonon, libkcddb ? null
+, libkcddb, phonon
 }:
 
 let
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     shared_mime_info libvorbis taglib flac libsamplerate libdvdread
     lame libsndfile libmad stdenv.cc.libc kdelibs
-    kdemultimedia phonon libkcddb makeWrapper cdparanoia
+    phonon libkcddb makeWrapper cdparanoia
     libdvdcss ffmpeg
   ];
 
