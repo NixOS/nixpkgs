@@ -16713,8 +16713,6 @@ with pkgs;
 
         kmplayer = callPackage ../applications/video/kmplayer { };
 
-        kmymoney = callPackage ../applications/office/kmymoney { };
-
         kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
         ktikz = callPackage ../applications/graphics/ktikz { };
