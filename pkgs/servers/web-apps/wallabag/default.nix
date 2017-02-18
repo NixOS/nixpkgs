@@ -2,18 +2,23 @@
 
 stdenv.mkDerivation rec {
   name = "wallabag-${version}";
-  version = "2.2.0";
+  version = "2.2.1";
 
   # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur
 
   src = fetchurl {
     url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    sha256 = "0aix2iwwb9imqqhgbxpk8n9pr6875ljkwz7jpjnjdzlk7ndzvl7w";
+    sha256 = "0kp1fkfipsbz14kpp107nwknb3s54jwxprcwmsh19gl97jmwnq0g";
   };
 
   outputs = [ "out" "doc" ];
 
   patchPhase = ''
+    # workaround for https://github.com/wallabag/wallabag/issues/2794
+    ln -sf ../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public ./web/bundles/fosjsrouting
+    ln -sf ../../vendor/nelmio/api-doc-bundle/Nelmio/ApiDocBundle/Resources/public ./web/bundles/nelmioapidoc
+    ln -sf ../../vendor/white-october/pagerfanta-bundle/Resources/public ./web/bundles/whiteoctoberpagerfanta
+
     rm Makefile # use the "shared hosting" package with bundled dependencies
     substituteInPlace app/AppKernel.php \
       --replace "__DIR__" "getenv('WALLABAG_DATA')"
