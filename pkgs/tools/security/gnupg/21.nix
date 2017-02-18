@@ -37,6 +37,14 @@ stdenv.mkDerivation rec {
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
+  postInstall = ''
+    mkdir -p $out/lib/systemd/user
+    for f in doc/examples/systemd-user/*.{service,socket} ; do
+      substitute $f $out/lib/systemd/user/$(basename $f) \
+        --replace /usr/bin $out/bin
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;
     description = "A complete and free implementation of the OpenPGP standard";
