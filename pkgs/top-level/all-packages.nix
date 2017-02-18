@@ -16706,8 +16706,6 @@ with pkgs;
           oxygen_icons = kde5.oxygen-icons5;
         };
 
-        choqok = callPackage ../applications/networking/instant-messengers/choqok { };
-
         k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
 
         k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
