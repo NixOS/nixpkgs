@@ -2296,6 +2296,7 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
+    - lambdabot
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
@@ -5418,9 +5419,6 @@ dont-distribute-packages:
   lambda-toolbox:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   lambda2js:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   lambdaBase:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
-  lambdabot-haskell-plugins:                    [ i686-linux, x86_64-linux, x86_64-darwin ]
-  lambdabot-utils:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
-  lambdabot:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   lambdacat:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   lambdacms-core:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   lambdacms-media:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
