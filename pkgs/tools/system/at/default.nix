@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
+{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/run/wrappers/bin/sendmail" }:
 
 stdenv.mkDerivation {
   name = "at-3.1.16";

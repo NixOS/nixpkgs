@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     unitydir="$out/opt/Unity/Editor"
     mkdir -p $unitydir
     mv Editor/* $unitydir
-    ln -sf /var/setuid-wrappers/${chromium.sandboxExecutableName} $unitydir/chrome-sandbox
+    ln -sf /run/wrappers/bin/${chromium.sandboxExecutableName} $unitydir/chrome-sandbox
 
     mkdir -p $out/share/applications
     sed "/^Exec=/c\Exec=$out/bin/unity-editor" \

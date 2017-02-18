@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
@@ -45,6 +46,13 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ ncurses zlib ];
 
   postPatch = ""
+  + ''
+    patch -p1 --reverse < ${fetchpatch {
+      name = "fix-red-icons.diff"; # https://bugs.freedesktop.org/show_bug.cgi?id=99078
+      url = https://github.com/llvm-mirror/llvm/commit/c280d74837d8.diff;
+      sha256 = "11sq86spw41v72f676igksapdlsgh7fiqp5qkkmgfj0ndqcn9skf";
+    }}
+  ''
   # hacky fix: New LLVM releases require a newer OS X SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
@@ -109,7 +117,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
   };

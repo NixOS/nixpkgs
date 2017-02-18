@@ -1,8 +1,28 @@
+# construct an executable file that wraps the actual executable
+# makeWrapper EXECUTABLE ARGS
+
+# ARGS:
+# --argv0 NAME      : set name of executed process to NAME
+#                     (otherwise it’s called …-wrapped)
+# --set   VAR VAL   : add VAR with value VAL to the executable’s environment
+# --unset VAR       : remove VAR from the environment
+# --run   COMMAND   : run command before the executable
+#                     The command can push extra flags to a magic list variable
+#                     extraFlagsArray, which are then added to the invocation
+#                     of the executable
+# --add-flags FLAGS : add FLAGS to invocation of executable
+
+# --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
+# --suffix
+# --suffix-each     ENV SEP VALS  : like --suffix, but VALS is a list
+# --prefix-contents ENV SEP FILES : like --suffix-each, but contents of FILES
+#                                   are read first and used as VALS
+# --suffix-contents
 makeWrapper() {
     local original=$1
     local wrapper=$2
     local params varName value command separator n fileNames
-    local argv0 flagsBefore flags
+    local argv0 flagsBefore flags extraFlagsArray
 
     mkdir -p "$(dirname $wrapper)"
 

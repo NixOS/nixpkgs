@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgs, lib, python, pythonPackages }:
+{ fetchFromGitHub, lib, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   version = "3.4.0";
@@ -26,5 +26,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://github.com/insanum/gcalcli;
     description = "CLI for Google Calendar";
     license = licenses.mit;
+    maintainers = [ maintainers.nocoolnametom ];
   };
 }

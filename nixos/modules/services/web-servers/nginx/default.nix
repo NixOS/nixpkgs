@@ -16,20 +16,17 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
-  configFile = pkgs.runCommand "nginx.conf" {
-    inherit configFileUnformatted;
-    passAsFile = [ "configFileUnformatted" ];
-    # configFileUnformatted is created locally, therefore so should this be.
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    cp ${configFileUnformatted} nginx.conf
-    chmod u+w nginx.conf
-    ${pkgs.nginx-config-formatter}/bin/nginxfmt nginx.conf
-    cp nginx.conf $out
+  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+    proxy_set_header        X-Forwarded-Host $host;
+    proxy_set_header        X-Forwarded-Server $host;
+    proxy_set_header        Accept-Encoding "";
   '';
 
-  configFileUnformatted = pkgs.writeText "nginx.unformatted.conf" ''
+  configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
@@ -78,21 +75,19 @@ let
       ''}
 
       ${optionalString (cfg.recommendedProxySettings) ''
-        proxy_set_header        Host $host;
-        proxy_set_header        X-Real-IP $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header        X-Forwarded-Proto $scheme;
-        proxy_set_header        X-Forwarded-Host $host;
-        proxy_set_header        X-Forwarded-Server $host;
-        proxy_set_header        Accept-Encoding "";
-
         proxy_redirect          off;
         proxy_connect_timeout   90;
         proxy_send_timeout      90;
         proxy_read_timeout      90;
         proxy_http_version      1.0;
+        include ${recommendedProxyConfig};
       ''}
 
+      # $connection_upgrade is used for websocket proxying
+      map $http_upgrade $connection_upgrade {
+          default upgrade;
+          '''      close;
+      }
       client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
@@ -190,10 +185,16 @@ let
   mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
       ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
+      ${optionalString config.proxyWebsockets ''
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+      ''}
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${config.extraConfig}
+      ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') locations);
   mkBasicAuth = vhostName: authDef: let

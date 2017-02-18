@@ -64,7 +64,7 @@
       cups = 36;
       foldingathome = 37;
       sabnzbd = 38;
-      kdm = 39;
+      #kdm = 39; # dropped in 17.03
       ghostone = 40;
       git = 41;
       fourstore = 42;
@@ -287,6 +287,7 @@
       pdns-recursor = 269;
       kresd = 270;
       rpc = 271;
+      geoip = 272;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -333,7 +334,7 @@
       #cups = 36; # unused
       #foldingathome = 37; # unused
       #sabnzd = 38; # unused
-      #kdm = 39; # unused
+      #kdm = 39; # unused, even before 17.03
       ghostone = 40;
       git = 41;
       fourstore = 42;
@@ -543,6 +544,7 @@
       gogs = 268;
       kresd = 270;
       #rpc = 271; # unused
+      #geoip = 272; # unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

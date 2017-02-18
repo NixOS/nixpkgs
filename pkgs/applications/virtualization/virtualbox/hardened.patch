@@ -96,7 +96,7 @@ index 95dc9a7..39170bc 100644
      /* get the path to the executable */
      char szPath[RTPATH_MAX];
 -    RTPathAppPrivateArch(szPath, sizeof(szPath) - 1);
-+    RTStrCopy(szPath, sizeof(szPath) - 1, "/var/setuid-wrappers");
++    RTStrCopy(szPath, sizeof(szPath) - 1, "/run/wrappers/bin");
      size_t cchBufLeft = strlen(szPath);
      szPath[cchBufLeft++] = RTPATH_DELIMITER;
      szPath[cchBufLeft] = 0;
@@ -154,7 +154,7 @@ index be2ad8f..7ddf105 100644
  
 +RTDECL(int) RTPathSuidDir(char *pszPath, size_t cchPath)
 +{
-+    return RTStrCopy(pszPath, cchPath, "/var/setuid-wrappers");
++    return RTStrCopy(pszPath, cchPath, "/run/wrappers/bin");
 +}
 +
 +
@@ -174,7 +174,7 @@ index 7bde6af..2656cae 100644
 + * will cut off everything after the rightmost / as this function is analogous
 + * to RTProcGetExecutablePath().
 + */
-+#define SUIDDIR "/var/setuid-wrappers/"
++#define SUIDDIR "/run/wrappers/bin/"
 +
 +RTR3DECL(char *) RTProcGetSuidPath(char *pszExecPath, size_t cbExecPath)
 +{

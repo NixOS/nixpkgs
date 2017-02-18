@@ -111,11 +111,11 @@ in
 
     plugin = "exodus";
     namespace = "plugin.video.exodus";
-    version = "2.0.12";
+    version = "3.0.5";
 
     src = fetchurl {
       url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
-      sha256 = "02cdyvyxay6jiw9xj8hqnkp5w6drqj67pkh243znrsc06f26qkql";
+      sha256 = "0di34sp6y3v72l6gfhj7cvs1vljs9vf0d0x2giix3jk433cj01j0";
     };
 
     meta = with stdenv.lib; {

@@ -1,20 +1,20 @@
-{ fetchurl, stdenv, SDL, freealut, SDL_image, openal, physfs, zlib, mesa, glew }:
+{ fetchurl, stdenv, SDL2, freealut, SDL2_image, openal, physfs, zlib, mesa, glew }:
 
 stdenv.mkDerivation rec {
-  name = "trigger-rally-0.6.3";
+  name = "trigger-rally-0.6.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/trigger-rally/${name}.tar.gz";
-    sha256 = "103mv4vpq335mrmgzlhahrfncq7ds3b5ip5a52967rv2j6hhzpvy";
+    sha256 = "095s4sx0s1ijlarkh84rvzlv4nxh9llrsal1lb3m3pf0v228gnzj";
   };
 
-  buildInputs = [ SDL freealut SDL_image openal physfs zlib mesa glew ];
+  buildInputs = [ SDL2 freealut SDL2_image openal physfs zlib mesa glew ];
 
   preConfigure = ''
     sed s,/usr/local,$out, -i bin/*defs
 
     cd src
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL2.dev}/include/SDL2"
     export makeFlags="$makeFlags prefix=$out"
   '';
 
@@ -28,9 +28,6 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/trigger-rally
   '';
-
-  # search.patch :   fix c++ error.
-  patches = [ ./search.patch ];
 
   meta = {
     description = "Rally";

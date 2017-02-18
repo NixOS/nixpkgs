@@ -1,5 +1,5 @@
 
-{ stdenv, wayland, xorgserver, xkbcomp, xkeyboard_config, epoxy, libxslt, libunwind, makeWrapper }:
+{ stdenv, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config, epoxy, libxslt, libunwind, makeWrapper }:
 
 with stdenv.lib;
 
@@ -7,7 +7,7 @@ overrideDerivation xorgserver (oldAttrs: {
 
   name = "xwayland-${xorgserver.version}";
   propagatedNativeBuildInputs = oldAttrs.propagatedNativeBuildInputs
-    ++ [wayland epoxy libxslt makeWrapper libunwind];
+    ++ [wayland wayland-protocols epoxy libxslt makeWrapper libunwind];
   configureFlags = [
     "--disable-docs"
     "--disable-devel-docs"

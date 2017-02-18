@@ -50,10 +50,6 @@ in
     })
 
     (mkIf (xcfg.enable && cfg.enable) {
-
-      warnings = optional config.services.xserver.desktopManager.kde4.enable
-        "KDE 4 should not be enabled at the same time as KDE 5";
-
       services.xserver.desktopManager.session = singleton {
         name = "kde5";
         bgSupport = true;
@@ -65,24 +61,13 @@ in
           ''}
 
           exec "${kde5.startkde}"
-
         '';
       };
 
-      security.setuidOwners = [
-        {
-          program = "kcheckpass";
-          source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
-          owner = "root";
-          setuid = true;
-        }
-        {
-          program = "start_kdeinit";
-          source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit";
-          owner = "root";
-          setuid = true;
-        }
-      ];
+      security.wrappers = {
+        kcheckpass.source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
+        "start_kdeinit".source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit";
+      };
 
       environment.systemPackages =
         [
@@ -118,6 +103,8 @@ in
           kde5.kservice
           kde5.ktextwidgets
           kde5.kwallet
+          kde5.kwallet-pam
+          kde5.kwalletmanager
           kde5.kwayland
           kde5.kwidgetsaddons
           kde5.kxmlgui
@@ -248,6 +235,14 @@ in
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
+
+      # Doing these one by one seems silly, but we currently lack a better
+      # construct for handling common pam configs.
+      security.pam.services.gdm.enableKwallet = true;
+      security.pam.services.kdm.enableKwallet = true;
+      security.pam.services.lightdm.enableKwallet = true;
+      security.pam.services.sddm.enableKwallet = true;
+      security.pam.services.slim.enableKwallet = true;
 
       # use kimpanel as the default IBus panel
       i18n.inputMethod.ibus.panel =

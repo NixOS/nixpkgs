@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "terragrunt-${version}";
-  version = "0.9.9";
+  version = "0.10.1";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev    = "v${version}";
     owner  = "gruntwork-io";
     repo   = "terragrunt";
-    sha256 = "08rygmcjlcdj4g575cpx2lfdq69r450ri5q2dngvnhbvzk8nvnr0";
+    sha256 = "04q9wm8dnbm1pcy9i3c7ral49k3z10a7gx7h6h4bsvjy1sdf58vz";
   };
 
   goDeps = ./deps.nix;

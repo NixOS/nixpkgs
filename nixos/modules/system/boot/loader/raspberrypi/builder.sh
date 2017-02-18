@@ -61,12 +61,13 @@ addEntry() {
 
     local kernel=$(readlink -f $path/kernel)
     local initrd=$(readlink -f $path/initrd)
+    local dtb_path=$(readlink -f $path/kernel-modules/dtbs)
 
     if test -n "@copyKernels@"; then
         copyToKernelsDir $kernel; kernel=$result
         copyToKernelsDir $initrd; initrd=$result
     fi
-    
+
     echo $(readlink -f $path) > $outdir/$generation-system
     echo $(readlink -f $path/init) > $outdir/$generation-init
     cp $path/kernel-params $outdir/$generation-cmdline.txt
@@ -80,6 +81,11 @@ addEntry() {
         copyForced $kernel /boot/kernel7.img
       fi
       copyForced $initrd /boot/initrd
+      for dtb in $dtb_path/bcm*.dtb; do
+        dst="/boot/$(basename $dtb)"
+        copyForced $dtb "$dst"
+        filesCopied[$dst]=1
+      done
       cp "$(readlink -f "$path/init")" /boot/nixos-init
       echo "`cat $path/kernel-params` init=$path/init" >/boot/cmdline.txt
 
@@ -108,8 +114,8 @@ copyForced $fwdir/start_cd.elf  /boot/start_cd.elf
 copyForced $fwdir/start_db.elf  /boot/start_db.elf
 copyForced $fwdir/start_x.elf   /boot/start_x.elf
 
-# Remove obsolete files from /boot/old.
-for fn in /boot/old/*linux* /boot/old/*initrd*; do
+# Remove obsolete files from /boot and /boot/old.
+for fn in /boot/old/*linux* /boot/old/*initrd-initrd* /boot/bcm*.dtb; do
     if ! test "${filesCopied[$fn]}" = 1; then
         rm -vf -- "$fn"
     fi

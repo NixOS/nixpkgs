@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, lua, perl, python
+{ stdenv, fetchFromGitHub, pkgconfig, gtk2, lua, perl, python2
 , libtool, pciutils, dbus_glib, libcanberra_gtk2, libproxy
 , libsexy, enchant, libnotify, openssl, intltool
 , desktop_file_utils, hicolor_icon_theme
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2 lua perl python pciutils dbus_glib libcanberra_gtk2 libproxy
+    gtk2 lua perl python2 pciutils dbus_glib libcanberra_gtk2 libproxy
     libsexy libnotify openssl desktop_file_utils hicolor_icon_theme
   ];
 
