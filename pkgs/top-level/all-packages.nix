@@ -16719,8 +16719,6 @@ with pkgs;
 
         krusader = callPackage ../applications/misc/krusader { };
 
-        libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
-
         liblikeback = callPackage ../development/libraries/liblikeback { };
 
         massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
