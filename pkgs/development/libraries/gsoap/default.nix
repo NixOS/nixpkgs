@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gsoap-${version}";
-  version = "2.8.37";
+  version = "2.8.42";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gsoap2/gsoap-2.8/gsoap_${version}.zip";
-    sha256 = "1nvf5hgwff1agqdzbn3qc5569jzm14qkwqws0673z6hv2l3lijx3";
+    sha256 = "0fav4lhdibwggkf495pggmqna632jxkh6q2mi32b9hsn883pg5m7";
   };
 
   buildInputs = [ unzip m4 bison flex openssl zlib ];

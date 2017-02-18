@@ -7100,6 +7100,11 @@ with pkgs;
   dbus_libs = dbus;
   dbus_daemon = dbus.daemon;
 
+  makeDBusConf = { suidHelper, serviceDirectories }:
+    callPackage ../development/libraries/dbus/make-dbus-conf.nix {
+      inherit suidHelper serviceDirectories;
+    };
+
   dee = callPackage ../development/libraries/dee { };
 
   dhex = callPackage ../applications/editors/dhex { };
@@ -8747,8 +8752,6 @@ with pkgs;
 
   libzdb = callPackage ../development/libraries/libzdb { };
 
-  libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
-
   libwacom = callPackage ../development/libraries/libwacom { };
 
   lightning = callPackage ../development/libraries/lightning { };
@@ -9036,7 +9039,7 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = libressl_2_5;
+  libressl = libressl_2_4;
   libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
     fetchurl = fetchurlBoot;
   };
@@ -10360,7 +10363,9 @@ with pkgs;
 
   freeradius = callPackage ../servers/freeradius { };
 
-  freeswitch = callPackage ../servers/sip/freeswitch { };
+  freeswitch = callPackage ../servers/sip/freeswitch {
+    openssl = openssl_1_0_2;
+  };
 
   gatling = callPackage ../servers/http/gatling { };
 
@@ -14960,10 +14965,6 @@ with pkgs;
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
-  sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
-    gtk = gtk3;
-  };
-
   shfmt = callPackage ../tools/text/shfmt { };
 
   shutter = callPackage ../applications/graphics/shutter { };
@@ -15363,8 +15364,6 @@ with pkgs;
   };
 
   twmn = qt5.callPackage ../applications/misc/twmn { };
-
-  twinkle = callPackage ../applications/networking/instant-messengers/twinkle { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 

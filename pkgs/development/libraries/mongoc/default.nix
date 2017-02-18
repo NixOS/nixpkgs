@@ -2,16 +2,13 @@
 , openssl, which
 }:
 
-let
-  version = "1.1.10";
-in
-
 stdenv.mkDerivation rec {
   name = "mongoc-${version}";
+  version = "1.5.4";
 
   src = fetchzip {
     url = "https://github.com/mongodb/mongo-c-driver/releases/download/${version}/mongo-c-driver-${version}.tar.gz";
-    sha256 = "13yg8dpqgbpc44lsblr3szk2a5bnl2prlayv4xlkivx90m86lcx3";
+    sha256 = "0xjk3k76n8yz7zi6a0dx1wgpsvvn5qhpzrapdw4v3h49hwf7rc5q";
   };
 
   propagatedBuildInputs = [ libbson ];

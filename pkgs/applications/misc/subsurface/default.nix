@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # subsurfacewebservices.h dependency on ui_webservices.h
 
   cmakeFlags = [
     "-DMARBLE_LIBRARIES=${libmarble}/lib/libssrfmarblewidget.so"
