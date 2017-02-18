@@ -16721,8 +16721,6 @@ with pkgs;
 
         massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
-        partitionManager = callPackage ../tools/misc/partition-manager { };
-
         psi = callPackage ../applications/networking/instant-messengers/psi { };
 
         semnotes = callPackage ../applications/misc/semnotes { };
