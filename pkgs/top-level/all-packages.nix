@@ -16731,8 +16731,6 @@ with pkgs;
 
         kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
-        kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
-
         kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
         kdesvn = callPackage ../applications/version-management/kdesvn { };
