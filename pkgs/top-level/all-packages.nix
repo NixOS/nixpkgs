@@ -16701,8 +16701,6 @@ with pkgs;
           ffmpeg = ffmpeg_2;
         };
 
-        basket = callPackage ../applications/office/basket { };
-
         calligra = callPackage ../applications/office/calligra {
           vc = vc_0_7;
           oxygen_icons = kde5.oxygen-icons5;
