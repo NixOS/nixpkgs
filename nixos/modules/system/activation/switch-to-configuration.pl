@@ -383,6 +383,10 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
+# Set the new tmpfiles
+print STDERR "setting up tmpfiles\n";
+system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+
 # Reload units that need it. This includes remounting changed mount
 # units.
 if (scalar(keys %unitsToReload) > 0) {
