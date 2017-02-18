@@ -26,6 +26,10 @@ let
           buildInputs = [ drv ];
     };
 
+  customPhases = filterAttrs
+    (_: v: v != null)
+    { inherit setupHook configurePhase buildPhase installPhase; };
+
   pkg = self: stdenv.mkDerivation (attrs // {
 
     name = "${name}-${version}";
@@ -41,37 +45,30 @@ let
 
     inherit src;
 
-    setupHook = if setupHook == null
-    then writeText "setupHook.sh" ''
+    setupHook = writeText "setupHook.sh" ''
        addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
-    ''
-    else setupHook;
+    '';
 
     postPatch = ''
       rm -f rebar rebar3
     '' + postPatch;
 
-    configurePhase = if configurePhase == null
-    then ''
+    configurePhase = ''
       runHook preConfigure
       ${erlang}/bin/escript ${rebar3.bootstrapper} ${debugInfoFlag}
       runHook postConfigure
-    ''
-    else configurePhase;
+    '';
 
-    buildPhase = if buildPhase == null
-    then ''
+    buildPhase = ''
       runHook preBuild
       HOME=. rebar3 compile
       ${if compilePorts then ''
         HOME=. rebar3 pc compile
       '' else ''''}
       runHook postBuild
-    ''
-    else installPhase;
+    '';
 
-    installPhase = if installPhase == null
-    then ''
+    installPhase = ''
       runHook preInstall
       mkdir -p "$out/lib/erlang/lib/${name}-${version}"
       for reldir in src ebin priv include; do
@@ -81,8 +78,7 @@ let
         success=1
       done
       runHook postInstall
-    ''
-    else installPhase;
+    '';
 
     meta = {
       inherit (erlang.meta) platforms;
@@ -93,6 +89,6 @@ let
       env = shell self;
       inherit beamDeps;
     };
-  });
+  } // customPhases);
 in
   fix pkg
