@@ -16761,8 +16761,6 @@ with pkgs;
 
         psi = callPackage ../applications/networking/instant-messengers/psi { };
 
-        qtcurve = callPackage ../misc/themes/qtcurve { };
-
         rekonq-unwrapped = callPackage ../applications/networking/browsers/rekonq { };
         rekonq = wrapFirefox rekonq-unwrapped { };
 
