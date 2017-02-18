@@ -16764,8 +16764,6 @@ with pkgs;
 
         kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
 
-        rsibreak = callPackage ../applications/misc/rsibreak { };
-
         semnotes = callPackage ../applications/misc/semnotes { };
 
         telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
