@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, rustPlatform, lzo, zlib }:
+{ stdenv, fetchurl, rustPlatform, lzo, zlib }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "btrfs-dedupe-${version}";
-  version = "1.0.3-git";
+  version = "1.1.0";
 
-  src = fetchgit {
-    url = "https://gitlab.wellbehavedsoftware.com/well-behaved-software/btrfs-dedupe.git";
-    rev = "72c6a301";
-    sha256 = "1qf3kyi7ir408d321pj2qffdnngam5g2zarb0952bm50aqcl3bh0";
+
+  src = fetchurl {
+    url = "https://gitlab.wellbehavedsoftware.com/well-behaved-software/btrfs-dedupe/repository/archive.tar.bz2?ref=72c6a301d20f935827b994db210bf0a1e121273a";
+    sha256 = "0qy1g4crhfgs2f5cmrsjv6qscg3r66gb8n6sxhimm9ksivhjyyjp";
   };
 
   depsSha256 = "04jlz7nzsmg86i73w75i8rmlbk635xrg8m1dfac8h17dwb29yj6a";
@@ -22,6 +22,5 @@ buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ikervagyok ];
-    broken = true;
   };
 }
