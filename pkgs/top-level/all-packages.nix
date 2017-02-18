@@ -16707,8 +16707,6 @@ with pkgs;
 
         basket = callPackage ../applications/office/basket { };
 
-        bluedevil = callPackage ../tools/bluetooth/bluedevil { };
-
         calligra = callPackage ../applications/office/calligra {
           vc = vc_0_7;
         };
