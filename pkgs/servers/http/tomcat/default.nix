@@ -30,13 +30,6 @@ let
   });
 
 in {
-
-  tomcat6 = common {
-    versionMajor = "6";
-    versionMinor = "0.48";
-    sha256 = "1w4jf28g8p25fmijixw6b02iqlagy2rvr57y3n90hvz341kb0bbc";
-  };
-
   tomcat7 = common {
     versionMajor = "7";
     versionMinor = "0.73";
