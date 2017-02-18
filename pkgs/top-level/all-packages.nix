@@ -4121,6 +4121,8 @@ with pkgs;
 
   tryton = callPackage ../applications/office/tryton { };
 
+  trytond = callPackage ../applications/office/trytond { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
