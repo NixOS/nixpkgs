@@ -16759,8 +16759,6 @@ with pkgs;
 
         partitionManager = callPackage ../tools/misc/partition-manager { };
 
-        polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
-
         psi = callPackage ../applications/networking/instant-messengers/psi { };
 
         qtcurve = callPackage ../misc/themes/qtcurve { };
