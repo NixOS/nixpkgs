@@ -45,7 +45,8 @@ in
         deviceDependency = dev:
           # Use systemd service if we manage device creation, else
           # trust udev when not in the container
-          if (hasAttr dev cfg.bridges) ||
+          if (hasAttr dev (filterAttrs (k: v: v.virtual) cfg.interfaces)) ||
+             (hasAttr dev cfg.bridges) ||
              (hasAttr dev cfg.bonds) ||
              (hasAttr dev cfg.macvlans) ||
              (hasAttr dev cfg.sits) ||
