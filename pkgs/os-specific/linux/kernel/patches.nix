@@ -174,14 +174,4 @@ rec {
         sha256 = "0mps33r4mnwiy0bmgrzgqkrk59yya17v6kzpv9024g4xlz61rk8p";
       };
     };
-
-  sctp_bug_on_CVE_2017_5986 = rec
-    { name = "sctp_BUG_ON_CVE_2017_5986.patch";
-      patch = fetchpatch {
-        inherit name;
-        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=2dcab598484185dea7ec22219c76dcdd59e3cb90";
-        sha256 = "15np10bfm5yzby9zbkrh23qpm91wnprblsk0xn9yjryypnz8njxh";
-      };
-    };
-
 }
