@@ -8889,11 +8889,6 @@ with pkgs;
 
   mlt = callPackage ../development/libraries/mlt {};
 
-  mlt-qt4 = callPackage ../development/libraries/mlt/qt-4.nix {
-    ffmpeg = ffmpeg_2;
-    qt = qt4;
-  };
-
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
   mono-zeroconf = callPackage ../development/libraries/mono-zeroconf { };
@@ -16711,8 +16706,6 @@ with pkgs;
         k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
 
         kadu = callPackage ../applications/networking/instant-messengers/kadu { };
-
-        kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
         kdesvn = callPackage ../applications/version-management/kdesvn { };
 
