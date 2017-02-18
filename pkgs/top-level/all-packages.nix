@@ -16772,7 +16772,6 @@ with pkgs;
 
         zanshin = callPackage ../applications/office/zanshin { };
 
-        kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
       });
 
     in recurseIntoAttrs self;
