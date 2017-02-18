@@ -59,6 +59,7 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keybase-go = keybase;  # added 2016-08-24
