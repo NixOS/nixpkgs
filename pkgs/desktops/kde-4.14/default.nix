@@ -29,8 +29,6 @@ kde.modules // kde.individual //
 
   akonadi = callPackage ./support/akonadi { };
 
-  qt4 = qt48;
-
   inherit release;
 
   l10n = callPackage ./l10n {
