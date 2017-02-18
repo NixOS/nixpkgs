@@ -120,6 +120,8 @@ let
        lwt = ocaml_lwt;
     };
 
+    cow = callPackage ../development/ocaml-modules/cow { };
+
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
