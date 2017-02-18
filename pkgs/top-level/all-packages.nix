@@ -17254,7 +17254,10 @@ with pkgs;
 
   picosat = callPackage ../applications/science/logic/picosat {};
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) prooftree;
+  prooftree = (with ocamlPackages_4_01_0;
+    callPackage  ../applications/science/logic/prooftree {
+      camlp5 = camlp5_transitional;
+    });
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 

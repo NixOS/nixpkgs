@@ -721,12 +721,6 @@ let
       camlp5 = camlp5_transitional;
     };
 
-    prooftree =
-      if lib.versionOlder "4.01" ocaml.version
-      then null
-      else callPackage ../applications/science/logic/prooftree {
-      camlp5 = camlp5_transitional;
-    };
   };
     in lib.fix' (lib.extends overrides packageSet);
 in rec
