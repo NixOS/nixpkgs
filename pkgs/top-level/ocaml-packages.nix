@@ -698,11 +698,6 @@ let
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-    llpp =
-      if lib.versionOlder "4.04" ocaml.version
-      then callPackage ../applications/misc/llpp { }
-      else null;
-
 
     monotoneViz = callPackage ../applications/version-management/monotone-viz {
       inherit (pkgs.gnome2) libgnomecanvas glib;

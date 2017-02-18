@@ -14098,7 +14098,7 @@ with pkgs;
     bison = bison2;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_04) llpp;
+  llpp = ocaml-ng.ocamlPackages_4_04.callPackage ../applications/misc/llpp { };
 
   lmms = callPackage ../applications/audio/lmms { };
 
