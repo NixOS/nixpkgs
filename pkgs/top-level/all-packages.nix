@@ -945,6 +945,7 @@ with pkgs;
 
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
+    czmq = czmq3;
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
@@ -9998,9 +9999,13 @@ with pkgs;
 
   cppzmq = callPackage ../development/libraries/cppzmq {};
 
-  czmq = callPackage ../development/libraries/czmq { };
+  czmq3 = callPackage ../development/libraries/czmq/3.x.nix {};
+  czmq4 = callPackage ../development/libraries/czmq/4.x.nix {};
+  czmq = czmq4;
 
-  czmqpp = callPackage ../development/libraries/czmqpp { };
+  czmqpp = callPackage ../development/libraries/czmqpp {
+    czmq = czmq3;
+  };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
