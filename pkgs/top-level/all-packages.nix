@@ -15150,7 +15150,7 @@ with pkgs;
     themes = [];  # extra themes, etc.
   };
 
-  skrooge2 = qt5.callPackage ../applications/office/skrooge/2.nix {};
+  skrooge = qt5.callPackage ../applications/office/skrooge {};
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
@@ -16791,8 +16791,6 @@ with pkgs;
         rsibreak = callPackage ../applications/misc/rsibreak { };
 
         semnotes = callPackage ../applications/misc/semnotes { };
-
-        skrooge = callPackage ../applications/office/skrooge { };
 
         telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
