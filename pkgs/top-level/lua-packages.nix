@@ -151,6 +151,21 @@ let
     };
   };
 
+  luaposix = buildLuaPackage rec {
+    name = "posix-${version}";
+    version = "33.4.0";
+    src = fetchurl {
+      url = "https://github.com/luaposix/luaposix/archive/release-v${version}.tar.gz";
+      sha256 = "e66262f5b7fe1c32c65f17a5ef5ffb31c4d1877019b4870a5d373e2ab6526a21";
+    };
+    buildInputs = [ perl ];
+    meta = {
+      description = "Lua bindings for POSIX API";
+      homepage = "https://github.com/luaposix/luaposix";
+      hydraPlatforms = stdenv.lib.platforms.unix;
+    };
+  };
+
   lpty = buildLuaPackage rec {
     name = "lpty-${version}";
     version = "1.1.1";
