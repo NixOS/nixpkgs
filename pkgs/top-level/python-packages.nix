@@ -26784,11 +26784,11 @@ EOF
 
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
-    version = "0.12.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/webassets/${name}.tar.gz";
-      sha256 = "14m13xa5sc7iqq2j1wsd2klcwaihqlhz2l9lmn92dks2yc8hplcr";
+      sha256 = "1nrqkpb7z46h2b77xafxihqv3322cwqv6293ngaky4j3ff4cing7";
     };
 
     buildInputs = with self; [ nose jinja2 mock pytest ];
