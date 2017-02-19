@@ -3,16 +3,20 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-policykit";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0rbqzh8r259cc44f1cb236p9c3lp195zjdsw3w1nz7j7gzv9yjnd";
+    sha256 = "0sf8wj152z1xid1i2x5g1zpgh7lwq8f0rbrk3r9shyksxqcj2d8p";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
     qt5.qtbase
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "The LXQt PolicyKit agent";
     homepage = https://github.com/lxde/lxqt-policykit;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }
