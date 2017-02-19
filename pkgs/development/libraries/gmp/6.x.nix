@@ -22,6 +22,8 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ]
     ++ stdenv.lib.optional (buildPlatform != hostPlatform) buildPackages.stdenv.cc;
 
+  ${if hostPlatform != buildPlatform then "configurePlatforms" else null} = [];
+
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
