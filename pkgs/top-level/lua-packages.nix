@@ -126,7 +126,7 @@ let
 
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
-      plaftorms = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
@@ -146,7 +146,7 @@ let
     '';
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
-      plaftorms = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = with maintainers; [ flosse ];
     };
   };
@@ -162,7 +162,7 @@ let
     meta = {
       description = "Lua bindings for POSIX API";
       homepage = "https://github.com/luaposix/luaposix";
-      plaftorms = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 
@@ -175,7 +175,7 @@ let
     };
     meta = {
       homepage = "http://www.tset.de/lpty";
-      plaftorms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
     preBuild = ''
@@ -239,7 +239,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      plaftorms = with platforms; [darwin linux freebsd illumos];
+      platforms = with platforms; [darwin linux freebsd illumos];
       maintainers = with maintainers; [ mornfall ];
     };
   };
@@ -257,7 +257,7 @@ let
     disabled = isLua52;
     meta = {
       homepage = "https://github.com/luaforge/luazip";
-      plaftorms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -288,7 +288,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = https://github.com/brimworks/lua-zlib;
-      plaftorms = platforms.unix;
+      platforms = platforms.unix;
       license = licenses.mit;
       maintainers = [ maintainers.koral ];
     };
@@ -304,7 +304,7 @@ let
     buildInputs = [ autoreconfHook unzip ];
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
-      plaftorms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -339,7 +339,7 @@ let
 
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
-      plaftorms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
       broken = true;
     };
@@ -359,7 +359,7 @@ let
 
     meta = {
       homepage = "https://github.com/LuaDist/luasql-sqlite3";
-      plaftorms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -387,7 +387,7 @@ let
 
     meta = {
       homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
-      plaftorms = stdenv.lib.platforms.all;
+      platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -459,7 +459,7 @@ let
     meta = {
       description = "Simple implementation of msgpack in C Lua 5.1";
       homepage = "https://github.com/tarruda/libmpack";
-      plaftorms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
