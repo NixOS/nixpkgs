@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5Full, lzo, libX11 }:
+{ stdenv, fetchurl, qmakeHook, qtbase, qtwebkit, qtx11extras, lzo, libX11 }:
 
 stdenv.mkDerivation rec {
   name = pname + "-" + version;
@@ -8,10 +8,13 @@ stdenv.mkDerivation rec {
     url = "http://www.molspaces.com/dl/progs/${name}.tar.gz";
     sha256 = "0yz79v023w1229wzck3gij0iqah1xg8rg4a352q8idvg7bdmyfin";
   };
-  buildInputs = [ qt5Full lzo libX11 ];
-  QTDIR=qt5Full;
-  configurePhase =''
-    ./configure --prefix $out
+  buildInputs = [ qtbase qtwebkit qtx11extras lzo libX11 ];
+  nativeBuildInputs = [ qmakeHook ];
+
+  configurePhase = ''
+    runHook preConfigure
+    ./configure --prefix $out --qmakepath $QMAKE
+    runHook postConfigure
   '';
 
   meta = with stdenv.lib; {

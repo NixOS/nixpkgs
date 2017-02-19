@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, spidermonkey_24, unzip, curl, pcre, readline, openssl, perl, html-tidy }:
+{ stdenv, fetchurl, spidermonkey, unzip, curl, pcre, readline, openssl, perl, html-tidy }:
+
 stdenv.mkDerivation rec {
   name = "edbrowse-${version}";
   version = "3.6.1";
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ curl pcre readline openssl spidermonkey_24 perl html-tidy ];
+  buildInputs = [ curl pcre readline openssl spidermonkey perl html-tidy ];
 
   patchPhase = ''
     substituteInPlace src/ebjs.c --replace \"edbrowse-js\" \"$out/bin/edbrowse-js\"
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${spidermonkey_24.dev}/include/mozjs-24";
+  NIX_CFLAGS_COMPILE = "-I${spidermonkey}/include/mozjs-31";
   makeFlags = "-C src prefix=$(out)";
 
   src = fetchurl {
@@ -34,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://edbrowse.org/;
     maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
     platforms = platforms.linux;
+    broken = true;  # no compatible spidermonkey
   };
 }

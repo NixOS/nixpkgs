@@ -7,12 +7,12 @@
 stdenv.mkDerivation rec {
 
     pname = "discord";
-    version = "0.0.13";
+    version = "0.0.1";
     name = "${pname}-${version}";
 
     src = fetchurl {
-        url = "https://cdn-canary.discordapp.com/apps/linux/${version}/${pname}-canary-${version}.tar.gz";
-        sha256 = "1pwb8y80z1bmfln5wd1vrhras0xygd1j15sib0g9vaig4mc55cs6";
+        url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
+        sha256 = "10m3ixvhmxdw55awd84gx13m222qjykj7gcigbjabcvsgp2z63xs";
     };
 
     libPath = stdenv.lib.makeLibraryPath [
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
         # see pkgs/applications/misc/adobe-reader/builder.sh
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                  --set-rpath "$out:$libPath"                                   \
-                 $out/DiscordCanary
+                 $out/Discord
 
-        paxmark m $out/DiscordCanary
+        paxmark m $out/Discord
 
-        ln -s $out/DiscordCanary $out/bin/
+        ln -s $out/Discord $out/bin/
         ln -s $out/discord.png $out/share/pixmaps
 
         # Putting udev in the path won't work :(
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
 
     desktopItem = makeDesktopItem {
       name = pname;
-      exec = "DiscordCanary";
+      exec = "Discord";
       icon = pname;
-      desktopName = "Discord Canary";
+      desktopName = "Discord";
       genericName = meta.description;
       categories = "Network;InstantMessaging;";
     };

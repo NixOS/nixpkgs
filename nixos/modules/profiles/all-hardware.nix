@@ -42,6 +42,9 @@
       # Virtio (QEMU, KVM etc.) support.
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
+      # Hyper-V support.
+      "hv_storvsc"
+
       # Keyboards
       "usbhid" "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
     ];

@@ -108,7 +108,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to include the 32-bit pulseaudio libraries in the systemn or not.
+          Whether to include the 32-bit pulseaudio libraries in the system or not.
           This is only useful on 64-bit systems and currently limited to x86_64-linux.
         '';
       };

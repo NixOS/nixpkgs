@@ -38,6 +38,10 @@ stdenv.mkDerivation {
       url = "https://sources.debian.net/data/main/g/graphicsmagick/1.3.25-5/debian/patches/CVE-2016-8684.patch";
       sha256 = "1p36gpz904wnmbz1n64x4pdpg8lp9zs3gx0awklxqdvgl8m82vvy";
     })
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/g/graphicsmagick/1.3.25-7/debian/patches/CVE-2016-9830.patch";
+      sha256 = "0qh15sd7nx7vf9sld4453iml951bwsx2fx84hxc7plhds2k3gjpa";
+    })
   ];
 
   configureFlags = [

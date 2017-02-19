@@ -1,19 +1,32 @@
-{ stdenv, fetchzip, ocaml, findlib, re, sexplib_p4, stringext, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, re, stringext, ounit
+, sexplib, ppx_sexp_conv
+, legacyVersion ? false
+, sexplib_p4
+}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
+assert stdenv.lib.versionAtLeast ocaml.version "4";
 
-let version = "1.9.1"; in
+with
+  if legacyVersion
+  then {
+    version = "1.9.1";
+    sha256 = "0v3jxqgyi4kj92r3x83rszfpnvvzy9lyb913basch4q64yka3w85";
+  } else {
+    version = "1.9.2";
+    sha256 = "137pg8j654x7r0d1664iy2zp3l82nki1kkh921lwdrwc5qqdl6jx";
+  };
 
 stdenv.mkDerivation {
-  name = "ocaml-uri-${version}";
+  name = "ocaml${ocaml.version}-uri-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/ocaml-uri/archive/v${version}.tar.gz";
-    sha256 = "0v3jxqgyi4kj92r3x83rszfpnvvzy9lyb913basch4q64yka3w85";
+    inherit sha256;
   };
 
-  buildInputs = [ ocaml findlib ounit ];
-  propagatedBuildInputs = [ re sexplib_p4 stringext ];
+  buildInputs = [ ocaml findlib ounit ]
+  ++ stdenv.lib.optional (!legacyVersion) ppx_sexp_conv;
+  propagatedBuildInputs = [ re (if legacyVersion then sexplib_p4 else sexplib) stringext ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
   buildPhase = ''

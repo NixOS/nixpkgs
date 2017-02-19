@@ -1,8 +1,9 @@
 { lib
-, system, platform, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays
 }:
 
 assert crossSystem == null;
+let inherit (localSystem) system; in
 
 
 [
@@ -58,7 +59,10 @@ assert crossSystem == null;
   })
 
   (prevStage: {
-    inherit system crossSystem platform config overlays;
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
+    inherit config overlays;
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-3";
       inherit system config;

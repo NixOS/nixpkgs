@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "kbfs-2016-11-18-git";
-  version = "1.0.2";
+  name = "kbfs-${version}";
+  version = "20170209.d1db463";
 
   goPackagePath = "github.com/keybase/kbfs";
   subPackages = [ "kbfsfuse" ];
@@ -12,8 +12,8 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "keybase";
     repo = "kbfs";
-    rev = "aac615d7c50e7512a51a133c14cb699d9941ba8c";
-    sha256 = "0vah6x37g2w1f7mb5x16f1815608mvv2d1mrpkpnhz2gz7qzz6bv";
+    rev = "d1db46315d9271f21ca2700a84ca19767e638296";
+    sha256 = "12i2m370r27mmn37s55krdkhr5k8kpl3x8y3gzg7w5zn2wiw8i1g";
   };
 
   buildFlags = [ "-tags production" ];

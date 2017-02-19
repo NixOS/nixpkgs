@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "${meta.tag}";
-    sha256 = "01nirw0xb8fjjv0jz88bmddv26bgg82w1wg65q51iblmy9z8azfh";
+    sha256 = "0chwnw3d2d1k8g4xidzkpy9f3ci30yz7yvxq1mipp2rbndl1y2am";
   };
 
   patches = [];
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras.
     '';
-    version = "2.5.11";
-    tag = "libgphoto2-2_5_11-release";
+    version = "2.5.12";
+    tag = "libgphoto2-2_5_12-release";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = with stdenv.lib.platforms; unix;

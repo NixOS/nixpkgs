@@ -26,7 +26,7 @@ index 50e8ad8..eec0ed2 100644
 +	is_nixos=no
 +fi
 +
-+if [ -u /var/setuid-wrappers/gksign ]; then
++if [ -u /run/wrappers/bin/gksign ]; then
 +	cat <<EOM
 +
 +Gale appears to have already been set up via the NixOS module system (check

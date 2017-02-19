@@ -2,12 +2,12 @@
 , ocaml, ocamlfuse, findlib, gapi_ocaml, ocaml_sqlite3, camlidl }:
 
 stdenv.mkDerivation rec {
-  name = "google-drive-ocamlfuse-${version}";
-  version = "0.5.22";
+  name    = "google-drive-ocamlfuse-${version}";
+  version = "0.6.17";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1587/${name}.tar.gz";
-    sha256 = "1hjm6hyva9sl6lddb0372wsy7f76105iaxh976yyzfn3b4ran6ab";
+    url = "https://forge.ocamlcore.org/frs/download.php/1674/${name}.tar.gz";
+    sha256 = "1ldja7080pnjaibrbdvfqwakp4mac8yw1lkb95f7lgldmy96lxas";
   };
 
   buildInputs = [ zlib ocaml ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl];

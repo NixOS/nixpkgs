@@ -1,6 +1,7 @@
 # This function provides specific bits for building a flit-based Python package.
 
-{ flit
+{ python
+, flit
 }:
 
 { ... } @ attrs:
@@ -13,7 +14,9 @@ attrs // {
     runHook postBuild
   '';
 
-  # Flit packages do not come with tests.
-  installCheckPhase = attrs.checkPhase or ":";
-  doCheck = attrs.doCheck or false;
+  # Flit packages, like setuptools packages, might have tests.
+  installCheckPhase = attrs.checkPhase or ''
+    ${python.interpreter} -m unittest discover
+  '';
+  doCheck = attrs.doCheck or true;
 }

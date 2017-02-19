@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "cbatticon-${version}";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "valr";
     repo = "cbatticon";
     rev = version;
-    sha256 = "0m3bj408mbini97kq0cdf048lnfkdn7bd8ikbfijd7dwfdzv27i5";
+    sha256 = "1j7gbmmygvbrawqn1bbaf47lb600lylslzqbvfwlhifmi7qnm6ca";
   };
 
   makeFlags = "PREFIX=$(out)";

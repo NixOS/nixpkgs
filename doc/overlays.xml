@@ -28,8 +28,8 @@ first one present is considered, and all the rest are ignored:
 
   <listitem>
 
-    <para>In the directory pointed by the environment variable
-    <varname>NIXPKGS_OVERLAYS</varname>.</para>
+    <para>In the directory pointed to by the Nix search path entry
+    <literal>&lt;nixpkgs-overlays></literal>.</para>
   </listitem>
 
   <listitem>

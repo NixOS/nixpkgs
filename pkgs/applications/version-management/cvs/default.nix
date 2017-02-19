@@ -8,7 +8,10 @@ stdenv.mkDerivation {
     sha256 = "0pjir8cwn0087mxszzbsi1gyfc6373vif96cw4q3m1x6p49kd1bq";
   };
 
-  patches = [ ./getcwd-chroot.patch ];
+  patches = [
+    ./getcwd-chroot.patch
+    ./CVE-2012-0804.patch
+  ];
 
   hardeningDisable = [ "fortify" "format" ];
 

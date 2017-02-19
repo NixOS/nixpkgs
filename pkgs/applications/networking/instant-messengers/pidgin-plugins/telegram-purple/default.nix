@@ -1,15 +1,15 @@
 { stdenv, fetchgit, pkgconfig, pidgin, libwebp, libgcrypt, gettext } :
 
 let
-  version = "2016-03-17";
+  version = "1.3.0";
 in
 stdenv.mkDerivation rec {
   name = "telegram-purple-${version}";
 
   src = fetchgit {
     url = "https://github.com/majn/telegram-purple";
-    rev = "ee2a6fb740fe9580336e4af9a153b845bc715927";
-    sha256 = "0pxaj95b6nzy73dckpr3v4nljyijkx71vmnp9dcj48d22pvy0nyf";
+    rev = "0340e4f14b2480782db4e5b9242103810227c522";
+    sha256 = "1xb7hrgisbpx00dsrm5yz934bdd7nfzicd7k855iynk3hjzqj7k5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i "s|/etc/telegram-purple/server.tglpub|$out/lib/pidgin/server.tglpub|g" telegram-purple.c
+    echo "#define GIT_COMMIT \"${builtins.substring 0 10 src.rev}\"" > commit.h
   '';
 
   installPhase = ''

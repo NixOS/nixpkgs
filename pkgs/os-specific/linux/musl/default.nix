@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--enable-static"
-    "--disable-gcc-wrapper"
   ];
 
   patches = [

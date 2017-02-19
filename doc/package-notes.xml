@@ -278,7 +278,7 @@ packageOverrides = pkgs: {
 </screen>
 
     to your Nixpkgs configuration
-    (<filename>~/.nixpkgs/config.nix</filename>) and install it by
+    (<filename>~/.config/nixpkgs/config.nix</filename>) and install it by
     running <command>nix-env -f '&lt;nixpkgs&gt;' -iA
     myEclipse</command> and afterward run Eclipse as usual. It is
     possible to find out which plugins are available for installation

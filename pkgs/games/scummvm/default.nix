@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib, mesa }:
 
 stdenv.mkDerivation rec {
-  name = "scummvm-1.8.0";
+  name = "scummvm-1.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/scummvm/${name}.tar.bz2";
-    sha256 = "0f3zgvz886lk9ps0v333aq74vx6grlx68hg14gfaxcvj55g73v01";
+    url = "http://scummvm.org/frs/scummvm/1.9.0/scummvm-1.9.0.tar.bz2";
+    sha256 = "813d7d8a76e3d05b45001d37451368711dadc32899ecf907df1cc7abfb1754d2";
   };
   
   buildInputs = [ SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib mesa ];

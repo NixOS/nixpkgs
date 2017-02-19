@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ stdenv, fetchurl, buildPackages, perl
 , withCryptodev ? false, cryptodevHeaders
 , enableSSL2 ? false }:
 
@@ -25,8 +25,8 @@ let
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
            ./darwin-arch.patch;
 
-  outputs = [ "bin" "dev" "out" "man" ];
-  setOutputFlags = false;
+    outputs = [ "bin" "dev" "out" "man" ];
+    setOutputFlags = false;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
@@ -50,7 +50,7 @@ let
 
     postConfigure = if makeDepend then "make depend" else null;
 
-  makeFlags = [ "MANDIR=$(man)/share/man" ];
+    makeFlags = [ "MANDIR=$(man)/share/man" ];
 
     # Parallel building is broken in OpenSSL.
     enableParallelBuilding = false;
@@ -76,7 +76,7 @@ let
 
     postFixup = ''
       # Check to make sure the main output doesn't depend on perl
-      if grep -r '${perl}' $out; then
+      if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi
@@ -109,24 +109,19 @@ let
 
 in {
 
-  openssl_1_0_1 = common {
-    version = "1.0.1u";
-    sha256 = "0fb7y9pwbd76pgzd7xzqfrzibmc0vf03sl07f34z5dhm2b5b84j3";
-  };
-
   openssl_1_0_2 = common {
-    version = "1.0.2j";
-    sha256 = "0cf4ar97ijfc7mg35zdgpad6x8ivkdx9qii6mz35khi1ps9g5bz7";
+    version = "1.0.2k";
+    sha256 = "1h6qi35w6hv6rd73p4cdgdzg732pdrfgpp37cgwz1v9a3z37ffbb";
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0c";
-    sha256 = "1xfn5ydl14myd9wgxm4nxy5a42cpp1g12ijf3g9m4mz0l90n8hzw";
+    version = "1.1.0e";
+    sha256 = "0k47sdd9gs6yxfv6ldlgpld2lyzrkcv9kz4cf88ck04xjwc8dgjp";
   };
 
   openssl_1_0_2-steam = common {
-    version = "1.0.2j";
-    sha256 = "0cf4ar97ijfc7mg35zdgpad6x8ivkdx9qii6mz35khi1ps9g5bz7";
+    version = "1.0.2k";
+    sha256 = "1h6qi35w6hv6rd73p4cdgdzg732pdrfgpp37cgwz1v9a3z37ffbb";
     configureFlags = [ "no-engine" ];
     makeDepend = true;
     patches = [ ./openssl-fix-cpuid_setup.patch ];

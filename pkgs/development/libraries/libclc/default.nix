@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, llvm, clang }:
+{ stdenv, fetchFromGitHub, python2, llvm, clang }:
 
 stdenv.mkDerivation {
   name = "libclc-2015-08-07";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "10n9qk1dild9yjkjjkzpmp9zid3ysdgvqrad554azcf755frch7g";
   };
 
-  buildInputs = [ python llvm clang ];
+  buildInputs = [ python2 llvm clang ];
 
   postPatch = ''
     sed -i 's,llvm_clang =.*,llvm_clang = "${clang}/bin/clang",' configure.py
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    python2 ./configure.py --prefix=$out
+    ${python2.interpreter} ./configure.py --prefix=$out
   '';
 
   meta = with stdenv.lib; {

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A polyhedral optimizer for llvm";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };
 }

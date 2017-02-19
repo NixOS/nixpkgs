@@ -1,11 +1,12 @@
 { lib
-, system, platform, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays
 
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/33f59c9d11b8d5014dfd18cc11a425f6393c884a/${file}";
-    inherit sha256 system executable;
+    inherit (localSystem) system;
+    inherit sha256 executable;
   }; in {
     sh      = fetch { file = "sh";    sha256 = "1rx4kg6358xdj05z0m139a0zn4f4zfmq4n4vimlmnwyfiyn4x7wk"; };
     bzip2   = fetch { file = "bzip2"; sha256 = "104qnhzk79vkbp2yi0kci6lszgfppvrwk3rgxhry842ly1xz2r7l"; };
@@ -18,6 +19,8 @@
 assert crossSystem == null;
 
 let
+  inherit (localSystem) system platform;
+
   libSystemProfile = ''
     (import "${./standard-sandbox.sb}")
   '';
@@ -98,7 +101,10 @@ in rec {
       };
 
     in {
-      inherit system platform crossSystem config overlays;
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      inherit config overlays;
       stdenv = thisStdenv;
     };
 
@@ -316,7 +322,10 @@ in rec {
     stage3
     stage4
     (prevStage: {
-      inherit system crossSystem platform config overlays;
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      inherit config overlays;
       stdenv = stdenvDarwin prevStage;
     })
   ];

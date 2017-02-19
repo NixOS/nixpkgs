@@ -4,15 +4,15 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "racer-${version}";
-  version = "1.2.10";
+  version = "2.0.5";
   src = fetchFromGitHub {
     owner = "phildawes";
     repo = "racer";
-    rev = "e5ffe9efc1d10d4a7d66944b4c0939b7c575530e";
-    sha256 = "1cvgd6gcwb82p387h4wl8wz07z64is8jrihmf2z84vxmlrasmprm";
+    rev = "93eac5cd633c937a05d4138559afe6fb054c7c28";
+    sha256 = "0smp5dv0f5bymficrg0dz8h9x4lhklrz6f31fbcy0vhg8l70di2n";
   };
 
-  depsSha256 = "1d44q7hfxijn40q7y6xawgd3c91i90fmd1dyx7i2v9as29js5694";
+  depsSha256 = "1qq2fpjg1wfb7z2s8p4i2aw9swcpqsp9m5jmhbyvwnd281ag4z6a";
 
   buildInputs = [ makeWrapper ];
 

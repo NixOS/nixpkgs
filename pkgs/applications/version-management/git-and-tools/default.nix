@@ -22,6 +22,8 @@ in
 rec {
   # Try to keep this generally alphabetized
 
+  bfg-repo-cleaner = callPackage ./bfg-repo-cleaner { };
+
   bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
 
   darcsToGit = callPackage ./darcs-to-git { };
@@ -80,7 +82,7 @@ rec {
     inherit (darwin) Security;
   };
 
-  qgit = callPackage ./qgit { };
+  qgit = qt5.callPackage ./qgit { };
 
   stgit = callPackage ./stgit {
   };

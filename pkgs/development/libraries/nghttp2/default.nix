@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 
 # Optional Dependencies
-, openssl ? null, libev ? null, zlib ? null
+, openssl ? null, libev ? null, zlib ? null, libcares ? null
 , enableHpack ? false, jansson ? null
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
@@ -17,18 +17,18 @@ with { inherit (stdenv.lib) optional; };
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.17.0";
+  version = "1.19.0";
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "7685b6717d205d3a251b7dd5e73a7ca5e643bc5c01f928b82bfeed30c243f28a";
+    sha256 = "477466eee27158d37b4478d9335dd091497cae4d7f2375fc6657beab67db9e7a";
   };
 
   outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libev zlib ]
+  buildInputs = [ openssl libev zlib libcares ]
     ++ optional enableHpack jansson
     ++ optional enableAsioLib boost
     ++ optional enableGetAssets libxml2

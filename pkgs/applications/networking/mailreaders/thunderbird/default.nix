@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
+{ stdenv, lib, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
-, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those
@@ -14,7 +14,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.6.0"; in
+let version = "45.7.1"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "1f4579ac37b8ab98c91fe2e3e6742ba1b005ca9346d23f467d19e6af45eb457cab749bf91ed2a79f2058bd66f54da661da3ea5d5786f8c4b472d8a2a6c34db4b";
+    sha512 = "aa1231169cfe243a257e6b9088281b85d0cf75207e3b9ebeda7792567a86f6098fb5c74dc397e3eeeb1925d221d2fb1b17df8762afd115eff9ad4d1370a49e56";
   };
+
+  patches = [ ./gcc6.patch ];
 
   # New sed no longer tolerates this mistake.
   postPatch = ''
@@ -138,10 +140,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    name = "thunderbird";
-    sourceSectionRegex = ".";
-    basePath = "pkgs/applications/networking/mailreaders/thunderbird";
+    attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

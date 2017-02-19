@@ -25,7 +25,7 @@ Otherwise, you can only log into a plain undecorated
 <command>xterm</command> window.  Thus you should pick one or more of
 the following lines:
 <programlisting>
-services.xserver.desktopManager.kde4.enable = true;
+services.xserver.desktopManager.kde5.enable = true;
 services.xserver.desktopManager.xfce.enable = true;
 services.xserver.windowManager.xmonad.enable = true;
 services.xserver.windowManager.twm.enable = true;
@@ -35,9 +35,9 @@ services.xserver.windowManager.icewm.enable = true;
 
 <para>NixOS’s default <emphasis>display manager</emphasis> (the
 program that provides a graphical login prompt and manages the X
-server) is SLiM.  You can select KDE’s <command>kdm</command> instead:
+server) is SLiM.  You can select KDE’s <command>sddm</command> instead:
 <programlisting>
-services.xserver.displayManager.kdm.enable = true;
+services.xserver.displayManager.sddm.enable = true;
 </programlisting>
 </para>
 

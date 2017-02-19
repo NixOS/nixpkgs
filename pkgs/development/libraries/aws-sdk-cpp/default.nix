@@ -5,15 +5,22 @@
   customMemoryManagement ? true
 }:
 
-stdenv.mkDerivation rec {
+let
+  loaderVar =
+    if stdenv.isLinux
+      then "LD_LIBRARY_PATH"
+      else if stdenv.isDarwin
+        then "DYLD_LIBRARY_PATH"
+        else throw "Unsupported system!";
+in stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.0.48";
+  version = "1.0.60";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "1k73ir1w6457y9mdv2xnk8cr1y1xxhzzd4095rzvn2y7fr3zgz01";
+    sha256 = "0k6jv70l4xhkf2rna6zaxkxgd7xh7cc1ghzska637h5d2v6h8nzk";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -29,11 +36,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Behold the escaping nightmare below on loaderVar o.O
   preBuild =
     ''
       # Ensure that the unit tests can find the *.so files.
       for i in testing-resources aws-cpp-sdk-*; do
-        export LD_LIBRARY_PATH=$(pwd)/$i:$LD_LIBRARY_PATH
+        export ${loaderVar}=$(pwd)/$i:''${${loaderVar}}
       done
     '';
 

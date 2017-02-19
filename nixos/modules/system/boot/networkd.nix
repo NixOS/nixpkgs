@@ -79,7 +79,7 @@ let
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
       "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec"
+      "UpDelaySec" "DownDelaySec" "GratuitousARP"
     ])
     (assertValueOneOf "Mode" [
       "balance-rr" "active-backup" "balance-xor"
@@ -667,8 +667,10 @@ in
 
   config = mkIf config.systemd.network.enable {
 
-    systemd.additionalUpstreamSystemUnits =
-      [ "systemd-networkd.service" "systemd-networkd-wait-online.service" ];
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-networkd.service" "systemd-networkd-wait-online.service"
+      "org.freedesktop.network1.busname"
+    ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs

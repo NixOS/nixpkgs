@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = mirror://sourceforge/jclasslib/jclasslib_unix_2_0.tar.gz;
-    md5 = "31d91bb03fee23410689d2f1c4c439b1";
+    sha256 = "1y2fbg5h2p3fwcp7h5n1qib7x9svyrilq3i58vm6vany1xzg7nx5";
   };
 
   inherit jre xpf ant;

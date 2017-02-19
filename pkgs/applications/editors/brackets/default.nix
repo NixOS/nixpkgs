@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "brackets-${version}";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
     url = "https://github.com/adobe/brackets/releases/download/release-${version}/Brackets.Release.${version}.64-bit.deb";
-    sha256 = "0nsiy3gvp8rd71a0misf6v1kz067kxnszr5mpch9fj4jqmg6nj8m";
+    sha256 = "0b2k0vv1qwmsg1wckp71yrb86zp8zisskmzzvx9ir19bma9jzr42";
     name = "${name}.deb";
   };
 

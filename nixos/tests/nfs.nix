@@ -40,7 +40,7 @@ in
 
   testScript =
     ''
-      $server->waitForUnit("nfsd");
+      $server->waitForUnit("nfs-server");
       $server->succeed("systemctl start network-online.target");
       $server->waitForUnit("network-online.target");
 
@@ -54,8 +54,8 @@ in
       $client2->succeed("echo bla > /data/bar");
       $server->succeed("test -e /data/bar");
 
-      # Test whether restarting ‘nfsd’ works correctly.
-      $server->succeed("systemctl restart nfsd");
+      # Test whether restarting ‘nfs-server’ works correctly.
+      $server->succeed("systemctl restart nfs-server");
       $client2->succeed("echo bla >> /data/bar"); # will take 90 seconds due to the NFS grace period
 
       # Test whether we can get a lock.

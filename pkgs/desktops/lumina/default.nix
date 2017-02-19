@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "lumina-${version}";
-  version = "1.1.0-p1";
+  version = "1.2.0-p1";
 
   src = fetchFromGitHub {
     owner = "trueos";
     repo = "lumina";
     rev = "v${version}";
-    sha256 = "1kkb6v6p6w5mx1qdmcrq3r674k9ahpc6wlsb9pi2lq8qk9yaid0m";
+    sha256 = "0k16lcpxp9avwkadbbyqficd1wxsmwian5ji38wyax76v22yq7p6";
   };
 
   nativeBuildInputs = [

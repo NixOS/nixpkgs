@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, xorg
+{ stdenv, fetchFromGitHub, xorg
 , autoconf, automake, cvs, libtool, nasm, pixman, xkeyboard_config
 , fontDirectories, libgcrypt, gnutls, pam, flex, bison, gettext
 , cmake, libjpeg_turbo, fltk, nettle, libiconv, libtasn1
@@ -7,13 +7,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.8.0pre20170211";
   name = "tigervnc-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/TigerVNC/tigervnc/";
-    sha256 = "1b6n2gq6078x8dwz471a68jrkgpcxmbiivmlsakr42vrndm7niz3";
-    rev = "e25272fc74ef09987ccaa33b9bf1736397c76fdf";
+  src = fetchFromGitHub {
+    owner = "TigerVNC";
+    repo = "tigervnc";
+    sha256 = "10bs6394ya953gmak8g2d3n133vyfrryq9zq6dc27g8s6lw0mrbh";
+    rev = "b6c46a1a99a402d5d17b1afafc4784ce0958d6ec";
   };
 
   inherit fontDirectories;
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir = true;
 
   postBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
     export CXXFLAGS="$CXXFLAGS -fpermissive"
     # Build Xvnc
     tar xf ${xorg.xorgserver.src}

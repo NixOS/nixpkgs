@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, automoc4, boost, shared_desktop_ontologies, cmake
-, eigen, lcms, gettext, jasper, kdelibs, kdepimlibs, lensfun
+{ stdenv, fetchurl, fetchpatch, automoc4, boost, shared_desktop_ontologies
+, cmake, eigen, lcms, gettext, jasper, kdelibs, kdepimlibs, lensfun
 , libgphoto2, libjpeg, libkdcraw, libkexiv2, libkipi, libpgf, libtiff
 , libusb1, liblqr1, marble, mysql, opencv, perl, phonon, pkgconfig
 , qca2, qimageblitz, qjson, qt4, soprano
@@ -35,6 +35,16 @@ let
       url = "http://download.kde.org/stable/digikam/${pName}.tar.bz2";
       sha256 = "081ldsaf3frf5khznjd3sxkjmi4dyp6w6nqnc2a0agkk0kxkl10m";
     };
+
+    patches = [
+      (fetchpatch {
+        # Fix compilation against Lensfun 0.3.2
+        url = "http://cgit.kde.org/digikam.git/patch/?id=0f159981176faa6da701f112bfe557b79804d468";
+        sha256 = "1c8bg7s84vg4v620gbs16cjcbpml749018gy5dpvfacx5vl24wza";
+      })
+    ];
+
+    patchFlags = ["-p1" "-dcore"];
 
     nativeBuildInputs = [ 
       automoc4 cmake gettext perl pkgconfig
@@ -182,6 +192,7 @@ runCommand "${pName}" {
     homepage = http://www.digikam.org;
     maintainers = with stdenv.lib.maintainers; [ /*jraygauthier*/ ];
     inherit (kdelibs.meta) platforms;
+    broken = true;
   };
 
 } ''

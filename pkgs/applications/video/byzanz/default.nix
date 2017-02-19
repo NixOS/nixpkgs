@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/GNOME/byzanz;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
   };
 }

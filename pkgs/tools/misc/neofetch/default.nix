@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "neofetch-${version}";
-  version = "2.0.2";
+  version = "3.0.1";
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "neofetch";
     rev = version;
-    sha256 = "15fpm6nflf6w0c758xizfifvvxrkmcc2hpzrnfw6fcngfqcvajmd";
+    sha256 = "0ccdgyn9m7vbrmjlsxdwv7cagsdg8hy8x4n1mx334pkqvl820jjn";
   };
 
   patchPhase = ''

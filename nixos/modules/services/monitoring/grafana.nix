@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -232,9 +232,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = [
-      "Grafana passwords will be stored as plaintext in the Nix store!"
-    ];
+    warnings = optional (
+      cfg.database.password != options.services.grafana.database.password.default ||
+      cfg.security.adminPassword != options.services.grafana.security.adminPassword.default
+    ) "Grafana passwords will be stored as plaintext in the Nix store!";
 
     environment.systemPackages = [ cfg.package ];
 

@@ -98,4 +98,13 @@
       sha256 = "179lwaf0hvczl8g4xzkpcpzq25p1b23f7399bx5zl55iin62d8yz";
     };
   }
+  {
+    goPackagePath = "github.com/aws/aws-sdk-go";
+    fetch = {
+      type = "git";
+      url = "https://github.com/aws/aws-sdk-go";
+      rev = "3f8f870ec9939e32b3372abf74d24e468bcd285d";
+      sha256 = "0a4hycs3d87s50z4prf5h6918r0fa2rvrrwlbffs430ilc4y8ghv";
+    };
+  }
 ]

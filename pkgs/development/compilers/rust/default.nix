@@ -6,15 +6,14 @@ let
 in
 rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "1.14";
+    shortVersion = "1.15.1";
     isRelease = true;
     forceBundledLLVM = false;
     configureFlags = [ "--release-channel=stable" ];
-    srcRev = "e8a0123241f0d397d39cd18fcc4e5e7edde22730";
-    srcSha = "1sla3gnx9dqvivnyhvwz299mc3jmdy805q2y5xpmpi1vhfk0bafx";
+    srcRev = "021bd294c039bd54aa5c4aa85bcdffb0d24bc892";
+    srcSha = "1dp7cjxj8nv960jxkq3p18agh9bpfb69ac14x284jmhwyksim3y7";
 
     patches = [
-      ./patches/disable-lockfile-check-stable.patch
       ./patches/darwin-disable-fragile-tcp-tests.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
@@ -25,10 +24,10 @@ rec {
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "0.15.0";
-    srcRev = "298a0127f703d4c2500bb06d309488b92ef84ae1";
-    srcSha = "0v74r18vszapw2rfk7w72czkp9gbq4s1sggphm5vx0kyh058dxc5";
-    depsSha256 = "0ksiywli8r4lkprfknm0yz1w27060psi3db6wblqmi8sckzdm44h";
+    version = "0.16.0";
+    srcRev = "6e0c18cccc8b0c06fba8a8d76486f81a792fb420";
+    srcSha = "117ivvs9wz848mwf8bw797n10qpn77agd353z8b0hxgbxhpribya";
+    depsSha256 = "11s2xpgfhl4mb4wa2nk4mzsypr7m9daxxc7l0vraiz5cr77gk7qq";
 
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo

@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "mlterm-${version}";
-  version = "3.7.2";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mlterm/01release/${name}/${name}.tar.gz";
-    sha256 = "1b24w8hfck1ylfkdz9z55vlmsb36q9iyfr0i9q9y98dfk0f0rrw8";
+    sha256 = "00dzx5rqsp73shgvn2jvgk85v3lirby06wxkqjcm1i1xwigidq3b";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf ];
@@ -20,17 +20,15 @@ stdenv.mkDerivation rec {
     harfbuzz fribidi m17n_lib openssl libssh2
   ];
 
-  patches = [ ./x_shortcut.c.patch ]; #fixes numlock in 3.7.2. should be safe to remove by 3.7.3 since it's already in the trunk: https://bitbucket.org/arakiken/mlterm/commits/4820d42c7abfe1760a5ea35492c83be469c642b3
-
   #bad configure.ac and Makefile.in everywhere
   preConfigure = ''
     sed -ie 's;-L/usr/local/lib -R/usr/local/lib;;g' \
-      xwindow/libtype/Makefile.in \
       main/Makefile.in \
       tool/mlfc/Makefile.in \
       tool/mlimgloader/Makefile.in \
       tool/mlconfig/Makefile.in \
-      xwindow/libotl/Makefile.in
+      uitoolkit/libtype/Makefile.in \
+      uitoolkit/libotl/Makefile.in
     sed -ie 's;cd ..srcdir. && rm -f ...lang..gmo.*;;g' \
       tool/mlconfig/po/Makefile.in.in
     #utmp and mlterm-fb
@@ -68,14 +66,9 @@ stdenv.mkDerivation rec {
  ];
 
   postInstall = ''
-    mkdir -p "$out/share/icons/hicolor/scalable/apps"
-    cp contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
-
-    mkdir -p "$out/share/icons/hicolor/48x48/apps"
-    cp contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
-
-    mkdir -p "$out/share/applications"
-    cp $desktopItem/share/applications/* $out/share/applications
+    install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
+    install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
+    install -D -t $out/share/applications $desktopItem/share/applications/*
   '';
 
   desktopItem = makeDesktopItem rec {

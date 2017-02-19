@@ -10,42 +10,10 @@ let
 
   homeDir = "/run/dbus";
 
-  systemExtraxml = concatStrings (flip concatMap cfg.packages (d: [
-    "<servicedir>${d}/share/dbus-1/system-services</servicedir>"
-    "<includedir>${d}/etc/dbus-1/system.d</includedir>"
-  ]));
-
-  sessionExtraxml = concatStrings (flip concatMap cfg.packages (d: [
-    "<servicedir>${d}/share/dbus-1/services</servicedir>"
-    "<includedir>${d}/etc/dbus-1/session.d</includedir>"
-  ]));
-
-  daemonArgs = "--address=systemd: --nofork --nopidfile --systemd-activation";
-
-  configDir = pkgs.runCommand "dbus-conf"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
-    ''
-      mkdir -p $out
-
-      cp ${pkgs.dbus.out}/share/dbus-1/{system,session}.conf $out
-
-      # avoid circular includes
-      sed -ri 's@(<include ignore_missing="yes">/etc/dbus-1/(system|session)\.conf</include>)@<!-- \1 -->@g' $out/{system,session}.conf
-
-      # include by full path
-      sed -ri "s@/etc/dbus-1/(system|session)-@$out/\1-@" $out/{system,session}.conf
-
-      sed '${./dbus-system-local.conf.in}' \
-        -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
-        -e 's,@extra@,${systemExtraxml},' \
-        > "$out/system-local.conf"
-
-      sed '${./dbus-session-local.conf.in}' \
-        -e 's,@extra@,${sessionExtraxml},' \
-        > "$out/session-local.conf"
-    '';
+  configDir = pkgs.makeDBusConf {
+    suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
+    serviceDirectories = cfg.packages;
+  };
 
 in
 
@@ -114,15 +82,14 @@ in
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
-    security.setuidOwners = singleton
-      { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
-        owner = "root";
-        group = "messagebus";
-        setuid = true;
-        setgid = false;
-        permissions = "u+rx,g+rx,o-rx";
-      };
+    security.wrappers.dbus-daemon-launch-helper = {
+      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      owner = "root";
+      group = "messagebus";
+      setuid = true;
+      setgid = false;
+      permissions = "u+rx,g+rx,o-rx";
+    };
 
     services.dbus.packages = [
       pkgs.dbus.out
@@ -133,10 +100,6 @@ in
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
       restartTriggers = [ configDir ];
-      serviceConfig.ExecStart = [
-        ""
-        "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=${configDir}/system.conf ${daemonArgs}"
-      ];
     };
 
     systemd.user = {
@@ -144,10 +107,6 @@ in
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [ configDir ];
-        serviceConfig.ExecStart = [
-          ""
-          "${lib.getBin pkgs.dbus}/bin/dbus-daemon --config-file=${configDir}/session.conf ${daemonArgs}"
-        ];
       };
       sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
     };

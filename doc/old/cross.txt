@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = http://ftp.nluug.nl/gnu/binutils/binutils-2.16.1.tar.bz2;
-    md5 = "6a9d529efb285071dad10e1f3d2b2967";
+    sha256 = "1ian3kwh2vg6hr3ymrv48s04gijs539vzrq62xr76bxbhbwnz2np";
   };
   inherit noSysDirs;
   configureFlags = "--target=arm-linux";
@@ -81,11 +81,11 @@ Step 2: build kernel headers for the target architecture
 assert stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "linux-headers-2.6.13.4-arm";
+  name = "linux-headers-2.6.13.1-arm";
   builder = ./builder.sh;
   src = fetchurl {
-    url = http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.13.4.tar.bz2;
-    md5 = "94768d7eef90a9d8174639b2a7d3f58d";
+    url = http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.13.1.tar.bz2;
+    sha256 = "12qxmc827fjhaz53kjy7vyrzsaqcg78amiqsb3qm20z26w705lma";
   };
 }
 ---
@@ -152,9 +152,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.0.2/gcc-core-4.0.2.tar.bz2;
-    md5 = "f7781398ada62ba255486673e6274b26";
-    #url = ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.0.2/gcc-4.0.2.tar.bz2;
-    #md5 = "a659b8388cac9db2b13e056e574ceeb0";
+    sha256 = "02fxh0asflm8825w23l2jq1wvs7hbnam0jayrivg7zdv2ifnc0rc";
   };
   # !!! apply only if noSysDirs is set
   patches = [./no-sys-dirs.patch ./gcc-inhibit.patch];

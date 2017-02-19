@@ -45,9 +45,8 @@ let
 in
 
 {
-  options = {
-
-    nixpkgs.config = mkOption {
+  options.nixpkgs = {
+    config = mkOption {
       default = {};
       example = literalExample
         ''
@@ -61,7 +60,7 @@ in
       '';
     };
 
-    nixpkgs.overlays = mkOption {
+    overlays = mkOption {
       default = [];
       example = literalExample
         ''
@@ -85,7 +84,7 @@ in
       '';
     };
 
-    nixpkgs.system = mkOption {
+    system = mkOption {
       type = types.str;
       example = "i686-linux";
       description = ''
@@ -95,14 +94,9 @@ in
         multi-platform deployment, or when building virtual machines.
       '';
     };
-
   };
 
   config = {
-    _module.args.pkgs = import ../../.. {
-      system = config.nixpkgs.system;
-
-      inherit (config.nixpkgs) config;
-    };
+    _module.args.pkgs = import ../../.. config.nixpkgs;
   };
 }

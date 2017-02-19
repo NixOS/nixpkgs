@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "059a9yc58wcicc6xxsjh1ph7k2yrag0spsahp1wqmsq6h7jwwyyq";
   };
 
+  patches = [ ./0001-bash-completion-quote-pattern-argument-to-grep.patch ];
+
   nativeBuildInputs = [ cmake libuuid gnutls ];
 
   postInstall = ''
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "GTD (getting things done) implementation";
+    description = "Highly flexible command-line tool to manage TODO lists";
     homepage = http://taskwarrior.org;
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber jgeerds ];

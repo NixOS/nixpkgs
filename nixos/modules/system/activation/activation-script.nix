@@ -19,6 +19,7 @@ let
       glibc # needed for getent
       shadow
       nettools # needed for hostname
+      utillinux # needed for mount and mountpoint
     ];
 
 in
@@ -168,12 +169,12 @@ in
           local options="$3"
           local fsType="$4"
 
-          if ${pkgs.utillinux}/bin/mountpoint -q "$mountPoint"; then
+          if mountpoint -q "$mountPoint"; then
             local options="remount,$options"
           else
             mkdir -m 0755 -p "$mountPoint"
           fi
-          ${pkgs.utillinux}/bin/mount -t "$fsType" -o "$options" "$device" "$mountPoint"
+          mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }
         source ${config.system.build.earlyMountScript}
       '';

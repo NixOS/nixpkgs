@@ -5,7 +5,7 @@ args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, p
   ### NixOS - usage:
   ==================
 
-    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }).v_2_2_1 ];
+    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }).v_2_3_1 ];
 
 
   ### important Postgis implementation details:
@@ -84,9 +84,9 @@ let
 
 in rec {
 
-  v_2_2_1 = pgDerivationBaseNewer.merge ( fix : {
-    version = "2.2.1";
-    sha256 = "02gsi1cm63kf0r7881444lrkzdjqhhpz9a5zav3al0q24nq01r8g";
+  v_2_3_1 = pgDerivationBaseNewer.merge ( fix : {
+    version = "2.3.1";
+    sha256 = "0xd21h2k6x3i1b3z6pgm3pmkfpxm6irxd5wbx68acjndjgd6p3ac";
     sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
     builtInputs = [gdal json_c pkgconfig];
 

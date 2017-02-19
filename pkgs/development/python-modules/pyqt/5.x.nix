@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, dbus_libs
+{ lib, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
 , lndir, makeWrapper, qmakeHook }:
 
 let
@@ -22,7 +22,7 @@ in mkPythonDerivation {
 
   buildInputs = [
     pkgconfig makeWrapper lndir
-    qtbase qtsvg qtwebkit dbus_libs qmakeHook
+    qtbase qtsvg qtwebkit qtwebengine dbus_libs qmakeHook
   ];
 
   propagatedBuildInputs = [ sip ];

@@ -2,8 +2,7 @@
 
 buildGoPackage rec {
   name = "keybase-${version}";
-  version = "1.0.18";
-  rev = "v${version}";
+  version = "20170209.17b641d";
 
   goPackagePath = "github.com/keybase/client";
   subPackages = [ "go/keybase" ];
@@ -13,8 +12,8 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "keybase";
     repo = "client";
-    inherit rev;
-    sha256 = "16n9fwx8v3jradp1l2564872akq6npib794jadfl5d122cll0n7h";
+    rev = "17b641de629a85ad77621d0efa3e2442661b5ee7";
+    sha256 = "0y6kiwj690yd0alvcyd74wx2wlbh110k1rdcvimszyb9gqig8p11";
   };
 
   buildFlags = [ "-tags production" ];

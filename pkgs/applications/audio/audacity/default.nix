@@ -13,12 +13,20 @@ stdenv.mkDerivation rec {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
     sha256 = "1ggr6g0mk36rqj7ahsg8b0b1r9kphwajzvxgn43md263rm87n04h";
   };
-  patches = [(fetchpatch {
-    name = "new-ffmpeg.patch";
-    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
-      + "/audacity-ffmpeg.patch?h=packages/audacity&id=0c1e35798d4d70692";
-    sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "new-ffmpeg.patch";
+      url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
+        + "/audacity-ffmpeg.patch?h=packages/audacity&id=0c1e35798d4d70692";
+      sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
+    })
+  ]
+    ++ optional (hasPrefix "gcc-6" stdenv.cc.cc.name)
+      (fetchpatch {
+        name = "gcc6.patch";
+        url = "https://github.com/audacity/audacity/commit/60f2322055756e8cacfe96530a12c63e9694482c.patch";
+        sha256 = "07jlxr8y7ap3nsblx3zh8v9rcx7ajbcfnvwzhwykmbwbsyirgqf2";
+      });
 
   preConfigure = /* we prefer system-wide libs */ ''
     mv lib-src lib-src-rm
@@ -56,6 +64,8 @@ stdenv.mkDerivation rec {
     libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil gtk2
     ffmpeg libmad lame libvorbis flac soundtouch
   ]; #ToDo: detach sbsms
+
+  enableParallelBuilding = true;
 
   dontDisableStatic = true;
   doCheck = false; # Test fails

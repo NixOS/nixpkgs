@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/verdammelt/tnef;
     license = licenses.gpl2;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

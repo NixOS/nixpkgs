@@ -1,11 +1,13 @@
 { stdenv, fetchurl, python, buildPythonPackage, pycairo
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3
+, freetype, libpng, pkgconfig, mock, pytz, pygobject3, functools32, subprocess32
 , enableGhostscript ? false, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobjectIntrospection
 , enableGtk3 ? false, cairo
 , enableTk ? false, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, Cocoa, Foundation, CoreData, cf-private, libobjc, libcxx
+, enableQt ? false, pyqt4
+, libcxx
+, Cocoa
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -15,14 +17,15 @@ assert enableTk -> (tcl != null)
                 && (tkinter != null)
                 && (libX11 != null)
                 ;
+assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
   name = "matplotlib-${version}";
-  version = "1.5.3";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "mirror://pypi/m/matplotlib/${name}.tar.gz";
-    sha256 = "1g7bhr6v3wdxyx29rfxgf57l9w19s79cdlpyi0h4y0c5ywwxr9d0";
+    sha256 = "04zqymd5dw6lxvfbxf1sycdnibjk5qky5rfsn6wb46lwha2hkkrn";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -31,16 +34,17 @@ buildPythonPackage rec {
 
   buildInputs = [ python which sphinx stdenv ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation CoreData
-                                              cf-private libobjc ];
+    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
-    [ cycler dateutil nose numpy pyparsing tornado freetype 
-      libpng pkgconfig mock pytz  
+    [ cycler dateutil nose numpy pyparsing tornado freetype
+      libpng pkgconfig mock pytz
     ]
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ];
+    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ stdenv.lib.optionals enableQt [ pyqt4 ]
+    ++ stdenv.lib.optionals (builtins.hasAttr "isPy2" python) [ functools32 subprocess32 ];
 
   patches =
     [ ./basedirlist.patch ] ++
@@ -64,8 +68,8 @@ buildPythonPackage rec {
     ${python.interpreter} tests.py
   '';
 
-  # The entry point for running tests, tests.py, is not included in the release.
-  # https://github.com/matplotlib/matplotlib/issues/6017
+  # Test data is not included in the distribution (the `tests` folder
+  # is missing)
   doCheck = false;
 
   prePatch = ''

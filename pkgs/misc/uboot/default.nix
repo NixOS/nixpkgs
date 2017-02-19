@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bc, dtc }:
+{ stdenv, fetchurl, bc, dtc, python2 }:
 
 let
   buildUBoot = { targetPlatforms
@@ -17,7 +17,7 @@ let
       sha256 = "1wpc51jm3zyibgcr78jng2yksqvrya76bxgsr4pcyjrsz5sm2hkc";
     };
 
-    nativeBuildInputs = [ bc dtc ];
+    nativeBuildInputs = [ bc dtc python2 ];
 
     hardeningDisable = [ "all" ];
 
@@ -34,6 +34,7 @@ let
       runHook postInstall
     '';
 
+    enableParallelBuilding = true;
     dontStrip = true;
 
     crossAttrs = {
@@ -100,9 +101,15 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRaspberryPi3 = buildUBoot rec {
+  ubootRaspberryPi3_32bit = buildUBoot rec {
     defconfig = "rpi_3_32b_defconfig";
     targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3_64bit = buildUBoot rec {
+    defconfig = "rpi_3_defconfig";
+    targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 

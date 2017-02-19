@@ -37,6 +37,9 @@ qtSubmodule {
     sed -i -e 's,\(static QString processPath\),\1 = QLatin1String("'$out'/libexec/QtWebEngineProcess"),' src/core/web_engine_library_info.cpp
     sed -i -e 's,\(static QString potentialLocalesPath =\).*,\1 QLatin1String("'$out'/translations/qtwebengine_locales");,' src/core/web_engine_library_info.cpp
 
+    # fix default SSL bundle location
+    sed -i -e 's,/cert.pem,/certs/ca-bundle.crt,' src/3rdparty/chromium/third_party/boringssl/src/crypto/x509/x509_def.c
+
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
         -importdir $out/lib/qt5/imports \
