@@ -1,15 +1,15 @@
 { newScope, stdenv, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
 let
-  callPackage = newScope (self // { inherit stdenv isl version fetch; });
+  callPackage = newScope (self // { inherit stdenv isl release_version version fetch; });
 
-  version = "4.0.0";
+  release_version = "4.0.0";
   rc = "rc2";
+  version = "${release_version}${rc}";
 
-  fetch = fetch_v version;
-  fetch_v = ver: name: sha256: fetchurl {
-    url = "http://llvm.org/pre-releases/${version}/${rc}/${name}-${version}${rc}.src.tar.xz";
+  fetch = name: sha256: fetchurl {
+    url = "http://llvm.org/pre-releases/${release_version}/${rc}/${name}-${version}.src.tar.xz";
     # Once 4.0 is released, use this instead:
-    # url = "http://llvm.org/releases/${version}/${name}-${ver}.src.tar.xz";
+    # url = "http://llvm.org/releases/${release-version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 

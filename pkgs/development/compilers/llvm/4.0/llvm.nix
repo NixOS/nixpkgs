@@ -11,6 +11,7 @@
 , valgrind
 , ncurses
 , version
+, release_version
 , zlib
 , compiler-rt_src
 , libcxxabi
@@ -25,7 +26,7 @@ let
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." version));
+    concatStringsSep "." (take 2 (splitString "." release_version));
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
@@ -99,7 +100,7 @@ in stdenv.mkDerivation rec {
     install_name_tool -id $lib/lib/libLLVM.dylib $lib/lib/libLLVM.dylib
     install_name_tool -change @rpath/libLLVM.dylib $lib/lib/libLLVM.dylib $out/bin/llvm-config
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${version}.dylib
+    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
 
   enableParallelBuilding = true;

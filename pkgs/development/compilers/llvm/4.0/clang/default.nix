@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src, python }:
+{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -33,7 +33,7 @@ let
     # Clang expects to find sanitizer libraries in its own prefix
     postInstall = ''
       ln -sv ${llvm}/lib/LLVMgold.so $out/lib
-      ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
+      ln -sv ${llvm}/lib/clang/${release_version}/lib $out/lib/clang/${release_version}/
       ln -sv $out/bin/clang $out/bin/cpp
     '';
 
