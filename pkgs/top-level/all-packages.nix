@@ -17254,12 +17254,6 @@ with pkgs;
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
 
-  matita = (with ocamlPackages_3_11_2; callPackage ../applications/science/logic/matita {
-      ulex08 = ulex08.override { camlp5 = camlp5_old_transitional; };
-    });
-
-  matita_130312 = lowPrio (ocamlPackages.callPackage ../applications/science/logic/matita/130312.nix { });
-
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
 
   mcrl2 = callPackage ../applications/science/logic/mcrl2 { };
