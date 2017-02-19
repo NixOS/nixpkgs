@@ -6,10 +6,12 @@
 , swig
 , which
 , libedit
+, libxml2
 , llvm
 , clang-unwrapped
 , python
 , version
+, darwin
 }:
 
 stdenv.mkDerivation {
@@ -27,21 +29,22 @@ stdenv.mkDerivation {
       cmake/modules/LLDBStandalone.cmake
   '';
 
-  buildInputs = [ cmake python which swig ncurses zlib libedit llvm ];
+  buildInputs = [ cmake python which swig ncurses zlib libedit libxml2 llvm ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DLLDB_DISABLE_LIBEDIT=1" 
+    "-DLLDB_DISABLE_LIBEDIT=ON"
   ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.ncsa;
-    platforms   = stdenv.lib.platforms.all;
+    license     = licenses.ncsa;
+    platforms   = platforms.allBut platforms.darwin;
   };
 }
