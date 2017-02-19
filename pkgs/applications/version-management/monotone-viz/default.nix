@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.0.2";
   name = "monotone-viz-${version}";
 
-  buildInputs = [ocaml lablgtk libgnomecanvas glib pkgconfig graphviz_2_0 makeWrapper];
+  buildInputs = [ocaml lablgtk libgnomecanvas glib pkgconfig graphviz_2_0 makeWrapper camlp4];
   src = fetchurl {
     url = "http://oandrieu.nerim.net/monotone-viz/${name}-nolablgtk.tar.gz";
     sha256 = "1l5x4xqz5g1aaqbc1x80mg0yzkiah9ma9k9mivmn08alkjlakkdk";

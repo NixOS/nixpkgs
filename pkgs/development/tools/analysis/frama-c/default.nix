@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 apron
+    lablgtk coq graphviz zarith why3 apron camlp4
   ];
 
 
@@ -56,13 +56,15 @@ stdenv.mkDerivation rec {
   patches = [ ./dynamic.diff ];
   postPatch = ''
     # strip absolute paths to /usr/bin
-    for file in ./configure ./share/Makefile.common ./src/*/configure; do
+    for file in ./configure ./share/Makefile.common ./src/*/configure; do #*/
       substituteInPlace $file  --replace '/usr/bin/' ""
     done
 
     substituteInPlace ./src/plugins/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
 
     cd ../why*
+
+    substituteInPlace ./Makefile.in --replace '-warn-error A' '-warn-error A-3'    
     substituteInPlace ./frama-c-plugin/Makefile --replace 'shell frama-c' "shell $out/bin/frama-c"
     substituteInPlace ./jc/jc_make.ml --replace ' why-dp '       " $out/bin/why-dp "
     substituteInPlace ./jc/jc_make.ml --replace "?= why@\n"      "?= $out/bin/why@\n"

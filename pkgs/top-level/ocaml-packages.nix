@@ -53,13 +53,10 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
-    bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
-    bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
-
     bitstring =
       if lib.versionOlder "4.02" ocaml.version
-      then bitstring_git
-      else bitstring_2_0_4;
+      then callPackage ../development/ocaml-modules/bitstring { }
+      else callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -99,7 +96,10 @@ let
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
     camomile = callPackage ../development/ocaml-modules/camomile { };
 
-    camlimages_4_0 = callPackage ../development/ocaml-modules/camlimages/4.0.nix {
+    camlimages_4_0 =
+      if lib.versionOlder "4.02" ocaml.version
+      then null
+      else callPackage ../development/ocaml-modules/camlimages/4.0.nix {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
     };
@@ -392,7 +392,10 @@ let
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
-    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
+    spacetime_lib = if lib.versionOlder "4.04" ocaml.version then
+    callPackage ../development/tools/ocaml/ocamlbuild { }
+    else
+    null;
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
@@ -700,7 +703,6 @@ let
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-    llpp = callPackage ../applications/misc/llpp { };
 
     monotoneViz = callPackage ../applications/version-management/monotone-viz {
       inherit (pkgs.gnome2) libgnomecanvas glib;
@@ -724,9 +726,6 @@ let
       camlp5 = camlp5_transitional;
     };
 
-    prooftree = callPackage ../applications/science/logic/prooftree {
-      camlp5 = camlp5_transitional;
-    };
   };
     in lib.fix' (lib.extends overrides packageSet);
 in rec
@@ -754,5 +753,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_04;
 
-  ocamlPackages = ocamlPackages_4_01_0;
+  ocamlPackages = ocamlPackages_4_02;
 }
