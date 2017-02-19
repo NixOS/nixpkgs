@@ -239,7 +239,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      platforms = with platforms; [darwin linux freebsd illumos];
+      platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
       maintainers = with maintainers; [ mornfall ];
     };
   };
