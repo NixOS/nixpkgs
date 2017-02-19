@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       calculus in one easy-to-use package.
     '';
     homepage = https://www.geogebra.org/;
+    maintainers = with maintainers; [ ma27 ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = platforms.all;
     hydraPlatforms = [];
