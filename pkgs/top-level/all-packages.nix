@@ -862,6 +862,8 @@ with pkgs;
 
   ent = callPackage ../tools/misc/ent { };
 
+  envconsul = callPackage ../tools/system/envconsul { };
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
