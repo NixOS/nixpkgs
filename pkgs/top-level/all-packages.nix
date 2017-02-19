@@ -4484,7 +4484,7 @@ with pkgs;
 
   wv2 = callPackage ../tools/misc/wv2 { };
 
-  inherit (ocamlPackages) wyrd;
+  wyrd = ocamlPackages.callPackage ../tools/misc/wyrd { };
 
   x86info = callPackage ../os-specific/linux/x86info { };
 
@@ -4764,7 +4764,9 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) compcert;
+  compcert = ocamlPackages.callPackage ../development/compilers/compcert {
+    coq = coq_8_5;
+  };
 
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
@@ -5092,7 +5094,7 @@ with pkgs;
 
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
-  inherit (ocamlPackages) haxe;
+  haxe = ocamlPackages.callPackage ../development/compilers/haxe { };
 
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
@@ -5503,7 +5505,7 @@ with pkgs;
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) trv;
+  trv = ocamlPackages_4_02.callPackage ../development/tools/misc/trv { };
 
   bupc = callPackage ../development/compilers/bupc { };
 
@@ -6805,9 +6807,13 @@ with pkgs;
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
-  verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
+  verasco = ocamlPackages.callPackage  ../development/tools/analysis/verasco ({
     coq = coq_8_4;
-  };
+  } //  (
+      if system == "x86_64-linux"
+      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
+      else {}
+    ));
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
@@ -7440,7 +7446,12 @@ with pkgs;
 
   glpk = callPackage ../development/libraries/glpk { };
 
-  inherit (ocamlPackages) glsurf;
+  glsurf = ocamlPackages_4_01_0.callPackage
+   ../applications/science/math/glsurf {
+      libpng = libpng12;
+      giflib = giflib_4_1;
+      camlimages = ocamlPackages_4_01_0.camlimages_4_0;
+    };
 
   glui = callPackage ../development/libraries/glui {};
 
@@ -13308,7 +13319,7 @@ with pkgs;
 
   goldendict = qt55.callPackage ../applications/misc/goldendict { };
 
-  inherit (ocamlPackages) google-drive-ocamlfuse;
+  google-drive-ocamlfuse = ocamlPackages.callPackage  ../applications/networking/google-drive-ocamlfuse { };
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
 
@@ -14244,7 +14255,9 @@ with pkgs;
     lua = lua5;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) monotoneViz;
+  monotoneViz = ocamlPackages_4_01_0.callPackage ../applications/version-management/monotone-viz {
+      inherit (gnome2) libgnomecanvas glib;
+    };
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
@@ -15392,7 +15405,10 @@ with pkgs;
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
-  inherit (ocamlPackages) unison;
+  unison = ocamlPackages.callPackage ../applications/networking/sync/unison {
+      enableX11 = config.unison.enableX11 or true;
+    };
+
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
@@ -17207,7 +17223,9 @@ with pkgs;
 
   hol = callPackage ../applications/science/logic/hol { };
 
-  inherit (ocamlPackages) hol_light;
+  hol_light = ocamlPackages.callPackage ../applications/science/logic/hol_light {
+      camlp5 = ocamlPackages.camlp5_strict;
+    };
 
   hologram = callPackage ../tools/security/hologram { };
 
@@ -17236,9 +17254,11 @@ with pkgs;
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
 
-  inherit (ocaml-ng.ocamlPackages_3_11_2) matita;
+  matita = (with ocamlPackages_3_11_2; callPackage ../applications/science/logic/matita {
+      ulex08 = ulex08.override { camlp5 = camlp5_old_transitional; };
+    });
 
-  matita_130312 = lowPrio ocamlPackages.matita_130312;
+  matita_130312 = lowPrio (ocamlPackages.callPackage ../applications/science/logic/matita/130312.nix { });
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
 
@@ -17248,7 +17268,9 @@ with pkgs;
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
-  inherit (ocamlPackages) ott;
+  ott = (with ocamlPackages; callPackage ../applications/science/logic/ott {
+      camlp5 = camlp5_transitional;
+    });
 
   otter = callPackage ../applications/science/logic/otter {};
 

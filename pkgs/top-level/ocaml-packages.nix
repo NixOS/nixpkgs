@@ -664,62 +664,11 @@ let
 
     # Apps / from all-packages
 
-    wyrd = callPackage ../tools/misc/wyrd { };
-
-    compcert = callPackage ../development/compilers/compcert ((
-      if system == "x86_64-linux"
-      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
-      else {}
-    ) // {
-      coq = pkgs.coq_8_5;
-    });
-
-    haxe = callPackage ../development/compilers/haxe { };
-
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
-    trv = callPackage ../development/tools/misc/trv { };
-
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
-
-    verasco = callPackage ../development/tools/analysis/verasco (
-      if system == "x86_64-linux"
-      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
-      else {}
-    );
-
-    glsurf = callPackage ../applications/science/math/glsurf {
-      libpng = pkgs.libpng12;
-      giflib = pkgs.giflib_4_1;
-      camlimages = camlimages_4_0;
-    };
-
-    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
-
-
-    monotoneViz = callPackage ../applications/version-management/monotone-viz {
-      inherit (pkgs.gnome2) libgnomecanvas glib;
-    };
-
-    unison = callPackage ../applications/networking/sync/unison {
-      enableX11 = config.unison.enableX11 or true;
-    };
-
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      camlp5 = camlp5_strict;
-    };
-
-    matita = callPackage ../applications/science/logic/matita {
-      ulex08 = ulex08.override { camlp5 = camlp5_old_transitional; };
-    };
-
-    matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
-
-    ott = callPackage ../applications/science/logic/ott {
-      camlp5 = camlp5_transitional;
-    };
 
   };
     in lib.fix' (lib.extends overrides packageSet);
