@@ -105,7 +105,9 @@ let
 
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
-  maybeCopyAll = { usesGemspec ? false, ...}@main:
+  maybeCopyAll = main: if main == null then "" else copyIfUseGemspec main;
+
+  copyIfUseGemspec = { usesGemspec ? false, ...}@main:
   (if usesGemspec then ''
   cp -a ${gemdir}/* $out/
   '' else ""
