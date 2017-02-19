@@ -340,6 +340,7 @@ self: super: {
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
+  orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
