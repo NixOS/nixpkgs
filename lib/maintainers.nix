@@ -305,7 +305,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   metabar = "Celine Mercier <softs@metabarcoding.org>";
   mguentner = "Maximilian Güntner <code@klandest.in>";
-  mic92 = "Jörg Thalheim <joerg@higgsboson.tk>";
+  mic92 = "Jörg Thalheim <joerg@thalheim.io>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
