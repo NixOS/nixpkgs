@@ -1,5 +1,7 @@
 { stdenv, fetchurl, fetchpatch
 , bzip2
+, expat
+, libffi
 , gdbm
 , lzma
 , ncurses
@@ -32,7 +34,7 @@ let
   sitePackages = "lib/${libPrefix}/site-packages";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 lzma gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
@@ -86,6 +88,8 @@ in stdenv.mkDerivation {
     "--enable-shared"
     "--with-threads"
     "--without-ensurepip"
+    "--with-system-expat"
+    "--with-system-ffi"
   ];
 
   preConfigure = ''
