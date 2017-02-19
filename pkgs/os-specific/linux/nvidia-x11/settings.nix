@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, pkgconfig, m4, gtk2, gtk3, libXv, libvdpau
+{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, gtk3, libXv, libXrandr, libvdpau
 , withGtk2 ? false, withGtk3 ? true
 }:
 
@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig m4 ];
 
-  buildInputs = [ gtk2 gtk3 libXv libvdpau ];
+  buildInputs = [ jansson gtk2 gtk3 libXv libXrandr libvdpau nvidia_x11 ];
 
+  NIX_LDFLAGS = [ "-lvdpau" "-lXrandr" "-lXv" "-lnvidia-ml" ];
+
+  makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/nvidia-settings):$out/lib:${nvidia_x11}/lib" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/nvidia-settings):$out/lib" \
       $out/bin/nvidia-settings
   '';
 
