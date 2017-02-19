@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     "--without-python"
   ] ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) "--enable-seccomp";
 
+  postConfigure = ''
+    STD_CDEFINES="-DDIG_SIGCHASE=1"
+    export STD_CDEFINES
+  '';
+
   postInstall = ''
     moveToOutput bin/bind9-config $dev
     moveToOutput bin/isc-config.sh $dev
