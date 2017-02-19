@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchurl, ocaml, sexplib_p4, stringext, uri, cstruct, ipaddr
+{ stdenv, buildOcaml, fetchurl, ocaml, sexplib_p4, stringext, uri_p4, cstruct, ipaddr
 , asyncSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
 , async_p4 ? null, async_ssl_p4 ? null, lwt ? null
 }:
@@ -12,7 +12,7 @@ buildOcaml rec {
     sha256 = "5cf1a46aa0254345e5143feebe6b54bdef96314e9987f44e69f24618d620faa1";
   };
 
-  propagatedBuildInputs = [ sexplib_p4 stringext uri cstruct ipaddr ];
+  propagatedBuildInputs = [ sexplib_p4 stringext uri_p4 cstruct ipaddr ];
   buildInputs = stdenv.lib.optional (lwt != null) lwt
              ++ stdenv.lib.optional (asyncSupport && async_p4 != null) async_p4
              ++ stdenv.lib.optional (asyncSupport && async_ssl_p4 != null) async_ssl_p4;
