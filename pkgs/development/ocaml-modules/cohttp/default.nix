@@ -1,25 +1,28 @@
-{ stdenv, buildOcaml, fetchurl, ocaml, cmdliner, re, uri, fieldslib_p4
-, sexplib_p4, conduit , stringext, base64, magic-mime, ounit, alcotest
+{ stdenv, buildOcaml, fetchurl, ocaml, findlib, cmdliner, re, uri, fieldslib
+, sexplib, conduit, stringext, base64, magic-mime, ounit, alcotest
 , asyncSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
-, lwt ? null, async_p4 ? null, async_ssl_p4 ? null
+, lwt ? null, async ? null, async_ssl ? null
 }:
 
 buildOcaml rec {
   name = "cohttp";
-  version = "0.19.3";
+  version = "0.21.0";
 
   minimumSupportedOcamlVersion = "4.01";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/archive/v${version}.tar.gz";
-    sha256 = "1nrzpd4h52c1hnzcgsz462676saj9zss708ng001h54dglk8i1iv";
+    sha256 = "09n45x5z2zb2f6nqa03fk056dbbvc5z5hk4yjk435ks7zhfbrqk5";
   };
 
-  buildInputs = [ alcotest cmdliner conduit magic-mime ounit lwt ]
-  ++ stdenv.lib.optionals asyncSupport [ async_p4 async_ssl_p4 ];
-  propagatedBuildInputs = [ re stringext uri fieldslib_p4 sexplib_p4 base64 ];
+  buildInputs = [ alcotest findlib cmdliner conduit magic-mime ounit ];
+  propagatedBuildInputs = [ re stringext uri fieldslib sexplib base64 ]
+    ++ stdenv.lib.optionals (asyncSupport && async != null && async_ssl != null) [ async async_ssl ]
+    ++ stdenv.lib.optionals (lwt != null) [ lwt ];
 
   buildFlags = "PREFIX=$(out)";
+  doCheck = true;
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-cohttp;

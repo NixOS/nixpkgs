@@ -36,7 +36,15 @@ let
 
     async_shell = callPackage ../development/ocaml-modules/async_shell { };
 
-    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
+    async_ssl_p4 =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/async_ssl { }
+      else null;
+
+    async_ssl =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/async_ssl.nix {}
+      else async_ssl_p4;
 
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
@@ -111,6 +119,8 @@ let
     conduit = callPackage ../development/ocaml-modules/conduit {
        lwt = ocaml_lwt;
     };
+
+    cow = callPackage ../development/ocaml-modules/cow { };
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
