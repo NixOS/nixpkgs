@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$LIBCXXABI_INCLUDE_DIR")
   '';
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patchPhase = ''
+		substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
+  '';
 
   buildInputs = [ cmake llvm libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
