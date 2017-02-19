@@ -11,8 +11,11 @@ fetchCargoDeps() {
     echo "Using rust registry from $rustRegistry"
 
     cat <<EOF > $out/config
-[registry]
-index = "file://$rustRegistry"
+[source.nix-store-rust-registry]
+registry = "file://$rustRegistry"
+
+[source.crates-io]
+replace-with = "nix-store-rust-registry"
 EOF
 
     export CARGO_HOME=$out

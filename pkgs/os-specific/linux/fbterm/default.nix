@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses}:
+{stdenv, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses, libx86}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     url="http://fbterm.googlecode.com/files/fbterm-1.7.0.tar.gz";
     sha256="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
-  buildInputs = [gpm freetype fontconfig pkgconfig ncurses];
+  buildInputs = [gpm freetype fontconfig pkgconfig ncurses libx86];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -23,6 +23,10 @@ stdenv.mkDerivation {
     ' -i src/Makefile.in
     export HOME=$PWD;
     export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
+  '';
+  preBuild = ''
+    mkdir -p "$out/share/terminfo"
+    tic -a -v2 -o"$out/share/terminfo" terminfo/fbterm
   '';
   meta = {
     inherit (s) version;

@@ -4,6 +4,7 @@
 , settingsSha256
 , persistencedSha256
 , useGLVND ? true
+, useProfiles ? true
 , preferGtk2 ? false
 }:
 
@@ -41,7 +42,7 @@ let
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
-    inherit version useGLVND;
+    inherit version useGLVND useProfiles;
     inherit (stdenv) system;
 
     outputs = [ "out" ] ++ optional (!libsOnly) "bin";

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v9xgpcf186ni55rkmx008msyszw0ypd6rd98hgwpih8yv3pymfy";
   };
 
-  buildInputs = [ ncurses gsl ] ++ (with ocamlPackages; [ ocaml ]);
+  buildInputs = [ ncurses gsl ] ++ (with ocamlPackages; [ ocaml camlp4 ]);
 
   meta = {
     homepage = http://pessimization.com/software/orpie/;

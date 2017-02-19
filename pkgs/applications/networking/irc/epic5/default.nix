@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, ncurses, libiconv, tcl }:
+{ stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "epic5-${version}";
@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     substituteInPlace bsdinstall \
-      --replace /bin/cp cp \
-      --replace /bin/rm rm \
-      --replace /bin/chmod chmod
+      --replace /bin/cp ${coreutils}/bin/cp \
+      --replace /bin/rm ${coreutils}/bin/rm \
+      --replace /bin/chmod ${coreutils}/bin/chmod \
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://epicsol.org/";
-    description = "a IRC client that offers a great ircII interface";
+    homepage = "http://epicsol.org";
+    description = "A IRC client that offers a great ircII interface";
     license = licenses.bsd3;
     maintainers = [ maintainers.ndowens ];
   };

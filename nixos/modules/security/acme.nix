@@ -138,7 +138,7 @@ in
 
       certs = mkOption {
         default = { };
-        type = with types; loaOf (submodule certOpts);
+        type = with types; attrsOf (submodule certOpts);
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';

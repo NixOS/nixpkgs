@@ -6,12 +6,12 @@ let
 in
 rec {
   rustc = callPackage ./rustc.nix {
-    shortVersion = "1.15";
+    shortVersion = "1.15.1";
     isRelease = true;
     forceBundledLLVM = false;
     configureFlags = [ "--release-channel=stable" ];
-    srcRev = "10893a9a349cdd423f2490a6984acb5b3b7c8046";
-    srcSha = "0861iivb98ir9ixq2qzznfc1b2l9khlwdln5n0gf2mp1fi3w4d4f";
+    srcRev = "021bd294c039bd54aa5c4aa85bcdffb0d24bc892";
+    srcSha = "1dp7cjxj8nv960jxkq3p18agh9bpfb69ac14x284jmhwyksim3y7";
 
     patches = [
       ./patches/darwin-disable-fragile-tcp-tests.patch

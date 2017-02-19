@@ -277,6 +277,7 @@
   luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lukego = "Luke Gorrie <luke@snabb.co>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
+  ma27 = "Maximilian Bosch <maximilian@mbosch.me>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
   mahe = "Matthias Herrmann <matthias.mh.herrmann@gmail.com>";
@@ -304,7 +305,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   metabar = "Celine Mercier <softs@metabarcoding.org>";
   mguentner = "Maximilian Güntner <code@klandest.in>";
-  mic92 = "Jörg Thalheim <joerg@higgsboson.tk>";
+  mic92 = "Jörg Thalheim <joerg@thalheim.io>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
@@ -428,6 +429,7 @@
   rongcuid = "Rongcui Dong <rongcuid@outlook.com>";
   ronny = "Ronny Pfannschmidt <nixos@ronnypfannschmidt.de>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
+  rtreffer = "Rene Treffer <treffer+nixos@measite.de>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";

@@ -65,6 +65,7 @@ with pkgs;
 
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
 
+  common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
   ### BUILD SUPPORT
 
@@ -502,6 +503,8 @@ with pkgs;
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
+  dgsh = callPackage ../shells/dgsh { };
+
   elvish = callPackage ../shells/elvish { };
 
   encryptr = callPackage ../tools/security/encryptr {
@@ -671,6 +674,8 @@ with pkgs;
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
   btrfs-progs_4_4_1 = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
+
+  btrfs-dedupe = callPackage ../tools/filesystems/btrfs-dedupe/default.nix {};
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
@@ -864,6 +869,8 @@ with pkgs;
 
   ent = callPackage ../tools/misc/ent { };
 
+  envconsul = callPackage ../tools/system/envconsul { };
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
@@ -951,6 +958,7 @@ with pkgs;
 
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
+    czmq = czmq3;
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
@@ -2314,6 +2322,12 @@ with pkgs;
 
   innoextract = callPackage ../tools/archivers/innoextract { };
 
+  intecture-agent = callPackage ../tools/admin/intecture/agent.nix { };
+
+  intecture-auth = callPackage ../tools/admin/intecture/auth.nix { };
+
+  intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
+
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
@@ -3513,6 +3527,8 @@ with pkgs;
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
+  psi = callPackage ../applications/networking/instant-messengers/psi { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pssh = callPackage ../tools/networking/pssh { };
@@ -3844,7 +3860,7 @@ with pkgs;
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  sks = callPackage ../servers/sks { };
+  sks = callPackage ../servers/sks { inherit (ocamlPackages) ocaml camlp4; };
 
   skydns = callPackage ../servers/skydns { };
 
@@ -5172,7 +5188,9 @@ with pkgs;
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
-  intercal = callPackage ../development/compilers/intercal { };
+  intercal = callPackage ../development/compilers/intercal {
+    flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
+  };
 
   irony-server = callPackage ../development/tools/irony-server/default.nix {
     # The repository of irony to use -- must match the version of the employed emacs
@@ -6272,7 +6290,9 @@ with pkgs;
   # Does not actually depend on Qt 5
   extra-cmake-modules = qt5.ecmNoHooks;
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocamlPackages_4_01_0;
+   };
 
   cpptest = callPackage ../development/libraries/cpptest { };
 
@@ -9238,6 +9258,7 @@ with pkgs;
   re2 = callPackage ../development/libraries/re2 { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
+  qca2-qt5 = callPackage ../development/libraries/qca2 { qt = qt5.qtbase; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
@@ -10032,9 +10053,13 @@ with pkgs;
 
   cppzmq = callPackage ../development/libraries/cppzmq {};
 
-  czmq = callPackage ../development/libraries/czmq { };
+  czmq3 = callPackage ../development/libraries/czmq/3.x.nix {};
+  czmq4 = callPackage ../development/libraries/czmq/4.x.nix {};
+  czmq = czmq4;
 
-  czmqpp = callPackage ../development/libraries/czmqpp { };
+  czmqpp = callPackage ../development/libraries/czmqpp {
+    czmq = czmq3;
+  };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -10692,6 +10717,7 @@ with pkgs;
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
+  prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
@@ -11358,7 +11384,6 @@ with pkgs;
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.sctp_bug_on_CVE_2017_5986
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11477,6 +11502,8 @@ with pkgs;
     jool = callPackage ../os-specific/linux/jool { };
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
+
+    mwprocapture = callPackage ../os-specific/linux/mwprocapture { };
 
     mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
 
@@ -14143,7 +14170,7 @@ with pkgs;
     bison = bison2;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_04) llpp;
+  llpp = ocaml-ng.ocamlPackages_4_04.callPackage ../applications/misc/llpp { };
 
   lmms = callPackage ../applications/audio/lmms { };
 
@@ -14261,7 +14288,9 @@ with pkgs;
 
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
+    ocaml = ocamlPackages_4_01_0.ocaml;
+  };
 
   MMA = callPackage ../applications/audio/MMA { };
 
@@ -15523,7 +15552,9 @@ with pkgs;
     spice_gtk = spice_gtk;
   };
 
-  virt-top = callPackage ../applications/virtualization/virt-top { };
+  virt-top = callPackage ../applications/virtualization/virt-top {
+    ocamlPackages = ocamlPackages_4_01_0;
+  };
 
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     vte = gnome3.vte;
@@ -16800,8 +16831,6 @@ with pkgs;
 
           polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
-          psi = callPackage ../applications/networking/instant-messengers/psi { };
-
           qtcurve = callPackage ../misc/themes/qtcurve { };
 
           quassel = callPackage ../applications/networking/irc/quassel rec {
@@ -17276,7 +17305,8 @@ with pkgs;
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
 
-  leo2 = callPackage ../applications/science/logic/leo2 {};
+  leo2 = callPackage ../applications/science/logic/leo2 {
+     ocaml = ocamlPackages_4_01_0.ocaml;};
 
   logisim = callPackage ../applications/science/logic/logisim {};
 
@@ -17300,13 +17330,18 @@ with pkgs;
 
   picosat = callPackage ../applications/science/logic/picosat {};
 
-  inherit (ocaml-ng.ocamlPackages_4_01_0) prooftree;
+  prooftree = (with ocamlPackages_4_01_0;
+    callPackage  ../applications/science/logic/prooftree {
+      camlp5 = camlp5_transitional;
+    });
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
   proverif = callPackage ../applications/science/logic/proverif { };
 
-  satallax = callPackage ../applications/science/logic/satallax {};
+  satallax = callPackage ../applications/science/logic/satallax {
+    ocaml = ocamlPackages_4_01_0.ocaml;
+  };
 
   saw-tools = callPackage ../applications/science/logic/saw-tools {};
 
@@ -17562,6 +17597,8 @@ with pkgs;
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
+
+  cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 
   crashplan = callPackage ../applications/backup/crashplan { };
 
