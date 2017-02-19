@@ -3502,6 +3502,8 @@ with pkgs;
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
+  psi = callPackage ../applications/networking/instant-messengers/psi { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pssh = callPackage ../tools/networking/pssh { };
@@ -16756,8 +16758,6 @@ with pkgs;
           plasma-nm = callPackage ../tools/networking/plasma-nm { };
 
           polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
-
-          psi = callPackage ../applications/networking/instant-messengers/psi { };
 
           qtcurve = callPackage ../misc/themes/qtcurve { };
 
