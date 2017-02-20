@@ -16720,6 +16720,7 @@ with pkgs;
         krusader = callPackage ../applications/misc/krusader { };
 
         massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
+        psi = callPackage ../applications/networking/instant-messengers/psi { };
 
         telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
