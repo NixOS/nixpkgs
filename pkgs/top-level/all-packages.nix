@@ -7506,11 +7506,7 @@ with pkgs;
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = gnutls34;
-
-  gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
+  gnutls = gnutls35;
 
   gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
     guileBindings = config.gnutls.guile or false;
