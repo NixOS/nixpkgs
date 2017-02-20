@@ -5436,27 +5436,32 @@ in {
     '';
   };
 
-  pytestcov = buildPythonPackage (rec {
-    name = "pytest-cov-2.3.1";
+  pytestcov = buildPythonPackage rec {
+    name = "pytest-cov-2.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-cov/${name}.tar.gz";
-      sha256 = "fa0a212283cdf52e2eecc24dd6459bb7687cc29adb60cb84258fab73be8dda0f";
+      sha256 = "03c2qc42r4bczyw93gd7n0qi1h1jfhw7fnbhi33c3vp1hs81gm2k";
     };
 
-   buildInputs = with self; [ covCore pytest virtualenv process-tests helper ];
+   buildInputs = with self; [ pytest pytest_xdist virtualenv process-tests ];
+   propagatedBuildInputs = with self; [ coverage ];
 
+   # xdist related tests fail with the following error
+   # OSError: [Errno 13] Permission denied: 'py/_code'
    doCheck = false;
    checkPhase = ''
+     # allow to find the module helper during the test run
+     export PYTHONPATH=$PYTHONPATH:$PWD/tests
      py.test tests
    '';
 
     meta = {
       description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
-      homepage = https://github.com/schlamar/pytest-cov;
+      homepage = https://github.com/pytest-dev/pytest-cov;
       license = licenses.mit;
     };
-  });
+  };
 
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
