@@ -671,14 +671,6 @@ let
 
     wyrd = callPackage ../tools/misc/wyrd { };
 
-    compcert = callPackage ../development/compilers/compcert ((
-      if system == "x86_64-linux"
-      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
-      else {}
-    ) // {
-      coq = pkgs.coq_8_5;
-    });
-
     haxe = callPackage ../development/compilers/haxe { };
 
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };

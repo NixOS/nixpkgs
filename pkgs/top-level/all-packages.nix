@@ -4795,7 +4795,14 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) compcert;
+  compcert = callPackage ../development/compilers/compcert ((
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  ) // {
+    coq = coq_8_6;
+  });
+
 
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
@@ -5835,8 +5842,7 @@ with pkgs;
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php71;
-
-  phpPackages = php70Packages;
+  phpPackages = php71Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -10624,7 +10630,7 @@ with pkgs;
 
   mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
-  riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
+  riak = callPackage ../servers/nosql/riak/2.2.0.nix { };
 
   riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
