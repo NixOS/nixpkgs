@@ -24,5 +24,6 @@
   <xi:include href="submitting-changes.xml" />
   <xi:include href="reviewing-contributions.xml" />
   <xi:include href="contributing.xml" />
+  <xi:include href="troubleshooting.xml" />
 
 </book>

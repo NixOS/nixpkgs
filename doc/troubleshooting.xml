@@ -1,0 +1,20 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-troubleshooting">
+
+<title>Troubleshooting</title>
+
+<section xml:id="upgrading-nix">
+  <title>Upgrading Nix</title>
+  <para>
+    Nixpkgs having a requirement on Nix version, it can happen that Nix is too 
+    old to evaluate Nixpkgs.
+  </para>
+  <para>
+    In that case, it is possible to upgrade Nix to the latest version using 
+    pre-compiled packages: <link 
+      xlink:href="https://hydra.nixos.org/release/nix/nix-1.11.2">Nix 
+      1.11.2</link>.
+  </para>
+</section>
+</chapter>
