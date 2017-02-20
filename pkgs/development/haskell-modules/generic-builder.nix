@@ -310,6 +310,8 @@ stdenv.mkDerivation ({
       '';
     };
 
+    inherit haskellBuildInputs;
+    inherit systemBuildInputs;
   };
 
   meta = { inherit homepage license platforms; }
