@@ -12335,6 +12335,8 @@ with pkgs;
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
+  stix-two = callPackage ../data/fonts/stix-two { };
+
   inherit (callPackages ../data/fonts/gdouros { })
     symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
