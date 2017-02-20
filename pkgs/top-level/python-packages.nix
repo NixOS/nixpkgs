@@ -22181,12 +22181,12 @@ in {
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.6.2";
+    version = "0.7.1";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "0ds1b2qx0nx9bqj1sqgr4lmanb4hpchmylp1hml1l0p71qi5ha0r";
+      sha256 = "16grklnbgcfwqj3f39gw7fc9afi7xlp9gm7x8w6mi81dzhdxf50y";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
