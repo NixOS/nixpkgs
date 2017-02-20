@@ -118,6 +118,10 @@ def main():
         os.environ["NIXOS_INSTALL_BOOTLOADER"] = "1"
 
     if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
+        # bootctl uses fopen() with modes "wxe" and fails if the file exists.
+        if os.path.exists("@efiSysMountPoint@/loader/loader.conf"):
+            os.unlink("@efiSysMountPoint@/loader/loader.conf")
+
         if "@canTouchEfiVariables@" == "1":
             subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "install"])
         else:
