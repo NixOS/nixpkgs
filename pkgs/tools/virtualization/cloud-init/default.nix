@@ -1,6 +1,6 @@
-{ lib, pythonPackages, fetchurl }:
+{ lib, pythonPackages, fetchurl, kmod, systemd }:
 
-let version = "0.7.6";
+let version = "0.7.9";
 
 in pythonPackages.buildPythonApplication rec {
   name = "cloud-init-${version}";
@@ -8,9 +8,10 @@ in pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://launchpad.net/cloud-init/trunk/${version}/+download/cloud-init-${version}.tar.gz";
-    sha256 = "1mry5zdkfaq952kn1i06wiggc66cqgfp6qgnlpk0mr7nnwpd53wy";
+    sha256 = "0wnl76pdcj754pl99wxx76hkir1s61x0bg0lh27sdgdxy45vivbn";
   };
 
+  patches = [ ./add-nixos-support.patch ];
   patchPhase = ''
     patchShebangs ./tools
 
@@ -19,15 +20,17 @@ in pythonPackages.buildPythonApplication rec {
       --replace /etc $out/etc \
       --replace /lib/systemd $out/lib/systemd \
       --replace 'self.init_system = ""' 'self.init_system = "systemd"'
+
+    patchPhase
     '';
 
   propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
-    oauth pyserial configobj pyyaml argparse requests jsonpatch ];
+    oauthlib pyserial configobj pyyaml argparse requests jsonpatch ];
 
   meta = {
     homepage = http://cloudinit.readthedocs.org;
     description = "Provides configuration and customization of cloud instance";
-    maintainers = [ lib.maintainers.madjar ];
+    maintainers = [ lib.maintainers.madjar lib.maintainers.phile314 ];
     platforms = lib.platforms.all;
   };
 }
