@@ -3483,9 +3483,10 @@ in {
           sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
       })
 
-      ../development/python-modules/cairocffi/dlopen-paths.patch
       ../development/python-modules/cairocffi/fix_test_scaled_font.patch
-    ];
+    ] ++ ( if stdenv.isDarwin
+      then [ ../development/python-modules/cairocffi/dlopen-paths.osx.patch ]
+      else [ ../development/python-modules/cairocffi/dlopen-paths.patch ] );
 
     postPatch = ''
       # Hardcode cairo library path
@@ -3496,7 +3497,7 @@ in {
 
     meta = {
       homepage = https://github.com/SimonSapin/cairocffi;
-      license = "bsd";
+      license = licenses.bsd3;
       description = "cffi-based cairo bindings for Python";
     };
   };
