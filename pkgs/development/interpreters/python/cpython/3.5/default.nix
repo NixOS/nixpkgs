@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , bzip2
 , gdbm
 , lzma
@@ -54,6 +54,14 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "glibc-2.25-enosys.patch";
+      url = https://github.com/python/cpython/commit/035ba5da3e53e.patch;
+      sha256 = "1y74ir1w5cq542w27rgzgp70chhq2x047db9911mihpab8p2nj71";
+    })
+  ];
 
   postPatch = optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
