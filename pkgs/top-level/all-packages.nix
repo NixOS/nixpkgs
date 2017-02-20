@@ -4766,7 +4766,14 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) compcert;
+  compcert = callPackage ../development/compilers/compcert ((
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  ) // {
+    coq = coq_8_6;
+  });
+
 
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
