@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.0
+  # LTS Haskell 8.2
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -208,7 +208,7 @@ default-package-overrides:
   - base64-string ==0.2
   - basic-prelude ==0.6.1
   - bcrypt ==0.0.10
-  - benchpress ==0.2.2.8
+  - benchpress ==0.2.2.9
   - bencode ==0.6.0.0
   - bento ==0.1.0
   - bifunctors ==5.4.1
@@ -256,7 +256,7 @@ default-package-overrides:
   - blosum ==0.1.1.4
   - bmp ==1.2.6.3
   - bool-extras ==0.4.0
-  - Boolean ==0.2.3
+  - Boolean ==0.2.4
   - boolean-like ==0.1.1.0
   - boolsimplifier ==0.1.8
   - boomerang ==1.4.5.2
@@ -301,7 +301,7 @@ default-package-overrides:
   - camfort ==0.901
   - carray ==0.1.6.5
   - cartel ==0.18.0.2
-  - case-insensitive ==1.2.0.7
+  - case-insensitive ==1.2.0.8
   - cased ==0.1.0.0
   - cases ==0.1.3.2
   - cassava ==0.4.5.1
@@ -317,9 +317,9 @@ default-package-overrides:
   - ChannelT ==0.0.0.2
   - charset ==0.3.7.1
   - charsetdetect-ae ==1.1.0.2
-  - Chart ==1.8.1
-  - Chart-cairo ==1.8.1
-  - Chart-diagrams ==1.8.1
+  - Chart ==1.8.2
+  - Chart-cairo ==1.8.2
+  - Chart-diagrams ==1.8.2
   - chart-unit ==0.1.0.0
   - ChasingBottoms ==1.3.1.2
   - cheapskate ==0.1.0.5
@@ -378,7 +378,7 @@ default-package-overrides:
   - composition ==1.0.2.1
   - composition-extra ==2.0.0
   - concurrency ==1.0.0.0
-  - concurrent-output ==1.7.8
+  - concurrent-output ==1.7.9
   - concurrent-supply ==0.1.8
   - conduit ==1.2.9
   - conduit-combinators ==1.1.0
@@ -598,7 +598,7 @@ default-package-overrides:
   - fast-builder ==0.0.0.6
   - fast-digits ==0.2.1.0
   - fast-logger ==2.4.10
-  - fasta ==0.10.4.1
+  - fasta ==0.10.4.2
   - fay ==0.23.1.16
   - fay-base ==0.20.0.1
   - fay-builder ==0.2.0.5
@@ -843,7 +843,7 @@ default-package-overrides:
   - hackage-security ==0.5.2.2
   - hackernews ==1.1.1.0
   - haddock-library ==1.4.2
-  - hailgun ==0.4.1.1
+  - hailgun ==0.4.1.2
   - hailgun-simple ==0.1.0.0
   - hakyll ==4.9.5.1
   - half ==0.2.2.3
@@ -928,7 +928,7 @@ default-package-overrides:
   - hinotify ==0.3.9
   - hint ==0.6.0
   - hip ==1.5.2.0
-  - histogram-fill ==0.8.4.1
+  - histogram-fill ==0.8.5.0
   - hit ==0.6.3
   - hjpath ==3.0.1
   - hjsmin ==0.2.0.2
@@ -976,7 +976,7 @@ default-package-overrides:
   - hsemail ==1.7.7
   - HSet ==0.0.0
   - hset ==2.2.0
-  - hsexif ==0.6.0.10
+  - hsexif ==0.6.1.0
   - hsignal ==0.2.7.5
   - hsinstall ==1.5
   - hslogger ==1.2.10
@@ -988,6 +988,7 @@ default-package-overrides:
   - hsp ==0.10.0
   - hspec ==2.4.1
   - hspec-attoparsec ==0.1.0.2
+  - hspec-contrib ==0.4.0
   - hspec-core ==2.4.1
   - hspec-discover ==2.4.1
   - hspec-expectations ==0.8.2
@@ -1087,7 +1088,7 @@ default-package-overrides:
   - interpolatedstring-perl6 ==1.0.0
   - IntervalMap ==0.5.2.0
   - intervals ==0.7.2
-  - intro ==0.1.0.6
+  - intro ==0.1.0.8
   - invariant ==0.4
   - invertible ==0.2.0
   - io-choice ==0.0.6
@@ -1107,7 +1108,7 @@ default-package-overrides:
   - irc-ctcp ==0.1.3.0
   - irc-dcc ==2.0.0
   - islink ==0.1.0.0
-  - iso3166-country-codes ==0.20140203.7
+  - iso3166-country-codes ==0.20140203.8
   - iso639 ==0.1.0.3
   - iso8601-time ==0.1.4
   - iterable ==3.0
@@ -1121,7 +1122,7 @@ default-package-overrides:
   - jmacro-rpc-snap ==0.3
   - jni ==0.2.3
   - jose ==0.5.0.2
-  - jose-jwt ==0.7.4
+  - jose-jwt ==0.7.5
   - js-flot ==0.8.3
   - js-jquery ==3.1.1
   - json ==0.9.1
@@ -1149,7 +1150,7 @@ default-package-overrides:
   - koofr-client ==1.0.0.3
   - kraken ==0.0.3
   - l10n ==0.1.0.0
-  - labels ==0.3.0
+  - labels ==0.3.2
   - lackey ==0.4.2
   - language-c ==0.5.0
   - language-c-quote ==0.11.7.1
@@ -1194,7 +1195,7 @@ default-package-overrides:
   - licensor ==0.2.0
   - lift-generics ==0.1.1
   - lifted-async ==0.9.1.1
-  - lifted-base ==0.2.3.8
+  - lifted-base ==0.2.3.10
   - line ==2.2.0
   - linear ==1.20.5
   - linear-accelerate ==0.2
@@ -1215,7 +1216,7 @@ default-package-overrides:
   - log-postgres ==0.7
   - logfloat ==0.13.3.3
   - logger-thread ==0.1.0.2
-  - logging-effect ==1.1.2
+  - logging-effect ==1.1.3
   - logging-facade ==0.1.1
   - logict ==0.6.0.2
   - loop ==0.3.0
@@ -1231,7 +1232,7 @@ default-package-overrides:
   - machines-process ==0.2.0.8
   - magic ==1.1
   - mainland-pretty ==0.4.1.4
-  - makefile ==0.1.0.5
+  - makefile ==0.1.1.0
   - managed ==1.0.5
   - mandrill ==0.5.3.1
   - markdown ==0.1.16
@@ -1281,7 +1282,7 @@ default-package-overrides:
   - monad-extras ==0.6.0
   - monad-http ==0.1.0.0
   - monad-journal ==0.7.2
-  - monad-logger ==0.3.20.1
+  - monad-logger ==0.3.20.2
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.6
   - monad-logger-syslog ==0.1.3.0
@@ -1306,7 +1307,7 @@ default-package-overrides:
   - MonadRandom ==0.5.1
   - monads-tf ==0.1.0.3
   - mongoDB ==2.1.1.1
-  - mono-traversable ==1.0.1.1
+  - mono-traversable ==1.0.1.2
   - mono-traversable-instances ==0.1.0.0
   - monoid-extras ==0.4.2
   - monoid-subclasses ==0.4.3.1
@@ -1352,7 +1353,7 @@ default-package-overrides:
   - network-anonymous-i2p ==0.10.0
   - network-anonymous-tor ==0.11.0
   - network-attoparsec ==0.12.2
-  - network-carbon ==1.0.8
+  - network-carbon ==1.0.9
   - network-conduit-tls ==1.2.2
   - network-house ==0.1.0.2
   - network-info ==0.2.0.8
@@ -1421,7 +1422,7 @@ default-package-overrides:
   - pagination ==0.1.1
   - palette ==0.1.0.4
   - pandoc ==1.19.2.1
-  - pandoc-citeproc ==0.10.4
+  - pandoc-citeproc ==0.10.4.1
   - pandoc-types ==1.17.0.5
   - pango ==0.13.3.1
   - parallel ==3.2.1.0
@@ -1450,7 +1451,7 @@ default-package-overrides:
   - pdfinfo ==1.5.4
   - pem ==0.2.2
   - permutation ==0.5.0.5
-  - persistable-record ==0.4.1.0
+  - persistable-record ==0.4.1.1
   - persistable-types-HDBC-pg ==0.0.1.4
   - persistent ==2.6
   - persistent-mysql ==2.6
@@ -1477,7 +1478,7 @@ default-package-overrides:
   - pipes-extras ==1.0.8
   - pipes-fluid ==0.5.0.3
   - pipes-group ==1.0.6
-  - pipes-misc ==0.2.3.0
+  - pipes-misc ==0.2.5.0
   - pipes-mongodb ==0.1.0.0
   - pipes-parse ==3.0.8
   - pipes-random ==1.0.0.3
@@ -1499,12 +1500,13 @@ default-package-overrides:
   - pointless-fun ==1.1.0.6
   - polynomials-bernstein ==1.1.2
   - polyparse ==1.12
+  - posix-paths ==0.2.1.1
   - posix-realtime ==0.0.0.4
   - post-mess-age ==0.2.1.0
-  - postgresql-binary ==0.9.2
+  - postgresql-binary ==0.9.3
   - postgresql-libpq ==0.9.3.0
   - postgresql-simple ==0.5.2.1
-  - postgresql-simple-migration ==0.1.8.0
+  - postgresql-simple-migration ==0.1.9.0
   - postgresql-simple-url ==0.2.0.0
   - postgresql-transactional ==1.1.1
   - postgresql-typed ==0.5.0
@@ -1527,7 +1529,7 @@ default-package-overrides:
   - printcess ==0.1.0.3
   - process-extras ==0.7.1
   - product-profunctors ==0.7.1.0
-  - profiteur ==0.4.2.0
+  - profiteur ==0.4.2.1
   - profunctor-extras ==4.0
   - profunctors ==5.2
   - project-template ==0.2.0
@@ -1548,7 +1550,7 @@ default-package-overrides:
   - pure-cdb ==0.1.2
   - pure-io ==0.2.1
   - pureMD5 ==2.1.3
-  - purescript-bridge ==0.10.0.0
+  - purescript-bridge ==0.10.1.0
   - pusher-http-haskell ==1.1.0.4
   - pwstore-fast ==2.4.4
   - pwstore-purehaskell ==2.1.4
@@ -1616,9 +1618,9 @@ default-package-overrides:
   - regex-tdfa ==1.2.2
   - regex-tdfa-text ==1.0.0.3
   - reinterpret-cast ==0.1.0
-  - relational-query ==0.8.3.4
+  - relational-query ==0.8.3.5
   - relational-query-HDBC ==0.6.0.2
-  - relational-record ==0.1.5.1
+  - relational-record ==0.1.6.1
   - relational-schemas ==0.1.3.1
   - renderable ==0.2.0.1
   - repa ==3.4.1.2
@@ -1652,13 +1654,14 @@ default-package-overrides:
   - RNAlien ==1.3.1
   - rng-utils ==0.2.1
   - rose-trees ==0.0.4.3
+  - rot13 ==0.1.0.2
   - rotating-log ==0.4.2
   - RSA ==2.2.0
   - rss-conduit ==0.3.0.0
   - runmemo ==1.0.0.1
   - rvar ==0.2.0.3
   - s3-signer ==0.3.0.0
-  - safe ==0.3.13
+  - safe ==0.3.14
   - safe-exceptions ==0.1.4.0
   - safe-exceptions-checked ==0.1.0
   - safecopy ==0.9.2
@@ -1696,7 +1699,7 @@ default-package-overrides:
   - servant-cassava ==0.8
   - servant-client ==0.9.1.1
   - servant-docs ==0.9.1.1
-  - servant-elm ==0.4.0.0
+  - servant-elm ==0.4.0.1
   - servant-foreign ==0.9.1.1
   - servant-js ==0.9.1
   - servant-JuicyPixels ==0.3.0.2
@@ -1763,7 +1766,7 @@ default-package-overrides:
   - sorted-list ==0.2.0.0
   - sourcemap ==0.1.6
   - sparkle ==0.4.0.2
-  - sparse-linear-algebra ==0.2.2.0
+  - sparse-linear-algebra ==0.2.9.4
   - spdx ==0.2.1.0
   - speculation ==1.5.0.3
   - speedy-slice ==0.3.0
@@ -1857,9 +1860,9 @@ default-package-overrides:
   - tar ==0.5.0.3
   - tar-conduit ==0.1.0
   - tardis ==0.4.1.0
-  - tasty ==0.11.1
+  - tasty ==0.11.2
   - tasty-ant-xml ==1.0.4
-  - tasty-auto ==0.1.0.1
+  - tasty-auto ==0.1.0.2
   - tasty-dejafu ==0.3.0.2
   - tasty-discover ==1.1.0
   - tasty-expected-failure ==0.11.0.4
@@ -1877,11 +1880,11 @@ default-package-overrides:
   - tasty-tap ==0.0.4
   - tasty-th ==0.1.4
   - Taxonomy ==1.0.2
-  - TCache ==0.12.0
+  - TCache ==0.12.1
   - tce-conf ==1.3
   - tcp-streams ==0.6.0.0
   - tcp-streams-openssl ==0.6.0.0
-  - telegram-api ==0.6.0.0
+  - telegram-api ==0.6.0.2
   - template ==0.2.0.10
   - temporary ==1.2.0.4
   - temporary-rc ==1.2.0.3
@@ -2084,7 +2087,7 @@ default-package-overrides:
   - warp ==3.2.11
   - warp-tls ==3.2.3
   - wave ==0.1.4
-  - wavefront ==0.7.0.2
+  - wavefront ==0.7.0.3
   - wavefront-obj ==0.1.0.1
   - web-plugins ==0.2.9
   - web-routes ==0.27.11
@@ -2145,10 +2148,10 @@ default-package-overrides:
   - xenstore ==0.1.1
   - xhtml ==3000.2.1
   - xlsior ==0.1.0.1
-  - xlsx ==0.4.2
+  - xlsx ==0.4.3
   - xlsx-tabular ==0.2.2
   - xml ==1.3.14
-  - xml-conduit ==1.4.0.3
+  - xml-conduit ==1.4.0.4
   - xml-conduit-parse ==0.3.1.0
   - xml-conduit-writer ==0.1.1.1
   - xml-hamlet ==0.4.1
