@@ -5,16 +5,20 @@ lxmenu-data }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-panel";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0lwgz6nir4cd50xbmc3arngnw38rb5kqgcsgp3dlq6gpncg45hdq";
+    sha256 = "097rivly61i99v0w9a3dgbwbc4c5x9nh3jl0n94dix1qgd4w983y";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
     qt5.qtbase
@@ -27,6 +31,7 @@ stdenv.mkDerivation rec {
     kde5.kguiaddons
     lxqt.liblxqt
     lxqt.libqtxdg
+    lxqt.lxqt-common
     lxqt.lxqt-globalkeys
     lxqt.libsysstat
     xorg.libpthreadstubs
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "The LXQt desktop panel";
     homepage = https://github.com/lxde/lxqt-panel;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

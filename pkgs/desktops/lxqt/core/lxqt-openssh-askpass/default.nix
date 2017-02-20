@@ -3,16 +3,19 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-openssh-askpass";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0nz8sv3yrqbzgmd6jahaqaa71axy5x06k091splp9cmab0vzng7c";
+    sha256 = "030pzys86s7rpgl35kl4b3y7gmv9982j3blmg8927nq4pw61gfj9";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
     qt5.qtbase
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "GUI to query passwords on behalf of SSH agents";
     homepage = https://github.com/lxde/lxqt-openssh-askpass;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

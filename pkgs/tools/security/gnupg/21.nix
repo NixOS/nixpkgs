@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
-, gettext, texinfo, pcsclite, sqlite
+{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+, libiconv, npth, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -29,13 +29,34 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
-  patches = [ ./fix-libusb-include-path.patch ];
+  patches = [
+    ./fix-libusb-include-path.patch
+    # TODO: Remove the following two patches on the next gnupg release after 2.1.18
+    (fetchpatch {
+      name = "scd-Backport-two-fixes-from-master";
+      url = "https://anonscm.debian.org/git/pkg-gnupg/gnupg2.git/plain/debian/patches/0028-scd-Backport-two-fixes-from-master.patch?h=debian/2.1.18-6";
+      sha256 = "01l2s4s7kp6j2f3qd371arq7pfphvncc9k1m63rqm0kyzy9jk20k";
+    })
+    (fetchpatch {
+      name = "scd-Fix-use-case-of-PC-SC";
+      url = "https://anonscm.debian.org/git/pkg-gnupg/gnupg2.git/plain/debian/patches/0029-scd-Fix-use-case-of-PC-SC.patch?h=debian/2.1.18-6";
+      sha256 = "0lxqj614fialbqs2x0z13q5ikq2rc9xwphmkly179qs03d4mawsz";
+    })
+  ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
   configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
+
+  postInstall = ''
+    mkdir -p $out/lib/systemd/user
+    for f in doc/examples/systemd-user/*.{service,socket} ; do
+      substitute $f $out/lib/systemd/user/$(basename $f) \
+        --replace /usr/bin $out/bin
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;

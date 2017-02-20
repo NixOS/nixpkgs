@@ -1,78 +1,70 @@
-{ withKDE ? true
-, stdenv, fetchurl, gettext, poppler_qt4, qt4
-# Qt only (no KDE):
-, pkgconfig
-# With KDE
-, cmake, automoc4, kdelibs
-}:
+{ stdenv, fetchFromGitHub, gettext, poppler_qt5, qt5 , pkgconfig }:
 
-# Warning: You will also need a working pdflatex installation containing (at
-# least) auctex and pgf.
+# Warning: You will also need a working pdflatex installation containing
+# at least auctex and pgf.
 
-assert withKDE -> kdelibs != null;
+# This package only builds ktikz without KDE integration because KDE4 is
+# deprecated and upstream does not (yet ?) support KDE5.
+# See historical versions of this file for building ktikz with KDE4.
 
-let
-  version = "0.10";
+stdenv.mkDerivation rec {
+  version = "unstable-20161122";
+  name = "qtikz-${version}";
 
-  qtikz = {
-    name = "qtikz-${version}";
+  src = fetchFromGitHub {
+    owner = "fhackenberger";
+    repo = "ktikz";
+    rev = "be66c8b1ff7e6b791b65af65e83c4926f307cf5a";
+    sha256 = "15jx53sjlnky4yg3ry1i1c29g28v1jbbvhbz66h7a49pfxa40fj3";
+  };
 
-    conf = ''
-      # installation prefix:
-      #PREFIX = ""
+  meta = with stdenv.lib; {
+    description = "Editor for the TikZ language";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.layus ];
+  };
 
-      # install desktop file here (*nix only):
-      DESKTOPDIR = ''$''${PREFIX}/share/applications
+  conf = ''
+    # installation prefix:
+    PREFIX = @out@
 
-      # install mimetype here:
-      MIMEDIR = ''$''${PREFIX}/share/mime/packages
+    # install desktop file here (*nix only):
+    DESKTOP_INSTALL_DIR = @out@/share/applications
 
-      CONFIG -= debug
-      CONFIG += release
+    # install mimetype here:
+    MIME_INSTALL_DIR = @out@/share/mime/packages
 
-      # qmake command:
-      QMAKECOMMAND = qmake
-      # lrelease command:
-      LRELEASECOMMAND = lrelease
-      # qcollectiongenerator command:
-      #QCOLLECTIONGENERATORCOMMAND = qcollectiongenerator
+    # install doc here:
+    MAN_INSTALL_DIR = @out@/share/man
 
-      # TikZ documentation default file path:
-      TIKZ_DOCUMENTATION_DEFAULT = ''$''${PREFIX}/share/doc/texmf/pgf/pgfmanual.pdf.gz
-    '';
+    CONFIG -= debug
+    CONFIG += release
 
-    patchPhase = ''
-      echo "$conf" > conf.pri
-    '';
+    # qmake command:
+    QMAKECOMMAND = qmake
+    # lrelease command:
+    LRELEASECOMMAND = lrelease
+    # qcollectiongenerator command:
+    #QCOLLECTIONGENERATORCOMMAND = qcollectiongenerator
 
-    configurePhase = ''
+    # TikZ documentation default file path:
+    TIKZ_DOCUMENTATION_DEFAULT = @out@/share/doc/texmf/pgf/pgfmanual.pdf.gz
+  '';
+
+  # 1. Configuration is done by overwriting qtikzconfig.pri
+  # 2. Recent Qt removed QString::fromAscii in favor of QString::fromLatin1
+  patchPhase = ''
+    echo "$conf" | sed "s!@out@!$out!g" > qmake/qtikzconfig.pri
+    find -name "*.cpp" -exec sed -i s/fromAscii/fromLatin1/g "{}" \;
+  '';
+
+  configurePhase = ''
       qmake PREFIX="$out" ./qtikz.pro
-    '';
+  '';
 
-    buildInputs = [ gettext qt4 poppler_qt4 pkgconfig ];
-  };
+  buildInputs = [ gettext qt5.full poppler_qt5 pkgconfig ];
 
-  ktikz = {
-    name = "ktikz-${version}";
-    buildInputs = [ kdelibs cmake qt4 automoc4 gettext poppler_qt4 ];
-  };
-
-  common = {
-    inherit version;
-    src = fetchurl {
-      url = "http://www.hackenberger.at/ktikz/ktikz_${version}.tar.gz";
-      sha256 = "19jl49r7dw3vb3hg52man8p2lszh71pvnx7d0xawyyi0x6r8ml9i";
-    };
-
-    enableParallelBuilding = true;
-
-    meta = with stdenv.lib; {
-      description = "Editor for the TikZ language";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-      maintainers = [ maintainers.layus ];
-    };
-  };
-
-in stdenv.mkDerivation (common // (if withKDE then ktikz else qtikz))
+  enableParallelBuilding = true;
+}
 

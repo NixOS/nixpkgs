@@ -808,12 +808,6 @@ self: super: {
   # No upstream issue tracker
   hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
 
-  lentil = super.lentil.overrideScope (self: super: {
-    pipes = self.pipes_4_3_2;
-    # https://github.com/roelvandijk/terminal-progress-bar/issues/14
-    terminal-progress-bar = doJailbreak self.terminal-progress-bar_0_1_1;
-  });
-
   # https://github.com/basvandijk/lifted-base/issues/34
   lifted-base = doJailbreak super.lifted-base;
 
@@ -864,4 +858,7 @@ self: super: {
 
   # https://github.com/lambdabot/lambdabot/issues/158
   lambdabot-core = doJailbreak super.lambdabot-core;
+
+  # https://github.com/jswebtools/language-ecmascript/pull/81
+  language-ecmascript = doJailbreak super.language-ecmascript;
 }

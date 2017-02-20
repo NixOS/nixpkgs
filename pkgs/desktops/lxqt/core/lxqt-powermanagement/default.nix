@@ -3,16 +3,19 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-powermanagement";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "10myxrhlhvr9cmcqv67skzd11c40bgqgf6qdvm5smww2il1mzfwa";
+    sha256 = "0rcjq20ap6kc3m1f2glb8c62qhsx8qh0rkzlj3rykdj6n4hc0x79";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
     qt5.qtbase
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Power management module for LXQt";
     homepage = https://github.com/lxde/lxqt-powermanagement;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

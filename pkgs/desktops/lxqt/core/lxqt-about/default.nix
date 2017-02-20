@@ -1,18 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt, xorg }:
+{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-about";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0739gp3af68cvf8fxqvd203xqzncglmxpklq8mryrs5f1xnqp6gc";
+    sha256 = "1pa68pr0iwvh34lippagc8kxdfd0l2071m0vh7dnvfqbnwly29dk";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
     qt5.qtx11extras
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Dialogue window providing information about LXQt and the system it's running on";
     homepage = https://github.com/lxde/lxqt-about;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }
