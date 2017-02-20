@@ -22785,6 +22785,24 @@ in {
     };
   };
 
+  robotframework-requests = buildPythonPackage rec {
+    version = "0.4.6";
+    name = "robotframework-requests-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/ad/da/51359b11d2005ff425984205677890fafaf270a71b03df22c255501bc99d/robotframework-requests-0.4.6.tar.gz";
+      sha256 = "0416rxg7g0pfg77akljnkass0xz0id26v4saag2q2h1fgwrm7n4q";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [ robotframework lxml requests2 ];
+
+    meta = {
+      description = "Robot Framework keyword library wrapper around the HTTP client library requests";
+      homepage = https://github.com/bulkan/robotframework-requests;
+    };
+  };
+
   rootpy = buildPythonPackage rec {
     version = "0.8.3";
     name = "rootpy-${version}";
