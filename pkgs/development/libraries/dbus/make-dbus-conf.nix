@@ -10,7 +10,6 @@
  */
 runCommand "dbus-1"
   {
-    buildInputs = [ libxslt ];
     inherit serviceDirectories suidHelper;
     XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
       <?xml version="1.0"?>
@@ -28,12 +27,12 @@ runCommand "dbus-1"
   ''
     mkdir -p $out
 
-    xsltproc --nonet \
+    ${libxslt.bin}/bin/xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
       --stringparam suidHelper "$suidHelper" \
       ${./make-system-conf.xsl} ${dbus}/share/dbus-1/system.conf \
       > $out/system.conf
-    xsltproc --nonet \
+    ${libxslt.bin}/bin/xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
       ${./make-session-conf.xsl} ${dbus}/share/dbus-1/session.conf \
       > $out/session.conf
