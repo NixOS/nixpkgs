@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     # TODO: Remove the following two patches on the next gnupg release after 2.1.18
     (fetchpatch {
       name = "scd-Backport-two-fixes-from-master";
-      url = "https://sources.debian.net/data/main/g/gnupg2/2.1.18-6/debian/patches/0028-scd-Backport-two-fixes-from-master.patch";
+      url = "https://anonscm.debian.org/git/pkg-gnupg/gnupg2.git/plain/debian/patches/0028-scd-Backport-two-fixes-from-master.patch?h=debian/2.1.18-6";
       sha256 = "01l2s4s7kp6j2f3qd371arq7pfphvncc9k1m63rqm0kyzy9jk20k";
     })
     (fetchpatch {
       name = "scd-Fix-use-case-of-PC-SC";
-      url = "https://sources.debian.net/data/main/g/gnupg2/2.1.18-6/debian/patches/0029-scd-Fix-use-case-of-PC-SC.patch";
+      url = "https://anonscm.debian.org/git/pkg-gnupg/gnupg2.git/plain/debian/patches/0029-scd-Fix-use-case-of-PC-SC.patch?h=debian/2.1.18-6";
       sha256 = "0lxqj614fialbqs2x0z13q5ikq2rc9xwphmkly179qs03d4mawsz";
     })
   ];
