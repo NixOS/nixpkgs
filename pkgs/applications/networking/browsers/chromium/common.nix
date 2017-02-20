@@ -1,4 +1,4 @@
-{ stdenv, gn, ninja, which
+{ stdenv, ninja, which
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -20,7 +20,6 @@
 , libexif ? null # only needed for Chromium before version 51
 
 # package customization
-, enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
 , enableHotwording ? false
 , enableWideVine ? false
@@ -86,7 +85,10 @@ let
 
     src = upstream-info.main;
 
-    nativeBuildInputs = [ gn which python2Packages.python perl pkgconfig ];
+    nativeBuildInputs = [
+      ninja which python2Packages.python perl pkgconfig
+      python2Packages.ply python2Packages.jinja2
+    ];
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -95,18 +97,16 @@ let
       glib gtk2 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      python2Packages.ply python2Packages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
-      ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio
       ++ optional (versionAtLeast version "56.0.0.0") gtk3;
 
     patches = [
-      ./patches/glibc-2.24.patch
       ./patches/nix_plugin_paths_52.patch
-    ] ++ optional enableWideVine ./patches/widevine.patch;
+    ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
+      ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -137,8 +137,8 @@ let
 
     gnFlags = mkGnFlags ({
       linux_use_bundled_binutils = false;
-      linux_use_bundled_gold = false;
-      linux_use_gold_flags = true;
+      use_gold = true;
+      gold_path = "${stdenv.cc}/bin";
       is_debug = false;
 
       proprietary_codecs = false;
@@ -149,7 +149,6 @@ let
       enable_nacl = enableNaCl;
       enable_hotwording = enableHotwording;
       enable_widevine = enableWideVine;
-      selinux = enableSELinux;
       use_cups = cupsSupport;
     } // {
       treat_warnings_as_errors = false;
@@ -173,16 +172,24 @@ let
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
+      runHook preConfigure
+
+      # Build gn
+      python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
+      PATH="$PWD/out/Release:$PATH"
+
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
       gn gen --args=${escapeShellArg gnFlags} out/Release
+
+      runHook postConfigure
     '';
 
     buildPhase = let
       buildCommand = target: ''
-        "${ninja}/bin/ninja" -C "${buildPath}"  \
+        ninja -C "${buildPath}"  \
           -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
