@@ -11337,6 +11337,8 @@ in {
     };
   };
 
+  flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
+
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
     version = "3.1.0";
