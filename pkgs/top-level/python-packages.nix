@@ -22667,17 +22667,14 @@ in {
   };
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.7";
+    version = "3.0.2";
     name = "robotframework-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/robotframework/${name}.tar.gz";
-      sha256 = "0mfd0s989j3jrpl8q0lb4wsjy1x280chfr9r74m2dyi9c7rxzc58";
+      sha256 = "1xqzxv00lxf9xi4vdxdsyd1bfmx18gi96vrnijpzj9w2aqrz4610";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       description = "Generic test automation framework";
