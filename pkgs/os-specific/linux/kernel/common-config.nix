@@ -188,7 +188,7 @@ with stdenv.lib;
     DRM_AMD_POWERPLAY y # necessary for amdgpu polaris support
   ''}
   ${optionalString (versionAtLeast version "4.9") ''
-    DRM_AMDGPU_SI y # (experimental) amdgpu support for verde and newer chipsets
+    DRM_AMDGPU_SI? y # (experimental) amdgpu support for verde and newer chipsets
     DRM_AMDGPU_CIK y # (stable) amdgpu support for bonaire and newer chipsets
   ''}
 
@@ -229,7 +229,7 @@ with stdenv.lib;
   EXT3_FS_POSIX_ACL y
   EXT3_FS_SECURITY y
   EXT4_FS_POSIX_ACL y
-  EXT4_ENCRYPTION? ${if versionOlder version "4.8" then "m" else "y"}
+  EXT4_ENCRYPTION? ${if (versionOlder version "4.8") || (versionAtLeast version "4.10") then "m" else "y"}
   EXT4_FS_SECURITY y
   REISERFS_FS_XATTR? y
   REISERFS_FS_POSIX_ACL? y
