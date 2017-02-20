@@ -31987,7 +31987,7 @@ EOF
     };
 
     propagatedBuildInputs = with self; [
-      django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil
+      django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
     ];
 
     meta = {
