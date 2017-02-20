@@ -354,6 +354,8 @@ in {
     };
   };
 
+  PyWebDAV = callPackage ../development/python-modules/pywebdav { };
+
   pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
 
   relatorio = callPackage ../development/python-modules/relatorio { };
