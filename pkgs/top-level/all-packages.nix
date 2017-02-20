@@ -9549,7 +9549,9 @@ with pkgs;
 
   serd = callPackage ../development/libraries/serd {};
 
-  serf = callPackage ../development/libraries/serf {};
+  serf = callPackage ../development/libraries/serf {
+    openssl = openssl_1_0_2;
+  };
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
