@@ -3571,10 +3571,7 @@ with pkgs;
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
-  qtikz = callPackage ../applications/graphics/ktikz {
-    withKDE = false;
-    kdelibs = null;
-  };
+  qtikz = callPackage ../applications/graphics/ktikz { };
 
   quicktun = callPackage ../tools/networking/quicktun { };
 
@@ -16738,8 +16735,6 @@ with pkgs;
           kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
           konversation = callPackage ../applications/networking/irc/konversation { };
-
-          ktikz = callPackage ../applications/graphics/ktikz { };
 
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
