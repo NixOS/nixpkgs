@@ -12500,6 +12500,8 @@ with pkgs;
     };
   };
 
+  antfs-cli = callPackage ../applications/misc/antfs-cli {};
+
   antimony = qt5.callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
