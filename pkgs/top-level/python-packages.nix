@@ -334,6 +334,8 @@ in {
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
+  python-stdnum = callPackage ../development/python-modules/python-stdnum { };
+
   pytimeparse = buildPythonPackage rec {
     pname = "pytimeparse";
     version = "1.1.6";
