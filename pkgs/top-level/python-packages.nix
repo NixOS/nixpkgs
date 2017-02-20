@@ -11337,6 +11337,8 @@ in {
     };
   };
 
+  flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
+
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
   flaky = buildPythonPackage rec {
