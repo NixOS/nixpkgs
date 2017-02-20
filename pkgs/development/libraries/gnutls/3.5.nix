@@ -7,6 +7,4 @@ callPackage ./generic.nix (args // rec {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/gnutls-${version}.tar.xz";
     sha256 = "0l9971841jsfdcvcyhas17sk5rsby6x5vvwcmmj4x3zi9q60zcc2";
   };
-
-  buildInputs = [ libunistring ];
 })

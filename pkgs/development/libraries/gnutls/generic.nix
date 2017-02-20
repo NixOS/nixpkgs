@@ -1,6 +1,6 @@
 { lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound, libiconv
-, tpmSupport ? false, trousers, nettools, bash
+, tpmSupport ? false, trousers, nettools, libunistring
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn p11_kit zlib gmp autogen ]
+  buildInputs = [ lzo lzip libtasn1 libidn p11_kit zlib gmp autogen libunistring ]
     ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
@@ -58,6 +58,9 @@ stdenv.mkDerivation {
         -e 's,-L${gmp.dev}/lib,-L${gmp.out}/lib,' \
         -e 's,-lgmp,-L${gmp.out}/lib -lgmp,' \
         -i $out/lib/*.la "$dev/lib/pkgconfig/gnutls.pc"
+    # It seems only useful for static linking but basically noone does that.
+    substituteInPlace "$out/lib/libgnutls.la" \
+      --replace "-lunistring" ""
   '';
 
   meta = with lib; {
