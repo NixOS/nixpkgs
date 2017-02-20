@@ -360,6 +360,8 @@ in {
 
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
+  simpleeval = callPackage ../development/python-modules/simpleeval { };
+
   sip = callPackage ../development/python-modules/sip { };
 
   tables = callPackage ../development/python-modules/tables {
