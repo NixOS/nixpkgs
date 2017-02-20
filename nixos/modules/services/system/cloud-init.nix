@@ -3,52 +3,7 @@
 with lib;
 
 let cfg = config.services.cloud-init;
-    path = with pkgs; [ cloud-init nettools utillinux e2fsprogs shadow dmidecode openssh ];
-    configFile = pkgs.writeText "cloud-init.cfg" ''
-users:
-   - root
-
-disable_root: false
-preserve_hostname: false
-
-cloud_init_modules:
- - migrator
- - seed_random
- - bootcmd
- - write-files
- - growpart
- - resizefs
- - set_hostname
- - update_hostname
- - update_etc_hosts
- - ca-certs
- - rsyslog
- - users-groups
-
-cloud_config_modules:
- - emit_upstart
- - disk_setup
- - mounts
- - ssh-import-id
- - set-passwords
- - timezone
- - disable-ec2-metadata
- - runcmd
- - ssh
-
-cloud_final_modules:
- - rightscale_userdata
- - scripts-vendor
- - scripts-per-once
- - scripts-per-boot
- - scripts-per-instance
- - scripts-user
- - ssh-authkey-fingerprints
- - keys-to-console
- - phone-home
- - final-message
- - power-state-change
-'';
+    path = with pkgs; [ cloud-init nettools utillinux e2fsprogs shadow openssh iproute ];
 in
 {
   options = {
@@ -74,11 +29,64 @@ in
         '';
       };
 
+      config = mkOption {
+        type = types.str;
+        default = ''
+          system_info:
+            distro: nixos
+          users:
+             - root
+
+          disable_root: false
+          preserve_hostname: false
+
+          cloud_init_modules:
+           - migrator
+           - seed_random
+           - bootcmd
+           - write-files
+           - growpart
+           - resizefs
+           - set_hostname
+           - update_hostname
+           - update_etc_hosts
+           - ca-certs
+           - rsyslog
+           - users-groups
+
+          cloud_config_modules:
+           - disk_setup
+           - mounts
+           - ssh-import-id
+           - set-passwords
+           - timezone
+           - disable-ec2-metadata
+           - runcmd
+           - ssh
+
+          cloud_final_modules:
+           - rightscale_userdata
+           - scripts-vendor
+           - scripts-per-once
+           - scripts-per-boot
+           - scripts-per-instance
+           - scripts-user
+           - ssh-authkey-fingerprints
+           - keys-to-console
+           - phone-home
+           - final-message
+           - power-state-change
+          '';
+        description = ''cloud-init configuration.'';
+      };
+
     };
 
   };
 
   config = mkIf cfg.enable {
+
+    environment.etc."cloud/cloud.cfg".text = cfg.config;
 
     systemd.services.cloud-init-local =
       { description = "Initial cloud-init job (pre-networking)";
@@ -88,7 +96,7 @@ in
         path = path;
         serviceConfig =
           { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init -f ${configFile} init --local";
+            ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
             RemainAfterExit = "yes";
             TimeoutSec = "0";
             StandardOutput = "journal+console";
@@ -105,7 +113,7 @@ in
         path = path;
         serviceConfig =
           { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init -f ${configFile} init";
+            ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
             RemainAfterExit = "yes";
             TimeoutSec = "0";
             StandardOutput = "journal+console";
@@ -121,7 +129,7 @@ in
         path = path;
         serviceConfig =
           { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init -f ${configFile} modules --mode=config";
+            ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
             RemainAfterExit = "yes";
             TimeoutSec = "0";
             StandardOutput = "journal+console";
@@ -137,7 +145,7 @@ in
         path = path;
         serviceConfig =
           { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init -f ${configFile} modules --mode=final";
+            ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
             RemainAfterExit = "yes";
             TimeoutSec = "0";
             StandardOutput = "journal+console";
