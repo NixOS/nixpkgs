@@ -81,7 +81,7 @@ in
       # to bootstrap-tools; on cross-arm this stripping would break objects.
       if [ -z "$crossConfig" ]; then
         for i in "$out"/lib/*.a; do
-            strip -S "$i"
+            [ "$i" = "$out/lib/libm.a" ] || strip -S "$i"
         done
       fi
 
