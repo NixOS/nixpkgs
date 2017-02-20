@@ -9082,6 +9082,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf3_0 pycrypto ];
+    # IV == 0 in tests is not supported by pycrytpodom (our pycrypto drop-in)
+    doCheck = !isPy3k;
 
     meta = {
       homepage = "https://github.com/tgalal/python-axolotl";
@@ -19295,63 +19297,27 @@ in {
   });
 
   protobuf = self.protobuf2_6;
-  protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
-  protobuf3_0_0b2 = (self.protobufBuild pkgs.protobuf3_0_0b2).override { doCheck = false; };
-  protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
-  protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
-  protobufBuild = protobuf: buildPythonPackage rec {
-    inherit (protobuf) name src;
-    disabled = isPy3k || isPyPy;
-
-    propagatedBuildInputs = with self; [ protobuf google_apputils ];
-
-    prePatch = ''
-      while [ ! -d python ]; do
-        cd *
-      done
-      cd python
-    '';
-
-    preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-      export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-    '';
-
-    preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
-    '';
-
-    checkPhase = ''
-      runHook preCheck
-    '' + (if versionAtLeast protobuf.version "2.6.0" then ''
-      ${python.executable} setup.py google_test --cpp_implementation
-      echo "sanity checking the C extension . . ."
-      echo "import google.protobuf.descriptor" | ${python.executable}
-    '' else ''
-      ${python.executable} setup.py test
-    '') + ''
-      runHook postCheck
-    '';
-
-    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
-
-    # the _message.so isn't installed, so we'll do that manually.
-    # if someone can figure out a less hacky way to get the _message.so to
-    # install, please do replace this.
-    postInstall = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      cp -v $(find build -name "_message*") $out/${python.sitePackages}/google/protobuf/pyext
-    '';
-
-    doCheck = true;
-
-    meta = {
-      description = "Protocol Buffers are Google's data interchange format";
-      homepage = http://code.google.com/p/protobuf/;
-    };
-
-    passthru.protobuf = protobuf;
+  # only required by tensorflow
+  protobuf3_0_0b2 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy || isPy3k;
+    doCheck = isPy3k;
+    protobuf = pkgs.protobuf3_0_0b2;
   };
 
+  protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy;
+    doCheck = isPy3k;
+    protobuf = pkgs.protobuf3_0;
+  };
+  protobuf2_6 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPy3k || isPyPy;
+    doCheck = false;
+    protobuf = pkgs.protobuf2_6;
+  };
+  protobuf2_5 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPy3k || isPyPy;
+    protobuf = pkgs.protobuf2_5;
+  };
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
