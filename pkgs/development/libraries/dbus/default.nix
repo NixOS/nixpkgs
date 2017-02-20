@@ -67,8 +67,8 @@ self = stdenv.mkDerivation {
     installFlags = [ "sysconfdir=$(out)/etc" "datadir=$(out)/share" ];
 
     postInstall = ''
-      mkdir -p $doc/share/xml/dbus
-      cp doc/*.dtd $doc/share/xml/dbus
+      mkdir -p "$out/share/xml/dbus"
+      cp doc/*.dtd "$out/share/xml/dbus"
     '';
 
     # it's executed from $lib by absolute path
