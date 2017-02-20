@@ -484,10 +484,10 @@
     debbugs = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib, soap-client }:
     elpaBuild {
         pname = "debbugs";
-        version = "0.12";
+        version = "0.14";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/debbugs-0.12.tar";
-          sha256 = "1swi4d7fhahimid9j12cypmkz7dlqgffrnhfxy5ra44y3j2b35ph";
+          url = "https://elpa.gnu.org/packages/debbugs-0.14.tar";
+          sha256 = "07wgcvg038l88gxvjr0gjpjhyk743w22x1rqghz3gkmif0g70say";
         };
         packageRequires = [ cl-lib soap-client ];
         meta = {
@@ -822,10 +822,10 @@
     gnugo = callPackage ({ ascii-art-to-unicode, cl-lib ? null, elpaBuild, fetchurl, lib, xpm }:
     elpaBuild {
         pname = "gnugo";
-        version = "3.0.2";
+        version = "3.1.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnugo-3.0.2.tar";
-          sha256 = "12xm960awsn2k8ph1yibhrxdg8iz1icifdqimysg3qxljmhmnb3k";
+          url = "https://elpa.gnu.org/packages/gnugo-3.1.0.tar";
+          sha256 = "0xpjvs250gg71qwapdsb1hlc61gs0gpkjds01srf784fvyxx2gf1";
         };
         packageRequires = [ ascii-art-to-unicode cl-lib xpm ];
         meta = {
@@ -2101,10 +2101,10 @@
       }) {};
     xpm = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "xpm";
-        version = "1.0.3";
+        version = "1.0.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xpm-1.0.3.tar";
-          sha256 = "0qckb93xwzcg8iwiv4bd08r60jn0n853czmilz0hyyb1lfi82lp4";
+          url = "https://elpa.gnu.org/packages/xpm-1.0.4.tar";
+          sha256 = "075miyashh9cm3b0gk6ngld3rm8bfgnh4qxnhxmmvjgzf6a64grh";
         };
         packageRequires = [];
         meta = {
