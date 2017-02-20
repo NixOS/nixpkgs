@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libtool perl libxml2 ] ++
     stdenv.lib.optional stdenv.isLinux libseccomp;
 
+  STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
+
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"

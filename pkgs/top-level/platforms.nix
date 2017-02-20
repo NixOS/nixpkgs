@@ -416,9 +416,6 @@ rec {
     kernelAutoModules = false;
     uboot = null;
     kernelTarget = "zImage";
-    kernelExtraConfig = ''
-      AHCI_IMX y
-    '';
     gcc = {
       # Some table about fpu flags:
       # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png

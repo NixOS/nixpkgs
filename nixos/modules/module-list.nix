@@ -41,6 +41,7 @@
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
+  ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
@@ -80,6 +81,7 @@
   ./programs/light.nix
   ./programs/man.nix
   ./programs/mosh.nix
+  ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/oblogout.nix
   ./programs/screen.nix
@@ -91,6 +93,7 @@
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix
+  ./programs/wireshark.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix

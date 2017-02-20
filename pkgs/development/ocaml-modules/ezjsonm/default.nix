@@ -1,17 +1,17 @@
-{ stdenv, fetchzip, ocaml, findlib, jsonm, hex, sexplib_p4, lwt }:
+{ stdenv, fetchzip, ocaml, findlib, jsonm, hex, sexplib, lwt }:
 
-let version = "0.4.1"; in
+let version = "0.4.3"; in
 
 stdenv.mkDerivation {
   name = "ocaml-ezjsonm-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/ezjsonm/archive/${version}.tar.gz";
-    sha256 = "0cfjh8awajvw6kkmxr65dvri4k6h29pynxvk76a8c2lkixpsc095";
+    sha256 = "1y6p3ga6vj1wx5dyns7hjgd0qgrrn2hnn323a7y5didgci5pybls";
   };
 
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ jsonm hex sexplib_p4 lwt ];
+  buildInputs = [ ocaml findlib lwt ];
+  propagatedBuildInputs = [ jsonm hex sexplib ];
   createFindlibDestdir = true;
 
   configureFlags = "--enable-lwt";

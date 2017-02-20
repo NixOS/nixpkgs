@@ -41,6 +41,9 @@ self: super: {
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
+  http-streams = dontCheck super.http-streams;
+
+  # segfault due to missing return: https://github.com/haskell/c2hs/pull/184
   c2hs = dontCheck super.c2hs;
 
   # This test keeps being aborted because it runs too quietly for too long
@@ -228,7 +231,6 @@ self: super: {
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
-  hapistrano = dontCheck super.hapistrano;
   HerbiePlugin = dontCheck super.HerbiePlugin;
   wai-cors = dontCheck super.wai-cors;
 
@@ -278,7 +280,6 @@ self: super: {
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   ed25519 = dontCheck super.ed25519;
-  either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
@@ -307,7 +308,6 @@ self: super: {
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
   hmatrix-tests = dontCheck super.hmatrix-tests;
-  hPDB-examples = dontCheck super.hPDB-examples;
   hquery = dontCheck super.hquery;
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
@@ -340,6 +340,7 @@ self: super: {
   opaleye = dontCheck super.opaleye;
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
+  orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
@@ -427,9 +428,6 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
 
-  # https://github.com/afcowie/http-streams/issues/80
-  http-streams = dontCheck super.http-streams;
-
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
@@ -450,9 +448,6 @@ self: super: {
   apiary-purescript = dontCheck super.apiary-purescript;
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
-
-  # https://github.com/alephcloud/hs-configuration-tools/issues/40
-  configuration-tools = dontCheck super.configuration-tools;
 
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
@@ -695,13 +690,6 @@ self: super: {
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
 
-  # Fix tests which would otherwise fail with "Couldn't launch intero process."
-  intero = overrideCabal super.intero (drv: {
-    postPatch = (drv.postPatch or "") + ''
-      substituteInPlace src/test/Main.hs --replace "\"intero\"" "\"$PWD/dist/build/intero/intero\""
-    '';
-  });
-
   # https://github.com/commercialhaskell/stack/issues/3001
   stack = doJailbreak super.stack;
 
@@ -736,14 +724,7 @@ self: super: {
   });
 
   # test suite cannot find its own "idris" binary
-  idris = overrideCabal super.idris (drv: {
-    # "idris" binary cannot find Idris library otherwise while building. After
-    # installing it's completely fine though. This seems like a bug in Idris
-    # that's related to builds with shared libraries enabled. It would be great
-    # if someone who knows a thing or two about Idris could look into this.
-    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
-    doCheck = false;
-  });
+  idris = dontCheck super.idris;
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -827,12 +808,6 @@ self: super: {
   # No upstream issue tracker
   hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
 
-  lentil = super.lentil.overrideScope (self: super: {
-    pipes = self.pipes_4_3_2;
-    # https://github.com/roelvandijk/terminal-progress-bar/issues/14
-    terminal-progress-bar = doJailbreak self.terminal-progress-bar_0_1_1;
-  });
-
   # https://github.com/basvandijk/lifted-base/issues/34
   lifted-base = doJailbreak super.lifted-base;
 
@@ -862,4 +837,28 @@ self: super: {
 
   # https://github.com/Gabriel439/Haskell-DirStream-Library/issues/8
   dirstream = doJailbreak super.dirstream;
+
+  # https://github.com/xmonad/xmonad-extras/issues/3
+  xmonad-extras = doJailbreak super.xmonad-extras;
+
+  # https://github.com/bmillwood/pointfree/issues/21
+  pointfree = appendPatch super.pointfree (pkgs.fetchpatch {
+    url = "https://github.com/bmillwood/pointfree/pull/22.patch";
+    sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
+  });
+
+  # https://github.com/int-e/QuickCheck-safe/issues/2
+  QuickCheck-safe = doJailbreak super.QuickCheck-safe;
+
+  # https://github.com/mokus0/dependent-sum-template/issues/7
+  dependent-sum-template = doJailbreak super.dependent-sum-template;
+
+  # https://github.com/jcristovao/newtype-generics/issues/13
+  newtype-generics = doJailbreak super.newtype-generics;
+
+  # https://github.com/lambdabot/lambdabot/issues/158
+  lambdabot-core = doJailbreak super.lambdabot-core;
+
+  # https://github.com/jswebtools/language-ecmascript/pull/81
+  language-ecmascript = doJailbreak super.language-ecmascript;
 }

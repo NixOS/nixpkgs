@@ -236,8 +236,8 @@ let
           firewall.allowPing = true;
           useDHCP = false;
           bonds.bond = {
-            mode = "balance-rr";
             interfaces = [ "eth1" "eth2" ];
+            driverOptions.mode = "balance-rr";
           };
           interfaces.eth1.ip4 = mkOverride 0 [ ];
           interfaces.eth2.ip4 = mkOverride 0 [ ];

@@ -3,13 +3,12 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  # Reenable tests for 0.9.0, they are broken at the moment: #15981
-  version = "0.8.4";
+  version = "0.9.2";
   name = "khal-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/k/khal/khal-${version}.tar.gz";
-    sha256 = "03vy4dp9n43w51mwqjjy08dr5nj7wxqnb085visz3j43vzm42p1f";
+    sha256 = "1ryh5c7408w8gpql5s9mkxkvz1ngnds3xm43p7r96ynx8prr9swp";
   };
 
   LC_ALL = "en_US.UTF-8";

@@ -76,6 +76,7 @@ let
       # wrapped plugins by makeWrapper being with dots
       ignore_file ^\.
 
+      allow ^::1$
       allow ^127\.0\.0\.1$
 
       ${nodeCfg.extraConfig}

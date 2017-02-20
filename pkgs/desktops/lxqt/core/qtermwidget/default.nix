@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "qtermwidget";
-  version = "0.7.0";
+  version = "0.7.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "18dnrzpbijh0xdgx83zs8nlbxk0d7hgzib54fqqvxyrjjy4g9scz";
+    sha256 = "0awp33cnkpi9brpx01mz5hwj7j2lq1wdi8cabk3wassd99vvxdxz";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "A terminal emulator widget for Qt 5";
     homepage = https://github.com/lxde/qtermwidget;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

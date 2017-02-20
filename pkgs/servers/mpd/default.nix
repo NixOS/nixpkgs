@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
+, avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac
 , vorbisSupport ? true, libvorbis
 , madSupport ? true, libmad
@@ -26,6 +27,8 @@
 , soundcloudSupport ? true, yajl
 }:
 
+assert avahiSupport -> avahi != null && dbus != null;
+
 let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
@@ -45,6 +48,8 @@ in stdenv.mkDerivation rec {
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
+    ++ opt avahiSupport avahi
+    ++ opt avahiSupport dbus
     ++ opt flacSupport flac
     ++ opt vorbisSupport libvorbis
     # using libmad to decode mp3 files on darwin is causing a segfault -- there
@@ -101,6 +106,7 @@ in stdenv.mkDerivation rec {
       (mkFlag opusSupport "opus")
       (mkFlag soundcloudSupport "soundcloud")
       "--enable-debug"
+      "--with-zeroconf=avahi"
     ]
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";

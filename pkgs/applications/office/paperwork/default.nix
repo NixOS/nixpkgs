@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     }' src/paperwork/frontend/util/__init__.py
 
     sed -i -e '/^LOCALE_PATHS = \[/,/^\]$/ {
-      c LOCALE_PATHS = ["'"$out/share/locale"'"]
+      c LOCALE_PATHS = ["'"$out/share"'"]
     }' src/paperwork/paperwork.py
 
     sed -i -e 's/"icon"/"icon-name"/g' \

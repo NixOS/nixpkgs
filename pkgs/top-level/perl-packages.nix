@@ -5611,6 +5611,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  GetoptTabular = buildPerlPackage rec {
+    name = "Getopt-Tabular-0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GW/GWARD/${name}.tar.gz";
+      sha256 = "0xskl9lcj07sdfx5dkma5wvhhgf5xlsq0khgh8kk34dm6dv0dpwv";
+    };
+  };
+
   GitPurePerl = buildPerlPackage {
     name = "Git-PurePerl-0.51";
     src = fetchurl {
@@ -9637,6 +9645,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestNoWarnings ];
     meta = {
       description = "Internationalizing Domain Names in Applications (IDNA)";
+    };
+  };
+
+  NetIMAPClient = buildPerlPackage rec {
+    name = "Net-IMAP-Client-0.9505";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GANGLION/${name}.tar.gz";
+      sha256 = "d3f6a608b85e09a8080a67a9933837aae6f2cd0e8ee39df3380123dc5e3de912";
+    };
+    buildInputs = [TestPod TestPodCoverage];
+    propagatedBuildInputs = [ IOSocketSSL ListMoreUtils ];
+    meta = {
+      description = "Not so simple IMAP client library";
     };
   };
 

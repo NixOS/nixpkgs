@@ -1,26 +1,24 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt, xorg, hicolor_icon_theme, xmessage }:
+{ stdenv, fetchFromGitHub, cmake, qt5, lxqt, hicolor_icon_theme, xmessage }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-common";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "14nx3zcknwsn713wdnmb2xl15vf21vh13kxscdwmfnd48m5j4m3b";
+    sha256 = "07ih2w9ksbxqwy36xvgb9b31740nhkm7ap70wvv8q6x0wyhn71gn";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
-    qt5.qtx11extras
-    qt5.qttools
     qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
     hicolor_icon_theme
     xmessage
   ];
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Common files for LXQt";
     homepage = https://github.com/lxde/lxqt-common;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

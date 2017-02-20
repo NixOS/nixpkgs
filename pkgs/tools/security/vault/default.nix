@@ -9,7 +9,7 @@ let
   };
 in buildGoPackage rec {
   name = "vault-${version}";
-  version = "0.6.4";
+  version = "0.6.5";
 
   goPackagePath = "github.com/hashicorp/vault";
 
@@ -17,7 +17,7 @@ in buildGoPackage rec {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "0rrrzkza12zbbfc24q4q7ygfczq1j8ljsjagsa8vpp3375dflzdy";
+    sha256 = "0ci46zn9d9h26flgjf4inmvk4mb1hlixvx5g7vg02raw0cqvknnb";
   };
 
   buildFlagsArray = ''
@@ -33,6 +33,7 @@ in buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://www.vaultproject.io;
     description = "A tool for managing secrets";
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ rushmorem offline pradeepchhetri ];
   };

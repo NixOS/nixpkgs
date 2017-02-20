@@ -4683,6 +4683,37 @@ in {
     };
   };
 
+  openant = buildPythonPackage rec {
+    name = "openant-unstable-2017-02-11";
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/Tigge/openant";
+      description = "ANT and ANT-FS Python Library";
+      license = licenses.mit;
+      platforms = platforms.linux;
+    };
+
+    src = pkgs.fetchFromGitHub {
+      owner = "Tigge";
+      repo = "openant";
+      rev = "ed89281e37f65d768641e87356cef38877952397";
+      sha256 = "1g81l9arqdy09ijswn3sp4d6i3z18d44lzyb78bwnvdb14q22k19";
+    };
+
+    # Removes some setup.py hacks intended to install udev rules.
+    # We do the job ourselves in postInstall below.
+    postPatch = ''
+      sed -i -e '/cmdclass=.*/d' setup.py
+    '';
+
+    postInstall = ''
+      install -dm755 "$out/etc/udev/rules.d"
+      install -m644 resources/ant-usb-sticks.rules "$out/etc/udev/rules.d/99-ant-usb-sticks.rules"
+    '';
+
+    propagatedBuildInputs = with self; [ pyusb ];
+  };
+
   opencv = pkgs.opencv.override {
     enablePython = true;
     pythonPackages = self;
@@ -9051,6 +9082,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf3_0 pycrypto ];
+    # IV == 0 in tests is not supported by pycrytpodom (our pycrypto drop-in)
+    doCheck = !isPy3k;
 
     meta = {
       homepage = "https://github.com/tgalal/python-axolotl";
@@ -12208,14 +12241,14 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.7.1_1";
+    version = "2.8.2";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "0gc2qgpzmy7q31z8b11ls4ifb0lwrz94xnz1kj27kc369a01gbxv";
+      sha256 = "1jwaq9k6q8wn197wadiwid7d8aik24rhsypmcl5q0jviwkhhiri9";
     };
 
     doCheck = false;
@@ -16721,8 +16754,19 @@ in {
       rev = "64cbb10095cf9ef0270d65fff58085a13bc0abe9";
       sha256 = "0s5kz5ln96ka0f1sa9nyp34c28mkxkrgcxbvysdawlppg7ay9s1z";
     };
+    buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
     propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
-    postInstall = "ln -s $out/bin/osc-wrapper.py $out/bin/osc";
+    postInstall = ''
+      ln -s $out/bin/osc-wrapper.py $out/bin/osc
+      install -D -m555 dist/osc.complete $out/share/bash-completion/helpers/osc-helper
+      mkdir -p $out/share/bash-completion/completions
+      cat >>$out/share/bash-completion/completions/osc <<EOF
+      test -z "\$BASH_VERSION" && return
+      complete -o default _nullcommand >/dev/null 2>&1 || return
+      complete -r _nullcommand >/dev/null 2>&1         || return
+      complete -o default -C $out/share/bash-completion/helpers/osc-helper osc
+      EOF
+    '';
     meta = {
       description = "opensuse-commander with svn like handling";
       maintainers = [ maintainers.peti ];
@@ -19253,63 +19297,27 @@ in {
   });
 
   protobuf = self.protobuf2_6;
-  protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
-  protobuf3_0_0b2 = (self.protobufBuild pkgs.protobuf3_0_0b2).override { doCheck = false; };
-  protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
-  protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
-  protobufBuild = protobuf: buildPythonPackage rec {
-    inherit (protobuf) name src;
-    disabled = isPy3k || isPyPy;
-
-    propagatedBuildInputs = with self; [ protobuf google_apputils ];
-
-    prePatch = ''
-      while [ ! -d python ]; do
-        cd *
-      done
-      cd python
-    '';
-
-    preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-      export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
-    '';
-
-    preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
-    '';
-
-    checkPhase = ''
-      runHook preCheck
-    '' + (if versionAtLeast protobuf.version "2.6.0" then ''
-      ${python.executable} setup.py google_test --cpp_implementation
-      echo "sanity checking the C extension . . ."
-      echo "import google.protobuf.descriptor" | ${python.executable}
-    '' else ''
-      ${python.executable} setup.py test
-    '') + ''
-      runHook postCheck
-    '';
-
-    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--install-option='--cpp_implementation'";
-
-    # the _message.so isn't installed, so we'll do that manually.
-    # if someone can figure out a less hacky way to get the _message.so to
-    # install, please do replace this.
-    postInstall = optionalString (versionAtLeast protobuf.version "2.6.0") ''
-      cp -v $(find build -name "_message*") $out/${python.sitePackages}/google/protobuf/pyext
-    '';
-
-    doCheck = true;
-
-    meta = {
-      description = "Protocol Buffers are Google's data interchange format";
-      homepage = http://code.google.com/p/protobuf/;
-    };
-
-    passthru.protobuf = protobuf;
+  # only required by tensorflow
+  protobuf3_0_0b2 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy || isPy3k;
+    doCheck = isPy3k;
+    protobuf = pkgs.protobuf3_0_0b2;
   };
 
+  protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy;
+    doCheck = isPy3k;
+    protobuf = pkgs.protobuf3_0;
+  };
+  protobuf2_6 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPy3k || isPyPy;
+    doCheck = false;
+    protobuf = pkgs.protobuf2_6;
+  };
+  protobuf2_5 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPy3k || isPyPy;
+    protobuf = pkgs.protobuf2_5;
+  };
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
@@ -19840,9 +19848,8 @@ in {
       patchShebangs .
     '';
 
-    buildInputs = [
-      self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio
-    ];
+    buildInputs = [ self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio ]
+      ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
     patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
 
@@ -25368,6 +25375,7 @@ in {
       homepage = http://taskcoach.org/;
       description = "Todo manager to keep track of personal tasks and todo lists";
       license = licenses.gpl3Plus;
+      broken = stdenv.isDarwin;
     };
   };
 
@@ -26783,11 +26791,11 @@ EOF
 
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
-    version = "0.12.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/webassets/${name}.tar.gz";
-      sha256 = "14m13xa5sc7iqq2j1wsd2klcwaihqlhz2l9lmn92dks2yc8hplcr";
+      sha256 = "1nrqkpb7z46h2b77xafxihqv3322cwqv6293ngaky4j3ff4cing7";
     };
 
     buildInputs = with self; [ nose jinja2 mock pytest ];
@@ -31941,6 +31949,29 @@ EOF
   };
 
   yarl = callPackage ../development/python-modules/yarl { };
+
+  suseapi = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "suseapi";
+    version = "0.24-5-g9937e3b";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "openSUSE";
+      repo = "python-${pname}";
+      rev = version;
+      sha256 = "1144h26wrzazzy6y3yy163fccqmggk5hazjkk8l9a547390ilgrv";
+    };
+
+    propagatedBuildInputs = with self; [
+      django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
+    ];
+
+    meta = {
+      homepage = "https://github.com/openSUSE/python-suseapi/";
+      description = "Python module to work with various SUSE services";
+      license = licenses.gpl3Plus;
+    };
+  };
 
   stripe = buildPythonPackage rec {
     name = "${pname}-${version}";
