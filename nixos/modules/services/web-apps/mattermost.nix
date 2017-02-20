@@ -202,6 +202,7 @@ in
           ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
           WorkingDirectory = "${cfg.statePath}";
           PrivateTmp = true;
+          JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
           Restart = "always";
           RestartSec = "10";
           LimitNOFILE = "49152";

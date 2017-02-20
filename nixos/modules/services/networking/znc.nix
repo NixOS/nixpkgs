@@ -208,7 +208,7 @@ in
 
         networks = mkOption {
           default = { };
-          type = with types; loaOf (submodule networkOpts);
+          type = with types; attrsOf (submodule networkOpts);
           description = ''
             IRC networks to connect the user to.
           '';

@@ -132,6 +132,8 @@ let
 
     containers = callPackage ../development/ocaml-modules/containers { };
 
+    cow = callPackage ../development/ocaml-modules/cow { };
+
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
@@ -513,6 +515,9 @@ let
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
     uri = callPackage ../development/ocaml-modules/uri { };
+    uri_p4 = callPackage ../development/ocaml-modules/uri {
+      legacyVersion = true;
+    };
 
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };

@@ -4,19 +4,18 @@
 , udev
 , mesa, SDL
 , libao, openal, libpulseaudio
-, gtk2, gtksourceview
-}:
+, gtk2, gtksourceview }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "101";
+  version = "102";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "04vr3fp0b3cwq7q8d9v60qmv08zpcsb5gqn1whl4fvwcxcl22by8";
+    sha256 = "1wcr2sxk0n4rngnf9g2qcjcv70s8rf5cqj195sav1yjwxkrdrnjj";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
@@ -71,16 +70,17 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Higan (formerly bsnes) is a Nintendo multi-system emulator.
       It currently supports the following systems:
-        Famicom; Super Famicom;
-        Game Boy; Game Boy Color; Game Boy Advance
-        WonderSwan; WonderSwan Color
-      higan also supports the following subsystems:
-        Super Game Boy; BS-X Satellaview; Sufami Turbo
+        - Nintendo's Famicom, Super Famicom (with subsystems: 
+          Super Game Boy, BS-X Satellaview, Sufami Turbo); 
+          Game Boy, Game Boy Color, Game Boy Advance;
+        - Sega's Master System, Game Gear, Mega Drive;
+        - NEC's PC Engine, SuperGrafx;
+        - Bandai' WonderSwan, WonderSwan Color.
     '';
     homepage = http://byuu.org/higan/;
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }
 

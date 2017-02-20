@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales
-, pythonPackages, imagemagick
+, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
 
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
@@ -93,6 +93,9 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
+    pythonPackages.gst-python
+    pythonPackages.pygobject3
+    gobjectIntrospection
   ] ++ optional enableAcoustid     pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
@@ -119,7 +122,11 @@ in pythonPackages.buildPythonApplication rec {
     nose
     rarfile
     responses
-  ];
+  ] ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+  ]);
 
   patches = [
     ./replaygain-default-bs1770gain.patch
@@ -197,6 +204,8 @@ in pythonPackages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
+
+  makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
 
   meta = {
     description = "Music tagger and library organizer";

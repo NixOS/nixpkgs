@@ -28,6 +28,7 @@ let
 
     ### BASE
     libqtxdg = callPackage ./base/libqtxdg { };
+    lxqt-build-tools = callPackage ./base/lxqt-build-tools { };
     libsysstat = callPackage ./base/libsysstat { };
     liblxqt = callPackage ./base/liblxqt { };
 

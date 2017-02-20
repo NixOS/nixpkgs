@@ -65,6 +65,7 @@ with pkgs;
 
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
 
+  common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
   ### BUILD SUPPORT
 
@@ -861,6 +862,8 @@ with pkgs;
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
+
+  envconsul = callPackage ../tools/system/envconsul { };
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
@@ -3499,6 +3502,8 @@ with pkgs;
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
+  psi = callPackage ../applications/networking/instant-messengers/psi { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pssh = callPackage ../tools/networking/pssh { };
@@ -3566,10 +3571,7 @@ with pkgs;
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
-  qtikz = callPackage ../applications/graphics/ktikz {
-    withKDE = false;
-    kdelibs = null;
-  };
+  qtikz = callPackage ../applications/graphics/ktikz { };
 
   quicktun = callPackage ../tools/networking/quicktun { };
 
@@ -4764,9 +4766,13 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  compcert = ocamlPackages.callPackage ../development/compilers/compcert {
-    coq = coq_8_5;
-  };
+  compcert = callPackage ../development/compilers/compcert ((
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  ) // {
+    coq = coq_8_6;
+  });
 
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
@@ -5806,8 +5812,7 @@ with pkgs;
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php71;
-
-  phpPackages = php70Packages;
+  phpPackages = php71Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -6409,8 +6414,6 @@ with pkgs;
   github-release = callPackage ../development/tools/github/github-release { };
 
   global = callPackage ../development/tools/misc/global { };
-
-  gn = callPackage ../development/tools/build-managers/gn { };
 
   gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
 
@@ -9226,6 +9229,7 @@ with pkgs;
   re2 = callPackage ../development/libraries/re2 { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
+  qca2-qt5 = callPackage ../development/libraries/qca2 { qt = qt5.qtbase; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
@@ -10580,7 +10584,7 @@ with pkgs;
 
   mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
-  riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
+  riak = callPackage ../servers/nosql/riak/2.2.0.nix { };
 
   riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -11339,6 +11343,22 @@ with pkgs;
       ];
   };
 
+  linux_4_10 = callPackage ../os-specific/linux/kernel/linux-4.10.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
+        # kernelPatches.cpu-cgroup-v2."4.7"
+        kernelPatches.modinst_arg_list_too_long
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -11511,7 +11531,7 @@ with pkgs;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_9;
+  linuxPackages_latest = linuxPackages_4_10;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -11522,6 +11542,7 @@ with pkgs;
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1);
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
+  linuxPackages_4_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_10);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -12505,6 +12526,8 @@ with pkgs;
     };
   };
 
+  antfs-cli = callPackage ../applications/misc/antfs-cli {};
+
   antimony = qt5.callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
@@ -12779,6 +12802,7 @@ with pkgs;
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
     libjack = libjack2;
     libcdio = libcdio082;
     ffmpeg = ffmpeg_2;
@@ -16731,8 +16755,6 @@ with pkgs;
 
           konversation = callPackage ../applications/networking/irc/konversation { };
 
-          ktikz = callPackage ../applications/graphics/ktikz { };
-
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
           krename = callPackage ../applications/misc/krename/kde4.nix {
@@ -16768,8 +16790,6 @@ with pkgs;
           plasma-nm = callPackage ../tools/networking/plasma-nm { };
 
           polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
-
-          psi = callPackage ../applications/networking/instant-messengers/psi { };
 
           qtcurve = callPackage ../misc/themes/qtcurve { };
 
@@ -17537,6 +17557,8 @@ with pkgs;
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
+
+  cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 
   crashplan = callPackage ../applications/backup/crashplan { };
 

@@ -1,4 +1,7 @@
-{ runCommand, libxslt, dbus, serviceDirectories ? [], suidHelper ? "/var/setuid-wrappers/dbus-daemon-launch-helper" }:
+{ runCommand, writeText, libxslt, dbus
+, serviceDirectories ? []
+, suidHelper ? "/var/setuid-wrappers/dbus-daemon-launch-helper"
+}:
 
 /* DBus has two configuration parsers -- normal and "trivial", which is used
  * for suid helper. Unfortunately the latter doesn't support <include>
@@ -7,21 +10,30 @@
  */
 runCommand "dbus-1"
   {
-    buildInputs = [ libxslt ];
     inherit serviceDirectories suidHelper;
+    XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE catalog PUBLIC
+        "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+
+      <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+        <rewriteSystem
+          systemIdStartString="http://www.freedesktop.org/standards/dbus/1.0/"
+          rewritePrefix="file://${dbus}/share/xml/dbus/"/>
+      </catalog>
+    '';
   }
   ''
     mkdir -p $out
 
-    xsltproc \
+    ${libxslt.bin}/bin/xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
       --stringparam suidHelper "$suidHelper" \
-      --path ${dbus.doc}/share/xml/dbus \
       ${./make-system-conf.xsl} ${dbus}/share/dbus-1/system.conf \
       > $out/system.conf
-    xsltproc \
+    ${libxslt.bin}/bin/xsltproc --nonet \
       --stringparam serviceDirectories "$serviceDirectories" \
-      --path ${dbus.doc}/share/xml/dbus \
       ${./make-session-conf.xsl} ${dbus}/share/dbus-1/session.conf \
       > $out/session.conf
   ''

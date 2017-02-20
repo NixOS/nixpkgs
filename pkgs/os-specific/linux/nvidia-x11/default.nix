@@ -37,6 +37,7 @@ in
     settingsSha256 = "0q92xw4fr9p5nbhj1plynm50d32881861daxfwrisywszqijhmlf";
     persistencedSha256 = null;
     useGLVND = false;
+    useProfiles = false;
   };
 
   legacy_173 = callPackage ./legacy173.nix { };
