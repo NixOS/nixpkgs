@@ -960,14 +960,8 @@ in
         source  = "${pkgs.iputils.out}/bin/ping";
         capabilities = "cap_net_raw+p";
       };
-
-      ping6 = {
-        source  = "${pkgs.iputils.out}/bin/ping6";
-        capabilities = "cap_net_raw+p";
-      };
     } else {
       ping.source = "${pkgs.iputils.out}/bin/ping";
-      "ping6".source = "${pkgs.iputils.out}/bin/ping6";
     };
 
     # Set the host and domain names in the activation script.  Don't
