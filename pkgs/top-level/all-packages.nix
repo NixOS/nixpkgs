@@ -6936,7 +6936,8 @@ with pkgs;
 
   agg = callPackage ../development/libraries/agg { };
 
-  allegro = callPackage ../development/libraries/allegro {};
+  allegro = allegro4;
+  allegro4 = callPackage ../development/libraries/allegro {};
   allegro5 = callPackage ../development/libraries/allegro/5.nix {};
 
   amrnb = callPackage ../development/libraries/amrnb { };
@@ -16391,6 +16392,8 @@ with pkgs;
   };
 
   gambatte = callPackage ../games/gambatte { };
+
+  garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gav = callPackage ../games/gav { };
 
