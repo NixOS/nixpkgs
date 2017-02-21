@@ -22,56 +22,17 @@ let
       };
     });
 in {
-  graylog_anonymous_usage_statistics = glPlugin rec {
-    name = "graylog-anonymous-usage-statistics-${version}";
-    pluginName = "graylog-plugin-anonymous-usage-statistics";
-    version = "2.2.0-rc.1";
-    src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/graylog-plugin-anonymous-usage-statistics-${version}.jar";
-      sha256 = "1qsxx6hrbx12bbpq4dqd7zhqhlmgv0i5q7ljjmdada4hv5fg6346";
-    };
-    meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-anonymous-usage-statistics";
-      description = "Plugin to collect anonymous usage statistics of Graylog";
-    };
-  };
   graylog_auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "1.0.5";
+    version = "1.0.6";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "14m8nilimdh6rp8bssks1hhqs0729q6wga2brbqi3dgmmy4gcwfn";
+      sha256 = "0wvdf2rnjrhdw1vp7bc7008s45rggzq57lh8k6s3q35rppligaqd";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-auth-sso";
       description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
-    };
-  };
-  graylog_beats = glPlugin rec {
-    name = "graylog-beats-${version}";
-    pluginName = "graylog-plugin-beats";
-    version = "2.2.0-rc.1";
-    src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "13v8f2sbp1rd9f9r191z6x83slpvzm6lvhkbzm8367xm08jansv3";
-    };
-    meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-beats";
-      description = "Elastic Beats Input plugin for Graylog";
-    };
-  };
-  graylog_collector = glPlugin rec {
-    name = "graylog-collector-${version}";
-    pluginName = "graylog-plugin-collector";
-    version = "2.2.0-rc.1";
-    src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "06f27w0bzpqd842w6ydlpdq8mplwsnyhw0v6nvj90fx54rpxfadv";
-    };
-    meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-collector";
-      description = "Collector plugin for Graylog";
     };
   };
   graylog_ipanonymizer = glPlugin rec {
@@ -116,10 +77,10 @@ in {
   graylog_threatintel = glPlugin rec {
     name = "graylog-threatintel-${version}";
     pluginName = "graylog-plugin-threatintel";
-    version = "0.9.0";
+    version = "0.9.1";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "1sqa4676rn142s7d8ipw7ww52ba49js4lp63jszl7ss5a3qf3v3v";
+      sha256 = "106mr0ppw4dym65s59v76ikkfzsdf6g2rq124y2mh5kpc28b6p7i";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-threatintel";
