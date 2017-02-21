@@ -1832,11 +1832,11 @@ rec {
       fullName = "Ubuntu 16.10 Yakkety (i386)";
       packagesLists =
         [ (fetchurl {
-            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            url = mirror://ubuntu/dists/yakkety/main/binary-i386/Packages.xz;
             sha256 = "da811f582779a969f738f2366c17e075cf0da3c4f2a4ed1926093a2355fd72ba";
           })
           (fetchurl {
-            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            url = mirror://ubuntu/dists/yakkety/universe/binary-i386/Packages.xz;
             sha256 = "5162b0a87173cd5dea7ce2273788befe36f38089d44a2379ed9dd92f76c6b2aa";
           })
         ];
