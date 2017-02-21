@@ -242,6 +242,14 @@ rec {
 
     eval "$preVM"
 
+    if [ "$enableParallelBuilding" = 1 ]; then
+      if [ ''${NIX_BUILD_CORES:-0} = 0 ]; then
+        QEMU_OPTS+=" -smp cpus=$(nproc)"
+      else
+        QEMU_OPTS+=" -smp cpus=$NIX_BUILD_CORES"
+      fi
+    fi
+
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
     # the -K option to preserve the temporary build directory).
