@@ -2,12 +2,12 @@
 
 python2Packages.buildPythonApplication rec {
   name = "mailpile-${version}";
-  version = "0.4.1";
+  version = "0.5.2";
 
   src = fetchgit {
-    url = "git://github.com/pagekite/Mailpile";
+    url = "git://github.com/mailpile/Mailpile";
     rev = "refs/tags/${version}";
-    sha256 = "118b5zwfwmzj38p0mkj3r1s09jxg8x38y0a42b21imzpmli5vpb5";
+    sha256 = "1d2b776x9134sv67pylfkvf1dd4vs5pvgrngpmshrsjgsib13dx5";
   };
 
   patchPhase = ''
