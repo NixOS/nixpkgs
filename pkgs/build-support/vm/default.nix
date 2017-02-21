@@ -1827,6 +1827,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1610i386 = {
+      name = "ubuntu-16.04-xenial-i386";
+      fullName = "Ubuntu 16.04 Xenial (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            sha256 = "da811f582779a969f738f2366c17e075cf0da3c4f2a4ed1926093a2355fd72ba";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            sha256 = "5162b0a87173cd5dea7ce2273788befe36f38089d44a2379ed9dd92f76c6b2aa";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1610x86_64 = {
+      name = "ubuntu-16.04-yakkety-amd64";
+      fullName = "Ubuntu 16.04 Yakkety (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/yakkety/main/binary-amd64/Packages.xz;
+            sha256 = "356c4cfab0d7f77b75c473cd78b22ee7288f63b24c9739049924dc081dd2e3d1";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/yakkety/universe/binary-amd64/Packages.xz;
+            sha256 = "a72660f8feffd6978e3b9328c6259b5387ac0b4f33d1029e4a17091ceb5057e6";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
