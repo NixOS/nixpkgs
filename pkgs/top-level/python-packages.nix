@@ -332,6 +332,8 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  python-sql = callPackage ../development/python-modules/python-sql { };
+
   pytimeparse = buildPythonPackage rec {
     pname = "pytimeparse";
     version = "1.1.6";
@@ -353,6 +355,8 @@ in {
   };
 
   pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
+
+  relatorio = callPackage ../development/python-modules/relatorio { };
 
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
