@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  makeFlags = "PREFIX=$(out)";
-
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
     license = licenses.gpl3;
