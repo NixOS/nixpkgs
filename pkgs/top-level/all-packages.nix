@@ -11484,6 +11484,8 @@ with pkgs;
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
 
+    sch_cake = callPackage ../os-specific/linux/sch_cake { };
+
     inherit (callPackage ../os-specific/linux/spl {
       configFile = "kernel";
       inherit kernel;
