@@ -14769,6 +14769,8 @@ with pkgs;
 
   pstree = callPackage ../applications/misc/pstree { };
 
+  ptask = callPackage ../applications/misc/ptask { };
+
   pulseview = callPackage ../applications/science/electronics/pulseview { };
 
   puredata = callPackage ../applications/audio/puredata { };
