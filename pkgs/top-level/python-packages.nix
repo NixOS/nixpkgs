@@ -32086,6 +32086,8 @@ EOF
 
   treq = callPackage ../development/python-modules/treq { };
 
+  snakeviz = callPackage ../development/python-modules/snakeviz { };
+
 });
 
 in fix' (extends overrides packages)
