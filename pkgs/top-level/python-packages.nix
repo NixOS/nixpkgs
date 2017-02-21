@@ -27591,6 +27591,10 @@ EOF
 
     propagatedBuildInputs = with self; [ zope_i18nmessageid zope_schema ];
 
+    # Trouble with implicit namespace packages on Python3
+    # see https://github.com/pypa/setuptools/issues/912
+    doCheck = !isPy3k;
+
     meta = {
         maintainers = with maintainers; [ goibhniu ];
     };
