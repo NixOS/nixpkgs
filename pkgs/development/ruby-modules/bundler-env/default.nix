@@ -76,16 +76,14 @@ let
     if hasBundler then gems.bundler
     else defs.bundler.override (attrs: { inherit ruby; });
 
-  pathDerivation = {
-    usesGemspec ? false, ...
-  }@attrs:
+  pathDerivation = { gemName, version, path, ...  }:
     let
       res = {
-          inherit usesGemspec;
           type = "derivation";
-          name = attrs.gemName;
-          version = attrs.version;
-          outPath = attrs.path;
+          bundledByPath = true;
+          name = gemName;
+          version = version;
+          outPath = path;
           outputs = [ "out" ];
           out = res;
           outputName = "out";
@@ -105,10 +103,10 @@ let
 
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
-  maybeCopyAll = main: if main == null then "" else copyIfUseGemspec main;
+  maybeCopyAll = main: if main == null then "" else copyIfBundledByPath main;
 
-  copyIfUseGemspec = { usesGemspec ? false, ...}@main:
-  (if usesGemspec then ''
+  copyIfBundledByPath = { bundledByPath ? false, ...}@main:
+  (if bundledByPath then ''
   cp -a ${gemdir}/* $out/
   '' else ""
   );
