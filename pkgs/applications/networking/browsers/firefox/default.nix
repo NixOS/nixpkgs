@@ -5,7 +5,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which
-, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -151,8 +151,8 @@ in {
     version = "51.0.1";
     sha512 = "556e31b717c0640ef5e181e00b9d2a6ea0ace7c16ae04333d0f2e9e120d0ab9efe82a4ca314ef43594c080523edf37953e65dbf694c7428be0a024f3719d8312";
     updateScript = import ./update.nix {
-        name = "firefox";
-        inherit writeScript xidel coreutils gnused gnugrep curl ed;
+      attrPath = "firefox-unwrapped";
+      inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
     };
   };
 
@@ -161,9 +161,9 @@ in {
     version = "45.7.0esr";
     sha512 = "6424101b6958191ce654d0619950dfbf98d4aa6bdd979306a2df8d6d30d3fecf1ab44638061a2b4fb1af85fe972f5ff49400e8eeda30cdcb9087c4b110b97a7d";
     updateScript = import ./update.nix {
-        name = "firefox-esr";
-        versionSuffix = "esr";
-        inherit writeScript xidel coreutils gnused gnugrep curl ed;
+      attrPath = "firefox-esr-unwrapped";
+      versionSuffix = "esr";
+      inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
     };
   };
 

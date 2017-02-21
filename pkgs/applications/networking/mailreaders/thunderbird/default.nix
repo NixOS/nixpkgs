@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
+{ stdenv, lib, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
-, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those
@@ -140,10 +140,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    name = "thunderbird";
-    sourceSectionRegex = ".";
-    basePath = "pkgs/applications/networking/mailreaders/thunderbird";
+    attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

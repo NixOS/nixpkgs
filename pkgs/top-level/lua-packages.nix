@@ -126,7 +126,7 @@ let
 
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
-      hydraPlatforms = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
@@ -146,8 +146,23 @@ let
     '';
     meta = {
       homepage = "https://github.com/keplerproject/luafilesystem";
-      hydraPlatforms = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.unix;
       maintainers = with maintainers; [ flosse ];
+    };
+  };
+
+  luaposix = buildLuaPackage rec {
+    name = "posix-${version}";
+    version = "33.4.0";
+    src = fetchurl {
+      url = "https://github.com/luaposix/luaposix/archive/release-v${version}.tar.gz";
+      sha256 = "e66262f5b7fe1c32c65f17a5ef5ffb31c4d1877019b4870a5d373e2ab6526a21";
+    };
+    buildInputs = [ perl ];
+    meta = {
+      description = "Lua bindings for POSIX API";
+      homepage = "https://github.com/luaposix/luaposix";
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 
@@ -160,7 +175,7 @@ let
     };
     meta = {
       homepage = "http://www.tset.de/lpty";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
     preBuild = ''
@@ -224,7 +239,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
-      hydraPlatforms = with platforms; [darwin linux freebsd illumos];
+      platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
       maintainers = with maintainers; [ mornfall ];
     };
   };
@@ -242,7 +257,7 @@ let
     disabled = isLua52;
     meta = {
       homepage = "https://github.com/luaforge/luazip";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -273,7 +288,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = https://github.com/brimworks/lua-zlib;
-      hydraPlatforms = platforms.unix;
+      platforms = platforms.unix;
       license = licenses.mit;
       maintainers = [ maintainers.koral ];
     };
@@ -289,7 +304,7 @@ let
     buildInputs = [ autoreconfHook unzip ];
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -324,7 +339,7 @@ let
 
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
       broken = true;
     };
@@ -344,7 +359,7 @@ let
 
     meta = {
       homepage = "https://github.com/LuaDist/luasql-sqlite3";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -372,7 +387,7 @@ let
 
     meta = {
       homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
-      hydraPlatforms = stdenv.lib.platforms.all;
+      platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.mit;
     };
   };
@@ -444,7 +459,7 @@ let
     meta = {
       description = "Simple implementation of msgpack in C Lua 5.1";
       homepage = "https://github.com/tarruda/libmpack";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
     };
   };

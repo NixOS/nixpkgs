@@ -7,7 +7,7 @@
 
 <para>The file <filename>/etc/nixos/configuration.nix</filename>
 contains the current configuration of your machine.  Whenever you’ve
-changed something to that file, you should do
+<link linkend="ch-configuration">changed something</link> in that file, you should do
 
 <screen>
 # nixos-rebuild switch</screen>

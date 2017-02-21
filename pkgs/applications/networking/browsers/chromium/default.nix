@@ -2,7 +2,6 @@
 
 # package customization
 , channel ? "stable"
-, enableSELinux ? false
 , enableNaCl ? false
 , enableHotwording ? false
 , gnomeSupport ? false, gnome ? null
@@ -22,7 +21,7 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableSELinux enableNaCl enableHotwording gnomeSupport gnome
+      inherit enableNaCl enableHotwording gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
               enableWideVine;
     };
@@ -108,7 +107,7 @@ in stdenv.mkDerivation {
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName;
+  inherit (chromium.browser) meta packageName version;
 
   passthru = {
     inherit (chromium) upstream-info browser;

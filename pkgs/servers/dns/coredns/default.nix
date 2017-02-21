@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "coredns-${version}";
-  version = "001";
+  version = "005";
 
   goPackagePath = "github.com/miekg/coredns";
   subPackages = [ "." ];
@@ -11,10 +11,8 @@ buildGoPackage rec {
     owner = "miekg";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "1ybi0v40bsndiffm41hak3b3w22l1in392zcy75bpf2mklxywnak";
+    sha256 = "11wvy3xp9in5ny6h7hp24dq6asc013vrwc6bqiky83dlzasjwkf6";
   };
-
-  patches = [ ./pull-278.patch ];
 
   goDeps = ./deps.nix;
 
@@ -22,6 +20,6 @@ buildGoPackage rec {
     homepage = https://coredns.io;
     description = "A DNS server that runs middleware";
     license = licenses.asl20;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = [ maintainers.rushmorem maintainers.rtreffer ];
   };
 }
