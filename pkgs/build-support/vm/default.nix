@@ -1828,8 +1828,8 @@ rec {
     };
 
     ubuntu1610i386 = {
-      name = "ubuntu-16.04-xenial-i386";
-      fullName = "Ubuntu 16.04 Xenial (i386)";
+      name = "ubuntu-16.10-yakkety-i386";
+      fullName = "Ubuntu 16.10 Yakkety (i386)";
       packagesLists =
         [ (fetchurl {
             url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
@@ -1845,8 +1845,8 @@ rec {
     };
 
     ubuntu1610x86_64 = {
-      name = "ubuntu-16.04-yakkety-amd64";
-      fullName = "Ubuntu 16.04 Yakkety (amd64)";
+      name = "ubuntu-16.10-yakkety-amd64";
+      fullName = "Ubuntu 16.10 Yakkety (amd64)";
       packagesList =
         [ (fetchurl {
             url = mirror://ubuntu/dists/yakkety/main/binary-amd64/Packages.xz;
