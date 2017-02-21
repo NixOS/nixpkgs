@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "antimicro-${version}";
-  version = "2.22";
+  version = "2.23";
 
   src = fetchFromGitHub {
     owner = "AntiMicro";
     repo = "antimicro";
     rev = "${version}";
-    sha256 = "102fh9ysd2dmfc6b73bj88m064jhlglqrz2gd7k9jccadxpbp3mq";
+    sha256 = "1q40ayxwwyq85lc89cnj1cm2nar625h4vhh8dvmb2qcxczaggf4v";
   };
 
   buildInputs = [

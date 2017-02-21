@@ -3928,10 +3928,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DigestCRC = buildPerlPackage rec {
-    name = "Digest-CRC-0.21";
+    name = "Digest-CRC-0.22.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OL/OLIMAUL/${name}.tar.gz";
-      sha256 = "79a0ef8081767c324edb9da39f80835910ed7c5b0539ed106caf7f2467d1958f";
+      sha256 = "112b50f7fbc6f6baf5d4584ee97f542ced6c9ec03a3147f7902c84b8b26778cb";
     };
     meta = {
       description = "Module that calculates CRC sums of all sorts";

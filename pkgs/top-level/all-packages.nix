@@ -4163,6 +4163,8 @@ with pkgs;
 
   tryton = callPackage ../applications/office/tryton { };
 
+  trytond = callPackage ../applications/office/trytond { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
@@ -10925,7 +10927,8 @@ with pkgs;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-    abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
+    abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
+      or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
   } // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
@@ -11540,6 +11543,8 @@ with pkgs;
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
+
+    sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     inherit (callPackage ../os-specific/linux/spl {
       configFile = "kernel";
@@ -12394,6 +12399,8 @@ with pkgs;
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
+
+  stix-two = callPackage ../data/fonts/stix-two { };
 
   inherit (callPackages ../data/fonts/gdouros { })
     symbola aegyptus akkadian anatolian maya unidings musica analecta;

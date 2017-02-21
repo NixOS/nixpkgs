@@ -332,6 +332,8 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  python-sql = callPackage ../development/python-modules/python-sql { };
+
   pytimeparse = buildPythonPackage rec {
     pname = "pytimeparse";
     version = "1.1.6";
@@ -353,6 +355,8 @@ in {
   };
 
   pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
+
+  relatorio = callPackage ../development/python-modules/relatorio { };
 
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
@@ -22940,17 +22944,14 @@ in {
   };
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.7";
+    version = "3.0.2";
     name = "robotframework-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/robotframework/${name}.tar.gz";
-      sha256 = "0mfd0s989j3jrpl8q0lb4wsjy1x280chfr9r74m2dyi9c7rxzc58";
+      sha256 = "1xqzxv00lxf9xi4vdxdsyd1bfmx18gi96vrnijpzj9w2aqrz4610";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       description = "Generic test automation framework";
@@ -23055,6 +23056,24 @@ in {
       license = licenses.asl20;
       platforms = platforms.linux;
       maintainers = with maintainers; [ bjornfor ];
+    };
+  };
+
+  robotframework-requests = buildPythonPackage rec {
+    version = "0.4.6";
+    name = "robotframework-requests-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/ad/da/51359b11d2005ff425984205677890fafaf270a71b03df22c255501bc99d/robotframework-requests-0.4.6.tar.gz";
+      sha256 = "0416rxg7g0pfg77akljnkass0xz0id26v4saag2q2h1fgwrm7n4q";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [ robotframework lxml requests2 ];
+
+    meta = {
+      description = "Robot Framework keyword library wrapper around the HTTP client library requests";
+      homepage = https://github.com/bulkan/robotframework-requests;
     };
   };
 
