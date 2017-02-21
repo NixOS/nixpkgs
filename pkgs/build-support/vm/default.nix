@@ -1154,6 +1154,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora25i386 = {
+      name = "fedora-25-i386";
+      fullName = "Fedora 25 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/25/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "4d399e5eebb8d543d50e2da274348280fae07a6efcc469491784582b39d73bba";
+      };
+      urlPrefix = mirror://fedora/linux/releases/25/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora25x86_64 = {
+      name = "fedora-25-x86_64";
+      fullName = "Fedora 25 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/25/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "eaea04bff7327c49d90240992dff2be6d451a1758ef83e94825f23d4ff27e868";
+      };
+      urlPrefix = mirror://fedora/linux/releases/25/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
