@@ -354,7 +354,7 @@ in
       default = null;
       example = {
         address = "131.211.84.1";
-        device = "enp3s0";
+        interface = "enp3s0";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
@@ -367,7 +367,7 @@ in
       default = null;
       example = {
         address = "2001:4d0:1e04:895::1";
-        device = "enp3s0";
+        interface = "enp3s0";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
