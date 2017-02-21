@@ -277,9 +277,8 @@ in
         Type = "simple";
         NonBlocking = "true";
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
-
+        Restart = "always";
         User = "dnscrypt-proxy";
-
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHome = true;
