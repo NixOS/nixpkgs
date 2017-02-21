@@ -3,13 +3,14 @@
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
-  version = "0.12.2";
+  # > 0.13 should have unit tests and dbus support
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "1y26dpx0qc01mhv2f325ymyc3r7ihayrr10rp25p1bs24010azwn";
+    sha256 = "0hdcbhmjwxhs3mr72w6x6yfnk8b0drsqyj40grg8dc0gb1x8y82j";
   };
 
   buildInputs = [
