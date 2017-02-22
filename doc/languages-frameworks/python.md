@@ -860,7 +860,8 @@ folder and not downloaded again.
 
 Following rules are desired to be respected:
 
-* Make sure package builds for all python interpreters. Use `disabled` argument to `buildPythonPackage` to set unsupported interpreters.
-* If tests need to be disabled for a package, make sure you leave a comment about reasoning.
-* Packages in `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid merge conflicts.
-* Python libraries are supposed to be in `python-packages.nix` and packaged with `buildPythonPackage`. Python applications live outside of `python-packages.nix` and are packaged with `buildPythonApplication`.
+* Python libraries are supposed to be called from `python-packages.nix` and packaged with `buildPythonPackage`. The expression of a library should be in `pkgs/development/python-modules/<name>/default.nix`. Libraries in `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid merge conflicts.
+* Python applications live outside of `python-packages.nix` and are packaged with `buildPythonApplication`.
+* Make sure libraries build for all Python interpreters.
+* By default we enable tests. Make sure the tests are found and, in the case of libraries, are passing for all interpreters. If certain tests fail they can be disabled individually. Try to avoid disabling the tests altogether. In any case, when you disable tests, leave a comment explaining why.
+* Commit names of Python libraries should include `pythonPackages`, for example `pythonPackages.numpy: 1.11 -> 1.12`.
