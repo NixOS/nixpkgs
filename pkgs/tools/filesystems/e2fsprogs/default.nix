@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  configureFlags = [
-    (if stdenv.isLinux then "--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
+  configureFlags = 
+    if stdenv.isLinux then ["--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
     # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-    "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
-    else "--enable-libuuid --disable-e2initrd-helper")
-  ];
+    "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"]
+    else ["--enable-libuuid --disable-e2initrd-helper"]
+  ;
 
   # hacky way to make it install *.pc
   postInstall = ''
