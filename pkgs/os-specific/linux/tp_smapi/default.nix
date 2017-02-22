@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, kernel, writeScript, coreutils, gnugrep, jq, curl
+{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts
 }:
 
 stdenv.mkDerivation rec {
   name = "tp_smapi-${version}-${kernel.version}";
-
   version = "0.42";
 
-  src = fetchurl {
-    url = "https://github.com/evgeni/tp_smapi/archive/tp-smapi/${version}.tar.gz";
-    sha256 = "cd28bf6ee21b2c27b88d947cb0bfcb19648c7daa5d350115403dbcad05849381";
+  src = fetchFromGitHub {
+    owner = "evgeni";
+    repo = "tp_smapi";
+    rev = "tp-smapi/${version}";
+    sha256 = "12lnig90lrmkmqwl386q7ssqs9p0jikqhwl2wsmcmii1gn92hzfy";
+    name = "tp-smapi-${version}";
   };
 
   hardeningDisable = [ "pic" ];
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = import ./update.nix {
-    inherit writeScript coreutils gnugrep jq curl;
+    inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts;
   };
 
   meta = {

@@ -18,6 +18,8 @@ let
 
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
+    angstrom = callPackage ../development/ocaml-modules/angstrom { };
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     apron = callPackage ../development/ocaml-modules/apron { };
@@ -51,13 +53,10 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
-    bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
-    bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
-
     bitstring =
       if lib.versionOlder "4.02" ocaml.version
-      then bitstring_git
-      else bitstring_2_0_4;
+      then callPackage ../development/ocaml-modules/bitstring { }
+      else callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -97,7 +96,10 @@ let
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
     camomile = callPackage ../development/ocaml-modules/camomile { };
 
-    camlimages_4_0 = callPackage ../development/ocaml-modules/camlimages/4.0.nix {
+    camlimages_4_0 =
+      if lib.versionOlder "4.02" ocaml.version
+      then null
+      else callPackage ../development/ocaml-modules/camlimages/4.0.nix {
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
     };
@@ -129,6 +131,8 @@ let
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
     containers = callPackage ../development/ocaml-modules/containers { };
+
+    cow = callPackage ../development/ocaml-modules/cow { };
 
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
 
@@ -253,6 +257,10 @@ let
 
     llvm = callPackage ../development/ocaml-modules/llvm {
       llvm = pkgs.llvm_37;
+    };
+
+    logs = callPackage ../development/ocaml-modules/logs {
+      lwt = ocaml_lwt;
     };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
@@ -384,7 +392,10 @@ let
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
-    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
+    spacetime_lib = if lib.versionOlder "4.04" ocaml.version then
+    callPackage ../development/tools/ocaml/ocamlbuild { }
+    else
+    null;
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
@@ -504,6 +515,9 @@ let
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
     uri = callPackage ../development/ocaml-modules/uri { };
+    uri_p4 = callPackage ../development/ocaml-modules/uri {
+      legacyVersion = true;
+    };
 
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
@@ -657,14 +671,6 @@ let
 
     wyrd = callPackage ../tools/misc/wyrd { };
 
-    compcert = callPackage ../development/compilers/compcert ((
-      if system == "x86_64-linux"
-      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
-      else {}
-    ) // {
-      coq = pkgs.coq_8_5;
-    });
-
     haxe = callPackage ../development/compilers/haxe { };
 
     ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
@@ -689,7 +695,6 @@ let
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-    llpp = callPackage ../applications/misc/llpp { };
 
     monotoneViz = callPackage ../applications/version-management/monotone-viz {
       inherit (pkgs.gnome2) libgnomecanvas glib;
@@ -713,9 +718,6 @@ let
       camlp5 = camlp5_transitional;
     };
 
-    prooftree = callPackage ../applications/science/logic/prooftree {
-      camlp5 = camlp5_transitional;
-    };
   };
     in lib.fix' (lib.extends overrides packageSet);
 in rec
@@ -743,5 +745,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_04;
 
-  ocamlPackages = ocamlPackages_4_01_0;
+  ocamlPackages = ocamlPackages_4_02;
 }

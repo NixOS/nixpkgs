@@ -166,24 +166,24 @@ let
           # Test vlan 1
           $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
           $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::1");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::2");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::2");
 
           $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
           $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::1");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::2");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::2");
 
           # Test vlan 2
           $client->waitUntilSucceeds("ping -c 1 192.168.2.1");
           $client->waitUntilSucceeds("ping -c 1 192.168.2.2");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::1");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::2");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::1");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::2");
 
           $router->waitUntilSucceeds("ping -c 1 192.168.2.1");
           $router->waitUntilSucceeds("ping -c 1 192.168.2.2");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::1");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::2");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::1");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::2");
         '';
     };
     dhcpOneIf = {
@@ -390,11 +390,11 @@ let
           $client2->succeed("ip addr >&2");
 
           # Test ipv6
-          $client1->waitUntilSucceeds("ping6 -c 1 fc00::1");
-          $client1->waitUntilSucceeds("ping6 -c 1 fc00::2");
+          $client1->waitUntilSucceeds("ping -c 1 fc00::1");
+          $client1->waitUntilSucceeds("ping -c 1 fc00::2");
 
-          $client2->waitUntilSucceeds("ping6 -c 1 fc00::1");
-          $client2->waitUntilSucceeds("ping6 -c 1 fc00::2");
+          $client2->waitUntilSucceeds("ping -c 1 fc00::1");
+          $client2->waitUntilSucceeds("ping -c 1 fc00::2");
         '';
     };
     vlan = let

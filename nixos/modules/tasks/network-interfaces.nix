@@ -358,7 +358,7 @@ in
       default = null;
       example = {
         address = "131.211.84.1";
-        device = "enp3s0";
+        interface = "enp3s0";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
@@ -371,7 +371,7 @@ in
       default = null;
       example = {
         address = "2001:4d0:1e04:895::1";
-        device = "enp3s0";
+        interface = "enp3s0";
       };
       type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
@@ -960,14 +960,8 @@ in
         source  = "${pkgs.iputils.out}/bin/ping";
         capabilities = "cap_net_raw+p";
       };
-
-      ping6 = {
-        source  = "${pkgs.iputils.out}/bin/ping6";
-        capabilities = "cap_net_raw+p";
-      };
     } else {
       ping.source = "${pkgs.iputils.out}/bin/ping";
-      "ping6".source = "${pkgs.iputils.out}/bin/ping6";
     };
 
     # Set the host and domain names in the activation script.  Don't

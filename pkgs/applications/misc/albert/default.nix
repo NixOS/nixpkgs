@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.8.11";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner  = "manuelschneid3r";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "12ag30l3dd05hg0d08ax4c8dvp24lgd677szkq445xzvvhggxr37";
+    sha256 = "026vcnx893wrggx0v07x66vc179mpil2p90lzb16n070qn3jb58n";
   };
 
   nativeBuildInputs = [ cmake makeQtWrapper ];

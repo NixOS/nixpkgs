@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     settings = null;
     persistenced = null;
     useGLVND = false;
+    useProfiles = false;
   };
 
   meta = {

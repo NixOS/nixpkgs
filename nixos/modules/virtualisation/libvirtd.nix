@@ -13,6 +13,9 @@ let
     auth_unix_rw = "none"
     ${cfg.extraConfig}
   '';
+  qemuConfigFile = pkgs.writeText "qemu.conf" ''
+    ${cfg.qemuVerbatimConfig}
+  '';
 
 in {
 
@@ -45,6 +48,18 @@ in {
       description = ''
         Extra contents appended to the libvirtd configuration file,
         libvirtd.conf.
+      '';
+    };
+
+    virtualisation.libvirtd.qemuVerbatimConfig = mkOption {
+      type = types.lines;
+      default = ''
+        namespaces = []
+      '';
+      description = ''
+        Contents written to the qemu configuration file, qemu.conf.
+        Make sure to include a proper namespace configuration when
+        supplying custom configuration.
       '';
     };
 
@@ -118,6 +133,9 @@ in {
             mkdir -p /var/lib/$(dirname $i) -m 755
             cp -npd ${pkgs.libvirt}/var/lib/$i /var/lib/$i
         done
+
+        # Copy generated qemu config to libvirt directory
+        cp -f ${qemuConfigFile} /var/lib/libvirt/qemu.conf
 
         # libvirtd puts the full path of the emulator binary in the machine
         # config file. But this path can unfortunately be garbage collected

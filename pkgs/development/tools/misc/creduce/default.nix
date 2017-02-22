@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ stdenv, fetchurl, cmake, makeWrapper
 , llvm, clang-unwrapped
 , flex
 , zlib
@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
     # Ensure stdenv's CC is on PATH before clang-unwrapped
     stdenv.cc
     # Actual deps:
-    cmake
+    cmake makeWrapper
     llvm clang-unwrapped
     flex zlib
+    perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey
   ];
 
   # On Linux, c-reduce's preferred way to reason about
@@ -34,14 +35,12 @@ stdenv.mkDerivation rec {
       lscpu ${utillinux}/bin/lscpu
   '';
 
-  perlDeps = [
-    perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey
-  ];
-
-  propagatedNativeBuildInputs = perlDeps;
-  propagatedUserEnvPkgs = perlDeps;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"
+  '';
 
   meta = with stdenv.lib; {
     description = "A C program reducer";
