@@ -31,6 +31,12 @@ in stdenv.mkDerivation rec {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
+  # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+  postPatch = ''
+    sed 1i'#include <sys/sysmacros.h>' \
+      -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
+  '';
+
   enableParallelBuilding = true;
 
   # TODO: instruct cmake not to put it in /usr, rather than cleaning up
