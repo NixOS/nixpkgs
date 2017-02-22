@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , glibc
 , bzip2
 , gdbm
@@ -54,6 +54,14 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "glibc-2.25-failed-to-get-random-numbers.patch";
+      url = https://github.com/python/cpython/commit/ff558f5aba4.patch;
+      sha256 = "1k12gpn69np94cm942vaf40sv7gsxqf20rv1m3parzgi1gs4hqa3";
+    })
+  ];
 
   postPatch = optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"

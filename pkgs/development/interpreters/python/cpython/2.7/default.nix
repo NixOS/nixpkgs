@@ -66,6 +66,8 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
+      ./glibc-2.25-enosys.patch
+
     ] ++ optionals stdenv.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
