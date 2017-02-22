@@ -84,7 +84,7 @@ in
     security.pam.services.polkit-1 = {};
 
     security.wrappers = {
-      pkexec.source = "${pkgs.polkit.out}/bin/pkexec";
+      pkexec.source = "${pkgs.polkit.bin}/bin/pkexec";
       "polkit-agent-helper-1".source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
     };
 
