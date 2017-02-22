@@ -7281,6 +7281,8 @@ with pkgs;
 
   freetts = callPackage ../development/libraries/freetts { };
 
+  fstrm = callPackage ../development/libraries/fstrm { };
+
   cfitsio = callPackage ../development/libraries/cfitsio { };
 
   fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
