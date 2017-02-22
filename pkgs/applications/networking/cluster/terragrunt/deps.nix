@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "f85f603a3e5b4d0eb9516dddb33778918f3b45c6";
-      sha256 = "10frgavkbsqpfninrlgwh64qjx9rwyjzbdfrikciv75v1gljh6zv";
+      rev = "3d7773ac930d57ef4a59e0d10c5f65a0cfa5acd6";
+      sha256 = "0jgyybih4vhlja76x5wjsvdbvq3v14yllzfi36f2527bby18g1hc";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/hcl";
-      rev = "372e8ddaa16fd67e371e9323807d056b799360af";
-      sha256 = "1hv8p1858k1b99p3yc2jj6h77bl0iv9ziyzyp4w3xlcci2s13hnr";
+      rev = "630949a3c5fa3c613328e1b8256052cbc2327c9b";
+      sha256 = "00lalg0gz7218gnw6zgn28gfizpcl8zw8jpkghn681vj7lfah5dh";
     };
   }
   {
