@@ -1448,7 +1448,6 @@ with pkgs;
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
-    pythonPackages = python3Packages;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
