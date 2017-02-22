@@ -359,6 +359,8 @@ with pkgs;
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
+  afio = callPackage ../tools/archivers/afio { };
+
   afl = callPackage ../tools/security/afl { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng/default.nix { };

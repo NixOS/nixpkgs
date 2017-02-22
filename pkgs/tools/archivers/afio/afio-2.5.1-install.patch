@@ -1,0 +1,48 @@
+--- p1/Makefile.orig	2017-02-14 21:40:20.404249126 +0100
++++ p1/Makefile	2017-02-19 23:38:43.880414077 +0100
+@@ -66,37 +66,42 @@
+ # systems the large file compile environment itself might be buggy or beta.
+ #LARGEFILEFLAGS=
+ LARGEFILEFLAGS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
+ 
+ # even more warnings flags..
+ MW=
+ #MW=-Wtraditional -Wcast-qual -Wcast-align -Wconversion -pedantic -Wlong-long -Wimplicit -Wuninitialized -W -Wshadow -Wsign-compare -Wstrict-prototypes -Wmissing-declarations
+ 
+ CFLAGS1 = -Wall -Wstrict-prototypes -s -O2 -fomit-frame-pointer ${LARGEFILEFLAGS} ${MW}
+ 
+-CC=gcc
++#CC=gcc
+ 
+ CFLAGS = ${CFLAGS1} $1 $2 $3 $4 $5 $6 $7 $8 $9 $a $b $c $d $e ${e2} $f $g $I
+ LDFLAGS =
+ 
+ afio : afio.o compfile.o exten.o match.o $M
+ 	${CC} ${LDFLAGS} afio.o compfile.o exten.o match.o $M -o afio
+ 
+ clean:
+ 	rm -f *.o afio 
+ 	rm -f regtest/cmpstat regtest/makesparse
+ 	rm -f regtest/statsize regtest/statsize64
+ 	cd regtest; /bin/sh regtest.clean
+ 
++ifndef DESTDIR
++install:
++	$(error Please specify install prefix as $$DESTDIR)
++else
+ install: afio
+-	cp afio /usr/local/bin
+-	cp afio.1 /usr/share/man/man1
++	install -Dm755 afio $(DESTDIR)/bin/afio
++	install -Dm644 afio.1 $(DESTDIR)/share/man/man1/afio.1
++endif
+ 
+ # generate default list of -E extensions from manpage
+ # note: on sun, I had to change awk command below to nawk or gawk
+ # to get it to work.
+ exten_default.h : afio.1
+ 		awk -f exten_make.awk afio.1 >exten_default.h
+ 
+ 
+ afio.o : afio.h patchlevel.h
+ compfile.o : afio.h
