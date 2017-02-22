@@ -10,6 +10,20 @@ stdenv.mkDerivation {
   };
   postPatch = "patchShebangs event_rpcgen.py";
 
+  prePatch = let
+      # https://lwn.net/Vulnerabilities/714581/
+      debian = fetchurl {
+        url = "http://http.debian.net/debian/pool/main/libe/libevent/"
+            + "libevent_2.0.21-stable-3.debian.tar.xz";
+        sha256 = "0b2syswiq3cvfbdvi4lbca15c31lilxnahax4a4b4qxi5fcab7h5";
+      };
+    in ''
+      tar xf '${debian}'
+      patches="$patches $(cat debian/patches/series | grep -v '^$\|^#' \
+                          | grep -v '^20d6d445.patch' \
+                          | grep -v '^dh-autoreconf' | sed 's|^|debian/patches/|')"
+    '';
+
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
