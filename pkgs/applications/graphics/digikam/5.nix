@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ecm makeQtWrapper ];
 
+  patches = [ ./0001-Disable-fno-operator-names.patch ];
+
   buildInputs = [
     qtbase
     qtxmlpatterns
