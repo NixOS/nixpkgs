@@ -74,6 +74,19 @@ in {
       description = "Graylog NetFlow plugin";
     };
   };
+  redis = glPlugin rec {
+    name = "graylog-redis-${version}";
+    pluginName = "graylog-plugin-redis";
+    version = "0.1.0";
+    src = fetchurl {
+      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "0hwz83m9gwx0fdapc63v3lr1q6acbphssqwp4qqzz78wg2w79xgi";
+    };
+    meta = {
+      homepage = "https://github.com/Graylog2/graylog-plugin-redis";
+      description = "Redis plugin for Graylog";
+    };
+  };
   spaceweather = glPlugin rec {
     name = "graylog-spaceweather-${version}";
     pluginName = "graylog-plugin-spaceweather";
