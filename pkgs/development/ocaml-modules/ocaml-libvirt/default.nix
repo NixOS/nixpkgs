@@ -1,19 +1,27 @@
-{ stdenv, fetchurl, libvirt, ocaml, findlib }:
+{ stdenv, fetchgit, libvirt, autoconf, ocaml, findlib }:
 
 stdenv.mkDerivation rec {
   name = "ocaml-libvirt-${version}";
-  version = "0.6.1.4";
+  version = "0.6.1.5"; # FIXME: libguestfs depends on not yet released 0.6.1.5, so the latest post-0.6.1.4 master from git is used
 
-  src = fetchurl {
-    url = "http://libvirt.org/sources/ocaml/ocaml-libvirt-${version}.tar.gz";
-    sha256 = "06q2y36ckb34n179bwczxkl82y3wrba65xb2acg8i04jpiyxadjd";
+  src = fetchgit {
+    url = "git://git.annexia.org/git/ocaml-libvirt.git";
+    rev = "8853f5a49587f00a7d2a5c8c7e52480a16bbdb02";
+    sha256 = "1lnsvyb6dll58blacc629nz1lzc20p7ayqn9pag1rrx5i54q9v24";
   };
 
   propagatedBuildInputs = [ libvirt ];
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ autoconf findlib ];
+
+  buildInputs = [ ocaml ];
 
   createFindlibDestdir = true;
+
+  preConfigure = ''
+    substituteInPlace configure.ac --replace 0.6.1.4 0.6.1.5
+    autoconf
+  '';
 
   buildPhase = if stdenv.cc.isClang then "make all opt CPPFLAGS=-Wno-error" else "make all opt";
 
