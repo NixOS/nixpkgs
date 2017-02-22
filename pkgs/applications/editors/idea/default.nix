@@ -146,18 +146,6 @@ in
     wmClass = "jetbrains-clion";
   };
 
-  idea14-community = buildIdea rec {
-    name = "idea-community-${version}";
-    version = "14.1.7";
-    description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
-    license = stdenv.lib.licenses.asl20;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1i4mdjm9dd6zvxlpdgd3bqg45ir0cfc9hl55cdc0hg5qwbz683fz";
-    };
-    wmClass = "jetbrains-idea-ce";
-  };
-
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
     version = "2016.3.4";
