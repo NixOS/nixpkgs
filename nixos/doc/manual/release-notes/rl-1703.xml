@@ -222,8 +222,8 @@ following incompatible changes:</para>
     Iputils no longer provide ping6 and traceroute6. The functionality of
     these tools have been integrated into ping and traceroute respectively. To
     enforce an address family the new flags <literal>-4</literal> and
-    <literal>-6</literal> have been added. One notable incompabtibility is that
-    specifying an interface (for link-local ipv6 for instance) is no longer done
+    <literal>-6</literal> have been added. One notable incompatibility is that
+    specifying an interface (for link-local IPv6 for instance) is no longer done
     with the <literal>-I</literal> flag, but by encoding the interface into the
     address (<literal>ping fe80::1%eth0</literal>).
     </para>
