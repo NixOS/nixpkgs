@@ -67,7 +67,7 @@ in stdenv.mkDerivation {
     # Determinism
     substituteInPlace "Lib/py_compile.py" --replace "source_stats['mtime']" "(1 if 'DETERMINISTIC_BUILD' in os.environ else source_stats['mtime'])"
     # Determinism. This is done unconditionally
-    substituteInPlace "Lib/importlib/_bootstrap_external.py" --replace "source_mtime = int(st['mtime'])" "source_mtime = 1"
+    substituteInPlace "Lib/importlib/_bootstrap.py" --replace "source_mtime = int(source_stats['mtime'])" "source_mtime = 1"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   ''
