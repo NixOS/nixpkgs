@@ -478,6 +478,7 @@
   sztupi = "Attila Sztupak <attila.sztupak@gmail.com>";
   taeer = "Taeer Bar-Yam <taeer@necsi.edu>";
   tailhook = "Paul Colomiets <paul@colomiets.name>";
+  takikawa = "Asumu Takikawa <asumu@igalia.com>";
   taktoa = "Remy Goldschmidt <taktoa@gmail.com>";
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
   teh = "Tom Hunger <tehunger@gmail.com>";
