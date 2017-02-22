@@ -2008,6 +2008,9 @@ with pkgs;
   grails = callPackage ../development/web/grails { jdk = null; };
 
   graylog = callPackage ../tools/misc/graylog { };
+  graylogPlugins = recurseIntoAttrs (
+    callPackage ../tools/misc/graylog/plugins.nix { }
+  );
 
   gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
     # Using pypy provides significant performance improvements (~2x)
