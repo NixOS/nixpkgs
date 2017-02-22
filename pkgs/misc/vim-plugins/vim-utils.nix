@@ -20,9 +20,9 @@ vim-with-plugins in PATH:
     # store your plugins in Vim packages
     vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
       # loaded on launch
-      start = [ youcompleteme fugitive ]
+      start = [ youcompleteme fugitive ];
       # manually loadable by calling `:packadd $plugin-name`
-      opt = [ phpCompletion elm-vim ]
+      opt = [ phpCompletion elm-vim ];
       # To automatically load a plugin when opening a filetype, add vimrc lines like:
       # autocmd FileType php :packadd phpCompletion
     };
