@@ -20,6 +20,6 @@ python27Packages.buildPythonApplication {
   meta = with stdenv.lib; {
     description = "A Python-enhanced molecular graphics tool";
     homepage = "https://www.pymol.org/";
-    license = licences.psfl;
+    license = licenses.psfl;
   };
 }
