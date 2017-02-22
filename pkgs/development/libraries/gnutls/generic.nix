@@ -58,6 +58,7 @@ stdenv.mkDerivation {
         -e 's,-L${gmp.dev}/lib,-L${gmp.out}/lib,' \
         -e 's,-lgmp,-L${gmp.out}/lib -lgmp,' \
         -i $out/lib/*.la "$dev/lib/pkgconfig/gnutls.pc"
+  '' + ''
     # It seems only useful for static linking but basically noone does that.
     substituteInPlace "$out/lib/libgnutls.la" \
       --replace "-lunistring" ""
