@@ -1,4 +1,4 @@
-{ lib ? import <nixpkgs/lib>, modules ? [] }:
+{ lib ? import ../.., modules ? [] }:
 
 {
   inherit (lib.evalModules {
