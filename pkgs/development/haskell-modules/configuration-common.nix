@@ -724,7 +724,7 @@ self: super: {
   });
 
   # test suite cannot find its own "idris" binary
-  idris = dontCheck super.idris;
+  idris = doJailbreak (dontCheck super.idris);
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
