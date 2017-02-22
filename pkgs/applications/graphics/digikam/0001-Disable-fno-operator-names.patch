@@ -1,0 +1,25 @@
+From beb9ad0149adfe448acfa650fb3e171d5fdd7e27 Mon Sep 17 00:00:00 2001
+From: Moritz Ulrich <moritz@tarn-vedra.de>
+Date: Wed, 22 Feb 2017 15:28:11 +0100
+Subject: [PATCH] Disable `-fno-operator-names`
+
+---
+ core/CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/CMakeLists.txt b/core/CMakeLists.txt
+index 89e06827e6..01d0c88ea9 100644
+--- a/core/CMakeLists.txt
++++ b/core/CMakeLists.txt
+@@ -98,6 +98,8 @@ include(MacroOpenCV)
+ include(MacroJPEG)
+ include(MacroBoolTo01)
+ 
++string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++
+ # ==================================================================================================
+ 
+ option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                           OFF)
+-- 
+2.11.1
+

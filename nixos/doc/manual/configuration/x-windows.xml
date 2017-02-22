@@ -27,17 +27,21 @@ the following lines:
 <programlisting>
 services.xserver.desktopManager.kde5.enable = true;
 services.xserver.desktopManager.xfce.enable = true;
+services.xserver.desktopManager.gnome3.enable = true;
 services.xserver.windowManager.xmonad.enable = true;
 services.xserver.windowManager.twm.enable = true;
 services.xserver.windowManager.icewm.enable = true;
+services.xserver.windowManager.i3.enable = true;
 </programlisting>
 </para>
 
 <para>NixOS’s default <emphasis>display manager</emphasis> (the
 program that provides a graphical login prompt and manages the X
-server) is SLiM.  You can select KDE’s <command>sddm</command> instead:
+server) is SLiM. You can select an alternative one by picking one
+of the following lines:
 <programlisting>
 services.xserver.displayManager.sddm.enable = true;
+services.xserver.displayManager.lightdm.enable = true;
 </programlisting>
 </para>
 

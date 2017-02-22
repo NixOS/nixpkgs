@@ -31,7 +31,13 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch
+  (fetchurl {
+    url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=c7042bedbb3b12c5f4e19e59e52da370d4ffe62f;hp=bc2b135677110d8065ba1174f09bc7f5ba73b9e9";
+    sha256 = "1m70akywf2r52lhlvzr720vl1i7ng9cqbzaiif8s81xs4g4nn2rz";
+    name = "wireshark-CVE-2017-6014.patch";
+  })
+  ];
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''

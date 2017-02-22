@@ -133,7 +133,7 @@
       <varname>stdenv.mkDerivation</varname>, are defined using this
       function, which means most packages in the nixpkgs expression,
       <varname>pkgs</varname>, have this function.
-    </para> 
+    </para>
 
     <para>
       Example usage:
@@ -228,7 +228,7 @@
     ] name)</code> from the <literal>INI</literal> generator. It gets the name
     of a section and returns a sanitized name. The default
     <literal>mkSectionName</literal> escapes <literal>[</literal> and
-    <literal>]</literal> with a backslash. 
+    <literal>]</literal> with a backslash.
   </para>
 
   <note><para>Nix store paths can be converted to strings by enclosing a
@@ -523,6 +523,22 @@
   It is possible to inspect the arguments with which an image was built
   using its <varname>buildArgs</varname> attribute.
   </para>
+
+
+
+  <note>
+  <para>
+  If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal>
+  you may need to add <literal>pkgs.iana_etc</literal> to <varname>contents</varname>.
+  </para>
+  </note>
+
+  <note>
+  <para>
+  If you see errors similar to <literal>Error_Protocol ("certificate has unknown CA",True,UnknownCa)</literal>
+  you may need to add <literal>pkgs.cacert</literal> to <varname>contents</varname>.
+  </para>
+  </note>
 
 </section>
 

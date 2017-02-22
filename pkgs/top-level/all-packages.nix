@@ -4134,6 +4134,8 @@ with pkgs;
 
   tryton = callPackage ../applications/office/tryton { };
 
+  trytond = callPackage ../applications/office/trytond { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
@@ -4225,6 +4227,8 @@ with pkgs;
     inherit (gnome2) scrollkeeper;
     inherit (gnome3) gexiv2;
   };
+
+  vim-vint = callPackage ../development/tools/vim-vint { };
 
   vit = callPackage ../applications/misc/vit { };
 
@@ -7277,6 +7281,8 @@ with pkgs;
 
   freetts = callPackage ../development/libraries/freetts { };
 
+  fstrm = callPackage ../development/libraries/fstrm { };
+
   cfitsio = callPackage ../development/libraries/cfitsio { };
 
   fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
@@ -8927,6 +8933,8 @@ with pkgs;
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+  ndpi = callPackage ../development/libraries/ndpi { };
+
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
   ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
@@ -10572,7 +10580,7 @@ with pkgs;
 
   mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
-  riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
+  riak = callPackage ../servers/nosql/riak/2.2.0.nix { };
 
   riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -10865,7 +10873,8 @@ with pkgs;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-    abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
+    abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
+      or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
   } // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
@@ -11476,6 +11485,8 @@ with pkgs;
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
+
+    sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     inherit (callPackage ../os-specific/linux/spl {
       configFile = "kernel";
@@ -12330,6 +12341,8 @@ with pkgs;
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
+
+  stix-two = callPackage ../data/fonts/stix-two { };
 
   inherit (callPackages ../data/fonts/gdouros { })
     symbola aegyptus akkadian anatolian maya unidings musica analecta;
@@ -14420,8 +14433,6 @@ with pkgs;
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul { };
-
   planner = callPackage ../applications/office/planner { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
@@ -14764,6 +14775,8 @@ with pkgs;
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
+
+  pymol = callPackage ../applications/science/chemistry/pymol { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
