@@ -158,30 +158,6 @@ in
     wmClass = "jetbrains-idea-ce";
   };
 
-  idea14-ultimate = buildIdea rec {
-    name = "idea-ultimate-${version}";
-    version = "14.1.7";
-    description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1hhga1i2zbsipgq283gn19kv9n94inhr1bxh2yx19gz7yr4r49d2";
-    };
-    wmClass = "jetbrains-idea";
-  };
-
-  idea15-ultimate = buildIdea rec {
-    name = "idea-ultimate-${version}";
-    version = "15.0.6";
-    description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "012aap2qn0jx4x34bdv9ivrsr86vvf683srb5vpj27hc4l6rw6ll";
-    };
-    wmClass = "jetbrains-idea";
-  };
-
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
     version = "2016.3.4";
