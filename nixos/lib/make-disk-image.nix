@@ -7,6 +7,12 @@
 , # The size of the disk, in megabytes.
   diskSize
 
+  # The files and directories to be placed in the target file system.
+  # This is a list of attribute sets {source, target} where `source'
+  # is the file system object (regular file or directory) to be
+  # grafted in the file system at path `target'.
+, contents ? []
+
 , # Whether the disk should be partitioned (with a single partition
   # containing the root filesystem) or contain the root filesystem
   # directly.
@@ -45,7 +51,14 @@ pkgs.vmTools.runInLinuxVM (
           ${pkgs.vmTools.qemu}/bin/qemu-img create -f ${format} $diskImage "${toString diskSize}M"
           mv closure xchg/
         '';
-      buildInputs = [ pkgs.utillinux pkgs.perl pkgs.e2fsprogs pkgs.parted ];
+      buildInputs = with pkgs; [ utillinux perl e2fsprogs parted rsync ];
+
+      # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
+      # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
+      # !!! should use XML.
+      sources = map (x: x.source) contents;
+      targets = map (x: x.target) contents;
+
       exportReferencesGraph =
         [ "closure" config.system.build.toplevel ];
       inherit postVM;
@@ -97,6 +110,38 @@ pkgs.vmTools.runInLinuxVM (
 
       # Remove /etc/machine-id so that each machine cloning this image will get its own id
       rm -f /mnt/etc/machine-id
+
+      # Copy arbitrary other files into the image
+      # Semi-shamelessly copied from make-etc.sh. I (@copumpkin) shall factor this stuff out as part of
+      # https://github.com/NixOS/nixpkgs/issues/23052.
+      set -f
+      sources_=($sources)
+      targets_=($targets)
+      set +f
+
+      for ((i = 0; i < ''${#targets_[@]}; i++)); do
+        source="''${sources_[$i]}"
+        target="''${targets_[$i]}"
+
+        if [[ "$source" =~ '*' ]]; then
+
+          # If the source name contains '*', perform globbing.
+          mkdir -p /mnt/$target
+          for fn in $source; do
+            rsync -a --no-o --no-g "$fn" /mnt/$target/
+          done
+
+        else
+
+          mkdir -p /mnt/$(dirname $target)
+          if ! [ -e /mnt/$target ]; then
+            rsync -a --no-o --no-g $source /mnt/$target
+          else
+            echo "duplicate entry $target -> $source"
+            exit 1
+          fi
+        fi
+      done
 
       umount /mnt
 
