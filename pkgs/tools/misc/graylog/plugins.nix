@@ -22,7 +22,7 @@ let
       };
     });
 in {
-  graylog_auth_sso = glPlugin rec {
+  auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
     version = "1.0.6";
@@ -35,7 +35,7 @@ in {
       description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
     };
   };
-  graylog_ipanonymizer = glPlugin rec {
+  ipanonymizer = glPlugin rec {
     name = "graylog-ipanonymizer-${version}";
     pluginName = "graylog-plugin-ipanonymizer";
     version = "1.1.2";
@@ -48,7 +48,20 @@ in {
       description = "A graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
     };
   };
-  graylog_netflow = glPlugin rec {
+  jabber = glPlugin rec {
+    name = "graylog-jabber-${version}";
+    pluginName = "graylog-plugin-jabber";
+    version = "1.2.1";
+    src = fetchurl {
+      url = "https://github.com/Graylog2/${pluginName}/releases/download/v${version}/${pluginName}-${version}.jar";
+      sha256 = "1r12hpjp2ggmhsapgrk829va94aw44qi2kqqkgf1fj9ih4k0c837";
+    };
+    meta = {
+      homepage = "https://github.com/Graylog2/graylog-plugin-jabber";
+      description = "Jabber Alarmcallback Plugin for Graylog";
+    };
+  };
+  netflow = glPlugin rec {
     name = "graylog-netflow-${version}";
     pluginName = "graylog-plugin-netflow";
     version = "0.1.1";
@@ -61,7 +74,7 @@ in {
       description = "Graylog NetFlow plugin";
     };
   };
-  graylog_spaceweather = glPlugin rec {
+  spaceweather = glPlugin rec {
     name = "graylog-spaceweather-${version}";
     pluginName = "graylog-plugin-spaceweather";
     version = "1.0";
@@ -74,17 +87,30 @@ in {
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
     };
   };
-  graylog_threatintel = glPlugin rec {
+  threatintel = glPlugin rec {
     name = "graylog-threatintel-${version}";
     pluginName = "graylog-plugin-threatintel";
-    version = "0.9.1";
+    version = "0.9.2";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "106mr0ppw4dym65s59v76ikkfzsdf6g2rq124y2mh5kpc28b6p7i";
+      sha256 = "0d2cjcgjwfqp6b756n68zbslm1pq1z9dhn6iiskmv6jdpkffjw3l";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-threatintel";
       description = "Graylog Processing Pipeline functions to enrich log messages with IoC information from threat intelligence databases";
+    };
+  };
+  twitter = glPlugin rec {
+    name = "graylog-twitter-${version}";
+    pluginName = "graylog-plugin-twitter";
+    version = "2.0.0";
+    src = fetchurl {
+      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1pi34swy9nzq35a823zzvqrjhb6wsg302z31vk2y656sw6ljjxyh";
+    };
+    meta = {
+      homepage = "https://github.com/Graylog2/graylog-plugin-twitter";
+      description = "Graylog input plugin that reads Twitter messages based on keywords in realtime";
     };
   };
 }
