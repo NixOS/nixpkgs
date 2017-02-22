@@ -531,6 +531,7 @@
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
+  ./services/wayland/window-managers/sway.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -582,7 +583,6 @@
   ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/none.nix
-  ./services/x11/window-managers/sway.nix
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/windowlab.nix
   ./services/x11/window-managers/wmii.nix
