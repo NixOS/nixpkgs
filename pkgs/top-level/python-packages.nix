@@ -22807,12 +22807,12 @@ in {
   };
 
   rootpy = buildPythonPackage rec {
-    version = "0.8.3";
+    version = "0.9.0";
     name = "rootpy-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/d5/40/feddb2c9d1cadfe05d1d9aea1a71be093dc700879c9f6af40a10b1330f34/rootpy-0.8.3.tar.gz";
-      sha256 = "14q9bhs2a53598571x8yikj68x2iyl6090wbvdrpbwr238799b0z";
+      url = "mirror://pypi/r/rootpy/${name}.tar.gz";
+      sha256 = "04alx6afiyahhv816f6zpwnm0sx2jxgqpgqcn6kdw0wnpc9625cr";
     };
 
     disabled = isPy3k;
