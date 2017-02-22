@@ -1,5 +1,7 @@
 { stdenv, fetchurl
 , bzip2
+, expat
+, libffi
 , gdbm
 , lzma
 , ncurses
@@ -84,6 +86,8 @@ in stdenv.mkDerivation {
     "--enable-shared"
     "--with-threads"
     "--without-ensurepip"
+    "--with-system-expat"
+    "--with-system-ffi"
   ];
 
   preConfigure = ''
