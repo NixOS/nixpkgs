@@ -220,12 +220,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2016.3.1";
+    version = "2016.3.2";
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "10d1ba6qpizhz4d7fz0ya565pdvkgcmsdgs7b8dv98s9hxfjsldy";
+      sha256 = "1fqlrvhlk09z8nx68qv4nqs5n8ldia3lixsl6r04gsfyl1a69sb6";
     };
     wmClass = "jetbrains-rubymine";
   };
