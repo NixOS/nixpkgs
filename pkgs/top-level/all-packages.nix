@@ -6708,7 +6708,12 @@ with pkgs;
 
   shards = callPackage ../development/tools/build-managers/shards { };
 
-  shellcheck = self.haskellPackages.ShellCheck;
+  shellcheck = haskell.lib.overrideCabal haskellPackages.ShellCheck (drv: {
+    isLibrary = false;
+    enableSharedExecutables = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+  });
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
