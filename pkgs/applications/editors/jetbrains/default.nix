@@ -292,19 +292,6 @@ in
     update-channel = "PS2017.2";
   };
 
-  phpstorm10 = buildPhpStorm rec {
-    name = "phpstorm-${version}";
-    version = "10.0.4";
-    description = "Professional IDE for Web and PHP developers";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0fi042zvjpg5pn2mnhj3bbrdkl1b9vmhpf2l6ca4nr0rhjjv7dsm";
-    };
-    wmClass = "jetbrains-phpstorm";
-    update-channel = "WI10";
-  };
-
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
     version = "2017.2.2"; /* updated by script */
