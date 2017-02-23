@@ -576,7 +576,10 @@ let
 
     ppx_here = callPackage ../development/ocaml-modules/janestreet/ppx-here.nix {};
 
-    ppx_sexp_conv = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
+    ppx_sexp_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_conv-113_33_01.nix { }
+      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
 
     ppx_assert = callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
 
