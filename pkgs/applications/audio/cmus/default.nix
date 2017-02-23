@@ -31,9 +31,8 @@
 , wavpackSupport ? true, wavpack ? null
 , opusSupport ? true, opusfile ? null
 
-# can't make these work, something is broken
-, aacSupport ? true, faad2 ? null
-, mp4Support ? true, mp4v2 ? null
+, aacSupport ? false, faad2 ? null # already handled by ffmpeg
+, mp4Support ? false, mp4v2 ? null # ffmpeg does support mp4 better
 
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
