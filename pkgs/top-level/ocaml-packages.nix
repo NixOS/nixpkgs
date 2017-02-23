@@ -613,7 +613,9 @@ let
       else fieldslib_p4;
 
     sexplib =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/sexplib-113_33_00.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
       else sexplib_p4;
 
