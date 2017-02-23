@@ -859,6 +859,9 @@ self: super: {
   # https://github.com/lambdabot/lambdabot/issues/158
   lambdabot-core = doJailbreak super.lambdabot-core;
 
+  # https://github.com/lambdabot/lambdabot/issues/159
+  lambdabot = doJailbreak super.lambdabot;
+
   # https://github.com/jswebtools/language-ecmascript/pull/81
   language-ecmascript = doJailbreak super.language-ecmascript;
 }
