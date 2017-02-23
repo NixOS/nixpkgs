@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, pkgconfig, gnutls, gsasl, libidn, Security }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.4";
+  version = "1.6.6";
   name = "msmtp-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/msmtp/${name}.tar.xz";
-    sha256 = "1kfihblm769s4hv8iah5mqynqd6hfwlyz5rcg2v423a4llic0jcv";
+    sha256 = "0ppvww0sb09bnsrpqnvlrn8vx231r24xn2iiwpy020mxc8gxn5fs";
   };
 
   buildInputs = [ openssl pkgconfig gnutls gsasl libidn ]
