@@ -567,7 +567,10 @@ let
 
     ppx_driver = callPackage ../development/ocaml-modules/janestreet/ppx-driver.nix {};
 
-    ppx_type_conv = callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
+    ppx_type_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_type_conv-113_33_02.nix { }
+      else callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
 
     ppx_compare = callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
 
