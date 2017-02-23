@@ -28,5 +28,12 @@ in stdenv.mkDerivation rec {
     homepage = http://github.com/JonathanBeck/libplist;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    knownVulnerabilities = [
+      "CVE-2017-5209: base64decode function in base64.c allows attackers to obtain sensitive information from process memory or cause a denial of service"
+      "CVE-2017-5545: attackers to obtain sensitive information from process memory or cause a denial of service"
+      "CVE-2017-5834: A heap-buffer overflow in parse_dict_node"
+      "CVE-2017-5835: A memory allocation error leading to DoS"
+      "CVE-2017-5836: A type inconsistency in bplist.c"
+    ];
   };
 }
