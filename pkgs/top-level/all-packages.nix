@@ -13685,7 +13685,9 @@ with pkgs;
 
   gollum = callPackage ../applications/misc/gollum { };
 
-  google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
+  google-chrome = if stdenv.isDarwin
+  then callPackage ../applications/networking/browsers/google-chrome/darwin.nix {}
+  else callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
 
   google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
 
@@ -15186,11 +15188,12 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
-  spotify = callPackage ../applications/audio/spotify {
-    inherit (gnome2) GConf;
-    libgcrypt = libgcrypt_1_5;
-    libpng = libpng12;
-  };
+  spotify = if stdenv.isDarwin then callPackage ../applications/audio/spotify/darwin.nix {}
+    else callPackage ../applications/audio/spotify {
+      inherit (gnome2) GConf;
+      libgcrypt = libgcrypt_1_5;
+      libpng = libpng12;
+    };
 
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
@@ -16457,11 +16460,12 @@ with pkgs;
 
   steamPackages = callPackage ../games/steam { };
 
-  steam = steamPackages.steam-chrootenv.override {
+  steam = if stdenv.isDarwin then callPackage ../games/steam/darwin.nix {}
+  else if stdenv.isLinux then steamPackages.steam-chrootenv.override {
     # DEPRECATED
     withJava = config.steam.java or false;
     withPrimus = config.steam.primus or false;
-  };
+  } else null;
 
   steam-run = steam.run;
 
