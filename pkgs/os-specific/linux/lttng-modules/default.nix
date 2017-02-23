@@ -3,25 +3,25 @@
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
   name = "${pname}-${kernel.version}";
-  version = "2.8.3";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "http://lttng.org/files/lttng-modules/lttng-modules-${version}.tar.bz2";
-    sha256 = "018lqxbksj9hpjfp2a3yc6lkjkj4rgf2x147l1jjh7mfgqvcb53b";
+    sha256 = "0m0d8sp7fj1qha7qz1204yzpsyfd8a8fawjbvdlmk9jc4piqy1v2";
   };
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-function-declaration" ];
 
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     export INSTALL_MOD_PATH="$out"
   '';
 
-  installPhase = ''
-    make modules_install
-  '';
+  installTargets = [ "modules_install" ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Linux kernel modules for LTTng tracing";
