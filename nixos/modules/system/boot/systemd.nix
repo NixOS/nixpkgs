@@ -842,6 +842,7 @@ in
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];
 
     # Don't bother with certain units in containers.
