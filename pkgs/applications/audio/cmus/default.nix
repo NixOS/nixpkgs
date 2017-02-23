@@ -32,8 +32,8 @@
 , opusSupport ? true, opusfile ? null
 
 # can't make these work, something is broken
-#, mp4Support ? true, mp4v2 ? null
 , aacSupport ? true, faad2 ? null
+, mp4Support ? true, mp4v2 ? null
 
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
@@ -84,7 +84,7 @@ let
     (mkFlag wavpackSupport "CONFIG_WAVPACK=y" wavpack)
     (mkFlag opusSupport   "CONFIG_OPUS=y"    opusfile)
 
-    #(mkFlag mp4Support    "CONFIG_MP4=y"     mp4v2)
+    (mkFlag mp4Support    "CONFIG_MP4=y"     mp4v2)
     (mkFlag aacSupport    "CONFIG_AAC=y"     faad2)
 
     #(mkFlag vtxSupport    "CONFIG_VTX=y"     libayemu)
