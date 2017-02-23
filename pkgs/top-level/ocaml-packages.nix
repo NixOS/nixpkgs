@@ -554,7 +554,10 @@ let
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
 
-    ppx_core = callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
+    ppx_core =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_core-113_33_01.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
 
     ppx_optcomp = callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
 
