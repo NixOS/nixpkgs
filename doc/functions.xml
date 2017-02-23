@@ -173,6 +173,43 @@
       </para>
     </note>
 
+    <para>
+      Some more examples follow.
+
+      <programlisting>optimizeWithFlags = pkg: flags:
+          pkgs.lib.overrideDerivation pkg (old:
+          let
+            newflags = pkgs.lib.foldl' (acc: x: "${acc} ${x}") "" flags;
+            oldflags = if (pkgs.lib.hasAttr "NIX_CFLAGS_COMPILE" old)
+              then "${old.NIX_CFLAGS_COMPILE}"
+              else "";
+          in
+          {
+            NIX_CFLAGS_COMPILE = "${oldflags} ${newflags}";
+          });
+      </programlisting>
+    </para>
+
+    <para>
+      The above function can be used to override override the
+      <varname>NIX_CFLAGS_COMPILE</varname>
+      variable and thus pass custom compiler flags.
+      It can then be used like so:
+
+      <programlisting>
+        environment.systemPackages = let
+          mutt = optimizeWithFlags pkgs.mutt [ "-O3" "-march=native" ];
+        in
+          [ mutt # and more
+          ];
+      </programlisting>
+
+      to compile
+      <literal>mutt</literal> with
+      <literal>-O3<literal> and
+      <literal>-march=native<literal>, for example.
+    </para>
+
   </section>
 
   <section xml:id="sec-lib-makeOverridable">
