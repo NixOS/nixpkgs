@@ -251,11 +251,6 @@ in
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
 
-    # The ‘ip-up’ target is kept for backwards compatibility.
-    # New services should use systemd upstream targets:
-    # See https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
-    systemd.targets.ip-up.description = "Services Requiring IP Connectivity (deprecated)";
-
     # This is needed when /etc/resolv.conf is being overriden by networkd
     # and other configurations. If the file is destroyed by an environment
     # activation then it must be rebuilt so that applications which interface
