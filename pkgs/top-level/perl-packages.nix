@@ -13140,6 +13140,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestRun = buildPerlPackage rec {
+    name = "Test-Run-0.0304";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "f3feaf9c4494c0b3a5294228cab27efe93653b7e0bbd7fbb99b94b65b247f323";
+    };
+    buildInputs = [ ModuleBuild TestTrap ];
+    propagatedBuildInputs = [ IPCSystemSimple ListMoreUtils MROCompat Moose MooseXStrictConstructor TextSprintfNamed UNIVERSALrequire ];
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Base class to run standard TAP scripts";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   TestScript = buildPerlPackage rec {
     name = "Test-Script-1.10";
     src = fetchurl {
