@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, makeWrapper
-, coreutils, ctags, ncurses, pythonPackages, sqlite, pkgconfig
+, coreutils, ctags, ncurses, pythonPackages, sqlite, universal-ctags, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     "--with-ncurses=${ncurses.dev}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-exuberant-ctags=${ctags}/bin/ctags"
+    "--with-universal-ctags=${universal-ctags}/bin/ctags"
     "--with-posix-sort=${coreutils}/bin/sort"
   ];
 
