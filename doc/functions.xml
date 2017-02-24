@@ -103,7 +103,7 @@
 
       <programlisting>optimizeWithFlag = pkg: flag:
         pkg.overrideAttrs (attrs: {
-          NIX_CFLAGS_COMPILE = (attrs.NIX_CFLAGS_COMPILE or "") + "${flag}";
+          NIX_CFLAGS_COMPILE = (attrs.NIX_CFLAGS_COMPILE or "") + " ${flag}";
         });
       </programlisting>
 
