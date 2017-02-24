@@ -28879,7 +28879,6 @@ EOF
 
     src = pkgs.fetchurl {
       url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
-      # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
       sha256 = "1dpxl5hwyyqd71avpm5vkvw8fhlvf9liizmhrq9jphhrx0nx5rsn";
     };
 
