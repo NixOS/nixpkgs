@@ -8734,6 +8734,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooX = buildPerlPackage rec {
+    name = "MooX-0.101";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GE/GETTY/${name}.tar.gz";
+      sha256 = "2ff91a656e78aae0aca42293829d7a7e5acb9bf22b0401635b2ab6c870de32d5";
+    };
+    propagatedBuildInputs = [ DataOptList ImportInto ModuleRuntime Moo ];
+    meta = {
+      homepage = https://github.com/Getty/p5-moox;
+      description = "Using Moo and MooX:: packages the most lazy way";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MooXlate = buildPerlPackage {
     name = "MooX-late-0.015";
     src = fetchurl {
