@@ -5121,6 +5121,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileFindObject = buildPerlPackage rec {
+    name = "File-Find-Object-v0.3.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "7c467b6b7752bff46b7b8b84c9aabeac45bbfdab1e2224108a2e2170adb9f2b7";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ ClassXSAccessor ];
+    meta = {
+      description = "An object oriented File::Find replacement";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   FileFindRule = buildPerlPackage rec {
     name = "File-Find-Rule-0.33";
     src = fetchurl {
