@@ -25,8 +25,6 @@ in
 
 kde.modules // kde.individual //
 {
-  inherit kdelibs;
-
   akonadi = callPackage ./support/akonadi { };
 
   inherit release;

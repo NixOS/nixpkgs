@@ -7829,6 +7829,8 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+  kdelibs4 = kde5.applications.kdelibs;
+
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
     lua = lua5_1;
@@ -11697,9 +11699,7 @@ with pkgs;
 
   gocode = callPackage ../development/tools/gocode { };
 
-  kgocode = callPackage ../applications/misc/kgocode {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  kgocode = callPackage ../applications/misc/kgocode { };
 
   gotags = callPackage ../development/tools/gotags { };
 
@@ -14002,7 +14002,7 @@ with pkgs;
     qt = qt4;
   };
 
-  kile = kde5.callPackage ../applications/editors/kile/frameworks.nix { };
+  kile = kde5.callPackage ../applications/editors/kile { };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome2) libglade;
@@ -15373,7 +15373,6 @@ with pkgs;
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
   tomahawk = callPackage ../applications/audio/tomahawk {
-    inherit (pkgs.kde4) kdelibs;
     taglib = taglib_1_9;
     enableXMPP      = config.tomahawk.enableXMPP      or true;
     enableKDE       = config.tomahawk.enableKDE       or false;
@@ -16675,7 +16674,7 @@ with pkgs;
         libusb = libusb1;
         python2Packages = python2Packages;
         inherit (python2Packages) python;
-        kdelibs = kde5.kdelibs;
+        kdelibs = kdelibs4;
         boost = boost155;
         subversionClient = subversion18.override {
           bdbSupport = false;
@@ -16710,8 +16709,6 @@ with pkgs;
         kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
         kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
-
-        kile = callPackage ../applications/editors/kile { };
 
         kmplayer = callPackage ../applications/video/kmplayer { };
 
