@@ -13155,6 +13155,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestRunCmdLine = buildPerlPackage rec {
+    name = "Test-Run-CmdLine-0.0131";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "cceeeecd3f4b2f1d2929f3ada351c1ade23a8ac73ef0486dc6e9605ebcdaef18";
+    };
+    buildInputs = [ ModuleBuild TestTrap ];
+    propagatedBuildInputs = [ Moose MooseXGetopt TestRun UNIVERSALrequire YAMLLibYAML ];
+    meta = {
+      homepage = http://web-cpan.berlios.de/modules/Test-Run/;
+      description = "Analyze tests from the command line using Test::Run";
+      license = stdenv.lib.licenses.mit;
+    };
+   };
+
   TestScript = buildPerlPackage rec {
     name = "Test-Script-1.10";
     src = fetchurl {
