@@ -12193,6 +12193,21 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+ 
+  TaskFreecellSolverTesting = buildPerlModule rec {
+    name = "Task-FreecellSolver-Testing-v0.0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "ce8960c0250a9947ae5b4485e8a3e807bb2d87b1120096464b3d2247d2c194ff";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify Inline InlineC ListMoreUtils Moo MooX PathTiny StringShellQuote TaskTestRunAllPlugins TemplateToolkit TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace YAMLLibYAML ];
+    meta = {
+      homepage = http://metacpan.org/release/Task-FreecellSolver-Testing;
+      description = "Install the CPAN dependencies of the Freecell Solver test suite";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   TaskPlack = buildPerlModule rec {
     name = "Task-Plack-0.28";
