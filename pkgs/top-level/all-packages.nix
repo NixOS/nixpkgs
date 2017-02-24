@@ -8193,7 +8193,9 @@ with pkgs;
     fetchurl = fetchurlBoot;
   };
 
-  libevent = callPackage ../development/libraries/libevent { };
+  libevent = callPackage ../development/libraries/libevent {
+    openssl = openssl_1_0_2;
+  };
 
   libewf = callPackage ../development/libraries/libewf { };
 
