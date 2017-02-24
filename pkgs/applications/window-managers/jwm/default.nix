@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "jwm-${version}";
-  version = "1580";
+  version = "1582";
   
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "s${version}";
-    sha256 = "098m54mn8f1vzdb7j6zmlflid7a4yjinbdh7avg2a0z45nl1znb4";
+    sha256 = "1z6cxf18n69sjd20bbyxrnd19hhy955ddvakgpfyhiprpfjkkv70";
   };
 
   nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
