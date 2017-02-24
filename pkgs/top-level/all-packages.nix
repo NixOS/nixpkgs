@@ -924,6 +924,8 @@ with pkgs;
 
   hexio = callPackage ../development/tools/hexio { };
 
+  hr = callPackage ../applications/misc/hr { };
+
   interlock = callPackage ../servers/interlock {};
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
