@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
+  configureFlags = [ "--localstatedir=/var/cache" ];
+
   crossAttrs = {
     # Fix the 'buildInputs = [ coreutils ]' above - that adds the cross coreutils to PATH :(
     propagatedBuildInputs = [ ];
