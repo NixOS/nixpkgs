@@ -12627,6 +12627,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestDataSplit = buildPerlModule rec {
+    name = "Test-Data-Split-0.2.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "90811c2af56750bf08eeff39e1e30f2ff8f625e809ed838b5ccb56a256c4b595";
+    };
+    buildInputs = [ ModuleBuild TestDifferences perl ];
+    propagatedBuildInputs = [ IOAll ListMoreUtils MooX MooXlate ];
+    meta = {
+      description = "Split data-driven tests into several test scripts";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   TestDeep = buildPerlPackage {
     name = "Test-Deep-0.112";
     src = fetchurl {
