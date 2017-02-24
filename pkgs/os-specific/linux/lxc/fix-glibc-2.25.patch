@@ -1,0 +1,36 @@
+diff --git a/src/lxc/bdev/lxclvm.c b/src/lxc/bdev/lxclvm.c
+index 75de17f..d6d98e4 100644
+--- a/src/lxc/bdev/lxclvm.c
++++ b/src/lxc/bdev/lxclvm.c
+@@ -30,6 +30,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <sys/wait.h>
++#include <sys/sysmacros.h>
+ 
+ #include "bdev.h"
+ #include "config.h"
+diff --git a/src/lxc/conf.c b/src/lxc/conf.c
+index a93124b..948d716 100644
+--- a/src/lxc/conf.c
++++ b/src/lxc/conf.c
+@@ -48,6 +48,7 @@
+ #include <sys/stat.h>
+ #include <sys/socket.h>
+ #include <sys/syscall.h>
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/utsname.h>
+ #include <sys/wait.h>
+diff --git a/src/lxc/lxccontainer.c b/src/lxc/lxccontainer.c
+index 0dbbf2c..7135222 100644
+--- a/src/lxc/lxccontainer.c
++++ b/src/lxc/lxccontainer.c
+@@ -34,6 +34,7 @@
+ #include <sys/mman.h>
+ #include <sys/mount.h>
+ #include <sys/syscall.h>
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
