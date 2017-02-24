@@ -13039,6 +13039,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ PerlCritic ];
   };
 
+  TestPerlTidy = buildPerlPackage rec {
+    name = "Test-PerlTidy-20130104";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LA/LARRYL/${name}.tar.gz";
+      sha256 = "3f15d9f3f4811e348594620312258d75095237925b491ada623fa73ac9d2b9c8";
+    };
+    propagatedBuildInputs = [ FileFinder FileSlurp PerlTidy TextDiff ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestPod = buildPerlPackage rec {
     name = "Test-Pod-1.51";
     src = fetchurl {
