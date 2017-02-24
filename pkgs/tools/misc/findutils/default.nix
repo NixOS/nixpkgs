@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
+  configureFlags = [ "--localstatedir=/var/cache" ];
+
   crossAttrs = {
     # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
     configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
