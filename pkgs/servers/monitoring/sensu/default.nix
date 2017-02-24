@@ -1,8 +1,8 @@
 { lib, bundlerEnv, ruby }:
 
-bundlerEnv {
+bundlerEnv rec {
   name = "sensu-${version}";
-  version = (import gemset).sensu.version;
+  version = (import ./gemset.nix).sensu.version;
 
   inherit ruby;
   gemdir = ./.;
