@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   # configured on the build machine).
   preConfigure= "
     configureFlagsArray=(
-      --with-ping-command='/run/wrappers/bin/ping -n -U -w %d -c %d %s'
-      --with-ping6-command='/run/wrappers/bin/ping6 -n -U -w %d -c %d %s'
+      --with-ping-command='/run/wrappers/bin/ping -4 -n -U -w %d -c %d %s'
+      --with-ping6-command='/run/wrappers/bin/ping -6 -n -U -w %d -c %d %s'
     )
   ";
 

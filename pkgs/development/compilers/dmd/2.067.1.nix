@@ -19,7 +19,11 @@ stdenv.mkDerivation {
       # Was not able to compile on darwin due to "__inline_isnanl"
       # being undefined.
       substituteInPlace src/dmd/root/port.c --replace __inline_isnanl __inline_isnan
-  '';
+  ''
+    + stdenv.lib.optionalString stdenv.isLinux ''
+        substituteInPlace src/dmd/root/port.c \
+          --replace "#include <bits/mathdef.h>" "#include <complex.h>"
+      '';
 
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''

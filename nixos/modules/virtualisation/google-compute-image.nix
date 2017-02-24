@@ -23,7 +23,7 @@ in
 
           postVM =
             ''
-              PATH=$PATH:${stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+              PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
               pushd $out
               mv $diskImageBase disk.raw
               tar -Szcf $diskImageBase.tar.gz disk.raw

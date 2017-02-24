@@ -30,10 +30,10 @@
 , vorbisSupport ? true, libvorbis ? null
 , opusSupport ? true, opusfile ? null
 , wavpackSupport ? true, wavpack ? null
+, opusSupport ? true, opusfile ? null
 
-# can't make these work, something is broken
-#, mp4Support ? true, mp4v2 ? null
-#, aacSupport ? true, faac ? null
+, aacSupport ? false, faad2 ? null # already handled by ffmpeg
+, mp4Support ? false, mp4v2 ? null # ffmpeg does support mp4 better
 
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
@@ -82,10 +82,17 @@ let
     (mkFlag tremorSupport  "CONFIG_TREMOR=y"  tremor)
     (mkFlag vorbisSupport  "CONFIG_VORBIS=y"  libvorbis)
     (mkFlag wavpackSupport "CONFIG_WAVPACK=y" wavpack)
+<<<<<<< HEAD
     (mkFlag opusSupport   "CONFIG_OPUS=y"     opusfile)
 
     #(mkFlag mp4Support    "CONFIG_MP4=y"     mp4v2)
     #(mkFlag aacSupport    "CONFIG_AAC=y"     faac)
+=======
+    (mkFlag opusSupport   "CONFIG_OPUS=y"    opusfile)
+
+    (mkFlag mp4Support    "CONFIG_MP4=y"     mp4v2)
+    (mkFlag aacSupport    "CONFIG_AAC=y"     faad2)
+>>>>>>> upstream/master
 
     #(mkFlag vtxSupport    "CONFIG_VTX=y"     libayemu)
   ];

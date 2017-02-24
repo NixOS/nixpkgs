@@ -724,7 +724,7 @@ self: super: {
   });
 
   # test suite cannot find its own "idris" binary
-  idris = dontCheck super.idris;
+  idris = doJailbreak (dontCheck super.idris);
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -858,6 +858,9 @@ self: super: {
 
   # https://github.com/lambdabot/lambdabot/issues/158
   lambdabot-core = doJailbreak super.lambdabot-core;
+
+  # https://github.com/lambdabot/lambdabot/issues/159
+  lambdabot = doJailbreak super.lambdabot;
 
   # https://github.com/jswebtools/language-ecmascript/pull/81
   language-ecmascript = doJailbreak super.language-ecmascript;

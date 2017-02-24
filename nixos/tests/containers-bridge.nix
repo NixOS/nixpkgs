@@ -66,7 +66,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       "${containerIp6}" =~ /([^\/]+)\/([0-9+])/;
       my $ip6 = $1;
       chomp $ip6;
-      $machine->succeed("ping6 -n -c 1 $ip6");
+      $machine->succeed("ping -n -c 1 $ip6");
       $machine->succeed("curl --fail http://[$ip6]/ > /dev/null");
 
       # Stop the container.

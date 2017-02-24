@@ -57,7 +57,14 @@ in stdenv.mkDerivation {
 
   postPatch = optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
-  '';
+  ''
+    # Avoid picking up getentropy() from glibc >= 2.25, as that would break
+    # on older kernels.  http://bugs.python.org/issue29157
+    + optionalString stdenv.isLinux
+      ''
+        substituteInPlace Python/random.c --replace 'defined(HAVE_GETENTROPY)' '0'
+        cat Python/random.c
+      '';
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity

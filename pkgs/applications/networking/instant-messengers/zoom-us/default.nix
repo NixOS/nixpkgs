@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
       platforms = stdenv.lib.platforms.linux;
     };
 
-    version = "2.0.70790.1031";
+    version = "2.0.81497.0116";
     src = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "0kkg3bqv8zwhpxgrssa7ds00dxhdimnq2vfklgrdqn5qzbij31hd";
+      sha256 = "1lq59l5vxirjgcsrl6r4nqgvjr519gkn69alffv1f1fwq5vzif7j";
     };
 
     phases = [ "unpackPhase" "installPhase" ];

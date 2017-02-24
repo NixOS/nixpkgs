@@ -74,6 +74,11 @@ stdenv.mkDerivation {
       ${flip concatMapStrings xenExtfiles (x: let src = fetchurl x; in ''
         cp ${src} xen_ext_files/${src.name}
       '')}
+
+      # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.
+      sed 1i'#include <sys/sysmacros.h>' \
+        -i tools/blktap2/control/tap-ctl-allocate.c \
+        -i tools/libxl/libxl_device.c
   '';
 
   preConfigure = ''

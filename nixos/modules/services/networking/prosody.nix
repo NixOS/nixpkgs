@@ -274,7 +274,8 @@ in
     systemd.services.prosody = {
 
       description = "Prosody XMPP server";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "prosody";
