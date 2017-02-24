@@ -13217,6 +13217,23 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestRunPluginColorSummary = buildPerlModule rec {
+    name = "Test-Run-Plugin-ColorSummary-0.0202";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "ea4fb6768c4f6645cedf87d9b7c6baf97364ebc6f4171e4dd5f68939fb2bdd3a";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ TestRun TestRunCmdLine ]  moreInputs;
+    moreInputs = [ TestTrap ]; # Added because tests were failing without it
+    doCheck=true;
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "A Test::Run plugin that";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   TestRunPluginTrimDisplayedFilenames = buildPerlPackage rec {
     name = "Test-Run-Plugin-TrimDisplayedFilenames-0.0125";
     src = fetchurl {
