@@ -11273,6 +11273,7 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.packet_fix_race_condition_CVE_2016_8655
+        kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11285,6 +11286,7 @@ with pkgs;
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
       packet_fix_race_condition_CVE_2016_8655
+      DCCP_double_free_vulnerability_CVE-2017-6074
     ];
   };
 
@@ -11293,6 +11295,7 @@ with pkgs;
       [ bridge_stp_helper
         lguest_entry-linkage
         packet_fix_race_condition_CVE_2016_8655
+        DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11304,6 +11307,7 @@ with pkgs;
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
+        DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11315,6 +11319,7 @@ with pkgs;
   linux_4_1 = callPackage ../os-specific/linux/kernel/linux-4.1.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11327,6 +11332,7 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.cpu-cgroup-v2."4.4"
+        kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11343,6 +11349,7 @@ with pkgs;
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
         # kernelPatches.cpu-cgroup-v2."4.7"
         kernelPatches.modinst_arg_list_too_long
+        kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11371,6 +11378,7 @@ with pkgs;
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
+      kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
       kernelPatches.mips_fpu_sigill
@@ -11383,6 +11391,7 @@ with pkgs;
                       kernelPatches.chromiumos_mfd_fix_dependency
                       kernelPatches.chromiumos_no_link_restrictions
                       kernelPatches.genksyms_fix_segfault
+                      kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
                     ];
   };
 
@@ -11390,6 +11399,7 @@ with pkgs;
     kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_18
                       kernelPatches.chromiumos_no_link_restrictions
                       kernelPatches.genksyms_fix_segfault
+                      kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
                     ];
   };
 
