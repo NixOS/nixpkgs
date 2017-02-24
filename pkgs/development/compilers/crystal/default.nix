@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm_39, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.20.5";
+  version = "0.21.0";
   name = "crystal-${version}-1";
   arch =
     {
@@ -14,15 +14,15 @@ stdenv.mkDerivation rec {
     url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-1-${arch}.tar.gz";
     sha256 =
       {
-        "x86_64-linux" = "fd077c0a727419e131b1be6198a5aa5820ecbdaafd2d2bb38be5716ba75b5100";
-        "i686-linux" = "e3a890f11833c57c9004655d108f981c7c630cd7a939f828d9a6c571705bc3e7";
-        "x86_64-darwin" = "79462c8ff994b36cff219c356967844a17e8cb2817bb24a196a960a08b8c9e47";
+        "x86_64-linux" = "07vsrj9l3n1cqm8qhivfb7qkrcc2yzallc8w72jawfw1yffm6i0a";
+        "i686-linux" = "1vq7szp6n5m5wipnzddhg7dw628frmqhsnkzwzmzaafkjizjhics";
+        "x86_64-darwin" = "1vk9wi5r01y4il5j4w8sg76plmxjfn1xd6k29sxzx4m5m4rvnap9";
       }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
   };
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "ee1e5948c6e662ccb1e62671cf2c91458775b559b23d74ab226dc2a2d23f7707";
+    sha256 = "173p124fagla3y90yz09csb0dfi7p8pkdz02gzd0wjihyl1igl2d";
   };
 
   # crystal on Darwin needs libiconv to build
