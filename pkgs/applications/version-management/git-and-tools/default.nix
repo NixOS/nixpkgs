@@ -58,6 +58,8 @@ rec {
 
   git-crypt = callPackage ./git-crypt { };
 
+  git-dit = callPackage ./git-dit { };
+
   git-extras = callPackage ./git-extras { };
 
   git-hub = callPackage ./git-hub { };
