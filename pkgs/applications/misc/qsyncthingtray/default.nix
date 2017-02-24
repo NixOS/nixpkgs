@@ -3,14 +3,14 @@
 , qmakeHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.5rc2";
+  version = "0.5.7";
   name = "qsyncthingtray-${version}";
 
   src = fetchFromGitHub {
     owner = "sieren";
     repo = "QSyncthingTray";
     rev = "${version}";
-    sha256 = "1x7j7ylgm4ih06m7gb5ls3c9bdjwbra675489caq2f04kgw4yxq2";
+    sha256 = "0crrdpdmlc4ahkvp5znzc4zhfwsdih655q1kfjf0g231mmynxhvq";
   };
 
   buildInputs = [ qtbase qtwebengine ];
@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     cp binary/QSyncthingTray $out/bin
-    cat > $out/bin/qt.conf <<EOF
-    [Paths]
-    Prefix = ${qtwebengine.out}
-    EOF
   '';
 
   meta = with stdenv.lib; {
