@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     do
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \
-            --prefix PATH : "${stdenv.lib.makeBinPath [ jre8 which gawk ]}" \
-            --set JAVA_HOME "$jre8"
+            --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gawk ]}" \
+            --set JAVA_HOME "$jre"
     done
   '';
 
