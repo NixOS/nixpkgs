@@ -10014,7 +10014,9 @@ with pkgs;
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
-  xmlsec = callPackage ../development/libraries/xmlsec { };
+  xmlsec = callPackage ../development/libraries/xmlsec {
+    openssl = openssl_1_1_0;
+  };
 
   xml-security-c = callPackage ../development/libraries/xml-security-c { };
 
