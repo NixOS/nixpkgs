@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, freeglut, SDL, mesa, libXi, libXmu}:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk2, freeglut, SDL, SDL_mixer
+, mesa, libXi, libXmu}:
 
 stdenv.mkDerivation {
   name = "crack-attack-1.1.14";
@@ -8,9 +9,9 @@ stdenv.mkDerivation {
     sha256 = "1sakj9a2q05brpd7lkqxi8q30bccycdzd96ns00s6jbxrzjlijkm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 freeglut SDL mesa libXi libXmu ];
-
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gtk2 freeglut SDL SDL_mixer mesa libXi libXmu ];
+  configureFlags = [ "--enable-sound=yes" ];
   hardeningDisable = [ "format" ];
 
   meta = {
