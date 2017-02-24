@@ -1,15 +1,13 @@
-{ stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
+{ stdenv, fetchurl, which, autoconf, automake, ncurses, perl
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "20160827";
+  version = "20170206";
   name = "neomutt-${version}";
 
-  src = fetchFromGitHub {
-    owner = "neomutt";
-    repo = "neomutt";
-    rev = "neomutt-${version}";
-    sha256 = "1gam2iyy75drlp9ap1hlfb38i0p6zwgw09m08m5x50dbp3lxf7xp";
+  src = fetchurl {
+    url = "https://github.com/neomutt/neomutt/archive/${name}.tar.gz";
+    sha256 = "1505cds6wy5xld1lpxqs8k6y4mhghcw09dj2adhkpnxdzmib6pls";
   };
 
   buildInputs =
@@ -28,6 +26,7 @@ stdenv.mkDerivation rec {
     "--enable-keywords"
     "--enable-smtp"
     "--enable-nntp"
+    "--enable-compressed"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="
