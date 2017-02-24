@@ -6,10 +6,16 @@ with lib;
   imports = [
     ../profiles/qemu-guest.nix
     ../profiles/headless.nix
+    ./grow-partition.nix
   ];
 
   config = {
-    fileSystems."/".device = "/dev/disk/by-label/nixos";
+    fileSystems."/" = {
+      device = "/dev/disk/by-label/nixos";
+      autoResize = true;
+    };
+
+    virtualisation.growPartition = true;
 
     boot.kernelParams = [ "console=ttyS0" ];
     boot.loader.grub.device = "/dev/vda";
