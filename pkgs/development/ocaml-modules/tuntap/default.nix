@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ipaddr }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ipaddr }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1cmd4kky875ks02gm2nb8yr80hmlfcnjdfyc63hvkh49acssy3d5";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ipaddr ];
 
   createFindlibDestdir = true;
