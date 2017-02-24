@@ -16705,9 +16705,10 @@ with pkgs;
       });
 
       self = lib.makeScope deps.newScope (self: with self;
-        deps.callPackage ../desktops/kde-4.14 {
+        import ../desktops/kde-4.14 {
           callPackageOrig = pkgs.callPackage;
           inherit (self) callPackage;
+          inherit stdenv qt48 kdelibs;
         }
       );
     in recurseIntoAttrs self;
