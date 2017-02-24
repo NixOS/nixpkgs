@@ -209,7 +209,10 @@ in
             then { GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"; }
             else { });
 
-      fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
+      fonts.fonts = [
+        (kde5.oxygen-fonts or pkgs.noto-fonts)
+        pkgs.hack-font
+      ];
 
       programs.ssh.askPassword = "${kde5.ksshaskpass.out}/bin/ksshaskpass";
 
