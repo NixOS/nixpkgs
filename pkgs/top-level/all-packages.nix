@@ -16671,17 +16671,9 @@ with pkgs;
   kde4 =
     let
       deps = lib.makeScope newScope (self: {
-        libusb = libusb1;
-        python2Packages = python2Packages;
         inherit (python2Packages) python;
         kdelibs = kdelibs4;
         boost = boost155;
-        subversionClient = subversion18.override {
-          bdbSupport = false;
-          perlBindings = true;
-          pythonBindings = true;
-        };
-        ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
         ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
       });
 
