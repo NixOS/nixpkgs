@@ -13200,6 +13200,23 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestRunPluginColorFileVerdicts = buildPerlPackage rec {
+    name = "Test-Run-Plugin-ColorFileVerdicts-0.0124";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "0418f03abe241f5a3c2a2ab3dd2679d11eee42c9e1f5b5a6ea80d9e238374302";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ]  moreInputs;
+    moreInputs = [ TestTrap ]; # Added because tests were failing without it
+    doCheck=true;
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Make the file verdict ("ok", "NOT OK")";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   TestRunPluginTrimDisplayedFilenames = buildPerlPackage rec {
     name = "Test-Run-Plugin-TrimDisplayedFilenames-0.0125";
     src = fetchurl {
