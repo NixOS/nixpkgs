@@ -19389,12 +19389,21 @@ in {
 
   publicsuffix = buildPythonPackage rec {
     name = "publicsuffix-${version}";
-    version = "1.0.2";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/publicsuffix/${name}.tar.gz";
-      sha256 = "f6dfcb8a33fb3ac4f09e644cd26f8af6a09d1a45a019d105c8da58e289ca0096";
+      sha256 = "1adx520249z2cy7ykwjr1k190mn2888wqn9jf8qm27ly4qymjxxf";
     };
+
+    # fix the ASCII-mode LICENSE file read
+    # disable test_fetch and the doctests (which also invoke fetch)
+    patchPhase = optionalString isPy3k ''
+      sed -i "s/)\.read(/,encoding='utf-8'\0/" setup.py
+    '' + ''
+      sed -i -e "/def test_fetch/i\\
+      \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
+    '';
 
     meta = {
       description = "Allows to get the public suffix of a domain name";
