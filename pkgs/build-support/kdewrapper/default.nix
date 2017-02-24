@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     for a in ${program}/bin/*; do 
       PROG=$out/bin/`basename $a` 
     cat > $PROG << END
-    #!/bin/sh
+    #!${stdenv.shell}
     export KDEDIRS=$KDEDIRS\''${KDEDIRS:+:}\$KDEDIRS
     export QT_PLUGIN_PATH=$QT_PLUGIN_PATH\''${QT_PLUGIN_PATH:+:}\$QT_PLUGIN_PATH
     exec $a "\$@"
