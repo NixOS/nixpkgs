@@ -5172,6 +5172,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileFinder = buildPerlPackage rec {
+    name = "File-Finder-0.53";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ME/MERLYN/${name}.tar.gz";
+      sha256 = "2ecbc19ac67a9e635c872a807a8d3eaaff5babc054f15a191d47cdfc5f176a74";
+    };
+    propagatedBuildInputs = [ TextGlob ];
+    meta = {
+      license = stdenv.lib.licenses.unknown;
+    };
+  };
+
   FileHandleUnget = buildPerlPackage rec {
     name = "FileHandle-Unget-0.1628";
     src = fetchurl {
