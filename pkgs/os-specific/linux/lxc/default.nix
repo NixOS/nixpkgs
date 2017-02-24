@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
-    ./fix-glibc-2.25.patch
   ];
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
