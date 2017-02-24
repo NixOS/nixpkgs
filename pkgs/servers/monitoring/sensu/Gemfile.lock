@@ -1,79 +1,75 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    amq-protocol (2.0.1)
-    amqp (1.6.0)
-      amq-protocol (>= 2.0.1)
+    amq-protocol (1.9.2)
+    amqp (1.5.0)
+      amq-protocol (>= 1.9.2)
       eventmachine
-    childprocess (0.5.8)
+    async_sinatra (1.0.0)
+      rack (>= 1.4.1)
+      sinatra (>= 1.3.2)
+    childprocess (0.5.3)
       ffi (~> 1.0, >= 1.0.11)
-    em-http-server (0.1.8)
-      eventmachine
+    daemons (1.2.2)
+    em-redis-unified (0.6.0)
+      eventmachine (>= 0.12.10)
     em-worker (0.0.2)
       eventmachine
-    eventmachine (1.2.2)
-    ffi (1.9.17)
-    oj (2.14.6)
-    parse-cron (0.1.4)
-    sensu (0.28.0)
-      em-http-server (= 0.1.8)
-      eventmachine (= 1.2.2)
-      parse-cron (= 0.1.4)
-      sensu-extension (= 1.5.1)
-      sensu-extensions (= 1.7.1)
-      sensu-json (= 2.0.1)
-      sensu-logger (= 1.2.1)
-      sensu-redis (= 2.1.0)
-      sensu-settings (= 9.9.0)
-      sensu-spawn (= 2.2.1)
-      sensu-transport (= 7.0.2)
-    sensu-extension (1.5.1)
-      eventmachine
-    sensu-extensions (1.7.1)
+    eventmachine (1.0.3)
+    ffi (1.9.8)
+    multi_json (1.11.0)
+    rack (1.6.0)
+    rack-protection (1.5.3)
+      rack
+    sensu (0.17.1)
+      async_sinatra (= 1.0.0)
+      em-redis-unified (= 0.6.0)
+      eventmachine (= 1.0.3)
+      multi_json (= 1.11.0)
+      sensu-em (= 2.4.1)
+      sensu-extension (= 1.1.2)
+      sensu-extensions (= 1.2.0)
+      sensu-logger (= 1.0.0)
+      sensu-settings (= 1.3.0)
+      sensu-spawn (= 1.1.0)
+      sensu-transport (= 2.4.0)
+      sinatra (= 1.3.5)
+      thin (= 1.5.0)
+      uuidtools (= 2.1.4)
+    sensu-em (2.4.1)
+    sensu-extension (1.1.2)
+      sensu-em
+    sensu-extensions (1.2.0)
+      multi_json
+      sensu-em
       sensu-extension
-      sensu-extensions-debug (= 1.0.0)
-      sensu-extensions-json (= 1.0.0)
-      sensu-extensions-occurrences (= 1.1.0)
-      sensu-extensions-only-check-output (= 1.0.0)
-      sensu-extensions-ruby-hash (= 1.0.0)
-      sensu-json (>= 1.1.0)
       sensu-logger
       sensu-settings
-    sensu-extensions-debug (1.0.0)
-      sensu-extension
-    sensu-extensions-json (1.0.0)
-      sensu-extension
-    sensu-extensions-occurrences (1.1.0)
-      sensu-extension
-    sensu-extensions-only-check-output (1.0.0)
-      sensu-extension
-    sensu-extensions-ruby-hash (1.0.0)
-      sensu-extension
-    sensu-json (2.0.1)
-      oj (= 2.14.6)
-    sensu-logger (1.2.1)
-      eventmachine
-      sensu-json
-    sensu-redis (2.1.0)
-      eventmachine
-    sensu-settings (9.9.0)
-      parse-cron
-      sensu-json (>= 1.1.0)
-    sensu-spawn (2.2.1)
-      childprocess (= 0.5.8)
+    sensu-logger (1.0.0)
+      multi_json
+      sensu-em
+    sensu-settings (1.3.0)
+      multi_json
+    sensu-spawn (1.1.0)
+      childprocess (= 0.5.3)
       em-worker (= 0.0.2)
-      eventmachine
-    sensu-transport (7.0.2)
-      amq-protocol (= 2.0.1)
-      amqp (= 1.6.0)
-      eventmachine
-      sensu-redis (>= 1.0.0)
+      sensu-em
+    sensu-transport (2.4.0)
+      amqp (= 1.5.0)
+      sensu-em
+    sinatra (1.3.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.3)
+      tilt (~> 1.3, >= 1.3.3)
+    thin (1.5.0)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
+    tilt (1.4.1)
+    uuidtools (2.1.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   sensu
-
-BUNDLED WITH
-   1.14.4
