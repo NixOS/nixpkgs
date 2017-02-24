@@ -3508,8 +3508,6 @@ with pkgs;
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
-  psi = callPackage ../applications/networking/instant-messengers/psi { };
-
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pssh = callPackage ../tools/networking/pssh { };
@@ -6542,6 +6540,8 @@ with pkgs;
   lttng-ust = callPackage ../development/tools/misc/lttng-ust { };
 
   lttv = callPackage ../development/tools/misc/lttv { };
+
+  massif-visualizer = kde4.callPackage ../development/tools/analysis/massif-visualizer { };
 
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
@@ -12519,6 +12519,10 @@ with pkgs;
     tcl = tcl-8_5;
   };
 
+  amarok = kde4.callPackage ../applications/audio/amarok {
+    ffmpeg = ffmpeg_2;
+  };
+
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
@@ -12727,6 +12731,11 @@ with pkgs;
   calcurse = callPackage ../applications/misc/calcurse { };
 
   calibre = qt5.callPackage ../applications/misc/calibre { };
+
+  calligra = kde4.callPackage ../applications/office/calligra {
+    vc = vc_0_7;
+    oxygen_icons = kde5.oxygen-icons5;
+  };
 
   camlistore = callPackage ../applications/misc/camlistore { };
 
@@ -13970,7 +13979,15 @@ with pkgs;
     boost = boost155;
   };
 
+  k3b-original = lowPrio (kde4.callPackage ../applications/misc/k3b { });
+
+  k3b = kde4.callPackage ../applications/misc/k3b/wrapper.nix { };
+
   k9copy = qt5.callPackage ../applications/video/k9copy {};
+
+  kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
+
+  kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
   kdeconnect = qt5.callPackage ../applications/misc/kdeconnect { };
 
@@ -13994,6 +14011,8 @@ with pkgs;
 
   keymon = callPackage ../applications/video/key-mon { };
 
+  kgraphviewer = kde4.callPackage ../applications/graphics/kgraphviewer { };
+
   khal = callPackage ../applications/misc/khal { };
 
   khard = callPackage ../applications/misc/khard { };
@@ -14015,12 +14034,16 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  kmplayer = kde4.callPackage ../applications/video/kmplayer { };
+
   konversation = qt5.callPackage ../applications/networking/irc/konversation { };
 
   krita = qt5.callPackage ../applications/graphics/krita {
     vc = vc_0_7;
     openjpeg = openjpeg_1;
   };
+
+  krusader = kde4.callPackage ../applications/misc/krusader { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
@@ -14770,6 +14793,8 @@ with pkgs;
     notifySupport   = config.profanity.notifySupport   or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
+
+  psi = kde4.callPackage ../applications/networking/instant-messengers/psi { };
 
   psol = callPackage ../development/libraries/psol/default.nix { };
 
@@ -15981,6 +16006,8 @@ with pkgs;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
+  zanshin = kde4.callPackage ../applications/office/zanshin { };
+
   zathura = callPackage ../applications/misc/zathura {
     useMupdf = config.zathura.useMupdf or true;
   };
@@ -16678,45 +16705,11 @@ with pkgs;
       });
 
       self = lib.makeScope deps.newScope (self: with self;
-        (deps.callPackage ../desktops/kde-4.14 {
+        deps.callPackage ../desktops/kde-4.14 {
           callPackageOrig = pkgs.callPackage;
           inherit (self) callPackage;
-        }) // {
-
-        libcanberra = libcanberra_kde;
-
-        amarok = callPackage ../applications/audio/amarok {
-          ffmpeg = ffmpeg_2;
-        };
-
-        calligra = callPackage ../applications/office/calligra {
-          vc = vc_0_7;
-          oxygen_icons = kde5.oxygen-icons5;
-        };
-
-        k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
-
-        k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
-
-        kadu = callPackage ../applications/networking/instant-messengers/kadu { };
-
-        kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
-
-        kmplayer = callPackage ../applications/video/kmplayer { };
-
-        ktikz = callPackage ../applications/graphics/ktikz { };
-
-        krusader = callPackage ../applications/misc/krusader { };
-
-        massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
-        psi = callPackage ../applications/networking/instant-messengers/psi { };
-
-        telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
-
-        zanshin = callPackage ../applications/office/zanshin { };
-
-      });
-
+        }
+      );
     in recurseIntoAttrs self;
 
   lumina = callPackage ../desktops/lumina { };
