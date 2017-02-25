@@ -194,7 +194,7 @@ stdenv.mkDerivation ({
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    export PATH="${ghc}/bin:$PATH"
+    export PATH="${if ghc.isGhcjs or false then ghcEnv else ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"

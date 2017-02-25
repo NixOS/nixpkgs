@@ -88,6 +88,10 @@
   ]
 
 , stage2 ? import ./stage2.nix
+
+, patches ? [ ./ghcjs.patch ]
+
+, ghcLibdir ? null
 }:
 let
   inherit (bootPkgs) ghc;
@@ -116,7 +120,7 @@ in mkDerivation (rec {
   testDepends = [
     HUnit test-framework test-framework-hunit
   ];
-  patches = [ ./ghcjs.patch ];
+  inherit patches;
   postPatch = ''
     substituteInPlace Setup.hs \
       --replace "/usr/bin/env" "${coreutils}/bin/env"
@@ -159,6 +163,7 @@ in mkDerivation (rec {
         --with-cabal ${cabal-install}/bin/cabal \
         --with-gmp-includes ${gmp.dev}/include \
         --with-gmp-libraries ${gmp.out}/lib
+      ${if isNull ghcLibdir then "" else ''echo "${ghcLibdir}" > "$out/lib/ghcjs-${version}/ghc_libdir"''}
   '';
   passthru = let
     ghcjsNodePkgs = callPackage ../../../top-level/node-packages.nix {
