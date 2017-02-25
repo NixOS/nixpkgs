@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    inherit (src.meta) homepage;
     description = "Decentralized Issue Tracking for git";
-    inherit (src) homepage;
     license = licenses.gpl2;
     maintainers = with maintainers; [ profpatsch matthiasbeyer ];
   };
