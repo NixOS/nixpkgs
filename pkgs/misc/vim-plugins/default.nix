@@ -399,6 +399,17 @@ rec {
 
   };
 
+  vim-indent-object = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-indent-object-2015-08-11";
+    src = fetchgit {
+      url = "git://github.com/michaeljsmith/vim-indent-object";
+      rev = "1d3e4aac0117d57c3e1aaaa7e5a99f1d7553e01b";
+      sha256 = "1xxl5pwbz56qjfxw6l686m1qc4a3q0r7afa9r5gjhgd1jy67z7d7";
+    };
+    dependencies = [];
+
+  };
+
   vim-nix = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-nix-2016-11-02";
     src = fetchgit {
@@ -617,6 +628,17 @@ rec {
       url = "git://github.com/eikenb/acp";
       rev = "5c627cec37d0d3b1670cb250d84e176e8b0c644e";
       sha256 = "0h7s4nvxin7m2caka7g1hhlxj1bbiwsvw8s2lqwlh7nq43v23ghg";
+    };
+    dependencies = [];
+
+  };
+
+  argtextobj = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "argtextobj-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/argtextobj.vim";
+      rev = "f3fbe427f7b4ec436416a5816d714dc917dc530b";
+      sha256 = "1l4jh5hdmky1qj5z26jpnk49a6djjcvzyyr6pknrrgb8rzkiln48";
     };
     dependencies = [];
 
