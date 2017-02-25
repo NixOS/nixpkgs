@@ -105,7 +105,9 @@ in stdenv.mkDerivation (rec {
     "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ (lib.optional ("${cross.config}" == "aarch64-apple-darwin14") "--disable-large-address-space");
+  ] ++
+    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+    lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
   buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
 
