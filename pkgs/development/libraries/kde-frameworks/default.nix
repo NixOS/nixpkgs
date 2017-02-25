@@ -51,9 +51,7 @@ let
 
       });
 
-    kdeFramework = let
-      broken = builtins.compareVersions self.qtbase.version "5.6.0" < 0;
-    in args:
+    kdeFramework = args:
       let
         inherit (args) name;
         inherit (srcs."${name}") src version;
@@ -67,7 +65,6 @@ let
           ];
           platforms = lib.platforms.linux;
           homepage = "http://www.kde.org";
-          inherit broken;
         } // (args.meta or {});
       });
 
