@@ -1,12 +1,12 @@
 {stdenv, fetchFromGitHub, mono}:
 stdenv.mkDerivation rec {
   name = "wavefunctioncollapse-${version}";
-  version = "0.0pre20160930";
+  version = "0.0pre20170130";
   src = fetchFromGitHub {
     owner = "mxgmn";
     repo = "WaveFunctionCollapse";
-    rev = "333f592b6612da43ec475c988c09325378c662e9";
-    sha256 = "1cpwn52ka1zsi2yc7rfg5r9ll2kjgzabx4a5axcp9c4ph5qzsza6";
+    rev = "ef660c037b1d7c4ebce66efc625af2bb2f2111c0";
+    sha256 = "1dr5fvdgn1jqqacby6rrqm951adx3jw0j70r5i8pmrqnnw482l8m";
   };
   buildPhase = ''
     mcs *.cs -out:wavefunctioncollapse.exe -r:System.Drawing
