@@ -33,13 +33,13 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "4";
+  minor = "5";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}${if minor == "" then "" else "." + minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "0a4psqsf71vc6hfgyv55jclsx8yb7lf4w840qlq6cq8j3hsjaavi";
+    sha256 = "11w9v0l9lf504nkxlb91y5r9x403ikl626mjd1lf4fj44yz76maj";
   };
 
   patches = [ ./i386.patch ];

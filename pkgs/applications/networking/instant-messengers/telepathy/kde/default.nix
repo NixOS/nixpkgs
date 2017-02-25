@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, automoc4, cmake, gettext, perl, pkgconfig
-, telepathy_qt, kdelibs, kde_workspace, dbus_glib, dbus_libs, farstream
+, telepathy_qt, kdelibs4, kde_workspace, dbus_glib, dbus_libs, farstream
 , qt_gstreamer1, telepathy_glib, telepathy_logger
 , qjson, flex, bison, qca2 }:
 
@@ -48,12 +48,12 @@ let
         nativeBuildInputs =
           [ automoc4 cmake gettext perl pkgconfig ]
           ++ (stdenv.lib.attrByPath [ key ] [] extraNativeBuildInputs);
-        buildInputs = [ kdelibs telepathy_qt ]
+        buildInputs = [ kdelibs4 telepathy_qt ]
           ++ stdenv.lib.optional (name != "ktp-common-internals") ktp.common_internals
           ++ (stdenv.lib.attrByPath [ key ] [] extraBuildInputs);
 
         meta = {
-          inherit (kdelibs.meta) platforms;
+          inherit (kdelibs4.meta) platforms;
           maintainers = [ stdenv.lib.maintainers.urkud ];
         };
       }

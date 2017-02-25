@@ -399,10 +399,7 @@ let
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
-    spacetime_lib = if lib.versionOlder "4.04" ocaml.version then
-    callPackage ../development/tools/ocaml/ocamlbuild { }
-    else
-    null;
+    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
