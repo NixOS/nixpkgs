@@ -9343,8 +9343,8 @@ with pkgs;
 
   mkLibsForQt5 = self: with self;
     let kdeFrameworks = import ../development/libraries/kde-frameworks {
-          inherit stdenv lib kdeDerivation makeSetupHook makeWrapper fetchurl buildEnv;
-          inherit (self) callPackage;
+          inherit (self) newScope;
+          inherit kdeDerivation lib fetchurl;
         };
     in {
 
