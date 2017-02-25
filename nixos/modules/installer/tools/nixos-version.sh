@@ -91,7 +91,7 @@ if [[ "$all" = "1" ]] || [[ "$id" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Distributor ID:\t"
   fi
-  echo $ID
+  echo $NAME
 fi
 
 if [[ "$all" = "1" ]] || [[ "$description" = "1" ]]; then
@@ -115,16 +115,14 @@ if [[ "$all" = "1" ]] || [[ "$revision" = "1" ]]; then
   fi
   # TODO: echo "@nixosRevision@"?
   # Revision comes from: VERSION="16.09.git.effc189 (Flounder)" -> effc189
-  echo $(echo $VERSION | awk '{print $1}' | rev | cut -d. -f1 | rev)
+  echo $(echo $VERSION_ID | rev | cut -d. -f1 | rev)
 fi
 
 if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Codename:\t"
   fi
-
-  # Codename comes from: VERSION="16.09.git.effc189 (Flounder)" -> Flounder
-  echo $(echo $VERSION | awk '{print $2}' | tr -d \(\))
+  echo $(echo $VERSION_CODENAME)
 fi
 
 exit 0
