@@ -28149,6 +28149,10 @@ EOF
     inherit (pkgs) libasyncns pkgconfig;
   };
 
+  libarcus = callPackage ../development/python-modules/libarcus {
+    protobuf = self.protobuf3_0;
+  };
+
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
     version = "0.9.2";
