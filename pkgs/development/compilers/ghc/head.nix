@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+{ stdenv, lib, fetchgit, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
 , autoconf, automake, happy, alex, python3, buildPlatform, targetPlatform
 , selfPkgs, cross ? null
 
@@ -105,7 +105,7 @@ in stdenv.mkDerivation (rec {
     "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
-  ];
+  ] ++ (lib.optional ("${cross.config}" == "aarch64-apple-darwin14") "--disable-large-address-space");
 
   buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
 
