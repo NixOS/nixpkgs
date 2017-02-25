@@ -84,6 +84,17 @@ let
 
   extraConfig = name: {
     boot.loader.grub.enable = false;
+    boot.initrd.kernelModules = [ "virtio" ];
+
+    fileSystems = {
+      "/".device = "/dev/vda";
+      "/nix/store" = {
+        device = "store";
+        fsType = "9p";
+        # TODO: review these options, the first 3 come from containers.nix and the last one from http://serverfault.com/a/757770
+        options = [ "trans=virtio" "version=9p2000.L" "cache=loose" "msize=262144" ];
+      };
+    };
 
     networking = {
       hostName = mkDefault name;
@@ -104,31 +115,33 @@ let
   startVM = name:
     let mcfg = cfg.machines.${name}; in
     ''
-      #!${pkgs.stdenv.shell}
+      image="${cfg.imagesPath}/${name}.img"
+      console="${cfg.consolePath}/${name}"
+      store="${cfg.storesPath}/${name}"
+      persist="${cfg.persistPath}/${name}"
 
-      image = "${cfg.imagesPath}/${name}.img"
-      store = "${cfg.storesPath}/${name}"
-      persist = "${cfg.persistPath}/${name}"
+      mkdir -p "$store" "$persist" "${cfg.imagesPath}" "${cfg.consolePath}"
+      mkdir -p ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
+
       if [ \! -e "$image" ]; then
-        mkdir -p "$store" "$persist"
-        mkdir ${concatStringsSep " " (map (x: "$persist/" + x) mcfg.persistent)}
-
-        mkdir -p "${cfg.imagesPath}"
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
           ${toString mcfg.diskSize}M || exit 1
       fi
 
       # TODO: handle shared and persisted
       # TODO: Have a look at regInfo (@qemu-vm.nix) and understand what it's doing
+      # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
       exec ${pkgs.qemu}/bin/qemu-kvm \
         -name ${name} \
+        -nographic \
+        -serial unix:"$console",server,nowait \
         -m ${toString mcfg.memorySize} \
         ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
-        -virtfs local,path="$store",security_model=none,mount_tag=store \
-        -drive file="$image",if=virtio \
+        -virtfs local,path="/nix/store",security_model=none,mount_tag=store \
+        -drive file="$image",if=virtio,media=disk \
         -kernel ${mcfg.config.system.build.toplevel}/kernel \
         -initrd ${mcfg.config.system.build.toplevel}/initrd \
-        -append "$(cat ${mcfg.config.system.build.toplevel}/kernel-params) init=${mcfg.config.system.build.toplevel}/init console=ttyS0 \
+        -append "$(cat ${mcfg.config.system.build.toplevel}/kernel-params) init=${mcfg.config.system.build.toplevel}/init console=ttyS0 allowShell=1" \
         $@
     '';
 
@@ -179,6 +192,17 @@ in
       type = types.str;
       default = "/var/lib/vm/stores";
       description = "Path to the stores";
+    };
+    consolePath = mkOption {
+      type = types.str;
+      default = "/var/lib/vm/consoles";
+      description =
+        ''
+          Path to unix-domain sockets with the serial consoles of the VMs. Use
+          <command>nc -U
+          <replaceable>/var/lib/vm/consoles/vmname</replaceable></command>
+          to connect.
+        '';
     };
 
     machines = mkOption {
