@@ -385,6 +385,7 @@ in
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs
