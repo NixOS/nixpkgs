@@ -32010,6 +32010,8 @@ EOF
     };
   };
 
+  uranium = callPackage ../development/python-modules/uranium { };
+
   urlscan = callPackage ../applications/misc/urlscan { };
 
   vine = buildPythonPackage rec {
