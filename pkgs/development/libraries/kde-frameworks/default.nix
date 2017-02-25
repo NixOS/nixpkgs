@@ -54,10 +54,6 @@ let
         } // (args.meta or {});
       });
 
-    kdeWrapper = import ./kde-wrapper.nix {
-      inherit stdenv lib makeWrapper buildEnv;
-    };
-
     attica = callPackage ./attica.nix {};
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};

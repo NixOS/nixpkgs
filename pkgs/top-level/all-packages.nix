@@ -271,6 +271,10 @@ with pkgs;
 
   kdeDerivation = import ../build-support/kde/derivation.nix { inherit stdenv lib; };
 
+  kdeWrapper = import ../build-support/kde/wrapper.nix {
+    inherit stdenv lib makeWrapper buildEnv;
+  };
+
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
