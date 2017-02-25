@@ -15,8 +15,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = if md5 != null then "md5" else "sha256";
   outputHashMode = "recursive";
-  outputHash = if md5 != null then
-    (stdenv.lib.fetchMD5warn "fetchhg" url md5) else sha256;
+  outputHash = if md5 != null then md5 else sha256;
 
   inherit url rev;
   preferLocalBuild = true;

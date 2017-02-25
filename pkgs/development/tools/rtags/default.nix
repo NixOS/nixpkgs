@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
-  version = "2.3";
+  version = "2.8-p1";
 
   buildInputs = [ cmake llvmPackages.llvm openssl llvmPackages.clang emacs ]
-    ++ lib.optional stdenv.isDarwin apple_sdk.sdk;
+    ++ lib.optionals stdenv.isDarwin [ apple_sdk.sdk apple_sdk.frameworks.CoreServices ];
 
   preConfigure = ''
-    export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) " \
+    export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib" \
 
   '' + lib.optionalString stdenv.isDarwin ''
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchgit {
-    rev = "refs/tags/v${version}";
+    # rev = "refs/tags/v${version}"; # TODO Renable if sha1 below is tagged as release
+    rev = "f85bd60f00d51748ea159b00fda7b5bfa78ef571";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "05kzch88x2wiimygfli6vsr9i5hzgkybsya8qx4zvb6daip4b7yf";
+    sha256 = "0g9sgc763c5d695hjffhis19sbaqk8z4884szljf7kbrjxl17y78";
   };
 
   meta = {

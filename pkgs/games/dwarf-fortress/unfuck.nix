@@ -30,11 +30,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Breaks dfhack because of inlining.
+  hardeningDisable = [ "fortify" ];
+
   passthru.dfVersion = "0.43.05";
 
   meta = with stdenv.lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";
-    homepage = https://github.com/svenstaro/dwarf_fortress_unfuck;
+    homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

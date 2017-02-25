@@ -16,6 +16,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
+    cp ../{unix,generic}/*.h $out/include
   '';
 
   configureFlags = [

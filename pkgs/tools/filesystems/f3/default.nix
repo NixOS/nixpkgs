@@ -1,20 +1,34 @@
-{ stdenv, fetchFromGitHub }:
-
+{ stdenv, fetchFromGitHub
+, parted, udev
+}:
+let
+  version = "6.0-2016.11.16-unstable";
+in
 stdenv.mkDerivation rec {
   name = "f3-${version}";
-  version = "6.0";
 
   enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "AltraMayor";
     repo = "f3";
-    rev = "v${version}";
-    sha256 = "1azi10ba0h9z7m0gmfnyymmfqb8380k9za8hn1rrw1s442hzgnz2";
+    rev = "eabf001f69a788e64912bc9e812c118a324077d5";
+    sha256 = "0ypqyqwqiy3ynssdd9gamk1jxywg6avb45ndlzhv3wxh2qcframm";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [ parted udev ];
+
   patchPhase = "sed -i 's/-oroot -groot//' Makefile";
+
+  buildFlags   = [ "CFLAGS=-fgnu89-inline"  # HACK for weird gcc incompatibility with -O2
+                   "all"                    # f3read, f3write
+                   "extra"                  # f3brew, f3fix, f3probe
+                 ];
+
+  installFlags = [ "PREFIX=$(out)"
+                   "install"
+                   "install-extra"
+                 ];
 
   meta = {
     description = "Fight Flash Fraud";

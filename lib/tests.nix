@@ -135,6 +135,22 @@ runTests {
   # these tests assume attributes are converted to lists
   # in alphabetical order
 
+  testMkKeyValueDefault = {
+    expr = generators.mkKeyValueDefault ":" "f:oo" "bar";
+    expected = ''f\:oo:bar'';
+  };
+
+  testToKeyValue = {
+    expr = generators.toKeyValue {} {
+      key = "value";
+      "other=key" = "baz";
+    };
+    expected = ''
+      key=value
+      other\=key=baz
+    '';
+  };
+
   testToINIEmpty = {
     expr = generators.toINI {} {};
     expected = "";

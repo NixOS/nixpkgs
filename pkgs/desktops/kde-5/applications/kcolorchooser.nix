@@ -15,4 +15,7 @@ let
       propagatedBuildInputs = [ ki18n kwidgetsaddons kxmlgui ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/kcolorchooser" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/kcolorchooser" ];
+}

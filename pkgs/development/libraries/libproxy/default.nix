@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, zlib, glib }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+, dbus, networkmanager, spidermonkey_1_8_5 }:
 
 stdenv.mkDerivation rec {
   name = "libproxy-${version}";
@@ -14,9 +15,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  propagatedBuildInputs = [ zlib ]
-    # now some optional deps, but many more are possible
-    ++ [ glib ];
+
+  buildInputs = [ dbus networkmanager spidermonkey_1_8_5 ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

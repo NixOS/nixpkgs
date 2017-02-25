@@ -12,7 +12,7 @@ let
     ''
       xauth_path ${dmcfg.xauthBin}
       default_xserver ${dmcfg.xserverBin}
-      xserver_arguments ${dmcfg.xserverArgs}
+      xserver_arguments ${toString dmcfg.xserverArgs}
       sessiondir ${dmcfg.session.desktops}
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
@@ -20,6 +20,7 @@ let
       ${optionalString (cfg.defaultUser != null) ("default_user " + cfg.defaultUser)}
       ${optionalString (cfg.defaultUser != null) ("focus_password yes")}
       ${optionalString cfg.autoLogin "auto_login yes"}
+      ${optionalString (cfg.consoleCmd != null) "console_cmd ${cfg.consoleCmd}"}
       ${cfg.extraConfig}
     '';
 
@@ -105,6 +106,18 @@ in
         '';
       };
 
+      consoleCmd = mkOption {
+        type = types.nullOr types.str;
+        default = ''
+          ${pkgs.xterm}/bin/xterm -C -fg white -bg black +sb -T "Console login" -e ${pkgs.shadow}/bin/login
+        '';
+        defaultText = ''
+          ''${pkgs.xterm}/bin/xterm -C -fg white -bg black +sb -T "Console login" -e ''${pkgs.shadow}/bin/login
+        '';
+        description = ''
+          The command to run when "console" is given as the username.
+        '';
+      };
     };
 
   };

@@ -13,6 +13,8 @@ let
     useDisplayDevice = cfg.connectDisplay;
   };
 
+  useBbswitch = cfg.pmMethod == "bbswitch" || cfg.pmMethod == "auto" && useNvidia;
+
   primus = pkgs.primus.override {
     inherit useNvidia;
   };
@@ -61,12 +63,11 @@ in
         '';
       };
 
-      bbswitch = mkOption {
-        default = true;
-        type = types.bool;
+      pmMethod = mkOption {
+        default = "auto";
+        type = types.enum [ "auto" "bbswitch" "switcheroo" "none" ];
         description = ''
-          Set to true if you want to use bbswitch for power management of
-          unused card.
+          Set preferred power management method for unused card.
         '';
       };
 
@@ -75,8 +76,8 @@ in
 
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
-    boot.kernelModules = optional cfg.bbswitch [ "bbswitch" ];
-    boot.extraModulePackages = optional cfg.bbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11;
+    boot.kernelModules = optional useBbswitch "bbswitch";
+    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
 
     environment.systemPackages = [ bumblebee primus ];
 
@@ -85,7 +86,7 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "display-manager.service" ];
       serviceConfig = {
-        ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${cfg.group} --driver ${cfg.driver}";
+        ExecStart = "${bumblebee}/bin/bumblebeed --use-syslog -g ${cfg.group} --driver ${cfg.driver} --pm-method ${cfg.pmMethod}";
       };
     };
   };

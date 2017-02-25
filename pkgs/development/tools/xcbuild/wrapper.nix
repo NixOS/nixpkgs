@@ -60,9 +60,12 @@ stdenv.mkDerivation {
       --add-flags "DERIVED_DATA_DIR=." \
       --set DEVELOPER_DIR "$out"
     wrapProgram $out/bin/xcrun \
-      --add-flags "-sdk ${sdkName}" \
+      --set DEVELOPER_DIR "$out"
+    wrapProgram $out/bin/xcode-select \
       --set DEVELOPER_DIR "$out"
   '';
+
+  inherit (xcbuild) meta;
 
   passthru = {
     raw = xcbuild;

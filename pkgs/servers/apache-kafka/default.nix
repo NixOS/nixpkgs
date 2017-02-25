@@ -3,17 +3,17 @@
 
 let
   versionMap = {
-    "0.8" = { kafkaVersion = "0.8.2.1";
+    "0.8" = { kafkaVersion = "0.8.2.2";
               scalaVersion = "2.10";
-              sha256 = "1klri23fjxbzv7rmi05vcqqfpy7dzi1spn2084y1dxsi1ypfkvc9";
+              sha256 = "1azccf1k0nr8y1sfpjgqf9swyp87ypvgva68ci4kczwcx1z9d89v";
             };
     "0.9" = { kafkaVersion = "0.9.0.1";
               scalaVersion = "2.11";
               sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
             };
-    "0.10" = { kafkaVersion = "0.10.1.0";
+    "0.10" = { kafkaVersion = "0.10.1.1";
                scalaVersion = "2.11";
-               sha256 = "144k6bqg8q8f3x3nk05hvaaad8xa32qjifg785i15j69cnp355bd";
+               sha256 = "0a89dyvisa5vilfa0h0ljrb00l5n9h730yxy1058z7a2g43q0h0m";
              };
   };
 in

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, autoconf, automake
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext ];
+  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake ];
 
   propagatedBuildInputs = [
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090";
+  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090 -DMAC_OS_X_VERSION_MIN_REQUIRED=1090";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''

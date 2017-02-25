@@ -2,18 +2,20 @@
 , fetchurl
 , bison
 , pkgconfig
+, python27 # >= 2.6
+, swig2 # 2.0
 , multipleOutputs ? false #Uses incomplete features of nix!
 }:
 
 stdenv.mkDerivation (rec {
-  name = "sphinxbase-0.8";
+  name = "sphinxbase-5prealpha";
 
   src = fetchurl {
     url = "mirror://sourceforge/cmusphinx/${name}.tar.gz";
-    sha256 = "1a3c91g6rcfb2k8qyfhnd7s68ds6pxwv61xfp0ai1arbhx28jw2m";
+    sha256 = "0vr4k8pv5a8nvq9yja7kl13b5lh0f9vha8fc8znqnm8bwmcxnazp";
   };
 
-  buildInputs = [ pkgconfig bison ];
+  buildInputs = [ swig2 python27 pkgconfig bison ];
 
   meta = {
     description = "Support Library for Pocketsphinx";

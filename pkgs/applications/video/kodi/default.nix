@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, python2
-, boost, avahi, libdvdcss, lame, autoreconfHook
+, boost, avahi, libdvdcss, libdvdnav, libdvdread, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
 , libX11, xproto, inputproto, libxml2
@@ -38,18 +38,18 @@ assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
 
 let
-  rel = "Jarvis";
-  ffmpeg_2_8_6 = fetchurl {
-    url = "https://github.com/xbmc/FFmpeg/archive/2.8.6-${rel}-16.1.tar.gz";
-    sha256 = "1qp8b97298l2pnhhcp7xczdfwr7q7ibxlk4vp8pfmxli2h272wan";
+  rel = "Krypton";
+  ffmpeg_3_1_6 = fetchurl {
+    url = "https://github.com/xbmc/FFmpeg/archive/3.1.6-${rel}.tar.gz";
+    sha256 = "14jicb26s20nr3qmfpazszpc892yjwjn81zbsb8szy3a5xs19y81";
   };
 in stdenv.mkDerivation rec {
     name = "kodi-" + version;
-    version = "16.1";
+    version = "17.0";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "047xpmz78k3d6nhk1x9s8z0bw1b1w9kca46zxkg86p3iyapwi0kx";
+      sha256 = "0ib59x733yf8ivsw82qlsq43jn5214n668nrn5df2flpjcjgmzsb";
     };
 
     buildInputs = [
@@ -90,14 +90,17 @@ in stdenv.mkDerivation rec {
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
       substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
         --replace "/bin/bash" "${bash}/bin/bash -ex"
-      cp ${ffmpeg_2_8_6} tools/depends/target/ffmpeg/ffmpeg-2.8.6-${rel}-16.0.tar.gz
+      cp ${ffmpeg_3_1_6} tools/depends/target/ffmpeg/ffmpeg-3.1.6-${rel}.tar.gz
+      ln -s ${libdvdcss.src} tools/depends/target/libdvdcss/libdvdcss-master.tar.gz
+      ln -s ${libdvdnav.src} tools/depends/target/libdvdnav/libdvdnav-master.tar.gz
+      ln -s ${libdvdread.src} tools/depends/target/libdvdread/libdvdread-master.tar.gz
     '';
 
     preConfigure = ''
       ./bootstrap
     '';
 
-    configureFlags = [ ]
+    configureFlags = [ "--enable-libcec" ]
     ++ lib.optional (!sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"
     ++ lib.optional pulseSupport "--enable-pulse"

@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml camlp5 ];
 
+  patches = [ ./Makefile.patch ];
+
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"
     cp -a  . $out/lib/hol_light

@@ -4,9 +4,7 @@ bundlerEnv {
   name = "timetrap-1.10.0";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   meta = {
     description = "A simple command line time tracker written in ruby";

@@ -47,11 +47,31 @@ in
         '';
       };
 
+      gatewayAddress = mkOption {
+        type = types.str;
+        default = "/ip4/127.0.0.1/tcp/8080";
+        description = "Where the IPFS Gateway can be reached";
+      };
+
+      apiAddress = mkOption {
+        type = types.str;
+        default = "/ip4/127.0.0.1/tcp/5001";
+        description = "Where IPFS exposes its API to";
+      };
+
       enableGC = mkOption {
         type = types.bool;
         default = false;
         description = ''
           Whether to enable automatic garbage collection.
+        '';
+      };
+
+      emptyRepo = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set to true, the repo won't be initialized with help files
         '';
       };
 
@@ -84,27 +104,72 @@ in
       };
     };
 
+    systemd.services.ipfs-init = {
+      description = "IPFS Initializer";
+
+      after = [ "local-fs.target" ];
+      before = [ "ipfs.service" "ipfs-offline.service" ];
+
+      path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
+
+      preStart = ''
+        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
+      '';
+
+      script =  ''
+        if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
+          cd ${cfg.dataDir}
+          ${ipfs}/bin/ipfs init ${optionalString cfg.emptyRepo "-e"}
+        fi
+        ${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress}
+        ${ipfs}/bin/ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
+      '';
+
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        Type = "oneshot";
+        RemainAfterExit = true;
+        PermissionsStartOnly = true;
+      };
+    };
+
     systemd.services.ipfs = {
       description = "IPFS Daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "local-fs.target" ];
-      path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
+      after = [ "network.target" "local-fs.target" "ipfs-init.service" ];
 
-      preStart =
-        ''
-          install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
-          if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
-            cd ${cfg.dataDir}
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c "${ipfs}/bin/ipfs init"
-          fi
-        '';
+      conflicts = [ "ipfs-offline.service" ];
+      wants = [ "ipfs-init.service" ];
+
+      path  = [ pkgs.ipfs ];
 
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags}";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = true;
+        Restart = "on-failure";
+        RestartSec = 1;
+      };
+    };
+
+    systemd.services.ipfs-offline = {
+      description = "IPFS Daemon (offline mode)";
+
+      after = [ "local-fs.target" "ipfs-init.service" ];
+
+      conflicts = [ "ipfs.service" ];
+      wants = [ "ipfs-init.service" ];
+
+      path  = [ pkgs.ipfs ];
+
+      serviceConfig = {
+        ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags} --offline";
+        User = cfg.user;
+        Group = cfg.group;
+        Restart = "on-failure";
+        RestartSec = 1;
       };
     };
   };

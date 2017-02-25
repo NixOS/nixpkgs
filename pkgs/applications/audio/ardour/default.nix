@@ -2,8 +2,8 @@
 , fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper
-, perl, pkgconfig, python2, rubberband, serd, sord-svn, sratom
+, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper
+, perl, pkgconfig, python2, rubberband, serd, sord, sratom
 , taglib, vampSDK, dbus, fftw, pango, suil, libarchive }:
 
 let
@@ -16,7 +16,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "5.4";
+  tag = "5.5";
 
 in
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
-      makeWrapper pango perl pkgconfig python2 rubberband serd sord-svn
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
+      makeWrapper pango perl pkgconfig python2 rubberband serd sord
       sratom suil taglib vampSDK libarchive
     ];
 

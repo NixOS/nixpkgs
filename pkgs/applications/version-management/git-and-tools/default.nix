@@ -22,6 +22,10 @@ in
 rec {
   # Try to keep this generally alphabetized
 
+  bfg-repo-cleaner = callPackage ./bfg-repo-cleaner { };
+
+  bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
+
   darcsToGit = callPackage ./darcs-to-git { };
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
@@ -45,12 +49,16 @@ rec {
 
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
+  git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
+
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
   git-cola = callPackage ./git-cola { };
 
   git-crypt = callPackage ./git-crypt { };
+
+  git-dit = callPackage ./git-dit { };
 
   git-extras = callPackage ./git-extras { };
 
@@ -76,9 +84,7 @@ rec {
     inherit (darwin) Security;
   };
 
-  qgit = callPackage ./qgit { };
-
-  qgitGit = callPackage ./qgit/qgit-git.nix { };
+  qgit = qt5.callPackage ./qgit { };
 
   stgit = callPackage ./stgit {
   };

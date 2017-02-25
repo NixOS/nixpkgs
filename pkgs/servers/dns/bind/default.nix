@@ -1,23 +1,25 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
 , libseccomp ? null }:
 
-let version = "9.10.4-P4"; in
+let version = "9.10.4-P6"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "11lxkb7d79c75scrs28q4xmr0ii2li69zj1c650al3qxir8yf754";
+    sha256 = "0rgffdm0h6dks0np4h9q4kd8nyb3azrdxw2skqnjzd8ws78vzpx1";
   };
 
-  outputs = [ "bin" "lib" "dev" "out" "man" "dnsutils" "host" ];
+  outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
 
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   buildInputs = [ openssl libtool perl libxml2 ] ++
     stdenv.lib.optional stdenv.isLinux libseccomp;
+
+  STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
   configureFlags = [
     "--localstatedir=/var"
@@ -40,16 +42,13 @@ stdenv.mkDerivation rec {
     moveToOutput bin/isc-config.sh $dev
 
     moveToOutput bin/host $host
-    ln -sf $host/bin/host $bin/bin
 
     moveToOutput bin/dig $dnsutils
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
-    ln -sf $dnsutils/bin/{dig,nslookup,nsupdate} $bin/bin
-    ln -sf $host/bin/host $dnsutils/bin
 
-    for f in "$out/lib/"*.la; do
-      sed -i $f -e 's|-L${openssl.dev}|-L${openssl.out}|g'
+    for f in "$lib/lib/"*.la "$dev/bin/"{isc-config.sh,bind*-config}; do
+      sed -i "$f" -e 's|-L${openssl.dev}|-L${openssl.out}|g'
     done
   '';
 
@@ -60,5 +59,7 @@ stdenv.mkDerivation rec {
 
     maintainers = with stdenv.lib.maintainers; [viric peti];
     platforms = with stdenv.lib.platforms; unix;
+
+    outputsToInstall = [ "out" "dnsutils" "host" ];
   };
 }

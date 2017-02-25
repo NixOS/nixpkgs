@@ -6,14 +6,14 @@
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus_glib, glibc, qt4, kdelibs4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, makeWrapper, gsettings_desktop_schemas
 , defaultIconTheme, glib, ncurses
-, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
+, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" "hu" ]
 , withHelp ? true
 , kdeIntegration ? false
 }:
@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1mzsz9pd2k1lpvwf7r5q90qmdp57160362cmlxaj6bxz52gr9f2i";
+      sha256 = "0lv3jbnzzkr7nbivsl9jm9b4m9mxvngbmhz6yasblhi0m9ifkxmb";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "1qqpggcanchz0qqasc5xvginrpa5rx7ahj3dw2vk7n34xaarnni6";
+      sha256 = "1d29ppdkhhy5x8cric0l872x607ng02bnp2gvv5ck3blb759q68i";
     };
 
   };
@@ -58,16 +58,6 @@ in stdenv.mkDerivation rec {
 
   inherit (primary-src) src;
 
-  # we only have this problem on i686 ATM
-  patches = if stdenv.is64bit then null else [
-    (fetchurl {
-      name = "disable-flaky-tests.diff";
-      url = "https://anonscm.debian.org/git/pkg-openoffice/libreoffice.git/plain"
-        + "/patches/disable-flaky-tests.diff?h=libreoffice_5.1.5_rc2-1";
-      sha256 = "1v1aiqdi64iijjraj6v4ljzclrd9lqan54hmy2h6m20x3ab005wb";
-    })
-  ];
-
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
   # It also seems not to mention libdl explicitly in some places.
@@ -75,9 +65,7 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead 
   # of rasqal/rasqal.h
-  # curl upgrade to 7.50.0 (#17152) changes the libcurl headers slightly and
-  # therefore requires the -fpermissive flag until this package gets updated
-  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal -fpermissive";
+  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
 
   # If we call 'configure', 'make' will then call configure again without parameters.
   # It's their system.
@@ -127,8 +115,20 @@ in stdenv.mkDerivation rec {
     sed -e '/CPPUNIT_TEST(testTdf96536);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
     # rendering-dependent test
     sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
+    # tilde expansion in path processing checks the existence of $HOME
+    sed -e 's@rtl::OString sSysPath("~/tmp");@& return ; @' -i sal/qa/osl/file/osl_File.cxx
+    # rendering-dependent: on my computer the test table actually doesn't fit…
+    # interesting fact: test disabled on macOS by upstream
+    sed -re '/DECLARE_WW8EXPORT_TEST[(]testTableKeep, "tdf91083.odt"[)]/,+5d' -i ./sw/qa/extras/ww8export/ww8export.cxx
+    # Segfault on DB access
+    sed -e 's/CppunitTest_dbaccess_empty_stdlib_save//' -i ./dbaccess/Module_dbaccess.mk
     # one more fragile test?
     sed -e '/CPPUNIT_TEST(testTdf77014);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
+    # rendering-dependent tests
+    sed -e '/CPPUNIT_TEST(testCustomColumnWidthExportXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
+    sed -e '/CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
+    sed -e '/CPPUNIT_TEST(testChartImportXLS)/d' -i sc/qa/unit/subsequent_filters-test.cxx
+    sed -z -r -e 's/DECLARE_OOXMLEXPORT_TEST[(]testFlipAndRotateCustomShape,[^)]*[)].[{]/& return;/' -i sw/qa/extras/ooxmlexport/ooxmlexport7.cxx
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
@@ -216,7 +216,6 @@ in stdenv.mkDerivation rec {
     "--without-system-hsqldb"
     "--without-system-altlinuxhyph"
     "--without-system-lpsolve"
-    "--without-system-npapi-headers"
     "--without-system-libetonyek"
     "--without-system-libfreehand"
     "--without-system-liblangtag"
@@ -248,11 +247,13 @@ in stdenv.mkDerivation rec {
       librevenge libe-book libmwaw glm glew ncurses
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
     ]
-    ++ lib.optional kdeIntegration kde4.kdelibs;
+    ++ lib.optional kdeIntegration kdelibs4;
 
   passthru = {
     inherit srcs;
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite (Still/stable release)";
@@ -260,6 +261,5 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 }

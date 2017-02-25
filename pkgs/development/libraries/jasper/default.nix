@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, libjpeg, autoreconfHook }:
+{ stdenv, fetchurl, fetchpatch, libjpeg, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "jasper-1.900.28";
+  name = "jasper-2.0.10";
 
   src = fetchurl {
     # You can find this code on Github at https://github.com/mdadams/jasper
     # however note at https://www.ece.uvic.ca/~frodo/jasper/#download
     # not all tagged releases are for distribution.
     url = "http://www.ece.uvic.ca/~mdadams/jasper/software/${name}.tar.gz";
-    sha256 = "0nsiblsfpfa0dahsk6hw9cd18fp9c8sk1z5hdp19m33c0bf92ip9";
+    sha256 = "1s022mfxyw8jw60fgyj60lbm9h6bc4nk2751b0in8qsjwcl59n2l";
   };
 
   # newer reconf to recognize a multiout flag
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ libjpeg ];
 
   configureFlags = "--enable-shared";
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    moveToOutput bin "$bin"
+  '';
 
   meta = {
     homepage = https://www.ece.uvic.ca/~frodo/jasper/;

@@ -74,8 +74,9 @@ unwrapped = kdeApp {
   };
 };
 in
-kdeWrapper unwrapped
+kdeWrapper
 {
+  inherit unwrapped;
   targets = [ "bin/kdenlive" ];
   paths = [ kinit ];
 }

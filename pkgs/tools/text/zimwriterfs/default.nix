@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ automake autoconf libtool lzma pkgconfig zimlib file zlib ];
   setSourceRoot = "cd openzim-*/zimwriterfs; export sourceRoot=`pwd`";
-  preConfigurePhases = [ "./autogen.sh" ];
+  preConfigure = "./autogen.sh";
 
   meta = {
     description = "A console tool to create ZIM files";

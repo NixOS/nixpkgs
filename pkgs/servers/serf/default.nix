@@ -1,17 +1,24 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "serf-${version}";
-  version = "20150515-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "668982d8f90f5eff4a766583c1286393c1d27f68";
+  version = "0.8.1";
+  rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/serf";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "serf";
     inherit rev;
-    url = "https://github.com/hashicorp/serf";
-    sha256 = "1h05h5xhaj27r1mh5zshnykax29lqjhfc0bx4v9swiwb873c24qk";
+    sha256 = "1arakjvhyasrk52vhxas2ghlrby3i3wj59r7sjrkbpln2cdbqnlx";
   };
 
-  goDeps = ./deps.nix;
+  meta = with stdenv.lib; {
+    description = "Tool for service orchestration and management";
+    homepage = "https://www.serf.io/";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ pradeepchhetri ];
+  };
 }

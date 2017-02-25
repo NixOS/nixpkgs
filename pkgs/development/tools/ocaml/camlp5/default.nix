@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, transitional ? false}:
+{ stdenv, fetchzip, ocaml, transitional ? false }:
 
 let
   metafile = ./META;
@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation {
 
-  name = "camlp5${if transitional then "_transitional" else ""}-6.16";
+  name = "camlp5${if transitional then "_transitional" else ""}-6.17";
 
-  src = fetchurl {
-    url = http://camlp5.gforge.inria.fr/distrib/src/camlp5-6.16.tgz;
-    sha256 = "1caqa2rl7rav7pfwv1l1j0j18yr1qzyyqz0wa9519x91ckznqi7x";
+  src = fetchzip {
+    url = https://github.com/camlp5/camlp5/archive/rel617.tar.gz;
+    sha256 = "0finmr6y0lyd7mnl61kmvwd32cmmf64m245vdh1iy0139rxf814c";
   };
 
   buildInputs = [ ocaml ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
     '';
-    homepage = http://pauillac.inria.fr/~ddr/camlp5/;
+    homepage = https://camlp5.github.io/;
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [

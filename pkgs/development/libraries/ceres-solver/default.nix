@@ -3,7 +3,7 @@
 , fetchurl
 , cmake
 , google-gflags ? null
-, glog ? null
+, glog
 , runTests ? false
 }:
 
@@ -12,11 +12,6 @@ assert runTests -> google-gflags != null;
 
 let
   version = "1.10.0";
-
-  # glog currently doesn't build on darwin
-  # Issue: https://code.google.com/p/google-glog/issues/detail?id=121
-  useGlog = glog != null && !stdenv.isDarwin;
-
 in
 stdenv.mkDerivation {
   name = "ceres-solver-${version}";
@@ -26,8 +21,7 @@ stdenv.mkDerivation {
     sha256 = "20bb5db05c3e3e14a4062e2cf2b0742d2653359549ecded3e0653104ef3deb17";
   };
 
-  buildInputs = [ cmake ]
-    ++ stdenv.lib.optional useGlog glog
+  buildInputs = [ cmake glog ]
     ++ stdenv.lib.optional (google-gflags != null) google-gflags;
 
   inherit eigen;
@@ -38,7 +32,6 @@ stdenv.mkDerivation {
 
   cmakeFlags = "
     -DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3
-    ${if !useGlog then "-DMINIGLOG=ON" else ""}
   ";
 
   meta = with stdenv.lib; {

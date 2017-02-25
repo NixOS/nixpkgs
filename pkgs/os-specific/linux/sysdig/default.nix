@@ -1,15 +1,15 @@
-{stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc}:
+{stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
 let
   inherit (stdenv.lib) optional optionalString;
   baseName = "sysdig";
-  version = "0.12.0";
+  version = "0.14.0";
 in
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "17nf2h5ajy333rwh91hzaw8zq2mnkb3lxy8fmbbs8qazgsvwz6c3";
+    sha256 = "14wy4p1q8rk3q4s8vczfhkk20z3kz8wvyxpi8qx0xc7px7z5da76";
   };
 
   buildInputs = [
@@ -17,6 +17,9 @@ stdenv.mkDerivation {
   ];
 
   hardeningDisable = [ "pic" ];
+
+  patches = [
+  ];
 
   postPatch = ''
     sed '1i#include <cmath>' -i userspace/libsinsp/{cursesspectro,filterchecks}.cpp

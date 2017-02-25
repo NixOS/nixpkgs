@@ -1,17 +1,17 @@
 {stdenv, fetchFromGitHub, ocaml, findlib, buildOcaml, type_conv, camlp4,
  ocamlmod, ocamlify, ounit, expect}:
 let
-  version = "0.9.2";
+  version = "0.9.3";
 in
 stdenv.mkDerivation {
-  name = "ocamlbuild";
+  name = "ocamlbuild-${version}";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "ocamlbuild";
     rev = version;
-    sha256 = "0q4bvik08v444g1pill9zgwal48xs50jf424lbryfvqghhw5xjjc";
+    sha256 = "1ikm51lx4jz5vmbvrdwsm5p59bwbz3pi22vqkyz5lmqcciyn69i3";
   };
 
   createFindlibDestdir = true;
@@ -25,18 +25,12 @@ stdenv.mkDerivation {
     "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
   '';
 
-  # configurePhase = "ocaml setup.ml -configure --prefix $out";
-  # buildPhase     = "ocaml setup.ml -build";
-  # installPhase   = "ocaml setup.ml -install";
-
-  # meta = with stdenv.lib; {
-  #   homepage = http://oasis.forge.ocamlcore.org/;
-  #   description = "Configure, build and install system for OCaml projects";
-  #   license = licenses.lgpl21;
-  #   platforms = ocaml.meta.platforms or [];
-  #   maintainers = with maintainers; [
-  #     vbgl z77z
-  #   ];
-  # };
+  meta = with stdenv.lib; {
+    homepage = https://github.com/ocaml/ocamlbuild/;
+    description = "A build system with builtin rules to easily build most OCaml projects";
+    license = licenses.lgpl2;
+    inherit (ocaml.meta) platforms;
+    maintainers = with maintainers; [ vbgl ];
+  };
 }
 

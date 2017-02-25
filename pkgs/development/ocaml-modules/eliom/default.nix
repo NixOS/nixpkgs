@@ -1,43 +1,32 @@
-{ stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
+{ stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml,
   js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
   ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
-  reactivedata, opam, ppx_tools, camlp4}:
+  reactivedata, opam, ppx_tools, ppx_deriving, findlib
+, ocamlbuild
+}:
 
-let ocamlVersion = (stdenv.lib.getVersion ocaml);
-  in
-
-(
-assert stdenv.lib.versionAtLeast ocamlVersion "4";
+assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "5.0.0";
+  version = "6.0.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "1g9wq2qpn0sgzyb6iq0h9afq5p68il4h8pc7jppqsislk87m09k7";
+    sha256 = "1yaqi5fdzvi2ga412chw5rk3533a3xamwfmias1crk793d43cmpc";
   };
 
   patches = [ ./camlp4.patch ];
 
-  buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
-                 js_of_ocaml ocaml_optcomp opam ppx_tools camlp4 ];
+  buildInputs = [ ocaml which findlib ocamlbuild ocaml_optcomp opam ppx_tools ];
 
-  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr
-                            calendar cryptokit ocamlnet ocaml_react ocaml_ssl
-                            ocaml_pcre ];
+  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr ocsigen_server ppx_deriving
+                            ocsigen_deriving js_of_ocaml
+                            calendar cryptokit ocamlnet ocaml_react ocaml_ssl ocaml_pcre ];
 
-  preConfigure = stdenv.lib.optionalString (!stdenv.lib.versionAtLeast ocamlVersion "4.02") ''
-      export PPX=false
-    '';
-
-  installPhase =
-  ''opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocamlVersion}/site-lib/
-  '';
+  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
 
   createFindlibDestdir = true;
 
@@ -57,8 +46,6 @@ stdenv.mkDerivation rec
 
     license = stdenv.lib.licenses.lgpl21;
 
-    platforms = ocaml.meta.platforms or [];
-
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };
-})
+}

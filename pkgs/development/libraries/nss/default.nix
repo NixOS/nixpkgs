@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.27.1";
+  version = "3.28.1";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_27_1_RTM/src/${name}.tar.gz";
-    sha256 = "fd3637a1930cd838239a89633a7ed9a18859ae9b599043f3a18f726dc4ec2a6b";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_28_1_RTM/src/${name}.tar.gz";
+    sha256 = "58cc0c05c0ed9523e6d820bea74f513538f48c87aac931876e3d3775de1a82ad";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];
@@ -23,10 +23,20 @@ in stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ ./nss-3.21-gentoo-fixups.patch
+    [ # Install a nss.pc (pkgconfig) file and nss-config script
+      # Upstream issue: https://bugzilla.mozilla.org/show_bug.cgi?id=530672
+      (fetchurl {
+        name = "nss-3.28-gentoo-fixups.patch";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/"
+            + "dev-libs/nss/files/nss-3.28-gentoo-fixups.patch"
+            + "?id=05c31f8cca591b3ce8219e4def7c26c7b1b130d6";
+        sha256 = "0z58axd1n7vq4kdp5mrb3dsg6di39a1g40s3shl6n2dzs14c1y2q";
+      })
       # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
       ./85_security_load.patch
     ];
+
+  patchFlags = "-p0";
 
   postPatch = ''
     # Fix up the patch from Gentoo.

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, unzip, openblas, gfortran }:
 
 stdenv.mkDerivation rec {
-  version = "3.12.6";
   name = "ipopt-${version}";
+  version = "3.12.6";
 
   src = fetchurl {
     url = "http://www.coin-or.org/download/source/Ipopt/Ipopt-${version}.zip";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A software package for large-scale nonlinear optimization";
-    homepage = https://projects.coin-or.org/Ipopt;
+    homepage = "https://projects.coin-or.org/Ipopt";
     license = licenses.epl10;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

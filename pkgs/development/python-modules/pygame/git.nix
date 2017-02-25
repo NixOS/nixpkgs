@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "http://www.pygame.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    broken = true;
   };
 }

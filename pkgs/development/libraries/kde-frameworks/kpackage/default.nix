@@ -1,10 +1,7 @@
-{ kdeFramework, lib, copyPathsToStore
-, ecm
-, karchive
-, kconfig
-, kcoreaddons
-, kdoctools
-, ki18n
+{
+  kdeFramework, fetchurl, lib, copyPathsToStore,
+  ecm, kdoctools,
+  karchive, kconfig, kcoreaddons, ki18n
 }:
 
 kdeFramework {

@@ -19,13 +19,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  inherit (topkg) buildPhase;
-
-  installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
-  '';
+  inherit (topkg) buildPhase installPhase;
 
   propagatedBuildInputs = [ xmlm ];
 

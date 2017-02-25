@@ -92,10 +92,15 @@ in
 
     users.extraGroups.gdm.gid = config.ids.gids.gdm;
 
+    # GDM needs different xserverArgs, presumable because using wayland by default.
+    services.xserver.tty = null;
+    services.xserver.display = null;
+
     services.xserver.displayManager.job =
       {
         environment = {
-          GDM_X_SERVER_EXTRA_ARGS = "${cfg.xserverArgs}";
+          GDM_X_SERVER_EXTRA_ARGS = toString
+            (filter (arg: arg != "-terminate") cfg.xserverArgs);
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "shfmt-${version}";
-  version = "0.2.0";
+  version = "1.1.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/mvdan/sh";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "mvdan";
     repo = "sh";
     inherit rev;
-    sha256 = "07jf9v6583vvmk07fp7xdlnh7rvgl6f06ib2588g3xf1wk9vrq3d";
+    sha256 = "0h1qy27z6j1cgkk3hkvl7w3wjqc5flgn92r3j6frn8k2wzwj7zhz";
   };
 
   meta = with stdenv.lib; {

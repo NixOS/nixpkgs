@@ -6,11 +6,15 @@ stdenv.mkDerivation {
   patches = [ ./CVE-2014-3618.patch ];
 
   # getline is defined differently in glibc now. So rename it.
+  # Without the .PHONY target "make install" won't install anything on Darwin.
   postPatch = ''
     sed -e "s%^RM.*$%#%" -i Makefile
     sed -e "s%^BASENAME.*%\BASENAME=$out%" -i Makefile
     sed -e "s%^LIBS=.*%LIBS=-lm%" -i Makefile
     sed -e "s%getline%thisgetline%g" -i src/*.c src/*.h
+    sed -e "3i\
+.PHONY: install
+" -i Makefile
   '';
 
   src = fetchurl {

@@ -32,6 +32,6 @@ in python2Packages.buildPythonApplication {
     homepage = "http://www.nongnu.org/duplicity";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric peti];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -20,6 +20,8 @@ let
 
     timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
 
+    editor = if cfg.editor then "True" else "False";
+
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
 in {
@@ -35,6 +37,20 @@ in {
       type = types.bool;
 
       description = "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+    };
+
+    editor = mkOption {
+      default = true;
+
+      type = types.bool;
+
+      description = ''
+        Whether to allow editing the kernel command-line before
+        boot. It is recommended to set this to false, as it allows
+        gaining root access by passing init=/bin/sh as a kernel
+        parameter. However, it is enabled by default for backwards
+        compatibility.
+      '';
     };
   };
 

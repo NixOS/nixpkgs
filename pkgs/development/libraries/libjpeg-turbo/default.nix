@@ -1,12 +1,13 @@
 { stdenv, fetchurl, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "libjpeg-turbo-1.5.0";
+  name = "libjpeg-turbo-${version}";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
-    sha256 = "0pq3lav976d6a1d16yyqrj1b4gmhk1ca4zar6zp00avxlqqpqfcz";
-  };
+    sha256 = "0v365hm6z6lddcqagjj15wflk66rqyw75m73cqzl65rh4lyrshj1";
+  }; # github releases still need autotools, surprisingly
 
   patches =
     stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")

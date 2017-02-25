@@ -32,6 +32,7 @@ in {
 
       services.urxvtd = {
         description = "urxvt terminal daemon";
+        path = [ pkgs.xsel ];
         serviceConfig = {
           ExecStart = "${pkgs.rxvt_unicode-with-plugins}/bin/urxvtd -o";
           Environment = "RXVT_SOCKET=%t/urxvtd-socket";

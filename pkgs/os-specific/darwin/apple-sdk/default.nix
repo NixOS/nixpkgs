@@ -31,6 +31,10 @@ let
       mv System/* .
       rmdir System
 
+      pushd lib
+      ln -s -L /usr/lib/libcups*.dylib .
+      popd
+
       cd Library/Frameworks/QuartzCore.framework/Versions/A/Headers
       for file in CI*.h; do
         rm $file

@@ -6,12 +6,13 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, libX11 ? null, xproto ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, libX11 ? null, xproto ? null, x11Support ? false
 , zlib
 , callPackage
 , self
-, python34Packages
 , CF, configd
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -23,7 +24,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  minorVersion = "5";
+  minorVersion = "6";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -44,7 +45,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "12l9klp778wklxmckhghniy5hklss8r26995pyd00qbllk4b2r7f";
+    sha256 = "0h2z248hkf8x1ix1z8npkqs9cq62i322sl4rcjdkp7mawsxjhd7i";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -53,6 +54,17 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
+
+  postPatch = optionalString (x11Support && (tix != null)) ''
+    substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+  ''
+    # Avoid picking up getentropy() from glibc >= 2.25, as that would break
+    # on older kernels.  http://bugs.python.org/issue29157
+    + optionalString stdenv.isLinux
+      ''
+        substituteInPlace Python/random.c --replace 'defined(HAVE_GETENTROPY)' '0'
+        cat Python/random.c
+      '';
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -111,11 +123,14 @@ in stdenv.mkDerivation {
 
   '';
 
-  passthru = rec {
+  passthru = let
+    pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+  in rec {
     inherit libPrefix sitePackages x11Support;
     executable = "${libPrefix}m";
     buildEnv = callPackage ../../wrapper.nix { python = self; };
-    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python34Packages; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+    pkgs = pythonPackages;
     isPy3 = true;
     isPy34 = true;
     is_py3k = true;  # deprecated

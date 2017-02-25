@@ -9,14 +9,14 @@ let
 in
 {
   options.programs.mosh = {
-      enable = mkOption {
-	description = ''
-	  Whether to enable mosh. Note, this will open ports in your firewall!
-	'';
-        default = false;
-	example = true;
-	type = lib.types.bool;
-      };
+    enable = mkOption {
+      description = ''
+        Whether to enable mosh. Note, this will open ports in your firewall!
+      '';
+      default = false;
+      example = true;
+      type = lib.types.bool;
+    };
   };
 
   config = mkIf cfg.enable {

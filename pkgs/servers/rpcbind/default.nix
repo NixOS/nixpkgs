@@ -1,24 +1,27 @@
 { fetchurl, stdenv, pkgconfig, libtirpc
 , useSystemd ? true, systemd }:
 
-let version = "0.2.3";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "rpcbind-${version}";
-  
+  version = "0.2.4";
+
   src = fetchurl {
     url = "mirror://sourceforge/rpcbind/${version}/${name}.tar.bz2";
-    sha256 = "0yyjzv4161rqxrgjcijkrawnk55rb96ha0pav48s03l2klx855wq";
+    sha256 = "0rjc867mdacag4yqvs827wqhkh27135rp9asj06ixhf71m9rljh7";
   };
 
   patches = [
     ./sunrpc.patch
-    ./0001-handle_reply-Don-t-use-the-xp_auth-pointer-directly.patch
   ];
 
   buildInputs = [ libtirpc ]
              ++ stdenv.lib.optional useSystemd systemd;
 
-  configureFlags = stdenv.lib.optional (!useSystemd) "--with-systemdsystemunitdir=no";
+  configureFlags = [
+    "--with-systemdsystemunitdir=${if useSystemd then "$(out)/etc/systemd/system" else "no"}"
+    "--enable-warmstarts"
+    "--with-rpcuser=rpc"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
 

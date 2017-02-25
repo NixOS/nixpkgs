@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "12c6z5yvp60v57f6nijifp14i56bb5614hac1qg528s9liaf8vml";
+  outputHash = "066ikswavq3l37x1s3pfdncyj77pvpa0kj14ax5dqb9njmsg0s11";
 
   buildInputs = [ curl ];
 

@@ -3,21 +3,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.1025";
+  version = "5.0-r1";
   name = "rawtherapee-" + version;
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "dc4bbe906ba92ddc66f98a3c26ce19822bfb99ab";
-    sha256 = "0c5za9s8533fiyl32378dq9rgd5044xi8y0wm2gkr7krbdnx74l3";
+    rev = "1077c4ba2e2dbe249884e6974c6050db8eb5e9c2";
+    sha256 = "1xqmkwprk3h9nhy6q562mkjdpynyg9ff7a92sdga50k56gi0aj0s";
   };
 
-  buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
-    lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx ];
-
-  patches = [
-    ./fix-glibmm-output.patch
+  buildInputs = [
+    pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
+    lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx
   ];
 
   cmakeFlags = [

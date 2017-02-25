@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, postgresql, python2 }:
+{ lib, stdenv, fetchurl, postgresql, python2, gnused }:
 
 stdenv.mkDerivation rec {
   name = "libpqxx-4.0.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f6wxspp6rx12fkasanb0z2g2gc8dhcfwnxagx8wwqbpg6ifsz09";
   };
 
-  buildInputs = [ postgresql python2 ];
+  buildInputs = [ postgresql python2 gnused ];
 
   preConfigure = ''
     patchShebangs .

@@ -1,4 +1,4 @@
-{ fetchurl, kde, kdelibs, nepomuk_core }:
+{ fetchurl, kde, kdelibs }:
 
 kde {
 
@@ -13,7 +13,7 @@ kde {
 
   setOutputFlags = false;
 
-  propagatedBuildInputs = [ kdelibs nepomuk_core ];
+  propagatedBuildInputs = [ kdelibs ];
 
   meta = {
     description = "KDE activities library and daemon";

@@ -1,3 +1,5 @@
+# To build, use:
+# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 let
@@ -27,7 +29,6 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = ["console=ttyS0,115200n8" "console=ttymxc0,115200n8" "console=ttyAMA0,115200n8" "console=ttyO0,115200n8" "console=tty0"];
-  boot.consoleLogLevel = 7;
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";
@@ -43,11 +44,9 @@ in
         enable_uart=1
       '';
       in ''
-        for f in bootcode.bin fixup.dat start.elf; do
-          cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/$f boot/
-        done
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
         cp ${pkgs.ubootRaspberryPi2}/u-boot.bin boot/u-boot-rpi2.bin
-        cp ${pkgs.ubootRaspberryPi3}/u-boot.bin boot/u-boot-rpi3.bin
+        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin boot/u-boot-rpi3.bin
         cp ${configTxt} boot/config.txt
         ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
       '';

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "mgba-${version}";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "1ysxyy888qdwjbgsh3xdzsx8f3a5yd1gqx54xvndpv9v3zqgr2jf";
+    sha256 = "1cpxiwzbywnjs3lrqa3bc9bj68plypx0br3lssd6p68c4wh01fyp";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];

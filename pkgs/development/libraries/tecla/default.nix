@@ -1,14 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tecla-1.6.2";
+  name = "tecla-1.6.3";
 
   src = fetchurl {
     url = "http://www.astro.caltech.edu/~mcs/tecla/lib${name}.tar.gz";
-    sha256 = "1f5p1v9ac5r1f6pjzwacb4yf8m6z19rv77p76j7fix34hd9dnqcc";
+    sha256 = "06pfq5wa8d25i9bdjkp4xhms5101dsrbg82riz7rz1a0a32pqxgj";
   };
-
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3";
 
   meta = {
     homepage = "http://www.astro.caltech.edu/~mcs/tecla/";

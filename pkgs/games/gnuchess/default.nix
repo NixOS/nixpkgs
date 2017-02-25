@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="gnuchess";
-    version="6.2.3";
+    version="6.2.4";
     name="${baseName}-${version}";
     url="mirror://gnu/chess/${name}.tar.gz";
-    sha256="10hvnfhj9bkpz80x20jgxyqvgvrcgfdp8sfcbcrf1dgjn9v936bq";
+    sha256="1vw2w3jwnmn44d5vsw47f8y70xvxcsz9m5msq9fgqlzjch15qhiw";
   };
   buildInputs = [
     flex
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     inherit (s) version;
     description = "GNU Chess engine";
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl3Plus;
   };
 }

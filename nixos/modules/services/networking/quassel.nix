@@ -25,8 +25,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.kde4.quasselDaemon;
-        defaultText = "pkgs.kde4.quasselDaemon";
+        default = pkgs.quasselDaemon;
+        defaultText = "pkgs.quasselDaemon";
         description = ''
           The package of the quassel daemon.
         '';

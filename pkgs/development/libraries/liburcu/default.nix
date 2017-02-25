@@ -1,19 +1,24 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.6";
+  version = "0.9.3";
   name = "liburcu-${version}";
 
   src = fetchurl {
     url = "http://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-    sha256 = "08dbfkdj4pm9s3q56nwa1vzldkf1jav61g2r4xq7mfhlw2yd79di";
+    sha256 = "01j0xp3f0w147yfyzybkjvb7i67i7prsvnkssgvgwry9lvk35khv";
   };
+
+  nativeBuildInputs = stdenv.lib.optional doCheck perl;
+
+  preCheck = "patchShebangs tests/unit";
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Userspace RCU (read-copy-update) library";
     homepage = http://lttng.org/urcu;
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 

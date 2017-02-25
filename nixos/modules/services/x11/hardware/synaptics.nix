@@ -19,7 +19,7 @@ let cfg = config.services.xserver.synaptics;
       Option "TapButton3" "0"
     '';
   pkg = pkgs.xorg.xf86inputsynaptics;
-  etcFile = "X11/xorg.conf.d/50-synaptics.conf";
+  etcFile = "X11/xorg.conf.d/70-synaptics.conf";
 in {
 
   options = {
@@ -172,7 +172,7 @@ in {
     services.xserver.modules = [ pkg.out ];
 
     environment.etc."${etcFile}".source =
-      "${pkg.out}/share/X11/xorg.conf.d/50-synaptics.conf";
+      "${pkg.out}/share/X11/xorg.conf.d/70-synaptics.conf";
 
     environment.systemPackages = [ pkg ];
 

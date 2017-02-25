@@ -6,17 +6,17 @@
 with stdenv.lib;
 
 let
-  baseVersion = "4.1";
-  revision = "0";
-  version = "${baseVersion}.${revision}";
+  baseVersion = "4.2";
+  revision = "1";
 in
 
 stdenv.mkDerivation rec {
   name = "qtcreator-${version}";
+  version = "${baseVersion}.${revision}";
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "00xlzw01ngza54ssmwz2ryahjlrbniy2q3p174xri1pxvcih4b21";
+    sha256 = "0f2slaf579q2anflf524lbhmpwrwy3hzjfxzs10n44r7s7yc4dr5";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
   buildFlags = optional withDocumentation "docs";
 
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
+
+  preBuild = optional withDocumentation ''
+    ln -s ${qtbase}/share/doc $NIX_QT5_TMP/share
+  '';
 
   postInstall = ''
     # Install desktop file

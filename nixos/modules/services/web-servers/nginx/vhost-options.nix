@@ -8,6 +8,15 @@
 with lib;
 {
   options = {
+    serverName = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Name of this virtual host. Defaults to attribute name in virtualHosts.
+      '';
+      example = "example.org";
+    };
+
     serverAliases = mkOption {
       type = types.listOf types.str;
       default = [];

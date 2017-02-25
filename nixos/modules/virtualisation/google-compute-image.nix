@@ -23,7 +23,7 @@ in
 
           postVM =
             ''
-              PATH=$PATH:${stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+              PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
               pushd $out
               mv $diskImageBase disk.raw
               tar -Szcf $diskImageBase.tar.gz disk.raw
@@ -125,7 +125,7 @@ in
     169.254.169.254 metadata.google.internal metadata
   '';
 
-  services.ntp.servers = [ "metadata.google.internal" ];
+  networking.timeServers = [ "metadata.google.internal" ];
 
   networking.usePredictableInterfaceNames = false;
 

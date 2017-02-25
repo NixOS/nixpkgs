@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, spidermonkey
+{ stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, spidermonkey_17
 , gobjectIntrospection, libxslt, docbook_xsl, docbook_xml_dtd_412
 , useSystemd ? stdenv.isLinux, systemd }:
 
 let
 
   system = "/var/run/current-system/sw";
-  setuid = "/var/setuid-wrappers"; #TODO: from <nixos> config.security.wrapperDir;
+  setuid = "/run/wrappers/bin"; #TODO: from <nixos> config.security.wrapperDir;
 
   foolVars = {
     SYSCONF = "/etc";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   buildInputs =
-    [ pkgconfig glib expat pam intltool spidermonkey gobjectIntrospection ]
+    [ pkgconfig glib expat pam intltool spidermonkey_17 gobjectIntrospection ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ] # man pages
     ++ stdenv.lib.optional useSystemd systemd;
 

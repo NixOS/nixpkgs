@@ -32,11 +32,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.7";
+  version = "6.8";
 
   src = fetchurl {
     url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "0v1nz07vzz0c7rwyz15kbagpl4l42n871vbwij4wrbk2lx22ksgy";
+    sha256 = "1l9z1a0r5zydr50cklx9xjw3l0pwnf64i10xq7112fl1r89q3qgv";
   };
 
   FONTCONFIG_FILE = fontsConf;

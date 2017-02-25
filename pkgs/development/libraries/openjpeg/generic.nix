@@ -11,7 +11,7 @@
 , testsSupport ? false
 , jdk ? null
 # Inherit generics
-, branch, version, revision, sha256, ...
+, branch, version, revision, sha256, patches ? [], ...
 }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     rev = revision;
     inherit sha256;
   };
+
+  inherit patches;
 
   outputs = [ "out" "dev" ];
 

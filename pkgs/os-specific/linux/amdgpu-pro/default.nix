@@ -30,9 +30,9 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "16.40";
+  version = "16.60";
   pname = "amdgpu-pro";
-  build = "16.40-348864";
+  build = "${version}-379184";
 
   libCompatDir = "/run/lib/${libArch}";
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
-    sha256 = "1c06lx07irmlpmbmgb3qcgpzj6q6rimszrbbdrgz8kqnfpcv3mjr";
+    sha256 = "1g90sryxw8y4abjgviibq34v3hr82ijgbaiqnxgafrf7g9s5m2yq";
     curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
   };
 
@@ -58,20 +58,10 @@ in stdenv.mkDerivation rec {
   '';
 
   modulePatches = [
-    ./patches/0001-Find-correct-System.map.patch
-    ./patches/0002-Fix-kernel-module-install-location.patch
-    ./patches/0003-Add-Gentoo-as-build-option.patch
-    ./patches/0004-Remove-extra-parameter-from-ttm_bo_reserve-for-4.7.0.patch
-    ./patches/0005-Remove-first-param-from-drm_gem_object_lookup.patch
-    ./patches/0006-Remove-vblank_disable_allowed-assignment.patch
-    ./patches/0007-Fix-__drm_atomic_helper_connector_destroy_state-call.patch
-    ./patches/0008-Change-seq_printf-format-for-64-bit-context.patch
-    ./patches/0009-Fix-vblank-calls.patch
-    ./patches/0010-Fix-crtc_gamma-functions-for-4.8.0.patch
-    ./patches/0011-Fix-drm_atomic_helper_swap_state-for-4.8.0.patch
-    ./patches/0012-Add-extra-flag-to-ttm_bo_move_ttm-for-4.8.0-rc2.patch
-    ./patches/0013-Remove-dependency-on-System.map.patch
-    ./patches/0014-disable-dal-by-default.patch
+    ./patches/0001-disable-firmware-copy.patch
+    ./patches/0002-linux-4.9-fixes.patch
+    ./patches/0003-Change-seq_printf-format-for-64-bit-context.patch
+    ./patches/0004-fix-warnings-for-Werror.patch
   ];
 
   patchPhase = optionalString (!libsOnly) ''
@@ -85,12 +75,23 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = optionalString (!libsOnly) ''
-    makeFlags="$makeFlags M=$(pwd)/usr/src/amdgpu-pro-${build}"
+    pushd usr/src/amdgpu-pro-${build}
+    makeFlags="$makeFlags M=$(pwd)"
+    patchShebangs pre-build.sh
+    ./pre-build.sh ${kernel.version}
+    popd
   '';
 
-  postBuild = optionalString (!libsOnly) ''
-    xz usr/src/amdgpu-pro-${build}/amd/amdgpu/amdgpu.ko
-  '';
+  modules = [
+    "amd/amdgpu/amdgpu.ko"
+    "amd/amdkcl/amdkcl.ko"
+    "ttm/amdttm.ko"
+  ];
+
+  postBuild = optionalString (!libsOnly)
+    (concatMapStrings (m: "xz usr/src/amdgpu-pro-${build}/${m}\n") modules);
+
+  NIX_CFLAGS_COMPILE = "-Werror";
 
   makeFlags = optionalString (!libsOnly)
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build modules";
@@ -125,10 +126,10 @@ in stdenv.mkDerivation rec {
   '' + ''
     popd
 
-  '' + optionalString (!libsOnly) ''
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/amd/amdgpu/amdgpu.ko.xz
-    cp usr/src/amdgpu-pro-${build}/amd/amdgpu/amdgpu.ko.xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/amd/amdgpu/amdgpu.ko.xz
-  '' + ''
+  '' + optionalString (!libsOnly)
+    (concatMapStrings (m:
+      "install -Dm444 usr/src/amdgpu-pro-${build}/${m}.xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/${m}.xz\n") modules)
+  + ''
     mv $out/etc/vulkan $out/share
     interpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
     libPath="$out/lib:$out/lib/gbm:$depLibPath"
@@ -137,7 +138,6 @@ in stdenv.mkDerivation rec {
       patchelf --interpreter "$interpreter" --set-rpath "$libPath" "$out/bin/$prog"
     done
   '' + ''
-    ln -s libgbm.so.1.0.0 $out/lib/libgbm.so.1
     ln -s ${makeLibraryPath [ncurses5]}/libncursesw.so.5 $out/lib/libtinfo.so.5
   '';
 

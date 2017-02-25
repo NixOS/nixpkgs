@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
-    libvdpau libvorbis lzma SDL soxr x264 x265 xvidcore zlib libopus
+    libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus
   ] ++ optional openglSupport mesa
     ++ optionals (!isDarwin && !isArm) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isArm) libva

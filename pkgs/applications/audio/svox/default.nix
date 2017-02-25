@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "svox-${version}";
-  version = "2016-01-25";
+  version = "2016-10-20";
 
   src = fetchgit {
     url = "https://android.googlesource.com/platform/external/svox";
-    rev = "dfb9937746b1828d093faf3b1494f9dc403f392d";
-    sha256 = "1gkfj5avikzmr2vv8bhf83n15jcbz4phz5j13l0qnh3gjzh4f1bk";
+    rev = "2dd8f16e4436520b93e93aa72b92acad92c0127d";
+    sha256 = "064h3zb9bn1z6xbv15iy6l4rlxx8fqzy54s898qvafjhz6kawj9g";
   };
 
   postPatch = ''

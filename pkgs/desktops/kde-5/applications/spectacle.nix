@@ -18,7 +18,8 @@ let
       ];
     };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/spectacle" ];
   paths = [ kipi-plugins ];
 }

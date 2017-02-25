@@ -23,7 +23,7 @@ let
       else additionalArgs="-logfile /var/log/X.$display.log"
       fi
 
-      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} $additionalArgs "$@"
+      exec ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} $additionalArgs "$@"
     '';
 
   usersConf = writeText "users.conf"

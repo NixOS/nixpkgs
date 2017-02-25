@@ -4,9 +4,7 @@ bundlerEnv {
   name = "chefdk-0.11.2";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   buildInputs = [ perl autoconf ];
 

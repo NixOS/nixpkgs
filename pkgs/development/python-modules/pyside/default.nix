@@ -1,7 +1,7 @@
 { lib, fetchurl, cmake, python, mkPythonDerivation, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
 mkPythonDerivation rec {
-  name = "${python.libPrefix}-pyside-${version}";
+  name = "pyside-${version}";
   version = "1.2.4";
 
   src = fetchurl {

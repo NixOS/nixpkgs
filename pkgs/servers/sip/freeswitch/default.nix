@@ -1,19 +1,19 @@
 { fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline
-, openssl, perl, sqlite, libjpeg, libzrtpcpp, speex, pcre
+, openssl, perl, sqlite, libjpeg, speex, pcre
 , ldns, libedit, yasm, which, lua, libopus, libsndfile }:
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.6.9";
+  name = "freeswitch-1.6.15";
 
   src = fetchurl {
     url = "http://files.freeswitch.org/freeswitch-releases/${name}.tar.bz2";
-    sha256 = "0g0x4m8rb2ybpxwrszb4w37rb10v9fbszm7l2skjakf4dx0gw5i7";
+    sha256 = "071g7229shr9srwzspx29fcx3ccj3rwakkydpc4vdf1q3lldd2ld";
   };
   postPatch = "patchShebangs libs/libvpx/build/make/rtcd.pl";
 
   buildInputs = [
-    ncurses curl pkgconfig gnutls readline openssl perl libjpeg
-    sqlite libzrtpcpp pcre speex ldns libedit yasm which lua libopus
+    openssl ncurses curl pkgconfig gnutls readline perl libjpeg
+    sqlite pcre speex ldns libedit yasm which lua libopus
     libsndfile
   ];
 

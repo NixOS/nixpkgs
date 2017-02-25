@@ -18,4 +18,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/kdf" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/kdf" ];
+}

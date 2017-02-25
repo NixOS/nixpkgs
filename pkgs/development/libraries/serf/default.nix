@@ -1,11 +1,11 @@
 { stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos, pkgconfig, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "serf-1.3.7";
+  name = "serf-1.3.9";
 
   src = fetchurl {
-    url = "http://serf.googlecode.com/svn/src_releases/${name}.tar.bz2";
-    sha256 = "1bphz616dv1svc50kkm8xbgyszhg3ni2dqbij99sfvjycr7bgk7c";
+    url = "https://www.apache.org/dist/serf/${name}.tar.bz2";
+    sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 
   buildInputs = [ apr scons openssl aprutil zlib ]

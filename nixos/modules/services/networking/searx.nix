@@ -34,6 +34,11 @@ in
         ";
       };
 
+      package = mkOption {
+        default = pkgs.pythonPackages.searx;
+        description = "searx package to use.";
+      };
+
     };
 
   };
@@ -61,14 +66,13 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "searx";
-          ExecStart = "${pkgs.pythonPackages.searx}/bin/searx-run";
+          ExecStart = "${cfg.package}/bin/searx-run";
         };
       } // (optionalAttrs (configFile != "") {
         environment.SEARX_SETTINGS_PATH = configFile;
       });
-        
 
-    environment.systemPackages = [ pkgs.pythonPackages.searx ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 

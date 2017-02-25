@@ -11,8 +11,33 @@ has the following highlights: </para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>Nixpkgs is now extensible through overlays. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">Nixpkgs
+    manual</link> for more information.</para>
   </listitem>
+
+  <listitem>
+    <para>The setuid wrapper functionality now supports setting
+    capabilities.</para>
+  </listitem>
+
+  <listitem>
+    <para>X.org server uses branch 1.19.  Due to ABI incompatibilities,
+      <literal>ati_unfree</literal> keeps forcing 1.17
+      and <literal>amdgpu-pro</literal> starts forcing 1.18.</para>
+  </listitem>
+
+  <listitem>
+    <para>PHP now defaults to PHP 7.1</para>
+  </listitem>
+
+  <listitem>
+    <para>Packages in nixpkgs can be marked as insecure through listed
+    vulnerabilities. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-allow-insecure">Nixpkgs
+    manual</link> for more information.</para>
+  </listitem>
+
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>
@@ -28,6 +53,32 @@ has the following highlights: </para>
 following incompatible changes:</para>
 
 <itemizedlist>
+  <listitem>
+    <para>
+      Cross compilation has been rewritten. See the nixpkgs manual for
+      details. The most obvious breaking change is that derivations absent a
+      <literal>.nativeDrv</literal> or <literal>.crossDrv</literal> are now
+      cross by default, not native.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>stdenv.overrides</literal> is now expected to take <literal>self</literal>
+      and <literal>super</literal> arguments. See <literal>lib.trivial.extends</literal>
+      for what those parameters represent.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>ansible</literal> now defaults to ansible version 2 as version 1
+      has been removed due to a serious <link
+      xlink:href="https://www.computest.nl/advisories/CT-2017-0109_Ansible.txt">
+      vulnerability</link> unpatched by upstream.
+    </para>
+  </listitem>
+
   <listitem>
     <para>
       <literal>gnome</literal> alias has been removed along with
@@ -71,24 +122,145 @@ following incompatible changes:</para>
 
   <listitem>
     <para>
+      Two lone top-level dict dbs moved into <literal>dictdDBs</literal>. This
+      affects: <literal>dictdWordnet</literal> which is now at
+      <literal>dictdDBs.wordnet</literal> and <literal>dictdWiktionary</literal>
+      which is now at <literal>dictdDBs.wiktionary</literal>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
       Parsoid service now uses YAML configuration format.
      <literal>service.parsoid.interwikis</literal> is now called
      <literal>service.parsoid.wikis</literal> and is a list of either API URLs
      or attribute sets as specified in parsoid's documentation.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+     <literal>Ntpd</literal> was replaced by
+     <literal>systemd-timesyncd</literal> as the default service to synchronize
+     system time with a remote NTP server. The old behavior can be restored by
+     setting <literal>services.ntp.enable</literal> to <literal>true</literal>.
+     Upstream time servers for all NTP implementations are now configured using
+     <literal>networking.timeServers</literal>.
+   </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>service.nylon</literal> is now declared using named instances.
+      As an example:
+
+<programlisting>
+  services.nylon = {
+    enable = true;
+    acceptInterface = "br0";
+    bindInterface = "tun1";
+    port = 5912;
+  };
+</programlisting>
+
+      should be replaced with:
+
+<programlisting>
+  services.nylon.myvpn = {
+    enable = true;
+    acceptInterface = "br0";
+    bindInterface = "tun1";
+    port = 5912;
+  };
+</programlisting>
+
+      this enables you to declare a SOCKS proxy for each uplink.
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para><literal>overridePackages</literal> function no longer exists.
+    It is replaced by <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
+    overlays</link>.  For example, the following code:
+
+<programlisting>
+  let
+    pkgs = import &lt;nixpkgs&gt; {};
+  in
+    pkgs.overridePackages (self: super: ...)
+</programlisting>
+
+    should be replaced by:
+
+<programlisting>
+  let
+    pkgs = import &lt;nixpkgs&gt; {};
+  in
+    import pkgs.path { overlays = [(self: super: ...)] }
+</programlisting>
+
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      Autoloading connection tracking helpers is now disabled by default.
+      This default was also changed in the Linux kernel and is considered
+      insecure if not configured properly in your firewall. If you need
+      connection tracking helpers (i.e. for active FTP) please enable
+      <literal>networking.firewall.autoLoadConntrackHelpers</literal> and
+      tune <literal>networking.firewall.connectionTrackingModules</literal>
+      to suit your needs.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      <literal>local_recipient_maps</literal> is not set to empty value by
+      Postfix service. It's an insecure default as stated by Postfix
+      documentation. Those who want to retain this setting need to set it via
+      <literal>services.postfix.extraConfig</literal>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    Iputils no longer provide ping6 and traceroute6. The functionality of
+    these tools have been integrated into ping and traceroute respectively. To
+    enforce an address family the new flags <literal>-4</literal> and
+    <literal>-6</literal> have been added. One notable incompatibility is that
+    specifying an interface (for link-local IPv6 for instance) is no longer done
+    with the <literal>-I</literal> flag, but by encoding the interface into the
+    address (<literal>ping fe80::1%eth0</literal>).
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
 <para>Other notable improvements:</para>
 
 <itemizedlist>
+
   <listitem>
     <para>Module type system have a new extensible option types feature that
       allow to extend certain types, such as enum, through multiple option
       declarations of the same option across multiple modules.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      <literal>jre</literal> now defaults to GTK+ UI by default. This
+      improves visual consistency and makes Java follow system font style,
+      improving the situation on HighDPI displays. This has a cost of increased
+      closure size; for server and other headless workloads it's recommended to
+      use <literal>jre_headless</literal>.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 

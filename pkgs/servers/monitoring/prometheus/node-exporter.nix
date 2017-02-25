@@ -1,9 +1,9 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "node_exporter-${version}";
-  version = "0.12.0";
-  rev = version;
+  version = "0.13.0";
+  rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/node_exporter";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "0ih8w9ji0fw1smsi45jgvrpqfzm3f5bvk9q3nwrl0my5xkksnr8g";
+    sha256 = "03xk8zns0dvzs13jgiwl2dxj9aq4bbfmwsg0wq5piravxpszs09q";
   };
 
   # FIXME: megacli test fails
@@ -21,7 +21,7 @@ buildGoPackage rec {
     description = "Prometheus exporter for machine metrics";
     homepage = https://github.com/prometheus/node_exporter;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;
   };
 }

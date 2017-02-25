@@ -19,8 +19,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     services.xserver.desktopManager.default = "none";
   };
 
-  enableOCR = true;
-
   testScript = { nodes, ... }: ''
     startAll;
     $machine->waitForFile("/home/alice/.Xauthority");

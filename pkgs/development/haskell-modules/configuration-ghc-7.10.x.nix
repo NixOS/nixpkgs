@@ -37,10 +37,10 @@ self: super: {
   xhtml = null;
 
   # Enable latest version of cabal-install.
-  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
+  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
 
   # Build jailbreak-cabal with the latest version of Cabal.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_1_0; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
 
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
@@ -102,8 +102,6 @@ self: super: {
     buildDepends = [ primitive ];
     license = pkgs.stdenv.lib.licenses.bsd3;
   }) {};
-
-  mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
 
   # diagrams/monoid-extras#19
   monoid-extras = overrideCabal super.monoid-extras (drv: {
@@ -185,6 +183,8 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
+  distributive = addBuildDepend super.distributive self.semigroups;
+  mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
   Glob_0_7_10 = addBuildDepends super.Glob_0_7_10 (with self; [semigroups]);
@@ -207,7 +207,5 @@ self: super: {
 
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
-
-
 
 }

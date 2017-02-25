@@ -10,16 +10,16 @@
 }:
 
 let
-  version = "1.4";
-  build = "589.38-1";
+  version = "1.6";
+  build = "689.34-1";
   fullVersion = "stable_${version}.${build}";
 
   info = if stdenv.is64bit then {
       arch = "amd64";
-      sha256 = "08qdpl5dkb2snpqlk3rsqlyl9rfas9v6bbcw2p4kzazhinak5hv3";
+      sha256 = "0wn98nzlhppmm3g797kiqr9bxxff8l7l110f1w1fnfl93d325hrm";
     } else {
       arch = "i386";
-      sha256 = "0wpaglc1aaam5bqxgvf5zwcbr0xll8yj63l19q792l51j1vkv56q";
+      sha256 = "0agybibfwk5n1gxi8g4rbvvmlq5963df5arz4fyi4a1hcayllaz0";
     };
 
 in stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
+    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
       libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
       atk alsaLib dbus_libs cups gtk2 gdk_pixbuf libexif ffmpeg systemd
       freetype fontconfig libXrender libuuid expat glib nss nspr

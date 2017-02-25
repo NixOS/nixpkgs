@@ -4,17 +4,17 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "pdfpc";
-  version = "4.0.3";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
     rev = "v${version}";
-    sha256 = "1fcwxvik3nnn0g37xvb30vxaxwrd881fw07fyfb9c6ami9bnva3p";
+    sha256 = "13spngkp0lq2qlw4mxsngx4ckr201axzn5ppjax0bhlckirvzr2s";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ gstreamer gst-plugins-base vala gtk3 libgee poppler
+  nativeBuildInputs = [ cmake pkgconfig vala ];
+  buildInputs = [ gstreamer gst-plugins-base gtk3 libgee poppler
     libpthreadstubs makeWrapper librsvg ];
 
   postInstall = ''

@@ -1,33 +1,29 @@
-{ stdenv, fetchurl, openssl, net_snmp, libnl }:
+{ stdenv, fetchFromGitHub, libnfnetlink, libnl, net_snmp, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "keepalived-1.2.19";
+  name = "keepalived-${version}";
+  version = "1.3.4";
 
-  src = fetchurl {
-    url = "http://keepalived.org/software/${name}.tar.gz";
-    sha256 = "0lrq963pxhgh74qmxjyy5hvxdfpm4r50v4vsrp559n0w5irsxyrj";
+  src = fetchFromGitHub {
+    owner = "acassen";
+    repo = "keepalived";
+    rev = "v${version}";
+    sha256 = "0vmflvr7j53dhpfawd1l2kkqw9prs2vl6r4a8rv5ilrrj3j0q989";
   };
 
-  buildInputs = [ openssl net_snmp libnl ];
+  buildInputs = [
+    libnfnetlink
+    libnl
+    net_snmp
+    openssl
+  ];
 
-  postPatch = ''
-    sed -i 's,$(DESTDIR)/usr/share,$out/share,g' Makefile.in
-  '';
-
-  # It doesn't know about the include/libnl<n> directory
-  NIX_CFLAGS_COMPILE="-I${libnl.dev}/include/libnl3";
-  NIX_LDFLAGS="-lnl-3 -lnl-genl-3";
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--enable-snmp"
     "--enable-sha1"
-  ];
-
-  installFlags = [
-    "sysconfdir=\${out}/etc"
-  ];
+    "--enable-snmp"
+ ];
 
   meta = with stdenv.lib; {
     homepage = http://keepalived.org;

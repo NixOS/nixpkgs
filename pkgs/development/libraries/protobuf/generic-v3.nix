@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     rm -rf gmock
-    cp -r ${gmock.source} gmock
+    cp -r ${gmock.src}/googlemock gmock
+    cp -r ${gmock.src}/googletest googletest
     chmod -R a+w gmock
+    chmod -R a+w googletest
+    ln -s ../googletest gmock/gtest
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
@@ -30,6 +33,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  NIX_CFLAGS_COMPILE = with stdenv.lib;
+    # gcc before 6 doesn't know this option
+    optionalString (hasPrefix "gcc-6" stdenv.cc.cc.name) "-Wno-error=misleading-indentation";
 
   meta = {
     description = "Google's data interchange format";

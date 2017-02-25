@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, openresolv, coreutils, which, systemd }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, openresolv, coreutils, systemd }:
 
 let
-  binPath = lib.makeBinPath [ coreutils openresolv which systemd ];
+  binPath = lib.makeBinPath [ coreutils openresolv systemd ];
 
 in stdenv.mkDerivation rec {
-  name = "update-resolv-conf-2016-04-24";
+  name = "update-resolv-conf-2016-09-30";
 
   src = fetchFromGitHub {
     owner = "masterkorp";
     repo = "openvpn-update-resolv-conf";
-    rev = "994574f36b9147cc78674a5f13874d503a625c98";
-    sha256 = "1rvzlaj53k8s09phg4clsyzlmf44dmwwyvg0nbg966sxp3xsqlxc";
+    rev = "09cb5ab5a50dfd6e77e852749d80bef52d7a6b34";
+    sha256 = "0s5cilph0p0wiixj7nlc7f3hqmr1mhvbfyapd0060n3y6xgps9y9";
   };
 
   nativeBuildInputs = [ makeWrapper ];

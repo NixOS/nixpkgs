@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, extra-cmake-modules, makeQtWrapper
+{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, makeQtWrapper
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   name = "krita-${version}";
-  version = "3.0";
+  ver_min = "3.1.2";
+  version = "${ver_min}.1";
 
-  src = fetchgit {
-    url = "http://phabricator.kde.org/diffusion/KRITA/krita.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0aas86667ncp8jz00c8qk7bm26g76l65cysh06wxr8kxbvqynrdn";
+  src = fetchurl {
+    url = "http://download.kde.org/stable/krita/${ver_min}/${name}.tar.gz";
+    sha256 = "934ed82c3f4e55e7819b327c838ea2f307d3bf3d040722501378b01d76a3992d";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules makeQtWrapper ];

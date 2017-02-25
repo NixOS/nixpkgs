@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python, sqlite, systemd
 , gobjectIntrospection, vala_0_23, gtk_doc, autoreconfHook, autoconf-archive
-, nix, boost
+# TODO: set enableNixBackend to true, as soon as it builds
+, nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
 , enableBashCompletion ? false, bash-completion ? null }:
 
@@ -28,7 +29,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-systemd"
-    "--enable-nix"
     "--disable-dummy"
     "--disable-cron"
     "--disable-introspection"
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "--with-dbus-sys=$(out)/etc/dbus-1/system.d"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system/"
   ]
+  ++ lib.optional enableNixBackend "--enable-nix"
   ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"
   ++ lib.optional (!enableCommandNotFound) "--disable-command-not-found";
 

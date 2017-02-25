@@ -1,10 +1,10 @@
-diff --git a/extra/haxelib_src/src/tools/haxelib/Main.hx b/extra/haxelib_src/src/tools/haxelib/Main.hx
-index a44a785..0eb811a 100644
+diff --git a/src/tools/haxelib/Main.hx b/src/tools/haxelib/Main.hx
+index dc18815..def5231 100644
 --- a/extra/haxelib_src/src/tools/haxelib/Main.hx
 +++ b/extra/haxelib_src/src/tools/haxelib/Main.hx
-@@ -996,21 +996,26 @@ class Main {
+@@ -1301,21 +1301,26 @@ class Main {
  	}
- 
+
  	function checkRec( prj : String, version : String, l : List<{ project : String, version : String, info : Infos }> ) {
 -		var pdir = getRepository() + Data.safe(prj);
 -		if( !FileSystem.exists(pdir) )
@@ -44,7 +44,7 @@ index a44a785..0eb811a 100644
  		var json = try File.getContent(vdir+"/"+Data.JSON) catch( e : Dynamic ) null;
  		var inf = Data.readData(json,false);
  		l.add({ project : prj, version : version, info: inf });
-@@ -1025,15 +1030,21 @@ class Main {
+@@ -1330,15 +1335,21 @@ class Main {
  			var a = args[argcur++].split(":");
  			checkRec(a[0],a[1],list);
  		}
@@ -73,10 +73,10 @@ index a44a785..0eb811a 100644
  			var ndir = dir + "ndll";
  			if( FileSystem.exists(ndir) ) {
  				var sysdir = ndir+"/"+Sys.systemName();
-@@ -1153,21 +1164,39 @@ class Main {
- 		print('  Path: $devPath');
+@@ -1491,23 +1502,43 @@ class Main {
+ 			);
  	}
- 
+
 +	function getNixLib(project:String):Null<String>
 +	{
 +		var hlibPath = Sys.getEnv("HAXELIB_PATH");
@@ -91,7 +91,7 @@ index a44a785..0eb811a 100644
 +		}
 +		return null;
 +	}
-+
+
  	function run() {
 -		var rep = getRepository();
  		var project = param("Library");
@@ -103,10 +103,10 @@ index a44a785..0eb811a 100644
 -		pdir += "/";
 -		var version = temp[1] != null ? temp[1] : getCurrent(pdir);
 -		var dev = try getDev(pdir) catch ( e : Dynamic ) null;
--		var vdir = dev!=null ? dev : pdir + Data.safe(version);
--		var rdir = vdir + "/run.n";
--		if( !FileSystem.exists(rdir) )
--			throw "Library "+project+" version "+version+" does not have a run script";
+-		var vdir = dev != null ? dev : pdir + Data.safe(version);
+
+ 		args.push(cli.cwd);
++
 +		var vdir = this.getNixLib(project);
 +		if (vdir == null) {
 +			var rep = getRepository();
@@ -121,6 +121,8 @@ index a44a785..0eb811a 100644
 +			if( !FileSystem.exists(rdir) )
 +				throw "Library "+project+" version "+version+" does not have a run script";
 +		}
- 		args.push(Sys.getCwd());
- 		Sys.setCwd(vdir);
- 		var cmd = "neko run.n";
+ 		cli.cwd = vdir;
+-
+ 		var callArgs =
+ 			switch try [Data.readData(File.getContent(vdir + '/haxelib.json'), false), null] catch (e:Dynamic) [null, e] {
+ 				case [null, e]:

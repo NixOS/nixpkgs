@@ -3,10 +3,10 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
-  version = "15.11";
+  version = "16.6";
   src = fetchurl {
     url = "http://www.software-lab.de/${name}.tgz";
-    sha256 = "0gi1n7gl786wbz6sn0f0002h49f0zvfrzxlhabkghwlbva1rwp58";
+    sha256 = "0y9b4wqpgx0j0igbp4h7k0bw3hvp7dnrhl3fsaagjpp305b003z3";
   };
   buildInputs = optional stdenv.is64bit jdk;
   patchPhase = optionalString stdenv.isArm ''

@@ -1,17 +1,19 @@
-{ stdenv, fetchgit, which, perl, jdk
+{ stdenv, fetchFromGitHub, which, perl, jdk
 , ocamlPackages, openssl
 , coreutils, zlib, ncurses, makeWrapper
-, gcc, binutils, gnumake, nodejs} :
+, gcc, binutils, gnumake, nodejs
+}:
 
 stdenv.mkDerivation rec {
   pname = "opa";
-  version = "4309";
+  version = "4310";
   name = "${pname}-${version}";
 
-  src = fetchgit {
-    url = https://github.com/MLstate/opalang.git;
-    rev = "047f58bfd4be35ee30176156b3718c707a6c0f76";
-    sha256 = "1laynwf64713q2vhdkxw679dah6hl3bvmrj8cj836a9k9z7jcc1r";
+  src = fetchFromGitHub {
+    owner = "MLstate";
+    repo = "opalang";
+    rev = "a13d45af30bc955c40c4b320353fb21e4ecacbc5";
+    sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
 
   # Paths so the opa compiler code generation will use the same programs as were
@@ -27,6 +29,12 @@ stdenv.mkDerivation rec {
     echo 'let opa_git_sha = "xxxx"'
     cat ./compiler/buildinfos/buildInfos.ml.post
     )> ./compiler/buildinfos/buildInfos.ml
+    for p in configure tools/platform_helper.sh
+    do
+      substituteInPlace $p --replace 'IS_MAC=1' 'IS_LINUX=1'
+    done
+    export CAMLP4O=${ocamlPackages.camlp4}/bin/camlp4o
+    export CAMLP4ORF=${ocamlPackages.camlp4}/bin/camlp4orf
   '';
 
   prefixKey = "-prefix ";
@@ -36,10 +44,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ which perl jdk openssl coreutils zlib ncurses
     makeWrapper gcc binutils gnumake nodejs
   ] ++ (with ocamlPackages; [
-    ocaml findlib ocaml_ssl cryptokit camlzip ulex ocamlgraph
+    ocaml findlib ocaml_ssl cryptokit camlzip ulex ocamlgraph camlp4
   ]);
 
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   postInstall = ''
     # Have compiler use same tools for code generation as used to build it.
@@ -62,9 +70,6 @@ stdenv.mkDerivation rec {
     homepage = http://opalang.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
-    platforms = with stdenv.lib.platforms; linux;
-    # opa was built with nodejs 0.10 which reached end of LTS
-    # in October 216, it doesn't built with nodejs 4.x
-    broken = true;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

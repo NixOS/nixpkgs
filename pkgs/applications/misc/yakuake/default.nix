@@ -1,28 +1,63 @@
-{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
-, kdelibs, konsole }:
+{ kdeDerivation
+, lib
+, fetchurl
+, kdoctools
+, kdeWrapper
+, ecm
+, karchive
+, kcrash
+, kdbusaddons
+, ki18n
+, kiconthemes
+, knewstuff
+, knotifications
+, knotifyconfig
+, konsole
+, kparts
+, kwindowsystem
+}:
 
 let
-  pname = "yakuake";
-  version = "2.9.9";
+  unwrapped = let
+    pname = "yakuake";
+    version = "3.0.2";
+  in kdeDerivation rec {
+    name = "${pname}-${version}";
+
+    src = fetchurl {
+      url = "http://download.kde.org/stable/${pname}/${version}/src/${name}.tar.xz";
+      sha256 = "0vcdji1k8d3pz7k6lkw8ighkj94zff2l2cf9v1avf83f4hjyfhg5";
+    };
+
+    buildInputs = [
+      karchive
+      kcrash
+      kdbusaddons
+      ki18n
+      kiconthemes
+      knewstuff
+      knotifications
+      knotifyconfig
+      kparts
+      kwindowsystem
+    ];
+
+    nativeBuildInputs = [
+      ecm kdoctools
+    ];
+
+    meta = {
+      homepage = https://yakuake.kde.org;
+      description = "Quad-style terminal emulator for KDE";
+      maintainers = with lib.maintainers; [ fridh ];
+    };
+  };
+
+
 in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "0e0e4994c568f8091c9424e4aab35645436a9ff341c00b1cd1eab0ada0bf61ce";
-  };
-
-  buildInputs = [ kdelibs ];
-
-  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
-
-  propagatedUserEnvPkgs = [ konsole ];
-
-  meta = {
-    homepage = http://yakuake.kde.org;
-    description = "Quad-style terminal emulator for KDE";
-    inherit (kdelibs.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-  };
+kdeWrapper
+{
+  inherit unwrapped;
+  targets = [ "bin/yakuake" ];
+  paths = [ konsole.unwrapped ];
 }

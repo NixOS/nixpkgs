@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, boost, cmake, jsoncpp }:
+{ stdenv, fetchgit, boost, cmake, jsoncpp }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.4";
+  version = "0.4.8";
   name = "solc-${version}";
 
-  src = fetchFromGitHub {
-    owner = "ethereum";
-    repo = "solidity";
-    rev = "v${version}";
-    sha256 = "150prr7m0jnx3vhq0wy3avzsijxd3pn7c8jxdvf6jkcc408dgn6z";
+  # Cannot use `fetchFromGitHub' because of submodules
+  src = fetchgit {
+    url = "https://github.com/ethereum/solidity";
+    rev = "60cc1668517f56ce6ca8225555472e7a27eab8b0";
+    sha256 = "09mwah7c5ca1bgnqp5qgghsi6mbsi7p16z8yxm0aylsn2cjk23na";
   };
 
   patchPhase = ''
-    echo >commit_hash.txt 4633f3def897db0f91237f98cf46e5d84fb05e61
+    echo >commit_hash.txt 2dabbdf06f414750ef0425c664f861aeb3e470b8
   '';
 
   buildInputs = [ boost cmake jsoncpp ];

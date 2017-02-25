@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, spice_protocol, intltool, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
-, cyrus_sasl, pythonPackages, autoreconfHook, usbredir, libsoup
+, cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , gtk3, epoxy }:
 
 with stdenv.lib;
 
 let
-  inherit (pythonPackages) python pygtk;
+  inherit (python2Packages) python pygtk;
 in stdenv.mkDerivation rec {
   name = "spice-gtk-0.32";
 

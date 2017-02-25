@@ -17,17 +17,12 @@ let
 
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress-original.dfVersion}";
+
     paths = pkgs;
+    pathsToLink = [ "/" "/hack" ];
     ignoreCollisions = true;
+
     postBuild = lib.optionalString enableDFHack ''
-      # #4621
-      if [ -L "$out/hack" ]; then
-        rm $out/hack
-        mkdir $out/hack
-        for i in ${dfhack}/hack/*; do
-          ln -s $i $out/hack
-        done
-      fi
       rm $out/hack/symbols.xml
       substitute ${dfhack}/hack/symbols.xml $out/hack/symbols.xml \
         --replace $(cat ${dwarf-fortress-original}/hash.md5.orig) \

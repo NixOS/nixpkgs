@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
-  version = "2016.08.08.00";
+  version = "2016.12.19.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "0f9xdi8w2mbn6gxjfvpzh8i22ca8p11a2ss6qkw31yhdgd3s9087";
+    sha256 = "1q5nh84sxkdi4x0gwr0x7bgk33pq6071vxz5vnjkznwywhgw2hnn";
   };
 
   nativeBuildInputs = [ autoreconfHook python pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
-    homepage = https://github.com/facebook/folly;
+    homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [ "x86_64-linux" ];

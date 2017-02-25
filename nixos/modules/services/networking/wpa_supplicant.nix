@@ -12,11 +12,13 @@ let
       psk = if networkConfig.psk != null
         then ''"${networkConfig.psk}"''
         else networkConfig.pskRaw;
+      priority = networkConfig.priority;
     in ''
       network={
         ssid="${ssid}"
         ${optionalString (psk != null) ''psk=${psk}''}
         ${optionalString (psk == null) ''key_mgmt=NONE''}
+        ${optionalString (priority != null) ''priority=${toString priority}''}
       }
     '') cfg.networks)}
   '' else "/etc/wpa_supplicant.conf";
@@ -66,6 +68,19 @@ in {
                 to being a network without any authentication.
 
                 Mutually exclusive with <varname>psk</varname>.
+              '';
+            };
+            priority = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              description = ''
+                By default, all networks will get same priority group (0). If some of the
+                networks are more desirable, this field can be used to change the order in
+                which wpa_supplicant goes through the networks when selecting a BSS. The
+                priority groups will be iterated in decreasing priority (i.e., the larger the
+                priority value, the sooner the network is matched against the scan results).
+                Within each priority group, networks will be selected based on security
+                policy, signal strength, etc.
               '';
             };
           };

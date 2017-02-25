@@ -5,14 +5,14 @@
 
 let
   minor = "3.16";
-  version = "${minor}.2";
+  version = "${minor}.4";
   inherit (python2Packages) python buildPythonApplication pycairo pygobject3;
 in buildPythonApplication rec {
   name = "meld-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "2dd3f58b95444bf721e0c912668c29cf8f47a402440b772ea12c4b9a0c94966f";
+    sha256 = "0rwflfkfnb9ydnk4k591x0il29d4dvz95cjs2f279blx64lgki4k";
   };
 
   buildInputs = [

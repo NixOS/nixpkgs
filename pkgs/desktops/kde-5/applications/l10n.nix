@@ -205,7 +205,7 @@ lib.mapAttrs (name: attr: pkgs.recurseIntoAttrs attr) {
     }) {};
     qt5 = callPackage (kdeLocale5 "sr" {
       preConfigure = ''
-        patchShebangs 5/sr/data/resolve-sr-hybrid
+        patchShebangs 5/sr/cmake_modules/resolve-sr-hybrid
         sed -e 's/add_subdirectory(kdesdk)//' -i 5/sr/data/CMakeLists.txt
       '';
     }) {};
@@ -222,13 +222,10 @@ lib.mapAttrs (name: attr: pkgs.recurseIntoAttrs attr) {
     qt4 = callPackage (kdeLocale4 "ug" {}) {};
     qt5 = callPackage (kdeLocale5 "ug" {}) {};
   };
-  # TODO: build broken in 15.11.80; re-enable in next release
-  /*
   uk = {
     qt4 = callPackage (kdeLocale4 "uk" {}) {};
     qt5 = callPackage (kdeLocale5 "uk" {}) {};
   };
-  */
   wa = {
     qt4 = callPackage (kdeLocale4 "wa" {}) {};
     qt5 = callPackage (kdeLocale5 "wa" {}) {};

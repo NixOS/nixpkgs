@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     done)
   '';
 
-  preferLocalBuilds = true;
+  preferLocalBuild = true;
 
   meta = with kodi.meta; {
     inherit license homepage;

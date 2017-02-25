@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables }:
 
 stdenv.mkDerivation rec {
-  version = "2.3";
+  version = "2.3.1";
   name = "ferm-${version}";
 
   src = fetchurl {
-    url = "http://ferm.foo-projects.org/download/${version}/ferm-${version}.tar.gz";
-    sha256 = "0jx63fhjw5y1ahgdbn4hgd7sq6clxl80dr8a2hkryibfbwz3vs4x";
+    url = "http://ferm.foo-projects.org/download/2.3/ferm-${version}.tar.gz";
+    sha256 = "1scdnd2jk4787jyr6fxav2598g0x7hjic5b8bj77j8s0hki48m4a";
   };
 
   buildInputs = [ perl ipset ebtables iptables makeWrapper ];

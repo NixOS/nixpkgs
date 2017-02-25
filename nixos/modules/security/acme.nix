@@ -129,7 +129,7 @@ in
 
       certs = mkOption {
         default = { };
-        type = with types; loaOf (submodule certOpts);
+        type = with types; attrsOf (submodule certOpts);
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';
@@ -178,6 +178,7 @@ in
                   path = [ pkgs.simp_le ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
+                    chown '${data.user}:${data.group}' '${cfg.directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi
@@ -283,6 +284,8 @@ in
             OnCalendar = cfg.renewInterval;
             Unit = "acme-${cert}.service";
             Persistent = "yes";
+            AccuracySec = "5m";
+            RandomizedDelaySec = "1h";
           };
         })
       );

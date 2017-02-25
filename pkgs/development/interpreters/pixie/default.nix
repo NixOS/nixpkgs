@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, python, makeWrapper, pkgconfig, gcc,
+{ stdenv, fetchgit, fetchurl, python2, makeWrapper, pkgconfig, gcc,
   pypy, libffi, libedit, libuv, boost, zlib,
   variant ? "jit", buildWithPypy ? false }:
 
@@ -36,7 +36,7 @@ let
     buildInputs = [ pkgconfig makeWrapper ];
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/.pypy-c-wrapped"
-      else "${python}/bin/python";
+      else "${python2.interpreter}";
     unpackPhase = ''
       cp -R ${pixie-src} pixie-src
       mkdir pypy-src

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.15.1";
+  version = "0.16.4";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,8 +11,10 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0wj5nhrrgx4nkiqwjp5wpfzdyikrjv4qr5x39s5094yc4p2k30b1";
+    sha256 = "0kq4j6q1xk17ryzzcb8s6l2zqsjkk75lrwalias9gwcriqs6k6yn";
   };
+
+  outputs = [ "bin" "out" "man" ];
 
   buildInputs = [ ncurses ];
 
@@ -25,15 +27,10 @@ buildGoPackage rec {
 
   postInstall = ''
     cp $src/bin/fzf-tmux $bin/bin
+    mkdir -p $man/share/man
+    cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
-  '';
-
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    # fixes cycle between $out and $bin
-    # otool -l shows that the binary includes an LC_RPATH to $out/lib
-    # it seems safe to remove that since but the directory does not exist.
-    install_name_tool -delete_rpath $out/lib $bin/bin/fzf
   '';
 
   meta = with stdenv.lib; {

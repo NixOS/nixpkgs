@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, lib, python, which }:
 let
-  version = "0.5.5";
+  version = "0.6.0";
   src = fetchFromGitHub {
-    sha256 = "12yv0j333z6jkaaal8my3jx3k4ml9hq8ldis5zfvr8179d4xah7q";
+    sha256 = "053xnx39jh9kn9l572z4k0q7bbxjpisf1fm9aq27ybj2ha1rh6wr";
     rev = "version-${version}";
     repo = "gup";
     owner = "timbertson";

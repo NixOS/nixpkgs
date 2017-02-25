@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     ' libmultipath/defaults.h
     sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
       kpartx/Makefile libmpathpersist/Makefile
+    sed -i -e "s,GZIP = .*, GZIP = gzip -9n -c," \
+      Makefile.inc
   '';
 
   nativeBuildInputs = [ gzip ];

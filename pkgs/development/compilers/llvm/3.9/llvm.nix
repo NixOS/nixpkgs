@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
@@ -19,7 +20,7 @@
 }:
 
 let
-  src = fetch "llvm" "0j49lkd5d7nnpdqzaybs2472bvcxyx0i4r3iccwf3kj2v9wk3iv6";
+  src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
   shlib = if stdenv.isDarwin then "dylib" else "so";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
@@ -45,6 +46,13 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ ncurses zlib ];
 
   postPatch = ""
+  + ''
+    patch -p1 --reverse < ${fetchpatch {
+      name = "fix-red-icons.diff"; # https://bugs.freedesktop.org/show_bug.cgi?id=99078
+      url = https://github.com/llvm-mirror/llvm/commit/c280d74837d8.diff;
+      sha256 = "11sq86spw41v72f676igksapdlsgh7fiqp5qkkmgfj0ndqcn9skf";
+    }}
+  ''
   # hacky fix: New LLVM releases require a newer OS X SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
@@ -109,7 +117,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
   };

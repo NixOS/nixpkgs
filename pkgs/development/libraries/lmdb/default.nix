@@ -1,25 +1,47 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchFromGitHub }:
 
 let optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "lmdb-${version}";
-  version = "0.9.18";
+  version = "0.9.19";
 
-  src = fetchzip {
-    url = "https://github.com/LMDB/lmdb/archive/LMDB_${version}.tar.gz";
-    sha256 = "01j384kxg36kym060pybr5p6mjw0xv33bqbb8arncdkdq57xk8wg";
+  src = fetchFromGitHub {
+    owner = "LMDB";
+    repo = "lmdb";
+    rev = "LMDB_${version}";
+    sha256 = "04qx803jdmhkcam748fn0az3cyzvj91lw28kcvwfyq0al7pmjkfs";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
-  makeFlags = ["prefix=$(out)"]
-              ++ optional stdenv.cc.isClang "CC=clang";
+  outputs = [ "bin" "out" "dev" ];
+
+  makeFlags = [ "prefix=$(out)" "CC=cc" ];
 
   doCheck = true;
   checkPhase = "make test";
 
-  preInstall = ''
-    mkdir -p $out/{man/man1,bin,lib,include}
+  postInstall = ''
+    moveToOutput bin "$bin"
+    moveToOutput "lib/*.a" REMOVE # until someone needs it
+  ''
+
+    # fix bogus library name
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+    mv "$out"/lib/liblmdb.{so,dylib}
+    ''
+
+    # add lmdb.pc (dynamic only)
+    + ''
+    mkdir -p "$dev/lib/pkgconfig"
+    cat > "$dev/lib/pkgconfig/lmdb.pc" <<EOF
+    Name: lmdb
+    Description: ${meta.description}
+    Version: ${version}
+
+    Cflags: -I$dev/include
+    Libs: -L$out/lib -llmdb
+    EOF
   '';
 
   meta = with stdenv.lib; {
@@ -32,7 +54,7 @@ in stdenv.mkDerivation rec {
       limited to the size of the virtual address space.
     '';
     homepage = http://symas.com/mdb/;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 vcunat ];
     license = licenses.openldap;
     platforms = platforms.all;
   };

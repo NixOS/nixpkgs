@@ -50,7 +50,7 @@ let
       outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
-      setupHook = ./setup-hook.sh;
+      setupHook = ../qtsubmodule-setup-hook.sh;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
@@ -106,12 +106,18 @@ let
         qtconnectivity qtdeclarative qtdoc qtenginio qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwayland
-        qtwebsockets qtx11extras qtxmlpatterns
+        qtwebchannel qtwebengine qtwebsockets qtx11extras qtxmlpatterns
       ];
 
-      makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { deps = [ self.qtbase.dev ]; } ./qmake-hook.sh;
+      makeQtWrapper =
+        makeSetupHook
+        { deps = [ makeWrapper ]; }
+        (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
 
+      qmakeHook =
+        makeSetupHook
+        { deps = [ self.qtbase.dev ]; }
+        (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);
     };
 
    self = makeScope pkgs.newScope addPackages;

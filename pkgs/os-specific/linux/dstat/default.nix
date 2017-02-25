@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-stdenv.mkDerivation rec {
+python2Packages.mkPythonDerivation rec {
   name = "dstat-${version}";
   version = "0.7.3";
 
@@ -9,20 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "16286z3y2lc9nsq8njzjkv6k2vyxrj9xiixj1k3gnsbvhlhkirj6";
   };
 
-  buildInputs = with pythonPackages; [ python-wifi wrapPython ];
-
-  pythonPath = with pythonPackages; [ python-wifi ];
-
-  patchPhase = ''
-    sed -i -e 's|/usr/bin/env python|${python}/bin/python|' \
-           -e "s|/usr/share/dstat|$out/share/dstat|" dstat
-  '';
+  propagatedBuildInputs = with python2Packages; [ python-wifi ];
 
   makeFlags = [ "prefix=$(out)" ];
-
-  postInstall = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://dag.wieers.com/home-made/dstat/;

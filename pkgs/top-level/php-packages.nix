@@ -51,7 +51,7 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
   # Not released yet
@@ -69,7 +69,7 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
   # No support for PHP 7 yet (and probably never will be)
@@ -79,13 +79,13 @@ let
     sha256 = "1ywrsp90w6rlgq3v2vmvp2zvvykkgqqasab7h9bf3vgvgv3qasbg";
 
     configureFlags = [
-      "--with-spidermonkey=${pkgs.spidermonkey_185}"
+      "--with-spidermonkey=${pkgs.spidermonkey_1_8_5}"
     ];
 
-    buildInputs = [ pkgs.spidermonkey_185 ];
+    buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp7 then xdebug24 else xdebug23;
+  xdebug = if isPhp7 then xdebug25 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -96,10 +96,10 @@ let
     checkTarget = "test";
   };
 
-  xdebug24 = buildPecl {
-    name = "xdebug-2.4.0RC3";
+  xdebug25 = buildPecl {
+    name = "xdebug-2.5.0";
 
-    sha256 = "06ppsihw4cl8kxmywvic6wsm4ps9pvsns2vbab9ivrfyp8b6h5dy";
+    sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
 
     doCheck = true;
     checkTarget = "test";
@@ -235,11 +235,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.2.0";
+    version = "1.3.2";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "15chwfsqmwmhry3bv13a5y4ih1vzb0j8h1dfd49pnzzd8lai706w";
+      sha256 = "0s85zglzwx5i0hw9zlpwy1385jink1g1lhdwhv59zdjblcd7ckva";
     };
 
     phases = [ "installPhase" ];

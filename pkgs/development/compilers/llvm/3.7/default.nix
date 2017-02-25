@@ -1,6 +1,6 @@
-{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun }:
+{ newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun }:
 let
-  callPackage = newScope (self // { inherit stdenv isl version fetch; });
+  callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl version fetch; });
 
   version = "3.7.1";
 

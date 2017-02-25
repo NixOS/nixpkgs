@@ -9,11 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.4.3";
+  version = "1.4-bootstrap-20161024";
+  revision = "79d85a4965ea7c46db483314c3981751909d7883";
 
   src = fetchurl {
-    url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "0rcrhb3r997dw3d02r37zp26ln4q9n77fqxbnvw04zs413md5s35";
+    url = "https://github.com/golang/go/archive/${revision}.tar.gz";
+    sha256 = "1ljbllwjysya323xxm9s792z8y9jdw19n8sj3mlc8picjclrx5xf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -76,6 +77,29 @@ stdenv.mkDerivation rec {
     # fails when running inside tmux
     sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
 
+    # unix socket tests fail on darwin
+    sed -i '/TestConnAndListener/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestConnAndPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestStreamConnServer/areturn' src/net/server_test.go
+    sed -i '/TestReadUnixgramWithUnnamedSocket/areturn' src/net/unix_test.go
+    sed -i '/TestReadUnixgramWithZeroBytesBuffer/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramWrite/areturn' src/net/unix_test.go
+    sed -i '/TestUnixConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestWithSimulated/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestFlap/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNew/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNewLogger/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestDial/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentReconnect/areturn' src/log/syslog/syslog_test.go
 
     # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
     sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
@@ -89,7 +113,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.4.patch
-    ./new-binutils.patch
+    ./creds-test-1.4.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

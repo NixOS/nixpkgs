@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, coverageAnalysis ? null, gnu ? null }:
+, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null }:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -13,6 +13,9 @@
     url = "mirror://gnu/guile/${name}.tar.xz";
     sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
   };
+
+  outputs = [ "out" "dev" "info" ];
+  setOutputFlags = false; # $dev gets into the library otherwise
 
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
@@ -31,7 +34,13 @@
   # libguile/vm-i-system.i is not created in time
   enableParallelBuilding = false;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch ] ++
+  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
+    (fetchpatch {
+      # Fixes stability issues with 00-repl-server.test
+      url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
+      sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
+    })
+  ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   # Explicitly link against libgcc_s, to work around the infamous
@@ -40,7 +49,21 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  configureFlags = [ "--with-libreadline-prefix" ];
+  configureFlags = [ "--with-libreadline-prefix" ]
+    ++ stdenv.lib.optionals stdenv.isSunOS [
+      # Make sure the right <gmp.h> is found, and not the incompatible
+      # /usr/include/mp.h from OpenSolaris.  See
+      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+      # for details.
+      "--with-libgmp-prefix=${gmp.dev}"
+
+      # Same for these (?).
+      "--with-libreadline-prefix=${readline.dev}"
+      "--with-libunistring-prefix=${libunistring}"
+
+      # See below.
+      "--without-threads"
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -49,13 +72,16 @@
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
     sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
-        -e 's|-lunistring|-L${libunistring}/lib -lunistring|g ;
+        -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
-            s|-lltdl|-L${libtool.lib}/lib -lltdl|g'
+            s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+            s|includedir=$out|includedir=$dev|g
+            "
   '';
 
   # make check doesn't work on darwin
-  doCheck = !stdenv.isDarwin;
+  # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
+  doCheck = false;
 
   setupHook = ./setup-hook-2.0.sh;
 
@@ -85,27 +111,6 @@
       processing.
     '';
   };
-}
-
-//
-
-(stdenv.lib.optionalAttrs stdenv.isSunOS {
-  # TODO: Move me above.
-  configureFlags =
-    [
-      # Make sure the right <gmp.h> is found, and not the incompatible
-      # /usr/include/mp.h from OpenSolaris.  See
-      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
-      # for details.
-      "--with-libgmp-prefix=${gmp.dev}"
-
-      # Same for these (?).
-      "--with-libreadline-prefix=${readline.dev}"
-      "--with-libunistring-prefix=${libunistring}"
-
-      # See below.
-      "--without-threads"
-    ];
 })
 
 //
@@ -114,4 +119,4 @@
   # Work around <http://bugs.gnu.org/14201>.
   SHELL = "/bin/sh";
   CONFIG_SHELL = "/bin/sh";
-}))
+})

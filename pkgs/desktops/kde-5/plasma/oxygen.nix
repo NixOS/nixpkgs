@@ -15,6 +15,7 @@ let
     ];
   };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/oxygen-demo5" "bin/oxygen-settings5" ];
 }

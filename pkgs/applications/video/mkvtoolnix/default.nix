@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoconf, automake
-, ruby, file, xdg_utils, gettext, expat, qt5, boost
+, drake, ruby, file, xdg_utils, gettext, expat, qt5, boost
 , libebml, zlib, libmatroska, libogg, libvorbis, flac
 , withGUI ? true
 }:
@@ -10,16 +10,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "9.5.0";
+  version = "9.8.0";
 
   src = fetchFromGitHub {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "1v6rqlb5srhwzad45b50pvfbi1c9n719ihi54hzbkzklj7h4s70h";
+    sha256 = "1hnk92ksgg290q4kwdl8jqrz7vzlwki4f85bb6kgdgzpjkblw76n";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext ruby ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby ];
 
   buildInputs = [
     expat file xdg_utils boost libebml zlib libmatroska libogg
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   ] ++ optional withGUI qt5.qtbase;
 
   preConfigure = "./autogen.sh; patchShebangs .";
-  buildPhase   = "./drake -j $NIX_BUILD_CORES";
-  installPhase = "./drake install -j $NIX_BUILD_CORES";
+  buildPhase   = "drake -j $NIX_BUILD_CORES";
+  installPhase = "drake install -j $NIX_BUILD_CORES";
 
   configureFlags = [
     "--enable-magic"
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     "--disable-profiling"
     "--disable-precompiled-headers"
     "--disable-static-qt"
-    "--without-curl"
     "--with-gettext"
     (enableFeature withGUI "qt")
   ];

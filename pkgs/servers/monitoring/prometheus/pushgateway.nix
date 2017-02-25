@@ -1,9 +1,9 @@
-{ stdenv, lib, go, buildGoPackage, go-bindata, fetchFromGitHub }:
+{ stdenv, go, buildGoPackage, go-bindata, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "pushgateway-${version}";
-  version = "0.3.0";
-  rev = version;
+  version = "0.3.1";
+  rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/pushgateway";
 
@@ -11,10 +11,8 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "1bj0s4s3gbcnlp2z2yx7jf3jx14cdg2v4pr0yciai0g6jwwg63hd";
+    sha256 = "0ax83yy5hbfppcr66l9al7wxibcqfnyps05jdscvpwvgrg4q7ldk";
   };
-
-  goDeps = ./pushgateway_deps.nix;
 
   buildInputs = [ go-bindata ];
 
@@ -29,9 +27,9 @@ buildGoPackage rec {
     -ldflags=
         -X main.buildVersion=${version}
         -X main.buildRev=${rev}
-        -X main.buildBranch=master
+        -X main.buildBranch=${rev}
         -X main.buildUser=nix@nixpkgs
-        -X main.buildDate=20150101-00:00:00
+        -X main.buildDate=19700101-00:00:00
         -X main.goVersion=${stdenv.lib.getVersion go}
   '';
 
@@ -39,7 +37,7 @@ buildGoPackage rec {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
     homepage = https://github.com/prometheus/pushgateway;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;
   };
 }

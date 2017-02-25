@@ -1,0 +1,77 @@
+diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
+index 3f271fc..dc273f4 100644
+--- a/hw/9pfs/9p-local.c
++++ b/hw/9pfs/9p-local.c
+@@ -45,6 +45,23 @@
+ 
+ #define VIRTFS_META_DIR ".virtfs_metadata"
+ 
++static int is_in_store_path(const char *path)
++{
++    static char *store_path = NULL;
++    int store_path_len = -1;
++
++    if (store_path_len == -1) {
++        if ((store_path = getenv("NIX_STORE")) != NULL)
++            store_path_len = strlen(store_path);
++        else
++            store_path_len = 0;
++    }
++
++    if (store_path_len > 0)
++        return strncmp(path, store_path, strlen(store_path)) == 0;
++    return 0;
++}
++
+ static char *local_mapped_attr_path(FsContext *ctx, const char *path)
+ {
+     int dirlen;
+@@ -128,6 +145,8 @@ static int local_lstat(FsContext *fs_ctx, V9fsPath *fs_path, struct stat *stbuf)
+     if (err) {
+         goto err_out;
+     }
++    stbuf->st_uid = 0;
++    stbuf->st_gid = 0;
+     if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
+         /* Actual credentials are part of extended attrs */
+         uid_t tmp_uid;
+@@ -462,6 +481,11 @@ static ssize_t local_pwritev(FsContext *ctx, V9fsFidOpenState *fs,
+     return ret;
+ }
+ 
++static inline int maybe_chmod(const char *path, mode_t mode)
++{
++    return is_in_store_path(path) ? 0 : chmod(path, mode);
++}
++
+ static int local_chmod(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+ {
+     char *buffer;
+@@ -477,7 +501,7 @@ static int local_chmod(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+     } else if ((fs_ctx->export_flags & V9FS_SM_PASSTHROUGH) ||
+                (fs_ctx->export_flags & V9FS_SM_NONE)) {
+         buffer = rpath(fs_ctx, path);
+-        ret = chmod(buffer, credp->fc_mode);
++        ret = maybe_chmod(buffer, credp->fc_mode);
+         g_free(buffer);
+     }
+     return ret;
+@@ -621,6 +645,8 @@ static int local_fstat(FsContext *fs_ctx, int fid_type,
+     if (err) {
+         return err;
+     }
++    stbuf->st_uid = 0;
++    stbuf->st_gid = 0;
+     if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
+         /* Actual credentials are part of extended attrs */
+         uid_t tmp_uid;
+@@ -916,7 +942,8 @@ static int local_chown(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+         (fs_ctx->export_flags & V9FS_SM_PASSTHROUGH) ||
+         (fs_ctx->export_flags & V9FS_SM_NONE)) {
+         buffer = rpath(fs_ctx, path);
+-        ret = lchown(buffer, credp->fc_uid, credp->fc_gid);
++        ret = is_in_store_path(buffer)
++            ? 0 : lchown(buffer, credp->fc_uid, credp->fc_gid);
+         g_free(buffer);
+     } else if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
+         buffer = rpath(fs_ctx, path);

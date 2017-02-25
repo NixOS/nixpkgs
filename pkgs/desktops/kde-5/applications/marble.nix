@@ -18,7 +18,8 @@ let
       enableParallelBuilding = true;
     };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/marble-qt" ];
   paths = [ unwrapped ];
 }

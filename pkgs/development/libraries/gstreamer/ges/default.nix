@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-editing-services-1.8.2";
+  name = "gstreamer-editing-services-1.10.3";
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-editing-services/${name}.tar.xz";
-    sha256 = "a1d57ff9461407cca1f6e7a9f31a5bdb73f73f33c488a3e3318b27e10a4332ae";
+    sha256 = "0ax3qbi1m4wcii03ysln3lm8nhw3fr2rd35ndfy4mr4vg2nm5gxw";
   };
 
   outputs = [ "out" "dev" ];

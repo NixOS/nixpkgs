@@ -3,7 +3,7 @@
 , libtool
 , automake
 , autoconf
-, python
+, python2 # Needed for tests
 }:
 stdenv.mkDerivation rec {
   name = "libcpuid-${version}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     pushd Install
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib ${python.interpreter} ../tests/run_tests.py ./bin/cpuid_tool ../tests/
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/lib ${python2.interpreter} ../tests/run_tests.py ./bin/cpuid_tool ../tests/
     popd
 
     function fixRunPath {

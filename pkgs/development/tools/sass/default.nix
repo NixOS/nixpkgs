@@ -4,9 +4,7 @@ bundlerEnv {
   name = "sass-3.4.22";
 
   inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   meta = with lib; {
     description = "Tools and Ruby libraries for the CSS3 extension languages: Sass and SCSS";

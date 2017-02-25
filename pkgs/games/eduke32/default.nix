@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
       --replace libGLU.so	${mesa}/lib/libGLU.so
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${SDL2}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
   NIX_LDFLAGS = "-L${SDL2}/lib";
 
   makeFlags = [

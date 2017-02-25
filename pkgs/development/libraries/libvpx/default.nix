@@ -44,8 +44,6 @@ let
   inherit (stdenv.lib) enableFeature optional optionals;
 in
 
-assert isi686 || isx86_64 || isArm || isMips; # Requires ARM with floating point support
-
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
 assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postprocSupport;
 /* If spatialResamplingSupport not enabled, build will fail with undeclared variable errors.
@@ -59,13 +57,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   name = "libvpx-${version}";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
     rev = "v${version}";
-    sha256 = "19ill4c7dak5f8m4pdbas87zknw3a34sca8a4i952q0l0jnif0np";
+    sha256 = "10fs7xilf2bsj5bqw206lb5r5dgl84p5m6nibiirk28lmjx1i3l0";
   };
 
   patchPhase = ''patchShebangs .'';
@@ -91,7 +89,6 @@ stdenv.mkDerivation rec {
     (enableFeature gcovSupport "gcov")
     # Required to build shared libraries
     (enableFeature (!isCygwin) "pic")
-    (enableFeature (isi686 || isx86_64) "use-x86inc")
     (enableFeature optimizationsSupport "optimizations")
     (enableFeature runtimeCpuDetectSupport "runtime-cpu-detect")
     (enableFeature thumbSupport "thumb")

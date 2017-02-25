@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "libva-${version}";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva/${name}.tar.bz2";
-    sha256 = "04rczbnbi70y1ziy9ab59szi3glk9q35hshlws0bcj2ndbqirmjx";
+    sha256 = "1ndrf136rlw03xag7j1xpmf9015d1h0dpnv6v587jnh6k2a17g12";
   };
 
   outputs = [ "bin" "dev" "out" ];

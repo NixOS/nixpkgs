@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig
+{ stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig, makeWrapper
 , enableDecLocator ? true
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ xorg.libXaw xorg.xproto xorg.libXt xorg.libXext xorg.libX11 xorg.libSM xorg.libICE
-      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit
+      ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit makeWrapper
     ];
 
   patches = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "--enable-luit"
     "--enable-mini-luit"
     "--with-tty-group=tty"
+    "--with-app-defaults=$(out)/lib/X11/app-defaults"
   ] ++ stdenv.lib.optional enableDecLocator "--enable-dec-locator";
 
   # Work around broken "plink.sh".
@@ -42,6 +43,12 @@ stdenv.mkDerivation rec {
   # groups, and the builder will end up removing any setgid.
   postConfigure = ''
     echo '#define USE_UTMP_SETGID 1'
+  '';
+
+  postInstall = ''
+    for bin in $out/bin/*; do
+      wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
+    done
   '';
 
   meta = {

@@ -81,6 +81,7 @@ in
     users.extraUsers = singleton {
       name = clamavUser;
       uid = config.ids.uids.clamav;
+      group = clamavGroup;
       description = "ClamAV daemon user";
       home = stateDir;
     };

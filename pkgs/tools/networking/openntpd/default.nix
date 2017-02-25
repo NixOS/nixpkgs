@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, openssl
+{ stdenv, fetchurl, libressl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:
 
 stdenv.mkDerivation rec {
   name = "openntpd-${version}";
-  version = "5.7p4";
+  version = "6.0p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenNTPD/${name}.tar.gz";
-    sha256 = "08ybpi351284wj53qqrmg13j8l7md397yrqsmg0aqxg3frcxk4x9";
+    sha256 = "1s3plmxmybwpfrimq6sc54wxnn6ca7rb2g5k2bdjm4c88w4q1axi";
   };
 
   configureFlags = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libressl ];
 
   installFlags = [
     "sysconfdir=\${out}/etc"

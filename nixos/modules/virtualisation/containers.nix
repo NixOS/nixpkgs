@@ -89,6 +89,15 @@ let
         if [ -n "$HOST_BRIDGE" ]; then
           extraFlags+=" --network-bridge=$HOST_BRIDGE"
         fi
+        if [ -n "$HOST_PORT" ]; then
+          OIFS=$IFS
+          IFS=","
+          for i in $HOST_PORT
+          do
+              extraFlags+=" --port=$i"
+          done
+          IFS=$OIFS
+        fi
       fi
 
       extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
@@ -128,9 +137,13 @@ let
         --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
+        --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
-        ${if cfg.additionalCapabilities != null then
+        ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
           ''--capability="${concatStringsSep " " cfg.additionalCapabilities}"'' else ""
+        } \
+        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
+          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -312,6 +325,36 @@ let
       '';
     };
 
+    forwardPorts = mkOption {
+      type = types.listOf (types.submodule {
+        options = {
+          protocol = mkOption {
+            type = types.str;
+            default = "tcp";
+            description = "The protocol specifier for port forwarding between host and container";
+          };
+          hostPort = mkOption {
+            type = types.int;
+            description = "Source port of the external interface on host";
+          };
+          containerPort = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            description = "Target port of container";
+          };
+        };
+      });
+      default = [];
+      example = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; } ];
+      description = ''
+        List of forwarded ports from host to container. Each forwarded port
+        is specified by protocol, hostPort and containerPort. By default,
+        protocol is tcp and hostPort and containerPort are assumed to be
+        the same if containerPort is not explicitly given. 
+      '';
+    };
+
+
     hostAddress = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -367,6 +410,7 @@ let
       hostAddress6 = null;
       localAddress = null;
       localAddress6 = null;
+      tmpfs = null;
     };
 
 in
@@ -472,6 +516,17 @@ in
               '';
             };
 
+            macvlans = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "eth1" "eth2" ];
+              description = ''
+                The list of host interfaces from which macvlans will be
+                created. For each interface specified, a macvlan interface
+                will be created and moved to the container.
+              '';
+            };
+
             extraVeths = mkOption {
               type = with types; attrsOf (submodule { options = networkOptions; });
               default = {};
@@ -507,6 +562,18 @@ in
               example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
+              '';
+            };
+
+            tmpfs = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "/var" ];
+              description = ''
+                Mounts a set of tmpfs file systems into the container.
+                Multiple paths can be specified.
+                Valid items must conform to the --tmpfs argument
+                of systemd-nspawn. See systemd-nspawn(1) for details.
               '';
             };
 
@@ -615,7 +682,9 @@ in
     # Generate a configuration file in /etc/containers for each
     # container so that container@.target can get the container
     # configuration.
-    environment.etc = mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
+    environment.etc =
+      let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort); 
+      in mapAttrs' (name: cfg: nameValuePair "containers/${name}.conf"
       { text =
           ''
             SYSTEM_PATH=${cfg.path}
@@ -623,6 +692,9 @@ in
               PRIVATE_NETWORK=1
               ${optionalString (cfg.hostBridge != null) ''
                 HOST_BRIDGE=${cfg.hostBridge}
+              ''}
+              ${optionalString (length cfg.forwardPorts > 0) ''
+                HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
               ''}
               ${optionalString (cfg.hostAddress != null) ''
                 HOST_ADDRESS=${cfg.hostAddress}
@@ -638,6 +710,7 @@ in
               ''}
             ''}
             INTERFACES="${toString cfg.interfaces}"
+            MACVLANS="${toString cfg.macvlans}"
             ${optionalString cfg.autoStart ''
               AUTO_START=1
             ''}
@@ -648,10 +721,10 @@ in
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
       ''
-        ${cfg.localAddress} ${name}.containers
+        ${head (splitString "/" cfg.localAddress)} ${name}.containers
       '') config.containers);
 
-    networking.dhcpcd.denyInterfaces = [ "ve-*" ];
+    networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
 
     environment.systemPackages = [ pkgs.nixos-container ];
   });

@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-25.1";
-  name = "${emacsName}-mac-6.0";
+  name = "${emacsName}-mac-6.1";
 
   builder = ./builder.sh;
 
@@ -16,7 +16,12 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "2f7a3fd826e6dea541ada04f4a1ff2903a87a1f736b89c5b90bf7bb820568e34";
+    sha256 = "1zwxh7zsvwcg221mpjh0dhpdas3j9mc5q92pprf8yljl7clqvg62";
+  };
+
+  hiresSrc = fetchurl {
+    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-hires-icons-2.0.tar.gz";
+    sha256 = "1ari8n3y1d4hdl9npg3c3hk27x7cfkwfgyhgzn1vlqkrdah4z434";
   };
 
   enableParallelBuilding = true;
@@ -32,12 +37,18 @@ stdenv.mkDerivation rec {
     mv $sourceRoot $name
     tar xzf $macportSrc
     mv $name $sourceRoot
+
+    # extract retina image resources
+    tar xzfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
   postPatch = ''
     patch -p1 < patch-mac
     substituteInPlace lisp/international/mule-cmds.el \
       --replace /usr/share/locale ${gettext}/share/locale
+
+    # use newer emacs icon
+    cp nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns mac/Emacs.app/Contents/Resources/Emacs.icns
   '';
 
   configureFlags = [
@@ -48,7 +59,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090";
+  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090 -DMAC_OS_X_VERSION_MIN_REQUIRED=1090";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''

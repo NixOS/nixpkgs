@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-ugly-1.8.2";
+  name = "gst-plugins-ugly-1.10.3";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Ugly Plugins";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz";
-    sha256 = "9c5b33a2a98fc1d6d6c99a1b536b1fb2de45f53cc8bf8ab85a8b8141fed1a8ac";
+    sha256 = "1lkb8kznc9wxmhbp7k67b50y27nz8jp2x2flb91xzydz7b89f5f9";
   };
 
   outputs = [ "out" "dev" ];

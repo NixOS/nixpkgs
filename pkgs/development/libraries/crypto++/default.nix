@@ -1,22 +1,21 @@
-{ fetchurl, stdenv, unzip }:
+{ fetchurl, fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "crypto++-${version}";
   majorVersion = "5.6";
-  version = "${majorVersion}.4";
+  version = "${majorVersion}.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cryptopp/cryptopp564.zip";
-    sha256 = "1msar24a38rxzq0xgmjf09hzaw2lv6s48vnbbhfrf5awn1vh6hxy";
+  src = fetchFromGitHub {
+    owner = "weidai11";
+    repo = "cryptopp";
+    rev = "CRYPTOPP_5_6_5";
+    sha256 = "1yk7jyf4va9425cg05llskpls2jm7n3jwy2hj5jm74zkr4mwpvl7";
   };
 
   patches = with stdenv;
     lib.optional (system != "i686-cygwin") ./dll.patch
     ++ lib.optional isDarwin ./GNUmakefile-darwin.patch;
 
-  buildInputs = [ unzip ];
-
-  sourceRoot = ".";
 
   configurePhase = let
     marchflags =

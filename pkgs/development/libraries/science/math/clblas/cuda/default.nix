@@ -7,6 +7,7 @@
 , python
 , cudatoolkit
 , nvidia_x11
+, gtest
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     cmake ../src -DCMAKE_INSTALL_PREFIX=$out \
                  -DCMAKE_BUILD_TYPE=Release \
                  -DOPENCL_ROOT=${cudatoolkit} \
+                 -DUSE_SYSTEM_GTEST=ON
   '';
 
   dontStrip = true; 
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
     python
     cudatoolkit
     nvidia_x11
+    gtest
   ]; 
 
   meta = with stdenv.lib; {

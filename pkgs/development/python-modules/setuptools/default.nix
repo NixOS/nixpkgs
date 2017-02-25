@@ -5,11 +5,11 @@ stdenv.mkDerivation rec {
   shortName = "${pname}-${version}";
   name = "${python.libPrefix}-${shortName}";
 
-  version = "28.8.0";
+  version = "30.2.0";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${shortName}.tar.gz";
-    sha256 = "432a1ad4044338c34c2d09b0ff75d509b9849df8cf329f4c1c7706d9c2ba3c61";
+    sha256 = "f865709919903e3399343c0b3c42f95e9aeddc41e38cfb334fb2bb5dfa384857";
   };
 
   buildInputs = [ python wrapPython ];

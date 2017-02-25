@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "quickder";
   name = "${pname}-${version}";
-  version = "1.0-RC1";
+  version = "1.0-RC2";
 
   src = fetchFromGitHub {
-    sha256 = "05gw5dqkw3l8kwwm0044zpxhcp7sxicx9wxbfyr49c91403p870w";
+    sha256 = "1nzk8x6qzpvli8bf74dc2qya63nlppqjrnkaxvjxr2dbqb8qcrqd";
     rev = "version-${version}";
     owner = "vanrein";
     repo = "quick-der";

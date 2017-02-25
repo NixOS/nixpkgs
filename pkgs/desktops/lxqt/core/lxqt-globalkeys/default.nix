@@ -3,16 +3,19 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-globalkeys";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "05kcq21fyz7vnhh9k4nzhskgbghp1slsz14gh9anhya4a567xx0y";
+    sha256 = "1kwibll2azi4pafk7crfgibk5a54rnsia3c4cz680iny7xz1wy6h";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt.lxqt-build-tools
+  ];
 
   buildInputs = [
     qt5.qtbase
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Daemon used to register global keyboard shortcuts";
     homepage = https://github.com/lxde/lxqt-globalkeys;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

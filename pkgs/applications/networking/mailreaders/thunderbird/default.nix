@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python, zip, libIDL
+{ stdenv, lib, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
+, yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those
@@ -13,7 +14,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.5.0"; in
+let version = "45.7.1"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -21,15 +22,24 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "719469c4f66a9e4b09c360056c63ef2e1803334901dd4a23f12e455fe8ae4d0aba0a6273b3cf2796c925dc93f0add3df011ffe40148ef0b3f226d0b1a1c37b6a";
+    sha512 = "aa1231169cfe243a257e6b9088281b85d0cf75207e3b9ebeda7792567a86f6098fb5c74dc397e3eeeb1925d221d2fb1b17df8762afd115eff9ad4d1370a49e56";
   };
+
+  patches = [ ./gcc6.patch ];
+
+  # New sed no longer tolerates this mistake.
+  postPatch = ''
+    for f in mozilla/{js/src,}/configure; do
+      substituteInPlace "$f" --replace '[:space:]*' '[[:space:]]*'
+    done
+  '';
 
   buildInputs = # from firefox30Pkgs.xulrunner, without gstreamer and libvpx
     [ pkgconfig which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
-      python dbus dbus_glib pango freetype fontconfig xorg.libXi
+      python2 dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
-      xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
+      xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification cairo icu
     ] ++ [ m4 ];
@@ -127,5 +137,11 @@ stdenv.mkDerivation rec {
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
     maintainers = [ maintainers.pierron maintainers.eelco ];
     platforms = platforms.linux;
+  };
+
+  passthru.updateScript = import ./../../browsers/firefox/update.nix {
+    attrPath = "thunderbird";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales
-, pythonPackages, imagemagick
+, pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
 
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
@@ -56,12 +56,12 @@ let
   };
 
   pluginsWithoutDeps = [
-    "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
-    "export" "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "hook" "ihate"
-    "importadded" "importfeeds" "info" "inline" "ipfs" "lyrics"
-    "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
-    "plexupdate" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the"
-    "types" "zero"
+    "absubmit" "beatport" "bench" "bpd" "bpm" "bucket" "cue" "duplicates"
+    "edit" "embedart" "export" "filefilter" "freedesktop" "fromfilename"
+    "ftintitle" "fuzzy" "hook" "ihate" "importadded" "importfeeds" "info"
+    "inline" "ipfs" "lyrics" "mbcollection" "mbsubmit" "mbsync" "metasync"
+    "missing" "permissions" "play" "plexupdate" "random" "rewrite" "scrub"
+    "smartplaylist" "spotify" "the" "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -74,16 +74,17 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   name = "beets-${version}";
-  version = "1.3.19";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
-    owner = "sampsyo";
+    owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "0f2v1924ryx5xijpv1jycanl4471vcd7c5lld58lm0viyvh5k28x";
+    sha256 = "0sh2ap7jbqh7p8h63kgrx1ja9lyqlxjpfnh6axxw9p1mh78cgc1v";
   };
 
   propagatedBuildInputs = [
+    pythonPackages.six
     pythonPackages.enum34
     pythonPackages.jellyfish
     pythonPackages.munkres
@@ -92,6 +93,9 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
+    pythonPackages.gst-python
+    pythonPackages.pygobject3
+    gobjectIntrospection
   ] ++ optional enableAcoustid     pythonPackages.pyacoustid
     ++ optional (enableFetchart
               || enableEmbyupdate
@@ -118,7 +122,11 @@ in pythonPackages.buildPythonApplication rec {
     nose
     rarfile
     responses
-  ];
+  ] ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+  ]);
 
   patches = [
     ./replaygain-default-bs1770gain.patch
@@ -196,6 +204,8 @@ in pythonPackages.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
+
+  makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
 
   meta = {
     description = "Music tagger and library organizer";

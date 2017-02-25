@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "htslib";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://github.com/samtools/${pname}/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "49d53a2395b8cef7d1d11270a09de888df8ba06f70fe68282e8235ee04124ae6";
+    sha256 = "0iq3blw23s55vkr1z88p9y2dqrb2dybzhl6hz2nlk53ncihrxcdr";
   };
 
   buildInputs = [ zlib ];

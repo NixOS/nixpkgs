@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, perl, fetchurl, python2
-, pkgconfig, spidermonkey_31, boost, icu, libxml2, libpng
+, pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, mesa, xproto, libX11, libXcursor, nspr, SDL, SDL2
 , gloox, nvidia-texture-tools
@@ -10,17 +10,17 @@ assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
-  version = "0.0.20";
+  version = "0.0.21";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "13n61xhjsawda3kl7112la41bqkbqmq4yhr3slydsz856z5xb5m3";
+    sha256 = "1kw3hqnr737ipx4f03khz3hvsh3ha7r8iy9njppk2faa53j27gln";
   };
 
   nativeBuildInputs = [ python2 perl pkgconfig ];
 
   buildInputs = [
-    spidermonkey_31 boost icu libxml2 libpng libjpeg
+    spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
     mesa xproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools
@@ -44,11 +44,16 @@ stdenv.mkDerivation rec {
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
 
+    # Workaround invalid pkgconfig name for mozjs
+    mkdir pkgconfig
+    ln -s ${spidermonkey_38}/lib/pkgconfig/* pkgconfig/mozjs-38.pc
+    PKG_CONFIG_PATH="$PWD/pkgconfig:$PKG_CONFIG_PATH"
+
     # Update Makefiles
     pushd build/workspaces
     ./update-workspaces.sh \
       --with-system-nvtt \
-      --with-system-mozjs31 \
+      --with-system-mozjs38 \
       ${lib.optionalString withEditor "--enable-atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \

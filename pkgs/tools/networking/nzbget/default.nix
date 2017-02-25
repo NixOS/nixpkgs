@@ -3,12 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "nzbget-${version}";
-  version = "17.0-r1686";
-  filename = "nzbget-17.0-testing-r1686";
+  version = "17.1";
 
   src = fetchurl {
-    url = "http://github.com/nzbget/nzbget/releases/download/v${version}/${filename}-src.tar.gz";
-    sha256 = "0hk0hiccdk3bivdnc2635kqqdwgwf73wvis1wl9k0snds25dwfiw";
+    url = "http://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
+    sha256 = "0fcw43bigjmgxcz1jvqpd01sz4vciqsm311cbfv9lvmvv40gag2b";
   };
 
   buildInputs = [ pkgconfig libxml2 ncurses libsigcxx libpar2 gnutls

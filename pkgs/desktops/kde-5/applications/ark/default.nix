@@ -36,7 +36,8 @@ let
       };
     };
 in
-kdeWrapper unwrapped
+kdeWrapper
 {
+  inherit unwrapped;
   targets = [ "bin/ark" ];
 }

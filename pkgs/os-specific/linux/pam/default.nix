@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
-    ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
+    ln -sv /run/wrappers/bin/unix_chkpwd $out/sbin/unix_chkpwd
   ''; /*
     rm -rf $out/etc
     mkdir -p $modules/lib

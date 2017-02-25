@@ -38,6 +38,7 @@ doNotDisplayTwice rec {
   cups_filters = cups-filters; # added 2016-08
   cv = progress; # added 2015-09-06
   debian_devscripts = debian-devscripts; # added 2016-03-23
+  digikam5 = digikam; # added 2017-02-18
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
@@ -58,8 +59,11 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepassx2-http = keepassx-reboot; # added 2016-10-17
+  keepassx-reboot = keepassx-community; # added 2017-02-01
   keybase-go = keybase;  # added 2016-08-24
+  krename-qt5 = krename; # added 2017-02-18
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29
@@ -69,6 +73,7 @@ doNotDisplayTwice rec {
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  m3d-linux = m33-linux; # added 2016-08-13
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
   midoriWrapper = midori; # added 2015-01
@@ -77,8 +82,11 @@ doNotDisplayTwice rec {
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
+  mysqlWorkbench = mysql-workbench; # added 2017-01-19
   ncat = nmap;  # added 2016-01-26
+  nmap_graphical = nmap-graphical;  # added 2017-01-19
   nfsUtils = nfs-utils;  # added 2014-12-06
+  opencl-icd = ocl-icd; # added 2017-01-20
   owncloudclient = owncloud-client;  # added 2016-08
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
@@ -88,15 +96,16 @@ doNotDisplayTwice rec {
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
-  rekonqWrapper = rekonq; # added 2015-01
   rssglx = rss-glx; #added 2015-03-25
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
+  rustUnstable = rustNightly; # added 2016-11-29
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
   scim = sc-im; # added 2016-01-22
+  skrooge2 = skrooge; # added 2017-02-18
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
@@ -114,7 +123,6 @@ doNotDisplayTwice rec {
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
-  m3d-linux = m33-linux; # added 2016-08-13
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

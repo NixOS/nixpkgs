@@ -1,15 +1,26 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, withKDE ? stdenv.isLinux # enable KDE integration
-, kdelibs ? null
 , static ? false # link statically
 
-, stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf, qca2 }:
+, stdenv, fetchurl, cmake, makeWrapper, dconf
+, qtbase, qtscript
+, phonon, libdbusmenu, qca-qt5
 
-let buildClient = monolithic || client;
+, withKDE ? stdenv.isLinux # enable KDE integration
+, extra-cmake-modules
+, kconfigwidgets
+, kcoreaddons
+, knotifications
+, knotifyconfig
+, ktextwidgets
+, kwidgetsaddons
+, kxmlgui
+}:
+
+let
+    buildClient = monolithic || client;
     buildCore = monolithic || daemon;
 in
 
@@ -17,7 +28,6 @@ assert stdenv.isLinux;
 
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
-assert withKDE -> kdelibs != null;
 assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
@@ -31,21 +41,28 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs =
-       [ cmake makeWrapper qt ]
-    ++ lib.optionals buildCore [qca2]
-    ++ lib.optionals withKDE [automoc4 kdelibs phonon];
+  # Prevent ``undefined reference to `qt_version_tag''' in SSL check
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_VERSION_TAGGING=1" ];
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  buildInputs =
+       [ cmake makeWrapper qtbase ]
+    ++ lib.optionals buildCore [qtscript qca-qt5]
+    ++ lib.optionals buildClient [libdbusmenu phonon]
+    ++ lib.optionals (buildClient && withKDE) [
+      extra-cmake-modules kconfigwidgets kcoreaddons
+      knotifications knotifyconfig ktextwidgets kwidgetsaddons
+      kxmlgui
+    ];
 
   cmakeFlags = [
-    "-DEMBED_DATA=OFF" ]
+    "-DEMBED_DATA=OFF"
+    "-DUSE_QT5=ON"
+  ]
     ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
-    ++ edf withKDE "WITH_KDE"
-    ++ edf previews "WITH_WEBKIT";
+    ++ edf withKDE "WITH_KDE";
 
   preFixup =
     lib.optionalString buildClient ''
@@ -66,6 +83,6 @@ in with stdenv; mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     maintainers = with maintainers; [ phreedom ttuegel ];
     repositories.git = https://github.com/quassel/quassel.git;
-    inherit (qt.meta) platforms;
+    inherit (qtbase.meta) platforms;
   };
 }

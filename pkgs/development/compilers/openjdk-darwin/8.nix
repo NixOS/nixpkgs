@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, setJavaClassPath }:
+{ stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
 let
   jdk = stdenv.mkDerivation {
     name = "zulu1.8.0_66-8.11.0.1";
@@ -9,7 +9,7 @@ let
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
     };
 
-    buildInputs = [ unzip ];
+    buildInputs = [ unzip freetype ];
 
     installPhase = ''
       mkdir -p $out
@@ -25,6 +25,8 @@ let
       # properly.
       mkdir -p $out/nix-support
       echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+
+      install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/jre/lib/libfontmanager.dylib
 
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook

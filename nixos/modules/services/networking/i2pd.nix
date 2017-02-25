@@ -8,7 +8,7 @@ let
 
   homeDir = "/var/lib/i2pd";
 
-  extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
+  extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sLf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
 
   toYesNo = b: if b then "true" else "false";
 
@@ -147,7 +147,7 @@ let
   host = ${tun.address}
   port = ${tun.port}
   inport = ${tun.inPort}
-  accesslist = ${concatStringSep "," tun.accessList}
+  accesslist = ${builtins.concatStringsSep "," tun.accessList}
   '')
   }
   '';

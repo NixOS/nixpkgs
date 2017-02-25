@@ -8,14 +8,14 @@ spirv_sources = {
   tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "923a4596b44831a07060df45caacb522613730c9";
-    sha256 = "0hmgng2sv34amfsag3ya09prnv1w535djwlzfn8h2vh430vgawxa";
+    rev = "37422e9dba1a3a8cb8028b779dd546d43add6ef8";
+    sha256 = "0sp2p4wg902clq0fr94vj19vyv43cq333jjxr0mjzay8dw2h4yzk";
   };
   headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "33d41376d378761ed3a4c791fc4b647761897f26";
-    sha256 = "1s103bpi3g6hhq453qa4jbabfkyxxpf9vn213j8k4vm26lsi8hs2";
+    rev = "c470b68225a04965bf87d35e143ae92f831e8110";
+    sha256 = "18jgcpmm0ixp6314r5w144l3wayxjkmwqgx8dk5jgyw36dammkwd";
   };
 };
 
@@ -23,7 +23,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "spirv-tools-${version}";
-  version = "2016-07-18";
+  version = "2016-12-19";
 
   src = spirv_sources.tools;
   patchPhase = ''ln -sv ${spirv_sources.headers} external/spirv-headers'';
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules.";
+    description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
+    license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }

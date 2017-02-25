@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "non-${version}";
-  version = "2016-04-05";
+  version = "2016-12-07";
   src = fetchFromGitHub {
     owner = "original-male";
     repo = "non";
-    rev = "16885e69fe865495dc32d869d1454ab148b0dca6";
-    sha256 = "1nwzzgcdpbqh5kjvz40yy5nmzvpp8gcr9biyhhwi68s5bsg972ss";
+    rev = "754d113b0e3144a145d50bde8370ff2cae98169c";
+    sha256 = "04h67vy966vys6krgjsxd7dph4z46r8c6maw1hascxlasy3bhhk0";
   };
 
   buildInputs = [ pkgconfig python2 cairo libjpeg ntk libjack2 libsndfile

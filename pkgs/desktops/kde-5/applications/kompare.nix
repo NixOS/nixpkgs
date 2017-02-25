@@ -15,4 +15,7 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/kompare" ]; }
+kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/kompare" ];
+}

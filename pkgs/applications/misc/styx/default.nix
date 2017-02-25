@@ -1,35 +1,52 @@
-{ stdenv, fetchFromGitHub, caddy, asciidoctor }:
+{ stdenv, fetchFromGitHub, caddy, asciidoctor
+, file, lessc, sass, multimarkdown }:
 
 stdenv.mkDerivation rec {
   name    = "styx-${version}";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
     rev    = "v${version}";
-    sha256 = "0wyibdyi4ld0kfhng5ldb2rlgjrci014fahxn7nnchlg7dvcc5ni";
+    sha256 = "0v36i40cwrajsd02xjfdldih5g493m28lhzgjg1gd3pwk2yd6rm1";
   };
 
-  server = caddy.bin;
+  setSourceRoot = "cd styx-*/src; export sourceRoot=`pwd`";
+
+  server = "${caddy.bin}/bin/caddy";
 
   nativeBuildInputs = [ asciidoctor ];
 
-  setSourceRoot = "cd styx-*/src; export sourceRoot=`pwd`";
+  propagatedBuildInputs = [
+    file
+    lessc
+    sass
+    asciidoctor
+    multimarkdown
+  ];
+
+  outputs = [ "out" "lib" ];
 
   installPhase = ''
     mkdir $out
     install -D -m 777 styx.sh $out/bin/styx
 
     mkdir -p $out/share/styx
-    cp -r lib $out/share/styx
     cp -r scaffold $out/share/styx
+    cp    builder.nix $out/share/styx
 
     mkdir -p $out/share/doc/styx
-    asciidoctor doc/manual.adoc -o $out/share/doc/styx/index.html
+    asciidoctor doc/index.adoc       -o $out/share/doc/styx/index.html
+    asciidoctor doc/styx-themes.adoc -o $out/share/doc/styx/styx-themes.html
+    cp -r doc/imgs $out/share/doc/styx/
 
     substituteAllInPlace $out/bin/styx
     substituteAllInPlace $out/share/doc/styx/index.html
+    substituteAllInPlace $out/share/doc/styx/styx-themes.html
+
+    mkdir $lib
+    cp -r lib/* $lib
   '';
 
   meta = with stdenv.lib; {

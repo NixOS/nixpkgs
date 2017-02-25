@@ -4,29 +4,24 @@ libfm, menu-cache }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "libfm-qt";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1kgvzjsa4ihlj2clz6y6s95nq0lhg66d1dhkgw3mdqaak7d0pdiz";
+    sha256 = "0k2g6bkz7bvawqkjzykbxi18wqsnhbxklqy6aqqkclpzcw45vk5v";
   };
 
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.liblxqt
-    lxqt.libqtxdg
+    lxqt.lxqt-build-tools
   ];
 
   buildInputs = [
     qt5.qtx11extras
     qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    xorg.libpthreadstubs
-    xorg.libXdmcp
     libfm
     menu-cache
   ];
@@ -37,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     homepage = https://github.com/lxde/libfm-qt;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

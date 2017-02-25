@@ -20,31 +20,30 @@ let
     else
       "${shortVersion}-g${builtins.substring 0 7 srcRev}";
 
-  name = "rustc-${version}";
-
   procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
 
-  meta = with stdenv.lib; {
-    homepage = http://www.rust-lang.org/;
-    description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington retrry ];
-    license = [ licenses.mit licenses.asl20 ];
-    platforms = platforms.linux ++ platforms.darwin;
-  };
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  name = "rustc-${version}";
   inherit version;
-  inherit meta;
 
   __impureHostDeps = [ "/usr/lib/libedit.3.dylib" ];
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
+
+  # Enable nightly features in stable compiles (used for
+  # bootstrapping, see https://github.com/rust-lang/rust/pull/37265).
+  # This loosens the hard restrictions on bootstrapping-compiler
+  # versions.
+  RUSTC_BOOTSTRAP = "1";
+
+  # Increase codegen units to introduce parallelism within the compiler.
+  RUSTFLAGS = "-Ccodegen-units=10";
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
@@ -57,6 +56,8 @@ stdenv.mkDerivation {
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
+                # TODO: Remove when fixed build with rustbuild
+                ++ [ "--disable-rustbuild" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
@@ -88,14 +89,14 @@ stdenv.mkDerivation {
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
     # Disable fragile linker-output-non-utf8 test
-    rm -vr src/test/run-make/linker-output-non-utf8/
+    rm -vr src/test/run-make/linker-output-non-utf8 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
-    rm -vr src/test/run-pass/issue-36023.rs
+    rm -vr src/test/run-pass/issue-36023.rs || true
 
     # Disable test getting stuck on hydra - possible fix:
     # https://reviews.llvm.org/rL281650
-    rm -vr src/test/run-pass/issue-36474.rs
+    rm -vr src/test/run-pass/issue-36474.rs || true
 
     # Useful debugging parameter
     # export VERBOSE=1
@@ -124,13 +125,12 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ optional (!forceBundledLLVM) llvmShared;
 
-  # https://github.com/rust-lang/rust/issues/30181
-  # enableParallelBuilding = false; # missing files during linking, occasionally
-
   outputs = [ "out" "doc" ];
   setOutputFlags = false;
 
+  # Disable codegen units for the tests.
   preCheck = ''
+    export RUSTFLAGS=
     export TZDIR=${tzdata}/share/zoneinfo
   '' +
   # Ensure TMPDIR is set, and disable a test that removing the HOME
@@ -141,7 +141,18 @@ stdenv.mkDerivation {
     sed -i '28s/home_dir().is_some()/true/' ./src/test/run-pass/env-home-dir.rs
   '';
 
-  # Disable doCheck on Darwin to work around upstream issue
   doCheck = true;
   dontSetConfigureCross = true;
+
+  # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
+  # https://github.com/rust-lang/rust/issues/30181
+  # enableParallelBuilding = false;
+
+  meta = with stdenv.lib; {
+    homepage = http://www.rust-lang.org/;
+    description = "A safe, concurrent, practical language";
+    maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington retrry ];
+    license = [ licenses.mit licenses.asl20 ];
+    platforms = platforms.linux ++ platforms.darwin;
+  };
 }

@@ -50,7 +50,7 @@ let
       outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
-      setupHook = ./setup-hook.sh;
+      setupHook = ../qtsubmodule-setup-hook.sh;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
@@ -82,6 +82,7 @@ let
         inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
       };
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
+      qtquickcontrols2 = callPackage ./qtquickcontrols2.nix {};
       qtscript = callPackage ./qtscript {};
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
@@ -90,7 +91,7 @@ let
       qttranslations = callPackage ./qttranslations.nix {};
       qtwayland = callPackage ./qtwayland.nix {};
       qtwebchannel = callPackage ./qtwebchannel.nix {};
-      qtwebengine = callPackage ./qtwebengine.nix {};
+      qtwebengine = callPackage ./qtwebengine {};
       qtwebkit = callPackage ./qtwebkit {};
       qtwebsockets = callPackage ./qtwebsockets.nix {};
       qtx11extras = callPackage ./qtx11extras.nix {};
@@ -107,12 +108,12 @@ let
       makeQtWrapper =
         makeSetupHook
         { deps = [ makeWrapper ]; }
-        ./make-qt-wrapper.sh;
+        ../make-qt-wrapper.sh;
 
       qmakeHook =
         makeSetupHook
         { deps = [ self.qtbase.dev ]; }
-        ./qmake-hook.sh;
+        ../qmake-hook.sh;
 
     };
 

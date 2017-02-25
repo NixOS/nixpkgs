@@ -112,8 +112,7 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
   outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
       if sha512 != "" then "sha512" else if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
   outputHash = if outputHash != "" then outputHash else
-      if sha512 != "" then sha512 else if sha256 != "" then sha256 else if sha1 != "" then sha1 else
-        (stdenv.lib.fetchMD5warn "fetchurl" (builtins.head urls_) md5);
+      if sha512 != "" then sha512 else if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 

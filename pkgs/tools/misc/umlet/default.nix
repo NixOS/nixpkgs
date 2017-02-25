@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.umlet.com;
     license = licenses.gpl3;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

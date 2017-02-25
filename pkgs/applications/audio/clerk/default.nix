@@ -2,7 +2,7 @@
 utillinux, pythonPackages, libnotify }:
 
 stdenv.mkDerivation {
-  name = "clerk-unstable-2016-10-14";
+  name = "clerk-2016-10-14";
 
   src = fetchFromGitHub {
     owner = "carnager";

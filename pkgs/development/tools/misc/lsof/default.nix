@@ -1,5 +1,7 @@
 { stdenv, fetchurl, ncurses }:
 
+let dialect = with stdenv.lib; last (splitString "-" stdenv.system); in
+
 stdenv.mkDerivation rec {
   name = "lsof-${version}";
   version = "4.89";
@@ -24,19 +26,18 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
- 
+
   patches = [ ./dfile.patch ];
 
-  configurePhase = ''
-    # Stop build scripts from searching global include paths
-    export LSOF_INCLUDE=${stdenv.cc.libc}/include
-    ./Configure -n ${if stdenv.isDarwin then "darwin" else "linux"}
-  '';
-  
+  # Stop build scripts from searching global include paths
+  LSOF_INCLUDE = "${stdenv.cc.libc}/include";
+  configurePhase = "./Configure -n ${dialect}";
   preBuild = ''
     sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;' -e 's/-lcurses/-lncurses/'
+    for filepath in $(find dialects/${dialect} -type f); do
+      sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
+    done
   '';
-
 
   installPhase = ''
     mkdir -p $out/bin $out/man/man8
@@ -53,6 +54,6 @@ stdenv.mkDerivation rec {
       from it).
     '';
     maintainers = [ stdenv.lib.maintainers.mornfall ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

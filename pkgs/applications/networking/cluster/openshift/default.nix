@@ -1,9 +1,11 @@
 { stdenv, fetchFromGitHub, go, which }:
 
 let
-  version = "1.3.1";
-  versionMajor = "1";
-  versionMinor = "3";
+  version = "1.3.2";
+  ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
+  versionMajor = ver 0;
+  versionMinor = ver 1;
+  versionPatch = ver 2;
 in
 stdenv.mkDerivation rec {
   name = "openshift-origin-${version}";
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "1kxa1k38hvi1vg52p82mmkmp9k4bbbm2pryzapsxwga7d8x4bnbh";
+    sha256 = "0zw8zb9c6icigcq6y47ppnjnqyghk2kril07bapbddvgnvbbfp6m";
   };
 
   buildInputs = [ go which ];
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
     homepage = http://www.openshift.org;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [offline bachp];
     platforms = platforms.linux;
   };
 }

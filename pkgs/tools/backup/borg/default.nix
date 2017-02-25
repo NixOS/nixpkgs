@@ -2,24 +2,25 @@
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
-  version = "1.0.8";
+  version = "1.0.9";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/borgbackup/borg/releases/download/"
       + "${version}/${name}.tar.gz";
-    sha256 = "1fdfi0yzzdrrlml6780n4fh61sqm7pw6fcd1y67kfkvw8hy5c0k9";
+    sha256 = "1ciwp9yilcibk0x82y5nn8ps95jrm8rxvff8mjrlp7a2w100i1im";
   };
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:
-    sphinx
+    sphinx sphinx_rtd_theme
   ];
-  propagatedBuildInputs = [
-    acl lz4 openssl
-  ] ++ (with python3Packages; [
-    cython msgpack llfuse tox detox setuptools_scm
-  ]);
+  buildInputs = [
+    acl lz4 openssl python3Packages.setuptools_scm
+  ];
+  propagatedBuildInputs = with python3Packages; [
+    cython llfuse msgpack
+  ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"

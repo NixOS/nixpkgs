@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   name = "moonlight-embedded-${version}";
-  version = "2.2.1";
+  version = "2.2.3";
 
   # fetchgit used to ensure submodules are available
   src = fetchgit {

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "radeontop-${version}";
-  version = "2016-07-04";
+  version = "2016-10-28";
 
   src = fetchFromGitHub {
-    sha256 = "07pj5c3shnxljwq0hkksw7qnp8kb3n5ngihdmi4fqbmyz8in2vm5";
-    rev = "bb3ed18aa8877f2816348ca9f016bb61d67e636f";
+    sha256 = "0y4rl8pm7p22s1ipyb75mlsk9qb6j4rd6nlqb3digmimnyxda1q3";
+    rev = "v1.0";
     repo = "radeontop";
     owner = "clbr";
   };

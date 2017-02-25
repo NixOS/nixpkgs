@@ -1,15 +1,15 @@
 { stdenv, fetchurl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "libpcap-1.7.4";
-  
+  name = "libpcap-1.8.1";
+
   src = fetchurl {
     url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "1c28ykkizd7jqgzrfkg7ivqjlqs9p6lygp26bsw2i0z8hwhi3lvs";
+    sha256 = "07jlhc66z76dipj4j5v3dig8x6h3k6cb36kmnmpsixf3zmlvqgb7";
   };
-  
+
   nativeBuildInputs = [ flex bison ];
-  
+
   # We need to force the autodetection because detection doesn't
   # work in pure build enviroments.
   configureFlags =
@@ -22,16 +22,17 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''mkdir -p $out/bin'';
-  
+
   crossAttrs = {
     # Stripping hurts in static libraries
     dontStrip = true;
     configureFlags = configureFlags ++ [ "ac_cv_linux_vers=2" ];
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.tcpdump.org;
     description = "Packet Capture Library";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

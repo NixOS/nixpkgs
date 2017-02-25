@@ -75,7 +75,7 @@ let
     '') cfg.listenAddresses}
     Listen /var/run/cups/cups.sock
 
-    SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin
+    SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
 
     DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
 
@@ -310,6 +310,13 @@ in
             for i in *; do
               [ ! -e "/var/lib/cups/$i" ] && ln -s "${rootdir}/etc/cups/$i" "/var/lib/cups/$i"
             done
+
+            #update path reference
+            [ -L /var/lib/cups/path ] && \
+              rm /var/lib/cups/path
+            [ ! -e /var/lib/cups/path ] && \
+              ln -s ${bindir} /var/lib/cups/path
+
             ${optionalString cfg.gutenprint ''
               if [ -d /var/lib/cups/ppd ]; then
                 ${gutenprint}/bin/cups-genppdupdate -p /var/lib/cups/ppd

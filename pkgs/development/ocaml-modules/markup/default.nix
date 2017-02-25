@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, uutf, lwt }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, uutf, lwt }:
 
 stdenv.mkDerivation rec {
-  pname = "ocaml-markup";
-  version = "0.7.2";
-  name = "${pname}-${version}";
+  pname = "markup";
+  version = "0.7.4";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://github.com/aantron/markup.ml/archive/${version}.tar.gz";
-    sha256 = "0d3wi22v7h0iqzq8dgl0g4fj2wb67gvmbzdckacifghinrx762k3";
+    sha256 = "1hchlqzsy9pax91gcdmxzakfm22fbvhxzwyzpvz8fqkx4372zs37";
     };
 
   buildInputs = [ ocaml findlib ocamlbuild ];

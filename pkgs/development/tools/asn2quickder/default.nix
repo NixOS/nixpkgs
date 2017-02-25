@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper }:
+{ stdenv, fetchFromGitHub, python2Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "asn2quickder";
@@ -12,15 +12,15 @@ stdenv.mkDerivation rec {
     repo = "${pname}";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pyparsing makeWrapper ];
+  propagatedBuildInputs = with python2Packages; [ pyparsing makeWrapper ];
 
-  patchPhase = with pythonPackages; ''
+  patchPhase = with python2Packages; ''
     substituteInPlace Makefile \
-      --replace '..' '..:$(DESTDIR)/${python.sitePackages}:${pythonPackages.pyparsing}/${python.sitePackages}' \
+      --replace '..' '..:$(DESTDIR)/${python.sitePackages}:${python2Packages.pyparsing}/${python.sitePackages}' \
     '';
 
   installPhase = ''
-    mkdir -p $out/${pythonPackages.python.sitePackages}/
+    mkdir -p $out/${python2Packages.python.sitePackages}/
     mkdir -p $out/bin $out/lib $out/sbin $out/man
     make DESTDIR=$out PREFIX=/ all
     make DESTDIR=$out PREFIX=/ install

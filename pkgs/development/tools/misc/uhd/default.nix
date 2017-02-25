@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "uhd-${version}";
-  version = "3.9.3";
+  version = "3.10.1";
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf...
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "release_003_009_003";
-    sha256 = "0nbm8nrjd0l8jj1wq0kkgd8pifzysdyc7pvraq16m0dc01mr638h";
+    rev = "release_003_010_001_000";
+    sha256 = "1wypn1cspwx331ah7awajjhnpyjykiif0h1l4fb3lahxvsnkwi51";
   };
 
   enableParallelBuilding = true;

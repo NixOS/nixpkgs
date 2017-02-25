@@ -4,29 +4,20 @@
 , kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
 , iptables, gnu-efi
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, enableKDbus ? false
 }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "231";
+  version = "232";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "nixos";
     repo = "systemd";
-    rev = "3b11791d323cf2d0e00a156967021e1ae9119de2";
-    sha256 = "1xzldwd6407jdg6z36smd49d961nmqykpay969i4xfdldcgyjdv0";
+    rev = "c110fc3504d7a2fa944575b347814f7e97d3c5a0";
+    sha256 = "19carch1adad70nifbqdx649kj5m8pgpiq27hh05ig38yrbmb2vz";
   };
-
-  patches = [
-    # Fixes tty issues, see #18158. Remove when upgrading to systemd 232.
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/bd64d82c1c0e3fe2a5f9b3dd9132d62834f50b2d.patch";
-      sha256 = "1gc9fxdlnfmjhbi77xfwcb5mkhryjsdi0rmbh2lq2qq737iyqqwm";
-    })
-  ];
 
   outputs = [ "out" "lib" "man" "dev" ];
 
@@ -53,7 +44,6 @@ stdenv.mkDerivation rec {
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
       "--with-tty-gid=3" # tty in NixOS has gid 3
-      "--enable-compat-libs" # get rid of this eventually
       "--disable-tests"
 
       "--enable-lz4"
@@ -80,7 +70,7 @@ stdenv.mkDerivation rec {
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
       "--with-rc-local-script-path-stop=/etc/halt.local"
-    ] ++ (if enableKDbus then [ "--enable-kdbus" ] else [ "--disable-kdbus" ]);
+    ];
 
   hardeningDisable = [ "stackprotector" ];
 

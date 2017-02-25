@@ -2,7 +2,7 @@
 
 if (isPyPy) then throw "pycairo not supported for interpreter ${python.executable}" else mkPythonDerivation rec {
   version = "1.10.0";
-  name = "${python.libPrefix}-pycairo-${version}";
+  name = "pycairo-${version}";
   src = if isPy3k
     then fetchurl {
       url = "http://cairographics.org/releases/pycairo-${version}.tar.bz2";

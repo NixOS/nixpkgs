@@ -115,6 +115,11 @@ set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-loaOfSub-
 checkConfigError 'The option .* defined in .* does not exist.' "$@"
 checkConfigOutput "true" "$@" ./define-module-check.nix
 
+# Check coerced value.
+checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
+checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
+checkConfigError 'The option value .* in .* is not a string or integer.' config.value ./declare-coerced-value.nix ./define-value-list.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

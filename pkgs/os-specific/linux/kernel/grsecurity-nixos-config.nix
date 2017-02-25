@@ -22,6 +22,8 @@ PAX_PT_PAX_FLAGS y
 PAX_XATTR_PAX_FLAGS y
 PAX_EI_PAX n
 
+PAX_INITIFY y
+
 # The bts instrumentation method is compatible with binary only modules.
 #
 # Note: if platform supports SMEP, we could do without this
@@ -29,6 +31,10 @@ PAX_KERNEXEC_PLUGIN_METHOD_BTS y
 
 # Additional grsec hardening not implied by auto constraints
 GRKERNSEC_IO y
+GRKERNSEC_SYSFS_RESTRICT y
+GRKERNSEC_ROFS y
+
+GRKERNSEC_MODHARDEN y
 
 # Disable protections rendered useless by redistribution
 GRKERNSEC_HIDESYM n
@@ -50,10 +56,8 @@ GRKERNSEC_FORKFAIL y
 # Wishlist: support trusted path execution
 GRKERNSEC_TPE n
 
-# Wishlist: enable this, but breaks user initiated module loading
-GRKERNSEC_MODHARDEN n
-
 GRKERNSEC_SYSCTL y
 GRKERNSEC_SYSCTL_DISTRO y
-GRKERNSEC_SYSCTL_ON y
+# Assume that appropriate sysctls are toggled once the system is up
+GRKERNSEC_SYSCTL_ON n
 ''

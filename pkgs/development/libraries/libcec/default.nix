@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cmake, pkgconfig, udev, libcec_platform }:
 
-let version = "3.0.1"; in
+let version = "4.0.2"; in
 
 stdenv.mkDerivation {
   name = "libcec-${version}";
 
   src = fetchurl {
     url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}.tar.gz";
-    sha256 = "0gi5gq8pz6vfdx80pimx23d5g243zzgmc7s8wpb686csjk470dky";
+    sha256 = "09xsw9hfymzl9fi9r2r8n5cxk80fc00x9drsy1r59pgbycqxvf5q";
   };
 
   buildInputs = [ cmake pkgconfig udev libcec_platform ];

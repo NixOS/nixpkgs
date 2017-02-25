@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.9.2";
+  version = "3.7.10.1";
 
   src = fetchurl {
     url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "0qdmakvgq3jxnnqpcn3k4q07vj8ycrbyzv32h76k71cv13w2yrki";
+    sha256 = "0ds9mcw8hgm03f82jvp3j4mm02ha6zvsl77lp13jzqmbqifbdmv3";
   };
 
   buildInputs = [

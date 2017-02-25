@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./
     sed -i 's/dvdisaster48.png/dvdisaster/' contrib/dvdisaster.desktop
+    substituteInPlace scripts/bash-based-configure \
+      --replace 'if (make -v | grep "GNU Make") > /dev/null 2>&1 ;' \
+                'if make -v | grep "GNU Make" > /dev/null 2>&1 ;'
   '';
 
   configureFlags = [

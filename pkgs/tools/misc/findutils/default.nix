@@ -8,9 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
-  nativeBuildInputs = [ coreutils ];
+  patches = [ ./memory-leak.patch ];
 
-  doCheck = !stdenv.isDarwin;
+  buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
+
+  # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
+  doCheck = !stdenv.isDarwin && (stdenv.system != "i686-linux");
 
   outputs = [ "out" "info" ];
 

@@ -32,9 +32,18 @@ stdenv.mkDerivation rec {
     # This is needed, for instance, so that running "ldd" on a binary that is
     # PaX-marked to disable mprotect doesn't fail with permission denied.
     ./pt-pax-flags.patch
+
+    # Bfd looks in BINDIR/../lib for some plugins that don't
+    # exist. This is pointless (since users can't install plugins
+    # there) and causes a cycle between the lib and bin outputs, so
+    # get rid of it.
+    ./no-plugins.patch
   ];
 
-  outputs = [ "out" "info" ] ++ (optional (cross == null) "dev");
+  outputs = [ "out" ]
+    ++ optional (cross == null && !stdenv.isDarwin) "lib" # problems in Darwin stdenv
+    ++ [ "info" ]
+    ++ optional (cross == null) "dev";
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];

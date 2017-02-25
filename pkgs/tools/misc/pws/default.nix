@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
 
     inherit ruby;
 
-    gemfile  = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset   = ./gemset.nix;
+    gemdir = ./.;
   };
 
   buildInputs = [ makeWrapper ];

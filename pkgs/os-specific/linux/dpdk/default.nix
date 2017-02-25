@@ -4,11 +4,11 @@ assert lib.versionAtLeast kernel.version "3.18";
 
 stdenv.mkDerivation rec {
   name = "dpdk-${version}-${kernel.version}";
-  version = "16.07";
+  version = "16.07.2";
 
   src = fetchurl {
-    url = "http://dpdk.org/browse/dpdk/snapshot/dpdk-${version}.tar.gz";
-    sha256 = "1sgh55w3xpc0lb70s74cbyryxdjijk1fbv9b25jy8ms3lxaj966c";
+    url = "http://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+    sha256 = "1mzwazmzpq8mvwiham80y6h53qpvjpp76v0d58gz9bfiphbi9876";
   };
 
   buildInputs = [ pkgconfig libvirt ];

@@ -318,6 +318,8 @@ mountFS() {
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
         lustrateRoot "/mnt-root"
+
+    true
 }
 
 lustrateRoot () {

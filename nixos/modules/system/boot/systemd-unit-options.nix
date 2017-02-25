@@ -52,6 +52,12 @@ in rec {
       description = "Units that want (i.e. depend on) this unit.";
     };
 
+    aliases = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = "Aliases of that unit.";
+    };
+
   };
 
   concreteUnitOptions = sharedOptions // {
@@ -464,5 +470,21 @@ in rec {
   };
 
   targetOptions = commonUnitOptions;
+
+  sliceOptions = commonUnitOptions // {
+
+    sliceConfig = mkOption {
+      default = {};
+      example = { MemoryMax = "2G"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Slice]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.slice</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
 
 }

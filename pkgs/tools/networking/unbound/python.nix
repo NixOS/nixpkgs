@@ -5,11 +5,11 @@ let
 in stdenv.mkDerivation rec {
   pname = "pyunbound";
   name = "${pname}-${version}";
-  version = "1.5.9";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/unbound-${version}.tar.gz";
-    sha256 = "01328cfac99ab5b8c47115151896a244979e442e284eb962c0ea84b7782b6990";
+    sha256 = "1dzsxyp34ianp08wk4vf13qzl5ss5rr9v1p8zr1aggfywrsbhzbb";
   };
 
   buildInputs = [ openssl expat libevent swig python ];
