@@ -19,19 +19,21 @@ existing packages here and modify it as necessary.
 1. Update the URL in `./fetch.sh`.
 2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/desktops/kde-5/plasma`
    from the top of the Nixpkgs tree.
-3. Invoke `nix-build -A kde5` and ensure that everything builds.
+3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
 
 */
 
-{ pkgs, debug ? false }:
+{
+  stdenv, lib, libsForQt5, makeSetupHook, symlinkJoin, fetchurl,
+  gconf,
+  debug ? false,
+}:
 
 let
 
-  inherit (pkgs) lib makeSetupHook stdenv symlinkJoin;
-
   mirror = "mirror://kde";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
   packages = self: with self; {
     plasmaPackage = args:
@@ -39,7 +41,7 @@ let
         inherit (args) name;
         sname = args.sname or name;
         inherit (srcs."${sname}") src version;
-      in kdeDerivation (args // {
+      in libsForQt5.kdeDerivation (args // {
         name = "${name}-${version}";
         inherit src;
 
@@ -86,7 +88,7 @@ let
     plasma-integration = callPackage ./plasma-integration.nix {};
     plasma-nm = callPackage ./plasma-nm {};
     plasma-pa = callPackage ./plasma-pa.nix {
-      inherit (pkgs.gnome3) gconf;
+      inherit gconf;
     };
     plasma-workspace = callPackage ./plasma-workspace {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
@@ -96,4 +98,4 @@ let
     systemsettings = callPackage ./systemsettings.nix {};
   };
 
-in packages
+in lib.makeScope libsForQt5.newScope packages

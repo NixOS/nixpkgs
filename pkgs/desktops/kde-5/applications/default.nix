@@ -20,31 +20,34 @@ still shows most of the available features is in `./gwenview.nix`.
 1. Update the URL in `./fetch.sh`.
 2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/desktops/kde-5/applications`
    from the top of the Nixpkgs tree.
-3. Invoke `nix-build -A kde5` and ensure that everything builds.
+3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
 
 */
 
-{ pkgs, debug ? false }:
+{
+  stdenv, lib, libsForQt5, fetchurl,
+  plasma5,
+  attica, phonon,
+  debug ? false,
+}:
 
 let
 
-  inherit (pkgs) lib stdenv;
-
   mirror = "mirror://kde";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
   packages = self: with self; {
 
     kdeApp = import ./kde-app.nix {
       inherit lib;
       inherit debug srcs;
-      inherit kdeDerivation;
+      inherit (libsForQt5) kdeDerivation;
     };
 
     kdelibs = callPackage ./kdelibs {
       inherit (srcs.kdelibs) src version;
-      inherit (pkgs) attica phonon;
+      inherit attica phonon;
     };
 
     akonadi = callPackage ./akonadi.nix {};
@@ -54,9 +57,7 @@ let
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
     dolphin-plugins = callPackage ./dolphin-plugins.nix {};
-    ffmpegthumbs = callPackage ./ffmpegthumbs.nix {
-      ffmpeg = pkgs.ffmpeg_2;
-    };
+    ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
     filelight = callPackage ./filelight.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
@@ -85,9 +86,11 @@ let
     okteta = callPackage ./okteta.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
-    spectacle = callPackage ./spectacle.nix {};
+    spectacle = callPackage ./spectacle.nix {
+      inherit (plasma5) kscreen;
+    };
 
     l10n = pkgs.recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib pkgs; });
   };
 
-in packages
+in lib.makeScope libsForQt5.newScope packages

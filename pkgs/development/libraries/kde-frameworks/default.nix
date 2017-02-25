@@ -19,7 +19,7 @@ existing packages here and modify it as necessary.
 1. Update the URL in `./fetch.sh`.
 2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/kde-frameworks`
    from the top of the Nixpkgs tree.
-3. Invoke `nix-build -A kde5` and ensure that everything builds.
+3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
 
 */

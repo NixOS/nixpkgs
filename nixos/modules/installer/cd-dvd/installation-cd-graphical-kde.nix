@@ -66,7 +66,7 @@ with lib;
   in ''
     mkdir -p /root/Desktop
     ln -sfT ${desktopFile} /root/Desktop/nixos-manual.desktop
-    ln -sfT ${pkgs.kde5.konsole}/share/applications/org.kde.konsole.desktop /root/Desktop/org.kde.konsole.desktop
+    ln -sfT ${pkgs.kdeApplications.konsole}/share/applications/org.kde.konsole.desktop /root/Desktop/org.kde.konsole.desktop
     ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop /root/Desktop/gparted.desktop
   '';
 

@@ -7846,7 +7846,7 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
-  kdelibs4 = kde5.applications.kdelibs;
+  kdelibs4 = kdeApplications.kdelibs;
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -12791,7 +12791,7 @@ with pkgs;
 
   calligra = kde4.callPackage ../applications/office/calligra {
     vc = vc_0_7;
-    oxygen_icons = kde5.oxygen-icons5;
+    oxygen_icons = libsForQt5.oxygen-icons5;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -14048,17 +14048,29 @@ with pkgs;
 
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
+  kdeApplications = import ../desktops/kde-5/applications {
+    inherit stdenv lib libsForQt5 fetchurl;
+    inherit plasma5;
+    inherit attica phonon;
+  };
+
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
-  kdecoration-viewer = kde5.callPackage ../tools/misc/kdecoration-viewer {};
+  kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer {
+    inherit (plasma5) kdecoration;
+  };
 
-  kdevelop-pg-qt = kde5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
+  kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
 
-  kdevelop = kde5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
+  kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
+    inherit (kdeApplications) konsole;
+    inherit (plasma5) libksysguard;
     llvmPackages = llvmPackages_38;
   };
 
-  kdevplatform = kde5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {};
+  kdevplatform = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {
+    inherit (kdeApplications) libkomparediff2;
+  };
 
   keepnote = callPackage ../applications/office/keepnote { };
 
@@ -14080,14 +14092,18 @@ with pkgs;
     qt = qt4;
   };
 
-  kile = kde5.callPackage ../applications/editors/kile { };
+  kile = libsForQt5.callPackage ../applications/editors/kile {
+    inherit (kdeApplications) konsole;
+  };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome2) libglade;
     ffmpeg = ffmpeg_2;
   };
 
-  kipi-plugins = kde5.callPackage ../applications/graphics/kipi-plugins {};
+  kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins {
+    inherit (kdeApplications) libkipi;
+  };
 
   kiwix = callPackage ../applications/misc/kiwix {
     stdenv = overrideCC stdenv gcc49;
@@ -16050,7 +16066,9 @@ with pkgs;
 
   yabar = callPackage ../applications/window-managers/yabar { };
 
-  yakuake = kde5.callPackage ../applications/misc/yakuake {};
+  yakuake = libsForQt5.callPackage ../applications/misc/yakuake {
+    inherit (kdeApplications) konsole;
+  };
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
@@ -16210,7 +16228,9 @@ with pkgs;
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam = kde5.callPackage ../applications/graphics/digikam {
+  digikam = libsForQt5.callPackage ../applications/graphics/digikam {
+    inherit (kdeApplications) libkipi marble;
+    inherit (plasma5) oxygen;
     boost = boost160;
   };
 
@@ -16779,7 +16799,7 @@ with pkgs;
       );
     in recurseIntoAttrs self;
 
-  lumina = qt5.callPackage ../desktops/lumina { };
+  lumina = libsForQt5.callPackage ../desktops/lumina { };
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
     inherit pkgs libsForQt5 fetchFromGitHub;
@@ -16795,11 +16815,16 @@ with pkgs;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
   };
 
+  plasma5 = import ../desktops/kde-5/plasma {
+    inherit stdenv lib libsForQt5 makeSetupHook symlinkJoin fetchurl;
+    inherit (gnome3) gconf;
+  };
+
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg;
   };
 
-  redshift-plasma-applet = callPackage ../applications/misc/redshift-plasma-applet { };
+  redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
   orion = callPackage ../misc/themes/orion {};
 
@@ -16812,22 +16837,6 @@ with pkgs;
   gnome_themes_standard = gnome3.gnome_themes_standard;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
-
-  kde5 =
-    let
-      plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
-      applications = import ../desktops/kde-5/applications { inherit pkgs; };
-      merged = self:
-        {
-          plasma = plasma self;
-          frameworks = libsForQt5.kdeFrameworks;
-          applications = applications self;
-        }
-        // libsForQt5.kdeFrameworks
-        // plasma self
-        // applications self;
-    in
-      recurseIntoAttrs (lib.makeScope libsForQt5.newScope merged);
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
