@@ -569,7 +569,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_type_conv-113_33_02.nix { }
       else callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
 
-    ppx_compare = callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
+    ppx_compare =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_compare-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
 
     ppx_here = callPackage ../development/ocaml-modules/janestreet/ppx-here.nix {};
 
