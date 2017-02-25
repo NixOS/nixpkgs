@@ -622,6 +622,17 @@ rec {
 
   };
 
+  argtextobj = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "argtextobj-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/argtextobj.vim";
+      rev = "f3fbe427f7b4ec436416a5816d714dc917dc530b";
+      sha256 = "1l4jh5hdmky1qj5z26jpnk49a6djjcvzyyr6pknrrgb8rzkiln48";
+    };
+    dependencies = [];
+
+  };
+
   vim-elixir = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-elixir-2017-01-24";
     src = fetchgit {

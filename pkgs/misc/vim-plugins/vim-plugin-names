@@ -121,6 +121,7 @@
 "github:vim-scripts/Colour-Sampler-Pack"
 "github:vim-scripts/Rename"
 "github:vim-scripts/a.vim"
+"github:vim-scripts/argtextobj.vim"
 "github:vim-scripts/align"
 "github:vim-scripts/changeColorScheme.vim"
 "github:vim-scripts/random.vim"
