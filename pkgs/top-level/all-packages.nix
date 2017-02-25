@@ -13771,6 +13771,8 @@ with pkgs;
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
+  hiawatha = callPackage ../servers/http/hiawatha { };
+
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
   homebank = callPackage ../applications/office/homebank {
