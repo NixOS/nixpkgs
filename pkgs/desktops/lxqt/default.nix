@@ -1,13 +1,11 @@
-{ pkgs, newScope, fetchFromGitHub }:
+{ pkgs, makeScope, libsForQt5, fetchFromGitHub }:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
+  packages = self: with self; {
 
     # For compiling information, see:
     # - https://github.com/lxde/lxqt/wiki/Building-from-source
-  
+
     standardPatch = ''
       for file in $(find . -name CMakeLists.txt); do
         substituteInPlace $file \
@@ -128,4 +126,4 @@ let
 
   };
 
-in self
+in makeScope libsForQt5.newScope packages
