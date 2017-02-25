@@ -78,16 +78,8 @@ let
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
-    # FIXME: this collides with the "ecm" package.
-    ecm =
-      let drv = { cmake, ecmNoHooks, pkgconfig, qtbase, qttools }:
-            makeSetupHook
-            { deps = lib.chooseDevOutputs [ cmake ecmNoHooks pkgconfig qtbase qttools ]; }
-            ./setup-hook.sh;
-      in callPackage drv {};
-    ecmNoHooks = callPackage ./extra-cmake-modules {
-      inherit (srcs.extra-cmake-modules) src version;
-    };
+    ecm = callPackage ./extra-cmake-modules {};
+    ecmNoHooks = callPackage ./extra-cmake-modules/no-hooks.nix {};
     frameworkintegration = callPackage ./frameworkintegration.nix {};
     kactivities = callPackage ./kactivities.nix {};
     kactivities-stats = callPackage ./kactivities-stats.nix {};
