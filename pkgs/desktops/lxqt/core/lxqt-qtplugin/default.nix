@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, lxqt }:
+{
+  stdenv, fetchFromGitHub, standardPatch,
+  cmake, lxqt-build-tools,
+  qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg,
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,21 +18,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtx11extras
-    qt5.qttools
-    qt5.qtsvg
-    qt5.libdbusmenu
-    lxqt.libqtxdg
+    qtbase
+    qtx11extras
+    qttools
+    qtsvg
+    libdbusmenu
+    libqtxdg
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
-  postPatch = lxqt.standardPatch;
+  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "LXQt Qt platform integration plugin";

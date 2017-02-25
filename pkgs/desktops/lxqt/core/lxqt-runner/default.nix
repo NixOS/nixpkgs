@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt,
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common, lxqt-globalkeys,
 menu-cache, muparser }:
 
 stdenv.mkDerivation rec {
@@ -16,18 +16,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
-    lxqt.lxqt-common
-    lxqt.lxqt-globalkeys
+    qtbase
+    qttools
+    qtsvg
+    kwindowsystem
+    liblxqt
+    libqtxdg
+    lxqt-common
+    lxqt-globalkeys
     menu-cache
     muparser
   ];

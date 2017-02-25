@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, xorg,
-libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
-lxmenu-data }:
+{
+  stdenv, fetchFromGitHub, standardPatch,
+  cmake, pkgconfig, lxqt-build-tools,
+  qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
+  kguiaddons, liblxqt, libqtxdg, lxqt-common, lxqt-globalkeys, libsysstat,
+  xorg, libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
+  lxmenu-data
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -17,23 +22,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
-    qt5.qtsvg
-    qt5.libdbusmenu
-    kde5.kwindowsystem
-    kde5.solid
-    kde5.kguiaddons
-    lxqt.liblxqt
-    lxqt.libqtxdg
-    lxqt.lxqt-common
-    lxqt.lxqt-globalkeys
-    lxqt.libsysstat
+    qtbase
+    qttools
+    qtx11extras
+    qtsvg
+    libdbusmenu
+    kwindowsystem
+    solid
+    kguiaddons
+    liblxqt
+    libqtxdg
+    lxqt-common
+    lxqt-globalkeys
+    libsysstat
     xorg.libpthreadstubs
     xorg.libXdmcp
     libstatgrab
@@ -46,7 +51,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
-  postPatch = lxqt.standardPatch;
+  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "The LXQt desktop panel";
