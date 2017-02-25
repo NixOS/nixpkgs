@@ -24,16 +24,18 @@ existing packages here and modify it as necessary.
 
 */
 
-{ pkgs, debug ? false }:
+{
+  stdenv, lib, makeSetupHook, makeWrapper, fetchurl, buildEnv,
+  callPackage,
+  debug ? false
+}:
 
 let
 
-  inherit (pkgs) lib makeSetupHook stdenv;
-
   mirror = "mirror://kde";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
-  packages = self: with self; {
+  packages = rec {
 
     kdeDerivation = args:
       let
@@ -69,7 +71,7 @@ let
       });
 
     kdeWrapper = import ./kde-wrapper.nix {
-      inherit (pkgs) stdenv lib makeWrapper buildEnv;
+      inherit stdenv lib makeWrapper buildEnv;
     };
 
     attica = callPackage ./attica.nix {};

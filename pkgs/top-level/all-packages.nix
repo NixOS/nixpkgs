@@ -9336,11 +9336,11 @@ with pkgs;
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
   mkLibsForQt5 = self: with self;
-    let kdeFrameworks =
-          import ../development/libraries/kde-frameworks { inherit pkgs; } self;
+    let kdeFrameworks = import ../development/libraries/kde-frameworks {
+          inherit stdenv lib makeSetupHook makeWrapper fetchurl buildEnv;
+          inherit (self) callPackage;
+        };
     in {
-
-    inherit kdeFrameworks;
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
