@@ -6,7 +6,7 @@
 
 let
 
-  inherit (stdenv.lib) fix' extends;
+  inherit (stdenv.lib) fix' extends makeExtensible;
 
   haskellPackages = self:
     let
@@ -109,7 +109,7 @@ let
 
 in
 
-  fix'
+  makeExtensible
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig
