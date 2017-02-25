@@ -36,6 +36,12 @@ in stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/community.git/plain/mupdf/trunk/0001-mupdf-openjpeg.patch?id=9083dac2a398bfe694d31a0c6a0a839c5a756e53";
       sha256 = "14ndgy3w1sl25km9bcc2zfcxrcihqjw1sdzkpcw5g1mi7gcgxp3g";
     })
+
+    (fetchurl {
+      name = "CVE-2017-5896.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2c4e5867ee699b1081527bc6c6ea0e99a35a5c27";
+      sha256 = "14k7x47ifx82sds1c06ibzbmcparfg80719jhgwjk6w1vkh4r693";
+    })
   ];
 
   makeFlags = [ "prefix=$(out)" ];
