@@ -1,7 +1,7 @@
 {
   stdenv, lib, src, version,
   automoc4, cmake, perl, pkgconfig,
-  kdelibs, qt4, xproto
+  kdelibs4, qt4, xproto
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     homepage = "http://www.kde.org";
   };
   inherit src;
-  buildInputs = [ kdelibs qt4 xproto ];
+  buildInputs = [ kdelibs4 qt4 xproto ];
   nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
   cmakeFlags = [
     "-DUSE_KDE4=ON"

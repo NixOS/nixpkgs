@@ -16815,7 +16815,7 @@ with pkgs;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
   };
 
-  plasma5 = import ../desktops/kde-5/plasma {
+  plasma5 = import ../desktops/plasma-5 {
     inherit stdenv lib libsForQt5 makeSetupHook symlinkJoin fetchurl;
     inherit (gnome3) gconf;
   };
