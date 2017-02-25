@@ -16822,11 +16822,10 @@ with pkgs;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
   };
 
-  plasma5 = import ../desktops/plasma-5 {
-    inherit stdenv lib libsForQt5 makeSetupHook symlinkJoin fetchurl;
-    inherit kdeDerivation;
+  plasma5 = recurseIntoAttrs (import ../desktops/plasma-5 {
+    inherit libsForQt5 kdeDerivation lib fetchurl;
     inherit (gnome3) gconf;
-  };
+  });
 
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg;
