@@ -5,16 +5,16 @@ with lib;
 let
 
   xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.kde5;
+  cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeWrapper kdeApplications plasma5 libsForQt5 qt5 xorg;
 
 in
 
 {
   options = {
 
-    services.xserver.desktopManager.kde5 = {
+    services.xserver.desktopManager.plasma5 = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -45,12 +45,12 @@ in
 
   config = mkMerge [
     (mkIf (cfg.extraPackages != []) {
-      environment.systemPackages = [ (libsForQt5.kdeWrapper cfg.extraPackages) ];
+      environment.systemPackages = [ (kdeWrapper cfg.extraPackages) ];
     })
 
     (mkIf (xcfg.enable && cfg.enable) {
       services.xserver.desktopManager.session = singleton {
-        name = "Plasma 5";
+        name = "plasma5";
         bgSupport = true;
         start = ''
           # Load PulseAudio module for routing support.
@@ -163,7 +163,7 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      services.xserver.desktopManager.kde5.extraPackages =
+      services.xserver.desktopManager.plasma5.extraPackages =
         with kdeApplications; with plasma5;
         [
           khelpcenter
