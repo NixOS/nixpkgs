@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.vms;
 
+  system = config.nixpkgs.system;
+
   machineOpts = { name, config, ... }: {
     options = {
       # TODO: allow leaving these field unset and auto-fill it with a valid value
@@ -72,27 +74,63 @@ let
           merge = loc: defs: (import ../../lib/eval-config.nix {
             inherit system;
             modules =
-              let extraConfig =
-                { networking = {
-                    hostName = mkDefault name;
-                    useDHCP = false;
-                    defaultGateway = cfg.ip4.address;
-                    defaultGateway6 = cfg.ip6.address;
-                    interfaces.eth0 = {
-                      ip4.address = cfg.${name}.ip4;
-                      ip4.prefixLength = cfg.ip4.prefixLength;
-                      ip6.address = cfg.${name}.ip6;
-                      ip6.prefixLength = cfg.ip6.prefixLength;
-                    };
-                  };
-                };
-              in [ extraConfig ] ++ (map (x: x.value) defs);
+              [ (extraConfig name) ] ++ (map (x: x.value) defs);
             prefix = [ "vms" "machines" name ];
           }).config;
         };
       };
     };
   };
+
+  extraConfig = name: {
+    boot.loader.grub.enable = false;
+
+    networking = {
+      hostName = mkDefault name;
+      useDHCP = false;
+      defaultGateway = mkDefault cfg.ip4.address;
+      defaultGateway6 = mkDefault cfg.ip6.address;
+      /* TODO
+      interfaces.eth0 = {
+        ip4.address = cfg.${name}.ip4;
+        ip4.prefixLength = cfg.ip4.prefixLength;
+        ip6.address = cfg.${name}.ip6;
+        ip6.prefixLength = cfg.ip6.prefixLength;
+      };
+      */
+    };
+  };
+
+  startVM = name:
+    let mcfg = cfg.machines.${name}; in
+    ''
+      #!${pkgs.stdenv.shell}
+
+      image = "${cfg.imagesPath}/${name}.img"
+      store = "${cfg.storesPath}/${name}"
+      persist = "${cfg.persistPath}/${name}"
+      if [ \! -e "$image" ]; then
+        mkdir -p "$store" "$persist"
+        mkdir ${concatStringsSep " " (map (x: "$persist/" + x) mcfg.persistent)}
+
+        mkdir -p "${cfg.imagesPath}"
+        ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
+          ${toString mcfg.diskSize}M || exit 1
+      fi
+
+      # TODO: handle shared and persisted
+      # TODO: Have a look at regInfo (@qemu-vm.nix) and understand what it's doing
+      exec ${pkgs.qemu}/bin/qemu-kvm \
+        -name ${name} \
+        -m ${toString mcfg.memorySize} \
+        ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
+        -virtfs local,path="$store",security_model=none,mount_tag=store \
+        -drive file="$image",if=virtio \
+        -kernel ${mcfg.config.system.build.toplevel}/kernel \
+        -initrd ${mcfg.config.system.build.toplevel}/initrd \
+        -append "$(cat ${mcfg.config.system.build.toplevel}/kernel-params) init=${mcfg.config.system.build.toplevel}/init console=ttyS0 \
+        $@
+    '';
 
 in
 
@@ -159,5 +197,14 @@ in
           should not be changed light-heartedly.
         '';
     };
+  };
+
+  config =
+    let unit = name: {
+      description = "VM '${name}'";
+      script = startVM name;
+    }; in
+  mkIf (cfg.machines != {}) {
+    systemd.services = mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines;
   };
 }
