@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   stdenv, lib, libsForQt5, makeSetupHook, symlinkJoin, fetchurl,
-  gconf,
+  gconf, kdeDerivation,
   debug ? false,
 }:
 
@@ -41,7 +41,7 @@ let
         inherit (args) name;
         sname = args.sname or name;
         inherit (srcs."${sname}") src version;
-      in libsForQt5.kdeDerivation (args // {
+      in kdeDerivation (args // {
         name = "${name}-${version}";
         inherit src;
 

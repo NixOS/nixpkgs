@@ -269,6 +269,8 @@ with pkgs;
       inherit kernel rootModules allowMissing;
     };
 
+  kdeDerivation = import ../build-support/kde/derivation.nix { inherit stdenv lib; };
+
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -9337,10 +9339,14 @@ with pkgs;
 
   mkLibsForQt5 = self: with self;
     let kdeFrameworks = import ../development/libraries/kde-frameworks {
-          inherit stdenv lib makeSetupHook makeWrapper fetchurl buildEnv;
+          inherit stdenv lib kdeDerivation makeSetupHook makeWrapper fetchurl buildEnv;
           inherit (self) callPackage;
         };
     in {
+
+    ### BUILD SUPPORT
+
+    ### LIBRARIES
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -14047,7 +14053,7 @@ with pkgs;
 
   kdeApplications = import ../desktops/kde-5/applications {
     inherit stdenv lib libsForQt5 fetchurl;
-    inherit plasma5;
+    inherit kdeDerivation plasma5;
     inherit attica phonon;
   };
 
@@ -16814,6 +16820,7 @@ with pkgs;
 
   plasma5 = import ../desktops/plasma-5 {
     inherit stdenv lib libsForQt5 makeSetupHook symlinkJoin fetchurl;
+    inherit kdeDerivation;
     inherit (gnome3) gconf;
   };
 

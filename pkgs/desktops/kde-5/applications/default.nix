@@ -27,7 +27,7 @@ still shows most of the available features is in `./gwenview.nix`.
 
 {
   stdenv, lib, libsForQt5, fetchurl,
-  plasma5,
+  kdeDerivation, plasma5,
   attica, phonon,
   debug ? false,
 }:
@@ -40,9 +40,8 @@ let
   packages = self: with self; {
 
     kdeApp = import ./kde-app.nix {
-      inherit lib;
+      inherit lib kdeDerivation;
       inherit debug srcs;
-      inherit (libsForQt5) kdeDerivation;
     };
 
     kdelibs = callPackage ./kdelibs {

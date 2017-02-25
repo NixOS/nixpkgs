@@ -26,7 +26,7 @@ existing packages here and modify it as necessary.
 
 {
   stdenv, lib, makeSetupHook, makeWrapper, fetchurl, buildEnv,
-  callPackage,
+  kdeDerivation, callPackage,
   debug ? false
 }:
 
@@ -36,22 +36,6 @@ let
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
   packages = rec {
-
-    kdeDerivation = args:
-      let
-      in stdenv.mkDerivation (args // {
-
-        outputs = args.outputs or [ "out" "dev" ];
-
-        propagatedUserEnvPkgs =
-          builtins.map lib.getBin (args.propagatedBuildInputs or []);
-
-        cmakeFlags =
-          (args.cmakeFlags or [])
-          ++ [ "-DBUILD_TESTING=OFF" ]
-          ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
-
-      });
 
     kdeFramework = args:
       let
