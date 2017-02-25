@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, src, version,
+  kdeApp, lib,
   automoc4, bison, cmake, flex, libxslt, perl, pkgconfig, shared_mime_info,
   attica, attr, avahi, docbook_xml_dtd_42, docbook_xsl, giflib, ilmbase,
   libdbusmenu_qt, libjpeg, libxml2, phonon, polkit_qt4, qca2, qt4,

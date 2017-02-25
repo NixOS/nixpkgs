@@ -14055,11 +14055,11 @@ with pkgs;
 
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
-  kdeApplications = import ../desktops/kde-5/applications {
-    inherit stdenv lib libsForQt5 fetchurl;
+  kdeApplications = recurseIntoAttrs (import ../applications/kde {
+    inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
     inherit kdeDerivation plasma5;
     inherit attica phonon;
-  };
+  });
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 

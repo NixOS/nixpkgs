@@ -1,4 +1,4 @@
-{ callPackage, pkgs, lib }:
+{ callPackage, recurseIntoAttrs, lib }:
 
 let
 
@@ -7,7 +7,7 @@ let
 
 in
 
-lib.mapAttrs (name: attr: pkgs.recurseIntoAttrs attr) {
+lib.mapAttrs (name: attr: recurseIntoAttrs attr) {
   ar = {
     qt4 = callPackage (kdeLocale4 "ar" {}) {};
     qt5 = callPackage (kdeLocale5 "ar" {}) {};
