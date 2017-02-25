@@ -16779,7 +16779,7 @@ with pkgs;
       );
     in recurseIntoAttrs self;
 
-  lumina = callPackage ../desktops/lumina { };
+  lumina = qt5.callPackage ../desktops/lumina { };
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
     inherit pkgs libsForQt5 fetchFromGitHub;
