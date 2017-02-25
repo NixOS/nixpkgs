@@ -14414,6 +14414,8 @@ with pkgs;
     withSidebar = true;
   };
 
+  mwic = callPackage ../applications/misc/mwic { };
+
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
   natron = callPackage ../applications/video/natron { };
