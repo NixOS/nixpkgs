@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.kde.org;
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
 }
