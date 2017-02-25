@@ -80,6 +80,7 @@
 "github:lyokha/vim-xkbswitch"
 "github:machakann/vim-highlightedyank"
 "github:mhinz/vim-startify"
+"github:michaeljsmith/vim-indent-object"
 "github:mkasa/lushtags"
 "github:mpickering/hlint-refactor-vim"
 "github:nathanaelkane/vim-indent-guides"

@@ -399,6 +399,17 @@ rec {
 
   };
 
+  vim-indent-object = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-indent-object-2015-08-11";
+    src = fetchgit {
+      url = "git://github.com/michaeljsmith/vim-indent-object";
+      rev = "1d3e4aac0117d57c3e1aaaa7e5a99f1d7553e01b";
+      sha256 = "1xxl5pwbz56qjfxw6l686m1qc4a3q0r7afa9r5gjhgd1jy67z7d7";
+    };
+    dependencies = [];
+
+  };
+
   vim-nix = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-nix-2016-11-02";
     src = fetchgit {
