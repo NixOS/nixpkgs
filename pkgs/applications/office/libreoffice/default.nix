@@ -6,7 +6,7 @@
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, mesa, bsh, CoinMP, libwps, libabw
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus_glib, glibc, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
@@ -252,7 +252,7 @@ in stdenv.mkDerivation rec {
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
       gdb
     ]
-    ++ lib.optional kdeIntegration kde4.kdelibs;
+    ++ lib.optional kdeIntegration kdelibs4;
 
   passthru = {
     inherit srcs;

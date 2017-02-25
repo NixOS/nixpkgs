@@ -746,7 +746,7 @@ with pkgs;
 
   clib = callPackage ../tools/package-management/clib { };
 
-  colord-kde = qt5.callPackage ../tools/misc/colord-kde/0.5.nix {};
+  colord-kde = qt5.callPackage ../tools/misc/colord-kde {};
 
   consul = callPackage ../servers/consul { };
 
@@ -2451,11 +2451,11 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
-  krename-qt5 = qt5.callPackage ../applications/misc/krename/kde5.nix { };
+  krename = qt5.callPackage ../applications/misc/krename { };
 
   kronometer = qt5.callPackage ../tools/misc/kronometer { };
 
-  kdiff3-qt5 = qt5.callPackage ../tools/text/kdiff3/kde5.nix { };
+  kdiff3 = qt5.callPackage ../tools/text/kdiff3 { };
 
   peruse = qt5.callPackage ../tools/misc/peruse { };
 
@@ -3508,8 +3508,6 @@ with pkgs;
 
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
-  psi = callPackage ../applications/networking/instant-messengers/psi { };
-
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pssh = callPackage ../tools/networking/pssh { };
@@ -4370,9 +4368,7 @@ with pkgs;
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
-  uim = callPackage ../tools/inputmethods/uim {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  uim = kde4.callPackage ../tools/inputmethods/uim { };
 
   uhub = callPackage ../servers/uhub { };
 
@@ -6547,6 +6543,8 @@ with pkgs;
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
+  massif-visualizer = kde4.callPackage ../development/tools/analysis/massif-visualizer { };
+
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
@@ -7833,6 +7831,8 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+  kdelibs4 = kde5.applications.kdelibs;
+
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
     lua = lua5_1;
@@ -8893,11 +8893,6 @@ with pkgs;
 
   mlt = callPackage ../development/libraries/mlt {};
 
-  mlt-qt4 = callPackage ../development/libraries/mlt/qt-4.nix {
-    ffmpeg = ffmpeg_2;
-    qt = qt4;
-  };
-
   mono-addins = callPackage ../development/libraries/mono-addins { };
 
   mono-zeroconf = callPackage ../development/libraries/mono-zeroconf { };
@@ -9251,7 +9246,7 @@ with pkgs;
     libpng = libpng12;
   };
 
-  qt4 = pkgs.kde4.qt4;
+  qt4 = qt48;
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
@@ -9328,7 +9323,7 @@ with pkgs;
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
-    libktorrent = callPackage ../development/libraries/libktorrent/5.nix { };
+    libktorrent = callPackage ../development/libraries/libktorrent { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
@@ -11716,9 +11711,7 @@ with pkgs;
 
   gocode = callPackage ../development/tools/gocode { };
 
-  kgocode = callPackage ../applications/misc/kgocode {
-    inherit (pkgs.kde4) kdelibs;
-  };
+  kgocode = callPackage ../applications/misc/kgocode { };
 
   gotags = callPackage ../development/tools/gotags { };
 
@@ -12538,6 +12531,10 @@ with pkgs;
     tcl = tcl-8_5;
   };
 
+  amarok = kde4.callPackage ../applications/audio/amarok {
+    ffmpeg = ffmpeg_2;
+  };
+
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
@@ -12746,6 +12743,11 @@ with pkgs;
   calcurse = callPackage ../applications/misc/calcurse { };
 
   calibre = qt5.callPackage ../applications/misc/calibre { };
+
+  calligra = kde4.callPackage ../applications/office/calligra {
+    vc = vc_0_7;
+    oxygen_icons = kde5.oxygen-icons5;
+  };
 
   camlistore = callPackage ../applications/misc/camlistore { };
 
@@ -13991,7 +13993,15 @@ with pkgs;
     boost = boost155;
   };
 
+  k3b-original = lowPrio (kde4.callPackage ../applications/misc/k3b { });
+
+  k3b = kde4.callPackage ../applications/misc/k3b/wrapper.nix { };
+
   k9copy = qt5.callPackage ../applications/video/k9copy {};
+
+  kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
+
+  kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
   kdeconnect = qt5.callPackage ../applications/misc/kdeconnect { };
 
@@ -14015,6 +14025,8 @@ with pkgs;
 
   keymon = callPackage ../applications/video/key-mon { };
 
+  kgraphviewer = kde4.callPackage ../applications/graphics/kgraphviewer { };
+
   khal = callPackage ../applications/misc/khal { };
 
   khard = callPackage ../applications/misc/khard { };
@@ -14023,27 +14035,33 @@ with pkgs;
     qt = qt4;
   };
 
-  kile = kde5.callPackage ../applications/editors/kile/frameworks.nix { };
+  kile = kde5.callPackage ../applications/editors/kile { };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome2) libglade;
     ffmpeg = ffmpeg_2;
   };
 
+  kipi-plugins = kde5.callPackage ../applications/graphics/kipi-plugins {};
+
   kiwix = callPackage ../applications/misc/kiwix {
     stdenv = overrideCC stdenv gcc49;
   };
 
-  konversation = qt5.callPackage ../applications/networking/irc/konversation/1.6.nix { };
+  kmplayer = kde4.callPackage ../applications/video/kmplayer { };
+
+  konversation = qt5.callPackage ../applications/networking/irc/konversation { };
 
   krita = qt5.callPackage ../applications/graphics/krita {
     vc = vc_0_7;
     openjpeg = openjpeg_1;
   };
 
+  krusader = kde4.callPackage ../applications/misc/krusader { };
+
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
-  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent/5.nix { };
+  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = go_1_6;
@@ -14790,6 +14808,8 @@ with pkgs;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
 
+  psi = kde4.callPackage ../applications/networking/instant-messengers/psi { };
+
   psol = callPackage ../development/libraries/psol/default.nix { };
 
   pstree = callPackage ../applications/misc/pstree { };
@@ -14857,7 +14877,7 @@ with pkgs;
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
 
-  quassel = qt5.callPackage ../applications/networking/irc/quassel/qt-5.nix {
+  quassel = qt5.callPackage ../applications/networking/irc/quassel {
     monolithic = true;
     daemon = false;
     client = false;
@@ -15164,7 +15184,7 @@ with pkgs;
     themes = [];  # extra themes, etc.
   };
 
-  skrooge2 = qt5.callPackage ../applications/office/skrooge/2.nix {};
+  skrooge = qt5.callPackage ../applications/office/skrooge {};
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
@@ -15392,7 +15412,6 @@ with pkgs;
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
   tomahawk = callPackage ../applications/audio/tomahawk {
-    inherit (pkgs.kde4) kdelibs;
     taglib = taglib_1_9;
     enableXMPP      = config.tomahawk.enableXMPP      or true;
     enableKDE       = config.tomahawk.enableKDE       or false;
@@ -15981,7 +16000,7 @@ with pkgs;
 
   yabar = callPackage ../applications/window-managers/yabar { };
 
-  yakuake = kde5.callPackage ../applications/misc/yakuake/3.0.nix {};
+  yakuake = kde5.callPackage ../applications/misc/yakuake {};
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
@@ -16000,6 +16019,8 @@ with pkgs;
   inherit (pythonPackages) youtube-dl;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
+
+  zanshin = kde4.callPackage ../applications/office/zanshin { };
 
   zathura = callPackage ../applications/misc/zathura {
     useMupdf = config.zathura.useMupdf or true;
@@ -16139,7 +16160,7 @@ with pkgs;
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam5 = kde5.callPackage ../applications/graphics/digikam/5.nix {
+  digikam = kde5.callPackage ../applications/graphics/digikam {
     boost = boost160;
   };
 
@@ -16688,212 +16709,23 @@ with pkgs;
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  kde4 = recurseIntoAttrs pkgs.kde414;
-
-  kde414 =
-    kdePackagesFor
-      {
-        libusb = libusb1;
-        python2Packages = python2Packages;
-        inherit (python2Packages) python;
-        libcanberra = libcanberra_kde;
-        boost = boost155;
-        kdelibs = kde5.kdelibs;
-        subversionClient = pkgs.subversion18.override {
-          bdbSupport = false;
-          perlBindings = true;
-          pythonBindings = true;
-        };
-        ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
-        ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
-      }
-      ../desktops/kde-4.14;
-
-
-  kdePackagesFor = extra: dir:
+  kde4 =
     let
-      # list of extra packages not included in KDE
-      # the real work in this function is done below this list
-      extraPackages = callPackage:
-        rec {
-          amarok = callPackage ../applications/audio/amarok {
-            ffmpeg = ffmpeg_2;
-          };
+      deps = lib.makeScope newScope (self: {
+        inherit (python2Packages) python;
+        kdelibs = kdelibs4;
+        boost = boost155;
+        ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
+      });
 
-          bangarang = callPackage ../applications/video/bangarang { };
-
-          basket = callPackage ../applications/office/basket { };
-
-          bluedevil = callPackage ../tools/bluetooth/bluedevil { };
-
-          calligra = callPackage ../applications/office/calligra {
-            vc = vc_0_7;
-          };
-
-          choqok = callPackage ../applications/networking/instant-messengers/choqok { };
-
-          colord-kde = callPackage ../tools/misc/colord-kde { };
-
-          digikam = callPackage ../applications/graphics/digikam { };
-
-          eventlist = callPackage ../applications/office/eventlist {};
-
-          k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
-
-          k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
-
-          kadu = callPackage ../applications/networking/instant-messengers/kadu { };
-
-          kbibtex = callPackage ../applications/office/kbibtex { };
-
-          kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
-
-          kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
-
-          kdeconnect = callPackage ../applications/misc/kdeconnect/0.7.nix { };
-
-          kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
-
-          kdesvn = callPackage ../applications/version-management/kdesvn { };
-
-          kdevelop = callPackage ../applications/editors/kdevelop { };
-
-          kdevplatform = callPackage ../development/libraries/kdevplatform {
-            boost = boost155;
-          };
-
-          kdiff3 = callPackage ../tools/text/kdiff3 { };
-
-          kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
-
-          kile = callPackage ../applications/editors/kile { };
-
-          kmplayer = callPackage ../applications/video/kmplayer { };
-
-          kmymoney = callPackage ../applications/office/kmymoney { };
-
-          kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
-
-          konversation = callPackage ../applications/networking/irc/konversation { };
-
-          kvirc = callPackage ../applications/networking/irc/kvirc { };
-
-          krename = callPackage ../applications/misc/krename/kde4.nix {
-            taglib = taglib_1_9;
-          };
-
-          krusader = callPackage ../applications/misc/krusader { };
-
-          ksshaskpass = callPackage ../tools/security/ksshaskpass {};
-
-          ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
-
-          kuickshow = callPackage ../applications/graphics/kuickshow { };
-
-          libalkimia = callPackage ../development/libraries/libalkimia { };
-
-          libktorrent = callPackage ../development/libraries/libktorrent {
-            boost = boost155;
-          };
-
-          libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
-
-          liblikeback = callPackage ../development/libraries/liblikeback { };
-
-          libmm-qt = callPackage ../development/libraries/libmm-qt { };
-
-          libnm-qt = callPackage ../development/libraries/libnm-qt { };
-
-          massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
-
-          partitionManager = callPackage ../tools/misc/partition-manager { };
-
-          plasma-nm = callPackage ../tools/networking/plasma-nm { };
-
-          polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
-
-          qtcurve = callPackage ../misc/themes/qtcurve { };
-
-          quassel = callPackage ../applications/networking/irc/quassel rec {
-            monolithic = true;
-            daemon = false;
-            client = false;
-            withKDE = stdenv.isLinux;
-            qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
-            dconf = gnome3.dconf;
-          };
-
-          quasselWithoutKDE = (quassel.override {
-            monolithic = true;
-            daemon = false;
-            client = false;
-            withKDE = false;
-            #qt = qt5;
-            tag = "-without-kde";
-          });
-
-          quasselDaemon = (quassel.override {
-            monolithic = false;
-            daemon = true;
-            client = false;
-            withKDE = false;
-            #qt = qt5;
-            tag = "-daemon";
-          });
-
-          quasselClient = (quassel.override {
-            monolithic = false;
-            daemon = false;
-            client = true;
-            tag = "-client";
-          });
-
-          quasselClientWithoutKDE = (quasselClient.override {
-            monolithic = false;
-            daemon = false;
-            client = true;
-            withKDE = false;
-            #qt = qt5;
-            tag = "-client-without-kde";
-          });
-
-          rekonq-unwrapped = callPackage ../applications/networking/browsers/rekonq { };
-          rekonq = wrapFirefox rekonq-unwrapped { };
-
-          kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
-
-          rsibreak = callPackage ../applications/misc/rsibreak { };
-
-          semnotes = callPackage ../applications/misc/semnotes { };
-
-          skrooge = callPackage ../applications/office/skrooge { };
-
-          telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
-
-          yakuake = callPackage ../applications/misc/yakuake { };
-
-          zanshin = callPackage ../applications/office/zanshin { };
-
-          kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
-        };
-
-      callPackageOrig = newScope extra;
-
-      makePackages = extra:
-        let
-          callPackage = newScope (extra // self);
-          kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
-          self =
-            kde4
-            // extraPackages callPackage
-            // {
-              inherit kde4;
-              wrapper = callPackage ../build-support/kdewrapper {};
-              recurseForRelease = true;
-            };
-        in self;
-
-    in makeOverridable makePackages extra;
+      self = lib.makeScope deps.newScope (self: with self;
+        import ../desktops/kde-4.14 {
+          callPackageOrig = pkgs.callPackage;
+          inherit (self) callPackage;
+          inherit stdenv qt48 kdelibs;
+        }
+      );
+    in recurseIntoAttrs self;
 
   lumina = callPackage ../desktops/lumina { };
 
@@ -16918,12 +16750,6 @@ with pkgs;
 
   albatross = callPackage ../misc/themes/albatross { };
 
-  oxygen-gtk2 = callPackage ../misc/themes/gtk2/oxygen-gtk { };
-
-  oxygen-gtk3 = callPackage ../misc/themes/gtk3/oxygen-gtk3 { };
-
-  oxygen_gtk = oxygen-gtk2; # backwards compatibility
-
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
 
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
@@ -16941,7 +16767,6 @@ with pkgs;
           plasma = plasma self;
           frameworks = qt5.kdeFrameworks;
           applications = applications self;
-          kipi-plugins = self.callPackage ../applications/graphics/kipi-plugins/5.x.nix {};
         }
         // qt5.kdeFrameworks
         // plasma self
@@ -18011,8 +17836,6 @@ with pkgs;
     webkit = webkitgtk2;
   };
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
-
-  inherit (kde4) rekonq;
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb {
     webkit = webkitgtk2;
