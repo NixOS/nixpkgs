@@ -14,28 +14,30 @@ top-level attribute to `top-level/all-packages.nix`.
 
 */
 
-{ pkgs
+{
+  newScope,
+  stdenv, fetchurl, makeSetupHook, makeWrapper,
+  bison, cups ? null, harfbuzz, mesa, perl,
+  gstreamer, gst-plugins-base,
 
-# options
-, developerBuild ? false
-, decryptSslTraffic ? false
+  # options
+  developerBuild ? false,
+  decryptSslTraffic ? false,
 }:
-
-let inherit (pkgs) makeSetupHook makeWrapper stdenv; in
 
 with stdenv.lib;
 
 let
 
   mirror = "http://download.qt.io";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   qtSubmodule = args:
     let
       inherit (args) name;
       version = args.version or srcs."${name}".version;
       src = args.src or srcs."${name}".src;
-      inherit (pkgs.stdenv) mkDerivation;
+      inherit (stdenv) mkDerivation;
     in mkDerivation (args // {
       name = "${name}-${version}";
       inherit src;
@@ -43,7 +45,7 @@ let
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
       nativeBuildInputs =
         (args.nativeBuildInputs or [])
-        ++ [ pkgs.perl self.qmakeHook ];
+        ++ [ perl self.qmakeHook ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
@@ -63,10 +65,7 @@ let
     in {
 
       qtbase = callPackage ./qtbase {
-        mesa = pkgs.mesa_noglu;
-        harfbuzz = pkgs.harfbuzz-icu;
-        cups = if stdenv.isLinux then pkgs.cups else null;
-        bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
+        inherit bison cups harfbuzz mesa;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -83,7 +82,7 @@ let
       qtlocation = callPackage ./qtlocation.nix {};
       /* qtmacextras = not packaged */
       qtmultimedia = callPackage ./qtmultimedia.nix {
-        inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
+        inherit gstreamer gst-plugins-base;
       };
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
       qtscript = callPackage ./qtscript {};
@@ -120,6 +119,6 @@ let
         (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);
     };
 
-   self = makeScope pkgs.newScope addPackages;
+   self = makeScope newScope addPackages;
 
 in self
