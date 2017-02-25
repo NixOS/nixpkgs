@@ -1,6 +1,6 @@
 { stdenv, fetchurl, expat }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "rnv-${version}";
   version = "1.7.11";
 
