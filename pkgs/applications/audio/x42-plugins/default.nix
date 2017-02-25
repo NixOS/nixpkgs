@@ -3,12 +3,12 @@
 , mesa_glu, lv2, mesa, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20160825";
+  version = "20161230";
   name = "x42-plugins-${version}";
 
   src = fetchurl {
     url = "http://gareus.org/misc/x42-plugins/${name}.tar.xz";
-    sha256 = "13ln5ccmrrc07ykfp040389av60dlgqz1kh6vfjkga6sq7z51msr";
+    sha256 = "1yni9c17kl2pi9lqxip07b6g6lyfii1pch5czp183113gk54fwj5";
   };
 
   buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 mesa gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
