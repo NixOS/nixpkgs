@@ -23,31 +23,9 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
-    description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = http://www.passwordstore.org/;
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 the-kenny fpletz ];
-    platforms   = platforms.unix;
-
-    longDescription = ''
-      pass is a very simple password store that keeps passwords inside gpg2
-      encrypted files inside a simple directory tree residing at
-      ~/.password-store. The pass utility provides a series of commands for
-      manipulating the password store, allowing the user to add, remove, edit,
-      synchronize, generate, and manipulate passwords.
-    '';
-  };
-
-  preInstall = ''
-    mkdir -p "$out/share/bash-completion/completions"
-    mkdir -p "$out/share/zsh/site-functions"
-    mkdir -p "$out/share/fish/vendor_completions.d"
-  '';
-
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
 
   postInstall = ''
     # Install Emacs Mode. NOTE: We can't install the necessary
@@ -85,4 +63,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/passmenu \
       --prefix PATH : "$out/bin:${wrapperPath}"
   '';
+
+  meta = with stdenv.lib; {
+    description = "Stores, retrieves, generates, and synchronizes passwords securely";
+    homepage    = http://www.passwordstore.org/;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lovek323 the-kenny fpletz ];
+    platforms   = platforms.unix;
+
+    longDescription = ''
+      pass is a very simple password store that keeps passwords inside gpg2
+      encrypted files inside a simple directory tree residing at
+      ~/.password-store. The pass utility provides a series of commands for
+      manipulating the password store, allowing the user to add, remove, edit,
+      synchronize, generate, and manipulate passwords.
+    '';
+  };
 }
