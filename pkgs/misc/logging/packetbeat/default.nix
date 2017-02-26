@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "packetbeat-${version}";
-  version = "5.0.2";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/beats/packetbeat/${name}-linux-x86_64.tar.gz";
-    sha256 = "0x4n1250nbaadkjm1wr2iw1fd2ri5ipbxll6lczmqh8ssbykzb27";
+    sha256 = "14ff466ban8pfsw750r8jkz1brczfrbcrwfhqvi5i8smfg56m9rl";
   };
 
   dontBuild = true;
