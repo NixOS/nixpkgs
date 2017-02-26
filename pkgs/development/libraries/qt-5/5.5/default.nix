@@ -88,6 +88,7 @@ let
       };
       qtquick1 = callPackage ./qtquick1 {};
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
+      qtquickcontrols2 = null;
       qtscript = callPackage ./qtscript {};
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
