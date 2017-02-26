@@ -167,7 +167,7 @@ let
   startVM = name: let mcfg = cfg.machines.${name}; in
     ''
       image="${cfg.imagesPath}/${name}.img"
-      console="${cfg.consolePath}/${name}"
+      console="${cfg.consolePath}/${name}.unix"
       store="${cfg.storesPath}/${name}"
       persist="${cfg.persistPath}/${name}"
 
@@ -175,6 +175,7 @@ let
       mkdir -p ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
 
       if [ \! -e "$image" ]; then
+        # TODO: auto-cleanup the image when the VM is removed from configuration
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
           ${toString mcfg.diskSize}M || exit 1
       fi
@@ -254,6 +255,10 @@ in
           system, allowing it to be started and stopped via
           <command>systemctl</command>.
 
+          Access to the serial console of the VM can be found using
+          <command>screen
+          <replaceable>vms.consolePath</replaceable>/<replaceable>vmname</replaceable></command>.
+
           Please note VMs are heavily identified by their name, so the key
           should not be changed light-heartedly.
         '';
@@ -261,11 +266,28 @@ in
   };
 
   config =
-    let unit = name: {
-      description = "VM '${name}'";
-      script = startVM name;
-    }; in
+    let
+      unit = name: {
+        description = "VM '${name}'";
+        script = startVM name;
+        wantedBy = [ "multi-user.target" ];
+      };
+      consoleUnit = name: {
+        description = "Console for VM '${name}'";
+        script =
+          ''
+            # Wait until the VM has had time to startup
+            sleep 1
+            exec ${pkgs.socat}/bin/socat PTY,link="${cfg.consolePath}/${name}" "${cfg.consolePath}/${name}.unix"
+          '';
+        partOf = [ "vm-${name}.service" ];
+        after = [ "vm-${name}.service" ];
+        wantedBy = [ "vm-${name}.service" ];
+      };
+    in
   mkIf (cfg.machines != {}) {
-    systemd.services = mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines;
+    systemd.services =
+      mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines //
+      mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines;
   };
 }
