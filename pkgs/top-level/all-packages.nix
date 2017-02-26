@@ -1151,7 +1151,7 @@ with pkgs;
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = [ gst_plugins_base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
+    gst_plugins = [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
   };
 
   clementineFree = clementine.free;
@@ -7519,14 +7519,14 @@ with pkgs;
 
   gst_all = {
     inherit (pkgs) gstreamer gnonlin gst-python qt-gstreamer;
-    gstPluginsBase = pkgs.gst_plugins_base;
+    gstPluginsBase = pkgs.gst-plugins-base;
     gstPluginsBad = pkgs.gst-plugins-bad;
     gstPluginsGood = pkgs.gst-plugins-good;
     gstPluginsUgly = pkgs.gst-plugins-ugly;
     gstFfmpeg = pkgs.gst-ffmpeg;
 
     # aliases with the dashed naming, same as in gst_all_1
-    gst-plugins-base = pkgs.gst_plugins_base;
+    gst-plugins-base = pkgs.gst-plugins-base;
     gst-plugins-bad = pkgs.gst-plugins-bad;
     gst-plugins-good = pkgs.gst-plugins-good;
     gst-plugins-ugly = pkgs.gst-plugins-ugly;
@@ -7537,7 +7537,7 @@ with pkgs;
     bison = bison2;
   };
 
-  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
+  gst-plugins-base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
