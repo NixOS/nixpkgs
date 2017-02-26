@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "filebeat-${version}";
-  version = "5.0.2";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/beats/filebeat/${name}-linux-x86_64.tar.gz";
-    sha256 = "1i00ndkzf4v4m6i8vdncsm3bya3jkn0lwhpjwhw6dv2w091vbw6g";
+    sha256 = "0kwkd3n6jmd0mwbvk2dng8843mxyq4mfvlm3hc8d1vd2m1m9wlhi";
   };
 
   # statically linked binary, no need to build anything
