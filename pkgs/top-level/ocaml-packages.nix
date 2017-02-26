@@ -583,7 +583,10 @@ let
 
     ppx_assert = callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
 
-    ppx_inline_test = callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
+    ppx_inline_test =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_inline_test-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
 
     ppx_bench = callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
 
