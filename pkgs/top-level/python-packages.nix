@@ -364,6 +364,8 @@ in {
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
+  pyzufall = callPackage ../development/python-modules/pyzufall { };
+
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
