@@ -26,6 +26,8 @@ in
 
     createFindlibDestdir = true;
 
+    dontStrip = true;
+
     meta = with stdenv.lib; {
       description = "Tools for authors of ppx rewriters";
       homepage = http://www.lexifi.com/ppx_tools;
