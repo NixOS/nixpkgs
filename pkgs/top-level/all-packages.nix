@@ -6292,7 +6292,7 @@ with pkgs;
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
   # Does not actually depend on Qt 5
-  inherit (kdeFrameworks) extra-cmake-modules;
+  inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocamlPackages_4_01_0;
@@ -9356,11 +9356,27 @@ with pkgs;
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
-      attica;
+      attica baloo bluez-qt frameworkintegration kactivities kactivities-stats
+      karchive kauth kbookmarks kcmutils kcodecs kcompletion kconfig
+      kconfigwidgets kcoreaddons kcrash kdbusaddons kdeclarative kdelibs4support
+      kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
+      khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
+      kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
+      knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
+      kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
+      kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
+      networkmanager-qt plasma-framework solid sonnet syntax-highlighting
+      threadweaver;
 
-    ### LIBRARIES
+    ### KDE PLASMA 5
 
-    ### BUILD SUPPORT
+    inherit (plasma5.override { libsForQt5 = self; })
+      kdecoration libkscreen libksysguard plasma-integration;
+
+    ### KDE APPLICATIONS
+
+    inherit (kdeApplications.override { libsForQt5 = self; })
+      libkdcraw libkexiv2 libkipi libkomparediff2;
 
     ### LIBRARIES
 
@@ -12814,7 +12830,6 @@ with pkgs;
 
   calligra = kde4.callPackage ../applications/office/calligra {
     vc = vc_0_7;
-    oxygen_icons = libsForQt5.oxygen-icons5;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -14071,29 +14086,34 @@ with pkgs;
 
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
-  kdeApplications = recurseIntoAttrs (import ../applications/kde {
-    inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
-    inherit kdeDerivation plasma5;
-    inherit attica phonon;
-  });
+  kdeApplications =
+    let
+      mkApplications = import ../applications/kde;
+      attrs = {
+        inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
+        inherit kdeDerivation plasma5;
+        inherit attica phonon;
+      };
+    in
+      recurseIntoAttrs (makeOverridable mkApplications attrs);
+
+  inherit (kdeApplications)
+    ark dolphin filelight gwenview kate kdenlive kcalc kcolorchooser kgpg
+    khelpcenter kig konsole marble okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
-  kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer {
-    inherit (plasma5) kdecoration;
-  };
+  kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
+
+  inherit (kdeFrameworks) kdesu;
 
   kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
 
   kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
-    inherit (kdeApplications) konsole;
-    inherit (plasma5) libksysguard;
     llvmPackages = llvmPackages_38;
   };
 
-  kdevplatform = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {
-    inherit (kdeApplications) libkomparediff2;
-  };
+  kdevplatform = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix { };
 
   keepnote = callPackage ../applications/office/keepnote { };
 
@@ -14115,18 +14135,14 @@ with pkgs;
     qt = qt4;
   };
 
-  kile = libsForQt5.callPackage ../applications/editors/kile {
-    inherit (kdeApplications) konsole;
-  };
+  kile = libsForQt5.callPackage ../applications/editors/kile { };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome2) libglade;
     ffmpeg = ffmpeg_2;
   };
 
-  kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins {
-    inherit (kdeApplications) libkipi;
-  };
+  kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins { };
 
   kiwix = callPackage ../applications/misc/kiwix {
     stdenv = overrideCC stdenv gcc49;
@@ -16838,10 +16854,17 @@ with pkgs;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
   };
 
-  plasma5 = recurseIntoAttrs (import ../desktops/plasma-5 {
-    inherit libsForQt5 kdeDerivation lib fetchurl;
-    inherit (gnome3) gconf;
-  });
+  inherit (kdeFrameworks) kded kinit;
+
+  plasma5 =
+    let
+      mkPlasma5 = import ../desktops/plasma-5;
+      attrs = {
+        inherit libsForQt5 kdeDerivation lib fetchurl;
+        inherit (gnome3) gconf;
+      };
+    in
+      recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
 
   redshift = callPackage ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg;

@@ -35,9 +35,7 @@ let
     lxqt-about = callPackage ./core/lxqt-about { };
     lxqt-admin = callPackage ./core/lxqt-admin { };
     lxqt-common = callPackage ./core/lxqt-common { };
-    lxqt-config = callPackage ./core/lxqt-config {
-      inherit (pkgs.plasma5) libkscreen;
-    };
+    lxqt-config = callPackage ./core/lxqt-config { };
     lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
     lxqt-l10n = callPackage ./core/lxqt-l10n { };
     lxqt-notificationd = callPackage ./core/lxqt-notificationd { };
@@ -67,7 +65,7 @@ let
     preRequisitePackages = [
       pkgs.gvfs # virtual file systems support for PCManFM-QT
       pkgs.libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
-      pkgs.plasma5.libkscreen # provides plugins for screen management software
+      pkgs.libsForQt5.libkscreen # provides plugins for screen management software
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.lxmenu-data
@@ -120,7 +118,7 @@ let
       qlipper
 
       ### Default icon theme
-      qt5.oxygen-icons5
+      pkgs.oxygen-icons5
 
       ### Screen saver
       pkgs.xscreensaver
