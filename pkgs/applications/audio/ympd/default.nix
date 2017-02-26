@@ -5,10 +5,10 @@ stdenv.mkDerivation rec {
   version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "hschaeidt";
+    owner = "mayflower";
     repo = "ympd";
-    rev = "c48e248d23e037576893265167ab6bdd7553bf93";
-    sha256 = "1cj4j6cnz3jl2h1v3hjzrp3006cjj1vvisdrj3ah9q0w4lfs9qs5";
+    rev = "0301b62bb4743a869018269975f746f663ccabe9";
+    sha256 = "03w512ik15f0727y3rdzsh8szjg28cn3bgd0zpbkjbibysp2wbzc";
   };
 
   buildInputs = [ cmake pkgconfig mpd_clientlib openssl ];
