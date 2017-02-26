@@ -615,7 +615,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_fields_conv-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
 
-    ppx_let = callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
+    ppx_let =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_let-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
 
     ppx_pipebang = callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
 
