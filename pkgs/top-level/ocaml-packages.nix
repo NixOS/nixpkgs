@@ -653,7 +653,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_expect-113_33_01.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
 
-    ppx_jane = callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
+    ppx_jane =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_jane-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
 
 
     # Core sublibs
