@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, automoc4, cmake, gettext, perl, pkgconfig
 , telepathy_qt, kdelibs4, kde_workspace, dbus_glib, dbus_libs, farstream
-, qt_gstreamer1, telepathy_glib, telepathy_logger
+, qt-gstreamer1, telepathy_glib, telepathy_logger
 , qjson, flex, bison, qca2 }:
 
 let
@@ -21,10 +21,10 @@ let
 
   extraBuildInputs = {
     auth_handler = [ qjson qca2 ];
-    call_ui = [ qt_gstreamer1 telepathy_glib farstream ];
+    call_ui = [ qt-gstreamer1 telepathy_glib farstream ];
     contact_applet = [ kde_workspace ];
-    telepathy_logger_qt = [ telepathy_logger qt_gstreamer1 ];
-    text_ui = [ qt_gstreamer1 telepathy_logger qjson ];
+    telepathy_logger_qt = [ telepathy_logger qt-gstreamer1 ];
+    text_ui = [ qt-gstreamer1 telepathy_logger qjson ];
     common_internals = [ telepathy_qt ];
   };
 
