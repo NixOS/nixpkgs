@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
+{ stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst-plugins-base
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
 , usbmuxd, libmtp, gvfs, libcdio, libspotify, protobuf, qca2, pkgconfig
 , sparsehash, config, makeWrapper, runCommand, gst_plugins }:
@@ -27,7 +27,7 @@ let
     fftw
     gettext
     glew
-    gst_plugins_base
+    gst-plugins-base
     gstreamer
     gvfs
     libcdio

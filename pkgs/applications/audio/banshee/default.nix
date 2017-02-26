@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst_plugins_base
+{ pkgs, stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst-plugins-base
 , gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-ffmpeg, glib
 , mono, mono-addins, dbus-sharp-1_0, dbus-sharp-glib-1_0, notify-sharp, gtk-sharp-2_0
 , boo, gdata-sharp, taglib-sharp, sqlite, gnome-sharp, gconf, gtk-sharp-beans, gio-sharp
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [
-    gtk-sharp-2_0.gtk gstreamer gst_plugins_base gst-plugins-good
+    gtk-sharp-2_0.gtk gstreamer gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-ffmpeg
     mono dbus-sharp-1_0 dbus-sharp-glib-1_0 mono-addins notify-sharp
     gtk-sharp-2_0 boo gdata-sharp taglib-sharp sqlite gnome-sharp gconf gtk-sharp-beans

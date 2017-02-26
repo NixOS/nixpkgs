@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libnice, pkgconfig, python2Packages, gstreamer, gst_plugins_base
+{ stdenv, fetchurl, libnice, pkgconfig, python2Packages, gstreamer, gst-plugins-base
 , gst-python, gupnp_igd }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base ];
+  propagatedBuildInputs = [ gstreamer gst-plugins-base ];
 
   meta = {
     homepage = http://farsight.freedesktop.org/wiki/;

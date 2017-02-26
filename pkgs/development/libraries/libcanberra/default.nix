@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libtool, gtk ? null, libcap
-, alsaLib, libpulseaudio, gstreamer, gst_plugins_base, libvorbis }:
+, alsaLib, libpulseaudio, gstreamer, gst-plugins-base, libvorbis }:
 
 stdenv.mkDerivation rec {
   name = "libcanberra-0.30";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libtool alsaLib libpulseaudio libvorbis gtk libcap
-    /*gstreamer gst_plugins_base*/      # ToDo: gstreamer not found (why?), add (g)udev?
+    /*gstreamer gst-plugins-base*/      # ToDo: gstreamer not found (why?), add (g)udev?
   ];
 
   configureFlags = "--disable-oss";

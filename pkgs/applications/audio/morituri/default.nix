@@ -1,5 +1,5 @@
 { stdenv, fetchgit, pythonPackages, cdparanoia, cdrdao
-, gst-python, gst_plugins_base, gst-plugins-good
+, gst-python, gst-plugins-base, gst-plugins-good
 , utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
 let
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     python cdparanoia cdrdao utillinux makeWrapper
-    gst_plugins_base gst-plugins-good
+    gst-plugins-base gst-plugins-good
   ] ++ pythonPath;
 
   patches = [

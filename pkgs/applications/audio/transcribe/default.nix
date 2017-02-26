@@ -1,5 +1,5 @@
 { stdenv, fetchzip, lib, makeWrapper, alsaLib, atk, cairo, gdk_pixbuf
-, glib, gst-ffmpeg, gst-plugins-bad, gst_plugins_base
+, glib, gst-ffmpeg, gst-plugins-bad, gst-plugins-base
 , gst-plugins-good, gst-plugins-ugly, gstreamer, gtk2, libSM, libX11
 , libpng12, pango, zlib }:
 
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ gst_plugins_base gst-plugins-good
+  buildInputs = [ gst-plugins-base gst-plugins-good
     gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
 
   dontPatchELF = true;
 
   libPath = lib.makeLibraryPath [
     stdenv.cc.cc glib gtk2 atk pango cairo gdk_pixbuf alsaLib
-    libX11 libSM libpng12 gstreamer gst_plugins_base zlib
+    libX11 libSM libpng12 gstreamer gst-plugins-base zlib
   ];
 
   installPhase = ''
