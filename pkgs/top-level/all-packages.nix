@@ -948,6 +948,8 @@ with pkgs;
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  metricbeat = callPackage ../misc/logging/metricbeat { };
+
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
   mpdcron = callPackage ../tools/audio/mpdcron { };
