@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "bdfa2d07dfe0ce68f638b04fed6890db506416c1dcf1279e83458269d719a4e8";
+    sha256 = "04l2hvvz9b0f3nyds1k3yfk5di8a91fpr6maj19c11mwp1s82l2r";
   };
 
   patches = [ ./different-path-with-pygobject.patch ];
