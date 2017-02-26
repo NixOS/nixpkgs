@@ -21,97 +21,48 @@ in
     };
     networking.nftables.ruleset = mkOption {
       type = types.lines;
-      default =
-        ''
-          table inet filter {
-            # Block all IPv4/IPv6 input traffic except SSH.
-            chain input {
-              type filter hook input priority 0;
-              ct state invalid reject
-              ct state {established, related} accept
-              iifname lo accept
-              tcp dport 22 accept
-              reject
-            }
+      example = ''
+        # Check out https://wiki.nftables.org/ for better documentation.
+        # Table for both IPv4 and IPv6.
+        table inet filter {
+          # Block all incomming connections traffic except SSH and "ping".
+          chain input {
+            type filter hook input priority 0;
 
-            # Allow anything in.
-            chain output {
-              type filter hook output priority 0;
-              ct state invalid reject
-              ct state {established, related} accept
-              oifname lo accept
-              accept
-            }
+            # accept any localhost traffic
+            iifname lo accept
 
-            chain forward {
-              type filter hook forward priority 0;
-              accept
-            }
-          }
-        '';
-      example =
-        ''
-          # Check out http://wiki.nftables.org/ for better documentation.
+            # accept traffic originated from us
+            ct state {established, related} accept
 
-          define LAN = 192.168.0.1/24
+            # ICMP
+            # routers may also want: mld-listener-query, nd-router-solicit
+            ip6 nexthdr icmpv6 icmpv6 type { destination-unreachable, packet-too-big, time-exceeded, parameter-problem, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+            ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
 
-          # Handle IPv4 traffic.
-          table ip filter {
-            chain input {
-              type filter hook input priority 0;
-              # Handle existing connections.
-              ct state invalid reject
-              ct state {established, related} accept
-              # Allow loopback for applications.
-              iifname lo accept
-              # Allow people to ping us on LAN.
-              ip protocol icmp ip daddr $LAN accept
-              # Allow SSH over LAN.
-              tcp dport 22 ip daddr $LAN accept
-              # Reject all other output traffic.
-              reject
-            }
+            # allow "ping"
+            ip6 nexthdr icmp icmpv6 type echo-request accept
+            ip protocol icmp icmp type echo-request accept
 
-            chain output {
-              type filter hook output priority 0;
-              # Handle existing connections.
-              ct state invalid reject
-              ct state {established, related} accept
-              # Allow loopback for applications.
-              oifname lo accept
-              # Allow the Tor user to run its daemon,
-              # but only on WAN in case of compromise.
-              skuid tor ip daddr != $LAN accept
-              # Allowing pinging others on LAN.
-              ip protocol icmp ip daddr $LAN accept
-              # Reject all other output traffic.
-              reject
-            }
+            # accept SSH connections (required for a server)
+            tcp dport 22 accept
 
-            chain forward {
-              type filter hook forward priority 0;
-              reject
-            }
+            # count and drop any other traffic
+            counter drop
           }
 
-          # Block all IPv6 traffic.
-          table ip6 filter {
-            chain input {
-              type filter hook input priority 0;
-              reject
-            }
-
-            chain output {
-              type filter hook output priority 0;
-              reject
-            }
-
-            chain forward {
-              type filter hook forward priority 0;
-              reject
-            }
+          # Allow all outgoing connections.
+          chain output {
+            type filter hook output priority 0;
+            accept
           }
-        '';
+
+          chain forward {
+            type filter hook forward priority 0;
+            accept
+          }
+        }
+      '';
       description =
         ''
           The ruleset to be used with nftables.  Should be in a format that
