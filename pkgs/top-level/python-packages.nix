@@ -28449,7 +28449,7 @@ EOF
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
   };
 
-  libasyncns = callPackage ../development/python-modules/libasyncns.nix {
+  libasyncns = callPackage ../development/python-modules/libasyncns {
     inherit (pkgs) libasyncns pkgconfig;
   };
 

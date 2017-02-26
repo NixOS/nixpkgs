@@ -10,6 +10,8 @@ buildPythonPackage rec {
     sha256 = "1q4l71b2h9q756x4pjynp6kczr2d8c1jvbdp982hf7xzv7w5gxqg";
   };
 
+  patches = [ ./libasyncns-fix-res-consts.patch ];
+
   buildInputs = [ libasyncns ];
   nativeBuildInputs = [ pkgconfig ];
   doCheck = false; # requires network access
