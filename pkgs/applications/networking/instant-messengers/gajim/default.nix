@@ -4,7 +4,7 @@
 # Test requirements
 , xvfb_run
 
-, enableJingle ? true, farstream ? null, gst_plugins_bad ? null
+, enableJingle ? true, farstream ? null, gst-plugins-bad ? null
 ,                      libnice ? null
 , enableE2E ? true
 , enableRST ? true
@@ -14,7 +14,7 @@
 , extraPythonPackages ? pkgs: []
 }:
 
-assert enableJingle -> farstream != null && gst_plugins_bad != null
+assert enableJingle -> farstream != null && gst-plugins-bad != null
                     && libnice != null;
 assert enableE2E -> pythonPackages.pycrypto != null;
 assert enableRST -> pythonPackages.docutils != null;
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python libX11
-  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ];
+  ] ++ optionals enableJingle [ farstream gst-plugins-bad libnice ];
 
   nativeBuildInputs = [
     autoreconfHook pythonPackages.wrapPython intltool pkgconfig
