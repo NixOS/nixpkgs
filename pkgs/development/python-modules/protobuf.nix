@@ -1,5 +1,5 @@
 { stdenv, python, buildPythonPackage
-, protobuf, google_apputils
+, protobuf, google_apputils, pyext
 , disabled, doCheck ? true }:
 
 with stdenv.lib;
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   inherit disabled doCheck;
 
   propagatedBuildInputs = [ protobuf google_apputils ];
-  buildInputs = [ google_apputils ];
+  buildInputs = [ google_apputils pyext ];
 
   prePatch = ''
     while [ ! -d python ]; do
