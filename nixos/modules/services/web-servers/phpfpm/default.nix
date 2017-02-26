@@ -24,10 +24,11 @@ let
     ${concatStringsSep "\n" (mapAttrsToList (n: v: "[${n}]\n${v}") cfg.poolConfigs)}
   '';
 
-  phpIni = pkgs.writeText "php.ini" ''
-    ${readFile "${cfg.phpPackage}/etc/php.ini"}
-
-    ${cfg.phpOptions}
+  phpIni = pkgs.runCommand "php.ini" {
+    inherit (cfg) phpPackage phpOptions;
+    passAsFile = [ "phpOptions" ];
+  } ''
+    cat $phpPackage/etc/php.ini $phpOptionsFile > $out
   '';
 
 in {
