@@ -7,21 +7,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.3.2";
+  name = "R-3.3.3";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0k2i9qdd83g09fcpls2198q4ykxkii5skczb514gnx7mx4hsv56j";
+    sha256 = "0v7wpj89b0i3ad3fi1wak5c93hywmbxv8sdnixhq8l17782nidss";
   };
 
-  buildInputs = [ bzip2 gfortran libX11 libXmu libXt
-    libXt libjpeg libpng libtiff ncurses pango pcre perl readline
-    texLive xz zlib less texinfo graphviz icu pkgconfig bison imake
-    which jdk openblas curl ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
+  buildInputs = [
+    bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
+    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
+    pkgconfig bison imake which jdk openblas curl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
 
-  patches = [ ./no-usr-local-search-paths.patch ./zlib-version-check.patch ];
+  patches = [ ./no-usr-local-search-paths.patch ];
 
   preConfigure = ''
     configureFlagsArray=(
@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
     echo "TCLLIBPATH=${tk}/lib" >>etc/Renviron.in
   '';
 
+  # This Darwin-specific patch has almost certainly become unnecessary. Can
+  # some Darwin user please verify that the R build still succeeds if this is
+  # removed?
   postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g' src/library/base/R/datetime.R
     sed -i 's|getenv("R_SHARE_DIR")|"${tzdata}/share"|g' src/extra/tzone/localtime.c
@@ -71,10 +74,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -95,9 +98,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
-    platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = platforms.all;
+    hydraPlatforms = platforms.linux;
 
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    maintainers = [ maintainers.peti ];
   };
 }
