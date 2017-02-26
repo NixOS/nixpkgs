@@ -29698,21 +29698,20 @@ EOF
   };
 
   parsimonious = buildPythonPackage rec {
-    version = "0.6.2";
+    version = "0.7.0";
     name = "parsimonious-${version}";
-    disabled = ! isPy27;
     src = pkgs.fetchFromGitHub {
       repo = "parsimonious";
       owner = "erikrose";
       rev = version;
-      sha256 = "1wf12adzhqjibbhy2m9abfqdgbb6z97s7wydhasir70307rqf9rj";
+      sha256 = "087npc8ccryrxabmqifcz56w4wd0hzmv0mc91wrbhc1sil196j0a";
     };
 
-    propagatedBuildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ nose six ];
 
     meta = {
       homepage = "https://github.com/erikrose/parsimonious";
-      description = "Fast arbitrary-lookahead packrat parser written in pure Python";
+      description = "Fast arbitrary-lookahead parser written in pure Python";
       license = licenses.mit;
     };
   };
