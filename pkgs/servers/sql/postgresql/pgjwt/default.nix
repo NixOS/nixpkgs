@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     rev = "12a41eef15e6d3a22399e03178560d5174d496a3";
     sha256 = "1dgx7kqkf9d7j5qj3xykx238xm8jg0s6c8h7zyl4lx8dmbz9sgsv";
   };
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
     mkdir -p $out/bin  # current postgresql extension mechanism in nixos requires bin directory
     mkdir -p $out/share/extension
