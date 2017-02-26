@@ -9229,6 +9229,7 @@ with pkgs;
   # 3.0.0-beta-2 is only introduced for tensorflow. remove this version when tensorflow is moved to 3.0.
   protobuf3_0_0b2 = lowPrio (callPackage ../development/libraries/protobuf/3.0.0-beta-2.nix { });
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+  protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
