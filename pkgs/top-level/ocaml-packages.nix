@@ -620,7 +620,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_let-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
 
-    ppx_pipebang = callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
+    ppx_pipebang =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_pipebang-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
 
     ppx_sexp_message = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
 
