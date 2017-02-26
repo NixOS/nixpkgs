@@ -84,7 +84,7 @@ let
 
   extraConfig = name: {
     boot.loader.grub.enable = false;
-    boot.initrd.kernelModules = [ "virtio" ];
+    boot.initrd.kernelModules = [ "virtio" "virtio_pci" "virtio_net" "virtio_rng" "virtio_blk" "virtio_console" ];
 
     fileSystems = {
       "/".device = "/dev/vda";
@@ -112,8 +112,30 @@ let
     };
   };
 
-  startVM = name:
-    let mcfg = cfg.machines.${name}; in
+  qemuCommand = name:
+    let
+      mcfg = cfg.machines.${name};
+      toplevel = mcfg.config.system.build.toplevel;
+    in
+    ''
+      # TODO: handle shared and persisted
+      # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
+      # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
+      ${pkgs.qemu}/bin/qemu-kvm \
+        -name ${name} \
+        -nographic \
+        -serial unix:"$console",server,nowait \
+        -m ${toString mcfg.memorySize} \
+        ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
+        -virtfs local,path="/nix/store",security_model=none,mount_tag=store \
+        -drive file="$image",if=virtio,media=disk \
+        -kernel ${toplevel}/kernel \
+        -initrd ${toplevel}/initrd \
+        -append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0 allowShell=1" \
+        $@
+    '';
+
+  startVM = name: let mcfg = cfg.machines.${name}; in
     ''
       image="${cfg.imagesPath}/${name}.img"
       console="${cfg.consolePath}/${name}"
@@ -128,21 +150,7 @@ let
           ${toString mcfg.diskSize}M || exit 1
       fi
 
-      # TODO: handle shared and persisted
-      # TODO: Have a look at regInfo (@qemu-vm.nix) and understand what it's doing
-      # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
-      exec ${pkgs.qemu}/bin/qemu-kvm \
-        -name ${name} \
-        -nographic \
-        -serial unix:"$console",server,nowait \
-        -m ${toString mcfg.memorySize} \
-        ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
-        -virtfs local,path="/nix/store",security_model=none,mount_tag=store \
-        -drive file="$image",if=virtio,media=disk \
-        -kernel ${mcfg.config.system.build.toplevel}/kernel \
-        -initrd ${mcfg.config.system.build.toplevel}/initrd \
-        -append "$(cat ${mcfg.config.system.build.toplevel}/kernel-params) init=${mcfg.config.system.build.toplevel}/init console=ttyS0 allowShell=1" \
-        $@
+      exec ${qemuCommand name}
     '';
 
 in
