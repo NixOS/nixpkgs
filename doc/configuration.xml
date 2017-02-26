@@ -10,7 +10,7 @@ will prevent installation if any of the following criteria are
 true:</para>
 
 <itemizedlist>
-  <listitem><para>The packages is thought to be broken, and has had
+  <listitem><para>The package is thought to be broken, and has had
   its <literal>meta.broken</literal> set to
   <literal>true</literal>.</para></listitem>
 
@@ -23,7 +23,14 @@ true:</para>
   <literal>meta.knownVulnerabilities</literal>.</para></listitem>
 </itemizedlist>
 
-<para>Each of these criteria can be altering the nixpkgs
+<para>Note that all this is checked during evaluation already,
+and the check includes any package that is evaluated.
+In particular, all build-time dependencies are checked.
+<literal>nix-env -qa</literal> will (attempt to) hide any packages
+that would be refused.
+</para>
+
+<para>Each of these criteria can be altered in the nixpkgs
 configuration.</para>
 
 <para>The nixpkgs configuration for a NixOS system is set in the
@@ -68,10 +75,11 @@ configuration file located at
       add <literal>allowBroken = true;</literal> to your user's
       configuration file, like this:
 
-      <programlisting>
+<programlisting>
 {
   allowBroken = true;
-}</programlisting>
+}
+</programlisting>
     </para></listitem>
   </itemizedlist>
 </section>
@@ -156,7 +164,7 @@ configuration file located at
   </title>
 
   <para>There are several ways to tweak how Nix handles a package
-  which has been marked as unfree.</para>
+  which has been marked as insecure.</para>
 
   <itemizedlist>
     <listitem><para>

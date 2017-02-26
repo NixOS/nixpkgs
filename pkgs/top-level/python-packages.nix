@@ -336,6 +336,8 @@ in {
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
+  python-stdnum = callPackage ../development/python-modules/python-stdnum { };
+
   pytimeparse = buildPythonPackage rec {
     pname = "pytimeparse";
     version = "1.1.6";
@@ -356,11 +358,15 @@ in {
     };
   };
 
+  PyWebDAV = callPackage ../development/python-modules/pywebdav { };
+
   pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
+
+  simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   sip = callPackage ../development/python-modules/sip { };
 
@@ -11455,6 +11461,10 @@ in {
     };
   };
 
+  flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
+
+  flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
+
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
     version = "3.1.0";
@@ -19636,12 +19646,21 @@ in {
 
   publicsuffix = buildPythonPackage rec {
     name = "publicsuffix-${version}";
-    version = "1.0.2";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/publicsuffix/${name}.tar.gz";
-      sha256 = "f6dfcb8a33fb3ac4f09e644cd26f8af6a09d1a45a019d105c8da58e289ca0096";
+      sha256 = "1adx520249z2cy7ykwjr1k190mn2888wqn9jf8qm27ly4qymjxxf";
     };
+
+    # fix the ASCII-mode LICENSE file read
+    # disable test_fetch and the doctests (which also invoke fetch)
+    patchPhase = optionalString isPy3k ''
+      sed -i "s/)\.read(/,encoding='utf-8'\0/" setup.py
+    '' + ''
+      sed -i -e "/def test_fetch/i\\
+      \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
+    '';
 
     meta = {
       description = "Allows to get the public suffix of a domain name";
@@ -22446,12 +22465,12 @@ in {
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.6.2";
+    version = "0.7.1";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "0ds1b2qx0nx9bqj1sqgr4lmanb4hpchmylp1hml1l0p71qi5ha0r";
+      sha256 = "16grklnbgcfwqj3f39gw7fc9afi7xlp9gm7x8w6mi81dzhdxf50y";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
@@ -27854,6 +27873,10 @@ EOF
 
     propagatedBuildInputs = with self; [ zope_i18nmessageid zope_schema ];
 
+    # Trouble with implicit namespace packages on Python3
+    # see https://github.com/pypa/setuptools/issues/912
+    doCheck = !isPy3k;
+
     meta = {
         maintainers = with maintainers; [ goibhniu ];
     };
@@ -29154,7 +29177,6 @@ EOF
 
     src = pkgs.fetchurl {
       url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
-      # sha1 = "d2d9f60699611f95dd8c328691a2555e76191c0c";
       sha256 = "1dpxl5hwyyqd71avpm5vkvw8fhlvf9liizmhrq9jphhrx0nx5rsn";
     };
 
@@ -29965,21 +29987,20 @@ EOF
   };
 
   parsimonious = buildPythonPackage rec {
-    version = "0.6.2";
+    version = "0.7.0";
     name = "parsimonious-${version}";
-    disabled = ! isPy27;
     src = pkgs.fetchFromGitHub {
       repo = "parsimonious";
       owner = "erikrose";
       rev = version;
-      sha256 = "1wf12adzhqjibbhy2m9abfqdgbb6z97s7wydhasir70307rqf9rj";
+      sha256 = "087npc8ccryrxabmqifcz56w4wd0hzmv0mc91wrbhc1sil196j0a";
     };
 
-    propagatedBuildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ nose six ];
 
     meta = {
       homepage = "https://github.com/erikrose/parsimonious";
-      description = "Fast arbitrary-lookahead packrat parser written in pure Python";
+      description = "Fast arbitrary-lookahead parser written in pure Python";
       license = licenses.mit;
     };
   };

@@ -106,9 +106,12 @@ in
         NAME=NixOS
         ID=nixos
         VERSION="${config.system.nixosVersion} (${config.system.nixosCodeName})"
+        VERSION_CODENAME=${toLower config.system.nixosCodeName}
         VERSION_ID="${config.system.nixosVersion}"
         PRETTY_NAME="NixOS ${config.system.nixosVersion} (${config.system.nixosCodeName})"
-        HOME_URL="http://nixos.org/"
+        HOME_URL="https://nixos.org/"
+        SUPPORT_URL="https://nixos.org/nixos/support.html"
+        BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
       '';
 
   };

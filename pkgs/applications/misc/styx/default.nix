@@ -1,20 +1,22 @@
 { stdenv, fetchFromGitHub, caddy, asciidoctor
-, file, lessc, sass, multimarkdown }:
+, file, lessc, sass, multimarkdown, linkchecker
+, perlPackages, python27 }:
 
 stdenv.mkDerivation rec {
   name    = "styx-${version}";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner  = "styx-static";
     repo   = "styx";
     rev    = "v${version}";
-    sha256 = "0v36i40cwrajsd02xjfdldih5g493m28lhzgjg1gd3pwk2yd6rm1";
+    sha256 = "1dl6zmic8bv17f3ib8by66c2fj7izlnv9dh2cfa2m0ipkxk930vk";
   };
 
   setSourceRoot = "cd styx-*/src; export sourceRoot=`pwd`";
 
   server = "${caddy.bin}/bin/caddy";
+  linkcheck = "${linkchecker}/bin/linkchecker";
 
   nativeBuildInputs = [ asciidoctor ];
 
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
     sass
     asciidoctor
     multimarkdown
+    perlPackages.ImageExifTool
+    (python27.withPackages (ps: [ ps.parsimonious ]))
   ];
 
   outputs = [ "out" "lib" ];
@@ -34,16 +38,20 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/styx
     cp -r scaffold $out/share/styx
-    cp    builder.nix $out/share/styx
+    cp -r nix $out/share/styx
 
     mkdir -p $out/share/doc/styx
     asciidoctor doc/index.adoc       -o $out/share/doc/styx/index.html
     asciidoctor doc/styx-themes.adoc -o $out/share/doc/styx/styx-themes.html
+    asciidoctor doc/library.adoc     -o $out/share/doc/styx/library.html
+    cp -r doc/highlight $out/share/doc/styx/
     cp -r doc/imgs $out/share/doc/styx/
+    cp -r tools $out/share
 
     substituteAllInPlace $out/bin/styx
     substituteAllInPlace $out/share/doc/styx/index.html
     substituteAllInPlace $out/share/doc/styx/styx-themes.html
+    substituteAllInPlace $out/share/doc/styx/library.html
 
     mkdir $lib
     cp -r lib/* $lib

@@ -145,9 +145,11 @@ pkgs.vmTools.runInLinuxVM (
 
       umount /mnt
 
-      # Make sure resize2fs works
+      # Make sure resize2fs works. Note that resize2fs has stricter criteria for resizing than a normal
+      # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic
+      # output, of course, but we can fix that when/if we start making images deterministic.
       ${optionalString (fsType == "ext4") ''
-        tune2fs -c 0 -i 0 $rootDisk
+        tune2fs -T now -c 0 -i 0 $rootDisk
       ''}
     ''
 )

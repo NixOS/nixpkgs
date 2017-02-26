@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-unstable-${version}";
-  version = "2016-08-18";
+  version = "2017-02-23";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
-    rev = "f2ece2418c875eb7e7ac3d25fbb484ddda47ab46";
-    sha256 = "0cvb0m6qz3k8a5njwyw65l4y3izi2rsh512hv5va97kjc6wzzx4j";
+    rev = "4cf826c82c8f865c281833f92f8182d457277b3a";
+    sha256 = "100pkc324m57ci3fb99d3api6wh6g58lya6ssly9hxyhdsa3i7bk";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
