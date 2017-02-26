@@ -84,7 +84,33 @@ let
 
   extraConfig = name: {
     boot.loader.grub.enable = false;
+
     boot.initrd.kernelModules = [ "virtio" "virtio_pci" "virtio_net" "virtio_rng" "virtio_blk" "virtio_console" ];
+    boot.initrd.extraUtilsCommands =
+      ''
+        # Need mke2fs in the initrd
+        copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
+      '';
+    boot.initrd.postDeviceCommands =
+      ''
+        # Format the boot disk if need be
+        FSTYPE=$(blkid -o value -s TYPE /dev/vda || true)
+        if [ -z "$FSTYPE" ]; then
+          mke2fs -t ext4 /dev/vda
+        fi
+      '';
+    boot.initrd.postMountCommands =
+      ''
+        # Mark as being NixOS
+        mkdir -p $targetRoot/etc
+        touch $targetRoot/etc/NIXOS
+
+        # Fix perms on /tmp
+        # TODO: why is this actually required?
+        chmod 1777 $targetRoot/tmp
+
+        mkdir -p $targetRoot/boot
+      '';
 
     fileSystems = {
       "/".device = "/dev/vda";
