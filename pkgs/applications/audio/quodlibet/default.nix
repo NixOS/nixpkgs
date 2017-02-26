@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python2Packages, intltool
-, gst_python, withGstPlugins ? false, gst_plugins_base ? null
+, gst-python, withGstPlugins ? false, gst_plugins_base ? null
 , gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
 assert withGstPlugins -> gst_plugins_base != null
@@ -48,7 +48,7 @@ in buildPythonApplication {
   ];
 
   propagatedBuildInputs = [
-    mutagen pygtk pygobject2 dbus-python gst_python intltool
+    mutagen pygtk pygobject2 dbus-python gst-python intltool
   ];
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''

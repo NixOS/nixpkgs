@@ -1,5 +1,5 @@
 { stdenv, fetchgit, pythonPackages, cdparanoia, cdrdao
-, gst_python, gst_plugins_base, gst_plugins_good
+, gst-python, gst_plugins_base, gst_plugins_good
 , utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   pythonPath = with pythonPackages; [
-    pygobject2 gst_python musicbrainzngs
+    pygobject2 gst-python musicbrainzngs
     pycdio pyxdg setuptools
     CDDB
   ];

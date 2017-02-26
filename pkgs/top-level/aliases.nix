@@ -52,6 +52,7 @@ doNotDisplayTwice rec {
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = qt5.grantlee;  # added 2015-12-19
+  gst_python = gst-python;  # added 2017-02
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
