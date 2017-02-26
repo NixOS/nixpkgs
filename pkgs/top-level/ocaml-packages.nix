@@ -630,7 +630,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_message-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
 
-    ppx_sexp_value = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
+    ppx_sexp_value =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_value-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
 
     ppx_typerep_conv = callPackage ../development/ocaml-modules/janestreet/ppx-typerep-conv.nix {};
 
