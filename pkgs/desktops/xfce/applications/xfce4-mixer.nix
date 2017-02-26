@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, makeWrapper
 , glib, gstreamer, gst_plugins_base, gtk
 , libxfce4util, libxfce4ui, xfce4panel, xfconf, libunique ? null
-, pulseaudioSupport ? false, gst_plugins_good
+, pulseaudioSupport ? false, gst-plugins-good
 }:
 
 let
@@ -10,7 +10,7 @@ let
   gst_plugins_minimal = gst_plugins_base.override {
     minimalDeps = true;
   };
-  gst_plugins_pulse = gst_plugins_good.override {
+  gst_plugins_pulse = gst-plugins-good.override {
     minimalDeps = true;
   };
   gst_plugins = [ gst_plugins_minimal ] ++ stdenv.lib.optional pulseaudioSupport gst_plugins_pulse;

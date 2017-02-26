@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify, gstreamer,
-  gst_plugins_base, gst_plugins_good, gnome3, makeWrapper, aria2 ? null }:
+  gst_plugins_base, gst-plugins-good, gnome3, makeWrapper, aria2 ? null }:
 
 stdenv.mkDerivation rec {
   name = "uget-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool makeWrapper ];
   
   buildInputs = [
-    openssl curl libnotify gstreamer gst_plugins_base gst_plugins_good
+    openssl curl libnotify gstreamer gst_plugins_base gst-plugins-good
     gnome3.gtk gnome3.dconf
   ]
   ++ (stdenv.lib.optional (aria2 != null) aria2);
