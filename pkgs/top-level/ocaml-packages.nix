@@ -688,7 +688,9 @@ let
       else bin_prot_p4;
 
     core_kernel =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/core_kernel-113_33_01.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {}
       else core_kernel_p4;
 
