@@ -47,4 +47,6 @@ bootPkgs.callPackage ./base.nix {
     "unix"
   ];
   stage2 = import ./head_stage2.nix;
+
+  isBroken = false;
 }
