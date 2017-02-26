@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftw, gtk, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
+{ stdenv, fetchurl, fftw, gtk2, lv2, libsamplerate, libsndfile, pkgconfig, zita-convolver }:
 
 stdenv.mkDerivation rec {
   name = "ir.lv2-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "17a6h2mv9xv41jpbx6bdakkngin4kqzh2v67l4076ddq609k5a7v";
   };
 
-  buildInputs = [ fftw gtk lv2 libsamplerate libsndfile pkgconfig zita-convolver ];
+  buildInputs = [ fftw gtk2 lv2 libsamplerate libsndfile pkgconfig zita-convolver ];
 
   buildPhase = ''
     make
