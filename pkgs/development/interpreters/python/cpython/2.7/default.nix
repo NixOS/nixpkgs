@@ -178,6 +178,17 @@ in stdenv.mkDerivation {
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
+
+        # Determinism: Windows installers were not deterministic.
+        # We're also not interested in building Windows installers.
+        find "$out" -name 'wininst*.exe' | xargs -r rm -f
+
+        # Determinism: rebuild all bytecode
+        # We exclude lib2to3 because that's Python 2 code which fails
+        # We rebuild three times, once for each optimization level
+        find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
       '';
 
     passthru = let
