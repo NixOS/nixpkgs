@@ -622,7 +622,10 @@ let
 
     ppx_typerep_conv = callPackage ../development/ocaml-modules/janestreet/ppx-typerep-conv.nix {};
 
-    ppx_variants_conv = callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
+    ppx_variants_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_variants_conv-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
 
     ppx_expect = callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
 
