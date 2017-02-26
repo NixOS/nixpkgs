@@ -588,7 +588,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_inline_test-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
 
-    ppx_bench = callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
+    ppx_bench =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_bench-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
 
     ppx_bin_prot = callPackage ../development/ocaml-modules/janestreet/ppx-bin-prot.nix {};
 
