@@ -627,7 +627,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_variants_conv-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
 
-    ppx_expect = callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
+    ppx_expect =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_expect-113_33_01.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
 
     ppx_jane = callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
 
