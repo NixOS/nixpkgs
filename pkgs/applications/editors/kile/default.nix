@@ -1,7 +1,7 @@
 { kdeDerivation
 , lib
 , fetchgit
-, ecm
+, extra-cmake-modules
 , kdoctools
 , kdeWrapper
 , qtscript
@@ -33,7 +33,7 @@ let
 
       };
 
-      nativeBuildInputs = [ ecm kdoctools ];
+      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
       buildInputs = [
         kconfig

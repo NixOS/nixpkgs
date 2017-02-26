@@ -3,7 +3,7 @@
 , fetchurl
 , kdoctools
 , kdeWrapper
-, ecm
+, extra-cmake-modules
 , karchive
 , kcrash
 , kdbusaddons
@@ -43,7 +43,7 @@ let
     ];
 
     nativeBuildInputs = [
-      ecm kdoctools
+      extra-cmake-modules kdoctools
     ];
 
     meta = {

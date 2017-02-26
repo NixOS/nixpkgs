@@ -65,10 +65,10 @@ in
 
       security.wrappers = {
         kcheckpass.source = "${plasma5.plasma-workspace.out}/lib/libexec/kcheckpass";
-        "start_kdeinit".source = "${libsForQt5.kinit.out}/lib/libexec/kf5/start_kdeinit";
+        "start_kdeinit".source = "${pkgs.kinit.out}/lib/libexec/kf5/start_kdeinit";
       };
 
-      environment.systemPackages = with qt5; with libsForQt5; with plasma5; with kdeApplications;
+      environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
         [
           frameworkintegration
           kactivities
@@ -213,10 +213,10 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        themes = with libsForQt5; with plasma5; [
-          ecm # for the setup-hook
-          plasma-workspace
-          breeze-icons
+        themes = [
+          pkgs.extra-cmake-modules # for the setup-hook
+          plasma5.plasma-workspace
+          pkgs.breeze-icons
         ];
       };
 

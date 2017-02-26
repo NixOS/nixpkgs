@@ -1,7 +1,7 @@
 {
   kdeApp, lib, kdeWrapper,
 
-  ecm, kdoctools, makeWrapper,
+  extra-cmake-modules, kdoctools, makeWrapper,
 
   karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, khtml, kio,
   kservice, kpty, kwidgetsaddons, libarchive,
@@ -15,7 +15,7 @@ let
     kdeApp {
       name = "ark";
       nativeBuildInputs = [
-        ecm kdoctools makeWrapper
+        extra-cmake-modules kdoctools makeWrapper
       ];
       propagatedBuildInputs = [
         khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice

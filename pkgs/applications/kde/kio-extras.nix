@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, ecm, kdoctools, shared_mime_info,
+  kdeApp, lib, extra-cmake-modules, kdoctools, shared_mime_info,
   exiv2, kactivities, karchive, kbookmarks, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kguiaddons, kdnssd, kiconthemes, ki18n, kio, khtml,
   kdelibs4support, kpty, libmtp, libssh, openexr, ilmbase, openslp, phonon,
@@ -12,7 +12,7 @@ kdeApp {
     license = with lib.licenses; [ gpl2 lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm kdoctools shared_mime_info ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools shared_mime_info ];
   propagatedBuildInputs = [
     exiv2 kactivities karchive kbookmarks kconfig kconfigwidgets kcoreaddons
     kdbusaddons kguiaddons kdnssd kiconthemes ki18n kio khtml kdelibs4support

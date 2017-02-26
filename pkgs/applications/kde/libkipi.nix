@@ -1,4 +1,4 @@
-{ kdeApp, lib, ecm, kconfig, ki18n, kservice, kxmlgui }:
+{ kdeApp, lib, extra-cmake-modules, kconfig, ki18n, kservice, kxmlgui }:
 
 kdeApp {
   name = "libkipi";
@@ -6,6 +6,6 @@ kdeApp {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ kconfig ki18n kservice kxmlgui ];
 }

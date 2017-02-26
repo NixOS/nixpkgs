@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   djvulibre, ebook_tools, kactivities, karchive, kbookmarks, kcompletion,
   kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdegraphics-mobipocket,
   kiconthemes, kjs, khtml, kio, kparts, kpty, kwallet, kwindowsystem, libkexiv2,
@@ -10,7 +10,7 @@
 let
   unwrapped = kdeApp {
     name = "okular";
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [
       djvulibre ebook_tools kactivities karchive kbookmarks kcompletion kconfig
       kconfigwidgets kcoreaddons kdbusaddons kdegraphics-mobipocket kiconthemes

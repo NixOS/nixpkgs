@@ -1,6 +1,6 @@
 {
   kdeApp, lib,
-  ecm, ki18n,
+  extra-cmake-modules, ki18n,
   kcoreaddons, kconfig, kcodecs
 }:
 
@@ -10,6 +10,6 @@ kdeApp {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm ki18n ];
+  nativeBuildInputs = [ extra-cmake-modules ki18n ];
   buildInputs = [ kcoreaddons kconfig kcodecs ];
 }

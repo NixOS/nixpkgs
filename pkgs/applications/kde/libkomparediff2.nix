@@ -1,7 +1,7 @@
-{ kdeApp, lib, ecm, ki18n, kxmlgui, kcodecs, kio }:
+{ kdeApp, lib, extra-cmake-modules, ki18n, kxmlgui, kcodecs, kio }:
 
 kdeApp {
   name = "libkomparediff2";
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ kcodecs ki18n kxmlgui kio ];
 }

@@ -1,6 +1,6 @@
 {
   plasmaPackage, lib, copyPathsToStore,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   attica, baloo, boost, fontconfig, ibus, kactivities, kactivities-stats, kauth,
   kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
   kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
@@ -13,7 +13,7 @@
 
 plasmaPackage rec {
   name = "plasma-desktop";
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     attica boost fontconfig ibus kcmutils kdbusaddons kded kitemmodels knewstuff
     knotifications knotifyconfig kwallet libcanberra_kde libXcursor

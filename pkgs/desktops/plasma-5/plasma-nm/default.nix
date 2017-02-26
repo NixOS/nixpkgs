@@ -1,4 +1,4 @@
-{ plasmaPackage, substituteAll, ecm, kdoctools
+{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
 , kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
@@ -15,7 +15,7 @@ plasmaPackage {
       inherit mobile_broadband_provider_info;
     })
   ];
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
     qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes

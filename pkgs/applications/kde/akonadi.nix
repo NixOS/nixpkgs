@@ -1,6 +1,6 @@
 {
   kdeApp, lib,
-  ecm,
+  extra-cmake-modules,
   kcompletion, kconfigwidgets, kdbusaddons, kdesignerplugin, kiconthemes,
   kio,
   boost, kitemmodels
@@ -12,7 +12,7 @@ kdeApp {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcompletion kconfigwidgets kdbusaddons kdesignerplugin kiconthemes kio
   ];

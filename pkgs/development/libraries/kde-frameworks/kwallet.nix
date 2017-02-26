@@ -1,4 +1,4 @@
-{ kdeFramework, lib, ecm, kconfig, kconfigwidgets
+{ kdeFramework, lib, extra-cmake-modules, kconfig, kconfigwidgets
 , kcoreaddons , kdbusaddons, kdoctools, ki18n, kiconthemes
 , knotifications , kservice, kwidgetsaddons, kwindowsystem, libgcrypt
 }:
@@ -6,7 +6,7 @@
 kdeFramework {
   name = "kwallet";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     kconfig kconfigwidgets kcoreaddons kdbusaddons ki18n kiconthemes
     knotifications kservice kwidgetsaddons kwindowsystem libgcrypt

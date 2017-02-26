@@ -1,6 +1,6 @@
 {
   kdeApp, lib,
-  ecm,
+  extra-cmake-modules,
   akonadi, kdbusaddons, kio, kitemmodels, kmime
 }:
 
@@ -10,6 +10,6 @@ kdeApp {
     license = with lib.licenses; [ gpl2 lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ akonadi kdbusaddons kio kitemmodels kmime ];
 }

@@ -1,4 +1,4 @@
-{ plasmaPackage, ecm, kdoctools
+{ plasmaPackage, extra-cmake-modules, kdoctools
 , kconfig, kconfigwidgets, kcoreaddons, kcmutils, kdelibs4support, ki18n
 , kio, knewstuff, kross, krunner, kservice, ksysguard, kunitconversion
 , plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
@@ -8,7 +8,7 @@
 plasmaPackage {
   name = "kdeplasma-addons";
   nativeBuildInputs = [
-    ecm
+    extra-cmake-modules
     kdoctools
   ];
   propagatedBuildInputs = [

@@ -6292,7 +6292,7 @@ with pkgs;
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
   # Does not actually depend on Qt 5
-  extra-cmake-modules = libsForQt5.ecmNoHooks;
+  inherit (kdeFrameworks) extra-cmake-modules;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocamlPackages_4_01_0;
@@ -7852,6 +7852,16 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+  kdeFrameworks =
+    let
+      mkFrameworks = import ../development/libraries/kde-frameworks;
+      attrs = {
+        inherit libsForQt5;
+        inherit kdeDerivation lib fetchurl;
+      };
+    in
+      recurseIntoAttrs (makeOverridable mkFrameworks attrs);
+
   kdelibs4 = kdeApplications.kdelibs;
 
   keybinder = callPackage ../development/libraries/keybinder {
@@ -9341,12 +9351,14 @@ with pkgs;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
-  mkLibsForQt5 = self: with self;
-    let kdeFrameworks = import ../development/libraries/kde-frameworks {
-          inherit (self) newScope;
-          inherit kdeDerivation lib fetchurl;
-        };
-    in {
+  mkLibsForQt5 = self: with self; {
+
+    ### KDE FRAMEWORKS
+
+    inherit (kdeFrameworks.override { libsForQt5 = self; })
+      attica;
+
+    ### LIBRARIES
 
     ### BUILD SUPPORT
 
@@ -9426,7 +9438,7 @@ with pkgs;
 
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
-  } // kdeFrameworks;
+  };
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
@@ -12140,6 +12152,8 @@ with pkgs;
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
+  inherit (kdeFrameworks) breeze-icons;
+
   cacert = callPackage ../data/misc/cacert { };
 
   caladea = callPackage ../data/fonts/caladea {};
@@ -12375,6 +12389,8 @@ with pkgs;
   overpass = callPackage ../data/fonts/overpass { };
 
   oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
+
+  inherit (kdeFrameworks) oxygen-icons5;
 
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 

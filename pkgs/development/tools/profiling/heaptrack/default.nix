@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub, cmake, ecm,
+  stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
   zlib, boost162, libunwind, elfutils, sparsehash,
   qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons,
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dqchd2r4khv9gzj4n0qjii2nqygkj5jclkji8jbvivx5qwsqznc";
   };
 
-  nativeBuildInputs = [ cmake ecm ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
     zlib boost162 libunwind elfutils sparsehash
     qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons

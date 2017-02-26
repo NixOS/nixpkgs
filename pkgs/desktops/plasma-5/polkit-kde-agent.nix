@@ -1,12 +1,12 @@
 {
-  plasmaPackage, ecm,
+  plasmaPackage, extra-cmake-modules,
   kcoreaddons, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, knotifications,
   kwidgetsaddons, kwindowsystem, polkit-qt
 }:
 
 plasmaPackage {
   name = "polkit-kde-agent";
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
     kdbusaddons kwidgetsaddons kcoreaddons kcrash kconfig ki18n kiconthemes
     knotifications kwindowsystem polkit-qt

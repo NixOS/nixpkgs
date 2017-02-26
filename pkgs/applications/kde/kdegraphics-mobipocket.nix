@@ -1,6 +1,6 @@
 {
   kdeApp, lib,
-  ecm,
+  extra-cmake-modules,
   kio
 }:
 
@@ -10,6 +10,6 @@ kdeApp {
     license = [ lib.licenses.gpl2Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kio ];
 }

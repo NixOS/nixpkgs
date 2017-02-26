@@ -1,7 +1,7 @@
 {
   plasmaPackage, lib, copyPathsToStore,
 
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
 
   baloo, kactivities, kcmutils, kconfig, kcrash, kdbusaddons, kdeclarative,
   kdelibs4support, kdesu, kglobalaccel, kidletime, kjsembed, knewstuff,
@@ -14,7 +14,7 @@
 plasmaPackage {
   name = "plasma-workspace";
 
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff

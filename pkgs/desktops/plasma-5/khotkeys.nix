@@ -1,4 +1,4 @@
-{ plasmaPackage, ecm, kdoctools, kcmutils
+{ plasmaPackage, extra-cmake-modules, kdoctools, kcmutils
 , kdbusaddons, kdelibs4support, kglobalaccel, ki18n, kio, kxmlgui
 , plasma-framework, plasma-workspace, qtx11extras
 , fetchpatch
@@ -6,7 +6,7 @@
 
 plasmaPackage {
   name = "khotkeys";
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   patches = [
     # Patch is in 5.9 and up.

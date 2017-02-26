@@ -1,9 +1,9 @@
-{ plasmaPackage, ecm, kdoctools, kdelibs4support
+{ plasmaPackage, extra-cmake-modules, kdoctools, kdelibs4support
 , qtx11extras
 }:
 
 plasmaPackage {
   name = "kgamma5";
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kdelibs4support qtx11extras ];
 }

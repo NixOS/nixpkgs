@@ -1,4 +1,4 @@
-{ plasmaPackage, ecm
+{ plasmaPackage, extra-cmake-modules
 , breeze-qt5, kconfig, kconfigwidgets, kiconthemes, kio, kwayland
 , libXcursor
 }:
@@ -8,7 +8,7 @@
 plasmaPackage {
   name = "plasma-integration";
   nativeBuildInputs = [
-    ecm
+    extra-cmake-modules
   ];
   buildInputs = [
     breeze-qt5 kconfig kconfigwidgets kiconthemes kio kwayland

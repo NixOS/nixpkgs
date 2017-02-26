@@ -1,6 +1,6 @@
 {
   plasmaPackage, lib, copyPathsToStore,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   breeze-qt5, epoxy, kactivities, kcompletion, kcmutils, kconfig,
   kconfigwidgets, kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel,
   ki18n, kiconthemes, kidletime, kinit, kio, knewstuff, knotifications,
@@ -12,7 +12,7 @@
 plasmaPackage {
   name = "kwin";
   nativeBuildInputs = [
-    ecm
+    extra-cmake-modules
     kdoctools
   ];
   propagatedBuildInputs = [

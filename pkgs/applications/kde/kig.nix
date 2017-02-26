@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper
-  , ecm, kdoctools, kparts
+  , extra-cmake-modules, kdoctools, kparts
   , qtsvg, qtxmlpatterns, ktexteditor, boost
 }:
 
@@ -12,7 +12,7 @@ let
         license = with lib.licenses; [ gpl2 ];
         maintainers = with lib.maintainers; [ raskin ];
       };
-      nativeBuildInputs = [ ecm kdoctools ];
+      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       buildInputs = [
         kparts qtsvg qtxmlpatterns ktexteditor boost
       ];

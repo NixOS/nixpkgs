@@ -1,9 +1,9 @@
-{ plasmaPackage, ecm, kdoctools, kcoreaddons
+{ plasmaPackage, extra-cmake-modules, kdoctools, kcoreaddons
 , ki18n, kwallet, kwidgetsaddons
 }:
 
 plasmaPackage {
   name = "ksshaskpass";
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kcoreaddons ki18n kwallet kwidgetsaddons ];
 }

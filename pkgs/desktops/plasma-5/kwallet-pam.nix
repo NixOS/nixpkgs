@@ -1,10 +1,10 @@
-{ plasmaPackage, ecm, pam, socat, libgcrypt
+{ plasmaPackage, extra-cmake-modules, pam, socat, libgcrypt
 }:
 
 plasmaPackage {
   name = "kwallet-pam";
 
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [ pam socat libgcrypt ];
 

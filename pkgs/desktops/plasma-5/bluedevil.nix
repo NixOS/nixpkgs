@@ -1,12 +1,12 @@
 {
-  plasmaPackage, ecm, shared_mime_info,
+  plasmaPackage, extra-cmake-modules, shared_mime_info,
   bluez-qt, kcoreaddons, kdbusaddons, kded, ki18n, kiconthemes, kio,
   knotifications, kwidgetsaddons, kwindowsystem, plasma-framework, qtdeclarative
 }:
 
 plasmaPackage {
   name = "bluedevil";
-  nativeBuildInputs = [ ecm shared_mime_info ];
+  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
   propagatedBuildInputs = [
     bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative kcoreaddons
     kdbusaddons kded kiconthemes knotifications kwidgetsaddons

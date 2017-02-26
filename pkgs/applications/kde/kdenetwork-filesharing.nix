@@ -1,6 +1,6 @@
 {
   kdeApp, lib,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   kcoreaddons, ki18n, kio, kwidgetsaddons, samba
 }:
 
@@ -10,6 +10,6 @@ kdeApp {
     license = [ lib.licenses.gpl2 lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kcoreaddons ki18n kio kwidgetsaddons samba ];
 }

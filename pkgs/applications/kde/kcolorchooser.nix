@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper,
-  ecm, ki18n, kwidgetsaddons, kxmlgui
+  extra-cmake-modules, ki18n, kwidgetsaddons, kxmlgui
 }:
 
 let
@@ -11,7 +11,7 @@ let
         license = with lib.licenses; [ mit ];
         maintainers = [ lib.maintainers.ttuegel ];
       };
-      nativeBuildInputs = [ ecm ];
+      nativeBuildInputs = [ extra-cmake-modules ];
       propagatedBuildInputs = [ ki18n kwidgetsaddons kxmlgui ];
     };
 in

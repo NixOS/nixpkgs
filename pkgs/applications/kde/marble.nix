@@ -1,5 +1,5 @@
 { kdeApp, lib, kdeWrapper
-, ecm, qtscript, qtsvg, qtquickcontrols
+, extra-cmake-modules, qtscript, qtsvg, qtquickcontrols
 , gpsd
 }:
 
@@ -9,7 +9,7 @@ let
       name = "marble";
       meta.license = with lib.licenses; [ lgpl21 gpl3 ];
 
-      nativeBuildInputs = [ ecm ];
+      nativeBuildInputs = [ extra-cmake-modules ];
       propagatedBuildInputs = [
         qtscript qtsvg qtquickcontrols
         gpsd

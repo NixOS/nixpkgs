@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   kactivities, kconfig, kcrash, kdbusaddons, kguiaddons, kiconthemes, ki18n,
   kinit, kio, kitemmodels, kjobwidgets, knewstuff, knotifications, konsole,
   kparts, ktexteditor, kwindowsystem, kwallet, kxmlgui, libgit2,
@@ -15,7 +15,7 @@ let
         license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
         maintainers = [ lib.maintainers.ttuegel ];
       };
-      nativeBuildInputs = [ ecm kdoctools ];
+      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       propagatedBuildInputs = [
         kactivities ki18n kio ktexteditor kwindowsystem plasma-framework
         qtscript kconfig kcrash kguiaddons kiconthemes kinit kjobwidgets kparts

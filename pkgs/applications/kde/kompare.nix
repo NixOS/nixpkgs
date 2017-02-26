@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   kparts, ktexteditor, kwidgetsaddons, libkomparediff2
 }:
 
@@ -9,7 +9,7 @@ let
     kdeApp {
       name = "kompare";
       meta = { license = with lib.licenses; [ gpl2 ]; };
-      nativeBuildInputs = [ ecm kdoctools ];
+      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       propagatedBuildInputs = [
         kparts ktexteditor kwidgetsaddons libkomparediff2
       ];

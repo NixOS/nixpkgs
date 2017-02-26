@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake
-, ecm, qtbase, qtscript
+, extra-cmake-modules, qtbase, qtscript
 , ki18n, kio, knotifications, knotifyconfig, kdoctools, kross, kcmutils, kdelibs4support
 , libktorrent, boost, taglib
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  nativeBuildInputs = [ kdoctools ecm ];
+  nativeBuildInputs = [ kdoctools extra-cmake-modules ];
 
   buildInputs =
     [ cmake qtbase qtscript

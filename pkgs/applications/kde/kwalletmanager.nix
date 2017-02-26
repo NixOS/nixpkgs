@@ -1,7 +1,7 @@
 { lib
 , kdeApp
 , kdeWrapper
-, ecm
+, extra-cmake-modules
 , kdoctools
 , kauth
 , kcmutils
@@ -19,7 +19,7 @@ let
       license = with lib.licenses; [ gpl2 ];
       maintainers = with lib.maintainers; [ fridh ];
     };
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [
       kauth
       kcmutils

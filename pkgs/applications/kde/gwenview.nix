@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   baloo, exiv2, kactivities, kdelibs4support, kio, kipi-plugins, lcms2,
   libkdcraw, libkipi, phonon, qtimageformats, qtsvg, qtx11extras
 }:
@@ -13,7 +13,7 @@ let
         license = with lib.licenses; [ gpl2 fdl12 ];
         maintainers = [ lib.maintainers.ttuegel ];
       };
-      nativeBuildInputs = [ ecm kdoctools ];
+      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       propagatedBuildInputs = [
         baloo kactivities kdelibs4support kio exiv2 lcms2 libkdcraw
         libkipi phonon qtimageformats qtsvg qtx11extras

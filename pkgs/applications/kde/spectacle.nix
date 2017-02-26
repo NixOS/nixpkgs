@@ -1,6 +1,6 @@
 {
   kdeApp, lib, kdeWrapper,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, ki18n, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
   xcb-util-cursor
@@ -11,7 +11,7 @@ let
     kdeApp {
       name = "spectacle";
       meta = with lib; { maintainers = with maintainers; [ ttuegel ]; };
-      nativeBuildInputs = [ ecm kdoctools ];
+      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       propagatedBuildInputs = [
         kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
         kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi xcb-util-cursor

@@ -1,12 +1,12 @@
 {
   plasmaPackage, lib, copyPathsToStore,
-  ecm,
+  extra-cmake-modules,
   plymouth
 }:
 
 plasmaPackage {
   name = "breeze-plymouth";
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ plymouth ];
   outputs = [ "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
