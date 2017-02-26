@@ -5,6 +5,7 @@ with lib;
 let
 
   xcfg = config.services.xserver;
+  pcfg = config.hardware.pulseaudio;
   cfg = xcfg.desktopManager.xfce;
 
 in
@@ -89,7 +90,7 @@ in
         pkgs.xfce.xfce4icontheme
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
-        pkgs.xfce.xfce4mixer
+       (pkgs.xfce.xfce4mixer.override { pulseaudioSupport = pcfg.enable; })
         pkgs.xfce.xfce4volumed
         pkgs.xfce.xfce4-screenshooter
         pkgs.xfce.xfconf
