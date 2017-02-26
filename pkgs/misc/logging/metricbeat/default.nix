@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   doCheck = false;
 
+  # need to patch interpreter to be able to run on NixOS
+  patchPhase = ''
+    patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) metricbeat
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp metricbeat $out/bin/
