@@ -31,7 +31,7 @@
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
-, drmSupport         ? true,  libdrm        ? null
+, drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
@@ -114,7 +114,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg_3_2 freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
-  ] ++ optional alsaSupport        alsaLib
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       libiconv Cocoa CoreAudio ])
+    ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
     ++ optional xineramaSupport    libXinerama
@@ -122,9 +124,6 @@ in stdenv.mkDerivation rec {
     ++ optional bluraySupport      libbluray
     ++ optional jackaudioSupport   libjack2
     ++ optional pulseSupport       libpulseaudio
-    ++ optional stdenv.isDarwin    libiconv
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-       Cocoa CoreAudio ])
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport       libvdpau
