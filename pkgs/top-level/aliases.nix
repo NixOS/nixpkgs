@@ -54,6 +54,7 @@ doNotDisplayTwice rec {
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gst_ffmpeg = gst-ffmpeg;  # added 2017-02
   gst_plugins_good = gst-plugins-good;  # added 2017-02
+  gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_python = gst-python;  # added 2017-02
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
