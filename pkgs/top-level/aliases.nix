@@ -98,6 +98,7 @@ doNotDisplayTwice rec {
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
+  qt_gstreamer = qt-gstreamer;  # added 2017-02
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = qt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
