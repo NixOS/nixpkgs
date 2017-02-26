@@ -2,7 +2,7 @@
 , exiv2, boost, sqlite, icu, vc, shared_mime_info, librevenge, libodfgen, libwpg
 , libwpd, poppler_qt4, ilmbase, gsl, qca2, marble, libvisio, libmysql, postgresql
 , freetds, fftw, glew, libkdcraw, pstoedit, opencolorio, kdepimlibs
-, kactivities, okular, git, oxygen_icons, makeWrapper
+, kactivities, okular, git, oxygen-icons5, makeWrapper
 # TODO: not found
 #, xbase, openjpeg
 # TODO: package libWPS, Spnav, m2mml, LibEtonyek
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     for i in $out/bin/*; do
       wrapProgram $i \
         --prefix PATH ':' "${pstoedit.out}/bin" \
-        --prefix XDG_DATA_DIRS ':' "${oxygen_icons}/share"
+        --prefix XDG_DATA_DIRS ':' "${oxygen-icons5}/share"
     done
   '';
 
