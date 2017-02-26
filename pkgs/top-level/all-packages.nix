@@ -928,6 +928,8 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+  heartbeat = callPackage ../misc/logging/heartbeat { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hexio = callPackage ../development/tools/hexio { };
