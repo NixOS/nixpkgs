@@ -1,15 +1,24 @@
 /*
 
+# New packages
+
+READ THIS FIRST
+
+This module is for official packages in Qt 5. All available packages are listed
+in `./srcs.nix`, although a few are not yet packaged in Nixpkgs (see below).
+
+IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
+
+Many of the packages released upstream are not yet built in Nixpkgs due to lack
+of demand. To add a Nixpkgs build for an upstream package, copy one of the
+existing packages here and modify it as necessary.
+
 # Updates
 
-Before a major version update, make a copy of this directory. (We like to
-keep the old version around for a short time after major updates.) Add a
-top-level attribute to `top-level/all-packages.nix`.
-
-1. Update the URL in `maintainers/scripts/generate-qt.sh`.
-2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Check that the new packages build correctly.
+1. Update the URL in `./fetch.sh`.
+2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION/`
+   from the top of the Nixpkgs tree.
+3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
 
 */
