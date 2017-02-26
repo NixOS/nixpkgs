@@ -7518,7 +7518,7 @@ with pkgs;
   });
 
   gst_all = {
-    inherit (pkgs) gstreamer gnonlin gst-python qt_gstreamer;
+    inherit (pkgs) gstreamer gnonlin gst-python qt-gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
     gstPluginsBad = pkgs.gst-plugins-bad;
     gstPluginsGood = pkgs.gst-plugins-good;
@@ -7563,7 +7563,7 @@ with pkgs;
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};
 
-  qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
+  qt-gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
   qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
