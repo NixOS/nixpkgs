@@ -19,11 +19,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  configureFlags = 
-    if stdenv.isLinux then ["--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
-    # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-    "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"]
-    else ["--enable-libuuid --disable-e2initrd-helper"]
+  configureFlags =
+    if stdenv.isLinux then [
+      "--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
+      # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
+      "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
+    ] else [
+      "--enable-libuuid --disable-e2initrd-helper"
+    ]
   ;
 
   # hacky way to make it install *.pc
@@ -34,10 +37,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://e2fsprogs.sourceforge.net/;
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
   };
 }
