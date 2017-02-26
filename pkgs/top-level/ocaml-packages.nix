@@ -607,7 +607,10 @@ let
 
     ppx_fail = callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
 
-    ppx_fields_conv = callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
+    ppx_fields_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_fields_conv-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
 
     ppx_let = callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
 
