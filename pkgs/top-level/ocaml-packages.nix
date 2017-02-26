@@ -600,7 +600,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_custom_printf-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-custom-printf.nix {};
 
-    ppx_enumerate = callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
+    ppx_enumerate =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_enumerate-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
 
     ppx_fail = callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
 
