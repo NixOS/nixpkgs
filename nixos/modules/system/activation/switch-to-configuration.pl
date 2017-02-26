@@ -164,21 +164,6 @@ while (my ($unit, $state) = each %{$activePrev}) {
         elsif ($unit =~ /\.target$/) {
             my $unitInfo = parseUnit($newUnitFile);
 
-            # Cause all active target units to be restarted below.
-            # This should start most changed units we stop here as
-            # well as any new dependencies (including new mounts and
-            # swap devices).  FIXME: the suspend target is sometimes
-            # active after the system has resumed, which probably
-            # should not be the case.  Just ignore it.
-            if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
-                    $unitsToStart{$unit} = 1;
-                    recordUnit($startListFile, $unit);
-                    # Don't spam the user with target units that always get started.
-                    $unitsToFilter{$unit} = 1;
-                }
-            }
-
             # Stop targets that have X-StopOnReconfiguration set.
             # This is necessary to respect dependency orderings
             # involving targets: if unit X starts after target Y and
@@ -403,8 +388,12 @@ if (scalar(keys %unitsToRestart) > 0) {
     unlink($restartListFile);
 }
 
-# Start all active targets, as well as changed units we stopped above.
-# The latter is necessary because some may not be dependencies of the
+# Start default.target asynchronously (since we might be running while it
+# starts), which starts all active targets for us.
+system("@systemd@/bin/systemctl", "start", "--no-block", "default.target") == 0 or $res = 4;
+
+# Also start any changed units we stopped above.
+# This is necessary because some may not be dependencies of the
 # targets (i.e., they were manually started).  FIXME: detect units
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
