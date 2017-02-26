@@ -1151,7 +1151,7 @@ with pkgs;
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = [ gst_plugins_base gst-plugins-good gst_plugins_ugly gst-ffmpeg ];
+    gst_plugins = [ gst_plugins_base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
   };
 
   clementineFree = clementine.free;
@@ -7522,14 +7522,14 @@ with pkgs;
     gstPluginsBase = pkgs.gst_plugins_base;
     gstPluginsBad = pkgs.gst-plugins-bad;
     gstPluginsGood = pkgs.gst-plugins-good;
-    gstPluginsUgly = pkgs.gst_plugins_ugly;
+    gstPluginsUgly = pkgs.gst-plugins-ugly;
     gstFfmpeg = pkgs.gst-ffmpeg;
 
     # aliases with the dashed naming, same as in gst_all_1
     gst-plugins-base = pkgs.gst_plugins_base;
     gst-plugins-bad = pkgs.gst-plugins-bad;
     gst-plugins-good = pkgs.gst-plugins-good;
-    gst-plugins-ugly = pkgs.gst_plugins_ugly;
+    gst-plugins-ugly = pkgs.gst-plugins-ugly;
     gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 
@@ -7545,7 +7545,7 @@ with pkgs;
 
   gst-plugins-bad = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-bad {};
 
-  gst_plugins_ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
+  gst-plugins-ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
 
   gst-ffmpeg = callPackage ../development/libraries/gstreamer/legacy/gst-ffmpeg {
     ffmpeg = ffmpeg_0;

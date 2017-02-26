@@ -1,10 +1,10 @@
 { stdenv, fetchurl, python2Packages, intltool
 , gst-python, withGstPlugins ? false, gst_plugins_base ? null
-, gst-plugins-good ? null, gst_plugins_ugly ? null, gst-plugins-bad ? null }:
+, gst-plugins-good ? null, gst-plugins-ugly ? null, gst-plugins-bad ? null }:
 
 assert withGstPlugins -> gst_plugins_base != null
                          || gst-plugins-good != null
-                         || gst_plugins_ugly != null
+                         || gst-plugins-ugly != null
                          || gst-plugins-bad != null;
 
 let
@@ -44,7 +44,7 @@ in buildPythonApplication {
   patches = [ ./quodlibet-package-plugins.patch ];
 
   buildInputs = stdenv.lib.optionals withGstPlugins [
-    gst_plugins_base gst-plugins-good gst_plugins_ugly gst-plugins-bad
+    gst_plugins_base gst-plugins-good gst-plugins-ugly gst-plugins-bad
   ];
 
   propagatedBuildInputs = [
