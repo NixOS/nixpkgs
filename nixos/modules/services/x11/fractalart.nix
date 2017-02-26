@@ -30,7 +30,7 @@ in {
       wantedBy = [ "default.target" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.haskellPackages.FractalArt}/bin/FractalArt -w ${toString cfg.width} -h ${toString cfg.height} -f .background-image";
+        ExecStart = "${pkgs.haskellPackages.FractalArt}/bin/FractalArt --no-bg -w ${toString cfg.width} -h ${toString cfg.height} -f .background-image";
       };
     };
   };
