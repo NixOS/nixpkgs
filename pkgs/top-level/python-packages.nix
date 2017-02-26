@@ -31908,10 +31908,10 @@ EOF
   };
 
   packaging = buildPythonPackage rec {
-    name = "packaging-16.7";
+    name = "packaging-16.8";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/packaging/${name}.tar.gz";
-      sha256 = "07h18mrpqs0lv2x4fl43pqi0xj6hdrmrnm6v9q634yliagg6q91f";
+      sha256 = "5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e";
     };
     propagatedBuildInputs = with self; [ pyparsing six ];
     buildInputs = with self; [ pytest pretend ];
