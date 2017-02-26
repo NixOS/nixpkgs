@@ -625,7 +625,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_pipebang-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
 
-    ppx_sexp_message = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
+    ppx_sexp_message =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_message-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
 
     ppx_sexp_value = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
 
