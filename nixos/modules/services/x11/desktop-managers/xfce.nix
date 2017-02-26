@@ -91,7 +91,7 @@ in
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
        (pkgs.xfce.xfce4mixer.override { pulseaudioSupport = pcfg.enable; })
-        pkgs.xfce.xfce4volumed
+       (if pcfg.enable then pkgs.xfce.xfce4volumed_pulse else pkgs.xfce.xfce4volumed_gst)
         pkgs.xfce.xfce4-screenshooter
         pkgs.xfce.xfconf
         # This supplies some "abstract" icons such as
