@@ -253,6 +253,17 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+      <para>
+      Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
+      Minor modifications had to be made to the interpreters in order to generate
+      deterministic bytecode. This has security implications and is relevant for
+      those using Python in a <literal>nix-shell</literal>. See the Nixpkgs manual
+      for details.
+    </para>
+
+  </listitem>
+
 </itemizedlist>
 
 

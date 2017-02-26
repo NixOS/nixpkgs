@@ -1,6 +1,8 @@
 { stdenv, fetchurl, fetchpatch
 , glibc
 , bzip2
+, expat
+, libffi
 , gdbm
 , lzma
 , ncurses
@@ -50,6 +52,12 @@ in stdenv.mkDerivation {
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
 
+  # Determinism: The interpreter is patched to write null timestamps when compiling python files.
+  # This way python doesn't try to update them when we freeze timestamps in nix store.
+  DETERMINISTIC_BUILD=1;
+  # Determinism: We fix the hashes of str, bytes and datetime objects.
+  PYTHONHASHSEED=0;
+
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
@@ -63,9 +71,26 @@ in stdenv.mkDerivation {
     })
   ];
 
-  postPatch = optionalString (x11Support && (tix != null)) ''
+  postPatch = ''
+    # Determinism
+    substituteInPlace "Lib/py_compile.py" --replace "source_stats['mtime']" "(1 if 'DETERMINISTIC_BUILD' in os.environ else source_stats['mtime'])"
+    # Determinism. This is done unconditionally
+    substituteInPlace "Lib/importlib/_bootstrap_external.py" --replace "source_mtime = int(st['mtime'])" "source_mtime = 1"
+  '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
+
+  CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}";
+  LDFLAGS="${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}";
+  LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}";
+
+  configureFlags = [
+    "--enable-shared"
+    "--with-threads"
+    "--without-ensurepip"
+    "--with-system-expat"
+    "--with-system-ffi"
+  ];
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -75,12 +100,6 @@ in stdenv.mkDerivation {
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
      ''}
-
-    configureFlagsArray=( --enable-shared --with-threads
-                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
-                          LDFLAGS="${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}"
-                          LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
-                        )
   '';
 
   setupHook = ./setup-hook.sh;
@@ -103,6 +122,10 @@ in stdenv.mkDerivation {
     # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
     echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
+    # Determinism: Windows installers were not deterministic.
+    # We're also not interested in building Windows installers.
+    find "$out" -name 'wininst*.exe' | xargs -r rm -f
+
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
     ln -s "$out/bin/pip3" "$out/bin/pip"
@@ -110,6 +133,13 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
+
+    # Determinism: rebuild all bytecode
+    # We exclude lib2to3 because that's Python 2 code which fails
+    # We rebuild three times, once for each optimization level
+    find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
   '';
 
   passthru = let
