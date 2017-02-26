@@ -1,5 +1,5 @@
 { stdenv, fetchzip, lib, makeWrapper, alsaLib, atk, cairo, gdk_pixbuf
-, glib, gst_ffmpeg, gst_plugins_bad, gst_plugins_base
+, glib, gst-ffmpeg, gst_plugins_bad, gst_plugins_base
 , gst_plugins_good, gst_plugins_ugly, gstreamer, gtk2, libSM, libX11
 , libpng12, pango, zlib }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ gst_plugins_base gst_plugins_good
-    gst_plugins_bad gst_plugins_ugly gst_ffmpeg ];
+    gst_plugins_bad gst_plugins_ugly gst-ffmpeg ];
 
   dontPatchELF = true;
 
