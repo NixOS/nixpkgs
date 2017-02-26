@@ -427,6 +427,7 @@
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
   ./services/networking/nix-serve.nix
   ./services/networking/nntp-proxy.nix
