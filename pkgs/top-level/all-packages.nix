@@ -14414,7 +14414,9 @@ with pkgs;
     withSidebar = true;
   };
 
-  mwic = callPackage ../applications/misc/mwic { };
+  mwic = callPackage ../applications/misc/mwic {
+    pythonPackages = python3Packages;
+  };
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
