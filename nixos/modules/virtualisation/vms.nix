@@ -85,7 +85,10 @@ let
   extraConfig = name: {
     boot.loader.grub.enable = false;
 
-    boot.initrd.kernelModules = [ "virtio" "virtio_pci" "virtio_net" "virtio_rng" "virtio_blk" "virtio_console" ];
+    boot.initrd.kernelModules = [
+      "virtio" "virtio_pci" "virtio_net" "virtio_rng" "virtio_blk"
+      "virtio_console" "9p" "9pnet" "9pnet_virtio"
+    ];
     boot.initrd.extraUtilsCommands =
       ''
         # Need mke2fs in the initrd
