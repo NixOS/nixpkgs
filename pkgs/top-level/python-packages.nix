@@ -31254,7 +31254,9 @@ EOF
 
   tensorflowWithoutCuda = callPackage ../development/python-modules/tensorflow { };
 
-  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow/cuda.nix { };
+  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = true;
+  };
 
   tflearn = buildPythonPackage rec {
     name = "tflearn-0.2.1";
