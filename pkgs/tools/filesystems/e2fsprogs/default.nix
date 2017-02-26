@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libuuid }:
+{ stdenv, fetchurl, pkgconfig, libuuid, gettext }:
 
 stdenv.mkDerivation rec {
   name = "e2fsprogs-1.43.4";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libuuid ];
+  buildInputs = [ libuuid gettext ];
 
   crossAttrs = {
     preConfigure = ''
@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  configureFlags = [
-    "--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
+  configureFlags = 
+    if stdenv.isLinux then ["--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
     # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-    "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
-  ];
+    "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"]
+    else ["--enable-libuuid --disable-e2initrd-helper"]
+  ;
 
   # hacky way to make it install *.pc
   postInstall = ''
