@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libuuid gettext ];
+  buildInputs = [ libuuid ] ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
 
   crossAttrs = {
     preConfigure = ''
