@@ -62,6 +62,45 @@ in
     buildPhase = "make";
   };
 
+  beetle-pce-fast = (mkLibRetroCore rec {
+    core = "mednafen-pce-fast";
+    src = fetchRetro {
+      repo = "beetle-pce-fast-libretro";
+      rev = "6e2eaf75da2eb3dfcf2fd64413f471c8c90cf885";
+      sha256 = "0m946108wzawg0c4xvqpv6yzfmjngz6lji5hn4swgk0z5f2bj5a5";
+    };
+    description = "Port of Mednafen's PC Engine core to libretro";
+  }).override {
+    buildPhase = "make";
+    name = "beetle-pce-fast";
+  };
+
+  beetle-psx = (mkLibRetroCore rec {
+    core = "mednafen-psx";
+    src = fetchRetro {
+      repo = "beetle-psx-libretro";
+      rev = "20c9b0eb0062b8768cc40aca0e2b2d626f1002a2";
+      sha256 = "192xzvdbjjqlxrnxxn45hmrr6yjpxw3gapkbax6nhrabnxhva43k";
+    };
+    description = "Port of Mednafen's PSX Engine core to libretro";
+  }).override {
+    buildPhase = "make";
+    name = "beetle-psx";
+  };
+
+  beetle-saturn = (mkLibRetroCore rec {
+    core = "mednafen-saturn";
+    src = fetchRetro {
+      repo = "beetle-saturn-libretro";
+      rev = "bb5d0c126feb25cf980f5cc1fc57d6a5a6f6e7ab";
+      sha256 = "0bnsdy27378b71y6aa65k4jxxy2xw6ky2ici3z53hkky2jnnjq0b";
+    };
+    description = "Port of Mednafen's Saturn core to libretro";
+  }).override {
+    buildPhase = "make";
+    name = "beetle-saturn";
+  };
+
   bsnes-mercury = let bname = "bsnes-mercury"; in (mkLibRetroCore rec {
     core = bname + "-accuracy";
     src = fetchRetro {
@@ -144,42 +183,6 @@ in
     description = "Port of MAME to libretro";
 
     extraBuildInputs = [ alsaLib portaudio python27 ];
-  };
-
-  mednafen-pce-fast = (mkLibRetroCore rec {
-    core = "mednafen-pce-fast";
-    src = fetchRetro {
-      repo = "beetle-pce-fast-libretro";
-      rev = "6e2eaf75da2eb3dfcf2fd64413f471c8c90cf885";
-      sha256 = "0m946108wzawg0c4xvqpv6yzfmjngz6lji5hn4swgk0z5f2bj5a5";
-    };
-    description = "Port of Mednafen's PC Engine core to libretro";
-  }).override {
-    buildPhase = "make";
-  };
-
-  mednafen-psx = (mkLibRetroCore rec {
-    core = "mednafen-psx";
-    src = fetchRetro {
-      repo = "beetle-psx-libretro";
-      rev = "20c9b0eb0062b8768cc40aca0e2b2d626f1002a2";
-      sha256 = "192xzvdbjjqlxrnxxn45hmrr6yjpxw3gapkbax6nhrabnxhva43k";
-    };
-    description = "Port of Mednafen's PSX Engine core to libretro";
-  }).override {
-    buildPhase = "make";
-  };
-
-  mednafen-saturn = (mkLibRetroCore rec {
-    core = "mednafen-saturn";
-    src = fetchRetro {
-      repo = "beetle-saturn-libretro";
-      rev = "bb5d0c126feb25cf980f5cc1fc57d6a5a6f6e7ab";
-      sha256 = "0bnsdy27378b71y6aa65k4jxxy2xw6ky2ici3z53hkky2jnnjq0b";
-    };
-    description = "Port of Mednafen's Saturn core to libretro";
-  }).override {
-    buildPhase = "make";
   };
 
   mgba = mkLibRetroCore rec {
