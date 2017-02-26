@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libnice, pkgconfig, python2Packages, gstreamer, gst_plugins_base
-, gst_python, gupnp_igd }:
+, gst-python, gupnp_igd }:
 
 let
   inherit (python2Packages) python pygobject2;
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "16qz4x14rdycm4nrn5wx6k2y22fzrazsbmihrxdwafx9cyf23kjm";
   };
 
-  buildInputs = [ libnice python pygobject2 gst_python gupnp_igd ];
+  buildInputs = [ libnice python pygobject2 gst-python gupnp_igd ];
 
   nativeBuildInputs = [ pkgconfig ];
 

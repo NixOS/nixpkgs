@@ -7518,7 +7518,7 @@ with pkgs;
   });
 
   gst_all = {
-    inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
+    inherit (pkgs) gstreamer gnonlin gst-python qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
     gstPluginsBad = pkgs.gst_plugins_bad;
     gstPluginsGood = pkgs.gst_plugins_good;
@@ -7530,8 +7530,7 @@ with pkgs;
     gst-plugins-bad = pkgs.gst_plugins_bad;
     gst-plugins-good = pkgs.gst_plugins_good;
     gst-plugins-ugly = pkgs.gst_plugins_ugly;
-    gst-ffmpeg = pkgs.gst_ffmpeg;
-    gst-python = pkgs.gst_python;
+    gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 
   gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer {
@@ -7552,7 +7551,7 @@ with pkgs;
     ffmpeg = ffmpeg_0;
   };
 
-  gst_python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
+  gst-python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
 
   gstreamermm = callPackage ../development/libraries/gstreamer/legacy/gstreamermm { };
 
