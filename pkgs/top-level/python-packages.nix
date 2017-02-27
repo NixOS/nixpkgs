@@ -295,6 +295,8 @@ in {
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
+  pycrypto-original = callPackage ../development/python-modules/pycrypto-original { };
+
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
   pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
@@ -30562,7 +30564,7 @@ EOF
       sha256 = "1b3vjbv8hvynwj6amw3rg5zj8bagynbj0ipy09xwksf1mb0kz8m8";
     };
 
-    propagatedBuildInputs = with self ; [ pycrypto ];
+    propagatedBuildInputs = with self ; [ pycrypto-original ];
 
     meta = {
       description = "A pure Python OTR implementation";
