@@ -15,7 +15,8 @@ let version = "0.8.1"; in
           polkit gcab appstream-glib gusb sqlite libarchive libsoup
           docbook2x libxslt libelf libsmbios fwupdate libyaml valgrind
         ];
-      patchPhase = ''
+      patches = [ ./localstatedir-check-perms.patch ];
+      postPatch = ''
         sed -i -e \
           's|/usr/bin/gpgme-config|${gpgme.dev}/bin/gpgme-config|' -e \
           's|/usr/bin/gpg-error-config|${libgpgerror.dev}/bin/gpg-error-config|' \
@@ -27,6 +28,7 @@ let version = "0.8.1"; in
       configureFlags =
         [ "--with-systemdunitdir=$(out)/lib/systemd/system"
           "--with-udevrulesdir=$(out)/lib/udev/rules.d"
+          "--localstatedir=/var"
         ];
       enableParallelBuilding = true;
       meta =
