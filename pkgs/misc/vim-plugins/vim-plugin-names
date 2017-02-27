@@ -46,6 +46,7 @@
 "github:elmcast/elm-vim"
 "github:embear/vim-localvimrc"
 "github:enomsg/vim-haskellConcealPlus"
+"github:ensime/ensime-vim"
 "github:esneider/YUNOcommit.vim"
 "github:fatih/vim-go"
 "github:flazz/vim-colorschemes"
