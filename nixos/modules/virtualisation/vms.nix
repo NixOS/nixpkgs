@@ -143,13 +143,11 @@ let
       toplevel = mcfg.config.system.build.toplevel;
     in
     ''
+      # TODO: prohibit ip spoofing between VMs
       # TODO: handle shared and persisted
       # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
       # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
       # TODO: remove allowShell=1
-
-      # Make the tap device
-      ${pkgs.iproute}/bin/ip tuntap add vm-${name} mode tap
 
       ${pkgs.qemu}/bin/qemu-kvm \
         -name ${name} \
@@ -272,6 +270,8 @@ in
       unit = name: {
         description = "VM '${name}'";
         script = startVM name;
+        requires = [ "vm-${name}-netdev.service" ];
+        after = [ "vm-${name}-netdev.service" ];
         wantedBy = [ "multi-user.target" ];
       };
       consoleUnit = name: {
@@ -296,9 +296,13 @@ in
       interfaces = mapAttrsToList (name: _: "vm-${name}") cfg.machines;
     };
 
-    # TODO: generate the taps from here?
     networking.interfaces =
-      mapAttrs' (name: _: nameValuePair "vm-${name}" { useDHCP = false; }) cfg.machines //
+      mapAttrs' (name: _: nameValuePair
+        "vm-${name}"
+        { useDHCP = false;
+          virtual = true;
+          virtualType = "tap";
+        }) cfg.machines //
       { ${cfg.bridge} = {
           ip4 = [ cfg.ip4 ];
           ip6 = [ cfg.ip6 ];
