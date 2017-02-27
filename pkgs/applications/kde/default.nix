@@ -85,9 +85,7 @@ let
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
       print-manager = callPackage ./print-manager.nix {};
-      spectacle = callPackage ./spectacle.nix {
-        inherit (plasma5) kscreen;
-      };
+      spectacle = callPackage ./spectacle.nix {};
 
       l10n = recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib recurseIntoAttrs; });
     };
