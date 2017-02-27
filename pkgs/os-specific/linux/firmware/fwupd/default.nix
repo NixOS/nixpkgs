@@ -25,8 +25,8 @@ let version = "0.8.0"; in
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${efivar}/include/efivar"
       '';
       configureFlags =
-        [ "--with-systemdunitdir=$out/lib/systemd/system"
-          "--with-udevrulesdir=$out/lib/udev/rules.d"
+        [ "--with-systemdunitdir=$(out)/lib/systemd/system"
+          "--with-udevrulesdir=$(out)/lib/udev/rules.d"
         ];
       enableParallelBuilding = true;
       meta =
