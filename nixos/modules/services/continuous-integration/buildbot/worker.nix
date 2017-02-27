@@ -100,14 +100,11 @@ in {
 
     systemd.services.buildbot-worker = {
       description = "Buildbot Worker.";
-      after = [ "network.target" ];
+      after = [ "network.target" "buildbot-master.service" ];
       wantedBy = [ "multi-user.target" ];
-      wants = [ "buildbot-master.service" ];
       path = cfg.packages;
 
       preStart = ''
-        # NOTE: ensure master has time to start in case running on localhost
-        ${pkgs.coreutils}/bin/sleep 4
         ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
       '';

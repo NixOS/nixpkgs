@@ -3,11 +3,11 @@
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot-worker";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "176kp04g4c7gj15f73wppraqrirbfclyx214gcz966019niikcsp";
+    sha256 = "0rdrr8x7sn2nxl51p6h9ad42s3c28lb6sys84zrg0d7fm4zhv7hj";
   };
 
   buildInputs = with pythonPackages; [ setuptoolsTrial mock ];
@@ -21,7 +21,6 @@ pythonPackages.buildPythonApplication (rec {
     homepage = http://buildbot.net/;
     description = "Buildbot Worker Daemon";
     maintainers = with maintainers; [ nand0p ryansydnor ];
-    platforms = platforms.all;
     license = licenses.gpl2;
   };
 })

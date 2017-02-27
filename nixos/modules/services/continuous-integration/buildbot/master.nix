@@ -28,7 +28,7 @@ let
 
     ${cfg.extraConfig}
   ''
-  else pkgs.writeText "master.cfg" cfg.masterCfg;
+  else cfg.masterCfg;
 
 in {
   options = {
@@ -66,13 +66,10 @@ in {
       };
 
       masterCfg = mkOption {
-        type = types.nullOr types.str;
-        description = ''
-          Optionally pass raw master.cfg file as string.
-          Other options in this configuration will be ignored.
-        '';
+        type = types.nullOr types.path;
+        description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = null;
-        example = "BuildmasterConfig = c = {}";
+        example = "/etc/nixos/buildbot/master.cfg";
       };
 
       schedulers = mkOption {
@@ -88,7 +85,7 @@ in {
         type = types.listOf types.str;
         description = "List of Builders.";
         default = [
-          "util.BuilderConfig(name='runtests',workernames=['default-worker'],factory=factory)"
+          "util.BuilderConfig(name='runtests',workernames=['example-worker'],factory=factory)"
         ];
       };
 
@@ -183,10 +180,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.buildbot-ui;
-        description = ''
-          Package to use for buildbot.
-          <literal>buildbot-full</literal> is required in order to use local workers.
-        '';
+        description = "Package to use for buildbot.";
         example = pkgs.buildbot-full;
       };
 
