@@ -2910,6 +2910,8 @@ with pkgs;
 
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
+  moneyplex = callPackage ../applications/office/moneyplex { };
+
   monit = callPackage ../tools/system/monit { };
 
   moreutils = callPackage ../tools/misc/moreutils {
