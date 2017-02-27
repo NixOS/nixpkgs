@@ -110,9 +110,9 @@ in {
   };
 
   cudatoolkit8 = common {
-    version = "8.0.44";
-    url = https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda_8.0.44_linux-run;
-    sha256 = "1w5xmjf40kkis42dqs8dva4xjq7wr5y6vi1m0xlhs6i6cyw4mp34";
+    version = "8.0.61";
+    url = https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run;
+    sha256 = "1i4xrsqbad283qffvysn88w2pmxzxbbby41lw0j1113z771akv4w";
   };
 
 }
