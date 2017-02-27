@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.phpfpm;
+  enabled = cfg.poolConfigs != {} || cfg.pools != {};
 
   stateDir = "/run/phpfpm";
 
@@ -119,18 +120,30 @@ in {
     };
   };
 
-  config = {
+  config = mkIf enabled {
+
+    systemd.slices.phpfpm = {
+      description = "PHP FastCGI Process manager pools slice";
+    };
+
+    systemd.targets.phpfpm = {
+      description = "PHP FastCGI Process manager pools target";
+      wantedBy = [ "multi-user.target" ];
+    };
+
     systemd.services = flip mapAttrs' poolConfigs (pool: poolConfig:
       nameValuePair "phpfpm-${pool}" {
-        description = "PHP FastCGI Process Manager for pool ${pool}";
+        description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "phpfpm.target" ];
+        partOf = [ "phpfpm.target" ];
         preStart = ''
           mkdir -p ${stateDir}
         '';
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolConfig;
         in {
+          Slice = "phpfpm.slice";
           PrivateTmp = true;
           PrivateDevices = true;
           ProtectSystem = "full";
