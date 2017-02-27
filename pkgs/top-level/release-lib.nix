@@ -1,15 +1,16 @@
 { supportedSystems
 , packageSet ? (import ../..)
 , scrubJobs ? true
+, # Don't build packages marked as unfree
+  allowUnfree ? false
 }:
 
 with import ../../lib;
 
 rec {
 
-  # Ensure that we don't build packages marked as unfree.
   allPackages = args: packageSet (args // {
-    config.allowUnfree = false;
+    config.allowUnfree = allowUnfree;
     config.inHydra = true;
   });
 
