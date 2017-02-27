@@ -5678,6 +5678,8 @@ in {
 
   leather = callPackage ../development/python-modules/leather { };
 
+  libais = callPackage ../development/python-modules/libais { };
+
   libtmux = buildPythonPackage rec {
     name = "libtmux-${version}";
     version = "0.6.0";
