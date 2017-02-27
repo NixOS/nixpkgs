@@ -125,19 +125,15 @@ let
       };
     };
 
-    networking = {
+    networking = let mcfg = cfg.machines.${name}; in {
       hostName = mkDefault name;
       useDHCP = false;
       defaultGateway = mkDefault cfg.ip4.address;
       defaultGateway6 = mkDefault cfg.ip6.address;
-      /* TODO
-      interfaces.eth0 = {
-        ip4.address = cfg.${name}.ip4;
-        ip4.prefixLength = cfg.ip4.prefixLength;
-        ip6.address = cfg.${name}.ip6;
-        ip6.prefixLength = cfg.ip6.prefixLength;
+      interfaces.enp0s4 = {
+        ip4 = [ { address = mcfg.ip4; prefixLength = cfg.ip4.prefixLength; } ];
+        ip6 = [ { address = mcfg.ip6; prefixLength = cfg.ip6.prefixLength; } ];
       };
-      */
     };
   };
 
@@ -296,14 +292,14 @@ in
       mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines //
       mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines;
 
-    networking.bridges."${cfg.bridge}" = {
+    networking.bridges.${cfg.bridge} = {
       interfaces = mapAttrsToList (name: _: "vm-${name}") cfg.machines;
     };
 
     # TODO: generate the taps from here?
     networking.interfaces =
       mapAttrs' (name: _: nameValuePair "vm-${name}" { useDHCP = false; }) cfg.machines //
-      { "${cfg.bridge}" = {
+      { ${cfg.bridge} = {
           ip4 = [ cfg.ip4 ];
           ip6 = [ cfg.ip6 ];
         };
