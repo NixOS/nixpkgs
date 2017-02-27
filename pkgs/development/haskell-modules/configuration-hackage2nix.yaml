@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.2
+  # LTS Haskell 8.3
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -265,7 +265,7 @@ default-package-overrides:
   - boundingboxes ==0.2.3
   - bower-json ==1.0.0.1
   - boxes ==0.1.4
-  - brick ==0.17
+  - brick ==0.17.1
   - broadcast-chan ==0.1.1
   - bson ==0.3.2.3
   - bson-lens ==0.1.1
@@ -366,7 +366,7 @@ default-package-overrides:
   - cmark-lucid ==0.1.0.0
   - cmdargs ==0.10.14
   - code-builder ==0.1.3
-  - code-page ==0.1.1
+  - code-page ==0.1.2
   - codo-notation ==0.5.2
   - colorful-monoids ==0.2.1.0
   - colour ==2.3.3
@@ -565,7 +565,7 @@ default-package-overrides:
   - enummapset-th ==0.6.1.1
   - envelope ==0.2.1.0
   - envparse ==0.4
-  - envy ==1.3.0.1
+  - envy ==1.3.0.2
   - epub-metadata ==4.5
   - eq ==4.0.4
   - equivalence ==0.3.2
@@ -693,7 +693,7 @@ default-package-overrides:
   - gi-gobject ==2.0.11
   - gi-gtk ==3.0.11
   - gi-javascriptcore ==3.0.11
-  - gi-pango ==1.0.11
+  - gi-pango ==1.0.12
   - gi-soup ==2.4.11
   - gi-webkit ==3.0.11
   - ginger ==0.3.9.1
@@ -959,7 +959,7 @@ default-package-overrides:
   - hPDB ==1.2.0.9
   - hPDB-examples ==1.2.0.7
   - HPDF ==1.4.10
-  - hpio ==0.8.0.6
+  - hpio ==0.8.0.7
   - hpp ==0.4.0
   - hpqtypes ==1.5.1.1
   - hquantlib ==0.0.3.3
@@ -983,14 +983,14 @@ default-package-overrides:
   - hslua ==0.4.1
   - hsndfile ==0.8.0
   - hsndfile-vector ==0.5.2
-  - HsOpenSSL ==0.11.4
+  - HsOpenSSL ==0.11.4.1
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
-  - hspec ==2.4.1
+  - hspec ==2.4.2
   - hspec-attoparsec ==0.1.0.2
   - hspec-contrib ==0.4.0
-  - hspec-core ==2.4.1
-  - hspec-discover ==2.4.1
+  - hspec-core ==2.4.2
+  - hspec-discover ==2.4.2
   - hspec-expectations ==0.8.2
   - hspec-expectations-pretty-diff ==0.7.2.4
   - hspec-golden-aeson ==0.2.0.3
@@ -1015,11 +1015,11 @@ default-package-overrides:
   - htoml ==1.0.0.3
   - HTTP ==4000.3.5
   - http-api-data ==0.3.5
-  - http-client ==0.5.5
+  - http-client ==0.5.6.1
   - http-client-openssl ==0.2.0.4
-  - http-client-tls ==0.3.3.1
+  - http-client-tls ==0.3.4
   - http-common ==0.8.2.0
-  - http-conduit ==2.2.3
+  - http-conduit ==2.2.3.1
   - http-date ==0.0.6.1
   - http-link-header ==1.0.3
   - http-media ==0.6.4
@@ -1090,7 +1090,7 @@ default-package-overrides:
   - intervals ==0.7.2
   - intro ==0.1.0.8
   - invariant ==0.4
-  - invertible ==0.2.0
+  - invertible ==0.2.0.2
   - io-choice ==0.0.6
   - io-machine ==0.2.0.0
   - io-manager ==0.1.0.2
@@ -1242,6 +1242,7 @@ default-package-overrides:
   - mathexpr ==0.3.0.0
   - matrices ==0.4.4
   - matrix ==0.3.5.0
+  - matrix-market-attoparsec ==0.1.0.5
   - maximal-cliques ==0.1.1
   - mbox ==0.3.3
   - mcmc-types ==1.0.3
@@ -1307,12 +1308,12 @@ default-package-overrides:
   - MonadRandom ==0.5.1
   - monads-tf ==0.1.0.3
   - mongoDB ==2.1.1.1
-  - mono-traversable ==1.0.1.2
+  - mono-traversable ==1.0.1.3
   - mono-traversable-instances ==0.1.0.0
   - monoid-extras ==0.4.2
   - monoid-subclasses ==0.4.3.1
   - monoidal-containers ==0.3.0.1
-  - morte ==1.6.5
+  - morte ==1.6.6
   - mountpoints ==1.0.2
   - mstate ==0.2.7
   - mtl ==2.2.1
@@ -1333,7 +1334,7 @@ default-package-overrides:
   - mysql ==0.1.4
   - mysql-haskell ==0.8.0.0
   - mysql-haskell-openssl ==0.8.0.0
-  - mysql-simple ==0.4.0.0
+  - mysql-simple ==0.4.0.1
   - nagios-check ==0.3.2
   - names-th ==0.2.0.2
   - nano-erl ==0.1.0.1
@@ -1377,7 +1378,7 @@ default-package-overrides:
   - non-empty-sequence ==0.2.0.2
   - nonce ==1.0.2
   - NoTrace ==0.3.0.1
-  - nsis ==0.3
+  - nsis ==0.3.1
   - numbers ==3000.2.0.1
   - numeric-extras ==0.1
   - NumInstances ==1.4
@@ -1395,7 +1396,7 @@ default-package-overrides:
   - OneTuple ==0.2.1
   - oo-prototypes ==0.1.0.0
   - opaleye ==0.5.3.0
-  - opaleye-trans ==0.3.4
+  - opaleye-trans ==0.3.5
   - open-browser ==0.2.1.0
   - open-witness ==0.4
   - OpenAL ==1.7.0.4
@@ -1458,7 +1459,7 @@ default-package-overrides:
   - persistent-postgresql ==2.6
   - persistent-redis ==2.5.2
   - persistent-refs ==0.4
-  - persistent-sqlite ==2.6
+  - persistent-sqlite ==2.6.0.1
   - persistent-template ==2.5.1.6
   - pgp-wordlist ==0.1.0.2
   - phantom-state ==0.2.1.2
@@ -1694,14 +1695,14 @@ default-package-overrides:
   - serf ==0.1.1.0
   - servant ==0.9.1.1
   - servant-aeson-specs ==0.5.2.0
-  - servant-auth-cookie ==0.4.3.2
+  - servant-auth-cookie ==0.4.3.3
   - servant-blaze ==0.7.1
   - servant-cassava ==0.8
   - servant-client ==0.9.1.1
   - servant-docs ==0.9.1.1
   - servant-elm ==0.4.0.1
   - servant-foreign ==0.9.1.1
-  - servant-js ==0.9.1
+  - servant-js ==0.9.2
   - servant-JuicyPixels ==0.3.0.2
   - servant-lucid ==0.7.1
   - servant-mock ==0.8.1.1
@@ -1766,7 +1767,7 @@ default-package-overrides:
   - sorted-list ==0.2.0.0
   - sourcemap ==0.1.6
   - sparkle ==0.4.0.2
-  - sparse-linear-algebra ==0.2.9.4
+  - sparse-linear-algebra ==0.2.9.7
   - spdx ==0.2.1.0
   - speculation ==1.5.0.3
   - speedy-slice ==0.3.0
@@ -1783,7 +1784,7 @@ default-package-overrides:
   - spool ==0.1
   - spoon ==0.3.1
   - sql-words ==0.1.4.1
-  - sqlite-simple ==0.4.12.1
+  - sqlite-simple ==0.4.13.0
   - sqlite-simple-errors ==0.6.0.0
   - srcloc ==0.5.1.0
   - stache ==0.2.0
@@ -1855,7 +1856,7 @@ default-package-overrides:
   - taggy ==0.2.0
   - taggy-lens ==0.1.2
   - tagshare ==0.0
-  - tagsoup ==0.14
+  - tagsoup ==0.14.1
   - tagstream-conduit ==0.5.5.3
   - tar ==0.5.0.3
   - tar-conduit ==0.1.0
@@ -2015,7 +2016,7 @@ default-package-overrides:
   - Unixutils ==1.54.1
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.7.2
-  - uri-bytestring ==0.2.2.1
+  - uri-bytestring ==0.2.3.0
   - uri-encode ==1.5.0.5
   - uri-templater ==0.2.1.0
   - url ==2.1.3
@@ -2084,7 +2085,7 @@ default-package-overrides:
   - wai-transformers ==0.0.7
   - wai-websockets ==3.0.1.1
   - waitra ==0.0.4.0
-  - warp ==3.2.11
+  - warp ==3.2.11.1
   - warp-tls ==3.2.3
   - wave ==0.1.4
   - wavefront ==0.7.0.3
@@ -2166,7 +2167,7 @@ default-package-overrides:
   - xss-sanitize ==0.3.5.7
   - yackage ==0.8.1
   - yahoo-finance-api ==0.2.0.1
-  - yaml ==0.8.21.2
+  - yaml ==0.8.22
   - Yampa ==0.10.5
   - YampaSynth ==0.2
   - yes-precure5-command ==5.5.3
@@ -2207,7 +2208,7 @@ default-package-overrides:
   - yjtools ==0.9.18
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.5
-  - zip ==0.1.7
+  - zip ==0.1.8
   - zip-archive ==0.3.0.5
   - zippers ==0.2.2
   - zlib ==0.6.1.2
