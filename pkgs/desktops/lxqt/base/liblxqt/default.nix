@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt, xorg }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools,
+  qtx11extras, qttools, qtsvg, libqtxdg, kwindowsystem, xorg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,15 +15,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtx11extras
-    qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.libqtxdg
+    qtx11extras
+    qttools
+    qtsvg
+    kwindowsystem
+    libqtxdg
     xorg.libXScrnSaver
   ];
 

@@ -17,7 +17,7 @@ in
   ### Deprecated aliases - for backward compatibility
 
 doNotDisplayTwice rec {
-  accounts-qt = qt5.accounts-qt;  # added 2015-12-19
+  accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14
   arduino_core = arduino-core;  # added 2015-02-04
@@ -51,7 +51,7 @@ doNotDisplayTwice rec {
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   googleAuthenticator = google-authenticator; # added 2016-10-16
-  grantlee5 = qt5.grantlee;  # added 2015-12-19
+  grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gst_ffmpeg = gst-ffmpeg;  # added 2017-02
   gst_plugins_base = gst-plugins-base;  # added 2017-02
   gst_plugins_good = gst-plugins-good;  # added 2017-02
@@ -71,7 +71,7 @@ doNotDisplayTwice rec {
   keybase-go = keybase;  # added 2016-08-24
   krename-qt5 = krename; # added 2017-02-18
   letsencrypt = certbot; # added 2016-05-16
-  libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
+  libdbusmenu_qt5 = libsForQt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
@@ -83,7 +83,7 @@ doNotDisplayTwice rec {
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
   midoriWrapper = midori; # added 2015-01
-  mlt-qt5 = qt5.mlt;  # added 2015-12-19
+  mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   module_init_tools = kmod; # added 2016-04-22
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
@@ -96,13 +96,13 @@ doNotDisplayTwice rec {
   owncloudclient = owncloud-client;  # added 2016-08
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
-  poppler_qt5 = qt5.poppler;  # added 2015-12-19
-  qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
+  poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
   qt_gstreamer = qt-gstreamer;  # added 2017-02
   qt_gstreamer1 = qt-gstreamer1;  # added 2017-02
   quake3game = ioquake3; # added 2016-01-14
-  qwt6 = qt5.qwt;  # added 2015-12-19
+  qwt6 = libsForQt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rssglx = rss-glx; #added 2015-03-25
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
@@ -119,7 +119,7 @@ doNotDisplayTwice rec {
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   sshfsFuse = sshfs-fuse; # added 2016-09
   system_config_printer = system-config-printer;  # added 2016-01-03
-  telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
+  telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
   ucsFonts = ucs-fonts; # added 2016-07-15
   usb_modeswitch = usb-modeswitch; # added 2016-05-10

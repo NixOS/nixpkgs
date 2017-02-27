@@ -1,11 +1,12 @@
 { kdeFramework, lib
-, ecm
-, modemmanager
+, extra-cmake-modules
+, modemmanager, qtbase
 }:
 
 kdeFramework {
   name = "modemmanager-qt";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ qtbase ];
   propagatedBuildInputs = [ modemmanager ];
 }

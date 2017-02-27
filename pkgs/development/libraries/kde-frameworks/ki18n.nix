@@ -1,5 +1,5 @@
 { kdeFramework, lib
-, ecm
+, extra-cmake-modules
 , gettext
 , python
 , qtdeclarative
@@ -9,7 +9,7 @@
 kdeFramework {
   name = "ki18n";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ qtdeclarative qtscript ];
   propagatedNativeBuildInputs = [ gettext python ];
 }

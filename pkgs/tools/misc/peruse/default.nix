@@ -1,6 +1,6 @@
 {
   kdeDerivation, kdeWrapper, fetchFromGitHub, fetchurl, lib,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   baloo, kconfig, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
 }:
 
@@ -21,7 +21,7 @@ let
       sha256 = "1ik2627xynkichsq9x28rkczqn3l3p06q6vw5jdafdh3hisccmjq";
     };
 
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
     propagatedBuildInputs = [ baloo kconfig kfilemetadata kinit kirigami knewstuff plasma-framework ];
 

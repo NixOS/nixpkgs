@@ -1,15 +1,15 @@
-{ stdenv, lib, copyPathsToStore, src, version, cmake }:
+{ kdeFramework, lib, copyPathsToStore, cmake, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "extra-cmake-modules-${version}";
-
-  inherit src;
+kdeFramework {
+  name = "extra-cmake-modules";
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
   outputs = [ "out" ];  # this package has no runtime components
 
-  nativeBuildInputs = [ cmake ];
+  propagatedNativeBuildInputs = [ cmake pkgconfig ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     platforms = lib.platforms.linux;

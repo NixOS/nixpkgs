@@ -1,12 +1,12 @@
 { kdeFramework, lib
-, ecm
+, extra-cmake-modules
 , qtdeclarative
 }:
 
 kdeFramework {
   name = "bluez-qt";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ qtdeclarative ];
   preConfigure = ''
     substituteInPlace CMakeLists.txt \

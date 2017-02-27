@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ecm, makeQtWrapper, qtwebkit, qtscript, grantlee,
+{ stdenv, fetchurl, cmake, extra-cmake-modules, makeQtWrapper, qtwebkit, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
   kiconthemes, knewstuff, sqlcipher, qca-qt5, kdelibs4support, kactivities,
   knotifyconfig, krunner, libofx }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xrh9nal122rzlv4m0x8qah6zpqb6891al3351piarpk2xgjgj4x";
   };
 
-  nativeBuildInputs = [ cmake ecm makeQtWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules makeQtWrapper ];
 
   buildInputs = [ qtwebkit qtscript grantlee kxmlgui kwallet kparts kdoctools
     kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5

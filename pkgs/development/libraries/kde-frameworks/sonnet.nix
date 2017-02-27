@@ -1,11 +1,11 @@
 { kdeFramework, lib
-, ecm
-, hunspell
+, extra-cmake-modules
+, hunspell, qtbase, qttools
 }:
 
 kdeFramework {
   name = "sonnet";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
-  buildInputs = [ hunspell ];
+  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  buildInputs = [ hunspell qtbase ];
 }

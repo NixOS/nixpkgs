@@ -1,6 +1,6 @@
 {
   kdeDerivation, kdeWrapper, fetchurl, lib,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   kconfig, kinit
 }:
 
@@ -19,7 +19,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ peterhoeg ];
     };
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [ kconfig kinit ];
   };
 in

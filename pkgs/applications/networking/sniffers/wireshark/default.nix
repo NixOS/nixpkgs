@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
-, libssh, zlib, cmake, ecm
+, libssh, zlib, cmake, extra-cmake-modules
 , withGtk ? false, gtk3 ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
 , withQt ? false, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [
-    bison cmake ecm flex gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt libgpgerror gnutls
+    bison cmake extra-cmake-modules flex gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt libgpgerror gnutls
     geoip c-ares python glib zlib
   ] ++ (optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ]))
     ++ (optionals withGtk [ gtk3 pango cairo gdk_pixbuf ])
