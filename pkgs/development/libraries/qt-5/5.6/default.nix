@@ -1,41 +1,52 @@
 /*
 
+# New packages
+
+READ THIS FIRST
+
+This module is for official packages in Qt 5. All available packages are listed
+in `./srcs.nix`, although a few are not yet packaged in Nixpkgs (see below).
+
+IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
+
+Many of the packages released upstream are not yet built in Nixpkgs due to lack
+of demand. To add a Nixpkgs build for an upstream package, copy one of the
+existing packages here and modify it as necessary.
+
 # Updates
 
-Before a major version update, make a copy of this directory. (We like to
-keep the old version around for a short time after major updates.) Add a
-top-level attribute to `top-level/all-packages.nix`.
-
-1. Update the URL in `maintainers/scripts/generate-qt.sh`.
-2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Check that the new packages build correctly.
+1. Update the URL in `./fetch.sh`.
+2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION/`
+   from the top of the Nixpkgs tree.
+3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
 
 */
 
-{ pkgs
+{
+  newScope,
+  stdenv, fetchurl, makeSetupHook, makeWrapper,
+  bison, cups ? null, harfbuzz, mesa, perl,
+  gstreamer, gst-plugins-base,
 
-# options
-, developerBuild ? false
-, decryptSslTraffic ? false
+  # options
+  developerBuild ? false,
+  decryptSslTraffic ? false,
 }:
-
-let inherit (pkgs) makeSetupHook makeWrapper stdenv; in
 
 with stdenv.lib;
 
 let
 
   mirror = "http://download.qt.io";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   qtSubmodule = args:
     let
       inherit (args) name;
       version = args.version or srcs."${name}".version;
       src = args.src or srcs."${name}".src;
-      inherit (pkgs.stdenv) mkDerivation;
+      inherit (stdenv) mkDerivation;
     in mkDerivation (args // {
       name = "${name}-${version}";
       inherit src;
@@ -43,7 +54,7 @@ let
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
       nativeBuildInputs =
         (args.nativeBuildInputs or [])
-        ++ [ pkgs.perl self.qmakeHook ];
+        ++ [ perl self.qmakeHook ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
@@ -63,10 +74,7 @@ let
     in {
 
       qtbase = callPackage ./qtbase {
-        mesa = pkgs.mesa_noglu;
-        harfbuzz = pkgs.harfbuzz-icu;
-        cups = if stdenv.isLinux then pkgs.cups else null;
-        bison = pkgs.bison2; # error: too few arguments to function 'int yylex(...
+        inherit bison cups harfbuzz mesa;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -83,9 +91,11 @@ let
       qtlocation = callPackage ./qtlocation.nix {};
       /* qtmacextras = not packaged */
       qtmultimedia = callPackage ./qtmultimedia.nix {
-        inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
+        inherit gstreamer gst-plugins-base;
       };
+      qtquick1 = null;
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
+      qtquickcontrols2 = callPackage ./qtquickcontrols2.nix {};
       qtscript = callPackage ./qtscript {};
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
@@ -120,6 +130,6 @@ let
         (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);
     };
 
-   self = makeScope pkgs.newScope addPackages;
+   self = makeScope newScope addPackages;
 
 in self

@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = with platforms; linux ++ darwin;
     maintainers = [];
+    knownVulnerabilities = [
+      "WSA-2016-0004"
+      "WSA-2016-0005"
+      "WSA-2016-0006"
+      "WSA-2017-0001"
+      "WSA-2017-0002"
+    ];
   };
 
   src = fetchurl {

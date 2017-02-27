@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, boost162, libunwind,
-  elfutils, qt5, kde5, sparsehash }:
+{
+  stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
+  zlib, boost162, libunwind, elfutils, sparsehash,
+  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons,
+}:
 
 stdenv.mkDerivation rec {
   name = "heaptrack-${version}";
@@ -12,9 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "0dqchd2r4khv9gzj4n0qjii2nqygkj5jclkji8jbvivx5qwsqznc";
   };
 
-  buildInputs = [ cmake zlib boost162 libunwind elfutils sparsehash
-                  qt5.ecm qt5.qtbase kde5.kio kde5.kitemmodels
-                  kde5.threadweaver kde5.kconfigwidgets kde5.kcoreaddons ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  buildInputs = [
+    zlib boost162 libunwind elfutils sparsehash
+    qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons
+  ];
 
   meta = with stdenv.lib; {
     description = "Heap memory profiler for Linux";

@@ -2,7 +2,7 @@
 , fetchurl
 , gcc
 , glib
-, gst_plugins_base
+, gst-plugins-base
 , gstreamer
 , icu
 , libpulseaudio
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       alsaLib
       gcc.cc
       glib
-      gst_plugins_base
+      gst-plugins-base
       gstreamer
       icu
       libpulseaudio

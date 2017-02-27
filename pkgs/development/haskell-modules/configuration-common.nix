@@ -689,6 +689,10 @@ self: super: {
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
+  gtk =
+    if pkgs.stdenv.isDarwin
+    then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
+    else super.gtk;
 
   # https://github.com/commercialhaskell/stack/issues/3001
   stack = doJailbreak super.stack;
@@ -858,6 +862,9 @@ self: super: {
 
   # https://github.com/lambdabot/lambdabot/issues/158
   lambdabot-core = doJailbreak super.lambdabot-core;
+
+  # https://github.com/lambdabot/lambdabot/issues/159
+  lambdabot = doJailbreak super.lambdabot;
 
   # https://github.com/jswebtools/language-ecmascript/pull/81
   language-ecmascript = doJailbreak super.language-ecmascript;

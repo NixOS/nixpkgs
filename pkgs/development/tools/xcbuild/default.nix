@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
   '';

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--localstatedir=/var/cache" ];
 
   crossAttrs = {
-    # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
-    configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
+    # Fix the 'buildInputs = [ coreutils ]' above - that adds the cross coreutils to PATH :(
+    propagatedBuildInputs = [ ];
   };
 
   enableParallelBuilding = true;

@@ -1,7 +1,8 @@
 { stdenv, fetchurl, jre, makeWrapper, bash }:
 
 stdenv.mkDerivation rec {
-  name = "zookeeper-3.4.9";
+  name = "zookeeper-${version}";
+  version = "3.4.9";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${name}/${name}.tar.gz";

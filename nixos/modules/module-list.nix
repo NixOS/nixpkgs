@@ -30,6 +30,7 @@
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/ksm.nix
+  ./hardware/mcelog.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2100bg.nix
   ./hardware/network/intel-2200bg.nix
@@ -106,6 +107,7 @@
   ./security/audit.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
+  ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
@@ -426,6 +428,7 @@
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
   ./services/networking/nix-serve.nix
   ./services/networking/nntp-proxy.nix

@@ -1,12 +1,12 @@
 {
   kdeFramework, lib,
-  bison, ecm, flex,
-  qtdeclarative
+  bison, extra-cmake-modules, flex,
+  qtdeclarative, qttools
 }:
 
 kdeFramework {
   name = "solid";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ bison ecm flex ];
+  nativeBuildInputs = [ bison extra-cmake-modules flex qttools ];
   propagatedBuildInputs = [ qtdeclarative ];
 }

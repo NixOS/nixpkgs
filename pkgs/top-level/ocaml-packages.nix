@@ -202,7 +202,12 @@ let
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
-    ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
+    ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
+
+    ipaddr =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/ipaddr { }
+      else ipaddr_p4;
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
@@ -280,6 +285,8 @@ let
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
+
+    mparser =  callPackage ../development/ocaml-modules/mparser { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
@@ -392,10 +399,7 @@ let
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
-    spacetime_lib = if lib.versionOlder "4.04" ocaml.version then
-    callPackage ../development/tools/ocaml/ocamlbuild { }
-    else
-    null;
+    spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
@@ -547,51 +551,112 @@ let
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
 
-    ppx_core = callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
+    ppx_core =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_core-113_33_01.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
 
-    ppx_optcomp = callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
+    ppx_optcomp =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_optcomp-113_33_01.nix {
+        oasis = ocaml_oasis; }
+      else callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
 
     ppx_driver = callPackage ../development/ocaml-modules/janestreet/ppx-driver.nix {};
 
-    ppx_type_conv = callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
+    ppx_type_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_type_conv-113_33_02.nix { }
+      else callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
 
-    ppx_compare = callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
+    ppx_compare =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_compare-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
 
     ppx_here = callPackage ../development/ocaml-modules/janestreet/ppx-here.nix {};
 
-    ppx_sexp_conv = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
+    ppx_sexp_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_conv-113_33_01.nix { }
+      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
 
     ppx_assert = callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
 
-    ppx_inline_test = callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
+    ppx_inline_test =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_inline_test-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-inline-test.nix {};
 
-    ppx_bench = callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
+    ppx_bench =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_bench-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-bench.nix {};
 
-    ppx_bin_prot = callPackage ../development/ocaml-modules/janestreet/ppx-bin-prot.nix {};
+    ppx_bin_prot =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_bin_prot-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-bin-prot.nix {};
 
-    ppx_custom_printf = callPackage ../development/ocaml-modules/janestreet/ppx-custom-printf.nix {};
+    ppx_custom_printf =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_custom_printf-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-custom-printf.nix {};
 
-    ppx_enumerate = callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
+    ppx_enumerate =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_enumerate-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
 
-    ppx_fail = callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
+    ppx_fail =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_fail-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
 
-    ppx_fields_conv = callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
+    ppx_fields_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_fields_conv-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
 
-    ppx_let = callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
+    ppx_let =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_let-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-let.nix {};
 
-    ppx_pipebang = callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
+    ppx_pipebang =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_pipebang-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-pipebang.nix {};
 
-    ppx_sexp_message = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
+    ppx_sexp_message =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_message-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-message.nix {};
 
-    ppx_sexp_value = callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
+    ppx_sexp_value =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_value-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-value.nix {};
 
-    ppx_typerep_conv = callPackage ../development/ocaml-modules/janestreet/ppx-typerep-conv.nix {};
+    ppx_typerep_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_typerep_conv-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-typerep-conv.nix {};
 
-    ppx_variants_conv = callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
+    ppx_variants_conv =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_variants_conv-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-variants-conv.nix {};
 
-    ppx_expect = callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
+    ppx_expect =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_expect-113_33_01.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-expect.nix {};
 
-    ppx_jane = callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
+    ppx_jane =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/ppx_jane-113_33_00.nix {}
+      else callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
 
 
     # Core sublibs
@@ -606,7 +671,9 @@ let
       else fieldslib_p4;
 
     sexplib =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/sexplib-113_33_00.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
       else sexplib_p4;
 
@@ -621,12 +688,16 @@ let
       else bin_prot_p4;
 
     core_kernel =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/core_kernel-113_33_01.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core_kernel.nix {}
       else core_kernel_p4;
 
     core =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/core-113_33_02.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core.nix {}
       else core_p4;
 

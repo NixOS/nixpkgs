@@ -5,13 +5,16 @@ with lib;
 let
   cfg = config.services.nginx;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
-    vhostConfig // {
+    let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
+    in
+    vhostConfig // {
+      inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${vhostName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
+      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
+      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -382,6 +385,7 @@ in
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs

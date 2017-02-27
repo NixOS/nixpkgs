@@ -92,6 +92,7 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,Click>=[^"]*,Click,g' \
       -e 's,websocket-client>=[^"]*,websocket-client,g' \
       -e 's,scandir>=[^"]*,scandir,g' \
+      -e 's,Jinja2>=[^"]*,Jinja2,g' \
       setup.py
   '';
 

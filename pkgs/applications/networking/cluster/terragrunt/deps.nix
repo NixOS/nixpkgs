@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "3d7773ac930d57ef4a59e0d10c5f65a0cfa5acd6";
-      sha256 = "0jgyybih4vhlja76x5wjsvdbvq3v14yllzfi36f2527bby18g1hc";
+      rev = "9350193373dc6d4bb4d6af55675c11ca7fc4230c";
+      sha256 = "0n9b1szwf69mjmf7dgl1b2hv3aqjhih2pvfcjxnv1xgbigm821w2";
     };
   }
   {
