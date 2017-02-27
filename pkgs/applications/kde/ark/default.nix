@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib, config, kdeWrapper,
 
   extra-cmake-modules, kdoctools, makeWrapper,
 
@@ -7,7 +7,10 @@
   kservice, kpty, kwidgetsaddons, libarchive,
 
   # Archive tools
-  p7zip, unrar, unzipNLS, zip
+  p7zip, unzipNLS, zip,
+
+  # Unfree tools
+  unfreeEnableUnrar ? false, unrar,
 }:
 
 let
@@ -23,15 +26,16 @@ let
       ];
       postInstall =
         let
-          PATH = lib.makeBinPath [
-            p7zip unrar unzipNLS zip
-          ];
+          PATH =
+            lib.makeBinPath
+            ([ p7zip unzipNLS zip ] ++ lib.optional unfreeEnableUnrar unrar);
         in ''
           wrapProgram "$out/bin/ark" \
               --prefix PATH : "${PATH}"
         '';
       meta = {
-        license = with lib.licenses; [ gpl2 lgpl3 ];
+        license = with lib.licenses;
+          [ gpl2 lgpl3 ] ++ lib.optional unfreeEnableUnrar unfree;
         maintainers = [ lib.maintainers.ttuegel ];
       };
     };
