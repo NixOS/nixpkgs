@@ -198,6 +198,7 @@ self: super: {
   hslogger = addBuildDepend super.hslogger self.HUnit;
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
+  optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
