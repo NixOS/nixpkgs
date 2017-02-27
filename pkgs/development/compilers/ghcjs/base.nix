@@ -1,4 +1,5 @@
 { mkDerivation
+, broken ? false
 , test-framework
 , test-framework-hunit
 , test-framework-quickcheck2
@@ -183,5 +184,5 @@ in mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
-  broken = true;  # http://hydra.nixos.org/build/45110274
+  inherit broken;
 })
