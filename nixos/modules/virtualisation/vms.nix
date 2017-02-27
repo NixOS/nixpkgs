@@ -150,6 +150,11 @@ let
       # TODO: handle shared and persisted
       # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
       # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
+      # TODO: remove allowShell=1
+
+      # Make the tap device
+      ${pkgs.iproute}/bin/ip tuntap add vm-${name} mode tap
+
       ${pkgs.qemu}/bin/qemu-kvm \
         -name ${name} \
         -nographic \
@@ -158,6 +163,7 @@ let
         ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
         -virtfs local,path="/nix/store",security_model=none,mount_tag=store \
         -drive file="$image",if=virtio,media=disk \
+        -netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no -device virtio-net-pci,netdev=net0 \
         -kernel ${toplevel}/kernel \
         -initrd ${toplevel}/initrd \
         -append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0 allowShell=1" \
@@ -289,5 +295,8 @@ in
     systemd.services =
       mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines //
       mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines;
+
+    networking.interfaces =
+      mapAttrs' (name: _: nameValuePair "vm-${name}" { useDHCP = false; }) cfg.machines;
   };
 }
