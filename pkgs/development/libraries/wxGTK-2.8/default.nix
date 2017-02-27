@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst_plugins_base, GConf, libX11, cairo
-, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
+, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true
+, Carbon ? null, Cocoa ? null, CoreServices ? null
 }:
 
 assert withMesa -> mesa != null;
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf libX11 cairo ]
-    ++ optional withMesa mesa;
+    ++ optional withMesa mesa
+    ++ optionals stdenv.isDarwin [ Carbon Cocoa CoreServices ];
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = [ "-DHAVE_X11_XLIB_H=1" "-lX11" "-lcairo" "-Wno-narrowing" ];
+
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreServices";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
