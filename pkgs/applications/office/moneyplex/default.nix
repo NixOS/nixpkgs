@@ -1,26 +1,30 @@
-{ stdenv, requireFile, writeScript, patchelf, libredirect, coreutils, pcsclite
+{ stdenv, fetchurl, patchelf, libredirect, coreutils, pcsclite
 , zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
     stdenv.cc.cc zlib glib gdk_pixbuf gtk2 cairo pango libX11 atk openssl
   ];
+
+  src_i686 = {
+    url = "http://www.matrica.com/download/distribution/moneyplex_16_install32_22424.tar.gz";
+    sha256 = "0yfpc6s85r08g796dycl378kagkma865vp7j72npia3hjc4vwamr";
+  };
+
+  src_x86_64 = {
+    url = "http://www.matrica.com/download/distribution/moneyplex_16_install64_22424.tar.gz";
+    sha256 = "03vxbg1yp8qyvcn6bw2a5s134nxzq9cn0vqbmlld7hh4knbsfqzw";
+  };
 in
 
 stdenv.mkDerivation rec {
   name = "moneyplex-${version}";
-  version = "1.0";
+  version = "16.0.22424";
 
-  src = requireFile {
-    message = ''
-      Unfortunately, Matrica does not provide an installable version of moneyplex.
-      To work around, install moneyplex on another system, und delete the following files
-      from the moneyplex installation directory: backups, mdaten, rup, Lnx\ Global.ali, Lnx\ Local ...ali
-      and settings.ini, and then pack the folder into moneyplex-${version}.tar.gz.
-    '';
-    name = "moneyplex-${version}.tar.gz";
-    sha256 = "0wpzwvhybjbqvqi8bpvkvcs3mikvl68gk1hzawihi0xnm28lcxw0";
-  };
+  src = fetchurl (if stdenv.system == "i686-linux" then src_i686
+                  else if stdenv.system == "x86_64-linux" then src_x86_64
+                  else throw "moneyplex requires i686-linux or x86_64-linux");
+
 
   phases = [ "unpackPhase" "installPhase" "postInstall" ];
 
