@@ -13,6 +13,7 @@
 , configureFlags ? []
 , description ? ""
 , doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
+, doBench ? false
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? false
@@ -38,6 +39,7 @@
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
+, benchDepends ? []
 , testTarget ? ""
 , broken ? false
 , preCompileBuildDriver ? "", postCompileBuildDriver ? ""
@@ -145,7 +147,8 @@ let
   otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ setupHaskellDepends ++
                      buildTools ++ libraryToolDepends ++ executableToolDepends ++
                      optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
-                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends);
+                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
+                     optionals doBench benchDepends;
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
@@ -341,6 +344,7 @@ stdenv.mkDerivation ({
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
 // optionalAttrs (doCheck)              { inherit doCheck; }
+// optionalAttrs (doBench)              { inherit doBench; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
