@@ -53,18 +53,24 @@ let
   rubyWrapper = ''--suffix PATH : \"${rubyEnv}/bin\" '' +
                 ''--suffix GEM_HOME : \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
 
+  pluginPythonPackages = builtins.concatLists
+    (map ({ pythonDependencies ? [], ...}: pythonDependencies)
+         (vimUtils.requiredPlugins configure));
   pythonEnv = pythonPackages.python.buildEnv.override {
     extraLibs = (
         if withPyGUI
           then [ pythonPackages.neovim_gui ]
           else [ pythonPackages.neovim ]
-      ) ++ extraPythonPackages;
+      ) ++ extraPythonPackages ++ pluginPythonPackages;
     ignoreCollisions = true;
   };
   pythonWrapper = ''--cmd \"let g:python_host_prog='$out/bin/nvim-python'\" '';
 
+  pluginPython3Packages = builtins.concatLists
+    (map ({ python3Dependencies ? [], ...}: python3Dependencies)
+         (vimUtils.requiredPlugins configure));
   python3Env = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages;
+    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages ++ pluginPython3Packages;
     ignoreCollisions = true;
   };
   python3Wrapper = ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '';

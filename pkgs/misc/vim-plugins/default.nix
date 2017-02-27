@@ -4,6 +4,7 @@
 , xkb_switch, rustracerd, fzf
 , python3, boost, icu
 , ycmd
+, pythonPackages, python3Packages
 , Cocoa ? null
 }:
 
