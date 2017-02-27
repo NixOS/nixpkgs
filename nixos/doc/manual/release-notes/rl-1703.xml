@@ -4,7 +4,7 @@
          version="5.0"
          xml:id="sec-release-17.03">
 
-<title>Release 17.03 (“XXX”, 2017/03/??)</title>
+<title>Release 17.03 (“Gorilla”, 2017/03/??)</title>
 
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights: </para>
@@ -22,7 +22,7 @@ has the following highlights: </para>
   </listitem>
 
   <listitem>
-    <para>X.org server uses branch 1.19.  Due to ABI incompatibilities,
+    <para>X.org server uses branch 1.19. Due to ABI incompatibilities,
       <literal>ati_unfree</literal> keeps forcing 1.17
       and <literal>amdgpu-pro</literal> starts forcing 1.18.</para>
   </listitem>
@@ -38,14 +38,106 @@ has the following highlights: </para>
     manual</link> for more information.</para>
   </listitem>
 
+  <listitem>
+    <para>Packages in nixpkgs can be marked as insecure through listed
+    vulnerabilities. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-allow-insecure">Nixpkgs
+    manual</link> for more information.</para>
+  </listitem>
+
+  <listitem>
+    <para>This release is based on Glibc 2.25, GCC 5.4.0 and systemd
+    232. The default Linux kernel is 4.9.</para>
+  </listitem>
+
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>
 
 <itemizedlist>
-  <listitem>
-    <para></para>
-  </listitem>
+  <listitem><para><literal>hardware/ckb.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/mcelog.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/usb-wwan.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/video/capture/mwprocapture.nix</literal></para></listitem>
+  <listitem><para><literal>programs/adb.nix</literal></para></listitem>
+  <listitem><para><literal>programs/chromium.nix</literal></para></listitem>
+  <listitem><para><literal>programs/gphoto2.nix</literal></para></listitem>
+  <listitem><para><literal>programs/java.nix</literal></para></listitem>
+  <listitem><para><literal>programs/mtr.nix</literal></para></listitem>
+  <listitem><para><literal>programs/oblogout.nix</literal></para></listitem>
+  <listitem><para><literal>programs/vim.nix</literal></para></listitem>
+  <listitem><para><literal>programs/wireshark.nix</literal></para></listitem>
+  <listitem><para><literal>security/dhparams.nix</literal></para></listitem>
+  <listitem><para><literal>security/wrappers/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/audio/ympd.nix</literal></para></listitem>
+  <listitem><para><literal>services/computing/boinc/client.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/buildbot/master.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/buildbot/worker.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/gitlab-runner.nix</literal></para></listitem>
+  <listitem><para><literal>services/databases/riak-cs.nix</literal></para></listitem>
+  <listitem><para><literal>services/databases/stanchion.nix</literal></para></listitem>
+  <listitem><para><literal>services/desktops/gnome3/gnome-terminal-server.nix</literal></para></listitem>
+  <listitem><para><literal>services/editors/infinoted.nix</literal></para></listitem>
+  <listitem><para><literal>services/hardware/illum.nix</literal></para></listitem>
+  <listitem><para><literal>services/hardware/trezord.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/journalbeat.nix</literal></para></listitem>
+  <listitem><para><literal>services/mail/offlineimap.nix</literal></para></listitem>
+  <listitem><para><literal>services/mail/postgrey.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/couchpotato.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/docker-registry.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/errbot.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/geoip-updater.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/gogs.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/leaps.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/nix-optimise.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/ssm-agent.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/sssd.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/arbtt.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/netdata.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/alertmanager.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/blackbox-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/json-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/nginx-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/node-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/snmp-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/varnish-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/sysstat.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/telegraf.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/vnstat.nix</literal></para></listitem>
+  <listitem><para><literal>services/network-filesystems/cachefilesd.nix</literal></para></listitem>
+  <listitem><para><literal>services/network-filesystems/glusterfs.nix</literal></para></listitem>
+  <listitem><para><literal>services/network-filesystems/ipfs.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/dante.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/dnscrypt-wrapper.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/fakeroute.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/flannel.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/htpdate.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/miredo.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/nftables.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/powerdns.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/pdns-recursor.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/quagga.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/redsocks.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/wireguard.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/hologram-server.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/hologram-agent.nix</literal></para></listitem>
+  <listitem><para><literal>services/system/cgmanager.nix</literal></para></listitem>
+  <listitem><para><literal>services/torrent/opentracker.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/atlassian/confluence.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/atlassian/crowd.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/atlassian/jira.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/frab.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/nixbot.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/selfoss.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/quassel-webserver.nix</literal></para></listitem>
+  <listitem><para><literal>services/x11/unclutter-xfixes.nix</literal></para></listitem>
+  <listitem><para><literal>services/x11/urxvtd.nix</literal></para></listitem>
+  <listitem><para><literal>system/boot/systemd-nspawn.nix</literal></para></listitem>
+  <listitem><para><literal>virtualisation/ecs-agent.nix</literal></para></listitem>
+  <listitem><para><literal>virtualisation/lxcfs.nix</literal></para></listitem>
+  <listitem><para><literal>virtualisation/openstack/keystone.nix</literal></para></listitem>
+  <listitem><para><literal>virtualisation/openstack/glance.nix</literal></para></listitem>
 </itemizedlist>
 
 
@@ -183,7 +275,7 @@ following incompatible changes:</para>
     <para><literal>overridePackages</literal> function no longer exists.
     It is replaced by <link
     xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
-    overlays</link>.  For example, the following code:
+    overlays</link>. For example, the following code:
 
 <programlisting>
   let
