@@ -2769,6 +2769,8 @@ with pkgs;
 
   lz4 = callPackage ../tools/compression/lz4 { };
 
+  lzbench = callPackage ../tools/compression/lzbench { };
+
   lzop = callPackage ../tools/compression/lzop { };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
