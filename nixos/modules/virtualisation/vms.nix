@@ -214,7 +214,7 @@ in
       default = "fd1d:fbcd:2a87:1::";
     };
     ip6.prefixLength = mkOption {
-      type = types.str;
+      type = types.int;
       description = "IPv6 prefix length for the VM bridge";
       default = 48;
     };
@@ -296,7 +296,17 @@ in
       mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines //
       mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines;
 
+    networking.bridges."${cfg.bridge}" = {
+      interfaces = mapAttrsToList (name: _: "vm-${name}") cfg.machines;
+    };
+
+    # TODO: generate the taps from here?
     networking.interfaces =
-      mapAttrs' (name: _: nameValuePair "vm-${name}" { useDHCP = false; }) cfg.machines;
+      mapAttrs' (name: _: nameValuePair "vm-${name}" { useDHCP = false; }) cfg.machines //
+      { "${cfg.bridge}" = {
+          ip4 = [ cfg.ip4 ];
+          ip6 = [ cfg.ip6 ];
+        };
+      };
   };
 }
