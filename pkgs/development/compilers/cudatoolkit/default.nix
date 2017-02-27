@@ -22,7 +22,7 @@ let
           }
         else throw "cudatoolkit does not support platform ${stdenv.system}";
 
-      outputs = [ "out" "sdk" ];
+      outputs = [ "out" "lib" "doc" ];
 
       buildInputs = [ perl ];
 
@@ -43,23 +43,34 @@ let
       '';
 
       buildPhase = ''
-        find . -type f -executable -exec patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          '{}' \; || true
-        find . -type f -exec patchelf \
-          --set-rpath $rpath:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_CC/nix-support/orig-cc)/lib \
-          --force-rpath \
-          '{}' \; || true
+        chmod -R u+w .
+        while IFS= read -r -d ''$'\0' i; do
+          if ! isELF "$i"; then continue; fi
+          echo "patching $i..."
+          if [[ ! $i =~ \.so ]]; then
+            patchelf \
+              --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+          fi
+          if [[ $i =~ libOpenCL ]]; then
+            rpath2=
+          else
+            rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+          fi
+          patchelf --set-rpath $rpath2 --force-rpath $i
+        done < <(find . -type f -print0)
       '';
 
       installPhase = ''
-        mkdir $out $sdk
+        mkdir $out
         perl ./install-linux.pl --prefix="$out"
-        rm $out/tools/CUDA_Occupancy_Calculator.xls
-        perl ./install-sdk-linux.pl --prefix="$sdk" --cudaprefix="$out"
+
+        rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
         # let's remove the 32-bit libraries, they confuse the lib64->lib mover
         rm -rf $out/lib
+
+        # Remove some cruft.
+        rm $out/bin/uninstall*
 
         # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
         if [ -d "$out"/cuda-samples ]; then
@@ -72,6 +83,11 @@ let
         # Ensure that cmake can find CUDA.
         mkdir -p $out/nix-support
         echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
+
+        # Move some libraries to the lib output so that programs that
+        # depend on them don't pull in this entire monstrosity.
+        mkdir -p $lib/lib
+        mv -v $out/lib64/libOpenCL* $lib/lib/
 
       '' + lib.optionalString (lib.versionOlder version "8.0") ''
         # Hack to fix building against recent Glibc/GCC.
