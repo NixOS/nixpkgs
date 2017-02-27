@@ -81,8 +81,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postFixup = optionalString (cross == null) "ln -s $out/bin $dev/bin"; # tools needed for development
-
   meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''
