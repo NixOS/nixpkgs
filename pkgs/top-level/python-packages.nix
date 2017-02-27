@@ -24675,6 +24675,8 @@ in {
     doCheck = false;
   };
 
+  hieroglyph = callPackage ../development/python-modules/hieroglyph { };
+
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.9";
 
