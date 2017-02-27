@@ -242,6 +242,7 @@ let
     BayesVarSel = [ pkgs.gsl_1 ];
     BayesXsrc = [ pkgs.readline.dev pkgs.ncurses ];
     bigGP = [ pkgs.openmpi ];
+    bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
     bnpmr = [ pkgs.gsl_1 ];
