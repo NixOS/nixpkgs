@@ -182,6 +182,10 @@ self: super: {
   # https://github.com/well-typed/hackage-security/issues/158
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
+  # Breaks a dependency cycle between QuickCheck and semigroups
+  hashable = dontCheck super.hashable;
+  unordered-containers = dontCheck super.unordered-containers;
+
   # GHC versions prior to 8.x require additional build inputs.
   distributive = addBuildDepend super.distributive self.semigroups;
   mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
