@@ -194,6 +194,7 @@ self: super: {
   hslogger = addBuildDepend super.hslogger self.HUnit;
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
+  QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
