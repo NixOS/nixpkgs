@@ -86,18 +86,15 @@ this into your user profile.
 
 ## Updating the package set
 
+To update the three main package sets, run the following commands:
 ```bash
-Rscript generate-r-packages.R cran  > cran-packages.nix.new
-mv cran-packages.nix.new cran-packages.nix
+nix-shell --pure generate-shell.nix --command "Rscript generate-r-packages.R cran > cran-packages.nix.new && mv cran-packages.nix.new cran-packages.nix"
 
-Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
-mv bioc-packages.nix.new bioc-packages.nix
+nix-shell --pure generate-shell.nix --command "Rscript generate-r-packages.R bioc > bioc-packages.nix.new && mv bioc-packages.nix.new bioc-packages.nix"
 
-Rscript generate-r-packages.R irkernel  > irkernel-packages.nix.new
-mv irkernel-packages.nix.new irkernel-packages.nix
+nix-shell --pure generate-shell.nix --command "Rscript generate-r-packages.R irkernel > irkernel-packages.nix.new && mv irkernel-packages.nix.new irkernel-packages.nix"
 ```
-
-`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
+`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, which makes the redirection/renaming necessary.
 
 
 ## Testing if the Nix-expression could be evaluated
