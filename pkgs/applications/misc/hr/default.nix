@@ -11,20 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "162vkip2772jl59lschpinimpg4ssiyg7fq0va5cx4d7wldpqmks";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontBuild = true;
+  installFlags = [ "PREFIX=$(out)" "MANPREFIX=$(out)/share" ];
 
-  installPhase = ''
+  preInstall = ''
     mkdir -p $out/{bin,share}
-    sed -i "s,PREFIX=.*,PREFIX=$out," Makefile
-    sed -i "s,MANPREFIX=.*,MANPREFIX=$out/share," Makefile
-    make install
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/LuRsT/hr;
     description = "A horizontal bar for your terminal";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = licenses.mit;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.unix;
   };
 }
