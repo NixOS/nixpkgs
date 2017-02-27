@@ -712,9 +712,7 @@ self: super: {
     ];
 
     jailbreak = true;
-  })).override {
-    haskell-src-exts = self.haskell-src-exts-simple;
-  };
+  }));
 
   # Needs new version.
   haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
