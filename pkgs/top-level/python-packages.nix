@@ -10617,26 +10617,7 @@ in {
     };
   };
 
-  djangorestframework = buildPythonPackage rec {
-    name = "djangorestframework-${version}";
-    version = "3.2.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/djangorestframework/${name}.tar.gz";
-      sha256 = "06kp4hg3y4bqy2ixlb1q6bw81gwgsb86l4lanbav7bp1grrbbnj1";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ django ];
-
-    meta = {
-      description = "Web APIs for Django, made easy";
-      homepage = http://www.django-rest-framework.org/;
-      maintainers = with maintainers; [ desiderius ];
-      license = licenses.bsd2;
-    };
-  };
+  djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
   django_raster = buildPythonPackage rec {
     name = "django-raster-${version}";
