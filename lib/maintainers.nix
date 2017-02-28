@@ -223,6 +223,7 @@
   jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgertm = "Tim Jaeger <jger.tm@gmail.com>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
+  jhhuh = "Ji-Haeng Huh <jhhuh.note@gmail.com>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
