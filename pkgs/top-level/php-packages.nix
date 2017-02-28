@@ -176,7 +176,7 @@ let
 
   redis = if isPhp7 then redisPhp7 else redis22;
 
-  redis22 = buildPecl {
+  redis22 = assert !isPhp7; buildPecl {
     name = "redis-2.2.7";
     sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
