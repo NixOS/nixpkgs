@@ -1,15 +1,22 @@
-{ stdenv, fetchurl, zlib, qt4, which }:
+{ stdenv, fetchurl, fetchpatch, zlib, qt4, which }:
 
 stdenv.mkDerivation rec {
   name = "gpsbabel-${version}";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     # gpgbabel.org makes it hard to get the source tarball automatically, so
     # get it from elsewhere.
     url = "mirror://debian/pool/main/g/gpsbabel/gpsbabel_${version}.orig.tar.gz";
-    sha256 = "0xf7wmy2m29g2lm8lqc74yf8rf7sxfl3cfwbk7dpf0yf42pb0b6w";
+    sha256 = "0l6c8911f7i5bbdzah9irhqf127ib0b7lv53rb8r9z8g439mznq1";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip;
+      sha256 = "03fpsmlx1wc48d1j405zkzp8j64hcp0z72islf4mk1immql3ibcr";
+    })
+  ];
 
   buildInputs = [ zlib qt4 which ];
 
@@ -19,7 +26,6 @@ stdenv.mkDerivation rec {
 
     But FOP isn't packaged yet.  */
 
-  preConfigure = "cd gpsbabel";
   configureFlags = [ "--with-zlib=system" ]
     # Floating point behavior on i686 causes test failures. Preventing
     # extended precision fixes this problem.
