@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A multi-purpose particle physics event generator";
     license     = stdenv.lib.licenses.gpl2;
     homepage    = https://herwig.hepforge.org/;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = [ "x86_64-darwin" "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };
 }
