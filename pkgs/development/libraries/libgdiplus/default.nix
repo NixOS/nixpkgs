@@ -1,38 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
+{ stdenv, lib, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
 , libtiff, giflib, libungif, libjpeg, libpng, monoDLLFixer
 , libXrender, libexif }:
 
 stdenv.mkDerivation rec {
-  name = "libgdiplus-2.10.9";
+  name = "libgdiplus-${version}";
+  version = "4.2";
 
   src = fetchurl {
-    url = "http://download.mono-project.com/sources/libgdiplus/${name}.tar.bz2";
-    sha256 = "0klnbly2q0yx5p0l5z8da9lhqsjj9xqj06kdw2v7rnms4z1vdpkd";
+    url = "http://download.mono-project.com/sources/libgdiplus/${name}.tar.gz";
+    sha256 = "1syzpbny2gcvfca7cadqj33hdf30cclsf0cdil5wblagnjwbjcpk";
   };
 
-  NIX_LDFLAGS = "-lgif";
+  nativeBuildInputs = [ pkgconfig ];
 
-  patches =
-    [ (fetchurl {
-        url = "https://raw.github.com/MagicGroup/MagicSpecLib/master/libgdiplus/libgdiplus-2.10.1-libpng15.patch";
-        sha256 = "130r0jm065pjvbz5dkx96w37vj1wqc8fakmi2znribs14g0bl65f";
-      })
-      ./giflib.patch
-    ];
-
-  patchFlags = "-p0";
-
-  buildInputs =
-    [ pkgconfig glib cairo fontconfig libtiff giflib libungif
-      libjpeg libpng libXrender libexif
-    ]
-    ++ stdenv.lib.optional stdenv.isDarwin Carbon;
+  buildInputs = [ cairo libpng libexif libtiff giflib libjpeg ]
+    ++ lib.optional stdenv.isDarwin Carbon;
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     ln -s $out/lib/libgdiplus.0.dylib $out/lib/libgdiplus.so
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
+    homepage = "http://www.mono-project.com/docs/gui/libgdiplus/";
+    platforms = platforms.unix;
+    license = licenses.mpl11;
   };
 }
