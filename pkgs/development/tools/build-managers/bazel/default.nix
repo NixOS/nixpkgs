@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     export TEST_TMPDIR=$(pwd)
-    ./output/bazel test examples/cpp:hello-success_test
-    ./output/bazel test examples/java-native/src/test/java/com/example/myproject:hello
+    ./output/bazel test --test_output=errors examples/cpp:hello-success_test
+    ./output/bazel test --test_output=errors examples/java-native/src/test/java/com/example/myproject:hello
   '';
 
   installPhase = ''
