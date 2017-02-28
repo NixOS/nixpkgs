@@ -120,7 +120,9 @@ let
       "/nix/store" = {
         device = "store";
         fsType = "9p";
-        # TODO: review these options, the first 3 come from containers.nix and the last one from http://serverfault.com/a/757770
+        # TODO: optimize the size given in msize by highly evolved trial-and-failure
+        # Warning: cache=loose works only because this mount is read-only. Do
+        # not copy this over to `shared`
         options = [ "trans=virtio" "version=9p2000.L" "cache=loose" "msize=262144" ];
       };
     };
@@ -147,7 +149,6 @@ let
       # TODO: handle shared and persisted
       # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
       # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
-      # TODO: remove allowShell=1
 
       ${pkgs.qemu}/bin/qemu-kvm \
         -name ${name} \
@@ -160,7 +161,7 @@ let
         -netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no -device virtio-net-pci,netdev=net0 \
         -kernel ${toplevel}/kernel \
         -initrd ${toplevel}/initrd \
-        -append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0 allowShell=1" \
+        -append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0" \
         $@
     '';
 
