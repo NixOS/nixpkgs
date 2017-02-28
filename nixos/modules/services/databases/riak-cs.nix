@@ -86,6 +86,14 @@ in
         '';
       };
 
+      authV4Enabled = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable V4 signature authorization for clients to use when connecting.
+        '';
+      };
+
       dataDir = mkOption {
         type = types.path;
         default = "/var/db/riak-cs";
@@ -110,13 +118,6 @@ in
         '';
       };
 
-      extraAdvancedConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          Additional text to be appended to <filename>advanced.config</filename>.
-        '';
-      };
     };
 
   };
@@ -142,7 +143,13 @@ in
     '';
 
     environment.etc."riak-cs/advanced.config".text = ''
-      ${cfg.extraAdvancedConfig}
+      [
+       {riak_cs,
+        [
+         {stanchion_ssl, ${if cfg.stanchionSsl then "true" else "false"}},
+         {auth_v4_enabled, ${if cfg.authV4Enabled then "true" else "false"}}
+        ]}
+      ].
     '';
 
     users.extraUsers.riak-cs = {
