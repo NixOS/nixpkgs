@@ -11,11 +11,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.78b";
+  name = "blender-2.78c";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0wgrqwznih6c19y2fpvrk3k6qsaxsy3g7xja87rb4hq7r7j8x22d";
+    sha256 = "0f6k3m9yd5yhn7fq9srgzwh2gachlxm03bdrvn2r7xq00grqzab4";
   };
 
   buildInputs =
@@ -54,7 +54,12 @@ stdenv.mkDerivation rec {
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
     ]
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
+    ++ optionals cudaSupport
+      [ "-DWITH_CYCLES_CUDA_BINARIES=ON"
+        # Disable the sm_20 architecture to work around a segfault in
+        # ptxas, as suggested on #blendercoders.
+        "-DCYCLES_CUDA_BINARIES_ARCH=sm_21;sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
+      ]
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
