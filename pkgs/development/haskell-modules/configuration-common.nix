@@ -880,4 +880,8 @@ self: super: {
   rank1dynamic = doJailbreak super.rank1dynamic;
 
   cabal-lenses = doJailbreak super.cabal-lenses;
+
+  # https://github.com/snoyberg/yaml/issues/106
+  yaml = disableCabalFlag super.yaml "system-libyaml";
+
 }
