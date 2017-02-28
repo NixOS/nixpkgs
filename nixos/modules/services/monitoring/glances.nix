@@ -33,8 +33,8 @@ let
     + "--config ${mkConfig cfg}"
     + "${mkNamedFlag cfg "listenAddress" "bind"}"
     + "${mkFlag cfg "port"}"
-    + "${mkFlag cfg "username"}"
-    + "${mkFlag cfg "password"}"
+    # + "${mkFlag cfg "username"}"
+    # + "${mkFlag cfg "password"}"
     + "${mkFlag cfg "disable-alert"}"
     + "${mkFlag cfg "disable-amps"}"
     + "${mkFlag cfg "disable-cpu"}"
@@ -120,17 +120,19 @@ in
         description = "Port to listen on.";
       };
 
-      username = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "Username";
-      };
+      # The "username" option does not work as I would expect it to
+      # username = mkOption {
+      #   type = types.nullOr types.str;
+      #   default = null;
+      #   description = "Username";
+      # };
 
-      password = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = "Password";
-      };
+      # The "password" option does not work as I would expect it to
+      # password = mkOption {
+      #   type = types.nullOr types.str;
+      #   default = null;
+      #   description = "Password";
+      # };
 
       conf = mkOption {
         type = types.str;
