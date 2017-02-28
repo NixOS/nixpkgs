@@ -8022,8 +8022,6 @@ with pkgs;
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
-  libcm = callPackage ../development/libraries/libcm { };
-
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   inherit (gnome3) libcroco;
