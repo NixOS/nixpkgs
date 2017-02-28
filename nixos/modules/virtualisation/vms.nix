@@ -80,6 +80,10 @@ let
         };
       };
     };
+
+    config = {
+      shared = genAttrs config.persistent (n: "${cfg.persistPath}/${name}${n}");
+    };
   };
 
   extraConfig = name: {
@@ -314,11 +318,5 @@ in
           ip6 = [ cfg.ip6 ];
         };
       };
-
-    /* TODO: make this not infinitely recurse
-    vms.machines = mapAttrs' (name: value: nameValuePair name
-      { shared = genAttrs (n: "${cfg.persistPath}${n}") value.persistent;
-      }) cfg.machines;
-    */
   };
 }
