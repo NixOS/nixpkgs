@@ -2247,6 +2247,13 @@ extra-packages:
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
   - vector < 0.10.10                    # newer versions don't work with GHC 6.12.3
   - zlib < 0.6                          # newer versions break cabal-install
+  - aeson == 0.11.3.0                   # purescript 0.10.7
+  - bower-json == 1.0.0.1               # purescript 0.10.7
+  - optparse-applicative == 0.13.1.0    # purescript 0.10.7
+  - http-client == 0.4.31.2             # purescript 0.10.7
+  - http-client-tls == 0.2.4.1          # purescript 0.10.7
+  - pipes == 4.2.0                      # purescript 0.10.7
+  - websockets == 0.9.8.2               # purescript 0.10.7
 
 package-maintainers:
   peti:
@@ -6764,7 +6771,6 @@ dont-distribute-packages:
   pure-priority-queue-tests:                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   purescript-bridge:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   purescript-bundle-fast:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
-  purescript:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   pure-zlib:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   pusher-haskell:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   pusher-http-haskell:                          [ i686-linux, x86_64-linux, x86_64-darwin ]

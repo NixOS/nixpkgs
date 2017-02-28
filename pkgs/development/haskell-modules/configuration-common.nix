@@ -448,6 +448,16 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
+  # See instructions provided by Peti in https://github.com/NixOS/nixpkgs/issues/23036
+  purescript = super.purescript.overrideScope (self: super: {
+    # TODO: Re-evaluate the following overrides after the 0.11 release.
+    aeson = self.aeson_0_11_3_0;
+    http-client = self.http-client_0_4_31_2;
+    http-client-tls = self.http-client-tls_0_2_4_1;
+    pipes = self.pipes_4_2_0;
+    websockets = self.websockets_0_9_8_2;
+  });
+
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
