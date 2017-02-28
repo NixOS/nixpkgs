@@ -1,13 +1,15 @@
 {stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
+
 let
   inherit (stdenv.lib) optional optionalString;
   baseName = "sysdig";
   version = "0.15.0";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   src = fetchurl {
+    name = "${name}.tar.gz";
     url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
     sha256 = "08spprzgx6ksd7sjp5nk7z5szdlixh2sb0bsb9mfaq4xr12gsjw2";
   };
