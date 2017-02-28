@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, libjack2, alsaLib, libsndfile, liblo, lv2, qt5 }:
+{ stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "drumkv1-${version}";
-  version = "0.7.6";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumkv1/${name}.tar.gz";
-    sha256 = "0cl1rbj26nsbvg9wzsh2j8xlx69xjxn29x46ypmy3939zbk81bi6";
+    sha256 = "1n2kd468kn71yp2asmamprvblmdlvh0zd8lsh3598dwi4b7aa3ga";
   };
 
   buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools ];
+
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "An old-school drum-kit sampler synthesizer with stereo fx";
