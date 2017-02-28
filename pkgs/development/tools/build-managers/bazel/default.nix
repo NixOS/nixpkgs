@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, zip, unzip, which, bash, binutils, coreutils }:
+{ stdenv, fetchurl, jdk, zip, unzip, which, bash, binutils, coreutils, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     unzip
     which
     binutils
+    makeWrapper
   ];
 
   # These must be propagated since the dependency is hidden in a compressed
@@ -75,13 +76,15 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     export TEST_TMPDIR=$(pwd)
-    ./output/bazel test --test_output=errors examples/cpp:hello-success_test
-    ./output/bazel test --test_output=errors examples/java-native/src/test/java/com/example/myproject:hello
+    ./output/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
+    wrapProgram "$out/bin/bazel" --prefix PATH : "${jdk}/bin"
   '';
 
   dontStrip = true;
