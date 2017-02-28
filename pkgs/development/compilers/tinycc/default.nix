@@ -2,10 +2,10 @@
 with stdenv.lib;
 
 let
-  date = "20170108";
+  date = "20170220";
   version = "0.9.27pre-${date}";
-  rev = "5420bb8a67f5f782ac49c90afb7da178a60c448a";
-  sha256 = "0gf1ys4vv5qfkh6462fkdv44mz5chhrchlvgcl0m44f8mm8cjwa3";
+  rev = "e209b7dac463e228525499153103ec28173ca365";
+  sha256 = "1p8h999aqgy5rlkk47vc86c5lx8280761712nwkcgvydvixd0gd6";
 in
 
 stdenv.mkDerivation rec {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.tinycc.org/;
-    license = licenses.lgpl2Plus;
+    license = licenses.mit;
 
     platforms = platforms.unix;
     maintainers = [ maintainers.joachifm ];
