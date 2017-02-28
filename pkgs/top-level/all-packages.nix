@@ -8429,8 +8429,6 @@ with pkgs;
 
   libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
 
-  libjson_rpc_cpp_0_2_1 = callPackage ../development/libraries/libjson-rpc-cpp/0.2.1 { };
-
   libkate = callPackage ../development/libraries/libkate { };
 
   libksba = callPackage ../development/libraries/libksba { };
