@@ -1,15 +1,22 @@
-{stdenv, fetchurl, autoconf, automake, pkgconfig, curl, openssl, libxml2, fuse}:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, openssl, libxml2, fuse }:
 
-stdenv.mkDerivation {
-  name = "s3fs-fuse-1.80";
+stdenv.mkDerivation rec {
+  name = "s3fs-fuse-${version}";
+  version = "1.80";
 
-  src = fetchurl {
-    url = https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.80.tar.gz;
-    sha256 = "0ddx5khlyyrxm4s8is4gqbczmrcivj11hmkk9s893r3kpp4q30yy";
+  src = fetchFromGitHub {
+    owner  = "s3fs-fuse";
+    repo   = "s3fs-fuse";
+    rev    = "v${version}";
+    sha256 = "0yikqpdyjibbb36rj4118lv9nxgp9f5jhydzxijzxrzw29ypvw76";
   };
 
-  preConfigure = "./autogen.sh";
-  buildInputs = [ autoconf automake pkgconfig curl openssl libxml2 fuse ];
+  buildInputs = [ curl openssl libxml2 fuse ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  configureFlags = [
+    "--with-openssl"
+  ];
 
   postInstall = ''
     ln -s $out/bin/s3fs $out/bin/mount.s3fs
