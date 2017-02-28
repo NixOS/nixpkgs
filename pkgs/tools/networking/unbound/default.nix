@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
-  preFixup =
+  preFixup = stdenv.lib.optionalString stdenv.isLinux
     # Build libunbound again, but only against nettle instead of openssl.
     # This avoids gnutls.out -> unbound.lib -> openssl.out.
+    # There was some problem with this on Darwin; let's not complicate non-Linux.
     ''
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
