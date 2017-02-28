@@ -108,10 +108,6 @@ let
         mkdir -p $targetRoot/etc
         touch $targetRoot/etc/NIXOS
 
-        # Fix perms on /tmp
-        # TODO: why is this actually required?
-        chmod 1777 $targetRoot/tmp
-
         mkdir -p $targetRoot/boot
       '';
 
