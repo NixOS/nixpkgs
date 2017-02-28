@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, zip, unzip, which, bash, binutils, coreutils }:
+{ stdenv, fetchurl, jdk, zip, unzip, which, bash, binutils, coreutils, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     unzip
     which
     binutils
+    makeWrapper
   ];
 
   # These must be propagated since the dependency is hidden in a compressed
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
+    wrapProgram "$out/bin/bazel" --prefix PATH : "${jdk}/bin"
   '';
 
   dontStrip = true;
