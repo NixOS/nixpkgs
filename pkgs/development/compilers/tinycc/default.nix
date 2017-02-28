@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.tinycc.org/;
     license = licenses.mit;
 
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.joachifm ];
   };
 }
