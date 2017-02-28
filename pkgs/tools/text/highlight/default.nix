@@ -2,19 +2,23 @@
 
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
-  version = "3.28";
+  version = "3.35";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "1kg73isgz3czb1k6ccajqzifahr3zs9ci8168k0dlj31j1nlndin";
+    sha256 = "8a14b49f5e0c07daa9f40b4ce674baa00bb20061079473a5d386656f6d236d05";
   };
 
-  buildInputs = [ getopt lua boost pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ getopt lua boost ];
 
   preConfigure = ''makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/"'';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Source code highlighting tool";
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
+    platforms = platforms.unix;
+    maintainers = maintainers.ndowens;
   };
 }
