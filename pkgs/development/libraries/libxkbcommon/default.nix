@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A library to handle keyboard descriptions";
     homepage = http://xkbcommon.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ garbas ttuegel ];
     platforms = with platforms; unix;
   };
 }
