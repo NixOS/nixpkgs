@@ -19323,7 +19323,7 @@ in {
   };
   protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
-    doCheck = isPy3k;
+    doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_0;
   };
   protobuf2_6 = callPackage ../development/python-modules/protobuf.nix {
