@@ -21,6 +21,7 @@ let
     use-ipv6=${if ipv6 then "yes" else "no"}
     ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
     ${optionalString (domainName!=null) "domain-name=${domainName}"}
+    allow-point-to-point=${if allowPointToPoint then "yes" else "no"}
 
     [wide-area]
     enable-wide-area=${if wideArea then "yes" else "no"}
@@ -95,6 +96,15 @@ in
           List of network interfaces that should be used by the <command>avahi-daemon</command>.
           Other interfaces will be ignored. If <literal>null</literal> all local interfaces
           except loopback and point-to-point will be used.
+        '';
+      };
+
+      allowPointToPoint = mkOption {
+        default = false;
+        description= ''
+          Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
+          latencies with such links and opens a potential security hole by allowing mDNS access from Internet
+          connections. Use with care and YMMV!
         '';
       };
 
