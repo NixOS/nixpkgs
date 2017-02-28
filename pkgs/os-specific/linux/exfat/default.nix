@@ -1,5 +1,9 @@
 { stdenv, fetchFromGitHub, kernel }:
 
+# Upstream build for kernel > 4.10 is currently broken
+# Reference: https://github.com/dorimanx/exfat-nofuse/issues/103
+assert stdenv.lib.versionOlder kernel.version "4.10";
+
 stdenv.mkDerivation rec {
   name = "exfat-nofuse-${version}-${kernel.version}";
   version = "2017-01-03";
