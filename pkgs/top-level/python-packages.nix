@@ -2405,26 +2405,7 @@ in {
     };
   };
 
-  channels = buildPythonPackage rec {
-    name = "channels-${version}";
-    version = "1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/channels/${name}.tar.gz";
-      sha256 = "0d8fywg416p851i8vz26pmz8b47akg5z10yw7xc7i51cpmp7y5zj";
-    };
-
-    # Files are missing in the distribution
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ asgiref django daphne ];
-
-    meta = {
-      description = "Brings event-driven capabilities to Django with a channel system";
-      license = licenses.bsd3;
-      homepage = https://github.com/django/channels;
-    };
-  };
+  channels = callPackage ../development/python-modules/channels {};
 
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
@@ -5928,23 +5909,7 @@ in {
     };
   });
 
-  daphne = buildPythonPackage rec {
-    name = "daphne-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/daphne/${name}.tar.gz";
-      sha256 = "0l62bd9swv0k9qcpl2s8kj4mgl6qayi0krwkkg1x73a9y48xpi9z";
-    };
-
-    propagatedBuildInputs = with self; [ asgiref autobahn ];
-
-    meta = {
-      description = "Django ASGI (HTTP/WebSocket) server";
-      license = licenses.bsd3;
-      homepage = https://github.com/django/daphne;
-    };
-  };
+  daphne = callPackage ../development/python-modules/daphne { };
 
   dateparser = buildPythonPackage rec {
     name = "dateparser-${version}";
