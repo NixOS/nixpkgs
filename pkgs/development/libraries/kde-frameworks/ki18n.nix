@@ -1,15 +1,16 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, gettext
-, python
-, qtdeclarative
-, qtscript
+{
+  kdeFramework, lib,
+  extra-cmake-modules, gettext, python,
+  qtbase, qtdeclarative, qtscript,
 }:
 
 kdeFramework {
   name = "ki18n";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  meta = {
+    maintainers = [ lib.maintainers.ttuegel ];
+    broken = builtins.compareVersions qtbase.version "5.6.0" < 0;
+  };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ qtdeclarative qtscript ];
   propagatedNativeBuildInputs = [ gettext python ];
+  propagatedBuildInputs = [ qtdeclarative qtscript ];
 }
