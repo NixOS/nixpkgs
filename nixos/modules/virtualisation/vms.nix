@@ -116,12 +116,15 @@ let
       "/nix/store" = {
         device = "store";
         fsType = "9p";
-        # TODO: optimize the size given in msize by highly evolved trial-and-failure
-        # Warning: cache=loose works only because this mount is read-only. Do
-        # not copy this over to `shared`
+        # TODO: optimize the size given in msize by highly evolved trial-and-failure (and just below, too)
+        # Warning: cache=loose works only because this mount is read-only.
         options = [ "trans=virtio" "version=9p2000.L" "cache=loose" "msize=262144" ];
       };
-    };
+    } // listToAttrs (imap (i: n: nameValuePair n {
+      device = "shared${toString i}";
+      fsType = "9p";
+      options = [ "trans=virtio" "version=9p2000.L" "msize=262144" ];
+    }) (attrNames cfg.machines.${name}.shared));
 
     networking = let mcfg = cfg.machines.${name}; in {
       hostName = mkDefault name;
@@ -140,26 +143,32 @@ let
       mcfg = cfg.machines.${name};
       toplevel = mcfg.config.system.build.toplevel;
     in
-    ''
-      # TODO: prohibit ip spoofing between VMs
-      # TODO: handle shared and persisted
-      # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
-      # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
-
-      ${pkgs.qemu}/bin/qemu-kvm \
-        -name ${name} \
-        -nographic \
-        -serial unix:"$console",server,nowait \
-        -m ${toString mcfg.memorySize} \
-        ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
-        -virtfs local,path="/nix/store",security_model=none,mount_tag=store \
-        -drive file="$image",if=virtio,media=disk \
-        -netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no -device virtio-net-pci,netdev=net0 \
-        -kernel ${toplevel}/kernel \
-        -initrd ${toplevel}/initrd \
-        -append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0" \
-        $@
-    '';
+    # TODO: prohibit ip spoofing between VMs
+    # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
+    # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
+    concatStringsSep " " (
+      [ # Generic configuration
+        ''${pkgs.qemu}/bin/qemu-kvm''
+        ''-name ${name}''
+        ''-m ${toString mcfg.memorySize}''
+        ''${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}''
+        # Run headless
+        ''-nographic -serial unix:"$console",server,nowait''
+        # File systems
+        ''-drive file="$image",if=virtio,media=disk''
+        ''-virtfs local,path="/nix/store",security_model=none,mount_tag=store''
+        # Network
+        ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
+        ''-device virtio-net-pci,netdev=net0''
+        # Boot
+        ''-kernel ${toplevel}/kernel''
+        ''-initrd ${toplevel}/initrd''
+        ''-append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0"''
+      ] ++ # Shared and persisted filesystems
+      imap (i: n:
+        ''-virtfs local,path="${mcfg.shared.${n}}",security_model=mapped-xattr,mount_tag="shared${toString i}"''
+      ) (attrNames mcfg.shared)
+    );
 
   startVM = name: let mcfg = cfg.machines.${name}; in
     ''
@@ -305,5 +314,11 @@ in
           ip6 = [ cfg.ip6 ];
         };
       };
+
+    /* TODO: make this not infinitely recurse
+    vms.machines = mapAttrs' (name: value: nameValuePair name
+      { shared = genAttrs (n: "${cfg.persistPath}${n}") value.persistent;
+      }) cfg.machines;
+    */
   };
 }
