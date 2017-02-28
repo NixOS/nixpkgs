@@ -1101,6 +1101,7 @@ with pkgs;
   davix = callPackage ../tools/networking/davix { };
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata {
+    inherit vlc;
     ffmpeg = ffmpeg_2;
   };
 
@@ -10493,7 +10494,7 @@ with pkgs;
   hbase = callPackage ../servers/hbase {};
 
   hiawatha = callPackage ../servers/http/hiawatha {};
-  
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
