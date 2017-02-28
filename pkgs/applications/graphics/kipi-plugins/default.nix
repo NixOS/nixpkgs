@@ -1,6 +1,6 @@
 {
   stdenv, fetchurl,
-  ecm,
+  extra-cmake-modules,
   karchive, kconfig, ki18n, kiconthemes, kio, kservice, kwindowsystem, kxmlgui,
   libkipi, qtbase, qtsvg, qtxmlpatterns
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cd extra/kipi-plugins
   '';
 
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     karchive kconfig ki18n kiconthemes kio kservice kwindowsystem kxmlgui libkipi
     qtbase qtsvg qtxmlpatterns

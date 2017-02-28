@@ -269,6 +269,12 @@ with pkgs;
       inherit kernel rootModules allowMissing;
     };
 
+  kdeDerivation = import ../build-support/kde/derivation.nix { inherit stdenv lib; };
+
+  kdeWrapper = import ../build-support/kde/wrapper.nix {
+    inherit stdenv lib makeWrapper buildEnv;
+  };
+
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -382,7 +388,7 @@ with pkgs;
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
-  albert = qt5.callPackage ../applications/misc/albert {};
+  albert = libsForQt5.callPackage ../applications/misc/albert {};
 
   alacritty = callPackage ../applications/misc/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
@@ -426,7 +432,7 @@ with pkgs;
     withGui = false;
   };
 
-  apitrace = qt55.callPackage ../applications/graphics/apitrace {};
+  apitrace = libsForQt55.callPackage ../applications/graphics/apitrace {};
 
   argus = callPackage ../tools/networking/argus {};
 
@@ -752,7 +758,7 @@ with pkgs;
 
   clib = callPackage ../tools/package-management/clib { };
 
-  colord-kde = qt5.callPackage ../tools/misc/colord-kde {};
+  colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
 
   consul = callPackage ../servers/consul { };
 
@@ -934,6 +940,8 @@ with pkgs;
 
   hexio = callPackage ../development/tools/hexio { };
 
+  hr = callPackage ../applications/misc/hr { };
+
   interlock = callPackage ../servers/interlock {};
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
@@ -1104,7 +1112,7 @@ with pkgs;
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = qt5.callPackage ../applications/audio/cantata {
+  cantata = libsForQt5.callPackage ../applications/audio/cantata {
     ffmpeg = ffmpeg_2;
   };
 
@@ -1161,7 +1169,7 @@ with pkgs;
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
+    gst_plugins = [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
   };
 
   clementineFree = clementine.free;
@@ -1170,7 +1178,7 @@ with pkgs;
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
 
-  cmst = qt5.callPackage ../tools/networking/cmst { };
+  cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   colord = callPackage ../tools/misc/colord { };
 
@@ -1305,7 +1313,7 @@ with pkgs;
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
-  ckb = qt5.callPackage ../tools/misc/ckb { };
+  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
 
   compass = callPackage ../development/tools/compass { };
 
@@ -1313,7 +1321,7 @@ with pkgs;
 
   convoy = callPackage ../tools/filesystems/convoy { };
 
-  cool-retro-term = qt55.callPackage ../applications/misc/cool-retro-term { };
+  cool-retro-term = libsForQt55.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
@@ -2218,7 +2226,7 @@ with pkgs;
 
   hecate = callPackage ../applications/editors/hecate { };
 
-  heaptrack = callPackage ../development/tools/profiling/heaptrack {};
+  heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
 
   heimdall = callPackage ../tools/misc/heimdall { };
 
@@ -2268,11 +2276,11 @@ with pkgs;
 
   i2pd = callPackage ../tools/networking/i2pd {};
 
-  i-score = qt5.callPackage ../applications/audio/i-score { };
+  i-score = libsForQt5.callPackage ../applications/audio/i-score { };
 
   iasl = callPackage ../development/compilers/iasl { };
 
-  iannix = qt5.callPackage ../applications/audio/iannix { };
+  iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
   icecast = callPackage ../servers/icecast { };
 
@@ -2471,15 +2479,15 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
-  krename = qt5.callPackage ../applications/misc/krename { };
+  krename = libsForQt5.callPackage ../applications/misc/krename { };
 
-  kronometer = qt5.callPackage ../tools/misc/kronometer { };
+  kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
-  kdiff3 = qt5.callPackage ../tools/text/kdiff3 { };
+  kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
-  peruse = qt5.callPackage ../tools/misc/peruse { };
+  peruse = libsForQt5.callPackage ../tools/misc/peruse { };
 
-  kst = qt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
+  kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
   kytea = callPackage ../tools/text/kytea { };
 
@@ -2781,6 +2789,8 @@ with pkgs;
 
   lz4 = callPackage ../tools/compression/lz4 { };
 
+  lzbench = callPackage ../tools/compression/lzbench { };
+
   lzop = callPackage ../tools/compression/lzop { };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
@@ -2880,7 +2890,7 @@ with pkgs;
 
   mfoc = callPackage ../tools/security/mfoc { };
 
-  mgba = qt5.callPackage ../misc/emulators/mgba { };
+  mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
 
   mimeo = callPackage ../tools/misc/mimeo { };
 
@@ -2927,6 +2937,8 @@ with pkgs;
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
+
+  moneyplex = callPackage ../applications/office/moneyplex { };
 
   monit = callPackage ../tools/system/monit { };
 
@@ -3430,7 +3442,7 @@ with pkgs;
     inherit qt4;
   };
 
-  pinentry_qt5 = qt5.callPackage ../tools/security/pinentry/qt5.nix {
+  pinentry_qt5 = libsForQt5.callPackage ../tools/security/pinentry/qt5.nix {
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
@@ -3579,10 +3591,10 @@ with pkgs;
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
 
-  qastools = qt5.callPackage ../tools/audio/qastools { };
+  qastools = libsForQt5.callPackage ../tools/audio/qastools { };
 
-  qesteidutil = qt5.callPackage ../tools/security/qesteidutil { } ;
-  qdigidoc = qt5.callPackage ../tools/security/qdigidoc { } ;
+  qesteidutil = libsForQt5.callPackage ../tools/security/qesteidutil { } ;
+  qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
   esteidfirefoxplugin = callPackage ../applications/networking/browsers/mozilla-plugins/esteidfirefoxplugin { };
 
 
@@ -3799,7 +3811,9 @@ with pkgs;
     quazip = quazip_qt4;
   };
 
-  quazip_qt4 = self.qt5.quazip.override { qt = qt4; qmakeHook = qmake4Hook; };
+  quazip_qt4 = libsForQt5.quazip.override {
+    qtbase = qt4; qmakeHook = qmake4Hook;
+  };
 
   scrot = callPackage ../tools/graphics/scrot { };
 
@@ -3841,7 +3855,7 @@ with pkgs;
 
   siege = callPackage ../tools/networking/siege {};
 
-  sigil = qt55.callPackage ../applications/editors/sigil { };
+  sigil = libsForQt55.callPackage ../applications/editors/sigil { };
 
   # aka., gpg-tools
   signing-party = callPackage ../tools/security/signing-party { };
@@ -3949,7 +3963,7 @@ with pkgs;
 
   su-exec = callPackage ../tools/security/su-exec {};
 
-  subsurface = qt5.callPackage ../applications/misc/subsurface { };
+  subsurface = libsForQt5.callPackage ../applications/misc/subsurface { };
 
   sudo = callPackage ../tools/security/sudo { };
 
@@ -4085,7 +4099,7 @@ with pkgs;
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
-  tiled = qt5.callPackage ../applications/editors/tiled { };
+  tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   timemachine = callPackage ../applications/audio/timemachine { };
 
@@ -6309,7 +6323,7 @@ with pkgs;
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
   # Does not actually depend on Qt 5
-  extra-cmake-modules = qt5.ecmNoHooks;
+  inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocamlPackages_4_01_0;
@@ -6690,7 +6704,7 @@ with pkgs;
 
   premake = premake4;
 
-  qtcreator = qt5.callPackage ../development/qtcreator { };
+  qtcreator = libsForQt5.callPackage ../development/qtcreator { };
 
   r10k = callPackage ../tools/system/r10k { };
 
@@ -7548,41 +7562,40 @@ with pkgs;
   });
 
   gst_all = {
-    inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
-    gstPluginsBase = pkgs.gst_plugins_base;
-    gstPluginsBad = pkgs.gst_plugins_bad;
-    gstPluginsGood = pkgs.gst_plugins_good;
-    gstPluginsUgly = pkgs.gst_plugins_ugly;
-    gstFfmpeg = pkgs.gst_ffmpeg;
+    inherit (pkgs) gstreamer gnonlin gst-python qt-gstreamer;
+    gstPluginsBase = pkgs.gst-plugins-base;
+    gstPluginsBad = pkgs.gst-plugins-bad;
+    gstPluginsGood = pkgs.gst-plugins-good;
+    gstPluginsUgly = pkgs.gst-plugins-ugly;
+    gstFfmpeg = pkgs.gst-ffmpeg;
 
     # aliases with the dashed naming, same as in gst_all_1
-    gst-plugins-base = pkgs.gst_plugins_base;
-    gst-plugins-bad = pkgs.gst_plugins_bad;
-    gst-plugins-good = pkgs.gst_plugins_good;
-    gst-plugins-ugly = pkgs.gst_plugins_ugly;
-    gst-ffmpeg = pkgs.gst_ffmpeg;
-    gst-python = pkgs.gst_python;
+    gst-plugins-base = pkgs.gst-plugins-base;
+    gst-plugins-bad = pkgs.gst-plugins-bad;
+    gst-plugins-good = pkgs.gst-plugins-good;
+    gst-plugins-ugly = pkgs.gst-plugins-ugly;
+    gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 
   gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer {
     bison = bison2;
   };
 
-  gst_plugins_base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
+  gst-plugins-base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  gst_plugins_good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
+  gst-plugins-good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
 
-  gst_plugins_bad = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-bad {};
+  gst-plugins-bad = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-bad {};
 
-  gst_plugins_ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
+  gst-plugins-ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
 
-  gst_ffmpeg = callPackage ../development/libraries/gstreamer/legacy/gst-ffmpeg {
+  gst-ffmpeg = callPackage ../development/libraries/gstreamer/legacy/gst-ffmpeg {
     ffmpeg = ffmpeg_0;
   };
 
-  gst_python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
+  gst-python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
 
   gstreamermm = callPackage ../development/libraries/gstreamer/legacy/gstreamermm { };
 
@@ -7594,9 +7607,9 @@ with pkgs;
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};
 
-  qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
+  qt-gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
-  qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
+  qt-gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost155;};
 
   gnet = callPackage ../development/libraries/gnet { };
 
@@ -7875,7 +7888,17 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
-  kdelibs4 = kde5.applications.kdelibs;
+  kdeFrameworks =
+    let
+      mkFrameworks = import ../development/libraries/kde-frameworks;
+      attrs = {
+        inherit libsForQt5;
+        inherit kdeDerivation lib fetchurl;
+      };
+    in
+      recurseIntoAttrs (makeOverridable mkFrameworks attrs);
+
+  kdelibs4 = kdeApplications.kdelibs;
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -9264,6 +9287,7 @@ with pkgs;
   # 3.0.0-beta-2 is only introduced for tensorflow. remove this version when tensorflow is moved to 3.0.
   protobuf3_0_0b2 = lowPrio (callPackage ../development/libraries/protobuf/3.0.0-beta-2.nix { });
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+  protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
@@ -9324,33 +9348,79 @@ with pkgs;
     developerBuild = true;
   });
 
-  qt55 =
-    let imported = import ../development/libraries/qt-5/5.5 { inherit pkgs; };
-        # Libraries that cannot be built with newer versions of Qt 5
-        qt55Only = self: with self; {
-          # Requires Qt Quick (deprecated in Qt 5.5, removed from Qt 5.6)
-          qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-        };
-    in recurseIntoAttrs (imported.override (super: self: qt5LibsFun self // qt55Only self));
+  qt55 = recurseIntoAttrs (import ../development/libraries/qt-5/5.5 {
+    inherit newScope;
+    inherit stdenv fetchurl makeSetupHook makeWrapper;
+    bison = bison2; # error: too few arguments to function 'int yylex(...
+    cups = if stdenv.isLinux then cups else null;
+    harfbuzz = harfbuzz-icu;
+    mesa = mesa_noglu;
+    inherit perl;
+    inherit (gnome2) libgnomeui GConf gnome_vfs;
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  });
 
-  qt56 =
-    let imported = import ../development/libraries/qt-5/5.6 { inherit pkgs; };
-    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+  libsForQt55 = recurseIntoAttrs (lib.makeScope qt55.newScope mkLibsForQt5);
 
-  qt57 =
-    let imported = import ../development/libraries/qt-5/5.7 { inherit pkgs; };
-    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+  qt56 = recurseIntoAttrs (import ../development/libraries/qt-5/5.6 {
+    inherit newScope;
+    inherit stdenv fetchurl makeSetupHook makeWrapper;
+    bison = bison2; # error: too few arguments to function 'int yylex(...
+    cups = if stdenv.isLinux then cups else null;
+    harfbuzz = harfbuzz-icu;
+    mesa = mesa_noglu;
+    inherit perl;
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  });
 
-  qt5 = qt56;
+  libsForQt56 = recurseIntoAttrs (lib.makeScope qt56.newScope mkLibsForQt5);
 
-  qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
+  qt57 = recurseIntoAttrs (import ../development/libraries/qt-5/5.7 {
+    inherit newScope;
+    inherit stdenv fetchurl makeSetupHook makeWrapper;
+    bison = bison2; # error: too few arguments to function 'int yylex(...
+    cups = if stdenv.isLinux then cups else null;
+    harfbuzz = harfbuzz-icu;
+    mesa = mesa_noglu;
+    inherit perl;
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  });
 
-  qt5LibsFun = self: with self;
-    let kdeFrameworks =
-          import ../development/libraries/kde-frameworks { inherit pkgs; } self;
-    in {
+  libsForQt57 = recurseIntoAttrs (lib.makeScope qt57.newScope mkLibsForQt5);
 
-    inherit kdeFrameworks;
+  qt5 = qt57;
+  libsForQt5 = libsForQt57;
+
+  qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
+
+  mkLibsForQt5 = self: with self; {
+
+    ### KDE FRAMEWORKS
+
+    inherit (kdeFrameworks.override { libsForQt5 = self; })
+      attica baloo bluez-qt kactivities kactivities-stats
+      karchive kauth kbookmarks kcmutils kcodecs kcompletion kconfig
+      kconfigwidgets kcoreaddons kcrash kdbusaddons kdeclarative kdelibs4support
+      kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
+      khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
+      kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
+      knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
+      kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
+      kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
+      networkmanager-qt plasma-framework solid sonnet syntax-highlighting
+      threadweaver;
+
+    ### KDE PLASMA 5
+
+    inherit (plasma5.override { libsForQt5 = self; })
+      kdecoration khotkeys libkscreen libksysguard;
+
+    ### KDE APPLICATIONS
+
+    inherit (kdeApplications.override { libsForQt5 = self; })
+      libkdcraw libkexiv2 libkipi libkomparediff2;
+
+    ### LIBRARIES
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -9360,10 +9430,7 @@ with pkgs;
 
     kirigami_1 = callPackage ../development/libraries/kirigami { };
 
-    kirigami_2 = callPackage ../development/libraries/kirigami/v2.nix {
-      # kirigami v2 requires qt 5.7 and above
-      inherit (qt57) qtbase qtquickcontrols2;
-    };
+    kirigami_2 = callPackage ../development/libraries/kirigami/v2.nix { };
 
     kirigami = kirigami_1;
 
@@ -9403,6 +9470,8 @@ with pkgs;
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
+    qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+
     qscintilla = callPackage ../development/libraries/qscintilla {
       withQt5 = true;
     };
@@ -9413,9 +9482,7 @@ with pkgs;
 
     qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
-    quazip = callPackage ../development/libraries/quazip {
-      qt = qtbase;
-    };
+    quazip = callPackage ../development/libraries/quazip { };
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
 
@@ -9429,7 +9496,7 @@ with pkgs;
 
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
-  } // kdeFrameworks;
+  };
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
@@ -10219,6 +10286,10 @@ with pkgs;
 
   leaps = callPackage ../development/tools/leaps { };
 
+  ### DEVELOPMENT / JAVA MODULES
+
+  javaPackages = recurseIntoAttrs (callPackage ./java-packages.nix { });
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
@@ -10678,7 +10749,7 @@ with pkgs;
   };
 
   mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
-    inherit (darwin) cctools;
+    inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost159;
   };
@@ -10861,6 +10932,8 @@ with pkgs;
   sensu = callPackage ../servers/monitoring/sensu {
     ruby = ruby_2_1;
   };
+
+  uchiwa = callPackage ../servers/monitoring/uchiwa { };
 
   shishi = callPackage ../servers/shishi {
       pam = if stdenv.isLinux then pam else null;
@@ -11144,6 +11217,10 @@ with pkgs;
   drbd = callPackage ../os-specific/linux/drbd { };
 
   dstat = callPackage ../os-specific/linux/dstat { };
+
+  fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; };
+
+  fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
@@ -12123,8 +12200,7 @@ with pkgs;
 
   xf86_input_mtrack = callPackage ../os-specific/linux/xf86-input-mtrack { };
 
-  xf86_input_multitouch =
-    callPackage ../os-specific/linux/xf86-input-multitouch { };
+  xf86_input_multitouch = callPackage ../os-specific/linux/xf86-input-multitouch { };
 
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
@@ -12161,6 +12237,8 @@ with pkgs;
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   bgnet = callPackage ../data/documentation/bgnet { };
+
+  inherit (kdeFrameworks) breeze-icons;
 
   cacert = callPackage ../data/misc/cacert { };
 
@@ -12398,6 +12476,8 @@ with pkgs;
 
   oxygenfonts = callPackage ../data/fonts/oxygenfonts { };
 
+  inherit (kdeFrameworks) oxygen-icons5;
+
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   pecita = callPackage ../data/fonts/pecita {};
@@ -12529,7 +12609,7 @@ with pkgs;
 
   xlsx2csv = pythonPackages.xlsx2csv;
 
-  zeal = qt5.callPackage ../data/documentation/zeal { };
+  zeal = libsForQt5.callPackage ../data/documentation/zeal { };
 
 
   ### APPLICATIONS
@@ -12623,13 +12703,13 @@ with pkgs;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
-  antimony = qt5.callPackage ../applications/graphics/antimony {};
+  antimony = libsForQt5.callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
 
   ao = callPackage ../applications/graphics/ao {};
 
-  aqemu = qt5.callPackage ../applications/virtualization/aqemu { };
+  aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
   ardour = callPackage ../applications/audio/ardour {
     inherit (gnome2) libgnomecanvas libgnomecanvasmm;
@@ -12655,7 +12735,7 @@ with pkgs;
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
   audacious = callPackage ../applications/audio/audacious { };
-  audaciousQt5 = qt5.callPackage ../applications/audio/audacious/qt-5.nix { };
+  audaciousQt5 = libsForQt5.callPackage ../applications/audio/audacious/qt-5.nix { };
 
   audacity = callPackage ../applications/audio/audacity { };
 
@@ -12717,7 +12797,7 @@ with pkgs;
   };
   awesome = awesome-4-0;
 
-  awesomebump = qt5.callPackage ../applications/graphics/awesomebump { };
+  awesomebump = libsForQt5.callPackage ../applications/graphics/awesomebump { };
 
   inherit (gnome3) baobab;
 
@@ -12788,7 +12868,7 @@ with pkgs;
 
   bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
 
-  bomi = qt5.callPackage ../applications/video/bomi {
+  bomi = libsForQt5.callPackage ../applications/video/bomi {
     youtube-dl = pythonPackages.youtube-dl;
     pulseSupport = config.pulseaudio or true;
     ffmpeg = ffmpeg_2;
@@ -12816,11 +12896,10 @@ with pkgs;
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
-  calibre = qt5.callPackage ../applications/misc/calibre { };
+  calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
   calligra = kde4.callPackage ../applications/office/calligra {
     vc = vc_0_7;
-    oxygen_icons = kde5.oxygen-icons5;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -12837,7 +12916,7 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cb2bib = qt5.callPackage ../applications/office/cb2bib { };
+  cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
@@ -12912,7 +12991,7 @@ with pkgs;
 
   cni = callPackage ../applications/networking/cluster/cni {};
 
-  communi = qt5.callPackage ../applications/networking/irc/communi { };
+  communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome2) GConf ORBit2 metacity;
@@ -12959,7 +13038,7 @@ with pkgs;
   cutecom = callPackage ../tools/misc/cutecom { };
 
   cutegram =
-    let callpkg = qt55.callPackage;
+    let callpkg = libsForQt55.callPackage;
     in callpkg ../applications/networking/instant-messengers/telegram/cutegram rec {
       libqtelegram-aseman-edition = callpkg ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
       telegram-qml = callpkg ../applications/networking/instant-messengers/telegram/telegram-qml {
@@ -13009,9 +13088,9 @@ with pkgs;
     plugins = [];
   };
 
-  dfasma = qt5.callPackage ../applications/audio/dfasma { };
+  dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
-  dfilemanager = qt5.callPackage ../applications/misc/dfilemanager { };
+  dfilemanager = libsForQt5.callPackage ../applications/misc/dfilemanager { };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
@@ -13361,7 +13440,7 @@ with pkgs;
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
-  keepassx-community = qt5.callPackage ../applications/misc/keepassx/community.nix { };
+  keepassx-community = libsForQt5.callPackage ../applications/misc/keepassx/community.nix { };
 
   inherit (gnome3) evince;
   evolution_data_server = gnome3.evolution_data_server;
@@ -13396,7 +13475,7 @@ with pkgs;
      inherit (darwin.apple_sdk.frameworks) CoreServices CoreAudio AudioUnit;
   };
 
-  fmit = qt5.callPackage ../applications/audio/fmit { };
+  fmit = libsForQt5.callPackage ../applications/audio/fmit { };
 
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
@@ -13414,7 +13493,7 @@ with pkgs;
 
   fribid = callPackage ../applications/networking/browsers/mozilla-plugins/fribid { };
 
-  fritzing = qt5.callPackage ../applications/science/electronics/fritzing { };
+  fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
@@ -13445,7 +13524,7 @@ with pkgs;
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
-  goldendict = qt55.callPackage ../applications/misc/goldendict { };
+  goldendict = libsForQt55.callPackage ../applications/misc/goldendict { };
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
@@ -13553,7 +13632,7 @@ with pkgs;
     desktopName = "Firefox Beta";
   };
 
-  firestr = qt5.callPackage ../applications/networking/p2p/firestr
+  firestr = libsForQt5.callPackage ../applications/networking/p2p/firestr
     { boost = boost155;
     };
 
@@ -13704,7 +13783,7 @@ with pkgs;
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
-  linssid = qt5.callPackage ../applications/networking/linssid { };
+  linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
   manuskript = callPackage ../applications/editors/manuskript { };
 
@@ -13791,7 +13870,7 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
-  gpsbabel = qt5.callPackage ../applications/misc/gpsbabel { };
+  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
@@ -13799,7 +13878,7 @@ with pkgs;
 
   gpsprune = callPackage ../applications/misc/gpsprune { };
 
-  gpxsee = qt5.callPackage ../applications/misc/gpxsee { };
+  gpxsee = libsForQt5.callPackage ../applications/misc/gpxsee { };
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
     inherit (gnome2) gtk;
@@ -14005,7 +14084,7 @@ with pkgs;
     lua = lua5_1;
   };
 
-  ipe = qt5.callPackage ../applications/graphics/ipe {
+  ipe = libsForQt5.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
     texlive = texlive.combine { inherit (texlive) scheme-small; };
   };
@@ -14079,31 +14158,49 @@ with pkgs;
 
   k3b = kde4.callPackage ../applications/misc/k3b/wrapper.nix { };
 
-  k9copy = qt5.callPackage ../applications/video/k9copy {};
+  k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
   kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
 
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
-  kdeconnect = qt5.callPackage ../applications/misc/kdeconnect { };
+  kdeApplications =
+    let
+      mkApplications = import ../applications/kde;
+      attrs = {
+        inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
+        inherit kdeDerivation plasma5;
+        inherit attica phonon;
+      };
+    in
+      recurseIntoAttrs (makeOverridable mkApplications attrs);
 
-  kdecoration-viewer = kde5.callPackage ../tools/misc/kdecoration-viewer {};
+  inherit (kdeApplications)
+    akonadi ark dolphin ffmpegthumbs filelight gwenview kate
+    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole marble
+    okteta okular spectacle;
 
-  kdevelop-pg-qt = kde5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
+  kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
-  kdevelop = kde5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
+  kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
+
+  inherit (kdeFrameworks) kdesu;
+
+  kdevelop-pg-qt = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop-pg-qt.nix {};
+
+  kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
     llvmPackages = llvmPackages_38;
   };
 
-  kdevplatform = kde5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix {};
+  kdevplatform = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix { };
 
   keepnote = callPackage ../applications/office/keepnote { };
 
   kermit = callPackage ../tools/misc/kermit { };
 
-  keyfinder = qt5.callPackage ../applications/audio/keyfinder { };
+  keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
-  keyfinder-cli = qt5.callPackage ../applications/audio/keyfinder-cli { };
+  keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
 
   keymon = callPackage ../applications/video/key-mon { };
 
@@ -14117,14 +14214,14 @@ with pkgs;
     qt = qt4;
   };
 
-  kile = kde5.callPackage ../applications/editors/kile { };
+  kile = libsForQt5.callPackage ../applications/editors/kile { };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome2) libglade;
     ffmpeg = ffmpeg_2;
   };
 
-  kipi-plugins = kde5.callPackage ../applications/graphics/kipi-plugins {};
+  kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins { };
 
   kiwix = callPackage ../applications/misc/kiwix {
     stdenv = overrideCC stdenv gcc49;
@@ -14132,9 +14229,9 @@ with pkgs;
 
   kmplayer = kde4.callPackage ../applications/video/kmplayer { };
 
-  konversation = qt5.callPackage ../applications/networking/irc/konversation { };
+  konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
 
-  krita = qt5.callPackage ../applications/graphics/krita {
+  krita = libsForQt5.callPackage ../applications/graphics/krita {
     vc = vc_0_7;
     openjpeg = openjpeg_1;
   };
@@ -14143,7 +14240,7 @@ with pkgs;
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
-  ktorrent = qt5.callPackage ../applications/networking/p2p/ktorrent { };
+  ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = go_1_6;
@@ -14267,7 +14364,7 @@ with pkgs;
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
-  luminanceHDR = qt55.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt55.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
@@ -14286,7 +14383,7 @@ with pkgs;
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
-  lyx = qt5.callPackage ../applications/misc/lyx { };
+  lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 
@@ -14519,7 +14616,7 @@ with pkgs;
       else null;
   };
 
-  musescore = qt55.callPackage ../applications/audio/musescore { };
+  musescore = libsForQt55.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
@@ -14567,11 +14664,11 @@ with pkgs;
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
-  shotcut = qt5.callPackage ../applications/video/shotcut { };
+  shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
 
-  smplayer = qt5.callPackage ../applications/video/smplayer { };
+  smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
-  smtube = qt55.callPackage ../applications/video/smtube {};
+  smtube = libsForQt55.callPackage ../applications/video/smtube {};
 
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
@@ -14674,7 +14771,7 @@ with pkgs;
 
   oblogout = callPackage ../tools/X11/oblogout { };
 
-  obs-studio = qt5.callPackage ../applications/video/obs-studio {
+  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
     alsaSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or true;
   };
@@ -14774,9 +14871,9 @@ with pkgs;
 
   pflask = callPackage ../os-specific/linux/pflask {};
 
-  photoqt = qt5.callPackage ../applications/graphics/photoqt { };
+  photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
-  phototonic = qt5.callPackage ../applications/graphics/phototonic { };
+  phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
@@ -14908,7 +15005,7 @@ with pkgs;
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = qt5.callPackage ../applications/networking/p2p/qbittorrent {
+  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
     boost = boost;
     libtorrentRasterbar = libtorrentRasterbar_1_0;
   };
@@ -14922,15 +15019,15 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis {};
 
-  qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
+  qgroundcontrol = libsForQt55.callPackage ../applications/science/robotics/qgroundcontrol { };
 
-  qjackctl = qt5.callPackage ../applications/audio/qjackctl { };
+  qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
   qmidinet = callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = qt5.callPackage ../applications/audio/qmmp { };
+  qmmp = libsForQt5.callPackage ../applications/audio/qmmp { };
 
   qnotero = callPackage ../applications/office/qnotero { };
 
@@ -14942,15 +15039,15 @@ with pkgs;
     qt = qt4;
   };
 
-  qsyncthingtray = qt5.callPackage ../applications/misc/qsyncthingtray { };
+  qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
-  qtox = qt5.callPackage ../applications/networking/instant-messengers/qtox { };
+  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
-  qtpass = qt5.callPackage ../applications/misc/qtpass { };
+  qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
@@ -14958,7 +15055,7 @@ with pkgs;
 
   qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
 
-  quassel = qt5.callPackage ../applications/networking/irc/quassel {
+  quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
     monolithic = true;
     daemon = false;
     client = false;
@@ -14984,16 +15081,16 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc {};
 
-  quiterss = qt5.callPackage ../applications/networking/newsreaders/quiterss {};
+  quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
   quodlibet-without-gst-plugins = callPackage ../applications/audio/quodlibet { };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
     withGstPlugins = true;
-    gst_plugins_bad = null;
+    gst-plugins-bad = null;
   };
 
-  qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
+  qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils;
     inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
@@ -15012,7 +15109,7 @@ with pkgs;
     demo = false;
   };
 
-  rapcad = qt55.callPackage ../applications/graphics/rapcad { boost = boost159; };
+  rapcad = libsForQt55.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
@@ -15054,7 +15151,7 @@ with pkgs;
 
   retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix { });
 
-  ricochet = qt55.callPackage ../applications/networking/instant-messengers/ricochet { };
+  ricochet = libsForQt55.callPackage ../applications/networking/instant-messengers/ricochet { };
 
   ripser = callPackage ../applications/science/math/ripser { };
 
@@ -15234,13 +15331,13 @@ with pkgs;
   bittorrentSync14 = callPackage ../applications/networking/bittorrentsync/1.4.x.nix { };
   bittorrentSync20 = callPackage ../applications/networking/bittorrentsync/2.0.x.nix { };
 
-  dropbox = qt5.callPackage ../applications/networking/dropbox { };
+  dropbox = libsForQt5.callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
   insync = callPackage ../applications/networking/insync { };
 
-  lightdm = qt5.callPackage ../applications/display-managers/lightdm {
+  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm {
     qt4 = null;
     withQt5 = false;
   };
@@ -15261,11 +15358,11 @@ with pkgs;
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  sddm = qt5.callPackage ../applications/display-managers/sddm {
+  sddm = libsForQt5.callPackage ../applications/display-managers/sddm {
     themes = [];  # extra themes, etc.
   };
 
-  skrooge = qt5.callPackage ../applications/office/skrooge {};
+  skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
@@ -15287,7 +15384,7 @@ with pkgs;
 
   sipp = callPackage ../development/tools/misc/sipp { };
 
-  sonic-visualiser = qt5.callPackage ../applications/audio/sonic-visualiser {
+  sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
   };
 
@@ -15402,7 +15499,7 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  teamspeak_client = qt55.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt55.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskjuggler-2 = callPackage ../applications/misc/taskjuggler/2.x { };
@@ -15547,7 +15644,7 @@ with pkgs;
     boost = boost160;
   };
 
-  twmn = qt5.callPackage ../applications/misc/twmn { };
+  twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
@@ -15625,7 +15722,7 @@ with pkgs;
 
   neovim = callPackage ../applications/editors/neovim { };
 
-  neovim-qt = qt5.callPackage ../applications/editors/neovim/qt.nix { };
+  neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
   neovim-pygui = pythonPackages.neovim_gui;
 
@@ -15713,7 +15810,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  vlc_qt5 = qt5.vlc;
+  vlc_qt5 = libsForQt5.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -15926,7 +16023,7 @@ with pkgs;
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  xca = qt5.callPackage ../applications/misc/xca { };
+  xca = libsForQt5.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
@@ -16089,7 +16186,9 @@ with pkgs;
 
   yabar = callPackage ../applications/window-managers/yabar { };
 
-  yakuake = kde5.callPackage ../applications/misc/yakuake {};
+  yakuake = libsForQt5.callPackage ../applications/misc/yakuake {
+    inherit (kdeApplications) konsole;
+  };
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
@@ -16214,13 +16313,13 @@ with pkgs;
 
   chessdb = callPackage ../games/chessdb { };
 
-  chessx = qt5.callPackage ../games/chessx { };
+  chessx = libsForQt5.callPackage ../games/chessx { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
   ckan = callPackage ../games/ckan { };
 
-  cockatrice = qt5.callPackage ../games/cockatrice {  };
+  cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
 
   commandergenius = callPackage ../games/commandergenius { };
 
@@ -16251,7 +16350,8 @@ with pkgs;
 
   dhewm3 = callPackage ../games/dhewm3 {};
 
-  digikam = kde5.callPackage ../applications/graphics/digikam {
+  digikam = libsForQt5.callPackage ../applications/graphics/digikam {
+    inherit (plasma5) oxygen;
     boost = boost160;
   };
 
@@ -16299,7 +16399,7 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = qt5.callPackage ../games/flightgear { };
+  flightgear = libsForQt5.callPackage ../games/flightgear { };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
@@ -16414,7 +16514,7 @@ with pkgs;
 
   minecraft-server = callPackage ../games/minecraft-server { };
 
-  multimc = qt5.callPackage ../games/multimc { };
+  multimc = libsForQt5.callPackage ../games/multimc { };
 
   minetest = callPackage ../games/minetest {
     libpng = libpng12;
@@ -16424,7 +16524,7 @@ with pkgs;
 
   mrrescue = callPackage ../games/mrrescue { };
 
-  mudlet = qt5.callPackage ../games/mudlet {
+  mudlet = libsForQt5.callPackage ../games/mudlet {
     inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
 
@@ -16569,7 +16669,7 @@ with pkgs;
 
   solarus = callPackage ../games/solarus { };
 
-  solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
+  solarus-quest-editor = libsForQt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
@@ -16702,7 +16802,7 @@ with pkgs;
 
   warsow = callPackage ../games/warsow { };
 
-  warzone2100 = qt5.callPackage ../games/warzone2100 { };
+  warzone2100 = libsForQt5.callPackage ../games/warzone2100 { };
 
   wesnoth = callPackage ../games/wesnoth { };
 
@@ -16822,9 +16922,12 @@ with pkgs;
       );
     in recurseIntoAttrs self;
 
-  lumina = callPackage ../desktops/lumina { };
+  lumina = libsForQt5.callPackage ../desktops/lumina { };
 
-  lxqt = recurseIntoAttrs (callPackage ../desktops/lxqt { });
+  lxqt = recurseIntoAttrs (import ../desktops/lxqt {
+    inherit pkgs libsForQt5 fetchFromGitHub;
+    inherit (lib) makeScope;
+  });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate {
     callPackage = newScope pkgs.mate;
@@ -16839,7 +16942,7 @@ with pkgs;
     inherit (python3Packages) python pygobject3 pyxdg;
   };
 
-  redshift-plasma-applet = callPackage ../applications/misc/redshift-plasma-applet { };
+  redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
   orion = callPackage ../misc/themes/orion {};
 
@@ -16853,22 +16956,6 @@ with pkgs;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
-  kde5 =
-    let
-      plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
-      applications = import ../desktops/kde-5/applications { inherit pkgs; };
-      merged = self:
-        {
-          plasma = plasma self;
-          frameworks = qt5.kdeFrameworks;
-          applications = applications self;
-        }
-        // qt5.kdeFrameworks
-        // plasma self
-        // applications self;
-    in
-      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
-
   theme-vertex = callPackage ../misc/themes/vertex { };
 
   rox-filer = callPackage ../desktops/rox/rox-filer {
@@ -16879,6 +16966,29 @@ with pkgs;
   xfce4-12 = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
+
+  ### DESKTOP ENVIRONMENTS / PLASMA 5
+
+  plasma5 =
+    let
+      mkPlasma5 = import ../desktops/plasma-5;
+      attrs = {
+        inherit libsForQt5 kdeDerivation lib fetchurl;
+        inherit (gnome3) gconf;
+      };
+    in
+      recurseIntoAttrs (makeOverridable mkPlasma5 attrs);
+
+  inherit (kdeFrameworks) kded kinit frameworkintegration;
+
+  inherit (plasma5)
+    bluedevil breeze-gtk breeze-qt4 breeze-qt5 breeze-grub breeze-plymouth
+    kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
+    kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
+    kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-desktop
+    plasma-integration plasma-nm plasma-pa plasma-workspace
+    plasma-workspace-wallpapers polkit-kde-agent powerdevil startkde
+    systemsettings;
 
   ### SCIENCE
 
@@ -17374,7 +17484,7 @@ with pkgs;
 
   yacas = callPackage ../applications/science/math/yacas { };
 
-  speedcrunch = qt5.callPackage ../applications/science/math/speedcrunch { };
+  speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
 
@@ -17405,7 +17515,7 @@ with pkgs;
 
   spyder = pythonPackages.spyder;
 
-  stellarium = qt5.callPackage ../applications/science/astronomy/stellarium { };
+  stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
     cmake = cmake_2_8;
@@ -17467,7 +17577,7 @@ with pkgs;
 
   ### MISC
 
-  antimicro = qt5.callPackage ../tools/misc/antimicro { };
+  antimicro = libsForQt5.callPackage ../tools/misc/antimicro { };
 
   atari800 = callPackage ../misc/emulators/atari800 { };
 
@@ -17652,6 +17762,7 @@ with pkgs;
   kops = callPackage ../applications/networking/cluster/kops { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { guile = guile_1_8; };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 { };
 
@@ -17736,9 +17847,9 @@ with pkgs;
     pcre = pcre-cpp;
   });
 
-  redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
+  redis-desktop-manager = libsForQt55.callPackage ../applications/misc/redis-desktop-manager { };
 
-  robomongo = qt5.callPackage ../applications/misc/robomongo { };
+  robomongo = libsForQt5.callPackage ../applications/misc/robomongo { };
 
   rucksack = callPackage ../development/tools/rucksack { };
 
@@ -17940,7 +18051,7 @@ with pkgs;
   vips = callPackage ../tools/graphics/vips { };
   nip2 = callPackage ../tools/graphics/nip2 { };
 
-  vokoscreen = qt5.callPackage ../applications/video/vokoscreen { };
+  vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
@@ -18103,7 +18214,7 @@ with pkgs;
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
 
-  golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 
@@ -18125,9 +18236,9 @@ with pkgs;
 
   zuki-themes = callPackage ../misc/themes/zuki { };
 
-  zoom-us = qt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
+  zoom-us = libsForQt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
 
-  tora = qt5.callPackage ../development/tools/tora {};
+  tora = libsForQt5.callPackage ../development/tools/tora {};
 
   xulrunner = firefox-unwrapped;
 

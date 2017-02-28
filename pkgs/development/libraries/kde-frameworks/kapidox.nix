@@ -1,7 +1,7 @@
-{ kdeFramework, lib, ecm, python }:
+{ kdeFramework, lib, extra-cmake-modules, python }:
 
 kdeFramework {
   name = "kapidox";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm python ];
+  nativeBuildInputs = [ extra-cmake-modules python ];
 }

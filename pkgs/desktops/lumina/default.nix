@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop_file_utils,
-  numlockx, xorg, qt5, kde5
+{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop_file_utils, numlockx,
+  xorg, qtbase, qtsvg, qtmultimedia, qtx11extras, qmakeHook, qttools, oxygen-icons5
 }:
 
 stdenv.mkDerivation rec {
@@ -14,19 +14,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qt5.qmakeHook
-    qt5.qttools
+    qmakeHook
+    qttools
   ];
 
   buildInputs = [
     xorg.libxcb
     xorg.xcbutilwm
     xorg.xcbutilimage
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtmultimedia
-    qt5.qtx11extras
-    kde5.oxygen-icons5
+    qtbase
+    qtsvg
+    qtmultimedia
+    qtx11extras
+    oxygen-icons5
     fluxbox
     xscreensaver
     desktop_file_utils

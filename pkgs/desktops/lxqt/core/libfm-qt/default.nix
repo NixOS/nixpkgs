@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, xorg,
-libfm, menu-cache }:
+{
+  stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
+  xorg, libfm, menu-cache,
+  qtx11extras, qttools
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -16,18 +19,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtx11extras
-    qt5.qttools
+    qtx11extras
+    qttools
     libfm
     menu-cache
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-   
+
   meta = with stdenv.lib; {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     homepage = https://github.com/lxde/libfm-qt;

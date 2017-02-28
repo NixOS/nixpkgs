@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, cmake, mesa, pkgconfig, libpulseaudio
-, qt4 ? null, extra-cmake-modules, qtbase ? null, qttools ? null
+, qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qttools ? null
 , withQt5 ? false
 , debug ? false }:
 
@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     [ mesa libpulseaudio ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ]);
 
-  nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
+  nativeBuildInputs =
+    [ cmake pkgconfig ]
+    ++ optional withQt5 extra-cmake-modules;
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 

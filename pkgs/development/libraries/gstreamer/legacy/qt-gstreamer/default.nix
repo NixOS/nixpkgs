@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gstreamer, gst_plugins_base, boost, glib, qt4, cmake
+{ stdenv, fetchurl, gstreamer, gst-plugins-base, boost, glib, qt4, cmake
 , automoc4, flex, bison, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pqg9sxzk8sdrf7pazb5v21hasqai9i4l203gbdqz29w2ll1ybsl";
   };
 
-  buildInputs = [ gstreamer gst_plugins_base glib qt4 ];
+  buildInputs = [ gstreamer gst-plugins-base glib qt4 ];
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [ cmake automoc4 flex bison pkgconfig ];
 

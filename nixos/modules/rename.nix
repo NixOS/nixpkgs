@@ -178,6 +178,9 @@ with lib;
     (mkRenamedOptionModule [ "services" "nfs" "lockdPort" ] [ "services" "nfs" "server" "lockdPort" ])
     (mkRenamedOptionModule [ "services" "nfs" "statdPort" ] [ "services" "nfs" "server" "statdPort" ])
 
+    # KDE Plasma 5
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")

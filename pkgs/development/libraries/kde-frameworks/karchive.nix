@@ -1,7 +1,8 @@
-{ kdeFramework, lib, ecm }:
+{ kdeFramework, lib, extra-cmake-modules, qtbase }:
 
 kdeFramework {
   name = "karchive";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ qtbase ];
 }

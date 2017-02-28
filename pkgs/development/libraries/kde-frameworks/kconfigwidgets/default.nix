@@ -1,12 +1,12 @@
 {
-  kdeFramework, lib, ecm,
+  kdeFramework, lib, extra-cmake-modules,
   kauth, kcodecs, kconfig, kdoctools, kguiaddons, ki18n, kwidgetsaddons
 }:
 
 kdeFramework {
   name = "kconfigwidgets";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     kauth kconfig kcodecs kguiaddons ki18n kwidgetsaddons
   ];

@@ -1,6 +1,6 @@
 {
   kdeDerivation, kdeWrapper, fetchFromGitHub, lib,
-  ecm, kdoctools, kconfig, kinit, kjsembed,
+  extra-cmake-modules, kdoctools, kconfig, kinit, kjsembed,
   taglib, exiv2, podofo
 }:
 
@@ -25,7 +25,7 @@ let
     };
 
     buildInputs = [ taglib exiv2 podofo ];
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [ kconfig kinit kjsembed ];
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, standardPatch, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,21 +14,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtx11extras
-    qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
+    qtx11extras
+    qttools
+    qtsvg
+    kwindowsystem
+    liblxqt
+    libqtxdg
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
-  postPatch = lxqt.standardPatch;
+  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "Dialogue window providing information about LXQt and the system it's running on";

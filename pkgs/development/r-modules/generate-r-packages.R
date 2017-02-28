@@ -4,7 +4,7 @@ library(parallel)
 cl <- makeCluster(10)
 
 rVersion <- paste(R.Version()$major, strsplit(R.Version()$minor, ".", fixed=TRUE)[[1]][1], sep=".")
-snapshotDate <- Sys.Date()
+snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/bioc/src/contrib/")
                   , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/annotation/src/contrib/")
@@ -45,16 +45,20 @@ nixPrefetch <- function(name, version) {
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
+    name <- ifelse(name == "import", "r_import", name)
     attr <- gsub(".", "_", name, fixed=TRUE)
+    options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
                     , if (is.na(imports)) "" else gsub("[ \t\n]+", "", imports)
                     , if (is.na(linkingTo)) "" else gsub("[ \t\n]+", "", linkingTo)
                     , sep=","
                     )
     depends <- unlist(strsplit(depends, split=",", fixed=TRUE))
-    depends <- sapply(depends, gsub, pattern="([^ \t\n(]+).*", replacement="\\1")
-    depends <- sapply(depends, gsub, pattern=".", replacement="_", fixed=TRUE)
+    depends <- lapply(depends, gsub, pattern="([^ \t\n(]+).*", replacement="\\1")
+    depends <- lapply(depends, gsub, pattern=".", replacement="_", fixed=TRUE)
     depends <- depends[depends %in% knownPackages]
+    depends <- lapply(depends, function(d) ifelse(d == "import", "r_import", d))
+    depends <- paste(depends)
     depends <- paste(sort(unique(depends)), collapse=" ")
     paste0("  ", attr, " = derive2 { name=\"", name, "\"; version=\"", version, "\"; sha256=\"", sha256, "\"; depends=[", depends, "]; };")
 }
