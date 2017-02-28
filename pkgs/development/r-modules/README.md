@@ -87,6 +87,8 @@ this into your user profile.
 ## Updating the package set
 
 ```bash
+nix-shell generate-shell.nix
+
 Rscript generate-r-packages.R cran  > cran-packages.nix.new
 mv cran-packages.nix.new cran-packages.nix
 

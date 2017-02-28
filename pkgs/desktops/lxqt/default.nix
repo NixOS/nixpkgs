@@ -1,13 +1,11 @@
-{ pkgs, newScope, fetchFromGitHub }:
+{ pkgs, makeScope, libsForQt5, fetchFromGitHub }:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
+  packages = self: with self; {
 
     # For compiling information, see:
     # - https://github.com/lxde/lxqt/wiki/Building-from-source
-  
+
     standardPatch = ''
       for file in $(find . -name CMakeLists.txt); do
         substituteInPlace $file \
@@ -57,7 +55,7 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./optional/qterminal { };
-    compton-conf = callPackage ./optional/compton-conf { };
+    compton-conf = pkgs.qt5.callPackage ./optional/compton-conf { };
     obconf-qt = callPackage ./optional/obconf-qt { };
     lximage-qt = callPackage ./optional/lximage-qt { };
     qps = callPackage ./optional/qps { };
@@ -66,14 +64,14 @@ let
 
     preRequisitePackages = [
       pkgs.gvfs # virtual file systems support for PCManFM-QT
-      pkgs.kde5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
-      pkgs.kde5.libkscreen # provides plugins for screen management software
+      pkgs.libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
+      pkgs.libsForQt5.libkscreen # provides plugins for screen management software
       pkgs.libfm
       pkgs.libfm-extra
       pkgs.lxmenu-data
       pkgs.menu-cache
       pkgs.openbox # default window manager
-      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
+      qt5.qtsvg # provides QT5 plugins for svg icons
     ];
 
     corePackages = [
@@ -120,7 +118,7 @@ let
       qlipper
 
       ### Default icon theme
-      pkgs.kde5.oxygen-icons5
+      pkgs.oxygen-icons5
 
       ### Screen saver
       pkgs.xscreensaver
@@ -128,4 +126,4 @@ let
 
   };
 
-in self
+in makeScope libsForQt5.newScope packages

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ecm, makeQtWrapper
+{ stdenv, fetchurl, cmake, extra-cmake-modules, makeQtWrapper
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dgsgji14l5zvxny36hrfsp889fsfrsbbn9bg57m18404xp903kg";
   };
 
-  nativeBuildInputs = [ cmake ecm makeQtWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules makeQtWrapper ];
 
   patches = [ ./0001-Disable-fno-operator-names.patch ];
 

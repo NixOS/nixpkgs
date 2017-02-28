@@ -689,6 +689,10 @@ self: super: {
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
+  gtk =
+    if pkgs.stdenv.isDarwin
+    then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
+    else super.gtk;
 
   # https://github.com/commercialhaskell/stack/issues/3001
   stack = doJailbreak super.stack;

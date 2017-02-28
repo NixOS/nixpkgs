@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ecm
+{ stdenv, fetchurl, cmake, extra-cmake-modules
 , karchive, kcrash, ki18n, kio, solid
 , boost, gmp, qca-qt5, libgcrypt
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake ecm ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ karchive kcrash ki18n kio solid qca-qt5 libgcrypt ];
 
   propagatedBuildInputs = [ gmp boost ];

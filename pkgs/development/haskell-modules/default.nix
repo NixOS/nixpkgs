@@ -6,12 +6,13 @@
 
 let
 
-  inherit (stdenv.lib) fix' extends makeExtensible;
+  inherit (stdenv.lib) fix' extends makeOverridable makeExtensible;
+  inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
 
   haskellPackages = self:
     let
 
-      mkDerivation = pkgs.callPackage ./generic-builder.nix {
+      mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
         jailbreak-cabal = if (self.ghc.cross or null) != null
@@ -37,9 +38,7 @@ let
         });
       };
 
-      overrideCabal = drv: f: drv.override (args: args // {
-        mkDerivation = drv: args.mkDerivation (drv // f drv);
-      });
+      mkDerivation = makeOverridable mkDerivationImpl;
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
         overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;

@@ -4,14 +4,14 @@ with lib;
 
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
-let version = "3.3.5"; in
+let version = "3.3.6-pl1"; in
 
 stdenv.mkDerivation rec {
   name = "fftw-${precision}-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
-    sha256 = "1kwbx92ps0r7s2mqy7lxbxanslxdzj7dp7r7gmdkzv1j8yqf3kwf";
+    sha256 = "0g8qk98lgq770ixdf7n36yd5xjsgm2v3wzvnphwmhy6r4y2amx0y";
   };
 
   outputs = [ "out" "dev" "doc" ]; # it's dev-doc only

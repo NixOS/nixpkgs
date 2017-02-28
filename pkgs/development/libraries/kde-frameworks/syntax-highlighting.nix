@@ -1,9 +1,10 @@
 { kdeFramework, lib
-, ecm, perl
+, extra-cmake-modules, perl, qtbase, qttools
 }:
 
 kdeFramework {
   name = "syntax-highlighting";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm perl ];
+  nativeBuildInputs = [ extra-cmake-modules perl qttools ];
+  buildInputs = [ qtbase ];
 }

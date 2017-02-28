@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem
 , libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
-, gstreamer, gst_plugins_base, gst_plugins_good, gst_ffmpeg, gmp, ffmpeg
+, gstreamer, gst-plugins-base, gst-plugins-good, gst-ffmpeg, gmp, ffmpeg
 , libpulseaudio
 , mediaSupport ? false
 }:
@@ -11,12 +11,12 @@ let
     stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
   ] ++ stdenv.lib.optionals mediaSupport [
-    gstreamer gst_plugins_base gmp ffmpeg
+    gstreamer gst-plugins-base gmp ffmpeg
     libpulseaudio
   ]);
 
   # Ignored if !mediaSupport
-  gstPlugins = [ gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg ];
+  gstPlugins = [ gstreamer gst-plugins-base gst-plugins-good gst-ffmpeg ];
 
   gstPluginsPath = stdenv.lib.concatMapStringsSep ":" (x:
     "${x}/lib/gstreamer-0.10") gstPlugins;

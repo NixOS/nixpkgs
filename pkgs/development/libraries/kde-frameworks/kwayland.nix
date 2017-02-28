@@ -1,13 +1,14 @@
 { kdeFramework
-, ecm
-, wayland
+, extra-cmake-modules
+, qtbase, wayland
 }:
 
 kdeFramework {
   name = "kwayland";
   nativeBuildInputs = [
-    ecm
+    extra-cmake-modules
   ];
+  buildInputs = [ qtbase ];
   propagatedBuildInputs = [
     wayland
   ];

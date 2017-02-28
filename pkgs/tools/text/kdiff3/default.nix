@@ -1,6 +1,6 @@
 {
   kdeDerivation, kdeWrapper, lib, fetchgit,
-  ecm, kdoctools, kconfig, kinit, kparts
+  extra-cmake-modules, kdoctools, kconfig, kinit, kparts
 }:
 
 let
@@ -18,7 +18,7 @@ let
 
     preConfigure = "cd kdiff3";
 
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
     propagatedBuildInputs = [ kconfig kinit kparts ];
 

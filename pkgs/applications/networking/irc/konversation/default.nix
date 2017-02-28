@@ -1,7 +1,7 @@
 { kdeDerivation
 , lib
 , fetchurl
-, ecm
+, extra-cmake-modules
 , kbookmarks
 , karchive
 , kconfig
@@ -64,7 +64,7 @@ let
     ];
 
     nativeBuildInputs = [
-      ecm
+      extra-cmake-modules
       kdoctools
     ];
 
