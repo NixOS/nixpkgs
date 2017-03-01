@@ -151,7 +151,7 @@ let
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     ${pkgs.i2pd}/bin/i2pd \
-      ${if isNull cfg.extIp then "" else "--host="+cfg.extIp} \
+      ${if isNull cfg.address then "" else "--host="+cfg.address} \
       --conf=${i2pdConf} \
       --tunconf=${i2pdTunnelConf}
   '';
@@ -176,11 +176,11 @@ in
         '';
       };
 
-      extIp = mkOption {
+      address = mkOption {
         type = with types; nullOr str;
         default = null;
         description = ''
-          Your external IP.
+          Your external IP or hostname.
         '';
       };
 
