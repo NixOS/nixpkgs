@@ -874,4 +874,7 @@ self: super: {
 
   # fixed in unreleased (2017-03-01) https://github.com/ekmett/machines/commit/5463cf5a69194faaec2345dff36469b4b7a8aef0
   machines = doJailbreak super.machines;
+
+  # fixed in unreleased (2017-03-01) https://github.com/choener/OrderedBits/commit/7b9c6c6c61d9acd0be8b38939915d287df3c53ab
+  OrderedBits = doJailbreak super.OrderedBits;
 }
