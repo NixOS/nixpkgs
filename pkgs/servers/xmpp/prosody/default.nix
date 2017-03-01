@@ -1,6 +1,10 @@
 { stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
-, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, luazlib ? null
-, withLibevent ? true, withZlib ? true }:
+, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, withLibevent ? true, luaevent ? null
+, withZlib ? true, luazlib ? null
+, withDBI ? true, luadbi ? null
+, withExtraLibs ? [ ]
+, withCommunityModules ? [ ] }:
 
 assert withLibevent -> luaevent != null;
 assert withZlib -> luazlib != null;
@@ -10,7 +14,9 @@ with stdenv.lib;
 let
   libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
                 ++ optional withLibevent luaevent
-                ++ optional withZlib luazlib;
+                ++ optional withZlib luazlib
+                ++ optional withDBI luadbi
+                ++ withExtraLibs;
   getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
   getLuaPath  = lib : getPath lib "lua";
   getLuaCPath = lib : getPath lib "so";
@@ -28,14 +34,12 @@ stdenv.mkDerivation rec {
   };
 
   communityModules = fetchhg {
-    url = "http://prosody-modules.googlecode.com/hg/";
-    rev = "4b55110b0aa8";
-    sha256 = "0010x2rl9f9ihy2nwqan2jdlz25433srj2zna1xh10490mc28hij";
+    url = "https://hg.prosody.im/prosody-modules";
+    rev = "590ac12b7671";
+    sha256 = "02f3nmvbidm2f32v6kvc1ljmslysgk0ab2lpg91szy0agmmj5xja";
   };
 
-  buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ]
-                ++ optional withLibevent luaevent
-                ++ optional withZlib luazlib;
+  buildInputs = [ lua5 makeWrapper libidn openssl ];
 
   configureFlags = [
     "--ostype=linux"
@@ -44,7 +48,9 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-      cp $communityModules/mod_websocket/mod_websocket.lua $out/lib/prosody/modules/
+      ${concatMapStringsSep "\n" (module: ''
+        cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
+      '') withCommunityModules}
       wrapProgram $out/bin/prosody \
         --set LUA_PATH '${luaPath};' \
         --set LUA_CPATH '${luaCPath};'
