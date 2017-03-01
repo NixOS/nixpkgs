@@ -8,6 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, libmysql, postgresql
 , fetchFromGitHub, libmpack
 }:
 
@@ -129,6 +130,34 @@ let
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
       platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
+    };
+  };
+
+  luadbi = buildLuaPackage rec {
+    name = "luadbi-${version}";
+    version = "0.5";
+    src = fetchurl {
+      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/luadbi/luadbi.${version}.tar.gz";
+      sha256 = "07ikxgxgfpimnwf7zrqwcwma83ss3wm2nzjxpwv2a1c0vmc684a9";
+    };
+    sourceRoot = ".";
+
+    buildInputs = [ libmysql postgresql sqlite ];
+
+    NIX_CFLAGS_COMPILE = [
+      "-I${libmysql.dev}/include/mysql"
+      "-I${postgresql}/include/server"
+    ];
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p DBI.lua *.so $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://code.google.com/archive/p/luadbi/";
+      platforms = stdenv.lib.platforms.unix;
+      maintainers = with maintainers; [ sshishk ];
     };
   };
 
