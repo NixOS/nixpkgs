@@ -14333,6 +14333,11 @@ with pkgs;
   lilyterm = callPackage ../applications/misc/lilyterm {
     inherit (gnome2) vte;
     gtk = gtk2;
+    flavour = "stable";
+  };
+
+  lilyterm-git = lilyterm.override {
+    flavour = "git";
   };
 
   lumail = callPackage ../applications/networking/mailreaders/lumail { };
