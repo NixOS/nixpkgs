@@ -179,6 +179,5 @@ in {
 <xi:include href="option-types.xml" />
 <xi:include href="option-def.xml" />
 <xi:include href="meta-attributes.xml" />
-<xi:include href="replace-modules.xml" />
 
 </chapter>
