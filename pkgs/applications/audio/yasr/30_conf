@@ -1,22 +1,18 @@
-Index: yasr/yasr.conf
-===================================================================
---- yasr.orig/yasr.conf	2008-01-31 14:01:50.000000000 +0100
-+++ yasr/yasr.conf	2012-01-28 21:43:09.027710410 +0100
-@@ -55,13 +55,13 @@ cursor tracking=full
- #synthesizer=doubletalk
- #synthesizer=bns
- #synthesizer=apollo
--synthesizer=emacspeak server
--#synthesizer=speech dispatcher
-+#synthesizer=emacspeak server
-+synthesizer=speech dispatcher
+diff --git a/yasr.conf b/yasr.conf
+index 1e07fc6..72f5922 100644
+--- a/yasr.conf
++++ b/yasr.conf
+@@ -59,11 +59,11 @@ synthesizer=emacspeak server
+ #synthesizer=speech dispatcher
  #synthesizer port=S0
  #synthesizer port=l0
 -synthesizer port=|/usr/local/bin/eflite
-+#synthesizer port=|/usr/local/bin/eflite
++synthesizer port=|eflite
  # Below line appropriate for Speech Dispatcher in its default configuration
--#synthesizer port=127.0.0.1:6560
-+synthesizer port=127.0.0.1:6560
+ #synthesizer port=127.0.0.1:6560
  key echo=off
- shell=/bin/bash
+-shell=/bin/bash
++shell=/bin/sh
  special=off
+ up and down arrows=speak line
+ DisableKey=6925
