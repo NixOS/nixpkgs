@@ -17,7 +17,7 @@ let
       GeoIPv6File ${pkgs.tor.geoip}/share/tor/geoip6
     ''}
 
-    ${optint "ControlPort" cfg.controlPort}
+    ${optint "ControlPort" (toString cfg.controlPort)}
   ''
   # Client connection config
   + optionalString cfg.client.enable  ''
@@ -27,7 +27,7 @@ let
   ''
   # Relay config
   + optionalString cfg.relay.enable ''
-    ORPort ${cfg.relay.portSpec}
+    ORPort ${toString cfg.relay.port}
     ${opt "Address" cfg.relay.address}
     ${opt "Nickname" cfg.relay.nickname}
     ${opt "ContactInfo" cfg.relay.contactInfo}
@@ -56,7 +56,7 @@ let
   + concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v: ''
     HiddenServiceDir ${torDirectory}/onion/${v.name}
     ${flip concatMapStrings v.map (p: ''
-      HiddenServicePort ${p.port} ${p.destination}
+      HiddenServicePort ${toString p.port} ${p.destination}
     '')}
   ''))
   + cfg.extraConfig;
@@ -98,7 +98,7 @@ in
       };
 
       controlPort = mkOption {
-        type = types.nullOr types.int;
+        type = types.nullOr (types.either types.int types.str);
         default = null;
         example = 9051;
         description = ''
@@ -185,7 +185,7 @@ in
             Setting this to true requires setting
             <option>services.tor.relay.role</option>
             and
-            <option>services.tor.relay.portSpec</option>
+            <option>services.tor.relay.port</option>
             options.
           '';
         };
@@ -307,10 +307,10 @@ in
 
                 <para>
                   Switching to this role after measurable time in
-                  "bridge" role is pretty useless as some Tor users would have
-                  learned about your node already.
-                  In the latter case you can still change
-                  <option>portSpec</option> option.
+                  "bridge" role is pretty useless as some Tor users
+                  would have learned about your node already. In the
+                  latter case you can still change
+                  <option>port</option> option.
                 </para>
 
                 <para>
@@ -403,9 +403,9 @@ in
           '';
         };
 
-        portSpec = mkOption {
-          type    = types.str;
-          example = "143";
+        port = mkOption {
+          type    = types.either types.int types.str;
+          example = 143;
           description = ''
             What port to advertise for Tor connections. This corresponds to the
             <literal>ORPort</literal> section in the Tor manual; see
@@ -477,8 +477,8 @@ in
         default = {};
         example = literalExample ''
           { "my-hidden-service-example".map = [
-              { port = "22"; }                   # map ssh port to this machine's ssh
-              { port = "80";  toPort = "8080"; } # map http port to whatever runs on 8080
+              { port = 22; }                # map ssh port to this machine's ssh
+              { port = 80; toPort = 8080; } # map http port to whatever runs on 8080
               { port = "sip"; toHost = "mail.example.com"; toPort = "imap"; } # because we can
             ];
           }
@@ -506,8 +506,8 @@ in
                  options = {
 
                    port = mkOption {
-                     type = types.str;
-                     example = "80";
+                     type = types.either types.int types.str;
+                     example = 80;
                      description = ''
                        Hidden service port to "bind to".
                      '';
@@ -526,8 +526,8 @@ in
                    };
 
                    toPort = mkOption {
-                     type = types.str;
-                     example = "8080";
+                     type = types.either types.int types.str;
+                     example = 8080;
                      description = "Mapping destination port.";
                    };
 
@@ -535,7 +535,7 @@ in
 
                  config = {
                    toPort = mkDefault config.port;
-                   destination = mkDefault "${config.toHost}:${config.toPort}";
+                   destination = mkDefault "${config.toHost}:${toString config.toPort}";
                  };
                }));
              };
