@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   name = "simavr-${version}";
-  version = "1.3";
+  version = "1.5";
   enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "buserror";
     repo = "simavr";
-    rev = "51d5fa69f9bc3d62941827faec02f8fbc7e187ab";
-    sha256 = "0k8xwzw9i6xsmf98q43fxhphq0wvflvmzqma1n4jd1ym9wi48lfx";
+    rev = "e0d4de41a72520491a4076b3ed87beb997a395c0";
+    sha256 = "0b2lh6l2niv80dmbm9xkamvnivkbmqw6v97sy29afalrwfxylxla";
   };
 
   buildFlags = "AVR_ROOT=${avrgcclibc}/avr SIMAVR_VERSION=${version}";
