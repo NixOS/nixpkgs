@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "088p9w816s02s64grfs28gai3lnibzdjb9d1jwxzr8smbs2qbbci";
   };
   buildInputs = [ flite alsaLib ];
-  configureFlags = "flite_dir=${flite} --with-audio=alsa";
+  configureFlags = "flite_dir=${flite} --with-audio=alsa --with-vox=cmu_us_kal16";
   patches = [
     ./buf-overflow
     ./cvs-update
