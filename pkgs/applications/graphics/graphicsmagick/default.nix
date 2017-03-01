@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8 }:
+, libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
 let version = "1.3.25"; in
 
@@ -53,7 +53,8 @@ stdenv.mkDerivation {
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
       zlib libtool libwebp
-    ];
+    ]
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   nativeBuildInputs = [ xz ];
 
