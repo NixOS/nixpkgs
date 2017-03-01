@@ -3595,6 +3595,8 @@ with pkgs;
 
   pasystray = callPackage ../tools/audio/pasystray { };
 
+  pebble-sdk = callPackage ../development/mobile/pebblesdk { };
+
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
