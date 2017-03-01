@@ -3055,6 +3055,8 @@ with pkgs;
 
   networkmanagerapplet = newScope gnome2 ../tools/networking/network-manager-applet { };
 
+  networkmanager_dmenu = callPackage ../tools/networking/networkmanager_dmenu  { };
+
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
   newsbeuter-dev = callPackage ../applications/networking/feedreaders/newsbeuter/dev.nix { };
