@@ -1,0 +1,13 @@
+Link with shared libs
+
+--- eflite-0.4.1.orig/Makefile.in
++++ eflite-0.4.1/Makefile.in
+@@ -28,7 +28,7 @@
+ #CFLAGS+= -DDEBUG=2
+ 
+ # For making releases
+-FLITE_LIBS:=-L$(flite_dir)/lib -lflite_$(FL_VOX) -lflite_$(FL_LEX) -lflite_$(FL_LANG) -lflite
++FLITE_LIBS:=-L$(flite_dir)/lib -lflite_$(subst cmu_us_kal16,cmu_us_kal,$(FL_VOX)) -lflite_$(FL_LEX) -lflite_$(FL_LANG) -lflite
+ 
+ eflite: fs.o es.o soccon.o sockopen.o tone.o
+ 	$(CC) $(LDFLAGS) -o $@ $^ -lm $(LIBS) $(FLITE_LIBS) $(AUDIOLIBS)
