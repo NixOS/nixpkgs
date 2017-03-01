@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
+    name = "${pname}-unstable-${version}";
     pname = "cockatrice";
     version = "2015-09-24";
 
