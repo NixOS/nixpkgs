@@ -283,17 +283,16 @@ in
     };
 
     systemd.services.prosody = {
-
       description = "Prosody XMPP server";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "prosody";
+        Type = "forking";
         PIDFile = "/var/lib/prosody/prosody.pid";
         ExecStart = "${pkgs.prosody}/bin/prosodyctl start";
       };
-
     };
 
   };
