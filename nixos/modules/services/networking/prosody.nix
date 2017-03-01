@@ -10,17 +10,22 @@ let
 
     options = {
 
-      # TODO: require attribute
       key = mkOption {
         type = types.path;
-        description = "Path to the key file";
+        description = "Path to the key file.";
       };
 
-      # TODO: require attribute
       cert = mkOption {
         type = types.path;
-        description = "Path to the certificate file";
+        description = "Path to the certificate file.";
       };
+
+      extraOptions = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Extra SSL configuration options.";
+      };
+
     };
   };
 
@@ -112,10 +117,19 @@ let
 
   };
 
-  createSSLOptsStr = o:
-    if o ? key && o ? cert then
-      ''ssl = { key = "${o.key}"; certificate = "${o.cert}"; };''
-    else "";
+  toLua = x:
+    if builtins.isString x then ''"${x}"''
+    else if builtins.isBool x then toString x
+    else if builtins.isInt x then toString x
+    else throw "Invalid Lua value";
+
+  createSSLOptsStr = o: ''
+    ssl = {
+      key = "${o.key}";
+      certificate = "${o.cert}";
+      ${concatStringsSep "\n" (mapAttrsToList (name: value: "${name} = ${toLua value};") o.extraOptions)}
+    };
+  '';
 
   vHostOpts = { ... }: {
 
