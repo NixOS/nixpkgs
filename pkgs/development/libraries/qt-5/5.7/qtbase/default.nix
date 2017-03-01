@@ -228,6 +228,29 @@ stdenv.mkDerivation {
               done
           popd
       fi
+
+      # fixup .pc file (where to find 'moc' etc.)
+      sed "s|^host_bins=.*|host_bins=$dev/bin|" -i "$dev/lib/pkgconfig/Qt5Core.pc"
+    ''
+    # Don't move .prl files on darwin because they end up in
+    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
+    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
+    # are in lib, and so do not cause a subsequent recreation of deep
+    # framework directory trees.
+    + lib.optionalString stdenv.isDarwin ''
+      fixDarwinDylibNames_rpath() {
+        local flags=()
+
+        for fn in "$@"; do
+          flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
+        done
+
+        for fn in "$@"; do
+          echo "$fn: fixing dylib"
+          install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
+        done
+      }
+      fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
     '';
 
   inherit lndir;
