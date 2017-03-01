@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, libmysql, postgresql
+, libmysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack
 }:
 
@@ -71,6 +71,37 @@ let
       maintainers = with maintainers; [ flosse ];
     };
   };
+
+  luacyrussasl = buildLuaPackage rec {
+    version = "1.1.0";
+    name = "lua-cyrussasl-${version}";
+    src = fetchFromGitHub {
+      owner = "JorjBauer";
+      repo = "lua-cyrussasl";
+      rev = "v${version}";
+      sha256 = "14kzm3vk96k2i1m9f5zvpvq4pnzaf7s91h5g4h4x2bq1mynzw2s1";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        CFLAGS="-O2 -fPIC"
+        LDFLAGS="-O -shared -fpic -lsasl2"
+        LUAPATH="$out/share/lua/${lua.luaversion}"
+        CPATH="$out/lib/lua/${lua.luaversion}"
+      );
+      mkdir -p $out/{share,lib}/lua/${lua.luaversion}
+    '';
+
+    buildInputs = [ cyrus_sasl ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/JorjBauer/lua-cyrussasl";
+      description = "Cyrus SASL library for Lua 5.1+";
+      license = licenses.bsd3;
+    };
+  };
+
+
 
   luaevent = buildLuaPackage rec {
     version = "0.4.4";
@@ -156,7 +187,6 @@ let
     meta = with stdenv.lib; {
       homepage = "https://code.google.com/archive/p/luadbi/";
       platforms = stdenv.lib.platforms.unix;
-      maintainers = with maintainers; [ sshishk ];
     };
   };
 
