@@ -256,9 +256,11 @@ let
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
     version = "3.0-rc1";
-    src = fetchurl {
-      url = "https://github.com/diegonehab/luasocket/archive/v${version}.tar.gz";
-      sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
+    src = fetchFromGitHub {
+      owner = "diegonehab";
+      repo = "luasocket";
+      rev = "v${version}";
+      sha256 = "1chs7z7a3i3lck4x7rz60ziwbf793gw169hpjdfca8y4yf1hzsxk";
     };
 
     patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -284,14 +286,18 @@ let
   luazip = buildLuaPackage rec {
     name = "zip-${version}";
     version = "1.2.3";
-    src = fetchzip {
-      url = "https://github.com/luaforge/luazip/archive/0b8f5c958e170b1b49f05bc267bc0351ad4dfc44.zip";
-      sha256 = "0zrrwhmzny5zbpx91bjbl77gzkvvdi3qhhviliggp0aj8w3faxsr";
+    src = fetchFromGitHub {
+      owner = "luaforge";
+      repo = "luazip";
+      rev = "v${stdenv.lib.replaceChars ["."] ["_"] version}";
+      sha256 = "07gqh514h6a27n68dckhr74j1drmkc1agnvs95dsbghl54v3v9q1";
     };
+
     buildInputs = [ unzip zziplib ];
     patches = [ ../development/lua-modules/zip.patch ];
     # does not currently work under lua 5.2
     disabled = isLua52;
+
     meta = {
       homepage = "https://github.com/luaforge/luazip";
       platforms = stdenv.lib.platforms.linux;
