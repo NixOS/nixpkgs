@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  doCheck = withRecommendedPackages;
+  doCheck = true;
+  preCheck = "bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 
