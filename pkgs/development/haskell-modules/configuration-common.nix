@@ -880,4 +880,6 @@ self: super: {
 
   # https://github.com/haskell-distributed/rank1dynamic/issues/17
   rank1dynamic = doJailbreak super.rank1dynamic;
+
+  cabal-lenses = doJailbreak super.cabal-lenses;
 }
