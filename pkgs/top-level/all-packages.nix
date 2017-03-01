@@ -2433,6 +2433,8 @@ in
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
+  
+  libmesode = callPackage ../development/libraries/libmesode { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
