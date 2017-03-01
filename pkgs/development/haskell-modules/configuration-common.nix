@@ -877,4 +877,7 @@ self: super: {
 
   # fixed in unreleased (2017-03-01) https://github.com/choener/OrderedBits/commit/7b9c6c6c61d9acd0be8b38939915d287df3c53ab
   OrderedBits = doJailbreak super.OrderedBits;
+
+  # https://github.com/haskell-distributed/rank1dynamic/issues/17
+  rank1dynamic = doJailbreak super.rank1dynamic;
 }
