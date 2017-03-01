@@ -636,7 +636,9 @@ with pkgs;
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
-  blitz = callPackage ../development/libraries/blitz { };
+  blitz = callPackage ../development/libraries/blitz {
+    boost = boost160;
+  };
 
   blockdiag = pythonPackages.blockdiag;
 
