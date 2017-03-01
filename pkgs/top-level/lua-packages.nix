@@ -253,12 +253,12 @@ let
   };
 
   lpty = buildLuaPackage rec {
+    version = "1.2.1";
     name = "lpty-${version}";
-    version = "1.1.1";
 
     src = fetchurl {
-      url = "http://www.tset.de/downloads/lpty-1.1-1.tar.gz";
-      sha256 = "0d4ffda654dcf37dd8c99bcd100d0ee0dde7782cbd0ba9200ef8711c5cab02f1";
+      url = "http://www.tset.de/downloads/lpty-${version}-1.tar.gz";
+      sha256 = "0rgvbpymcgdkzdwfag607xfscs9xyqxg0dj0qr5fv906mi183gs6";
     };
 
     preBuild = ''
