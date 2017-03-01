@@ -52,19 +52,14 @@ let
       ''}
     ''}
   ''
-  + hiddenServices
+  # Hidden services
+  + concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v: ''
+    HiddenServiceDir ${torDirectory}/onion/${v.name}
+    ${flip concatMapStrings v.map (p: ''
+      HiddenServicePort ${p.port} ${p.destination}
+    '')}
+  ''))
   + cfg.extraConfig;
-
-  hiddenServices = concatStrings (mapAttrsToList (hiddenServiceDir: hs:
-    let
-      hsports = concatStringsSep "\n" (map mkHiddenServicePort hs.hiddenServicePorts);
-    in
-      "HiddenServiceDir ${hiddenServiceDir}\n${hsports}\n${hs.extraConfig}\n"
-    ) cfg.hiddenServices);
-
-    mkHiddenServicePort = hsport: let
-      trgt = optionalString (hsport.target != null) (" " + hsport.target);
-    in "HiddenServicePort ${toString hsport.virtualPort}${trgt}";
 
   torRcFile = pkgs.writeText "torrc" torRc;
 
@@ -452,74 +447,123 @@ in
       };
 
       hiddenServices = mkOption {
-        type = types.attrsOf (types.submodule ({
+        description = ''
+          A set of static hidden services that terminate their Tor
+          circuits at this node.
+
+          Every element in this set declares a virtual onion host.
+
+          You can specify your onion address by putting corresponding
+          private key to an appropriate place in ${torDirectory}.
+
+          For services without private keys in ${torDirectory} Tor
+          daemon will generate random key pairs (which implies random
+          onion addresses) on restart. The latter could take a while,
+          please be patient.
+
+          <note><para>
+            Hidden services can be useful even if you don't intend to
+            actually <emphasis>hide</emphasis> them, since they can
+            also be seen as a kind of NAT traversal mechanism.
+
+            E.g. the example will make your sshd, whatever runs on
+            "8080" and your mail server available from anywhere where
+            the Tor network is available (which, with the help from
+            bridges, is pretty much everywhere), even if both client
+            and server machines are behind NAT you have no control
+            over.
+          </para></note>
+        '';
+        default = {};
+        example = literalExample ''
+          { "my-hidden-service-example".map = [
+              { port = "22"; }                   # map ssh port to this machine's ssh
+              { port = "80";  toPort = "8080"; } # map http port to whatever runs on 8080
+              { port = "sip"; toHost = "mail.example.com"; toPort = "imap"; } # because we can
+            ];
+          }
+        '';
+        type = types.loaOf (types.submodule ({name, config, ...}: {
           options = {
-            hiddenServicePorts = mkOption {
-              type = types.listOf (types.submodule {
-                options = {
-                  virtualPort = mkOption {
-                    type = types.int;
-                    example = 80;
-                    description = "Virtual port.";
-                  };
-                  target = mkOption {
-                    type = types.nullOr types.str;
-                    default = null;
-                    example = "127.0.0.1:8080";
-                    description = ''
-                      Target virtual Port shall be mapped to.
 
-                      You may override the target port, address, or both by
-                      specifying a target of addr, port, addr:port, or
-                      unix:path. (You can specify an IPv6 target as
-                      [addr]:port. Unix paths may be quoted, and may use
-                      standard C escapes.)
-                    '';
-                  };
-                };
-              });
-              example = [ { virtualPort = 80; target = "127.0.0.1:8080"; } { virtualPort = 6667; } ];
-              description = ''
-                If target is <literal>null</literal> the virtual port is mapped
-                to the same port on 127.0.0.1 over TCP. You may use
-                <literal>target</literal> to overwrite this behaviour (see
-                description of target).
+             name = mkOption {
+               type = types.str;
+               description = ''
+                 Name of this tor hidden service.
 
-                This corresponds to the <literal>HiddenServicePort VIRTPORT
-                [TARGET]</literal> option by looking at the tor manual
-                <citerefentry><refentrytitle>tor</refentrytitle>
-                <manvolnum>1</manvolnum></citerefentry> for more information.
-              '';
-            };
-            extraConfig = mkOption {
-              type = types.str;
-              default = "";
-              description = ''
-                Extra configuration. Contents will be added in the current
-                hidden service context.
-              '';
-            };
+                 This is purely descriptive.
+
+                 After restarting Tor daemon you should be able to
+                 find your .onion address in
+                 <literal>${torDirectory}/onion/$name/hostname</literal>.
+               '';
+             };
+
+             map = mkOption {
+               default = [];
+               description = "Port mapping for this hidden service.";
+               type = types.listOf (types.submodule ({config, ...}: {
+                 options = {
+
+                   port = mkOption {
+                     type = types.str;
+                     example = "80";
+                     description = ''
+                       Hidden service port to "bind to".
+                     '';
+                   };
+
+                   destination = mkOption {
+                     internal = true;
+                     type = types.str;
+                     description = "Forward these connections where?";
+                   };
+
+                   toHost = mkOption {
+                     type = types.str;
+                     default = "127.0.0.1";
+                     description = "Mapping destination host.";
+                   };
+
+                   toPort = mkOption {
+                     type = types.str;
+                     example = "8080";
+                     description = "Mapping destination port.";
+                   };
+
+                 };
+
+                 config = {
+                   toPort = mkDefault config.port;
+                   destination = mkDefault "${config.toHost}:${config.toPort}";
+                 };
+               }));
+             };
+
+          };
+
+          config = {
+            name = mkDefault name;
           };
         }));
-        default = {};
-        example = {
-          "/var/lib/tor/webserver" = {
-            hiddenServicePorts = [ { virtualPort = 80; } ];
-          };
-        };
-        description = ''
-          Configure hidden services.
-
-          Please consult the tor manual
-          <citerefentry><refentrytitle>tor</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for a more detailed
-          explanation. (search for 'HIDDEN').
-        '';
       };
     };
   };
 
   config = mkIf cfg.enable {
+    # Not sure if `cfg.relay.role == "private-bridge"` helps as tor
+    # sends a lot of stats
+    warnings = optional (cfg.relay.enable && cfg.hiddenServices != {})
+      ''
+        Running Tor hidden services on a public relay makes the
+        presence of hidden services visible through simple statistical
+        analysis of publicly available data.
+
+        You can safely ignore this warning if you don't intend to
+        actually hide your hidden services. In either case, you can
+        always create a container/VM with a separate Tor daemon instance.
+      '';
+
     users.extraGroups.tor.gid = config.ids.gids.tor;
     users.extraUsers.tor =
       { description = "Tor Daemon User";
@@ -538,9 +582,13 @@ in
         restartTriggers = [ torRcFile ];
 
         # Translated from the upstream contrib/dist/tor.service.in
+        preStart = ''
+          install -o tor -g tor -d ${torDirectory}/onion
+          ${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config
+        '';
+
         serviceConfig =
           { Type         = "simple";
-            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
             ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile} --RunAsDaemon 0";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
