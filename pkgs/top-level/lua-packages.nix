@@ -388,6 +388,8 @@ let
       );
     '';
 
+    installTargets = [ "install" "install-unix" ];
+
     meta = with stdenv.lib; {
       description = "Network support for Lua";
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
