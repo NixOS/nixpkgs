@@ -57,9 +57,12 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
 
   inherit pythonPath;
 
-  # patch python interpreter to write null timestamps when compiling python files
-  # this way python doesn't try to update them when we freeze timestamps in nix store
+
+  # Determinism: The interpreter is patched to write null timestamps when compiling python files.
+  # This way python doesn't try to update them when we freeze timestamps in nix store.
   DETERMINISTIC_BUILD=1;
+  # Determinism: We fix the hashes of str, bytes and datetime objects.
+  PYTHONHASHSEED = 0;
 
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]

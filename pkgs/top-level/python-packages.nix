@@ -20325,12 +20325,12 @@ in {
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.1.3";
+    version = "2.2.0";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/Pygments/${name}.tar.gz";
-      sha256 = "10axnp2wpjnq9g8wg53fx0c70dfxqrz498jyz8mrdx9a3flwir48";
+      sha256 = "1k78qdvir1yb1c634nkv6rbga8wv4289xarghmsbbvzhvr311bnv";
     };
 
     propagatedBuildInputs = with self; [ docutils ];
@@ -20807,11 +20807,11 @@ in {
 
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-${version}";
-    version = "2.1.8";
+    version = "2.1.10";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyparsing/${name}.tar.gz";
-      sha256 = "0sy5fxhsvhf0fwk9h6nqlhn1lsjpdmg41jziw5z814rlkydqd903";
+      sha256 = "811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188";
     };
 
     # Not everything necessary to run the tests is included in the distribution
@@ -28976,7 +28976,8 @@ EOF
         --replace 'pyyaml==3.11' 'pyyaml' \
         --replace 'lxml==3.7.1' 'lxml' \
         --replace 'pyopenssl==16.2.0' 'pyopenssl' \
-        --replace 'requests[socks]==2.12.4' 'requests[socks]'
+        --replace 'requests[socks]==2.12.4' 'requests[socks]' \
+        --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0'
     '';
 
     propagatedBuildInputs = with self; [
@@ -31899,10 +31900,10 @@ EOF
   };
 
   packaging = buildPythonPackage rec {
-    name = "packaging-16.7";
+    name = "packaging-16.8";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/packaging/${name}.tar.gz";
-      sha256 = "07h18mrpqs0lv2x4fl43pqi0xj6hdrmrnm6v9q634yliagg6q91f";
+      sha256 = "5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e";
     };
     propagatedBuildInputs = with self; [ pyparsing six ];
     buildInputs = with self; [ pytest pretend ];
