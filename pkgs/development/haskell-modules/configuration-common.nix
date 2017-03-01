@@ -868,4 +868,7 @@ self: super: {
 
   # https://github.com/jswebtools/language-ecmascript/pull/81
   language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # https://github.com/choener/DPutils/pull/1
+  DPutils = doJailbreak super.DPutils;
 }
