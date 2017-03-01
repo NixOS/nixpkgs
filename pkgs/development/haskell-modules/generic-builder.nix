@@ -303,7 +303,7 @@ stdenv.mkDerivation ({
 
   passthru = passthru // {
 
-    inherit pname version ghcEnv haskellBuildInputs;
+    inherit pname version ghcEnv;
 
     isHaskellLibrary = hasActiveLibrary;
 
