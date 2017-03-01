@@ -309,8 +309,10 @@ let
     name = "zlib-${version}";
     version = "1.1";
 
-    src = fetchzip {
-      url = "https://github.com/brimworks/lua-zlib/archive/v${version}.tar.gz";
+    src = fetchFromGitHub {
+      owner = "brimworks";
+      repo = "lua-zlib";
+      rev = "v${version}";
       sha256 = "1520lk4xpf094xn2zallqgqhs0zb4w61l49knv9y8pmhkdkxzzgy";
     };
 
