@@ -12,11 +12,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "http://www.profanity.im/profanity-${version}.tar.gz";
-    sha256 = "0s4njc4rcaii51qw1najxa0fa8bb2fnas00z47y94wdbdsmfhfvq";
+    sha256 = "1f7ylw3mhhnii52mmk40hyc4kqhpvjdr3hmsplzkdhsfww9kflg3";
   };
 
   buildInputs = [
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.devhell ];
+    updateWalker = true;
   };
 }
