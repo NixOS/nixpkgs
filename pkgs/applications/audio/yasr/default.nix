@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.6.9";
   
   src = fetchurl {
-    url = "https://sourceforge.net/projects/yasr/files/yasr/0.6.9/yasr-0.6.9.tar.gz";
+    url = "https://sourceforge.net/projects/yasr/files/yasr/${version}/${name}.tar.gz";
     sha256 = "1prv9r9y6jb5ga5578ldiw507fa414m60xhlvjl29278p3x7rwa1";
   };
   
