@@ -2148,6 +2148,8 @@ with pkgs;
 
   gzrt = callPackage ../tools/compression/gzrt { };
 
+  httplab = callPackage ../tools/networking/httplab { };
+
   partclone = callPackage ../tools/backup/partclone { };
 
   partimage = callPackage ../tools/backup/partimage { };
