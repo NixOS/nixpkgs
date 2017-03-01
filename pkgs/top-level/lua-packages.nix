@@ -106,7 +106,6 @@ let
   luaexpat = buildLuaPackage rec {
     version = "1.3.0";
     name = "expat-${version}";
-    isLibrary = true;
     src = fetchurl {
       url = "https://matthewwild.co.uk/projects/luaexpat/luaexpat-${version}.tar.gz";
       sha256 = "1hvxqngn0wf5642i5p3vcyhg3pmp102k63s9ry4jqyyqc1wkjq6h";
