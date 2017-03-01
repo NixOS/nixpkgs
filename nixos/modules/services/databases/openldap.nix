@@ -68,10 +68,10 @@ in
         ";
         example = literalExample ''
             '''
-            include ${pkgs.openldap.out}/etc/openldap/schema/core.schema
-            include ${pkgs.openldap.out}/etc/openldap/schema/cosine.schema
-            include ${pkgs.openldap.out}/etc/openldap/schema/inetorgperson.schema
-            include ${pkgs.openldap.out}/etc/openldap/schema/nis.schema
+            include ${pkgs.openldap.out}/etc/schema/core.schema
+            include ${pkgs.openldap.out}/etc/schema/cosine.schema
+            include ${pkgs.openldap.out}/etc/schema/inetorgperson.schema
+            include ${pkgs.openldap.out}/etc/schema/nis.schema
 
             database bdb 
             suffix dc=example,dc=org 
