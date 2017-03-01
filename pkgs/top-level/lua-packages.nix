@@ -306,6 +306,8 @@ let
       );
     '';
 
+    installTargets = [ "install" "install-unix" ];
+
     meta = with stdenv.lib; {
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
