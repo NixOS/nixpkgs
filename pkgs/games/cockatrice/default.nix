@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
     name = "${pname}-${version}";
     pname = "cockatrice";
-    version = "2015-09-24";
+    version = "2017-01-20";
 
     src = fetchurl {
         url = "https://github.com/Cockatrice/Cockatrice/archive/${version}-Release.tar.gz";
-        sha256 = "068f93k3bg4cmdm0iyh2vfmk51nnzf3d6g6cvlm5q8dz1zk5nwzf";
+        sha256 = "1gbcn8vffqdagidlamx670jxymhzaw28r4c6aqg3pq0s6by1l65f";
     };
 
     buildInputs = [
