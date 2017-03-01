@@ -353,7 +353,7 @@ in
         };
       };
 
-      proto.httpProxy = mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4446 "";
+      proto.httpProxy = mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4444 "";
       proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "")
       // {
         outproxy = mkOption {
