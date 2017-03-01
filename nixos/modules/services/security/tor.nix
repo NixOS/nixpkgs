@@ -7,7 +7,7 @@ let
   torDirectory = "/var/lib/tor";
 
   opt    = name: value: optionalString (value != null) "${name} ${value}";
-  optint = name: value: optionalString (value != 0)    "${name} ${toString value}";
+  optint = name: value: optionalString (value != null && value != 0)    "${name} ${toString value}";
 
   torRc = ''
     User tor
@@ -28,6 +28,7 @@ let
   # Relay config
   + optionalString cfg.relay.enable ''
     ORPort ${cfg.relay.portSpec}
+    ${opt "Address" cfg.relay.address}
     ${opt "Nickname" cfg.relay.nickname}
     ${opt "ContactInfo" cfg.relay.contactInfo}
 
@@ -36,14 +37,19 @@ let
     ${opt "AccountingMax" cfg.relay.accountingMax}
     ${opt "AccountingStart" cfg.relay.accountingStart}
 
-    ${if cfg.relay.isExit then
+    ${if (cfg.relay.role == "exit") then
         opt "ExitPolicy" cfg.relay.exitPolicy
       else
         "ExitPolicy reject *:*"}
 
-    ${optionalString cfg.relay.isBridge ''
+    ${optionalString (elem cfg.relay.role ["bridge" "private-bridge"]) ''
       BridgeRelay 1
       ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
+      ExtORPort auto
+      ${optionalString (cfg.relay.role == "private-bridge") ''
+        ExtraInfoStatistics 0
+        PublishServerDescriptor 0
+      ''}
     ''}
   ''
   + hiddenServices
@@ -61,6 +67,7 @@ let
     in "HiddenServicePort ${toString hsport.virtualPort}${trgt}";
 
   torRcFile = pkgs.writeText "torrc" torRc;
+
 in
 {
   options = {
@@ -96,8 +103,8 @@ in
       };
 
       controlPort = mkOption {
-        type = types.int;
-        default = 0;
+        type = types.nullOr types.int;
+        default = null;
         example = 9051;
         description = ''
           If set, Tor will accept connections on the specified port
@@ -133,9 +140,10 @@ in
           example = "192.168.0.1:9101";
           description = ''
             Bind to this address to listen for connections from
-            Socks-speaking applications. Same as socksListenAddress
-            but uses weaker circuit isolation to provide performance
-            suitable for a web browser.
+            Socks-speaking applications. Same as
+            <option>socksListenAddress</option> but uses weaker
+            circuit isolation to provide performance suitable for a
+            web browser.
            '';
          };
 
@@ -145,9 +153,9 @@ in
           example = "accept 192.168.0.0/16, reject *";
           description = ''
             Entry policies to allow/deny SOCKS requests based on IP
-            address.  First entry that matches wins. If no SocksPolicy
+            address. First entry that matches wins. If no SocksPolicy
             is set, we accept all (and only) requests from
-            SocksListenAddress.
+            <option>socksListenAddress</option>.
           '';
         };
 
@@ -176,45 +184,147 @@ in
           description = ''
             Whether to enable relaying TOR traffic for others.
 
-            See https://www.torproject.org/docs/tor-doc-relay for details.
+            See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay" />
+            for details.
+
+            Setting this to true requires setting
+            <option>services.tor.relay.role</option>
+            and
+            <option>services.tor.relay.portSpec</option>
+            options.
           '';
         };
 
-        isBridge = mkOption {
-          type = types.bool;
-          default = false;
+        role = mkOption {
+          type = types.enum [ "exit" "relay" "bridge" "private-bridge" ];
           description = ''
-            Bridge relays (or "bridges") are Tor relays that aren't
-            listed in the main directory. Since there is no complete
-            public list of them, even if an ISP is filtering
-            connections to all the known Tor relays, they probably
-            won't be able to block all the bridges.
+            Your role in Tor network. There're several options:
 
-            A bridge relay can't be an exit relay.
+            <variablelist>
+            <varlistentry>
+              <term><literal>exit</literal></term>
+              <listitem>
+                <para>
+                  An exit relay. This allows Tor users to access regular
+                  Internet services through your public IP.
+                </para>
 
-            You need to set relay.enable to true for this option to
-            take effect.
+                <important><para>
+                  Running an exit relay may expose you to abuse
+                  complaints. See
+                  <link xlink:href="https://www.torproject.org/faq.html.en#ExitPolicies" />
+                  for more info.
+                </para></important>
 
-            The bridge is set up with an obfuscated transport proxy.
+                <para>
+                  You can specify which services Tor users may access via
+                  your exit relay using <option>exitPolicy</option> option.
+                </para>
+              </listitem>
+            </varlistentry>
 
-            See https://www.torproject.org/bridges.html.en for more info.
-          '';
-        };
+            <varlistentry>
+              <term><literal>relay</literal></term>
+              <listitem>
+                <para>
+                  Regular relay. This allows Tor users to relay onion
+                  traffic to other Tor nodes, but not to public
+                  Internet.
+                </para>
 
-        isExit = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            An exit relay allows Tor users to access regular Internet
-            services.
+                <important><para>
+                  Note that some misconfigured and/or disrespectful
+                  towards privacy sites will block you even if your
+                  relay is not an exit relay. That is, just being listed
+                  in a public relay directory can have unwanted
+                  consequences.
 
-            Unlike running a non-exit relay, running an exit relay may
-            expose you to abuse complaints. See
-            https://www.torproject.org/faq.html.en#ExitPolicies for
-            more info.
+                  Which means you might not want to use
+                  this role if you browse public Internet from the same
+                  network as your relay, unless you want to write
+                  e-mails to those sites (you should!).
+                </para></important>
 
-            You can specify which services Tor users may access via
-            your exit relay using exitPolicy option.
+                <para>
+                  See
+                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en" />
+                  for more info.
+                </para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term><literal>bridge</literal></term>
+              <listitem>
+                <para>
+                  Regular bridge. Works like a regular relay, but
+                  doesn't list you in the public relay directory and
+                  hides your Tor node behind obfsproxy.
+                </para>
+
+                <para>
+                  Using this option will make Tor advertise your bridge
+                  to users through various mechanisms like
+                  <link xlink:href="https://bridges.torproject.org/" />, though.
+                </para>
+
+                <important>
+                  <para>
+                    WARNING: THE FOLLOWING PARAGRAPH IS NOT LEGAL ADVISE.
+                    Consult with your lawer when in doubt.
+                  </para>
+
+                  <para>
+                    This role should be safe to use in most situations
+                    (unless the act of forwarding traffic for others is
+                    a punishable offence under your local laws, which
+                    would be pretty insane as it would make ISP
+                    illegal).
+                  </para>
+                </important>
+
+                <para>
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  for more info.
+                </para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
+              <term><literal>private-bridge</literal></term>
+              <listitem>
+                <para>
+                  Private bridge. Works like regular bridge, but does
+                  not advertise your node in any way.
+                </para>
+
+                <para>
+                  Using this role means that you won't contribute to Tor
+                  network in any way unless you advertise your node
+                  yourself in some way.
+                </para>
+
+                <para>
+                  Use this if you want to run a private bridge, for
+                  example because you'll give out your bridge address
+                  manually to your friends.
+                </para>
+
+                <para>
+                  Switching to this role after measurable time in
+                  "bridge" role is pretty useless as some Tor users would have
+                  learned about your node already.
+                  In the latter case you can still change
+                  <option>portSpec</option> option.
+                </para>
+
+                <para>
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  for more info.
+                </para>
+              </listitem>
+            </varlistentry>
+            </variablelist>
           '';
         };
 
@@ -268,8 +378,8 @@ in
         };
 
         bandwidthRate = mkOption {
-          type = types.int;
-          default = 0;
+          type = types.nullOr types.int;
+          default = null;
           example = 100;
           description = ''
             Specify this to limit the bandwidth usage of relayed (server)
@@ -278,13 +388,23 @@ in
         };
 
         bandwidthBurst = mkOption {
-          type = types.int;
+          type = types.nullOr types.int;
           default = cfg.relay.bandwidthRate;
           example = 200;
           description = ''
             Specify this to allow bursts of the bandwidth usage of relayed (server)
             traffic. The average usage will still be as specified in relayBandwidthRate.
             Your own traffic is still unthrottled. Units: bytes/second.
+          '';
+        };
+
+        address = mkOption {
+          type    = types.nullOr types.str;
+          default = null;
+          example = "noname.example.com";
+          description = ''
+            The IP address or full DNS name for advertised address of your relay.
+            Leave unset and Tor will guess.
           '';
         };
 
@@ -313,13 +433,15 @@ in
             considered first to last, and the first match wins. If you
             want to _replace_ the default exit policy, end this with
             either a reject *:* or an accept *:*. Otherwise, you're
-            _augmenting_ (prepending to) the default exit
-            policy. Leave commented to just use the default, which is
+            _augmenting_ (prepending to) the default exit policy.
+            Leave commented to just use the default, which is
             available in the man page or at
-            https://www.torproject.org/documentation.html
+            <link xlink:href="https://www.torproject.org/documentation.html" />.
 
-            Look at https://www.torproject.org/faq-abuse.html#TypicalAbuses
-            for issues you might encounter if you use the default exit policy.
+            Look at
+            <link xlink:href="https://www.torproject.org/faq-abuse.html#TypicalAbuses" />
+            for issues you might encounter if you use the default
+            exit policy.
 
             If certain IPs and ports are blocked externally, e.g. by
             your firewall, you should update your exit policy to
@@ -398,12 +520,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = singleton
-      { message = "Can't be both an exit and a bridge relay at the same time";
-        assertion =
-          cfg.relay.enable -> !(cfg.relay.isBridge && cfg.relay.isExit);
-      };
-
     users.extraGroups.tor.gid = config.ids.gids.tor;
     users.extraUsers.tor =
       { description = "Tor Daemon User";
