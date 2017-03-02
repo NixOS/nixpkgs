@@ -71,7 +71,7 @@ in stdenv.mkDerivation (args // {
     (
         cd $sourceRoot
 
-        cargo fetch
+        cargo fetch --frozen
         cargo clean
     )
   '' + (args.postUnpack or "");
