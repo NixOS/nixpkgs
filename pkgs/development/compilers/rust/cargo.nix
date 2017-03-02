@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchgit, file, curl, pkgconfig, python, openssl_1_1_0, cmake, zlib
+{ stdenv, buildEnv, fetchgit, file, curl, pkgconfig, python, openssl_1_0_2, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
 , version, srcRev, srcSha, depsSha256
 , patches ? []}:
@@ -6,7 +6,7 @@
 let
   openssl = buildEnv {
     name = "openssl-env";
-    paths = [ openssl_1_1_0.out openssl_1_1_0.dev ];
+    paths = [ openssl_1_0_2.out openssl_1_0_2.dev ];
   };
 in rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
