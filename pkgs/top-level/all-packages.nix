@@ -10984,9 +10984,7 @@ with pkgs;
 
   unifi = callPackage ../servers/unifi { };
 
-  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix {
-    openssl = openssl_1_0_2;
-  };
+  virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
   virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix { };
 
