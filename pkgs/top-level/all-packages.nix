@@ -2616,7 +2616,6 @@ with pkgs;
 
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
-    openssl = openssl_1_0_2;
   };
 
   nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix {
@@ -2626,7 +2625,6 @@ with pkgs;
 
   nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
     libtool = darwin.cctools;
-    openssl = openssl_1_0_2;
   };
 
   nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix {
