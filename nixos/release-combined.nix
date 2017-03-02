@@ -68,7 +68,7 @@ in rec {
         (all nixos.tests.boot.uefiCdrom)
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
-        (all nixos.tests.hibernate)
+        nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
         (all nixos.tests.ecryptfs)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
