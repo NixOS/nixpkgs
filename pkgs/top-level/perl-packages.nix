@@ -459,6 +459,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  AudioScan = buildPerlPackage rec {
+    name = "Audio-Scan-0.96";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
+      sha256 = "67f45fef6a23b7548f387b675cbf7881bf9da62d7d007cbf90d3a4b851b99eb7";
+    };
+    buildInputs = [ ModuleBuild TestWarn ScalarString DigestCRC DataInteger ];
+    meta = {
+      description = "Fast C metadata and tag reader for all common audio file formats";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   AuthenDecHpwd = buildPerlPackage rec {
     name = "Authen-DecHpwd-2.006";
     src = fetchurl {
