@@ -31,9 +31,7 @@ stdenv.mkDerivation rec {
       --replace "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
   '';
 
-  patches = with lib; [
-    ./libressl-des.diff
-  ] ++ optional (pcsclite != null)
+  patches = with lib; optional (pcsclite != null)
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit pcsclite;
