@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.1.18";
+  version = "2.1.19";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "157rrv3ly9j2k0acz43nhiba5hfl6h7048jvj55wwqjmgsmnyk6h";
+    sha256 = "1w4vccmb5l50lm4yrz9vkdj7whbfvzx543r55362kkj1aqgyvk26";
   };
 
   buildInputs = [
@@ -31,17 +31,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-libusb-include-path.patch
-    # TODO: Remove the following two patches on the next gnupg release after 2.1.18
-    (fetchpatch {
-      name = "scd-Backport-two-fixes-from-master";
-      url = "https://anonscm.debian.org/git/pkg-gnupg/gnupg2.git/plain/debian/patches/0028-scd-Backport-two-fixes-from-master.patch?h=debian/2.1.18-6";
-      sha256 = "01l2s4s7kp6j2f3qd371arq7pfphvncc9k1m63rqm0kyzy9jk20k";
-    })
-    (fetchpatch {
-      name = "scd-Fix-use-case-of-PC-SC";
-      url = "https://anonscm.debian.org/git/pkg-gnupg/gnupg2.git/plain/debian/patches/0029-scd-Fix-use-case-of-PC-SC.patch?h=debian/2.1.18-6";
-      sha256 = "0lxqj614fialbqs2x0z13q5ikq2rc9xwphmkly179qs03d4mawsz";
-    })
   ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
