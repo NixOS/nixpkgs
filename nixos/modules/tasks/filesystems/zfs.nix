@@ -13,12 +13,14 @@ let
   cfgZfs = config.boot.zfs;
   cfgSnapshots = config.services.zfs.autoSnapshot;
   cfgSnapFlags = cfgSnapshots.flags;
+  cfgScrub = config.services.zfs.autoScrub;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
   enableAutoSnapshots = cfgSnapshots.enable;
-  enableZfs = inInitrd || inSystem || enableAutoSnapshots;
+  enableAutoScrub = cfgScrub.enable;
+  enableZfs = inInitrd || inSystem || enableAutoSnapshots || enableAutoScrub;
 
   kernel = config.boot.kernelPackages;
 
@@ -215,6 +217,37 @@ in
         '';
       };
     };
+
+    services.zfs.autoScrub = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enables periodic scrubbing of ZFS pools.
+        '';
+      };
+
+      interval = mkOption {
+        default = "Sun, 02:00";
+        type = types.str;
+        example = "daily";
+        description = ''
+          Systemd calendar expression when to scrub ZFS pools. See
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>.
+        '';
+      };
+
+      pools = mkOption {
+        default = [];
+        type = types.listOf types.str;
+        example = [ "tank" ];
+        description = ''
+          List of ZFS pools to periodically scrub. If empty, all pools
+          will be scrubbed.
+        '';
+      };
+    };
   };
 
   ###### implementation
@@ -280,7 +313,7 @@ in
         zfsSupport = true;
       };
 
-      environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/*";
+      environment.etc."zfs/zed.d".source = "${packages.zfsUser}/etc/zfs/zed.d/";
 
       system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
       environment.systemPackages = [ packages.zfsUser ]
@@ -388,6 +421,32 @@ in
                                 };
                               };
                             }) snapshotNames);
+    })
+
+    (mkIf enableAutoScrub {
+      systemd.services.zfs-scrub = {
+        description = "ZFS pools scrubbing";
+        after = [ "zfs-import.target" ];
+        serviceConfig = {
+          Type = "oneshot";
+        };
+        script = ''
+          ${packages.zfsUser}/bin/zpool scrub ${
+            if cfgScrub.pools != [] then
+              (concatStringsSep " " cfgScrub.pools)
+            else
+              "$(${packages.zfsUser}/bin/zpool list -H -o name)"
+            }
+        '';
+      };
+
+      systemd.timers.zfs-scrub = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = cfgScrub.interval;
+          Persistent = "yes";
+        };
+      };
     })
   ];
 }
