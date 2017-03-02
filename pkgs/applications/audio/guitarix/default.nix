@@ -2,7 +2,7 @@
 , avahi, bluez, boost, eigen, fftw, glib, glib_networking
 , glibmm, gsettings_desktop_schemas, gtkmm2, libjack2
 , ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
-, webkitgtk2, wrapGAppsHook, zita-convolver, zita-resampler
+, webkitgtk, wrapGAppsHook, zita-convolver, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     avahi bluez boost eigen fftw glib glibmm glib_networking.out
     gsettings_desktop_schemas gtkmm2 libjack2 ladspaH librdf
-    libsndfile lilv lv2 serd sord sratom webkitgtk2 zita-convolver
+    libsndfile lilv lv2 serd sord sratom webkitgtk zita-convolver
     zita-resampler
   ];
 
