@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "httping-${version}";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
-    url = "http://www.vanheusden.com/httping/${name}.tgz";
-    sha256 = "1110r3gpsj9xmybdw7w4zkhj3zmn5mnv2nq0ijbvrywbn019zdfs";
+    url = "https://www.vanheusden.com/httping/${name}.tgz";
+    sha256 = "3e895a0a6d7bd79de25a255a1376d4da88eb09c34efdd0476ab5a907e75bfaf8";
   };
 
   buildInputs = [ fftw ncurses openssl ];
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
       the transmission across the network also takes time! So it measures the
       latency of the webserver + network. It supports IPv6.
     '';
+    license     = licenses.agpl3;
     maintainers = with maintainers; [ nckx rickynils ];
-    platforms = platforms.linux;
+    platforms   = platforms.linux;
   };
 }
