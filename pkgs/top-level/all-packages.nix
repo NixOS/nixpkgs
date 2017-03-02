@@ -11134,9 +11134,7 @@ with pkgs;
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptsetup = callPackage ../os-specific/linux/cryptsetup {
-    openssl = openssl_1_1_0;
-  };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
