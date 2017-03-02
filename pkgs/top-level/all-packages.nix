@@ -16493,9 +16493,7 @@ with pkgs;
 
   openrw = callPackage ../games/openrw { };
 
-  openspades = callPackage ../games/openspades {};
-
-  openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
+  openspades = callPackage ../games/openspades { };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
