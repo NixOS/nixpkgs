@@ -73,15 +73,12 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "--enable-default-toolkit=cairo-gtk2"
       "--with-google-api-keyfile=ga"
     ]
+    ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize"
                              "--enable-strip" ])
-    ++ lib.optional enableOfficialBranding "--enable-official-branding"
-    ++ lib.optionals (lib.versionOlder version "48.0") [
-      "--disable-installer"
-      "--disable-javaxpcom"
-      "--disable-content-sandbox-reporter" ];
+    ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
   enableParallelBuilding = true;
 
@@ -110,7 +107,9 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
-
+    '' + lib.optionalString enableGTK3
+      # argv[0] must point to firefox itself
+    ''
       wrapProgram "$out/bin/firefox" \
         --argv0 "$out/bin/.firefox-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
