@@ -4096,9 +4096,7 @@ with pkgs;
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  thc-hydra = callPackage ../tools/security/thc-hydra {
-    openssl = openssl_1_0_2;
-  };
+  thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
