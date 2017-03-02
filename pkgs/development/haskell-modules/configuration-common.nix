@@ -879,6 +879,7 @@ self: super: {
   # https://github.com/haskell-distributed/rank1dynamic/issues/17
   rank1dynamic = doJailbreak super.rank1dynamic;
 
+  # https://github.com/dan-t/cabal-lenses/issues/6
   cabal-lenses = doJailbreak super.cabal-lenses;
 
   # https://github.com/snoyberg/yaml/issues/106
