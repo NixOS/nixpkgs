@@ -27,7 +27,7 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "13.0.5";
+  version = "17.0.0";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "bfcea7e2c801525a60895c8aff11aa68457ee9aa35d01a4638e1f310a3f5ef87";
+    sha256 = "10c4cvm6hhdch0idh2kn7qv1dq6zlw97sc3pz7bssn81f1ckvnrr";
   };
 
   prePatch = "patchShebangs .";
@@ -54,11 +54,6 @@ stdenv.mkDerivation {
     ./symlink-drivers.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/egl/main/egldriver.c \
-      --replace _EGL_DRIVER_SEARCH_DIR '"${driverLink}"'
-  '';
-
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
@@ -69,7 +64,7 @@ stdenv.mkDerivation {
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
   ] ++ (if stdenv.isArm || stdenv.isAarch64 then [
-      "--with-gallium-drivers=nouveau,freedreno,vc4,swrast"
+      "--with-gallium-drivers=nouveau,freedreno,vc4,etnaviv,swrast"
       "--with-dri-drivers=nouveau,swrast"
   ] else [
       "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,swrast"

@@ -99,6 +99,7 @@ in
   }).override {
     buildPhase = "make";
     name = "beetle-saturn";
+    meta.platforms = [ "x86_64-linux" ];
   };
 
   bsnes-mercury = let bname = "bsnes-mercury"; in (mkLibRetroCore rec {

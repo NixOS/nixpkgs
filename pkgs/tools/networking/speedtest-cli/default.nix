@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "speedtest-cli-${version}";
-  version = "0.3.4";
+  version = "1.0.2";
   
-  src = fetchurl {
-    url = "mirror://pypi/s/speedtest-cli/speedtest-cli-${version}.tar.gz";
-    sha256 = "19i671cd815fcv0x7h2m0a493slzwkzn7r926g8myx1srkss0q6d";
+  src = fetchFromGitHub {
+    owner = "sivel";
+    repo = "speedtest-cli";
+    rev = "v${version}";
+    sha256 = "1p7lavw95w3as9b2b55i61mwxdr1b6jj40yly91f9j26ywr5dpkg";
   };
 
   meta = with stdenv.lib; {
@@ -14,6 +16,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Command line interface for testing internet bandwidth using speedtest.net";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [ maintainers.domenkozar ];
+    maintainers = with maintainers; [ domenkozar ndowens ];
   };
 }

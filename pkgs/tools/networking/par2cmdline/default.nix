@@ -1,17 +1,19 @@
-{ stdenv, fetchzip, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name    = "par2cmdline-${version}";
-  version = "0.6.11";
+  version = "0.6.13";
 
-  src = fetchzip {
-    url = "https://github.com/BlackIkeEagle/par2cmdline/archive/v${version}.tar.gz";
-    sha256 = "0maywssv468ia7rf8jyq4axwahgli3nfykl7x3zip503psywjj8a";
+  src = fetchFromGitHub {
+    owner = "Parchive";
+    repo = "par2cmdline";
+    rev = "v${version}";
+    sha256 = "0jxixkc8vid933nph2mvhgz58my42kwjlzbir38hml2xrzq00d8f";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/BlackIkeEagle/par2cmdline;
     description = "PAR 2.0 compatible file verification and repair tool";
     longDescription = ''
@@ -19,8 +21,8 @@ stdenv.mkDerivation rec {
       damage in data files and repair them if necessary. It can be used with
       any kind of file.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.muflax ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.muflax ];
+    platforms = platforms.all;
   };
 }

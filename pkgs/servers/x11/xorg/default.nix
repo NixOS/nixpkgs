@@ -669,11 +669,11 @@ let
   }) // {inherit windowswmproto libX11 libXext xextproto ;};
 
   libX11 = (mkDerivation "libX11" {
-    name = "libX11-1.6.4";
+    name = "libX11-1.6.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.4.tar.bz2;
-      sha256 = "0hg46i6h92pmb7xp1cis2j43zq3fkdz89p0yv35w4vm17az4iixp";
+      url = mirror://xorg/individual/lib/libX11-1.6.5.tar.bz2;
+      sha256 = "0pa3cfp6h9rl2vxmkph65250gfqyki0ccqyaan6bl9d25gdr0f2d";
     };
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
