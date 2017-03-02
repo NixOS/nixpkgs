@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.2.x-module_dir.patch
-    ./libressl.patch
   ];
 
   configureFlags = [
