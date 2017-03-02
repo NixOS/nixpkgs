@@ -1,4 +1,4 @@
-{stdenv,fetchurl,flite,alsaLib}:
+{stdenv,fetchurl,flite,alsaLib,debug ? false}:
 
 stdenv.mkDerivation rec {
   name = "eflite-${version}";
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     ./buf-overflow
     ./cvs-update
     ./link
+    ./format.patch
   ]; # Patches are taken from debian.
-
+  CFLAGS = stdenv.lib.optionalString debug " -DDEBUG=2";
   meta = {
     homepage = http://eflite.sourceforge.net;
     description = "EFlite is a speech server for screen readers";

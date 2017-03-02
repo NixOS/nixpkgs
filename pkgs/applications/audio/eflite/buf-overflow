@@ -16,7 +16,7 @@ Fix buffer overflow
  
    if ((flags & 0xffff) > DEBUG) return;
 -  sprintf(logname, "%s/es.log", getenv("HOME"));
-+  sprintf(logname, sizeof(logname), "%s/es.log", getenv("HOME"));
++  snprintf(logname, sizeof(logname), "%s/es.log", getenv("HOME"));
    va_start(arg, text);
    vsnprintf(buf, 200, text, arg);
    va_end(arg);
