@@ -1,8 +1,11 @@
-{ stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper
+{ stdenv, lib, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
 , ignoreCollisions ? false, withLLVM ? false
 , postBuild ? ""
 , haskellPackages
+, ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
+
+assert ghcLibdir != null -> (ghc.isGhcjs or false);
 
 # This wrapper works only with GHC 6.12 or later.
 assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
@@ -48,7 +51,7 @@ let
                    ++ lib.optional stdenv.isDarwin llvmPackages.clang);
 in
 if paths == [] && !withLLVM then ghc else
-buildEnv {
+symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
@@ -58,14 +61,6 @@ buildEnv {
   inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
-
-    # Work around buildEnv sometimes deciding to make bin a symlink
-    if test -L "$out/bin"; then
-      binTarget="$(readlink -f "$out/bin")"
-      rm "$out/bin"
-      cp -r "$binTarget" "$out/bin"
-      chmod u+w "$out/bin"
-    fi
 
     # wrap compiler executables with correct env variables
 
@@ -102,6 +97,12 @@ buildEnv {
     done
 
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
+    ${# ghcjs will read the ghc_libdir file when resolving plugins.
+      lib.optionalString (isGhcjs && ghcLibdir != null) ''
+      mkdir -p "${libDir}"
+      rm -f "${libDir}/ghc_libdir"
+      printf '%s' '${ghcLibdir}' > "${libDir}/ghc_libdir"
+    ''}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
   passthru = {
