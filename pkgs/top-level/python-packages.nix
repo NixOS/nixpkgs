@@ -18901,6 +18901,8 @@ in {
      };
   };
 
+  proselint = callPackage ../tools/text/proselint { };
+
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
     version = "0.2.4";
