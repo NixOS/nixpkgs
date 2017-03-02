@@ -6963,7 +6963,6 @@ with pkgs;
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
-    openssl = openssl_1_0_2;
     bdbSupport = true;
     db = if stdenv.isFreeBSD then db4 else db;
     # XXX: only the db_185 interface was available through
