@@ -3,7 +3,7 @@
   automoc4, bison, cmake, flex, libxslt, perl, pkgconfig, shared_mime_info,
   attica, attr, avahi, docbook_xml_dtd_42, docbook_xsl, giflib, ilmbase,
   libdbusmenu_qt, libjpeg, libxml2, phonon, polkit_qt4, qca2, qt4,
-  shared_desktop_ontologies, soprano, strigi, udev, xz, pcre
+  shared_desktop_ontologies, soprano, strigi, udev, xz, pcre, fetchpatch
 }:
 
 kdeApp {
@@ -28,6 +28,11 @@ kdeApp {
     ./0001-old-kde4-cmake-policies.patch
     ./0002-polkit-install-path.patch
     ./0003-remove_xdg_impurities.patch
+    (fetchpatch {
+     name = "SanitizeURLsBeforePassingThemToFindProxyForURL.patch";
+     url = "https://cgit.kde.org/kdelibs.git/patch/?id=1804c2fde7bf4e432c6cf5bb8cce5701c7010559";
+     sha256 = "1y9951wgx35yf24i6gjz219fhspyqri1jvbw4fybd8nwwjb6ciz1";
+   })
   ];
 
   # cmake does not detect path to `ilmbase`
