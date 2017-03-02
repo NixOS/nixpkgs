@@ -10673,9 +10673,7 @@ with pkgs;
 
   rmilter = callPackage ../servers/mail/rmilter { };
 
-  rspamd = callPackage ../servers/mail/rspamd {
-    openssl = openssl_1_0_2;
-  };
+  rspamd = callPackage ../servers/mail/rspamd { };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix {
     gperf = gperf_3_0;
