@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "rpodgorny";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
   patches = [ ./no-var-spool-install.patch ];
 
   meta = with stdenv.lib; {
