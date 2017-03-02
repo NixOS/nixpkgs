@@ -14475,6 +14475,11 @@ with pkgs;
 
   ympd = callPackage ../applications/audio/ympd { };
 
+  nitpick = callPackage ../applications/version-management/nitpick {
+    python = python27;
+    inherit (python27Packages) wrapPython;
+  };
+
   nload = callPackage ../applications/networking/nload { };
 
   normalize = callPackage ../applications/audio/normalize { };
