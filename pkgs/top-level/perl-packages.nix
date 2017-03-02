@@ -9763,20 +9763,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
   };
 
-  NetSSLeay = let openssl = pkgs.openssl_1_0_2;
-  in buildPerlPackage rec {
+  NetSSLeay = buildPerlPackage rec {
     name = "Net-SSLeay-1.77";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEM/${name}.tar.gz";
       sha256 = "06h6wbr923jxmazmv5shdg1767s7r60bvzcza52dk31yckks6l31";
     };
-    buildInputs = [ openssl ];
+    buildInputs = [ pkgs.openssl ];
     doCheck = false; # Test performs network access.
     preConfigure = ''
       mkdir openssl
-      ln -s ${openssl.out}/lib openssl
-      ln -s ${openssl.bin}/bin openssl
-      ln -s ${openssl.dev}/include openssl
+      ln -s ${pkgs.openssl.out}/lib openssl
+      ln -s ${pkgs.openssl.bin}/bin openssl
+      ln -s ${pkgs.openssl.dev}/include openssl
       export OPENSSL_PREFIX=$(realpath openssl)
     '';
     meta = {
