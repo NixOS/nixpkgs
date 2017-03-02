@@ -1,5 +1,5 @@
-{stdenv, autoconf, which, writeText, makeWrapper, fetchFromGitHub, erlang,
-  beamPackages, z3, python27 }:
+{ stdenv, autoreconfHook, which, writeText, makeWrapper, fetchFromGitHub, erlang
+, beamPackages, z3, python27 }:
 
 stdenv.mkDerivation rec {
   name = "cuter";
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   setupHook = writeText "setupHook.sh" ''
     addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
   '';
-  buildInputs = with beamPackages; [ autoconf erlang z3 python27 makeWrapper which ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = with beamPackages; [ python27.pkgs.setuptools erlang z3 python27 makeWrapper which ];
 
   buildFlags = "PWD=$(out)/lib/erlang/lib/cuter-${version} cuter_target";
   configurePhase = ''
