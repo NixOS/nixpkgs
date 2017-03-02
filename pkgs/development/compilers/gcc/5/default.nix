@@ -515,8 +515,6 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
-  requiredSystemFeatures = [ "big-parallel" ];
-
   meta = {
     homepage = http://gcc.gnu.org/;
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+

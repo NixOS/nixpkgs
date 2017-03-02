@@ -121,8 +121,6 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "$out/bin/firefox" --version
     '';
 
-  requiredSystemFeatures = [ "big-parallel" ];
-
   postFixup =
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     ''
