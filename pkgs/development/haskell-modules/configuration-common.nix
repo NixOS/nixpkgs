@@ -700,20 +700,6 @@ self: super: {
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
-  # To be in sync with Hoogle.
-  lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/lambdabot/lambdabot/commit/78a2361024724acb70bc1c12c42f3a16015bb373.patch";
-        sha256 = "0aw0jpw07idkrg8pdn3y3qzhjfrxsvmx3plg51m1aqgbzs000yxf";
-        stripLen = 2;
-        addPrefixes = true;
-      })
-    ];
-
-    jailbreak = true;
-  }));
-
   # Needs new version.
   haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
