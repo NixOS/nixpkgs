@@ -1,6 +1,6 @@
 { fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu}:
+  gksuSupport ? false, gksu, unzip, zip }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
@@ -32,6 +32,21 @@ in let
     dontStrip = true;
     dontPatchELF = true;
     buildInputs = [ makeWrapper ];
+
+    # make exec.py in Default.sublime-package use "/usr/bin/env bash"
+    # instead of "/bin/bash"
+    patchPhase = ''
+      mkdir Default.sublime-package-fix
+      ( cd Default.sublime-package-fix
+        ${unzip}/bin/unzip ../Packages/Default.sublime-package > /dev/null
+        substituteInPlace "exec.py" --replace \
+          '["/bin/bash"' \
+          '["/usr/bin/env", "bash"'
+      )
+      ${zip}/bin/zip -j Default.sublime-package.zip Default.sublime-package-fix/* > /dev/null
+      mv Default.sublime-package.zip Packages/Default.sublime-package
+      rm -r Default.sublime-package-fix
+    '';
 
     buildPhase = ''
       for i in sublime_text plugin_host crash_reporter; do
