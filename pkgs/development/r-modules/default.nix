@@ -16,8 +16,6 @@ let
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
   mkDerive = {mkHomepage, mkUrls}: args:
-      # XXX: not ideal ("2.2" would match "2.22") but sufficient
-      assert (!(args ? rVersion) || lib.hasPrefix args.rVersion (lib.getVersion R));
       lib.makeOverridable ({
         name, version, sha256,
         depends ? [],
