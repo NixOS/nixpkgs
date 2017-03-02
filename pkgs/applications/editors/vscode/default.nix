@@ -83,7 +83,7 @@ in
       '';
       homepage = http://code.visualstudio.com/;
       downloadPage = https://code.visualstudio.com/Updates;
-      license = licenses.unfree;
+      license = licenses.mit;
       platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     };
   }
