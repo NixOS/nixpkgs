@@ -62,12 +62,22 @@ appleDerivation rec {
     ld -macosx_version_min 10.7 -arch x86_64 -dylib \
        -o $out/lib/system/libsystem_c.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_c_symbols}
+       -reexported_symbols_list ${./system_c_symbols_x86_64}
+
+    ld -macosx_version_min 10.7 -arch i386 -dylib \
+       -o $out/lib/system/libsystem_c.i386.dylib \
+       /usr/lib/libSystem.dylib \
+       -reexported_symbols_list ${./system_c_symbols_i386}
 
     ld -macosx_version_min 10.7 -arch x86_64 -dylib \
        -o $out/lib/system/libsystem_kernel.dylib \
        /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_kernel_symbols}
+       -reexported_symbols_list ${./system_kernel_symbols_x86_64}
+
+    ld -macosx_version_min 10.7 -arch i386 -dylib \
+       -o $out/lib/system/libsystem_kernel.i386.dylib \
+       /usr/lib/libSystem.dylib \
+       -reexported_symbols_list ${./system_kernel_symbols_i386}
 
     # The umbrella libSystem also exports some symbols,
     # but we don't want to pull in everything from the other libraries.
@@ -89,13 +99,23 @@ appleDerivation rec {
     done
 
     ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/libSystem.B.dylib \
+       -o $out/lib/libSystem.B.x86_64.dylib \
        -compatibility_version 1.0 \
        -current_version 1226.10.1 \
        -reexport_library $out/lib/system/libsystem_c.dylib \
        -reexport_library $out/lib/system/libsystem_kernel.dylib \
        -reexport_library $out/lib/libSystem_internal.dylib \
        $args
+
+    ld -macosx_version_min 10.7 -arch i386 -dylib \
+       -o $out/lib/libSystem.B.i386.dylib \
+       -compatibility_version 1.0 \
+       -current_version 1226.10.1 \
+       -reexport_library $out/lib/system/libsystem_c.i386.dylib \
+       -reexport_library $out/lib/system/libsystem_kernel.i386.dylib \
+       $args
+
+    lipo -create $out/lib/libSystem.B.x86_64.dylib $out/lib/libSystem.B.i386.dylib -output $out/lib/libSystem.B.dylib
 
     ln -s libSystem.B.dylib $out/lib/libSystem.dylib
 
