@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0h8kpn42mgpkzmnga143hi8nh0ai65ypxh7qhkwbb15j3wz2h4fn";
   };
 
+  outputs = [ "out" "geoip" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl zlib ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
@@ -20,6 +22,12 @@ stdenv.mkDerivation rec {
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+  '';
+
+  postInstall = ''
+    mkdir -p $geoip/share/tor
+    mv $out/share/tor/geoip{,6} $geoip/share/tor
+    rm -rf $out/share/tor
   '';
 
   doCheck = true;
