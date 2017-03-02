@@ -463,9 +463,12 @@ let self = _self // overrides; _self = with self; {
     name = "Audio-Scan-0.96";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "67f45fef6a23b7548f387b675cbf7881bf9da62d7d007cbf90d3a4b851b99eb7";
+      sha256 = "d68bb3598bb3c925f4753cc9e73f5e357bf249a36e16da57c54c205de4bbb426";
     };
-    buildInputs = [ ModuleBuild TestWarn ScalarString DigestCRC DataInteger ];
+    buildInputs = [ pkgs.zlib ModuleBuild ModuleBuildPluggablePPPort ];
+    propagatedBuildInputs = [ TestWarn ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Fast C metadata and tag reader for all common audio file formats";
       license = stdenv.lib.licenses.gpl2;
@@ -6544,13 +6547,15 @@ let self = _self // overrides; _self = with self; {
   ImageScale = buildPerlPackage rec {
     name = "Image-Scale-0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AG/AGRUNDMAN/${name}.tar.gz";
-      sha256 = "1mx065134gy75pgdldh65118bpcs6yfbqmr7bf9clwq44zslxhxc";
+      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
+      sha256 = "5b2c92dc2dd635b488879461760cd251aa2b1feef41b64f17914a6e4bbe3e442";
     };
-    buildInputs = [ ModuleBuild TestNoWarnings ];
+    buildInputs = [ pkgs.libpng pkgs.libjpeg ];
+    propagatedBuildInputs = [ TestNoWarnings pkgs.zlib ];
+    makeMakerFlags = "--with-jpeg-includes=${pkgs.libjpeg.dev}/include --with-jpeg-libs=${pkgs.libjpeg.out}/lib --with-png-includes=${pkgs.libpng.dev}/include --with-png-libs=${pkgs.libpng.out}/lib";
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
-      license = stdenv.lib.licenses.gpl2;
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   };
 

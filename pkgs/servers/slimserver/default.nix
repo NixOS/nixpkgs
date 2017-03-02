@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/slimserver.pl \
       --set PERL5LIB "${with perlPackages; stdenv.lib.makePerlPath [
       Log4Perl
+      AudioScan
+      ImageScale
       ]}"
   '';
 
