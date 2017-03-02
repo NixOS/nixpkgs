@@ -21,7 +21,7 @@
 }:
 
 let
-  src = fetch "llvm" "1qfvvblca2aa5shamz66132k30hmpq2mkpfn172xzzlm6znzlmr2";
+  src = fetch "llvm" "0ic3y9gaissi6ixyj9x1c0pq69wfbl2svhprp33av0b58f7wj9v7";
   shlib = if stdenv.isDarwin then "dylib" else "so";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 }
