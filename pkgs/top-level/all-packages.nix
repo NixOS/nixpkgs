@@ -15456,6 +15456,8 @@ with pkgs;
 
   telepathy_idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
 
+  inherit (pythonPackages) termdown;
+
   terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
 
   terminator = callPackage ../applications/misc/terminator {

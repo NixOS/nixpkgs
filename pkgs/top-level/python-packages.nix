@@ -25935,6 +25935,8 @@ in {
     };
   };
 
+  termdown = callPackage ../applications/misc/termdown {};
+
   traits = buildPythonPackage rec {
     name = "traits-${version}";
     version = "4.5.0";
