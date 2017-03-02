@@ -2883,7 +2883,9 @@ with pkgs;
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
-  miniupnpc = callPackage ../tools/networking/miniupnpc { };
+  inherit (callPackage ../tools/networking/miniupnpc { })
+    miniupnpc_1 miniupnpc_2;
+  miniupnpc = miniupnpc_1;
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
@@ -14932,7 +14934,10 @@ with pkgs;
     libtorrentRasterbar = libtorrentRasterbar_1_0;
   };
 
-  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
+  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
+    lua5 = lua5_1;
+    miniupnpc = miniupnpc_1;
+  };
 
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
