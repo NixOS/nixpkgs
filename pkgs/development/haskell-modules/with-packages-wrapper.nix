@@ -1,7 +1,8 @@
-{ stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper
+{ stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper, runCommand
 , ignoreCollisions ? false, withLLVM ? false
 , postBuild ? ""
 , haskellPackages
+, ghcLibdir ? null
 }:
 
 # This wrapper works only with GHC 6.12 or later.
@@ -46,6 +47,10 @@ let
   llvm          = lib.makeBinPath
                   ([ llvmPackages.llvm ]
                    ++ lib.optional stdenv.isDarwin llvmPackages.clang);
+  ghcLibdirLink = runCommand "ghc_libdir" {} ''
+    mkdir -p '${libDir}'
+    echo '${ghcLibdir}' > '${libDir}/ghc_libdir_override'
+  '';
 in
 if paths == [] && !withLLVM then ghc else
 buildEnv {
@@ -53,7 +58,7 @@ buildEnv {
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
-  paths = paths ++ [ghc];
+  paths = paths ++ [ghc] ++ lib.optional (isGhcjs && ghcLibdir != null) ghcLibdirLink;
   extraOutputsToInstall = [ "out" "doc" ];
   inherit ignoreCollisions;
   postBuild = ''
@@ -102,6 +107,9 @@ buildEnv {
     done
 
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
+    ${lib.optionalString (isGhcjs && ghcLibdir != null) ''
+      mv '${libDir}/ghc_libdir_override' '${libDir}/ghc_libdir'
+    ''}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
   passthru = {
