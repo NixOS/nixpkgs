@@ -41,10 +41,10 @@
       }) {};
     ada-ref-man = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "ada-ref-man";
-        version = "2012.0";
+        version = "2012.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ada-ref-man-2012.0.tar";
-          sha256 = "1g97892h8d1xa7cfxgg4i232i15hhci7gijj0dzc31yd9vbqayx8";
+          url = "https://elpa.gnu.org/packages/ada-ref-man-2012.3.tar";
+          sha256 = "0w88xw51jb85nmqbi3i9kj9kx2fa6zlazk3x7afll7njc6g4105z";
         };
         packageRequires = [];
         meta = {
@@ -306,6 +306,19 @@
           license = lib.licenses.free;
         };
       }) {};
+    cl-print = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "cl-print";
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/cl-print-1.0.el";
+          sha256 = "0ib8j7rv5f4c4xg3kban58jm6cam756i3xz6j8100846g3jn9zcc";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/cl-print.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     cobol-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "cobol-mode";
         version = "1.0.0";
@@ -376,10 +389,10 @@
     company-statistics = callPackage ({ company, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "company-statistics";
-        version = "0.2.2";
+        version = "0.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-statistics-0.2.2.tar";
-          sha256 = "0h1k0dbb7ngk6pghli2csfpzpx37si0wg840jmay0jlb80q6vw73";
+          url = "https://elpa.gnu.org/packages/company-statistics-0.2.3.tar";
+          sha256 = "0780xp09f739jys469x4fqpgj1lysi8gnhiaz0735jib07lmh4ww";
         };
         packageRequires = [ company emacs ];
         meta = {
@@ -1995,10 +2008,10 @@
       }) {};
     wconf = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "wconf";
-        version = "0.2.0";
+        version = "0.2.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/wconf-0.2.0.el";
-          sha256 = "07adnx2ni7kprxw9mx1nywzs1a2h43rszfa8r8i0s9j16grvgphk";
+          url = "https://elpa.gnu.org/packages/wconf-0.2.1.el";
+          sha256 = "13p1xycp3mcrg8jv65mcyqvln4h7awhjz35dzr5bi86zb824ryxf";
         };
         packageRequires = [ emacs ];
         meta = {
