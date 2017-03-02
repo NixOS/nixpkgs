@@ -8,7 +8,7 @@ let
 
   fetch = name: sha256: fetchurl {
     url = "http://llvm.org/pre-releases/${release_version}/${rc}/${name}-${version}.src.tar.xz";
-    # Once 4.0 is released, use this instead:
+    # Once 4 is released, use this instead:
     # url = "http://llvm.org/releases/${release-version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
