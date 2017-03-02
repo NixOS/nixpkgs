@@ -29,5 +29,7 @@ stdenv.mkDerivation rec {
     description = "Linux driver for setting the backlight brightness on laptops using NVIDIA GPU";
     homepage = https://github.com/guillaumezin/nvidiabl;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
+    broken = !stdenv.lib.versionOlder kernel.version "4.9";
   };
 }
