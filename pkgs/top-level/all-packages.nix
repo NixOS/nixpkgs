@@ -5491,6 +5491,12 @@ with pkgs;
   rustc = rust.rustc;
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
+  rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable);
+
+  # rust platform to build cargo itself (with cargoSnapshot)
+  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcMaster) rustUnstableCargoPlatform;
 
   makeRustPlatform = rust: lib.fix (self:
     let
