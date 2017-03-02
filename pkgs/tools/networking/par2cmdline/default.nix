@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jxixkc8vid933nph2mvhgz58my42kwjlzbir38hml2xrzq00d8f";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/BlackIkeEagle/par2cmdline;
