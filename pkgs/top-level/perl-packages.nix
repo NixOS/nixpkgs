@@ -6541,6 +6541,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ImageScale = buildPerlPackage rec {
+    name = "Image-Scale-0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGRUNDMAN/${name}.tar.gz";
+      sha256 = "1mx065134gy75pgdldh65118bpcs6yfbqmr7bf9clwq44zslxhxc";
+    };
+    buildInputs = [ ModuleBuild TestNoWarnings ];
+    meta = {
+      description = "Fast, high-quality fixed-point image resizing";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   ImageSize = buildPerlPackage rec {
     name = "Image-Size-3.232";
     src = fetchurl {
