@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Source code highlighting tool";
     homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = maintainers.ndowens;
   };
 }
