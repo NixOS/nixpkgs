@@ -5191,8 +5191,6 @@ with pkgs;
     inherit (haskellPackages) idris;
   };
 
-  ikarus = callPackage ../development/compilers/ikarus { };
-
   intercal = callPackage ../development/compilers/intercal {
     flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
   };
