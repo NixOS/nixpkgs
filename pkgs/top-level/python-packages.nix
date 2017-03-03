@@ -6672,6 +6672,8 @@ in {
     };
   };
 
+  edward = callPackage ../development/python-modules/edward { };
+
   elasticsearch = buildPythonPackage (rec {
     name = "elasticsearch-1.9.0";
 
