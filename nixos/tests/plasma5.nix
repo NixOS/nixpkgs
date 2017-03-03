@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} :
 
 {
-  name = "kde5";
+  name = "plasma5";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ttuegel ];
   };
@@ -17,7 +17,8 @@ import ./make-test.nix ({ pkgs, ...} :
         user = "alice";
       };
     };
-    services.xserver.desktopManager.kde5.enable = true;
+    services.xserver.desktopManager.plasma5.enable = true;
+    services.xserver.desktopManager.default = "plasma5";
     virtualisation.writableStore = false; # FIXME
   };
 
