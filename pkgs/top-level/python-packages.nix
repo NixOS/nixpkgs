@@ -824,6 +824,30 @@ in {
     };
   };
 
+  python-sybase = buildPythonPackage rec {
+    name = "python-sybase-${version}";
+    version = "0.40pre2";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://sourceforge.net/projects/python-sybase/files/python-sybase/${name}/${name}.tar.gz";
+      sha256 = "0pm88hyn18dy7ljam4mdx9qqgmgraf2zy2wl02g5vsjl4ncvq90j";
+    };
+
+    propagatedBuildInputs = [ pkgs.freetds ];
+
+    SYBASE = pkgs.freetds;
+    setupPyBuildFlags = [ "-DHAVE_FREETDS" "-UWANT_BULKCOPY" ];
+
+    meta = {
+      description = "The Sybase module provides a Python interface to the Sybase relational database system";
+      homepage    = http://python-sybase.sourceforge.net;
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ veprbl ];
+      platforms   = platforms.unix;
+    };
+  };
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
@@ -5069,6 +5093,41 @@ in {
       homepage    = "http://github.com/syrusakbary/pyjade";
       license     = licenses.mit;
       maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
+  pyhepmc = buildPythonPackage rec {
+    name = "pyhepmc-${version}";
+    version = "0.5.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyhepmc/${name}.tar.gz";
+      sha256 = "1rbi8gqgclfvaibv9kzhfis11gw101x8amc93qf9y08ny4jfyr1d";
+    };
+
+    patches = [
+      # merge PR https://bitbucket.org/andybuckley/pyhepmc/pull-requests/1/add-incoming-outgoing-generators-for/diff
+      ../development/python-modules/pyhepmc_export_edges.patch
+      # add bindings to Flow class
+      ../development/python-modules/pyhepmc_export_flow.patch
+    ];
+
+    # regenerate python wrapper
+    preConfigure = ''
+      rm hepmc/hepmcwrap.py
+      swig -c++ -I${pkgs.hepmc}/include -python hepmc/hepmcwrap.i
+    '';
+
+    buildInputs = with pkgs; [ swig hepmc ];
+
+    HEPMCPATH = pkgs.hepmc;
+
+    meta = {
+      description = "A simple wrapper on the main classes of the HepMC event simulation representation, making it possible to create, read and manipulate HepMC events from Python code";
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ veprbl ];
       platforms   = platforms.all;
     };
   };
@@ -15319,6 +15378,24 @@ in {
     };
   };
 
+  graphviz = buildPythonPackage rec {
+    name = "graphviz-${version}";
+    version = "0.5.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/graphviz/${name}.zip";
+      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
+    };
+
+    propagatedBuildInputs = [ pkgs.graphviz ];
+
+    meta = {
+      description = "Simple Python interface for Graphviz";
+      homepage = https://github.com/xflr6/graphviz;
+      license = licenses.mit;
+    };
+  };
+
   pygraphviz = buildPythonPackage rec {
     name = "pygraphviz-${version}";
     version = "1.4rc1";
@@ -22795,12 +22872,12 @@ in {
   };
 
   rootpy = buildPythonPackage rec {
-    version = "0.8.3";
+    version = "0.9.0";
     name = "rootpy-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/d5/40/feddb2c9d1cadfe05d1d9aea1a71be093dc700879c9f6af40a10b1330f34/rootpy-0.8.3.tar.gz";
-      sha256 = "14q9bhs2a53598571x8yikj68x2iyl6090wbvdrpbwr238799b0z";
+      url = "mirror://pypi/r/rootpy/${name}.tar.gz";
+      sha256 = "04alx6afiyahhv816f6zpwnm0sx2jxgqpgqcn6kdw0wnpc9625cr";
     };
 
     disabled = isPy3k;
