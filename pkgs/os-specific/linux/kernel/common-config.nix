@@ -129,6 +129,9 @@ with stdenv.lib;
   IPV6_MROUTE y
   IPV6_MROUTE_MULTIPLE_TABLES y
   IPV6_PIMSM_V2 y
+  ${optionalString (versionAtLeast version "4.7") ''
+    IPV6_FOU_TUNNEL m
+  ''}
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
@@ -143,6 +146,8 @@ with stdenv.lib;
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
   BONDING m
+  NET_L3_MASTER_DEV y
+  NET_FOU_IP_TUNNELS y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build

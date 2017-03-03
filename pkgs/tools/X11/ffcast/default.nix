@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-xrectsel" ];
 
   postBuild = ''
-    make DESTDIR="$out" install
+    make install
   '';
 
   meta = with stdenv.lib; {

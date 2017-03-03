@@ -14,14 +14,15 @@ with stdenv.lib;
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2017.02.24.1";
+  version = "2017.02.27";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "1m2mmnjf7zw0vsbw6vjl8b4p8wa3jdmdzli970cp26awgkq5c15v";
+    sha256 = "0pcrr1bxxw3aar681gj8n5ms69j54namjlw5bj88crs0nm69kspk";
   };
 
-  buildInputs = [ zip makeWrapper ] ++ optional generateManPage pandoc;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ zip ] ++ optional generateManPage pandoc;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP

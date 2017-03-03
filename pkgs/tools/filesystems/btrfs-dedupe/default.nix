@@ -20,7 +20,7 @@ buildRustPackage rec {
     homepage = "https://gitlab.wellbehavedsoftware.com/well-behaved-software/btrfs-dedupe";
     description = "BTRFS deduplication utility";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ikervagyok ];
   };
 }

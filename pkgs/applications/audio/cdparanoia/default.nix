@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optionals stdenv.isDarwin [
     (fetchurl {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/osx_interface.patch";
-      sha1 = "c86e573f51e6d58d5f349b22802a7a7eeece9fcd";
+      sha256 = "1n86kzm2ssl8fdf5wlhp6ncb2bf6b9xlb5vg0mhc85r69prqzjiy";
     })
     (fetchurl {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/patch-paranoia_paranoia.c.10.4.diff";
-      sha1 = "d7dc121374df3b82e82adf544df7bf1eec377bdb";
+      sha256 = "17l2qhn8sh4jy6ryy5si6ll6dndcm0r537rlmk4a6a8vkn852vad";
     })
   ];
 

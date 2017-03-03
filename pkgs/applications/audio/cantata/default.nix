@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ stdenv, fetchFromGitHub, cmake, vlc
 , withQt4 ? false, qt4
 , withQt5 ? true, qtbase, qtsvg, qttools, makeQtWrapper
 
@@ -34,7 +34,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "1.5.1";
+  version = "2.0.1";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -43,14 +43,15 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    inherit name;
-    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60UktwaTRMTjRIUW8";
-    sha256 = "0y7y3nbiqgh1ghb47n4lfyp163wvazvhavlshb1c18ik03fkn5sp";
+  src = fetchFromGitHub {
+    owner = "CDrummond";
+    repo = "cantata";
+    rev = "v${version}";
+    sha256 = "18fiz3cav41dpap42qwj9hwxf2k9fmhyg2r34yggxqi2cjlsil36";
   };
 
   buildInputs =
-    [ cmake ]
+    [ cmake vlc ]
     ++ stdenv.lib.optional withQt4 qt4
     ++ stdenv.lib.optionals withQt5 [ qtbase qtsvg qttools ]
     ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
@@ -63,9 +64,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (withTaglib && withDevices) udisks2;
 
   nativeBuildInputs = stdenv.lib.optional withQt5 makeQtWrapper;
-
-  unpackPhase = "tar -xvf $src";
-  sourceRoot = "${name}";
 
   cmakeFlags = stdenv.lib.flatten [
     (fstat withQt5 "QT5")

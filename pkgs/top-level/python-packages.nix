@@ -824,6 +824,30 @@ in {
     };
   };
 
+  python-sybase = buildPythonPackage rec {
+    name = "python-sybase-${version}";
+    version = "0.40pre2";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://sourceforge.net/projects/python-sybase/files/python-sybase/${name}/${name}.tar.gz";
+      sha256 = "0pm88hyn18dy7ljam4mdx9qqgmgraf2zy2wl02g5vsjl4ncvq90j";
+    };
+
+    propagatedBuildInputs = [ pkgs.freetds ];
+
+    SYBASE = pkgs.freetds;
+    setupPyBuildFlags = [ "-DHAVE_FREETDS" "-UWANT_BULKCOPY" ];
+
+    meta = {
+      description = "The Sybase module provides a Python interface to the Sybase relational database system";
+      homepage    = http://python-sybase.sourceforge.net;
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ veprbl ];
+      platforms   = platforms.unix;
+    };
+  };
+
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
 
@@ -2405,26 +2429,7 @@ in {
     };
   };
 
-  channels = buildPythonPackage rec {
-    name = "channels-${version}";
-    version = "1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/channels/${name}.tar.gz";
-      sha256 = "0d8fywg416p851i8vz26pmz8b47akg5z10yw7xc7i51cpmp7y5zj";
-    };
-
-    # Files are missing in the distribution
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ asgiref django daphne ];
-
-    meta = {
-      description = "Brings event-driven capabilities to Django with a channel system";
-      license = licenses.bsd3;
-      homepage = https://github.com/django/channels;
-    };
-  };
+  channels = callPackage ../development/python-modules/channels {};
 
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
@@ -5092,6 +5097,41 @@ in {
     };
   };
 
+  pyhepmc = buildPythonPackage rec {
+    name = "pyhepmc-${version}";
+    version = "0.5.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyhepmc/${name}.tar.gz";
+      sha256 = "1rbi8gqgclfvaibv9kzhfis11gw101x8amc93qf9y08ny4jfyr1d";
+    };
+
+    patches = [
+      # merge PR https://bitbucket.org/andybuckley/pyhepmc/pull-requests/1/add-incoming-outgoing-generators-for/diff
+      ../development/python-modules/pyhepmc_export_edges.patch
+      # add bindings to Flow class
+      ../development/python-modules/pyhepmc_export_flow.patch
+    ];
+
+    # regenerate python wrapper
+    preConfigure = ''
+      rm hepmc/hepmcwrap.py
+      swig -c++ -I${pkgs.hepmc}/include -python hepmc/hepmcwrap.i
+    '';
+
+    buildInputs = with pkgs; [ swig hepmc ];
+
+    HEPMCPATH = pkgs.hepmc;
+
+    meta = {
+      description = "A simple wrapper on the main classes of the HepMC event simulation representation, making it possible to create, read and manipulate HepMC events from Python code";
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ veprbl ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytest = self.pytest_30;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
@@ -5928,23 +5968,7 @@ in {
     };
   });
 
-  daphne = buildPythonPackage rec {
-    name = "daphne-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/daphne/${name}.tar.gz";
-      sha256 = "0l62bd9swv0k9qcpl2s8kj4mgl6qayi0krwkkg1x73a9y48xpi9z";
-    };
-
-    propagatedBuildInputs = with self; [ asgiref autobahn ];
-
-    meta = {
-      description = "Django ASGI (HTTP/WebSocket) server";
-      license = licenses.bsd3;
-      homepage = https://github.com/django/daphne;
-    };
-  };
+  daphne = callPackage ../development/python-modules/daphne { };
 
   dateparser = buildPythonPackage rec {
     name = "dateparser-${version}";
@@ -10617,26 +10641,7 @@ in {
     };
   };
 
-  djangorestframework = buildPythonPackage rec {
-    name = "djangorestframework-${version}";
-    version = "3.2.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/djangorestframework/${name}.tar.gz";
-      sha256 = "06kp4hg3y4bqy2ixlb1q6bw81gwgsb86l4lanbav7bp1grrbbnj1";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ django ];
-
-    meta = {
-      description = "Web APIs for Django, made easy";
-      homepage = http://www.django-rest-framework.org/;
-      maintainers = with maintainers; [ desiderius ];
-      license = licenses.bsd2;
-    };
-  };
+  djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
   django_raster = buildPythonPackage rec {
     name = "django-raster-${version}";
@@ -11037,6 +11042,26 @@ in {
     meta = {
       homepage = http://pypi.python.org/pypi/enum/;
       description = "Robust enumerated type support in Python";
+    };
+  };
+
+  enum-compat = buildPythonPackage rec {
+    pname = "enum-compat";
+    version = "0.0.2";
+    name = "${pname}-${version}";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "14j1i963jic2vncbf9k5nq1vvv8pw2zsg7yvwhm7d9c6h7qyz74k";
+    };
+
+    propagatedBuildInputs = with self; [ enum34 ];
+
+    meta = {
+      homepage = "https://github.com/jstasiak/enum-compat";
+      description = "enum/enum34 compatibility package";
+      license = licenses.mit;
+      maintainers = with maintainers; [ abbradar ];
     };
   };
 
@@ -15353,6 +15378,24 @@ in {
     };
   };
 
+  graphviz = buildPythonPackage rec {
+    name = "graphviz-${version}";
+    version = "0.5.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/graphviz/${name}.zip";
+      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
+    };
+
+    propagatedBuildInputs = [ pkgs.graphviz ];
+
+    meta = {
+      description = "Simple Python interface for Graphviz";
+      homepage = https://github.com/xflr6/graphviz;
+      license = licenses.mit;
+    };
+  };
+
   pygraphviz = buildPythonPackage rec {
     name = "pygraphviz-${version}";
     version = "1.4rc1";
@@ -19323,7 +19366,7 @@ in {
   };
   protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
-    doCheck = isPy3k;
+    doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_0;
   };
   protobuf2_6 = callPackage ../development/python-modules/protobuf.nix {
@@ -22829,12 +22872,12 @@ in {
   };
 
   rootpy = buildPythonPackage rec {
-    version = "0.8.3";
+    version = "0.9.0";
     name = "rootpy-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/d5/40/feddb2c9d1cadfe05d1d9aea1a71be093dc700879c9f6af40a10b1330f34/rootpy-0.8.3.tar.gz";
-      sha256 = "14q9bhs2a53598571x8yikj68x2iyl6090wbvdrpbwr238799b0z";
+      url = "mirror://pypi/r/rootpy/${name}.tar.gz";
+      sha256 = "04alx6afiyahhv816f6zpwnm0sx2jxgqpgqcn6kdw0wnpc9625cr";
     };
 
     disabled = isPy3k;
@@ -28183,6 +28226,10 @@ EOF
     inherit (pkgs) libasyncns pkgconfig;
   };
 
+  libarcus = callPackage ../development/python-modules/libarcus {
+    protobuf = self.protobuf3_0;
+  };
+
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
     version = "0.9.2";
@@ -32041,6 +32088,8 @@ EOF
     };
   };
 
+  uranium = callPackage ../development/python-modules/uranium { };
+
   urlscan = callPackage ../applications/misc/urlscan { };
 
   vine = buildPythonPackage rec {
@@ -32080,6 +32129,26 @@ EOF
 
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
     (pkgs.zeitgeist.override{python2Packages=self;}).py;
+
+  zeroconf = buildPythonPackage rec {
+    pname = "zeroconf";
+    version = "0.18.0";
+    name = "${pname}-${version}";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0s1840v2h4h19ad8lfadbm3dhzs8bw9c5c3slkxql1zsaiycvjy2";
+    };
+
+    propagatedBuildInputs = with self; [ netifaces six enum-compat ];
+
+    meta = {
+      description = "A pure python implementation of multicast DNS service discovery";
+      homepage = "https://github.com/jstasiak/python-zeroconf";
+      license = licenses.lgpl21;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
 
   zipfile36 = buildPythonPackage rec {
     pname = "zipfile36";

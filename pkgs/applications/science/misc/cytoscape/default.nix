@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     ln -s $out/share/cytoscape.sh $out/bin/cytoscape
 
-    wrapProgram $out/share/gen_vmoptions.sh \
+    wrapProgram $out/share/cytoscape.sh \
       --set JAVA_HOME "${jre}" \
       --set JAVA  "${jre}/bin/java"
 

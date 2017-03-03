@@ -59,14 +59,13 @@ self: super: {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
-  # The Hackage tarball is purposefully broken. Mr. Hess wants people to build
-  # his package from the Git repo because that is, like, better!
+  # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
+  # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = ((overrideCabal super.git-annex (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "joeyh";
-      repo = "git-annex";
-      sha256 = "0f79i2i1cr8j02vc4ganw92prbkv9ca1yl9jgkny0rxf28wdlc6v";
-      rev = drv.version;
+    src = pkgs.fetchgit {
+      url = "git://git-annex.branchable.com/";
+      rev = "refs/tags/" + drv.version;
+      sha256 = "0irvzwpwxxdy6qs7jj81r6qk7i1gkkqyaza4wcm0phyyn07yh2sz";
     };
   }))).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -119,7 +118,7 @@ self: super: {
   diagrams = dontHaddock super.diagrams;
   either = dontHaddock super.either;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
-  gl = dontHaddock super.gl;
+  gl = doJailbreak (dontHaddock super.gl); # jailbreak fixed in unreleased (2017-03-01) https://github.com/ekmett/gl/commit/885e08a96aa53d80c3b62e157b20d2f05e34f133
   groupoids = dontHaddock super.groupoids;
   hamlet = dontHaddock super.hamlet;
   HaXml = dontHaddock super.HaXml;
@@ -700,22 +699,6 @@ self: super: {
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
-  # To be in sync with Hoogle.
-  lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/lambdabot/lambdabot/commit/78a2361024724acb70bc1c12c42f3a16015bb373.patch";
-        sha256 = "0aw0jpw07idkrg8pdn3y3qzhjfrxsvmx3plg51m1aqgbzs000yxf";
-        stripLen = 2;
-        addPrefixes = true;
-      })
-    ];
-
-    jailbreak = true;
-  })).override {
-    haskell-src-exts = self.haskell-src-exts-simple;
-  };
-
   # Needs new version.
   haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
@@ -868,4 +851,26 @@ self: super: {
 
   # https://github.com/jswebtools/language-ecmascript/pull/81
   language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # https://github.com/choener/DPutils/pull/1
+  DPutils = doJailbreak super.DPutils;
+
+  # fixed in unreleased (2017-03-01) https://github.com/ekmett/machines/commit/5463cf5a69194faaec2345dff36469b4b7a8aef0
+  machines = doJailbreak super.machines;
+
+  # fixed in unreleased (2017-03-01) https://github.com/choener/OrderedBits/commit/7b9c6c6c61d9acd0be8b38939915d287df3c53ab
+  OrderedBits = doJailbreak super.OrderedBits;
+
+  # https://github.com/haskell-distributed/rank1dynamic/issues/17
+  rank1dynamic = doJailbreak super.rank1dynamic;
+
+  # https://github.com/dan-t/cabal-lenses/issues/6
+  cabal-lenses = doJailbreak super.cabal-lenses;
+
+  # https://github.com/fizruk/http-api-data/issues/49
+  http-api-data = dontCheck super.http-api-data;
+
+  # https://github.com/snoyberg/yaml/issues/106
+  yaml = disableCabalFlag super.yaml "system-libyaml";
+
 }

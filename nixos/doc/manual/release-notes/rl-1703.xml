@@ -262,14 +262,23 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
-      <para>
+    <para>
       Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
       Minor modifications had to be made to the interpreters in order to generate
       deterministic bytecode. This has security implications and is relevant for
       those using Python in a <literal>nix-shell</literal>. See the Nixpkgs manual
       for details.
     </para>
+  </listitem>
 
+  <listitem>
+    <para>
+      Modules can now be disabled by using <link
+      xlink:href="https://nixos.org/nixpkgs/manual/#sec-replace-modules">
+      disabledModules</link>, allowing another to take it's place.  This can be
+      used to import a set of modules from another channel while keeping the
+      rest of the system on a stable release.
+    </para>
   </listitem>
 
 </itemizedlist>

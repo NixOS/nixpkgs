@@ -399,4 +399,9 @@ rec {
     https://archive.mozilla.org/pub/
   ];
 
+  # Maven Central
+  maven = [
+    http://repo1.maven.org/maven2/
+    http://central.maven.org/maven2/
+  ];
 }

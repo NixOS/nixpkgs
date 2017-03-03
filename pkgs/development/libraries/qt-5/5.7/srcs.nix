@@ -2,14 +2,6 @@
 { fetchurl, mirror }:
 
 {
-  qtwebkit = {
-    version = "5.7.0";
-    src = fetchurl {
-      url = "${mirror}/community_releases/5.7/5.7.0/qtwebkit-opensource-src-5.7.0.tar.xz";
-      sha256 = "1prlpl3zslzpr1iv7m3irvxjxn3v8nlxh21v9k2kaq4fpwy2b8y7";
-      name = "qtwebkit-opensource-src-5.7.0.tar.xz";
-    };
-  };
   qt3d = {
     version = "5.7.1";
     src = fetchurl {
@@ -264,6 +256,22 @@
       url = "${mirror}/official_releases/qt/5.7/5.7.1/submodules/qtwebengine-opensource-src-5.7.1.tar.xz";
       sha256 = "0ayc3j17nampy7pg464nbi09wr2d3pfbpqql789m0av37lz8h091";
       name = "qtwebengine-opensource-src-5.7.1.tar.xz";
+    };
+  };
+  qtwebkit = {
+    version = "5.7.1";
+    src = fetchurl {
+      url = "${mirror}/community_releases/5.7/5.7.1/qtwebkit-opensource-src-5.7.1.tar.xz";
+      sha256 = "00szgcra6pf2myfjrdbsr1gmrxycpbjqlzkplna5yr1rjg4gfv54";
+      name = "qtwebkit-opensource-src-5.7.1.tar.xz";
+    };
+  };
+  qtwebkit-examples = {
+    version = "5.7.1";
+    src = fetchurl {
+      url = "${mirror}/community_releases/5.7/5.7.1/qtwebkit-examples-opensource-src-5.7.1.tar.xz";
+      sha256 = "09c2ni3nf7vdsw1y9yhpbal9zs8jgvi1wndnva6mgdbcnm8h23fm";
+      name = "qtwebkit-examples-opensource-src-5.7.1.tar.xz";
     };
   };
   qtwebsockets = {

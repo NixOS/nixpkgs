@@ -58,6 +58,16 @@ in stdenv.mkDerivation rec {
   # if we dynamically link the lib, we get these errors:
   # https://github.com/NixOS/nixpkgs/pull/19064#issuecomment-255082684
   preConfigure = ''
+    # https://issues.apache.org/jira/browse/MESOS-6616
+    configureFlagsArray+=(
+      "CXXFLAGS=-O2 -Wno-error=strict-aliasing"
+    )
+
+    # Fix cases where makedev(),major(),minor() are referenced through
+    # <sys/types.h> instead of <sys/sysmacros.h>
+    sed 1i'#include <sys/sysmacros.h>' -i src/linux/fs.cpp
+    sed 1i'#include <sys/sysmacros.h>' -i src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
+
     substituteInPlace 3rdparty/stout/include/stout/os/posix/chown.hpp \
       --subst-var-by chown ${coreutils}/bin/chown
 

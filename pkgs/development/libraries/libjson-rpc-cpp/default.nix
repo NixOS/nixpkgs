@@ -1,26 +1,21 @@
-{ stdenv
-, fetchgit
-, cmake
-, jsoncpp
-, argtable
-, curl
-, libmicrohttpd
-, doxygen
-, catch
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
+, doxygen, catch, pkgconfig, git, gcc6
 }:
+
 stdenv.mkDerivation rec {
   name = "libjson-rpc-cpp-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  src = fetchgit {
-    url = https://github.com/cinemast/libjson-rpc-cpp.git;
-    sha256 = "00fxxisg89zgg1wq047n8r8ws48jx35x3s6bbym4kg7dkxv9vv9f";
-    rev = "c6e3d7195060774bf95afc6df9c9588922076d3e";
+  src = fetchFromGitHub {
+    owner = "cinemast";
+    repo = "libjson-rpc-cpp";
+    sha256 = "07bg4nyvx0yyhy8c4x9i22kwqpx5jlv36dvpabgbb46ayyndhr7a";
+    rev = "v${version}";
   };
 
-  hardeningDisable = [ "format" ];
+  NIX_CFLAGS_COMPILE = "-I${catch}/include/catch";
 
-  patchPhase = ''
+  postPatch = ''
     for f in cmake/FindArgtable.cmake \
              src/stubgenerator/stubgenerator.cpp \
              src/stubgenerator/stubgeneratorfactory.cpp
@@ -38,13 +33,13 @@ stdenv.mkDerivation rec {
     cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install \
              -DCMAKE_BUILD_TYPE=Release
   '';
- 
+
   installPhase = '' 
     mkdir -p $out
 
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      q="$p:${stdenv.lib.makeLibraryPath [ stdenv.cc.cc jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      q="$p:${stdenv.lib.makeLibraryPath [ gcc6 jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
       patchelf --set-rpath $q $1
     }
 
@@ -54,12 +49,11 @@ stdenv.mkDerivation rec {
     for f in Install/lib/*.so* $(find Install/bin -executable -type f); do
       fixRunPath $f
     done
- 
+
     cp -r Install/* $out
   '';
 
-  dontStrip = true;
-
+  nativeBuildInputs = [ pkgconfig gcc6 ];
   buildInputs = [ cmake jsoncpp argtable curl libmicrohttpd doxygen catch ];
 
   meta = with stdenv.lib; {

@@ -6,7 +6,7 @@
 
 let
 
-  inherit (stdenv.lib) fix' extends makeOverridable;
+  inherit (stdenv.lib) fix' extends makeOverridable makeExtensible;
   inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
 
   haskellPackages = self:
@@ -108,7 +108,7 @@ let
 
 in
 
-  fix'
+  makeExtensible
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig
