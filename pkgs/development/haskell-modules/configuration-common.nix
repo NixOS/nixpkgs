@@ -867,6 +867,9 @@ self: super: {
   # https://github.com/dan-t/cabal-lenses/issues/6
   cabal-lenses = doJailbreak super.cabal-lenses;
 
+  # https://github.com/fizruk/http-api-data/issues/49
+  http-api-data = dontCheck super.http-api-data;
+
   # https://github.com/snoyberg/yaml/issues/106
   yaml = disableCabalFlag super.yaml "system-libyaml";
 
