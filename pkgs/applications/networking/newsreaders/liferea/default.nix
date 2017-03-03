@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings_desktop_schemas
     libpeas gsettings_desktop_schemas json_glib dconf gobjectIntrospection
-    librsvg glib_networking
+    librsvg glib_networking libnotify
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
   ]);
