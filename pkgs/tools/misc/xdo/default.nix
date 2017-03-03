@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
    meta = with stdenv.lib; {
      description = "Small X utility to perform elementary actions on windows";
      homepage = "https://github.com/baskerville/xdo";
-     maintainers = maintainers.meisternu;
+     maintainers = with maintainers; [ meisternu ];
      license = licenses.bsd2;
      platforms = platforms.linux;
    };
