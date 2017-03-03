@@ -28,6 +28,38 @@ let
         else cfg.conf;
     };
 
+  mkPkgDep = cfg: pkg: if cfg then pkg else null;
+
+  pyPkgs = pkgs.pythonPackages;
+
+  package = pkgs.glances.overrideAttrs (attrs: {
+    # attrs.withBatinfoPkg
+    attrs.withBernhardPkg = mkPkgDep cfg.export-riemann pyPkgs.bernhard;
+    # attrs.withBottlePkg
+    attrs.withCassandra-driverPkg = mkPkgDep cfg.export-cassandra pyPkgs.cassandra-driver;
+    attrs.withCouchdbPkg = mkPkgDep cfg.export-couchdb pyPkgs.couchdb;
+    attrs.withDockerPkg = mkPkgDep !cfg.disable-docker pyPkgs.docker;
+    attrs.withElasticsearchPkg = mkPkgDep cfg.export-elasticsearch pyPkgs.elasicsearch;
+    attrs.withHddtempPkg = mkPkgDep !cfg.disable-hddtemp pyPkgs.hddtemp;
+    attrs.withInfluxdbPkg = mkPkgDep cfg.export-influxdb pyPkgs.influxdb;
+    attrs.withMatplotlibPkg = mkPkgDep cfg.enable-history pyPkgs.matplotlib;
+    # attrs.withNetifacesPkg
+    # attrs.withNvidia-ml-pyPkg
+    # attrs.withPikaPkg
+    attrs.withPotsdbPkg = mkPkgDep cfg.export-opentsdb pyPkgs.potsdb;
+    attrs.withPy3sensorsPkg = mkPkgDep !cfg.disable-left-sidebar pyPkgs.py3sensors;
+    attrs.withPy-cpuinfoPkg = mkPkgDep !cfg.disable-quicklook pyPkgs.py-cpuinfo;
+    attrs.withPymdstatPkg = mkPkgDep !cfg.disable-raid pyPkgs.pymdstat;
+    # attrs.withPysnmpPkg
+    # attrs.withPystachePkg
+    # attrs.withPyzmqPkg
+    # attrs.withRequestsPkg
+    # attrs.withScandirPkg
+    attrs.withStatsdPkg = mkPkgDep cfg.export-statsd pyPkgs.statsd;
+    # attrs.withWifiPkg
+    attrs.withZeroconfPkg = mkPkgDep cfg.export-zeromq pyPkgs.zmq;
+  });
+
   # Building the commandline flags for glances here
   glancesCommands = ""
     + "--config ${mkConfig cfg}"
@@ -472,7 +504,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.pythonPackages.glances ];
+    environment.systemPackages = [ package ];
 
     systemd.services.glances = {
       description = "Glances monitoring service";
