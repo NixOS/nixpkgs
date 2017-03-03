@@ -134,10 +134,10 @@ fun! nix#AddNixDerivation(opts, cache, name, ...) abort
     if len(list) > 0
       if '' != list[2]
         let name = list[2]
-        let repository = { 'type': 'git', 'owner': list[1], 'repo': list[2], 'url': 'git://github.com/'.list[1].'/'.list[2] }
+        let repository = { 'type': 'git', 'owner': list[1], 'repo': list[2], 'url': 'https://github.com/'.list[1].'/'.list[2] }
       else
         let name = list[1]
-        let repository = { 'type': 'git', 'owner': list[1], 'repo': 'vim-addon-'.list[1], 'url': 'git://github.com/'.list[1].'/vim-addon-'.list[1] }
+        let repository = { 'type': 'git', 'owner': list[1], 'repo': 'vim-addon-'.list[1], 'url': 'https://github.com/'.list[1].'/vim-addon-'.list[1] }
       endif
     else
       let repository = get(g:vim_addon_manager.plugin_sources, a:name, {})
