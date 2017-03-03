@@ -16568,7 +16568,10 @@ with pkgs;
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
-  scid = callPackage ../games/scid { };
+  scid = callPackage ../games/scid {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
 
   scummvm = callPackage ../games/scummvm { };
 
