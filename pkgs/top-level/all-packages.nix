@@ -12923,7 +12923,7 @@ let
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
-    webkitgtk = webkitgtk24x;
+    inherit (gnome3) libpeas gsettings_desktop_schemas dconf;
   };
 
   lingot = callPackage ../applications/audio/lingot {
