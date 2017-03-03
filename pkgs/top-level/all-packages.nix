@@ -970,6 +970,8 @@ with pkgs;
 
   gist = callPackage ../tools/text/gist { };
 
+  glances = callPackage ../tools/system/glances { };
+
   glide = callPackage ../development/tools/glide { };
 
   glock = callPackage ../development/tools/glock { };
