@@ -501,6 +501,17 @@ rec {
 
   };
 
+  vim-sort-motion = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-sort-motion-2017-01-28";
+    src = fetchgit {
+      url = "https://github.com/christoomey/vim-sort-motion";
+      rev = "dab96e1f4100a559c58f1d0d8e5e400057479f6b";
+      sha256 = "0p8p8nn0q62xm6sc36rwn3dknyk0wpjya21iy9y721vbz1s0l8x7";
+    };
+    dependencies = [];
+
+  };
+
   vim-tmux-navigator = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-tmux-navigator-2017-02-26";
     src = fetchgit {
@@ -1176,6 +1187,17 @@ rec {
 
   };
 
+  python-mode = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "python-mode-2017-02-06";
+    src = fetchgit {
+      url = "https://github.com/python-mode/python-mode";
+      rev = "d113cffc3f7a48564aeb568e1c7a6f5312ff09f5";
+      sha256 = "1gn74cj629q00ar3z0c1dlngn31jr4lv04bwi2npzinn7rpf8nj6";
+    };
+    dependencies = [];
+
+  };
+
   vim-racer = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-racer-2017-02-08";
     src = fetchgit {
@@ -1404,6 +1426,17 @@ rec {
 
   };
 
+  vim-dispatch = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-dispatch-2016-08-30";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-dispatch";
+      rev = "a54f2c5e18b8c2aad8c6f8ba474760e70fdaaca3";
+      sha256 = "18z1hkr3qrgj9j0kr0q3i5vq27dpkjhsm3mqyssi6k5v0iyw49dk";
+    };
+    dependencies = [];
+
+  };
+
   vim-eunuch = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-eunuch-2016-09-07";
     src = fetchgit {
@@ -1546,6 +1579,17 @@ rec {
       url = "https://github.com/vim-scripts/Rename";
       rev = "b240f28d2ede65fa77cd99fe045efe79202f7a34";
       sha256 = "1d1myg4zyc281zcc1ba9idbgcgxndb4a0jwqr4yqxhhzdgszw46r";
+    };
+    dependencies = [];
+
+  };
+
+  ReplaceWithRegister = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ReplaceWithRegister-2014-10-30";
+    src = fetchgit {
+      url = "https://github.com/vim-scripts/ReplaceWithRegister";
+      rev = "832efc23111d19591d495dc72286de2fb0b09345";
+      sha256 = "0mb0sx85j1k59b1zz95r4vkq4kxlb4krhncq70mq7fxrs5bnhq8g";
     };
     dependencies = [];
 
