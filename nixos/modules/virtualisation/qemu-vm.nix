@@ -138,13 +138,13 @@ let
         ''
           # Create a /boot EFI partition with 40M
           ${pkgs.gptfdisk}/bin/sgdisk -G /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -a 1 -n 1:34:2047 -c 1:"BIOS Boot Partition" -t 1:ef02 /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -a 512 -N 2 -c 2:"EFI System" -t 2:ef00 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -a 1 -n 1:34:2047 -c 1:BIOSBootPartition -t 1:ef02 /dev/vda
+          ${pkgs.gptfdisk}/bin/sgdisk -a 512 -N 2 -c 2:EFISystem -t 2:ef00 /dev/vda
           ${pkgs.gptfdisk}/bin/sgdisk -A 1:set:1 /dev/vda
           ${pkgs.gptfdisk}/bin/sgdisk -A 2:set:2 /dev/vda
           ${pkgs.gptfdisk}/bin/sgdisk -h 2 /dev/vda
           ${pkgs.gptfdisk}/bin/sgdisk -C /dev/vda
-          ${pkgs.utillinux}/bin/sfdisk /dev/vda -A 2
+          ${pkgs.gptfdisk}/bin/sgdisk -A 2:set:2 /dev/vda
           . /sys/class/block/vda2/uevent
           mknod /dev/vda2 b $MAJOR $MINOR
           . /sys/class/block/vda/uevent
