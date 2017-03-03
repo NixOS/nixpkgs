@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} :
 
 {
-  name = "kde5";
+  name = "plasma5";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ttuegel ];
   };
