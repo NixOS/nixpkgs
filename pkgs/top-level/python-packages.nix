@@ -1393,29 +1393,7 @@ in {
     };
   });
 
-  astroid = buildPythonPackage rec {
-    name = "astroid-1.4.4";
-
-    propagatedBuildInputs = with self; [ logilab_common six lazy-object-proxy wrapt ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/astroid/${name}.tar.gz";
-      sha256 = "7f7e5512efe515098e77cbd3a60e87c8db8954097b0e025d8d6f72f2e8ddc298";
-    };
-
-    checkPhase = ''
-        ${python.interpreter} -m unittest discover
-    '';
-
-    # Tests cannot be found because they're named unittest_...
-    # instead of test_...
-
-    meta = {
-      description = "A abstract syntax tree for Python with inference support";
-      homepage = http://bitbucket.org/logilab/astroid;
-      license = with licenses; [ lgpl2 ];
-    };
-  };
+  astroid = callPackage ../development/python-modules/astroid { };
 
   attrdict = buildPythonPackage (rec {
     name = "attrdict-2.0.0";
@@ -20457,31 +20435,7 @@ in {
     };
   };
 
-  pylint = buildPythonPackage rec {
-    name = "pylint-${version}";
-    version = "1.5.4";
-
-    src = pkgs.fetchurl {
-        url = "mirror://pypi/p/pylint/${name}.tar.gz";
-        sha256 = "2fe3cc2fc66a56fdc35dbbc2bf1dd96a534abfc79ee6b2ad9ae4fe166e570c4b";
-    };
-
-    propagatedBuildInputs = with self; [ astroid ];
-
-    checkPhase = ''
-        cd pylint/test; ${python.interpreter} -m unittest discover -p "*test*"
-    '';
-
-    postInstall = ''
-        mkdir -p $out/share/emacs/site-lisp
-        cp "elisp/"*.el $out/share/emacs/site-lisp/
-    '';
-
-    meta = {
-        homepage = http://www.logilab.org/project/pylint;
-        description = "A bug and style checker for Python";
-    };
-  };
+  pylint = callPackage ../development/python-modules/pylint { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
