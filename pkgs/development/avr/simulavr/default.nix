@@ -1,26 +1,44 @@
-{ stdenv, fetchurl, python, doxygen, tcl, tk, binutils }:
+# /nix/store/151ypclwwxg67zq7in39476agy6njmrb-simavr-1.3/bin/simavr
+# 
+
+{ stdenv, fetchFromGitHub, avrgcclibc, libelf, which, git, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "simulavr";
+  name = "simavr-${version}";
+  version = "1.3";
+  enableParallelBuilding = true;
 
-  src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/simulavr/simulavr-1.0.0.tar.gz";
-    sha256 = "39d93faa3eeae2bee15f682dd6a48fb4d4366addd12a2abebb04c99f87809be7";
+  src = fetchFromGitHub {
+    owner = "buserror";
+    repo = "simavr";
+    rev = "51d5fa69f9bc3d62941827faec02f8fbc7e187ab";
+    sha256 = "0k8xwzw9i6xsmf98q43fxhphq0wvflvmzqma1n4jd1ym9wi48lfx";
   };
 
-  configureFlags = [
-    "--enable-python"
-    "--enable-doxygen-doc"
-    "--enable-tcl"
-    "--with-bfd=${binutils}/lib/libbfd.la"
-  ];
-  
-  buildInputs = [ python doxygen tcl tk binutils];
+  buildFlags = "AVR_ROOT=${avrgcclibc}/avr SIMAVR_VERSION=${version}";
+  installFlags = buildFlags + " DESTDIR=$(out)";
 
-  meta = {
-    description = "";
-    homepage    = http://www.nongnu.org/simulavr/;
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.all;
+  postFixup = stdenv.lib.optional (!stdenv.isDarwin) ''
+    target="$out/bin/simavr"
+    patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+  '';
+
+  buildInputs = [ which git avrgcclibc libelf pkgconfig  ];
+
+  preBuild = ''
+  pwd
+  rm -r tests/*
+  echo "all: ;" > tests/Makefile
+  rm -r examples/*
+  echo "all: ;" > examples/Makefile
+''  ;
+
+
+  meta = with stdenv.lib; {
+    description = "A lean and mean Atmel AVR simulator for Linux";
+    homepage    = https://github.com/buserror/simavr;
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ goodrone ];
   };
+
 }
