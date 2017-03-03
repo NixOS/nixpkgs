@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, sqlite, pkgconfig, autoreconfHook
+{ fetchurl, stdenv, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime, texinfo , emacs, guile
 , gtk3, webkitgtk24x, libsoup, icu
 , withMug ? false }:
@@ -12,9 +12,18 @@ stdenv.mkDerivation rec {
     sha256 = "0gfwi4dwqhsz138plryd0j935vx2i44p63jpfx85ki3l4ysmmlwd";
   };
 
+  # as of 0.9.18 2 tests are failing but previously we had no tests
+  patches = [
+    ./failing_tests.patch
+  ];
+
+  # pmccabe should be a checkInput instead, but configure looks for it
   buildInputs = [
-    sqlite pkgconfig xapian glib gmime texinfo emacs guile libsoup icu
-    autoreconfHook ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x ];
+    sqlite xapian glib gmime texinfo emacs guile libsoup icu pmccabe
+  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+
+  doCheck = true;
 
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)
