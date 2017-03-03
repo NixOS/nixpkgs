@@ -15966,7 +15966,8 @@ with pkgs;
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  xca = libsForQt5.callPackage ../applications/misc/xca { };
+  # v1.3.2 segfaults with qt 5.7
+  xca = libsForQt56.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
