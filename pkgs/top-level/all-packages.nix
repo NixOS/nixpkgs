@@ -4097,6 +4097,8 @@ with pkgs;
 
   tldr = callPackage ../tools/misc/tldr { };
 
+  tlspool = callPackage ../tools/networking/tlspool { };
+
   tmate = callPackage ../tools/misc/tmate { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
@@ -7594,6 +7596,11 @@ with pkgs;
 
   gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
     guileBindings = config.gnutls.guile or false;
+  };
+
+  gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
+    guileBindings = config.gnutls.guile or false;
+    gperf = gperf_3_0;
   };
 
   gpac = callPackage ../applications/video/gpac { };
