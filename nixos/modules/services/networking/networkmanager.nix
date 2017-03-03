@@ -24,6 +24,10 @@ let
 
     [connection]
     ipv6.ip6-privacy=2
+    ${optionalString (cfg.ethernet.macAddress != null)
+      ''ethernet.cloned-mac-address=${cfg.ethernet.macAddress}''}
+    ${optionalString (cfg.wifi.macAddress != null)
+      ''wifi.cloned-mac-address=${cfg.wifi.macAddress}''}
   '';
 
   /*
@@ -137,6 +141,34 @@ in {
         description = ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
+        '';
+      };
+
+      ethernet.macAddress = mkOption {
+        type = types.nullOr (types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]));
+        default = null;
+        example = "00:11:22:33:44:55";
+        description = ''
+          "XX:XX:XX:XX:XX:XX": MAC address of the interface.
+          <literal>permanent</literal>: use the permanent MAC address of the device.
+          <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
+          <literal>random</literal>: generate a randomized value upon each connect.
+          <literal>stable</literal>: generate a stable, hashed MAC address.
+          See <link xlink:href="https://blogs.gnome.org/thaller/2016/08/26/mac-address-spoofing-in-networkmanager-1-4-0/">MAC Address Spoofing in NetworkManager 1.4.0 – Thomas Haller's Blog</link> for more information.
+        '';
+      };
+
+      wifi.macAddress = mkOption {
+        type = types.nullOr (types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]));
+        default = null;
+        example = "random";
+        description = ''
+          "XX:XX:XX:XX:XX:XX": MAC address of the interface.
+          <literal>permanent</literal>: use the permanent MAC address of the device.
+          <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
+          <literal>random</literal>: generate a randomized value upon each connect.
+          <literal>stable</literal>: generate a stable, hashed MAC address.
+          See <link xlink:href="https://blogs.gnome.org/thaller/2016/08/26/mac-address-spoofing-in-networkmanager-1-4-0/">MAC Address Spoofing in NetworkManager 1.4.0 – Thomas Haller's Blog</link> for more information.
         '';
       };
 
