@@ -1,8 +1,8 @@
 {
   stdenv, lib, runCommand, dbus, qttools, socat, gnugrep, gnused, kconfig,
   kinit, kservice, plasma-workspace, xmessage, xprop, xsetroot, qtbase,
-  qtdeclarative, qtgraphicaleffects, qtquickcontrols, qtscript, qtsvg,
-  qtx11extras, qtxmlpatterns
+  qtdeclarative, qtgraphicaleffects, qtquickcontrols, qtquickcontrols2,
+  qtscript, qtsvg, qtx11extras, qtxmlpatterns
 }:
 
 let
@@ -19,7 +19,7 @@ let
       ];
     libs = builtins.map (pkg: pkg.out or pkg)
       [
-        qtbase qtdeclarative qtgraphicaleffects qtquickcontrols
+        qtbase qtdeclarative qtgraphicaleffects qtquickcontrols qtquickcontrols2
         qtscript qtsvg qtx11extras qtxmlpatterns
       ];
   };

@@ -9347,8 +9347,21 @@ with pkgs;
 
   libsForQt57 = recurseIntoAttrs (lib.makeScope qt57.newScope mkLibsForQt5);
 
-  qt5 = qt57;
-  libsForQt5 = libsForQt57;
+  qt58 = recurseIntoAttrs (import ../development/libraries/qt-5/5.8 {
+    inherit newScope;
+    inherit stdenv fetchurl makeSetupHook makeWrapper;
+    bison = bison2; # error: too few arguments to function 'int yylex(...
+    cups = if stdenv.isLinux then cups else null;
+    harfbuzz = harfbuzz-icu;
+    mesa = mesa_noglu;
+    inherit perl;
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  });
+
+  libsForQt58 = recurseIntoAttrs (lib.makeScope qt58.newScope mkLibsForQt5);
+
+  qt5 = qt58;
+  libsForQt5 = libsForQt58;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -14307,7 +14320,7 @@ with pkgs;
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
-  lyx = libsForQt5.callPackage ../applications/misc/lyx { };
+  lyx = libsForQt57.callPackage ../applications/misc/lyx { };
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 

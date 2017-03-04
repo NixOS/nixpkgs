@@ -101,10 +101,8 @@ stdenv.mkDerivation {
     -release
     -shared
     ${lib.optionalString developerBuild "-developer-build"}
-    -largefile
     -accessibility
     -rpath
-    -optimized-qmake
     -strip
     -no-reduce-relocations
     -system-proxies
@@ -114,7 +112,6 @@ stdenv.mkDerivation {
     -widgets
     -opengl desktop
     -qml-debug
-    -iconv
     -icu
     -pch
     -glib
@@ -254,7 +251,9 @@ stdenv.mkDerivation {
     '';
 
   inherit lndir;
-  setupHook = ../../qtbase-setup-hook.sh;
+  setupHook = if stdenv.isDarwin
+              then ../../qtbase-setup-hook-darwin.sh
+              else ../../qtbase-setup-hook.sh;
 
   enableParallelBuilding = true;
 
