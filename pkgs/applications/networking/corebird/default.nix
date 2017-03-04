@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, gtk3, json_glib, sqlite, libsoup, gettext, vala_0_32
-, automake, autoconf, libtool, pkgconfig, gnome3, gst_all_1, wrapGAppsHook }:
+, automake, autoconf, libtool, pkgconfig, gnome3, gst_all_1, wrapGAppsHook
+, glib_networking }:
 
 stdenv.mkDerivation rec {
   version = "1.3.3";
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automake autoconf libtool pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest
+    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest glib_networking
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav ]);
 
   meta = {
