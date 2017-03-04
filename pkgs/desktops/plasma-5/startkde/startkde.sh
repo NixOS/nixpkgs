@@ -14,6 +14,12 @@ if ! [ -e $HOME/.gtkrc-2.0 ] \
     cat >$HOME/.gtkrc-2.0 <<EOF
 # Default GTK+ 2 config for NixOS KDE 5
 include "/run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc"
+style "user-font"
+{
+  font_name="Sans Serif Regular"
+}
+widget_class "*" style "user-font"
+gtk-font-name="Sans Serif Regular 10"
 gtk-theme-name="Breeze"
 gtk-icon-theme-name="breeze"
 gtk-fallback-icon-theme="hicolor"
@@ -28,6 +34,7 @@ if ! [ -e $HOME/.config/gtk-3.0/settings.ini ] \
        && [ -e /run/current-system/sw/share/themes/Breeze/gtk-3.0 ]; then
     cat >$HOME/.config/gtk-3.0/settings.ini <<EOF
 [Settings]
+gtk-font-name=Sans Serif Regular 10
 gtk-theme-name=Breeze
 gtk-icon-theme-name=breeze
 gtk-fallback-icon-theme=hicolor
@@ -79,9 +86,9 @@ kcheckrunning_result=$?
 if test $kcheckrunning_result -eq 0 ; then
     echo "KDE seems to be already running on this display."
     xmessage -geometry 500x100 "KDE seems to be already running on this display."
-	exit 1
+    exit 1
 elif test $kcheckrunning_result -eq 2 ; then
-	echo "\$DISPLAY is not set or cannot connect to the X server."
+    echo "\$DISPLAY is not set or cannot connect to the X server."
     exit 1
 fi
 
@@ -122,6 +129,7 @@ ksplashrc KSplash Theme ${THEME}.desktop
 ksplashrc KSplash Engine KSplashQML
 kdeglobals KScreen ScreenScaleFactors ''
 kcmfonts General forceFontDPI 0
+kcmfonts General dontChangeAASettings true
 EOF
 
 # preload the user's locale on first start
@@ -145,9 +153,14 @@ kdeglobalsfile=$configDir/kdeglobals
 test -f $kdeglobalsfile || {
 cat >$kdeglobalsfile <<EOF
 [General]
-XftAntialias=true
-XftHintStyle=hintmedium
-XftSubPixel=none
+fixed=Monospace,10,-1,5,50,0,0,0,0,0,Regular
+font=Sans Serif,10,-1,5,50,0,0,0,0,0,Regular
+menuFont=Sans Serif,10,-1,5,50,0,0,0,0,0,Regular
+smallestReadableFont=Sans Serif,8,-1,5,50,0,0,0,0,0,Regular
+toolBarFont=Sans Serif,8,-1,5,50,0,0,0,0,0,Regular
+
+[WM]
+activeFont=Noto Sans,12,-1,5,50,0,0,0,0,0,Bold
 EOF
 }
 
