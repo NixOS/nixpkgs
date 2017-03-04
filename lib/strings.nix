@@ -3,6 +3,7 @@
 let lib = import ./default.nix;
 
 inherit (builtins) length;
+inherit (lib.fndoc) docFn;
 
 in
 
@@ -10,58 +11,69 @@ rec {
 
   inherit (builtins) stringLength substring head tail isString replaceStrings;
 
-  /* Concatenate a list of strings.
+  concatStrings = docFn {
+    description = "Concatenate a list of strings";
+    example = ''
+      concastStrings ["foo "bar"]
+      => "foobar"
+    '';
 
-     Example:
-       concatStrings ["foo" "bar"]
-       => "foobar"
-  */
-  concatStrings = builtins.concatStringsSep "";
+    fn = builtins.concatStringsSep "";
+  };
 
-  /* Map a function over a list and concatenate the resulting strings.
+  concatMapStrings = docFn {
+    description = "Map a function over a list and concatenate the resulting strings.";
+    example = ''
+      concatMapStrings (x: "a" + x) ["foo" "bar"]
+      => "afooabar"
+    '';
 
-     Example:
-       concatMapStrings (x: "a" + x) ["foo" "bar"]
-       => "afooabar"
-  */
-  concatMapStrings = f: list: concatStrings (map f list);
+    fn = f: list: concatStrings (map f list);
+  };
 
-  /* Like `concatMapStrings' except that the f functions also gets the
-     position as a parameter.
+  concatImapStrings = docFn {
+    description = "Like `concatMapStrings' except that the f functions also gets the position as a parameter.";
+    example = ''
+      concatImapStrings (pos: x: "''${toString pos}-''${x}") ["foo" "bar"]
+      => "1-foo2-bar"
+    '';
 
-     Example:
-       concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
-       => "1-foo2-bar"
-  */
-  concatImapStrings = f: list: concatStrings (lib.imap f list);
+    fn = f: list: concatStrings (lib.imap f list);
+  };
 
-  /* Place an element between each element of a list
+  intersperse = docFn {
+    description = "Place an element between each element of a list.";
+    example = ''
+      intersperse "/" ["usr" "local" "bin"]
+      => ["usr" "/" "local" "/" "bin"].
+    '';
 
-     Example:
-       intersperse "/" ["usr" "local" "bin"]
-       => ["usr" "/" "local" "/" "bin"].
-  */
-  intersperse = separator: list:
-    if list == [] || length list == 1
-    then list
-    else tail (lib.concatMap (x: [separator x]) list);
+    fn = separator: list:
+      if list == [] || length list == 1
+      then list
+      else tail (lib.concatMap (x: [separator x]) list);
+  };
 
-  /* Concatenate a list of strings with a separator between each element
-
-     Example:
+  concatStringsSep = docFn {
+    description = "Concatenate a list of strings with a separator between each element";
+    example = ''
         concatStringsSep "/" ["usr" "local" "bin"]
         => "usr/local/bin"
-  */
-  concatStringsSep = builtins.concatStringsSep or (separator: list:
-    concatStrings (intersperse separator list));
+    '';
 
-  /* First maps over the list and then concatenates it.
+    fn = builtins.concatStringsSep or (separator: list:
+      concatStrings (intersperse separator list));
+  };
 
-     Example:
-        concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
-        => "FOO-BAR-BAZ"
-  */
-  concatMapStringsSep = sep: f: list: concatStringsSep sep (map f list);
+  concatMapStringsSep = docFn {
+    description = "First maps over the list and then concatenates it.";
+    example = ''
+      concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
+      => "FOO-BAR-BAZ"
+    '';
+
+    fn = sep: f: list: concatStringsSep sep (map f list);
+  };
 
   /* First imaps over the list and then concatenates it.
 

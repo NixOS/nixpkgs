@@ -1,5 +1,8 @@
 let
 
+  # document functions
+  fndoc = import ./fndoc.nix;
+
   # trivial, often used functions
   trivial = import ./trivial.nix;
 
@@ -35,7 +38,7 @@ let
   fetchers = import ./fetchers.nix;
 
 in
-  { inherit trivial
+  { inherit fndoc trivial
             attrsets lists strings stringsWithDeps
             customisation maintainers meta sources
             modules options types

@@ -16,6 +16,7 @@
   <xi:include href="cross-compilation.xml" />
   <xi:include href="configuration.xml" />
   <xi:include href="functions.xml" />
+  <xi:include href="lib.xml" />
   <xi:include href="meta.xml" />
   <xi:include href="languages-frameworks/index.xml" />
   <xi:include href="package-notes.xml" />

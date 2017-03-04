@@ -3,6 +3,10 @@ let
   lib = pkgs.lib;
   sources = lib.sourceFilesBySuffices ./. [".xml"];
   sources-langs = ./languages-frameworks;
+  libDocJSON = builtins.toFile "options.json" (builtins.toJSON (import ./fn-docs.nix));
+  libDocBook= pkgs.runCommand "options-db.xml" {} ''
+    ${pkgs.ruby}/bin/ruby ${./lib2docbook.rb} < ${libDocJSON} > $out
+  '';
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
@@ -73,6 +77,8 @@ pkgs.stdenv.mkDerivation {
       outputFile = "./languages-frameworks/vim.xml";
     }
   + ''
+    cp ${libDocBook} ./lib.xml
+
     echo ${lib.nixpkgsVersion} > .version
 
     # validate against relaxng schema
@@ -93,6 +99,7 @@ pkgs.stdenv.mkDerivation {
 
     mkdir -p $out/nix-support
     echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
+
 
     xsltproc $xsltFlags --nonet --xinclude \
       --output $dst/epub/ \
