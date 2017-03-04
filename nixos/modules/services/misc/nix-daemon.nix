@@ -8,6 +8,8 @@ let
 
   nix = cfg.package.out;
 
+  isNix112 = versionAtLeast (getVersion nix) "1.12pre4997";
+
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
       description = "Nix build user ${toString nr}";
@@ -383,7 +385,9 @@ in
 
     nix.envVars =
       { NIX_CONF_DIR = "/etc/nix";
+      }
 
+      // optionalAttrs (!isNix112) {
         # Enable the copy-from-other-stores substituter, which allows
         # builds to be sped up by copying build results from remote
         # Nix stores.  To do this, mount the remote file system on a
@@ -392,9 +396,11 @@ in
       }
 
       // optionalAttrs cfg.distributedBuilds {
-        NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
-        NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
-        NIX_CURRENT_LOAD = "/run/nix/current-load";
+        NIX_BUILD_HOOK =
+          if isNix112 then
+            "${nix}/libexec/nix/build-remote"
+          else
+            "${nix}/libexec/nix/build-remote.pl";
       };
 
     # Set up the environment variables for running Nix.

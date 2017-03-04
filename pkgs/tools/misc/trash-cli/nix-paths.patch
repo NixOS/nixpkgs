@@ -1,18 +1,5 @@
-diff -Nurp trash-cli-0.12.9.14-orig/integration_tests/test_trash_rm_script.py trash-cli-0.12.9.14/integration_tests/test_trash_rm_script.py
---- trash-cli-0.12.9.14-orig/integration_tests/test_trash_rm_script.py	2014-12-23 10:10:43.808470486 +0100
-+++ trash-cli-0.12.9.14/integration_tests/test_trash_rm_script.py	2014-12-23 10:11:02.688517975 +0100
-@@ -9,7 +9,7 @@ from pprint import pprint
- @istest
- class WhenNoArgs:
-     def setUp(self):
--        process = Popen(['python', 'trashcli/rm.py'],
-+        process = Popen(['@python@', 'trashcli/rm.py'],
-                     env={'PYTHONPATH':'.'},
-                     stdin=None,
-                     stdout=PIPE,
-diff -Nurp trash-cli-0.12.9.14-orig/trashcli/list_mount_points.py trash-cli-0.12.9.14/trashcli/list_mount_points.py
---- trash-cli-0.12.9.14-orig/trashcli/list_mount_points.py	2014-12-23 10:10:43.808470486 +0100
-+++ trash-cli-0.12.9.14/trashcli/list_mount_points.py	2014-12-23 10:19:04.954796457 +0100
+--- a/trashcli/list_mount_points.py	2014-12-23 10:10:43.808470486 +0100
++++ a/trashcli/list_mount_points.py	2014-12-23 10:19:04.954796457 +0100
 @@ -12,7 +12,7 @@ def mount_points_from_getmnt():
  
  def mount_points_from_df():

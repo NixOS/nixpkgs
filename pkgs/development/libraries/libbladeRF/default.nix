@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Debug"
-    "-DUDEV_RULES_PATH=$out/etc/udev/rules.d"
+    "-DUDEV_RULES_PATH=etc/udev/rules.d"
     "-DINSTALL_UDEV_RULES=ON"
     "-DBUILD_DOCUMENTATION=ON"
   ];

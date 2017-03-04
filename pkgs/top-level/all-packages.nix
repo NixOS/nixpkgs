@@ -1589,6 +1589,8 @@ with pkgs;
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  eflite = callPackage ../applications/audio/eflite {};
+
   eid-mw = callPackage ../tools/security/eid-mw { };
 
   eid-viewer = callPackage ../tools/security/eid-viewer { };
@@ -2163,6 +2165,8 @@ with pkgs;
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
+
+  httplab = callPackage ../tools/networking/httplab { };
 
   partclone = callPackage ../tools/backup/partclone { };
 
@@ -4118,6 +4122,8 @@ with pkgs;
 
   tldr = callPackage ../tools/misc/tldr { };
 
+  tlspool = callPackage ../tools/networking/tlspool { };
+
   tmate = callPackage ../tools/misc/tmate { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
@@ -5215,8 +5221,6 @@ with pkgs;
   idrisPackages = callPackage ../development/idris-modules {
     inherit (haskellPackages) idris;
   };
-
-  ikarus = callPackage ../development/compilers/ikarus { };
 
   intercal = callPackage ../development/compilers/intercal {
     flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
@@ -7619,6 +7623,11 @@ with pkgs;
 
   gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
     guileBindings = config.gnutls.guile or false;
+  };
+
+  gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
+    guileBindings = config.gnutls.guile or false;
+    gperf = gperf_3_0;
   };
 
   gpac = callPackage ../applications/video/gpac { };
@@ -14307,7 +14316,7 @@ with pkgs;
 
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
-    webkitgtk = webkitgtk24x;
+    inherit (gnome3) libpeas gsettings_desktop_schemas dconf;
   };
 
   lingot = callPackage ../applications/audio/lingot {
@@ -16627,7 +16636,10 @@ with pkgs;
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
-  scid = callPackage ../games/scid { };
+  scid = callPackage ../games/scid {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
 
   scummvm = callPackage ../games/scummvm { };
 

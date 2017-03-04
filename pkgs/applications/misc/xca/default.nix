@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeQtWrapper pkgconfig which ];
 
+  configureFlags = [ "CXXFLAGS=-std=c++11" ];
+
   preBuild = ''
     substituteInPlace Local.mak \
       --replace ${qtbase}/bin/moc ${qtbase.dev}/bin/moc \

@@ -93,7 +93,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     platforms = python.meta.platforms;
   } // meta // {
     # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow domenkozar ];
+    maintainers = (meta.maintainers or []) ++ [ chaoflow ];
     # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };
