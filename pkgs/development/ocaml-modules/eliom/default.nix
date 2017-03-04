@@ -10,12 +10,12 @@ assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "6.0.0";
+  version = "6.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "1yaqi5fdzvi2ga412chw5rk3533a3xamwfmias1crk793d43cmpc";
+    sha256 = "01c4l982ld6d1ndhb6f15ldb2li7mv0bs279d5gs99mpiwsapadx";
   };
 
   patches = [ ./camlp4.patch ];
