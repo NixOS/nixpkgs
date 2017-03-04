@@ -34,6 +34,9 @@ let
   sandbox = import ./sandbox.nix;
   fetchers = import ./fetchers.nix;
 
+  # Eval-time filesystem handling
+  filesystem = import ./filesystem.nix;
+
 in
   { inherit trivial
             attrsets lists strings stringsWithDeps
@@ -41,7 +44,7 @@ in
             modules options types
             licenses platforms systems
             debug generators misc
-            sandbox fetchers;
+            sandbox fetchers filesystem;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
