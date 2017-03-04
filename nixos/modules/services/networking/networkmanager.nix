@@ -75,6 +75,19 @@ let
     "pre-down" = "pre-down.d/";
   };
 
+  macAddressOpt = mkOption {
+    type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+    default = "preserve";
+    example = "00:11:22:33:44:55";
+    description = ''
+      "XX:XX:XX:XX:XX:XX": MAC address of the interface.
+      <literal>permanent</literal>: use the permanent MAC address of the device.
+      <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
+      <literal>random</literal>: generate a randomized value upon each connect.
+      <literal>stable</literal>: generate a stable, hashed MAC address.
+    '';
+  };
+
 in {
 
   ###### interface
@@ -142,33 +155,8 @@ in {
         '';
       };
 
-      ethernet.macAddress = mkOption {
-        type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
-        default = "preserve";
-        example = "00:11:22:33:44:55";
-        description = ''
-          "XX:XX:XX:XX:XX:XX": MAC address of the interface.
-          <literal>permanent</literal>: use the permanent MAC address of the device.
-          <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
-          <literal>random</literal>: generate a randomized value upon each connect.
-          <literal>stable</literal>: generate a stable, hashed MAC address.
-          See <link xlink:href="https://blogs.gnome.org/thaller/2016/08/26/mac-address-spoofing-in-networkmanager-1-4-0/">MAC Address Spoofing in NetworkManager 1.4.0 – Thomas Haller's Blog</link> for more information.
-        '';
-      };
-
-      wifi.macAddress = mkOption {
-        type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
-        default = "preserve";
-        example = "random";
-        description = ''
-          "XX:XX:XX:XX:XX:XX": MAC address of the interface.
-          <literal>permanent</literal>: use the permanent MAC address of the device.
-          <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
-          <literal>random</literal>: generate a randomized value upon each connect.
-          <literal>stable</literal>: generate a stable, hashed MAC address.
-          See <link xlink:href="https://blogs.gnome.org/thaller/2016/08/26/mac-address-spoofing-in-networkmanager-1-4-0/">MAC Address Spoofing in NetworkManager 1.4.0 – Thomas Haller's Blog</link> for more information.
-        '';
-      };
+      ethernet.macAddress = macAddressOpt;
+      wifi.macAddress = macAddressOpt;
 
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
