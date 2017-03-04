@@ -318,7 +318,7 @@ in {
     pythonPackages = self;
   };
 
-  pyqt5 = pkgs.qt5.callPackage ../development/python-modules/pyqt/5.x.nix {
+  pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
 
