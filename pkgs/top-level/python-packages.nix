@@ -17395,6 +17395,22 @@ in {
     };
   };
 
+  kaitaistruct = buildPythonPackage rec {
+    name = "kaitaistruct-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/kaitaistruct/${name}.tar.gz";
+      sha256 = "0rwcrlz7f2bwmypqa38pag492bp71wp1bhz51hsaynjjyr9knr12";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Kaitai Struct: runtime library for Python";
+      homepage = "https://github.com/kaitai-io/kaitai_struct_python_runtime";
+      license = licenses.mit;
+    };
+  };
+
   Kajiki = buildPythonPackage rec {
     name = "Kajiki-${version}";
     version = "0.5.5";
