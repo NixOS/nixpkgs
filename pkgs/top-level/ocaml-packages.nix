@@ -382,6 +382,8 @@ let
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
+    ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
+
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
