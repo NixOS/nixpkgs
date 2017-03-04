@@ -7,6 +7,7 @@
 
 let 
   python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
+  # when changing test saving as .sif
 in
 
 stdenv.mkDerivation rec {
@@ -31,12 +32,21 @@ stdenv.mkDerivation rec {
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper intltool gsl poppler imagemagick libwpg librevenge
     libvisio libcdr libexif automake114x cmake
+
+    python2 # provides toPythonPath
   ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
+    for i in "$out/bin/"*
+    do
+      wrapProgram "$i" \
+        --prefix PYTHONPATH : $(toPythonPath "${python2Env}") \
+        --prefix PATH       : ${python2Env}/bin || \
+        exit 2
+    done
     rm "$out/share/icons/hicolor/icon-theme.cache"
   '';
 
