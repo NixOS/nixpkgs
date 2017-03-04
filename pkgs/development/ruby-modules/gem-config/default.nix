@@ -79,11 +79,14 @@ in
   };
 
   # disable bundle install as it can't install anything in addition to what is
-  # specified in pkgs/applications/misc/jekyll/Gemfile anyway
+  # specified in pkgs/applications/misc/jekyll/Gemfile anyway. Also do chmod_R
+  # to compensate for read-only files in site_template in nix store.
   jekyll = attrs: {
     postInstall = ''
       installPath=$(cat $out/nix-support/gem-meta/install-path)
-      sed -i $installPath/lib/jekyll/commands/new.rb -e 's@Exec.run("bundle", "install"@Exec.run("true"@'
+      sed -i $installPath/lib/jekyll/commands/new.rb \
+          -e 's@Exec.run("bundle", "install"@Exec.run("true"@' \
+          -e 's@FileUtils.cp_r site_template + "/.", path@FileUtils.cp_r site_template + "/.", path; FileUtils.chmod_R "u+w", path@'
     '';
   };
 
