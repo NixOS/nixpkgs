@@ -261,6 +261,7 @@ in {
 
     systemd.services."network-manager" = {
       wantedBy = [ "network.target" ];
+      restartTriggers = [ configFile ];
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
