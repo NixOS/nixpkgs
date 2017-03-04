@@ -634,20 +634,6 @@ self: super: {
     haskell-src-exts = self.haskell-src-exts_1_19_1;
   };
 
-  # https://github.com/yesodweb/Shelly.hs/issues/106
-  # https://github.com/yesodweb/Shelly.hs/issues/108
-  # https://github.com/yesodweb/Shelly.hs/issues/130
-  shelly =
-    let drv = appendPatch (dontCheck (doJailbreak super.shelly)) (pkgs.fetchpatch {
-                url = "https://github.com/k0001/Shelly.hs/commit/32a1e290961755e7b2379f59faa49b13d03dfef6.patch";
-                sha256 = "0ccq0qly8bxxv64dk97a44ng6hb01j6ajs0sp3f2nn0hf5j3xv69";
-              });
-    in overrideCabal drv (drv : {
-         # doJailbreak doesn't seem to work for build-depends inside an
-         # if-then-else block so we have to do it manually.
-         postPatch = "sed -i 's/base >=4\.6 \&\& <4\.9\.1/base -any/' shelly.cabal";
-       });
-
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
