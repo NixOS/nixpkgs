@@ -24,10 +24,8 @@ let
 
     [connection]
     ipv6.ip6-privacy=2
-    ${optionalString (cfg.ethernet.macAddress != null)
-      ''ethernet.cloned-mac-address=${cfg.ethernet.macAddress}''}
-    ${optionalString (cfg.wifi.macAddress != null)
-      ''wifi.cloned-mac-address=${cfg.wifi.macAddress}''}
+    ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
+    wifi.cloned-mac-address=${cfg.wifi.macAddress}
   '';
 
   /*
@@ -145,8 +143,8 @@ in {
       };
 
       ethernet.macAddress = mkOption {
-        type = types.nullOr (types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]));
-        default = null;
+        type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+        default = "preserve";
         example = "00:11:22:33:44:55";
         description = ''
           "XX:XX:XX:XX:XX:XX": MAC address of the interface.
@@ -159,8 +157,8 @@ in {
       };
 
       wifi.macAddress = mkOption {
-        type = types.nullOr (types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]));
-        default = null;
+        type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+        default = "preserve";
         example = "random";
         description = ''
           "XX:XX:XX:XX:XX:XX": MAC address of the interface.
