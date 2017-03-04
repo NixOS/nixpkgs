@@ -39,6 +39,14 @@
     };
     version = "3.4.1";
   };
+  jekyll-feed = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1dj62gy1jskkn703mi5h0bkg1psbpkdm2qqdw3bhjfid9358qvay";
+      type = "gem";
+    };
+    version = "0.9.1";
+  };
   jekyll-paginate = {
     source = {
       sha256 = "0r7bcs8fq98zldih4787zk5i9w24nz5wa26m84ssja95n3sas2l8";
@@ -92,6 +100,14 @@
       type = "gem";
     };
     version = "0.3.6";
+  };
+  minima = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1s7ks9fqfvqx7qicnkrg76wavg9mjas52f7iyhr89lz9mqiy7p39";
+      type = "gem";
+    };
+    version = "2.1.0";
   };
   pathutil = {
     source = {
