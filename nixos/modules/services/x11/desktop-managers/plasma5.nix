@@ -181,16 +181,6 @@ in
       };
 
       environment.variables = {
-        GST_PLUGIN_SYSTEM_PATH_1_0 =
-          builtins.map (pkg: getLib pkg + "/lib/gstreamer-1.0")
-            (with pkgs.gst_all_1; [
-              gstreamer
-              gst-plugins-base
-              gst-plugins-good
-              gst-plugins-ugly
-              gst-plugins-bad
-              gst-libav # for mp3 playback
-            ]);
         # Enable GTK applications to load SVG icons
         GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
       };
