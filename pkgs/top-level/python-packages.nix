@@ -7437,6 +7437,7 @@ in modules // {
       homepage = "http://jupyter.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
+      priority = 100; # This is a metapackage which is unimportant
     };
   };
 
