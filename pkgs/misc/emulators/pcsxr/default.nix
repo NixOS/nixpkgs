@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/cgit/pkg-games/pcsxr.git/plain/debian/patches/08_reproducible.patch?h=debian/1.9.94-2";
       sha256 = "1cx9q59drsk9h6l31097lg4aanaj93ysdz5p88pg9c7wvxk1qz06";
     })
+
+    ./uncompress2.patch
   ];
 
   buildInputs = [
