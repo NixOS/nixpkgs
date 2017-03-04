@@ -1,7 +1,7 @@
 { fetchurl, stdenv, sqlite, pkgconfig, autoreconfHook
 , xapian, glib, gmime, texinfo , emacs, guile
 , gtk3, webkitgtk24x, libsoup, icu
-, withMug ? stdenv.isLinux }:
+, withMug ? false }:
 
 stdenv.mkDerivation rec {
   version = "0.9.18";
