@@ -13,18 +13,22 @@ let
       ip4 = mkOption {
         type = types.str;
         description =
-        ''
-          IPv4 address of the guest (must be in the subnet defined by
-          <replaceable>vms.ip4</replaceable>.
-        '';
+          ''
+            IPv4 address of the guest (must be in the subnet defined by
+            <replaceable>vms.ip4</replaceable>).
+          '';
       };
       ip6 = mkOption {
         type = types.str;
         description =
-        ''
-          IPv6 address of the guest (must be in the subnet defined by
-          <replaceable>vms.ip6</replaceable>.
-        '';
+          ''
+            IPv6 address of the guest (must be in the subnet defined by
+            <replaceable>vms.ip6</replaceable>).
+          '';
+      };
+      mac = mkOption {
+        type = types.str;
+        description = "MAC address of the guest.";
       };
 
       persistent = mkOption {
@@ -147,9 +151,8 @@ let
       mcfg = cfg.machines.${name};
       toplevel = mcfg.config.system.build.toplevel;
     in
-    # TODO: prohibit ip spoofing between VMs
     # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
-    # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_
+    # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_ , cf make-disk-image.nix
     concatStringsSep " " (
       [ # Generic configuration
         ''${pkgs.qemu}/bin/qemu-kvm''
@@ -163,7 +166,7 @@ let
         ''-virtfs local,path="/nix/store",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
-        ''-device virtio-net-pci,netdev=net0''
+        ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
         # Boot
         ''-kernel ${toplevel}/kernel''
         ''-initrd ${toplevel}/initrd''
@@ -271,7 +274,11 @@ in
 
           Please note VMs are heavily identified by their name, so the key
           should not be changed light-heartedly.
-        '';
+
+          Warning: this will conflict with any ebtables configuration you may
+          have from elsewhere, with undefined results. This will be possible to
+          fix when a nixos module handling ebtables will be made.
+        ''; # TODO: fix this warning. ebtables is rarely enough used so that I think it's not a *huge* issue, but it should be dealt with nonetheless
     };
   };
 
@@ -318,5 +325,78 @@ in
           ip6 = [ cfg.ip6 ];
         };
       };
+
+    networking.firewall.extraCommands =
+    let ebtables = "${pkgs.ebtables}/bin/ebtables"; in
+      ''
+        # Define chains and policies
+        ${ebtables} -P FORWARD DROP
+        ${ebtables} -P INPUT DROP
+        ${ebtables} -P OUTPUT DROP
+        ${ebtables} -F FORWARD
+        ${ebtables} -F INPUT
+        ${ebtables} -F OUTPUT
+        ${ebtables} -N CHECK_SRC_4
+        ${ebtables} -N CHECK_SRC_6
+        ${ebtables} -N CHECK_DST_4
+        ${ebtables} -N CHECK_DST_6
+        ${ebtables} -N FAIL
+        ${ebtables} -P CHECK_SRC_4 DROP
+        ${ebtables} -P CHECK_SRC_6 DROP
+        ${ebtables} -P CHECK_DST_4 DROP
+        ${ebtables} -P CHECK_DST_6 DROP
+        ${ebtables} -P FAIL DROP
+
+        # TODO: be more strict on ARP's, to ban a VM from DOSing another VM by
+        # taking its IP?
+        ${ebtables} -A FORWARD -p ARP -j ACCEPT
+        ${ebtables} -A INPUT -p ARP -j ACCEPT
+        ${ebtables} -A OUTPUT -p ARP -j ACCEPT
+        # Allow Neighbour Discovery Protocol (same as ARP, same TODO)
+        ${ebtables} -A FORWARD -p IPv6 --ip6-protocol ipv6-icmp --ip6-icmp-type 135:136/0 -j ACCEPT
+        ${ebtables} -A INPUT -p IPv6 --ip6-protocol ipv6-icmp --ip6-icmp-type 135:136/0 -j ACCEPT
+        ${ebtables} -A OUTPUT -p IPv6 --ip6-protocol ipv6-icmp --ip6-icmp-type 135:136/0 -j ACCEPT
+
+        # TODO: check destination for INPUT / source for OUTPUT? (a malicious
+        # host is most likely out of any relevant threat model, so...)
+        ${ebtables} -A FORWARD -p IPv4 -j CHECK_SRC_4
+        ${ebtables} -A FORWARD -p IPv4 -j CHECK_DST_4
+        ${ebtables} -A FORWARD -p IPv4 -j ACCEPT
+        ${ebtables} -A INPUT -p IPv4 -j CHECK_SRC_4
+        ${ebtables} -A INPUT -p IPv4 -j ACCEPT
+        ${ebtables} -A OUTPUT -p IPv4 -j CHECK_DST_4
+        ${ebtables} -A OUTPUT -p IPv4 -j ACCEPT
+
+        ${ebtables} -A FORWARD -p IPv6 -j CHECK_SRC_6
+        ${ebtables} -A FORWARD -p IPv6 -j CHECK_DST_6
+        ${ebtables} -A FORWARD -p IPv6 -j ACCEPT
+        ${ebtables} -A INPUT -p IPv6 -j CHECK_SRC_6
+        ${ebtables} -A INPUT -p IPv6 -j ACCEPT
+        ${ebtables} -A OUTPUT -p IPv6 -j CHECK_DST_6
+        ${ebtables} -A OUTPUT -p IPv6 -j ACCEPT
+
+        ${ebtables} -A FORWARD -j FAIL
+        ${ebtables} -A INPUT -j FAIL
+        ${ebtables} -A OUTPUT -j FAIL
+
+        # CHECK_(SRC|DST)_[46]
+      '' + concatMapStrings (name:
+        let mcfg = cfg.machines.${name}; in
+        ''
+          ${ebtables} -A CHECK_SRC_4 -p IPv4 -i vm-${name} -s ${mcfg.mac} --ip-src ${mcfg.ip4} -j RETURN
+          ${ebtables} -A CHECK_SRC_6 -p IPv6 -i vm-${name} -s ${mcfg.mac} --ip6-src ${mcfg.ip6} -j RETURN
+
+          ${ebtables} -A CHECK_DST_4 -p IPv4 -o vm-${name} -d ${mcfg.mac} --ip-dst ${mcfg.ip4} -j RETURN
+          ${ebtables} -A CHECK_DST_6 -p IPv6 -o vm-${name} -d ${mcfg.mac} --ip6-dst ${mcfg.ip6} -j RETURN
+        ''
+      ) (attrNames cfg.machines) +
+      ''
+        ${ebtables} -A CHECK_SRC_4 -j FAIL
+        ${ebtables} -A CHECK_SRC_6 -j FAIL
+        ${ebtables} -A CHECK_DST_4 -j FAIL
+        ${ebtables} -A CHECK_DST_6 -j FAIL
+
+        ${ebtables} -A FAIL --log --log-prefix "Dropping frame" --log-ip --log-ip6 --log-arp -j DROP
+      '';
   };
 }
