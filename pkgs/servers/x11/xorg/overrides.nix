@@ -394,6 +394,11 @@ in
     let
       attrs = with args;
         if (args.abiCompat == null) then attrs_passed
+            # All this just for 1.19.2, as the tarball is incorrectly autotoolized.
+            // {
+              nativeBuildInputs = [ utilmacros fontutil ];
+              preConfigure = "libtoolize --force; aclocal; autoheader; automake -afi";
+            }
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
