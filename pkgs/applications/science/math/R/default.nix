@@ -55,15 +55,8 @@ stdenv.mkDerivation rec {
       OBJC="clang"
   '' + ''
     )
-    echo "TCLLIBPATH=${tk}/lib" >>etc/Renviron.in
-  '';
-
-  # This Darwin-specific patch has almost certainly become unnecessary. Can
-  # some Darwin user please verify that the R build still succeeds if this is
-  # removed?
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g' src/library/base/R/datetime.R
-    sed -i 's|getenv("R_SHARE_DIR")|"${tzdata}/share"|g' src/extra/tzone/localtime.c
+    echo >>etc/Renviron.in "TCLLIBPATH=${tk}/lib"
+    echo >>etc/Renviron.in "TZDIR=${tzdata}/share/zoneinfo"
   '';
 
   installTargets = [ "install" "install-info" "install-pdf" ];
