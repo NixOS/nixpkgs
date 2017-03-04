@@ -5462,6 +5462,8 @@ with pkgs;
 
   ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
+  ocsigen-i18n = ocamlPackages_4_03.callPackage ../development/tools/ocaml/ocsigen-i18n { };
+
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
     ocamlPackages = ocamlPackages_4_02;
