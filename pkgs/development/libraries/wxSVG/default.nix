@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     Scalable Vector Graphics (SVG) files with the wxWidgets toolkit.
     '';
     homepage = http://wxsvg.sourceforge.net/;
-    license = licenses.gpl;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = with licenses; gpl2;
+    maintainers = with  maintainers [ AndersonTorres ];
+    platforms = with platforms; linux;
   };
 }
