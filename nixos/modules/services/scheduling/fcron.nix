@@ -105,6 +105,10 @@ in
       ];
 
     environment.systemPackages = [ pkgs.fcron ];
+    users.extraUsers.fcron = {
+      isSystemUser = true;
+      description = "fcron";};
+    users.groups = { fcron = { }; };
 
     security.wrappers.fcrontab.source = "${pkgs.fcron.out}/bin/fcrontab";
     systemd.services.fcron = {
