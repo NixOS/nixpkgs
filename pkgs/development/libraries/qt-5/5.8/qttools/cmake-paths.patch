@@ -1,7 +1,7 @@
-Index: qttools-opensource-src-5.5.1/src/assistant/help/Qt5HelpConfigExtras.cmake.in
+Index: qttools-opensource-src-5.8.0/src/assistant/help/Qt5HelpConfigExtras.cmake.in
 ===================================================================
---- qttools-opensource-src-5.5.1.orig/src/assistant/help/Qt5HelpConfigExtras.cmake.in
-+++ qttools-opensource-src-5.5.1/src/assistant/help/Qt5HelpConfigExtras.cmake.in
+--- qttools-opensource-src-5.8.0.orig/src/assistant/help/Qt5HelpConfigExtras.cmake.in
++++ qttools-opensource-src-5.8.0/src/assistant/help/Qt5HelpConfigExtras.cmake.in
 @@ -2,11 +2,10 @@
  if (NOT TARGET Qt5::qcollectiongenerator)
      add_executable(Qt5::qcollectiongenerator IMPORTED)
@@ -18,10 +18,23 @@ Index: qttools-opensource-src-5.5.1/src/assistant/help/Qt5HelpConfigExtras.cmake
      _qt5_Help_check_file_exists(${imported_location})
  
      set_target_properties(Qt5::qcollectiongenerator PROPERTIES
-Index: qttools-opensource-src-5.5.1/src/linguist/Qt5LinguistToolsConfig.cmake.in
+@@ -17,11 +16,7 @@ endif()
+ if (NOT TARGET Qt5::qhelpgenerator)
+     add_executable(Qt5::qhelpgenerator IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Help_install_prefix}/$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
++    set(imported_location \"@NIX_OUT@/$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+     _qt5_Help_check_file_exists(${imported_location})
+ 
+     set_target_properties(Qt5::qhelpgenerator PROPERTIES
+Index: qttools-opensource-src-5.8.0/src/linguist/Qt5LinguistToolsConfig.cmake.in
 ===================================================================
---- qttools-opensource-src-5.5.1.orig/src/linguist/Qt5LinguistToolsConfig.cmake.in
-+++ qttools-opensource-src-5.5.1/src/linguist/Qt5LinguistToolsConfig.cmake.in
+--- qttools-opensource-src-5.8.0.orig/src/linguist/Qt5LinguistToolsConfig.cmake.in
++++ qttools-opensource-src-5.8.0/src/linguist/Qt5LinguistToolsConfig.cmake.in
 @@ -44,11 +44,10 @@ endmacro()
  if (NOT TARGET Qt5::lrelease)
      add_executable(Qt5::lrelease IMPORTED)
