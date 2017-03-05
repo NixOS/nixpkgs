@@ -141,9 +141,6 @@ with lib;
     # Unity3D
     (mkRenamedOptionModule [ "programs" "unity3d" "enable" ] [ "security" "chromiumSuidSandbox" "enable" ])
 
-    # fontconfig-ultimate
-    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "rendering" ] [ "fonts" "fontconfig" "ultimate" "preset" ])
-
     # murmur
     (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
 
@@ -195,5 +192,6 @@ with lib;
       "See the 16.09 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
   ];
 }

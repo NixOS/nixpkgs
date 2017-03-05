@@ -104,7 +104,7 @@ in
         ultimate = {
           enable = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
               Enable fontconfig-ultimate settings (formerly known as
               Infinality). Besides the customizable settings in this NixOS
@@ -163,15 +163,6 @@ in
               <literal>none</literal> disables the substitutions.
             '';
           };
-
-          preset = mkOption {
-            type = types.enum ["ultimate1" "ultimate2" "ultimate3" "ultimate4" "ultimate5" "osx" "windowsxp"];
-            default = "ultimate3";
-            description = ''
-              FreeType rendering settings preset. Any of the presets may be
-              customized by setting environment variables.
-            '';
-          };
         };
       };
     };
@@ -181,7 +172,6 @@ in
   config = mkIf (config.fonts.fontconfig.enable && cfg.enable) {
 
     fonts.fontconfig.confPackages = [ confPkg ];
-    environment.variables."INFINALITY_FT" = cfg.preset;
 
   };
 

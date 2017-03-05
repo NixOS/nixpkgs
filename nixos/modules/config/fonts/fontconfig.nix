@@ -83,7 +83,7 @@ let cfg = config.fonts.fontconfig;
             ${fcBool cfg.hinting.autohint}
           </edit>
           <edit mode="assign" name="hintstyle">
-            <const>hint${cfg.hinting.style}</const>
+            <const>hintslight</const>
           </edit>
           <edit mode="assign" name="antialias">
             ${fcBool cfg.antialias}
@@ -233,7 +233,11 @@ in
         antialias = mkOption {
           type = types.bool;
           default = true;
-          description = "Enable font antialiasing.";
+          description = ''
+            Enable font antialiasing. At high resolution (> 200 DPI),
+            antialiasing has no visible effect; users of such displays may want
+            to disable this option.
+          '';
         };
 
         dpi = mkOption {
@@ -249,7 +253,7 @@ in
           type = types.lines;
           default = "";
           description = ''
-            System-wide customization file contents, has higher priority than 
+            System-wide customization file contents, has higher priority than
             <literal>defaultFonts</literal> settings.
           '';
         };
@@ -287,7 +291,12 @@ in
           enable = mkOption {
             type = types.bool;
             default = true;
-            description = "Enable TrueType hinting.";
+            description = ''
+              Enable font hinting. Hinting aligns glyphs to pixel boundaries to
+              improve rendering sharpness at low resolution. At high resolution
+              (> 200 dpi) hinting will do nothing (at best); users of such
+              displays may want to disable this option.
+            '';
           };
 
           autohint = mkOption {
@@ -297,16 +306,6 @@ in
               Enable the autohinter, which provides hinting for otherwise
               un-hinted fonts. The results are usually lower quality than
               correctly-hinted fonts.
-            '';
-          };
-
-          style = mkOption {
-            type = types.enum ["none" "slight" "medium" "full"];
-            default = "full";
-            description = ''
-              TrueType hinting style, one of <literal>none</literal>,
-              <literal>slight</literal>, <literal>medium</literal>, or
-              <literal>full</literal>.
             '';
           };
         };
@@ -327,7 +326,15 @@ in
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = ''
-              Subpixel order.
+              Subpixel order. The overwhelming majority of displays are
+              <literal>rgb</literal> in their normal orientation. Select
+              <literal>vrgb</literal> for mounting such a display 90 degrees
+              clockwise from its normal orientation or <literal>vbgr</literal>
+              for mounting 90 degrees counter-clockwise. Select
+              <literal>bgr</literal> in the unlikely event of mounting 180
+              degrees from the normal orientation. Reverse these directions in
+              the improbable event that the display's native subpixel order is
+              <literal>bgr</literal>.
             '';
           };
 
@@ -335,7 +342,9 @@ in
             default = "default";
             type = types.enum ["none" "default" "light" "legacy"];
             description = ''
-              FreeType LCD filter.
+              FreeType LCD filter. At high resolution (> 200 DPI), LCD filtering
+              has no visible effect; users of such displays may want to select
+              <literal>none</literal>.
             '';
           };
 
