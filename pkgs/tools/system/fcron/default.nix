@@ -1,15 +1,15 @@
-# I've only worked on this till it compiled and worked. So maybe there are some things which should be done but I've missed
 # restart using 'killall -TERM fcron; fcron -b
 # use convert-fcrontab to update fcrontab files
 
 { stdenv, fetchurl, perl, busybox, vim }:
 
 stdenv.mkDerivation rec {
-  name = "fcron-3.1.2";
+  name = "fcron-${version}";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "http://fcron.free.fr/archives/${name}.src.tar.gz";
-    sha256 = "0p8sn4m3frh2x2llafq2gbcm46rfrn6ck4qi0d0v3ql6mfx9k4hw";
+    sha256 = "0sjz7r050myj6zgixzx3pk5ff819v6b0zfn0q1lkd19jkaix0531";
   };
 
   buildInputs = [ perl ];
@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
       "--with-editor=${vim}/bin/vi"  # TODO customizable
       "--with-bootinstall=no"
       "--sysconfdir=/etc"
-      # fcron would have been default user/grp
-      "--with-username=root"
-      "--with-groupname=root"
       "--with-rootname=root"
       "--with-rootgroup=root"
       "--disable-checks"
@@ -49,10 +46,10 @@ stdenv.mkDerivation rec {
              -e 's@if test ! -f $(DESTDIR)$(ETC)/fcron.allow@ # @' Makefile.in
     '';
 
-  meta = { 
+  meta = with stdenv.lib; { 
     description="A command scheduler with extended capabilities over cron and anacron";
     homepage = http://fcron.free.fr;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    
   };
 }
