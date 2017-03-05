@@ -622,6 +622,16 @@ rec {
 
   };
 
+  vim-beancount = buildVimPlugin {
+    name = "vim-beancount";
+    src = fetchgit {
+      url = "https://github.com/nathangrigg/vim-beancount";
+      rev = "548424b59ac5902a07d53a2c984baeb3983c28ca";
+      sha256 = "0jdd2r6qg9kmv29hfwflr3m2wzqysg7aw1ssjw496bfzmwzyn6bx";
+    };
+    dependencies = [];
+  };
+
   vim-elixir = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-elixir-2017-02-21";
     src = fetchgit {
