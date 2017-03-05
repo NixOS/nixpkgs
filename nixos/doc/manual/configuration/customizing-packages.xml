@@ -90,4 +90,26 @@ be passed your customised instance.  (However, the value
 original rather than overridden instance, to prevent an infinite
 recursion.)</para>
 
+<para>
+  <literal>overrideAttrs</literal> can be used to write a helper function to
+  override compiler flags for a package:
+
+  <programlisting>optimizeWithFlag = pkg: flag:
+    pkg.overrideAttrs (attrs: {
+      NIX_CFLAGS_COMPILE = (attrs.NIX_CFLAGS_COMPILE or "") + " ${flag}";
+    });
+  </programlisting>
+
+  This function can be used to override the
+  <varname>NIX_CFLAGS_COMPILE</varname>
+  variable and thus pass custom compiler flags:
+
+  <programlisting>environment.systemPackages = let
+      mutt = optimizeWithFlag pkgs.mutt "-march=native";
+    in
+      [ mutt # and more
+      ];
+  </programlisting>
+</para>
+
 </section>
