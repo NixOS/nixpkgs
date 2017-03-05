@@ -180,8 +180,6 @@ self: super:
       ] drv.libraryHaskellDepends;
   });
 
-  semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
-
   transformers-compat = overrideCabal super.transformers-compat (drv: {
     configureFlags = [];
   });
