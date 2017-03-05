@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, skalibs }:
+{ stdenv, fetchFromGitHub, skalibs, gcc }:
 
 stdenv.mkDerivation rec {
   name = "s6-portable-utils-${version}";
@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   dontDisableStatic = true;
-
+  
+  # Darwin Support, optional isDarwin failed
+  nativeBuildInputs = [ gcc ];
+    
   configureFlags = [
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs}/include"
