@@ -279,6 +279,7 @@
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
+  ndowens = "Nathan Owens <ndowens04@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
