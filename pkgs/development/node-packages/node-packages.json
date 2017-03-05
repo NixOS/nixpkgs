@@ -4,6 +4,7 @@
 , "bower"
 , "bower2nix"
 , "browserify"
+, "@captainsafia/legit"
 , "castnow"
 , "coffee-script"
 , "cordova"
