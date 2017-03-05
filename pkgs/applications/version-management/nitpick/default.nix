@@ -1,21 +1,21 @@
 { fetchFromGitHub
-, python
-, wrapPython
+, buildPythonPackage
 , stdenv
 }:
 
-stdenv.mkDerivation rec {
-  name = "nitpick-${version}";
+buildPythonPackage rec {
+  pname = "nitpick";
   version = "1.1";
+  name = "${pname}-${version}";
+
+  format = "other";
+  
   src = fetchFromGitHub {
     owner = "travisb-ca";
-    repo = "nitpick";
+    repo = pname;
     rev = version;
     sha256 = "11gn6nc6ypwivy20bx1r0rm2giblwx6jv485zk875a9pdbcwbrf6";
   };
-
-  buildInputs = [ python ];
-  nativeBuildInputs = [ wrapPython ];
 
   installPhase = ''
     mkdir -p $out/share/src
@@ -23,12 +23,6 @@ stdenv.mkDerivation rec {
   
     mkdir -p $out/bin
     ln -s $out/share/src/nitpick.py $out/bin/nitpick
-  '';
-
-  postFixup = ''
-    buildPythonPath "$out"
-
-    patchPythonScript "$out/share/src/nitpick.py"
   '';
 
   meta = {

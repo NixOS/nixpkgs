@@ -32105,6 +32105,8 @@ EOF
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
+  nitpick = callPackage ../applications/version-management/nitpick { };
+
 });
 
 in fix' (extends overrides packages)
