@@ -1,6 +1,7 @@
 { fetchFromGitHub
 , buildPythonPackage
 , stdenv
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -9,6 +10,7 @@ buildPythonPackage rec {
   name = "${pname}-${version}";
 
   format = "other";
+  disabled = !isPy27;
   
   src = fetchFromGitHub {
     owner = "travisb-ca";
