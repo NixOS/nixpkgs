@@ -10033,6 +10033,10 @@ with pkgs;
     inherit (darwin.stubs) setfile rez derez;
   };
 
+  wxSVG = callPackage ../development/libraries/wxSVG {
+    wxGTK = wxGTK30;
+  };
+
   wtk = callPackage ../development/libraries/wtk { };
 
   x264 = callPackage ../development/libraries/x264 { };
