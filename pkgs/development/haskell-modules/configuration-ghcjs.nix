@@ -47,10 +47,10 @@ self: super:
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   bin-package-db = null;
-  haskeline = self.haskeline_0_7_2_1;
+  haskeline = self.haskeline_0_7_3_1;
   hoopl = self.hoopl_3_10_2_1;
   hpc = self.hpc_0_6_0_2;
-  terminfo = self.terminfo_0_4_0_1;
+  terminfo = self.terminfo_0_4_0_2;
   xhtml = self.xhtml_3000_2_1;
 
 
