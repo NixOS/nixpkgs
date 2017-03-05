@@ -1,5 +1,5 @@
---- qtwebengine-opensource-src-5.6.0-orig/src/3rdparty/chromium/v8/tools/gyp/v8.gyp	2016-03-04 01:48:36.000000000 +1100
-+++ qtwebengine-opensource-src-5.6.0/src/3rdparty/chromium/v8/tools/gyp/v8.gyp	2016-05-01 19:15:44.052770543 +1000
+--- qtwebengine-opensource-src-5.8.0-orig/src/3rdparty/chromium/v8/src/v8.gyp	2016-03-04 01:48:36.000000000 +1100
++++ qtwebengine-opensource-src-5.8.0/src/3rdparty/chromium/v8/src/v8.gyp	2016-05-01 19:15:44.052770543 +1000
 @@ -33,6 +33,7 @@
      'embed_script%': "",
      'v8_extra_library_files%': [],

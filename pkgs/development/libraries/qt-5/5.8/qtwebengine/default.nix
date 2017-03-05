@@ -27,9 +27,9 @@ qtSubmodule {
     export MAKEFLAGS=-j$NIX_BUILD_CORES
     substituteInPlace ./src/3rdparty/chromium/build/common.gypi \
       --replace /bin/echo ${coreutils}/bin/echo
-    substituteInPlace ./src/3rdparty/chromium/v8/build/toolchain.gypi \
+    substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/toolchain.gypi \
       --replace /bin/echo ${coreutils}/bin/echo
-    substituteInPlace ./src/3rdparty/chromium/v8/build/standalone.gypi \
+    substituteInPlace ./src/3rdparty/chromium/v8/gypfiles/standalone.gypi \
       --replace /bin/echo ${coreutils}/bin/echo
 
     # fix default SSL bundle location
