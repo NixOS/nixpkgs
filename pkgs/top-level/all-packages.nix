@@ -13115,6 +13115,10 @@ with pkgs;
 
   dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
+  dvdstyler = callPackage ../applications/video/dvdstyler {
+    inherit (gnome2) libgnomeui;
+  };
+
   dwb-unwrapped = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
   dwb = wrapFirefox dwb-unwrapped { desktopName = "dwb"; };
 
