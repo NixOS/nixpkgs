@@ -576,7 +576,7 @@ specified packages in its path.
 #### python.withPackages function
 
 The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
-It takes a function as an argument that is passed the set of python packages and returns the list 
+It takes a function as an argument that is passed the set of python packages and returns the list
 of the packages to be included in the environment. Using the `withPackages` function, the previous
 example for the Pyramid Web Framework environment can be written like this:
 
@@ -584,10 +584,10 @@ example for the Pyramid Web Framework environment can be written like this:
 
     python.withPackages (ps: [ps.pyramid])
 
-`withPackages` passes the correct package set for the specific interpreter version as an 
+`withPackages` passes the correct package set for the specific interpreter version as an
 argument to the function. In the above example, `ps` equals `pythonPackages`.
 But you can also easily switch to using python3:
-    
+
     with import <nixpkgs> {};
 
     python3.withPackages (ps: [ps.pyramid])
@@ -828,7 +828,7 @@ Create this `default.nix` file, together with a `requirements.txt` and simply ex
 with import <nixpkgs> {};
 with pkgs.python27Packages;
 
-stdenv.mkDerivation { 
+stdenv.mkDerivation {
   name = "impurePythonEnv";
   buildInputs = [
     # these packages are required for virtualenv and pip to work:
@@ -836,10 +836,10 @@ stdenv.mkDerivation {
     python27Full
     python27Packages.virtualenv
     python27Packages.pip
-    # the following packages are related to the dependencies of your python 
-    # project. 
-    # In this particular example the python modules listed in the 
-    # requirements.tx require the following packages to be installed locally 
+    # the following packages are related to the dependencies of your python
+    # project.
+    # In this particular example the python modules listed in the
+    # requirements.tx require the following packages to be installed locally
     # in order to compile any binary extensions they may require.
     #
     taglib
@@ -854,7 +854,7 @@ stdenv.mkDerivation {
   shellHook = ''
   # set SOURCE_DATE_EPOCH so that we can use python wheels
   SOURCE_DATE_EPOCH=$(date +%s)
-  virtualenv --no-setuptools venv 
+  virtualenv --no-setuptools venv
   export PATH=$PWD/venv/bin:$PATH
   pip install -r requirements.txt
   '';
@@ -862,7 +862,7 @@ stdenv.mkDerivation {
 ```
 
 Note that the `pip install` is an imperative action. So every time `nix-shell`
-is executed it will attempt to download the python modules listed in 
+is executed it will attempt to download the python modules listed in
 requirements.txt. However these will be cached locally within the `virtualenv`
 folder and not downloaded again.
 
