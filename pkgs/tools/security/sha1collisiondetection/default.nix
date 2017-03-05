@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation  rec {
   pname = "sha1collisiondetection";
-  version = "2017-02-21";
-  name = "${pname}-unstable-${version}";
+  version = "1.0.1";
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "cr-marcstevens";
     repo = "${pname}";
-    rev = "40ccf5e3537ff6b2e5ceac5747f376a2ef430bec";
-    sha256 = "1k2qjarcx88ndc4yl8xnr1l3j74w1qacvyrhv4ms9hndy8lrsm0l";
+    rev = "development-v${version}";
+    sha256 = "2k2qjarcx88ndc4yl8xnr1l3j74w1qacvyrhv4ms9hndy8lrsm0l";
   };
 
   patchPhase = ''substituteInPlace Makefile --replace "shell arch" "uname -m"'';
