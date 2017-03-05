@@ -74,7 +74,6 @@ can do is write a simple Nix expression which sets up an environment for you,
 requiring you only to type `nix-shell`. Say we want to have Python 3.5, `numpy`
 and `toolz`, like before, in an environment. With a `shell.nix` file
 containing
-
 ```nix
 with import <nixpkgs> {};
 
@@ -101,22 +100,25 @@ On Nix all packages are built by functions. The main function in Nix for buildin
 Let's see how we would build the `toolz` package. According to [`python-packages.nix`](https://raw.githubusercontent.com/NixOS/nixpkgs/master/pkgs/top-level/python-packages.nix) `toolz` is build using
 
 ```nix
-toolz = buildPythonPackage rec{
-  name = "toolz-${version}";
-  version = "0.7.4";
+{ # ...
 
-  src = pkgs.fetchurl{
-    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-    sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
-  };
+  toolz = buildPythonPackage rec {
+    name = "toolz-${version}";
+    version = "0.7.4";
 
-  meta = {
-    homepage = "http://github.com/pytoolz/toolz/";
-    description = "List processing tools and functional utilities";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
+      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
+    };
+
+    meta = {
+      homepage = "http://github.com/pytoolz/toolz/";
+      description = "List processing tools and functional utilities";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ fridh ];
+    };
   };
-};
+}
 ```
 
 What happens here? The function `buildPythonPackage` is called and as argument
@@ -143,7 +145,7 @@ pkgs.python35Packages.buildPythonPackage rec {
   name = "toolz-${version}";
   version = "0.8.0";
 
-  src = pkgs.fetchurl{
+  src = pkgs.fetchurl {
     url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
   };
@@ -174,7 +176,7 @@ with import <nixpkgs> {};
       name = "toolz-${version}";
       version = "0.8.0";
 
-      src = pkgs.fetchurl{
+      src = pkgs.fetchurl {
         url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
         sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
       };
@@ -215,25 +217,28 @@ The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
 
 ```nix
-datashape = buildPythonPackage rec {
-  name = "datashape-${version}";
-  version = "0.4.7";
+{ # ...
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/D/DataShape/${name}.tar.gz";
-    sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+  datashape = buildPythonPackage rec {
+    name = "datashape-${version}";
+    version = "0.4.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/D/DataShape/${name}.tar.gz";
+      sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
+
+    meta = {
+      homepage = https://github.com/ContinuumIO/datashape;
+      description = "A data description language";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ fridh ];
+    };
   };
-
-  buildInputs = with self; [ pytest ];
-  propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
-
-  meta = {
-    homepage = https://github.com/ContinuumIO/datashape;
-    description = "A data description language";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fridh ];
-  };
-};
+}
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
@@ -247,23 +252,26 @@ Python bindings to `libxml2` and `libxslt`. These libraries are only required
 when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
-lxml = buildPythonPackage rec {
-  name = "lxml-3.4.4";
+{ # ...
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/l/lxml/${name}.tar.gz";
-    sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
+  lxml = buildPythonPackage rec {
+    name = "lxml-3.4.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lxml/${name}.tar.gz";
+      sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
+    };
+
+    buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
+
+    meta = {
+      description = "Pythonic binding for the libxml2 and libxslt libraries";
+      homepage = http://lxml.de;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ sjourdois ];
+    };
   };
-
-  buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
-
-  meta = {
-    description = "Pythonic binding for the libxml2 and libxslt libraries";
-    homepage = http://lxml.de;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sjourdois ];
-  };
-};
+}
 ```
 
 In this example `lxml` and Nix are able to work out exactly where the relevant
@@ -277,33 +285,37 @@ find each of them in a different folder, and therefore we have to set `LDFLAGS`
 and `CFLAGS`.
 
 ```nix
-pyfftw = buildPythonPackage rec {
-  name = "pyfftw-${version}";
-  version = "0.9.2";
+{ # ...
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-    sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
+  pyfftw = buildPythonPackage rec {
+    name = "pyfftw-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
+      sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
+    };
+
+    buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
+
+    propagatedBuildInputs = with self; [ numpy scipy ];
+
+    # Tests cannot import pyfftw. pyfftw works fine though.
+    doCheck = false;
+
+    preConfigure = ''
+      export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
+      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
+    '';
+
+    meta = {
+      description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
+      homepage = http://hgomersall.github.com/pyFFTW/;
+      license = with licenses; [ bsd2 bsd3 ];
+      maintainer = with maintainers; [ fridh ];
+    };
   };
-
-  buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
-
-  propagatedBuildInputs = with self; [ numpy scipy ];
-
-  # Tests cannot import pyfftw. pyfftw works fine though.
-  doCheck = false;
-
-  LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-  CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
-  '';
-
-  meta = {
-    description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-    homepage = http://hgomersall.github.com/pyFFTW/;
-    license = with licenses; [ bsd2 bsd3 ];
-    maintainer = with maintainers; [ fridh ];
-  };
-};
+}
 ```
 Note also the line `doCheck = false;`, we explicitly disabled running the test-suite.
 
@@ -316,10 +328,7 @@ That way, you can run updated code without having to reinstall after each and ev
 Development mode is also available. Let's see how you can use it.
 
 In the previous Nix expression the source was fetched from an url. We can also refer to a local source instead using
-
-```nix
-src = ./path/to/source/tree;
-```
+`src = ./path/to/source/tree;`
 
 If we create a `shell.nix` file which calls `buildPythonPackage`, and if `src`
 is a local source, and if the local source has a `setup.py`, then development
@@ -338,7 +347,7 @@ buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
   propagatedBuildInputs = [ pytest numpy pkgs.libsndfile ];
-};
+}
 ```
 
 It is important to note that due to how development mode is implemented on Nix it is not possible to have multiple packages simultaneously in development mode.
@@ -371,7 +380,7 @@ buildPythonPackage rec {
   name = "toolz-${version}";
   version = "0.7.4";
 
-  src = pkgs.fetchurl{
+  src = pkgs.fetchurl {
     url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
@@ -382,7 +391,7 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };
-};
+}
 ```
 
 It takes two arguments, `pkgs` and `buildPythonPackage`.
@@ -392,7 +401,10 @@ We now call this function using `callPackage` in the definition of our environme
 with import <nixpkgs> {};
 
 ( let
-    toolz = pkgs.callPackage ~/path/to/toolz/release.nix { pkgs=pkgs; buildPythonPackage=pkgs.python35Packages.buildPythonPackage; };
+    toolz = pkgs.callPackage /path/to/toolz/release.nix {
+      pkgs = pkgs;
+      buildPythonPackage = pkgs.python35Packages.buildPythonPackage;
+    };
   in pkgs.python35.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
@@ -474,22 +486,27 @@ The `buildPythonPackage` function is implemented in
 `pkgs/development/interpreters/python/build-python-package.nix`
 
 The following is an example:
+```nix
+{ # ...
 
-    twisted = buildPythonPackage {
-      name = "twisted-8.1.0";
+  twisted = buildPythonPackage {
+    name = "twisted-8.1.0";
 
-      src = pkgs.fetchurl {
-        url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
-        sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
-      };
+    src = pkgs.fetchurl {
+      url = http://tmrc.mit.edu/mirror/twisted/Twisted/8.1/Twisted-8.1.0.tar.bz2;
+      sha256 = "0q25zbr4xzknaghha72mq57kh53qw1bf8csgp63pm9sfi72qhirl";
+    };
 
-      propagatedBuildInputs = [ self.ZopeInterface ];
+    propagatedBuildInputs = [ self.ZopeInterface ];
 
-      meta = {
-        homepage = http://twistedmatrix.com/;
-        description = "Twisted, an event-driven networking engine written in Python";
-        license = stdenv.lib.licenses.mit; };
-      };
+    meta = {
+      homepage = http://twistedmatrix.com/;
+      description = "Twisted, an event-driven networking engine written in Python";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+}
+```
 
 The `buildPythonPackage` mainly does four things:
 
@@ -539,29 +556,32 @@ Because with an application we're not interested in multiple version the prefix 
 Python environments can be created using the low-level `pkgs.buildEnv` function.
 This example shows how to create an environment that has the Pyramid Web Framework.
 Saving the following as `default.nix`
+```nix
+with import <nixpkgs> {};
 
-    with import <nixpkgs> {};
-
-    python.buildEnv.override {
-      extraLibs = [ pkgs.pythonPackages.pyramid ];
-      ignoreCollisions = true;
-    }
+python.buildEnv.override {
+  extraLibs = [ pkgs.pythonPackages.pyramid ];
+  ignoreCollisions = true;
+}
+```
 
 and running `nix-build` will create
-
-    /nix/store/cf1xhjwzmdki7fasgr4kz6di72ykicl5-python-2.7.8-env
+```
+/nix/store/cf1xhjwzmdki7fasgr4kz6di72ykicl5-python-2.7.8-env
+```
 
 with wrapped binaries in `bin/`.
 
 You can also use the `env` attribute to create local environments with needed
 packages installed. This is somewhat comparable to `virtualenv`. For example,
 running `nix-shell` with the following `shell.nix`
+```nix
+with import <nixpkgs> {};
 
-    with import <nixpkgs> {};
-
-    (python3.buildEnv.override {
-      extraLibs = with python3Packages; [ numpy requests2 ];
-    }).env
+(python3.buildEnv.override {
+  extraLibs = with python3Packages; [ numpy requests2 ];
+}).env
+```
 
 will drop you into a shell where Python will have the
 specified packages in its path.
@@ -579,27 +599,30 @@ The `python.withPackages` function provides a simpler interface to the `python.b
 It takes a function as an argument that is passed the set of python packages and returns the list
 of the packages to be included in the environment. Using the `withPackages` function, the previous
 example for the Pyramid Web Framework environment can be written like this:
+```nix
+with import <nixpkgs> {};
 
-    with import <nixpkgs> {};
-
-    python.withPackages (ps: [ps.pyramid])
+python.withPackages (ps: [ps.pyramid])
+```
 
 `withPackages` passes the correct package set for the specific interpreter version as an
 argument to the function. In the above example, `ps` equals `pythonPackages`.
 But you can also easily switch to using python3:
+```nix
+with import <nixpkgs> {};
 
-    with import <nixpkgs> {};
-
-    python3.withPackages (ps: [ps.pyramid])
+python3.withPackages (ps: [ps.pyramid])
+```
 
 Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
 
 As `python.withPackages` simply uses `python.buildEnv` under the hood, it also supports the `env`
 attribute. The `shell.nix` file from the previous section can thus be also written like this:
+```nix
+with import <nixpkgs> {};
 
-    with import <nixpkgs> {};
-
-    (python33.withPackages (ps: [ps.numpy ps.requests2])).env
+(python33.withPackages (ps: [ps.numpy ps.requests2])).env
+```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
@@ -613,22 +636,24 @@ install -e . --prefix $TMPDIR/`for the package.
 Warning: `shellPhase` is executed only if `setup.py` exists.
 
 Given a `default.nix`:
+```nix
+with import <nixpkgs> {};
 
-    with import <nixpkgs> {};
+buildPythonPackage { name = "myproject";
 
-    buildPythonPackage { name = "myproject";
+buildInputs = with pkgs.pythonPackages; [ pyramid ];
 
-    buildInputs = with pkgs.pythonPackages; [ pyramid ];
-
-    src = ./.; }
+src = ./.; }
+```
 
 Running `nix-shell` with no arguments should give you
 the environment in which the package would be built with
 `nix-build`.
 
 Shortcut to setup environments with C headers/libraries and python packages:
-
-    $ nix-shell -p pythonPackages.pyramid zlib libjpeg git
+```shell
+nix-shell -p pythonPackages.pyramid zlib libjpeg git
+```
 
 Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 
@@ -676,7 +701,7 @@ with import <nixpkgs> {};
 pkgs.python35.withPackages (ps: with ps; [ numpy ipython ])
 ```
 and install it in your profile with
-```
+```shell
 nix-env -if build.nix
 ```
 Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
@@ -684,15 +709,19 @@ Now you can use the Python interpreter, as well as the extra packages that you a
 #### Environment defined in `~/.nixpkgs/config.nix`
 
 If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
-```
+```nix
+{ # ...
+
   packageOverrides = pkgs: with pkgs; {
     myEnv = python35.withPackages (ps: with ps; [ numpy ipython ]);
   };
+}
 ```
 and install it in your profile with
-```
+```shell
 nix-env -iA nixpkgs.myEnv
 ```
+
 We're installing using the attribute path and assume the channels is named `nixpkgs`.
 Note that I'm using the attribute path here.
 
@@ -701,9 +730,12 @@ Note that I'm using the attribute path here.
 For the sake of completeness, here's another example how to install the environment system-wide.
 
 ```nix
-environment.systemPackages = with pkgs; [
-  (python35.withPackages(ps: with ps; [ numpy ipython ]))
-];
+{ # ...
+
+  environment.systemPackages = with pkgs; [
+    (python35.withPackages(ps: with ps; [ numpy ipython ]))
+  ];
+}
 ```
 
 ### How to solve circular dependencies?
@@ -740,19 +772,18 @@ All packages in the Python package set will now use the updated `scipy` version.
 ```nix
 with import <nixpkgs> {};
 
-(
-let
-  packageOverrides = self: super: {
-    scipy = super.scipy_0_17;
-  };
-in (pkgs.python35.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
+( let
+    packageOverrides = self: super: {
+      scipy = super.scipy_0_17;
+    };
+  in (pkgs.python35.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
 ).env
 ```
 The requested package `blaze` depends on `pandas` which itself depends on `scipy`.
 
 If you want the whole of Nixpkgs to use your modifications, then you can use `overlays`
 as explained in this manual. In the following example we build a `inkscape` using a different version of `numpy`.
-```
+```nix
 let
   pkgs = import <nixpkgs> {};
   newpkgs = import pkgs.path { overlays = [ (pkgsself: pkgssuper: {
@@ -775,32 +806,32 @@ This is because files are included that depend on items in the Nix store which h
 The command `bdist_wheel` takes into account `SOURCE_DATE_EPOCH`, and `nix-shell` sets this to 1. By setting it to a value corresponding to 1980 or later, or by unsetting it, it is possible to build wheels.
 
 Use 1980 as timestamp:
-```
+```shell
 nix-shell --run "SOURCE_DATE_EPOCH=315532800 python3 setup.py bdist_wheel"
 ```
 or the current time:
-```
+```shell
 nix-shell --run "SOURCE_DATE_EPOCH=$(date +%s) python3 setup.py bdist_wheel"
 ```
 or unset:
-```
+```shell
 nix-shell --run "unset SOURCE_DATE_EPOCH; python3 setup.py bdist_wheel"
 ```
 
 ### `install_data` / `data_files` problems
 
 If you get the following error:
-
-    could not create '/nix/store/6l1bvljpy8gazlsw2aw9skwwp4pmvyxw-python-2.7.8/etc':
-    Permission denied
-
-This is a [known bug](https://github.com/pypa/setuptools/issues/130) in setuptools.
+```
+could not create '/nix/store/6l1bvljpy8gazlsw2aw9skwwp4pmvyxw-python-2.7.8/etc':
+Permission denied
+```
+This is a [known bug](https://github.com/pypa/setuptools/issues/130) in `setuptools`.
 Setuptools `install_data` does not respect `--prefix`. An example of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
-
-    ${python.interpreter} setup.py install_data --install-dir=$out --root=$out
-    sed -i '/ = data\_files/d' setup.py
-
+```shell
+${python.interpreter} setup.py install_data --install-dir=$out --root=$out
+sed -i '/ = data\_files/d' setup.py
+```
 
 ###  Rationale of non-existent global site-packages
 
@@ -824,7 +855,7 @@ and install python modules through `pip` the traditional way.
 
 Create this `default.nix` file, together with a `requirements.txt` and simply execute `nix-shell`.
 
-```
+```nix
 with import <nixpkgs> {};
 with pkgs.python27Packages;
 
