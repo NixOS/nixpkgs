@@ -21,7 +21,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "1.12pre")
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
