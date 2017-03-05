@@ -152,7 +152,6 @@ let
       toplevel = mcfg.config.system.build.toplevel;
     in
     # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
-    # TODO: DO NOT BE STUPID AND GIVE ACCESS TO ALL THE STORE, ie. s_/nix/store_$store_ , cf make-disk-image.nix
     concatStringsSep " " (
       [ # Generic configuration
         ''${pkgs.qemu}/bin/qemu-kvm''
@@ -163,7 +162,7 @@ let
         ''-nographic -serial unix:"$console",server,nowait''
         # File systems
         ''-drive file="$image",if=virtio,media=disk''
-        ''-virtfs local,path="/nix/store",security_model=none,mount_tag=store''
+        ''-virtfs local,path="$store",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
         ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
@@ -184,8 +183,28 @@ let
       store="${cfg.storesPath}/${name}"
       persist="${cfg.persistPath}/${name}"
 
-      mkdir -p "$store" "$persist" "${cfg.imagesPath}" "${cfg.consolePath}"
+      # Generate paths
+      mkdir -p "$persist" "${cfg.imagesPath}" "${cfg.consolePath}"
       mkdir -p ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
+
+      # Regenerate store
+      for path in $(ls "$store"); do
+        ${pkgs.busybox}/bin/umount "$store/$path" > /dev/null 2>&1 || true
+        if [ -d "$store/$path" ]; then
+          rmdir "$store/$path"
+        else
+          rm "$store/$path"
+        fi
+      done
+      for path in $(${pkgs.nix}/bin/nix-store -qR "${mcfg.config.system.build.toplevel}"); do
+        npath="$(echo "$path" | sed "s*/nix/store*$store*")"
+        if [ -d "$path" ]; then
+          mkdir "$npath"
+        else
+          touch "$npath"
+        fi
+        ${pkgs.busybox}/bin/mount --bind "$path" "$npath"
+      done
 
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
@@ -296,7 +315,8 @@ in
         script =
           ''
             # Wait until the VM has had time to startup
-            sleep 1
+            # TODO: make this service actually start only after qemu has started?
+            sleep 60
             exec ${pkgs.socat}/bin/socat PTY,link="${cfg.consolePath}/${name}" "${cfg.consolePath}/${name}.unix"
           '';
         partOf = [ "vm-${name}.service" ];
