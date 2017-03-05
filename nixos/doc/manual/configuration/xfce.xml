@@ -84,7 +84,7 @@ services.xserver.desktopManager.xfce.enable = true;
             Thunar and/or the desktop takes time to show up.
 
             Thunar will spit out this kind of message on start
-            (look at journalctl --user -b).
+            (look at <command>journalctl --user -b</command>).
 
             <programlisting>
 Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with dbus name org.gtk.Private.UDisks2VolumeMonitor is not supported
