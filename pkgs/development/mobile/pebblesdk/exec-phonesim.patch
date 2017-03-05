@@ -1,0 +1,11 @@
+diff -purN p1qqihlhddcrqqf33024j2bz3lk3drdd-pebble-sdk-4.5/pebble-tool/pebble_tool/sdk/emulator.py new/pebble-tool/pebble_tool/sdk/emulator.py
+--- p1qqihlhddcrqqf33024j2bz3lk3drdd-pebble-sdk-4.5/pebble-tool/pebble_tool/sdk/emulator.py	1969-12-31 19:00:01.000000000 -0500
++++ new/pebble-tool/pebble_tool/sdk/emulator.py	2017-03-01 12:32:11.832916784 -0500
+@@ -304,7 +304,6 @@ class ManagedEmulatorTransport(Websocket
+                                    "layouts.json")
+ 
+         command = [
+-            sys.executable,
+             phonesim_bin,
+             "--qemu", "localhost:{}".format(self.qemu_port),
+             "--port", str(self.pypkjs_port),
