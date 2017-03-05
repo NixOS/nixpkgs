@@ -1,12 +1,12 @@
 { stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5.1";
+  version = "1.3.5.2";
   name = "chuck-${version}";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "0lqzkphfd91kz95nf1wqy0z17r1m70c8inwvnb9fscbiaihwlhfi";
+    sha256 = "02z7sglax3j09grj5s1skmw8z6wz7b21hjrm95nrrdpwbxabh079";
   };
 
   buildInputs = [ bison flex libsndfile which ]
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     install -Dm755 ./src/chuck $out/bin/chuck
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programming language for real-time sound synthesis and music creation";
     homepage = http://chuck.cs.princeton.edu;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ ftrvxmtrx ];
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ ftrvxmtrx ];
   };
 }
