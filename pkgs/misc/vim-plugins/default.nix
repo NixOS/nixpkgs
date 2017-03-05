@@ -786,6 +786,16 @@ rec {
     dependencies = [];
   };
 
+  vim-cpp-enhanced-highlight = buildVimPlugin {
+    name = "vim-cpp-enhanced-highlight";
+    src = fetchgit {
+      url = "https://github.com/octol/vim-cpp-enhanced-highlight";
+      rev = "42e8b05f200a22635ac4774fa6c1efd37b0484d6";
+      sha256 = "1sjfnbbgxngq590i51pmmpkp0npkqjsafkcwwc5a4bpprlyq4kbb";
+    };
+    dependencies = [];
+  };
+
   lightline-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "lightline-vim-2017-02-12";
     src = fetchgit {
