@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
-      # gstreamer gst-plugins-base 
+      # gstreamer gst_plugins_base 
     ];
 
   preConfigure = ''
@@ -51,6 +51,7 @@ in stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
+    cp ./attrib/gatttool $out/bin/gatttool
     mkdir $out/test
     cp -a test $out
     pushd $out/test
