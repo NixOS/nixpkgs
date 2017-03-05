@@ -776,6 +776,16 @@ rec {
 
   };
 
+  vim-trailing-whitespace = buildVimPlugin {
+    name = "vim-trailing-whitespace";
+    src = fetchgit {
+      url = "https://github.com/bronson/vim-trailing-whitespace";
+      rev = "733fb64337b6da4a51c85a43450cd620d8b617b5";
+      sha256 = "1469bd744lf8vk1nnw7kyq4ahpw84crp614mkpq88cs6rhvjhcyw";
+    };
+    dependencies = [];
+  };
+
   lightline-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "lightline-vim-2017-02-12";
     src = fetchgit {
@@ -1730,7 +1740,7 @@ rec {
       sha256 = "0rl211rmnzwribzpqxfg99lsyln2x1i8ygyz8b9jy804fm5i24f3";
     };
     dependencies = [];
-    buildInputs = [ python3 ]; 
+    buildInputs = [ python3 ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
       python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
