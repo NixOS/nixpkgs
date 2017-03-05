@@ -23,7 +23,8 @@ let
   allowdeny = target: users:
     { source = pkgs.writeText "fcron.${target}" (concatStringsSep "\n" users);
       target = "fcron.${target}";
-      mode = "600"; # fcron has some security issues.. So I guess this is most safe
+      mode = "644";
+      gid = config.ids.gids.fcron;
     };
 
 in
@@ -89,7 +90,7 @@ in
       [ (allowdeny "allow" (cfg.allow))
         (allowdeny "deny" cfg.deny)
         # see man 5 fcron.conf
-        { source = pkgs.writeText "fcon.conf" ''
+        { source = pkgs.writeText "fcron.conf" ''
             fcrontabs   =       /var/spool/fcron
             pidfile     =       /var/run/fcron.pid
             fifofile    =       /var/run/fcron.fifo
@@ -97,16 +98,40 @@ in
             fcrondeny   =       /etc/fcron.deny
             shell       =       /bin/sh
             sendmail    =       /run/wrappers/bin/sendmail
-            editor      =       /run/current-system/sw/bin/vi
+            editor      =       ${pkgs.vim}/bin/vim
           '';
           target = "fcron.conf";
-          mode = "0600"; # max allowed is 644
+          gid = config.ids.gids.fcron;
+          mode = "0644";
         }
       ];
 
     environment.systemPackages = [ pkgs.fcron ];
+    users.extraUsers.fcron = {
+      uid = config.ids.uids.fcron;
+      home = "/var/spool/fcron";
+      group = "fcron";
+    };
+    users.groups.fcron.gid = config.ids.gids.fcron;
 
-    security.wrappers.fcrontab.source = "${pkgs.fcron.out}/bin/fcrontab";
+    security.wrappers = {
+      fcrontab = {
+        source = "${pkgs.fcron}/bin/fcrontab";
+        owner = "fcron";
+        group = "fcron";
+        setgid = true;
+      };
+      fcrondyn = {
+        source = "${pkgs.fcron}/bin/fcrondyn";
+        owner = "fcron";
+        group = "fcron";
+        setgid = true;
+      };
+      fcronsighup = {
+        source = "${pkgs.fcron}/bin/fcronsighup";
+        group = "fcron";
+      };
+    };
     systemd.services.fcron = {
       description = "fcron daemon";
       after = [ "local-fs.target" ];
@@ -118,14 +143,17 @@ in
       };
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -m 0700 -p /var/spool/fcron
+        ${pkgs.coreutils}/bin/mkdir -m 0770 -p /var/spool/fcron
+        ${pkgs.coreutils}/bin/chown -R fcron:fcron /var/spool/fcron
         # load system crontab file
-        ${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
+        set -x
+        #${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
       '';
 
-      serviceConfig.Type = "forking";
-
-      script = "${pkgs.fcron}/sbin/fcron -m ${toString cfg.maxSerialJobs} ${queuelen}";
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = "${pkgs.fcron}/sbin/fcron -m ${toString cfg.maxSerialJobs} ${queuelen}";
+      };
     };
   };
 }
