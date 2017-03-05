@@ -34,13 +34,13 @@ services.compton = {
         Some Xfce programs are not installed automatically.
         To install them manually (system wide), put them into your
         <literal>environment.systemPackages</literal>.
-	</para>
+    </para>
 
     <para>
-		NixOS’s default <emphasis>display manager</emphasis> is SLiM.
-		(DM is the program that provides a graphical login prompt
-		 and manages the X server.)
-	   	You can, for example, select KDE’s
+        NixOS’s default <emphasis>display manager</emphasis> is SLiM.
+        (DM is the program that provides a graphical login prompt
+         and manages the X server.)
+        You can, for example, select KDE’s
         <command>sddm</command> instead:
         <programlisting>
 services.xserver.displayManager.sddm.enable = true;
