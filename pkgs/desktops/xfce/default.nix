@@ -89,6 +89,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
   xfce4_netload_plugin          = callPackage ./panel-plugins/xfce4-netload-plugin.nix          { };
   xfce4_notes_plugin            = callPackage ./panel-plugins/xfce4-notes-plugin.nix            { };
+  xfce4_mailwatch_plugin        = callPackage ./panel-plugins/xfce4-mailwatch-plugin.nix        { };
   xfce4_mpc_plugin              = callPackage ./panel-plugins/xfce4-mpc-plugin.nix              { };
   xfce4-sensors-plugin          = callPackage ./panel-plugins/xfce4-sensors-plugin.nix          { };
   xfce4_systemload_plugin       = callPackage ./panel-plugins/xfce4-systemload-plugin.nix       { };
