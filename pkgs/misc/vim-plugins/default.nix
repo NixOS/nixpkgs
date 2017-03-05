@@ -786,6 +786,16 @@ rec {
     dependencies = [];
   };
 
+  vim-toml = buildVimPlugin {
+    name = "vim-toml";
+    src = fetchgit {
+      url = "https://github.com/cespare/vim-toml";
+      rev = "00ecc580aef1f7f80779af577b6e2b7a056f260f";
+      sha256 = "16jmk58619qg88s839d5rnhpjxcpdmfq1199d5z2l089x05cw1ad";
+    };
+    dependencies = [];
+  };
+
   vim-cpp-enhanced-highlight = buildVimPlugin {
     name = "vim-cpp-enhanced-highlight";
     src = fetchgit {
