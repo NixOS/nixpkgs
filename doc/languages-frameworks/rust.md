@@ -24,6 +24,9 @@ There are also `rustUnstable` and `rustNightly` package sets available,
 though, as nixpkgs does not update the nightlies very often, one should rather
 use an alternative approach for installing the nightly version of rust.
 
+There is, however [nixcrates](https://github.com/fractalide/nixcrates)
+which might be used to install crates with nix.
+
 ## Using Rust nightlies (with an overlay)
 
 Mozilla provides an overlay for nixpkgs which can be used to bring a nightly
