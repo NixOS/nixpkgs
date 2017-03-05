@@ -37,6 +37,5 @@ buildPythonPackage rec {
     homepage = http://travisbrown.ca/projects/nitpick/docs/nitpick.html;
     license = with stdenv.lib.licenses; gpl2;
     maintainers = [];
-    platforms = stdenv.lib.platforms.all;
   };
 }
