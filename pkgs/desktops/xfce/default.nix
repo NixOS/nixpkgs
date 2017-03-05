@@ -32,9 +32,9 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   thunar          = callPackage ./core/thunar.nix { };
   thunarx-2-dev   = thunar-build; # Plugins need only the `thunarx-2` part of the package. Awaiting multiple outputs.
   thunar_volman   = callPackage ./core/thunar-volman.nix { }; # ToDo: probably inside Thunar now
-  thunar-archive-plugin 
+  thunar-archive-plugin
                   = callPackage ./thunar-plugins/archive { };
-  thunar-dropbox-plugin 
+  thunar-dropbox-plugin
                   = callPackage ./thunar-plugins/dropbox { };
   tumbler         = callPackage ./core/tumbler.nix { };
   xfce4panel      = callPackage ./core/xfce4-panel.nix { }; # ToDo: impure plugins from /run/current-system/sw/lib/xfce4
@@ -89,6 +89,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
   xfce4_netload_plugin          = callPackage ./panel-plugins/xfce4-netload-plugin.nix          { };
   xfce4_notes_plugin            = callPackage ./panel-plugins/xfce4-notes-plugin.nix            { };
+  xfce4_mpc_plugin              = callPackage ./panel-plugins/xfce4-mpc-plugin.nix              { };
   xfce4-sensors-plugin          = callPackage ./panel-plugins/xfce4-sensors-plugin.nix          { };
   xfce4_systemload_plugin       = callPackage ./panel-plugins/xfce4-systemload-plugin.nix       { };
   xfce4_timer_plugin            = callPackage ./panel-plugins/xfce4-timer-plugin.nix            { };
