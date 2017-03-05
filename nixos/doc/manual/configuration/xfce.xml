@@ -37,7 +37,7 @@ services.compton = {
 	</para>
 
     <para>
-		NixOS’s default <emphasis>display manager</emphasis>is SLiM.
+		NixOS’s default <emphasis>display manager</emphasis> is SLiM.
 		(DM is the program that provides a graphical login prompt
 		 and manages the X server.)
 	   	You can, for example, select KDE’s
