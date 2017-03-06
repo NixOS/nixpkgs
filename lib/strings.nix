@@ -522,6 +522,21 @@ rec {
     in
       lib.foldl (a: b: a * 16 + b) 0 ints;
 
+  /* Converts an integer to a hexadecimal number (without '0x' prefix).
+  */
+  intToHex = i:
+    let
+      intToHexImpl = i:
+        if i == 0
+        then ""
+        else
+          let mod = a: b: a - (builtins.mul b (builtins.div a b)); in # TODO: really not yet existing?
+          (intToHexImpl (builtins.div i 16) + (builtins.elemAt hexDigits (mod i 16)));
+    in
+    if i == 0
+    then "0"
+    else intToHexImpl i;
+
   /* Parse an IP address to an integer list.
      List length will be either 4 for IPv4, or 8 for IPv6
   */
@@ -545,4 +560,16 @@ rec {
       if length ip == 4 && builtins.all (x: 0 <= x && x <= 255) ip
       then ip
       else throw "Could not convert ${str} to IP.";
+
+  /* Converts an integer list to an IP.
+     Input list length has to be either 4 for IPv4, or 8 for IPv6
+  */
+  genIP = ip:
+    let
+      digits = map toString ip;
+      hexdigits = map intToHex ip;
+    in
+      if length ip == 4 then concatStringsSep "." digits
+      else if length ip == 8 then concatStringsSep ":" hexdigits
+      else throw "${toString ip} has neither 4 nor 8 elements and cannot be inferred as IPv4 or IPv6.";
 }
