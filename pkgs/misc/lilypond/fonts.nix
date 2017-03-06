@@ -43,7 +43,7 @@ let
 
 in
 
-{
+rec {
   beethoven = olpFont {
     fontName = "beethoven";
     rev = "669f400";
@@ -119,4 +119,22 @@ in
     rev = "44bf262";
     sha256 = "09i8p3p4z6vz69j187cpxvikkgc4pk6gxippahy0k7i7bh0d4qaj";
   };
+
+  all = [
+    beethoven
+    bravura
+    cadence
+    gonville
+    gutenberg1939
+    haydn
+    improviso
+    lilyboulez
+    lilyjazz
+    lv-goldenage
+    paganini
+    profondo
+    ross
+    scorlatti
+    sebastiano
+  ];
 }

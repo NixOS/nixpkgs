@@ -1,4 +1,11 @@
-{ stdenv, lilypond, lndir }: fonts: stdenv.mkDerivation {
+{ stdenv
+, lndir
+, lilypond
+, openlilylib-fonts
+, fonts ? openlilylib-fonts.all
+}:
+
+stdenv.mkDerivation {
   name = "${lilypond.name}-with-fonts";
   phases = "installPhase";
   buildInputs = fonts;
