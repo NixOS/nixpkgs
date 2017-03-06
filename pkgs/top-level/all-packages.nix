@@ -10033,6 +10033,10 @@ with pkgs;
     inherit (darwin.stubs) setfile rez derez;
   };
 
+  wxSVG = callPackage ../development/libraries/wxSVG {
+    wxGTK = wxGTK30;
+  };
+
   wtk = callPackage ../development/libraries/wtk { };
 
   x264 = callPackage ../development/libraries/x264 { };
@@ -13110,6 +13114,10 @@ with pkgs;
   dvdbackup = callPackage ../applications/video/dvdbackup { };
 
   dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
+
+  dvdstyler = callPackage ../applications/video/dvdstyler {
+    inherit (gnome2) libgnomeui;
+  };
 
   dwb-unwrapped = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
   dwb = wrapFirefox dwb-unwrapped { desktopName = "dwb"; };
