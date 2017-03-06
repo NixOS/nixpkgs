@@ -481,6 +481,7 @@ in {
         mkdir -p ${cfg.statePath}/repositories
         mkdir -p ${gitlabConfig.production.shared.path}/artifacts
         mkdir -p ${gitlabConfig.production.shared.path}/lfs-objects
+        mkdir -p ${gitlabConfig.production.shared.path}/pages
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/shell
         mkdir -p ${cfg.statePath}/tmp/pids
