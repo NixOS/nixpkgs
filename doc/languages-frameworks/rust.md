@@ -17,7 +17,8 @@ into the `environment.systemPackages` or bring them into scope with
 `nix-shell -p rustStable.rustc -p rustStable.cargo`.
 
 There are also `rustBeta` and `rustNightly` package sets available.
-These are not updated very regulary. For daily builds see [Using the Rust nightlies overlay](#using-the-rust-nightlies-overlay)
+These are not updated very regulary. For daily builds see
+[Using the Rust nightlies overlay](#using-the-rust-nightlies-overlay)
 
 ## Packaging Rust applications
 
@@ -49,9 +50,13 @@ buildRustPackage rec {
 }
 ```
 
-`buildRustPackage` requires a `depsSha256` attribute which is computed over all crate sources of this package. Currently it is obtained by inserting a fake checksum into the expression and building the package once. The correct checksum can be then take from the failed build.
+`buildRustPackage` requires a `depsSha256` attribute which is computed over
+all crate sources of this package. Currently it is obtained by inserting a
+fake checksum into the expression and building the package once. The correct
+checksum can be then take from the failed build.
 
-To install creates with nix there is also an experimental project called [nixcrates](https://github.com/fractalide/nixcrates).
+To install creates with nix there is also an experimental project called
+[nixcrates](https://github.com/fractalide/nixcrates).
 
 ## Using the Rust nightlies overlay
 
@@ -82,4 +87,5 @@ To install the beta or nightly channel, "stable" should be substituted by
 use the function provided by this overlay to pull a version based on a
 build date.
 
-The overlay automatically update itself as it uses the same source as [rustup](https://www.rustup.rs/).
+The overlay automatically update itself as it uses the same source as
+[rustup](https://www.rustup.rs/).
