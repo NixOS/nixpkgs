@@ -56,21 +56,4 @@ To install the beta or nightly channel, "stable" should be substituted by
 use the function provided by this overlay to pull a version based on a
 build date.
 
-### How does it work?
-
-This section explains how the overlay works.
-
-This overlay should auto-update it-self as if you were running rustup
-each time you go through the rustChannels attributes.  It works by
-using the fetchurl builtin function to pull the same file as rustup do
-through https.
-
-The `*.toml` manifest file is then parsed (yes,
-[in Nix](https://github.com/mozilla/nixpkgs-mozilla/blob/master/lib/parseTOML.nix)
-) to extract the sha256 and the location of all the packages indexed by the
-manifest file.  Then,
-[some logic](https://github.com/mozilla/nixpkgs-mozilla/blob/master/rust-overlay.nix)
-is used to convert the `*.toml` file into proper derivations which are used to
-pull the prebuilt binaries and to change the interpreter of the binaries using
-patchelf.
-
+The overlay automatically update itself as it uses the same source as [rustup](https://www.rustup.rs/).
