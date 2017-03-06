@@ -198,7 +198,7 @@
           in the root of the git repository.
         </para>
         <para>
-          Wether or not the old stable should be marked deprecated or unsupported depends on
+          Whether or not the old stable should be marked deprecated or unsupported depends on
           which commitments the security team is willing to make.
         </para>
       </listitem>
