@@ -5,11 +5,12 @@ with lib;
 let
   cfg = config.system;
 
-  releaseFile  = "${toString pkgs.path}/.version";
-  suffixFile   = "${toString pkgs.path}/.version-suffix";
-  revisionFile = "${toString pkgs.path}/.git-revision";
-  gitRepo      = "${toString pkgs.path}/.git";
-  gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
+  releaseFile     = "${toString pkgs.path}/.version";
+  suffixFile      = "${toString pkgs.path}/.version-suffix";
+  unsupportedFile = "${toString pkgs.path}/.version-is-unsupported";
+  revisionFile    = "${toString pkgs.path}/.git-revision";
+  gitRepo         = "${toString pkgs.path}/.git";
+  gitCommitId     = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
 in
 
 {
@@ -60,6 +61,14 @@ in
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
+    nixosIsSupportedVersion = mkOption {
+      readOnly = true;
+      internal = true;
+      type = types.bool;
+      default = ! (pathExists unsupportedFile);
+      description = "Whether or not this version of NixOS is still supported.";
+    };
+
     nixosRevision = mkOption {
       internal = true;
       type = types.str;
@@ -86,9 +95,9 @@ in
 
   config = {
 
-    warnings = [
-      "NixOS deprecated"
-    ];
+    warnings = if !cfg.nixosIsSupportedVersion then [
+      "NixOS version ${cfg.nixosRelease} is deprecated"
+    ] else [] ;
 
     system = {
       # These defaults are set here rather than up there so that
@@ -116,6 +125,7 @@ in
         HOME_URL="https://nixos.org/"
         SUPPORT_URL="https://nixos.org/nixos/support.html"
         BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
+        SUPPORTED=${toString config.system.nixosIsSupportedVersion}
       '';
 
   };
