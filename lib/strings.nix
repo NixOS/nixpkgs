@@ -506,7 +506,7 @@ rec {
   */
   fileContents = file: removeSuffix "\n" (builtins.readFile file);
 
-  /* Parse an hexadecimal number to an integer.
+  /* Parse a positive hexadecimal number to an integer.
      '0x' prefix is not allowed.
   */
   hexToInt = hex:
@@ -536,16 +536,19 @@ rec {
 
   /* Parse an IP address to an integer list.
      List length will be either 4 for IPv4, or 8 for IPv6
-     TODO: handle ::-notation for IPv6
   */
   parseIP = str:
     let
       chars = stringToCharacters str;
       ipv6 = builtins.any (x: x == ":") chars;
+      ndots = lib.count (x: x == ":") (stringToCharacters str);
+      missingndots = 9 - ndots; # 2 + (7 - ndots)
+      missingdots = concatStrings (map (_: ":") (lib.range 1 missingndots));
+      ipv6str = replaceStrings [ "::" ] [ missingdots ] str;
     in
     if ipv6
     then
-      let ip = map hexToInt (splitString ":" str); in
+      let ip = map hexToInt (splitString ":" ipv6str); in
       if length ip == 8 && builtins.all (x: 0 <= x && x <= 65535) ip
       then ip
       else throw "Could not convert ${str} to IP."
