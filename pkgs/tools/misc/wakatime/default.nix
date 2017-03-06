@@ -8,7 +8,7 @@ buildPythonPackage rec {
   version = "7.0.4";
 
   src = fetchFromGitHub {
-    sha256 = "0ghrf0aqb89gjp4pb0398cszi6wzk8chqwd3l5xq6qcgvsq8srq3";
+    sha256 = "1cddabx9x11d2nxxcqlf4piysjnpfici0n5qy3n9gw81asz1djhf";
     rev = version;
     repo = "wakatime";
     owner = "wakatime";
