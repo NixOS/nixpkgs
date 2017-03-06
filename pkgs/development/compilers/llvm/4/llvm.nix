@@ -50,12 +50,19 @@ in stdenv.mkDerivation rec {
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-        sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+    sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
+  ''
+  # Remove broken tests: (https://bugs.llvm.org//show_bug.cgi?id=31610)
+  + ''
+    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata1.ll
+    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata2.ll
+    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata3.ll
+    rm test/CodeGen/AMDGPU/runtime-metadata.ll
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -85,6 +92,14 @@ in stdenv.mkDerivation rec {
     rm -fR $out
 
     paxmark m bin/{lli,llvm-rtdyld}
+    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
+    paxmark m unittests/ExecutionEngine/Orc/OrcJITTests
+    paxmark m unittests/Support/SupportTests
+    paxmark m bin/lli-child-target
+  '';
+
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
   '';
 
   postInstall = ""
@@ -102,6 +117,10 @@ in stdenv.mkDerivation rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
+
+  doCheck = stdenv.isLinux;
+
+  checkTarget = "check-all";
 
   enableParallelBuilding = true;
 
