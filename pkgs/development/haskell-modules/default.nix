@@ -56,7 +56,7 @@ let
 
       haskellSrc2nix = { name, src, sha256 ? null }:
         let
-          sha256Arg = if isNull sha256 then "" else ''--sha256="${sha256}"'';
+          sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
         in pkgs.stdenv.mkDerivation {
           name = "cabal2nix-${name}";
           buildInputs = [ pkgs.cabal2nix ];
