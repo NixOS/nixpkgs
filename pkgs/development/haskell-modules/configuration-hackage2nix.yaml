@@ -37,6 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
+  - store < 0.4.1               # https://github.com/fpco/store/issues/104
   # LTS Haskell 8.3
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
