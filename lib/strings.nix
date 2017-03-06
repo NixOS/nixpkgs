@@ -530,8 +530,8 @@ rec {
         if i == 0
         then ""
         else
-          let mod = a: b: a - (builtins.mul b (builtins.div a b)); in # TODO: really not yet existing?
-          (intToHexImpl (builtins.div i 16) + (builtins.elemAt hexDigits (mod i 16)));
+          let mod = a: b: a - ((a / b) * b); in # TODO: really not yet existing?
+          (intToHexImpl (i / 16) + (builtins.elemAt hexDigits (mod i 16)));
     in
     if i == 0
     then "0"
