@@ -21,18 +21,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = []
     ++ optional stdenv.isDarwin gcc;
   
-    #preConfigure = ''
-    #substituteInPlace configure \
-    # "${cross}" " "
-    # '';
-
-      # configureFlags = [
-        #"--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
-        #"--with-include=${skalibs}/include"
-        #"--with-lib=${skalibs}/lib"
-        #"--with-dynlib=${skalibs}/lib"
-        #]
-        #++ (optional stdenv.isDarwin "--target=${stdenv.system}")
+  configureFlags = [
+    #"--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    #"--with-include=${skalibs}/include"
+     "--with-lib=${skalibs}/lib"
+     "--with-dynlib=${skalibs}/lib"
+        ];
+        
   
   meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
