@@ -26,6 +26,16 @@ let
      cloner false config.nesting.children
   ++ cloner true config.nesting.clone;
 
+  warningsJSON = pkgs.writeTextFile {
+    name = "warnings.json";
+    text = builtins.toJSON config.warnings;
+  };
+
+  warningsShellText = pkgs.writeTextFile {
+    name = "warnings.txt.raw";
+    text = let warnings = map (w: "[1;31mwarning: ${w}[0m\n") config.warnings;
+           in concatStrings warnings;
+  };
 
   systemBuilder =
     let
@@ -55,6 +65,9 @@ let
 
         ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
+
+      cp ${warningsJSON} $out/warnings.json
+      cp ${warningsShellText} $out/warnings.txt.raw
 
       echo "$activationScript" > $out/activate
       substituteInPlace $out/activate --subst-var out
@@ -93,14 +106,12 @@ let
 
   failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
 
-  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
-
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = showWarnings (
+  baseSystem =
     if [] == failed then pkgs.stdenvNoCC.mkDerivation {
       name = let hn = config.networking.hostName;
                  nn = if (hn != "") then hn else "unnamed";
@@ -124,7 +135,7 @@ let
 
       # Needed by switch-to-configuration.
       perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
+  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}";
 
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
