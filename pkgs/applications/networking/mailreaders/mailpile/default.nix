@@ -30,5 +30,7 @@ pythonPackages.buildPythonApplication rec {
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    broken = true; # See:
+    # https://github.com/NixOS/nixpkgs/pull/23058#issuecomment-283515104
   };
 }
