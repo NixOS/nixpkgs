@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, zlib, qt4, which }:
+{ lib, stdenv, fetchurl, fetchpatch, zlib, qt4, which, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "gpsbabel-${version}";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib qt4 which ];
+  buildInputs = [ zlib qt4 which ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
 
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
     patchShebangs testo
     substituteInPlace testo \
       --replace "-x /usr/bin/hexdump" ""
-  '' + (
+  ''
     # The raymarine and gtm tests fail on i686 despite -ffloat-store.
-    if stdenv.isi686 then "rm -v testo.d/raymarine.test testo.d/gtm.test;"
-    else ""
-  );
+  + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
+    # The tomtom asc test fails on darwin, see PR #23572.
+  + lib.optionalString stdenv.isDarwin "rm -v testo.d/tomtom_asc.test;";
 
   meta = with stdenv.lib; {
     description = "Convert, upload and download data from GPS and Map programs";
