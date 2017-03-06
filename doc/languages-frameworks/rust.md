@@ -6,11 +6,7 @@ date: 2017-03-05
 
 # User's Guide to the Rust Infrastructure
 
-Rust is packaged with nixpkgs, although there are no rust crates packaged in
-nixpkgs.
-Therefor, one has to use `cargo` directly.
-
-To install the rust compiler and cargo, one has to put
+To install the rust compiler and cargo put
 
 ```
 rustStable.rustc
@@ -20,14 +16,44 @@ rustStable.cargo
 into the `environment.systemPackages` or bring them into scope with
 `nix-shell -p rustStable.rustc -p rustStable.cargo`.
 
-There are also `rustUnstable` and `rustNightly` package sets available,
-though, as nixpkgs does not update the nightlies very often, one should rather
-use an alternative approach for installing the nightly version of rust.
+There are also `rustBeta` and `rustNightly` package sets available.
+These are not updated very regulary. For daily builds see [Using the Rust nightlies overlay](#using-the-rust-nightlies-overlay)
 
-There is, however [nixcrates](https://github.com/fractalide/nixcrates)
-which might be used to install crates with nix.
+## Packaging Rust applications
 
-## Using Rust nightlies (with an overlay)
+Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
+
+``` from
+with rustPlatform;
+
+buildRustPackage rec {
+  name = "ripgrep-${version}";
+  version = "0.4.0";
+
+  src = fetchFromGitHub {
+    owner = "BurntSushi";
+    repo = "ripgrep";
+    rev = "${version}";
+    sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
+  };
+
+  depsSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+
+  meta = with stdenv.lib; {
+    description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
+    homepage = https://github.com/BurntSushi/ripgrep;
+    license = with licenses; [ unlicense ];
+    maintainers = [ maintainers.tailhook ];
+    platforms = platforms.all;
+  };
+}
+```
+
+`buildRustPackage` requires a `depsSha256` attribute which is computed over all crate sources of this package. Currently it is obtained by inserting a fake checksum into the expression and building the package once. The correct checksum can be then take from the failed build.
+
+To install creates with nix there is also an experimental project called [nixcrates](https://github.com/fractalide/nixcrates).
+
+## Using the Rust nightlies overlay
 
 Mozilla provides an overlay for nixpkgs which can be used to bring a nightly
 version of Rust into scope.
