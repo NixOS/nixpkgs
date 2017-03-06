@@ -505,4 +505,53 @@ rec {
        => "1.0"
   */
   fileContents = file: removeSuffix "\n" (builtins.readFile file);
+
+  /* Parse an hexadecimal number to an integer.
+     '0x' prefix is not allowed.
+  */
+  hexToInt = hex:
+    let
+      chars = stringToCharacters (toLower hex);
+      digitConv = d:
+        if d == "0" then 0
+        else if d == "1" then 1
+        else if d == "2" then 2
+        else if d == "3" then 3
+        else if d == "4" then 4
+        else if d == "5" then 5
+        else if d == "6" then 6
+        else if d == "7" then 7
+        else if d == "8" then 8
+        else if d == "9" then 9
+        else if d == "a" then 10
+        else if d == "b" then 11
+        else if d == "c" then 12
+        else if d == "d" then 13
+        else if d == "e" then 14
+        else if d == "f" then 15
+        else throw "Could not read ${hex} as an hexadecimal number.";
+      ints = map digitConv chars;
+    in
+      lib.foldl (a: b: a * 16 + b) 0 ints;
+
+  /* Parse an IP address to an integer list.
+     List length will be either 4 for IPv4, or 8 for IPv6
+     TODO: handle ::-notation for IPv6
+  */
+  parseIP = str:
+    let
+      chars = stringToCharacters str;
+      ipv6 = builtins.any (x: x == ":") chars;
+    in
+    if ipv6
+    then
+      let ip = map hexToInt (splitString ":" str); in
+      if length ip == 8 && builtins.all (x: 0 <= x && x <= 65535) ip
+      then ip
+      else throw "Could not convert ${str} to IP."
+    else
+      let ip = map toInt (splitString "." str); in
+      if length ip == 4 && builtins.all (x: 0 <= x && x <= 255) ip
+      then ip
+      else throw "Could not convert ${str} to IP.";
 }
