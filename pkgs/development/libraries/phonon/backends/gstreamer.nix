@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
   ];
 
+  # cleanup: the build system creates (empty) $out/$out/share/icons (double prefix)
+  # if DESTDIR is unset
+  DESTDIR="/";
+
   nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
 
   cmakeFlags =
