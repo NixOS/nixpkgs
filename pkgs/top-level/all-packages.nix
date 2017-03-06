@@ -10044,7 +10044,9 @@ with pkgs;
 
   x265 = callPackage ../development/libraries/x265 { };
 
-  xapian = callPackage ../development/libraries/xapian { };
+  inherit (callPackage ../development/libraries/xapian { })
+    xapian_1_2_22 xapian_1_4_0;
+  xapian = xapian_1_4_0;
 
   xapian-omega = callPackage ../development/libraries/xapian/tools/omega {
     libmagic = file;
