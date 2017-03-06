@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
 
   name = "sound-of-sorting-${version}";
-  version = "20150721";
+  version = "unstable-2015-07-21";
 
   src = fetchgit {
     url = "https://github.com/bingmann/sound-of-sorting.git";
