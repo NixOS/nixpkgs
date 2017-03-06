@@ -1,0 +1,22 @@
+In systemd I have seen this error, using it as a service:
+
+vlock-start[14567]: vlock-new: could not activate new terminal: Interrupted system call
+
+I think this should fix that.
+
+diff --git a/modules/new.c b/modules/new.c
+index e9b15fb..1f692fd 100644
+--- a/modules/new.c
++++ b/modules/new.c
+@@ -103,7 +103,10 @@ static char *get_console_name(int n)
+  * file descriptor. */
+ static int activate_console(int consfd, int vtno)
+ {
+-  int c = ioctl(consfd, VT_ACTIVATE, vtno);
++  int c;
++  do {
++    c = ioctl(consfd, VT_ACTIVATE, vtno);
++  } while(c != 0 && errno == EINTR);
+ 
+   return c < 0 ? c : ioctl(consfd, VT_WAITACTIVE, vtno);
+ }

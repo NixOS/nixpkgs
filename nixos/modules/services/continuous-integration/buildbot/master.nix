@@ -66,7 +66,7 @@ in {
       };
 
       masterCfg = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         description = ''
           Optionally pass raw master.cfg file as string.
           Other options in this configuration will be ignored.

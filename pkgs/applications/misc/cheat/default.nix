@@ -1,14 +1,14 @@
 { python3Packages, fetchurl, lib }:
 
 python3Packages.buildPythonApplication rec {
-  version = "2.1.27";
+  version = "2.1.28";
   name = "cheat-${version}";
 
   propagatedBuildInputs = with python3Packages; [ docopt pygments ];
 
   src = fetchurl {
     url = "mirror://pypi/c/cheat/${name}.tar.gz";
-    sha256 = "1mrrfwd4ivas0alfkhjryxxzf24a4ngk8c6n2zlfb8ziwf7czcqd";
+    sha256 = "1a5c5f3dx3dmmvv75q2w6v2xb1i6733c0f8knr6spapvlim5i0c5";
   };
   # no tests available
   doCheck = false;

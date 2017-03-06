@@ -461,6 +461,8 @@ let
       homepage = "https://github.com/tarruda/libmpack";
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
+      # gcc -llua fails with luajit
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 

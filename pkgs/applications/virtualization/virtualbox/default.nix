@@ -66,6 +66,7 @@ in stdenv.mkDerivation {
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
+        -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qt5.qtbase}/bin"@' \
         ''} -i configure

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, cstruct, result, findlib, ocaml_oasis }:
+{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, cstruct, result, findlib, ocaml_oasis }:
 
 stdenv.mkDerivation rec {
   version = "0.3.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ ocaml ocaml_oasis findlib ];
+  buildInputs = [ ocaml ocaml_oasis findlib ocamlbuild ];
   propagatedBuildInputs = [ result cstruct ];
 
   meta = {

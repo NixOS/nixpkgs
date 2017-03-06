@@ -1,11 +1,12 @@
 { stdenv, fetchurl, perl, ppp, iproute, which }:
 
 stdenv.mkDerivation rec {
-  name = "pptp-1.8.0";
+  name = "pptp-${version}";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pptpclient/${name}.tar.gz";
-    sha256 = "1nmvwj7wd9c1isfi9i0hdl38zv55y2khy2k0v1nqlai46gcl5773";
+    sha256 = "00cj3jqj1hqri856jif4kkzan684qv1cb1zf2amzblvqqnzqq7hb";
   };
 
   patchPhase =

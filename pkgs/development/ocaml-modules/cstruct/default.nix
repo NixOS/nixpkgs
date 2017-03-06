@@ -1,4 +1,4 @@
-{ stdenv, writeText, fetchFromGitHub, ocaml, ocplib-endian, sexplib, findlib, ppx_tools
+{ stdenv, writeText, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
 , async ? null, lwt ? null
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "${opt lwt}-lwt" "${opt async}-async" "${opt ppx_tools}-ppx" ];
 
-  buildInputs = [ ocaml findlib ppx_tools lwt async ];
+  buildInputs = [ ocaml findlib ocamlbuild ppx_tools lwt async ];
   propagatedBuildInputs = [ ocplib-endian sexplib ];
 
   createFindlibDestdir = true;

@@ -641,6 +641,19 @@ community to help save time. No tool is preferred at the moment.
 - [pypi2nix](https://github.com/garbas/pypi2nix) by Rok Garbas
 - [pypi2nix](https://github.com/offlinehacker/pypi2nix) by Jaka Hudoklin
 
+### Deterministic builds
+
+Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
+Minor modifications had to be made to the interpreters in order to generate
+deterministic bytecode. This has security implications and is relevant for
+those using Python in a `nix-shell`.
+
+When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will have timestamp 1.
+The `buildPythonPackage` function sets `DETERMINISTIC_BUILD` as well as
+[PYTHONHASHSEED](https://docs.python.org/3.5/using/cmdline.html#envvar-PYTHONHASHSEED).
+Both are also exported in `nix-shell`.
+
+
 ## FAQ
 
 ### How can I install a working Python environment?

@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
       "getnameinfo_basic" # probably network-dependent
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
-    ];
+    ]
+      # sometimes: timeout (no output), failed uv_listen
+      ++ stdenv.lib.optionals stdenv.isDarwin [ "process_title" "emfile" ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString doCheck ''
       sed '/${tdRegexp}/d' -i test/test-list.h

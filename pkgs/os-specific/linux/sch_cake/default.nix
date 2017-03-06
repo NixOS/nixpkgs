@@ -1,5 +1,7 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
 
+assert stdenv.lib.versionAtLeast kernel.version "4.4";
+
 stdenv.mkDerivation {
   name = "sch_cake-2017-01-28";
 

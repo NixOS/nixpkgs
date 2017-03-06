@@ -43,9 +43,9 @@ self: super: {
   # These packages are core libraries in GHC 7.10.x, but not here.
   binary = self.binary_0_8_4_1;
   deepseq = self.deepseq_1_3_0_1;
-  haskeline = self.haskeline_0_7_2_1;
+  haskeline = self.haskeline_0_7_3_1;
   hoopl = self.hoopl_3_10_2_0;
-  terminfo = self.terminfo_0_4_0_1;
+  terminfo = self.terminfo_0_4_0_2;
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 

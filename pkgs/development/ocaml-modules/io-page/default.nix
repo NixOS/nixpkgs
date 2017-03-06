@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, cstruct }:
 
 let version = "1.5.1"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0y92wbvi129d0i7wr4lpk1ps9l247zaf1ibqqz0i6spgl28dyq79";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ cstruct ];
 
   createFindlibDestdir = true;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, vpnc, openssl ? null, gnutls ? null, libxml2, stoken, zlib } :
+{ stdenv, fetchurl, pkgconfig, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib } :
 
 let
   xor = a: b: (a || b) && (!(a && b));
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ vpnc openssl gnutls libxml2 stoken zlib ];
+  propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
 
   meta = {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";

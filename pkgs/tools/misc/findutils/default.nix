@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
-  patches = [ ./memory-leak.patch ];
+  patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin && (stdenv.system != "i686-linux");
 
   outputs = [ "out" "info" ];
+
+  configureFlags = [ "--localstatedir=/var/cache" ];
 
   crossAttrs = {
     # Fix the 'buildInputs = [ coreutils ]' above - that adds the cross coreutils to PATH :(

@@ -4,24 +4,25 @@ with lib;
 
 let
   cfg = config.services.phpfpm;
+  enabled = cfg.poolConfigs != {} || cfg.pools != {};
 
   stateDir = "/run/phpfpm";
 
+  poolConfigs = cfg.poolConfigs // mapAttrs mkPool cfg.pools;
+
   mkPool = n: p: ''
-    [${n}]
     listen = ${p.listen}
     ${p.extraConfig}
   '';
 
-  cfgFile = pkgs.writeText "phpfpm.conf" ''
+  fpmCfgFile = pool: poolConfig: pkgs.writeText "phpfpm-${pool}.conf" ''
     [global]
     error_log = syslog
     daemonize = no
     ${cfg.extraConfig}
 
-    ${concatStringsSep "\n" (mapAttrsToList mkPool cfg.pools)}
-
-    ${concatStringsSep "\n" (mapAttrsToList (n: v: "[${n}]\n${v}") cfg.poolConfigs)}
+    [${pool}]
+    ${poolConfig}
   '';
 
   phpIni = pkgs.runCommand "php.ini" {
@@ -119,18 +120,41 @@ in {
     };
   };
 
-  config = mkIf (cfg.pools != {} || cfg.poolConfigs != {}) {
+  config = mkIf enabled {
 
-    systemd.services.phpfpm = {
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        mkdir -p "${stateDir}"
-      '';
-      serviceConfig = {
-        Type = "notify";
-        ExecStart = "${cfg.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${phpIni}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
-      };
+    systemd.slices.phpfpm = {
+      description = "PHP FastCGI Process manager pools slice";
     };
+
+    systemd.targets.phpfpm = {
+      description = "PHP FastCGI Process manager pools target";
+      wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services = flip mapAttrs' poolConfigs (pool: poolConfig:
+      nameValuePair "phpfpm-${pool}" {
+        description = "PHP FastCGI Process Manager service for pool ${pool}";
+        after = [ "network.target" ];
+        wantedBy = [ "phpfpm.target" ];
+        partOf = [ "phpfpm.target" ];
+        preStart = ''
+          mkdir -p ${stateDir}
+        '';
+        serviceConfig = let
+          cfgFile = fpmCfgFile pool poolConfig;
+        in {
+          Slice = "phpfpm.slice";
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectSystem = "full";
+          ProtectHome = true;
+          NoNewPrivileges = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+          Type = "notify";
+          ExecStart = "${cfg.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${phpIni}";
+          ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        };
+      }
+   );
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, libelf, gfortran, zlib, binutils }:
+{ stdenv, fetchurl, autoconf, libelf, libiberty, gfortran, zlib, binutils }:
 
 stdenv.mkDerivation rec {
   version = "1.0.6";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     export ac_cv_func_malloc_0_nonnull=yes
   '';
 
-  buildInputs = [ autoconf libelf gfortran zlib binutils ];
+  buildInputs = [ autoconf libelf libiberty gfortran zlib binutils ];
 
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";

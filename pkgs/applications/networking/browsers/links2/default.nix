@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.13";
+  version = "2.14";
   name = "links2-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "c252095334a3b199fa791c6f9a9affe2839a7fbd536685ab07851cb7efaa4405";
+    sha256 = "1f24y83wa1vzzjq5kp857gjqdpnmf8pb29yw7fam0m8wxxw0c3gp";
   };
 
   buildInputs =
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://links.twibright.com/;
     description = "A small browser with some graphics support";
-    maintainers = with stdenv.lib.maintainers; [ raskin urkud viric ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ raskin urkud viric ];
+    platforms = platforms.linux;
   };
 }

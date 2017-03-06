@@ -345,7 +345,7 @@ let
     seqminer = [ pkgs.zlib.dev pkgs.bzip2 ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
-    SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
+    SOD = [ pkgs.opencl-headers ];
     spate = [ pkgs.fftw.dev ];
     sprint = [ pkgs.openmpi ];
     ssanv = [ pkgs.proj ];
@@ -380,6 +380,7 @@ let
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = [ pkgs.zlib.dev ];
     snpStats = [ pkgs.zlib.dev ];
+    gputools = [ pkgs.pcre.dev pkgs.lzma.dev pkgs.zlib.dev pkgs.bzip2.dev pkgs.icu.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -392,7 +393,7 @@ let
     RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
-    gmatrix = [ pkgs.cudatoolkit ];
+    gmatrix = [ pkgs.cudatoolkit pkgs.which ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
@@ -692,6 +693,7 @@ let
   packagesToSkipCheck = [
     "Rmpi" # tries to run MPI processes
     "gmatrix" # requires CUDA runtime
+    "gputools" # requires CUDA runtime
     "sprint" # tries to run MPI processes
     "pbdMPI" # tries to run MPI processes
   ];
@@ -741,6 +743,7 @@ let
     "RefNet" # depends on broken package interactiveDisplayBase
     "pwOmics" # depends on broken package interactiveDisplayBase
     "grasp2db" # depends on broken package interactiveDisplayBase
+    "gputools" # broken build
     "EnsDb_Rnorvegicus_v79" # depends on broken package interactiveDisplayBase
     "EnsDb_Rnorvegicus_v75" # depends on broken package interactiveDisplayBase
     "EnsDb_Mmusculus_v79" # depends on broken package interactiveDisplayBase
@@ -1089,13 +1092,11 @@ let
     "GEWIST" # depends on broken package nlopt
     "ggtree" # broken build
     "gimme" # depends on broken package nlopt
-    "gmatrix" # depends on broken package cudatoolkit
     "gMCP" # build is broken
     "gmum_r" # broken build
     "GPC" # broken build
     "gplm" # depends on broken package nlopt
     "gpuR" # depends on GPU-specific header files
-    "gputools" # depends on broken package cudatoolkit
     "granova" # depends on broken package nlopt
     "graphicalVAR" # depends on broken package nlopt
     "GraphPAC" # broken build
@@ -1435,7 +1436,6 @@ let
     "smacof" # broken build
     "SNAGEE" # build is broken
     "snm" # depends on broken package nlopt
-    "SOD" # depends on broken package cudatoolkit
     "sodium" # broken build
     "soilphysics" # depends on broken package rpanel
     "sortinghat" # broken build
@@ -1593,18 +1593,6 @@ let
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
       PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
-    });
-
-    gputools = old.gputools.overrideDerivation (attrs: {
-      patches = [ ./patches/gputools.patch ];
-      CUDA_HOME = "${pkgs.cudatoolkit}";
-    });
-
-    gmatrix = old.gmatrix.overrideDerivation (attrs: {
-      patches = [ ./patches/gmatrix.patch ];
-      CUDA_LIB_PATH = "${pkgs.cudatoolkit}/lib64";
-      R_INC_PATH = "${pkgs.R}/lib/R/include";
-      CUDA_INC_PATH = "${pkgs.cudatoolkit}/include";
     });
 
     EMCluster = old.EMCluster.overrideDerivation (attrs: {

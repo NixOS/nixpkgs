@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   name = "easytag-${version}";
   majorVersion = "2.4";
-  version = "${majorVersion}.1";
+  version = "${majorVersion}.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/easytag/${majorVersion}/${name}.tar.xz";
-    sha256 = "1mbpwp3lh6yz5xkaq3a329x4r3chmjsr83r349crhi1gax3mzvxr";
+    sha256 = "1mbxnqrw1fwcgraa1bgik25vdzvf97vma5pzknbwbqq5ly9fwlgw";
   };
 
   preFixup = ''
@@ -21,17 +21,17 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lid3tag -lz";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper pkgconfig intltool ];
   buildInputs = [
-    pkgconfig intltool gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
+    gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
     itstool libxml2 gsettings_desktop_schemas gnome3.defaultIconTheme gnome3.dconf
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "View and edit tags for various audio files";
     homepage = "http://projects.gnome.org/easytag/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fuuzetsu ];
+    platforms = platforms.linux;
   };
 }

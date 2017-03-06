@@ -2862,14 +2862,13 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
   };
 
-  DataFormValidator = buildPerlModule rec {
-    name = "Data-FormValidator-4.81";
+  DataFormValidator = buildPerlPackage rec {
+    name = "Data-FormValidator-4.85";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKSTOS/${name}.tar.gz";
-      sha256 = "f844056231b2eeb4068cafbcab1ddf5d46cb348bd5cfb1d234421c09ee8a0de3";
+      url = "mirror://cpan/authors/id/D/DF/DFARRELL/${name}.tar.gz";
+      sha256 = "809f15d05434ff5667c3967e71e86308fcfad8fce1057420bd2714300b2a5870";
     };
-    buildInputs = [ CGI ModuleBuild ];
-    propagatedBuildInputs = [ DateCalc EmailValid FileMMagic ImageSize MIMETypes Perl6Junction RegexpCommon ];
+    propagatedBuildInputs = [ DateCalc EmailValid FileMMagic ImageSize MIMETypes RegexpCommon ];
     meta = {
       description = "Validates user input (usually from an HTML form) based on input profile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -7562,10 +7561,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogLog4perl = buildPerlPackage rec {
-    name = "Log-Log4perl-1.48";
+    name = "Log-Log4perl-1.49";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHILLI/${name}.tar.gz";
-      sha256 = "cf6e9fc1f9183fabbe540d84f603c6541458034092b7c53e41008093db62dc98";
+      sha256 = "b739187f519146cb6bebcfc427c64b1f4138b35c5f4c96f46a21ed4a43872e16";
     };
     meta = {
       homepage = https://mschilli.github.io/log4perl/;

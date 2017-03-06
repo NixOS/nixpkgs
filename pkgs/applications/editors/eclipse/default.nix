@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
-, glib, libXtst, jdk
+, glib, gtk2, libXtst, jdk
 , webkitgtk2 ? null  # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
@@ -10,9 +10,14 @@ assert stdenv ? glibc;
 
 rec {
 
-  buildEclipse = callPackage ./build-eclipse.nix { };
+  buildEclipse = import ./build-eclipse.nix {
+    inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
+            jdk glib gtk2 libXtst webkitgtk2 makeWrapper;
+  };
 
   ### Eclipse CPP
+
+  eclipse-cpp = eclipse-cpp-46; # always point to latest
 
   eclipse-cpp-46 = buildEclipse {
     name = "eclipse-cpp-4.6.0";
@@ -50,6 +55,8 @@ rec {
 
   ### Eclipse Modeling
 
+  eclipse-modeling = eclipse-modeling-46; # always point to latest
+
   eclipse-modeling-46 = buildEclipse {
     name = "eclipse-modeling-4.6";
     description = "Eclipse Modeling Tools";
@@ -85,7 +92,7 @@ rec {
 
   ### Eclipse Platform
 
-  eclipse-platform = eclipse-platform-46;
+  eclipse-platform = eclipse-platform-46; # always point to latest
 
   eclipse-platform-46 = buildEclipse {
     name = "eclipse-platform-4.6.2";
@@ -104,6 +111,8 @@ rec {
 
   ### Eclipse Scala SDK
 
+  eclipse-scala-sdk = eclipse-scala-sdk-441; # always point to latest
+
   eclipse-scala-sdk-441 = buildEclipse {
     name = "eclipse-scala-sdk-4.4.1";
     description = "Eclipse IDE for Scala Developers";
@@ -121,6 +130,8 @@ rec {
   };
 
   ### Eclipse SDK
+
+  eclipse-sdk = eclipse-sdk-46; # always point to latest
 
   eclipse-sdk-46 = buildEclipse {
     name = "eclipse-sdk-4.6.2";

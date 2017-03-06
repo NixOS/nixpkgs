@@ -636,7 +636,9 @@ with pkgs;
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
-  blitz = callPackage ../development/libraries/blitz { };
+  blitz = callPackage ../development/libraries/blitz {
+    boost = boost160;
+  };
 
   blockdiag = pythonPackages.blockdiag;
 
@@ -1101,6 +1103,7 @@ with pkgs;
   davix = callPackage ../tools/networking/davix { };
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata {
+    inherit vlc;
     ffmpeg = ffmpeg_2;
   };
 
@@ -1569,6 +1572,8 @@ with pkgs;
   edit = callPackage ../applications/editors/edit { };
 
   edk2 = callPackage ../development/compilers/edk2 { };
+
+  eflite = callPackage ../applications/audio/eflite {};
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
@@ -2142,6 +2147,8 @@ with pkgs;
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
+
+  httplab = callPackage ../tools/networking/httplab { };
 
   partclone = callPackage ../tools/backup/partclone { };
 
@@ -2769,6 +2776,8 @@ with pkgs;
 
   lz4 = callPackage ../tools/compression/lz4 { };
 
+  lzbench = callPackage ../tools/compression/lzbench { };
+
   lzop = callPackage ../tools/compression/lzop { };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
@@ -2878,7 +2887,9 @@ with pkgs;
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
-  miniupnpc = callPackage ../tools/networking/miniupnpc { };
+  inherit (callPackage ../tools/networking/miniupnpc { })
+    miniupnpc_1 miniupnpc_2;
+  miniupnpc = miniupnpc_1;
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
@@ -3814,6 +3825,8 @@ with pkgs;
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
+  sha1collisiondetection = callPackage ../tools/security/sha1collisiondetection { };
+
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
   sharutils = callPackage ../tools/archivers/sharutils { };
@@ -4085,6 +4098,8 @@ with pkgs;
   tlsdate = callPackage ../tools/networking/tlsdate { };
 
   tldr = callPackage ../tools/misc/tldr { };
+
+  tlspool = callPackage ../tools/networking/tlspool { };
 
   tmate = callPackage ../tools/misc/tmate { };
 
@@ -4752,7 +4767,7 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
-  clang_40 = lowPrio llvmPackages_40.clang;
+  clang_4 = lowPrio llvmPackages_4.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5184,8 +5199,6 @@ with pkgs;
     inherit (haskellPackages) idris;
   };
 
-  ikarus = callPackage ../development/compilers/ikarus { };
-
   intercal = callPackage ../development/compilers/intercal {
     flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
   };
@@ -5307,13 +5320,13 @@ with pkgs;
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
-  lld = lowPrio llvmPackages_40.lld;
+  lld = lowPrio llvmPackages_4.lld;
 
   lldb = llvmPackages.lldb;
 
   llvm = llvmPackages.llvm;
 
-  llvm_40 = lowPrio llvmPackages_40.llvm;
+  llvm_4 = lowPrio llvmPackages_4.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5351,7 +5364,7 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
   };
 
-  llvmPackages_40 = callPackage ../development/compilers/llvm/4.0 {
+  llvmPackages_4 = callPackage ../development/compilers/llvm/4 {
     inherit (stdenvAdapters) overrideCC;
   };
 
@@ -6418,7 +6431,9 @@ with pkgs;
     ocaml = ocaml_4_02;
   };
 
-  framac = callPackage ../development/tools/analysis/frama-c { };
+  framac = callPackage ../development/tools/analysis/frama-c {
+    coq = coq_8_4;
+  };
 
   frame = callPackage ../development/libraries/frame { };
 
@@ -7587,6 +7602,11 @@ with pkgs;
     guileBindings = config.gnutls.guile or false;
   };
 
+  gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
+    guileBindings = config.gnutls.guile or false;
+    gperf = gperf_3_0;
+  };
+
   gpac = callPackage ../applications/video/gpac { };
 
   gpgme = callPackage ../development/libraries/gpgme {
@@ -8020,8 +8040,6 @@ with pkgs;
 
   libclxclient = callPackage ../development/libraries/libclxclient  { };
 
-  libcm = callPackage ../development/libraries/libcm { };
-
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   inherit (gnome3) libcroco;
@@ -8427,9 +8445,7 @@ with pkgs;
 
   libjreen = callPackage ../development/libraries/libjreen { };
 
-  libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
-
-  libjson_rpc_cpp_0_2_1 = callPackage ../development/libraries/libjson-rpc-cpp/0.2.1 { };
+  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
 
   libkate = callPackage ../development/libraries/libkate { };
 
@@ -9138,7 +9154,7 @@ with pkgs;
   };
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
-    cudatoolkit = cudatoolkit8;
+    cmake = cmake_2_8;
   };
 
   openwsman = callPackage ../development/libraries/openwsman {};
@@ -10240,6 +10256,10 @@ with pkgs;
 
   leaps = callPackage ../development/tools/leaps { };
 
+  ### DEVELOPMENT / JAVA MODULES
+
+  javaPackages = recurseIntoAttrs (callPackage ./java-packages.nix { });
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
@@ -10497,7 +10517,7 @@ with pkgs;
   hbase = callPackage ../servers/hbase {};
 
   hiawatha = callPackage ../servers/http/hiawatha {};
-  
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -12788,7 +12808,6 @@ with pkgs;
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
-    cudatoolkit = cudatoolkit8;
     python = python35;
   };
 
@@ -12986,8 +13005,6 @@ with pkgs;
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
-  d4x = callPackage ../applications/misc/d4x { };
-
   darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
@@ -13097,7 +13114,7 @@ with pkgs;
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { webkitgtk2 = null; });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
@@ -14250,7 +14267,7 @@ with pkgs;
 
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
-    webkitgtk = webkitgtk24x;
+    inherit (gnome3) libpeas gsettings_desktop_schemas dconf;
   };
 
   lingot = callPackage ../applications/audio/lingot {
@@ -14515,10 +14532,6 @@ with pkgs;
 
   multimon-ng = callPackage ../applications/misc/multimon-ng { };
 
-  multisync = callPackage ../applications/misc/multisync {
-    inherit (gnome2) ORBit2 libbonobo libgnomeui GConf;
-  };
-
   inherit (callPackages ../applications/networking/mumble {
       avahi = avahi.override {
         withLibdnssdCompat = true;
@@ -14536,7 +14549,11 @@ with pkgs;
       else null;
   };
 
-  musescore = libsForQt55.callPackage ../applications/audio/musescore { };
+  musescore =
+    if stdenv.isDarwin then
+      callPackage ../applications/audio/musescore/darwin.nix { }
+    else
+      libsForQt55.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
@@ -14930,7 +14947,10 @@ with pkgs;
     libtorrentRasterbar = libtorrentRasterbar_1_0;
   };
 
-  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
+  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
+    lua5 = lua5_1;
+    miniupnpc = miniupnpc_1;
+  };
 
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
@@ -14959,7 +14979,8 @@ with pkgs;
     qt = qt4;
   };
 
-  qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
+  # 0.5.7 segfaults when opening the main panel with qt 5.7
+  qsyncthingtray = libsForQt56.callPackage ../applications/misc/qsyncthingtray { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
@@ -15268,9 +15289,15 @@ with pkgs;
 
   slic3r = callPackage ../applications/misc/slic3r { };
 
-  curaengine = callPackage ../applications/misc/curaengine { };
+  curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
+  cura_stable = callPackage ../applications/misc/cura/stable.nix {
+    curaengine = curaengine_stable;
+  };
 
-  cura = callPackage ../applications/misc/cura { };
+  curaengine = callPackage ../applications/misc/curaengine {
+    inherit (python3.pkgs) libarcus;
+  };
+  cura = qt5.callPackage ../applications/misc/cura { };
 
   curaLulzbot = callPackage ../applications/misc/cura/lulzbot.nix { };
 
@@ -15943,7 +15970,8 @@ with pkgs;
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  xca = libsForQt5.callPackage ../applications/misc/xca { };
+  # v1.3.2 segfaults with qt 5.7
+  xca = libsForQt56.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
@@ -16480,9 +16508,7 @@ with pkgs;
 
   openrw = callPackage ../games/openrw { };
 
-  openspades = callPackage ../games/openspades {};
-
-  openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
+  openspades = callPackage ../games/openspades { };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
@@ -16559,7 +16585,10 @@ with pkgs;
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
-  scid = callPackage ../games/scid { };
+  scid = callPackage ../games/scid {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
 
   scummvm = callPackage ../games/scummvm { };
 
@@ -17107,8 +17136,8 @@ with pkgs;
     lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
   };
   coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
-    inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
+    inherit (ocamlPackages_4_02) ocaml findlib lablgtk;
+    camlp5 = ocamlPackages_4_02.camlp5_transitional;
   };
   coq_8_5 = callPackage ../applications/science/logic/coq {
     version = "8.5pl3";
@@ -17118,7 +17147,7 @@ with pkgs;
     inherit (ocamlPackages) ocaml findlib lablgtk;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
-  coq = coq_8_4;
+  coq = coq_8_6;
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
     inherit callPackage;

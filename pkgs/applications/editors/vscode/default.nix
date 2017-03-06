@@ -2,24 +2,24 @@
   makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.9.1";
-  rev = "f9d0c687ff2ea7aabd85fb9a43129117c0ecf519";
+  version = "1.10.0";
+  rev = "49129d126e2c3c5592cfc8a509d872067b69d262";
   channel = "stable";
 
   # The revision can be obtained with the following command (see https://github.com/NixOS/nixpkgs/issues/22465):
   # curl -w "%{url_effective}\n" -I -L -s -S https://vscode-update.azurewebsites.net/latest/linux-x64/stable -o /dev/null
 
-  sha256 = if stdenv.system == "i686-linux"    then "03lv792rkb1hgn1knd8kpic7q07cd194cr4fw1bimnjblrvyy586"
-      else if stdenv.system == "x86_64-linux"  then "1vrcb4y2y83bhxx9121afwbzm8yddfin4zy3nyxfi805pjmszwjm"
-      else if stdenv.system == "x86_64-darwin" then "0s92ing4m2qyqdkpmkhl2zj40hcdsr5x764sb6zprwwhfv4npymr"
+  sha256 = if stdenv.system == "i686-linux"    then "14ip00ysnn6daw7ws3vgnhib18pi7r1z1szfr7s996awbq12ir3i"
+      else if stdenv.system == "x86_64-linux"  then "1krrshsx2pjkr4pc1d6zad664f5khdbhwaq8lpx1aagxxd921mx6"
+      else if stdenv.system == "x86_64-darwin" then "1y574b4wpkk06a36clajx57ydj7a0scn2gms4070cqaf0afzy19f"
       else throw "Unsupported system: ${stdenv.system}";
 
   urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
 
   urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-${channel}-code_${version}-1486596246_i386.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1488384152_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-${channel}-code_${version}-1486597190_amd64.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1488387854_amd64.tar.gz"
       else if stdenv.system == "x86_64-darwin" then
         urlBase + "VSCode-darwin-${channel}.zip"
       else throw "Unsupported system: ${stdenv.system}";

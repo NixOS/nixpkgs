@@ -56,6 +56,14 @@ let
 
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
+
+        # Remove static libraries in case dynamic are available.
+        for i in $out/lib/*.a; do
+          name="$(basename "$i")"
+          if [ -e "$lib/lib/''${name%.a}.so" ] || [ -e "''${i%.a}.so" ]; then
+            rm "$i"
+          fi
+        done
       '';
 
     postFixup = lib.optionalString (!stdenv.isDarwin)

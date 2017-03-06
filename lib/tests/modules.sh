@@ -99,6 +99,14 @@ checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-if-foo-enabl
 checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-if-enable.nix
 checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-enable-if.nix
 
+# Check disabledModules with config definitions and option declarations.
+set -- config.enable ./define-enable.nix ./declare-enable.nix
+checkConfigOutput "true" "$@"
+checkConfigOutput "false" "$@" ./disable-define-enable.nix
+checkConfigError "The option .*enable.* defined in .* does not exist" "$@" ./disable-declare-enable.nix
+checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
+checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
+
 # Check _module.args.
 set -- config.enable ./declare-enable.nix ./define-enable-with-custom-arg.nix
 checkConfigError 'while evaluating the module argument .*custom.* in .*define-enable-with-custom-arg.nix.*:' "$@"

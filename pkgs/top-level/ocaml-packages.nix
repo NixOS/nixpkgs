@@ -717,14 +717,18 @@ let
       else core_extended_p4;
 
     async_kernel =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/async_kernel-113_33_00.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-kernel.nix {}
       else async_kernel_p4;
 
     async_rpc_kernel = callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
 
     async_unix =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/async_unix-113_33_00.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
       else async_unix_p4;
 
