@@ -244,6 +244,7 @@ rec {
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  hexDigits  = stringToCharacters "0123456789abcdef";
 
   /* Converts an ASCII string to lower-case.
 
@@ -513,23 +514,10 @@ rec {
     let
       chars = stringToCharacters (toLower hex);
       digitConv = d:
-        if d == "0" then 0
-        else if d == "1" then 1
-        else if d == "2" then 2
-        else if d == "3" then 3
-        else if d == "4" then 4
-        else if d == "5" then 5
-        else if d == "6" then 6
-        else if d == "7" then 7
-        else if d == "8" then 8
-        else if d == "9" then 9
-        else if d == "a" then 10
-        else if d == "b" then 11
-        else if d == "c" then 12
-        else if d == "d" then 13
-        else if d == "e" then 14
-        else if d == "f" then 15
-        else throw "Could not read ${hex} as an hexadecimal number.";
+        let i = lib.findFirstIndex (x: x == d) hexDigits; in
+        if i == "default"
+        then throw "Could not read ${hex} as an hexadecimal number."
+        else i;
       ints = map digitConv chars;
     in
       lib.foldl (a: b: a * 16 + b) 0 ints;
