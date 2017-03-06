@@ -32038,6 +32038,8 @@ EOF
     };
   };
 
+  typed-ast = callPackage ../development/python-modules/typed-ast { };
+
   stripe = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "stripe";
