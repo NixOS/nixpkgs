@@ -560,101 +560,102 @@ in
 
     };
 
-    networking.bonds = mkOption {
-      default = { };
-      example = literalExample {
-        bond0 = {
-          interfaces = [ "eth0" "wlan0" ];
-          miimon = 100;
+    networking.bonds =
+      let
+        driverOptionsExample = {
+          miimon = "100";
           mode = "active-backup";
         };
-        fatpipe.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
-      };
-      description = ''
-        This option allows you to define bond devices that aggregate multiple,
-        underlying networking interfaces together. The value of this option is
-        an attribute set. Each attribute specifies a bond, with the attribute
-        name specifying the name of the bond's network interface
-      '';
-
-      type = with types; attrsOf (submodule {
-
-        options = {
-
-          interfaces = mkOption {
-            example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
-            type = types.listOf types.str;
-            description = "The interfaces to bond together";
+      in mkOption {
+        default = { };
+        example = literalExample {
+          bond0 = {
+            interfaces = [ "eth0" "wlan0" ];
+            driverOptions = driverOptionsExample;
           };
-
-          driverOptions = mkOption {
-            type = types.attrsOf types.str;
-            default = {};
-            example = literalExample {
-              interfaces = [ "eth0" "wlan0" ];
-              miimon = 100;
-              mode = "active-backup";
-            };
-            description = ''
-              Options for the bonding driver.
-              Documentation can be found in
-              <link xlink:href="https://www.kernel.org/doc/Documentation/networking/bonding.txt" />
-            '';
-
-          };
-
-          lacp_rate = mkOption {
-            default = null;
-            example = "fast";
-            type = types.nullOr types.str;
-            description = ''
-              DEPRECATED, use `driverOptions`.
-              Option specifying the rate in which we'll ask our link partner
-              to transmit LACPDU packets in 802.3ad mode.
-            '';
-          };
-
-          miimon = mkOption {
-            default = null;
-            example = 100;
-            type = types.nullOr types.int;
-            description = ''
-              DEPRECATED, use `driverOptions`.
-              Miimon is the number of millisecond in between each round of polling
-              by the device driver for failed links. By default polling is not
-              enabled and the driver is trusted to properly detect and handle
-              failure scenarios.
-            '';
-          };
-
-          mode = mkOption {
-            default = null;
-            example = "active-backup";
-            type = types.nullOr types.str;
-            description = ''
-              DEPRECATED, use `driverOptions`.
-              The mode which the bond will be running. The default mode for
-              the bonding driver is balance-rr, optimizing for throughput.
-              More information about valid modes can be found at
-              https://www.kernel.org/doc/Documentation/networking/bonding.txt
-            '';
-          };
-
-          xmit_hash_policy = mkOption {
-            default = null;
-            example = "layer2+3";
-            type = types.nullOr types.str;
-            description = ''
-              DEPRECATED, use `driverOptions`.
-              Selects the transmit hash policy to use for slave selection in
-              balance-xor, 802.3ad, and tlb modes.
-            '';
-          };
-
+          anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
         };
+        description = ''
+          This option allows you to define bond devices that aggregate multiple,
+          underlying networking interfaces together. The value of this option is
+          an attribute set. Each attribute specifies a bond, with the attribute
+          name specifying the name of the bond's network interface
+        '';
 
-      });
-    };
+        type = with types; attrsOf (submodule {
+
+          options = {
+
+            interfaces = mkOption {
+              example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
+              type = types.listOf types.str;
+              description = "The interfaces to bond together";
+            };
+
+            driverOptions = mkOption {
+              type = types.attrsOf types.str;
+              default = {};
+              example = literalExample driverOptionsExample;
+              description = ''
+                Options for the bonding driver.
+                Documentation can be found in
+                <link xlink:href="https://www.kernel.org/doc/Documentation/networking/bonding.txt" />
+              '';
+
+            };
+
+            lacp_rate = mkOption {
+              default = null;
+              example = "fast";
+              type = types.nullOr types.str;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                Option specifying the rate in which we'll ask our link partner
+                to transmit LACPDU packets in 802.3ad mode.
+              '';
+            };
+
+            miimon = mkOption {
+              default = null;
+              example = 100;
+              type = types.nullOr types.int;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                Miimon is the number of millisecond in between each round of polling
+                by the device driver for failed links. By default polling is not
+                enabled and the driver is trusted to properly detect and handle
+                failure scenarios.
+              '';
+            };
+
+            mode = mkOption {
+              default = null;
+              example = "active-backup";
+              type = types.nullOr types.str;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                The mode which the bond will be running. The default mode for
+                the bonding driver is balance-rr, optimizing for throughput.
+                More information about valid modes can be found at
+                https://www.kernel.org/doc/Documentation/networking/bonding.txt
+              '';
+            };
+
+            xmit_hash_policy = mkOption {
+              default = null;
+              example = "layer2+3";
+              type = types.nullOr types.str;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                Selects the transmit hash policy to use for slave selection in
+                balance-xor, 802.3ad, and tlb modes.
+              '';
+            };
+
+          };
+
+        });
+      };
 
     networking.macvlans = mkOption {
       default = { };
