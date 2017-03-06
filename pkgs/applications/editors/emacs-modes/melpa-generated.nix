@@ -45711,12 +45711,12 @@
     nix-buffer = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "nix-buffer";
-        version = "20170305.333";
+        version = "20170305.1601";
         src = fetchFromGitHub {
           owner = "shlevy";
           repo = "nix-buffer";
-          rev = "c48d501ec6a1c2d8295190abd1e27ef61867c92b";
-          sha256 = "0q4fhf311c8pz0lwp4lc7i9jxpvdrp2a1b2jgi3g2wv5fcavx5a7";
+          rev = "89d30002eddcc33c5c74dcc871a97aee0228d403";
+          sha256 = "0pz1p8mdk988x4k41qi3j8rf6g33gj6lx4dm9sgfyzgzi9ixyma8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/08b978724ff26b3ea7a134d307d888c80e2a92a9/recipes/nix-buffer";
