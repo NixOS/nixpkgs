@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, git, gperf, pcre, unbound, libev, tokyocabinet, pkgconfig, bash, libsrs2 }:
+{ stdenv, lib, fetchurl, fetchFromGitHub, git, gperf, pcre, unbound, libev, tokyocabinet, pkgconfig, bash, libsrs2 }:
 
 let
   version = "0.9";
@@ -19,6 +19,12 @@ let
     sha256 = "14fxldp29j4vmfmhfgwwi37pj8cz0flm1aykkxlbgakz92d4pm35";
   };
 
+  # from https://github.com/Fruneau/pfixtools/pull/21
+  unboundPatch = fetchurl {
+    url = https://github.com/cpages/pfixtools/commit/bf269dda3c81bb9eaa244b3015d426de38c85ccf.patch;
+    sha256 = "1c50qsmpqg5j49k992hvhsf5ya5ml7ybg7hhm10y90dslkkgh4in";
+  };
+
 in
 
 stdenv.mkDerivation {
@@ -27,6 +33,10 @@ stdenv.mkDerivation {
   src = pfixtoolsSrc;
 
   buildInputs = [git gperf pcre unbound libev tokyocabinet pkgconfig bash libsrs2];
+
+  patches = [
+    unboundPatch
+  ];
 
   postUnpack = ''
     cp -Rp ${libCommonSrc}/* ${srcRoot}/common;
