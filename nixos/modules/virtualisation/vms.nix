@@ -7,6 +7,7 @@ let
 
   system = config.nixpkgs.system;
 
+  # TODO: replace calls to sudo by User=
   machineOpts = { name, config, ... }: {
     options = {
       # TODO: allow leaving these field unset and auto-fill it with a valid value
@@ -50,7 +51,7 @@ let
           These paths won't enter the store, so may be secrets. They will be
           read by user
           <literal>vm-<replaceable>vmname</replaceable></literal>:<literal>vm-<replaceable>vmname</replaceable></literal>.
-        ''; # TODO: Switch from running as root to running as vm-[vmname]
+        '';
       };
       diskSize = mkOption {
         type = types.int;
@@ -153,16 +154,19 @@ let
     in
     # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
     concatStringsSep " " (
-      [ # Generic configuration
+      [ # Drop priviledges
+        ''${pkgs.sudo}/bin/sudo''
+        ''-u "vm-${name}"''
+        # Generic configuration
         ''${pkgs.qemu}/bin/qemu-kvm''
         ''-name ${name}''
         ''-m ${toString mcfg.memorySize}''
         ''${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}''
         # Run headless
-        ''-nographic -serial unix:"$console",server,nowait''
+        ''-nographic -serial unix:"${cfg.consolePath}/${name}/socket.unix",server,nowait''
         # File systems
-        ''-drive file="$image",if=virtio,media=disk''
-        ''-virtfs local,path="$store",security_model=none,mount_tag=store''
+        ''-drive file="${cfg.imagesPath}/${name}.img",if=virtio,media=disk''
+        ''-virtfs local,path="${cfg.storesPath}/${name}",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
         ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
@@ -176,15 +180,15 @@ let
       ) (attrNames mcfg.shared)
     );
 
-  startVM = name: let mcfg = cfg.machines.${name}; in
+  setupVM = name: let mcfg = cfg.machines.${name}; in
     ''
       image="${cfg.imagesPath}/${name}.img"
-      console="${cfg.consolePath}/${name}.unix"
+      console="${cfg.consolePath}/${name}/socket.unix"
       store="${cfg.storesPath}/${name}"
       persist="${cfg.persistPath}/${name}"
 
       # Generate paths
-      mkdir -p "$persist" "${cfg.imagesPath}" "${cfg.consolePath}"
+      mkdir -p "$store" "$persist" "${cfg.imagesPath}" "${cfg.consolePath}/${name}"
       mkdir -p ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
 
       # Regenerate store
@@ -212,7 +216,8 @@ let
           ${toString mcfg.diskSize}M || exit 1
       fi
 
-      exec ${qemuCommand name}
+      # Ensure permissions
+      chown "vm-${name}:vm-${name}" "${cfg.consolePath}/${name}" "$persist" "$image"
     '';
 
 in
@@ -268,9 +273,8 @@ in
       default = "/var/lib/vm/consoles";
       description =
         ''
-          Path to unix-domain sockets with the serial consoles of the VMs. Use
-          <command>nc -U
-          <replaceable>/var/lib/vm/consoles/vmname</replaceable></command>
+          Path to the serial consoles of the VMs. Use <command>screen
+          <replaceable>/var/lib/vm/consoles/vmname</replaceable>/screen</command>
           to connect.
         '';
     };
@@ -305,7 +309,8 @@ in
     let
       unit = name: {
         description = "VM '${name}'";
-        script = startVM name;
+        preStart = setupVM name;
+        script = "exec ${qemuCommand name}";
         requires = [ "vm-${name}-netdev.service" ];
         after = [ "vm-${name}-netdev.service" ];
         wantedBy = [ "multi-user.target" ];
@@ -314,10 +319,10 @@ in
         description = "Console for VM '${name}'";
         script =
           ''
-            # Wait until the VM has had time to startup
-            # TODO: make this service actually start only after qemu has started?
-            sleep 60
-            exec ${pkgs.socat}/bin/socat PTY,link="${cfg.consolePath}/${name}" "${cfg.consolePath}/${name}.unix"
+            exec ${pkgs.sudo}/bin/sudo -u "vm-${name}" \
+              ${pkgs.socat}/bin/socat \
+                PTY,link="${cfg.consolePath}/${name}/screen" \
+                "${cfg.consolePath}/${name}/socket.unix"
           '';
         partOf = [ "vm-${name}.service" ];
         after = [ "vm-${name}.service" ];
@@ -329,6 +334,15 @@ in
       mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines //
       mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines;
 
+    users.groups = mapAttrs' (name: _: nameValuePair "vm-${name}" {}) cfg.machines;
+    users.users =
+      mapAttrs' (name: _: nameValuePair
+        "vm-${name}"
+        { description = "VM ${name}";
+          isSystemUser = true;
+          group = "vm-${name}";
+        }) cfg.machines;
+
     networking.bridges.${cfg.bridge} = {
       interfaces = mapAttrsToList (name: _: "vm-${name}") cfg.machines;
     };
@@ -339,6 +353,7 @@ in
         { useDHCP = false;
           virtual = true;
           virtualType = "tap";
+          virtualOwner = "vm-${name}";
         }) cfg.machines //
       { ${cfg.bridge} = {
           ip4 = [ cfg.ip4 ];
