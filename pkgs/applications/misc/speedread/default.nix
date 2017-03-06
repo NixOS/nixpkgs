@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
-  version = "git-2016-09-21";
-  name = "speedread-${version}";
+  name = "speedread-unstable-2016-09-21";
 
   src = fetchFromGitHub {
     owner  = "pasky";
@@ -14,8 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv speedread $out/bin
+    install -m755 -D speedread $out/bin/speedread
   '';
 
   meta = with stdenv.lib; {
