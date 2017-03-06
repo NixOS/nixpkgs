@@ -99,7 +99,7 @@
       </listitem>
       <listitem>
         <para>
-          Use https://lwn.net/Vulnerabilities/ and 
+          Use https://lwn.net/Vulnerabilities/ and
           <link xlink:href="https://github.com/NixOS/nixpkgs/search?utf8=%E2%9C%93&amp;q=vulnerabilities&amp;type=Issues">triage vulnerabilities in an issue</link>.
         </para>
       </listitem>
@@ -184,6 +184,22 @@
         <para>
           Send an email to nix-dev to announce the release with above information. Best to check how previous email was formulated
           to see what needs to be included.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="after-final-release-time">
+    <title>After the final release time</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Mark the old stable as <literal>deprecated</literal> or <literal>unsupported</literal> by running
+          <literal>echo 'deprecated' &gt; .version-unsupported-state</literal>
+          in the root of the git repository.
+        </para>
+        <para>
+          Wether or not the old stable should be marked deprecated or unsupported depends on
+          which commitments the security team is willing to make.
         </para>
       </listitem>
     </itemizedlist>
