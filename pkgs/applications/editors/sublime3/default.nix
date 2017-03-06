@@ -1,6 +1,6 @@
 { fetchurl, stdenv, glib, xorg, cairo, gtk2, pango, makeWrapper, openssl, bzip2,
   pkexecPath ? "/run/wrappers/bin/pkexec", libredirect,
-  gksuSupport ? false, gksu, unzip, zip }:
+  gksuSupport ? false, gksu, unzip, zip, bash }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
@@ -33,15 +33,15 @@ in let
     dontPatchELF = true;
     buildInputs = [ makeWrapper ];
 
-    # make exec.py in Default.sublime-package use "/usr/bin/env bash"
-    # instead of "/bin/bash"
+    # make exec.py in Default.sublime-package use own bash with
+    # an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
       mkdir Default.sublime-package-fix
       ( cd Default.sublime-package-fix
         ${unzip}/bin/unzip ../Packages/Default.sublime-package > /dev/null
         substituteInPlace "exec.py" --replace \
-          '["/bin/bash"' \
-          '["/usr/bin/env", "bash"'
+          "[\"/bin/bash\"" \
+          "[\"$out/sublime_bash\""
       )
       ${zip}/bin/zip -j Default.sublime-package.zip Default.sublime-package-fix/* > /dev/null
       mv Default.sublime-package.zip Packages/Default.sublime-package
@@ -66,6 +66,12 @@ in let
 
       mkdir -p $out
       cp -prvd * $out/
+
+      # We can't just call /usr/bin/env bash because a relocation error occurs
+      # when trying to run a build from within Sublime Text
+      ln -s ${bash}/bin/bash $out/sublime_bash
+      wrapProgram $out/sublime_bash \
+        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
 
       wrapProgram $out/sublime_text \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
