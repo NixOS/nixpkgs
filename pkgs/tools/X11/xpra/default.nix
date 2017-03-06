@@ -53,12 +53,6 @@ in buildPythonApplication rec {
   '';
   setupPyBuildFlags = ["--with-Xdummy" "--without-strict"];
 
-  preInstall = ''
-    # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
-    ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
-    sed -i '/ = data_files/d' setup.py
-  '';
-
   postInstall = ''
     wrapProgram $out/bin/xpra \
       --set XPRA_INSTALL_PREFIX "$out" \
