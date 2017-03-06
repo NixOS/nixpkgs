@@ -7,7 +7,6 @@ let
 
   system = config.nixpkgs.system;
 
-  # TODO: replace calls to sudo by User=
   machineOpts = { name, config, ... }: {
     options = {
       # TODO: allow leaving these field unset and auto-fill it with a valid value
@@ -154,10 +153,7 @@ let
     in
     # TODO: repair the nix db (like with regInfo @qemu-vm.nix?)
     concatStringsSep " " (
-      [ # Drop priviledges
-        ''${pkgs.sudo}/bin/sudo''
-        ''-u "vm-${name}"''
-        # Generic configuration
+      [ # Generic configuration
         ''${pkgs.qemu}/bin/qemu-kvm''
         ''-name ${name}''
         ''-m ${toString mcfg.memorySize}''
@@ -314,19 +310,27 @@ in
         requires = [ "vm-${name}-netdev.service" ];
         after = [ "vm-${name}-netdev.service" ];
         wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          User = "vm-${name}";
+          Group = "vm-${name}";
+          PermissionsStartOnly = "true";
+        };
       };
       consoleUnit = name: {
         description = "Console for VM '${name}'";
         script =
           ''
-            exec ${pkgs.sudo}/bin/sudo -u "vm-${name}" \
-              ${pkgs.socat}/bin/socat \
+            exec ${pkgs.socat}/bin/socat \
                 PTY,link="${cfg.consolePath}/${name}/screen" \
                 "${cfg.consolePath}/${name}/socket.unix"
           '';
         partOf = [ "vm-${name}.service" ];
         after = [ "vm-${name}.service" ];
         wantedBy = [ "vm-${name}.service" ];
+        serviceConfig = {
+          User = "vm-${name}";
+          Group = "vm-${name}";
+        };
       };
     in
   mkIf (cfg.machines != {}) {
