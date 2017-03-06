@@ -1,6 +1,9 @@
 { stdenv, fetchFromGitHub, skalibs, gcc }:
 
 with stdenv.lib;
+let
+  cross = "";
+in
 
 stdenv.mkDerivation rec {
   name = "s6-portable-utils-${version}";
@@ -17,7 +20,12 @@ stdenv.mkDerivation rec {
   
   nativeBuildInputs = []
     ++ optional stdenv.isDarwin gcc;
-    
+  
+  preConfigure = ''
+    substituteInPlace configure \
+      "${cross}" " "
+      '';
+
   configureFlags = [
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs}/include"
@@ -25,8 +33,7 @@ stdenv.mkDerivation rec {
     "--with-dynlib=${skalibs}/lib"
   ]
   ++ (optional stdenv.isDarwin "--target=${stdenv.system}")
-  ++ (optional stdenv.isDarwin "--with-gcc=${gcc}/bin");
-
+  ;
   meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
     description = "A set of tiny general Unix utilities optimized for simplicity and small size";
