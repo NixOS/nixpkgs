@@ -726,6 +726,8 @@ with pkgs;
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
 
+  clog-cli = callPackage ../development/tools/clog-cli { };
+
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
   clib = callPackage ../tools/package-management/clib { };
