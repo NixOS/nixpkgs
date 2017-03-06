@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, skalibs, gcc }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "s6-portable-utils-${version}";
   version = "2.1.0.0";
@@ -13,8 +15,8 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
   
-  # Darwin Support, optional isDarwin failed
-  nativeBuildInputs = [ gcc ];
+  nativeBuildInputs = []
+    ++ optional stdenv.isDarwin gcc;
     
   configureFlags = [
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
@@ -22,9 +24,10 @@ stdenv.mkDerivation rec {
     "--with-lib=${skalibs}/lib"
     "--with-dynlib=${skalibs}/lib"
   ]
-  ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
+  ++ (optional stdenv.isDarwin "--target=${stdenv.system}")
+  ++ (optional stdenv.isDarwin "--with-gcc=${gcc}/bin");
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
     description = "A set of tiny general Unix utilities optimized for simplicity and small size";
     platforms = platforms.all;
