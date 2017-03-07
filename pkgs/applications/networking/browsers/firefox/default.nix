@@ -148,8 +148,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "51.0.1";
-    sha512 = "556e31b717c0640ef5e181e00b9d2a6ea0ace7c16ae04333d0f2e9e120d0ab9efe82a4ca314ef43594c080523edf37953e65dbf694c7428be0a024f3719d8312";
+    version = "52.0";
+    sha512 = "bffe5fd9eee240f252bf8a882c46f04551d21f6f58b8da68779cd106ed012ea77ee16bc287c847f8a7b959203c79f1b1d3f50151111f9610e1ca7a57c7b811f7";
     updateScript = import ./update.nix {
       attrPath = "firefox-unwrapped";
       inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
@@ -158,8 +158,8 @@ in {
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.7.0esr";
-    sha512 = "6424101b6958191ce654d0619950dfbf98d4aa6bdd979306a2df8d6d30d3fecf1ab44638061a2b4fb1af85fe972f5ff49400e8eeda30cdcb9087c4b110b97a7d";
+    version = "52.0esr";
+    sha512 = "7e191c37af98163131cbba4dcc820a4edc0913d81c3b2493d9aad0a2886e7aed41a990fa5281ccfb08566ecfdfd7df7353063a01ad92d2ec6e1ce19d277b6e67";
     updateScript = import ./update.nix {
       attrPath = "firefox-esr-unwrapped";
       versionSuffix = "esr";
