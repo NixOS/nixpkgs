@@ -17008,6 +17008,8 @@ with pkgs;
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
 
+  varscan = callPackage ../applications/science/biology/varscan/default.nix { };
+
   bwa = callPackage ../applications/science/biology/bwa/default.nix { };
 
   ### SCIENCE/MATH
