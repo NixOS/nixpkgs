@@ -6315,9 +6315,7 @@ with pkgs;
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle {
-    ocamlPackages = ocamlPackages_4_01_0;
-   };
+  coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
   cpptest = callPackage ../development/libraries/cpptest { };
 
@@ -10207,8 +10205,6 @@ with pkgs;
   gwtwidgets = callPackage ../development/libraries/java/gwt-widgets { };
 
   javaCup = callPackage ../development/libraries/java/cup { };
-
-  javasvn = callPackage ../development/libraries/java/javasvn { };
 
   jclasslib = callPackage ../development/tools/java/jclasslib { };
 

@@ -4,10 +4,10 @@
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot";
-  version = "0.9.3";
+  version = "0.9.4";
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "1yw7knk5dcvwms14vqwlp89flhjf8567l17s9cq7vydh760nmg62";
+    sha256 = "0wklrn4fszac9wi8zw3vbsznwyff6y57cz0i81zvh46skb6n3086";
   };
 
   buildInputs = with pythonPackages; [
@@ -41,6 +41,7 @@ pythonPackages.buildPythonApplication (rec {
     dateutil
     txaio
     autobahn
+    pyjwt
 
     # tls
     pyopenssl
@@ -70,7 +71,6 @@ pythonPackages.buildPythonApplication (rec {
     homepage = http://buildbot.net/;
     description = "Continuous integration system that automates the build/test cycle";
     maintainers = with maintainers; [ nand0p ryansydnor ];
-    platforms = platforms.linux;
     license = licenses.gpl2;
   };
 })
