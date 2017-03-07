@@ -266,13 +266,15 @@ in
       requires = [ "init-dnscrypt-proxy-statedir.service" ];
       after = [ "init-dnscrypt-proxy-statedir.service" ];
 
-      path = with pkgs; [ curl minisign ];
+      path = with pkgs; [ curl dnscrypt-proxy minisign ];
       script = ''
         cd ${stateDirectory}
-        curl -fSsL -o dnscrypt-resolvers.csv.tmp \
-          https://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-resolvers.csv
-        curl -fSsL -o dnscrypt-resolvers.csv.minisig.tmp \
-          https://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-resolvers.csv.minisig
+        domain=download.dnscrypt.org
+        get="curl -fSs --resolve $domain:443:$(hostip -r 8.8.8.8 $domain | head -1)"
+        $get -o dnscrypt-resolvers.csv.tmp \
+          https://$domain/dnscrypt-proxy/dnscrypt-resolvers.csv
+        $get -o dnscrypt-resolvers.csv.minisig.tmp \
+          https://$domain/dnscrypt-proxy/dnscrypt-resolvers.csv.minisig
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
         minisign -q -V -p ${upstreamResolverListPubKey} \
           -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig
