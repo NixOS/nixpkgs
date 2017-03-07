@@ -16978,6 +16978,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  bedtools = callPackage ../applications/science/biology/bedtools/default.nix { };
+
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
