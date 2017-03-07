@@ -16998,6 +16998,8 @@ with pkgs;
 
   paml = callPackage ../applications/science/biology/paml { };
 
+  picard-tools = callPackage ../applications/science/biology/picard-tools/default.nix { };
+
   platypus = callPackage ../applications/science/biology/platypus/default.nix { };
 
   plink = callPackage ../applications/science/biology/plink/default.nix { };
