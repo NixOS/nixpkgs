@@ -16996,6 +16996,8 @@ with pkgs;
 
   paml = callPackage ../applications/science/biology/paml { };
 
+  platypus = callPackage ../applications/science/biology/platypus/default.nix { };
+
   plink = callPackage ../applications/science/biology/plink/default.nix { };
 
   plink-ng = callPackage ../applications/science/biology/plink-ng/default.nix { };
