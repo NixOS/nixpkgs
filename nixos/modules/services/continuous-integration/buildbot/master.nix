@@ -180,13 +180,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.buildbot-ui;
+        defaultText = "pkgs.buildbot-ui";
         description = "Package to use for buildbot.";
-        example = pkgs.buildbot-full;
+        example = literalExample "pkgs.buildbot-full";
       };
 
       packages = mkOption {
         default = [ ];
-        example = [ pkgs.git ];
+        example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
