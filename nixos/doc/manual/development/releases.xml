@@ -193,9 +193,10 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Mark the old stable as <literal>deprecated</literal> or <literal>unsupported</literal> by running
-          <literal>echo 'deprecated' &gt; .version-unsupported-state</literal>
-          in the root of the git repository.
+          Mark the old stable as <literal>deprecated</literal> or <literal>unsupported</literal> by updating
+          the <literal>state</literal> field in the <literal>.version-state.nix</literal> file to
+          the desired state. It's recommended to also add a <literal>description</literal> field in that file
+          to give the user instructions on how to actually upgrade.
         </para>
         <para>
           Whether or not the old stable should be marked deprecated or unsupported depends on
