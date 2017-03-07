@@ -155,15 +155,59 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-
+  config = mkIf cfg.enable (mkMerge [{
     assertions = [
       { assertion = (cfg.customResolver != null) || (cfg.resolverName != null);
         message   = "please configure upstream DNSCrypt resolver";
       }
     ];
 
-    security.apparmor.profiles = optional apparmorEnabled (pkgs.writeText "apparmor-dnscrypt-proxy" ''
+    users.users.dnscrypt-proxy = {
+      description = "dnscrypt-proxy daemon user";
+      isSystemUser = true;
+      group = "dnscrypt-proxy";
+    };
+    users.groups.dnscrypt-proxy = {};
+
+    systemd.sockets.dnscrypt-proxy = {
+      description = "dnscrypt-proxy listening socket";
+      documentation = [ "man:dnscrypt-proxy(8)" ];
+
+      wantedBy = [ "sockets.target" ];
+
+      socketConfig = {
+        ListenStream = localAddress;
+        ListenDatagram = localAddress;
+      };
+    };
+
+    systemd.services.dnscrypt-proxy = {
+      description = "dnscrypt-proxy daemon";
+      documentation = [ "man:dnscrypt-proxy(8)" ];
+
+      before = [ "nss-lookup.target" ];
+
+      after = [ "network.target" ]
+        ++ optional apparmorEnabled "apparmor.service";
+
+      requires = [ "dnscrypt-proxy.socket "]
+        ++ optional apparmorEnabled "apparmor.service";
+
+      serviceConfig = {
+        NonBlocking = "true";
+        ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+
+        User = "dnscrypt-proxy";
+
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHome = true;
+      };
+    };
+    }
+
+    (mkIf apparmorEnabled {
+    security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
       ${dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
         /dev/urandom r,
@@ -188,35 +232,35 @@ in
         ${getLib pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
         ${getLib pkgs.libcap}/lib/libcap.so.* mr,
         ${getLib pkgs.lz4}/lib/liblz4.so.* mr,
-        ${getLib pkgs.attr}/lib/libattr.so.* mr,
+        ${getLib pkgs.attr}/lib/libattr.so.* mr, # */
 
         ${resolverList} r,
       }
     '');
+    })
 
-    users.users.dnscrypt-proxy = {
-      description = "dnscrypt-proxy daemon user";
-      isSystemUser = true;
-      group = "dnscrypt-proxy";
-    };
-    users.groups.dnscrypt-proxy = {};
-
-    systemd.services.init-dnscrypt-proxy-statedir = optionalAttrs useUpstreamResolverList {
+    (mkIf useUpstreamResolverList {
+    systemd.services.init-dnscrypt-proxy-statedir = {
       description = "Initialize dnscrypt-proxy state directory";
+
+      wantedBy = [ "dnscrypt-proxy.service" ];
+      before = [ "dnscrypt-proxy.service" ];
+
       script = ''
         mkdir -pv ${stateDirectory}
         chown -c dnscrypt-proxy:dnscrypt-proxy ${stateDirectory}
-        cp --preserve=timestamps -uv \
+        cp -uv \
           ${pkgs.dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv \
           ${stateDirectory}
       '';
+
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };
     };
 
-    systemd.services.update-dnscrypt-resolvers = optionalAttrs useUpstreamResolverList {
+    systemd.services.update-dnscrypt-resolvers = {
       description = "Update list of DNSCrypt resolvers";
 
       requires = [ "init-dnscrypt-proxy-statedir.service" ];
@@ -243,47 +287,13 @@ in
       };
     };
 
-    systemd.timers.update-dnscrypt-resolvers = optionalAttrs useUpstreamResolverList {
+    systemd.timers.update-dnscrypt-resolvers = {
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnBootSec = "5min";
         OnUnitActiveSec = "6h";
       };
-      wantedBy = [ "timers.target" ];
     };
-
-    systemd.sockets.dnscrypt-proxy = {
-      description = "dnscrypt-proxy listening socket";
-      socketConfig = {
-        ListenStream = localAddress;
-        ListenDatagram = localAddress;
-      };
-      wantedBy = [ "sockets.target" ];
-    };
-
-    systemd.services.dnscrypt-proxy = {
-      description = "dnscrypt-proxy daemon";
-
-      before = [ "nss-lookup.target" ];
-
-      after = [ "network.target" ]
-        ++ optional apparmorEnabled "apparmor.service"
-        ++ optional useUpstreamResolverList "init-dnscrypt-proxy-statedir.service";
-
-      requires = [ "dnscrypt-proxy.socket "]
-        ++ optional apparmorEnabled "apparmor.service"
-        ++ optional useUpstreamResolverList "init-dnscrypt-proxy-statedir.service";
-
-      serviceConfig = {
-        Type = "simple";
-        NonBlocking = "true";
-        ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
-
-        User = "dnscrypt-proxy";
-
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHome = true;
-      };
-    };
-  };
+    })
+    ]);
 }
