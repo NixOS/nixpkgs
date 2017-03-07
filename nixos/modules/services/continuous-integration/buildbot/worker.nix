@@ -68,13 +68,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.buildbot-worker;
+        defaultText = "pkgs.buildbot-worker";
         description = "Package to use for buildbot worker.";
-        example = pkgs.buildbot-worker;
+        example = literalExample "pkgs.buildbot-worker";
       };
 
       packages = mkOption {
         default = [ ];
-        example = [ pkgs.git ];
+        example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
