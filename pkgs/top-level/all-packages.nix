@@ -3106,7 +3106,7 @@ with pkgs;
 
   nkf = callPackage ../tools/text/nkf {};
 
-  nlopt = callPackage ../development/libraries/nlopt {};
+  nlopt = callPackage ../development/libraries/nlopt { octave = null; };
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk {};
 
@@ -6907,7 +6907,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy-lang = callPackage ../development/tools/mypy-lang { };
+  mypy = callPackage ../development/tools/mypy { };
 
 
   ### DEVELOPMENT / LIBRARIES
@@ -10042,7 +10042,7 @@ with pkgs;
 
   x265 = callPackage ../development/libraries/x265 { };
 
-  inherit (callPackage ../development/libraries/xapian { })
+  inherit (callPackages ../development/libraries/xapian { })
     xapian_1_2_22 xapian_1_4_0;
   xapian = xapian_1_4_0;
 
@@ -10405,6 +10405,7 @@ with pkgs;
   cassandra_1_2 = callPackage ../servers/nosql/cassandra/1.2.nix { };
   cassandra_2_0 = callPackage ../servers/nosql/cassandra/2.0.nix { };
   cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
+  cassandra_2_2 = callPackage ../servers/nosql/cassandra/2.2.nix { };
   cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix { };
   cassandra = cassandra_3_0;
 
@@ -14333,6 +14334,11 @@ with pkgs;
   lilyterm = callPackage ../applications/misc/lilyterm {
     inherit (gnome2) vte;
     gtk = gtk2;
+    flavour = "stable";
+  };
+
+  lilyterm-git = lilyterm.override {
+    flavour = "git";
   };
 
   lumail = callPackage ../applications/networking/mailreaders/lumail { };
@@ -14380,7 +14386,10 @@ with pkgs;
 
   mcomix = callPackage ../applications/graphics/mcomix { };
 
-  mendeley = callPackage ../applications/office/mendeley { };
+  mendeley = callPackage ../applications/office/mendeley {
+    qt5 = qt56;
+    gconf = pkgs.gnome2.GConf;
+  };
 
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;

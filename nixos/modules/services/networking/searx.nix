@@ -19,6 +19,7 @@ in
     services.searx = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "
           Whether to enable the Searx server. See https://github.com/asciimoo/searx
@@ -26,6 +27,7 @@ in
       };
 
       configFile = mkOption {
+        type = types.path;
         default = "";
         description = "
           The path of the Searx server configuration file. If no file
@@ -35,7 +37,9 @@ in
       };
 
       package = mkOption {
+        type = types.package;
         default = pkgs.pythonPackages.searx;
+        defaultText = "pkgs.pythonPackages.searx";
         description = "searx package to use.";
       };
 

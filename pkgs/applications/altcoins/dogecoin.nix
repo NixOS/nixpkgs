@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     repo = "dogecoin";
     rev = "v${version}";
     sha256 = "16q3rldj04hkzzjd23h0knszqr5dgixizy4iyc129mz8wa8pbnvy";
+=======
+  >>>>>>> master
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

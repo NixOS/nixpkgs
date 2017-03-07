@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, help2man, fuse, pam }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse, pam }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-${version}";
-  version = "2.0.4";
+  # use unstable because it fixed some serious crashes,
+  # stable should be reconsidered in future
+  name = "lxcfs-unstable-2017-03-02";
 
-  src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxcfs/lxcfs-${version}.tar.gz";
-    sha256 = "0pfrsn7hqccpcnwg4xk8ds0avb2yc9gyvj7bk2bl90vpwsm35j7y";
+  src = fetchFromGitHub {
+    owner = "lxc";
+    repo = "lxcfs";
+    sha256 = "1say5bf6gknzs0aymvrg2xiypc311gcdcfdmvb2vnz058pmianq9";
+    rev = "4a6707e130b4b65a33606ebc18a95ec471f4bf40";
   };
 
-  nativeBuildInputs = [ pkgconfig help2man ];
+  nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
   buildInputs = [ fuse pam ];
 
   configureFlags = [
