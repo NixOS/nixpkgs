@@ -6,7 +6,6 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
   version = "1.10.0";
 
