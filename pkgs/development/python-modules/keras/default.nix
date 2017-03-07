@@ -7,10 +7,13 @@
 , pytest_xdist
 , six
 , Theano
+, tensorflow ? null
+, tensorflowWithCuda ? null
 , pyyaml
 }:
 
-buildPythonPackage rec {
+let tf = if tensorflowWithCuda != null then tensorflowWithCuda else tensorflow;
+in buildPythonPackage rec {
   pname = "Keras";
   version = "1.2.2";
   name = "${pname}-${version}";
@@ -28,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six Theano pyyaml
+    six Theano pyyaml tf
   ];
 
   # Couldn't get tests working
