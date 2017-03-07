@@ -100,8 +100,12 @@ self: super: {
   semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend super.distributive self.semigroups;
+  QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
+
+  # Breaks a dependency cycle between QuickCheck and semigroups
+  unordered-containers = dontCheck super.unordered-containers;
 
 }
