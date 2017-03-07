@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "16q3rldj04hkzzjd23h0knszqr5dgixizy4iyc129mz8wa8pbnvyt chec";
+    sha256 = "16q3rldj04hkzzjd23h0knszqr5dgixizy4iyc129mz8wa8pbnvy";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
