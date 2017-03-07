@@ -2974,14 +2974,9 @@ in
 
   pal = callPackage ../tools/misc/pal { };
 
-  pandoc = haskell.lib.overrideCabal haskellPackages.pandoc (drv: {
+  pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildTools = drv.buildTools or [] ++ [haskellPackages.hsb2hs];
-    enableSharedExecutables = false;
-    enableSharedLibraries = false;
-    isLibrary = false;
-    doHaddock = false;
-    postFixup = "rm -rf $out/lib $out/nix-support $out/share";
   });
 
   panomatic = callPackage ../tools/graphics/panomatic { };
@@ -4714,18 +4709,13 @@ in
 
   cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
 
-  stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
-    enableSharedExecutables = false;
-    isLibrary = false;
-    doHaddock = false;
-    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  });
+  stack = haskell.lib.justStaticExecutables haskellPackages.stack;
 
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
-  haxe = callPackage ../development/compilers/haxe {
-    inherit (ocamlPackages) camlp4;
-  };
+  purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
+
+  inherit (ocamlPackages) haxe;
 
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
@@ -6708,7 +6698,7 @@ in
   sbt = callPackage ../development/tools/build-managers/sbt { };
   simpleBuildTool = sbt;
 
-  shellcheck = self.haskellPackages.ShellCheck;
+  shellcheck = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -12712,15 +12702,8 @@ in
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
-  d4x = callPackage ../applications/misc/d4x { };
-
-  darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
+  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
-    enableSharedExecutables = false;
-    enableSharedLibraries = false;
-    isLibrary = false;
-    doHaddock = false;
-    postFixup = "rm -rf $out/lib $out/nix-support $out/share";
   });
 
   darktable = callPackage ../applications/graphics/darktable {
