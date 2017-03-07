@@ -7,7 +7,7 @@ let
 
   releaseFile     = "${toString pkgs.path}/.version";
   suffixFile      = "${toString pkgs.path}/.version-suffix";
-  unsupportedFile = "${toString pkgs.path}/.version-unsupported-state";
+  unsupportedFile = "${toString pkgs.path}/.version-unsupported-state.nix";
   revisionFile    = "${toString pkgs.path}/.git-revision";
   gitRepo         = "${toString pkgs.path}/.git";
   gitCommitId     = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
@@ -74,7 +74,18 @@ in
       internal = true;
       type = types.nullOr (types.enum ["deprecated" "unsupported"]);
       default = if pathExists unsupportedFile
-                then fileContents unsupportedFile
+                then (import unsupportedFile).state
+                else null;
+      description = "In which way the current version is not supported.";
+      example = literalExample "deprecated";
+    };
+
+    nixosUnsupportedStateDescription = mkOption {
+      readOnly = true;
+      internal = true;
+      type = types.nullOr types.str;
+      default = if pathExists unsupportedFile
+                then (import unsupportedFile).description
                 else null;
       description = "In which way the current version is not supported.";
       example = literalExample "deprecated";
@@ -107,7 +118,9 @@ in
   config = {
 
     warnings = if !cfg.nixosIsSupportedVersion then [
-      "NixOS version ${cfg.nixosRelease} is ${cfg.nixosUnsupportedState}"
+      ''
+        NixOS version ${cfg.nixosRelease} is ${cfg.nixosUnsupportedState}.
+        ${cfg.nixosUnsupportedStateDescription}''
     ] else [] ;
 
     system = {
