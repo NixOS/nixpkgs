@@ -420,6 +420,9 @@ self: super: builtins.intersectAttrs super {
   # tests require git
   hapistrano = addBuildTool super.hapistrano pkgs.git;
 
+  # This propagates this to everything depending on haskell-gi-base
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+
   # requires webkitgtk API version 3 (webkitgtk 2.4 is the latest webkit supporting that version)
   gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
   gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
