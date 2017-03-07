@@ -26,12 +26,12 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   patches = [
-    ./docbook2texi.patch
     ./symlinks-in-bin.patch
     ./git-sh-i18n.patch
     ./ssh-path.patch
     ./ssl-cert-file.patch
-  ];
+  ] ++ stdenv.lib.optionals withManual [ ./docbook2texi.patch ]
+    ++ stdenv.lib.optionals guiSupport [ ./ssh-path-gui.patch ];
 
   postPatch = ''
     for x in connect.c git-gui/lib/remote_add.tcl ; do
