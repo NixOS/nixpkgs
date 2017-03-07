@@ -5,11 +5,12 @@ with lib;
 let
   cfg = config.system;
 
-  releaseFile  = "${toString pkgs.path}/.version";
-  suffixFile   = "${toString pkgs.path}/.version-suffix";
-  revisionFile = "${toString pkgs.path}/.git-revision";
-  gitRepo      = "${toString pkgs.path}/.git";
-  gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
+  releaseFile     = "${toString pkgs.path}/.version";
+  suffixFile      = "${toString pkgs.path}/.version-suffix";
+  nixosState      = import "${toString pkgs.path}/.version-state.nix";
+  revisionFile    = "${toString pkgs.path}/.git-revision";
+  gitRepo         = "${toString pkgs.path}/.git";
+  gitCommitId     = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
 in
 
 {
@@ -60,6 +61,35 @@ in
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
+    nixosState = rec {
+      isSupported = mkOption {
+        readOnly = true;
+        internal = true;
+        type = types.bool;
+        default = nixosState.state == "supported";
+        description = "Whether or not this version of NixOS is supported.";
+      };
+
+      state = mkOption {
+        readOnly = true;
+        internal = true;
+        type = types.nullOr (types.enum ["supported" "deprecated" "unsupported"]);
+        default = nixosState.state;
+        description = "Support state of this version of NixOS. Both depreciated and unsupported are considered to be unsupported.";
+        example = literalExample "supported";
+      };
+
+      description = mkOption {
+        readOnly = true;
+        internal = true;
+        type = types.nullOr types.str;
+        default = if (nixosState ? description)
+                  then nixosState.description
+                  else null;
+        description = "Additional information that will be shown to the user if the state is unsupported";
+      };
+    };
+
     nixosRevision = mkOption {
       internal = true;
       type = types.str;
@@ -85,6 +115,18 @@ in
   };
 
   config = {
+
+    warnings =
+      if !cfg.nixosState.isSupported
+      then
+        let
+          description =
+            if cfg.nixosState.description == null
+            then ""
+            else "\n${cfg.nixosState.description}";
+        in
+          [ "NixOS version ${cfg.nixosRelease} is ${cfg.nixosState.state}.${description}" ]
+      else [] ;
 
     system = {
       # These defaults are set here rather than up there so that
@@ -112,6 +154,8 @@ in
         HOME_URL="https://nixos.org/"
         SUPPORT_URL="https://nixos.org/nixos/support.html"
         BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
+        IS_SUPPORTED=${toString config.system.nixosState.isSupported}
+        SUPPORT_STATE="${toString config.system.nixosState.state}"
       '';
 
   };
