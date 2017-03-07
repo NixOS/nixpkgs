@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
@@ -6,8 +6,10 @@
 , grsecEnabled ? false
 , enableRadv ? false
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+, galliumDrivers ? null
+, driDrivers ? null
+, vulkanDrivers ? null
 }:
-
 
 /** Packaging design:
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
@@ -25,6 +27,40 @@ with stdenv.lib;
 if ! lists.elem stdenv.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
+
+let
+  defaultGalliumDrivers =
+    if (stdenv.isArm || stdenv.isAarch64)
+    then ["nouveau" "freedreno" "vc4" "etnaviv"]
+    else ["i915" "ilo" "r300" "r600" "radeonsi" "nouveau"];
+  defaultDriDrivers =
+    if (stdenv.isArm || stdenv.isAarch64)
+    then ["nouveau"]
+    else ["i915" "i965" "nouveau" "radeon" "r200"];
+  defaultVulkanDrivers =
+    if (stdenv.isArm || stdenv.isAarch64)
+    then []
+    else ["intel"] ++ lib.optional enableRadv "radeon";
+in
+
+let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
+
+let
+  galliumDrivers =
+    ["svga"]
+    ++ (if gallium_ == null
+          then defaultGalliumDrivers
+          else gallium_)
+    ++ ["swrast"];
+  driDrivers =
+    (if dri_ == null
+      then defaultDriDrivers
+      else dri_) ++ ["swrast"];
+  vulkanDrivers =
+    if vulkan_ == null
+    then defaultVulkanDrivers
+    else vulkan_;
+in
 
 let
   version = "17.0.1";
@@ -64,14 +100,17 @@ stdenv.mkDerivation {
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
-  ] ++ (if stdenv.isArm || stdenv.isAarch64 then [
-      "--with-gallium-drivers=nouveau,freedreno,vc4,etnaviv,swrast"
-      "--with-dri-drivers=nouveau,swrast"
-  ] else [
-      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,swrast"
-      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
-      ("--with-vulkan-drivers=intel" + optionalString enableRadv ",radeon")
-  ]) ++ [
+  ]
+  ++ (optional (galliumDrivers != [])
+      ("--with-gallium-drivers=" +
+        builtins.concatStringsSep "," galliumDrivers))
+  ++ (optional (driDrivers != [])
+      ("--with-dri-drivers=" +
+        builtins.concatStringsSep "," driDrivers))
+  ++ (optional (vulkanDrivers != [])
+      ("--with-vulkan-drivers=" +
+        builtins.concatStringsSep "," vulkanDrivers))
+  ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
@@ -144,7 +183,7 @@ stdenv.mkDerivation {
 
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + optionalString (!(stdenv.isArm || stdenv.isAarch64)) ''
+  '' + optionalString (builtins.elem "intel" vulkanDrivers) ''
     # move share/vulkan/icd.d/
     mv $out/share/ $drivers/
     # Update search path used by Vulkan (it's pointing to $out but

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
-, glib, libXtst, jdk
+, glib, gtk2, libXtst, jdk
 , webkitgtk2 ? null  # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
@@ -10,7 +10,10 @@ assert stdenv ? glibc;
 
 rec {
 
-  buildEclipse = callPackage ./build-eclipse.nix { };
+  buildEclipse = import ./build-eclipse.nix {
+    inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
+            jdk glib gtk2 libXtst webkitgtk2 makeWrapper;
+  };
 
   ### Eclipse CPP
 

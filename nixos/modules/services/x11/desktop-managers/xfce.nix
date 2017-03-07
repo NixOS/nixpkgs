@@ -47,6 +47,12 @@ in
         default = true;
         description = "Enable the XFWM (default) window manager.";
       };
+
+      screenLock = mkOption {
+        type = types.enum [ "xscreensaver" "xlockmore" "slock" ];
+        default = "xlockmore";
+        description = "Application used by XFCE to lock the screen.";
+      };
     };
 
   };
@@ -80,6 +86,7 @@ in
         pkgs.tango-icon-theme
         pkgs.shared_mime_info
         pkgs.which # Needed by the xfce's xinitrc script.
+        pkgs."${cfg.screenLock}"
         pkgs.xfce.exo
         pkgs.xfce.gtk_xfce_engine
         pkgs.xfce.mousepad

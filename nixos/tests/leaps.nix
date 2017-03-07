@@ -24,6 +24,7 @@ import ./make-test.nix ({ pkgs,  ... }:
     ''
       startAll;
       $server->waitForOpenPort(6666);
-      $client->succeed("curl http://server:6666/leaps/ | grep -i 'leaps'"); 
+      $client->waitForUnit("network.target");
+      $client->succeed("${pkgs.curl}/bin/curl http://server:6666/leaps/ | grep -i 'leaps'");
     '';
 })

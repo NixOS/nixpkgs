@@ -191,6 +191,7 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers;
 
   # GHC versions prior to 8.x require additional build inputs.
+  dependent-map = addBuildDepend super.dependent-map self.semigroups;
   distributive = addBuildDepend super.distributive self.semigroups;
   mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);

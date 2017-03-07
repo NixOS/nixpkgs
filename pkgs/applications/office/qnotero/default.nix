@@ -18,15 +18,10 @@ python3Packages.buildPythonPackage rec {
 
   patchPhase = ''
       substituteInPlace ./setup.py \
-        --replace "/usr/share" "$out/usr/share"
+        --replace "/usr/share" "usr/share"
 
       substituteInPlace ./libqnotero/_themes/default.py \
-        --replace "/usr/share" "$out/usr/share"
-  '';
-
-  postInstall = ''
-      mkdir -p "$out/usr/share/qnotero"
-      mv resources "$out/usr/share/qnotero"
+         --replace "/usr/share" "$out/usr/share"
   '';
 
   meta = {

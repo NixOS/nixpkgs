@@ -19,7 +19,7 @@
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
-, pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
+, pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
 , libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc
 }@args:
@@ -89,7 +89,7 @@ in
   msgpack = attrs: {
     buildInputs = [ libmsgpack ];
   };
-  
+
   mysql = attrs: {
     buildInputs = [ mysql.lib zlib openssl ];
   };
@@ -218,7 +218,7 @@ in
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     '';
   };
-  
+
   uuid4r = attrs: {
     buildInputs = [ which libossp_uuid ];
   };
@@ -226,12 +226,12 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    buildInputs = [ xapian pkgconfig zlib ];
+    buildInputs = [ xapian_1_2_22 pkgconfig zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile
     '';
     preInstall = ''
-      export XAPIAN_CONFIG=${xapian}/bin/xapian-config
+      export XAPIAN_CONFIG=${xapian_1_2_22}/bin/xapian-config
     '';
   };
 

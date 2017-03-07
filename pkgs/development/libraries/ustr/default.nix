@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     sed -i 's,\(USTR_CONF_HAVE_STDINT_H\) 0,\1 1,g' ustr-import.in
   '';
 
-  buildTargets = [ "all-shared" ];
-
   preBuild = ''
     makeFlagsArray+=("prefix=$out")
     makeFlagsArray+=("LDCONFIG=echo")

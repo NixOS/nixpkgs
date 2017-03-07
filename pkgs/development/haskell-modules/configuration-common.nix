@@ -448,6 +448,16 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
+  # See instructions provided by Peti in https://github.com/NixOS/nixpkgs/issues/23036
+  purescript = super.purescript.overrideScope (self: super: {
+    # TODO: Re-evaluate the following overrides after the 0.11 release.
+    aeson = self.aeson_0_11_3_0;
+    http-client = self.http-client_0_4_31_2;
+    http-client-tls = self.http-client-tls_0_2_4_1;
+    pipes = self.pipes_4_2_0;
+    websockets = self.websockets_0_9_8_2;
+  });
+
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
@@ -623,20 +633,6 @@ self: super: {
   })).override {
     haskell-src-exts = self.haskell-src-exts_1_19_1;
   };
-
-  # https://github.com/yesodweb/Shelly.hs/issues/106
-  # https://github.com/yesodweb/Shelly.hs/issues/108
-  # https://github.com/yesodweb/Shelly.hs/issues/130
-  shelly =
-    let drv = appendPatch (dontCheck (doJailbreak super.shelly)) (pkgs.fetchpatch {
-                url = "https://github.com/k0001/Shelly.hs/commit/32a1e290961755e7b2379f59faa49b13d03dfef6.patch";
-                sha256 = "0ccq0qly8bxxv64dk97a44ng6hb01j6ajs0sp3f2nn0hf5j3xv69";
-              });
-    in overrideCabal drv (drv : {
-         # doJailbreak doesn't seem to work for build-depends inside an
-         # if-then-else block so we have to do it manually.
-         postPatch = "sed -i 's/base >=4\.6 \&\& <4\.9\.1/base -any/' shelly.cabal";
-       });
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -872,5 +868,11 @@ self: super: {
 
   # https://github.com/snoyberg/yaml/issues/106
   yaml = disableCabalFlag super.yaml "system-libyaml";
+
+  # https://github.com/diagrams/diagrams-lib/issues/288
+  diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
+
+  # https://github.com/cartazio/arithmoi/issues/49
+  arithmoi = overrideCabal super.arithmoi (drv: { doCheck = !pkgs.stdenv.isi686; });
 
 }

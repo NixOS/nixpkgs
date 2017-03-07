@@ -214,8 +214,8 @@
             GRKERNSEC_CONFIG_SERVER y
             GRKERNSEC_CONFIG_SECURITY y
           '';
-          };
-      }
+        };
+      };
     </programlisting>
   </para>
 

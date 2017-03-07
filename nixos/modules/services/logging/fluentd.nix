@@ -25,6 +25,7 @@ in {
       package = mkOption {
         type = types.path;
         default = pkgs.fluentd;
+        defaultText = "pkgs.fluentd";
         description = "The fluentd package to use.";
       };
     };

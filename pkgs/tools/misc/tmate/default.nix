@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "tmate-${version}";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
-    owner  = "nviennot";
+    owner  = "tmate-io";
     repo   = "tmate";
     rev    = version;
-    sha256 = "1w3a7na0yj1y0x24qckc7s2y9xfak5iv6vyqrd0iibn3b7dxarli";
+    sha256 = "0pfl9vrswzim9ydi1n652h3rax2zrmy6sqkp0r09yy3lw83h4y1r";
   };
 
   buildInputs = [ autoconf automake pkgconfig libtool zlib openssl libevent ncurses cmake ruby libmsgpack libssh ];
