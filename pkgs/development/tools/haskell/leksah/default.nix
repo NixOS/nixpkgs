@@ -14,4 +14,6 @@ in stdenv.mkDerivation {
       --prefix PATH : "${leksahEnv}/bin" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
+
+  meta.broken = true; # depends on broken leksah-server-0.15.2.0
 }
