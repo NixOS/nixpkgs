@@ -160,6 +160,9 @@ let
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
 
+      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
+        chrome/browser/shell_integration_linux.cc
+
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
