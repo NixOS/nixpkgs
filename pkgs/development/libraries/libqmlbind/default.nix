@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/seanchas116/libqmlbind";
-    rev = "7ca90d1993934cd7748da7ed89484802290b9489";
+    rev = "refs/tags/v${version}";
     sha256 = "00wm9f6c2pa7587m84831171cwrvxp5y5ndcrr8w668nirnzwvsy";
     deepClone = true;
   };
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 qt57.full ];
 
   preBuild = ''
-    pushd .
     doxygen Doxyfile
     popd
   '';
@@ -49,5 +48,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/seanchas116/libqmlbind;
     description = "C bindings for QML, used for binding to other languages";
+    license = with licenses; [ mit fdl13 ];
+    maintainers = [ "0BobTheJanitor <Changing Email>" ]
   };
 }
