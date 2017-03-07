@@ -285,7 +285,9 @@ in
         PrivateTmp = true;
         PrivateDevices = true;
         ProtectHome = true;
-        ProtectSystem = true;
+        ProtectSystem = "strict";
+        ReadWritePaths = "${dirOf stateDirectory} ${stateDirectory}";
+        SystemCallFilter = "~@mount";
       };
     };
 
