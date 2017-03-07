@@ -424,6 +424,9 @@ self: super: builtins.intersectAttrs super {
   gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
   gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
 
+  # Requires gi-javascriptcore API version 4
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };
+
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
     preConfigure = ''
