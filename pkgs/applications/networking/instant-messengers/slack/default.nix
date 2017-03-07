@@ -26,6 +26,7 @@ let
     stdenv.cc.cc
     systemd
 
+    xorg.libxkbfile
     xorg.libX11
     xorg.libXcomposite
     xorg.libXcursor
