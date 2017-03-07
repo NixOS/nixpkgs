@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, perl }:
 
 stdenv.mkDerivation rec {
   name = "inetutils-1.9.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
 
-  buildInputs = [ ncurses /* for `talk' */ ];
+  buildInputs = [ ncurses /* for `talk' */ perl /* for `whois' */ ];
 
   configureFlags = "--with-ncurses-include-dir=${ncurses.dev}/include";
 
