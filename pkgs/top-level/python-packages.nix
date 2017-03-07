@@ -31278,6 +31278,8 @@ EOF
 
   tensorflowWithCuda = callPackage ../development/python-modules/tensorflow {
     cudaSupport = true;
+    cudatoolkit = pkgs.cudatoolkit8;
+    cudnn = pkgs.cudnn51_cudatoolkit80;
   };
 
   tflearn = buildPythonPackage rec {
