@@ -6,7 +6,6 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-
   name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
   version = "1.10.0";
 
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "dogecoin";
     repo = "dogecoin";
     rev = "v${version}";
-    sha256 = "16q3rldj04hkzzjd23h0knszqr5dgixizy4iyc129mz8wa8pbnvy";
+    sha256 = "16q3rldj04hkzzjd23h0knszqr5dgixizy4iyc129mz8wa8pbnvyt chec";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
