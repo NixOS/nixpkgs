@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/seanchas116/libqmlbind;
     description = "C bindings for QML, used for binding to other languages";
     license = with licenses; [ mit fdl13 ];
-    maintainers = [ "0BobTheJanitor <Changing Email>" ];
+    maintainers = with maintainers; [ bobthejanitor ];
   };
 }
