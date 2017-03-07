@@ -10042,7 +10042,7 @@ with pkgs;
 
   x265 = callPackage ../development/libraries/x265 { };
 
-  inherit (callPackage ../development/libraries/xapian { })
+  inherit (callPackages ../development/libraries/xapian { })
     xapian_1_2_22 xapian_1_4_0;
   xapian = xapian_1_4_0;
 

@@ -1,7 +1,8 @@
-{ stdenv, callPackage, overrideCC, fetchurl, makeWrapper, pkgconfig
+{ stdenv, callPackage, fetchurl, makeWrapper, pkgconfig
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus_glib
 , gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
+, xapian, ctpp2, zimlib
 }:
 
 with stdenv.lib;
@@ -28,10 +29,9 @@ let
               then { tar = xulrunner64_tar; sdk = xulrunnersdk64_tar; }
               else { tar = xulrunner32_tar; sdk = xulrunnersdk32_tar; };
 
-  ctpp2 = callPackage ../../../development/libraries/ctpp2 { inherit stdenv; };
-  xapian = callPackage ../../../development/libraries/xapian { inherit stdenv; };
-  zimlib = callPackage ../../../development/libraries/zimlib { inherit stdenv; };
-
+  ctpp2_ = ctpp2.override { inherit stdenv; };
+  xapian_ = xapian.override { inherit stdenv; };
+  zimlib_ = zimlib.override { inherit stdenv; };
 
   pugixml = stdenv.mkDerivation rec {
     version = "1.2";
@@ -53,9 +53,6 @@ let
       # and the build scripts are in there :'(
       cd scripts
     '';
-
-    NIX_CFLAGS_COMPILE = "-fPIC";
-
   };
 
 in
@@ -70,23 +67,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    zip
-    pkgconfig
-    python
-    zlib
-    xapian
-    which
-    icu
-    libmicrohttpd
-    lzma
-    zimlib
-    ctpp2
-    aria2
-    wget
-    bc
-    libuuid
-    makeWrapper
-    pugixml
+    zip pkgconfig python zlib xapian_ which icu libmicrohttpd
+    lzma zimlib_ ctpp2_ aria2 wget bc libuuid makeWrapper pugixml
   ];
 
   postUnpack = ''
@@ -107,8 +89,7 @@ stdenv.mkDerivation rec {
     "--disable-staticbins"
   ];
 
-  installPhase = ''
-    make install
+  postInstall = ''
     cp -r src/dependencies/xulrunner $out/lib/kiwix
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/kiwix/xulrunner/xulrunner
