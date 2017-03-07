@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeWrapper, pkgconfig
+{ stdenv, fetchurl, makeWrapper, pkgconfig
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus_glib
 , gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
