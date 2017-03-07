@@ -77,6 +77,7 @@ let
       qtdoc = callPackage ./qtdoc.nix {};
       qtgraphicaleffects = callPackage ./qtgraphicaleffects.nix {};
       qtimageformats = callPackage ./qtimageformats.nix {};
+      qtinstaller = callPackage ./qtinstaller.nix { inherit mirror; };
       qtlocation = callPackage ./qtlocation.nix {};
       qtmultimedia = callPackage ./qtmultimedia.nix {
         inherit (pkgs.gst_all_1) gstreamer gst-plugins-base;
