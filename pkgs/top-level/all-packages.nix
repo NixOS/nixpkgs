@@ -11912,6 +11912,12 @@ with pkgs;
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
   qemu_kvm = lowPrio (qemu.override { x86Only = true; });
+
+  # See `xenPackages` source for explanations.
+  # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
+  qemu_xen = lowPrio (qemu.override { x86Only = true; xenSupport = true; xen = xen-slim; });
+  qemu_xen-light = lowPrio (qemu.override { x86Only = true; xenSupport = true; xen = xen-light; });
+
   qemu_test = lowPrio (qemu.override { x86Only = true; nixosTestRunner = true; });
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
@@ -16029,9 +16035,11 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen_4_5 = callPackage ../applications/virtualization/xen/4.5.nix { stdenv = overrideCC stdenv gcc49; };
-  xen_xenServer = callPackage ../applications/virtualization/xen/4.5.nix { xenserverPatched = true; stdenv = overrideCC stdenv gcc49; };
-  xen = xen_4_5;
+  xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
+
+  xen = xenPackages.xen_4_5-vanilla;
+  xen-slim = xenPackages.xen_4_5-slim;
+  xen-light = xenPackages.xen_4_5-light;
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
