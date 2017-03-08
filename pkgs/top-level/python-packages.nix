@@ -21554,6 +21554,7 @@ in {
     doCheck = false;
   };
 
+  rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient.nix { };
 
   pyrax = buildPythonPackage rec {
     name = "pyrax-1.8.2";
