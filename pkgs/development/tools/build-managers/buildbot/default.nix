@@ -2,11 +2,10 @@
 
 let
   withPlugins = plugins: runCommand "wrapped-${package.name}" {
-    buildInputs = [ makeWrapper ];
+    buildInputs = [ makeWrapper ] ++ plugins;
     passthru.withPlugins = moarPlugins: withPlugins (moarPlugins ++ plugins);
   } ''
-    makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
-      --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" pythonPackages.python.sitePackages plugins}
+    makeWrapper ${package}/bin/buildbot $out/bin/buildbot --prefix PYTHONPATH : $PYTHONPATH
   '';
 
   package = pythonPackages.buildPythonApplication (rec {
