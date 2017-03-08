@@ -3314,6 +3314,8 @@ with pkgs;
 
   pell = callPackage ../applications/misc/pell { };
 
+  pepper = callPackage ../tools/admin/salt/pepper { };
+
   pick = callPackage ../tools/misc/pick { };
 
   pitivi = callPackage ../applications/video/pitivi {
