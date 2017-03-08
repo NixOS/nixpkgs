@@ -266,7 +266,7 @@ in
       requires = [ "init-dnscrypt-proxy-statedir.service" ];
       after = [ "init-dnscrypt-proxy-statedir.service" ];
 
-      path = with pkgs; [ curl dnscrypt-proxy minisign ];
+      path = with pkgs; [ curl diffutils dnscrypt-proxy minisign ];
       script = ''
         cd ${stateDirectory}
         domain=download.dnscrypt.org
@@ -278,7 +278,13 @@ in
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
         minisign -q -V -p ${upstreamResolverListPubKey} \
           -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig
+        [[ -f dnscrypt-resolvers.csv ]] && mv dnscrypt-resolvers.csv{,.old}
         mv dnscrypt-resolvers.csv{.tmp,}
+        if cmp dnscrypt-resolvers.csv{,.old} ; then
+          echo "no change"
+        else
+          echo "resolver list updated"
+        fi
       '';
 
       serviceConfig = {
