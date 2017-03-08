@@ -17,7 +17,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "1qr0ky7llwgjgx1pzkp3pnz32nb6f7lvg8qg6rp5axhgpkx54hz7";
+  src = fetch "lldb" "14dy1j48nw10w8brkpmla2vjjwfr1mrsl9wfabjfx1j85ywp3h69";
 
   patchPhase = ''
     # Fix up various paths that assume llvm and clang are installed in the same place

@@ -21,7 +21,7 @@
 }:
 
 let
-  src = fetch "llvm" "0ic3y9gaissi6ixyj9x1c0pq69wfbl2svhprp33av0b58f7wj9v7";
+  src = fetch "llvm" "1ljb5y5wgypk3sy8zcd5qdgsm5hw8vl7cy6874mbf4gnk9k809b1";
   shlib = if stdenv.isDarwin then "dylib" else "so";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
