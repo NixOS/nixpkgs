@@ -6220,12 +6220,8 @@ with pkgs;
   buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix {
     pythonPackages = python2Packages;
   };
-  buildbot-ui = self.buildbot.override {
-    plugins = with self.buildbot-plugins; [ www ];
-  };
-  buildbot-full = self.buildbot.override {
-    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
-  };
+  buildbot-ui = buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
+  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view ]);
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
