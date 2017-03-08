@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
   ];
 
-  doCheck = false; # 5 out of 7 fail
+  doCheck = true;
 
   buildInputs = with pythonPackages; [
-    qtbase libmsgpack
+    neovim qtbase libmsgpack
   ] ++ (with pythonPackages; [
     jinja2 msgpack python
   ]);
@@ -29,8 +29,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # avoid cmake trying to download libmsgpack
-  preConfigure = "echo \"\" > third-party/CMakeLists.txt";
+  preConfigure = ''
+    # avoid cmake trying to download libmsgpack
+    echo "" > third-party/CMakeLists.txt
+    # we rip out the gui test as spawning a GUI fails in our build environment
+    sed -i '/^add_xtest_gui/d' test/CMakeLists.txt
+  '';
 
   postInstall = ''
     wrapQtProgram "$out/bin/nvim-qt" \
