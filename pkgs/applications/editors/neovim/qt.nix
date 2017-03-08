@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, doxygen
-, libmsgpack, makeWrapper, neovim, pythonPackages, qtbase }:
+, libmsgpack, makeQtWrapper, neovim, pythonPackages, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner  = "equalsraf";
     repo   = "neovim-qt";
     rev    = "v${version}";
-    sha256 = "0yf9wwkl0lbbj3vyf8hxnlsk7jhk5ggivszyqxply69dbar9ww59";
+    sha256 = "1q706k400j5v9kans71yjz9p36ran2lpz29m4vjzj920llksln3d";
   };
 
   cmakeFlags = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     jinja2 msgpack python
   ]);
 
-  nativeBuildInputs = [ cmake doxygen makeWrapper ];
+  nativeBuildInputs = [ cmake doxygen makeQtWrapper ];
 
   enableParallelBuilding = true;
 
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   preConfigure = "echo \"\" > third-party/CMakeLists.txt";
 
   postInstall = ''
-    wrapProgram "$out/bin/nvim-qt" --prefix PATH : "${neovim}/bin"
+    wrapQtProgram "$out/bin/nvim-qt" \
+      --prefix PATH : "${neovim}/bin"
   '';
 
   meta = with stdenv.lib; {
