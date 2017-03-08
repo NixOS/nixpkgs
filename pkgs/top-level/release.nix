@@ -48,7 +48,7 @@ let
               jobs.linux.aarch64-linux
               jobs.python.x86_64-linux
               jobs.python.i686-linux
-              jobs.python.aarch4-linux
+              jobs.python.aarch64-linux
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-linux
               jobs.python3.i686-linux
