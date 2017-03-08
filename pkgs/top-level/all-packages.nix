@@ -4124,9 +4124,7 @@ with pkgs;
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
-    inherit (xorg) libXrender libX11 libXext libXt;
-  };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
