@@ -2,7 +2,7 @@
 , lndir, makeWrapper, qmakeHook }:
 
 let
-  version = "5.8";
+  version = "5.8.1";
   inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
 in mkPythonDerivation {
   name = "PyQt-${version}";
@@ -17,7 +17,7 @@ in mkPythonDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "9edf2816105a4111a447452df2bef7ce47d7efb307c75c3e74c27b8d31d7f66e";
+    sha256 = "0biak7l574i2gc8lj1s45skajbxsmmx66nlvs6xaakzkc6r293qy";
   };
 
   buildInputs = [
