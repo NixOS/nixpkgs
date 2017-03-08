@@ -15,9 +15,9 @@ set -e
 # Also jshon does funny things with slashes in strings, which can be
 # fixed with sed.
 
-VERSION="2.1.1"
+VERSION="3.0.0"
 URL="https://registry.npmjs.org/pump.io/-/pump.io-$VERSION.tgz"
-SHA1="jg4xkqgbakp6vcy2czcc6wb15npqpycv"
+SHA1="ycfm7ak83xi8mgafhp9q0n6n3kzmdz16"
 
 curl https://raw.githubusercontent.com/e14n/pump.io/v$VERSION/package.json | \
     jshon -e dependencies              \
