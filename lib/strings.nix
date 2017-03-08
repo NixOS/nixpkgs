@@ -578,4 +578,22 @@ rec {
       hexify = x: pad (intToHex x);
     in
       concatStringsSep ":" (map hexify mac);
+
+  /* Adds an integer to a list modulo a value (used for adding an integer to an
+     IP)
+  */
+  addToIPorMAC = list: i: mod:
+    let
+      normalize = list:
+        let
+          idx = lib.findFirstIndex (x: x >= mod) list;
+          before = lib.take idx list;
+          after = lib.reverseList (lib.take (length list - idx) (lib.reverseList list));
+          nextstep = (lib.init before) ++ [((lib.last before) + 1)] ++ [((head after) - mod)] ++ (tail after);
+        in
+          if idx == -1
+          then list
+          else normalize nextstep;
+    in
+      normalize ((lib.init list) ++ [ ((lib.last list) + i) ]);
 }
