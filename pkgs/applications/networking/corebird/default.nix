@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automake autoconf libtool pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest glib_networking
+    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest gnome3.dconf glib_networking
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav ]);
 
   meta = {
