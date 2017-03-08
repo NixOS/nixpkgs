@@ -1920,6 +1920,8 @@ with pkgs;
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
+  gitkraken = callPackage ../applications/version-management/gitkraken { };
+
   gitlab = callPackage ../applications/version-management/gitlab { };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
