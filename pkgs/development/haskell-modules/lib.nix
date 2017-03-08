@@ -76,6 +76,14 @@ rec {
     fixupPhase = ":";
   });
 
+  # link executables statically against haskell libs to reduce closure size
+  justStaticExecutables = drv: overrideCabal drv (drv: {
+    enableSharedExecutables = false;
+    isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+  });
+
   buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
       echo "Source tarball is at ${src}/${tarname}.tar.gz"
