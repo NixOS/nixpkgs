@@ -380,6 +380,15 @@ in
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
+    assertions = let hostOrAliasIsNull = l: l.root == null || l.alias == null; in [ {
+        assertion = all hostOrAliasIsNull (attrValues virtualHosts);
+        message = "Only one of nginx root or alias can be specified on a virtualHost.";
+      } {
+        assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
+        message = "Only one of nginx root or alias can be specified on a location.";
+      }
+    ];
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
