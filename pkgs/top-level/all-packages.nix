@@ -15794,7 +15794,8 @@ with pkgs;
     gtk = gtk2;
   };
 
-  vlc_qt5 = libsForQt5.vlc;
+  # VLC 3.0 is needed to compile in C++11 mode (QT 5.7)
+  vlc_qt5 = libsForQt56.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
