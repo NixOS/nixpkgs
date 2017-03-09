@@ -1,8 +1,12 @@
 #! @shell@
 
+# Program name (e.g. /.../nixos-version -> nixos-version)
+# Helps with alternative names like lsb_release
+pname="${0##*/}"
+
 show_help() {
   cat << EOF
-Usage: nixos-version [options]
+Usage: $pname [options]
 
 Options:
   -h, --help         show this help message and exit
@@ -27,6 +31,26 @@ revision=0
 codename=0
 all=0
 short=0
+
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+  # This shouldn't happen on any recent GNU system.
+  echo "Enhanced getopt not supported, please open an issue."
+else
+  # Define all short and long options.
+  SHORT=hvidrcas
+  LONG=help,version,id,description,release,revision,hash,codename,all,short
+
+  # Parse all options.
+  PARSED=`getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
+  if [[ $? -ne 0 ]]; then
+    # getopt will print an error
+    exit 1
+  fi
+
+  eval set -- "$PARSED"
+fi
+
 
 # Process each argument, and set the appropriate flag if we recognize it.
 while [[ $# -ge 1 ]]; do
@@ -57,13 +81,16 @@ while [[ $# -ge 1 ]]; do
       ;;
     -h|--help)
       show_help
-      # TODO
-      #exec man nixos-version
+      ;;
+    --)
+      shift
+      break
       ;;
     *)
-      echo "nixos-version: unrecognized option '$1'"
-      echo "Type 'nixos-version -h' for a list of available options."
+      echo "$pname: unrecognized option '$1'"
+      echo "Type '$pname -h' for a list of available options."
       exit 1
+      ;;
   esac
   shift
 done
@@ -76,17 +103,28 @@ else
   exit 1
 fi
 
-# TODO: Default?
-#echo "@nixosVersion@ (@nixosCodeName@)"
-if [[ "$all" = "1" ]] || [[ "$version" = "1" ]] || \
-   ([[ "$id" = "0" ]] && [[ "$description" = "0" ]] && \
-    [[ "$release" = "0" ]] && [[ "$codename" = "0" ]]); then
-  echo "No LSB modules are available."
+# Default output (depending on the executable name)
+# Stays compatible to nixos-version *and* lsb_release
+if [[ "$version" = "0" ]] && [[ "$id" = "0" ]] && \
+   [[ "$description" = "0" ]] && [[ "$release" = "0" ]] && \
+   [[ "$revision" = "0" ]] && [[ "$codename" = "0" ]] && \
+   [[ "$all" = "0" ]]; then
+  if [[ $pname = "lsb_release" ]]; then
+    echo "No LSB modules are available."
+  else
+    echo $VERSION
+    # was: echo "@nixosVersion@ (@nixosCodeName@)"
+  fi
+  exit 0
 fi
 
 # Now output the data - The order of these was chosen to match
-# what the original lsb_release used, and while I suspect it doesn't
-# matter I kept it the same.
+# what the original lsb_release used.
+
+if [[ "$all" = "1" ]] || [[ "$version" = "1" ]]; then
+  echo "No LSB modules are available."
+fi
+
 if [[ "$all" = "1" ]] || [[ "$id" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Distributor ID:\t"
@@ -113,9 +151,9 @@ if [[ "$all" = "1" ]] || [[ "$revision" = "1" ]]; then
   if [[ "$short" = "0" ]]; then
     printf "Revision:\t"
   fi
-  # TODO: echo "@nixosRevision@"?
-  # Revision comes from: VERSION="16.09.git.effc189 (Flounder)" -> effc189
+  # Revision comes from: VERSION_ID="16.09.git.effc189" -> effc189
   echo $(echo $VERSION_ID | rev | cut -d. -f1 | rev)
+  # was: echo "@nixosRevision@"
 fi
 
 if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
@@ -125,4 +163,5 @@ if [[ "$all" = "1" ]] || [[ "$codename" = "1" ]]; then
   echo $(echo $VERSION_CODENAME)
 fi
 
+# Success
 exit 0
