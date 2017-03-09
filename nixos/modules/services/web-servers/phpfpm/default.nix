@@ -27,9 +27,12 @@ let
 
   phpIni = pkgs.runCommand "php.ini" {
     inherit (cfg) phpPackage phpOptions;
-    passAsFile = [ "phpOptions" ];
+    nixDefaults = ''
+      sendmail_path = "/run/wrappers/bin/sendmail -t -i"
+    '';
+    passAsFile = [ "nixDefaults" "phpOptions" ];
   } ''
-    cat $phpPackage/etc/php.ini $phpOptionsPath > $out
+    cat $phpPackage/etc/php.ini $nixDefaultsPath $phpOptionsPath > $out
   '';
 
 in {
