@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub
-, which, pkgconfig
-, qt5, libidn, qca2-qt5, libXScrnSaver, enchant
+{ stdenv, fetchFromGitHub, cmake
+, qt5, libidn, qca2-qt5, libXScrnSaver, hunspell
+, libgcrypt, libotr, html-tidy, libgpgerror
 }:
 
 stdenv.mkDerivation rec {
@@ -25,11 +25,16 @@ stdenv.mkDerivation rec {
     cp -a "${resources}/iconsets" "$sourceRoot"
   '';
 
-  nativeBuildInputs = [ which pkgconfig ];
+  cmakeFlags = [
+    "-DENABLE_PLUGINS=ON"
+  ];
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    qt5.qtbase qt5.qtmultimedia qt5.qtx11extras
-    libidn qca2-qt5 libXScrnSaver enchant
+    qt5.qtbase qt5.qtmultimedia qt5.qtx11extras qt5.qttools qt5.qtwebkit
+    libidn qca2-qt5 libXScrnSaver hunspell
+    libgcrypt libotr html-tidy libgpgerror
   ];
 
   enableParallelBuilding = true;
