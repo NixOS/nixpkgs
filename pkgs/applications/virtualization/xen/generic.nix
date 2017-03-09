@@ -1,188 +1,219 @@
-{ stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl
-, libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2
-, lvm2, utillinux, procps, texinfo, perl, python2Packages
-, glib, bridge-utils, xorg, pixman, iproute, udev, bison
-, flex, cmake, ocamlPackages, figlet, libaio, yajl
-, checkpolicy, transfig, glusterfs, acl, fetchgit, xz, spice
-, spice_protocol, usbredir, alsaLib, quilt
+config:
+{ stdenv, cmake, pkgconfig, which
+
+# Xen
+, bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
+, iasl, libaio, libiconv, libuuid, ncurses, openssl, perl
+, python2Packages
+# python2Packages.python
+, xz, yajl, zlib
+
+# Xen Optional
+, ocamlPackages
+
+# Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
-, inetutils, iptables, openvswitch, nbd, drbd, xenConfig
-, xenserverPatched ? false, ... }:
+, iproute, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
+, lvm2, utillinux, procps
+
+# Documentation
+# python2Packages.markdown
+, transfig, ghostscript, texinfo, pandoc
+
+, ...} @ args:
 
 with stdenv.lib;
 
 let
+  #TODO: fix paths instead
+  scriptEnvPath = concatMapStringsSep ":" (x: "${x}/bin") [
+    which perl
+    coreutils gawk gnused gnugrep diffutils utillinux multipath-tools
+    iproute inetutils iptables bridge-utils openvswitch nbd drbd
+  ];
 
-  libDir = if stdenv.is64bit then "lib64" else "lib";
+  withXenfiles = f: concatStringsSep "\n" (mapAttrsToList f config.xenfiles);
 
-  # Sources needed to build the tools
-  # These sources are already rather old and probably do not change frequently
-  xenExtfiles = [
-      { url = http://xenbits.xensource.com/xen-extfiles/ipxe-git-9a93db3f0947484e30e753bbd61a10b17336e20e.tar.gz;
-        sha256 = "0p206zaxlhda60ci33h9gipi5gm46fvvsm6k5c0w7b6cjg0yhb33";
-      }
-    ];
-
-  scriptEnvPath = stdenv.lib.concatStrings (stdenv.lib.intersperse ":" (map (x: "${x}/bin")
-    [ coreutils gawk gnused gnugrep which perl diffutils utillinux multipath-tools
-      iproute inetutils iptables bridge-utils openvswitch nbd drbd ]));
+  withTools = a: f: withXenfiles (name: x: optionalString (hasAttr a x) ''
+    echo "processing ${name}"
+    __do() {
+      cd "tools/${name}"
+      ${f name x}
+    }
+    ( __do )
+  '');
 in
 
+stdenv.mkDerivation (rec {
+  inherit (config) version;
 
-
-stdenv.mkDerivation {
-  inherit (xenConfig) name version src;
+  name = "xen-${version}";
 
   dontUseCmakeConfigure = true;
 
-  buildInputs =
-    [ which zlib pkgconfig SDL openssl libuuid gettext ncurses
-      dev86 iasl pciutils bzip2 xz texinfo perl yajl
-      python2Packages.python python2Packages.wrapPython
-      glib bridge-utils pixman iproute udev bison xorg.libX11
-      flex ocamlPackages.ocaml ocamlPackages.findlib figlet libaio
-      checkpolicy python2Packages.markdown transfig
-      glusterfs acl cmake spice spice_protocol usbredir
-      alsaLib quilt
-    ];
-
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
-  patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
+  buildInputs = [
+    cmake pkgconfig which
+
+    # Xen
+    bison bzip2 checkpolicy dev86 figlet flex gettext glib iasl libaio
+    libiconv libuuid ncurses openssl perl python2Packages.python xz yajl zlib
+
+    # oxenstored
+    ocamlPackages.findlib ocamlPackages.ocaml
+
+    # Python fixes
+    python2Packages.wrapPython
+
+    # Documentation
+    python2Packages.markdown transfig ghostscript texinfo pandoc
+
+    # Others
+  ] ++ (concatMap (x: x.buildInputs or []) (attrValues config.xenfiles))
+    ++ (config.buildInputs or []);
+
+  prePatch = ''
+    ### Generic fixes
+
+    # Xen's stubdoms, tools and firmwares need various sources that
+    # are usually fetched at build time using wget and git. We can't
+    # have that, so we prefetch them in nix-expression and setup
+    # fake wget and git for debugging purposes.
+
+    mkdir fake-bin
+
+    # Fake git: just print what it wants and die
+    cat > fake-bin/wget << EOF
+    #!/bin/sh -e
+    echo ===== FAKE WGET: Not fetching \$*
+    [ -e \$3 ]
+    EOF
+
+    # Fake git: just print what it wants and die
+    cat > fake-bin/git << EOF
+    #!/bin/sh
+    echo ===== FAKE GIT: Not cloning \$*
+    [ -e \$3 ]
+    EOF
+
+    chmod +x fake-bin/*
+    export PATH=$PATH:$PWD/fake-bin
+
+    # Remove in-tree qemu stuff in case we build from a tar-ball
+    rm -rf tools/qemu-xen tools/qemu-xen-traditional
+
+    # Fix shebangs, mainly for build-scipts
+    # We want to do this before getting prefetched stuff to speed things up
+    # (prefetched stuff has lots of files)
+    find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
+    find . -type f | xargs sed -i 's@/bin/bash@/bin/sh@g'
+
+    # Get prefetched stuff
+    ${withXenfiles (name: x: ''
+      echo "${x.src} -> tools/${name}"
+      cp -r ${x.src} tools/${name}
+      chmod -R +w tools/${name}
+    '')}
+  '';
+
+  patches = [ ./0000-fix-ipxe-src.patch
+              ./0000-fix-install-python.patch ]
+         ++ (config.patches or []);
 
   postPatch = ''
-      ${stdenv.lib.optionalString ((xenserverPatched == true) && (builtins.hasAttr "xenserverPatches" xenConfig)) xenConfig.xenserverPatches}
+    ### Hacks
 
-      # Xen's tools and firmares need various git repositories that it
-      # usually checks out at time using git.  We can't have that.
-      ${flip concatMapStrings xenConfig.toolsGits (x: let src = fetchgit x.git; in ''
-        cp -r ${src} tools/${src.name}-dir-remote
-        chmod -R +w tools/${src.name}-dir-remote
-      '' + stdenv.lib.optionalString (builtins.hasAttr "patches" x) ''
-        ( cd tools/${src.name}-dir-remote; ${concatStringsSep "; " (map (p: "patch -p1 < ${p}") x.patches)} )
-      '')}
-      ${flip concatMapStrings xenConfig.firmwareGits (x: let src = fetchgit x.git; in ''
-        cp -r ${src} tools/firmware/${src.name}-dir-remote
-        chmod -R +w tools/firmware/${src.name}-dir-remote
-      '' + stdenv.lib.optionalString (builtins.hasAttr "patches" x) ''
-        ( cd tools/firmware/${src.name}-dir-remote; ${concatStringsSep "; " (map (p: "patch -p1 < ${p}") x.patches)} )
-      '')}
+    # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
+    # print the GCC version number properly.
+    substituteInPlace xen/Makefile \
+      --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
 
-      # Xen's stubdoms and firmwares need various sources that are usually fetched
-      # at build time using wget. We can't have that, so we prefetch Xen's ext_files.
-      mkdir xen_ext_files
-      ${flip concatMapStrings xenExtfiles (x: let src = fetchurl x; in ''
-        cp ${src} xen_ext_files/${src.name}
-      '')}
+    # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
+    mkdir -p tools/include/gnu
+    touch tools/include/gnu/stubs-32.h
 
-      # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.
-      sed 1i'#include <sys/sysmacros.h>' \
-        -i tools/blktap2/control/tap-ctl-allocate.c \
-        -i tools/libxl/libxl_device.c
+    ### Fixing everything else
+
+    substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
+      --replace /usr $out
+
+    substituteInPlace tools/blktap2/lvm/lvm-util.c \
+      --replace /usr/sbin/vgs ${lvm2}/bin/vgs \
+      --replace /usr/sbin/lvs ${lvm2}/bin/lvs
+
+    substituteInPlace tools/misc/xenpvnetboot \
+      --replace /usr/sbin/mount ${utillinux}/bin/mount \
+      --replace /usr/sbin/umount ${utillinux}/bin/umount
+
+    substituteInPlace tools/xenmon/xenmon.py \
+      --replace /usr/bin/pkill ${procps}/bin/pkill
+
+    substituteInPlace tools/xenstat/Makefile \
+      --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
+
+    # TODO: use this as a template and support our own if-up scripts instead?
+    substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
+      --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts
+
+    # blktap is not provided by xen, but by xapi
+    sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules.in
+
+    ${withTools "patches" (name: x: ''
+      ${concatMapStringsSep "\n" (p: ''
+        echo "# Patching with ${p}"
+        patch -p1 < ${p}
+      '') x.patches}
+    '')}
+
+    ${withTools "postPatch" (name: x: x.postPatch)}
+
+    ${config.postPatch or ""}
   '';
-
-  preConfigure = ''
-    # Fake wget: copy prefetched downloads instead
-    mkdir wget
-    echo "#!/bin/sh" > wget/wget
-    echo "echo ===== Not fetching \$*, copy pre-fetched file instead" >> wget/wget
-    echo "cp \$4 \$3" >> wget/wget
-    chmod +x wget/wget
-    export PATH=$PATH:$PWD/wget
-    export EXTRA_QEMUU_CONFIGURE_ARGS="--enable-spice --enable-usb-redir --enable-linux-aio"
-  '';
-
-  # https://github.com/NixOS/nixpkgs/issues/13590
-  configureFlags = ["--disable-stubdom"];
-
-  postConfigure =
-    ''
-      substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
-        --replace /usr $out
-
-      substituteInPlace tools/blktap2/lvm/lvm-util.c \
-        --replace /usr/sbin/vgs ${lvm2}/sbin/vgs \
-        --replace /usr/sbin/lvs ${lvm2}/sbin/lvs
-
-      substituteInPlace tools/xenmon/xenmon.py \
-        --replace /usr/bin/pkill ${procps}/bin/pkill
-
-      substituteInPlace tools/xenstat/Makefile \
-        --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
-
-      substituteInPlace tools/qemu-xen-traditional/xen-hooks.mak \
-        --replace /usr/include/pci ${pciutils}/include/pci
-
-      substituteInPlace tools/qemu-xen-traditional-dir-remote/xen-hooks.mak \
-        --replace /usr/include/pci ${pciutils}/include/pci
-
-      substituteInPlace tools/hotplug/Linux/xen-backend.rules \
-        --replace /etc/xen/scripts $out/etc/xen/scripts
-
-      # blktap is not provided by xen, but by xapi
-      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules
-
-      # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
-      # print the GCC version number properly.
-      substituteInPlace xen/Makefile \
-        --replace '$(CC) $(CFLAGS) -v' '$(CC) -v'
-
-      # Allow the location of the xendomains config file to be
-      # overriden at runtime.
-      substituteInPlace tools/hotplug/Linux/init.d/xendomains \
-        --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
-        --replace 'XENDOM_CONFIG=/etc/default/xendomains' "" \
-        --replace /etc/xen/scripts/hotplugpath.sh $out/etc/xen/scripts/hotplugpath.sh \
-        --replace /bin/ls ls
-
-      substituteInPlace tools/hotplug/Linux/xendomains \
-        --replace /bin/ls ls
-
-      # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
-      mkdir -p tools/include/gnu
-      touch tools/include/gnu/stubs-32.h
-    '';
-
-  # Fix build on Glibc 2.24.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # TODO: Flask needs more testing before enabling it by default.
   #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
-  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
+  makeFlags = [ "PREFIX=$(out) CONFIG_DIR=/etc" "XEN_SCRIPT_DIR=/etc/xen/scripts" ]
+           ++ (config.makeFlags or []);
 
   buildFlags = "xen tools";
 
-  postBuild =
-    ''
-      make -C docs man-pages
+  postBuild = ''
+    make -C docs man-pages
 
-      (cd tools/xen-libhvm-dir-remote; make)
-      (cd tools/xen-libhvm-dir-remote/biospt; cc -Wall -g -D_LINUX -Wstrict-prototypes biospt.c -o biospt -I../libhvm -L../libhvm -lxenhvm)
-    '';
+    ${withTools "buildPhase" (name: x: x.buildPhase)}
+  '';
 
-  installPhase =
-    ''
-      mkdir -p $out $out/share
-      cp -prvd dist/install/nix/store/*/* $out/
-      cp -prvd dist/install/boot $out/boot
-      cp -prvd dist/install/etc $out
-      cp -dR docs/man1 docs/man5 $out/share/man/
-      wrapPythonPrograms
-      substituteInPlace $out/etc/xen/scripts/hotplugpath.sh --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
+  installPhase = ''
+    mkdir -p $out $out/share
+    cp -prvd dist/install/nix/store/*/* $out/
+    cp -prvd dist/install/boot $out/boot
+    cp -prvd dist/install/etc $out
+    cp -dR docs/man1 docs/man5 $out/share/man/
 
-      shopt -s extglob
-      for i in $out/etc/xen/scripts/!(*.sh); do
-        sed -i "2s@^@export PATH=$out/bin:${scriptEnvPath}\n@" $i
-      done
+    ${withTools "installPhase" (name: x: x.installPhase)}
 
-      (cd tools/xen-libhvm-dir-remote; make install)
-      cp tools/xen-libhvm-dir-remote/biospt/biospt $out/bin/.
-    '';
+    # Hack
+    substituteInPlace $out/etc/xen/scripts/hotplugpath.sh \
+      --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
+
+    wrapPythonPrograms
+
+    shopt -s extglob
+    for i in $out/etc/xen/scripts/!(*.sh); do
+      sed -i "2s@^@export PATH=$out/bin:${scriptEnvPath}\n@" $i
+    done
+  '';
 
   meta = {
     homepage = http://www.xen.org/;
-    description = "Xen hypervisor and management tools for Dom0";
+    description = "Xen hypervisor and related components"
+                + optionalString (args ? meta && args.meta ? description)
+                                 " (${args.meta.description})";
+    longDescription = (args.meta.longDescription or "")
+                    + "\nIncludes:\n"
+                    + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ eelco tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
   };
-}
+} // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

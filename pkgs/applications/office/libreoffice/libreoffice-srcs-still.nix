@@ -112,11 +112,11 @@
     md5name = "1f467e5bb703f12cbbb09d5cf67ecf4a-converttexttonumber-1-5-0.oxt";
   }
   {
-    name = "curl-7.51.0.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/curl-7.51.0.tar.gz";
-    sha256 = "65b5216a6fbfa72f547eb7706ca5902d7400db9868269017a8888aa91d87977c";
-    md5 = "490e19a8ccd1f4a244b50338a0eb9456";
-    md5name = "490e19a8ccd1f4a244b50338a0eb9456-curl-7.51.0.tar.gz";
+    name = "curl-7.52.1.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/curl-7.52.1.tar.gz";
+    sha256 = "a8984e8b20880b621f61a62d95ff3c0763a3152093a9f9ce4287cfd614add6ae";
+    md5 = "4e1ef056e117b4d25f4ec42ac609c0d4";
+    md5name = "4e1ef056e117b4d25f4ec42ac609c0d4-curl-7.52.1.tar.gz";
   }
   {
     name = "libe-book-0.1.2.tar.bz2";

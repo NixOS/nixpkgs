@@ -31,7 +31,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [ "nixbld" ];
+        default = [];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 

@@ -1,17 +1,28 @@
-{ stdenv, fetchFromGitHub, qt4, sqlite, cmake }:
+{ stdenv, fetchFromGitHub, qt5, sqlite, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.0";
+  version = "3.9.1";
   name = "sqlitebrowser-${version}";
 
   src = fetchFromGitHub {
     repo   = "sqlitebrowser";
     owner  = "sqlitebrowser";
     rev    = "v${version}";
-    sha256 = "009yaamf6f654dl796f1gmj3rb34d55w87snsfgk33gpy6x19ccp";
+    sha256 = "1s7f2d7wx2i68x60z7wdws3il6m83k5n5w5wyjvr0mz0mih0s150";
   };
 
-  buildInputs = [ qt4 sqlite cmake ];
+  buildInputs = [ qt5.qtbase qt5.qttools sqlite cmake ];
+  
+  enableParallelBuilding = true;
+  
+  cmakeFlags = [ "-DUSE_QT5=TRUE" ];
+  
+  # A regression was introduced in CMakeLists.txt on v3.9.x
+  # See https://github.com/sqlitebrowser/sqlitebrowser/issues/832 and issues/755
+  patchPhase = ''
+    substituteInPlace CMakeLists.txt --replace 'project("DB Browser for SQLite")' 'project(sqlitebrowser)'
+  '';
+
 
   meta = with stdenv.lib; {
     description = "DB Browser for SQLite";
@@ -21,4 +32,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux; # can only test on linux
   };
 }
-

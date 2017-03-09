@@ -5,12 +5,12 @@ let
 
   platform = if stdenv.system == "x86_64-linux"
     then "x86_64-unknown-linux-gnu"
-    else abort "missing boostrap url for platform ${stdenv.system}";
+    else throw "missing bootstrap url for platform ${stdenv.system}";
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
     then "1v7jvwigb29m15wilzcrk5jmlpaccpzbkhlzf7z5qw08320gvc91"
-    else throw "missing boostrap hash for platform ${stdenv.system}";
+    else throw "missing bootstrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
 

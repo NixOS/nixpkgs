@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, glib, gnome2
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, gnome2
 , libnotify, nspr, nss, systemd, xorg }:
 
 let
@@ -11,6 +11,7 @@ let
     atk
     cairo
     cups
+    curl
     dbus
     expat
     fontconfig
