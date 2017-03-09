@@ -280,7 +280,7 @@ in
         options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" "uas" ];
 
     boot.blacklistedKernelModules = [ "nouveau" ];
 
