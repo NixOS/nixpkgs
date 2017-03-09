@@ -52,7 +52,7 @@ let
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-linux
               jobs.python3.i686-linux
-              jobs.python3.aarchh64-linux
+              jobs.python3.aarch64-linux
               jobs.python3.x86_64-darwin
               # Many developers use nix-repl
               jobs.nix-repl.x86_64-linux
