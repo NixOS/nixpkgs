@@ -21184,30 +21184,9 @@ in {
     buildInputs = with self; [ pyasn1 pycrypto ];
   };
 
-  pyudev = buildPythonPackage rec {
-    name = "pyudev-${version}";
-    version = "0.20.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyudev/${name}.tar.gz";
-      sha256 = "0al4cpg0m8n7cd06w94x3cx8mxaqg08bfv4r6a3pkgqxc74mpn0l";
-    };
-
-    postPatch = ''
-      substituteInPlace src/pyudev/_ctypeslib/libudev.py \
-        --replace "find_library('udev')" "'${pkgs.systemd.lib}/lib/libudev.so'"
-    '';
-
-    propagatedBuildInputs = with self; [ pkgs.systemd six ];
-
-    meta = {
-      homepage = "http://pyudev.readthedocs.org/";
-      description = "Pure Python libudev binding";
-      license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
-    };
+  pyudev = callPackage ../development/python-modules/pyudev.nix {
+    inherit (pkgs) fetchurl systemd;
   };
-
 
   pynzb = buildPythonPackage (rec {
     name = "pynzb-0.1.0";
