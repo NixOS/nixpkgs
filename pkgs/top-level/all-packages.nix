@@ -15425,6 +15425,8 @@ with pkgs;
     webkit = webkitgtk2;
   };
 
+  surf-webkit2 = callPackage ../applications/networking/browsers/surf/webkit2.nix { };
+
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
