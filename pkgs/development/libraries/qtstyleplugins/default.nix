@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;
-    broken = builtins.compareVersion qtbase.version "5.7.0" > 0;
+    broken = builtins.compareVersions qtbase.version "5.7.0" > 0;
   };
 }
