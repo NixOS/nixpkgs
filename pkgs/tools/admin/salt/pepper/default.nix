@@ -10,6 +10,8 @@ python2Packages.buildPythonApplication rec {
     url = "https://github.com/saltstack/pepper/releases/download/${version}/${name}.tar.gz";
     sha256 = "0gf4v5y1kp16i1na4c9qw7cgrpsh21p8ldv9r6b8gdwcxzadxbck";
   };
+  
+  doCheck = false; # no tests available
 
   meta = {
     description = "A CLI front-end to a running salt-api system";
