@@ -3,8 +3,9 @@ with lib;
 
 let
   apparmorEnabled = config.security.apparmor.enable;
-  dnscrypt-proxy = pkgs.dnscrypt-proxy;
+
   cfg = config.services.dnscrypt-proxy;
+
   stateDirectory = "/var/lib/dnscrypt-proxy";
 
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
@@ -195,7 +196,7 @@ in
 
       serviceConfig = {
         NonBlocking = "true";
-        ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+        ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
 
         User = "dnscrypt-proxy";
 
@@ -208,7 +209,7 @@ in
 
     (mkIf apparmorEnabled {
     security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
-      ${dnscrypt-proxy}/bin/dnscrypt-proxy {
+      ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
         /dev/urandom r,
 
