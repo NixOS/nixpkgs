@@ -15712,6 +15712,8 @@ with pkgs;
     system-libvirt = libvirt;
   };
 
+  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix { };
+
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
   virtualbox = callPackage ../applications/virtualization/virtualbox {
