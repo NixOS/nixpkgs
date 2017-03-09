@@ -21556,25 +21556,7 @@ in {
 
   rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient.nix { };
 
-  pyrax = buildPythonPackage rec {
-    name = "pyrax-1.8.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyrax/${name}.tar.gz";
-      sha256 = "0hvim60bhgfj91m7pp8jfmb49f087xqlgkqa505zw28r7yl0hcfp";
-    };
-
-    propagatedBuildInputs = with self; [ requests2 ];
-    doCheck = false;
-
-    meta = {
-      broken = true;  # missing lots of dependencies with rackspace-novaclient
-      homepage    = "https://github.com/rackspace/pyrax";
-      license     = licenses.mit;
-      description = "Python API to interface with Rackspace";
-    };
-  };
-
+  pyrax = callPackage ../development/python-modules/pyrax.nix { };
 
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
