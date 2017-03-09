@@ -21556,7 +21556,9 @@ in {
 
   rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient.nix { };
 
-  pyrax = callPackage ../development/python-modules/pyrax.nix { };
+  pyrax = callPackage ../development/python-modules/pyrax.nix {
+    glibcLocales = pkgs.glibcLocales;
+  };
 
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";

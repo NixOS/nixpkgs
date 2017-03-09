@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchurl, requests2, novaclient, keyring,
-  rackspace-novaclient, six, isPy3k }:
+  rackspace-novaclient, six, isPy3k, pytest, glibcLocales }:
 buildPythonPackage rec {
   name = "pyrax-1.9.8";
 
@@ -16,6 +16,13 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
   propagatedBuildInputs = [ requests2 novaclient keyring rackspace-novaclient six ];
+
+  LC_ALL = "en_US.UTF-8";
+  buildInputs = [ pytest glibcLocales ];
+
+  checkPhase = ''
+    py.test tests/unit
+  '';
 
   meta = {
     homepage = "https://github.com/rackspace/pyrax";
