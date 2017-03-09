@@ -45,6 +45,15 @@ with lib;
       '';
     };
 
+    alias = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/your/alias/directory";
+      description = ''
+        Alias directory for requests.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
