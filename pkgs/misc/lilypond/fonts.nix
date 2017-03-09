@@ -24,11 +24,11 @@ let
 
       installPhase = ''
         for f in {otf,supplementary-fonts}/**.{o,t}tf; do
-          install -Dt $out/otf -m755 otf/*
+          install -Dt $out/otf -m755 $f
         done
 
         for f in svg/**.{svg,woff}; do
-          install -Dt $out/svg -m755 svg/*
+          install -Dt $out/svg -m755 $f
         done
       '';
 
