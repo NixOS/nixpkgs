@@ -756,15 +756,12 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
           src = pkgs.fetchgit {
             url = "https://github.com/bepasty/bepasty-server";
             sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-            #sha256 = "5ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-            #sha256 = "7ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
             rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
           };
-          });
-
-        };
+        });
       };
     };
+  };
 ```
 
 ### How to override a Python package?
