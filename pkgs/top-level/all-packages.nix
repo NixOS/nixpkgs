@@ -7782,6 +7782,8 @@ with pkgs;
   hyena = callPackage ../development/libraries/hyena { };
 
   icu = callPackage ../development/libraries/icu { };
+  # Needed for LibreOffice Still as of 5.2.6.2
+  icu_57 = callPackage ../development/libraries/icu/57.nix { };
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
