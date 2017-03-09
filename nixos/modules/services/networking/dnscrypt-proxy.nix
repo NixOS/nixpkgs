@@ -307,4 +307,8 @@ in
     };
     })
     ]);
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ])
+  ];
 }
