@@ -5,10 +5,10 @@ with pythonPackages;
 buildPythonPackage rec {
   namePrefix = "";
   name = "wakatime-${version}";
-  version = "6.0.1";
+  version = "7.0.4";
 
   src = fetchFromGitHub {
-    sha256 = "0bkzchivkz39jiz78jy7zkpsg6fd94wd7nsmrnijvxb3dn35l7l2";
+    sha256 = "1cddabx9x11d2nxxcqlf4piysjnpfici0n5qy3n9gw81asz1djhf";
     rev = version;
     repo = "wakatime";
     owner = "wakatime";

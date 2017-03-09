@@ -1,11 +1,11 @@
 { lib, fetchurl, mkPythonDerivation, python, isPyPy }:
 
 if isPyPy then throw "sip not supported for interpreter ${python.executable}" else mkPythonDerivation rec {
-  name = "sip-4.18.1";
+  name = "sip-4.19.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "1452zy3g0qv4fpd9c0y4gq437kn0xf7bbfniibv5n43zpwnpmklv";
+    sha256 = "501852b8325349031b769d1c03d6eab04f7b9b97f790ec79f3d3d04bf065d83e";
   };
 
   configurePhase = ''

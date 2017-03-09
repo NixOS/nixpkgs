@@ -29,7 +29,7 @@ let
     inherit (cfg) phpPackage phpOptions;
     passAsFile = [ "phpOptions" ];
   } ''
-    cat $phpPackage/etc/php.ini $phpOptionsFile > $out
+    cat $phpPackage/etc/php.ini $phpOptionsPath > $out
   '';
 
 in {

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub
-, SDL2, libpng, libjpeg, glew, openal, scons
+, SDL2, libpng, libjpeg, glew, openal, scons, libmad
 }:
 
 let
-  version = "0.9.4";
+  version = "0.9.6";
 
 in
 stdenv.mkDerivation rec {
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "1mirdcpap0a280j472lhmhqg605b7glvdr4l93qcapk8an8d46m7";
+    sha256 = "166wr861w415kynim0yx3x7c16x66f5367hv2mfzhpyp244jzccx";
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [
-    SDL2 libpng libjpeg glew openal scons
+    SDL2 libpng libjpeg glew openal scons libmad
   ];
 
   patches = [

@@ -1,17 +1,17 @@
-{stdenv, fetchurl, libtool, openssl, pkgconfig}:
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "libp11-0.2.7";
-  
-  src = fetchurl {
-    urls = [
-      "http://www.opensc-project.org/files/libp11/${name}.tar.gz"
-      "http://www.openadk.org/distfiles/${name}.tar.gz"
-    ];
-    sha256 = "0kaz5qafaxm0ycywmajl166c29fh9cz89b8i043jqsbxlpzf4hdp";
+
+  src = fetchFromGitHub {
+    owner = "OpenSC";
+    repo = "libp11";
+    rev = name;
+    sha256 = "0llw69kcb6nvz7zzkb9nyfyhc2s972q68sqciabqxwxljr09c411";
   };
-  
-  buildInputs = [ libtool openssl pkgconfig ];
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+  buildInputs = [ openssl ];
 
   meta = {
     homepage = http://www.opensc-project.org/libp11/;

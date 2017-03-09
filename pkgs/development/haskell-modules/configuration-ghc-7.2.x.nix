@@ -36,8 +36,8 @@ self: super: {
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   deepseq = self.deepseq_1_3_0_1;
-  haskeline = self.haskeline_0_7_2_1;
-  terminfo = self.terminfo_0_4_0_1;
+  haskeline = self.haskeline_0_7_3_1;
+  terminfo = self.terminfo_0_4_0_2;
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 

@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     license = with licenses; gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

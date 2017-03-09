@@ -1,17 +1,23 @@
-{stdenv, fetchurl, perl, python}:
-# Perl and Python required by the test suite.
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "dmtcp-${version}";
+  version = "2.5.0";
 
-  version = "2.3.1";
-
-  buildInputs = [ perl python ];
-
-  src = fetchurl {
-    url = "mirror://sourceforge/dmtcp/dmtcp-${version}.tar.gz";
-    sha256 = "1f83ae112e102d4fbf69dded0dfaa6daeb60c4c0c569297553785a876e95ba15";
+  src = fetchFromGitHub {
+    owner = "dmtcp";
+    repo = "dmtcp";
+    rev = version;
+    sha256 = "08l774i8yp41j6kmzhj7x13475m5kdfhn678ydpm5cbg4l3dda3c";
   };
+
+  dontDisableStatic = true;
+
+  postPatch = ''
+    substituteInPlace configure \
+      --replace '#define ELF_INTERPRETER "$interp"' \
+                "#define ELF_INTERPRETER \"$(cat $NIX_CC/nix-support/dynamic-linker)\""
+  '';
 
   preConfigure = ''
     substituteInPlace src/dmtcp_coordinator.cpp \

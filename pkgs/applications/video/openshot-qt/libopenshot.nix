@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor";
     license = licenses.gpl3Plus;
-    maintainers = [maintainers.tohl];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

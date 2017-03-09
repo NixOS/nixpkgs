@@ -34,8 +34,8 @@ self: super: {
   unix = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
-  haskeline = self.haskeline_0_7_2_1;
-  terminfo = self.terminfo_0_4_0_1;
+  haskeline = self.haskeline_0_7_3_1;
+  terminfo = self.terminfo_0_4_0_2;
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 
@@ -100,8 +100,12 @@ self: super: {
   semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend super.distributive self.semigroups;
+  QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
+
+  # Breaks a dependency cycle between QuickCheck and semigroups
+  unordered-containers = dontCheck super.unordered-containers;
 
 }

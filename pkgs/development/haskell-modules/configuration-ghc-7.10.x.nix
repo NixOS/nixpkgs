@@ -191,6 +191,7 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers;
 
   # GHC versions prior to 8.x require additional build inputs.
+  dependent-map = addBuildDepend super.dependent-map self.semigroups;
   distributive = addBuildDepend super.distributive self.semigroups;
   mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
@@ -201,7 +202,7 @@ self: super: {
   hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
   hslogger = addBuildDepend super.hslogger self.HUnit;
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
-  lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
+  lens = addBuildDepend super.lens self.generic-deriving;
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);

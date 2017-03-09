@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodePackages
+, jailbreak-cabal, hscolour, cpphs
 }: let isCross = (ghc.cross or null) != null; in
 
 { pname

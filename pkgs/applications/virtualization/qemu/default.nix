@@ -9,7 +9,9 @@
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol, usbredir
+, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol
+, usbredirSupport ? spiceSupport, usbredir
+, xenSupport ? false, xen
 , x86Only ? false
 , nixosTestRunner ? false
 }:
@@ -24,6 +26,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "qemu-"
+    + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString x86Only "x86-only-"
     + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
     + version;
@@ -44,8 +47,10 @@ stdenv.mkDerivation rec {
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
-    ++ optionals spiceSupport [ spice_protocol spice usbredir ]
-    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ];
+    ++ optionals spiceSupport [ spice_protocol spice ]
+    ++ optionals usbredirSupport [ usbredir ]
+    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
+    ++ optionals xenSupport [ xen ];
 
   enableParallelBuilding = true;
 
@@ -95,9 +100,11 @@ stdenv.mkDerivation rec {
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
+    ++ optional usbredirSupport "--enable-usb-redir"
     ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
     ++ optional stdenv.isDarwin "--enable-cocoa"
-    ++ optional stdenv.isLinux "--enable-linux-aio";
+    ++ optional stdenv.isLinux "--enable-linux-aio"
+    ++ optional xenSupport "--enable-xen";
 
   postFixup =
     ''
