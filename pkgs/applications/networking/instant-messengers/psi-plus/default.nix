@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , which, pkgconfig
-, qt4, libidn, qca2, libXScrnSaver, enchant
+, qt5, libidn, qca2-qt5, libXScrnSaver, enchant
 }:
 
 stdenv.mkDerivation rec {
@@ -27,11 +27,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which pkgconfig ];
 
-  buildInputs = [ qt4 libidn qca2 libXScrnSaver enchant ];
-
-  NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
-
-  NIX_LDFLAGS="-lqca";
+  buildInputs = [
+    qt5.qtbase qt5.qtmultimedia qt5.qtx11extras
+    libidn qca2-qt5 libXScrnSaver enchant
+  ];
 
   enableParallelBuilding = true;
 
