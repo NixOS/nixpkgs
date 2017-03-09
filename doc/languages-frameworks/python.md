@@ -744,6 +744,24 @@ Consider the packages `A` and `B` that depend on each other. When packaging `B`,
 a solution is to override package `A` not to depend on `B` as an input. The same
 should also be done when packaging `A`.
 
+### How to override a Python package from `configuration.nix`?
+
+If you need to change a package's attribute(s) from `configuration.nix` you could do:
+
+```nix
+  nixpkgs.config.packageOverrides = super: {
+    pythonPackages = super.pythonPackages // { bepasty-server = super.python27Packages.bepasty-server.overrideAttrs (oldAttrs: {
+        src = pkgs.fetchgit {
+          url = "https://github.com/bepasty/bepasty-server";
+          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
+          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+        };
+      });
+    };
+  };
+
+```
+
 ### How to override a Python package?
 
 We can override the interpreter and pass `packageOverrides`.
