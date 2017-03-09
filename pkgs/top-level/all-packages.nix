@@ -5230,7 +5230,7 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk = if stdenv.isDarwin then openjdk7 else openjdk8;
+  openjdk = openjdk8;
 
   jdk7 = openjdk7 // { outputs = [ "out" ]; };
   jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}"
@@ -5247,9 +5247,9 @@ with pkgs;
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
-  jdk = if stdenv.isDarwin then jdk7 else jdk8;
-  jre = if stdenv.isDarwin then jre7 else jre8;
-  jre_headless = if stdenv.isDarwin then jre7 else jre8_headless;
+  jdk = jdk8;
+  jre = jre8;
+  jre_headless = jre8_headless;
 
   openshot-qt = callPackage ../applications/video/openshot-qt { };
 
