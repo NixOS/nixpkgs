@@ -89,6 +89,15 @@ with lib;
       '';
     };
 
+    alias = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/data/webserver/docs";
+      description = ''
+        The path of the web alias directory.
+      '';
+    };
+
     default = mkOption {
       type = types.bool;
       default = false;

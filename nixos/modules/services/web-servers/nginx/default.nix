@@ -163,6 +163,7 @@ let
           server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
+          ${optionalString (vhost.alias != null) "alias ${vhost.alias};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
           ''}
@@ -185,6 +186,7 @@ let
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
+      ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
     }
   '') locations);
