@@ -11535,9 +11535,7 @@ with pkgs;
 
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
 
-  sensu = callPackage ../servers/monitoring/sensu {
-    ruby = ruby_2_1;
-  };
+  sensu = callPackage ../servers/monitoring/sensu { };
 
   uchiwa = callPackage ../servers/monitoring/uchiwa { };
 
