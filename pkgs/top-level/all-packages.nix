@@ -7001,6 +7001,7 @@ with pkgs;
   boost_process = callPackage ../development/libraries/boost-process { };
 
   botan = callPackage ../development/libraries/botan { };
+  botan2 = callPackage ../development/libraries/botan/2.0.nix { };
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
