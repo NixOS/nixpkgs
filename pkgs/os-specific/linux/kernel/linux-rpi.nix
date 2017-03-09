@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "4.4.26";
-  tag = "1.20161020-1";
+  modDirVersion = "4.4.50";
+  tag = "1.20170303";
 in
 stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
   version = "${modDirVersion}-${tag}";
@@ -11,8 +11,8 @@ stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = "raspberrypi-kernel_${tag}";
-    sha256 = "0y76xrapq7710zzf6sif94xzly72gg505y65lslfirng500ncnv5";
+    rev = "raspberrypi-kernel_${tag}-1";
+    sha256 = "1lvsr8zm8p1ng4b9vq0nkf2gn4gabla8dh6l60vifclqdcq2vwvx";
   };
 
   features.iwlwifi = true;

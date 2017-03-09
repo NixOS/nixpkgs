@@ -11364,7 +11364,6 @@ with pkgs;
   linux_rpi = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
     kernelPatches = with kernelPatches; [
       bridge_stp_helper
-      packet_fix_race_condition_CVE_2016_8655
       DCCP_double_free_vulnerability_CVE-2017-6074
     ];
   };
@@ -17415,7 +17414,10 @@ with pkgs;
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
-  gplates = callPackage ../applications/science/misc/gplates { };
+  gplates = callPackage ../applications/science/misc/gplates {
+    boost = boost160;
+    cgal = cgal.override { boost = boost160; };
+  };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
