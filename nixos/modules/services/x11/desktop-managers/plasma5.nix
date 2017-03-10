@@ -196,6 +196,11 @@ in
       };
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
+      fonts.fontconfig.defaultFonts = {
+        monospace = [ "Hack" "Noto Mono" ];
+        sansSerif = [ "Noto Sans" ];
+        serif = [ "Noto Serif" ];
+      };
 
       programs.ssh.askPassword = "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
