@@ -69,6 +69,12 @@ let
       };
       # TODO: add number of VCPUs
 
+      # TODO: hide this option as it's not oriented towards end-user
+      store = mkOption {
+        type = types.path;
+        description = "Path to the store of the VM. DO NOT SET.";
+      };
+
       config = mkOption {
         description =
         ''
@@ -96,6 +102,37 @@ let
       ip4 = mkDefault (genIPv4 (addToIPv4 (parseIPv4 cfg.ip4.address) id));
       ip6 = mkDefault (genIPv6 (addToIPv6 (parseIPv6 cfg.ip6.address) id));
       mac = mkDefault (genMAC  (addToMAC  (parseMAC "56:00:00:00:00:00") id));
+
+      store = pkgs.stdenv.mkDerivation {
+        name = "vm-${name}-store";
+        phases = [ "buildPhase" ];
+        buildInputs = [ config.config.system.build.toplevel ];
+        exportReferencesGraph = [ "closure" config.config.system.build.toplevel ];
+        preferLocalBuild = true;
+        buildPhase =
+          ''
+            # TODO: find way to directly do the hardlinking instead of relying on nix
+            function recurse_in_dir_unused() {
+              if [ -d "/nix/store/$1" ]; then
+                mkdir "$out/$1"
+                ls "/nix/store/$1" | while read elem; do
+                  recurse_in_dir "$1/$elem"
+                done
+              else
+                ln "/nix/store/$1" "$out/$1"
+              fi
+            }
+
+            function recurse_in_dir() {
+              ${pkgs.rsync}/bin/rsync -a "/nix/store/$1" "$out"
+            }
+
+            mkdir $out
+            cat closure | grep '/nix/store/' | sed 's_/nix/store/__' | sort -u | while read elem; do
+              recurse_in_dir "$elem"
+            done
+          '';
+      };
     };
   };
 
@@ -171,7 +208,7 @@ let
         ''-nographic -serial unix:"${cfg.consolePath}/${name}/socket.unix",server,nowait''
         # File systems
         ''-drive file="${cfg.imagesPath}/${name}.img",if=virtio,media=disk''
-        ''-virtfs local,path="${cfg.storesPath}/${name}",security_model=none,mount_tag=store''
+        ''-virtfs local,path="${mcfg.store}",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
         ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
@@ -189,34 +226,12 @@ let
     ''
       image="${cfg.imagesPath}/${name}.img"
       console="${cfg.consolePath}/${name}/socket.unix"
-      store="${cfg.storesPath}/${name}"
       persist="${cfg.persistPath}/${name}"
 
       # Generate paths
       mkdir -p \
-        "$store" "$persist" "${cfg.imagesPath}" \
-        "${cfg.consolePath}/${name}" \
+        "$persist" "${cfg.imagesPath}" "${cfg.consolePath}/${name}" \
         ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
-
-      # Regenerate store
-      for path in $(ls "$store"); do
-        ${pkgs.busybox}/bin/umount "$store/$path" > /dev/null 2>&1 || true
-        if [ -d "$store/$path" ]; then
-          rmdir "$store/$path"
-        else
-          rm "$store/$path"
-        fi
-      done
-      for path in $(${pkgs.nix}/bin/nix-store -qR "${mcfg.config.system.build.toplevel}"); do
-        npath="$(echo "$path" | sed "s*/nix/store*$store*")"
-        if [ -d "$path" ]; then
-          mkdir "$npath"
-        else
-          touch "$npath"
-        fi
-        # TODO: switch from spamming bind-mounts to mirroring directory hierarchy and hardlinking
-        ${pkgs.busybox}/bin/mount --bind "$path" "$npath"
-      done
 
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
@@ -270,11 +285,6 @@ in
       type = types.str;
       default = "/var/lib/vm/images";
       description = "Path inside which to put the VM images.";
-    };
-    storesPath = mkOption {
-      type = types.str;
-      default = "/var/lib/vm/stores";
-      description = "Path to the stores";
     };
     consolePath = mkOption {
       type = types.str;
