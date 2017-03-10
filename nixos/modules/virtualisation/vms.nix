@@ -67,6 +67,7 @@ let
         default = 1024;
         description = "Amount of RAM (in MiB) allocated to this VM.";
       };
+      # TODO: add number of VCPUs
 
       config = mkOption {
         description =
@@ -213,7 +214,7 @@ let
         else
           touch "$npath"
         fi
-        # TODO: switch from spamming bind-mounts to some FUSE-based "filesystem firewall"?
+        # TODO: switch from spamming bind-mounts to mirroring directory hierarchy and hardlinking
         ${pkgs.busybox}/bin/mount --bind "$path" "$npath"
       done
 
@@ -331,6 +332,8 @@ in
         description = "Console for VM '${name}'";
         script =
           ''
+            # Wait for socket creation
+            sleep 1
             exec ${pkgs.socat}/bin/socat \
                 PTY,link="${cfg.consolePath}/${name}/screen" \
                 "${cfg.consolePath}/${name}/socket.unix"
