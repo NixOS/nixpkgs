@@ -3289,6 +3289,8 @@ with pkgs;
     nix = nixUnstable;
   };
 
+  packetdrill = callPackage ../tools/networking/packetdrill { };
+
   pakcs = callPackage ../development/compilers/pakcs {};
 
   pal = callPackage ../tools/misc/pal { };
