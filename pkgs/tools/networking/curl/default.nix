@@ -57,7 +57,9 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
+      # OS X does not have a default system bundle, so we assume cacerts is installed in the default nix-env profile
+      # This sucks. We should probably just include the latest cacerts in the darwin bootstrap.
+      "--with-ca-bundle=${if stdenv.isDarwin then "/nix/var/nix/profiles/default" else ""}/etc/ssl/certs/ca-${if stdenv.isDarwin then "bundle" else "certificates"}.crt"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
