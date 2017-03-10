@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
+, libXcursor, libXmu, qt5, gsettings_desktop_schemas
+, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
 , libXrandr, libXinerama
 , which, alsaLib, curl, libvpx, gawk, nettools, dbus
 , xorriso, makeself, perl, pkgconfig
@@ -18,15 +19,15 @@ let
   python = python2;
   buildType = "release";
 
-  extpack = "baddb7cc49224ecc1147f82d77fce2685ac39941ac9b0aac83c270dd6570ea85";
-  extpackRev = 112924;
-  main = "8267bb026717c6e55237eb798210767d9c703cfcdf01224d9bc26f7dac9f228a";
-  version = "5.1.14";
+  extpackHash = "02f73xxx8vk7g2ym26h6x9id088kff1256y9jbhmn0dz2qb72f58";
+  extpackRev = 113841;
+  main = "19wi4a5m5wvrxjkhmg14mgv0373adjpc6ln3h5wkrggkf8qiq1vq";
+  version = "5.1.16";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${toString extpackRev}.vbox-extpack";
-    sha256 = extpack;
+    sha256 = extpackHash;
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) available at:
@@ -58,7 +59,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras gsettings_desktop_schemas libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -188,9 +189,16 @@ in stdenv.mkDerivation {
   passthru = { inherit version; /* for guest additions */ };
 
   meta = {
-    description = "PC emulator";
+    description = "A general-purpose full virtualizer for x86/x64 machines";
+    longDescription = ''
+      VirtualBox is a powerful x86 and AMD64/Intel64 virtualization product for
+      enterprise as well as home use. Not only is VirtualBox an extremely feature
+      rich, high performance product for enterprise customers, it is also the only
+      professional solution that is freely available as Open Source Software.
+    '';
     homepage = http://www.virtualbox.org/;
-    maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    license = with licenses; gpl2;
+    maintainers = with maintainers; [ AndersonTorres sander ];
+    platforms = with platforms; linux;
   };
 }
