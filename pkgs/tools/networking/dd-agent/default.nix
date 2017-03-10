@@ -1,7 +1,31 @@
-{ stdenv, fetchFromGitHub, python, pythonPackages, sysstat, unzip, tornado
-, makeWrapper }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, pythonPackages
+, sysstat, unzip, tornado, makeWrapper }:
+let
+  docker_1_10 = buildPythonPackage rec {
+    name = "docker-${version}";
+    version = "1.10.6";
 
-stdenv.mkDerivation rec {
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "docker-py";
+      rev = version;
+      sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      six
+      requests2
+      websocket_client
+      ipaddress
+      backports_ssl_match_hostname
+      docker_pycreds
+    ];
+
+    # due to flake8
+    doCheck = false;
+  };
+
+in stdenv.mkDerivation rec {
   version = "5.5.2";
   name = "dd-agent-${version}";
 
@@ -23,7 +47,9 @@ stdenv.mkDerivation rec {
     pythonPackages.simplejson
     pythonPackages.pyyaml
     pythonPackages.pymongo
-    pythonPackages.docker
+    pythonPackages.python-etcd
+    pythonPackages.consul
+    docker_1_10
   ];
   propagatedBuildInputs = [ python tornado ];
 
