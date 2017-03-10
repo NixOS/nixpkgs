@@ -1,8 +1,8 @@
-{ pkgs ? import <nixpkgs> {} }:
-pkgs.stdenv.mkDerivation {
+{ stdenv, fetchFromGitHub, bison, flex }:
+stdenv.mkDerivation rec {
   version = "1.0";
   name = "packetdrill-${version}";
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "google";
     repo = "packetdrill";
     rev = "58a7865c47e3a71e92ca0e4cc478c320e1c35f82";
@@ -12,14 +12,14 @@ pkgs.stdenv.mkDerivation {
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
   hardeningDisable = [ "all" ];
-  buildInputs = with pkgs; [ bison flex ];
+  buildInputs = [ bison flex ];
   patches = [ ./nix.patch ];
   enableParallelBuilding = true;
-
   meta = {
-    description = "The packetdrill scripting tool enables quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks, from the system call layer down to the NIC hardware";
+    description = "Quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks";
     homepage = https://github.com/google/packetdrill;
-    license = "GPLv2";
-    platforms = stdenv.lib.platforms.gnu;
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ dmjio cleverca22 ];
   };
 }
