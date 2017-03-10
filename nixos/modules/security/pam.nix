@@ -342,6 +342,7 @@ let
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (cfg.limits != [])
               "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf cfg.limits}"}
+          session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/run/current-system/warnings.txt.raw
           ${optionalString (cfg.showMotd && config.users.motd != null)
               "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
           ${optionalString cfg.pamMount
