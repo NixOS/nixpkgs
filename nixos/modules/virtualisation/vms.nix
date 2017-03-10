@@ -376,6 +376,16 @@ in
         };
       };
 
+    # TODO: put this behind an option
+    networking.extraHosts =
+      concatMapStrings (name:
+        ''
+          # machine MAC: ${cfg.machines.${name}.mac} vm-${name}.localhost
+          ${cfg.machines.${name}.ip4} vm-${name}.localhost
+          ${cfg.machines.${name}.ip6} vm-${name}.localhost
+        ''
+      ) (attrNames cfg.machines);
+
     networking.firewall.extraCommands =
     let ebtables = "${pkgs.ebtables}/bin/ebtables"; in
       ''
