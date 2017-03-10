@@ -14268,9 +14268,7 @@ with pkgs;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
-      icu = icu_57;
     };
-    icu = icu_57;
   });
 
 
