@@ -15,6 +15,10 @@ let
           ''
             IPv4 address of the guest (must be in the subnet defined by
             <replaceable>vms.ip4</replaceable>).
+
+            Will be auto-filled with a valid IP in the range if left undefined.
+            Warning: don't fill some ip4's and not others, collision checking
+            isn't supported!
           '';
       };
       ip6 = mkOption {
@@ -23,11 +27,22 @@ let
           ''
             IPv6 address of the guest (must be in the subnet defined by
             <replaceable>vms.ip6</replaceable>).
+
+            Will be auto-filled with a valid IP in the range if left undefined.
+            Warning: don't fill some ip6's and not others, collision checking
+            isn't supported!
           '';
       };
       mac = mkOption {
         type = types.str;
-        description = "MAC address of the guest.";
+        description =
+          ''
+            MAC address of the guest.
+
+            Will be auto-filled with a random MACif left undefined.
+            Warning: don't fill some mac's and not others, collision checking
+            isn't supported!
+          '';
       };
 
       persistent = mkOption {
@@ -322,7 +337,20 @@ in
     machines = mkOption {
       type = types.attrsOf (types.submodule machineOpts);
       default = {};
-      # TODO: example = ?
+      example = literalExample
+        ''
+          { nginx =
+            { memorySize = 128;
+              vcpus = 2;
+              config =
+              { services.nginx.enable = true;
+                networking.firewall.allowedTCPPorts = [ 80 ];
+              };
+            };
+          };
+          # Somewhere under, port forwarding to ''${vms.machines.nginx.ip4} and
+          # ''${vms.machines.nginx.ip6}.
+        '';
       description =
         ''
           A set of NixOS system configurations to be run as virtual machines.
