@@ -1,0 +1,11 @@
+How to update the NPM packages
+==============================
+- Install node2nix:
+
+nix-env -f '<nixpkgs>' -iA node2nix
+
+- Modify node-packages.json
+
+- Run the script:
+
+sh generate.sh
