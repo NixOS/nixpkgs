@@ -33,6 +33,12 @@
 , nspr
 , nss
 , pango
+, writeScript
+, xidel
+, coreutils
+, gnused
+, gnugrep
+, gnupg
 }:
 
 assert stdenv.isLinux;
@@ -141,6 +147,12 @@ stdenv.mkDerivation {
       EOF
     '';
 
+  passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
+    baseName = "thunderbird";
+    basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
+    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+  };
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = http://www.mozilla.org/thunderbird/;
