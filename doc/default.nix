@@ -3,10 +3,7 @@ let
   lib = pkgs.lib;
   sources = lib.sourceFilesBySuffices ./. [".xml"];
   sources-langs = ./languages-frameworks;
-  libDocJSON = builtins.toFile "options.json" (builtins.toJSON (import ./fn-docs.nix));
-  libDocBook= pkgs.runCommand "options-db.xml" {} ''
-    ${pkgs.ruby}/bin/ruby ${./lib2docbook.rb} < ${libDocJSON} > $out
-  '';
+  libChapter = builtins.toFile "lib.xml" (import ./fn-docs.nix).docChapter;
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
@@ -77,7 +74,7 @@ pkgs.stdenv.mkDerivation {
       outputFile = "./languages-frameworks/vim.xml";
     }
   + ''
-    cp ${libDocBook} ./lib.xml
+    cp ${libChapter} ./lib.xml
 
     echo ${lib.nixpkgsVersion} > .version
 
