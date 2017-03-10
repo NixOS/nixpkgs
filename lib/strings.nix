@@ -587,7 +587,7 @@ rec {
   /* Adds an integer to a list modulo a value (used for adding an integer to an
      IP)
   */
-  addToIPorMAC = list: i: mod:
+  addToIPorMAC = mod: list: i:
     let
       normalize = list:
         let
@@ -601,4 +601,7 @@ rec {
           else normalize nextstep;
     in
       normalize ((lib.init list) ++ [ ((lib.last list) + i) ]);
+  addToIPv4 = addToIPorMAC 256;
+  addToIPv6 = addToIPorMAC 65536;
+  addToMAC  = addToIPorMAC 256;
 }
