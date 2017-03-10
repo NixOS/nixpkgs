@@ -547,7 +547,12 @@ rec {
       missingndots = 9 - ndots; # 2 + (7 - ndots)
       missingdots = concatStrings (map (_: ":") (lib.range 1 missingndots));
       ipv6str = replaceStrings [ "::" ] [ missingdots ] str;
-      ip = map hexToInt (splitString ":" ipv6str);
+      # TODO: remove once https://github.com/NixOS/nixpkgs/issues/23681 is fixed
+      ipv6strfix =
+        if lib.last (stringToCharacters ipv6str) == ":"
+        then "${ipv6str}0"
+        else ipv6str;
+      ip = map hexToInt (splitString ":" ipv6strfix);
     in
       if length ip == 8 && builtins.all (x: 0 <= x && x <= 65535) ip
       then ip
