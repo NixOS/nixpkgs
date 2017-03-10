@@ -18,10 +18,10 @@ let
   python = python2;
   buildType = "release";
 
-  extpack = "baddb7cc49224ecc1147f82d77fce2685ac39941ac9b0aac83c270dd6570ea85";
-  extpackRev = 112924;
-  main = "8267bb026717c6e55237eb798210767d9c703cfcdf01224d9bc26f7dac9f228a";
-  version = "5.1.14";
+  extpack = "02f73xxx8vk7g2ym26h6x9id088kff1256y9jbhmn0dz2qb72f58";
+  extpackRev = 113841;
+  main = "19wi4a5m5wvrxjkhmg14mgv0373adjpc6ln3h5wkrggkf8qiq1vq";
+  version = "5.1.16";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
