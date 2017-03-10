@@ -9,7 +9,6 @@ let
 
   machineOpts = { name, config, ... }: {
     options = {
-      # TODO: allow leaving these field unset and auto-fill it with a valid value
       ip4 = mkOption {
         type = types.str;
         description =
@@ -67,7 +66,11 @@ let
         default = 1024;
         description = "Amount of RAM (in MiB) allocated to this VM.";
       };
-      # TODO: add number of VCPUs
+      vcpus = mkOption {
+        type = types.int;
+        default = 1;
+        description = "Number of cores available to this VM.";
+      };
 
       # TODO: hide this option as it's not oriented towards end-user
       store = mkOption {
@@ -203,6 +206,7 @@ let
         ''${pkgs.qemu}/bin/qemu-kvm''
         ''-name ${name}''
         ''-m ${toString mcfg.memorySize}''
+        ''-smp ${toString mcfg.vcpus}''
         ''${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}''
         # Run headless
         ''-nographic -serial unix:"${cfg.consolePath}/${name}/socket.unix",server,nowait''
