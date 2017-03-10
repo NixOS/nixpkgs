@@ -1,0 +1,40 @@
+From c31e0f682431508ccd2d3c0f74e6e16fc71445d8 Mon Sep 17 00:00:00 2001
+From: Cray Elliott <MP2E@archlinux.us>
+Date: Fri, 10 Mar 2017 03:48:36 -0800
+Subject: [PATCH] Fix segfault in Linux when no system tray exists
+
+previously, switching workspaces while obs-studio is running resulted in a
+segfault if no system tray was available
+---
+ UI/window-basic-main.cpp | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/UI/window-basic-main.cpp b/UI/window-basic-main.cpp
+index 8590dd75..024854d6 100644
+--- a/UI/window-basic-main.cpp
++++ b/UI/window-basic-main.cpp
+@@ -2916,13 +2916,15 @@ void OBSBasic::closeEvent(QCloseEvent *event)
+
+ void OBSBasic::changeEvent(QEvent *event)
+ {
+-	if (event->type() == QEvent::WindowStateChange &&
+-	    isMinimized() &&
+-	    trayIcon->isVisible() &&
+-	    sysTrayMinimizeToTray()) {
+-
+-		ToggleShowHide();
+-	}
++  if (trayIcon) {
++	  if (event->type() == QEvent::WindowStateChange &&
++	      isMinimized() &&
++	      trayIcon->isVisible() &&
++	      sysTrayMinimizeToTray()) {
++
++	  	ToggleShowHide();
++	  }
++  }
+ }
+
+ void OBSBasic::on_actionShow_Recordings_triggered()
+--
+2.12.0
