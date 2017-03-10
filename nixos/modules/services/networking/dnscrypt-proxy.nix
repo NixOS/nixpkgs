@@ -15,16 +15,13 @@ let
   };
 
   # Internal flag indicating whether the upstream resolver list is used.
-  useUpstreamResolverList = cfg.resolverList == null && cfg.customResolver == null;
+  useUpstreamResolverList = cfg.customResolver == null;
 
   # The final local address.
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
 
   # The final resolvers list path.
-  resolverList =
-    if (cfg.resolverList != null)
-      then cfg.resolverList
-      else "${stateDirectory}/dnscrypt-resolvers.csv";
+  resolverList = "${stateDirectory}/dnscrypt-resolvers.csv";
 
   # Build daemon command line
 
@@ -88,19 +85,11 @@ in
         default = "dnscrypt.eu-nl";
         type = types.nullOr types.str;
         description = ''
-          The name of the upstream DNSCrypt resolver to use, taken from
-          <filename>${resolverList}</filename>.  The default resolver is
-          located in Holland, supports DNS security extensions, and
-          <emphasis>claims</emphasis> to not keep logs.
-        '';
-      };
-
-      resolverList = mkOption {
-        default = null;
-        type = types.nullOr types.path;
-        description = ''
-          List of DNSCrypt resolvers.  The default is to use the list of
-          public resolvers provided by upstream.
+          The name of the DNSCrypt resolver to use, taken from
+          <filename>${resolverList}</filename>.  The default
+          resolver is located in Holland, supports DNS security
+          extensions, and <emphasis>claims</emphasis> to not
+          keep logs.
         '';
       };
 
@@ -319,5 +308,10 @@ in
       (config:
         let val = getAttrFromPath [ "services" "dnscrypt-proxy" "ephemeralKeys" ] config; in
         optional val "-E"))
+
+    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" "resolverList" ] ''
+      The current resolver listing from upstream is always used
+      unless a custom resolver is specified.
+    '')
   ];
 }
