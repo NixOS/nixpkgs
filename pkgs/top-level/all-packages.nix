@@ -13419,6 +13419,8 @@ with pkgs;
 
   keepass = callPackage ../applications/misc/keepass { };
 
+  keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
+
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
   keepass-keepasshttp = callPackage ../applications/misc/keepass-plugins/keepasshttp { };
