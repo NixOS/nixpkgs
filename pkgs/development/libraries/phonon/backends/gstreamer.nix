@@ -55,6 +55,10 @@ stdenv.mkDerivation rec {
     [ gstreamer gst-plugins-base phonon ]
     ++ (if withQt5 then [ qtbase qtx11extras ] else [ qt4 ]);
 
+  # cleanup: the build system creates (empty) $out/$out/share/icons (double prefix)
+  # if DESTDIR is unset
+  DESTDIR="/";
+
   nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
 
   cmakeFlags =

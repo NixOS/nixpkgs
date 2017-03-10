@@ -21,7 +21,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "1.12pre")
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
@@ -112,12 +112,12 @@ in rec {
 
   nixUnstable = lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5060_fa125b9";
+    suffix = "pre5073_1cf4801";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "fa125b9b28bea25a4eeb4d39a71a481563127cb9";
-      sha256 = "1l7prlki3rjw3i119cizqqkpqg4p3hvym103x7hddimwpzwkw756";
+      rev = "1cf480110879ffc8aee94b4b75999da405b71d7c";
+      sha256 = "1iwpddz0yni7cz2g9asj6nmrwhaai3rhfmkq954hph8nx02c3l02";
     };
     fromGit = true;
   });

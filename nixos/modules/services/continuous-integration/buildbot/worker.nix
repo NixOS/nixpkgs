@@ -31,7 +31,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [ "nixbld" ];
+        default = [];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 
@@ -68,13 +68,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.buildbot-worker;
+        defaultText = "pkgs.buildbot-worker";
         description = "Package to use for buildbot worker.";
-        example = pkgs.buildbot-worker;
+        example = literalExample "pkgs.buildbot-worker";
       };
 
       packages = mkOption {
         default = [ ];
-        example = [ pkgs.git ];
+        example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
@@ -100,24 +101,21 @@ in {
 
     systemd.services.buildbot-worker = {
       description = "Buildbot Worker.";
-      after = [ "network.target" ];
+      after = [ "network.target" "buildbot-master.service" ];
       wantedBy = [ "multi-user.target" ];
-      wants = [ "buildbot-master.service" ];
       path = cfg.packages;
 
       preStart = ''
-        # NOTE: ensure master has time to start in case running on localhost
-        ${pkgs.coreutils}/bin/sleep 4
         ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
       '';
 
       serviceConfig = {
-        Type = "forking";
+        Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot-worker start ${cfg.buildbotDir}";
+        ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
       };
 
     };

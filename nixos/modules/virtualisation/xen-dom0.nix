@@ -27,6 +27,36 @@ in
           '';
       };
 
+    virtualisation.xen.package = mkOption {
+      type = types.package;
+      default = pkgs.xen;
+      defaultText = "pkgs.xen";
+      example = literalExample "pkgs.xen-light";
+      description = ''
+        The package used for Xen binary.
+      '';
+    };
+
+    virtualisation.xen.qemu = mkOption {
+      type = types.path;
+      default = "${pkgs.xen}/lib/xen/bin/qemu-system-i386";
+      defaultText = "''${pkgs.xen}/lib/xen/bin/qemu-system-i386";
+      example = literalExample "''${pkgs.qemu_xen-light}/bin/qemu-system-i386";
+      description = ''
+        The qemu binary to use for Dom-0 backend.
+      '';
+    };
+
+    virtualisation.xen.qemu-package = mkOption {
+      type = types.package;
+      default = pkgs.xen;
+      defaultText = "pkgs.xen";
+      example = literalExample "pkgs.qemu_xen-light";
+      description = ''
+        The package with qemu binaries for xendomains.
+      '';
+    };
+
     virtualisation.xen.bootParams =
       mkOption {
         default = "";
@@ -106,9 +136,9 @@ in
       message = "Xen currently does not support EFI boot";
     } ];
 
-    virtualisation.xen.stored = mkDefault "${pkgs.xen}/bin/oxenstored";
+    virtualisation.xen.stored = mkDefault "${cfg.package}/bin/oxenstored";
 
-    environment.systemPackages = [ pkgs.xen ];
+    environment.systemPackages = [ cfg.package ];
 
     # Make sure Domain 0 gets the required configuration
     #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
@@ -144,7 +174,7 @@ in
 
     system.extraSystemBuilderCmds =
       ''
-        ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz
+        ln -s ${cfg.package}/boot/xen.gz $out/xen.gz
         echo "${toString cfg.bootParams}" > $out/xen-params
       '';
 
@@ -180,19 +210,19 @@ in
 
 
     environment.etc =
-      [ { source = "${pkgs.xen}/etc/xen/xl.conf";
+      [ { source = "${cfg.package}/etc/xen/xl.conf";
           target = "xen/xl.conf";
         }
-        { source = "${pkgs.xen}/etc/xen/scripts";
+        { source = "${cfg.package}/etc/xen/scripts";
           target = "xen/scripts";
         }
-        { source = "${pkgs.xen}/etc/default/xendomains";
+        { source = "${cfg.package}/etc/default/xendomains";
           target = "default/xendomains";
         }
       ];
 
     # Xen provides udev rules.
-    services.udev.packages = [ pkgs.xen ];
+    services.udev.packages = [ cfg.package ];
 
     services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
 
@@ -217,7 +247,7 @@ in
         time=0
         timeout=30
         # Wait for xenstored to actually come up, timing out after 30 seconds
-        while [ $time -lt $timeout ] && ! `${pkgs.xen}/bin/xenstore-read -s / >/dev/null 2>&1` ; do
+        while [ $time -lt $timeout ] && ! `${cfg.package}/bin/xenstore-read -s / >/dev/null 2>&1` ; do
             time=$(($time+1))
             sleep 1
         done
@@ -228,8 +258,8 @@ in
             exit 1
         fi
 
-        ${pkgs.xen}/bin/xenstore-write "/local/domain/0/name" "Domain-0"
-        ${pkgs.xen}/bin/xenstore-write "/local/domain/0/domid" 0
+        ${cfg.package}/bin/xenstore-write "/local/domain/0/name" "Domain-0"
+        ${cfg.package}/bin/xenstore-write "/local/domain/0/domid" 0
         '';
     };
 
@@ -256,7 +286,7 @@ in
         '';
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.xen}/bin/xenconsoled${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
+          ${cfg.package}/bin/xenconsoled${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
           '';
       };
     };
@@ -267,8 +297,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "xen-console.service" ];
       serviceConfig.ExecStart = ''
-        ${pkgs.xen}/lib/xen/bin/qemu-system-i386 -xen-domid 0 -xen-attach -name dom0 -nographic -M xenpv \
-           -monitor /dev/null -serial /dev/null -parallel /dev/null
+        ${cfg.qemu} -xen-attach -xen-domid 0 -name dom0 -M xenpv \
+           -nographic -monitor /dev/null -serial /dev/null -parallel /dev/null
         '';
     };
 
@@ -277,7 +307,7 @@ in
       description = "Xen Watchdog Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "xen-qemu.service" ];
-      serviceConfig.ExecStart = "${pkgs.xen}/bin/xenwatchdogd 30 15";
+      serviceConfig.ExecStart = "${cfg.package}/bin/xenwatchdogd 30 15";
       serviceConfig.Type = "forking";
       serviceConfig.RestartSec = "1";
       serviceConfig.Restart = "on-failure";
@@ -366,11 +396,11 @@ in
       before = [ "dhcpd.service" ];
       restartIfChanged = false;
       serviceConfig.RemainAfterExit = "yes";
-      path = [ pkgs.xen ];
-      environment.XENDOM_CONFIG = "${pkgs.xen}/etc/sysconfig/xendomains";
+      path = [ cfg.package cfg.qemu-package ];
+      environment.XENDOM_CONFIG = "${cfg.package}/etc/sysconfig/xendomains";
       preStart = "mkdir -p /var/lock/subsys -m 755";
-      serviceConfig.ExecStart = "${pkgs.xen}/etc/init.d/xendomains start";
-      serviceConfig.ExecStop = "${pkgs.xen}/etc/init.d/xendomains stop";
+      serviceConfig.ExecStart = "${cfg.package}/etc/init.d/xendomains start";
+      serviceConfig.ExecStop = "${cfg.package}/etc/init.d/xendomains stop";
     };
 
   };

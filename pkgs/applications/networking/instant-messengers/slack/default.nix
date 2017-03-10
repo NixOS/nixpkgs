@@ -1,16 +1,17 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, glib, gnome2
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, gnome2
 , libnotify, nspr, nss, systemd, xorg }:
 
 let
 
-  version = "2.3.4";
+  version = "2.5.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     cairo
     cups
+    curl
     dbus
     expat
     fontconfig
@@ -26,6 +27,7 @@ let
     stdenv.cc.cc
     systemd
 
+    xorg.libxkbfile
     xorg.libX11
     xorg.libXcomposite
     xorg.libXcursor
@@ -42,8 +44,8 @@ let
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "https://slack-ssb-updates.global.ssl.fastly.net/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "01kr7maj8f4yinyri7rs4pmzab9cvp48xfqw3ilirx4mvh8mr1fd";
+        url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
+        sha256 = "1rrhgqmz0ajv2135bzykv3dq0mifzf5kiycgrisk2sfxn6nwyyvj";
       }
     else
       throw "Slack is not supported on ${stdenv.system}";
@@ -59,7 +61,7 @@ in stdenv.mkDerivation {
     mkdir -p $out
     dpkg -x $src $out
     cp -av $out/usr/* $out
-    rm -rf $out/usr $out/share/lintian
+    rm -rf $out/etc $out/usr $out/share/lintian
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out

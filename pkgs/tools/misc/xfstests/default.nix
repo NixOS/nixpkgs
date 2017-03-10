@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     # The configure scripts really don't like looking in PATH at all...
     export AWK=$(type -P awk)
-    export ECHO=$(type -P sort)
+    export ECHO=$(type -P echo)
     export LIBTOOL=$(type -P libtool)
     export MAKE=$(type -P make)
     export SED=$(type -P sed)

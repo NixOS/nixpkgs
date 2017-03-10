@@ -94,9 +94,6 @@ mv cran-packages.nix.new cran-packages.nix
 
 Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
 mv bioc-packages.nix.new bioc-packages.nix
-
-Rscript generate-r-packages.R irkernel  > irkernel-packages.nix.new
-mv irkernel-packages.nix.new irkernel-packages.nix
 ```
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.

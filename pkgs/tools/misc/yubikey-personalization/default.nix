@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yubikey-personalization-${version}";
-  version = "1.17.3";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${version}.tar.gz";
-    sha256 = "034wmwinxmngji1ly8nm9q4hg194iwk164y5rw0whnf69ycc6bs8";
+    sha256 = "1bc2z6y2x7bbqn7ink2dg3wrgqzlcq2zxxg0cdcxy6jm7c9kwcyg";
   };
 
   nativeBuildInputs = [ pkgconfig ];

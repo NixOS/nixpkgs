@@ -274,6 +274,8 @@ in {
           RestartSec = "500ms";
         };
       };
+
+      environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
     })
   ];
 

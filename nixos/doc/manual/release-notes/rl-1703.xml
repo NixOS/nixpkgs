@@ -271,16 +271,6 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
-  <listitem>
-    <para>
-      Modules can now be disabled by using <link
-      xlink:href="https://nixos.org/nixpkgs/manual/#sec-replace-modules">
-      disabledModules</link>, allowing another to take it's place.  This can be
-      used to import a set of modules from another channel while keeping the
-      rest of the system on a stable release.
-    </para>
-  </listitem>
-
 </itemizedlist>
 
 

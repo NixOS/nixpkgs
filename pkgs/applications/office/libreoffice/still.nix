@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0lv3jbnzzkr7nbivsl9jm9b4m9mxvngbmhz6yasblhi0m9ifkxmb";
+      sha256 = "0w77mkxmhxx4qjwdwb8bipcdb4pkvkg202mxbbjrv0aj09k6dhvk";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "1d29ppdkhhy5x8cric0l872x607ng02bnp2gvv5ck3blb759q68i";
+      sha256 = "12xqzp005dhbh618g3zb30vj7rdmccdqj6ix10jlk0clk66n9kf0";
     };
 
   };
@@ -71,6 +71,13 @@ in stdenv.mkDerivation rec {
   # It's their system.
   configureScript = "./autogen.sh";
   dontUseCmakeConfigure = true;
+
+  # ICU 58, included in 5.3.x
+  patches = [(fetchurl {
+    url = "https://gerrit.libreoffice.org/gitweb?p=core.git;a=patch;h=3e42714c76b1347babfdea0564009d8d82a83af4";
+    sha256 = "10bid0jdw1rpdsqwzzk3r4rp6bjs2cvi82h7anz2m1amfjdv86my";
+    name = "libreoffice-5.2.x-icu4c-58.patch";
+  })];
 
   postUnpack = ''
     mkdir -v $sourceRoot/src

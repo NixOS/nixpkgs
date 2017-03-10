@@ -27,7 +27,7 @@
 , libv4l
 , kfilemetadata
 , ffmpeg
-, phonon-backend-vlc
+, phonon-backend-gstreamer
 , qtquickcontrols
 }:
 
@@ -65,7 +65,7 @@ unwrapped = kdeApp {
     kwindowsystem
     kfilemetadata
     plasma-framework
-    phonon-backend-vlc
+    phonon-backend-gstreamer
     qtquickcontrols
   ];
   enableParallelBuilding = true;
