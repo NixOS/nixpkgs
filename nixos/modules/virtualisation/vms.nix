@@ -115,18 +115,7 @@ let
         preferLocalBuild = true;
         buildPhase =
           ''
-            # TODO: find way to directly do the hardlinking instead of relying on nix
-            function recurse_in_dir_unused() {
-              if [ -d "/nix/store/$1" ]; then
-                mkdir "$out/$1"
-                ls "/nix/store/$1" | while read elem; do
-                  recurse_in_dir "$1/$elem"
-                done
-              else
-                ln "/nix/store/$1" "$out/$1"
-              fi
-            }
-
+            # TODO: handle upgrades by using an unionfs on top of this
             function recurse_in_dir() {
               ${pkgs.rsync}/bin/rsync -a "/nix/store/$1" "$out"
             }
@@ -139,6 +128,21 @@ let
       };
     };
   };
+
+  extraHosts =
+    optionalString cfg.addHostNames (
+      ''
+        ${cfg.ip4.address} host.localhost
+        ${cfg.ip6.address} host.localhost
+      '' +
+      concatMapStrings (name:
+        ''
+          # machine MAC: ${cfg.machines.${name}.mac} vm-${name}.localhost
+          ${cfg.machines.${name}.ip4} vm-${name}.localhost
+          ${cfg.machines.${name}.ip6} vm-${name}.localhost
+        ''
+      ) (attrNames cfg.machines)
+    );
 
   extraConfig = name: {
     boot.loader.grub.enable = false;
@@ -186,6 +190,7 @@ let
 
     networking = let mcfg = cfg.machines.${name}; in {
       hostName = mkDefault name;
+      extraHosts = extraHosts;
       useDHCP = false;
       defaultGateway = mkDefault cfg.ip4.address;
       defaultGateway6 = mkDefault cfg.ip6.address;
@@ -302,6 +307,18 @@ in
         '';
     };
 
+    addHostNames = mkOption {
+      type = types.bool;
+      default = true;
+      description =
+        ''
+          Whether to add
+          <command>vm-<replaceable>''${name}</replaceable>.localhost</command>
+          (and <command>host.localhost</command>) hostnames on the host and
+          guests to allow for easier inter-reachability.
+        '';
+    };
+
     machines = mkOption {
       type = types.attrsOf (types.submodule machineOpts);
       default = {};
@@ -394,15 +411,7 @@ in
         };
       };
 
-    # TODO: put this behind an option
-    networking.extraHosts =
-      concatMapStrings (name:
-        ''
-          # machine MAC: ${cfg.machines.${name}.mac} vm-${name}.localhost
-          ${cfg.machines.${name}.ip4} vm-${name}.localhost
-          ${cfg.machines.${name}.ip6} vm-${name}.localhost
-        ''
-      ) (attrNames cfg.machines);
+    networking.extraHosts = extraHosts;
 
     networking.firewall.extraCommands =
     let ebtables = "${pkgs.ebtables}/bin/ebtables"; in
