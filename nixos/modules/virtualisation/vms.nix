@@ -86,8 +86,15 @@ let
       };
     };
 
-    config = {
+    config =
+    let
+      id = 1 + lib.findFirstIndex (x: x == name) (attrNames cfg.machines);
+    in
+    {
       shared = genAttrs config.persistent (n: "${cfg.persistPath}/${name}${n}");
+      ip4 = mkDefault (genIPv4 (addToIPv4 (parseIPv4 cfg.ip4.address) id));
+      ip6 = mkDefault (genIPv6 (addToIPv6 (parseIPv6 cfg.ip6.address) id));
+      mac = mkDefault (genMAC  (addToMAC  (parseMAC "56:00:00:00:00:00") id));
     };
   };
 
