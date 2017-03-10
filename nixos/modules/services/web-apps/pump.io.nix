@@ -57,7 +57,8 @@ let
     smtpfrom = cfg.smtpFrom;
 
     nologger = false;
-    uploaddir =  "${dataDir}/uploads";
+    enableUploads = cfg.enableUploads;
+    datadir = dataDir;
     debugClient = false;
     firehose = cfg.firehose;
     disableRegistration = cfg.disableRegistration;
@@ -149,6 +150,15 @@ in
         description = ''
           Local filesystem path to the favicon.ico file to use. This
           will be served as "/favicon.ico" by the server.
+        '';
+      };
+
+      enableUploads = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If you want to disable file uploads, set this to false. Uploaded files will be stored
+          in ${dataDir}/uploads.
         '';
       };
 
@@ -341,7 +351,15 @@ in
       { description = "pump.io social network stream server";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        preStart = ''
+          mkdir -p ${dataDir}/uploads
+          chown pumpio:pumpio ${dataDir}/uploads
+          chmod 770 ${dataDir}/uploads
+        '';
+
         serviceConfig.ExecStart = "${pkgs.pumpio}/bin/pump -c /etc/pump.io.json";
+        PermissionsStartOnly = true;
         serviceConfig.User = if cfg.port < 1024 then "root" else user;
         serviceConfig.Group = user;
       };
