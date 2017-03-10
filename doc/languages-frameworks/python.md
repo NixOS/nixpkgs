@@ -744,8 +744,6 @@ Consider the packages `A` and `B` that depend on each other. When packaging `B`,
 a solution is to override package `A` not to depend on `B` as an input. The same
 should also be done when packaging `A`.
 
-
-
 ### How to override a Python package?
 
 We can override the interpreter and pass `packageOverrides`.
