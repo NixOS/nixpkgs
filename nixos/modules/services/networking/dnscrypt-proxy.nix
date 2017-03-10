@@ -6,8 +6,6 @@ let
 
   stateDirectory = "/var/lib/dnscrypt-proxy";
 
-  localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
-
   # The minisign public key used to sign the upstream resolver list.
   # This is somewhat more flexible than preloading the key as an
   # embedded string.
@@ -16,31 +14,36 @@ let
     sha256 = "18lnp8qr6ghfc2sd46nn1rhcpr324fqlvgsp4zaigw396cd7vnnh";
   };
 
-  # Internal flag indicating whether the upstream resolver list is used
+  # Internal flag indicating whether the upstream resolver list is used.
   useUpstreamResolverList = cfg.resolverList == null && cfg.customResolver == null;
 
+  # The final local address.
+  localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
+
+  # The final resolvers list path.
   resolverList =
     if (cfg.resolverList != null)
       then cfg.resolverList
       else "${stateDirectory}/dnscrypt-resolvers.csv";
 
-  resolverArgs = if (cfg.customResolver != null)
-    then
-      [ "--resolver-address=${cfg.customResolver.address}:${toString cfg.customResolver.port}"
-        "--provider-name=${cfg.customResolver.name}"
-        "--provider-key=${cfg.customResolver.key}"
-      ]
-    else
-      [ "--resolvers-list=${resolverList}"
-        "--resolver-name=${cfg.resolverName}"
-      ];
+  # Build daemon command line
 
-  # The final command line arguments passed to the daemon
+  resolverArgs =
+    if (cfg.customResolver == null)
+      then
+        [ "-L ${resolverList}"
+          "-R ${cfg.resolverName}"
+        ]
+      else with cfg.customResolver;
+        [ "-N ${name}"
+          "-k ${key}"
+          "-r ${address}:${toString port}"
+        ];
+
   daemonArgs =
-    [ "--local-address=${localAddress}" ]
-    ++ optional cfg.tcpOnly "--tcp-only"
-    ++ optional cfg.ephemeralKeys "-E"
-    ++ resolverArgs;
+       [ "-a ${localAddress}" ]
+    ++ resolverArgs
+    ++ cfg.extraArgs;
 in
 
 {
@@ -50,6 +53,9 @@ in
   };
 
   options = {
+    # Before adding another option, consider whether it could
+    # equally well be passed via extraArgs.
+
     services.dnscrypt-proxy = {
       enable = mkOption {
         default = false;
@@ -131,24 +137,13 @@ in
         }; }));
       };
 
-      tcpOnly = mkOption {
-        default = false;
-        type = types.bool;
+      extraArgs = mkOption {
+        default = [];
+        type = types.listOf types.str;
         description = ''
-          Force sending encrypted DNS queries to the upstream resolver over
-          TCP instead of UDP (on port 443). Use only if the UDP port is blocked.
-        '';
-      };
-
-      ephemeralKeys = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Compute a new key pair for every query.  Enabling this option
-          increases CPU usage, but makes it more difficult for the upstream
-          resolver to track your usage of their service across IP addresses.
-          The default is to re-use the public key pair for all queries, making
-          tracking trivial.
+          Additional command-line arguments passed verbatim to the daemon.
+          See <citerefentry><refentrytitle>dnscrypt-proxy</refentrytitle>
+          <manvolnum>8</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -309,5 +304,19 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ])
+
+    (mkChangedOptionModule
+      [ "services" "dnscrypt-proxy" "tcpOnly" ]
+      [ "services" "dnscrypt-proxy" "extraArgs" ]
+      (config:
+        let val = getAttrFromPath [ "services" "dnscrypt-proxy" "tcpOnly" ] config; in
+        optional val "-T"))
+
+    (mkChangedOptionModule
+      [ "services" "dnscrypt-proxy" "ephemeralKeys" ]
+      [ "services" "dnscrypt-proxy" "extraArgs" ]
+      (config:
+        let val = getAttrFromPath [ "services" "dnscrypt-proxy" "ephemeralKeys" ] config; in
+        optional val "-E"))
   ];
 }
