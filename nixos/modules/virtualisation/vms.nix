@@ -72,10 +72,11 @@ let
         description = "Number of cores available to this VM.";
       };
 
-      # TODO: hide this option as it's not oriented towards end-user
       store = mkOption {
         type = types.path;
-        description = "Path to the store of the VM. DO NOT SET.";
+        internal = true;
+        visible = false;
+        description = "Path to the store of the VM.";
       };
 
       config = mkOption {
