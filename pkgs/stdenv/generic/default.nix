@@ -397,7 +397,8 @@ let
             || system == "mips64el-linux";
       isArm = system == "armv5tel-linux"
            || system == "armv6l-linux"
-           || system == "armv7l-linux";
+           || system == "armv7l-linux"
+           || system == "aarch64-linux";
       isAarch64 = system == "aarch64-linux";
       isBigEndian = system == "powerpc-linux";
 
