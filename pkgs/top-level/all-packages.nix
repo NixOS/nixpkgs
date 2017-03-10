@@ -14188,7 +14188,7 @@ with pkgs;
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
-    go = go_1_6;
+    go = go_1_7;
   };
 
   lame = callPackage ../development/libraries/lame { };
