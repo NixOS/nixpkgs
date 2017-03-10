@@ -942,6 +942,8 @@ with pkgs;
 
   hexio = callPackage ../development/tools/hexio { };
 
+  hostsblock = callPackage ../tools/misc/hostsblock { };
+
   hr = callPackage ../applications/misc/hr { };
 
   interlock = callPackage ../servers/interlock {};
