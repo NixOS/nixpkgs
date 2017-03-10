@@ -86,6 +86,10 @@ let
     ${cfg.extraConf}
   '';
 
+  printersFile = writeConf "printers.conf" ''
+    ${cfg.printersConf}
+  '';
+
   browsedFile = writeConf "cups-browsed.conf" cfg.browsedConf;
 
   rootdir = pkgs.buildEnv {
@@ -95,7 +99,8 @@ let
       cupsdFile
       (writeConf "client.conf" cfg.clientConf)
       (writeConf "snmp.conf" cfg.snmpConf)
-    ] ++ optional avahiEnabled browsedFile
+    ] ++ optional ( null != cfg.printersConf ) printersFile
+      ++ optional avahiEnabled browsedFile
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
@@ -182,6 +187,17 @@ in
         description = ''
           Extra contents of the configuration file of the CUPS daemon
           (<filename>cupsd.conf</filename>).
+        '';
+      };
+
+      printersConf = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Contents of the printers configuration file of the CUPS daemon
+          (<filename>printers.conf</filename>). When left null, cups will use
+          the (<filename>/etc/cups/printers.conf</filename>) as the configuration
+          file.
         '';
       };
 
@@ -305,6 +321,16 @@ in
                 [ -L "$i" ] && rm "$i"
               done
             fi
+
+            # A special case for `printer.conf` for which we know cups will move the declarative
+            # version of the file out of the way on common operations (e.g: printing). So the
+            # current response to this annoying situation is to systematically replace the cups
+            # version with the declaratively specified one (that is, only when `null != printersConf`).
+            if [ -e "${rootdir}/etc/cups/printers.conf" ]; then
+              ln -s --backup=simple --suffix='.O' \
+                "${rootdir}/etc/cups/printers.conf" "/var/lib/cups/printers.conf"
+            fi
+
             # Then, populate it with static files
             cd ${rootdir}/etc/cups
             for i in *; do
