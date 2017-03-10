@@ -33,6 +33,7 @@ let
 
       persistent = mkOption {
         type = with types; listOf str;
+        default = [];
         description =
           ''
             List of paths to make persistent across reboots of the VM. Please
@@ -184,8 +185,10 @@ let
       persist="${cfg.persistPath}/${name}"
 
       # Generate paths
-      mkdir -p "$store" "$persist" "${cfg.imagesPath}" "${cfg.consolePath}/${name}"
-      mkdir -p ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
+      mkdir -p \
+        "$store" "$persist" "${cfg.imagesPath}" \
+        "${cfg.consolePath}/${name}" \
+        ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
 
       # Regenerate store
       for path in $(ls "$store"); do
@@ -203,6 +206,7 @@ let
         else
           touch "$npath"
         fi
+        # TODO: switch from spamming bind-mounts to some FUSE-based "filesystem firewall"?
         ${pkgs.busybox}/bin/mount --bind "$path" "$npath"
       done
 
