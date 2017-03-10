@@ -48,14 +48,13 @@ self: super: {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
-  # The Hackage tarball is purposefully broken. Mr. Hess wants people to build
-  # his package from the Git repo because that is, like, better!
+  # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
+  # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = ((overrideCabal super.git-annex (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "joeyh";
-      repo = "git-annex";
+    src = pkgs.fetchgit {
+      url = "git://git-annex.branchable.com/";
+      rev = "refs/tags/" + drv.version;
       sha256 = "1vy6bj7f8zyj4n1r0gpi0r7mxapsrjvhwmsi5sbnradfng5j3jya";
-      rev = drv.version;
     };
   })).overrideScope (self: super: {
     # https://github.com/bitemyapp/esqueleto/issues/8
