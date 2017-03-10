@@ -3630,31 +3630,6 @@ in {
     };
   };
 
-  celery_3 = buildPythonPackage rec {
-    name = "celery-${version}";
-    version = "3.1.23";
-
-    disabled = (pythonOlder "2.6") || isPy35;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/celery/${name}.tar.gz";
-      sha256 = "0614ppp18vmiwdk0rxvz0wn62d7svanwdnx7jgqxpy9pb20rqd8s";
-    };
-
-    buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu_3 billiard_33 pytz anyjson amqp_1 ];
-
-    checkPhase = ''
-      nosetests $out/${python.sitePackages}/celery/tests/
-    '';
-
-    meta = {
-      homepage = https://github.com/celery/celery/;
-      description = "Distributed task queue";
-      license = licenses.bsd3;
-    };
-  };
-
   celery = buildPythonPackage rec {
     name = "celery-${version}";
     version = "4.0.2";
