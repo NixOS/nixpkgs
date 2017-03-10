@@ -938,6 +938,10 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
+  jbuilder = callPackage ../development/tools/ocaml/jbuilder {
+    inherit (ocaml-ng.ocamlPackages_4_03) ocaml;
+  };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
