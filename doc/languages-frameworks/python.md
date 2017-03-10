@@ -744,25 +744,7 @@ Consider the packages `A` and `B` that depend on each other. When packaging `B`,
 a solution is to override package `A` not to depend on `B` as an input. The same
 should also be done when packaging `A`.
 
-### How to override a Python package from `configuration.nix`?
 
-If you need to change a package's attribute(s) from `configuration.nix` you could do:
-
-```nix
-  nixpkgs.config.packageOverrides = super: {
-    pythonPackages = super.pythonPackages.override {
-      overrides = self: super: {
-        bepasty-server = super.bepasty-server.overrideAttrs ( oldAttrs: {
-          src = pkgs.fetchgit {
-            url = "https://github.com/bepasty/bepasty-server";
-            sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-            rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
-          };
-        });
-      };
-    };
-  };
-```
 
 ### How to override a Python package?
 
@@ -917,6 +899,27 @@ is executed it will attempt to download the python modules listed in
 requirements.txt. However these will be cached locally within the `virtualenv`
 folder and not downloaded again.
 
+### How to override a Python package from `configuration.nix`?
+
+If you need to change a package's attribute(s) from `configuration.nix` you could do:
+
+```nix
+  nixpkgs.config.packageOverrides = superP: {
+    pythonPackages = superP.pythonPackages.override {
+      overrides = self: super: {
+        bepasty-server = super.bepasty-server.overrideAttrs ( oldAttrs: {
+          src = pkgs.fetchgit {
+            url = "https://github.com/bepasty/bepasty-server";
+            sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
+            rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+          };
+        });
+      };
+    };
+  };
+```
+
+If you are using the `bepasty-servr` package somewhere, for example in `systemPackages` or from `services.bepasty`, then a  `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify python software easily.
 
 ## Contributing
 
