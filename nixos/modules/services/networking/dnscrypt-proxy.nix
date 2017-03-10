@@ -121,7 +121,7 @@ in
           name = mkOption {
             type = types.str;
             description = "Fully qualified domain name";
-            example = "2.dnscrypt-cert.opendns.com";
+            example = "2.dnscrypt-cert.example.com";
           };
 
           key = mkOption {
