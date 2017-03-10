@@ -917,7 +917,7 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-If you are using the `bepasty-servr` package somewhere, for example in `systemPackages` or from `services.bepasty`, then a  `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify python software easily.
+If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a  `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify python software easily. Using `self` and `super` one can also change dependencies when overriding libraries which have mutual dependencies between your changes and the original nixpkgs state.
 
 ## Contributing
 
