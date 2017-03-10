@@ -30,15 +30,15 @@ else
 
 let
   defaultGalliumDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if stdenv.isArm
     then ["nouveau" "freedreno" "vc4" "etnaviv"]
     else ["i915" "ilo" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if stdenv.isArm
     then ["nouveau"]
     else ["i915" "i965" "nouveau" "radeon" "r200"];
   defaultVulkanDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if stdenv.isArm
     then []
     else ["intel"] ++ lib.optional enableRadv "radeon";
 in
