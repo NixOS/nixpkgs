@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
-  hardeningDisable = [ "all" ];
-  buildInputs = [ bison flex ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  nativeBuildInputs = [ bison flex ];
   patches = [ ./nix.patch ];
   enableParallelBuilding = true;
   meta = {
