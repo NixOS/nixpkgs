@@ -26,14 +26,14 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  version = "5.5.2";
+  version = "5.11.2";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
     owner  = "datadog";
     repo   = "dd-agent";
     rev    = version;
-    sha256 = "0ga7h3rdg6q2pi4dxxkird5nf6s6hc13mj1xd9awwpli48gyvxn7";
+    sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
   };
 
   buildInputs = [
