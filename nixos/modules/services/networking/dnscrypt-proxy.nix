@@ -225,6 +225,8 @@ in
         network inet dgram,
         network inet6 dgram,
 
+        ${getLib pkgs.dnscrypt-proxy}/lib/dnscrypt-proxy/libdcplugin*.so mr,
+
         ${getLib pkgs.gcc.cc}/lib/libssp.so.* mr,
         ${getLib pkgs.libsodium}/lib/libsodium.so.* mr,
         ${getLib pkgs.systemd}/lib/libsystemd.so.* mr,
