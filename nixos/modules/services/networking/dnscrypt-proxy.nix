@@ -145,6 +145,7 @@ in
           See <citerefentry><refentrytitle>dnscrypt-proxy</refentrytitle>
           <manvolnum>8</manvolnum></citerefentry> for details.
         '';
+        example = [ "-X libdcplugin_example_cache.so,--min-ttl=60" ];
       };
     };
   };
