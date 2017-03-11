@@ -5,7 +5,7 @@
 
 let
   withSpotify = config.clementine.spotify or false;
-  withIpod = config.clementine.ipod or true;
+  withIpod = config.clementine.ipod or false;
   withMTP = config.clementine.mtp or true;
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
