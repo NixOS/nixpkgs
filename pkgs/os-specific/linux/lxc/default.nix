@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
+    (fetchurl {
+      name = "CVE-2017-5985.patch";
+      url = "https://github.com/lxc/lxc/commit/d512bd5efb0e407eba350c4e649c464a65b712a3.patch";
+      sha256 = "0v1rhlfviadsxj2wmbl7nqb64p6y2bxm9y43sc44jg3k6mkr0r5c";
+    })
   ];
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
