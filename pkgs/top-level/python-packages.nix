@@ -30799,29 +30799,7 @@ EOF
     };
   };
 
-  trezor = buildPythonPackage rec{
-    version = "0.7.4";
-    name = "trezor-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/trezor/${name}.tar.gz";
-      sha256 = "18nr76jkdg24sb3r8cfbiq12b95gnh0amc0r1wx9mmg3pwq6jx6y";
-    };
-
-    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
-
-    buildInputs = with self; [ ecdsa mnemonic ];
-
-    # There are no actual tests: "ImportError: No module named tests"
-    doCheck = false;
-
-    meta = {
-      description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
-      homepage = https://github.com/trezor/python-trezor;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  trezor = callPackage ../development/python-modules/trezor.nix { };
 
   keepkey = buildPythonPackage rec{
     version = "0.7.3";
