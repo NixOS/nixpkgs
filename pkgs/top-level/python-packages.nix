@@ -289,6 +289,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  pyaes = callPackage ../development/python-modules/pyaes.nix { };
+
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
 
   pycairo = callPackage ../development/python-modules/pycairo { };
@@ -30780,48 +30782,9 @@ EOF
     };
   };
 
-  mnemonic = buildPythonPackage rec{
-    version = "0.12";
-    name = "mnemonic-${version}";
+  mnemonic = callPackage ../development/python-modules/mnemonic.nix { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mnemonic/${name}.tar.gz";
-      sha256 = "0j5jm4v54135qqw455fw4ix2mhxhzjqvxji9gqkpxagk31cvbnj4";
-    };
-
-    propagatedBuildInputs = with self; [ pbkdf2 ];
-
-    meta = {
-      description = "Implementation of Bitcoin BIP-0039";
-      homepage = https://github.com/trezor/python-mnemonic;
-      license = licenses.mit;
-      maintainers = with maintainers; [ np ];
-    };
-  };
-
-  trezor = buildPythonPackage rec{
-    version = "0.7.4";
-    name = "trezor-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/trezor/${name}.tar.gz";
-      sha256 = "18nr76jkdg24sb3r8cfbiq12b95gnh0amc0r1wx9mmg3pwq6jx6y";
-    };
-
-    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
-
-    buildInputs = with self; [ ecdsa mnemonic ];
-
-    # There are no actual tests: "ImportError: No module named tests"
-    doCheck = false;
-
-    meta = {
-      description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
-      homepage = https://github.com/trezor/python-trezor;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  trezor = callPackage ../development/python-modules/trezor.nix { };
 
   keepkey = buildPythonPackage rec{
     version = "0.7.3";
