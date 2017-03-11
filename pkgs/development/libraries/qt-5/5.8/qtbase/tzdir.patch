@@ -1,0 +1,40 @@
+Index: qtbase-opensource-src-5.7.0/src/corelib/tools/qtimezoneprivate_tz.cpp
+===================================================================
+--- qtbase-opensource-src-5.7.0.orig/src/corelib/tools/qtimezoneprivate_tz.cpp
++++ qtbase-opensource-src-5.7.0/src/corelib/tools/qtimezoneprivate_tz.cpp
+@@ -68,7 +68,10 @@ typedef QHash<QByteArray, QTzTimeZone> Q
+ // Parse zone.tab table, assume lists all installed zones, if not will need to read directories
+ static QTzTimeZoneHash loadTzTimeZones()
+ {
+-    QString path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
++    QString path = qgetenv("TZDIR");
++    path += "/zone.tab";
++    if (!QFile::exists(path))
++        path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
+     if (!QFile::exists(path))
+         path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
+ 
+@@ -566,12 +569,18 @@ void QTzTimeZonePrivate::init(const QByt
+         if (!tzif.open(QIODevice::ReadOnly))
+             return;
+     } else {
+-        // Open named tz, try modern path first, if fails try legacy path
+-        tzif.setFileName(QLatin1String("/usr/share/zoneinfo/") + QString::fromLocal8Bit(ianaId));
++        // Try TZDIR first
++        QString zoneinfoDir = qgetenv("TZDIR");
++        zoneinfoDir += "/" + QString::fromLocal8Bit(ianaId);
++        tzif.setFileName(zoneinfoDir);
+         if (!tzif.open(QIODevice::ReadOnly)) {
+-            tzif.setFileName(QLatin1String("/usr/lib/zoneinfo/") + QString::fromLocal8Bit(ianaId));
+-            if (!tzif.open(QIODevice::ReadOnly))
+-                return;
++            // Open named tz, try modern path first, if fails try legacy path
++            tzif.setFileName(QLatin1String("/usr/share/zoneinfo/") + QString::fromLocal8Bit(ianaId));
++            if (!tzif.open(QIODevice::ReadOnly)) {
++                tzif.setFileName(QLatin1String("/usr/lib/zoneinfo/") + QString::fromLocal8Bit(ianaId));
++                if (!tzif.open(QIODevice::ReadOnly))
++                    return;
++            }
+         }
+     }
+ 
