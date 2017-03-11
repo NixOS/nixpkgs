@@ -1,4 +1,4 @@
-{lib, pkgs} :
+{lib, pkgs}:
 let inherit (lib) nv nvs; in
 {
 
@@ -19,7 +19,7 @@ let inherit (lib) nv nvs; in
   # * vim_configurable
   #
   # A minimal example illustrating most features would look like this:
-  # let base = composableDerivation { (fixed : let inherit (fixed.fixed) name in {
+  # let base = composableDerivation { (fixed: let inherit (fixed.fixed) name in {
   #    src = fetchurl {
   #    }
   #    buildInputs = [A];
@@ -79,7 +79,7 @@ let inherit (lib) nv nvs; in
         # consider adding addtional elements by derivation.merge { removeAttrs = ["elem"]; };
         removeAttrs ? ["cfg" "flags"]
 
-      }: (lib.defaultOverridableDelayableArgs ( a: mkDerivation a) 
+      }: (lib.defaultOverridableDelayableArgs ( a: mkDerivation a)
          {
            inherit applyPreTidy removeAttrs;
          }).merge;
