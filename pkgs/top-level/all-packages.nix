@@ -2778,6 +2778,8 @@ with pkgs;
 
   lzfse = callPackage ../tools/compression/lzfse { };
 
+  lzham = callPackage ../tools/compression/lzham { };
+
   lzip = callPackage ../tools/compression/lzip { };
 
   lzma = xz;
