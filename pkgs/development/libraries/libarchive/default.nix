@@ -10,12 +10,19 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   name = "libarchive-${version}";
-  version = "3.3.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "1rr40hxlm9vy5z2zb5w7pyfkgd1a4s061qapm83s19accb8mpji9";
+    sha256 = "03q6y428rg723c9fj1vidzjw46w1vf8z0h95lkvz1l9jw571j739";
   };
+
+  patches = [
+    (fetchurl {
+      url = "https://github.com/libarchive/libarchive/commit/98dcbbf0bf4854bf987557e55e55fff7abbf3ea9.patch";
+      sha256 = "1934krf5imc9rq1av6immpsfn77pglanhz1csq8j22h9ab87n5z6";
+    })
+  ];
 
   outputs = [ "out" "lib" "dev" ];
 
