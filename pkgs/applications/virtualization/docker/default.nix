@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, pkgconfig, go-md2man
-, go, containerd, runc, docker-proxy, tini
+{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+, go-md2man, go, containerd, runc, docker-proxy, tini
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   });
 
   buildInputs = [
-    makeWrapper pkgconfig go-md2man go
+    makeWrapper removeReferencesTo pkgconfig go-md2man go
     sqlite devicemapper btrfs-progs systemd
   ];
 
@@ -126,12 +126,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # remove references to go compiler, gcc and glibc
-    while read file; do
-      sed -ri "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-      sed -ri "s,${stdenv.cc.cc},$(echo "${stdenv.cc.cc}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-      sed -ri "s,${stdenv.glibc.dev},$(echo "${stdenv.glibc.dev}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-    done < <(find $out -type f 2>/dev/null)
+    find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} -t ${stdenv.glibc.dev} '{}' +
   '';
 
   meta = {
