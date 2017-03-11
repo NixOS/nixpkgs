@@ -291,6 +291,8 @@ with pkgs;
 
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
+  removeReferencesTo = callPackage ../build-support/remove-references-to/default.nix { };
+
   vmTools = callPackage ../build-support/vm/default.nix { };
 
   releaseTools = callPackage ../build-support/release/default.nix { };
