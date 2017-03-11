@@ -164,7 +164,7 @@ let
 
     boot.initrd.kernelModules = [
       "virtio" "virtio_pci" "virtio_net" "virtio_rng" "virtio_blk"
-      "virtio_console" "9p" "9pnet" "9pnet_virtio"
+      "virtio_console" "9p" "9pnet" "9pnet_virtio" "overlay"
     ];
     boot.initrd.extraUtilsCommands =
       ''
@@ -186,16 +186,22 @@ let
         touch $targetRoot/etc/NIXOS
 
         mkdir -p $targetRoot/boot
+
+        # Mount writable store
+        mkdir -p $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
+        mount -t overlay overlay $targetRoot/nix/store \
+          -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
       '';
 
     fileSystems = {
       "/".device = "/dev/vda";
-      "/nix/store" = {
+      "/nix/.ro-store" = {
         device = "store";
         fsType = "9p";
         # TODO: optimize the size given in msize by highly evolved trial-and-failure (and just below, too)
         # Warning: cache=loose works only because this mount is read-only.
         options = [ "trans=virtio" "version=9p2000.L" "cache=loose" "msize=262144" ];
+        neededForBoot = true;
       };
     } // listToAttrs (imap (i: n: nameValuePair n {
       device = "shared${toString i}";
@@ -240,7 +246,8 @@ let
         # Boot
         ''-kernel ${toplevel}/kernel''
         ''-initrd ${toplevel}/initrd''
-        ''-append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0"''
+        ''-append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0 boot.shell_on_fail"''
+        # TODO: remove boot.shell_on_fail
       ] ++ # Shared and persisted filesystems
       imap (i: n:
         ''-virtfs local,path="${mcfg.shared.${n}}",security_model=mapped-xattr,mount_tag="shared${toString i}"''
