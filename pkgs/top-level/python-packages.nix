@@ -6590,24 +6590,8 @@ in {
     };
   };
 
-  ds4drv = buildPythonPackage rec {
-    name = "ds4drv-${version}";
-    version = "0.5.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/ds4drv/${name}.tar.gz";
-      sha256 = "0dq2z1z09zxa6rn3v94vwqaaz29jwiydkss8hbjglixf20krmw3b";
-    };
-
-    propagatedBuildInputs = with self; [ evdev pyudev ];
-
-    buildInputs = [ pkgs.bluez ];
-
-    meta = {
-      description = "Userspace driver for the DualShock 4 controller";
-      homepage = "https://github.com/chrippa/ds4drv";
-      license = licenses.mit;
-    };
-
+  ds4drv = callPackage ../development/python-modules/ds4drv.nix {
+    inherit (pkgs) fetchFromGitHub bluez;
   };
 
   dyn = buildPythonPackage rec {
@@ -21200,31 +21184,9 @@ in {
     buildInputs = with self; [ pyasn1 pycrypto ];
   };
 
-  pyudev = buildPythonPackage rec {
-    name = "pyudev-${version}";
-    version = "0.16.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyudev/${name}.tar.gz";
-      sha256 = "765d1c14bd9bd031f64e2612225621984cb2bbb8cbc0c03538bcc4c735ff1c95";
-    };
-
-    postPatch = ''
-      sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.systemd.lib}/lib/libudev.so.1"|p; d
-      }' pyudev/_libudev.py
-    '';
-
-    propagatedBuildInputs = with self; [ pkgs.systemd ];
-
-    meta = {
-      homepage = "http://pyudev.readthedocs.org/";
-      description = "Pure Python libudev binding";
-      license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
-    };
+  pyudev = callPackage ../development/python-modules/pyudev.nix {
+    inherit (pkgs) fetchurl systemd;
   };
-
 
   pynzb = buildPythonPackage (rec {
     name = "pynzb-0.1.0";
