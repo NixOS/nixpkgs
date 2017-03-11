@@ -64,8 +64,11 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
 
     # bugfixes
-    (upstreamPatch "qemu-vnc-no-disconnect" "537848ee62195fc06c328b1cd64f4218f404a7f1"
-      "1pf4ghfl6mx6yw3qzy384kvdf0ch9qbh4n32c8d5dwq98lgxavqs")
+    (fetchurl {
+      name = "qemu-vnc-do-not-disconnect-on-EAGAIN.patch";
+      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/vnc-do-not-disconnect-on-EAGAIN.patch?h=debian/qemu_2.8%2bdfsg-3";
+      sha256 = "1nqhfgfw1pzhid094pk204qy36r6n7w1yilsiwabgcsyxs5bymnh";
+    })
 
     (upstreamPatch "qemu-fix-win7-xhci" "7da76e12cc5cc902dda4c168d8d608fd4e61cbc5"
       "0m1ggbxziy7vqz9007ypzg23cni8cc4db36wlnhxz0kdpq70c6x0")
