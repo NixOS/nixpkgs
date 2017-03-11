@@ -7057,6 +7057,8 @@ with pkgs;
 
   certbot = callPackage ../tools/admin/certbot { };
 
+  caf = callPackage ../development/libraries/caf { };
+
   cgal = callPackage ../development/libraries/CGAL {};
 
   cgui = callPackage ../development/libraries/cgui {};
