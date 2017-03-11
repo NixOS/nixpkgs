@@ -15,6 +15,10 @@ in stdenv.mkDerivation rec {
                             gnome3.evolution_data_server ];
 
   propagatedBuildInputs = [ gnome3.gtkhtml ];
+  
+  postPatch = ''
+    substituteInPlace ./configure --replace "/usr/bin/file" "${file}/bin/file" 
+  '';
 
   buildInputs = [ gtk3 glib intltool itstool libxml2 libtool
                   gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
