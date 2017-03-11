@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "1hcwx8ww3sxzdskkx3l7q70a7wd6569yrnjkw9pw013cf9smpddm";
   };
 
-  patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];
+  patches = [
+    ./remove-runtime-dep-on-openssl-headers.patch
+    (fetchurl {
+      name = "CVE-2017-6508";
+      url = "http://git.savannah.gnu.org/cgit/wget.git/patch/?id=4d729e322fae359a1aefaafec1144764a54e8ad4";
+      sha256 = "14r0c5y3w3gavxp2d9yq8xji82izi5sx0sjv6jpmk6zp6cnr7cjf";
+    })
+  ];
 
   preConfigure = ''
     patchShebangs doc
