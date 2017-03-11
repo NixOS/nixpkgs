@@ -78,12 +78,6 @@ stdenv.mkDerivation rec {
 
     # security fixes from debian
     (fetchurl {
-      name = "CVE-2016-9602.patch";
-      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/9pfs-symlink-attack-fixes-CVE-2016-9602.patch?h=debian/qemu_2.8%2bdfsg-3";
-      sha256 = "0f7m1k3hbw9v0dwqn53ds36s7s334vlidvbn0682s9r2sq0sjlkv";
-    })
-
-    (fetchurl {
       name = "CVE-2017-2630.patch";
       url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/nbd_client-fix-drop_sync-CVE-2017-2630.patch?h=debian/qemu_2.8%2bdfsg-3";
       sha256 = "1gdxaari53iwgj3gyczz30rhg8lj6xqycxym4snw9z5vmkyj1bbq";
@@ -141,7 +135,13 @@ stdenv.mkDerivation rec {
     (upstreamPatch "CVE-2017-5987" "6e86d90352adf6cb08295255220295cf23c4286e"
       "09yfxf93cisx8rhm0h48ib1ibwfs420k5pqpz8dnz33nci9567jm")
 
-  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ] ++ (if nixosTestRunner then [ ./force-uid0-on-9p.patch ] else [
+    (fetchurl {
+      name = "CVE-2016-9602.patch";
+      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/9pfs-symlink-attack-fixes-CVE-2016-9602.patch?h=debian/qemu_2.8%2bdfsg-3";
+      sha256 = "0f7m1k3hbw9v0dwqn53ds36s7s334vlidvbn0682s9r2sq0sjlkv";
+    })
+ ]);
 
   hardeningDisable = [ "stackprotector" ];
 
