@@ -1100,6 +1100,8 @@ with pkgs;
 
   atool = callPackage ../tools/archivers/atool { };
 
+  bsc = callPackage ../tools/compression/bsc { };
+
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
