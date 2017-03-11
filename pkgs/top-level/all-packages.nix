@@ -3685,6 +3685,8 @@ with pkgs;
 
   renameutils = callPackage ../tools/misc/renameutils { };
 
+  renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
+
   replace = callPackage ../tools/text/replace { };
 
   reckon = callPackage ../tools/text/reckon { };
