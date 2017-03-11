@@ -87,6 +87,21 @@ let
         description = "Number of cores available to this VM.";
       };
 
+      channels = mkOption {
+        type = with types; attrsOf str;
+        default = {};
+        example = {
+          nixos = "https://nixos.org/channels/nixos-unstable";
+        };
+        description =
+          ''
+            Channel to make available to the VM. Note that its base
+            configuration will not be built with this channel, but with the
+            channel of the enclosing configuration.nix. It will only be used for
+            things such as <command>nix-shell -p iotop</command>.
+          '';
+      };
+
       store = mkOption {
         type = types.path;
         internal = true;
@@ -192,6 +207,13 @@ let
         mount -t overlay overlay $targetRoot/nix/store \
           -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
       '';
+    boot.postBootCommands =
+      concatMapStrings (chan:
+        ''
+          ${config.nix.package.out}/bin/nix-channel --add \
+            ${cfg.machines.${name}.channels.${chan}} ${chan}
+        ''
+      ) (attrNames cfg.machines.${name}.channels);
 
     fileSystems = {
       "/".device = "/dev/vda";
