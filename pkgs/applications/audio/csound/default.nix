@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libsndfile, flex, bison, boost, boost-build
+{ stdenv, fetchurl, cmake, libsndfile, flex, bison, boost
 , alsaLib ? null
 , libpulseaudio ? null
 , tcltk ? null
