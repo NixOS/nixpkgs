@@ -6862,7 +6862,10 @@ with pkgs;
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
-  valgrind = callPackage ../development/tools/analysis/valgrind { };
+  valgrind = callPackage ../development/tools/analysis/valgrind {
+    inherit (darwin) xnu bootstrap_cmds cctools;
+    llvm = llvm_39;
+   };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
