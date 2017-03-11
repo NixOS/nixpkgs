@@ -948,6 +948,10 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
+  jbuilder = callPackage ../development/tools/ocaml/jbuilder {
+    inherit (ocaml-ng.ocamlPackages_4_03) ocaml;
+  };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
@@ -1107,6 +1111,8 @@ with pkgs;
   ori = callPackage ../tools/backup/ori { };
 
   atool = callPackage ../tools/archivers/atool { };
+
+  bsc = callPackage ../tools/compression/bsc { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
@@ -2790,6 +2796,8 @@ with pkgs;
 
   lzfse = callPackage ../tools/compression/lzfse { };
 
+  lzham = callPackage ../tools/compression/lzham { };
+
   lzip = callPackage ../tools/compression/lzip { };
 
   lzma = xz;
@@ -3307,6 +3315,8 @@ with pkgs;
   };
 
   packetbeat = callPackage ../misc/logging/packetbeat { };
+
+  packetdrill = callPackage ../tools/networking/packetdrill { };
 
   pakcs = callPackage ../development/compilers/pakcs {};
 
@@ -6234,7 +6244,7 @@ with pkgs;
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
     pythonPackages = python2Packages;
   };
-  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix {
+  buildbot-plugins = callPackages ../development/tools/build-managers/buildbot/plugins.nix {
     pythonPackages = python2Packages;
   };
   buildbot-ui = buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
@@ -11453,7 +11463,6 @@ with pkgs;
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
-        DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11522,7 +11531,6 @@ with pkgs;
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
-      kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
       kernelPatches.mips_fpu_sigill
@@ -13070,7 +13078,7 @@ with pkgs;
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
-  dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
+  dd-agent = callPackage ../tools/networking/dd-agent { };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
     pulseSupport = config.pulseaudio or true;
@@ -14160,6 +14168,8 @@ with pkgs;
 
   kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
 
+  kanboard = callPackage ../applications/misc/kanboard { };
+
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
   kdeApplications =
@@ -14241,7 +14251,7 @@ with pkgs;
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
-    go = go_1_6;
+    go = go_1_7;
   };
 
   lame = callPackage ../development/libraries/lame { };
@@ -14321,9 +14331,7 @@ with pkgs;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
-      icu = icu_57;
     };
-    icu = icu_57;
   });
 
 
@@ -15766,6 +15774,8 @@ with pkgs;
     spice_gtk = spice_gtk;
     system-libvirt = libvirt;
   };
+
+  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix { };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
 

@@ -41,11 +41,11 @@ let cfg = config.fonts.fontconfig;
     # priority 0
     cacheConfSupport = makeCacheConf { version = supportVersion; };
     cacheConfLatest  = makeCacheConf {};
-    
+
     # generate the font cache setting file for a fontconfig version
     # use latest when no version is passed
     makeCacheConf = { version ? null }:
-      let 
+      let
         fcPackage = if builtins.isNull version
                     then "fontconfig"
                     else "fontconfig_${version}";
@@ -104,6 +104,13 @@ let cfg = config.fonts.fontconfig;
         </match>
         ''}
 
+        <!-- Force autohint always -->
+        <match target="font">
+          <edit name="force_autohint" mode="assign">
+            ${fcBool cfg.forceAutohint}
+          </edit>
+        </match>
+
       </fontconfig>
     '';
 
@@ -113,7 +120,7 @@ let cfg = config.fonts.fontconfig;
 
     # default fonts configuration file
     # priority 52
-    defaultFontsConf = 
+    defaultFontsConf =
       let genDefault = fonts: name:
         optionalString (fonts != []) ''
           <alias>
@@ -142,7 +149,61 @@ let cfg = config.fonts.fontconfig;
       </fontconfig>
     '';
 
-    # fontconfig configuration package 
+    # bitmap font options
+    # priority 53
+    rejectBitmaps = pkgs.writeText "fc-53-nixos-bitmaps.conf" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+
+      ${optionalString (!cfg.allowBitmaps) ''
+      <!-- Reject bitmap fonts -->
+      <selectfont>
+        <rejectfont>
+          <pattern>
+            <patelt name="scalable"><bool>false</bool></patelt>
+          </pattern>
+        </rejectfont>
+      </selectfont>
+      ''}
+
+      <!-- Use embedded bitmaps in fonts like Calibri? -->
+      <match target="font">
+        <edit name="embeddedbitmap" mode="assign">
+          ${fcBool cfg.useEmbeddedBitmaps}
+        </edit>
+      </match>
+
+      <!-- Render some monospace TTF fonts as bitmaps -->
+      <match target="pattern">
+        <edit name="bitmap_monospace" mode="assign">
+          ${fcBool cfg.renderMonoTTFAsBitmap}
+        </edit>
+      </match>
+
+      </fontconfig>
+    '';
+
+    # reject Type 1 fonts
+    # priority 53
+    rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+
+      <!-- Reject Type 1 fonts -->
+      <selectfont>
+        <rejectfont>
+          <pattern>
+            <patelt name="fontformat"><string>Type 1</string></patelt>
+          </pattern>
+        </rejectfont>
+      </selectfont>
+
+      </fontconfig>
+    '';
+
+    # fontconfig configuration package
     confPkg = pkgs.runCommand "fontconfig-conf" {} ''
       support_folder=$out/etc/fonts
       latest_folder=$out/etc/fonts/${latestVersion}
@@ -166,7 +227,7 @@ let cfg = config.fonts.fontconfig;
 
       substitute ${latestPkg.out}/etc/fonts/conf.d/51-local.conf \
                  $latest_folder/conf.d/51-local.conf \
-                 --replace local.conf /etc/fonts/${latestVersion}/local.conf 
+                 --replace local.conf /etc/fonts/${latestVersion}/local.conf
 
       # 00-nixos-cache.conf
       ln -s ${cacheConfSupport} \
@@ -192,6 +253,16 @@ let cfg = config.fonts.fontconfig;
       # 52-nixos-default-fonts.conf
       ln -s ${defaultFontsConf} $support_folder/conf.d/52-nixos-default-fonts.conf
       ln -s ${defaultFontsConf} $latest_folder/conf.d/52-nixos-default-fonts.conf
+
+      # 53-nixos-bitmaps.conf
+      ln -s ${rejectBitmaps} $support_folder/conf.d/53-nixos-bitmaps.conf
+      ln -s ${rejectBitmaps} $latest_folder/conf.d/53-nixos-bitmaps.conf
+
+      ${optionalString (! cfg.allowType1) ''
+      # 53-nixos-reject-type1.conf
+      ln -s ${rejectType1} $support_folder/conf.d/53-nixos-reject-type1.conf
+      ln -s ${rejectType1} $latest_folder/conf.d/53-nixos-reject-type1.conf
+      ''}
     '';
 
     # Package with configuration files
@@ -347,6 +418,45 @@ in
           description = ''
             Generate system fonts cache for 32-bit applications.
           '';
+        };
+
+        allowBitmaps = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Allow bitmap fonts. Set to <literal>false</literal> to ban all
+            bitmap fonts.
+          '';
+        };
+
+        allowType1 = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Allow Type-1 fonts. Default is <literal>false</literal> because of
+            poor rendering.
+          '';
+        };
+
+        useEmbeddedBitmaps = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''Use embedded bitmaps in fonts like Calibri.'';
+        };
+
+        forceAutohint = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Force use of the TrueType Autohinter. Useful for debugging or
+            free-software purists.
+          '';
+        };
+
+        renderMonoTTFAsBitmap = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''Render some monospace TTF fonts as bitmaps.'';
         };
 
       };

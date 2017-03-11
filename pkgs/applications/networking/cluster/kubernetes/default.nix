@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     ./hack/generate-docs.sh
-    (cd build/pause && gcc pause.c -o pause)
+    (cd build/pause && cc pause.c -o pause)
   '';
 
   installPhase = ''
@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = http://kubernetes.io;
     maintainers = with maintainers; [offline];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
