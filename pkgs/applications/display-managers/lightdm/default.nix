@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
-, intltool, xlibsWrapper, libxklavier, libgcrypt, libaudit
+, intltool, xlibsWrapper, libxklavier, libgcrypt, libaudit, gcc6
 , qt4 ? null
 , withQt5 ? false, qtbase
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
-    qt4 libaudit
+    qt4 libaudit gcc6
   ] ++ stdenv.lib.optional withQt5 qtbase;
 
   configureFlags = [
