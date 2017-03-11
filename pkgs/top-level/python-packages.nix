@@ -18190,7 +18190,7 @@ in {
 
   parsedatetime = buildPythonPackage rec {
     name = "parsedatetime-${version}";
-    version = "2.1";
+    version = "2.3";
 
     meta = {
       description = "Parse human-readable date/time text";
@@ -18198,11 +18198,12 @@ in {
       license = licenses.asl20;
     };
 
-    buildInputs = with self; [ PyICU nose ];
+    buildInputs = with self; [ pytest pytestrunner ];
+    propagatedBuildInputs = with self; [ future ];
 
     src = pkgs.fetchurl {
         url = "mirror://pypi/p/parsedatetime/${name}.tar.gz";
-        sha256 = "0bdgyw6y3v7bcxlx0p50s8drxsh5bb5cy2afccqr3j90amvpii8p";
+        sha256 = "1vkrmd398s11h1zn3zaqqsiqhj9lwy1ikcg6irx2lrgjzjg3rjll";
     };
   };
 
