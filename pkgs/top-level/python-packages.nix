@@ -289,6 +289,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  pyaes = callPackage ../development/python-modules/pyaes.nix { };
+
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
 
   pycairo = callPackage ../development/python-modules/pycairo { };
