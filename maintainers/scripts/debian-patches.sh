@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Download patches from debian project
 # Usage $0 debian-patches.txt debian-patches.nix
@@ -6,12 +6,12 @@
 
 DEB_URL=http://patch-tracker.debian.org/patch/series/dl
 declare -a deb_patches
-mapfile -t deb_patches < $1
+mapfile -t deb_patches < "$1"
 
-prefix="${DEB_URL}/${deb_patches[0]}"
+prefix=${DEB_URL}/${deb_patches[0]}
 
-if [[ -n "$2" ]]; then
-    exec 1> $2
+if [ -n "$2" ]; then
+    exec 1> "$2"
 fi
 
 cat <<EOF
@@ -22,11 +22,11 @@ in
 [
 EOF
 for ((i=1;i < ${#deb_patches[@]}; ++i)); do
-    url="${prefix}/${deb_patches[$i]}"
-    sha256=$(nix-prefetch-url $url)
-    echo "  {"
+    url=${prefix}/${deb_patches[$i]}
+    sha256=$(nix-prefetch-url $url) &&
+    echo '  {'
     echo "    url = \"\${prefix}/${deb_patches[$i]}\";"
     echo "    sha256 = \"$sha256\";"
-    echo "  }"
+    echo '  }'
 done
-echo "]"
+echo ']'
