@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, which, go, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
     "cmd/kubeadm"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ps9bn5gqknyjv0b9jvp7xg3cyd4anq11j785p22347al0b8w81v";
   };
 
-  buildInputs = [ makeWrapper which go rsync go-bindata ];
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
@@ -59,12 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # Remove references to go compiler
-    while read file; do
-      cat $file | sed "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" > $file.tmp
-      mv $file.tmp $file
-      chmod +x $file
-    done < <(find $out/bin $pause/bin -type f 2>/dev/null)
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {
