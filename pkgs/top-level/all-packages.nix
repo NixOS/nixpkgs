@@ -14111,6 +14111,8 @@ with pkgs;
 
   kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
 
+  kanboard = callPackage ../applications/misc/kanboard { };
+
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
   kdeApplications =
