@@ -14101,7 +14101,7 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate
-    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole marble
+    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole krfb marble
     okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };

@@ -76,6 +76,7 @@ let
       kmix = callPackage ./kmix.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
+      krfb = callPackage ./krfb.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
