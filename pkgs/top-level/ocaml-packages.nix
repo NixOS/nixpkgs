@@ -261,7 +261,7 @@ let
       else lambdaTerm-1_6;
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      llvm = pkgs.llvm_37;
+      llvm = pkgs.llvm_39;
     };
 
     logs = callPackage ../development/ocaml-modules/logs {
