@@ -6945,6 +6945,10 @@ with pkgs;
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
+  qcachegrind = libsForQt57.callPackage ../development/tools/analysis/qcachegrind {
+    qt = qt57;
+  };
+
   verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
     coq = coq_8_4;
   };
