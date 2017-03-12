@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     description = "An open source implementation of the actor model in C++";
     homepage = http://actor-framework.org/;
     license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ bobakker ];
   };
 }
