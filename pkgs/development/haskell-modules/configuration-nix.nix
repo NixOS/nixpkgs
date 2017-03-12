@@ -33,7 +33,7 @@ with import ./lib.nix { inherit pkgs; };
 #
 #   foo = ... something involving super.foo ...
 #
-# but that means that we add `foo` attribute even is there is no `super.foo`! So if
+# but that means that we add `foo` attribute even if there is no `super.foo`! So if
 # you want to use this configuration for a package set that only contains a subset of
 # the packages that have overrides defined here, you'll end up with a set that contains
 # a bunch of attributes that trigger an evaluation error.
