@@ -824,12 +824,6 @@ self: super: {
   # https://github.com/xmonad/xmonad-extras/issues/3
   xmonad-extras = doJailbreak super.xmonad-extras;
 
-  # https://github.com/bmillwood/pointfree/issues/21
-  pointfree = appendPatch super.pointfree (pkgs.fetchpatch {
-    url = "https://github.com/bmillwood/pointfree/pull/22.patch";
-    sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
-  });
-
   # https://github.com/int-e/QuickCheck-safe/issues/2
   QuickCheck-safe = doJailbreak super.QuickCheck-safe;
 
