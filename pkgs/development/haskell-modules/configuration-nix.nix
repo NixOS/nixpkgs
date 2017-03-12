@@ -29,6 +29,17 @@
 
 with import ./lib.nix { inherit pkgs; };
 
+# All of the overrides in this set should look like:
+#
+#   foo = ... something involving super.foo ...
+#
+# but that means that we add `foo` attribute even is there is no `super.foo`! So if
+# you want to use this configuration for a package set that only contains a subset of
+# the packages that have overrides defined here, you'll end up with a set that contains
+# a bunch of attributes that trigger an evaluation error.
+#
+# To avoid this, we use `intersectAttrs` here so we never add packages that are not present
+# in the parent package set (`super`).
 self: super: builtins.intersectAttrs super {
 
   # Apply NixOS-specific patches.
