@@ -81,7 +81,7 @@ rec {
       #   name: name of the type
       #   type: type function.
       #   wrapped: the type wrapped in case of compound types.
-      #   payload: values of the type, two payloads of the same type must be 
+      #   payload: values of the type, two payloads of the same type must be
       #            combinable with the binOp binary operation.
       #   binOp: binary operation that merge two payloads of the same type.
       functor ? defaultFunctor name
