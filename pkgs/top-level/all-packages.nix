@@ -7225,8 +7225,6 @@ with pkgs;
 
   enet = callPackage ../development/libraries/enet { };
 
-  enginepkcs11 = callPackage ../development/libraries/enginepkcs11 { };
-
   epoxy = callPackage ../development/libraries/epoxy {};
 
   esdl = callPackage ../development/libraries/esdl { };
