@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0202nsdriigdh6sxi1k3hddvmf1x54qpykbvf2ghfhzyh0m1q7j2";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "An open source implementation of the actor model in C++";
