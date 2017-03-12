@@ -210,6 +210,7 @@ let
     boot.postBootCommands =
       concatMapStrings (chan:
         ''
+          echo "adding channel ${chan}"
           ${config.nix.package.out}/bin/nix-channel --add \
             ${cfg.machines.${name}.channels.${chan}} ${chan}
         ''
