@@ -71,11 +71,10 @@ stdenv.mkDerivation rec {
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
-      mkdir $dev/bin
-      mv $out/bin/cups-config $dev/bin/
+      moveToOutput bin/cups-config "$dev"
 
       # Rename systemd files provided by CUPS
-      for f in $out/lib/systemd/system/*; do
+      for f in "$out"/lib/systemd/system/*; do
         substituteInPlace "$f" \
           --replace "org.cups.cupsd" "cups" \
           --replace "org.cups." ""
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
       done
     '' + optionalString stdenv.isLinux ''
       # Use xdg-open when on Linux
-      substituteInPlace $out/share/applications/cups.desktop \
+      substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
