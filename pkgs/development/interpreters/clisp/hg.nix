@@ -23,13 +23,13 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xproto != null && libXext != null && xextproto != null);
 
 stdenv.mkDerivation rec {
-  v = "2.50pre20161201";
+  v = "2.50pre20170130";
   name = "clisp-${v}";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/clisp/clisp";
-    rev = "536a48";
-    sha256 = "097igsfpn8xipnjapyf5hx6smzh04v4ncskxl747xxn6pgpq813z";
+    rev = "130e74c8ea17";
+    sha256 = "1aqaxskvghc4ipbs3m4syvzn6bzj165zqvjpw0xa696i07vkk19j";
   };
 
   inherit libsigsegv gettext coreutils;
