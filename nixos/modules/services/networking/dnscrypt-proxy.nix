@@ -2,8 +2,6 @@
 with lib;
 
 let
-  apparmorEnabled = config.security.apparmor.enable;
-
   cfg = config.services.dnscrypt-proxy;
 
   stateDirectory = "/var/lib/dnscrypt-proxy";
@@ -187,12 +185,8 @@ in
       documentation = [ "man:dnscrypt-proxy(8)" ];
 
       before = [ "nss-lookup.target" ];
-
-      after = [ "network.target" ]
-        ++ optional apparmorEnabled "apparmor.service";
-
-      requires = [ "dnscrypt-proxy.socket "]
-        ++ optional apparmorEnabled "apparmor.service";
+      after = [ "network.target" ];
+      requires = [ "dnscrypt-proxy.socket "];
 
       serviceConfig = {
         NonBlocking = "true";
@@ -208,7 +202,9 @@ in
     };
     }
 
-    (mkIf apparmorEnabled {
+    (mkIf config.security.apparmor.enable {
+    systemd.services.dnscrypt-proxy.after = [ "apparmor.service" ];
+
     security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
       ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
