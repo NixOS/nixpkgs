@@ -823,10 +823,10 @@ alternative implemention for Integer called
 [integer-simple](http://hackage.haskell.org/package/integer-simple).
 
 To get a GHC compiler build with `integer-simple` instead of `integer-gmp` use
-the attribute: `pkgs.haskell.compiler.integer-simple."${ghcVersion}"`.
+the attribute: `haskell.compiler.integer-simple."${ghcVersion}"`.
 For example:
 
-    $ nix-build -E '(import <nixpkgs> {}).pkgs.haskell.compiler.integer-simple.ghc802'
+    $ nix-build -E '(import <nixpkgs> {}).haskell.compiler.integer-simple.ghc802'
     ...
     $ result/bin/ghc-pkg list | grep integer
         integer-simple-0.1.1.1
@@ -838,7 +838,6 @@ The following command displays the complete list of GHC compilers build with `in
     haskell.compiler.integer-simple.ghc7103  ghc-7.10.3
     haskell.compiler.integer-simple.ghc722   ghc-7.2.2
     haskell.compiler.integer-simple.ghc742   ghc-7.4.2
-    haskell.compiler.integer-simple.ghc763   ghc-7.6.3
     haskell.compiler.integer-simple.ghc783   ghc-7.8.3
     haskell.compiler.integer-simple.ghc784   ghc-7.8.4
     haskell.compiler.integer-simple.ghc801   ghc-8.0.1
@@ -846,10 +845,10 @@ The following command displays the complete list of GHC compilers build with `in
     haskell.compiler.integer-simple.ghcHEAD  ghc-8.1.20170106
 
 To get a package set supporting `integer-simple` use the attribute:
-`pkgs.haskell.packages.integer-simple."${ghcVersion}"`. For example
+`haskell.packages.integer-simple."${ghcVersion}"`. For example
 use the following to get the `scientific` package build with `integer-simple`:
 
-    $ nix-build -A pkgs.haskell.packages.integer-simple.ghc802.scientific
+    $ nix-build -A haskell.packages.integer-simple.ghc802.scientific
 
 
 ## Other resources
