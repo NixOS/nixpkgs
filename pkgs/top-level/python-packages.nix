@@ -29044,6 +29044,8 @@ EOF
     };
   };
 
+  first = callPackage ../development/python-modules/first {};
+
   flaskbabel = buildPythonPackage rec {
     name = "Flask-Babel-0.11.1";
 
