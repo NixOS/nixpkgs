@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xp4ji4rz3xffsz6w6nd60ajxvvihn02pkyp2l4smhqxbmyvp2gm";
   };
 
-  # FIXME: the cups libraries contains some $out/share strings so can't be split.
-  outputs = [ "out" "dev" "man" ]; # TODO: above
+  outputs = [ "out" "lib" "dev" "man" ];
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
@@ -30,6 +29,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   configureFlags = [
+    # Put just lib/* and locale into $lib; this didn't work directly.
+    # lib/cups is moved back to $out in postInstall.
+    # Beware: some parts of cups probably don't fully respect these.
+    "--prefix=$(lib)"
+    "--datadir=$(out)/share"
+    "--localedir=$(lib)/share/locale"
+
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-systemd=\${out}/lib/systemd/system"
@@ -68,6 +74,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+      moveToOutput lib/cups "$out"
+
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
