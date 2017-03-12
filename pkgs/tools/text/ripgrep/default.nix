@@ -15,6 +15,11 @@ buildRustPackage rec {
 
   depsSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
 
+  preFixup = ''
+    mkdir -p "$out/man/man1"
+    cp "$src/doc/rg.1" "$out/man/man1"
+  '';
+
   meta = with stdenv.lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = https://github.com/BurntSushi/ripgrep;
