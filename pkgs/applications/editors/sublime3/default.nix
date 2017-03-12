@@ -66,6 +66,7 @@ in stdenv.mkDerivation {
   phases = [ "installPhase" ];
   installPhase = ''
     mkdir -p $out/bin
+    ln -s ${sublime}/sublime_text $out/bin/subl
     ln -s ${sublime}/sublime_text $out/bin/sublime
     ln -s ${sublime}/sublime_text $out/bin/sublime3
     mkdir -p $out/share/applications
