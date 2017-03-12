@@ -7330,6 +7330,8 @@ with pkgs;
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
+  fontconfig-penultimate = callPackage ../data/fonts/fontconfig-penultimate {};
+
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
   folly = callPackage ../development/libraries/folly { };
