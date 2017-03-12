@@ -9,13 +9,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cups-${version}";
-  version = "2.1.4";
+  version = "2.2.2";
 
   passthru = { inherit version; };
 
   src = fetchurl {
-    url = "https://github.com/apple/cups/releases/download/release-${version}/cups-${version}-source.tar.gz";
-    sha256 = "13bjxw256wd1nff22vj2z25mdhllj2h6d9xypsg55b40661zs52b";
+    url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    sha256 = "1xp4ji4rz3xffsz6w6nd60ajxvvihn02pkyp2l4smhqxbmyvp2gm";
   };
 
   # FIXME: the cups libraries contains some $out/share strings so can't be split.
