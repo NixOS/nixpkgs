@@ -336,6 +336,8 @@ let
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
+    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
+
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
