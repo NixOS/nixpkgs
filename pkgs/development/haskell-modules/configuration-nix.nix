@@ -29,7 +29,7 @@
 
 with import ./lib.nix { inherit pkgs; };
 
-self: super: builtins.intersectAttrs super {
+self: super: {
 
   # Apply NixOS-specific patches.
   ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
