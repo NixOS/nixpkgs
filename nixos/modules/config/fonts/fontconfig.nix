@@ -75,23 +75,23 @@ let cfg = config.fonts.fontconfig;
       <fontconfig>
 
         <!-- Default rendering settings -->
-        <match target="font">
-          <edit mode="assign" name="hinting">
+        <match target="pattern">
+          <edit mode="append" name="hinting">
             ${fcBool cfg.hinting.enable}
           </edit>
-          <edit mode="assign" name="autohint">
+          <edit mode="append" name="autohint">
             ${fcBool cfg.hinting.autohint}
           </edit>
-          <edit mode="assign" name="hintstyle">
+          <edit mode="append" name="hintstyle">
             <const>hintslight</const>
           </edit>
-          <edit mode="assign" name="antialias">
+          <edit mode="append" name="antialias">
             ${fcBool cfg.antialias}
           </edit>
-          <edit mode="assign" name="rgba">
+          <edit mode="append" name="rgba">
             <const>${cfg.subpixel.rgba}</const>
           </edit>
-          <edit mode="assign" name="lcdfilter">
+          <edit mode="append" name="lcdfilter">
             <const>lcd${cfg.subpixel.lcdfilter}</const>
           </edit>
         </match>
