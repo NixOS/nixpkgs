@@ -18874,6 +18874,10 @@ in {
     };
   };
 
+  pip-tools = callPackage ../development/python-modules/pip-tools {
+    glibcLocales = pkgs.glibcLocales;
+  };
+
   pika = buildPythonPackage rec {
     name = "pika-${version}";
     version = "0.10.0";
