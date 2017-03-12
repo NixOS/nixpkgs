@@ -23,7 +23,7 @@ in
 EOF
 for ((i=1;i < ${#deb_patches[@]}; ++i)); do
     url=${prefix}/${deb_patches[$i]}
-    sha256=$(nix-prefetch-url $url) &&
+    sha256=$(nix-prefetch-url "$url") &&
     echo '  {'
     echo "    url = \"\${prefix}/${deb_patches[$i]}\";"
     echo "    sha256 = \"$sha256\";"
