@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "emem";
-  version = "0.2.34";
+  version = "0.2.35";
   name = "${pname}-${version}";
 
   inherit jdk;
 
   src = fetchurl {
     url = "https://github.com/ebzzry/${pname}/releases/download/v${version}/${pname}.jar";
-    sha256 = "19dslv632qyz3hcycx22w6x96nwph7cxl1yjprir2w2c692dq06x";
+    sha256 = "0y1jwfmqmmff3kh82j07p9j0l2hc7dxhy8vij4lz8wrv6pnxng7f";
   };
 
   buildInputs = [ ];
