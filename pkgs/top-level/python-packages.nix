@@ -5841,17 +5841,16 @@ in {
 
   requests-cache = buildPythonPackage (rec {
     name = "requests-cache-${version}";
-    version = "0.4.10";
-    disabled = isPy3k;
+    version = "0.4.13";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests-cache/${name}.tar.gz";
-      sha256 = "671969d00719fa3e80476b128dc9232025926884d0110d4d235abdd9c3508fc0";
+      sha256 = "18jpyivnq5pjbkymk3i473rihpj2bgikafpha7xvr6w736hiqmpy";
     };
 
     buildInputs = with self; [ mock ];
 
-    propagatedBuildInputs = with self; [ self.six requests2 ];
+    propagatedBuildInputs = with self; [ requests2 six urllib3 ];
 
     meta = {
       description = "Persistent cache for requests library";
