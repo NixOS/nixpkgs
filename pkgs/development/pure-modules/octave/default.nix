@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, pure, octave }:
+{ stdenv, fetchurl, pkgconfig, pure, octave, gcc6 }:
 
 stdenv.mkDerivation rec {
   baseName = "octave";
-  version = "0.7";
+  version = "0.9";
   name = "pure-${baseName}-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/purelang/pure-lang/downloads/${name}.tar.gz";
-    sha256 = "04c1q5cjcyc5sg15ny1hn43rkphja3virw4k110cahc3piwbpsqk";
+    sha256 = "0l1mvmi3rpabzjcrk6p04rdn922mvdm9x67zby3dha5iiccc47q0";
   };
 
-  buildInputs = [ pkgconfig ];
+  buildInputs = [ pkgconfig gcc6 ];
   propagatedBuildInputs = [ pure octave ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;
