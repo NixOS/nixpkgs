@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoconf, automake
 , drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, qt5, boost
-, libebml, zlib, libmatroska, libogg, libvorbis, flac
+, libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt
 , withGUI ? true
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jiz23s52l3gpl84yx4yw3w445jqzcimvnvibvrv3a21k29hyik1";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby docbook_xsl ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby docbook_xsl libxslt ];
 
   buildInputs = [
     expat file xdg_utils boost libebml zlib libmatroska libogg
