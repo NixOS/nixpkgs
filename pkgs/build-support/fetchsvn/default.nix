@@ -22,15 +22,18 @@ let
   name_ = if name == null then "${repoName}-r${toString rev}" else name;
 in
 
+if md5 != "" then
+  throw "fetchsvn does not support md5 anymore, please use sha256"
+else
 stdenv.mkDerivation {
   name = name_;
   builder = ./builder.sh;
   buildInputs = [subversion];
 
-  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
-  
+  outputHash = sha256;
+
   inherit url rev sshSupport openssh ignoreExternals;
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
