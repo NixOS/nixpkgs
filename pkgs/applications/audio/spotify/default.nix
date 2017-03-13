@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   src =
     fetchurl {
-      url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
+      url = "https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
       sha256 = "0l008x06d257vcw6gq3q90hvv93cq6mxpj11by1np6bzzg61qv8x";
     };
 
