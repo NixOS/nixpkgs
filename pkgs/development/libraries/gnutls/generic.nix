@@ -1,6 +1,6 @@
 { lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound, libiconv
-, tpmSupport ? false, trousers, nettools, bash
+, tpmSupport ? false, trousers, which, nettools
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
@@ -42,14 +42,14 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
-    ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile
     ++ buildInputs;
 
-  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs
+    ++ lib.optionals doCheck [ which nettools ];
 
   inherit doCheck;
 
