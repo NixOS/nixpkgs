@@ -18880,6 +18880,10 @@ in {
     };
   };
 
+  pip-tools = callPackage ../development/python-modules/pip-tools {
+    glibcLocales = pkgs.glibcLocales;
+  };
+
   pika = buildPythonPackage rec {
     name = "pika-${version}";
     version = "0.10.0";
@@ -29063,6 +29067,8 @@ EOF
       maintainers = with maintainers; [ matejc ];
     };
   };
+
+  first = callPackage ../development/python-modules/first {};
 
   flaskbabel = buildPythonPackage rec {
     name = "Flask-Babel-0.11.1";
