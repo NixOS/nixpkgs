@@ -42,6 +42,9 @@ let
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
+    # patch to get the nvidiaBeta driver to compile on kernel 4.10
+    patches = if versionOlder version "378" then null else [ ./kernel_4.10.patch ];
+
     inherit version useGLVND useProfiles;
     inherit (stdenv) system;
 
