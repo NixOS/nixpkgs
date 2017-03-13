@@ -23420,11 +23420,11 @@ in {
 
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
-    version = "1.11.1";
+    version = "1.15.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/setuptools_scm/${name}.tar.gz";
-      sha256 = "8c45f738a23410c5276b0ed9294af607f491e4260589f1eb90df8312e23819bf";
+      sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
     };
 
     buildInputs = with self; [ pip pytest ];
