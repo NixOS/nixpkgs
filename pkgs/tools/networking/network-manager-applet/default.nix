@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
     polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
-    modemmanager jansson librsvg
+    modemmanager jansson librsvg glib_networking gnome3.dconf
   ];
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];

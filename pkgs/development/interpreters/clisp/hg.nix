@@ -5,8 +5,7 @@
 # - full: contains base plus modules in withModules
 { stdenv, fetchhg, libsigsegv, gettext, ncurses, readline, libX11
 , libXau, libXt, pcre, zlib, libXpm, xproto, libXext, xextproto
-, libffi
-, libffcall
+, libffi, libffcall, automake
 , coreutils
 # build options
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
@@ -37,6 +36,7 @@ stdenv.mkDerivation rec {
 
   ffcallAvailable = stdenv.isLinux && (libffcall != null);
 
+  nativeBuildInputs = [ automake ]; # sometimes fails otherwise
   buildInputs = [libsigsegv]
   ++ stdenv.lib.optional (gettext != null) gettext
   ++ stdenv.lib.optional (ncurses != null) ncurses
