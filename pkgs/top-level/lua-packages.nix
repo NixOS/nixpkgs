@@ -459,7 +459,7 @@ let
     meta = {
       description = "Simple implementation of msgpack in C Lua 5.1";
       homepage = "https://github.com/tarruda/libmpack";
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.unix;
       license = stdenv.lib.licenses.mit;
     };
   };
