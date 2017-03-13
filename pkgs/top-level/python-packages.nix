@@ -25661,12 +25661,13 @@ in {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.3.1";
-    name = "traitlets-${version}";
+    pname = "traitlets";
+    version = "4.3.2";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "ba8c94323ccbe8fd792e45d8efe8c95d3e0744cc8c085295b607552ab573724c";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835";
     };
 
     LC_ALL = "en_US.UTF-8";
