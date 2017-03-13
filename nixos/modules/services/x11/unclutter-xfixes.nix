@@ -44,7 +44,7 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.unclutter-xfixes = {
       description = "unclutter-xfixes";
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "default.target" ];
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           --timeout ${toString cfg.timeout} \
