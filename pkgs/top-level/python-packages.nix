@@ -24728,7 +24728,7 @@ in {
   });
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
-    name = "sphinxcontrib-httpdomain-1.3.0";
+    name = "sphinxcontrib-httpdomain-1.5.0";
 
     # Check is disabled due to this issue:
     # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
@@ -24736,7 +24736,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinxcontrib-httpdomain/${name}.tar.gz";
-      sha256 = "ba8fbe82eddc96cfa9d7b975b0422801a14ace9d7e051b8b2c725b92ea6137b5";
+      sha256 = "0srg8lwf4m1hyhz942fcdfxh689xphndngiidb575qmfbi89gc7a";
     };
 
     propagatedBuildInputs = with self; [sphinx];
