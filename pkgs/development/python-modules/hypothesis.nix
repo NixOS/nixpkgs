@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python
-, isPy27, enum34
+, pythonOlder, enum34
 , doCheck ? true, pytest, flake8, flaky
 }:
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = stdenv.lib.optionals doCheck [ pytest flake8 flaky ];
-  propagatedBuildInputs = stdenv.lib.optionals isPy27 [ enum34 ];
+  propagatedBuildInputs = stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   inherit doCheck;
 
