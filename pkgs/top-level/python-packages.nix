@@ -6482,6 +6482,28 @@ in {
     };
   };
 
+  doit  = buildPythonPackage (rec {
+    pname = "doit";
+    version= "0.30.0";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/${pname}/${name}.tar.gz";
+      sha256 = "0ghj3bsrc5bm30w97bn8nvf5jlabg06xs16g7284mimyr7q9z0j0";
+    };
+
+    propagatedBuildInputs = with self; [ cloudpickle pyinotify pytest ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pydoit.org";
+      description = "Build make task automation pipeline";
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
+    };
+  });
+
   dotfiles = buildPythonPackage rec {
     name = "dotfiles-0.6.3";
 
@@ -8417,7 +8439,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/natsort/${name}.tar.gz";
-      sha256 = "4ad6b4d1153451e345967989bd3ca30abf33f615b116eeadfcc51a456e6974a9";
+      sha256 = "1abld5p4a6n5zjnyw5mi2pv37gqalcybv2brjr2y6l9l2p8v9mja";
     };
 
     buildInputs = with self;
@@ -8437,7 +8459,6 @@ in {
       description = "Natural sorting for python";
       homepage = https://github.com/SethMMorton/natsort;
       license = licenses.mit;
-      broken = true;
     };
   };
 
@@ -12700,6 +12721,21 @@ in {
     };
   };
 
+  husl = buildPythonPackage rec {
+    pname    = "husl";
+    name    = "${pname}-${version}";
+    version = "4.0.3";
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/husl/${name}.tar.gz";
+      sha256 = "1fahd35yrpvdqzdd1r6r416d0csg4jbxwlkzm19sa750cljn47ca";
+    };
+
+  };
+
   hvac = buildPythonPackage rec {
     name    = "hvac-${version}";
     version = "0.2.15";
@@ -14535,6 +14571,26 @@ in {
     };
   };
 
+  micawber= self.buildPythonPackage rec {
+    pname = "micawber";
+    version = "0.3.3";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/${pname}/${name}.tar.gz";
+      sha256 = "18lna1bgzw4l3kqdi3nr1l557rj3wddrcj81x0rf8f4p87xsg9fq";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Small library for extracting rich content from urls";
+      homepage = "http://github.com/coleifer/micawber/";
+      license = licenses.mit;
+    };
+  };
+
+
   minimock = buildPythonPackage rec {
     version = "1.2.8";
     name = "minimock-${version}";
@@ -14592,6 +14648,36 @@ in {
     };
   };
 
+  nikola = buildPythonPackage rec {
+    pname = "Nikola";
+    name = "${pname}-${version}";
+
+    version = "7.8.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/N/${pname}/${name}.tar.gz";
+      sha256 = "12kcnvwy9dr194riji6iird1zpdcv252d19lfvabr39rsi9658jl";
+    };
+
+    meta = {
+      description = "A static content management system";
+      homepage    = "https://www.getnikola.com/";
+      license     = "MIT";
+      maintainers = with maintainers; [ ];
+    };
+
+    # No tests included in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+      markdown jinja2 husl pyphen micawber pygal typogrify phpserialize
+      webassets notebook ipykernel ghp-import2 ws4py watchdog pillow
+      Yapsy pyrss2gen piexif doit natsort blinker Mako unidecode
+      dateutil Logbook
+    ];
+  };
+
+
   nototools = buildPythonPackage rec {
     version = "git-2016-03-25";
     name = "nototools-${version}";
@@ -14619,6 +14705,25 @@ in {
       description = "Noto fonts support tools and scripts plus web site generation";
       license = licenses.asl20;
       homepage = https://github.com/googlei18n/nototools;
+    };
+  };
+
+  phpserialize = self.buildPythonPackage rec {
+    pname = "phpserialize";
+    version = "1.3";
+    name = "${pname}-${version}";
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "19qgkb9z4zjbjxlpwh2w6pxkz2j3iymnydi69jl0jg905lqjsrxz";
+    };
+
+    meta = {
+      description = "Port of serialize and unserialize functions of php to python";
+      homepage = "http://github.com/mitsuhiko/phpserialize";
+      license = licenses.bsd3;
     };
   };
 
@@ -15315,6 +15420,25 @@ in {
     };
   };
 
+  piexif = self.buildPythonPackage rec {
+    pname = "piexif";
+    version = "1.0.10";
+    name = "${pname}-${version}";
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.zip";
+      sha256 = "1j20kl3655k4qx0ydc38fmr242qjvwpk5dyfm2f1chgjg26y23s6";
+    };
+
+    meta = {
+      description = "Simplify exif manipulations with python";
+      homepage = "https://github.com/hMatoba/Piexif";
+      license = licenses.mit;
+    };
+  };
+
   pint = buildPythonPackage rec {
     name = "pint-${version}";
     version = "0.7.2";
@@ -15332,16 +15456,15 @@ in {
   };
 
   pygal = buildPythonPackage rec {
-    version = "2.0.10";
-    name = "pygal-${version}";
+    pname = "pygal";
+    version = "2.3.1";
+    name = "${pname}-${version}";
 
     doCheck = !isPyPy;  # one check fails with pypy
 
-    src = pkgs.fetchFromGitHub {
-      owner = "Kozea";
-      repo = "pygal";
-      rev = version;
-      sha256 = "1j7qjgraapvfc80yp8xcbddqrw8379gqi7pwkvfml3qcqm0z0d33";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "0rq6hwd1vn44p3jx79wvln1p9mrbwh36plmlyj5js31x4f8s39bv";
     };
 
     buildInputs = with self; [ flask pyquery pytest ];
@@ -15452,6 +15575,23 @@ in {
       description = "PyMySQL dialect for SQL Alchemy";
       homepage = https://pypi.python.org/pypi/pymysql_sa;
       license = licenses.mit;
+    };
+  };
+
+  pyphen = self.buildPythonPackage rec {
+    pname = "Pyphen";
+    version = "0.9.4";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/${pname}/${name}.tar.gz";
+      sha256 = "1mqb5jrigxipxzp1d8nbwkq0cfjw77pnn6hc4mp1yd2mn059mymb";
+    };
+
+    meta = {
+      description = "Hyphenate text using existing Hunspell hyphenation dictionaries";
+      homepage = https://github.com/Kozea/Pyphen;
+      license = licenses.gpl2Plus;
     };
   };
 
@@ -21057,12 +21197,16 @@ in {
   });
 
   pyrss2gen = buildPythonPackage (rec {
-    name = "PyRSS2Gen-1.0.0";
+    pname = "PyRSS2Gen";
+    version= "1.1";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyRSS2Gen/${name}.tar.gz";
-      sha256 = "4929d022713129401160fd47550d5158931e4ea6a7136b5d8dfe3b13ac16f2f0";
+      sha256 = "1rvf5jw9hknqz02rp1vg8abgb1lpa0bc65l7ylmlillqx7bswq3r";
     };
+
+    propagatedBuildInputs = with self; [ feedparser six ];
 
     meta = {
       homepage = http://www.dalkescientific.om/Python/PyRSS2Gen.html;
@@ -28860,14 +29004,13 @@ EOF
   };
 
   ws4py = buildPythonPackage rec {
+    pname = "ws4py";
+    version = "0.3.5";
     name = "ws4py-${version}";
 
-    version = "git-20130303";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/Lawouach/WebSocket-for-Python.git";
-      rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
-      sha256 = "1g7nmhjjxjf6vx75dyzns8bpid3b5i02kakk2lh1i297b5rw2rjq";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/w/${pname}/${name}.tar.gz";
+      sha256 = "1af79v1lh2njip4zmkm45772wp6nns7a6hk1d80adxi7423lmk64";
     };
 
     # python zip complains about old timestamps
@@ -30102,6 +30245,31 @@ EOF
       homepage = "http://github.com/davisp/ghp-import";
       license = "Tumbolia Public License";
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  ghp-import2 = buildPythonPackage rec {
+    pname = "ghp-import2";
+    version = "1.0.1";
+    name = "${pname}-${version}";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/ghp-import2/${name}.tar.gz";
+      sha256 = "0zvdr67f1gr21ygnahmagfxbn1r1yb2gyiii9fb44nvcn935iygx";
+    };
+
+    disabled = isPyPy;
+    buildInputs = [ pkgs.glibcLocales ];
+
+    LC_ALL="en_US.UTF-8";
+
+    # No tests available
+    doCheck = false;
+
+    meta = {
+      description = "A GitHub Pages import tool";
+      homepage = "https://github.com/ionelmc/python-ghp-import";
+      license = "Tumbolia Public License";
+      maintainers = with maintainers; [ ];
     };
   };
 
