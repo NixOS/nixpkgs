@@ -30,9 +30,7 @@
   # A native Guile 2.0 is needed to cross-build Guile.
   selfNativeBuildInput = true;
 
-  # Guile 2.0.11 repeatable fails with 8-core parallel building because
-  # libguile/vm-i-system.i is not created in time
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
     (fetchpatch {
