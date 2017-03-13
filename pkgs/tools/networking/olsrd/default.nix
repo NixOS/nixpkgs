@@ -1,11 +1,12 @@
 { stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "olsrd-0.6.6.1";
+  name = "olsrd-${version}";
+  version = "0.9.6.1";
 
   src = fetchurl {
-    url = "http://www.olsr.org/releases/0.6/${name}.tar.bz2";
-    sha256 = "1fphbh9x724r83gxxrd13zv487s4svnr9jdy76h4f36xxb15pnp8";
+    url = "http://www.olsr.org/releases/0.9/${name}.tar.bz2";
+    sha256 = "9cac290e9bff5fc7422110b9ccd972853f10962c962d2f31a63de9c6d1520612";
   };
 
   buildInputs = [ bison flex ];

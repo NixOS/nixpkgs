@@ -72,6 +72,13 @@ in stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
   dontUseCmakeConfigure = true;
 
+  # ICU 58, included in 5.3.x
+  patches = [(fetchurl {
+    url = "https://gerrit.libreoffice.org/gitweb?p=core.git;a=patch;h=3e42714c76b1347babfdea0564009d8d82a83af4";
+    sha256 = "10bid0jdw1rpdsqwzzk3r4rp6bjs2cvi82h7anz2m1amfjdv86my";
+    name = "libreoffice-5.2.x-icu4c-58.patch";
+  })];
+
   postUnpack = ''
     mkdir -v $sourceRoot/src
   '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)

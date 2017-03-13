@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
-      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing" +
+      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing bash_cv_getcwd_malloc=yes" +
       optionalString stdenv.isCygwin ''
         --without-libintl-prefix --without-libiconv-prefix
         --with-installed-readline

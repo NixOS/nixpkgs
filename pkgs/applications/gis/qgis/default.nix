@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
 , qjson, qca2, txt2tags, openssl
 , withGrass ? false, grass
@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
     (with python2Packages; [ numpy psycopg2 requests2 python2Packages.qscintilla sip ]);
 
   nativeBuildInputs = [ cmake makeWrapper ];
+
+  patches = [
+    # See https://hub.qgis.org/issues/16071
+    (fetchpatch {
+      name = "fix-build-against-recent-sip";
+      url = "https://github.com/qgis/QGIS/commit/85a0db24f32351f6096cd8282f03ad5c2f4e6ef5.patch";
+      sha256 = "0snspzdrpawd7j5b69i8kk7pmmy6ij8bn02bzg94qznfpf9ihf30";
+    })
+  ];
 
   # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
   #enableParallelBuilding = true;

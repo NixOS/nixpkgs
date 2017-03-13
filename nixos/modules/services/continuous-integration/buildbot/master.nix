@@ -217,11 +217,11 @@ in {
       path = cfg.packages;
 
       serviceConfig = {
-        Type = "forking";
+        Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot start ${cfg.buildbotDir}";
+        ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
       };
 
       preStart = ''

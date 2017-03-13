@@ -6,7 +6,7 @@ with stdenv.lib;
 let
   cli = buildGoPackage rec {
     name = "cli-${version}";
-    version = "5.6.14";
+    version = "5.6.32";
 
     goPackagePath = "github.com/heroku/cli";
 
@@ -14,8 +14,21 @@ let
       owner  = "heroku";
       repo   = "cli";
       rev    = "v${version}";
-      sha256 = "11jccham1vkmh5284l6i30na4a4y7b1jhi2ci2z2wwx8m3gkypq9";
+      sha256 = "062aa79mv2njjb0ix7isbz6646wxmsldv27bsz5v2pbv597km0vz";
     };
+
+    buildFlagsArray = ''
+      -ldflags=
+        -X=main.Version=${version}
+        -X=main.Channel=stable
+        -X=main.Autoupdate=no
+    '';
+
+    preCheck = ''
+      export HOME=/tmp
+    '';
+
+    doCheck = true;
   };
 
 in stdenv.mkDerivation rec {

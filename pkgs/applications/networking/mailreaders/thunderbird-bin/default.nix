@@ -38,6 +38,7 @@
 , coreutils
 , gnused
 , gnugrep
+, gnupg
 }:
 
 assert stdenv.isLinux;
@@ -148,7 +149,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl;
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
     baseName = "thunderbird";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";

@@ -40,7 +40,7 @@ in
     virtualisation.xen.qemu = mkOption {
       type = types.path;
       default = "${pkgs.xen}/lib/xen/bin/qemu-system-i386";
-      defaultText = "''${pkgs.xen}/lib/xen/bin/qemu-system-i386";
+      defaultText = "\${pkgs.xen}/lib/xen/bin/qemu-system-i386";
       example = literalExample "''${pkgs.qemu_xen-light}/bin/qemu-system-i386";
       description = ''
         The qemu binary to use for Dom-0 backend.
