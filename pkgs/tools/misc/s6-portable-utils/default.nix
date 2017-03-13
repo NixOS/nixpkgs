@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, skalibs }:
+{ stdenv, fetchFromGitHub, skalibs }:
 
-let
-
-  version = "2.0.5.3";
-
-in stdenv.mkDerivation rec {
-
+stdenv.mkDerivation rec {
   name = "s6-portable-utils-${version}";
+  version = "2.1.0.0";
 
-  src = fetchurl {
-    url = "http://www.skarnet.org/software/s6-portable-utils/${name}.tar.gz";
-    sha256 = "029fg9c37vwh9yagd69h8r192nrx4mfva8dwgpm1gxkdssrh3gi7";
+  src = fetchFromGitHub {
+    owner = "skarnet";
+    repo = "s6-portable-utils";
+    rev = "v${version}";
+    sha256 = "0k5pcwc45jw5l8ycz03wx2w4pds0wp4ll47d3i5i1j02i9v0rhc9";
   };
 
   dontDisableStatic = true;
@@ -23,12 +21,12 @@ in stdenv.mkDerivation rec {
   ]
   ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
     description = "A set of tiny general Unix utilities optimized for simplicity and small size";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
+    platforms = platforms.all;
+    license = licenses.isc;
+    maintainers = with maintainers; [ pmahoney ];
   };
 
 }
