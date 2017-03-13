@@ -13131,6 +13131,13 @@ in {
       sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
     };
 
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/ipython/ipython_genutils/commit/6d74d8cb34e49820e48ba8b4f5e5f8322824f4f7.patch";
+        sha256 = "13ah6a11qldzzywax50la6qwq02sk5929gjkzzn456lg1ja5gq35";
+      })
+    ];
+
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ];
 
