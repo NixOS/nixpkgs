@@ -138,6 +138,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cpuid = callPackage ../development/ocaml-modules/cpuid { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     cstruct = callPackage ../development/ocaml-modules/cstruct {
