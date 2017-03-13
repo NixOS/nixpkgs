@@ -197,6 +197,7 @@ in
       serviceConfig = {
         NonBlocking = "true";
         ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         User = "dnscrypt-proxy";
 
