@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtwebengine ];
   nativeBuildInputs = [ qmakeHook ];
   enableParallelBuilding = true;
-  
+
   postInstall = ''
     mkdir -p $out/bin
     cp binary/QSyncthingTray $out/bin
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.all;
+    broken = builtins.compareVersions qtbase.version "5.7.0" >= 0;
   };
 }
