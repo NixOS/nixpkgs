@@ -8950,7 +8950,7 @@ with pkgs;
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mkvtoolnix-cli = mkvtoolnix.override {
+  mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
     withGUI = false;
   };
 

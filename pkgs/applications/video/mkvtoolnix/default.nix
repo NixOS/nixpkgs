@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake
+{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libiconv
 , drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, qt5, boost
 , libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt
 , withGUI ? true
@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat file xdg_utils boost libebml zlib libmatroska libogg
     libvorbis flac
-  ] ++ optional withGUI qt5.qtbase;
+  ]
+  ++ optional stdenv.isDarwin libiconv
+  ++ optional withGUI qt5.qtbase;
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "drake -j $NIX_BUILD_CORES";
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.bunkus.org/videotools/mkvtoolnix/;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel fuuzetsu rnhmjoj ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux
+      ++ optionals (!withGUI) platforms.darwin;
   };
 }
