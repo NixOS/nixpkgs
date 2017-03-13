@@ -5,7 +5,7 @@
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
 , buildInputs ? []
-, ...}:
+, ...}@args:
 
 assert guileBindings -> guile != null;
 let
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
   # for the actual fix.  Also an apparent race in the generation of
   # systemkey-args.h.
-  enableParallelBuilding = false;
+  enableParallelBuilding = args.enableParallelBuilding or false;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv

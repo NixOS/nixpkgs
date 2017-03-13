@@ -9,4 +9,6 @@ callPackage ./generic.nix (args // rec {
   };
 
   buildInputs = [ libunistring ];
+
+  enableParallelBuilding = true;
 })
