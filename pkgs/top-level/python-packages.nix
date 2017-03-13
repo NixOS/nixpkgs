@@ -32035,6 +32035,8 @@ EOF
     };
   };
 
+  vulnix = callPackage ../tools/security/vulnix { };
+
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "wp_export_parser";
