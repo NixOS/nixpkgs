@@ -877,4 +877,8 @@ self: super: {
 
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
+
+  # strict-io is too cautious with it's deepseq dependency
+  # strict-io doesn't have a working bug tracker, the author has been emailed however.
+  strict-io = doJailbreak super.strict-io;
 }
