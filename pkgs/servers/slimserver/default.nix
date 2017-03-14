@@ -17,9 +17,19 @@ stdenv.mkDerivation rec {
   buildInputs = [
     makeWrapper
     perl
-    perlPackages.Log4Perl
     perlPackages.AudioScan
+    perlPackages.DBI
+    perlPackages.DigestSHA1
+    perlPackages.EV
+    perlPackages.HTMLParser
     perlPackages.ImageScale
+    # why do
+    perlPackages.JSONXS
+    perlPackages.JSONXSVersionOneAndTwo
+    perlPackages.Log4Perl
+    perlPackages.SubName
+    perlPackages.XMLParser
+    perlPackages.YAML
   ];
 
   buildPhase = ''
@@ -32,9 +42,18 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/slimserver.pl \
       --set PERL5LIB "${with perlPackages; stdenv.lib.makePerlPath [
-      Log4Perl
       AudioScan
+      DBI
+      DigestSHA1
+      EV
+      HTMLParser
       ImageScale
+      JSONXS
+      JSONXSVersionOneAndTwo
+      Log4Perl
+      SubName
+      XMLParser
+      YAML
       ]}"
   '';
 
