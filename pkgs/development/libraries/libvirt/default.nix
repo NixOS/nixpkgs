@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
-    libnl numad numactl xen zfs
+    libnl numad numactl zfs
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
-  ];
+  ] ++ stdenv.lib.optional (stdenv.system == "x86_64-linux") xen;
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
     PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
