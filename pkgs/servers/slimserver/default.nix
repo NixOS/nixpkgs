@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    rm -Rf CPAN
+    rm -Rf Bin
   '';
 
   installPhase = ''
