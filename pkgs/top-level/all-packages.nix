@@ -798,6 +798,8 @@ with pkgs;
 
   crunch = callPackage ../tools/security/crunch { };
 
+  crudini = callPackage ../tools/misc/crudini { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dante = callPackage ../servers/dante { };
