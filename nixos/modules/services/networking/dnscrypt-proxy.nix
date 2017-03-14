@@ -261,8 +261,11 @@ in
         $get -o dnscrypt-resolvers.csv.minisig.tmp \
           https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
-        minisign -q -V -p ${upstreamResolverListPubKey} \
-          -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig
+        if ! minisign -q -V -p ${upstreamResolverListPubKey} \
+          -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig ; then
+          echo "failed to verify resolver list!" >&2
+          exit 1
+        fi
         [[ -f dnscrypt-resolvers.csv ]] && mv dnscrypt-resolvers.csv{,.old}
         mv dnscrypt-resolvers.csv{.tmp,}
         if cmp dnscrypt-resolvers.csv{,.old} ; then
