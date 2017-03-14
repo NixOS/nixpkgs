@@ -13460,16 +13460,16 @@ in {
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.4.0";
+    version = "5.0.0";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "c99a52fac2e5b7a3b714e9252ebf72cbf97536d556ae2b5082baccc3e5cd52ee";
+      sha256 = "2766f9c2deb9ae826e65d53a56a36d69b184f63d0dcb7710835273327126bc5b";
     };
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
+    propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq dateutil] ++ optional isPyPy py;
 
     checkPhase = ''
       nosetests -v
