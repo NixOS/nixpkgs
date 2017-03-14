@@ -950,6 +950,8 @@ with pkgs;
 
   long-shebang = callPackage ../misc/long-shebang {};
 
+  iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
+
   mathics = pythonPackages.mathics;
 
   meson = callPackage ../development/tools/build-managers/meson { };
