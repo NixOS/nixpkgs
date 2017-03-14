@@ -15599,12 +15599,12 @@ in {
   };
 
   nbformat = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "4.3.0";
     name = "nbformat-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nbformat/${name}.tar.gz";
-      sha256 = "389a5b630a30539074f238a48fb9864592f63d611baccfa2ffaf14ffe239de06";
+      sha256 = "5febcce872672f1c97569e89323992bdcb8573fdad703f835e6521253191478b";
     };
     LC_ALL="en_US.UTF-8";
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
