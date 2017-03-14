@@ -13,10 +13,16 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python2Packages; [ iniparse ];
 
+  checkPhase = ''
+    patchShebangs .
+    pushd tests >/dev/null
+    ./test.sh
+  '';
+
   meta = with stdenv.lib; {
     description = "A utility for manipulating ini files ";
     homepage = http://www.pixelbeat.org/programs/crudini/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }
