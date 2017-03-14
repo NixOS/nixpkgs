@@ -13083,12 +13083,12 @@ in {
   };
 
   ipython = buildPythonPackage rec {
-    version = "5.2.1";
+    version = "5.3.0";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipython/${name}.tar.gz";
-      sha256 = "04dafc37c8876e10e797264302e4333dbcd2854ef6d16bb57cc12ce26515bfdb";
+      sha256 = "bf5e615e7d96dac5a61fbf98d9e2926d98aa55582681bea7e9382992a3f43c1d";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
