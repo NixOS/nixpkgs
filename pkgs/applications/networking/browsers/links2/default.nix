@@ -16,10 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "1f24y83wa1vzzjq5kp857gjqdpnmf8pb29yw7fam0m8wxxw0c3gp";
   };
 
-  buildInputs =
-    [ libev librsvg libpng libjpeg libtiff gpm openssl xz bzip2 zlib ]
-    ++ stdenv.lib.optionals enableX11 [ libX11 libXau libXt ]
-    ++ stdenv.lib.optional enableDirectFB [ directfb ];
+  buildInputs = with stdenv.lib;
+    [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
+    ++ optionals stdenv.isLinux [ gpm ]
+    ++ optionals enableX11 [ libX11 libXau libXt ]
+    ++ optional enableDirectFB [ directfb ];
 
   nativeBuildInputs = [ pkgconfig bzip2 ];
 
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = http://links.twibright.com/;
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin urkud viric ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
