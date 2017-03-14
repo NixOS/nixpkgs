@@ -17984,7 +17984,13 @@ with pkgs;
 
   terraform = callPackage ../applications/networking/cluster/terraform {};
 
+  terraform_0_8_5 = callPackage ../applications/networking/cluster/terraform/0.8.5.nix {};
+
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+
+  terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
+    terraform = terraform_0_8_5;
+  };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
