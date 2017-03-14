@@ -905,7 +905,7 @@ in {
 
 
   alot = buildPythonPackage rec {
-    rev = "0.5";
+    rev = "0.5.1";
     name = "alot-${rev}";
 
     disabled = isPy3k;
@@ -914,7 +914,7 @@ in {
       owner = "pazz";
       repo = "alot";
       inherit rev;
-      sha256 = "1hzajfh0f21k97xip9blg7zifiv3y5k33swp2h9sc57qd7qkr5i6";
+      sha256 = "0ipkhc5wllfq78lg47aiq4qih0yjq8ad9xkrbgc88xk8pk9166i8";
     };
 
     postPatch = ''
