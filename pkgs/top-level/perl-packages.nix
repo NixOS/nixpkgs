@@ -881,6 +881,17 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestMore ];
   };
 
+  CanaryStability = buildPerlPackage rec {
+    name = "Canary-Stability-2012";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "fd240b111d834dbae9630c59b42fae2145ca35addc1965ea311edf0d07817107";
+    };
+    meta = {
+      license = stdenv.lib.licenses.gpl1Plus;
+    };
+  };
+
   CaptchaReCAPTCHA = buildPerlPackage rec {
     name = "Captcha-reCAPTCHA-0.97";
     src = fetchurl {
@@ -4663,6 +4674,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  EV = buildPerlPackage rec {
+    name = "EV-4.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "2ae7f8734e2e4945510252152c3bea4be35f4aa58aad3db0504c38844b08a991";
+    };
+    buildInputs = [ CanaryStability ];
+    propagatedBuildInputs = [ CommonSense ];
+    meta = {
+      license = stdenv.lib.licenses.gpl1Plus;
+    };
+  };
+
   EvalClosure = buildPerlPackage {
     name = "Eval-Closure-0.11";
     src = fetchurl {
@@ -7110,6 +7134,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    };
+  };
+
+  JSONXSVersionOneAndTwo = buildPerlPackage rec {
+    name = "JSON-XS-VersionOneAndTwo-0.31";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LB/LBROCARD/${name}.tar.gz";
+      sha256 = "e6092c4d961fae777acf7fe99fb3cd6e5b710fec85765a6b90417480e4c94a34";
+    };
+    propagatedBuildInputs = [ JSONXS ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
