@@ -4171,6 +4171,12 @@ in {
     # No tests available
     doCheck = false;
 
+    # Fix issue when used together with other namespace packages
+    # https://github.com/NixOS/nixpkgs/issues/23855
+    patches = [
+      ./../development/python-modules/configparser/0001-namespace-fix.patch
+    ];
+
     meta = {
       maintainers = [ ];
       platforms = platforms.all;
