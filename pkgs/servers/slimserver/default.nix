@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub
-, makeWrapper
+{ stdenv, buildPerlPackage, fetchFromGitHub
 #, sqlite, expat, mp4v2, flac, spidermonkey_1_8_5, taglib, libexif, curl, ffmpeg, file
 , perl, perlPackages }:
 
-stdenv.mkDerivation rec {
+buildPerlPackage rec {
   name = "slimserver-${version}";
   version = "7.9";
 
@@ -15,49 +14,66 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper
     perl
+    perlPackages.AnyEvent
     perlPackages.AudioScan
+    perlPackages.CarpClan
+    perlPackages.CGI
+    perlPackages.DataURIEncode
+    perlPackages.DBDSQLite
     perlPackages.DBI
+    perlPackages.DBIxClass
     perlPackages.DigestSHA1
     perlPackages.EV
+    perlPackages.ExporterLite
+    perlPackages.FileBOM
+    perlPackages.FileNext
+    perlPackages.FileSlurp
+    perlPackages.FileWhich
     perlPackages.HTMLParser
+    perlPackages.HTTPCookies
+    perlPackages.HTTPMessage
     perlPackages.ImageScale
-    # why do
-    perlPackages.JSONXS
+    perlPackages.IOSocketSSL
+    perlPackages.IOString
     perlPackages.JSONXSVersionOneAndTwo
     perlPackages.Log4Perl
+    perlPackages.NetHTTP
+    perlPackages.ProcBackground
     perlPackages.SubName
+    perlPackages.TextUnidecode
+    perlPackages.TieCacheLRU
+    perlPackages.TieCacheLRUExpires
+    perlPackages.TieRegexpHash
+    perlPackages.TimeDate
+    perlPackages.URI
     perlPackages.XMLParser
-    perlPackages.YAML
+    perlPackages.XMLSimple
+    perlPackages.YAMLLibYAML
   ];
 
-  buildPhase = ''
-    rm -Rf CPAN
-    rm -Rf Bin
-  '';
+
+  prePatch = ''
+    rm -rf CPAN
+    rm -rf Bin
+    touch Makefile.PL
+    '';
+
+  preConfigurePhase = "";
+
+  buildPhase = "
+    mv lib tmp
+    mkdir -p lib/perl5/
+    mv tmp lib/perl5/site_perl
+  ";
+
+  doCheck = false;
 
   installPhase = ''
     cp -r . $out
   '';
-  
-  postFixup = ''
-    wrapProgram $out/slimserver.pl \
-      --set PERL5LIB "${with perlPackages; stdenv.lib.makePerlPath [
-      AudioScan
-      DBI
-      DigestSHA1
-      EV
-      HTMLParser
-      ImageScale
-      JSONXS
-      JSONXSVersionOneAndTwo
-      Log4Perl
-      SubName
-      XMLParser
-      YAML
-      ]}"
-  '';
+
+  outputs = [ "out" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Logitech/slimserver;
