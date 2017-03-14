@@ -2676,6 +2676,8 @@ with pkgs;
 
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
+  latex2html = callPackage ../tools/misc/latex2html { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns {
@@ -4651,6 +4653,8 @@ with pkgs;
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
+  
+  yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
 
@@ -6887,7 +6891,10 @@ with pkgs;
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
-  valgrind = callPackage ../development/tools/analysis/valgrind { };
+  valgrind = callPackage ../development/tools/analysis/valgrind {
+    inherit (darwin) xnu bootstrap_cmds cctools;
+    llvm = llvm_39;
+   };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -7078,6 +7085,8 @@ with pkgs;
   cegui = callPackage ../development/libraries/cegui {};
 
   certbot = callPackage ../tools/admin/certbot { };
+
+  caf = callPackage ../development/libraries/caf {};
 
   cgal = callPackage ../development/libraries/CGAL {};
 
@@ -8971,7 +8980,7 @@ with pkgs;
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mkvtoolnix-cli = mkvtoolnix.override {
+  mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
     withGUI = false;
   };
 
@@ -14200,7 +14209,7 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate
-    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole marble
+    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole krfb marble
     okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
@@ -15855,7 +15864,8 @@ with pkgs;
     gtk = gtk2;
   };
 
-  vlc_qt5 = libsForQt5.vlc;
+  # VLC 3.0 is needed to compile in C++11 mode (QT 5.7)
+  vlc_qt5 = libsForQt56.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -16245,8 +16255,6 @@ with pkgs;
   yed = callPackage ../applications/graphics/yed {};
 
   inherit (gnome3) yelp;
-
-  ykpers = callPackage ../applications/misc/ykpers {};
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
 

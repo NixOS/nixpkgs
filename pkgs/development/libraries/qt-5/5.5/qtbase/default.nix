@@ -269,9 +269,12 @@ stdenv.mkDerivation {
               done
           popd
       fi
+    ''
 
-      # fixup .pc file (where to find 'moc' etc.)
-      sed "s|^host_bins=.*|host_bins=$dev/bin|" -i "$dev/lib/pkgconfig/Qt5Core.pc"
+    # fixup .pc file (where to find 'moc' etc.)
+    + lib.optionalString (!stdenv.isDarwin) ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
     '';
 
   inherit lndir;

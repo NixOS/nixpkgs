@@ -5878,17 +5878,16 @@ in {
 
   requests-cache = buildPythonPackage (rec {
     name = "requests-cache-${version}";
-    version = "0.4.10";
-    disabled = isPy3k;
+    version = "0.4.13";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests-cache/${name}.tar.gz";
-      sha256 = "671969d00719fa3e80476b128dc9232025926884d0110d4d235abdd9c3508fc0";
+      sha256 = "18jpyivnq5pjbkymk3i473rihpj2bgikafpha7xvr6w736hiqmpy";
     };
 
     buildInputs = with self; [ mock ];
 
-    propagatedBuildInputs = with self; [ self.six requests2 ];
+    propagatedBuildInputs = with self; [ requests2 six urllib3 ];
 
     meta = {
       description = "Persistent cache for requests library";
@@ -13256,6 +13255,13 @@ in {
       sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
     };
 
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/ipython/ipython_genutils/commit/6d74d8cb34e49820e48ba8b4f5e5f8322824f4f7.patch";
+        sha256 = "13ah6a11qldzzywax50la6qwq02sk5929gjkzzn456lg1ja5gq35";
+      })
+    ];
+
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ nose pkgs.glibcLocales ];
 
@@ -19060,6 +19066,10 @@ in {
     };
   };
 
+  pip-tools = callPackage ../development/python-modules/pip-tools {
+    glibcLocales = pkgs.glibcLocales;
+  };
+
   pika = buildPythonPackage rec {
     name = "pika-${version}";
     version = "0.10.0";
@@ -23661,11 +23671,11 @@ in {
 
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
-    version = "1.11.1";
+    version = "1.15.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/setuptools_scm/${name}.tar.gz";
-      sha256 = "8c45f738a23410c5276b0ed9294af607f491e4260589f1eb90df8312e23819bf";
+      sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
     };
 
     buildInputs = with self; [ pip pytest ];
@@ -24968,8 +24978,21 @@ in {
     };
   });
 
+  sphinxcontrib-openapi = buildPythonPackage (rec {
+    name = "sphinxcontrib-openapi-0.3.0";
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sphinxcontrib-openapi/${name}.tar.gz";
+      sha256 = "0fyniq37nnmhrk4j7mzvg6vfcpb624hb9x70g6mccyw4xrnhadv6";
+    };
+
+    propagatedBuildInputs = with self; [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
+  });
+
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
-    name = "sphinxcontrib-httpdomain-1.3.0";
+    name = "sphinxcontrib-httpdomain-1.5.0";
 
     # Check is disabled due to this issue:
     # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
@@ -24977,7 +25000,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinxcontrib-httpdomain/${name}.tar.gz";
-      sha256 = "ba8fbe82eddc96cfa9d7b975b0422801a14ace9d7e051b8b2c725b92ea6137b5";
+      sha256 = "0srg8lwf4m1hyhz942fcdfxh689xphndngiidb575qmfbi89gc7a";
     };
 
     propagatedBuildInputs = with self; [sphinx];
@@ -25882,12 +25905,13 @@ in {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.3.1";
-    name = "traitlets-${version}";
+    pname = "traitlets";
+    version = "4.3.2";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "ba8c94323ccbe8fd792e45d8efe8c95d3e0744cc8c085295b607552ab573724c";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -29284,6 +29308,8 @@ EOF
     };
   };
 
+  first = callPackage ../development/python-modules/first {};
+
   flaskbabel = buildPythonPackage rec {
     name = "Flask-Babel-0.11.1";
 
@@ -31521,7 +31547,7 @@ EOF
       sha256 = "0hq887yb3rwc0rcw32lh7xdkk9bbrqy274aspzqkd6f7dyhp73ih";
     };
 
-    disabled = isPy3k;
+    propagatedBuildInputs = with self; [ requests-cache ];
 
     meta = {
       description = "Simple to use TVDB (thetvdb.com) API in Python.";
@@ -31533,19 +31559,18 @@ EOF
 
   tvnamer = buildPythonPackage rec {
     name = "tvnamer-${version}";
-    version = "2.3";
+    version = "2.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tvnamer/${name}.tar.gz";
-      sha256 = "15i6qvhwhcx08c96xx3s2841yc7k8gxrqqvhw908c11g0045c2r3";
+      sha256 = "10iizmwna2xpyc2694hsrvny68y3bdq576p8kxsvg5gj2spnsxav";
     };
 
-    propagatedBuildInputs = with self; [
-      tvdb_api
-    ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ tvdb_api ];
 
-    # tvdb_api isn't working with Python 3
-    disabled = isPy3k;
+    # a ton of tests fail with: IOError: tvnamer/main.py could not be found in . or ..
+    doCheck = false;
 
     meta = {
       description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";

@@ -46,7 +46,7 @@ let
     alsaLib.out
     atk.out
     cairo.out
-    cups.out
+    cups
     curl.out
     dbus.lib
     expat.out

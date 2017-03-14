@@ -645,10 +645,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.2.3";
+        version = "1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.2.3.tar";
-          sha256 = "1d7iqr4fr0kr171fnjcm2n0bgcwzdh6jl585mwjf2zqnqszv13h0";
+          url = "https://elpa.gnu.org/packages/el-search-1.3.tar";
+          sha256 = "0hg7jppdsaxy285bdaban1i096bjx21pqmczz7w9f3nr34n28pyn";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -821,10 +821,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.1.2";
+        version = "1.1.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.1.2.tar";
-          sha256 = "18d5wdv33lcg96m3ljnv9zn98in27apm7bjycgq0asd2f31dvcvx";
+          url = "https://elpa.gnu.org/packages/gnorb-1.1.5.tar";
+          sha256 = "128ag8zkfxspf6szxfd7dcscm1zzzcibx7p9dpbpk036cr7m5i1p";
         };
         packageRequires = [ cl-lib ];
         meta = {

@@ -1,5 +1,6 @@
 {stdenv, subversion, sshSupport ? false, openssh ? null}:
-{url, rev ? "HEAD", md5 ? "", sha256 ? "", ignoreExternals ? false, name ? null}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "",
+ ignoreExternals ? false, ignoreKeywords ? false, name ? null}:
 
 let
   repoName = with stdenv.lib;
@@ -31,7 +32,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
   
-  inherit url rev sshSupport openssh ignoreExternals;
+  inherit url rev sshSupport openssh ignoreExternals ignoreKeywords;
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
   preferLocalBuild = true;

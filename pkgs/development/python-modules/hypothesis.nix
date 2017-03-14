@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python
-, isPy27, enum34
+, pythonOlder, enum34
 , doCheck ? true, pytest, flake8, flaky
 }:
 buildPythonPackage rec {
@@ -10,18 +10,18 @@ buildPythonPackage rec {
   # If you need these, you can just add them to your environment.
 
   name = "hypothesis-${version}";
-  version = "3.6.0";
+  version = "3.6.1";
 
   # Upstream prefers github tarballs
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "${version}";
-    sha256 = "0a3r4c8sr9jn7sv419vdzrzfc9sp7zf105f1lgyiwyzi3cgyvcvg";
+    sha256 = "1zwr9g4h4jizbvm2d7fywdpcxmw8i1m85h8g72kizah07gk12aq1";
   };
 
   buildInputs = stdenv.lib.optionals doCheck [ pytest flake8 flaky ];
-  propagatedBuildInputs = stdenv.lib.optionals isPy27 [ enum34 ];
+  propagatedBuildInputs = stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   inherit doCheck;
 

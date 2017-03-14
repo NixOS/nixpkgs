@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libsndfile, flex, bison
+{ stdenv, fetchFromGitHub, cmake, libsndfile, flex, bison, boost
 , alsaLib ? null
 , libpulseaudio ? null
 , tcltk ? null
@@ -11,26 +11,30 @@
 # , wiiuse ? null
 }:
 
-stdenv.mkDerivation {
-  name = "csound-6.04";
+stdenv.mkDerivation rec {
+  name = "csound-6.08.1";
+  version = "6.08.1";
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
-  src = fetchurl {
-    url = mirror://sourceforge/csound/Csound6.04.tar.gz;
-    sha256 = "1030w38lxdwjz1irr32m9cl0paqmgr02lab2m7f7j1yihwxj1w0g";
+  src = fetchFromGitHub {
+    owner = "csound";
+    repo = "csound";
+    rev = version;
+    sha256 = "03xnva17sw35ga3n96x1zdfgw913dga1hccly85wzfn0kxz4rld9";
   };
 
-  buildInputs = [ cmake libsndfile flex bison alsaLib libpulseaudio tcltk ];
+  nativeBuildInputs = [ cmake flex bison ];
+  buildInputs = [ libsndfile alsaLib libpulseaudio tcltk boost ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
     homepage = http://www.csounds.com/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [maintainers.marcweber];
+    platforms = platforms.linux;
   };
 }
 

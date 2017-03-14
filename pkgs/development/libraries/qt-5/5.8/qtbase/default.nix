@@ -230,7 +230,7 @@ stdenv.mkDerivation {
     # fixup .pc file (where to find 'moc' etc.)
     + lib.optionalString (!stdenv.isDarwin) ''
       sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
-          "s|^host_bins=.*|host_bins=$dev/bin|"
+          -e "/^host_bins=/ c host_bins=$dev/bin"
     ''
 
     # Don't move .prl files on darwin because they end up in

@@ -107,12 +107,12 @@ let
       makeQtWrapper =
         makeSetupHook
         { deps = [ makeWrapper ]; }
-        ../make-qt-wrapper.sh;
+        (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
 
       qmakeHook =
         makeSetupHook
         { deps = [ self.qtbase.dev ]; }
-        ../qmake-hook.sh;
+        (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);
 
     };
 

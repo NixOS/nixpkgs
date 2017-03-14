@@ -8,7 +8,7 @@
 assert ghcLibdir != null -> (ghc.isGhcjs or false);
 
 # This wrapper works only with GHC 6.12 or later.
-assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
+assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 
 # It's probably a good idea to include the library "ghc-paths" in the
 # compiler environment, because we have a specially patched version of
@@ -33,13 +33,14 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
 
 let
   isGhcjs       = ghc.isGhcjs or false;
-  ghc761OrLater = isGhcjs || lib.versionOlder "7.6.1" ghc.version;
+  isHaLVM       = ghc.isHaLVM or false;
+  ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
   crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
   ghcCommand = "${crossPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
-  libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
+  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}" else "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
