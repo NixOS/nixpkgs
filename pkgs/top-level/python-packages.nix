@@ -5371,10 +5371,10 @@ in {
 
   pytest-shutil = buildPythonPackage rec {
     name = "pytest-shutil-${version}";
-    version = "1.1.1";
+    version = "1.2.8";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
-      sha256 = "bb3c4fc2dddaf70b38bd9bb7a710d07728fa14f88fbc89c2a07979b383ade5d4";
+      sha256 = "924accaec3f3781416139e580386ab4f849cb8662bc1072405a81d3a5e56bf3d";
     };
     buildInputs = with self; [ cmdline pytest ];
     propagatedBuildInputs = with self; [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
