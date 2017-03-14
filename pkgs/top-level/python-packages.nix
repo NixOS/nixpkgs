@@ -10059,6 +10059,11 @@ in {
       substituteInPlace pywatchman/__init__.py \
         --replace "'watchman'" "'${pkgs.watchman}/bin/watchman'"
     '';
+    # SyntaxError
+    disabled = isPy3k;
+    # No tests in archive
+    doCheck = false;
+
   };
 
   zope_tales = buildPythonPackage rec {
