@@ -18460,12 +18460,12 @@ in {
   };
 
   pathpy = buildPythonPackage rec {
-    version = "8.1.2";
+    version = "10.1";
     name = "path.py-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/path.py/${name}.tar.gz";
-      sha256 = "ada95d117c4559abe64080961daf5badda68561afdd34c278f8ca20f2fa466d2";
+      sha256 = "8b0ee56f6c1421a9038823926ee8da354ce70933424b408558bc6b48496587f3";
     };
 
     buildInputs = with self; [setuptools_scm pytestrunner pytest pkgs.glibcLocales ];
