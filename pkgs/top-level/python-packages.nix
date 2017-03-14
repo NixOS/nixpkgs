@@ -5973,6 +5973,7 @@ in {
       description = "Date parsing library designed to parse dates from HTML pages";
       homepage = http://pypi.python.org/pypi/dateparser;
       license = licenses.bsd3;
+      broken = true;
     };
   };
 
