@@ -5386,12 +5386,9 @@ in {
       license = licenses.mit;
     };
 
-
     checkPhase = ''
       py.test
     '';
-    # Bunch of pickle errors
-    doCheck = false;
   };
 
   pytestcov = buildPythonPackage (rec {
@@ -5421,10 +5418,10 @@ in {
   pytest-virtualenv = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-virtualenv";
-    version = "1.1.0";
+    version = "1.2.7";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
+      sha256 = "51fb6468670624b2315aecaf1a2bbd698509e3ea6a1e28b094984c45e1376755";
     };
     buildInputs = with self; [ pytest pytestcov mock cmdline ];
     propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil ];
