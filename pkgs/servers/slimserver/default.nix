@@ -70,6 +70,7 @@ buildPerlPackage rec {
     mv lib tmp
     mkdir -p lib/perl5/
     mv tmp lib/perl5/site_perl
+    mv Slim lib/perl5/site_perl
   ";
 
   doCheck = false;
