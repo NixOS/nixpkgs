@@ -291,6 +291,8 @@ with pkgs;
 
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
+  removeReferencesTo = callPackage ../build-support/remove-references-to/default.nix { };
+
   vmTools = callPackage ../build-support/vm/default.nix { };
 
   releaseTools = callPackage ../build-support/release/default.nix { };
@@ -938,11 +940,17 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
+  jbuilder = callPackage ../development/tools/ocaml/jbuilder {
+    inherit (ocaml-ng.ocamlPackages_4_03) ocaml;
+  };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
   long-shebang = callPackage ../misc/long-shebang {};
+
+  iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   mathics = pythonPackages.mathics;
 
@@ -1095,6 +1103,8 @@ with pkgs;
   ori = callPackage ../tools/backup/ori { };
 
   atool = callPackage ../tools/archivers/atool { };
+
+  bsc = callPackage ../tools/compression/bsc { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
@@ -2650,6 +2660,8 @@ with pkgs;
 
   kindlegen = callPackage ../tools/typesetting/kindlegen { };
 
+  latex2html = callPackage ../tools/misc/latex2html { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns {
@@ -2771,6 +2783,8 @@ with pkgs;
   lxd = callPackage ../tools/admin/lxd { };
 
   lzfse = callPackage ../tools/compression/lzfse { };
+
+  lzham = callPackage ../tools/compression/lzham { };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -3284,6 +3298,8 @@ with pkgs;
   packagekit = callPackage ../tools/package-management/packagekit {
     nix = nixUnstable;
   };
+
+  packetdrill = callPackage ../tools/networking/packetdrill { };
 
   pakcs = callPackage ../development/compilers/pakcs {};
 
@@ -4614,6 +4630,8 @@ with pkgs;
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
+  
+  yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
 
@@ -4766,7 +4784,7 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
-  clang_4 = lowPrio llvmPackages_4.clang;
+  clang_4  = llvmPackages_4.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5322,13 +5340,13 @@ with pkgs;
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
-  lld = lowPrio llvmPackages_4.lld;
+  lld = llvmPackages_4.lld;
 
   lldb = llvmPackages.lldb;
 
   llvm = llvmPackages.llvm;
 
-  llvm_4 = lowPrio llvmPackages_4.llvm;
+  llvm_4  = llvmPackages_4.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5434,7 +5452,7 @@ with pkgs;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  inherit (ocamlPackages) ocaml-top;
+  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
@@ -6209,7 +6227,7 @@ with pkgs;
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
     pythonPackages = python2Packages;
   };
-  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix {
+  buildbot-plugins = callPackages ../development/tools/build-managers/buildbot/plugins.nix {
     pythonPackages = python2Packages;
   };
   buildbot-ui = buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
@@ -6850,7 +6868,10 @@ with pkgs;
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
-  valgrind = callPackage ../development/tools/analysis/valgrind { };
+  valgrind = callPackage ../development/tools/analysis/valgrind {
+    inherit (darwin) xnu bootstrap_cmds cctools;
+    llvm = llvm_39;
+   };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -7041,6 +7062,8 @@ with pkgs;
   cegui = callPackage ../development/libraries/cegui {};
 
   certbot = callPackage ../tools/admin/certbot { };
+
+  caf = callPackage ../development/libraries/caf {};
 
   cgal = callPackage ../development/libraries/CGAL {};
 
@@ -8929,7 +8952,7 @@ with pkgs;
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mkvtoolnix-cli = mkvtoolnix.override {
+  mkvtoolnix-cli = callPackage ../applications/video/mkvtoolnix {
     withGUI = false;
   };
 
@@ -11408,7 +11431,6 @@ with pkgs;
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
-        DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11477,7 +11499,6 @@ with pkgs;
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
-      kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
       kernelPatches.mips_fpu_sigill
@@ -13025,7 +13046,7 @@ with pkgs;
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
-  dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
+  dd-agent = callPackage ../tools/networking/dd-agent { };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
     pulseSupport = config.pulseaudio or true;
@@ -14107,6 +14128,8 @@ with pkgs;
 
   kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
 
+  kanboard = callPackage ../applications/misc/kanboard { };
+
   kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
   kdeApplications =
@@ -14122,7 +14145,7 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate
-    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole marble
+    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole krfb marble
     okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
@@ -14188,7 +14211,7 @@ with pkgs;
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
-    go = go_1_6;
+    go = go_1_7;
   };
 
   lame = callPackage ../development/libraries/lame { };
@@ -14268,9 +14291,7 @@ with pkgs;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
-      icu = icu_57;
     };
-    icu = icu_57;
   });
 
 
@@ -15712,6 +15733,8 @@ with pkgs;
     system-libvirt = libvirt;
   };
 
+  virtmanager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix { };
+
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
   virtualbox = callPackage ../applications/virtualization/virtualbox {
@@ -15775,7 +15798,8 @@ with pkgs;
     gtk = gtk2;
   };
 
-  vlc_qt5 = libsForQt5.vlc;
+  # VLC 3.0 is needed to compile in C++11 mode (QT 5.7)
+  vlc_qt5 = libsForQt56.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -16165,8 +16189,6 @@ with pkgs;
   yed = callPackage ../applications/graphics/yed {};
 
   inherit (gnome3) yelp;
-
-  ykpers = callPackage ../applications/misc/ykpers {};
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
 

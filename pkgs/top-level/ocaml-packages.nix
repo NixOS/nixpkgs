@@ -138,6 +138,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cpuid = callPackage ../development/ocaml-modules/cpuid { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     cstruct = callPackage ../development/ocaml-modules/cstruct {
@@ -261,7 +263,7 @@ let
       else lambdaTerm-1_6;
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      llvm = pkgs.llvm_37;
+      llvm = pkgs.llvm_39;
     };
 
     logs = callPackage ../development/ocaml-modules/logs {
@@ -335,6 +337,8 @@ let
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
@@ -747,8 +751,6 @@ let
     wyrd = callPackage ../tools/misc/wyrd { };
 
     haxe = callPackage ../development/compilers/haxe { };
-
-    ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 

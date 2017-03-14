@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, which, go, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
 , iptables, coreutils
 , components ? [
     "cmd/kubeadm"
@@ -18,16 +18,16 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1ps9bn5gqknyjv0b9jvp7xg3cyd4anq11j785p22347al0b8w81v";
+    sha256 = "1xhz6m6ly6ffj60id9ms1liijlrik8n2pxyzb5m77ym3zf7rxlpl";
   };
 
-  buildInputs = [ makeWrapper which go rsync go-bindata ];
+  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     ./hack/generate-docs.sh
-    (cd build/pause && gcc pause.c -o pause)
+    (cd build/pause && cc pause.c -o pause)
   '';
 
   installPhase = ''
@@ -59,12 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # Remove references to go compiler
-    while read file; do
-      cat $file | sed "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" > $file.tmp
-      mv $file.tmp $file
-      chmod +x $file
-    done < <(find $out/bin $pause/bin -type f 2>/dev/null)
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {
@@ -72,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = http://kubernetes.io;
     maintainers = with maintainers; [offline];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

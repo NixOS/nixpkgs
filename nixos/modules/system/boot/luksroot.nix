@@ -434,8 +434,8 @@ in
       chmod +x $out/bin/cryptsetup-askpass
 
       ${optionalString luks.yubikeySupport ''
-        copy_bin_and_libs ${pkgs.ykpers}/bin/ykchalresp
-        copy_bin_and_libs ${pkgs.ykpers}/bin/ykinfo
+        copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykchalresp
+        copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykinfo
         copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
 
         cc -O3 -I${pkgs.openssl.dev}/include -L${pkgs.openssl.out}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto

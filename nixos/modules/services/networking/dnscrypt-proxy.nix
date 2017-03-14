@@ -3,8 +3,9 @@ with lib;
 
 let
   apparmorEnabled = config.security.apparmor.enable;
-  dnscrypt-proxy = pkgs.dnscrypt-proxy;
+
   cfg = config.services.dnscrypt-proxy;
+
   stateDirectory = "/var/lib/dnscrypt-proxy";
 
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
@@ -121,7 +122,7 @@ in
           name = mkOption {
             type = types.str;
             description = "Fully qualified domain name";
-            example = "2.dnscrypt-cert.opendns.com";
+            example = "2.dnscrypt-cert.example.com";
           };
 
           key = mkOption {
@@ -195,7 +196,7 @@ in
 
       serviceConfig = {
         NonBlocking = "true";
-        ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+        ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
 
         User = "dnscrypt-proxy";
 
@@ -208,7 +209,7 @@ in
 
     (mkIf apparmorEnabled {
     security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
-      ${dnscrypt-proxy}/bin/dnscrypt-proxy {
+      ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
         /dev/urandom r,
 
@@ -223,6 +224,8 @@ in
         network inet6 stream,
         network inet dgram,
         network inet6 dgram,
+
+        ${getLib pkgs.dnscrypt-proxy}/lib/dnscrypt-proxy/libdcplugin*.so mr,
 
         ${getLib pkgs.gcc.cc}/lib/libssp.so.* mr,
         ${getLib pkgs.libsodium}/lib/libsodium.so.* mr,
@@ -306,4 +309,8 @@ in
     };
     })
     ]);
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ])
+  ];
 }

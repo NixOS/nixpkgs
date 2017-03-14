@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, IOKit, Carbon }:
+{ stdenv, fetchurl, autoreconfHook, gnu-config, IOKit, Carbon }:
 
 stdenv.mkDerivation rec {
   name = "cdparanoia-III-10.2";
@@ -7,10 +7,6 @@ stdenv.mkDerivation rec {
     url = "http://downloads.xiph.org/releases/cdparanoia/${name}.src.tgz";
     sha256 = "1pv4zrajm46za0f6lv162iqffih57a8ly4pc69f7y0gfyigb8p80";
   };
-
-  hardeningDisable = [ "format" ];
-
-  preConfigure = "unset CC";
 
   patches = stdenv.lib.optionals stdenv.isDarwin [
     (fetchurl {
@@ -23,10 +19,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  buildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
+
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [
     Carbon
     IOKit
   ];
+
+  hardeningDisable = [ "format" ];
+
+  preConfigure = "unset CC" + stdenv.lib.optionalString stdenv.isAarch64 ''\n
+    cp ${gnu-config}/config.sub configure.sub
+    cp ${gnu-config}/config.guess configure.guess
+  '';
 
   meta = {
     homepage = http://xiph.org/paranoia;

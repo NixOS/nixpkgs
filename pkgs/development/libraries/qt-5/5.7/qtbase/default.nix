@@ -4,6 +4,7 @@
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
   ruby,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
@@ -15,7 +16,8 @@
   cups ? null, mysql ? null, postgresql ? null,
 
   # options
-  mesaSupported, mesa,
+  mesaSupported ? (!stdenv.isDarwin),
+  mesa,
   buildExamples ? false,
   buildTests ? false,
   developerBuild ? false,
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
+    ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)]
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
     ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
@@ -54,11 +57,11 @@ stdenv.mkDerivation {
       substituteInPlace src/network/kernel/qhostinfo_unix.cpp \
         --replace "@glibc@" "${stdenv.cc.libc.out}"
 
-      substituteInPlace src/plugins/platforms/xcb/qxcbcursor.cpp \
-        --replace "@libXcursor@" "${libXcursor.out}"
-
       substituteInPlace src/network/ssl/qsslsocket_openssl_symbols.cpp \
         --replace "@openssl@" "${openssl.out}"
+    '' + lib.optionalString stdenv.isLinux ''
+      substituteInPlace src/plugins/platforms/xcb/qxcbcursor.cpp \
+        --replace "@libXcursor@" "${libXcursor.out}"
 
       substituteInPlace src/dbus/qdbus_symbols.cpp \
         --replace "@dbus_libs@" "${dbus.lib}"
@@ -74,8 +77,23 @@ stdenv.mkDerivation {
       substituteInPlace mkspecs/common/linux.conf \
         --replace "@mesa_lib@" "${mesa.out}" \
         --replace "@mesa_inc@" "${mesa.dev or mesa}"
-    '';
-
+    ''+ lib.optionalString stdenv.isDarwin ''
+      sed -i \
+          -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
+          -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
+          -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot="${darwin.apple_sdk.sdk}"|' \
+          -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
+          -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
+          -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
+          -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
+          ./configure
+      sed -i '3,$d' ./mkspecs/features/mac/default_pre.prf
+      sed -i '26,$d' ./mkspecs/features/mac/default_post.prf
+      sed -i '1,$d' ./mkspecs/features/mac/sdk.prf
+      sed 's/QMAKE_LFLAGS_RPATH      = -Wl,-rpath,/QMAKE_LFLAGS_RPATH      =/' -i ./mkspecs/common/mac.conf
+     '';
+     # Note on the above: \x27 is a way if including a single-quote
+     # character in the sed string arguments.
 
   setOutputFlags = false;
   preConfigure = ''
@@ -103,7 +121,6 @@ stdenv.mkDerivation {
     ${lib.optionalString developerBuild "-developer-build"}
     -largefile
     -accessibility
-    -rpath
     -optimized-qmake
     -strip
     -no-reduce-relocations
@@ -117,15 +134,6 @@ stdenv.mkDerivation {
     -iconv
     -icu
     -pch
-    -glib
-    -xcb
-    -qpa xcb
-    -${lib.optionalString (cups == null) "no-"}cups
-
-    -no-eglfs
-    -no-directfb
-    -no-linuxfb
-    -no-kms
 
     ${lib.optionalString (!system-x86_64) "-no-sse2"}
     -no-sse3
@@ -141,13 +149,8 @@ stdenv.mkDerivation {
     -system-libpng
     -system-libjpeg
     -system-harfbuzz
-    -system-xcb
-    -system-xkbcommon
     -system-pcre
     -openssl-linked
-    -dbus-linked
-    -libinput
-    -gtk
 
     -system-sqlite
     -${if mysql != null then "plugin" else "no"}-sql-mysql
@@ -158,7 +161,30 @@ stdenv.mkDerivation {
     -${lib.optionalString (buildExamples == false) "no"}make examples
     -${lib.optionalString (buildTests == false) "no"}make tests
     -v
-  '';
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    -no-rpath
+    -glib
+    -xcb
+    -qpa xcb
+
+    -${lib.optionalString (cups == null) "no-"}cups
+
+    -no-eglfs
+    -no-directfb
+    -no-linuxfb
+    -no-kms
+
+    -libinput
+    -gtk
+    -system-xcb
+    -system-xkbcommon
+    -dbus-linked
+  '' + lib.optionalString stdenv.isDarwin ''
+    -platform macx-clang
+    -no-use-gold-linker
+    -no-fontconfig
+    -qt-freetype
+   '';
 
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
@@ -166,32 +192,44 @@ stdenv.mkDerivation {
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   propagatedBuildInputs = [
-    dbus glib libxml2 libxslt openssl pcre16 sqlite udev zlib
+    libxml2 libxslt openssl pcre16 sqlite zlib
+
+    # Text rendering
+    harfbuzz icu
 
     # Image formats
     libjpeg libpng libtiff
+  ]
+  ++ lib.optional mesaSupported mesa
+  ++ lib.optionals (!stdenv.isDarwin) [
+    dbus glib udev
 
     # Text rendering
-    fontconfig freetype harfbuzz icu
+    fontconfig freetype
 
     # X11 libs
     libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
     xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
-  ]
-  ++ lib.optional mesaSupported mesa;
+   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ApplicationServices CoreServices AppKit Carbon OpenGL AGL Cocoa
+    DiskArbitration darwin.cf-private libiconv darwin.apple_sdk.sdk
+  ]);
 
-  buildInputs =
-    [ gtk3 libinput ]
+  buildInputs = [ ]
+    ++ lib.optionals (!stdenv.isDarwin) [ gtk3 libinput ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
     ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs =
-    [ bison flex gperf lndir patchelf perl pkgconfig python2 ];
+  nativeBuildInputs = [ bison flex gperf lndir perl pkgconfig python2 ] ++ lib.optional (!stdenv.isDarwin) patchelf;
 
   # freetype-2.5.4 changed signedness of some struct fields
-  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare"
+    + lib.optionalString stdenv.isDarwin " -D__MAC_OS_X_VERSION_MAX_ALLOWED=1090 -D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))";
+  # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
+  # 10.9 which necessitates the above macro definition that mentions
+  # 10.10
 
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
@@ -213,6 +251,11 @@ stdenv.mkDerivation {
     moveToOutput "share/doc" "$dev"
   '';
 
+  # Don't move .prl files on darwin because they end up in
+  # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
+  # use of lndir in the qtbase setup-hook. On Linux, the .prl files
+  # are in lib, and so do not cause a subsequent recreation of deep
+  # framework directory trees.
   postFixup =
     ''
       # Don't retain build-time dependencies like gdb.
@@ -221,17 +264,33 @@ stdenv.mkDerivation {
       # Move libtool archives and qmake projects
       if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
           pushd "''${!outputLib}"
-          find lib -name '*.a' -o -name '*.la' -o -name '*.prl' | \
+          find lib -name '*.a' -o -name '*.la'${if stdenv.isDarwin then "" else "-o -name '*.prl'"} | \
               while read -r file; do
                   mkdir -p "''${!outputDev}/$(dirname "$file")"
                   mv "''${!outputLib}/$file" "''${!outputDev}/$file"
               done
           popd
       fi
+    '' + lib.optionalString stdenv.isDarwin ''
+      fixDarwinDylibNames_rpath() {
+        local flags=()
+
+        for fn in "$@"; do
+          flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
+        done
+
+        for fn in "$@"; do
+          echo "$fn: fixing dylib"
+          install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
+        done
+      }
+      fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
     '';
 
   inherit lndir;
-  setupHook = ../../qtbase-setup-hook.sh;
+  setupHook = if stdenv.isDarwin
+              then ../../qtbase-setup-hook-darwin.sh
+              else ../../qtbase-setup-hook.sh;
 
   enableParallelBuilding = true;
 
@@ -240,7 +299,7 @@ stdenv.mkDerivation {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ bbenoist qknight ttuegel ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

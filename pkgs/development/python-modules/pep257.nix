@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage = https://github.com/GreenSteam/pep257/;
     description = "Python docstring style checker";
     longDescription = "Static analysis tool for checking compliance with Python PEP 257.";
-    lecense = licenses.mit;
+    license = licenses.mit;
   };
 }
