@@ -3627,31 +3627,6 @@ in {
     };
   };
 
-  celery_3 = buildPythonPackage rec {
-    name = "celery-${version}";
-    version = "3.1.23";
-
-    disabled = (pythonOlder "2.6") || isPy35;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/celery/${name}.tar.gz";
-      sha256 = "0614ppp18vmiwdk0rxvz0wn62d7svanwdnx7jgqxpy9pb20rqd8s";
-    };
-
-    buildInputs = with self; [ mock nose unittest2 ];
-    propagatedBuildInputs = with self; [ kombu_3 billiard_33 pytz anyjson amqp_1 ];
-
-    checkPhase = ''
-      nosetests $out/${python.sitePackages}/celery/tests/
-    '';
-
-    meta = {
-      homepage = https://github.com/celery/celery/;
-      description = "Distributed task queue";
-      license = licenses.bsd3;
-    };
-  };
-
   celery = buildPythonPackage rec {
     name = "celery-${version}";
     version = "4.0.2";
@@ -10614,24 +10589,7 @@ in {
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
-  django_raster = buildPythonPackage rec {
-    name = "django-raster-${version}";
-    version = "0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-raster/${name}.tar.gz";
-      sha256 = "0vn11y07wag7yvjzrk7m99xs3cqyaaaklwcsik9zbvw0kwp2khni";
-    };
-
-    propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
-                                          pyparsing django celery_3 ];
-
-    meta = {
-      description = "Basic raster data integration for Django";
-      homepage = https://github.com/geodesign/django-raster;
-      license = licenses.mit;
-    };
-  };
+  django-raster = callPackage ../development/python-modules/django-raster { };
 
   django_redis = buildPythonPackage rec {
     name = "django-redis-${version}";
