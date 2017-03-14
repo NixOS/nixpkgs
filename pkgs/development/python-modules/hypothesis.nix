@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python
-, pythonOlder, enum34
+, pythonOlder, pythonAtLeast, enum34
 , doCheck ? true, pytest, flake8, flaky
 }:
 buildPythonPackage rec {
@@ -29,6 +29,10 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m pytest tests/cover
   '';
+
+  # Unsupport by upstream on certain versions
+  # https://github.com/HypothesisWorks/hypothesis-python/issues/477
+  disabled = pythonOlder "3.4" && pythonAtLeast "2.8";
 
   meta = with stdenv.lib; {
     description = "A Python library for property based testing";
