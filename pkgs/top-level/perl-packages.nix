@@ -460,10 +460,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AudioScan = buildPerlPackage rec {
-    name = "Audio-Scan-0.96";
+    name = "Audio-Scan-0.93";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "d68bb3598bb3c925f4753cc9e73f5e357bf249a36e16da57c54c205de4bbb426";
+      sha256 = "03nwcm234y76jb1p20rlcky6vzv68i46s9mjfr7kzp65w3yg94js";
     };
     buildInputs = [ pkgs.zlib ModuleBuild ModuleBuildPluggablePPPort ];
     propagatedBuildInputs = [ TestWarn ];
@@ -2067,6 +2067,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ClassInspector ];
   };
 
+  ClassVirtual = buildPerlPackage rec {
+    name = "Class-Virtual-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/${name}.tar.gz";
+      sha256 = "c6499b42d3b4e5c6488a5e82fbc28698e6c9860165072dddfa6749355a9cfbb2";
+    };
+    propagatedBuildInputs = [ CarpAssert ClassDataInheritable ClassISA ];
+    meta = {
+      homepage = https://metacpan.org/release/Class-Virtual;
+      description = "Base class for virtual base classes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassXSAccessor = buildPerlPackage {
     name = "Class-XSAccessor-1.19";
     src = fetchurl {
@@ -3074,6 +3088,17 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MW/MWX/${name}.tar.gz";
       sha256 = "b6919ba49b9fe98bfdf3e8accae7b9b7f78dc9e71ebbd0b7fef7a45d99324ccb";
+    };
+  };
+
+  DataURIEncode = buildPerlPackage rec {
+    name = "Data-URIEncode-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RH/RHANDOM/${name}.tar.gz";
+      sha256 = "51c9efbf8423853616eaa24841e4d1996b2db0036900617fb1dbc76c75a1f360";
+    };
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4641,6 +4666,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  enum = buildPerlPackage rec {
+    name = "enum-1.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "d2f36b5015f1e35f640159867b60bf5d5cd66b56cd5e42d33f531be68e5eee35";
+    };
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Env = buildPerlPackage {
     name = "Env-1.04";
     src = fetchurl {
@@ -5111,6 +5147,20 @@ let self = _self // overrides; _self = with self; {
       perl Build.PL PREFIX="$out" prefix="$out"
     '';
     propagatedBuildInputs = [ ModuleBuild ];
+  };
+
+  FileBOM = buildPerlPackage rec {
+    name = "File-BOM-0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTLAW/${name}.tar.gz";
+      sha256 = "431c8b39397fd5ad5b1a1100d3647a06e9f94304d46db44ffc0a0e5c5c06a1c1";
+    };
+    buildInputs = [ ModuleBuild TestException ];
+    propagatedBuildInputs = [ Readonly ];
+    meta = {
+      description = "Utilities for handling Byte Order Marks";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   FileCheckTree = buildPerlPackage {
@@ -10628,6 +10678,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ProcBackground = buildPerlPackage rec {
+    name = "Proc-Background-1.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BZ/BZAJAC/${name}.tar.gz";
+      sha256 = "1ce0dd78c0bb8393a2431b385a27b99fcc623a41ebec57b3cc09cc38cdb708ee";
+    };
+    meta = {
+    };
+  };
+
   ProcProcessTable = buildPerlPackage {
     name = "Proc-ProcessTable-0.51";
     src = fetchurl {
@@ -14000,6 +14060,31 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TieCacheLRU = buildPerlPackage rec {
+    name = "Tie-Cache-LRU-20150301";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/${name}.tar.gz";
+      sha256 = "1bf740450d3a6d7c12b48c25f7da5964e44e7cc38b28572cfb76ff22464f4469";
+    };
+    propagatedBuildInputs = [ CarpAssert ClassDataInheritable ClassVirtual enum ];
+    meta = {
+      description = "A Least-Recently Used cache";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TieCacheLRUExpires = buildPerlPackage rec {
+    name = "Tie-Cache-LRU-Expires-0.55";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OE/OESTERHOL/${name}.tar.gz";
+      sha256 = "b316d849acd25f24346d55a9950d281fee0746398767c601234122159573eb9a";
+    };
+    propagatedBuildInputs = [ TieCacheLRU ];
+    meta = {
+      license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
   TieCycle = buildPerlPackage rec {
     name = "Tie-Cycle-1.21";
     src = fetchurl {
@@ -14052,6 +14137,17 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = mirror://cpan/authors/id/F/FL/FLORA/Tie-RefHash-1.39.tar.gz;
       sha256 = "b0b80ef571e7dadb726b8214f7352a932a8fa82af29072895aa1aadc89f48bec";
+    };
+  };
+
+  TieRegexpHash = buildPerlPackage rec {
+    name = "Tie-RegexpHash-0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AL/ALTREUS/${name}.tar.gz";
+      sha256 = "0c207850e77efb16618e0aa015507926a3425b34aad5aa6e3e40d83989a085a3";
+    };
+    meta = {
+      license = stdenv.lib.licenses.artistic1;
     };
   };
 
@@ -14446,6 +14542,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://perl.wdlabs.com/URI-ws/;
       description = "WebSocket support for URI package";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  UUIDTiny = buildPerlPackage rec {
+    name = "UUID-Tiny-1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CAUGUSTIN/${name}.tar.gz";
+      sha256 = "6dcd92604d64e96cc6c188194ae16a9d3a46556224f77b6f3d1d1312b68f9a3d";
+    };
+    meta = {
+      description = "Pure Perl UUID Support With Functional Interface";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
