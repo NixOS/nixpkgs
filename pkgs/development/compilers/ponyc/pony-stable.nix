@@ -1,13 +1,13 @@
 {stdenv, fetchFromGitHub, ponyc }:
 
 stdenv.mkDerivation {
-  name = "pony-stable-2016-10-10";
+  name = "pony-stable-unstable-2017-01-03";
 
   src = fetchFromGitHub {
     owner = "jemc";
     repo = "pony-stable";
-    rev = "fdefa26fed93f4ff81c323f29abd47813c515703";
-    sha256 = "16inavy697icgryyvn9gcylgh639xxs7lnbrqdzcryvh0ck15qxk";
+    rev = "0054b429a54818d187100ed40f5525ec7931b31b";
+    sha256 = "0libx8byzwqjjgxxyiiahiprzzp845xgbk09sx9bzban5cd5j0g5";
   };
 
   buildInputs = [ ponyc ];
