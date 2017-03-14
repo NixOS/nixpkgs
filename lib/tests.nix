@@ -220,4 +220,34 @@ runTests {
       expected = builtins.toJSON val;
   };
 
+  testSplitStringsSimple = {
+    expr = strings.splitString "." "a.b.c.d";
+    expected = [ "a" "b" "c" "d" ];
+  };
+
+  testSplitStringsEmpty = {
+    expr = strings.splitString "." "a..b";
+    expected = [ "a" "" "b" ];
+  };
+
+  testSplitStringsOne = {
+    expr = strings.splitString ":" "a.b";
+    expected = [ "a.b" ];
+  };
+
+  testSplitStringsNone = {
+    expr = strings.splitString "." "";
+    expected = [ "" ];
+  };
+
+  testSplitStringsFirstEmpty = {
+    expr = strings.splitString "/" "/a/b/c";
+    expected = [ "" "a" "b" "c" ];
+  };
+
+  testSplitStringsLastEmpty = {
+    expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
+    expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
 }
