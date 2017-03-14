@@ -146,7 +146,7 @@ in stdenv.mkDerivation rec {
 
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
-    ln -s ${stdenv.glibc.bin}/bin/iconv opt/vagrant/embedded/bin
+    ln -s ${stdenv.cc.libc.bin}/bin/iconv opt/vagrant/embedded/bin
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
