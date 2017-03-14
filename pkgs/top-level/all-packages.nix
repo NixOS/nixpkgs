@@ -9877,8 +9877,6 @@ with pkgs;
 
   unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
 
-  urt = callPackage ../development/libraries/urt { };
-
   ustr = callPackage ../development/libraries/ustr { };
 
   usbredir = callPackage ../development/libraries/usbredir {
