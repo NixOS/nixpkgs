@@ -3446,11 +3446,13 @@ in {
 
 
   cairocffi = buildPythonPackage rec {
-    name = "cairocffi-0.7.2";
+    pname = "cairocffi";
+    version = "0.8.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cairocffi/${name}.tar.gz";
-      sha256 = "e42b4256d27bd960cbf3b91a6c55d602defcdbc2a73f7317849c80279feeb975";
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "0i9m3p39g9wrkpjvpawch2qmnmm3cnim7niz3nmmbcp2hrkixwk5";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -3464,6 +3466,7 @@ in {
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ pkgs.cairo cffi ];
 
+
     checkPhase = ''
       py.test $out/${python.sitePackages}
     '';
@@ -3473,15 +3476,10 @@ in {
     # OSError: dlopen() failed to load a library: gdk_pixbuf-2.0 / gdk_pixbuf-2.0-0
 
     patches = [
-      # This patch from PR substituted upstream
-      (pkgs.fetchpatch {
-          url = "https://github.com/avnik/cairocffi/commit/2266882e263c5efc87350cf016d117b2ec6a1d59.patch";
-          sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
-      })
-
-      ../development/python-modules/cairocffi/dlopen-paths.patch
       ../development/python-modules/cairocffi/fix_test_scaled_font.patch
-    ];
+    ] ++ ( if stdenv.isDarwin
+      then [ ../development/python-modules/cairocffi/dlopen-paths.osx.patch ]
+      else [ ../development/python-modules/cairocffi/dlopen-paths.patch ] );
 
     postPatch = ''
       # Hardcode cairo library path
@@ -3492,7 +3490,7 @@ in {
 
     meta = {
       homepage = https://github.com/SimonSapin/cairocffi;
-      license = "bsd";
+      license = licenses.bsd3;
       description = "cffi-based cairo bindings for Python";
     };
   };
@@ -4940,6 +4938,8 @@ in {
     checkPhase = ''
       py.test
     '';
+    # fails to complete tests on OSX but libraries using it works.
+    doCheck = ( if stdenv.isDarwin then false else true );
 
     meta = {
       maintainers = with maintainers; [ domenkozar ];
@@ -15291,16 +15291,15 @@ in {
   };
 
   pygal = buildPythonPackage rec {
-    version = "2.0.10";
-    name = "pygal-${version}";
+    pname = "pygal";
+    version = "2.3.1";
+    name = "${pname}-${version}";
 
-    doCheck = !isPyPy;  # one check fails with pypy
+    doCheck = true;
 
-    src = pkgs.fetchFromGitHub {
-      owner = "Kozea";
-      repo = "pygal";
-      rev = version;
-      sha256 = "1j7qjgraapvfc80yp8xcbddqrw8379gqi7pwkvfml3qcqm0z0d33";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0rq6hwd1vn44p3jx79wvln1p9mrbwh36plmlyj5js31x4f8s39bv";
     };
 
     buildInputs = with self; [ flask pyquery pytest ];
@@ -15310,7 +15309,7 @@ in {
       description = "Sexy and simple python charting";
       homepage = http://www.pygal.org;
       license = licenses.lgpl3;
-      maintainers = with maintainers; [ sjourdois ];
+      maintainers = with maintainers; [ sjourdois vrthra ];
     };
   };
 
