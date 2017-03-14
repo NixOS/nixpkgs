@@ -2898,7 +2898,7 @@ in {
     };
   };
 
-  # Needed for bleach 1.5.0 and calibre 2.76.0
+  # Needed for FlexGet 1.2.337 and calibre 2.76.0
   html5lib_0_9999999 = self.html5lib.override rec {
     name = "html5lib-${version}";
     buildInputs = with self; [ nose flake8 ];
@@ -2916,21 +2916,16 @@ in {
 
   bleach = buildPythonPackage rec {
     pname = "bleach";
-    version = "1.5.0";
+    version = "2.0.0";
     name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "978e758599b54cd3caa2e160d74102879b230ea8dc93871d0783721eef58bc65";
+      sha256 = "0c5w7hh70lqzca7ir71j891csvch1899r8q09zgswk1y00q22lmr";
     };
 
     buildInputs = with self; [ pytest pytestrunner ];
-    propagatedBuildInputs = with self; [ six html5lib_0_9999999 ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==3.0.3" ""
-      substituteInPlace setup.py --replace ">=0.999,!=0.9999,!=0.99999,<0.99999999" ""
-    '';
+    propagatedBuildInputs = with self; [ six html5lib ];
 
     meta = {
       description = "An easy, HTML5, whitelisting HTML sanitizer";
