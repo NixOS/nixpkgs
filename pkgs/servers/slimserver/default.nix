@@ -19,6 +19,7 @@ buildPerlPackage rec {
     perlPackages.AudioScan
     perlPackages.CarpClan
     perlPackages.CGI
+    perlPackages.DataDump
     perlPackages.DataURIEncode
     perlPackages.DBDSQLite
     perlPackages.DBI
@@ -27,11 +28,13 @@ buildPerlPackage rec {
     perlPackages.EV
     perlPackages.ExporterLite
     perlPackages.FileBOM
+    perlPackages.FileCopyRecursive
     perlPackages.FileNext
     perlPackages.FileSlurp
     perlPackages.FileWhich
     perlPackages.HTMLParser
     perlPackages.HTTPCookies
+    perlPackages.HTTPDaemon
     perlPackages.HTTPMessage
     perlPackages.ImageScale
     perlPackages.IOSocketSSL
@@ -47,6 +50,8 @@ buildPerlPackage rec {
     perlPackages.TieRegexpHash
     perlPackages.TimeDate
     perlPackages.URI
+    perlPackages.URIFind
+    perlPackages.UUIDTiny
     perlPackages.XMLParser
     perlPackages.XMLSimple
     perlPackages.YAMLLibYAML
