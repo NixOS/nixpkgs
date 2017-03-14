@@ -18442,14 +18442,14 @@ in {
 
   pathlib2 = if !(pythonOlder "3.4") then null else buildPythonPackage rec {
     name = "pathlib2-${version}";
-    version = "2.1.0";
+    version = "2.2.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pathlib2/${name}.tar.gz";
-      sha256 = "deb3a960c1d55868dfbcac98432358b92ba89d95029cddd4040db1f27405055c";
+      sha256 = "ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d";
     };
 
-    propagatedBuildInputs = with self; [ six ];
+    propagatedBuildInputs = with self; [ six ] ++ optional (pythonOlder "3.5") scandir;
 
     meta = {
       description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
