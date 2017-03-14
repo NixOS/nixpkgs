@@ -8865,6 +8865,8 @@ with pkgs;
 
   lirc = callPackage ../development/libraries/lirc { };
 
+  liquid-dsp = callPackage ../development/libraries/liquid-dsp { };
+
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
   live555 = callPackage ../development/libraries/live555 { };
