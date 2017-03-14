@@ -254,12 +254,12 @@ in
       path = with pkgs; [ curl diffutils dnscrypt-proxy minisign ];
       script = ''
         cd ${stateDirectory}
-        domain=download.dnscrypt.org
+        domain=raw.githubusercontent.com
         get="curl -fSs --resolve $domain:443:$(hostip -r 8.8.8.8 $domain | head -1)"
         $get -o dnscrypt-resolvers.csv.tmp \
-          https://$domain/dnscrypt-proxy/dnscrypt-resolvers.csv
+          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv
         $get -o dnscrypt-resolvers.csv.minisig.tmp \
-          https://$domain/dnscrypt-proxy/dnscrypt-resolvers.csv.minisig
+          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
         minisign -q -V -p ${upstreamResolverListPubKey} \
           -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig
