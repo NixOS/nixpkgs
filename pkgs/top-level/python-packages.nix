@@ -16047,12 +16047,12 @@ in {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.3.2";
+    version = "4.4.1";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "fc77edf4ec295542172aa66a3e9d527e75038fcaadd3ed20afbf8596e5629aa9";
+      sha256 = "dfadef2babd7c04c6c257df7d07d7ba587e503dbb4e4c95305f9a95b8d3a9765";
     };
 
     LC_ALL = "en_US.UTF-8";
