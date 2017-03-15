@@ -12960,6 +12960,8 @@ with pkgs;
 
   clfswm = callPackage ../applications/window-managers/clfswm { };
 
+  cligh = callPackage ../development/tools/github/cligh {};
+
   clipgrab = callPackage ../applications/video/clipgrab { };
 
   clipit = callPackage ../applications/misc/clipit { };
