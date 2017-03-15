@@ -20339,6 +20339,8 @@ in {
     };
   };
 
+  PyGithub = callPackage ../development/python-modules/pyGithub {};
+
   pyglet = buildPythonPackage rec {
     name = "pyglet-${version}";
     version = "1.2.4";
