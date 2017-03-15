@@ -18,7 +18,7 @@ let
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l: ''
     ${pkgs.coreutils}/bin/mkdir -p ${listCtl d l}
-    echo ${listAddress d l} > ${listCtl d l}/listadress
+    echo ${listAddress d l} > ${listCtl d l}/listaddress
     echo "${lib.concatStringsSep "\n" (customHeaders d l)}" > ${listCtl d l}/customheaders
     echo ${footer d l} > ${listCtl d l}/footer
     echo ${subjectPrefix l} > ${listCtl d l}/prefix
