@@ -5063,6 +5063,8 @@ in {
     };
   };
 
+  python-jose = callPackage ../development/python-modules/python-jose {};
+
   pyhepmc = buildPythonPackage rec {
     name = "pyhepmc-${version}";
     version = "0.5.0";
@@ -19725,7 +19727,6 @@ in {
     };
   };
 
-
   Babel = buildPythonPackage (rec {
     name = "Babel-2.3.4";
 
@@ -20337,6 +20338,8 @@ in {
       license = licenses.lgpl3Plus;
     };
   };
+
+  PyGithub = callPackage ../development/python-modules/pyGithub {};
 
   pyglet = buildPythonPackage rec {
     name = "pyglet-${version}";
