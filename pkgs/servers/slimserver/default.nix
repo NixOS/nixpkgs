@@ -19,6 +19,7 @@ buildPerlPackage rec {
     perlPackages.AudioScan
     perlPackages.CarpClan
     perlPackages.CGI
+    perlPackages.ClassXSAccessor
     perlPackages.DataDump
     perlPackages.DataURIEncode
     perlPackages.DBDSQLite
@@ -30,6 +31,7 @@ buildPerlPackage rec {
     perlPackages.FileBOM
     perlPackages.FileCopyRecursive
     perlPackages.FileNext
+    perlPackages.FileReadBackwards
     perlPackages.FileSlurp
     perlPackages.FileWhich
     perlPackages.HTMLParser
@@ -41,6 +43,7 @@ buildPerlPackage rec {
     perlPackages.IOString
     perlPackages.JSONXSVersionOneAndTwo
     perlPackages.Log4Perl
+    perlPackages.LWPUserAgent
     perlPackages.NetHTTP
     perlPackages.ProcBackground
     perlPackages.SubName
@@ -59,6 +62,8 @@ buildPerlPackage rec {
 
 
   prePatch = ''
+    mkdir CPAN_used
+    mv CPAN/DBIx CPAN/SQL CPAN/Template* CPAN_used
     rm -rf CPAN
     rm -rf Bin
     touch Makefile.PL
@@ -68,8 +73,9 @@ buildPerlPackage rec {
 
   buildPhase = "
     mv lib tmp
-    mkdir -p lib/perl5/
-    mv tmp lib/perl5/site_perl
+    mkdir -p lib/perl5/site_perl
+    mv CPAN_used/* lib/perl5/site_perl
+    cp -rf tmp/* lib/perl5/site_perl
     mv Slim lib/perl5/site_perl
   ";
 
