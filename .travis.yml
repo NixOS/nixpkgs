@@ -18,3 +18,8 @@ matrix:
 env:
     global:
         - GITHUB_TOKEN=5edaaf1017f691ed34e7f80878f8f5fbd071603f
+
+notifications:
+    email:
+        on_success: never
+        on_failure: change
