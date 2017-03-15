@@ -6765,8 +6765,8 @@ with pkgs;
 
   scons = callPackage ../development/tools/build-managers/scons { };
 
-  sbt_0_12_4 = callPackage ../development/tools/build-managers/0.12.4.nix { };
   sbt = callPackage ../development/tools/build-managers/sbt { };
+  sbt_0_12_4 = callPackage ../development/tools/build-managers/sbt/0.12.4.nix { };
   simpleBuildTool = sbt;
 
   shards = callPackage ../development/tools/build-managers/shards { };
