@@ -30,6 +30,10 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
     inherit sha512;
   };
 
+  # this patch should no longer be needed in 53
+  # from https://bugzilla.mozilla.org/show_bug.cgi?id=1013882
+  patches = lib.optional debugBuild ./fix-debug.patch;
+
   buildInputs =
     [ pkgconfig gtk2 perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
