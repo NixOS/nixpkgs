@@ -494,6 +494,8 @@ let
 
     re = callPackage ../development/ocaml-modules/re { };
 
+    rresult = callPackage ../development/ocaml-modules/rresult { };
+
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
