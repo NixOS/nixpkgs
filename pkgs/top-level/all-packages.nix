@@ -6283,6 +6283,8 @@ with pkgs;
 
   coan = callPackage ../development/tools/analysis/coan { };
 
+  compile-daemon = callPackage ../development/tools/compile-daemon { };
+
   complexity = callPackage ../development/tools/misc/complexity { };
 
   cookiecutter = pythonPackages.cookiecutter;
