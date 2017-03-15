@@ -27406,25 +27406,7 @@ EOF
     };
   };
 
-
-  BTrees = self.buildPythonPackage rec {
-    name = "BTrees-4.1.4";
-
-    propagatedBuildInputs = with self; [ persistent zope_interface transaction ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/BTrees/${name}.tar.gz";
-      sha256 = "1avvhkd7rvp3rzhw20v6ank8a8m9a1lmh99c4gjjsa1ry0zsri3y";
-    };
-
-    patches = [ ../development/python-modules/btrees-py35.patch ];
-
-    meta = {
-      description = "Scalable persistent components";
-      homepage = http://packages.python.org/BTrees;
-    };
-  };
-
+  BTrees = callPackage ../development/python-modules/btrees {};
 
   persistent = self.buildPythonPackage rec {
     name = "persistent-4.0.8";
@@ -31998,8 +31980,6 @@ EOF
       license = licenses.bsd3;
     };
   };
-
-  vulnix = callPackage ../tools/security/vulnix { };
 
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";

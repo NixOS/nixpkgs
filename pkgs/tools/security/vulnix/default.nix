@@ -1,51 +1,37 @@
-{ buildPythonPackage,
-  callPackage,
-  click,
-  colorama,
-  fetchurl,
-  flake8,
-  lxml,
-  nix,
-  python,
-  pytest,
-  pytestcov,
-  stdenv,
-  }:
+{ stdenv, pythonPackages, fetchurl, callPackage, nix, }:
 
 let
-  external = callPackage ./requirements.nix { inherit buildPythonPackage fetchurl stdenv; };
-in
-
-buildPythonPackage rec{
+  external = callPackage ./requirements.nix {
+    inherit pythonPackages;
+  };
+in pythonPackages.buildPythonApplication rec{
   name = "${pname}-${version}";
   pname = "vulnix";
   version = "1.2.2";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/90/c9/ebef9243334a99edb8598061efae0f00d7a199b01bea574a84e31e06236d/vulnix-${version}.tar.gz";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
     sha256 = "1ia9plziwach0bxnlcd33q30kcsf8sv0nf2jc78gsmrqnxjabr12";
   };
 
-  buildInputs = [
-    flake8
-    pytest
-    pytestcov
-  ];
+  buildInputs = with pythonPackages; [ flake8 pytest pytestcov ];
+
+  postPatch = ''
+    sed -i -e 's/==\([^=]\+\)/>=\1/g' setup.py
+  '';
 
   propagatedBuildInputs = [
+    nix
+  ] ++ (with pythonPackages; [
     click
     colorama
-    nix
-    external.lxml
-    external.PyYAML
-    external.requests
-    external.ZODB
-  ];
+    lxml
+    pyyaml
+    requests2
+    external.zodb
+  ]);
 
-  checkPhase = ''
-    export PYTHONPATH=src:$PYTHONPATH
-    py.test
-  '';
+  checkPhase = "py.test";
 
   meta = with stdenv.lib; {
     description = "NixOS vulnerability scanner";
