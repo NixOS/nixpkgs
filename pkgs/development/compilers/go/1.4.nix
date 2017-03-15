@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
+{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana_etc, libcCross
 , pkgconfig
 , pcre
 , Security }:
@@ -114,6 +114,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-tools-1.4.patch
     ./creds-test-1.4.patch
+
+    # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
+    # actually works on old versions too.
+    (fetchpatch {
+      url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
+      sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
+    })
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
