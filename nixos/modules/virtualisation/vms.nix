@@ -2,6 +2,9 @@
 
 with lib;
 
+# TODO: go back to mount --bind time except with rsync -a instead
+# TODO: forward resolv.conf via 9pfs, cp -L it at start and reload of service
+
 let
   cfg = config.vms;
 
@@ -45,25 +48,15 @@ let
           '';
       };
 
-      persistent = mkOption {
-        type = with types; listOf str;
-        default = [];
-        description =
-          ''
-            List of paths to make persistent across reboots of the VM. Please
-            note all other paths may or may not be erased between VM reboots.
-            These paths will be stored on the host filesystem, and won't be
-            erased when the VM is removed for the configuration, in order to
-            avoid accidental data loss.
-          '';
-      };
       shared = mkOption {
         type = with types; attrsOf str;
+        default = {};
+        example = { "/guest/directory" = "/maps/to/host/directory"; };
         description =
         ''
           Associations guest => host of files to make available to the guest.
-          These paths won't enter the store, so may be secrets. They will be
-          read by user
+          The content of these paths won't enter the store, so may be secrets.
+          They will be read by user
           <literal>vm-<replaceable>vmname</replaceable></literal>:<literal>vm-<replaceable>vmname</replaceable></literal>.
         '';
       };
@@ -72,8 +65,7 @@ let
         default = 10240;
         description =
           ''
-            Maximum size of the VM disk (in MiB), excluding persistent and
-            shared paths.
+            Maximum size of the VM disk (in MiB), excluding shared paths.
           '';
       };
       memorySize = mkOption {
@@ -132,7 +124,6 @@ let
       id = 1 + lib.findFirstIndex (x: x == name) (attrNames cfg.machines);
     in
     {
-      shared = genAttrs config.persistent (n: "${cfg.persistPath}/${name}${n}");
       ip4 = mkDefault (genIPv4 (addToIPv4 (parseIPv4 cfg.ip4.address) id));
       ip6 = mkDefault (genIPv6 (addToIPv6 (parseIPv6 cfg.ip6.address) id));
       mac = mkDefault (genMAC  (addToMAC  (parseMAC "56:00:00:00:00:00") id));
@@ -271,7 +262,7 @@ let
         ''-initrd ${toplevel}/initrd''
         ''-append "$(cat ${toplevel}/kernel-params) init=${toplevel}/init console=ttyS0 boot.shell_on_fail"''
         # TODO: remove boot.shell_on_fail
-      ] ++ # Shared and persisted filesystems
+      ] ++ # Shared filesystems
       imap (i: n:
         ''-virtfs local,path="${mcfg.shared.${n}}",security_model=mapped-xattr,mount_tag="shared${toString i}"''
       ) (attrNames mcfg.shared)
@@ -281,12 +272,9 @@ let
     ''
       image="${cfg.imagesPath}/${name}.img"
       console="${cfg.consolePath}/${name}/socket.unix"
-      persist="${cfg.persistPath}/${name}"
 
       # Generate paths
-      mkdir -p \
-        "$persist" "${cfg.imagesPath}" "${cfg.consolePath}/${name}" \
-        ${concatStringsSep " " (map (x: "\"$persist" + x + "\"") mcfg.persistent)}
+      mkdir -p "${cfg.imagesPath}" "${cfg.consolePath}/${name}"
 
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
@@ -295,7 +283,7 @@ let
       fi
 
       # Ensure permissions
-      chown "vm-${name}:vm-${name}" "${cfg.consolePath}/${name}" "$persist" "$image"
+      chown "vm-${name}:vm-${name}" "${cfg.consolePath}/${name}" "$image"
     '';
 
 in
@@ -328,14 +316,6 @@ in
       default = 48;
     };
 
-    persistPath = mkOption {
-      type = types.str;
-      default = "/var/lib/vm/persist";
-      description =
-        ''
-          Path inside which to put the persisted directories of VMs.
-        '';
-    };
     imagesPath = mkOption {
       type = types.str;
       default = "/var/lib/vm/images";
