@@ -3,6 +3,14 @@
 let
   pname = "icu4c";
   version = "58.2";
+
+  # this patch should no longer be needed in 58.3
+  # https://bugs.gentoo.org/show_bug.cgi?id=599142#c14
+  keywordFix = fetchurl {
+    url = "http://bugs.icu-project.org/trac/changeset/39484?format=diff";
+    name = "icu-changeset-39484.diff";
+    sha256 = "0hxhpgydalyxacaaxlmaddc1sjwh65rsnpmg0j414mnblq74vmm8";
+  };
 in
 stdenv.mkDerivation ({
   name = pname + "-" + version;
@@ -32,6 +40,7 @@ stdenv.mkDerivation ({
   '';
   postPatch = ''
     popd
+    patch -p4 < ${keywordFix}
   '';
 
   patches = [
