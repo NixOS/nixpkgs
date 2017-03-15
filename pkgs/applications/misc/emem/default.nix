@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "emem";
-  version = "0.2.35";
+  version = "0.2.39";
   name = "${pname}-${version}";
 
   inherit jdk;
 
   src = fetchurl {
     url = "https://github.com/ebzzry/${pname}/releases/download/v${version}/${pname}.jar";
-    sha256 = "0y1jwfmqmmff3kh82j07p9j0l2hc7dxhy8vij4lz8wrv6pnxng7f";
+    sha256 = "068x3gj7arnl5s45rickq6pr6qjcddfg54xn6ywd5c2i5zklb89p";
   };
 
   buildInputs = [ ];
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
   phases = [ "buildPhase" "installPhase" ];
 
   buildPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/java
+    mkdir -p $out/bin $out/share/java
   '';
 
   installPhase = ''
