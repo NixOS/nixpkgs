@@ -47,6 +47,7 @@ buildPerlPackage rec {
     perlPackages.NetHTTP
     perlPackages.ProcBackground
     perlPackages.SubName
+    perlPackages.TemplateToolkit
     perlPackages.TextUnidecode
     perlPackages.TieCacheLRU
     perlPackages.TieCacheLRUExpires
@@ -63,7 +64,7 @@ buildPerlPackage rec {
 
   prePatch = ''
     mkdir CPAN_used
-    mv CPAN/DBIx CPAN/SQL CPAN/Template* CPAN_used
+    mv CPAN/DBIx CPAN/SQL CPAN_used
     rm -rf CPAN
     rm -rf Bin
     touch Makefile.PL
