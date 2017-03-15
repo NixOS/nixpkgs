@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
-    ++ lib.optional (withX && withGTK2) gtk2
-    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optionals (withX && withGTK2) [ gtk2 wrapGAppsHook ]
+    ++ lib.optionals (withX && withGTK3) [ gtk3 wrapGAppsHook ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals withXwidgets [ webkitgtk24x wrapGAppsHook glib_networking ];
+    ++ lib.optionals withXwidgets [ webkitgtk24x glib_networking ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
