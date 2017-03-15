@@ -4634,7 +4634,7 @@ with pkgs;
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
-  
+
   yasr = callPackage ../applications/audio/yasr { };
 
   yank = callPackage ../tools/misc/yank { };
@@ -6765,6 +6765,7 @@ with pkgs;
 
   scons = callPackage ../development/tools/build-managers/scons { };
 
+  sbt_0_12_4 = callPackage ../development/tools/build-managers/0.12.4.nix { };
   sbt = callPackage ../development/tools/build-managers/sbt { };
   simpleBuildTool = sbt;
 
