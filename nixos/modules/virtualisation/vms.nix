@@ -250,9 +250,9 @@ let
         ''-smp ${toString mcfg.vcpus}''
         ''${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}''
         # Run headless
-        ''-nographic -serial unix:"${cfg.consolePath}/${name}/socket.unix",server,nowait''
+        ''-nographic -serial unix:"${cfg.rpath}/${name}/socket.unix",server,nowait''
         # File systems
-        ''-drive file="${cfg.imagesPath}/${name}.img",if=virtio,media=disk''
+        ''-drive file="${cfg.path}/${name}/image.qcow2",if=virtio,media=disk''
         ''-virtfs local,path="${mcfg.store}",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
@@ -270,20 +270,18 @@ let
 
   setupVM = name: let mcfg = cfg.machines.${name}; in
     ''
-      image="${cfg.imagesPath}/${name}.img"
-      console="${cfg.consolePath}/${name}/socket.unix"
+      image="${cfg.path}/${name}/image.qcow2"
 
       # Generate paths
-      mkdir -p "${cfg.imagesPath}" "${cfg.consolePath}/${name}"
+      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
 
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
           ${toString mcfg.diskSize}M || exit 1
+        chown "vm-${name}:vm-${name}" "$image"
       fi
-
-      # Ensure permissions
-      chown "vm-${name}:vm-${name}" "${cfg.consolePath}/${name}" "$image"
     '';
 
 in
@@ -316,20 +314,23 @@ in
       default = 48;
     };
 
-    imagesPath = mkOption {
+    path = mkOption {
       type = types.str;
-      default = "/var/lib/vm/images";
-      description = "Path inside which to put the VM images.";
-    };
-    consolePath = mkOption {
-      type = types.str;
-      default = "/var/lib/vm/consoles";
+      default = "/var/lib/vm";
       description =
         ''
-          Path to the serial consoles of the VMs. Use <command>screen
-          <replaceable>/var/lib/vm/consoles/vmname</replaceable>/screen</command>
-          to connect.
+          Path inside which to put all VM-related data. All files will be kept
+          in <literal>''${vms.path}/''${name}</literal>.
+
+          The main disk image will be in <literal>image.qcow2</literal>, and a
+          serial console can be accessed by running <command>screen</command> on
+          the file <literal>screen</literal>.
         '';
+    };
+    rpath = mkOption {
+      type = types.str;
+      default = "/run/vm";
+      description = "Path for temporary VM data.";
     };
 
     addHostNames = mkOption {
@@ -371,7 +372,7 @@ in
 
           Access to the serial console of the VM can be found using
           <command>screen
-          <replaceable>vms.consolePath</replaceable>/<replaceable>vmname</replaceable></command>.
+          <replaceable>vms.path</replaceable>/<replaceable>vmname</replaceable>/screen</command>.
 
           Please note VMs are heavily identified by their name, so the key
           should not be changed light-heartedly.
@@ -405,8 +406,8 @@ in
             # Wait for socket creation
             sleep 1
             exec ${pkgs.socat}/bin/socat \
-                PTY,link="${cfg.consolePath}/${name}/screen" \
-                "${cfg.consolePath}/${name}/socket.unix"
+                PTY,link="${cfg.path}/${name}/screen" \
+                "${cfg.rpath}/${name}/socket.unix"
           '';
         partOf = [ "vm-${name}.service" ];
         after = [ "vm-${name}.service" ];
