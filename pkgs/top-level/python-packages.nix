@@ -8948,6 +8948,8 @@ in {
     };
   };
 
+  pycassa = callPackage ../development/python-modules/pycassa { };
+
    pybluez = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "pybluez";
