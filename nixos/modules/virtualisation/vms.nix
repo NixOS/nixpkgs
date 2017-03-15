@@ -275,6 +275,7 @@ let
       # Generate paths
       mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}"
       chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
 
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
