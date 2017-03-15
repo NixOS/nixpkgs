@@ -26,17 +26,7 @@ in
           This will switch to a new virtual terminal, turn off console
           switching and disable SysRq mechanism (when
           <option>services.physlock.disableSysRq</option> is set)
-          until the root or <option>services.physlock.user</option>
-          password is given.
-        '';
-      };
-
-      user = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          User whose password will be used to unlock the screen on par
-          with the root password.
+          until the root or user password is given.
         '';
       };
 
@@ -105,7 +95,7 @@ in
               ++ cfg.lockOn.extraTargets;
       serviceConfig.Type = "forking";
       script = ''
-        ${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.user != null) " -u ${cfg.user}"}
+        ${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}
       '';
     };
 

@@ -17,6 +17,10 @@ buildGoPackage rec {
 
   buildInputs = [ makeWrapper ];
 
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-X main.VERSION=v${version}")
+  '';
+
   postInstall = ''
     wrapProgram $bin/bin/terragrunt \
       --set TERRAGRUNT_TFPATH ${lib.getBin terraform}/bin/terraform

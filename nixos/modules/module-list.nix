@@ -29,6 +29,7 @@
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
@@ -328,6 +329,7 @@
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix
+  ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix

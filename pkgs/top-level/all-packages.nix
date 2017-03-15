@@ -305,6 +305,8 @@ with pkgs;
 
   fixDarwinDylibNames = makeSetupHook { } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
+  fixDarwinFrameworks = makeSetupHook { } ../build-support/setup-hooks/fix-darwin-frameworks.sh;
+
   keepBuildTree = makeSetupHook { } ../build-support/setup-hooks/keep-build-tree.sh;
 
   enableGCOVInstrumentation = makeSetupHook { } ../build-support/setup-hooks/enable-coverage-instrumentation.sh;
@@ -798,6 +800,8 @@ with pkgs;
 
   crunch = callPackage ../tools/security/crunch { };
 
+  crudini = callPackage ../tools/misc/crudini { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dante = callPackage ../servers/dante { };
@@ -949,6 +953,8 @@ with pkgs;
   languagetool = callPackage ../tools/text/languagetool {  };
 
   long-shebang = callPackage ../misc/long-shebang {};
+
+  iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   mathics = pythonPackages.mathics;
 
@@ -4782,7 +4788,7 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
-  clang_4 = lowPrio llvmPackages_4.clang;
+  clang_4  = llvmPackages_4.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5338,13 +5344,13 @@ with pkgs;
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
-  lld = lowPrio llvmPackages_4.lld;
+  lld = llvmPackages_4.lld;
 
   lldb = llvmPackages.lldb;
 
   llvm = llvmPackages.llvm;
 
-  llvm_4 = lowPrio llvmPackages_4.llvm;
+  llvm_4  = llvmPackages_4.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5450,7 +5456,7 @@ with pkgs;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  inherit (ocamlPackages) ocaml-top;
+  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
@@ -6581,6 +6587,8 @@ with pkgs;
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
   libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
+
+  lit = callPackage ../development/tools/misc/lit { };
 
   lsof = callPackage ../development/tools/misc/lsof { };
 
@@ -8737,7 +8745,8 @@ with pkgs;
   libusb = callPackage ../development/libraries/libusb {};
 
   libusb1 = callPackage ../development/libraries/libusb1 {
-    inherit (darwin) libobjc IOKit;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
@@ -9886,8 +9895,6 @@ with pkgs;
 
   unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
 
-  urt = callPackage ../development/libraries/urt { };
-
   ustr = callPackage ../development/libraries/ustr { };
 
   usbredir = callPackage ../development/libraries/usbredir {
@@ -10814,6 +10821,7 @@ with pkgs;
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
+  prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
@@ -13429,6 +13437,8 @@ with pkgs;
   evolution_data_server = gnome3.evolution_data_server;
 
   keepass = callPackage ../applications/misc/keepass { };
+
+  keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
 
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
@@ -17995,7 +18005,13 @@ with pkgs;
 
   terraform = callPackage ../applications/networking/cluster/terraform {};
 
+  terraform_0_8_5 = callPackage ../applications/networking/cluster/terraform/0.8.5.nix {};
+
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+
+  terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
+    terraform = terraform_0_8_5;
+  };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
@@ -18133,6 +18149,8 @@ with pkgs;
 
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
+  wordpress = callPackage ../servers/web-apps/wordpress { };
+
   wraith = callPackage ../applications/networking/irc/wraith { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
@@ -18151,7 +18169,11 @@ with pkgs;
 
   xcftools = callPackage ../tools/graphics/xcftools { };
 
-  xhyve = callPackage ../applications/virtualization/xhyve { };
+  xhyve = callPackage ../applications/virtualization/xhyve {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
+    inherit (darwin.apple_sdk.libs) xpc;
+    inherit (darwin) libobjc;
+  };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 

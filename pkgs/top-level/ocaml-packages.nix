@@ -752,8 +752,6 @@ let
 
     haxe = callPackage ../development/compilers/haxe { };
 
-    ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
-
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
     trv = callPackage ../development/tools/misc/trv { };
