@@ -114,9 +114,9 @@ let
       env = callPackage ../qt-env.nix {};
       full = env "qt-${qtbase.version}" [
         qtconnectivity qtdeclarative qtdoc qtenginio qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwayland
-        qtwebchannel qtwebengine qtwebsockets qtx11extras qtxmlpatterns
+        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
+        qtscript qtsensors qtserialport qtsvg qttools qttranslations qtwayland
+        qtwebchannel qtwebengine qtwebkit qtwebsockets qtx11extras qtxmlpatterns
       ];
 
       makeQtWrapper =

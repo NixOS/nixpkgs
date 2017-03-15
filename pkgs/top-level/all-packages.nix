@@ -804,6 +804,8 @@ with pkgs;
 
   crunch = callPackage ../tools/security/crunch { };
 
+  crudini = callPackage ../tools/misc/crudini { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dante = callPackage ../servers/dante { };
@@ -959,6 +961,8 @@ with pkgs;
   languagetool = callPackage ../tools/text/languagetool {  };
 
   long-shebang = callPackage ../misc/long-shebang {};
+
+  iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   mathics = pythonPackages.mathics;
 
@@ -4807,7 +4811,7 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
-  clang_4 = lowPrio llvmPackages_4.clang;
+  clang_4  = llvmPackages_4.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
@@ -5363,13 +5367,13 @@ with pkgs;
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
-  lld = lowPrio llvmPackages_4.lld;
+  lld = llvmPackages_4.lld;
 
   lldb = llvmPackages.lldb;
 
   llvm = llvmPackages.llvm;
 
-  llvm_4 = lowPrio llvmPackages_4.llvm;
+  llvm_4  = llvmPackages_4.llvm;
   llvm_39 = llvmPackages_39.llvm;
   llvm_38 = llvmPackages_38.llvm;
   llvm_37 = llvmPackages_37.llvm;
@@ -5475,7 +5479,7 @@ with pkgs;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
-  inherit (ocamlPackages) ocaml-top;
+  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
@@ -9916,8 +9920,6 @@ with pkgs;
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
   unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers {});
-
-  urt = callPackage ../development/libraries/urt { };
 
   ustr = callPackage ../development/libraries/ustr { };
 
@@ -18052,7 +18054,13 @@ with pkgs;
 
   terraform = callPackage ../applications/networking/cluster/terraform {};
 
+  terraform_0_8_5 = callPackage ../applications/networking/cluster/terraform/0.8.5.nix {};
+
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+
+  terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
+    terraform = terraform_0_8_5;
+  };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
@@ -18189,6 +18197,8 @@ with pkgs;
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
+
+  wordpress = callPackage ../servers/web-apps/wordpress { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
 
