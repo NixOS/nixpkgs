@@ -5158,7 +5158,7 @@ in {
     };
   };
 
-  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix { };
+  pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-fixture-config = buildPythonPackage rec {
     name = "${pname}-${version}";
