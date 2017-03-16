@@ -17997,11 +17997,18 @@ with pkgs;
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform = callPackage ../applications/networking/cluster/terraform {};
+  inherit (callPackage ../applications/networking/cluster/terraform {})
+    terraform_0_8_5
+    terraform_0_8_8
+    terraform_0_9_0;
 
-  terraform_0_8_5 = callPackage ../applications/networking/cluster/terraform/0.8.5.nix {};
+  terraform_0_8 = terraform_0_8_8;
+  terraform_0_9 = terraform_0_9_0;
+  terraform = terraform_0_8;
 
-  terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
+  terragrunt = callPackage ../applications/networking/cluster/terragrunt {
+    terraform = terraform_0_8;
+  };
 
   terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
     terraform = terraform_0_8_5;
