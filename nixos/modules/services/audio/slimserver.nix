@@ -21,9 +21,9 @@ in {
 
       package = mkOption {
         type = types.package;
-	default = pkgs.slimserver;
-	defaultText = "pkgs.slimserver";
-	description = "Slimserver package to use.";
+        default = pkgs.slimserver;
+        defaultText = "pkgs.slimserver";
+        description = "Slimserver package to use.";
       };
 
       dataDir = mkOption {
@@ -84,9 +84,9 @@ in {
       groups.slimserver.gid = config.ids.gids.slimserver;
       users.slimserver = {
         uid = config.ids.uids.slimserver;
-	description = "Slimserver daemon user";
-	home = cfg.dataDir;
-	group = "slimserver";
+        description = "Slimserver daemon user";
+        home = cfg.dataDir;
+        group = "slimserver";
       };
     };
   };

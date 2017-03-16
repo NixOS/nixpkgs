@@ -1,5 +1,4 @@
 { stdenv, buildPerlPackage, fetchurl
-#, sqlite, expat, mp4v2, flac, spidermonkey_1_8_5, taglib, libexif, curl, ffmpeg, file
 , perl, perlPackages }:
 
 buildPerlPackage rec {
@@ -62,6 +61,7 @@ buildPerlPackage rec {
 
   prePatch = ''
     mkdir CPAN_used
+    # slimserver doesn't work with current DBIx/SQL versions, use bundled copies
     mv CPAN/DBIx CPAN/SQL CPAN_used
     rm -rf CPAN
     rm -rf Bin
