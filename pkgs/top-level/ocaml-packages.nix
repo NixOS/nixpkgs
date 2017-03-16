@@ -53,6 +53,8 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bos = callPackage ../development/ocaml-modules/bos { };
+
     bitstring =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/bitstring { }
