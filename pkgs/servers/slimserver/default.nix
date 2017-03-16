@@ -1,16 +1,14 @@
-{ stdenv, buildPerlPackage, fetchFromGitHub
+{ stdenv, buildPerlPackage, fetchurl
 #, sqlite, expat, mp4v2, flac, spidermonkey_1_8_5, taglib, libexif, curl, ffmpeg, file
 , perl, perlPackages }:
 
 buildPerlPackage rec {
   name = "slimserver-${version}";
-  version = "7.9";
+  version = "7.9.0";
 
-  src = fetchFromGitHub {
-    owner  = "Logitech";
-    repo   = "slimserver";
-    rev    = "095dd886a01e56a1ffe1b2ea31bb290d17c83948";
-    sha256 = "06s945spxh6j4g0l1k6cxpq04011ad4swgqd2in87c86sf6bm445";
+  src = fetchurl {
+    url = "https://github.com/Logitech/slimserver/archive/${version}.tar.gz";
+    sha256 = "07rhqipg7m28x0nqdd83nyzi88dp9cf8rr2pamdyrfcwyp1h1b44";
   };
 
   buildInputs = [
