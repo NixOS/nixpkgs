@@ -53,6 +53,8 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bos = callPackage ../development/ocaml-modules/bos { };
+
     bitstring =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/bitstring { }
@@ -137,6 +139,8 @@ let
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
+
+    cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
@@ -261,7 +265,7 @@ let
       else lambdaTerm-1_6;
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      llvm = pkgs.llvm_37;
+      llvm = pkgs.llvm_39;
     };
 
     logs = callPackage ../development/ocaml-modules/logs {
@@ -335,6 +339,8 @@ let
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
+
+    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
@@ -489,6 +495,8 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     re = callPackage ../development/ocaml-modules/re { };
+
+    rresult = callPackage ../development/ocaml-modules/rresult { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
@@ -747,8 +755,6 @@ let
     wyrd = callPackage ../tools/misc/wyrd { };
 
     haxe = callPackage ../development/compilers/haxe { };
-
-    ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 

@@ -98,21 +98,22 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-${qtbase.version}" [
-        qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
+        qtconnectivity qtdeclarative qtdoc qtgraphicaleffects qtimageformats
+        qtlocation qtmultimedia qtquickcontrols qtquickcontrols2 qtscript
         qtsensors qtserialport qtsvg qttools qttranslations qtwayland
-        qtwebsockets qtx11extras qtxmlpatterns
+        qtwebchannel qtwebengine qtwebkit qtwebsockets qtx11extras
+        qtxmlpatterns
       ];
 
       makeQtWrapper =
         makeSetupHook
         { deps = [ makeWrapper ]; }
-        ../make-qt-wrapper.sh;
+        (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
 
       qmakeHook =
         makeSetupHook
         { deps = [ self.qtbase.dev ]; }
-        ../qmake-hook.sh;
+        (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);
 
     };
 

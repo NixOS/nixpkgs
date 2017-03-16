@@ -28,8 +28,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
-  configureFlags = [ "--disable-spamassassin" "--disable-pst-import" "--disable-autoar"
-                     "--disable-libcryptui" --with-openldap ];
+
+  configureFlags = [ "--disable-pst-import" "--disable-autoar"
+                     "--disable-libcryptui" "--with-openldap"];
 
   NIX_CFLAGS_COMPILE = "-I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 

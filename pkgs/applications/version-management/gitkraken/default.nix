@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.tar.gz";
-    sha256 = "56b5657f5c13fa1d8f6b7b9331194cbc8c48c0b913e5f0fb561d0e9af82f7999";
+    sha256 = "0a3ed917e6e937af4dd180144fbb4ad8b99b35b5d8c1f0684a55de38189a812d";
   };
 
   libPath = stdenv.lib.makeLibraryPath [
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ xnwdd ];
   };
 }

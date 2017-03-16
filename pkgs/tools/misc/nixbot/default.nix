@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    desciption = "Github bot for reviewing/testing pull requests with the help of Hydra";
+    description = "Github bot for reviewing/testing pull requests with the help of Hydra";
     maintainers = with maintainers; [ domenkozar fpletz globin ];
     license = licenses.asl20;
     homepage = https://github.com/domenkozar/nixbot;
