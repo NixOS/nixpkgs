@@ -143,7 +143,7 @@ let
 
     boot.initrd.kernelModules = [
       "virtio" "virtio_pci" "virtio_net" "virtio_rng" "virtio_blk"
-      "virtio_console" "9p" "9pnet" "9pnet_virtio" "overlay"
+      "virtio_console" "9p" "9pnet" "9pnet_virtio"
     ];
     boot.initrd.extraUtilsCommands =
       ''
@@ -165,11 +165,6 @@ let
         touch $targetRoot/etc/NIXOS
 
         mkdir -p $targetRoot/boot
-
-        # Mount writable store
-        mkdir -p $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
-        mount -t overlay overlay $targetRoot/nix/store \
-          -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
       '';
     boot.postBootCommands =
       concatMapStrings (chan:
@@ -182,7 +177,7 @@ let
 
     fileSystems = {
       "/".device = "/dev/vda";
-      "/nix/.ro-store" = {
+      "/nix/store" = {
         device = "store";
         fsType = "9p";
         # TODO: optimize the size given in msize by highly evolved trial-and-failure (and just below, too)
@@ -248,7 +243,7 @@ let
 
       # Generate paths
       mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}" "$store"
-      chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}" "$store"
       chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
 
       # Generate image if need be
@@ -263,12 +258,12 @@ let
       # TODO: use exportReferencesGraph?
       ${pkgs.nix}/bin/nix-store -qR "${mcfg.config.system.build.toplevel}" > "${cfg.rpath}/${name}/store"
       for path in $(ls "$store"); do
-        if ! grep "$path" "${cfg.rpath}/${name}/store"; then
+        if ! grep "$path" "${cfg.rpath}/${name}/store" > /dev/null 2>&1; then
           rm -Rf "$path"
         fi
       done
       for path in $(cat "${cfg.rpath}/${name}/store"); do
-        ${pkgs.rsync}/bin/rsync -a "$path" "$(echo "$path" | sed "s*/nix/store*$store*")"
+        ${pkgs.rsync}/bin/rsync -a "$path" "$store"
       done
     '';
 
