@@ -94,13 +94,6 @@ let
           '';
       };
 
-      store = mkOption {
-        type = types.path;
-        internal = true;
-        visible = false;
-        description = "Path to the store of the VM.";
-      };
-
       config = mkOption {
         description =
         ''
@@ -127,26 +120,6 @@ let
       ip4 = mkDefault (genIPv4 (addToIPv4 (parseIPv4 cfg.ip4.address) id));
       ip6 = mkDefault (genIPv6 (addToIPv6 (parseIPv6 cfg.ip6.address) id));
       mac = mkDefault (genMAC  (addToMAC  (parseMAC "56:00:00:00:00:00") id));
-
-      store = pkgs.stdenv.mkDerivation {
-        name = "vm-${name}-store";
-        phases = [ "buildPhase" ];
-        buildInputs = [ config.config.system.build.toplevel ];
-        exportReferencesGraph = [ "closure" config.config.system.build.toplevel ];
-        preferLocalBuild = true;
-        buildPhase =
-          ''
-            # TODO: handle upgrades by using an unionfs on top of this
-            function recurse_in_dir() {
-              ${pkgs.rsync}/bin/rsync -a "/nix/store/$1" "$out"
-            }
-
-            mkdir $out
-            cat closure | grep '/nix/store/' | sed 's_/nix/store/__' | sort -u | while read elem; do
-              recurse_in_dir "$elem"
-            done
-          '';
-      };
     };
   };
 
@@ -253,7 +226,7 @@ let
         ''-nographic -serial unix:"${cfg.rpath}/${name}/socket.unix",server,nowait''
         # File systems
         ''-drive file="${cfg.path}/${name}/image.qcow2",if=virtio,media=disk''
-        ''-virtfs local,path="${mcfg.store}",security_model=none,mount_tag=store''
+        ''-virtfs local,path="${cfg.path}/${name}/store",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
         ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
@@ -271,18 +244,32 @@ let
   setupVM = name: let mcfg = cfg.machines.${name}; in
     ''
       image="${cfg.path}/${name}/image.qcow2"
+      store="${cfg.path}/${name}/store"
 
       # Generate paths
-      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}" "$store"
       chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
       chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
 
+      # Generate image if need be
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
           ${toString mcfg.diskSize}M || exit 1
         chown "vm-${name}:vm-${name}" "$image"
       fi
+
+      # Regenerate store
+      # TODO: use exportReferencesGraph?
+      ${pkgs.nix}/bin/nix-store -qR "${mcfg.config.system.build.toplevel}" > "${cfg.rpath}/${name}/store"
+      for path in $(ls "$store"); do
+        if ! grep "$path" "${cfg.rpath}/${name}/store"; then
+          rm -Rf "$path"
+        fi
+      done
+      for path in $(cat "${cfg.rpath}/${name}/store"); do
+        ${pkgs.rsync}/bin/rsync -a "$path" "$(echo "$path" | sed "s*/nix/store*$store*")"
+      done
     '';
 
 in
