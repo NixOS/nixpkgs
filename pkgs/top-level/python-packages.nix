@@ -5108,7 +5108,25 @@ in {
     };
   };
 
-  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix { };
+  pytest-catchlog = buildPythonPackage rec {
+    name = "pytest-catchlog-1.2.2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-catchlog/${name}.zip";
+      sha256 = "1w7wxh27sbqwm4jgwrjr9c2gy384aca5jzw9c0wzhl0pmk2mvqab";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = "make test";
+
+    meta = {
+      license = licenses.mit;
+      website = https://pypi.python.org/pypi/pytest-catchlog/;
+      description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
+    };
+  };
+
+  pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-fixture-config = buildPythonPackage rec {
     name = "${pname}-${version}";
