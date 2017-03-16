@@ -1,11 +1,22 @@
-{ stdenv, python, fetchurl, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip, buildPythonPackage }:
 
-stdenv.mkDerivation rec {
-  name = "${python.libPrefix}-bootstrapped-pip-${version}";
+let
   version = "9.0.1";
+  # Hash of the wheel
+  sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
+in buildPythonPackage rec {
+  pname = "bootstrapped-pip";
+  inherit version;
+  name = "${pname}-${version}";
+  format = "other";         # For bootstrapping
+  catchConflicts = false;   # For bootstrapping
 
-  src = fetchurl {
-    url = "https://files.pythonhosted.org/packages/b6/ac/7015eb97dc749283ffdec1c3a88ddb8ae03b8fad0f0e611408f196358da3/pip-9.0.1-py2.py3-none-any.whl";
+  # We download a wheel, but, because we cannot use `format = "wheel";` yet at this point
+  # we manually install the wheel.
+  src = fetchPypi {
+    inherit version;
+    pname = "pip";
+    format = "wheel";
     sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
   };
 
@@ -14,15 +25,10 @@ stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
   '';
 
-
-  patchPhase = ''
-    mkdir -p $out/bin
-  '';
-
   buildInputs = [ python makeWrapper unzip ];
 
   installPhase = ''
-
+    mkdir -p $out/bin
     # install pip binary
     echo '#!${python.interpreter}' > $out/bin/pip
     echo 'import sys;from pip import main' >> $out/bin/pip
