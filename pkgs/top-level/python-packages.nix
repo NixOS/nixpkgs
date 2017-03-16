@@ -8607,7 +8607,7 @@ in {
 
     propagatedBuildInputs = with self; [
       twitter-common-collections setproctitle setuptools six ansicolors
-      packaging pathspec scandir twitter-common-dirutil psutil requests2
+      packaging pathspec_0_5 scandir twitter-common-dirutil psutil requests2
       pystache pex docutils markdown pygments twitter-common-confluence
       fasteners coverage pywatchman futures cffi
     ];
@@ -8656,6 +8656,7 @@ in {
     };
   };
 
+  # Get rid of this when pants 1.3.0 is released and make 0.5 the default
   pathspec = buildPythonPackage rec {
     pname   = "pathspec";
     version = "0.3.4";
@@ -8664,6 +8665,24 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
+    };
+
+    meta = {
+      description = "Utility library for gitignore-style pattern matching of file paths";
+      homepage = "https://github.com/cpburnz/python-path-specification";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
+  };
+
+  pathspec_0_5 = buildPythonPackage rec {
+    pname   = "pathspec";
+    version = "0.5.0";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "07yx1gxj9v1iyyiy5fhq2wsmh4qfbrx158wi7jb0nx6lah80ffma";
     };
 
     meta = {
