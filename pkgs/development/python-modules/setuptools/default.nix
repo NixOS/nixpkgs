@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ appdirs six packaging ];
-  installFlags = [ "--ignore-installed" ];
+  installFlags = [ "--ignore-installed" "--no-dependencies" ];
 
   meta = with lib; {
     description = "Utilities to facilitate the installation of Python packages";
