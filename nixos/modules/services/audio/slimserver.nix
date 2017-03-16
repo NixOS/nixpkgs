@@ -34,32 +34,7 @@ in {
           playlists etc.
         '';
       };
-
-      network = {
-
-        listenAddress = mkOption {
-          type = types.str;
-          default = "127.0.0.1";
-          example = "any";
-          description = ''
-            The address for the daemon to listen on.
-            Use <literal>any</literal> to listen on all addresses.
-          '';
-        };
-
-        port = mkOption {
-          type = types.int;
-          default = 6600;
-          description = ''
-            This setting is the TCP port that is desired for the daemon to get assigned
-            to.
-          '';
-        };
-
-      };
-
     };
-
   };
 
 
