@@ -19,8 +19,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ thrift ];
 
   meta = {
-    description = "pycassa is a python client library for Apache Cassandra";
+    description = "A python client library for Apache Cassandra";
     homepage = http://github.com/pycassa/pycassa;
-    license = stdenv.licenses.mit;
+    license = stdenv.lib.licenses.mit;
   };
 }
