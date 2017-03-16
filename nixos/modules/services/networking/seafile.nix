@@ -63,7 +63,7 @@ in {
       type = types.string;
       default = "127.0.0.1";
       description = ''
-        The tcp port used by ccnet.
+        The tcp address used by ccnet.
       '';
     };
 
@@ -161,12 +161,12 @@ in {
         User = "seafile";
         Group = "seafile";
         RuntimeDirectory = "seafile";
-        ExecStart = "${pkgs.seafile-server}/bin/seaf-server -F ${centralConfigDir} -c ${ccnetDir} -d ${seafileDataDir} -l ${logDir}/seafile.log -P ${runDir}/seafile.pid";
+        ExecStart = "${pkgs.seafile}/bin/seaf-server -F ${centralConfigDir} -c ${ccnetDir} -d ${seafileDataDir} -l ${logDir}/seafile.log -P ${runDir}/seafile.pid";
         PIDFile = "${runDir}/seafile.pid";
       };
       preStart = ''
         if [ ! -d "${seafileDataDir}" ]; then
-          ${pkgs.seafile-server}/bin/seaf-server-init -F ${centralConfigDir} \
+          ${pkgs.seafile}/bin/seaf-server-init -F ${centralConfigDir} \
             --seafile-dir ${seafileDataDir} --port ${toString cfg.seafilePort} --fileserver-port ${toString cfg.fileserverPort}
         fi
       '';

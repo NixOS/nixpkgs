@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec
 {
-  version = "5.1.2";
+  version = "5.1.4";
   name = "seafile-${version}";
 
   src = fetchurl {
     url = "https://github.com/haiwen/seafile/archive/v${version}-server.tar.gz";
-    sha256 = "0kj6af695b9mrdfnvgw5zkkslncrqs035q3pna08anpa203vw4xq";
+    sha256 = "06b97qb56qsnw93fjrdaglmfll2mvf0s8jh96i53smjjqa5jsnxl";
   };
 
   buildInputs = [ which automake autoconf pkgconfig libtool libarchive libevhtp-seafile vala python intltool fuse ccnet curl acl attr lzma bzip2 makeWrapper];
