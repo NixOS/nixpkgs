@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage }:
+{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage, curl }:
 
 let
   inherit (stdenv.lib) optionalString;
@@ -9,7 +9,7 @@ let
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
-    then "1v7jvwigb29m15wilzcrk5jmlpaccpzbkhlzf7z5qw08320gvc91"
+    then "1d5h34dkm1r1ff562szygn9xk2qll1pjryvypl0lazzanxdh5gv5"
     else throw "missing bootstrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
@@ -19,7 +19,7 @@ let
      sha256 = bootstrapHash;
   };
 
-  version = "2017-01-26";
+  version = "2017-03-16";
 in
 
 rec {
@@ -69,7 +69,7 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper ];
+    buildInputs = [ makeWrapper curl ];
     phases = ["unpackPhase" "installPhase"];
 
     installPhase = ''
@@ -78,6 +78,7 @@ rec {
 
       ${optionalString needsPatchelf ''
         patchelf \
+          --set-rpath "${stdenv.lib.makeLibraryPath [ curl zlib ]}" \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
       ''}
