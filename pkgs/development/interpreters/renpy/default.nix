@@ -12,6 +12,9 @@ stdenv.mkDerivation {
     homepage = "http://renpy.org/";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
+    # This is an ancient version, last updated in 2014 (3d59f42ce); it fails to
+    # build with the most recent pygame version, and fails to run with 1.9.1.
+    broken = true;
   };
 
   src = fetchurl {
