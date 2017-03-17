@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam
+{ stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
@@ -11,11 +11,6 @@ assert withKerberos -> kerberos != null;
 assert withGssapiPatches -> withKerberos;
 
 let
-
-  hpnSrc = fetchurl {
-    url = mirror://sourceforge/hpnssh/openssh-6.6p1-hpnssh14v5.diff.gz;
-    sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
-  };
 
   # **please** update this patch when you update to a new openssh release.
   gssapiSrc = fetchpatch {
@@ -33,16 +28,16 @@ stdenv.mkDerivation rec {
   name = "openssh-${version}";
   version = "7.5p1";
 
-  src = fetchurl {
-    url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1w7rb5gbrikxdkp8w7zxnci4549gk4bw1lml01s59w5rzb2y6ilq";
-  };
-
-  prePatch = optionalString hpnSupport
-    ''
-      gunzip -c ${hpnSrc} | patch -p1
-      export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
-    '';
+  src = if hpnSupport then
+      fetchurl {
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_5_P1.tar.gz";
+        sha256 = "1hasdcfjl6xf5nbbbvqyyq5v7ad10nywrq89j7naxz9wln58nhnn";
+      }
+    else
+      fetchurl {
+        url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
+        sha256 = "1w7rb5gbrikxdkp8w7zxnci4549gk4bw1lml01s59w5rzb2y6ilq";
+      };
 
   patches =
     [
@@ -55,7 +50,8 @@ stdenv.mkDerivation rec {
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
-    ++ optional withKerberos kerberos;
+    ++ optional withKerberos kerberos
+    ++ optional hpnSupport autoreconfHook;
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -94,6 +90,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco aneeshusa ];
-    broken = hpnSupport; # probably after 6.7 update
   };
 }
