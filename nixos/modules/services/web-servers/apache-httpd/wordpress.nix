@@ -4,11 +4,6 @@
 with lib;
 
 let
-
-  # Upgrading? We have a test! nix-build ./nixos/tests/wordpress.nix
-  version = "4.7.2";
-  fullversion = "${version}";
-
   # Our bare-bones wp-config.php file using the above settings
   wordpressConfig = pkgs.writeText "wp-config.php" ''
     <?php
@@ -71,12 +66,7 @@ let
   # The wordpress package itself
   wordpressRoot = pkgs.stdenv.mkDerivation rec {
     name = "wordpress";
-    src = pkgs.fetchFromGitHub {
-      owner = "WordPress";
-      repo = "WordPress";
-      rev = "${fullversion}";
-      sha256 = "0vph12708drf8ww0xd05hpdvbyy7n5gj9ca598lhdhy2i1j6wy32";
-    };
+    src = config.package;
     installPhase = ''
       mkdir -p $out
       # copy all the wordpress files we downloaded
@@ -122,6 +112,14 @@ in
   enablePHP = true;
 
   options = {
+    package = mkOption {
+      type = types.path;
+      default = pkgs.wordpress;
+      description = ''
+        Path to the wordpress sources.
+        Upgrading? We have a test! nix-build ./nixos/tests/wordpress.nix
+      '';
+    };
     dbHost = mkOption {
       default = "localhost";
       description = "The location of the database server.";

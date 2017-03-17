@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
-  src = fetch "libcxx" "15l6bcmwczspbqcq4m2lmzb23g11axr9m8dayn25iys26nn00q43";
+  src = fetch "libcxx" "15ngfcjc3pjakpwfq7d4n546jj0rgfdv5rpb1qv9xgv9mp236kag";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
