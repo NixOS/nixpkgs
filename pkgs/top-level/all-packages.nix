@@ -2383,6 +2383,8 @@ with pkgs;
 
   ipxe = callPackage ../tools/misc/ipxe { };
 
+  irker = callPackage ../servers/irker { };
+
   ised = callPackage ../tools/misc/ised {};
 
   isl = isl_0_17;
