@@ -61,6 +61,7 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "--with-system-libvpx"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
+      "--enable-alsa"
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
