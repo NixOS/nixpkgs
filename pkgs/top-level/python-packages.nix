@@ -13966,7 +13966,7 @@ in {
     };
   };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_38;};
+  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_39;};
 
   lockfile = buildPythonPackage rec {
     pname = "lockfile";
