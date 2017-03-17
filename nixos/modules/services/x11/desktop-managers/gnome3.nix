@@ -53,7 +53,6 @@ in {
     services.xserver.desktopManager.gnome3 = {
       enable = mkOption {
         default = false;
-        example = true;
         description = "Enable Gnome 3 desktop manager.";
       };
 
