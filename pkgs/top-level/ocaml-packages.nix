@@ -198,6 +198,8 @@ let
 
     fpath = callPackage ../development/ocaml-modules/fpath { };
 
+    functoria = callPackage ../development/ocaml-modules/functoria { };
+
     functory = callPackage ../development/ocaml-modules/functory { };
 
     gen = callPackage ../development/ocaml-modules/gen { };
