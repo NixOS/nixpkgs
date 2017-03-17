@@ -960,6 +960,8 @@ with pkgs;
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  minikube = callPackage ../development/tools/minikube { };
+
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
   mpdcron = callPackage ../tools/audio/mpdcron { };
