@@ -13,7 +13,6 @@ in {
       deluge = {
         enable = mkOption {
           default = false;
-          example = true;
           description = "Start the Deluge daemon";
         };
 
@@ -29,7 +28,6 @@ in {
       deluge.web = {
         enable = mkOption {
           default = false;
-          example = true;
           description = ''
             Start Deluge Web daemon.
           '';

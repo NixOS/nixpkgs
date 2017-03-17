@@ -172,7 +172,6 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
-      example = true;
       description = ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when

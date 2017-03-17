@@ -29,7 +29,6 @@ in
 
     agree = mkOption {
       default = false;
-      example = true;
       type = types.bool;
       description = "Agree to Let's Encrypt Subscriber Agreement";
     };
