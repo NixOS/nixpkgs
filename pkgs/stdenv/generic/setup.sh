@@ -550,7 +550,7 @@ unpackPhase() {
 
     if [ -z "$srcs" ]; then
         if [ -z "$src" ]; then
-            echo 'variable $src or $srcs should point to the source'
+            echo 'To use the default unpackPhase, the variable $src or $srcs should point to the source. If this derivation has no sources to unpack, you can override the default unpack phase with a noop by setting unpackPhase="true" in the argument to mkDerivation.'
             exit 1
         fi
         srcs="$src"
