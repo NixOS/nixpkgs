@@ -5,6 +5,7 @@ with lib;
 let
 
   rspamdCfg = config.services.rspamd;
+  postfixCfg = config.services.postfix;
   cfg = config.services.rmilter;
 
   inetSocket = addr: port: "inet:[${toString port}@${addr}]";
@@ -219,7 +220,7 @@ in
           PermissionsStartOnly = true;
           Restart = "always";
           RuntimeDirectory = "rmilter";
-          RuntimeDirectoryMode = "0755";
+          RuntimeDirectoryMode = "0750";
         };
 
       };
@@ -231,16 +232,18 @@ in
           ListenStream = systemdSocket;
           SocketUser = cfg.user;
           SocketGroup = cfg.group;
-          SocketMode = "0666";
+          SocketMode = "0660";
         };
       };
     })
 
+    (mkIf (cfg.enable && cfg.rspamd.enable && rspamdCfg.enable) {
+      users.extraUsers.${cfg.user}.extraGroups = [ rspamdCfg.group ];
+    })
+
     (mkIf (cfg.enable && cfg.postfix.enable) {
-
       services.postfix.extraConfig = cfg.postfix.configFragment;
-      users.users.postfix.extraGroups = [ cfg.group ];
-
+      users.extraUsers.${postfixCfg.user}.extraGroups = [ cfg.group ];
     })
   ];
 }

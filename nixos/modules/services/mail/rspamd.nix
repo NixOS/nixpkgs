@@ -53,8 +53,11 @@ in
       bindSocket = mkOption {
         type = types.listOf types.str;
         default = [
-          "/run/rspamd/rspamd.sock mode=0666 owner=${cfg.user}"
+          "/run/rspamd/rspamd.sock mode=0660 owner=${cfg.user} group=${cfg.group}"
         ];
+        defaultText = ''[
+          "/run/rspamd/rspamd.sock mode=0660 owner=${cfg.user} group=${cfg.group}"
+        ]'';
         description = ''
           List of sockets to listen, in format acceptable by rspamd
         '';
