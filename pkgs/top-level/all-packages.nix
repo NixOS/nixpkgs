@@ -9662,6 +9662,8 @@ with pkgs;
 
   sfml = callPackage ../development/libraries/sfml { };
 
+  shapelib = callPackage ../development/libraries/shapelib { };
+
   skalibs = callPackage ../development/libraries/skalibs { };
 
   slang = callPackage ../development/libraries/slang { };
