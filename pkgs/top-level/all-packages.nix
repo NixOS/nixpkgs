@@ -16001,6 +16001,11 @@ with pkgs;
 
   xara = callPackage ../applications/graphics/xara { };
 
+  xastir = callPackage ../applications/misc/xastir {
+    rastermagick = imagemagick;
+    inherit (xorg) libXt;
+  };
+
   xawtv = callPackage ../applications/video/xawtv { };
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
