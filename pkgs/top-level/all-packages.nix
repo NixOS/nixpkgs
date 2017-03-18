@@ -5421,7 +5421,7 @@ with pkgs;
   llvm_34 = llvmPackages_34.llvm;
 
   llvmPackages = recurseIntoAttrs
-    (if stdenv.isDarwin then llvmPackages_37 else llvmPackages_39);
+    (if stdenv.isDarwin then llvmPackages_4 else llvmPackages_39);
 
   llvmPackagesSelf = llvmPackages_34.override {
     stdenv = libcxxStdenv;
@@ -5435,13 +5435,9 @@ with pkgs;
     isl = isl_0_14;
   };
 
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
     inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-    cmake = cmake.override { isBootstrap = true; useSharedLibraries = false; };
-    libxml2 = libxml2.override { pythonSupport = false; };
-    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
-  });
+  };
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
     inherit (stdenvAdapters) overrideCC;
@@ -5451,9 +5447,13 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
   };
 
-  llvmPackages_4 = callPackage ../development/compilers/llvm/4 {
+  llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
     inherit (stdenvAdapters) overrideCC;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    cmake = cmake.override { isBootstrap = true; useSharedLibraries = false; };
+    libxml2 = libxml2.override { pythonSupport = false; };
+    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
+  });
 
   manticore = callPackage ../development/compilers/manticore { };
 
