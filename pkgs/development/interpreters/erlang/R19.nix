@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny sjmackenzie couchemar ];
+    maintainers = with maintainers; [ yurrriq couchemar DerTim1 mdaiter ];
     license = licenses.asl20;
   };
 }
