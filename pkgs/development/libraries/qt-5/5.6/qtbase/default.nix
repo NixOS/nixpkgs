@@ -267,7 +267,20 @@ stdenv.mkDerivation {
               done
           popd
       fi
-    '' + lib.optionalString stdenv.isDarwin ''
+    ''
+
+    # fixup .pc file (where to find 'moc' etc.)
+    + lib.optionalString (!stdenv.isDarwin) ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
+    ''
+
+    # Don't move .prl files on darwin because they end up in
+    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
+    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
+    # are in lib, and so do not cause a subsequent recreation of deep
+    # framework directory trees.
+    + lib.optionalString stdenv.isDarwin ''
       fixDarwinDylibNames_rpath() {
         local flags=()
 
