@@ -100,8 +100,7 @@ in {
   aenum = callPackage ../development/python-modules/aenum { };
 
   agate = buildPythonPackage rec {
-    name = "agate-1.2.2";
-    disabled = isPy3k;
+    name = "agate-1.5.5";
 
     meta = {
       description = "A Python data analysis library that is optimized for humans instead of machines";
@@ -110,17 +109,18 @@ in {
       maintainers = with maintainers; [ vrthra ];
     };
 
-    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse awesome-slugify leather];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/agate/${name}.tar.gz";
-      sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
+      sha256 = "0rajv5zpnfkr5yr5bgr26rjs8yz6vj6mm57h4li2li2ayigdlq98";
     };
   };
 
   agate-dbf = buildPythonPackage rec {
-    name = "agate-dbf-0.1.0";
-    disabled = isPy3k;
+    name = "agate-dbf-0.2.0";
 
     meta = {
       description = "Adds read support for dbf files to agate";
@@ -133,13 +133,12 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/agate-dbf/${name}.tar.gz";
-      sha256 = "0xzz834lh4xbl342c6wmxqy7ynmsrjp42bsjahfcxhsgq33vzngz";
+      sha256 = "0pkk6m873xpqj77ja6ylmg8v41abpn4bvsqw6mh2hjyd0snw2rh6";
     };
   };
 
   agate-excel = buildPythonPackage rec {
-    name = "agate-excel-0.1.0";
-    disabled = isPy3k;
+    name = "agate-excel-0.2.0";
 
     meta = {
       description = "Adds read support for excel files to agate";
@@ -148,13 +147,35 @@ in {
       maintainers = with maintainers; [ vrthra ];
     };
 
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ agate openpyxl xlrd ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/agate-excel/${name}.tar.gz";
-      sha256 = "08zvj3pwqw8zhd58iyymiwblrk92y4gl6yyrb2svb0k8za7v0hak";
+      sha256 = "1lh6x0zbp8l5ba6i1zjbnzqb63n56y1v1vlmws7y3zz1xwplaxay";
     };
   };
+
+
+  agate-sql = buildPythonPackage rec {
+    name = "agate-sql-0.5.0";
+
+    meta = {
+      description = "Adds SQL read/write support to agate";
+      homepage    = "https://github.com/wireservice/agate-sql";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ sqlalchemy agate ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate-sql/${name}.tar.gz";
+      sha256 = "1yrgncxfmpb8vcq25w5jz0nglc03hg6r99skfqy1vmy0sn6p5yp5";
+    };
+  };
+
 
   ansicolor = buildPythonPackage rec {
     name = "ansicolor-${version}";
@@ -182,8 +203,7 @@ in {
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   dbf = buildPythonPackage rec {
-    name = "dbf-0.94.003";
-    disabled = isPy3k;
+    name = "dbf-0.96.8";
 
     meta = {
       description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
@@ -192,16 +212,19 @@ in {
       maintainers = with maintainers; [ vrthra ];
     };
 
+    propagatedBuildInputs = with self; [ aenum ];
+
+    doCheck = false;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dbf/${name}.tar.gz";
-      sha256 = "0i2454hwg67079jb56x663wqmmwr55pcr6c76q2415185y6nhny9";
+      sha256 = "1z8n7s4cka6x9ybh4qpfhj51v2qrk38h2f06npizzhm0hmn6r3v1";
     };
   };
 
 
   dbfread = buildPythonPackage rec {
-    name = "dbfread-2.0.5";
-    disabled = isPy3k;
+    name = "dbfread-2.0.7";
 
     meta = {
       description = "Read DBF Files with Python";
@@ -212,7 +235,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dbfread/${name}.tar.gz";
-      sha256 = "0r5axq9ax0czyapm7b69krcv22r1nyb4vci7c5x8mx8pq1axim93";
+      sha256 = "0gdpwdzf1fngsi6jrdyj4qdf6cr7gnnr3zp80dpkzbgz0spskj07";
     };
   };
 
@@ -2511,15 +2534,17 @@ in {
 
   csvkit = buildPythonPackage rec {
     name = "csvkit-${version}";
-    version = "0.9.1";
-    disabled = isPy3k;
+    version = "1.0.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/csvkit/${name}.tar.gz";
-      sha256 = "0fprr4wgp0bq8kl5qims88np11af7ahr5bxkrhfwpdgcgdjbiy4j";
+      sha256 = "1ldwwzc6m7b5k46lckc109hcla2f6n32fw7q8k9b94k83vkwcsq4";
     };
 
-    propagatedBuildInputs = with self; [ dateutil_2_2 dbf xlrd sqlalchemy openpyxl_2_2_0_b1 ];
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ dateutil dbf xlrd sqlalchemy
+      agate agate-sql agate-dbf  agate-excel openpyxl ];
 
     meta = {
       description = "A library of utilities for working with CSV, the king of tabular file formats";
@@ -6012,27 +6037,7 @@ in {
   };
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-${version}";
-    version = "2.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
-
-  # csvkit 0.9.1 needs dateutil==2.2
-  dateutil_2_2 = buildPythonPackage (rec {
-    name = "dateutil-2.2";
-    disabled = isPy3k;
+    name = "dateutil-2.6.0";
 
     propagatedBuildInputs = with self; [ self.six ];
 
@@ -6040,12 +6045,13 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "0s74ad6r789810s10dxgvaf48ni6adac2icrdad34zxygqq6bj7f";
+      sha256 = "1lhq0hxjc3cfha101q02ld5ijlpfyjn2w1yh7wvpiy367pgzi8k2";
     };
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
       homepage = http://pypi.python.org/pypi/python-dateutil;
+      maintainers = with maintainers; [ vrthra ];
       license = "BSD-style";
     };
   });
