@@ -15027,6 +15027,8 @@ with pkgs;
 
   psi = kde4.callPackage ../applications/networking/instant-messengers/psi { };
 
+  psi-plus = callPackage ../applications/networking/instant-messengers/psi-plus { };
+
   psol = callPackage ../development/libraries/psol/default.nix { };
 
   pstree = callPackage ../applications/misc/pstree { };
