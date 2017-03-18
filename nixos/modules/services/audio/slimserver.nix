@@ -56,13 +56,12 @@ in {
     };
 
     users = {
-      groups.slimserver.gid = config.ids.gids.slimserver;
       users.slimserver = {
-        uid = config.ids.uids.slimserver;
         description = "Slimserver daemon user";
         home = cfg.dataDir;
         group = "slimserver";
       };
+      groups.slimserver = {};
     };
   };
 
