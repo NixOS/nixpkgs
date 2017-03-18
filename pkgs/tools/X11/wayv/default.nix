@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
+  postInstall = ''
+    make -C doc install
+    mkdir -p "$out"/share/doc/wayv
+    cp [A-Z][A-Z]* "$out"/share/doc/wayv
+    cp doc/[A-Z][A-Z]* "$out"/share/doc/wayv
+    cp doc/*.txt "$out"/share/doc/wayv
+    cp doc/*.jpg "$out"/share/doc/wayv
+  '';
+
   meta = {
     inherit version;
     description = "A gesture control for X11";
