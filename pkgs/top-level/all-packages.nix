@@ -6909,6 +6909,7 @@ with pkgs;
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
   };
+  xxdiff-tip = callPackage ../development/tools/misc/xxdiff/tip.nix { };
 
   yacc = bison;
 
@@ -15872,6 +15873,8 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  wayv = callPackage ../tools/X11/wayv {};
+
   weechat = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
@@ -16010,6 +16013,8 @@ with pkgs;
   x2vnc = callPackage ../tools/X11/x2vnc { };
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
+
+  xannotate = callPackage ../tools/X11/xannotate {};
 
   xaos = callPackage ../applications/graphics/xaos {
     libpng = libpng12;
