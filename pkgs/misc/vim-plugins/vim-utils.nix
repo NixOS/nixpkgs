@@ -150,6 +150,10 @@ vim_with_plugins can be installed like any other application within Nix.
 let
   inherit (stdenv) lib;
 
+  toNames = x:
+      if builtins.isString x then [x]
+      else (lib.optional (x ? name) x.name)
+            ++ (x.names or []);
   findDependenciesRecursively = {knownPlugins, names}:
 
     let depsOf = name: (builtins.getAttr name knownPlugins).dependencies or [];
@@ -210,11 +214,6 @@ let
       vamImpl = lib.optionalString (vam != null)
       (let
         knownPlugins = vam.knownPlugins or vimPlugins;
-
-        toNames = x:
-            if builtins.isString x then [x]
-            else (lib.optional (x ? name) x.name)
-                  ++ (x.names or []);
 
         names = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
 
@@ -412,6 +411,19 @@ rec {
     configurePhase =":";
   } // a);
 
+  requiredPlugins = {
+    knownPlugins ? vimPlugins,
+    vam ? null,
+    pathogen ? null, ...
+  }:
+    let
+      pathogenNames = map (name: knownPlugins.${name}) (findDependenciesRecursively { inherit knownPlugins; names = pathogen.pluginNames; });
+      vamNames = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
+      names = (lib.optionals (pathogen != null) pathogenNames) ++
+              (lib.optionals (vam != null) vamNames);
+    in
+      map (name: knownPlugins.${name}) names;
+
   # test cases:
   test_vim_with_vim_addon_nix_using_vam = vim_configurable.customize {
    name = "vim-with-vim-addon-nix-using-vam";
@@ -427,5 +439,4 @@ rec {
     name = "vim-with-vim-addon-nix";
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-addon-nix ];
   };
-
 }
