@@ -23922,7 +23922,7 @@ in {
       sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
     };
 
-    propagatedBuildInputs = with self; [ pydns lockfile ];
+    propagatedBuildInputs = with self; [ bsddb3 pydns lockfile ];
 
     meta = {
       description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
