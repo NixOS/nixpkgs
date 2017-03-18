@@ -48,7 +48,7 @@ let
          ++ lib.optionals (cfg.enableQuakeLive or false)
          (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
          ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
-         ++ lib.optional (config.pulseaudio or false) libpulseaudio;
+         ++ lib.optional (config.pulseaudio or true) libpulseaudio;
   gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
   gtk_modules = [ libcanberra_gtk2 ];
 
