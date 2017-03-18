@@ -29,6 +29,7 @@ in
     ./twm.nix
     ./windowmaker.nix
     ./wmii.nix
+    ./wtftw.nix
     ./xmonad.nix
     ./qtile.nix
     ./none.nix ];

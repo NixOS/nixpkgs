@@ -18216,6 +18216,8 @@ with pkgs;
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
+  
+  wtftw = callPackage ../applications/window-managers/wtftw { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
