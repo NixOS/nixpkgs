@@ -221,7 +221,7 @@ let
         ''-nographic -serial unix:"${cfg.rpath}/${name}/socket.unix",server,nowait''
         # File systems
         ''-drive file="${cfg.path}/${name}/image.qcow2",if=virtio,media=disk''
-        ''-virtfs local,path="${cfg.path}/${name}/store",security_model=none,mount_tag=store''
+        ''-virtfs local,path="${cfg.path}/${name}/store",security_model=mapped-file,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
         ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
@@ -236,35 +236,64 @@ let
       ) (attrNames mcfg.shared)
     );
 
-  setupVM = name: let mcfg = cfg.machines.${name}; in
+  referencesGraph = name: let mcfg = cfg.machines.${name}; in
+    pkgs.stdenv.mkDerivation {
+      name = "references-vm-${name}";
+      passAsFile = [ "buildCommand" ];
+      buildCommand = "grep '/nix/store' closure > $out";
+      exportReferencesGraph = [ "closure" mcfg.config.system.build.toplevel ];
+    };
+
+  setupStore = name: let mcfg = cfg.machines.${name}; in
+    pkgs.writeScript "setup-store-vm-${name}"
     ''
       image="${cfg.path}/${name}/image.qcow2"
       store="${cfg.path}/${name}/store"
-
-      # Generate paths
-      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}" "$store"
-      chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}" "$store"
-      chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
 
       # Generate image if need be
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
           ${toString mcfg.diskSize}M || exit 1
-        chown "vm-${name}:vm-${name}" "$image"
       fi
 
       # Regenerate store
-      # TODO: use exportReferencesGraph?
-      ${pkgs.nix}/bin/nix-store -qR "${mcfg.config.system.build.toplevel}" > "${cfg.rpath}/${name}/store"
+      targetStore="${referencesGraph name}"
+      mkdir -p "$store"
       for path in $(ls "$store"); do
-        if ! grep "$path" "${cfg.rpath}/${name}/store" > /dev/null 2>&1; then
+        if ! grep "$path" "targetStore" > /dev/null 2>&1; then
           rm -Rf "$path"
         fi
       done
-      for path in $(cat "${cfg.rpath}/${name}/store"); do
-        ${pkgs.rsync}/bin/rsync -a "$path" "$store"
+      for path in $(cat "$targetStore"); do
+        ${pkgs.rsync}/bin/rsync -a --info=name "$path" "$store" \
+            | grep -- '->' \
+            | cut -f 1 -d ' ' \
+            | while read filename; do
+          f="${cfg.path}/${name}/store/$filename"
+          target="$(readlink "$f")"
+          dir="$(dirname "$f")"
+          chmod u+w "$dir"
+          rm "$f"
+          echo -n "$target" > "$f"
+          mkdir -p "$dir/.virtfs_metadata"
+          cat > "$dir/.virtfs_metadata/$(basename "$f")" <<EOF
+virtfs.uid=0
+virtfs.gid=0
+virtfs.mode=41471
+EOF
+          chmod u-w "$dir"
+        done
       done
+    '';
+
+  setupVM = name:
+    ''
+      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chown -R "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+
+      exec ${pkgs.sudo}/bin/sudo -u "vm-${name}" ${setupStore name}
     '';
 
 in
