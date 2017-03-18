@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
   '';
 
-  buildInputs = [ cmake llvm libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [ cmake libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   cmakeFlags = [
       "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
