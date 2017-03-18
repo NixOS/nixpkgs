@@ -75,7 +75,6 @@ buildPerlPackage rec {
     mkdir -p lib/perl5/site_perl
     mv CPAN_used/* lib/perl5/site_perl
     cp -rf tmp/* lib/perl5/site_perl
-    mv Slim lib/perl5/site_perl
   ";
 
   doCheck = false;
