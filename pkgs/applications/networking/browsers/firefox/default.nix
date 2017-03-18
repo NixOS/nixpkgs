@@ -162,8 +162,8 @@ in {
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "52.0esr";
-    sha512 = "7e191c37af98163131cbba4dcc820a4edc0913d81c3b2493d9aad0a2886e7aed41a990fa5281ccfb08566ecfdfd7df7353063a01ad92d2ec6e1ce19d277b6e67";
+    version = "52.0.1esr";
+    sha512 = "c1f0aea279254e7788f62bba7892840edd2b667f385a649d374c9e783b93ec7faf9e5ebfccd04cd94f46da37aeb6bd7785d17faca2ad441a0b6e8587917faab2";
     updateScript = import ./update.nix {
       attrPath = "firefox-esr-unwrapped";
       versionSuffix = "esr";
