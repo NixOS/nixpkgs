@@ -4689,6 +4689,7 @@ with pkgs;
   zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
 
   zstd = callPackage ../tools/compression/zstd { };
+  zstdmt = callPackage ../tools/compression/zstdmt { };
 
   zsync = callPackage ../tools/compression/zsync { };
 
