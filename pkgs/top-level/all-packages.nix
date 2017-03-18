@@ -15316,6 +15316,8 @@ with pkgs;
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
+  sops = callPackage ../tools/security/sops { };
+
   sorcer = callPackage ../applications/audio/sorcer { };
 
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
