@@ -6013,23 +6013,7 @@ in {
     };
   };
 
-  dateutil = buildPythonPackage (rec {
-    name = "dateutil-${version}";
-    version = "2.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
+  dateutil = callPackage ../development/python-modules/dateutil { };
 
   # csvkit 0.9.1 needs dateutil==2.2
   dateutil_2_2 = buildPythonPackage (rec {
