@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    sed -i "/QStringList dirs = {/a    \"$out/lib\"," \
+      src/lib/albert/src/pluginsystem/extensionmanager.cpp
+  '';
+
   fixupPhase = ''
     wrapQtProgram $out/bin/albert
   '';
