@@ -10898,6 +10898,8 @@ with pkgs;
 
   redstore = callPackage ../servers/http/redstore { };
 
+  restic = callPackage ../tools/backup/restic { };
+
   restund = callPackage ../servers/restund {};
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
