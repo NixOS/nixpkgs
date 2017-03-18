@@ -6315,16 +6315,14 @@ in {
 
   dill = buildPythonPackage rec {
     name = "dill-${version}";
-    version = "0.2.5";
+    version = "0.2.6";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dill/${name}.tgz";
-      sha256 = "431c9d46e190dcdf1397234cf659d66e2e22e33b0474ed6ee2d0b16c9c0ea319";
+      url = "mirror://pypi/d/dill/${name}.zip";
+      sha256 = "6c1ccca68be483fa8c66e85a89ffc850206c26373aa77a97b83d8d0994e7f1fd";
     };
 
-    propagatedBuildInputs = with self; [objgraph];
-
-    # failing tests
+    # TypeError: don't know how to make test from: {'byref': False, 'recurse': False, 'protocol': 3, 'fmode': 0}
     doCheck = false;
 
     meta = {
