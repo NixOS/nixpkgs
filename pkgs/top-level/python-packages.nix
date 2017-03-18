@@ -13867,6 +13867,8 @@ in {
     clblas = pkgs.clblas-cuda;
   };
 
+  libnacl = callPackage ../development/python-modules/libnacl/default.nix { };
+
   libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
     (pkgs.libplist.override{python2Packages=self; }).py;
 
