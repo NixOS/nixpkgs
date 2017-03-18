@@ -5120,6 +5120,35 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileFindObject = buildPerlPackage rec {
+    name = "File-Find-Object-v0.3.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "7c467b6b7752bff46b7b8b84c9aabeac45bbfdab1e2224108a2e2170adb9f2b7";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ ClassXSAccessor ];
+    meta = {
+      description = "An object oriented File::Find replacement";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
+  FileFindObjectRule = buildPerlModule rec {
+    name = "File-Find-Object-Rule-0.0306";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "2ce55766b25fb8799d37b95bca61e8a71d8a437e28541e1cd06b7eb89f7739d1";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ ClassXSAccessor FileFindObject NumberCompare TextGlob ];
+    meta = {
+      homepage = http://www.shlomifish.org/open-source/projects/File-Find-Object/;
+      description = "Alternative interface to File::Find::Object";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileFindRule = buildPerlPackage rec {
     name = "File-Find-Rule-0.33";
     src = fetchurl {
@@ -5139,6 +5168,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Common rules for searching for Perl things";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  FileFinder = buildPerlPackage rec {
+    name = "File-Finder-0.53";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ME/MERLYN/${name}.tar.gz";
+      sha256 = "2ecbc19ac67a9e635c872a807a8d3eaaff5babc054f15a191d47cdfc5f176a74";
+    };
+    propagatedBuildInputs = [ TextGlob ];
+    meta = {
+      license = stdenv.lib.licenses.unknown;
     };
   };
 
@@ -8692,6 +8733,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooX = buildPerlPackage rec {
+    name = "MooX-0.101";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GE/GETTY/${name}.tar.gz";
+      sha256 = "2ff91a656e78aae0aca42293829d7a7e5acb9bf22b0401635b2ab6c870de32d5";
+    };
+    propagatedBuildInputs = [ DataOptList ImportInto ModuleRuntime Moo ];
+    meta = {
+      homepage = https://github.com/Getty/p5-moox;
+      description = "Using Moo and MooX:: packages the most lazy way";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MooXlate = buildPerlPackage {
     name = "MooX-late-0.015";
     src = fetchurl {
@@ -10163,10 +10218,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PathTiny = buildPerlPackage {
-    name = "Path-Tiny-0.052";
+    name = "Path-Tiny-0.104";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.052.tar.gz;
-      sha256 = "1b70yhbdww9k5m4a4lhdd71jrxdxhi10533slmxynxa04nyn2f0a";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.104.tar.gz;
+      sha256 = "c69f1dcfeb4aa004086deb9bc14c7d79f45798b947f1efbd634a3442e267aaef";
     };
     buildInputs = [ DevelHide Filepushd TestDeep TestFailWarnings TestFatal perl ];
     propagatedBuildInputs = [ autodie ];
@@ -12137,6 +12192,21 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
+ 
+  TaskFreecellSolverTesting = buildPerlModule rec {
+    name = "Task-FreecellSolver-Testing-v0.0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "ce8960c0250a9947ae5b4485e8a3e807bb2d87b1120096464b3d2247d2c194ff";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify Inline InlineC ListMoreUtils Moo MooX PathTiny StringShellQuote TaskTestRunAllPlugins TemplateToolkit TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace YAMLLibYAML ];
+    meta = {
+      homepage = http://metacpan.org/release/Task-FreecellSolver-Testing;
+      description = "Install the CPAN dependencies of the Freecell Solver test suite";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   TaskPlack = buildPerlModule rec {
     name = "Task-Plack-0.28";
@@ -12145,6 +12215,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0ajwkyr9nwn11afi6fz6kx4bi7a3p8awjsldmsakz3sl0s42pmbr";
     };
     propagatedBuildInputs = [ Plack PSGI ModuleBuildTiny ];
+  };
+
+  TaskTestRunAllPlugins = buildPerlPackage rec {
+    name = "Task-Test-Run-AllPlugins-0.0105";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "fd43bd053aa884a5abca851f145a0e29898515dcbfc3512f18cd0d86d28eb0a9";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Specifications for installing all the Test::Run";
+      license = stdenv.lib.licenses.mit;
+    };
   };
 
   TaskWeaken = buildPerlPackage {
@@ -12571,6 +12656,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestDataSplit = buildPerlModule rec {
+    name = "Test-Data-Split-0.2.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "90811c2af56750bf08eeff39e1e30f2ff8f625e809ed838b5ccb56a256c4b595";
+    };
+    buildInputs = [ ModuleBuild TestDifferences perl ];
+    propagatedBuildInputs = [ IOAll ListMoreUtils MooX MooXlate ];
+    meta = {
+      description = "Split data-driven tests into several test scripts";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   TestDeep = buildPerlPackage {
     name = "Test-Deep-0.112";
     src = fetchurl {
@@ -12969,6 +13068,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ PerlCritic ];
   };
 
+  TestPerlTidy = buildPerlPackage rec {
+    name = "Test-PerlTidy-20130104";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LA/LARRYL/${name}.tar.gz";
+      sha256 = "3f15d9f3f4811e348594620312258d75095237925b491ada623fa73ac9d2b9c8";
+    };
+    propagatedBuildInputs = [ FileFinder FileSlurp PerlTidy TextDiff ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestPod = buildPerlPackage rec {
     name = "Test-Pod-1.51";
     src = fetchurl {
@@ -13055,6 +13166,129 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
+    };
+  };
+
+  TestRun = buildPerlPackage rec {
+    name = "Test-Run-0.0304";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "f3feaf9c4494c0b3a5294228cab27efe93653b7e0bbd7fbb99b94b65b247f323";
+    };
+    buildInputs = [ ModuleBuild TestTrap ];
+    propagatedBuildInputs = [ IPCSystemSimple ListMoreUtils MROCompat Moose MooseXStrictConstructor TextSprintfNamed UNIVERSALrequire ];
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Base class to run standard TAP scripts";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  TestRunCmdLine = buildPerlPackage rec {
+    name = "Test-Run-CmdLine-0.0131";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "cceeeecd3f4b2f1d2929f3ada351c1ade23a8ac73ef0486dc6e9605ebcdaef18";
+    };
+    buildInputs = [ ModuleBuild TestTrap ];
+    propagatedBuildInputs = [ Moose MooseXGetopt TestRun UNIVERSALrequire YAMLLibYAML ];
+    meta = {
+      homepage = http://web-cpan.berlios.de/modules/Test-Run/;
+      description = "Analyze tests from the command line using Test::Run";
+      license = stdenv.lib.licenses.mit;
+    };
+   };
+
+  TestRunPluginAlternateInterpreters = buildPerlPackage rec {
+    name = "Test-Run-Plugin-AlternateInterpreters-0.0124";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "eecb3830d350b5d7853322df4f3090af42ff17e9c31075f8d4f69856c968bff3";
+    };
+    buildInputs = [ ModuleBuild TestTrap YAMLLibYAML ];
+    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ];
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Define different interpreters for different test scripts with Test::Run";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  TestRunPluginBreakOnFailure = buildPerlPackage rec {
+    name = "Test-Run-Plugin-BreakOnFailure-v0.0.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "e422eb64a2fa6ae59837312e37ab88d68b4945148eb436a3774faed5074f0430";
+    };
+    buildInputs = [ ModuleBuild TestTrap YAMLLibYAML ];
+    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ];
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Stop processing the entire test suite";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  TestRunPluginColorFileVerdicts = buildPerlPackage rec {
+    name = "Test-Run-Plugin-ColorFileVerdicts-0.0124";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "0418f03abe241f5a3c2a2ab3dd2679d11eee42c9e1f5b5a6ea80d9e238374302";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ]  moreInputs;
+    moreInputs = [ TestTrap ]; # Added because tests were failing without it
+    doCheck=true;
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Make the file verdict ("ok", "NOT OK")";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  TestRunPluginColorSummary = buildPerlModule rec {
+    name = "Test-Run-Plugin-ColorSummary-0.0202";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "ea4fb6768c4f6645cedf87d9b7c6baf97364ebc6f4171e4dd5f68939fb2bdd3a";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ TestRun TestRunCmdLine ]  moreInputs;
+    moreInputs = [ TestTrap ]; # Added because tests were failing without it
+    doCheck=true;
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "A Test::Run plugin that";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  TestRunPluginTrimDisplayedFilenames = buildPerlPackage rec {
+    name = "Test-Run-Plugin-TrimDisplayedFilenames-0.0125";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "2255bc5cb6ab65ee4dfff3bcdf007fb74785ff3bb439a9cef5052c66d80424a5";
+    };
+    buildInputs = [ ModuleBuild TestTrap YAMLLibYAML ];
+    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ];
+    meta = {
+      homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
+      description = "Trim the first components";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  TestRunValgrind = buildPerlModule rec {
+    name = "Test-RunValgrind-0.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "67bf3cf3e7d5d23ec33e592f8b0dbcccfa01205d5bf0a3d73d8c8358d167e83f";
+    };
+    buildInputs = [ ModuleBuild perl ];
+    propagatedBuildInputs = [ PathTiny ];
+    meta = {
+      description = "Tests that an external program is valgrind-clean";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
@@ -13178,6 +13412,20 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Overrides the time() and sleep() core functions for testing";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+ 
+  TestTrailingSpace = buildPerlPackage rec {
+    name = "Test-TrailingSpace-0.0301";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "a28875747adb7a0e7d1ae8a4ffe71869e7ceb3a85d0cb30172959dada7de5970";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ FileFindObjectRule ];
+    meta = {
+      description = "Test for trailing space in source files";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
@@ -13672,6 +13920,19 @@ let self = _self // overrides; _self = with self; {
       sha256 = "2e56bb4324ee0186b908b3bd78463643affe7295624af0628e81491e910283d9";
     };
     propagatedBuildInputs = [ if_ ];
+  };
+
+  TextSprintfNamed = buildPerlPackage rec {
+    name = "Text-Sprintf-Named-0.0402";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "951317fce8fa5dd08190ba760182bc71f2b4346fa21df55c76155e6353e2864f";
+    };
+    buildInputs = [ ModuleBuild TestWarn ];
+    meta = {
+      description = "Sprintf-like function with named conversions";
+      license = stdenv.lib.licenses.mit;
+    };
   };
 
   TextTable = buildPerlPackage rec {
