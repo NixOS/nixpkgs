@@ -148,7 +148,6 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether to enable the Taskwarrior server.
 

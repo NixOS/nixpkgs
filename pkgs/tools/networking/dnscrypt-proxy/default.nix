@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsodium, systemd }:
+{ stdenv, fetchurl, pkgconfig, libsodium, ldns, openssl, systemd }:
 
 with stdenv.lib;
 
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libsodium ] ++ optional stdenv.isLinux systemd;
+  # <ldns/ldns.h> depends on <openssl/ssl.h>
+  buildInputs = [ libsodium openssl.dev ldns ] ++ optional stdenv.isLinux systemd;
 
   postInstall = ''
     # Previous versions required libtool files to load plugins; they are

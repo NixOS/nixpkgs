@@ -53,6 +53,8 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bos = callPackage ../development/ocaml-modules/bos { };
+
     bitstring =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/bitstring { }
@@ -195,6 +197,8 @@ let
     };
 
     fpath = callPackage ../development/ocaml-modules/fpath { };
+
+    functoria = callPackage ../development/ocaml-modules/functoria { };
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
@@ -380,6 +384,8 @@ let
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
+    ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
+
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
@@ -493,6 +499,8 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     re = callPackage ../development/ocaml-modules/re { };
+
+    rresult = callPackage ../development/ocaml-modules/rresult { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
 

@@ -80,11 +80,6 @@ stdenv.mkDerivation rec {
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isDarwin ''
-
-    # Disabling `format_test.go` because it fails on Darwin for an
-    # unknown reason see: https://github.com/NixOS/nixpkgs/pull/23122#issuecomment-282188727
-    rm src/time/format_test.go
-
     substituteInPlace src/race.bash --replace \
       "sysctl machdep.cpu.extfeatures | grep -qv EM64T" true
     sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
@@ -115,6 +110,13 @@ stdenv.mkDerivation rec {
       ./cacert-1.8.patch
       ./creds-test.patch
       ./remove-test-pie-1.8.patch
+
+      # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
+      # works fine here for now.
+      (fetchpatch {
+        url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
+        sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
+      })
     ];
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
