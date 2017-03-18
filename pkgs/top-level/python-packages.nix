@@ -16283,9 +16283,9 @@ in {
     };
 
     meta = {
-      homepage = https://pypi.python.org/pypi/progressbar2;
+      homepage = https://github.com/WoLpH/python-progressbar;
       description = "Provides visual (yet text based) progress to long running operations";
-      license = licenses.bsd;
+      license = licenses.bsd3;
       maintainers = with maintainers; [ edanaher ];
     };
   });
