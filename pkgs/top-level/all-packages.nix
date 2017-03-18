@@ -5028,7 +5028,7 @@ with pkgs;
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
-    libcCross = if crossSystem != null then libcCross else null;
+    libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
   }));
