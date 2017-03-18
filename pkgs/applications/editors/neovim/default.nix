@@ -53,7 +53,7 @@ let
   rubyWrapper = ''--suffix PATH : \"${rubyEnv}/bin\" '' +
                 ''--suffix GEM_HOME : \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
 
-  pluginPythonPackages = builtins.concatLists
+  pluginPythonPackages = if configure == null then [] else builtins.concatLists
     (map ({ pythonDependencies ? [], ...}: pythonDependencies)
          (vimUtils.requiredPlugins configure));
   pythonEnv = pythonPackages.python.buildEnv.override {
@@ -66,7 +66,7 @@ let
   };
   pythonWrapper = ''--cmd \"let g:python_host_prog='$out/bin/nvim-python'\" '';
 
-  pluginPython3Packages = builtins.concatLists
+  pluginPython3Packages = if configure == null then [] else builtins.concatLists
     (map ({ python3Dependencies ? [], ...}: python3Dependencies)
          (vimUtils.requiredPlugins configure));
   python3Env = python3Packages.python.buildEnv.override {
