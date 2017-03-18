@@ -1,8 +1,8 @@
 { stdenv, lib, fetchurl, makeWrapper, automoc4, cmake, perl, pkgconfig
 , shared_mime_info, libvorbis, taglib, flac, libsamplerate
 , libdvdread, lame, libsndfile, libmad, gettext , transcode, cdrdao
-, dvdplusrwtools, vcdimager, cdparanoia, kdelibs, libdvdcss, ffmpeg
-, kdemultimedia, phonon, libkcddb ? null
+, dvdplusrwtools, vcdimager, cdparanoia, kdelibs4, libdvdcss, ffmpeg
+, libkcddb, phonon
 }:
 
 let
@@ -24,8 +24,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     shared_mime_info libvorbis taglib flac libsamplerate libdvdread
-    lame libsndfile libmad stdenv.cc.libc kdelibs
-    kdemultimedia phonon libkcddb makeWrapper cdparanoia
+    lame libsndfile libmad stdenv.cc.libc kdelibs4
+    phonon libkcddb makeWrapper cdparanoia
     libdvdcss ffmpeg
   ];
 

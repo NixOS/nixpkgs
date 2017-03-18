@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ecm, pkgconfig, plasma-framework, qtbase, qtquickcontrols2 }:
+{ stdenv, fetchurl, cmake, extra-cmake-modules, pkgconfig, plasma-framework, qtbase, qtquickcontrols2 }:
 
 stdenv.mkDerivation rec {
   pname = "kirigami";
@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtquickcontrols2 plasma-framework ];
 
-  nativeBuildInputs = [ cmake pkgconfig ecm ];
+  nativeBuildInputs = [ cmake pkgconfig extra-cmake-modules ];
 
   meta = with stdenv.lib; {
     license = licenses.lgpl2;
     homepage = http://www.kde.org;
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
 }

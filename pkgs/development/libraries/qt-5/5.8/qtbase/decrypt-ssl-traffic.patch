@@ -1,0 +1,13 @@
+Index: qtbase-opensource-src-5.5.1/src/network/ssl/qsslsocket_openssl.cpp
+===================================================================
+--- qtbase-opensource-src-5.5.1.orig/src/network/ssl/qsslsocket_openssl.cpp
++++ qtbase-opensource-src-5.5.1/src/network/ssl/qsslsocket_openssl.cpp
+@@ -48,7 +48,7 @@
+ ****************************************************************************/
+ 
+ //#define QSSLSOCKET_DEBUG
+-//#define QT_DECRYPT_SSL_TRAFFIC
++#define QT_DECRYPT_SSL_TRAFFIC
+ 
+ #include "qssl_p.h"
+ #include "qsslsocket_openssl_p.h"

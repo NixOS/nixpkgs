@@ -27,7 +27,11 @@ users.extraUsers.youruser.extraGroups = [ "networkmanager" ];
 <para>NetworkManager is controlled using either <command>nmcli</command> or
 <command>nmtui</command> (curses-based terminal user interface). See their
 manual pages for details on their usage. Some desktop environments (GNOME, KDE)
-have their own configuration tools for NetworkManager.</para>
+have their own configuration tools for NetworkManager. On XFCE, there is no
+configuration tool for NetworkManager by default: by adding
+<code>networkmanagerapplet</code> to the list of system packages, the graphical
+applet will be installed and will launch automatically when XFCE is starting
+(and will show in the status tray).</para>
 
 <note><para><code>networking.networkmanager</code> and
 <code>networking.wireless</code> (WPA Supplicant) cannot be enabled at the same

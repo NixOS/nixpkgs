@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TV steaming server";
+    description = "TV streaming server";
     longDescription = ''
 	Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android 
         supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, SAT>IP and HDHomeRun as input sources.

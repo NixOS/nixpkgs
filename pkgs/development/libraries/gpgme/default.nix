@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE =
     with stdenv; lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
 
+  AM_CXXFLAGS =
+    with stdenv; lib.optional (isDarwin) "-D_POSIX_C_SOURCE=200809L";
+
   meta = with stdenv.lib; {
     homepage = "http://www.gnupg.org/related_software/gpgme";
     description = "Library for making GnuPG easier to use";

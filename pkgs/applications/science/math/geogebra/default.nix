@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
-  version = "5-0-331-0";
+  version = "5-0-338-0";
 
   preferLocalBuild = true;
 
   src = fetchurl {
     url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
-    sha256 = "135g2xqafgs1gv98vqq2jpfwyi1aflyiynx1gmsgs23jxbr218v2";
+    sha256 = "1namwib3912zjizgl9swan0fwgmq9kvfq5k5y8lz818vh4lv88kx";
   };
 
   srcIcon = fetchurl {

@@ -33,16 +33,14 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "4";
+  minor = "6";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}${if minor == "" then "" else "." + minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "0a4psqsf71vc6hfgyv55jclsx8yb7lf4w840qlq6cq8j3hsjaavi";
+    sha256 = "0isbpa79m7zf09w3s1ry638cw96rxasy1ch66zl01k75i48mw1gl";
   };
-
-  patches = [ ./i386.patch ];
 
   buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit

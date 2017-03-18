@@ -20,7 +20,10 @@ let
 
   primus = if useNvidia then primusLib_ else primusLib_.override { nvidia_x11 = null; };
   primus_i686 = if useNvidia then primusLib_i686_ else primusLib_i686_.override { nvidia_x11 = null; };
-  ldPath = lib.makeLibraryPath ([ primus primus.glvnd ] ++ lib.optionals (primusLib_i686 != null) [ primus_i686 primus_i686.glvnd ]);
+  ldPath = lib.makeLibraryPath (lib.filter (x: x != null) (
+    [ primus primus.glvnd ]
+    ++ lib.optionals (primusLib_i686 != null) [ primus_i686 primus_i686.glvnd ]
+  ));
 
 in writeScriptBin "primusrun" ''
   #!${stdenv.shell}

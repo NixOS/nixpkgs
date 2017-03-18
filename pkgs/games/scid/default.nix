@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "SHAREDIR=$(out)/share"
   ];
 
+  hardeningDisable = [ "format" ];
+
   dontPatchShebangs = true;
 
   postFixup = ''

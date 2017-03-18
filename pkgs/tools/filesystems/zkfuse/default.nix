@@ -1,15 +1,10 @@
 { stdenv, lib, zookeeper, zookeeper_mt, fuse, pkgconfig, autoreconfHook, log4cxx, boost, tree }:
 
 stdenv.mkDerivation rec {
-  name = "zkfuse";
+  name = "zkfuse-${version}";
+  inherit (zookeeper) version src;
 
-  src = zookeeper.src;
-  patches = [
-    # see: https://issues.apache.org/jira/browse/ZOOKEEPER-1929
-    ./zookeeper-1929.patch
-  ];
-
-  setSourceRoot = "export sourceRoot=${zookeeper.name}/src/contrib/zkfuse";
+  sourceRoot = "${zookeeper.name}/src/contrib/zkfuse";
 
   buildInputs = [ autoreconfHook zookeeper_mt log4cxx boost fuse ];
 

@@ -5,7 +5,7 @@
 
 assert par2Support -> par2cmdline != null;
 
-let version = "0.28.1"; in
+let version = "0.29"; in
 
 with stdenv.lib;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "1hsxzrjvqa3pd74vmz8agiiwynrzynp1i726h0fzdsakc4adya4l";
+    sha256 = "1cc9kpq9bpln89m4ni6wqzh4c8zwxmgnhaibdxxfs5pk2mpl3ds5";
   };
 
   buildInputs = [ git python2Packages.python ];

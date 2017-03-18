@@ -139,7 +139,7 @@ composableDerivation {
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
-    ximSupport       = config.vim.xim or false;
+    ximSupport       = config.vim.xim or true; # less than 15KB, needed for deadkeys
 
     # by default, compile with darwin support if we're compiling on darwin, but
     # allow this to be disabled by setting config.vim.darwin to false

@@ -1,17 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "samplicator-${version}";
-  version = "1.3.7-beta6";
+  version = "1.3.8rc1";
 
-  src = fetchurl {
-    url = "http://samplicator.googlecode.com/files/${name}.tar.gz";
-    sha1 = "2091af1898d6508ad9fd338a07e352e2387522d4";
+  buildInputs = [ autoreconfHook ];
+
+  src = fetchFromGitHub {
+    owner = "sleinen";
+    repo = "samplicator";
+    rev = version;
+    sha256 = "0fv5vldmwd6qrdv2wkk946dk9rn9nrv3c84ldvvqqn1spxfzgirm";
   };
 
   meta = {
     description = "Send copies of (UDP) datagrams to multiple receivers";
-    homepage = "http://code.google.com/p/samplicator/";
+    homepage = https://github.com/sleinen/samplicator/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

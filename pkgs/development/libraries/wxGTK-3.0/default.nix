@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm
-, xf86vidmodeproto , gstreamer, gst_plugins_base, GConf, setfile
+, xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
 , withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true
 , withWebKit ? false, webkitgtk2 ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
-      gst_plugins_base GConf ]
+      gst-plugins-base GConf ]
     ++ optional withMesa mesa
     ++ optional withWebKit webkitgtk2
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];

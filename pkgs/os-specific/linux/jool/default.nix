@@ -1,5 +1,7 @@
 { stdenv, fetchzip, kernel }:
 
+assert stdenv.lib.versionOlder kernel.version "4.10";
+
 let
   sourceAttrs = (import ./source.nix) { inherit fetchzip; };
 in

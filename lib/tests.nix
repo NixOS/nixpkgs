@@ -80,7 +80,7 @@ runTests {
                      y = x.merge {};
                 in (y.merge) { a = 10; };
 
-          resRem7 = res6.replace (a : removeAttrs a ["a"]);
+          resRem7 = res6.replace (a: removeAttrs a ["a"]);
 
           resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
                             x2 = x.merge { a = 20; }; # now we have 27
@@ -88,10 +88,10 @@ runTests {
 
           # fixed tests (delayed args): (when using them add some comments, please)
           resFixed1 =
-                let x = defaultOverridableDelayableArgs id ( x : { a = 7; c = x.fixed.b; });
-                    y = x.merge (x : { name = "name-${builtins.toString x.fixed.c}"; });
+                let x = defaultOverridableDelayableArgs id ( x: { a = 7; c = x.fixed.b; });
+                    y = x.merge (x: { name = "name-${builtins.toString x.fixed.c}"; });
                 in (y.merge) { b = 10; };
-          strip = attrs : removeAttrs attrs ["merge" "replace"];
+          strip = attrs: removeAttrs attrs ["merge" "replace"];
       in all id
         [ ((strip res1) == { })
           ((strip res2) == { a = 7; })
@@ -218,6 +218,36 @@ runTests {
       expr = generators.toYAML {} val;
       # trival implementation
       expected = builtins.toJSON val;
+  };
+
+  testSplitStringsSimple = {
+    expr = strings.splitString "." "a.b.c.d";
+    expected = [ "a" "b" "c" "d" ];
+  };
+
+  testSplitStringsEmpty = {
+    expr = strings.splitString "." "a..b";
+    expected = [ "a" "" "b" ];
+  };
+
+  testSplitStringsOne = {
+    expr = strings.splitString ":" "a.b";
+    expected = [ "a.b" ];
+  };
+
+  testSplitStringsNone = {
+    expr = strings.splitString "." "";
+    expected = [ "" ];
+  };
+
+  testSplitStringsFirstEmpty = {
+    expr = strings.splitString "/" "/a/b/c";
+    expected = [ "" "a" "b" "c" ];
+  };
+
+  testSplitStringsLastEmpty = {
+    expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
+    expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
 }

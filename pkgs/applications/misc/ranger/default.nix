@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, w3m, file, less }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "ranger-1.8.0";
+  name = "ranger-1.8.1";
 
   meta = {
     description = "File manager with minimalistic curses interface";
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "http://ranger.nongnu.org/${name}.tar.gz";
-    sha256 = "14j067n1azk6vc6cxlhi5w5bsn2wcz4hypvgxc0vjl9xp5n4f0nf";
+    sha256 = "1d11qw0mr9aj22a7nhr6p2c3yzf359xbffmjsjblq44bjpwzjcql";
   };
 
   checkInputs = with pythonPackages; [ pytest ];

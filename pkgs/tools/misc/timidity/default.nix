@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ alsaLib libjack2 ncurses ];
 
-  configureFlags = [ "--enable-audio=oss,alsa,jack" "--with-default-output=alsa" "--enable-ncurses" ];
+  configureFlags = [ "--enable-audio=oss,alsa,jack" "--enable-alsaseq" "--with-default-output=alsa" "--enable-ncurses" ];
 
   NIX_LDFLAGS = ["-ljack -L${libjack2}/lib"];
 

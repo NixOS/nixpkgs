@@ -3,6 +3,8 @@ let
 
   inherit (config.security) wrapperDir wrappers;
 
+  parentWrapperDir = dirOf wrapperDir;
+
   programs =
     (lib.mapAttrsToList
       (n: v: (if v ? "program" then v else v // {program=n;}))
@@ -15,8 +17,7 @@ let
     hardeningEnable = [ "pie" ];
     installPhase = ''
       mkdir -p $out/bin
-      parentWrapperDir=$(dirname ${wrapperDir})
-      gcc -Wall -O2 -DWRAPPER_DIR=\"$parentWrapperDir\" \
+      gcc -Wall -O2 -DWRAPPER_DIR=\"${parentWrapperDir}\" \
           -lcap-ng -lcap ${./wrapper.c} -o $out/bin/security-wrapper
     '';
   };
@@ -156,6 +157,11 @@ in
 
     security.wrappers.fusermount.source = "${pkgs.fuse}/bin/fusermount";
 
+    boot.specialFileSystems.${parentWrapperDir} = {
+      fsType = "tmpfs";
+      options = [ "nodev" ];
+    };
+
     # Make sure our wrapperDir exports to the PATH env variable when
     # initializing the shell
     environment.extraInit = ''
@@ -183,19 +189,15 @@ in
           # Remove the old /run/setuid-wrappers-dir path from the
           # system as well...
           #
-          # TDOO: this is only necessary for ugprades 16.09 => 17.x;
+          # TODO: this is only necessary for ugprades 16.09 => 17.x;
           # this conditional removal block needs to be removed after
           # the release.
           if [ -d /run/setuid-wrapper-dirs ]; then
             rm -rf /run/setuid-wrapper-dirs
           fi
 
-          # Get the "/run/wrappers" path, we want to place the tmpdirs
-          # for the wrappers there
-          parentWrapperDir="$(dirname ${wrapperDir})"
-
-          mkdir -p "$parentWrapperDir"
-          wrapperDir=$(mktemp --directory --tmpdir="$parentWrapperDir" wrappers.XXXXXXXXXX)
+          # We want to place the tmpdirs for the wrappers to the parent dir.
+          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
           chmod a+rx $wrapperDir
 
           ${lib.concatStringsSep "\n" mkWrappedPrograms}
@@ -207,13 +209,6 @@ in
             ln --symbolic --force --no-dereference $wrapperDir ${wrapperDir}-tmp
             mv --no-target-directory ${wrapperDir}-tmp ${wrapperDir}
             rm --force --recursive $old
-          elif [ -d ${wrapperDir} ]; then
-            # Compatibility with old state, just remove the folder and symlink
-            rm -f ${wrapperDir}/*
-            # if it happens to be a tmpfs
-            ${pkgs.utillinux}/bin/umount ${wrapperDir} || true
-            rm -d ${wrapperDir}
-            ln -d --symbolic $wrapperDir ${wrapperDir}
           else
             # For initial setup
             ln --symbolic $wrapperDir ${wrapperDir}

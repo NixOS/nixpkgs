@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python2Packages, mygpoclient, intltool
-, ipodSupport ? true, libgpod
+, ipodSupport ? false, libgpod
 , gnome3
 }:
 

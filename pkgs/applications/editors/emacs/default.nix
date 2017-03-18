@@ -4,7 +4,7 @@
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
-, withGTK3 ? true, gtk3 ? null
+, withGTK3 ? true, gtk3 ? null, gsettings_desktop_schemas ? null
 , withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ lib.optionals srcRepo [ autoconf automake texinfo ];
+    ++ lib.optionals srcRepo [ autoconf automake texinfo ]
+    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
@@ -66,9 +67,9 @@ stdenv.mkDerivation rec {
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
     ++ lib.optional (withX && withGTK2) gtk2
-    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings_desktop_schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals withXwidgets [ webkitgtk24x wrapGAppsHook glib_networking ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x glib_networking ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 

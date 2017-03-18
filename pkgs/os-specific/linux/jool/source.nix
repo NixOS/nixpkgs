@@ -1,9 +1,9 @@
 { fetchzip }:
 
 rec {
-  version = "3.5.0";
+  version = "3.5.2";
   src = fetchzip {
     url = "https://github.com/NICMx/releases/raw/master/Jool/Jool-${version}.zip";
-    sha256 = "06jp6gpfryn66q0z4w3gwkvfr17bcrjvys597nj49pxfiz4vczb2";
+    sha256 = "0gmjdi50c9wfapikniy2i1cfhz124pp7q02a0vbwxw7f21llcv8x";
   };
 }

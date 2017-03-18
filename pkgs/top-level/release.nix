@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -41,18 +41,23 @@ let
               jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
+              jobs.stdenv.aarch64-linux
               jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
+              jobs.linux.aarch64-linux
               jobs.python.x86_64-linux
               jobs.python.i686-linux
+              jobs.python.aarch64-linux
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-linux
               jobs.python3.i686-linux
+              jobs.python3.aarch64-linux
               jobs.python3.x86_64-darwin
               # Many developers use nix-repl
               jobs.nix-repl.x86_64-linux
               jobs.nix-repl.i686-linux
+              jobs.nix-repl.aarch64-linux
               jobs.nix-repl.x86_64-darwin
               # Needed by travis-ci to test PRs
               jobs.nox.i686-linux
@@ -61,6 +66,7 @@ let
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
+              jobs.thunderbird.aarch64-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
@@ -73,6 +79,9 @@ let
     }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" supportedSystems) {
       stdenvBootstrapTools.x86_64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
+    }) // (lib.optionalAttrs (builtins.elem "aarch64-linux" supportedSystems) {
+      stdenvBootstrapTools.aarch64-linux =
+        { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "aarch64-linux"; }) dist test; };
     }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
       stdenvBootstrapTools.x86_64-darwin =
         let

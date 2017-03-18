@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
-, libssh, zlib, cmake, ecm
-, withGtk ? false, gtk3 ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
+, libssh, zlib, cmake, extra-cmake-modules
+, withGtk ? false, gtk3 ? null, librsvg ? null, gsettings_desktop_schemas ? null, wrapGAppsHook ? null
 , withQt ? false, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
@@ -23,15 +23,25 @@ in stdenv.mkDerivation {
     sha256 = "049r5962yrajhhz9r4dsnx403dab50d6091y2mw298ymxqszp9s2";
   };
 
+  nativeBuildInputs = [
+    bison cmake extra-cmake-modules flex
+  ] ++ optional withGtk wrapGAppsHook;
+
   buildInputs = [
-    bison cmake ecm flex gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt libgpgerror gnutls
-    geoip c-ares python glib zlib
-  ] ++ (optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ]))
-    ++ (optionals withGtk [ gtk3 pango cairo gdk_pixbuf ])
+    gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt
+    libgpgerror gnutls geoip c-ares python glib zlib
+  ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+    ++ optionals withGtk [ gtk3 librsvg gsettings_desktop_schemas ]
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch
+  (fetchurl {
+    url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=c7042bedbb3b12c5f4e19e59e52da370d4ffe62f;hp=bc2b135677110d8065ba1174f09bc7f5ba73b9e9";
+    sha256 = "1m70akywf2r52lhlvzr720vl1i7ng9cqbzaiif8s81xs4g4nn2rz";
+    name = "wireshark-CVE-2017-6014.patch";
+  })
+  ];
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''

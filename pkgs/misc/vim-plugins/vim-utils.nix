@@ -17,6 +17,17 @@ vim-with-plugins in PATH:
       set hidden
     '';
 
+    # store your plugins in Vim packages
+    vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
+      # loaded on launch
+      start = [ youcompleteme fugitive ];
+      # manually loadable by calling `:packadd $plugin-name`
+      opt = [ phpCompletion elm-vim ];
+      # To automatically load a plugin when opening a filetype, add vimrc lines like:
+      # autocmd FileType php :packadd phpCompletion
+    };
+
+    # plugins can also be managed by VAM
     vimrcConfig.vam.knownPlugins = pkgs.vimPlugins; # optional
     vimrcConfig.vam.pluginDictionaries = [
       # load always
@@ -139,6 +150,10 @@ vim_with_plugins can be installed like any other application within Nix.
 let
   inherit (stdenv) lib;
 
+  toNames = x:
+      if builtins.isString x then [x]
+      else (lib.optional (x ? name) x.name)
+            ++ (x.names or []);
   findDependenciesRecursively = {knownPlugins, names}:
 
     let depsOf = name: (builtins.getAttr name knownPlugins).dependencies or [];
@@ -154,6 +169,7 @@ let
     in lib.uniqList { inputList = recurseNames [] names; };
 
   vimrcFile = {
+    packages ? null,
     vam ? null,
     pathogen ? null,
     customRC ? ""
@@ -199,11 +215,6 @@ let
       (let
         knownPlugins = vam.knownPlugins or vimPlugins;
 
-        toNames = x:
-            if builtins.isString x then [x]
-            else (lib.optional (x ? name) x.name)
-                  ++ (x.names or []);
-
         names = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
 
         # Vim almost reads JSON, so eventually JSON support should be added to Nix
@@ -242,7 +253,7 @@ let
           let &rtp.=(empty(&rtp)?"":',').c.plugin_root_dir.'/vim-addon-manager'
           if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
             " checkout VAM
-            execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
+            execute '!git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager '
                 \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
           endif
         endif
@@ -251,6 +262,31 @@ let
         let l = []
         ${lib.concatMapStrings (p: "call add(l, ${toNix p})\n") vam.pluginDictionaries}
         call vam#Scripts(l, {})
+      '');
+
+      nativeImpl = lib.optionalString (packages != null)
+      (let
+        link = (packageName: dir: pluginPath: "ln -sf ${pluginPath}/share/vim-plugins/* $out/pack/${packageName}/${dir}");
+        packageLinks = (packageName: {start ? [], opt ? []}:
+          ["mkdir -p $out/pack/${packageName}/start"]
+          ++ (builtins.map (link packageName "start") start)
+          ++ ["mkdir -p $out/pack/${packageName}/opt"]
+          ++ (builtins.map (link packageName "opt") opt)
+        );
+        packDir = (packages:
+          stdenv.mkDerivation rec {
+            name = "vim-pack-dir";
+            src = ./.;
+            installPhase = lib.concatStringsSep
+                             "\n"
+                             (lib.flatten (lib.mapAttrsToList packageLinks packages));
+          }
+        );
+      in
+      ''
+        set packpath-=~/.vim/after
+        set packpath+=${packDir packages}
+        set packpath+=~/.vim/after
       '');
 
       # somebody else could provide these implementations
@@ -267,6 +303,7 @@ let
   ${pathogenImpl}
   ${vundleImpl}
   ${neobundleImpl}
+  ${nativeImpl}
 
   filetype indent plugin on | syn on
 
@@ -374,6 +411,19 @@ rec {
     configurePhase =":";
   } // a);
 
+  requiredPlugins = {
+    knownPlugins ? vimPlugins,
+    vam ? null,
+    pathogen ? null, ...
+  }:
+    let
+      pathogenNames = map (name: knownPlugins.${name}) (findDependenciesRecursively { inherit knownPlugins; names = pathogen.pluginNames; });
+      vamNames = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
+      names = (lib.optionals (pathogen != null) pathogenNames) ++
+              (lib.optionals (vam != null) vamNames);
+    in
+      map (name: knownPlugins.${name}) names;
+
   # test cases:
   test_vim_with_vim_addon_nix_using_vam = vim_configurable.customize {
    name = "vim-with-vim-addon-nix-using-vam";
@@ -385,4 +435,8 @@ rec {
     vimrcConfig.pathogen.pluginNames = [ "vim-addon-nix" ];
   };
 
+  test_vim_with_vim_addon_nix = vim_configurable.customize {
+    name = "vim-with-vim-addon-nix";
+    vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-addon-nix ];
+  };
 }

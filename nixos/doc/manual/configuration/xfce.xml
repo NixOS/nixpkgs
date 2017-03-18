@@ -9,10 +9,10 @@
     <para>
         To enable the Xfce Desktop Environment, set
         <programlisting>
-            services.xserver.desktopManager = {
-                xfce.enable = true;
-                default = "xfce";
-            };
+services.xserver.desktopManager = {
+    xfce.enable = true;
+    default = "xfce";
+};
         </programlisting>
     </para>
 
@@ -20,13 +20,13 @@
         Optionally, <emphasis>compton</emphasis>
         can be enabled for nice graphical effects, some example settings:
         <programlisting>
-            services.compton = {
-              enable          = true;
-              fade            = true;
-              inactiveOpacity = "0.9";
-              shadow          = true;
-              fadeDelta       = 4;
-            };
+services.compton = {
+  enable          = true;
+  fade            = true;
+  inactiveOpacity = "0.9";
+  shadow          = true;
+  fadeDelta       = 4;
+};
         </programlisting>
     </para>
 
@@ -34,16 +34,16 @@
         Some Xfce programs are not installed automatically.
         To install them manually (system wide), put them into your
         <literal>environment.systemPackages</literal>.
-	</para>
+    </para>
 
     <para>
-		NixOS’s default <emphasis>display manager</emphasis>is SLiM.
-		(DM is the program that provides a graphical login prompt
-		 and manages the X server.)
-	   	You can, for example, select KDE’s
+        NixOS’s default <emphasis>display manager</emphasis> is SLiM.
+        (DM is the program that provides a graphical login prompt
+         and manages the X server.)
+        You can, for example, select KDE’s
         <command>sddm</command> instead:
         <programlisting>
-            services.xserver.displayManager.sddm.enable = true;
+services.xserver.displayManager.sddm.enable = true;
         </programlisting>
     </para>
 
@@ -55,7 +55,7 @@
             <emphasis>Thunar</emphasis>
             volume support, put
             <programlisting>
-                services.xserver.desktopManager.xfce.enable = true;
+services.xserver.desktopManager.xfce.enable = true;
             </programlisting>
             into your <emphasis>configuration.nix</emphasis>.
         </para>
@@ -84,10 +84,10 @@
             Thunar and/or the desktop takes time to show up.
 
             Thunar will spit out this kind of message on start
-            (look at journalctl --user -b).
+            (look at <command>journalctl --user -b</command>).
 
             <programlisting>
-                Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with dbus name org.gtk.Private.UDisks2VolumeMonitor is not supported
+Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with dbus name org.gtk.Private.UDisks2VolumeMonitor is not supported
             </programlisting>
 
             This is caused by some needed GNOME services not running.
@@ -95,7 +95,7 @@
             the Advanced tab of the Session and Startup settings panel.
             Alternatively, you can run this command to do the same thing.
             <programlisting>
-                $ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
+$ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
             </programlisting>
             A log-out and re-log will be needed for this to take effect.
         </para>

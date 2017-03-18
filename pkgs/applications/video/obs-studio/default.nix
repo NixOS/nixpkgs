@@ -22,14 +22,16 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "17.0.1";
+  version = "18.0.1";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "0x5lnl1xkmm8x4g0f8rma8ir1bcldz9sssj2fzkv80hn79h2cvxm";
+    sha256 = "0mvjmkq5zlcppjqy18933w7r7rz1mpr2jpf8ipd0famdlgyacix6";
   };
+
+  patches = [ ./segfault-patch-systray.patch ];
 
   nativeBuildInputs = [ cmake
                       ];

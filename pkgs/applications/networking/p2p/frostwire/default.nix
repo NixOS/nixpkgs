@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "6.0.0";
+  version = "6.4.5";
   name = "frostwire-${version}";
 
   src = fetchurl {
-    url = "http://dl.frostwire.com/frostwire/${version}/frostwire-${version}.x86_64.tar.gz";
-    sha256 = "16rpfh235jj75vm4rx6qqw25ax3rk2p21l6lippbm0pi13lp2pdh";
+    url = "http://dl.frostwire.com/frostwire/${version}/frostwire-${version}.noarch.tar.gz";
+    sha256 = "01nq1vwkqdidmprlnz5d3c5412r6igv689barv64dmb9m6iqg53z";
   };
 
   inherit jre;
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/frostwire
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.frostwire.com/;
     description = "BitTorrent Client and Cloud File Downloader";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.gavin ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ gavin ];
+    platforms = platforms.all;
   };
 }

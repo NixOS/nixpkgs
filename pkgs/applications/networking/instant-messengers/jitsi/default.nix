@@ -8,11 +8,11 @@ assert stdenv.isLinux;
 stdenv.mkDerivation rec {
 
   name = "jitsi-${version}";
-  version = "2.8.5426";
+  version = "2.10.5550";
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi/src/jitsi-src-${version}.zip";
-    sha256 = "0v7k16in2i57z5amr7k5c3fc8f0azrzrs5dvn729bwbc31z8cjg6";
+    sha256 = "11vjchc3dnzj55x7c62wsm6masvwmij1ifkds917r1qvil1nzz6d";
   };
 
 

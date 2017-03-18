@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
       ./bootstrap
     '';
 
-    configureFlags = [ ]
+    configureFlags = [ "--enable-libcec" ]
     ++ lib.optional (!sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"
     ++ lib.optional pulseSupport "--enable-pulse"

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem
 , libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk2
 , atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
-, gstreamer, gst_plugins_base, gst_plugins_good, gst_ffmpeg, gmp, ffmpeg
+, gstreamer, gst-plugins-base, gst-plugins-good, gst-ffmpeg, gmp, ffmpeg
 , libpulseaudio
 , mediaSupport ? false
 }:
@@ -11,12 +11,12 @@ let
     stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk2 atk pango freetype
     fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
   ] ++ stdenv.lib.optionals mediaSupport [
-    gstreamer gst_plugins_base gmp ffmpeg
+    gstreamer gst-plugins-base gmp ffmpeg
     libpulseaudio
   ]);
 
   # Ignored if !mediaSupport
-  gstPlugins = [ gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg ];
+  gstPlugins = [ gstreamer gst-plugins-base gst-plugins-good gst-ffmpeg ];
 
   gstPluginsPath = stdenv.lib.concatMapStringsSep ":" (x:
     "${x}/lib/gstreamer-0.10") gstPlugins;
@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "6.5";
+  version = "6.5.1";
 
   src = fetchurl {
     url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "0q0rdwjiqjjh9awiyp0a55nkhyri5y6zhkyq3n3x6w4afihl0wf4" else
-      "1y1sx2gp7c66l7a4smfibl8mv54byvawhhkikpa5l2vic75vyhk9";
+      "1p2bgavvyzahqpjg9vp14c0s50rmha3v1hs1c8zvz6fj8fgrhn0i" else
+      "1zfghr01bhpn39wqaw7hyx7yap7xyla4m3mrgz2vi9a5qsyxmbcr";
   };
 
   preferLocalBuild = true;

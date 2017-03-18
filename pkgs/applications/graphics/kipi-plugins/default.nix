@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, kdelibs, qimageblitz, qca2, kdepimlibs, libxml2, libxslt
-, gettext, opencv, libgpod, gdk_pixbuf , qjson, pkgconfig
-, cmake, automoc4
-, kdegraphics, libkexiv2 ? kdegraphics, libkdcraw ? kdegraphics
-, libkipi ? kdegraphics, libksane ? kdegraphics }:
+{
+  stdenv, fetchurl,
+  extra-cmake-modules,
+  karchive, kconfig, ki18n, kiconthemes, kio, kservice, kwindowsystem, kxmlgui,
+  libkipi, qtbase, qtsvg, qtxmlpatterns
+}:
 
 stdenv.mkDerivation rec {
-  name = "kipi-plugins-1.9.0";
+  name    = "kipi-plugins-${version}";
+  version = "5.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kipi/${name}.tar.bz2";
-    sha256 = "0k4k9v1rj7129n0s0i5pvv4rabx0prxqs6sca642fj95cxc6c96m";
+    url = "http://download.kde.org/stable/digikam/digikam-${version}.tar.xz";
+    sha256 = "0q4j7iv20cxgfsr14qwzx05wbp2zkgc7cg2pi7ibcnwba70ky96g";
   };
 
-  buildInputs =
-    [ kdelibs libkexiv2 libkdcraw libkipi qimageblitz qca2 kdepimlibs libxml2
-      libksane libxslt gettext opencv libgpod gdk_pixbuf qjson
-    ];
+  prePatch = ''
+    cd extra/kipi-plugins
+  '';
 
-  nativeBuildInputs = [ pkgconfig cmake automoc4 ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [
+    karchive kconfig ki18n kiconthemes kio kservice kwindowsystem kxmlgui libkipi
+    qtbase qtsvg qtxmlpatterns
+  ];
 
   meta = {
-    description = "Photo Management Program";
-    license = "GPL";
-    homepage = http://www.kipi-plugins.org;
-    inherit (kdelibs.meta) platforms;
-    maintainers = with stdenv.lib.maintainers; [ viric urkud ];
-    broken = true; # it should be built from digikam sources, perhaps together
+    description = "Plugins for KDE-based image applications";
+    license = stdenv.lib.licenses.gpl2;
+    homepage = http://www.digikam.org;
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

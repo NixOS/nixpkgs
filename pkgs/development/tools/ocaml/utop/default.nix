@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.19.2";
+  version = "1.19.3";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0hxybkqmrh0sz1yyyrgzdmxp46gda4vk22pv07s0qpfg2dpv56jh";
+    sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild makeWrapper cppo camlp4 ppx_tools ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   configureFlags = [ "--enable-camlp4" ]
-  ++ stdenv.lib.optional (ppx_tools != null) "--enable-interact";
+  ++ stdenv.lib.optional (ppx_tools != null && !stdenv.lib.versionAtLeast ocaml.version "4.04") "--enable-interact";
 
   buildPhase = ''
     make

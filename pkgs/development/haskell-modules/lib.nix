@@ -3,7 +3,7 @@
 rec {
 
   overrideCabal = drv: f: (drv.override (args: args // {
-    mkDerivation = drv: args.mkDerivation (drv // f drv);
+    mkDerivation = drv: (args.mkDerivation drv).override f;
   })) // {
     overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
   };
@@ -74,6 +74,14 @@ rec {
     checkPhase = ":";
     installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
+  });
+
+  # link executables statically against haskell libs to reduce closure size
+  justStaticExecutables = drv: overrideCabal drv (drv: {
+    enableSharedExecutables = false;
+    isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   });
 
   buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {

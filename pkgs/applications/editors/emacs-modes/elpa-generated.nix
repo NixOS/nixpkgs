@@ -41,10 +41,10 @@
       }) {};
     ada-ref-man = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "ada-ref-man";
-        version = "2012.0";
+        version = "2012.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ada-ref-man-2012.0.tar";
-          sha256 = "1g97892h8d1xa7cfxgg4i232i15hhci7gijj0dzc31yd9vbqayx8";
+          url = "https://elpa.gnu.org/packages/ada-ref-man-2012.3.tar";
+          sha256 = "0w88xw51jb85nmqbi3i9kj9kx2fa6zlazk3x7afll7njc6g4105z";
         };
         packageRequires = [];
         meta = {
@@ -306,6 +306,19 @@
           license = lib.licenses.free;
         };
       }) {};
+    cl-print = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "cl-print";
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/cl-print-1.0.el";
+          sha256 = "0ib8j7rv5f4c4xg3kban58jm6cam756i3xz6j8100846g3jn9zcc";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/cl-print.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     cobol-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "cobol-mode";
         version = "1.0.0";
@@ -376,10 +389,10 @@
     company-statistics = callPackage ({ company, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "company-statistics";
-        version = "0.2.2";
+        version = "0.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-statistics-0.2.2.tar";
-          sha256 = "0h1k0dbb7ngk6pghli2csfpzpx37si0wg840jmay0jlb80q6vw73";
+          url = "https://elpa.gnu.org/packages/company-statistics-0.2.3.tar";
+          sha256 = "0780xp09f739jys469x4fqpgj1lysi8gnhiaz0735jib07lmh4ww";
         };
         packageRequires = [ company emacs ];
         meta = {
@@ -484,10 +497,10 @@
     debbugs = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib, soap-client }:
     elpaBuild {
         pname = "debbugs";
-        version = "0.12";
+        version = "0.14";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/debbugs-0.12.tar";
-          sha256 = "1swi4d7fhahimid9j12cypmkz7dlqgffrnhfxy5ra44y3j2b35ph";
+          url = "https://elpa.gnu.org/packages/debbugs-0.14.tar";
+          sha256 = "07wgcvg038l88gxvjr0gjpjhyk743w22x1rqghz3gkmif0g70say";
         };
         packageRequires = [ cl-lib soap-client ];
         meta = {
@@ -632,10 +645,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.2.3";
+        version = "1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.2.3.tar";
-          sha256 = "1d7iqr4fr0kr171fnjcm2n0bgcwzdh6jl585mwjf2zqnqszv13h0";
+          url = "https://elpa.gnu.org/packages/el-search-1.3.tar";
+          sha256 = "0hg7jppdsaxy285bdaban1i096bjx21pqmczz7w9f3nr34n28pyn";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -808,10 +821,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.1.2";
+        version = "1.1.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.1.2.tar";
-          sha256 = "18d5wdv33lcg96m3ljnv9zn98in27apm7bjycgq0asd2f31dvcvx";
+          url = "https://elpa.gnu.org/packages/gnorb-1.1.5.tar";
+          sha256 = "128ag8zkfxspf6szxfd7dcscm1zzzcibx7p9dpbpk036cr7m5i1p";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -822,10 +835,10 @@
     gnugo = callPackage ({ ascii-art-to-unicode, cl-lib ? null, elpaBuild, fetchurl, lib, xpm }:
     elpaBuild {
         pname = "gnugo";
-        version = "3.0.2";
+        version = "3.1.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnugo-3.0.2.tar";
-          sha256 = "12xm960awsn2k8ph1yibhrxdg8iz1icifdqimysg3qxljmhmnb3k";
+          url = "https://elpa.gnu.org/packages/gnugo-3.1.0.tar";
+          sha256 = "0xpjvs250gg71qwapdsb1hlc61gs0gpkjds01srf784fvyxx2gf1";
         };
         packageRequires = [ ascii-art-to-unicode cl-lib xpm ];
         meta = {
@@ -1943,10 +1956,10 @@
     validate = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "validate";
-        version = "1.0.2";
+        version = "1.0.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/validate-1.0.2.el";
-          sha256 = "19xhd9mxkdcisspz5q3bnvf6jjsvmhjjrpw3pq5lgyqbcz8k8dsr";
+          url = "https://elpa.gnu.org/packages/validate-1.0.4.el";
+          sha256 = "0vksssk98hcnz804g62k8kika13argf6p7bx8rf9hwidvzdsv6mi";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -1995,10 +2008,10 @@
       }) {};
     wconf = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "wconf";
-        version = "0.2.0";
+        version = "0.2.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/wconf-0.2.0.el";
-          sha256 = "07adnx2ni7kprxw9mx1nywzs1a2h43rszfa8r8i0s9j16grvgphk";
+          url = "https://elpa.gnu.org/packages/wconf-0.2.1.el";
+          sha256 = "13p1xycp3mcrg8jv65mcyqvln4h7awhjz35dzr5bi86zb824ryxf";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2101,10 +2114,10 @@
       }) {};
     xpm = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "xpm";
-        version = "1.0.3";
+        version = "1.0.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xpm-1.0.3.tar";
-          sha256 = "0qckb93xwzcg8iwiv4bd08r60jn0n853czmilz0hyyb1lfi82lp4";
+          url = "https://elpa.gnu.org/packages/xpm-1.0.4.tar";
+          sha256 = "075miyashh9cm3b0gk6ngld3rm8bfgnh4qxnhxmmvjgzf6a64grh";
         };
         packageRequires = [];
         meta = {

@@ -1,26 +1,30 @@
-{ stdenv, fetchurl, automoc4, cmake, perl, pkgconfig
-, colord, libX11, libXrandr, lcms2, kdelibs
+{ stdenv, lib, fetchurl
+, extra-cmake-modules, ki18n
+, kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kiconthemes, kcmutils
+, kio, knotifications, plasma-framework, kwidgetsaddons, kwindowsystem
+, kitemviews, lcms2, libXrandr, qtx11extras
 }:
 
-stdenv.mkDerivation {
-  name = "colord-kde-0.3.0";
+stdenv.mkDerivation rec {
+  name = "colord-kde-${version}";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = http://download.kde.org/stable/colord-kde/0.3.0/src/colord-kde-0.3.0.tar.bz2;
-    sha256 = "ab3cdb7c8c98aa2ee8de32a92f87770e1fbd58eade6471f3f24d932b50b4cf09";
+    url = "http://download.kde.org/stable/colord-kde/${version}/src/${name}.tar.xz";
+    sha256 = "0brdnpflm95vf4l41clrqxwvjrdwhs859n7401wxcykkmw4m0m3c";
   };
 
-  nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
+  nativeBuildInputs = [ extra-cmake-modules ki18n ];
 
-  buildInputs = [ colord libX11 libXrandr lcms2 kdelibs ];
+  buildInputs = [
+    kconfig kconfigwidgets kcoreaddons kdbusaddons kiconthemes
+    kcmutils kio knotifications plasma-framework kwidgetsaddons
+    kwindowsystem kitemviews lcms2 libXrandr qtx11extras
+  ];
 
-  patches = [ ./fix_check_include_files.patch ];
-  patchFlags = [ "-p0" ];
-
-  enableParallelBuilding = true;
-
-  meta = {
-    description = "A colord front-end for KDE";
-    license = stdenv.lib.licenses.gpl2Plus;
+  meta = with lib; {
+    homepage = "https://projects.kde.org/projects/playground/graphics/colord-kde";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

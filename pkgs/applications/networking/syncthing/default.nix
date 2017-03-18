@@ -1,22 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, go, pkgs }:
+{ stdenv, lib, fetchFromGitHub, go, pkgs, removeReferencesTo }:
 
-let
-  removeExpr = ref: ''
-    sed -i "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
-  '';
-
-in stdenv.mkDerivation rec {
-  version = "0.14.23";
+stdenv.mkDerivation rec {
+  version = "0.14.24";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "1himf8yhfpjsv5m068y2f6f696d7ip0jq7jmg69kn7035zlxicis";
+    sha256 = "15jjk49ibry7crc3sw5zg09zsm5ir0ph5c0f3acas66wd02rnvl1";
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ go removeReferencesTo ];
 
   buildPhase = ''
     mkdir -p src/github.com/syncthing
@@ -48,7 +43,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin -type f -exec ${removeExpr go} '{}' '+'
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
   '';
 
   meta = with stdenv.lib; {

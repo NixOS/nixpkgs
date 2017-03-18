@@ -1,33 +1,29 @@
-{ stdenv, fetchurl, substituteAll, coreutils, python2, python2Packages }:
+{ stdenv, fetchFromGitHub, coreutils
+, python3, python3Packages, substituteAll }:
 
 assert stdenv.isLinux;
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
-  version = "0.12.9.14";
+  version = "0.17.1.14";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "https://github.com/andreafrancia/trash-cli/archive/${version}.tar.gz";
-    sha256 = "10idvzrlppj632pw6mpk1zy9arn1x4lly4d8nfy9cz4zqv06lhvh";
+  src = fetchFromGitHub {
+    owner = "andreafrancia";
+    repo = "trash-cli";
+    rev = "${version}";
+    sha256 = "1bqazna223ibqjwbc1wfvfnspfyrvjy8347qlrgv4cpng72n7gfi";
   };
 
-
   patches = [
-    # Fix paths.
     (substituteAll {
       src = ./nix-paths.patch;
       df = "${coreutils}/bin/df";
-      python = "${python2}/bin/${python2.executable}";
       libc = "${stdenv.cc.libc.out}/lib/libc.so.6";
     })
-
-    # Apply https://github.com/JaviMerino/trash-cli/commit/4f45a37a3
-    # to fix failing test case.
-    ./fix_should_output_info_for_multiple_files.patch
   ];
 
-  buildInputs = with python2Packages; [ nose mock ];
+  buildInputs = with python3Packages; [ nose mock ];
 
   checkPhase = "nosetests";
 

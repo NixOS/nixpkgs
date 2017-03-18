@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = false;
   };
 
+  postPatch = ''
+    for f in Source/Core/VideoBackends/{Software,OGL}/RasterFont.{h,cpp}; do
+      substituteInPlace "$f" --replace " CHAR_WIDTH " " CHARWIDTH "
+    done
+  '';
+
   cmakeFlags = ''
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
     -DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include

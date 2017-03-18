@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, xorg }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, standardPatch, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, libpthreadstubs, xorg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,18 +15,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtx11extras
-    qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    kde5.libkscreen
-    lxqt.liblxqt
-    lxqt.libqtxdg
+    qtbase
+    qtx11extras
+    qttools
+    qtsvg
+    kwindowsystem
+    libkscreen
+    liblxqt
+    libqtxdg
     xorg.libpthreadstubs
     xorg.libXdmcp
     xorg.libXScrnSaver
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
-  postPatch = lxqt.standardPatch;
+  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "Tools to configure LXQt and the underlying operating system";

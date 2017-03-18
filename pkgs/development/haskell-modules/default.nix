@@ -6,12 +6,13 @@
 
 let
 
-  inherit (stdenv.lib) fix' extends;
+  inherit (stdenv.lib) fix' extends makeOverridable makeExtensible;
+  inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
 
   haskellPackages = self:
     let
 
-      mkDerivation = pkgs.callPackage ./generic-builder.nix {
+      mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
         jailbreak-cabal = if (self.ghc.cross or null) != null
@@ -37,9 +38,7 @@ let
         });
       };
 
-      overrideCabal = drv: f: drv.override (args: args // {
-        mkDerivation = drv: args.mkDerivation (drv // f drv);
-      });
+      mkDerivation = makeOverridable mkDerivationImpl;
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
         overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
@@ -57,7 +56,7 @@ let
 
       haskellSrc2nix = { name, src, sha256 ? null }:
         let
-          sha256Arg = if isNull sha256 then "" else ''--sha256="${sha256}"'';
+          sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
         in pkgs.stdenv.mkDerivation {
           name = "cabal2nix-${name}";
           buildInputs = [ pkgs.cabal2nix ];
@@ -85,7 +84,14 @@ let
         callHackage = name: version: self.callPackage (hackage2nix name version);
 
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
-        callCabal2nix = name: src: self.callPackage (haskellSrc2nix { inherit src name; });
+        callCabal2nix = name: src: args:
+          let
+            # Filter out files other than the cabal file. This ensures
+            # that we don't create new derivations even when the cabal
+            # file hasn't changed.
+            justCabal = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+            drv = self.callPackage (haskellSrc2nix { inherit name; src = justCabal; }) args;
+          in overrideCabal drv (drv': { inherit src; }); # Restore the desired src.
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
@@ -109,7 +115,7 @@ let
 
 in
 
-  fix'
+  makeExtensible
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig

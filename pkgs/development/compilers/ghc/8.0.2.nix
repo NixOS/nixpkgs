@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+{ stdenv, lib, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
 , hscolour, patchutils, sphinx
 
   # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
 , enableIntegerSimple ? false, gmp
+, cross ? null
 }:
 
 let
@@ -44,7 +45,9 @@ stdenv.mkDerivation rec {
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
-  ];
+  ] ++
+    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+    lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort

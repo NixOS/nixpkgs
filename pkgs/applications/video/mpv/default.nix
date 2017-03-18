@@ -31,7 +31,7 @@
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
-, drmSupport         ? true,  libdrm        ? null
+, drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
@@ -79,13 +79,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "02k8p4z1mwxxlg9spwwrlcciia80kyrpp09hpl60g22h85jj1ng9";
+    sha256 = "1aq1lvhw4l0i2gc9x6ijaaj2h3894jbcpd4j055n0y9vg9vqm6yy";
   };
 
   patchPhase = ''
@@ -114,7 +114,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg_3_2 freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
-  ] ++ optional alsaSupport        alsaLib
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       libiconv Cocoa CoreAudio ])
+    ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
     ++ optional xineramaSupport    libXinerama
@@ -122,9 +124,6 @@ in stdenv.mkDerivation rec {
     ++ optional bluraySupport      libbluray
     ++ optional jackaudioSupport   libjack2
     ++ optional pulseSupport       libpulseaudio
-    ++ optional stdenv.isDarwin    libiconv
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-       Cocoa CoreAudio ])
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport       libvdpau
@@ -171,7 +170,7 @@ in stdenv.mkDerivation rec {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu ];
+    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

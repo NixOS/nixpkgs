@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sed -i -e 's/install -s/install/' common.mak || die
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++11" ]; # build with Qt 5.7
+
   IPEPREFIX="$$out";
   URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";

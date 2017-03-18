@@ -81,7 +81,7 @@ in
       # to bootstrap-tools; on cross-arm this stripping would break objects.
       if [ -z "$crossConfig" ]; then
         for i in "$out"/lib/*.a; do
-            strip -S "$i"
+            [ "$i" = "$out/lib/libm.a" ] || strip -S "$i"
         done
       fi
 
@@ -91,6 +91,9 @@ in
       mkdir -p $static/lib
       mv $out/lib/*.a $static/lib
       mv $static/lib/lib*_nonshared.a $out/lib
+      # Some of *.a files are linker scripts where moving broke the paths.
+      sed "/^GROUP/s|$out/lib/lib|$static/lib/lib|g" \
+        -i "$static"/lib/*.a
 
       # Work around a Nix bug: hard links across outputs cause a build failure.
       cp $bin/bin/getconf $bin/bin/getconf_

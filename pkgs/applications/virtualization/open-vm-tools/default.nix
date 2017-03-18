@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
      sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
      sed -i 's,$(UDEVRULESDIR),''${prefix}/$(UDEVRULESDIR),' udev/Makefile.am
+
+     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+     sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
   '';
 
   configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]

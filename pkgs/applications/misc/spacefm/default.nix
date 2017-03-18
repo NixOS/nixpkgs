@@ -1,6 +1,6 @@
 { pkgs, fetchFromGitHub, stdenv, gtk3, udev, desktop_file_utils
 , shared_mime_info, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer
-, jmtpfs, ifuse, lsof, udisks, hicolor_icon_theme, adwaita-icon-theme }:
+, jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks, hicolor_icon_theme, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "spacefm-${version}";
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 udev desktop_file_utils shared_mime_info intltool pkgconfig
-    wrapGAppsHook ffmpegthumbnailer jmtpfs ifuse lsof udisks
-  ];
+    wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks
+  ] ++ (if ifuseSupport then [ ifuse ] else []);
+  # Introduced because ifuse doesn't build due to CVEs in libplist
+  # Revert when libplist builds again…
 
   meta = with stdenv.lib;  {
     description = "A multi-panel tabbed file manager";

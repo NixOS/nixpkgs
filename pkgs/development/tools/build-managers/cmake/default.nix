@@ -13,7 +13,7 @@ with stdenv.lib;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "3.7";
-  minorVersion = "1";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    # from https://cmake.org/files/v3.7/cmake-3.7.1-SHA-256.txt
-    sha256 = "449a5bce64dbd4d5b9517ebd1a1248ed197add6ad27934478976fd5f1f9330e1";
+    # from https://cmake.org/files/v3.7/cmake-3.7.2-SHA-256.txt
+    sha256 = "dc1246c4e6d168ea4d6e042cfba577c1acd65feea27e56f5ff37df920c30cae0";
   };
 
   prePatch = optionalString (!useSharedLibraries) ''

@@ -13,7 +13,7 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst_plugins_base
+, gst-plugins-base
 , gstreamer
 , gtk2
 , kerberos
@@ -38,6 +38,7 @@
 , coreutils
 , gnused
 , gnugrep
+, gnupg
 }:
 
 assert stdenv.isLinux;
@@ -91,7 +92,7 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst_plugins_base
+      gst-plugins-base
       gstreamer
       gtk2
       kerberos
@@ -148,7 +149,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl;
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
     baseName = "thunderbird";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
