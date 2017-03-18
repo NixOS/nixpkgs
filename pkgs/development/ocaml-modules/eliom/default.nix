@@ -30,6 +30,8 @@ stdenv.mkDerivation rec
 
   createFindlibDestdir = true;
 
+  setupHook = [ ./setup-hook.sh ];
+
   meta = {
     homepage = http://ocsigen.org/eliom/;
     description = "Ocaml Framework for programming Web sites and client/server Web applications";
