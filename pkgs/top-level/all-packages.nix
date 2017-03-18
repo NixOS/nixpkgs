@@ -15999,6 +15999,8 @@ with pkgs;
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
+  xannotate = callPackage ../tools/X11/xannotate {};
+
   xaos = callPackage ../applications/graphics/xaos {
     libpng = libpng12;
   };
