@@ -18092,6 +18092,9 @@ in {
     checkPhase = ''
       nosetests -v $out/${python.sitePackages}
     '';
+    postPatch = ''
+      substituteInPlace setup.py --replace "__builtins__.__NUMPY_SETUP__ = False" ""
+    '';
   };
 
   paho-mqtt = buildPythonPackage rec {
