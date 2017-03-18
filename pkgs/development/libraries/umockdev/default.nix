@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
    sed -i 's|+=|=|g' docs/reference/Makefile.am
    '';
 
-  preConfigure = ''
-    #  sed -i 's|gobject-2.0 >= 2.32.0 gio-2.0 >= 2.32.0 gio-unix-2.0 >= 2.32.0)|gobject-2.0 >= 2.32.0, gio-2.0 >= 2.32.0, gio-unix-2.0 >= 2.32.0)|g' configure
-    '';
-
   meta = with stdenv.lib; {
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl2;
