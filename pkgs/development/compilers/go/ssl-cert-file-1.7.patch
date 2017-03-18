@@ -13,7 +13,7 @@ index a4b33c7..9700b75 100644
  
  func loadSystemRoots() (*CertPool, error) {
  	roots := NewCertPool()
-+	if file := os.Getenv("SSL_CERT_FILE"); file != "" {
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
 +		data, err := ioutil.ReadFile(file)
 +		if err == nil {
 +			roots.AppendCertsFromPEM(data)
@@ -24,26 +24,19 @@ index a4b33c7..9700b75 100644
  	var data C.CFDataRef = nil
  	err := C.FetchPEMRoots(&data)
 diff --git a/src/crypto/x509/root_darwin.go b/src/crypto/x509/root_darwin.go
-index 66cdb5e..bb28036 100644
+index 59b303d..d4a34ac 100644
 --- a/src/crypto/x509/root_darwin.go
 +++ b/src/crypto/x509/root_darwin.go
-@@ -61,17 +61,25 @@ func execSecurityRoots() (*CertPool, error) {
- 		println(fmt.Sprintf("crypto/x509: %d certs have a trust policy", len(hasPolicy)))
- 	}
-
--	cmd := exec.Command("/usr/bin/security", "find-certificate", "-a", "-p", "/System/Library/Keychains/SystemRootCertificates.keychain")
--	data, err := cmd.Output()
--	if err != nil {
--		return nil, err
--	}
--
- 	var (
- 		mu          sync.Mutex
- 		roots       = NewCertPool()
- 		numVerified int // number of execs of 'security verify-cert', for debug stats
- 	)
-
-+	if file := os.Getenv("SSL_CERT_FILE"); file != "" {
+@@ -28,16 +28,25 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ // The linker will not include these unused functions in binaries built with cgo enabled.
+ 
+ func execSecurityRoots() (*CertPool, error) {
++	var (
++		mu    sync.Mutex
++		roots = NewCertPool()
++	)
++
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
 +		data, err := ioutil.ReadFile(file)
 +		if err == nil {
 +			roots.AppendCertsFromPEM(data)
@@ -51,14 +44,19 @@ index 66cdb5e..bb28036 100644
 +		}
 +	}
 +
-+	cmd := exec.Command("/usr/bin/security", "find-certificate", "-a", "-p", "/System/Library/Keychains/SystemRootCertificates.keychain")
-+	data, err := cmd.Output()
-+	if err != nil {
-+		return nil, err
-+	}
-+
- 	blockCh := make(chan *pem.Block)
- 	var wg sync.WaitGroup
+ 	cmd := exec.Command("/usr/bin/security", "find-certificate", "-a", "-p", "/System/Library/Keychains/SystemRootCertificates.keychain")
+ 	data, err := cmd.Output()
+ 	if err != nil {
+ 		return nil, err
+ 	}
+ 
+-	var (
+-		mu    sync.Mutex
+-		roots = NewCertPool()
+-	)
+ 	add := func(cert *Certificate) {
+ 		mu.Lock()
+ 		defer mu.Unlock()
 diff --git a/src/crypto/x509/root_unix.go b/src/crypto/x509/root_unix.go
 index 7bcb3d6..3986e1a 100644
 --- a/src/crypto/x509/root_unix.go
@@ -67,7 +65,7 @@ index 7bcb3d6..3986e1a 100644
  
  func loadSystemRoots() (*CertPool, error) {
  	roots := NewCertPool()
-+	if file := os.Getenv("SSL_CERT_FILE"); file != "" {
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
 +		data, err := ioutil.ReadFile(file)
 +		if err == nil {
 +			roots.AppendCertsFromPEM(data)
