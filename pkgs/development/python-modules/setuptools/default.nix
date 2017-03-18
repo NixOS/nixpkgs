@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "f865709919903e3399343c0b3c42f95e9aeddc41e38cfb334fb2bb5dfa384857";
   };
 
-  buildInputs = [ python wrapPython ];
+  buildInputs = [ wrapPython ];
+  propagatedBuildInputs = [ python ];
   doCheck = false;  # requires pytest
   installPhase = ''
       dst=$out/${python.sitePackages}
