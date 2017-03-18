@@ -5179,7 +5179,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ TextGlob ];
     meta = {
-      license = stdenv.lib.licenses.unknown;
+      license = stdenv.lib.licenses.free; # Same as Perl
     };
   };
 
@@ -13236,7 +13236,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0418f03abe241f5a3c2a2ab3dd2679d11eee42c9e1f5b5a6ea80d9e238374302";
     };
     buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ]  moreInputs;
+    propagatedBuildInputs = [ MROCompat Moose TestRun TestRunCmdLine ] ++ moreInputs;
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
@@ -13253,7 +13253,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "ea4fb6768c4f6645cedf87d9b7c6baf97364ebc6f4171e4dd5f68939fb2bdd3a";
     };
     buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ TestRun TestRunCmdLine ]  moreInputs;
+    propagatedBuildInputs = [ TestRun TestRunCmdLine ] ++ moreInputs;
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
