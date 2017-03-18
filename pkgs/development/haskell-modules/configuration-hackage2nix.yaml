@@ -2293,7 +2293,8 @@ extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 6.12.3
   - aeson < 1.1                         # required by stack
   - aeson-pretty < 0.8                  # required by elm compiler
-  - binary > 0.7 && < 0.8               # binary 0.8.x is the latest, but it's largely unsupported so far
+  - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
+  - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.20.*                     # required for cabal-install et al on old GHC versions
   - containers < 0.5                    # required to build alex with GHC 6.12.3
