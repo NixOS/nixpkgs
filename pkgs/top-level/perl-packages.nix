@@ -13241,7 +13241,7 @@ let self = _self // overrides; _self = with self; {
     doCheck=true;
     meta = {
       homepage = http://web-cpan.shlomifish.org/modules/Test-Run/;
-      description = "Make the file verdict ("ok", "NOT OK")";
+      description = "Make the file verdict ('ok', 'NOT OK')";
       license = stdenv.lib.licenses.mit;
     };
   };
