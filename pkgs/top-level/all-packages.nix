@@ -14496,6 +14496,8 @@ with pkgs;
 
   mimms = callPackage ../applications/audio/mimms {};
 
+  meh = callPackage ../applications/graphics/meh {};
+
   mirage = callPackage ../applications/graphics/mirage { };
 
   mixxx = callPackage ../applications/audio/mixxx {
