@@ -3510,9 +3510,10 @@ in {
           sha256 = "0gb570z3ivf1b0ixsk526n3h29m8c5rhjsiyam7rr3x80dp65cdl";
       })
 
-      ../development/python-modules/cairocffi/dlopen-paths.patch
       ../development/python-modules/cairocffi/fix_test_scaled_font.patch
-    ];
+    ] ++ ( if stdenv.isDarwin
+      then [ ../development/python-modules/cairocffi/dlopen-paths.osx.patch ]
+      else [ ../development/python-modules/cairocffi/dlopen-paths.patch ] );
 
     postPatch = ''
       # Hardcode cairo library path
@@ -3523,7 +3524,7 @@ in {
 
     meta = {
       homepage = https://github.com/SimonSapin/cairocffi;
-      license = "bsd";
+      license = licenses.bsd3;
       description = "cffi-based cairo bindings for Python";
     };
   };
@@ -6014,20 +6015,22 @@ in {
   };
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-${version}";
     version = "2.5.3";
+    pname = "python-dateutil";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
     };
 
-    propagatedBuildInputs = with self; [ self.six ];
+    propagatedBuildInputs = with self; [ six ];
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
       homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
+      maintainers = with maintainers; [ vrthra ];
+      license = licenses.bsd3;
     };
   });
 
