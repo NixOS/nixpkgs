@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "google-gflags-${version}";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "gflags";
     repo = "gflags";
     rev = "v${version}";
-    sha256 = "0qxvr9cyxq3px60jglkm94pq5bil8dkjjdb99l3ypqcds7iypx9w";
+    sha256 = "1y5808ky8qhjwv1nf134czz0h2p2faqvjhxa9zxf8mg8hn4ns9wp";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,17 +21,16 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A C++ library that implements commandline flags processing";
     longDescription = ''
       The gflags package contains a C++ library that implements commandline flags processing.
       As such it's a replacement for getopt().
       It was owned by Google. google-gflags project has been renamed to gflags and maintained by new community.
     '';
-    homepage = https://code.google.com/p/gflags/;
-    license = stdenv.lib.licenses.bsd3;
-
-    maintainers = [ stdenv.lib.maintainers.linquize ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = https://gflags.github.io/gflags/;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.linquize ];
+    platforms = platforms.all;
   };
 }
