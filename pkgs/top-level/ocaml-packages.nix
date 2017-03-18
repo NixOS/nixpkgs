@@ -483,6 +483,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_deriving {}
       else null;
 
+    ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
+
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
     ppx_tools =
