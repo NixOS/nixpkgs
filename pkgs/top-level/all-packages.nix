@@ -15860,6 +15860,8 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  wayv = callPackage ../tools/X11/wayv {};
+
   weechat = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
