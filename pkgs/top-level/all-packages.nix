@@ -14918,6 +14918,8 @@ with pkgs;
 
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
+  phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
+
   phwmon = callPackage ../applications/misc/phwmon { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
