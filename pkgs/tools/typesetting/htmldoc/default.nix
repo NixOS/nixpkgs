@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
       + "/release-${version}/htmldoc-${version}-source.tar.gz";
     sha256 = "15x0xdf487j4i4gfap5yr83airxnbp2v4lxaz79a4s3iirrq39p0";
   };
-  buildInputs =
-    stdenv.lib.ifEnable stdenv.isDarwin [SystemConfiguration Foundation];
+  buildInputs = with stdenv;
+       lib.optional isDarwin SystemConfiguration
+    ++ lib.optional isDarwin Foundation;
 
   meta = with stdenv.lib; {
     description = "Converts HTML files to PostScript and PDF";
