@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
   
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 which intltool file ];
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ gtk2 which file ];
 
   doCheck = true;
 
