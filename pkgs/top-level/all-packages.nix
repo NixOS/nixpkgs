@@ -17698,6 +17698,8 @@ with pkgs;
 
   crashplan = callPackage ../applications/backup/crashplan { };
 
+  colort = callPackage ../applications/misc/colort { };
+
   e17gtk = callPackage ../misc/themes/e17gtk { };
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
