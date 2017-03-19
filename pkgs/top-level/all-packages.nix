@@ -12812,6 +12812,8 @@ with pkgs;
     guile = guile_1_8;
   };
 
+  bevelbar = callPackage ../applications/window-managers/bevelbar { };
+
   bibletime = callPackage ../applications/misc/bibletime { };
 
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
