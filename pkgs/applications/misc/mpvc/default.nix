@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ socat makeWrapper ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A mpc-like control interface for mpv";
     homepage = https://github.com/wildefyr/mpvc;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.neeasade ];
+    platforms = platforms.linux;
   };
 }

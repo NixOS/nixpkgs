@@ -344,6 +344,7 @@
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
   ndowens = "Nathan Owens <ndowens04@gmail.com>";
+  neeasade = "Nathan Isom <nathanisom27@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
   nhooyr = "Anmol Sethi <anmol@aubble.com>";
