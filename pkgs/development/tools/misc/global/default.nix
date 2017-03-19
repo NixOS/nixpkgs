@@ -34,8 +34,10 @@ stdenv.mkDerivation rec {
     cp -v *.el "$out/share/emacs/site-lisp"
 
     wrapProgram $out/bin/gtags \
+      --prefix GTAGSCONF : "$out/share/gtags/gtags.conf" \
       --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
     wrapProgram $out/bin/global \
+      --prefix GTAGSCONF : "$out/share/gtags/gtags.conf" \
       --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
   '';
 
