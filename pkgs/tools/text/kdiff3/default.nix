@@ -16,7 +16,11 @@ let
       inherit rev;
     };
 
-    preConfigure = "cd kdiff3";
+    setSourceRoot = ''sourceRoot="$(echo */kdiff3/)"'';
+
+    postPatch = ''
+      sed -re "s/(p\\[[^]]+] *== *)('([^']|\\\\')+')/\\1QChar(\\2)/g" -i src/diff.cpp
+    '';
 
     nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
