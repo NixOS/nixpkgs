@@ -15,7 +15,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ getopt lua boost ];
 
-  preConfigure = ''makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/"'';
+  prePatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace src/makefile \
+        --replace 'CXX=g++' 'CXX=clang++'
+  '';
+
+  preConfigure = ''
+    makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/"
+  '';
 
   meta = with stdenv.lib; {
     description = "Source code highlighting tool";
