@@ -453,6 +453,7 @@
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
+  shanemikel = "Shane Pearlman <shanemikel1@gmail.com>";
   sheenobu = "Sheena Artrip <sheena.artrip@gmail.com>";
   sheganinans = "Aistis Raulinaitis <sheganinans@gmail.com>";
   shell = "Shell Turner <cam.turn@gmail.com>";
