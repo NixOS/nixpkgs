@@ -88,6 +88,7 @@ let
     openalSoft
     libva
     openssl-steam
+    vulkan-loader
   ] ++ lib.optional newStdcpp gcc.cc;
 
   ourRuntime = if runtimeOnly then []
