@@ -73,7 +73,6 @@ in {
       clickMethod = mkOption {
         type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
-        example = "none";
         description =
           ''
             Enables a click method. Permitted values are none, buttonareas, clickfinger.
@@ -85,14 +84,12 @@ in {
       leftHanded = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Enables left-handed button orientation, i.e. swapping left and right buttons.";
       };
 
       middleEmulation = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description =
           ''
             Enables middle button emulation. When enabled, pressing the left and right buttons
@@ -103,7 +100,6 @@ in {
       naturalScrolling = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Enables or disables natural scrolling behavior.";
       };
 
@@ -131,7 +127,6 @@ in {
       horizontalScrolling = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description =
           ''
             Disables horizontal scrolling. When disabled, this driver will discard any horizontal scroll
@@ -153,7 +148,6 @@ in {
       tapping = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description =
           ''
             Enables or disables tap-to-click behavior.
@@ -163,7 +157,6 @@ in {
       tappingDragLock = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description =
           ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
@@ -175,7 +168,6 @@ in {
       disableWhileTyping = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description =
           ''
             Disable input method while typing.

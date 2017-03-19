@@ -1,5 +1,6 @@
 { stdenv, buildPythonPackage, fetchurl
 , pytest, django, setuptools_scm
+, fetchpatch
 }:
 buildPythonPackage rec {
   name = "pytest-django-${version}";
@@ -12,6 +13,17 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest setuptools_scm ];
   propagatedBuildInputs = [ django ];
+
+  patches = [
+    # Unpin setuptools-scm
+    (fetchpatch {
+      url = "https://github.com/pytest-dev/pytest-django/commit/25cbc3b395dcdeb92bdc9414e296680c2b9d602e.patch";
+      sha256 = "0mz3rcsv44pfzlxy3pv8mx87glmv34gy0d5aknvbzgb2a9niryws";
+    })
+  ];
+
+  # Complicated. Requires Django setup.
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "py.test plugin for testing of Django applications";
