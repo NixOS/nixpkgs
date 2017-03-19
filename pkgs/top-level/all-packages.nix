@@ -5384,6 +5384,7 @@ with pkgs;
   lld = llvmPackages_4.lld;
 
   lldb = llvmPackages.lldb;
+  lldb_4 = llvmPackages_4.lldb;
 
   llvm = llvmPackages.llvm;
 
