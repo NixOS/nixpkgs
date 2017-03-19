@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libevdev-1.5.6";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/libevdev/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/libevdev/${name}.tar.xz";
     sha256 = "1256ypz93039n6km4macg158fpmjgylhmcmk20pnklxicsfpxv7c";
   };
 
