@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
@@ -9,10 +9,13 @@
 
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
-  version = "4.0";
-  src = fetchurl {
-    url    = "http://github.com/awesomeWM/awesome-releases/raw/master/${name}.tar.xz";
-    sha256 = "0czkcz67sab63gf5m2p2pgg05yinjx60hfb9rfyzdkkg28q9f02w";
+  version = "4.1";
+
+  src = fetchFromGitHub {
+    owner = "awesomewm";
+    repo = "awesome";
+    rev = "v${version}";
+    sha256 = "1qik8h5nwjq4535lpdpal85vas1k7am3s6l5r763kpdzxhfcyyaj";
   };
 
   nativeBuildInputs = [
@@ -22,8 +25,10 @@ with luaPackages; stdenv.mkDerivation rec {
     imagemagick
     makeWrapper
     pkgconfig
-    xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+    xmlto docbook_xml_dtd_45
+    docbook_xsl findXMLCatalogs
   ];
+
   propagatedUserEnvPkgs = [ hicolor_icon_theme ];
   buildInputs = [ cairo dbus gdk_pixbuf gobjectIntrospection
                   git lgi libpthreadstubs libstartup_notification
