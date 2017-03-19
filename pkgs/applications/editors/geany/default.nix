@@ -1,5 +1,7 @@
 { stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file }:
 
+with stdenv.lib;
+
 let
   version = "1.30.1";
 in
@@ -13,8 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-
-  buildInputs = [ gtk2 which pkgconfig intltool file ];
+  
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 which intltool file ];
 
   doCheck = true;
 
@@ -47,9 +50,9 @@ stdenv.mkDerivation rec {
       - Simple project management
       - Plugin interface
     '';
-    homepage = "http://www.geany.org/";
+    homepage = http://www.geany.org/;
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ maintainers.bbenoist ];
+    platforms = platforms.all;
   };
 }
