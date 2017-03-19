@@ -6,12 +6,13 @@
 assert stdenv.isDarwin -> SystemConfiguration != null
                        && Foundation != null;
 
-stdenv.mkDerivation {
-  name = "htmldoc-1.8.29";
+stdenv.mkDerivation rec {
+  version = "1.8.29";
+  name = "htmldoc-${version}";
   src = fetchurl {
     url = "https://github.com/michaelrsweet/htmldoc/releases/download"
-        + "/release-1.8.29/htmldoc-1.8.29-source.tar.gz";
-    md5 = "14d32bd772e2bc6af7b9b2233724c3ec";
+      + "/release-${version}/htmldoc-${version}-source.tar.gz";
+    sha256 = "15x0xdf487j4i4gfap5yr83airxnbp2v4lxaz79a4s3iirrq39p0";
   };
   buildInputs =
     stdenv.lib.ifEnable stdenv.isDarwin [SystemConfiguration Foundation];
