@@ -4381,6 +4381,10 @@ with pkgs;
 
   html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
 
+  htmldoc = callPackage ../tools/typesetting/htmldoc {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
+  };
+
   rcm = callPackage ../tools/misc/rcm {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
@@ -13979,10 +13983,6 @@ with pkgs;
   };
 
   ht = callPackage ../applications/editors/ht { };
-
-  htmldoc = callPackage ../applications/misc/htmldoc {
-    fltk = fltk13;
-  };
 
   hugin = callPackage ../applications/graphics/hugin { };
 
