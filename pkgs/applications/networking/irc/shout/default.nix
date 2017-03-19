@@ -11,7 +11,7 @@ let
 
 in nodePackages.buildNodePackage rec {
   name = "shout-${version}";
-  version = "0.51.1";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "erming";

@@ -476,9 +476,7 @@ rec {
   readPathsFromFile = rootPath: file:
     let
       root = toString rootPath;
-      lines =
-        builtins.map (lib.removeSuffix "\n")
-        (lib.splitString "\n" (builtins.readFile file));
+      lines = lib.splitString "\n" (builtins.readFile file);
       removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
       absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;

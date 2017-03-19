@@ -7,12 +7,11 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-${version}";
-  version = "2.2.0";
+  name = "guile-2.0.13";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "05dmvhd1y135x7w5qfw4my42cfp6l8bbhjfxvchcc1cbdvzri0f1";
+    sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -33,8 +32,12 @@
 
   enableParallelBuilding = true;
 
-  patches = [
-    ./eai_system.patch
+  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
+    (fetchpatch {
+      # Fixes stability issues with 00-repl-server.test
+      url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
+      sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
+    })
   ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
@@ -44,7 +47,7 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
+  configureFlags = [ "--with-libreadline-prefix" ]
     ++ stdenv.lib.optionals stdenv.isSunOS [
       # Make sure the right <gmp.h> is found, and not the incompatible
       # /usr/include/mp.h from OpenSolaris.  See
@@ -53,6 +56,7 @@
       "--with-libgmp-prefix=${gmp.dev}"
 
       # Same for these (?).
+      "--with-libreadline-prefix=${readline.dev}"
       "--with-libunistring-prefix=${libunistring}"
 
       # See below.
@@ -65,7 +69,7 @@
     # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-    sed -i "$out/lib/pkgconfig/guile-2.2.pc"    \
+    sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
@@ -77,7 +81,7 @@
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
 
-  setupHook = ./setup-hook-2.2.sh;
+  setupHook = ./setup-hook-2.0.sh;
 
   crossAttrs.preConfigure =
     stdenv.lib.optionalString (stdenv.cross.config == "i586-pc-gnu")
@@ -92,7 +96,7 @@
     description = "Embeddable Scheme implementation";
     homepage    = http://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
+    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
     platforms   = stdenv.lib.platforms.all;
 
     longDescription = ''
@@ -107,3 +111,10 @@
   };
 })
 
+//
+
+(stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+  # Work around <http://bugs.gnu.org/14201>.
+  SHELL = "/bin/sh";
+  CONFIG_SHELL = "/bin/sh";
+})
