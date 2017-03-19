@@ -533,6 +533,8 @@ with pkgs;
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  kwakd = callPackage ../servers/kwakd { };
+
   kwm = callPackage ../os-specific/darwin/kwm { };
 
   khd = callPackage ../os-specific/darwin/khd {
@@ -943,6 +945,8 @@ with pkgs;
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hexio = callPackage ../development/tools/hexio { };
+
+  hostsblock = callPackage ../tools/misc/hostsblock { };
 
   hr = callPackage ../applications/misc/hr { };
 
