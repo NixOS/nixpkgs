@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, autoconf, automake,
+{ stdenv, fetchFromGitHub, autoreconfHook,
   libtool, pkgconfig, re2, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "cre2-${version}";
-
   version = "0.3.0";
     
   src = fetchFromGitHub {
@@ -14,26 +13,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     libtool
     pkgconfig
-    re2
-    texinfo
   ];
+  buildInputs = [ re2 texinfo ];
 
   NIX_LDFLAGS="-lre2 -lpthread";
 
-  preConfigure = "sh autogen.sh";
-  
   configureFlags = [
     "--enable-maintainer-mode"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://marcomaggi.github.io/docs/cre2.html;
     description = "C Wrapper for RE2";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 }
