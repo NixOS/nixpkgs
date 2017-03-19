@@ -23,7 +23,7 @@
 
 usage() {
     cat <<EOF
-usage: nix-diff.sh [-h] [-p profile | -s] [range]
+usage: nix-diff.sh [-h | [-p profile | -s] [-q] [-l] [range]]
 -h:         print this message before exiting
 -q:         list the derivations installed in the parent generation
 -l:         diff every available intermediate generation between parent and
