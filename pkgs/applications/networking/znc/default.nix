@@ -9,14 +9,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "znc-${version}";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchurl {
-    url = "http://znc.in/releases/${name}.tar.gz";
-    sha256 = "070d6b1i3jy66m4ci4ypxkg4pbwqbzbzss1y1ycgq2w62zmrf423";
+    url = "http://znc.in/releases/archive/${name}.tar.gz";
+    sha256 = "1jia6kq6bp8yxfj02d5vj9vqb4pylqcldspyjj6iz82kkka2a0ig";
   };
 
-  buildInputs = [ openssl pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ openssl ]
     ++ optional withPerl perl
     ++ optional withPython python3
     ++ optional withTcl tcl

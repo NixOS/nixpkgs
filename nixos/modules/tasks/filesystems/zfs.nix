@@ -109,7 +109,6 @@ in
       forceImportRoot = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Forcibly import the ZFS root pool(s) during early boot.
 
@@ -128,7 +127,6 @@ in
       forceImportAll = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Forcibly import all ZFS pool(s).
 

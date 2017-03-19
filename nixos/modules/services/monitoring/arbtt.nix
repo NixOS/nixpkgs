@@ -10,7 +10,6 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Enable the arbtt statistics capture service.
         '';

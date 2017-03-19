@@ -381,7 +381,6 @@ in
 
       efiInstallAsRemovable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to invoke <literal>grub-install</literal> with

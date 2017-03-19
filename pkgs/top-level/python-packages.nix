@@ -309,6 +309,37 @@ in {
 
   pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
 
+  pygame_sdl2 = buildPythonPackage rec {
+    pname = "pygame_sdl2";
+    version = "6.99.10.1227";
+    name = "${pname}-${version}";
+
+    meta = {
+      description = "A reimplementation of parts of pygame API using SDL2";
+      homepage    = "https://github.com/renpy/pygame_sdl2";
+      # Some parts are also available under Zlib License
+      license     = licenses.lgpl2;
+      maintainers = with maintainers; [ raskin ];
+    };
+
+    propagatedBuildInputs = with self; [ ];
+    buildInputs = with pkgs; with self; [
+      SDL2 SDL2_image SDL2_ttf SDL2_mixer
+      cython libjpeg libpng ];
+
+    postInstall = ''
+      ( cd "$out"/include/python*/ ;
+        ln -s pygame-sdl2 pygame_sdl2 || true ; )
+    '';
+
+    src = pkgs.fetchFromGitHub {
+      owner = "renpy";
+      repo = "${pname}";
+      rev = "renpy-${version}";
+      sha256 = "10n6janvqh5adn7pcijqwqfh234sybjz788kb8ac6b4l11hy2lx1";
+    };
+  };
+
   pygobject2 = callPackage ../development/python-modules/pygobject { };
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
 
@@ -5100,6 +5131,8 @@ in {
     };
   };
 
+  python-jose = callPackage ../development/python-modules/python-jose {};
+
   pyhepmc = buildPythonPackage rec {
     name = "pyhepmc-${version}";
     version = "0.5.0";
@@ -5175,7 +5208,25 @@ in {
     };
   };
 
-  pytestdjango = callPackage ../development/python-modules/pytestdjango.nix { };
+  pytest-catchlog = buildPythonPackage rec {
+    name = "pytest-catchlog-1.2.2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-catchlog/${name}.zip";
+      sha256 = "1w7wxh27sbqwm4jgwrjr9c2gy384aca5jzw9c0wzhl0pmk2mvqab";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    checkPhase = "make test";
+
+    meta = {
+      license = licenses.mit;
+      website = https://pypi.python.org/pypi/pytest-catchlog/;
+      description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
+    };
+  };
+
+  pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-fixture-config = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -5737,6 +5788,8 @@ in {
 
   leather = callPackage ../development/python-modules/leather { };
 
+  libais = callPackage ../development/python-modules/libais { };
+
   libtmux = buildPythonPackage rec {
     name = "libtmux-${version}";
     version = "0.6.0";
@@ -5997,23 +6050,7 @@ in {
     };
   };
 
-  dateutil = buildPythonPackage (rec {
-    name = "dateutil-${version}";
-    version = "2.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1v9j9fmf8g911yg6k01xa2db6dx3wv73zkk7fncsj7vagjqgs20l";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
+  dateutil = callPackage ../development/python-modules/dateutil { };
 
   # csvkit 0.9.1 needs dateutil==2.2
   dateutil_2_2 = buildPythonPackage (rec {
@@ -8684,9 +8721,44 @@ in {
 
     meta = {
       description = "A build system for software projects in a variety of languages";
-      homepage = "http://www.pantsbuild.org/";
-      license = licenses.asl20;
+      homepage    = "http://www.pantsbuild.org/";
+      license     = licenses.asl20;
       maintainers = with maintainers; [ copumpkin ];
+      platforms   = platforms.unix;
+    };
+  };
+
+  pants13-pre = buildPythonPackage rec {
+    pname   = "pantsbuild.pants";
+    version = "1.3.0.dev13";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "0gnz0f74s53xccfdn78v2dg1m3gx2mm0pdmmjvs5ikfbb9lidhz4";
+    };
+
+    prePatch = ''
+      sed -E -i "s/'([[:alnum:].-]+)[=><][[:digit:]=><.,]*'/'\\1'/g" setup.py
+    '';
+
+    # Unnecessary, and causes some really weird behavior around .class files, which
+    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520.
+    dontStrip = true;
+
+    propagatedBuildInputs = with self; [
+      twitter-common-collections setproctitle setuptools six ansicolors
+      packaging pathspec_0_5 scandir twitter-common-dirutil psutil requests2
+      pystache pex docutils markdown pygments twitter-common-confluence
+      fasteners coverage pywatchman futures cffi
+    ];
+
+    meta = {
+      description = "A build system for software projects in a variety of languages";
+      homepage    = "http://www.pantsbuild.org/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ copumpkin ];
+      platforms   = platforms.unix;
     };
   };
 
@@ -8725,6 +8797,7 @@ in {
     };
   };
 
+  # Get rid of this when pants 1.3.0 is released and make 0.5 the default
   pathspec = buildPythonPackage rec {
     pname   = "pathspec";
     version = "0.3.4";
@@ -8733,6 +8806,24 @@ in {
     src = self.fetchPypi {
       inherit pname version;
       sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
+    };
+
+    meta = {
+      description = "Utility library for gitignore-style pattern matching of file paths";
+      homepage = "https://github.com/cpburnz/python-path-specification";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ copumpkin ];
+    };
+  };
+
+  pathspec_0_5 = buildPythonPackage rec {
+    pname   = "pathspec";
+    version = "0.5.0";
+    name    = "${pname}-${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
+      sha256 = "07yx1gxj9v1iyyiy5fhq2wsmh4qfbrx158wi7jb0nx6lah80ffma";
     };
 
     meta = {
@@ -9072,7 +9163,9 @@ in {
     };
   };
 
-   pybluez = buildPythonPackage rec {
+  pycassa = callPackage ../development/python-modules/pycassa { };
+
+  pybluez = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "pybluez";
     name = "${pname}-${version}";
@@ -14075,6 +14168,28 @@ in {
     };
   };
 
+  livereload = buildPythonPackage rec {
+    name = "livereload-${version}";
+    version = "2.5.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "lepture";
+      repo = "python-livereload";
+      rev = "v${version}";
+      sha256 = "0ixsc7wibmkfk9fnyq0d1b5d9snxfpzzzgsxvq28rn54v6q8b7m2";
+    };
+
+    buildInputs = with self; [ nose django ];
+
+    propagatedBuildInputs = with self; [ tornado six ];
+
+    meta = {
+      description = "Runs a local server that reloads as you develop";
+      homepage = "https://github.com/lepture/python-livereload";
+      license = licenses.bsd3;
+    };
+  };
+
   llfuse = buildPythonPackage rec {
     name = "llfuse-1.0";
 
@@ -19070,6 +19185,8 @@ in {
      };
   };
 
+  proselint = callPackage ../tools/text/proselint { };
+
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
     version = "0.2.4";
@@ -19089,6 +19206,8 @@ in {
       license = licenses.gpl3;
     };
   };
+
+  pylibmc = callPackage ../development/python-modules/pylibmc {};
 
   pymetar = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -19356,12 +19475,12 @@ in {
   };
 
   powerline = buildPythonPackage rec {
-    rev  = "2.4";
+    rev  = "2.5.2";
     name = "powerline-${rev}";
     src = pkgs.fetchurl {
       url    = "https://github.com/powerline/powerline/archive/${rev}.tar.gz";
       name   = "${name}.tar.gz";
-      sha256 = "12fp3cpwgpkxcj4mfjdpsmf1h0b8pqy1icb07jdivz9kw18h0184";
+      sha256 = "064rp2jzz4vp1xqk3445qf08pq3aif00q1rjqaqx2pla15s27yrz";
     };
 
     propagatedBuildInputs = with self; [ pkgs.git pkgs.mercurial pkgs.bazaar self.psutil self.pygit2 ];
@@ -19929,7 +20048,6 @@ in {
       platforms = platforms.all;
     };
   };
-
 
   Babel = buildPythonPackage (rec {
     name = "Babel-2.3.4";
@@ -20542,6 +20660,8 @@ in {
       license = licenses.lgpl3Plus;
     };
   };
+
+  PyGithub = callPackage ../development/python-modules/pyGithub {};
 
   pyglet = buildPythonPackage rec {
     name = "pyglet-${version}";
@@ -24054,7 +24174,7 @@ in {
       sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
     };
 
-    propagatedBuildInputs = with self; [ pydns lockfile ];
+    propagatedBuildInputs = with self; [ bsddb3 pydns lockfile ];
 
     meta = {
       description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
@@ -32253,6 +32373,9 @@ EOF
   };
 
   yenc = callPackage ../development/python-modules/yenc {
+  };
+
+  zeep = callPackage ../development/python-modules/zeep {
   };
 
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else

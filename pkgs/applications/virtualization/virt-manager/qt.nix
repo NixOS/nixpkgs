@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "virt-manager-qt-${version}";
-  version = "0.39.60";
+  version = "0.42.67";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
     rev    = "${version}";
-    sha256 = "010lpw85m5sd613l281y4zxkp5v3k16pgnawskbi1ricsnj4k5mh";
+    sha256 = "0hskaffc84wf8h9qck5xg840jw8x2krfy6cw4hqnq946z9lbyanr";
   };
 
   cmakeFlags = [

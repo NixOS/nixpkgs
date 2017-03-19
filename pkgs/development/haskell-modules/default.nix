@@ -85,13 +85,13 @@ let
 
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
         callCabal2nix = name: src: args:
-	  let
-	    # Filter out files other than the cabal file. This ensures
-	    # that we don't create new derivations even when the cabal
-	    # file hasn't changed.
-	    justCabal = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
-	    drv = self.callPackage (haskellSrc2nix { inherit name; src = justCabal; }) args;
-	  in overrideCabal drv (drv': { inherit src; }); # Restore the desired src.
+          let
+            # Filter out files other than the cabal file. This ensures
+            # that we don't create new derivations even when the cabal
+            # file hasn't changed.
+            justCabal = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+            drv = self.callPackage (haskellSrc2nix { inherit name; src = justCabal; }) args;
+          in overrideCabal drv (drv': { inherit src; }); # Restore the desired src.
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

@@ -2248,7 +2248,6 @@ extra-packages:
   - QuickCheck < 2                      # required by test-framework-quickcheck and its users
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
-  - servant-auth-server < 0.2.2.0       # https://github.com/plow-technologies/servant-auth/issues/25
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
@@ -7302,8 +7301,6 @@ dont-distribute-packages:
   servant-smsc-ru:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-snap:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   servant-subscriber:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
-  servant-swagger:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
-  servant-swagger-ui:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   server-generic:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   serversession-backend-persistent:             [ i686-linux, x86_64-linux, x86_64-darwin ]
   serversession-backend-redis:                  [ i686-linux, x86_64-linux, x86_64-darwin ]

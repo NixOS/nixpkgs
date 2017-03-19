@@ -1,23 +1,25 @@
-{ stdenv, fetchgit, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
+{ stdenv, fetchFromGitHub, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
 , qtbase, qmakeHook, mesa_glu
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.5";
+  version = "0.9.8";
   name = "rapcad-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/GilesBathgate/RapCAD.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "1i5h4sw7mdbpdbssmbjccwgidndrsc606zz4wy9pjsg2wzrabw7x";
+  src = fetchFromGitHub {
+    owner = "gilesbathgate";
+    repo = "rapcad";
+    rev = "v${version}";
+    sha256 = "0a0sqf6h227zalh0jrz6jpm8iwji7q3i31plqk76i4qm9vsgrhir";
   };
 
-  buildInputs = [ qtbase qmakeHook cgal boost gmp mpfr flex bison dxflib readline mesa_glu ];
+  nativeBuildInputs = [ qmakeHook ];
+  buildInputs = [ qtbase cgal boost gmp mpfr flex bison dxflib readline mesa_glu ];
 
-  meta = {
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    license = licenses.gpl3;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     description = ''Constructive solid geometry package'';
   };
 }

@@ -41,10 +41,12 @@ stdenv.mkDerivation rec {
 
       ${homepage}
 
+      (if you do not find version ${version} there, try https://www.citrix.com/downloads/citrix-receiver/)
+
       Once you have downloaded the file, please use the following command and re-run the
       installation:
 
-      nix-prefetch-url file://${name}
+      nix-prefetch-url file://$PWD/${name}
     '';
   };
 

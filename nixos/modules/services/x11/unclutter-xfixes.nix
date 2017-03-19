@@ -11,7 +11,6 @@ in {
       description = "Enable unclutter-xfixes to hide your mouse cursor when inactive.";
       type = types.bool;
       default = false;
-      example = true;
     };
 
     package = mkOption {

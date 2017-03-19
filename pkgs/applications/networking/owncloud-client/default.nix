@@ -1,8 +1,7 @@
 { stdenv, fetchurl, cmake, qt5, pkgconfig, qtkeychain, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "owncloud-client" + "-" + version;
-
+  name = "owncloud-client-${version}";
   version = "2.3.0";
 
   src = fetchurl {
@@ -11,7 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-
   buildInputs = [ qt5.qtbase qt5.qtwebkit qtkeychain sqlite ];
 
   cmakeFlags = [
@@ -20,10 +18,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";
     homepage = https://owncloud.org;
-    maintainers = with stdenv.lib.maintainers; [ qknight ];
-    meta.platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.qknight ];
+    platforms = platforms.unix;
   };
 }

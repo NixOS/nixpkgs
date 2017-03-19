@@ -1,28 +1,32 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext
+{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
-, autoconf, automake
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
-  emacsName = "emacs-24.5";
-  name = "${emacsName}-mac-5.15";
+  emacsName = "emacs-25.1";
+  name = "${emacsName}-mac-6.1";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "0kn3rzm91qiswi0cql89kbv6mqn27rwsyjfb8xmwy9m5s8fxfiyx";
+    url = "ftp://ftp.gnu.org/gnu/emacs/${emacsName}.tar.xz";
+    sha256 = "19f2798ee3bc26c95dca3303e7ab141e7ad65d6ea2b6945eeba4dbea7df48f33";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "1r47bm1pf5av2yr37byz91y7bp6vdw9smahiy18g5qp4jp6mz193";
+    sha256 = "1zwxh7zsvwcg221mpjh0dhpdas3j9mc5q92pprf8yljl7clqvg62";
+  };
+
+  hiresSrc = fetchurl {
+    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/emacs-hires-icons-2.0.tar.gz";
+    sha256 = "1ari8n3y1d4hdl9npg3c3hk27x7cfkwfgyhgzn1vlqkrdah4z434";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake ];
+  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake];
 
   propagatedBuildInputs = [
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
@@ -30,14 +34,21 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
-    mv $emacsName $name
+    mv $sourceRoot $name
     tar xzf $macportSrc
-    mv $name $emacsName
+    mv $name $sourceRoot
+
+    # extract retina image resources
+    tar xzfv $hiresSrc --strip 1 -C $sourceRoot
   '';
 
   postPatch = ''
     patch -p1 < patch-mac
-    sed -i 's|/usr/share/locale|${gettext}/share/locale|g' lisp/international/mule-cmds.el
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace /usr/share/locale ${gettext}/share/locale
+
+    # use newer emacs icon
+    cp nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns mac/Emacs.app/Contents/Resources/Emacs.icns
   '';
 
   configureFlags = [
@@ -48,7 +59,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1090 -DMAC_OS_X_VERSION_MIN_REQUIRED=1090";
+  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''
@@ -59,7 +70,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "GNU Emacs 24, the extensible, customizable text editor";
+    description = "GNU Emacs 25, the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley ];

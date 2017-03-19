@@ -544,7 +544,6 @@ in
           };
 
           rstp = mkOption {
-            example = true;
             default = false;
             type = types.bool;
             description = "Whether the bridge interface should enable rstp.";

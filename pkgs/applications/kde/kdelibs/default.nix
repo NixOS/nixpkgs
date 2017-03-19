@@ -28,11 +28,6 @@ kdeApp {
     ./0001-old-kde4-cmake-policies.patch
     ./0002-polkit-install-path.patch
     ./0003-remove_xdg_impurities.patch
-    (fetchpatch {
-     name = "SanitizeURLsBeforePassingThemToFindProxyForURL.patch";
-     url = "https://cgit.kde.org/kdelibs.git/patch/?id=1804c2fde7bf4e432c6cf5bb8cce5701c7010559";
-     sha256 = "1y9951wgx35yf24i6gjz219fhspyqri1jvbw4fybd8nwwjb6ciz1";
-   })
   ];
 
   # cmake does not detect path to `ilmbase`

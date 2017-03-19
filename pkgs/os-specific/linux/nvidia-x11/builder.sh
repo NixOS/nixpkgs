@@ -78,7 +78,7 @@ installPhase() {
     fi
 
     # All libs except GUI-only are installed now, so fixup them.
-    for libname in `find "$out/lib/" -name '*.so.*'` `find "$bin/lib/" -name '*.so.*'`
+    for libname in `find "$out/lib/" -name '*.so.*'` `test -z "$bin" || find "$bin/lib/" -name '*.so.*'`
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.

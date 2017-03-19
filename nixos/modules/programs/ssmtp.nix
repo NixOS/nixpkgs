@@ -22,7 +22,6 @@ in
       directDelivery = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Use the trivial Mail Transfer Agent (MTA)
           <command>ssmtp</command> package to allow programs to send
@@ -65,7 +64,6 @@ in
       useTLS = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether TLS should be used to connect to the default mail
           server.
@@ -75,7 +73,6 @@ in
       useSTARTTLS = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether the STARTTLS should be used to connect to the default
           mail server.  (This is needed for TLS-capable mail servers

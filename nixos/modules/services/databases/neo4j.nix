@@ -117,6 +117,7 @@ in {
         ExecStart = "${cfg.package}/bin/neo4j console";
         User = "neo4j";
         PermissionsStartOnly = true;
+        LimitNOFILE = 40000;
       };
       preStart = ''
         mkdir -p /run/neo4j

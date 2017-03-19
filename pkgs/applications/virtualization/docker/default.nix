@@ -11,14 +11,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.13.1";
-  rev = "092cba3"; # should match the version commit
+  version = "17.03.0-ce";
+  rev = "60ccb22"; # should match the version commit
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "0l9kjibnpwcgk844sibxk9ppyqniw9r0np1mzp95f8f461jb0iar";
+    sha256 = "0ml9aan8x4w8kfz7dm9vvl8b1a0vq09si9b7z50xz84040cjhnr9";
   };
 
   docker-runc = runc.overrideAttrs (oldAttrs: rec {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "docker";
       repo = "runc";
-      rev = "9df8b306d01f59d3a8029be411de015b7304dd8f";
-      sha256 = "1yvrk1w2409b90gk55k72z7l3jlkj682x4h3b7004mkl9bhscqd9";
+      rev = "a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70";
+      sha256 = "0n7vr47fhpyxx5vdnp453qp4cq50w4hwgq3ldyj5878d91iir7l1";
     };
     # docker/runc already include these patches / are not applicable
     patches = [];
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "docker";
       repo = "containerd";
-      rev = "aa8187dbd3b7ad67d8e5e3a15115d3eef43a7ed1";
-      sha256 = "0vidbsgyn77m98kisrqnbykva0zmk1ljprgqhbfp5lw16ac6qj8c";
+      rev = "977c511eda0925a723debdc94d09459af49d082a";
+      sha256 = "0hmcj8i70vv3a3bbdawrgi84a442m09x5mpc7fgn8dd3v031lcbc";
     };
   });
   docker-tini = tini.overrideAttrs  (oldAttrs: rec {
