@@ -5790,9 +5790,9 @@ with pkgs;
 
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
-  guile_2_0 = callPackage ../development/interpreters/guile { };
+  guile_2_2 = callPackage ../development/interpreters/guile { };
 
-  guile = guile_2_0;
+  guile = guile_2_2;
 
   hadoop = callPackage ../applications/networking/cluster/hadoop { };
 
