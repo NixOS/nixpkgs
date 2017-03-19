@@ -19,10 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake4Hook ];
   buildInputs = [ qt4 zlib ];
   postPatch = ''
-    sed '1i#include <cmath>' -i common/camera.cpp
-    substituteInPlace common/camera.cpp --replace "isnan(" "std::isnan("
     export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
-   '';
+  '';
 
   meta = with stdenv.lib; {
     description = "CAD program for creating virtual LEGO models";
