@@ -55,7 +55,7 @@ all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
 checksum can be then take from the failed build.
 
-To install creates with nix there is also an experimental project called
+To install crates with nix there is also an experimental project called
 [nixcrates](https://github.com/fractalide/nixcrates).
 
 ## Using the Rust nightlies overlay
