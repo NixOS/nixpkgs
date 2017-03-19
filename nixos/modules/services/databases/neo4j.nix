@@ -140,7 +140,7 @@ in {
       '';
     };
 
-    environment.systemPackages = [ pkgs.neo4j ];
+    environment.systemPackages = [ cfg.package ];
 
     users.extraUsers = singleton {
       name = "neo4j";
