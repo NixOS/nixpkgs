@@ -10,23 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qiyvb3ck1wyd3izajwvlq4bwgsbq7x8ya3fgi5i0g2qr39a1qml";
   };
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
-
-  # defaults to make install.
-  buildPhase = ''
-    make PREFIX=$out
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    makeWrapper ${socat}/bin/socat $out/bin/socat \
-      --prefix PATH : "$out/bin"
-    wrapProgram $out/bin/mpvc
+    wrapProgram $out/bin/mpvc --prefix PATH : "${socat}/bin/"
   '';
 
   buildInputs = [ socat makeWrapper ];
-  outputs = [ "out" ];
 
   meta = {
     description = "A mpc-like control interface for mpv";
