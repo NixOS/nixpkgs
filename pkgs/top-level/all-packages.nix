@@ -10169,6 +10169,8 @@ with pkgs;
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
+  yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
+
   yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
 
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
