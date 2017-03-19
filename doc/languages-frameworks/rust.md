@@ -60,8 +60,7 @@ To install crates with nix there is also an experimental project called
 
 ## Using the Rust nightlies overlay
 
-Mozilla provides an overlay for nixpkgs which can be used to bring a nightly
-version of Rust into scope.
+Mozilla provides an overlay for nixpkgs to bring a nightly version of Rust into scope.
 This overlay can _also_ be used to install recent unstable or stable versions
 of Rust, if desired.
 
@@ -75,12 +74,13 @@ in the `~/.config/nixpkgs/overlays` directory.
     $ mkdir -p  ~/.config/nixpkgs/overlays
     $ ln -s $(pwd)/nixpkgs-mozilla/rust-overlay.nix ~/.config/nixpkgs/overlays/rust-overlay.nix
 
-Once installed, one can install the latest versions with the following command:
+The latest version can be installed with the following command:
 
     $ nix-env -Ai nixos.rustChannels.stable.rust
 
-Or use this attribute to build a nix-shell environment which pull the
-latest version of rust for you when you enter it.
+Or using the attribute with nix-shell:
+
+    $ nix-shell -p nixos.rustChannels.stable.rust
 
 To install the beta or nightly channel, "stable" should be substituted by
 "nightly" and "beta", or
