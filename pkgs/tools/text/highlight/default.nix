@@ -1,5 +1,7 @@
 { stdenv, fetchurl, getopt, lua, boost, pkgconfig, gcc }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
   version = "3.35";
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "8a14b49f5e0c07daa9f40b4ce674baa00bb20061079473a5d386656f6d236d05";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin  gcc ;
+  nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin  gcc ;
 
   buildInputs = [ getopt lua boost ];
 
@@ -19,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Source code highlighting tool";
     homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
     platforms = platforms.unix;
-    maintainers = maintainers.ndowens;
+    maintainers = [ maintainers.ndowens ];
   };
 }

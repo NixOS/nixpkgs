@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison }:
+{ stdenv, fetchurl, fetchpatch, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "libpcap-1.8.1";
@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace " -arch i386" ""
   '';
+
+  patches = [
+    (fetchpatch {
+      url    = "https://sources.debian.net/data/main/libp/libpcap/1.8.1-3/debian/patches/disable-remote.diff";
+      sha256 = "0dvjax9c0spvq8cdjnkbnm65wlzaml259yragf95kzg611vszfmj";
+    })
+  ];
 
   preInstall = ''mkdir -p $out/bin'';
 

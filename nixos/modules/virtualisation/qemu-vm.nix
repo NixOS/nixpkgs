@@ -136,15 +136,17 @@ let
                       else "-nographic -serial pty";
         }
         ''
-          # Create a /boot EFI partition with 40M
-          ${pkgs.gptfdisk}/bin/sgdisk -G /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -a 1 -n 1:34:2047 -c 1:"BIOS Boot Partition" -t 1:ef02 /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -a 512 -N 2 -c 2:"EFI System" -t 2:ef00 /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -A 1:set:1 /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -A 2:set:2 /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -h 2 /dev/vda
-          ${pkgs.gptfdisk}/bin/sgdisk -C /dev/vda
-          ${pkgs.utillinux}/bin/sfdisk /dev/vda -A 2
+          # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
+          ${pkgs.gptfdisk}/bin/sgdisk \
+            --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
+            --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
+            --attributes=1:set:1 \
+            --attributes=2:set:2 \
+            --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C1 \
+            --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+            --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
+            --hybrid 2 \
+            --recompute-chs /dev/vda
           . /sys/class/block/vda2/uevent
           mknod /dev/vda2 b $MAJOR $MINOR
           . /sys/class/block/vda/uevent

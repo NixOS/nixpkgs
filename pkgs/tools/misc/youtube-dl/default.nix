@@ -14,11 +14,11 @@ with stdenv.lib;
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2017.02.27";
+  version = "2017.03.10";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0pcrr1bxxw3aar681gj8n5ms69j54namjlw5bj88crs0nm69kspk";
+    sha256 = "0ccrwhgycz17xmsdsd0rsv7khhp1z7dnwp7fkxx7dxbivjf0h0a4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,6 +51,6 @@ buildPythonApplication rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu ];
+    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu fpletz ];
   };
 }

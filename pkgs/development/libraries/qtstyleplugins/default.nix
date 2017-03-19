@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmakeHook, pkgconfig, gtk2 }:
+{ stdenv, fetchFromGitHub, qmakeHook, qtbase, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "qtstyleplugins-2016-12-01";
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;
+    broken = builtins.compareVersions qtbase.version "5.7.0" > 0;
   };
 }

@@ -29,6 +29,17 @@
 
 with import ./lib.nix { inherit pkgs; };
 
+# All of the overrides in this set should look like:
+#
+#   foo = ... something involving super.foo ...
+#
+# but that means that we add `foo` attribute even if there is no `super.foo`! So if
+# you want to use this configuration for a package set that only contains a subset of
+# the packages that have overrides defined here, you'll end up with a set that contains
+# a bunch of attributes that trigger an evaluation error.
+#
+# To avoid this, we use `intersectAttrs` here so we never add packages that are not present
+# in the parent package set (`super`).
 self: super: builtins.intersectAttrs super {
 
   # Apply NixOS-specific patches.
@@ -216,20 +227,19 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general-darwin = overrideCabal (super.llvm-general.override { llvm-config = pkgs.llvm_35; }) (drv: {
-      preConfigure = ''
-        sed -i llvm-general.cabal \
-            -e 's,extra-libraries: stdc++,extra-libraries: c++,'
-      '';
-      configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
-      librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
-    });
-
-  # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
   llvm-general =
-    if pkgs.stdenv.isDarwin
-    then self.llvm-general-darwin
-    else super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+    # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
+    let base = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+    in if !pkgs.stdenv.isDarwin then base else overrideCabal base (
+      drv: {
+        preConfigure = ''
+          sed -i llvm-general.cabal \
+              -e 's,extra-libraries: stdc++,extra-libraries: c++,'
+        '';
+        configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
+        librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
+      }
+    );
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -420,9 +430,15 @@ self: super: builtins.intersectAttrs super {
   # tests require git
   hapistrano = addBuildTool super.hapistrano pkgs.git;
 
+  # This propagates this to everything depending on haskell-gi-base
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+
   # requires webkitgtk API version 3 (webkitgtk 2.4 is the latest webkit supporting that version)
   gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
   gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
+
+  # Requires gi-javascriptcore API version 4
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {

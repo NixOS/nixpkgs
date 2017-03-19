@@ -1,0 +1,15 @@
+Index: qtbase-opensource-src-5.5.1/mkspecs/common/linux.conf
+===================================================================
+--- qtbase-opensource-src-5.5.1.orig/mkspecs/common/linux.conf
++++ qtbase-opensource-src-5.5.1/mkspecs/common/linux.conf
+@@ -12,8 +12,8 @@ QMAKE_INCDIR            =
+ QMAKE_LIBDIR            =
+ QMAKE_INCDIR_X11        =
+ QMAKE_LIBDIR_X11        =
+-QMAKE_INCDIR_OPENGL     =
+-QMAKE_LIBDIR_OPENGL     =
++QMAKE_INCDIR_OPENGL     = @mesa_inc@/include
++QMAKE_LIBDIR_OPENGL     = @mesa_lib@/lib
+ QMAKE_INCDIR_OPENGL_ES2 = $$QMAKE_INCDIR_OPENGL
+ QMAKE_LIBDIR_OPENGL_ES2 = $$QMAKE_LIBDIR_OPENGL
+ QMAKE_INCDIR_EGL        =

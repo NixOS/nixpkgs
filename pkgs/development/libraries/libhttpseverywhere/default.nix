@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   major = "0.2";
-  minor = "3";
+  minor = "10";
   version = "${major}.${minor}";
 
   name = "libhttpseverywhere-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libhttpseverywhere/${major}/libhttpseverywhere-${version}.tar.xz";
-    sha256 = "0ndk6yyfcd7iwwkv4rkivhd08k0x8v03gnp9dk1ms4bxb1l2i8l1";
+    sha256 = "235f5b7f96188d800470871774e31696fbde085b63f65bd71434af8e9e6ac8aa";
   };
 
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     ninja
-    ninja devhelp
-  '';
+   '';
 
   installPhase = "ninja install";
 

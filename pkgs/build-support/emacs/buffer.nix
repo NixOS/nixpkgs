@@ -12,15 +12,16 @@
       ; Only set up nixpkgs buffer handling when we have some buffers active
       (defvar nixpkgs--buffer-count 0)
       (when (eq nixpkgs--buffer-count 0)
+        (make-variable-buffer-local 'nixpkgs--is-nixpkgs-buffer)
         ; When generating a new temporary buffer (one whose name starts with a space), do inherit-local inheritance and make it a nixpkgs buffer
         (defun nixpkgs--around-generate (orig name)
-          (if (eq (aref name 0) ?\s)
+          (if (and nixpkgs--is-nixpkgs-buffer (eq (aref name 0) ?\s))
               (let ((buf (funcall orig name)))
-                (when (inherit-local-inherit-child buf)
+                (progn
+                  (inherit-local-inherit-child buf)
                   (with-current-buffer buf
-                    (make-local-variable 'kill-buffer-hook)
                     (setq nixpkgs--buffer-count (1+ nixpkgs--buffer-count))
-                    (add-hook 'kill-buffer-hook 'nixpkgs--decrement-buffer-count)))
+                    (add-hook 'kill-buffer-hook 'nixpkgs--decrement-buffer-count nil t)))
                 buf)
             (funcall orig name)))
         (advice-add 'generate-new-buffer :around #'nixpkgs--around-generate)
@@ -32,8 +33,7 @@
             (fmakunbound 'nixpkgs--around-generate)
             (fmakunbound 'nixpkgs--decrement-buffer-count))))
       (setq nixpkgs--buffer-count (1+ nixpkgs--buffer-count))
-      (make-local-variable 'kill-buffer-hook)
-      (add-hook 'kill-buffer-hook 'nixpkgs--decrement-buffer-count)
+      (add-hook 'kill-buffer-hook 'nixpkgs--decrement-buffer-count nil t)
 
       ; Add packages to PATH and exec-path
       (make-local-variable 'process-environment)
@@ -41,6 +41,9 @@
       (inherit-local 'process-environment)
       (setenv "PATH" (concat "${lib.makeSearchPath "bin" pkgs}:" (getenv "PATH")))
       (inherit-local-permanent exec-path (append '(${builtins.concatStringsSep " " (map (p: "\"${p}/bin\"") pkgs)}) exec-path))
+
+      (setq nixpkgs--is-nixpkgs-buffer t)
+      (inherit-local 'nixpkgs--is-nixpkgs-buffer)
 
       ${lib.concatStringsSep "\n" extras}
     '';

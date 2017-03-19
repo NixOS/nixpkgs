@@ -29,6 +29,7 @@
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
@@ -272,6 +273,7 @@
   ./services/misc/gogs.nix
   ./services/misc/gpsd.nix
   #./services/misc/ihaskell.nix
+  ./services/misc/irkerd.nix
   ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
@@ -328,10 +330,12 @@
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix
+  ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/snmp-exporter.nix
+  ./services/monitoring/prometheus/unifi-exporter.nix
   ./services/monitoring/prometheus/varnish-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
@@ -571,6 +575,7 @@
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
+  ./services/x11/display-managers/xpra.nix
   ./services/x11/hardware/libinput.nix
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix

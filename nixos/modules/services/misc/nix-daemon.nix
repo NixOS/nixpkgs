@@ -8,6 +8,8 @@ let
 
   nix = cfg.package.out;
 
+  isNix112 = versionAtLeast (getVersion nix) "1.12pre4997";
+
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
       description = "Nix build user ${toString nr}";
@@ -162,22 +164,23 @@ in
       buildMachines = mkOption {
         type = types.listOf types.attrs;
         default = [];
-        example = [
-          { hostName = "voila.labs.cs.uu.nl";
-            sshUser = "nix";
-            sshKey = "/root/.ssh/id_buildfarm";
-            system = "powerpc-darwin";
-            maxJobs = 1;
-          }
-          { hostName = "linux64.example.org";
-            sshUser = "buildfarm";
-            sshKey = "/root/.ssh/id_buildfarm";
-            system = "x86_64-linux";
-            maxJobs = 2;
-            supportedFeatures = [ "kvm" ];
-            mandatoryFeatures = [ "perf" ];
-          }
-        ];
+        example = literalExample ''
+          [ { hostName = "voila.labs.cs.uu.nl";
+              sshUser = "nix";
+              sshKey = "/root/.ssh/id_buildfarm";
+              system = "powerpc-darwin";
+              maxJobs = 1;
+            }
+            { hostName = "linux64.example.org";
+              sshUser = "buildfarm";
+              sshKey = "/root/.ssh/id_buildfarm";
+              system = "x86_64-linux";
+              maxJobs = 2;
+              supportedFeatures = [ "kvm" ];
+              mandatoryFeatures = [ "perf" ];
+            }
+          ]
+        '';
         description = ''
           This option lists the machines to be used if distributed
           builds are enabled (see
@@ -380,7 +383,9 @@ in
 
     nix.envVars =
       { NIX_CONF_DIR = "/etc/nix";
+      }
 
+      // optionalAttrs (!isNix112) {
         # Enable the copy-from-other-stores substituter, which allows
         # builds to be sped up by copying build results from remote
         # Nix stores.  To do this, mount the remote file system on a
@@ -389,9 +394,11 @@ in
       }
 
       // optionalAttrs cfg.distributedBuilds {
-        NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
-        NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
-        NIX_CURRENT_LOAD = "/run/nix/current-load";
+        NIX_BUILD_HOOK =
+          if isNix112 then
+            "${nix}/libexec/nix/build-remote"
+          else
+            "${nix}/libexec/nix/build-remote.pl";
       };
 
     # Set up the environment variables for running Nix.

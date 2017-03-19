@@ -43,7 +43,6 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Whether of not to enable Compton as the X.org composite manager.
       '';
@@ -52,7 +51,6 @@ in {
     fade = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Fade windows in and out.
       '';
@@ -93,7 +91,6 @@ in {
     shadow = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Draw window shadows.
       '';

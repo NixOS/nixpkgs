@@ -66,6 +66,8 @@ rec {
 
   git-imerge = callPackage ./git-imerge { };
 
+  git-octopus = callPackage ./git-octopus { };
+
   git-radar = callPackage ./git-radar { };
 
   git-remote-hg = callPackage ./git-remote-hg { };

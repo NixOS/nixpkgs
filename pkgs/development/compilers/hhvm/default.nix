@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
   # work around broken build system
   NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 
+  # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+  # (setting it to an absolute path causes include files to go to $out/$out/include,
+  #  because the absolute path is interpreted with root at $out).
+  cmakeFlags = "-DCMAKE_INSTALL_INCLUDEDIR=include";
+
   prePatch = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \
       --replace /bin/bash ${stdenv.shell}

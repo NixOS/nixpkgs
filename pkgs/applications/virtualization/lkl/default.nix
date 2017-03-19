@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as extensively as possible with minimal effort and reduced maintenance overhead";
-    platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
+    platforms   = [ "x86_64-linux" ]; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
     maintainers = with maintainers; [ copumpkin ];
   };

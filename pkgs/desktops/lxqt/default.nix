@@ -71,7 +71,7 @@ let
       pkgs.lxmenu-data
       pkgs.menu-cache
       pkgs.openbox # default window manager
-      qt5.qtsvg # provides QT5 plugins for svg icons
+      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
     ];
 
     corePackages = [

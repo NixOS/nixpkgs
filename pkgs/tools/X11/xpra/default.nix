@@ -3,7 +3,8 @@
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama
-, gst_all_1, pulseaudioLight, gobjectIntrospection }:
+, gst_all_1, pulseaudioLight, gobjectIntrospection
+, pam }:
 
 with lib;
 
@@ -36,34 +37,29 @@ in buildPythonApplication rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
 
+    pam
+
     makeWrapper
   ];
 
   propagatedBuildInputs = with python2Packages; [
     pillow pygtk pygobject2 rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy websockify pygobject3 gst-python
+    netifaces numpy websockify pygobject3 gst-python pam
   ];
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
+    substituteInPlace xpra/server/auth/pam.py --replace "/lib/libpam.so.1" "${pam}/lib/libpam.so"
   '';
   setupPyBuildFlags = ["--with-Xdummy" "--without-strict"];
 
-  preInstall = ''
-    # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
-    ${python}/bin/${python.executable} setup.py install_data --install-dir=$out --root=$out
-    sed -i '/ = data_files/d' setup.py
-  '';
-
   postInstall = ''
     wrapProgram $out/bin/xpra \
-      --set FONTCONFIG_FILE "${fontsConf}" \
-      --set XPRA_LOG_DIR "\$HOME/.xpra" \
       --set XPRA_INSTALL_PREFIX "$out" \
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
       --set GST_PLUGIN_SYSTEM_PATH_1_0 "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]} \
+      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib  \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudioLight ]}
   '';
 
   preCheck = "exit 0";

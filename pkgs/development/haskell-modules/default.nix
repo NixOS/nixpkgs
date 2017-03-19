@@ -56,7 +56,7 @@ let
 
       haskellSrc2nix = { name, src, sha256 ? null }:
         let
-          sha256Arg = if isNull sha256 then "" else ''--sha256="${sha256}"'';
+          sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
         in pkgs.stdenv.mkDerivation {
           name = "cabal2nix-${name}";
           buildInputs = [ pkgs.cabal2nix ];
@@ -84,7 +84,14 @@ let
         callHackage = name: version: self.callPackage (hackage2nix name version);
 
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
-        callCabal2nix = name: src: self.callPackage (haskellSrc2nix { inherit src name; });
+        callCabal2nix = name: src: args:
+          let
+            # Filter out files other than the cabal file. This ensures
+            # that we don't create new derivations even when the cabal
+            # file hasn't changed.
+            justCabal = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+            drv = self.callPackage (haskellSrc2nix { inherit name; src = justCabal; }) args;
+          in overrideCabal drv (drv': { inherit src; }); # Restore the desired src.
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

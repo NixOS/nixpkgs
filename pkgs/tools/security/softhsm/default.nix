@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "softhsm-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://dist.opendnssec.org/source/${name}.tar.gz";
-    sha256 = "0399b06f196fbfaebe73b4aeff2e2d65d0dc1901161513d0d6a94f031dcd827e";
+    sha256 = "1xw53zkv5xb9pxa8q84kh505yd6pkavxd12x2fjgqi6s12p2hsgb";
   };
 
   configureFlags = [

@@ -7,8 +7,9 @@
   kdelibs4support, kdesu, kglobalaccel, kidletime, kjsembed, knewstuff,
   knotifyconfig, kpackage, krunner, ktexteditor, ktextwidgets, kwallet,
   kwayland, kwin, kxmlrpcclient, libkscreen, libksysguard, networkmanager-qt,
-  phonon, plasma-framework, qtgraphicaleffects, qtquickcontrols, qtscript,
-  qtx11extras, solid, isocodes, libdbusmenu, libSM, libXcursor, pam, wayland
+  phonon, plasma-framework, qtgraphicaleffects, qtquickcontrols,
+  qtquickcontrols2, qtscript, qtx11extras, solid, isocodes, libdbusmenu, libSM,
+  libXcursor, pam, wayland
 }:
 
 plasmaPackage {
@@ -20,8 +21,8 @@ plasmaPackage {
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage krunner ktexteditor ktextwidgets kwallet kwayland
     kwin kxmlrpcclient libkscreen libksysguard networkmanager-qt phonon
-    plasma-framework qtgraphicaleffects qtquickcontrols qtscript qtx11extras
-    solid isocodes libdbusmenu libSM libXcursor pam wayland
+    plasma-framework qtgraphicaleffects qtquickcontrols qtquickcontrols2
+    qtscript qtx11extras solid isocodes libdbusmenu libSM libXcursor pam wayland
   ];
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

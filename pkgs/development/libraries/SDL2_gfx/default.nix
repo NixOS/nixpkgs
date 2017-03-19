@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 ];
 
-  configureFlags = [ "--enable-mmx" ];
+  configureFlags = if stdenv.isi686 || stdenv.isx86_64 then "--enable-mmx" else "--disable-mmx";
 
   meta = with stdenv.lib; {
     description = "SDL graphics drawing primitives and support functions";

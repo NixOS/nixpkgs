@@ -12,7 +12,6 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether to enable the BOINC distributed computing client. If this
           option is set to true, the boinc_client daemon will be run as a
@@ -41,7 +40,6 @@ in
       allowRemoteGuiRpc = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           If set to true, any remote host can connect to and control this BOINC
           client (subject to password authentication). If instead set to false,

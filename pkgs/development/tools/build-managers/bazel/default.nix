@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, zip, unzip, which, bash, binutils, coreutils, makeWrapper }:
+{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -22,24 +22,16 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   postPatch = ''
-    patchShebangs .
+    for f in $(grep -l -r '#!/bin/bash'); do
+      substituteInPlace "$f" --replace '#!/bin/bash' '#!${bash}/bin/bash'
+    done
     for f in \
       src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java \
       src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java \
-      src/test/java/com/google/devtools/build/lib/shell/CommandTest.java \
-      src/test/java/com/google/devtools/build/lib/shell/InterruptibleTest.java \
-      src/test/java/com/google/devtools/build/lib/shell/LoadTest.java \
-      src/test/java/com/google/devtools/build/lib/skylark/SkylarkRuleImplementationFunctionsTest.java \
-      src/test/java/com/google/devtools/build/lib/standalone/StandaloneSpawnStrategyTest.java
-    do
-      substituteInPlace $f \
-        --replace /bin/bash ${bash}/bin/bash \
-        --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /bin/echo ${coreutils}/bin/echo \
-        --replace /bin/false ${coreutils}/bin/false \
-        --replace /bin/pwd ${coreutils}/bin/pwd \
-        --replace /bin/sleep ${coreutils}/bin/sleep \
-        --replace /bin/true ${coreutils}/bin/true
+      src/main/java/com/google/devtools/build/lib/bazel/rules/sh/BazelShRuleClasses.java \
+      src/main/java/com/google/devtools/build/lib/rules/cpp/LinkCommandLine.java \
+      ; do
+      substituteInPlace "$f" --replace /bin/bash ${bash}/bin/bash
     done
   '';
 
@@ -49,8 +41,6 @@ stdenv.mkDerivation rec {
     jdk
     zip
     unzip
-    which
-    binutils
     makeWrapper
   ];
 
@@ -59,7 +49,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     bash
-    coreutils
   ];
 
   # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
@@ -81,10 +70,12 @@ stdenv.mkDerivation rec {
         examples/java-native/src/test/java/com/example/myproject:hello
   '';
 
+  # Bazel expects gcc and java to be in the path.
+
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --prefix PATH : "${jdk}/bin"
+    wrapProgram "$out/bin/bazel" --prefix PATH : "${stdenv.cc}/bin:${jdk}/bin"
   '';
 
   dontStrip = true;

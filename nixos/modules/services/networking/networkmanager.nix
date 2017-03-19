@@ -24,6 +24,8 @@ let
 
     [connection]
     ipv6.ip6-privacy=2
+    ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
+    wifi.cloned-mac-address=${cfg.wifi.macAddress}
   '';
 
   /*
@@ -71,6 +73,19 @@ let
     "basic" = "";
     "pre-up" = "pre-up.d/";
     "pre-down" = "pre-down.d/";
+  };
+
+  macAddressOpt = mkOption {
+    type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+    default = "preserve";
+    example = "00:11:22:33:44:55";
+    description = ''
+      "XX:XX:XX:XX:XX:XX": MAC address of the interface.
+      <literal>permanent</literal>: use the permanent MAC address of the device.
+      <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
+      <literal>random</literal>: generate a randomized value upon each connect.
+      <literal>stable</literal>: generate a stable, hashed MAC address.
+    '';
   };
 
 in {
@@ -139,6 +154,9 @@ in {
           the ones configured in NetworkManager or received by DHCP.
         '';
       };
+
+      ethernet.macAddress = macAddressOpt;
+      wifi.macAddress = macAddressOpt;
 
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
@@ -229,6 +247,7 @@ in {
 
     systemd.services."network-manager" = {
       wantedBy = [ "network.target" ];
+      restartTriggers = [ configFile ];
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections

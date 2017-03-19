@@ -6,7 +6,7 @@
 with lib;
 
 let
-  v = "4.9.0";
+  v = "4.9.1";
 in
 
 assert withQt5 -> qtbase != null;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${v}/phonon-${v}.tar.xz";
-    sha256 = "1q5hvsk4sfcb91625wcmldy7kgjmfpmpmkgzi6mxkqdd307v8x5v";
+    sha256 = "177647r2jqfm32hqcz2nqfqv6v48hn5ab2vc31svba2wz23fkgk7";
   };
 
   buildInputs =

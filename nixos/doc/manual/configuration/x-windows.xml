@@ -25,7 +25,7 @@ Otherwise, you can only log into a plain undecorated
 <command>xterm</command> window.  Thus you should pick one or more of
 the following lines:
 <programlisting>
-services.xserver.desktopManager.kde5.enable = true;
+services.xserver.desktopManager.plasma5.enable = true;
 services.xserver.desktopManager.xfce.enable = true;
 services.xserver.desktopManager.gnome3.enable = true;
 services.xserver.windowManager.xmonad.enable = true;

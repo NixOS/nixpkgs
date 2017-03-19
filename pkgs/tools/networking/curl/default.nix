@@ -21,11 +21,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.53.0";
+  name = "curl-7.53.1";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "008833dd9w4l2277q9r0bsq1vqmm0fr7qqyzvqlw5d47xy5mld5j";
+    sha256 = "1s1hyndva0yp62xy96pcp4anzrvw6cl0abjajim17sbmdp00fwhw";
   };
 
   patches = [ ];
@@ -57,7 +57,9 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
+      # OS X does not have a default system bundle, so we assume cacerts is installed in the default nix-env profile
+      # This sucks. We should probably just include the latest cacerts in the darwin bootstrap.
+      "--with-ca-bundle=${if stdenv.isDarwin then "/nix/var/nix/profiles/default" else ""}/etc/ssl/certs/ca-${if stdenv.isDarwin then "bundle" else "certificates"}.crt"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )

@@ -1,0 +1,18 @@
+diff --git a/yasr.conf b/yasr.conf
+index 1e07fc6..72f5922 100644
+--- a/yasr.conf
++++ b/yasr.conf
+@@ -59,11 +59,11 @@ synthesizer=emacspeak server
+ #synthesizer=speech dispatcher
+ #synthesizer port=S0
+ #synthesizer port=l0
+-synthesizer port=|/usr/local/bin/eflite
++synthesizer port=|eflite
+ # Below line appropriate for Speech Dispatcher in its default configuration
+ #synthesizer port=127.0.0.1:6560
+ key echo=off
+-shell=/bin/bash
++shell=/bin/sh
+ special=off
+ up and down arrows=speak line
+ DisableKey=6925

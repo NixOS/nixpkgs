@@ -1,0 +1,17 @@
+Index: qtbase-opensource-src-5.5.1/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
+===================================================================
+--- qtbase-opensource-src-5.5.1.orig/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
++++ qtbase-opensource-src-5.5.1/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
+@@ -563,7 +563,12 @@ void (*QGLXContext::getProcAddress(const
+             {
+                 extern const QString qt_gl_library_name();
+ //                QLibrary lib(qt_gl_library_name());
++                // Check system library paths first
+                 QLibrary lib(QLatin1String("GL"));
++                if (!lib.load()) {
++                    // Fallback to Mesa driver
++                    lib.setFileName(QLatin1String("@mesa_lib@/lib/libGL"));
++                }
+                 glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
+             }
+         }

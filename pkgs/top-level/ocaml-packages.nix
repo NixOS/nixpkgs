@@ -53,6 +53,8 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bos = callPackage ../development/ocaml-modules/bos { };
+
     bitstring =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/bitstring { }
@@ -138,6 +140,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cpuid = callPackage ../development/ocaml-modules/cpuid { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     cstruct = callPackage ../development/ocaml-modules/cstruct {
@@ -193,6 +197,8 @@ let
     };
 
     fpath = callPackage ../development/ocaml-modules/fpath { };
+
+    functoria = callPackage ../development/ocaml-modules/functoria { };
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
@@ -261,7 +267,7 @@ let
       else lambdaTerm-1_6;
 
     llvm = callPackage ../development/ocaml-modules/llvm {
-      llvm = pkgs.llvm_37;
+      llvm = pkgs.llvm_39;
     };
 
     logs = callPackage ../development/ocaml-modules/logs {
@@ -336,6 +342,8 @@ let
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
+    ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
+
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
@@ -375,6 +383,8 @@ let
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
+
+    ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
@@ -473,6 +483,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_deriving {}
       else null;
 
+    ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
+
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
     ppx_tools =
@@ -489,6 +501,8 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     re = callPackage ../development/ocaml-modules/re { };
+
+    rresult = callPackage ../development/ocaml-modules/rresult { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
@@ -717,14 +731,18 @@ let
       else core_extended_p4;
 
     async_kernel =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/async_kernel-113_33_00.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-kernel.nix {}
       else async_kernel_p4;
 
     async_rpc_kernel = callPackage ../development/ocaml-modules/janestreet/async-rpc-kernel.nix {};
 
     async_unix =
-      if lib.versionOlder "4.02" ocaml.version
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/janestreet/async_unix-113_33_00.nix {}
+      else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async-unix.nix {}
       else async_unix_p4;
 
@@ -743,8 +761,6 @@ let
     wyrd = callPackage ../tools/misc/wyrd { };
 
     haxe = callPackage ../development/compilers/haxe { };
-
-    ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 

@@ -24,10 +24,10 @@ rec {
   traceValSeq = v: traceVal (builtins.deepSeq v v);
 
   # this can help debug your code as well - designed to not produce thousands of lines
-  traceShowVal = x : trace (showVal x) x;
+  traceShowVal = x: trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
-  attrNamesToStr = a : lib.concatStringsSep "; " (map (x : "${x}=") (attrNames a));
-  showVal = x :
+  attrNamesToStr = a: lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a));
+  showVal = x:
       if isAttrs x then
           if x ? outPath then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
           else "x is attr set { ${attrNamesToStr x} }"
@@ -43,9 +43,9 @@ rec {
 
   # trace the arguments passed to function and its result
   # maybe rewrite these functions in a traceCallXml like style. Then one function is enough
-  traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
-  traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
-  traceCall3 = n : f : a : b : c : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
+  traceCall  = n: f: a: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
+  traceCall2 = n: f: a: b: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
+  traceCall3 = n: f: a: b: c: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
   # FIXME: rename this?
   traceValIfNot = c: x:
@@ -71,7 +71,7 @@ rec {
 
   # create a test assuming that list elements are true
   # usage: { testX = allTrue [ true ]; }
-  testAllTrue = expr : { inherit expr; expected = map (x: true) expr; };
+  testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
 
   strict = v:
     trace "Warning: strict is deprecated and will be removed in the next release"

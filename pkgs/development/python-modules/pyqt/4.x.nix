@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pythonPackages, qt4, pkgconfig, lndir, dbus_libs, makeWrapper }:
 
 let
-  version = "4.11.3";
+  version = "4.12";
   inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
 in mkPythonDerivation {
   name = "PyQt-x11-gpl-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
-    sha256 = "11jnfjw79s0b0qdd9s6kd69w87vf16dhagbhbmwbmrp2vgf80dw5";
+    url = "mirror://sourceforge/pyqt/PyQt4_gpl_x11-${version}.tar.gz";
+    sha256 = "1nw8r88a5g2d550yvklawlvns8gd5slw53yy688kxnsa65aln79w";
   };
 
   configurePhase = ''

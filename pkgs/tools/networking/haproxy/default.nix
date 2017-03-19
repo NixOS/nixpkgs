@@ -3,20 +3,20 @@
 stdenv.mkDerivation rec {
   pname = "haproxy";
   majorVersion = "1.7";
-  minorVersion = "2";
+  minorVersion = "3";
   version = "${majorVersion}.${minorVersion}";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.haproxy.org/download/${majorVersion}/src/${name}.tar.gz";
-    sha256 = "0bsb5q3s1k5gqybv5p8zyvl6zh8iyidv3jb3wfmgwqad5bsl0nzr";
+    sha256 = "ebb31550a5261091034f1b6ac7f4a8b9d79a8ce2a3ddcd7be5b5eb355c35ba65";
   };
 
   buildInputs = [ openssl zlib ];
 
-  # TODO: make it work on darwin/bsd as well
+  # TODO: make it work on bsd as well
   preConfigure = ''
-    export makeFlags="TARGET=${if stdenv.isSunOS then "solaris" else "linux2628"} PREFIX=$out USE_OPENSSL=yes USE_ZLIB=yes"
+    export makeFlags="TARGET=${if stdenv.isSunOS then "solaris" else if stdenv.isLinux then "linux2628" else "generic"} PREFIX=$out USE_OPENSSL=yes USE_ZLIB=yes ${stdenv.lib.optionalString stdenv.isDarwin "CC=cc USE_KQUEUE=1"}"
   '';
 
   meta = {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://haproxy.1wt.eu;
     maintainers = [ stdenv.lib.maintainers.garbas ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     license = stdenv.lib.licenses.gpl2;
   };
 }

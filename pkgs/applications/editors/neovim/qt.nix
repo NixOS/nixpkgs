@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, doxygen
-, libmsgpack, makeWrapper, neovim, pythonPackages, qtbase }:
+, libmsgpack, makeQtWrapper, neovim, pythonPackages, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner  = "equalsraf";
     repo   = "neovim-qt";
     rev    = "v${version}";
-    sha256 = "0yf9wwkl0lbbj3vyf8hxnlsk7jhk5ggivszyqxply69dbar9ww59";
+    sha256 = "1wsxhy8fdayy4dsr2dxgh5k4jysybjlyzj134vk325v6cqz9bsgm";
   };
 
   cmakeFlags = [
@@ -17,23 +17,28 @@ stdenv.mkDerivation rec {
     "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
   ];
 
-  doCheck = false; # 5 out of 7 fail
+  doCheck = true;
 
   buildInputs = with pythonPackages; [
-    qtbase libmsgpack
+    neovim qtbase libmsgpack
   ] ++ (with pythonPackages; [
     jinja2 msgpack python
   ]);
 
-  nativeBuildInputs = [ cmake doxygen makeWrapper ];
+  nativeBuildInputs = [ cmake doxygen makeQtWrapper ];
 
   enableParallelBuilding = true;
 
-  # avoid cmake trying to download libmsgpack
-  preConfigure = "echo \"\" > third-party/CMakeLists.txt";
+  preConfigure = ''
+    # avoid cmake trying to download libmsgpack
+    echo "" > third-party/CMakeLists.txt
+    # we rip out the gui test as spawning a GUI fails in our build environment
+    sed -i '/^add_xtest_gui/d' test/CMakeLists.txt
+  '';
 
   postInstall = ''
-    wrapProgram "$out/bin/nvim-qt" --prefix PATH : "${neovim}/bin"
+    wrapQtProgram "$out/bin/nvim-qt" \
+      --prefix PATH : "${neovim}/bin"
   '';
 
   meta = with stdenv.lib; {

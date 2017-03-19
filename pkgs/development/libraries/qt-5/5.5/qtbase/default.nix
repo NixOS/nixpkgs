@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
-    ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
+    ++ lib.optionals mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
   postPatch =
     ''
@@ -269,6 +269,12 @@ stdenv.mkDerivation {
               done
           popd
       fi
+    ''
+
+    # fixup .pc file (where to find 'moc' etc.)
+    + lib.optionalString (!stdenv.isDarwin) ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
     '';
 
   inherit lndir;

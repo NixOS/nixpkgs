@@ -65,7 +65,7 @@ self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
     mtl = super.mtl_2_2_1;
     transformers = super.transformers_0_4_3_0;
-    haskeline = self.haskeline_0_7_2_1;
+    haskeline = self.haskeline_0_7_3_1;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
   })) (drv: {});
 

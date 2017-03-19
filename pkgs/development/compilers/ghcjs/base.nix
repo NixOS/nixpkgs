@@ -1,4 +1,5 @@
 { mkDerivation
+, lib
 , broken ? false
 , test-framework
 , test-framework-hunit
@@ -94,6 +95,11 @@
   ]
 
 , stage2 ? import ./stage2.nix
+
+, patches ? [ ./ghcjs.patch ]
+
+# used for resolving compiler plugins
+, ghcLibdir ? null
 }:
 let
   inherit (bootPkgs) ghc;
@@ -122,7 +128,7 @@ in mkDerivation (rec {
   testDepends = [
     HUnit test-framework test-framework-hunit
   ];
-  patches = [ ./ghcjs.patch ];
+  inherit patches;
   postPatch = ''
     substituteInPlace Setup.hs \
       --replace "/usr/bin/env" "${coreutils}/bin/env"
@@ -165,6 +171,8 @@ in mkDerivation (rec {
         --with-cabal ${cabal-install}/bin/cabal \
         --with-gmp-includes ${gmp.dev}/include \
         --with-gmp-libraries ${gmp.out}/lib
+  '' + lib.optionalString (ghcLibdir != null) ''
+    printf '%s' '${ghcLibdir}' > "$out/lib/ghcjs-${version}/ghc_libdir"
   '';
   passthru = {
     inherit bootPkgs;

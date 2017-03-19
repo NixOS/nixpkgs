@@ -177,7 +177,7 @@ foreach my $u (@{$spec->{users}}) {
     }
 
     # Create a home directory.
-    if ($u->{createHome} && ! -e $u->{home}) {
+    if ($u->{createHome}) {
         make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
     }

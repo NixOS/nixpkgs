@@ -73,7 +73,7 @@ let
               if(versionSpec == "latest" || versionSpec == "unstable" ||
                   versionSpec.substr(0, 2) == ".." || dependency.substr(0, 2) == "./" || dependency.substr(0, 2) == "~/" || dependency.substr(0, 1) == '/')
                   return '*';
-              else if(parsedUrl.protocol == "git:" || parsedUrl.protocol == "git+ssh:" || parsedUrl.protocol == "git+http:" || parsedUrl.protocol == "git+https:" ||
+              else if(parsedUrl.protocol == "git:" || parsedUrl.protocol == "git+ssh:" || parsedUrl.protocol == "git+http:" || parsedUrl.protocol == "git+https:" || parsedUrl.protocol == "github:" ||
                   parsedUrl.protocol == "http:" || parsedUrl.protocol == "https:")
                   return '*';
               else

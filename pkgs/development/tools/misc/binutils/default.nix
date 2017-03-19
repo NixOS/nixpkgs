@@ -2,7 +2,7 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
-let basename = "binutils-2.27"; in
+let basename = "binutils-2.28"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "125clslv17xh1sab74343fg6v31msavpmaa1c1394zsqa773g5rn";
+    sha256 = "0wiasgns7i8km8nrxas265sh2dfpsw93b3qw195ipc90w4z475v2";
   };
 
   patches = [
@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
-
-  postFixup = optionalString (cross == null) "ln -s $out/bin $dev/bin"; # tools needed for development
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";

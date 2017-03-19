@@ -130,6 +130,7 @@ in {
         ExecStart = "${cfg.package}/bin/neo4j console";
         User = "neo4j";
         PermissionsStartOnly = true;
+        LimitNOFILE = 40000;
       };
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}/{data/graph.db,conf,logs}

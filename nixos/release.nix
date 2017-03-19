@@ -1,6 +1,6 @@
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" "i686-linux" "aarch64-linux" ]
 }:
 
 with import ../lib;
@@ -255,7 +255,7 @@ in rec {
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
-  tests.kde5 = callTest tests/kde5.nix {};
+  tests.plasma5 = callTest tests/plasma5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.keystone = callTest tests/keystone.nix {};
@@ -302,6 +302,7 @@ in rec {
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
+  tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
 
 
@@ -327,7 +328,7 @@ in rec {
     kde = makeClosure ({ pkgs, ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
-        services.xserver.desktopManager.kde5.enable = true;
+        services.xserver.desktopManager.plasma5.enable = true;
       });
 
     xfce = makeClosure ({ pkgs, ... }:

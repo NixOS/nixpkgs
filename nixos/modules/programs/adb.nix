@@ -10,7 +10,6 @@ with lib;
     programs.adb = {
       enable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to configure system to use Android Debug Bridge (adb).

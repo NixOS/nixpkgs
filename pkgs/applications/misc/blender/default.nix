@@ -2,7 +2,7 @@
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg_1, python
-, zlib, fftw, opensubdiv, freetype, jemalloc
+, zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit
 , colladaSupport ? true, opencollada
@@ -29,9 +29,10 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada;
 
-  postUnpack =
+  postPatch =
     ''
-      substituteInPlace */doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
+      substituteInPlace doc/manpage/blender.1.py --replace /usr/bin/python ${python}/bin/python3
+      substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '';
 
   cmakeFlags =

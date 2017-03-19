@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ stdenv, fetchFromGitHub, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "tty-clock-${version}";
-  version = "0.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "xorg62";
     repo = "tty-clock";
-    rev = "v0.1";
-    sha256 = "14h70ky5y9nb3mzhlshdgq5n47hg3g6msnwbqd7nnmjzrw1nmarl";
+    rev = "v${version}";
+    sha256 = "16v3pmva13skpfjja96zacjpxrwzs1nb1iqmrp2qzvdbcm9061pp";
   };
-
+  
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ];
 
-  preInstall = ''
-    sed -i 's@/usr/local/@$(out)/@' Makefile
-  '';
+  makeFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/xorg62/tty-clock;
