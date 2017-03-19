@@ -574,7 +574,9 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
-  autogen = callPackage ../development/tools/misc/autogen { };
+  autogen = callPackage ../development/tools/misc/autogen {
+    guile = guile_2_0;
+  };
 
   autojump = callPackage ../tools/misc/autojump { };
 
@@ -5791,6 +5793,9 @@ with pkgs;
   groovy = callPackage ../development/interpreters/groovy { };
 
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
+
+  # Needed for autogen
+  guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
 
   guile_2_2 = callPackage ../development/interpreters/guile { };
 
