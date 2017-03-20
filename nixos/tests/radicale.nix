@@ -48,8 +48,9 @@ ht.save()
     '';
   };
 
-in import ./make-test.nix {
+in import ./make-test.nix ({ lib, ... }: {
   name = "radicale";
+  meta.maintainers = with lib.maintainers; [ aneeshusa ];
 
   # Test radicale with bcrypt-based htpasswd authentication
   nodes = {
@@ -76,4 +77,4 @@ in import ./make-test.nix {
       $machine->succeed('curl -s http://someuser:really_secret_password@127.0.0.1:${builtins.toString port}/someuser/calendar.ics/');
     }
   '';
-}
+})
