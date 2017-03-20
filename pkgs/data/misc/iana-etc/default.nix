@@ -1,17 +1,18 @@
-{stdenv, fetchurl}:
+{ stdenv, cacert, curl }:
+
 
 stdenv.mkDerivation rec {
-  name = "iana-etc-2.30";
 
-  src = fetchurl {
-    url = "http://sethwklein.net/${name}.tar.bz2";
-    sha256 = "03gjlg5zlwsdk6qyw3v85l129rna5bpm4m7pzrp864h0n97qg9mr";
-  };
-
-  preInstall = "installFlags=\"PREFIX=$out\"";
-
+  name = "iana-etc-${version}";
+  version = "20170321";
+  
+  phases = [ "buildPhase" ];
+  buildInputs = [ cacert curl ];
+  builder = ./builder.sh;
+  
+  
   meta = {
-    homepage = http://sethwklein.net/iana-etc;
+    homepage = https://www.iana.org/;
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
     platforms = stdenv.lib.platforms.unix;
   };

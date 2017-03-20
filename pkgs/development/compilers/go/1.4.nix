@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana_etc, libcCross
+{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
 , pkgconfig
 , pcre
 , Security }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     # ParseInLocation fails the test
     sed -i '/TestParseInSydney/areturn' src/time/format_test.go
 
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
 

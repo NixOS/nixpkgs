@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, go_bootstrap, runCommand
+{ stdenv, lib, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre
 , Security, Foundation, bash }:
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
     # Remove the timezone naming test
     sed -i '/TestLoadFixed/areturn' src/time/time_test.go
 
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
-    sed -i 's,/etc/services,${iana_etc}/etc/services,' src/net/port_unix.go
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
+    sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + lib.optionalString stdenv.isDarwin ''
