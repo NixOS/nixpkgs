@@ -1,22 +1,24 @@
 { stdenv, fetchurl, libxml2Python, libxslt, makeWrapper
 , python, pyserial, pygtk
 }:
-
+let
+  version = "20161018";
+in
 stdenv.mkDerivation rec {
   name = "chirp-daily-${version}";
-  version = "20170311";
+  inherit version;
 
   src = fetchurl {
-    url = "http://trac.chirp.danplanet.com/chirp_daily/daily-${version}/${name}.tar.gz";
-    sha256 = "0mvj650vm3bfk94b174gl99fj4jigrx38f1iciz1cp3gn8hcrcpj";
+    url = "http://trac.chirp.danplanet.com/chirp_daily/daily-${version}/chirp-daily-${version}.tar.gz";
+    sha256 = "0f3r919az4vvcgxzqmxvhrxa2byzk5algy7srzzs15ihkvyxcwkb";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
+    makeWrapper
     pyserial pygtk libxml2Python libxslt pyserial
   ];
 
-  # phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/chirp
