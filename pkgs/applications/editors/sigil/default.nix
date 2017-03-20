@@ -6,10 +6,10 @@
 
 stdenv.mkDerivation rec {
   name = "sigil-${version}";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
-    sha256 = "0hihd5f3avpdvxwp5j80qdg74zbw7p20y6j9q8cw7wd0bak58h9c";
+    sha256 = "17m2f7pj2sx5rxrbry6wk1lvviy8fi2m270h47sisywnrhddarh7";
     rev = version;
     repo = "Sigil";
     owner = "Sigil-Ebook";
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with python3Packages; [ lxml ];
 
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+
   buildInputs = [
-    cmake pkgconfig
     boost xercesc qtbase qttools qtwebkit qtxmlpatterns
-    python3 python3Packages.lxml makeWrapper
-  ];
+    python3 python3Packages.lxml ];
 
   preFixup = ''
     wrapProgram "$out/bin/sigil" \
@@ -32,12 +32,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free, open source, multi-platform ebook (ePub) editor";
     homepage = https://github.com/Sigil-Ebook/Sigil/;
-    license = stdenv.lib.licenses.gpl3;
-    inherit version;
-    maintainers = with stdenv.lib.maintainers; [ ramkromberg ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl3;
+    maintainers =[ maintainers.ramkromberg ];
+    platforms = platforms.linux;
   };
 }
