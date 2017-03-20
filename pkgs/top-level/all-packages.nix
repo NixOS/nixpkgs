@@ -14717,6 +14717,8 @@ with pkgs;
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
+  pijul = callPackage ../applications/version-management/pijul {};
+
   planner = callPackage ../applications/office/planner { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
