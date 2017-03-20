@@ -1,11 +1,12 @@
 { stdenv, fetchurl, python, rcs, git }:
 
 stdenv.mkDerivation rec {
-  name = "src-1.11";
+  name = "src-${version}";
+  version = "1.12";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "07kj0ri0s0vn8s54yvkyzaag332spxs0379r718b80y31c4mgbyl";
+    sha256 = "1m6rjbizx9win3jkciyx176sfy98r5arb1g3l6aqnqam9gpr44zm";
   };
 
   buildInputs = [ python rcs git ];
@@ -16,10 +17,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple single-file revision control";
     homepage = http://www.catb.org/~esr/src/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ calvertvl ];
   };
 }
