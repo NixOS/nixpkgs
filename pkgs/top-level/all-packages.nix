@@ -2727,6 +2727,8 @@ with pkgs;
 
   libevhtp = callPackage ../development/libraries/libevhtp { };
 
+  libfann = callPackage ../development/libraries/libfann { };
+
   libircclient = callPackage ../development/libraries/libircclient { };
 
   libite = callPackage ../development/libraries/libite { };
