@@ -2255,9 +2255,12 @@ with pkgs;
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
-  highlight = callPackage ../tools/text/highlight {
+  highlight = callPackage ../tools/text/highlight ({
     lua = lua5;
-  };
+  } // lib.optionalAttrs stdenv.isDarwin {
+    # doesn't build with clang_37
+    inherit (llvmPackages_38) stdenv;
+  });
 
   homesick = callPackage ../tools/misc/homesick { };
 
@@ -4378,6 +4381,10 @@ with pkgs;
 
   html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
 
+  htmldoc = callPackage ../tools/typesetting/htmldoc {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
+  };
+
   rcm = callPackage ../tools/misc/rcm {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
@@ -5377,6 +5384,7 @@ with pkgs;
   lld = llvmPackages_4.lld;
 
   lldb = llvmPackages.lldb;
+  lldb_4 = llvmPackages_4.lldb;
 
   llvm = llvmPackages.llvm;
 
@@ -7192,6 +7200,8 @@ with pkgs;
 
   cracklib = callPackage ../development/libraries/cracklib { };
 
+  cre2 = callPackage ../development/libraries/cre2 { };
+
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
@@ -8906,6 +8916,8 @@ with pkgs;
   linenoise = callPackage ../development/libraries/linenoise { };
 
   lirc = callPackage ../development/libraries/lirc { };
+
+  liquid-dsp = callPackage ../development/libraries/liquid-dsp { };
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
@@ -13976,10 +13988,6 @@ with pkgs;
   };
 
   ht = callPackage ../applications/editors/ht { };
-
-  htmldoc = callPackage ../applications/misc/htmldoc {
-    fltk = fltk13;
-  };
 
   hugin = callPackage ../applications/graphics/hugin { };
 

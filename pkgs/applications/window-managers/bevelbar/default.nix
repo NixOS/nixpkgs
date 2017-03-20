@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXrandr libXft ];
 
-  makeFlags = [ "prefix=$(out)" ];
   installFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {

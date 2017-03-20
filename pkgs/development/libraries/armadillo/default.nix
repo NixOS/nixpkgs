@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DDETECT_HDF5=ON" ];
 
  patches = [ ./use-unix-config-on-OS-X.patch ];
-  
+
   meta = with stdenv.lib; {
     description = "C++ linear algebra library";
     homepage = http://arma.sourceforge.net;
-    license = licenses.apl2;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ juliendehos knedlsepp ];
   };
