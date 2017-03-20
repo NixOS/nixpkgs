@@ -52,6 +52,11 @@ rec {
       patch = ./bridge-stp-helper.patch;
     };
 
+  p9_fixes =
+    { name = "p9-fixes";
+      patch = ./p9-fixes.patch;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
