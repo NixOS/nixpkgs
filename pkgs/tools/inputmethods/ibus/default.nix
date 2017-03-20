@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  outputs = [ "out" "dev" ];
+
   preConfigure = ''
     # Fix hard-coded installation paths, so make does not try to overwrite our
     # Python installation.
