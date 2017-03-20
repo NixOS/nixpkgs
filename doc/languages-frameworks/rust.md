@@ -71,7 +71,7 @@ and create a symbolic link to the file
 in the `~/.config/nixpkgs/overlays` directory.
 
     $ git clone https://github.com/mozilla/nixpkgs-mozilla.git
-    $ mkdir -p  ~/.config/nixpkgs/overlays
+    $ mkdir -p ~/.config/nixpkgs/overlays
     $ ln -s $(pwd)/nixpkgs-mozilla/rust-overlay.nix ~/.config/nixpkgs/overlays/rust-overlay.nix
 
 The latest version can be installed with the following command:
