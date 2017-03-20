@@ -306,6 +306,8 @@ let
         substituteInPlace configure --replace "-lstdc++" "-lc++"
       '';
 
+      stripDebugList = "bin sbin lib modules";
+
     });
 
 in {
