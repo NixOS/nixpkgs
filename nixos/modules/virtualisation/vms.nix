@@ -265,25 +265,47 @@ let
           rm -Rf "$path"
         fi
       done
-      for path in $(cat "$targetStore"); do
-        ${pkgs.rsync}/bin/rsync -a --info=name "$path" "$store" \
-            | grep -- '->' \
-            | cut -f 1 -d ' ' \
-            | while read filename; do
-          f="${cfg.path}/${name}/store/$filename"
-          target="$(readlink "$f")"
-          dir="$(dirname "$f")"
-          chmod u+w "$dir"
-          rm "$f"
-          echo -n "$target" > "$f"
-          mkdir -p "$dir/.virtfs_metadata"
-          cat > "$dir/.virtfs_metadata/$(basename "$f")" <<EOF
+      function recurse_in_path() {
+        if [ -f "/nix/store/$1"]; then
+          if [ ! -f "$store/$1" ]; then
+            dir="$(dirname "$1")"
+            f="$(basename "$1")"
+            cp "/nix/store/$1" "$store/$dir/.virtfs_metadata/.nixos-module-vms.$f.data"
+            if ls -lahd "/nix/store/$1" | cut -f 1 -d ' ' | grep 'x'; then
+              cat > "$store/$dir/.virtfs_metadata/$f" <<EOF
+virtfs.uid=0
+virtfs.gid=0
+virtfs.mode=365
+EOF
+            else
+              cat > "$store/$dir/.virtfs_metadata/$f" <<EOF
+virtfs.uid=0
+virtfs.gid=0
+virtfs.mode=292
+EOF
+            fi
+            mv "$store/$dir/.virtfs_metadata/.nixos-module-vms.$f.data" "$store/$dir/$f"
+          fi
+        elif [ -L "/nix/store/$1" ]; then
+          if [ ! -f "$store/$1" ]; then
+            dir="$(dirname "$1")"
+            f="$(basename "$1")"
+            cat > "$store/$dir/.virtfs_metadata/$f" <<EOF
 virtfs.uid=0
 virtfs.gid=0
 virtfs.mode=41471
 EOF
-          chmod u-w "$dir"
-        done
+            readlink "/nix/store/$1" > "$store/$1"
+        elif [ -d "/nix/store/$1" ]; then
+          for path in $(ls "/nix/store/$1"); do
+            recurse_in_path "$1/$path"
+          done
+        else
+          echo "Unknown file type: /nix/store/$1" >&2
+        fi
+      }
+      for path in $(cat "$targetStore" | sed 's_/nix/store/__'); do
+        recurse_in_path "$path"
       done
     '';
 
