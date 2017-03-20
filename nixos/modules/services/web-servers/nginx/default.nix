@@ -87,6 +87,8 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
+      ${cfg.commonHttpConfig}
+
       ${vhosts}
 
       ${optionalString cfg.statusPage ''
@@ -272,6 +274,24 @@ in
           can be specified more than once and it's value will be
           concatenated (contrary to <option>config</option> which
           can be set only once).
+        '';
+      };
+
+      commonHttpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          resolver 127.0.0.1 valid=5s;
+
+          log_format myformat '$remote_addr - $remote_user [$time_local] '
+                              '"$request" $status $body_bytes_sent '
+                              '"$http_referer" "$http_user_agent"';
+        '';
+        description = ''
+          With nginx you must provide common http context definitions before
+          they are used, e.g. log_format, resolver, etc. inside of server
+          or location contexts. Use this attribute to set these definitions
+          at the appropriate location.
         '';
       };
 
