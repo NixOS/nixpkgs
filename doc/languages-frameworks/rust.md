@@ -24,7 +24,7 @@ These are not updated very regulary. For daily builds see
 
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
-``` from
+```
 with rustPlatform;
 
 buildRustPackage rec {
