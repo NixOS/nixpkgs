@@ -902,6 +902,8 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
+  filebeat = callPackage ../misc/logging/filebeat { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -944,6 +946,8 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+  heartbeat = callPackage ../misc/logging/heartbeat { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hexio = callPackage ../development/tools/hexio { };
@@ -969,6 +973,8 @@ with pkgs;
   mathics = pythonPackages.mathics;
 
   meson = callPackage ../development/tools/build-managers/meson { };
+
+  metricbeat = callPackage ../misc/logging/metricbeat { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
@@ -3319,6 +3325,8 @@ with pkgs;
   packagekit = callPackage ../tools/package-management/packagekit {
     nix = nixUnstable;
   };
+
+  packetbeat = callPackage ../misc/logging/packetbeat { };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
