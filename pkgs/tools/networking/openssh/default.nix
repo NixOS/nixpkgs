@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Please ensure that openssh_with_kerberos still builds when
   # bumping the version here!
   name = "openssh-${version}";
-  version = "7.4p1";
+  version = "7.5p1";
 
   src = if hpnSupport then
       fetchurl {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "1l8r3x4fr2kb6xm95s7kjdif1wp6f94d4kljh4qjj9109shw87qv";
+        sha256 = "1w7rb5gbrikxdkp8w7zxnci4549gk4bw1lml01s59w5rzb2y6ilq";
       };
 
   patches =
