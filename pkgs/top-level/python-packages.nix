@@ -14094,6 +14094,10 @@ in {
     clblas = pkgs.clblas-cuda;
   };
 
+  libnacl = callPackage ../development/python-modules/libnacl/default.nix {
+    inherit (pkgs) libsodium;
+  };
+
   libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
     (pkgs.libplist.override{python2Packages=self; }).py;
 
@@ -20281,7 +20285,7 @@ in {
       sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
+    buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
     # error: invalid command 'test'
     doCheck = false;

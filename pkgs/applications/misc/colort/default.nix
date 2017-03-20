@@ -17,5 +17,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/neeasade/colort;
     license = licenses.mit;
     platforms = platforms.all;
+    maintainers = [ maintainers.neeasade ];
   };
 }

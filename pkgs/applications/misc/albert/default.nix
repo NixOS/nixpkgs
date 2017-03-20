@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.9.4";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
-    owner  = "manuelschneid3r";
+    owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "131ij525rgh2j9m2vydh79wm4bs0p3x27crar9f16rqhz15gkcpl";
+    sha256 = "1r8m0b6lqljy314ilpi58sdpqyb9rr502nzx3pgmx2g2xz4izsfj";
   };
 
   nativeBuildInputs = [ cmake makeQtWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/manuelSchneid3r/albert;
+    homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes ];

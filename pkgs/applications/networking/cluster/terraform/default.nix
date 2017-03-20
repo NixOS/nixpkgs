@@ -27,7 +27,7 @@ let
       export HOME=$TMP
     '';
 
-    doCheck = true;
+    doCheck = builtins.compareVersions version "0.8.8" >= 0;
 
     meta = with stdenv.lib; {
       description = "Tool for building, changing, and versioning infrastructure";
@@ -48,12 +48,8 @@ in rec {
     sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
   };
 
-  terraform_0_9_0 = generic {
-    version = "0.9.0";
-    sha256 = "1v96qgc6pd1bkwvkz855625xdcy7xb5lk60lg70144idqmwfjb9g";
+  terraform_0_9_1 = generic {
+    version = "0.9.1";
+    sha256 = "081p6dlvkg9mgaz49ichxzlk1ks0rxa7nvilaq8jj1gq3jvylqnh";
   };
-
-  terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_0;
-  terraform = terraform_0_9;
 }

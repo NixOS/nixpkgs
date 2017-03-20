@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
+
   configureFlags = ''
     --with-apr=${apr.dev}
     --with-apr-util=${aprutil.dev}
@@ -66,6 +67,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  stripDebugList = "lib modules bin";
 
   postInstall = ''
     mkdir -p $doc/share/doc/httpd
