@@ -35,6 +35,8 @@ in stdenv.mkDerivation rec {
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ];
 
+  stripDebugList = "bin lib etc/udev";
+
   postInstall =
     let
       giTypelibPath = stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gdk_pixbuf.out gtk3.out pango.out atk.out libnotify.out ];
