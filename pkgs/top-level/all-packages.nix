@@ -2525,6 +2525,8 @@ with pkgs;
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
+  lbrynet = pythonPackages.lbrynet;
+
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg_2;
   };

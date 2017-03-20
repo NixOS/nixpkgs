@@ -173,6 +173,15 @@ in {
     };
   };
 
+  base58 = buildPythonPackage rec {
+    name = "base58-0.2.4";
+
+    srcs = pkgs.fetchurl {
+      url = "mirror://pypi/b/base58/${name}.tar.gz";
+      sha256 = "130mh7sqdlfawi0vyrva88rqdi5nc9aks0s15y0gn6m8qz5lvjwp";
+    };
+  };
+
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
@@ -228,6 +237,16 @@ in {
       license = "MIT";
       description = "Kick ass affine-invariant ensemble MCMC sampling";
     };
+  };
+
+  envparse = buildPythonPackage rec {
+    name = "envparse-0.2.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/envparse/${name}.tar.gz";
+      sha256 = "1dvf0m2jc49s3150b6hwi644apn0zq3g1bdl9q97zljmpckrlfsg";
+    };
+
+    doCheck = false;
   };
 
   dbus-python = callPackage ../development/python-modules/dbus {
@@ -5749,6 +5768,53 @@ in {
     };
   };
 
+  lbrynet = buildPythonPackage rec {
+    name = "lbrynet-${version}";
+    version = "0.9.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "lbryio";
+      repo = "lbry";
+      rev = "v${version}";
+      sha256 = "0na65jsawzw07nkx19q3n9gc8q0zhrk3pc93rwq4hsqg4wnpd1vy";
+    };
+
+    propagatedBuildInputs = with self; [
+      base58
+      envparse
+      jsonrpc
+      jsonschema
+      lbryum
+      miniupnpc
+      pyyaml
+      seccure
+      twisted
+      txJSON-RPC
+    ];
+  };
+
+  lbryum = buildPythonPackage rec {
+    name = "lbryum-${version}";
+    version = "2.7.13";
+
+    propagatedBuildInputs = with self; [
+      protobuf3_0 slowaes pbkdf2 ecdsa appdirs jsonrpclib dns requests qrcode
+      requests-futures
+    ];
+
+    preBuild = ''
+      sed -i 's/protobuf==3.0.0/protobuf>=3.0.0/' setup.py
+    '';
+
+    src = pkgs.fetchFromGitHub rec {
+      owner = "lbryio";
+      repo = "lbryum";
+      rev = "v${version}";
+      sha256 = "0zb2k3p2ihm7cjp939y6vvvmrq87d66p15r52dl6znf2dyaqlcgs";
+    };
+
+  };
+
   leather = callPackage ../development/python-modules/leather { };
 
   libais = callPackage ../development/python-modules/libais { };
@@ -7993,6 +8059,15 @@ in {
     };
   };
 
+  jsonrpc = buildPythonPackage rec {
+    name = "jsonrpc-1.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jsonrpc/${name}.tar.gz";
+      sha256 = "03zh9mccvy2awi0bwlf2di69apqd2h8aqd8qjr1w53zh5gxd98rz";
+    };
+  };
+
   jsonrpclib = buildPythonPackage rec {
     name = "jsonrpclib-${version}";
     version = "0.1.7";
@@ -8346,6 +8421,15 @@ in {
       description = "Python bindings for Mapnik";
       homepage = http://mapnik.org;
       license  = licenses.lgpl21;
+    };
+  };
+
+  miniupnpc = buildPythonPackage rec {
+    name = "miniupnpc-1.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/miniupnpc/${name}.tar.gz";
+      sha256 = "19mw32vhnvaizmgzp6nmivhgdyr8mv74ppm4ydkfb39y8k2kb2s9";
     };
   };
 
@@ -9936,6 +10020,24 @@ in {
       license = licenses.mit;
     };
   };
+
+  seccure = buildPythonPackage rec {
+    name = "seccure-0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/seccure/${name}.tar.gz";
+      sha256 = "0801l9jgl2j32vxfwzczha9h8l84smp3mwhv4yscjcph1fq9rdh3";
+    };
+
+    propagatedBuildInputs = with self; [
+      six
+      pycrypto
+      gmpy
+    ];
+
+    doCheck = false;
+  };
+
 
   substanced = buildPythonPackage rec {
     # no release yet
@@ -22265,6 +22367,18 @@ in {
 
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
+  requests-futures = buildPythonPackage rec {
+    name = "requests-futures-0.9.7";
+
+    propagatedBuildInputs = with self; [ requests futures ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/requests-futures/${name}.tar.gz";
+      sha256 = "1bbvx99dnkh9cqbmhs4c1yvb4aiffi3c2nfyqngc5ymnh0s2rjm9";
+    };
+
+  };
+
   requests_toolbelt = buildPythonPackage rec {
     version = "0.7.1";
     name = "requests-toolbelt-${version}";
@@ -23153,6 +23267,15 @@ in {
       homepage = https://bitbucket.org/ruamel/ordereddict;
       license = licenses.mit;
     };
+  };
+
+  txJSON-RPC = buildPythonPackage rec {
+    name = "txJSON-RPC-0.5";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/txJSON-RPC/${name}.tar.gz";
+      sha256 = "149ihgfmgm7hq4f08zkjcxzcqh9vcfsjrlmwpx10dqz9x5rn37ng";
+    };
+    propagatedBuildInputs = with self; [ six twisted ];
   };
 
   typing = buildPythonPackage rec {
