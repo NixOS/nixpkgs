@@ -1,18 +1,29 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, unzip, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "glm-0.9.6.1";
+  version = "0.9.8.4";
+  name = "glm-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ogl-math/${name}/${name}.zip";
-    sha256 = "1s1kpf9hpyq6bdf87nhlkxyr2ay0ip9wqicdma9h8yz4vs20r2hs";
+    url = "https://github.com/g-truc/glm/releases/download/${version}/${name}.zip";
+    sha256 = "1c9cflvx0b16qxh3izk6siqldp9q8qlrznk14br3jdyhnr2gbdx9";
   };
 
-  buildInputs = [ unzip ];
+  buildInputs = [ unzip cmake ];
 
   outputs = [ "out" "doc" ];
 
+  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+
+  buildPhase = ''
+    set -x
+    cmake CMakeLists.txt -DCMAKE_INSTALL_PREFIX:PATH=$out
+  '';
+
   installPhase = ''
+    mkdir -p $out/lib/pkgconfig
+    cp glm.pc $out/lib/pkgconfig
+
     mkdir -p "$out/include"
     cp -r glm "$out/include"
 
@@ -33,3 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }
+
