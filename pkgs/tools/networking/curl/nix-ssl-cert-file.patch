@@ -1,0 +1,14 @@
+diff -ru -x '*~' curl-7.50.3-orig/src/tool_operate.c curl-7.50.3/src/tool_operate.c
+--- curl-7.50.3-orig/src/tool_operate.c	2016-09-06 23:25:06.000000000 +0200
++++ curl-7.50.3/src/tool_operate.c	2016-10-14 11:51:48.999943142 +0200
+@@ -269,7 +269,9 @@
+         capath_from_env = true;
+       }
+       else {
+-        env = curlx_getenv("SSL_CERT_FILE");
++        env = curlx_getenv("NIX_SSL_CERT_FILE");
++        if(!env)
++          env = curlx_getenv("SSL_CERT_FILE");
+         if(env) {
+           config->cacert = strdup(env);
+           if(!config->cacert) {
