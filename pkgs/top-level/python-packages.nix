@@ -20080,7 +20080,7 @@ in {
       sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
+    buildInputs = with self; [ pkgs.curl pkgs.openssl.out ];
 
     # error: invalid command 'test'
     doCheck = false;
