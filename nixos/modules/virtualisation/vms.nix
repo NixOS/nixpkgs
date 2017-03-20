@@ -240,7 +240,7 @@ let
     pkgs.stdenv.mkDerivation {
       name = "references-vm-${name}";
       passAsFile = [ "buildCommand" ];
-      buildCommand = "grep '/nix/store' closure > $out";
+      buildCommand = "grep '/nix/store' closure | sort -u > $out";
       exportReferencesGraph = [ "closure" mcfg.config.system.build.toplevel ];
     };
 
