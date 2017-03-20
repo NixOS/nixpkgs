@@ -69,6 +69,10 @@ pkgs.stdenv.mkDerivation {
       outputFile = "languages-frameworks/r.xml";
     }
   + toDocbook {
+      inputFile = ./languages-frameworks/rust.md;
+      outputFile = "./languages-frameworks/rust.xml";
+    }
+  + toDocbook {
       inputFile = ./languages-frameworks/vim.md;
       outputFile = "./languages-frameworks/vim.xml";
     }
