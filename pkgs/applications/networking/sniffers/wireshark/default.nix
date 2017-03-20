@@ -11,7 +11,7 @@ assert withQt -> !withGtk && qt4 != null;
 with stdenv.lib;
 
 let
-  version = "2.2.4";
+  version = "2.2.5";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 in
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
-    sha256 = "049r5962yrajhhz9r4dsnx403dab50d6091y2mw298ymxqszp9s2";
+    sha256 = "1j4sc3pmy8l6k41007spglcqiabjlzc7f85pn3jmjr9ksv9qipbm";
   };
 
   buildInputs = [
@@ -29,13 +29,7 @@ stdenv.mkDerivation {
   ] ++ optional withQt qt4
     ++ (optionals withGtk [gtk pango cairo gdk_pixbuf]);
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch
-  (fetchurl {
-    url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=c7042bedbb3b12c5f4e19e59e52da370d4ffe62f;hp=bc2b135677110d8065ba1174f09bc7f5ba73b9e9";
-    sha256 = "1m70akywf2r52lhlvzr720vl1i7ng9cqbzaiif8s81xs4g4nn2rz";
-    name = "wireshark-CVE-2017-6014.patch";
-  })
-  ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
   configureFlags = "--disable-usr-local --disable-silent-rules --with-ssl"
     + (if withGtk then
