@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.pymongo
+    pythonPackages.pymongo_2_9_1
     pythonPackages.docker
   ];
   propagatedBuildInputs = [ python tornado ];
