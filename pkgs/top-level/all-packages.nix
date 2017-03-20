@@ -10531,7 +10531,7 @@ with pkgs;
     spidermonkey = spidermonkey_1_8_5;
     python = python27;
     sphinx = python27Packages.sphinx;
-    erlang = erlangR16;
+    erlang = erlangR17;
   };
 
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
