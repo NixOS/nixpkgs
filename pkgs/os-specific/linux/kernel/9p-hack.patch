@@ -1,0 +1,39 @@
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -483,6 +483,9 @@ static int v9fs_test_inode(struct inode *inode, void *data)
+ 
+ 	if (v9inode->qid.type != st->qid.type)
+ 		return 0;
++
++	if (v9inode->qid.path != st->qid.path)
++		return 0;
+ 	return 1;
+ }
+ 
+diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -87,6 +87,9 @@ static int v9fs_test_inode_dotl(struct inode *inode, void *data)
+ 
+ 	if (v9inode->qid.type != st->qid.type)
+ 		return 0;
++
++	if (v9inode->qid.path != st->qid.path)
++		return 0;
+ 	return 1;
+ }
+ 
+diff --git a/net/9p/client.c b/net/9p/client.c
+--- a/net/9p/client.c
++++ b/net/9p/client.c
+@@ -749,7 +749,7 @@ p9_client_rpc(struct p9_client *c, int8_t type, const char *fmt, ...)
+ 	}
+ again:
+ 	/* Wait for the response */
+-	err = wait_event_interruptible(*req->wq,
++	err = wait_event_killable(*req->wq,
+ 				       req->status >= REQ_STATUS_RCVD);
+ 
+ 	/*
+
