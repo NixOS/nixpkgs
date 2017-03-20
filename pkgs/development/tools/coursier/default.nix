@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "610c5fc08d0137c5270cefd14623120ab10cd81b9f48e43093893ac8d00484c9";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   phases = "installPhase";
 
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage    = http://get-coursier.io/;
     description = "A Scala library to fetch dependencies from Maven / Ivy repositories";
     license     = licenses.asl20;
+    maintainers = with maintainers; [ adelbertc nequissimus ];
   };
 }
