@@ -1867,6 +1867,8 @@ with pkgs;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
+  fwknop = callPackage ../tools/security/fwknop { };
+
   exfat = callPackage ../tools/filesystems/exfat { };
 
   dos2unix = callPackage ../tools/text/dos2unix { };
