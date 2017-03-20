@@ -246,11 +246,13 @@ in
       };
 
       package = mkOption {
-        default = pkgs.nginx;
-        defaultText = "pkgs.nginx";
+        default = pkgs.nginxStable;
+        defaultText = "pkgs.nginxStable";
         type = types.package;
         description = "
-          Nginx package to use.
+          Nginx package to use. This defaults to the stable version. Note
+          that the nginx team recommends to use the mainline version which
+          available in nixpkgs as <literal>nginxMainline</literal>.
         ";
       };
 
