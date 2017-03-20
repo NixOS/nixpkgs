@@ -271,8 +271,8 @@ with pkgs;
 
   kdeDerivation = import ../build-support/kde/derivation.nix { inherit stdenv lib; };
 
-  kdeWrapper = import ../build-support/kde/wrapper.nix {
-    inherit stdenv lib makeWrapper buildEnv;
+  kdeWrapper = callPackage ../build-support/kde/wrapper.nix {
+    inherit (gnome3) dconf;
   };
 
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
@@ -9454,6 +9454,7 @@ with pkgs;
     mesa = mesa_noglu;
     inherit perl;
     inherit (gst_all_1) gstreamer gst-plugins-base;
+    inherit (gnome3) gtk3 dconf;
   });
 
   libsForQt57 = recurseIntoAttrs (lib.makeScope qt57.newScope mkLibsForQt5);
@@ -9467,6 +9468,7 @@ with pkgs;
     mesa = mesa_noglu;
     inherit perl;
     inherit (gst_all_1) gstreamer gst-plugins-base;
+    inherit (gnome3) gtk3 dconf;
   });
 
   libsForQt58 = recurseIntoAttrs (lib.makeScope qt58.newScope mkLibsForQt5);
