@@ -83,9 +83,9 @@ Or using the attribute with nix-shell:
     $ nix-shell -p nixos.rustChannels.stable.rust
 
 To install the beta or nightly channel, "stable" should be substituted by
-"nightly" and "beta", or
+"nightly" or "beta", or
 use the function provided by this overlay to pull a version based on a
 build date.
 
-The overlay automatically update itself as it uses the same source as
+The overlay automatically updates itself as it uses the same source as
 [rustup](https://www.rustup.rs/).
