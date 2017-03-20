@@ -11939,6 +11939,8 @@ with pkgs;
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
+  odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
+
   pagemon = callPackage ../os-specific/linux/pagemon { };
 
   pam = callPackage ../os-specific/linux/pam { };
@@ -12135,6 +12137,7 @@ with pkgs;
     ubootBananaPi
     ubootBeagleboneBlack
     ubootJetsonTK1
+    ubootOdroidXU3
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootRaspberryPi2
