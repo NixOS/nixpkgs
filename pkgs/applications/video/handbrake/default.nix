@@ -77,6 +77,10 @@ stdenv.mkDerivation rec {
     (if useGtk then "--disable-gtk-update-checks" else "--disable-gtk")
   ];
 
+  NIX_LDFLAGS = [
+    "-lx265"
+  ];
+
   preBuild = ''
     cd build
   '';
