@@ -79,11 +79,11 @@ stdenv.mkDerivation ( rec {
   # Stripping breaks linking for ponyc
   dontStrip = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = http://www.ponylang.org;
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ doublec kamilchm ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ doublec kamilchm ];
+    platforms = subtractLists platforms.i686 platforms.unix;
   };
 })
