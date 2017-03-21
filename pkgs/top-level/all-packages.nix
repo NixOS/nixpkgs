@@ -17741,6 +17741,8 @@ with pkgs;
 
   colort = callPackage ../applications/misc/colort { };
 
+  terminal-parrot = callPackage ../applications/misc/terminal-parrot { };
+
   e17gtk = callPackage ../misc/themes/e17gtk { };
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
