@@ -35,6 +35,9 @@ with lib;
     (mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
     (mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
 
+    (mkRemovedOptionModule [ "services" "rmilter" "bindInetSockets" ] "Use services.rmilter.bindSocket.* instead")
+    (mkRemovedOptionModule [ "services" "rmilter" "bindUnixSockets" ] "Use services.rmilter.bindSocket.* instead")
+
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
     (mkRenamedOptionModule [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ])

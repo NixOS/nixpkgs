@@ -1,38 +1,36 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, buildGoPackage, libpcap }:
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "packetbeat-${version}";
-  version = "5.2.1";
+  version = "5.2.2";
 
-  src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/beats/packetbeat/${name}-linux-x86_64.tar.gz";
-    sha256 = "14ff466ban8pfsw750r8jkz1brczfrbcrwfhqvi5i8smfg56m9rl";
+  src = fetchFromGitHub {
+    owner = "elastic";
+    repo = "beats";
+    rev = "v${version}";
+    sha256 = "19hkq19xpi3c9y5g1yq77sm2d5vzybn6mxxf0s5l6sw4l98aak5q";
   };
 
-  dontBuild = true;
-  doCheck = false;
+  goPackagePath = "github.com/elastic/beats";
 
-  # need to patch interpreter to be able to run on NixOS
-  patchPhase = ''
-    patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) packetbeat
-  '';
+  subPackages = [ "packetbeat" ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp packetbeat $out/bin/
-  '';
+  buildInputs = [ libpcap ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Network packet analyzer that ships data to Elasticsearch";
     longDescription = ''
-      Packetbeat is an open source network packet analyzer that ships the data to Elasticsearch.
+      Packetbeat is an open source network packet analyzer that ships the
+      data to Elasticsearch.
 
-      Think of it like a distributed real-time Wireshark with a lot more analytics features.
-      The Packetbeat shippers sniff the traffic between your application processes, parse on the fly protocols like HTTP, MySQL, PostgreSQL, Redis or Thrift and correlate the messages into transactions.
+      Think of it like a distributed real-time Wireshark with a lot more
+      analytics features. The Packetbeat shippers sniff the traffic between
+      your application processes, parse on the fly protocols like HTTP, MySQL,
+      PostgreSQL, Redis or Thrift and correlate the messages into transactions.
     '';
     homepage = https://www.elastic.co/products/beats;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.fadenb ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = [ maintainers.fadenb ];
+    platforms = platforms.linux;
   };
 }
