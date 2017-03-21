@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlangR16, which, pam, coreutils }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam, coreutils }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   name = "riak-2.2.0";
 
   buildInputs = [
-    which unzip erlangR16 pam
+    which unzip erlang pam
   ];
 
   src = srcs.riak;
