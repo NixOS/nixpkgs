@@ -55,15 +55,15 @@ python2Packages.buildPythonApplication rec {
     LC_ALL=C python -m gpodder.unittests
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
     homepage = "http://gpodder.org/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.skeidel ];
+    license = licenses.gpl3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ skeidel mic92 ];
   };
 }
