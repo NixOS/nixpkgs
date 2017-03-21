@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       of any application using Vulkan, D3D11, OpenGL or D3D12 across
       Windows 7 - 10, Linux or Android.
     '';
-    maintainers = maintainers.jansol;
+    maintainers = [maintainers.jansol];
     platforms = platforms.linux;
   };
 }
