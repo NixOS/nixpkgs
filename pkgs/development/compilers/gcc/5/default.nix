@@ -76,7 +76,8 @@ let version = "5.4.0";
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
 
-      # This could be applied unconditionally but I don't want to cause a full Linux rebuild.
+      # This could be applied unconditionally but I don't want to cause a full
+      # Linux rebuild.
       ++ optional stdenv.cc.isClang ./libcxx38-and-above.patch;
 
     javaEcj = fetchurl {
@@ -233,6 +234,13 @@ stdenv.mkDerivation ({
   NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
+
+  # This should kill all the stdinc frameworks that gcc and friends like to
+  # insert into default search paths.
+  prePatch = if stdenv.isDarwin then ''
+    substituteInPlace gcc/config/darwin-c.c \
+      --replace 'if (stdinc)' 'if (0)'
+  '' else null;
 
   postPatch =
     if (stdenv.isGNU
