@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     export GOPATH=$(pwd)/vendor
-    mkdir vendor
+    mkdir -p vendor
     gx install
   '';
 
