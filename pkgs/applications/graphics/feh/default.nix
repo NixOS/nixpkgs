@@ -22,18 +22,17 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlags="PREFIX=$out exif=1"
-  '';
-
-  libPath = makeLibraryPath ([ imlib2 curl xorg.libXinerama libjpeg libpng libexif xorg.libX11 ]);
+      '';
 
   postInstall = ''
     wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
                                --add-flags '--theme=feh' 
-    '';
-
+        '';
+  
   checkPhase = ''
     PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl" make test
   '';
+
   doCheck = true;
 
   meta = {
