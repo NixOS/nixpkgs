@@ -189,15 +189,6 @@ following incompatible changes:</para>
 
   <listitem>
     <para>
-      The Yama LSM is now enabled by default in the kernel,
-      which prevents ptracing non-child processes.
-      This means you will not be able to attach gdb to an existing process,
-      but will need to start that process from gdb (so it is a child).
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>
       The <literal>stripHash</literal> bash function in <literal>stdenv</literal>
       changed according to its documentation; it now outputs the stripped name to
       <literal>stdout</literal> instead of putting it in the variable
