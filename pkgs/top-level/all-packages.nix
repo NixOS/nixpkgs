@@ -804,6 +804,8 @@ with pkgs;
 
   coturn = callPackage ../servers/coturn { };
 
+  coursier = callPackage ../development/tools/coursier {};
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
