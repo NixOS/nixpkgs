@@ -233,6 +233,8 @@ let
 
     hex = callPackage ../development/ocaml-modules/hex { };
 
+    inifiles = callPackage ../development/ocaml-modules/inifiles { };
+
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       batteries = ocaml_batteries;
       pcre = ocaml_pcre;
