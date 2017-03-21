@@ -8,6 +8,9 @@ use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt);
 use Cwd 'abs_path';
 
+my $nsenter = "@utillinux@/bin/nsenter";
+my $su = "@su@";
+
 # Ensure a consistent umask.
 umask 0022;
 
@@ -223,6 +226,22 @@ sub stopContainer {
         or die "$0: failed to stop container\n";
 }
 
+# Return the PID of the init process of the container.
+sub getLeader {
+    my $s = `machinectl show "$containerName" -p Leader`;
+    chomp $s;
+    $s =~ /^Leader=(\d+)$/ or die "unable to get container's main PID\n";
+    return int($1);
+}
+
+# Run a command in the container.
+sub runInContainer {
+    my @args = @_;
+    my $leader = getLeader;
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    die "cannot run ‘nsenter’: $!\n";
+}
+
 # Remove a directory while recursively unmounting all mounted filesystems within
 # that directory and unmounting/removing that directory afterwards as well.
 #
@@ -297,14 +316,14 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    exec("machinectl", "shell", $containerName, "/bin/sh", "-l");
+    runInContainer("@su@", "root", "-l");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
     # Escape command.
     my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
-    exec("machinectl", "--quiet", "shell", $containerName, "/bin/sh", "-l", "-c", $s);
+    runInContainer("@su@", "root", "-l", "-c", "exec " . $s);
 }
 
 elsif ($action eq "show-ip") {
