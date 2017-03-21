@@ -7319,6 +7319,8 @@ with pkgs;
     inherit (pkgs.gnome2) gtkglext;
   };
 
+  far2l = callPackage ../applications/misc/far2l { };
+
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
