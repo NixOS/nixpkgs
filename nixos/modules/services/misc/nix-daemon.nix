@@ -46,7 +46,7 @@ let
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
         binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
-        auto-optimise-store = ${toString cfg.autoOptimiseStore}
+        auto-optimise-store = ${if cfg.autoOptimiseStore then "true" else "false"}
         ${optionalString cfg.requireSignedBinaryCaches ''
           signed-binary-caches = *
         ''}
