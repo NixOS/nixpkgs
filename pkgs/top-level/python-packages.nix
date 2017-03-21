@@ -28477,11 +28477,11 @@ EOF
 
 
   websocket_client = buildPythonPackage rec {
-    name = "websocket_client-0.32.0";
+    name = "websocket_client-0.40.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/websocket-client/${name}.tar.gz";
-      sha256 = "cb3ab95617ed2098d24723e3ad04ed06c4fde661400b96daa1859af965bfe040";
+      sha256 = "1yz67wdjijrvwpx0a0f6wdfy8ajsvr9xbj5514ld452fqnh19b20";
     };
 
     propagatedBuildInputs = with self; [ six backports_ssl_match_hostname unittest2 argparse ];
