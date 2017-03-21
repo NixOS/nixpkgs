@@ -545,6 +545,35 @@ All parameters from `mkDerivation` function are still supported.
 * `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
 * `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
 
+##### Overriding Python packages
+
+The `buildPythonPackage` function has a `overridePythonPackage` method that
+can be used to override the package. In the following example we create an
+environment where we have the `blaze` package using an older version of `pandas`.
+We override first the Python interpreter and pass
+`packageOverrides` which contains the overrides for packages in the package set.
+
+```nix
+with import <nixpkgs> {};
+
+(let
+  python = let
+    packageOverrides = self: super: {
+      pandas = super.pandas.overridePythonPackage(old: rec {
+        version = "0.19.1";
+        name = "pandas-${version}";
+        src =  super.fetchPypi {
+          pname = "pandas";
+          inherit version;
+          sha256 = "08blshqj9zj1wyjhhw3kl2vas75vhhicvv72flvf1z3jvapgw295";
+        };
+      });
+    };
+  in pkgs.python3.override {inherit packageOverrides;};
+
+in python.withPackages(ps: [ps.blaze])).env
+```
+
 #### `buildPythonApplication` function
 
 The `buildPythonApplication` function is practically the same as `buildPythonPackage`.
@@ -754,17 +783,17 @@ In the following example we rename the `pandas` package and build it.
 ```nix
 with import <nixpkgs> {};
 
-let
+(let
   python = let
     packageOverrides = self: super: {
-      pandas = super.pandas.override {name="foo";};
+      pandas = super.pandas.overridePythonPackage(old: {name="foo";});
     };
   in pkgs.python35.override {inherit packageOverrides;};
 
-in python.pkgs.pandas
+in python.withPackages(ps: [ps.pandas])).env
 ```
-Using `nix-build` on this expression will build the package `pandas`
-but with the new name `foo`.
+Using `nix-build` on this expression will build an environment that contains the
+package `pandas` but with the new name `foo`.
 
 All packages in the package set will use the renamed package.
 A typical use case is to switch to another version of a certain package.
