@@ -5,7 +5,8 @@
 , libelf, libvdpau, python2
 , grsecEnabled ? false
 , enableRadv ? false
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+# Texture floats are patented, see docs/patents.txt, but Debian enables them.
+, enableTextureFloats ? true
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
