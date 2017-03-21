@@ -3,11 +3,11 @@
 , epoxy, poppler }:
 
 stdenv.mkDerivation rec {
-  name = "fbida-2.12";
+  name = "fbida-2.13";
   
   src = fetchurl {
     url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
-    sha256 = "0bw224vb7jh0lrqaf4jgxk48xglvxs674qcpj5y0axyfbh896cfk";
+    sha256 = "01yv4qqqfbz9v281y2jlxhxdym3ricyb0zkqkgp5b40qrmfik1x8";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
     sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
     '';
 
-  configurePhase = "make config $makeFlags";
-
   crossAttrs = {
-    makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP="];
+    makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP=" ];
   };
 
   meta = with stdenv.lib; {
