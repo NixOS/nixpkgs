@@ -47,8 +47,9 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.system}";
 
-pythonPackages.mkPythonDerivation {
+pythonPackages.buildPythonApplication {
   inherit name src;
+  format = "other";
 
   buildInputs = [
     libjpeg
