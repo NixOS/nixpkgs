@@ -117,7 +117,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.octoprint}/bin/octoprint -b ${cfg.stateDir}";
+        ExecStart = "${pkgs.octoprint}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = true;
