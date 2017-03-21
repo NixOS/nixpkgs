@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpcap texinfo ]
-    ++ stdenv.lib.optional gnupgSupport [ gnupg gpgme ]
+    ++ stdenv.lib.optional gnupgSupport [ gnupg gpgme.dev ]
     ++ stdenv.lib.optional wgetSupport [ wget ];
 
   configureFlags = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!buildClient) "--disable-client"}
     ${lib.optionalString gnupgSupport ''
       --with-gpgme
-      --with-gpgme-prefix=${gpgme}
+      --with-gpgme-prefix=${gpgme.dev}
       --with-gpg=${gnupg}
     ''}
     ${lib.optionalString wgetSupport ''
