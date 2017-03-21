@@ -6,19 +6,22 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "hardkernel";
     repo = "u-boot";
-    rev = "bbdea1841c4fbf767dcaf9d7ae8d3a46af235c4d";
-    sha256 = "03rvyfj147xh83w8hlvbxix131l3nnvk8n517fdhv9nil1l8dd71";
+    rev = "fe2f831fd44a4071f58a42f260164544697aa666";
+    sha256 = "1h5yvawzla0vqhkk98gxcwc824bhc936bh6j77qkyspvqcw761fr";
   };
 
   buildCommand = ''
-    install -Dm644 -t $out/lib/sd_fuse-xu3 $src/sd_fuse/hardkernel/*.hardkernel
-    ln -sf ${ubootOdroidXU3}/u-boot.bin $out/lib/sd_fuse-xu3/u-boot.bin.hardkernel
+    install -Dm644 -t $out/lib/sd_fuse-xu3 $src/sd_fuse/hardkernel_1mb_uboot/{bl2,tzsw}.*
+    install -Dm644 -t $out/lib/sd_fuse-xu3 $src/sd_fuse/hardkernel/bl1.*
+    ln -sf ${ubootOdroidXU3}/u-boot-dtb.bin $out/lib/sd_fuse-xu3/u-boot-dtb.bin
 
-    install -Dm755 $src/sd_fuse/hardkernel/sd_fusing.sh $out/bin/sd_fuse-xu3
+    install -Dm755 $src/sd_fuse/hardkernel_1mb_uboot/sd_fusing.1M.sh $out/bin/sd_fuse-xu3
     sed -i \
       -e '1i#!${stdenv.shell}' \
       -e '1iPATH=${lib.makeBinPath [ coreutils ]}:$PATH' \
-      -e "s,if=\./,if=$out/lib/sd_fuse-xu3/,g" \
+      -e '/set -x/d' \
+      -e 's,.\/sd_fusing\.sh,sd_fuse-xu3,g' \
+      -e "s,\./,$out/lib/sd_fuse-xu3/,g" \
       $out/bin/sd_fuse-xu3
   '';
 

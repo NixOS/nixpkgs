@@ -86,7 +86,7 @@ in rec {
   ubootOdroidXU3 = buildUBoot rec {
     defconfig = "odroid-xu3_defconfig";
     targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot.bin"];
+    filesToInstall = ["u-boot-dtb.bin"];
   };
 
   ubootPcduino3Nano = buildUBoot rec {
