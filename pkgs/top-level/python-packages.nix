@@ -27,7 +27,27 @@ let
 
   mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
   });
-  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
+
+  makeOverridablePythonPackage = f: origArgs:
+    let
+      ff = f origArgs;
+      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
+    in
+      if builtins.isAttrs ff then (ff // {
+        overridePythonPackage = newArgs: makeOverridable f (overrideWith newArgs);
+        overrideDerivation = fdrv:
+          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
+        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
+      })
+      else if builtins.isFunction ff then {
+        overridePythonPackage = newArgs: makeOverridable f (overrideWith newArgs);
+        __functor = self: ff;
+        overrideDerivation = throw "overrideDerivation not yet supported for functors";
+      }
+      else ff;
+
+  buildPythonPackage = makeOverridablePythonPackage (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit mkPythonDerivation;
     inherit bootstrapped-pip;
     flit = self.flit;
