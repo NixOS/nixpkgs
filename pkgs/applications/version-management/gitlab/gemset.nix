@@ -927,7 +927,7 @@
       type = "gem";
     };
     version = "1.5.1";
-};
+  };
   gitlab_omniauth-ldap = {
     source = {
       remotes = ["https://rubygems.org"];
@@ -2219,10 +2219,10 @@
   rubyzip = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10a9p1m68lpn8pwqp972lv61140flvahm3g9yzbxzjks2z3qlb2s";
+      sha256 = "06js4gznzgh8ac2ldvmjcmg9v1vg9llm357yckkpylaj6z456zqz";
       type = "gem";
     };
-    version = "1.2.0";
+    version = "1.2.1";
   };
   rufus-scheduler = {
     source = {
