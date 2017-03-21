@@ -5,7 +5,9 @@
 , libelf, libvdpau, python2
 , grsecEnabled ? false
 , enableRadv ? false
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
+# It's overridden for mesa_drivers.
+, enableTextureFloats ? false
 }:
 
 
