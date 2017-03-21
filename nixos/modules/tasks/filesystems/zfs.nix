@@ -234,7 +234,7 @@ in
         description = ''
           Systemd calendar expression when to scrub ZFS pools. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
