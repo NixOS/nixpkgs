@@ -8991,6 +8991,7 @@ with pkgs;
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
+      enableTextureFloats = true;
     };
     in mo.drivers
   );
