@@ -902,6 +902,8 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
+  filebeat = callPackage ../misc/logging/filebeat { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -944,6 +946,8 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+  heartbeat = callPackage ../misc/logging/heartbeat { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hexio = callPackage ../development/tools/hexio { };
@@ -969,6 +973,8 @@ with pkgs;
   mathics = pythonPackages.mathics;
 
   meson = callPackage ../development/tools/build-managers/meson { };
+
+  metricbeat = callPackage ../misc/logging/metricbeat { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
@@ -3320,6 +3326,8 @@ with pkgs;
     nix = nixUnstable;
   };
 
+  packetbeat = callPackage ../misc/logging/packetbeat { };
+
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
   pakcs = callPackage ../development/compilers/pakcs {};
@@ -5495,6 +5503,10 @@ with pkgs;
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
   ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
+
+  ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n {
+    ocamlPackages = ocamlPackages_4_03;
+  };
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
@@ -10529,7 +10541,7 @@ with pkgs;
     spidermonkey = spidermonkey_1_8_5;
     python = python27;
     sphinx = python27Packages.sphinx;
-    erlang = erlangR16;
+    erlang = erlangR17;
   };
 
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
@@ -10685,7 +10697,9 @@ with pkgs;
 
   neard = callPackage ../servers/neard { };
 
-  nginx = callPackage ../servers/http/nginx/stable.nix {
+  nginx = nginxStable;
+
+  nginxStable = callPackage ../servers/http/nginx/stable.nix {
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
@@ -11094,7 +11108,7 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws { erlang = erlangR17; };
+  yaws = callPackage ../servers/http/yaws { };
 
   zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
 
@@ -11937,6 +11951,8 @@ with pkgs;
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
+  odroid-xu3-bootloader = callPackage ../tools/misc/odroid-xu3-bootloader { };
+
   pagemon = callPackage ../os-specific/linux/pagemon { };
 
   pam = callPackage ../os-specific/linux/pam { };
@@ -12133,6 +12149,7 @@ with pkgs;
     ubootBananaPi
     ubootBeagleboneBlack
     ubootJetsonTK1
+    ubootOdroidXU3
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootRaspberryPi2
@@ -14714,6 +14731,8 @@ with pkgs;
   pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
 
   pig = callPackage ../applications/networking/cluster/pig { };
+
+  pijul = callPackage ../applications/version-management/pijul {};
 
   planner = callPackage ../applications/office/planner { };
 
@@ -18093,10 +18112,10 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_0;
+    terraform_0_9_1;
 
   terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_0;
+  terraform_0_9 = terraform_0_9_1;
   terraform = terraform_0_8;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {

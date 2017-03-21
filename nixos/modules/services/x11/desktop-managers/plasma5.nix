@@ -225,11 +225,6 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
-      # use kimpanel as the default IBus panel
-      i18n.inputMethod.ibus.panel =
-        lib.mkDefault
-        "${plasma5.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
-
     })
   ];
 

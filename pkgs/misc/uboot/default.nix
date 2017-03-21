@@ -83,6 +83,12 @@ in rec {
     filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
   };
 
+  ubootOdroidXU3 = buildUBoot rec {
+    defconfig = "odroid-xu3_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-dtb.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot rec {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     targetPlatforms = ["armv7l-linux"];

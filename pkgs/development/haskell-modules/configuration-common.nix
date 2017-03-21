@@ -282,6 +282,7 @@ self: super: {
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
+  friday-juicypixels = dontCheck super.friday-juicypixels; #tarball missing test/rgba8.png
   ghc-events = dontCheck super.ghc-events;              # http://hydra.cryp.to/build/498226/log/raw
   ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
   ghc-imported-from = dontCheck super.ghc-imported-from;
@@ -823,12 +824,6 @@ self: super: {
 
   # https://github.com/xmonad/xmonad-extras/issues/3
   xmonad-extras = doJailbreak super.xmonad-extras;
-
-  # https://github.com/bmillwood/pointfree/issues/21
-  pointfree = appendPatch super.pointfree (pkgs.fetchpatch {
-    url = "https://github.com/bmillwood/pointfree/pull/22.patch";
-    sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
-  });
 
   # https://github.com/int-e/QuickCheck-safe/issues/2
   QuickCheck-safe = doJailbreak super.QuickCheck-safe;

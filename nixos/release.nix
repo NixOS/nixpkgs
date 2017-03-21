@@ -1,6 +1,6 @@
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" "aarch64-linux" ]
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 with import ../lib;
@@ -280,6 +280,7 @@ in rec {
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
+  tests.nginx = callTest tests/nginx.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
