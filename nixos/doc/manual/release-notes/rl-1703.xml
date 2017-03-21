@@ -249,6 +249,13 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      The <literal>fetch*</literal> functions no longer support md5,
+      please use sha256 instead.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
