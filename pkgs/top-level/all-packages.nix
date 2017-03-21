@@ -4665,6 +4665,8 @@ with pkgs;
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
+  
+  yasr = callPackage ../applications/audio/yasr { };
 
   yasr = callPackage ../applications/audio/yasr { };
 
