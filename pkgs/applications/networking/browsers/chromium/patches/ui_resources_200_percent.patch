@@ -1,0 +1,29 @@
+--- a/ui/resources/BUILD.gn	2016-11-09 22:48:28.509443093 +0100
++++ b/ui/resources/BUILD.gn	2016-11-09 22:52:26.110380470 +0100
+@@ -62,6 +62,17 @@
+       "//ui/resources",
+     ]
+   }
++  copy("copy_ui_resources_200_percent") {
++    sources = [
++      "$root_gen_dir/ui/resources/ui_resources_200_percent.pak",
++    ]
++    outputs = [
++      "$root_out_dir/ui_resources_200_percent.pak",
++    ]
++    deps = [
++      "//ui/resources",
++    ]
++  }
+ }
+ 
+ # On iOS and Mac the string resources need to go into a locale subfolder, which
+@@ -186,7 +197,7 @@
+   }
+ 
+   if (!is_mac) {
+-    deps += [ ":copy_ui_resources_100_percent" ]
++    deps += [ ":copy_ui_resources_100_percent", ":copy_ui_resources_200_percent" ]
+   }
+ 
+   if (is_chromeos) {
