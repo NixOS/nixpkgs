@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkgconfig, SDL2, qtbase, qttools, xorg, fetchFromGitHub }:
+{ stdenv, cmake, pkgconfig, SDL2, qtbase, qttools, makeQtWrapper, xorg, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "antimicro-${version}";
@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake pkgconfig SDL2 qtbase qttools xorg.libXtst
+    cmake pkgconfig SDL2 qtbase qttools xorg.libXtst makeQtWrapper
   ];
+
+  postInstall = ''
+    wrapQtProgram $out/bin/antimicro
+  '';
 
   meta = with stdenv.lib; {
     description = "GUI for mapping keyboard and mouse controls to a gamepad";
