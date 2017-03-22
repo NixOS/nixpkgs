@@ -3,9 +3,10 @@
 
 let
   version = "5.6";
-  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
-in mkPythonDerivation {
+  inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+in buildPythonPackage {
   name = "PyQt-${version}";
+  format = "other";
 
   meta = with lib; {
     description = "Python bindings for Qt5";
