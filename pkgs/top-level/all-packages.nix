@@ -968,6 +968,8 @@ with pkgs;
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  loccount = callPackage ../development/tools/misc/loccount { };
+
   long-shebang = callPackage ../misc/long-shebang {};
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
