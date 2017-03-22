@@ -42,6 +42,7 @@ let
     passthru = {
       lib = self; # compatibility with gcc, so that `stdenv.cc.cc.lib` works on both
       isClang = true;
+      inherit llvm;
     } // stdenv.lib.optionalAttrs stdenv.isLinux {
       inherit gcc;
     };
