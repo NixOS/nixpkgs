@@ -2,7 +2,8 @@
 
 , xlibs, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus
-, zlib, libjpeg, libpng, libtiff
+, zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
+, jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsaLib
 , libcap
 , pciutils
@@ -34,9 +35,6 @@ qtSubmodule {
     substituteInPlace ./src/3rdparty/chromium/v8/build/standalone.gypi \
       --replace /bin/echo ${coreutils}/bin/echo
 
-    # fix default SSL bundle location
-    sed -i -e 's,/cert.pem,/certs/ca-bundle.crt,' src/3rdparty/chromium/third_party/boringssl/src/crypto/x509/x509_def.c
-
     # Fix library paths
     sed -i \
       -e "s,QLibraryInfo::location(QLibraryInfo::DataPath),QLatin1String(\"$out\"),g" \
@@ -54,10 +52,16 @@ qtSubmodule {
   qmakeFlags = lib.optional enableProprietaryCodecs "WEBENGINE_CONFIG+=use_proprietary_codecs";
 
   propagatedBuildInputs = [
-    dbus zlib alsaLib
+    dbus zlib minizip alsaLib snappy nss protobuf jsoncpp libevent
 
     # Image formats
-    libjpeg libpng libtiff
+    libjpeg libpng libtiff libwebp
+
+    # Video formats
+    srtp libvpx
+
+    # Audio formats
+    alsaLib libopus
 
     # Text rendering
     fontconfig freetype harfbuzz icu
