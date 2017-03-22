@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, perl, xulrunner, cmake, perlPackages, zip, unzip, pkgconfig
+, perl, firefox, perlPackages, zip, unzip, pkgconfig
 , libpulseaudio, glib, gtk2, pixman, nspr, nss, libXScrnSaver
 , scrnsaverproto
 }:
@@ -14,25 +14,20 @@ stdenv.mkDerivation rec {
     sha256 = "19104fwdaf0nnsr5w755fg8wwww5sh96wmn939gxa5ah155nf2w3";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake zip unzip ];
+  nativeBuildInputs = [ pkgconfig zip unzip ];
 
   buildInputs =
-    [ perl xulrunner libpulseaudio glib gtk2 pixman nspr
+    [ perl firefox libpulseaudio glib gtk2 pixman nspr
       nss libXScrnSaver scrnsaverproto
     ] ++ [ perlPackages.SubName gtk2 glib ];
 
   postPatch = ''
-    sed -e '1i#include <netinet/in.h>' -i src/rtp/otRTPDecoder.cpp src/rtp/otRTPEncoder.cpp
+    sed -e '1i#include <netinet/in.h>' -i src/components/src/rtp/otRTPDecoder.cpp src/components/src/rtp/otRTPEncoder.cpp
   '';
-
-  cmakeBuildDir = "cmake-build";
-  cmakeFlags = ["-D XPCOM_GECKO_SDK=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"];
 
   buildPhase = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
-    cd src/components
     perl build.pl XULAPP 1
-    cd ../../
   '';
 
   installPhase = ''
@@ -43,7 +38,8 @@ stdenv.mkDerivation rec {
     unzip "$BUILD_DIR/oneteam.xulapp"
     mkdir -p "$out/bin"
     echo "#! ${stdenv.shell}" > "$out/bin/oneteam"
-    echo "\"${xulrunner}/bin/xulrunner\" \"$TARGET_DIR/application.ini\"" > "$out/bin/oneteam"
+    sed -re 's@MaxVersion=[0-9.]+@MaxVersion=999.0@' -i "$TARGET_DIR/application.ini"
+    echo "\"${firefox}/bin/firefox\" -app \"$TARGET_DIR/application.ini\"" > "$out/bin/oneteam"
     chmod a+x "$out/bin/oneteam"
     mkdir -p "$out/share/doc"
     cp -r "$BUILD_DIR/docs" "$out/share/doc/oneteam"
@@ -54,6 +50,8 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     license = stdenv.lib.licenses.gpl2;
     homepage="http://oneteam.im";
+    # Fell behind the Firefox development
+    broken = true;
   };
 
   passthru = {
