@@ -208,11 +208,7 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        themes = [
-          pkgs.extra-cmake-modules # for the setup-hook
-          plasma5.plasma-workspace
-          pkgs.breeze-icons
-        ];
+        package = pkgs.sddmPlasma5;
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
