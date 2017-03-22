@@ -25,10 +25,11 @@ let
 
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
-  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
-  });
-
-  makeOverridablePythonPackage = f: origArgs:
+  buildPythonPackage = let
+    # This function is basically a copy of `lib.makeOverridable`.
+    # The only difference is that we use a different attribute,
+    # `overridePythonPackage`, instead of `override`.
+    makeOverridablePythonPackage = f: origArgs:
     let
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
@@ -46,9 +47,7 @@ let
         overrideDerivation = throw "overrideDerivation not yet supported for functors";
       }
       else ff;
-
-  buildPythonPackage = makeOverridablePythonPackage (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit mkPythonDerivation;
+  in makeOverridablePythonPackage (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit bootstrapped-pip;
     flit = self.flit;
   });
@@ -78,7 +77,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit python pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi;
 
   # helpers
