@@ -13934,6 +13934,8 @@ with pkgs;
 
   gmpc = callPackage ../applications/audio/gmpc {};
 
+  gmtp = callPackage ../applications/misc/gmtp {};
+
   gnome-mpv = callPackage ../applications/video/gnome-mpv { };
 
   gollum = callPackage ../applications/misc/gollum { };
