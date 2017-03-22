@@ -6,6 +6,7 @@
 , alsaLib
 , libcap
 , pciutils
+, systemd
 
 , bison, flex, git, which, gperf
 , coreutils
@@ -41,6 +42,12 @@ qtSubmodule {
       -e "s,QLibraryInfo::location(QLibraryInfo::TranslationsPath),QLatin1String(\"$out/translations\"),g" \
       -e "s,QLibraryInfo::location(QLibraryInfo::LibraryExecutablesPath),QLatin1String(\"$out/libexec\"),g" \
       src/core/web_engine_library_info.cpp
+
+    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
+      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
+
+    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
+      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
 
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
