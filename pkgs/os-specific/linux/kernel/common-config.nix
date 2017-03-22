@@ -33,13 +33,16 @@ with stdenv.lib;
   DEBUG_KERNEL y
   DYNAMIC_DEBUG y
   BACKTRACE_SELF_TEST n
-  CPU_NOTIFIER_ERROR_INJECT? n
   DEBUG_DEVRES n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  ${optionalString (versionOlder version "4.10") ''
+    CPU_NOTIFIER_ERROR_INJECT? n
+  ''}
 
   ${optionalString (versionOlder version "4.11") ''
     TIMER_STATS y
@@ -303,7 +306,9 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
-  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ${optionalString (versionOlder version "4.11") ''
+    DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ''}
 
   # Security related features.
   RANDOMIZE_BASE? y
@@ -451,7 +456,11 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  UPROBE_EVENT? y
+
+  ${optionalString (versionOlder version "4.11") ''
+    UPROBE_EVENT? y
+  ''}
+
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
     BPF_EVENTS y
