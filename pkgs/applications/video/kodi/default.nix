@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchurl, makeWrapper
+{ stdenv, lib, fetchFromGitHub, fetchurl, autoconf, automake, libtool, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, python2
-, boost, avahi, libdvdcss, libdvdnav, libdvdread, lame, autoreconfHook
+, libgcrypt, libgpgerror, libunistring
+, boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
 , libX11, xproto, inputproto, libxml2
@@ -16,133 +17,194 @@
 , sqlite, mysql, nasm, gnutls, libva, wayland
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
-, libcrossguid
-, dbus_libs ? null, dbusSupport ? true
-, udev, udevSupport ? true
-, libusb ? null, usbSupport ? false
-, samba ? null, sambaSupport ? true
-, libmicrohttpd, bash
-# TODO: would be nice to have nfsSupport (needs libnfs library)
-, rtmpdump ? null, rtmpSupport ? true
-, libvdpau ? null, vdpauSupport ? true
-, libpulseaudio ? null, pulseSupport ? true
-, joystickSupport ? true
+, libcrossguid, libmicrohttpd
+, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
+, libplist, p11_kit, zlib
+, dbusSupport ? true, dbus_libs ? null
+, joystickSupport ? true, cwiid ? null
+, nfsSupport ? true, libnfs ? null
+, pulseSupport ? true, libpulseaudio ? null
+, rtmpSupport ? true, rtmpdump ? null
+, sambaSupport ? true, samba ? null
+, udevSupport ? true, udev ? null
+, usbSupport  ? false, libusb ? null
+, vdpauSupport ? true, libvdpau ? null
 }:
 
 assert dbusSupport  -> dbus_libs != null;
-assert udevSupport  -> udev != null;
-assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
-assert sambaSupport -> samba != null;
-assert vdpauSupport -> libvdpau != null;
+assert nfsSupport   -> libnfs != null;
 assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
+assert sambaSupport -> samba != null;
+assert udevSupport  -> udev != null;
+assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
+assert vdpauSupport -> libvdpau != null;
+
+# TODO for Kodi 18.0
+# - cmake is no longer in project/cmake
+# - maybe we can remove auto{conf,make} and libtool from inputs
+# - check if dbus support PR has been merged and add dbus as a buildInput
 
 let
-  kodi_version = "17.4";
+  kodiReleaseDate = "20171115";
+  kodiVersion = "17.6";
   rel = "Krypton";
-  ffmpeg_3_1_9 = fetchurl {
-    url = "https://github.com/xbmc/FFmpeg/archive/3.1.9-${rel}-${kodi_version}.tar.gz";
-    sha256 = "0rhjz505ljfg2jqbm3rd7qbcjq4vnp8h9a8vad8rjf84v3alglpa";
-  };
-  # Usage of kodi fork of libdvdnav and libdvdread is necessary for functional dvd playback:
-  libdvdnav_src = fetchurl {
-    url = "https://github.com/xbmc/libdvdnav/archive/981488f.tar.gz";
-    sha256 = "312b3d15bc448d24e92f4b2e7248409525eccc4e75776026d805478e51c5ef3d";
-  };
-  libdvdread_src = fetchurl {
-    url = "https://github.com/xbmc/libdvdread/archive/17d99db.tar.gz";
-    sha256 = "e7179b2054163652596a56301c9f025515cb08c6d6310b42b897c3ad11c0199b";
-  };
-in stdenv.mkDerivation rec {
-    version = kodi_version;
-    name = "kodi-${version}";
 
-    src = fetchurl {
-      url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1p1lxkapynjbd85ns7m4jybl4k35kxzv7105xkh03hlz8kkqc23b";
-    };
+  kodi_src = fetchFromGitHub {
+    owner  = "xbmc";
+    repo   = "xbmc";
+    rev    = "${kodiVersion}-${rel}";
+    sha256 = "1pwmmbry7dajwdpmc1mdygjvxna4kl38h32d71g10yf3mdm5wmz3";
+  };
+
+  kodiDependency = { name, version, rev, sha256, ... } @attrs:
+    let
+      attrs' = builtins.removeAttrs attrs ["name" "version" "rev" "sha256"];
+    in stdenv.mkDerivation ({
+      name = "kodi-${lib.toLower name}-${version}";
+      src = fetchFromGitHub {
+        owner = "xbmc";
+        repo  = name;
+        inherit rev sha256;
+      };
+      enableParallelBuilding = true;
+    } // attrs');
+
+  ffmpeg = kodiDependency rec {
+    name    = "FFmpeg";
+    version = "3.1.11";
+    rev     = "${version}-${rel}-17.5"; # TODO: change 17.5 back to ${kodiVersion}
+    sha256  = "0nc4sb6v1g3l11v9h5l9n44a8r40186rcbp2xg5c7vg6wcpjid13";
+    preConfigure = ''
+      cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
+    '';
+    buildInputs = [ gnutls libidn libtasn1 p11_kit zlib ];
+    nativeBuildInputs = [ cmake nasm pkgconfig ];
+  };
+
+  # we should be able to build these externally and have kodi reference them as buildInputs.
+  # Doesn't work ATM though so we just use them for the src
+
+  libdvdcss = kodiDependency {
+    name              = "libdvdcss";
+    version           = "20160215";
+    rev               = "2f12236bc1c92f73c21e973363f79eb300de603f";
+    sha256            = "198r0q73i55ga1dvyqq9nfcri0zq08b94hy8671lg14i3izx44dd";
+    buildInputs       = [ libdvdread ];
+    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  };
+
+  libdvdnav = kodiDependency {
+    name              = "libdvdnav";
+    version           = "20170217";
+    rev               = "981488f7f27554b103cca10c1fbeba027396c94a";
+    sha256            = "089pswc51l3avh95zl4cpsh7gh1innh7b2y4xgx840mcmy46ycr8";
+    buildInputs       = [ libdvdread ];
+    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  };
+
+  libdvdread = kodiDependency {
+    name              = "libdvdread";
+    version           = "20160221";
+    rev               = "17d99db97e7b8f23077b342369d3c22a6250affd";
+    sha256            = "1gr5aq1cjr3as9mnwrw29cxn4m6f6pfrxdahkdcjy70q3ldg90sl";
+    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  };
+
+in stdenv.mkDerivation rec {
+    name = "kodi-${kodiVersion}";
+
+    src = kodi_src;
 
     buildInputs = [
-      libxml2 gnutls yasm python2
+      gnutls libidn libtasn1 nasm p11_kit
+      libxml2 yasm python2
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva
       openssl gperf tinyxml2 taglib libssh swig jre
-      libX11 xproto inputproto which
-      libXt libXmu libXext xextproto
-      libXinerama libXrandr randrproto
-      libXtst libXfixes fixesproto
+      libX11 xproto inputproto libXt libXmu libXext xextproto
+      libXinerama libXrandr randrproto libXtst libXfixes fixesproto
       SDL SDL_image SDL_mixer alsaLib
       mesa glew fontconfig freetype ftgl
-      libjpeg jasper libpng libtiff wayland
+      libjpeg jasper libpng libtiff libva wayland
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.lib nasm avahi libdvdcss lame
+      sqlite mysql.lib avahi lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
-      libcrossguid
+      libgcrypt libgpgerror libunistring
+      libcrossguid cwiid libplist
+      bluez giflib glib harfbuzz lcms2 libpthreadstubs libXdmcp
+      ffmpeg
+      # libdvdcss libdvdnav libdvdread
     ]
-    ++ lib.optional dbusSupport dbus_libs
-    ++ lib.optional udevSupport udev
-    ++ lib.optional usbSupport libusb
-    ++ lib.optional sambaSupport samba
-    ++ lib.optional vdpauSupport libvdpau
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional rtmpSupport rtmpdump
-    ++ lib.optional joystickSupport SDL2;
+    ++ lib.optional  dbusSupport     dbus_libs
+    ++ lib.optionals joystickSupport [ cwiid SDL2 ]
+    ++ lib.optional  nfsSupport      libnfs
+    ++ lib.optional  pulseSupport    libpulseaudio
+    ++ lib.optional  rtmpSupport     rtmpdump
+    ++ lib.optional  sambaSupport    samba
+    ++ lib.optional  udevSupport     udev
+    ++ lib.optional  usbSupport      libusb
+    ++ lib.optional  vdpauSupport    libvdpau;
 
     nativeBuildInputs = [
-      autoreconfHook cmake gnumake makeWrapper pkgconfig
+      cmake
+      doxygen
+      makeWrapper
+      which
+      pkgconfig gnumake
+      autoconf automake libtool # still needed for some components. Check if that is the case with 18.0
     ];
 
-    dontUseCmakeConfigure = true;
+    cmakeFlags = [
+      "-Dlibdvdcss_URL=${libdvdcss.src}"
+      "-Dlibdvdnav_URL=${libdvdnav.src}"
+      "-Dlibdvdread_URL=${libdvdread.src}"
+      "-DGIT_VERSION=${kodiReleaseDate}"
+      "-DENABLE_EVENTCLIENTS=ON"
+      "-DENABLE_INTERNAL_CROSSGUID=OFF"
+      "-DENABLE_OPTICAL=ON"
+      "-DLIRC_DEVICE=/run/lirc/lircd"
+    ];
+
+    enableParallelBuilding = true;
+
+    # 14 tests fail but the biggest issue is that every test takes 30 seconds -
+    # I'm guessing there is a thing waiting to time out
+    doCheck = false;
 
     postPatch = ''
       substituteInPlace xbmc/linux/LinuxTimezone.cpp \
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
-      substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
-        --replace "/bin/bash" "${bash}/bin/bash -ex"
-      cp ${ffmpeg_3_1_9} tools/depends/target/ffmpeg/ffmpeg-3.1.9-${rel}-${version}.tar.gz
-      ln -s ${libdvdcss.src} tools/depends/target/libdvdcss/libdvdcss-master.tar.gz
-      cp ${libdvdnav_src} tools/depends/target/libdvdnav/libdvdnav-master.tar.gz
-      cp ${libdvdread_src} tools/depends/target/libdvdread/libdvdread-master.tar.gz
     '';
 
     preConfigure = ''
-      patchShebangs .
-      ./bootstrap
-      # tests here fail
-      sed -i '/TestSystemInfo.cpp/d' xbmc/utils/test/{Makefile,CMakeLists.txt}
-      # tests here trigger a segfault in kodi.bin
-      sed -i '/TestWebServer.cpp/d'  xbmc/network/test/{Makefile,CMakeLists.txt}
+      cd project/cmake
     '';
-
-    enableParallelBuilding = true;
-
-    doCheck = true;
-
-    configureFlags = [ "--enable-libcec" ]
-    ++ lib.optional (!sambaSupport) "--disable-samba"
-    ++ lib.optional vdpauSupport "--enable-vdpau"
-    ++ lib.optional pulseSupport "--enable-pulse"
-    ++ lib.optional rtmpSupport "--enable-rtmp"
-    ++ lib.optional joystickSupport "--enable-joystick";
 
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH ":" "${lib.makeBinPath
-              [ python2 glxinfo xdpyinfo ]}" \
+          --prefix PATH            ":" "${lib.makeBinPath [ python2 glxinfo xdpyinfo ]}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               [ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass SDL2 ]}"
       done
+
+      substituteInPlace $out/share/xsessions/kodi.desktop \
+        --replace kodi-standalone $out/bin/kodi-standalone
     '';
 
+    doInstallCheck = true;
+
+    installCheckPhase = "$out/bin/kodi --version";
+
     meta = with stdenv.lib; {
-      homepage = https://kodi.tv/;
       description = "Media center";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ domenkozar titanous edwtjo ];
+      homepage    = https://kodi.tv/;
+      license     = licenses.gpl2;
+      platforms   = platforms.linux;
+      maintainers = with maintainers; [ domenkozar titanous edwtjo peterhoeg ];
     };
 }
