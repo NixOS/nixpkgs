@@ -14,6 +14,9 @@ my $su = "@su@";
 # Ensure a consistent umask.
 umask 0022;
 
+# Ensure $NIXOS_CONFIG is not set.
+$ENV{"NIXOS_CONFIG"} = "";
+
 # Parse the command line.
 
 sub showHelp {
