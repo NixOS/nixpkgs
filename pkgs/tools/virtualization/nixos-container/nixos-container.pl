@@ -270,7 +270,7 @@ if ($action eq "destroy") {
 
     safeRemoveTree($profileDir) if -e $profileDir;
     safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
-    system("chattr", "-i", "$root/var/empty") if -e $root;
+    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
     safeRemoveTree($root) if -e $root;
     unlink($confFile) or die;
 }
