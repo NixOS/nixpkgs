@@ -79,7 +79,7 @@ if ($action eq "list") {
 }
 
 my $containerName = $ARGV[1] or die "$0: no container name specified\n";
-$containerName =~ /^[a-zA-Z0-9\-]+$/ or die "$0: invalid container name\n";
+$containerName =~ /^[a-zA-Z0-9_-]+$/ or die "$0: invalid container name\n";
 
 sub writeNixOSConfig {
     my ($nixosConfigFile) = @_;
