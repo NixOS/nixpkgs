@@ -15263,6 +15263,13 @@ with pkgs;
     themes = [];  # extra themes, etc.
   };
 
+  sddmPlasma5 = sddm.override {
+    themes = [
+      plasma5.plasma-workspace
+      pkgs.breeze-icons
+    ];
+  };
+
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
   slim = callPackage ../applications/display-managers/slim {
