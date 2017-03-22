@@ -2950,7 +2950,7 @@ in {
   };
 
   # Needed for FlexGet 1.2.337 and calibre 2.76.0
-  html5lib_0_9999999 = self.html5lib.override rec {
+  html5lib_0_9999999 = self.html5lib.overridePythonPackage rec {
     name = "html5lib-${version}";
     buildInputs = with self; [ nose flake8 ];
     propagatedBuildInputs = with self; [ six ];
@@ -4098,7 +4098,7 @@ in {
   };
 
   # Needed for awscli
-  colorama_3_3 = self.colorama.override rec {
+  colorama_3_3 = self.colorama.overridePythonPackage rec {
     name = "colorama-${version}";
     version = "0.3.3";
     src = pkgs.fetchurl {
@@ -4131,7 +4131,7 @@ in {
     };
   };
 
-  CommonMark_54 = self.CommonMark.override rec {
+  CommonMark_54 = self.CommonMark.overridePythonPackage rec {
     name = "CommonMark-0.5.4";
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
@@ -7195,7 +7195,7 @@ in {
     '';
   };
 
-  fudge_9 = self.fudge.override rec {
+  fudge_9 = self.fudge.overridePythonPackage rec {
     name = "fudge-0.9.6";
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fudge/${name}.tar.gz";
@@ -10612,7 +10612,7 @@ in {
     };
   };
 
-  django_tagging_0_3 = self.django_tagging.override (attrs: rec {
+  django_tagging_0_3 = self.django_tagging.overridePythonPackage (attrs: rec {
     name = "django-tagging-0.3.6";
 
     src = pkgs.fetchurl {
@@ -10654,8 +10654,8 @@ in {
 
     # TODO improve the that multi-override necessity (the fixpoint based python
     # packages work can be the solution)
-    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
-      buildInputs = with self; [ (django_nose.override {
+    propagatedBuildInputs = with self; [ django_1_9 (django_compat.overridePythonPackage {
+      buildInputs = with self; [ (django_nose.overridePythonPackage {
         propagatedBuildInputs = with self; [ django_1_9 nose ];
       }) ];
       propagatedBuildInputs = with self; [ django_1_9 six ];
@@ -10850,7 +10850,7 @@ in {
     };
   };
 
-  django_pipeline_1_3 = self.django_pipeline.overrideDerivation (super: rec {
+  django_pipeline_1_3 = self.django_pipeline.overridePythonPackage (super: rec {
     name = "django-pipeline-1.3.27";
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-pipeline/${name}.tar.gz";
@@ -12073,7 +12073,7 @@ in {
     };
   };
 
-  futures_2_2 = self.futures.override rec {
+  futures_2_2 = self.futures.overridePythonPackage rec {
     version = "2.2.0";
     name = "futures-${version}";
 
@@ -19446,7 +19446,7 @@ in {
       maintainers = with maintainers; [ nckx ];
     };
   };
-  prompt_toolkit_52 = self.prompt_toolkit.override(self: rec {
+  prompt_toolkit_52 = self.prompt_toolkit.overridePythonPackage(self: rec {
     name = "prompt_toolkit-${version}";
     version = "0.52";
     src = pkgs.fetchurl {
@@ -19505,7 +19505,7 @@ in {
     };
   };
 
-  psutil_1 = self.psutil.overrideDerivation (self: rec {
+  psutil_1 = self.psutil.overridePythonPackage (self: rec {
     name = "psutil-1.2.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psutil/${name}.tar.gz";
@@ -20530,7 +20530,7 @@ in {
   };
 
   # For Pelican 3.6.3
-  pygments_2_0 = self.pygments.override rec {
+  pygments_2_0 = self.pygments.overridePythonPackage rec {
     version = "2.0.2";
     name = "Pygments-${version}";
 
@@ -23560,7 +23560,7 @@ in {
     };
   };
 
-  setuptools_scm_18 = self.setuptools_scm.override rec {
+  setuptools_scm_18 = self.setuptools_scm.overridePythonPackage rec {
     name = "setuptools_scm-${version}";
     version = "1.8.0";
 
@@ -24762,7 +24762,7 @@ in {
     };
   });
 
-  sphinx_1_2 = self.sphinx.override rec {
+  sphinx_1_2 = self.sphinx.overridePythonPackage rec {
     name = "sphinx-1.2.3";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
