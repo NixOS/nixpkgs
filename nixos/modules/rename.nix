@@ -192,5 +192,7 @@ with lib;
       "See the 16.09 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
+      "Set the option `services.xserver.displayManager.sddm.package' instead.")
   ];
 }

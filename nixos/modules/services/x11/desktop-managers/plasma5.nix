@@ -213,10 +213,7 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        themes = [
-          plasma5.plasma-workspace
-          pkgs.breeze-icons
-        ];
+        package = pkgs.sddmPlasma5;
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
