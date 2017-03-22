@@ -11,8 +11,9 @@
 , bison, flex, git, which, gperf
 , coreutils
 , pkgconfig, python2
+, enableProprietaryCodecs ? true
 
-, stdenv # lib.optional, needsPax
+, lib, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
@@ -48,13 +49,10 @@ qtSubmodule {
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-
-    configureFlags+="\
-        -plugindir $out/lib/qt5/plugins \
-        -importdir $out/lib/qt5/imports \
-        -qmldir $out/lib/qt5/qml \
-        -docdir $out/share/doc/qt5"
   '';
+
+  qmakeFlags = lib.optional enableProprietaryCodecs "WEBENGINE_CONFIG+=use_proprietary_codecs";
+
   propagatedBuildInputs = [
     dbus zlib alsaLib
 
@@ -71,7 +69,7 @@ qtSubmodule {
     libcap
     pciutils
   ];
-  patches = stdenv.lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+  patches = lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
