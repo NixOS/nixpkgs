@@ -13771,10 +13771,6 @@ with pkgs;
     ffmpeg = ffmpeg_1;
   };
 
-  freicoin = callPackage ../applications/misc/freicoin {
-    boost = boost155;
-  };
-
   fte = callPackage ../applications/editors/fte { };
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
