@@ -380,6 +380,7 @@
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   patternspandemic = "Brad Christensen <patternspandemic@live.com>";
   pawelpacana = "Paweł Pacana <pawel.pacana@gmail.com>";
+  pbogdan = "Piotr Bogdan <ppbogdan@gmail.com>";
   periklis = "theopompos@gmail.com";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
