@@ -29119,7 +29119,8 @@ EOF
         --replace 'lxml==3.7.1' 'lxml' \
         --replace 'pyopenssl==16.2.0' 'pyopenssl' \
         --replace 'requests[socks]==2.12.4' 'requests[socks]' \
-        --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0'
+        --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
+        --replace 'python-dateutil==2.5.3' 'python-dateutil>=2.5,<3.0'
     '';
 
     propagatedBuildInputs = with self; [
