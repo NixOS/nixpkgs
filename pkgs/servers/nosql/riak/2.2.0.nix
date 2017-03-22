@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam, coreutils }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam, coreutils
+, Carbon ? null, Cocoa ? null }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -29,8 +30,9 @@ stdenv.mkDerivation rec {
   name = "riak-2.2.0";
 
   buildInputs = [
-    which unzip erlang pam
-  ];
+    which unzip erlang
+  ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ]
+    ++ lib.optional stdenv.isLinux pam;
 
   src = srcs.riak;
 
@@ -91,6 +93,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
-    platforms   = [ "x86_64-linux" ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

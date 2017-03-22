@@ -10808,6 +10808,7 @@ with pkgs;
   mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
   riak = callPackage ../servers/nosql/riak/2.2.0.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     erlang = erlang_basho_R16B02;
   };
 
