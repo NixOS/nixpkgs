@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     homepage = "https://gmtp.sourceforge.io";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.pbogdan ];
+    license = stdenv.lib.licenses.bsd3;
   };
 }
