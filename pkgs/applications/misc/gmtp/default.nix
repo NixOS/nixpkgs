@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     sha256 = "b21b9a8e66ae7bb09fc70ac7e317a0e32aff3917371a7241dea73c41db1dd13b";
   };
 
-  buildInputs = [ pkgconfig libmtp libid3tag flac libvorbis gtk3
-                  gsettings_desktop_schemas wrapGAppsHook];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings_desktop_schemas ];
 
   enableParallelBuilding = true;
 
