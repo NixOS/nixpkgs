@@ -209,7 +209,6 @@ in
       services.xserver.displayManager.sddm = {
         theme = "breeze";
         themes = [
-          pkgs.extra-cmake-modules # for the setup-hook
           plasma5.plasma-workspace
           pkgs.breeze-icons
         ];
