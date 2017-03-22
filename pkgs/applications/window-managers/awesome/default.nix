@@ -33,6 +33,13 @@ with luaPackages; stdenv.mkDerivation rec {
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ];
 
+  patches = [
+    (fetchurl {
+      url = "https://patch-diff.githubusercontent.com/raw/awesomeWM/awesome/pull/1639.patch";
+      sha256 = "00piynmbxajd2xbg960gmf0zlqn7m489f4ww482y49ravfy1jhsj";
+    })
+  ];
+
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
 
   LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ cairo pango gobjectIntrospection ]}";
