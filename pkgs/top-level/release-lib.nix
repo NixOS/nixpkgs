@@ -3,7 +3,9 @@
 , scrubJobs ? true
 }:
 
-with import ../../lib;
+let
+  lib = import ../../lib;
+in with lib;
 
 rec {
 
@@ -14,6 +16,7 @@ rec {
   });
 
   pkgs = pkgsFor "x86_64-linux";
+  inherit lib;
 
 
   hydraJob' = if scrubJobs then hydraJob else id;

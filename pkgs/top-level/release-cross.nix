@@ -1,4 +1,3 @@
-
 { # The platforms for which we build Nixpkgs.
   supportedSystems ? [ builtins.currentSystem ]
 , # Strip most of attributes when evaluating to spare memory usage
@@ -8,8 +7,6 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  inherit (pkgs) lib;
-
   nativePlatforms = linux;
 
   /* Basic list of packages to cross-build */

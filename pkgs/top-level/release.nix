@@ -9,7 +9,7 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 
-{ nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
   supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
@@ -20,9 +20,6 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-
-  lib = pkgs.lib;
-
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
