@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
          or any other theme.
       '';
 
-    homepage = http://members.dslextreme.com/users/billw/gkrellm/gkrellm.html;
+    homepage = http://gkrellm.srcbox.net;
     license = licenses.gpl3Plus;
     maintainers = [ ];
     platforms = platforms.unix;
