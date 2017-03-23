@@ -517,6 +517,8 @@ let
 
     stdio = callPackage ../development/ocaml-modules/stdio { };
 
+    stog = callPackage ../applications/misc/stog { };
+
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
