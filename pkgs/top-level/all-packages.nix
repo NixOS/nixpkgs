@@ -2212,7 +2212,12 @@ with pkgs;
 
   h2 = callPackage ../servers/h2 { };
 
-  haproxy = callPackage ../tools/networking/haproxy { };
+  haproxy = callPackage ../tools/networking/haproxy {
+    useLua = if stdenv.isDarwin then false else true;
+    lua = if stdenv.isDarwin then null else lua5_3;
+    usePcre = true;
+    pcre = pcre;
+  };
 
   haveged = callPackage ../tools/security/haveged { };
 
