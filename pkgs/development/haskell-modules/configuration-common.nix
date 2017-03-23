@@ -483,9 +483,6 @@ self: super: {
   # https://github.com/afcowie/locators/issues/1
   locators = dontCheck super.locators;
 
-  # https://github.com/haskell/haddock/issues/378
-  haddock-library = dontCheck super.haddock-library;
-
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
