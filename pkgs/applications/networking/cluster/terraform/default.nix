@@ -27,7 +27,7 @@ let
       export HOME=$TMP
     '';
 
-    doCheck = builtins.compareVersions version "0.8.8" >= 0;
+    doCheck = builtins.compareVersions version "0.9.0" >= 0;
 
     meta = with stdenv.lib; {
       description = "Tool for building, changing, and versioning infrastructure";
