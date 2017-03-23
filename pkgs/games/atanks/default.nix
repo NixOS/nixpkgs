@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ allegro ];
 
-  patchPhase = ''
-    substituteInPlace Makefile --replace /usr $out
-  '';
-
   makeFlags = [ "PREFIX=$(out)/" "INSTALL=install" "CXX=g++" ];
 
   meta = with stdenv.lib; {
