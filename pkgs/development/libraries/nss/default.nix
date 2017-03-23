@@ -16,7 +16,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1wrx2ig6yvgywjs25hzy4szgml21hwhd7ds0ghyfybhkiq7lyg6x";
   };
 
-  buildInputs = [ nspr perl zlib sqlite ];
+  buildInputs = [ perl zlib sqlite ];
+
+  propagatedBuildInputs = [ nspr ];
 
   prePatch = ''
     xz -d < ${nssPEM} | patch -p1

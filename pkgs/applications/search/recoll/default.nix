@@ -7,15 +7,13 @@
 assert stdenv.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
-  ver = "1.21.3";
+  ver = "1.23.1";
   name = "recoll-${ver}";
 
   src = fetchurl {
     url = "http://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "66f039f08b149d5e4840664d4a636f6b55145b02072f87aab83282ebe0cd593a";
+    sha256 = "0si407qm47ndy0l6zv57lqb5za4aiv0lyghnzb211g03szjkfpg8";
   };
-
-  patches = [ ./nodeblayout.patch ./versionawk.patch ];
 
   configureFlags = [ "--with-inotify" ];
 
@@ -61,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.lesbonscomptes.com/recoll/;
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming ];
+    maintainers = [ maintainers.jcumming ];
   };
 }

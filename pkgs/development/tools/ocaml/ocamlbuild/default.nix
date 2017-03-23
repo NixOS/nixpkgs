@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, ocaml, findlib, buildOcaml, type_conv, camlp4,
  ocamlmod, ocamlify, ounit, expect}:
 let
-  version = "0.9.3";
+  version = "0.11.0";
 in
 stdenv.mkDerivation {
   name = "ocamlbuild-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "ocaml";
     repo = "ocamlbuild";
     rev = version;
-    sha256 = "1ikm51lx4jz5vmbvrdwsm5p59bwbz3pi22vqkyz5lmqcciyn69i3";
+    sha256 = "0c8lv15ngmrc471jmkv0jp3d573chibwnjlavps047d9hd8gwxak";
   };
 
   createFindlibDestdir = true;
@@ -22,6 +22,7 @@ stdenv.mkDerivation {
   make -f configure.make Makefile.config \
     "OCAMLBUILD_PREFIX=$out" \
     "OCAMLBUILD_BINDIR=$out/bin" \
+    "OCAMLBUILD_MANDIR=$out/share/man" \
     "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
   '';
 
@@ -33,4 +34,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ vbgl ];
   };
 }
-

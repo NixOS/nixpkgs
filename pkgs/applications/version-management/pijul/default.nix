@@ -4,21 +4,21 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "pijul-${version}";
-  version = "0.3";
+  version = "0.3.3";
 
   src = fetchurl {
     url = "https://pijul.org/releases/${name}.tar.gz";
-    sha256 = "2c7b354b4ab142ac50a85d70c80949ff864377b37727b862d103d3407e2c7818";
+    sha256 = "933e68703916ee7b50cd09f928bb072bdfc3388b69ff657578c23080f7df22b8";
   };
 
-  sourceRoot = "pijul/pijul";
+  sourceRoot = "${name}/pijul";
 
   buildInputs = [ perl ]++ stdenv.lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ Security ]);
 
   doCheck = false;
   
-  depsSha256 = "03bb92mn16d38l49x4p1z21k7gvq3l3ki10brr13p7yv45rwvmzc";
+  depsSha256 = "1aiyjl8jbmr8yys5bsd2mg1i7jryzb8kxqlmxp7kjn2qx7b4q2zd";
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";

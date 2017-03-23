@@ -49,6 +49,8 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    base = callPackage ../development/ocaml-modules/base { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
@@ -232,6 +234,8 @@ let
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
     hex = callPackage ../development/ocaml-modules/hex { };
+
+    inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       batteries = ocaml_batteries;

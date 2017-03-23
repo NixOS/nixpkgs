@@ -6,14 +6,15 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-0.12.8";
+  name = "spice-0.13.3";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/releases/${name}.tar.bz2";
-    sha256 = "0za03i77j8i3g5l2np2j7vy8cqsdbkm9wbv4hjnaqq9xhz2sa0gr";
+    sha256 = "17mqgwamdhj8sx8vhahrjl5937x693kjnw6cp6v0akjrwz011xrh";
   };
 
   patches = [
+    # the following three patches fix CVE-2016-9577 and CVE-2016-9578
     (fetchpatch {
       name = "0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch";
       url = "http://pkgs.fedoraproject.org/cgit/rpms/spice.git/plain/0001-Prevent-possible-DoS-attempts-during-protocol-handsh.patch?id=d919d639ae5f83a9735a04d843eed675f9357c0d";
@@ -24,9 +25,11 @@ stdenv.mkDerivation rec {
       url = "http://pkgs.fedoraproject.org/cgit/rpms/spice.git/plain/0002-Prevent-integer-overflows-in-capability-checks.patch?id=d919d639ae5f83a9735a04d843eed675f9357c0d";
       sha256 = "1r1bhq98w93cvvrlrz6jwdfsy261xl3xqs0ppchaa2igyxvxv5z5";
     })
-    # Originally from http://pkgs.fedoraproject.org/cgit/rpms/spice.git/plain/0003-main-channel-Prevent-overflow-reading-messages-from-.patch?id=d919d639ae5f83a9735a04d843eed675f9357c0d
-    # but main-channel.c was renamed to main_channel.c
-    ./0001-Adapting-the-following-patch-from-http-pkgs.fedorapr.patch
+    (fetchpatch {
+      name = "0003-main-channel-Prevent-overflow-reading-messages-from.patch";
+      url = "https://cgit.freedesktop.org/spice/spice/patch/?id=1d3e26c0ee75712fa4bbbcfa09d8d5866b66c8af";
+      sha256 = "030mm551aipck99rqiz39vsvk071pn8715zynr5j6chwzgpflwm3";
+    })
   ];
 
   buildInputs = [ pixman celt alsaLib openssl libjpeg zlib

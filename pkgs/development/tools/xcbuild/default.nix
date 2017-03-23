@@ -31,6 +31,9 @@ in stdenv.mkDerivation rec {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
+  # See https://github.com/facebook/xcbuild/issues/238 and remove once that's in
+  patches = [ ./return-false.patch ];
+
   # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
   postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed 1i'#include <sys/sysmacros.h>' \

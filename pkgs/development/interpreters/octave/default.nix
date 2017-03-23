@@ -41,6 +41,12 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ mesa libX11 ])
     ;
 
+  # REMOVE ON VERSION BUMP
+  # Needed for Octave-4.2.1 on darwin. See https://savannah.gnu.org/bugs/?50234
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed 's/inline file_stat::~file_stat () { }/file_stat::~file_stat () { }/' -i ./liboctave/system/file-stat.cc
+  '';
+
   doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
