@@ -170,6 +170,8 @@ with pkgs;
     inherit curl stdenv;
   };
 
+  fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
+
   # fetchurlBoot is used for curl and its dependencies in order to
   # prevent a cyclic dependency (curl depends on curl.tar.bz2,
   # curl.tar.bz2 depends on fetchurl, fetchurl depends on curl).  It
