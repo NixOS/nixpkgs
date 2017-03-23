@@ -51,7 +51,7 @@ stdenv.mkDerivation {
                     --set QML_IMPORT_PATH "$env/lib/qt5/imports" \
                     --set QML2_IMPORT_PATH "$env/lib/qt5/qml" \
                     --set QT_PLUGIN_PATH "$env/lib/qt5/plugins" \
-                    --prefix GIO_EXTRA_MODULES : "${dconf.lib}/lib/gio/modules"
+                    --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
                 good="1"
                 break
             fi
