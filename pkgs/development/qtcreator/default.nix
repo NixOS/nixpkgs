@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
     license = "LGPL";
-    maintainers = [ maintainers.akaWolf maintainers.bbenoist ];
+    maintainers = [ maintainers.akaWolf ];
     platforms = platforms.all;
   };
 }
