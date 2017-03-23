@@ -555,6 +555,8 @@ let
 
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
 
+    xtmpl = callPackage ../development/ocaml-modules/xtmpl { };
+
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
