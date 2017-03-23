@@ -12,17 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake
     libusb1
-    pkgconfig
     qt5.qtbase
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
   ];
   patches = [
      ./FixInstallDestination.patch
      ./HeaderPath.patch
   ];
   cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
-  meta = {
+  meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''
        The nitrokey-app provides a QT system tray widget with wich you can
@@ -31,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage         = https://github.com/Nitrokey/nitrokey-app;
     repositories.git = https://github.com/Nitrokey/nitrokey-app.git;
-    license          = stdenv.lib.licenses.gpl3;
-    maintainer       = stdenv.lib.maintainers.kaiha;
+    license          = licenses.gpl3;
+    maintainer       = maintainers.kaiha;
   };
 }
