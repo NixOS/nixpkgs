@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.geany.org/";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.all;
   };
 }

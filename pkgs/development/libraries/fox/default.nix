@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "http://fox-toolkit.org";
     license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.all;
   };
 }
