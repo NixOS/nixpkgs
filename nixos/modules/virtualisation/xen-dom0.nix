@@ -29,7 +29,6 @@ in
 
     virtualisation.xen.package = mkOption {
       type = types.package;
-      default = pkgs.xen;
       defaultText = "pkgs.xen";
       example = literalExample "pkgs.xen-light";
       description = ''
@@ -39,7 +38,6 @@ in
 
     virtualisation.xen.qemu = mkOption {
       type = types.path;
-      default = "${pkgs.xen}/lib/xen/bin/qemu-system-i386";
       defaultText = "\${pkgs.xen}/lib/xen/bin/qemu-system-i386";
       example = literalExample "''${pkgs.qemu_xen-light}/bin/qemu-system-i386";
       description = ''
@@ -49,7 +47,6 @@ in
 
     virtualisation.xen.qemu-package = mkOption {
       type = types.package;
-      default = pkgs.xen;
       defaultText = "pkgs.xen";
       example = literalExample "pkgs.qemu_xen-light";
       description = ''
@@ -136,6 +133,9 @@ in
       message = "Xen currently does not support EFI boot";
     } ];
 
+    virtualisation.xen.package = mkDefault pkgs.xen;
+    virtualisation.xen.qemu = mkDefault "${pkgs.xen}/lib/xen/bin/qemu-system-i386";
+    virtualisation.xen.qemu-package = mkDefault pkgs.xen;
     virtualisation.xen.stored = mkDefault "${cfg.package}/bin/oxenstored";
 
     environment.systemPackages = [ cfg.package ];
