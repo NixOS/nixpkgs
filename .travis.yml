@@ -1,4 +1,10 @@
 language: nix
+sudo: true
+# 'sudo: false' == containers that start fast, but only get 4G ram;
+# 'sudo: true'  == VMs that start slow, but with 8G
+# ..as per:  https://docs.travis-ci.com/user/ci-environment/#Virtualization-environments
+# Nixpkgs PR tests OOM with 4G: https://github.com/NixOS/nixpkgs/issues/24200
+
 matrix:
     include:
         - os: linux
