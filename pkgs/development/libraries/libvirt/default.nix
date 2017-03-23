@@ -6,6 +6,9 @@
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, xen, zfs
 }:
+
+with stdenv.lib;
+
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
@@ -23,14 +26,14 @@ stdenv.mkDerivation rec {
     libxml2 gnutls perl python2 readline
     gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
     libnl numad numactl xen zfs
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
+  preConfigure = optionalString stdenv.isLinux ''
     PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
     substituteInPlace configure \
       --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
@@ -48,13 +51,13 @@ stdenv.mkDerivation rec {
     "--with-test"
     "--with-esx"
     "--with-remote"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
     "--with-init-script=redhat"
     "--with-storage-zfs"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
 
@@ -67,16 +70,16 @@ stdenv.mkDerivation rec {
     sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin"
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + optionalString stdenv.isLinux ''
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ iptables iproute pmutils numad numactl ]}
+      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://libvirt.org/;
     repositories.git = git://libvirt.org/libvirt.git;
     description = ''
