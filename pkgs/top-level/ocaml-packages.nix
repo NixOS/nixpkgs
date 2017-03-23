@@ -208,6 +208,8 @@ let
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
+    higlo = callPackage ../development/ocaml-modules/higlo { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
