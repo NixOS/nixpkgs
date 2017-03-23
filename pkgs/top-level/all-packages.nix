@@ -11506,7 +11506,6 @@ with pkgs;
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.packet_fix_race_condition_CVE_2016_8655
         kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
