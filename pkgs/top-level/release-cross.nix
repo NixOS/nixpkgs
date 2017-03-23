@@ -139,16 +139,7 @@ in
       float = "hard";
       withTLS = true;
       libc = "glibc";
-      platform = {
-        name = "fuloong-minipc";
-        kernelMajor = "2.6";
-        kernelBaseConfig = "lemote2f_defconfig";
-        kernelHeadersBaseConfig = "fuloong2e_defconfig";
-        uboot = null;
-        kernelArch = "mips";
-        kernelAutoModules = false;
-        kernelTarget = "vmlinux";
-      };
+      platform = pkgs.platforms.fuloong2f_n32;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "loongson2f";
