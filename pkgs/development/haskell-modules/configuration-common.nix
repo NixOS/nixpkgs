@@ -871,9 +871,6 @@ self: super: {
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
 
-  # https://github.com/cartazio/arithmoi/issues/49
-  arithmoi = overrideCabal super.arithmoi (drv: { doCheck = !pkgs.stdenv.isi686; });
-
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
 
