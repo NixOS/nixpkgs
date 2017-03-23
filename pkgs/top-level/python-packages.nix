@@ -28605,11 +28605,25 @@ EOF
     name = "worldengine-${version}";
     version = "0.19.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/worldengine/${name}.tar.gz";
-      sha256 = "0wnpp0zm4idc4242a970yf1blf8y2f1ikwha0q781wfz1dg4z0i6";
+    src = pkgs.fetchFromGitHub {
+      owner = "Mindwerks";
+      repo = "worldengine";
+      rev = "v${version}";
+      sha256 = "1xrckb0dn2841gvp32n18gib14bpi77hmjw3r9jiyhg402iip7ry";
     };
 
+    src-data = pkgs.fetchFromGitHub {
+      owner = "Mindwerks";
+      repo = "worldengine-data";
+      rev = "029051e";
+      sha256 = "06xbf8gj3ljgr11v1n8jbs2q8pdf9wz53xdgkhpm8hdnjahgdxdm";
+    };
+
+    postUnpack = ''
+      ln -s ${src-data} worldengine-data
+    '';
+
+    buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ noise numpy pyplatec protobuf3_2 purepng argparse h5py gdal ];
 
     prePatch = ''
@@ -28620,6 +28634,11 @@ EOF
         --replace 'protobuf==3.0.0a3' 'protobuf' \
         --replace 'noise==1.2.2' 'noise' \
         --replace 'PyPlatec==1.4.0' 'PyPlatec' \
+    '';
+
+    doCheck = true;
+    postCheck = ''
+      nosetests tests
     '';
 
     meta = {
