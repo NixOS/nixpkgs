@@ -1,100 +1,43 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
-  diskSize = "100G";
-in
-{
-  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
+
+  diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}";
+
+in {
+  imports = [
+    ../profiles/headless.nix
+    ../profiles/qemu-guest.nix
+    ./grow-partition.nix
+    ./google-options.nix
+  ];
 
   # https://cloud.google.com/compute/docs/tutorials/building-images
   networking.firewall.enable = mkDefault false;
 
-  system.build.googleComputeImage =
-    pkgs.vmTools.runInLinuxVM (
-      pkgs.runCommand "google-compute-image"
-        { preVM =
-            ''
-              mkdir $out
-              diskImage=$out/$diskImageBase
-              truncate $diskImage --size ${diskSize}
-              mv closure xchg/
-            '';
+  system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
+    inherit config pkgs lib;
+    diskSize = config.gcp.computeImage.size;
+    partitioned = true;
+    installBootLoader = true;
+    postVM = ''
+      PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+      pushd $out
+      mv nixos.img disk.raw
+      tar -Szcf "${diskImageBase}.tar.gz" disk.raw
+      rm disk.raw
+      popd
+    '';
+  };
 
-          postVM =
-            ''
-              PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
-              pushd $out
-              mv $diskImageBase disk.raw
-              tar -Szcf $diskImageBase.tar.gz disk.raw
-              rm $out/disk.raw
-              popd
-            '';
-          diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
-          exportReferencesGraph =
-            [ "closure" config.system.build.toplevel ];
-        }
-        ''
-          # Create partition table
-          ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-          ${pkgs.parted}/sbin/parted /dev/vda mkpart primary ext4 1 ${diskSize}
-          ${pkgs.parted}/sbin/parted /dev/vda print
-          . /sys/class/block/vda1/uevent
-          mknod /dev/vda1 b $MAJOR $MINOR
+  virtualisation.growPartition = true;
 
-          # Create an empty filesystem and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda1
-          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
-
-          mkdir /mnt
-          mount /dev/vda1 /mnt
-
-          # The initrd expects these directories to exist.
-          mkdir /mnt/dev /mnt/proc /mnt/sys
-
-          mount --bind /proc /mnt/proc
-          mount --bind /dev /mnt/dev
-          mount --bind /sys /mnt/sys
-
-          # Copy all paths in the closure to the filesystem.
-          storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
-
-          mkdir -p /mnt/nix/store
-          echo "copying everything (will take a while)..."
-          cp -prd $storePaths /mnt/nix/store/
-
-          # Register the paths in the Nix database.
-          printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-              chroot /mnt ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
-
-          # Create the system profile to allow nixos-rebuild to work.
-          chroot /mnt ${config.nix.package.out}/bin/nix-env \
-              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} \
-              --option build-users-group ""
-
-          # `nixos-rebuild' requires an /etc/NIXOS.
-          mkdir -p /mnt/etc
-          touch /mnt/etc/NIXOS
-
-          # `switch-to-configuration' requires a /bin/sh
-          mkdir -p /mnt/bin
-          ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
-
-          # Install a configuration.nix.
-          mkdir -p /mnt/etc/nixos /mnt/boot/grub
-          cp ${./google-compute-config.nix} /mnt/etc/nixos/configuration.nix
-
-          # Generate the GRUB menu.
-          ln -s vda /dev/sda
-          chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
-
-          umount /mnt/proc /mnt/dev /mnt/sys
-          umount /mnt
-        ''
-    );
-
-  fileSystems."/".label = "nixos";
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+  };
 
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
