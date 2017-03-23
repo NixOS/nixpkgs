@@ -236,6 +236,30 @@ sub usbCheck {
             )
         {
             push @initrdAvailableKernelModules, $module;
+        } else {
+            my $vendor = read_file "$path/../idVendor"; chomp $vendor;
+            my $product = read_file "$path/../idProduct"; chomp $product;
+
+            if ($vendor eq "046d" && ($product eq "c52b" || $product eq "c53b")) {
+                # Logitech Unifying receiver
+                push @initrdAvailableKernelModules, "usbhid";
+                push @initrdAvailableKernelModules, "hid_logitech_dj";
+            }
+            if ($vendor eq "17ef" && $product eq "6009") {
+                # Lenovo ThinkPad USB Keyboard with TrackPoint
+                push @initrdAvailableKernelModules, "usbhid";
+                push @initrdAvailableKernelModules, "hid_lenovo_tpkbd";
+            }
+            if ($vendor eq "1e7d" &&
+                ($product == "30d4" || $product == "319c" || $product == "3264" || $product == "2ced" ||
+                 $product == "2d51" || $product == "2dbe" || $product == "2db4" || $product == "2e22" ||
+                 $product == "2d50" || $product == "2c2e" || $product == "2c24" || $product == "2cf6" ||
+                 $product == "3138" || $product == "31ce" || $product == "3232" || $product == "2d5a" ))
+            {
+                # Roccat
+                push @initrdAvailableKernelModules, "usbhid";
+                push @initrdAvailableKernelModules, "hid_roccat";
+            }
         }
     }
 }
