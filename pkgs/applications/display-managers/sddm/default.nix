@@ -1,4 +1,4 @@
-{ stdenv, lib, makeQtWrapper, fetchFromGitHub, fetchpatch
+{ stdenv, makeQtWrapper, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 , themes
@@ -28,13 +28,10 @@ let
     nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
     buildInputs = [
-      libxcb libpthreadstubs libXdmcp libXau pam systemd
-      qtbase qtdeclarative
+      libxcb libpthreadstubs libXdmcp libXau qtbase pam systemd
     ];
 
-    propagatedUserEnvPkgs = builtins.map lib.getBin [
-      qtbase qtdeclarative
-    ];
+    propagatedBuildInputs = [ qtdeclarative ];
 
     cmakeFlags = [
       "-DCONFIG_FILE=/etc/sddm.conf"
@@ -82,21 +79,6 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-
-    propagated=
-    for i in $unwrapped $themes; do
-      findInputs $i propagated propagated-user-env-packages
-      if [ -z "$crossConfig" ]; then
-          findInputs $i propagated propagated-native-build-inputs
-      else
-          findInputs $i propagated propagated-build-inputs
-      fi
-    done
-
-    for pkg in $propagated; do
-      addToSearchPath RUNTIME_XDG_DATA_DIRS "$pkg/share"
-      addToSearchPath RUNTIME_XDG_CONFIG_DIRS "$pkg/etc/xdg"
-    done
 
     makeQtWrapper "$unwrapped/bin/sddm" "$out/bin/sddm"
 
