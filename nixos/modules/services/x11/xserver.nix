@@ -578,6 +578,35 @@ in
 
     services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
 
+    system.extraDependencies = [
+      (pkgs.runCommand "xkb-layouts-exist" {
+            layouts=cfg.layout;
+        } ''
+        missing=()
+        while read -d , layout
+        do
+          [[ -f "${cfg.xkbDir}/symbols/$layout" ]] || missing+=($layout)
+        done <<< "$layouts,"
+        if [[ ''${#missing[@]} -eq 0 ]]
+        then
+          touch $out
+          exit 0
+        fi
+
+        cat >&2 <<EOF
+
+        Some of the selected keyboard layouts do not exist:
+
+          ''${missing[@]}
+
+        Set services.xserver.layout to the name of an existing keyboard
+        layout (check ${cfg.xkbDir}/symbols for options).
+
+        EOF
+        exit -1
+      '')
+    ];
+
     services.xserver.config =
       ''
         Section "ServerFlags"
