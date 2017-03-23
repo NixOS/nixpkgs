@@ -371,6 +371,8 @@ let
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
+    ocf = callPackage ../development/ocaml-modules/ocf { };
+
     ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
 
     ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
