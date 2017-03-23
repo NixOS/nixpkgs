@@ -281,6 +281,8 @@ with pkgs;
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
+  setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
+
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
   srcOnly = args: callPackage ../build-support/src-only args;
