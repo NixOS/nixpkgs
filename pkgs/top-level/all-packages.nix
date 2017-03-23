@@ -15543,6 +15543,8 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
+  inherit (ocamlPackages_4_03) stog;
+
   stp = callPackage ../applications/science/logic/stp {};
 
   stumpwm = callPackage ../applications/window-managers/stumpwm {
