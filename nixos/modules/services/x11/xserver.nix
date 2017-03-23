@@ -258,7 +258,7 @@ in
         type = types.str;
         default = "us";
         description = ''
-          Keyboard layout.
+          Keyboard layout, or multiple keyboard layouts separated by commas.
         '';
       };
 
