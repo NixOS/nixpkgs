@@ -14879,7 +14879,7 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis {};
 
-  qgroundcontrol = libsForQt55.callPackage ../applications/science/robotics/qgroundcontrol { };
+  qgroundcontrol = libsForQt56.callPackage ../applications/science/robotics/qgroundcontrol { };
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
