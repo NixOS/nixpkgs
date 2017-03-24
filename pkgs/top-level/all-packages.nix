@@ -17520,7 +17520,9 @@ with pkgs;
 
   caneda = callPackage ../applications/science/electronics/caneda { };
 
-  geda = callPackage ../applications/science/electronics/geda { };
+  geda = callPackage ../applications/science/electronics/geda {
+    guile = guile_2_0;
+  };
 
   gerbv = callPackage ../applications/science/electronics/gerbv { };
 
