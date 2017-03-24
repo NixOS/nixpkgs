@@ -4,8 +4,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  emacsName = "emacs-25.1";
-  name = "${emacsName}-mac-6.1";
+  emacsVersion = "25.1";
+  emacsName = "emacs-${emacsVersion}";
+  macportVersion = "6.1";
+  name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   builder = ./builder.sh;
 
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   macportSrc = fetchurl {
-    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
+    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
     sha256 = "1zwxh7zsvwcg221mpjh0dhpdas3j9mc5q92pprf8yljl7clqvg62";
   };
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mv $sourceRoot $name
-    tar xzf $macportSrc
+    tar xzf $macportSrc -C $name --strip-components=1
     mv $name $sourceRoot
 
     # extract retina image resources
