@@ -36,8 +36,6 @@ let
 
     async_shell = callPackage ../development/ocaml-modules/async_shell { };
 
-    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
-
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
     async_p4 =
@@ -766,6 +764,8 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async.nix {}
       else async_p4;
+
+    async_ssl = callPackage ../development/ocaml-modules/janestreet/async_ssl.nix { };
 
     # Apps / from all-packages
 
