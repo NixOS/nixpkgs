@@ -573,6 +573,8 @@ let
 
     ocaml-compiler-libs = callPackage ../development/ocaml-modules/janestreet/ocaml-compiler-libs.nix {};
 
+    ppx_ast = callPackage ../development/ocaml-modules/janestreet/ppx_ast.nix {};
+
     ppx_core =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_core-113_33_01.nix {}
