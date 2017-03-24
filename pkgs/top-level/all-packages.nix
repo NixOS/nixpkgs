@@ -14480,7 +14480,7 @@ with pkgs;
       else null;
   };
 
-  musescore = libsForQt55.callPackage ../applications/audio/musescore { };
+  musescore = libsForQt56.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
