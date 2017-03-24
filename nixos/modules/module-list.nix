@@ -87,6 +87,7 @@
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/oblogout.nix
+  ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/shadow.nix
   ./programs/shell.nix
