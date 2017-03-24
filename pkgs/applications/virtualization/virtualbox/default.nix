@@ -72,15 +72,17 @@ in stdenv.mkDerivation {
         ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
-    sed -i -e '
-      s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g
-      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g
-      ${optionalString pulseSupport ''
-      s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g
-      ''}
-    ' src/VBox/Main/xml/Settings.cpp \
-      src/VBox/Devices/Audio/{alsa,pulse}_stubs.c \
-      include/VBox/dbus-calls.h
+
+    grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
+      ${optionalString pulseSupport
+        ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
+
+    grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
+
+    grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g'
+
     export USER=nix
     set +x
   '';
