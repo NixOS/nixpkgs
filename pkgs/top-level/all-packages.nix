@@ -17713,7 +17713,7 @@ with pkgs;
     pcre = pcre-cpp;
   });
 
-  redis-desktop-manager = libsForQt55.callPackage ../applications/misc/redis-desktop-manager { };
+  redis-desktop-manager = libsForQt56.callPackage ../applications/misc/redis-desktop-manager { };
 
   robomongo = libsForQt5.callPackage ../applications/misc/robomongo { };
 
