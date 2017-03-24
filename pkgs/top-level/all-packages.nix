@@ -12675,6 +12675,10 @@ with pkgs;
 
   ### APPLICATIONS
 
+  "2bwm" = callPackage ../applications/window-managers/2bwm {
+    patches = config."2bwm".patches or [];
+  };
+
   a2jmidid = callPackage ../applications/audio/a2jmidid { };
 
   aacgain = callPackage ../applications/audio/aacgain { };
