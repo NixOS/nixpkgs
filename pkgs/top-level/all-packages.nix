@@ -6963,6 +6963,10 @@ with pkgs;
 
   vultr = callPackage ../development/tools/vultr { };
 
+  vulnix = callPackage ../tools/security/vulnix {
+    pythonPackages = python3Packages;
+  };
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
