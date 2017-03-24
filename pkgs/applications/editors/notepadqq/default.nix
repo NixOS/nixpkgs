@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, which, qtbase }:
+{ stdenv, fetchgit, pkgconfig, which, qtbase, qtsvg, qttools, qtwebkit }:
 
 let
   version = "0.53.0";
@@ -12,11 +12,11 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkgconfig which
+    pkgconfig which qttools
   ];
 
   buildInputs = [
-    qtbase.qtsvg qtbase.qtwebkit qtbase.qttools
+    qtbase qtsvg qtwebkit
   ];
 
   preConfigure = ''
