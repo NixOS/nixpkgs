@@ -107,7 +107,7 @@ let
 
       makeQtWrapper =
         makeSetupHook
-        { deps = [ makeWrapper dconf.lib gtk ]; }
+        { deps = [ makeWrapper dconf.lib gtk3 ]; }
         (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
 
       qmakeHook =
