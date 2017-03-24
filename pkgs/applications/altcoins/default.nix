@@ -16,6 +16,7 @@ rec {
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
+  freicoin = callPackage ../freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix { };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
