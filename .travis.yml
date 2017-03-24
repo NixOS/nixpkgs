@@ -8,7 +8,7 @@ sudo: true
 matrix:
     include:
         - os: linux
-          sudo: false
+          sudo: required
           script:
               - ./maintainers/scripts/travis-nox-review-pr.sh nixpkgs-verify nixpkgs-manual nixpkgs-tarball nixpkgs-unstable
               - ./maintainers/scripts/travis-nox-review-pr.sh nixos-options nixos-manual
