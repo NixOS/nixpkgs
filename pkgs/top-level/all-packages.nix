@@ -13346,7 +13346,7 @@ with pkgs;
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
-  fdr = qt57.callPackage ../applications/science/programming/fdr { };
+  fdr = libsForQt56.callPackage ../applications/science/programming/fdr { };
 
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
