@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = stdenv.lib.platforms.linux;
     description = ''Constructive solid geometry package'';
+    broken = true; # redefines template instance added in Qt 5.6
   };
 }
