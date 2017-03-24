@@ -15,10 +15,11 @@ stdenv.mkDerivation {
     done
 
     export HOME=.repo
-    repo init --manifest-url=${manifest} --manifest-branch=${rev} --depth=1 --no-clone-bundle
-    ${optionalString (repoRepoURL != "") " --repo-url=${repoRepoURL}"}
-    ${optionalString (repoRepoRev != "") " --repo-branch=${repoRepoRev}"}
-    ${optionalString (referenceDir != "") " --reference=${referenceDir}"}
+    repo init --manifest-url=${manifest} --manifest-branch=${rev} --depth=1 --no-clone-bundle''
+  + optionalString (repoRepoURL != "") " --repo-url=${repoRepoURL}"
+  + optionalString (repoRepoRev != "") " --repo-branch=${repoRepoRev}"
+  + optionalString (referenceDir != "") " --reference=${referenceDir}"
+  + ''
     repo sync --jobs=$NIX_BUILD_CORES --current-branch
     rm -rf $out/.repo
   '';
