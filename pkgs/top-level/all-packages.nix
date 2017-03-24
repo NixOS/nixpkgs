@@ -7442,6 +7442,8 @@ with pkgs;
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
+  fontconfig-penultimate = callPackage ../data/fonts/fontconfig-penultimate {};
+
   fontconfig-ultimate = callPackage ../development/libraries/fontconfig-ultimate {};
 
   folly = callPackage ../development/libraries/folly { };
@@ -9011,6 +9013,7 @@ with pkgs;
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
       grsecEnabled = config.grsecurity or false;
+      enableTextureFloats = true;
     };
     in mo.drivers
   );
