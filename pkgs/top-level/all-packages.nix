@@ -15182,7 +15182,7 @@ with pkgs;
     demo = false;
   };
 
-  rapcad = libsForQt55.callPackage ../applications/graphics/rapcad { boost = boost159; };
+  rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
