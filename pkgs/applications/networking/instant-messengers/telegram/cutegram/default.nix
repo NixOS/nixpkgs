@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ profpatsch AndersonTorres ];
     platforms = platforms.linux;
+    broken = true;
   };
 }
 #TODO: appindicator, for system tray plugin (by @profpatsch)
