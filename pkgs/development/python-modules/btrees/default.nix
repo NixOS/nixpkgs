@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, persistent, zope_interface, transaction }:
+{ stdenv, fetchPypi, buildPythonPackage, persistent, zope_interface, transaction }:
 
 buildPythonPackage rec {
   pname = "BTrees";
