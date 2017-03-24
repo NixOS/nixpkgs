@@ -1,5 +1,8 @@
-{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform,
-  targets ? [], targetToolchains ? [], targetPatches ? [] }:
+{ stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm
+, targets ? []
+, targetToolchains ? []
+, targetPatches ? []
+}:
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
@@ -17,6 +20,7 @@ rec {
       ./patches/darwin-disable-fragile-tcp-tests.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
+    inherit llvm;
     inherit targets;
     inherit targetPatches;
     inherit targetToolchains;
