@@ -9299,20 +9299,6 @@ with pkgs;
     developerBuild = true;
   });
 
-  qt55 = recurseIntoAttrs (import ../development/libraries/qt-5/5.5 {
-    inherit newScope;
-    inherit stdenv fetchurl makeSetupHook makeWrapper;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
-    harfbuzz = harfbuzz-icu;
-    mesa = mesa_noglu;
-    inherit perl;
-    inherit (gnome2) libgnomeui GConf gnome_vfs;
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  });
-
-  libsForQt55 = recurseIntoAttrs (lib.makeScope qt55.newScope mkLibsForQt5);
-
   qt56 = recurseIntoAttrs (import ../development/libraries/qt-5/5.6 {
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
