@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_3_2
-, freefont_ttf, freetype, libass, libpthreadstubs
+, freefont_ttf, freetype, libass, libpthreadstubs, waf
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
 , x11Support ? true,
@@ -68,16 +68,7 @@ assert jackaudioSupport   -> available libjack2;
 assert vaapiSupport       -> available libva;
 assert drmSupport         -> available libdrm;
 
-let
-  # Purity: Waf is normally downloaded by bootstrap.py, but
-  # for purity reasons this behavior should be avoided.
-  wafVersion = "1.8.12";
-  waf = fetchurl {
-    urls = [ "http://waf.io/waf-${wafVersion}"
-             "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
-    sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "mpv-${version}";
   version = "0.24.0";
 
