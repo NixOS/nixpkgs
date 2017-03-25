@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, makeWrapper
-, libxml2, gnutls, devicemapper, perl, python2
+, libxml2, gnutls, devicemapper, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
-, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
+, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, xen, zfs
 }:
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline
-    gettext libtasn1 libgcrypt yajl
+    gettext libtasn1 libgcrypt yajl attr
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
-    libnl numad numactl xen zfs
+    libnl numad numactl xen zfs libapparmor
   ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
@@ -52,6 +52,9 @@ stdenv.mkDerivation rec {
     "--with-esx"
     "--with-remote"
   ] ++ optionals stdenv.isLinux [
+    "--with-attr"
+    "--with-apparmor"
+    "--with-secdriver-apparmor"
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
