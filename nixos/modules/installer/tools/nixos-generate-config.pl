@@ -533,24 +533,34 @@ if ($showHardwareConfig) {
     if ($force || ! -e $fn) {
         print STDERR "writing $fn...\n";
 
-        my $bootLoaderConfig = "";
-        if (-e "/sys/firmware/efi/efivars") {
-            $bootLoaderConfig = <<EOF;
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-EOF
-        } elsif ($virt ne "systemd-nspawn") {
-            $bootLoaderConfig = <<EOF;
+        my $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
+
+  # Define which hard drive you want to install GRUB on for BIOS/legacy mode
+  # booting (use "nodev" if you don't care to support legacy mode)
+EOF
+        if (-e "/sys/firmware/efi/efivars") {
+            $bootLoaderConfig .= <<EOF;
+  boot.loader.grub.device = "nodev";
+
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.efiInstallAsRemovable = false;
+  boot.loader.efi.canTouchEfiVariables = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
+EOF
+        } elsif ($virt ne "systemd-nspawn") {
+            $bootLoaderConfig .= <<EOF;
+  # boot.loader.grub.device = "/dev/sda";
+
+  # The following options are only useful if you want to support EFI booting
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.canTouchEfiVariables = false;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  # Define on which hard drive you want to install Grub.
-  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 EOF
+        } else {
+            $bootLoaderConfig = "";
         }
 
         write_file($fn, <<EOF);
