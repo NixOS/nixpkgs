@@ -15,6 +15,7 @@ let
       mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
+        nodejs = pkgs.nodejs-slim;
         jailbreak-cabal = if (self.ghc.cross or null) != null
           then self.ghc.bootPkgs.jailbreak-cabal
           else self.jailbreak-cabal;
