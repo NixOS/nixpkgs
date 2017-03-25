@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, zip, makeWrapper, nix, nix-prefetch-scripts
+{ stdenv, fetchurl, fetchzip, python, zip, makeWrapper, nix, nix-prefetch-scripts
 }:
 
 let
@@ -20,12 +20,19 @@ let
     sha256 = "0d5fwxmw4ibynk3imph3n4n84m0n3ib1vj339fxhkqri0qd4767d";
   };
 
+  # We use this version since it doesn't have any dependencies!
+  setuptools = fetchzip {
+    url = "https://pypi.python.org/packages/dc/8c/7c9869454bdc53e72fb87ace63eac39336879eef6f2bf96e946edbf03e90/setuptools-33.1.1.zip";
+    sha256 = "01j1687xqlxwayc05f0032s7r1k58szdg7ads1lfqcrgx2dkfgmh";
+  };
+
 in stdenv.mkDerivation rec {
   name = "pypi2nix-${version}";
   srcs = [
     src
     click
     requests
+    setuptools
   ];
   buildInputs = [ python zip makeWrapper nix.out nix-prefetch-scripts ];
   sourceRoot = ".";
@@ -35,6 +42,7 @@ in stdenv.mkDerivation rec {
 
     mv click-*/click                    $out/pkgs/click
     mv requests-*/requests              $out/pkgs/
+    mv setuptools-*/pkg_resources       $out/pkgs/
 
     if [ "$IN_NIX_SHELL" != "1" ]; then
       if [ -e git-export ]; then
