@@ -2436,6 +2436,8 @@ with pkgs;
 
   jaaa = callPackage ../applications/audio/jaaa { };
 
+  jackett = callPackage ../servers/jackett { };
+
   jade = callPackage ../tools/text/sgml/jade { };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
