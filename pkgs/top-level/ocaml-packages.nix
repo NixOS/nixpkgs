@@ -198,7 +198,9 @@ let
 
     fpath = callPackage ../development/ocaml-modules/fpath { };
 
-    functoria = callPackage ../development/ocaml-modules/functoria { };
+    functoria = if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/functoria { }
+      else null;
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
