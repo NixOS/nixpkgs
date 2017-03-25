@@ -682,6 +682,8 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_jane-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
 
+    ppx_traverse_builtins = callPackage ../development/ocaml-modules/janestreet/ppx_traverse_builtins.nix {};
+
 
     # Core sublibs
     typerep =
