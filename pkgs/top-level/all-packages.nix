@@ -18370,8 +18370,6 @@ with pkgs;
 
   zuki-themes = callPackage ../misc/themes/zuki { };
 
-  zoom-us = libsForQt56.callPackage ../applications/networking/instant-messengers/zoom-us {};
-
   tora = libsForQt5.callPackage ../development/tools/tora {};
 
   xulrunner = firefox-unwrapped;
