@@ -4108,7 +4108,7 @@ with pkgs;
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+  torbrowser = callPackage ../applications/networking/browsers/torbrowser { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
