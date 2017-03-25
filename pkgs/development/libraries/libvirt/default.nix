@@ -1,12 +1,14 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, makeWrapper
-, libxml2, gnutls, devicemapper, perl, python2
+, libxml2, gnutls, devicemapper, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
-, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
+, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs
-, withXen ? false, xen ? null
+, curl, libiconv, gmp, xen, zfs
 }:
+
+with stdenv.lib;
+
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
@@ -22,18 +24,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline
-    gettext libtasn1 libgcrypt yajl
+    gettext libtasn1 libgcrypt yajl attr
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
-    libnl numad numactl zfs
-  ] ++ stdenv.lib.optionals (stdenv.isLinux && withXen) [
-    xen
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    libnl numad numactl xen zfs libapparmor
+  ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
+  preConfigure = optionalString stdenv.isLinux ''
     PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
     substituteInPlace configure \
       --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
@@ -51,13 +51,16 @@ stdenv.mkDerivation rec {
     "--with-test"
     "--with-esx"
     "--with-remote"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
+    "--with-attr"
+    "--with-apparmor"
+    "--with-secdriver-apparmor"
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
-    "--with-init-script=redhat"
+    "--with-init-script=systemd+redhat"
     "--with-storage-zfs"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
 
@@ -69,17 +72,19 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace "$out/bin" "${gettext}/bin"
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+      --replace "$out/bin" "${gettext}/bin" \
+      --replace "lock/subsys" "lock"
+    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
+  '' + optionalString stdenv.isLinux ''
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ iptables iproute pmutils numad numactl ]}
+      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://libvirt.org/;
     repositories.git = git://libvirt.org/libvirt.git;
     description = ''

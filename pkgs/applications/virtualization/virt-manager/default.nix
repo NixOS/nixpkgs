@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, intltool, curl
+{ stdenv, fetchurl, python2Packages, intltool, curl, file
 , wrapGAppsHook, virtinst, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
 , avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
@@ -27,7 +27,7 @@ buildPythonApplication rec {
       wrapGAppsHook
     ] ++ optional spiceSupport spice_gtk;
 
-  buildInputs = [ dconf avahi intltool ];
+  buildInputs = [ dconf avahi intltool file ];
 
   postPatch = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
@@ -54,6 +54,6 @@ buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [qknight offline];
+    maintainers = with maintainers; [ qknight offline fpletz ];
   };
 }
