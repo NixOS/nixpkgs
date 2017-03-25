@@ -1230,7 +1230,6 @@ with pkgs;
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
   ibus = callPackage ../tools/inputmethods/ibus {
-    inherit (python3Packages) pygobject3;
     inherit (gnome3) dconf glib;
   };
 
