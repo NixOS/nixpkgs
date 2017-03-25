@@ -1,7 +1,7 @@
-{stdenv, lib, libXcomposite, libgnome_keyring, makeWrapper, udev, curl, alsaLib
-  ,libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
-  ,libX11, libXi, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-  ,nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
+{ stdenv, lib, libXcomposite, libgnome_keyring, makeWrapper, udev, curl, alsaLib
+, libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
+, libX11, libXi, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
+, nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
 }:
 
 stdenv.mkDerivation rec {
@@ -47,14 +47,16 @@ stdenv.mkDerivation rec {
     libgnome_keyring
   ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ makeWrapper ];
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/opt/gitkraken"
     cp -r ./* "$out/opt/gitkraken"
-    fixupPhase
+  '';
+
+  postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
              --set-rpath "$libPath:$out/opt/gitkraken" "$out/opt/gitkraken/gitkraken"
     wrapProgram $out/opt/gitkraken/gitkraken \
