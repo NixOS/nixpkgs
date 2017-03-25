@@ -147,7 +147,6 @@ in {
           cfgFile = fpmCfgFile pool poolConfig;
         in {
           Slice = "phpfpm.slice";
-          PrivateTmp = true;
           PrivateDevices = true;
           ProtectSystem = "full";
           ProtectHome = true;
