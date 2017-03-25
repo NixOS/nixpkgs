@@ -10326,13 +10326,14 @@ in {
       sha256 = "12szjsmnfhh2yr54sfynyjr8vl0q9gb6qak3ayqcifcinrs97f0d";
     };
 
-    patches = [
+    # Gdal is marked as only supported for linux platform. This makes
+    # django build without its support on support on other platforms.
+    patches = optional stdenv.isLinux
       (pkgs.substituteAll {
         src = ../development/python-modules/django/1.10-gis-libs.template.patch;
         geos = pkgs.geos;
         gdal = self.gdal;
-      })
-    ];
+      });
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
     postFixup = ''
