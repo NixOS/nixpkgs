@@ -211,8 +211,10 @@ stdenv.mkDerivation {
     libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
     xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices Foundation CoreServices AppKit Carbon OpenGL AGL Cocoa
-    DiskArbitration darwin.cf-private libiconv
+    AGL AppKit ApplicationServices Carbon Cocoa
+    CoreAudio CoreBluetooth CoreLocation CoreServices
+    DiskArbitration Foundation OpenGL
+    darwin.cf-private darwin.apple_sdk.sdk darwin.libobjc libiconv
   ]);
 
   buildInputs = [ ]
