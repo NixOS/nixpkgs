@@ -97,26 +97,6 @@ with lib;
       '';
     };
 
-    authType = mkOption {
-      type = types.enum [ "PASS" "AH" ];
-      default = "PASS";
-      description = ''
-        Authentication type:
-
-        PASS - Simple password (suggested)
-        AH - IPSEC (not recommended))
-      '';
-    };
-
-    authPass = mkOption {
-      type = types.string;
-      description = ''
-        Password for accessing vrrpd. Should be the same for all machines. Only
-        the first eight (8) characters are used by keepalived, therefore this
-        option is limited to 8 characters as well.
-      '';
-    };
-
     virtualIps = mkOption {
       type = types.listOf (types.submodule (import ./virtual-ip-options.nix {
         inherit lib;

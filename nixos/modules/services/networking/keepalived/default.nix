@@ -45,11 +45,6 @@ let
           ${concatStringsSep "\n" i.unicastPeers}
         }
 
-        authentication {
-          auth_type ${i.authType}
-          ${optionalString (i.authType == "PASS") "auth_pass \"${i.authPass}\""}
-        }
-
         virtual_ipaddress {
           ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
         }
@@ -84,9 +79,6 @@ let
     }
     { assertion = i.priority >= 0 && i.priority <= 255;
       message = "services.keepalived.vrrpInstances.${i.name}.priority must be an integer between 0..255.";
-    }
-    { assertion = i.authType != "PASS" || (stringLength i.authPass > 0 && stringLength i.authPass <= 8);
-      message = "services.keepalived.vrrpInstances.${i.name}.authPass must be between 1 and 8 characters long.";
     }
     { assertion = i.vmacInterface == null || i.useVmac;
       message = "services.keepalived.vrrpInstances.${i.name}.vmacInterface has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
