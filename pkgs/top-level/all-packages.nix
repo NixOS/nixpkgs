@@ -3670,6 +3670,8 @@ with pkgs;
 
   radamsa = callPackage ../tools/security/radamsa { };
 
+  radarr = callPackage ../servers/radarr { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
