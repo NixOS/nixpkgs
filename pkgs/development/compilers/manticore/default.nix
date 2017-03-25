@@ -21,7 +21,19 @@ in stdenv.mkDerivation rec {
 
   autoreconfFlags = "-Iconfig -vfi";
 
-  postPatch = "patchShebangs .";
+  unpackPhase = ''
+    mkdir -p $out
+    cd $out
+    unpackFile $src
+    mv manticore_temp_mirror-${rev}-src repo_checkout
+    cd repo_checkout
+    chmod u+w . -R
+  ''; 
+  
+  postPatch = ''
+    patchShebangs .
+    substituteInPlace configure.ac --replace 'MANTICORE_ROOT=`pwd`' 'MANTICORE_ROOT=$out/repo_checkout'
+  '';
 
   preInstall = "mkdir -p $out/bin";
 
