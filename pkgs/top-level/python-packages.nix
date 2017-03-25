@@ -31828,6 +31828,28 @@ EOF
     };
   };
 
+  rss2email = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "rss2email";
+    version = "3.9";
+
+    disabled = pythonOlder "3.2";
+
+    propagatedBuildInputs = with self; [ feedparser beautifulsoup4 html2text ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rss2email/${name}.tar.gz";
+      sha256 = "02wj9zhmc2ym8ba1i0z9pm1c622z2fj7fxwagnxbvpr1402ahmr5";
+    };
+
+    meta = {
+      description = "A tool that converts RSS/Atom newsfeeds to email.";
+      homepage = "https://pypi.python.org/pypi/rss2email";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ jb55 ];
+    };
+  };
+
   yapf = buildPythonPackage rec {
     name = "yapf-${version}";
     version = "0.11.0";
