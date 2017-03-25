@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.0.2";
   name = "irssi-${version}";
 
   src = fetchurl {
     url = "https://github.com/irssi/irssi/releases/download/${version}/${name}.tar.gz";
-    sha256 = "1nqrm376bipvh4x483vygydjzs05n4fmfzip1gfakq1vfqqfhshr";
+    sha256 = "1fas6dqz6g8m2400spvkhfxihj3w06qb917h4vhcb716g9wpjkwf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
