@@ -516,6 +516,8 @@ let
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
+    stdio = callPackage ../development/ocaml-modules/stdio { };
+
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
