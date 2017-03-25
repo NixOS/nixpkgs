@@ -7657,7 +7657,11 @@ let
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-    llvmPackages = llvmPackages_36;
+    llvmPackages = if system == "i686-linux"
+      # quake3 test (and llvmpipe?) breaks on i686 with LLVM 3.5 and 3.6, showing:
+      # "LLVM ERROR: Do not know how to split the result of this operator!"
+      then llvmPackages_34
+      else llvmPackages_36;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
