@@ -198,6 +198,7 @@ let
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
+      ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
@@ -416,6 +417,13 @@ in
 
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
+
+    assertions = let hostOrAliasIsNull = l: l.root == null || l.alias == null; in [
+      {
+        assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
+        message = "Only one of nginx root or alias can be specified on a location.";
+      }
+    ];
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

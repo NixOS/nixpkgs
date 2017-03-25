@@ -5,7 +5,9 @@
 , libelf, libvdpau, python2
 , grsecEnabled ? false
 , enableRadv ? false
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
+# It's overridden for mesa_drivers.
+, enableTextureFloats ? false
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -63,7 +65,7 @@ let
 in
 
 let
-  version = "17.0.1";
+  version = "17.0.2";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -78,7 +80,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "96fd70ef5f31d276a17e424e7e1bb79447ccbbe822b56844213ef932e7ad1b0c";
+    sha256 = "f8f191f909e01e65de38d5bdea5fb057f21649a3aed20948be02348e77a689d4";
   };
 
   prePatch = "patchShebangs .";

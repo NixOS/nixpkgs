@@ -1,0 +1,18 @@
+diff -Nuar fontconfig-2.10.2-orig/test/out.expected fontconfig-2.10.2/test/out.expected
+--- fontconfig-2.10.2-orig/test/out.expected	2017-03-06 06:45:50.876053093 -0600
++++ fontconfig-2.10.2/test/out.expected	2017-03-06 06:48:18.012514337 -0600
+@@ -1,8 +1,8 @@
+-Fixed:pixelsize=16
+-Fixed:pixelsize=6
++Misc Fixed:pixelsize=6
++Sony Fixed:pixelsize=16
+ =
+-Fixed:pixelsize=16
+-Fixed:pixelsize=6
++Misc Fixed:pixelsize=6
++Sony Fixed:pixelsize=16
+ =
+-Fixed:pixelsize=16
+-Fixed:pixelsize=6
++Misc Fixed:pixelsize=6
++Sony Fixed:pixelsize=16

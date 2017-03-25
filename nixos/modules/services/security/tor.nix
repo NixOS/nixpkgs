@@ -140,6 +140,7 @@ in
         };
 
         privoxy.enable = mkOption {
+          type = types.bool;
           default = true;
           description = ''
             Whether to enable and configure the system Privoxy to use Tor's

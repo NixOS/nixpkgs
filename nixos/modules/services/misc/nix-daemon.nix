@@ -8,7 +8,7 @@ let
 
   nix = cfg.package.out;
 
-  isNix112 = versionAtLeast (getVersion nix) "1.12pre4997";
+  isNix112 = versionAtLeast (getVersion nix) "1.12pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";

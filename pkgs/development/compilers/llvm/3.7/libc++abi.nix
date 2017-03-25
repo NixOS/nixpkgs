@@ -1,6 +1,12 @@
-{ stdenv, cmake, fetch, libcxx, libunwind, llvm, version }:
+{ stdenv, cmake, fetch, fetchpatch, libcxx, libunwind, llvm, version }:
 
-stdenv.mkDerivation {
+let
+  # Newer LLVMs (3.8 onwards) have changed how some basic C++ stuff works, which breaks builds of this older version
+  llvm38-and-above = fetchpatch {
+    url    = "https://trac.macports.org/raw-attachment/ticket/50304/0005-string-Fix-exception-declaration.patch";
+    sha256 = "1lm38n7s0l5dbl7kp4i49pvzxz1mcvlr2vgsnj47agnwhhm63jvr";
+  };
+in stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
   src = fetch "libcxxabi" "0ambfcmr2nh88hx000xb7yjm9lsqjjz49w5mlf6dlxzmj3nslzx4";
@@ -15,6 +21,13 @@ stdenv.mkDerivation {
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '';
+
+  # I can't use patches directly because this is actually a patch for libc++'s source, which we manually extract
+  # into the libc++abi build environment above.
+  prePatch = ''(
+    cd ../libcxx-*
+    patch -p1 < ${llvm38-and-above}
+  )'';
 
   installPhase = if stdenv.isDarwin
     then ''

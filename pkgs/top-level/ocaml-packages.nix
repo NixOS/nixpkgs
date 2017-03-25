@@ -49,6 +49,8 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    base = callPackage ../development/ocaml-modules/base { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
@@ -232,6 +234,8 @@ let
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
     hex = callPackage ../development/ocaml-modules/hex { };
+
+    inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
       batteries = ocaml_batteries;
@@ -512,6 +516,8 @@ let
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
+    stdio = callPackage ../development/ocaml-modules/stdio { };
+
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
@@ -566,6 +572,10 @@ let
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
+
+    ocaml-compiler-libs = callPackage ../development/ocaml-modules/janestreet/ocaml-compiler-libs.nix {};
+
+    ppx_ast = callPackage ../development/ocaml-modules/janestreet/ppx_ast.nix {};
 
     ppx_core =
       if lib.versionOlder "4.03" ocaml.version
@@ -673,6 +683,8 @@ let
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_jane-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
+
+    ppx_traverse_builtins = callPackage ../development/ocaml-modules/janestreet/ppx_traverse_builtins.nix {};
 
 
     # Core sublibs

@@ -21,6 +21,7 @@ in stdenv.mkDerivation {
     done
 
     substituteInPlace "$out"/modprobe.conf \
+      --replace "blacklist bochs-drm" "" \
       --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
       --replace /sbin/rmmod /run/booted-system/sw/bin/rmmod \
       --replace /sbin/modprobe /run/booted-system/sw/bin/modprobe \

@@ -4,12 +4,12 @@ let
          then "linux-amd64"
          else "darwin-amd64";
   checksum = if stdenv.isLinux
-             then "8bb6f9d336ca7913556e463c5b65eb8d69778c518df2fab0d20be943fbf0efc1"
-             else "94c9f2d511aec3d4b7dcc5f0ce6f846506169b4eb7235e1dc137d08edf408098";
+             then "fa434644d1afd92637369a033fd65b717d8dfa910127d335e8a82c8fad74cc35"
+             else "64420d467e03ceb666a4f22b89e08b93c06f76f5917fe539860b04cd5e5e515f";
 in
 stdenv.mkDerivation rec {
   pname = "helm";
-  version = "2.1.3";
+  version = "2.2.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
