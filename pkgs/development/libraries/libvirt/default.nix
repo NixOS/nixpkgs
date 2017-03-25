@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
-    "--with-init-script=redhat"
+    "--with-init-script=systemd+redhat"
     "--with-storage-zfs"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
@@ -72,7 +72,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace "$out/bin" "${gettext}/bin"
+      --replace "$out/bin" "${gettext}/bin" \
+      --replace "lock/subsys" "lock"
+    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
   '' + optionalString stdenv.isLinux ''
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
