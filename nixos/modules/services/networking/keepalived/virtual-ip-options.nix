@@ -5,14 +5,14 @@ with lib;
   options = {
 
     addr = mkOption {
-      type = types.string;
+      type = types.str;
       description = ''
         IP address, optionally with a netmask: IPADDR[/MASK]
       '';
     };
 
     brd = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       description = ''
         The broadcast address on the interface.
@@ -20,7 +20,7 @@ with lib;
     };
 
     dev = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       description = ''
         The name of the device to add the address to.
@@ -28,7 +28,7 @@ with lib;
     };
 
     scope = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       description = ''
         The scope of the area where this address is valid.
@@ -36,7 +36,7 @@ with lib;
     };
 
     label = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       description = ''
         Each address may be tagged with a label string. In order to preserve

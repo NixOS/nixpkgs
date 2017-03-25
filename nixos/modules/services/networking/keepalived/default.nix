@@ -121,7 +121,7 @@ in
         };
 
         socket = mkOption {
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           default = null;
           description = ''
             Socket to use for connecting to SNMP master agent. If this value is

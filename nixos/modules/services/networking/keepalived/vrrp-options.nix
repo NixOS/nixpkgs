@@ -5,7 +5,7 @@ with lib;
   options = {
 
     interface = mkOption {
-      type = types.string;
+      type = types.str;
       description = ''
         Interface for inside_network, bound by vrrp.
       '';
@@ -59,7 +59,7 @@ with lib;
     };
 
     vmacInterface = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       description = ''
          Name of the vmac interface to use. keepalived will come up with a name
@@ -76,7 +76,7 @@ with lib;
     };
 
     unicastSrcIp = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.str;
       default = null;
       description = ''
          Default IP for binding vrrpd is the primary IP on interface. If you
@@ -86,7 +86,7 @@ with lib;
     };
 
     unicastPeers = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = ''
         Do not send VRRP adverts over VRRP multicast group. Instead it sends
