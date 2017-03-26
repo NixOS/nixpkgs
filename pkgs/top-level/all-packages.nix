@@ -6810,8 +6810,6 @@ with pkgs;
     luaBindings = config.radare.luaBindings or false;
   };
 
-  radarr = callPackage ../servers/radarr { };
-
   ragel = ragelStable;
 
   inherit (callPackages ../development/tools/parsing/ragel {
