@@ -1,11 +1,8 @@
 {stdenv, fetchurl, fetchFromGitHub, callPackage, makeWrapper, doxygen
-, ffmpeg, python3Packages, qt55}:
+, ffmpeg, python3Packages, libopenshot, qtbase, qtmultimedia }:
 
 with stdenv.lib;
 
-let
-  libopenshot = callPackage ./libopenshot.nix {};
-in
 stdenv.mkDerivation rec {
   name = "openshot-qt-${version}";
   version = "2.1.0";
@@ -20,8 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [doxygen python3Packages.python makeWrapper ffmpeg];
 
   propagatedBuildInputs = [
-    qt55.qtbase
-    qt55.qtmultimedia
+    qtbase
+    qtmultimedia
     libopenshot
   ];
 

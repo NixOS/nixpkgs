@@ -1,5 +1,5 @@
-{stdenv, fetchurl, fetchFromGitHub, callPackage, cmake, doxygen
-, imagemagick, ffmpeg, qt55, swig, python3, ruby, unittest-cpp
+{ stdenv, fetchurl, fetchFromGitHub, callPackage, cmake, doxygen
+, imagemagick, ffmpeg, qtbase, qtmultimedia, swig, python3, ruby, unittest-cpp
 , cppzmq, czmqpp
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake doxygen
-    imagemagick ffmpeg qt55.qtbase qt55.qtmultimedia swig python3 ruby
+    imagemagick ffmpeg qtbase qtmultimedia swig python3 ruby
     unittest-cpp cppzmq czmqpp
   ];
 
