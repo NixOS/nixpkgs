@@ -316,6 +316,7 @@
   michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   mikefaille = "Michaël Faille <michael@faille.io>";
+  miltador = "Vasiliy Solovey <miltador@yandex.ua>";
   mimadrid = "Miguel Madrid <mimadrid@ucm.es>";
   mingchuan = "Ming Chuan <ming@culpring.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
