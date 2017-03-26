@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ Carbon Cocoa ];
 
-  prePatch = ''
-    substituteInPlace makefile \
-      --replace g++ clang++
-  '';
-
   buildPhase = ''
     make install
   '';

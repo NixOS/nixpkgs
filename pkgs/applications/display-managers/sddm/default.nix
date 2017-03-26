@@ -29,10 +29,9 @@ let
 
     buildInputs = [
       libxcb libpthreadstubs libXdmcp libXau pam systemd
-      qtbase qtdeclarative
     ];
 
-    propagatedUserEnvPkgs = builtins.map lib.getBin [
+    propagatedBuildInputs = [
       qtbase qtdeclarative
     ];
 
@@ -98,6 +97,7 @@ stdenv.mkDerivation {
       addToSearchPath RUNTIME_XDG_CONFIG_DIRS "$pkg/etc/xdg"
     done
 
+    mkdir -p "$out/bin"
     makeQtWrapper "$unwrapped/bin/sddm" "$out/bin/sddm"
 
     mkdir -p "$out/share/sddm"

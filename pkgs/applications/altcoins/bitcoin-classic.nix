@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
+, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-classic-" + version;
-  version = "0.11.2.cl1.b1";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://github.com/bitcoinclassic/bitcoinclassic/archive/v${version}.tar.gz";
-    sha256 = "1szsnx5aijk3hx7qkqzbqsr0basg8ydwp20mh3bhnf4ljryy2049";
+  src = fetchFromGitHub {
+    owner = "bitcoinclassic";
+    repo = "bitcoinclassic";
+    rev = "v${version}";
+    sha256 = "0y99c8zv42ps3pxp46p3fqj9sir580v7s5qyi3cxva12mq2z0cql";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook openssl db48 boost zlib
-                  miniupnpc utillinux protobuf ]
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ openssl db48 boost zlib
+                  miniupnpc utillinux protobuf libevent ]
                   ++ optionals withGui [ qt4 qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
       continue to release updates that are in line with Satoshi’s whitepaper &
       vision, and are agreed upon by the community.
     '';
-    homepage = "https://bitcoinclassic.com/";
+    homepage = https://bitcoinclassic.com/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
     platforms = platforms.unix;

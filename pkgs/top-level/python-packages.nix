@@ -7035,9 +7035,10 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = mkPythonDerivation rec {
+  fedora_cert = buildPythonPackage rec {
     name = "fedora-cert-0.5.9.2";
     meta.maintainers = with maintainers; [ mornfall ];
+    format = "other";
 
     src = pkgs.fetchurl {
       url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
@@ -10315,36 +10316,8 @@ in {
 
   django = self.django_1_10;
 
-  django_1_10 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.10.5";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-      sha256 = "12szjsmnfhh2yr54sfynyjr8vl0q9gb6qak3ayqcifcinrs97f0d";
-    };
-
-    patches = [
-      (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
-        geos = pkgs.geos;
-        gdal = self.gdal;
-      })
-    ];
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    # too complicated to setup
-    doCheck = false;
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
+  django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
+    gdal = self.gdal;
   };
 
   django_1_9 = buildPythonPackage rec {
@@ -21810,8 +21783,9 @@ in {
   };
 
 
-  pysvn = mkPythonDerivation rec {
+  pysvn = buildPythonPackage rec {
     name = "pysvn-1.8.0";
+    format = "other";
 
     src = pkgs.fetchurl {
       url = "http://pysvn.barrys-emacs.org/source_kits/${name}.tar.gz";
@@ -21966,9 +21940,10 @@ in {
   });
 
 
-  pywebkitgtk = mkPythonDerivation rec {
+  pywebkitgtk = buildPythonPackage rec {
     name = "pywebkitgtk-${version}";
     version = "1.1.8";
+    format = "other";
 
     src = pkgs.fetchurl {
       url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
@@ -22301,10 +22276,11 @@ in {
 
   qscintilla = if isPy3k || isPyPy
     then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
-    else mkPythonDerivation rec {
+    else buildPythonPackage rec {
       # TODO: Qt5 support
       name = "qscintilla-${version}";
       version = pkgs.qscintilla.version;
+      format = "other";
 
       src = pkgs.qscintilla.src;
 
@@ -24769,6 +24745,8 @@ in {
     doCheck = false;
   };
 
+  hieroglyph = callPackage ../development/python-modules/hieroglyph { };
+
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.9";
 
@@ -25853,9 +25831,10 @@ in {
   # Python package.
   tkinter = let
     py = python.override{x11Support=true;};
-  in mkPythonDerivation rec {
+  in buildPythonPackage rec {
     name = "tkinter-${python.version}";
     src = py;
+    format = "other";
 
     disabled = isPy26 || isPyPy;
 
@@ -27550,25 +27529,7 @@ EOF
     };
   };
 
-
-  BTrees = self.buildPythonPackage rec {
-    name = "BTrees-4.1.4";
-
-    propagatedBuildInputs = with self; [ persistent zope_interface transaction ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/BTrees/${name}.tar.gz";
-      sha256 = "1avvhkd7rvp3rzhw20v6ank8a8m9a1lmh99c4gjjsa1ry0zsri3y";
-    };
-
-    patches = [ ../development/python-modules/btrees-py35.patch ];
-
-    meta = {
-      description = "Scalable persistent components";
-      homepage = http://packages.python.org/BTrees;
-    };
-  };
-
+  BTrees = callPackage ../development/python-modules/btrees {};
 
   persistent = self.buildPythonPackage rec {
     name = "persistent-4.0.8";

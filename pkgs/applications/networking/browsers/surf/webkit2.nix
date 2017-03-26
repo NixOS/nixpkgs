@@ -6,9 +6,9 @@
 
 let
   # http://git.suckless.org/surf/log/?h=surf-webkit2
-  rev = "37e43501d80710533f3ec0bd61ee84916c8524a4";
-  sha256 = "1q388rzm4irpaam4z8xycbyh5dgkjlar5jn1iw7zfls1pbpzr5br";
-  date = "2017-03-06";
+  rev = "7e02344a615a61246ccce1c7f770e88fbd57756e";
+  sha256 = "11f93fbjhl7nfgwkcc45lcm3x1wk5h87ap8fbw9w855021i57pp6";
+  date = "2017-03-22";
 in
 
 stdenv.mkDerivation rec {

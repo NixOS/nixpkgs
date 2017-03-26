@@ -99,8 +99,7 @@ in
     services.xserver.displayManager.job =
       {
         environment = {
-          GDM_X_SERVER_EXTRA_ARGS = toString
-            (filter (arg: arg != "-terminate") cfg.xserverArgs);
+          GDM_X_SERVER = "${cfg.xserverBin} ${toString cfg.xserverArgs}";
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";

@@ -27,13 +27,23 @@ let
 
 in
 
-stdenv.mkDerivation {
+with stdenv.lib;
 
+let
+  extraRepoInitFlags = [
+    (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
+    (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
+    (optionalString (referenceDir != "") "--reference=${referenceDir}")
+  ];
+in
+
+stdenv.mkDerivation {
   buildCommand = ''
     mkdir .repo
     ${optionalString (local_manifests != []) ''
     mkdir ./.repo/local_manifests
     for local_manifest in ${concatMapStringsSep " " toString local_manifests}
+
     do
       cp $local_manifest ./.repo/local_manifests/$(stripHash $local_manifest; echo $strippedName)
     done

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/Tribler/tribler";
-    rev = "v${revision}";
+    rev = revision;
     sha256 = "16mk76qgg7fgca11yvpygicxqbkc0kn6r82x73fly2310pagd845";
     fetchSubmodules = true;
   };

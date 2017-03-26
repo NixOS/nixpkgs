@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
       url = "https://cgit.freedesktop.org/fontconfig/patch/?id=1ab5258f7c";
       sha256 = "0x2a4qx51j3gqcp1kp4lisdzmhrkw1zw0r851d82ksgjlc0vkbaz";
     })
+
+    # FreeType 2.7 prefixes PCF font family names with the foundry name.
+    # The output of fc-list and fc-query change which breaks the tests.
+    ./test-pcf-family-names-freetype-2.7.patch
   ];
   # additionally required for the glibc-2.25 patch; avoid requiring gperf
   postPatch = ''

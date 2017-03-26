@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation ( rec {
   name = "ponyc-${version}";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     rev = version;
-    sha256 = "08wh8rh17bf043glvn7778bwpxyzpm95kgfll645hf2m65n5ncsh";
+    sha256 = "0csssmc9dcm2ib9k5qhglnjyrqsmci9b5q0b5cxwvl5z1llib9hg";
   };
 
   buildInputs = [ llvm makeWrapper which ];
