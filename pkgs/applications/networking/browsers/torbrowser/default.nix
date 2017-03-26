@@ -34,6 +34,9 @@
 , gst-ffmpeg
 , gmp
 , ffmpeg
+
+# Pluggable transport dependencies
+, python27
 }:
 
 with stdenv.lib;
@@ -73,6 +76,9 @@ let
       gst-plugins-good
       gst-ffmpeg
     ];
+
+  # Library search path for the fte transport
+  fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
   version = "6.5.1";
@@ -128,6 +134,24 @@ stdenv.mkDerivation rec {
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
     libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
+
+    # Fixup paths to pluggable transports.
+    sed -i TorBrowser/Data/Tor/torrc-defaults \
+        -e "s,./TorBrowser,$TBB_IN_STORE/TorBrowser,g"
+
+    # Fixup obfs transport.  Work around patchelf failing to set
+    # interpreter for pre-compiled Go binaries by invoking the interpreter
+    # directly.
+    sed -i TorBrowser/Data/Tor/torrc-defaults \
+        -e "s|\(ClientTransportPlugin obfs2,obfs3,obfs4,scramblesuit\) exec|\1 exec $interp|" \
+
+    # Fixup fte transport
+    #
+    # Note: the script adds its dirname to search path automatically
+    sed -i TorBrowser/Tor/PluggableTransports/fteproxy.bin \
+        -e "s,/usr/bin/env python,${python27.interpreter},"
+
+    patchelf --set-rpath "${fteLibPath}" TorBrowser/Tor/PluggableTransports/fte/cDFA.so
 
     # Prepare for autoconfig.
     #
