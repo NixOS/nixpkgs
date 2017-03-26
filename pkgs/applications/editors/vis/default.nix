@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     cp $desktopItem/share/applications/* $out/share/applications
     echo wrapping $out/bin/vis with runtime environment
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH : "${lpeg}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH : "${lpeg}/share/lua/${lua.luaversion}/?.lua" \
+      --prefix LUA_CPATH ';' "${lpeg}/lib/lua/${lua.luaversion}/?.so" \
+      --prefix LUA_PATH ';' "${lpeg}/share/lua/${lua.luaversion}/?.lua" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
