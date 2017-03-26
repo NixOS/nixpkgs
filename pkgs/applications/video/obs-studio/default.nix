@@ -27,11 +27,9 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
-    rev = "${version}";
-    sha256 = "0mvjmkq5zlcppjqy18933w7r7rz1mpr2jpf8ipd0famdlgyacix6";
+    rev = "624aa2a5";
+    sha256 = "1bs82rqyq7wjjg99mh23ap8z5bmrhjfnza5iyjx808fzqc0bgzaj";
   };
-
-  patches = [ ./segfault-patch-systray.patch ];
 
   nativeBuildInputs = [ cmake
                       ];

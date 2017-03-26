@@ -89,5 +89,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ pxc ];
+    broken = true; # relies improperly on private Qt 5.5 headers
   };
 }

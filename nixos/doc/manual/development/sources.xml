@@ -27,8 +27,8 @@ a subdirectory of the Nixpkgs repository.) The remote
 <literal>channels</literal> refers to a read-only repository that
 tracks the Nixpkgs/NixOS channels (see <xref linkend="sec-upgrading"/>
 for more information about channels). Thus, the Git branch
-<literal>channels/nixos-14.12</literal> will contain the latest built
-and tested version available in the <literal>nixos-14.12</literal>
+<literal>channels/nixos-17.03</literal> will contain the latest built
+and tested version available in the <literal>nixos-17.03</literal>
 channel.</para>
 
 <para>It’s often inconvenient to develop directly on the master
@@ -39,9 +39,9 @@ branch based on your current NixOS version:
 
 <screen>
 $ nixos-version
-14.04.273.ea1952b (Baboon)
+17.09pre104379.6e0b727 (Hummingbird)
 
-$ git checkout -b local ea1952b
+$ git checkout -b local e3938c8
 </screen>
 
 Or, to base your local branch on the latest version available in a
@@ -49,17 +49,17 @@ NixOS channel:
 
 <screen>
 $ git remote update channels
-$ git checkout -b local channels/nixos-14.12
+$ git checkout -b local channels/nixos-17.03
 </screen>
 
-(Replace <literal>nixos-14.12</literal> with the name of the channel
+(Replace <literal>nixos-17.03</literal> with the name of the channel
 you want to use.) You can use <command>git merge</command> or
 <command>git rebase</command> to keep your local branch in sync with
 the channel, e.g.
 
 <screen>
 $ git remote update channels
-$ git merge channels/nixos-14.12
+$ git merge channels/nixos-17.03
 </screen>
 
 You can use <command>git cherry-pick</command> to copy commits from

@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./remove-tools-1.7.patch
-      ./cacert-1.7.patch
+      ./ssl-cert-file-1.7.patch
       ./creds-test.patch
 
       # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"

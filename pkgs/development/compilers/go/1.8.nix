@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./remove-tools-1.8.patch
-      ./cacert-1.8.patch
+      ./ssl-cert-file-1.8.patch
       ./creds-test.patch
       ./remove-test-pie-1.8.patch
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"

@@ -8,13 +8,13 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption "radarr";
+      enable = mkEnableOption "Radarr";
     };
   };
 
   config = mkIf cfg.enable {
     systemd.services.radarr = {
-      description = "radarr";
+      description = "Radarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
@@ -31,7 +31,7 @@ in
         User = "radarr";
         Group = "nogroup";
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.radarr}/bin/radarr --no-browser";
+        ExecStart = "${pkgs.radarr}/bin/Radarr";
         Restart = "on-failure";
       };
     };

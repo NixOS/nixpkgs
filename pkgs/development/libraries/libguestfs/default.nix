@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
-        --prefix "PATH" : "$out/bin:${hivex}/bin" \
+        --prefix "PATH" : "$out/bin:${hivex}/bin:${qemu}/bin" \
         --prefix "PERL5LIB" : "$PERL5LIB:$out/lib/perl5/site_perl"
     done
   '';
