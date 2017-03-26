@@ -171,8 +171,10 @@ stdenv.mkDerivation rec {
     # having to synchronize between local state and store.
     mv TorBrowser/Data/Browser/profile.default/preferences/extension-overrides.js defaults/pref/torbrowser.js
 
-    # Hard-code paths to geoip data files, to prevent them from being
-    # copied into the local state directory.
+    # Hard-code paths to geoip data files.  TBB resolves the geoip files
+    # relative to torrc-defaults_path but if we do not hard-code them
+    # here, these paths end up being written to the torrc in the user's
+    # state dir.
     cat >>TorBrowser/Data/Tor/torrc-defaults <<EOF
     GeoIPFile $TBB_IN_STORE/TorBrowser/Data/Tor/geoip
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
