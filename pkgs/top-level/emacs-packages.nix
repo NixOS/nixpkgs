@@ -75,6 +75,25 @@ let
 
   ## START HERE
 
+  all-the-icons = melpaBuild rec {
+    pname = "all-the-icons";
+    version = "2.0.0";
+    src = fetchFromGitHub {
+      owner = "domtronn";
+      repo = "${pname}.el";
+      rev = version;
+      sha256 = "1zw6mkayf9dqxkk6pfb6niarkxk1jcwdln45jp7q7n8vq3cqg6rp";
+    };
+    propagatedBuildInputs = with external; [ font-awesome-ttf atom-file-icons ];
+    fileSpecs = [ "*.el" "data" ];
+    packageRequires = [ dash ];
+    meta = {
+      description = "A utility package to collect various Icon Fonts and propertize them within Emacs";
+      license = mit;
+    };
+  };
+
+
   tablist = melpaBuild rec {
     pname = "tablist";
     inherit (pdf-tools) src version;
