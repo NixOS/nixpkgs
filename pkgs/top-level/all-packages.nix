@@ -3690,6 +3690,8 @@ with pkgs;
 
   radarr = callPackage ../servers/radarr { };
 
+  radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
