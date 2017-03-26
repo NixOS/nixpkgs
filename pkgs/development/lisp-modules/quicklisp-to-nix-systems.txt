@@ -1,0 +1,4 @@
+stumpwm
+cl-fuse
+esrap
+hunchentoot
