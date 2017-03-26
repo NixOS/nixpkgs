@@ -39,14 +39,12 @@ stdenv.mkDerivation rec {
       In order to use Citrix Receiver, you need to comply with the Citrix EULA and download
       the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
 
-      ${homepage}
-
-      (if you do not find version ${version} there, try https://www.citrix.com/downloads/citrix-receiver/)
+      https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-latest-13-4.html
 
       Once you have downloaded the file, please use the following command and re-run the
       installation:
 
-      nix-prefetch-url file://$PWD/${name}
+      nix-prefetch-url file://${name}
     '';
   };
 
@@ -135,7 +133,8 @@ stdenv.mkDerivation rec {
     echo "Wrapping wfica..."
     mkdir "$out/bin"
 
-    makeWrapper "$ICAInstDir/wfica -icaroot $ICAInstDir" "$out/bin/wfica" \
+    makeWrapper "$ICAInstDir/wfica" "$out/bin/wfica" \
+      --add-flags "-icaroot $ICAInstDir" \
       --set ICAROOT "$ICAInstDir" \
       --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome_themes_standard}/lib/gtk-2.0" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
