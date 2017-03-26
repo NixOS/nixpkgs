@@ -15917,6 +15917,8 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  way-cooler = callPackage ../applications/window-managers/way-cooler {};
+
   wayv = callPackage ../tools/X11/wayv {};
 
   weechat = callPackage ../applications/networking/irc/weechat {
