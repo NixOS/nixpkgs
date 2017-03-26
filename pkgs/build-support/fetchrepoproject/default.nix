@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     repo init ${concatStringsSep " " repoInitFlags}
 
     repo sync --jobs=$NIX_BUILD_CORES --current-branch
-    ${optionalString !createMirror "rm -rf $out/.repo"}
+    ${optionalString (!createMirror) "rm -rf $out/.repo"}
   '';
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
