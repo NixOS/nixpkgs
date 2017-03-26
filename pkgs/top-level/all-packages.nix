@@ -3893,6 +3893,8 @@ with pkgs;
 
   shellinabox = callPackage ../servers/shellinabox { };
 
+  shrikhand = callPackage ../data/fonts/shrikhand { };
+
   sic = callPackage ../applications/networking/irc/sic { };
 
   siege = callPackage ../tools/networking/siege {};
