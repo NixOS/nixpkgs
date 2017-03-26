@@ -434,7 +434,7 @@ with pkgs;
     withGui = false;
   };
 
-  apitrace = libsForQt55.callPackage ../applications/graphics/apitrace {};
+  apitrace = libsForQt56.callPackage ../applications/graphics/apitrace {};
 
   argus = callPackage ../tools/networking/argus {};
 
@@ -1340,7 +1340,7 @@ with pkgs;
 
   convoy = callPackage ../tools/filesystems/convoy { };
 
-  cool-retro-term = libsForQt55.callPackage ../applications/misc/cool-retro-term { };
+  cool-retro-term = libsForQt56.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
@@ -3897,7 +3897,7 @@ with pkgs;
 
   siege = callPackage ../tools/networking/siege {};
 
-  sigil = libsForQt55.callPackage ../applications/editors/sigil { };
+  sigil = libsForQt56.callPackage ../applications/editors/sigil { };
 
   # aka., gpg-tools
   signing-party = callPackage ../tools/security/signing-party { };
@@ -5327,7 +5327,7 @@ with pkgs;
   jre = jre8;
   jre_headless = jre8_headless;
 
-  openshot-qt = callPackage ../applications/video/openshot-qt { };
+  openshot-qt = libsForQt56.callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = pkgs.jdkdistro true false;
 
@@ -6104,7 +6104,7 @@ with pkgs;
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
 
-  supercollider = callPackage ../development/interpreters/supercollider {
+  supercollider = libsForQt56.callPackage ../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
   };
 
@@ -6947,9 +6947,7 @@ with pkgs;
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
-  qcachegrind = libsForQt57.callPackage ../development/tools/analysis/qcachegrind {
-    qt = qt57;
-  };
+  qcachegrind = libsForQt56.callPackage ../development/tools/analysis/qcachegrind {};
 
   verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
     coq = coq_8_4;
@@ -9427,20 +9425,6 @@ with pkgs;
     developerBuild = true;
   });
 
-  qt55 = recurseIntoAttrs (import ../development/libraries/qt-5/5.5 {
-    inherit newScope;
-    inherit stdenv fetchurl makeSetupHook makeWrapper;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
-    harfbuzz = harfbuzz-icu;
-    mesa = mesa_noglu;
-    inherit perl;
-    inherit (gnome2) libgnomeui GConf gnome_vfs;
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  });
-
-  libsForQt55 = recurseIntoAttrs (lib.makeScope qt55.newScope mkLibsForQt5);
-
   qt56 = recurseIntoAttrs (import ../development/libraries/qt-5/5.6 {
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
@@ -9453,20 +9437,6 @@ with pkgs;
   });
 
   libsForQt56 = recurseIntoAttrs (lib.makeScope qt56.newScope mkLibsForQt5);
-
-  qt57 = recurseIntoAttrs (import ../development/libraries/qt-5/5.7 {
-    inherit newScope;
-    inherit stdenv fetchurl makeSetupHook makeWrapper;
-    bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
-    harfbuzz = harfbuzz-icu;
-    mesa = mesa_noglu;
-    inherit perl;
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-    inherit (gnome3) gtk3 dconf;
-  });
-
-  libsForQt57 = recurseIntoAttrs (lib.makeScope qt57.newScope mkLibsForQt5);
 
   qt58 = recurseIntoAttrs (import ../development/libraries/qt-5/5.8 {
     inherit newScope;
@@ -9535,6 +9505,8 @@ with pkgs;
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
     libktorrent = callPackage ../development/libraries/libktorrent { };
+
+    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {};
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
@@ -13112,7 +13084,7 @@ with pkgs;
   cutecom = callPackage ../tools/misc/cutecom { };
 
   cutegram =
-    let callpkg = libsForQt55.callPackage;
+    let callpkg = libsForQt56.callPackage;
     in callpkg ../applications/networking/instant-messengers/telegram/cutegram rec {
       libqtelegram-aseman-edition = callpkg ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
       telegram-qml = callpkg ../applications/networking/instant-messengers/telegram/telegram-qml {
@@ -13526,7 +13498,7 @@ with pkgs;
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
-  fdr = qt57.callPackage ../applications/science/programming/fdr { };
+  fdr = libsForQt56.callPackage ../applications/science/programming/fdr { };
 
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
@@ -13591,7 +13563,7 @@ with pkgs;
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
-  goldendict = libsForQt55.callPackage ../applications/misc/goldendict { };
+  goldendict = libsForQt56.callPackage ../applications/misc/goldendict { };
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
@@ -14423,7 +14395,7 @@ with pkgs;
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
-  luminanceHDR = libsForQt55.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt56.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
@@ -14448,7 +14420,7 @@ with pkgs;
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
-  lyx = libsForQt57.callPackage ../applications/misc/lyx { };
+  lyx = libsForQt56.callPackage ../applications/misc/lyx { };
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 
@@ -14668,7 +14640,7 @@ with pkgs;
       avahi = avahi.override {
         withLibdnssdCompat = true;
       };
-      qt5 = qt55; # Mumble doesn't work with newer Qt versions.
+      qt5 = qt56; # Mumble doesn't work with Qt > 5.5
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
@@ -14685,7 +14657,7 @@ with pkgs;
     if stdenv.isDarwin then
       callPackage ../applications/audio/musescore/darwin.nix { }
     else
-      libsForQt55.callPackage ../applications/audio/musescore { };
+      libsForQt56.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
@@ -14739,7 +14711,7 @@ with pkgs;
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
-  smtube = libsForQt55.callPackage ../applications/video/smtube {};
+  smtube = libsForQt56.callPackage ../applications/video/smtube {};
 
   sudolikeaboss = callPackage ../tools/security/sudolikeaboss { };
 
@@ -14812,9 +14784,7 @@ with pkgs;
 
   nedit = callPackage ../applications/editors/nedit { };
 
-  notepadqq = callPackage ../applications/editors/notepadqq {
-    qtbase = qt55;
-  };
+  notepadqq = libsForQt56.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
@@ -15099,7 +15069,7 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis {};
 
-  qgroundcontrol = libsForQt55.callPackage ../applications/science/robotics/qgroundcontrol { };
+  qgroundcontrol = libsForQt56.callPackage ../applications/science/robotics/qgroundcontrol { };
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
@@ -15192,7 +15162,7 @@ with pkgs;
     demo = false;
   };
 
-  rapcad = libsForQt55.callPackage ../applications/graphics/rapcad { boost = boost159; };
+  rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
@@ -15234,7 +15204,7 @@ with pkgs;
 
   retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix { });
 
-  ricochet = libsForQt55.callPackage ../applications/networking/instant-messengers/ricochet { };
+  ricochet = libsForQt56.callPackage ../applications/networking/instant-messengers/ricochet { };
 
   ripser = callPackage ../applications/science/math/ripser { };
 
@@ -15416,7 +15386,7 @@ with pkgs;
   bittorrentSync14 = callPackage ../applications/networking/bittorrentsync/1.4.x.nix { };
   bittorrentSync20 = callPackage ../applications/networking/bittorrentsync/2.0.x.nix { };
 
-  dropbox = libsForQt5.callPackage ../applications/networking/dropbox { };
+  dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
@@ -15599,7 +15569,7 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  teamspeak_client = libsForQt55.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
+  teamspeak_client = libsForQt56.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { ruby = ruby_2_0; };
@@ -15727,8 +15697,7 @@ with pkgs;
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  # We need QtWebkit which was deprecated in Qt 5.6 although it can still be build
-  trojita = with qt55; callPackage ../applications/networking/mailreaders/trojita { };
+  trojita = libsForQt56.callPackage ../applications/networking/mailreaders/trojita { };
 
   tsearch_extras = callPackage ../servers/sql/postgresql/tsearch_extras { };
 
@@ -17610,7 +17579,7 @@ with pkgs;
 
   yacas = callPackage ../applications/science/math/yacas { };
 
-  speedcrunch = libsForQt57.callPackage ../applications/science/math/speedcrunch { };
+  speedcrunch = libsForQt56.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
 
@@ -17985,7 +17954,7 @@ with pkgs;
     pcre = pcre-cpp;
   });
 
-  redis-desktop-manager = libsForQt55.callPackage ../applications/misc/redis-desktop-manager { };
+  redis-desktop-manager = libsForQt56.callPackage ../applications/misc/redis-desktop-manager { };
 
   robomongo = libsForQt5.callPackage ../applications/misc/robomongo { };
 
@@ -18394,8 +18363,6 @@ with pkgs;
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
   zuki-themes = callPackage ../misc/themes/zuki { };
-
-  zoom-us = libsForQt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
 
   tora = libsForQt5.callPackage ../development/tools/tora {};
 
