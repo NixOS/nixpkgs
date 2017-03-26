@@ -13,17 +13,19 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
-  nativeBuildInputs = []
-  ++ optional stdenv.isDarwin gcc;
-
   configureFlags = [
     "--enable-absolute-paths"
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs}/include"
     "--with-lib=${skalibs}/lib"
     "--with-dynlib=${skalibs}/lib"
-  ];
-
+  ]
+  # On darwin, the target triplet from -dumpmachine includes version number, but
+  # skarnet.org software uses the triplet to test binary compatibility.
+  # Explicitly setting target ensures code can be compiled against a skalibs
+  # binary built on a different version of darwin.
+  # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
+  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;
