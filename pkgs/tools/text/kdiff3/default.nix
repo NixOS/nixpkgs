@@ -26,7 +26,7 @@ let
       homepage = http://kdiff3.sourceforge.net/;
       license = licenses.gpl2Plus;
       description = "Compares and merges 2 or 3 files or directories";
-      maintainers = with maintainers; [ viric urkud peterhoeg ];
+      maintainers = with maintainers; [ viric peterhoeg ];
       platforms = with platforms; linux;
     };
   };

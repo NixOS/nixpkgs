@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage    = http://projects.gnome.org/NetworkManager/;
     description = "NetworkManager control applet for GNOME";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom urkud rickynils ];
+    maintainers = with maintainers; [ phreedom rickynils ];
     platforms   = platforms.linux;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://libwpg.sourceforge.net;
     description = "C++ library to parse WPG";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

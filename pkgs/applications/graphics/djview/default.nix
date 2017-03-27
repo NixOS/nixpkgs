@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A portable DjVu viewer and browser plugin";
     license = licenses.gpl2;
     inherit (qt.meta) platforms;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }
