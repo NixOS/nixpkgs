@@ -13,18 +13,29 @@
 
 ### optionals
 
+## optional libraries
+
 , alsaSupport ? true, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 
-, webrtcSupport ? true
-, geolocationSupport ? true
+## privacy-related options
+
+, privacySupport ? false
+
+# WARNING: NEVER set any of the options below to `true` by default.
+# Set to `privacySupport` or `false`.
+
+, webrtcSupport ? !privacySupport
+, geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
 
 , safeBrowsingSupport ? false
 , drmSupport ? false
+
+## other
 
 # If you want the resulting program to call itself "Firefox" instead
 # of "Nightly" or whatever, enable this option.  However, those
