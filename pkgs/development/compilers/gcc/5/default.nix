@@ -237,10 +237,16 @@ stdenv.mkDerivation ({
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
-  prePatch = if stdenv.isDarwin then ''
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace gcc/config/darwin-c.c \
       --replace 'if (stdinc)' 'if (0)'
-  '' else null;
+
+    substituteInPlace libgcc/config/t-slibgcc-darwin \
+      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+
+    substituteInPlace libgfortran/configure \
+      --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+  '';
 
   postPatch =
     if (stdenv.isGNU
