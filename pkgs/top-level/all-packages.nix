@@ -9320,6 +9320,8 @@ with pkgs;
 
   pocketsphinx = callPackage ../development/libraries/pocketsphinx { };
 
+  poco = callPackage ../development/libraries/poco { };
+
   podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
 
   poker-eval = callPackage ../development/libraries/poker-eval { };
