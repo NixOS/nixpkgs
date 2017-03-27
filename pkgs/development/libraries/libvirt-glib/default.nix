@@ -15,8 +15,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libvirt glib libxml2 intltool libtool yajl nettle libgcrypt
-    python pygobject2 gobjectIntrospection libcap_ng numactl xen
-  ];
+    python pygobject2 gobjectIntrospection libcap_ng numactl
+  ] ++ stdenv.lib.optional (stdenv.system == "x86_64-linux") xen;
 
   meta = with stdenv.lib; {
     description = "Library for working with virtual machines";

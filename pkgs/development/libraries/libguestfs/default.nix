@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     makeWrapper pkgconfig autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
-    SysVirt numactl xen
-  ];
+    SysVirt numactl
+  ] ++ stdenv.lib.optional (stdenv.system == "x86_64-linux") xen;
 
   configureFlags = "--disable-appliance --disable-daemon";
   patches = [ ./libguestfs-syms.patch ];
