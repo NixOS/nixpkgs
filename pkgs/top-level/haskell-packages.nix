@@ -8,6 +8,7 @@ let # These are attributes in compiler and packages that don't support integer-s
       "ghc6104"
       "ghc6123"
       "ghc704"
+      "ghc763"
       "ghcjs"
       "ghcjsHEAD"
       "ghcCross"
