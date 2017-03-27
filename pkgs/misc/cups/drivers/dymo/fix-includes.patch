@@ -1,0 +1,67 @@
+diff -rp dymo-cups-drivers-1.4.0.5/src/common/CupsFilter.h dymo-cups-drivers-1.4.0.5-fix/src/common/CupsFilter.h
+*** dymo-cups-drivers-1.4.0.5/src/common/CupsFilter.h	2012-02-07 14:22:37.000000000 +0100
+--- dymo-cups-drivers-1.4.0.5-fix/src/common/CupsFilter.h	2017-03-27 23:10:17.638976126 +0200
+***************
+*** 22,29 ****
+--- 22,31 ----
+  #define hfc4bbdea_8a1b_427c_9ab5_50b84576b19e
+  
+  #include <cups/cups.h>
++ #include <cups/ppd.h>
+  #include <cups/raster.h>
+  #include <memory>
++ #include <stdio.h>
+  #include <string>
+  #include "CupsPrintEnvironment.h"
+  #include "ErrorDiffusionHalftoning.h"
+diff -rp dymo-cups-drivers-1.4.0.5/src/common/CupsPrintEnvironment.h dymo-cups-drivers-1.4.0.5-fix/src/common/CupsPrintEnvironment.h
+*** dymo-cups-drivers-1.4.0.5/src/common/CupsPrintEnvironment.h	2012-02-07 14:22:37.000000000 +0100
+--- dymo-cups-drivers-1.4.0.5-fix/src/common/CupsPrintEnvironment.h	2017-03-27 23:10:17.638976126 +0200
+***************
+*** 22,27 ****
+--- 22,28 ----
+  #define h952b1c81_8931_433a_8479_7ae6d8e85a86
+  
+  #include "PrinterDriver.h"
++ #include <stdio.h>
+  
+  namespace DymoPrinterDriver
+  {
+diff -rp dymo-cups-drivers-1.4.0.5/src/lm/CupsFilterLabelManager.h dymo-cups-drivers-1.4.0.5-fix/src/lm/CupsFilterLabelManager.h
+*** dymo-cups-drivers-1.4.0.5/src/lm/CupsFilterLabelManager.h	2012-02-07 14:22:38.000000000 +0100
+--- dymo-cups-drivers-1.4.0.5-fix/src/lm/CupsFilterLabelManager.h	2017-03-27 23:10:17.635976126 +0200
+***************
+*** 22,27 ****
+--- 22,28 ----
+  #define he780684b_6efc_428d_bfdb_c5422b1ed982
+  
+  #include <cups/cups.h>
++ #include <cups/ppd.h>
+  #include <cups/raster.h>
+  #include "LabelManagerDriver.h"
+  #include "LabelManagerLanguageMonitor.h"
+*************** public:
+*** 50,53 ****
+  
+  /*
+   * End of "$Id: CupsFilterLabelManager.h 14880 2011-03-31 16:29:05Z aleksandr $".
+!  */
+\ No newline at end of file
+--- 51,54 ----
+  
+  /*
+   * End of "$Id: CupsFilterLabelManager.h 14880 2011-03-31 16:29:05Z aleksandr $".
+!  */
+diff -rp dymo-cups-drivers-1.4.0.5/src/lw/CupsFilterLabelWriter.h dymo-cups-drivers-1.4.0.5-fix/src/lw/CupsFilterLabelWriter.h
+*** dymo-cups-drivers-1.4.0.5/src/lw/CupsFilterLabelWriter.h	2012-02-07 14:22:37.000000000 +0100
+--- dymo-cups-drivers-1.4.0.5-fix/src/lw/CupsFilterLabelWriter.h	2017-03-27 23:10:17.632976126 +0200
+***************
+*** 22,27 ****
+--- 22,28 ----
+  #define hd8574b83_b264_47b2_8d33_a46ae75691d2
+  
+  #include <cups/cups.h>
++ #include <cups/ppd.h>
+  #include <cups/raster.h>
+  #include "LabelWriterDriver.h"
+  #include "LabelWriterLanguageMonitor.h"
