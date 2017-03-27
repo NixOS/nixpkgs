@@ -12,6 +12,7 @@
 , gemfile ? null
 , lockfile ? null
 , gemset ? null
+, allBins ? false
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
@@ -123,7 +124,17 @@ let
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
-  binPaths = if mainGem != null then [ mainGem ] ++ envPaths else envPaths;
+  binPaths = if !allBins && mainGem != null then [ mainGem ] else envPaths;
+
+  genStubs = binPaths: ''
+    ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
+      "${ruby}/bin/ruby" \
+      "${confFiles}/Gemfile" \
+      "$out/${ruby.gemPath}" \
+      "${bundler}/${ruby.gemPath}" \
+      ${lib.escapeShellArg binPaths} \
+      ${lib.escapeShellArg groups}
+  '';
 
   bundlerEnv = buildEnv {
     inherit ignoreCollisions;
@@ -133,15 +144,7 @@ let
     paths = envPaths;
     pathsToLink = [ "/lib" ];
 
-    postBuild = ''
-      ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
-        "${ruby}/bin/ruby" \
-        "${confFiles}/Gemfile" \
-        "$out/${ruby.gemPath}" \
-        "${bundler}/${ruby.gemPath}" \
-        ${lib.escapeShellArg binPaths} \
-        ${lib.escapeShellArg groups}
-    '' + lib.optionalString (postBuild != null) postBuild;
+    postBuild = (genStubs binPaths) + lib.optionalString (postBuild != null) postBuild;
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
@@ -173,7 +176,7 @@ let
           require 'bundler/setup'
         '';
         in stdenv.mkDerivation {
-          name = "interactive-${drvName}-environment";
+          name = "${drvName}-interactive-environment";
           nativeBuildInputs = [ wrappedRuby bundlerEnv ];
           shellHook = ''
             export OLD_IRBRC="$IRBRC"
