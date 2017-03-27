@@ -16,7 +16,7 @@ let
     "--depth=1"
     #TODO: fetching clone.bundle seems to fail spectacularly inside a sandbox.
     "--no-clone-bundle"
-    (optionalString (createMirror != "") "--mirror")
+    (optionalString createMirror "--mirror")
     (optionalString useArchive "--archive")
     (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
     (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
