@@ -1,4 +1,11 @@
-{ stdenv, pkgs, fetchurl, openssl, zlib }:
+{ useLua ? false
+, usePcre ? false
+, stdenv, fetchurl
+, openssl, zlib, lua ? null, pcre ? null
+}:
+
+assert useLua -> lua != null;
+assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
@@ -12,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "ebb31550a5261091034f1b6ac7f4a8b9d79a8ce2a3ddcd7be5b5eb355c35ba65";
   };
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ openssl zlib ]
+    ++ stdenv.lib.optional useLua lua
+    ++ stdenv.lib.optional usePcre pcre;
 
   # TODO: make it work on bsd as well
   makeFlags = [
@@ -25,6 +34,13 @@ stdenv.mkDerivation rec {
   buildFlags = [
     "USE_OPENSSL=yes"
     "USE_ZLIB=yes"
+  ] ++ stdenv.lib.optionals usePcre [
+    "USE_PCRE=yes"
+    "USE_PCRE_JIT=yes"
+  ] ++ stdenv.lib.optionals useLua [
+    "USE_LUA=yes"
+    "LUA_LIB=${lua}/lib"
+    "LUA_INC=${lua}/include"
   ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc";
 
   meta = {
