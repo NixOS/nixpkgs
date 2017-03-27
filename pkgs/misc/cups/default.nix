@@ -79,7 +79,12 @@ stdenv.mkDerivation rec {
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
+      # Some outputs in cups-config were unexpanded and some even wrong.
       moveToOutput bin/cups-config "$dev"
+      sed -e "/^cups_serverbin=/s|\$(lib)|$out|" \
+          -e "s|\$(out)|$out|" \
+          -e "s|\$(lib)|$lib|" \
+          -i "$dev/bin/cups-config"
 
       # Rename systemd files provided by CUPS
       for f in "$out"/lib/systemd/system/*; do
