@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, doxygen, libxml2, qt57 }:
+{ stdenv, fetchgit, doxygen, libxml2, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "libqmlbind-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ doxygen ];
-  buildInputs = [ libxml2 qt57.full ];
+  buildInputs = [ libxml2 qt5.full ];
 
   preBuild = ''
     doxygen Doxyfile
