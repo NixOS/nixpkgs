@@ -7295,6 +7295,8 @@ with pkgs;
 
   dlib = callPackage ../development/libraries/dlib { };
 
+  docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
+
   dotconf = callPackage ../development/libraries/dotconf { };
 
   dssi = callPackage ../development/libraries/dssi {};
