@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   CFLAGS = "-I${pixman}/include/pixman-1";
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.goibhniu maintainers.urkud ];
+    maintainers = [ maintainers.goibhniu ];
     description = "Wacom digitizer driver for X11";
     homepage = http://linuxwacom.sourceforge.net;
     license = licenses.gpl2;

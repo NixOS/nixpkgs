@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake qt4 ];
 
   meta = {
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     inherit (qt4.meta) platforms;
   };
 }

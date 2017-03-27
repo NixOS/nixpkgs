@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "CD/DVD Burning Application for KDE";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sander maintainers.urkud maintainers.phreedom ];
+    maintainers = [ maintainers.sander maintainers.phreedom ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

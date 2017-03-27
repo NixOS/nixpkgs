@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "SSH client library";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ sander urkud ];
+    maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
   };
 }
