@@ -4713,9 +4713,11 @@ in
 
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
-  purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
+  haxe = callPackage ../development/compilers/haxe {
+    inherit (ocamlPackages) camlp4;
+  };
 
-  inherit (ocamlPackages) haxe;
+  purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
 
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
@@ -12701,6 +12703,8 @@ in
   cwm = callPackage ../applications/window-managers/cwm { };
 
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
+
+  d4x = callPackage ../applications/misc/d4x { };
 
   darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
