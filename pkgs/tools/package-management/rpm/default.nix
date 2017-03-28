@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "rpm-4.13.0.1";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-4.13.x/rpm-4.13.0.1.tar.bz2";
+    url = "http://ftp.rpm.org/releases/rpm-4.13.x/${name}.tar.bz2";
     sha256 = "03cvbwbfrhm0fa02j7828k1qp05hf2m0fradwcf2nqhrsjkppz17";
   };
 
