@@ -23,12 +23,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
-    libxml2 gnutls perl python2 readline
-    gettext libtasn1 libgcrypt yajl attr
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
+    attr libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
-    libnl numad numactl xen zfs libapparmor
+    libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
+    libapparmor libcap_ng numactl xen
   ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
