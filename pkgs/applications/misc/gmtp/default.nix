@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libmtp, libid3tag, flac, libvorbis, gtk3
-, gsettings_desktop_schemas, wrapGAppsHook
+, gsettings_desktop_schemas, makeWrapper, gnome3
 }:
 
 let version = "1.3.10"; in
@@ -12,8 +12,14 @@ stdenv.mkDerivation {
     sha256 = "b21b9a8e66ae7bb09fc70ac7e317a0e32aff3917371a7241dea73c41db1dd13b";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings_desktop_schemas ];
+  preFixup = ''
+    wrapProgram $out/bin/gmtp \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
+      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+  '';
+
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings_desktop_schemas gnome3.dconf ];
 
   enableParallelBuilding = true;
 
