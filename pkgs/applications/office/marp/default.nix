@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "marp-${version}";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchurl {
     url = "https://github.com/yhatt/marp/releases/download/v${version}/${version}-Marp-linux-x64.tar.gz";
-    sha256 = "142c35d88rkgjy85f4204givgx0p1qyfpipbrsa11lp3cb6jzhn2";
+    sha256 = "0x4qldbyvq88cs12znxv33bb0nxr3wxcwhyr97pkjrjc2cn7nphx";
   };
   sourceRoot = ".";
 
