@@ -6992,7 +6992,7 @@ with pkgs;
 
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    llvmPackages = llvmPackages_39;
+    llvmPackages = llvmPackages_4;
     python = python2;
   };
 
