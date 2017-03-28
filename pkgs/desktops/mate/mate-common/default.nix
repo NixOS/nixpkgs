@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "mate-common-${version}";
   version = "${major-ver}.${minor-ver}";
-  major-ver = "1.17";
+  major-ver = "1.18";
   minor-ver = "0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "06pvbi2kk39ysd9dfi6ljkncm53hn02n7dygax6ig4p9qd750sdc";
+    sha256 = "1005laf3z1h8qczm7pmwr40r842665cv6ykhjg7r93vldra48z6p";
   };
 
   meta = {
