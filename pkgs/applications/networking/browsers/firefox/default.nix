@@ -153,8 +153,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "52.0.1";
-    sha512 = "535e2cc0ee645d4ebe9f1d2d1f4fbb16ff5d1745ce493add6b2e323ca3b0907c3054705c5a15eaadb314d5d6474ba1825554fd1ff0780ab7f76fd3f9672a6974";
+    version = "52.0.2";
+    sha512 = "15668625d212acf874b560d0adf738faf3e0df532c549ab94e1d91944542e13bf16265f08fca1eded42820f9b7ad3f0ff70a8b5bc9adde0a79d11e022bb1158e";
     updateScript = import ./update.nix {
       attrPath = "firefox-unwrapped";
       inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
