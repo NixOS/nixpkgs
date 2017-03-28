@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.cmake.org/;
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ urkud mornfall ];
+    maintainers = with stdenv.lib.maintainers; [ mornfall ];
   };
 }

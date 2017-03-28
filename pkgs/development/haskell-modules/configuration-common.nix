@@ -55,6 +55,7 @@ self: super: {
 
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
+  mysql-haskell = dontCheck super.mysql-haskell;
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };

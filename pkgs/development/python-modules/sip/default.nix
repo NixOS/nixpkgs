@@ -19,7 +19,7 @@ if isPyPy then throw "sip not supported for interpreter ${python.executable}" el
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander urkud ];
+    maintainers = with maintainers; [ lovek323 sander ];
     platforms   = platforms.all;
   };
 }

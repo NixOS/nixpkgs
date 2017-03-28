@@ -816,18 +816,22 @@ in {
 
   python-gnupg = buildPythonPackage rec {
     name    = "python-gnupg-${version}";
-    version = "0.3.8";
+    version = "0.4.0";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/p/python-gnupg/${name}.tar.gz";
-      sha256 = "0nkbs9c8f30lra7ca39kg91x8cyxn0jb61vih4qky839gpbwwwiq";
+      sha256 = "1yd88acafs9nwk6gzpbxjzpx0zd04qrvc6hmwhj1i89ghm2g7ap6";
     };
+
+    propagatedBuildInputs = [ pkgs.gnupg1 ];
 
     # Let's make the library default to our gpg binary
     patchPhase = ''
       substituteInPlace gnupg.py \
         --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
     '';
+
+    doCheck = false;
 
     meta = {
       description = "A wrapper for the Gnu Privacy Guard";
@@ -29039,13 +29043,13 @@ EOF
   };
 
   libvirt = let
-    version = "3.0.0";
+    version = "3.1.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1ha4bqf029si1lla1z7ca786w571fh3wfs4h7zaglfk4gb2w39wl";
+      sha256 = "06524dhm27fjfnmr5bqdxlmm1g9ixvzaaq572hgyy5dqwfn64spk";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

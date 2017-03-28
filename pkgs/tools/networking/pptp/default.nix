@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "PPTP client for Linux";
     homepage = http://pptpclient.sourceforge.net/;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }
