@@ -12564,7 +12564,7 @@ with pkgs;
   inherit (callPackages ../data/fonts/gdouros { })
     symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
-  iana_etc = callPackage ../data/misc/iana-etc { };
+  iana-etc = callPackage ../data/misc/iana-etc { };
 
   poppler_data = callPackage ../data/misc/poppler-data { };
 
