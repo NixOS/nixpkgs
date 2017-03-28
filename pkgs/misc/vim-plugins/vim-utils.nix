@@ -412,11 +412,16 @@ rec {
   } // a);
 
   requiredPlugins = {
-    knownPlugins ? vimPlugins,
+    givenKnownPlugins ? null,
     vam ? null,
     pathogen ? null, ...
   }:
     let
+      # This is probably overcomplicated, but I don't understand this well enough to know what's necessary.
+      knownPlugins = if givenKnownPlugins != null then givenKnownPlugins else
+                     if vam != null && vam ? knownPlugins then vam.knownPlugins else
+                     if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
+                     vimPlugins;
       pathogenNames = map (name: knownPlugins.${name}) (findDependenciesRecursively { inherit knownPlugins; names = pathogen.pluginNames; });
       vamNames = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
       names = (lib.optionals (pathogen != null) pathogenNames) ++
