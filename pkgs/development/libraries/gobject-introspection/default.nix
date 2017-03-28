@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage    = http://live.gnome.org/GObjectIntrospection;
-    maintainers = with maintainers; [ lovek323 urkud lethalman ];
+    maintainers = with maintainers; [ lovek323 lethalman ];
     platforms   = platforms.unix;
 
     longDescription = ''

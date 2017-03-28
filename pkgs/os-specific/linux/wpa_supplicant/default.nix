@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     homepage = http://hostap.epitest.fi/wpa_supplicant/;
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marcweber urkud wkennington ];
+    maintainers = with maintainers; [ marcweber wkennington ];
     platforms = platforms.linux;
   };
 }

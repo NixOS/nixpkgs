@@ -113,12 +113,12 @@ in rec {
 
   nixUnstable = lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5110_165786d";
+    suffix = "pre5122_c60715e";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "165786dbc0ca0b93fadb6e491defac603475b601";
-      sha256 = "0ah68ss5wlpgfpc4k7yl2h3szbwgllyn5d6s464vynaig6b165pz";
+      rev = "c60715e937e3773bbb8a114fc9b9c6577f8c5cb5";
+      sha256 = "0hkc4g7i3z06y3rsdxqzdnx5rz77jb8ij1j13bdskbvpp7vfm60p";
     };
     fromGit = true;
   });

@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     repositories.git = git://github.com/lastfm/liblastfm.git;
     description = "Official LastFM library";
     inherit (qt4.meta) platforms;
-    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
+    maintainers = with stdenv.lib.maintainers; [ phreedom ];
   };
 }

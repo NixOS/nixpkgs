@@ -172,12 +172,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2016.3.5";
+    version = "2017.1";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0v5wxjbzrax688knjsf7xd956i8pq5i4svkgnrrc4s390f0ixnl5";
+      sha256 = "0pfsf7ykwixvljcmrv4gldaaflf13brch70cd6xpax0m89vm22vm";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -208,12 +208,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.3.4";
+    version = "2017.1";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1ichjrdmnhyqv9cr73d8kif9l53k3x36i8js8nf9cmkbhdsfckn3";
+      sha256 = "1858jhmyyb7nhx08yxbn5bfgx9m32r8yqwjxjw17rf8gnfvs8225";
     };
     wmClass = "jetbrains-idea";
   };
@@ -280,12 +280,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2016.3.2";
+    version = "2017.1";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "05ylhpn1mijjphcmv6ay3123xp72yypw19430dgr8101zpsnifa5";
+      sha256 = "1ynffm5x8fqq2r71rr9rbvdifbwbvbhqb2x1hkyy4az38gxal1bm";
     };
     wmClass = "jetbrains-phpstorm";
   };

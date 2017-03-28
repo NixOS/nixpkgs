@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1yvaadhgakskqq5wpv53hd6fc3pp17mrdldw4i5cvgck4iwprcfd";
   };
 
+  patches = [
+    # Remove once they release a version above 0.5.3. See https://github.com/sandstorm-io/capnproto/issues/433
+    ./clang4.patch
+  ];
+
   meta = with stdenv.lib; {
     homepage    = "http://kentonv.github.io/capnproto";
     description = "Cap'n Proto cerealization protocol";

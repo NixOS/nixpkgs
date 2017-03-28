@@ -95,6 +95,7 @@ doNotDisplayTwice rec {
   nfsUtils = nfs-utils;  # added 2014-12-06
   opencl-icd = ocl-icd; # added 2017-01-20
   owncloudclient = owncloud-client;  # added 2016-08
+  pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19

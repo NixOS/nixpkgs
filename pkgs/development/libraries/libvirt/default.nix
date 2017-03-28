@@ -12,23 +12,22 @@ with stdenv.lib;
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "0php6wxjcilpir0miwg06yd2ha25zi9fv2apvvgv5c8k1svjd7cx";
+    sha256 = "1a9j6yqfy7i5yv414wk6nv26a5bpfyyg0rpcps6ybi6a1yd04ybq";
   };
 
   patches = [ ./build-on-bsd.patch ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
-    libxml2 gnutls perl python2 readline
-    gettext libtasn1 libgcrypt yajl attr
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
+    attr libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
-    libnl numad numactl xen zfs libapparmor
+    libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
+    libapparmor libcap_ng numactl xen
   ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
