@@ -398,6 +398,15 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      The dnscrypt-proxy service supports synchronizing the list of public
+      resolvers without working DNS resolution.  This fixes issues caused by the
+      resolver list becoming outdated.  It also improves the viability of
+      DNSCrypt only configurations.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
