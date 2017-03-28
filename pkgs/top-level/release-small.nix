@@ -68,7 +68,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   hdparm = linux;
   hello = all;
   host = linux;
-  iana_etc = linux;
+  iana-etc = linux;
   icewm = linux;
   idutils = all;
   inetutils = linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, tzdata, iana_etc, go_bootstrap, runCommand, writeScriptBin
+{ stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre, cacert
 , Security, Foundation, bash }:
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
     # Remove the timezone naming test
     sed -i '/TestLoadFixed/areturn' src/time/time_test.go
 
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
-    sed -i 's,/etc/services,${iana_etc}/etc/services,' src/net/port_unix.go
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
+    sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
 
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
