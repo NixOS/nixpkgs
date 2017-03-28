@@ -5759,11 +5759,11 @@ in {
 
   libtmux = buildPythonPackage rec {
     name = "libtmux-${version}";
-    version = "0.6.0";
+    version = "0.6.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libtmux/${name}.tar.gz";
-      sha256 = "117savw47c2givq9vxr5m02nyxmsk34l2ihxyy5axlaiqyxyf20s";
+      sha256 = "0kmw7x8cxb2hj2mzibmg9nxaijhsm1kcm0vdihn99fhm5kw1phh5";
     };
 
     buildInputs = with self; [ pytest_29 ];
