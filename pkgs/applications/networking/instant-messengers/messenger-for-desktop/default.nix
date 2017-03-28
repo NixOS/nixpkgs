@@ -3,11 +3,13 @@
   fontconfig, freetype, glib, gnome2, libnotify, nspr, nss, systemd, xorg
 }:
 
+with stdenv.lib;
+
 let
 
   version = "2.0.6";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = makeLibraryPath [
     alsaLib
     atk
     cairo
@@ -64,8 +66,7 @@ in stdenv.mkDerivation {
 
     mv $out/usr/share $out/share
     mv $out/opt/messengerfordesktop $out/libexec
-    rmdir $out/usr
-    rm -rf $out/etc $out/usr $out/share/lintian
+    rmdir $out/usr $out/opt
 
     chmod -R g-w $out
 
@@ -92,9 +93,9 @@ in stdenv.mkDerivation {
       This is NOT an official product.
     '';
     homepage = https://messengerfordesktop.org;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = [
-      stdenv.lib.maintainers.shawndellysse
+      maintainers.shawndellysse
     ];
     platforms = [
       "x86_64-linux"
