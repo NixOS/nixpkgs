@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub, standardPatch,
+  stdenv, fetchFromGitHub, fetchurl, standardPatch,
   cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-common, lxqt-globalkeys, libsysstat,
@@ -47,6 +47,13 @@ stdenv.mkDerivation rec {
     alsaLib
     menu-cache
     lxmenu-data
+  ];
+
+  patches = [
+    (fetchurl {
+       url = https://github.com/lxde/lxqt-panel/commit/ec62109e0fa678875a9b10fc6f1975267432712d.patch;
+       sha256 = "1ywwk8gb6gbvs8z9gwgsnb13z1jvyvjij349nq7ij6iyhyld0jlr";
+    })
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
