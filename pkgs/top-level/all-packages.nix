@@ -12809,6 +12809,7 @@ with pkgs;
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
   go-ethereum = self.altcoins.go-ethereum;
+  parity = self.altcoins.parity;
   ethabi = self.altcoins.ethabi;
 
   stellar-core = self.altcoins.stellar-core;
