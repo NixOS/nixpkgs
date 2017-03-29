@@ -3,6 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
+, qtbase, qtdeclarative, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -43,6 +44,8 @@ let
       dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
       ncurses zlib
+
+      qtbase qtdeclarative qtwebkit
     ];
 
   desktopItem = makeDesktopItem {
@@ -70,8 +73,6 @@ in stdenv.mkDerivation {
   dontStrip = true; # already done
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p "$out/${appdir}"
     cp -r --no-preserve=mode "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
@@ -79,6 +80,19 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/libffi.so.6"
     rm "$out/${appdir}/libGL.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
+
+    rm "$out/${appdir}/libQt5Core.so.5"
+    rm "$out/${appdir}/libQt5DBus.so.5"
+    rm "$out/${appdir}/libQt5Gui.so.5"
+    rm "$out/${appdir}/libQt5Network.so.5"
+    rm "$out/${appdir}/libQt5OpenGL.so.5"
+    rm "$out/${appdir}/libQt5PrintSupport.so.5"
+    rm "$out/${appdir}/libQt5Qml.so.5"
+    rm "$out/${appdir}/libQt5Quick.so.5"
+    rm "$out/${appdir}/libQt5Sql.so.5"
+    rm "$out/${appdir}/libQt5WebKit.so.5"
+    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
+    rm "$out/${appdir}/libQt5XcbQpa.so.5"
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
@@ -92,13 +106,9 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
     chmod 755 $out/${appdir}/dropbox
-
-    runHook postInstall
   '';
 
   fixupPhase = ''
-    runHook preFixup
-
     INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
     RPATH="${ldpath}:$out/${appdir}"
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
@@ -138,8 +148,6 @@ in stdenv.mkDerivation {
     done
 
     paxmark m $out/${appdir}/dropbox
-
-    runHook postFixup
   '';
 
   meta = {
