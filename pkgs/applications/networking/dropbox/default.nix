@@ -107,23 +107,15 @@ in stdenv.mkDerivation {
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
     find "$out/${appdir}" -type f -a -perm -0100 -print | while read obj; do
         dynamic=$(readelf -S "$obj" 2>/dev/null | grep "DYNAMIC" || true)
-
         if [[ -n "$dynamic" ]]; then
-            type=$(readelf -h "$obj" 2>/dev/null | grep 'Type:' | sed -e "$getType")
 
-            if [[ "$type" == "EXEC" ]]; then
-
+            if readelf -l "$obj" 2>/dev/null | grep "INTERP" >/dev/null; then
                 echo "patching interpreter path in $type $obj"
                 patchelf --set-interpreter "$INTERP" "$obj"
+            fi
 
-                echo "patching RPATH in $type $obj"
-                oldRPATH=$(patchelf --print-rpath "$obj")
-                patchelf --set-rpath "''${oldRPATH:+$oldRPATH:}$RPATH" "$obj"
-
-                echo "shrinking RPATH in $type $obj"
-                patchelf --shrink-rpath "$obj"
-
-            elif [[ "$type" == "DYN" ]]; then
+            type=$(readelf -h "$obj" 2>/dev/null | grep 'Type:' | sed -e "$getType")
+            if [ "$type" == "EXEC" ] || [ "$type" == "DYN" ]; then
 
                 echo "patching RPATH in $type $obj"
                 oldRPATH=$(patchelf --print-rpath "$obj")
