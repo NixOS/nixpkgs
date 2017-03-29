@@ -68,7 +68,6 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".dropbox-dist";
 
-  dontPatchELF = true; # patchelf invoked explicitly below
   nativeBuildInputs = [ makeQtWrapper patchelf ];
   dontStrip = true; # already done
 
@@ -120,9 +119,6 @@ in stdenv.mkDerivation {
                 echo "patching RPATH in $type $obj"
                 oldRPATH=$(patchelf --print-rpath "$obj")
                 patchelf --set-rpath "''${oldRPATH:+$oldRPATH:}$RPATH" "$obj"
-
-                echo "shrinking RPATH in $type $obj"
-                patchelf --shrink-rpath "$obj"
 
             else
 
