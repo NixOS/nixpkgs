@@ -29,18 +29,7 @@ let
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
   inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.x-2015-11-16";
-
-  unifont_bdf = fetchurl {
-    url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
-    sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
-  };
-
-  po_src = fetchurl {
-    name = "grub-2.02-beta2.tar.gz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
-    sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
-  };
+  version = "2.x-2017-03-15";
 
 in (
 
@@ -50,10 +39,10 @@ assert zfsSupport -> zfs != null;
 stdenv.mkDerivation rec {
   name = "grub-${version}";
 
-  src = fetchFromSavannah {
-    repo = "grub";
-    rev = "50d6f38febe80d4d3088dae1ee639b341787ab71";
-    sha256 = "1pyn2qa8hwiabhgnzj86y4b69y4a37dh5n0j4csmm7xmgc13vvww";
+  src = fetchurl {
+    name = "grub-2.02-rc2.tar.xz";
+    url = "https://alpha.gnu.org/gnu/grub/grub-2.02~rc2.tar.xz";
+    sha256 = "0in25wbzmrbw11w3ncnxbci7gnggw4aypx5sl7sy8cv76szgqfq5";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
@@ -83,16 +72,6 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
-    '';
-
-  prePatch =
-    '' tar zxf ${po_src} grub-2.02~beta2/po
-       rm -rf po
-       mv grub-2.02~beta2/po po
-       sh autogen.sh
-       gunzip < "${unifont_bdf}" > "unifont.bdf"
-       sed -i "configure" \
-           -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
   patches = [ ./fix-bash-completion.patch ];
