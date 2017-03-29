@@ -400,7 +400,8 @@ in {
 
           mkdir -p ${cfg.dataDir}/whisper
           chmod 0700 ${cfg.dataDir}/whisper
-          chown -R graphite:graphite ${cfg.dataDir}
+          chown graphite:graphite ${cfg.dataDir}
+          chown graphite:graphite ${cfg.dataDir}/whisper
         '';
       };
     })
@@ -489,7 +490,10 @@ in {
 
             touch ${dataDir}/db-created
 
-            chown -R graphite:graphite ${cfg.dataDir}
+            chown graphite:graphite ${cfg.dataDir}
+            chown graphite:graphite ${cfg.dataDir}/db-created
+            chown graphite:graphite ${cfg.dataDir}/whisper
+            chown -R graphite:graphite ${cfg.dataDir}/log
           fi
         '';
       };
@@ -528,7 +532,9 @@ in {
 
             touch ${dataDir}/db-created
 
-            chown -R graphite:graphite ${cfg.dataDir}
+            chown graphite:graphite ${cfg.dataDir}
+            chown graphite:graphite ${cfg.dataDir}/db-created
+            chown -R graphite:graphite ${cfg.dataDir}/cache
           fi
         '';
       };
@@ -549,7 +555,7 @@ in {
         preStart = ''
           if ! test -e ${dataDir}/db-created; then
             mkdir -p ${dataDir}
-            chown -R graphite:graphite ${dataDir}
+            chown graphite:graphite ${dataDir}
           fi
         '';
       };
