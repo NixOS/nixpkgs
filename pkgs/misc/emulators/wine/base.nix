@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgArches,
+{ stdenv, lib, pkgArches, fetchurl,
   name, version, src, monos, geckos, platforms,
   pkgconfig, fontforge, makeWrapper, flex, bison,
   supportFlags,
@@ -14,6 +14,15 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   builder = buildScript;
 }) // rec {
   inherit name src configureFlags;
+
+  patches = if lib.versionOlder "1.9.0" version then null else [
+    (fetchurl {
+      name = "new-gnutls.patch";
+      url = "http://anonscm.debian.org/git/pkg-wine/wine.git/plain/debian/patches/"
+          + "gnutls.patch?id=758122e8a";
+      sha256 = "1ifpdvdwps1qkzrhnaaaznpj8aww8qpzikhjh04h6rgp2ls0p24j";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig fontforge makeWrapper flex bison
