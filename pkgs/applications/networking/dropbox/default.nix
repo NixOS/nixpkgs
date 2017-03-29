@@ -76,23 +76,16 @@ in stdenv.mkDerivation {
     mkdir -p "$out/${appdir}"
     cp -r --no-preserve=mode "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
+    # Vendored libraries interact poorly with our graphics drivers
     rm "$out/${appdir}/libdrm.so.2"
     rm "$out/${appdir}/libffi.so.6"
     rm "$out/${appdir}/libGL.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
 
-    rm "$out/${appdir}/libQt5Core.so.5"
-    rm "$out/${appdir}/libQt5DBus.so.5"
-    rm "$out/${appdir}/libQt5Gui.so.5"
-    rm "$out/${appdir}/libQt5Network.so.5"
-    rm "$out/${appdir}/libQt5OpenGL.so.5"
-    rm "$out/${appdir}/libQt5PrintSupport.so.5"
-    rm "$out/${appdir}/libQt5Qml.so.5"
-    rm "$out/${appdir}/libQt5Quick.so.5"
-    rm "$out/${appdir}/libQt5Sql.so.5"
-    rm "$out/${appdir}/libQt5WebKit.so.5"
-    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
-    rm "$out/${appdir}/libQt5XcbQpa.so.5"
+    # Cannot use vendored Qt libraries due to problem with xkbcommon
+    rm "$out/${appdir}/"libQt5*.so.5
+    rm "$out/${appdir}/qt.conf"
+    rm -fr "$out/${appdir}/plugins"
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
