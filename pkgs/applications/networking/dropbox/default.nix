@@ -3,7 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
-, qtbase, qtdeclarative, qtwebkit
+, qtbase, qtdeclarative, qtwebkit, makeQtWrapper
 }:
 
 # this package contains the daemon version of dropbox
@@ -68,8 +68,8 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".dropbox-dist";
 
-  nativeBuildInputs = [ makeWrapper patchelf ];
   dontPatchELF = true; # patchelf invoked explicitly below
+  nativeBuildInputs = [ makeQtWrapper patchelf ];
   dontStrip = true; # already done
 
   installPhase = ''
@@ -102,7 +102,7 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
-    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
+    makeQtWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
     chmod 755 $out/${appdir}/dropbox
