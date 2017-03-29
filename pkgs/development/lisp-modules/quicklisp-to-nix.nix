@@ -11,7 +11,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."split-sequence" or (x: {}))
        (import ./quicklisp-to-nix-output/split-sequence.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -20,7 +19,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."trivial-garbage" or (x: {}))
        (import ./quicklisp-to-nix-output/trivial-garbage.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -29,7 +27,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."trivial-gray-streams" or (x: {}))
        (import ./quicklisp-to-nix-output/trivial-gray-streams.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -38,18 +35,8 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."babel" or (x: {}))
        (import ./quicklisp-to-nix-output/babel.nix {
          inherit fetchurl;
-         "trivial-features" = quicklisp-to-nix-packages."trivial-features";
-         "alexandria" = quicklisp-to-nix-packages."alexandria";
-         
-       }));
-
-
-  "trivial-features" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."trivial-features" or (x: {}))
-       (import ./quicklisp-to-nix-output/trivial-features.nix {
-         inherit fetchurl;
-         
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -58,7 +45,30 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."uiop" or (x: {}))
        (import ./quicklisp-to-nix-output/uiop.nix {
          inherit fetchurl;
-         
+       }));
+
+
+  "chipz" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."chipz" or (x: {}))
+       (import ./quicklisp-to-nix-output/chipz.nix {
+         inherit fetchurl;
+       }));
+
+
+  "puri" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."puri" or (x: {}))
+       (import ./quicklisp-to-nix-output/puri.nix {
+         inherit fetchurl;
+       }));
+
+
+  "trivial-features" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."trivial-features" or (x: {}))
+       (import ./quicklisp-to-nix-output/trivial-features.nix {
+         inherit fetchurl;
        }));
 
 
@@ -67,8 +77,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."usocket" or (x: {}))
        (import ./quicklisp-to-nix-output/usocket.nix {
          inherit fetchurl;
-         "split-sequence" = quicklisp-to-nix-packages."split-sequence";
-         
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
        }));
 
 
@@ -77,7 +86,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."rfc2388" or (x: {}))
        (import ./quicklisp-to-nix-output/rfc2388.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -86,7 +94,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."md5" or (x: {}))
        (import ./quicklisp-to-nix-output/md5.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -95,13 +102,12 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl+ssl" or (x: {}))
        (import ./quicklisp-to-nix-output/cl+ssl.nix {
          inherit fetchurl;
-         "cffi" = quicklisp-to-nix-packages."cffi";
-         "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
-         "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
-         "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
-         "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
-         "uiop" = quicklisp-to-nix-packages."uiop";
-         
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+           "uiop" = quicklisp-to-nix-packages."uiop";
        }));
 
 
@@ -110,8 +116,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."flexi-streams" or (x: {}))
        (import ./quicklisp-to-nix-output/flexi-streams.nix {
          inherit fetchurl;
-         "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
-         
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
        }));
 
 
@@ -120,9 +125,8 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-fad" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-fad.nix {
          inherit fetchurl;
-         "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
-         "alexandria" = quicklisp-to-nix-packages."alexandria";
-         
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -131,7 +135,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-base64" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-base64.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -140,8 +143,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."chunga" or (x: {}))
        (import ./quicklisp-to-nix-output/chunga.nix {
          inherit fetchurl;
-         "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
-         
+           "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
        }));
 
 
@@ -150,7 +152,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."trivial-utf-8" or (x: {}))
        (import ./quicklisp-to-nix-output/trivial-utf-8.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -159,7 +160,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."iterate" or (x: {}))
        (import ./quicklisp-to-nix-output/iterate.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -168,7 +168,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."trivial-backtrace" or (x: {}))
        (import ./quicklisp-to-nix-output/trivial-backtrace.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -177,8 +176,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."bordeaux-threads" or (x: {}))
        (import ./quicklisp-to-nix-output/bordeaux-threads.nix {
          inherit fetchurl;
-         "alexandria" = quicklisp-to-nix-packages."alexandria";
-         
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -187,7 +185,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-utilities" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-utilities.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -196,11 +193,10 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cffi" or (x: {}))
        (import ./quicklisp-to-nix-output/cffi.nix {
          inherit fetchurl;
-         "uiop" = quicklisp-to-nix-packages."uiop";
-         "alexandria" = quicklisp-to-nix-packages."alexandria";
-         "trivial-features" = quicklisp-to-nix-packages."trivial-features";
-         "babel" = quicklisp-to-nix-packages."babel";
-         
+           "uiop" = quicklisp-to-nix-packages."uiop";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "babel" = quicklisp-to-nix-packages."babel";
        }));
 
 
@@ -209,7 +205,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."clx" or (x: {}))
        (import ./quicklisp-to-nix-output/clx.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -218,7 +213,6 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-ppcre" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-ppcre.nix {
          inherit fetchurl;
-         
        }));
 
 
@@ -227,7 +221,31 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."alexandria" or (x: {}))
        (import ./quicklisp-to-nix-output/alexandria.nix {
          inherit fetchurl;
-         
+       }));
+
+
+  "drakma" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."drakma" or (x: {}))
+       (import ./quicklisp-to-nix-output/drakma.nix {
+         inherit fetchurl;
+           "puri" = quicklisp-to-nix-packages."puri";
+           "cl-base64" = quicklisp-to-nix-packages."cl-base64";
+           "chunga" = quicklisp-to-nix-packages."chunga";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "chipz" = quicklisp-to-nix-packages."chipz";
+           "usocket" = quicklisp-to-nix-packages."usocket";
+           "cl+ssl" = quicklisp-to-nix-packages."cl+ssl";
+       }));
+
+
+  "external-program" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."external-program" or (x: {}))
+       (import ./quicklisp-to-nix-output/external-program.nix {
+         inherit fetchurl;
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
        }));
 
 
@@ -236,18 +254,17 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."hunchentoot" or (x: {}))
        (import ./quicklisp-to-nix-output/hunchentoot.nix {
          inherit fetchurl;
-         "chunga" = quicklisp-to-nix-packages."chunga";
-         "cl-base64" = quicklisp-to-nix-packages."cl-base64";
-         "cl-fad" = quicklisp-to-nix-packages."cl-fad";
-         "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
-         "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
-         "cl+ssl" = quicklisp-to-nix-packages."cl+ssl";
-         "md5" = quicklisp-to-nix-packages."md5";
-         "rfc2388" = quicklisp-to-nix-packages."rfc2388";
-         "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
-         "usocket" = quicklisp-to-nix-packages."usocket";
-         "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
-         
+           "chunga" = quicklisp-to-nix-packages."chunga";
+           "cl-base64" = quicklisp-to-nix-packages."cl-base64";
+           "cl-fad" = quicklisp-to-nix-packages."cl-fad";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
+           "cl+ssl" = quicklisp-to-nix-packages."cl+ssl";
+           "md5" = quicklisp-to-nix-packages."md5";
+           "rfc2388" = quicklisp-to-nix-packages."rfc2388";
+           "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
+           "usocket" = quicklisp-to-nix-packages."usocket";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
        }));
 
 
@@ -256,8 +273,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."esrap" or (x: {}))
        (import ./quicklisp-to-nix-output/esrap.nix {
          inherit fetchurl;
-         "alexandria" = quicklisp-to-nix-packages."alexandria";
-         
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
        }));
 
 
@@ -266,13 +282,12 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-fuse" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-fuse.nix {
          inherit fetchurl;
-         "cffi" = quicklisp-to-nix-packages."cffi";
-         "cl-utilities" = quicklisp-to-nix-packages."cl-utilities";
-         "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
-         "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
-         "iterate" = quicklisp-to-nix-packages."iterate";
-         "trivial-utf-8" = quicklisp-to-nix-packages."trivial-utf-8";
-         
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "cl-utilities" = quicklisp-to-nix-packages."cl-utilities";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
+           "iterate" = quicklisp-to-nix-packages."iterate";
+           "trivial-utf-8" = quicklisp-to-nix-packages."trivial-utf-8";
        }));
 
 
@@ -281,10 +296,9 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."stumpwm" or (x: {}))
        (import ./quicklisp-to-nix-output/stumpwm.nix {
          inherit fetchurl;
-         "alexandria" = quicklisp-to-nix-packages."alexandria";
-         "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
-         "clx" = quicklisp-to-nix-packages."clx";
-         
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
+           "clx" = quicklisp-to-nix-packages."clx";
        }));
 
 

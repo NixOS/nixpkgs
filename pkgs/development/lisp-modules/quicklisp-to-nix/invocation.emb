@@ -2,7 +2,6 @@
     ((f: x: (x // (f x)))
        (qlOverrides."<% @var name %>" or (x: {}))
        (import ./quicklisp-to-nix-output/<% @var name %>.nix {
-         inherit fetchurl;
-         <% @loop deps %>"<% @var name %>" = quicklisp-to-nix-packages."<% @var name %>";
-         <% @endloop %>
+         inherit fetchurl;<% @loop deps %>
+           "<% @var name %>" = quicklisp-to-nix-packages."<% @var name %>";<% @endloop %>
        }));
