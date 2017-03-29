@@ -741,7 +741,7 @@ with pkgs;
   catclock = callPackage ../applications/misc/catclock { };
 
   cde = callPackage ../tools/package-management/cde { };
-  
+
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
@@ -6770,6 +6770,10 @@ with pkgs;
   premake3 = callPackage ../development/tools/misc/premake/3.nix { };
 
   premake4 = callPackage ../development/tools/misc/premake { };
+
+  premake5 = callPackage ../development/tools/misc/premake/5.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   premake = premake4;
 
