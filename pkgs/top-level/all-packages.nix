@@ -10306,8 +10306,6 @@ with pkgs;
 
   javaCup = callPackage ../development/libraries/java/cup { };
 
-  jclasslib = callPackage ../development/tools/java/jclasslib { };
-
   jdom = callPackage ../development/libraries/java/jdom { };
 
   jflex = callPackage ../development/libraries/java/jflex { };
