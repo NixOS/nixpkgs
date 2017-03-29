@@ -1,10 +1,10 @@
-{ useLua ? false
-, usePcre ? false
+{ useLua ? !stdenv.isDarwin
+, usePcre ? true
 , stdenv, fetchurl
-, openssl, zlib, lua ? null, pcre ? null
+, openssl, zlib, lua5_3 ? null, pcre ? null
 }:
 
-assert useLua -> lua != null;
+assert useLua -> lua5_3 != null;
 assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl zlib ]
-    ++ stdenv.lib.optional useLua lua
+    ++ stdenv.lib.optional useLua lua5_3
     ++ stdenv.lib.optional usePcre pcre;
 
   # TODO: make it work on bsd as well
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     "USE_PCRE_JIT=yes"
   ] ++ stdenv.lib.optionals useLua [
     "USE_LUA=yes"
-    "LUA_LIB=${lua}/lib"
-    "LUA_INC=${lua}/include"
+    "LUA_LIB=${lua5_3}/lib"
+    "LUA_INC=${lua5_3}/include"
   ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc";
 
   meta = {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = http://haproxy.1wt.eu;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = with stdenv.lib.maintainers; [ fuzzy-id garbas ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     license = stdenv.lib.licenses.gpl2;
   };
