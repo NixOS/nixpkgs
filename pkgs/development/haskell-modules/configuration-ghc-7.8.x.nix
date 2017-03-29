@@ -139,10 +139,15 @@ self: super: {
   conduit = addBuildDepend super.conduit self.void;
   conduit_1_2_5 = addBuildDepend super.conduit_1_2_5 self.void;
 
+  # Breaks a dependency cycle between QuickCheck and semigroups
+  hashable = dontCheck super.hashable;
+  unordered-containers = dontCheck super.unordered-containers;
+
   # Needs additional inputs on pre 7.10.x compilers.
   semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend super.distributive self.semigroups;
+  QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
