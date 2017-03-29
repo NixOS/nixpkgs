@@ -5622,6 +5622,8 @@ with pkgs;
 
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
+  swift = callPackage ../development/compilers/swift { };
+
   swiProlog = callPackage ../development/compilers/swi-prolog { };
 
   tbb = callPackage ../development/libraries/tbb { };
@@ -8082,6 +8084,8 @@ with pkgs;
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
+
+  libblocksruntime = callPackage ../development/libraries/libblocksruntime { };
 
   libbluray = callPackage ../development/libraries/libbluray { };
 
