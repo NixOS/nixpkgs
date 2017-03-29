@@ -385,6 +385,56 @@ import ./make-test.nix ({ pkgs, networkd, test, ... }:
             $client2->succeed("ip addr show dev vlan >&2");
           '';
       };
+      veth = {
+        name = "veth";
+        nodes.node = { config, pkgs, ... }: {
+          virtualisation.vlans = [ 1 ];
+          networking = {
+            useNetworkd = networkd;
+            firewall.allowPing = true;
+            veths = {
+              veth0 = { peername = "veth0peer"; };
+            };
+            interfaces.veth0.ip4 = [{ address = "192.168.10.1"; prefixLength = 24; }];
+          };
+        };
+        testScript = { nodes, ... }:
+          ''
+            startAll;
+
+            $node->waitForUnit("network.target");
+
+            #$node->waitForUnit("veth0-netdev.service");
+
+            $node->execute("systemctl -l |grep veth0 >&2");
+
+            $node->succeed("ip link show veth0 >&2");
+            $node->succeed("ip link show veth0peer >&2");
+            $node->succeed("ip a show dev veth0 >&2");
+
+            $node->succeed("ip netns add test >&2");
+            $node->succeed("ip link set veth0peer netns test >&2");
+            $node->succeed("ip netns exec test ip a add 192.168.10.2/24 dev veth0peer >&2");
+            $node->succeed("ip netns exec test ip link set veth0peer up >&2");
+            $node->succeed("ip netns list >&2");
+            $node->succeed("ip -4 a >&2");
+            $node->succeed("ip netns exec test ip -4 a >&2");
+            $node->succeed("ip -4 r >&2");
+            $node->succeed("ip netns exec test ip -4 r >&2");
+            $node->succeed("ip netns exec test ping -n -c 2 192.168.10.1 >&2");
+            $node->succeed("ping -n -c 2 192.168.10.2 >&2");
+
+            $node->succeed("ip netns delete test >&2");
+            $node->execute("systemctl -l |grep veth0 >&2");
+
+            $node->execute("systemctl status network-addresses-veth0 >&2");
+            $node->execute("systemctl status network-link-veth0 >&2");
+            $node->execute("systemctl status veth0-netdev >&2");
+
+            $node->execute("ip link >&2");
+            $node->fail("ip link show veth0 >&2");
+          '';
+      };
     };
     case = testCases.${test};
   in case // {

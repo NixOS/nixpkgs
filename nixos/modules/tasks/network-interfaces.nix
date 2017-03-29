@@ -265,9 +265,9 @@ in
         generate a random 32-bit ID using the following commands:
 
         <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
-        
+
         (this derives it from the machine-id that systemd generates) or
-        
+
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
       '';
     };
@@ -612,6 +612,31 @@ in
       };
     };
 
+    networking.veths = mkOption {
+      default = { };
+      example = {
+        veth0 = {
+          peername = "veth0-peer";
+        };
+        container0 = {
+          peername = "container0-inside";
+        };
+      };
+      description = ''
+        This option allows you to define veth-pairs which are virtual network interfaces that are pair-wise connected. One side can be placed in a network namespace like a container.
+      '';
+
+      type = types.attrsOf types.optionSet;
+
+      options = {
+        peername = mkOption {
+          example = "veth0-peer";
+          type = types.string;
+          description = "Name of the other end of the veth pair.";
+        };
+      };
+    };
+
     networking.useDHCP = mkOption {
       type = types.bool;
       default = true;
@@ -745,7 +770,7 @@ in
       { description = "Link configuration of ${i.name}";
         wantedBy = [ "network-interfaces.target" ];
         before = [ "network-interfaces.target" ];
-        bindsTo = [ (subsystemDevice i.name) ];
+        bindsTo = if config.boot.isContainer then [] else [ (subsystemDevice i.name) ];
         after = [ (subsystemDevice i.name) "network-pre.target" ];
         path = [ pkgs.iproute ];
         serviceConfig = {

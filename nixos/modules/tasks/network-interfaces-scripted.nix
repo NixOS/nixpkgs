@@ -110,7 +110,7 @@ in
           { description = "Address configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
             before = [ "network-interfaces.target" ];
-            bindsTo = [ (subsystemDevice i.name) ];
+            bindsTo = if config.boot.isContainer then [] else [ (subsystemDevice i.name) ];
             after = [ (subsystemDevice i.name) "network-pre.target" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -331,6 +331,36 @@ in
             '';
           });
 
+        createVethPair = n: v: nameValuePair "${n}-netdev"
+          ({
+            description = "Veth Pair ${n}";
+            wantedBy = [ "network.target" (subsystemDevice n) ];
+            after = [ "network-pre.target" ];
+            before = [ "network-interfaces.target" (subsystemDevice n) ];
+            requiredBy = mapAttrsToList (name: container:
+              "container@${name}.service"
+            ) (
+              filterAttrs (name: container:
+                any (i: i == v.peername) container.interfaces
+              ) config.containers
+            );
+            serviceConfig.type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add name "${n}" type veth peer name "${v.peername}"
+              ip link set "${n}" up
+              ip link set "${v.peername}" up
+              ip link show "${n}"
+            '';
+            postStop = ''
+              # ignore if the device is already gone
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}" || exit 0
+            '';
+          });
+
       in listToAttrs (
            map configureAddrs interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
@@ -339,6 +369,7 @@ in
          // mapAttrs' createMacvlanDevice cfg.macvlans
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
+         // mapAttrs' createVethPair cfg.veths
          // {
            "network-setup" = networkSetup;
            "network-local-commands" = networkLocalCommands;
