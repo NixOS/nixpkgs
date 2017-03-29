@@ -256,12 +256,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2016.3.2";
+    version = "2017.1";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0fag5ng9n953mnf3gmxpac1icnb1qz6dybhqwjbr13qij8v2s2g1";
+      sha256 = "14p6f15n0927awgpsdsdqgmdfbbwkykrw5xggz5hnfl7d05i4sb6";
     };
     wmClass = "jetbrains-pycharm-ce";
   };
