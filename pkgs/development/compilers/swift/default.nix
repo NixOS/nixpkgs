@@ -258,7 +258,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/apple/swift";
     maintainers = with maintainers; [ jb55 dtzWill ];
     license = licenses.asl20;
-    platforms = platforms.linux;
+    # Swift doesn't support 32bit Linux, unknown on other platforms.
+    platforms = [ "x86_64-linux" ];
   };
 }
 
