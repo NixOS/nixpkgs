@@ -152,4 +152,7 @@ self: super: {
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
 
+  # extra-test: <stdout>: hFlush: invalid argument (Bad file descriptor)
+  extra = dontCheck super.extra;
+
 }
