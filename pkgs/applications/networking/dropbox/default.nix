@@ -104,7 +104,7 @@ in stdenv.mkDerivation {
     INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
     RPATH="${ldpath}:$out/${appdir}"
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
-    find "$out/${appdir}" -type f -a -perm -0100 -print | while read obj; do
+    find "$out/${appdir}" -type f -print | while read obj; do
         dynamic=$(readelf -S "$obj" 2>/dev/null | grep "DYNAMIC" || true)
         if [[ -n "$dynamic" ]]; then
 
