@@ -148,6 +148,7 @@ self: super: {
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend super.distributive self.semigroups;
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
+  void = addBuildDepends super.void (with self; [hashable semigroups]);
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
