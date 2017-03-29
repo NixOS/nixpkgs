@@ -942,6 +942,8 @@ with pkgs;
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
+  nfdump = callPackage ../tools/networking/nfdump { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
