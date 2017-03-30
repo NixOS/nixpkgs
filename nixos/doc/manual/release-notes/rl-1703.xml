@@ -247,6 +247,17 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      The dnscrypt-proxy module interface has been streamlined around the
+      <option>extraArgs</option> option.  Where possible, legacy option
+      declarations are mapped to <option>extraArgs</option> but will emit
+      warnings.  The <option>resolverList</option> has been outright
+      removed: to use an unlisted resolver, use the
+      <option>customResolver</option> option.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
