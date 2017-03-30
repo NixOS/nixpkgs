@@ -244,13 +244,67 @@ let
       exportReferencesGraph = [ "closure" mcfg.config.system.build.toplevel ];
     };
 
+  generateStore = name:
+    pkgs.writeScript "generate-store-vm-${name}.py"
+    ''
+      # Python3 script, assumes ${cfg.path}/${name}/.virtfs_metadata already exists
+      import os
+      import shutil
+      import sys
+
+      with open("${referencesGraph name}") as f:
+        target_store = [l[11:-1] for l in f.readlines()] # 11 is /nix/store/, -1 for \n
+      store = "${cfg.path}/${name}/store/"
+
+      # Cleanup old store entries to save disk space
+      for path in os.listdir(store):
+        if path not in target_store and path != ".virtfs_metadata":
+          if os.path.isdir(path) and not os.path.islink(path):
+            shutil.rmtree(store + path)
+          else:
+            os.remove(store + path)
+
+      # Recurse in path, assuming {store}/{dirname path}/.virtfs_metadata already exists
+      def recurse_in_path(path):
+        src = "/nix/store/" + path
+        dst = store + path
+        dir = os.path.dirname(path)
+        f = os.path.basename(path)
+        metadir = store + dir + "/.virtfs_metadata/"
+        tmpfile = metadir + ".nixos-module-vms." + f + ".data"
+        if os.path.islink(src):
+          if not os.path.exists(dst):
+            with open(metadir + f, 'w') as meta:
+              meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=41471\n")
+            with open(tmpfile, 'w') as data:
+              data.write(os.readlink(src))
+            os.rename(tmpfile, dst)
+        elif os.path.isfile(src):
+          if not os.path.exists(dst):
+            shutil.copyfile(src, tmpfile)
+            with open(metadir + f, 'w') as meta:
+              if os.stat(src).st_mode & 1 == 1: # file is executable
+                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=365\n")
+              else:
+                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=292\n")
+            os.rename(tmpfile, dst)
+        elif os.path.isdir(src):
+          os.makedirs(dst + "/.virtfs_metadata", exist_ok=True)
+          for child in os.listdir(src):
+            recurse_in_path(path + "/" + child)
+        else:
+          print("Unknown file type: '{}'".format(src), file=sys.stderr)
+
+      # Call all this
+      for path in target_store:
+        recurse_in_path(path)
+    '';
+
   setupStore = name: let mcfg = cfg.machines.${name}; in
     pkgs.writeScript "setup-store-vm-${name}"
     ''
-      image="${cfg.path}/${name}/image.qcow2"
-      store="${cfg.path}/${name}/store"
-
       # Generate image if need be
+      image="${cfg.path}/${name}/image.qcow2"
       if [ \! -e "$image" ]; then
         # TODO: auto-cleanup the image when the VM is removed from configuration
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
@@ -258,59 +312,8 @@ let
       fi
 
       # Regenerate store
-      targetStore="${referencesGraph name}"
-      mkdir -p "$store"
-      for path in $(ls "$store"); do
-        if ! grep "$path" "targetStore" > /dev/null 2>&1; then
-          rm -Rf "$path"
-        fi
-      done
-      function recurse_in_path() {
-        if [ -L "/nix/store/$1" ]; then
-          if [ ! -f "$store/$1" ]; then
-            dir="$(dirname "$1")"
-            f="$(basename "$1")"
-            cat > "$store/$dir/.virtfs_metadata/$f" <<EOF
-virtfs.uid=0
-virtfs.gid=0
-virtfs.mode=41471
-EOF
-            readlink "/nix/store/$1" > "$store/$dir/.virtfs_metadata/.nixos-module-vms.$f.data"
-            mv "$store/$dir/.virtfs_metadata/.nixos-module-vms.$f.data" "$store/$dir/$f"
-          fi
-        elif [ -f "/nix/store/$1" ]; then
-          if [ ! -f "$store/$1" ]; then
-            dir="$(dirname "$1")"
-            f="$(basename "$1")"
-            cp "/nix/store/$1" "$store/$dir/.virtfs_metadata/.nixos-module-vms.$f.data"
-            if ls -lahd "/nix/store/$1" | cut -f 1 -d ' ' | grep 'x' > /dev/null 2>&1; then
-              cat > "$store/$dir/.virtfs_metadata/$f" <<EOF
-virtfs.uid=0
-virtfs.gid=0
-virtfs.mode=365
-EOF
-            else
-              cat > "$store/$dir/.virtfs_metadata/$f" <<EOF
-virtfs.uid=0
-virtfs.gid=0
-virtfs.mode=292
-EOF
-            fi
-            mv "$store/$dir/.virtfs_metadata/.nixos-module-vms.$f.data" "$store/$dir/$f"
-          fi
-        elif [ -d "/nix/store/$1" ]; then
-          mkdir "$store/$1" "$store/$1/.virtfs_metadata"
-          for path in $(ls "/nix/store/$1"); do
-            recurse_in_path "$1/$path"
-          done
-        else
-          echo "Unknown file type: /nix/store/$1" >&2
-        fi
-      }
-      mkdir "$store/.virtfs_metadata"
-      for path in $(cat "$targetStore" | sed 's_/nix/store/__'); do
-        recurse_in_path "$path"
-      done
+      mkdir -p "${cfg.path}/${name}/store/.virtfs_metadata"
+      "${pkgs.python3}/bin/python3" "${generateStore name}"
     '';
 
   setupVM = name:
