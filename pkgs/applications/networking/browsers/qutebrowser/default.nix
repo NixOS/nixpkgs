@@ -74,8 +74,6 @@ in buildPythonApplication rec {
   postFixup = ''
     mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
     makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
-
-    sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
   '';
 
   meta = {
