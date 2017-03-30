@@ -3282,8 +3282,6 @@ with pkgs;
     buildTools = drv.buildTools or [] ++ [haskellPackages.hsb2hs];
   });
 
-  panomatic = callPackage ../tools/graphics/panomatic { };
-
   pamtester = callPackage ../tools/security/pamtester { };
 
   paper-gtk-theme = callPackage ../misc/themes/paper { };
