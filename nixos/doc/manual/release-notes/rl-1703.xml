@@ -6,6 +6,14 @@
 
 <title>Release 17.03 (“Gorilla”, 2017/03/31)</title>
 
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.03-highlights">
+
+<title>Highlights</title>
+
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights: </para>
 
@@ -72,6 +80,15 @@ has the following highlights: </para>
   </listitem>
 
 </itemizedlist>
+
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.03-new-services">
+
+<title>New Services</title>
 
 <para>The following new services were added since the last release:</para>
 
@@ -159,6 +176,14 @@ has the following highlights: </para>
   <listitem><para><literal>virtualisation/openstack/glance.nix</literal></para></listitem>
 </itemizedlist>
 
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.03-incompatibilities">
+
+<title>Backward Incompatibilities</title>
 
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:</para>
@@ -383,8 +408,14 @@ following incompatible changes:</para>
   </listitem>
 </itemizedlist>
 
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.03-notable-changes">
 
-<para>Other notable changes:</para>
+<title>Other Notable Changes</title>
 
 <itemizedlist>
 
@@ -479,4 +510,5 @@ following incompatible changes:</para>
     </para>
   </listitem>
 </itemizedlist>
+</section>
 </section>
