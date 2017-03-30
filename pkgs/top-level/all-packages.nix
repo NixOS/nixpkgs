@@ -12670,6 +12670,8 @@ with pkgs;
 
   xlsx2csv = pythonPackages.xlsx2csv;
 
+  xorg-rgb = callPackage ../data/misc/xorg-rgb {};
+
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
 
 
