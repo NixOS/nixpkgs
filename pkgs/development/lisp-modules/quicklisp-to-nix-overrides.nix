@@ -17,4 +17,7 @@
   hunchentoot = x: {
     propagatedBuildInputs = [pkgs.openssl];
   };
+  iolib = x: {
+    propagatedBuildInputs = [pkgs.libfixposix pkgs.gcc];
+  };
 }

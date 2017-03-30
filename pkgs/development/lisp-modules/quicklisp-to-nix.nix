@@ -6,6 +6,82 @@ let quicklisp-to-nix-packages = rec {
   buildLispPackage = callPackage ./define-package.nix;
   qlOverrides = callPackage ./quicklisp-to-nix-overrides.nix {};
 
+  "iolib/conf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/conf" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_conf.nix {
+         inherit fetchurl;
+       }));
+  "iolib_slash_conf" = quicklisp-to-nix-packages."iolib/conf";
+
+
+  "iolib/asdf" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/asdf" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_asdf.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+  "iolib_slash_asdf" = quicklisp-to-nix-packages."iolib/asdf";
+
+
+  "swap-bytes" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."swap-bytes" or (x: {}))
+       (import ./quicklisp-to-nix-output/swap-bytes.nix {
+         inherit fetchurl;
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+       }));
+
+
+  "idna" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."idna" or (x: {}))
+       (import ./quicklisp-to-nix-output/idna.nix {
+         inherit fetchurl;
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+       }));
+
+
+  "iolib/grovel" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/grovel" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_grovel.nix {
+         inherit fetchurl;
+           "iolib/asdf" = quicklisp-to-nix-packages."iolib/asdf";
+           "iolib/base" = quicklisp-to-nix-packages."iolib/base";
+           "iolib/conf" = quicklisp-to-nix-packages."iolib/conf";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "uiop" = quicklisp-to-nix-packages."uiop";
+       }));
+  "iolib_slash_grovel" = quicklisp-to-nix-packages."iolib/grovel";
+
+
+  "iolib/syscalls" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/syscalls" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_syscalls.nix {
+         inherit fetchurl;
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "iolib/base" = quicklisp-to-nix-packages."iolib/base";
+           "iolib/grovel" = quicklisp-to-nix-packages."iolib/grovel";
+       }));
+  "iolib_slash_syscalls" = quicklisp-to-nix-packages."iolib/syscalls";
+
+
+  "iolib/common-lisp" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/common-lisp" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_common-lisp.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+       }));
+  "iolib_slash_common-lisp" = quicklisp-to-nix-packages."iolib/common-lisp";
+
+
   "split-sequence" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."split-sequence" or (x: {}))
@@ -46,6 +122,60 @@ let quicklisp-to-nix-packages = rec {
        (import ./quicklisp-to-nix-output/uiop.nix {
          inherit fetchurl;
        }));
+
+
+  "iolib/sockets" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/sockets" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_sockets.nix {
+         inherit fetchurl;
+           "iolib/base" = quicklisp-to-nix-packages."iolib/base";
+           "iolib/syscalls" = quicklisp-to-nix-packages."iolib/syscalls";
+           "iolib/streams" = quicklisp-to-nix-packages."iolib/streams";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+           "iolib/grovel" = quicklisp-to-nix-packages."iolib/grovel";
+           "bordeaux-threads" = quicklisp-to-nix-packages."bordeaux-threads";
+           "idna" = quicklisp-to-nix-packages."idna";
+           "swap-bytes" = quicklisp-to-nix-packages."swap-bytes";
+       }));
+  "iolib_slash_sockets" = quicklisp-to-nix-packages."iolib/sockets";
+
+
+  "iolib/streams" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/streams" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_streams.nix {
+         inherit fetchurl;
+           "iolib/base" = quicklisp-to-nix-packages."iolib/base";
+           "iolib/multiplex" = quicklisp-to-nix-packages."iolib/multiplex";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+       }));
+  "iolib_slash_streams" = quicklisp-to-nix-packages."iolib/streams";
+
+
+  "iolib/multiplex" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/multiplex" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_multiplex.nix {
+         inherit fetchurl;
+           "iolib/base" = quicklisp-to-nix-packages."iolib/base";
+           "iolib/syscalls" = quicklisp-to-nix-packages."iolib/syscalls";
+           "cffi" = quicklisp-to-nix-packages."cffi";
+       }));
+  "iolib_slash_multiplex" = quicklisp-to-nix-packages."iolib/multiplex";
+
+
+  "iolib/base" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib/base" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib_slash_base.nix {
+         inherit fetchurl;
+           "iolib/common-lisp" = quicklisp-to-nix-packages."iolib/common-lisp";
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+       }));
+  "iolib_slash_base" = quicklisp-to-nix-packages."iolib/base";
 
 
   "chipz" = buildLispPackage
@@ -221,6 +351,18 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."alexandria" or (x: {}))
        (import ./quicklisp-to-nix-output/alexandria.nix {
          inherit fetchurl;
+       }));
+
+
+  "iolib" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."iolib" or (x: {}))
+       (import ./quicklisp-to-nix-output/iolib.nix {
+         inherit fetchurl;
+           "iolib/base" = quicklisp-to-nix-packages."iolib/base";
+           "iolib/multiplex" = quicklisp-to-nix-packages."iolib/multiplex";
+           "iolib/streams" = quicklisp-to-nix-packages."iolib/streams";
+           "iolib/sockets" = quicklisp-to-nix-packages."iolib/sockets";
        }));
 
 

@@ -1,6 +1,6 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''<% @var name %>'';
+  baseName = ''<% @var filename %>'';
   version = ''<% @var version %>'';
 
   description = ''<% @var description %>'';
