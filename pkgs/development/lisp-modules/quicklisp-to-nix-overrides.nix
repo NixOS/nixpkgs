@@ -19,5 +19,10 @@
   };
   iolib = x: {
     propagatedBuildInputs = [pkgs.libfixposix pkgs.gcc];
+    overrides = y: {
+      postBuild = ''
+        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :iolib)"' common-lisp.sh ""
+      '';
+    };
   };
 }
