@@ -488,12 +488,11 @@ in {
             # create index
             ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
 
-            touch ${dataDir}/db-created
-
             chown graphite:graphite ${cfg.dataDir}
-            chown graphite:graphite ${cfg.dataDir}/db-created
             chown graphite:graphite ${cfg.dataDir}/whisper
             chown -R graphite:graphite ${cfg.dataDir}/log
+
+            touch ${dataDir}/db-created
           fi
         '';
       };
@@ -530,11 +529,10 @@ in {
             mkdir -p ${dataDir}/cache/
             chmod 0700 ${dataDir}/cache/
 
-            touch ${dataDir}/db-created
-
             chown graphite:graphite ${cfg.dataDir}
-            chown graphite:graphite ${cfg.dataDir}/db-created
             chown -R graphite:graphite ${cfg.dataDir}/cache
+
+            touch ${dataDir}/db-created
           fi
         '';
       };
