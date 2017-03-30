@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  configureFlags = [ "--disable-spellcheck" ];
-
   nativeBuildInputs = [ automake autoconf libtool pkgconfig wrapGAppsHook ];
 
   buildInputs = [
