@@ -529,7 +529,7 @@
   <note>
   <para>
   If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal>
-  you may need to add <literal>pkgs.iana_etc</literal> to <varname>contents</varname>.
+  you may need to add <literal>pkgs.iana-etc</literal> to <varname>contents</varname>.
   </para>
   </note>
 

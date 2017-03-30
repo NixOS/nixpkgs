@@ -132,5 +132,7 @@ in {
   mumble     = client stableSource;
   mumble_git = client gitSource;
   murmur     = server stableSource;
-  murmur_git = server gitSource;
+  murmur_git = (server gitSource).overrideAttrs (old: {
+    meta = old.meta // { broken = true; };
+  });
 }

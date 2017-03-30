@@ -1,5 +1,5 @@
 { lib, fetchurl, buildPythonPackage
-, six, systemd
+, six, systemd, pytest, mock, hypothesis, docutils
 }:
 
 buildPythonPackage rec {
@@ -12,11 +12,20 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace src/pyudev/_ctypeslib/libudev.py \
-      --replace "find_library('udev')" "'${systemd.lib}/lib/libudev.so'"
+    substituteInPlace src/pyudev/_ctypeslib/utils.py \
+      --replace "find_library(name)" "'${systemd.lib}/lib/libudev.so'"
     '';
 
+  buildInputs = [ pytest mock hypothesis docutils ];
   propagatedBuildInputs = [ systemd six ];
+
+  checkPhase = ''
+    py.test
+  '';
+
+  # Bunch of failing tests
+  # https://github.com/pyudev/pyudev/issues/187
+  doCheck = false;
 
   meta = {
     homepage = "http://pyudev.readthedocs.org/";

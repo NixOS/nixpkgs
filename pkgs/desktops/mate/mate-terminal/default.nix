@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, pkgs, pkgconfig, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, gnome3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name      = "mate-terminal-${version}";
-  version   = "${major-ver}.${minor-ver}";
-  major-ver = "1.17";
+  name = "mate-terminal-${version}";
+  version = "${major-ver}.${minor-ver}";
+  major-ver = "1.18";
   minor-ver = "0";
 
   src = fetchurl {
-    url    = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "0sbncykjf0ifj87rwpdw2ln0wavykiki4zqsw60vch7agh49fw0f";
+    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    sha256 = "07z8g8zkc8k6d7xqdlg18cjnwg7zzv5hbgwma5y9mh8zx9xsqz92";
   };
 
-  buildInputs = with pkgs; [
-     intltool
-     pkgconfig
+  buildInputs = [
      glib
      itstool
      libxml2
@@ -25,12 +23,16 @@ stdenv.mkDerivation rec {
      gnome3.dconf
   ];
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    wrapGAppsHook
+  ];
 
   meta = with stdenv.lib; {
     description = "The MATE Terminal Emulator";
-    homepage    = "http://mate-desktop.org";
-    license     = licenses.gpl3;
-    platforms   = platforms.unix;
+    homepage = "http://mate-desktop.org";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

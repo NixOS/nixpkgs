@@ -139,7 +139,6 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
-  ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
@@ -464,7 +463,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  ./services/networking/quagga.nix
+  # ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/quicktun.nix
   ./services/networking/racoon.nix

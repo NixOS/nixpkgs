@@ -3,6 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
+, qtbase, qtdeclarative, qtwebkit, makeQtWrapper
 }:
 
 # this package contains the daemon version of dropbox
@@ -43,6 +44,8 @@ let
       dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
       ncurses zlib
+
+      qtbase qtdeclarative qtwebkit
     ];
 
   desktopItem = makeDesktopItem {
@@ -65,20 +68,23 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".dropbox-dist";
 
-  nativeBuildInputs = [ makeWrapper patchelf ];
-  dontPatchELF = true; # patchelf invoked explicitly below
+  nativeBuildInputs = [ makeQtWrapper patchelf ];
   dontStrip = true; # already done
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p "$out/${appdir}"
     cp -r --no-preserve=mode "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
+    # Vendored libraries interact poorly with our graphics drivers
     rm "$out/${appdir}/libdrm.so.2"
     rm "$out/${appdir}/libffi.so.6"
     rm "$out/${appdir}/libGL.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
+
+    # Cannot use vendored Qt libraries due to problem with xkbcommon
+    rm "$out/${appdir}/"libQt5*.so.5
+    rm "$out/${appdir}/qt.conf"
+    rm -fr "$out/${appdir}/plugins"
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
@@ -88,46 +94,31 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
-    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
+    makeQtWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
     chmod 755 $out/${appdir}/dropbox
-
-    runHook postInstall
   '';
 
   fixupPhase = ''
-    runHook preFixup
-
     INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
     RPATH="${ldpath}:$out/${appdir}"
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
-    find "$out/${appdir}" -type f -a -perm -0100 -print | while read obj; do
+    find "$out/${appdir}" -type f -print | while read obj; do
         dynamic=$(readelf -S "$obj" 2>/dev/null | grep "DYNAMIC" || true)
-
         if [[ -n "$dynamic" ]]; then
-            type=$(readelf -h "$obj" 2>/dev/null | grep 'Type:' | sed -e "$getType")
 
-            if [[ "$type" == "EXEC" ]]; then
-
+            if readelf -l "$obj" 2>/dev/null | grep "INTERP" >/dev/null; then
                 echo "patching interpreter path in $type $obj"
                 patchelf --set-interpreter "$INTERP" "$obj"
+            fi
+
+            type=$(readelf -h "$obj" 2>/dev/null | grep 'Type:' | sed -e "$getType")
+            if [ "$type" == "EXEC" ] || [ "$type" == "DYN" ]; then
 
                 echo "patching RPATH in $type $obj"
                 oldRPATH=$(patchelf --print-rpath "$obj")
                 patchelf --set-rpath "''${oldRPATH:+$oldRPATH:}$RPATH" "$obj"
-
-                echo "shrinking RPATH in $type $obj"
-                patchelf --shrink-rpath "$obj"
-
-            elif [[ "$type" == "DYN" ]]; then
-
-                echo "patching RPATH in $type $obj"
-                oldRPATH=$(patchelf --print-rpath "$obj")
-                patchelf --set-rpath "''${oldRPATH:+$oldRPATH:}$RPATH" "$obj"
-
-                echo "shrinking RPATH in $type $obj"
-                patchelf --shrink-rpath "$obj"
 
             else
 
@@ -138,8 +129,6 @@ in stdenv.mkDerivation {
     done
 
     paxmark m $out/${appdir}/dropbox
-
-    runHook postFixup
   '';
 
   meta = {

@@ -6,6 +6,7 @@ let
     mkdir -p "$(dirname "$config_script")"
     touch "$config_script"
     chmod a+x "$config_script"
+    echo "export NIX_CFLAGS_COMPILE='$NIX_CFLAGS_COMPILE'\"\''${NIX_CFLAGS_COMPILE:+ $NIX_CFLAGS_COMPILE}\"" >> "$config_script"
     echo "export NIX_LISP_COMMAND='$NIX_LISP_COMMAND'" >> "$config_script"
     echo "export NIX_LISP_ASDF='$NIX_LISP_ASDF'" >> "$config_script"
     echo "export CL_SOURCE_REGISTRY="\$CL_SOURCE_REGISTRY\''${CL_SOURCE_REGISTRY:+:}"'$CL_SOURCE_REGISTRY:$out/lib/common-lisp/${args.baseName}/'" >> "$config_script"
@@ -46,6 +47,7 @@ basePackage = {
     ++ (args.propagatedBuildInputs or []);
   buildInputs = buildInputs;
   dontStrip=true;
+
   meta = {
     inherit description version;
   } // meta;

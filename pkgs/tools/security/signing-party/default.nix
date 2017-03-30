@@ -81,7 +81,8 @@ stdenv.mkDerivation rec {
     install -D -m444 gpglist/gpglist.1 $out/share/man/man1/gpglist.1;
 
     # gpgsigs: annotates list of GnuPG keys with already done signatures
-    # Handled by 'make install'
+    # The manual page is not handled by 'make install'
+    install -D -m444 gpgsigs/gpgsigs.1 $out/share/man/man1/gpgsigs.1;
 
     # gpgparticipants: create list of party participants for the organiser
     install -D -m555 gpgparticipants/gpgparticipants $out/bin/gpgparticipants;
@@ -94,7 +95,10 @@ stdenv.mkDerivation rec {
     install -D -m444 gpgwrap/doc/gpgwrap.1 $out/share/man/man1/gpgwrap.1;
 
     # keyanalyze: minimum signing distance (MSD) analysis on keyrings
-    # Handled by 'make install'
+    # Only the binaries are handled by 'make install'
+    install -D -m444 keyanalyze/keyanalyze.1 $out/share/man/man1/keyanalyze.1;
+    install -D -m444 keyanalyze/pgpring/pgpring.1 $out/share/man/man1/pgpring.1;
+    install -D -m444 keyanalyze/process_keys.1 $out/share/man/man1/process_keys.1;
 
     # keylookup: ncurses wrapper around gpg --search
     # Handled by 'make install'
@@ -139,7 +143,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gpgdir --set PERL5LIB \
       ${with perlPackages; stdenv.lib.makePerlPath ([
         TermReadKey ]
-        ++ GnuPGInterfaceRuntimeDependencies)}
+        ++ GnuPGInterfaceRuntimeDependencies)} \
+      --prefix PATH ":" \
+      "${stdenv.lib.makeBinPath [ gnupg1 ]}"
 
     wrapProgram $out/bin/gpglist --prefix PATH ":" \
       "${stdenv.lib.makeBinPath [ gnupg1 ]}"
@@ -210,7 +216,7 @@ stdenv.mkDerivation rec {
       * keyart: creates a random ASCII art of a PGP key file
       * gpg-key2latex: generate LaTeX file with fingerprint paper slips
     '';
-    license = licenses.gpl2;
+    license = with licenses; [ bsd2 bsd3 gpl2 gpl2Plus gpl3Plus ];
     maintainers = with maintainers; [ fpletz primeos ];
     platforms = platforms.linux;
   };

@@ -42,6 +42,7 @@ let
     xorg.libXrender
     xorg.libXScrnSaver
     xorg.libXtst
+    xorg.libxcb
     zlib
   ];
 
