@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/halfo/lambda-mod-zsh-theme/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ ma27 ];
+    maintainers = with maintainers; [ ma27 ];
   };
 }
