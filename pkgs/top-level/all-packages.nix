@@ -15364,8 +15364,6 @@ with pkgs;
 
   telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
-  telepathy_rakia = callPackage ../applications/networking/instant-messengers/telepathy/rakia { };
-
   telepathy_salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
 
   telepathy_idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
