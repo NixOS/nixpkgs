@@ -4339,8 +4339,6 @@ with pkgs;
 
   time = callPackage ../tools/misc/time { };
 
-  tkabber = callPackage ../applications/networking/instant-messengers/tkabber { };
-
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
