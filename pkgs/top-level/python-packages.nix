@@ -8558,6 +8558,8 @@ in {
 
   python-openid = callPackage ../development/python-modules/python-openid { };
 
+  python3-openid = callPackage ../development/python-modules/python3-openid { };
+
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
     version = "0.3.0";
