@@ -4,7 +4,7 @@
          version="5.0"
          xml:id="sec-release-17.03">
 
-<title>Release 17.03 (“Gorilla”, 2017/03/??)</title>
+<title>Release 17.03 (“Gorilla”, 2017/03/31)</title>
 
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights: </para>
@@ -14,6 +14,15 @@ has the following highlights: </para>
     <para>Nixpkgs is now extensible through overlays. See the <link
     xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">Nixpkgs
     manual</link> for more information.</para>
+  </listitem>
+
+  <listitem>
+    <para>This release is based on Glibc 2.25, GCC 5.4.0 and systemd
+    232. The default Linux kernel is 4.9 and Nix is at 1.11.8.</para>
+  </listitem>
+
+  <listitem>
+    <para>The default desktop environment now is KDE's Plasma 5. KDE 4 has been removed</para>
   </listitem>
 
   <listitem>
@@ -28,26 +37,38 @@ has the following highlights: </para>
   </listitem>
 
   <listitem>
+    <para>
+      Cross compilation has been rewritten. See the nixpkgs manual for
+      details. The most obvious breaking change is that in derivations there is no
+      <literal>.nativeDrv</literal> nor <literal>.crossDrv</literal> are now
+      cross by default, not native.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>The <literal>overridePackages</literal> function has been rewritten
+    to be replaced by <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-overlays-install">
+    overlays</link></para>
+  </listitem>
+
+  <listitem>
+    <para>Packages in nixpkgs can be marked as insecure through listed
+    vulnerabilities. See the <link
+    xlink:href="https://nixos.org/nixpkgs/manual/#sec-allow-insecure">Nixpkgs
+    manual</link> for more information.</para>
+  </listitem>
+
+  <listitem>
     <para>PHP now defaults to PHP 7.1</para>
   </listitem>
 
   <listitem>
-    <para>Packages in nixpkgs can be marked as insecure through listed
-    vulnerabilities. See the <link
-    xlink:href="https://nixos.org/nixpkgs/manual/#sec-allow-insecure">Nixpkgs
-    manual</link> for more information.</para>
-  </listitem>
-
-  <listitem>
-    <para>Packages in nixpkgs can be marked as insecure through listed
-    vulnerabilities. See the <link
-    xlink:href="https://nixos.org/nixpkgs/manual/#sec-allow-insecure">Nixpkgs
-    manual</link> for more information.</para>
-  </listitem>
-
-  <listitem>
-    <para>This release is based on Glibc 2.25, GCC 5.4.0 and systemd
-    232. The default Linux kernel is 4.9.</para>
+    <para>
+      The user handling now keeps track of deallocated UIDs/GIDs. When a user
+      or group is revived, this allows it to be allocated the UID/GID it had before.
+      A consequence is that UIDs and GIDs are no longer reused.
+    </para>
   </listitem>
 
 </itemizedlist>
@@ -68,7 +89,6 @@ has the following highlights: </para>
   <listitem><para><literal>programs/vim.nix</literal></para></listitem>
   <listitem><para><literal>programs/wireshark.nix</literal></para></listitem>
   <listitem><para><literal>security/dhparams.nix</literal></para></listitem>
-  <listitem><para><literal>security/wrappers/default.nix</literal></para></listitem>
   <listitem><para><literal>services/audio/ympd.nix</literal></para></listitem>
   <listitem><para><literal>services/computing/boinc/client.nix</literal></para></listitem>
   <listitem><para><literal>services/continuous-integration/buildbot/master.nix</literal></para></listitem>
@@ -101,6 +121,7 @@ has the following highlights: </para>
   <listitem><para><literal>services/monitoring/prometheus/nginx-exporter.nix</literal></para></listitem>
   <listitem><para><literal>services/monitoring/prometheus/node-exporter.nix</literal></para></listitem>
   <listitem><para><literal>services/monitoring/prometheus/snmp-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/unifi-exporter.nix</literal></para></listitem>
   <listitem><para><literal>services/monitoring/prometheus/varnish-exporter.nix</literal></para></listitem>
   <listitem><para><literal>services/monitoring/sysstat.nix</literal></para></listitem>
   <listitem><para><literal>services/monitoring/telegraf.nix</literal></para></listitem>
@@ -120,8 +141,6 @@ has the following highlights: </para>
   <listitem><para><literal>services/networking/quagga.nix</literal></para></listitem>
   <listitem><para><literal>services/networking/redsocks.nix</literal></para></listitem>
   <listitem><para><literal>services/networking/wireguard.nix</literal></para></listitem>
-  <listitem><para><literal>services/security/hologram-server.nix</literal></para></listitem>
-  <listitem><para><literal>services/security/hologram-agent.nix</literal></para></listitem>
   <listitem><para><literal>services/system/cgmanager.nix</literal></para></listitem>
   <listitem><para><literal>services/torrent/opentracker.nix</literal></para></listitem>
   <listitem><para><literal>services/web-apps/atlassian/confluence.nix</literal></para></listitem>
@@ -147,10 +166,8 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
-      Cross compilation has been rewritten. See the nixpkgs manual for
-      details. The most obvious breaking change is that derivations absent a
-      <literal>.nativeDrv</literal> or <literal>.crossDrv</literal> are now
-      cross by default, not native.
+      Derivations have no <literal>.nativeDrv</literal> nor <literal>.crossDrv</literal> 
+      and are now cross by default, not native.
     </para>
   </listitem>
 
@@ -342,9 +359,9 @@ following incompatible changes:</para>
   <listitem>
     <para>
       The dnscrypt-proxy module interface has been streamlined around the
-      <option>extraArgs</option> option.  Where possible, legacy option
+      <option>extraArgs</option> option. Where possible, legacy option
       declarations are mapped to <option>extraArgs</option> but will emit
-      warnings.  The <option>resolverList</option> has been outright
+      warnings. The <option>resolverList</option> has been outright
       removed: to use an unlisted resolver, use the
       <option>customResolver</option> option.
     </para>
@@ -353,12 +370,17 @@ following incompatible changes:</para>
   <listitem>
     <para>
       torbrowser now stores local state under
-      <filename>~/.local/share/tor-browser</filename> by default.  Any
+      <filename>~/.local/share/tor-browser</filename> by default. Any
       browser profile data from the old location,
       <filename>~/.torbrowser4</filename>, must be migrated manually.
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      The ihaskell, monetdb, offlineimap and sitecopy services have been removed.
+    </para>
+  </listitem>
 </itemizedlist>
 
 
@@ -388,7 +410,11 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
-    <para>The Python 2.7 interpreter does not use modules anymore. Instead, all CPython interpreters now include the whole standard library except for `tkinter`, which is available in the Python package set.</para>
+    <para>
+      The Python 2.7 interpreter does not use modules anymore. Instead, all
+      CPython interpreters now include the whole standard library except for `tkinter`,
+      which is available in the Python package set.
+    </para>
   </listitem>
 
   <listitem>
@@ -399,21 +425,26 @@ following incompatible changes:</para>
       those using Python in a <literal>nix-shell</literal>. See the Nixpkgs manual
       for details.
     </para>
-
   </listitem>
 
   <listitem>
-    <para>The Python package sets now use a fixed-point combinator and the sets are available as attributes of the interpreters.</para>
+    <para>
+      The Python package sets now use a fixed-point combinator and the sets are
+      available as attributes of the interpreters.
+    </para>
   </listitem>
 
   <listitem>
-    <para>The Python function `buildPythonPackage` has been improved and can be used to build from Setuptools source, Flit source, and precompiled Wheels.</para>
+    <para>
+      The Python function <literal>buildPythonPackage</literal> has been improved and can be
+      used to build from Setuptools source, Flit source, and precompiled Wheels.
+    </para>
   </listitem>
 
   <listitem>
     <para>
       When adding new or updating current Python libraries, the expressions should be put
-      in separate files in <literal>pkgs/development/python-modules</literal> and 
+      in separate files in <literal>pkgs/development/python-modules</literal> and
       called from <literal>python-packages.nix</literal>.
     </para>
   </listitem>
@@ -421,13 +452,31 @@ following incompatible changes:</para>
   <listitem>
     <para>
       The dnscrypt-proxy service supports synchronizing the list of public
-      resolvers without working DNS resolution.  This fixes issues caused by the
-      resolver list becoming outdated.  It also improves the viability of
+      resolvers without working DNS resolution. This fixes issues caused by the
+      resolver list becoming outdated. It also improves the viability of
       DNSCrypt only configurations.
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      Containers using bridged networking no longer lose their connection after
+      changes to the host networking.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      ZFS supports pool auto scrubbing.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      The bind DNS utilities (e.g. dig) have been split into their own output and
+      are now also available in <literal>pkgs.dnsutils</literal> and it is no longer
+      necessary to pull in all of <literal>bind</literal> to use them.
+    </para>
+  </listitem>
 </itemizedlist>
-
-
 </section>
