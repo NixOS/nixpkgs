@@ -350,6 +350,15 @@ following incompatible changes:</para>
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      torbrowser now stores local state under
+      <filename>~/.local/share/tor-browser</filename> by default.  Any
+      browser profile data from the old location,
+      <filename>~/.torbrowser4</filename>, must be migrated manually.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 
