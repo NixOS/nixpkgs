@@ -358,15 +358,14 @@
           license = lib.licenses.free;
         };
       }) {};
-    company = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
-    elpaBuild {
+    company = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "company";
-        version = "0.9.2";
+        version = "0.9.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/company-0.9.2.tar";
-          sha256 = "10divixs06gq9nm8s8x0q12ir07y27d06l52ix2dn84zvj853z4z";
+          url = "https://elpa.gnu.org/packages/company-0.9.3.tar";
+          sha256 = "1b38najmah4s2smxslik6wbdvb0x77rm6fv45pcq5x5aaiplh5ap";
         };
-        packageRequires = [ cl-lib emacs ];
+        packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/company.html";
           license = lib.licenses.free;
@@ -821,10 +820,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.1.5";
+        version = "1.2.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.1.5.tar";
-          sha256 = "128ag8zkfxspf6szxfd7dcscm1zzzcibx7p9dpbpk036cr7m5i1p";
+          url = "https://elpa.gnu.org/packages/gnorb-1.2.1.tar";
+          sha256 = "0mip0czvpdl26xz9wamii5azj9bacjhdg0jgkrxyv17vqqlbag9x";
         };
         packageRequires = [ cl-lib ];
         meta = {
