@@ -15,6 +15,7 @@ let
       mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
+        nodejs = pkgs.nodejs-slim;
         jailbreak-cabal = if (self.ghc.cross or null) != null
           then self.ghc.bootPkgs.jailbreak-cabal
           else self.jailbreak-cabal;
@@ -84,14 +85,7 @@ let
         callHackage = name: version: self.callPackage (hackage2nix name version);
 
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
-        callCabal2nix = name: src: args:
-          let
-            # Filter out files other than the cabal file. This ensures
-            # that we don't create new derivations even when the cabal
-            # file hasn't changed.
-            justCabal = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
-            drv = self.callPackage (haskellSrc2nix { inherit name; src = justCabal; }) args;
-          in overrideCabal drv (drv': { inherit src; }); # Restore the desired src.
+        callCabal2nix = name: src: self.callPackage (haskellSrc2nix { inherit src name; });
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

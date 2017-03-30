@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://podofo.sourceforge.net;
     description = "A library to work with the PDF file format";
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

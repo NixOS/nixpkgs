@@ -9,7 +9,7 @@
 
 assert glSupport -> mesa_noglu != null;
 
-with { inherit (stdenv.lib) optional optionals; };
+let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   name = "cairo-1.14.8";

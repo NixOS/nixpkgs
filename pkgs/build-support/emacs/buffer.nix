@@ -39,6 +39,8 @@
       (make-local-variable 'process-environment)
       (put 'process-environment 'permanent-local t)
       (inherit-local 'process-environment)
+      ; setenv modifies in place, so copy the environment first
+      (setq process-environment (copy-tree process-environment))
       (setenv "PATH" (concat "${lib.makeSearchPath "bin" pkgs}:" (getenv "PATH")))
       (inherit-local-permanent exec-path (append '(${builtins.concatStringsSep " " (map (p: "\"${p}/bin\"") pkgs)}) exec-path))
 

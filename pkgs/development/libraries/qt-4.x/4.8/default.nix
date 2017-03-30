@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
     # there might be more references, but this is the only one I could find
     substituteInPlace tools/macdeployqt/tests/tst_deployment_mac.cpp \
       --replace /usr/lib/libstdc++.6.dylib "${stdenv.cc}/lib/libstdc++.6.dylib"
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp \
+      --replace 'optionalHeight > 0' 'optionalHeight != NULL'
+
+    substituteInPlace ./tools/linguist/linguist/messagemodel.cpp \
+      --replace 'm->comment()) >= 0' 'm->comment()) != NULL'
   '';
 
   patches =
@@ -211,7 +217,7 @@ stdenv.mkDerivation rec {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
+    maintainers = with maintainers; [ lovek323 phreedom sander ];
     platforms   = platforms.unix;
   };
 }

@@ -42,6 +42,7 @@ stdenv.mkDerivation {
       url = "https://sources.debian.net/data/main/g/graphicsmagick/1.3.25-7/debian/patches/CVE-2016-9830.patch";
       sha256 = "0qh15sd7nx7vf9sld4453iml951bwsx2fx84hxc7plhds2k3gjpa";
     })
+    ./cmyka-bounds.patch
   ];
 
   configureFlags = [

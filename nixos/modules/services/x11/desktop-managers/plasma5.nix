@@ -176,7 +176,7 @@ in
       environment.pathsToLink = [ "/share" ];
 
       environment.etc = singleton {
-        source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        source = xcfg.xkbDir;
         target = "X11/xkb";
       };
 

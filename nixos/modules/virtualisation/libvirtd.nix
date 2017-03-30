@@ -90,13 +90,15 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages =
-      [ pkgs.libvirt pkgs.netcat-openbsd ]
-       ++ optional cfg.enableKVM pkgs.qemu_kvm;
+    environment.systemPackages = with pkgs;
+      [ libvirt netcat-openbsd ]
+       ++ optional cfg.enableKVM qemu_kvm;
 
     boot.kernelModules = [ "tun" ];
 
     users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
+
+    systemd.packages = [ pkgs.libvirt ];
 
     systemd.services.libvirtd = {
       description = "Libvirt Virtual Machine Management Daemon";
@@ -105,13 +107,17 @@ in {
       after = [ "systemd-udev-settle.service" ]
               ++ optional vswitch.enable "vswitchd.service";
 
-      path = [
-          pkgs.bridge-utils
-          pkgs.dmidecode
-          pkgs.dnsmasq
-          pkgs.ebtables
+      environment = {
+        LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
+      };
+
+      path = with pkgs; [
+          bridge-utils
+          dmidecode
+          dnsmasq
+          ebtables
         ]
-        ++ optional cfg.enableKVM pkgs.qemu_kvm
+        ++ optional cfg.enableKVM qemu_kvm
         ++ optional vswitch.enable vswitch.package;
 
       preStart = ''
@@ -153,11 +159,15 @@ in {
       ''; # */
 
       serviceConfig = {
-        ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
         Restart = "on-failure";
       };
+    };
+
+    systemd.services.libvirt-guests = {
+      wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ coreutils libvirt gawk ];
     };
 
     systemd.sockets.virtlogd = {

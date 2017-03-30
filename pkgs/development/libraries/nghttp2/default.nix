@@ -13,7 +13,7 @@ assert enableAsioLib -> boost != null;
 assert enableGetAssets -> libxml2 != null;
 assert enableJemalloc -> jemalloc != null;
 
-with { inherit (stdenv.lib) optional; };
+let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";

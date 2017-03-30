@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://links.twibright.com/;
     description = "A small browser with some graphics support";
-    maintainers = with maintainers; [ raskin urkud viric ];
+    maintainers = with maintainers; [ raskin viric ];
     platforms = platforms.unix;
   };
 }

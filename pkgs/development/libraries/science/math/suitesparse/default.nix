@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gfortran, openblas }:
+{ stdenv, fetchurl, gfortran, openblas
+, enableCuda  ? false, cudatoolkit
+}:
 
 let
   version = "4.4.4";
@@ -28,6 +30,21 @@ stdenv.mkDerivation {
   + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
+  ''
+  + stdenv.lib.optionalString enableCuda ''
+    sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
+        -e 's|^[[:space:]]*\(CUDA_ROOT     =\)|CUDA_ROOT = ${cudatoolkit}|' \
+        -e 's|^[[:space:]]*\(GPU_BLAS_PATH =\)|GPU_BLAS_PATH = $(CUDA_ROOT)|' \
+        -e 's|^[[:space:]]*\(GPU_CONFIG    =\)|GPU_CONFIG = -I$(CUDA_ROOT)/include -DGPU_BLAS -DCHOLMOD_OMP_NUM_THREADS=$(NIX_BUILD_CORES) |' \
+        -e 's|^[[:space:]]*\(CUDA_PATH     =\)|CUDA_PATH = $(CUDA_ROOT)|' \
+        -e 's|^[[:space:]]*\(CUDART_LIB    =\)|CUDART_LIB = $(CUDA_ROOT)/lib64/libcudart.so|' \
+        -e 's|^[[:space:]]*\(CUBLAS_LIB    =\)|CUBLAS_LIB = $(CUDA_ROOT)/lib64/libcublas.so|' \
+        -e 's|^[[:space:]]*\(CUDA_INC_PATH =\)|CUDA_INC_PATH = $(CUDA_ROOT)/include/|' \
+        -e 's|^[[:space:]]*\(NV_20         =\)|NV_20 = -arch=sm_20 -Xcompiler -fPIC|' \
+        -e 's|^[[:space:]]*\(NV_30         =\)|NV_30 = -arch=sm_30 -Xcompiler -fPIC|' \
+        -e 's|^[[:space:]]*\(NV_35         =\)|NV_35 = -arch=sm_35 -Xcompiler -fPIC|' \
+        -e 's|^[[:space:]]*\(NVCC          =\) echo|NVCC = $(CUDA_ROOT)/bin/nvcc|' \
+        -e 's|^[[:space:]]*\(NVCCFLAGS     =\)|NVCCFLAGS = $(NV20) -O3 -gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_35,code=sm_35 -gencode=arch=compute_60,code=sm_60|'
   '';
 
   makeFlags = [

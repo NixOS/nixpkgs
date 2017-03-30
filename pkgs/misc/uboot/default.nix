@@ -10,16 +10,20 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2017.01";
+    version = "2017.03";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1wpc51jm3zyibgcr78jng2yksqvrya76bxgsr4pcyjrsz5sm2hkc";
+      sha256 = "0gqihplap05dlpwdb971wsqyv01nz2vabwq5g5649gr5jczsyjzm";
     };
 
     nativeBuildInputs = [ bc dtc python2 ];
 
     hardeningDisable = [ "all" ];
+
+    postPatch = ''
+      patchShebangs tools
+    '';
 
     configurePhase = ''
       make ${defconfig}

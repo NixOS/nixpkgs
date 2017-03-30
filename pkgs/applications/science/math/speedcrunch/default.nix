@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
+    broken = builtins.compareVersions qtbase.version "5.8.0" >= 0;
   };
-
 }

@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   '';
 
   inherit asdf lisp;
+  stdenv_shell = stdenv.shell;
 
   setupHook = ./setup-hook.sh;
 
