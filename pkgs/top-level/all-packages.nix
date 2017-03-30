@@ -10377,6 +10377,15 @@ with pkgs;
     texLive = null;
   };
 
+  # QuickLisp minimal version
+  asdf_2_26 = callPackage ../development/lisp-modules/asdf/2.26.nix {
+    texLive = null;
+  };
+  # Currently most popular
+  asdf_3_1 = callPackage ../development/lisp-modules/asdf/3.1.nix {
+    texLive = null;
+  };
+
   clwrapperFunction = callPackage ../development/lisp-modules/clwrapper;
 
   wrapLisp = lisp: clwrapperFunction { inherit lisp; };
@@ -10395,6 +10404,8 @@ with pkgs;
   quicklispPackagesClisp = quicklispPackagesFor (wrapLisp clisp);
   quicklispPackagesSBCL = quicklispPackagesFor (wrapLisp sbcl);
   quicklispPackages = quicklispPackagesSBCL;
+  quicklispPackages_asdf_3_1 = quicklispPackagesFor
+    ((wrapLisp sbcl).override { asdf = asdf_3_1; });
 
   ### DEVELOPMENT / PERL MODULES
 
