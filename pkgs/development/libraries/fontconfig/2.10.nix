@@ -8,12 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0llraqw86jmw4vzv7inskp3xxm2gc64my08iwq5mzncgfdbfza4f";
   };
 
-  patches = [
-    # FreeType 2.7 prefixes PCF font family names with the foundry name.
-    # The output of fc-list and fc-query change which breaks the tests.
-    ./test-pcf-family-names-freetype-2.7.patch
-  ];
-
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
