@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     for p in $(ls $out/bin/) ; do
       wrapProgram $out/bin/$p --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}";
     done
+    export PATH="$out/bin:$PATH";
+    raco setup;
   '';
 
   meta = with stdenv.lib; {
