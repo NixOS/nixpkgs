@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
@@ -37,6 +37,13 @@ with luaPackages; stdenv.mkDerivation rec {
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ];
+
+  patches = [
+    (fetchurl {
+      url = "https://patch-diff.githubusercontent.com/raw/awesomeWM/awesome/pull/1639.patch";
+      sha256 = "00piynmbxajd2xbg960gmf0zlqn7m489f4ww482y49ravfy1jhsj";
+    })
+  ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
 

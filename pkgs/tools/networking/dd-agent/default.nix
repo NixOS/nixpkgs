@@ -20,6 +20,7 @@ let
       ipaddress
       backports_ssl_match_hostname
       docker_pycreds
+      uptime
     ];
 
     # due to flake8

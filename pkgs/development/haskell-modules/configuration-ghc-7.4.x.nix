@@ -92,7 +92,8 @@ self: super: {
   # Needs tagged on pre 7.6.x compilers.
   reflection = addBuildDepend super.reflection self.tagged;
 
-  # Needs nats on pre 7.6.x compilers.
-  semigroups = addBuildDepend super.semigroups self.nats;
+  # These builds Need additional dependencies on pre 7.6.x compilers.
+  semigroups = addBuildDepends super.semigroups (with self; [nats bytestring-builder tagged unordered-containers transformers]);
+  QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
 
 }

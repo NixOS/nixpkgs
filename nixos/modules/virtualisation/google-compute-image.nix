@@ -62,7 +62,7 @@ in
 
           mkdir -p /mnt/nix/store
           echo "copying everything (will take a while)..."
-          cp -prd $storePaths /mnt/nix/store/
+          ${pkgs.rsync}/bin/rsync -a $storePaths /mnt/nix/store/
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
@@ -261,7 +261,7 @@ in
     "kernel.kptr_restrict" = mkDefault "1";
 
     # set ptrace protections
-    "kernel.yama.ptrace_scope" = mkDefault "1";
+    "kernel.yama.ptrace_scope" = mkOverride 500 "1";
 
     # set perf only available to root
     "kernel.perf_event_paranoid" = mkDefault "2";

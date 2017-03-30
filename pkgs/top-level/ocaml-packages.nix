@@ -36,8 +36,6 @@ let
 
     async_shell = callPackage ../development/ocaml-modules/async_shell { };
 
-    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
-
     async_unix_p4 = callPackage ../development/ocaml-modules/async_unix { };
 
     async_p4 =
@@ -53,14 +51,11 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
+    bitstring = callPackage ../development/ocaml-modules/bitstring { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
-
-    bitstring =
-      if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/bitstring { }
-      else callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -520,6 +515,8 @@ let
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
+    stdio = callPackage ../development/ocaml-modules/stdio { };
+
     stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
@@ -578,6 +575,10 @@ let
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
+
+    ocaml-compiler-libs = callPackage ../development/ocaml-modules/janestreet/ocaml-compiler-libs.nix {};
+
+    ppx_ast = callPackage ../development/ocaml-modules/janestreet/ppx_ast.nix {};
 
     ppx_core =
       if lib.versionOlder "4.03" ocaml.version
@@ -686,6 +687,8 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_jane-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-jane.nix {};
 
+    ppx_traverse_builtins = callPackage ../development/ocaml-modules/janestreet/ppx_traverse_builtins.nix {};
+
 
     # Core sublibs
     typerep =
@@ -769,6 +772,8 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/async.nix {}
       else async_p4;
+
+    async_ssl = callPackage ../development/ocaml-modules/janestreet/async_ssl.nix { };
 
     # Apps / from all-packages
 

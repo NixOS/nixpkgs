@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
 , avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac
@@ -41,6 +41,8 @@ in stdenv.mkDerivation rec {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
     sha256 = "0isbpa79m7zf09w3s1ry638cw96rxasy1ch66zl01k75i48mw1gl";
   };
+
+  patches = [ ./x86.patch ];
 
   buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit

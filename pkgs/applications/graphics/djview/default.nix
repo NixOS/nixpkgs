@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "A portable DjVu viewer and browser plugin";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

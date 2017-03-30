@@ -65,7 +65,7 @@ stdenv.mkDerivation ({
   meta = with stdenv.lib; {
     description = "Unicode and globalization support library";
     homepage = http://site.icu-project.org/;
-    maintainers = with maintainers; [ raskin urkud ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
   };
 } // (if stdenv.isArm then {

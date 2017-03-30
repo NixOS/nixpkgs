@@ -6,7 +6,7 @@ assert stdenv.lib.versionAtLeast ocaml.version "4.01";
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
-  then { version = "2.3.0"; sha256 = "19spsgkry41dhsbm6ij71kws90bqp7wiggc6lsqdl43xxvbgdmys"; }
+  then { version = "2.3.2"; sha256 = "1fykack86hvvqhwngddyxxqlwm3xjljfaszsjbdrvjlrd1nlg079"; }
   else { version = "1.9.0"; sha256 = "1c1j21zgmxi9spq23imy7byn50qr7hlds1cfpzxlsx9dp309jngy"; };
 in
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://pkg-isocodes.alioth.debian.org/;
     description = "Various ISO codes packaged as XML files";
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

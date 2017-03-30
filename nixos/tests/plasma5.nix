@@ -8,25 +8,27 @@ import ./make-test.nix ({ pkgs, ...} :
 
   machine = { lib, ... }: {
     imports = [ ./common/user-account.nix ];
-    virtualisation.memorySize = 1024;
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm = {
-      enable = true;
-      autoLogin = {
-        enable = true;
-        user = "alice";
-      };
-    };
+    services.xserver.displayManager.sddm.enable = true;
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.desktopManager.default = "plasma5";
-    virtualisation.writableStore = false; # FIXME
+    virtualisation.memorySize = 1024;
   };
 
-  testScript = { nodes, ... }:
-  let xdo = "${pkgs.xdotool}/bin/xdotool"; in
-   ''
+  enableOCR = true;
+
+  testScript = { nodes, ... }: let
+    user = nodes.machine.config.users.extraUsers.alice;
+    xdo = "${pkgs.xdotool}/bin/xdotool";
+  in ''
     startAll;
 
+    # Wait for display manager to start
+    $machine->waitForText(qr/${user.description}/);
+    $machine->screenshot("sddm");
+
+    # Log in
+    $machine->sendChars("${user.password}\n");
     $machine->waitForFile("/home/alice/.Xauthority");
     $machine->succeed("xauth merge ~alice/.Xauthority");
 

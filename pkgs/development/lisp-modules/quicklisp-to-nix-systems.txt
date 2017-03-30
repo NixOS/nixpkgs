@@ -1,0 +1,6 @@
+stumpwm
+cl-fuse
+esrap
+hunchentoot
+external-program
+drakma
