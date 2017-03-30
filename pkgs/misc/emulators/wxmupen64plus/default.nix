@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     description = "GUI for the Mupen64Plus 2.0 emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = https://bitbucket.org/auria/wxmupen64plus/wiki/Home;
-    broken = true
+    broken = true;
   };
 }
