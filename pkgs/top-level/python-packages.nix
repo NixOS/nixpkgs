@@ -8556,6 +8556,8 @@ in {
     };
   };
 
+  python-openid = callPackage ../development/python-modules/python-openid { };
+
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
     version = "0.3.0";
