@@ -8,10 +8,17 @@ rec {
   simple framework for user-defined handlers and can be extended
   through subclassing.'';
 
-  deps = [ args."chunga" args."cl-base64" args."cl-fad" args."cl-ppcre" args."flexi-streams" args."cl+ssl" args."md5" args."rfc2388" args."trivial-backtrace" args."usocket" args."bordeaux-threads" ];
+  deps = [ args."bordeaux-threads" args."chunga" args."cl+ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."flexi-streams" args."md5" args."rfc2388" args."trivial-backtrace" args."usocket" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/hunchentoot/2016-03-18/hunchentoot-1.2.35.tgz'';
     sha256 = ''0gp2rgndkijjydb1x3p8414ii1z372gzdy945jy0491bcbhygj74'';
+  };
+
+  overrides = x: {
+    postInstall = ''
+        echo "$CL_SOURCE_REGISTRY"
+        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :hunchentoot)"' "$out/bin/hunchentoot-lisp-launcher.sh" ""
+    '';
   };
 }

@@ -59,7 +59,7 @@
          (nix-prefetch-url local-url)))
      (ideal-md5 (ql-dist:archive-md5 ql-release))
      (file-md5 (getf archive-data :md5))
-     (raw-dependencies (asdf:system-depends-on asdf-system))
+     (raw-dependencies (ql-dist:required-systems ql-system))
      (dependencies (remove-if-not 'ql-dist:find-system raw-dependencies))
      (deps (mapcar (lambda (x) (list :name x)) dependencies))
      (name (string-downcase (format nil "~a" system)))
@@ -75,6 +75,7 @@
     :url url
     :md5 file-md5
     :name name
+    :testname (gethash name testnames)
     :filename (escape-filename name)
     :deps deps
     :dependencies dependencies
@@ -110,6 +111,7 @@
       finally (return res))))
 
 (defun ql-to-nix (target-directory)
+  (load (format nil "~a/quicklisp-to-nix-overrides.lisp" target-directory))
   (let*
     ((systems
        (cl-ppcre:split
