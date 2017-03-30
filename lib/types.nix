@@ -6,7 +6,7 @@ with import ./attrsets.nix;
 with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
-with {inherit (import ./modules.nix) mergeDefinitions filterOverrides; };
+let inherit (import ./modules.nix) mergeDefinitions filterOverrides; in
 
 rec {
 

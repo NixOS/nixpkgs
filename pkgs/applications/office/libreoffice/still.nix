@@ -22,7 +22,7 @@ let
   primary-src = import ./still-primary-src.nix { inherit fetchurl; };
 in
 
-with { inherit (primary-src) major minor subdir version; };
+let inherit (primary-src) major minor subdir version; in
 
 let
   lib = stdenv.lib;

@@ -9,11 +9,11 @@
   useEncumberedCode ? true,
 }:
 
-with { inherit (stdenv.lib) optional optionals optionalString; };
+let
+  inherit (stdenv.lib) optional optionals optionalString;
+  version = "2.7.1"; name = "freetype-" + version;
 
-let version = "2.7.1"; name = "freetype-" + version; in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   meta = with stdenv.lib; {

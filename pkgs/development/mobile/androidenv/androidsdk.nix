@@ -7,7 +7,7 @@
 }:
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false, useGooglePlayServices ? false }:
 
-with { inherit (stdenv.lib) makeLibraryPath; };
+let inherit (stdenv.lib) makeLibraryPath; in
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
