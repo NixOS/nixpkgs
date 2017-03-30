@@ -293,7 +293,7 @@ in rec {
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};
-  tests.quagga = callTest tests/quagga.nix {};
+  # tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.samba = callTest tests/samba.nix {};
