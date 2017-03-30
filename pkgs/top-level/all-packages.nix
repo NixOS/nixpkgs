@@ -7709,9 +7709,7 @@ with pkgs;
 
   gpac = callPackage ../applications/video/gpac { };
 
-  gpgme = callPackage ../development/libraries/gpgme {
-    gnupg1 = gnupg1orig;
-  };
+  gpgme = callPackage ../development/libraries/gpgme { };
 
   pgpdump = callPackage ../tools/security/pgpdump { };
 
