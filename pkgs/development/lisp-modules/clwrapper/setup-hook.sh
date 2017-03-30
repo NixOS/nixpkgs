@@ -1,6 +1,6 @@
 NIX_LISP_ASDF="@asdf@"
 
-CL_SOURCE_REGISTRY="@asdf@/lib/common-lisp/asdf/:@asdf@/lib/common-lisp/asdf/uiop/"
+CL_SOURCE_REGISTRY="${CL_SOURCE_REGISTRY:+$CL_SOURCE_REGISTRY:}@asdf@/lib/common-lisp/asdf/:@asdf@/lib/common-lisp/asdf/uiop/"
 
 addASDFPaths () {
     for j in "$1"/lib/common-lisp/*; do
