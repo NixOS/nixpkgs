@@ -1,15 +1,15 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 let
-  pkgName = "lambda-mod-zsh-theme";
+  repo = "lambda-mod-zsh-theme";
   rev = "eceee68cf46bba9f7f42887c2128b48e8861e31b";
 in stdenv.mkDerivation {
-  name = "${pkgName}-${rev}";
+  name = "${repo}-${rev}";
 
-  src = fetchgit {
-    inherit rev;
+  src = fetchFromGitHub {
+    inherit rev repo;
 
-    url = "https://github.com/halfo/lambda-mod-zsh-theme";
+    owner = "halfo";
     sha256 = "1410ryc22i20na5ypa1q6f106lkjj8n1qfjmb77q4rspi0ydaiy4";
   };
 
