@@ -8,13 +8,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "plan9port-2016-04-18";
+  name = "plan9port-2017-02-10";
 
   src = fetchgit {
     # Latest, same as on github, google code is old
     url = "https://plan9port.googlesource.com/plan9";
-    rev = "35d43924484b88b9816e40d2f6bff4547f3eec47";
-    sha256 = "1dvg580rkav09fra2gnrzh271b4fw6bgqfv4ib7ds5k3j55ahcdc";
+    rev = "9f34853f7c6b459fb473d75cb78372406f69d7b2";
+    sha256 = "0gjcz254wb78lp1s2l8n9z24avbwfvhgkb1zm9hs8x42qaj3w9sx";
   };
 
   patches = [
