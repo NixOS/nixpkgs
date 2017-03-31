@@ -240,7 +240,7 @@ in
 
     systemd =
       let
-        sshd-service =
+        service =
           { description = "SSH Daemon";
 
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
@@ -251,8 +251,16 @@ in
 
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
-            wants = [ "sshd-keygen.service" ];
-            after = [ "sshd-keygen.service" ];
+            preStart =
+              ''
+                mkdir -m 0755 -p /etc/ssh
+
+                ${flip concatMapStrings cfg.hostKeys (k: ''
+                  if ! [ -f "${k.path}" ]; then
+                      ssh-keygen -t "${k.type}" ${if k ? bits then "-b ${toString k.bits}" else ""} -f "${k.path}" -N ""
+                  fi
+                '')}
+              '';
 
             serviceConfig =
               { ExecStart =
@@ -267,26 +275,6 @@ in
                 Type = "simple";
               });
           };
-
-        sshd-keygen-service =
-          { description = "SSH Host Key Generation";
-            path = [ cfgc.package ];
-            script =
-            ''
-              mkdir -m 0755 -p /etc/ssh
-              ${flip concatMapStrings cfg.hostKeys (k: ''
-                if ! [ -f "${k.path}" ]; then
-                  ssh-keygen -t "${k.type}" ${if k ? bits then "-b ${toString k.bits}" else ""} -f "${k.path}" -N ""
-                fi
-              '')}
-            '';
-
-            serviceConfig = {
-              Type = "oneshot";
-              RemainAfterExit = "yes";
-            };
-          };
-
       in
 
       if cfg.startWhenNeeded then {
@@ -298,13 +286,11 @@ in
             socketConfig.Accept = true;
           };
 
-        services.sshd-keygen = sshd-keygen-service;
-        services."sshd@" = sshd-service;
+        services."sshd@" = service;
 
       } else {
 
-        services.sshd-keygen = sshd-keygen-service;
-        services.sshd = sshd-service;
+        services.sshd = service;
 
       };
 
