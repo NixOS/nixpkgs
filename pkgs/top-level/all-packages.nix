@@ -10391,7 +10391,7 @@ with pkgs;
   };
 
   lispPackages = recurseIntoAttrs (quicklispPackages_asdf_3_1 //
-    lispPackagesFor (wrapLisp sbcl));
+    lispPackagesFor ((wrapLisp sbcl).override { asdf = asdf_3_1; }));
 
   quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules/quicklisp-to-nix.nix {
     inherit clwrapper;
