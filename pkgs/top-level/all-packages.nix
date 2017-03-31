@@ -5204,7 +5204,9 @@ with pkgs;
 
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
-  # tweet-hs = haskellPackages.callPackage ../tools/networking/tweet-hs/default.nix { };
+  tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs; # haskellPackages.callPackage ../tools/networking/tweet-hs/default.nix { };
+
+  madlang = haskell.lib.justStaticExecutables haskellPackages.madlang; # haskellPackages.callPackage ../tools/networking/tweet-hs/default.nix { };
 
   purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
 
