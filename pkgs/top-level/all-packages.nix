@@ -5323,7 +5323,7 @@ with pkgs;
   jdk = jdk8;
   jre = jre8;
   jre_headless = jre8_headless;
-
+  
   openshot-qt = libsForQt56.callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = pkgs.jdkdistro true false;
@@ -9511,7 +9511,9 @@ with pkgs;
 
     libktorrent = callPackage ../development/libraries/libktorrent { };
 
-    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {};
+    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
+
+    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
