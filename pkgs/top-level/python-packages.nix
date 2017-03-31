@@ -26852,6 +26852,22 @@ in {
     };
   };
 
+  pytest-httpbin = buildPythonPackage rec {
+    name = "pytest-httpbin-${version}";
+    version = "0.2.3";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/kevin1024/pytest-httpbin/archive/v${version}.tar.gz";
+      sha256 = "a7217b2cd3f91bc2c31529b0c9d95b46ad9101baf5ad12128a41b9a619996b9e";
+    };
+
+    # test_dont_crash_on_certificate_problems fails
+    doCheck = false;
+    checkPhase = "py.test tests/";
+    buildInputs = with self; [ pytest requests ];
+    propagatedBuildInputs = with self; [ flask decorator httpbin six ];
+  };
+
   virtkey = buildPythonPackage rec {
     name = "virtkey-${version}";
     majorVersion = "0.63";
