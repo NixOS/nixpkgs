@@ -3,7 +3,7 @@ rec {
   baseName = ''uiop'';
   version = ''3.2.0'';
 
-  description = '''';
+  description = ''Portability library for Common Lisp programs'';
 
   deps = [ ];
 
@@ -13,9 +13,5 @@ rec {
   };
 
   overrides = x: {
-    postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :uiop)"' "$out/bin/uiop-lisp-launcher.sh" ""
-    '';
   };
 }

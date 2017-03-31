@@ -13,9 +13,5 @@ rec {
   };
 
   overrides = x: {
-    postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :lack-util)"' "$out/bin/lack-util-lisp-launcher.sh" ""
-    '';
   };
 }

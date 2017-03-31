@@ -62,4 +62,27 @@ in
     trivial-gray-streams babel
   ]);
   css-lite = addDeps (with qlnp; [parenscript]);
+  clsql = x: {
+    propagatedBuildInputs = with pkgs; [mysql postgresql sqlite zlib];
+    overrides = y: (x.overrides y) // {
+      preConfigure = ((x.overrides y).preConfigure or "") + ''
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.lib.getDev pkgs.mysql.client}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.lib.getLib pkgs.mysql.client}/lib/mysql"
+      '';
+    };
+  };
+  clx-truetype = skipBuildPhase;
+  query-fs = x: {
+    overrides = y: (x.overrides y) // {
+      linkedSystems = [];
+      postInstall = ''
+        export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
+	export HOME=$PWD
+	build-with-lisp.sh sbcl \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
+	  "$out/bin/query-fs" \
+	  "(query-fs:run-fs-with-cmdline-args)"
+      '';
+    };
+  };
 }
