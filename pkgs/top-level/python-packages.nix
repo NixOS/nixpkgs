@@ -12796,11 +12796,13 @@ in {
   });
 
   httpbin = buildPythonPackage rec {
-    name = "httpbin-0.2.0";
+    name = "httpbin-0.5.0";
+    # Fails to install on py3k
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpbin/${name}.tar.gz";
-      sha256 = "6b57f563900ecfe126015223a259463848daafbdc2687442317c0992773b9054";
+      sha256 = "79fbc5d27e4194ea908b0fa18e09a59d95d287c91667aa69bcd010342d1589b5";
     };
 
     propagatedBuildInputs = with self; [ flask markupsafe decorator itsdangerous six ];
