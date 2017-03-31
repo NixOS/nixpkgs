@@ -8,13 +8,13 @@ let lispPackages = rec {
 
   esrap-peg = buildLispPackage rec {
     baseName = "esrap-peg";
-    version = "git-20131029";
+    version = "git-20170320";
     description = "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
     deps = with pkgs.quicklispPackages; [alexandria cl-unification esrap iterate];
     src = pkgs.fetchgit {
       url = "https://github.com/fb08af68/esrap-peg.git";
-      sha256 = "48e616a697aca95e90e55052fdc9a7f96bf29b3208b1b4012fcd3189c2eceeb1";
-      rev = ''1f2f21e32e618f71ed664cdc5e7005f8b6b0f7c8'';
+      sha256 = "15yiial7cy2nbgszqxd26qqcc6n3pw5qlrppzx0mfr3xbd9pvzby";
+      rev = ''5a559b0030ecbf5e14cb070b0dc240535faa3402'';
     };
   };
 
