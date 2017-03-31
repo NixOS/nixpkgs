@@ -71,14 +71,6 @@ has the following highlights: </para>
     <para>PHP now defaults to PHP 7.1</para>
   </listitem>
 
-  <listitem>
-    <para>
-      The user handling now keeps track of deallocated UIDs/GIDs. When a user
-      or group is revived, this allows it to be allocated the UID/GID it had before.
-      A consequence is that UIDs and GIDs are no longer reused.
-    </para>
-  </listitem>
-
 </itemizedlist>
 
 </section>
@@ -353,7 +345,7 @@ following incompatible changes:</para>
   <listitem>
     <para>
     Iputils no longer provide ping6 and traceroute6. The functionality of
-    these tools have been integrated into ping and traceroute respectively. To
+    these tools has been integrated into ping and traceroute respectively. To
     enforce an address family the new flags <literal>-4</literal> and
     <literal>-6</literal> have been added. One notable incompatibility is that
     specifying an interface (for link-local IPv6 for instance) is no longer done
