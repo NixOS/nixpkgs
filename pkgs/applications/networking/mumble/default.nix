@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib
+, alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -19,7 +19,7 @@ let
 
     patches = optional jackSupport ./mumble-jack-support.patch;
 
-    nativeBuildInputs = [ pkgconfig ]
+    nativeBuildInputs = [ pkgconfig python ]
       ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
@@ -42,6 +42,7 @@ let
 
     preConfigure = ''
        qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib"
+       patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
