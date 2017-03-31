@@ -6,9 +6,9 @@
 
 let
   versionMap = {
-    "1.6.0" = {
+    "1.6.3" = {
                 hadoopVersion = "cdh4";
-                sparkSha256 = "19ycx1r8g82vkvzmn9wxkssmv2damrg72yfmrgzpc6xyh071g91c";
+                sparkSha256 = "00il083cjb9xqzsma2ifphq9ggichwndrj6skh2z5z9jk3z0lgyn";
               };
     "2.1.0" = {
                 hadoopVersion = "hadoop2.4";
