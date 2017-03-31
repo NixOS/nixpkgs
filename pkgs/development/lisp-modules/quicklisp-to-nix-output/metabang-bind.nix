@@ -13,9 +13,5 @@ rec {
   };
 
   overrides = x: {
-    postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :metabang-bind)"' "$out/bin/metabang-bind-lisp-launcher.sh" ""
-    '';
   };
 }

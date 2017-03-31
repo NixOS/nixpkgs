@@ -10,7 +10,7 @@ let lispPackages = rec {
     baseName = "esrap-peg";
     version = "git-20170320";
     description = "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
-    deps = with pkgs.quicklispPackages; [alexandria cl-unification esrap iterate];
+    deps = with (pkgs.quicklispPackagesFor clwrapper); [alexandria cl-unification esrap iterate];
     src = pkgs.fetchgit {
       url = "https://github.com/fb08af68/esrap-peg.git";
       sha256 = "15yiial7cy2nbgszqxd26qqcc6n3pw5qlrppzx0mfr3xbd9pvzby";
@@ -22,7 +22,7 @@ let lispPackages = rec {
     baseName = "clx-xkeyboard";
     version = "git-20150523";
     description = "CLX support for X Keyboard extensions";
-    deps = with pkgs.quicklispPackages; [clx];
+    deps = with (pkgs.quicklispPackagesFor clwrapper); [clx];
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/filonenko-mikhail/clx-xkeyboard'';

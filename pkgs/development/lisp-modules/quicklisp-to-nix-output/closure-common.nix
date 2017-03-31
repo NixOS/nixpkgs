@@ -13,9 +13,5 @@ rec {
   };
 
   overrides = x: {
-    postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :closure-common)"' "$out/bin/closure-common-lisp-launcher.sh" ""
-    '';
   };
 }

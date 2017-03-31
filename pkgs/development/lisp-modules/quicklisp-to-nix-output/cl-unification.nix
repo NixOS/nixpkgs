@@ -15,9 +15,5 @@ The system contains the definitions for the 'unification' machinery.'';
   };
 
   overrides = x: {
-    postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :cl-unification)"' "$out/bin/cl-unification-lisp-launcher.sh" ""
-    '';
   };
 }
