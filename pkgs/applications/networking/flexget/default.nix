@@ -17,13 +17,20 @@ buildPythonPackage rec {
     sha256 = "925e6bf62dfae73194dbf8b963ff2b60fb500f2457463b744086706da94dabd7";
   };
 
-  # Requires vcrpy
-  doCheck = false;
+  doCheck = true;
+  # test_regexp requires that HOME exist, test_filesystem requires a
+  # unicode-capable filesystem (and setting LC_ALL doesn't work).
+  # setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+  patchPhase = ''
+    sed -i '/def test_non_ascii/i\    import pytest\
+        @pytest.mark.skip' flexget/tests/test_filesystem.py
+  '';
   checkPhase = ''
+    export HOME=.
     py.test
   '';
 
-  buildInputs = [ pytest mock ];
+  buildInputs = [ pytest mock vcrpy pytest-catchlog boto3 ];
   propagatedBuildInputs = [
     feedparser sqlalchemy pyyaml
     beautifulsoup4 html5lib pyrss2gen pynzb
