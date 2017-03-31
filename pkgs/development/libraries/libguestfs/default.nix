@@ -6,16 +6,16 @@
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.34.4";
+  version = "1.34.6";
 
   appliance = fetchurl {
-    url = "http://libguestfs.org/download/binaries/appliance/appliance-1.34.0.tar.xz";
-    sha256 = "0d7kg6ck9hwsqrxch69fhn49sbsjc8c40fr4753c35cq49f7xp6d";
+    url = "http://libguestfs.org/download/binaries/appliance/appliance-1.36.1.tar.xz";
+    sha256 = "1klvr13gpg615hgjvviwpxlj839lbwwsrq7x100qg5zmmjfhl125";
   };
 
   src = fetchurl {
     url = "http://libguestfs.org/download/1.34-stable/libguestfs-${version}.tar.gz";
-    sha256 = "1ca9i9d03pnfm7qqixvl48d7n0hn4ldmzlh2wcws45441prdxw3z";
+    sha256 = "1bdn6jsxm7krl4bpzwx47lg1xlhp5wfzizy03vspkgcppgp2q36s";
   };
 
   buildInputs = [

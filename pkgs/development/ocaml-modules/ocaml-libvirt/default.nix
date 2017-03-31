@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml-libvirt-${version}";
-  version = "0.6.1.5"; # FIXME: libguestfs depends on not yet released 0.6.1.5, so the latest post-0.6.1.4 master from git is used
+  rev = "3169af3";
+  version = "0.6.1.4-rev.${rev}"; # libguestfs-1.34 needs ocaml-libvirt newer than the latest release 0.6.1.4
 
   src = fetchgit {
     url = "git://git.annexia.org/git/ocaml-libvirt.git";
-    rev = "8853f5a49587f00a7d2a5c8c7e52480a16bbdb02";
-    sha256 = "1lnsvyb6dll58blacc629nz1lzc20p7ayqn9pag1rrx5i54q9v24";
+    rev = rev;
+    sha256 = "0z8p6q6k42rdrvy248siq922m1yszny1hfklf6djynvk2viyqdbg";
   };
 
   propagatedBuildInputs = [ libvirt ];
@@ -19,7 +20,6 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   preConfigure = ''
-    substituteInPlace configure.ac --replace 0.6.1.4 0.6.1.5
     autoconf
   '';
 
