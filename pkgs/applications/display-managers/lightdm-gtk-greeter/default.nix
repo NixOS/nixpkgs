@@ -12,7 +12,6 @@ let
 in
 stdenv.mkDerivation rec {
   name = "lightdm-gtk-greeter-${version}";
-
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.gz";
     sha256 = "031iv7zrpv27zsvahvfyrm75zdrh7591db56q89k8cjiiy600r1j";
@@ -24,6 +23,7 @@ stdenv.mkDerivation rec {
       url = "https://588764.bugs.gentoo.org/attachment.cgi?id=442616";
       sha256 = "0r383kjkvq9yanjc1lk878xc5g8993pjgxylqhhjb5rkpi1mbfsv";
     })
+    ./cursors.patch
   ];
 
   buildInputs = [ pkgconfig lightdm intltool makeWrapper ]
