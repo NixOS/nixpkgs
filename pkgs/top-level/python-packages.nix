@@ -22323,6 +22323,23 @@ in {
     };
   };
 
+  rednose = buildPythonPackage rec {
+    name = "rednose-${version}";
+    version = "1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rednose/${name}.tar.gz";
+      sha256 = "0b0bsna217lr1nykyhl5fgjly15zhdvqd4prg4wy1zrgfv7al6m0";
+    };
+
+    meta = {
+      description = "A python nose plugin adding color to console results.";
+    };
+
+    buildInputs = with self; [ nose six ];
+    propagatedBuildInputs = with self; [ colorama termstyle ];
+  };
+
   reikna = callPackage ../development/python-modules/reikna { };
 
   repocheck = buildPythonPackage rec {
