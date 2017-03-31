@@ -18115,11 +18115,11 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_1;
+    terraform_0_9_2;
 
   terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_1;
-  terraform = terraform_0_8;
+  terraform_0_9 = terraform_0_9_2;
+  terraform = terraform_0_9;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {
     terraform = terraform_0_8;
