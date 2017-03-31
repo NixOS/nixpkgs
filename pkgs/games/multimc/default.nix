@@ -4,30 +4,28 @@ let
   libnbt = fetchFromGitHub {
     owner = "MultiMC";
     repo = "libnbtplusplus";
-    rev = "5d0ffb50a526173ce58ae57136bf5d79a7e1920d";
-    sha256 = "05hnwfb77rmm9ba7n96g4g1sgwqqcmplvbcafsl76yxr6ysgw5jg";
+    rev = "4b305bb";
+    sha256 = "1zj7pxk0g5zl16hrngb4rss00hi019rylin7zgf18kaymc54nbcs";
   };
 in
 stdenv.mkDerivation {
-  name = "multimc-5";
+  name = "multimc-0.5.1";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = "895d8ab4699f1b50bf03532c967a91f5ecb62a50";
-    sha256 = "179vc1iv57fx4g4h1wy8yvyvdm671jnvp6zi8pcr1n6azqhwklds";
+    rev = "0.5.1";
+    sha256 = "0wmlnwcq3gxrbmc53j96aa64pp1kmnlxiifhzngcb5kfmbbc8a20";
   };
   buildInputs = [ cmake qtbase jdk zlib file makeWrapper ];
 
   libpath = with xorg; [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
   postUnpack = ''
-    rmdir $sourceRoot/depends/libnbtplusplus
-    cp -r ${libnbt} $sourceRoot/depends/libnbtplusplus
-    chmod 755 -R $sourceRoot/depends/libnbtplusplus
+    rmdir $sourceRoot/libraries/libnbtplusplus
+    cp -r ${libnbt} $sourceRoot/libraries/libnbtplusplus
+    chmod 755 -R $sourceRoot/libraries/libnbtplusplus
     mkdir -pv $sourceRoot/build/
     cp -v ${quazip.src} $sourceRoot/build/quazip-0.7.1.tar.gz
   '';
-
-  patches = [ ./multimc.patch ];
 
   enableParallelBuilding = true;
 
@@ -41,7 +39,7 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin/jars $out/lib
     cp -v MultiMC $out/bin/
     cp -v jars/*.jar $out/bin/jars/ #*/
-    cp -v librainbow.so libnbt++.so libMultiMC_logic.so $out/lib
+    cp -v libMultiMC_rainbow.so libMultiMC_nbt++.so libMultiMC_logic.so libMultiMC_gui.so $out/lib
     wrapProgram $out/bin/MultiMC --add-flags "-d \$HOME/.multimc/" --set GAME_LIBRARY_PATH $RESULT --prefix PATH : ${jdk}/bin/
   '';
 
