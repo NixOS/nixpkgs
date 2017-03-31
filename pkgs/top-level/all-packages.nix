@@ -8022,6 +8022,8 @@ with pkgs;
 
   lmdb = callPackage ../development/libraries/lmdb { };
 
+  legit = nodePackages."@captainsafia/legit";
+
   levmar = callPackage ../development/libraries/levmar { };
 
   leptonica = callPackage ../development/libraries/leptonica {
