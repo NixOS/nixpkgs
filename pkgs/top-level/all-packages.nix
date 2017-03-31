@@ -5204,6 +5204,8 @@ with pkgs;
 
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
+  # tweet-hs = haskellPackages.callPackage ../tools/networking/tweet-hs/default.nix { };
+
   purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
 
   inherit (ocamlPackages) haxe;
