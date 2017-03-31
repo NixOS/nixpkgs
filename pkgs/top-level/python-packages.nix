@@ -11607,9 +11607,7 @@ in {
       sha256 = "3bb76cc156b9a09da62396d82b29fa31e4f27cccf79528538fe7155cf2785593";
     };
 
-    # Requires additional packages.
-    doCheck = false;
-    buildInputs = with self; [ nose blinker tzlocal ];
+    buildInputs = with self; [ nose blinker tzlocal mock rednose ];
     propagatedBuildInputs = with self; [ flask six jsonschema pytz aniso8601 flask-restful ];
 
     meta = {
