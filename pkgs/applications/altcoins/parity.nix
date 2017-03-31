@@ -5,16 +5,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "parity-${version}";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "parity";
-    rev = "1164193019243b76ca4a90e6feff83367bee311e";
-    sha256 = "198zjacipi7rljb533pcswxf50jdapgxavfx9c4nanpb2js496c3";
+    rev = "987390fb7d9f42a97c34aba254a8b9d8efd461d7";
+    sha256 = "19cn0yh043il3dwcg7x69paw2b5iqq6fb8lwrkarvnfvjsg6a39s";
   };
 
-  depsSha256 = "001765dqvrjb07vj3sh3r8lqwmgkbkkcp86n713l8qxa7qnsjddj";
+  depsSha256 = "0y07kjgyn4znw0xqmh5v10f1g7yk0lj81l1zyz2gwxz2wq8h54hr";
 
   buildInputs = [ perl openssl libudev ];
   nativeBuildInputs = [ pkgconfig ];
