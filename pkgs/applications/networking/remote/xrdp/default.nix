@@ -3,13 +3,13 @@
 let
   xorgxrdp = stdenv.mkDerivation rec {
     name = "xorgxrdp-${version}";
-    version = "0.2.0";
+    version = "0.2.1";
   
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      sha256 = "125mv7lm2ns1gdgz6zf647d3pay8if8506rclb3312wwa5qfd2hn";
+      sha256 = "13713qs1v79xa02iw6vaj9b2q62ix770a32z56ql05d6yvfdsfhi";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
@@ -34,8 +34,8 @@ let
   };
 
   xrdp = stdenv.mkDerivation rec {
-    version = "0.9.1";
-    rev = "0920933"; # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be fixed already
+    version = "0.9.2";
+    rev = "48c26a3"; # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be fixed already
     name = "xrdp-${version}.${rev}";
   
     src = fetchFromGitHub {
@@ -43,7 +43,7 @@ let
       repo = "xrdp";
       rev = rev;
       fetchSubmodules = true;
-      sha256 = "0a000h82728vp0abvjk2m03nqqiw2lky7kqk41b70cyd3bp0vdnz";
+      sha256 = "0zs03amshmvy65d26vsv31n9jflkjf43vsjhg4crzifka3vz9p16";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
@@ -52,8 +52,6 @@ let
 
     postPatch = ''
       substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
-      substituteInPlace common/file_loc.h --replace /etc/xrdp $out/etc/xrdp --replace /usr/local $out
-      substituteInPlace instfiles/xrdp.sh --replace /etc/xrdp $out/etc/xrdp --replace /usr/local $out
     '';
 
     preConfigure = ''
@@ -66,8 +64,8 @@ let
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
     postInstall = ''
-      # remove generated keys as non-determenistic
-      rm $out/etc/xrdp/{rsakeys.ini,key.pem,cert.pem}
+      # remove generated keys (as non-determenistic) and upstart script
+      rm $out/etc/xrdp/{rsakeys.ini,key.pem,cert.pem,xrdp.sh}
 
       cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
 
@@ -85,9 +83,6 @@ let
       param=${xorg.xorgserver}/bin/Xorg
       param=-modulepath
       param=${xorgxrdp}/lib/xorg/modules,${xorg.xorgserver}/lib/xorg/modules
-      ; the following two lines are needless after https://github.com/NixOS/nixpkgs/pull/21653
-      param=-xkbdir
-      param=${xorg.xkeyboardconfig}/share/X11/xkb
       param=-config
       param=${xorgxrdp}/etc/X11/xrdp/xorg.conf
       param=-noreset
