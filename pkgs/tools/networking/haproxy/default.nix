@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, openssl, zlib }:
+{ stdenv, pkgs, fetchurl, lua5_3, openssl, pcre, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
@@ -12,12 +12,23 @@ stdenv.mkDerivation rec {
     sha256 = "ebb31550a5261091034f1b6ac7f4a8b9d79a8ce2a3ddcd7be5b5eb355c35ba65";
   };
 
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ lua5_3 openssl pcre zlib ];
 
   # TODO: make it work on bsd as well
-  preConfigure = ''
-    export makeFlags="TARGET=${if stdenv.isSunOS then "solaris" else if stdenv.isLinux then "linux2628" else "generic"} PREFIX=$out USE_OPENSSL=yes USE_ZLIB=yes ${stdenv.lib.optionalString stdenv.isDarwin "CC=cc USE_KQUEUE=1"}"
-  '';
+  makeFlags = [
+    "PREFIX=\${out}"
+    "TARGET=${if stdenv.isSunOS then "solaris" else if stdenv.isLinux then "linux2628" else "generic"}"
+  ];
+  buildFlags = [
+    "USE_LUA=yes"
+    "LUA_LIB=${pkgs.lua5_3}/lib"
+    "LUA_INC=${pkgs.lua5_3}/include"
+    "USE_PCRE=yes"
+    "USE_PCRE_JIT=yes"
+    "USE_OPENSSL=yes"
+    "USE_ZLIB=yes"
+    (stdenv.lib.optionalString stdenv.isDarwin "CC=cc USE_KQUEUE=1")
+  ];
 
   meta = {
     description = "Reliable, high performance TCP/HTTP load balancer";
