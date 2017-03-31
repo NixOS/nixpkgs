@@ -26868,6 +26868,33 @@ in {
     propagatedBuildInputs = with self; [ flask decorator httpbin six ];
   };
 
+  vcrpy = buildPythonPackage rec {
+    name = "vcrpy-${version}";
+    version = "1.10.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vcrpy/${name}.tar.gz";
+      sha256 = "c70464484e036e6e9339df433bca813174e14828e42886622d416e2fcd63768a";
+    };
+
+    # These tests try to use the network to reach external services.
+    patchPhase = ''
+      rm tests/unit/test_stubs.py tests/integration/test_wild.py
+    '';
+    checkPhase = ''
+      cat $(python -c 'import requests; print(requests.certs.where())') \
+          $(python -m pytest_httpbin.certs) > certs.pem
+      export REQUESTS_CA_BUNDLE=certs.pem
+      py.test
+    '';
+    buildInputs = with self; [ pytest pytest-httpbin mock requests2 ];
+    propagatedBuildInputs = with self; [ six wrapt pyyaml ]
+      ++ (if isPy27 then [ contextlib2 mock ] else [ yarl ]);
+    # 2.6 and older require backport_collections which isn't packaged, and
+    # 3.3 isn't supported at all.
+    disabled = (pythonOlder "2.7") || isPy33;
+  };
+
   virtkey = buildPythonPackage rec {
     name = "virtkey-${version}";
     majorVersion = "0.63";
