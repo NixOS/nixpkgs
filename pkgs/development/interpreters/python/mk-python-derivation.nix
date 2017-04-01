@@ -79,10 +79,9 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   postFixup = ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
-    # Check if we have two packages with the same name in the closure and fail.
-    # If this happens, something went wrong with the dependencies specs.
-    # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
-    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
+    # check if we have two packages with the same name in closure and fail
+    # this shouldn't happen, something went wrong with dependencies specs
+    ${python.interpreter} ${./catch_conflicts.py}
   '' + attrs.postFixup or '''';
 
   passthru = {
@@ -99,3 +98,5 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     isBuildPythonPackage = python.meta.platforms;
   };
 })
+
+
