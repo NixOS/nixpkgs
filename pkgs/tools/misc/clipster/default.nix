@@ -14,7 +14,6 @@ stdenv.mkDerivation  rec {
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
   buildInputs =  [ pythonEnv gtk3 libwnck3 ];
-
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -48,6 +47,6 @@ stdenv.mkDerivation  rec {
     license = licenses.agpl3;
     homepage = https://github.com/mrichar1/clipster;
     platforms = platforms.linux;
-    maintainers = [maintainers.magnetophon];
+    maintainers = [ maintainers.magnetophon ];
   };
 }
