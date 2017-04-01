@@ -1,4 +1,4 @@
-{pkgs, buildLispPackage, quicklisp-to-nix-packages}:
+{pkgs, buildLispPackage, clwrapper, quicklisp-to-nix-packages}:
 let
   addDeps = newdeps: x: {deps = x.deps ++ newdeps;};
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
@@ -31,6 +31,8 @@ in
     flexi-streams circular-streams ironclad cl-syntax-annot alexandria
     split-sequence
   ]);
+  clack-handler-fcgi = addDeps (with qlnp; []);
+  lack = addDeps (with qlnp; [ironclad]);
   cxml = skipBuildPhase;
   cxml-xml = skipBuildPhase;
   cxml-dom = skipBuildPhase;
@@ -38,7 +40,7 @@ in
   cxml-test = skipBuildPhase;
   wookie = multiOverride [(addDeps (with qlnp; [
       alexandria blackbird cl-async chunga fast-http quri babel cl-ppcre
-      cl-fad fast-io vom do-urlencode
+      cl-fad fast-io vom do-urlencode cl-async-ssl
     ])) 
     (addNativeLibs (with pkgs; [libuv openssl]))];
   woo = addDeps (with qlnp; [
@@ -57,10 +59,15 @@ in
   "cl+ssl" = addNativeLibs [pkgs.openssl];
   cl-colors = skipBuildPhase;
   cl-libuv = addNativeLibs [pkgs.libuv];
+  cl-async = addDeps (with qlnp; [cl-async-base]);
+  cl-async-ssl = multiOverride [(addDeps (with qlnp; [cl-async-base]))
+    (addNativeLibs [pkgs.openssl])];
+  cl-async-repl = addDeps (with qlnp; [cl-async]);
   cl-async-base = addDeps (with qlnp; [
     cffi fast-io vom cl-libuv cl-ppcre trivial-features static-vectors
     trivial-gray-streams babel
   ]);
+  cl-async-util = addDeps (with qlnp; [ cl-async-base ]);
   css-lite = addDeps (with qlnp; [parenscript]);
   clsql = x: {
     propagatedBuildInputs = with pkgs; [mysql postgresql sqlite zlib];
@@ -75,7 +82,7 @@ in
   query-fs = x: {
     overrides = y: (x.overrides y) // {
       linkedSystems = [];
-      postInstall = ''
+      postInstall = ((x.overrides y).postInstall or "") + ''
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
 	export HOME=$PWD
 	build-with-lisp.sh sbcl \
@@ -85,4 +92,38 @@ in
       '';
     };
   };
+  cffi-grovel = addDeps (with qlnp; [ cffi-toolchain ]);
+  cffi-toolchain = addDeps (with qlnp; [ cffi uiop ]);
+  cffi-examples = addDeps (with qlnp; [ cffi ]);
+  cffi-libffi = addDeps (with qlnp; [ cffi ]);
+  cffi-uffi-compat = addDeps (with qlnp; [ cffi ]);
+  cffi = multiOverride [(addNativeLibs [pkgs.libffi])
+    (addDeps (with qlnp; [uffi]))];
+  cl-vectors = addDeps (with qlnp; [zpb-ttf]);
+  "3bmd" = addDeps (with qlnp; [esrap split-sequence]);
+  "3bmd-ext-tables" = addDeps (with qlnp; [qlnp."3bmd"]);
+  "3bmd-ext-wiki-links" = addDeps (with qlnp; [qlnp."3bmd"]);
+  "3bmd-youtube" = addDeps (with qlnp; [qlnp."3bmd"]);
+  cl-dbi = addDeps (with qlnp; [
+    cl-syntax cl-syntax-annot split-sequence closer-mop bordeaux-threads
+  ]);
+  dbd-sqlite3 = addDeps (with qlnp; [cl-dbi]);
+  dbd-postgres = addDeps (with qlnp; [cl-dbi]);
+  dbd-mysql = addDeps (with qlnp; [cl-dbi]);
+  cl-mysql = addNativeLibs [pkgs.mysql];
+  cl-ppcre-template = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        ln -s lib-dependent/*.asd .
+      '';
+    };
+  };
+  cl-unification = addDeps (with qlnp; [cl-ppcre]);
+  cl-syntax-annot = addDeps (with qlnp; [cl-syntax]);
+  cl-syntax-anonfun = addDeps (with qlnp; [cl-syntax]);
+  cl-syntax-markup = addDeps (with qlnp; [cl-syntax]);
+  cl-test-more = addDeps (with qlnp; [prove]);
+  babel-streams = addDeps (with qlnp; [babel]);
+  plump = addDeps (with qlnp; [array-utils trivial-indent]);
+  sqlite = addNativeLibs [pkgs.sqlite];
 }

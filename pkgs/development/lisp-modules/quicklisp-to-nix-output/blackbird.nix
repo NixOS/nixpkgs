@@ -13,5 +13,16 @@ rec {
   };
 
   overrides = x: {
+    postInstall = ''
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/blackbird[.]asd${"$"}' |
+        while read f; do
+          CL_SOURCE_REGISTRY= \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
+    '';
   };
 }
+/* (SYSTEM blackbird DESCRIPTION A promise implementation for Common Lisp. SHA256 0l053fb5fdz1q6dyfgys6nmbairc3aig4wjl5abpf8b1paf7gzq9 URL
+    http://beta.quicklisp.org/archive/blackbird/2016-05-31/blackbird-20160531-git.tgz MD5 5cb13dc06a0eae8dcba14714d2b5365d NAME blackbird TESTNAME NIL FILENAME
+    blackbird DEPS ((NAME vom)) DEPENDENCIES (vom) VERSION 20160531-git SIBLINGS (blackbird-test)) */

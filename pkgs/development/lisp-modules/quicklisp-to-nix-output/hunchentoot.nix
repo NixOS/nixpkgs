@@ -16,5 +16,22 @@ rec {
   };
 
   overrides = x: {
+    postInstall = ''
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/hunchentoot[.]asd${"$"}' |
+        while read f; do
+          CL_SOURCE_REGISTRY= \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
+    '';
   };
 }
+/* (SYSTEM hunchentoot DESCRIPTION Hunchentoot is a HTTP server based on USOCKET and
+  BORDEAUX-THREADS.  It supports HTTP 1.1, serves static files, has a
+  simple framework for user-defined handlers and can be extended
+  through subclassing.
+    SHA256 0gp2rgndkijjydb1x3p8414ii1z372gzdy945jy0491bcbhygj74 URL http://beta.quicklisp.org/archive/hunchentoot/2016-03-18/hunchentoot-1.2.35.tgz MD5
+    d1ce17dec454cab119c0f263e8a176d1 NAME hunchentoot TESTNAME NIL FILENAME hunchentoot DEPS
+    ((NAME bordeaux-threads) (NAME chunga) (NAME cl+ssl) (NAME cl-base64) (NAME cl-fad) (NAME cl-ppcre) (NAME flexi-streams) (NAME md5) (NAME rfc2388)
+     (NAME trivial-backtrace) (NAME usocket))
+    DEPENDENCIES (bordeaux-threads chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams md5 rfc2388 trivial-backtrace usocket) VERSION 1.2.35 SIBLINGS NIL) */

@@ -17,8 +17,14 @@ stdenv.mkDerivation {
     echo "$NIX_LISP"
 
     ASDF_OUTPUT_TRANSLATIONS="${asdf}/lib/common-lisp/:$out/lib/common-lisp-compiled/" \
-    NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(uiop/lisp-build:compile-file* \"${asdf}/lib/common-lisp/asdf/build/asdf.lisp\")"' \
+    NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn 
+        (uiop/lisp-build:compile-file* \"${asdf}/lib/common-lisp/asdf/build/asdf.lisp\")
+        (asdf:load-system :uiop :force :all)
+        (asdf:load-system :asdf :force :all)
+      )"' \
       "$out/bin/common-lisp.sh" "$NIX_LISP"
+
+    ln -s "$out/lib/common-lisp-compiled"/{asdf/uiop,uiop}
   '';
 
   inherit asdf lisp;

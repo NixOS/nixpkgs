@@ -13,5 +13,16 @@ rec {
   };
 
   overrides = x: {
+    postInstall = ''
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/cl-ppcre[.]asd${"$"}' |
+        while read f; do
+          CL_SOURCE_REGISTRY= \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
+    '';
   };
 }
+/* (SYSTEM cl-ppcre DESCRIPTION Perl-compatible regular expression library SHA256 1djciws9n0jg3qdrck3j4wj607zvkbir8p379mp0p7b5g0glwvb2 URL
+    http://beta.quicklisp.org/archive/cl-ppcre/2015-09-23/cl-ppcre-2.0.11.tgz MD5 6d5250467c05eb661a76d395186a1da0 NAME cl-ppcre TESTNAME NIL FILENAME cl-ppcre
+    DEPS NIL DEPENDENCIES NIL VERSION 2.0.11 SIBLINGS (cl-ppcre-unicode)) */

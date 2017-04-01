@@ -6,7 +6,7 @@ ASDF_OUTPUT_TRANSLATIONS="@asdf@/lib/common-lisp/:@out@/lib/common-lisp-compiled
 addASDFPaths () {
     for j in "$1"/lib/common-lisp/*; do
 	if [ -d "$j" ]; then
-            CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$j/"
+            CL_SOURCE_REGISTRY="$j/:$CL_SOURCE_REGISTRY"
             if [ -d "$(dirname "$(dirname "$j")")/common-lisp-compiled/$(basename "$j")" ]; then
               ASDF_OUTPUT_TRANSLATIONS="$j:$(dirname "$(dirname "$j")")/common-lisp-compiled/$(basename "$j")${ASDF_OUTPUT_TRANSLATIONS:+:}$ASDF_OUTPUT_TRANSLATIONS"
             fi

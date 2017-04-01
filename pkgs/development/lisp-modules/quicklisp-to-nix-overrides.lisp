@@ -1,4 +1,3 @@
-(defparameter testnames (make-hash-table :test 'equal))
 (setf
   (gethash "cxml-xml" testnames) "cxml"
   (gethash "cxml-dom" testnames) "cxml"

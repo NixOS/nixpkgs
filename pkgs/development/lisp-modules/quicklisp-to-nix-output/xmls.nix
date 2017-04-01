@@ -13,5 +13,15 @@ rec {
   };
 
   overrides = x: {
+    postInstall = ''
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/xmls[.]asd${"$"}' |
+        while read f; do
+          CL_SOURCE_REGISTRY= \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
+    '';
   };
 }
+/* (SYSTEM xmls DESCRIPTION NIL SHA256 1pch221g5jv02rb21ly9ik4cmbzv8ca6bnyrs4s0yfrrq0ji406b URL http://beta.quicklisp.org/archive/xmls/2015-04-07/xmls-1.7.tgz
+    MD5 697c9f49a60651b759e24ea0c1eb1cfe NAME xmls TESTNAME NIL FILENAME xmls DEPS NIL DEPENDENCIES NIL VERSION 1.7 SIBLINGS NIL) */

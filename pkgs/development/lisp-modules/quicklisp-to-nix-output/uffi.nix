@@ -13,5 +13,16 @@ rec {
   };
 
   overrides = x: {
+    postInstall = ''
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/uffi[.]asd${"$"}' |
+        while read f; do
+          CL_SOURCE_REGISTRY= \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
+    '';
   };
 }
+/* (SYSTEM uffi DESCRIPTION Universal Foreign Function Library for Common Lisp SHA256 1b3mb1ac5hqpn941pmgwkiy241rnin308haxbs2f4rwp2la7wzyy URL
+    http://beta.quicklisp.org/archive/uffi/2015-09-23/uffi-20150923-git.tgz MD5 84babed7d1633cf01610e81f027024da NAME uffi TESTNAME NIL FILENAME uffi DEPS NIL
+    DEPENDENCIES NIL VERSION 20150923-git SIBLINGS (uffi-tests)) */

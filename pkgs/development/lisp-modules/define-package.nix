@@ -1,4 +1,4 @@
-args @ {stdenv, clwrapper, baseName, testSystem ? baseName, version ? "latest"
+args @ {stdenv, clwrapper, baseName, testSystems ? [baseName], version ? "latest"
   , src, description, deps, buildInputs ? [], meta ? {}, overrides?(x: {})
   , propagatedBuildInputs ? []}:
 let 
@@ -10,7 +10,7 @@ let
     echo "export NIX_CFLAGS_COMPILE='$NIX_CFLAGS_COMPILE'\"\''${NIX_CFLAGS_COMPILE:+ \$NIX_CFLAGS_COMPILE}\"" >> "$config_script"
     echo "export NIX_LISP_COMMAND='$NIX_LISP_COMMAND'" >> "$config_script"
     echo "export NIX_LISP_ASDF='$NIX_LISP_ASDF'" >> "$config_script"
-    echo "export CL_SOURCE_REGISTRY="\$CL_SOURCE_REGISTRY\''${CL_SOURCE_REGISTRY:+:}"'$CL_SOURCE_REGISTRY:$out/lib/common-lisp/${args.baseName}/'" >> "$config_script"
+    echo "export CL_SOURCE_REGISTRY="\$CL_SOURCE_REGISTRY\''${CL_SOURCE_REGISTRY:+:}"'$out/lib/common-lisp/${args.baseName}/:$CL_SOURCE_REGISTRY'" >> "$config_script"
     echo "export ASDF_OUTPUT_TRANSLATIONS="\$ASDF_OUTPUT_TRANSLATIONS\''${ASDF_OUTPUT_TRANSLATIONS:+:}"'$out/lib/common-lisp/${args.baseName}/:$out/lib/common-lisp-compiled/${args.baseName}:$ASDF_OUTPUT_TRANSLATIONS'" >> "$config_script"
     test -n "$LD_LIBRARY_PATH" &&
         echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\"'$LD_LIBRARY_PATH'" >> "$config_script"
@@ -43,10 +43,12 @@ basePackage = {
     ${deployConfigScript}
     ${deployLaunchScript}
 
-    ${if testSystem != null then ''
-       NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :${testSystem})"' \
+    ${stdenv.lib.concatMapStrings (testSystem: ''
+       CL_SOURCE_REGISTRY= \
+       NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
+             (asdf:compile-system :${testSystem}) (asdf:load-system :${testSystem}))"' \
           "$out/bin/${args.baseName}-lisp-launcher.sh" ""
-    '' else ""}
+    '') testSystems}
 
     eval "$postInstall"
   '';
