@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, python, buildPythonPackage, pkgconfig, cairo, xlibsWrapper, isPyPy, isPy35, isPy3k }:
+{ lib, fetchurl, fetchpatch, python, buildPythonPackage, pkgconfig, cairo, xlibsWrapper, isPyPy, isPy35, isPy36, isPy3k }:
 
 if (isPyPy) then throw "pycairo not supported for interpreter ${python.executable}" else buildPythonPackage rec {
   version = "1.10.0";
@@ -28,12 +28,14 @@ if (isPyPy) then throw "pycairo not supported for interpreter ${python.executabl
 
   buildInputs = [ python pkgconfig cairo xlibsWrapper ];
 
+  isPy35OrAbove = isPy35 || isPy36;
+
   configurePhase = ''
     (
       cd $(${python.executable} waf unpack)
       pwd
       patch -p1 < ${patch_waf}
-      ${lib.optionalString isPy35 "patch -p1 < ${patch_waf-py3_5}"}
+      ${lib.optionalString isPy35OrAbove "patch -p1 < ${patch_waf-py3_5}"}
     )
 
     ${python.executable} waf configure --prefix=$out
