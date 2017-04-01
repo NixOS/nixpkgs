@@ -21,12 +21,32 @@ in
       '';
     };
 
+    nixos.tags = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "with-xen" ];
+      description = ''
+        Strings to prefix to the default
+        <option>system.nixos.label</option>.
+
+        Useful for not loosing track of configurations built with
+        different options, e.g.:
+
+        <screen>
+        {
+          system.nixos.tags = [ "with-xen" ];
+          virtualisation.xen.enable = true;
+        }
+        </screen>
+      '';
+    };
+
   };
 
   config = {
     # This is set here rather than up there so that changing it would
     # not rebuild the manual
-    system.nixos.label = mkDefault cfg.version;
+    system.nixos.label = mkDefault (concatStringsSep "-" (sort (x: y: x < y) cfg.tags) + "-" + cfg.version);
   };
 
 }
