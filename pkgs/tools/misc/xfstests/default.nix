@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Torture test suite for filesystems";
-    homepage = "http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git";
+    homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
