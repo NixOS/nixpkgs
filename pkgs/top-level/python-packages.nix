@@ -466,15 +466,19 @@ in {
   };
 
   altair = buildPythonPackage rec {
-    name = "altair-1.0.0";
+    name = "altair-1.2.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/altair/${name}.tar.gz";
-      sha256 = "024drhmiw8w3dl7dbal0pvnlfd3sv4n1rqywv2jb488b3fzm704r";
+      sha256 = "05c47dm20p7m0017p2h38il721rxag1q0457dj7whp0k8rc7qd1n";
     };
+    buildInputs = [ self.pytest ];
 
+    checkPhase = ''
+      export LANG=en_US.UTF-8
+      py.test altair --doctest-modules
+    '';
     propagatedBuildInputs = with self; [ vega pandas ipython traitlets ];
-
     meta = {
       description = "A declarative statistical visualization library for Python.";
       homepage = https://github.com/altair-viz/altair;
@@ -491,6 +495,7 @@ in {
       sha256 = "08k92afnk0bivm07h1l5nh26xl2rfp7qn03aq17q1hr3fs5r6cdm";
     };
 
+    buildInputs = [ self.pytest ];
     propagatedBuildInputs = with self; [ jupyter_core pandas ];
 
     meta = {
@@ -29038,14 +29043,14 @@ EOF
 
   Logbook = buildPythonPackage rec {
     name = "Logbook-${version}";
-    version = "0.11.3";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/L/Logbook/${name}.tar.gz";
-      sha256 = "0bchn00jj0y4dmrmqsm29ffcx37g79jcxjihadmgz2aj0z6dbsrc";
+      sha256 = "0whqbx5p0zkf7gmb5ssnsnhm4kn4drd4x7fbhdi8dnxklqajbnl7";
     };
 
-    buildInputs = [ self.pytest ];
+    buildInputs = [ self.pytest ] ++ optionals (!isPy3k) [ self.mock ];
 
     checkPhase = ''
       find tests -name \*.pyc -delete
