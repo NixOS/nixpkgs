@@ -1,5 +1,6 @@
 { pname, version, updateScript ? null
-, src, patches ? [], meta }:
+, src, patches ? [], overrides ? {}, meta
+, isTorBrowserLike ? false }:
 
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
@@ -22,12 +23,13 @@
 
 ## privacy-related options
 
-, privacySupport ? false
+, privacySupport ? isTorBrowserLike
 
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
+, loopSupport ? !privacySupport || !isTorBrowserLike
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -37,21 +39,22 @@
 
 ## other
 
-# If you want the resulting program to call itself "Firefox" instead
-# of "Nightly" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
+# If you want the resulting program to call itself
+# "Firefox"/"Torbrowser" instead of "Nightly" or whatever, enable this
+# option. However, in Firefox's case, those binaries may not be
+# distributed without permission from the Mozilla Foundation, see
 # http://www.mozilla.org/foundation/trademarks/.
 , enableOfficialBranding ? false
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
+assert !isTorBrowserLike -> loopSupport; # can't be disabled on firefox :(
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "${pname}-unwrapped-${version}";
 
   inherit src patches meta;
@@ -60,12 +63,14 @@ stdenv.mkDerivation rec {
     gtk2 perl zip libIDL libjpeg zlib bzip2
     dbus dbus_glib pango freetype fontconfig xorg.libXi
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    nss nspr libnotify xorg.pixman yasm mesa
+    nspr libnotify xorg.pixman yasm mesa
     xorg.libXScrnSaver xorg.scrnsaverproto
     xorg.libXext xorg.xextproto sqlite unzip makeWrapper
     hunspell libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc
   ]
+  ++ lib.optionals (!isTorBrowserLike) [ nss ]
+
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
@@ -98,8 +103,6 @@ stdenv.mkDerivation rec {
     "--with-system-jpeg"
     "--with-system-zlib"
     "--with-system-bz2"
-    "--with-system-nspr"
-    "--with-system-nss"
     "--with-system-libevent"
     "--with-system-libvpx"
     "--with-system-png" # needs APNG support
@@ -119,11 +122,33 @@ stdenv.mkDerivation rec {
     "--disable-gconf"
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
   ]
+
+  # TorBrowser patches these
+  ++ lib.optionals (!isTorBrowserLike) [
+    "--with-system-nss"
+    "--with-system-nspr"
+  ]
+
+  # and wants these
+  ++ lib.optionals isTorBrowserLike [
+    "--with-tor-browser-version=${version}"
+    "--enable-signmar"
+    "--enable-verify-mar"
+
+    # We opt out of TorBrowser's nspr because that patch is useless on
+    # anything but Windows and produces zero fingerprinting
+    # possibilities on other platforms.
+    # Lets save some space instead.
+    "--with-system-nspr"
+  ]
+
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
+  ++ lib.optionals isTorBrowserLike
+       (flag loopSupport "loop")
   ++ flag geolocationSupport "mozril-geoloc"
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
@@ -171,8 +196,10 @@ stdenv.mkDerivation rec {
     browserName = "firefox";
     inherit version updateScript;
     isFirefox3Like = true;
+    inherit isTorBrowserLike;
     gtk = gtk2;
     inherit nspr;
     inherit ffmpegSupport;
   };
-}
+
+} // overrides)

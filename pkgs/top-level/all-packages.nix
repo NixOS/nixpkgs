@@ -13787,6 +13787,7 @@ with pkgs;
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr;
+  tor-browser-unwrapped = firefoxPackages.tor-browser;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
