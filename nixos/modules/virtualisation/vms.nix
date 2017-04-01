@@ -2,7 +2,6 @@
 
 with lib;
 
-# TODO: go back to mount --bind time except with rsync -a instead
 # TODO: forward resolv.conf via 9pfs, cp -L it at start and reload of service
 
 let
@@ -181,8 +180,7 @@ let
         device = "store";
         fsType = "9p";
         # TODO: optimize the size given in msize by highly evolved trial-and-failure (and just below, too)
-        # Warning: cache=loose works only because this mount is read-only.
-        options = [ "trans=virtio" "version=9p2000.L" "cache=loose" "msize=262144" ];
+        options = [ "trans=virtio" "version=9p2000.L" "msize=262144" ];
         neededForBoot = true;
       };
     } // listToAttrs (imap (i: n: nameValuePair n {
@@ -248,6 +246,7 @@ let
     pkgs.writeScript "generate-store-vm-${name}.py"
     ''
       # Python3 script, assumes ${cfg.path}/${name}/.virtfs_metadata already exists
+      # Makes a 'cp' between the relevant paths while keeping qemu's mapped_file metadata
       import os
       import shutil
       import sys
@@ -259,12 +258,17 @@ let
       # Cleanup old store entries to save disk space
       for path in os.listdir(store):
         if path not in target_store and path != ".virtfs_metadata":
-          if os.path.isdir(path) and not os.path.islink(path):
+          if os.path.isdir(store + path) and not os.path.islink(store + path):
             shutil.rmtree(store + path)
           else:
             os.remove(store + path)
 
       # Recurse in path, assuming {store}/{dirname path}/.virtfs_metadata already exists
+      # virtfs.mode is made of magic numbers:
+      #  * 16749 is  040555, permissions for directories in the store
+      #  * 33060 is 0100444, permissions for non-executable files in the store
+      #  * 33133 is 0100555, permissions for executable files in the store
+      #  * 41471 is 0120777, permissions for symlinks
       def recurse_in_path(path):
         src = "/nix/store/" + path
         dst = store + path
@@ -284,12 +288,15 @@ let
             shutil.copyfile(src, tmpfile)
             with open(metadir + f, 'w') as meta:
               if os.stat(src).st_mode & 1 == 1: # file is executable
-                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=365\n")
+                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=33133\n")
               else:
-                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=292\n")
+                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=33060\n")
             os.rename(tmpfile, dst)
         elif os.path.isdir(src):
-          os.makedirs(dst + "/.virtfs_metadata", exist_ok=True)
+          if not os.path.exists(dst + "/.virtfs_metadata"):
+            with open(metadir + f, 'w') as meta:
+              meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=16749\n")
+            os.makedirs(dst + "/.virtfs_metadata", exist_ok=True)
           for child in os.listdir(src):
             recurse_in_path(path + "/" + child)
         else:
@@ -443,7 +450,7 @@ in
       };
       consoleUnit = name: {
         description = "Console for VM '${name}'";
-        script =
+        script = # TODO: get why this has to be restarted when pre-start takes too long
           ''
             # Wait for socket creation
             sleep 1
