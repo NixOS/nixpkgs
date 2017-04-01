@@ -43,6 +43,24 @@ let
       };
     });
 
+  buildGogland = { name, version, src, license, description, wmClass }:
+    (mkJetBrainsProduct {
+      inherit name version src wmClass jdk;
+      product = "Gogland";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/go/";
+        inherit description license;
+        longDescription = ''
+          Gogland is the codename for a new commercial IDE by JetBrains
+          aimed at providing an ergonomic environment for Go development.
+          The new IDE extends the IntelliJ platform with the coding assistance
+          and tool integrations specific for the Go language
+        '';
+        maintainers = [ maintainers.miltador ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildIdea = { name, version, src, license, description, wmClass }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
@@ -187,6 +205,18 @@ in
       sha256 = "91ee6a1e43d75a45ae51829835e457da85262410d89e617324d0239ba5625dfa";
     };
     wmClass = "jetbrains-datagrip";
+  };
+
+  gogland = buildGogland rec {
+    name = "gogland-${version}";
+    version = "171.3780.106";
+    description = "Up and Coming Go IDE";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/go/${name}.tar.gz";
+      sha256 = "cbe84d07fdec6425d8ac63b0ecd5e04148299c1c0c6d05751523aaaa9360110b";
+    };
+    wmClass = "jetbrains-gogland";
   };
 
   idea14-community = buildIdea rec {
