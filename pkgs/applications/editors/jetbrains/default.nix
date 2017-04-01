@@ -6,10 +6,10 @@
 assert stdenv.isLinux;
 
 let
-  mkIdeaProduct = callPackage ./common.nix { };
+  mkJetBrainsProduct = callPackage ./common.nix { };
 
   buildClion = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct rec {
+    (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
@@ -25,7 +25,7 @@ let
     });
 
   buildIdea = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct rec {
+    (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "IDEA";
       meta = with stdenv.lib; {
@@ -42,7 +42,7 @@ let
     });
 
   buildRubyMine = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct rec {
+    (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "RubyMine";
       meta = with stdenv.lib; {
@@ -55,7 +55,7 @@ let
     });
 
   buildPhpStorm = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PhpStorm";
       meta = with stdenv.lib; {
@@ -72,7 +72,7 @@ let
     });
 
   buildWebStorm = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";
       meta = with stdenv.lib; {
@@ -89,7 +89,7 @@ let
     });
 
   buildPycharm = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct rec {
+    (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "PyCharm";
       meta = with stdenv.lib; {
@@ -116,7 +116,7 @@ let
     };
 
   buildDataGrip = { name, version, src, license, description, wmClass }:
-    (mkIdeaProduct {
+    (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "DataGrip";
       meta = with stdenv.lib; {
