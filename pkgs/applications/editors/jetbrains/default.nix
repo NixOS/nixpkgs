@@ -8,6 +8,8 @@ assert stdenv.isLinux;
 let
   mkJetBrainsProduct = callPackage ./common.nix { };
 
+  # Sorted alphabetically
+
   buildClion = { name, version, src, license, description, wmClass }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
@@ -20,6 +22,23 @@ let
           developer on Linux, OS X and Windows.
         '';
         maintainers = with maintainers; [ edwtjo ];
+        platforms = platforms.linux;
+      };
+    });
+
+  buildDataGrip = { name, version, src, license, description, wmClass }:
+    (mkJetBrainsProduct {
+      inherit name version src wmClass jdk;
+      product = "DataGrip";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/datagrip/";
+        inherit description license;
+        longDescription = ''
+          DataGrip is a new IDE from JetBrains built for database admins.
+          It allows you to quickly migrate and refactor relational databases,
+          construct efficient, statically checked SQL queries and much more.
+        '';
+        maintainers = with maintainers; [ loskutov ];
         platforms = platforms.linux;
       };
     });
@@ -41,19 +60,6 @@ let
       };
     });
 
-  buildRubyMine = { name, version, src, license, description, wmClass }:
-    (mkJetBrainsProduct rec {
-      inherit name version src wmClass jdk;
-      product = "RubyMine";
-      meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/ruby/";
-        inherit description license;
-        longDescription = description;
-        maintainers = with maintainers; [ edwtjo ];
-        platforms = platforms.linux;
-      };
-    });
-
   buildPhpStorm = { name, version, src, license, description, wmClass }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
@@ -67,23 +73,6 @@ let
           automated refactorings for PHP and JavaScript code.
         '';
         maintainers = with maintainers; [ schristo ];
-        platforms = platforms.linux;
-      };
-    });
-
-  buildWebStorm = { name, version, src, license, description, wmClass }:
-    (mkJetBrainsProduct {
-      inherit name version src wmClass jdk;
-      product = "WebStorm";
-      meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/webstorm/";
-        inherit description license;
-        longDescription = ''
-          WebStorm provides an editor for HTML, JavaScript (incl. Node.js),
-          and CSS with on-the-fly code analysis, error prevention and
-          automated refactorings for JavaScript code.
-        '';
-        maintainers = with maintainers; [ abaldeau ];
         platforms = platforms.linux;
       };
     });
@@ -115,25 +104,41 @@ let
       propagatedUserEnvPkgs = [ python ];
     };
 
-  buildDataGrip = { name, version, src, license, description, wmClass }:
-    (mkJetBrainsProduct {
+  buildRubyMine = { name, version, src, license, description, wmClass }:
+    (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
-      product = "DataGrip";
+      product = "RubyMine";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/datagrip/";
+        homepage = "https://www.jetbrains.com/ruby/";
         inherit description license;
-        longDescription = ''
-          DataGrip is a new IDE from JetBrains built for database admins.
-          It allows you to quickly migrate and refactor relational databases,
-          construct efficient, statically checked SQL queries and much more.
-        '';
-        maintainers = with maintainers; [ loskutov ];
+        longDescription = description;
+        maintainers = with maintainers; [ edwtjo ];
         platforms = platforms.linux;
       };
     });
+
+  buildWebStorm = { name, version, src, license, description, wmClass }:
+    (mkJetBrainsProduct {
+      inherit name version src wmClass jdk;
+      product = "WebStorm";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/webstorm/";
+        inherit description license;
+        longDescription = ''
+          WebStorm provides an editor for HTML, JavaScript (incl. Node.js),
+          and CSS with on-the-fly code analysis, error prevention and
+          automated refactorings for JavaScript code.
+        '';
+        maintainers = with maintainers; [ abaldeau ];
+        platforms = platforms.linux;
+      };
+    });
+
 in
 
 {
+  # Sorted alphabetically
+
   clion = buildClion rec {
     name = "clion-${version}";
     version = "2017.1";
@@ -144,6 +149,18 @@ in
       sha256 = "00fc023ca56f2781864cddc7bd5c2897d837d1db17dd8f987abe046ed4df3ca5";
     };
     wmClass = "jetbrains-clion";
+  };
+
+  datagrip = buildDataGrip rec {
+    name = "datagrip-${version}";
+    version = "2017.1";
+    description = "Your Swiss Army Knife for Databases and SQL";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
+      sha256 = "91ee6a1e43d75a45ae51829835e457da85262410d89e617324d0239ba5625dfa";
+    };
+    wmClass = "jetbrains-datagrip";
   };
 
   idea14-community = buildIdea rec {
@@ -206,6 +223,54 @@ in
     wmClass = "jetbrains-idea";
   };
 
+  phpstorm = buildPhpStorm rec {
+    name = "phpstorm-${version}";
+    version = "2017.1";
+    description = "Professional IDE for Web and PHP developers";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
+      sha256 = "1ynffm5x8fqq2r71rr9rbvdifbwbvbhqb2x1hkyy4az38gxal1bm";
+    };
+    wmClass = "jetbrains-phpstorm";
+  };
+
+  phpstorm10 = buildPhpStorm rec {
+    name = "phpstorm-${version}";
+    version = "10.0.4";
+    description = "Professional IDE for Web and PHP developers";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
+      sha256 = "0fi042zvjpg5pn2mnhj3bbrdkl1b9vmhpf2l6ca4nr0rhjjv7dsm";
+    };
+    wmClass = "jetbrains-phpstorm";
+  };
+
+  pycharm-community = buildPycharm rec {
+    name = "pycharm-community-${version}";
+    version = "2017.1";
+    description = "PyCharm Community Edition";
+    license = stdenv.lib.licenses.asl20;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/python/${name}.tar.gz";
+      sha256 = "14p6f15n0927awgpsdsdqgmdfbbwkykrw5xggz5hnfl7d05i4sb6";
+    };
+    wmClass = "jetbrains-pycharm-ce";
+  };
+
+  pycharm-professional = buildPycharm rec {
+    name = "pycharm-professional-${version}";
+    version = "2017.1";
+    description = "PyCharm Professional Edition";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/python/${name}.tar.gz";
+      sha256 = "1rvic3njsq480pslhw6rxld7jngchihkplq3dfnmkr2h9gx26lkf";
+    };
+    wmClass = "jetbrains-pycharm";
+  };
+
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
     version = "2016.3.2";
@@ -242,54 +307,6 @@ in
     wmClass = "jetbrains-rubymine";
   };
 
-  pycharm-community = buildPycharm rec {
-    name = "pycharm-community-${version}";
-    version = "2017.1";
-    description = "PyCharm Community Edition";
-    license = stdenv.lib.licenses.asl20;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "14p6f15n0927awgpsdsdqgmdfbbwkykrw5xggz5hnfl7d05i4sb6";
-    };
-    wmClass = "jetbrains-pycharm-ce";
-  };
-
-  pycharm-professional = buildPycharm rec {
-    name = "pycharm-professional-${version}";
-    version = "2017.1";
-    description = "PyCharm Professional Edition";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1rvic3njsq480pslhw6rxld7jngchihkplq3dfnmkr2h9gx26lkf";
-    };
-    wmClass = "jetbrains-pycharm";
-  };
-
-  phpstorm = buildPhpStorm rec {
-    name = "phpstorm-${version}";
-    version = "2017.1";
-    description = "Professional IDE for Web and PHP developers";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1ynffm5x8fqq2r71rr9rbvdifbwbvbhqb2x1hkyy4az38gxal1bm";
-    };
-    wmClass = "jetbrains-phpstorm";
-  };
-
-  phpstorm10 = buildPhpStorm rec {
-    name = "phpstorm-${version}";
-    version = "10.0.4";
-    description = "Professional IDE for Web and PHP developers";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0fi042zvjpg5pn2mnhj3bbrdkl1b9vmhpf2l6ca4nr0rhjjv7dsm";
-    };
-    wmClass = "jetbrains-phpstorm";
-  };
-
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
     version = "2017.1";
@@ -324,17 +341,5 @@ in
       sha256 = "17agyqdyz6naxyx6p0y240ar93gja0ypw01nm2qmfzvh7ch03r24";
     };
     wmClass = "jetbrains-webstorm";
-  };
-
-  datagrip = buildDataGrip rec {
-    name = "datagrip-${version}";
-    version = "2017.1";
-    description = "Your Swiss Army Knife for Databases and SQL";
-    license = stdenv.lib.licenses.unfree;
-    src = fetchurl {
-      url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "91ee6a1e43d75a45ae51829835e457da85262410d89e617324d0239ba5625dfa";
-    };
-    wmClass = "jetbrains-datagrip";
   };
 }
