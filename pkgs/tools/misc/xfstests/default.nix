@@ -23,6 +23,14 @@ stdenv.mkDerivation {
     # Don't canonicalize path to mkfs (in util-linux) - otherwise e.g. mkfs.ext4 isn't found
     sed -i common/config -e 's|^export MKFS_PROG=.*|export MKFS_PROG=mkfs|'
 
+    # Move the Linux-specific test output files to the correct place, or else it will
+    # try to move them at runtime. Also nuke all the irix crap.
+    for f in tests/*/*.out.linux; do
+      mv $f $(echo $f | sed -e 's/\.linux$//')
+    done
+    rm -f tests/*/*.out.irix
+
+    # Fix up lots of impure paths
     for f in common/* tools/* tests/*/*; do
       sed -i $f -e 's|/bin/bash|${bash}/bin/bash|'
       sed -i $f -e 's|/bin/true|true|'
