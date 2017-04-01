@@ -39,28 +39,28 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
-    MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel} (nomodeset)
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
-    MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel} (copytoram)
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-nomodeset
-    MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel} (debug)
+    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
@@ -82,7 +82,7 @@ let
     mkdir -p $out/loader/entries
 
     cat << EOF > $out/loader/entries/nixos-iso.conf
-    title NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     linux /boot/${config.system.boot.loader.kernelFile}
     initrd /boot/${config.system.boot.loader.initrdFile}
     options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
@@ -90,7 +90,7 @@ let
 
     # A variant to boot with 'nomodeset'
     cat << EOF > $out/loader/entries/nixos-iso-nomodeset.conf
-    title NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     version nomodeset
     linux /boot/${config.system.boot.loader.kernelFile}
     initrd /boot/${config.system.boot.loader.initrdFile}
@@ -99,7 +99,7 @@ let
 
     # A variant to boot with 'copytoram'
     cat << EOF > $out/loader/entries/nixos-iso-copytoram.conf
-    title NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     version copytoram
     linux /boot/${config.system.boot.loader.kernelFile}
     initrd /boot/${config.system.boot.loader.initrdFile}
@@ -108,7 +108,7 @@ let
 
     # A variant to boot with verbose logging to the console
     cat << EOF > $out/loader/entries/nixos-iso-debug.conf
-    title NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel} (debug)
+    title NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
     linux /boot/${config.system.boot.loader.kernelFile}
     initrd /boot/${config.system.boot.loader.initrdFile}
     options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
@@ -361,7 +361,7 @@ in
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
-        { source = pkgs.writeText "version" config.system.nixosLabel;
+        { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
       ] ++ optionals config.isoImage.makeEfiBootable [

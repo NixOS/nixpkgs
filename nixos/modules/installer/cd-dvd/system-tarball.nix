@@ -8,7 +8,7 @@ with lib;
 
 let
 
-  versionFile = pkgs.writeText "nixos-label" config.system.nixosLabel;
+  versionFile = pkgs.writeText "nixos-label" config.system.nixos.label;
 
 in
 

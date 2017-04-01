@@ -3,14 +3,14 @@
 with lib;
 
 let
-  cfg = config.system;
+  cfg = config.system.nixos;
 in
 
 {
 
   options.system = {
 
-    nixosLabel = mkOption {
+    nixos.label = mkOption {
       type = types.str;
       description = ''
         NixOS version name to be used in the names of generated
@@ -26,7 +26,7 @@ in
   config = {
     # This is set here rather than up there so that changing it would
     # not rebuild the manual
-    system.nixosLabel = mkDefault cfg.nixosVersion;
+    system.nixos.label = mkDefault cfg.version;
   };
 
 }
