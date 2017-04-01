@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchurl, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchpatch, fetchFromGitHub }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -54,13 +54,13 @@ in {
     sha256 = "1yj5x1d10028fm3v3gjyjdn128ps0as345hr50y8x3vn86n70lxl";
 
     patches = [
-      (fetchurl {
+      (fetchpatch {
         url = "https://github.com/hashicorp/terraform/pull/13237.patch";
-        sha256 = "1f7hr1l5hck9mmqk01p6wxbfv9r3b0yi9ypz7bcmikp3bikza98x";
+        sha256 = "03c2nq12gvqqp12znvl3lmiviwsqksx4nrplv09fns2kz2gyfnbm";
       })
-      (fetchurl {
+      (fetchpatch {
         url = "https://github.com/hashicorp/terraform/pull/13248.patch";
-        sha256 = "1qc57kjhlqg5339him9bg4izdphins2fjjhb4ffr7bv9lb5k0hkr";
+        sha256 = "0awj8gaic0j7a69is95f2rll3yip4n6avai1jh20b1x7dybdrp5m";
       })
     ];
 
