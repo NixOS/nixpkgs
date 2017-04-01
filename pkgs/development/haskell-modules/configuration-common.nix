@@ -866,4 +866,7 @@ self: super: {
   # strict-io is too cautious with it's deepseq dependency
   # strict-io doesn't have a working bug tracker, the author has been emailed however.
   strict-io = doJailbreak super.strict-io;
+
+  # https://github.com/danidiaz/tailfile-hinotify/issues/2
+  tailfile-hinotify = dontCheck super.tailfile-hinotify;
 }
