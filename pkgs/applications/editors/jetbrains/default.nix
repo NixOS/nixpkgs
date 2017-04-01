@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
+{ lib, stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, python, unzip, p7zip
 , androidsdk, jdk
 }:
@@ -103,6 +103,32 @@ let
     }).override {
       propagatedUserEnvPkgs = [ python ];
     };
+
+  buildRider = { name, version, src, license, description, wmClass }:
+    lib.overrideDerivation (mkJetBrainsProduct rec {
+      inherit name version src wmClass jdk;
+      product = "Rider";
+      meta = with stdenv.lib; {
+        homepage = "https://www.jetbrains.com/rider/";
+        inherit description license;
+        longDescription = ''
+          JetBrains Rider is a new .NET IDE based on the IntelliJ
+          platform and ReSharper. Rider supports .NET Core,
+          .NET Framework and Mono based projects. This lets you
+          develop a wide array of applications including .NET desktop
+          apps, services and libraries, Unity games, ASP.NET and 
+          ASP.NET Core web applications.
+        '';
+        maintainers = [ maintainers.miltador ];
+        platforms = platforms.linux;
+      };
+    }) (attrs: {
+      patchPhase = attrs.patchPhase + ''
+        # Patch built-in mono for ReSharperHost to start successfully
+        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+        patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
+      '';
+    });
 
   buildRubyMine = { name, version, src, license, description, wmClass }:
     (mkJetBrainsProduct rec {
@@ -269,6 +295,18 @@ in
       sha256 = "1rvic3njsq480pslhw6rxld7jngchihkplq3dfnmkr2h9gx26lkf";
     };
     wmClass = "jetbrains-pycharm";
+  };
+
+  rider = buildRider rec {
+    name = "rider-${version}";
+    version = "171.3655.1246";
+    description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/resharper/riderRS-${version}.tar.gz";
+      sha256 = "90f9f8f1919e0f1dad42387f1a308483448323b089c13c409f3dd4d52992266b";
+    };
+    wmClass = "jetbrains-rider";
   };
 
   ruby-mine = buildRubyMine rec {
