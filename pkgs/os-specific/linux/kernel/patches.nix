@@ -52,6 +52,11 @@ rec {
       patch = ./bridge-stp-helper.patch;
     };
 
+  hack_9p =
+    { name = "hack-9p";
+      patch = ./9p-hack.patch;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
