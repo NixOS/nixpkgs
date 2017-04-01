@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig udev glib ];
 
+  # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
+  configureFlags = [ "--disable-umockdev" ];
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/libgudev;
     maintainers = [ maintainers.eelco ];
