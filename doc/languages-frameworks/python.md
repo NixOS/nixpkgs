@@ -598,7 +598,11 @@ specified packages in its path.
 
 The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
 It takes a function as an argument that is passed the set of python packages and returns the list
-of the packages to be included in the environment. Using the `withPackages` function, the previous
+of the packages to be included in the environment. It does not set `ignoreCollisions = true` or
+`postBuild` and should not be used with Python 2 due to collisions between `__init__.py` files in
+namespace packages.
+
+Using the `withPackages` function, the previous
 example for the Pyramid Web Framework environment can be written like this:
 ```nix
 with import <nixpkgs> {};
@@ -624,9 +628,6 @@ with import <nixpkgs> {};
 
 (python33.withPackages (ps: [ps.numpy ps.requests2])).env
 ```
-
-In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
-such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
 
 ### Development mode
 
