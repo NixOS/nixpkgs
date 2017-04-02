@@ -385,7 +385,7 @@
   nand0p = "Fernando Jose Pando <nando@hex7.com>";
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
-  nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
+  nckx = "Tobias Geerinckx-Rice <github@tobias.gr>";
   ndowens = "Nathan Owens <ndowens04@gmail.com>";
   neeasade = "Nathan Isom <nathanisom27@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
