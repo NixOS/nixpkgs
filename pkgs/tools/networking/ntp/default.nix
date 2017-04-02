@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "17xrk7gxrl3hgg0i73n8qm53knyh01lf0f3l1zx9x6r1cip3dlnx";
   };
 
+  # The hardcoded list of allowed system calls for seccomp is
+  # insufficient for NixOS, add more to make it work (issue #21136).
+  patches = [ ./seccomp.patch ];
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
