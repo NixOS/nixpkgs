@@ -37,6 +37,10 @@ boot.initrd.luks.devices.crypted.device = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-
 fileSystems."/".device = "/dev/mapper/crypted";
 </programlisting>
 
+Should grub be used as bootloader, and <filename>/boot</filename> is located
+on an encrypted partition, it is necessary to add the following grub option:
+<programlisting>boot.loader.grub.enableCryptodisk = true;</programlisting>
+
 </para>
 
 </section>

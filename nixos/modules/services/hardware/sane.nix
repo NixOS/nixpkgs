@@ -51,7 +51,7 @@ in
         Enable support for SANE scanners.
 
         <note><para>
-          Users in the "scanner" group will gain access to the scanner.
+          Users in the "scanner" group will gain access to the scanner, or the "lp" group if it's also a printer.
         </para></note>
       '';
     };

@@ -4,20 +4,20 @@ stdenv.mkDerivation rec {
   name = "zuki-themes-${version}";
   version = "${gnome3.version}.${date}";
   date = {
-    "3.20" = "2016-07-01";
-    "3.22" = "2016-10-20";
+    "3.20" = "2017-02-09";
+    "3.22" = "2017-02-17";
   }."${gnome3.version}";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "zuki-themes";
     rev = {
-      "3.20" = "dda1726ac7b556df2ef9696e530f8c2eaa0aed37";
-      "3.22" = "a48f0f12f81c49b480f82369ae45cfa49d78b143";
+      "3.20" = "b9106c3c05012b7e91394819ca550def3357d2eb";
+      "3.22" = "fc3cf7c372bcc439870c4785f91b8ea7af73e1cc";
     }."${gnome3.version}";
     sha256 = {
-      "3.20" = "0p7db8a2ni494vwp3b7av7d214fnynf6gr976qma6h9x4ck3phiz";
-      "3.22" = "05sa5ighq01krbgfd4lddxvbhfqk5x5kgw6jnxwvx9rmmff713s1";
+      "3.20" = "03k18p25gsscv05934vs0py26vpcrx93wi5bj6di277c6kwgjzxg";
+      "3.22" = "02ppk8wsx0k7j3zgmcb1l8jgij0m5rdkrahfv884jxkyjr6wwgs5";
     }."${gnome3.version}";
   };
 

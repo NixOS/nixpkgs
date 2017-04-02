@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake, autoconf, pkgconfig, libtool, python, pythonPackages, glib, jansson}:
+{stdenv, fetchurl, automake, autoconf, pkgconfig, libtool, python2Packages, glib, jansson}:
 
 stdenv.mkDerivation rec
 {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec
 
   patches = [ ./libsearpc.pc.patch ];
 
-  buildInputs = [ automake autoconf pkgconfig libtool python pythonPackages.simplejson ];
+  buildInputs = [ automake autoconf pkgconfig libtool python2Packages.python python2Packages.simplejson ];
   propagatedBuildInputs = [ glib jansson ];
 
   preConfigure = "./autogen.sh";

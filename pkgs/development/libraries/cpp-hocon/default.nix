@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "cpp-hocon-${version}";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
-    sha256 = "0v2mnak6fh13dkl25lfvw1la2dfjqrh3lq1d40r3a52m56vwflrg";
+    sha256 = "1abalk0sjfg4yfz148hdknsbnl2xwjb8li7lqc64d07ifxhcqr87";
     rev = version;
     repo = "cpp-hocon";
     owner = "puppetlabs";

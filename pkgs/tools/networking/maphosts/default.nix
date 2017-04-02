@@ -6,9 +6,7 @@ stdenv.mkDerivation rec {
   env = bundlerEnv {
     name = "maphosts-gems";
     inherit ruby;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
   };
 
   phases = ["installPhase"];

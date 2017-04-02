@@ -1,13 +1,11 @@
-{ pkgs, newScope, fetchFromGitHub }:
+{ pkgs, makeScope, libsForQt5, fetchFromGitHub }:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
+  packages = self: with self; {
 
     # For compiling information, see:
     # - https://github.com/lxde/lxqt/wiki/Building-from-source
-  
+
     standardPatch = ''
       for file in $(find . -name CMakeLists.txt); do
         substituteInPlace $file \
@@ -28,6 +26,7 @@ let
 
     ### BASE
     libqtxdg = callPackage ./base/libqtxdg { };
+    lxqt-build-tools = callPackage ./base/lxqt-build-tools { };
     libsysstat = callPackage ./base/libsysstat { };
     liblxqt = callPackage ./base/liblxqt { };
 
@@ -56,13 +55,75 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./optional/qterminal { };
-    compton-conf = callPackage ./optional/compton-conf { };
+    compton-conf = pkgs.qt5.callPackage ./optional/compton-conf { };
     obconf-qt = callPackage ./optional/obconf-qt { };
     lximage-qt = callPackage ./optional/lximage-qt { };
     qps = callPackage ./optional/qps { };
     screengrab = callPackage ./optional/screengrab { };
     qlipper = callPackage ./optional/qlipper { };
 
+    preRequisitePackages = [
+      pkgs.gvfs # virtual file systems support for PCManFM-QT
+      pkgs.libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
+      pkgs.libsForQt5.libkscreen # provides plugins for screen management software
+      pkgs.libfm
+      pkgs.libfm-extra
+      pkgs.lxmenu-data
+      pkgs.menu-cache
+      pkgs.openbox # default window manager
+      pkgs.qt5.qtsvg # provides QT5 plugins for svg icons
+    ];
+
+    corePackages = [
+      ### BASE
+      libqtxdg
+      libsysstat
+      liblxqt
+
+      ### CORE 1
+      libfm-qt
+      lxqt-about
+      lxqt-admin
+      lxqt-common
+      lxqt-config
+      lxqt-globalkeys
+      lxqt-l10n
+      lxqt-notificationd
+      lxqt-openssh-askpass
+      lxqt-policykit
+      lxqt-powermanagement
+      lxqt-qtplugin
+      lxqt-session
+      lxqt-sudo
+      pavucontrol-qt
+
+      ### CORE 2
+      lxqt-panel
+      lxqt-runner
+      pcmanfm-qt
+    ];
+
+    optionalPackages = [
+      ### LXQt project
+      qterminal
+      compton-conf
+      obconf-qt
+      lximage-qt
+
+      ### QtDesktop project
+      qps
+      screengrab
+
+      ### Qlipper
+      qlipper
+
+      ### Default icon theme
+      pkgs.oxygen-icons5
+
+      ### Screen saver
+      pkgs.xscreensaver
+    ];
+
   };
 
-in self
+in makeScope libsForQt5.newScope packages

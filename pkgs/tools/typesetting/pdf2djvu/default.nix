@@ -1,15 +1,21 @@
 { stdenv, fetchurl, pkgconfig, djvulibre, poppler, fontconfig, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.4";
+  version = "0.9.5";
   name = "pdf2djvu-${version}";
 
   src = fetchurl {
-    url = "https://bitbucket.org/jwilk/pdf2djvu/downloads/${name}.tar.xz";
-    sha256 = "1a1gwr6yzbiximbpgg4rc69dq8g3jmxwcbcwqk0fhfbgzj1j4w65";
+    url = "https://github.com/jwilk/pdf2djvu/releases/download/${version}/${name}.tar.xz";
+    sha256 = "0fr8b44rsqll2m6qnh9id1lfc980k7rj3aq975mwba4y57rwnlnc";
   };
 
-  buildInputs = [ pkgconfig djvulibre poppler fontconfig libjpeg ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ djvulibre poppler fontconfig libjpeg ];
+
+  preConfigure = ''
+    sed -i 's#\$djvulibre_bin_path#${djvulibre.bin}/bin#g' configure
+  '';
 
   meta = with stdenv.lib; {
     description = "Creates djvu files from PDF files";

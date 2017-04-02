@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
-  src = fetch "libcxxabi" "06c05jlwfgm2q5xhy5wzmsi9bmfphzh22wpmbph84s452wksjdxh";
+  src = fetch "libcxxabi" "1qi9q06zanqm8awzq83810avmvi52air6gr9zfip8mbg5viqn3cj";
 
   buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://libcxxabi.llvm.org/;
     description = "A new implementation of low level support for a standard C++ library";
-    license = "BSD";
+    license = with stdenv.lib.licenses; [ ncsa mit ];
     maintainers = with stdenv.lib.maintainers; [ vlstill ];
     platforms = stdenv.lib.platforms.unix;
   };

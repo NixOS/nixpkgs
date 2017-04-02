@@ -1,8 +1,9 @@
-{ lib, fetchurl, mkPythonDerivation, python, pkgconfig, dbus, dbus_glib, dbus_tools, isPyPy
+{ lib, fetchurl, buildPythonPackage, python, pkgconfig, dbus, dbus_glib, dbus_tools, isPyPy
 , ncurses, pygobject3 }:
 
-if isPyPy then throw "dbus-python not supported for interpreter ${python.executable}" else mkPythonDerivation rec {
+if isPyPy then throw "dbus-python not supported for interpreter ${python.executable}" else buildPythonPackage rec {
   name = "dbus-python-1.2.4";
+  format = "other";
 
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus-python/${name}.tar.gz";

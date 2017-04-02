@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
 args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
-, composableDerivation, writeText, lib, config, glib, gtk2, python, perl, tcl, ruby
+, composableDerivation, writeText, lib, config, glib, gtk2, gtk3, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 
@@ -69,8 +69,8 @@ composableDerivation {
     nativeBuildInputs = [ pkgconfig ];
 
     buildInputs
-      = [ ncurses gtk2 libX11 libXext libSM libXpm libXt libXaw libXau
-          libXmu glib libICE ];
+      = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
+          libXmu glib libICE ] ++ (if args.gui == "gtk3" then [gtk3] else [gtk2]);
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
@@ -139,7 +139,7 @@ composableDerivation {
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
-    ximSupport       = config.vim.xim or false;
+    ximSupport       = config.vim.xim or true; # less than 15KB, needed for deadkeys
 
     # by default, compile with darwin support if we're compiling on darwin, but
     # allow this to be disabled by setting config.vim.darwin to false
@@ -149,7 +149,7 @@ composableDerivation {
     ftNixSupport     = config.vim.ftNix or true;
   };
 
-  #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gnome/gnome2/motif/athena/neXtaw/photon/carbon
+  #--enable-gui=OPTS     X11 GUI default=auto OPTS=auto/no/gtk/gtk2/gtk3/gnome/gnome2/motif/athena/neXtaw/photon/carbon
     /*
       // edf "gtk_check" "gtk_check" { } #If auto-select GUI, check for GTK default=yes
       // edf "gtk2_check" "gtk2_check" { } #If GTK GUI, check for GTK+ 2 default=yes
@@ -161,6 +161,10 @@ composableDerivation {
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
 
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
+
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
@@ -171,4 +175,3 @@ composableDerivation {
 
   dontStrip = 1;
 })
-

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libX11, procps, python, libdwarf, qtbase, qtwebkit }:
+{ stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit }:
 
 stdenv.mkDerivation rec {
   name = "apitrace-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # LD_PRELOAD wrappers need to be statically linked to work against all kinds
   # of games -- so it's fine to use e.g. bundled snappy.
-  buildInputs = [ libX11 procps python libdwarf qtbase qtwebkit ];
+  buildInputs = [ libX11 procps python2 libdwarf qtbase qtwebkit ];
 
   nativeBuildInputs = [ cmake ];
 

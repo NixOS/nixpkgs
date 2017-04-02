@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libstrophe-${version}";
-  version = "0.8.8";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = "libstrophe";
     rev = version;
-    sha256 = "1xzyqqf99r0jfd0g3v0zwc68sac6y25v1d4m365zpc14l02midis";
+    sha256 = "099iv13c03y1dsn2ngdhfx2cnax0aj2gfh00w55hlzpvmjm8dsml";
   };
 
   buildInputs = [ automake autoconf openssl expat libtool pkgconfig check ];
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       runs well on both Linux, Unix, and Windows based platforms.
     '';
     homepage = http://strophe.im/libstrophe/;
-    license = stdenv.lib.licenses.gpl3;
+    license = with stdenv.lib.licenses; [gpl3 mit];
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    maintainers = with stdenv.lib.maintainers; [devhell flosse];
   };
 }

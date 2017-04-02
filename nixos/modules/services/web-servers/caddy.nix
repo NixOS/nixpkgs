@@ -29,7 +29,6 @@ in
 
     agree = mkOption {
       default = false;
-      example = true;
       type = types.bool;
       description = "Agree to Let's Encrypt Subscriber Agreement";
     };
@@ -39,6 +38,13 @@ in
       type = types.path;
       description = "The data directory, for storing certificates.";
     };
+
+    package = mkOption {
+      default = pkgs.caddy;
+      defaultText = "pkgs.caddy";
+      type = types.package;
+      description = "Caddy package to use.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -47,13 +53,14 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = ''${pkgs.caddy.bin}/bin/caddy -conf=${configFile} \
+        ExecStart = ''${cfg.package.bin}/bin/caddy -conf=${configFile} \
           -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
         '';
         Type = "simple";
         User = "caddy";
         Group = "caddy";
         AmbientCapabilities = "cap_net_bind_service";
+        LimitNOFILE = 8192;
       };
     };
 

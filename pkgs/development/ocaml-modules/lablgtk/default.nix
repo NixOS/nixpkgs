@@ -8,11 +8,11 @@ assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "2.18.3";
+  version = "2.18.5";
 
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1479/lablgtk-2.18.3.tar.gz;
-    sha256 = "1bybn3jafxf4cx25zvn8h2xj9agn1xjbn7j3ywxxqx6az7rfnnwp";
+    url = https://forge.ocamlcore.org/frs/download.php/1627/lablgtk-2.18.5.tar.gz;
+    sha256 = "0cyj6sfdvzx8hw7553lhgwc0krlgvlza0ph3dk9gsxy047dm3wib";
   };
 
   buildInputs = [ocaml findlib pkgconfig gtk2 libgnomecanvas libglade gtksourceview camlp4];

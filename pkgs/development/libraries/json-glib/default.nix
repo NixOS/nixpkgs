@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
+  outputs = [ "out" "dev" ];
+
   meta = with stdenv.lib; {
     homepage = http://live.gnome.org/JsonGlib;
     description = "A library providing (de)serialization support for the JavaScript Object Notation (JSON) format";

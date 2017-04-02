@@ -10,8 +10,8 @@ let
   mimisrc = fetchFromGitHub {
     owner = "march-linux";
     repo = "mimi";
-    rev = "d85ea8256ed627e93b387cd42e4ab39bfab9504c";
-    sha256 = "1h9mb3glfvc6pa2f9g07xgmf8lrwxiyjxvl906xlysy4klybxvhg";
+    rev = "8e0070f17bcd3612ee83cb84e663e7c7fabcca3d";
+    sha256 = "15gw2nyrqmdsdin8gzxihpn77grhk9l97jp7s7pr7sl4n9ya2rpj";
   };
 in
 

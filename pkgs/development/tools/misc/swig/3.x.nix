@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ pcre ];
 
+  configureFlags = "--without-tcl";
+
   postPatch = ''
     # Disable ccache documentation as it need yodl
     sed -i '/man1/d' CCache/Makefile.in
@@ -29,6 +31,6 @@ stdenv.mkDerivation rec {
     # Different types of licenses available: http://www.swig.org/Release/LICENSE .
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ urkud wkennington ];
+    maintainers = with maintainers; [ wkennington ];
   };
 }

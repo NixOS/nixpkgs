@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with stdenv.lib.maintainers; [viric];
 
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

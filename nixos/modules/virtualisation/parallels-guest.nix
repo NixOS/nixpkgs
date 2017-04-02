@@ -57,7 +57,7 @@ in
 
     boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" "acpi_memhotplug" ];
 
-    services.ntp.enable = false;
+    services.timesyncd.enable = false;
 
     systemd.services.prltoolsd = {
       description = "Parallels Tools' service";

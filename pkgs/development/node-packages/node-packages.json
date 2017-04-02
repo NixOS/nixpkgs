@@ -22,6 +22,7 @@
 , "gulp"
 , "hipache"
 , "htmlhint"
+, "ios-deploy"
 , "istanbul"
 , "jayschema"
 , "jshint"
@@ -32,6 +33,7 @@
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lcov-result-merger"
 , "meat"
+, "mocha"
 , "nijs"
 , "node2nix"
 , "node-gyp"
@@ -55,6 +57,7 @@
 , "smartdc"
 , "stylus"
 , "svgo"
+, "tern"
 , "titanium"
 , "typescript"
 , "uglify-js"
@@ -62,4 +65,6 @@
 , "webdrvr"
 , "webpack"
 , "wring"
+, "yarn"
+, "yo"
 ]

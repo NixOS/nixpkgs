@@ -1,15 +1,17 @@
 { python3Packages, fetchurl, lib }:
 
 python3Packages.buildPythonApplication rec {
-  version = "2.1.26";
+  version = "2.2.0";
   name = "cheat-${version}";
 
   propagatedBuildInputs = with python3Packages; [ docopt pygments ];
 
   src = fetchurl {
     url = "mirror://pypi/c/cheat/${name}.tar.gz";
-    sha256 = "0yilm9ba6ll9wzh20gj3lg9mnc50q95m6sqmjp2vcghwgipdixpm";
+    sha256 = "16pg1bgyfjvzpm2rbi411ckf3gljg9v1vzd5qhp23g69ch6yr138";
   };
+  # no tests available
+  doCheck = false;
 
   meta = {
     description = "cheat allows you to create and view interactive cheatsheets on the command-line";

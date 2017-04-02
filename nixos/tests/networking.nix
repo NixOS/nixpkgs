@@ -1,4 +1,6 @@
-{ system ? builtins.currentSystem, networkd }:
+{ system ? builtins.currentSystem
+# bool: whether to use networkd in the tests
+, networkd }:
 
 with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
@@ -10,26 +12,58 @@ let
       vlanIfs = range 1 (length config.virtualisation.vlans);
     in {
       virtualisation.vlans = [ 1 2 3 ];
+      boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
       networking = {
         useDHCP = false;
         useNetworkd = networkd;
         firewall.allowPing = true;
+        firewall.checkReversePath = true;
+        firewall.allowedUDPPorts = [ 547 ];
         interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
           nameValuePair "eth${toString n}" {
             ipAddress = "192.168.${toString n}.1";
             prefixLength = 24;
+            ipv6Address = "fd00:1234:5678:${toString n}::1";
+            ipv6PrefixLength = 64;
           })));
       };
-      services.dhcpd = {
+      services.dhcpd4 = {
         enable = true;
         interfaces = map (n: "eth${toString n}") vlanIfs;
         extraConfig = ''
-          option subnet-mask 255.255.255.0;
+          authoritative;
         '' + flip concatMapStrings vlanIfs (n: ''
           subnet 192.168.${toString n}.0 netmask 255.255.255.0 {
-            option broadcast-address 192.168.${toString n}.255;
             option routers 192.168.${toString n}.1;
+            # XXX: technically it's _not guaranteed_ that IP addresses will be
+            # issued from the first item in range onwards! We assume that in
+            # our tests however.
             range 192.168.${toString n}.2 192.168.${toString n}.254;
+          }
+        '');
+      };
+      services.radvd = {
+        enable = true;
+        config = flip concatMapStrings vlanIfs (n: ''
+          interface eth${toString n} {
+            AdvSendAdvert on;
+            AdvManagedFlag on;
+            AdvOtherConfigFlag on;
+
+            prefix fd00:1234:5678:${toString n}::/64 {
+              AdvAutonomous off;
+            };
+          };
+        '');
+      };
+      services.dhcpd6 = {
+        enable = true;
+        interfaces = map (n: "eth${toString n}") vlanIfs;
+        extraConfig = ''
+          authoritative;
+        '' + flip concatMapStrings vlanIfs (n: ''
+          subnet6 fd00:1234:5678:${toString n}::/64 {
+            range6 fd00:1234:5678:${toString n}::2 fd00:1234:5678:${toString n}::2;
           }
         '');
       };
@@ -108,8 +142,14 @@ let
           useNetworkd = networkd;
           firewall.allowPing = true;
           useDHCP = true;
-          interfaces.eth1.ip4 = mkOverride 0 [ ];
-          interfaces.eth2.ip4 = mkOverride 0 [ ];
+          interfaces.eth1 = {
+            ip4 = mkOverride 0 [ ];
+            ip6 = mkOverride 0 [ ];
+          };
+          interfaces.eth2 = {
+            ip4 = mkOverride 0 [ ];
+            ip6 = mkOverride 0 [ ];
+          };
         };
       };
       testScript = { nodes, ... }:
@@ -121,21 +161,31 @@ let
 
           # Wait until we have an ip address on each interface
           $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q '192.168.1'");
+          $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'");
           $client->waitUntilSucceeds("ip addr show dev eth2 | grep -q '192.168.2'");
+          $client->waitUntilSucceeds("ip addr show dev eth2 | grep -q 'fd00:1234:5678:2:'");
 
           # Test vlan 1
           $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
           $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::2");
 
           $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
           $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::2");
 
           # Test vlan 2
           $client->waitUntilSucceeds("ping -c 1 192.168.2.1");
           $client->waitUntilSucceeds("ping -c 1 192.168.2.2");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::1");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::2");
 
           $router->waitUntilSucceeds("ping -c 1 192.168.2.1");
           $router->waitUntilSucceeds("ping -c 1 192.168.2.2");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::1");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::2");
         '';
     };
     dhcpOneIf = {
@@ -188,8 +238,8 @@ let
           firewall.allowPing = true;
           useDHCP = false;
           bonds.bond = {
-            mode = "balance-rr";
             interfaces = [ "eth1" "eth2" ];
+            driverOptions.mode = "balance-rr";
           };
           interfaces.eth1.ip4 = mkOverride 0 [ ];
           interfaces.eth2.ip4 = mkOverride 0 [ ];
@@ -342,11 +392,11 @@ let
           $client2->succeed("ip addr >&2");
 
           # Test ipv6
-          $client1->waitUntilSucceeds("ping6 -c 1 fc00::1");
-          $client1->waitUntilSucceeds("ping6 -c 1 fc00::2");
+          $client1->waitUntilSucceeds("ping -c 1 fc00::1");
+          $client1->waitUntilSucceeds("ping -c 1 fc00::2");
 
-          $client2->waitUntilSucceeds("ping6 -c 1 fc00::1");
-          $client2->waitUntilSucceeds("ping6 -c 1 fc00::2");
+          $client2->waitUntilSucceeds("ping -c 1 fc00::1");
+          $client2->waitUntilSucceeds("ping -c 1 fc00::2");
         '';
     };
     vlan = let

@@ -1,15 +1,18 @@
-{stdenv, fetchurl, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
+{stdenv, fetchFromGitHub, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
 
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ pyopenssl cheetah]);
+  pythonEnv = python2.withPackages(ps: with ps; [ cryptography cheetah yenc ]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "1.1.0";
-  name = "sabnzbd-${version}";
+  version = "1.2.1";
+  pname = "sabnzbd";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/sabnzbd/sabnzbd/archive/${version}.tar.gz";
-    sha256 = "16srhknmjx5x2zsg1m0w9bipcv9b3b96bvb27fkf4dc2aswwcsc7";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1rw6f455p0n8qigzkvnlr0d6rzkx2mpzhcp7m0j8fwqdbq831q8y";
   };
 
   buildInputs = [ pythonEnv makeWrapper ];

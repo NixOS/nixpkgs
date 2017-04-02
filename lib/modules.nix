@@ -20,7 +20,8 @@ rec {
                 , prefix ? []
                 , # This should only be used for special arguments that need to be evaluated
                   # when resolving module structure (like in imports). For everything else,
-                  # there's _module.args.
+                  # there's _module.args. If specialArgs.modulesPath is defined it will be
+                  # used as the base path for disabledModules.
                   specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
@@ -58,10 +59,7 @@ rec {
 
       closed = closeModules (modules ++ [ internalModule ]) ({ inherit config options; lib = import ./.; } // specialArgs);
 
-      # Note: the list of modules is reversed to maintain backward
-      # compatibility with the old module system.  Not sure if this is
-      # the most sensible policy.
-      options = mergeModules prefix (reverseList closed);
+      options = mergeModules prefix (reverseList (filterModules (specialArgs.modulesPath or "") closed));
 
       # Traverse options and extract the option values into the final
       # config set.  At the same time, check whether all option
@@ -87,6 +85,16 @@ rec {
       result = { inherit options config; };
     in result;
 
+
+ # Filter disabled modules. Modules can be disabled allowing
+ # their implementation to be replaced.
+ filterModules = modulesPath: modules:
+   let
+     moduleKey = m: if isString m then toString modulesPath + "/" + m else toString m;
+     disabledKeys = map moduleKey (concatMap (m: m.disabledModules) modules);
+   in
+     filter (m: !(elem m.key disabledKeys)) modules;
+
   /* Close a set of modules under the ‘imports’ relation. */
   closeModules = modules: args:
     let
@@ -106,17 +114,18 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let metaSet = if m ? meta 
+    let metaSet = if m ? meta
       then { meta = m.meta; }
       else {};
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file" "meta"]; in
+      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
         { file = m._file or file;
           key = toString m.key or key;
+          disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
           config = mkMerge [ (m.config or {}) metaSet ];
@@ -124,9 +133,10 @@ rec {
     else
       { file = m._file or file;
         key = toString m.key or key;
+        disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = mkMerge [ (removeAttrs m ["key" "_file" "require" "imports"]) metaSet ];
+        config = mkMerge [ (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]) metaSet ];
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
@@ -326,7 +336,7 @@ rec {
     # Type-check the remaining definitions, and merge them.
     mergedValue = foldl' (res: def:
       if type.check def.value then res
-      else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
+      else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.description}.")
       (type.merge loc defsFinal) defsFinal;
 
     isDefined = defsFinal != [];
@@ -585,7 +595,7 @@ rec {
        functionality
 
      This show a warning if any a.b.c or d.e.f is set, and set the value of
-     x.y.z to the result of the merge function 
+     x.y.z to the result of the merge function
   */
   mkMergedOptionModule = from: to: mergeFn:
     { config, options, ... }:
@@ -601,12 +611,12 @@ rec {
           let val = getAttrFromPath f config;
               opt = getAttrFromPath f options;
           in
-          optionalString 
+          optionalString
             (val != "_mkMergedOptionModule")
             "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
         ) from);
       } // setAttrByPath to (mkMerge
-             (optional 
+             (optional
                (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from)
                (mergeFn config)));
     };

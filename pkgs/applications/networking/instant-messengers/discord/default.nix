@@ -1,18 +1,18 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeDesktopItem
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
 , glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
 , systemd, libXScrnSaver }:
 
-let version = "0.0.11"; in
+stdenv.mkDerivation rec {
 
-stdenv.mkDerivation {
-
-    name = "discord-${version}";
+    pname = "discord";
+    version = "0.0.1";
+    name = "${pname}-${version}";
 
     src = fetchurl {
-        url = "https://cdn-canary.discordapp.com/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "1lk53vm14vr5pb8xxcx6hinpc2mkdns2xxv0bfzxvlmhfr6d6y18";
+        url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
+        sha256 = "10m3ixvhmxdw55awd84gx13m222qjykj7gcigbjabcvsgp2z63xs";
     };
 
     libPath = stdenv.lib.makeLibraryPath [
@@ -23,20 +23,33 @@ stdenv.mkDerivation {
      ];
 
     installPhase = ''
-        mkdir -p $out/bin
+        mkdir -p $out/{bin,share/pixmaps}
         mv * $out
 
         # Copying how adobe-reader does it,
         # see pkgs/applications/misc/adobe-reader/builder.sh
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                  --set-rpath "$out:$libPath"                                   \
-                 $out/DiscordCanary
+                 $out/Discord
 
-        ln -s $out/DiscordCanary $out/bin/
+        paxmark m $out/Discord
+
+        ln -s $out/Discord $out/bin/
+        ln -s $out/discord.png $out/share/pixmaps
 
         # Putting udev in the path won't work :(
         ln -s ${systemd.lib}/lib/libudev.so.1 $out
+        ln -s "${desktopItem}/share/applications" $out/share/
         '';
+
+    desktopItem = makeDesktopItem {
+      name = pname;
+      exec = "Discord";
+      icon = pname;
+      desktopName = "Discord";
+      genericName = meta.description;
+      categories = "Network;InstantMessaging;";
+    };
 
     meta = with stdenv.lib; {
         description = "All-in-one voice and text chat for gamers that’s free, secure, and works on both your desktop and phone";

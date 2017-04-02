@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bc, dtc }:
+{ stdenv, fetchurl, bc, dtc, python2 }:
 
 let
   buildUBoot = { targetPlatforms
@@ -10,16 +10,20 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2016.05";
+    version = "2017.03";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "0wdivib8kbm17qr6r7n7wyzg5vnwpagvwk5m0z80rbssc5sj5l47";
+      sha256 = "0gqihplap05dlpwdb971wsqyv01nz2vabwq5g5649gr5jczsyjzm";
     };
 
-    nativeBuildInputs = [ bc dtc ];
+    nativeBuildInputs = [ bc dtc python2 ];
 
     hardeningDisable = [ "all" ];
+
+    postPatch = ''
+      patchShebangs tools
+    '';
 
     configurePhase = ''
       make ${defconfig}
@@ -34,6 +38,7 @@ let
       runHook postInstall
     '';
 
+    enableParallelBuilding = true;
     dontStrip = true;
 
     crossAttrs = {
@@ -82,6 +87,12 @@ in rec {
     filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
   };
 
+  ubootOdroidXU3 = buildUBoot rec {
+    defconfig = "odroid-xu3_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-dtb.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot rec {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     targetPlatforms = ["armv7l-linux"];
@@ -100,9 +111,15 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  ubootRaspberryPi3 = buildUBoot rec {
+  ubootRaspberryPi3_32bit = buildUBoot rec {
     defconfig = "rpi_3_32b_defconfig";
     targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3_64bit = buildUBoot rec {
+    defconfig = "rpi_3_defconfig";
+    targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 

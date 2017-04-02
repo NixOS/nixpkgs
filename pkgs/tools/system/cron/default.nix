@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     #define _PATH_SENDMAIL "${sendmailPath}"
 
     #undef _PATH_DEFPATH
-    #define _PATH_DEFPATH "/var/setuid-wrappers:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/usr/bin:/bin"
+    #define _PATH_DEFPATH "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/usr/bin:/bin"
     __EOT__
 
     # Implicit saved uids do not work here due to way NixOS uses setuid wrappers

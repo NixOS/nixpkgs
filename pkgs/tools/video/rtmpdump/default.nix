@@ -11,13 +11,13 @@ assert opensslSupport -> openssl != null && !gnutlsSupport;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "rtmpdump-${version}";
-  version = "2015-01-15";
+  version = "2015-12-30";
 
   src = fetchgit {
     url = git://git.ffmpeg.org/rtmpdump;
     # Currently the latest commit is used (a release has not been made since 2011, i.e. '2.4')
-    rev = "a107cef9b392616dff54fabfd37f985ee2190a6f";
-    sha256 = "03x7dy111dk8b23cq2wb5h8ljcv58fzhp0xm0d1myfvzhr9amqqs";
+    rev = "fa8646daeb19dfd12c181f7d19de708d623704c0";
+    sha256 = "17m9rmnnqyyzsnnxcdl8258hjmw16nxbj1n1lr7fj3kmcs189iig";
   };
 
   makeFlags = [ ''prefix=$(out)'' ]
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib ]
     ++ optionals gnutlsSupport [ gnutls nettle ]
     ++ optional opensslSupport openssl;
+
+  outputs = [ "out" "dev" ];
 
   meta = {
     description = "Toolkit for RTMP streams";

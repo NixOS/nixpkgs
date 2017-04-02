@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, fftw, ncurses, libpulseaudio }:
+{ stdenv, fetchFromGitHub, fftw, ncurses, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  version = "2016-06-02";
+  version = "1.5";
   name = "cli-visualizer-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/dpayne/cli-visualizer.git";
-    rev = "bc0104eb57e7a0b3821510bc8f93cf5d1154fa8e";
-    sha256 = "16768gyi85mkizfn874q2q9xf32knw08z27si3k5bk99492dxwzw";
+  src = fetchFromGitHub {
+    owner = "dpayne";
+    repo = "cli-visualizer";
+    rev = version;
+    sha256 = "18qv4ya64qmczq94dnynrnzn7pwhmzbn14r05qcvbbwv7r8gclzs";
   };
 
   postPatch = ''

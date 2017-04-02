@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
+  # Tests were previously failing due to Hydra running builds as uid 0.
+  # That should hopefully be fixed now.
   doCheck = true;
 
   preCheck =

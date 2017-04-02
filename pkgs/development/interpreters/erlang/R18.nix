@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, perl, gnum4, ncurses, openssl
+{ stdenv, fetchurl, fetchpatch, fetchFromGitHub, perl, gnum4, ncurses, openssl
 , gnused, gawk, autoconf, libxslt, libxml2, makeWrapper
 , Carbon, Cocoa
 , odbcSupport ? false, unixODBC ? null
@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
      url = "https://github.com/binarin/otp/commit/9f9841eb7327c9fe73e84e197fd2965a97b639cf.patch";
      sha256 = "10h5348p6g279b4q01i5jdqlljww5chcvrx5b4b0dv79pk0p0m9f";
   };
+
+  # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+  prePatch = ''
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
+  '';
 
   patches = [
     rmAndPwdPatch

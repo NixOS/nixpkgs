@@ -36,6 +36,7 @@ stdenv.mkDerivation {
     "-DCLANG_MAIN_INCLUDE_DIR=${clang-unwrapped}/include"
     "-DPYTHON_VERSION_MAJOR=2"
     "-DPYTHON_VERSION_MINOR=7"
+    "-DLLDB_DISABLE_LIBEDIT=1" # https://llvm.org/bugs/show_bug.cgi?id=28898
   ];
 
   enableParallelBuilding = true;
@@ -43,7 +44,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A next-generation high-performance debugger";
     homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };
 }

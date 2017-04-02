@@ -3,11 +3,11 @@
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pyqt5 sip ]);
 in stdenv.mkDerivation {
-  name = "qarte-3.2.0";
+  name = "qarte-3.2.0+158";
   src = fetchbzr {
     url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-3;
-    rev = "146";
-    sha256 = "0dvl38dknmnj2p4yr25p88kw3mh502c6qdp2bd43bhd2sqc3b0v0";
+    rev = "158";
+    sha256 = "0nj9yxylz1nz0hdjm0jzrq2l3dgfdqkafwxnzydp6qv6261w564n";
   };
 
   buildInputs = [ makeWrapper pythonEnv ];

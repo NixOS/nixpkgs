@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkgconfig, python2Packages, which, procps, gdb }:
 
 stdenv.mkDerivation rec {
-  version = "4.3.0";
+  version = "4.5.0";
   name = "rr-${version}";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "0hl59g6252zi1j9zng5x5gqlmdwa4gz7mbvz8h3b7z4gnn2q5l6c";
+    sha256 = "114g1yhpjfyxcn0fkvnfi03lhrs11pj0a1945j2j8z90hx4dwba8";
   };
 
   postPatch = ''
@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ cmake libpfm zlib python2Packages.python pkgconfig python2Packages.pexpect which procps gdb ];
+  buildInputs = [
+    cmake libpfm zlib python2Packages.python pkgconfig python2Packages.pexpect which procps gdb
+  ];
   cmakeFlags = [
     "-DCMAKE_C_FLAGS_RELEASE:STRING="
     "-DCMAKE_CXX_FLAGS_RELEASE:STRING="

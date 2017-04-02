@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, stdenv, ... }:
 
 with lib;
 with utils;
@@ -115,6 +115,35 @@ let
         };
       };
     };
+
+  gatewayCoerce = address: { inherit address; };
+
+  gatewayOpts = { ... }: {
+
+    options = {
+
+      address = mkOption {
+        type = types.str;
+        description = "The default gateway address.";
+      };
+
+      interface = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "enp0s3";
+        description = "The default gateway interface.";
+      };
+
+      metric = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 42;
+        description = "The default gateway metric/preference.";
+      };
+
+    };
+
+  };
 
   interfaceOpts = { name, ... }: {
 
@@ -327,19 +356,27 @@ in
 
     networking.defaultGateway = mkOption {
       default = null;
-      example = "131.211.84.1";
-      type = types.nullOr types.str;
+      example = {
+        address = "131.211.84.1";
+        interface = "enp3s0";
+      };
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
-        The default gateway.  It can be left empty if it is auto-detected through DHCP.
+        The default gateway. It can be left empty if it is auto-detected through DHCP.
+        It can be specified as a string or an option set along with a network interface.
       '';
     };
 
     networking.defaultGateway6 = mkOption {
       default = null;
-      example = "2001:4d0:1e04:895::1";
-      type = types.nullOr types.str;
+      example = {
+        address = "2001:4d0:1e04:895::1";
+        interface = "enp3s0";
+      };
+      type = types.nullOr (types.coercedTo types.str gatewayCoerce (types.submodule gatewayOpts));
       description = ''
-        The default ipv6 gateway.  It can be left empty if it is auto-detected through DHCP.
+        The default ipv6 gateway. It can be left empty if it is auto-detected through DHCP.
+        It can be specified as a string or an option set along with a network interface.
       '';
     };
 
@@ -511,7 +548,6 @@ in
           };
 
           rstp = mkOption {
-            example = true;
             default = false;
             type = types.bool;
             description = "Whether the bridge interface should enable rstp.";
@@ -523,81 +559,102 @@ in
 
     };
 
-    networking.bonds = mkOption {
-      default = { };
-      example = literalExample {
-        bond0 = {
-          interfaces = [ "eth0" "wlan0" ];
-          miimon = 100;
+    networking.bonds =
+      let
+        driverOptionsExample = {
+          miimon = "100";
           mode = "active-backup";
         };
-        fatpipe.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
-      };
-      description = ''
-        This option allows you to define bond devices that aggregate multiple,
-        underlying networking interfaces together. The value of this option is
-        an attribute set. Each attribute specifies a bond, with the attribute
-        name specifying the name of the bond's network interface
-      '';
-
-      type = with types; attrsOf (submodule {
-
-        options = {
-
-          interfaces = mkOption {
-            example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
-            type = types.listOf types.str;
-            description = "The interfaces to bond together";
+      in mkOption {
+        default = { };
+        example = literalExample {
+          bond0 = {
+            interfaces = [ "eth0" "wlan0" ];
+            driverOptions = driverOptionsExample;
           };
-
-          lacp_rate = mkOption {
-            default = null;
-            example = "fast";
-            type = types.nullOr types.str;
-            description = ''
-              Option specifying the rate in which we'll ask our link partner
-              to transmit LACPDU packets in 802.3ad mode.
-            '';
-          };
-
-          miimon = mkOption {
-            default = null;
-            example = 100;
-            type = types.nullOr types.int;
-            description = ''
-              Miimon is the number of millisecond in between each round of polling
-              by the device driver for failed links. By default polling is not
-              enabled and the driver is trusted to properly detect and handle
-              failure scenarios.
-            '';
-          };
-
-          mode = mkOption {
-            default = null;
-            example = "active-backup";
-            type = types.nullOr types.str;
-            description = ''
-              The mode which the bond will be running. The default mode for
-              the bonding driver is balance-rr, optimizing for throughput.
-              More information about valid modes can be found at
-              https://www.kernel.org/doc/Documentation/networking/bonding.txt
-            '';
-          };
-
-          xmit_hash_policy = mkOption {
-            default = null;
-            example = "layer2+3";
-            type = types.nullOr types.str;
-            description = ''
-              Selects the transmit hash policy to use for slave selection in
-              balance-xor, 802.3ad, and tlb modes.
-            '';
-          };
-
+          anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
         };
+        description = ''
+          This option allows you to define bond devices that aggregate multiple,
+          underlying networking interfaces together. The value of this option is
+          an attribute set. Each attribute specifies a bond, with the attribute
+          name specifying the name of the bond's network interface
+        '';
 
-      });
-    };
+        type = with types; attrsOf (submodule {
+
+          options = {
+
+            interfaces = mkOption {
+              example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
+              type = types.listOf types.str;
+              description = "The interfaces to bond together";
+            };
+
+            driverOptions = mkOption {
+              type = types.attrsOf types.str;
+              default = {};
+              example = literalExample driverOptionsExample;
+              description = ''
+                Options for the bonding driver.
+                Documentation can be found in
+                <link xlink:href="https://www.kernel.org/doc/Documentation/networking/bonding.txt" />
+              '';
+
+            };
+
+            lacp_rate = mkOption {
+              default = null;
+              example = "fast";
+              type = types.nullOr types.str;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                Option specifying the rate in which we'll ask our link partner
+                to transmit LACPDU packets in 802.3ad mode.
+              '';
+            };
+
+            miimon = mkOption {
+              default = null;
+              example = 100;
+              type = types.nullOr types.int;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                Miimon is the number of millisecond in between each round of polling
+                by the device driver for failed links. By default polling is not
+                enabled and the driver is trusted to properly detect and handle
+                failure scenarios.
+              '';
+            };
+
+            mode = mkOption {
+              default = null;
+              example = "active-backup";
+              type = types.nullOr types.str;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                The mode which the bond will be running. The default mode for
+                the bonding driver is balance-rr, optimizing for throughput.
+                More information about valid modes can be found at
+                https://www.kernel.org/doc/Documentation/networking/bonding.txt
+              '';
+            };
+
+            xmit_hash_policy = mkOption {
+              default = null;
+              example = "layer2+3";
+              type = types.nullOr types.str;
+              description = ''
+                DEPRECATED, use `driverOptions`.
+                Selects the transmit hash policy to use for slave selection in
+                balance-xor, 802.3ad, and tlb modes.
+              '';
+            };
+
+          };
+
+        });
+      };
 
     networking.macvlans = mkOption {
       default = { };
@@ -896,7 +953,16 @@ in
         (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true))
       ));
 
-    security.setuidPrograms = [ "ping" "ping6" ];
+    # Capabilities won't work unless we have at-least a 4.3 Linux
+    # kernel because we need the ambient capability
+    security.wrappers = if (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") then {
+      ping = {
+        source  = "${pkgs.iputils.out}/bin/ping";
+        capabilities = "cap_net_raw+p";
+      };
+    } else {
+      ping.source = "${pkgs.iputils.out}/bin/ping";
+    };
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
@@ -910,20 +976,23 @@ in
         domainname "${cfg.domain}"
       '';
 
-    environment.etc = mkIf (cfg.hostId != null)
-      [
-        {
-          target = "hostid";
-          source = pkgs.runCommand "gen-hostid" {} ''
-            hi="${cfg.hostId}"
-            ${if pkgs.stdenv.isBigEndian then ''
-              echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
-            '' else ''
-              echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
-            ''}
-          '';
-        }
-      ];
+    environment.etc."hostid" = mkIf (cfg.hostId != null)
+      { source = pkgs.runCommand "gen-hostid" {} ''
+          hi="${cfg.hostId}"
+          ${if pkgs.stdenv.isBigEndian then ''
+            echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
+          '' else ''
+            echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
+          ''}
+        '';
+      };
+
+    # static hostname configuration needed for hostnamectl and the
+    # org.freedesktop.hostname1 dbus service (both provided by systemd)
+    environment.etc."hostname" = mkIf (cfg.hostName != "")
+      {
+        text = cfg.hostName + "\n";
+      };
 
     environment.systemPackages =
       [ pkgs.host

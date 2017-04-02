@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl
+{ stdenv, fetchurl, libressl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ libressl ];
 
   installFlags = [
     "sysconfdir=\${out}/etc"

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export cmakeFlags="-DPREFIX=$out"
+    export cmakeFlags="-DPREFIX=$out -DCFGDIR=/etc/icewm"
   '';
 
   meta = {

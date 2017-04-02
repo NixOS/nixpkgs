@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/synthWrapper
-    sed -i "s@../PureData/OscSendVoc.pd@$out/PureData/OscSendVoc.pd@g" launchers/synthWrapper
+    sed -i "s@../PureData/OscSendVoc.pd@$out/PureData/OscSendVoc.pd@g" launchers/pitchTracker
   '';
 
   buildPhase = ''

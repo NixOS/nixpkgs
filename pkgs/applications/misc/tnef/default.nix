@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, lib, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.12";
+  version = "1.4.14";
   name = "tnef-${version}";
 
   src = fetchFromGitHub {
     owner = "verdammelt";
     repo = "tnef";
     rev = "${version}";
-    sha256 = "02hwdaaa3yk0lbzb40fgxlkyhc1wicl6ncajpvfcz888z6yxps2c";
+    sha256 = "0p7yji5hqq7k4pcba1cnv4jkl0fkg7jd77c1q164wk0vwinpmsc2";
   };
 
   doCheck = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/verdammelt/tnef;
     license = licenses.gpl2;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

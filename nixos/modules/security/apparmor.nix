@@ -18,22 +18,30 @@ in
          default = [];
          description = "List of files containing AppArmor profiles.";
        };
+       packages = mkOption {
+         type = types.listOf types.package;
+         default = [];
+         description = "List of packages to be added to apparmor's include path";
+       };
      };
    };
 
    config = mkIf cfg.enable {
      environment.systemPackages = [ pkgs.apparmor-utils ];
 
-     systemd.services.apparmor = {
+     systemd.services.apparmor = let
+       paths = concatMapStrings (s: " -I ${s}/etc/apparmor.d")
+         ([ pkgs.apparmor-profiles ] ++ cfg.packages);
+     in {
        wantedBy = [ "local-fs.target" ];
        serviceConfig = {
          Type = "oneshot";
          RemainAfterExit = "yes";
-         ExecStart = concatMapStrings (p:
-           ''${pkgs.apparmor-parser}/bin/apparmor_parser -rKv -I ${pkgs.apparmor-profiles}/etc/apparmor.d "${p}" ; ''
+         ExecStart = map (p:
+           ''${pkgs.apparmor-parser}/bin/apparmor_parser -rKv ${paths} "${p}"''
          ) cfg.profiles;
-         ExecStop = concatMapStrings (p:
-           ''${pkgs.apparmor-parser}/bin/apparmor_parser -Rv "${p}" ; ''
+         ExecStop = map (p:
+           ''${pkgs.apparmor-parser}/bin/apparmor_parser -Rv "${p}"''
          ) cfg.profiles;
        };
      };

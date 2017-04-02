@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash }:
+{ stdenv, fetchurl, bash, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name    = "capstone-${version}";
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   configurePhase = '' patchShebangs make.sh '';
   buildPhase = '' ./make.sh '';
   installPhase = '' env PREFIX=$out ./make.sh install '';
+  
+  nativeBuildInputs = [
+    pkgconfig
+  ];
 
   enableParallelBuilding = true;
 

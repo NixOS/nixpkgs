@@ -1,20 +1,32 @@
-{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium
+{ lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
+, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 let
 
-  common = { name, src }: stdenv.mkDerivation rec {
+  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src;
+    version = lib.getVersion name;
+
+    VERSION_SUFFIX = lib.optionalString fromGit suffix;
 
     outputs = [ "out" "dev" "man" "doc" ];
 
-    nativeBuildInputs = [ perl pkgconfig ];
+    nativeBuildInputs =
+      [ perl pkgconfig ]
+      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
     buildInputs = [ curl openssl sqlite xz ]
-      ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
+      ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
+      ++ lib.optional fromGit brotli # Since 1.12
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
+          (aws-sdk-cpp.override {
+            apis = ["s3"];
+            customMemoryManagement = false;
+          });
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -28,14 +40,17 @@ let
       '';
 
     configureFlags =
-      ''
-        --with-store-dir=${storeDir} --localstatedir=${stateDir} --sysconfdir=/etc
-        --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
-        --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
-        --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
-        --disable-init-state
-        --enable-gc
-      '';
+      [ "--with-store-dir=${storeDir}"
+        "--localstatedir=${stateDir}"
+        "--sysconfdir=/etc"
+        "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
+        "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
+        "--disable-init-state"
+        "--enable-gc"
+      ]
+      ++ lib.optional (!lib.versionAtLeast version "1.12pre") [
+        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+      ];
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -89,19 +104,23 @@ in rec {
   nix = nixStable;
 
   nixStable = common rec {
-    name = "nix-1.11.4";
+    name = "nix-1.11.8";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "937779ed2efaa3dec210250635401980acb99a6fea6d7374fbaea78231b36d34";
+      sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
     };
   };
 
   nixUnstable = lib.lowPrio (common rec {
-    name = "nix-1.12pre4523_3b81b26";
-    src = fetchurl {
-      url = "http://hydra.nixos.org/build/33598573/download/4/${name}.tar.xz";
-      sha256 = "0469zv09m85824w4vqj2ag0nciq51xvrvsys7bd5v4nrxihk9991";
+    name = "nix-1.12${suffix}";
+    suffix = "pre5122_c60715e";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "c60715e937e3773bbb8a114fc9b9c6577f8c5cb5";
+      sha256 = "0hkc4g7i3z06y3rsdxqzdnx5rz77jb8ij1j13bdskbvpp7vfm60p";
     };
+    fromGit = true;
   });
 
 }

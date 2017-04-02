@@ -29,7 +29,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 gnome-terminal &'");
       $machine->succeed("xauth merge ~alice/.Xauthority");
       $machine->waitForWindow(qr/Terminal/);
-      $machine->mustSucceed("timeout 900 bash -c 'journalctl -f|grep -m 1 \"GNOME Shell started\"'");
+      $machine->succeed("timeout 900 bash -c 'while read msg; do if [[ \$msg =~ \"GNOME Shell started\" ]]; then break; fi; done < <(journalctl -f)'");
       $machine->sleep(10);
       $machine->screenshot("screen");
     '';

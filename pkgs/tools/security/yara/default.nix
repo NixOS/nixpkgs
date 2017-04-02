@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoconf, automake, libtool, pcre
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pcre
 , withCrypto ? true, openssl
 , enableMagic ? true, file
 , enableCuckoo ? true, jansson
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.4.0";
+  version = "3.5.0";
   name = "yara-${version}";
 
   src = fetchFromGitHub {
-    owner = "plusvic";
+    owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "1rv1xixbjqx1vkcij8r01rq08ncqgy6nn98xvkrpixwvi4fy956s";
+    sha256 = "18hn6acfj0cha9cv70f6hyaqf8qbgj0c0dm9db4v2q8z7cgi1681";
   };
 
   # FIXME: this is probably not the right way to make it work
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     EOF
   '';
   patches = [
-    (fetchurl {
-      url = "https://github.com/plusvic/yara/pull/261.diff";
-      sha256 = "1fkxnk84ryvrjq7p225xvw9pn5gm2bjia2jz38fclwbsaxdi6p3b";
-    })
     "staticlibrary.patch"
   ];
 

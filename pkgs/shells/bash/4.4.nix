@@ -12,11 +12,21 @@ let
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
   sha256 = "1jyz6snd63xjn6skk7za6psgidsd53k05cr3lksqybi0q6936syq";
 
+  upstreamPatches =
+    let
+      patch = nr: sha256:
+        fetchurl {
+          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
+          inherit sha256;
+        };
+    in
+      import ./bash-4.4-patches.nix patch;
+
   inherit (stdenv.lib) optional optionalString;
 in
 
 stdenv.mkDerivation rec {
-  name = "${realName}-p${toString (builtins.length patches)}";
+  name = "${realName}-p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
@@ -41,20 +51,12 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches =
-    (let
-      patch = nr: sha256:
-        fetchurl {
-          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
-          inherit sha256;
-        };
-    in
-      import ./bash-4.4-patches.nix patch)
+  patches = upstreamPatches
       ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
-      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing" +
+      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing bash_cv_getcwd_malloc=yes" +
       optionalString stdenv.isCygwin ''
         --without-libintl-prefix --without-libiconv-prefix
         --with-installed-readline

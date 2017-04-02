@@ -39,7 +39,8 @@ mkdir -p $out
 for PREP in $prepend; do
   cat $PREP >> $out/initrd
 done
-(cd root && find * -print0 | cpio -o -H newc -R 0:0 --null | perl $cpioClean | $compressor >> $out/initrd)
+(cd root && find * -print0 | xargs -0r touch -h -d '@1')
+(cd root && find * -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | $compressor >> $out/initrd)
 
 if [ -n "$makeUInitrd" ]; then
     mv $out/initrd $out/initrd.gz

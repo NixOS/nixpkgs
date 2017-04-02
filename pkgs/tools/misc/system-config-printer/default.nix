@@ -16,8 +16,6 @@ in stdenv.mkDerivation rec {
     sha256 = "1vxczk22f58nbikvj47s2x1gzh6q4mbgwnf091p00h3b6nxppdgn";
   };
 
-  propagatedBuildInputs = [ pythonPackages.pycurl ];
-
   patches = [ ./detect_serverbindir.patch ];
 
   buildInputs =
@@ -27,13 +25,15 @@ in stdenv.mkDerivation rec {
     ];
 
   pythonPath = with pythonPackages;
-    [ pycups pycurl dbus-python pygobject3 requests2 ];
+    [ pycups pycurl dbus-python pygobject3 requests2 pycairo pythonPackages.pycurl ];
 
   configureFlags =
     [ "--with-udev-rules"
       "--with-udevdir=$(out)/etc/udev"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ];
+
+  stripDebugList = "bin lib etc/udev";
 
   postInstall =
     let
@@ -44,6 +44,7 @@ in stdenv.mkDerivation rec {
           --set GI_TYPELIB_PATH ${giTypelibPath} \
           --set CUPS_DATADIR ${cups-filters}/share/cups"
       wrapPythonPrograms
+
       # The program imports itself, so we need to move shell wrappers to a proper place.
       fixupWrapper() {
         mv "$out/share/system-config-printer/$2.py" \

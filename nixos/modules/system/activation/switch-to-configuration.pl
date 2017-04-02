@@ -41,7 +41,7 @@ if ($action eq "switch" || $action eq "boot") {
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
-system("@coreutils@/bin/sync") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
+system("@coreutils@/bin/sync", "-f", "/nix/store") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
 
 exit 0 if $action eq "boot";
 
@@ -382,6 +382,10 @@ system("@systemd@/bin/systemctl", "reset-failed");
 
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
+
+# Set the new tmpfiles
+print STDERR "setting up tmpfiles\n";
+system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
 
 # Reload units that need it. This includes remounting changed mount
 # units.

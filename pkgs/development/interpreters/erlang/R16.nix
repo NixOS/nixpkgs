@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
       ++ optional odbcSupport unixODBC
       ++ optionals stdenv.isDarwin [ Carbon Cocoa ];
 
+  # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+  prePatch = ''
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
+  '';
+
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
   preConfigure = ''

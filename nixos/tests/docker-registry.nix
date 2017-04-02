@@ -16,13 +16,11 @@ import ./make-test.nix ({ pkgs, ...} : {
 
     client1 = { config, pkgs, ...}: {
       virtualisation.docker.enable = true;
-      virtualisation.docker.socketActivation = false;
       virtualisation.docker.extraOptions = "--insecure-registry registry:8080";
     };
 
     client2 = { config, pkgs, ...}: {
       virtualisation.docker.enable = true;
-      virtualisation.docker.socketActivation = false;
       virtualisation.docker.extraOptions = "--insecure-registry registry:8080";
     };
   };

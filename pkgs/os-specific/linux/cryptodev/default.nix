@@ -19,5 +19,7 @@ stdenv.mkDerivation rec {
     description = "Device that allows access to Linux kernel cryptographic drivers";
     homepage = http://home.gna.org/cryptodev-linux/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
+    broken = !stdenv.lib.versionOlder kernel.version "4.9";
   };
 }

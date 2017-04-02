@@ -1,8 +1,16 @@
-{ stdenv, fetchurl, fixDarwinDylibNames }:
+{ stdenv, fetchurl, fetchpatch, fixDarwinDylibNames }:
 
 let
   pname = "icu4c";
-  version = "57.1";
+  version = "58.2";
+
+  # this patch should no longer be needed in 58.3
+  # https://bugs.gentoo.org/show_bug.cgi?id=599142#c14
+  keywordFix = fetchurl {
+    url = "http://bugs.icu-project.org/trac/changeset/39484?format=diff";
+    name = "icu-changeset-39484.diff";
+    sha256 = "0hxhpgydalyxacaaxlmaddc1sjwh65rsnpmg0j414mnblq74vmm8";
+  };
 in
 stdenv.mkDerivation ({
   name = pname + "-" + version;
@@ -10,7 +18,7 @@ stdenv.mkDerivation ({
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "10cmkqigxh9f73y7q3p991q6j8pph0mrydgj11w1x6wlcp5ng37z";
+    sha256 = "036shcb3f8bm1lynhlsb4kpjm9s9c2vdiir01vg216rs2l8482ib";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,6 +32,19 @@ stdenv.mkDerivation ({
     sourceRoot=''${sourceRoot}/source
     echo Source root reset to ''${sourceRoot}
   '';
+
+  # This pre/postPatch shenanigans is to handle that the patches expect
+  # to be outside of `source`.
+  prePatch = ''
+    pushd ..
+  '';
+  postPatch = ''
+    popd
+    patch -p4 < ${keywordFix}
+  '';
+
+  patches = [
+  ];
 
   preConfigure = ''
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
@@ -44,7 +65,7 @@ stdenv.mkDerivation ({
   meta = with stdenv.lib; {
     description = "Unicode and globalization support library";
     homepage = http://site.icu-project.org/;
-    maintainers = with maintainers; [ raskin urkud ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
   };
 } // (if stdenv.isArm then {

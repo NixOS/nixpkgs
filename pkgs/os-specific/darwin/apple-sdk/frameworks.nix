@@ -52,6 +52,7 @@ with frameworks; with libs; {
   GSS                     = [];
   GameController          = [];
   GameKit                 = [ Foundation ];
+  Hypervisor              = [];
   ICADevices              = [ Carbon CF IOBluetooth ];
   IMServicePlugIn         = [];
   IOBluetoothUI           = [ IOBluetooth ];
@@ -104,6 +105,7 @@ with frameworks; with libs; {
   VideoDecodeAcceleration = [ CF CoreVideo ];
   VideoToolbox            = [ CF CoreMedia CoreVideo ];
   WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL ];
+  X11                     = []; # used by Tk, should this exist?
 
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
@@ -116,4 +118,6 @@ with frameworks; with libs; {
   OpenDirectory       = [];
   Quartz              = [ QuickLook QTKit ];
   QuartzCore          = [ ApplicationServices CF CoreVideo OpenCL ];
+
+  vmnet = [];
 }

@@ -1,25 +1,13 @@
 { callPackage, fetchurl, coq }:
 
-if coq.coq-version == "8.4" then
+let param =
+  {
+    version = "1.6.1";
+    url = https://github.com/math-comp/math-comp/archive/mathcomp-1.6.1.tar.gz;
+    sha256 = "1j9ylggjzrxz1i2hdl2yhsvmvy5z6l4rprwx7604401080p5sgjw";
+  }; in
 
 callPackage ./generic.nix {
-
-  src = fetchurl {
-    url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.6.tar.gz;
-    sha256 = "0adr556032r1jkvphbpfvrrv041qk0yqb7a1xnbam52ji0mdl2w8";
-  };
-
+  name = "coq${coq.coq-version}-ssreflect-${param.version}";
+  src = fetchurl { inherit (param) url sha256; };
 }
-
-else if coq.coq-version == "8.5" then
-
-callPackage ./generic.nix {
-
-  src = fetchurl {
-    url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.6.tar.gz;
-    sha256 = "0adr556032r1jkvphbpfvrrv041qk0yqb7a1xnbam52ji0mdl2w8";
-  };
-
-}
-
-else throw "No ssreflect package for Coq version ${coq.coq-version}"

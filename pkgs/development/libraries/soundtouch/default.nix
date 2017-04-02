@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake libtool ];
 
-  preConfigurePhases = "./bootstrap";
+  preConfigure = "./bootstrap";
 
   meta = {
       description = "A program and library for changing the tempo, pitch and playback rate of audio";

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, xulrunner }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.18";
+  version = "2.0.21";
   name = "pencil-${version}";
 
   src = fetchurl {
     url = "https://github.com/prikhi/pencil/releases/download/v${version}/Pencil-${version}-linux-pkg.tar.gz";
-    sha256 = "0x0kibb2na12fwl0x68xhkjpbm5h2widm346cx2r29gp1kq9kklc";
+    sha256 = "0xq3gczqy7gzf1997qxdql5z7qqk1vabr0rzgakmsi4dq2q4d3kq";
   };
 
   buildPhase = "";
@@ -32,8 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2; # Commercial license is also available
     maintainers = with maintainers; [ bjornfor prikhi ];
     platforms = platforms.linux;
-    # See https://github.com/prikhi/pencil/issues/840
-    # ("Error: Platform version '47.0' is not compatible with minVersion >= 36.0 maxVersion <= 46.*")
-    broken = true;
   };
 }

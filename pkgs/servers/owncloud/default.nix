@@ -43,28 +43,28 @@ in {
   };
 
   owncloud80 = common {
-    versiona = "8.0.15";
-    sha256 = "18042jkp4p3b6xh394zm80126975g94r4ka8gzwhyvgfwpgxrx84";
+    versiona = "8.0.16";
+    sha256 = "1pgfawrmx6n02h7h6g5wk0sa1kgablqa8ljfiywyw8znxxa5lnrm";
   };
 
   owncloud81 = common {
-    versiona = "8.1.10";
-    sha256 = "1vspsd3l86mrhhddmyafwdr961f4dy6ln2j4dds2h45wf6296c63";
+    versiona = "8.1.11";
+    sha256 = "04izfzj3ckcs0x882kkggp6y7zcrhdihm71wkd9vk6j5fn8k9am0";
   };
 
   owncloud82 = common {
-    versiona = "8.2.8";
-    sha256 = "0k10b3gfpfk3imxhkra0vn6a004xmcma09lw6pgxnalpmpbm8jiy";
+    versiona = "8.2.9";
+    sha256 = "09gzpxd9gjg8h57m8j0r6xnr85fdb951ykwmjby811c6730769pw";
   };
 
   owncloud90 = common {
-    versiona = "9.0.5";
-    sha256 = "1igpjc4rfaxqrkf2dln85wvdii54nrmwlh17fq3g0232l3vw9hn8";
+    versiona = "9.0.7";
+    sha256 = "1j6xrd4dhc0v0maa3z8n392nfc9hrnvbxxyqr8g8kz88w9vbqa6h";
   };
 
   owncloud91 = common {
-    versiona = "9.1.1";
-    sha256 = "1fd73ggzj2v43j284is2c6936gwkmz1inr5fm88rmq5pxcqkbgx6";
+    versiona = "9.1.3";
+    sha256 = "1sgnsj2ng14lh05n5kc3jv03xk6xnkyx7xj1rasxlqgvzwsyp8g0";
   };
 
 }

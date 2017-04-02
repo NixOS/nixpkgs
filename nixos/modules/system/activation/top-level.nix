@@ -45,10 +45,15 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
+        ${optionalString (pkgs.stdenv.platform.kernelDTB or false) ''
+          ln -s ${config.boot.kernelPackages.kernel}/dtbs $out/dtbs
+        ''}
 
         echo -n "$kernelParams" > $out/kernel-params
 
         ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
+
+        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
 
         ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}

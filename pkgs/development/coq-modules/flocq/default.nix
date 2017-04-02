@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  name = "coq-flocq-${coq.coq-version}-${version}";
-  version = "2.5.1";
+  name = "coq${coq.coq-version}-flocq-${version}";
+  version = "2.5.2";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/35430/flocq-2.5.1.tar.gz;
-    sha256 = "1a0gznvg32ckxgs3jzznc1368p8x2ny4vfwrnavb3h0ljcl1mlzy";
+    url = https://gforge.inria.fr/frs/download.php/file/36199/flocq-2.5.2.tar.gz;
+    sha256 = "0h5mlasirfzc0wwn2isg4kahk384n73145akkpinrxq5jsn5d22h";
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 bash which autoconf automake ];

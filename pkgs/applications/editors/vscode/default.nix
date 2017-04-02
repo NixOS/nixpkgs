@@ -2,22 +2,26 @@
   makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.6.1";
-  rev = "9e4e44c19e393803e2b05fe2323cf4ed7e36880e";
+  version = "1.10.2";
+  rev = "8076a19fdcab7e1fc1707952d652f0bb6c6db331";
+  channel = "stable";
 
-  sha256 = if stdenv.system == "i686-linux"    then "1aks84siflpjbd2s9y1f0vvvf3nas4f50cimjf25lijxzjxrlivy"
-      else if stdenv.system == "x86_64-linux"  then "05kbi081ih64fadj4k74grkk9ca3wga6ybwgs5ld0bal4ilw1q6i"
-      else if stdenv.system == "x86_64-darwin" then "00p2m8b0l3pkf5k74szw6kcql3j1fjnv3rwnhy24wfkg4b4ah2x9"
+  # The revision can be obtained with the following command (see https://github.com/NixOS/nixpkgs/issues/22465):
+  # curl -w "%{url_effective}\n" -I -L -s -S https://vscode-update.azurewebsites.net/latest/linux-x64/stable -o /dev/null
+
+  sha256 = if stdenv.system == "i686-linux"    then "1rhwrpv17c8j06qja7i58cggzka8jm9v9h27jy22z30yxjz0p241"
+      else if stdenv.system == "x86_64-linux"  then "1c1w7wc39a5vdap8j143ym976p9l9iwns1y28mcgjwrihdlb5wb8"
+      else if stdenv.system == "x86_64-darwin" then "1zznsn84k79lqirzv950q7caq7c88yh2gglwjc11y8k69awmlpva"
       else throw "Unsupported system: ${stdenv.system}";
 
-  urlBase = "https://az764295.vo.msecnd.net/stable/${rev}/";
+  urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
 
   urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-stable-code_${version}-1476372351_i386.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1488982317_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-stable-code_${version}-1476373175_amd64.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1488981323_amd64.tar.gz"
       else if stdenv.system == "x86_64-darwin" then
-        urlBase + "VSCode-darwin-stable.zip"
+        urlBase + "VSCode-darwin-${channel}.zip"
       else throw "Unsupported system: ${stdenv.system}";
 in
   stdenv.mkDerivation rec {
@@ -33,10 +37,7 @@ in
       name = "code";
       exec = "code";
       icon = "code";
-      comment = ''
-        Code editor redefined and optimized for building and debugging modern
-        web and cloud applications
-      '';
+      comment = "Code editor redefined and optimized for building and debugging modern web and cloud applications";
       desktopName = "Visual Studio Code";
       genericName = "Text Editor";
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
@@ -46,26 +47,28 @@ in
       then [ unzip makeWrapper libXScrnSaver ]
       else [ makeWrapper libXScrnSaver ];
 
-    installPhase = ''
-      mkdir -p $out/lib/vscode $out/bin
-      cp -r ./* $out/lib/vscode
-      ln -s $out/lib/vscode/code $out/bin
+    installPhase =
+      if stdenv.system == "x86_64-darwin" then ''
+        mkdir -p $out/lib/vscode $out/bin
+        cp -r ./* $out/lib/vscode
+        ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
+      '' else ''
+        mkdir -p $out/lib/vscode $out/bin
+        cp -r ./* $out/lib/vscode
+        ln -s $out/lib/vscode/bin/code $out/bin
 
-      mkdir -p $out/share/applications
-      cp $desktopItem/share/applications/* $out/share/applications
+        mkdir -p $out/share/applications
+        cp $desktopItem/share/applications/* $out/share/applications
 
-      mkdir -p $out/share/pixmaps
-      cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
-    '';
+        mkdir -p $out/share/pixmaps
+        cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
+      '';
 
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/vscode" \
+        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1:$out/lib/vscode" \
         $out/lib/vscode/code
-
-      wrapProgram $out/bin/code \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
     meta = with stdenv.lib; {

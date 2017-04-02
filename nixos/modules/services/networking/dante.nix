@@ -22,7 +22,7 @@ in
 
       config = mkOption {
         default     = null;
-        type        = types.str;
+        type        = types.nullOr types.str;
         description = ''
           Contents of Dante's configuration file
           NOTE: user.privileged/user.unprivileged are set by the service

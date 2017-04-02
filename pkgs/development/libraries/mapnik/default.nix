@@ -1,6 +1,6 @@
 { stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
-, libwebp, libxml2, proj, python, scons, sqlite, zlib
+, libwebp, libxml2, proj, python2, scons, sqlite, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ python scons ];
+  nativeBuildInputs = [ python2 scons ];
 
   buildInputs =
     [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
-      libwebp libxml2 proj python sqlite zlib
+      libwebp libxml2 proj python2 sqlite zlib
     ];
 
   configurePhase = ''

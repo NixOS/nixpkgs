@@ -9,21 +9,14 @@
 
 assert glSupport -> mesa_noglu != null;
 
-with { inherit (stdenv.lib) optional optionals; };
+let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.6";
+  name = "cairo-1.14.8";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "0lmjlzmghmr27y615px9hkm552x7ap6pmq9mfbzr6smp8y2b6g31";
-  };
-
-  infinality = fetchFromGitHub {
-    owner = "bohoomil";
-    repo = "fontconfig-ultimate";
-    rev = "730f5e77580677e86522c1f2119aa78803741759";
-    sha256 = "1hbrdpm6xcczs2c2iid7by8h7dsd0jcf7an88s150njyqnjzxjg7";
+    sha1 = "c6f7b99986f93c9df78653c3e6a3b5043f65145e";
   };
 
   patches = [
@@ -35,10 +28,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  prePatch = ''
-    patches="$patches $(echo $infinality/*_cairo-iu/*.patch)"
-  '';
-
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
 
@@ -47,6 +36,7 @@ stdenv.mkDerivation rec {
     libiconv
   ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
+    CoreText
     ApplicationServices
     Carbon
   ]);

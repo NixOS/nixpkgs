@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, lzo, bzip2, nasm, perl}:
 
 stdenv.mkDerivation rec {
-  version = "0.630";
+  version = "0.631";
   name = "lrzip-${version}";
 
   src = fetchurl {
     url = "http://ck.kolivas.org/apps/lrzip/${name}.tar.bz2";
-    sha256 = "01ykxliqw4cavx9f2gawxfa9wf52cjy1qx28cnkrh6i3lfzzcq94";
+    sha256 = "0mb449vmmwpkalq732jdyginvql57nxyd31sszb108yps1lf448d";
   };
 
   buildInputs = [ zlib lzo bzip2 nasm perl ];

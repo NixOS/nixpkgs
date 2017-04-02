@@ -11,6 +11,9 @@ let
     ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
     ${cfg.extraConfig}
   '';
+
+  pidFile = "/run/openntpd.pid";
+
 in
 {
   ###### interface
@@ -49,7 +52,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.ntp.enable = mkForce false;
+    services.timesyncd.enable = mkForce false;
 
     # Add ntpctl to the environment for status checking
     environment.systemPackages = [ package ];
@@ -67,7 +70,11 @@ in
       wants = [ "network-online.target" "time-sync.target" ];
       before = [ "time-sync.target" ];
       after = [ "dnsmasq.service" "bind.service" "network-online.target" ];
-      serviceConfig.ExecStart = "${package}/sbin/ntpd -d -f ${cfgFile} ${cfg.extraOptions}";
+      serviceConfig = {
+        ExecStart = "${package}/sbin/ntpd -f ${cfgFile} -p ${pidFile} ${cfg.extraOptions}";
+        Type = "forking";
+        PIDFile = pidFile;
+      };
     };
   };
 }

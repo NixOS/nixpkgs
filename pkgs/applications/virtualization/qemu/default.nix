@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
-, ncurses, perl, pixman, vde2, alsaLib, texinfo, libuuid, flex
+{ stdenv, fetchurl, fetchpatch, python2, zlib, pkgconfig, glib
+, ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
@@ -9,29 +9,36 @@
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol, usbredir
+, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol
+, usbredirSupport ? spiceSupport, usbredir
+, xenSupport ? false, xen
 , x86Only ? false
+, nixosTestRunner ? false
 }:
 
 with stdenv.lib;
 let
-  version = "2.7.0";
+  version = "2.8.0";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 in
 
 stdenv.mkDerivation rec {
-  name = "qemu-" + stdenv.lib.optionalString x86Only "x86-only-" + version;
+  name = "qemu-"
+    + stdenv.lib.optionalString xenSupport "xen-"
+    + stdenv.lib.optionalString x86Only "x86-only-"
+    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
+    + version;
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "0lqyz01z90nvxpc3nx4djbci7hx62cwvs5zwd6phssds0sap6vij";
+    sha256 = "0qjy3rcrn89n42y5iz60kgr0rrl29hpnj8mq2yvbc1wrcizmvzfs";
   };
 
   buildInputs =
-    [ python zlib pkgconfig glib ncurses perl pixman
-      vde2 texinfo libuuid flex bison makeWrapper lzo snappy
+    [ python2 zlib pkgconfig glib ncurses perl pixman
+      vde2 texinfo flex bison makeWrapper lzo snappy
       gnutls nettle curl
     ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa rez setfile ]
@@ -40,100 +47,102 @@ stdenv.mkDerivation rec {
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
-    ++ optionals spiceSupport [ spice_protocol spice usbredir ]
-    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ];
+    ++ optionals spiceSupport [ spice_protocol spice ]
+    ++ optionals usbredirSupport [ usbredir ]
+    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
+    ++ optionals xenSupport [ xen ];
 
   enableParallelBuilding = true;
 
-  patches = [
+  patches = let
+    upstreamPatch = name: commit: sha256: fetchurl {
+      name = "${name}.patch";
+      url = "http://git.qemu-project.org/?p=qemu.git;a=patch;h=${commit}";
+      inherit sha256;
+    };
+  in [
     ./no-etc-install.patch
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/net-vmxnet-initialise-local-tx-descriptor-CVE-2016-6836.patch";
-      sha256 = "1i01vsxsdwrb5r7i9dmrshal4fvpj2j01cmvfkl5wz3ssq5z02wc";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/scsi-mptconfig-fix-an-assert-expression-CVE-2016-7157.patch";
-      sha256 = "1wqf9k79wdr1k25siyhhybz1bpb0iyshv6fvsf55pgk5p0dg1970";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/scsi-mptconfig-fix-misuse-of-MPTSAS_CONFIG_PACK-CVE-2016-7157.patch";
-      sha256 = "0l78fcbq8mywlgax234dh4226kxzbdgmarz1yrssaaiipkzq4xgw";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/scsi-mptsas-use-g_new0-to-allocate-MPTSASRequest-obj-CVE-2016-7423.patch";
-      sha256 = "14l8w40zjjhpmzz4rkh69h5na8d4did7v99ng7nzrychakd5l29h";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/scsi-pvscsi-check-page-count-while-initialising-descriptor-rings-CVE-2016-7155.patch";
-      sha256 = "1dwkci5mqgx3xz2q69kbcn48l8vwql9g3qaza2jxi402xdgc07zn";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/scsi-pvscsi-limit-loop-to-fetch-SG-list-CVE-2016-7156.patch";
-      sha256 = "1r5xm4m9g39p89smsia4i9jbs32nq9gdkpx6wgd91vmswggcbqsi";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/scsi-pvscsi-limit-process-IO-loop-to-ring-size-CVE-2016-7421.patch";
-      sha256 = "07661d1kd0ddkmzsrjph7jnhz2qbfavkxamnvs3axaqpp52kx6ga";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/usb-xhci-fix-memory-leak-in-usb_xhci_exit-CVE-2016-7466.patch";
-      sha256 = "0nckwzn9k6369vni12s8hhjn73gbk6ns0mazns0dlgcq546q2fjj";
-    })
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/q/qemu/1:2.7+dfsg-3/debian/patches/virtio-add-check-for-descriptor-s-mapped-address-CVE-2016-7422.patch";
-      sha256 = "1f1ilpzlxfjqvwmv9h0mzygwl5l8zd690f32vxfv9g6rfbr5h72k";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-8909.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=0c0fc2b5fd534786051889459848764edd798050";
-      sha256 = "0mavkajxchfacpl4gpg7dhppbnhs1bbqn2rwqwiwkl0m5h19d9fv";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-8910.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=c7c35916692fe010fef25ac338443d3fe40be225";
-      sha256 = "10qmlggifdmvj5hg3brs712agjq6ppnslm0n5d5jfgjl7599wxml";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-9103.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=eb687602853b4ae656e9236ee4222609f3a6887d";
-      sha256 = "0j20n4z1wzybx8m7pn1zsxmz4rbl8z14mbalfabcjdgz8sx8g90d";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-9104.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=7e55d65c56a03dcd2c5d7c49d37c5a74b55d4bd6";
-      sha256 = "1l99sf70098l6v05dq4x7p2glxx1l4nq1l8l3711ykp9vxkp91qs";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-9105.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=4c1586787ff43c9acd18a56c12d720e3e6be9f7c";
-      sha256 = "0b2w5myw2vjqk81wm8dz373xfhfkx3hgy7bxr94l060snxcl7ar4";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-9106.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=fdfcc9aeea1492f4b819a24c94dfb678145b1bf9";
-      sha256 = "0npi3fag52icq7xr799h5zi11xscbakdhqmdab0kyl6q331cc32z";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-7994.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=cb3a0522b694cc5bb6424497b3f828ccd28fd1dd";
-      sha256 = "1zhmbqlj0hc69ia4s6h59pi1z3nmijkryxwmf4bzp9gahx8x4xm3";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-8668.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=8caed3d564672e8bc6d2e4c6a35228afd01f4723";
-      sha256 = "19sq6fh7nh8wrk52skky4vwm80029lhm093g11f539krmzjgipik";
-    })
-    (fetchpatch {
-      name = "qemu-CVE-2016-7907.patch";
-      url = "http://git.qemu.org/?p=qemu.git;a=patch;h=070c4b92b8cd5390889716677a0b92444d6e087a";
-      sha256 = "0in89697r6kwkf302v3cg16390q7qs33n2b4kba26m4x65632dxm";
+
+    # bugfixes
+    (fetchurl {
+      name = "qemu-vnc-do-not-disconnect-on-EAGAIN.patch";
+      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/vnc-do-not-disconnect-on-EAGAIN.patch?h=debian/qemu_2.8%2bdfsg-3";
+      sha256 = "1nqhfgfw1pzhid094pk204qy36r6n7w1yilsiwabgcsyxs5bymnh";
     })
 
-    # FIXME: Fix for CVE-2016-9101 not yet ready: https://lists.gnu.org/archive/html/qemu-devel/2016-10/msg03024.html
+    (upstreamPatch "qemu-fix-win7-xhci" "7da76e12cc5cc902dda4c168d8d608fd4e61cbc5"
+      "0m1ggbxziy7vqz9007ypzg23cni8cc4db36wlnhxz0kdpq70c6x0")
 
-    # from http://git.qemu.org/?p=qemu.git;a=patch;h=ff55e94d23ae94c8628b0115320157c763eb3e06
-    ./CVE-2016-9102.patch
-  ];
+    (upstreamPatch "qemu-xhci-free-completed-transfers" "f94d18d6c6df388fde196d3ab252f57e33843a8b"
+      "0lk19qss6ky7cqnvis54742cr2z0vl8c64chhch0kp6n83hray9x")
+
+    # security fixes from debian
+    (fetchurl {
+      name = "CVE-2016-9602.patch";
+      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/9pfs-symlink-attack-fixes-CVE-2016-9602.patch?h=debian/qemu_2.8%2bdfsg-3";
+      sha256 = "0f7m1k3hbw9v0dwqn53ds36s7s334vlidvbn0682s9r2sq0sjlkv";
+    })
+
+    (fetchurl {
+      name = "CVE-2017-2630.patch";
+      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/nbd_client-fix-drop_sync-CVE-2017-2630.patch?h=debian/qemu_2.8%2bdfsg-3";
+      sha256 = "1gdxaari53iwgj3gyczz30rhg8lj6xqycxym4snw9z5vmkyj1bbq";
+    })
+
+    (fetchurl {
+      name = "CVE-2017-6058.patch";
+      url = "https://anonscm.debian.org/cgit/pkg-qemu/qemu.git/plain/debian/patches/vmxnet3-fix-memory-corruption-on-vlan-header-stripping-CVE-2017-6058.patch?h=debian/qemu_2.8%2bdfsg-3";
+      sha256 = "0w8az2cr116mnijxjd4aprl8dvfdj76gm7ddajmngdslxiax601f";
+    })
+
+    # security fixes from upstream
+    (upstreamPatch "CVE-2016-7907" "81f17e0d435c3db3a3e67e0d32ebf9c98973211f"
+      "0dzghbm3jmnyw34kd40a6akrr1cpizd9hdzqmhlc2ljab7pr1rcb")
+
+    (upstreamPatch "CVE-2016-10155" "eb7a20a3616085d46aa6b4b4224e15587ec67e6e"
+      "1xk00fyls0hdza11dyfrnzcn6gibmmcrwy7sxgp6iizp6wgzi3vw")
+
+    (upstreamPatch "CVE-2017-2615" "62d4c6bd5263bb8413a06c80144fc678df6dfb64"
+      "0miph2x4d474issa44hmc542zxmkc7lsr4ncb7pwarq6j7v52l8h")
+
+    (upstreamPatch "CVE-2017-2620" "92f2b88cea48c6aeba8de568a45f2ed958f3c298"
+      "1kz12qmvfccy7xilsrxahbs67jycv4zjfbijxivadvx9klxs1n58")
+
+    (upstreamPatch "CVE-2017-5525" "12351a91da97b414eec8cdb09f1d9f41e535a401"
+      "190b4aqr35p4lb3rjarknfi1ip1c9zizliqp1dd6frx4364y5yp2")
+
+    (upstreamPatch "CVE-2017-5526" "069eb7b2b8fc47c7cb52e5a4af23ea98d939e3da"
+      "05xgzd3zldk3x2vqpjag9z5ilhdkpkyh633fb5kvnz8scns6v86f")
+
+    (upstreamPatch "CVE-2017-5579" "8409dc884a201bf74b30a9d232b6bbdd00cb7e2b"
+      "0lbcyhif1kdcy8my0bv8aqr2f421kmljcch3plrjzj9pgcm4sv83")
+
+    (upstreamPatch "CVE-2017-5667" "42922105beb14c2fc58185ea022b9f72fb5465e9"
+      "049vq70is3fj9bf4ysfj3s44iz93qhyqn6xijck32w1x6yyzqyx4")
+
+    (upstreamPatch "CVE-2017-5667-fix" "913a87885f589d263e682c2eb6637c6e14538061"
+      "0nm1k2r9n6r86dvjr16hxak2vcsinj7ijlqw5i6f4y5h2sh37wr5")
+
+    (upstreamPatch "CVE-2017-5856" "765a707000e838c30b18d712fe6cb3dd8e0435f3"
+      "03pjkn8l8rp9ip5h5rm1dp0nrwd43nmgpwamz4z1vy3rli1z3yjw")
+
+    (upstreamPatch "CVE-2017-5857" "5e8e3c4c75c199aa1017db816fca02be2a9f8798"
+      "1kz14rmxf049zl5m27apzpbvy8dk0g47n9gnwy0nm70g65rl1dh8")
+
+    (upstreamPatch "CVE-2017-5898" "c7dfbf322595ded4e70b626bf83158a9f3807c6a"
+      "1y2j0qw04s8fl0cs8i619y08kj75lxn3c0y19g710fzpk3rq8dvn")
+
+    (upstreamPatch "CVE-2017-5931" "a08aaff811fb194950f79711d2afe5a892ae03a4"
+      "0hlih9jhbb1mb174hvxs7pf7lgcs7s9g705ri9rliw7wrhqdpja5")
+
+    (upstreamPatch "CVE-2017-5973" "f89b60f6e5fee3923bedf80e82b4e5efc1bb156b"
+      "06niyighjxb4p5z2as3mqfmrwrzn4sq47j7raipbq9gnda7x9sw6")
+
+    (upstreamPatch "CVE-2017-5987" "6e86d90352adf6cb08295255220295cf23c4286e"
+      "09yfxf93cisx8rhm0h48ib1ibwfs420k5pqpz8dnz33nci9567jm")
+
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
+
   hardeningDisable = [ "stackprotector" ];
 
   configureFlags =
@@ -145,9 +154,11 @@ stdenv.mkDerivation rec {
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
+    ++ optional usbredirSupport "--enable-usb-redir"
     ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
     ++ optional stdenv.isDarwin "--enable-cocoa"
-    ++ optional stdenv.isLinux "--enable-linux-aio";
+    ++ optional stdenv.isLinux "--enable-linux-aio"
+    ++ optional xenSupport "--enable-xen";
 
   postFixup =
     ''

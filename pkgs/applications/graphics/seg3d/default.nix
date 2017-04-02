@@ -48,4 +48,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ cmake wxGTK itk mesa libXft libXext libXi zlib libXmu libuuid ];
+
+  meta = {
+    broken = true;
+  };
 }

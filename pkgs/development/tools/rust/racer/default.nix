@@ -1,18 +1,17 @@
 { stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "racer-${version}";
-  version = "1.2.10";
+  version = "2.0.6";
+
   src = fetchFromGitHub {
     owner = "phildawes";
     repo = "racer";
-    rev = "e5ffe9efc1d10d4a7d66944b4c0939b7c575530e";
-    sha256 = "1cvgd6gcwb82p387h4wl8wz07z64is8jrihmf2z84vxmlrasmprm";
+    rev = version;
+    sha256 = "09wgfrb0z2d2icfk11f1jal5p93sqjv3jzmzcgw0pgw3zvffhni3";
   };
 
-  depsSha256 = "1d44q7hfxijn40q7y6xawgd3c91i90fmd1dyx7i2v9as29js5694";
+  depsSha256 = "0mnq7dk9wz2k9jhzciknybwc471sy8f71cd15m752b5ng6v1f5kn";
 
   buildInputs = [ makeWrapper ];
 
@@ -31,7 +30,7 @@ buildRustPackage rec {
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/phildawes/racer;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ jagajaga globin ];
     platforms = platforms.all;
   };

@@ -34,7 +34,7 @@ with lib;
 
     assertions = singleton
       { assertion = !(config.services.openfire.usePostgreSQL -> config.services.postgresql.enable);
-        message = "OpenFire assertion failed.";
+        message = "OpenFire configured to use PostgreSQL but services.postgresql.enable is not enabled.";
       };
 
     systemd.services.openfire = {

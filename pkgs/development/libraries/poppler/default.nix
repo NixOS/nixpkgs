@@ -3,13 +3,14 @@
 , withData ? false, poppler_data
 , qt4Support ? false, qt4 ? null
 , qt5Support ? false, qtbase ? null
+, introspectionSupport ? false, gobjectIntrospection ? null
 , utils ? false
 , minimal ? false, suffix ? "glib"
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.47.0"; # even major numbers are stable
-  sha256 = "0hnjkcqqk87dw3hlda4gh4l7brkslniax9a79g772jn3iwiffwmq";
+  version = "0.50.0";
+  sha256 = "0dmwnh59m75vhii6dw63x8l0qa0ha733pb8bdqzr7lw9nwc37jf9";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     [ zlib freetype fontconfig libjpeg openjpeg ]
     ++ optionals (!minimal) [ cairo lcms curl ]
     ++ optional qt4Support qt4
-    ++ optional qt5Support qtbase;
+    ++ optional qt5Support qtbase
+    ++ optional introspectionSupport gobjectIntrospection;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -47,7 +49,8 @@ stdenv.mkDerivation rec {
       "--disable-poppler-glib" "--disable-poppler-cpp"
       "--disable-libcurl"
     ]
-    ++ optional (!utils) "--disable-utils" ;
+    ++ optional (!utils) "--disable-utils"
+    ++ optional introspectionSupport "--enable-introspection";
 
   enableParallelBuilding = true;
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.vanheusden.com/iops/;
     license = licenses.gpl2;
-    maintainers = with maintainers; davidak;
+    maintainers = with maintainers; [ davidak ];
     platforms = platforms.linux; # build problems on Darwin
   };
 }

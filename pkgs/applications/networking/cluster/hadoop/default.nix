@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     for n in "bin/"* "sbin/"*; do
       sed -i $n -e "s|#!/usr/bin/env bash|#! ${bash}/bin/bash|"
     done
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" bin/container-executor
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" bin/container-executor;
   '';
 
   installPhase = ''

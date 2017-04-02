@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nickjj";
     repo = "rolespec";
-    rev = "64a2092773b77f7a888522ceddd815e97b129321";
-    sha256 = "1867acxy18a3cgi84iwsp37sxglaljn1dq50amahp5zkmd8x8vnz";
+    rev = "d9ee530cd709168882059776c482fc37f46cb743";
+    sha256 = "1jkidw6aqr0zfqwmcvlpi9qa140z2pxcfsd43xm5ikx6jcwjdrzl";
     inherit name;
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/nickjj/rolespec";
     license = licenses.gpl3;
-    version = "20160105";
+    version = "20161104";
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
   };

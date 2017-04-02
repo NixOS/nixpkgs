@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dirac-1.0.2.patch ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   postInstall = ''
     # keep only necessary binaries
     find $out/bin \( -name '*RGB*' -or -name '*YUV*' -or -name create_dirac_testfile.pl \) -delete

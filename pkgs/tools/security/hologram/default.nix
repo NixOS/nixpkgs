@@ -2,16 +2,24 @@
 
 buildGoPackage rec {
   name = "hologram-${version}";
-  version = "20160209-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "8d86e3fdcbfd967ba58d8de02f5e8173c101212e";
-
-  goPackagePath = "github.com/AdRoll/hologram";
+  version = "20170130-${stdenv.lib.strings.substring 0 7 rev}";
+  rev = "d20d1c30379e7010e8f9c428a5b9e82f54d390e1";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/AdRoll/hologram";
-    sha256 = "0i0p170brdsczfz079mqbc5y7x7mdph04p3wgqsd7xcrddvlkkaf";
+    sha256 = "0dg5kfs16kf2gzhpmzsg83qzi2pxgnc9g81lw5zpa6fmzpa9kgsn";
   };
 
+  goPackagePath = "github.com/AdRoll/hologram";
+
   goDeps = ./deps.nix;
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/AdRoll/hologram/;
+    description = "Easy, painless AWS credentials on developer laptops.";
+    maintainers = with maintainers; [ nand0p ];
+    platforms = platforms.all;
+    license = licenses.asl20;
+  };
 }

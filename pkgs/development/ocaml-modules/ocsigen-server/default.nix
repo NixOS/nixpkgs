@@ -1,6 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, which, ocaml_react, ocaml_ssl,
 ocaml_lwt, ocamlnet, ocaml_pcre, cryptokit, tyxml, ipaddr, zlib,
-libev, openssl, ocaml_sqlite3, tree, uutf, makeWrapper
+libev, openssl, ocaml_sqlite3, tree, uutf, makeWrapper, camlp4
+, pgocaml
 }:
 
 let mkpath = p: n:
@@ -9,16 +10,16 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation {
-  name = "ocsigenserver-2.7";
+  name = "ocsigenserver-2.8";
 
   src = fetchurl {
-    url = https://github.com/ocsigen/ocsigenserver/archive/2.7.tar.gz;
-    sha256 = "0gv9nchsx9z74hh46gn7bd0053j4694fhxriannf13sqh2qpg901";
+    url = https://github.com/ocsigen/ocsigenserver/archive/2.8.tar.gz;
+    sha256 = "1v44qv2ixd7i1qinyhlzzqiffawsdl7xhhh6ysd7lf93kh46d5sy";
   };
 
   buildInputs = [ocaml which findlib ocaml_react ocaml_ssl ocaml_lwt
   ocamlnet ocaml_pcre cryptokit tyxml ipaddr zlib libev openssl
-  ocaml_sqlite3 tree uutf makeWrapper ];
+  ocaml_sqlite3 tree uutf makeWrapper camlp4 pgocaml ];
 
   configureFlags = "--root $(out) --prefix /";
 

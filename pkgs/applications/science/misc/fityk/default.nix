@@ -3,7 +3,7 @@
 
 let
   name    = "fityk";
-  version = "1.3.0";
+  version = "1.3.1";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "wojdyr";
     repo = "fityk";
     rev = "v${version}";
-    sha256 = "07xzhy47q5ddg1qn51qds4wp6r5g2cx8bla0hm0a9ipr2hg92lm9";
+    sha256 = "0kmrjjjwrh6xgw590awcd52b86kksmv6rfgih75zvpiavr1ygwsi";
   };
 
   buildInputs = [ autoreconfHook wxGTK30 boost lua zlib bzip2 xylib readline

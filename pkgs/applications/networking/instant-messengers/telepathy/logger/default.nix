@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
 
   buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib pkgconfig intltool
-                  gobjectIntrospection dbus_libs ];
+                  gobjectIntrospection dbus_libs telepathy_glib.python ];
 
   nativeBuildInputs = [ libxslt ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Logger service for Telepathy framework";
     homepage = http://telepathy.freedesktop.org/wiki/Logger ;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu; # Arbitrary choice
   };
 }

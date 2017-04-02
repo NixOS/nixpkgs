@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hasklig-${version}";
-  version = "0.9";
+  version = "1.1";
 
   src = fetchurl {
     url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
-    sha256 = "0rav55f6j1b8pqjgwvw52b92j2m630ampamlsiiym2xf684wnw2d";
+    sha256 = "1hwmdbygallw2kjk0v3a3dl7w6b21wii3acrl0w3ibn05g1cxv4q";
   };
 
   buildInputs = [ unzip ];

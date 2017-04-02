@@ -13,7 +13,7 @@ with stdenv.lib;
 
 let
   ver_maj = "3.22";
-  ver_min = "1";
+  ver_min = "8";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "127c8c5cfc32681f9ab3cb542eb0d5c16c1c02faba68bf8fcac9a3cf278ef471";
+    sha256 = "c7254a88df5c17e9609cee9e848c3d0104512707edad4c3b4f256b131f8d3af1";
   };
 
   outputs = [ "out" "dev" ];
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
   postInstall = optionalString (!stdenv.isDarwin) ''
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
+    # The updater is needed for nixos env and it's tiny.
+    moveToOutput bin/gtk-update-icon-cache "$out"
   '';
 
   meta = with stdenv.lib; {
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ urkud raskin vcunat lethalman ];
+    maintainers = with maintainers; [ raskin vcunat lethalman ];
     platforms = platforms.all;
   };
 }

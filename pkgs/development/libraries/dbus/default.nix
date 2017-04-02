@@ -6,11 +6,12 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.10.12";
-  sha256 = "0pa71vf5c0d7k3gni06iascmplj0j5g70wbc833ayvi71d1pj2i1";
+  version = "1.10.16";
+  sha256 = "121kqkjsd3vgf8vca8364xl44qa5086h7qy5zs5f1l78ldpbmc57";
 
-self =  stdenv.mkDerivation {
+self = stdenv.mkDerivation {
     name = "dbus-${version}";
+    inherit version;
 
     src = fetchurl {
       url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
@@ -49,9 +50,8 @@ self =  stdenv.mkDerivation {
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-systemduserunitdir=$(out)/etc/systemd/user"
       "--enable-user-session"
-      # this package installs nothing into those dirs and they create a dependency
-      "--datadir=/run/current-system/sw/share"
-      "--libexecdir=$(out)/libexec" # we don't need dbus-daemon-launch-helper
+      "--datadir=/etc"
+      "--libexecdir=$(out)/libexec"
     ] ++ lib.optional (!x11Support) "--without-x";
 
     # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
@@ -64,7 +64,12 @@ self =  stdenv.mkDerivation {
 
     doCheck = true;
 
-    installFlags = "sysconfdir=$(out)/etc datadir=$(out)/share";
+    installFlags = [ "sysconfdir=$(out)/etc" "datadir=$(out)/share" ];
+
+    postInstall = ''
+      mkdir -p "$out/share/xml/dbus"
+      cp doc/*.dtd "$out/share/xml/dbus"
+    '';
 
     # it's executed from $lib by absolute path
     postFixup = ''

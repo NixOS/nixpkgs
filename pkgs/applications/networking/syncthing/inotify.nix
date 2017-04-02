@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "syncthing-inotify-${version}";
-  version = "0.8.4";
+  version = "0.8.5";
 
   goPackagePath = "github.com/syncthing/syncthing-inotify";
 
   src = fetchFromGitHub {
-    owner = "syncthing";
-    repo = "syncthing-inotify";
-    rev = "v${version}";
-    sha256 = "0iix4gd5zh2ydn429jmcf0pr1pxxd1wq1vp5ciq9bavhvnim9clw";
+    owner  = "syncthing";
+    repo   = "syncthing-inotify";
+    rev    = "v${version}";
+    sha256 = "13qfppwlqrx3fs44ghnffdp9x0hs7mn1gal2316p7jb0klkcpfzh";
   };
 
   goDeps = ./inotify-deps.nix;

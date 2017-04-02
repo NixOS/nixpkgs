@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc/clamav"
     "--with-zlib=${zlib.dev}"
+    "--disable-zlib-vcheck" # it fails to recognize that 1.2.10 >= 1.2.2
     "--with-libbz2-prefix=${bzip2.dev}"
     "--with-iconv-dir=${libiconv}"
     "--with-xml=${libxml2.dev}"

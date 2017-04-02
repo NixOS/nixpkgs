@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zcbx69k0d3p2pjh3g7sa3q2zkd5xchxkqsmlfn3fwxaz0pmsmvi";
   };
 
-  buildInputs = [ telepathy_glib makeWrapper /*upower*/ ]; # ToDo: optional stuff missing
+  buildInputs = [ telepathy_glib telepathy_glib.python makeWrapper /*upower*/ ]; # ToDo: optional stuff missing
   # 5.16.3 won't build with upower-0.99. Arch and Debian choose to disable it
 
   nativeBuildInputs = [ pkgconfig libxslt ];

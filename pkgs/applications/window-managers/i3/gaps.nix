@@ -17,6 +17,8 @@ i3.overrideDerivation (super : rec {
       echo -n "${version} (${releaseDate})" > ./i3-${version}/I3_VERSION
   '';
 
+  # fatal error: GENERATED_config_enums.h: No such file or directory
+  enableParallelBuilding = false;
 }) // {
 
   meta = with stdenv.lib; {

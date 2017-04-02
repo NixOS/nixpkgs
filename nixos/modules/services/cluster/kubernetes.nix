@@ -76,6 +76,7 @@ in {
       description = "Kubernetes package to use.";
       type = types.package;
       default = pkgs.kubernetes;
+      defaultText = "pkgs.kubernetes";
     };
 
     verbose = mkOption {
@@ -484,7 +485,7 @@ in {
 
       clusterDns = mkOption {
         description = "Use alternative dns.";
-        default = "10.10.1.1";
+        default = "10.10.0.1";
         type = types.str;
       };
 
@@ -737,6 +738,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
+          RestartSec = "30s";
+          Restart = "on-failure";
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
             --address=${cfg.controllerManager.address} \
             --port=${toString cfg.controllerManager.port} \
@@ -773,7 +776,7 @@ in {
             --bind-address=${cfg.proxy.address} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
-            ${cfg.controllerManager.extraOpts}
+            ${cfg.proxy.extraOpts}
           '';
           WorkingDirectory = cfg.dataDir;
         };

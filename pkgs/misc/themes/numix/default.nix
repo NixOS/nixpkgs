@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2016-06-12";
+  version = "2017-02-15";
   name = "numix-gtk-theme-${version}";
 
   src = fetchFromGitHub {
     repo = "numix-gtk-theme";
     owner = "numixproject";
-    rev = "1d941a15971f43fb2f5675c7059bf313b78797fc";
-    sha256 = "14b1gl761acdza4bkqr6dvsblvi2wsph79j5jircxfd3wgvm756i";
+    rev = "f25d7e04353543e03fd155f4d9dfa80fc6b551f2";
+    sha256 = "0n57airi1kgg754099sdq40bb0mbp4my385fvslnsjv5d4h8jhvq";
   };
 
   nativeBuildInputs = [ sass glib libxml2 gdk_pixbuf ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
+    patchShebangs .
   '';
 
   meta = {

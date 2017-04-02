@@ -11,7 +11,7 @@ index a9d8ac4..85f13f5 100644
 -  # #   arguments: '-i -t'
 -  # # }
 +  config.action_mailer.sendmail_settings = {
-+    location: '/var/setuid-wrappers/sendmail',
++    location: '/run/wrappers/bin/sendmail',
 +    arguments: '-i -t'
 +  }
    config.action_mailer.perform_deliveries = true

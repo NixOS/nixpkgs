@@ -1,8 +1,8 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, config
 
 ## various stuff that can be plugged in
-, gnash, flashplayer, hal-flash
-, MPlayerPlugin, gecko_mediaplayer, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
+, flashplayer, hal-flash
+, MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
 , supportsJDK, jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
@@ -17,26 +17,22 @@ browser:
 , desktopName ? # browserName with first letter capitalized
   (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
 , nameSuffix ? ""
-, icon ? browserName, libtrick ? true
+, icon ? browserName
 }:
 
 let
   cfg = stdenv.lib.attrByPath [ browserName ] {} config;
   enableAdobeFlash = cfg.enableAdobeFlash or false;
-  enableGnash = cfg.enableGnash or false;
   ffmpegSupport = browser.ffmpegSupport or false;
   jre = cfg.jre or false;
   icedtea = cfg.icedtea or false;
 
   plugins =
-     assert !(enableGnash && enableAdobeFlash);
      assert !(jre && icedtea);
      ([ ]
-      ++ lib.optional enableGnash gnash
       ++ lib.optional enableAdobeFlash flashplayer
       ++ lib.optional (cfg.enableDjvu or false) (djview4)
       ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
-      ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
       ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
       ++ lib.optional icedtea icedtea_web
       ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
@@ -56,16 +52,15 @@ let
   gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
   gtk_modules = [ libcanberra_gtk2 ];
 
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   inherit name;
 
   desktopItem = makeDesktopItem {
     name = browserName;
-    exec = browserName + " %U";
+    exec = "${browserName}${nameSuffix} %U";
     inherit icon;
     comment = "";
-    desktopName = desktopName;
+    desktopName = "${desktopName}${nameSuffix}";
     genericName = "Web Browser";
     categories = "Application;Network;WebBrowser;";
     mimeType = stdenv.lib.concatStringsSep ";" [
@@ -88,39 +83,27 @@ stdenv.mkDerivation {
         exit 1
     fi
 
-    makeWrapper "${browser}/bin/${browserName}" \
+    makeWrapper "$(readlink -v --canonicalize-existing "${browser}/bin/${browserName}")" \
         "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
         --suffix LD_LIBRARY_PATH ':' "$libs" \
         --suffix-each GTK_PATH ':' "$gtk_modules" \
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
-        --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}"*)" \
+        --suffix PATH ':' "$out/bin" \
+        --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
         ${lib.optionalString (!ffmpegSupport) ''--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"''}
-
-    ${ lib.optionalString libtrick
-    ''
-    libdirname="$(echo "${browser}/lib/${browserName}"*)"
-    libdirbasename="$(basename "$libdirname")"
-    mkdir -p "$out/lib/$libdirbasename"
-    ln -s "$libdirname"/* "$out/lib/$libdirbasename"
-    script_location="$(mktemp "$out/lib/$libdirbasename/${browserName}${nameSuffix}.XXXXXX")"
-    mv "$out/bin/${browserName}${nameSuffix}" "$script_location"
-    ln -s "$script_location" "$out/bin/${browserName}${nameSuffix}"
-    ''
-    }
 
     if [ -e "${browser}/share/icons" ]; then
         mkdir -p "$out/share"
         ln -s "${browser}/share/icons" "$out/share/icons"
     else
         mkdir -p "$out/share/icons/hicolor/128x128/apps"
-        ln -s "$out/lib/$libdirbasename/browser/icons/mozicon128.png" \
+        ln -s "${browser}/lib/${browserName}-"*"/browser/icons/mozicon128.png" \
             "$out/share/icons/hicolor/128x128/apps/${browserName}.png"
     fi
 
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications
+    install -D -t $out/share/applications $desktopItem/share/applications/*
 
     # For manpages, in case the program supplies them
     mkdir -p $out/nix-support

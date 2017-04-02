@@ -172,13 +172,12 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
-      example = true;
       description = ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
         you want to be able to keep all the sources needed to build your
         system or when you are going to install the system on a computer
-        with slow on non-existent network connection.
+        with slow or non-existent network connection.
       '';
     };
 
@@ -232,8 +231,6 @@ in
     system.boot.loader.kernelFile = "bzImage";
     environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
 
-    boot.consoleLogLevel = mkDefault 7;
-
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
     # root filesystem on the kernel command line, rather than in
@@ -282,7 +279,7 @@ in
         options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" "uas" ];
 
     boot.blacklistedKernelModules = [ "nouveau" ];
 

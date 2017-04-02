@@ -3,8 +3,8 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
-, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
-, buildWebkit ? stdenv.isLinux
+, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
+, buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk2, GConf, gnome_vfs
 , developerBuild ? false
@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
     # there might be more references, but this is the only one I could find
     substituteInPlace tools/macdeployqt/tests/tst_deployment_mac.cpp \
       --replace /usr/lib/libstdc++.6.dylib "${stdenv.cc}/lib/libstdc++.6.dylib"
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp \
+      --replace 'optionalHeight > 0' 'optionalHeight != NULL'
+
+    substituteInPlace ./tools/linguist/linguist/messagemodel.cpp \
+      --replace 'm->comment()) >= 0' 'm->comment()) != NULL'
   '';
 
   patches =
@@ -61,7 +67,7 @@ stdenv.mkDerivation rec {
       ./libressl.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        cups = if cups != null then cups.out else null;
+        cups = if cups != null then stdenv.lib.getLib cups else null;
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
@@ -80,12 +86,19 @@ stdenv.mkDerivation rec {
         gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
-    ++ [(fetchpatch {
+    ++ [
+      (fetchpatch {
         name = "fix-medium-font.patch";
         url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
           + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
-      })];
+      })
+      (fetchpatch {
+        name = "qt4-gcc6.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      })
+    ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
@@ -131,7 +144,7 @@ stdenv.mkDerivation rec {
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ optional mesaSupported mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
-    ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
+    ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
 
   # The following libraries are only used in plugins
   buildInputs =
@@ -145,8 +158,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-    "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
+  NIX_CFLAGS_COMPILE =
+    optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
+    + optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
+      " -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include"
     + optionalString stdenv.isDarwin " -I${libcxx}/include/c++/v1";
 
   NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
@@ -202,7 +217,7 @@ stdenv.mkDerivation rec {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
+    maintainers = with maintainers; [ lovek323 phreedom sander ];
     platforms   = platforms.unix;
   };
 }

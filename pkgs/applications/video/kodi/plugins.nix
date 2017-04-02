@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml, unzip }:
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, lib
+, unzip, cmake, kodi, steam, libcec_platform, tinyxml }:
 
 let
 
@@ -6,22 +7,22 @@ let
 
   kodi-platform = stdenv.mkDerivation rec {
     project = "kodi-platform";
-    version = "15.2";
+    version = "17.1";
     name = "${project}-${version}";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = project;
-      rev = "45d6ad1984fdb1dc855076ff18484dbec33939d1";
-      sha256 = "1fai33mwyv5ab47b16i692g7a3vcnmxavx13xin2gh16y0qm62hi";
+      rev = "c8188d82678fec6b784597db69a68e74ff4986b5";
+      sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
     };
 
     buildInputs = [ cmake kodi libcec_platform tinyxml ];
   };
 
-  mkKodiPlugin = { plugin, namespace, version, src, meta, ... }:
+  mkKodiPlugin = { plugin, namespace, version, src, meta, sourceDir ? null, ... }:
   stdenv.lib.makeOverridable stdenv.mkDerivation rec {
-    inherit src meta;
+    inherit src meta sourceDir;
     name = "kodi-plugin-${plugin}-${version}";
     passthru = {
       kodiPlugin = pluginDir;
@@ -29,6 +30,7 @@ let
     };
     dontStrip = true;
     installPhase = ''
+      ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
       d=$out${pluginDir}/${namespace}
       mkdir -p $d
       sauce="."
@@ -70,34 +72,69 @@ in
 
   };
 
-  genesis = (mkKodiPlugin rec {
+  controllers = let
+    pname = "game-controller";
+    version = "1.0.3";
 
-    plugin = "genesis";
-    namespace = "plugin.video.genesis";
-    version = "5.1.4";
-
-    src = fetchurl {
-      url = "https://offshoregit.com/lambda81/lambda-repo/${namespace}/${namespace}-${version}.zip";
-      sha256 = "0b0pdzgg42mgxgkb6sb83rldh4k19c3l9z7g2wnvxm3s2p6rjy3v";
+    src = fetchFromGitHub {
+      owner = "kodi-game";
+      repo = "kodi-game-controllers";
+      rev = "01acb5b6e8b85392b3cb298b034aadb1b24ccf18";
+      sha256 = "0sbc0w0fwbp7rbmbgb6a1kglhnn5g85hijcbbvf5x6jdq9v3f1qb";
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forums.tvaddons.ag/forums/148-lambda-s-kodi-addons";
-      description = "The origins of streaming";
+      description = "Add support for different gaming controllers.";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
     };
+
+    mkController = controller: {
+        "${controller}" = mkKodiPlugin rec {
+          plugin = pname + "-" + controller;
+          namespace = "game.controller." + controller;
+          sourceDir = "addons/" + namespace;
+          inherit version src meta;
+        };
+      };
+    in (mkController "default")
+    // (mkController "dreamcast")
+    // (mkController "gba")
+    // (mkController "genesis")
+    // (mkController "mouse")
+    // (mkController "n64")
+    // (mkController "nes")
+    // (mkController "ps")
+    // (mkController "snes");
+
+  exodus = (mkKodiPlugin rec {
+
+    plugin = "exodus";
+    namespace = "plugin.video.exodus";
+    version = "3.0.5";
+
+    src = fetchurl {
+      url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
+      sha256 = "0di34sp6y3v72l6gfhj7cvs1vljs9vf0d0x2giix3jk433cj01j0";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A streaming plugin for Kodi";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
   }).override { buildInputs = [ unzip ]; };
 
   hyper-launcher = let
     pname = "hyper-launcher";
-    version = "1.2.0";
+    version = "1.5.2";
     src = fetchFromGitHub rec {
       name = pname + "-" + version + ".tar.gz";
       owner = "teeedubb";
       repo = owner + "-xbmc-repo";
-      rev = "9bd170407436e736d2d709f8af9968238594669c";
-      sha256 = "019nqf7kixicnrzkg671x4yq723igjkhfl8hz5bifi9gx2qcy8hy";
+      rev = "f958ba93fe85b9c9025b1745d89c2db2e7dd9bf6";
+      sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
     };
     meta = with stdenv.lib; {
       homepage = http://forum.kodi.tv/showthread.php?tid=258159;
@@ -107,8 +144,9 @@ in
   in {
     service = mkKodiPlugin {
       plugin = pname + "-service";
+      version = "1.2.1";
       namespace = "service.hyper.launcher";
-      inherit version src meta;
+      inherit src meta;
     };
     plugin = mkKodiPlugin {
       plugin = pname;
@@ -117,39 +155,18 @@ in
     };
   };
 
-  salts = mkKodiPlugin rec {
-
-    plugin = "salts";
-    namespace = "plugin.video.salts";
-    version = "2.0.19";
-
-    src = fetchFromGitHub {
-      name = plugin + "-" + version + ".tar.gz";
-      owner = "tknorris";
-      repo = plugin;
-      rev = "9c1882bad35cab9e62687847e097c37a576b900d";
-      sha256 = "0saq578xsxvyg1v8jg2m3131hfrr95gv74b2npxr7g715yyx5bjq";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/tknorris/salts";
-      description = "Stream All The Sources";
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
-
   svtplay = mkKodiPlugin rec {
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.24";
+    version = "4.0.42";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "e66e2af6529e3ffd030ad486c849894a9ffdeb45";
-      sha256 = "01nq6gac83q6ayhqcj1whvk58pzrm1haw801s321f4vc8gswag56";
+      rev = "83cb52b949930a1b6d2e51a7a0faf9bd69c7fb7d";
+      sha256 = "0ync2ya4lwmfn6ngg8v0z6bng45whwg280irsn4bam5ca88383iy";
     };
 
     meta = with stdenv.lib; {
@@ -219,20 +236,20 @@ in
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "2.2.13";
+    version = "3.4.16";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
-      rev = "3274354511e970e2101c2aa437001b2f245f80da";
-      sha256 = "0i7cb61pjv6vbj3x96cm1n4w91mvc8z6lxa8ykjasrrbi95ph7ld";
+      rev = "b39e4e9870d68841279cbc7d7214f3ad9b27f330";
+      sha256 = "0pmlgqr4kd0gvckz77mj6v42kcx6lb23anm8jnf2fbn877snnijx";
     };
 
     meta = with stdenv.lib; {
       homepage = https://github.com/kodi-pvr/pvr.hts;
       description = "Kodi's Tvheadend HTSP client addon";
       platforms = platforms.all;
-      maintainers = with maintainers; [ page ];
+      maintainers = with maintainers; [ cpages ];
     };
   }).override {
     buildInputs = [ cmake kodi libcec_platform kodi-platform ];
@@ -247,49 +264,5 @@ in
       make install
       ln -s $out/lib/addons/pvr.hts/pvr.hts.so* $out/share/kodi/addons/pvr.hts
     '';
-  };
-
-  t0mm0-common = mkKodiPlugin rec {
-
-    plugin = "t0mm0-common";
-    namespace = "script.module.t0mm0.common";
-    version = "0.0.1";
-
-    src = fetchFromGitHub {
-      name = plugin + "-" + version + ".tar.gz";
-      owner = "t0mm0";
-      repo = "xbmc-urlresolver";
-      rev = "ab16933a996a9e77b572953c45e70900c723d6e1";
-      sha256 = "1yd00md8iirizzaiqy6fv1n2snydcpqvp2f9irzfzxxi3i9asb93";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/t0mm0/xbmc-urlresolver/";
-      description = "t0mm0's common stuff";
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
-
-  urlresolver = (mkKodiPlugin rec {
-
-    plugin = "urlresolver";
-    namespace = "script.module.urlresolver";
-    version = "2.10.0";
-
-    src = fetchFromGitHub {
-      name = plugin + "-" + version + ".tar.gz";
-      owner = "Eldorados";
-      repo = namespace;
-      rev = "72b9d978d90d54bb7a0224a1fd2407143e592984";
-      sha256 = "0r5glfvgy9ri3ar9zdkvix8lalr1kfp22fap2pqp739b6k2iqir6";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/Eldorados/urlresolver";
-      description = "Resolve common video host URL's to be playable in XBMC/Kodi";
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  }).override {
-    postPatch = "sed -i -e 's,settings_file = os.path.join(addon_path,settings_file = os.path.join(profile_path,g' lib/urlresolver/common.py";
   };
 }

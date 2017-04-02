@@ -2,14 +2,14 @@
 
 let
   pkgname = "ipmitool";
-  version = "1.8.15";
+  version = "1.8.17";
 in
 stdenv.mkDerivation {
   name = "${pkgname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pkgname}/${pkgname}-${version}.tar.gz";
-    sha256 = "0y6g8xg9p854n7xm3kds8m3d53jrsllnknp8lcr3jscf99j4x5ph";
+    sha256 = "0qcrz1d1dbjg46n3fj6viglzcxlf2q15xa7bx9w1hm2hq1r3jzbi";
   };
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''

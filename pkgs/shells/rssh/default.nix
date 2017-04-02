@@ -79,4 +79,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ arobyn ];
   };
+
+  passthru = {
+    shellPath = "/bin/rssh";
+  };
 }

@@ -1,23 +1,20 @@
 { stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
 
-let version = "1.6.0";
+let version = "1.6.1";
 in
 stdenv.mkDerivation rec {
   name = "nitrogen-${version}";
 
   src = fetchurl {
     url = "http://projects.l3ib.org/nitrogen/files/${name}.tar.gz";
-    sha256 = "1pil2qa3v7x56zh9xvba8v96abnf9qgglbsdlrlv0kfjlhzl4jhr";
+    sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ glib gtkmm2 ];
 
-  NIX_CXXFLAGS_COMPILE = "-std=c++11";
-
   patchPhase = ''
-    substituteInPlace data/Makefile.in --replace /usr/share $out/share
     patchShebangs data/icon-theme-installer
   '';
 

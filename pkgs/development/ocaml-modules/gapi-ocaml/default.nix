@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
 
 stdenv.mkDerivation rec {
-  name = "gapi-ocaml-0.2.10";
+  name = "gapi-ocaml-0.3.1";
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1601/${name}.tar.gz";
-    sha256 = "0kg4j7dhr7jynpy8x53bflqjf78jyl14j414l6px34xz7c9qx5fl";
+    url = "https://forge.ocamlcore.org/frs/download.php/1665/${name}.tar.gz";
+    sha256 = "1fn563k9mpqp61909l5bzddnkyn04bk106vrcr7qiim1d2i6cf8i";
   };
   buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ ocurl cryptokit ocaml_extlib yojson ocamlnet xmlm ];

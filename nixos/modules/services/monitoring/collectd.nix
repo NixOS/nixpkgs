@@ -108,7 +108,8 @@ in {
       };
 
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
+        mkdir -p ${cfg.dataDir}
+        chmod 755 ${cfg.dataDir}
         install -D /dev/null ${cfg.pidFile}
         if [ "$(id -u)" = 0 ]; then
           chown -R ${cfg.user} ${cfg.dataDir};

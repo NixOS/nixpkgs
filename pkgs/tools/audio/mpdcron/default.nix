@@ -4,9 +4,7 @@
 let
   gemEnv = bundlerEnv {
     name = "mpdcron-bundle";
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    gemdir = ./.;
   };
 in stdenv.mkDerivation rec {
   version = "20130809";

@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, pkgconfig, go-md2man
-, go, containerd, runc
+{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+, go-md2man, go, containerd, runc, docker-proxy, tini
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps
@@ -11,17 +11,56 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.12.3";
+  version = "17.03.0-ce";
+  rev = "60ccb22"; # should match the version commit
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "0jifd35h22lgh36w1j2k97pgndjh5sppr3cwndlv0saf9618wx5k";
+    sha256 = "0ml9aan8x4w8kfz7dm9vvl8b1a0vq09si9b7z50xz84040cjhnr9";
   };
 
+  docker-runc = runc.overrideAttrs (oldAttrs: rec {
+    name = "docker-runc";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "runc";
+      rev = "a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70";
+      sha256 = "0n7vr47fhpyxx5vdnp453qp4cq50w4hwgq3ldyj5878d91iir7l1";
+    };
+    # docker/runc already include these patches / are not applicable
+    patches = [];
+  });
+  docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    name = "docker-containerd";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "containerd";
+      rev = "977c511eda0925a723debdc94d09459af49d082a";
+      sha256 = "0hmcj8i70vv3a3bbdawrgi84a442m09x5mpc7fgn8dd3v031lcbc";
+    };
+  });
+  docker-tini = tini.overrideAttrs  (oldAttrs: rec {
+    name = "docker-init";
+    src = fetchFromGitHub {
+      owner = "krallin";
+      repo = "tini";
+      rev = "949e6facb77383876aeff8a6944dde66b3089574";
+      sha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+    };
+
+    # Do not remove static from make files as we want a static binary
+    patchPhase = ''
+    '';
+
+    NIX_CFLAGS_COMPILE = [
+      "-DMINIMAL=ON"
+    ];
+  });
+
   buildInputs = [
-    makeWrapper pkgconfig go-md2man go
+    makeWrapper removeReferencesTo pkgconfig go-md2man go
     sqlite devicemapper btrfs-progs systemd
   ];
 
@@ -41,7 +80,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="23cf638"
+    export DOCKER_GITCOMMIT="${rev}"
     ./hack/make.sh dynbinary
   '';
 
@@ -52,16 +91,17 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 ./bundles/${version}/dynbinary-client/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
-    install -Dm755 ./bundles/${version}/dynbinary-daemon/docker-proxy-${version} $out/libexec/docker/docker-proxy
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
       --prefix PATH : "$out/libexec/docker:$extraPath"
     makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
       --prefix PATH : "$out/libexec/docker:$extraPath"
 
     # docker uses containerd now
-    ln -s ${containerd}/bin/containerd $out/libexec/docker/docker-containerd
-    ln -s ${containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-    ln -s ${runc}/bin/runc $out/libexec/docker/docker-runc
+    ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/docker-containerd
+    ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
+    ln -s ${docker-runc}/bin/runc $out/libexec/docker/docker-runc
+    ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
+    ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
@@ -86,12 +126,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # remove references to go compiler, gcc and glibc
-    while read file; do
-      sed -ri "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-      sed -ri "s,${stdenv.cc.cc},$(echo "${stdenv.cc.cc}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-      sed -ri "s,${stdenv.glibc.dev},$(echo "${stdenv.glibc.dev}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-    done < <(find $out -type f 2>/dev/null)
+    find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} -t ${stdenv.glibc.dev} '{}' +
   '';
 
   meta = {

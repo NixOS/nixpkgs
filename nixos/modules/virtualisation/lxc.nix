@@ -62,19 +62,18 @@ in
             </citerefentry>.
           '';
       };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
     environment.systemPackages = [ pkgs.lxc ];
-
     environment.etc."lxc/lxc.conf".text = cfg.systemConfig;
     environment.etc."lxc/lxc-usernet".text = cfg.usernetConfig;
     environment.etc."lxc/default.conf".text = cfg.defaultConfig;
+    systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
+    security.apparmor.packages = [ pkgs.lxc ];
+    security.apparmor.profiles = [ "${pkgs.lxc}/etc/apparmor.d/lxc-containers" ];
   };
-
 }

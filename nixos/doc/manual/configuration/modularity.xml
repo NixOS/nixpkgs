@@ -36,9 +36,8 @@ latter might look like this:
 { config, pkgs, ... }:
 
 { services.xserver.enable = true;
-  services.xserver.displayManager.kdm.enable = true;
-  services.xserver.desktopManager.kde4.enable = true;
-  environment.systemPackages = [ pkgs.kde4.kscreensaver ];
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
 }
 </programlisting>
 
@@ -129,7 +128,7 @@ default; run <literal>nix-env -i nix-repl</literal> to get it.  A
 typical use:
 
 <screen>
-$ nix-repl '&lt;nixos>'
+$ nix-repl '&lt;nixpkgs/nixos>'
 
 nix-repl> config.networking.hostName
 "mandark"

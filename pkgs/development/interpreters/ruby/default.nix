@@ -113,6 +113,7 @@ let
 
         configureFlags = ["--enable-shared" "--enable-pthread"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
+          ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
             # that tk is installed
@@ -154,7 +155,7 @@ let
           license = stdenv.lib.licenses.ruby;
           homepage = http://www.ruby-lang.org/en/;
           description = "The Ruby language";
-          maintainers = [ stdenv.lib.maintainers.vrthra ];
+          maintainers = with stdenv.lib.maintainers; [ vrthra manveru ];
           platforms = stdenv.lib.platforms.all;
         };
 
@@ -179,14 +180,6 @@ let
     ) args; in self;
 
 in {
-  ruby_1_9_3 = generic {
-    version = rubyVersion "1" "9" "3" "p551";
-    sha256 = {
-      src = "1s2ibg3s2iflzdv7rfxi1qqkvdbn2dq8gxdn0nxrb77ls5ffanxv";
-      git = "1r9xzzxmci2ajb34qb4y1w424mz878zdgzxkfp9w60agldxnb36s";
-    };
-  };
-
   ruby_2_0_0 = generic {
     version = rubyVersion "2" "0" "0" "p647";
     sha256 = {
@@ -211,11 +204,19 @@ in {
     };
   };
 
-  ruby_2_3_1 = generic {
-    version = rubyVersion "2" "3" "1" "";
+  ruby_2_3_3 = generic {
+    version = rubyVersion "2" "3" "3" "";
     sha256 = {
-      src = "1kbxg72las93w0y553cxv3lymy2wvij3i3pg1y9g8aq3na676z5q";
-      git = "0dv1rf5f9lj3icqs51bq7ljdcf17sdclmxm9hilwxps5l69v5q9r";
+      src = "1dqmh42p6siv9aqzdjldsnhljj3f2h30m0v8cf25icjmqp40h514";
+      git = "0cwjf0nrzaa5g81bw0qp65byyadhxvbnvprkshv3ckjl7yi46zf6";
+    };
+  };
+
+  ruby_2_4_0 = generic {
+    version = rubyVersion "2" "4" "0" "";
+    sha256 = {
+      src = "0gcyn9328w2vma882l71c9v9ygmmsj2z8j1l44c4l2x92nyx0bqm";
+      git = "1w9zyx8xmka8jdiha57snnbfls2r6dc9g03d8cjx0nxkmwf3r2l3";
     };
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "0.4.6";
   name = "kargo-${version}";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     ansible2
     boto
     cffi

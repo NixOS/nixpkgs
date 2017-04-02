@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
    name = "xdo-${version}";
-   version = "0.5.3";
+   version = "0.5.5";
 
    src = fetchFromGitHub {
      owner = "baskerville";
      repo = "xdo";
      rev = version;
-     sha256 = "0gfrziil6xw6pkr8k8rn56ihy0333v6dlsw3dckib9hm7ikj0k2f";
+     sha256 = "17i7ym4jrrbsiqs0jnm6k49hp9qn32hswad4j0lavwgv4wawachz";
    };
-
-   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
+   
+   makeFlags = "PREFIX=$(out)";
 
    buildInputs = [ libxcb xcbutilwm ];
 
-   meta = {
+   meta = with stdenv.lib; {
      description = "Small X utility to perform elementary actions on windows";
-     inherit (src.meta) homepage;
-     maintainers = [ stdenv.lib.maintainers.meisternu ];
-     license = stdenv.lib.licenses.bsd2;
-     platforms = stdenv.lib.platforms.linux;
+     homepage = "https://github.com/baskerville/xdo";
+     maintainers = with maintainers; [ meisternu ];
+     license = licenses.bsd2;
+     platforms = platforms.linux;
    };
 }

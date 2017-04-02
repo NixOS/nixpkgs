@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.version}";
-  version = "1.6.17";
+  version = "1.6.20";
 
   src = fetchurl {
     url = "http://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
-    sha256 = "16532f4951piv1g2i539233868xfs1damrnxql61gjgxpwnklhcn";
+    sha256 = "0qar94k9x9dkws4clrnlw789q1ha9qjk06356s86hh78qwywc1ki";
   };
 
   nativeBuildInputs = [ autoconf automake flex yacc perl which ];

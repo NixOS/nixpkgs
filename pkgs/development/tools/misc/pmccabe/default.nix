@@ -1,24 +1,30 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pmccabe-2.4-CVS20070814";
+  name = "pmccabe-${version}";
+  version = "2.6";
 
   src = fetchurl {
-    url = "http://cvs.parisc-linux.org/download/${name}.tar.gz";
-    sha256 = "0nqvfdf2cxx516nw0rwr3lhzhiyrnpc2jf45ldfwsdc9rm2nj3r9";
+    url = "http://http.debian.net/debian/pool/main/p/pmccabe/pmccabe_${version}.tar.gz";
+    sha256 = "0a3h1b9fb87c82d5fbql5lc4gp338pa5s9i66dhw7zk8jdygx474";
   };
 
   configurePhase = ''
-    sed -i "Makefile"							\
-        -"es|^[[:blank:]]*DESTDIR[[:blank:]]*=.*$|DESTDIR = $out|g ;	\
-	   s|^[[:blank:]]*INSTALL[[:blank:]]*=.*$|INSTALL = install|g ;	\
-	   s|/usr/|/|g"
-  '';
+    sed -i -r Makefile \
+      -e 's,/usr/,/,g' \
+      -e "s,^DESTDIR =.*$,DESTDIR = $out," \
+      -e "s,^INSTALL = install.*$,INSTALL = install," \
+      -e "s,^all:.*$,all: \$(PROGS),"
+    '';
 
-  meta = {
+  checkPhase = "make test";
+
+  doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "McCabe-style function complexity and line counting for C and C++";
-    homepage = http://www.parisc-linux.org/~bame/pmccabe/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = https://people.debian.org/~bame/pmccabe/;
+    license = licenses.gpl2Plus;
 
     longDescription = ''
       pmccabe calculates McCabe-style cyclomatic complexity for C and
@@ -32,6 +38,7 @@ stdenv.mkDerivation rec {
       trees or files; and vifn, to invoke vi given a function name rather
       than a file name.
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

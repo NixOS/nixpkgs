@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchgit, fetchpatch, pythonPackages, docutils
+{ lib, stdenv, fetchgit, fetchpatch, python3, docutils
 , acl, binutils, bzip2, cbfstool, cdrkit, colord, cpio, diffutils, e2fsprogs, file, fpc, gettext, ghc
-, gnupg1, gzip, jdk, libcaca, mono, pdftk, poppler_utils, rpm, sng, sqlite, squashfsTools, unzip, vim, xz
+, gnupg1, gzip, jdk, libcaca, mono, pdftk, poppler_utils, sng, sqlite, squashfsTools, unzip, vim, xz
+, colordiff
 , enableBloat ? false
 }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "diffoscope-${version}";
-  version = "52";
-
-  namePrefix = "";
+python3.pkgs.buildPythonApplication rec {
+  pname = "diffoscope";
+  name = "${pname}-${version}";
+  version = "77";
 
   src = fetchgit {
     url = "git://anonscm.debian.org/reproducible/diffoscope.git";
     rev = "refs/tags/${version}";
-    sha256 = "18nqsd51rc0rldyxnjmzn86154asianhv415llhbxpr1a6zwqis6";
+    sha256 = "0l5q24sqb88qkz62cz85bq65myfqig3z3m1lj2s92hdlqip9946b";
   };
 
   patches =
@@ -29,10 +29,12 @@ pythonPackages.buildPythonApplication rec {
   # Still missing these tools: enjarify, otool & lipo (maybe OS X only), showttf
   # Also these libraries: python3-guestfs
   # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
-  propagatedBuildInputs = (with pythonPackages; [ debian libarchive-c python_magic tlsh ]) ++
+  buildInputs =
     map lib.getBin ([ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file gettext
-      gzip libcaca poppler_utils rpm sng sqlite squashfsTools unzip vim xz
+      gzip libcaca poppler_utils sng sqlite squashfsTools unzip vim xz colordiff
     ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ]);
+
+  pythonPath = with python3.pkgs; [ debian libarchive-c python_magic tlsh rpm ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 

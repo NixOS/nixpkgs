@@ -1,17 +1,20 @@
 { stdenv, fetchurl, cmake }:
 
 let
-  version = "2.3.0";
+  version = "2.6.0";
 in
 stdenv.mkDerivation rec {
   name = "ign-math2-${version}";
 
   src = fetchurl {
     url = "http://gazebosim.org/distributions/ign-math/releases/ignition-math2-${version}.tar.bz2";
-    sha256 = "1a2jgq6allcxg62y0r61iv4hgxkfr1whpsxy75hg7k85s7da8dpl";
+    sha256 = "1d4naq0zp704c7ckj2wwmhplxmwkvcs1jib8bklnnd09lhg9j92j";
   };
 
   buildInputs = [ cmake ];
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_INCLUDEDIR=include -DCMAKE_INSTALL_LIBDIR=lib"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://ignitionrobotics.org/libraries/math;

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = http://asynk.io/;
     description = "Flexible contacts synchronization program";
     license = licenses.agpl3;
-    maintainers = [ maintainers.DamienCassou ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

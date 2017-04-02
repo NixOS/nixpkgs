@@ -5,11 +5,19 @@ with lib;
 let
   cfg = config.services.nginx;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
-    vhostConfig // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${vhostName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
+    let
+      serverName = if vhostConfig.serverName != null
+        then vhostConfig.serverName
+        else vhostName;
+    in
+    vhostConfig // {
+      inherit serverName;
+    } // (optionalAttrs vhostConfig.enableACME {
+      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
+      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
     })
   ) cfg.virtualHosts;
+  enableIPv6 = config.networking.enableIPv6;
 
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
@@ -79,12 +87,14 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
+      ${cfg.commonHttpConfig}
+
       ${vhosts}
 
       ${optionalString cfg.statusPage ''
         server {
           listen 80;
-          listen [::]:80;
+          ${optionalString enableIPv6 "listen [::]:80;" }
 
           server_name localhost;
 
@@ -92,7 +102,7 @@ let
             stub_status on;
             access_log off;
             allow 127.0.0.1;
-            allow ::1;
+            ${optionalString enableIPv6 "allow ::1;"}
             deny all;
           }
         }
@@ -111,12 +121,13 @@ let
     ${cfg.appendConfig}
   '';
 
-  vhosts = concatStringsSep "\n" (mapAttrsToList (serverName: vhost:
+  vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
       let
+        serverName = vhost.serverName;
         ssl = vhost.enableSSL || vhost.forceSSL;
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl http2"
-          + optionalString vhost.default " default";
+          + optionalString vhost.default " default_server";
         acmeLocation = optionalString vhost.enableACME (''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
@@ -132,8 +143,10 @@ let
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            listen 80 ${optionalString vhost.default "default"};
-            listen [::]:80 ${optionalString vhost.default "default"};
+            listen 80 ${optionalString vhost.default "default_server"};
+            ${optionalString enableIPv6
+              ''listen [::]:80 ${optionalString vhost.default "default_server"};''
+            }
 
             server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
             ${acmeLocation}
@@ -145,7 +158,7 @@ let
 
         server {
           listen ${listenString};
-          listen [::]:${listenString};
+          ${optionalString enableIPv6 "listen [::]:${listenString};"}
 
           server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
           ${acmeLocation}
@@ -158,7 +171,7 @@ let
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
 
-          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth serverName vhost.basicAuth)}
+          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth vhostName vhost.basicAuth)}
 
           ${mkLocations vhost.locations}
 
@@ -172,11 +185,12 @@ let
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
+      ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
     }
   '') locations);
-  mkBasicAuth = serverName: authDef: let
-    htpasswdFile = pkgs.writeText "${serverName}.htpasswd" (
+  mkBasicAuth = vhostName: authDef: let
+    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
       concatStringsSep "\n" (mapAttrsToList (user: password: ''
         ${user}:{PLAIN}${password}
       '') authDef)
@@ -233,11 +247,13 @@ in
       };
 
       package = mkOption {
-        default = pkgs.nginx;
-        defaultText = "pkgs.nginx";
+        default = pkgs.nginxStable;
+        defaultText = "pkgs.nginxStable";
         type = types.package;
         description = "
-          Nginx package to use.
+          Nginx package to use. This defaults to the stable version. Note
+          that the nginx team recommends to use the mainline version which
+          available in nixpkgs as <literal>nginxMainline</literal>.
         ";
       };
 
@@ -261,6 +277,24 @@ in
           can be specified more than once and it's value will be
           concatenated (contrary to <option>config</option> which
           can be set only once).
+        '';
+      };
+
+      commonHttpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          resolver 127.0.0.1 valid=5s;
+
+          log_format myformat '$remote_addr - $remote_user [$time_local] '
+                              '"$request" $status $body_bytes_sent '
+                              '"$http_referer" "$http_user_agent"';
+        '';
+        description = ''
+          With nginx you must provide common http context definitions before
+          they are used, e.g. log_format, resolver, etc. inside of server
+          or location contexts. Use this attribute to set these definitions
+          at the appropriate location.
         '';
       };
 
@@ -370,10 +404,18 @@ in
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
+    assertions = let hostOrAliasIsNull = l: l.root == null || l.alias == null; in [
+      {
+        assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
+        message = "Only one of nginx root or alias can be specified on a location.";
+      }
+    ];
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs
@@ -390,17 +432,20 @@ in
     };
 
     security.acme.certs = filterAttrs (n: v: v != {}) (
-      mapAttrs (vhostName: vhostConfig:
-        optionalAttrs vhostConfig.enableACME {
-          user = cfg.user;
-          group = cfg.group;
-          webroot = vhostConfig.acmeRoot;
-          extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
-          postRun = ''
-            systemctl reload nginx
-          '';
-        }
-      ) virtualHosts
+      let
+        vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME) vhostsConfigs;
+        acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
+            user = cfg.user;
+            group = lib.mkDefault cfg.group;
+            webroot = vhostConfig.acmeRoot;
+            extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+            postRun = ''
+              systemctl reload nginx
+            '';
+          }; }) acmeEnabledVhosts;
+      in
+        listToAttrs acmePairs
     );
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton

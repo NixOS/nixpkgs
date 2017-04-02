@@ -1,13 +1,12 @@
-{stdenv, fetchurl, which, openssl, ocaml, findlib}:
+{ stdenv, fetchzip, which, openssl, ocaml, findlib }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-ssl-${version}";
-  version = "0.5.2";
+  name = "ocaml${ocaml.version}-ssl-${version}";
+  version = "0.5.3";
 
-  src = fetchurl {
-  url = "mirror://sourceforge/project/savonet/ocaml-ssl/0.5.2/ocaml-ssl-0.5.2.tar.gz";
-
-    sha256 = "0341rm8aqrckmhag1lrqfnl17v6n4ci8ibda62ahkkn5cxd58cpp";
+  src = fetchzip {
+    url = "https://github.com/savonet/ocaml-ssl/releases/download/0.5.3/ocaml-ssl-${version}.tar.gz";
+    sha256 = "0h2k19zpdvq1gqwrmmgkibw4j48l71vv6ajzxs0wi71y80c1vhwm";
   };
 
   buildInputs = [which ocaml findlib];

@@ -1,50 +1,54 @@
-{ stdenv, fetchurl, fetchpatch, boehmgc, zlib, sqlite, pcre }:
+{ stdenv, fetchurl, fetchpatch, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
+, git, apacheHttpd, apr, aprutil, mariadb, mbedtls, openssl, pkgs, gtk2
+}:
 
 stdenv.mkDerivation rec {
   name = "neko-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "http://nekovm.org/_media/neko-${version}.tar.gz";
-    sha256 = "1lcm1ahbklfpd5lnqjwmvyj2vr85jbq57hszk5jgq0x6yx6p3927";
+    url = "http://nekovm.org/media/neko-${version}-src.tar.gz";
+    sha256 = "15ng9ad0jspnhj38csli1pvsv3nxm75f0nlps7i10194jvzdb4qc";
   };
 
-  patches = stdenv.lib.singleton (fetchpatch {
-    url = "https://github.com/HaxeFoundation/neko/commit/"
-        + "ccc78c29deab7971e1369f4fe3dedd14cf9f3128.patch";
-    sha256 = "1nya50rzai15hmpq2azganjxzgrfydf30glfwirgw6q8z7z3wpkq";
-  });
+  # Patches backported with reference to https://github.com/HaxeFoundation/neko/issues/131
+  # They can probably be removed when bumping to next version
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/HaxeFoundation/neko/commit/"
+          + "a8c71ad97faaccff6c6e9e09eba2d5efd022f8dc.patch";
+      sha256 = "0mnx15cdjs8mnl01mhc9z2gpzh4d1q0ygqnjackrqxz6x235ydyp";
+    })
+    (fetchpatch {
+      url = "https://github.com/HaxeFoundation/neko/commit/"
+          + "fe87462d9c7a6ee27e28f5be5e4fc0ac87b34574.patch";
+      sha256 = "1jbmq6j32vg3qv20dbh82cp54886lgrh7gkcqins8a2y4l4dl3sc";
+    })
+  ];
 
-  prePatch = with stdenv.lib; let
-    libs = concatStringsSep "," (map (lib: "\"${lib.dev}/include\"") buildInputs);
-  in ''
-    sed -i -e '/^search_includes/,/^}/c \
-      search_includes = function(_) { return $array(${libs}) }
-    ' src/tools/install.neko
-    sed -i -e '/allocated = strdup/s|"[^"]*"|"'"$out/lib/neko:$out/bin"'"|' \
-      vm/load.c
-    # temporarily, fixed in 1.8.3
-    sed -i -e 's/^#if defined(_64BITS)/& || defined(__x86_64__)/' vm/neko.h
-
-    for disabled_mod in mod_neko{,2} mod_tora{,2} mysql ui; do
-      sed -i -e '/^libs/,/^}/{/^\s*'"$disabled_mod"'\s*=>/,/^\s*}/d}' \
-        src/tools/install.neko
-    done
+  buildInputs =
+    [ boehmgc zlib sqlite pcre cmake pkgconfig git apacheHttpd apr aprutil
+      mariadb.client mbedtls openssl ]
+      ++ stdenv.lib.optional stdenv.isLinux gtk2
+      ++ stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
+                                                pkgs.darwin.apple_sdk.frameworks.Carbon];
+  cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
+  prePatch = ''
+    sed -i -e '/allocated = strdup/s|"[^"]*"|"'"$out/lib/neko:$out/bin"'"|' vm/load.c
   '';
 
-  makeFlags = "INSTALL_PREFIX=$(out)";
-  buildInputs = [ boehmgc zlib sqlite pcre ];
+  checkPhase = ''
+    bin/neko bin/test.n
+  '';
+
   dontStrip = true;
 
-  preInstall = ''
-    install -vd "$out/lib" "$out/bin"
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-level dynamically typed programming language";
     homepage = http://nekovm.org;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
+

@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
-, hscolour, patchutils
+{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+, hscolour, patchutils, sphinx
+
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # library instead of the faster but GPLed integer-gmp library.
+, enableIntegerSimple ? false, gmp
 }:
 
 let
@@ -22,7 +26,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./ghc-8.x-dont-pass-linker-flags-via-response-files.patch  # https://github.com/NixOS/nixpkgs/issues/10752
     ./relocation.patch
 
     # Fix https://ghc.haskell.org/trac/ghc/ticket/12130
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     (fetchFilteredPatch { url = https://git.haskell.org/ghc.git/patch/2f8cd14fe909a377b3e084a4f2ded83a0e6d44dd; sha256 = "06zvlgcf50ab58bw6yw3krn45dsmhg4cmlz4nqff8k4z1f1bj01v"; })
   ] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch;
 
-  buildInputs = [ ghc perl hscolour ];
+  buildInputs = [ ghc perl hscolour sphinx];
 
   enableParallelBuilding = true;
 
@@ -42,13 +45,16 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString enableIntegerSimple ''
+    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
   '';
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
     "--datadir=$doc/share/doc/ghc"
+  ] ++ stdenv.lib.optional (! enableIntegerSimple) [
+    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
@@ -58,6 +64,8 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   postInstall = ''
+    paxmark m $out/lib/${name}/bin/{ghc,haddock}
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
 

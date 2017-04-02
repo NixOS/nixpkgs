@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, intltool, pkgconfig , gtk, libxml2
-, enchant, gucharmap, python
+{ stdenv, fetchurl, intltool, wrapGAppsHook, pkgconfig , gtk, libxml2
+, enchant, gucharmap, python, gnome3
 }:
 
 stdenv.mkDerivation rec {
-  name = "bluefish-2.2.7";
+  name = "bluefish-2.2.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/bluefish/${name}.tar.bz2";
-    sha256 = "1psqx3ljz13ylqs4zkaxv9lv1hgzld6904kdp0alwx99p5rlnlr3";
+    sha256 = "1ciygj79q6i3ga5x1j8aivc05nh6rhhnm7hrq8q8xd9vd4ms3v5g";
   };
 
-  buildInputs = [ intltool pkgconfig gtk libxml2
+  nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
+  buildInputs = [ gnome3.defaultIconTheme gtk libxml2
     enchant gucharmap python ];
 
   meta = with stdenv.lib; {

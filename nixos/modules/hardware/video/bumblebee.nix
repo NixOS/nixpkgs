@@ -13,7 +13,7 @@ let
     useDisplayDevice = cfg.connectDisplay;
   };
 
-  useBbswitch = cfg.pmMethod == "bbswitch";
+  useBbswitch = cfg.pmMethod == "bbswitch" || cfg.pmMethod == "auto" && useNvidia;
 
   primus = pkgs.primus.override {
     inherit useNvidia;
@@ -65,7 +65,7 @@ in
 
       pmMethod = mkOption {
         default = "auto";
-        type = types.enum [ "auto" "bbswitch" "nouveau" "switcheroo" "none" ];
+        type = types.enum [ "auto" "bbswitch" "switcheroo" "none" ];
         description = ''
           Set preferred power management method for unused card.
         '';
@@ -76,8 +76,8 @@ in
 
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
-    boot.kernelModules = optional useBbswitch [ "bbswitch" ];
-    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11;
+    boot.kernelModules = optional useBbswitch "bbswitch";
+    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
 
     environment.systemPackages = [ bumblebee primus ];
 

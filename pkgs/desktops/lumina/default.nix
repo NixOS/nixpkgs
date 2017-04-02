@@ -1,32 +1,32 @@
-{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop_file_utils,
-  numlockx, xorg, qt5, kde5
+{ stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop_file_utils, numlockx,
+  xorg, qtbase, qtsvg, qtmultimedia, qtx11extras, qmakeHook, qttools, oxygen-icons5
 }:
 
 stdenv.mkDerivation rec {
   name = "lumina-${version}";
-  version = "1.1.0-p1";
+  version = "1.2.0-p1";
 
   src = fetchFromGitHub {
     owner = "trueos";
     repo = "lumina";
     rev = "v${version}";
-    sha256 = "1kkb6v6p6w5mx1qdmcrq3r674k9ahpc6wlsb9pi2lq8qk9yaid0m";
+    sha256 = "0k16lcpxp9avwkadbbyqficd1wxsmwian5ji38wyax76v22yq7p6";
   };
 
   nativeBuildInputs = [
-    qt5.qmakeHook
-    qt5.qttools
+    qmakeHook
+    qttools
   ];
 
   buildInputs = [
     xorg.libxcb
     xorg.xcbutilwm
     xorg.xcbutilimage
-    qt5.qtbase
-    qt5.qtsvg
-    qt5.qtmultimedia
-    qt5.qtx11extras
-    kde5.oxygen-icons5
+    qtbase
+    qtsvg
+    qtmultimedia
+    qtx11extras
+    oxygen-icons5
     fluxbox
     xscreensaver
     desktop_file_utils

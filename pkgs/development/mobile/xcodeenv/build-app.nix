@@ -1,12 +1,11 @@
 {stdenv, xcodewrapper}:
 { name
 , src
-, sdkVersion ? "6.1"
+, sdkVersion ? "10.2"
 , target ? null
 , configuration ? null
 , scheme ? null
 , sdk ? null
-, arch ? null
 , xcodeFlags ? ""
 , release ? false
 , codeSignIdentity ? null
@@ -35,11 +34,6 @@ let
       if release then "Release" else "Debug"
     else configuration;
     
-  _arch = if arch == null
-    then
-      if release then "armv7" else "x86_64"
-    else arch;
-
   _sdk = if sdk == null
     then
       if release then "iphoneos" + sdkVersion else "iphonesimulator" + sdkVersion
@@ -68,6 +62,9 @@ stdenv.mkDerivation {
         # Import the certificate into the keychain
         security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A 
 
+        # Grant the codesign utility permissions to read from the keychain
+        security set-key-partition-list -S apple-tool:,apple: -s -k "" $keychainName
+        
         # Determine provisioning ID
         PROVISIONING_PROFILE=$(grep UUID -A1 -a ${provisioningProfile} | grep -o "[-A-Za-z0-9]\{36\}")
 
@@ -83,7 +80,7 @@ stdenv.mkDerivation {
       ''}
 
     # Do the building
-    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} -arch ${_arch} ONLY_ACTIVE_ARCH=NO VALID_ARCHS="${_arch}" CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateXCArchive then "archive" else ""} ${xcodeFlags} ${if release then ''"CODE_SIGN_IDENTITY=${codeSignIdentity}" PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName"'' else ""}
+    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} TARGETED_DEVICE_FAMILY="1, 2" ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateXCArchive then "archive" else ""} ${xcodeFlags} ${if release then ''"CODE_SIGN_IDENTITY=${codeSignIdentity}" PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName-db"'' else ""}
     
     ${stdenv.lib.optionalString release ''
       ${stdenv.lib.optionalString generateIPA ''

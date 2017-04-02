@@ -108,7 +108,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to include the 32-bit pulseaudio libraries in the systemn or not.
+          Whether to include the 32-bit pulseaudio libraries in the system or not.
           This is only useful on 64-bit systems and currently limited to x86_64-linux.
         '';
       };
@@ -160,6 +160,13 @@ in {
             if activated.
           '';
         };
+
+        config = mkOption {
+          type = types.attrsOf types.unspecified;
+          default = {};
+          description = ''Config of the pulse daemon. See <literal>man pulse-daemon.conf</literal>.'';
+          example = literalExample ''{ flat-volumes = "no"; }'';
+        };
       };
 
       zeroconf = {
@@ -204,14 +211,18 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
-      environment.etc = singleton {
-        target = "asound.conf";
-        source = alsaConf;
-      };
+      environment.etc = [
+        { target = "asound.conf";
+          source = alsaConf; }
+
+        { target = "pulse/daemon.conf";
+          source = writeText "daemon.conf" (lib.generators.toKeyValue {} cfg.daemon.config); }
+      ];
 
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
+      systemd.packages = [ cfg.package ];
     })
 
     (mkIf hasZeroconf {
@@ -227,30 +238,13 @@ in {
         target = "pulse/default.pa";
         source = myConfigFile;
       };
-
       systemd.user = {
         services.pulseaudio = {
-          description = "PulseAudio Server";
-          # NixOS doesn't support "Also" so we bring it in manually
-          wantedBy = [ "default.target" ];
           serviceConfig = {
-            Type = "notify";
-            ExecStart = binaryNoDaemon;
-            Restart = "on-failure";
             RestartSec = "500ms";
           };
           environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
           restartIfChanged = true;
-        };
-
-        sockets.pulseaudio = {
-          description = "PulseAudio Socket";
-          wantedBy = [ "sockets.target" ];
-          socketConfig = {
-            Priority = 6;
-            Backlog = 5;
-            ListenStream = "%t/pulse/native";
-          };
         };
       };
     })
@@ -280,6 +274,8 @@ in {
           RestartSec = "500ms";
         };
       };
+
+      environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
     })
   ];
 

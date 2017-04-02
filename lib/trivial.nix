@@ -1,16 +1,43 @@
 rec {
 
-  # Identity function.
+  /* The identity function
+     For when you need a function that does “nothing”.
+
+     Type: id :: a -> a
+  */
   id = x: x;
 
-  # Constant function.
+  /* The constant function
+     Ignores the second argument.
+     Or: Construct a function that always returns a static value.
+
+     Type: const :: a -> b -> a
+     Example:
+       let f = const 5; in f 10
+       => 5
+  */
   const = x: y: x;
 
-  # Named versions corresponding to some builtin operators.
+
+  ## Named versions corresponding to some builtin operators.
+
+  /* Concat two strings */
   concat = x: y: x ++ y;
+
+  /* boolean “or” */
   or = x: y: x || y;
+
+  /* boolean “and” */
   and = x: y: x && y;
+
+  /* Merge two attribute sets shallowly, right side trumps left
+
+     Example:
+       mergeAttrs { a = 1; b = 2; } // { b = 3; c = 4; }
+       => { a = 1; b = 3; c = 4; }
+  */
   mergeAttrs = x: y: x // y;
+
 
   # Compute the fixed point of the given function `f`, which is usually an
   # attribute set that expects its final, non-recursive representation as an
@@ -102,25 +129,7 @@ rec {
   min = x: y: if x < y then x else y;
   max = x: y: if x > y then x else y;
 
-  /* Reads a JSON file. It is useful to import pure data into other nix
-     expressions.
-
-     Example:
-
-       mkDerivation {
-         src = fetchgit (importJSON ./repo.json)
-         #...
-       }
-
-       where repo.json contains:
-
-       {
-         "url": "git://some-domain/some/repo",
-         "rev": "265de7283488964f44f0257a8b4a055ad8af984d",
-         "sha256": "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h"
-       }
-
-  */
+  /* Reads a JSON file. */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
@@ -138,7 +147,4 @@ rec {
   */
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
-
-  fetchMD5warn = name: context : data : info
-    "Deprecated use of MD5 hash in ${name} to fetch ${context}" data;
 }

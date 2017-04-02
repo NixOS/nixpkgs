@@ -428,7 +428,7 @@ in {
         TimeoutSec = "300";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
+        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
 
@@ -481,6 +481,7 @@ in {
         mkdir -p ${cfg.statePath}/repositories
         mkdir -p ${gitlabConfig.production.shared.path}/artifacts
         mkdir -p ${gitlabConfig.production.shared.path}/lfs-objects
+        mkdir -p ${gitlabConfig.production.shared.path}/pages
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/shell
         mkdir -p ${cfg.statePath}/tmp/pids
@@ -528,8 +529,8 @@ in {
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
-            psql postgres -c "CREATE ROLE gitlab WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${config.services.postgresql.package}/bin/createdb --owner gitlab gitlab || true
+            psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
+            ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName} || true
             touch "${cfg.statePath}/db-created"
           fi
         fi

@@ -13,6 +13,7 @@ from tempfile import NamedTemporaryFile
 
 import click
 
+IS_AUTO_CONFIG = @isAutoConfig@ # NOQA
 CERTTOOL_COMMAND = "@certtool@"
 CERT_BITS = "@certBits@"
 CLIENT_EXPIRATION = "@clientExpiration@"
@@ -149,6 +150,12 @@ def create_template(contents):
 
 
 def generate_key(org, user):
+    if not IS_AUTO_CONFIG:
+        msg = "Automatic PKI handling is disabled, you need to " \
+              "manually issue a client certificate for user {}.\n"
+        sys.stderr.write(msg.format(user))
+        return
+
     basedir = os.path.join(TASKD_DATA_DIR, "keys", org, user)
     if os.path.exists(basedir):
         raise OSError("Keyfile directory for {} already exists.".format(user))
@@ -243,26 +250,32 @@ class User(object):
         self.key = key
 
     def export(self):
-        pubcert = getkey(self.__org, self.name, "public.cert")
-        privkey = getkey(self.__org, self.name, "private.key")
-        cacert = getkey("ca.cert")
-
-        keydir = "${TASKDATA:-$HOME/.task}/keys"
-
         credentials = '/'.join([self.__org, self.name, self.key])
         allow_unquoted = string.ascii_letters + string.digits + "/-_."
         if not all((c in allow_unquoted) for c in credentials):
             credentials = "'" + credentials.replace("'", r"'\''") + "'"
 
-        script = [
-            "umask 0077",
-            'mkdir -p "{}"'.format(keydir),
-            mktaskkey("certificate", os.path.join(keydir, "public.cert"),
-                      pubcert),
-            mktaskkey("key", os.path.join(keydir, "private.key"), privkey),
-            mktaskkey("ca", os.path.join(keydir, "ca.cert"), cacert),
+        script = []
+
+        if IS_AUTO_CONFIG:
+            pubcert = getkey(self.__org, self.name, "public.cert")
+            privkey = getkey(self.__org, self.name, "private.key")
+            cacert = getkey("ca.cert")
+
+            keydir = "${TASKDATA:-$HOME/.task}/keys"
+
+            script += [
+                "umask 0077",
+                'mkdir -p "{}"'.format(keydir),
+                mktaskkey("certificate", os.path.join(keydir, "public.cert"),
+                          pubcert),
+                mktaskkey("key", os.path.join(keydir, "private.key"), privkey),
+                mktaskkey("ca", os.path.join(keydir, "ca.cert"), cacert)
+            ]
+
+        script.append(
             "task config taskd.credentials -- {}".format(credentials)
-        ]
+        )
 
         return "\n".join(script) + "\n"
 
@@ -526,7 +539,7 @@ def export_user(organisation, user):
     userobj = organisation.get_user(user)
     if userobj is None:
         msg = "User {} doesn't exist in organisation {}."
-        sys.exit(msg.format(userobj.name, organisation.name))
+        sys.exit(msg.format(user, organisation.name))
 
     sys.stdout.write(userobj.export())
 

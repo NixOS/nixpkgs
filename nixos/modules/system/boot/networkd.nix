@@ -79,7 +79,7 @@ let
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
       "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec"
+      "UpDelaySec" "DownDelaySec" "GratuitousARP"
     ])
     (assertValueOneOf "Mode" [
       "balance-rr" "active-backup" "balance-xor"
@@ -165,6 +165,11 @@ let
       '';
     };
 
+    extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      description = "Extra configuration append to unit";
+    };
   };
 
   linkOptions = commonNetworkOptions // {
@@ -515,6 +520,8 @@ let
         ''
           [Link]
           ${attrsToSection def.linkConfig}
+
+          ${def.extraConfig}
         '';
     };
 
@@ -565,6 +572,7 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${def.extraConfig}
         '';
     };
 
@@ -603,9 +611,14 @@ let
             ${attrsToSection x.routeConfig}
 
           '')}
+          ${def.extraConfig}
         '';
     };
 
+  unitFiles = map (name: {
+    target = "systemd/network/${name}";
+    source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units);
 in
 
 {
@@ -654,20 +667,20 @@ in
 
   config = mkIf config.systemd.network.enable {
 
-    systemd.additionalUpstreamSystemUnits =
-      [ "systemd-networkd.service" "systemd-networkd-wait-online.service" ];
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-networkd.service" "systemd-networkd-wait-online.service"
+      "org.freedesktop.network1.busname"
+    ];
 
-    systemd.network.units =
-      mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
+    systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
       // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
-    environment.etc."systemd/network".source =
-      generateUnits "network" cfg.units [] [];
+    environment.etc = unitFiles;
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ config.environment.etc."systemd/network".source ];
+      restartTriggers = map (f: f.source) (unitFiles);
     };
 
     systemd.services.systemd-networkd-wait-online = {
@@ -687,8 +700,5 @@ in
     };
 
     services.resolved.enable = mkDefault true;
-    services.timesyncd.enable = mkDefault config.services.ntp.enable;
-
   };
-
 }
