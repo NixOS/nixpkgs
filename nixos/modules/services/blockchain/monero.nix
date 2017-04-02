@@ -210,7 +210,7 @@ in
         name = opts.user.default;
         uid = config.ids.uids.${opts.user.default};
         group = opts.group.default;
-        description = opts.user.defaultText;
+        description = opts.user.description;
         home = cfg.dataDir;
         createHome = true;
       });
