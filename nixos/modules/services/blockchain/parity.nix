@@ -22,25 +22,26 @@ in
     services.parity = {
 
       enable = mkOption {
-        type = types.bool;
         default = false;
         description = "Enable ${description}";
+        type = types.bool;
       };
 
       package = mkOption {
         default = pkgs.altcoins.parity;
+        description = "Package to use";
         type = types.package;
       };
 
       user = mkOption {
          default = "parity";
-         defaultText = "Parity daemon user"; 
+         description = "Parity daemon user"; 
          type = types.str;
       };
 
       group = mkOption {
          default = "parity";
-         defaultText = "Parity daemon group";
+         description = "Parity daemon group";
          type = types.str;
       };
 
@@ -84,7 +85,7 @@ in
         name = opts.user.default;
         uid = config.ids.uids.${opts.user.default};
         group = opts.group.default;
-        description = opts.user.defaultText;
+        description = opts.user.description;
         home = cfg.dataDir;
         createHome = true;
       });
