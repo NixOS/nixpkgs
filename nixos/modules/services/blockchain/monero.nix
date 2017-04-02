@@ -72,18 +72,19 @@ in
 
       package = mkOption {
         default = pkgs.monero;
+        description = "Package to use";
         type = types.package;
       };
 
       user = mkOption {
          default = "monero";
-         defaultText = "Monero daemon user"; 
+         description = "Monero daemon user"; 
          type = types.str;
       };
 
       group = mkOption {
          default = "monero";
-         defaultText = "Monero daemon group";
+         description = "Monero daemon group";
          type = types.str;
       };
 
@@ -99,6 +100,7 @@ in
 
       wallets = mkOption {
         default = {};
+        description = "Additional wallet RPC daemons to start";
         type = with types; attrsOf (submodule {
 
           options = {
