@@ -8,6 +8,14 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
 
+# Copy the secrets to their needed location
+if [ -d "@extraUtils@/secrets" ]; then
+    for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        ln -s "@extraUtils@/secrets/$secret" "$secret"
+    done
+fi
+
 # Stop LVM complaining about fd3
 export LVM_SUPPRESS_FD_WARNINGS=true
 
