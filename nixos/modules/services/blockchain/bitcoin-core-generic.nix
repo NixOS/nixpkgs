@@ -33,13 +33,14 @@ in
     services.${name} = {
 
       enable = mkOption {
-        type = types.bool;
         default = false;
         description = "Enable ${description}";
+        type = types.bool;
       };
 
       package = mkOption {
         default = defaultPackage;
+        description = "Package to use";
         type = types.package;
       };
 
