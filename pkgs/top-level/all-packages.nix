@@ -4532,6 +4532,10 @@ with pkgs;
     python = python27;
   };
 
+  veracrypt = callPackage ../applications/misc/veracrypt {
+    wxGUI = true;
+  };
+
   vlan = callPackage ../tools/networking/vlan { };
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
