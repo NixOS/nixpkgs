@@ -1891,11 +1891,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videoopenchrome = (mkDerivation "xf86videoopenchrome" {
-    name = "xf86-video-openchrome-0.3.3";
+    name = "xf86-video-openchrome-0.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-openchrome-0.3.3.tar.bz2;
-      sha256 = "1v8j4i1r268n4fc5gq54zg1x50j0rhw71f3lba7411mcblg2z7p4";
+      url = mirror://xorg/individual/driver/xf86-video-openchrome-0.6.0.tar.bz2;
+      sha256 = "0x9gq3hw6k661k82ikd1y2kkk4dmgv310xr5q59dwn4k6z37aafs";
     };
     buildInputs = [pkgconfig fontsproto glproto libdrm udev libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;
