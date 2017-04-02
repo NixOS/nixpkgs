@@ -140,6 +140,10 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
+  ./services/blockchain/bitcoin.nix
+  ./services/blockchain/dash.nix
+  ./services/blockchain/parity.nix
+  ./services/blockchain/monero.nix
   ./services/cluster/fleet.nix
   ./services/cluster/kubernetes.nix
   ./services/cluster/panamax.nix

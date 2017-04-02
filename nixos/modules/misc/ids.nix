@@ -289,6 +289,10 @@
       rpc = 271;
       geoip = 272;
       fcron = 273;
+      bitcoin = 275;
+      dash = 276;
+      parity = 277;
+      monero = 278;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -547,6 +551,10 @@
       #rpc = 271; # unused
       #geoip = 272; # unused
       fcron = 273;
+      bitcoin = 275;
+      dash = 276;
+      parity = 277;
+      monero = 278;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
