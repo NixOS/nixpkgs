@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     xorg.libXv
   ]);
 
-  buildInputs = [unzip ant jdk];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ ant jdk];
 
   buildPhase = ''ant make'';
 
@@ -55,23 +56,27 @@ stdenv.mkDerivation rec {
     cp resources/install/generic/run.sh $out/bin/jitsi
     chmod +x $out/bin/jitsi
     substituteInPlace $out/bin/jitsi \
-        --subst-var-by JAVA ${jdk}/bin/java \
-        --subst-var-by EXTRALIBS ${gtk2.out}/lib
+      --subst-var-by JAVA ${jdk}/bin/java \
+      --subst-var-by EXTRALIBS ${gtk2.out}/lib \
+      --replace java ${jdk}/bin/java
     patchShebangs $out
-
-    libPath="$libPath:${jdk.jre.home}/lib/${jdk.architecture}"
+    libPath="$libPath:${jdk.home}/lib/${jdk.architecture}"
     find $out/ -type f -name '*.so' | while read file; do
       patchelf --set-rpath "$libPath" "$file" && \
           patchelf --shrink-rpath "$file"
     done
   '';
 
+  postFixup = ''
+    sed -i 's|net./nix/store/zk8kmwxkfard47bdvg7l0lmhix3idzhs-openjdk-8u121b13/bin/java.sip.communicator.launcher.SIPCommunicator|net.java.sip.communicator.launcher.SIPCommunicator|g' $out/bin/jitsi
+    '';
+
   meta = with stdenv.lib; {
     homepage = https://jitsi.org/;
     description = "Open Source Video Calls and Chat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.khumba ];
+    maintainers = with maintainers; [ khumba ndowens ];
   };
 
 }
