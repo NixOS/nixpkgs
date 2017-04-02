@@ -12,16 +12,14 @@ stdenv.mkDerivation rec {
   version = "3.19";
   name = "${_target}-linux-api-headers-${version}";
 
-  meta.priority = 1;
-
   sourceRoot = ".";
   inherit src;
 
   phases = [ "unpackPhase" "installPhase" ];
 
   unpackCmd = ''
-      ar x $curSrc
-      tar xf data.tar.gz
+    ar x $curSrc
+    tar xf data.tar.gz
   '';
 
   installPhase = ''
@@ -29,4 +27,17 @@ stdenv.mkDerivation rec {
     find . \( -name .install -o -name ..install.cmd \) -delete
     cp -r usr $out/${_target}
   '';
+
+  meta = {
+    description = "FRC linux api headers";
+    longDescription = ''
+      All linux api headers required to compile the arm-frc-linux-gnuaebi-gcc
+      cross compiler and all user programs.
+    '';
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.colescott ];
+    platforms = stdenv.lib.platforms.linux;
+
+    priority = 1;
+  };
 }

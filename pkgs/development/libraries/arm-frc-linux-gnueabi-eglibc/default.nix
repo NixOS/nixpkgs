@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
   version = "2.21";
   name = "${_target}-eglibc-${version}";
 
-  meta.priority = 2;
-
   sourceRoot = ".";
   inherit srcs;
 
@@ -51,4 +49,17 @@ stdenv.mkDerivation rec {
 
     cp -r ${arm-frc-linux-gnueabi-linux-api-headers}/* $out
   '';
+
+  meta = {
+    description = "FRC standard C lib";
+    longDescription = ''
+      eglibc library for the NI RoboRio to be used in compiling frc user
+      programs.
+    '';
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.colescott ];
+    platforms = stdenv.lib.platforms.linux;
+
+    priority = 2;
+  };
 }

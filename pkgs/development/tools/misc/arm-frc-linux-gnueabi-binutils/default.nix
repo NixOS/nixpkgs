@@ -6,8 +6,6 @@ stdenv.mkDerivation rec {
   version = "2.28";
   name = "${_target}-binutils-${version}";
 
-  meta.priority = 3;
-
   src = fetchurl {
     url = "ftp://ftp.gnu.org/gnu/binutils/binutils-${version}.tar.bz2";
     sha256 = "369737ce51587f92466041a97ab7d2358c6d9e1b6490b3940eb09fb0a9a6ac88";
@@ -41,4 +39,16 @@ stdenv.mkDerivation rec {
 
     cp -r ${arm-frc-linux-gnueabi-eglibc}/* $out
   '';
+
+  meta = {
+    description = "FRC binutils";
+    longDescription = ''
+      binutils used to build arm-frc-linux-gnueabi and user programs.
+    '';
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.colescott ];
+    platforms = stdenv.lib.platforms.linux;
+
+    priority = 3;
+  };
 }

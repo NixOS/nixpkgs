@@ -7,14 +7,10 @@ stdenv.mkDerivation rec {
   version = "4.9.4";
   name = "${_target}-gcc-${version}";
 
-  meta.priority = 4;
-
   src = fetchurl {
     url = "ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/gcc-${version}.tar.bz2";
     sha256 = "6c11d292cd01b294f9f84c9a59c230d80e9e4a47e5c6355f046bb36d4f358092";
   };
-
-  buildInputs = [arm-frc-linux-gnueabi-binutils arm-frc-linux-gnueabi-eglibc arm-frc-linux-gnueabi-linux-api-headers elfutils libmpc gmp mpfr zlib];
 
   patches =
   [
@@ -22,6 +18,8 @@ stdenv.mkDerivation rec {
     ./no-nested-deprecated-warnings.patch
     ./format-error-fix.patch
   ];
+
+  buildInputs = [arm-frc-linux-gnueabi-binutils arm-frc-linux-gnueabi-eglibc arm-frc-linux-gnueabi-linux-api-headers elfutils libmpc gmp mpfr zlib];
 
   configurePhase = ''
     mkdir -p $out
@@ -77,4 +75,18 @@ stdenv.mkDerivation rec {
 
     chmod 555 $out
   '';
+
+  meta = {
+    description = "FRC cross compiler";
+    longDescription = ''
+      arm-frc-linux-gnueabi-gcc is a cross compiler for building
+      code for FIRST Robotics Competition. Used as a cross compiler
+      for the NI RoboRio.
+    '';
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.colescott ];
+    platforms = stdenv.lib.platforms.linux;
+
+    priority = 4;
+  };
 }
