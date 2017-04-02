@@ -5206,6 +5206,8 @@ with pkgs;
 
   tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs; 
 
+  madlang = haskell.lib.justStaticExecutables haskellPackages.madlang; 
+
   purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
 
   inherit (ocamlPackages) haxe;
