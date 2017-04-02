@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
   [
     ./minorSOname.patch
     ./no-nested-deprecated-warnings.patch
-    ./format-error-fix.patch
   ];
+
+  hardeningDisable = [ "format" ];
 
   buildInputs = [arm-frc-linux-gnueabi-binutils arm-frc-linux-gnueabi-eglibc arm-frc-linux-gnueabi-linux-api-headers elfutils libmpc gmp mpfr zlib];
 
