@@ -1,24 +1,27 @@
-{ stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4, ppx_tools }:
-
-let
-  inherit (stdenv.lib) optional getVersion versionAtLeast;
-in
+{ stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, camlp4
+, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, glib
+, ppx_tools, result
+, ppxSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
+}:
 
 stdenv.mkDerivation rec {
   name = "ocaml-lwt-${version}";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/lwt/archive/${version}.tar.gz";
-    sha256 = "0gmhm282r8yi0gwcv0g2s7qchkfjmhqbqf4j9frlyv665ink9kxl";
+    sha256 = "0f1h83zh60rspm4fxd96z9h5bkhq1n1q968hgq92sq4a6bfi1c2w";
   };
 
-  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 ppx_tools ];
+  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 ]
+  ++ stdenv.lib.optional ppxSupport ppx_tools;
 
-  propagatedBuildInputs = [ ocaml_react ocaml_ssl ocaml_text libev ];
+  propagatedBuildInputs = [ result ocaml_react ocaml_ssl libev ];
 
-  configureFlags = [ "--enable-glib" "--enable-ssl" "--enable-react" "--enable-camlp4"]
-  ++ [ (if versionAtLeast ocaml.version "4.02" then "--enable-ppx" else "--disable-ppx") ];
+  configureScript = "ocaml setup.ml -configure";
+  prefixKey = "--prefix ";
+  configureFlags = [ "--enable-glib" "--enable-ssl" "--enable-react" "--enable-camlp4" ]
+  ++ [ (if ppxSupport then "--enable-ppx" else "--disable-ppx") ];
 
   createFindlibDestdir = true;
 

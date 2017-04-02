@@ -57,10 +57,6 @@ in
     tradcpp = if stdenv.isDarwin then args.tradcpp else null;
   };
 
-  intelgputools = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ args.cairo args.libunwind ];
-  };
-
   mkfontdir = attrs: attrs // {
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
   };
@@ -239,6 +235,11 @@ in
   };
 
   libXpm = attrs: attrs // {
+    name = "libXpm-3.5.12";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/lib/libXpm-3.5.12.tar.bz2;
+      sha256 = "1v5xaiw4zlhxspvx76y3hq4wpxv7mpj6parqnwdqvpj8vbinsspx";
+    };
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
@@ -337,10 +338,8 @@ in
   xf86videoark        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videogeode      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videoglide      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
-  xf86videoglint      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videoi128       = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videonewport    = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
-  xf86videoopenchrome = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videotga        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videov4l        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videovoodoo     = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
@@ -352,13 +351,6 @@ in
 
   xf86videoati = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-I${xorg.xorgserver.dev or xorg.xorgserver}/include/xorg";
-  };
-
-  xf86videonv = attrs: attrs // {
-    patches = [( args.fetchpatch {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-nv/patch/?id=fc78fe98222b0204b8a2872a529763d6fe5048da;
-      sha256 = "0i2ddgqwj6cfnk8f4r73kkq3cna7hfnz7k3xj3ifx5v8mfiva6gw";
-    })];
   };
 
   xf86videovmware = attrs: attrs // {
@@ -397,10 +389,16 @@ in
   };
 
   xorgserver = with xorg; attrs_passed:
-    # exchange attrs if fglrxCompat is set
+    # exchange attrs if abiCompat is set
     let
-      attrs = if !args.fglrxCompat then attrs_passed else
-        with args; {
+      attrs = with args;
+        if (args.abiCompat == null) then attrs_passed
+            # All this just for 1.19.2, as the tarball is incorrectly autotoolized.
+            // {
+              nativeBuildInputs = [ utilmacros fontutil ];
+              preConfigure = "libtoolize --force; aclocal; autoheader; automake -afi";
+            }
+        else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
           src = fetchurl {
@@ -409,7 +407,16 @@ in
           };
           buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
           meta.platforms = stdenv.lib.platforms.unix;
-        };
+        } else if (args.abiCompat == "1.18") then {
+            name = "xorg-server-1.18.4";
+            builder = ./builder.sh;
+            src = fetchurl {
+              url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
+              sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
+            };
+            buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+            meta.platforms = stdenv.lib.platforms.unix;
+        } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
 
     in attrs //
     (let
@@ -425,6 +432,7 @@ in
         damageproto xcmiscproto  bigreqsproto
         inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        libXfont2
       ];
       # fix_segfault: https://bugs.freedesktop.org/show_bug.cgi?id=91316
       commonPatches = [ ];
@@ -456,16 +464,14 @@ in
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
           "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+          "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+          "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--enable-glamor"
         ];
         postInstall = ''
-          rm -fr $out/share/X11/xkb/compiled
-          ln -s /var/tmp $out/share/X11/xkb/compiled
-          wrapProgram $out/bin/Xephyr \
-            --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
+          rm -fr $out/share/X11/xkb/compiled # otherwise X will try to write in it
           wrapProgram $out/bin/Xvfb \
-            --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri \
-            --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
+            --set XORG_DRI_DRIVER_PATH ${args.mesa}/lib/dri
           ( # assert() keeps runtime reference xorgserver-dev in xf86-video-intel and others
             cd "$dev"
             for f in include/xorg/*.h; do
@@ -510,7 +516,6 @@ in
         '';
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
-          ln -s /var/tmp $out/share/X11/xkb/compiled
 
           cp -rT ${darwinOtherX}/bin $out/bin
           rm -f $out/bin/X
@@ -567,6 +572,10 @@ in
         url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=bd94c475035739b42294477cff108e0c5f15ef67";
         sha256 = "0myfry07655adhrpypa9rqigd6rfx57pqagcwibxw7ab3wjay9f6";
       })
+      (args.fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=78d1138dd6e214a200ca66fa9e439ee3c9270ec8";
+        sha256 = "0z3643afgrync280zrp531ija0hqxc5mrwjif9nh9lcnzgnz2d6d";
+      })
     ];
   };
 
@@ -594,4 +603,9 @@ in
     preBuild = "sed -i 's|gcc -E|gcc -E -P|' man/Makefile";
   };
 
+  xrandr = attrs: attrs // {
+    postInstall = ''
+      rm $out/bin/xkeystone
+    '';
+  };
 }

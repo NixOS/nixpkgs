@@ -2,7 +2,7 @@
 
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
 stdenv.mkDerivation rec {
-  name = "${python.libPrefix}-pyside-shiboken-${version}";
+  name = "pyside-shiboken-${version}";
   version = "1.2.4";
 
   src = fetchurl {

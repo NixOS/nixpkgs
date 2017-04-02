@@ -15,7 +15,7 @@ assert mouseSupport -> gpm-ncurses != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "w3m-v0.5.3+git20161120";
+  name = "w3m-0.5.3+git20161120";
 
   src = fetchFromGitHub {
     owner = "tats";

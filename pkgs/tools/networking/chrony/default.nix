@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr }:
+{ stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr
+, libseccomp }:
 
 assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
   name = "chrony-${version}";
 
-  version = "2.4";
+  version = "3.0";
 
   src = fetchurl {
     url = "http://download.tuxfamily.org/chrony/${name}.tar.gz";
-    sha256 = "07rrys5axrz4grfy7fj3ds0r9ny1qcwiswsb2318jciklb6yf14d";
+    sha256 = "0vfdsajz2w6b7c94rxrj7fsr234jryhl2rbdlmb7h10gla8pnf50";
   };
 
-  buildInputs = [ readline texinfo nss nspr ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+  buildInputs = [ readline texinfo nss nspr ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libcap libseccomp ];
   nativeBuildInputs = [ pkgconfig ];
 
   hardeningEnable = [ "pie" ];
 
-  configureFlags = [
-    "--chronyvardir=$(out)/var/lib/chrony"
-  ];
+  configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" ]
+    ++ stdenv.lib.optional stdenv.isLinux [ "--enable-scfilter" ];
 
   meta = with stdenv.lib; {
     description = "Sets your computer's clock from time servers on the Net";

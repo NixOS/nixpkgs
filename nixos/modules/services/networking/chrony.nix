@@ -12,6 +12,25 @@ let
 
   cfg = config.services.chrony;
 
+  configFile = pkgs.writeText "chrony.conf" ''
+    ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
+
+    ${optionalString
+      cfg.initstepslew.enabled
+      "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
+    }
+
+    driftfile ${stateDir}/chrony.drift
+
+    keyfile ${keyFile}
+
+    ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
+
+    ${cfg.extraConfig}
+  '';
+
+  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+
 in
 
 {
@@ -31,7 +50,7 @@ in
       };
 
       servers = mkOption {
-        default = config.services.ntp.servers;
+        default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -58,6 +77,13 @@ in
           <literal>chrony.conf</literal>
         '';
       };
+
+      extraFlags = mkOption {
+        default = [];
+        example = [ "-s" ];
+        type = types.listOf types.str;
+        description = "Extra flags passed to the chronyd command.";
+      };
     };
 
   };
@@ -69,25 +95,6 @@ in
 
     # Make chronyc available in the system path
     environment.systemPackages = [ pkgs.chrony ];
-
-    environment.etc."chrony.conf".text =
-      ''
-        ${concatMapStringsSep "\n" (server: "server " + server) cfg.servers}
-
-        ${optionalString
-          cfg.initstepslew.enabled
-          "initstepslew ${toString cfg.initstepslew.threshold} ${concatStringsSep " " cfg.initstepslew.servers}"
-        }
-
-        driftfile ${stateDir}/chrony.drift
-
-        keyfile ${keyFile}
-        generatecommandkey
-
-        ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
-
-        ${cfg.extraConfig}
-      '';
 
     users.extraGroups = singleton
       { name = "chrony";
@@ -102,7 +109,7 @@ in
         home = stateDir;
       };
 
-    systemd.services.ntpd.enable = mkForce false;
+    systemd.services.timesyncd.enable = mkForce false;
 
     systemd.services.chronyd =
       { description = "chrony NTP daemon";
@@ -124,7 +131,7 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${pkgs.chrony}/bin/chronyd -n -m -u chrony";
+          { ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
           };
       };
 

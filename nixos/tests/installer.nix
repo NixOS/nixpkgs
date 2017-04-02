@@ -115,8 +115,8 @@ let
 
       # Did the swap device get activated?
       # uncomment once https://bugs.freedesktop.org/show_bug.cgi?id=86930 is resolved
-      #$machine->waitForUnit("swap.target");
-      $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
+      $machine->waitForUnit("swap.target");
+      $machine->succeed("cat /proc/swaps | grep -q /dev");
 
       # Check whether the channel works.
       $machine->succeed("nix-env -iA nixos.procps >&2");

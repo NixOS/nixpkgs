@@ -27,6 +27,13 @@ let
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
   nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
 
+  nvidiaPackage = nvidia: pkgs:
+    if !nvidia.useGLVND then nvidia
+    else pkgs.buildEnv {
+      name = "nvidia-libs";
+      paths = [ pkgs.libglvnd nvidia.out ];
+    };
+
   enabled = nvidia_x11 != null;
 in
 
@@ -35,19 +42,23 @@ in
   config = mkIf enabled {
 
     services.xserver.drivers = singleton
-      { name = "nvidia"; modules = [ nvidia_x11 ]; libPath = [ nvidia_x11 ]; };
+      { name = "nvidia"; modules = [ nvidia_x11.bin ]; libPath = [ nvidia_x11 ]; };
 
     services.xserver.screenSection =
       ''
         Option "RandRRotation" "on"
       '';
 
-    hardware.opengl.package = nvidia_x11;
-    hardware.opengl.package32 = nvidia_libs32;
+    environment.etc."nvidia/nvidia-application-profiles-rc" = mkIf nvidia_x11.useProfiles {
+      source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
+    };
 
-    environment.systemPackages = [ nvidia_x11 ];
+    hardware.opengl.package = nvidiaPackage nvidia_x11 pkgs;
+    hardware.opengl.package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
 
-    boot.extraModulePackages = [ nvidia_x11 ];
+    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings nvidia_x11.persistenced ];
+
+    boot.extraModulePackages = [ nvidia_x11.bin ];
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ];
@@ -61,8 +72,6 @@ in
     boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" ];
 
     services.acpid.enable = true;
-
-    environment.etc."OpenCL/vendors/nvidia.icd".source = "${nvidia_x11}/lib/vendors/nvidia.icd";
 
   };
 

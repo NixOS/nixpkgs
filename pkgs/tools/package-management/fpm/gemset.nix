@@ -1,11 +1,13 @@
 {
   archive-tar-minitar = {
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1j666713r3cc3wb0042x0wcmq2v11vwwy5pcaayy5f0lnd26iqig";
-      type = "gem";
+      fetchSubmodules = false;
+      rev = "dae32ca550a87dba32597115ae18805db4782ebe";
+      sha256 = "0fvxacbcb52fm5dis451kdd7dv74z8p6nm4vnfqf7jg2aghcxdkd";
+      type = "git";
+      url = "git://github.com/peterhoeg/archive-tar-minitar.git";
     };
-    version = "0.5.2";
+    version = "0.5.2.1";
   };
   arr-pm = {
     source = {

@@ -60,7 +60,9 @@ self: super: {
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
-  # https://github.com/christian-marie/xxhash/issues/3
-  xxhash = doJailbreak super.xxhash;
+  ## GHC 8.0.2
+
+  # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
+  vector-algorithms = dontCheck super.vector-algorithms;
 
 }

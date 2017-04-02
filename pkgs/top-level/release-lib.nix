@@ -25,6 +25,7 @@ rec {
   pkgsFor = system:
     if system == "x86_64-linux" then pkgs_x86_64_linux
     else if system == "i686-linux" then pkgs_i686_linux
+    else if system == "aarch64-linux" then pkgs_aarch64_linux
     else if system == "x86_64-darwin" then pkgs_x86_64_darwin
     else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then pkgs_i686_freebsd
@@ -34,6 +35,7 @@ rec {
 
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
   pkgs_i686_linux = allPackages { system = "i686-linux"; };
+  pkgs_aarch64_linux = allPackages { system = "aarch64-linux"; };
   pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
   pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
   pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };
@@ -46,23 +48,23 @@ rec {
      interested in the result of cross building a package. */
   crossMaintainers = [ maintainers.viric ];
 
+  forAllSupportedSystems = systems: f:
+    genAttrs (filter (x: elem x supportedSystems) systems) f;
 
   /* Build a package on the given set of platforms.  The function `f'
      is called for each supported platform with Nixpkgs for that
      platform as an argument .  We return an attribute set containing
      a derivation for each supported platform, i.e. ‘{ x86_64-linux =
      f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
-  testOn = systems: f: genAttrs
-    (filter (x: elem x supportedSystems) systems) (system: hydraJob' (f (pkgsFor system)));
+  testOn = systems: f: forAllSupportedSystems systems
+    (system: hydraJob' (f (pkgsFor system)));
 
 
   /* Similar to the testOn function, but with an additional
      'crossSystem' parameter for allPackages, defining the target
      platform for cross builds. */
-  testOnCross = crossSystem: systems: f: {system ? builtins.currentSystem}:
-    if elem system systems
-    then f (allPackages { inherit system crossSystem; })
-    else {};
+  testOnCross = crossSystem: systems: f: forAllSupportedSystems systems
+    (system: hydraJob' (f (allPackages { inherit system crossSystem; })));
 
 
   /* Given a nested set where the leaf nodes are lists of platforms,
@@ -85,7 +87,7 @@ rec {
   packagePlatforms = mapAttrs (name: value:
     let res = builtins.tryEval (
       if isDerivation value then
-        value.meta.hydraPlatforms or (value.meta.platforms or [])
+        value.meta.hydraPlatforms or (value.meta.platforms or [ "x86_64-linux" ])
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.73";
+  name = "libdrm-2.4.75";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "0kayvwqqrjm45y6dk9q2b4gmjdasci0y28jzv4bq05py8a9d7gwn";
+    sha256 = "2d5a500eef412cc287d12268eed79d571e262d4957a2ec9258073f305985054f";
   };
 
   outputs = [ "out" "dev" ];
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-freedreno" "--disable-valgrind" ]
+  configureFlags = [ "--disable-valgrind" ]
+    ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];

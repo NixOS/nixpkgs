@@ -1,11 +1,15 @@
-{stdenv, fetchurl, unzip, darwin}:
+{ stdenv, fetchurl, unzip, darwin }:
+
 stdenv.mkDerivation {
   name = "freeimage-3.17.0";
+
   src = fetchurl {
     url = mirror://sourceforge/freeimage/FreeImage3170.zip;
     sha256 = "12bz57asdcfsz3zr9i9nska0fb6h3z2aizy412qjqkixkginbz7v";
   };
+
   buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
+
   prePatch = if stdenv.isDarwin
              then ''
     sed -e 's/gcc-4.0/clang/g' \
@@ -37,6 +41,8 @@ stdenv.mkDerivation {
   postBuild = stdenv.lib.optionalString (!stdenv.isDarwin) "make -f Makefile.fip";
   preInstall = "mkdir -p $out/include $out/lib";
   postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) "make -f Makefile.fip install";
+
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";

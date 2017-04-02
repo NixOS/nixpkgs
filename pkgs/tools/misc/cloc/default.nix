@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cloc-${version}";
-  version = "1.70";
+  version = "1.72";
 
   src = fetchFromGitHub {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "1abkfkjn4fxplq33cwqjmgxabk2x6ij2klqn0w4a0lj82a7xx10x";
+    sha256 = "192z3fzib71y3sjic03ll67xv51igdlpvfhx12yv9wnzkir7lx02";
   };
 
   sourceRoot = "cloc-v${version}-src/Unix";

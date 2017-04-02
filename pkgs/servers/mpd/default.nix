@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
+, avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac
 , vorbisSupport ? true, libvorbis
 , madSupport ? true, libmad
@@ -26,25 +27,29 @@
 , soundcloudSupport ? true, yajl
 }:
 
+assert avahiSupport -> avahi != null && dbus != null;
+
 let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
-  major = "0.19";
-  minor = "19";
+  major = "0.20";
+  minor = "6";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-${major}.${minor}";
+  name = "mpd-${major}${if minor == "" then "" else "." + minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "07af1m2lgblyiq0gcs26zv8n22wrhrpmf49xsm338h1n87d6r1dw";
+    sha256 = "0isbpa79m7zf09w3s1ry638cw96rxasy1ch66zl01k75i48mw1gl";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin ./darwin-enable-cxx-exceptions.patch;
+  patches = [ ./x86.patch ];
 
   buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
+    ++ opt avahiSupport avahi
+    ++ opt avahiSupport dbus
     ++ opt flacSupport flac
     ++ opt vorbisSupport libvorbis
     # using libmad to decode mp3 files on darwin is causing a segfault -- there
@@ -101,6 +106,7 @@ in stdenv.mkDerivation rec {
       (mkFlag opusSupport "opus")
       (mkFlag soundcloudSupport "soundcloud")
       "--enable-debug"
+      "--with-zeroconf=avahi"
     ]
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
@@ -113,7 +119,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl fuuzetsu ehmry ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu ehmry fpletz ];
     platforms   = platforms.unix;
 
     longDescription = ''

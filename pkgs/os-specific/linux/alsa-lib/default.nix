@@ -27,12 +27,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  crossAttrs = {
-    patchPhase = ''
-      sed -i s/extern/static/g include/iatomic.h
-    '';
-  };
-
   meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture libraries";

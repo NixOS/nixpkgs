@@ -4,7 +4,7 @@
  */
 , gplLicensing ? true # GPL: fdkaac,openssl,frei0r,cdio,samba,utvideo,vidstab,x265,x265,xavs,avid,zvbi,x11grab
 , version3Licensing ? true # (L)GPL3: opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
-, nonfreeLicensing ? false # NONFREE: openssl,fdkaac,faac,aacplus,blackmagic-design-desktop-video
+, nonfreeLicensing ? false # NONFREE: openssl,fdkaac,blackmagic-design-desktop-video
 /*
  *  Build options
  */
@@ -12,7 +12,6 @@
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime (disable to compile natively)
 , grayBuild ? true # Full grayscale support
 , swscaleAlphaBuild ? true # Alpha channel support in swscale
-, incompatibleLibavAbiBuild ? false # Incompatible Libav fork ABI
 , hardcodedTablesBuild ? true # Hardcode decode tables instead of runtime generation
 , safeBitstreamReaderBuild ? true # Buffer boundary checking in bitreaders
 , memalignHackBuild ? false # Emulate memalign
@@ -49,14 +48,12 @@
 /*
  *  External libraries options
  */
-#, aacplusExtlib ? false, aacplus ? null # AAC+ encoder
 , alsaLib ? null # Alsa in/output support
 #, avisynth ? null # Support for reading AviSynth scripts
 , bzip2 ? null
 , celt ? null # CELT decoder
 #, crystalhd ? null # Broadcom CrystalHD hardware acceleration
 #, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
-, faacExtlib ? false, faac ? null # AAC encoder
 , fdkaacExtlib ? false, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
 #, flite ? null # Flite (voice synthesis) support
 , fontconfig ? null # Needed for drawtext filter
@@ -220,11 +217,9 @@ assert swscaleLibrary -> avutilLibrary;
 /*
  *  External libraries
  */
-#assert aacplusExtlib -> nonfreeLicensing;
 #assert decklinkExtlib -> blackmagic-design-desktop-video != null
 #                                       && !isCygwin && multithreadBuild # POSIX threads required
 #                                       && nonfreeLicensing;
-assert faacExtlib -> faac != null && nonfreeLicensing;
 assert fdkaacExtlib -> fdk_aac != null && nonfreeLicensing;
 assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
@@ -237,11 +232,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.1.3";
+  version = "3.2.4";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "08l8290gipm632dhrqndnphdpkc5ncqc1j3hxdx46r1a3q3mqmzq";
+    sha256 = "0ymg1mkg1n0770gmjfqp79p5ijxq04smfrsrrxc8pjc0y0agyf3f";
   };
 
   patchPhase = ''patchShebangs .
@@ -267,7 +262,6 @@ stdenv.mkDerivation rec {
     (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
     (enableFeature grayBuild "gray")
     (enableFeature swscaleAlphaBuild "swscale-alpha")
-    (enableFeature incompatibleLibavAbiBuild "incompatible-libav-abi")
     (enableFeature hardcodedTablesBuild "hardcoded-tables")
     (enableFeature safeBitstreamReaderBuild "safe-bitstream-reader")
     (enableFeature memalignHackBuild "memalign-hack")
@@ -314,13 +308,11 @@ stdenv.mkDerivation rec {
     /*
      *  External libraries
      */
-    #(enableFeature aacplus "libaacplus")
     #(enableFeature avisynth "avisynth")
     (enableFeature (bzip2 != null) "bzlib")
     (enableFeature (celt != null) "libcelt")
     #(enableFeature crystalhd "crystalhd")
     #(enableFeature decklinkExtlib "decklink")
-    (enableFeature faacExtlib "libfaac")
     (enableFeature (fdkaacExtlib && gplLicensing) "libfdk-aac")
     #(enableFeature (flite != null) "libflite")
     "--disable-libflite" # Force disable until a solution is found
@@ -412,11 +404,11 @@ stdenv.mkDerivation rec {
     samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
   ] ++ optional openglExtlib mesa
     ++ optionals x11grabExtlib [ libXext libXfixes ]
-    ++ optionals nonfreeLicensing [ faac fdk_aac openssl ]
+    ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optionals nvenc [ nvidia-video-sdk ]
-    ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation 
+    ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration ];
 
   # Build qt-faststart executable
@@ -471,11 +463,11 @@ stdenv.mkDerivation rec {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = https://www.ffmpeg.org/;
     longDescription = ''
-      FFmpeg is the leading multimedia framework, able to decode, encode, transcode, 
-      mux, demux, stream, filter and play pretty much anything that humans and machines 
-      have created. It supports the most obscure ancient formats up to the cutting edge. 
-      No matter if they were designed by some standards committee, the community or 
-      a corporation. 
+      FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
+      mux, demux, stream, filter and play pretty much anything that humans and machines
+      have created. It supports the most obscure ancient formats up to the cutting edge.
+      No matter if they were designed by some standards committee, the community or
+      a corporation.
     '';
     license = (
       if nonfreeLicensing then

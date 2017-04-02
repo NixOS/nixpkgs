@@ -242,6 +242,14 @@ rec {
 
     eval "$preVM"
 
+    if [ "$enableParallelBuilding" = 1 ]; then
+      if [ ''${NIX_BUILD_CORES:-0} = 0 ]; then
+        QEMU_OPTS+=" -smp cpus=$(nproc)"
+      else
+        QEMU_OPTS+=" -smp cpus=$NIX_BUILD_CORES"
+      fi
+    fi
+
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
     # the -K option to preserve the temporary build directory).
@@ -858,7 +866,7 @@ rec {
       fullName = "Fedora 10 (i386)";
       packagesList = fetchurl {
         url = mirror://fedora/linux/releases/10/Everything/i386/os/repodata/beeea88d162e76993c25b9dd8139868274ee7fa1-primary.xml.gz;
-        sha1 = "beeea88d162e76993c25b9dd8139868274ee7fa1";
+        sha256 = "17lyvzqjsxw3ll7726dpg14f9jc2p3fz5cr5cwd8hp3rkm5nfclv";
       };
       urlPrefix = mirror://fedora/linux/releases/10/Everything/i386/os;
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
@@ -869,7 +877,7 @@ rec {
       fullName = "Fedora 10 (x86_64)";
       packagesList = fetchurl {
         url = mirror://fedora/linux/releases/10/Everything/x86_64/os/repodata/7958210175e86b5cc843cf4bd0bc8659e445e261-primary.xml.gz;
-        sha1 = "7958210175e86b5cc843cf4bd0bc8659e445e261";
+        sha256 = "02pzqmb26zmmzdni11dip3bar4kr54ddsrq9z4vda7ldwwkqd3py";
       };
       urlPrefix = mirror://fedora/linux/releases/10/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
@@ -1154,6 +1162,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora25i386 = {
+      name = "fedora-25-i386";
+      fullName = "Fedora 25 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/25/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "4d399e5eebb8d543d50e2da274348280fae07a6efcc469491784582b39d73bba";
+      };
+      urlPrefix = mirror://fedora/linux/releases/25/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora25x86_64 = {
+      name = "fedora-25-x86_64";
+      fullName = "Fedora 25 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/25/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "eaea04bff7327c49d90240992dff2be6d451a1758ef83e94825f23d4ff27e868";
+      };
+      urlPrefix = mirror://fedora/linux/releases/25/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1291,7 +1325,7 @@ rec {
       fullName = "Ubuntu 7.10 Gutsy (i386)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/gutsy/main/binary-i386/Packages.bz2;
-        sha1 = "8b52ee3d417700e2b2ee951517fa25a8792cabfd";
+        sha256 = "0fmac8svxq86a4w878g6syczvy5ff4jrdc1gajd3xd8z0dypnw27";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
@@ -1302,7 +1336,7 @@ rec {
       fullName = "Ubuntu 8.04 Hardy (i386)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/hardy/main/binary-i386/Packages.bz2;
-        sha1 = "db74581ee75cb3bee2a8ae62364e97956c723259";
+        sha256 = "19132nc9fhdfmgmvn834lk0d8c0n3jv0ndz9inyynh9k6pc8b5hd";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
@@ -1313,7 +1347,7 @@ rec {
       fullName = "Ubuntu 8.04 Hardy (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/hardy/main/binary-amd64/Packages.bz2;
-        sha1 = "d1f1d2b3cc62533d6e4337f2696a5d27235d1f28";
+        sha256 = "1xjcgh0ydixmim7kgxss0mhfw0sibpgygvgsyac4bdz9m503sj3h";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
@@ -1377,7 +1411,7 @@ rec {
     ubuntu910x86_64 = {
       name = "ubuntu-9.10-karmic-amd64";
       fullName = "Ubuntu 9.10 Karmic (amd64)";
-     packagesList = fetchurl {
+      packagesList = fetchurl {
         url = mirror://ubuntu/dists/karmic/main/binary-amd64/Packages.bz2;
         sha256 = "3a604fcb0c135eeb8b95da3e90a8fd4cfeff519b858cd3c9e62ea808cb9fec40";
       };
@@ -1793,6 +1827,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1610i386 = {
+      name = "ubuntu-16.10-yakkety-i386";
+      fullName = "Ubuntu 16.10 Yakkety (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/yakkety/main/binary-i386/Packages.xz;
+            sha256 = "da811f582779a969f738f2366c17e075cf0da3c4f2a4ed1926093a2355fd72ba";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/yakkety/universe/binary-i386/Packages.xz;
+            sha256 = "5162b0a87173cd5dea7ce2273788befe36f38089d44a2379ed9dd92f76c6b2aa";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1610x86_64 = {
+      name = "ubuntu-16.10-yakkety-amd64";
+      fullName = "Ubuntu 16.10 Yakkety (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/yakkety/main/binary-amd64/Packages.xz;
+            sha256 = "356c4cfab0d7f77b75c473cd78b22ee7288f63b24c9739049924dc081dd2e3d1";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/yakkety/universe/binary-amd64/Packages.xz;
+            sha256 = "a72660f8feffd6978e3b9328c6259b5387ac0b4f33d1029e4a17091ceb5057e6";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1886,22 +1954,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.6-jessie-i386";
-      fullName = "Debian 8.6 Jessie (i386)";
+      name = "debian-8.7-jessie-i386";
+      fullName = "Debian 8.7 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "b915c936233609af3ecf9272cd53fbdb2144d463e8472a30507aa112ef5e6a6b";
+        sha256 = "71cacb934dc4ab2e67a5ed215ccbc9836cf8d95687edec7e7fe8d3916e3b3fe8";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.6-jessie-amd64";
-      fullName = "Debian 8.6 Jessie (amd64)";
+      name = "debian-8.7-jessie-amd64";
+      fullName = "Debian 8.7 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "8b80b6608a8fc72509b949efe1730077f0e8383b29c6aed5f86d9f9b51a631d8";
+        sha256 = "b4cfbaaef31f05ce1726d00f0a173f5b6f33a9192513302319a49848884a17f3";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

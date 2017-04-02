@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, sass, inkscape, glib, which, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, autoreconfHook, parallel, sassc, inkscape, libxml2, glib, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   name = "adapta-gtk-theme-${version}";
-  version = "3.21.3.68";
+  version = "3.89.1.66";
 
   meta = with stdenv.lib; {
     description = "An adaptive GTK+ theme based on Material Design";
@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
     owner = "tista500";
     repo = "Adapta";
     rev = version;
-    sha256 = "0wwsmsyxfdgsc7fj1kn4r9zsgs09prizwkjljmirwrfdm6j3387p";
+    sha256 = "08g941xgxg7i8g1srn3zdxz1nxm24bkrg5cx9ipjqk5cwsck7470";
   };
 
   preferLocalBuild = true;
-  buildInputs = [ gtk-engine-murrine ];
-  nativeBuildInputs = [ autoreconfHook sass inkscape glib.dev which ];
+
+  nativeBuildInputs = [ autoreconfHook parallel sassc inkscape libxml2 glib.dev ];
+
+  buildInputs = [ gdk_pixbuf librsvg gtk-engine-murrine ];
 
   postPatch = "patchShebangs .";
 
-  configureFlags = "--enable-chrome --disable-unity";
+  configureFlags = "--disable-unity";
 }

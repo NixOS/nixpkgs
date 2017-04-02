@@ -1,6 +1,8 @@
-{ stdenv, fetchFromGitHub, openssl, zlib, python, gyp, bash, go, readline }:
+{ stdenv, fetchFromGitHub, openssl, zlib, python2Packages, bash, go, readline }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (python2Packages) python gyp;
+in stdenv.mkDerivation rec {
   version = "2.5.3";
   name    = "arangodb-${version}";
 

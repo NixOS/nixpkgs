@@ -19,7 +19,6 @@ in {
     services.ferm = {
       enable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to enable Ferm Firewall.
@@ -51,6 +50,7 @@ in {
       before = [ "network-pre.target" ];
       wants = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
+      reloadIfChanged = true;
       serviceConfig = {
         Type="oneshot";
         RemainAfterExit = "yes";

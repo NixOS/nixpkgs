@@ -1,27 +1,38 @@
-{ stdenv, fetchurl, flex, bison, ncurses, buddy, tecla, libsigsegv, gmpxx, makeWrapper }:
+{ stdenv, fetchurl, unzip, makeWrapper , flex, bison, ncurses, buddy, tecla
+, libsigsegv, gmpxx, cvc4, cln
+}:
 
-stdenv.mkDerivation rec {
-  name = "maude-2.6";
+let
 
-  src = fetchurl {
-    url = "http://maude.cs.uiuc.edu/download/current/Maude-2.6.tar.gz";
-    sha256 = "182abzhvjvlaa21aqv7802v3bs57a4dm7cw09s3mqmih7nzpkfm5";
-  };
+  version = "2.7.1";
 
   fullMaude = fetchurl {
-    url = "https://full-maude.googlecode.com/git/full-maude261h.maude";
-    sha256 = "0xx8bfn6arsa75m5vhp5lmpazgfw230ssq33h9vifswlvzzc81ha";
+    url = "http://maude.cs.illinois.edu/w/images/c/ca/Full-Maude-${version}.zip";
+    sha256 = "0y4gn7n8vh24r24vckhpkd46hb5hqsbrm4w9zr6dz4paafq12fjc";
   };
 
-  buildInputs = [flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper];
+in
+
+stdenv.mkDerivation rec {
+  name = "maude-${version}";
+
+  src = fetchurl {
+    url = "http://maude.cs.illinois.edu/w/images/d/d8/Maude-${version}.tar.gz";
+    sha256 = "0jskn5dm8vvbd3mlryjxdb6wfpkvyx174wk7ci9a31aylxzpr25i";
+  };
+
+  buildInputs = [
+    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip cvc4 cln
+  ];
 
   hardeningDisable = [ "stackprotector" ] ++
     stdenv.lib.optionals stdenv.isi686 [ "pic" "fortify" ];
 
   preConfigure = ''
     configureFlagsArray=(
-      --datadir=$out/share/maude
+      --datadir="$out/share/maude"
       TECLA_LIBS="-ltecla -lncursesw"
+      LIBS="-lcln"
       CFLAGS="-O3" CXXFLAGS="-O3"
     )
   '';
@@ -30,12 +41,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for n in "$out/bin/"*; do wrapProgram "$n" --suffix MAUDE_LIB ':' "$out/share/maude"; done
-    mkdir -p $out/share/maude
-    cp ${fullMaude} -d $out/share/maude/full-maude.maude
+    unzip ${fullMaude}
+    install -D -m 444 full-maude.maude $out/share/maude/full-maude.maude
   '';
 
   meta = {
-    homepage = "http://maude.cs.uiuc.edu/";
+    homepage = "http://maude.cs.illinois.edu/";
     description = "High-level specification language";
     license = stdenv.lib.licenses.gpl2;
 

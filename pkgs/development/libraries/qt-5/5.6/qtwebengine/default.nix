@@ -9,15 +9,16 @@
 
 , bison, flex, git, which, gperf
 , coreutils
-, pkgconfig, python
+, pkgconfig, python2
 
+, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
   name = "qtwebengine";
   qtInputs = [ qtquickcontrols qtlocation qtwebchannel ];
   buildInputs = [ bison flex git which gperf ];
-  nativeBuildInputs = [ pkgconfig python coreutils ];
+  nativeBuildInputs = [ pkgconfig python2 coreutils ];
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -35,6 +36,9 @@ qtSubmodule {
     sed -i -e 's,\(static QString potentialResourcesPath =\).*,\1 QLatin1String("'$out'/resources");,' src/core/web_engine_library_info.cpp
     sed -i -e 's,\(static QString processPath\),\1 = QLatin1String("'$out'/libexec/QtWebEngineProcess"),' src/core/web_engine_library_info.cpp
     sed -i -e 's,\(static QString potentialLocalesPath =\).*,\1 QLatin1String("'$out'/translations/qtwebengine_locales");,' src/core/web_engine_library_info.cpp
+
+    # fix default SSL bundle location
+    sed -i -e 's,/cert.pem,/certs/ca-bundle.crt,' src/3rdparty/chromium/third_party/boringssl/src/crypto/x509/x509_def.c
 
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
@@ -60,11 +64,14 @@ qtSubmodule {
   ];
   patches = [
     ./chromium-clang-update-py.patch
-  ];
+  ] ++ stdenv.lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..
     EOF
+
+    paxmark m $out/libexec/QtWebEngineProcess
   '';
 }

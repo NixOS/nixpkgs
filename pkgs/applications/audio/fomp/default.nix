@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lv2, pkgconfig, python }:
+{ stdenv, fetchurl, lv2, pkgconfig, python2 }:
 
 stdenv.mkDerivation rec {
   name = "fomp-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hh2xhknanqn3iwp12ihl6bf8p7bqxryms9qk7mh21lixl42b8k5";
   };
 
-  buildInputs = [ lv2  pkgconfig python ];
+  buildInputs = [ lv2  pkgconfig python2 ];
 
   installPhase = ''
     python waf configure --prefix=$out

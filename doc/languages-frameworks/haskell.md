@@ -195,7 +195,7 @@ its normal core packages:
         mtl-2.2.1
 
 This function allows users to define their own development environment by means
-of an override. After adding the following snippet to `~/.nixpkgs/config.nix`,
+of an override. After adding the following snippet to `~/.config/nixpkgs/config.nix`,
 
     {
       packageOverrides = super: let self = super.pkgs; in
@@ -522,7 +522,7 @@ file with `cabal2nix`:
     $ cd ~/src/foo && cabal2nix . >default.nix
     $ cd ~/src/bar && cabal2nix . >default.nix
 
-Then edit your `~/.nixpkgs/config.nix` file to register those builds in the
+Then edit your `~/.config/nixpkgs/config.nix` file to register those builds in the
 default Haskell package set:
 
       {
@@ -554,7 +554,7 @@ Every Haskell package set takes a function called `overrides` that you can use
 to manipulate the package as much as you please. One useful application of this
 feature is to replace the default `mkDerivation` function with one that enables
 library profiling for all packages. To accomplish that, add configure the
-following snippet in your `~/.nixpkgs/config.nix` file:
+following snippet in your `~/.config/nixpkgs/config.nix` file:
 
     {
       packageOverrides = super: let self = super.pkgs; in
@@ -583,7 +583,7 @@ The first step is to generate Nix build instructions with `cabal2nix`:
 
     $ cabal2nix cabal://ghc-events-0.4.3.0 >~/.nixpkgs/ghc-events-0.4.3.0.nix
 
-Then add the override in `~/.nixpkgs/config.nix`:
+Then add the override in `~/.config/nixpkgs/config.nix`:
 
     {
       packageOverrides = super: let self = super.pkgs; in
@@ -792,6 +792,63 @@ In Nix, this is accomplished with:
 It's important to realize, however, that most system libraries in Nix are built
 as shared libraries only, i.e. there is just no static library available that
 Cabal could link!
+
+### Building GHC with integer-simple
+
+By default GHC implements the Integer type using the
+[GNU Multiple Precision Arithmetic (GMP) library](https://gmplib.org/).
+The implementation can be found in the
+[integer-gmp](http://hackage.haskell.org/package/integer-gmp) package.
+
+A potential problem with this is that GMP is licensed under the
+[​GNU Lesser General Public License (LGPL)](http://www.gnu.org/copyleft/lesser.html),
+a kind of "copyleft" license. According to the terms of the LGPL, paragraph 5,
+you may distribute a program that is designed to be compiled and dynamically
+linked with the library under the terms of your choice (i.e., commercially) but
+if your program incorporates portions of the library, if it is linked
+statically, then your program is a "derivative"--a "work based on the
+library"--and according to paragraph 2, section c, you "must cause the whole of
+the work to be licensed" under the terms of the LGPL (including for free).
+
+The LGPL licensing for GMP is a problem for the overall licensing of binary
+programs compiled with GHC because most distributions (and builds) of GHC use
+static libraries. (Dynamic libraries are currently distributed only for OS X.)
+The LGPL licensing situation may be worse: even though
+​[The Glasgow Haskell Compiler License](https://www.haskell.org/ghc/license)
+is essentially a "free software" license (BSD3), according to
+paragraph 2 of the LGPL, GHC must be distributed under the terms of the LGPL!
+
+To work around these problems GHC can be build with a slower but LGPL-free
+alternative implemention for Integer called
+[integer-simple](http://hackage.haskell.org/package/integer-simple).
+
+To get a GHC compiler build with `integer-simple` instead of `integer-gmp` use
+the attribute: `haskell.compiler.integer-simple."${ghcVersion}"`.
+For example:
+
+    $ nix-build -E '(import <nixpkgs> {}).haskell.compiler.integer-simple.ghc802'
+    ...
+    $ result/bin/ghc-pkg list | grep integer
+        integer-simple-0.1.1.1
+
+The following command displays the complete list of GHC compilers build with `integer-simple`:
+
+    $ nix-env -f "<nixpkgs>" -qaP -A haskell.compiler.integer-simple
+    haskell.compiler.integer-simple.ghc7102  ghc-7.10.2
+    haskell.compiler.integer-simple.ghc7103  ghc-7.10.3
+    haskell.compiler.integer-simple.ghc722   ghc-7.2.2
+    haskell.compiler.integer-simple.ghc742   ghc-7.4.2
+    haskell.compiler.integer-simple.ghc783   ghc-7.8.3
+    haskell.compiler.integer-simple.ghc784   ghc-7.8.4
+    haskell.compiler.integer-simple.ghc801   ghc-8.0.1
+    haskell.compiler.integer-simple.ghc802   ghc-8.0.2
+    haskell.compiler.integer-simple.ghcHEAD  ghc-8.1.20170106
+
+To get a package set supporting `integer-simple` use the attribute:
+`haskell.packages.integer-simple."${ghcVersion}"`. For example
+use the following to get the `scientific` package build with `integer-simple`:
+
+    $ nix-build -A haskell.packages.integer-simple.ghc802.scientific
 
 
 ## Other resources

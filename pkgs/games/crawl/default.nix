@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.19.1";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "02iklz5q5h7h27gw86ws8wk5gz1fg86jclkar05nd7zxxgiwsk96";
+    sha256 = "1qn6r5pg568pk8zgp2ijn04h4brvw675q4nxkkvzyf76ljbpzif7";
   };
 
   patches = [ ./crawl_purify.patch ];

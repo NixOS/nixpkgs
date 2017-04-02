@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "bspwm-${version}";
-  version = "0.9.1";
+  version = "0.9.2";
 
 
   src = fetchurl {
     url = "https://github.com/baskerville/bspwm/archive/${version}.tar.gz";
-    sha256 = "11dvfcvr8bc116yb3pvl0k1h2gfm9rv652jbxd1c5pmc0yimifq2";
+    sha256 = "1w6wxwgyb14w664xafp3b2ps6zzf9yw7cfhbh9229x2hil9rss1k";
   };
 
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];

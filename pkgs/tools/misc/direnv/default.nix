@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "direnv-${version}";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "1zi4i2ds8xkbhfcpi52hca4lcwan9gf93bdmd2vwdsry16kn3f6k";
+    sha256 = "04b098i8dlr6frks67ik0kbc281c6j8lkb6v0y33iwqv45n233q3";
   };
 
   buildInputs = [ go ];

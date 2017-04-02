@@ -12,10 +12,10 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, perl, perlArchiveCpio, cpio, contents, ubootChooser, compressor, prepend }:
+{ stdenv, perl, cpio, contents, ubootChooser, compressor, prepend }:
 
 let
-  inputsFun = ubootName : [perl cpio perlArchiveCpio ]
+  inputsFun = ubootName : [ perl cpio ]
     ++ stdenv.lib.optional (ubootName != null) [ (ubootChooser ubootName) ];
   makeUInitrdFun = ubootName : (ubootName != null);
 in
@@ -30,12 +30,11 @@ stdenv.mkDerivation {
   objects = map (x: x.object) contents;
   symlinks = map (x: x.symlink) contents;
   suffices = map (x: if x ? suffix then x.suffix else "none") contents;
-  
+
   # For obtaining the closure of `contents'.
   exportReferencesGraph =
     map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
   pathsFromGraph = ./paths-from-graph.pl;
-  cpioClean = ./cpio-clean.pl;
 
   crossAttrs = {
     nativeBuildInputs = inputsFun stdenv.cross.platform.uboot;

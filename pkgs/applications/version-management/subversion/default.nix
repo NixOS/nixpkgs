@@ -26,8 +26,8 @@ let
       inherit sha256;
     };
 
-  # Can't do separate $lib and $bin, as libs reference bins
-  outputs = [ "out" "dev" "man" ];
+    # Can't do separate $lib and $bin, as libs reference bins
+    outputs = [ "out" "dev" "man" ];
 
     buildInputs = [ zlib apr aprutil sqlite openssl ]
       ++ stdenv.lib.optional httpSupport serf
@@ -75,7 +75,7 @@ let
       mkdir -p $out/share/bash-completion/completions
       cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
 
-      for f in $out/lib/*.la; do
+      for f in $out/lib/*.la $out/lib/python*/site-packages/*/*.la; do
         substituteInPlace $f \
           --replace "${expat.dev}/lib" "${expat.out}/lib" \
           --replace "${zlib.dev}/lib" "${zlib.out}/lib" \
@@ -103,15 +103,13 @@ let
   });
 
 in {
-
   subversion18 = common {
-    version = "1.8.16";
-    sha256 = "0imkxn25n6sbcgfldrx4z29npjprb1lxjm5fb89q4297161nx3zi";
+    version = "1.8.17";
+    sha256 = "1450fkj1jmxyphqn6cd95z1ykwsabajm9jw4i412qpwss8w9a4fy";
   };
 
   subversion19 = common {
-    version = "1.9.4";
-    sha256 = "16cjkvvq628hbznkhqkppzs8nifcr7k43s5y4c32cgwqmgigjrqj";
+    version = "1.9.5";
+    sha256 = "1ramwly6p74jhb2rdm5ygxjri7jds940cilyvnsdq60xzy5cckwa";
   };
-
 }

@@ -1,14 +1,26 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation {
-  name = "gnused-4.2.2";
+stdenv.mkDerivation rec {
+  name = "gnused-${version}";
+  version = "4.4";
 
   src = fetchurl {
-    url = mirror://gnu/sed/sed-4.2.2.tar.bz2;
-    sha256 = "f048d1838da284c8bc9753e4506b85a1e0cc1ea8999d36f6995bcb9460cddbd7";
+    url = "mirror://gnu/sed/sed-${version}.tar.xz";
+    sha256 = "0fv88bcnraixc8jvpacvxshi30p5x9m7yb8ns1hfv07hmb2ypmnb";
   };
 
   outputs = [ "out" "info" ];
+
+  nativeBuildInputs = [ perl ];
+  preConfigure = "patchShebangs ./build-aux/help2man";
+
+  crossAttrs = {
+    # The tarball ships with a fine prebuilt manpage, but the make rules try to rebuild it,
+    # which won't work when cross compiling as help2man needs to execute the binaries.
+    postConfigure = ''
+      sed -i Makefile -e 's|doc/sed\.1:|dummy:|'
+    '';
+  };
 
   meta = {
     homepage = http://www.gnu.org/software/sed/;

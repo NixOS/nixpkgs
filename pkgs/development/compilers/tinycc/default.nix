@@ -1,14 +1,11 @@
 { stdenv, fetchFromRepoOrCz, perl, texinfo }:
-
-assert (stdenv.isGlibc);
-
 with stdenv.lib;
 
 let
-  date = "20160525";
+  date = "20170225";
   version = "0.9.27pre-${date}";
-  rev = "1ca685f887310b5cbdc415cdfc3a578dbc8d82d8";
-  sha256 = "149s847jkg2zdmk09h0cp0q69m8kxxci441zyw8b08fy9b87ayd8";
+  rev = "bb93064d7857d887b674999c9b4152b44a628f9a";
+  sha256 = "12wcahj1x4qy9ia931i23lvwkqjmyhaks3wipnzvbnlnc2b03kpr";
 in
 
 stdenv.mkDerivation rec {
@@ -20,8 +17,6 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "bin" "dev" "out" ];
-
   nativeBuildInputs = [ perl texinfo ];
 
   hardeningDisable = [ "fortify" ];
@@ -32,17 +27,20 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    configureFlagsArray+=("--elfinterp=$(cat $NIX_CC/nix-support/dynamic-linker)")
-    configureFlagsArray+=("--crtprefix=${stdenv.glibc.out}/lib")
-    configureFlagsArray+=("--sysincludepaths=${stdenv.glibc.dev}/include:{B}/include")
-    configureFlagsArray+=("--libpaths=${stdenv.glibc.out}/lib")
+    echo ${version} > VERSION
+
+    configureFlagsArray+=("--cc=cc")
+    configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
+    configureFlagsArray+=("--crtprefix=${getLib stdenv.cc.libc}/lib")
+    configureFlagsArray+=("--sysincludepaths=${getDev stdenv.cc.libc}/include:{B}/include")
+    configureFlagsArray+=("--libpaths=${getLib stdenv.cc.libc}/lib")
   '';
 
   doCheck = true;
   checkTarget = "test";
 
   postFixup = ''
-    paxmark m $bin/bin/tcc
+    paxmark m $out/bin/tcc
   '';
 
   meta = {
@@ -73,9 +71,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.tinycc.org/;
-    license = licenses.lgpl2Plus;
+    license = licenses.mit;
 
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.joachifm ];
   };
 }

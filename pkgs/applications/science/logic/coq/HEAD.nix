@@ -6,8 +6,8 @@
 {stdenv, fetchgit, writeText, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null, csdp ? null}:
 
 let
-  version = "8.5pre-0c999f02";
-  coq-version = "8.5";
+  version = "8.6pre-0c999f02";
+  coq-version = "8.6";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
@@ -24,20 +24,18 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://scm.gforge.inria.fr/coq/coq.git;
-    rev = "0c999f02ffcd61fcace0cc2d045056a82992a100";
-    sha256 = "08z9z4bv4a8ha1jrn18vxad6d7y7h92ggr00rx8jfvvi290n9344";
+    rev = "ad768e435a736ca51ac79a575967b388b34918c7";
+    sha256 = "05s7sk1l3mvdjag3idnhkpj707y4bv56da7kpffw862f2qgfr77j";
   };
 
   buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
-
-  patches = [ ./no-codesign.patch ];
 
   postPatch = ''
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
     substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace Makefile.build --replace "ifeq (\$(ARCH),Darwin)" "ifeq (\$(ARCH),Darwinx)"
+    substituteInPlace configure.ml --replace "\"Darwin\"; \"FreeBSD\"; \"OpenBSD\"" "\"Darwinx\"; \"FreeBSD\"; \"OpenBSD\""
     ${csdpPatch}
   '';
 

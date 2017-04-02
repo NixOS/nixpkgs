@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.19.2";
+  version = "1.19.3";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0hxybkqmrh0sz1yyyrgzdmxp46gda4vk22pv07s0qpfg2dpv56jh";
+    sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild makeWrapper cppo camlp4 ppx_tools ];
@@ -18,21 +18,31 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   configureFlags = [ "--enable-camlp4" ]
-  ++ stdenv.lib.optional (ppx_tools != null) "--enable-interact";
+  ++ stdenv.lib.optional (ppx_tools != null && !stdenv.lib.versionAtLeast ocaml.version "4.04") "--enable-interact";
 
   buildPhase = ''
     make
     make doc
     '';
 
+  dontStrip = true;
+
   postFixup =
-  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-  in
+   let p = p: "${p}/lib/ocaml/${ocaml.version}/site-lib"; in
    ''
-   for prog in "$out"/bin/*
+   pushd $out/bin
+   for prog in *
    do
-    wrapProgram $prog --set CAML_LD_LIBRARY_PATH "${ocaml_lwt}"/lib/ocaml/${ocamlVersion}/site-lib/lwt/:"${lambdaTerm}"/lib/ocaml/${ocamlVersion}/site-lib/lambda-term/:'$CAML_LD_LIBRARY_PATH' --set OCAMLPATH "${ocaml_lwt}"/lib/ocaml/${ocamlVersion}/site-lib:${ocaml_react}/lib/ocaml/${ocamlVersion}/site-lib:${camomile}/lib/ocaml/${ocamlVersion}/site-lib:${zed}/lib/ocaml/${ocamlVersion}/site-lib:${lambdaTerm}/lib/ocaml/${ocamlVersion}/site-lib:"$out"/lib/ocaml/${ocamlVersion}/site-lib:'$OCAMLPATH'
+    mv $prog .$prog-wrapped
+    cat > $prog <<EOF
+#!/bin/sh
+export CAML_LD_LIBRARY_PATH=${p ocaml_lwt}/lwt:${p lambdaTerm}/lambda-term:'\$CAML_LD_LIBRARY_PATH'
+export OCAMLPATH=${p ocaml_lwt}:${p ocaml_react}:${p camomile}:${p zed}:${p lambdaTerm}:"$out"/lib/ocaml/${ocaml.version}/site-lib:'\$OCAMLPATH'
+${ocaml}/bin/ocamlrun $out/bin/.$prog-wrapped \$*
+EOF
+    chmod +x $prog
    done
+   popd
    '';
 
   meta = {

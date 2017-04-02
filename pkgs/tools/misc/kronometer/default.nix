@@ -1,28 +1,29 @@
 {
   kdeDerivation, kdeWrapper, fetchurl, lib,
-  ecm, kdoctools,
+  extra-cmake-modules, kdoctools,
   kconfig, kinit
 }:
 
 let
   pname = "kronometer";
-  version = "2.1.0";
+  version = "2.1.3";
   unwrapped = kdeDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "1nh7y4c13rscy55f5n8s2v8jij27b55rwkxh9g8r0p7mdwmw8vri";
+      sha256 = "1z06gvaacm3d3a9smlmgg2vf0jdab5kqxx24r6v7iprqzgdpsn4i";
     };
 
     meta = with lib; {
       license = licenses.gpl2;
       maintainers = with maintainers; [ peterhoeg ];
     };
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [ kconfig kinit ];
   };
 in
-kdeWrapper unwrapped {
+kdeWrapper {
+  inherit unwrapped;
   targets = [ "bin/kronometer" ];
 }

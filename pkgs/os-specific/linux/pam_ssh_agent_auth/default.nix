@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pam, openssl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "pam_ssh_agent_auth-0.9.5";
+  name = "pam_ssh_agent_auth-0.10.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/pamsshagentauth/${name}.tar.bz2";
-    sha256 = "1aihfyj17nvqhf0d5i0dg2lsly3r24xjyx0sfqpf60s0libkp4y0";
+    sha256 = "0qx78x7nvqdscyp04hfijl4rgyf64xy03prr28hipvgasrcd6lrw";
   };
 
   patches =

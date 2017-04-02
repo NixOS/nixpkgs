@@ -9,12 +9,12 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
-  sddm = pkgs.sddm.override { inherit (cfg) themes; };
+  sddm = cfg.package;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
     ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-    exec systemd-cat ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
+    exec systemd-cat ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeScript "Xsetup" ''
@@ -105,11 +105,12 @@ in
         '';
       };
 
-      themes = mkOption {
-        type = types.listOf types.package;
-        default = [];
+      package = mkOption {
+        type = types.package;
+        default = pkgs.sddm;
         description = ''
-          Extra packages providing themes.
+          The SDDM package to install.
+          The default package can be overridden to provide extra themes.
         '';
       };
 

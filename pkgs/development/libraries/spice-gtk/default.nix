@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, spice_protocol, intltool, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
-, cyrus_sasl, pythonPackages, autoreconfHook, usbredir, libsoup
+, cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , gtk3, epoxy }:
 
 with stdenv.lib;
 
 let
-  inherit (pythonPackages) python pygtk;
+  inherit (python2Packages) python pygtk;
 in stdenv.mkDerivation rec {
-  name = "spice-gtk-0.32";
+  name = "spice-gtk-0.33";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "00pf94xh2xf0h1g13lnavxrysd0d0x22l5jl108cvq1mjc4z8j2c";
+    sha256 = "0fdgx9k4vgmasp8i2n0swrkapq8f212igcg7wsgvr3mbhsvk7bvx";
   };
 
   buildInputs = [

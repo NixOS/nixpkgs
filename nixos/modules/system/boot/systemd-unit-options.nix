@@ -52,6 +52,12 @@ in rec {
       description = "Units that want (i.e. depend on) this unit.";
     };
 
+    aliases = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      description = "Aliases of that unit.";
+    };
+
   };
 
   concreteUnitOptions = sharedOptions // {
@@ -322,7 +328,7 @@ in rec {
         Automatically start this unit at the given date/time, which
         must be in the format described in
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>.  This is equivalent
+        <manvolnum>7</manvolnum></citerefentry>.  This is equivalent
         to adding a corresponding timer unit with
         <option>OnCalendar</option> set to the value given here.
       '';
@@ -369,9 +375,9 @@ in rec {
         Each attribute in this set specifies an option in the
         <literal>[Timer]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> and
+        <manvolnum>7</manvolnum></citerefentry> and
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <manvolnum>7</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -464,5 +470,21 @@ in rec {
   };
 
   targetOptions = commonUnitOptions;
+
+  sliceOptions = commonUnitOptions // {
+
+    sliceConfig = mkOption {
+      default = {};
+      example = { MemoryMax = "2G"; };
+      type = types.attrsOf unitOption;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Slice]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.slice</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
 
 }

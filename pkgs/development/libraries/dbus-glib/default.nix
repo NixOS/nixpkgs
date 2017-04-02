@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, expat, gettext, libiconv, dbus, glib }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-glib-0.106";
+  name = "dbus-glib-0.108";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
-    sha256 = "0in0i6v68ixcy0ip28i84hdczf10ykq9x682qgcvls6gdmq552dk";
+    sha256 = "0b307hw9j41npzr6niw1bs6ryp87m5yafg492gqwvsaj4dz0qd4z";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://dbus.freedesktop.org;
     license = with stdenv.lib.licenses; [ afl21 gpl2 ];
     description = "Obsolete glib bindings for D-Bus lightweight IPC mechanism";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

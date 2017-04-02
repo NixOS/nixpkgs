@@ -18,18 +18,21 @@ let
       };
     };
 
-  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha256 }: rec {
+  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha512 }: rec {
     name = "grsecurity-${grver}-${kver}-${grrev}";
 
     # Pass these along to allow the caller to determine compatibility
     inherit grver kver grrev;
 
     patch = fetchurl {
-      # When updating versions/hashes, ALWAYS use the official version; we use
-      # this mirror only because upstream removes sources files immediately upon
-      # releasing a new version ...
-      url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
-      inherit sha256;
+      urls = [
+        "https://grsecurity.net/${grbranch}/${name}.patch"
+        # When updating versions/hashes, ALWAYS use the official
+        # version; we use this mirror only because upstream removes
+        # source files immediately upon releasing a new version ...
+        "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${kver}/${name}.patch"
+      ];
+      inherit sha512;
     };
 
     features.grsecurity = true;
@@ -38,9 +41,20 @@ in
 
 rec {
 
+  multithreaded_rsapubkey =
+    {
+      name = "multithreaded-rsapubkey-asn1.patch";
+      patch = ./multithreaded-rsapubkey-asn1.patch;
+    };
+
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
+    };
+
+  p9_fixes =
+    { name = "p9-fixes";
+      patch = ./p9-fixes.patch;
     };
 
   no_xsave =
@@ -86,9 +100,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.8.10";
-      grrev  = "201611232213";
-      sha256 = "13v3h6cjd5qz57rf242kpxhz5rk094lg5kyf86a852fk58apk6b6";
+    { kver   = "4.9.20";
+      grrev  = "201703310823";
+      sha512 = "0pm3wmcip73imjjx13yar5l5bhpii45mjac5vb1snypmbwqmywmikiixqslq84i1yqw0c8pi822znkz7650dhxrmdmagy0yirwfdrhf";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -97,14 +111,6 @@ rec {
     {
       name  = "grsecurity-nixos-kmod";
       patch = ./grsecurity-nixos-kmod.patch;
-    };
-
-  # A temporary work-around for execvp: arglist too long error during
-  # module_install.  Without this, no modules are installed into the
-  # resulting output.
-  grsecurity_modinst =
-    { name = "grsecurity-modinst";
-      patch = ./grsecurity-modinst.patch;
     };
 
   crc_regression =
@@ -154,6 +160,32 @@ rec {
         url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git"
             + "/patch/drivers/lguest/x86/core.c?id=cdd77e87eae52";
         sha256 = "04xlx6al10cw039av6jkby7gx64zayj8m1k9iza40sw0fydcfqhc";
+      };
     };
-  };
+
+  packet_fix_race_condition_CVE_2016_8655 =
+    { name = "packet_fix_race_condition_CVE_2016_8655.patch";
+      patch = fetchpatch {
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=84ac7260236a49c79eede91617700174c2c19b0c";
+        sha256 = "19viqjjgq8j8jiz5yhgmzwhqvhwv175q645qdazd1k69d25nv2ki";
+      };
+    };
+
+  panic_on_icmp6_frag_CVE_2016_9919 = rec
+    { name = "panic_on_icmp6_frag_CVE_2016_9919.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=79dc7e3f1cd323be4c81aa1a94faa1b3ed987fb2";
+        sha256 = "0mps33r4mnwiy0bmgrzgqkrk59yya17v6kzpv9024g4xlz61rk8p";
+      };
+    };
+
+  DCCP_double_free_vulnerability_CVE-2017-6074 = rec
+    { name = "DCCP_double_free_vulnerability_CVE-2017-6074.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=5edabca9d4cff7f1f2b68f0bac55ef99d9798ba4";
+        sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
+      };
+    };
 }

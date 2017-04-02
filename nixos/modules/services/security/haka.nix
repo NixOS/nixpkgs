@@ -99,7 +99,6 @@ in
 
       pcap = mkOption {
         default = true;
-        example = false;
         type = types.bool;
         description = "Whether to enable pcap";
       };

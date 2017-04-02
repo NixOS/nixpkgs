@@ -9,6 +9,8 @@ rec {
 
   inherit pkgs;
 
+  qemu = pkgs.qemu_test;
+
 
   # Build a virtual network from an attribute set `{ machine1 =
   # config1; ... machineN = configN; }', where `machineX' is the
@@ -27,6 +29,7 @@ rec {
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; services.nixosManual.enable = false; }
+          { key = "qemu"; system.build.qemu = qemu; }
         ] ++ optional minimal ../modules/testing/minimal-kernel.nix;
       extraArgs = { inherit nodes; };
     };

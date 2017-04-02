@@ -6,16 +6,17 @@
 , openssl
 , readline
 , sqlite
-, tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
+, tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
 , callPackage
 , self
-, python27Packages
 , gettext
 , db
 , expat
 , libffi
 , CF, configd, coreutils
+# For the Python package set
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -27,7 +28,7 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  minorVersion = "12";
+  minorVersion = "13";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -36,7 +37,7 @@ let
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
+    sha256 = "0cgpk3zk0fgpji59pb4zy9nzljr70qzgv1vpz5hq5xw2d2c47m9m";
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -56,13 +57,6 @@ let
 
       ./properly-detect-curses.patch
 
-      # FIXME: get rid of this after the next release, when the commit referenced here makes
-      # it in. We need it until then because it breaks compilation of programs that use
-      # locale with clang 3.8 and higher.
-      (fetchpatch {
-        url    = "https://hg.python.org/cpython/raw-rev/e0ec3471cb09";
-        sha256 = "1jdgb70jw942r4kmr01qll7mk1di8jx0qiabmp20jhnmha246ivq";
-      })
     ] ++ optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -71,6 +65,8 @@ let
       # (since it will do a futile invocation of gcc (!) to find
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
+
+      ./glibc-2.25-enosys.patch
 
     ] ++ optionals stdenv.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
@@ -156,6 +152,10 @@ in stdenv.mkDerivation {
 
     setupHook = ./setup-hook.sh;
 
+    postPatch = optionalString (x11Support && (tix != null)) ''
+          substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+    '';
+
     postInstall =
       ''
         # needed for some packages, especially packages that backport
@@ -178,13 +178,27 @@ in stdenv.mkDerivation {
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
+
+        # Determinism: Windows installers were not deterministic.
+        # We're also not interested in building Windows installers.
+        find "$out" -name 'wininst*.exe' | xargs -r rm -f
+
+        # Determinism: rebuild all bytecode
+        # We exclude lib2to3 because that's Python 2 code which fails
+        # We rebuild three times, once for each optimization level
+        find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
       '';
 
-    passthru = rec {
+    passthru = let
+      pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
+    in rec {
       inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
       executable = libPrefix;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
+      pkgs = pythonPackages;
       isPy2 = true;
       isPy27 = true;
       interpreter = "${self}/bin/${executable}";
@@ -207,5 +221,8 @@ in stdenv.mkDerivation {
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
       maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
+      # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
+      # in case both 2 and 3 are installed.
+      priority = -100;
     };
   }

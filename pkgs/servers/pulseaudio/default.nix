@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, autoreconfHook
-, json_c, libsndfile, libtool
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook
+, libsndfile, libtool
 , xorg, libcap, alsaLib, glib
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
@@ -30,18 +30,24 @@
 
 , # Whether to build only the library.
   libOnly ? false
+
+, CoreServices, AudioUnit, Cocoa
 }:
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "9.0";
+  version = "10.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "11j682g2mn723sz3bh4i44ggq29z053zcggy0glzn63zh9mxdly3";
+    sha256 = "0mrg8qvpwm4ifarzphl3749p7p050kdx1l6mvsaj03czvqj6h653";
   };
 
-  patches = [ ./caps-fix.patch ];
+  patches = [ ./caps-fix.patch ]
+            ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+              url = "https://bugs.freedesktop.org/attachment.cgi?id=127889";
+              sha256 = "063h5vmh4ykgxjbxyxjlj6qhyyxhazbh3p18p1ik69kq24nkny9m";
+            });
 
   outputs = [ "out" "dev" ];
 
@@ -51,8 +57,9 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ json_c libsndfile speexdsp fftwFloat ]
+    [ libsndfile speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2

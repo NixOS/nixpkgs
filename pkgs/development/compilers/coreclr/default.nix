@@ -2,8 +2,8 @@
 , fetchFromGitHub
 , which
 , cmake
-, clang_35
-, llvmPackages_36
+, clang
+, llvmPackages
 , libunwind
 , gettext
 , openssl
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     which
     cmake
-    clang_35
-    llvmPackages_36.llvm
-    llvmPackages_36.lldb
+    clang
+    llvmPackages.llvm
+    llvmPackages.lldb
     libunwind
     gettext
     openssl
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     # Prevent clang-3.5 (rather than just clang) from being selected as the compiler as that's
     # not wrapped
-    substituteInPlace src/pal/tools/gen-buildsys-clang.sh --replace "which \"clang-\$" "which \"clang-DoNotFindThisOne\$"
+    # substituteInPlace src/pal/tools/gen-buildsys-clang.sh --replace "which \"clang-\$" "which \"clang-DoNotFindThisOne\$"
 
     patchShebangs build.sh
     patchShebangs src/pal/tools/gen-buildsys-clang.sh
@@ -67,7 +67,10 @@ stdenv.mkDerivation rec {
   BuildType = if debug then "Debug" else "Release";
 
   hardeningDisable = [ "strictoverflow" "format" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" ];
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=unused-result" "-Wno-error=delete-non-virtual-dtor"
+    "-Wno-error=null-dereference"
+  ];
 
   buildPhase = ''
     ./build.sh $BuildArch $BuildType
@@ -99,5 +102,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ obadz ];
     license = stdenv.lib.licenses.mit;
+    broken = true; # CoreCLR has proven to be very difficult to package. PRs welcome if someone wants to shave that yak.
   };
 }

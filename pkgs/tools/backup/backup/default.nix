@@ -4,9 +4,7 @@ bundlerEnv {
   name = "backup_v4";
 
   ruby = ruby_2_1;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  gemdir = ./.;
 
   buildInputs = [ curl ];
 

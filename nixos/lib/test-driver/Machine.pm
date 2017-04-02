@@ -504,6 +504,31 @@ sub screenshot {
     }, { image => $name } );
 }
 
+# Get the text of TTY<n>
+sub getTTYText {
+    my ($self, $tty) = @_;
+
+    my ($status, $out) = $self->execute("fold -w\$(stty -F /dev/tty${tty} size | awk '{print \$2}') /dev/vcs${tty}");
+    return $out;
+}
+
+# Wait until TTY<n>'s text matches a particular regular expression
+sub waitUntilTTYMatches {
+    my ($self, $tty, $regexp) = @_;
+
+    $self->nest("waiting for $regexp to appear on tty $tty", sub {
+        retry sub {
+            return 1 if $self->getTTYText($tty) =~ /$regexp/;
+        }
+    });
+}
+
+# Debugging: Dump the contents of the TTY<n>
+sub dumpTTYContents {
+    my ($self, $tty) = @_;
+
+    $self->execute("fold -w 80 /dev/vcs${tty} | systemd-cat");
+}
 
 # Take a screenshot and return the result as text using optical character
 # recognition.
@@ -582,15 +607,42 @@ sub waitForWindow {
 sub copyFileFromHost {
     my ($self, $from, $to) = @_;
     my $s = `cat $from` or die;
-    $self->mustSucceed("echo '$s' > $to"); # !!! escaping
+    $s =~ s/'/'\\''/g;
+    $self->mustSucceed("echo '$s' > $to");
 }
+
+
+my %charToKey = (
+    '!' => "shift-0x02",
+    '@' => "shift-0x03",
+    '#' => "shift-0x04",
+    '$' => "shift-0x05",
+    '%' => "shift-0x06",
+    '^' => "shift-0x07",
+    '&' => "shift-0x08",
+    '*' => "shift-0x09",
+    '(' => "shift-0x0A",
+    ')' => "shift-0x0B",
+    '-' => "0x0C", '_' => "shift-0x0C",
+    '=' => "0x0D", '+' => "shift-0x0D",
+    '[' => "0x1A", '{' => "shift-0x1A",
+    ']' => "0x1B", '}' => "shift-0x1B",
+    ';' => "0x27", ':' => "shift-0x27",
+   '\'' => "0x28", '"' => "shift-0x28",
+    '`' => "0x29", '~' => "shift-0x29",
+   '\\' => "0x2B", '|' => "shift-0x2B",
+    ',' => "0x33", '<' => "shift-0x33",
+    '.' => "0x34", '>' => "shift-0x34",
+    '/' => "0x35", '?' => "shift-0x35",
+    ' ' => "spc",
+   "\n" => "ret",
+);
 
 
 sub sendKeys {
     my ($self, @keys) = @_;
     foreach my $key (@keys) {
-        $key = "spc" if $key eq " ";
-        $key = "ret" if $key eq "\n";
+        $key = $charToKey{$key} if exists $charToKey{$key};
         $self->sendMonitorCommand("sendkey $key");
     }
 }

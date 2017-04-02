@@ -2,7 +2,7 @@
 
 
 let
-  version = "1.2.7";
+  version = "1.3.3";
 in
   stdenv.mkDerivation {
     name = "money-manager-ex-${version}";
@@ -10,13 +10,8 @@ in
     src = fetchgit {
       url = "https://github.com/moneymanagerex/moneymanagerex.git";
       rev = "refs/tags/v${version}";
-      sha256 = "0d6jcsj3m3b9mj68vfwr7dn67dws11p0pdys3spyyiv1464vmywi";
+      sha256 = "0r4n93z3scv0i0zqflsxwv7j4yl8jy3gr0m4l30y1q8qv0zj9n74";
     };
-
-    preConfigure = ''
-      export CFLAGS="-I`pwd`/include"
-      export CXXFLAGS="$CFLAGS"
-    '';
 
     buildInputs = [ sqlite wxGTK30 gettext ];
 

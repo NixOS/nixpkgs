@@ -10,9 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "0ynwn7ih5l2b1kpzpibns9bb9wzfjak7mgrb1ji0dkn2q5pv6lr0";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    ./format.patch
+    ./gcc6.patch
+  ];
 
-  hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
 
   buildInputs = [ SDL gtk2 mesa ];
 

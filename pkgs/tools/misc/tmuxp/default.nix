@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "tmuxp-${version}";
-  version = "1.2.2";
+  version = "1.2.7";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/t/tmuxp/${name}.tar.gz";
-    sha256 = "1g37pdxs0wmnskqm7qsqm0ygwpc1dxk1d7lrzpgs717zxaak8vln";
+    sha256 = "19s17frgyjvyvmr16fs0gl5mnbaxbmdffmkckadwhd5mg0pz2i4s";
   };
 
   patchPhase = ''
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   buildInputs = with pythonPackages; [
-    pytest
+    pytest_29
     pytest-rerunfailures
   ];
 

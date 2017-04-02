@@ -191,6 +191,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  eupl11 = spdx {
+    spdxId = "EUPL-1.1";
+    fullname = "European Union Public License 1.1";
+  };
+
   fdl12 = spdx {
     spdxId = "GFDL-1.2";
     fullName = "GNU Free Documentation License v1.2";
@@ -374,6 +379,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Mozilla Public License 2.0";
   };
 
+  mspl = spdx {
+    spdxId = "MS-PL";
+    fullName = "Microsoft Public License";
+  };
+
   msrla = {
     fullName  = "Microsoft Research License Agreement";
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
@@ -447,6 +457,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   sleepycat = spdx {
     spdxId = "Sleepycat";
     fullName = "Sleepycat License";
+  };
+
+  smail = {
+    shortName = "smail";
+    fullName = "SMAIL General Public License";
+    url = http://metadata.ftp-master.debian.org/changelogs/main/d/debianutils/debianutils_4.8.1_copyright;
   };
 
   tcltk = spdx {

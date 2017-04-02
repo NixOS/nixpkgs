@@ -1,29 +1,21 @@
-{ stdenv, fetchurl, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
 , xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
+, libxkbcommon, xcbutilxrm, hicolor_icon_theme
 }:
 
-let
-  version = "3.5.9";
-in with luaPackages;
-
-stdenv.mkDerivation rec {
+with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
-
-  src = fetchurl {
-    url    = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "0kynair1ykr74b39a4gcm2y24viial64337cf26nhlc7azjbby67";
-  };
-
-  meta = with stdenv.lib; {
-    description = "Highly configurable, dynamic window manager for X";
-    homepage    = http://awesome.naquadah.org/;
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+  version = "4.1";
+  
+  src = fetchFromGitHub {
+    owner = "awesomewm";
+    repo = "awesome";
+    rev = "v${version}";
+    sha256 = "1qik8h5nwjq4535lpdpal85vas1k7am3s6l5r763kpdzxhfcyyaj";
   };
 
   nativeBuildInputs = [
@@ -33,32 +25,24 @@ stdenv.mkDerivation rec {
     imagemagick
     makeWrapper
     pkgconfig
-    xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+    xmlto docbook_xml_dtd_45 
+    docbook_xsl findXMLCatalogs
   ];
+   
+  propagatedUserEnvPkgs = [ hicolor_icon_theme ];
+  buildInputs = [ cairo dbus gdk_pixbuf gobjectIntrospection
+                  git lgi libpthreadstubs libstartup_notification
+                  libxdg_basedir lua nettools pango xcb-util-cursor
+                  xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
+                  xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
+                  xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
+                  xcbutilxrm ];
 
-  buildInputs = [
-    cairo
-    dbus
-    gdk_pixbuf
-    gobjectIntrospection
-    git
-    lgi
-    libpthreadstubs
-    libstartup_notification
-    libxdg_basedir
-    lua
-    nettools
-    pango
-    xcb-util-cursor
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.libxcb
-    xorg.libxshmfence
-    xorg.xcbutil
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+  patches = [
+    (fetchurl {
+      url = "https://patch-diff.githubusercontent.com/raw/awesomeWM/awesome/pull/1639.patch";
+      sha256 = "00piynmbxajd2xbg960gmf0zlqn7m489f4ww482y49ravfy1jhsj";
+    })
   ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
@@ -82,5 +66,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit lua;
+  };
+
+  meta = with stdenv.lib; {
+    description = "Highly configurable, dynamic window manager for X";
+    homepage    = https://awesomewm.org/;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lovek323 rasendubi ndowens ];
+    platforms   = platforms.linux;
   };
 }

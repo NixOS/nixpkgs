@@ -7,7 +7,7 @@ let
 
   stateDir = "/var/spool/ddclient";
   ddclientUser = "ddclient";
-  ddclientFlags = "-foreground -verbose -noquiet -file ${config.services.ddclient.configFile}";
+  ddclientFlags = "-foreground -file ${config.services.ddclient.configFile}";
   ddclientPIDFile = "${stateDir}/ddclient.pid";
 
 in
@@ -102,6 +102,22 @@ in
           Method to determine the IP address to send to the dynamic DNS provider.
         '';
       };
+
+      verbose = mkOption {
+        default = true;
+        type = bool;
+        description = ''
+          Print verbose information.
+        '';
+      };
+
+      quiet = mkOption {
+        default = false;
+        type = bool;
+        description = ''
+          Print no messages for unnecessary updates.
+        '';
+      };
     };
   };
 
@@ -120,7 +136,7 @@ in
     };
 
     environment.etc."ddclient.conf" = {
-      enable = config.services.ddclient.configFile == /etc/ddclient.conf;
+      enable = config.services.ddclient.configFile == "/etc/ddclient.conf";
       uid = config.ids.uids.ddclient;
       mode = "0600";
       text = ''
@@ -132,9 +148,12 @@ in
         login=${config.services.ddclient.username}
         password=${config.services.ddclient.password}
         protocol=${config.services.ddclient.protocol}
-        server=${config.services.ddclient.server}
+        ${let server = config.services.ddclient.server; in
+          lib.optionalString (server != "") "server=${server}"}
         ssl=${if config.services.ddclient.ssl then "yes" else "no"}
         wildcard=YES
+        quiet=${if config.services.ddclient.quiet then "yes" else "no"}
+        verbose=${if config.services.ddclient.verbose then "yes" else "no"}
         ${config.services.ddclient.domain}
         ${config.services.ddclient.extraConfig}
       '';

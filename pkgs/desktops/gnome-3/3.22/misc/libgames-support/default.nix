@@ -1,15 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, intltool }:
 
-let
-  major = "1";
-  minor = "0";
-in stdenv.mkDerivation rec {
-  version = "${major}.${minor}";
-  name = "libgames-support-${version}";
+stdenv.mkDerivation rec {
+  version = "1.2.1";
+  name = "libgnome-games-support-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgames-support/${version}/${name}.tar.xz";
-    sha256 = "02qn009m1i07nh8wnyrrjf7kbbapk814ap5pvin5ka5sj996cyqq";
+    url = "mirror://gnome/sources/libgnome-games-support/1.2/${name}.tar.xz";
+    sha256 = "1rsyf5hbjim7zpk1yar3gv65g1nmw6zbbc0smrmxsfk0f9n3j9m6";
   };
 
   buildInputs = [ pkgconfig glib gtk3 libgee intltool ];

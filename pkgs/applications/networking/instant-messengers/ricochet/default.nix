@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "ricochet-${version}";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "https://github.com/ricochet-im/ricochet/archive/v${version}.tar.gz";
-    sha256 = "1szb5vmlqal0vhan87kgbks184f7xbfay1hr3d3vm8r1lvcjjfkr";
+    sha256 = "1kfj42ksvj7axc809lb8siqzj5hck2pib427b63a3ipnqc5h1faf";
   };
 
   desktopItem = makeDesktopItem {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Anonymous peer-to-peer instant messaging";
     homepage = "https://ricochet.im";
     license = licenses.bsd3;
-    maintainers = [ maintainers.codsl maintainers.jgillich ];
+    maintainers = [ maintainers.codsl maintainers.jgillich maintainers.np ];
     platforms = platforms.linux;
   };
 }

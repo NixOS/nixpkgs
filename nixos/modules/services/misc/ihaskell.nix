@@ -16,20 +16,7 @@ in
     services.ihaskell = {
       enable = mkOption {
         default = false;
-        example = true;
         description = "Autostart an IHaskell notebook service.";
-      };
-
-      haskellPackages = mkOption {
-        default = pkgs.haskellPackages;
-        defaultText = "pkgs.haskellPackages";
-        example = literalExample "pkgs.haskell.packages.ghc784";
-        description = ''
-          haskellPackages used to build IHaskell and other packages.
-          This can be used to change the GHC version used to build
-          IHaskell and the packages listed in
-          <varname>extraPackages</varname>.
-        '';
       };
 
       extraPackages = mkOption {

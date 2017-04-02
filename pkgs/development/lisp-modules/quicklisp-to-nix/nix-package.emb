@@ -1,0 +1,28 @@
+args @ { fetchurl, ... }:
+rec {
+  baseName = ''<% @var filename %>'';
+  version = ''<% @var version %>'';<% @if testname %>
+
+  testSystems = ["<% @var testname %>"];<% @endif %>
+
+  description = ''<% @var description %>'';
+
+  deps = [ <% @loop deps %>args."<% @var name %>" <% @endloop %>];
+
+  src = fetchurl {
+    url = ''<% @var url %>'';
+    sha256 = ''<% @var sha256 %>'';
+  };
+
+  overrides = x: {
+    postInstall = ''
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/<% @var name %>[.]asd${"$"}' |
+        while read f; do
+          CL_SOURCE_REGISTRY= \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
+    '';
+  };
+}
+/* <%= cl-emb-intern::topenv %> */

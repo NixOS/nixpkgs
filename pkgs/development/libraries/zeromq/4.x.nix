@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "zeromq-${version}";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "https://github.com/zeromq/libzmq/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "05y1s0938x5w838z79b4f9w6bspz9anldjx9dzvk32cpxvq3pf2k";
+    sha256 = "0syzwsiqblimfjb32fr6hswhdvp3cmbk0pgm7ayxaigmkv5g88sv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

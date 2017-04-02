@@ -20,6 +20,11 @@ in pythonPackages.buildPythonApplication rec {
     substituteInPlace setup.py --replace /usr $out
     find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
   '';
+  postInstall = ''
+    mkdir -p $out/share
+    mv $out/lib/python2.7/site-packages/$out/share/locale $out/share
+    rm -r $out/lib/python2.7/site-packages/nix
+  '';
   meta = {
     homepage = http://mnemosyne-proj.org/;
     description = "Spaced-repetition software";

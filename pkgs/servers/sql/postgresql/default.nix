@@ -56,6 +56,14 @@ let
 
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
+
+        # Remove static libraries in case dynamic are available.
+        for i in $out/lib/*.a; do
+          name="$(basename "$i")"
+          if [ -e "$lib/lib/''${name%.a}.so" ] || [ -e "''${i%.a}.so" ]; then
+            rm "$i"
+          fi
+        done
       '';
 
     postFixup = lib.optionalString (!stdenv.isDarwin)
@@ -89,33 +97,33 @@ in {
   };
 
   postgresql92 = common {
-    version = "9.2.19";
+    version = "9.2.20";
     psqlSchema = "9.2";
-    sha256 = "1bfvx1h1baxp40y4xi88974p43vazz13mwc0h8scq3sr9wxdfa8x";
+    sha256 = "09lgvl996py3mciybnlv0hycfwfxr41n0wksb2jvxjh0hjpbv2hb";
   };
 
   postgresql93 = common {
-    version = "9.3.15";
+    version = "9.3.16";
     psqlSchema = "9.3";
-    sha256 = "0kswvs4rzcmjz12hhyi61w5x2wh4dxskar8v7rgajfm98qabmz59";
+    sha256 = "0wv8qsi0amdhcl1qvkvas3lm37w6zsi818f5fxm6n0ngr155wpw4";
   };
 
   postgresql94 = common {
-    version = "9.4.10";
+    version = "9.4.11";
     psqlSchema = "9.4";
-    sha256 = "1kvfhalf3rs59887b5qa14zp85zcnsc6pislrs0wd08rxn5nfqbh";
+    sha256 = "08wxrk8wdhnz0756dsa8jkj0pqanjfpw7w715lyv10618p853sz3";
   };
 
   postgresql95 = common {
-    version = "9.5.5";
+    version = "9.5.6";
     psqlSchema = "9.5";
-    sha256 = "157kf6mdazmxfmd11f0akya2xcz6sfgprn7yqc26dpklps855ih2";
+    sha256 = "0bz1b9r249ffjfvldaiah2g78ccwq30ddh8hdvlq61z26inmz7mv";
   };
 
   postgresql96 = common {
-    version = "9.6.1";
+    version = "9.6.2";
     psqlSchema = "9.6";
-    sha256 = "1k8zwnabsl8f7vlp3azm4lrklkb9jkaxmihqf0mc27ql9451w475";
+    sha256 = "1jahzqqw5inyvmacic2ihhj5f8z50lapci2fwws91h719ccbb1q1";
   };
 
 }

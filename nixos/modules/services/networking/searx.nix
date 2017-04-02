@@ -19,6 +19,7 @@ in
     services.searx = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "
           Whether to enable the Searx server. See https://github.com/asciimoo/searx
@@ -26,12 +27,20 @@ in
       };
 
       configFile = mkOption {
+        type = types.path;
         default = "";
         description = "
           The path of the Searx server configuration file. If no file
           is specified, a default file is used (default config file has
           debug mode enabled).
         ";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.pythonPackages.searx;
+        defaultText = "pkgs.pythonPackages.searx";
+        description = "searx package to use.";
       };
 
     };
@@ -61,14 +70,13 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "searx";
-          ExecStart = "${pkgs.pythonPackages.searx}/bin/searx-run";
+          ExecStart = "${cfg.package}/bin/searx-run";
         };
       } // (optionalAttrs (configFile != "") {
         environment.SEARX_SETTINGS_PATH = configFile;
       });
-        
 
-    environment.systemPackages = [ pkgs.pythonPackages.searx ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 

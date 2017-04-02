@@ -39,6 +39,8 @@ in {
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
       };
+      wants = [ "systemd-udev-settle.service" ];
+      after = [ "local-fs.target" "systemd-udev-settle.service" ];
       before = [ "sysinit.target" ];
       wantedBy = [ "sysinit.target" ];
     };

@@ -7,15 +7,14 @@ let
     else if stdenv.system == "x86_64-darwin" then "bandwidth-mac64"
     else if stdenv.system == "i686-darwin" then "bandwidth-mac32"
     else if stdenv.system == "i686-cygwin" then "bandwidth-win32"
-    else null;
+    else throw "Unknown architecture";
 in
 stdenv.mkDerivation rec {
   name = "bandwidth-${version}";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://mutineer.org/file.php?id=284ebee21bde256fd0daeae91242c2b73d9cf1df&p=bandwidth";
-    name = "${name}.tar.gz";
+    url = "http://zsmith.co/archives/${name}.tar.gz";
     sha256 = "13a0mxrkybpwiynv4cj8wsy8zl5xir5xi1a03fzam5gw815dj4am";
   };
 

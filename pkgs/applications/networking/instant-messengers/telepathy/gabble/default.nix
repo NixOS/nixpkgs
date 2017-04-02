@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxslt, telepathy_glib, libxml2, dbus_glib, dbus_daemon
-, sqlite, libsoup, libnice, gnutls }:
+, sqlite, libsoup, libnice, gnutls}:
 
 stdenv.mkDerivation rec {
   name = "telepathy-gabble-0.18.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig libxslt ];
-  buildInputs = [ libxml2 dbus_glib sqlite libsoup libnice telepathy_glib gnutls ]
+  buildInputs = [ libxml2 dbus_glib sqlite libsoup libnice telepathy_glib gnutls telepathy_glib.python ]
     ++ stdenv.lib.optional doCheck dbus_daemon;
 
   configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";

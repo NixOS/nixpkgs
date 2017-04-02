@@ -4,11 +4,14 @@
 , pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, spice_protocol, spice_gtk, epoxy, at_spi2_core
-, openssl }:
+, openssl, gsettings_desktop_schemas
+# The themes here are soft dependencies; only icons are missing without them.
+, hicolor_icon_theme, adwaita-icon-theme
+}:
 
 let
-  version = "1.2.0-rcgit.15";
-  
+  version = "1.2.0-rcgit.17";
+
   desktopItem = makeDesktopItem {
     name = "remmina";
     desktopName = "Remmina";
@@ -19,41 +22,33 @@ let
     categories = "GTK;GNOME;X-GNOME-NetworkSettings;Network;";
   };
 
-  # Latest release of remmina refers to thing that aren't yet in
-  # a FreeRDP release so we need to build one from git source
-  # See also https://github.com/FreeRDP/Remmina/pull/731
-  # Remove when FreeRDP release catches up with this commit
-  freerdp_git = stdenv.lib.overrideDerivation freerdp (args: {
-    name = "freerdp-git-2016-09-30";
-    src = fetchFromGitHub {
-      owner  = "FreeRDP";
-      repo   = "FreeRDP";
-      rev    = "dbb353db92e7a5cb0be3c73aa950fb1113e627ec";
-      sha256 = "1nhm4v6z9var9hasp4bkmhvlrksbdizx95swx19shizfc82s9g4y";
-    };
-  });
-
-in
-
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "remmina-${version}";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "07lj6a7x9cqcff18pwfkx8c8iml015zp6sq29dfcxpfg4ai578h0";
+    sha256 = "1vfg8sfpj83ircp7ny6xsbn2ba5xbp3xrdl5wwyfcg1zrpdmi7f1";
   };
 
-  buildInputs = [ cmake pkgconfig wrapGAppsHook
+  buildInputs = [ cmake pkgconfig wrapGAppsHook gsettings_desktop_schemas
                   glib gtk3 gettext libxkbfile libgnome_keyring libX11
-                  freerdp_git libssh libgcrypt gnutls
+                  freerdp libssh libgcrypt gnutls
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
                   libsecret spice_protocol spice_gtk epoxy at_spi2_core
-                  openssl ];
+                  openssl hicolor_icon_theme adwaita-icon-theme ];
 
-  cmakeFlags = "-DWITH_VTE=OFF -DWITH_TELEPATHY=OFF -DWITH_AVAHI=OFF -DWINPR_INCLUDE_DIR=${freerdp_git}/include/winpr2";
+  cmakeFlags = [
+    "-DWITH_VTE=OFF"
+    "-DWITH_TELEPATHY=OFF"
+    "-DWITH_AVAHI=OFF"
+    "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
+    "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
+    "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"
+    "-DWINPR_INCLUDE_DIR=${freerdp}/include/winpr2"
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

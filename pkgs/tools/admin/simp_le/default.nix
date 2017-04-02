@@ -1,26 +1,28 @@
 { stdenv, fetchFromGitHub, fetchpatch, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "simp_le-2016-04-17";
+  pname = "simp_le-client";
+  version = "0.1.1";
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "kuba";
-    repo = "simp_le";
-    rev = "3a103b76f933f9aef782a47401dd2eff5057a6f7";
-    sha256 = "0x8gqazn09m30bn1l7xnf8snhbb7yz7sb09imciqmm4jqdvn797z";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "18y8mg0s0i2bs57pi6mbkwgjlr5mmivchiyvrpcbdmkg9qlbfwaa";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/kuba/simp_le/commit/4bc788fdd611c4118c3f86b5f546779723aca5a7.patch";
-      sha256 = "0036p11qn3plydv5s5z6i28r6ihy1ipjl0y8la0izpkiq273byfc";
-    })
-  ];
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace 'acme>=0.9,<0.10' acme
+  '';
 
-  propagatedBuildInputs = with pythonPackages; [ acme_0_5_0 ];
+  checkPhase = ''
+    $out/bin/simp_le --test
+  '';
+
+  propagatedBuildInputs = with pythonPackages; [ acme setuptools_scm ];
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/zenhack/simp_le";
     description = "Simple Let's Encrypt client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ gebner nckx ];

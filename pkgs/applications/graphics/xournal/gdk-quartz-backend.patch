@@ -1,0 +1,90 @@
+diff -rup xournal-0.4.8-orig/src/Makefile.am xournal-0.4.8/src/Makefile.am
+--- xournal-0.4.8-orig/src/Makefile.am	2012-07-04 23:12:47.000000000 +0200
++++ xournal-0.4.8/src/Makefile.am	2016-12-25 03:04:00.000000000 +0100
+@@ -31,6 +31,5 @@ if WIN32
+   xournal_LDFLAGS = -mwindows
+   xournal_LDADD = win32/xournal.res ttsubset/libttsubset.a @PACKAGE_LIBS@ $(INTLLIBS) -lz
+ else
+-  xournal_LDADD = ttsubset/libttsubset.a @PACKAGE_LIBS@ $(INTLLIBS) -lX11 -lz -lm
++  xournal_LDADD = ttsubset/libttsubset.a @PACKAGE_LIBS@ $(INTLLIBS) -lz -lm
+ endif
+-
+diff -rup xournal-0.4.8-orig/src/xo-file.c xournal-0.4.8/src/xo-file.c
+--- xournal-0.4.8-orig/src/xo-file.c	2014-06-28 21:52:25.000000000 +0200
++++ xournal-0.4.8/src/xo-file.c	2016-12-25 03:07:19.000000000 +0100
+@@ -31,11 +31,6 @@
+ #include <glib/gstdio.h>
+ #include <poppler/glib/poppler.h>
+ 
+-#ifndef WIN32
+- #include <gdk/gdkx.h>
+- #include <X11/Xlib.h>
+-#endif
+-
+ #include "xournal.h"
+ #include "xo-interface.h"
+ #include "xo-support.h"
+@@ -1275,50 +1270,8 @@ GList *attempt_load_gv_bg(char *filename
+ 
+ struct Background *attempt_screenshot_bg(void)
+ {
+-#ifndef WIN32
+-  struct Background *bg;
+-  GdkPixbuf *pix;
+-  XEvent x_event;
+-  GdkWindow *window;
+-  GdkColormap *cmap;
+-  int x,y,w,h;
+-  Window x_root, x_win;
+-
+-  x_root = gdk_x11_get_default_root_xwindow();
+-  
+-  if (!XGrabButton(GDK_DISPLAY(), AnyButton, AnyModifier, x_root, 
+-      False, ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, None))
+-    return NULL;
+-
+-  XWindowEvent (GDK_DISPLAY(), x_root, ButtonReleaseMask, &x_event);
+-  XUngrabButton(GDK_DISPLAY(), AnyButton, AnyModifier, x_root);
+-
+-  x_win = x_event.xbutton.subwindow;
+-  if (x_win == None) x_win = x_root;
+-
+-  window = gdk_window_foreign_new_for_display(gdk_display_get_default(), x_win);
+-    
+-  gdk_window_get_geometry(window, &x, &y, &w, &h, NULL);
+-  cmap = gdk_drawable_get_colormap(window);
+-  if (cmap == NULL) cmap = gdk_colormap_get_system();
+-  
+-  pix = gdk_pixbuf_get_from_drawable(NULL, window,
+-     cmap, 0, 0, 0, 0, w, h);
+-    
+-  if (pix == NULL) return NULL;
+-  
+-  bg = g_new(struct Background, 1);
+-  bg->type = BG_PIXMAP;
+-  bg->canvas_item = NULL;
+-  bg->pixbuf = pix;
+-  bg->pixbuf_scale = DEFAULT_ZOOM;
+-  bg->filename = new_refstring(NULL);
+-  bg->file_domain = DOMAIN_ATTACH;
+-  return bg;
+-#else
+   // not implemented under WIN32
+   return FALSE;
+-#endif
+ }
+ 
+ /************** pdf annotation ***************/
+diff -rup xournal-0.4.8-orig/src/xo-misc.c xournal-0.4.8/src/xo-misc.c
+--- xournal-0.4.8-orig/src/xo-misc.c	2014-06-28 15:17:44.000000000 +0200
++++ xournal-0.4.8/src/xo-misc.c	2016-12-25 03:05:50.000000000 +0100
+@@ -2288,9 +2288,7 @@ void hide_unimplemented(void)
+   }  
+   
+   /* screenshot feature doesn't work yet in Win32 */
+-#ifdef WIN32
+   gtk_widget_hide(GET_COMPONENT("journalScreenshot"));
+-#endif
+ }  
+ 
+ // toggle fullscreen mode

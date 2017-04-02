@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, xz }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, xz }:
 
 stdenv.mkDerivation rec {
   name = "libunwind-1.1";
@@ -8,13 +8,18 @@ stdenv.mkDerivation rec {
     sha256 = "16nhx2pahh9d62mvszc88q226q5lwjankij276fxwrm8wb50zzlx";
   };
 
+  buildInputs = stdenv.lib.optional stdenv.isAarch64 autoreconfHook;
+
   patches = [ ./libunwind-1.1-lzma.patch ./cve-2015-3239.patch
               # https://lists.nongnu.org/archive/html/libunwind-devel/2014-04/msg00000.html
               (fetchpatch {
                 url = "https://raw.githubusercontent.com/dropbox/pyston/1b2e676417b0f5f17526ece0ed840aa88c744145/libunwind_patches/0001-Change-the-RBP-validation-heuristic-to-allow-size-0-.patch";
                 sha256 = "1a0fsgfxmgd218nscswx7pgyb7rcn2gh6566252xhfvzhgn5i4ha";
               })
-            ];
+            ] ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+              url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/77709d1c6d5c39e23c1535b1bd584be1455f2551/extra/libunwind/libunwind-aarch64.patch";
+              sha256 = "1mpjs8izq9wxiaf5rl4gzaxrkz0s51f9qz5qc5dj72pr84mw50w8";
+            });
 
   postPatch = ''
     sed -i -e '/LIBLZMA/s:-lzma:-llzma:' configure

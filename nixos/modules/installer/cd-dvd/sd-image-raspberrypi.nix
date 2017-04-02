@@ -1,3 +1,5 @@
+# To build, use:
+# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-raspberrypi.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 let
@@ -26,16 +28,13 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_rpi;
-  boot.consoleLogLevel = 7;
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = ''
-      for f in bootcode.bin fixup.dat start.elf; do
-        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/$f boot/
-      done
+      (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
       cp ${pkgs.ubootRaspberryPi}/u-boot.bin boot/u-boot-rpi.bin
       echo 'kernel u-boot-rpi.bin' > boot/config.txt
       ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot

@@ -1,4 +1,4 @@
-# From an end-user configuration file (`configuration'), build a NixOS
+# From an end-user configuration file (`configuration.nix'), build a NixOS
 # configuration object (`config') from which we can retrieve option
 # values.
 

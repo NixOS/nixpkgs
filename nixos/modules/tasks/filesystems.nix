@@ -5,6 +5,11 @@ with utils;
 
 let
 
+  addCheckDesc = desc: elemType: check: types.addCheck elemType check
+    // { description = "${elemType.description} (with check: ${desc})"; };
+  nonEmptyStr = addCheckDesc "non-empty" types.str
+    (x: x != "" && ! (all (c: c == " " || c == "\t") (stringToCharacters x)));
+
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
   fileSystems = if fileSystems' ? "result"
@@ -26,21 +31,21 @@ let
 
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = types.str;
+        type = nonEmptyStr;
         description = "Location of the mounted the file system.";
       };
 
       device = mkOption {
         default = null;
         example = "/dev/sda";
-        type = types.nullOr types.str;
+        type = types.nullOr nonEmptyStr;
         description = "Location of the device.";
       };
 
       fsType = mkOption {
         default = "auto";
         example = "ext3";
-        type = types.str;
+        type = nonEmptyStr;
         description = "Type of the file system.";
       };
 
@@ -48,7 +53,7 @@ let
         default = [ "defaults" ];
         example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-        type = types.listOf types.str;
+        type = types.listOf nonEmptyStr;
       };
 
     };
@@ -67,7 +72,7 @@ let
       label = mkOption {
         default = null;
         example = "root-partition";
-        type = types.nullOr types.str;
+        type = types.nullOr nonEmptyStr;
         description = "Label of the device (if any).";
       };
 
@@ -216,7 +221,7 @@ in
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" ];
+        fsToSkipCheck = [ "none" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
         skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
       in ''
         # This is a generated file.  Do not edit!
@@ -286,7 +291,7 @@ in
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {
       "/proc" = { fsType = "proc"; options = [ "nosuid" "noexec" "nodev" ]; };
-      "/run" = { fsType = "tmpfs"; options = [ "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
+      "/run" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
       "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
       "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };

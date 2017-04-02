@@ -1,12 +1,17 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
 , libelf, libvdpau, python2
 , grsecEnabled ? false
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+, enableRadv ? false
+# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
+# It's overridden for mesa_drivers.
+, enableTextureFloats ? false
+, galliumDrivers ? null
+, driDrivers ? null
+, vulkanDrivers ? null
 }:
-
 
 /** Packaging design:
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
@@ -26,7 +31,43 @@ if ! lists.elem stdenv.system platforms.mesaPlatforms then
 else
 
 let
-  version = "13.0.1";
+  defaultGalliumDrivers =
+    if stdenv.isArm
+    then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
+    else if stdenv.isAarch64
+    then ["nouveau" "vc4" ]
+    else ["i915" "ilo" "r300" "r600" "radeonsi" "nouveau"];
+  defaultDriDrivers =
+    if (stdenv.isArm || stdenv.isAarch64)
+    then ["nouveau"]
+    else ["i915" "i965" "nouveau" "radeon" "r200"];
+  defaultVulkanDrivers =
+    if (stdenv.isArm || stdenv.isAarch64)
+    then []
+    else ["intel"] ++ lib.optional enableRadv "radeon";
+in
+
+let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
+
+let
+  galliumDrivers =
+    ["svga"]
+    ++ (if gallium_ == null
+          then defaultGalliumDrivers
+          else gallium_)
+    ++ ["swrast"];
+  driDrivers =
+    (if dri_ == null
+      then defaultDriDrivers
+      else dri_) ++ ["swrast"];
+  vulkanDrivers =
+    if vulkan_ == null
+    then defaultVulkanDrivers
+    else vulkan_;
+in
+
+let
+  version = "17.0.2";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -36,11 +77,12 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     urls = [
+      "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "0cd7axwihwsay0i9fvcw14cldbxyvf8b8rd5sh53plvppyr2z5ki";
+    sha256 = "f8f191f909e01e65de38d5bdea5fb057f21649a3aed20948be02348e77a689d4";
   };
 
   prePatch = "patchShebangs .";
@@ -53,11 +95,6 @@ stdenv.mkDerivation {
     ./symlink-drivers.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/egl/main/egldriver.c \
-      --replace _EGL_DRIVER_SEARCH_DIR '"${driverLink}"'
-  '';
-
   outputs = [ "out" "dev" "drivers" "osmesa" ];
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
@@ -68,12 +105,16 @@ stdenv.mkDerivation {
     "--with-dri-searchpath=${driverLink}/lib/dri"
     "--with-egl-platforms=x11,wayland,drm"
   ]
-    ++ optionals (stdenv.system != "armv7l-linux") [
-      "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
-      "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
-      "--with-vulkan-drivers=intel"
-  ]
-    ++ [
+  ++ (optional (galliumDrivers != [])
+      ("--with-gallium-drivers=" +
+        builtins.concatStringsSep "," galliumDrivers))
+  ++ (optional (driDrivers != [])
+      ("--with-dri-drivers=" +
+        builtins.concatStringsSep "," driDrivers))
+  ++ (optional (vulkanDrivers != [])
+      ("--with-vulkan-drivers=" +
+        builtins.concatStringsSep "," vulkanDrivers))
+  ++ [
     (enableFeature enableTextureFloats "texture-float")
     (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
@@ -134,14 +175,6 @@ stdenv.mkDerivation {
       $out/lib/libxatracker* \
       $out/lib/libvulkan_*
 
-    # move share/vulkan/icd.d/
-    mv $out/share/ $drivers/
-    # Update search path used by Vulkan (it's pointing to $out but
-    # drivers are in $drivers)
-    for js in $drivers/share/vulkan/icd.d/*.json; do
-      substituteInPlace "$js" --replace "$out" "$drivers"
-    done
-
     mv $out/lib/dri/* $drivers/lib/dri # */
     rmdir "$out/lib/dri"
 
@@ -154,6 +187,14 @@ stdenv.mkDerivation {
 
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
+  '' + optionalString (builtins.elem "intel" vulkanDrivers) ''
+    # move share/vulkan/icd.d/
+    mv $out/share/ $drivers/
+    # Update search path used by Vulkan (it's pointing to $out but
+    # drivers are in $drivers)
+    for js in $drivers/share/vulkan/icd.d/*.json; do
+      substituteInPlace "$js" --replace "$out" "$drivers"
+    done
   '';
 
   # TODO:

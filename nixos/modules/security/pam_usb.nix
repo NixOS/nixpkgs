@@ -32,10 +32,12 @@ in
 
   config = mkIf (cfg.enable || anyUsbAuth) {
 
-    # pmount need to have a set-uid bit to make pam_usb works in user
-    # environment. (like su, sudo)
+    # Make sure pmount and pumount are setuid wrapped.
+    security.wrappers = {
+      pmount.source = "${pkgs.pmount.out}/bin/pmount";
+      pumount.source = "${pkgs.pmount.out}/bin/pumount";
+    };
 
-    security.setuidPrograms = [ "pmount" "pumount" ];
     environment.systemPackages = [ pkgs.pmount ];
 
   };

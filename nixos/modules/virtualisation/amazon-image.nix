@@ -94,7 +94,6 @@ let cfg = config.ec2; in
             elif [ "$fsType" = ext3 ]; then
                 mp="/disk$diskNr"
                 diskNr=$((diskNr + 1))
-                echo "mounting $device on $mp..."
                 if mountFS "$device" "$mp" "" ext3; then
                     if [ -z "$diskForUnionfs" ]; then diskForUnionfs="$mp"; fi
                 fi

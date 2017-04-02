@@ -11,6 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "06ghqhr4db1ssq0acyyz49gr8k41gzw6pqb6mbn5r7jqp77s4hwz";
   };
 
+  prePatch =let
+      # https://lwn.net/Vulnerabilities/711777/
+      debian = fetchurl {
+        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.7-5.debian.tar.xz;
+        sha256 = "1ribxdn89wx3nllcyh7ql3dx6wpr1h7z3waglz1w7dklxm43q67l";
+      };
+    in ''
+      tar xf '${debian}'
+      patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
+    '';
+
   outputs = [ "bin" "dev" "out" "doc" ];
 
   nativeBuildInputs = [ pkgconfig ];

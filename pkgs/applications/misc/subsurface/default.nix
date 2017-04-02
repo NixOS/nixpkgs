@@ -1,51 +1,97 @@
 {
   stdenv,
-  cmake,
+  cmake, doxygen, pkgconfig, autoreconfHook,
   curl,
   fetchgit,
   grantlee,
-  libdivecomputer,
   libgit2,
-  libmarble-ssrf,
+  libusb,
   libssh2,
   libxml2,
   libxslt,
   libzip,
-  pkgconfig,
-  qtbase,
-  qtconnectivity,
-  qttools,
-  qtwebkit,
+  qtbase, qtconnectivity, qtquickcontrols, qtscript, qtsvg, qttools, qtwebkit,
   sqlite
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.5.6";
-  name = "subsurface-${version}";
+let
+  version = "4.6.0";
 
-  # use fetchgit instead of the official tgz is not complete
-  src = fetchgit {
-    sha256 = "156rqcszy0c4plk2mv7wdd4h7s7mygpq5sdc64pjfs4qvvsdj10f";
-    url = "git://git.subsurface-divelog.org/subsurface";
-    rev = "4d8d7c2a0fa1b4b0e6953d92287c75b6f97472d0";
-    branchName = "v4.5-branch";
+  libmarble = stdenv.mkDerivation rec {
+    name = "libmarble-ssrf-${version}";
+
+    src = fetchgit {
+      url    = "git://git.subsurface-divelog.org/marble";
+      rev    = "refs/tags/v${version}";
+      sha256 = "1dm2hdk6y36ls7pxbzkqmyc46hdy2cd5f6pkxa6nfrbhvk5f31zd";
+    };
+
+    buildInputs = [ qtbase qtquickcontrols qtscript qtwebkit ];
+    nativeBuildInputs = [ doxygen pkgconfig cmake ];
+
+    enableParallelBuilding = true;
+
+    cmakeFlags = [
+      "-DQTONLY=TRUE"
+      "-DQT5BUILD=ON"
+      "-DBUILD_MARBLE_TESTS=NO"
+      "-DWITH_DESIGNER_PLUGIN=NO"
+      "-DBUILD_MARBLE_APPS=NO"
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Qt library for a slippy map with patches from the Subsurface project";
+      homepage = http://subsurface-divelog.org;
+      license = licenses.lgpl21;
+      maintainers = with maintainers; [ mguentner ];
+      platforms = platforms.all;
+    };
   };
 
-  buildInputs = [ qtbase libdivecomputer libmarble-ssrf libxslt
-                  libzip libxml2 grantlee qtwebkit qttools
-                  qtconnectivity libgit2 libssh2 curl ];
-  nativeBuildInputs = [ pkgconfig cmake ];
+  libdc = stdenv.mkDerivation rec {
+    name = "libdivecomputer-ssrf-${version}";
 
-  enableParallelBuilding = true;
+    src = fetchgit {
+      url    = "git://subsurface-divelog.org/libdc";
+      rev    = "refs/tags/v${version}";
+      sha256 = "0s82c8bvqph9c9chwzd76iwrw968w7lgjm3pj4hmad1jim67bs6n";
+    };
 
-  # hack incoming...
-  preConfigure = ''
-    marble_libs=$(echo $(echo $CMAKE_LIBRARY_PATH | grep -o "/nix/store/[[:alnum:]]*-libmarble-ssrf-[a-zA-Z0-9\-]*/lib")/libssrfmarblewidget.so)
-    cmakeFlags="$cmakeFlags -DCMAKE_BUILD_TYPE=Debug \
-                            -DMARBLE_LIBRARIES=$marble_libs \
-                            -DNO_PRINTING=OFF \
-                            -DUSE_LIBGIT23_API=1"
-  '';
+    nativeBuildInputs = [ autoreconfHook ];
+
+    enableParallelBuilding = true;
+
+    meta = with stdenv.lib; {
+      homepage = http://www.libdivecomputer.org;
+      description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
+      maintainers = with maintainers; [ mguentner ];
+      license = licenses.lgpl21;
+      platforms = platforms.all;
+    };
+  };
+
+in stdenv.mkDerivation rec {
+  name = "subsurface-${version}";
+
+  src = fetchgit {
+    url    = "git://git.subsurface-divelog.org/subsurface";
+    rev    = "refs/tags/v${version}";
+    sha256 = "1rk5n52p6cnyjrgi7ybhmvh7y31zxrjny0mqpnc1wql69f90h94c";
+  };
+
+  buildInputs = [
+    libdc libmarble
+    curl grantlee libgit2 libssh2 libusb libxml2 libxslt libzip
+    qtbase qtconnectivity qtsvg qttools qtwebkit
+  ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  enableParallelBuilding = false; # subsurfacewebservices.h dependency on ui_webservices.h
+
+  cmakeFlags = [
+    "-DMARBLE_LIBRARIES=${libmarble}/lib/libssrfmarblewidget.so"
+    "-DNO_PRINTING=OFF"
+  ];
 
   meta = with stdenv.lib; {
     description = "Subsurface is an open source divelog program that runs on Windows, Mac and Linux";
@@ -57,8 +103,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://subsurface-divelog.org;
     license = licenses.gpl2;
-    maintainers = [ maintainers.mguentner ];
+    maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
   };
-
 }

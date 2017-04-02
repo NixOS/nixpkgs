@@ -1,19 +1,30 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchFromGitHub, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "1.9";
   name    = "grc-${version}";
+  version = "1.10.1";
 
-  src = fetchurl {
-    url    = "http://korpus.juls.savba.sk/~garabik/software/grc/grc_${version}.orig.tar.gz";
-    sha256 = "0nsgqpijhpinnzscmpnhcjahv8yivz0g65h8zsly2md23ibnwqj1";
+  src = fetchFromGitHub {
+    owner  = "garabik";
+    repo   = "grc";
+    rev    = "v${version}";
+    sha256 = "1c2ndnbyznb608h3s99fbcyh4qb1ccipxm15lyszrrks0w2llbah";
   };
 
+  buildInputs = with python3Packages; [ wrapPython makeWrapper ];
+
   installPhase = ''
-    sed -i s%/usr%% install.sh
-    sed -i "s% /usr/bin/python%${python}/bin/python%" grc
-    sed -i "s% /usr/bin/python%${python}/bin/python%" grc
-    ./install.sh "$out"
+    ./install.sh "$out" "$out"
+
+    for f in $out/bin/* ; do
+      patchPythonScript $f
+      substituteInPlace $f \
+        --replace ' /usr/bin/env python3' '${python3Packages.python.interpreter}' \
+        --replace "'/etc/grc.conf'"   "'$out/etc/grc.conf'" \
+        --replace "'/usr/share/grc/'" "'$out/share/grc/'"
+      wrapProgram $f \
+        --prefix PATH : $out/bin
+    done
   '';
 
   meta = with stdenv.lib; {

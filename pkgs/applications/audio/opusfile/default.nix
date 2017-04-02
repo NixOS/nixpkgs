@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
   patches = [ ./include-multistream.patch ];
   configureFlags = [ "--disable-examples" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "High-level API for decoding and seeking in .opus files";
     homepage = http://www.opus-codec.org/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.bsd3;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ fuuzetsu ];
   };
 }

@@ -2,8 +2,8 @@
 , fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper
-, perl, pkgconfig, python2, rubberband, serd, sord-svn, sratom
+, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper
+, perl, pkgconfig, python2, rubberband, serd, sord, sratom
 , taglib, vampSDK, dbus, fftw, pango, suil, libarchive }:
 
 let
@@ -16,7 +16,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "5.4";
+  tag = "5.8";
 
 in
 
@@ -25,16 +25,16 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = "bb3312c3bb9c6ed9b75ac6739a6ee720ddf86c86";
-    sha256 = "1yrg0d86k9fqw7lmzjglilbadb4cjqxqkf6ii4bjs6rihj6b0qrf";
+    rev = "e5c6f16126e0901654b09ecce990554b1ff73833";
+    sha256 = "1lcvslrcw6g4kp9w0h1jx46x6ilz4nzz0k2yrw4gd545k1rwx0c1";
   };
 
   buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
-      makeWrapper pango perl pkgconfig python2 rubberband serd sord-svn
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
+      makeWrapper pango perl pkgconfig python2 rubberband serd sord
       sratom suil taglib vampSDK libarchive
     ];
 

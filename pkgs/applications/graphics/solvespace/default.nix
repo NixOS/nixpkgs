@@ -9,6 +9,12 @@ stdenv.mkDerivation {
     rev = "e587d0e";
   };
 
+  # Fixup build after glibc-2.25.
+  postPatch = ''
+    sed 's/\<CHAR_WIDTH\>/CHARWIDTH/g' \
+      -i src/{fltk/fltkmain.cpp,glhelper.cpp,textwin.cpp,toolbar.cpp,ui.h}
+  '';
+
   # e587d0e fails with undefined reference errors if make is called
   # twice. Ugly workaround: Build while installing.
   dontBuild = true;

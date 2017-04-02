@@ -1,16 +1,15 @@
 { stdenv, fetchurl, coq, ncurses, which
 , graphviz, withDoc ? false
-, src, patches ? []
+, src, name, patches ? []
 }:
 
 stdenv.mkDerivation {
 
-  name = "coq-ssreflect-1.6-${coq.coq-version}";
-
+  inherit name;
   inherit src;
 
   nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
-  buildInputs = [ coq.ocaml coq.camlp5 ncurses which ];
+  buildInputs = [ coq.ocaml coq.findlib coq.camlp5 ncurses which ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;

@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.reddit.com/r/hawkthorne";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ campadrenalin ];
+    broken = true;
   };
 }

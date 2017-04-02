@@ -1,11 +1,14 @@
-{ stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper
+{ stdenv, lib, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
 , ignoreCollisions ? false, withLLVM ? false
 , postBuild ? ""
 , haskellPackages
+, ghcLibdir ? null # only used by ghcjs, when resolving plugins
 }:
 
+assert ghcLibdir != null -> (ghc.isGhcjs or false);
+
 # This wrapper works only with GHC 6.12 or later.
-assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
+assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 
 # It's probably a good idea to include the library "ghc-paths" in the
 # compiler environment, because we have a specially patched version of
@@ -30,11 +33,14 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
 
 let
   isGhcjs       = ghc.isGhcjs or false;
-  ghc761OrLater = isGhcjs || lib.versionOlder "7.6.1" ghc.version;
+  isHaLVM       = ghc.isHaLVM or false;
+  ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand    = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommandCaps= lib.toUpper ghcCommand;
-  libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
+  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
+  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
+  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommandCaps= lib.toUpper ghcCommand';
+  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}" else "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
@@ -46,22 +52,18 @@ let
                    ++ lib.optional stdenv.isDarwin llvmPackages.clang);
 in
 if paths == [] && !withLLVM then ghc else
-buildEnv {
+symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
+  extraOutputsToInstall = [ "out" "doc" ];
   inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
-    if test -L "$out/bin"; then
-      binTarget="$(readlink -f "$out/bin")"
-      rm "$out/bin"
-      cp -r "$binTarget" "$out/bin"
-      chmod u+w "$out/bin"
-    fi
+    # wrap compiler executables with correct env variables
 
     for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
       if [[ -x "${ghc}/bin/$prg" ]]; then
@@ -96,6 +98,12 @@ buildEnv {
     done
 
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
+    ${# ghcjs will read the ghc_libdir file when resolving plugins.
+      lib.optionalString (isGhcjs && ghcLibdir != null) ''
+      mkdir -p "${libDir}"
+      rm -f "${libDir}/ghc_libdir"
+      printf '%s' '${ghcLibdir}' > "${libDir}/ghc_libdir"
+    ''}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
   passthru = {

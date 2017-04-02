@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, curl, openssl, fuse, libxml2, json_c, file }:
+{ stdenv, fetchFromGitHub, pkgconfig, curl, openssl, fuse, libxml2, json_c, file }:
 
 stdenv.mkDerivation rec {
   name = "hubicfuse-${version}";
-  version = "2.1.0";
+  version = "3.0.0";
 
-  src = fetchurl {
-    url = https://github.com/TurboGit/hubicfuse/archive/v2.1.0.tar.gz;
-    sha256 = "1mnijcwac6k3f6xknvdrsbmkkizpwbayqkb5l6jic15ymxv1fs7d";
+  src = fetchFromGitHub {
+    owner = "TurboGit";
+    repo = "hubicfuse";
+    rev = "v${version}";
+    sha256 = "1y4n63bk9vd6n1l5psjb9xm9h042kw4yh2ni33z7agixkanajv1s";
   };
 
   buildInputs = [ pkgconfig curl openssl fuse libxml2 json_c file ];
@@ -21,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based filesystem to access hubic cloud storage";
     platforms = platforms.linux;
     license = licenses.mit;
+    maintainers = [ maintainers.jpierre03 ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, flex, bison, libxml2, intltool,
-  itstool, python, makeWrapper }:
+  itstool, python2, makeWrapper }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ pkgconfig flex bison gtk3 libxml2 gnome3.gjs gnome3.gdl
-    gnome3.libgda gnome3.gtksourceview intltool itstool python makeWrapper
+    gnome3.libgda gnome3.gtksourceview intltool itstool python2 makeWrapper
     gnome3.gsettings_desktop_schemas
   ];
 

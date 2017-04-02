@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ gtk2 libXft intltool automake115x autoconf libtool pkgconfig ];
 
-  preConfigurePhases = ''
+  preConfigure = ''
     ./autogen.sh
   '';
 

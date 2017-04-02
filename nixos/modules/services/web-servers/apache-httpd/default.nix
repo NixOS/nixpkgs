@@ -16,6 +16,8 @@ let
 
   phpMajorVersion = head (splitString "." php.version);
 
+  mod_perl = pkgs.mod_perl.override { apacheHttpd = httpd; };
+
   defaultListen = cfg: if cfg.enableSSL
     then [{ip = "*"; port = 443;}]
     else [{ip = "*"; port = 80;}];
@@ -61,6 +63,8 @@ let
       let
         svcFunction =
           if svc ? function then svc.function
+          # instead of using serviceType="mediawiki"; you can copy mediawiki.nix to any location outside nixpkgs, modify it at will, and use serviceExpression=./mediawiki.nix;
+          else if svc ? serviceExpression then import (toString svc.serviceExpression)
           else import (toString "${toString ./.}/${if svc ? serviceType then svc.serviceType else svc.serviceName}.nix");
         config = (evalModules
           { modules = [ { options = res.options; config = svc.config or svc; } ];
@@ -76,6 +80,7 @@ let
           robotsEntries = "";
           startupScript = "";
           enablePHP = false;
+          enablePerl = false;
           phpOptions = "";
           options = {};
           documentRoot = null;
@@ -355,6 +360,7 @@ let
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
           ++ optional mainCfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
           ++ optional enablePHP { name = "php${phpMajorVersion}"; path = "${php}/modules/libphp${phpMajorVersion}.so"; }
+          ++ optional enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -414,6 +420,8 @@ let
 
 
   enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
+
+  enablePerl = mainCfg.enablePerl || any (svc: svc.enablePerl) allSubservices;
 
 
   # Generate the PHP configuration file.  Should probably be factored
@@ -579,6 +587,12 @@ in
         '';
       };
 
+      enablePerl = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the Perl module (mod_perl).";
+      };
+
       phpOptions = mkOption {
         type = types.lines;
         default = "";
@@ -696,13 +710,6 @@ in
               [ $(id -u) != 0 ] || chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
             ''}
             mkdir -m 0700 -p ${mainCfg.logDir}
-
-            ${optionalString (mainCfg.documentRoot != null)
-            ''
-              # Create the document root directory if does not exists yet
-              mkdir -p ${mainCfg.documentRoot}
-            ''
-            }
 
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting

@@ -2,7 +2,9 @@
 
 with lib;
 
-{
+let cfg = config.services.hardware.pommed;
+    defaultConf = "${pkgs.pommed_light}/etc/pommed.conf.mactel";
+in {
 
   options = {
 
@@ -12,37 +14,37 @@ with lib;
         type = types.bool;
         default = false;
         description = ''
-          Whether to use the pommed tool to handle Apple laptop keyboard hotkeys.
+          Whether to use the pommed tool to handle Apple laptop
+          keyboard hotkeys.
         '';
       };
 
       configFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         description = ''
-          The path to the <filename>pommed.conf</filename> file.
+          The path to the <filename>pommed.conf</filename> file. Leave
+          to null to use the default config file
+          (<filename>/etc/pommed.conf.mactel</filename>). See the
+          files <filename>/etc/pommed.conf.mactel</filename> and
+          <filename>/etc/pommed.conf.pmac</filename> for examples to
+          build on.
         '';
       };
     };
 
   };
 
-  config = mkIf config.services.hardware.pommed.enable {
-    environment.systemPackages = [ pkgs.polkit ];
+  config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.polkit pkgs.pommed_light ];
 
-    environment.etc."pommed.conf".source = config.services.hardware.pommed.configFile;
-
-    services.hardware.pommed.configFile = "${pkgs.pommed}/etc/pommed.conf";
-
-    services.dbus.packages = [ pkgs.pommed ];
+    environment.etc."pommed.conf".source =
+      if cfg.configFile == null then defaultConf else cfg.configFile;
 
     systemd.services.pommed = {
-      description = "Pommed hotkey management";
+      description = "Pommed Apple Hotkeys Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "dbus.service" ];
-      postStop = "rm -f /var/run/pommed.pid";
-      script = "${pkgs.pommed}/bin/pommed";
-      serviceConfig.Type = "forking";
-      path = [ pkgs.eject ];
+      script = "${pkgs.pommed_light}/bin/pommed -f";
     };
   };
 }

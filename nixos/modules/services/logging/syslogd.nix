@@ -100,6 +100,12 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions =
+      [ { assertion = !config.services.rsyslogd.enable;
+          message = "rsyslogd conflicts with syslogd";
+        }
+      ];
+
     environment.systemPackages = [ pkgs.sysklogd ];
 
     services.syslogd.extraParams = optional cfg.enableNetworkInput "-r";

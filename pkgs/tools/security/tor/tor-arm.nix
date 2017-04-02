@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, pythonPackages, ncurses, lsof, nettools
+, python2Packages, ncurses, lsof, nettools
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yi87gdglkvi1a23hv5c3k7mc18g0rw7b05lfcw81qyxhlapf3pw";
   };
 
-  nativeBuildInputs = [ makeWrapper pythonPackages.python ];
+  nativeBuildInputs = [ makeWrapper python2Packages.python ];
 
   outputs = [ "out" "man" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --replace "lsof -wnPi"   "${lsof}/bin/lsof"
 
     substituteInPlace ./arm --replace '"$0" = /usr/bin/arm' 'true'
-    substituteInPlace ./arm --replace "python" "${pythonPackages.python}/bin/python"
+    substituteInPlace ./arm --replace "python" "${python2Packages.python}/bin/python"
 
     for i in ./install ./arm ./src/gui/controller.py ./src/cli/wizard.py ./src/resources/torrcOverride/override.h ./src/resources/torrcOverride/override.py ./src/resources/arm.1 ./setup.py; do
       substituteInPlace $i --replace "/usr/share" "$out/share"

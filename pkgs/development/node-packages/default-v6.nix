@@ -45,4 +45,12 @@ nodePackages // {
       done
     '';
   });
+
+  ios-deploy = nodePackages.ios-deploy.override (oldAttrs: {
+    preRebuild = ''
+      tmp=$(mktemp -d)
+      ln -s /usr/bin/xcodebuild $tmp
+      export PATH="$PATH:$tmp"
+    '';
+  });
 }

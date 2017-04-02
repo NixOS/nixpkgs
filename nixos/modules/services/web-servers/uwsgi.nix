@@ -29,7 +29,6 @@ let
 
       pythonPackages = pkgs.pythonPackages.override {
         inherit python;
-        self = pythonPackages;
       };
 
       penv = python.buildEnv.override {

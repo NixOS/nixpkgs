@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.amorsillo ];
+    broken = true;
   };
 }

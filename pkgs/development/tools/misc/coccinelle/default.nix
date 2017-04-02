@@ -1,36 +1,37 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig, makeWrapper }:
+{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name    = "coccinelle-${version}";
-  version = "1.0.0-rc23";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
-    sha256 = "1qrd4kr3wc0hm4l60fwn19iwzwqcjsx85mm3k4gm3cdhljjma82p";
+    sha256 = "02g9hmwkvfl838zz690yra5jzrqjg6y6ffxkrfcsx790bhkfsll4";
   };
 
   buildInputs = with ocamlPackages; [
-    ocaml findlib menhir ocamlPackages.camlp4
+    ocaml findlib menhir
     ocaml_pcre pycaml
     python ncurses pkgconfig
-    makeWrapper
   ];
 
-  # TODO: is the generation of this wrapper truly/still needed?
-  # I don't have a non-NixOS system, so I cannot verify this, but shouldn't
-  # libpython know where to find its modules? (the path is for example in
-  # its Sys-module).
-  postInstall =
-    # On non-NixOS systems, Coccinelle would end up looking up Python modules
-    # in the wrong directory.
-    '' for p in "$out/bin/"*
-       do
-         wrapProgram "$p" \
-           --prefix "PYTHONPATH" ":" "${python}/lib/python${python.majorVersion}"
-       done
-    '';
+  doCheck = !stdenv.isDarwin;
 
-  configureFlags = "--enable-release";
+  # The build system builds two versions of spgen:
+  # 'spgen' with ocamlc -custom (bytecode specially linked)
+  # and 'spgen.opt' using ocamlopt.
+  # I'm not sure of the intentions here, but the way
+  # the 'spgen' binary is produced results in an
+  # invalid/incorrect interpreter path (/lib/ld-linux*).
+  # We could patch it, but without knowing why it's
+  # finding the wrong path it seems safer to use
+  # the .opt version that is built correctly.
+  # All that said, our fix here is simple: remove 'spgen'.
+  # The bin/spgen entrypoint is really a bash script
+  # and will use spgen.opt if 'spgen' doesn't exist.
+  postInstall = ''
+    rm $out/lib/coccinelle/spgen/spgen
+  '';
 
   meta = {
     description = "Program to apply semantic patches to C code";

@@ -6,6 +6,7 @@
 , logLevel ? ""
 , buildInputs ? []
 , cargoUpdateHook ? ""
+, cargoDepsHook ? ""
 , ... } @ args:
 
 let
@@ -28,9 +29,11 @@ in stdenv.mkDerivation (args // {
   configurePhase = args.configurePhase or "true";
 
   postUnpack = ''
+    eval "$cargoDepsHook"
+
     echo "Using cargo deps from $cargoDeps"
 
-    cp -r "$cargoDeps" deps
+    cp -a "$cargoDeps" deps
     chmod +w deps -R
 
     # It's OK to use /dev/null as the URL because by the time we do this, cargo

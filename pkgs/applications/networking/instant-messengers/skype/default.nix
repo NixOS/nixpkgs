@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{libexec/skype/,bin}
     cp -r * $out/libexec/skype/
 
+    # Fix execution on PaX-enabled kernels
+    paxmark m $out/libexec/skype/skype
+
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${lib.makeLibraryPath buildInputs}" $out/libexec/skype/skype
 

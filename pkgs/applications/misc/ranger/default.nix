@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, w3m, file, less }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "ranger-1.7.2";
+  name = "ranger-1.8.1";
 
   meta = {
     description = "File manager with minimalistic curses interface";
@@ -12,10 +12,15 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "http://ranger.nongnu.org/${name}.tar.gz";
-    sha256 = "0yaviybviwdvfg2a0pf2kk28g10k245499xmbpqlai7fv91f7xll";
+    sha256 = "1d11qw0mr9aj22a7nhr6p2c3yzf359xbffmjsjblq44bjpwzjcql";
   };
 
+  checkInputs = with pythonPackages; [ pytest ];
   propagatedBuildInputs = [ file ];
+
+  checkPhase = ''
+    py.test tests
+  '';
 
   preConfigure = ''
     substituteInPlace ranger/ext/img_display.py \

@@ -1,16 +1,16 @@
 { stdenv, fetchurl, static ? false }:
 
-let version = "1.2.8"; in
+let version = "1.2.11"; in
 
 stdenv.mkDerivation rec {
   name = "zlib-${version}";
 
   src = fetchurl {
     urls =
-      [ "http://www.zlib.net/${name}.tar.gz"  # old versions vanish from here
+      [ "http://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
-    sha256 = "039agw5rqvqny92cpkrfn243x2gd4xn13hs3xi6isk55d2vqqr9n";
+    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
   };
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "static" ];
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
-
 
   preConfigure = ''
     if test -n "$crossConfig"; then
@@ -81,4 +80,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

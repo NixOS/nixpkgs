@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/git-bz \
+      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pycrypto}")" \
       --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 

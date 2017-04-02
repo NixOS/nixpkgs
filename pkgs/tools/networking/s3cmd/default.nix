@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   name = "s3cmd-${version}";
   version = "1.6.1";
   
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0aan6v1qj0pdkddhhkbaky44d54irm1pa8mkn52i2j86nb2rkcf9";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ python_magic dateutil ];
+  propagatedBuildInputs = with python2Packages; [ python_magic dateutil ];
 
   meta = with stdenv.lib; {
     homepage = http://s3tools.org/;

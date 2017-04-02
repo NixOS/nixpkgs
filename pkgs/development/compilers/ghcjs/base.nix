@@ -1,4 +1,6 @@
 { mkDerivation
+, lib
+, broken ? false
 , test-framework
 , test-framework-hunit
 , test-framework-quickcheck2
@@ -38,6 +40,11 @@
 , haddock, hspec, xhtml, primitive, cacert, pkgs
 , coreutils
 , libiconv
+
+, ghcjsNodePkgs ? callPackage ../../../top-level/node-packages.nix {
+    generated = ./node-packages-generated.nix;
+    self = ghcjsNodePkgs;
+  }
 
 , version ? "0.2.0"
 , ghcjsSrc ? fetchFromGitHub {
@@ -88,6 +95,11 @@
   ]
 
 , stage2 ? import ./stage2.nix
+
+, patches ? [ ./ghcjs.patch ]
+
+# used for resolving compiler plugins
+, ghcLibdir ? null
 }:
 let
   inherit (bootPkgs) ghc;
@@ -116,7 +128,7 @@ in mkDerivation (rec {
   testDepends = [
     HUnit test-framework test-framework-hunit
   ];
-  patches = [ ./ghcjs.patch ];
+  inherit patches;
   postPatch = ''
     substituteInPlace Setup.hs \
       --replace "/usr/bin/env" "${coreutils}/bin/env"
@@ -159,13 +171,10 @@ in mkDerivation (rec {
         --with-cabal ${cabal-install}/bin/cabal \
         --with-gmp-includes ${gmp.dev}/include \
         --with-gmp-libraries ${gmp.out}/lib
+  '' + lib.optionalString (ghcLibdir != null) ''
+    printf '%s' '${ghcLibdir}' > "$out/lib/ghcjs-${version}/ghc_libdir"
   '';
-  passthru = let
-    ghcjsNodePkgs = callPackage ../../../top-level/node-packages.nix {
-      generated = ./node-packages-generated.nix;
-      self = ghcjsNodePkgs;
-    };
-  in {
+  passthru = {
     inherit bootPkgs;
     isCross = true;
     isGhcjs = true;
@@ -183,4 +192,5 @@ in mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
+  inherit broken;
 })

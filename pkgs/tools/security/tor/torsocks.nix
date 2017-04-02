@@ -1,24 +1,27 @@
-{ stdenv, fetchgit, autoreconfHook, which }:
+{ stdenv, fetchgit, autoreconfHook, libcap }:
 
 stdenv.mkDerivation rec {
   name = "torsocks-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchgit {
     url    = meta.repositories.git;
     rev    = "refs/tags/v${version}";
-    sha256 = "1l890pg0h2hqpkabsnwc6pq2qi8mfv58qzaaicc9y62rq5nmrrws";
+    sha256 = "1xwkmfaxhhnbmvp37agnby1n53hznwhvx0dg1hj35467qfx985zc";
   };
 
-  buildInputs = [ autoreconfHook ];
-  preConfigure = ''
-      export configureFlags="$configureFlags --libdir=$out/lib"
+  nativeBuildInputs = [ autoreconfHook ];
+
+  postPatch = ''
+    # Patch torify_app()
+    sed -i \
+      -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
+      -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
+      src/bin/torsocks.in
   '';
 
-  patchPhase = ''
-    substituteInPlace src/bin/torsocks.in \
-      --replace which ${which}/bin/which
-  '';
+  doInstallCheck = true;
+  installCheckTarget = "check-recursive";
 
   meta = {
     description      = "Wrapper to safely torify applications";

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     inherit (s) version;
     description = "GNU Chess engine";
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl3Plus;
   };
 }

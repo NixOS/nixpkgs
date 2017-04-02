@@ -8,6 +8,8 @@ let
 
   nix = cfg.package.out;
 
+  isNix112 = versionAtLeast (getVersion nix) "1.12pre";
+
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
       description = "Nix build user ${toString nr}";
@@ -44,6 +46,7 @@ let
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
         binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
+        auto-optimise-store = ${if cfg.autoOptimiseStore then "true" else "false"}
         ${optionalString cfg.requireSignedBinaryCaches ''
           signed-binary-caches = *
         ''}
@@ -84,6 +87,18 @@ in
         '';
       };
 
+      autoOptimiseStore = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+         If set to true, Nix automatically detects files in the store that have
+         identical contents, and replaces them with hard links to a single copy.
+         This saves disk space. If set to false (the default), you can still run
+         nix-store --optimise to get rid of duplicate files.
+        '';
+      };
+
       buildCores = mkOption {
         type = types.int;
         default = 1;
@@ -105,7 +120,9 @@ in
           If set, Nix will perform builds in a sandboxed environment that it
           will set up automatically for each build.  This prevents
           impurities in builds by disallowing access to dependencies
-          outside of the Nix store.
+          outside of the Nix store. This isn't enabled by default for
+          performance. It doesn't affect derivation hashes, so changing
+          this option will not trigger a rebuild of packages.
         ";
       };
 
@@ -160,22 +177,23 @@ in
       buildMachines = mkOption {
         type = types.listOf types.attrs;
         default = [];
-        example = [
-          { hostName = "voila.labs.cs.uu.nl";
-            sshUser = "nix";
-            sshKey = "/root/.ssh/id_buildfarm";
-            system = "powerpc-darwin";
-            maxJobs = 1;
-          }
-          { hostName = "linux64.example.org";
-            sshUser = "buildfarm";
-            sshKey = "/root/.ssh/id_buildfarm";
-            system = "x86_64-linux";
-            maxJobs = 2;
-            supportedFeatures = [ "kvm" ];
-            mandatoryFeatures = [ "perf" ];
-          }
-        ];
+        example = literalExample ''
+          [ { hostName = "voila.labs.cs.uu.nl";
+              sshUser = "nix";
+              sshKey = "/root/.ssh/id_buildfarm";
+              system = "powerpc-darwin";
+              maxJobs = 1;
+            }
+            { hostName = "linux64.example.org";
+              sshUser = "buildfarm";
+              sshKey = "/root/.ssh/id_buildfarm";
+              system = "x86_64-linux";
+              maxJobs = 2;
+              supportedFeatures = [ "kvm" ];
+              mandatoryFeatures = [ "perf" ];
+            }
+          ]
+        '';
         description = ''
           This option lists the machines to be used if distributed
           builds are enabled (see
@@ -378,7 +396,9 @@ in
 
     nix.envVars =
       { NIX_CONF_DIR = "/etc/nix";
+      }
 
+      // optionalAttrs (!isNix112) {
         # Enable the copy-from-other-stores substituter, which allows
         # builds to be sped up by copying build results from remote
         # Nix stores.  To do this, mount the remote file system on a
@@ -387,9 +407,11 @@ in
       }
 
       // optionalAttrs cfg.distributedBuilds {
-        NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
-        NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
-        NIX_CURRENT_LOAD = "/run/nix/current-load";
+        NIX_BUILD_HOOK =
+          if isNix112 then
+            "${nix}/libexec/nix/build-remote"
+          else
+            "${nix}/libexec/nix/build-remote.pl";
       };
 
     # Set up the environment variables for running Nix.

@@ -38,6 +38,12 @@ while test -n "$1"; do
             nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr tarball --show-trace
             ;;
 
+        nixpkgs-unstable)
+            echo "=== Checking nixpkgs unstable job"
+
+            nix-instantiate $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr unstable --show-trace
+            ;;
+
         nixpkgs-lint)
             echo "=== Checking nixpkgs lint"
 

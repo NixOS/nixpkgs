@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.23.2";
+  version = "0.23.5";
   name = "notmuch-${version}";
 
   passthru = {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "1g4p5hsrqqbqk6s2w756als60wppvjgpyq104smy3w9vshl7bzgd";
+    sha256 = "0ry2k9sdwd1vw8cf6svch8wk98523s07mwxvsf7b8kghqnrr89n6";
   };
 
   buildInputs = [
@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     make install-man
   '';
+  dontGzipMan = true; # already compressed
 
   meta = {
     description = "Mail indexer";

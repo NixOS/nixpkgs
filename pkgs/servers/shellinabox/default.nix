@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pam, openssl, openssh, shadow, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "2.19";
+  version = "2.20";
   name = "shellinabox-${version}";
 
   src = fetchFromGitHub {
     owner = "shellinabox";
     repo = "shellinabox";
-    rev = "1a8010f2c94a62e7398c4fa130dfe9e099dc55cd";
-    sha256 = "16cr7gbnh6vzsxlhg9j9avqrxbhbkqhsbvh197b0ccdwbb04ysan";
+    rev = "v${version}";
+    sha256 = "1hmfayh21cks2lyj572944ll0mmgsxbnj981b3hq3nhdg8ywzjfr";
   };
 
   patches = [ ./shellinabox-minus.patch ];

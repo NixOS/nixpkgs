@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "linuxconsoletools-${version}";
-  version = "1.4.9";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxconsole/${name}.tar.bz2";
-    sha256 = "0rwv2fxn12bblp096m9jy1lhngz26lv6g6zs4cgfg4frikwn977s";
+    sha256 = "0il1m8pgw8f6b8qid035ixamv0w5fgh9pinx5vw4ayxn03nyzlnf";
   };
 
   buildInputs = [ SDL ];

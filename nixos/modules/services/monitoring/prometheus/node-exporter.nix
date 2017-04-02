@@ -44,10 +44,20 @@ in {
           Extra commandline options when launching the node exporter.
         '';
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open port in firewall for incoming connections.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
     systemd.services.prometheus-node-exporter = {
       description = "Prometheus exporter for machine metrics";
       unitConfig.Documentation = "https://github.com/prometheus/node_exporter";
