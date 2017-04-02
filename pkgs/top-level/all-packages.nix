@@ -14817,6 +14817,8 @@ with pkgs;
 
   nedit = callPackage ../applications/editors/nedit { };
 
+  nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
+
   notepadqq = libsForQt56.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
