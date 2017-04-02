@@ -1,27 +1,29 @@
-{ stdenv, fetchFromGitHub, qt4, qmake4Hook, gnuradio, boost, gnuradio-osmosdr
+{ stdenv, fetchFromGitHub, qt5, qmake4Hook, gnuradio, boost, gnuradio-osmosdr
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
 }:
 
+with stdenv.lib;
+
 assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gqrx-${version}";
-  version = "2.5.3";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "02pavd1kc0gsnrl18bfa01r2f3j4j05zly4a8zwss9yrsgf8432x";
+    sha256 = "0lhma6wqkka007vq4jpxxz0ws9kvg0b5insgfbplqhpb0pp99rc9";
   };
 
   nativeBuildInputs = [ qmake4Hook ];
 
   buildInputs = [
-    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
-  ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
+   qt5.qtbase gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
+  ] ++ optionals pulseaudioSupport [ libpulseaudio ];
 
   enableParallelBuilding = true;
 
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     cp resources/icons/gqrx.svg "$out/share/icons/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Software defined radio (SDR) receiver";
     longDescription = ''
       Gqrx is a software defined radio receiver powered by GNU Radio and the Qt
