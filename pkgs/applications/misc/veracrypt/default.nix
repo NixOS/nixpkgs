@@ -2,6 +2,8 @@
   wxGUI ? true
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "veracrypt-${version}";
   version = "1.19";
@@ -11,18 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "111xs1zmic82lpn5spn0ca33q0g4za04a2k4cvjwdb7k3vcicq6v";
   };
 
-  # The source archive can't be extracted with "tar xfz"; I don't know why
-  # Using "gunzip" before "tar xf" works though
+  # The source archive appears to be compressed twice ...
   unpackPhase =
     ''
-      gunzip -c $src > src.tar
-      tar xf src.tar
+      gzip -dc $src | tar xz
       cd Vera*/src
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse devicemapper wxGTK30 nasm makeself ];
-  makeFlags = if wxGUI then "" else "NOGUI=1";
+  nativeBuildInputs = [ makeself nasm pkgconfig ];
+  buildInputs = [ fuse devicemapper ]
+    ++ optional wxGUI wxGTK30;
+  makeFlags = optionalString (!wxGUI) "NOGUI=1";
 
   installPhase =
     ''
@@ -31,14 +32,14 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/$name
       cp License.txt $out/share/$name/LICENSE
       mkdir -p $out/share/applications
-      sed 's/\/usr\/bin\/veracrypt/veracrypt/' Setup/Linux/veracrypt.desktop > $out/share/applications/veracrypt.desktop
+      sed "s,Exec=.*,Exec=$out/bin/veracrypt," Setup/Linux/veracrypt.desktop > $out/share/applications/veracrypt.desktop
     '';
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = https://veracrypt.codeplex.com/;
     license = "VeraCrypt License";
-    maintainers = with stdenv.lib.maintainers; [dsferruzza];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ dsferruzza ];
+    platforms = platforms.linux;
   };
 }
