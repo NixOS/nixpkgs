@@ -1,0 +1,291 @@
+diff --git gcc-4.9.4/gcc/c/c-convert.c gcc-4.9.4-patched/gcc/c/c-convert.c
+index 38bacda..90b9931 100644
+--- gcc-4.9.4/gcc/c/c-convert.c
++++ gcc-4.9.4-patched/gcc/c/c-convert.c
+@@ -79,7 +79,7 @@ convert (tree type, tree expr)
+   if ((invalid_conv_diag
+        = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+     {
+-      error (invalid_conv_diag);
++      error ("%s", invalid_conv_diag);
+       return error_mark_node;
+     }
+ 
+diff --git gcc-4.9.4/gcc/c/c-decl.c gcc-4.9.4-patched/gcc/c/c-decl.c
+index 0751a52..dd45e93 100644
+--- gcc-4.9.4/gcc/c/c-decl.c
++++ gcc-4.9.4-patched/gcc/c/c-decl.c
+@@ -5699,7 +5699,7 @@ grokdeclarator (const struct c_declarator *declarator,
+ 	    errmsg = targetm.invalid_return_type (type);
+ 	    if (errmsg)
+ 	      {
+-		error (errmsg);
++		error ("%s", errmsg);
+ 		type = integer_type_node;
+ 	      }
+ 
+@@ -6480,7 +6480,7 @@ grokparms (struct c_arg_info *arg_info, bool funcdef_flag)
+ 	  errmsg = targetm.invalid_parameter_type (type);
+ 	  if (errmsg)
+ 	    {
+-	      error (errmsg);
++	      error ("%s", errmsg);
+ 	      TREE_VALUE (typelt) = error_mark_node;
+ 	      TREE_TYPE (parm) = error_mark_node;
+ 	      arg_types = NULL_TREE;
+diff --git gcc-4.9.4/gcc/c/c-typeck.c gcc-4.9.4-patched/gcc/c/c-typeck.c
+index 0b38bbd..d3ace1b 100644
+--- gcc-4.9.4/gcc/c/c-typeck.c
++++ gcc-4.9.4-patched/gcc/c/c-typeck.c
+@@ -3300,7 +3300,7 @@ convert_arguments (location_t loc, vec<location_t> arg_loc, tree typelist,
+       else if ((invalid_func_diag =
+ 		targetm.calls.invalid_arg_for_unprototyped_fn (typelist, fundecl, val)))
+ 	{
+-	  error (invalid_func_diag);
++	  error ("%s", invalid_func_diag);
+ 	  return -1;
+ 	}
+       else
+@@ -3799,7 +3799,7 @@ build_unary_op (location_t location,
+   if ((invalid_op_diag
+        = targetm.invalid_unary_op (code, TREE_TYPE (xarg))))
+     {
+-      error_at (location, invalid_op_diag);
++      error_at (location, "%s", invalid_op_diag);
+       return error_mark_node;
+     }
+ 
+@@ -10114,7 +10114,7 @@ build_binary_op (location_t location, enum tree_code code,
+   if ((invalid_op_diag
+        = targetm.invalid_binary_op (code, type0, type1)))
+     {
+-      error_at (location, invalid_op_diag);
++      error_at (location, "%s", invalid_op_diag);
+       return error_mark_node;
+     }
+ 
+diff --git gcc-4.9.4/gcc/collect2.c gcc-4.9.4-patched/gcc/collect2.c
+index 7a76a12..02e6903 100644
+--- gcc-4.9.4/gcc/collect2.c
++++ gcc-4.9.4-patched/gcc/collect2.c
+@@ -1992,7 +1992,7 @@ collect_execute (const char *prog, char **argv, const char *outname,
+ 	  fatal_error ("%s: %m", _(errmsg));
+ 	}
+       else
+-	fatal_error (errmsg);
++	fatal_error ("%s", errmsg);
+     }
+ 
+   free (response_arg);
+@@ -2543,7 +2543,7 @@ scan_prog_file (const char *prog_name, scanpass which_pass,
+ 	  fatal_error ("%s: %m", _(errmsg));
+ 	}
+       else
+-	fatal_error (errmsg);
++	fatal_error ("%s", errmsg);
+     }
+ 
+   int_handler  = (void (*) (int)) signal (SIGINT,  SIG_IGN);
+diff --git gcc-4.9.4/gcc/cp/cvt.c gcc-4.9.4-patched/gcc/cp/cvt.c
+index 4e6b3f7..3297c71 100644
+--- gcc-4.9.4/gcc/cp/cvt.c
++++ gcc-4.9.4-patched/gcc/cp/cvt.c
+@@ -682,7 +682,7 @@ ocp_convert (tree type, tree expr, int convtype, int flags,
+        = targetm.invalid_conversion (TREE_TYPE (expr), type)))
+     {
+       if (complain & tf_error)
+-	error (invalid_conv_diag);
++	error ("%s", invalid_conv_diag);
+       return error_mark_node;
+     }
+ 
+diff --git gcc-4.9.4/gcc/cp/decl.c gcc-4.9.4-patched/gcc/cp/decl.c
+index 74539ef..a8f3794 100644
+--- gcc-4.9.4/gcc/cp/decl.c
++++ gcc-4.9.4-patched/gcc/cp/decl.c
+@@ -9543,7 +9543,7 @@ grokdeclarator (const cp_declarator *declarator,
+ 	    errmsg = targetm.invalid_return_type (type);
+ 	    if (errmsg)
+ 	      {
+-		error (errmsg);
++		error ("%s", errmsg);
+ 		type = integer_type_node;
+ 	      }
+ 
+@@ -11120,7 +11120,7 @@ grokparms (tree parmlist, tree *parms)
+       if (type != error_mark_node
+ 	  && (errmsg = targetm.invalid_parameter_type (type)))
+ 	{
+-	  error (errmsg);
++	  error ("%s", errmsg);
+ 	  type = error_mark_node;
+ 	  TREE_TYPE (decl) = error_mark_node;
+ 	}
+diff --git gcc-4.9.4/gcc/cp/pt.c gcc-4.9.4-patched/gcc/cp/pt.c
+index e08a27d..dc47a75 100644
+--- gcc-4.9.4/gcc/cp/pt.c
++++ gcc-4.9.4-patched/gcc/cp/pt.c
+@@ -14227,7 +14227,7 @@ tsubst_copy_and_build (tree t,
+ 				     &error_msg,
+ 				     input_location);
+ 	if (error_msg)
+-	  error (error_msg);
++	  error ("%s", error_msg);
+ 	if (!function_p && identifier_p (decl))
+ 	  {
+ 	    if (complain & tf_error)
+diff --git gcc-4.9.4/gcc/cp/typeck.c gcc-4.9.4-patched/gcc/cp/typeck.c
+index 6ed9125..27f636d 100644
+--- gcc-4.9.4/gcc/cp/typeck.c
++++ gcc-4.9.4-patched/gcc/cp/typeck.c
+@@ -3993,7 +3993,7 @@ cp_build_binary_op (location_t location,
+        = targetm.invalid_binary_op (code, type0, type1)))
+     {
+       if (complain & tf_error)
+-	error (invalid_op_diag);
++	error ("%s", invalid_op_diag);
+       return error_mark_node;
+     }
+ 
+@@ -5586,7 +5586,7 @@ cp_build_unary_op (enum tree_code code, tree xarg, int noconvert,
+ 				   TREE_TYPE (xarg))))
+     {
+       if (complain & tf_error)
+-	error (invalid_op_diag);
++	error ("%s", invalid_op_diag);
+       return error_mark_node;
+     }
+ 
+diff --git gcc-4.9.4/gcc/dwarf2asm.c gcc-4.9.4-patched/gcc/dwarf2asm.c
+index 1372b23..ad9f44b 100644
+--- gcc-4.9.4/gcc/dwarf2asm.c
++++ gcc-4.9.4-patched/gcc/dwarf2asm.c
+@@ -164,7 +164,7 @@ dw2_asm_output_vms_delta (int size ATTRIBUTE_UNUSED,
+ #ifndef ASM_OUTPUT_DWARF_VMS_DELTA
+   /* VMS Delta is only special on ia64-vms, but this function also gets
+      called on alpha-vms so it has to do something sane.  */
+-  dw2_asm_output_delta (size, lab1, lab2, comment);
++  dw2_asm_output_delta (size, lab1, lab2, "%s", comment);
+ #else
+   ASM_OUTPUT_DWARF_VMS_DELTA (asm_out_file, size, lab1, lab2);
+   if (flag_debug_asm && comment)
+diff --git gcc-4.9.4/gcc/gcc.c gcc-4.9.4-patched/gcc/gcc.c
+index adbf0c4..15f6434 100644
+--- gcc-4.9.4/gcc/gcc.c
++++ gcc-4.9.4-patched/gcc/gcc.c
+@@ -2795,7 +2795,7 @@ execute (void)
+       if (errmsg != NULL)
+ 	{
+ 	  if (err == 0)
+-	    fatal_error (errmsg);
++	    fatal_error ("%s", errmsg);
+ 	  else
+ 	    {
+ 	      errno = err;
+diff --git gcc-4.9.4/gcc/lto-wrapper.c gcc-4.9.4-patched/gcc/lto-wrapper.c
+index 1607ab3..55252da 100644
+--- gcc-4.9.4/gcc/lto-wrapper.c
++++ gcc-4.9.4-patched/gcc/lto-wrapper.c
+@@ -192,10 +192,10 @@ collect_execute (char **argv)
+       if (err != 0)
+ 	{
+ 	  errno = err;
+-	  fatal_perror (errmsg);
++	  fatal_perror ("%s", errmsg);
+ 	}
+       else
+-	fatal (errmsg);
++	fatal ("%s", errmsg);
+     }
+ 
+   return pex;
+diff --git gcc-4.9.4/gcc/opts.c gcc-4.9.4-patched/gcc/opts.c
+index fbdebd7..7ca7844 100644
+--- gcc-4.9.4/gcc/opts.c
++++ gcc-4.9.4-patched/gcc/opts.c
+@@ -1055,7 +1055,7 @@ print_filtered_help (unsigned int include_flags,
+ 		      if (* (const char **) flag_var != NULL)
+ 			snprintf (new_help + strlen (new_help),
+ 				  sizeof (new_help) - strlen (new_help),
+-				  * (const char **) flag_var);
++				  "%s", * (const char **) flag_var);
+ 		    }
+ 		  else if (option->var_type == CLVC_ENUM)
+ 		    {
+@@ -1069,7 +1069,7 @@ print_filtered_help (unsigned int include_flags,
+ 			arg = _("[default]");
+ 		      snprintf (new_help + strlen (new_help),
+ 				sizeof (new_help) - strlen (new_help),
+-				arg);
++				"%s", arg);
+ 		    }
+ 		  else
+ 		    sprintf (new_help + strlen (new_help),
+diff --git gcc-4.9.4/gcc/tree-sra.c gcc-4.9.4-patched/gcc/tree-sra.c
+index 3659ff3..872b928 100644
+--- gcc-4.9.4/gcc/tree-sra.c
++++ gcc-4.9.4-patched/gcc/tree-sra.c
+@@ -3884,7 +3884,7 @@ dump_dereferences_table (FILE *f, const char *str, HOST_WIDE_INT *table)
+ {
+   basic_block bb;
+ 
+-  fprintf (dump_file, str);
++  fprintf (dump_file, "%s", str);
+   FOR_BB_BETWEEN (bb, ENTRY_BLOCK_PTR_FOR_FN (cfun),
+ 		  EXIT_BLOCK_PTR_FOR_FN (cfun), next_bb)
+     {
+diff --git gcc-4.9.4/gcc/tree-ssa-uninit.c gcc-4.9.4-patched/gcc/tree-ssa-uninit.c
+index eee83f7..79cae66 100644
+--- gcc-4.9.4/gcc/tree-ssa-uninit.c
++++ gcc-4.9.4-patched/gcc/tree-ssa-uninit.c
+@@ -751,7 +751,7 @@ dump_predicates (gimple usestmt, pred_chain_union preds,
+ {
+   size_t i, j;
+   pred_chain one_pred_chain = vNULL;
+-  fprintf (dump_file, msg);
++  fprintf (dump_file, "%s", msg);
+   print_gimple_stmt (dump_file, usestmt, 0, 0);
+   fprintf (dump_file, "is guarded by :\n\n");
+   size_t num_preds = preds.length ();
+diff --git gcc-4.9.4/libcpp/expr.c gcc-4.9.4-patched/libcpp/expr.c
+index 29cb0fa..9f67e76 100644
+--- gcc-4.9.4/libcpp/expr.c
++++ gcc-4.9.4-patched/libcpp/expr.c
+@@ -671,10 +671,10 @@ cpp_classify_number (cpp_reader *pfile, const cpp_token *token,
+ 
+ 	  if (CPP_OPTION (pfile, c99))
+             cpp_warning_with_line (pfile, CPP_W_LONG_LONG, virtual_location,
+-				   0, message);
++				   0, "%s", message);
+           else
+             cpp_pedwarning_with_line (pfile, CPP_W_LONG_LONG,
+-				      virtual_location, 0, message);
++				      virtual_location, 0, "%s", message);
+         }
+ 
+       result |= CPP_N_INTEGER;
+diff --git gcc-4.9.4/libcpp/macro.c gcc-4.9.4-patched/libcpp/macro.c
+index 11e50f4..97291b8 100644
+--- gcc-4.9.4/libcpp/macro.c
++++ gcc-4.9.4-patched/libcpp/macro.c
+@@ -2966,7 +2966,7 @@ create_iso_definition (cpp_reader *pfile, cpp_macro *macro)
+ 	     function-like macros, but not at the end.  */
+ 	  if (following_paste_op)
+ 	    {
+-	      cpp_error (pfile, CPP_DL_ERROR, paste_op_error_msg);
++	      cpp_error (pfile, CPP_DL_ERROR, "%s", paste_op_error_msg);
+ 	      return false;
+ 	    }
+ 	  break;
+@@ -2979,7 +2979,7 @@ create_iso_definition (cpp_reader *pfile, cpp_macro *macro)
+ 	     function-like macros, but not at the beginning.  */
+ 	  if (macro->count == 1)
+ 	    {
+-	      cpp_error (pfile, CPP_DL_ERROR, paste_op_error_msg);
++	      cpp_error (pfile, CPP_DL_ERROR, "%s", paste_op_error_msg);
+ 	      return false;
+ 	    }
+ 
+diff --git gcc-4.9.4-patched/mypatch.patch gcc-4.9.4-patched/mypatch.patch
+new file mode 100644
+index 0000000..e69de29

@@ -2,15 +2,17 @@
 
 let
   _target = "arm-frc-linux-gnueabi";
-  _basever = "3.16-r0.40";
+  _basever = "3.19-r0.36";
   src = fetchurl {
-    url = "http://download.ni.com/ni-linux-rt/feeds/2015/arm/ipk/cortexa9-vfpv3/linux-libc-headers-dev_${_basever}_cortexa9-vfpv3.ipk";
-    sha256 = "099b67fa1a2dea7730b1ec810fc61448b94459e68e9d640b02d095ffdebff2bb";
+    url = "http://download.ni.com/ni-linux-rt/feeds/2016/arm/ipk/cortexa9-vfpv3/linux-libc-headers-dev_${_basever}_cortexa9-vfpv3.ipk";
+    sha256 = "10066ddb9a19bf764a9a67919a7976478041e98c44c19308f076c78ecb07408c";
   };
 in
 stdenv.mkDerivation rec {
-  version = "3.16";
+  version = "3.19";
   name = "${_target}-linux-api-headers-${version}";
+
+  meta.priority = 1;
 
   sourceRoot = ".";
   inherit src;
@@ -23,8 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/usr/${_target}/usr
+    mkdir -p $out/${_target}
     find . \( -name .install -o -name ..install.cmd \) -delete
-    cp -r ./* $out/usr/${_target}/usr
+    cp -r usr $out/${_target}
   '';
 }
