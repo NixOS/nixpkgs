@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, cmake
 , glib, pcre, libtool, libogg, libvorbis
-, tqtinterface
+, tde
 , audiofileSupport ? true, audiofile ? null
 , lameSupport ? true, lame ? null
 , libmadSupport ? true, libmad ? null
@@ -18,23 +18,27 @@ assert libmp3spltSupport  -> (libmp3splt != null);
 assert mpdSupport         -> (mpd != null);
 assert vorbisToolsSupport -> (vorbisTools != null);
 assert alsaSupport        -> (alsaLib != null);
-assert jack2Support     -> (jack2Full != null);
+assert jack2Support       -> (jack2Full != null);
 
+let baseName = "arts"; in
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "arts-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14.0";
-  minorVer = "3";
+  name = "${baseName}-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${name}.tar.bz2";
-    sha256 = "0hh7gkyi5q6r5siz41fr5557zqgxlqja9c8yzyxvq2hgsrdh4883";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "13x5bk093yxr96br1x8wd0a5s00ikjvsmwz6agwmc667sw0a290v";
   };
 
-  buildInputs = [ pkgconfig cmake libtool glib pcre ];
-  propagatedBuildInputs = [ libogg libvorbis tqtinterface ]
+  nativeBuildInputs = [ pkgconfig cmake libtool ];
+  buildInputs = [ glib pcre ];
+  propagatedBuildInputs = [ libogg libvorbis tde.tqtinterface ]
     ++ optional audiofileSupport audiofile
     ++ optional lameSupport lame
     ++ optional libmadSupport libmad
@@ -55,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    cd arts
+    cd ${baseName}
   '';
 
   # It doesn't find libmcop.so library without that 'hack'
