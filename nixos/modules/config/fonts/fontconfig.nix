@@ -372,11 +372,11 @@ in
 
           autohint = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
-              Enable the autohinter, which provides hinting for otherwise
-              un-hinted fonts. The results are usually lower quality than
-              correctly-hinted fonts.
+              Enable the autohinter in place of the default interpreter.
+              The results are usually lower quality than correctly-hinted
+              fonts, but better than unhinted fonts.
             '';
           };
         };
