@@ -104,13 +104,6 @@ let cfg = config.fonts.fontconfig;
         </match>
         ''}
 
-        <!-- Force autohint always -->
-        <match target="font">
-          <edit name="force_autohint" mode="assign">
-            ${fcBool cfg.forceAutohint}
-          </edit>
-        </match>
-
       </fontconfig>
     '';
 
@@ -451,15 +444,6 @@ in
           type = types.bool;
           default = false;
           description = ''Use embedded bitmaps in fonts like Calibri.'';
-        };
-
-        forceAutohint = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Force use of the TrueType Autohinter. Useful for debugging or
-            free-software purists.
-          '';
         };
 
         renderMonoTTFAsBitmap = mkOption {
