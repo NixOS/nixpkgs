@@ -741,7 +741,7 @@ with pkgs;
   catclock = callPackage ../applications/misc/catclock { };
 
   cde = callPackage ../tools/package-management/cde { };
-  
+
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
@@ -5331,7 +5331,7 @@ with pkgs;
   jdk = jdk8;
   jre = jre8;
   jre_headless = jre8_headless;
-  
+
   openshot-qt = libsForQt56.callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = pkgs.jdkdistro true false;
@@ -6084,7 +6084,7 @@ with pkgs;
     ruby_2_1_10
     ruby_2_2_5
     ruby_2_3_3
-    ruby_2_4_0;
+    ruby_2_4_1;
 
   # Ruby aliases
   ruby = ruby_2_3;
@@ -6092,7 +6092,7 @@ with pkgs;
   ruby_2_1 = ruby_2_1_10;
   ruby_2_2 = ruby_2_2_5;
   ruby_2_3 = ruby_2_3_3;
-  ruby_2_4 = ruby_2_4_0;
+  ruby_2_4 = ruby_2_4_1;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
