@@ -6,16 +6,20 @@
 , file # libmagic
 , xorg, tde }:
 
-stdenv.mkDerivation rec{
+let baseName = "tdelibs"; in
+with stdenv.lib;
+stdenv.mkDerivation rec {
 
-  name = "tdelibs-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14";
-  minorVer = "0.3";
+  name = "${baseName}-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${name}.tar.bz2";
-    sha256 = "18yxw4q87zm2wxxpmchals89iqj2ppkc1wjb0vd0pmwlblb7nygz";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "1n8ifbfgly0cr254ksnvqfzrkrnhsl8qy0grjxsajaxiizfm3gzs";
   };
 
   patches = [ ./0001-fix-kdoctools-configurechecks.patch ];
@@ -23,8 +27,8 @@ stdenv.mkDerivation rec{
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs =
-  [ aspell hspell jasper cups libxml2 libxslt libidn openexr
-    pcre libutempter file glib openssl libudev
+  [ aspell hspell jasper cups libxml2 libxslt libidn
+    openexr pcre libutempter file glib openssl libudev
     xorg.iceauth xorg.libXtst xorg.libXrandr xorg.libXcomposite
     tde.tqtinterface tde.arts tde.libart-lgpl tde.dbus-tqt ];
 
