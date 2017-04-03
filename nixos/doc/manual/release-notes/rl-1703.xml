@@ -501,6 +501,14 @@ following incompatible changes:</para>
       necessary to pull in all of <literal>bind</literal> to use them.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      Per-user configuration was moved from <filename>~/.nixpkgs</filename> to
+      <filename>~/.config/nixpkgs</filename>. The former is still valid for
+      <filename>config.nix</filename> for backwards compatibility.
+    </para>
+  </listitem>
 </itemizedlist>
 </section>
 </section>
