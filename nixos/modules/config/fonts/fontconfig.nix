@@ -167,13 +167,6 @@ let cfg = config.fonts.fontconfig;
         </edit>
       </match>
 
-      <!-- Render some monospace TTF fonts as bitmaps -->
-      <match target="pattern">
-        <edit name="bitmap_monospace" mode="assign">
-          ${fcBool cfg.renderMonoTTFAsBitmap}
-        </edit>
-      </match>
-
       </fontconfig>
     '';
 
@@ -444,12 +437,6 @@ in
           type = types.bool;
           default = false;
           description = ''Use embedded bitmaps in fonts like Calibri.'';
-        };
-
-        renderMonoTTFAsBitmap = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''Render some monospace TTF fonts as bitmaps.'';
         };
 
       };
