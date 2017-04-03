@@ -3,6 +3,8 @@
 , cmake
 , makeWrapper
 , pkgconfig
+, wrapGAppsHook
+, gsettings_desktop_schemas
 
 , qtbase
 , qttools
@@ -27,13 +29,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "nomacs-3.4/ImageLounge";
+  sourceRoot = "${name}/ImageLounge";
 
   patches = [./fix-appdata-install.patch];
 
   nativeBuildInputs = [cmake
-                       makeWrapper
-                       pkgconfig];
+                       pkgconfig
+                       wrapGAppsHook];
 
   buildInputs = [qtbase
                  qttools
@@ -42,7 +44,8 @@ stdenv.mkDerivation rec {
                  opencv
                  libraw
                  libtiff
-                 quazip];
+                 quazip
+                 gsettings_desktop_schemas];
 
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
@@ -51,13 +54,11 @@ stdenv.mkDerivation rec {
                 "-DENABLE_QUAZIP=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
-  preFixup = "wrapProgram $out/bin/nomacs";
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://nomacs.org;
     description = "Qt-based image viewer";
-    maintainers = [stdenv.lib.maintainers.ahmedtd];
-    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [maintainers.ahmedtd];
+    license = licenses.gpl3Plus;
     repositories.git = https://github.com/nomacs/nomacs.git;
     inherit (qtbase.meta) platforms;
   };
