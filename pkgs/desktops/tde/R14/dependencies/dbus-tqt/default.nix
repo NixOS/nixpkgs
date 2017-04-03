@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, cmake, dbus-1-tqt }:
+{ stdenv, fetchurl, pkgconfig, cmake, tde }:
 
-stdenv.mkDerivation rec{
+let baseName = "dbus-tqt"; in
+with stdenv.lib;
+stdenv.mkDerivation rec {
 
-  name = "dbus-tqt-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14";
-  minorVer = "0.3";
+  name = "${baseName}-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${name}.tar.bz2";
-    sha256 = "13l2ah204y5bbp7zpqgpsis3abvpkayqq38r30dnm5nn6vg7d9zb";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "05q0i918si3q7z3ghjrzmc6npm2f0arzqh295qm19bl0p6ihncgz";
   };
 
-  buildInputs = [ pkgconfig cmake ];
-  propagatedBuildInputs = [ dbus-1-tqt ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  propagatedBuildInputs = [ tde.dbus-1-tqt ];
 
-  preConfigure = "cd dbus-tqt";
+  preConfigure = ''
+    cd ${baseName}
+  '';
 
   meta = with stdenv.lib;{
     description = "D-Bus API bindings for TDE";
