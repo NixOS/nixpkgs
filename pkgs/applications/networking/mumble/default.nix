@@ -107,6 +107,7 @@ let
 
     configureFlags = [
       "CONFIG+=no-client"
+      # "CONFIG+=no-ice"
     ];
 
     buildInputs = [ libcap ] ++ optional iceSupport zeroc_ice;
@@ -123,14 +124,14 @@ let
   };
 
   gitSource = rec {
-    version = "1.3.0-git-2016-04-10";
+    version = "1.3.0-git-2017-04-02";
     qtVersion = 5;
 
     # Needs submodules
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "0502fa67b036bae9f07a586d9f05a8bf74c24291";
-      sha256 = "07c1r26i0b5z7i787nr4mc60799skdzsh764ckk3gdi76agp2r2z";
+      rev = "2a9fa47e24e50bdf6afeca505c2adc32cbbc7d80";
+      sha256 = "0xa2a9wjg4lzkrikrr01ixibvb54h7ci0bfwnppax2fyzcikmawp";
     };
   };
 in {
@@ -138,6 +139,6 @@ in {
   mumble_git = client gitSource;
   murmur     = server stableSource;
   murmur_git = (server gitSource).overrideAttrs (old: {
-    meta = old.meta // { broken = true; };
+    meta = old.meta // { broken = iceSupport; };
   });
 }
