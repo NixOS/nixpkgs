@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, root, makeWrapper }:
+{ stdenv, fetchurl, python2Packages, root, makeWrapper, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "yoda-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   pythonPath = []; # python wrapper support
 
-  buildInputs = with python2Packages; [ python numpy matplotlib root makeWrapper ];
+  buildInputs = with python2Packages; [ python numpy matplotlib makeWrapper ]
+    ++ stdenv.lib.optional withRootSupport root;
 
   enableParallelBuilding = true;
 
