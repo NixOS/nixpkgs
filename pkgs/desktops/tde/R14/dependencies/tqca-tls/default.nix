@@ -1,27 +1,33 @@
 { stdenv, fetchurl, pkgconfig
 , openssl, tqtinterface, tqt3 }:
 
-stdenv.mkDerivation rec{
+let baseName = "tqca-tls"; in
+with stdenv.lib;
+stdenv.mkDerivation rec {
 
-  name = "tqca-tls-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14";
-  minorVer = "0.3";
+  name = "${baseName}-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${name}.tar.bz2";
-    sha256 = "0ihbrn997w0sh2lxjikkc054igshp3x411kz899dpabrs9cq3n42";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "09ra6qk27x1d2s8d0l71a59rwrp6xwhw4wwdsvm8z7f2dqz12ipz";
   };
   
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ openssl tqtinterface ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ openssl tde.tqtinterface ];
 
   patchPhase = ''
-    sed -i -e "s|/usr/include/tqt|${tqtinterface}/include/tqt|" tqca-tls/configure
-    sed -i -e '/for p in/ s|/usr|/FAIL|g' tqca-tls/configure
+    sed -i -e "s|/usr/include/tqt|${tde.tqtinterface}/include/tqt|" ${baseName}/configure
+    sed -i -e '/for p in/ s|/usr|/FAILURE|g' ${baseName}/configure
   '';
 
-  preConfigure = "cd tqca-tls";
+  preConfigure = ''
+    cd ${baseName}
+  '';
 
   dontAddPrefix = true;
   configureFlags = "--debug --qtdir=${tqt3} --with-openssl-inc=${openssl.dev}/include --with-openssl-lib=${openssl.out}/lib";
