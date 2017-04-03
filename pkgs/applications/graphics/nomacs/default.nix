@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub
+, fetchurl
 , cmake
 , makeWrapper
 , pkgconfig
@@ -18,12 +18,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.4";
-  src = fetchFromGitHub {
-    owner = "nomacs";
-    repo = "nomacs";
-    rev = "3.4";
-    sha256 = "1l7q85dsiss0ix25niybj27zx1ssd439mwj449rxixa351cg1r2z";
+  version = "3.6.1";
+  src = fetchurl {
+    url = "https://github.com/nomacs/nomacs/archive/${version}.tar.gz";
+    sha256 = "0s3hm3vv1cqcbg554akbvfzvbm5vbd060jma0b6dqpqsqp58kch9";
   };
 
   name = "nomacs-${version}";
