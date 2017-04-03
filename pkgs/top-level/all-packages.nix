@@ -6219,6 +6219,8 @@ with pkgs;
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
 
+  kt = callPackage ../tools/misc/kt {};
+
   asn2quickder = callPackage ../development/tools/asn2quickder {};
 
   astyle = callPackage ../development/tools/misc/astyle { };
