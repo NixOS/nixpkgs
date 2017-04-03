@@ -206,7 +206,7 @@ for type in $types; do
 
                     # Register the AMI.
                     if [ $type = pv ]; then
-                        kernel=$(aws ec2 describe-images --owner amazon --filters "Name=name,Values=pv-grub-hd0_1.04-$arch.gz" | jq -r .Images[0].ImageId)
+                        kernel=$(aws ec2 describe-images --owner amazon --filters "Name=name,Values=pv-grub-hd0_1.05-$arch.gz" | jq -r .Images[0].ImageId)
                         if [ "$kernel" = null ]; then break; fi
                         echo "using PV-GRUB kernel $kernel"
                         extraFlags+=" --virtualization-type paravirtual --kernel $kernel"
