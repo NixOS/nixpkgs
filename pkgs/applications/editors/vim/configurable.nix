@@ -139,7 +139,7 @@ composableDerivation {
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
-    ximSupport       = config.vim.xim or false;
+    ximSupport       = config.vim.xim or true; # less than 15KB, needed for deadkeys
 
     # by default, compile with darwin support if we're compiling on darwin, but
     # allow this to be disabled by setting config.vim.darwin to false
@@ -160,6 +160,10 @@ composableDerivation {
       // edf "carbon_check" "carbon_check" { } #If auto-select GUI, check for Carbon default=yes
       // edf "gtktest" "gtktest" { } #Do not try to compile and run a test GTK program
     */
+
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
 
   postInstall = stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus_libs, pcsclite
 , wget, coreutils
-, perl, pcscperl, Glib, Gtk2, Pango
+, perl, pcscperl, Glib, Gtk2, Pango, Cairo
 }:
 
 let deps = lib.makeBinPath [ wget coreutils ];
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/scriptor \
       --set PERL5LIB "${lib.makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/gscriptor \
-      --set PERL5LIB "${lib.makePerlPath [ pcscperl Glib Gtk2 Pango ]}"
+      --set PERL5LIB "${lib.makePerlPath [ pcscperl Glib Gtk2 Pango Cairo ]}"
     wrapProgram $out/bin/ATR_analysis \
       --set PERL5LIB "${lib.makePerlPath [ pcscperl ]}"
     wrapProgram $out/bin/pcsc_scan \

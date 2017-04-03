@@ -30,6 +30,7 @@ let
 
     patchPhase = ''
       sed -i -e 's,../SweetHome3D,${application.src},g' build.xml
+      sed -i -e 's,lib/macosx/java3d-1.6/jogl-all.jar,lib/java3d-1.6/jogl-all.jar,g' build.xml
     '';
 
     buildPhase = ''

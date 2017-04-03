@@ -3,10 +3,13 @@
 rec {
 
   overrideCabal = drv: f: (drv.override (args: args // {
-    mkDerivation = drv: args.mkDerivation (drv // f drv);
+    mkDerivation = drv: (args.mkDerivation drv).override f;
   })) // {
     overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
   };
+
+  doCoverage = drv: overrideCabal drv (drv: { doCoverage = true; });
+  dontCoverage = drv: overrideCabal drv (drv: { doCoverage = false; });
 
   doHaddock = drv: overrideCabal drv (drv: { doHaddock = true; });
   dontHaddock = drv: overrideCabal drv (drv: { doHaddock = false; });
@@ -35,6 +38,9 @@ rec {
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
   addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
 
+  addSetupDepend = drv: x: addSetupDepends drv [x];
+  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
+
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
@@ -50,8 +56,8 @@ rec {
   enableSharedLibraries = drv: overrideCabal drv (drv: { enableSharedLibraries = true; });
   disableSharedLibraries = drv: overrideCabal drv (drv: { enableSharedLibraries = false; });
 
-  enableSplitObjs = drv: overrideCabal drv (drv: { enableSplitObjs = true; });
-  disableSplitObjs = drv: overrideCabal drv (drv: { enableSplitObjs = false; });
+  enableDeadCodeElimination = drv: overrideCabal drv (drv: { enableDeadCodeElimination = true; });
+  disableDeadCodeElimination = drv: overrideCabal drv (drv: { enableDeadCodeElimination = false; });
 
   enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
   disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
@@ -71,6 +77,14 @@ rec {
     checkPhase = ":";
     installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
+  });
+
+  # link executables statically against haskell libs to reduce closure size
+  justStaticExecutables = drv: overrideCabal drv (drv: {
+    enableSharedExecutables = false;
+    isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   });
 
   buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {

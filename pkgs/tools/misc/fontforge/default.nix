@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     description = "A font editor";
     homepage = http://fontforge.github.io;
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.bsd3;
   };
 }
 

@@ -4,11 +4,11 @@ let
   buildbot-pkg = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-pkg";
-    version = "0.9.0.post1";
+    version = "0.9.4";
 
     src = fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0frmnc73dsyc9mjnrnpm4vdrwb7c63gc6maq6xvlp486v7sdhjbi";
+      sha256 = "09a3yvs5hhf8syrkyydznmymgg86dpvgrwy9rb3bryq00wpjb3wn";
     };
 
     propagatedBuildInputs = with pythonPackages; [ setuptools ];
@@ -17,7 +17,6 @@ let
       homepage = http://buildbot.net/;
       description = "Buildbot Packaging Helper";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
       license = licenses.gpl2;
     };
   };
@@ -26,21 +25,21 @@ in {
   www = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot_www";
-    version = "0.9.0.post1";
+    version = "0.9.4";
 
     # NOTE: wheel is used due to buildbot circular dependency
     format = "wheel";
 
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/02/d0/fc56ee27a09498638a47dcc5637ee5412ab7a67bfb4b3ff47e041f3d7b66/${name}-py2-none-any.whl";
-      sha256 = "14ghch67k6090736n89l401swz7r9hnk2zlmdb59niq8lg7dyg9q";
+    src = pythonPackages.fetchPypi {
+      inherit pname version format;
+      python = "py2";
+      sha256 = "08m4h2pf6hgi8igh2j0qzfq49izc2z0qqj6ddxk0di5l306jx4im";
     };
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot UI";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
       license = licenses.gpl2;
     };
   };
@@ -48,20 +47,19 @@ in {
   console-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-console-view";
-    version = "0.9.0.post1";
+    version = "0.9.4";
 
     src = fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0dc7rb7mrpva5gj7l57i96a78d6yj28pkkj9hfim1955z9dgn58l";
+      sha256 = "1w2vv8iyzl7ak4161avp9n6mhh08adav2fl82bbm17a3064apl8n";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot Console View Plugin";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
       license = licenses.gpl2;
     };
   };
@@ -69,20 +67,19 @@ in {
   waterfall-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-waterfall-view";
-    version = "0.9.0.post1";
+    version = "0.9.4";
 
     src = fetchurl {
       url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "0x9vvw15zzgj4w3qcxh8r10rb36ni0qh1215y7wbawh5lggnjm0g";
+      sha256 = "17xn6vrr0k2xabw6hr9sdyy0ry3llyjfmc79qrpgp5bsly2qv3jf";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot Waterfall View Plugin";
       maintainers = with maintainers; [ nand0p ryansydnor ];
-      platforms = platforms.all;
       license = licenses.gpl2;
     };
   };

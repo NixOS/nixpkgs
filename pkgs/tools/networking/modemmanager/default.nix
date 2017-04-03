@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "WWAN modem manager, part of NetworkManager";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

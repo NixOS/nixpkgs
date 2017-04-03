@@ -1,12 +1,12 @@
-{ callPackage, gtk3, glib, libxml2, gnuplot, makeWrapper, stdenv, gnome3, gdk_pixbuf, librsvg }:
+{ callPackage, gtk3, glib, libxml2, gnuplot, makeWrapper, stdenv, gnome3, gdk_pixbuf, librsvg, intltool }:
 let pkg = import ./base.nix {
-  version = "3.0.0";
+  version = "3.0.1";
   pkgName = "image-analyzer";
-  pkgSha256 = "1rb3f7c08dxc02zrwrkfvq7qlzlmm0kd2ah1fhxj6ajiyshi8q4v";
+  pkgSha256 = "19x5hx991pl55ddm2wjd2ylm2hiz9yvzgrwmpnsqr9zqc4lja682";
 };
 in callPackage pkg {
   buildInputs = [ glib gtk3 libxml2 gnuplot (callPackage ./libmirage.nix {}) makeWrapper
-                  gnome3.defaultIconTheme gdk_pixbuf librsvg ];
+                  gnome3.defaultIconTheme gdk_pixbuf librsvg intltool ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/image-analyzer \

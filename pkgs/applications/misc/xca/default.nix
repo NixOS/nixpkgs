@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeQtWrapper pkgconfig which ];
 
+  configureFlags = [ "CXXFLAGS=-std=c++11" ];
+
   preBuild = ''
     substituteInPlace Local.mak \
       --replace ${qtbase}/bin/moc ${qtbase.dev}/bin/moc \
@@ -35,5 +37,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = with maintainers; [ offline peterhoeg ];
+    broken = builtins.compareVersions qtbase.version "5.7.0" >= 0;
   };
 }

@@ -29,7 +29,6 @@ in
 
     agree = mkOption {
       default = false;
-      example = true;
       type = types.bool;
       description = "Agree to Let's Encrypt Subscriber Agreement";
     };
@@ -61,6 +60,7 @@ in
         User = "caddy";
         Group = "caddy";
         AmbientCapabilities = "cap_net_bind_service";
+        LimitNOFILE = 8192;
       };
     };
 

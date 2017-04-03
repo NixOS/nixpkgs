@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, pkgconfig, go-md2man
-, go, containerd, runc, docker-proxy, tini
+{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+, go-md2man, go, containerd, runc, docker-proxy, tini
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps
@@ -11,14 +11,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.13.0";
-  rev = "49bf474"; # should match the version commit
+  version = "17.03.0-ce";
+  rev = "60ccb22"; # should match the version commit
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "03b181xiqgnwanc567w9p6rbdgdvrfv0lk4r7b604ksm0fr4cz23";
+    sha256 = "0ml9aan8x4w8kfz7dm9vvl8b1a0vq09si9b7z50xz84040cjhnr9";
   };
 
   docker-runc = runc.overrideAttrs (oldAttrs: rec {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "docker";
       repo = "runc";
-      rev = "2f7393a47307a16f8cee44a37b262e8b81021e3e";
-      sha256 = "1s5nfnbinzmcnm8avhvsniz0ihxyva4w5qz1hzzyqdyr0w2scnbj";
+      rev = "a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70";
+      sha256 = "0n7vr47fhpyxx5vdnp453qp4cq50w4hwgq3ldyj5878d91iir7l1";
     };
     # docker/runc already include these patches / are not applicable
     patches = [];
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "docker";
       repo = "containerd";
-      rev = "03e5862ec0d8d3b3f750e19fca3ee367e13c090e";
-      sha256 = "184sd9dwkcba3zhxnz9grw8p81x05977p36cif2dgkhjdhv12map";
+      rev = "977c511eda0925a723debdc94d09459af49d082a";
+      sha256 = "0hmcj8i70vv3a3bbdawrgi84a442m09x5mpc7fgn8dd3v031lcbc";
     };
   });
   docker-tini = tini.overrideAttrs  (oldAttrs: rec {
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   });
 
   buildInputs = [
-    makeWrapper pkgconfig go-md2man go
+    makeWrapper removeReferencesTo pkgconfig go-md2man go
     sqlite devicemapper btrfs-progs systemd
   ];
 
@@ -126,12 +126,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # remove references to go compiler, gcc and glibc
-    while read file; do
-      sed -ri "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-      sed -ri "s,${stdenv.cc.cc},$(echo "${stdenv.cc.cc}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-      sed -ri "s,${stdenv.glibc.dev},$(echo "${stdenv.glibc.dev}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-    done < <(find $out -type f 2>/dev/null)
+    find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} -t ${stdenv.glibc.dev} '{}' +
   '';
 
   meta = {

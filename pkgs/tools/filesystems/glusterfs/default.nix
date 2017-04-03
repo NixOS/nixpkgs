@@ -3,14 +3,13 @@
  , liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which
 }:
 let 
-  s = # Generated upstream information 
+  s =
   rec {
     baseName="glusterfs";
-    version="3.9.0";
+    version = "3.10.0";
     name="${baseName}-${version}";
-    hash="057vq4f93f1g9sh1sfbqhccsprxrbhwwm898322x25sb8mscc5xl";
-    url="http://download.gluster.org/pub/gluster/glusterfs/3.9/3.9.0/glusterfs-3.9.0.tar.gz";
-    sha256="057vq4f93f1g9sh1sfbqhccsprxrbhwwm898322x25sb8mscc5xl";
+    url="http://download.gluster.org/pub/gluster/glusterfs/3.10/3.10.0/glusterfs-3.10.0.tar.gz";
+    sha256 = "1svysq55z4sd6bxcdpkxljwis4cnzkknag22ngyr7sgb4bs19c97";
   };
   buildInputs = [
     fuse bison flex_2_5_35 openssl python2 ncurses readline

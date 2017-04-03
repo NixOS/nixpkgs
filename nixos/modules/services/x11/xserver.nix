@@ -435,6 +435,14 @@ in
           by default.
         '';
       };
+
+      terminateOnReset = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to terminate X upon server reset.
+        '';
+      };
     };
 
   };
@@ -459,21 +467,31 @@ in
           knownVideoDrivers;
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
+    nixpkgs.config.xorg = optionalAttrs (elem "vboxvideo" cfg.videoDrivers) { abiCompat = "1.18"; };
+
     assertions =
       [ { assertion = config.security.polkit.enable;
           message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
         }
       ];
 
-    environment.etc = mkMerge [
-      (mkIf cfg.exportConfiguration {
-        "X11/xorg.conf".source = configFile;
-        "X11/xkb".source = cfg.xkbDir;
-      })
+    environment.etc =
+      (optionals cfg.exportConfiguration
+        [ { source = "${configFile}";
+            target = "X11/xorg.conf";
+          }
+          # -xkbdir command line option does not seems to be passed to xkbcomp.
+          { source = "${cfg.xkbDir}";
+            target = "X11/xkb";
+          }
+        ])
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
-      (let cfgPath = "X11/xorg.conf.d/10-evdev.conf"; in
-        { "${cfgPath}".source = xorg.xf86inputevdev.out + "/share" + cfgPath; })
-    ];
+      ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
+        [{
+          source = xorg.xf86inputevdev.out + "/share" + cfgPath;
+          target = cfgPath;
+        }]
+      );
 
     environment.systemPackages =
       [ xorg.xorgserver.out
@@ -540,8 +558,7 @@ in
       };
 
     services.xserver.displayManager.xserverArgs =
-      [ "-terminate"
-        "-config ${configFile}"
+      [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
         # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
         "-verbose" "3" "-logfile" "/dev/null"
@@ -550,7 +567,8 @@ in
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
-        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}";
+        ++ optional (cfg.autoRepeatInterval != null) "-arinterval ${toString cfg.autoRepeatInterval}"
+        ++ optional cfg.terminateOnReset "-terminate";
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++

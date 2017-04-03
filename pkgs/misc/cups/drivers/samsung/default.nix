@@ -72,10 +72,10 @@ in stdenv.mkDerivation rec {
 
   for bin in $out/bin/*; do
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$bin"
-    patchelf --set-rpath "$out/lib:${cups.out}/lib" "$bin"
+    patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$bin"
   done
 
-  patchelf --set-rpath "$out/lib:${cups.out}/lib" "$out/lib/libscmssc.so"
+  patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$out/lib/libscmssc.so"
 
   ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
 

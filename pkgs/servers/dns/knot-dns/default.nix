@@ -2,22 +2,17 @@
 , systemd, nettle, libedit, zlib, libiconv, fetchpatch
 }:
 
+let inherit (stdenv.lib) optional optionals; in
+
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "0y9nhp9lfmxv4iy1xg7l4lfxv4168qhag26wwg0dbi0zjpkd790b";
+    sha256 = "37da7fcf1f194bd6376c63d8c4fa28a21899b56a3f3b63dba7095740a5752c52";
   };
-
-  patches = stdenv.lib.optional stdenv.isDarwin
-      (fetchpatch {
-        name = "before-sierra.diff";
-        url = "https://gitlab.labs.nic.cz/labs/knot/merge_requests/664.diff";
-        sha256 = "0g4gm2m3pi0lfpkp53xayf6jq6yn3ifidh40maiy1a46dfadvw6w";
-      });
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -29,8 +24,11 @@ stdenv.mkDerivation rec {
     # without sphinx &al. for developer documentation
   ]
     # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
-    ++ stdenv.lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
+    ++ optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+
+  # Not ideal but seems to work on Linux.
+  configureFlags = optional stdenv.isLinux "--with-lmdb=${stdenv.lib.getLib lmdb}";
 
   enableParallelBuilding = true;
 

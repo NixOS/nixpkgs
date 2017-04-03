@@ -43,7 +43,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.glance;
-      example = literalExample "pkgs.glance";
+      defaultText = "pkgs.glance";
       description = ''
         Glance package to use.
       '';

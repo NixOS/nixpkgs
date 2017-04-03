@@ -44,24 +44,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
-    homepage = "http://gnupg.org/";
-    description = "Free implementation of the OpenPGP standard for encrypting and signing data";
-    license = stdenv.lib.licenses.gpl3Plus;
-
+  meta = with stdenv.lib; {
+    homepage = "https://gnupg.org";
+    description = "Stable (2.0) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
+    license = licenses.gpl3Plus;
     longDescription = ''
-      GnuPG is the GNU project's complete and free implementation of
-      the OpenPGP standard as defined by RFC4880.  GnuPG allows to
-      encrypt and sign your data and communication, features a
-      versatile key management system as well as access modules for all
-      kind of public key directories.  GnuPG, also known as GPG, is a
-      command line tool with features for easy integration with other
-      applications.  A wealth of frontend applications and libraries
-      are available.  Version 2 of GnuPG also provides support for
-      S/MIME.
+      The GNU Privacy Guard is the GNU project's complete and free
+      implementation of the OpenPGP standard as defined by RFC4880.  GnuPG
+      "stable" (2.0) is the current stable version for general use.  This is
+      what most users are still using.  GnuPG allows to encrypt and sign your
+      data and communication, features a versatile key management system as well
+      as access modules for all kind of public key directories.  GnuPG, also
+      known as GPG, is a command line tool with features for easy integration
+      with other applications.  A wealth of frontend applications and libraries
+      are available.  Version 2 of GnuPG also provides support for S/MIME.
     '';
-
-    maintainers = with stdenv.lib.maintainers; [ roconnor urkud ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ roconnor ];
+    platforms = platforms.all;
   };
 }

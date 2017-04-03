@@ -63,12 +63,12 @@ def main():
         if install_line is None:
             continue
 
-        url, size, md5 = install_line.split(' ', 2)
+        url, size, hash = install_line.split(' ', 2)
 
         pack = [
             '  {',
             '    url = "{0}";'.format(url),
-            '    md5 = "{0}";'.format(md5),
+            '    hash = "{0}";'.format(hash),
             '  }',
         ];
         sys.stdout.write('\n'.join(pack) + '\n')

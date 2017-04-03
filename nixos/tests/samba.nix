@@ -37,12 +37,11 @@ import ./make-test.nix ({ pkgs, ... }:
   testScript =
     ''
       $server->start;
-      $server->waitForUnit("samba-smbd");
-      $server->waitForUnit("samba-nmbd");
+      $server->waitForUnit("samba.target");
       $server->succeed("mkdir -p /public; echo bar > /public/foo");
 
       $client->start;
-      $client->waitForUnit("network.target");
+      $client->waitForUnit("remote-fs.target");
       $client->succeed("[[ \$(cat /public/foo) = bar ]]");
     '';
 })

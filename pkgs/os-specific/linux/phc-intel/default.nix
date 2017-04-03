@@ -2,20 +2,20 @@
 
 assert stdenv.isLinux;
 # Don't bother with older versions, though some might even work:
-assert stdenv.lib.versionAtLeast kernel.version "4.3";
+assert stdenv.lib.versionAtLeast kernel.version "4.10";
 # Disable on grsecurity kernels, which break module building:
 assert !kernel.features ? grsecurity;
 
 let
   release = "0.4.0";
-  revbump = "rev22"; # don't forget to change forum download id...
+  revbump = "rev24"; # don't forget to change forum download id...
 in stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
   version = "${release}-${revbump}";
 
   src = fetchurl {
-    sha256 = "f80285a8cd2ebb1753841e493af0c091d55c33823777b26a93d25ed7264a385d";
-    url = "http://www.linux-phc.org/forum/download/file.php?id=172";
+    sha256 = "02b4j8ap1fy09z36pmpplbw4vpwqdi16jyzw5kl0a60ydgxkmrpz";
+    url = "http://www.linux-phc.org/forum/download/file.php?id=178";
     name = "phc-intel-pack-${revbump}.tar.bz2";
   };
 

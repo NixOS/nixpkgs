@@ -1,22 +1,28 @@
-{ stdenv, lib, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils
-, file, makeWrapper, sqlite, glib
-, synctexSupport ? true, texlive ? null }:
+{ stdenv, fetchurl, makeWrapper, pkgconfig
+, gtk, girara, ncurses, gettext, docutils
+, file, sqlite, glib, texlive
+, synctexSupport ? true
+}:
 
 assert synctexSupport -> texlive != null;
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  version = "0.3.6";
-  name = "zathura-core-${version}";
+  name    = "zathura-core-${version}";
+  version = "0.3.7";
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "0fyb5hak0knqvg90rmdavwcmilhnrwgg1s5ykx9wd3skbpi8nsh8";
+    url    = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
+    sha256 = "1w0g74dq4z2vl3f99s2gkaqrb5pskgzig10qhbxj4gq9yj4zzbr2";
   };
 
   icon = ./icon.xpm;
 
-  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib
-  ] ++ lib.optional synctexSupport texlive.bin.core;
+  buildInputs = [
+    pkgconfig file gtk girara
+    gettext makeWrapper sqlite glib
+  ] ++ optional synctexSupport texlive.bin.core;
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -25,11 +31,12 @@ stdenv.mkDerivation rec {
     "RSTTOMAN=${docutils}/bin/rst2man.py"
     "VERBOSE=1"
     "TPUT=${ncurses.out}/bin/tput"
-  ] ++ lib.optional synctexSupport "WITH_SYNCTEX=1";
+    (optionalString synctexSupport "WITH_SYNCTEX=1")
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/zathura" \
-      --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
+      --prefix PATH ":" "${makeBinPath [ file ]}" \
       --prefix XDG_CONFIG_DIRS ":" "$out/etc"
 
     install -Dm644 $icon $out/share/pixmaps/pwmt.xpm
@@ -38,11 +45,11 @@ stdenv.mkDerivation rec {
     echo "Icon=pwmt" >> $out/share/applications/zathura.desktop
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+  meta = {
+    homepage    = http://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
-    license = licenses.zlib;
-    platforms = platforms.linux;
+    license     = licenses.zlib;
+    platforms   = platforms.linux;
     maintainers = with maintainers; [ garbas ];
   };
 }

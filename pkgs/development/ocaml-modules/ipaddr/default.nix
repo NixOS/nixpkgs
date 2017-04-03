@@ -1,27 +1,19 @@
-{stdenv, buildOcaml, fetchurl, sexplib_p4}:
+{ stdenv, buildOcaml, fetchurl, ocamlbuild, findlib
+, topkg, sexplib, ppx_sexp_conv, opam }:
 
 buildOcaml rec {
   name = "ipaddr";
-  version = "2.6.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-ipaddr/archive/${version}.tar.gz";
-    sha256 = "7051013d8f58abff433187d70cd7ddd7a6b49a6fbe6cad1893f571f65b8ed3d0";
+    sha256 = "0mnjw1xjr8vyn5x1nnbbxfxhs77znwrkz8c144w47zk2pc3xrh9d";
   };
 
-  propagatedBuildInputs = [ sexplib_p4 ];
+  buildInputs = [ findlib ocamlbuild topkg ppx_sexp_conv opam ];
+  propagatedBuildInputs = [ sexplib ];
 
-  configurePhase = ''
-   ocaml setup.ml -configure --prefix $out
-  '';
-
-  buildPhase =  ''
-  make build
-  '';
-
-  installPhase =  ''
-  make install
-  '';
+  inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-ipaddr;

@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://stosberg.net/odt2txt;
     platforms = stdenv.lib.platforms.all;
     lincense = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

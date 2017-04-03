@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     homepage = http://www.ps.uni-saarland.de/alice/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.doublec ];
+    broken = true;
   };
 }

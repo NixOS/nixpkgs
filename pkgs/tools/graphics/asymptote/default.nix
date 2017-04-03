@@ -2,17 +2,18 @@
   , freeglut, ghostscriptX, imagemagick, fftw 
   , boehmgc, mesa_glu, mesa_noglu, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
+, darwin
 }:
 
 let
   s = # Generated upstream information
   rec {
     baseName="asymptote";
-    version="2.38";
+    version="2.40";
     name="${baseName}-${version}";
-    hash="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
-    url="mirror://sourceforge/project/asymptote/2.38/asymptote-2.38.src.tgz";
-    sha256="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
+    hash="08hy8hgh217df9kwznr22mg8vxxh3rbmbxgx3nqhxyggc9xqy544";
+    url="https://netcologne.dl.sourceforge.net/project/asymptote/2.40/asymptote-2.40.src.tgz";
+    sha256="08hy8hgh217df9kwznr22mg8vxxh3rbmbxgx3nqhxyggc9xqy544";
   };
   buildInputs = [
    ghostscriptX imagemagick fftw
@@ -20,6 +21,8 @@ let
    python zlib perl texLive texinfo xz ]
    ++ stdenv.lib.optionals stdenv.isLinux
      [ freeglut mesa_glu mesa_noglu mesa_noglu.osmesa ]
+   ++ stdenv.lib.optionals stdenv.isDarwin
+     (with darwin.apple_sdk.frameworks; [ OpenGL GLUT Cocoa ])
    ;
 in
 stdenv.mkDerivation {

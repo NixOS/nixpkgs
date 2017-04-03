@@ -3,12 +3,12 @@
 , qtkeychain, quazip, sparsehash, taglib, websocketpp, makeWrapper
 
 , enableXMPP      ? true,  libjreen     ? null
-, enableKDE       ? false, kdelibs      ? null
+, enableKDE       ? false, kdelibs4     ? null
 , enableTelepathy ? false, telepathy_qt ? null
 }:
 
 assert enableXMPP      -> libjreen     != null;
-assert enableKDE       -> kdelibs      != null;
+assert enableKDE       -> kdelibs4     != null;
 assert enableTelepathy -> telepathy_qt != null;
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     qca2 qjson qt4 qtkeychain quazip sparsehash taglib websocketpp
     makeWrapper
   ] ++ stdenv.lib.optional enableXMPP      libjreen
-    ++ stdenv.lib.optional enableKDE       kdelibs
+    ++ stdenv.lib.optional enableKDE       kdelibs4
     ++ stdenv.lib.optional enableTelepathy telepathy_qt;
 
   postInstall = let

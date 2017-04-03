@@ -2,14 +2,14 @@
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
 
 stdenv.mkDerivation rec {
-  version = "20170128";
+  version = "20170306";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = "neomutt-${version}";
-    sha256 = "082ksn4fsj48nkz61ia0hcxz3396p6a4p9q8738w15qkycq23c20";
+    sha256 = "0nlazabwj4czi30m84ppga275hkr51glyndizqzg540q9wp1acz4";
   };
 
   nativeBuildInputs = [ which autoconf automake ];

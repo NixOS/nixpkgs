@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.2.0";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "b8828197dbd563e4b502571538c6d44ef2bb07dede1df884b785921f8aec77fd";
+    sha256 = "630b2ad0bfdcf59164957a377adef8b1fddc37a58a7e1d10e76a1b497a30f036";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
 
   buildInputs = [ knot-dns luajit libuv gnutls ]
-    # TODO: lmdb needs lmdb.pc; embedded for now
+    ++ optional stdenv.isLinux lmdb # system lmdb causes some problems on Darwin
     ## optional dependencies
     ++ optional doInstallCheck cmocka
     ++ optional stdenv.isLinux systemd # socket activation

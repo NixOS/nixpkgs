@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
+{ stdenv, lib, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu
-, writeScript, xidel, coreutils, gnused, gnugrep, curl, ed
+, cairo, gstreamer, gst-plugins-base, icu
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those
@@ -14,7 +14,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.7.0"; in
+let version = "45.8.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "99cea54b553158c1e08cf19157ac2bb6822fd1fef0501d36f983e6b8d4f2143a2e6124d61297446944033d3fed9326fe0f12ca45db0b5815be71a0777e73ffb0";
+    sha512 = "f8ba08d874fb1a09ac9ba5d4d1f46cefe801783ba4bf82eee682ac2ecc4e231d07033a80e036ad04bda7780c093fb7bc3122a23dc6e19c12f18fb7168dc78deb";
   };
+
+  patches = [ ./gcc6.patch ];
 
   # New sed no longer tolerates this mistake.
   postPatch = ''
@@ -138,10 +140,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    name = "thunderbird";
-    sourceSectionRegex = ".";
-    basePath = "pkgs/applications/networking/mailreaders/thunderbird";
+    attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    inherit writeScript xidel coreutils gnused gnugrep curl ed;
+    inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

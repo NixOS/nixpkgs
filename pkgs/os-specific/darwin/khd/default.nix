@@ -2,21 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "khd-${version}";
-  version = "1.1.4";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "khd";
     rev = "v${version}";
-    sha256 = "1klia3fywl0c88zbp5wdn6kxhdwdry1jwmkj27vpv8vzvdfzwfmy";
+    sha256 = "1ijfrlnwdf8hk259j3jfxj6zizvqzj57458rflza626z5dnhmbpr";
   };
 
   buildInputs = [ Carbon Cocoa ];
-
-  prePatch = ''
-    substituteInPlace makefile \
-      --replace g++ clang++
-  '';
 
   buildPhase = ''
     make install
@@ -32,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A simple modal hototkey daemon for OSX";
+    description = "A simple modal hotkey daemon for OSX";
     homepage = https://github.com/koekeishiya/khd;
     downloadPage = https://github.com/koekeishiya/khd/releases;
     platforms = platforms.darwin;

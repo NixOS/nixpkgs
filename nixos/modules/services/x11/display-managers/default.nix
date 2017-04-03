@@ -1,5 +1,5 @@
 # This module declares the options to define a *display manager*, the
-# program responsible for handling X logins (such as xdm, kdm, gdb, or
+# program responsible for handling X logins (such as xdm, gdb, or
 # SLiM).  The display manager allows the user to select a *session
 # type*.  When the user logs in, the display manager starts the
 # *session script* ("xsession" below) to launch the selected session
@@ -24,13 +24,16 @@ let
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
     Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
     Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
-    Xft.hintstyle: hint${fontconfig.hinting.style}
+    Xft.hintstyle: hintslight
   '';
 
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
       #! ${pkgs.bash}/bin/bash
+
+      # Handle being called by SDDM.
+      if test "''${1:0:1}" = / ; then eval exec $1 $2 ; fi
 
       ${optionalString cfg.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
@@ -54,9 +57,6 @@ let
           exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$sessionType"
         fi
       ''}
-
-      # Handle being called by kdm.
-      if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''

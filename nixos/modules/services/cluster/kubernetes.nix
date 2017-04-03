@@ -76,6 +76,7 @@ in {
       description = "Kubernetes package to use.";
       type = types.package;
       default = pkgs.kubernetes;
+      defaultText = "pkgs.kubernetes";
     };
 
     verbose = mkOption {
@@ -775,7 +776,7 @@ in {
             --bind-address=${cfg.proxy.address} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
-            ${cfg.controllerManager.extraOpts}
+            ${cfg.proxy.extraOpts}
           '';
           WorkingDirectory = cfg.dataDir;
         };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, jack ? pkgs.libjack2 }:
+{ stdenv, fetchurl, pkgconfig, scons, qt4, lash, libjack2, jack ? libjack2 }:
 
 stdenv.mkDerivation rec {
   name = "jackmix-0.5.2";
@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgs.pkgconfig
-    pkgs.scons
-    pkgs.kde4.qt4
-    pkgs.lash
+    pkgconfig
+    scons
+    qt4
+    lash
     jack
   ];
 

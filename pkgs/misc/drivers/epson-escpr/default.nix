@@ -1,15 +1,16 @@
 { stdenv, fetchurl, cups }:
 
 let
-  version = "1.6.8";
+  version = "1.6.12";
 in
   stdenv.mkDerivation {
 
     name = "epson-escpr-${version}";
   
     src = fetchurl {
-      url = "https://download3.ebz.epson.net/dsc/f/03/00/05/10/61/125006df4ffc84861395c1158a02f1f73e6f1753/epson-inkjet-printer-escpr-1.6.8-1lsb3.2.tar.gz";
-      sha256 = "02v8ljzw6xhfkz1x8m50mblcckgfbpa89fc902wcmi2sy8fihgh4";
+
+      url = "https://download3.ebz.epson.net/dsc/f/03/00/05/46/21/01534966894f35247dac8c8ef0a0a9c94d1c8b40/epson-inkjet-printer-escpr-1.6.12-1lsb3.2.tar.gz";
+      sha256 = "3773e74a0c4debf202eb9ad0aa31c6614a93d6170484ff660c14e99f8698cfda";
     }; 
 
     patches = [ ./cups-filter-ppd-dirs.patch ]; 
@@ -29,7 +30,14 @@ in
 	    enable = true;
 	    drivers = [ pkgs.epson-escpr ];
 	  };
-      '';
+
+  To setup a wireless printer, enable Avahi which provides
+  printer's hostname to CUPS and nss-mdns to make this
+  hostname resolvable:
+    services.avahi = {
+      enable = true;
+      nssmdns = true;
+    };'';
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ artuuge ];
       platforms = platforms.linux;

@@ -21,6 +21,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.light ];
-    security.setuidPrograms = [ "light" ];
+    security.wrappers.light.source = "${pkgs.light.out}/bin/light";
   };
 }

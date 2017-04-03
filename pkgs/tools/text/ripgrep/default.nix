@@ -4,16 +4,21 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "ripgrep-${version}";
-  version = "0.3.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = "${version}";
-    sha256 = "15j68bkkxpbh9c05f8l7j0y33da01y28kpg781lc0234h45535f3";
+    sha256 = "13mg624867hqxp9pzpq1gn9kqkvbaqcphdjia3bz5wvff1cbxkfy";
   };
 
-  depsSha256 = "142h6pcf2mr4i7dg7di4299c18aqn0yvk9nr1mxnkb7wjcmrvcfg";
+  depsSha256 = "0glw8xk77w2h1xg6c451fg8cmwx3vz7dyzdrbf0i8d84yq8sh0i1";
+
+  preFixup = ''
+    mkdir -p "$out/man/man1"
+    cp "$src/doc/rg.1" "$out/man/man1"
+  '';
 
   meta = with stdenv.lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";

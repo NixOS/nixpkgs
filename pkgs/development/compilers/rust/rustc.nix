@@ -56,6 +56,8 @@ stdenv.mkDerivation {
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
+                # TODO: Remove when fixed build with rustbuild
+                ++ [ "--disable-rustbuild" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
@@ -151,6 +153,6 @@ stdenv.mkDerivation {
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington retrry ];
     license = [ licenses.mit licenses.asl20 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = subtractLists platforms.i686 (platforms.linux ++ platforms.darwin);
   };
 }

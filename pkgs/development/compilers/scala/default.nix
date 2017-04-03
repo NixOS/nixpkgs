@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     rm "bin/"*.bat
     mv * $out
 
+    # put docs in correct subdirectory
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/scala
+
     for p in $(ls $out/bin/) ; do
       wrapProgram $out/bin/$p \
         --prefix PATH ":" ${coreutils}/bin \

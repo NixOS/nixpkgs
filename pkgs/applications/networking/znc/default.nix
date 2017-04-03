@@ -6,15 +6,19 @@
 }:
 
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "znc-1.6.3";
+  name = "znc-${version}";
+  version = "1.6.5";
 
   src = fetchurl {
-    url = "http://znc.in/releases/${name}.tar.gz";
-    sha256 = "09xqi5fs40x6nj9gq99bnw1a7saq96bvqxknxx0ilq7yfvg4c733";
+    url = "http://znc.in/releases/archive/${name}.tar.gz";
+    sha256 = "1jia6kq6bp8yxfj02d5vj9vqb4pylqcldspyjj6iz82kkka2a0ig";
   };
 
-  buildInputs = [ openssl pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ openssl ]
     ++ optional withPerl perl
     ++ optional withPython python3
     ++ optional withTcl tcl
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Advanced IRC bouncer";
     homepage = http://wiki.znc.in/ZNC;
-    maintainers = with maintainers; [ viric schneefux ];
+    maintainers = with maintainers; [ viric schneefux lnl7 ];
     license = licenses.asl20;
     platforms = platforms.unix;
   };

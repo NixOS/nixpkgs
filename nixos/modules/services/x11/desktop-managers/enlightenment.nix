@@ -20,7 +20,6 @@ in
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {
       default = false;
-      example = true;
       description = "Enable the Enlightenment desktop environment.";
     };
 
@@ -62,9 +61,12 @@ in
       '';
     }];
 
-    security.setuidPrograms = [ "e_freqset" ];
+    security.wrappers.e_freqset.source = "${e.enlightenment.out}/bin/e_freqset";
 
-    services.xserver.exportConfiguration = true;
+    environment.etc = singleton
+      { source = xcfg.xkbDir;
+        target = "X11/xkb";
+      };
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 

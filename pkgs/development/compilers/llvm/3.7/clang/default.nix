@@ -42,6 +42,7 @@ let
     passthru = {
       lib = self; # compatibility with gcc, so that `stdenv.cc.cc.lib` works on both
       isClang = true;
+      inherit llvm;
     } // stdenv.lib.optionalAttrs stdenv.isLinux {
       inherit gcc;
     };
@@ -49,7 +50,7 @@ let
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
       homepage    = http://llvm.org/;
-      license     = stdenv.lib.licenses.bsd3;
+      license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
   };

@@ -1,6 +1,6 @@
 {stdenv, gtk3, pkgconfig, libX11, perl, fetchurl, automake115x, autoconf}:
 let
-  version = "20161228.7cae89f";
+  version = "20170228.1f613ba";
   buildInputs = [
     gtk3 pkgconfig libX11 perl automake115x autoconf
   ];
@@ -8,7 +8,7 @@ in
 stdenv.mkDerivation {
   src = fetchurl {
    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-   sha256 = "0kqy3gdgfjgaqbjl95pnljz44v91i79qphwdp91k0n5alswxwn76";
+   sha256 = "02nqc18fhvxr545wgk55ly61fi0a06q61ljzwadprqxa1n0g0fz5";
   };
   name = "sgt-puzzles-r" + version;
   inherit buildInputs;

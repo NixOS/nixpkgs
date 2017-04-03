@@ -4,11 +4,11 @@ mesa_glu , xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.5";
+  version = "0.21.7";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1fslq70z4s6v9ipahnk8s5fgqnqq4njv4rlqv951r1bh1xk5lx7h";
+    sha256 = "1xvngjdsa0p901vfhrh2qpa50k32hwwhc8bgi16a9b5d9byzfhvn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
   # this is a hack and without this cpufreq module is not working. does the following:
   #   1. moves the "freqset" binary to "e_freqset",
   #   2. linkes "e_freqset" to enlightenment/bin so that,
-  #   3. setuidPrograms detects it and makes appropriate stuff to /var/setuid-wrappers/e_freqset,
-  #   4. and finaly, linkes /var/setuid-wrappers/e_freqset to original destination where enlightenment wants it
+  #   3. wrappers.setuid detects it and places wrappers in /run/wrappers/bin/e_freqset,
+  #   4. and finally, links /run/wrappers/bin/e_freqset to original destination where enlightenment wants it
   postInstall = ''
     export CPUFREQ_DIRPATH=`readlink -f $out/lib/enlightenment/modules/cpufreq/linux-gnu-*`;
     mv $CPUFREQ_DIRPATH/freqset $CPUFREQ_DIRPATH/e_freqset
     ln -sv $CPUFREQ_DIRPATH/e_freqset $out/bin/e_freqset
-    ln -sv /var/setuid-wrappers/e_freqset $CPUFREQ_DIRPATH/freqset
+    ln -sv /run/wrappers/bin/e_freqset $CPUFREQ_DIRPATH/freqset
   '';
 
   meta = with stdenv.lib; {

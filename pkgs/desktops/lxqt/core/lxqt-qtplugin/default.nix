@@ -1,39 +1,44 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt }:
+{
+  stdenv, fetchFromGitHub, standardPatch,
+  cmake, lxqt-build-tools,
+  qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg,
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-qtplugin";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "14bwi1c078arin025jcygz0db9nfr8qla9071ls17bbp4dh14vhx";
+    sha256 = "12hyw7rk3zx51n6g2bazlqv70xap0lygm9v21ibxgy1aw0j6iy02";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtx11extras
-    qt5.qttools
-    qt5.qtsvg
-    qt5.libdbusmenu
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
+    qtbase
+    qtx11extras
+    qttools
+    qtsvg
+    libdbusmenu
+    libqtxdg
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
-  postPatch = lxqt.standardPatch;
+  postPatch = standardPatch;
 
   meta = with stdenv.lib; {
     description = "LXQt Qt platform integration plugin";
     homepage = https://github.com/lxde/lxqt-qtplugin;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

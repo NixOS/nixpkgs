@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://sourceforge.net/projects/xfe/";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.linux;
   };
 }

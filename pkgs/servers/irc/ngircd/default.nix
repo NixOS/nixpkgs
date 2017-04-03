@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, openssl, pam, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "ngircd-21";
+  name = "ngircd-24";
 
   src = fetchurl {
     url = "http://ngircd.barton.de/pub/ngircd/${name}.tar.xz";
-    sha256 = "19llx54zy6hc8k7kcs1f234qc20mqpnlnb30c663c42jxq5x6xii";
+    sha256 = "020h9d1awyxqr0l42x1fhs47q7cmm17fdxzjish8p2kq23ma0gqp";
   };
 
   configureFlags = [

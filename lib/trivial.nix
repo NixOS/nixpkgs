@@ -1,16 +1,43 @@
 rec {
 
-  # Identity function.
+  /* The identity function
+     For when you need a function that does “nothing”.
+
+     Type: id :: a -> a
+  */
   id = x: x;
 
-  # Constant function.
+  /* The constant function
+     Ignores the second argument.
+     Or: Construct a function that always returns a static value.
+
+     Type: const :: a -> b -> a
+     Example:
+       let f = const 5; in f 10
+       => 5
+  */
   const = x: y: x;
 
-  # Named versions corresponding to some builtin operators.
+
+  ## Named versions corresponding to some builtin operators.
+
+  /* Concat two strings */
   concat = x: y: x ++ y;
+
+  /* boolean “or” */
   or = x: y: x || y;
+
+  /* boolean “and” */
   and = x: y: x && y;
+
+  /* Merge two attribute sets shallowly, right side trumps left
+
+     Example:
+       mergeAttrs { a = 1; b = 2; } // { b = 3; c = 4; }
+       => { a = 1; b = 3; c = 4; }
+  */
   mergeAttrs = x: y: x // y;
+
 
   # Compute the fixed point of the given function `f`, which is usually an
   # attribute set that expects its final, non-recursive representation as an

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, fetchurl, wrapGAppsHook
 , intltool, isocodes, pkgconfig
-, python3, pygobject3
+, python3
 , gtk2, gtk3, atk, dconf, glib, json_glib
 , dbus, libnotify, gobjectIntrospection, wayland
 , nodePackages
@@ -34,16 +34,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python3 pygobject3
+    python3
     intltool isocodes pkgconfig
     gtk2 gtk3 dconf
     json_glib
     dbus libnotify gobjectIntrospection wayland
   ];
 
-  propagatedBuildInputs = [ glib ];
+  propagatedBuildInputs = [ glib python3.pkgs.pygobject3 ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapGAppsHook python3.pkgs.wrapPython ];
+
+  outputs = [ "out" "dev" ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     # Fix hard-coded installation paths, so make does not try to overwrite our
@@ -57,14 +61,9 @@ stdenv.mkDerivation rec {
     substituteInPlace data/dconf/Makefile.in --replace "dconf update" "echo"
   '';
 
-  preFixup = ''
-    for f in "$out/bin"/*; do #*/
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
-        --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
-    done
+  postFixup = ''
+    buildPythonPath $out
+    patchPythonScript $out/share/ibus/setup/main.py
   '';
 
   doInstallCheck = true;

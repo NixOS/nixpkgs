@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://zsync.moria.org.uk/download/${name}.tar.bz2";
-    sha1 = "5e69f084c8adaad6a677b68f7388ae0f9507617a";
+    sha256 = "1wjslvfy76szf0mgg2i9y9q30858xyjn6v2acc24zal76d1m778b";
   };
 
   meta = {

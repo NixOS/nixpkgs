@@ -2,16 +2,16 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
-let basename = "binutils-2.27"; in
+let basename = "binutils-2.28"; in
 
-with { inherit (stdenv.lib) optional optionals optionalString; };
+let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = basename + optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "125clslv17xh1sab74343fg6v31msavpmaa1c1394zsqa773g5rn";
+    sha256 = "0wiasgns7i8km8nrxas265sh2dfpsw93b3qw195ipc90w4z475v2";
   };
 
   patches = [
@@ -32,9 +32,18 @@ stdenv.mkDerivation rec {
     # This is needed, for instance, so that running "ldd" on a binary that is
     # PaX-marked to disable mprotect doesn't fail with permission denied.
     ./pt-pax-flags.patch
+
+    # Bfd looks in BINDIR/../lib for some plugins that don't
+    # exist. This is pointless (since users can't install plugins
+    # there) and causes a cycle between the lib and bin outputs, so
+    # get rid of it.
+    ./no-plugins.patch
   ];
 
-  outputs = [ "out" "info" ] ++ (optional (cross == null) "dev");
+  outputs = [ "out" ]
+    ++ optional (cross == null && !stdenv.isDarwin) "lib" # problems in Darwin stdenv
+    ++ [ "info" ]
+    ++ optional (cross == null) "dev";
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
@@ -71,8 +80,6 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
-
-  postFixup = optionalString (cross == null) "ln -s $out/bin $dev/bin"; # tools needed for development
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";

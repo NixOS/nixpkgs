@@ -5,9 +5,9 @@
 }@args:
 
 callPackage ./generic.nix (args // rec {
-  version = "${branch}.4";
+  version = "${branch}.7";
   branch = "3.1";
-  sha256 = "1ynb1f0py5jb6hs78ypynpwc3jlqrw51vl8y1wnd44nwlisxz6bw";
+  sha256 = "0ldf484r3waslv0sjx3vcwlkfgh28bd1wqcj26snfhav7zkf10kl";
   darwinFrameworks = [ Cocoa CoreMedia ];
   patches = stdenv.lib.optional stdenv.isDarwin ./sdk_detection.patch;
 })

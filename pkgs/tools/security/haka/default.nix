@@ -8,9 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     name = "haka_${version}_source.tar.gz";
     url = "https://github.com/haka-security/haka/releases/download/v${version}/haka_${version}_source.tar.gz";
-
-    # https://github.com/haka-security/haka/releases/download/v${version}/haka_${version}_source.tar.gz.sha1.txt
-    sha1 = "87625ed32841cc0b3aa92aa49397ce71ce434bc2";
+    sha256 = "0dm39g3k77sa70zrjsqadidg27a6iqq61jzfdxazpllnrw4mjy4w";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
