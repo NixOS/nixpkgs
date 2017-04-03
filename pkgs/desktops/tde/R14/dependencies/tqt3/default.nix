@@ -32,20 +32,25 @@ assert xineramaSupport -> libXinerama != null;
 assert xextSupport -> libXext != null;
 assert smSupport -> libSM != null;
 
+let
+  baseName = "tqt3";
+in with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "tqt3-"+ (toString(if threadSupport then "thread" else "nothread"))+ "-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14";
-  minorVer = "0.3";
-  srcName = "tqt3-${version}";
+  name = "${baseName}"+(toString(if threadSupport then "-thread" else "-nothread"))+"-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${srcName}.tar.bz2";
-    sha256 = "04sm6752cmhc0jq9lcl9rv3d282mc8nqkda063160gn6jklby51x";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "0x3cz6rjfnpwl2f0palawjyw64yymk460yg8wmma683db082vxj7";
   };
 
-  buildInputs = [ pkgconfig which libuuid coreutils ];
+  nativeBuildInputs = [ pkgconfig which ];
+  buildInputs = [ libuuid coreutils ];
   propagatedBuildInputs = [ libpng libmng libjpeg zlib x11
     xlibsWrapper libX11 xextproto libXft libXrender ];
 
@@ -116,9 +121,9 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    for i in tqt3/config.tests/unix/checkavail \
-             tqt3/config.tests/*/*.test \
-             tqt3/mkspecs/*/qmake.conf; do
+    for i in ${baseName}/config.tests/unix/checkavail \
+             ${baseName}/config.tests/*/*.test \
+             ${baseName}/mkspecs/*/qmake.conf; do
       echo "Preprocessing $i..."
       substituteInPlace "$i" \
         --replace " /lib" " /FAILURE" \
@@ -130,7 +135,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configurePhase = ''
-    cd tqt3
+    cd ${baseName}
     sh configure -prefix $out $configureFlags
     export LD_LIBRARY_PATH=$(pwd)/lib
   '';
