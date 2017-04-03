@@ -1,22 +1,28 @@
-{ stdenv, fetchurl, cmake, pkgconfig, dbus
-, tqtinterface }:
+{ stdenv, fetchurl, cmake, pkgconfig
+, dbus, tde }:
 
-stdenv.mkDerivation rec{
+let baseName = "dbus-1-tqt"; in
+with stdenv.lib;
+stdenv.mkDerivation rec {
 
-  name = "dbus-1-tqt-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14";
-  minorVer = "0.3";
+  name = "${baseName}-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${name}.tar.bz2";
-    sha256 = "1badq4x7lflgdwp8155ljv6f2wr5byy899lpg6ca6s2p3rmd4jjm";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "1l96pw9nj47qgv2gkc5khi5zgpj3jhf3nv1ir55harcq9nspq6ri";
   };
   
-  buildInputs = [ cmake pkgconfig ];
-  propagatedBuildInputs = [ dbus tqtinterface ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  propagatedBuildInputs = [ dbus tde.tqtinterface ];
 
-  preConfigure = "cd dbus-1-tqt";
+  preConfigure = ''
+    cd ${baseName}
+  '';
 
   meta = with stdenv.lib;{
     description = "A backport of Harald Fernengel's Qt4 D-bus bindings";
