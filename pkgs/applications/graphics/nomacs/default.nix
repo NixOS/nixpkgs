@@ -18,19 +18,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.4";
+  version = "3.6.1";
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
-    rev = "3.4";
-    sha256 = "1l7q85dsiss0ix25niybj27zx1ssd439mwj449rxixa351cg1r2z";
+    rev = version;
+    sha256 = "0yli05hhmd57v3mynq78nmr15rbpm0vadv273pavmcnayv86yl44";
   };
 
   name = "nomacs-${version}";
 
   enableParallelBuilding = true;
 
-  sourceRoot = "${name}/ImageLounge";
+  sourceRoot = "${name}-src/ImageLounge";
 
   patches = [./fix-appdata-install.patch];
 
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
                  libtiff
                  quazip
                  gsettings_desktop_schemas];
-
 
   cmakeFlags = ["-DENABLE_OPENCV=ON"
                 "-DENABLE_RAW=ON"
