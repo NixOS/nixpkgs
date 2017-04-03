@@ -62,6 +62,7 @@ doNotDisplayTwice rec {
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
+  idea = jetbrains; # added 2017-04-03
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
