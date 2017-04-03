@@ -1,26 +1,30 @@
-{ stdenv, fetchurl, cmake, coreutils, which, libuuid, tqt3, mesa }:
+{ stdenv, fetchurl, cmake, coreutils, which, libuuid, mesa, tde }:
 
+let baseName = "tqtinterface"; in
+with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "tqtinterface-${version}";
-  version = "${majorVer}.${minorVer}";
-  majorVer = "R14.0";
-  minorVer = "3";
+  name = "${baseName}-${version}";
+  srcName = "${baseName}-R${version}";
+  version = "${majorVer}.${minorVer}.${patchVer}";
+  majorVer = "14";
+  minorVer = "0";
+  patchVer = "4";
 
   src = fetchurl {
-    url = "mirror://tde/${version}/dependencies/${name}.tar.bz2";
-    sha256 = "14kxq7nlkalgmlxpijs78fr0zr2ha9xykzqfbr7lh3zn0r79k5a3";
+    url = "mirror://tde/R${version}/dependencies/${srcName}.tar.bz2";
+    sha256 = "0ygxqdbqbp6kya4r425702n6z4cqfb4rra0aai8vqpcm6cz2jri9";
   };
 
-  buildInputs = [ cmake coreutils which ];
-  propagatedBuildInputs = [ tqt3 mesa libuuid ];
+  nativeBuildInputs = [ cmake coreutils which ];
+  propagatedBuildInputs = [ mesa libuuid tde.tqt3 ];
   setupHook = ./setup-hook.sh;
 
   cmakeFlags = [
     "-DQT_VERSION=3"
-    "-DQT_PREFIX_DIR=${tqt3}"
-    "-DQT_INCLUDE_DIR=${tqt3}/include"
-    "-DMOC_EXECUTABLE=${tqt3}/bin/tqmoc" ];
+    "-DQT_PREFIX_DIR=${tde.tqt3}"
+    "-DQT_INCLUDE_DIR=${tde.tqt3}/include"
+    "-DMOC_EXECUTABLE=${tde.tqt3}/bin/tqmoc" ];
 
   preConfigure = ''
     cd tqtinterface
