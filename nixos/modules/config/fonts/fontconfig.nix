@@ -444,11 +444,14 @@ in
     };
 
   };
-  config = mkIf cfg.enable {
-    fonts.fontconfig.confPackages = [ confPkg ];
-
-    environment.systemPackages    = [ pkgs.fontconfig ];
-    environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
-  };
+  config = mkMerge [
+    (mkIf cfg.enable {
+      environment.systemPackages    = [ pkgs.fontconfig ];
+      environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+    })
+    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+      fonts.fontconfig.confPackages = [ confPkg ];
+    })
+  ];
 
 }
