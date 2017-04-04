@@ -23,11 +23,11 @@ let
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path =
-      [ pkgs.coreutils
-        pkgs.utillinux
-        pkgs.openresolv
-      ] ++ optional config.nix.readOnlyStore readonlyMountpoint;
+    path = lib.makeBinPath ([
+      pkgs.coreutils
+      pkgs.utillinux
+      pkgs.openresolv
+    ] ++ optional config.nix.readOnlyStore readonlyMountpoint);
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}

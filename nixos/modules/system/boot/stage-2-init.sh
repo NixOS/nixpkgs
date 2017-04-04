@@ -2,28 +2,13 @@
 
 systemConfig=@systemConfig@
 
-export HOME=/root
+export HOME=/root PATH="@path@"
 
 
 # Print a greeting.
 echo
 echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
 echo
-
-
-# Set the PATH.
-setPath() {
-    local dirs="$1"
-    export PATH=/empty
-    for i in $dirs; do
-        PATH=$PATH:$i/bin
-        if test -e $i/sbin; then
-            PATH=$PATH:$i/sbin
-        fi
-    done
-}
-
-setPath "@path@"
 
 
 # Normally, stage 1 mounts the root filesystem read/writable.
