@@ -31,15 +31,15 @@ in rec {
   };
 
   unstable = fetchurl rec {
-    version = "2.4";
+    version = "2.5";
     url = "https://dl.winehq.org/wine/source/2.x/wine-${version}.tar.xz";
-    sha256 = "13klfadvd44zdfrzh38al99s53i02x3mlhcj5z7fq7vqwh3xzdc7";
+    sha256 = "1lnc7dnhvm1ir1hrjmihx9r47bc8wr8rhlf6pfm3lcl3nix2py8k";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
     inherit (unstable) version;
-    sha256 = "052s4y7d8lw2k0hk17zwz9bgbsl013g8953ad001y2kqjxwcnilh";
+    sha256 = "1l0sjbsajr4m7w3ar2ljwr3ffmwyv57g85a068ard3v8fv4nil22";
     owner = "wine-compholio";
     repo = "wine-staging";
     rev = "v${version}";
