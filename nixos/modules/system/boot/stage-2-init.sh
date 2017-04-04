@@ -46,7 +46,9 @@ echo "booting system configuration $systemConfig" > /dev/kmsg
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
-    if ! readonly-mountpoint /nix/store; then
+    if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
+        # FIXME when linux < 4.5 is EOL, switch to atomic bind mounts
+        #mount /nix/store /nix/store -o bind,remount,ro
         mount --bind /nix/store /nix/store
         mount -o remount,ro,bind /nix/store
     fi
