@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "installPhase" ];
 
-  unpackCmd = ''
+  unpackPhase = ''
     if [[ $OSTYPE == "darwin"* ]]; then
-        tar xf $curSrc
+      tar xf $src
     else 
-        ar x $curSrc
+      ar x $src
     fi
     tar xf data.tar.gz
   '';
