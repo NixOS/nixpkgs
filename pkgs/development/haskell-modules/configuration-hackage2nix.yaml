@@ -38,7 +38,7 @@ core-packages:
 
 default-package-overrides:
   - store < 0.4.1               # https://github.com/fpco/store/issues/104
-  # LTS Haskell 8.6
+  # LTS Haskell 8.8
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -371,7 +371,7 @@ default-package-overrides:
   - cmark ==0.5.5.1
   - cmark-highlight ==0.2.0.0
   - cmark-lucid ==0.1.0.0
-  - cmdargs ==0.10.16
+  - cmdargs ==0.10.17
   - code-builder ==0.1.3
   - code-page ==0.1.3
   - codo-notation ==0.5.2
@@ -666,6 +666,7 @@ default-package-overrides:
   - format-numbers ==0.1.0.0
   - formatting ==6.2.4
   - fortran-src ==0.1.0.4
+  - foundation ==0.0.4
   - Frames ==0.1.9
   - free ==4.12.4
   - free-vl ==0.1.4
@@ -695,7 +696,7 @@ default-package-overrides:
   - getopt-generics ==0.13
   - ghc-events ==0.4.4.0
   - ghc-exactprint ==0.5.3.0
-  - ghc-heap-view ==0.5.7
+  - ghc-heap-view ==0.5.9
   - ghc-mod ==5.7.0.0
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.3.0.2
@@ -708,7 +709,7 @@ default-package-overrides:
   - ghcjs-base-stub ==0.1.0.2
   - ghcjs-codemirror ==0.0.0.1
   - ghcjs-hplay ==0.3.4.2
-  - ghcjs-perch ==0.3.3.1
+  - ghcjs-perch ==0.3.3.2
   - gi-atk ==2.0.11
   - gi-cairo ==1.0.11
   - gi-gdk ==3.0.11
@@ -897,10 +898,10 @@ default-package-overrides:
   - hashable ==1.2.6.0
   - hashable-time ==0.2
   - hashmap ==1.3.2
-  - hashtables ==1.2.1.0
+  - hashtables ==1.2.1.1
   - haskeline ==0.7.3.1
-  - haskell-gi ==0.20
-  - haskell-gi-base ==0.20
+  - haskell-gi ==0.20.1
+  - haskell-gi-base ==0.20.1
   - haskell-import-graph ==1.0.1
   - haskell-lexer ==1.0.1
   - haskell-names ==0.8.0
@@ -957,6 +958,7 @@ default-package-overrides:
   - hfsevents ==0.1.6
   - hid ==0.2.2
   - hidapi ==0.1.4
+  - hidden-char ==0.1.0.0
   - hierarchical-clustering ==0.4.6
   - highjson ==0.4.0.0
   - highjson-swagger ==0.4.0.0
@@ -1097,7 +1099,8 @@ default-package-overrides:
   - hyphenation ==0.6
   - ical ==0.0.1
   - iconv ==0.4.1.3
-  - identicon ==0.2.0
+  - identicon ==0.2.1
+  - idris ==1.0
   - ieee754 ==0.8.0
   - if ==0.1.0.0
   - IfElse ==0.85
@@ -1224,6 +1227,7 @@ default-package-overrides:
   - leveldb-haskell ==0.6.4
   - lexer-applicative ==2.1.0.1
   - lhs2tex ==1.19
+  - libffi ==0.1
   - libgit ==0.3.1
   - libinfluxdb ==0.0.4
   - libmpd ==0.9.0.6
@@ -1291,7 +1295,7 @@ default-package-overrides:
   - median-stream ==0.7.0.0
   - mega-sdist ==0.3.0.2
   - megaparsec ==5.2.0
-  - memory ==0.14.2
+  - memory ==0.14.3
   - MemoTrie ==0.6.7
   - mersenne-random ==1.0.0.1
   - mersenne-random-pure64 ==0.2.2.0
@@ -1327,7 +1331,7 @@ default-package-overrides:
   - monad-extras ==0.6.0
   - monad-http ==0.1.0.0
   - monad-journal ==0.7.2
-  - monad-logger ==0.3.21
+  - monad-logger ==0.3.22
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.6
   - monad-logger-syslog ==0.1.3.0
@@ -1371,7 +1375,7 @@ default-package-overrides:
   - multistate ==0.7.1.1
   - murmur-hash ==0.1.0.9
   - MusicBrainz ==0.2.4
-  - mustache ==2.1.2
+  - mustache ==2.1.3
   - mutable-containers ==0.3.3
   - mwc-probability ==1.3.0
   - mwc-random ==0.13.5.0
@@ -1567,6 +1571,7 @@ default-package-overrides:
   - prelude-safeenum ==0.1.1.2
   - preprocessor-tools ==1.0.1
   - presburger ==1.3.1
+  - present ==4.1.0
   - pretty-class ==1.0.1.1
   - pretty-hex ==1.0
   - pretty-show ==1.6.12
@@ -1587,7 +1592,7 @@ default-package-overrides:
   - prometheus-metrics-ghc ==0.1.0.1
   - prompt ==0.1.1.2
   - protobuf ==0.2.1.1
-  - protobuf-simple ==0.1.0.2
+  - protobuf-simple ==0.1.0.3
   - protocol-buffers ==2.4.0
   - protocol-buffers-descriptor ==2.4.0
   - protolude ==0.1.10
@@ -1725,7 +1730,7 @@ default-package-overrides:
   - scalpel ==0.5.0
   - scalpel-core ==0.5.0
   - scanner ==0.2
-  - scientific ==0.3.4.10
+  - scientific ==0.3.4.11
   - scotty ==0.11.0
   - scrape-changes ==0.1.0.5
   - scrypt ==0.5.0
@@ -1867,7 +1872,7 @@ default-package-overrides:
   - storable-record ==0.0.3.1
   - store-core ==0.4
   - Strafunski-StrategyLib ==5.0.0.10
-  - stratosphere ==0.4.1
+  - stratosphere ==0.4.2
   - streaming ==0.1.4.5
   - streaming-bytestring ==0.1.4.6
   - streaming-commons ==0.1.17
@@ -1935,11 +1940,11 @@ default-package-overrides:
   - tasty-program ==1.0.5
   - tasty-quickcheck ==0.8.4
   - tasty-rerun ==1.1.6
-  - tasty-silver ==3.1.9
+  - tasty-silver ==3.1.10
   - tasty-smallcheck ==0.8.1
   - tasty-stats ==0.2.0.2
   - tasty-tap ==0.0.4
-  - tasty-th ==0.1.4
+  - tasty-th ==0.1.5
   - Taxonomy ==1.0.2
   - TCache ==0.12.1
   - tce-conf ==1.3
@@ -2054,7 +2059,7 @@ default-package-overrides:
   - uglymemo ==0.1.0.1
   - unbound ==0.5.1
   - unbound-generics ==0.3.1
-  - unbounded-delays ==0.1.0.9
+  - unbounded-delays ==0.1.0.10
   - uncertain ==0.3.1.0
   - unexceptionalio ==0.3.0
   - unicode-show ==0.1.0.2
@@ -2138,7 +2143,7 @@ default-package-overrides:
   - wai-middleware-consul ==0.1.0.2
   - wai-middleware-content-type ==0.5.0.1
   - wai-middleware-crowd ==0.1.4.2
-  - wai-middleware-metrics ==0.2.3
+  - wai-middleware-metrics ==0.2.4
   - wai-middleware-prometheus ==0.1.0.1
   - wai-middleware-static ==0.8.1
   - wai-middleware-throttle ==0.2.1.0
@@ -2168,7 +2173,7 @@ default-package-overrides:
   - webdriver-angular ==0.1.11
   - webkitgtk3 ==0.14.2.1
   - webkitgtk3-javascriptcore ==0.14.2.1
-  - webpage ==0.0.4
+  - webpage ==0.0.5
   - webrtc-vad ==0.1.0.3
   - websockets ==0.10.0.0
   - websockets-snap ==0.10.2.0
@@ -2203,7 +2208,7 @@ default-package-overrides:
   - writer-cps-full ==0.1.0.0
   - writer-cps-lens ==0.1.0.1
   - writer-cps-morph ==0.1.0.2
-  - writer-cps-mtl ==0.1.1.2
+  - writer-cps-mtl ==0.1.1.3
   - writer-cps-transformers ==0.1.1.2
   - wuss ==1.1.3
   - X11 ==1.8
@@ -2281,7 +2286,7 @@ default-package-overrides:
   - yjtools ==0.9.18
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.5
-  - zip ==0.1.9
+  - zip ==0.1.10
   - zip-archive ==0.3.0.5
   - zippers ==0.2.2
   - zlib ==0.6.1.2
