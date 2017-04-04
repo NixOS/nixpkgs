@@ -80,13 +80,9 @@ ln -s /proc/mounts /etc/mtab
 # More special file systems, initialise required directories.
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var /var/log /var/lib /var/db
-mkdir -m 0755 -p /nix/var
-mkdir -m 0700 -p /root
-chmod 0700 /root
-mkdir -m 0755 -p /bin # for the /bin/sh symlink
-mkdir -m 0755 -p /home
-mkdir -m 0755 -p /etc/nixos
+mkdir -m 0755 -p /var/{log,lib,db} /nix/var /etc/nixos/ \
+    /run/lock /home /bin # for the /bin/sh symlink
+install -m 0700 -d /root
 
 
 # Miscellaneous boot time cleanup.
@@ -96,9 +92,6 @@ rm -f /etc/{group,passwd,shadow}.lock
 
 # Also get rid of temporary GC roots.
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
-
-
-mkdir -m 0755 -p /run/lock
 
 
 # For backwards compatibility, symlink /var/run to /run, and /var/lock
