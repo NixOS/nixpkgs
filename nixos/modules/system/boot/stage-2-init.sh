@@ -6,7 +6,7 @@ export HOME=/root PATH="@path@"
 
 
 # Process the kernel command line.
-for o in $(cat /proc/cmdline); do
+for o in $(</proc/cmdline); do
     case $o in
         boot.debugtrace)
             # Show each command.
@@ -107,8 +107,8 @@ fi
 
 
 # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
-if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
-    cat /etc/resolv.conf | resolvconf -m 1000 -a host
+if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
+    resolvconf -m 1000 -a host </etc/resolv.conf
 fi
 
 # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
