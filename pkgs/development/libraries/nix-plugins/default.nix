@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, nix }:
-let version = "2.0.2"; in
+let version = "2.0.3"; in
 stdenv.mkDerivation {
   name = "nix-plugins-${version}";
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    sha256 = "02bi0p9qjpyxzbr0ki9q774lwdjwcpipkzx84xx9q1ywwafjhr7b";
+    sha256 = "033w4m9ah127sfls7zqzpp2b1wdzsvzzk3bnkv6jyi31bws7hadp";
   };
 
   buildInputs = [ nix ];
