@@ -44,7 +44,7 @@ runCommand "rustRegistry-${version}-${builtins.substring 0 7 rev}" { inherit src
   $git config --local user.email "example@example.com"
   $git config --local user.name "example"
   $git add .
-  $git commit -m 'Rust registry commit'
+  $git commit --quiet -m 'Rust registry commit'
 
   touch $out/touch . "$out/.cargo-index-lock"
 ''
