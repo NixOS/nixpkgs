@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeDesktopItem, cmake, boost155, zlib, openssl,
-R, qt4, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper,
+{ stdenv, fetchurl, makeDesktopItem, cmake, boost163, zlib, openssl,
+R, qt5, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper,
 # If you have set up an R wrapper with other packages by following
 # something like https://nixos.org/nixpkgs/manual/#r-packages, RStudio
 # by default not be able to access any of those R packages. In order
@@ -11,18 +11,18 @@ useRPackages ? false
 }:
 
 let
-  version = "0.98.110";
+  version = "1.1.135";
   ginVer = "1.5";
   gwtVer = "2.5.1";
 in
 stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
-  buildInputs = [ cmake boost155 zlib openssl R qt4 libuuid unzip ant jdk makeWrapper ];
+  buildInputs = [ cmake boost163 zlib openssl R qt5.full qt5.qtwebkit libuuid unzip ant jdk makeWrapper ];
 
   src = fetchurl {
     url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
-    sha256 = "0wybbvl5libki8z2ywgcd0hg0py1az484r95lhwh3jbrwfx7ri2z";
+    sha256 = "1jgzn053qx4b34i8x9wkvw66zfscvj96xdhaw4dby3vssgsip4h4";
   };
 
   # Hack RStudio to only use the input R.
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
   hunspellDictionaries = builtins.attrValues hunspellDicts;
 
   mathJaxSrc = fetchurl {
-    url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-20.zip;
-    sha256 = "1ikg3fhharsfrh2fv8c53fdawqajj24nif89400l3klw1hyq4zal";
+    url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
+    sha256 = "0wbcqb9rbfqqvvhqr1pbqax75wp8ydqdyhp91fbqfqp26xzjv6lk";
   };
 
   preConfigure =
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 	  done
       done
 
-      unzip $mathJaxSrc -d dependencies/common/mathjax
+      unzip $mathJaxSrc -d dependencies/common/mathjax-26
     '';
 
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" ];
