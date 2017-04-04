@@ -1,4 +1,4 @@
-{stdenv, fetchurl, arm-frc-linux-gnueabi-linux-api-headers}:
+{stdenv, fetchurl, binutils, arm-frc-linux-gnueabi-linux-api-headers}:
 
 let
   _target = "arm-frc-linux-gnueabi";
@@ -35,15 +35,13 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "installPhase" ];
 
+  buildInputs = [ binutils ];
+
   unpackPhase = ''
     echo "starting unpack phase..."
     for file in $srcs
     do
-      if [[ $OSTYPE == "darwin"* ]]; then
-        tar xf $file
-      else
-        ar x $file
-      fi
+      ${binutils}/bin/ar x $file
       tar xf data.tar.gz
     done
   '';
