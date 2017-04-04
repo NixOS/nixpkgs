@@ -5,6 +5,21 @@ systemConfig=@systemConfig@
 export HOME=/root PATH="@path@"
 
 
+# Process the kernel command line.
+for o in $(cat /proc/cmdline); do
+    case $o in
+        boot.debugtrace)
+            # Show each command.
+            set -x
+            ;;
+        resume=*)
+            set -- $(IFS==; echo $o)
+            resumeDevice=$2
+            ;;
+    esac
+done
+
+
 # Print a greeting.
 echo
 echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
@@ -60,21 +75,6 @@ mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 rm -f /etc/mtab* # not that we care about stale locks
 ln -s /proc/mounts /etc/mtab
-
-
-# Process the kernel command line.
-for o in $(cat /proc/cmdline); do
-    case $o in
-        boot.debugtrace)
-            # Show each command.
-            set -x
-            ;;
-        resume=*)
-            set -- $(IFS==; echo $o)
-            resumeDevice=$2
-            ;;
-    esac
-done
 
 
 # More special file systems, initialise required directories.
