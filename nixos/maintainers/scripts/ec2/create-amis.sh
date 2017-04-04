@@ -3,20 +3,21 @@
 
 # To start with do: nix-shell -p awscli --run "aws configure"
 
-set -e
+
 set -o pipefail
+#set -x
+
+stateDir=${TMPDIR:-/tmp}/ec2-image
+echo "keeping state in $stateDir"
+mkdir -p $stateDir
 
 version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.nixpkgsVersion | sed s/'"'//g)
 major=${version:0:5}
 echo "NixOS version is $version ($major)"
 
-stateDir=/var/tmp/ec2-image-$version
-echo "keeping state in $stateDir"
-mkdir -p $stateDir
-
 rm -f ec2-amis.nix
 
-types="hvm"
+types="hvm pv"
 stores="ebs s3"
 regions="eu-west-1 eu-west-2 eu-central-1 us-east-1 us-east-2 us-west-1 us-west-2 ca-central-1 ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2 sa-east-1 ap-south-1"
 
