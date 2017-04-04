@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
   unpackPhase = ''
+    echo "starting unpack phase..."
     if [[ $OSTYPE == "darwin"* ]]; then
       tar xf $src
     else 

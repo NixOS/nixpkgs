@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
   unpackPhase = ''
+    echo "starting unpack phase..."
     for file in $srcs
     do
       if [[ $OSTYPE == "darwin"* ]]; then
