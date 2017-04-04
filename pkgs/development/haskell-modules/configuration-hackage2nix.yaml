@@ -2414,12 +2414,14 @@ dont-distribute-packages:
   shine-varying:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
 
   # these packages depend on software with an unfree license
+  accelerate-bignum:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cublas:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cuda:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cufft:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-examples:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-fft:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-fourier-benchmark:                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  accelerate-llvm-ptx:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   bindings-yices:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   ccelerate-cuda:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   cublas:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
