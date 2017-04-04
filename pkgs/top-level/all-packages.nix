@@ -9808,6 +9808,8 @@ with pkgs;
 
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
+  sqlint = callPackage ../development/tools/sqlint { };
+
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
