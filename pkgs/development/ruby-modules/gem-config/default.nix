@@ -18,7 +18,7 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
+, libiconv, postgresql, libpg_query, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
 , libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc
@@ -127,6 +127,12 @@ in
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
+  };
+
+  pg_query = attrs: {
+    postPatch = ''
+      ln -s ${libpg_query}/lib ${libpg_query.name}
+    '';
   };
 
   puma = attrs: {

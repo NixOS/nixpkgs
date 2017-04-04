@@ -8685,6 +8685,8 @@ with pkgs;
 
   libpgf = callPackage ../development/libraries/libpgf { };
 
+  libpg_query = callPackage ../development/libraries/libpg_query { };
+
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
