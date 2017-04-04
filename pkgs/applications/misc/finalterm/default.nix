@@ -1,27 +1,29 @@
-{ stdenv, lib, fetchgit, makeWrapper
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , pkgconfig, cmake, libxml2, vala_0_23, intltool, libmx, gnome3, gtk3, gtk_doc
 , keybinder3, clutter_gtk, libnotify
 , libxkbcommon, xorg, udev
 , bashInteractive
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation {
   name = "finalterm-git-2014-11-15";
 
-  src = fetchgit {
-    url = "https://github.com/p-e-w/finalterm.git";
+  src = fetchFromGitHub {
+    owner = "p-e-w";
+    repo = "finalterm";
     rev = "39b078b2a96a5c3c9e74f92b1929f383d220ca8b";
     sha256 = "14viln5nabr39lafg1lzf6ydibz1h5d9346drp435ljxc6wsh21i";
   };
 
+  nativeBuildInputs = [ pkgconfig cmake intltool makeWrapper ];
   buildInputs = [
-    pkgconfig cmake vala_0_23 intltool gtk3 gnome3.gnome_common gnome3.libgee
-    gtk_doc clutter_gtk libmx keybinder3 libxml2 libnotify makeWrapper
+    vala_0_23 gtk3 gnome3.gnome_common gnome3.libgee
+    gtk_doc clutter_gtk libmx keybinder3 libxml2 libnotify
     xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence
     libxkbcommon
-  ] ++ lib.optionals stdenv.isLinux [
-    udev
-  ];
+  ] ++ optionals stdenv.isLinux [ udev ];
 
   preConfigure = ''
     substituteInPlace data/org.gnome.finalterm.gschema.xml \
@@ -44,7 +46,7 @@ stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:${gnome3.gtk.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://finalterm.org";
     description = "A new breed of terminal emulator";
     longDescription = ''
@@ -57,7 +59,7 @@ stdenv.mkDerivation {
       - GUI terminal controls
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = [ maintainers.cstrahan ];
     platforms = platforms.linux;
   };
 }
