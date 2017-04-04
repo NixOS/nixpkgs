@@ -12,5 +12,11 @@
     };
   };
 
-  config = {};
+  config = {
+    assertions = [
+      { assertion = config.ec2.hvm;
+        message = "Paravirtualized EC2 instances are no longer supported.";
+      }
+    ];
+  };
 }
