@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, pkgconfig, which, m4, gtk2, pango, perl, python2, zip, libIDL
-, libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
+{ stdenv, lib, fetchurl, pkgconfig, autoconf213, which, m4, gtk2, pango
+, perl, python2, zip
+, libIDL , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
@@ -14,7 +15,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "45.8.0"; in
+let version = "52.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -22,10 +23,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
-    sha512 = "f8ba08d874fb1a09ac9ba5d4d1f46cefe801783ba4bf82eee682ac2ecc4e231d07033a80e036ad04bda7780c093fb7bc3122a23dc6e19c12f18fb7168dc78deb";
+    sha512 = "215de8ae386f6f12d7a4338bb03bac956410be0dd4de5cca218e12241e3948c8c2540756e149bfde597cd10e399b4cb4db86619a2aa50a368ba323b413c1f93c";
   };
-
-  patches = [ ./gcc6.patch ];
 
   # New sed no longer tolerates this mistake.
   postPatch = ''
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = # from firefox30Pkgs.xulrunner, without gstreamer and libvpx
-    [ pkgconfig which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
+    [ pkgconfig autoconf213 which libpng gtk2 perl zip libIDL libjpeg zlib bzip2
       python2 dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
@@ -62,22 +61,20 @@ stdenv.mkDerivation rec {
       "--enable-system-sqlite"
       "--enable-system-cairo"
       "--disable-gconf"
-      "--disable-gstreamer"
       "--enable-startup-notification"
       # "--enable-content-sandbox"            # available since 26.0, but not much info available
       # "--enable-content-sandbox-reporter"   # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-installer"
       "--disable-updater"
       "--disable-pulseaudio"
+      "--enable-default-toolkit=cairo-gtk2"
     ] ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                         else [ "--disable-debug" "--enable-release"
                                "--disable-debug-symbols"
                                "--enable-optimize" "--enable-strip" ])
     ++ [
-      "--disable-javaxpcom"
       #"--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
     ]
     ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
