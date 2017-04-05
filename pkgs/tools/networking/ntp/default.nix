@@ -8,11 +8,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.8p9";
+  name = "ntp-4.2.8p10";
 
   src = fetchurl {
     url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
-    sha256 = "0whbyf82lrczbri4adbsa4hg1ppfa6c7qcj7nhjwdfp1g1vjh95p";
+    sha256 = "17xrk7gxrl3hgg0i73n8qm53knyh01lf0f3l1zx9x6r1cip3dlnx";
   };
 
   configureFlags = [
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.ntp.org/;
     description = "An implementation of the Network Time Protocol";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.linux;
   };
 }

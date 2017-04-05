@@ -741,7 +741,7 @@ with pkgs;
   catclock = callPackage ../applications/misc/catclock { };
 
   cde = callPackage ../tools/package-management/cde { };
-  
+
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
@@ -1809,6 +1809,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   });
   fontforge-gtk = callPackage ../tools/misc/fontforge {
+    withSpiro = true;
     withGTK = true;
     gtk2 = gtk2-x11;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -3439,6 +3440,8 @@ with pkgs;
     inherit (pythonPackages) pillow;
   };
 
+  pdfshuffler = callPackage ../applications/misc/pdfshuffler { };
+
   briss = callPackage ../tools/graphics/briss { };
 
   brickd = callPackage ../servers/brickd {
@@ -3793,6 +3796,10 @@ with pkgs;
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
+
+  rss2email = callPackage ../applications/networking/feedreaders/rss2email {
+    pythonPackages = python3Packages;
+  };
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
@@ -4247,6 +4254,8 @@ with pkgs;
 
   u9fs = callPackage ../servers/u9fs { };
 
+  ua = callPackage ../tools/networking/ua { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
@@ -4525,6 +4534,10 @@ with pkgs;
 
   venus = callPackage ../tools/misc/venus {
     python = python27;
+  };
+
+  veracrypt = callPackage ../applications/misc/veracrypt {
+    wxGUI = true;
   };
 
   vlan = callPackage ../tools/networking/vlan { };
@@ -5323,7 +5336,7 @@ with pkgs;
   jdk = jdk8;
   jre = jre8;
   jre_headless = jre8_headless;
-  
+
   openshot-qt = libsForQt56.callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = pkgs.jdkdistro true false;
@@ -6074,17 +6087,17 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_2_0_0
     ruby_2_1_10
-    ruby_2_2_5
-    ruby_2_3_3
-    ruby_2_4_0;
+    ruby_2_2_7
+    ruby_2_3_4
+    ruby_2_4_1;
 
   # Ruby aliases
   ruby = ruby_2_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_5;
-  ruby_2_3 = ruby_2_3_3;
-  ruby_2_4 = ruby_2_4_0;
+  ruby_2_2 = ruby_2_2_7;
+  ruby_2_3 = ruby_2_3_4;
+  ruby_2_4 = ruby_2_4_1;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -6212,6 +6225,8 @@ with pkgs;
   apacheKafka_0_8 = callPackage ../servers/apache-kafka { majorVersion = "0.8"; };
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
+
+  kt = callPackage ../tools/misc/kt {};
 
   asn2quickder = callPackage ../development/tools/asn2quickder {};
 
@@ -7709,9 +7724,7 @@ with pkgs;
 
   gpac = callPackage ../applications/video/gpac { };
 
-  gpgme = callPackage ../development/libraries/gpgme {
-    gnupg1 = gnupg1orig;
-  };
+  gpgme = callPackage ../development/libraries/gpgme { };
 
   pgpdump = callPackage ../tools/security/pgpdump { };
 
@@ -8074,6 +8087,10 @@ with pkgs;
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libb2 = callPackage ../development/libraries/libb2 { };
+
+  libbap = callPackage ../development/libraries/libbap {
+    inherit (ocamlPackages_4_02) bap ocaml findlib ctypes;
+  };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
@@ -8732,6 +8749,8 @@ with pkgs;
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
+  libspiro = callPackage ../development/libraries/libspiro {};
+
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
@@ -8840,10 +8859,7 @@ with pkgs;
   };
 
   libv4l = lowPrio (v4l_utils.override {
-    alsaLib = null;
-    libX11 = null;
-    qt4 = null;
-    qt5 = null;
+    withUtils = false;
   });
 
   libva = callPackage ../development/libraries/libva { };
@@ -9123,9 +9139,7 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {
-    nix = pkgs.nixUnstable;
-  };
+  nix-plugins = callPackage ../development/libraries/nix-plugins {};
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -9239,7 +9253,6 @@ with pkgs;
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = openssl_1_0_2;
-  openssl-steam = openssl_1_0_2-steam;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -9249,8 +9262,7 @@ with pkgs;
       };
     })
     openssl_1_0_2
-    openssl_1_1_0
-    openssl_1_0_2-steam;
+    openssl_1_1_0;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -11501,6 +11513,7 @@ with pkgs;
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
         kernelPatches.packet_fix_race_condition_CVE_2016_8655
         kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
       ]
@@ -11521,6 +11534,7 @@ with pkgs;
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
     kernelPatches = with kernelPatches;
       [ bridge_stp_helper
+        p9_fixes
         lguest_entry-linkage
         packet_fix_race_condition_CVE_2016_8655
         DCCP_double_free_vulnerability_CVE-2017-6074
@@ -11535,6 +11549,7 @@ with pkgs;
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
         kernelPatches.cpu-cgroup-v2."4.4"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11547,6 +11562,7 @@ with pkgs;
   linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
         # when adding a new linux version
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
@@ -11563,6 +11579,7 @@ with pkgs;
   linux_4_10 = callPackage ../os-specific/linux/kernel/linux-4.10.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
         # when adding a new linux version
         # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
@@ -11579,6 +11596,7 @@ with pkgs;
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
+      kernelPatches.p9_fixes
       kernelPatches.modinst_arg_list_too_long
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
@@ -12025,6 +12043,8 @@ with pkgs;
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
+  rtl8192su-firmware = callPackage ../os-specific/linux/firmware/rtl8192su-firmware { };
+
   rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
   rtlwifi_new-firmware = callPackage ../os-specific/linux/firmware/rtlwifi_new-firmware { };
@@ -12188,9 +12208,7 @@ with pkgs;
     systemd = null;
   });
 
-  v4l_utils = callPackage ../os-specific/linux/v4l-utils {
-    qt5 = null;
-  };
+  v4l_utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
   vndr = callPackage ../development/tools/vndr { };
 
@@ -13186,7 +13204,11 @@ with pkgs;
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
-  docker = callPackage ../applications/virtualization/docker { };
+  inherit (callPackage ../applications/virtualization/docker { })
+    docker_17_03;
+
+  docker = docker_17_03;
+
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -14806,6 +14828,8 @@ with pkgs;
 
   nedit = callPackage ../applications/editors/nedit { };
 
+  nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
+
   notepadqq = libsForQt56.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
@@ -14883,7 +14907,10 @@ with pkgs;
 
   osmo = callPackage ../applications/office/osmo { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon { };
+  palemoon = callPackage ../applications/networking/browsers/palemoon {
+    # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   pamix = callPackage ../applications/audio/pamix { };
 
@@ -15550,11 +15577,7 @@ with pkgs;
 
   subunit = callPackage ../development/libraries/subunit { };
 
-  surf = callPackage ../applications/networking/browsers/surf {
-    webkit = webkitgtk2;
-  };
-
-  surf-webkit2 = callPackage ../applications/networking/browsers/surf/webkit2.nix { };
+  surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
@@ -15606,7 +15629,7 @@ with pkgs;
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktop = qt56.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     inherit (pythonPackages) gyp;
   };
 
@@ -15714,6 +15737,8 @@ with pkgs;
   trayer = callPackage ../applications/window-managers/trayer { };
 
   tree = callPackage ../tools/system/tree {};
+
+  treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK30; };
 
   trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
 
@@ -16160,6 +16185,8 @@ with pkgs;
   xen = xenPackages.xen_4_5-vanilla;
   xen-slim = xenPackages.xen_4_5-slim;
   xen-light = xenPackages.xen_4_5-light;
+
+  xkbset = callPackage ../tools/X11/xkbset { };
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
@@ -18112,11 +18139,11 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_1;
+    terraform_0_9_2;
 
   terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_1;
-  terraform = terraform_0_8;
+  terraform_0_9 = terraform_0_9_2;
+  terraform = terraform_0_9;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {
     terraform = terraform_0_8;

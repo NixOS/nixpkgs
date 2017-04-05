@@ -146,17 +146,12 @@ let
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
-        mkdir -p $dev/lib/modules/${modDirVersion}
-        cd ..
-        mv $sourceRoot $dev/lib/modules/${modDirVersion}/source
+        mkdir -p $dev/lib/modules/${modDirVersion}/build
+        cp -dpR ../$sourceRoot $dev/lib/modules/${modDirVersion}/source
         cd $dev/lib/modules/${modDirVersion}/source
 
-        mv $buildRoot/.config $buildRoot/Module.symvers $TMPDIR
-        rm -fR $buildRoot
-        mkdir $buildRoot
-        mv $TMPDIR/.config $TMPDIR/Module.symvers $buildRoot
-        make modules_prepare $makeFlags "''${makeFlagsArray[@]}"
-        mv $buildRoot $dev/lib/modules/${modDirVersion}/build
+        cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
+        make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can add
@@ -164,7 +159,7 @@ let
         # from drivers/ in the future; it adds 50M to keep all of its
         # headers on 3.10 though.
 
-        chmod +w -R ../source
+        chmod u+w -R ../source
         arch=`cd $dev/lib/modules/${modDirVersion}/build/arch; ls`
 
         # Remove unusued arches
@@ -177,14 +172,14 @@ let
         rm -fR drivers
 
         # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod -w
+        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
 
         # Keep root and arch-specific Makefiles
-        chmod -w Makefile
-        chmod -w arch/$arch/Makefile*
+        chmod u-w Makefile
+        chmod u-w arch/$arch/Makefile*
 
         # Keep whole scripts dir
-        chmod -w -R scripts
+        chmod u-w -R scripts
 
         # Delete everything not kept
         find . -type f -perm -u=w -print0 | xargs -0 rm

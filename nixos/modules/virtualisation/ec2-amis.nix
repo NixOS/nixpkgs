@@ -193,5 +193,35 @@ let self = {
   "16.09".us-west-2.pv-ebs = "ami-6d4af60d";
   "16.09".us-west-2.pv-s3 = "ami-de48f4be";
 
-  latest = self."16.09";
+  # 17.03.885.6024dd4067
+  "17.03".ap-northeast-1.hvm-ebs = "ami-dbd0f7bc";
+  "17.03".ap-northeast-1.hvm-s3 = "ami-7cdff81b";
+  "17.03".ap-northeast-2.hvm-ebs = "ami-c59a48ab";
+  "17.03".ap-northeast-2.hvm-s3 = "ami-0b944665";
+  "17.03".ap-south-1.hvm-ebs = "ami-4f413220";
+  "17.03".ap-south-1.hvm-s3 = "ami-864033e9";
+  "17.03".ap-southeast-1.hvm-ebs = "ami-e08c3383";
+  "17.03".ap-southeast-1.hvm-s3 = "ami-c28f30a1";
+  "17.03".ap-southeast-2.hvm-ebs = "ami-fca9a69f";
+  "17.03".ap-southeast-2.hvm-s3 = "ami-3daaa55e";
+  "17.03".ca-central-1.hvm-ebs = "ami-9b00bdff";
+  "17.03".ca-central-1.hvm-s3 = "ami-e800bd8c";
+  "17.03".eu-central-1.hvm-ebs = "ami-5450803b";
+  "17.03".eu-central-1.hvm-s3 = "ami-6e2efe01";
+  "17.03".eu-west-1.hvm-ebs = "ami-10754c76";
+  "17.03".eu-west-1.hvm-s3 = "ami-11734a77";
+  "17.03".eu-west-2.hvm-ebs = "ami-ff1d099b";
+  "17.03".eu-west-2.hvm-s3 = "ami-fe1d099a";
+  "17.03".sa-east-1.hvm-ebs = "ami-d95d3eb5";
+  "17.03".sa-east-1.hvm-s3 = "ami-fca2c190";
+  "17.03".us-east-1.hvm-ebs = "ami-0940c61f";
+  "17.03".us-east-1.hvm-s3 = "ami-674fc971";
+  "17.03".us-east-2.hvm-ebs = "ami-afc2e6ca";
+  "17.03".us-east-2.hvm-s3 = "ami-a1cde9c4";
+  "17.03".us-west-1.hvm-ebs = "ami-587b2138";
+  "17.03".us-west-1.hvm-s3 = "ami-70411b10";
+  "17.03".us-west-2.hvm-ebs = "ami-a93daac9";
+  "17.03".us-west-2.hvm-s3 = "ami-5139ae31";
+
+  latest = self."17.03";
 }; in self

@@ -25,6 +25,7 @@
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   afranchuk = "Alex Franchuk <alex.franchuk@gmail.com>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
+  ahmedtd = "Taahir Ahmed <ahmed.taahir@gmail.com>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
   akc = "Anders Claesson <akc@akc.is>";
@@ -135,6 +136,7 @@
   dgonyeo = "Derek Gonyeo <derek@gonyeo.com>";
   dipinhora = "Dipin Hora <dipinhora+github@gmail.com>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
+  DmitryTsygankov = "Dmitry Tsygankov <dmitry.tsygankov@gmail.com>";
   dmjio = "David Johnson <djohnson.m@gmail.com>";
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   domenkozar = "Domen Kozar <domen@dev.si>";
@@ -142,6 +144,7 @@
   dpaetzel = "David Pätzel <david.a.paetzel@gmail.com>";
   drets = "Dmytro Rets <dmitryrets@gmail.com>";
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
+  dsferruzza = "David Sferruzza <david.sferruzza@gmail.com>";
   dtzWill = "Will Dietz <nix@wdtz.org>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
@@ -519,6 +522,7 @@
   tvorog = "Marsel Zaripov <marszaripov@gmail.com>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
+  utdemir = "Utku Demir <me@utdemir.com>";
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012
   uwap = "uwap <me@uwap.name>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
