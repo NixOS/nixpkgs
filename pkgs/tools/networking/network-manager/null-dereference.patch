@@ -1,0 +1,20 @@
+--- NetworkManager-1.4.4.org/src/dns-manager/nm-dns-manager.c	2016-12-15 20:39:00.000000000 +0100
++++ NetworkManager-1.4.4/src/dns-manager/nm-dns-manager.c	2017-04-05 13:03:29.473098217 +0200
+@@ -607,8 +607,16 @@
+ 		_LOGI ("Removing DNS information from %s", RESOLVCONF_PATH);
+ 
+ 		cmd = g_strconcat (RESOLVCONF_PATH, " -d ", "NetworkManager", NULL);
+-		if (nm_spawn_process (cmd, error) != 0)
++		if (nm_spawn_process (cmd, error) != 0) {
++			if (error && !*error) {
++				g_set_error (error,
++				             NM_MANAGER_ERROR,
++				             NM_MANAGER_ERROR_FAILED,
++				             "%s returned error code",
++				             RESOLVCONF_PATH);
++			}
+ 			return SR_ERROR;
++		}
+ 
+ 		return SR_SUCCESS;
+ 	}

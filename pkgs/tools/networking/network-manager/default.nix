@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, dbus_glib
+{ stdenv, fetchurl, fetchpatch, intltool, pkgconfig, dbus_glib
 , systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
@@ -58,7 +58,10 @@ stdenv.mkDerivation rec {
     "--with-libsoup=yes"
   ];
 
-  patches = [ ./PppdPath.patch ];
+  patches = [
+    ./PppdPath.patch
+    ./null-dereference.patch
+  ];
 
   buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp
                   bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
@@ -78,7 +81,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
     # rename to network-manager to be in style
-    mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service 
+    mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
 
     # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
     # aliases ourselves.
