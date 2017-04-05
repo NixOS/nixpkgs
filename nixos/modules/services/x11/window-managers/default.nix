@@ -14,6 +14,7 @@ in
     ./dwm.nix
     ./exwm.nix
     ./fluxbox.nix
+    ./fvwm.nix
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix
