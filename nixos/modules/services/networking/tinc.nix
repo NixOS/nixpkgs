@@ -279,6 +279,16 @@ in
               '';
             };
 
+            notify = mkOption {
+              default = false;
+              type = types.bool;
+              description = lib.mdDoc ''
+                Whether to set the system service type to "notify"; enable this if you want
+                to use system-notify in your tinc-up hook to tell systemd when the VPN interface
+                is up.
+              '';
+            };
+
             package = mkOption {
               type = types.package;
               default = pkgs.tinc_pre;
@@ -378,7 +388,11 @@ in
           reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
           restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
           serviceConfig = {
-            Type = "simple";
+            Type = if data.notify then "notify" else "simple";
+            NotifyAccess = "all";
+            # systemd docs do not state whether `PIDFile` is used when `Type != forking`,
+            # but since we know where Tinc puts its PID file, we might as well set that here.
+            PIDFile = "/run/tinc.${network}.pid";
             Restart = "always";
             RestartSec = "3";
             ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
