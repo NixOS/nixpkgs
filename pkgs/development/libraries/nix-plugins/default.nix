@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, nix }:
-let version = "2.0.3"; in
+{ stdenv, fetchFromGitHub, nix, boehmgc }:
+let version = "2.0.6"; in
 stdenv.mkDerivation {
   name = "nix-plugins-${version}";
 
@@ -7,12 +7,10 @@ stdenv.mkDerivation {
     owner = "shlevy";
     repo = "nix-plugins";
     rev = version;
-    sha256 = "033w4m9ah127sfls7zqzpp2b1wdzsvzzk3bnkv6jyi31bws7hadp";
+    sha256 = "0gbajaxg7awk1fhicsnmvhrmd47wc7i38lz4baxks17sgx76amqr";
   };
 
-  buildInputs = [ nix ];
-
-  buildFlags = [ "NIX_INCLUDE=${nix.dev}/include" ];
+  buildFlags = [ "NIX_INCLUDE=${nix.dev}/include" "GC_INCLUDE=${boehmgc.dev}/include" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
