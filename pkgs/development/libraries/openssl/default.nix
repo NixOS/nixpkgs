@@ -126,7 +126,10 @@ in {
     sha256 = "1h6qi35w6hv6rd73p4cdgdzg732pdrfgpp37cgwz1v9a3z37ffbb";
     configureFlags = [ "no-engine" ];
     makeDepend = true;
-    patches = [ ./openssl-fix-cpuid_setup.patch ];
+    patches = [
+     ./openssl-fix-cpuid_setup.patch
+     ./1.0.2-version-script.patch
+    ];
   };
 
 }
