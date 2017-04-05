@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "9a50e32b90219a3e0b863d13f7a54f6064410371feff5f226439a0f9bff5edd1";
+    sha256 = "30e24f9681e40c79a0aadbbfd78aaa72534dd3bca3347de89dfeae055b2c99e4";
   };
 
   outputs = [ "out" "dev" ];
