@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bashcomp-dir.patch ./systemd.patch ];
 
-  buildInputs = [ python pkgconfig cmake bluez libusb1 curl gettext sqlite libiconv ]
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [ python bluez libusb1 curl gettext sqlite libiconv ]
   ++ optionals dbiSupport [ libdbi libdbiDrivers ]
   ++ optionals postgresSupport [ postgresql ];
 
