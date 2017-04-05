@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-name = "pkg-config-0.29.1";
+  name = "pkg-config-0.29.2";
 
   setupHook = ./setup-hook.sh;
 
@@ -12,7 +12,7 @@ name = "pkg-config-0.29.1";
       "https://pkgconfig.freedesktop.org/releases/${name}.tar.gz"
       "http://fossies.org/linux/misc/${name}.tar.gz"
     ];
-    sha256 = "00dh1jn8rbppmgbhhgqhmbh3c58b0gccy39rsjdlcma50sg3rd5y";
+    sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
