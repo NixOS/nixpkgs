@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, pango, libinput
 , makeWrapper, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl, cairo
 , wayland, wlc, libxkbcommon, pixman, fontconfig, pcre, json_c, dbus_libs, libcap
+, xwayland
 }:
 
 let
@@ -18,7 +19,7 @@ in
 
     nativeBuildInputs = [ makeWrapper cmake pkgconfig asciidoc libxslt docbook_xsl ];
 
-    buildInputs = [ wayland wlc libxkbcommon pixman fontconfig pcre json_c dbus_libs pango cairo libinput libcap ];
+    buildInputs = [ wayland wlc libxkbcommon pixman fontconfig pcre json_c dbus_libs pango cairo libinput libcap xwayland ];
 
     patchPhase = ''
       sed -i s@/etc/sway@$out/etc/sway@g CMakeLists.txt;
