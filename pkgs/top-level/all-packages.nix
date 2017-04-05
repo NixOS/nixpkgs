@@ -3797,6 +3797,10 @@ with pkgs;
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
+  rss2email = callPackage ../applications/networking/feedreaders/rss2email {
+    pythonPackages = python3Packages;
+  };
+
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
