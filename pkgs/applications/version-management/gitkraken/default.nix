@@ -9,11 +9,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "0ld5wdnrz4qpjl9af8hwmzli3201rfsh73lyy2zp8c98749a2zqn";
+    sha256 = "ddb9eec34232e830646633c43bc9adc61afa0eee79500af29918b62780093b2a";
   };
 
   libPath = makeLibraryPath [
