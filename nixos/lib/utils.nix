@@ -21,8 +21,8 @@ rec {
   toShellPath = shell:
     if types.shellPackage.check shell then
       "/run/current-system/sw${shell.shellPath}"
-    else if types.package.check shell then
-      throw "${shell} is not a shell package"
+    else if types.stringPath.check shell then
+      shell
     else
-      shell;
+      throw "${shell} is not a shell package";
 }
