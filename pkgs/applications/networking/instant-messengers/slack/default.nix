@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg
+{ stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, gnome2
 , libnotify, nspr, nss, systemd, xorg }:
 
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg ];
+  buildInputs = [ dpkg makeWrapper ];
   unpackPhase = "true";
   buildCommand = ''
     mkdir -p $out
@@ -73,7 +73,8 @@ in stdenv.mkDerivation {
 
     # Fix the symlink
     rm $out/bin/slack
-    ln -s $out/lib/slack/slack $out/bin/slack
+    makeWrapper $out/lib/slack/slack $out/bin/slack \
+      --set LD_LIBRARY_PATH ${rpath}
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
