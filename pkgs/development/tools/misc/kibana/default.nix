@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.elastic.co/kibana/kibana/${name}-${plat}-${elasticArch}.tar.gz";
-    sha256 = shas."${stdenv.system}";
+    sha256 = shas."${stdenv.system}" or (throw "Unknown architecture");
   };
 
   buildInputs = [ makeWrapper ];

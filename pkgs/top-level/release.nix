@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -73,6 +73,9 @@ let
     }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" supportedSystems) {
       stdenvBootstrapTools.x86_64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
+    }) // (lib.optionalAttrs (builtins.elem "aarch64-linux" supportedSystems) {
+      stdenvBootstrapTools.aarch64-linux =
+        { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "aarch64-linux"; }) dist test; };
     }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
       stdenvBootstrapTools.x86_64-darwin =
         let

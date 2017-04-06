@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ocaml, findlib, js_of_ocaml, camlp4 }:
+{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "0.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n01bsk4car40p94fk1ssvww0inqapwwhdylmrb7vv40drsdldp1";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ocamlbuild ];
   propagatedBuildInputs = [ js_of_ocaml camlp4 ];
 
   createFindlibDestdir = true;

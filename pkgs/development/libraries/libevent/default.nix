@@ -23,10 +23,20 @@ stdenv.mkDerivation {
                           | grep -v '^dh-autoreconf' | sed 's|^|debian/patches/|')"
     '';
 
-  outputs = [ "out" "dev" ];
+  # libevent_openssl is moved into its own output, so that openssl isn't present
+  # in the default closure.
+  outputs = [ "out" "dev" "openssl" ];
   outputBin = "dev";
+  propagatedBuildOutputs = [ "out" "openssl" ];
 
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
+
+  postInstall = ''
+    moveToOutput "lib/libevent_openssl*" "$openssl"
+    substituteInPlace "$dev/lib/pkgconfig/libevent_openssl.pc" \
+      --replace "$out" "$openssl"
+    sed "/^libdir=/s|$out|$openssl|" -i "$openssl"/lib/libevent_openssl.la
+  '';
 
   meta = with stdenv.lib; {
     description = "Event notification library";

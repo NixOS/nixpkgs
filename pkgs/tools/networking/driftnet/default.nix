@@ -5,8 +5,8 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "driftnet-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "8d47fd563a06122d4a6f9b9b9d27ba3d635148c0";
+  name = "driftnet-${version}";
+  version = "1.1.5";
 
   buildInputs = [
     pkgconfig libpcap libjpeg libungif libpng giflib
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "deiv";
     repo = "driftnet";
-    sha256 = "1i9fqbsfrhvr36r17v3ydr1bqsszns8gyjbvlfqbdd4l5l5n6amg";
+    rev = "0ae4a91";
+    sha256 = "1sagpx0mw68ggvqd9c3crjhghqmj7391mf2cb6cjw1cpd2hcddsj";
   };
 
   meta = {

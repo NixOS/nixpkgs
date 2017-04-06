@@ -6,11 +6,11 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "133sx42wb66g803pcrgdwph40wh94knvab3yfqkgm0001jv4v14y";
+    sha256 = "10s1i18xlmvqfrnr0zn2mj2b28i7p62dlqzzzkmpaapqj1gsgpz5";
   };
 
   buildInputs = [
@@ -20,9 +20,13 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  patchPhase = ''
+    sed -i -e 's,/usr/share,'$out/share,g src/Misc/Config.cpp src/Misc/Bank.cpp
+  '';
+
   preConfigure = "cd src";
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so -DCMAKE_INSTALL_DATAROOTDIR=$out" ];
+  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so" ];
 
   meta = with stdenv.lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";

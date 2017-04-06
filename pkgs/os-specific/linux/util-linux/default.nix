@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
   majorVersion = "2.29";
-  patchVersion = "";
+  patchVersion = "2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "1rzrmdrz51p9sy7vlw5qmj8pmqazm7hgcch5yq242mkvrikyln9c";
+    sha256 = "1qz81w8vzrmy8xn9yx7ls4amkbgwx6vr62pl6kv9g7r0g3ba9kmc";
   };
 
   patches = [ ./rtcwake-search-PATH-for-shutdown.patch ];

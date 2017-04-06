@@ -2,24 +2,24 @@
   makeWrapper, libXScrnSaver }:
 
 let
-  version = "1.9.1";
-  rev = "f9d0c687ff2ea7aabd85fb9a43129117c0ecf519";
+  version = "1.10.2";
+  rev = "8076a19fdcab7e1fc1707952d652f0bb6c6db331";
   channel = "stable";
 
   # The revision can be obtained with the following command (see https://github.com/NixOS/nixpkgs/issues/22465):
   # curl -w "%{url_effective}\n" -I -L -s -S https://vscode-update.azurewebsites.net/latest/linux-x64/stable -o /dev/null
 
-  sha256 = if stdenv.system == "i686-linux"    then "03lv792rkb1hgn1knd8kpic7q07cd194cr4fw1bimnjblrvyy586"
-      else if stdenv.system == "x86_64-linux"  then "1vrcb4y2y83bhxx9121afwbzm8yddfin4zy3nyxfi805pjmszwjm"
-      else if stdenv.system == "x86_64-darwin" then "0s92ing4m2qyqdkpmkhl2zj40hcdsr5x764sb6zprwwhfv4npymr"
+  sha256 = if stdenv.system == "i686-linux"    then "1rhwrpv17c8j06qja7i58cggzka8jm9v9h27jy22z30yxjz0p241"
+      else if stdenv.system == "x86_64-linux"  then "1c1w7wc39a5vdap8j143ym976p9l9iwns1y28mcgjwrihdlb5wb8"
+      else if stdenv.system == "x86_64-darwin" then "1zznsn84k79lqirzv950q7caq7c88yh2gglwjc11y8k69awmlpva"
       else throw "Unsupported system: ${stdenv.system}";
 
   urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
 
   urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-${channel}-code_${version}-1486596246_i386.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1488982317_i386.tar.gz"
       else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-${channel}-code_${version}-1486597190_amd64.tar.gz"
+        urlBase + "code-${channel}-code_${version}-1488981323_amd64.tar.gz"
       else if stdenv.system == "x86_64-darwin" then
         urlBase + "VSCode-darwin-${channel}.zip"
       else throw "Unsupported system: ${stdenv.system}";
@@ -47,26 +47,28 @@ in
       then [ unzip makeWrapper libXScrnSaver ]
       else [ makeWrapper libXScrnSaver ];
 
-    installPhase = ''
-      mkdir -p $out/lib/vscode $out/bin
-      cp -r ./* $out/lib/vscode
-      ln -s $out/lib/vscode/code $out/bin
+    installPhase =
+      if stdenv.system == "x86_64-darwin" then ''
+        mkdir -p $out/lib/vscode $out/bin
+        cp -r ./* $out/lib/vscode
+        ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
+      '' else ''
+        mkdir -p $out/lib/vscode $out/bin
+        cp -r ./* $out/lib/vscode
+        ln -s $out/lib/vscode/bin/code $out/bin
 
-      mkdir -p $out/share/applications
-      cp $desktopItem/share/applications/* $out/share/applications
+        mkdir -p $out/share/applications
+        cp $desktopItem/share/applications/* $out/share/applications
 
-      mkdir -p $out/share/pixmaps
-      cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
-    '';
+        mkdir -p $out/share/pixmaps
+        cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
+      '';
 
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/vscode" \
+        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1:$out/lib/vscode" \
         $out/lib/vscode/code
-
-      wrapProgram $out/bin/code \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
     meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, xorg }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, libqtxdg, xorg }:
 
 stdenv.mkDerivation rec {
   name = "screengrab-unstable-2017-02-18";
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.libqtxdg
+    qtbase
+    qttools
+    qtx11extras
+    qtsvg
+    kwindowsystem
+    libqtxdg
     xorg.libpthreadstubs
     xorg.libXdmcp
   ];

@@ -1,8 +1,9 @@
 [
   ./config/debug-info.nix
   ./config/fonts/corefonts.nix
-  ./config/fonts/fontconfig-ultimate.nix
   ./config/fonts/fontconfig.nix
+  ./config/fonts/fontconfig-penultimate.nix
+  ./config/fonts/fontconfig-ultimate.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
@@ -29,7 +30,9 @@
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
+  ./hardware/mcelog.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2100bg.nix
   ./hardware/network/intel-2200bg.nix
@@ -135,7 +138,6 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
-  ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
@@ -271,6 +273,8 @@
   ./services/misc/gogs.nix
   ./services/misc/gpsd.nix
   #./services/misc/ihaskell.nix
+  ./services/misc/irkerd.nix
+  ./services/misc/jackett.nix
   ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
@@ -291,6 +295,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
+  ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
   ./services/misc/ripple-rest.nix
@@ -327,10 +332,12 @@
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix
+  ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/snmp-exporter.nix
+  ./services/monitoring/prometheus/unifi-exporter.nix
   ./services/monitoring/prometheus/varnish-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
@@ -427,6 +434,7 @@
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
   ./services/networking/nix-serve.nix
   ./services/networking/nntp-proxy.nix
@@ -447,7 +455,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  ./services/networking/quagga.nix
+  # ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
@@ -569,6 +577,7 @@
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
+  ./services/x11/display-managers/xpra.nix
   ./services/x11/fractalart.nix
   ./services/x11/hardware/libinput.nix
   ./services/x11/hardware/multitouch.nix

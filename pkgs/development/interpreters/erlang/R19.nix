@@ -21,7 +21,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
   + "${optionalString javacSupport "-javac"}";
-  version = "19.2";
+  version = "19.3";
 
   # Minor OTP releases are not always released as tarbals at
   # http://erlang.org/download/ So we have to download from
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "erlang";
     repo = "otp";
     rev = "OTP-${version}";
-    sha256 = "06pr4ydrqpp1skx85zjb1an4kvzv6vacb771vy71k54j7w6lh9hk";
+    sha256 = "0pp2hl8jf4iafpnsmf0q7jbm313daqzif6ajqcmjyl87m5pssr86";
   };
 
   buildInputs =
@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace configure.in \
       --replace '`sw_vers -productVersion`' '10.10'
+
+    # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
   '';
 
   preConfigure = ''
@@ -92,7 +95,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny sjmackenzie couchemar ];
+    maintainers = with maintainers; [ yurrriq couchemar DerTim1 mdaiter ];
     license = licenses.asl20;
   };
 }

@@ -1,5 +1,5 @@
 { kdeFramework, lib
-, ecm
+, extra-cmake-modules
 , kcompletion
 , kconfig
 , kconfigwidgets
@@ -18,7 +18,7 @@
 kdeFramework {
   name = "kdesignerplugin";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     kcompletion kconfig kconfigwidgets kcoreaddons kiconthemes kio
     kitemviews kplotting ktextwidgets kwidgetsaddons kxmlgui sonnet

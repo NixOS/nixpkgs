@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "http://boomerang.sourceforge.net/";
     license = stdenv.lib.licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
+    broken = true;
   };
 }

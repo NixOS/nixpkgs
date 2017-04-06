@@ -111,6 +111,7 @@ in buildEnv {
         -e "s,\$SELFAUTODIR,$out/share,g" \
         -e "s,\$SELFAUTOPARENT,$out/share,g" \
         -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
+        -e "/^mpost,/d" `# CVE-2016-10243` \
         "$cnfOrig" > ./texmf.cnf
 
       patchCnfLua "./texmfcnf.lua"

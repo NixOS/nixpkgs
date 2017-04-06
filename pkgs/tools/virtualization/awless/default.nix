@@ -2,22 +2,21 @@
 
 buildGoPackage rec {
   name = "awless-${version}";
-  version = "0.0.13";
-  rev = "${version}";
+  version = "0.0.14";
 
   goPackagePath = "github.com/wallix/awless";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "wallix";
-    repo = "awless";
-    sha256 = "045n4r2mk40pjggsfcjlxni6q4arybs9x9raghqb9n8dyfg9v5kv";
+    owner  = "wallix";
+    repo   = "awless";
+    rev    = version;
+    sha256 = "1syxw8d9y1b4bdb1arsx05m5mxnd0dqp3nj7fk5j1v7cnnbja3hj";
   };
 
   meta = with stdenv.lib; {
     homepage = https://github.com/wallix/awless/;
     description = "A Mighty CLI for AWS";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
     license = licenses.asl20;
     maintainers = with maintainers; [ pradeepchhetri ];
   };

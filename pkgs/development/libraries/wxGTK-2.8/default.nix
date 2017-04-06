@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
-, gstreamer, gst_plugins_base, GConf, libX11, cairo
+, gstreamer, gst-plugins-base, GConf, libX11, cairo
 , withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l1w4i113csv3bd5r8ybyj0qpxdq83lj6jrc5p7cc10mkwyiagqz";
   };
 
-  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf libX11 cairo ]
+  buildInputs = [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst-plugins-base GConf libX11 cairo ]
     ++ optional withMesa mesa;
 
   nativeBuildInputs = [ pkgconfig ];

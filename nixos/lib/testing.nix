@@ -108,16 +108,16 @@ rec {
           mkdir -p $out/bin
           echo "$testScript" > $out/test-script
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-          vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
+          vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
           wrapProgram $out/bin/nixos-test-driver \
-            --add-flags "$vms" \
+            --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
             --set testScript '$testScript' \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
-            --add-flags "$vms" \
+            --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --set tests 'startAll; joinAll;' \
             --set VLANS '${toString vlans}' \

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" ];
   outputInclude = "lib";
 
+  configureFlags = [ "--enable-shared" ];
+
   installFlags = "etcdir=$(out)/etc vardir=$(out)/var/lib/isns";
   installTargets = "install install_hdrs install_lib";
 

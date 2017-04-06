@@ -19,13 +19,8 @@ let
         ${toString cfg.extraProperties}
       '';
 
-  configDir = pkgs.buildEnv {
-    name = "apache-kafka-conf";
-    paths = [
-      (pkgs.writeTextDir "server.properties" serverProperties)
-      (pkgs.writeTextDir "log4j.properties" cfg.log4jProperties)
-    ];
-  };
+  serverConfig = pkgs.writeText "server.properties" serverProperties;
+  logConfig = pkgs.writeText "log4j.properties" cfg.log4jProperties;
 
 in {
 
@@ -143,10 +138,11 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${pkgs.jre}/bin/java \
-            -cp "${cfg.package}/libs/*:${configDir}" \
+            -cp "${cfg.package}/libs/*" \
+            -Dlog4j.configuration=file:${logConfig} \
             ${toString cfg.jvmOptions} \
             kafka.Kafka \
-            ${configDir}/server.properties
+            ${serverConfig}
         '';
         User = "apache-kafka";
         PermissionsStartOnly = true;

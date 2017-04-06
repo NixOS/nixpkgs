@@ -16,16 +16,12 @@ stdenv.mkDerivation rec {
         "M_INSTALL_DIR=$(out)/${octave.sitePath}/m " +
         "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct ");
 
-  preConfigure = ''
-    find octave -name '*.cc' | xargs sed -i 's|Octave_map|octave_map|g'
-  '';
-
   meta = {
     homepage = "http://ab-initio.mit.edu/nlopt/";
     description = "Free open-source library for nonlinear optimization";
     license = stdenv.lib.licenses.lgpl21Plus;
     hydraPlatforms = stdenv.lib.platforms.linux;
-    broken = true;              # cannot cope with Octave 4.x
+    broken = (octave != null);              # cannot cope with Octave 4.x
   };
 
 }

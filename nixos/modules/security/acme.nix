@@ -110,7 +110,7 @@ in
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -178,7 +178,7 @@ in
                   path = [ pkgs.simp_le ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
-                    chown '${data.user}:${data.group}' '${cfg.directory}'
+                    chown -R '${data.user}:${data.group}' '${cfg.directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi

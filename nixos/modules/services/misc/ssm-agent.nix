@@ -23,6 +23,7 @@ in {
       type = types.path;
       description = "The SSM agent package to use";
       default = pkgs.ssm-agent;
+      defaultText = "pkgs.ssm-agent";
     };
   };
 

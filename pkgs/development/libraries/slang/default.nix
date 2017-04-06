@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ncurses, pcre, libpng, zlib, readline, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "slang-2.3.0";
+  name = "slang-2.3.1a";
   src = fetchurl {
-    url = "http://www.jedsoft.org/releases/slang/${name}.tar.gz";
-    sha256 = "0aqd2cjabj6nhd4r3dc4vhqif2bf3dmqnrn2gj0xm4gqyfd177jy";
+    url = "http://www.jedsoft.org/releases/slang/${name}.tar.bz2";
+    sha256 = "0dlcy0hn0j6cj9qj5x6hpb0axifnvzzmv5jqq0wq14fygw0c7w2l";
   };
 
   outputs = [ "out" "dev" "doc" ];

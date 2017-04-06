@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt }:
+{
+  stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools,
+  qtbase, qttools, qtx11extras, qtsvg, polkit-qt, kwindowsystem, liblxqt,
+  libqtxdg,
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,18 +19,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
-    qt5.qtsvg
-    qt5.polkit-qt
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
+    qtbase
+    qttools
+    qtx11extras
+    qtsvg
+    polkit-qt
+    kwindowsystem
+    liblxqt
+    libqtxdg
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];

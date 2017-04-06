@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, cmake, fuse }:
+{ stdenv, fetchFromGitHub, cmake, fuse }:
 
 stdenv.mkDerivation rec {
   name = "unionfs-fuse-${version}";
   version = "1.0";
 
-  src = fetchurl {
-    url = "https://github.com/rpodgorny/unionfs-fuse/archive/v${version}.tar.gz";
-    sha256 = "02fcrjb06lxkxpk4l8arsqmai807sray24lj2nrasqaacg80ps1f";
+  src = fetchFromGitHub {
+    owner = "rpodgorny";
+    repo = "unionfs-fuse";
+    rev = "v${version}";
+    sha256 = "0g2hd6yi6v8iqzmgncg1zi9a7ixy9hsh51rzf6jnmzi79543dihf";
   };
 
   patches =

@@ -78,7 +78,6 @@ in
         secure = mkOption {
           type = types.bool;
           default = true;
-          example = false;
           description = "Whether the connections to the proxy should be considered secure.";
         };
       };

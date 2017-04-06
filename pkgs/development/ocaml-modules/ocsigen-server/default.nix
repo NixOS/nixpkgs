@@ -1,6 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, which, ocaml_react, ocaml_ssl,
 ocaml_lwt, ocamlnet, ocaml_pcre, cryptokit, tyxml, ipaddr, zlib,
 libev, openssl, ocaml_sqlite3, tree, uutf, makeWrapper, camlp4
+, pgocaml
 }:
 
 let mkpath = p: n:
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml which findlib ocaml_react ocaml_ssl ocaml_lwt
   ocamlnet ocaml_pcre cryptokit tyxml ipaddr zlib libev openssl
-  ocaml_sqlite3 tree uutf makeWrapper camlp4 ];
+  ocaml_sqlite3 tree uutf makeWrapper camlp4 pgocaml ];
 
   configureFlags = "--root $(out) --prefix /";
 

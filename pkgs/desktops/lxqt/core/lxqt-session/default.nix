@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, xorg, xdg-user-dirs }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common, xorg, xdg-user-dirs }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -15,17 +15,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
-    lxqt.lxqt-common
+    qtbase
+    qttools
+    qtsvg
+    kwindowsystem
+    liblxqt
+    libqtxdg
+    lxqt-common
     xorg.libpthreadstubs
     xorg.libXdmcp
     xdg-user-dirs

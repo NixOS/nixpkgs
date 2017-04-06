@@ -22,7 +22,8 @@ fi;
 # server's certificate.  This is perfectly safe: we don't care
 # whether the server is being spoofed --- only the cryptographic
 # hash of the output matters. Pass in extra p's to handle redirects.
-printf 'p\np\np\n' | svn export --trust-server-cert --non-interactive ${ignoreExternals:+--ignore-externals} \
+printf 'p\np\np\n' | svn export --trust-server-cert --non-interactive \
+    ${ignoreExternals:+--ignore-externals} ${ignoreKeywords:+--ignore-keywords} \
     -r "$rev" "$url" "$out"
 
 stopNest

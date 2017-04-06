@@ -18,11 +18,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.2.0";
+  version = "4.2.1";
   name = "octave-${version}";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.gz";
-    sha256 = "0rsmg5i3b5yfvkvrl9mqvn3f2n1a6vqg45phpja1qlzkh8vsffs4";
+    sha256 = "0frk0nk3aaic8hj3g45h11rnz3arp7pjsq0frbx50sspk1iqzhl0";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
@@ -40,6 +40,12 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (python != null) python)
     ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ mesa libX11 ])
     ;
+
+  # REMOVE ON VERSION BUMP
+  # Needed for Octave-4.2.1 on darwin. See https://savannah.gnu.org/bugs/?50234
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed 's/inline file_stat::~file_stat () { }/file_stat::~file_stat () { }/' -i ./liboctave/system/file-stat.cc
+  '';
 
   doCheck = !stdenv.isDarwin;
 

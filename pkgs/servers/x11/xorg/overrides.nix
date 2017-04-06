@@ -340,7 +340,6 @@ in
   xf86videoglide      = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videoi128       = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videonewport    = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
-  xf86videoopenchrome = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videotga        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videov4l        = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
   xf86videovoodoo     = attrs: attrs // { meta = attrs.meta // { broken = true; }; };
@@ -394,6 +393,11 @@ in
     let
       attrs = with args;
         if (args.abiCompat == null) then attrs_passed
+            # All this just for 1.19.2, as the tarball is incorrectly autotoolized.
+            // {
+              nativeBuildInputs = [ utilmacros fontutil ];
+              preConfigure = "libtoolize --force; aclocal; autoheader; automake -afi";
+            }
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -567,6 +571,10 @@ in
       (args.fetchpatch {
         url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=bd94c475035739b42294477cff108e0c5f15ef67";
         sha256 = "0myfry07655adhrpypa9rqigd6rfx57pqagcwibxw7ab3wjay9f6";
+      })
+      (args.fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=78d1138dd6e214a200ca66fa9e439ee3c9270ec8";
+        sha256 = "0z3643afgrync280zrp531ija0hqxc5mrwjif9nh9lcnzgnz2d6d";
       })
     ];
   };

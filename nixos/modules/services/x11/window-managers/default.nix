@@ -8,6 +8,7 @@ in
 
 {
   imports = [
+    ./2bwm.nix
     ./afterstep.nix
     ./bspwm.nix
     ./compiz.nix

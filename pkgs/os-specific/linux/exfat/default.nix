@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, kernel }:
+
+# Upstream build for kernel > 4.10 is currently broken
+# Reference: https://github.com/dorimanx/exfat-nofuse/issues/103
+assert lib.versionOlder kernel.version "4.10";
+
+# Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
+assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.version "4.0";
 
 stdenv.mkDerivation rec {
   name = "exfat-nofuse-${version}-${kernel.version}";
@@ -24,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "exfat kernel module";
     homepage = https://github.com/dorimanx/exfat-nofuse;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ makefu ];
+    platforms = lib.platforms.linux;
   };
 }

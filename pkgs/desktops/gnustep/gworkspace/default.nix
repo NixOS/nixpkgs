@@ -4,13 +4,13 @@
 , system_preferences
 }:
 let
-  version = "0.9.3";
+  version = "0.9.4";
 in
 gsmakeDerivation {
   name = "gworkspace-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/usr-apps/gworkspace-${version}.tar.gz";
-    sha256 = "0jchqwb0dj522j98jqlqlib44jppax39zx2zqyzdwiz4qjl470r3";
+    sha256 = "0cjn83m7qmbwdpldlyhs239nwswgip3yaz01ahls130dq5qq7hgk";
   };
   # additional dependencies:
   # - PDFKit framework from http://gap.nongnu.org/

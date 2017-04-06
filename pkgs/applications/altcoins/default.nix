@@ -5,6 +5,9 @@ rec {
   bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { withGui = false; };
 
+  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
+  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
+
   bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
 
@@ -16,6 +19,7 @@ rec {
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
+  freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
   go-ethereum = callPackage ./go-ethereum.nix { };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
@@ -33,5 +37,4 @@ rec {
   primecoind = callPackage ./primecoin.nix { withGui = false; };
 
   stellar-core = callPackage ./stellar-core.nix { };
-
 }

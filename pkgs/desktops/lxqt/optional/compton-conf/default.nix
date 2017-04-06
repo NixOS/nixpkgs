@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, kde5, lxqt, libconfig }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, lxqt, libconfig }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
+    qtbase
+    qttools
     libconfig
   ];
 

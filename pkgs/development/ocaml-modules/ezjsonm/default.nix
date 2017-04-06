@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, jsonm, hex, sexplib, lwt }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, jsonm, hex, sexplib, lwt }:
 
 let version = "0.4.3"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1y6p3ga6vj1wx5dyns7hjgd0qgrrn2hnn323a7y5didgci5pybls";
   };
 
-  buildInputs = [ ocaml findlib lwt ];
+  buildInputs = [ ocaml findlib ocamlbuild lwt ];
   propagatedBuildInputs = [ jsonm hex sexplib ];
   createFindlibDestdir = true;
 

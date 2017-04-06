@@ -1,17 +1,20 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchFromGitHub, python3Packages, hackrf, rtl-sdr }:
 
 python3Packages.buildPythonApplication rec {
   name = "urh-${version}";
-  version = "1.3.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = "urh";
     rev = "v${version}";
-    sha256 = "137dsxs4i0lmxwp31g8fzwpwv1i8rsiir9gxvs5cmnwsrbcrdvxh";
+    sha256 = "1f7hz2zs2dx3v6hpdyz7wyyq1xf641jhpljyhvmjr4zg5m035isa";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyqt5 numpy psutil cython ];
+  buildInputs = [ hackrf rtl-sdr ];
+  propagatedBuildInputs = with python3Packages; [
+    pyqt5 numpy psutil cython pyzmq
+  ];
 
   doCheck = false;
 

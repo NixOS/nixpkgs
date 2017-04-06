@@ -4,14 +4,14 @@
 stdenv.mkDerivation rec {
 
   name = "cimg-${version}";
-  version = "1.7.0";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "http://cimg.eu/files/CImg_${version}.zip";
-    sha256 = "06j3n7gvgxzvprqwf56nnca195y38dcbdlszrxyn5p9w9al437zj";
+    sha256 = "07g81jn25y2wksg9ycf9a7f5bfpcdl3xbrkp1xy3czl043a00y7s";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   builder = ./builder.sh;
 

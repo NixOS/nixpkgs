@@ -104,13 +104,13 @@ in {
     users.extraGroups = mkIf isMLocate { mlocate = {}; };
 
     security.wrappers = mkIf isMLocate {
-      mlocate = {
+      locate = {
         group = "mlocate";
         owner = "root";
         permissions = "u+rx,g+x,o+x";
         setgid = true;
         setuid = false;
-        program = "locate";
+        source = "${cfg.locate}/bin/locate";
       };
     };
 

@@ -1,17 +1,16 @@
-{ stdenv, fetchgit, nix }:
-
+{ stdenv, fetchFromGitHub, nix, boehmgc }:
+let version = "2.0.7"; in
 stdenv.mkDerivation {
-  name = "nix-plugins-1.0.0";
+  name = "nix-plugins-${version}";
 
-  src = fetchgit {
-    url = git://github.com/shlevy/nix-plugins.git;
-    rev = "refs/tags/1.0.0";
-    sha256 = "1w7l4mdwgf5w1g48mbng4lcg2nihixvp835mg2j7gghnya309fxl";
+  src = fetchFromGitHub {
+    owner = "shlevy";
+    repo = "nix-plugins";
+    rev = version;
+    sha256 = "1q4ydp2w114wbfm41m4qgrabha7ifa17xyz5dr137vvnj6njp4vs";
   };
 
-  buildInputs = [ nix ];
-
-  buildFlags = [ "NIX_INCLUDE=${nix}/include" ];
+  buildFlags = [ "NIX_INCLUDE=${nix.dev}/include" "GC_INCLUDE=${boehmgc.dev}/include" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -20,6 +19,5 @@ stdenv.mkDerivation {
     homepage = https://github.com/shlevy/nix-plugins;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;
-    broken = true;
   };
 }

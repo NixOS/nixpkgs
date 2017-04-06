@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, perl }:
+{ stdenv, fetchurl, pkgconfig, libxml2, perl, autoreconfHook, doxygen }:
 
 let
-  name = "libsmbios-2.2.28";
+  version = "2.3.2";
 in
 stdenv.mkDerivation {
-  inherit name;
+  name = "libsmbios-${version}";
 
   src = fetchurl {
-    url = "http://linux.dell.com/libsmbios/download/libsmbios/${name}/${name}.tar.gz";
-    sha256 = "03m0n834w49acwbf5cf9ync1ksnn2jkwaysvy7584y60qpmngb91";
+    url = "https://github.com/dell/libsmbios/archive/v${version}.tar.gz";
+    sha256 = "0kvi36jrvhspyyq0pjfdyvzvimdn27fvbdpf429qm3xdmfi78y2j";
   };
 
-  buildInputs = [ pkgconfig libxml2 perl ];
+  buildInputs = [ pkgconfig libxml2 perl autoreconfHook doxygen ];
 
   # It tries to install some Python stuff even when Python is disabled.
   installFlags = "pkgpythondir=$(TMPDIR)/python";
 
-  # It forgets to install headers.
   postInstall =
     ''
+      mkdir -p $out/include
       cp -va "src/include/"* "$out/include/"
       cp -va "out/public-include/"* "$out/include/"
     '';

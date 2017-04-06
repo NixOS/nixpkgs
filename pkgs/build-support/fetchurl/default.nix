@@ -87,12 +87,14 @@ assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 let
 
   hasHash = showURLs || (outputHash != "" && outputHashAlgo != "")
-    || md5 != "" || sha1 != "" || sha256 != "" || sha512 != "";
+    || sha1 != "" || sha256 != "" || sha512 != "";
   urls_ = if urls != [] then urls else [url];
 
 in
 
-if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}" else stdenv.mkDerivation {
+if md5 != "" then throw "fetchsvnssh does not support md5 anymore, please use sha256 or sha512"
+else if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}"
+else stdenv.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
@@ -110,9 +112,9 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
 
   # New-style output content requirements.
   outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
-      if sha512 != "" then "sha512" else if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
+      if sha512 != "" then "sha512" else if sha256 != "" then "sha256" else "sha1";
   outputHash = if outputHash != "" then outputHash else
-      if sha512 != "" then sha512 else if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
+      if sha512 != "" then sha512 else if sha256 != "" then sha256 else sha1;
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 

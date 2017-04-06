@@ -176,7 +176,7 @@ let
 
   redis = if isPhp7 then redisPhp7 else redis22;
 
-  redis22 = buildPecl {
+  redis22 = assert !isPhp7; buildPecl {
     name = "redis-2.2.7";
     sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
@@ -235,11 +235,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.3.2";
+    version = "1.4.1";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "0s85zglzwx5i0hw9zlpwy1385jink1g1lhdwhv59zdjblcd7ckva";
+      sha256 = "1g2wsnjcx1ysbw1ps2xwyhgcl8kl3yfzxgwcnh5rigjk6k67glmb";
     };
 
     phases = [ "installPhase" ];

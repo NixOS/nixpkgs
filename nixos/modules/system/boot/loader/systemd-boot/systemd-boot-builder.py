@@ -32,8 +32,11 @@ def write_loader_conf(generation):
             f.write("editor 0");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
+def profile_path(generation, name):
+    return os.readlink("%s/%s" % (system_dir(generation), name))
+
 def copy_from_profile(generation, name, dry_run=False):
-    store_file_path = os.readlink("%s/%s" % (system_dir(generation), name))
+    store_file_path = profile_path(generation, name)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
     efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
@@ -44,6 +47,11 @@ def copy_from_profile(generation, name, dry_run=False):
 def write_entry(generation, machine_id):
     kernel = copy_from_profile(generation, "kernel")
     initrd = copy_from_profile(generation, "initrd")
+    try:
+        append_initrd_secrets = profile_path(generation, "append-initrd-secrets")
+        subprocess.check_call([append_initrd_secrets, "@efiSysMountPoint@%s" % (initrd)])
+    except FileNotFoundError:
+        pass
     entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
     generation_dir = os.readlink(system_dir(generation))
     tmp_path = "%s.tmp" % (entry_file)

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , automoc4, cmake, gettext, makeWrapper, perl, pkgconfig
-, kdelibs, cairo, dbus_glib, mplayer
+, kdelibs4, cairo, dbus_glib, mplayer
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1yvbkb1hh5y7fqfvixjf2rryzm0fm0fpkx4lmvhi7k7d0v4wpgky";
   };
 
-  buildInputs = [ kdelibs cairo dbus_glib ];
+  buildInputs = [ kdelibs4 cairo dbus_glib ];
 
   nativeBuildInputs = [ automoc4 cmake gettext makeWrapper perl pkgconfig ];
 

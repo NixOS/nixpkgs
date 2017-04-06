@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "178nn4dl7wbcw499czikirnkniwnx36argdnqgz4ik9i6zvwkm6y";
   };
 
-  patches = [ ./memory-leak.patch ];
+  patches = [ ./memory-leak.patch ./no-install-statedir.patch ];
 
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
+  configureFlags = [ "--localstatedir=/var/cache" ];
+
   crossAttrs = {
-    # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
-    configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
+    # Fix the 'buildInputs = [ coreutils ]' above - that adds the cross coreutils to PATH :(
+    propagatedBuildInputs = [ ];
   };
 
   enableParallelBuilding = true;
