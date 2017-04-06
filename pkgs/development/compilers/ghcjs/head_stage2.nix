@@ -382,7 +382,6 @@
         version = "1.24.0.0";
         src = "${ghcjsBoot}/boot/cabal/Cabal";
         doCheck = false;
-        hyperlinkSource = false;
         libraryHaskellDepends = [
           array base binary bytestring containers deepseq directory filepath
           pretty process time unix
