@@ -751,6 +751,24 @@ in {
     };
   };
 
+  aniso8601 = buildPythonPackage rec {
+    name = "aniso8601-${version}";
+    version = "1.2.0";
+ 
+    meta = {
+      description = "Parses ISO 8601 strings.";
+      homepage    = "https://bitbucket.org/nielsenb/aniso8601";
+      license     = licenses.bsd3;
+    };
+ 
+    propagatedBuildInputs = with self; [ dateutil ];
+ 
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/aniso8601/${name}.tar.gz";
+      sha256 = "502400f82574afa804cc915d83f15c67533d364dcd594f8a6b9d2053f3404dd4";
+    };
+  };
+
   asgiref = buildPythonPackage rec {
     name = "asgiref-${version}";
     version = "1.0.0";
@@ -1217,12 +1235,11 @@ in {
   };
 
   apscheduler = buildPythonPackage rec {
-    name = "APScheduler-3.0.4";
-    disabled = !isPy27;
+    name = "APScheduler-3.3.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/A/APScheduler/${name}.tar.gz";
-      sha256 = "1ljjhn6cv8b1pccsi3mgc887ypi2vim317r9p0zh0amd0bhkk6wb";
+      sha256 = "f68874dff1bdffcc6ce3adb7840c1e4d162c609a3e3f831351df30b75732767b";
     };
 
     buildInputs = with self; [
@@ -1232,8 +1249,8 @@ in {
       twisted
       mock
       trollius
-      funcsigs
       gevent
+      setuptools_scm
     ];
 
     propagatedBuildInputs = with self; [
@@ -1241,6 +1258,7 @@ in {
       pytz
       tzlocal
       futures
+      funcsigs
     ];
 
     meta = with pkgs.stdenv.lib; {
@@ -2027,13 +2045,13 @@ in {
   };
 
   babelfish = buildPythonPackage rec {
-    version = "0.5.3";
+    version = "0.5.5";
     name = "babelfish-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/babelfish/${name}.tar.gz";
-      sha256 = "0wrw21dyq7v6lbffwvi1ik43d7dhmcv8xvgrrihhiv7ys1rd3gag";
+      sha256 = "8380879fa51164ac54a3e393f83c4551a275f03617f54a99d70151358e444104";
     };
 
     meta = {
@@ -2141,26 +2159,6 @@ in {
       license = licenses.mit;
       maintainers = with maintainers; [ domenkozar ];
     };
-  });
-
-  # flexget needs beatifulsoup < 4.4 for now
-  beautifulsoup_4_1_3 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "0cbcml88bkx9gf1wznxa0kqz1wpyakfbyh9gmxw0wljhda1q0zk1";
-    };
-
-    meta = {
-      homepage = http://crummy.com/software/BeautifulSoup/bs4/;
-      description = "HTML and XML parser";
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-
-    disabled = isPy3k;
-
   });
 
   beaker = buildPythonPackage rec {
@@ -2468,6 +2466,22 @@ in {
     doCheck = false; # weird error
 
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
+  };
+
+  colorclass = buildPythonPackage rec {
+    version = "2.2.0";
+    name = "colorclass-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/colorclass/${name}.tar.gz";
+      sha256 = "b05c2a348dfc1aff2d502527d78a5b7b7e2f85da94a96c5081210d8e9ee8e18b";
+    };
+
+    meta = {
+      homepage = "https://github.com/Robpol86/colorclass";
+      license = licenses.mit;
+      description = "Automatic support for console colors";
+    };
   };
 
   colorlog = buildPythonPackage rec {
@@ -3787,15 +3801,17 @@ in {
 
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-${version}";
-    version = "3.2.2";
+    version = "8.7.0";
 
     src = pkgs.fetchurl {
-      url = "http://download.cherrypy.org/cherrypy/${version}/CherryPy-${version}.tar.gz";
-      sha256 = "14dn129h69wj0h8yr0bjwbrk8kygl6mkfnxc5m3fxhlm4xb8hnnw";
+      url = "mirror://pypi/C/CherryPy/CherryPy-${version}.tar.gz";
+      sha256 = "cbf418bf46458a67eb841944f2d414c23bf59d090baf2a28704bd67243e6a79f";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    # wsgiserver.ssl_pyopenssl is broken on py3k.
+    doCheck = !isPy3k;
+    buildInputs = with self; [ pytest setuptools_scm pytestrunner ];
+    propagatedBuildInputs = with self; [ six ];
 
     meta = {
       homepage = "http://www.cherrypy.org";
@@ -6061,28 +6077,6 @@ in {
     };
 
     propagatedBuildInputs = with self; [ self.six ];
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
-
-  # flexget requires 2.1
-  dateutil_2_1 = buildPythonPackage (rec {
-    name = "dateutil-2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
-    };
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -9598,6 +9592,23 @@ in {
     };
   };
 
+  safe = buildPythonPackage rec {
+    version = "0.4";
+    name = "Safe-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/S/Safe/${name}.tar.gz";
+      sha256 = "a2fdac9fe8a9dcf02b438201d6ce0b7be78f85dc6492d03edfb89be2adf489de";
+    };
+
+    buildInputs = with self; [ nose ];
+    meta = {
+      homepage = "https://github.com/lepture/safe";
+      license = licenses.bsd3;
+      description = "Check password strength";
+    };
+  };
+
   samplerate = buildPythonPackage rec {
     name = "scikits.samplerate-${version}";
     version = "0.3.3";
@@ -11462,6 +11473,24 @@ in {
     };
   };
 
+  flask-compress = buildPythonPackage rec {
+    name = "Flask-Compress-${version}";
+    version = "1.3.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flask-Compress/${name}.tar.gz";
+      sha256 = "4fbb53e7f6ce8b1458a2c3d7a528564912f2641ab2f9f43819fc96ed7f770734";
+    };
+
+    propagatedBuildInputs = with self; [ flask ];
+
+    meta = {
+      description = "Compress responses in your Flask app with gzip";
+      homepage = "https://libwilliam.github.io/flask-compress/";
+      license = licenses.mit;
+    };
+  };
+
   flask-cors = buildPythonPackage rec {
     name = "Flask-Cors-${version}";
     version = "2.1.2";
@@ -11549,6 +11578,51 @@ in {
       homepage = "http://flask-pymongo.readthedocs.org/";
       description = "PyMongo support for Flask applications";
       license = licenses.bsd2;
+    };
+  };
+
+  flask-restful = buildPythonPackage rec {
+    name = "Flask-RESTful-${version}";
+    version = "0.3.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flask-RESTful/${name}.tar.gz";
+      sha256 = "cce4aeff959b571136b5af098bebe7d3deeca7eb1411c4e722ff2c5356ab4c42";
+    };
+
+    # TypeError: Only byte strings can be passed to C code
+    patchPhase = if isPy3k then ''
+      rm tests/test_crypto.py tests/test_paging.py
+    '' else null;
+    buildInputs = with self; [ nose mock blinker ];
+    propagatedBuildInputs = with self; [ flask six pytz aniso8601 pycrypto ];
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+
+    meta = {
+      homepage = "http://flask-restful.readthedocs.io/";
+      description = "REST API building blocks for Flask";
+      license = licenses.bsd3;
+    };
+  };
+
+  flask-restplus = buildPythonPackage rec {
+    name = "flask-restplus-${version}";
+    # Exactly 0.8.6 is required by flexget
+    version = "0.8.6";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flask-restplus/${name}.tar.gz";
+      sha256 = "3bb76cc156b9a09da62396d82b29fa31e4f27cccf79528538fe7155cf2785593";
+    };
+
+    buildInputs = with self; [ nose blinker tzlocal mock rednose ];
+    propagatedBuildInputs = with self; [ flask six jsonschema pytz aniso8601 flask-restful ];
+
+    meta = {
+      homepage = "https://github.com/noirbizarre/flask-restplus";
+      description = "Fast, easy and documented API development with Flask";
+      license = licenses.mit;
     };
   };
 
@@ -12553,26 +12627,47 @@ in {
   };
 
   guessit = buildPythonPackage rec {
-    version = "0.9.4";
+    version = "2.0.4";
     name = "guessit-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/guessit/${name}.tar.gz";
-      sha256 = "068d3dmyk4v04p2zna0340lsdnpkm10gyza62apd9akgjh9rfs48";
+      sha256 = "4f72e21fca9c294651abee26554e2ad778220d90a84f6e1195299a7ec17accb1";
     };
 
-    propagatedBuildInputs = with self; [
-      dateutil_2_1 requests stevedore babelfish pyyaml
-    ];
-
-    # A unicode test fails
+    # Tests require more packages.
     doCheck = false;
+    buildInputs = with self; [ pytestrunner ];
+    propagatedBuildInputs = with self; [
+      dateutil babelfish rebulk
+    ];
 
     meta = {
       homepage = http://pypi.python.org/pypi/guessit;
       license = licenses.lgpl3;
       description = "A library for guessing information from video files";
+    };
+  };
+
+  rebulk = buildPythonPackage rec {
+    version = "0.8.2";
+    name = "rebulk-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rebulk/${name}.tar.gz";
+      sha256 = "8c09901bda7b79a21d46faf489d67d017aa54d38bdabdb53f824068a6640401a";
+    };
+
+    # Some kind of trickery with imports that doesn't work.
+    doCheck = false;
+    buildInputs = with self; [ pytest pytestrunner ];
+    propagatedBuildInputs = with self; [ six regex ];
+
+    meta = {
+      homepage = "https://github.com/Toilal/rebulk/";
+      license = licenses.mit;
+      description = "Advanced string matching from simple patterns";
     };
   };
 
@@ -12708,11 +12803,13 @@ in {
   });
 
   httpbin = buildPythonPackage rec {
-    name = "httpbin-0.2.0";
+    name = "httpbin-0.5.0";
+    # Fails to install on py3k
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpbin/${name}.tar.gz";
-      sha256 = "6b57f563900ecfe126015223a259463848daafbdc2687442317c0992773b9054";
+      sha256 = "79fbc5d27e4194ea908b0fa18e09a59d95d287c91667aa69bcd010342d1589b5";
     };
 
     propagatedBuildInputs = with self; [ flask markupsafe decorator itsdangerous six ];
@@ -16109,6 +16206,23 @@ in {
     };
 
     buildInputs = with self; [ nose ];
+  };
+
+  rednose = buildPythonPackage rec {
+    name = "rednose-${version}";
+    version = "1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rednose/${name}.tar.gz";
+      sha256 = "0b0bsna217lr1nykyhl5fgjly15zhdvqd4prg4wy1zrgfv7al6m0";
+    };
+
+    meta = {
+      description = "A python nose plugin adding color to console results.";
+    };
+
+    buildInputs = with self; [ nose six ];
+    propagatedBuildInputs = with self; [ colorama termstyle ];
   };
 
   notebook = buildPythonPackage rec {
@@ -25587,6 +25701,22 @@ in {
     };
   };
 
+  terminaltables = buildPythonPackage rec {
+    name = "terminaltables-${version}";
+    version = "3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/terminaltables/${name}.tar.gz";
+      sha256 = "f3eb0eb92e3833972ac36796293ca0906e998dc3be91fbe1f8615b331b853b81";
+    };
+
+    meta = {
+      description = "Display simple tables in terminals";
+      homepage = "https://github.com/Robpol86/terminaltables";
+      license = licenses.mit;
+    };
+  };
+
   keystoneclient = buildPythonPackage rec {
     name = "keystoneclient-${version}";
     version = "1.8.1";
@@ -26727,6 +26857,49 @@ in {
       repositories.git = git://github.com/saghul/pyuv.git;
       license = licenses.mit;
     };
+  };
+
+  pytest-httpbin = buildPythonPackage rec {
+    name = "pytest-httpbin-${version}";
+    version = "0.2.3";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/kevin1024/pytest-httpbin/archive/v${version}.tar.gz";
+      sha256 = "a7217b2cd3f91bc2c31529b0c9d95b46ad9101baf5ad12128a41b9a619996b9e";
+    };
+
+    # test_dont_crash_on_certificate_problems fails
+    doCheck = false;
+    checkPhase = "py.test tests/";
+    buildInputs = with self; [ pytest requests ];
+    propagatedBuildInputs = with self; [ flask decorator httpbin six ];
+  };
+
+  vcrpy = buildPythonPackage rec {
+    name = "vcrpy-${version}";
+    version = "1.10.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vcrpy/${name}.tar.gz";
+      sha256 = "c70464484e036e6e9339df433bca813174e14828e42886622d416e2fcd63768a";
+    };
+
+    # These tests try to use the network to reach external services.
+    patchPhase = ''
+      rm tests/unit/test_stubs.py tests/integration/test_wild.py
+    '';
+    checkPhase = ''
+      cat $(python -c 'import requests; print(requests.certs.where())') \
+          $(python -m pytest_httpbin.certs) > certs.pem
+      export REQUESTS_CA_BUNDLE=certs.pem
+      py.test
+    '';
+    buildInputs = with self; [ pytest pytest-httpbin mock requests2 ];
+    propagatedBuildInputs = with self; [ six wrapt pyyaml ]
+      ++ (if isPy27 then [ contextlib2 mock ] else [ yarl ]);
+    # 2.6 and older require backport_collections which isn't packaged, and
+    # 3.3 isn't supported at all.
+    disabled = (pythonOlder "2.7") || isPy33;
   };
 
   virtkey = buildPythonPackage rec {
@@ -31310,6 +31483,9 @@ EOF
       lockfile
       clize
     ];
+    # zerobin doesn't have any tests, but includes a copy of cherrypy which
+    # can wrongly fail the check phase.
+    doCheck = false;
     meta = {
       description = "A client side encrypted pastebin";
       homepage = "http://0bin.net/";
