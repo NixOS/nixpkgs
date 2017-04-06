@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan, qt5
 , useGnupg1 ? false, gnupg1 ? null }:
 
 assert useGnupg1 -> gnupg1 != null;
@@ -19,13 +19,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
-  propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
+  propagatedBuildInputs = [ libgpgerror glib libassuan pth qt5.qtbase ];
 
   nativeBuildInputs = [ pkgconfig gnupg ];
 
   configureFlags = [
     "--enable-fixed-path=${gpgStorePath}/bin"
   ];
+
+  patches = [ ./gpgme_libsuffix.patch ];
 
   NIX_CFLAGS_COMPILE =
     with stdenv; lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
