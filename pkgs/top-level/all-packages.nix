@@ -12636,6 +12636,11 @@ with pkgs;
   source-han-sans-korean = sourceHanSansPackages.korean;
   source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
   source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
+  sourceHanSerifPackages = callPackage ../data/fonts/source-han-serif { };
+  source-han-serif-japanese = sourceHanSerifPackages.japanese;
+  source-han-serif-korean = sourceHanSerifPackages.korean;
+  source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
+  source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
