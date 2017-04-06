@@ -247,6 +247,7 @@
   ./services/mail/rmilter.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
+  ./services/misc/autorandr.nix
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
