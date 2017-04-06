@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "4.9.19";
+  version = "4.9.20";
   extraMeta.branch = "4.9";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "004qj678i7y951b48yb199hh0kjwicj784c6sbkyvy2y3162fykg";
+    sha256 = "0h8km3z5c3qyhwq24dvh00j2jzfcyqdjjcjrrz5qvyrjvl30hrj8";
   };
 
   kernelPatches = args.kernelPatches;

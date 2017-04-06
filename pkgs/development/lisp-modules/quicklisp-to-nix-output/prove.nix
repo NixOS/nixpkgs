@@ -1,21 +1,34 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''prove'';
-  version = ''20170124-git'';
+  version = ''20170403-git'';
 
   description = '''';
 
-  deps = [ args."alexandria" args."cl-ansi-text" args."cl-colors" args."cl-ppcre" args."uiop" ];
+  deps = [ args."uiop" args."cl-ppcre" args."cl-colors" args."cl-ansi-text" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/prove/2017-01-24/prove-20170124-git.tgz'';
-    sha256 = ''1kyhh4yvf47psb5v0zqivcwn71n6my5fwggdifymlpigk2q3zn03'';
+    url = ''http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz'';
+    sha256 = ''091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl'';
   };
 
   overrides = x: {
     postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :prove)"' "$out/bin/prove-lisp-launcher.sh" ""
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/prove[.]asd${"$"}' |
+        while read f; do
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
     '';
   };
 }
+/* (SYSTEM prove DESCRIPTION NIL SHA256 091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl URL
+    http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz MD5 063b615692c8711d2392204ecf1b37b7 NAME prove TESTNAME NIL FILENAME prove DEPS
+    ((NAME uiop) (NAME cl-ppcre) (NAME cl-colors) (NAME cl-ansi-text) (NAME alexandria)) DEPENDENCIES (uiop cl-ppcre cl-colors cl-ansi-text alexandria) VERSION
+    20170403-git SIBLINGS (cl-test-more prove-asdf prove-test)) */

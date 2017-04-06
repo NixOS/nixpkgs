@@ -142,35 +142,42 @@ in
             after = [ "network-pre.target" ] ++ (deviceDependency i.name);
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
+            # Restart rather than stop+start this unit to prevent the
+            # network from dying during switch-to-configuration.
+            stopIfChanged = false;
             path = [ pkgs.iproute ];
             script =
               ''
+                # FIXME: shouldn't this be done in network-link?
                 echo "bringing up interface..."
                 ip link set "${i.name}" up
 
-                restart_network_interfaces=false
+                state="/run/nixos/network/addresses/${i.name}"
+
+                mkdir -p $(dirname "$state")
+
               '' + flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
                 ''
-                  echo "checking ip ${address}..."
+                  echo "${address}" >> $state
                   if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                    echo "added ip ${address}..."
+                    echo "added ip ${address}"
                   elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
                     echo "failed to add ${address}"
                     exit 1
                   fi
                 '');
-            preStop = flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo -n "deleting ${address}..."
-                  ip addr del "${address}" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
-                  echo ""
-                '');
+            preStop = ''
+              state="/run/nixos/network/addresses/${i.name}"
+              while read address; do
+                echo -n "deleting $address..."
+                ip addr del "$address" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
+                echo ""
+              done < "$state"
+              rm -f "$state"
+            '';
           };
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"

@@ -43,8 +43,13 @@ in stdenv.mkDerivation {
     ++ optional (!stdenv.isLinux) gnumake;
 
   patches =
-    [ ./enable-table-validation.patch ]
-    ++ optional useEncumberedCode ./enable-subpixel-rendering.patch;
+    [
+      ./pcf-introduce-driver.patch
+      ./pcf-config-long-family-names.patch
+      ./disable-pcf-long-family-names.patch
+      ./enable-table-validation.patch
+    ] ++
+    optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [ "out" "dev" ];
 

@@ -53,6 +53,8 @@ let
 
         ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
 
+        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+
         ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
 

@@ -5,7 +5,7 @@ rec {
 
   description = ''Reader Syntax Coventions for Common Lisp and SLIME'';
 
-  deps = [ args."named-readtables" args."trivial-types" ];
+  deps = [ args."trivial-types" args."named-readtables" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz'';
@@ -14,8 +14,21 @@ rec {
 
   overrides = x: {
     postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :cl-syntax)"' "$out/bin/cl-syntax-lisp-launcher.sh" ""
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/cl-syntax[.]asd${"$"}' |
+        while read f; do
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
     '';
   };
 }
+/* (SYSTEM cl-syntax DESCRIPTION Reader Syntax Coventions for Common Lisp and SLIME SHA256 1pz9a7hiql493ax5qgs9zb3bmvf0nnmmgdx14s4j2apdy2m34v8n URL
+    http://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz MD5 602b84143aafe59d65f4e08ac20a124a NAME cl-syntax TESTNAME NIL FILENAME
+    cl-syntax DEPS ((NAME trivial-types) (NAME named-readtables)) DEPENDENCIES (trivial-types named-readtables) VERSION 20150407-git SIBLINGS
+    (cl-syntax-annot cl-syntax-anonfun cl-syntax-clsql cl-syntax-fare-quasiquote cl-syntax-interpol cl-syntax-markup)) */

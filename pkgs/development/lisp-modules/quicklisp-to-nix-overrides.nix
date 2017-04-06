@@ -1,4 +1,4 @@
-{pkgs, buildLispPackage, quicklisp-to-nix-packages}:
+{pkgs, buildLispPackage, clwrapper, quicklisp-to-nix-packages}:
 let
   addDeps = newdeps: x: {deps = x.deps ++ newdeps;};
   addNativeLibs = libs: x: { propagatedBuildInputs = libs; };
@@ -10,14 +10,24 @@ let
     ((builtins.head l) x) // (multiOverride (builtins.tail l) x);
 in
 {
-  stumpwm = addDeps (with qlnp; [alexandria cl-ppcre clx]);
+  stumpwm = x:{
+    overrides = y: (x.overrides y) // {
+      preConfigure = ''
+        export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
+      '';
+    };
+  };
   iterate = skipBuildPhase;
   cl-fuse = x: {
     propagatedBuildInputs = [pkgs.fuse];
     overrides = y : (x.overrides y) // {
       configurePhase = ''
+        export SAVED_CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY"
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$PWD"
         export makeFlags="$makeFlags LISP=common-lisp.sh"
+      '';
+      preInstall = ''
+        export CL_SOURCE_REGISTRY="$SAVED_CL_SOURCE_REGISTRY"
       '';
     };
   };
@@ -31,14 +41,13 @@ in
     flexi-streams circular-streams ironclad cl-syntax-annot alexandria
     split-sequence
   ]);
-  cxml = skipBuildPhase;
-  cxml-xml = skipBuildPhase;
-  cxml-dom = skipBuildPhase;
-  cxml-klacks = skipBuildPhase;
-  cxml-test = skipBuildPhase;
+  lack = addDeps (with qlnp; [ironclad]);
+  cxml = multiOverride [ skipBuildPhase (addDeps (with qlnp; [
+    closure-common puri trivial-gray-streams
+  ]))];
   wookie = multiOverride [(addDeps (with qlnp; [
       alexandria blackbird cl-async chunga fast-http quri babel cl-ppcre
-      cl-fad fast-io vom do-urlencode
+      cl-fad fast-io vom do-urlencode cl-async-ssl
     ])) 
     (addNativeLibs (with pkgs; [libuv openssl]))];
   woo = addDeps (with qlnp; [
@@ -57,9 +66,70 @@ in
   "cl+ssl" = addNativeLibs [pkgs.openssl];
   cl-colors = skipBuildPhase;
   cl-libuv = addNativeLibs [pkgs.libuv];
+  cl-async = addDeps (with qlnp; [cl-async-base]);
+  cl-async-ssl = multiOverride [(addDeps (with qlnp; [cl-async-base]))
+    (addNativeLibs [pkgs.openssl])];
+  cl-async-repl = addDeps (with qlnp; [cl-async]);
   cl-async-base = addDeps (with qlnp; [
     cffi fast-io vom cl-libuv cl-ppcre trivial-features static-vectors
     trivial-gray-streams babel
   ]);
+  cl-async-util = addDeps (with qlnp; [ cl-async-base ]);
   css-lite = addDeps (with qlnp; [parenscript]);
+  clsql = x: {
+    propagatedBuildInputs = with pkgs; [mysql postgresql sqlite zlib];
+    overrides = y: (x.overrides y) // {
+      preConfigure = ((x.overrides y).preConfigure or "") + ''
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.lib.getDev pkgs.mysql.client}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.lib.getLib pkgs.mysql.client}/lib/mysql"
+      '';
+    };
+  };
+  clx-truetype = skipBuildPhase;
+  query-fs = x: {
+    overrides = y: (x.overrides y) // {
+      linkedSystems = [];
+      postInstall = ((x.overrides y).postInstall or "") + ''
+        export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
+	export HOME=$PWD
+	build-with-lisp.sh sbcl \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
+	  "$out/bin/query-fs" \
+	  "(query-fs:run-fs-with-cmdline-args)"
+      '';
+    };
+  };
+  cffi = multiOverride [(addNativeLibs [pkgs.libffi])
+    (addDeps (with qlnp; [uffi uiop trivial-features]))];
+  cl-vectors = addDeps (with qlnp; [zpb-ttf]);
+  "3bmd" = addDeps (with qlnp; [esrap split-sequence]);
+  cl-dbi = addDeps (with qlnp; [
+    cl-syntax cl-syntax-annot split-sequence closer-mop bordeaux-threads
+  ]);
+  dbd-sqlite3 = addDeps (with qlnp; [cl-dbi]);
+  dbd-postgres = addDeps (with qlnp; [cl-dbi]);
+  dbd-mysql = addDeps (with qlnp; [cl-dbi]);
+  cl-mysql = addNativeLibs [pkgs.mysql];
+  cl-ppcre-template = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        ln -s lib-dependent/*.asd .
+      '';
+    };
+  };
+  cl-unification = addDeps (with qlnp; [cl-ppcre]);
+  cl-syntax-annot = addDeps (with qlnp; [cl-syntax]);
+  cl-syntax-anonfun = addDeps (with qlnp; [cl-syntax]);
+  cl-syntax-markup = addDeps (with qlnp; [cl-syntax]);
+  cl-test-more = addDeps (with qlnp; [prove]);
+  babel-streams = addDeps (with qlnp; [babel]);
+  plump = addDeps (with qlnp; [array-utils trivial-indent]);
+  sqlite = addNativeLibs [pkgs.sqlite];
+  uiop = x: {
+    overrides = y: (x.overrides y) // {
+      postInstall = ((x.overrides y).postInstall or "") + ''
+        cp -r "${pkgs.asdf}/lib/common-lisp/asdf/uiop/contrib" "$out/lib/common-lisp/uiop"
+      '';
+    };
+  };
 }

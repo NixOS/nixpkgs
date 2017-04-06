@@ -18,7 +18,7 @@ Index: qttools-opensource-src-5.8.0/src/assistant/help/Qt5HelpConfigExtras.cmake
      _qt5_Help_check_file_exists(${imported_location})
  
      set_target_properties(Qt5::qcollectiongenerator PROPERTIES
-@@ -17,11 +16,7 @@ endif()
+@@ -17,11 +16,10 @@ endif()
  if (NOT TARGET Qt5::qhelpgenerator)
      add_executable(Qt5::qhelpgenerator IMPORTED)
  
@@ -28,6 +28,9 @@ Index: qttools-opensource-src-5.8.0/src/assistant/help/Qt5HelpConfigExtras.cmake
 -    set(imported_location \"$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
 -!!ENDIF
 +    set(imported_location \"@NIX_OUT@/$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
++    if(NOT EXISTS \"${imported_location}\")
++        set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
++    endif()
      _qt5_Help_check_file_exists(${imported_location})
  
      set_target_properties(Qt5::qhelpgenerator PROPERTIES

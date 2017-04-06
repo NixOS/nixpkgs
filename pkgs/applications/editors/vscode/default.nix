@@ -55,7 +55,7 @@ in
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-        ln -s $out/lib/vscode/code $out/bin
+        ln -s $out/lib/vscode/bin/code $out/bin
 
         mkdir -p $out/share/applications
         cp $desktopItem/share/applications/* $out/share/applications
@@ -67,11 +67,8 @@ in
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/vscode" \
+        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1:$out/lib/vscode" \
         $out/lib/vscode/code
-
-      wrapProgram $out/bin/code \
-        --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
     meta = with stdenv.lib; {

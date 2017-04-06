@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "diff-so-fancy-${version}";
-  version = "0.11.1";
-
-  # perl is needed here so patchShebangs can do its job
-  buildInputs = [perl makeWrapper];
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "1dw32c5i9mry6zr2a6h1369fhp1qbqimx04qgdmdnmn1imyck1h3";
+    sha256 = "1za2rm8jzcdc6bkpl198nrqf5bc05nw53vlkk15nmmb9snnb69ig";
   };
+
+  # Perl is needed here for patchShebangs
+  nativeBuildInputs = [ perl makeWrapper ];
 
   buildPhase = null;
 
@@ -34,16 +34,14 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${ncurses.out}/bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/so-fancy/diff-so-fancy;
     description = "Good-looking diffs filter for git";
-    license = stdenv.lib.licenses.mit;
-
+    license = licenses.mit;
+    platforms = platforms.all;
     longDescription = ''
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
-
-    platforms = stdenv.lib.platforms.all;
   };
 }

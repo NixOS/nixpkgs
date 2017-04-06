@@ -14,8 +14,20 @@ rec {
 
   overrides = x: {
     postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :ironclad)"' "$out/bin/ironclad-lisp-launcher.sh" ""
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/ironclad[.]asd${"$"}' |
+        while read f; do
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
     '';
   };
 }
+/* (SYSTEM ironclad DESCRIPTION A cryptographic toolkit written in pure Common Lisp SHA256 1ld0xz8gmi566zxl1cva5yi86aw1wb6i6446gxxdw1lisxx3xwz7 URL
+    http://beta.quicklisp.org/archive/ironclad/2014-11-06/ironclad_0.33.0.tgz MD5 2b7befe607e2fedffbdd45b2443db718 NAME ironclad TESTNAME NIL FILENAME ironclad
+    DEPS ((NAME nibbles)) DEPENDENCIES (nibbles) VERSION ironclad_0.33.0 SIBLINGS (ironclad-text)) */
