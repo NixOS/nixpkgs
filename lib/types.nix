@@ -158,8 +158,10 @@ rec {
         in if isDerivation res then res else toDerivation res;
     };
 
-    shellPackage = package // {
-      check = x: (package.check x) && (hasAttr "shellPath" x);
+    shellPackage = mkOptionType {
+      name = "shellPackage";
+      check = x: isDerivation x && hasAttr "shellPath" x;
+      merge = mergeOneOption;
     };
 
     path = mkOptionType {
