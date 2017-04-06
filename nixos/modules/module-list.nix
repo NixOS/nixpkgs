@@ -529,6 +529,7 @@
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
+  ./services/system/earlyoom.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
