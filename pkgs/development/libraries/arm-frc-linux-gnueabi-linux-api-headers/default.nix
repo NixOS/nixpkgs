@@ -1,4 +1,4 @@
-{stdenv, fetchurl, binutils}:
+{stdenv, fetchurl}:
 
 let
   _target = "arm-frc-linux-gnueabi";
@@ -17,11 +17,8 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "installPhase" ];
 
-  buildInputs = [ binutils ];
-
-  unpackPhase = ''
-    echo "starting unpack phase..."
-    ${binutils}/bin/ar x $src
+  unpackCmd = ''
+    ar x $curSrc
     tar xf data.tar.gz
   '';
 
@@ -39,6 +36,7 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.colescott ];
+    platforms = stdenv.lib.platforms.linux;
 
     priority = 1;
   };
