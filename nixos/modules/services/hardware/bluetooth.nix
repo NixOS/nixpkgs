@@ -14,12 +14,26 @@ in
 
   options = {
 
-    hardware.bluetooth.enable = mkEnableOption "support for Bluetooth.";
+    hardware.bluetooth = {
+      enable = mkEnableOption "support for Bluetooth.";
 
-    hardware.bluetooth.powerOnBoot = mkOption {
-      type    = types.bool;
-      default = true;
-      description = "Whether to power up the default Bluetooth controller on boot.";
+      powerOnBoot = mkOption {
+        type    = types.bool;
+        default = true;
+        description = "Whether to power up the default Bluetooth controller on boot.";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          [General]
+          ControllerMode = bredr
+        '';
+        description = ''
+          Set additional configuration for system-wide bluetooth (/etc/bluetooth/main.conf).
+        '';
+      };
     };
 
   };
@@ -29,6 +43,11 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
+
+    environment.etc = singleton {
+      source = pkgs.writeText "main.conf" cfg.extraConfig;
+      target = "bluetooth/main.conf";
+    };
 
     services.udev.packages = [ bluez-bluetooth ];
     services.dbus.packages = [ bluez-bluetooth ];

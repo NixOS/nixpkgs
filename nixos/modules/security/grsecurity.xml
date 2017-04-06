@@ -312,7 +312,7 @@
       Overflows in boot critical code (e.g., the root filesystem module) can
       render the system unbootable.  Work around by setting
       <programlisting>
-        boot.kernel.kernelParams = [ "pax_size_overflow_report_only" ];
+        boot.kernelParams = [ "pax_size_overflow_report_only" ];
       </programlisting>
     </para></listitem>
 

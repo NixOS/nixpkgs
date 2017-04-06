@@ -3,18 +3,15 @@ let
   callPackage = newScope (self // { inherit stdenv isl release_version version fetch; });
 
   release_version = "4.0.0";
-  rc = "rc3";
-  version = "${release_version}${rc}";
+  version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    url = "http://llvm.org/pre-releases/${release_version}/${rc}/${name}-${version}.src.tar.xz";
-    # Once 4 is released, use this instead:
-    # url = "http://llvm.org/releases/${release-version}/${name}-${version}.src.tar.xz";
+    url = "http://llvm.org/releases/${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  compiler-rt_src = fetch "compiler-rt" "0jfqhz95cp15c5688c6l9mr12s0qp86milpcrjlc93dc2jy08ba5";
-  clang-tools-extra_src = fetch "clang-tools-extra" "1c9c507w3f5vm153rdd0kmzvv2ski6z439izk01zf5snfwkqxkq8";
+  compiler-rt_src = fetch "compiler-rt" "059ipqq27gd928ay06f1ck3vw6y5h5z4zd766x8k0k7jpqimpwnk";
+  clang-tools-extra_src = fetch "clang-tools-extra" "16bwckgcxfn56mbqjlxi7fxja0zm9hjfa6s3ncm3dz98n5zd7ds1";
 
   self = {
     llvm = callPackage ./llvm.nix {

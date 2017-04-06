@@ -12,7 +12,6 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Enable Redshift to change your screen's colour temperature depending on
         the time of day.

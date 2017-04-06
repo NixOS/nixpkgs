@@ -3,21 +3,21 @@
 , dbus, dbus_glib, file, fontconfig, freetype
 , gstreamer, gst-plugins-base, gst_all_1
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
-, libstartup_notification, libvpx, makeWrapper, mesa 
-, nspr, nss, pango, perl, python, libpulseaudio, sqlite 
+, libstartup_notification, libvpx, makeWrapper, mesa
+, nspr, nss, pango, perl, python, libpulseaudio, sqlite
 , unzip, xlibs, which, yasm, zip, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.1.1";
+  version = "27.2.1";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
-    rev    = "a35936746069e6591181eb67e5f9ea094938bae5";
-    sha256 = "0hns5993dh93brwz3z4xp1zp8n90x1hajxylv17zybpysax64jsk";
+    rev    = version + "_Release";
+    sha256 = "1yyipxd5lmavf4aca4vrcnp7hb8zkn4sv2zp6n2cm6w4pxlza0g4";
   };
 
   desktopItem = makeDesktopItem {
@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
     cd $builddir
     $src/mach install
   '';

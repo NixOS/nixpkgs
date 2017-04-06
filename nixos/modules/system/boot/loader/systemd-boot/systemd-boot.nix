@@ -65,6 +65,8 @@ in {
 
     boot.loader.grub.enable = mkDefault false;
 
+    boot.loader.supportsInitrdSecrets = true;
+
     system = {
       build.installBootLoader = gummibootBuilder;
 

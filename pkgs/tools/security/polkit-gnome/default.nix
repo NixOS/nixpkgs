@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     homepage = http://hal.freedesktop.org/docs/PolicyKit/;
     description = "A dbus session bus service that is used to bring up authentication dialogs";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
+    maintainers = with stdenv.lib.maintainers; [ phreedom ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

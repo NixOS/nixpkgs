@@ -13,12 +13,12 @@ let
   optional = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  version = "0.10.6";
+  version = "1.3.0";
   name = "radare2-${version}";
 
   src = fetchurl {
-    url = "http://radare.org/get/${name}.tar.xz";
-    sha256 = "0icxd8zilygnggxc50lkk6jmcq8xl66rqxqhzqwpiprbn8k7b24f";
+    url = "http://cloud.radare.org/get/${version}/${name}.tar.gz";
+    sha256 = "1kwp0i5sqk5almnx4g8claimqz8rwvv1fn8x66k4az1s8k7g9kiv";
   };
 
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     ++ optional luaBindings [lua];
 
   meta = {
-    description = "Free advanced command line hexadecimal editor";
+    description = "unix-like reverse engineering framework and commandline tools";
     homepage = http://radare.org/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin makefu];
     platforms = with stdenv.lib.platforms; linux;
     inherit version;
   };

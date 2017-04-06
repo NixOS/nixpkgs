@@ -25,7 +25,6 @@ in
         description = "
           Whether to enable the ldap server.
         ";
-        example = true;
       };
 
       user = mkOption {

@@ -1,12 +1,12 @@
 # Operations on attribute sets.
 
-with {
+let
   inherit (builtins) head tail length;
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
   inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
-};
+in
 
 rec {
   inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr;

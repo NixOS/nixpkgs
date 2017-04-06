@@ -58,6 +58,7 @@ let
     SDL
     SDL2_image
     glew110
+    openssl
     libidn
 
     # Other things from runtime
@@ -87,7 +88,7 @@ let
     alsaLib
     openalSoft
     libva
-    openssl-steam
+    vulkan-loader
   ] ++ lib.optional newStdcpp gcc.cc;
 
   ourRuntime = if runtimeOnly then []

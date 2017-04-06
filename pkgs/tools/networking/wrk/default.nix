@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, perl }:
+{ stdenv, fetchFromGitHub, luajit, openssl, perl }:
 
 stdenv.mkDerivation rec {
   name = "wrk-${version}";
@@ -11,7 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "1qg6w8xz4pr227h1gxrbm6ylhqvspk95hvq2f9iakni7s56pkh1w";
   };
 
-  buildInputs = [ openssl perl ];
+  buildInputs = [ luajit openssl perl ];
+
+  makeFlags = [ "WITH_LUAJIT=${luajit}" "WITH_OPENSSL=${openssl.dev}" "VER=${version}" ];
+
+  preBuild = ''
+    for f in src/*.h; do
+      substituteInPlace $f \
+        --replace "#include <luajit-2.0/" "#include <"
+    done
+  '';
   
   installPhase = ''
     mkdir -p $out/bin
@@ -29,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

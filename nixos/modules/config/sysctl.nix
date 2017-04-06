@@ -64,5 +64,9 @@ in
     # Removed under grsecurity.
     boot.kernel.sysctl."kernel.kptr_restrict" =
       if (config.boot.kernelPackages.kernel.features.grsecurity or false) then null else 1;
+
+    # Disable YAMA by default to allow easy debugging.
+    boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
+
   };
 }

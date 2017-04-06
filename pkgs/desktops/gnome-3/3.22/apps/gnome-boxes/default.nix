@@ -1,9 +1,9 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, intltool, itstool, libvirt-glib
 , glib, gobjectIntrospection, libxml2, gtk3, gtkvnc, libvirt, spice_gtk
 , spice_protocol, libuuid, libsoup, libosinfo, systemd, tracker, vala_0_32
-, libcap_ng, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg
-, desktop_file_utils, mtools, cdrkit, libcdio, numactl, xen
-, libusb, libarchive, acl, libgudev, qemu, libsecret
+, libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop_file_utils
+, mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
+, libcap_ng, numactl, xen, libapparmor
 }:
 
 # TODO: ovirt (optional)
@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeBuildInputs = [
+    makeWrapper pkgconfig intltool
+  ];
+
   buildInputs = [
-    makeWrapper pkgconfig intltool itstool libvirt-glib glib
-    gobjectIntrospection libxml2 gtk3 gtkvnc libvirt spice_gtk spice_protocol
-    libuuid libsoup libosinfo systemd tracker vala_0_32 libcap_ng libcap yajl gmp
-    gdbm cyrus_sasl gnome3.defaultIconTheme libusb libarchive
-    librsvg desktop_file_utils acl libgudev numactl xen libsecret
+    itstool libvirt-glib glib gobjectIntrospection libxml2 gtk3 gtkvnc
+    libvirt spice_gtk spice_protocol libuuid libsoup libosinfo systemd
+    tracker vala_0_32 libcap yajl gmp gdbm cyrus_sasl libusb libarchive
+    gnome3.defaultIconTheme librsvg desktop_file_utils acl libgudev libsecret
+    libcap_ng numactl xen libapparmor
   ];
 
   preFixup = ''

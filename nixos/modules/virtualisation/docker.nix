@@ -126,7 +126,17 @@ in
 
         path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
       };
-      systemd.sockets.docker.socketConfig.ListenStream = cfg.listenOptions;
+
+      systemd.sockets.docker = {
+        description = "Docker Socket for the API";
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          ListenStream = cfg.listenOptions;
+          SocketMode = "0660";
+          SocketUser = "root";
+          SocketGroup = "docker";
+        };
+      };
     }
   ]);
 

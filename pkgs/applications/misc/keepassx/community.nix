@@ -7,13 +7,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassx-community-${version}";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "0ncc157xki1mzxfa41bgwjfsz5jq9sq750ka578lq61smyzh5lq6";
+    sha256 = "1zamk3dc44fn61b880i3l1r0np2sx2hs05cvcf2x4748r3xicacf";
   };
 
   cmakeFlags = optional (withKeePassHTTP) [ "-DWITH_XC_HTTP=ON" ];

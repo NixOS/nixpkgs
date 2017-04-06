@@ -1,29 +1,24 @@
-{stdenv, fetchurl, fetchFromGitHub, callPackage, makeWrapper, doxygen
-, ffmpeg, python3Packages, qt55}:
+{ stdenv, fetchFromGitHub
+, doxygen, python3Packages, ffmpeg, libopenshot
+, qtbase, qtmultimedia, makeQtWrapper }:
 
 with stdenv.lib;
-
-let
-  libopenshot = callPackage ./libopenshot.nix {};
-in
 stdenv.mkDerivation rec {
   name = "openshot-qt-${version}";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "1cyr5m1n6qcb9bzkhh3v6ka91a6x9c50dl5j0ilrc8vj0mb43g8c";
+    sha256 = "0dg4fkkci1rz49yrdd4fa1whv10c1pgm3cl4i49452ckqa7qg037";
   };
+    
+  buildInputs =
+  [ python3Packages.python ffmpeg libopenshot qtbase qtmultimedia ];
 
-  buildInputs = [doxygen python3Packages.python makeWrapper ffmpeg];
-
-  propagatedBuildInputs = [
-    qt55.qtbase
-    qt55.qtmultimedia
-    libopenshot
-  ];
+  nativeBuildInputs =
+  [ doxygen makeQtWrapper ];
 
   installPhase = ''
     mkdir -p $(toPythonPath $out)
@@ -32,17 +27,24 @@ stdenv.mkDerivation rec {
     echo "#/usr/bin/env sh" >$out/bin/openshot-qt
     echo "exec ${python3Packages.python.interpreter} $(toPythonPath $out)/launch.py" >>$out/bin/openshot-qt
     chmod +x $out/bin/openshot-qt
-    wrapProgram $out/bin/openshot-qt \
+    wrapQtProgram $out/bin/openshot-qt \
       --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip}):$(toPythonPath ${python3Packages.httplib2}):$(toPythonPath ${python3Packages.pyzmq}):$PYTHONPATH"
   '';
 
   doCheck = false;
 
   meta = {
-    homepage = "http://openshot.org/";
+    homepage = http://openshot.org/;
     description = "Free, open-source video editor";
-    license = licenses.gpl3Plus;
-    maintainers = [];
-    platforms = platforms.linux;
+    longDescription = ''
+      OpenShot Video Editor is a free, open-source video editor for Linux.
+      OpenShot can take your videos, photos, and music files and help you
+      create the film you have always dreamed of. Easily add sub-titles,
+      transitions, and effects, and then export your film to DVD, YouTube,
+      Vimeo, Xbox 360, and many other common formats.
+    '';
+    license = with licenses; gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; linux;
   };
 }

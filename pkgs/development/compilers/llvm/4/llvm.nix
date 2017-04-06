@@ -21,7 +21,7 @@
 }:
 
 let
-  src = fetch "llvm" "0ic3y9gaissi6ixyj9x1c0pq69wfbl2svhprp33av0b58f7wj9v7";
+  src = fetch "llvm" "1giklnw71wzsgbqg9wb5x7dxnbj39m6zpfvskvzvhwvfz4fm244d";
   shlib = if stdenv.isDarwin then "dylib" else "so";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
@@ -41,21 +41,30 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
   buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin
-         [ libcxxabi darwin.cctools darwin.apple_sdk.libs.xpc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  # hacky fix: New LLVM releases require a newer OS X SDK than
-  # 10.9. This is a temporary measure until nixpkgs darwin support is
-  # updated.
+  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
+  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
+  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
+  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
+  # a flag and turn the flag off during the stdenv build.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-        sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+    substituteInPlace ./projects/compiler-rt/cmake/config-ix.cmake \
+      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
+  ''
+  # Remove broken tests: (https://bugs.llvm.org//show_bug.cgi?id=31610)
+  + ''
+    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata1.ll
+    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata2.ll
+    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata3.ll
+    rm test/CodeGen/AMDGPU/runtime-metadata.ll
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -78,13 +87,20 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-    "-DCMAKE_LIBTOOL=${darwin.cctools}/bin/libtool"
   ];
 
   postBuild = ''
     rm -fR $out
 
     paxmark m bin/{lli,llvm-rtdyld}
+    paxmark m unittests/ExecutionEngine/MCJIT/MCJITTests
+    paxmark m unittests/ExecutionEngine/Orc/OrcJITTests
+    paxmark m unittests/Support/SupportTests
+    paxmark m bin/lli-child-target
+  '';
+
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
   '';
 
   postInstall = ""
@@ -102,6 +118,10 @@ in stdenv.mkDerivation rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
+
+  doCheck = stdenv.isLinux;
+
+  checkTarget = "check-all";
 
   enableParallelBuilding = true;
 

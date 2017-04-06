@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, python3Packages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-let 
-  pythonPackages = python3Packages;
-in pythonPackages.buildPythonApplication rec {
-
+python3Packages.buildPythonApplication rec {
   name = "peru-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/peru/${name}.tar.gz";
-    sha256 = "d51771d4aa7e16119e46c39efd71b0a1a898607bf3fb7735fc688a64fc59cbf1";
+  src = fetchFromGitHub {
+    owner = "buildinspace";
+    repo = "peru";
+    rev = "${version}";
+    sha256 = "0hvp6pvpsz0f98az4f1wl93gqlz6wj24pjnc5zs1har9rqlpq8y8";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pyyaml docopt ];
+  propagatedBuildInputs = with python3Packages; [ pyyaml docopt ];
 
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/buildinspace/peru;
     description = "A tool for including other people's code in your projects";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
+
 }

@@ -19,5 +19,6 @@ buildGoPackage rec {
     homepage = "https://github.com/derekparker/delve";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.mit;
+    platforms = [ "x86_64-linux" ];
   };
 }

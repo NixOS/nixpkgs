@@ -8,7 +8,7 @@ let
 
   nix = cfg.package.out;
 
-  isNix112 = versionAtLeast (getVersion nix) "1.12pre4997";
+  isNix112 = versionAtLeast (getVersion nix) "1.12pre";
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -46,6 +46,7 @@ let
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
         binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
+        auto-optimise-store = ${if cfg.autoOptimiseStore then "true" else "false"}
         ${optionalString cfg.requireSignedBinaryCaches ''
           signed-binary-caches = *
         ''}
@@ -83,6 +84,18 @@ in
           to build in parallel.  The default is 1.  You should generally
           set it to the total number of logical cores in your system (e.g., 16
           for two CPUs with 4 cores each and hyper-threading).
+        '';
+      };
+
+      autoOptimiseStore = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+         If set to true, Nix automatically detects files in the store that have
+         identical contents, and replaces them with hard links to a single copy.
+         This saves disk space. If set to false (the default), you can still run
+         nix-store --optimise to get rid of duplicate files.
         '';
       };
 

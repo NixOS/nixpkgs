@@ -6,8 +6,9 @@
   kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications, knotifyconfig,
   kpeople, krunner, ksysguard, kwallet, kwin, libXcursor, libXft,
   libcanberra_kde, libpulseaudio, libxkbfile, phonon, plasma-framework,
-  plasma-workspace, qtdeclarative, qtquickcontrols, qtsvg, qtx11extras,
-  xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config, xorgserver,
+  plasma-workspace, qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg,
+  qtx11extras, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
+  xorgserver,
   utillinux
 }:
 
@@ -21,7 +22,7 @@ plasmaPackage rec {
     xf86inputsynaptics xkeyboard_config xinput baloo kactivities
     kactivities-stats kauth kdeclarative kdelibs4support kemoticons kglobalaccel
     ki18n kpeople krunner kwin plasma-framework plasma-workspace qtdeclarative
-    qtquickcontrols qtx11extras ksysguard
+    qtquickcontrols qtquickcontrols2 qtx11extras ksysguard
   ];
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

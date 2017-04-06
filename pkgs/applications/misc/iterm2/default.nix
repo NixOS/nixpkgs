@@ -2,16 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "iterm2-${version}";
-  version = "3.0.4";
+  version = "3.0.14";
 
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2";
     rev = "v${version}";
-    sha256 = "0ffg9l2jvv503h13nd5rjkn5xrahswcqqwmm052qzd6d0lmqjm93";
+    sha256 = "03m0ja11w9910z96yi8fzq3436y8xl14q031rdb2w3sapjd54qrj";
   };
 
   patches = [ ./disable_updates.patch ];
+  postPatch = ''
+    sed -i -e 's/CODE_SIGN_IDENTITY = "Developer ID Application"/CODE_SIGN_IDENTITY = ""/g' ./iTerm2.xcodeproj/project.pbxproj
+  '';
   makeFlagsArray = ["Deployment"];
   installPhase = ''
     mkdir -p "$out/Applications"

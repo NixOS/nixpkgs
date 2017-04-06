@@ -13,7 +13,7 @@ getCurrentVersions() {
 currentVersions="$(getCurrentVersions)"
 
 getLastestVersion() {
-    local baseurl="http://www.aquamaniac.de"
+    local baseurl="https://www.aquamaniac.de"
     local pkglist="sites/download/packages.php?package=$1&showall=1"
     local url="$baseurl/$pkglist"
     local reVersion='[0-9]+(\.[0-9]+)+' # Only release versions, no betas!

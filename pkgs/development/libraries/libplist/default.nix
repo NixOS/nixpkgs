@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://github.com/JonathanBeck/libplist;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     knownVulnerabilities = [
       "CVE-2017-5209: base64decode function in base64.c allows attackers to obtain sensitive information from process memory or cause a denial of service"
       "CVE-2017-5545: attackers to obtain sensitive information from process memory or cause a denial of service"

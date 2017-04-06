@@ -52,6 +52,11 @@ rec {
       patch = ./bridge-stp-helper.patch;
     };
 
+  p9_fixes =
+    { name = "p9-fixes";
+      patch = ./p9-fixes.patch;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -95,9 +100,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.9.13";
-      grrev  = "201703052141";
-      sha512 = "197n21975ifp2nkpl6d7v3r9fllw2l7pyd2h8cic7dnigy65a5jqx1sxhqryivijx3czf6hj173q999j218ihlg15p6a7aqjhkh90kf";
+    { kver   = "4.9.20";
+      grrev  = "201703310823";
+      sha512 = "0pm3wmcip73imjjx13yar5l5bhpii45mjac5vb1snypmbwqmywmikiixqslq84i1yqw0c8pi822znkz7650dhxrmdmagy0yirwfdrhf";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,

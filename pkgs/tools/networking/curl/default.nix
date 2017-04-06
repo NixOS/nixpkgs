@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "1s1hyndva0yp62xy96pcp4anzrvw6cl0abjajim17sbmdp00fwhw";
   };
 
-  patches = [ ];
-
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   enableParallelBuilding = true;
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
+      "--with-ca-fallback"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )

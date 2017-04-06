@@ -15,6 +15,7 @@ let
       mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
+        nodejs = pkgs.nodejs-slim;
         jailbreak-cabal = if (self.ghc.cross or null) != null
           then self.ghc.bootPkgs.jailbreak-cabal
           else self.jailbreak-cabal;
@@ -79,12 +80,12 @@ let
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
 
-        inherit mkDerivation callPackage;
+        inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
 
-        callHackage = name: version: self.callPackage (hackage2nix name version);
+        callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
-        callCabal2nix = name: src: self.callPackage (haskellSrc2nix { inherit src name; });
+        callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

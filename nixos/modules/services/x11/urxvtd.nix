@@ -11,7 +11,6 @@ in {
   options.services.urxvtd.enable = mkOption {
     type = types.bool;
     default = false;
-    example = true;
     description = ''
       Enable urxvtd, the urxvt terminal daemon. To use urxvtd, run
       "urxvtc".

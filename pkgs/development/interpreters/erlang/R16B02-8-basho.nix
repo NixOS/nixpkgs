@@ -2,7 +2,7 @@
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
 , wxSupport ? false, mesa ? null, wxGTK ? null, xorg ? null
-, enableDebugInfo ? false 
+, enableDebugInfo ? false
 , Carbon ? null, Cocoa ? null }:
 
 assert wxSupport -> mesa != null && wxGTK != null && xorg != null;
@@ -24,10 +24,15 @@ stdenv.mkDerivation rec {
   debugInfo = enableDebugInfo;
 
   buildInputs =
-    [ perl gnum4 ncurses openssl makeWrapper autoconf264 gcc 
+    [ perl gnum4 ncurses openssl makeWrapper autoconf264 gcc
     ] ++ optional wxSupport [ mesa wxGTK xorg.libX11 ]
       ++ optional odbcSupport [ unixODBC ]
       ++ optionals stdenv.isDarwin [ Carbon Cocoa ];
+
+  # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+  prePatch = ''
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
+  '';
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure.in erts/configure.in '';
 
@@ -36,22 +41,22 @@ stdenv.mkDerivation rec {
     export LANG=C
     export ERL_TOP=$(pwd)
     sed -e s@/bin/pwd@pwd@g -i otp_build
-    sed -e s@"/usr/bin/env escript"@${erlang}/bin/escript@g -i lib/diameter/bin/diameterc 
+    sed -e s@"/usr/bin/env escript"@${erlang}/bin/escript@g -i lib/diameter/bin/diameterc
   '';
 
   configureFlags= [
     "--with-ssl=${openssl.dev}"
-    "--enable-smp-support" 
-    "--enable-threads" 
-    "--enable-kernel-poll" 
-    "--disable-hipe" 
-    "${optionalString odbcSupport "--with-odbc=${unixODBC}"}" 
-    "${optionalString stdenv.isDarwin "--enable-darwin-64bit"}" 
+    "--enable-smp-support"
+    "--enable-threads"
+    "--enable-kernel-poll"
+    "--disable-hipe"
+    "${optionalString odbcSupport "--with-odbc=${unixODBC}"}"
+    "${optionalString stdenv.isDarwin "--enable-darwin-64bit"}"
     "${optionalString stdenv.isLinux "--enable-m64-build"}"
   ];
 
   buildPhase = ''
-    ./otp_build autoconf 
+    ./otp_build autoconf
     ./otp_build setup -a --prefix=$out $configureFlags
   '';
 
@@ -89,7 +94,7 @@ stdenv.mkDerivation rec {
       telephony and instant messaging. Erlang's runtime system has
       built-in support for concurrency, distribution and fault
       tolerance.
-      This version of Erlang is Basho's version, forked from Ericsson's 
+      This version of Erlang is Basho's version, forked from Ericsson's
       repository.
     '';
 

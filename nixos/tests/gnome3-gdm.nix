@@ -11,6 +11,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       services.xserver.enable = true;
 
+      services.xserver.displayManager.slim.enable = false;
       services.xserver.displayManager.gdm = {
         enable = true;
         autoLogin = {

@@ -109,7 +109,6 @@ in
       forceImportRoot = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Forcibly import the ZFS root pool(s) during early boot.
 
@@ -128,7 +127,6 @@ in
       forceImportAll = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Forcibly import all ZFS pool(s).
 
@@ -236,7 +234,7 @@ in
         description = ''
           Systemd calendar expression when to scrub ZFS pools. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 

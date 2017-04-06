@@ -54,7 +54,7 @@ let
 
         meta = {
           inherit (kdelibs4.meta) platforms;
-          maintainers = [ stdenv.lib.maintainers.urkud ];
+          maintainers = [ ];
         };
       }
     );

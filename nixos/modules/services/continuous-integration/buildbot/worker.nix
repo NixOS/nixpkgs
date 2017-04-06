@@ -31,7 +31,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [ "nixbld" ];
+        default = [];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 
@@ -111,11 +111,11 @@ in {
       '';
 
       serviceConfig = {
-        Type = "forking";
+        Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot-worker start ${cfg.buildbotDir}";
+        ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
       };
 
     };

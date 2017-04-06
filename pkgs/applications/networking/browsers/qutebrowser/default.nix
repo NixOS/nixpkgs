@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
+{ stdenv, lib, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
 , qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
-, qtwebkit-plugins }:
+, qtwebkit-plugins
+, withWebEngineDefault ? false
+}:
 
 let
   pdfjs = stdenv.mkDerivation rec {
@@ -24,12 +26,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.9.1";
+  version = "0.10.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0pf91nc0xcykahc3x7ww525c9czm8zpg80nxl8n2mrzc4ilgvass";
+    sha256 = "57f4915f0f2b1509f3aa1cb9c47117fdaad35b4c895e9223c4eb0a6e8af51917";
   };
 
   # Needs tox
@@ -73,7 +75,8 @@ in buildPythonApplication rec {
 
   postFixup = ''
     mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
-    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
+    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser \
+      ${lib.optionalString withWebEngineDefault ''--add-flags "--backend webengine"''}
 
     sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
   '';

@@ -1,21 +1,26 @@
-{ stdenv, autoconf, automake, libtool, makeWrapper, fetchgit, pkgconfig
-, intltool, gtk3, json_glib, curl }:
+{ stdenv, autoconf, automake, libtool, makeWrapper, fetchFromGitHub, pkgconfig
+, intltool, gtk3, json_glib, curl, glib, autoconf-archive, appstream-glib }:
 
 
 stdenv.mkDerivation rec {
   name = "transmission-remote-gtk-${version}";
-  version = "1.2";
+  version = "1.3.1";
 
-  src = fetchgit {
-    url = "https://github.com/ajf8/transmission-remote-gtk.git";
-    rev = "aa4e0c7d836cfcc10d8effd10225abb050343fc8";
-    sha256 = "0qz0jzr5w5fik2awfps0q49blwm4z7diqca2405rr3fyhyjhx42b";
+  src = fetchFromGitHub {
+    owner = "transmission-remote-gtk";
+    repo = "transmission-remote-gtk";
+    rev = "${version}";
+    sha256 = "02q0vl7achx9rpd0iv0347h838bwzm7aj4k04y88g3bh8fi3cddh";
   };
 
-  buildInputs = [ libtool autoconf automake makeWrapper pkgconfig intltool
-                  gtk3 json_glib curl ];
+  preConfigure = "./autogen.sh";
 
-  preConfigure = "sh autogen.sh";
+  nativeBuildInputs= [ 
+    autoconf automake libtool makeWrapper 
+    pkgconfig intltool autoconf-archive 
+    appstream-glib
+  ];
+  buildInputs = [ gtk3 json_glib curl glib ];
 
   preFixup = ''
     wrapProgram "$out/bin/transmission-remote-gtk" \

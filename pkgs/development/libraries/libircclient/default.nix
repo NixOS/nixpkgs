@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.ulduzsoft.com/libircclient/;
     license     = licenses.lgpl3;
     maintainers = with maintainers; [ obadz ];
-    platforms   = platforms.all;
+    platforms   = platforms.linux;
   };
 }

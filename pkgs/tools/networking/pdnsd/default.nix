@@ -14,11 +14,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-ipv6" ];
 
-  meta = { 
+  # fix ipv6 on darwin
+  CPPFLAGS = "-D__APPLE_USE_RFC_3542";
+
+  meta = with stdenv.lib; {
     description = "Permanent DNS caching";
-    homepage = http://www.phys.uu.nl/~rombouts/pdnsd.html;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    homepage = http://members.home.nl/p.a.rombouts/pdnsd;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [viric];
   };
 }

@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
-, openssl, netcat, gnutls, gsasl, libidn, Security, systemd }:
+, openssl, netcat-gnu, gnutls, gsasl, libidn, Security
+, systemd ? null }:
 
 let
   tester = "n"; # {x| |p|P|n|s}
@@ -28,7 +29,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     substitute scripts/msmtpq/msmtpq $out/bin/msmtpq \
       --replace @msmtp@      $out/bin/msmtp \
-      --replace @nc@         ${netcat}/bin/nc \
+      --replace @nc@         ${netcat-gnu}/bin/nc \
       --replace @journal@    ${journal} \
       ${lib.optionalString (journal == "y") "--replace @systemdcat@ ${systemd}/bin/systemd-cat" } \
       --replace @test@       ${tester}

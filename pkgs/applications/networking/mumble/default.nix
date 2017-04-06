@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib
+, alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -19,7 +19,7 @@ let
 
     patches = optional jackSupport ./mumble-jack-support.patch;
 
-    nativeBuildInputs = [ pkgconfig ]
+    nativeBuildInputs = [ pkgconfig python ]
       ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
@@ -42,6 +42,7 @@ let
 
     preConfigure = ''
        qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib"
+       patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
@@ -69,7 +70,7 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optional (source.qtVersion == 5) qt5.qttools;
+    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools qt5.makeQtWrapper ];
     buildInputs = [ libopus libsndfile speex ]
       ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
@@ -90,6 +91,10 @@ let
       mkdir -p $out/share/icons{,/hicolor/scalable/apps}
       cp icons/mumble.svg $out/share/icons
       ln -s $out/share/icon/mumble.svg $out/share/icons/hicolor/scalable/apps
+
+      ${optionalString (source.qtVersion == 5) ''
+        wrapQtProgram $out/bin/mumble
+      ''}
     '';
   } source;
 
@@ -132,5 +137,7 @@ in {
   mumble     = client stableSource;
   mumble_git = client gitSource;
   murmur     = server stableSource;
-  murmur_git = server gitSource;
+  murmur_git = (server gitSource).overrideAttrs (old: {
+    meta = old.meta // { broken = true; };
+  });
 }

@@ -10,14 +10,10 @@ import ./make-test.nix ({ pkgs, ... }:
     { web =
         { config, pkgs, ... }:
         {
-          services.mysql.enable = true;
-          services.mysql.package = pkgs.mysql;
-          services.mysql.initialScript = pkgs.writeText "start.sql" ''
-            CREATE DATABASE wordpress;
-	    CREATE USER 'wordpress'@'localhost' IDENTIFIED BY 'wordpress';
-            GRANT ALL on wordpress.* TO 'wordpress'@'localhost';
-          '';
-
+          services.mysql = {
+            enable = true;
+            package = pkgs.mysql;
+          };
           services.httpd = {
             enable = true;
             logPerVirtualHost = true;

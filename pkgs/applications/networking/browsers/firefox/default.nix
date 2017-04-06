@@ -30,6 +30,10 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
     inherit sha512;
   };
 
+  # this patch should no longer be needed in 53
+  # from https://bugzilla.mozilla.org/show_bug.cgi?id=1013882
+  patches = lib.optional debugBuild ./fix-debug.patch;
+
   buildInputs =
     [ pkgconfig gtk2 perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
@@ -57,6 +61,7 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "--with-system-libvpx"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
+      "--enable-alsa"
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
@@ -148,8 +153,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "52.0";
-    sha512 = "bffe5fd9eee240f252bf8a882c46f04551d21f6f58b8da68779cd106ed012ea77ee16bc287c847f8a7b959203c79f1b1d3f50151111f9610e1ca7a57c7b811f7";
+    version = "52.0.2";
+    sha512 = "15668625d212acf874b560d0adf738faf3e0df532c549ab94e1d91944542e13bf16265f08fca1eded42820f9b7ad3f0ff70a8b5bc9adde0a79d11e022bb1158e";
     updateScript = import ./update.nix {
       attrPath = "firefox-unwrapped";
       inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
@@ -158,8 +163,8 @@ in {
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "52.0esr";
-    sha512 = "7e191c37af98163131cbba4dcc820a4edc0913d81c3b2493d9aad0a2886e7aed41a990fa5281ccfb08566ecfdfd7df7353063a01ad92d2ec6e1ce19d277b6e67";
+    version = "52.0.2esr";
+    sha512 = "a0f31479e5265c7f40d3013c3dc8368c6bdf03f21f1c9054fb2ae5557065584da433b288b493680d6147a3b11155f41bd33ad2a5d53c6eaa507258c7e00d7335";
     updateScript = import ./update.nix {
       attrPath = "firefox-esr-unwrapped";
       versionSuffix = "esr";

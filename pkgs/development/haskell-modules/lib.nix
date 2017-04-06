@@ -38,6 +38,9 @@ rec {
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
   addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
 
+  addSetupDepend = drv: x: addSetupDepends drv [x];
+  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
+
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
@@ -74,6 +77,14 @@ rec {
     checkPhase = ":";
     installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
+  });
+
+  # link executables statically against haskell libs to reduce closure size
+  justStaticExecutables = drv: overrideCabal drv (drv: {
+    enableSharedExecutables = false;
+    isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
   });
 
   buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {

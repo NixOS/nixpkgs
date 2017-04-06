@@ -44,7 +44,6 @@ in
 
       enableContribAndExtras = mkOption {
         default = false;
-        example = true;
         type = lib.types.bool;
         description = "Enable xmonad-{contrib,extras} in Xmonad.";
       };

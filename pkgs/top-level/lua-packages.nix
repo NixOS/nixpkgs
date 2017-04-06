@@ -293,7 +293,7 @@ let
       maintainers = [ maintainers.koral ];
     };
   };
-      
+
 
   luastdlib = buildLuaPackage {
     name = "stdlib";
@@ -459,7 +459,7 @@ let
     meta = {
       description = "Simple implementation of msgpack in C Lua 5.1";
       homepage = "https://github.com/tarruda/libmpack";
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
       license = stdenv.lib.licenses.mit;
       # gcc -llua fails with luajit
       broken = (builtins.parseDrvName lua.name).name != "lua";
@@ -468,18 +468,20 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.1.3";
+    version = "2.2.0";
 
-    src = fetchzip {
-      url    = "http://git.sysphere.org/vicious/snapshot/vicious-${version}.tar.xz";
-      sha256 = "1c901siza5vpcbkgx99g1vkqiki5qgkzx2brnj4wrpbsbfzq0bcq";
+    src = fetchFromGitHub {
+      owner = "Mic92";
+      repo = "vicious";
+      rev = "v${version}";
+      sha256 = "0dhy0vklrhqrnmxb9pyqbfvkwwy86lwysk93pzg1j1zwprx366fj";
     };
 
     meta = with stdenv.lib; {
       description = "Vicious widgets for window managers";
-      homepage    = http://git.sysphere.org/vicious/;
+      homepage    = https://github.com/Mic92/vicious;
       license     = licenses.gpl2;
-      maintainers = with maintainers; [ makefu ];
+      maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
 

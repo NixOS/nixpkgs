@@ -48,8 +48,8 @@ def get_maintainers(attr_name):
 @click.command()
 @click.option(
     '--jobset',
-    default="nixos/release-16.09",
-    help='Hydra project like nixos/release-16.09')
+    default="nixos/release-17.03",
+    help='Hydra project like nixos/release-17.03')
 def cli(jobset):
     """
     Given a Hydra project, inspect latest evaluation
@@ -74,13 +74,13 @@ def cli(jobset):
     # TODO: dependency failed without propagated builds
     for tr in d('img[alt="Failed"]').parents('tr'):
         a = pq(tr)('a')[1]
-        print "- [ ] [{}]({})".format(a.text, a.get('href'))
+        print("- [ ] [{}]({})".format(a.text, a.get('href')))
 
         sys.stdout.flush()
 
         maintainers = get_maintainers(a.text)
         if maintainers:
-            print "  - maintainers: {}".format(", ".join(map(lambda u: '@' + u, maintainers)))
+            print("  - maintainers: {}".format(", ".join(map(lambda u: '@' + u, maintainers))))
         # TODO: print last three persons that touched this file
         # TODO: pinpoint the diff that broke this build, or maybe it's transient or maybe it never worked?
 
