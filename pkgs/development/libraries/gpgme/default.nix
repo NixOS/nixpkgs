@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan }:
+{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "gpgme-1.9.0";
@@ -11,13 +11,15 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
 
-  propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
+  propagatedBuildInputs = [ libgpgerror glib libassuan pth qt5.qtbase ];
 
   nativeBuildInputs = [ pkgconfig gnupg ];
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"
   ];
+
+  patches = [ ./gpgme_libsuffix.patch ];
 
   # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
   NIX_CFLAGS_COMPILE =
