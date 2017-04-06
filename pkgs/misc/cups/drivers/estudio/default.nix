@@ -1,40 +1,5 @@
 { stdenv, fetchurl, perl }:
 
-# Driver suitable for the following printers:
-# TOSHIBA e-STUDIO2000AC
-# TOSHIBA e-STUDIO2005AC
-# TOSHIBA e-STUDIO2040C
-# TOSHIBA e-STUDIO2050C
-# TOSHIBA e-STUDIO2055C
-# TOSHIBA e-STUDIO2500AC
-# TOSHIBA e-STUDIO2505AC
-# TOSHIBA e-STUDIO2540C
-# TOSHIBA e-STUDIO2550C
-# TOSHIBA e-STUDIO2555C
-# TOSHIBA e-STUDIO287CS
-# TOSHIBA e-STUDIO3005AC
-# TOSHIBA e-STUDIO3040C
-# TOSHIBA e-STUDIO3055C
-# TOSHIBA e-STUDIO347CS
-# TOSHIBA e-STUDIO3505AC
-# TOSHIBA e-STUDIO3540C
-# TOSHIBA e-STUDIO3555C
-# TOSHIBA e-STUDIO407CS
-# TOSHIBA e-STUDIO4505AC
-# TOSHIBA e-STUDIO4540C
-# TOSHIBA e-STUDIO4555C
-# TOSHIBA e-STUDIO5005AC
-# TOSHIBA e-STUDIO5055C
-# TOSHIBA e-STUDIO5506AC
-# TOSHIBA e-STUDIO5540C
-# TOSHIBA e-STUDIO5560C
-# TOSHIBA e-STUDIO6506AC
-# TOSHIBA e-STUDIO6540C
-# TOSHIBA e-STUDIO6550C
-# TOSHIBA e-STUDIO6560C
-# TOSHIBA e-STUDIO6570C
-# TOSHIBA e-STUDIO7506AC
-
 stdenv.mkDerivation {
   name = "cups-toshiba-estudio";
   version = "7.51";
@@ -47,14 +12,11 @@ stdenv.mkDerivation {
   buildInputs = [ perl ];
 
   phases = [ "unpackPhase"
-             "preInstall"
+             "patchPhase"
              "installPhase" ];
 
-  preInstall = ''
-    ls
+  patchPhase = ''
     patchShebangs lib/
-    head lib/cups/filter/est6550_Authentication
-
     gunzip                share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS.gz
     sed -i "s+/usr+$out+" share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS
     gzip                  share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS
@@ -69,10 +31,24 @@ stdenv.mkDerivation {
     chmod 755 $out/share/cups/model/Toshiba/TOSHIBA_ColorMFP_CUPS.gz
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Printer only driver for the Toshiba e-STUDIO class of printers";
+    longDescription = ''
+      This driver supports the following printers: TOSHIBA e-STUDIO2000AC,
+      TOSHIBA e-STUDIO2005AC, TOSHIBA e-STUDIO2040C, TOSHIBA e-STUDIO2050C,
+      TOSHIBA e-STUDIO2055C, TOSHIBA e-STUDIO2500AC, TOSHIBA e-STUDIO2505AC,
+      TOSHIBA e-STUDIO2540C, TOSHIBA e-STUDIO2550C, TOSHIBA e-STUDIO2555C,
+      TOSHIBA e-STUDIO287CS, TOSHIBA e-STUDIO3005AC, TOSHIBA e-STUDIO3040C,
+      TOSHIBA e-STUDIO3055C, TOSHIBA e-STUDIO347CS, TOSHIBA e-STUDIO3505AC,
+      TOSHIBA e-STUDIO3540C, TOSHIBA e-STUDIO3555C, TOSHIBA e-STUDIO407CS,
+      TOSHIBA e-STUDIO4505AC, TOSHIBA e-STUDIO4540C, TOSHIBA e-STUDIO4555C,
+      TOSHIBA e-STUDIO5005AC, TOSHIBA e-STUDIO5055C, TOSHIBA e-STUDIO5506AC,
+      TOSHIBA e-STUDIO5540C, TOSHIBA e-STUDIO5560C, TOSHIBA e-STUDIO6506AC,
+      TOSHIBA e-STUDIO6540C, TOSHIBA e-STUDIO6550C, TOSHIBA e-STUDIO6560C,
+      TOSHIBA e-STUDIO6570C and TOSHIBA e-STUDIO7506AC.
+    '';
     homepage = https://www.toshiba-business.com.au/support/drivers;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ jpotier ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.jpotier ];
   };
 }
