@@ -1,18 +1,10 @@
 3bmd
-3bmd-ext-tables
-3bmd-ext-wiki-links
-3bmd-youtube
 alexandria
 babel
 blackbird
 bordeaux-threads
 caveman
 cffi
-cffi-examples
-cffi-grovel
-cffi-libffi
-cffi-toolchain
-cffi-uffi-compat
 chipz
 circular-streams
 clack
@@ -35,6 +27,7 @@ cl-mysql
 closer-mop
 cl-ppcre
 cl-ppcre-template
+cl-ppcre-unicode
 cl-reexport
 cl-smtp
 clsql
@@ -53,9 +46,6 @@ clx-truetype
 command-line-arguments
 css-lite
 cxml
-cxml-dom
-cxml-klacks
-cxml-xml
 dbd-mysql
 dbd-postgres
 dbd-sqlite3

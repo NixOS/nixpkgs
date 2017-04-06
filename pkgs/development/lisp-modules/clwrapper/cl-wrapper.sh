@@ -49,7 +49,7 @@ NIX_LISP_ASDF_REGISTRY_CODE="
     )
 "
 
-NIX_LISP_ASDF="${NIX_LISP_ASDF:-@asdf@}"
+NIX_LISP_ASDF="${NIX_LISP_ASDF:-@out@}"
 
 nix_lisp_run_single_form(){
   NIX_LISP_FINAL_PARAMETERS=("$NIX_LISP_EXEC_CODE" "$1"

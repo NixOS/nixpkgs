@@ -16,8 +16,13 @@ rec {
     postInstall = ''
       find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/documentation-utils[.]asd${"$"}' |
         while read f; do
-          CL_SOURCE_REGISTRY= \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
             "$out"/bin/*-lisp-launcher.sh ||
           mv "$f"{,.sibling}; done || true
     '';
