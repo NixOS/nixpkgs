@@ -12,26 +12,25 @@ in {
     };
 
     width = mkOption {
-      type = types.int;
-      default = 1920;
+      type = types.nullOr types.int;
+      default = null;
+      example = 1920;
       description = "Screen width";
     };
 
     height = mkOption {
-      type = types.int;
-      default = 1080;
+      type = types.nullOr types.int;
+      default = null;
+      example = 1080;
       description = "Screen height";
     };
   };
+
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.haskellPackages.FractalArt ];
-    systemd.user.services.fractalart = {
-      before = [ "display-manager.service" ];
-      wantedBy = [ "default.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.haskellPackages.FractalArt}/bin/FractalArt --no-bg -w ${toString cfg.width} -h ${toString cfg.height} -f .background-image";
-      };
-    };
+    services.xserver.displayManager.sessionCommands =
+      "${pkgs.haskellPackages.FractalArt}/bin/FractalArt --no-bg -f .background-image"
+        + optionalString (cfg.width  != null) " -w ${toString cfg.width}"
+        + optionalString (cfg.height != null) " -h ${toString cfg.height}";
   };
 }
