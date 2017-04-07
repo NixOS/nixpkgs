@@ -87,6 +87,7 @@ let
       kio-extras = callPackage ./kio-extras.nix {};
       kholidays = callPackage ./kholidays.nix {};
       kldap = callPackage ./kldap.nix {};
+      kleopatra = callPackage ./kleopatra.nix {};
       kmail = callPackage ./kmail.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
       kmbox = callPackage ./kmbox.nix {};
