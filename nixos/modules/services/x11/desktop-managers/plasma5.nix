@@ -176,7 +176,7 @@ in
       environment.pathsToLink = [ "/share" ];
 
       environment.etc = singleton {
-        source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        source = xcfg.xkbDir;
         target = "X11/xkb";
       };
 
@@ -208,11 +208,7 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        themes = [
-          pkgs.extra-cmake-modules # for the setup-hook
-          plasma5.plasma-workspace
-          pkgs.breeze-icons
-        ];
+        package = pkgs.sddmPlasma5;
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
@@ -224,11 +220,6 @@ in
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
-
-      # use kimpanel as the default IBus panel
-      i18n.inputMethod.ibus.panel =
-        lib.mkDefault
-        "${plasma5.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
 
     })
   ];

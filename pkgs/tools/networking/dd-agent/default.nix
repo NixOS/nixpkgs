@@ -20,6 +20,7 @@ let
       ipaddress
       backports_ssl_match_hostname
       docker_pycreds
+      uptime
     ];
 
     # due to flake8
@@ -47,7 +48,7 @@ in stdenv.mkDerivation rec {
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.pymongo
+    pythonPackages.pymongo_2_9_1
     pythonPackages.python-etcd
     pythonPackages.consul
     docker_1_10

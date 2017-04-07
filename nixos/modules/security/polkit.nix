@@ -64,7 +64,7 @@ in
     systemd.packages = [ pkgs.polkit.out ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
-    systemd.services.polkit.unitConfig.X-StopIfChanged = false;
+    systemd.services.polkit.stopIfChanged = false;
 
     # The polkit daemon reads action/rule files
     environment.pathsToLink = [ "/share/polkit-1" ];

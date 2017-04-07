@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.pango.org/;
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin urkud ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

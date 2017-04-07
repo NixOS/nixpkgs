@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, pkgconfig, qtkeychain, sqlite }:
+{ stdenv, fetchurl, cmake, qt5, pkgconfig, qtkeychain, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "owncloud-client-${version}";
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ qt4 qtkeychain sqlite];
+  buildInputs = [ qt5.qtbase qt5.qtwebkit qtkeychain sqlite ];
 
   cmakeFlags = [
-  "-UCMAKE_INSTALL_LIBDIR"
+    "-UCMAKE_INSTALL_LIBDIR"
   ];
 
   enableParallelBuilding = true;

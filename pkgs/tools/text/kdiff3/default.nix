@@ -16,7 +16,11 @@ let
       inherit rev;
     };
 
-    preConfigure = "cd kdiff3";
+    setSourceRoot = ''sourceRoot="$(echo */kdiff3/)"'';
+
+    postPatch = ''
+      sed -re "s/(p\\[[^]]+] *== *)('([^']|\\\\')+')/\\1QChar(\\2)/g" -i src/diff.cpp
+    '';
 
     nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
@@ -26,7 +30,7 @@ let
       homepage = http://kdiff3.sourceforge.net/;
       license = licenses.gpl2Plus;
       description = "Compares and merges 2 or 3 files or directories";
-      maintainers = with maintainers; [ viric urkud peterhoeg ];
+      maintainers = with maintainers; [ viric peterhoeg ];
       platforms = with platforms; linux;
     };
   };

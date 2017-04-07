@@ -16,7 +16,7 @@ stdenv.mkDerivation (rec {
     homepage = http://natspec.sourceforge.net/ ;
     description = "A library intended to smooth national specificities in using of programs";
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
   NIX_LDFLAGS = "-liconv";

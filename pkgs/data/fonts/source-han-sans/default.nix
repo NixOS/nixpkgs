@@ -23,10 +23,11 @@ let
     '';
 
     meta = {
-      description = "${language} subset of an open source Pan-CJK typeface";
+      description = "${language} subset of an open source Pan-CJK sans-serif typeface";
       homepage = https://github.com/adobe-fonts/source-han-sans;
-      license = stdenv.lib.licenses.asl20;
+      license = stdenv.lib.licenses.ofl;
       platforms = stdenv.lib.platforms.unix;
+      maintainers = with stdenv.lib.maintainers; [ taku0 ];
     };
   };
 in

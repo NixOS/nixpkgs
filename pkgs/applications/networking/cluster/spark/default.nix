@@ -1,13 +1,14 @@
 { stdenv, fetchzip, makeWrapper, jre, pythonPackages
+, RSupport? true, R
 , mesosSupport ? true, mesos
 , version
 }:
 
 let
   versionMap = {
-    "1.6.0" = {
+    "1.6.3" = {
                 hadoopVersion = "cdh4";
-                sparkSha256 = "19ycx1r8g82vkvzmn9wxkssmv2damrg72yfmrgzpc6xyh071g91c";
+                sparkSha256 = "00il083cjb9xqzsma2ifphq9ggichwndrj6skh2z5z9jk3z0lgyn";
               };
     "2.1.0" = {
                 hadoopVersion = "hadoop2.4";
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
+    ++ optional RSupport R
     ++ optional mesosSupport mesos;
 
   untarDir = "${name}-bin-${hadoopVersion}";
@@ -46,6 +48,9 @@ stdenv.mkDerivation rec {
     export SPARK_HOME="$out/lib/${untarDir}"
     export PYSPARK_PYTHON="${pythonPackages.python}/bin/${pythonPackages.python.executable}"
     export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
+    ${optionalString RSupport
+      ''export SPARKR_R_SHELL="${R}/bin/R"
+        export PATH=$PATH:"${R}/bin/R"''}
     ${optionalString mesosSupport
       ''export MESOS_NATIVE_LIBRARY="$MESOS_NATIVE_LIBRARY"''}
     EOF
@@ -57,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description      = "Lightning-fast cluster computing";
+    description      = "Apache Spark is a fast and general engine for large-scale data processing";
     homepage         = "http://spark.apache.org";
     license          = stdenv.lib.licenses.asl20;
     platforms        = stdenv.lib.platforms.all;

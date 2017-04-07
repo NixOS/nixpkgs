@@ -1,17 +1,22 @@
-{stdenv, fetchurl, wxGTK, subversion, apr, aprutil, python}:
+{ stdenv, fetchurl, fetchpatch, wxGTK, subversion, apr, aprutil, python }:
 
-stdenv.mkDerivation {
-  name = "rapidsvn-0.12.0-1";
+stdenv.mkDerivation rec {
+  name = "rapidsvn-${version}";
+  version = "0.12.1";
 
   src = fetchurl {
-    url = http://www.rapidsvn.org/download/release/0.12/rapidsvn-0.12.0-1.tar.gz;
-    sha256 = "1i3afjmx99ljw1bj54q47fs0g1q9dmxxvr4ciq7ncp5s52shszgg";
+    url = "http://www.rapidsvn.org/download/release/${version}/${name}.tar.gz";
+    sha256 = "1bmcqjc12k5w0z40k7fkk8iysqv4fw33i80gvcmbakby3d4d4i4p";
   };
 
   buildInputs = [ wxGTK subversion apr aprutil python ];
 
   configureFlags = [ "--with-svn-include=${subversion.dev}/include"
     "--with-svn-lib=${subversion.out}/lib" ];
+
+  patches = [
+    ./fix-build.patch
+  ];
 
   meta = {
     description = "Multi-platform GUI front-end for the Subversion revision system";

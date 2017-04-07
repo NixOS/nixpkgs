@@ -1,16 +1,17 @@
 { stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
 , libnotify, libsecret, polkit, isocodes, modemmanager, librsvg
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, udev, libgudev, hicolor_icon_theme, jansson, wrapGAppsHook }:
+, makeWrapper, udev, libgudev, hicolor_icon_theme, jansson, wrapGAppsHook, webkitgtk }:
 
 stdenv.mkDerivation rec {
-  name    = "${pname}-${version}";
+  name    = "${pname}-${major}.${minor}";
   pname   = "network-manager-applet";
-  version = networkmanager.version;
+  major   = "1.4";
+  minor   = "6";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${name}.tar.xz";
-    sha256 = "09ijxicsqf39y6h8kwbfjyljfbqkkx4vrpyfn6gfg1h9mvp4cf39";
+    url    = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
+    sha256 = "0xpcdwqmnwiqqqsd5rx1gh5rvv5m2skj59bqxhccy1k2ikzgr9hh";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
     polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
-    modemmanager jansson librsvg glib_networking gnome3.dconf
+    modemmanager jansson librsvg glib_networking gnome3.dconf webkitgtk
   ];
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage    = http://projects.gnome.org/NetworkManager/;
     description = "NetworkManager control applet for GNOME";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom urkud rickynils ];
+    maintainers = with maintainers; [ phreedom rickynils ];
     platforms   = platforms.linux;
   };
 }

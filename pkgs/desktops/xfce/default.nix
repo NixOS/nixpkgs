@@ -73,6 +73,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 
   xfce4icontheme  = callPackage ./art/xfce4-icon-theme.nix { };
+  xfwm4themes     = callPackage ./art/xfwm4-themes.nix { };
 
   #### PANEL PLUGINS        from "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.{bz2,gz}"
 

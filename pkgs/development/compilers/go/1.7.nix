@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, tzdata, iana_etc, go_bootstrap, runCommand, writeScriptBin
+{ stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre, cacert
 , Security, Foundation, bash }:
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
     # Remove the timezone naming test
     sed -i '/TestLoadFixed/areturn' src/time/time_test.go
 
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
-    sed -i 's,/etc/services,${iana_etc}/etc/services,' src/net/port_unix.go
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
+    sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
 
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./remove-tools-1.7.patch
-      ./cacert-1.7.patch
+      ./ssl-cert-file-1.7.patch
       ./creds-test.patch
 
       # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"

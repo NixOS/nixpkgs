@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://cloud.radare.org/get/${version}/${name}.tar.gz";
-    sha256 = "08p2vhv6vkqvknwq18xl5wgf843lbpbmb111x23gkkxm6vxvpydd";
+    sha256 = "1kwp0i5sqk5almnx4g8claimqz8rwvv1fn8x66k4az1s8k7g9kiv";
   };
 
 

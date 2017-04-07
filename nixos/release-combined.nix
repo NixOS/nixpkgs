@@ -4,7 +4,7 @@
 
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" "aarch64-linux" ]
+, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
 let
@@ -92,7 +92,7 @@ in rec {
         (all nixos.tests.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
-        (all nixos.tests.sddm)
+        (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)

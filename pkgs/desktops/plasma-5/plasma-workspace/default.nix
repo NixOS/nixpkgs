@@ -17,12 +17,15 @@ plasmaPackage {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
+    isocodes libdbusmenu libSM libXcursor pam wayland
+  ];
+  propagatedBuildInputs = [
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage krunner ktexteditor ktextwidgets kwallet kwayland
     kwin kxmlrpcclient libkscreen libksysguard networkmanager-qt phonon
-    plasma-framework qtgraphicaleffects qtquickcontrols qtquickcontrols2
-    qtscript qtx11extras solid isocodes libdbusmenu libSM libXcursor pam wayland
+    plasma-framework solid qtgraphicaleffects qtquickcontrols qtquickcontrols2
+    qtscript qtx11extras
   ];
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

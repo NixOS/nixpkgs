@@ -7,8 +7,9 @@ let
   version = "3.9.2";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
-in python2Packages.mkPythonDerivation {
+in python2Packages.buildPythonApplication {
   inherit name;
+  format = "other";
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";

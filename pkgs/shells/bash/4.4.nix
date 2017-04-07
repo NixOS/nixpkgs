@@ -52,13 +52,6 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches = upstreamPatches
-      ++ [ (fetchurl {
-              # https://security.gentoo.org/glsa/201701-02
-              url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-shells"
-                  + "/bash/files/bash-4.4-popd-offset-overflow.patch"
-                  + "?id=1bf1ceeb04a2f57e1e5e1636a8c288c4d0db6682";
-              sha256 = "02n08lw5spvsc2b1bll0gr6mg4qxcg7pzfjkw7ji5w7bjcikccbm";
-          }) ]
       ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {

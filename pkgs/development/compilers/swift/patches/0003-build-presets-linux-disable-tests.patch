@@ -1,0 +1,38 @@
+From fcc7c216da6cd255f884b7aa39f361786e3afa6a Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Tue, 28 Mar 2017 15:02:18 -0500
+Subject: [PATCH 3/4] build-presets: (linux) disable tests.
+
+---
+ utils/build-presets.ini | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/utils/build-presets.ini b/utils/build-presets.ini
+index 1095cbaab7..1739e91dc2 100644
+--- a/utils/build-presets.ini
++++ b/utils/build-presets.ini
+@@ -700,7 +700,7 @@ build-swift-stdlib-unittest-extra
+ 
+ # Executes the lit tests for the installable package that is created
+ # Assumes the swift-integration-tests repo is checked out
+-test-installable-package
++# test-installable-package
+ 
+ # Path to the root of the installation filesystem.
+ install-destdir=%(install_destdir)s
+@@ -713,9 +713,9 @@ mixin-preset=mixin_linux_installation
+ build-subdir=buildbot_linux
+ lldb
+ release
+-test
+-validation-test
+-long-test
++#test
++#validation-test
++#long-test
+ foundation
+ libdispatch
+ lit-args=-v
+-- 
+2.12.2
+

@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace configure.in \
       --replace '`sw_vers -productVersion`' '10.10'
+
+    # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
   '';
 
   preConfigure = ''

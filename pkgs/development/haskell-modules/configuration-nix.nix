@@ -131,8 +131,6 @@ self: super: builtins.intersectAttrs super {
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
-  webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
-  webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
@@ -240,6 +238,8 @@ self: super: builtins.intersectAttrs super {
         librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
       }
     );
+
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -432,10 +432,6 @@ self: super: builtins.intersectAttrs super {
 
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
-
-  # requires webkitgtk API version 3 (webkitgtk 2.4 is the latest webkit supporting that version)
-  gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
-  gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
 
   # Requires gi-javascriptcore API version 4
   gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };

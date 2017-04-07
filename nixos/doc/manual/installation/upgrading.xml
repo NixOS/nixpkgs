@@ -15,12 +15,12 @@ been built.  These channels are:
 <itemizedlist>
   <listitem>
     <para><emphasis>Stable channels</emphasis>, such as <literal
-    xlink:href="https://nixos.org/channels/nixos-14.12">nixos-14.12</literal>.
+    xlink:href="https://nixos.org/channels/nixos-17.03">nixos-17.03</literal>.
     These only get conservative bug fixes and package upgrades.  For
     instance, a channel update may cause the Linux kernel on your
-    system to be upgraded from 3.4.66 to 3.4.67 (a minor bug fix), but
-    not from 3.4.<replaceable>x</replaceable> to
-    3.11.<replaceable>x</replaceable> (a major change that has the
+    system to be upgraded from 4.9.16 to 4.9.17 (a minor bug fix), but
+    not from 4.9.<replaceable>x</replaceable> to
+    4.11.<replaceable>x</replaceable> (a major change that has the
     potential to break things).  Stable channels are generally
     maintained until the next stable branch is created.</para>
     <para></para>
@@ -34,7 +34,7 @@ been built.  These channels are:
   </listitem>
   <listitem>
     <para><emphasis>Small channels</emphasis>, such as <literal
-    xlink:href="https://nixos.org/channels/nixos-14.12-small">nixos-14.12-small</literal>
+    xlink:href="https://nixos.org/channels/nixos-17.03-small">nixos-17.03-small</literal>
     or <literal
     xlink:href="https://nixos.org/channels/nixos-unstable-small">nixos-unstable-small</literal>. These
     are identical to the stable and unstable channels described above,
@@ -55,8 +55,8 @@ appliances.)</para>
 
 <para>When you first install NixOS, you’re automatically subscribed to
 the NixOS channel that corresponds to your installation source.   For
-instance, if you installed from a 14.12 ISO, you will be subscribed to
-the <literal>nixos-14.12</literal> channel.  To see which NixOS
+instance, if you installed from a 17.03 ISO, you will be subscribed to
+the <literal>nixos-17.03</literal> channel.  To see which NixOS
 channel you’re subscribed to, run the following as root:
 
 <screen>
@@ -71,16 +71,16 @@ To switch to a different NixOS channel, do
 </screen>
 
 (Be sure to include the <literal>nixos</literal> parameter at the
-end.)  For instance, to use the NixOS 14.12 stable channel:
+end.)  For instance, to use the NixOS 17.03 stable channel:
 
 <screen>
-# nix-channel --add https://nixos.org/channels/nixos-14.12 nixos
+# nix-channel --add https://nixos.org/channels/nixos-17.03 nixos
 </screen>
 
 If you have a server, you may want to use the “small” channel instead:
 
 <screen>
-# nix-channel --add https://nixos.org/channels/nixos-14.12-small nixos
+# nix-channel --add https://nixos.org/channels/nixos-17.03-small nixos
 </screen>
 
 And if you want to live on the bleeding edge:
@@ -130,7 +130,7 @@ runs, see <command>systemctl list-timers</command>.)  You can also
 specify a channel explicitly, e.g.
 
 <programlisting>
-system.autoUpgrade.channel = https://nixos.org/channels/nixos-15.09;
+system.autoUpgrade.channel = https://nixos.org/channels/nixos-17.03;
 </programlisting>
 
 </para>

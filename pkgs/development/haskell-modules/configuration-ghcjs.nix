@@ -53,6 +53,14 @@ self: super:
   terminfo = self.terminfo_0_4_0_2;
   xhtml = self.xhtml_3000_2_1;
 
+  # Cabal isn't part of the stage1 packages which form the default package-db
+  # that GHCJS provides.
+  # Almost all packages require Cabal to build their Setup.hs,
+  # but usually they don't declare it explicitly as they don't need to for normal GHC.
+  # To account for that we add Cabal by default.
+  mkDerivation = args:
+    if args.pname == "Cabal" then super.mkDerivation args else super.mkDerivation (args //
+      { setupHaskellDepends = (args.setupHaskellDepends or []) ++ [ self.Cabal ]; });
 
 ## OTHER PACKAGES
 
@@ -180,8 +188,6 @@ self: super:
         "glib" "gtk3" "webkitgtk3" "webkitgtk3-javascriptcore" "raw-strings-qq" "unix"
       ] drv.libraryHaskellDepends;
   });
-
-  semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
 
   transformers-compat = overrideCabal super.transformers-compat (drv: {
     configureFlags = [];

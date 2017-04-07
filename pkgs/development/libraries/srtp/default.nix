@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     "--disable-debug"
   ] ++ optional (openssl != null) "--enable-openssl";
 
+  buildFlags = [ "shared_library" ];
+
   postInstall = ''
     rm -rf $out/bin
   '';

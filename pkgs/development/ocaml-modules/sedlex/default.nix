@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
+  dontStrip = true;
+
   meta = {
     homepage = https://github.com/alainfrisch/sedlex;
     description = "An OCaml lexer generator for Unicode";

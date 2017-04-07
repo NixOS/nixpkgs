@@ -1,7 +1,7 @@
 { stdenv, gnupg, coreutils, writeScript }:
 
 stdenv.mkDerivation {
-  name = "gnupg1compat-0";
+  name = "gnupg1compat-${gnupg.version}";
 
   builder = writeScript "gnupg1compat-builder" ''
     # First symlink all top-level dirs
@@ -18,7 +18,9 @@ stdenv.mkDerivation {
     ${coreutils}/bin/ln -s gpgv2 $out/bin/gpgv
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = gnupg.meta // {
+    description = gnupg.meta.description +
+      " with symbolic links for gpg and gpgv";
+    priority = -1;
   };
 }

@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.sagemath.org";
     description = "A free open source mathematics software system";
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true;
   };
 }
