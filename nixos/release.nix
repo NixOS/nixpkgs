@@ -288,8 +288,8 @@ in rec {
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
+  tests.postgresql = callSubTests tests/postgresql.nix {};
   tests.pgjwt = callTest tests/pgjwt.nix {};
-  tests.postgresql = callTest tests/postgresql.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};
