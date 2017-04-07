@@ -87,7 +87,7 @@ let
   get_libluajit   = get_url libluajit_url   "1nhvcdjpqrhd5qbihdm3bxpw84irfvnw2vmfqnsy253ay3dxzrgy";
   get_gtdialog    = get_url gtdialog_url    "0nvcldyhj8abr8jny9pbyfjwg8qfp9f2h508vjmrvr5c5fqdbbm0";
   get_cdk         = get_url cdk_url         "0j74l874y33i26y5kjg3pf1vswyjif8k93pqhi0iqykpbxfsg382";
-  get_bombay      = get_url_zip bombay_url  "05fnh1imxdb4sb076fzqywqszp31whdbkzmpkqxc8q2r1m5vj3hg"
+  get_bombay      = get_url_zip bombay_url  "0illabngrrxidkprgz268wgjqknrds34nhm6hav95xc1nmsdr6jj"
     + "mv tip.zip bombay.zip\n";
   get_termkey     = get_url termkey_url     "12gkrv1ldwk945qbpprnyawh0jz7rmqh18fyndbxiajyxmj97538";
 
