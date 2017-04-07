@@ -9446,7 +9446,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
@@ -9459,7 +9459,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
