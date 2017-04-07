@@ -10368,7 +10368,11 @@ in {
     };
   };
 
-  django = self.django_1_10;
+  django = self.django_1_11;
+
+  django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
+    gdal = self.gdal;
+  };
 
   django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
     gdal = self.gdal;
