@@ -50,12 +50,15 @@ let
     in {
       kdelibs = callPackage ./kdelibs { inherit attica phonon; };
       akonadi = callPackage ./akonadi.nix {};
+      akonadi-calendar = callPackage ./akonadi-calendar.nix {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
       akonadi-notes = callPackage ./akonadi-notes.nix {};
       akonadi-search = callPackage ./akonadi-search.nix {};
+      akonadiconsole = callPackage ./akonadiconsole.nix {};
       ark = callPackage ./ark/default.nix {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
+      calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
@@ -81,6 +84,7 @@ let
       kig = callPackage ./kig.nix {};
       kimap = callPackage ./kimap.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
+      kholidays = callPackage ./kholidays.nix {};
       kldap = callPackage ./kldap.nix {};
       kmail = callPackage ./kmail.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
