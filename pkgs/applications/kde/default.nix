@@ -56,6 +56,7 @@ let
       akonadi-notes = callPackage ./akonadi-notes.nix {};
       akonadi-search = callPackage ./akonadi-search.nix {};
       akonadiconsole = callPackage ./akonadiconsole.nix {};
+      akregator = callPackage ./akregator.nix {};
       ark = callPackage ./ark/default.nix {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
@@ -116,6 +117,7 @@ let
       pimcommon = callPackage ./pimcommon.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
+      syndication = callPackage ./syndication.nix {};
 
       l10n = recurseIntoAttrs (import ./l10n.nix { inherit callPackage lib recurseIntoAttrs; });
     };
