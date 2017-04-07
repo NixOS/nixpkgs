@@ -99,6 +99,7 @@ let
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
+      kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       krfb = callPackage ./krfb.nix {};
