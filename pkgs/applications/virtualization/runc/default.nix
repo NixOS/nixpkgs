@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, go-md2man
+{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, go-md2man
 , go, pkgconfig, libapparmor, apparmor-parser, libseccomp }:
 
 with lib;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = ["fortify"];
 
-  buildInputs = [ go-md2man go pkgconfig libseccomp libapparmor apparmor-parser ];
+  buildInputs = [ removeReferencesTo go-md2man go pkgconfig libseccomp libapparmor apparmor-parser ];
 
   makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
 
@@ -61,10 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    # remove references to go compiler
-    while read file; do
-      sed -ri "s,${go},$(echo "${go}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" $file
-    done < <(find $out/bin -type f 2>/dev/null)
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = {

@@ -6,14 +6,16 @@
 
 let
 
-  inherit (stdenv.lib) fix' extends;
+  inherit (stdenv.lib) fix' extends makeOverridable makeExtensible;
+  inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
 
   haskellPackages = self:
     let
 
-      mkDerivation = pkgs.callPackage ./generic-builder.nix {
+      mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
         inherit stdenv;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
+        nodejs = pkgs.nodejs-slim;
         jailbreak-cabal = if (self.ghc.cross or null) != null
           then self.ghc.bootPkgs.jailbreak-cabal
           else self.jailbreak-cabal;
@@ -37,9 +39,7 @@ let
         });
       };
 
-      overrideCabal = drv: f: drv.override (args: args // {
-        mkDerivation = drv: args.mkDerivation (drv // f drv);
-      });
+      mkDerivation = makeOverridable mkDerivationImpl;
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
         overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
@@ -57,7 +57,7 @@ let
 
       haskellSrc2nix = { name, src, sha256 ? null }:
         let
-          sha256Arg = if isNull sha256 then "" else ''--sha256="${sha256}"'';
+          sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
         in pkgs.stdenv.mkDerivation {
           name = "cabal2nix-${name}";
           buildInputs = [ pkgs.cabal2nix ];
@@ -80,12 +80,12 @@ let
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
 
-        inherit mkDerivation callPackage;
+        inherit mkDerivation callPackage haskellSrc2nix hackage2nix;
 
-        callHackage = name: version: self.callPackage (hackage2nix name version);
+        callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
         # Creates a Haskell package from a source package by calling cabal2nix on the source.
-        callCabal2nix = name: src: self.callPackage (haskellSrc2nix { inherit src name; });
+        callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
@@ -109,7 +109,7 @@ let
 
 in
 
-  fix'
+  makeExtensible
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig

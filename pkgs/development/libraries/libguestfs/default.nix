@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen }:
+, gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen, libapparmor }:
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     makeWrapper pkgconfig autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
-    SysVirt numactl xen
+    SysVirt numactl xen libapparmor
   ];
 
   configureFlags = "--disable-appliance --disable-daemon";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
-        --prefix "PATH" : "$out/bin:${hivex}/bin" \
+        --prefix "PATH" : "$out/bin:${hivex}/bin:${qemu}/bin" \
         --prefix "PERL5LIB" : "$PERL5LIB:$out/lib/perl5/site_perl"
     done
   '';

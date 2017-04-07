@@ -132,7 +132,6 @@ in
     services.znc = {
       enable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Enable a ZNC service for a user.
@@ -208,7 +207,7 @@ in
 
         networks = mkOption {
           default = { };
-          type = with types; loaOf (submodule networkOpts);
+          type = with types; attrsOf (submodule networkOpts);
           description = ''
             IRC networks to connect the user to.
           '';
@@ -251,7 +250,6 @@ in
 
         useSSL = mkOption {
           default = true;
-          example = true;
           type = types.bool;
           description = ''
             Indicates whether the ZNC server should use SSL when listening on the specified port. A self-signed certificate will be generated.
@@ -278,7 +276,6 @@ in
  
       mutable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the `dataDir` directory to be changed

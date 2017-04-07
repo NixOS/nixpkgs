@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://dfilemanager.sourceforge.net/";
-    description = "File manager written in Qt/C++, it does use one library from kdelibs, the solid lib for easy device handling";
+    description = "File manager written in Qt/C++";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.eduarrrd ];

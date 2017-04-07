@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools, libnl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.2-rc3";
+  name = "aircrack-ng-1.2-rc4";
 
   src = fetchurl {
     url = "http://download.aircrack-ng.org/${name}.tar.gz";
-    sha256 = "11a53acln0fpar6v75qlybzdg8hdwc9ssd06fxygr47yp755qncf";
+    sha256 = "0dpzx9kddxpgzmgvdpl3rxn0jdaqhm5wxxndp1xd7d75mmmc2fnr";
   };
 
   buildInputs = [ libpcap openssl zlib libnl pkgconfig ];

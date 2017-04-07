@@ -1,18 +1,19 @@
-{ stdenv, fetchFromGitHub, fetchurl, python, pcsclite, pth, glibc }:
+{ stdenv, fetchFromGitHub, fetchurl, python, pcsclite, pth }:
 
 stdenv.mkDerivation rec {
   pname = "hexio";
   name = "${pname}-${version}";
-  version = "201605";
+  version = "1.0-RC1";
 
   src = fetchFromGitHub {
     sha256 = "08jxkdi0gjsi8s793f9kdlad0a58a0xpsaayrsnpn9bpmm5cgihq";
-    rev = "f6f963bd0fcd2808977e0ad82dcb3100691cdd7c";
+    rev = "version-${version}";
     owner = "vanrein";
     repo = "hexio";
   };
 
-  buildInputs = [ python pcsclite pth glibc ];
+  propagatedBuildInputs = [ python ];
+  buildInputs = [ pcsclite pth ];
 
   patchPhase = ''
     substituteInPlace Makefile \

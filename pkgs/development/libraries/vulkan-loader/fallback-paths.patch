@@ -1,0 +1,52 @@
+commit a59b141559a8c1813da438b97e5f79eeb6cc7642
+Author: Benjamin Saunders <ben.e.saunders@gmail.com>
+Date:   Sun Feb 19 11:14:24 2017 -0800
+
+    loader: Configurable fallback search paths
+    
+    This makes it easier for non-FHS distributions to behave well when the loader
+    is used by a SUID process or in an otherwise unusual environment.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a43d264..d28b3f5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,6 +16,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+ find_package(PythonInterp 3 REQUIRED)
+ 
+ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
++    set(FALLBACK_CONFIG_DIRS "/etc/xdg" CACHE STRING
++        "Search path to use when XDG_CONFIG_DIRS is unset or empty or the current process is SUID/SGID. Default is freedesktop compliant.")
++    set(FALLBACK_DATA_DIRS "/usr/local/share:/usr/share" CACHE STRING
++        "Search path to use when XDG_DATA_DIRS is unset or empty or the current process is SUID/SGID. Default is freedesktop compliant.")
++
+     include(FindPkgConfig)
+     option(BUILD_WSI_XCB_SUPPORT "Build XCB WSI support" ON)
+     option(BUILD_WSI_XLIB_SUPPORT "Build Xlib WSI support" ON)
+@@ -285,7 +290,10 @@ run_vk_xml_generate(dispatch_table_generator.py vk_dispatch_table_helper.h)
+ if(NOT WIN32)
+     include(GNUInstallDirs)
+ 
++    add_definitions(-DFALLBACK_CONFIG_DIRS="${FALLBACK_CONFIG_DIRS}")
++    add_definitions(-DFALLBACK_DATA_DIRS="${FALLBACK_DATA_DIRS}")
+     add_definitions(-DSYSCONFDIR="${CMAKE_INSTALL_FULL_SYSCONFDIR}")
++
+     # Make sure /etc is searched by the loader
+     if(NOT (CMAKE_INSTALL_FULL_SYSCONFDIR STREQUAL "/etc"))
+         add_definitions(-DEXTRASYSCONFDIR="/etc")
+diff --git a/loader/loader.c b/loader/loader.c
+index 81c37c4..83378eb 100644
+--- a/loader/loader.c
++++ b/loader/loader.c
+@@ -2644,9 +2644,9 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
+         const char *xdgconfdirs = secure_getenv("XDG_CONFIG_DIRS");
+         const char *xdgdatadirs = secure_getenv("XDG_DATA_DIRS");
+         if (xdgconfdirs == NULL || xdgconfdirs[0] == '\0')
+-            xdgconfdirs = "/etc/xdg";
++            xdgconfdirs = FALLBACK_CONFIG_DIRS;
+         if (xdgdatadirs == NULL || xdgdatadirs[0] == '\0')
+-            xdgdatadirs = "/usr/local/share:/usr/share";
++            xdgdatadirs = FALLBACK_DATA_DIRS;
+         const size_t rel_size = strlen(relative_location);
+         // Leave space for trailing separators
+         loc_size += strlen(xdgconfdirs) + strlen(xdgdatadirs) + 2*rel_size + 2;

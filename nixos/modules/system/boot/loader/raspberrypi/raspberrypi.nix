@@ -33,7 +33,7 @@ in
 
     boot.loader.raspberryPi.version = mkOption {
       default = 2;
-      type = types.enum [ 1 2 ];
+      type = types.enum [ 1 2 3 ];
       description = ''
       '';
     };

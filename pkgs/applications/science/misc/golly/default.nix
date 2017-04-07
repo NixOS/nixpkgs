@@ -1,4 +1,4 @@
-{stdenv, fetchurl, wxGTK, perl, python, zlib, mesa, libX11}:
+{stdenv, fetchurl, wxGTK, perl, python2, zlib, mesa, libX11}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="0a4vn2hm7h4b47v2iwip1z3n9y8isf79v08aipl2iqms2m3p5204";
   };
   buildInputs = [
-    wxGTK perl python zlib mesa libX11
+    wxGTK perl python2 zlib mesa libX11
   ];
 in
 stdenv.mkDerivation rec {
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
   makeFlags=[
     "AM_LDFLAGS="
   ];
-  NIX_LDFLAGS="-lpython${python.majorVersion} -lperl";
+  NIX_LDFLAGS="-lpython${python2.majorVersion} -lperl";
   preConfigure=''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
       -DPYTHON_SHLIB=$(basename "$(
-        readlink -f ${python}/lib/libpython*.so)")"
+        readlink -f ${python2}/lib/libpython*.so)")"
   '';
 
   meta = {

@@ -1,0 +1,22 @@
+Fix buffer overflow
+
+--- eflite-0.4.1.orig/es.c
++++ eflite-0.4.1/es.c
+@@ -329,7 +329,7 @@
+   char *p;
+ 
+   p = getenv("HOME");
+-  sprintf(buf, "%s/.es.conf", p);
++  snprintf(buf, sizeof(buf), "%s/.es.conf", p);
+   fp = fopen(buf, "r");
+   if (!fp) fp = fopen("/etc/es.conf", "r");
+   if (!fp) return 1;
+@@ -438,7 +438,7 @@
+   char logname[200];
+ 
+   if ((flags & 0xffff) > DEBUG) return;
+-  sprintf(logname, "%s/es.log", getenv("HOME"));
++  snprintf(logname, sizeof(logname), "%s/es.log", getenv("HOME"));
+   va_start(arg, text);
+   vsnprintf(buf, 200, text, arg);
+   va_end(arg);

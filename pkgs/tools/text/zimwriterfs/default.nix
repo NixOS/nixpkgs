@@ -1,16 +1,33 @@
-{ stdenv, fetchgit, automake, autoconf, libtool, lzma, pkgconfig, zimlib, file, zlib }:
+{ stdenv
+, fetchFromGitHub
 
-stdenv.mkDerivation {
-  name = "zimwriterfs";
-  version = "20150710";
+, autoconf
+, automake
+, libtool
+, pkgconfig
 
-  src = fetchgit {
-    url = https://gerrit.wikimedia.org/r/p/openzim.git;
-    rev = "165eab3e154c60b5b6436d653dc7c90f56cf7456";
-    sha256 = "076ixsq4lis0rkk7p049g02bidc7bggl9kf2wzmgmsnx396mqymf";
+, file
+, icu
+, libgumbo
+, lzma
+, xapian
+, zimlib
+, zlib
+}:
+
+stdenv.mkDerivation rec {
+  name = "zimwriterfs-${version}";
+  version = "1.0";
+
+  src = fetchFromGitHub {
+    owner = "wikimedia";
+    repo = "openzim";
+    rev = name;
+    sha256 = "1vkrrq929a8s3m5rri1lg0l2vd0mc9n2fsb2z1g88k4n4j2l6f19";
   };
 
-  buildInputs = [ automake autoconf libtool lzma pkgconfig zimlib file zlib ];
+  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  buildInputs = [ file icu libgumbo lzma zimlib zlib xapian ];
   setSourceRoot = "cd openzim-*/zimwriterfs; export sourceRoot=`pwd`";
   preConfigure = "./autogen.sh";
 

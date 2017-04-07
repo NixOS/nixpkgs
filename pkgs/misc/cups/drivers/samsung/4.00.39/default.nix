@@ -16,7 +16,7 @@
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
 let
-  cups' = cups.out;
+  cups' = stdenv.lib.getLib cups;
 in stdenv.mkDerivation rec {
   name = "samsung-UnifiedLinuxDriver-${version}";
   version = "4.00.39";

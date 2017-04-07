@@ -36,7 +36,7 @@ in {
     };
   };
 
-  elasticsearch_analisys_lemmagen = esPlugin rec {
+  elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
     pluginName = "elasticsearch-analysis-lemmagen";
     version = "0.1";

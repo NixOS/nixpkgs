@@ -1,20 +1,28 @@
 { stdenv, fetchFromGitHub, fetchpatch, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "simp_le-2016-12-16";
+  pname = "simp_le-client";
+  version = "0.1.1";
+  name = "${pname}-${version}";
 
-  # kuba/simp_le seems unmaintained
-  src = fetchFromGitHub {
-    owner = "zenhack";
-    repo = "simp_le";
-    rev = "63a43b8547cd9fbc87db6bcd9497c6e37f73abef";
-    sha256 = "04dr8lvcpi797722lsy06nxhlihrxdqgdy187pg3hl1ki2iq3ixx";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "18y8mg0s0i2bs57pi6mbkwgjlr5mmivchiyvrpcbdmkg9qlbfwaa";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ acme ];
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace 'acme>=0.9,<0.10' acme
+  '';
+
+  checkPhase = ''
+    $out/bin/simp_le --test
+  '';
+
+  propagatedBuildInputs = with pythonPackages; [ acme setuptools_scm ];
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/zenhack/simp_le";
     description = "Simple Let's Encrypt client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ gebner nckx ];

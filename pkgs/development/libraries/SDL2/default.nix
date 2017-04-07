@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   dontDisableStatic = true;
 
+  enableParallelBuilding = true;
+
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
   # to fail at doing this, hence `--disable-pulseaudio-shared'.
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
+    moveToOutput lib/libSDL2main.a "$dev"
     rm $out/lib/*.a
     moveToOutput bin/sdl2-config "$dev"
   '';

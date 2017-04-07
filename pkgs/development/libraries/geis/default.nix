@@ -16,11 +16,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "geis-${version}";
-  version = "2.2.16";
+  version = "2.2.17";
 
   src = fetchurl {
     url = "https://launchpad.net/geis/trunk/${version}/+download/${name}.tar.xz";
-    sha256 = "40a694092c79f325a2fbf8a9f301177bc91c364f4e637c2aa8963ad2a5aabbcf";
+    sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=pedantic";

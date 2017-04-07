@@ -34,16 +34,13 @@ self: super: {
   unix = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
-  haskeline = self.haskeline_0_7_2_1;
-  terminfo = self.terminfo_0_4_0_1;
+  haskeline = self.haskeline_0_7_3_1;
+  terminfo = self.terminfo_0_4_0_2;
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 
-  # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_8_4_1; };
-
   # Avoid inconsistent 'binary' versions from 'text' and 'Cabal'.
-  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_4_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_5_1; });
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -100,8 +97,18 @@ self: super: {
   semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend super.distributive self.semigroups;
+  QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
+  void = addBuildDepends super.void (with self; [hashable semigroups]);
+
+  # Need a newer version of Cabal to interpret their build instructions.
+  cmdargs = addSetupDepend super.cmdargs self.Cabal_1_24_2_0;
+  extra = addSetupDepend super.extra self.Cabal_1_24_2_0;
+  hlint = addSetupDepend super.hlint self.Cabal_1_24_2_0;
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
+
+  # Breaks a dependency cycle between QuickCheck and semigroups
+  unordered-containers = dontCheck super.unordered-containers;
 
 }

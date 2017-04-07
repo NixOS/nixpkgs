@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lv2 ];
 
-  installFlags = [ "LV2_PATH=$out/lib/lv2" ];
+  installFlags = [ "LV2_PATH=$(out)/lib/lv2"  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/portalmod/mod-distortion;

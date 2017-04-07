@@ -208,7 +208,6 @@ in
       storagePath = mkOption {
         type = types.path;
         default = "/var/lib/btsync/";
-        example = "/var/lib/btsync/";
         description = ''
           Where BitTorrent Sync will store it's database files (containing
           things like username info and licenses). Generally, you should not

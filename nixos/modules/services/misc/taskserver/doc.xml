@@ -136,9 +136,9 @@ $ ssh server nixos-taskserver user export my-company alice | sh
 
     <para>
       If you set any options within
-      <option>service.taskserver.pki.manual.*</option>, the automatic user and
-      CA management by the <command>nixos-taskserver</command> is disabled and
-      you need to create certificates and keys by yourself.
+      <option>service.taskserver.pki.manual.*</option>,
+      <command>nixos-taskserver</command> won't issue certificates, but you can
+      still use it for adding or removing user accounts.
     </para>
   </section>
 </chapter>

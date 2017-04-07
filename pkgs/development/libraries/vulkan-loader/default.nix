@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
   python3Packages, glslang, spirv-tools, x11, libxcb, libXrandr,
-  libXext, wayland }:
+  libXext, wayland, mesa_noglu }:
 
 let
   version = "1.0.39.1";
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_WSI_MIR_SUPPORT=OFF"
+    "-DFALLBACK_DATA_DIRS=${mesa_noglu.driverLink}/share:/usr/local/share:/usr/share"
   ];
 
-  patches = [ ./use-xdg-paths.patch ];
+  patches = [ ./use-xdg-paths.patch ./fallback-paths.patch ];
 
   outputs = [ "out" "dev" "demos" ];
 

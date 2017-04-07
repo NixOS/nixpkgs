@@ -291,7 +291,7 @@ rec {
 
       recurse = index: startAt:
         let cutUntil = i: [(substring startAt (i - startAt) s)]; in
-        if index < lastSearch then
+        if index <= lastSearch then
           if startWithSep index then
             let restartAt = index + sepLen; in
             cutUntil index ++ recurse restartAt restartAt
@@ -476,10 +476,8 @@ rec {
   readPathsFromFile = rootPath: file:
     let
       root = toString rootPath;
-      lines =
-        builtins.map (lib.removeSuffix "\n")
-        (lib.splitString "\n" (builtins.readFile file));
-      removeComments = lib.filter (line: !(lib.hasPrefix "#" line));
+      lines = lib.splitString "\n" (builtins.readFile file);
+      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
       absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
     in

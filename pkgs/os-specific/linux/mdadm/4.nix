@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \
         -e 's@ -Werror @ @' \
-        -e 's@/usr/sbin/sendmail@/var/setuid-wrappers/sendmail@' -i Makefile
+        -e 's@/usr/sbin/sendmail@/run/wrappers/bin/sendmail@' -i Makefile
   '';
 
   meta = {

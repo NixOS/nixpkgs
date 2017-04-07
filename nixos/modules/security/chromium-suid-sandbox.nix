@@ -27,6 +27,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ sandbox ];
-    security.setuidPrograms    = [ sandbox.passthru.sandboxExecutableName ];
+    security.wrappers."${sandbox.passthru.sandboxExecutableName}".source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
   };
 }

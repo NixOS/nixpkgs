@@ -22,13 +22,13 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "17.0.1";
+  version = "18.0.1";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
-    rev = "${version}";
-    sha256 = "0x5lnl1xkmm8x4g0f8rma8ir1bcldz9sssj2fzkv80hn79h2cvxm";
+    rev = "624aa2a5";
+    sha256 = "1bs82rqyq7wjjg99mh23ap8z5bmrhjfnza5iyjx808fzqc0bgzaj";
   };
 
   nativeBuildInputs = [ cmake

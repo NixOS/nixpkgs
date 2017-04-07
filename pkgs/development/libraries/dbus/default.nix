@@ -6,8 +6,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.10.14";
-  sha256 = "10x0wvv2ly4lyyfd42k4xw0ar5qdbi9cksw3l5fcwf1y6mq8y8r3";
+  version = "1.10.16";
+  sha256 = "121kqkjsd3vgf8vca8364xl44qa5086h7qy5zs5f1l78ldpbmc57";
 
 self = stdenv.mkDerivation {
     name = "dbus-${version}";
@@ -50,7 +50,8 @@ self = stdenv.mkDerivation {
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
       "--with-systemduserunitdir=$(out)/etc/systemd/user"
       "--enable-user-session"
-      "--libexecdir=$(out)/libexec" # we don't need dbus-daemon-launch-helper
+      "--datadir=/etc"
+      "--libexecdir=$(out)/libexec"
     ] ++ lib.optional (!x11Support) "--without-x";
 
     # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
@@ -63,7 +64,12 @@ self = stdenv.mkDerivation {
 
     doCheck = true;
 
-    installFlags = [ "sysconfdir=$(out)/etc" ];
+    installFlags = [ "sysconfdir=$(out)/etc" "datadir=$(out)/share" ];
+
+    postInstall = ''
+      mkdir -p "$out/share/xml/dbus"
+      cp doc/*.dtd "$out/share/xml/dbus"
+    '';
 
     # it's executed from $lib by absolute path
     postFixup = ''

@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
     libxcb xcbutil
   ];
 
-  postConfigure = ''
-    sed -i -e s,/etc,$out/etc, client/scripts/Makefile
-  '';
-
   NIX_LDFLAGS = "-lX11";
 
   preConfigure = ''

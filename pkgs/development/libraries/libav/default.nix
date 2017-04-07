@@ -17,7 +17,7 @@
 
 assert faacSupport -> enableUnfree;
 
-with { inherit (stdenv.lib) optional optionals hasPrefix; };
+let inherit (stdenv.lib) optional optionals hasPrefix; in
 
 /* ToDo:
     - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools

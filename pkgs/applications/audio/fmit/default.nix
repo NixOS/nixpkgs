@@ -11,16 +11,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "fmit-${version}";
-  version = "1.1.8";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
-    sha256 = "14vx4p1h3c6frvv8dam4ymz588zpycmg17pxfkmx4m7pszhlin6b";
+    sha256 = "1w492lf8n2sjkr53z8cvkgywzn0w53cf78hz93zaw6dwwv36lwdp";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw qtbase qtmultimedia qmakeHook ]
+  nativeBuildInputs = [ qmakeHook ];
+  buildInputs = [ fftw qtbase qtmultimedia ]
     ++ optionals alsaSupport [ alsaLib ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals portaudioSupport [ portaudio ];

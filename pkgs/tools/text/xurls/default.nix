@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, go }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.0";
+  version = "1.1.0";
   name = "xurls-${version}";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "xurls";
     rev = "v${version}";
-    sha256 = "0j35x6hl5hiwzpi6vjw9d2sn83rrsd9w07ql9kndhkngz8n6yr98";
+    sha256 = "05q4nqbpgfb0a35sn22rn9mlag2ks4cgwb54dx925hipp6zgj1hx";
   };
 
   buildInputs = [ go ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Extract urls from text";
     homepage = https://github.com/mvdan/xurls;
-    maintainers = [ maintainers.koral ];
+    maintainers = with maintainers; [ koral ndowens ];
     platforms = platforms.unix;
   };
 }

@@ -29,6 +29,17 @@
 
 with import ./lib.nix { inherit pkgs; };
 
+# All of the overrides in this set should look like:
+#
+#   foo = ... something involving super.foo ...
+#
+# but that means that we add `foo` attribute even if there is no `super.foo`! So if
+# you want to use this configuration for a package set that only contains a subset of
+# the packages that have overrides defined here, you'll end up with a set that contains
+# a bunch of attributes that trigger an evaluation error.
+#
+# To avoid this, we use `intersectAttrs` here so we never add packages that are not present
+# in the parent package set (`super`).
 self: super: builtins.intersectAttrs super {
 
   # Apply NixOS-specific patches.
@@ -120,8 +131,6 @@ self: super: builtins.intersectAttrs super {
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
-  webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
-  webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
@@ -167,6 +176,13 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  typed-process = dontCheck super.typed-process;
+  js-jquery = dontCheck super.js-jquery;
+  hPDB-examples = dontCheck super.hPDB-examples;
+  configuration-tools = dontCheck super.configuration-tools; # https://github.com/alephcloud/hs-configuration-tools/issues/40
+  tcp-streams = dontCheck super.tcp-streams;
+  holy-project = dontCheck super.holy-project;
+  mustache = dontCheck super.mustache;
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -209,20 +225,21 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general-darwin = overrideCabal (super.llvm-general.override { llvm-config = pkgs.llvm_35; }) (drv: {
-      preConfigure = ''
-        sed -i llvm-general.cabal \
-            -e 's,extra-libraries: stdc++,extra-libraries: c++,'
-      '';
-      configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
-      librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
-    });
-
-  # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
   llvm-general =
-    if pkgs.stdenv.isDarwin
-    then self.llvm-general-darwin
-    else super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+    # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
+    let base = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+    in if !pkgs.stdenv.isDarwin then base else overrideCabal base (
+      drv: {
+        preConfigure = ''
+          sed -i llvm-general.cabal \
+              -e 's,extra-libraries: stdc++,extra-libraries: c++,'
+        '';
+        configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
+        librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
+      }
+    );
+
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -378,13 +395,64 @@ self: super: builtins.intersectAttrs super {
   idris = overrideCabal super.idris (drv: {
     # https://github.com/idris-lang/Idris-dev/issues/2499
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
+
+    # tests and build run executable, so need to set LD_LIBRARY_PATH
+    preBuild = ''
+      export LD_LIBRARY_PATH="$PWD/dist/build:$LD_LIBRARY_PATH"
+    '';
   });
 
   libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
   });
 
-  # Needs network in tests.
-  typed-process = dontCheck super.typed-process;
+  # does not specify tests in cabal file, instead has custom runTest cabal hook,
+  # so cabal2nix will not detect test dependencies.
+  either-unwrap = overrideCabal super.either-unwrap (drv: {
+    testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
+  });
 
+  hidapi = addExtraLibrary super.hidapi pkgs.libudev;
+
+  hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
+
+  discount = super.discount.override { markdown = pkgs.discount; };
+
+  # tests require working stack installation with all-cabal-hashes cloned in $HOME
+  stackage-curator = dontCheck super.stackage-curator;
+
+  # hardcodes /usr/bin/tr: https://github.com/snapframework/io-streams/pull/59
+  io-streams = enableCabalFlag super.io-streams "NoInteractiveTests";
+
+  # requires autotools to build
+  secp256k1 = addBuildTools super.secp256k1 [ pkgs.autoconf pkgs.automake pkgs.libtool ];
+
+  # tests require git
+  hapistrano = addBuildTool super.hapistrano pkgs.git;
+
+  # This propagates this to everything depending on haskell-gi-base
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+
+  # Requires gi-javascriptcore API version 4
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };
+
+  # requires valid, writeable $HOME
+  hatex-guide = overrideCabal super.hatex-guide (drv: {
+    preConfigure = ''
+      ${drv.preConfigure or ""}
+      export HOME=$PWD
+    '';
+  });
+
+  # Fails to link against with newer gsl versions because a deprecrated function
+  # was removed
+  hmatrix-gsl = super.hmatrix-gsl.override { gsl = pkgs.gsl_1; };
+
+  # tests run executable, relying on PATH
+  # without this, tests fail with "Couldn't launch intero process"
+  intero = overrideCabal super.intero (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/intero:$PATH"
+    '';
+  });
 }

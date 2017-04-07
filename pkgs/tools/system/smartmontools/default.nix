@@ -1,8 +1,20 @@
-{ stdenv, fetchurl,
-IOKit ? null , ApplicationServices ? null }:
+{ stdenv, fetchurl, IOKit ? null , ApplicationServices ? null }:
+
+let
+
+  version = "6.5";
+
+  dbrev = "4391";
+  drivedbBranch = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}_DRIVEDB";
+  driverdb = fetchurl {
+    url = "http://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
+    sha256 = "1da99m81wr0rjdhcz2xx0sbbrqxkxffja2kllg4srmhih7fps5p1";
+    name = "smartmontools-drivedb.h";
+  };
+
+in
 
 stdenv.mkDerivation rec {
-  version = "6.5";
   name = "smartmontools-${version}";
 
   src = fetchurl {
@@ -13,6 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
 
   patches = [ ./smartmontools.patch ];
+  postPatch = "cp -v ${driverdb} drivedb.h";
 
   meta = with stdenv.lib; {
     description = "Tools for monitoring the health of hard drives";

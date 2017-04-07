@@ -508,7 +508,7 @@ sub screenshot {
 sub getTTYText {
     my ($self, $tty) = @_;
 
-    my ($status, $out) = $self->execute("fold -w 80 /dev/vcs${tty}");
+    my ($status, $out) = $self->execute("fold -w\$(stty -F /dev/tty${tty} size | awk '{print \$2}') /dev/vcs${tty}");
     return $out;
 }
 
@@ -607,7 +607,8 @@ sub waitForWindow {
 sub copyFileFromHost {
     my ($self, $from, $to) = @_;
     my $s = `cat $from` or die;
-    $self->mustSucceed("echo '$s' > $to"); # !!! escaping
+    $s =~ s/'/'\\''/g;
+    $self->mustSucceed("echo '$s' > $to");
 }
 
 

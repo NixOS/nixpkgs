@@ -27,5 +27,6 @@ buildGoPackage rec {
     homepage = https://github.com/kubernetes/kops;
     license = licenses.asl20;
     maintainers = with maintainers; [offline];
+    platforms = platforms.unix;
   };
 }
