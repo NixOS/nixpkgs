@@ -615,6 +615,13 @@ $bootLoaderConfig
   #   uid = 1000;
   # };
 
+  # Copies this file into the resulting profile.
+  # It can be found in every profile in /nix/var/nix/profiles/ ,
+  # and the currently used one at /run/current-system/ .
+  # Note that this only copies configuration.nix,
+  # and not any included files like hardware-configuration.nix.
+  system.copySystemConfiguration = true;
+
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "${\(qw(@nixosRelease@))}";
 
