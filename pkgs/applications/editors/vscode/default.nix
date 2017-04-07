@@ -3,37 +3,29 @@
 
 let
   version = "1.11.1";
-  rev = "d9484d12b38879b7f4cdd1150efeb2fd2c1fbf39";
   channel = "stable";
 
-  # The revision and build timestamps can be obtained with the following
-  # command (see https://github.com/NixOS/nixpkgs/issues/22465):
-  # for a in x64 ia32; do
-  #   curl -w "%{url_effective}\n" -I -L -s -S -o /dev/null \
-  #     "https://vscode-update.azurewebsites.net/latest/linux-${arch}/stable" \
-  # done
+  plat = {
+    "i686-linux" = "linux-ia32";
+    "x86_64-linux" = "linux-x64";
+    "x86_64-darwin" = "darwin";
+  }.${stdenv.system};
 
-  sha256 = if stdenv.system == "i686-linux"    then "14wdblh7q3m5qdsm34dpg5p7qk6llrbqk60md8wd0fb4chpvrq94"
-      else if stdenv.system == "x86_64-linux"  then "0rmzvaiar3y062mbrggiwjbwxs7izcih5333rn208ax4jxmbk4pc"
-      else if stdenv.system == "x86_64-darwin" then "1f3zdwsz0l6r7c2k25a7j5m0dl78219jzg4axcmbfa2qcs2hw0x6"
-      else throw "Unsupported system: ${stdenv.system}";
+  sha256 = {
+    "i686-linux" = "14wdblh7q3m5qdsm34dpg5p7qk6llrbqk60md8wd0fb4chpvrq94";
+    "x86_64-linux" = "0rmzvaiar3y062mbrggiwjbwxs7izcih5333rn208ax4jxmbk4pc";
+    "x86_64-darwin" = "1f3zdwsz0l6r7c2k25a7j5m0dl78219jzg4axcmbfa2qcs2hw0x6";
+  }.${stdenv.system};
 
-  urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
+  archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
 
-  urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-${channel}-code_${version}-1491487843_i386.tar.gz"
-      else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-${channel}-code_${version}-1491486998_amd64.tar.gz"
-      else if stdenv.system == "x86_64-darwin" then
-        urlBase + "VSCode-darwin-${channel}.zip"
-      else throw "Unsupported system: ${stdenv.system}";
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
-    inherit version;
 
     src = fetchurl {
-      url = urlStr;
+      name = "VSCode_${version}_${plat}.${archive_fmt}";
+      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/${channel}";
       inherit sha256;
     };
 
