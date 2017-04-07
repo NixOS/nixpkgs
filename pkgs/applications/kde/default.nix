@@ -93,6 +93,7 @@ let
       kimap = callPackage ./kimap.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
+      kleopatra = callPackage ./kleopatra.nix {};
       kmail = callPackage ./kmail.nix {};
       kmail-account-wizard = callPackage ./kmail-account-wizard.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
