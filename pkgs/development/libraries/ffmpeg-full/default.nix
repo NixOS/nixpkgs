@@ -110,7 +110,7 @@
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
 #, schroedinger ? null # Dirac de/encoder
-, SDL ? null
+, SDL2 ? null
 #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
@@ -199,7 +199,7 @@ assert ffplayProgram -> avcodecLibrary
                      && avformatLibrary
                      && swscaleLibrary
                      && swresampleLibrary
-                     && SDL != null;
+                     && SDL2 != null;
 assert ffprobeProgram -> avcodecLibrary && avformatLibrary;
 assert ffserverProgram -> avformatLibrary;
 /*
@@ -368,7 +368,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (schroedinger != null) "libschroedinger")
     #(enableFeature (shine != null) "libshine")
     (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
-    (enableFeature (SDL != null) "sdl") # Only configurable since 2.5, auto detected before then
+    (enableFeature (SDL2 != null) "sdl2")
     (enableFeature (soxr != null) "libsoxr")
     (enableFeature (speex != null) "libspeex")
     #(enableFeature (twolame != null) "libtwolame")
@@ -401,7 +401,7 @@ stdenv.mkDerivation rec {
     libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXext libXfixes libXv lzma openal openjpeg_1 libpulseaudio rtmpdump
-    samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
+    samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
   ] ++ optional openglExtlib mesa
     ++ optionals x11grabExtlib [ libXext libXfixes ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
