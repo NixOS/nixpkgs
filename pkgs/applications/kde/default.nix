@@ -115,6 +115,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
+      pim-storage-service-manager = callPackage ./pim-storage-service-manager.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
