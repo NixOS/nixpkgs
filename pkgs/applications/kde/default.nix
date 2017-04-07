@@ -67,6 +67,7 @@ let
       grantleetheme = callPackage ./grantleetheme.nix {};
       gwenview = callPackage ./gwenview.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
+      kalarmcal = callPackage ./kalarmcal.nix {};
       kate = callPackage ./kate.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
@@ -79,6 +80,7 @@ let
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs.nix {};
+      kdepim-runtime = callPackage ./kdepim-runtime.nix {};
       kdf = callPackage ./kdf.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
