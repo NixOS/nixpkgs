@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver }:
+  makeWrapper, libXScrnSaver, libxkbfile }:
 
 let
   version = "1.11.1";
@@ -18,6 +18,13 @@ let
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
+
+  rpath = lib.concatStringsSep ":" [
+    atomEnv.libPath
+    "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
+    "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
+    "$out/lib/vscode"
+  ];
 
 in
   stdenv.mkDerivation rec {
@@ -41,7 +48,7 @@ in
 
     buildInputs = if stdenv.system == "x86_64-darwin"
       then [ unzip makeWrapper libXScrnSaver ]
-      else [ makeWrapper libXScrnSaver ];
+      else [ makeWrapper libXScrnSaver libxkbfile ];
 
     installPhase =
       if stdenv.system == "x86_64-darwin" then ''
@@ -63,7 +70,7 @@ in
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1:$out/lib/vscode" \
+        --set-rpath "${rpath}" \
         $out/lib/vscode/code
     '';
 
