@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       sed -i \
           -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
           -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
-          -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot="${darwin.apple_sdk.sdk}"|' \
+          -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
           -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
           -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
           -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
@@ -212,7 +212,7 @@ stdenv.mkDerivation {
     xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices Foundation CoreServices AppKit Carbon OpenGL AGL Cocoa
-    DiskArbitration darwin.cf-private libiconv darwin.apple_sdk.sdk
+    DiskArbitration darwin.cf-private libiconv
   ]);
 
   buildInputs = [ ]

@@ -9446,7 +9446,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
@@ -9459,7 +9459,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
@@ -12636,6 +12636,11 @@ with pkgs;
   source-han-sans-korean = sourceHanSansPackages.korean;
   source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
   source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
+  sourceHanSerifPackages = callPackage ../data/fonts/source-han-serif { };
+  source-han-serif-japanese = sourceHanSerifPackages.japanese;
+  source-han-serif-korean = sourceHanSerifPackages.korean;
+  source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
+  source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
@@ -13205,9 +13210,11 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker { })
-    docker_17_03;
+    docker_17_03
+    docker_17_04;
 
   docker = docker_17_03;
+  docker-edge = docker_17_04;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -17762,6 +17769,8 @@ with pkgs;
   cups-kyocera = callPackage ../misc/cups/drivers/kyocera {};
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
+
+  cups-toshiba-estudio = callPackage ../misc/cups/drivers/estudio {};
 
   crashplan = callPackage ../applications/backup/crashplan { };
 

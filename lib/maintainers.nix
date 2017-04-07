@@ -243,6 +243,7 @@
   jonafato = "Jon Banafato <jon@jonafato.com>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jpierre03 = "Jean-Pierre PRUNARET <nix@prunetwork.fr>";
+  jpotier = "Martin Potier <jpo.contributes.to.nixos@marvid.fr>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
@@ -500,6 +501,7 @@
   tailhook = "Paul Colomiets <paul@colomiets.name>";
   takikawa = "Asumu Takikawa <asumu@igalia.com>";
   taktoa = "Remy Goldschmidt <taktoa@gmail.com>";
+  taku0 = "Takuo Yonezawa <mxxouy6x3m_github@tatapa.org>";
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
   teh = "Tom Hunger <tehunger@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";

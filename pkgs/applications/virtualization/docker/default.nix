@@ -156,4 +156,16 @@ rec {
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
+
+  docker_17_04 = dockerGen rec {
+    version = "17.04.0-ce";
+    rev = "4845c56"; # git commit
+    sha256 = "04farary19ws7xzsyack0sbrxjzp5xwjh26frxbpdd0a88pxnbj7";
+    runcRev = "9c2d8d184e5da67c95d601382adf14862e4f2228";
+    runcSha256 = "131jv8f77pbdlx88ar0zjwdsp0a5v8kydaw0w0cl3i0j3622ydjl";
+    containerdRev = "422e31ce907fd9c3833a38d7b8fdd023e5a76e73";
+    containerdSha256 = "1g0k82f1mk3vn57k130q776wp5c226d06qbiq1q148pqxxhym2r2";
+    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
+    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  };
 }

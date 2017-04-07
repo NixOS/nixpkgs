@@ -1,28 +1,33 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-test-more'';
-  version = ''prove-20170124-git'';
+  version = ''prove-20170403-git'';
 
   description = '''';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/prove/2017-01-24/prove-20170124-git.tgz'';
-    sha256 = ''1kyhh4yvf47psb5v0zqivcwn71n6my5fwggdifymlpigk2q3zn03'';
+    url = ''http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz'';
+    sha256 = ''091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl'';
   };
 
   overrides = x: {
     postInstall = ''
       find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/cl-test-more[.]asd${"$"}' |
         while read f; do
-          CL_SOURCE_REGISTRY= \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(asdf:load-system :$(basename "$f" .asd))'" \
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
             "$out"/bin/*-lisp-launcher.sh ||
           mv "$f"{,.sibling}; done || true
     '';
   };
 }
-/* (SYSTEM cl-test-more DESCRIPTION NIL SHA256 1kyhh4yvf47psb5v0zqivcwn71n6my5fwggdifymlpigk2q3zn03 URL
-    http://beta.quicklisp.org/archive/prove/2017-01-24/prove-20170124-git.tgz MD5 c5601ee1aebedc7272e2c25e6a5ca8be NAME cl-test-more TESTNAME NIL FILENAME
-    cl-test-more DEPS NIL DEPENDENCIES NIL VERSION prove-20170124-git SIBLINGS (prove-asdf prove-test prove)) */
+/* (SYSTEM cl-test-more DESCRIPTION NIL SHA256 091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl URL
+    http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz MD5 063b615692c8711d2392204ecf1b37b7 NAME cl-test-more TESTNAME NIL FILENAME
+    cl-test-more DEPS NIL DEPENDENCIES NIL VERSION prove-20170403-git SIBLINGS (prove-asdf prove-test prove)) */
