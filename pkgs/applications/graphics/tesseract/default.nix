@@ -1,5 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, leptonica, libpng, libtiff
 , icu, pango, opencl-headers
+
+# Supported list of languages or `null' for all available languages
+, enableLanguages ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +28,30 @@ stdenv.mkDerivation rec {
 
   LIBLEPT_HEADERSDIR = "${leptonica}/include";
 
-  postInstall = "cp -Rt \"$out/share/tessdata\" \"$tessdata/\"*";
+  # Copy the .traineddata files of the languages specified in enableLanguages
+  # into `$out/share/tessdata' and check afterwards if copying was successful.
+  postInstall = let
+    mkArg = lang: "-iname ${stdenv.lib.escapeShellArg "${lang}.traineddata"}";
+    mkFindArgs = stdenv.lib.concatMapStringsSep " -o " mkArg;
+    findLangArgs = if enableLanguages != null
+                   then "\\( ${mkFindArgs enableLanguages} \\)"
+                   else "-iname '*.traineddata'";
+  in ''
+    numLangs="$(find "$tessdata" -mindepth 1 -maxdepth 1 -type f \
+      ${findLangArgs} -exec cp -t "$out/share/tessdata" {} + -print | wc -l)"
+
+    ${if enableLanguages != null then ''
+      expected=${toString (builtins.length enableLanguages)}
+    '' else ''
+      expected="$(ls -1 "$tessdata/"*.traineddata | wc -l)"
+    ''}
+
+    if [ "$numLangs" -ne "$expected" ]; then
+      echo "Expected $expected languages, but $numLangs" \
+           "were copied to \`$out/share/tessdata'" >&2
+      exit 1
+    fi
+  '';
 
   meta = {
     description = "OCR engine";

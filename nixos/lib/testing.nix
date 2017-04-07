@@ -93,7 +93,7 @@ rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract;
+      ocrProg = tesseract.override { enableLanguages = [ "eng" ]; };
 
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
