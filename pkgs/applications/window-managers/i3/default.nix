@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  separateDebugInfo = true;
+
   meta = with stdenv.lib; {
     description = "A tiling window manager";
     homepage    = "http://i3wm.org";
