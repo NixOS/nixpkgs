@@ -10432,6 +10432,29 @@ in {
     };
   };
 
+  django_1_3 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.3.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
+      sha256 = "12pv8y2x3fhrcrjayfm6z40r57iwchfi5r19ajs8q8z78i3z8l7f";
+    };
+
+    # too complicated to setup
+    doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
   django_appconf = buildPythonPackage rec {
     name = "django-appconf-${version}";
     version = "1.0.1";
@@ -10605,6 +10628,24 @@ in {
     meta = {
       description = "Class based template tags for Django";
       homepage = https://github.com/ojii/django-classy-tags;
+      license = licenses.bsd3;
+    };
+  };
+
+  django_flash = buildPythonPackage rec {
+    name = "django-flash-${version}";
+    version = "1.8";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-flash/${name}.tar.gz";
+      sha256 = "00icqy4y0h0jqp98rzfg8sc47zinwj9rwnjnm38jdy1bllpn4yrf";
+    };
+
+    propagatedBuildInputs = with self; [ django_1_3 pysqlite ];
+
+    meta = {
+      description = "Django extension which provides support for Rails-like flash messages";
+      homepage = https://github.com/danielfm/django-flash;
       license = licenses.bsd3;
     };
   };
