@@ -13401,6 +13401,8 @@ with pkgs;
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
+  bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
+
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
     gperf = gperf_3_0;
   };
