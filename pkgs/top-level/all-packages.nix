@@ -444,6 +444,14 @@ with pkgs;
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
+  arm-frc-linux-gnueabi-eglibc = callPackage ../development/libraries/arm-frc-linux-gnueabi-eglibc {};
+
+  arm-frc-linux-gnueabi-linux-api-headers = callPackage ../development/libraries/arm-frc-linux-gnueabi-linux-api-headers {};
+
+  arm-frc-linux-gnueabi-binutils = callPackage ../development/tools/misc/arm-frc-linux-gnueabi-binutils {};
+
+  arm-frc-linux-gnueabi-gcc = callPackage ../development/compilers/arm-frc-linux-gnueabi-gcc {};
+
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
   artyFX = callPackage ../applications/audio/artyFX {};
