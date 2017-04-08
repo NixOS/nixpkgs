@@ -185,7 +185,7 @@ stdenv.mkDerivation {
 
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + optionalString (builtins.elem "intel" vulkanDrivers) ''
+  '' + optionalString (vulkanDrivers != []) ''
     # move share/vulkan/icd.d/
     mv $out/share/ $drivers/
     # Update search path used by Vulkan (it's pointing to $out but
