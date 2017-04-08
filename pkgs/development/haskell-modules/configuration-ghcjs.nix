@@ -58,9 +58,13 @@ self: super:
   # Almost all packages require Cabal to build their Setup.hs,
   # but usually they don't declare it explicitly as they don't need to for normal GHC.
   # To account for that we add Cabal by default.
-  mkDerivation = args:
-    if args.pname == "Cabal" then super.mkDerivation args else super.mkDerivation (args //
-      { setupHaskellDepends = (args.setupHaskellDepends or []) ++ [ self.Cabal ]; });
+  mkDerivation = args: super.mkDerivation (args // {
+    setupHaskellDepends = (args.setupHaskellDepends or []) ++
+      (if args.pname == "Cabal" then [ ]
+      # Break the dependency cycle between Cabal and hscolour
+      else if args.pname == "hscolour" then [ (dontHyperlinkSource self.Cabal) ]
+      else [ self.Cabal ]);
+  });
 
 ## OTHER PACKAGES
 
