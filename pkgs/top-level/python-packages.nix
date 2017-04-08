@@ -118,6 +118,185 @@ in {
     };
   };
 
+  neon = buildPythonPackage rec {
+    name = "nervananeon-${version}";
+    version = "0.8.1";
+    disabled = isPy3k;
+
+    meta = {
+      description = "neon is Nervana's Python based Deep Learning framework and achieves the fastest performance on modern deep neural networks";
+      homepage    = "https://github.com/NervanaSystems/neon";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ numpy pyyaml Mako ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nervananeon/${name}.tar.gz";
+      sha256 = "310052781db4fa49daeb1f940b9c7d72dec7668b87df5536ce8f310d5d229559";
+    };
+  };
+
+  scikit-chainer = buildPythonPackage rec {
+    name = "scikit-chainer-${version}";
+    version = "0.4.2";
+    disabled = isPy3k;
+
+    meta = {
+      description = "A Python data analysis library that is optimized for humans instead of machines";
+      homepage    = "https://github.com/lucidfrontier45/scikit-chainer";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ scikitlearn chainer ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scikit-chainer/${name}.tar.gz";
+      sha256 = "977ad6e45c53d7c7710018a8257a60f452e14147160f0b89bfa6aa8b51975a71";
+    };
+  };
+
+  scikit-cuda = buildPythonPackage rec {
+    name = "scikit-cuda-${version}";
+    version = "0.5.1";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Python interfaces to many of the functions in the CUDA device/runtime";
+      homepage    = "https://github.com/lebedov/scikit-cuda/";
+      license     = licenses.mit; #has no licence
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ numpy Mako pycuda ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scikit-cuda/${name}.tar.gz";
+      sha256 = "0apgb3kivdh73g95jbymlgs3hdsyhmlk3iyrjk8qn57pm8a7v6wg";
+    };
+  };
+
+  chainer-cuda-deps = buildPythonPackage rec {
+    name = "chainer-cuda-deps-${version}";
+    version = "1.1.0.1";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Cuda deps for chainer framework";
+      homepage    = "http://chainer.org/";
+      license     = licenses.mit; #has no licence
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ scikit-cuda ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/chainer-cuda-deps/${name}.tar.gz";
+      sha256 = "edb82fbd8d40c63aa071b191bb2b73aaf73b9be9419658074adaa023fd56586d";
+    };
+  };
+
+  filelock = buildPythonPackage rec {
+    name = "filelock-${version}";
+    version = "2.0.6";
+    disabled = isPy3k;
+
+    meta = {
+      description = "This package contains a single module, which implements a platform independent file locking mechanism for Python";
+      homepage    = "https://github.com/benediktschmitt/py-filelock";
+      license     = licenses.mit; 
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/filelock/${name}.tar.gz";
+      sha256 = "9209380b587f60c7533c2f204e468ee9dea898a79f437de5e5e3d8618e4f1e23";
+    };
+  };
+
+  chainer = buildPythonPackage rec {
+    name = "chainer-${version}";
+    version = "1.9.1";
+    disabled = isPy3k;
+
+    meta = {
+      description = "A neural network framework";
+      homepage    = "http://chainer.org/";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ filelock six numpy nose protobuf3_0 ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/chainer/${name}.tar.gz";
+      sha256 = "8dee4ff0fdcdad1035bbeae7d6b5e9613d8e41537d17af60cf789d4cfa93f6a1";
+    };
+  };
+
+  edward = buildPythonPackage rec {
+    name = "edward-${version}";
+    version = "1.0.7";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Edward is a Python library for probabilistic modeling, inference, and criticism";
+      homepage    = "http://edwardlib.org/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ numpy scipy tensorflow ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/edward/${name}.tar.gz";
+      sha256 = "edea7e9c21eb5b4c8ef1acbc8187a419a3acc7f7d4373f2faaff7c5591d12e56";
+    };
+  };
+
+  PreTrainingChain = buildPythonPackage rec {
+    name = "PreTrainingChain-${version}";
+    version = "0.1.8";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Extension of chainer. ChainList for the purpose of network scalability/congirablity/Pre-training executablity for deep leaning";
+      homepage    = "https://github.com/fukatani/PreTrainingChain";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pretrainingchain/${name}.zip";
+      sha256 = "be39272c4b5bcefcf97c1d6000c5e11a48b85053efe15fc9a2dbd0a1621b64c3";
+    };
+  };
+
+  zChainer = buildPythonPackage rec {
+    name = "zChainer-${version}";
+    version = "0.3.2";
+    disabled = isPy3k;
+
+    meta = {
+      description = "scikit-learn like interface and stacked autoencoder for chainer";
+      homepage    = "https://github.com/shoya140/zChainer";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+
+    propagatedBuildInputs = with self; [ numpy chainer scikitlearn ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/z/zChainer/${name}.tar.gz";
+      sha256 = "ceebcacb13f5bf000452e0fdb099bd6c706af43ff0c7df2227109ecb32495fa1";
+    };
+  };
+
+
   agate-dbf = buildPythonPackage rec {
     name = "agate-dbf-0.1.0";
     disabled = isPy3k;
