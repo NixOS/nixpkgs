@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "CP=cp"
     "RM=rm"
     "PDFTEX=echo"
+    "CC=c++"
   ];
 
   buildPhase = ''
