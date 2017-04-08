@@ -10,13 +10,13 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "purple-facebook-0.9.0";
+  name = "purple-facebook-0.9.3";
 
   src = fetchFromGitHub {
     owner = "dequis";
     repo = "purple-facebook";
-    rev = "v0.9.0-c9b74a765767";
-    sha256 = "1f7jhmaj15p3c9s4xmfygrpav9c8wq0vilbi5cj4jysb7xgndlqv";
+    rev = "v0.9.3-c9b74a765767";
+    sha256 = "10ncvg0arcxnd3cpb0nxry1plbws0mw9vhzjrhb40sv2i563dywb";
   };
 
   postPatch = ''
