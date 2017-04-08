@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "skim-${version}";
-  version = "1.4.27";
+  version = "1.4.28";
 
   src = fetchurl {
     url = "https://downloads.sourceforge.net/skim-app/Skim/Skim-${version}/Skim-${version}.dmg";
-    sha256 = "173q24mvir14lqk6w2ixw66a5vj2ljcc4szaqdxfwna005vhbkm3";
+    sha256 = "1ip54gyd6aizmgvmhdclhfs0sr42kskhl4ivky4xyp9gq89p4fzw";
   };
 
   buildInputs = [ undmg ];
