@@ -7,8 +7,8 @@
 
 let
 
-  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
-    inherit name src;
+  common = { name, suffix ? "", src, patchPhase, fromGit ? false }: stdenv.mkDerivation rec {
+    inherit name src patchPhase;
     version = lib.getVersion name;
 
     VERSION_SUFFIX = lib.optionalString fromGit suffix;
@@ -109,6 +109,14 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
     };
+
+    # 1.11.8 doesn't yet have the patch to work on LLVM 4, so we patch it for now. Take this out once
+    # we move to a higher version. I'd pull the specific patch from upstream but it doesn't apply cleanly.
+    patchPhase = ''
+      substituteInPlace src/libexpr/json-to-value.cc \
+        --replace 'std::less<Symbol>, gc_allocator<Value *>' \
+                  'std::less<Symbol>, gc_allocator<std::pair<const Symbol, Value *> >'
+    '';
   };
 
   nixUnstable = lib.lowPrio (common rec {
