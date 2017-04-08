@@ -123,7 +123,7 @@ in {
         "focused = 1" 
       ];
       description = ''
-        List of condition of windows that should have no shadow.
+        List of conditions of windows that should have no shadow.
         See <literal>compton(1)</literal> man page for more examples.
       '';
     };
