@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1msqv747iz12r73mz4qvsmlwkddwjvrahlrk7ysrcz07h7dsscxs";
   };
 
-  propagatedBuildInputs = with pythonPacckages; [ appdirs clint astor rply ];
+  propagatedBuildInputs = with pythonPackages; [ appdirs clint astor rply ];
 
   meta = {
     description = "A LISP dialect embedded in Python";
