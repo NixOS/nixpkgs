@@ -448,6 +448,8 @@ with pkgs;
 
   arm-frc-linux-gnueabi-linux-api-headers = callPackage ../development/libraries/arm-frc-linux-gnueabi-linux-api-headers {};
 
+  arm-frc-linux-gnueabi-binutils = callPackage ../development/tools/misc/arm-frc-linux-gnueabi-binutils {};
+
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
   artyFX = callPackage ../applications/audio/artyFX {};
