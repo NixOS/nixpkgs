@@ -39,7 +39,8 @@ in
         example = "mail.example.org";
         description = ''
           The host name of the default mail server to use to deliver
-          e-mail.
+          e-mail. Can also contain a port number (ex: mail.example.org:587),
+          defaults to port 25 if no port is given.
         '';
       };
 
@@ -106,7 +107,8 @@ in
         default = null;
         example = "/run/keys/ssmtp-authpass";
         description = ''
-          Path to a file that contains the password used for SMTP auth.
+          Path to a file that contains the password used for SMTP auth. The file
+          should not contain a trailing newline, if the password does not contain one.
           This file should be readable by the users that need to execute ssmtp.
 
           <option>authPassFile</option> takes precedence over <option>authPass</option>.
