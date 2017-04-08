@@ -1,35 +1,38 @@
 { stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver }:
+  makeWrapper, libXScrnSaver, libxkbfile }:
 
 let
-  version = "1.10.2";
-  rev = "8076a19fdcab7e1fc1707952d652f0bb6c6db331";
+  version = "1.11.1";
   channel = "stable";
 
-  # The revision can be obtained with the following command (see https://github.com/NixOS/nixpkgs/issues/22465):
-  # curl -w "%{url_effective}\n" -I -L -s -S https://vscode-update.azurewebsites.net/latest/linux-x64/stable -o /dev/null
+  plat = {
+    "i686-linux" = "linux-ia32";
+    "x86_64-linux" = "linux-x64";
+    "x86_64-darwin" = "darwin";
+  }.${stdenv.system};
 
-  sha256 = if stdenv.system == "i686-linux"    then "1rhwrpv17c8j06qja7i58cggzka8jm9v9h27jy22z30yxjz0p241"
-      else if stdenv.system == "x86_64-linux"  then "1c1w7wc39a5vdap8j143ym976p9l9iwns1y28mcgjwrihdlb5wb8"
-      else if stdenv.system == "x86_64-darwin" then "1zznsn84k79lqirzv950q7caq7c88yh2gglwjc11y8k69awmlpva"
-      else throw "Unsupported system: ${stdenv.system}";
+  sha256 = {
+    "i686-linux" = "14wdblh7q3m5qdsm34dpg5p7qk6llrbqk60md8wd0fb4chpvrq94";
+    "x86_64-linux" = "0rmzvaiar3y062mbrggiwjbwxs7izcih5333rn208ax4jxmbk4pc";
+    "x86_64-darwin" = "1f3zdwsz0l6r7c2k25a7j5m0dl78219jzg4axcmbfa2qcs2hw0x6";
+  }.${stdenv.system};
 
-  urlBase = "https://az764295.vo.msecnd.net/${channel}/${rev}/";
+  archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
 
-  urlStr = if stdenv.system == "i686-linux" then
-        urlBase + "code-${channel}-code_${version}-1488982317_i386.tar.gz"
-      else if stdenv.system == "x86_64-linux" then
-        urlBase + "code-${channel}-code_${version}-1488981323_amd64.tar.gz"
-      else if stdenv.system == "x86_64-darwin" then
-        urlBase + "VSCode-darwin-${channel}.zip"
-      else throw "Unsupported system: ${stdenv.system}";
+  rpath = lib.concatStringsSep ":" [
+    atomEnv.libPath
+    "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
+    "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
+    "$out/lib/vscode"
+  ];
+
 in
   stdenv.mkDerivation rec {
     name = "vscode-${version}";
-    inherit version;
 
     src = fetchurl {
-      url = urlStr;
+      name = "VSCode_${version}_${plat}.${archive_fmt}";
+      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/${channel}";
       inherit sha256;
     };
 
@@ -45,7 +48,7 @@ in
 
     buildInputs = if stdenv.system == "x86_64-darwin"
       then [ unzip makeWrapper libXScrnSaver ]
-      else [ makeWrapper libXScrnSaver ];
+      else [ makeWrapper libXScrnSaver libxkbfile ];
 
     installPhase =
       if stdenv.system == "x86_64-darwin" then ''
@@ -67,7 +70,7 @@ in
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1:$out/lib/vscode" \
+        --set-rpath "${rpath}" \
         $out/lib/vscode/code
     '';
 

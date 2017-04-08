@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake ];
 
+  # This breaks on Darwin because our cmake hook tries to make a build folder
+  # and the wonderful bazel BUILD file is already there (yay case-insensitivty?)
+  prePatch = "rm BUILD";
+
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
 

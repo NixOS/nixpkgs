@@ -1118,9 +1118,7 @@ with pkgs;
     inherit (pythonPackages) gyp;
   };
 
-  bup = callPackage ../tools/backup/bup {
-    par2Support = config.bup.par2Support or false;
-  };
+  bup = callPackage ../tools/backup/bup { };
 
   burp_1_3 = callPackage ../tools/backup/burp/1.3.48.nix { };
 
@@ -9448,7 +9446,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
@@ -9461,7 +9459,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
