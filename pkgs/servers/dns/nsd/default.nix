@@ -13,11 +13,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsd-4.1.14";
+  name = "nsd-4.1.15";
 
   src = fetchurl {
     url = "http://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
-    sha256 = "bdfc61c5f3bf11febd8f4776eef1d4f2d95ed70f12f11d4eeee943c186ffd802";
+    sha256 = "494a862cfcd26a525a4bf06306eb7ab0387b34678ac6d37767507438e3a23a4b";
   };
 
   buildInputs = [ libevent openssl ];
