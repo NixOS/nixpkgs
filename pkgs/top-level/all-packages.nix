@@ -4428,6 +4428,8 @@ with pkgs;
 
   time = callPackage ../tools/misc/time { };
 
+  tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs;
+
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
