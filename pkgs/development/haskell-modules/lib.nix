@@ -98,4 +98,7 @@ rec {
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
+  overrideSrc = drv: { src, version ? drv.version }:
+    overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
+
 }
