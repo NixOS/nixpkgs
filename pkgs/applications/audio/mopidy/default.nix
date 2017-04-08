@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly
+    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
     glib_networking gobjectIntrospection
   ];
 

@@ -160,6 +160,7 @@
   eleanor = "Dejan Lukan <dejan@proteansec.com>";
   elitak = "Eric Litak <elitak@gmail.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
+  eperuffo = "Emanuele Peruffo <info@emanueleperuffo.com>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
   ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
@@ -217,6 +218,7 @@
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
+  infinisil = "Silvan Mosberger <infinisil@icloud.com";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";

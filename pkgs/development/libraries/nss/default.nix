@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.28.3";
+  version = "3.30";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_28_3_RTM/src/${name}.tar.gz";
-    sha256 = "1wrx2ig6yvgywjs25hzy4szgml21hwhd7ds0ghyfybhkiq7lyg6x";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_30_RTM/src/${name}.tar.gz";
+    sha256 = "a8c0000dae5e992f6563972e26dbfefc50d006dd845c43b8ca24ea50169ff3a9";
   };
 
   buildInputs = [ perl zlib sqlite ];

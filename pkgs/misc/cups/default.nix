@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     "--disable-launchd"
   ];
 
+  # XXX: Hackery until https://github.com/NixOS/nixpkgs/issues/24693
+  preBuild = if stdenv.isDarwin then ''
+    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+  '' else null;
+
   installFlags =
     [ # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
@@ -109,6 +114,6 @@ stdenv.mkDerivation rec {
     description = "A standards-based printing system for UNIX";
     license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
     maintainers = with maintainers; [ jgeerds ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

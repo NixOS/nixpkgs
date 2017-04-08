@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
+  postPatch = ''
+    sed -i '/CC=\/usr/d' makefile.macosx_llvm_64bits
+
+    # I think this is a typo and should be CXX? Either way let's kill it
+    sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
+  '';
+
   preConfigure = ''
     makeFlagsArray=(DEST_HOME=$out)
     buildFlags=all3

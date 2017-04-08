@@ -1124,9 +1124,7 @@ with pkgs;
     inherit (pythonPackages) gyp;
   };
 
-  bup = callPackage ../tools/backup/bup {
-    par2Support = config.bup.par2Support or false;
-  };
+  bup = callPackage ../tools/backup/bup { };
 
   burp_1_3 = callPackage ../tools/backup/burp/1.3.48.nix { };
 
@@ -4447,6 +4445,8 @@ with pkgs;
 
   time = callPackage ../tools/misc/time { };
 
+  tweet-hs = haskell.lib.justStaticExecutables haskellPackages.tweet-hs;
+
   qfsm = callPackage ../applications/science/electronics/qfsm { };
 
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
@@ -5440,7 +5440,7 @@ with pkgs;
   llvm_34 = llvmPackages_34.llvm;
 
   llvmPackages = recurseIntoAttrs
-    (if stdenv.isDarwin then llvmPackages_37 else llvmPackages_39);
+    (if stdenv.isDarwin then llvmPackages_4 else llvmPackages_39);
 
   llvmPackagesSelf = llvmPackages_34.override {
     stdenv = libcxxStdenv;
@@ -5454,13 +5454,9 @@ with pkgs;
     isl = isl_0_14;
   };
 
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
     inherit (stdenvAdapters) overrideCC;
-  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-    cmake = cmake.override { isBootstrap = true; useSharedLibraries = false; };
-    libxml2 = libxml2.override { pythonSupport = false; };
-    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
-  });
+  };
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
     inherit (stdenvAdapters) overrideCC;
@@ -5470,9 +5466,13 @@ with pkgs;
     inherit (stdenvAdapters) overrideCC;
   };
 
-  llvmPackages_4 = callPackage ../development/compilers/llvm/4 {
+  llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
     inherit (stdenvAdapters) overrideCC;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    cmake = cmake.override { isBootstrap = true; useSharedLibraries = false; };
+    libxml2 = libxml2.override { pythonSupport = false; };
+    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
+  });
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -7406,7 +7406,7 @@ with pkgs;
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
   ffmpeg_2 = ffmpeg_2_8;
-  ffmpeg_3 = ffmpeg_3_1;
+  ffmpeg_3 = ffmpeg_3_2;
   ffmpeg = ffmpeg_3;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
@@ -9471,7 +9471,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
@@ -9484,7 +9484,7 @@ with pkgs;
     inherit newScope;
     inherit stdenv fetchurl makeSetupHook makeWrapper;
     bison = bison2; # error: too few arguments to function 'int yylex(...
-    cups = if stdenv.isLinux then cups else null;
+    inherit cups;
     harfbuzz = harfbuzz-icu;
     mesa = mesa_noglu;
     inherit perl;
@@ -14500,10 +14500,7 @@ with pkgs;
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
-  handbrake = callPackage ../applications/video/handbrake {
-    # TODO: remove when 3.2 becomes default
-    ffmpeg = ffmpeg_3_2;
-  };
+  handbrake = callPackage ../applications/video/handbrake { };
 
   lilyterm = callPackage ../applications/misc/lilyterm {
     inherit (gnome2) vte;
@@ -18072,7 +18069,7 @@ with pkgs;
 
   redis-desktop-manager = libsForQt56.callPackage ../applications/misc/redis-desktop-manager { };
 
-  robomongo = libsForQt5.callPackage ../applications/misc/robomongo { };
+  robomongo = callPackage ../applications/misc/robomongo { };
 
   rucksack = callPackage ../development/tools/rucksack { };
 

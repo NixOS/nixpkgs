@@ -79,6 +79,9 @@ rec {
     fixupPhase = ":";
   });
 
+  linkWithGold = drv : appendConfigureFlag drv
+    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
+
   # link executables statically against haskell libs to reduce closure size
   justStaticExecutables = drv: overrideCabal drv (drv: {
     enableSharedExecutables = false;

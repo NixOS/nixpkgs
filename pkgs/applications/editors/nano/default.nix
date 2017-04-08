@@ -36,6 +36,11 @@ in stdenv.mkDerivation rec {
     --sysconfdir=/etc
     ${optionalString (!enableNls) "--disable-nls"}
     ${optionalString enableTiny "--enable-tiny"}
+  ''
+  # Unclear why (perhaps an impurity?) but for some reason it decides that REG_ENHANCED is available
+  # during configure but then can't find it at build time.
+    + optionalString stdenv.isDarwin ''
+    nano_cv_flag_reg_extended=REG_EXTENDED
   '';
 
   postPatch = optionalString stdenv.isDarwin ''

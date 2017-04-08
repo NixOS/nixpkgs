@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng libidn expat ];
-  nativeBuildInputs = [ cmake gcc5 pkgconfig ];
-  buildInputs = [ lua5 stdenv.cc.libc ];
+
+  # Does Linux really need gcc5? Darwin doesn't seem to...
+  nativeBuildInputs = [ cmake pkgconfig ] ++ stdenv.lib.optional stdenv.isLinux gcc5;
+
+  # Does Linux really need libc here? Darwin doesn't seem to...
+  buildInputs = [ lua5 ] ++ stdenv.lib.optional stdenv.isLinux stdenv.cc.libc;
 
   crossAttrs = {
     propagatedBuildInputs = [ zlib.crossDrv freetype.crossDrv libjpeg.crossDrv
