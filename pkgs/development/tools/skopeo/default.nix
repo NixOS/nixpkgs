@@ -19,9 +19,18 @@ buildGoPackage rec {
     sha256 = "13k29i5hx909hvddl2xkyw4qzxq2q20ay9bkal3xi063s6l0sh0z";
   };
 
+  patches = [
+    ./path.patch
+  ];
+
   preBuild = ''
     export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
     export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
+  '';
+
+  postInstall = ''
+    mkdir $bin/etc
+    cp -v ./go/src/github.com/projectatomic/skopeo/default-policy.json $bin/etc/default-policy.json
   '';
 
   meta = {
