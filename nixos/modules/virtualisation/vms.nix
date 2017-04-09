@@ -2,7 +2,9 @@
 
 with lib;
 
+# TODO: switch to mode=proxy
 # TODO: forward resolv.conf via 9pfs, cp -L it at start and reload of service
+# TODO: see what happens when a VM addition changes the IP addresses of other VMs
 
 let
   cfg = config.vms;
@@ -219,7 +221,7 @@ let
         ''-nographic -serial unix:"${cfg.rpath}/${name}/socket.unix",server,nowait''
         # File systems
         ''-drive file="${cfg.path}/${name}/image.qcow2",if=virtio,media=disk''
-        ''-virtfs local,path="${cfg.path}/${name}/store",security_model=mapped-file,mount_tag=store''
+        ''-virtfs local,path="${cfg.path}/${name}/store",security_model=none,mount_tag=store''
         # Network
         ''-netdev type=tap,id=net0,ifname=vm-${name},script=no,dscript=no''
         ''-device virtio-net-pci,netdev=net0,mac=${mcfg.mac}''
@@ -238,98 +240,37 @@ let
     pkgs.stdenv.mkDerivation {
       name = "references-vm-${name}";
       passAsFile = [ "buildCommand" ];
-      buildCommand = "grep '/nix/store' closure | sort -u > $out";
+      buildCommand = "grep '/nix/store' closure | sed 's_/nix/store/__' | sort -u > $out";
       exportReferencesGraph = [ "closure" mcfg.config.system.build.toplevel ];
     };
 
-  generateStore = name:
-    pkgs.writeScript "generate-store-vm-${name}.py"
+  setupVM = name: let mcfg = cfg.machines.${name}; in
     ''
-      # Python3 script, assumes ${cfg.path}/${name}/.virtfs_metadata already exists
-      # Makes a 'cp' between the relevant paths while keeping qemu's mapped_file metadata
-      import os
-      import shutil
-      import sys
+      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chown "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
+      chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
 
-      with open("${referencesGraph name}") as f:
-        target_store = [l[11:-1] for l in f.readlines()] # 11 is /nix/store/, -1 for \n
-      store = "${cfg.path}/${name}/store/"
-
-      # Cleanup old store entries to save disk space
-      for path in os.listdir(store):
-        if path not in target_store and path != ".virtfs_metadata":
-          if os.path.isdir(store + path) and not os.path.islink(store + path):
-            shutil.rmtree(store + path)
-          else:
-            os.remove(store + path)
-
-      # Recurse in path, assuming {store}/{dirname path}/.virtfs_metadata already exists
-      # virtfs.mode is made of magic numbers:
-      #  * 16749 is  040555, permissions for directories in the store
-      #  * 33060 is 0100444, permissions for non-executable files in the store
-      #  * 33133 is 0100555, permissions for executable files in the store
-      #  * 41471 is 0120777, permissions for symlinks
-      def recurse_in_path(path):
-        src = "/nix/store/" + path
-        dst = store + path
-        dir = os.path.dirname(path)
-        f = os.path.basename(path)
-        metadir = store + dir + "/.virtfs_metadata/"
-        tmpfile = metadir + ".nixos-module-vms." + f + ".data"
-        if os.path.islink(src):
-          if not os.path.exists(dst):
-            with open(metadir + f, 'w') as meta:
-              meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=41471\n")
-            with open(tmpfile, 'w') as data:
-              data.write(os.readlink(src))
-            os.rename(tmpfile, dst)
-        elif os.path.isfile(src):
-          if not os.path.exists(dst):
-            shutil.copyfile(src, tmpfile)
-            with open(metadir + f, 'w') as meta:
-              if os.stat(src).st_mode & 1 == 1: # file is executable
-                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=33133\n")
-              else:
-                meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=33060\n")
-            os.rename(tmpfile, dst)
-        elif os.path.isdir(src):
-          if not os.path.exists(dst + "/.virtfs_metadata"):
-            with open(metadir + f, 'w') as meta:
-              meta.write("virtfs.uid=0\nvirtfs.gid=0\nvirtfs.mode=16749\n")
-            os.makedirs(dst + "/.virtfs_metadata", exist_ok=True)
-          for child in os.listdir(src):
-            recurse_in_path(path + "/" + child)
-        else:
-          print("Unknown file type: '{}'".format(src), file=sys.stderr)
-
-      # Call all this
-      for path in target_store:
-        recurse_in_path(path)
-    '';
-
-  setupStore = name: let mcfg = cfg.machines.${name}; in
-    pkgs.writeScript "setup-store-vm-${name}"
-    ''
-      # Generate image if need be
       image="${cfg.path}/${name}/image.qcow2"
+      store="${cfg.path}/${name}/store"
+      targetStore="${referencesGraph name}"
+
+      # Generate image if need be
       if [ \! -e "$image" ]; then
-        # TODO: auto-cleanup the image when the VM is removed from configuration
         ${pkgs.qemu}/bin/qemu-img create -f qcow2 "$image" \
           ${toString mcfg.diskSize}M || exit 1
+        chown "vm-${name}:vm-${name}" "$image"
       fi
 
       # Regenerate store
-      mkdir -p "${cfg.path}/${name}/store/.virtfs_metadata"
-      "${pkgs.python3}/bin/python3" "${generateStore name}"
-    '';
-
-  setupVM = name:
-    ''
-      mkdir -p "${cfg.path}/${name}" "${cfg.rpath}/${name}"
-      chown -R "vm-${name}:vm-${name}" "${cfg.path}/${name}" "${cfg.rpath}/${name}"
-      chmod 700 "${cfg.path}/${name}" "${cfg.rpath}/${name}"
-
-      exec ${pkgs.sudo}/bin/sudo -u "vm-${name}" ${setupStore name}
+      mkdir -p "${cfg.path}/${name}/store"
+      ls "$store" | while read path; do
+        if ! grep "$path" "$targetStore"; then
+          rm -Rf "$path"
+        fi
+      done
+      cat "$targetStore" | while read path; do
+        ${pkgs.rsync}/bin/rsync -a --ignore-existing "/nix/store/$path" "$store"
+      done
     '';
 
 in
