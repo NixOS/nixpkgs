@@ -97,11 +97,11 @@ stdenv.mkDerivation rec {
   '';
   dontGzipMan = true; # already compressed
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
-    platforms = stdenv.lib.platforms.unix;
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ chaoflow garbas ];
+    platforms   = platforms.unix;
   };
 }
