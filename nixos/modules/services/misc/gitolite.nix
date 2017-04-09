@@ -55,6 +55,14 @@ in
           Gitolite user account. This is the username of the gitolite endpoint.
         '';
       };
+
+      commonHooks = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          A list of custom git hooks that get copied to <literal>~/.gitolite/hooks/common</literal>.
+        '';
+      };
     };
   };
 
