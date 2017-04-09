@@ -20883,6 +20883,8 @@ in {
       sha256 = "0amyhkkm400qzbw65ivyzrzxl2r7vxqgsgqm7ml95m7gwkwhnzz0";
     };
 
+    patches = [ ../development/python-modules/pyocr-tesseract.patch ];
+
     postPatch = ''
       sed -i \
         -e 's,^\(TESSERACT_CMD *= *\).*,\1"${pkgs.tesseract}/bin/tesseract",' \
