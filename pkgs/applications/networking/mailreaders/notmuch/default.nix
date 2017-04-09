@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mail indexer";
-    homepage    = https://notmuchmmail.org/;
+    homepage    = https://notmuchmail.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
     platforms = stdenv.lib.platforms.unix;
