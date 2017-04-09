@@ -60,9 +60,13 @@ stdenv.mkDerivation {
       --add-flags "DERIVED_DATA_DIR=." \
       --set DEVELOPER_DIR "$out"
     wrapProgram $out/bin/xcrun \
+      --add-flags "-sdk macosx10.10" \
       --set DEVELOPER_DIR "$out"
     wrapProgram $out/bin/xcode-select \
       --set DEVELOPER_DIR "$out"
+
+    mkdir -p $out/usr/bin/
+    ln -s $out/bin/xcrun $out/usr/bin/xcrun
   '';
 
   inherit (xcbuild) meta;
