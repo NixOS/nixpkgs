@@ -18407,4 +18407,6 @@ with pkgs;
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
+
+  ibtool = callPackage ../os-specific/darwin/ibtool {};
 }
