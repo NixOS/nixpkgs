@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = https://github.com/openSUSE/hwinfo;
     maintainers = with maintainers; [ bobvanderlinden ndowens ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
