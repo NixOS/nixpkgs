@@ -20873,14 +20873,14 @@ in {
 
   pyocr = buildPythonPackage rec {
     name = "pyocr-${version}";
-    version = "0.4.4";
+    version = "0.4.6";
 
     # Don't fetch from PYPI because it doesn't contain tests.
     src = pkgs.fetchFromGitHub {
       owner = "jflesch";
       repo = "pyocr";
       rev = version;
-      sha256 = "09s7dxin8ams0f3xab60f45l3nn236a8win9yfyq9aqy9mm946ak";
+      sha256 = "0amyhkkm400qzbw65ivyzrzxl2r7vxqgsgqm7ml95m7gwkwhnzz0";
     };
 
     postPatch = ''
