@@ -7,9 +7,9 @@
 { runCommand, fetchFromGitHub, git }:
 
 let
-  version = "2017-04-03";
-  rev = "24cb86b25f4d4758b775e78c03673378ed28120d";
-  sha256 = "07nzdrrghbpikh0mgvi1mv66mxisd47lcwk6v3szbsy5pgj6dxnq";
+  version = "2017-04-08";
+  rev = "9876afbb35a2fe28748990f76d91eaae827e2aae";
+  sha256 = "14wk74s0mqhxzmgaq07y75y8v4jkffzhs981y9cz806asdcxlrwh";
 
   src = fetchFromGitHub {
       inherit rev;

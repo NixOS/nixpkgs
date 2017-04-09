@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

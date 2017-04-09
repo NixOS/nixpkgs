@@ -37,6 +37,7 @@ with lib;
         pkgs.xorg.fontbhlucidatypewriter75dpi
         pkgs.dejavu_fonts
         pkgs.freefont_ttf
+        pkgs.gyre-fonts # TrueType substitutes for standard PostScript fonts
         pkgs.liberation_ttf
         pkgs.xorg.fontbh100dpi
         pkgs.xorg.fontmiscmisc

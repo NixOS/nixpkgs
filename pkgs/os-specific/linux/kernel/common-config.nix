@@ -100,6 +100,10 @@ with stdenv.lib;
   # Disable some expensive (?) features.
   PM_TRACE_RTC n
 
+  # Enable initrd support.
+  BLK_DEV_RAM y
+  BLK_DEV_INITRD y
+
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support

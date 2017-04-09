@@ -171,7 +171,13 @@ self: super: {
     else dontCheck super.fsnotify;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then addExtraLibrary super.double-conversion pkgs.stdenv.cc.cc.lib
+    then addExtraLibrary
+           # https://github.com/bos/double-conversion/pull/17
+           (appendPatch super.double-conversion (pkgs.fetchpatch {
+              url = "https://github.com/basvandijk/double-conversion/commit/0927e347d53dbd96d1949930e728cc2471dd4b14.patch";
+              sha256 = "042yqbq5p6nc9nymmbz9hgp51dlc5asaj9bf91kw5fph6dw2hwg9";
+           }))
+           pkgs.stdenv.cc.cc.lib
     else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
@@ -869,4 +875,34 @@ self: super: {
 
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
-}
+} // (let scope' = self: super: {
+            haskell-tools-ast = super.haskell-tools-ast_0_6_0_0;
+            haskell-tools-backend-ghc = super.haskell-tools-backend-ghc_0_6_0_0;
+            haskell-tools-cli = super.haskell-tools-cli_0_6_0_0;
+            haskell-tools-daemon = super.haskell-tools-daemon_0_6_0_0;
+            haskell-tools-debug = super.haskell-tools-debug_0_6_0_0;
+            haskell-tools-demo = super.haskell-tools-demo_0_6_0_0;
+            haskell-tools-prettyprint = super.haskell-tools-prettyprint_0_6_0_0;
+            haskell-tools-refactor = super.haskell-tools-refactor_0_6_0_0;
+            haskell-tools-rewrite = super.haskell-tools-rewrite_0_6_0_0;
+          };
+      in {
+        haskell-tools-ast_0_6_0_0 =
+          super.haskell-tools-ast_0_6_0_0.overrideScope scope';
+        haskell-tools-backend-ghc_0_6_0_0 =
+          super.haskell-tools-backend-ghc_0_6_0_0.overrideScope scope';
+        haskell-tools-cli_0_6_0_0 =
+          dontCheck (super.haskell-tools-cli_0_6_0_0.overrideScope scope');
+        haskell-tools-daemon_0_6_0_0 =
+          dontCheck (super.haskell-tools-daemon_0_6_0_0.overrideScope scope');
+        haskell-tools-debug_0_6_0_0 =
+          super.haskell-tools-debug_0_6_0_0.overrideScope scope';
+        haskell-tools-demo_0_6_0_0 =
+          super.haskell-tools-demo_0_6_0_0.overrideScope scope';
+        haskell-tools-prettyprint_0_6_0_0 =
+          super.haskell-tools-prettyprint_0_6_0_0.overrideScope scope';
+        haskell-tools-refactor_0_6_0_0 =
+          super.haskell-tools-refactor_0_6_0_0.overrideScope scope';
+        haskell-tools-rewrite_0_6_0_0 =
+          super.haskell-tools-rewrite_0_6_0_0.overrideScope scope';
+     })

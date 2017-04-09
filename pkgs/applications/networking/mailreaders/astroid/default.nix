@@ -3,16 +3,14 @@
 
 stdenv.mkDerivation rec {
   name = "astroid-${version}";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "astroidmail";
     repo = "astroid";
     rev = "v${version}";
-    sha256 = "0r3hqwwr68bjhqaa1r3l9brbmvdp11pf8vhsjlvm5zv520z5y1rf";
+    sha256 = "1gjrdls1mz8y8bca7s8l965l0m7s2sb6g7a90gy848admjsyav7h";
   };
-
-  patches = [ ./propagate-environment.patch ];
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
 
@@ -20,8 +18,8 @@ stdenv.mkDerivation rec {
                   notmuch boost gnome3.gsettings_desktop_schemas
                   gnome3.adwaita-icon-theme ];
 
-  buildPhase = "scons --prefix=$out build";
-  installPhase = "scons --prefix=$out install";
+  buildPhase = "scons --propagate-environment --prefix=$out build";
+  installPhase = "scons --propagate-environment --prefix=$out install";
 
   meta = {
     homepage = "https://astroidmail.github.io/";

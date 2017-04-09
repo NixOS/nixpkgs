@@ -2,6 +2,7 @@
 , fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
+, darwin
 , substituteAll
 , flashplayerFix ? false
 }:
@@ -11,10 +12,16 @@ with stdenv.lib;
 qtSubmodule {
   name = "qtwebkit";
   qtInputs = [ qtdeclarative qtlocation qtsensors ];
-  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
+  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
+    ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ]);
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby
   ];
+
+  __impureHostDeps = optionals (stdenv.isDarwin) [
+    "/usr/lib/libicucore.dylib"
+  ];
+
   patches =
     let dlopen-webkit-nsplugin = substituteAll {
           src = ./0001-dlopen-webkit-nsplugin.patch;
@@ -30,6 +37,7 @@ qtSubmodule {
           libudev = systemd.lib;
         };
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
-    ++ [ dlopen-webkit-udev ];
-  meta.maintainers = with stdenv.lib.maintainers; [ abbradar ];
+    ++ optionals (!stdenv.isDarwin) [ dlopen-webkit-udev ]
+    ++ optionals (stdenv.isDarwin) [ ./0004-icucore-darwin.patch ];
+  meta.maintainers = with stdenv.lib.maintainers; [ abbradar periklis ];
 }

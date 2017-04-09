@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     (enableFeature withSidebar  "sidebar")
     "--enable-smtp"
     "--enable-pop"
-    "--enable-imap"
     "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail

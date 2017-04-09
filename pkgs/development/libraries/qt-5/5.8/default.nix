@@ -76,6 +76,7 @@ let
       qtgraphicaleffects = callPackage ./qtgraphicaleffects.nix {};
       qtimageformats = callPackage ./qtimageformats.nix {};
       qtlocation = callPackage ./qtlocation.nix {};
+      qtmacextras = callPackage ./qtmacextras.nix {};
       qtmultimedia = callPackage ./qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
@@ -97,12 +98,13 @@ let
       qtxmlpatterns = callPackage ./qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" [
+      full = env "qt-${qtbase.version}" ([
         qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwayland
+        qtsensors qtserialport qtsvg qttools qttranslations
         qtwebsockets qtx11extras qtxmlpatterns
-      ];
+      ] ++ optional (!stdenv.isDarwin) qtwayland
+        ++ optional (stdenv.isDarwin) qtmacextras);
 
       makeQtWrapper =
         makeSetupHook

@@ -57,6 +57,6 @@ in stdenv.mkDerivation rec {
 
     homepage = ftp://ftp.porcupine.org/pub/security/index.html;
     license = "BSD-style";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

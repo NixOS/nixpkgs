@@ -32,7 +32,10 @@ in
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
-  iolib = addNativeLibs [pkgs.libfixposix pkgs.gcc];
+  iolib = x: {
+    propagatedBuildInputs = (x.propagatedBuildInputs or []) ++ [pkgs.libfixposix pkgs.gcc];
+    testSystems = (x.testSystems or ["iolib"]) ++ ["iolib/os" "iolib/zstreams"];
+  };
   cl-unicode = addDeps (with qlnp; [cl-ppcre flexi-streams]);
   clack =  addDeps (with qlnp;[lack bordeaux-threads prove]);
   clack-v1-compat =  addDeps (with qlnp;[

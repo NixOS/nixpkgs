@@ -3,8 +3,6 @@
 bootPkgs.callPackage ./base.nix {
   version = "0.2.020170323";
 
-  # deprecated on HEAD, directly included in the distribution
-  ghcjs-prim = null;
   inherit bootPkgs;
 
   ghcjsSrc = fetchFromGitHub {
