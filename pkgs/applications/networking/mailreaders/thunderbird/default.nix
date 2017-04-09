@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
-      "--enable-system-cairo"
+      #"--enable-system-cairo"
       "--disable-gconf"
       "--disable-gstreamer"
       "--enable-startup-notification"
