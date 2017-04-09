@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tig-2.2";
+  name = "tig-2.2.1";
 
   src = fetchurl {
-    url = "http://jonas.nitro.dk/tig/releases/${name}.tar.gz";
-    sha256 = "0k3m894vfkgkj7xbr0j6ph91351dl6id5f0hk2ksjp5lmg9i6llg";
+    url = "https://github.com/jonas/tig/releases/download/${name}/${name}.tar.gz";
+    sha256 = "0wgsqdly3jd9c7b0ibb5vwsv4js19c5hi0698nf1fnfyjq40hj0b";
   };
 
   buildInputs = [ ncurses asciidoc xmlto docbook_xsl readline git makeWrapper ]
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://jonas.nitro.dk/tig/";
+    homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
     maintainers = with maintainers; [ garbas bjornfor domenkozar qknight ];
     license = licenses.gpl2;
