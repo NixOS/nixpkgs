@@ -15670,6 +15670,12 @@ with pkgs;
     vte = gnome2.vte.override { pythonSupport = true; };
   };
 
+  deepin-terminal = callPackage ../applications/misc/deepin-terminal {
+    vte = gnome3.vte;
+    wnck = libwnck3;
+    gee = libgee_0_8;
+  };
+
   termite = callPackage ../applications/misc/termite {
     vte = gnome3.vte-ng;
   };
