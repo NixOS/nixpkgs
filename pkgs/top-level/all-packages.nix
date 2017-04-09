@@ -15697,6 +15697,7 @@ with pkgs;
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
     libpng = libpng_apng;
+    enableGTK3 = true;
   };
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
