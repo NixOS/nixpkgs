@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "ZjStream printer drivers";
     maintainers = with maintainers;
     [
-      raskin urkud
+      raskin
     ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

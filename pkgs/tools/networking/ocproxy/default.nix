@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libevent }:
 
 stdenv.mkDerivation rec {
-  version = "1.50";
+  version = "1.60";
   name = "ocproxy-${version}";
 
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = "ocproxy";
     rev = "v${version}";
-    sha256 = "136vlk2svgls5paf17xi1zahcahgcnmi2p55khh7zpqaar4lzw6s";
+    sha256 = "03323nnhb4y9nzwva04mq7xg03dvdrgp689g89f69jqc261skcqx";
   };
 
-  buildInputs = [ autoconf automake libevent ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libevent ];
 
   preConfigure = ''
     patchShebangs autogen.sh

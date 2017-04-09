@@ -1,0 +1,77 @@
+
+# HG changeset patch
+# User Michelangelo De Simone <mdesimone@mozilla.com>
+# Date 1479198095 28800
+# Node ID fde6e9ccfc72fbc0fcd93af7a40436b216e7ea1a
+# Parent  687eac6845a77d2cac5505da9c8912885c2a9e57
+Bug 1013882 - TestInterfaceJS should be packaged only if it's available. r=glandium, a=jcristau
+
+MozReview-Commit-ID: IEHesdoU4Sz
+
+diff --git a/b2g/installer/package-manifest.in b/b2g/installer/package-manifest.in
+--- a/b2g/installer/package-manifest.in
++++ b/b2g/installer/package-manifest.in
+@@ -570,17 +570,17 @@
+ @RESPATH@/components/InputMethod.manifest
+ #ifdef MOZ_B2G
+ @RESPATH@/components/inputmethod.xpt
+ #endif
+ 
+ @RESPATH@/components/SystemUpdate.manifest
+ @RESPATH@/components/SystemUpdateManager.js
+ 
+-#ifdef MOZ_DEBUG
++#if defined(ENABLE_TESTS) && defined(MOZ_DEBUG)
+ @RESPATH@/components/TestInterfaceJS.js
+ @RESPATH@/components/TestInterfaceJS.manifest
+ @RESPATH@/components/TestInterfaceJSMaplike.js
+ #endif
+ 
+ ; Modules
+ @RESPATH@/modules/*
+ 
+diff --git a/browser/installer/package-manifest.in b/browser/installer/package-manifest.in
+--- a/browser/installer/package-manifest.in
++++ b/browser/installer/package-manifest.in
+@@ -554,17 +554,17 @@
+ @RESPATH@/components/PresentationControlService.js
+ @RESPATH@/components/PresentationDataChannelSessionTransport.js
+ @RESPATH@/components/PresentationDataChannelSessionTransport.manifest
+ 
+ ; InputMethod API
+ @RESPATH@/components/MozKeyboard.js
+ @RESPATH@/components/InputMethod.manifest
+ 
+-#ifdef MOZ_DEBUG
++#if defined(ENABLE_TESTS) && defined(MOZ_DEBUG)
+ @RESPATH@/components/TestInterfaceJS.js
+ @RESPATH@/components/TestInterfaceJS.manifest
+ @RESPATH@/components/TestInterfaceJSMaplike.js
+ #endif
+ 
+ ; [Extensions]
+ @RESPATH@/components/extensions-toolkit.manifest
+ @RESPATH@/browser/components/extensions-browser.manifest
+diff --git a/mobile/android/installer/package-manifest.in b/mobile/android/installer/package-manifest.in
+--- a/mobile/android/installer/package-manifest.in
++++ b/mobile/android/installer/package-manifest.in
+@@ -381,17 +381,17 @@
+ 
+ @BINPATH@/components/CaptivePortalDetectComponents.manifest
+ @BINPATH@/components/captivedetect.js
+ 
+ #ifdef MOZ_WEBSPEECH
+ @BINPATH@/components/dom_webspeechsynth.xpt
+ #endif
+ 
+-#ifdef MOZ_DEBUG
++#if defined(ENABLE_TESTS) && defined(MOZ_DEBUG)
+ @BINPATH@/components/TestInterfaceJS.js
+ @BINPATH@/components/TestInterfaceJS.manifest
+ @BINPATH@/components/TestInterfaceJSMaplike.js
+ #endif
+ 
+ @BINPATH@/components/nsAsyncShutdown.manifest
+ @BINPATH@/components/nsAsyncShutdown.js
+ 
+

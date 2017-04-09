@@ -82,6 +82,9 @@ in buildPythonPackage rec {
   '';
 
   meta = {
+    # https://github.com/pandas-dev/pandas/issues/14866
+    # pandas devs are no longer testing i686 so safer to assume it's broken
+    broken = stdenv.isi686;
     homepage = "http://pandas.pydata.org/";
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;

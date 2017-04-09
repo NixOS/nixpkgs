@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.lua.org/ftp/${name}.tar.gz";
-    sha1 = "1c46d1c78c44039939e820126b86a6ae12dadfba";
+    sha256 = "00fv1p6dv4701pyjrlvkrr6ykzxqy9hy1qxzj6qmwlb0ssr5wjmf";
   };
 
   nativeBuildInputs = [ readline ];

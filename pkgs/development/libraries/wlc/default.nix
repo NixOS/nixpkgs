@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, fetchgit, cmake, pkgconfig, fetchFromGitHub
+{ lib, stdenv, fetchgit, cmake, pkgconfig
 , glibc, wayland, pixman, libxkbcommon, libinput, libxcb, xcbutilwm, xcbutilimage, mesa, libdrm, udev, systemd, dbus_libs
 , libpthreadstubs, libX11, libXau, libXdmcp, libXext, libXdamage, libxshmfence, libXxf86vm
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
   name = "wlc-${version}";
-  version = "0.0.5";
+  version = "0.0.8";
 
   src = fetchgit {
     url = "https://github.com/Cloudef/wlc";
     rev = "refs/tags/v${version}";
-    sha256 = "0pg95n488fjlkc8n8x1h2dh4mxb7qln6mrq906lwwqv94aks9b43";
+    sha256 = "1lkxbqnxfmbk9j9k8wq2fl5z0a9ihzalad3x1pp8w2riz41j3by6";
     fetchSubmodules = true;
    };
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland pixman libxkbcommon libinput libxcb xcbutilwm xcbutilimage mesa libdrm udev
-    libX11 libXdamage systemd dbus_libs
+    libX11 libXdamage systemd dbus_libs wayland-protocols
   ];
 
 

@@ -3,13 +3,14 @@
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
-  version = "0.12.2";
+  # >= 0.14 should have unit tests and dbus support
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "1y26dpx0qc01mhv2f325ymyc3r7ihayrr10rp25p1bs24010azwn";
+    sha256 = "07aa92isknxf7531jr9kgk89wl5rvv34jrvir043fs9xvim5zq99";
   };
 
   buildInputs = [
@@ -22,12 +23,15 @@ stdenv.mkDerivation rec {
     cmake git pkgconfig
   ];
 
-  doCheck = false;
+  cmakeFlags = [
+    "-DENABLE_UPDATER=OFF"
+  ];
 
-  makeFlags = "PREFIX=$(out)";
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
+    homepage = https://github.com/uTox/uTox;
     license = licenses.gpl3;
     maintainers = with maintainers; [ domenkozar jgeerds ];
     platforms = platforms.all;

@@ -4,15 +4,15 @@
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/33f59c9d11b8d5014dfd18cc11a425f6393c884a/${file}";
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/c4effbe806be9a0a3727fdbbc9a5e28149347532/${file}";
     inherit (localSystem) system;
     inherit sha256 executable;
   }; in {
-    sh      = fetch { file = "sh";    sha256 = "1rx4kg6358xdj05z0m139a0zn4f4zfmq4n4vimlmnwyfiyn4x7wk"; };
-    bzip2   = fetch { file = "bzip2"; sha256 = "104qnhzk79vkbp2yi0kci6lszgfppvrwk3rgxhry842ly1xz2r7l"; };
-    mkdir   = fetch { file = "mkdir"; sha256 = "0d91c19xjzmqisncvldv79d7ddzai9l7vcmajhwlwwv74g6da5yl"; };
-    cpio    = fetch { file = "cpio";  sha256 = "0lw057bmcqls96j0gv1n3mgl66q31mba7i413cbkkaf0rfzz3dxj"; };
-    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "13ihbj002pis3fgy1d9c4fi7flca21z9brjsjkklm82h5b4nlwxl"; executable = false; };
+    sh      = fetch { file = "sh";    sha256 = "1b9r3dksj907bpxp589yhc4217cas73vni8sng4r57f04ydjcinr"; };
+    bzip2   = fetch { file = "bzip2"; sha256 = "1wm28jgap4cbr8hf4ambg6h9flr2b4mcbh7fw20i0l51v6n8igky"; };
+    mkdir   = fetch { file = "mkdir"; sha256 = "0jc32mzx2whhx2xh70grvvgz4jj26118p9yxmhjqcysagc0k7y66"; };
+    cpio    = fetch { file = "cpio";  sha256 = "0x5dcczkzn0g8yb4pah449jmgy3nmpzrqy4s480grcx05b6v6hkp"; };
+    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "0ifdc8bwxdhmpbhx2vd3lwjg71gqm6pi5mfm0fkcsbqavl8hd8hz"; executable = false; };
   }
 }:
 
@@ -301,7 +301,7 @@ in rec {
 
     allowedRequisites = (with pkgs; [
       xz.out xz.bin libcxx libcxxabi icu.out gmp.out gnumake findutils bzip2.out
-      bzip2.bin llvmPackages.llvm zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
+      bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
@@ -309,10 +309,12 @@ in rec {
       dyld Libsystem CF cctools libiconv locale
     ]);
 
-    overrides = self: super: persistent4 prevStage self super // {
-      clang = cc;
-      inherit cc;
-    };
+    overrides = self: super:
+      let persistent = persistent4 prevStage self super; in persistent // {
+        clang = cc;
+        llvmPackages = persistent.llvmPackages // { clang = cc; };
+        inherit cc;
+      };
   };
 
   stagesDarwin = [

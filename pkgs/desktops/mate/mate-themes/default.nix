@@ -6,17 +6,15 @@ stdenv.mkDerivation rec {
   version = "${major-ver}.${minor-ver}";
   major-ver = gnome3.version;
   minor-ver = {
-    "3.18" = "4";
-    "3.20" = "12";
-    "3.22" = "3";
+    "3.20" = "16";
+    "3.22" = "7";
   }."${major-ver}";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/themes/${major-ver}/${name}.tar.xz";
     sha256 = {
-      "3.18" = "1h3z705jrg7gng5glf51ksszjz6v81qq83qvmfpv1v69bwn6fy4b";
-      "3.20" = "15s2xp2cq9x8iikvbywr5gl8l33i57i1xvbv4jc2qipnkn3c4yca";
-      "3.22" = "0p1rf5q2nr1vsab3pljwycclbrnwylvp88d0dhk8as0d6n6fp85k";
+      "3.20" = "1dvzljpq6cscr82gnsqagf23inb039q84fnawraj0nhfjif11r7v";
+      "3.22" = "1kjchqkds0zj32x7cjfcq96zakcmhva1yg0nxfd6369a5nwkp5k0";
     }."${major-ver}";
   };
 

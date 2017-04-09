@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.pizzashack.org/rssh/";
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn ];
   };
 

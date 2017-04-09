@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "urbanterror-${version}";
-  version = "4.3.1";
+  version = "4.3.2";
 
   srcs =
     [ (fetchurl {
-         url = "http://cdn.fs1.urbanterror.info/urt/43/releases/zips/UrbanTerror431_full.zip";
-         sha256 = "1dfnyb2grf2fxxphwj7p2ff721j2l0gwrj76jzympr32sim5a6cw";
+         url = "http://cdn.fs1.urbanterror.info/urt/43/releases/zips/UrbanTerror432_full.zip";
+         sha256 = "192jwdyfy18cg413ysaklqc8yzmdnshljqc6dnr0xkd6dxbf3pkl";
        })
       (fetchurl {
-         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-4.3.1.zip";
-         sha256 = "1rbiqa1ki73649np3af96cilavkgv66a0b6p0a5x26cxvpgg128k";
+         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-${version}.zip";
+         sha256 = "0m376hdkk8vjnbdy8zakjazyag6jiw4n8zy4lxhv2ndn9mii8lcx";
        })
     ];
 
   buildInputs = [ unzip SDL mesa openal curl libXxf86vm ];
-  sourceRoot = "ioq3-for-UrbanTerror-4-release-4.3.1";
+  sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
 
   configurePhase = ''
     echo "USE_OPENAL = 1" > Makefile.local

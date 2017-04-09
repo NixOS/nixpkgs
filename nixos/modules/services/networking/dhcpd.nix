@@ -60,8 +60,9 @@ let
     };
   };
 
-  machineOpts = {...}: {
-    config = {
+  machineOpts = { ... }: {
+
+    options = {
 
       hostName = mkOption {
         type = types.str;
@@ -156,7 +157,7 @@ let
     };
 
     machines = mkOption {
-      type = types.listOf (types.submodule machineOpts);
+      type = with types; listOf (submodule machineOpts);
       default = [];
       example = [
         { hostName = "foo";

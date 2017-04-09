@@ -177,9 +177,10 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          override = g: makeScope newScope (self_:
-            let super = f self_;
-            in super // g super self_);
+          override = g:
+            makeScope newScope
+            (self_: let super = f self_; in super // g super self_);
+          packages = f;
         };
     in self;
 

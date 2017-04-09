@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     "-DCMAKE_BUILD_TYPE='Release'"
     "-DENABLE_FFMPEG='true'"
     #"-DENABLE_LINK='true'" currently broken :/
-    "-DSYSCONFDIR='$out/etc'"
+    "-DSYSCONFDIR=etc"
   ];
 
   meta = {

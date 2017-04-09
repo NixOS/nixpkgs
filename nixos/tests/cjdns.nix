@@ -109,14 +109,14 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # ping a few times each to let the routing table establish itself
 
-      $alice->succeed("ping6 -c 4 $carolIp6");
-      $bob->succeed("ping6 -c 4 $carolIp6");
+      $alice->succeed("ping -c 4 $carolIp6");
+      $bob->succeed("ping -c 4 $carolIp6");
 
-      $carol->succeed("ping6 -c 4 $aliceIp6");
-      $carol->succeed("ping6 -c 4 $bobIp6");
+      $carol->succeed("ping -c 4 $aliceIp6");
+      $carol->succeed("ping -c 4 $bobIp6");
 
-      $alice->succeed("ping6 -c 4 $bobIp6");
-      $bob->succeed("ping6 -c 4 $aliceIp6");
+      $alice->succeed("ping -c 4 $bobIp6");
+      $bob->succeed("ping -c 4 $aliceIp6");
 
       $alice->waitForUnit("httpd.service");
 

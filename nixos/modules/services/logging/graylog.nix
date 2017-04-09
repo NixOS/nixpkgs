@@ -17,9 +17,16 @@ let
     elasticsearch_discovery_zen_ping_unicast_hosts = ${cfg.elasticsearchDiscoveryZenPingUnicastHosts}
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
+    plugin_dir = /var/lib/graylog/plugins
 
     ${cfg.extraConfig}
   '';
+
+  glPlugins = pkgs.buildEnv {
+    name = "graylog-plugins";
+    paths = cfg.plugins;
+  };
+
 in
 
 {
@@ -121,6 +128,12 @@ in
         description = "Any other configuration options you might want to add";
       };
 
+      plugins = mkOption {
+        description = "Extra graylog plugins";
+        default = [ ];
+        type = types.listOf types.package;
+      };
+
     };
   };
 
@@ -146,6 +159,16 @@ in
       path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
+
+        rm -rf /var/lib/graylog/plugins || true
+        mkdir -p /var/lib/graylog/plugins -m 755
+
+        for declarativeplugin in `ls ${glPlugins}/bin/`; do
+          ln -sf ${glPlugins}/bin/$declarativeplugin /var/lib/graylog/plugins/$declarativeplugin
+        done
+        for includedplugin in `ls ${cfg.package}/plugin/`; do
+          ln -s ${cfg.package}/plugin/$includedplugin /var/lib/graylog/plugins/$includedplugin || true
+        done
         chown -R ${cfg.user} /var/lib/graylog
 
         mkdir -p ${cfg.messageJournalDir} -m 755

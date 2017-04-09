@@ -2,13 +2,13 @@
 
 buildOcaml rec {
   name = "ctypes";
-  version = "0.4.1";
+  version = "0.11.2";
 
   minimumSupportedOcamlVersion = "4";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/ocaml-ctypes/archive/${version}.tar.gz";
-    sha256 = "74564e049de5d3c0e76ea284c225cb658ac1a2b483345be1efb9be4b3c1702f5";
+    sha256 = "1ml80i8j5lpg3qwc074fks2hgxjq5cfdm9r6cznv605s05ajr3kh";
   };
 
   buildInputs = [ ncurses pkgconfig ];

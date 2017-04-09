@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, ecm, makeQtWrapper
+{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, makeQtWrapper
 , boost, doxygen, openssl, mysql, postgresql, graphviz, loki, qscintilla, qtbase }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [
-    cmake ecm makeQtWrapper
+    cmake extra-cmake-modules makeQtWrapper
     boost doxygen graphviz loki mysql openssl postgresql qscintillaLib qtbase
   ];
 

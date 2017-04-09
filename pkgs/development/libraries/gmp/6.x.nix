@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
 
-with { inherit (stdenv.lib) optional optionalString; };
+let inherit (stdenv.lib) optional optionalString; in
 
 let self = stdenv.mkDerivation rec {
   name = "gmp-6.1.1";

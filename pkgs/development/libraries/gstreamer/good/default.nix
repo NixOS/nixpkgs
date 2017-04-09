@@ -10,7 +10,7 @@ let
   inherit (stdenv.lib) optionals optionalString;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-1.10.3";
+  name = "gst-plugins-good-1.10.4";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-    sha256 = "0mar8ss8bvpz699ql4kgndvna8qsv7kj372py4435ffl6hzfj1sf";
+    sha256 = "0zjdwxn83sp9wjp9rxjbyk8kf284g9av7l2v6rjldi586hacd1la";
   };
 
   outputs = [ "out" "dev" ];

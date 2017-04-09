@@ -57,6 +57,7 @@ stdenv.mkDerivation ({
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
+    broken = ecl != null;
   };
 } // (stdenv.lib.optionalAttrs ecl-fasl {
   preConfigure = ''

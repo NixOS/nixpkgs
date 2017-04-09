@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/aws/aws-sdk-go";
-      rev = "f85f603a3e5b4d0eb9516dddb33778918f3b45c6";
-      sha256 = "10frgavkbsqpfninrlgwh64qjx9rwyjzbdfrikciv75v1gljh6zv";
+      rev = "78568b07950e5e7948496878fe99b9436add41d4";
+      sha256 = "0qi3q9qx8k055i2hlc6n8agl7nw1hzcw7aqqykla6z0hjv2hq0c3";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/hashicorp/hcl";
-      rev = "372e8ddaa16fd67e371e9323807d056b799360af";
-      sha256 = "1hv8p1858k1b99p3yc2jj6h77bl0iv9ziyzyp4w3xlcci2s13hnr";
+      rev = "630949a3c5fa3c613328e1b8256052cbc2327c9b";
+      sha256 = "00lalg0gz7218gnw6zgn28gfizpcl8zw8jpkghn681vj7lfah5dh";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/urfave/cli";
-      rev = "2526b57c56f30b50466c96c4133b1a4ad0f0191f";
-      sha256 = "03vvr1wq4pw2fixxsbr1d623hwqxf93d07p8vjml6iyd6k97b15p";
+      rev = "9e5b04886c4bfee2ceba1465b8121057355c4e53";
+      sha256 = "18jx6ypc1w02ha37rsx6hhmdwqmnybajd6l54qm07bdb850ip9db";
     };
   }
 ]

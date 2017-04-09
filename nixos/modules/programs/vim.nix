@@ -9,7 +9,6 @@ in {
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         When enabled, installs vim and configures vim to be the default editor
         using the EDITOR environment variable.

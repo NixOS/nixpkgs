@@ -37,6 +37,9 @@ let
     (yesNoOption "anonymousUser" "anonymous_enable" false ''
       Whether to enable the anonymous FTP user.
     '')
+    (yesNoOption "anonymousUserNoPassword" "no_anon_password" false ''
+      Whether to disable the password for the anonymous FTP user.
+    '')
     (yesNoOption "localUsers" "local_enable" false ''
       Whether to enable FTP for local users.
     '')

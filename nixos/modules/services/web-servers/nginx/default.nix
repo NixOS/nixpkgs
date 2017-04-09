@@ -5,13 +5,16 @@ with lib;
 let
   cfg = config.services.nginx;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
-    vhostConfig // {
+    let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
+    in
+    vhostConfig // {
+      inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${vhostName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${vhostName}/key.pem";
+      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
+      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -83,6 +86,8 @@ let
       client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
+
+      ${cfg.commonHttpConfig}
 
       ${vhosts}
 
@@ -180,6 +185,7 @@ let
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
+      ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
     }
   '') locations);
@@ -241,11 +247,13 @@ in
       };
 
       package = mkOption {
-        default = pkgs.nginx;
-        defaultText = "pkgs.nginx";
+        default = pkgs.nginxStable;
+        defaultText = "pkgs.nginxStable";
         type = types.package;
         description = "
-          Nginx package to use.
+          Nginx package to use. This defaults to the stable version. Note
+          that the nginx team recommends to use the mainline version which
+          available in nixpkgs as <literal>nginxMainline</literal>.
         ";
       };
 
@@ -269,6 +277,24 @@ in
           can be specified more than once and it's value will be
           concatenated (contrary to <option>config</option> which
           can be set only once).
+        '';
+      };
+
+      commonHttpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          resolver 127.0.0.1 valid=5s;
+
+          log_format myformat '$remote_addr - $remote_user [$time_local] '
+                              '"$request" $status $body_bytes_sent '
+                              '"$http_referer" "$http_user_agent"';
+        '';
+        description = ''
+          With nginx you must provide common http context definitions before
+          they are used, e.g. log_format, resolver, etc. inside of server
+          or location contexts. Use this attribute to set these definitions
+          at the appropriate location.
         '';
       };
 
@@ -378,10 +404,18 @@ in
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
+    assertions = let hostOrAliasIsNull = l: l.root == null || l.alias == null; in [
+      {
+        assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
+        message = "Only one of nginx root or alias can be specified on a location.";
+      }
+    ];
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs

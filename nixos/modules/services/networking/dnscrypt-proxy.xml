@@ -31,15 +31,12 @@
 
   </sect1>
 
-  <sect1><title>As a forwarder for a caching DNS client</title>
+  <sect1><title>As a forwarder for another DNS client</title>
 
   <para>
-    By default, DNSCrypt proxy acts as a transparent proxy for the
-    system stub resolver. Because the client does not cache lookups, this
-    setup can significantly slow down e.g., web browsing. The recommended
-    configuration is to run DNSCrypt proxy as a forwarder for a caching DNS
-    client. To achieve this, change the default proxy listening port to
-    a non-standard value and point the caching client to it:
+    To run the DNSCrypt proxy client as a forwarder for another
+    DNS client, change the default proxy listening port to a
+    non-standard value and point the other client to it:
     <programlisting>
       services.dnscrypt-proxy.localPort = 43;
     </programlisting>
@@ -60,7 +57,6 @@
   <para>
     <programlisting>
       {
-        networking.nameservers = [ "127.0.0.1" ];
         services.unbound.enable = true;
         services.unbound.forwardAddresses = [ "127.0.0.1@43" ];
       }

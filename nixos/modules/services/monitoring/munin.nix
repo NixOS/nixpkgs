@@ -76,6 +76,7 @@ let
       # wrapped plugins by makeWrapper being with dots
       ignore_file ^\.
 
+      allow ^::1$
       allow ^127\.0\.0\.1$
 
       ${nodeCfg.extraConfig}
@@ -192,14 +193,26 @@ in
 
   }) (mkIf cronCfg.enable {
 
-    services.cron.systemCronJobs = [
-      "*/5 * * * * munin ${pkgs.munin}/bin/munin-cron --config ${muninConf}"
-    ];
+    systemd.timers.munin-cron = {
+      description = "batch Munin master programs";
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = "*:0/5";
+    };
+
+    systemd.services.munin-cron = {
+      description = "batch Munin master programs";
+      unitConfig.Documentation = "man:munin-cron(8)";
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "munin";
+        ExecStart = "${pkgs.munin}/bin/munin-cron --config ${muninConf}";
+      };
+    };
 
     system.activationScripts.munin-cron = stringAfter [ "users" "groups" ] ''
       mkdir -p /var/{run,log,www,lib}/munin
       chown -R munin:munin /var/{run,log,www,lib}/munin
     '';
-
   })];
 }

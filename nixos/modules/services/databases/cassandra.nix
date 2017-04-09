@@ -310,7 +310,6 @@ in {
     autoBootstrap = mkOption {
       description = "It makes new (non-seed) nodes automatically migrate the right data to themselves.";
       default = true;
-      example = true;
       type = types.bool;
     };
     streamingSocketTimoutInMS = mkOption {

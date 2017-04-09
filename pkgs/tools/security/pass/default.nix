@@ -1,54 +1,31 @@
-{ stdenv, fetchurl
-, coreutils, gnused, getopt, pwgen, git, tree, gnupg, which, procps
+{ stdenv, lib, fetchurl
+, coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
 , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
 }:
 
+with lib;
+
 assert x11Support -> xclip != null
                   && xdotool != null
                   && dmenu != null;
 
 stdenv.mkDerivation rec {
-  version = "1.6.5";
+  version = "1.7";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "05bk3lrp5jwg0v338lvylp7glpliydzz4jf5pjr6k3kagrv3jyik";
+    sha256 = "002mw7j0m33bw483rllzhcf41wp3ixka8yma6kqrfaj57jyw66hn";
   };
 
-  patches =
-    [ ./program-name.patch
-      ./set-correct-program-name-for-sleep.patch
-    ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+  patches = stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
-    description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = http://www.passwordstore.org/;
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 the-kenny ];
-    platforms   = platforms.unix;
-
-    longDescription = ''
-      pass is a very simple password store that keeps passwords inside gpg2
-      encrypted files inside a simple directory tree residing at
-      ~/.password-store. The pass utility provides a series of commands for
-      manipulating the password store, allowing the user to add, remove, edit,
-      synchronize, generate, and manipulate passwords.
-    '';
-  };
-
-  preInstall = ''
-    mkdir -p "$out/share/bash-completion/completions"
-    mkdir -p "$out/share/zsh/site-functions"
-    mkdir -p "$out/share/fish/vendor_completions.d"
-  '';
-
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
 
   postInstall = ''
     # Install Emacs Mode. NOTE: We can't install the necessary
@@ -56,10 +33,8 @@ stdenv.mkDerivation rec {
     # himself.
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
-
-    ${if x11Support then ''
-      cp "contrib/dmenu/passmenu" "$out/bin/"
-    '' else ""}
+  '' + optionalString x11Support ''
+    cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 
   wrapperPath = with stdenv.lib; makeBinPath ([
@@ -68,16 +43,16 @@ stdenv.mkDerivation rec {
     git
     gnupg
     gnused
-    pwgen
     tree
     which
+    qrencode
   ] ++ stdenv.lib.optional stdenv.isLinux procps
     ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
   postFixup = ''
     # Fix program name in --help
     substituteInPlace $out/bin/pass \
-      --replace "\$program" "pass"
+      --replace 'PROGRAM="''${0##*/}"' "PROGRAM=pass"
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
@@ -88,4 +63,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/passmenu \
       --prefix PATH : "$out/bin:${wrapperPath}"
   '';
+
+  meta = with stdenv.lib; {
+    description = "Stores, retrieves, generates, and synchronizes passwords securely";
+    homepage    = http://www.passwordstore.org/;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lovek323 the-kenny fpletz ];
+    platforms   = platforms.unix;
+
+    longDescription = ''
+      pass is a very simple password store that keeps passwords inside gpg2
+      encrypted files inside a simple directory tree residing at
+      ~/.password-store. The pass utility provides a series of commands for
+      manipulating the password store, allowing the user to add, remove, edit,
+      synchronize, generate, and manipulate passwords.
+    '';
+  };
 }

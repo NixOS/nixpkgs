@@ -75,6 +75,14 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
+  allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
+  allowInsecurePredicate = x: (config.allowUnfreePredicate or allowInsecureDefaultPredicate) x;
+
+  hasAllowedInsecure = attrs:
+    (attrs.meta.knownVulnerabilities or []) == [] ||
+    allowInsecurePredicate attrs ||
+    builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
+
   showLicense = license: license.shortName or "unknown";
 
   defaultNativeBuildInputs = extraBuildInputs ++
@@ -137,24 +145,62 @@ let
           builtins.unsafeGetAttrPos "name" attrs;
       pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
 
-      throwEvalHelp = { reason, errormsg }:
-        # uppercase the first character of string s
-        let up = s: with lib;
-          (toUpper (substring 0 1 s)) + (substring 1 (stringLength s) s);
-        in
-        assert builtins.elem reason ["unfree" "broken" "blacklisted"];
 
-        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate."
-        + (lib.strings.optionalString (reason != "blacklisted") ''
-
+      remediation = {
+        unfree = remediate_whitelist "Unfree";
+        broken = remediate_whitelist "Broken";
+        blacklisted = x: "";
+        insecure = remediate_insecure;
+      };
+      remediate_whitelist = allow_attr: attrs:
+        ''
           a) For `nixos-rebuild` you can set
-            { nixpkgs.config.allow${up reason} = true; }
+            { nixpkgs.config.allow${allow_attr} = true; }
           in configuration.nix to override this.
 
           b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-            { allow${up reason} = true; }
+            { allow${allow_attr} = true; }
           to ~/.config/nixpkgs/config.nix.
-        ''));
+        '';
+
+      remediate_insecure = attrs:
+        ''
+
+          Known issues:
+
+        '' + (lib.fold (issue: default: "${default} - ${issue}\n") "" attrs.meta.knownVulnerabilities) + ''
+
+          You can install it anyway by whitelisting this package, using the
+          following methods:
+
+          a) for `nixos-rebuild` you can add ‘${attrs.name or "«name-missing»"}’ to
+             `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
+             like so:
+
+               {
+                 nixpkgs.config.permittedInsecurePackages = [
+                   "${attrs.name or "«name-missing»"}"
+                 ];
+               }
+
+          b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+          ‘${attrs.name or "«name-missing»"}’ to `permittedInsecurePackages` in
+          ~/.config/nixpkgs/config.nix, like so:
+
+               {
+                 permittedInsecurePackages = [
+                   "${attrs.name or "«name-missing»"}"
+                 ];
+               }
+
+        '';
+
+
+      throwEvalHelp = { reason , errormsg ? "" }:
+        throw (''
+          Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate.
+
+          '' + ((builtins.getAttr reason remediation) attrs));
 
       # Check if a derivation is valid, that is whether it passes checks for
       # e.g brokenness or license.
@@ -171,6 +217,8 @@ let
           { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
           { valid = false; reason = "broken"; errormsg = "is not supported on ‘${result.system}’"; }
+        else if !(hasAllowedInsecure attrs) then
+          { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
         else { valid = true; };
 
       outputs' =

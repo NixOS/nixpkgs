@@ -2,7 +2,7 @@
 
 
 let
-  version = "1.3.1";
+  version = "1.3.3";
 in
   stdenv.mkDerivation {
     name = "money-manager-ex-${version}";
@@ -10,7 +10,7 @@ in
     src = fetchgit {
       url = "https://github.com/moneymanagerex/moneymanagerex.git";
       rev = "refs/tags/v${version}";
-      sha256 = "1cmwmvlzg7r85qq23lbbmq2y91vhf9f5pblpja5ph98bsd218pc0";
+      sha256 = "0r4n93z3scv0i0zqflsxwv7j4yl8jy3gr0m4l30y1q8qv0zj9n74";
     };
 
     buildInputs = [ sqlite wxGTK30 gettext ];

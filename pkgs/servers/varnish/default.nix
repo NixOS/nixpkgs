@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = "localstatedir=/var/spool";
 
+  # https://github.com/varnishcache/varnish-cache/issues/1875
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
+
   outputs = [ "out" "dev" "man" ];
 
   meta = with stdenv.lib; {

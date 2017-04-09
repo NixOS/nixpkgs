@@ -27,12 +27,17 @@ let
     ''}
     dbms.shell.enabled=true
     ${cfg.extraServerConfig}
-  '';
 
-  wrapperConfig = pkgs.writeText "neo4j-wrapper.conf" ''
+    # Default JVM parameters from neo4j.conf
+    dbms.jvm.additional=-XX:+UseG1GC
+    dbms.jvm.additional=-XX:-OmitStackTraceInFastThrow
+    dbms.jvm.additional=-XX:+AlwaysPreTouch
+    dbms.jvm.additional=-XX:+UnlockExperimentalVMOptions
+    dbms.jvm.additional=-XX:+TrustFinalNonStaticFields
+    dbms.jvm.additional=-XX:+DisableExplicitGC
+    dbms.jvm.additional=-Djdk.tls.ephemeralDHKeySize=2048
+
     dbms.jvm.additional=-Dunsupported.dbms.udc.source=tarball
-    dbms.jvm.additional=-XX:+UseConcMarkSweepGC
-    dbms.jvm.additional=-XX:+CMSClassUnloadingEnabled
   '';
 
 in {
@@ -123,16 +128,16 @@ in {
         ExecStart = "${cfg.package}/bin/neo4j console";
         User = "neo4j";
         PermissionsStartOnly = true;
+        LimitNOFILE = 40000;
       };
       preStart = ''
         mkdir -m 0700 -p ${cfg.dataDir}/{data/graph.db,conf,logs}
         ln -fs ${serverConfig} ${cfg.dataDir}/conf/neo4j.conf
-        ln -fs ${wrapperConfig} ${cfg.dataDir}/conf/neo4j-wrapper.conf
         if [ "$(id -u)" = 0 ]; then chown -R neo4j ${cfg.dataDir}; fi
       '';
     };
 
-    environment.systemPackages = [ pkgs.neo4j ];
+    environment.systemPackages = [ cfg.package ];
 
     users.extraUsers = singleton {
       name = "neo4j";

@@ -4,14 +4,17 @@
 { stdenv, chicken }:
 { name, version, md5 ? "", sha256 ? "" }:
 
+if md5 != "" then
+  throw "fetchegg does not support md5 anymore, please use sha256"
+else
 stdenv.mkDerivation {
   name = "chicken-${name}-export";
   builder = ./builder.sh;
   buildInputs = [ chicken ];
 
-  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
+  outputHash = sha256;
 
   inherit version;
 

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation ( rec {
   name = "ponyc-${version}";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
     rev = version;
-    sha256 = "1v314abmhlqsj8iyab61cf8nb4kbddv1ycnw29z53mpbmivk4gn0";
+    sha256 = "1agb7aiii7pl8zsh3h0lfzghmm1ajj15gx1j48xjyvplxixdgn9j";
   };
 
   buildInputs = [ llvm makeWrapper which ];
@@ -79,11 +79,11 @@ stdenv.mkDerivation ( rec {
   # Stripping breaks linking for ponyc
   dontStrip = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = http://www.ponylang.org;
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ doublec kamilchm ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ doublec kamilchm ];
+    platforms = subtractLists platforms.i686 platforms.unix;
   };
 })

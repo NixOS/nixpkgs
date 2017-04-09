@@ -84,7 +84,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Ping on main veth
       $machine->succeed("ping -n -c 1 192.168.0.100");
-      $machine->succeed("ping6 -n -c 1 fc00::2");
+      $machine->succeed("ping -n -c 1 fc00::2");
 
       # Ping on the first extra veth
       $machine->succeed("ping -n -c 1 192.168.1.100 >&2");

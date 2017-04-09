@@ -27,5 +27,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://memtest86.com/;
     description = "A tool to detect memory errors, to be run from a bootloader";
+    broken = true;
   };
 }

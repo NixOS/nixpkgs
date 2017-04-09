@@ -13,6 +13,9 @@ let
     auth_unix_rw = "none"
     ${cfg.extraConfig}
   '';
+  qemuConfigFile = pkgs.writeText "qemu.conf" ''
+    ${cfg.qemuVerbatimConfig}
+  '';
 
 in {
 
@@ -48,6 +51,18 @@ in {
       '';
     };
 
+    virtualisation.libvirtd.qemuVerbatimConfig = mkOption {
+      type = types.lines;
+      default = ''
+        namespaces = []
+      '';
+      description = ''
+        Contents written to the qemu configuration file, qemu.conf.
+        Make sure to include a proper namespace configuration when
+        supplying custom configuration.
+      '';
+    };
+
     virtualisation.libvirtd.extraOptions = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -75,13 +90,15 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages =
-      [ pkgs.libvirt pkgs.netcat-openbsd ]
-       ++ optional cfg.enableKVM pkgs.qemu_kvm;
+    environment.systemPackages = with pkgs;
+      [ libvirt netcat-openbsd ]
+       ++ optional cfg.enableKVM qemu_kvm;
 
     boot.kernelModules = [ "tun" ];
 
     users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
+
+    systemd.packages = [ pkgs.libvirt ];
 
     systemd.services.libvirtd = {
       description = "Libvirt Virtual Machine Management Daemon";
@@ -90,13 +107,17 @@ in {
       after = [ "systemd-udev-settle.service" ]
               ++ optional vswitch.enable "vswitchd.service";
 
-      path = [
-          pkgs.bridge-utils
-          pkgs.dmidecode
-          pkgs.dnsmasq
-          pkgs.ebtables
+      environment = {
+        LIBVIRTD_ARGS = ''--config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
+      };
+
+      path = with pkgs; [
+          bridge-utils
+          dmidecode
+          dnsmasq
+          ebtables
         ]
-        ++ optional cfg.enableKVM pkgs.qemu_kvm
+        ++ optional cfg.enableKVM qemu_kvm
         ++ optional vswitch.enable vswitch.package;
 
       preStart = ''
@@ -119,6 +140,9 @@ in {
             cp -npd ${pkgs.libvirt}/var/lib/$i /var/lib/$i
         done
 
+        # Copy generated qemu config to libvirt directory
+        cp -f ${qemuConfigFile} /var/lib/libvirt/qemu.conf
+
         # libvirtd puts the full path of the emulator binary in the machine
         # config file. But this path can unfortunately be garbage collected
         # while still being used by the virtual machine. So update the
@@ -135,11 +159,15 @@ in {
       ''; # */
 
       serviceConfig = {
-        ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
         Restart = "on-failure";
       };
+    };
+
+    systemd.services.libvirt-guests = {
+      wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ coreutils libvirt gawk ];
     };
 
     systemd.sockets.virtlogd = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, re, stringext, ounit
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, re, stringext, ounit
 , sexplib, ppx_sexp_conv
 , legacyVersion ? false
 , sexplib_p4
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = [ ocaml findlib ounit ]
+  buildInputs = [ ocaml findlib ocamlbuild ounit ]
   ++ stdenv.lib.optional (!legacyVersion) ppx_sexp_conv;
   propagatedBuildInputs = [ re (if legacyVersion then sexplib_p4 else sexplib) stringext ];
 

@@ -15,8 +15,8 @@ index d2c7db4..dc107b3 100644
  	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
  	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
  	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
-+	ln -s -f liblua.${version}.dylib $(INSTALL_LIB)/liblua.${majorVersion}.dylib
-+	ln -s -f liblua.${majorVersion}.dylib $(INSTALL_LIB)/liblua.dylib
++	ln -s -f liblua.${version}.dylib $(INSTALL_LIB)/liblua.${luaversion}.dylib
++	ln -s -f liblua.${luaversion}.dylib $(INSTALL_LIB)/liblua.dylib
  
  uninstall:
  	cd src && cd $(INSTALL_BIN) && $(RM) $(TO_BIN)

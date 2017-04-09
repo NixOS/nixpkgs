@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.8.11";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
-    owner  = "manuelschneid3r";
+    owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "12ag30l3dd05hg0d08ax4c8dvp24lgd677szkq445xzvvhggxr37";
+    sha256 = "0plb8c7js91bpf7qgq1snhry8x4zixyy34lq42nhsglab2kaq4ns";
   };
 
   nativeBuildInputs = [ cmake makeQtWrapper ];
@@ -17,12 +17,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    sed -i "/QStringList dirs = {/a    \"$out/lib\"," \
+      src/lib/albert/src/pluginsystem/extensionmanager.cpp
+  '';
+
   fixupPhase = ''
     wrapQtProgram $out/bin/albert
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/manuelSchneid3r/albert;
+    homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes ];

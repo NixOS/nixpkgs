@@ -47,12 +47,24 @@ self: super:
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   bin-package-db = null;
-  haskeline = self.haskeline_0_7_2_1;
+  haskeline = self.haskeline_0_7_3_1;
   hoopl = self.hoopl_3_10_2_1;
   hpc = self.hpc_0_6_0_2;
-  terminfo = self.terminfo_0_4_0_1;
+  terminfo = self.terminfo_0_4_0_2;
   xhtml = self.xhtml_3000_2_1;
 
+  # Cabal isn't part of the stage1 packages which form the default package-db
+  # that GHCJS provides.
+  # Almost all packages require Cabal to build their Setup.hs,
+  # but usually they don't declare it explicitly as they don't need to for normal GHC.
+  # To account for that we add Cabal by default.
+  mkDerivation = args: super.mkDerivation (args // {
+    setupHaskellDepends = (args.setupHaskellDepends or []) ++
+      (if args.pname == "Cabal" then [ ]
+      # Break the dependency cycle between Cabal and hscolour
+      else if args.pname == "hscolour" then [ (dontHyperlinkSource self.Cabal) ]
+      else [ self.Cabal ]);
+  });
 
 ## OTHER PACKAGES
 
@@ -126,7 +138,8 @@ self: super:
   });
 
   ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
-    libraryHaskellDepends = [ self.ghcjs-base self.text ];
+    setupHaskellDepends = (drv.setupHaskellDepends or []) ++ [ self.Cabal_1_24_2_0 ];
+    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base self.text ];
     isLibrary = true;
   });
 
@@ -179,8 +192,6 @@ self: super:
         "glib" "gtk3" "webkitgtk3" "webkitgtk3-javascriptcore" "raw-strings-qq" "unix"
       ] drv.libraryHaskellDepends;
   });
-
-  semigroups = addBuildDepends super.semigroups [ self.hashable self.unordered-containers self.text self.tagged ];
 
   transformers-compat = overrideCabal super.transformers-compat (drv: {
     configureFlags = [];

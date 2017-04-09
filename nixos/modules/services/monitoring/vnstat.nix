@@ -32,7 +32,7 @@ in {
       preStart = "chmod 755 /var/lib/vnstat";
       serviceConfig = {
         ExecStart = "${pkgs.vnstat}/bin/vnstatd -n";
-        ExecReload = "kill -HUP $MAINPID";
+        ExecReload = "${pkgs.procps}/bin/kill -HUP $MAINPID";
         ProtectHome = true;
         PrivateDevices = true;
         PrivateTmp = true;

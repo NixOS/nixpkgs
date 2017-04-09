@@ -45,7 +45,7 @@ in
       overlays = dir:
         let content = readDir dir; in
         map (n: import (dir + ("/" + n)))
-          (builtins.filter (n: builtins.match ".*\.nix" n != null)
+          (builtins.filter (n: builtins.match ".*\.nix" n != null || pathExists (dir + ("/" + n + "/default.nix")))
             (attrNames content));
     in
       if dirPath != "" then

@@ -147,7 +147,6 @@ in
 
       allowAnonymous = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Allow clients to connect without authentication.
