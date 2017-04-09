@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     substituteAll "${./build-with-lisp.sh}" "$out/bin/build-with-lisp.sh"
     substituteAll "${./cl-wrapper.sh}" "$out/bin/cl-wrapper.sh"
     chmod a+x "$out"/bin/*
-    
+
     substituteAll "${./setup-hook.sh}" "setup-hook-parsed"
     source setup-hook-parsed
     setLisp "${lisp}"
@@ -22,7 +22,9 @@ stdenv.mkDerivation {
     cp -r "${asdf}/lib/common-lisp"/* "$out/lib/common-lisp/"
     chmod u+rw -R "$out/lib/common-lisp/"
 
-    NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn 
+    NIX_LISP_PRELAUNCH_HOOK='
+      NIX_LISP_FASL_TYPE=lisp
+      nix_lisp_run_single_form "(progn
         (uiop/lisp-build:compile-file* \"'"$out"'/lib/common-lisp/asdf/build/asdf.lisp\")
         (asdf:load-system :uiop :force :all)
         (asdf:load-system :asdf :force :all)
