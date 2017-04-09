@@ -16,8 +16,8 @@ in stdenv.mkDerivation {
   buildPhases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
-    mkdir -p $out/share
-    cp lambda-mod.zsh-theme $out/share
+    mkdir -p $out/share/themes
+    cp lambda-mod.zsh-theme $out/share/themes
   '';
 
   meta = with stdenv.lib; {
