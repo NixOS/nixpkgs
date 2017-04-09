@@ -232,7 +232,7 @@ let
         # TODO: remove boot.shell_on_fail
       ] ++ # Shared filesystems
       imap (i: n:
-        ''-virtfs local,path="${mcfg.shared.${n}}",security_model=mapped-xattr,mount_tag="shared${toString i}"''
+        ''-virtfs proxy,socket="${cfg.rpath}/${name}/virtfs${toString i}",mount_tag="shared${toString i}"''
       ) (attrNames mcfg.shared)
     );
 
@@ -264,7 +264,7 @@ let
       # Regenerate store
       mkdir -p "${cfg.path}/${name}/store"
       ls "$store" | while read path; do
-        if ! grep "$path" "$targetStore"; then
+        if ! grep "$path" "$targetStore" > /dev/null; then
           rm -Rf "$path"
         fi
       done
@@ -375,12 +375,24 @@ in
 
   config =
     let
+      proxyUnits = name:
+        listToAttrs (imap (i: n: nameValuePair "vm-${name}-shared-${toString i}" {
+          description = "Virtfs proxy helper for VM ${name} path ${n}";
+          script =
+            ''
+              exec ${pkgs.qemu}/bin/virtfs-proxy-helper \
+                -p "${cfg.machines.${name}.shared.${n}}" \
+                -s "${cfg.rpath}/${name}/virtfs${toString i}" \
+                -u "vm-${name}" -g "vm-${name}" \
+                --nodaemon
+            '';
+        }) (attrNames cfg.machines.${name}.shared));
       unit = name: {
         description = "VM '${name}'";
         preStart = setupVM name;
         script = "exec ${qemuCommand name}";
-        requires = [ "vm-${name}-netdev.service" ];
-        after = [ "vm-${name}-netdev.service" ];
+        requires = [ "vm-${name}-netdev.service" ] ++ (attrNames (proxyUnits name));
+        after = [ "vm-${name}-netdev.service" ] ++ (attrNames (proxyUnits name));
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "vm-${name}";
@@ -411,7 +423,8 @@ in
   mkIf (cfg.machines != {}) {
     systemd.services =
       mapAttrs' (name: _: nameValuePair "vm-${name}" (unit name)) cfg.machines //
-      mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines;
+      mapAttrs' (name: _: nameValuePair "vm-${name}-console" (consoleUnit name)) cfg.machines //
+      foldAttrs (n: _: n) "" (map proxyUnits (attrNames cfg.machines));
 
     users.groups = mapAttrs' (name: _: nameValuePair "vm-${name}" {}) cfg.machines;
     users.users =
