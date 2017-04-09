@@ -7,7 +7,7 @@
 
 let
 
-  common = { name, suffix ? "", src, patchPhase, fromGit ? false }: stdenv.mkDerivation rec {
+  common = { name, suffix ? "", src, patchPhase ? "", fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src patchPhase;
     version = lib.getVersion name;
 
