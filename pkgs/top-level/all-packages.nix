@@ -2481,6 +2481,8 @@ with pkgs;
 
   jsduck = callPackage ../development/tools/jsduck { };
 
+  jucipp = callPackage ../applications/editors/jucipp { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
