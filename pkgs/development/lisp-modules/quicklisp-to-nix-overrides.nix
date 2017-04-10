@@ -38,7 +38,7 @@ in
     testSystems = (x.testSystems or ["iolib"]) ++ [
       "iolib/os" "iolib/zstreams" "iolib/common-lisp" "iolib/base" "iolib/asdf"
       "iolib/conf" "iolib/grovel" "iolib/syscalls" "iolib/sockets"
-      "iolib/multiplex" "iolib/streams"
+      "iolib/multiplex" "iolib/streams" "iolib/pathnames"
     ];
   };
   cl-unicode = addDeps (with qlnp; [cl-ppcre flexi-streams]);
