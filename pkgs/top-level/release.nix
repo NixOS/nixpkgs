@@ -31,6 +31,21 @@ let
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
+      darwin-tested = pkgs.releaseTools.aggregate
+        { name = "nixpkgs-darwin-${jobs.tarball.version}";
+          meta.description = "Release-critical builds for the Nixpkgs darwin channel";
+          constituents =
+            [ jobs.tarball
+              jobs.stdenv.x86_64-darwin
+              jobs.ghc.x86_64-darwin
+              jobs.cabal2nix.x86_64-darwin
+              jobs.ruby.x86_64-darwin
+              jobs.python.x86_64-darwin
+              jobs.rustc.x86_64-darwin
+              jobs.go.x86_64-darwin
+            ];
+        };
+
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
