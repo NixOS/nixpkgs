@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
     zstd lz4
   ];
 
-  buildPhase = ''
-    make zstdmt lz4mt
-  '';
+  makeFlags = [ "CC=cc" "zstdmt" "lz4mt" ];
 
   installPhase = ''
     mkdir -p $out/bin/

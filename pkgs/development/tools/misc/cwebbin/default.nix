@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ascherer";
     repo = "cwebbin";
-    rev = name;
+    rev = "2016-05-20-22p";
     sha256 = "0zf93016hm9i74i2v384rwzcw16y3hg5vc2mibzkx1rzvqa50yfr";
   };
 
   cweb = fetchurl {
-    url = https://www.ctan.org/tex-archive/web/c_cpp/cweb/cweb.tar.gz;
+    url = https://www.ctan.org/tex-archive/web/c_cpp/cweb/cweb-3.64ah.tgz;
     sha256 = "1hdzxfzaibnjxjzgp6d2zay8nsarnfy9hfq55hz1bxzzl23n35aj";
   };
 
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "CP=cp"
     "RM=rm"
     "PDFTEX=echo"
+    "CC=c++"
   ];
 
   buildPhase = ''

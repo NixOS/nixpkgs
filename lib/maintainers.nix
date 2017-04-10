@@ -60,6 +60,7 @@
   bachp = "Pascal Bach <pascal.bach@nextrem.ch>";
   badi = "Badi' Abdul-Wahid <abdulwahidc@gmail.com>";
   balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
+  basvandijk = "Bas van Dijk <v.dijk.bas@gmail.com>";
   Baughn = "Svein Ove Aas <sveina@gmail.com>";
   bcarrell = "Brandon Carrell <brandoncarrell@gmail.com>";
   bcdarwin = "Ben Darwin <bcdarwin@gmail.com>";
@@ -105,6 +106,7 @@
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
   colemickens = "Cole Mickens <cole.mickens@gmail.com>";
+  colescott = "Cole Scott <colescottsf@gmail.com>";
   copumpkin = "Dan Peebles <pumpkingod@gmail.com>";
   corngood = "David McFarland <corngood@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
@@ -475,6 +477,7 @@
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   siddharthist = "Langston Barrett <langston.barrett@gmail.com>";
+  sigma = "Yann Hodique <yann.hodique@gmail.com>";
   simonvandel = "Simon Vandel Sillesen <simon.vandel@gmail.com>";
   sjagoe = "Simon Jagoe <simon@simonjagoe.com>";
   sjmackenzie = "Stewart Mackenzie <setori88@gmail.com>";

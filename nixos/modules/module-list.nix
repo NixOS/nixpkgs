@@ -130,6 +130,7 @@
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
+  ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
   ./services/backup/almir.nix

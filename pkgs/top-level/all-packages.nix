@@ -325,7 +325,7 @@ with pkgs;
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
   wrapGAppsHook = makeSetupHook {
-    deps = [ gnome3.dconf.lib gnome3.gtk makeWrapper ];
+    deps = [ gnome3.dconf.lib gnome3.gtk librsvg makeWrapper ];
   } ../build-support/setup-hooks/wrap-gapps-hook.sh;
 
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
@@ -449,6 +449,14 @@ with pkgs;
   argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
+
+  arm-frc-linux-gnueabi-eglibc = callPackage ../development/libraries/arm-frc-linux-gnueabi-eglibc {};
+
+  arm-frc-linux-gnueabi-linux-api-headers = callPackage ../development/libraries/arm-frc-linux-gnueabi-linux-api-headers {};
+
+  arm-frc-linux-gnueabi-binutils = callPackage ../development/tools/misc/arm-frc-linux-gnueabi-binutils {};
+
+  arm-frc-linux-gnueabi-gcc = callPackage ../development/compilers/arm-frc-linux-gnueabi-gcc {};
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
@@ -1675,6 +1683,8 @@ with pkgs;
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
   eplot = callPackage ../tools/graphics/eplot { };
+
+  epstool = callPackage ../tools/graphics/epstool { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
@@ -5952,17 +5962,29 @@ with pkgs;
     git = gitMinimal;
   };
 
-  octave = callPackage ../development/interpreters/octave {
-    qt = null;
-    ghostscript = null;
-    graphicsmagick = null;
-    llvm = null;
-    hdf5 = null;
-    glpk = null;
-    suitesparse = null;
-    jdk = null;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
-  };
+  inherit (
+    let
+      defaultOctaveOptions = {
+        qt = null;
+        ghostscript = null;
+        graphicsmagick = null;
+        llvm = null;
+        hdf5 = null;
+        glpk = null;
+        suitesparse = null;
+        jdk = null;
+        openblas = if stdenv.isDarwin then openblasCompat else openblas;
+      };
+
+      hgOctaveOptions =
+        (removeAttrs defaultOctaveOptions ["ghostscript"]) // {
+          overridePlatforms = stdenv.lib.platforms.none;
+        };
+    in {
+      octave = callPackage ../development/interpreters/octave defaultOctaveOptions;
+      octaveHg = lowPrio (callPackage ../development/interpreters/octave/hg.nix hgOctaveOptions);
+  }) octave octaveHg;
+
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
@@ -11083,6 +11105,8 @@ with pkgs;
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
+  slimserver = callPackage ../servers/slimserver { };
+
   smcroute = callPackage ../servers/smcroute { };
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
@@ -13729,7 +13753,7 @@ with pkgs;
   inherit (callPackages ../applications/networking/browsers/firefox {
     inherit (gnome2) libIDL;
     libpng = libpng_apng;
-    enableGTK3 = false;
+    enableGTK3 = true;
     python = python2;
     gnused = gnused_422;
   }) firefox-unwrapped firefox-esr-unwrapped;
@@ -15720,11 +15744,13 @@ with pkgs;
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
     libpng = libpng_apng;
+    enableGTK3 = true;
   };
 
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
   };
 
   tig = gitAndTools.tig;
@@ -15845,6 +15871,10 @@ with pkgs;
   vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
+
+  verbiste = callPackage ../applications/misc/verbiste {
+    inherit (gnome2) libgnomeui;
+  };
 
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -18453,7 +18483,7 @@ with pkgs;
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
 
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = libsForQt56.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 

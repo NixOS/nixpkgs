@@ -64,6 +64,11 @@ in {
       })
     ];
 
+    postPatch = ''
+      rm builtin/providers/dns/data_dns_cname_record_set_test.go
+      rm builtin/providers/vsphere/resource_vsphere_file_test.go
+    '';
+
     doCheck = true;
   };
 }
