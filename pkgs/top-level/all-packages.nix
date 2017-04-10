@@ -6310,7 +6310,7 @@ with pkgs;
 
   binutilsCross = assert targetPlatform != buildPlatform; lowPrio (
     if targetPlatform.libc == "libSystem" then darwin.cctools_cross
-    else forcedNativePackages.binutils.override {
+    else forcedNativePackages.binutils-raw.override {
       noSysDirs = true;
       cross = targetPlatform;
     });

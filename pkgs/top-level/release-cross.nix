@@ -1,6 +1,8 @@
+/* This file defines some basic smoke tests for cross compilation.
+*/
 
-{ # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ builtins.currentSystem ]
+{ # The platforms *from* which we cross compile.
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -10,7 +12,7 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 let
   inherit (pkgs) lib;
 
-  nativePlatforms = linux;
+  nativePlatforms = all;
 
   /* Basic list of packages to cross-build */
   basicCrossDrv = {
