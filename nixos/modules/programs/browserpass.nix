@@ -11,7 +11,7 @@ with lib;
         default = false;
         type = types.bool;
         description = ''
-          Wheter to install the NativeMessaging configuration for installed browsers.
+          Whether to install the NativeMessaging configuration for installed browsers.
         '';
       };
     };
