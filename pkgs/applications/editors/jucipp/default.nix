@@ -1,8 +1,7 @@
-{ config, stdenv, fetchgit, imagemagick, gnome3, at_spi2_core, libcxx,
+{ config, stdenv, fetchgit, makeWrapper, gnome3, at_spi2_core, libcxx,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
-  coreutils, glibc, makeWrapper, dbus_libs, openssl, libxml2, gnumake,
-  ctags, }:
+  coreutils, glibc, dbus_libs, openssl, libxml2, gnumake, ctags }:
 
 with stdenv.lib;
 
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = [
-    imagemagick
     dbus_libs
     openssl
     libxml2
