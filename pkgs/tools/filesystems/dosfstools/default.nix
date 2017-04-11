@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
+  configureFlags = [ "--enable-compat-symlinks" ];
+
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     repositories.git = git://daniel-baumann.ch/git/software/dosfstools.git;
