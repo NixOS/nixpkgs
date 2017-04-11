@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/projectlibre/code";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "0zwxclhq7gk5l09q5039yywn9b9d7yxm8mjjdxaq93y0pf3q3fcw";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://www.projectlibre.com/";
     descripton = "Project-Management Software similar to MS-Project";
-    maintainer = with maintainers; [ mogria ];
+    maintainer = maintainers.mogria;
     license = licenses.cpal10;
   };
 }
