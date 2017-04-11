@@ -19,6 +19,12 @@ let
         '';
       };
 
+      domain = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Domain to fetch certificate for (defaults to the entry name)";
+      };
+
       email = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -157,9 +163,10 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
+                domain = if data.domain != null then data.domain else cert;
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
