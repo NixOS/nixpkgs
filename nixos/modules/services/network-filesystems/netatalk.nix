@@ -9,7 +9,7 @@ let
   extmapFile = pkgs.writeText "extmap.conf" cfg.extmap;
 
   afpToString = x: if builtins.typeOf x == "bool"
-                   then (if x then "true" else "false")
+                   then boolToString x
                    else toString x;
 
   volumeConfig = name:

@@ -30,6 +30,11 @@ rec {
   /* boolean “and” */
   and = x: y: x && y;
 
+  /* Convert a boolean to a string.
+     Note that toString on a bool returns "1" and "".
+  */
+  boolToString = b: if b then "true" else "false";
+
   /* Merge two attribute sets shallowly, right side trumps left
 
      Example:
