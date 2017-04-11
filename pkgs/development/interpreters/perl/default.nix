@@ -121,17 +121,16 @@ let
 
 in rec {
 
-  perl = perl522;
-
-  perl520 = common {
-    version = "5.20.3";
-    sha256 = "0jlvpd5l5nk7lzfd4akdg1sw6vinbkj6izclyyr0lrbidfky691m";
-
-  };
+  perl = perl524;
 
   perl522 = common {
     version = "5.22.3";
     sha256 = "10q087l1ffdy3gpryr8z540jcnsr0dhm37raicyfqqkyvys1yd8v";
+  };
+
+  perl524 = common {
+    version = "5.24.1";
+    sha256 = "1bqqb5ghfj4486nqr77kgsd8aff6a289jy7n2cdkznwvn34qbhg6";
   };
 
 }
