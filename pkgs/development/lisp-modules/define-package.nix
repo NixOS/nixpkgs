@@ -1,7 +1,7 @@
 args @ {stdenv, clwrapper, baseName, testSystems ? [baseName], version ? "latest"
   , src, description, deps, buildInputs ? [], meta ? {}, overrides?(x: {})
   , propagatedBuildInputs ? []}:
-let 
+let
   deployConfigScript = ''
     outhash="$out"
     outhash="''${outhash##*/}"
@@ -39,7 +39,7 @@ let
     echo "#! /bin/sh" >> "$launch_script"
     echo "source '$config_script'" >> "$launch_script"
     echo "export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
-    echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script" 
+    echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script"
   '';
 basePackage = {
   name = "lisp-${baseName}-${version}";
@@ -66,12 +66,12 @@ basePackage = {
              (asdf:operate (quote asdf::compile-bundle-op) :${testSystem})
              (ignore-errors (asdf:operate (quote asdf::deploy-asd-op) :${testSystem}))
              )"' \
-          "$out/bin/${args.baseName}-lisp-launcher.sh" ""
+          "$out/bin/${args.baseName}-lisp-launcher.sh"
     '') testSystems}
 
     eval "$postInstall"
   '';
-  propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp clwrapper.asdf] 
+  propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp clwrapper.asdf]
     ++ (args.propagatedBuildInputs or []);
   buildInputs = buildInputs;
   dontStrip=true;

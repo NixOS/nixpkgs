@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     platforms =
       with stdenv.lib;
       platforms.linux ++ platforms.darwin;
+    maintainers = with stdenv.lib.maintainers; [ sigma ];
   };
 }

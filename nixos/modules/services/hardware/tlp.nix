@@ -58,6 +58,9 @@ in
     powerManagement.cpuFreqGovernor = null;
 
     systemd.services = {
+      "systemd-rfkill@".enable = false;
+      "systemd-rfkill".enable = false;
+
       tlp = {
         description = "TLP system startup/shutdown";
 

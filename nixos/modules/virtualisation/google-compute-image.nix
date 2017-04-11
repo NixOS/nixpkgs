@@ -2,10 +2,10 @@
 
 with lib;
 let
-  diskSize = "100G";
+  diskSize = "1G";
 in
 {
-  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
+  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ./grow-partition.nix ];
 
   # https://cloud.google.com/compute/docs/tutorials/building-images
   networking.firewall.enable = mkDefault false;
@@ -94,7 +94,10 @@ in
         ''
     );
 
-  fileSystems."/".label = "nixos";
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+  };
 
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];

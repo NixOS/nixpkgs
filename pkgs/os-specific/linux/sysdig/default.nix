@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
   ];
 
-  postInstall = ''
+  postInstall = optionalString (!stdenv.isDarwin) ''
     patchelf --set-rpath "$libPath" "$out/bin/sysdig"
     patchelf --set-rpath "$libPath" "$out/bin/csysdig"
   '' + optionalString (kernel != null) ''
