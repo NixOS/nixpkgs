@@ -3187,6 +3187,9 @@ in {
       runHook postCheck
     '';
 
+    # Network access
+    doCheck = false;
+
     meta = {
       homepage = https://github.com/boto/boto3;
       license = stdenv.lib.licenses.asl20;
