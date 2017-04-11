@@ -11332,11 +11332,11 @@ in {
 
   pycodestyle = buildPythonPackage rec {
     name = "pycodestyle-${version}";
-    version = "2.0.0";
+    version = "2.3.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pycodestyle/${name}.tar.gz";
-      sha256 = "1rz2v8506mdjdyxcnv9ygiw6v0d4dqx8z5sjyjm0w2v32h5l5w1p";
+      sha256 = "0rk78b66p57ala26mdldl9lafr48blv5s659sah9q50qnfjmc8k8";
     };
 
     meta = {
@@ -11364,11 +11364,11 @@ in {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "3.2.1";
+    version = "3.3.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "c7c460b5aff3a2063c798a77af18ec70af3941d35a22e2e76965e3c0e0b36055";
+      sha256 = "04izn1q1lgbr408l9b3vkxqmpi6mq47bxwc0iwypb02mrxns41xr";
     };
 
     buildInputs = with self; [ pytest mock pytestrunner ];
@@ -14417,11 +14417,11 @@ in {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.5.3";
+    name = "mccabe-0.6.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "16293af41e7242031afd73896fef6458f4cad38201d21e28f344fff50ae1c25e";
+      sha256 = "07w3p1qm44hgxf3vvwz84kswpsx6s7kvaibzrsx5dzm0hli1i3fx";
     };
 
     buildInputs = with self; [ pytestrunner pytest ];
@@ -20388,12 +20388,12 @@ in {
 
   pyflakes = buildPythonPackage rec {
     pname = "pyflakes";
-    version = "1.3.0";
+    version = "1.5.0";
     name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "a4f93317c97a9d9ed71d6ecfe08b68e3de9fea3f4d94dcd1d9d83ccbf929bc31";
+      sha256 = "1x1pcca4a24k4pw8x1c77sgi58cg1wl2k38mp8a25k608pzls3da";
     };
 
     buildInputs = with self; [ unittest2 ];
