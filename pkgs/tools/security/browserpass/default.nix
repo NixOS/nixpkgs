@@ -2,15 +2,16 @@
 { stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
-  name = "browserpass-unstable-${version}";
-  version = "HEAD";
-  rev = "HEAD";
+  name = "browserpass-${version}";
+  version = "2017-04-11";
+  rev = "e0fe250ed8fd061125746f5d99a1f9a678d21004";
 
   goPackagePath = "github.com/dannyvankooten/browserpass";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/dannyvankooten/browserpass";
+    sha256 = "0khwlh5agdd2mm2yzklg8r2h084n8j7jbjjxsiaj67zm8zz6b39c";
   };
 
   postInstall = ''
