@@ -18408,5 +18408,5 @@ with pkgs;
 
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
 
-  ibtool = callPackage ../os-specific/darwin/ibtool {};
+  ibtool = callPackage ../development/tools/ibtool {};
 }
