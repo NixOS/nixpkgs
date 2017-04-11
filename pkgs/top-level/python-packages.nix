@@ -118,6 +118,8 @@ in {
     };
   };
 
+  phonenumbers = callPackage ../development/python-modules/phonenumbers { };
+
   agate-dbf = buildPythonPackage rec {
     name = "agate-dbf-0.1.0";
     disabled = isPy3k;
