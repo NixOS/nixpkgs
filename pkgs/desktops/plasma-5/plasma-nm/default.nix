@@ -27,4 +27,5 @@ plasmaPackage {
     mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
     qca-qt5 solid
   ];
+  enableParallelBuilding = true;
 }
