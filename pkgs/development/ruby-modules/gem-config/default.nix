@@ -211,13 +211,13 @@ in
     buildInputs = [ curl ];
   };
 
-  tzinfo = attrs: {
+  tzinfo = attrs: if lib.versionAtLeast attrs.version "1.0" then {
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     '';
-  };
+  } else {};
 
   uuid4r = attrs: {
     buildInputs = [ which libossp_uuid ];
