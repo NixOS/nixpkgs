@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "0zpqnbhjaifdalyxwmvk5kcyd7cpxbcigbn7967nbsyvl54vl8vg";
   };
 
-  patches = optional stdenv.isLinux ./systemd-notify.patch;
-
   buildInputs = [ lzo openssl pkgconfig ]
                   ++ optionals stdenv.isLinux [ pam systemd iproute ]
                   ++ optional pkcs11Support pkcs11helper;
