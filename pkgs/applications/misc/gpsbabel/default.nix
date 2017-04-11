@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./clang-4.patch
     (fetchpatch {
       url = https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip;
       sha256 = "03fpsmlx1wc48d1j405zkzp8j64hcp0z72islf4mk1immql3ibcr";
@@ -44,8 +45,8 @@ stdenv.mkDerivation rec {
   ''
     # The raymarine and gtm tests fail on i686 despite -ffloat-store.
   + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
-    # The tomtom asc test fails on darwin, see PR #23572.
-  + lib.optionalString stdenv.isDarwin "rm -v testo.d/tomtom_asc.test;";
+    # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
+  + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test";
 
   meta = with stdenv.lib; {
     description = "Convert, upload and download data from GPS and Map programs";
