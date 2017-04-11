@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libsigsegv-2.10";
+  name = "libsigsegv-2.11";
 
   src = fetchurl {
     url = "mirror://gnu/libsigsegv/${name}.tar.gz";
-    sha256 = "16hrs8k3nmc7a8jam5j1fpspd6sdpkamskvsdpcw6m29vnis8q44";
+    sha256 = "063swdvq7mbmc1clv0rnh20grwln1zfc2qnm0sa1hivcxyr2wz6x";
   };
 
   # Based on https://github.com/davidgfnet/buildroot-Os/blob/69fe6065b9dd1cb4dcc0a4b554e42cc2e5bd0d60/package/libsigsegv/libsigsegv-0002-fix-aarch64-build.patch
