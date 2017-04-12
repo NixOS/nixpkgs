@@ -7,6 +7,7 @@
 , autoconf213, which, m4
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , enableGTK3 ? false, gtk3, wrapGAppsHook
+, enableCalendar ? true
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird" instead
   # of "Earlybird" or whatever, enable this option.  However, those
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
     ]
+      ++ lib.optional enableCalendar "--enable-calendar"
       ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                         else [ "--disable-debug" "--enable-release"
                                "--disable-debug-symbols"
