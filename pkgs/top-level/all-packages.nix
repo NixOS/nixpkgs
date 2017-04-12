@@ -9391,7 +9391,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
   };
 
-  portmidi = callPackage ../development/libraries/portmidi {};
+  portmidi = callPackage ../development/libraries/portmidi {
+    inherit (darwin.apple_sdk.frameworks) Carbon CoreAudio CoreServices CoreMIDI;
+    inherit (darwin) apple_sdk CF;
+  };
 
   prison = callPackage ../development/libraries/prison { };
 
