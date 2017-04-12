@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "xib2nib";
-    rev = "636fe783e8625bbdd7bfeaf85470ba3eb7b90359";
-    sha256 = "08fhx8rww95h1fpl1cwhd82bcqv1k51k542v4kawjf8w814g5y1c";
+    rev = "97c6a53aab83d919805efcae33cf80690e953d1e";
+    sha256 = "08442f4xg7racknj35nr56a4c62gvdgdw55pssbkn2qq0rfzziqq";
   };
 
   buildInputs = [ PlistCpp pugixml boost ];
