@@ -177,7 +177,6 @@ let
       Type = "ProductType";
       Identifier = "com.apple.product-type.bundle";
       Name = "Bundle";
-      DefaultTargetName = "Bundle";
       DefaultBuildProperties = {
         FULL_PRODUCT_NAME = "$(WRAPPER_NAME)";
         MACH_O_TYPE = "mh_bundle";
@@ -189,7 +188,6 @@ let
         LIBRARY_FLAG_PREFIX = "-l";
         LIBRARY_FLAG_NOSPACE = "YES";
         STRIP_STYLE = "non-global";
-        GCC_INLINES_ARE_PRIVATE_EXTERN = "YES";
       };
       PackageTypes = [ "com.apple.package-type.wrapper" ];
       IsWrapper = "YES";
@@ -201,23 +199,12 @@ let
       Type = "ProductType";
       BasedOn = "com.apple.product-type.bundle";
       Name = "Application";
-      DefaultTargetName = "Application";
       DefaultBuildProperties = {
         MACH_O_TYPE = "mh_execute";
-        GCC_DYNAMIC_NO_PIC = "NO";
-        GCC_SYMBOLS_PRIVATE_EXTERN = "YES";
-        GCC_INLINES_ARE_PRIVATE_EXTERN = "YES";
         WRAPPER_SUFFIX = ".$(WRAPPER_EXTENSION)";
         WRAPPER_EXTENSION = "app";
-        INSTALL_PATH = "$(LOCAL_APPS_DIR)";
-        STRIP_STYLE = "all";
       };
       PackageTypes = [ "com.apple.package-type.wrapper.application" ];
-      CanEmbedCompilerSanitizerLibraries = "YES";
-      RunpathSearchPathForEmbeddedFrameworks = "@executable_path/../Frameworks";
-      ValidateEmbeddedBinaries = "YES";
-      ProvisioningProfileSupported = "YES";
-      ProvisioningProfileRequired = "NO";
     }
   ];
 
