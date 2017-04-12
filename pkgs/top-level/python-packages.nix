@@ -2986,11 +2986,10 @@ in {
         to do lots of things, you're probably outside the use cases. Either
         trust those users, or don't.
       '';
-      homepage = https://github.com/jsocol/bleach;
-      downloadPage = https://github.com/jsocol/bleach/releases;
+      homepage = https://github.com/mozilla/bleach;
+      downloadPage = https://github.com/mozilla/bleach/releases;
       license = licenses.asl20;
       maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.linux;
     };
   };
 
