@@ -18410,5 +18410,10 @@ with pkgs;
 
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
 
+  NSPlist = callPackage ../development/libraries/NSPlist {};
+
+  PlistCpp = callPackage ../development/libraries/PlistCpp {};
+
   xib2nib = callPackage ../development/tools/xib2nib {};
+
 }

@@ -1,11 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, pugixml, boost }:
-
-let
-
-  NSPlist = callPackage ./nsplist.nix { };
-  PlistCpp = callPackage ./plist-cpp.nix { inherit NSPlist; };
-
-in
+{ stdenv, callPackage, fetchFromGitHub, pugixml, boost, PlistCpp }:
 
 stdenv.mkDerivation {
   name = "xib2nib-730e177";
