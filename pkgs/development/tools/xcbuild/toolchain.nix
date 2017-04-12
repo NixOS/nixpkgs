@@ -1,7 +1,7 @@
 {stdenv, writeText, toolchainName, xcbuild, fetchurl
 , llvm, cctools, gcc, bootstrap_cmds, binutils
 , yacc, flex, m4, unifdef, gperf, indent, ctags, makeWrapper
-, ibtool}:
+, xib2nib}:
 
 let
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     ln -s ${cctools}/bin/ranlib
     ln -s ${cctools}/bin/redo_prebinding
 
-    ln -s ${ibtool}/bin/ibtool
+    ln -s ${xib2nib}/bin/ibtool
   '' +
     # No point including the entire gcc closure if we don't already have it
     (if stdenv.cc.isClang then ''

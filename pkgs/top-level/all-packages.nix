@@ -18410,5 +18410,5 @@ with pkgs;
 
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
 
-  ibtool = callPackage ../development/tools/ibtool {};
+  xib2nib = callPackage ../development/tools/xib2nib {};
 }
