@@ -3479,7 +3479,9 @@ with pkgs;
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
-  pinentry_mac = callPackage ../tools/security/pinentry-mac { };
+  pinentry_mac = callPackage ../tools/security/pinentry-mac {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 

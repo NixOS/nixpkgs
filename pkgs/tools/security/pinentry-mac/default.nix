@@ -1,20 +1,22 @@
-{ fetchurl, stdenv, xcbuild }:
+{ fetchurl, stdenv, fetchFromGitHub, xcbuild, libiconv, Cocoa, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "pinentry-mac-0.9.4";
 
-  src = fetchurl {
-    url = "https://github.com/GPGTools/pinentry-mac/archive/v0.9.4.tar.gz";
-    sha256 = "037ebb010377d3a3879ae2a832cefc4513f5c397d7d887d7b86b4e5d9a628271";
+  src = fetchFromGitHub {
+    owner = "matthewbauer";
+    repo = "pinentry-mac";
+    rev = "77fc993d1040ed2319d9e53af78146be318c1fdd";
+    sha256 = "0rkmp6wb8wvmhipavn1bdmbw6564hc2b99dxqysr6yxr2xqs6fcz";
   };
 
-  buildInputs = [ xcbuild ];
+  buildInputs = [ xcbuild libiconv Cocoa ncurses ];
 
   dontUseXcbuild = true;
 
   installPhase = ''
     mkdir -p $out/Applications
-    mv build/Release/pinentry-mac.app $out/Applications
+    mv pinentry-mac-*/Build/Products/Release/pinentry-mac.app $out/Applications
   '';
 
   passthru = {
