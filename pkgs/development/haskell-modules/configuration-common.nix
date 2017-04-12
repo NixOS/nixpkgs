@@ -683,6 +683,9 @@ self: super: {
     store = self.store_0_3_1;
   });
 
+  # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
+  intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
+
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
