@@ -32193,6 +32193,8 @@ EOF
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
+  node-semver = callPackage ../development/python-modules/node-semver { };
+
   distro = callPackage ../development/python-modules/distro { };
 
 });
