@@ -39,6 +39,3 @@ stdenv.mkDerivation rec {
 		    maintainers = [ maintainers.metabar ];
   		};
 }
-
-
-
