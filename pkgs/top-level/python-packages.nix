@@ -32191,6 +32191,8 @@ EOF
 
   nitpick = callPackage ../applications/version-management/nitpick { };
 
+  pluginbase = callPackage ../development/python-modules/pluginbase { };
+
   distro = callPackage ../development/python-modules/distro { };
 
 });
