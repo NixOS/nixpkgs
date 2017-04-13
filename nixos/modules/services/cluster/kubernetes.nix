@@ -45,7 +45,7 @@ let
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";
     paths = imap (i: entry:
-      pkgs.writeTextDir "${10+i}-${entry.type}.conf" (builtins.toJSON entry)
+      pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
     ) cfg.kubelet.cni.config;
   };
 
