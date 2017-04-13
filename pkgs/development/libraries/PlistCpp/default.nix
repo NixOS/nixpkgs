@@ -11,4 +11,12 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ cmake boost NSPlist pugixml ];
+
+
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ matthewbauer ];
+    description = "CPP bindings for Plist";
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
 }

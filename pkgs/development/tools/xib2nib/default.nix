@@ -12,4 +12,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ PlistCpp pugixml boost ];
   makeFlags = [ "PREFIX=$(out)" ];
+
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ matthewbauer ];
+    description = "Compiles CocoaTouch .xib files into .nib";
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
 }

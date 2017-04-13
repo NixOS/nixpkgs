@@ -11,4 +11,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ cmake ];
+
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ matthewbauer ];
+    description = "Parses .plist files";
+    license = licenses.mit;
+    platforms = platforms.unix;
+  };
 }
