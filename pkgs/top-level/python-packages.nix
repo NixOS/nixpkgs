@@ -20679,11 +20679,11 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-1.9.5";
+    name = "PyICU-1.9.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "16rmxy9y0qhqqna2v49i7nzwm09as699rbyvh4raw7w602w55c3k";
+      sha256 = "0l151zhhyiazzdz8skpxgrw1x4nqa9pq2cwni6d97anmg97i7hn5";
     };
 
     buildInputs = [ pkgs.icu ];
