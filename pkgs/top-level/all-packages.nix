@@ -5085,7 +5085,7 @@ with pkgs;
     cross = null;
     libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
+    isl = isl_0_17;
   }));
 
   gfortran = gfortran5;
