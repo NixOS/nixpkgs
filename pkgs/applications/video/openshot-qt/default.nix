@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openshot-qt-${version}";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "0dg4fkkci1rz49yrdd4fa1whv10c1pgm3cl4i49452ckqa7qg037";
+    sha256 = "10j3p10q66m9nhzcd8315q1yiqscidkjbm474mllw7c281vacvzw";
   };
     
   buildInputs =
