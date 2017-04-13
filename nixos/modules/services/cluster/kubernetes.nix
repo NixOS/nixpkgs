@@ -39,9 +39,6 @@ let
     }];
   });
 
-  policyFile = pkgs.writeText "kube-policy"
-    concatStringsSep "\n" (map (builtins.toJSON cfg.apiserver.authorizationPolicy));
-
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";
     paths = imap (i: entry:
@@ -205,23 +202,33 @@ in {
         type = types.nullOr types.path;
       };
 
-      tokenAuth = mkOption {
+      tokenAuthFile = mkOption {
         description = ''
           Kubernetes apiserver token authentication file. See
           <link xlink:href="http://kubernetes.io/docs/admin/authentication.html"/>
         '';
         default = null;
-        example = ''token,user,uid,"group1,group2,group3"'';
-        type = types.nullOr types.lines;
+        type = types.nullOr types.path;
+      };
+
+      basicAuthFile = mkOption {
+        description = ''
+          Kubernetes apiserver basic authentication file. See
+          <link xlink:href="http://kubernetes.io/docs/admin/authentication.html"/>
+        '';
+        default = pkgs.writeText "users" ''
+          kubernetes,admin,0
+        '';
+        type = types.nullOr types.path;
       };
 
       authorizationMode = mkOption {
         description = ''
-          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC). See
-          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
+          Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
+          <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
         '';
-        default = "AlwaysAllow";
-        type = types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC"];
+        default = ["ABAC" "RBAC"];
+        type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC"]);
       };
 
       authorizationPolicy = mkOption {
@@ -229,19 +236,70 @@ in {
           Kubernetes apiserver authorization policy file. See
           <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
         '';
-        default = [];
-        example = literalExample ''
-          [
-            {user = "admin";}
-            {user = "scheduler"; readonly = true; kind= "pods";}
-            {user = "scheduler"; kind = "bindings";}
-            {user = "kubelet";  readonly = true; kind = "bindings";}
-            {user = "kubelet"; kind = "events";}
-            {user= "alice"; ns = "projectCaribou";}
-            {user = "bob"; readonly = true; ns = "projectCaribou";}
-          ]
-        '';
+        default = [
+          {
+            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+            kind = "Policy";
+            spec = {
+              user  = "admin";
+              namespace = "*";
+              resource = "*";
+              apiGroup = "*";
+              nonResourcePath = "*";
+            };
+          }
+          {
+            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+            kind = "Policy";
+            spec = {
+              user  = "kubecfg";
+              namespace = "*";
+              resource = "*";
+              apiGroup = "*";
+              nonResourcePath = "*";
+            };
+          }
+          {
+            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+            kind = "Policy";
+            spec = {
+              user  = "kubelet";
+              namespace = "*";
+              resource = "*";
+              apiGroup = "*";
+              nonResourcePath = "*";
+            };
+          }
+          {
+            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+            kind = "Policy";
+            spec = {
+              user  = "kube";
+              namespace = "*";
+              resource = "*";
+              apiGroup = "*";
+              nonResourcePath = "*";
+            };
+          }
+          {
+            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+            kind = "Policy";
+            spec = {
+              user  = "system:serviceaccount:kube-system:default";
+              namespace = "*";
+              resource = "*";
+              apiGroup = "*";
+              nonResourcePath = "*";
+            };
+          }
+        ];
         type = types.listOf types.attrs;
+      };
+
+      autorizationRBACSuperAdmin = mkOption {
+        description = "Role based authorization super admin";
+        default = "admin";
+        type = types.str;
       };
 
       allowPrivileged = mkOption {
@@ -261,7 +319,7 @@ in {
           Api runtime configuration. See
           <link xlink:href="http://kubernetes.io/v1.0/docs/admin/cluster-management.html"/>
         '';
-        default = "";
+        default = "rbac.authorization.k8s.io/v1alpha1";
         example = "api/all=false,api/v1=true";
         type = types.str;
       };
@@ -675,8 +733,10 @@ in {
               "--tls-cert-file=${cfg.apiserver.tlsCertFile}"} \
             ${optionalString (cfg.apiserver.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.apiserver.tlsKeyFile}"} \
-            ${optionalString (cfg.apiserver.tokenAuth != null)
-              "--token-auth-file=${cfg.apiserver.tokenAuth}"} \
+            ${optionalString (cfg.apiserver.tokenAuthFile != null)
+              "--token-auth-file=${cfg.apiserver.tokenAuthFile}"} \
+            ${optionalString (cfg.apiserver.basicAuthFile != null)
+              "--basic-auth-file=${cfg.apiserver.basicAuthFile}"} \
             --kubelet-https=${if cfg.apiserver.kubeletHttps then "true" else "false"} \
             ${optionalString (cfg.apiserver.kubeletClientCaFile != null)
               "--kubelet-certificate-authority=${cfg.apiserver.kubeletClientCaFile}"} \
@@ -686,9 +746,15 @@ in {
               "--kubelet-client-key=${cfg.apiserver.kubeletClientKeyFile}"} \
             ${optionalString (cfg.apiserver.clientCaFile != null)
               "--client-ca-file=${cfg.apiserver.clientCaFile}"} \
-            --authorization-mode=${cfg.apiserver.authorizationMode} \
-            ${optionalString (cfg.apiserver.authorizationMode == "ABAC")
-              "--authorization-policy-file=${policyFile}"} \
+            --authorization-mode=${concatStringsSep "," cfg.apiserver.authorizationMode} \
+            ${optionalString (elem "ABAC" cfg.apiserver.authorizationMode)
+              "--authorization-policy-file=${
+                pkgs.writeText "kube-auth-policy"
+                (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.apiserver.authorizationPolicy)
+              }"
+            } \
+            ${optionalString (elem "RBAC" cfg.apiserver.authorizationMode)
+              "--authorization-rbac-super-user=${cfg.apiserver.autorizationRBACSuperAdmin}"} \
             --secure-port=${toString cfg.apiserver.securePort} \
             --service-cluster-ip-range=${cfg.apiserver.portalNet} \
             ${optionalString (cfg.apiserver.runtimeConfig != "")
@@ -748,8 +814,9 @@ in {
             ${if (cfg.controllerManager.serviceAccountKeyFile!=null)
               then "--service-account-private-key-file=${cfg.controllerManager.serviceAccountKeyFile}"
               else "--service-account-private-key-file=/var/run/kubernetes/apiserver.key"} \
-            ${optionalString (cfg.controllerManager.rootCaFile!=null)
-              "--root-ca-file=${cfg.controllerManager.rootCaFile}"} \
+            ${if (cfg.controllerManager.rootCaFile!=null)
+              then "--root-ca-file=${cfg.controllerManager.rootCaFile}"
+              else "--root-ca-file=/var/run/kubernetes/apiserver.crt"} \
             ${optionalString (cfg.controllerManager.clusterCidr!=null)
               "--cluster-cidr=${cfg.controllerManager.clusterCidr}"} \
             --allocate-node-cidrs=true \
