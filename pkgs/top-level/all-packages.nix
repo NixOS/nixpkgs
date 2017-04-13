@@ -12439,6 +12439,8 @@ with pkgs;
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
+  envypn-font = callPackage ../data/fonts/envypn-font { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
