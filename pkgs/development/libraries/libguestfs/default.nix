@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.34.6";
+  version = "1.36.3";
 
   appliance = fetchurl {
     url = "http://libguestfs.org/download/binaries/appliance/appliance-1.36.1.tar.xz";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.34-stable/libguestfs-${version}.tar.gz";
-    sha256 = "1bdn6jsxm7krl4bpzwx47lg1xlhp5wfzizy03vspkgcppgp2q36s";
+    url = "http://libguestfs.org/download/1.36-stable/libguestfs-${version}.tar.gz";
+    sha256 = "0dhb69b7svjgnrmbyvizdz5vsgsrr95ypz0qvp3kz83jyj6sa76m";
   };
 
   buildInputs = [
