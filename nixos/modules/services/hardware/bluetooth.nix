@@ -6,9 +6,7 @@ let
   bluez-bluetooth = pkgs.bluez;
   cfg = config.hardware.bluetooth;
 
-in
-
-{
+in {
 
   ###### interface
 
@@ -32,6 +30,8 @@ in
         '';
         description = ''
           Set additional configuration for system-wide bluetooth (/etc/bluetooth/main.conf).
+
+          NOTE: We already include [Policy], so any configuration under the Policy group should come first.
         '';
       };
     };
@@ -45,7 +45,12 @@ in
     environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
 
     environment.etc = singleton {
-      source = pkgs.writeText "main.conf" cfg.extraConfig;
+      source = pkgs.writeText "main.conf" ''
+        [Policy]
+        AutoEnable=${lib.boolToString cfg.powerOnBoot}
+
+        ${cfg.extraConfig}
+      '';
       target = "bluetooth/main.conf";
     };
 
@@ -53,29 +58,11 @@ in
     services.dbus.packages = [ bluez-bluetooth ];
     systemd.packages       = [ bluez-bluetooth ];
 
-    services.udev.extraRules = optionalString cfg.powerOnBoot ''
-      ACTION=="add", KERNEL=="hci[0-9]*", ENV{SYSTEMD_WANTS}="bluetooth-power@%k.service"
-    '';
-
     systemd.services = {
       bluetooth = {
         wantedBy = [ "bluetooth.target" ];
         aliases  = [ "dbus-org.bluez.service" ];
       };
-
-      "bluetooth-power@" = mkIf cfg.powerOnBoot {
-        description = "Power up bluetooth controller";
-        after = [
-          "bluetooth.service"
-          "suspend.target"
-          "sys-subsystem-bluetooth-devices-%i.device"
-        ];
-        wantedBy = [ "suspend.target" ];
-
-        serviceConfig.Type      = "oneshot";
-        serviceConfig.ExecStart = "${pkgs.bluez.out}/bin/hciconfig %i up";
-      };
-
     };
 
     systemd.user.services = {
