@@ -12,7 +12,6 @@ nix-build '<nixpkgs/nixos>' \
    --arg configuration "{ imports = [ <nixpkgs/nixos/modules/virtualisation/google-compute-image.nix> ]; }" \
    --argstr system x86_64-linux \
    -o gce \
-   --option extra-binary-caches https://hydra.nixos.org \
    -j 10
 
 img_path=$(echo gce/*.tar.gz)
