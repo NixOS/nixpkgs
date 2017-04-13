@@ -32190,6 +32190,12 @@ EOF
 
   nitpick = callPackage ../applications/version-management/nitpick { };
 
+  pluginbase = callPackage ../development/python-modules/pluginbase { };
+
+  node-semver = callPackage ../development/python-modules/node-semver { };
+
+  distro = callPackage ../development/python-modules/distro { };
+
 });
 
 in fix' (extends overrides packages)

@@ -6407,6 +6407,8 @@ with pkgs;
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
+  conan = callPackage ../development/tools/build-managers/conan { };
+
   cookiecutter = pythonPackages.cookiecutter;
 
   ctags = callPackage ../development/tools/misc/ctags { };
