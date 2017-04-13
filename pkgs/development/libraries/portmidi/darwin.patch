@@ -1,0 +1,48 @@
+--- a/CMakeLists.txt	2010-09-20 21:57:48.000000000 +0200
++++ b/CMakeLists.txt	2017-04-12 19:19:44.000000000 +0200
+@@ -36,7 +36,7 @@
+ set(CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "" CACHE INTERNAL "Unused")
+ set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "" CACHE INTERNAL "Unused")
+ 
+-set(CMAKE_OSX_ARCHITECTURES i386 ppc x86_64 CACHE STRING "change to needed architecture for a smaller library" FORCE)
++set(CMAKE_OSX_ARCHITECTURES x86_64 CACHE STRING "change to needed architecture for a smaller library" FORCE)
+ 
+ PROJECT(portmidi)
+ 
+--- a/pm_dylib/CMakeLists.txt	2017-04-12 22:22:07.000000000 +0200
++++ b/pm_dylib/CMakeLists.txt	2017-04-12 22:23:22.000000000 +0200
+@@ -48,11 +48,10 @@
+     list(APPEND LIBSRC ../porttime/ptmacosx_mach)
+ 
+     include_directories(${CMAKE_OSX_SYSROOT}/Developer/Headers/FlatCarbon)
+-    set(FRAMEWORK_PATH ${CMAKE_OSX_SYSROOT}/System/Library/Frameworks)
+-    set(COREAUDIO_LIB "${FRAMEWORK_PATH}/CoreAudio.framework")
+-    set(COREFOUNDATION_LIB "${FRAMEWORK_PATH}/CoreFoundation.framework")
+-    set(COREMIDI_LIB "${FRAMEWORK_PATH}/CoreMIDI.framework")
+-    set(CORESERVICES_LIB "${FRAMEWORK_PATH}/CoreServices.framework")
++    set(COREAUDIO_LIB "CoreAudio.framework")
++    set(COREFOUNDATION_LIB "CoreFoundation.framework")
++    set(COREMIDI_LIB "CoreMIDI.framework")
++    set(CORESERVICES_LIB "CoreServices.framework")
+     set(PM_NEEDED_LIBS ${COREAUDIO_LIB} ${COREFOUNDATION_LIB}
+                              ${COREMIDI_LIB} ${CORESERVICES_LIB}
+         CACHE INTERNAL "")
+
+--- a/pm_common/CMakeLists.txt	2017-04-12 22:37:54.000000000 +0200
++++ b/pm_common/CMakeLists.txt	2017-04-12 22:38:52.000000000 +0200
+@@ -53,11 +53,10 @@
+     list(APPEND LIBSRC ../porttime/ptmacosx_mach)
+ 
+     include_directories(${CMAKE_OSX_SYSROOT}/Developer/Headers/FlatCarbon)
+-    set(FRAMEWORK_PATH ${CMAKE_OSX_SYSROOT}/System/Library/Frameworks)
+-    set(COREAUDIO_LIB "${FRAMEWORK_PATH}/CoreAudio.framework")
+-    set(COREFOUNDATION_LIB "${FRAMEWORK_PATH}/CoreFoundation.framework")
+-    set(COREMIDI_LIB "${FRAMEWORK_PATH}/CoreMIDI.framework")
+-    set(CORESERVICES_LIB "${FRAMEWORK_PATH}/CoreServices.framework")
++    set(COREAUDIO_LIB "CoreAudio.framework")
++    set(COREFOUNDATION_LIB "CoreFoundation.framework")
++    set(COREMIDI_LIB "CoreMIDI.framework")
++    set(CORESERVICES_LIB "CoreServices.framework")
+     set(PM_NEEDED_LIBS ${COREAUDIO_LIB} ${COREFOUNDATION_LIB}
+                              ${COREMIDI_LIB} ${CORESERVICES_LIB}
+         CACHE INTERNAL "")
