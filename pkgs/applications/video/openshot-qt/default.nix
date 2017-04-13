@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub
-, doxygen, python3Packages, ffmpeg, libopenshot
-, qtbase, qtmultimedia, makeQtWrapper }:
+, doxygen, python3Packages, libopenshot
+, makeQtWrapper }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   name = "openshot-qt-${version}";
   version = "2.3.1";
 
@@ -13,27 +12,19 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "10j3p10q66m9nhzcd8315q1yiqscidkjbm474mllw7c281vacvzw";
   };
-    
-  buildInputs =
-  [ python3Packages.python ffmpeg libopenshot qtbase qtmultimedia ];
 
-  nativeBuildInputs =
-  [ doxygen makeQtWrapper ];
+  nativeBuildInputs = [ doxygen ];
 
-  installPhase = ''
-    mkdir -p $(toPythonPath $out)
-    cp -r src/* $(toPythonPath $out)
-    mkdir -p $out/bin
-    echo "#/usr/bin/env sh" >$out/bin/openshot-qt
-    echo "exec ${python3Packages.python.interpreter} $(toPythonPath $out)/launch.py" >>$out/bin/openshot-qt
-    chmod +x $out/bin/openshot-qt
-    wrapQtProgram $out/bin/openshot-qt \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip}):$(toPythonPath ${python3Packages.httplib2}):$(toPythonPath ${python3Packages.pyzmq}):$PYTHONPATH"
+  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5 sip httplib2 pyzmq ];
+
+  preConfigure = ''
+    # tries to create caching directories during install
+    export HOME=$(mktemp -d)
   '';
 
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://openshot.org/;
     description = "Free, open-source video editor";
     longDescription = ''
