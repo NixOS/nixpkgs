@@ -3,16 +3,13 @@
 
 set -euo pipefail
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-NIXPKGS_ROOT="$DIR/../../../../"
 BUCKET_NAME="${BUCKET_NAME:-nixos-images}"
-export NIX_PATH=nixpkgs="$NIXPKGS_ROOT"
-export NIXOS_CONFIG="$NIXPKGS_ROOT/nixos/modules/virtualisation/google-compute-image.nix"
 TIMESTAMP="$(date +%Y%m%d%H%M)"
 export TIMESTAMP
 
 nix-build '<nixpkgs/nixos>' \
    -A config.system.build.googleComputeImage \
+   --arg configuration "{ imports = [ <nixpkgs/nixos/modules/virtualisation/google-compute-image.nix> ]; }" \
    --argstr system x86_64-linux \
    -o gce \
    --option extra-binary-caches https://hydra.nixos.org \
