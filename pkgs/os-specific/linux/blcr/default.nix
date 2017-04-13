@@ -1,13 +1,9 @@
 { stdenv, lib, fetchurl, kernel, perl, makeWrapper }:
 
-# BLCR 0.8.5 should works for kernel version up to 3.7.1
-# BLCR 0.8.6 should works for kernel version up to 3.17.x
+# BLCR version 0.8.6 should works with linux kernel up to version 3.17.x
 
 assert stdenv.isLinux;
 assert builtins.compareVersions "3.18" kernel.version == 1;
-
-# it doesn't compile anymore on 3.12
-assert lib.versionAtLeast kernel.version "3.14";
 
 stdenv.mkDerivation {
   name = "blcr_${kernel.version}-0.8.6pre4";
