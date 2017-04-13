@@ -11,25 +11,25 @@ let
 
 in nodePackages.buildNodePackage rec {
   name = "quassel-webserver-${version}";
-  version = "2.1.1";
+  version = "2.2.8";
   src = fetchFromGitHub {
     owner  = "magne4000";
     repo   = "quassel-webserver";
-    rev    = "dda457f38795d15565557a8629085063fa6a7378";
-    sha256 = "0syglfdmjnssxdiak1dw8cns5f736v58zmlsh81dvxww90gx3k7h";
+    rev    = "11e3f7b4906b5ec3039f2c7e0f33bbbe406d9aeb";
+    sha256 = "0jj0vds63v8c67sil579f0knhhjisnyqjragpj95ai4lfzlmqhk4";
   };
   buildInputs = nodePackages.nativeDeps."quassel-webserver" or [];
-  deps = [ nodePackages.by-spec."body-parser"."^1.15.2"
+  deps = [ nodePackages.by-spec."body-parser"."^1.16.0"
            nodePackages.by-spec."commander"."^2.9.0"
            nodePackages.by-spec."cookie-parser"."~1.4.3"
-           nodePackages.by-spec."express"."^4.14.0"
-           nodePackages.by-spec."jade"."~1.11.0"
-           nodePackages.by-spec."less"."^2.7.1"
+           nodePackages.by-spec."express"."^4.14.1"
+           nodePackages.by-spec."less"."^2.7.2"
            nodePackages.by-spec."less-middleware"."^2.2.0"
-           nodePackages.by-spec."libquassel"."~2.0.5"
-           nodePackages.by-spec."morgan"."^1.7.0"
-           nodePackages.by-spec."net-browserify-alt"."^1.0.0"
-           nodePackages.by-spec."serve-favicon"."~2.3.0"
+           nodePackages.by-spec."libquassel"."~2.1.7"
+           nodePackages.by-spec."morgan"."^1.8.0"
+           nodePackages.by-spec."net-browserify-alt"."^1.1.0"
+           nodePackages.by-spec."pug"."^2.0.0-beta11"
+           nodePackages.by-spec."serve-favicon"."~2.3.2"
          ];
   peerDependencies = [];
 
