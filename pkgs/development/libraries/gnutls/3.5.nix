@@ -1,4 +1,4 @@
-{ callPackage, stdenv, fetchurl, libunistring, darwin, ... } @ args:
+{ callPackage, fetchurl, libunistring, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   version = "3.5.11";
@@ -15,6 +15,4 @@ callPackage ./generic.nix (args // rec {
     sed '2iexit 77' -i tests/pkgconfig.sh
     sed '/^void doit(void)/,$s/{/{ exit(77);/; t' -i tests/trust-store.c
   '';
-
-  buildInputs = stdenv.lib.optional stdenv.isDarwin darwin.Security;
 })
