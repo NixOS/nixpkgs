@@ -5,7 +5,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "hivemind" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "git-2017-04-13";
+  version = "unstable";
 
   src = fetchFromGitHub {
     owner = "bitcoin-hivemind";
