@@ -13273,6 +13273,8 @@ in {
       license = with licenses; [ lgpl21 ];
     };
   };
+  
+  iso-639 = callPackage ../development/python-modules/iso-639 {};
 
   iso8601 = buildPythonPackage rec {
     name = "iso8601-${version}";
