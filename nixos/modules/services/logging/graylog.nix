@@ -4,16 +4,15 @@ with lib;
 
 let
   cfg = config.services.graylog;
-  configBool = b: if b then "true" else "false";
 
   confFile = pkgs.writeText "graylog.conf" ''
-    is_master = ${configBool cfg.isMaster}
+    is_master = ${boolToString cfg.isMaster}
     node_id_file = ${cfg.nodeIdFile}
     password_secret = ${cfg.passwordSecret}
     root_username = ${cfg.rootUsername}
     root_password_sha2 = ${cfg.rootPasswordSha2}
     elasticsearch_cluster_name = ${cfg.elasticsearchClusterName}
-    elasticsearch_discovery_zen_ping_multicast_enabled = ${configBool cfg.elasticsearchDiscoveryZenPingMulticastEnabled}
+    elasticsearch_discovery_zen_ping_multicast_enabled = ${boolToString cfg.elasticsearchDiscoveryZenPingMulticastEnabled}
     elasticsearch_discovery_zen_ping_unicast_hosts = ${cfg.elasticsearchDiscoveryZenPingUnicastHosts}
     message_journal_dir = ${cfg.messageJournalDir}
     mongodb_uri = ${cfg.mongodbUri}
