@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
     "LAPACK="
   ];
 
-  NIX_CFLAGS = "-fPIC";
-
   meta = with stdenv.lib; {
     homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;
     description = "A suite of sparse matrix algorithms";

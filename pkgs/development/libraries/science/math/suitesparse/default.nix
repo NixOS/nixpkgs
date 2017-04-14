@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     "LAPACK="
   ];
 
-  NIX_CFLAGS = stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
 
   postInstall = ''
     # Build and install shared library
