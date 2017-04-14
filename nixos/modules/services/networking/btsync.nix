@@ -9,7 +9,6 @@ let
 
   listenAddr = cfg.httpListenAddr + ":" + (toString cfg.httpListenPort);
 
-  boolStr = x: if x then "true" else "false";
   optionalEmptyStr = b: v: optionalString (b != "") v;
 
   webUIConfig = optionalString cfg.enableWebUI
@@ -31,7 +30,7 @@ let
   sharedFoldersRecord =
     concatStringsSep "," (map (entry:
       let helper = attr: v:
-        if (entry ? attr) then boolStr entry.attr else boolStr v;
+        if (entry ? attr) then boolToString entry.attr else boolToString v;
       in
       ''
         {
@@ -65,11 +64,11 @@ let
         "listening_port":  ${toString cfg.listeningPort},
         "use_gui":         false,
 
-        "check_for_updates": ${boolStr cfg.checkForUpdates},
-        "use_upnp":          ${boolStr cfg.useUpnp},
+        "check_for_updates": ${boolToString cfg.checkForUpdates},
+        "use_upnp":          ${boolToString cfg.useUpnp},
         "download_limit":    ${toString cfg.downloadLimit},
         "upload_limit":      ${toString cfg.uploadLimit},
-        "lan_encrypt_data":  ${boolStr cfg.encryptLAN},
+        "lan_encrypt_data":  ${boolToString cfg.encryptLAN},
 
         ${webUIConfig}
         ${sharedFoldersConfig}

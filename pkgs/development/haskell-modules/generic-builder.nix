@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, jailbreak-cabal, hscolour, cpphs, nodejs, lib
 }: let isCross = (ghc.cross or null) != null; in
 
 { pname
@@ -53,7 +53,7 @@
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? []
+, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
