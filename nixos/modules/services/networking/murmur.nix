@@ -28,15 +28,15 @@ let
     imagemessagelength=${toString cfg.imgMsgLength}
     allowhtml=${boolToString cfg.allowHtml}
     logdays=${toString cfg.logDays}
-    bonjour=${babelToString cfg.bonjour}
-    sendversion=${babelToString cfg.sendVersion}
+    bonjour=${boolToString cfg.bonjour}
+    sendversion=${boolToString cfg.sendVersion}
 
     ${if cfg.registerName     == "" then "" else "registerName="+cfg.registerName}
     ${if cfg.registerPassword == "" then "" else "registerPassword="+cfg.registerPassword}
     ${if cfg.registerUrl      == "" then "" else "registerUrl="+cfg.registerUrl}
     ${if cfg.registerHostname == "" then "" else "registerHostname="+cfg.registerHostname}
 
-    certrequired=${babelToString cfg.clientCertRequired}
+    certrequired=${boolToString cfg.clientCertRequired}
     ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
     ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
     ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
