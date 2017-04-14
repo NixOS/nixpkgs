@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     "--disable-launchd"
   ];
 
+  # XXX: Hackery until https://github.com/NixOS/nixpkgs/issues/24693
+  preBuild = if stdenv.isDarwin then ''
+    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+  '' else null;
+
   installFlags =
     [ # Don't try to write in /var at build time.
       "CACHEDIR=$(TMPDIR)/dummy"
@@ -79,7 +84,12 @@ stdenv.mkDerivation rec {
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
+      # Some outputs in cups-config were unexpanded and some even wrong.
       moveToOutput bin/cups-config "$dev"
+      sed -e "/^cups_serverbin=/s|\$(lib)|$out|" \
+          -e "s|\$(out)|$out|" \
+          -e "s|\$(lib)|$lib|" \
+          -i "$dev/bin/cups-config"
 
       # Rename systemd files provided by CUPS
       for f in "$out"/lib/systemd/system/*; do
@@ -104,6 +114,6 @@ stdenv.mkDerivation rec {
     description = "A standards-based printing system for UNIX";
     license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
     maintainers = with maintainers; [ jgeerds ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

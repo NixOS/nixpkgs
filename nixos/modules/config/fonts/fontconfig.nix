@@ -20,7 +20,7 @@ with lib;
 
 let cfg = config.fonts.fontconfig;
 
-    fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
+    fcBool = x: "<bool>" + (boolToString x) + "</bool>";
 
     # back-supported fontconfig version and package
     # version is used for font cache generation
@@ -104,13 +104,6 @@ let cfg = config.fonts.fontconfig;
         </match>
         ''}
 
-        <!-- Force autohint always -->
-        <match target="font">
-          <edit name="force_autohint" mode="assign">
-            ${fcBool cfg.forceAutohint}
-          </edit>
-        </match>
-
       </fontconfig>
     '';
 
@@ -171,13 +164,6 @@ let cfg = config.fonts.fontconfig;
       <match target="font">
         <edit name="embeddedbitmap" mode="assign">
           ${fcBool cfg.useEmbeddedBitmaps}
-        </edit>
-      </match>
-
-      <!-- Render some monospace TTF fonts as bitmaps -->
-      <match target="pattern">
-        <edit name="bitmap_monospace" mode="assign">
-          ${fcBool cfg.renderMonoTTFAsBitmap}
         </edit>
       </match>
 
@@ -372,11 +358,11 @@ in
 
           autohint = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
-              Enable the autohinter, which provides hinting for otherwise
-              un-hinted fonts. The results are usually lower quality than
-              correctly-hinted fonts.
+              Enable the autohinter in place of the default interpreter.
+              The results are usually lower quality than correctly-hinted
+              fonts, but better than unhinted fonts.
             '';
           };
         };
@@ -453,31 +439,19 @@ in
           description = ''Use embedded bitmaps in fonts like Calibri.'';
         };
 
-        forceAutohint = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Force use of the TrueType Autohinter. Useful for debugging or
-            free-software purists.
-          '';
-        };
-
-        renderMonoTTFAsBitmap = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''Render some monospace TTF fonts as bitmaps.'';
-        };
-
       };
 
     };
 
   };
-  config = mkIf cfg.enable {
-    fonts.fontconfig.confPackages = [ confPkg ];
-
-    environment.systemPackages    = [ pkgs.fontconfig ];
-    environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
-  };
+  config = mkMerge [
+    (mkIf cfg.enable {
+      environment.systemPackages    = [ pkgs.fontconfig ];
+      environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+    })
+    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+      fonts.fontconfig.confPackages = [ confPkg ];
+    })
+  ];
 
 }

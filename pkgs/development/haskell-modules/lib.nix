@@ -79,6 +79,9 @@ rec {
     fixupPhase = ":";
   });
 
+  linkWithGold = drv : appendConfigureFlag drv
+    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
+
   # link executables statically against haskell libs to reduce closure size
   justStaticExecutables = drv: overrideCabal drv (drv: {
     enableSharedExecutables = false;
@@ -100,5 +103,8 @@ rec {
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+
+  overrideSrc = drv: { src, version ? drv.version }:
+    overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
 }

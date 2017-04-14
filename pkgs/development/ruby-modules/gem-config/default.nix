@@ -211,7 +211,7 @@ in
     buildInputs = [ curl ];
   };
 
-  tzinfo = attrs: {
+  tzinfo = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \

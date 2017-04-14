@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "1r8m0b6lqljy314ilpi58sdpqyb9rr502nzx3pgmx2g2xz4izsfj";
+    sha256 = "0plb8c7js91bpf7qgq1snhry8x4zixyy34lq42nhsglab2kaq4ns";
   };
 
   nativeBuildInputs = [ cmake makeQtWrapper ];

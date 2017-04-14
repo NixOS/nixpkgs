@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
+  dontStrip = true;
+
   meta = with stdenv.lib; {
     description = "Xml template library for OCaml";
     homepage = "https://zoggy.github.io/xtmpl/";
@@ -27,5 +29,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ regnat ];
   };
 }
-
-

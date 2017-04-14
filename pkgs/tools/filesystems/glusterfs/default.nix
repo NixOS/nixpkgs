@@ -6,10 +6,10 @@ let
   s =
   rec {
     baseName="glusterfs";
-    version = "3.10.0";
+    version = "3.10.1";
     name="${baseName}-${version}";
-    url="http://download.gluster.org/pub/gluster/glusterfs/3.10/3.10.0/glusterfs-3.10.0.tar.gz";
-    sha256 = "1svysq55z4sd6bxcdpkxljwis4cnzkknag22ngyr7sgb4bs19c97";
+    url="http://download.gluster.org/pub/gluster/glusterfs/3.10/${version}/glusterfs-${version}.tar.gz";
+    sha256 = "05qmn85lg3d1gz0fhn1v2z7nwl2qwbflvjc8nvkfyr4r57rkvhnk";
   };
   buildInputs = [
     fuse bison flex_2_5_35 openssl python2 ncurses readline

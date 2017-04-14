@@ -14,8 +14,25 @@ rec {
 
   overrides = x: {
     postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :lack-util)"' "$out/bin/lack-util-lisp-launcher.sh" ""
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/lack-util[.]asd${"$"}' |
+        while read f; do
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
     '';
   };
 }
+/* (SYSTEM lack-util DESCRIPTION NIL SHA256 10bnpgbh5nk9lw1xywmvh5661rq91v8sp43ds53x98865ni7flnv URL
+    http://beta.quicklisp.org/archive/lack/2016-12-04/lack-20161204-git.tgz MD5 bef444eeadf759226539318bee9f0ab5 NAME lack-util TESTNAME NIL FILENAME lack-util
+    DEPS ((NAME ironclad)) DEPENDENCIES (ironclad) VERSION lack-20161204-git SIBLINGS
+    (lack-component lack-middleware-accesslog lack-middleware-auth-basic lack-middleware-backtrace lack-middleware-csrf lack-middleware-mount
+     lack-middleware-session lack-middleware-static lack-request lack-response lack-session-store-dbi lack-session-store-redis lack-test
+     lack-util-writer-stream lack t-lack-component t-lack-middleware-accesslog t-lack-middleware-auth-basic t-lack-middleware-backtrace t-lack-middleware-csrf
+     t-lack-middleware-mount t-lack-middleware-session t-lack-middleware-static t-lack-request t-lack-session-store-dbi t-lack-session-store-redis t-lack-util
+     t-lack)) */

@@ -1,13 +1,11 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "bonnie++-1.97";
+stdenv.mkDerivation rec {
+  name = "bonnie++-1.97.3";
   src = fetchurl {
-    url = http://www.coker.com.au/bonnie++/experimental/bonnie++-1.97.tgz;
-    sha256 = "10jrqgvacvblyqv38pg5jb9jspyisxaladcrp8k6b2k46xcs1xa4";
+    url = "http://www.coker.com.au/bonnie++/experimental/${name}.tgz";
+    sha256 = "0vkl42rsrsy95fc1ykc6g8rsdbnpxayvdaihnnkly1fww1m3hyz2";
   };
-
-  patches = stdenv.lib.optional stdenv.isDarwin ./bonnie-homebrew.patch;
 
   enableParallelBuilding = true;
 

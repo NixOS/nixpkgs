@@ -4,12 +4,12 @@
 }:
 buildPythonPackage rec {
   name = "Django-${version}";
-  version = "1.10.6";
+  version = "1.10.7";
   disabled = pythonOlder "2.7";
 
   src = fetchurl {
     url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
-    sha256 = "0q9c7hx720vc0jzq4xlxwhnxmmm8kh0qsqj3l46m29mi98jvwvks";
+    sha256 = "1f5hnn2dzfr5szk4yc47bs4kk2nmrayjcvgpqi2s4l13pjfpfgar";
   };
 
   patches = [

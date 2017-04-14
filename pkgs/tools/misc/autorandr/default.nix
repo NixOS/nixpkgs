@@ -1,12 +1,12 @@
-{ fetchgit
-, stdenv
+{ stdenv
 , python3Packages
-, fetchFromGitHub }:
+, fetchFromGitHub
+, systemd }:
 
 let
   python = python3Packages.python;
   wrapPython = python3Packages.wrapPython;
-  date = "2016-11-23";
+  date = "2017-01-22";
 in
   stdenv.mkDerivation {
     name = "autorandr-unstable-${date}";
@@ -16,20 +16,38 @@ in
     phases = [ "unpackPhase" "installPhase" ];
 
     installPhase = ''
-      # install bash completions
-      mkdir -p $out/bin $out/libexec $out/etc/bash_completion.d
-      cp -v contrib/bash_completion/autorandr $out/etc/bash_completion.d
-
-      # install autorandr bin
-      cp autorandr.py $out/bin/autorandr
+      make install TARGETS='autorandr' PREFIX=$out
       wrapPythonProgramsIn $out/bin/autorandr $out
+
+      make install TARGETS='bash_completion' DESTDIR=$out
+
+      make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
+
+      ${if false then ''
+        # breaks systemd-udev-settle during boot so disabled
+        make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
+          SYSTEMD_UNIT_DIR=/lib/systemd/system \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+        substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
+          --replace /bin "${systemd}/bin"
+      '' else if systemd != null then ''
+        make install TARGETS='systemd' PREFIX=$out DESTDIR=$out \
+          SYSTEMD_UNIT_DIR=/lib/systemd/system
+        make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+      '' else ''
+        make install TARGETS='pmutils' DESTDIR=$out \
+          PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
+        make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+      ''}
     '';
 
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "53d29f99275aebf14240ea95f2d7022b305738d5";
-      sha256 = "0pza4wfkzv7mmg2m4pf3n8wk0p7cy6bfqknn8ywz51r8ja16cqfj";
+      rev = "855c18b7f2cfd364d6f085d4301b5b98ba6e572a";
+      sha256 = "1yp1gns3lwa8796cb7par9czkc9i7paap2fkzf7wj6zqlkgjdvv0";
     };
 
     meta = {

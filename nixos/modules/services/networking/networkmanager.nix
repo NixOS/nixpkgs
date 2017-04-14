@@ -162,9 +162,9 @@ in {
         type = types.listOf (types.submodule {
           options = {
             source = mkOption {
-              type = types.str;
+              type = types.path;
               description = ''
-                A script source.
+                A script.
               '';
             };
 
@@ -224,7 +224,7 @@ in {
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
       ++ lib.imap (i: s: {
-        text = s.source;
+        inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
       }) cfg.dispatcherScripts;
 
@@ -241,6 +241,7 @@ in {
     users.extraUsers = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
+      extraGroups = [ "networkmanager" ];
     }];
 
     systemd.packages = cfg.packages;

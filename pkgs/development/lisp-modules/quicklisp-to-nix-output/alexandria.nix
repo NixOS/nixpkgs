@@ -14,8 +14,20 @@ rec {
 
   overrides = x: {
     postInstall = ''
-        echo "$CL_SOURCE_REGISTRY"
-        NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(asdf:load-system :alexandria)"' "$out/bin/alexandria-lisp-launcher.sh" ""
+      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/alexandria[.]asd${"$"}' |
+        while read f; do
+          env -i \
+          NIX_LISP="$NIX_LISP" \
+          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
+            (asdf:load-system :$(basename "$f" .asd))
+            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
+            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
+            )'" \
+            "$out"/bin/*-lisp-launcher.sh ||
+          mv "$f"{,.sibling}; done || true
     '';
   };
 }
+/* (SYSTEM alexandria DESCRIPTION Alexandria is a collection of portable public domain utilities. SHA256 0gnn4ysyvqf8wfi94kh6x23iwx3czaicam1lz9pnwsv40ws5fwwh
+    URL http://beta.quicklisp.org/archive/alexandria/2017-02-27/alexandria-20170227-git.tgz MD5 b0cbf86723fa3a1fe5c544e8079a3be3 NAME alexandria TESTNAME NIL
+    FILENAME alexandria DEPS NIL DEPENDENCIES NIL VERSION 20170227-git SIBLINGS (alexandria-tests)) */

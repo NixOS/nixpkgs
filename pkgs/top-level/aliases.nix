@@ -62,6 +62,7 @@ doNotDisplayTwice rec {
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
+  idea = jetbrains; # added 2017-04-03
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
@@ -121,6 +122,7 @@ doNotDisplayTwice rec {
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   sshfsFuse = sshfs-fuse; # added 2016-09
+  surf-webkit2 = surf; # added 2017-04-02
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03

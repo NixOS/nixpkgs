@@ -7,8 +7,8 @@
 
 let
 
-  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
-    inherit name src;
+  common = { name, suffix ? "", src, patchPhase ? "", fromGit ? false }: stdenv.mkDerivation rec {
+    inherit name src patchPhase;
     version = lib.getVersion name;
 
     VERSION_SUFFIX = lib.optionalString fromGit suffix;
@@ -16,7 +16,8 @@ let
     outputs = [ "out" "dev" "man" "doc" ];
 
     nativeBuildInputs =
-      [ perl pkgconfig ]
+      [ pkgconfig ]
+      ++ lib.optionals (!lib.versionAtLeast version "1.12pre") [ perl ]
       ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
     buildInputs = [ curl openssl sqlite xz ]
@@ -43,12 +44,12 @@ let
       [ "--with-store-dir=${storeDir}"
         "--localstatedir=${stateDir}"
         "--sysconfdir=/etc"
-        "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-        "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--disable-init-state"
         "--enable-gc"
       ]
-      ++ lib.optional (!lib.versionAtLeast version "1.12pre") [
+      ++ lib.optionals (!lib.versionAtLeast version "1.12pre") [
+        "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
+        "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
 
@@ -97,30 +98,58 @@ let
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.all;
     };
+
+    passthru = { inherit fromGit; };
+  };
+
+  perl-bindings = { nix }: stdenv.mkDerivation {
+    name = "nix-perl-" + nix.version;
+
+    inherit (nix) src;
+
+    postUnpack = "sourceRoot=$sourceRoot/perl";
+
+    nativeBuildInputs =
+      [ perl pkgconfig curl nix libsodium ]
+      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ];
+
+    configureFlags =
+      [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
+        "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
+        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+      ];
   };
 
 in rec {
 
   nix = nixStable;
 
-  nixStable = common rec {
+  nixStable = (common rec {
     name = "nix-1.11.8";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
     };
-  };
 
-  nixUnstable = lib.lowPrio (common rec {
+    # 1.11.8 doesn't yet have the patch to work on LLVM 4, so we patch it for now. Take this out once
+    # we move to a higher version. I'd pull the specific patch from upstream but it doesn't apply cleanly.
+    patchPhase = ''
+      substituteInPlace src/libexpr/json-to-value.cc \
+        --replace 'std::less<Symbol>, gc_allocator<Value *>' \
+                  'std::less<Symbol>, gc_allocator<std::pair<const Symbol, Value *> >'
+    '';
+  }) // { perl-bindings = nixStable; };
+
+  nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5122_c60715e";
+    suffix = "pre5152_915f62fa";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "c60715e937e3773bbb8a114fc9b9c6577f8c5cb5";
-      sha256 = "0hkc4g7i3z06y3rsdxqzdnx5rz77jb8ij1j13bdskbvpp7vfm60p";
+      rev = "915f62fa19790d8f826aeb4dd3d2bb5bde2f67e9";
+      sha256 = "0mf7y7hvzw2x5dp482qy8774djr3vzcjaqq58cp82zdil8l7kwjd";
     };
     fromGit = true;
-  });
+  })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
 
 }

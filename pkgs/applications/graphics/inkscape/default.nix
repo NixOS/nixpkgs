@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
     rm "$out/share/icons/hicolor/icon-theme.cache"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
   meta = with stdenv.lib; {

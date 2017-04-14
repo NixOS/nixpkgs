@@ -3,7 +3,7 @@
 pythonPackages.buildPythonApplication rec {
   name = "speedtest-cli-${version}";
   version = "1.0.4";
-  
+ 
   src = fetchFromGitHub {
     owner = "sivel";
     repo = "speedtest-cli";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "iosevka-${version}";
-  version = "1.11.4";
+  version = "1.12.1";
 
   buildInputs = [ unzip ];
 
   src = fetchurl {
-    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/01-iosevka-${version}.zip";
-    sha256 = "0mn9pqkambsal5cvz8hzlwx7qvcdfch8g1iy7mqhgghzflfhsy8x";
+    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/iosevka-pack-${version}.zip";
+    sha256 = "1rwg06fbizf2cmjwysx4ciz96nh80k48drsyr3rshppycajnaahj";
   };
 
   sourceRoot = ".";

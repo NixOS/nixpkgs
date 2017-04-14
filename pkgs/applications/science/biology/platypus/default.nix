@@ -33,6 +33,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     homepage = https://github.com/andyrimmer/Platypus;
     maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.unix;
+    platforms = platforms.x86_64;
   };
 }

@@ -5,6 +5,9 @@ rec {
   bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { withGui = false; };
 
+  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
+  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
+
   bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
 
@@ -18,6 +21,9 @@ rec {
 
   freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
   go-ethereum = callPackage ./go-ethereum.nix { };
+
+  hivemind = callPackage ./hivemind.nix { withGui = true; };
+  hivemindd = callPackage ./hivemind.nix { withGui = false; };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };

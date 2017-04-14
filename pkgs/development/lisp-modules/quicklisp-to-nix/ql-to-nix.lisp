@@ -6,8 +6,10 @@
 (ql:quickload :cl-emb)
 (ql:quickload :external-program)
 (ql:quickload :cl-ppcre)
-(ql:quickload :md5)
 (ql:quickload :alexandria)
+(ql:quickload :md5)
+
+(defvar testnames (make-hash-table :test 'equal))
 
 (defun nix-prefetch-url (url)
   (let*
@@ -45,11 +47,11 @@
            (t x)))))
 
 (defun system-data (system)
-  (ql:quickload system)
   (let*
     ((asdf-system (asdf:find-system system))
      (ql-system (ql-dist:find-system system))
      (ql-release (ql-dist:release ql-system))
+     (ql-sibling-systems (ql-dist:provided-systems ql-release))
      (url (ql-dist:archive-url ql-release))
      (local-archive (ql-dist:local-archive-file ql-release))
      (local-url (format nil "file://~a" (pathname local-archive)))
@@ -60,9 +62,18 @@
      (ideal-md5 (ql-dist:archive-md5 ql-release))
      (file-md5 (getf archive-data :md5))
      (raw-dependencies (ql-dist:required-systems ql-system))
-     (dependencies (remove-if-not 'ql-dist:find-system raw-dependencies))
-     (deps (mapcar (lambda (x) (list :name x)) dependencies))
      (name (string-downcase (format nil "~a" system)))
+     (ql-sibling-names
+       (remove name (mapcar 'ql-dist:name ql-sibling-systems)
+               :test 'equal))
+     (dependencies
+       (set-difference
+         (remove-duplicates
+           (remove-if-not 'ql-dist:find-system raw-dependencies)
+           :test 'equal)
+         ql-sibling-names
+         :test 'equal))
+     (deps (mapcar (lambda (x) (list :name x)) dependencies))
      (description (asdf:system-description asdf-system))
      (release-name (ql-dist:short-description ql-release))
      (version (cl-ppcre:regex-replace-all
@@ -79,7 +90,8 @@
     :filename (escape-filename name)
     :deps deps
     :dependencies dependencies
-    :version version)))
+    :version version
+    :siblings ql-sibling-names)))
 
 (defmacro this-file ()
   (or *compile-file-truename*
@@ -102,8 +114,11 @@
       with res := nil
       while queue
       for next := (pop queue)
-      for deps := (getf (system-data next) :dependencies)
-      unless (gethash next seen) do
+      for old := (gethash next seen)
+      for data := (unless old (system-data next))
+      for deps := (getf data :dependencies)
+      for siblings := (getf data :siblings)
+      unless old do
       (progn
         (push next res)
         (setf queue (append queue deps)))

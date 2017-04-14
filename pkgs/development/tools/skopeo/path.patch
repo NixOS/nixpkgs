@@ -1,0 +1,25 @@
+diff --git a/cmd/skopeo/main.go b/cmd/skopeo/main.go
+index 51f918d..6681d73 100644
+--- a/cmd/skopeo/main.go
++++ b/cmd/skopeo/main.go
+@@ -3,6 +3,7 @@ package main
+ import (
+ 	"fmt"
+ 	"os"
++  "path/filepath"
+
+ 	"github.com/Sirupsen/logrus"
+ 	"github.com/containers/image/signature"
+@@ -84,6 +85,12 @@ func getPolicyContext(c *cli.Context) (*signature.PolicyContext, error) {
+ 	policyPath := c.GlobalString("policy")
+ 	var policy *signature.Policy // This could be cached across calls, if we had an application context.
+ 	var err error
++  var dir string
++  if policyPath == "" {
++    dir, err = filepath.Abs(filepath.Dir(os.Args[0]))
++    policyPath = dir + "/../etc/default-policy.json"
++  }
++
+ 	if policyPath == "" {
+ 		policy, err = signature.DefaultPolicy(nil)
+ 	} else {

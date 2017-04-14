@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, fakeroot, file, getopt
-, gtk2, gdk_pixbuf, glib, mesa_glu, postgresql, nss, nspr
+, gtk2, gdk_pixbuf, glib, mesa_glu, postgresql, nss, nspr, udev
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
@@ -11,7 +11,7 @@ let
   libPath64 = lib.makeLibraryPath [
     gcc.cc gtk2 gdk_pixbuf glib mesa_glu postgresql nss nspr
     alsaLib GConf cups libcap fontconfig freetype pango
-    cairo dbus expat zlib libpng12
+    cairo dbus expat zlib libpng12 udev
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
   ];
@@ -25,19 +25,16 @@ let
     gnome-sharp gtk-sharp-2_0
   ];
 
-  ver = "5.3.5";
+  ver = "5.5.3";
   build = "f1";
-  date = "20160525";
-  pkgVer = "${ver}${build}";
-  fullVer = "${pkgVer}+${date}";
 
 in stdenv.mkDerivation rec {
   name = "unity-editor-${version}";
-  version = pkgVer;
+  version = "${ver}x${build}";
 
   src = fetchurl {
-    url = "http://download.unity3d.com/download_unity/linux/unity-editor-installer-${fullVer}.sh";
-    sha256 = "0lmc65175fdvbyn3565pjlg6cc4l5i58fj7bxzi5cqykkbzv5wdm";
+    url = "http://beta.unity3d.com/download/a2454d41e248/unity-editor-installer-${version}Linux.sh";
+    sha256 = "1hvas4n1hm0qp0265gk1nh03kypd9690fnxvzg70f5ni9q97pvm0";
   };
 
   nosuidLib = ./unity-nosuid.c;
@@ -46,9 +43,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "monodevelop" ];
 
+  sourceRoot = "unity-editor-${version}Linux";
+
   unpackPhase = ''
     echo -e 'q\ny' | fakeroot sh $src
-    sourceRoot="unity-editor-${pkgVer}"
   '';
 
   buildPhase = ''
@@ -125,6 +123,7 @@ in stdenv.mkDerivation rec {
   '';
 
   dontStrip = true;
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     homepage = https://unity3d.com/;

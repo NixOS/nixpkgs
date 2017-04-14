@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libxml2 glib gdk_pixbuf libiconv ]
     ++ libintlOrEmpty;
 
+  outputs = [ "out" "dev" ];
+
   doCheck = true;
   preCheck = "patchShebangs ./tests/";
 
