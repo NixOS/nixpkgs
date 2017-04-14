@@ -277,4 +277,14 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
+  testComposeExtensions = {
+    expr = let obj = makeExtensible (self: { foo = self.bar; });
+               f = self: super: { bar = false; baz = true; };
+               g = self: super: { bar = super.baz or false; };
+               f_o_g = composeExtensions f g;
+               composed = obj.extend f_o_g;
+           in composed.foo;
+    expected = true;
+  };
+
 }
