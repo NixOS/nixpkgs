@@ -820,10 +820,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.2.1";
+        version = "1.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.2.1.tar";
-          sha256 = "0mip0czvpdl26xz9wamii5azj9bacjhdg0jgkrxyv17vqqlbag9x";
+          url = "https://elpa.gnu.org/packages/gnorb-1.2.3.tar";
+          sha256 = "1bqm08i2aam4v4gfzyxfmic0rg0ka7cns38khwj42vhwgv045xc7";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -940,10 +940,10 @@
       }) {};
     ivy = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "ivy";
-        version = "0.8.0";
+        version = "0.9.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ivy-0.8.0.tar";
-          sha256 = "1c1impdk1p082v6nb9lms4n258z6ngz8ra90cshprs0ingrk705p";
+          url = "https://elpa.gnu.org/packages/ivy-0.9.0.tar";
+          sha256 = "1p5gfy16xik613ib30mv4yac004z4lpsybmraln1badyd6n3b07s";
         };
         packageRequires = [ emacs ];
         meta = {
