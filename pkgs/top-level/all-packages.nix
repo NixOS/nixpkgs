@@ -1717,6 +1717,8 @@ with pkgs;
       pillow;
   };
 
+  fanficfare = callPackage ../tools/text/fanficfare { };
+
   fastd = callPackage ../tools/networking/fastd { };
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
