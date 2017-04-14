@@ -82,7 +82,6 @@ stdenv.mkDerivation {
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
-      alsaLib.dev
       atk
       cairo
       curl

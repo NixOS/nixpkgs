@@ -35,8 +35,6 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
-      Top-level <literal>idea</literal> package collection was renamed.
-      All JetBrains IDEs are now at <literal>jetbrains</literal>.
     </para>
   </listitem>
 </itemizedlist>

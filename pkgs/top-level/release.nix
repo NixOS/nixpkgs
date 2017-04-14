@@ -15,11 +15,9 @@
   supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
-, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
+with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
 

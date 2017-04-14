@@ -1,20 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk2 }:
+{ stdenv, fetchFromGitHub, pkgconfig, gdk_pixbuf, gtk2, libXmu }:
 
 stdenv.mkDerivation rec {
-  name = "trayer-1.1.7";
+  name = "trayer-1.1.6";
 
-  buildInputs = [ pkgconfig gdk_pixbuf gtk2 ];
+  buildInputs = [ pkgconfig gdk_pixbuf gtk2 libXmu ];
 
   src = fetchFromGitHub {
     owner = "sargon";
     repo = "trayer-srg";
     rev = name;
-    sha256 = "06lpgralggh5546qgvpilzxh4anshli2za41x68x2zbaizyqb09a";
+    sha256 = "0mmya7a1qh3zyqgvcx5fz2lvr9n0ilr490l1j3z4myahi4snk2mg";
   };
-
-  preConfigure = ''
-    patchShebangs configure
-  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 

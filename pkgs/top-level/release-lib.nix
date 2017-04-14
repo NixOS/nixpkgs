@@ -1,15 +1,17 @@
 { supportedSystems
 , packageSet ? (import ../..)
 , scrubJobs ? true
-, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
 with import ../../lib;
 
 rec {
 
-  allPackages = args: packageSet (args // nixpkgsArgs);
+  # Ensure that we don't build packages marked as unfree.
+  allPackages = args: packageSet (args // {
+    config.allowUnfree = false;
+    config.inHydra = true;
+  });
 
   pkgs = pkgsFor "x86_64-linux";
 

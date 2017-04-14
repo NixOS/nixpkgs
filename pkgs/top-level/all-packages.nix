@@ -6073,9 +6073,7 @@ with pkgs;
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix {
-    pythonPackages = python3Packages;
-  };
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6402,8 +6400,6 @@ with pkgs;
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
   coan = callPackage ../development/tools/analysis/coan { };
-
-  compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -7741,9 +7737,15 @@ with pkgs;
 
   gnutls = gnutls35;
 
-  gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
+  gnutls35 = callPackage
+    (if stdenv.isDarwin
+      # Avoid > 3.5.10 due to frameworks for now; see discussion on:
+      # https://github.com/NixOS/nixpkgs/commit/d6454e6a1
+      then ../development/libraries/gnutls/3.5.10.nix
+      else ../development/libraries/gnutls/3.5.nix)
+    {
+      guileBindings = config.gnutls.guile or false;
+    };
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
     guileBindings = config.gnutls.guile or false;
@@ -7850,10 +7852,6 @@ with pkgs;
 
   gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration {
     gtk = gtk2;
-  };
-
-  gtk-mac-integration-gtk3 = callPackage ../development/libraries/gtk-mac-integration {
-    gtk = gtk3;
   };
 
   gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
@@ -9269,7 +9267,7 @@ with pkgs;
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = libressl_2_5;
+  libressl = libressl_2_4;
   libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
     fetchurl = fetchurlBoot;
   };
@@ -13904,7 +13902,7 @@ with pkgs;
     libart = pkgs.gnome2.libart_lgpl;
   };
 
-  jetbrains = recurseIntoAttrs (callPackages ../applications/editors/jetbrains { androidsdk = androidsdk_extras; });
+  idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_extras; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
@@ -13997,9 +13995,7 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
-    inherit (darwin) IOKit;
-  };
+  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 

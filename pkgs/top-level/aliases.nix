@@ -62,7 +62,6 @@ doNotDisplayTwice rec {
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
-  idea = jetbrains; # added 2017-04-03
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28

@@ -63,10 +63,6 @@ with stdenv; lib.makeOverridable mkDerivation rec {
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
       --prefix PATH : "$out/libexec/${name}:${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
-        # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib
-      ]}" \
       --set JDK_HOME "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ANDROID_JAVA_HOME "$jdk" \

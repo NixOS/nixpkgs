@@ -85,15 +85,6 @@ rec {
   # argument, but it's nice this way if several uses of `extends` are cascaded.
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
-  # Compose two extending functions of the type expected by 'extends'
-  # into one where changes made in the first are available in the
-  # 'super' of the second
-  composeExtensions =
-    f: g: self: super:
-      let fApplied = f self super;
-          super' = super // fApplied;
-      in fApplied // g self super';
-
   # Create an overridable, recursive attribute set. For example:
   #
   #     nix-repl> obj = makeExtensible (self: { })

@@ -1,24 +1,23 @@
-{ stdenv, fetchurl, pythonPackages, zip, makeWrapper, nix, nix-prefetch-git
-, nix-prefetch-hg
+{ stdenv, fetchurl, python, zip, makeWrapper, nix, nix-prefetch-scripts
 }:
 
 let
 
-  version = "1.8.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "133sjx8r1jdb5gi3caawa9m7v496jv4id2c3zqnx8hria22425za";
+    sha256 = "08iad1ad2gnvsnd66ddw3lff19ms2yly4iq63c8800j603d0pdhn";
   };
 
   click = fetchurl {
-    url = "https://pypi.python.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz";
-    sha256 = "02qkfpykbq35id8glfgwc38yc430427yd05z1wc5cnld8zgicmgi";
+    url = "https://pypi.python.org/packages/7a/00/c14926d8232b36b08218067bcd5853caefb4737cda3f0a47437151344792/click-6.6.tar.gz";
+    sha256 = "1sggipyz52crrybwbr9xvwxd4aqigvplf53k9w3ygxmzivd1jsnc";
   };
 
   requests = fetchurl {
-    url = "https://pypi.python.org/packages/16/09/37b69de7c924d318e51ece1c4ceb679bf93be9d05973bb30c35babd596e2/requests-2.13.0.tar.gz";
-    sha256 = "1s0wg4any4dsv5l3hqjxqk2zgb7pdbqhy9rhc8kh3aigfq4ws8jp";
+    url = "https://pypi.python.org/packages/5b/0b/34be574b1ec997247796e5d516f3a6b6509c4e064f2885a96ed885ce7579/requests-2.12.4.tar.gz";
+    sha256 = "0d5fwxmw4ibynk3imph3n4n84m0n3ib1vj339fxhkqri0qd4767d";
   };
 
 in stdenv.mkDerivation rec {
@@ -28,11 +27,7 @@ in stdenv.mkDerivation rec {
     click
     requests
   ];
-  buildInputs = [
-    pythonPackages.python pythonPackages.flake8
-    zip makeWrapper nix.out nix-prefetch-git nix-prefetch-hg
-  ];
-
+  buildInputs = [ python zip makeWrapper nix.out nix-prefetch-scripts ];
   sourceRoot = ".";
 
   postUnpack = ''
@@ -52,14 +47,13 @@ in stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e "s|default='nix-shell',|default='${nix.out}/bin/nix-shell',|" $out/pkgs/pypi2nix/cli.py
-    sed -i -e "s|nix-prefetch-git|${nix-prefetch-git}/bin/nix-prefetch-git|" $out/pkgs/pypi2nix/stage2.py
-    sed -i -e "s|nix-prefetch-hg|${nix-prefetch-hg}/bin/nix-prefetch-hg|" $out/pkgs/pypi2nix/stage2.py
+    sed -i -e "s|nix-prefetch-git|${nix-prefetch-scripts}/bin/nix-prefetch-git|" $out/pkgs/pypi2nix/stage2.py
   '';
 
   commonPhase = ''
     mkdir -p $out/bin
 
-    echo "#!${pythonPackages.python.interpreter}" >  $out/bin/pypi2nix
+    echo "#!${python.interpreter}" >  $out/bin/pypi2nix
     echo "import pypi2nix.cli" >> $out/bin/pypi2nix
     echo "pypi2nix.cli.main()" >> $out/bin/pypi2nix
 
@@ -68,16 +62,8 @@ in stdenv.mkDerivation rec {
     export PYTHONPATH=$out/pkgs:$PYTHONPATH
   '';
 
-  # flake8 doesn't run on python3
-  doCheck = false;
-  checkPhase = ''
-    flake8 ${src}/src
-  '';
-
   installPhase = commonPhase + ''
-    wrapProgram $out/bin/pypi2nix \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        --prefix PATH : "${nix-prefetch-git}/bin:${nix-prefetch-hg}/bin"
+    wrapProgram $out/bin/pypi2nix --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   shellHook = ''

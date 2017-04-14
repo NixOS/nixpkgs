@@ -43,15 +43,6 @@ let
     url = "https://github.com/xbmc/FFmpeg/archive/3.1.6-${rel}.tar.gz";
     sha256 = "14jicb26s20nr3qmfpazszpc892yjwjn81zbsb8szy3a5xs19y81";
   };
-  # Usage of kodi fork of libdvdnav and libdvdread is necessary for functional dvd playback:
-  libdvdnav_src = fetchurl {
-    url = "https://github.com/xbmc/libdvdnav/archive/981488f.tar.gz";
-    sha256 = "312b3d15bc448d24e92f4b2e7248409525eccc4e75776026d805478e51c5ef3d";
-  };
-  libdvdread_src = fetchurl {
-    url = "https://github.com/xbmc/libdvdread/archive/17d99db.tar.gz";
-    sha256 = "e7179b2054163652596a56301c9f025515cb08c6d6310b42b897c3ad11c0199b";
-  };
 in stdenv.mkDerivation rec {
     name = "kodi-${version}";
     version = "17.1";
@@ -101,8 +92,8 @@ in stdenv.mkDerivation rec {
         --replace "/bin/bash" "${bash}/bin/bash -ex"
       cp ${ffmpeg_3_1_6} tools/depends/target/ffmpeg/ffmpeg-3.1.6-${rel}.tar.gz
       ln -s ${libdvdcss.src} tools/depends/target/libdvdcss/libdvdcss-master.tar.gz
-      cp ${libdvdnav_src} tools/depends/target/libdvdnav/libdvdnav-master.tar.gz
-      cp ${libdvdread_src} tools/depends/target/libdvdread/libdvdread-master.tar.gz
+      ln -s ${libdvdnav.src} tools/depends/target/libdvdnav/libdvdnav-master.tar.gz
+      ln -s ${libdvdread.src} tools/depends/target/libdvdread/libdvdread-master.tar.gz
     '';
 
     preConfigure = ''
