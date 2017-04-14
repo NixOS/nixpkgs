@@ -73,6 +73,9 @@ let
           # applies to openntpd.
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
           ${config.systemd.package}/bin/systemctl try-restart openntpd.service
+
+          # exit code of last command is propagated, so we have to clear it
+          true
       fi
 
       ${cfg.runHook}
