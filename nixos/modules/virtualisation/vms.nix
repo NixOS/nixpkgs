@@ -387,12 +387,14 @@ in
                 --nodaemon
             '';
         }) (attrNames cfg.machines.${name}.shared));
+      proxyUnitsServices = name:
+        map (x: "${x}.service") (attrNames (proxyUnits name));
       unit = name: {
         description = "VM '${name}'";
         preStart = setupVM name;
         script = "exec ${qemuCommand name}";
-        requires = [ "vm-${name}-netdev.service" ] ++ (attrNames (proxyUnits name));
-        after = [ "vm-${name}-netdev.service" ] ++ (attrNames (proxyUnits name));
+        requires = [ "vm-${name}-netdev.service" ] ++ (proxyUnitsServices name);
+        after = [ "vm-${name}-netdev.service" ] ++ (proxyUnitsServices name);
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "vm-${name}";
