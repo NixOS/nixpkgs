@@ -3,7 +3,7 @@
 with pkgs;
 
 let
-  version = "1.2.0";
+  version = "3.4.0";
   dependencies = [
     boehmgc
     xorg.libXext
@@ -39,9 +39,12 @@ let
     nspr
     curl
     alsaLib
-    jdk
+    haxe
   ];
   libPath = stdenv.lib.makeLibraryPath dependencies;
+  embeddedLibPath = ''
+    $out/share/plaf/haxe/lib/hxcpp/hxcpp/bin/Android:$out/share/plaf/haxe/lib/hxcpp/hxcpp/project/libs/nekoapi/bin/Linux:$out/share/plaf/haxe/lib/hxcpp/hxcpp/project/libs/nekoapi/bin/Linux64:$out/share/plaf/haxe/lib/hxcpp/hxcpp/project/libs/nekoapi/bin/RPi:$out/share/plaf/haxe/lib/lime/lime/ndll/Android:$out/share/plaf/haxe/lib/lime/lime/templates/java/ndll/Linux:$out/share/plaf/haxe/lib/lime/lime/templates/java/ndll/Linux64:$out/share/plaf/haxe/lib/lime/lime/templates/neko/ndll/linux:$out/share/plaf/haxe/lib/lime/lime/templates/neko/ndll/linux64:$out/share/plaf/haxe/lib/lime/lime/templates/neko/ndll/rpi:$out/share/plaf/neko-linux:$out/share/runtimes/jre-linux/lib/amd64:$out/share/runtimes/jre-linux/lib/amd64/jli:$out/share/runtimes/jre-linux/lib/amd64/server
+  '';
 in
   stdenv.mkDerivation {
 
@@ -73,17 +76,15 @@ in
       echo "Patching ELF interpreter for executable: $elf_executable"
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}:${embeddedLibPath}" \
         "$elf_executable"  
     done
 
     # patch shared object files
     find -iname '*\.so*' | \
     while read so; do
-      file_info="$(file "$so")"
-      if [[ "$file_info" =~ "64-bit" ]]; then
-        echo "Patching shared object file: $so"
-        patchelf --set-rpath "${libPath}" "$so"
-      fi
+      echo "Patching shared object file: $so"
+      patchelf --set-rpath "${libPath}:${embeddedLibPath}" "$so"
     done
 
   '';
@@ -91,13 +92,11 @@ in
   installPhase = let
     binPath = stdenv.lib.makeBinPath [ psmisc ];
   in ''
-    mkdir -p $out/bin $out/share/stencyl
-    mv * $out/share/stencyl
-    makeWrapper "$out/share/stencyl/Stencyl" "$out/bin/stencyl" \
+    mkdir -p $out/bin $out/share
+    mv * $out/share
+    makeWrapper "$out/share/Stencyl" "$out/bin/stencyl" \
       --prefix LD_LIBRARY_PATH : "${libPath}" \
       --prefix PATH : "${binPath}"
   '';
-
-  dontPatchELF = true;
 
 }
