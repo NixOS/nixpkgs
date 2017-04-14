@@ -21,8 +21,8 @@ let
   gssapiSrc = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
-        + "/patches/gssapi.patch?id=255b8554a50b5c75fca63f76b1ac837c0d4fb7aa";
-    sha256 = "0yg9iq7vb2fkvy36ar0jxk29pkw0h3dhv5vn8qncc3pgwx3617n2";
+        + "/patches/gssapi.patch?id=a18d56bd84f04292ec9178b4b17ef6d56a0c7aef";
+    sha256 = "1sb929lfc3s45km2vpylmlbb6mpqcbr74xl6gx2s4cgnsrfd9kp3";
   };
 
 in
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   # Please ensure that openssh_with_kerberos still builds when
   # bumping the version here!
   name = "openssh-${version}";
-  version = "7.4p1";
+  version = "7.5p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1l8r3x4fr2kb6xm95s7kjdif1wp6f94d4kljh4qjj9109shw87qv";
+    sha256 = "1w7rb5gbrikxdkp8w7zxnci4549gk4bw1lml01s59w5rzb2y6ilq";
   };
 
   prePatch = optionalString hpnSupport
