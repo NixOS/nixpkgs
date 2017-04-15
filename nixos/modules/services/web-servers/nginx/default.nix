@@ -202,7 +202,13 @@ let
   ) virtualHosts);
   mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
-      ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
+      ${optionalString (config.proxyPass != null && !cfg.proxyResolveWhileRunning)
+        "proxy_pass ${config.proxyPass};"
+      }
+      ${optionalString (config.proxyPass != null && cfg.proxyResolveWhileRunning) ''
+        set $nix_proxy_target "${config.proxyPass}";
+        proxy_pass $nix_proxy_target;
+      ''}
       ${optionalString config.proxyWebsockets ''
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -403,6 +409,16 @@ in
         default = null;
         example = "/path/to/dhparams.pem";
         description = "Path to DH parameters file.";
+      };
+
+      proxyResolveWhileRunning = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Resolves domains of proxyPass targets at runtime
+          and not only at start, you have to set
+          services.nginx.resolver, too.
+        '';
       };
 
       resolver = mkOption {
