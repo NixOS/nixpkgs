@@ -70,6 +70,8 @@ rec {
 
   git-octopus = callPackage ./git-octopus { };
 
+  git-open = callPackage ./git-open { };
+
   git-radar = callPackage ./git-radar { };
 
   git-remote-hg = callPackage ./git-remote-hg { };
