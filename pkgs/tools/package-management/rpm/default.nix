@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     for tool in ld nm objcopy objdump strip; do
       sed -i $out/lib/rpm/macros -e "s/^%__$tool.*/%__$tool $tool/"
     done
+
+    # symlinks produced by build are incorrect
+    ln -sf $out/bin/{rpm,rpmquery}
+    ln -sf $out/bin/{rpm,rpmverify}
   '';
 
   meta = with stdenv.lib; {
