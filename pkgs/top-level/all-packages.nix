@@ -5582,6 +5582,8 @@ with pkgs;
   cargo = rust.cargo;
   rustc = rust.rustc;
 
+  cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
   makeRustPlatform = rust: lib.fix (self:
