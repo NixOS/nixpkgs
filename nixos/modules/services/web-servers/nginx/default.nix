@@ -32,7 +32,7 @@ let
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
-        server ${name} ${optionalString server.resolve "resolve"} ${optionalString server.backup "backup"};
+        server ${name} ${optionalString server.backup "backup"};
       ''))}
     }
   ''));
@@ -443,15 +443,6 @@ in
                     description = ''
                       Marks the server as a backup server. It will be passed
                       requests when the primary servers are unavailable.
-                    '';
-                  };
-                  resolve = mkOption {
-                    type = types.bool;
-                    default = false;
-                    description = ''
-                      Monitors changes of the IP addresses that correspond to a
-                      domain name of the server, and automatically modifies the
-                      upstream configuration without the need of restarting nginx.
                     '';
                   };
                 };
