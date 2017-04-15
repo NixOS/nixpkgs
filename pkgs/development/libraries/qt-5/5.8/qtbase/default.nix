@@ -106,6 +106,8 @@ stdenv.mkDerivation {
         -importdir $out/lib/qt5/imports \
         -qmldir $out/lib/qt5/qml \
         -docdir $out/share/doc/qt5"
+
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins\""
   '';
 
   prefixKey = "-prefix ";
@@ -227,11 +229,18 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ bison flex gperf lndir perl pkgconfig python2 ] ++ lib.optional (!stdenv.isDarwin) patchelf;
 
   # freetype-2.5.4 changed signedness of some struct fields
-  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare"
-    + lib.optionalString stdenv.isDarwin " -D__MAC_OS_X_VERSION_MAX_ALLOWED=1090 -D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))";
-  # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-  # 10.9 which necessitates the above macro definition that mentions
-  # 10.10
+  NIX_CFLAGS_COMPILE =
+    [
+      "-Wno-error=sign-compare"
+    ]
+    ++ lib.optionals stdenv.isDarwin
+    [
+      "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
+      "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
+      # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
+      # 10.9 which necessitates the above macro definition that mentions
+      # 10.10
+    ];
 
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
