@@ -8,8 +8,8 @@ Index: qtbase-opensource-src-5.8.0/src/network/ssl/qsslsocket_openssl_symbols.cp
      // first attempt: the canonical name is libssl.so.<SHLIB_VERSION_NUMBER>
 -    libssl->setFileNameAndVersion(QLatin1String("ssl"), QLatin1String(SHLIB_VERSION_NUMBER));
 -    libcrypto->setFileNameAndVersion(QLatin1String("crypto"), QLatin1String(SHLIB_VERSION_NUMBER));
-+    libssl->setFileNameAndVersion(QLatin1String("@openssl@/lib/libssl"), QLatin1String(SHLIB_VERSION_NUMBER));
-+    libcrypto->setFileNameAndVersion(QLatin1String("@openssl@/lib/libcrypto"), QLatin1String(SHLIB_VERSION_NUMBER));
++    libssl->setFileNameAndVersion(QStringLiteral(NIXPKGS_LIBSSL), QLatin1String(SHLIB_VERSION_NUMBER));
++    libcrypto->setFileNameAndVersion(QStringLiteral(NIXPKGS_LIBCRYPTO), QLatin1String(SHLIB_VERSION_NUMBER));
      if (libcrypto->load() && libssl->load()) {
          // libssl.so.<SHLIB_VERSION_NUMBER> and libcrypto.so.<SHLIB_VERSION_NUMBER> found
          return pair;
@@ -19,8 +19,8 @@ Index: qtbase-opensource-src-5.8.0/src/network/ssl/qsslsocket_openssl_symbols.cp
      //  iOS does not ship a system libssl.dylib, libcrypto.dylib in the first place.
 -    libssl->setFileNameAndVersion(QLatin1String("ssl"), -1);
 -    libcrypto->setFileNameAndVersion(QLatin1String("crypto"), -1);
-+    libssl->setFileNameAndVersion(QLatin1String("@openssl@/lib/libssl"), -1);
-+    libcrypto->setFileNameAndVersion(QLatin1String("@openssl@/lib/libcrypto"), -1);
++    libssl->setFileNameAndVersion(QStringLiteral(NIXPKGS_LIBSSL), -1);
++    libcrypto->setFileNameAndVersion(QStringLiteral(NIXPKGS_LIBCRYPTO), -1);
      if (libcrypto->load() && libssl->load()) {
          // libssl.so.0 and libcrypto.so.0 found
          return pair;
