@@ -66,10 +66,6 @@ stdenv.mkDerivation {
 
       substituteInPlace src/dbus/qdbus_symbols.cpp \
         --replace "@dbus_libs@" "${dbus.lib}"
-
-      substituteInPlace \
-        src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace "@libX11@" "${libX11.out}"
     ''
     + lib.optionalString mesaSupported ''
       substituteInPlace \
@@ -232,6 +228,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE =
     [
       "-Wno-error=sign-compare"
+      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
     ]
     ++ lib.optionals stdenv.isDarwin
     [
