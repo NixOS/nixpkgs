@@ -7,6 +7,7 @@
 , buildInputs ? []
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
+, cargoBuildFlags ? []
 , ... } @ args:
 
 let
@@ -92,9 +93,9 @@ in stdenv.mkDerivation (args // {
     )
   '' + (args.prePatch or "");
 
-  buildPhase = args.buildPhase or ''
-    echo "Running cargo build --release"
-    cargo build --release
+  buildPhase = with builtins; args.buildPhase or ''
+    echo "Running cargo build --release ${concatStringsSep " " cargoBuildFlags}"
+    cargo build --release ${concatStringsSep " " cargoBuildFlags}
   '';
 
   checkPhase = args.checkPhase or ''
