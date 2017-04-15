@@ -52,9 +52,6 @@ stdenv.mkDerivation {
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "src/corelib/Qt5CoreMacros.cmake"
       sed -i 's/NO_DEFAULT_PATH//' "src/gui/Qt5GuiConfigExtras.cmake.in"
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
-    '' + lib.optionalString stdenv.isLinux ''
-      substituteInPlace src/dbus/qdbus_symbols.cpp \
-        --replace "@dbus_libs@" "${dbus.lib}"
     ''
     + lib.optionalString mesaSupported ''
       substituteInPlace \
@@ -222,6 +219,9 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
       ''-DNIXPKGS_LIBSSL="${openssl.out}/lib/libssl"''
       ''-DNIXPKGS_LIBCRYPTO="${openssl.out}/lib/libcrypto"''
+      (if stdenv.isLinux
+        then ''-DNIXPKGS_LIBDBUS="${dbus.lib}/lib/libdbus-1"''
+        else ''-DNIXPKGS_LIBDBUS=""'')
     ]
     ++ lib.optionals stdenv.isDarwin
     [
