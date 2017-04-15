@@ -86,6 +86,8 @@ in {
       serviceConfig = {
         User = "nobody";
         Restart = "always";
+        Restart = "1s";
+        TimeoutStartSec = "5min";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
         ExecStart = ''
