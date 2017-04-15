@@ -47,6 +47,10 @@ let
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
 
+      ${optionalString (cfg.resolver.addresses != []) ''
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+      ''}
+
       ${optionalString (cfg.recommendedOptimisation) ''
         # optimisation
         sendfile on;
@@ -390,6 +394,32 @@ in
         default = null;
         example = "/path/to/dhparams.pem";
         description = "Path to DH parameters file.";
+      };
+
+      resolver = mkOption {
+        type = types.submodule {
+          options = {
+            addresses = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = literalExample ''[ "[::1]" "127.0.0.1:5353" ]'';
+              description = "List of resolvers to use";
+            };
+            valid = mkOption {
+              type = types.str;
+              default = "";
+              example = "30s";
+              description = ''
+                By default, nginx caches answers using the TTL value of a response.
+                An optional valid parameter allows overriding it
+              '';
+            };
+          };
+        };
+        description = ''
+          Configures name servers used to resolve names of upstream servers into addresses
+        '';
+        default = {};
       };
 
       virtualHosts = mkOption {
