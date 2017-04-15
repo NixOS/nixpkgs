@@ -15,6 +15,7 @@
   # Mozilla Foundation, see
   # http://www.mozilla.org/foundation/trademarks/.
   enableOfficialBranding ? false
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -107,6 +108,32 @@ stdenv.mkDerivation rec {
 
       # Needed to find Mozilla runtime
       gappsWrapperArgs+=(--argv0 "$out/bin/.thunderbird-wrapped")
+
+      # TODO: Move to a dev output?
+      rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+
+      ${ let desktopItem = makeDesktopItem {
+          name = "thunderbird";
+          exec = "$out/bin/thunderbird %U";
+          desktopName = "Thunderbird";
+          icon = "$out/lib/thunderbird-${version}/chrome/icons/default/default256.png";
+          genericName = "Main Reader";
+          categories = "Application;Network";
+          mimeType = stdenv.lib.concatStringsSep ";" [
+            # Email
+            "x-scheme-handler/mailto"
+            "message/rfc822"
+            # Newsgroup
+            "x-scheme-handler/news"
+            "x-scheme-handler/snews"
+            "x-scheme-handler/nntp"
+            # Feed
+            "x-scheme-handler/feed"
+            "application/rss+xml"
+            "application/x-extension-rss"
+          ];
+        }; in desktopItem.buildCommand
+      }
     '';
 
   postFixup =
