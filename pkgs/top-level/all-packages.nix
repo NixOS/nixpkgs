@@ -9715,6 +9715,8 @@ with pkgs;
 
   sad = callPackage ../applications/science/logic/sad { };
 
+  safefile = callPackage ../development/libraries/safefile {};
+
   sbc = callPackage ../development/libraries/sbc { };
 
   schroedinger = callPackage ../development/libraries/schroedinger { };
