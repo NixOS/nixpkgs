@@ -29,6 +29,14 @@ let
     proxy_set_header        Accept-Encoding "";
   '';
 
+  upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
+    upstream ${name} {
+      ${toString (flip mapAttrsToList upstream.servers (name: server: ''
+        server ${name} ${optionalString server.backup "backup"};
+      ''))}
+    }
+  ''));
+
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
@@ -51,6 +59,7 @@ let
       ${optionalString (cfg.resolver.addresses != []) ''
         resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
       ''}
+      ${upstreamConfig}
 
       ${optionalString (cfg.recommendedOptimisation) ''
         # optimisation
@@ -439,6 +448,35 @@ in
         };
         description = ''
           Configures name servers used to resolve names of upstream servers into addresses
+        '';
+        default = {};
+      };
+
+      upstreams = mkOption {
+        type = types.attrsOf (types.submodule {
+          options = {
+            servers = mkOption {
+              type = types.attrsOf (types.submodule {
+                options = {
+                  backup = mkOption {
+                    type = types.bool;
+                    default = false;
+                    description = ''
+                      Marks the server as a backup server. It will be passed
+                      requests when the primary servers are unavailable.
+                    '';
+                  };
+                };
+              });
+              description = ''
+                Defines the address and other parameters of the upstream servers.
+              '';
+              default = {};
+            };
+          };
+        });
+        description = ''
+          Defines a group of servers to use as proxy target.
         '';
         default = {};
       };
