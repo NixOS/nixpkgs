@@ -771,7 +771,7 @@ with pkgs;
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
-  
+
   clac = callPackage ../tools/misc/clac {};
 
   clasp = callPackage ../tools/misc/clasp { };
@@ -5610,6 +5610,9 @@ with pkgs;
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
+  rustup = callPackage ../development/tools/rust/rustup {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
