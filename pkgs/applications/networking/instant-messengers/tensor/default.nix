@@ -1,32 +1,30 @@
 { stdenv, fetchgit, qtbase, qtquickcontrols, qmakeHook, makeQtWrapper, makeDesktopItem }:
 
-let
-  rev = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
-
-in stdenv.mkDerivation rec {
-  name = "tensor-git-${stdenv.lib.strings.substring 0 8 rev}";
+stdenv.mkDerivation rec {
+  name = "tensor-git-${version}";
+  version = "2017-02-21";
 
   src = fetchgit {
-    url = "https://github.com/davidar/tensor.git";
+    url             = "https://github.com/davidar/tensor.git";
+    rev             = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
+    sha256          = "19in8c7a2hxsx2c4lj540w5c3pn1882645m21l91mcriynqr67k9";
     fetchSubmodules = true;
-    inherit rev;
-    sha256 = "19in8c7a2hxsx2c4lj540w5c3pn1882645m21l91mcriynqr67k9";
   };
 
-  parallelBuilding = true;
+  enableParallelBuilding = true;
 
   buildInputs = [ qtbase qtquickcontrols ];
   nativeBuildInputs = [ qmakeHook makeQtWrapper ];
 
   desktopItem = makeDesktopItem {
-    name = "tensor";
-    exec = "@bin@";
-    icon = "tensor.png";
-    comment = meta.description;
+    name        = "tensor";
+    exec        = "@bin@";
+    icon        = "tensor.png";
+    comment     = meta.description;
     desktopName = "Tensor Matrix Client";
     genericName = meta.description;
-    categories = "Chat;Utility";
-    mimeType = "text/xml";
+    categories  = "Chat;Utility";
+    mimeType    = "application/x-chat";
   };
 
   installPhase = ''
@@ -51,5 +49,7 @@ in stdenv.mkDerivation rec {
     description = "Cross-platform Qt5/QML-based Matrix client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
+    inherit (qtbase.meta) platforms;
+    inherit version;
   };
 }
