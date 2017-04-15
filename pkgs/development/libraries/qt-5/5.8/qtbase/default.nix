@@ -53,11 +53,6 @@ stdenv.mkDerivation {
       sed -i 's/NO_DEFAULT_PATH//' "src/gui/Qt5GuiConfigExtras.cmake.in"
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
-      substituteInPlace src/network/kernel/qdnslookup_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc.out}"
-      substituteInPlace src/network/kernel/qhostinfo_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc.out}"
-
       substituteInPlace src/network/ssl/qsslsocket_openssl_symbols.cpp \
         --replace "@openssl@" "${openssl.out}"
     '' + lib.optionalString stdenv.isLinux ''
@@ -229,6 +224,7 @@ stdenv.mkDerivation {
     [
       "-Wno-error=sign-compare"
       ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
     ]
     ++ lib.optionals stdenv.isDarwin
     [

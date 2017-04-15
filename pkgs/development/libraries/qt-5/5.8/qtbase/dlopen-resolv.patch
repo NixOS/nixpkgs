@@ -7,7 +7,7 @@ Index: qtbase-opensource-src-5.8.0/src/network/kernel/qdnslookup_unix.cpp
  #endif
      {
 -        lib.setFileName(QLatin1String("resolv"));
-+        lib.setFileName(QLatin1String("@glibc@/lib/resolv"));
++        lib.setFileName(QLatin1String(NIXPKGS_LIBRESOLV));
          if (!lib.load())
              return false;
      }
@@ -20,7 +20,7 @@ Index: qtbase-opensource-src-5.8.0/src/network/kernel/qhostinfo_unix.cpp
  #endif
      {
 -        lib.setFileName(QLatin1String("resolv"));
-+        lib.setFileName(QLatin1String("@glibc@/lib/libresolv"));
++        lib.setFileName(QLatin1String(NIXPKGS_LIBRESOLV));
          if (!lib.load())
              return false;
      }
