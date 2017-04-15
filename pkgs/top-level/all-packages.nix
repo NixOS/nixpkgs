@@ -13836,6 +13836,8 @@ with pkgs;
 
   getxbook = callPackage ../applications/misc/getxbook {};
 
+  ghq = gitAndTools.ghq;
+
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome2) libart_lgpl;
     webkit = null;
