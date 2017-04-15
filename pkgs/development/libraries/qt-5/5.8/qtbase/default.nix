@@ -56,9 +56,6 @@ stdenv.mkDerivation {
       substituteInPlace src/network/ssl/qsslsocket_openssl_symbols.cpp \
         --replace "@openssl@" "${openssl.out}"
     '' + lib.optionalString stdenv.isLinux ''
-      substituteInPlace src/plugins/platforms/xcb/qxcbcursor.cpp \
-        --replace "@libXcursor@" "${libXcursor.out}"
-
       substituteInPlace src/dbus/qdbus_symbols.cpp \
         --replace "@dbus_libs@" "${dbus.lib}"
     ''
@@ -225,6 +222,7 @@ stdenv.mkDerivation {
       "-Wno-error=sign-compare"
       ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
       ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
     ++ lib.optionals stdenv.isDarwin
     [
