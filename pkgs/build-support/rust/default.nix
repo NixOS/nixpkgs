@@ -116,9 +116,7 @@ in stdenv.mkDerivation (args // {
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p $out/bin
-    for f in $(find target/release -maxdepth 1 -type f); do
-      cp $f $out/bin
-    done;
+    find target/release -maxdepth 1 -executable -exec cp "{}" $out/bin \;
     runHook postInstall
   '';
 })
