@@ -33,7 +33,7 @@ in {
           Use with caution.
         '';
       };
-      
+
       unifiUsername = mkOption {
         type = types.str;
         example = "ReadOnlyUser";
@@ -41,14 +41,14 @@ in {
           username for authentication against UniFi Controller API.
         '';
       };
-      
+
       unifiPassword = mkOption {
         type = types.str;
         description = ''
           Password for authentication against UniFi Controller API.
         '';
       };
-      
+
       unifiTimeout = mkOption {
         type = types.str;
         default = "5s";
@@ -86,7 +86,7 @@ in {
       serviceConfig = {
         User = "nobody";
         Restart = "always";
-        Restart = "1s";
+        RestartSec = "1s";
         TimeoutStartSec = "5min";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
