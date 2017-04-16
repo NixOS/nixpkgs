@@ -16417,6 +16417,8 @@ with pkgs;
 
   zed = callPackage ../applications/editors/zed { };
 
+  zed-dev = callPackage ../applications/editors/zed/dev.nix { };
+
   zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
 
   zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
