@@ -762,6 +762,8 @@ with pkgs;
     google-gflags = null; # only required for examples/tests
   };
 
+  cewe-fotobuch = callPackage ../applications/graphics/cewe-fotobuch { };
+
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
 
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
