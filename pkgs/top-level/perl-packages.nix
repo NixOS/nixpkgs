@@ -1571,7 +1571,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "10hc8v22mv56wqi6drpl4pw3r8y3xrgh80ayrb2gir80ah9s5bvi";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassLoad Moose MooseXOneArgNew ParamsUtil RoleHasMessage RoleIdentifiable Throwable TieIxHash TryTiny ];
+    propagatedBuildInputs = [ ModulePluggable ClassLoad Moose MooseXOneArgNew ParamsUtil RoleHasMessage RoleIdentifiable Throwable TieIxHash TryTiny ];
     meta = {
       homepage = https://github.com/rjbs/config-mvp;
       description = "Multivalue-property package-oriented configuration";
@@ -2831,6 +2831,20 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  DistZillaLocaleTextDomain = buildPerlPackage {
+    name = "Dist-Zilla-LocaleTextDomain-0.90";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/Dist-Zilla-LocaleTextDomain-0.90.tar.gz;
+      sha256 = "143b0273f877efe5872489b72f2395ddecc72b6682244e0298386ed0dbc0fa2a";
+    };
+    buildInputs = [ AppCmd DistZilla TestFile TestFileContents ];
+    propagatedBuildInputs = [ DistZilla EmailAddress FileFindRule IPCRun3 Moose MooseXTypesPathClass PathClass namespaceautoclean ];
+    meta = {
+      description = "Tools for managing Locale::TextDomain language catalogs";
+      license = "perl";
+    };
+  };
+
   DistZillaPluginBundleTestingMania = buildPerlPackage {
     name = "Dist-Zilla-PluginBundle-TestingMania-0.21";
     src = fetchurl {
@@ -2856,6 +2870,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Dist::Zilla with Changes check";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DistZillaPluginCheckExtraTests = buildPerlPackage {
+    name = "Dist-Zilla-Plugin-CheckExtraTests-0.025";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Dist-Zilla-Plugin-CheckExtraTests-0.025.tar.gz;
+      sha256 = "3017a481c8a810420c2724f6fa7807e9e6411f293e85dcbec3fde059d5fe7480";
+    };
+    buildInputs = [ CaptureTiny DistZilla ParamsUtil SubExporter TestRequires TryTiny ];
+    propagatedBuildInputs = [ DistZilla Filepushd Moose PathIteratorRule PathTiny namespaceautoclean ];
+    meta = {
+      homepage = https://github.com/dagolden/Dist-Zilla-Plugin-CheckExtraTests;
+      description = "Check xt tests before release";
+      license = "apache";
     };
   };
 
@@ -3123,6 +3152,20 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-Test-Version/;
       description = "Release Test::Version tests";
       license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
+  DistZillaPluginsCJM = buildPerlPackage {
+    name = "Dist-Zilla-Plugins-CJM-4.26";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CJ/CJM/Dist-Zilla-Plugins-CJM-4.26.tar.gz;
+      sha256 = "0812afa640d5df74d9878b1434ca834a4e4ab1b69d01daeb127bb22c3cbf3e04";
+    };
+    buildInputs = [ DistZilla Filepushd TryTiny ];
+    propagatedBuildInputs = [ DistZilla FileHomeDir Moose PathClass namespaceautoclean ];
+    meta = {
+      description = "CJM's plugins for Dist::Zilla";
+      license = "perl";
     };
   };
 
@@ -7184,6 +7227,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PathIteratorRule = buildPerlPackage {
+    name = "Path-Iterator-Rule-1.008";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Iterator-Rule-1.008.tar.gz;
+      sha256 = "261fb71c9b44d52981e08bac552ba2a9a7a1a3b6dc77f8b20f8ddc2541567e9e";
+    };
+    buildInputs = [ Filepushd PathTiny TestDeep TestFilename ];
+    propagatedBuildInputs = [ NumberCompare TextGlob TryTiny ];
+    meta = {
+      homepage = https://github.com/dagolden/Path-Iterator-Rule;
+      description = "Iterative, recursive file finder";
+      license = "apache";
+    };
+  };
+
   PathTiny = buildPerlPackage {
     name = "Path-Tiny-0.052";
     src = fetchurl {
@@ -8972,6 +9030,48 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestFile = buildPerlPackage {
+    name = "Test-File-1.41";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.41.tar.gz;
+      sha256 = "45ec1b714f64d05e34205c40b08c49549f257910e4966fa28e2ac170d5516316";
+    };
+    buildInputs = [ Testutf8 ] ;
+    meta = {
+      description = "Check file attributes";
+      license = "perl";
+    };
+  };
+
+  TestFileContents = buildPerlModule {
+    name = "Test-File-Contents-0.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.21.tar.gz;
+      sha256 = "1b5a13f86f5df625ffd30361f628d34b0ceda80b9f39ca74bf0a4c1105828317";
+    };
+    propagatedBuildInputs = [ TextDiff ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Test-File-Contents/;
+      description = "Test routines for examining the contents of files";
+      license = "perl";
+    };
+  };
+
+  TestFilename = buildPerlPackage {
+    name = "Test-Filename-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-Filename-0.03.tar.gz;
+      sha256 = "6a450cc4c6281ed1129f32a1c0741f228967feda2e32a2915ff621c36525fcbe";
+    };
+    buildInputs = [ TestSimple TestTester ];
+    propagatedBuildInputs = [ PathTiny ];
+    meta = {
+      homepage = https://metacpan.org/release/Test-Filename;
+      description = "Portable filename comparison";
+      license = "apache";
+    };
+  };
+
   TestFileShareDir = buildPerlModule {
     name = "Test-File-ShareDir-0.3.3";
     src = fetchurl {
@@ -9374,6 +9474,19 @@ let self = _self // overrides; _self = with self; {
       homepage = http://github.com/audreyt/Test-use-ok/tree;
       description = "Alternative to Test::More::use_ok";
       license = "unrestricted";
+    };
+  };
+
+  Testutf8 = buildPerlPackage {
+    name = "Test-utf8-1.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MARKF/Test-utf8-1.01.tar.gz;
+      sha256 = "ef371b1769cd8d36d2d657e8321723d94c8f8d89e7fd7437c6648c5dc6711b7a";
+    };
+    meta = {
+      homepage = https://github.com/2shortplanks/Test-utf8/tree;
+      description = "Handy utf8 tests";
+      license = "perl";
     };
   };
 
