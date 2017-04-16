@@ -147,6 +147,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  asana = callPackage ../development/python-modules/asana { };
+
   # packages defined elsewhere
 
   bap = callPackage ../development/python-modules/bap {
