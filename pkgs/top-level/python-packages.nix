@@ -10961,6 +10961,8 @@ in {
     };
   });
 
+  fn = callPackage ../development/python-modules/fn { };
+
   pyfribidi = buildPythonPackage rec {
     version = "0.11.0";
     name = "pyfribidi-${version}";
