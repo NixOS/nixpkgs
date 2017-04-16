@@ -10458,6 +10458,8 @@ in {
     };
   };
 
+  django-sites = callPackage ../development/python-modules/django-sites { };
+
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
     version = "0.17.0";
