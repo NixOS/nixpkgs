@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e's|/usr/bin/perl|${perl}/bin/perl|g'
        done
+       patchShebangs ./tools/
     '';
 
   # Fixing the few tests that fail is left as an exercise to the reader.
