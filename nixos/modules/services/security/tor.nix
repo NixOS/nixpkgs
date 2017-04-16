@@ -18,6 +18,7 @@ let
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
+    ${optionalString cfg.controlSocket.enable "ControlSocket /var/run/tor/control GroupWritable RelaxDirModeCheck"}
   ''
   # Client connection config
   + optionalString cfg.client.enable  ''
@@ -105,6 +106,17 @@ in
           If set, Tor will accept connections on the specified port
           and allow them to control the tor process.
         '';
+      };
+
+      controlSocket = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Wheter to enable Tor control socket. Control socket is created
+            in <literal>/var/run/tor/control</literal>
+          '';
+        };
       };
 
       client = {
@@ -583,6 +595,9 @@ in
 
         # Translated from the upstream contrib/dist/tor.service.in
         preStart = ''
+          mkdir -p /var/run/tor
+          chown tor:tor /var/run/tor
+
           install -o tor -g tor -d ${torDirectory}/onion
           ${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config
         '';
@@ -607,7 +622,7 @@ in
             DevicePolicy            = "closed";
             InaccessibleDirectories = "/home";
             ReadOnlyDirectories     = "/";
-            ReadWriteDirectories    = torDirectory;
+            ReadWriteDirectories    = [torDirectory "/var/run/tor"];
             NoNewPrivileges         = "yes";
           };
       };
