@@ -10372,6 +10372,8 @@ in {
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
+  django-pglocks = callPackage ../development/python-modules/django-pglocks { };
+
   django-raster = callPackage ../development/python-modules/django-raster { };
 
   django_redis = buildPythonPackage rec {
