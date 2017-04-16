@@ -10707,6 +10707,7 @@ in {
     disabled = isPy3k;
   };
 
+  easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
