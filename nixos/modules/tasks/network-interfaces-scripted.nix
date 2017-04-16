@@ -103,7 +103,7 @@ in
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"} || true
+                      "dev ${cfg.defaultGateway.interface}"} proto static || true
                 ''}
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
@@ -113,7 +113,7 @@ in
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway6.interface != null)
-                      "dev ${cfg.defaultGateway6.interface}"} || true
+                      "dev ${cfg.defaultGateway6.interface}"} proto static || true
                 ''}
               '';
           };
