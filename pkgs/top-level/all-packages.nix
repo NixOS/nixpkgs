@@ -946,6 +946,8 @@ with pkgs;
 
   gdrivefs = python27Packages.gdrivefs;
 
+  gdrive = callPackage ../applications/networking/gdrive { };
+
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
   gencfsm = callPackage ../tools/security/gencfsm { };
