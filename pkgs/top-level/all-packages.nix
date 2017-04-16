@@ -14776,6 +14776,7 @@ with pkgs;
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
     withSidebar = true;
   };
+  mutt-kz = callPackage ../applications/networking/mailreaders/mutt/mutt-kz.nix { };
 
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
