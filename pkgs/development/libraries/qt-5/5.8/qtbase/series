@@ -7,3 +7,4 @@ xdg-config-dirs.patch
 compose-search-path.patch
 libressl.patch
 qpa-plugin-path.patch
+dlopen-gl.patch

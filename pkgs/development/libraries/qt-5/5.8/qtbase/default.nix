@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
     ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)]
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
-    ++ lib.optionals mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
+    ++ lib.optionals mesaSupported [ ./mkspecs-libgl.patch ];
 
   postPatch =
     ''
@@ -54,9 +54,6 @@ stdenv.mkDerivation {
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
     ''
     + lib.optionalString mesaSupported ''
-      substituteInPlace \
-        src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-        --replace "@mesa_lib@" "${mesa.out}"
       substituteInPlace mkspecs/common/linux.conf \
         --replace "@mesa_lib@" "${mesa.out}" \
         --replace "@mesa_inc@" "${mesa.dev or mesa}"
@@ -223,6 +220,8 @@ stdenv.mkDerivation {
         then ''-DNIXPKGS_LIBDBUS="${dbus.lib}/lib/libdbus-1"''
         else ''-DNIXPKGS_LIBDBUS=""'')
     ]
+    ++ lib.optional mesaSupported
+       ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
     ++ lib.optionals stdenv.isDarwin
     [
       "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
