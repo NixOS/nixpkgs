@@ -31,4 +31,7 @@ with lib;
 
   # Allow the user to log in as root without a password.
   users.extraUsers.root.initialHashedPassword = "";
+
+  # Make it nice to use
+  programs.bash.enableCompletion = true;
 }
