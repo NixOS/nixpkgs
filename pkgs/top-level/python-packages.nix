@@ -16315,6 +16315,8 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
+  pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
+
   osc = buildPythonPackage {
     name = "osc-0.156.0-16-g9e6d1a5";
     disabled = isPy3k;
