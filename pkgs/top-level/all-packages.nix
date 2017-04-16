@@ -774,6 +774,8 @@ with pkgs;
   
   clac = callPackage ../tools/misc/clac {};
 
+  clac = callPackage ../applications/misc/clac { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   cli53 = callPackage ../tools/admin/cli53 { };
