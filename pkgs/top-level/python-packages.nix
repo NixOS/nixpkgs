@@ -7748,6 +7748,9 @@ in {
     };
   });
 
+
+  htmlmin = callPackage ../development/python-modules/htmlmin.nix {};
+
   httpauth = buildPythonPackage rec {
     version = "0.3";
     name = "httpauth-${version}";
