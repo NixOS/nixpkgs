@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.0";
+  version = "52.0.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "215de8ae386f6f12d7a4338bb03bac956410be0dd4de5cca218e12241e3948c8c2540756e149bfde597cd10e399b4cb4db86619a2aa50a368ba323b413c1f93c";
+    sha512 = "7b8324a230a10b738b9a28c31b195bfb149b1f47eec6662d93a7d0c424d56303dbc2bca6645b30323c6da86628d6e49de359e1067081a5d0bd66541174a8be48";
   };
 
   # New sed no longer tolerates this mistake.
