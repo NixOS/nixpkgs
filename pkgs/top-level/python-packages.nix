@@ -10324,6 +10324,8 @@ in {
     };
   };
 
+  django-ipware = callPackage ../development/python-modules/django-ipware { };
+
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
     version = "1.4.4";
