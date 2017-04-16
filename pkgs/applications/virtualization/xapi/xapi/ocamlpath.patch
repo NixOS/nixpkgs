@@ -1,0 +1,13 @@
+diff -uNr xen-api-1.9.57/Makefile xen-api-1.9.57-new/Makefile
+--- xen-api-1.9.57/Makefile	2015-01-02 01:38:52.375556845 +0100
++++ xen-api-1.9.57-new/Makefile	2015-01-02 01:39:49.590203555 +0100
+@@ -25,7 +25,7 @@
+ 
+ include config.mk
+ 
+-OCAMLPATH=
++#OCAMLPATH=
+ EXTRA_INSTALL_PATH=
+ 
+ export ETCDIR OPTDIR PLUGINDIR HOOKSDIR INVENTORY VARPATCHDIR LIBEXECDIR XAPICONF SCRIPTSDIR SHAREDIR WEBDIR XHADIR BINDIR SBINDIR UDEVDIR OCAMLPATH EXTRA_INSTALL_PATH
+Binary files xen-api-1.9.57/.Makefile.swp and xen-api-1.9.57-new/.Makefile.swp differ

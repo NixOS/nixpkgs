@@ -16264,6 +16264,115 @@ with pkgs;
   win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
   win-signed-gplpv-drivers = callPackage ../applications/virtualization/driver/win-signed-gplpv-drivers { };
 
+  forkexecd = callPackage ../applications/virtualization/xapi/forkexecd {
+    inherit (ocamlPackages) fd-send-recv cmdliner findlib re rpc stdext uuidm xcp-idl uri cohttp xcp-inventory;
+  };
+
+  message-switch = callPackage ../applications/virtualization/xapi/message-switch {
+    inherit (ocamlPackages) lwt async camlp4 cmdliner cohttp findlib re rpc;
+  };
+
+  xenserver-core = callPackage ../applications/virtualization/xapi/xenserver-core { };
+
+  xenserver-install-wizard = callPackage ../applications/virtualization/xapi/xenserver-install-wizard { };
+
+  xsconsole = callPackage ../applications/virtualization/xapi/xsconsole { };
+
+  xsiostat = callPackage ../applications/virtualization/xapi/xsiostat { };
+
+  blktap = callPackage ../applications/virtualization/xapi/blktap { xen = xen_xenServer; };
+
+  deriving-ocsigen = callPackage ../applications/virtualization/xapi/deriving-ocsigen {
+    inherit (ocamlPackages) camlp4 findlib;
+  };
+
+  mirage-testvm = callPackage ../applications/virtualization/xapi/mirage-testvm {
+    inherit (ocamlPackages) camlp4 cohttp cstruct evtchn findlib gnt io-page ipaddr lwt mirage-block-xen mirage-clock-xen mirage-console-xen mirage-types mirage-xen rpc shared-memory-ring testvmlib vchan xenstore xenstore-clients;
+  };
+
+  sm-cli = callPackage ../applications/virtualization/xapi/sm-cli {
+    inherit (ocamlPackages) cmdliner findlib obuild re rpc xcp-idl xcp-inventory uri sexplib fd-send-recv cohttp;
+  };
+
+  squeezed = callPackage ../applications/virtualization/xapi/squeezed {
+    inherit (ocamlPackages) cmdliner findlib re rpc stdext uuidm xcp-idl xenstore xenstore-clients uri cohttp xcp-inventory lwt;
+    xen = xen_xenServer;
+  };
+
+  vhd-tool = callPackage ../applications/virtualization/xapi/vhd-tool {
+    inherit (ocamlPackages) cmdliner findlib io-page lwt nbd sha tapctl tar vhd xcp-idl xenstore xenstore-clients uri cohttp re xcp-inventory;
+  };
+
+  vncterm = callPackage ../applications/virtualization/xapi/vncterm { };
+
+  xapi-libvirt-storage = callPackage ../applications/virtualization/xapi/xapi-libvirt-storage {
+    inherit (ocamlPackages) cmdliner cohttp findlib libvirt re rpc xcp-idl fd-send-recv xcp-inventory;
+  };
+
+  xapi-quicktest = callPackage ../applications/virtualization/xapi/xapi-quicktest {
+    inherit (ocamlPackages) camlp4 cmdliner evtchn findlib gnt ipaddr lwt testvmlib vchan xen-api-client xenstore xenstore-clients mirage-types;
+    xen = xen_xenServer;
+  };
+
+  xapi-storage = callPackage ../applications/virtualization/xapi/xapi-storage {
+    inherit (ocamlPackages) cmdliner cow findlib rpc xmlm;
+    inherit (pythonPackages) python setuptools;
+  };
+
+  xcp-python-libs = callPackage ../applications/virtualization/xapi/xcp-python-libs {
+    inherit (pythonPackages) python setuptools;
+  };
+
+  #TODO: builds, but is still broken; python packages from xen_xenServer are not passed in correctly
+  xcp-sm = callPackage ../applications/virtualization/xapi/xcp-sm {
+    inherit (pythonPackages) python mock;
+    xen = xen_xenServer;
+  };
+
+  xe-create-templates = callPackage ../applications/virtualization/xapi/xe-create-templates {
+    inherit (ocamlPackages) camlp4 findlib lwt obuild stdext xcp-idl xen-api-client xen-api-libs-transitional xmlm xcp-inventory uuidm uri sexplib rpc re cstruct cohttp cmdliner;
+  };
+
+  xenops-cli = callPackage ../applications/virtualization/xapi/xenops-cli {
+    inherit (ocamlPackages) cmdliner findlib rpc uuidm xcp-idl uri re cohttp fd-send-recv xcp-inventory;
+  };
+
+  ezlvm = callPackage ../applications/virtualization/xapi/ezlvm {
+    inherit (ocamlPackages) camlp4 cmdliner findlib ounit re uri ocamlscript rpc;
+  };
+
+  ffs = callPackage ../applications/virtualization/xapi/ffs {
+    inherit (ocamlPackages) cmdliner cohttp cstruct findlib re rpc xcp-idl ocamlscript;
+  };
+
+  linux-guest-loader = callPackage ../applications/virtualization/xapi/linux-guest-loader {
+    inherit (pythonPackages) python setuptools;
+  };
+
+  xapi = callPackage ../applications/virtualization/xapi/xapi {
+    inherit (ocamlPackages) camlp4 cdrom cmdliner fd-send-recv findlib nbd netdev oclock opasswd ounit rpc rrdd-plugin ssl stdext tapctl tar xcp-idl xcp-inventory xcp-rrd xen-api-client xen-api-libs-transitional xenstore xenstore-clients utop uri re cohttp;
+    xen = xen_xenServer;
+    omake=omake_rc1;
+  };
+
+  xapi-storage-script = callPackage ../applications/virtualization/xapi/xapi-storage-script {
+    inherit (ocamlPackages) async-inotify camlp4 findlib rpc xcp-idl fd-send-recv xcp-inventory;
+  };
+
+  xcp-networkd = callPackage ../applications/virtualization/xapi/xcp-networkd {
+    inherit (ocamlPackages) findlib netlink ounit rpc stdext xcp-idl xcp-inventory xen-api-client xen-api-libs-transitional uri re cohttp;
+  };
+
+  xcp-rrdd = callPackage ../applications/virtualization/xapi/xcp-rrdd {
+    inherit (ocamlPackages) camlp4 findlib oclock rpc rrd-transport xcp-idl xcp-inventory xcp-rrd xen-api-libs-transitional xenops uri re cohttp xenstore-clients xenstore;
+    xen = xen_xenServer;
+  };
+
+  xenopsd = callPackage ../applications/virtualization/xapi/xenopsd {
+    inherit (ocamlPackages) cmdliner cohttp findlib libvirt oclock qmp rpc sexplib uuidm uutf xcp-idl xcp-inventory xcp-rrd xenstore xenstore-clients lwt;
+    xen = xen_xenServer;
+  };
+
   xfe = callPackage ../applications/misc/xfe {
     fox = fox_1_6;
   };

@@ -1,0 +1,17 @@
+diff -uNr xsconsole-0.9.0/Makefile xsconsole-0.9.0-new/Makefile
+--- xsconsole-0.9.0/Makefile	2015-01-02 10:19:11.902987253 +0100
++++ xsconsole-0.9.0-new/Makefile	2015-01-02 10:24:28.047212814 +0100
+@@ -2,10 +2,10 @@
+ # Makefile for xsconsole
+ # Copyright (c) Citrix Systems 2007
+ 
+-PREFIX=$(DESTDIR)/usr
+-LIBDIR=$(DESTDIR)/usr/lib64/
++PREFIX?=$(DESTDIR)/usr
++LIBDIR?=$(DESTDIR)/usr/lib
+ 
+-INSTALL=/usr/bin/install
++INSTALL=install
+ 
+ BIN_MODE := 755
+ LIB_MODE := 644
