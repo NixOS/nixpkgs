@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./build-fix.patch
+    ./p2p-fix.patch
   ];
 
   postInstall = ''
