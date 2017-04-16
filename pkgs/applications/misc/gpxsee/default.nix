@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmakeHook, qttools }:
+{ stdenv, fetchFromGitHub, qmakeHook, qtbase, qttools, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "gpxsee-${version}";
@@ -11,15 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "15f686frxlrmdvh5cc837kx62g0ihqj4vb87i8433g7l5vqkv3lf";
   };
 
-  nativeBuildInputs = [ qmakeHook qttools ];
+  nativeBuildInputs = [ qmakeHook qttools makeQtWrapper ];
 
   preConfigure = ''
+    substituteInPlace src/config.h --replace /usr/share/gpxsee $out/share/gpxsee
     lrelease lang/*.ts
   '';
 
   preFixup = ''
-    mkdir -p $out/bin
-    cp GPXSee $out/bin
+    install -Dm755 GPXSee $out/bin/GPXSee
+    wrapQtProgram $out/bin/GPXSee
+
+    mkdir -p $out/share/gpxsee
+    cp pkg/maps.txt $out/share/gpxsee
   '';
 
   meta = with stdenv.lib; {
