@@ -89,6 +89,7 @@
   ./programs/nano.nix
   ./programs/oblogout.nix
   ./programs/screen.nix
+  ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/shell.nix
   ./programs/spacefm.nix
