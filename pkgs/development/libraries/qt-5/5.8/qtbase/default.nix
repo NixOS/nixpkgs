@@ -39,8 +39,7 @@ stdenv.mkDerivation {
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
     ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)]
-    ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
-    ++ lib.optionals mesaSupported [ ./mkspecs-libgl.patch ];
+    ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch;
 
   postPatch =
     ''
@@ -53,11 +52,14 @@ stdenv.mkDerivation {
       sed -i 's/NO_DEFAULT_PATH//' "src/gui/Qt5GuiConfigExtras.cmake.in"
       sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
     ''
+
     + lib.optionalString mesaSupported ''
-      substituteInPlace mkspecs/common/linux.conf \
-        --replace "@mesa_lib@" "${mesa.out}" \
-        --replace "@mesa_inc@" "${mesa.dev or mesa}"
-    ''+ lib.optionalString stdenv.isDarwin ''
+      sed -i mkspecs/common/linux.conf \
+          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
+          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+    ''
+
+    + lib.optionalString stdenv.isDarwin ''
       sed -i \
           -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
           -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
