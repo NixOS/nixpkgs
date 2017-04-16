@@ -410,6 +410,7 @@ with stdenv.lib;
   MMC_BLOCK_MINORS 32 # 8 is default. Modern gpt tables on eMMC may go far beyond 8.
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
+  RTC_SYSTOHC y # copy (NTP synced) system time to hardware clock
   REGULATOR y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
   RT2800USB_RT55XX y
