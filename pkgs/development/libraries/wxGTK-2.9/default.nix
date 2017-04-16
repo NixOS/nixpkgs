@@ -1,10 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst-plugins-base, GConf, setfile
-, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true
+, withMesa ? true, mesa_glu ? null, mesa_noglu ? null
+, compat24 ? false, compat26 ? true, unicode ? true
 , Carbon ? null, Cocoa ? null, Kernel ? null, QuickTime ? null, AGL ? null
 }:
 
-assert withMesa -> mesa != null;
+assert withMesa -> mesa_glu != null && mesa_noglu != null;
 
 with stdenv.lib;
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]
-    ++ optional withMesa mesa
+    ++ optional withMesa mesa_glu
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,7 +40,7 @@ stdenv.mkDerivation {
       # allow building on 64-bit
       [ "--with-cocoa" "--enable-universal-binaries" "--with-macosx-version-min=10.7" ];
 
-  SEARCH_LIB = optionalString withMesa "${mesa}/lib";
+  SEARCH_LIB = "${mesa_glu.out}/lib ${mesa_noglu.out}/lib ";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
