@@ -1,7 +1,7 @@
-diff -ru glibc-2.16.0-orig/locale/loadarchive.c glibc-2.16.0/locale/loadarchive.c
---- glibc-2.16.0-orig/locale/loadarchive.c	2012-06-30 15:12:34.000000000 -0400
-+++ glibc-2.16.0/locale/loadarchive.c	2012-09-18 11:57:57.277515212 -0400
-@@ -123,6 +123,25 @@
+diff -ru glibc-2.21-orig/locale/loadarchive.c glibc-2.21/locale/loadarchive.c
+--- glibc-2.21-orig/locale/loadarchive.c	2015-05-14 11:44:02.826785677 +0000
++++ glibc-2.21/locale/loadarchive.c	2015-05-14 11:45:11.144816356 +0000
+@@ -124,6 +124,25 @@
  }
  
  
@@ -27,7 +27,7 @@ diff -ru glibc-2.16.0-orig/locale/loadarchive.c glibc-2.16.0/locale/loadarchive.
  /* Find the locale *NAMEP in the locale archive, and return the
     internalized data structure for its CATEGORY data.  If this locale has
     already been loaded from the archive, just returns the existing data
-@@ -202,7 +221,7 @@
+@@ -203,7 +222,7 @@
        archmapped = &headmap;
  
        /* The archive has never been opened.  */
@@ -36,7 +36,7 @@ diff -ru glibc-2.16.0-orig/locale/loadarchive.c glibc-2.16.0/locale/loadarchive.
        if (fd < 0)
  	/* Cannot open the archive, for whatever reason.  */
  	return NULL;
-@@ -393,8 +412,7 @@
+@@ -398,8 +417,7 @@
  	  if (fd == -1)
  	    {
  	      struct stat64 st;
@@ -46,10 +46,10 @@ diff -ru glibc-2.16.0-orig/locale/loadarchive.c glibc-2.16.0/locale/loadarchive.
  	      if (fd == -1)
  		/* Cannot open the archive, for whatever reason.  */
  		return NULL;
-diff -ru glibc-2.16.0-orig/locale/programs/locale.c glibc-2.16.0/locale/programs/locale.c
---- glibc-2.16.0-orig/locale/programs/locale.c	2012-06-30 15:12:34.000000000 -0400
-+++ glibc-2.16.0/locale/programs/locale.c	2012-09-18 11:53:03.719920947 -0400
-@@ -628,6 +628,20 @@
+diff -ru glibc-2.21-orig/locale/programs/locale.c glibc-2.21/locale/programs/locale.c
+--- glibc-2.21-orig/locale/programs/locale.c	2015-05-14 11:44:02.827785678 +0000
++++ glibc-2.21/locale/programs/locale.c	2015-05-14 11:44:53.902806494 +0000
+@@ -629,6 +629,20 @@
  		  ((const struct nameent *) b)->name);
  }
  
@@ -70,7 +70,7 @@ diff -ru glibc-2.16.0-orig/locale/programs/locale.c glibc-2.16.0/locale/programs
  
  static int
  write_archive_locales (void **all_datap, char *linebuf)
-@@ -641,7 +655,7 @@
+@@ -642,7 +656,7 @@
    int fd, ret = 0;
    uint32_t cnt;
  
@@ -79,10 +79,10 @@ diff -ru glibc-2.16.0-orig/locale/programs/locale.c glibc-2.16.0/locale/programs
    if (fd < 0)
      return 0;
  
-diff -ru glibc-2.16.0-orig/locale/programs/locarchive.c glibc-2.16.0/locale/programs/locarchive.c
---- glibc-2.16.0-orig/locale/programs/locarchive.c	2012-06-30 15:12:34.000000000 -0400
-+++ glibc-2.16.0/locale/programs/locarchive.c	2012-09-18 11:53:03.720920942 -0400
-@@ -509,6 +509,20 @@
+diff -ru glibc-2.21-orig/locale/programs/locarchive.c glibc-2.21/locale/programs/locarchive.c
+--- glibc-2.21-orig/locale/programs/locarchive.c	2015-05-14 11:44:02.827785678 +0000
++++ glibc-2.21/locale/programs/locarchive.c	2015-05-14 11:44:53.902806494 +0000
+@@ -553,6 +553,20 @@
    *ah = new_ah;
  }
  
@@ -103,7 +103,7 @@ diff -ru glibc-2.16.0-orig/locale/programs/locarchive.c glibc-2.16.0/locale/prog
  
  void
  open_archive (struct locarhandle *ah, bool readonly)
-@@ -528,7 +542,7 @@
+@@ -578,7 +592,7 @@
    while (1)
      {
        /* Open the archive.  We must have exclusive write access.  */
@@ -111,4 +111,4 @@ diff -ru glibc-2.16.0-orig/locale/programs/locarchive.c glibc-2.16.0/locale/prog
 +      fd = open_nix_locale_archive (archivefname, readonly ? O_RDONLY : O_RDWR);
        if (fd == -1)
  	{
- 	  /* Maybe the file does not yet exist.  */
+ 	  /* Maybe the file does not yet exist? If we are opening
