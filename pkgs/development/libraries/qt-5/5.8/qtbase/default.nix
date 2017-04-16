@@ -38,8 +38,7 @@ stdenv.mkDerivation {
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)]
-    ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch;
+    ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)];
 
   postPatch =
     ''
@@ -249,7 +248,9 @@ stdenv.mkDerivation {
       # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
       # 10.9 which necessitates the above macro definition that mentions
       # 10.10
-    ];
+    ]
+
+    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
 
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
