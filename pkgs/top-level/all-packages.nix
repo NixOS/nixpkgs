@@ -768,6 +768,8 @@ with pkgs;
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
+  clac = callPackage ../applications/misc/clac { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   cli53 = callPackage ../tools/admin/cli53 { };
