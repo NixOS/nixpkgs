@@ -134,6 +134,13 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
 
+    # Get rid of retained dependencies on -dev packages, and remove
+    # some $TMPDIR references to improve binary reproducibility.
+    # Note that the .pyc file of _sysconfigdata.py should be regenerated!
+    for i in $out/lib/python${majorVersion}/_sysconfigdata*.py $out/lib/python${majorVersion}/config-${majorVersion}m*/Makefile; do
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+    done
+
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
     # We rebuild three times, once for each optimization level
