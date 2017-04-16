@@ -5689,6 +5689,8 @@ in {
     };
   };
 
+  diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
+
   requests-cache = buildPythonPackage (rec {
     name = "requests-cache-${version}";
     version = "0.4.13";
