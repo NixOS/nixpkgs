@@ -10374,6 +10374,8 @@ in {
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
+  django-picklefield = callPackage ../development/python-modules/django-picklefield { };
+
   django-raster = callPackage ../development/python-modules/django-raster { };
 
   django_redis = buildPythonPackage rec {
