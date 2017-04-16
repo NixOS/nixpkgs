@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
-, mesa_glu, lv2, mesa, gtk2, cairo, pango, fftwFloat, zita-convolver }:
+, mesa_glu, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
   version = "20161230";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yni9c17kl2pi9lqxip07b6g6lyfii1pch5czp183113gk54fwj5";
   };
 
-  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 mesa gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
+  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
 
   makeFlags = [ "PREFIX=$(out)" "FONTFILE=${freefont_ttf}/share/fonts/truetype/FreeSansBold.ttf" ];
 

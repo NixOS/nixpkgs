@@ -9077,10 +9077,12 @@ with pkgs;
     in mo.drivers
   );
 
+  # Please, avoid using this attribute.  It was meant as transitional hack
+  # for packages that assume that libGLU and libGL live in the same prefix.
+  # Otherwise it's better to use mesa_glu or mesa_noglu, depending on whether
+  # you need libGLU or not (_glu propagates _noglu).
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
-    # FIXME: this causes mesa to have a runtime dependency on
-    # mesa_noglu.dev.
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
     meta = {
       platforms = lib.platforms.unix;
