@@ -63,7 +63,7 @@ let
         Section "Monitor"
           Identifier "${current.name}"
           ${optionalString (previous != []) ''
-          Option "RightOf" "${(head previous).name}"
+          Option "RightOf" "${(last previous).name}"
           ''}
         EndSection
       '';
