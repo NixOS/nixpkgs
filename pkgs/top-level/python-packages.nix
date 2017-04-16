@@ -2524,6 +2524,8 @@ in {
     doCheck = false; # lazy packager
   };
 
+  csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
+
   csvkit = buildPythonPackage rec {
     name = "csvkit-${version}";
     version = "0.9.1";
