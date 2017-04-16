@@ -8,7 +8,7 @@
 , preferGtk2 ? false
 }:
 
-{ stdenv, callPackage, callPackage_i686, buildEnv, fetchurl
+{ stdenv, callPackage, callPackage_i686, fetchurl
 , kernel ? null, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit

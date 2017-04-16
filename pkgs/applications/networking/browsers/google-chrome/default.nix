@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchurl, patchelf, bash
+{ stdenv, fetchurl, patchelf, bash
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
