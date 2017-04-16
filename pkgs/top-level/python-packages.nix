@@ -23612,6 +23612,8 @@ in {
     };
   };
 
+  serpy = callPackage ../development/python-modules/serpy { };
+
   sympy = buildPythonPackage rec {
     name = "sympy-1.0";
 
