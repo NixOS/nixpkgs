@@ -13382,6 +13382,8 @@ with pkgs;
 
     bbdb3 = callPackage ../applications/editors/emacs-modes/bbdb/3.nix {};
 
+    bbdbVcardExport = callPackage ../applications/editors/emacs-modes/bbdb-vcard-export { };
+
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
