@@ -13544,6 +13544,8 @@ with pkgs;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
+  enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
+
   epdfview = callPackage ../applications/misc/epdfview { };
 
   inherit (gnome3) epiphany;
