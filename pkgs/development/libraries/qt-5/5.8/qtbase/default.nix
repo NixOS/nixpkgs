@@ -95,110 +95,124 @@ stdenv.mkDerivation {
 
   # -no-eglfs, -no-directfb, -no-linuxfb and -no-kms because of the current minimalist mesa
   # TODO Remove obsolete and useless flags once the build will be totally mastered
-  configureFlags = ''
-    -verbose
-    -confirm-license
-    -opensource
+  configureFlags =
+    [
+      "-verbose"
+      "-confirm-license"
+      "-opensource"
 
-    -release
-    -shared
-    ${lib.optionalString developerBuild "-developer-build"}
-    -accessibility
-    -optimized-qmake
-    -strip
-    -no-reduce-relocations
-    -system-proxies
-    -pkg-config
+      "-release"
+      "-shared"
+      "-accessibility"
+      "-optimized-qmake"
+      "-strip"
+      "-no-reduce-relocations"
+      "-system-proxies"
+      "-pkg-config"
+    ]
+    ++ lib.optional developerBuild "-developer-build"
 
-    -gui
-    -widgets
-    -opengl desktop
-    -qml-debug
-    -icu
-    -pch
+    ++ [
+      "-gui"
+      "-widgets"
+      "-opengl desktop"
+      "-qml-debug"
+      "-icu"
+      "-pch"
+    ]
 
-    ${lib.optionalString (!system-x86_64) "-no-sse2"}
-    -no-sse3
-    -no-ssse3
-    -no-sse4.1
-    -no-sse4.2
-    -no-avx
-    -no-avx2
-    -no-mips_dsp
-    -no-mips_dspr2
+    ++ [
+      ''${lib.optionalString (!system-x86_64) "-no"}-sse2''
+      "-no-sse3"
+      "-no-ssse3"
+      "-no-sse4.1"
+      "-no-sse4.2"
+      "-no-avx"
+      "-no-avx2"
+      "-no-mips_dsp"
+      "-no-mips_dspr2"
+    ]
 
-    -system-zlib
-    -system-libjpeg
-    -system-harfbuzz
-    -system-pcre
-    -openssl-linked
+    ++ [
+      "-system-zlib"
+      "-system-libjpeg"
+      "-system-harfbuzz"
+      "-system-pcre"
+      "-openssl-linked"
+      "-system-sqlite"
+      ''-${if mysql != null then "plugin" else "no"}-sql-mysql''
+      ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
-    -system-sqlite
-    -${if mysql != null then "plugin" else "no"}-sql-mysql
-    -${if postgresql != null then "plugin" else "no"}-sql-psql
+      "-make libs"
+      "-make tools"
+      ''-${lib.optionalString (buildExamples == false) "no"}make examples''
+      ''-${lib.optionalString (buildTests == false) "no"}make tests''
+      "-v"
+    ]
 
-    -make libs
-    -make tools
-    -${lib.optionalString (buildExamples == false) "no"}make examples
-    -${lib.optionalString (buildTests == false) "no"}make tests
-    -v
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    -rpath
-    -glib
-    -xcb
-    -qpa xcb
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "-rpath"
+      "-glib"
+      "-xcb"
+      "-qpa xcb"
+      ''-${lib.optionalString (cups == null) "no-"}cups''
 
-    -${lib.optionalString (cups == null) "no-"}cups
+      "-no-eglfs"
+      "-no-directfb"
+      "-no-linuxfb"
+      "-no-kms"
 
-    -no-eglfs
-    -no-directfb
-    -no-linuxfb
-    -no-kms
+      "-libinput"
+      "-gtk"
+      "-system-libpng"
+      "-system-xcb"
+      "-system-xkbcommon"
+      "-dbus-linked"
+    ]
 
-    -libinput
-    -gtk
-    -system-libpng
-    -system-xcb
-    -system-xkbcommon
-    -dbus-linked
-  '' + lib.optionalString stdenv.isDarwin ''
-    -platform macx-clang
-    -no-use-gold-linker
-    -no-fontconfig
-    -qt-freetype
-    -qt-libpng
-  '';
+    ++ lib.optionals stdenv.isDarwin [
+      "-platform macx-clang"
+      "-no-use-gold-linker"
+      "-no-fontconfig"
+      "-qt-freetype"
+      "-qt-libpng"
+    ];
 
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  propagatedBuildInputs = [
-    libxml2 libxslt openssl pcre16 sqlite zlib
+  propagatedBuildInputs =
+    [
+      libxml2 libxslt openssl pcre16 sqlite zlib
 
-    # Text rendering
-    harfbuzz icu
+      # Text rendering
+      harfbuzz icu
 
-    # Image formats
-    libjpeg libpng libtiff
-  ]
-  ++ lib.optional mesaSupported mesa
-  ++ lib.optionals (!stdenv.isDarwin) [
-    dbus glib udev
+      # Image formats
+      libjpeg libpng libtiff
+    ]
 
-    # Text rendering
-    fontconfig freetype
+    ++ lib.optional mesaSupported mesa
 
-    # X11 libs
-    libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-    xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AGL AppKit ApplicationServices Carbon Cocoa
-    CoreAudio CoreBluetooth CoreLocation CoreServices
-    DiskArbitration Foundation OpenGL
-    darwin.cf-private darwin.libobjc libiconv
-  ]);
+    ++ lib.optionals (!stdenv.isDarwin) [
+      dbus glib udev
+
+      # Text rendering
+      fontconfig freetype
+
+      # X11 libs
+      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
+      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+    ]
+
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      AGL AppKit ApplicationServices Carbon Cocoa
+      CoreAudio CoreBluetooth CoreLocation CoreServices
+      DiskArbitration Foundation OpenGL
+      darwin.cf-private darwin.libobjc libiconv
+    ]);
 
   buildInputs = [ ]
     ++ lib.optionals (!stdenv.isDarwin) [ gtk3 libinput ]
@@ -207,7 +221,9 @@ stdenv.mkDerivation {
     ++ lib.optional (mysql != null) mysql.lib
     ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkgconfig python2 ] ++ lib.optional (!stdenv.isDarwin) patchelf;
+  nativeBuildInputs =
+    [ bison flex gperf lndir perl pkgconfig python2 ]
+    ++ lib.optional (!stdenv.isDarwin) patchelf;
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE =
@@ -222,8 +238,10 @@ stdenv.mkDerivation {
         then ''-DNIXPKGS_LIBDBUS="${dbus.lib}/lib/libdbus-1"''
         else ''-DNIXPKGS_LIBDBUS=""'')
     ]
+
     ++ lib.optional mesaSupported
        ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+
     ++ lib.optionals stdenv.isDarwin
     [
       "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
@@ -269,11 +287,13 @@ stdenv.mkDerivation {
           popd
       fi
     ''
+
     # fixup .pc file (where to find 'moc' etc.)
     + lib.optionalString (!stdenv.isDarwin) ''
       sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
           -e "/^host_bins=/ c host_bins=$dev/bin"
     ''
+
     # Don' move .prl files on darwin because they end up in
     # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
     # use of lndir in the qtbase setup-hook. On Linux, the .prl files
