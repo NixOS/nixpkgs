@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/quaternion.desktop \
       --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {
