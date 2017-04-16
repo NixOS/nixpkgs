@@ -10460,6 +10460,8 @@ in {
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
+  django-sr = callPackage ../development/python-modules/django-sr { };
+
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
     version = "0.17.0";
