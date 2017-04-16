@@ -22673,6 +22673,8 @@ in {
     };
   };
 
+  sampledata = callPackage ../development/python-modules/sampledata { };
+
   seqdiag = buildPythonPackage rec {
     name = "seqdiag-0.9.4";
 
