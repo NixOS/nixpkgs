@@ -10423,6 +10423,8 @@ in {
     };
   };
 
+  django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
+
   django_silk = buildPythonPackage rec {
     name = "django-silk-${version}";
     version = "0.5.6";
