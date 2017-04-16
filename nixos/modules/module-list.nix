@@ -506,6 +506,7 @@
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix
+  ./services/scheduling/aurora-scheduler.nix
   ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
