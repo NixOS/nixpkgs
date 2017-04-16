@@ -62,6 +62,10 @@ installPhase() {
         mkdir -p $bin/lib/xorg/modules/extensions
         cp -p libglx.so.* $bin/lib/xorg/modules/extensions
 
+        ln -snf $out/lib/xorg/modules/extensions/libglx.so.$versionNumber $out/lib/xorg/modules/extensions/libglx.so
+
+        patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.$versionNumber
+
         # Install the kernel module.
         mkdir -p $bin/lib/modules/$kernelVersion/misc
         for i in $(find ./kernel -name '*.ko'); do
