@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
       -demosdir $TMPDIR/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
+      -sysconfdir /run/current-system/sw/etc/xdg
     "
   '' + optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
