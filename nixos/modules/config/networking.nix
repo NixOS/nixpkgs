@@ -189,9 +189,9 @@ in
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =
           ''
-            127.0.0.1 localhost
+            127.0.0.1 localhost ${cfg.hostName}
             ${optionalString cfg.enableIPv6 ''
-              ::1 localhost
+              ::1 localhost ${cfg.hostName}
             ''}
             ${cfg.extraHosts}
           '';
