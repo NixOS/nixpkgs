@@ -12734,6 +12734,8 @@ with pkgs;
 
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
+  uni-vga = callPackage ../data/fonts/uni-vga { };
+
   unifont = callPackage ../data/fonts/unifont { };
 
   unifont_upper = callPackage ../data/fonts/unifont_upper { };
