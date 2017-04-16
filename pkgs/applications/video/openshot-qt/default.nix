@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , doxygen, python3Packages, libopenshot
-, makeQtWrapper }:
+, makeQtWrapper, wrapGAppsHook, gtk3 }:
 
 python3Packages.buildPythonApplication rec {
   name = "openshot-qt-${version}";
@@ -13,9 +13,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "10j3p10q66m9nhzcd8315q1yiqscidkjbm474mllw7c281vacvzw";
   };
 
-  nativeBuildInputs = [ doxygen ];
+  nativeBuildInputs = [ doxygen wrapGAppsHook ];
+
+  buildInputs = [ gtk3 ];
 
   propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5 sip httplib2 pyzmq ];
+
 
   preConfigure = ''
     # tries to create caching directories during install
