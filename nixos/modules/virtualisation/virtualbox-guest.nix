@@ -50,8 +50,7 @@ in
       { description = "VirtualBox Guest Services";
 
         wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-vboxguest.device" ];
-        after = [ "dev-vboxguest.device" ];
+        bindsTo = [ "dev-vboxguest.device" ];
 
         unitConfig.ConditionVirtualization = "oracle";
 
