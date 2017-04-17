@@ -548,6 +548,12 @@ my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiD
 my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
 symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot";
 
+# HOTFIX: Do not install GRUB for now.
+if ($requireNewInstall != 0) {
+    die "You do not want to instal the GRUB at the moment. Something is broken and it will break your system!\n";
+}
+
+
 # install non-EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
     foreach my $dev (@deviceTargets) {
