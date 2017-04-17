@@ -47,6 +47,8 @@ let
       sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
     };
 
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin "sed -i 's/MACOSX_DEPLOYMENT_TARGET=10.4/MACOSX_DEPLOYMENT_TARGET=10.5/' Makefile";
+
     buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
 
     postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
