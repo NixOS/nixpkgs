@@ -34,7 +34,6 @@ let
 
   cmdlineArgs = cfg.extraFlags ++ [
     "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${prometheusYml}"
     "-web.listen-address=${cfg.listenAddress}"
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
@@ -457,13 +456,28 @@ in {
     };
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
+
+      preStart = ''
+        cp ${prometheusYml} ${cfg.dataDir}/prometheus.yml
+        chown ${promUser} ${cfg.dataDir}/prometheus.yml
+      '';
+
       script = ''
-        #!/bin/sh
         exec ${pkgs.prometheus}/bin/prometheus \
+          -config.file=${cfg.dataDir}/prometheus.yml \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
+
+      restartTriggers = [ prometheusYml ];
+      reloadIfChanged = true;
+      reload = ''
+        cp ${prometheusYml} ${cfg.dataDir}/prometheus.yml
+        ${pkgs.coreutils}/bin/kill -HUP $MAINPID
+      '';
+
       serviceConfig = {
+        PermissionsStartOnly = true;
         User = promUser;
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
