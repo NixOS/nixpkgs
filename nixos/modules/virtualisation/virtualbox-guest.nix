@@ -53,7 +53,8 @@ in
         requires = [ "dev-vboxguest.device" ];
         after = [ "dev-vboxguest.device" ];
 
-        unitConfig.ConditionVirtualization = "oracle";
+        #Deactivate for as long as "systemd-detect-virt" returns "kvm" within a VirtualBox
+        #unitConfig.ConditionVirtualization = "oracle";
 
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
       };
