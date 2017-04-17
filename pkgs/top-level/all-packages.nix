@@ -16707,6 +16707,8 @@ with pkgs;
     lua = lua5;
   };
 
+  instead-launcher = callPackage ../games/instead-launcher { };
+
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
 
   klavaro = callPackage ../games/klavaro {};
