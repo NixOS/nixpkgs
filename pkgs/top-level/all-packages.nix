@@ -243,7 +243,6 @@ let
     else
       stdenv);
 
-
   ### BUILD SUPPORT
 
   attrSetToDir = arg: import ../build-support/upstream-updater/attrset-to-dir.nix {
@@ -1612,7 +1611,8 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = callPackage ../development/web/nodejs { };
+  #nodejs = callPackage ../development/web/nodejs { };
+
   nodejs-unstable = callPackage ../development/web/nodejs { unstableVersion = true; };
 
   nodePackages = callPackage ./node-packages.nix {
@@ -13014,5 +13014,12 @@ let
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
   hbase = callPackage ../servers/hbase {};
+
+
+  ### Custom packages.
+  nodejs = callPackage ../ai2/nodejs {};
+  grobid-home = callPackage ../ai2/grobid-home {};
+  grobid-native-libs = callPackage ../ai2/grobid-native-libs {};
+  grafana2 = callPackage ../development/tools/misc/grafana2 {};
 
 }; in self; in pkgs
