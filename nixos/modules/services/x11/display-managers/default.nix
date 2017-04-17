@@ -94,12 +94,12 @@ let
       ${cfg.displayManager.sessionCommands}
 
       # Allow the user to execute commands at the beginning of the X session.
-      if test -f ~/.xprofile; then
+      if test -f "$(readlink -f ~/.xprofile)"; then
           source ~/.xprofile
       fi
 
       # Allow the user to setup a custom session type.
-      if test -x ~/.xsession; then
+      if test -x "$(readlink -f ~/.xsession)"; then
           exec ~/.xsession
       else
           if test "$sessionType" = "custom"; then
