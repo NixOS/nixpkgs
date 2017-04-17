@@ -19,7 +19,7 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      (if config.environment.multilibGlibc then pkgs.glibc_multi else pkgs.glibc) # for ldd, getent
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -78,6 +78,12 @@ in
         default = [ ];
         example = [ "doc" "info" "devdoc" ];
         description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+      };
+
+      multilibGlibc = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Install multilib version of Glibc into system path";
       };
 
     };
