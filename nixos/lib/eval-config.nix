@@ -24,8 +24,17 @@
   check ? true
 , prefix ? []
 , lib ? import ../../lib
-}:
+}@args: if !(builtins ? modulePath) then let
+  scope = {
+    scopedImport = newScope: scopedImport (scope // newScope);
 
+    import = scopedImport scope;
+
+    modulePath = ../modules;
+
+    builtins = builtins // (removeAttrs scope [ "builtins" ]);
+  };
+in scopedImport scope ./eval-config.nix args else
 let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                    in if e == "" then [] else [(import (builtins.toPath e))];
