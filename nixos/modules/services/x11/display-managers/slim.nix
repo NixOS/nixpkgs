@@ -18,6 +18,7 @@ let
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
       reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
       ${optionalString (cfg.defaultUser != null) ("default_user " + cfg.defaultUser)}
+      ${optionalString (cfg.defaultUser != null) ("focus_password yes")}
       ${optionalString cfg.autoLogin "auto_login yes"}
       ${cfg.extraConfig}
     '';
