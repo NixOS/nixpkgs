@@ -37,8 +37,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)];
+    copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
   postPatch =
     ''
@@ -280,15 +279,33 @@ stdenv.mkDerivation {
     ''
       # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+    ''
 
-      # Move libtool archives and qmake projects
+    # Move libtool archives into $dev
+    + ''
       if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
           pushd "''${!outputLib}"
-          find lib -name '*.a' -o -name '*.la'${if stdenv.isDarwin then "" else "-o -name '*.prl'"} | \
-              while read -r file; do
-                  mkdir -p "''${!outputDev}/$(dirname "$file")"
-                  mv "''${!outputLib}/$file" "''${!outputDev}/$file"
-              done
+          find lib -name '*.a' -o -name '*.la' | while read -r file; do
+              mkdir -p "''${!outputDev}/$(dirname "$file")"
+              mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+          done
+          popd
+      fi
+    ''
+
+    # Move qmake project files into $dev.
+    # Don't move .prl files on darwin because they end up in
+    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
+    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
+    # are in lib, and so do not cause a subsequent recreation of deep
+    # framework directory trees.
+    + lib.optionalString (!stdenv.isDarwin) ''
+      if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
+          pushd "''${!outputLib}"
+          find lib -name '*.prl' | while read -r file; do
+              mkdir -p "''${!outputDev}/$(dirname "$file")"
+              mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+          done
           popd
       fi
     ''
@@ -299,11 +316,6 @@ stdenv.mkDerivation {
           -e "/^host_bins=/ c host_bins=$dev/bin"
     ''
 
-    # Don' move .prl files on darwin because they end up in
-    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
-    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
-    # are in lib, and so do not cause a subsequent recreation of deep
-    # framework directory trees.
     + lib.optionalString stdenv.isDarwin ''
       fixDarwinDylibNames_rpath() {
         local flags=()

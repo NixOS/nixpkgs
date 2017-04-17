@@ -8,3 +8,4 @@ compose-search-path.patch
 libressl.patch
 qpa-plugin-path.patch
 dlopen-gl.patch
+cmake-paths.patch
