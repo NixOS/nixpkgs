@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://tango.freedesktop.org/Standard_Icon_Naming_Specification;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }
