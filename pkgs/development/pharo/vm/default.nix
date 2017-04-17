@@ -1,27 +1,26 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, makeDesktopItem } @args:
+{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, makeDesktopItem, autoreconfHook, gcc6, fetchFromGitHub } @args:
 
-rec {
-  pharo-vm-build = import ./build-vm.nix args;
+let pharo-vm-build = import ./build-vm.nix args; in
 
-  base-url = http://files.pharo.org/vm/src/vm-unix-sources/blessed;
-
-  pharo-no-spur = pharo-vm-build rec {
-    version = "2016.02.18";
-    name = "pharo-vm-i386-${version}";
+{
+  pharo-vm = pharo-vm-build rec {
+    name = "pharo-vm";
+    version = "git.${revision}";
     binary-basename = "pharo-vm";
-    src = fetchurl {
-      url = "${base-url}/pharo-vm-${version}.tar.bz2";
-      sha256 = "16n2zg7v2s1ml0vvpbhkw6khmgn637sr0d7n2b28qm5yc8pfhcj4";
+    src = fetchFromGitHub {
+      owner = "pharo-project";
+      repo = "pharo-vm";
+      rev = revision;
+      sha256 = "114ydx015i8sg4xwy1hkb7vwkcxl93h5vqz4bry46x2gnvsay7yh";
     };
-  };
-
-  pharo-spur = pharo-vm-build rec {
-    version = "2016.07.16";
-    name = "pharo-vm-spur-i386-${version}";
-    binary-basename = "pharo-spur-vm";
-    src = fetchurl {
-      url = "${base-url}/pharo-vm-spur-${version}.tar.bz2";
-      sha256 = "07nk4w5wh7gcf27cch5paqp9zdlshnknpv4y7imxlkjd76viac2b";
-    };
+    # This metadata will be compiled into the VM and introspectable
+    # from Smalltalk. This has been manually extracted from 'git log'.
+    #
+    # The build would usually generate this automatically using
+    # opensmalltalk-vm/.git_filters/RevDateURL.smudge but that script
+    # is too impure to run from nix.
+    revision = "1c38b03fb043a2962f30f080db5b1292b5b7badb";
+    sourceDate = "Wed Apr 12 19:25:16 2017 +0200";
+    sourceURL  = "https://github.com/pharo-project/pharo-vm";
   };
 }
