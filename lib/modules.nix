@@ -416,11 +416,12 @@ rec {
   */
   filterOverrides = defs:
     let
+      defs' = filter (def: def.value._type or "" != "user-defined") defs;
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
-      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
-      strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
-    in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
+      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs';
+      strip = def: if def.value._type or "" == "override" || def.value._type or "" == "user-defined" then def // { value = def.value.content; } else def;
+    in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) (if highestPrio < 1000 then defs else defs');
 
   /* Sort a list of properties.  The sort priority of a property is
      1000 by default, but can be overriden by wrapping the property
@@ -463,6 +464,11 @@ rec {
   mkIf = condition: content:
     { _type = "if";
       inherit condition content;
+    };
+
+  mkIfUserDefined = content:
+    { _type = "user-defined";
+      inherit content;
     };
 
   mkAssert = assertion: message: content:
