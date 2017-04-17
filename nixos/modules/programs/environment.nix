@@ -32,7 +32,6 @@ in
     environment.profileRelativeEnvVars =
       { PATH = [ "/bin" "/sbin" "/lib/kde4/libexec" ];
         INFOPATH = [ "/info" "/share/info" ];
-        PKG_CONFIG_PATH = [ "/lib/pkgconfig" ];
         TERMINFO_DIRS = [ "/share/terminfo" ];
         PERL5LIB = [ "/lib/perl5/site_perl" ];
         KDEDIRS = [ "" ];
