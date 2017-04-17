@@ -1,12 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "t1utils-1.39";
+  version = "1.39";
+  name = "t1utils-${version}";
 
-  src = fetchurl {
-    url = "http://www.lcdf.org/type/${name}.tar.gz";
-    sha256 = "1i6ln194ns2g4j5zjlj4bfzxpkfpnxvy37n9baq3hywjqkjz7bhg";
+  src = fetchFromGitHub {
+    owner = "kohler";
+    repo = "t1utils";
+    rev = "v${version}";
+    sha256 = "02n4dzxa8fz0dbxari7xh6cq66x3az6g55fq8ix2bfmww42s4v2r";
   };
+
+  buildInputs = [ autoconf automake ];
+
+  preConfigure = "./bootstrap.sh";
 
   meta = with stdenv.lib; {
     description = "Collection of simple Type 1 font manipulation programs";
