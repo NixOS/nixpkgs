@@ -547,6 +547,8 @@ with pkgs;
 
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
+  glyr = callPackage ../tools/audio/glyr { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
@@ -562,8 +564,6 @@ with pkgs;
   };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
-
-  install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
@@ -661,6 +661,10 @@ with pkgs;
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
+
+  quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
+
+  tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
@@ -773,6 +777,8 @@ with pkgs;
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
+  
+  clac = callPackage ../tools/misc/clac {};
 
   clasp = callPackage ../tools/misc/clasp { };
 
@@ -945,6 +951,8 @@ with pkgs;
   gbsplay = callPackage ../applications/audio/gbsplay { };
 
   gdrivefs = python27Packages.gdrivefs;
+
+  gdrive = callPackage ../applications/networking/gdrive { };
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
@@ -1727,6 +1735,8 @@ with pkgs;
       pillow;
   };
 
+  fanficfare = callPackage ../tools/text/fanficfare { };
+
   fastd = callPackage ../tools/networking/fastd { };
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
@@ -2492,6 +2502,8 @@ with pkgs;
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jsduck = callPackage ../development/tools/jsduck { };
+
+  jucipp = callPackage ../applications/editors/jucipp { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
@@ -3509,7 +3521,9 @@ with pkgs;
     libcap = if stdenv.isDarwin then null else libcap;
   };
 
-  pinentry_mac = callPackage ../tools/security/pinentry-mac { };
+  pinentry_mac = callPackage ../tools/security/pinentry-mac {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
@@ -5104,7 +5118,7 @@ with pkgs;
     cross = null;
     libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
+    isl = isl_0_17;
   }));
 
   gfortran = gfortran5;
@@ -5247,6 +5261,8 @@ with pkgs;
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
   purescript = haskell.lib.justStaticExecutables haskellPackages.purescript;
+  psc-package = haskell.lib.justStaticExecutables
+    (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
   inherit (ocamlPackages) haxe;
 
@@ -5594,6 +5610,8 @@ with pkgs;
 
   cargo = rust.cargo;
   rustc = rust.rustc;
+
+  cargo-edit = callPackage ../tools/package-management/cargo-edit { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
@@ -6425,6 +6443,8 @@ with pkgs;
   compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
+
+  conan = callPackage ../development/tools/build-managers/conan { };
 
   cookiecutter = pythonPackages.cookiecutter;
 
@@ -7758,9 +7778,15 @@ with pkgs;
 
   gnutls = gnutls35;
 
-  gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
+  gnutls35 = callPackage
+    (if stdenv.isDarwin
+      # Avoid > 3.5.10 due to frameworks for now; see discussion on:
+      # https://github.com/NixOS/nixpkgs/commit/d6454e6a1
+      then ../development/libraries/gnutls/3.5.10.nix
+      else ../development/libraries/gnutls/3.5.nix)
+    {
+      guileBindings = config.gnutls.guile or false;
+    };
 
   gnutls-kdh = callPackage ../development/libraries/gnutls-kdh/3.5.nix {
     guileBindings = config.gnutls.guile or false;
@@ -7867,6 +7893,10 @@ with pkgs;
 
   gtk-mac-integration = callPackage ../development/libraries/gtk-mac-integration {
     gtk = gtk2;
+  };
+
+  gtk-mac-integration-gtk3 = callPackage ../development/libraries/gtk-mac-integration {
+    gtk = gtk3;
   };
 
   gtk-mac-bundler = callPackage ../development/tools/gtk-mac-bundler {};
@@ -9075,10 +9105,12 @@ with pkgs;
     in mo.drivers
   );
 
+  # Please, avoid using this attribute.  It was meant as transitional hack
+  # for packages that assume that libGLU and libGL live in the same prefix.
+  # Otherwise it's better to use mesa_glu or mesa_noglu, depending on whether
+  # you need libGLU or not (_glu propagates _noglu).
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
-    # FIXME: this causes mesa to have a runtime dependency on
-    # mesa_noglu.dev.
     paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu mesa_glu.dev ];
     meta = {
       platforms = lib.platforms.unix;
@@ -9721,6 +9753,8 @@ with pkgs;
   };
 
   sad = callPackage ../applications/science/logic/sad { };
+
+  safefile = callPackage ../development/libraries/safefile {};
 
   sbc = callPackage ../development/libraries/sbc { };
 
@@ -10605,6 +10639,8 @@ with pkgs;
 
   bosun = callPackage ../servers/monitoring/bosun { };
   scollector = bosun;
+
+  cayley = callPackage ../servers/cayley { };
 
   charybdis = callPackage ../servers/irc/charybdis {};
   charybdis-darkfasel = callPackage ../servers/irc/charybdis/darkfasel.nix {};
@@ -12470,6 +12506,8 @@ with pkgs;
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
+  envypn-font = callPackage ../data/fonts/envypn-font { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
@@ -13797,15 +13835,15 @@ with pkgs;
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer {
-      debug = config.flashplayer.debug or false;
+    debug = config.flashplayer.debug or false;
   };
 
   flashplayer-standalone = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer/standalone.nix {
-      debug = config.flashplayer.debug or false;
+    debug = config.flashplayer.debug or false;
   };
 
   flashplayer-standalone-debugger = flashplayer-standalone.override {
-      debug = true;
+    debug = true;
   };
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
@@ -13854,6 +13892,8 @@ with pkgs;
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   getxbook = callPackage ../applications/misc/getxbook {};
+
+  ghq = gitAndTools.ghq;
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome2) libart_lgpl;
@@ -17241,6 +17281,8 @@ with pkgs;
 
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
+  diamond = callPackage ../applications/science/biology/diamond { };
+
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
 
   emboss = callPackage ../applications/science/biology/emboss { };
@@ -18232,10 +18274,10 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_2;
+    terraform_0_9_3;
 
   terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_2;
+  terraform_0_9 = terraform_0_9_3;
   terraform = terraform_0_9;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {
@@ -18531,4 +18573,11 @@ with pkgs;
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   messenger-for-desktop = callPackage ../applications/networking/instant-messengers/messenger-for-desktop {};
+
+  NSPlist = callPackage ../development/libraries/NSPlist {};
+
+  PlistCpp = callPackage ../development/libraries/PlistCpp {};
+
+  xib2nib = callPackage ../development/tools/xib2nib {};
+
 }

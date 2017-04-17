@@ -228,7 +228,7 @@ in
         ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
       }
 
-      allow_registration = ${ if cfg.allowRegistration then "true" else "false" };
+      allow_registration = ${boolToString cfg.allowRegistration};
 
       ${ optionalString cfg.modules.console "console_enabled = true;" }
 
@@ -253,7 +253,7 @@ in
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         VirtualHost "${v.domain}"
-          enabled = ${if v.enabled then "true" else "false"};
+          enabled = ${boolToString v.enabled};
           ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
           ${ v.extraConfig }
         '') cfg.virtualHosts) }

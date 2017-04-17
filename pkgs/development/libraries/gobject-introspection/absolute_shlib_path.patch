@@ -57,15 +57,16 @@ diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
 index 838d343..ca7fc0d 100644
 --- a/giscanner/shlibs.py
 +++ b/giscanner/shlibs.py
-@@ -53,10 +53,24 @@ def _resolve_libtool(options, binary, libraries):
+@@ -53,10 +53,27 @@ def _resolve_libtool(options, binary, libraries):
  # Match absolute paths on OS X to conform to how libraries are usually
  # referenced on OS X systems.
  def _ldd_library_pattern(library_name):
 +    nix_store_dir = re.escape('@nixStoreDir@'.rstrip('/'))
      pattern = "(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
--    if platform.system() == 'Darwin':
--        pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+     if platform.system() == 'Darwin':
+         pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
 -    return re.compile(pattern % re.escape(library_name))
++        return re.compile(pattern % re.escape(library_name))
 +    pattern = r'''
 +        (
 +          (?:
@@ -85,7 +86,7 @@ index 838d343..ca7fc0d 100644
  
  
  # This is a what we do for non-la files. We assume that we are on an
-@@ -115,7 +129,11 @@ def _resolve_non_libtool(options, binary, libraries):
+@@ -115,7 +132,11 @@ def _resolve_non_libtool(options, binary, libraries):
                  m = pattern.search(line)
                  if m:
                      del patterns[library]

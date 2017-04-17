@@ -23,14 +23,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.3";
+  version = "1.0.7";
   name = "handbrake-${version}";
 
   src = fetchFromGitHub {
     owner  = "HandBrake";
     repo   = "HandBrake";
     rev    = "${version}";
-    sha256 = "1r8yzs0xih03p5ybx5096zkvlwxhcmg34047awmda1wq3z3rdjh5";
+    sha256 = "1pdrvicq40s8n23n6k8k097kkjs3ah5wbz1mvxnfy3h2mh5rwk57";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
   ]);
 
   dontUseCmakeConfigure = true;
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     patchShebangs scripts
@@ -83,6 +85,11 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd build
+  '';
+
+  # icon-theme.cache belongs in the icon theme, not in individual packages
+  postInstall = ''
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

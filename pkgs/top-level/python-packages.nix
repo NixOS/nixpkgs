@@ -3024,11 +3024,10 @@ in {
         to do lots of things, you're probably outside the use cases. Either
         trust those users, or don't.
       '';
-      homepage = https://github.com/jsocol/bleach;
-      downloadPage = https://github.com/jsocol/bleach/releases;
+      homepage = https://github.com/mozilla/bleach;
+      downloadPage = https://github.com/mozilla/bleach/releases;
       license = licenses.asl20;
       maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.linux;
     };
   };
 
@@ -13398,6 +13397,10 @@ in {
       license = with licenses; [ lgpl21 ];
     };
   };
+  
+  iso-639 = callPackage ../development/python-modules/iso-639 {};
+  
+  iso3166 = callPackage ../development/python-modules/iso3166 {};
 
   iso8601 = buildPythonPackage rec {
     name = "iso8601-${version}";
@@ -20885,11 +20888,11 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-1.9.5";
+    name = "PyICU-1.9.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "16rmxy9y0qhqqna2v49i7nzwm09as699rbyvh4raw7w602w55c3k";
+      sha256 = "0l151zhhyiazzdz8skpxgrw1x4nqa9pq2cwni6d97anmg97i7hn5";
     };
 
     buildInputs = [ pkgs.icu ];
@@ -29150,8 +29153,7 @@ EOF
     };
 
     propagatedBuildInputs = with self; [ cffi ];
-    buildInputs = [ pkgs.libspotify ]
-      ++ stdenv.lib.optional stdenv.isDarwin pkgs.install_name_tool;
+    buildInputs = [ pkgs.libspotify ];
 
     # python zip complains about old timestamps
     preConfigure = ''
@@ -32432,6 +32434,12 @@ EOF
   snakeviz = callPackage ../development/python-modules/snakeviz { };
 
   nitpick = callPackage ../applications/version-management/nitpick { };
+
+  pluginbase = callPackage ../development/python-modules/pluginbase { };
+
+  node-semver = callPackage ../development/python-modules/node-semver { };
+
+  distro = callPackage ../development/python-modules/distro { };
 
 });
 

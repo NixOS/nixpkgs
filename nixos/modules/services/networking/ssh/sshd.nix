@@ -314,8 +314,6 @@ in
 
         UsePAM yes
 
-        UsePrivilegeSeparation sandbox
-
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''
           Port ${toString port}

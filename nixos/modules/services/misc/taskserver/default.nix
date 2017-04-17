@@ -128,7 +128,7 @@ let
         certBits = cfg.pki.auto.bits;
         clientExpiration = cfg.pki.auto.expiration.client;
         crlExpiration = cfg.pki.auto.expiration.crl;
-        isAutoConfig = if needToCreateCA then "True" else "False";
+        isAutoConfig = boolToString needToCreateCA;
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
       from setuptools import setup

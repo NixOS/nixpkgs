@@ -16,8 +16,8 @@ let
   gssapiSrc = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
-        + "/patches/gssapi.patch?id=255b8554a50b5c75fca63f76b1ac837c0d4fb7aa";
-    sha256 = "0yg9iq7vb2fkvy36ar0jxk29pkw0h3dhv5vn8qncc3pgwx3617n2";
+        + "/patches/gssapi.patch?id=a18d56bd84f04292ec9178b4b17ef6d56a0c7aef";
+    sha256 = "1sb929lfc3s45km2vpylmlbb6mpqcbr74xl6gx2s4cgnsrfd9kp3";
   };
 
 in
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-7_4_P1.tar.gz";
-        sha256 = "1ppz5fm3ddpbz4k81wpdzwqj6wbx58wwdm6wz41vnr7vhar7wk83";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_5_P1.tar.gz";
+        sha256 = "1hasdcfjl6xf5nbbbvqyyq5v7ad10nywrq89j7naxz9wln58nhnn";
       }
     else
       fetchurl {
