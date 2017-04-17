@@ -45,7 +45,7 @@ rec {
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
   markBroken = drv: overrideCabal drv (drv: { broken = true; });
-  markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
+  markBrokenVersion = version: drv: if drv.version == version then markBroken drv else drv;
 
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });
