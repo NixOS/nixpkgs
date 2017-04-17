@@ -29,6 +29,7 @@
 , libgphoto2
 , libkipi
 , liblqr1
+, libqtav
 , libusb1
 , marble
 , mysql
@@ -83,6 +84,7 @@ stdenv.mkDerivation rec {
     libgphoto2
     libkipi
     liblqr1
+    libqtav
     libusb1
     marble.unwrapped
     mysql
@@ -99,6 +101,7 @@ stdenv.mkDerivation rec {
     "-DLIBUSB_INCLUDE_DIR=${libusb1.dev}/include/libusb-1.0"
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
+    "-DENABLE_MEDIAPLAYER=1"
   ];
 
   fixupPhase = ''

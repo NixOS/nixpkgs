@@ -9592,6 +9592,10 @@ with pkgs;
 
     libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
 
+    libqtav = callPackage ../development/libraries/libqtav { 
+      libva = libva-full; # also wants libva-x11 
+    };
+
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
     };
