@@ -18255,6 +18255,8 @@ with pkgs;
 
   ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
 
+  texLiveAuctex = callPackage ../tools/typesetting/tex/texlive/auctex.nix { };
+
   thermald = callPackage ../tools/system/thermald { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
