@@ -7640,7 +7640,7 @@ with pkgs;
   libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
 
   # Only supported on Linux
-  glibcLocales = if stdenv.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
+  glibcLocales = assert stdenv.isLinux; callPackage ../development/libraries/glibc/locales.nix { };
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
