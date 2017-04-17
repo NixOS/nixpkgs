@@ -45,6 +45,7 @@ let
     mkdir -p $4
     cp -av $2 $4
     cp -av $3 $4
+    cp -av `dirname $3`/vmlinux $4
   ''; };
 
   commonMakeFlags = [
