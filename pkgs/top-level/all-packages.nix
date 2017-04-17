@@ -14806,6 +14806,8 @@ with pkgs;
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
+
   ostinato = callPackage ../applications/networking/ostinato { };
 
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
