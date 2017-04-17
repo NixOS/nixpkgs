@@ -18199,6 +18199,8 @@ with pkgs;
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
+  shake = haskellPackages.callPackage ../development/tools/build-managers/shake { };
+
   slock = callPackage ../misc/screensavers/slock { };
 
   smokeping = callPackage ../tools/networking/smokeping {
