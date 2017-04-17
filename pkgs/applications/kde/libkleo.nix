@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib,
   extra-cmake-modules, kdoctools,
   boost, gpgme, kcodecs, kcompletion, kconfig, kcoreaddons, kitemmodels,
   kwidgetsaddons, kwindowsystem

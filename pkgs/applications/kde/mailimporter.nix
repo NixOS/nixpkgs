@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, kcompletion, kconfig, kcoreaddons, kmime, kxmlgui,
   libkdepim

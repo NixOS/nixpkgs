@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib,
   extra-cmake-modules, kdoctools,
   akonadi, kcalcore, kdelibs4support, kholidays, kidentitymanagement
 }:

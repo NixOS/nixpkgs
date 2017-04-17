@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-contacts, akonadi-search, kcmutils, kcodecs,
   kcompletion, kconfigwidgets, kcontacts, kiconthemes, kjobwidgets, kldap

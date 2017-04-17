@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, kcodecs, kcompletion, kconfigwidgets, kiconthemes, kio,
   kitemmodels, kldap, kmailtransport, mailimporter, messagelib

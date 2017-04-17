@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  kdeApp, lib,
   extra-cmake-modules, kdoctools,
   grantlee5, kcodecs, kconfigwidgets, kemoticons, kiconthemes, kio,
   kdesignerplugin, syntax-highlighting
