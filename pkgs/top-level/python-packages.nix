@@ -14078,6 +14078,8 @@ in {
       nosetests
     '';
 
+    __impureHostDeps = optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+
     meta = {
       homepage = http://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
@@ -23379,6 +23381,26 @@ in {
 
     # the test fails because the loader cannot create test objects!
     doCheck = false;
+
+    meta = {
+      description = "Image processing routines for SciPy";
+      homepage = http://scikit-image.org;
+      license = licenses.bsd3;
+    };
+  };
+
+  scikitimage = buildPythonPackage rec {
+    name = "scikit-image-${version}";
+    version = "0.11.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/scikit-image/${name}.tar.gz";
+      sha256 = "768e568f3299966c294b7eb8cd114fc648f7bfaef422ee9cc750dd8d9d09e44b";
+    };
+
+    buildInputs = with self; [ pkgs.cython nose numpy six ];
+
+    propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy ];
 
     meta = {
       description = "Image processing routines for SciPy";
