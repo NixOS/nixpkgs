@@ -203,4 +203,7 @@ self: super: {
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 
+  # https://github.com/yi-editor/yi-fuzzy-open/issues/3
+  yi-fuzzy-open = dontHaddock (appendConfigureFlag super.yi-fuzzy-open "--ghc-option=-XFlexibleContexts");
+
 }
