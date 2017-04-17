@@ -108,6 +108,9 @@ rec {
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
 
+  # Apply function if argument is non-null
+  mapNullable = f: a: if isNull a then a else f a;
+
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists readFile isBool isFunction

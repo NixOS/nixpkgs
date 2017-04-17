@@ -73,7 +73,7 @@ let
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };
-      persistenced = if persistencedSha256 == null then null else callPackage (import ./persistenced.nix self persistencedSha256) { };
+      persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
     };
 
     meta = with stdenv.lib; {
