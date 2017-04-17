@@ -29,8 +29,8 @@ stdenv.mkDerivation {
     ./gcc.patch
     (fetchpatch {
       name = "linux-4.8.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-linux48.patch?h=broadcom-wl-dkms";
-      sha256 = "1g1gazxx67kxyw242cli6bf62il7ikzmf0w6v14k44j6b4bihcax";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms&id=8c6d80fc77eb20cbb4fd0eca71fa8a03b9447c3f";
+      sha256 = "0b963540gaj06q6ynfg47z8k5y3k2503yahbwawclfq4cxhl472a";
     })
   ];
 
