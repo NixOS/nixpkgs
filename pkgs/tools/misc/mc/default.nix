@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "mc-${version}";
-  version = "4.8.18";
+  version = "4.8.19";
   
   src = fetchurl {
     url = "http://www.midnight-commander.org/downloads/${name}.tar.xz";
-    sha256 = "1kmysm1x7smxs9k483nin6bx1rx0av8xrqjx9yf73hc7r4anhqzp";
+    sha256 = "1pzjq4nfxl2aakxipdjs5hq9n14374ly1l00s40kd2djnnxmd7pb";
   };
   
   buildInputs = [ pkgconfig perl glib slang zip unzip file gettext libX11 libICE

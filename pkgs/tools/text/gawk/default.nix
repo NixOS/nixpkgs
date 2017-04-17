@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
     ++ [(if interactive then "--with-readline=${readline.dev}" else "--without-readline")];
 
-  postInstall = "rm $out/bin/gawk-*";
+  postInstall = ''
+    rm $out/bin/gawk-*
+    ln -s $man/share/man/man1/gawk.1 $man/share/man/man1/awk.1
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/gawk/;

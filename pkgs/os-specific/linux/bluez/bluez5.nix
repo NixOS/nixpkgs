@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
-      # gstreamer gst_plugins_base
+      # gstreamer gst-plugins-base
     ];
 
   outputs = [ "out" "dev" "test" ];
@@ -73,6 +73,10 @@ stdenv.mkDerivation rec {
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
     ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
+
+    # Add extra configuration
+    mkdir $out/etc/bluetooth
+    ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
   '';
 
   enableParallelBuilding = true;

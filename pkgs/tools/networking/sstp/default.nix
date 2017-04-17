@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sstp-client-${version}";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/sstp-client/sstp-client/${version}/sstp-client-${version}.tar.gz";
-    sha256 = "096lw3a881hjqnffms3bl077pjyq77870kjaf83chhjcakc8942z";
+    sha256 = "087vp3n7nv001fsgbmkjpgl3a2vhbix22cflrqi5bv9h8181p18v";
   };
 
   patchPhase =

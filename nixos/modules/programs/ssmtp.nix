@@ -22,7 +22,6 @@ in
       directDelivery = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Use the trivial Mail Transfer Agent (MTA)
           <command>ssmtp</command> package to allow programs to send
@@ -40,7 +39,8 @@ in
         example = "mail.example.org";
         description = ''
           The host name of the default mail server to use to deliver
-          e-mail.
+          e-mail. Can also contain a port number (ex: mail.example.org:587),
+          defaults to port 25 if no port is given.
         '';
       };
 
@@ -65,7 +65,6 @@ in
       useTLS = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether TLS should be used to connect to the default mail
           server.
@@ -75,7 +74,6 @@ in
       useSTARTTLS = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether the STARTTLS should be used to connect to the default
           mail server.  (This is needed for TLS-capable mail servers
@@ -98,9 +96,28 @@ in
         example = "correctHorseBatteryStaple";
         description = ''
           Password used for SMTP auth. (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
+
+          It's recommended to use <option>authPassFile</option>
+          which takes precedence over <option>authPass</option>.
         '';
       };
-      
+
+      authPassFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/run/keys/ssmtp-authpass";
+        description = ''
+          Path to a file that contains the password used for SMTP auth. The file
+          should not contain a trailing newline, if the password does not contain one.
+          This file should be readable by the users that need to execute ssmtp.
+
+          <option>authPassFile</option> takes precedence over <option>authPass</option>.
+
+          Warning: when <option>authPass</option> is non-empty <option>authPassFile</option>
+          defaults to a file in the WORLD-READABLE Nix store containing that password.
+        '';
+      };
+
       setSendmail = mkOption {
         type = types.bool;
         default = true;
@@ -114,21 +131,28 @@ in
 
   config = mkIf cfg.directDelivery {
 
+    networking.defaultMailServer.authPassFile = mkIf (cfg.authPass != "")
+      (mkDefault (toString (pkgs.writeTextFile {
+        name = "ssmtp-authpass";
+        text = cfg.authPass;
+      })));
+
     environment.etc."ssmtp/ssmtp.conf".text =
+      let yesNo = yes : if yes then "YES" else "NO"; in
       ''
         MailHub=${cfg.hostName}
         FromLineOverride=YES
-        ${if cfg.root != "" then "root=${cfg.root}" else ""}
-        ${if cfg.domain != "" then "rewriteDomain=${cfg.domain}" else ""}
-        UseTLS=${if cfg.useTLS then "YES" else "NO"}
-        UseSTARTTLS=${if cfg.useSTARTTLS then "YES" else "NO"}
+        ${optionalString (cfg.root   != "") "root=${cfg.root}"}
+        ${optionalString (cfg.domain != "") "rewriteDomain=${cfg.domain}"}
+        UseTLS=${yesNo cfg.useTLS}
+        UseSTARTTLS=${yesNo cfg.useSTARTTLS}
         #Debug=YES
-        ${if cfg.authUser != "" then "AuthUser=${cfg.authUser}" else ""}
-        ${if cfg.authPass != "" then "AuthPass=${cfg.authPass}" else ""}
+        ${optionalString (cfg.authUser != "")       "AuthUser=${cfg.authUser}"}
+        ${optionalString (!isNull cfg.authPassFile) "AuthPassFile=${cfg.authPassFile}"}
       '';
 
     environment.systemPackages = [pkgs.ssmtp];
-    
+
     services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
       program = "sendmail";
       source = "${pkgs.ssmtp}/bin/sendmail";

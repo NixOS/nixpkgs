@@ -50,7 +50,6 @@ let
     # Verified games requirements
     xlibs.libXmu
     xlibs.libxcb
-    xlibs.libpciaccess
     mesa_glu
     libuuid
     libogg
@@ -58,6 +57,7 @@ let
     SDL
     SDL2_image
     glew110
+    openssl
     libidn
 
     # Other things from runtime
@@ -78,7 +78,7 @@ let
     SDL2_ttf
     SDL2_mixer
     gstreamer
-    gst_plugins_base
+    gst-plugins-base
   ] ++ lib.optional (!newStdcpp) gcc48.cc;
 
   overridePkgs = with pkgs; [
@@ -87,7 +87,7 @@ let
     alsaLib
     openalSoft
     libva
-    openssl-steam
+    vulkan-loader
   ] ++ lib.optional newStdcpp gcc.cc;
 
   ourRuntime = if runtimeOnly then []

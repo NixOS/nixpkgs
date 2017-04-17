@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, curl
 , withGui }:
 
@@ -6,14 +6,17 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-xt-" + version;
-  version = "0.11D";
+  version = "0.11F";
 
-  src = fetchurl {
-    url = "https://github.com/bitcoinxt/bitcoinxt/archive/v${version}.tar.gz";
-    sha256 = "09r2i88wzqaj6mh66l3ngyfkm1a0dhwm5ibalj6y55wbxm9bvd36";
+  src = fetchFromGitHub {
+    owner = "bitcoinxt";
+    repo = "bitcoinxt";
+    rev = "v${version}";
+    sha256 = "13s5k9mxmlbf49p5hc546x20y5dslfp6g9hi6nw5yja5bngbwr24";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook openssl db48 boost zlib
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ openssl db48 boost zlib
                   miniupnpc utillinux protobuf curl ]
                   ++ optionals withGui [ qt4 qrencode ];
 

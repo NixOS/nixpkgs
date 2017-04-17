@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
     ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)]
     ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
-    ++ lib.optional mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
+    ++ lib.optionals mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
 
   postPatch =
     ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
       sed -i \
           -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
           -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
-          -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot="${darwin.apple_sdk.sdk}"|' \
+          -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
           -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
           -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
           -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
@@ -209,7 +209,7 @@ stdenv.mkDerivation {
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices CoreServices AppKit Carbon OpenGL AGL Cocoa
-    DiskArbitration darwin.cf-private libiconv darwin.apple_sdk.sdk
+    DiskArbitration darwin.cf-private libiconv
   ]);
 
   buildInputs =
@@ -268,7 +268,20 @@ stdenv.mkDerivation {
               done
           popd
       fi
-    '' + lib.optionalString stdenv.isDarwin ''
+    ''
+
+    # fixup .pc file (where to find 'moc' etc.)
+    + lib.optionalString (!stdenv.isDarwin) ''
+      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+          -e "/^host_bins=/ c host_bins=$dev/bin"
+    ''
+
+    # Don't move .prl files on darwin because they end up in
+    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
+    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
+    # are in lib, and so do not cause a subsequent recreation of deep
+    # framework directory trees.
+    + lib.optionalString stdenv.isDarwin ''
       fixDarwinDylibNames_rpath() {
         local flags=()
 
@@ -295,7 +308,7 @@ stdenv.mkDerivation {
     homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ bbenoist qknight ttuegel ];
+    maintainers = with maintainers; [ qknight ttuegel ];
     platforms = platforms.unix;
   };
 }

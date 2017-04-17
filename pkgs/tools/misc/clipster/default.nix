@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation  rec {
   name = "clipster-unstable-${version}";
-  version = "2017-01-12";
+  version = "2017-02-27";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
-    rev = "d66fbb098149bef687f062bfa111a21c9121851f";
-    sha256 = "0yncjfl0822v2b7f9g7a6ihb99g5hd1s8bfpr2r9nqga6m11k90q";
+    rev = "dfa75b52ee3a41fff7534aca165dc0e6a24a3680";
+    sha256 = "0d7ak6wpvvgz7cwvfzy2shkfiw6gr8l703xyjpiayjbnr2s79k5j";
   };
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck3 makeWrapper ];
+  buildInputs =  [ pythonEnv gtk3 libwnck3 ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster
@@ -46,6 +47,6 @@ stdenv.mkDerivation  rec {
     license = licenses.agpl3;
     homepage = https://github.com/mrichar1/clipster;
     platforms = platforms.linux;
-    maintainers = [maintainers.magnetophon];
+    maintainers = [ maintainers.magnetophon ];
   };
 }

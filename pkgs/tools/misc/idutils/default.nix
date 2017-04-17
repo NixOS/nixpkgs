@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional stdenv.isLinux emacs;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   patches = [ ./nix-mapping.patch ];
 

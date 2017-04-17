@@ -26,6 +26,7 @@ with lib;
       firmwareLinuxNonfree
       intel2200BGFirmware
       rtl8723bs-firmware
+      rtl8192su-firmware
     ];
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, ocaml, zlib, db48, perl }:
+{ stdenv, fetchFromBitbucket, ocaml, zlib, db48, perl, camlp4 }:
 
 stdenv.mkDerivation rec {
   name = "sks-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "00q5ma5rvl10rkc6cdw8d69bddgrmvy0ckqj3hbisy65l4idj2zm";
   };
 
-  buildInputs = [ ocaml zlib db48 perl ];
+  buildInputs = [ ocaml zlib db48 perl camlp4 ];
 
   makeFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
   preConfigure = ''

@@ -18,20 +18,17 @@ in {
 
       enable = mkOption {
         default = false;
-        example = true;
         description = "Whether to enable multitouch touchpad support.";
       };
 
       invertScroll = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = "Whether to invert scrolling direction à la OSX Lion";
       };
 
       ignorePalm = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = "Whether to ignore touches detected as being the palm (i.e when typing)";
       };
@@ -39,7 +36,6 @@ in {
       tapButtons = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = "Whether to enable tap buttons.";
       };
 

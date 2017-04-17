@@ -1,14 +1,15 @@
-{stdenv, fetchurl, qt4, perl}:
+{stdenv, fetchurl, qt4, perl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qshowdiff-1.2";
-  
+  name = "qshowdiff-${version}";
+  version = "1.2";
+
   src = fetchurl {
-    url = "http://qshowdiff.danfis.cz/files/${name}.tar.gz";
-    sha256 = "0i3ssvax4xync9c53jaxribazvh8d8v148l3yiqsfjmqsggw9rh3";
+    url = "https://github.com/danfis/qshowdiff/archive/v${version}.tar.gz";
+    sha256 = "027959xbzvi5c2w9y1x122sr5i26k9mvp43banz2wln6gd860n1a";
   };
 
-  buildInputs = [ qt4 perl ];
+  buildInputs = [ qt4 perl pkgconfig ];
 
   configurePhase = ''
     mkdir -p $out/{bin,man/man1}

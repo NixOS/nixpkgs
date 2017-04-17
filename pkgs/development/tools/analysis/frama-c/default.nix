@@ -8,28 +8,29 @@ in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20160501";
-  slang   = "Aluminium";
+  version = "20161101";
+  slang   = "Silicon";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "02z4d1lg2cs4hgbjx74crfrabv39dyhdrq5lvhv0q3hx5c8w7p90";
+    sha256 = "1qq045ymz1mx4m9dsypigrcagqyb2k78wk13nqlbykcs5xbihfdh";
   };
 
   why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.34.tar.gz";
-    sha256 = "1335bhq9v3h46m8aba2c5myi9ghm87q41in0m15xvdrwq5big1jg";
+    url    = "http://why.lri.fr/download/why-2.37.tar.gz";
+    sha256 = "00xr8aq6zwln0ccfs1ng610j70r6ia6wqdyaqs9iqibqfa1scr3m";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 apron
+    lablgtk coq graphviz zarith why3 apron camlp4
   ];
 
 
-  enableParallelBuilding = true;
+  # Experimentally, the build segfaults with high core counts
+  enableParallelBuilding = false;
 
   unpackPhase = ''
     tar xf $src
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     cd frama*
     ./configure --prefix=$out
-    make -j$NIX_BUILD_CORES
+    # It is not parallel safe
+    make
     make install
     cd ../why*
     FRAMAC=$out/bin/frama-c ./configure --prefix=$out
@@ -56,13 +58,15 @@ stdenv.mkDerivation rec {
   patches = [ ./dynamic.diff ];
   postPatch = ''
     # strip absolute paths to /usr/bin
-    for file in ./configure ./share/Makefile.common ./src/*/configure; do
+    for file in ./configure ./share/Makefile.common ./src/*/configure; do #*/
       substituteInPlace $file  --replace '/usr/bin/' ""
     done
 
     substituteInPlace ./src/plugins/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
 
     cd ../why*
+
+    substituteInPlace ./Makefile.in --replace '-warn-error A' '-warn-error A-3'    
     substituteInPlace ./frama-c-plugin/Makefile --replace 'shell frama-c' "shell $out/bin/frama-c"
     substituteInPlace ./jc/jc_make.ml --replace ' why-dp '       " $out/bin/why-dp "
     substituteInPlace ./jc/jc_make.ml --replace "?= why@\n"      "?= $out/bin/why@\n"

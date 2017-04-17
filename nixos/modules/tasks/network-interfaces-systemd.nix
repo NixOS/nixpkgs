@@ -59,15 +59,16 @@ in
     systemd.network =
       let
         domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
-        genericNetwork = override: {
-          DHCP = override (dhcpStr cfg.useDHCP);
-        } // optionalAttrs (cfg.defaultGateway != null) {
-          gateway = override [ cfg.defaultGateway.address ];
-        } // optionalAttrs (cfg.defaultGateway6 != null) {
-          gateway = override [ cfg.defaultGateway6.address ];
-        } // optionalAttrs (domains != [ ]) {
-          domains = override domains;
-        };
+        genericNetwork = override:
+          let gateway = optional (cfg.defaultGateway != null) cfg.defaultGateway.address
+            ++ optional (cfg.defaultGateway6 != null) cfg.defaultGateway6.address;
+          in {
+            DHCP = override (dhcpStr cfg.useDHCP);
+          } // optionalAttrs (gateway != [ ]) {
+            gateway = override gateway;
+          } // optionalAttrs (domains != [ ]) {
+            domains = override domains;
+          };
       in mkMerge [ {
         enable = true;
         networks."99-main" = genericNetwork mkDefault;

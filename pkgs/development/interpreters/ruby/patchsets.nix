@@ -24,24 +24,19 @@ rec {
     "${patchSet}/patches/ruby/2.1.8/railsexpress/08-funny-falcon-method-cache.patch"
     "${patchSet}/patches/ruby/2.1.8/railsexpress/09-heap-dump-support.patch"
   ];
-  "2.2.5" = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.2.5/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.2.5/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.2.5/railsexpress/03-display-more-detailed-stack-trace.patch"
+  "2.2.7" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.2/head/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.2/head/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.2/head/railsexpress/03-display-more-detailed-stack-trace.patch"
   ];
-  "2.3.1" = ops useRailsExpress [
+  "2.3.4" = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.3/head/railsexpress/01-skip-broken-tests.patch"
     "${patchSet}/patches/ruby/2.3/head/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.3/head/railsexpress/03-display-more-detailed-stack-trace.patch"
   ];
-  "2.3.3" = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.3/head/railsexpress/01-skip-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.3/head/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.3/head/railsexpress/03-display-more-detailed-stack-trace.patch"
-  ];
-  "2.4.0" = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.4.0/railsexpress/01-skip-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.4.0/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.4.0/railsexpress/03-display-more-detailed-stack-trace.patch"
+  "2.4.1" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.4/head/railsexpress/01-skip-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.4/head/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.4/head/railsexpress/03-display-more-detailed-stack-trace.patch"
   ];
 }

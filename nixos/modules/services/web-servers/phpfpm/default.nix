@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.phpfpm;
+  enabled = cfg.poolConfigs != {} || cfg.pools != {};
 
   stateDir = "/run/phpfpm";
 
@@ -24,10 +25,14 @@ let
     ${poolConfig}
   '';
 
-  phpIni = pkgs.writeText "php.ini" ''
-    ${readFile "${cfg.phpPackage}/etc/php.ini"}
-
-    ${cfg.phpOptions}
+  phpIni = pkgs.runCommand "php.ini" {
+    inherit (cfg) phpPackage phpOptions;
+    nixDefaults = ''
+      sendmail_path = "/run/wrappers/bin/sendmail -t -i"
+    '';
+    passAsFile = [ "nixDefaults" "phpOptions" ];
+  } ''
+    cat $phpPackage/etc/php.ini $nixDefaultsPath $phpOptionsPath > $out
   '';
 
 in {
@@ -118,19 +123,30 @@ in {
     };
   };
 
-  config = {
+  config = mkIf enabled {
+
+    systemd.slices.phpfpm = {
+      description = "PHP FastCGI Process manager pools slice";
+    };
+
+    systemd.targets.phpfpm = {
+      description = "PHP FastCGI Process manager pools target";
+      wantedBy = [ "multi-user.target" ];
+    };
+
     systemd.services = flip mapAttrs' poolConfigs (pool: poolConfig:
       nameValuePair "phpfpm-${pool}" {
-        description = "PHP FastCGI Process Manager for pool ${pool}";
+        description = "PHP FastCGI Process Manager service for pool ${pool}";
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "phpfpm.target" ];
+        partOf = [ "phpfpm.target" ];
         preStart = ''
           mkdir -p ${stateDir}
         '';
         serviceConfig = let
           cfgFile = fpmCfgFile pool poolConfig;
         in {
-          PrivateTmp = true;
+          Slice = "phpfpm.slice";
           PrivateDevices = true;
           ProtectSystem = "full";
           ProtectHome = true;

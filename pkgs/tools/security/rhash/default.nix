@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "mirror://sourceforge/rhash/${name}-src.tar.gz";
     sha1 = "0981bdc98ba7ef923b1a6cd7fd8bb0374cff632e";
+    sha256 = "0nii6p4m2x8rkaf8r6smgfwb1q4hpf117kkg64yr6gyqgdchnljv";
   };
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];

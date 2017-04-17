@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "07mlfnh0hwvk6xarcg315x7z2j0qbg9g7cm040df9c8psiahc3g6";
   };
 
+  postPatch = ''
+    substituteInPlace Source/Core/VideoBackends/OGL/RasterFont.cpp \
+      --replace " CHAR_WIDTH " " CHARWIDTH "
+  '';
+
   cmakeFlags = ''
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
     -DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include

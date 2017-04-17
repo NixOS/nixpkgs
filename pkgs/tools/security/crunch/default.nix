@@ -11,11 +11,11 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ which ];
 
-  configurePhase = "true";
-
   preBuild = ''
-    sed 's/sudo //' -i Makefile
-    sed 's/-g root -o root//' -i Makefile
+    substituteInPlace Makefile \
+      --replace '-g root -o root' "" \
+      --replace '-g wheel -o root' "" \
+      --replace 'sudo ' ""
   '';
 
   makeFlags = "PREFIX=$(out)";
@@ -23,7 +23,7 @@ stdenv.mkDerivation  rec {
   meta = with stdenv.lib; {
     description = "Wordlist generator";
     homepage = https://sourceforge.net/projects/crunch-wordlist/;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lethalman lnl7 ];
   };
 }

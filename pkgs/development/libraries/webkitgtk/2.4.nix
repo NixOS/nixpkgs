@@ -17,14 +17,19 @@ stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
   version = "2.4.11";
 
-  requiredSystemFeatures = [ "big-parallel" ];
-
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = with platforms; linux ++ darwin;
     maintainers = [];
+    knownVulnerabilities = [
+      "WSA-2016-0004"
+      "WSA-2016-0005"
+      "WSA-2016-0006"
+      "WSA-2017-0001"
+      "WSA-2017-0002"
+    ];
   };
 
   src = fetchurl {
@@ -60,6 +65,8 @@ stdenv.mkDerivation rec {
     "--disable-x11-target"
     "--enable-quartz-target"
     "--disable-web-audio"
+    "CFLAGS=-DJSC_OBJC_API_ENABLED=0"
+    "CXXFLAGS=-DJSC_OBJC_API_ENABLED=0"
   ] ++ optionals (!enableCredentialStorage) [
     "--disable-credential-storage"
   ];

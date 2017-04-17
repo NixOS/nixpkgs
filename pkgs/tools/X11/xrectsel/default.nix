@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   postBuild = ''
-    make DESTDIR="$out" install
+    make install
   '';
 
   meta = with stdenv.lib; {

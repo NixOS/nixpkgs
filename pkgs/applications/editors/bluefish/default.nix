@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bluefish-2.2.9";
+  name = "bluefish-2.2.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/bluefish/${name}.tar.bz2";
-    sha256 = "1l7pg6h485yj84i34jr09y8qzc1yr4ih6w5jdhmnrg156db7nwav";
+    sha256 = "1ciygj79q6i3ga5x1j8aivc05nh6rhhnm7hrq8q8xd9vd4ms3v5g";
   };
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];

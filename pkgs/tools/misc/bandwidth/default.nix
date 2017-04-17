@@ -7,7 +7,7 @@ let
     else if stdenv.system == "x86_64-darwin" then "bandwidth-mac64"
     else if stdenv.system == "i686-darwin" then "bandwidth-mac32"
     else if stdenv.system == "i686-cygwin" then "bandwidth-win32"
-    else null;
+    else throw "Unknown architecture";
 in
 stdenv.mkDerivation rec {
   name = "bandwidth-${version}";

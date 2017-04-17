@@ -11,18 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "1sqzdkj9vigkvxsjlih1i0gylv53na2yic5if9w1s2sgxhqqz5zv";
   };
 
-  # FIXME: ugh, there has to be a better way to do this...
-  prePatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'execute_process(COMMAND ''${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion OUTPUT_VARIABLE BASHCOMP_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)' \
-                "set (BASHCOMP_DIR "$out/share/bash-completion/completions")"
+  patches = [
+    ./fix-bash-completion-path.patch
+    ./fix-python-install-path.patch
+  ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '@BASHCOMP_DIR@' "$out/share/bash-completion/completions"
     substituteInPlace src/python/CMakeLists.txt \
-      --replace 'EXECUTE_PROCESS(COMMAND ''${PYTHON_EXECUTABLE} -c "from sys import stdout; from distutils import sysconfig; stdout.write(sysconfig.get_python2_lib(True))" OUTPUT_VARIABLE PYTHON_INSTALL_DIR)' \
-                "set (PYTHON_INSTALL_DIR "$out/${python2.sitePackages}")"
+      --replace "@PYTHON_INSTALL_PATH@" "$out/${python2.sitePackages}"
   '';
 
-  buildInputs = [ cmake pkgconfig bzip2 expat glib curl libxml2 python2 rpm openssl sqlite file xz pcre bash-completion ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ bzip2 expat glib curl libxml2 python2 rpm openssl sqlite file xz pcre bash-completion ];
 
   meta = with stdenv.lib; {
     description = "C implementation of createrepo";

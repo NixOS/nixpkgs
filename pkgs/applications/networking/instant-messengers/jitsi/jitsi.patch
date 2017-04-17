@@ -8,20 +8,20 @@
 +#mkdir -p $HOME/.sip-communicator/log
 +
 +cd "$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")"
- 
+
  # Get architecture
  ARCH=`uname -m | sed -e s/x86_64/64/ -e s/i.86/32/`
-@@ -6,10 +11,12 @@
+@@ -6,7 +11,9 @@
  # Additionnal JVM arguments
  CLIENTARGS=""
- 
+
 +NATIVELIBS="lib/native/linux-64"
- if [ $ARCH -eq 32 ]
+ if [ $ARCH = 32 ]
  then
      CLIENTARGS="-client -Xmx256m"
 +    NATIVELIBS="lib/native/linux"
  fi
- 
+
  export PATH=$PATH:native
 -java $CLIENTARGS -classpath "lib/felix.jar:sc-bundles/sc-launcher.jar:sc-bundles/util.jar:lib/" -Djava.library.path=native -Dfelix.config.properties=file:./lib/felix.client.run.properties -Djava.util.logging.config.file=lib/logging.properties net.java.sip.communicator.launcher.SIPCommunicator
 +LD_LIBRARY_PATH=@EXTRALIBS@ exec @JAVA@ $CLIENTARGS -classpath "lib/felix.jar:sc-bundles/sc-launcher.jar:sc-bundles/util.jar:lib/" -Djava.library.path=$NATIVELIBS -Dfelix.config.properties=file:lib/felix.client.run.properties -Djava.util.logging.config.file=lib/logging.properties net.java.sip.communicator.launcher.SIPCommunicator

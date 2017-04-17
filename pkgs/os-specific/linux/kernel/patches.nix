@@ -52,6 +52,11 @@ rec {
       patch = ./bridge-stp-helper.patch;
     };
 
+  p9_fixes =
+    { name = "p9-fixes";
+      patch = ./p9-fixes.patch;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -95,9 +100,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.9.10";
-      grrev  = "201702152052";
-      sha512 = "3whjlrm06r724q9lkycm2jalv3wm9bhxjlvgnglrfnc48rnv3b4j2m6gnq396pc3axnd2mpiinlwjwarw59dhs9qax9l7ddcc3cxd4k";
+    { kver   = "4.9.21";
+      grrev  = "201704091948";
+      sha512 = "1pa9vchnii319w3jarp4aclyjpwpk2s3ddi9facvy0r148xxqsl30hk2l0ihb9wwr9pz5a8l2z85skkkp65hpaz6fr9wmy9d1lb1hwh";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -175,4 +180,12 @@ rec {
       };
     };
 
+  DCCP_double_free_vulnerability_CVE-2017-6074 = rec
+    { name = "DCCP_double_free_vulnerability_CVE-2017-6074.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=5edabca9d4cff7f1f2b68f0bac55ef99d9798ba4";
+        sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
+      };
+    };
 }

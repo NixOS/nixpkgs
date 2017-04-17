@@ -1,27 +1,28 @@
-{ mkDerivation, aeson, aeson-pretty, base, binary, bytestring
-, directory, fetchgit, filepath, HTF, HUnit, mtl
-, optparse-applicative, parsec, process, shelly, stdenv, text
-, transformers, unix, zlib
+{ mkDerivation, fetchgit, aeson, aeson-pretty, base, bytestring, directory
+, filepath, hspec, hspec-core, HUnit, mtl, optparse-applicative
+, parsec, process, pureMD5, QuickCheck, shelly, stdenv, text
+, transformers, unix
 }:
 mkDerivation {
   pname = "super-user-spark";
-  version = "0.2.0.3";
+  version = "0.3.2.0-dev";
   src = fetchgit {
     url = "https://github.com/NorfairKing/super-user-spark";
-    sha256 = "1w9c2b1fxqxp2q5jxsvnrfqvyvpk8q70qqsgzshmghx0yylx9cns";
-    rev = "a7d132f7631649c3a093ede286e66f78e9793fba";
+    sha256 = "0akyc51bghzkk8j75n0i8v8rrsklidwvljhx3aibxfbkqp33372g";
+    rev = "ab8635682d67842b9e6d909cf3c618014e4157f2";
   };
-  isLibrary = false;
+  isLibrary = true;
   isExecutable = true;
-  executableHaskellDepends = [
-    aeson aeson-pretty base binary bytestring directory filepath HTF
-    mtl optparse-applicative parsec process shelly text transformers
-    unix zlib
+  libraryHaskellDepends = [
+    aeson aeson-pretty base bytestring directory filepath mtl
+    optparse-applicative parsec process pureMD5 shelly text
+    transformers unix
   ];
+  executableHaskellDepends = [ base ];
   testHaskellDepends = [
-    aeson aeson-pretty base binary bytestring directory filepath HTF
-    HUnit mtl optparse-applicative parsec process shelly text
-    transformers unix zlib
+    aeson aeson-pretty base bytestring directory filepath hspec
+    hspec-core HUnit mtl optparse-applicative parsec process pureMD5
+    QuickCheck shelly text transformers unix
   ];
   jailbreak = true;
   description = "Configure your dotfile deployment with a DSL";

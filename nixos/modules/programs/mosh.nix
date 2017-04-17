@@ -14,7 +14,6 @@ in
         Whether to enable mosh. Note, this will open ports in your firewall!
       '';
       default = false;
-      example = true;
       type = lib.types.bool;
     };
   };

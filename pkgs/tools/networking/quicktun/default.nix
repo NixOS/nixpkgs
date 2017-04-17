@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "quicktun-${version}";
-  version = "2.2.4-git-2016-07-04";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "UCIS";
     repo = "QuickTun";
-    rev = "b9c6da398e012830454d38baac96bb30f927a749";
-    sha256 = "1imbnks3ba72cxx58a9260zxy0xcsa2srf77cq02kqsakarfylal";
+    rev = "2d0c6a9cda8c21f921a5d1197aeee92e9568ca39";
+    sha256 = "1ydvwasj84qljfbzh6lmhyzjc20yw24a0v2mykp8afsm97zzlqgx";
   };
 
   buildInputs = [ libsodium ];

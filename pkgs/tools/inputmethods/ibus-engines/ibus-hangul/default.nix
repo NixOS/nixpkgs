@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig
-, gtk3, ibus, libhangul, librsvg, python3, pygobject3
+, gtk3, ibus, libhangul, librsvg, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "120p9w7za6hi521hz8q235fkl4i3p1qqr8nqm4a3kxr0pcq40bd2";
   };
 
-  buildInputs = [ gtk3 ibus libhangul python3 pygobject3 ];
+  buildInputs = [ gtk3 ibus libhangul ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig python3.pkgs.wrapPython ];
+
+  postFixup = "wrapPythonPrograms";
 
   meta = with stdenv.lib; {
     isIbusEngine = true;

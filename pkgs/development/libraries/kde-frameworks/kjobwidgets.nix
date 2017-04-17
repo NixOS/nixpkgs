@@ -1,13 +1,13 @@
 { kdeFramework, lib
-, ecm
+, extra-cmake-modules
 , kcoreaddons
 , kwidgetsaddons
-, qtx11extras
+, qttools, qtx11extras
 }:
 
 kdeFramework {
   name = "kjobwidgets";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules qttools ];
   propagatedBuildInputs = [ kcoreaddons kwidgetsaddons qtx11extras ];
 }

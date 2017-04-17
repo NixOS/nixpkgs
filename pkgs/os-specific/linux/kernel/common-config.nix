@@ -32,16 +32,22 @@ with stdenv.lib;
   # Debugging.
   DEBUG_KERNEL y
   DYNAMIC_DEBUG y
-  TIMER_STATS y
   BACKTRACE_SELF_TEST n
-  CPU_NOTIFIER_ERROR_INJECT? n
   DEBUG_DEVRES n
-  DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  ${optionalString (versionOlder version "4.10") ''
+    CPU_NOTIFIER_ERROR_INJECT? n
+  ''}
+
+  ${optionalString (versionOlder version "4.11") ''
+    TIMER_STATS y
+    DEBUG_NX_TEST n
+  ''}
 
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
@@ -94,6 +100,10 @@ with stdenv.lib;
   # Disable some expensive (?) features.
   PM_TRACE_RTC n
 
+  # Enable initrd support.
+  BLK_DEV_RAM y
+  BLK_DEV_INITRD y
+
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
@@ -121,6 +131,7 @@ with stdenv.lib;
   IP_VS_PROTO_ESP y
   IP_VS_PROTO_AH y
   IP_DCCP_CCID3 n # experimental
+  IP_MULTICAST y
   IPV6_ROUTER_PREF y
   IPV6_ROUTE_INFO y
   IPV6_OPTIMISTIC_DAD y
@@ -146,8 +157,8 @@ with stdenv.lib;
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
   BONDING m
-  NET_L3_MASTER_DEV y
-  NET_FOU_IP_TUNNELS y
+  NET_L3_MASTER_DEV? y
+  NET_FOU_IP_TUNNELS? y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -304,7 +315,9 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
-  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ${optionalString (versionOlder version "4.11") ''
+    DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ''}
 
   # Security related features.
   RANDOMIZE_BASE? y
@@ -452,7 +465,11 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  UPROBE_EVENT y
+
+  ${optionalString (versionOlder version "4.11") ''
+    UPROBE_EVENT? y
+  ''}
+
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
     BPF_EVENTS y

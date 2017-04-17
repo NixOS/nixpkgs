@@ -1,28 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, buildGoPackage }:
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "filebeat-${version}";
-  version = "5.0.2";
+  version = "5.2.2";
 
-  src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/beats/filebeat/${name}-linux-x86_64.tar.gz";
-    sha256 = "1i00ndkzf4v4m6i8vdncsm3bya3jkn0lwhpjwhw6dv2w091vbw6g";
+  src = fetchFromGitHub {
+    owner = "elastic";
+    repo = "beats";
+    rev = "v${version}";
+    sha256 = "19hkq19xpi3c9y5g1yq77sm2d5vzybn6mxxf0s5l6sw4l98aak5q";
   };
 
-  # statically linked binary, no need to build anything
-  dontBuild = true;
-  doCheck = false;
+  goPackagePath = "github.com/elastic/beats";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp filebeat $out/bin/
-  '';
+  subPackages = [ "filebeat" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Lightweight shipper for logfiles";
     homepage = https://www.elastic.co/products/beats;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.fadenb ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = [ maintainers.fadenb ];
+    platforms = platforms.linux;
   };
 }

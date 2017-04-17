@@ -19,6 +19,12 @@ let
         '';
       };
 
+      domain = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Domain to fetch certificate for (defaults to the entry name)";
+      };
+
       email = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -119,7 +125,7 @@ in
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -138,7 +144,7 @@ in
 
       certs = mkOption {
         default = { };
-        type = with types; loaOf (submodule certOpts);
+        type = with types; attrsOf (submodule certOpts);
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';
@@ -166,9 +172,10 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
+                domain = if data.domain != null then data.domain else cert;
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (cfg.server != null) [ "--server" cfg.server ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
@@ -188,7 +195,7 @@ in
                   path = [ pkgs.simp_le ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
-                    chown '${data.user}:${data.group}' '${cfg.directory}'
+                    chown -R '${data.user}:${data.group}' '${cfg.directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi

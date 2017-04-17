@@ -12,6 +12,10 @@ let
   torRc = ''
     User tor
     DataDirectory ${torDirectory}
+    ${optionalString cfg.enableGeoIP ''
+      GeoIPFile ${pkgs.tor.geoip}/share/tor/geoip
+      GeoIPv6File ${pkgs.tor.geoip}/share/tor/geoip6
+    ''}
 
     ${optint "ControlPort" cfg.controlPort}
   ''
@@ -55,6 +59,18 @@ in
         description = ''
           Enable the Tor daemon. By default, the daemon is run without
           relay, exit, bridge or client connectivity.
+        '';
+      };
+
+      enableGeoIP = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whenever to configure Tor daemon to use GeoIP databases.
+
+          Disabling this will disable by-country statistics for
+          bridges and relays and some client and third-party software
+          functionality.
         '';
       };
 
@@ -124,6 +140,7 @@ in
         };
 
         privoxy.enable = mkOption {
+          type = types.bool;
           default = true;
           description = ''
             Whether to enable and configure the system Privoxy to use Tor's

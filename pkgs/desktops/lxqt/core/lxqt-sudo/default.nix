@@ -1,27 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt, sudo }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-sudo";
-  version = "0.11.0";
+  version = "0.11.1";
 
   srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0nmn0j5qvqpkhlq8yvl8ycn3hijbnwxd32hhmxhcnaq07cmzbg1j";
+    sha256 = "0imy4cs51im81rd0wa03wy418cdv9gqqgmwkc7v58cip7h665pyk";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    lxqt-build-tools
+  ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.liblxqt
-    lxqt.libqtxdg
+    qtbase
+    qttools
+    qtx11extras
+    qtsvg
+    kwindowsystem
+    liblxqt
+    libqtxdg
     sudo
   ];
 
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "GUI frontend for sudo/su";
     homepage = https://github.com/lxde/lxqt-sudo;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

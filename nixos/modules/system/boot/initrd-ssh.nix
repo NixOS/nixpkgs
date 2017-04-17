@@ -44,9 +44,10 @@ in
       description = ''
         RSA SSH private key file in the Dropbear format.
 
-        WARNING: This key is contained insecurely in the global Nix store. Do NOT
-        use your regular SSH host private keys for this purpose or you'll expose
-        them to regular users!
+        WARNING: Unless your bootloader supports initrd secrets, this key is
+        contained insecurely in the global Nix store. Do NOT use your regular
+        SSH host private keys for this purpose or you'll expose them to
+        regular users!
       '';
     };
 
@@ -56,9 +57,10 @@ in
       description = ''
         DSS SSH private key file in the Dropbear format.
 
-        WARNING: This key is contained insecurely in the global Nix store. Do NOT
-        use your regular SSH host private keys for this purpose or you'll expose
-        them to regular users!
+        WARNING: Unless your bootloader supports initrd secrets, this key is
+        contained insecurely in the global Nix store. Do NOT use your regular
+        SSH host private keys for this purpose or you'll expose them to
+        regular users!
       '';
     };
 
@@ -68,9 +70,10 @@ in
       description = ''
         ECDSA SSH private key file in the Dropbear format.
 
-        WARNING: This key is contained insecurely in the global Nix store. Do NOT
-        use your regular SSH host private keys for this purpose or you'll expose
-        them to regular users!
+        WARNING: Unless your bootloader supports initrd secrets, this key is
+        contained insecurely in the global Nix store. Do NOT use your regular
+        SSH host private keys for this purpose or you'll expose them to
+        regular users!
       '';
     };
 
@@ -97,10 +100,6 @@ in
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.dropbear}/bin/dropbear
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
-
-      ${optionalString (cfg.hostRSAKey != null) "install -D ${cfg.hostRSAKey} $out/etc/dropbear/dropbear_rsa_host_key"}
-      ${optionalString (cfg.hostDSSKey != null) "install -D ${cfg.hostDSSKey} $out/etc/dropbear/dropbear_dss_host_key"}
-      ${optionalString (cfg.hostECDSAKey != null) "install -D ${cfg.hostECDSAKey} $out/etc/dropbear/dropbear_ecdsa_host_key"}
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
@@ -116,9 +115,6 @@ in
       touch /var/log/lastlog
 
       mkdir -p /etc/dropbear
-      ${optionalString (cfg.hostRSAKey != null) "ln -s $extraUtils/etc/dropbear/dropbear_rsa_host_key /etc/dropbear/dropbear_rsa_host_key"}
-      ${optionalString (cfg.hostDSSKey != null) "ln -s $extraUtils/etc/dropbear/dropbear_dss_host_key /etc/dropbear/dropbear_dss_host_key"}
-      ${optionalString (cfg.hostECDSAKey != null) "ln -s $extraUtils/etc/dropbear/dropbear_ecdsa_host_key /etc/dropbear/dropbear_ecdsa_host_key"}
 
       mkdir -p /root/.ssh
       ${concatStrings (map (key: ''
@@ -127,6 +123,11 @@ in
 
       dropbear -s -j -k -E -m -p ${toString cfg.port}
     '';
+
+    boot.initrd.secrets =
+     (optionalAttrs (cfg.hostRSAKey != null) { "/etc/dropbear/dropbear_rsa_host_key" = cfg.hostRSAKey; }) //
+     (optionalAttrs (cfg.hostDSSKey != null) { "/etc/dropbear/dropbear_dss_host_key" = cfg.hostDSSKey; }) //
+     (optionalAttrs (cfg.hostECDSAKey != null) { "/etc/dropbear/dropbear_ecdsa_host_key" = cfg.hostECDSAKey; });
 
   };
 

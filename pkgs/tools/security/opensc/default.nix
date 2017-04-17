@@ -14,10 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "16y3ryx606nry2li05hm88bllrragdj3sfl3yh7pf71777n4lsk4";
   };
 
-  postPatch = ''
-    sed -i 's,$(DESTDIR),$(out),g' etc/Makefile.am
-  '';
-
   buildInputs = [
     autoreconfHook pkgconfig zlib readline openssl pcsclite libassuan
     libXt libxslt libiconv docbook_xml_dtd_412
@@ -38,8 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=$(out)/etc"
   ];
+
+  
 
   meta = with stdenv.lib; {
     description = "Set of libraries and utilities to access smart cards";

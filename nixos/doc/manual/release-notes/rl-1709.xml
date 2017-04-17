@@ -1,0 +1,73 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.09">
+
+<title>Release 17.09 (“Hummingbird”, 2017/09/??)</title>
+
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights: </para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      The user handling now keeps track of deallocated UIDs/GIDs. When a user
+      or group is revived, this allows it to be allocated the UID/GID it had before.
+      A consequence is that UIDs and GIDs are no longer reused.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+<para>The following new services were added since the last release:</para>
+
+<itemizedlist>
+  <listitem>
+    <para></para>
+  </listitem>
+</itemizedlist>
+
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      Top-level <literal>idea</literal> package collection was renamed.
+      All JetBrains IDEs are now at <literal>jetbrains</literal>.
+    </para>
+  </listitem>
+</itemizedlist>
+
+
+<para>Other notable improvements:</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>
+      Modules can now be disabled by using <link
+      xlink:href="https://nixos.org/nixpkgs/manual/#sec-replace-modules">
+      disabledModules</link>, allowing another to take it's place.  This can be
+      used to import a set of modules from another channel while keeping the
+      rest of the system on a stable release.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Updated to FreeType 2.7.1, including a new TrueType engine.
+      The new engine replaces the Infinality engine which was the default in
+      NixOS. The default font rendering settings are now provided by
+      fontconfig-penultimate, replacing fontconfig-ultimate; the new defaults
+      are less invasive and provide rendering that is more consistent with
+      other systems and hopefully with each font designer's intent. Some
+      system-wide configuration has been removed from the Fontconfig NixOS
+      module where user Fontconfig settings are available.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</section>

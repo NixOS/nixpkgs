@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, automake113x, intltool, pkgconfig, libtool, makeWrapper,
-  dbus_glib, libcanberra_gtk2, gst_all_1, vala_0_32, gnome3, gtk3, gst_plugins_base,
+  dbus_glib, libcanberra_gtk2, gst_all_1, vala_0_32, gnome3, gtk3, gst-plugins-base,
   glib, gobjectIntrospection, telepathy_glib
 }:
 

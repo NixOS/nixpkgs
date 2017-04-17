@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, python, fetchurl
 , django_environ, mock, django, six
-, pytest, pytestrunner, pytestdjango, setuptools_scm
+, pytest, pytestrunner, pytest-django, setuptools_scm
 }:
 buildPythonPackage rec {
   name = "django-guardian-${version}";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1r3xj0ik0hh6dfak4kjndxk5v73x95nfbppgr394nhnmiayv4zc5";
   };
 
-  buildInputs = [ pytest pytestrunner pytestdjango django_environ mock setuptools_scm ];
+  buildInputs = [ pytest pytestrunner pytest-django django_environ mock setuptools_scm ];
   propagatedBuildInputs = [ django six ];
 
   checkPhase = ''

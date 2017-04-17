@@ -130,7 +130,7 @@ in
 
       plugins = mkOption {
         description = "Extra graylog plugins";
-        default = with pkgs.graylogPlugins; [ ];
+        default = [ ];
         type = types.listOf types.package;
       };
 

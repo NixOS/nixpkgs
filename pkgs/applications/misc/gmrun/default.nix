@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://sourceforge.net/projects/gmrun/";
     license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.bbenoist ];
+    maintainers = [];
     platforms = stdenv.lib.platforms.all;
   };
 }

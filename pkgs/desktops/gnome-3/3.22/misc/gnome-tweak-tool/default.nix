@@ -4,22 +4,13 @@
 , gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
 let
-  python = python2Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
+  pythonEnv = python2Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
 in stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   doCheck = true;
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-
-  # Make sure that Python 2 is first in $PATH because gnome3.gnome_shell
-  # propagates python3Packages.python.  If we do not do this, autoconf will use
-  # Python 3 instead which gnome-tweak-tool does not support at this time.  See:
-  # https://github.com/NixOS/nixpkgs/issues/21851
-  # https://github.com/NixOS/nixpkgs/pull/22370
-  preConfigure = ''
-    PATH="${python}/bin:$PATH"
-  '';
 
   makeFlags = [ "DESTDIR=/" ];
 
@@ -28,11 +19,10 @@ in stdenv.mkDerivation rec {
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
                   libnotify gnome3.gnome_shell
                   libsoup gnome3.gnome_settings_daemon gnome3.nautilus
-                  gnome3.gnome_desktop wrapGAppsHook ];
+                  gnome3.gnome_desktop wrapGAppsHook
+                  python2Packages.pygobject3.dev pythonEnv gobjectIntrospection ];
 
-  propagatedBuildInputs = [ python gobjectIntrospection ];
-
-  PYTHONPATH = "$out/${python.python.sitePackages}";
+  PYTHONPATH = "$out/${pythonEnv.python.sitePackages}";
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 

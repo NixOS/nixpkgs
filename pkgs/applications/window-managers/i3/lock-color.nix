@@ -2,17 +2,19 @@
 , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  rev = "c8e1aece7301c3c6481bf2f695734f8d273f252e";
-  version = "2.7-2016-09-17";
+  version = "2.7-2017-04-01";
   name = "i3lock-color-${version}";
+
   src = fetchFromGitHub {
     owner = "chrjguill";
     repo = "i3lock-color";
-    inherit rev;
-    sha256 = "07fpvwgdfxsnxnf63idrz3n1kbyayr53lsfns2q775q93cz1mfia";
+    rev = "61f6428aedbe4829d3e0f51d137283c8aec1e206";
+    sha256 = "0h4nzx46kcsp6b1i2lm9y4d1w1icrpvjl8g1h3wbpa5x4crh4703";
   };
-  buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutilimage pam libX11
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage pam libX11
     libev cairo libxkbcommon libxkbfile ];
+
   makeFlags = "all";
   preInstall = ''
     mkdir -p $out/share/man/man1

@@ -5,17 +5,23 @@
 , libvisio, libcdr, libexif, automake114x, cmake
 }:
 
-let 
+let
   python2Env = python2.withPackages(ps: with ps; [ numpy lxml ]);
 in
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.92.0";
+  name = "inkscape-0.92.1";
 
   src = fetchurl {
-    url = "https://inkscape.org/gallery/item/10552/${name}.tar.bz2";
-    sha256 = "0mmssxnxsvb3bpm7ck5pqvwyacrz1nkyacs571jx8j04l1cw3d5q";
+    url = "https://media.inkscape.org/dl/resources/file/${name}.tar_XlpI7qT.bz2";
+    sha256 = "01chr3vh728dkg7l7lilwgmh5nrp784khdhjgpqjbq9dh2zhax15";
   };
+
+  unpackPhase = ''
+    cp $src ${name}.tar.bz2
+    tar xvjf ${name}.tar.bz2 > /dev/null
+    cd ${name}
+  '';
 
   postPatch = ''
     patchShebangs share/extensions
@@ -38,6 +44,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Make sure PyXML modules can be found at run-time.
     rm "$out/share/icons/hicolor/icon-theme.cache"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
+    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
   meta = with stdenv.lib; {

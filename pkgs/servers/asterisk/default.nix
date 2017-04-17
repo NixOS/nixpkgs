@@ -1,9 +1,8 @@
-{ stdenv, pkgs, lib, fetchurl, fetchgit,
+{ stdenv, pkgs, lib, fetchurl, fetchgit, fetchsvn,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, binutils, newt,
   lua, speex,
-  srtp, wget, curl,
-  subversionClient
+  srtp, wget, curl
 }:
 
 let
@@ -11,7 +10,7 @@ let
     inherit version;
     name = "asterisk-${version}";
 
-    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua speex srtp wget curl subversionClient ];
+    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua speex srtp wget curl ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -36,7 +35,7 @@ let
     preConfigure = ''
       mkdir externals_cache
     '' + lib.concatStringsSep "\n"
-        (lib.mapAttrsToList (dst: src: "cp ${src} ${dst}") externals) + ''
+        (lib.mapAttrsToList (dst: src: "cp -r --no-preserve=mode ${src} ${dst}") externals) + ''
 
       chmod -w externals_cache
     '';
@@ -50,7 +49,6 @@ let
     preBuild = ''
       make menuselect.makeopts
       substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
-      ./contrib/scripts/get_mp3_source.sh
     '';
 
     postInstall = ''
@@ -71,6 +69,12 @@ let
     sha256 = "1wq8lpfcd4dfrbl7bgy2yzgp3ldjzq5430fqkhcqad0xfrxj0fdb";
   };
 
+  mp3-202 = fetchsvn {
+    url = http://svn.digium.com/svn/thirdparty/mp3/trunk;
+    rev = 202;
+    sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
+  };
+
 in
 {
 
@@ -79,6 +83,7 @@ in
     sha256 = "0yh097rrp1i681qclvwyh7l1gg2i5wx5pjrcvwpbj6g949mc98vd";
     externals = {
       "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
+      "addons/mp3" = mp3-202;
     };
   };
 
@@ -87,6 +92,7 @@ in
     sha256 = "193yhyjn0fwrd7hsmr3qwcx3k2pc6cq70v1mnfdwidix4cqm32xj";
     externals = {
       "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
+      "addons/mp3" = mp3-202;
     };
   };
 

@@ -12,7 +12,7 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst_plugins_base
+, gst-plugins-base
 , gstreamer
 , gtk2
 , gtk3
@@ -43,6 +43,7 @@
 , coreutils
 , gnused
 , gnugrep
+, gnupg
 }:
 
 assert stdenv.isLinux;
@@ -81,6 +82,7 @@ stdenv.mkDerivation {
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
+      alsaLib.dev
       atk
       cairo
       curl
@@ -93,7 +95,7 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst_plugins_base
+      gst-plugins-base
       gstreamer
       gtk2
       gtk3
@@ -173,7 +175,7 @@ stdenv.mkDerivation {
 
   passthru.ffmpegSupport = true;
   passthru.updateScript = import ./update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl;
+    inherit name writeScript xidel coreutils gnused gnugrep gnupg curl;
   };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";

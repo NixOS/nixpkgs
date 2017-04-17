@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
-, libxml2, libxslt, makeWrapper, p7zip, xar, gzip, cpio, coreutils }:
+{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libffi, libiconv
+, libssh2, libxml2, libxslt, libyaml, makeWrapper, p7zip, readline, xar, xz, gzip, cpio, coreutils, zlib }:
 
 let
   version = "1.9.1";
@@ -66,6 +66,57 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     sed -i "s|/opt|$out/opt|" usr/bin/vagrant
 
+    rm -fr opt/vagrant/embedded/lib/libxslt*
+    ln -s ${libxslt.out}/lib/libxslt* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libz*
+    ln -s ${zlib}/lib/libz* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libcurl*
+    ln -s ${curl.out}/lib/libcurl* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libarchive*
+    ln -s ${libarchive.lib}/lib/libarchive* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libssl*
+    ln -s ${openssl.out}/lib/libssl* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libcrypto*
+    ln -s ${openssl.out}/lib/libcrypto* opt/vagrant/embedded/lib/
+
+    rm -fr opt/vagrant/embedded/lib/engines/
+    ln -s ${openssl.out}/lib/engines/ opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libexslt*
+    ln -s ${openssl.out}/lib/libexslt* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libffi.*
+    ln -s ${libffi}/lib/libffi* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libhistory*
+    ln -s ${readline}/lib/libhistory* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libreadline*
+    ln -s ${readline}/lib/libreadline* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libruby*
+    ln -s ${ruby}/lib/libruby* opt/vagrant/embedded/lib/
+
+    rm -fr opt/vagrant/embedded/lib/ruby/
+    ln -s ${ruby}/lib/ruby/ opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/liblzma*
+    ln -s ${xz.out}/lib/liblzma* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libssh2*
+    ln -s ${libssh2}/lib/libssh2* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libxml2*
+    ln -s ${libxml2.out}/lib/libxml2* opt/vagrant/embedded/lib/
+
+    rm opt/vagrant/embedded/lib/libyaml*
+    ln -s ${libyaml}/lib/libyaml* opt/vagrant/embedded/lib/
+
     # overwrite embedded binaries
 
     # curl: curl, curl-config
@@ -73,9 +124,7 @@ in stdenv.mkDerivation rec {
     ln -s ${curl.bin}/bin/curl opt/vagrant/embedded/bin
     ln -s ${curl.dev}/bin/curl-config opt/vagrant/embedded/bin
 
-    # libarchive: bsdtar, bsdcpio
-    rm opt/vagrant/embedded/lib/libarchive*
-    ln -s ${libarchive}/lib/libarchive.so opt/vagrant/embedded/lib/libarchive.so
+    # bsdtar, bsdcpio
     rm opt/vagrant/embedded/bin/{bsdtar,bsdcpio}
     ln -s ${libarchive}/bin/bsdtar opt/vagrant/embedded/bin
     ln -s ${libarchive}/bin/bsdcpio opt/vagrant/embedded/bin
@@ -97,7 +146,7 @@ in stdenv.mkDerivation rec {
 
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
-    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
+    ln -s ${if stdenv.isGlibc then stdenv.glibc.bin else libiconv}/bin/iconv opt/vagrant/embedded/bin
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}

@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "neo4j-${version}";
-  version = "3.0.4";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "http://dist.neo4j.org/neo4j-community-${version}-unix.tar.gz";
-    sha256 = "01g88b9b1510jbks9v4xr4hyw8zy9nivxsl86xi810xi7qb53np1";
+    sha256 = "0kvbsm9mjwqyl3q2myif28a0f11i4rfq3hik07w9cdnrwyd75s40";
   };
 
   buildInputs = [ makeWrapper jre which gawk ];
@@ -18,12 +18,13 @@ stdenv.mkDerivation rec {
     cp -R * "$out/share/neo4j"
 
     mkdir -p "$out/bin"
-    substituteInPlace $out/share/neo4j/bin/neo4j \
-        --replace compgen ${bashCompletion}/share/bash-completion/completions/compgen
-    makeWrapper "$out/share/neo4j/bin/neo4j" "$out/bin/neo4j" \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ coreutils jre which gnused gawk gnugrep ]}"
-    makeWrapper "$out/share/neo4j/bin/neo4j-shell" "$out/bin/neo4j-shell" \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gnused gawk ]}"
+    for NEO4J_SCRIPT in neo4j neo4j-admin neo4j-import neo4j-shell cypher-shell
+    do
+        makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
+            "$out/bin/$NEO4J_SCRIPT" \
+            --prefix PATH : "${stdenv.lib.makeBinPath [ jre which gawk ]}" \
+            --set JAVA_HOME "$jre"
+    done
   '';
 
   meta = with stdenv.lib; {

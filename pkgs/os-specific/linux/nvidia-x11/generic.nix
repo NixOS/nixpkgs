@@ -4,6 +4,7 @@
 , settingsSha256
 , persistencedSha256
 , useGLVND ? true
+, useProfiles ? true
 , preferGtk2 ? false
 }:
 
@@ -41,7 +42,14 @@ let
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
-    inherit version useGLVND;
+    # patch to get the nvidia and nvidiaBeta driver to compile on kernel 4.10
+    patches = if libsOnly || versionOlder version "375"
+              then null
+              else [ (fetchurl {
+                      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel_4.10.patch?h=packages/nvidia;  sha256 = "0zhpx3baq2pca2pmz1af5cp2nzjxjx0j9w5xrdy204mnv3v2708z";
+                     }) ];
+
+    inherit version useGLVND useProfiles;
     inherit (stdenv) system;
 
     outputs = [ "out" ] ++ optional (!libsOnly) "bin";

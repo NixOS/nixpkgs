@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "qtox-${version}";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner  = "tux3";
     repo   = "qTox";
     rev    = "v${version}";
-    sha256 = "073kwfaw5n7vvcpwrpdbw5mlswbbwjipx7yy4a95r9z0gjljqnhq";
+    sha256 = "0l008mzrs1wsv5cbzxjkv3k48lghlcdsp8blqrkihjv5gcn3psml";
   };
 
   buildInputs = [
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
   ]);
 
   nativeBuildInputs = [ cmake makeQtWrapper pkgconfig ];
+
+  cmakeFlags = [
+    "-DGIT_DESCRIBE=${version}"
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -52,6 +52,7 @@ let
 
     ServerBin ${bindir}/lib/cups
     DataDir ${bindir}/share/cups
+    DocumentRoot ${cups.out}/share/doc/cups
 
     AccessLog syslog
     ErrorLog syslog

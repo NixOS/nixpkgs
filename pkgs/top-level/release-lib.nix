@@ -1,17 +1,15 @@
 { supportedSystems
 , packageSet ? (import ../..)
 , scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
 with import ../../lib;
 
 rec {
 
-  # Ensure that we don't build packages marked as unfree.
-  allPackages = args: packageSet (args // {
-    config.allowUnfree = false;
-    config.inHydra = true;
-  });
+  allPackages = args: packageSet (args // nixpkgsArgs);
 
   pkgs = pkgsFor "x86_64-linux";
 
@@ -25,6 +23,7 @@ rec {
   pkgsFor = system:
     if system == "x86_64-linux" then pkgs_x86_64_linux
     else if system == "i686-linux" then pkgs_i686_linux
+    else if system == "aarch64-linux" then pkgs_aarch64_linux
     else if system == "x86_64-darwin" then pkgs_x86_64_darwin
     else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then pkgs_i686_freebsd
@@ -34,6 +33,7 @@ rec {
 
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
   pkgs_i686_linux = allPackages { system = "i686-linux"; };
+  pkgs_aarch64_linux = allPackages { system = "aarch64-linux"; };
   pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
   pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
   pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };

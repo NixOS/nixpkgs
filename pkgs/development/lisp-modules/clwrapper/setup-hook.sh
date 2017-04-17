@@ -1,12 +1,10 @@
-NIX_LISP_ASDF="@asdf@"
+NIX_LISP_ASDF="@out@"
 
-CL_SOURCE_REGISTRY="@asdf@/lib/common-lisp/asdf/:@asdf@/lib/common-lisp/asdf/uiop/"
+CL_SOURCE_REGISTRY="${CL_SOURCE_REGISTRY:+$CL_SOURCE_REGISTRY:}@out@/lib/common-lisp/asdf/"
 
 addASDFPaths () {
-    for j in "$1"/lib/common-lisp/*; do
-	if [ -d "$j" ]; then
-            CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$j/"
-	fi
+    for j in "$1"/lib/common-lisp-settings/*-path-config.sh; do
+      source "$j"
     done
 }
 

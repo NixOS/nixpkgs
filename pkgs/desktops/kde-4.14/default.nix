@@ -25,19 +25,9 @@ in
 
 kde.modules // kde.individual //
 {
-  inherit (kde) manifest modules individual splittedModuleList;
-
-  inherit kdelibs;
-
   akonadi = callPackage ./support/akonadi { };
 
-  qt4 = qt48;
-
-  kdebase_workspace = kde.modules.kde_workspace;
-
   inherit release;
-
-  full = stdenv.lib.attrValues kde.modules;
 
   l10n = callPackage ./l10n {
     inherit release branch;

@@ -1,4 +1,4 @@
-{ clangStdenv, fetchFromGitHub, fetchsvn, gyp, which, ninja, python, pkgconfig, protobuf, ibus, gtk2, zinnia, qt4, libxcb, tegaki-zinnia-japanese }:
+{ clangStdenv, fetchFromGitHub, fetchsvn, which, ninja, python2, pkgconfig, protobuf, ibus, gtk2, zinnia, qt4, libxcb, tegaki-zinnia-japanese }:
 
 let
   japanese_usage_dictionary = fetchsvn {
@@ -19,7 +19,7 @@ in clangStdenv.mkDerivation rec {
     maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
-  nativeBuildInputs = [ gyp which ninja python pkgconfig ];
+  nativeBuildInputs = [ which ninja python2 python2.pkgs.gyp pkgconfig ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt4 libxcb ];
 
   src = fetchFromGitHub {
@@ -36,8 +36,8 @@ in clangStdenv.mkDerivation rec {
 
   configurePhase = ''
     export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc"
-    python src/build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc \
-    python src/unix/fcitx/fcitx.gyp gyp --gypdir=${gyp}/bin
+    python src/build_mozc.py gyp --gypdir=${python2.pkgs.gyp}/bin --server_dir=$out/lib/mozc \
+    python src/unix/fcitx/fcitx.gyp gyp --gypdir=${python2.pkgs.gyp}/bin
   '';
 
   preBuildPhase = ''

@@ -1,18 +1,18 @@
 { stdenv, fetchurl }:
 
-let name = "libbsd-0.8.2";
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "libbsd-${version}";
+  version = "0.8.3";
 
   src = fetchurl {
     url = "http://libbsd.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "02i5brb2007sxq3mn862mr7yxxm0g6nj172417hjyvjax7549xmj";
+    sha256 = "1a1l7afchlvvj2zfi7ajcg26bbkh5i98y2v5h9j5p1px9m7n6jwk";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Common functions found on BSD systems";
     homepage = http://libbsd.freedesktop.org/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

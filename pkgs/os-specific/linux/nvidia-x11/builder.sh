@@ -68,10 +68,17 @@ installPhase() {
             nuke-refs $i
             cp $i $bin/lib/modules/$kernelVersion/misc/
         done
+
+        # Install application profiles.
+        if [ "$useProfiles" = "1" ]; then
+            mkdir -p $bin/share/nvidia
+            cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
+            cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
+        fi
     fi
 
     # All libs except GUI-only are installed now, so fixup them.
-    for libname in `find "$out/lib/" -name '*.so.*'` `find "$bin/lib/" -name '*.so.*'`
+    for libname in `find "$out/lib/" -name '*.so.*'` `test -z "$bin" || find "$bin/lib/" -name '*.so.*'`
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.

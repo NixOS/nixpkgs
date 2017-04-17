@@ -119,6 +119,13 @@ in
         ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
       '';
 
+      restartTriggers = [ confFile ];
+      reloadIfChanged = true;
+      reload = ''
+        cp ${confFile} ${stateDir}/unbound.conf
+        ${pkgs.coreutils}/bin/kill -HUP $MAINPID
+      '';
+
       serviceConfig = {
         ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
         ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";

@@ -17,7 +17,7 @@ in pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "http://brettcsmith.org/2007/dtrx/dtrx-${version}.tar.gz";
-    sha1 = "05cfe705a04a8b84571b0a5647cd2648720791a4";
+    sha256 = "15yf4n27zbhvv0byfv3i89wl5zn6jc2wbc69lk5a3m6rx54gx6hw";
   };
 
   postInstall = ''

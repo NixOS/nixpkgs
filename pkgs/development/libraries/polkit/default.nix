@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freedesktop.org/wiki/Software/polkit;
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     platforms = platforms.linux;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

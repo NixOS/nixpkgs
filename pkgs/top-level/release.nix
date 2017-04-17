@@ -12,12 +12,14 @@
 { nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
+with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
 
 let
 
@@ -30,6 +32,21 @@ let
 
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
+
+      darwin-tested = pkgs.releaseTools.aggregate
+        { name = "nixpkgs-darwin-${jobs.tarball.version}";
+          meta.description = "Release-critical builds for the Nixpkgs darwin channel";
+          constituents =
+            [ jobs.tarball
+              jobs.stdenv.x86_64-darwin
+              jobs.ghc.x86_64-darwin
+              jobs.cabal2nix.x86_64-darwin
+              jobs.ruby.x86_64-darwin
+              jobs.python.x86_64-darwin
+              jobs.rustc.x86_64-darwin
+              jobs.go.x86_64-darwin
+            ];
+        };
 
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
@@ -73,6 +90,9 @@ let
     }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" supportedSystems) {
       stdenvBootstrapTools.x86_64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
+    }) // (lib.optionalAttrs (builtins.elem "aarch64-linux" supportedSystems) {
+      stdenvBootstrapTools.aarch64-linux =
+        { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "aarch64-linux"; }) dist test; };
     }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
       stdenvBootstrapTools.x86_64-darwin =
         let

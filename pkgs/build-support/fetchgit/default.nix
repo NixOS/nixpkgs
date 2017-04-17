@@ -39,18 +39,20 @@ in
    server admins start using the new version?
 */
 
-assert md5 != "" || sha256 != "";
 assert deepClone -> leaveDotGit;
 
+if md5 != "" then
+  throw "fetchgit does not support md5 anymore, please use sha256"
+else
 stdenv.mkDerivation {
   inherit name;
   builder = ./builder.sh;
   fetcher = "${./nix-prefetch-git}";  # This must be a string to ensure it's called with bash.
   buildInputs = [git];
 
-  outputHashAlgo = if sha256 == "" then "md5" else "sha256";
+  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = if sha256 == "" then md5 else sha256;
+  outputHash = sha256;
 
   inherit url rev leaveDotGit fetchSubmodules deepClone branchName;
 
