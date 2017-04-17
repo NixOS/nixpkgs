@@ -171,7 +171,7 @@ in
 
       systemd.services.consul = {
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ] ++ systemdDevices;
+        after = [ "network.target" "systemd-udev-settle.service" ] ++ systemdDevices;
         bindsTo = systemdDevices;
         restartTriggers = [ config.environment.etc."consul.json".source ]
           ++ mapAttrsToList (_: d: d.source)
