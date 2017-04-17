@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
+  patches = [ ./CVE-2015-7673_0.patch ./CVE-2015-7673_1.patch
+              ./CVE-2015-7673_2.patch ./CVE-2015-7674.patch ];
+
   configureFlags = "--with-libjasper --with-x11"
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;
