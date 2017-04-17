@@ -105,7 +105,6 @@ stdenv.mkDerivation {
       "-accessibility"
       "-optimized-qmake"
       "-strip"
-      "-no-reduce-relocations"
       "-system-proxies"
       "-pkg-config"
     ]
@@ -151,22 +150,27 @@ stdenv.mkDerivation {
 
     ++ lib.optionals (!stdenv.isDarwin) [
       "-rpath"
-      "-glib"
+
+      "-system-xcb"
       "-xcb"
       "-qpa xcb"
-      ''-${lib.optionalString (cups == null) "no-"}cups''
+
+      "-system-xkbcommon"
+      "-libinput"
+      "-xkbcommon-evdev"
 
       "-no-eglfs"
-      "-no-directfb"
-      "-no-linuxfb"
+      "-no-gbm"
       "-no-kms"
+      "-no-linuxfb"
 
-      "-libinput"
-      "-gtk"
-      "-system-libpng"
-      "-system-xcb"
-      "-system-xkbcommon"
+      ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
+      "-glib"
+      "-gtk"
+      "-inotify"
+      "-system-libjpeg"
+      "-system-libpng"
     ]
 
     ++ lib.optionals stdenv.isDarwin [
