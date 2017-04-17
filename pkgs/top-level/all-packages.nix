@@ -17297,6 +17297,8 @@ with pkgs;
     inherit (linuxPackages) nvidia_x11;
   };
 
+  eureqa = callPackage ../applications/science/math/eureqa { };
+
   jags = callPackage ../applications/science/math/jags { };
 
 
