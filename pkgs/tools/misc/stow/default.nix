@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = with perlPackages; [ perl IOStringy TestOutput ];
 
+  patches = [ ./precedence-issue.patch ];
+
   doCheck = true;
 
   meta = {
