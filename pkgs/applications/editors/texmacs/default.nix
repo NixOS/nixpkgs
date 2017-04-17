@@ -64,7 +64,11 @@ stdenv.mkDerivation rec {
         (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +
         (if aspell == null then "" else "${aspell}/bin:") +
         (if tex == null then "" else "${tex}/bin:") +
-        "${xmodmap}/bin:${which}/bin";
+        "${xmodmap}/bin:${which}/bin" +
+        # point to TFM and PK files
+        (if tex == null then "" else " " + 
+          "--set TEX_TFM_PATH ${tex}/share/texmf-dist/fonts/tfm/ " +
+          "--set TEX_PK_PATH ${tex}/share/texmf-dist/fonts/pk/");
 
   postFixup = ''
     bin="$out/libexec/TeXmacs/bin/texmacs.bin"
