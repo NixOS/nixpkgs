@@ -27250,29 +27250,7 @@ EOF
     };
   });
 
-  xarray = buildPythonPackage rec {
-    name = "xarray-${version}";
-    version = "0.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xarray/${name}.tar.gz";
-      sha256 = "89772ed0e23f0e71c3fb8323746374999ecbe79c113e3fadc7ae6374e6dc0525";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [numpy pandas];
-
-    checkPhase = ''
-      py.test $out/${python.sitePackages}
-    '';
-
-    meta = {
-      description = "N-D labeled arrays and datasets in Python";
-      homepage = https://github.com/pydata/xarray;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  xarray = callPackage ../development/python-modules/xarray { };
 
   xlwt = callPackage ../development/python-modules/xlwt { };
 
