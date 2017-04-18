@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "lftp-${version}";
-  version = "4.7.6";
+  version = "4.7.7";
 
   src = fetchurl {
     urls = [
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${name}.tar.bz2"
       "http://lftp.yar.ru/ftp/old/${name}.tar.bz2"
       ];
-    sha256 = "6b46389e9c2e67af9029a783806facea4c8f0b4d6adca5c1088e948d2fd68ae7";
+    sha256 = "104jvzmvbmblfg8n8ffrnrrg8za5l25n53lbkawwy5x3m4h1yi7y";
   };
 
   nativeBuildInputs = [ pkgconfig ];

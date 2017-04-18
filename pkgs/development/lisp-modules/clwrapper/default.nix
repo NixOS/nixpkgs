@@ -28,6 +28,7 @@ stdenv.mkDerivation {
         (uiop/lisp-build:compile-file* \"'"$out"'/lib/common-lisp/asdf/build/asdf.lisp\")
         (asdf:load-system :uiop :force :all)
         (asdf:load-system :asdf :force :all)
+        (ignore-errors (asdf:load-system :uiop/version :force :all))
       )"' \
       "$out/bin/common-lisp.sh"
   '';

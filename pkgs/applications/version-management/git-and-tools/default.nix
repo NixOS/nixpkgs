@@ -30,6 +30,8 @@ rec {
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
+  ghq = callPackage ./ghq { };
+
   git = appendToName "minimal" gitBase;
 
   # The full-featured Git.
@@ -67,6 +69,8 @@ rec {
   git-imerge = callPackage ./git-imerge { };
 
   git-octopus = callPackage ./git-octopus { };
+
+  git-open = callPackage ./git-open { };
 
   git-radar = callPackage ./git-radar { };
 

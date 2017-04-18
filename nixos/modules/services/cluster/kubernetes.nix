@@ -45,7 +45,7 @@ let
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";
     paths = imap (i: entry:
-      pkgs.writeTextDir "${10+i}-${entry.type}.conf" (builtins.toJSON entry)
+      pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
     ) cfg.kubelet.cni.config;
   };
 
@@ -597,7 +597,7 @@ in {
     (mkIf cfg.kubelet.enable {
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" "kube-apiserver.service" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables ];
         preStart = ''
@@ -606,6 +606,7 @@ in {
           ${concatMapStringsSep "\n" (p: "ln -fs ${p.plugins}/* /opt/cni/bin") cfg.kubelet.cni.packages}
         '';
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kubelet \
             --pod-manifest-path=${manifests} \
             --kubeconfig=${kubeconfig} \
@@ -655,9 +656,10 @@ in {
     (mkIf cfg.apiserver.enable {
       systemd.services.kube-apiserver = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" ];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-apiserver \
             --etcd-servers=${concatStringsSep "," cfg.etcd.servers} \
             ${optionalString (cfg.etcd.caFile != null)
@@ -713,9 +715,10 @@ in {
     (mkIf cfg.scheduler.enable {
       systemd.services.kube-scheduler = {
         description = "Kubernetes Scheduler Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-scheduler \
             --address=${cfg.scheduler.address} \
             --port=${toString cfg.scheduler.port} \
@@ -735,11 +738,12 @@ in {
     (mkIf cfg.controllerManager.enable {
       systemd.services.kube-controller-manager = {
         description = "Kubernetes Controller Manager Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
           RestartSec = "30s";
           Restart = "on-failure";
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
             --address=${cfg.controllerManager.address} \
             --port=${toString cfg.controllerManager.port} \
@@ -767,10 +771,11 @@ in {
     (mkIf cfg.proxy.enable {
       systemd.services.kube-proxy = {
         description = "Kubernetes Proxy Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         path = [pkgs.iptables];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-proxy \
             --kubeconfig=${kubeconfig} \
             --bind-address=${cfg.proxy.address} \
@@ -786,9 +791,10 @@ in {
     (mkIf cfg.dns.enable {
       systemd.services.kube-dns = {
         description = "Kubernetes Dns Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-dns \
             --kubecfg-file=${kubeconfig} \
             --dns-port=${toString cfg.dns.port} \
@@ -836,6 +842,11 @@ in {
         cfg.proxy.enable ||
         cfg.dns.enable
     ) {
+      systemd.targets.kubernetes = {
+        description = "Kubernetes";
+        wantedBy = [ "multi-user.target" ];
+      };
+
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /var/run/kubernetes 0755 kubernetes kubernetes -"

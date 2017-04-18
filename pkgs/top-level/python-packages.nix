@@ -2524,6 +2524,8 @@ in {
     doCheck = false; # lazy packager
   };
 
+  csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
+
   csvkit = buildPythonPackage rec {
     name = "csvkit-${version}";
     version = "0.9.1";
@@ -7746,6 +7748,9 @@ in {
       license = licenses.bsd3;
     };
   });
+
+
+  htmlmin = callPackage ../development/python-modules/htmlmin.nix {};
 
   httpauth = buildPythonPackage rec {
     version = "0.3";
@@ -13273,6 +13278,10 @@ in {
       license = with licenses; [ lgpl21 ];
     };
   };
+  
+  iso-639 = callPackage ../development/python-modules/iso-639 {};
+  
+  iso3166 = callPackage ../development/python-modules/iso3166 {};
 
   iso8601 = buildPythonPackage rec {
     name = "iso8601-${version}";
@@ -22330,7 +22339,7 @@ in {
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
-    propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
+    propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5];
 
     # : cannot connect to X server
     doCheck = false;

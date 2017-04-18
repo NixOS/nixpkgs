@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, cmake, perl, ruby, boost, lua5_1, graphviz, libsigcxx
-, libunwind, elfutils
+{ fetchurl, stdenv, cmake, perl, ruby, boost, lua5_3, graphviz, libsigcxx
+, libunwind, elfutils, python3, doxygen
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.11.1";
+  version = "3.15";
   name = "simgrid-${version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33686/${name}.tar.gz";
-    sha256 = "0mkrzxpf42lmn96khfl1791vram67r2nqsgmppd2yil889nyz5kp";
+    url = "https://gforge.inria.fr/frs/download.php/36621/${name}.tar.gz";
+    sha256 = "1s595wc4z8hkvim3ypfdxy16pply6ckjg10v84cc0lx9pz6i3r6i";
   };
 
-  buildInputs = [ cmake perl ruby boost lua5_1 graphviz libsigcxx libunwind
-    elfutils
+  buildInputs = [ cmake perl ruby boost lua5_3 graphviz libsigcxx libunwind
+    elfutils python3 doxygen
     ];
 
   preConfigure =
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
        # Enable more functionality.
        export cmakeFlags="$cmakeFlags -Denable_tracing=on -Denable_jedule=on
          -Denable_latency_bound_tracking=on -Denable_lua=on
-	 -Denable_ns3=on -Denable_gtnets=on
+	 -Denable_ns3=off -Denable_gtnets=on
 	 "
     '';
 
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e's|/usr/bin/perl|${perl}/bin/perl|g'
        done
+       patchShebangs ./tools/
     '';
 
   # Fixing the few tests that fail is left as an exercise to the reader.

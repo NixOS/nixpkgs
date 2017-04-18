@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs
+, curl, libiconv, gmp, xen, zfs, parted
 }:
 
 with stdenv.lib;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    attr libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+    attr libxslt xhtml1 perlPackages.XMLXPath curl libpcap parted
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl xen
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     "--with-test"
     "--with-esx"
     "--with-remote"
+    "--with-storage-disk"
   ] ++ optionals stdenv.isLinux [
     "--with-attr"
     "--with-apparmor"
