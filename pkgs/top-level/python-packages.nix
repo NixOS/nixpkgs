@@ -22209,28 +22209,7 @@ in {
     };
   };
 
-  qtconsole = buildPythonPackage rec {
-    version = "4.2.1";
-    name = "qtconsole-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/qtconsole/${name}.tar.gz";
-      sha256 = "1vqqx9hdvrg2d336wjyw0vr5b5v97kflkqqvr7ryicr8als7vv15";
-    };
-
-    buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
-    propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5];
-
-    # : cannot connect to X server
-    doCheck = false;
-
-    meta = {
-      description = "Jupyter Qt console";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
