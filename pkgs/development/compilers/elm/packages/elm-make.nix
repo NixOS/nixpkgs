@@ -1,22 +1,22 @@
 { mkDerivation, aeson, ansi-terminal, ansi-wl-pprint, base, binary
 , blaze-html, blaze-markup, bytestring, containers, directory
 , elm-compiler, elm-package, fetchgit, filepath, mtl
-, optparse-applicative, stdenv, text, time
+, optparse-applicative, stdenv, text, time, raw-strings-qq
 }:
 mkDerivation {
   pname = "elm-make";
-  version = "0.16";
+  version = "0.17";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-make";
-    sha256 = "fc0a6ed08b236dfab43e9af73f8e83a3b88a155695a9671a2b291dc596a75116";
-    rev = "54e0b33fea0cd72400ac6a3dec7643bf1b900741";
+    sha256 = "0y8a67y8jhnhbcqzgjymyf1ffs75vyfpyb8as2bi0mkhb7fvzi6q";
+    rev = "5f7b74567c43eff341048c7caceb247b51cdb8bb";
   };
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
     aeson ansi-terminal ansi-wl-pprint base binary blaze-html
     blaze-markup bytestring containers directory elm-compiler
-    elm-package filepath mtl optparse-applicative text time
+    elm-package filepath mtl optparse-applicative text time raw-strings-qq
   ];
   jailbreak = true;
   homepage = "http://elm-lang.org";
