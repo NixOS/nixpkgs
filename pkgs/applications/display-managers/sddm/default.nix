@@ -25,6 +25,12 @@ let
       })
     ];
 
+    postPatch =
+      # Module Qt5::Test must be included in `find_package` before it is used.
+      ''
+        sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
+      '';
+
     nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
     buildInputs = [
