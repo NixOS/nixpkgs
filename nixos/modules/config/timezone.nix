@@ -44,6 +44,8 @@ in
         mode = "direct-symlink";
       };
 
+    environment.etc.timezone.text = config.time.timeZone;
+
     environment.etc.zoneinfo.source = "${pkgs.tzdata}/share/zoneinfo";
 
   };
