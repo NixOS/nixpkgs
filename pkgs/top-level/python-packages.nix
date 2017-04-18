@@ -4788,11 +4788,13 @@ in {
 
 
   idna = buildPythonPackage rec {
-    name = "idna-2.0";
+    pname = "idna";
+    version = "2.5";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/idna/${name}.tar.gz";
-      sha256 = "0frxgmgi234lr9hylg62j69j4ik5zhg0wz05w5dhyacbjfnrl68n";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "3cb5ce08046c4e3a560fc02f138d0ac63e00f8ce5901a56b32ec8b7994082aab";
     };
 
     meta = {
