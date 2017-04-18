@@ -55,6 +55,6 @@ in buildPythonPackage (args // rec {
   meta = {
     description = "Scientific tools for Python";
     homepage = "http://numpy.scipy.org/";
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh adnelson ];
   } // (args.meta or {});
 })
