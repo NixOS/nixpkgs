@@ -24,5 +24,10 @@ buildGoPackage rec {
     rm -v $bin/bin/{man,script,genmakefile}
   '';
 
-  maintainers = [ lib.maintainers.twey ];
+  meta = {
+    description = "Git extension for versioning large files";
+    homepage    = https://git-lfs.github.com/;
+    license     = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers.twey ];
+  };
 }
