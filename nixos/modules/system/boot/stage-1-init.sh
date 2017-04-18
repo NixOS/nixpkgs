@@ -154,6 +154,9 @@ for o in $(cat /proc/cmdline); do
             fi
             ln -s "$root" /dev/root
             ;;
+        copytoram)
+            copytoram=1
+            ;;
     esac
 done
 
@@ -473,6 +476,22 @@ while read -u 3 mountPoint; do
     # Wait once more for the udev queue to empty, just in case it's
     # doing something with $device right now.
     udevadm settle
+
+    # If copytoram is enabled: skip mounting the ISO and copy its content to a tmpfs.
+    if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
+      fsType=$(blkid -o value -s TYPE "$device")
+      fsSize=$(blockdev --getsize64 "$device")
+
+      mkdir -p /tmp-iso
+      mount -t "$fsType" /dev/root /tmp-iso
+      mountFS tmpfs /iso size="$fsSize" tmpfs
+
+      cp -r /tmp-iso/* /mnt-root/iso/
+
+      umount /tmp-iso
+      rmdir /tmp-iso
+      continue
+    fi
 
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
