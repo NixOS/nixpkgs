@@ -22339,7 +22339,7 @@ in {
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
-    propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
+    propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5];
 
     # : cannot connect to X server
     doCheck = false;
