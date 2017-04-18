@@ -27374,6 +27374,26 @@ EOF
     ffmpegSupport = false;
   };
 
+  you-get=buildPythonPackage rec {
+    name="you-get-${version}";
+    version="0.4.293";
+    src = pkgs.fetchFromGitHub {
+      owner = "soimort";
+      repo = "you-get";
+      rev = "v${version}";
+      sha256 = "16g1lfjhjaai1k2vfa7fw577bvar20nz8zw75nsz3qy6knla3mzn";
+    };
+    meta={
+      licenses="MIT";
+      description="A tiny command-line utility to download media contents (videos, audios, images) from the Web.";
+      homepage="https://you-get.org/";
+    };
+    disabled=!isPy3k;
+    #namePrefix="";
+    propagateBuildInputs= [pkgs.ffmpeg];
+    doCheck=false;#checks require working sites
+  };
+  
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 
