@@ -32006,6 +32006,10 @@ EOF
       license = [ licenses.bsd2 licenses.asl20 ];
       maintainers = with maintainers; [ bennofs ];
     };
+
+    checkPhase = ''
+      py.test
+    '';
   };
 
   pypandoc = buildPythonPackage rec {
