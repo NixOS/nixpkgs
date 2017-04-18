@@ -22760,7 +22760,7 @@ in {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = self.scipy_0_18;
+  scipy = self.scipy_0_19;
 
   scipy_0_17 = self.buildScipyPackage rec {
     version = "0.17.1";
@@ -22776,6 +22776,15 @@ in {
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
       sha256 = "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e";
+    };
+    numpy = self.numpy;
+  };
+
+  scipy_0_19 = self.buildScipyPackage rec {
+    version = "0.19.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scipy/scipy-${version}.zip";
+      sha256 = "4190d34bf9a09626cd42100bbb12e3d96b2daf1a8a3244e991263eb693732122";
     };
     numpy = self.numpy;
   };
