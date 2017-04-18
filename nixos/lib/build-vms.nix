@@ -1,6 +1,6 @@
 { system, minimal ? false, config ? {} }:
 
-let pkgs = import ../.. { inherit system config; }; in
+let pkgs = import <nixpkgs> { inherit system config; }; in
 
 with pkgs.lib;
 with import ../lib/qemu-flags.nix;
