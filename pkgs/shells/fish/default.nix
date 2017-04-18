@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "fish-${version}";
   version = "2.5.0";
 
-  patches = [ ./etc_config.patch ];
+  patches = [ ./etc_config.patch ./sync-terminfo.patch ];
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
