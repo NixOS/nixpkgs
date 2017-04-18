@@ -628,6 +628,9 @@ with import <nixpkgs> {};
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
 
+Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv` 
+should be used with `ignoreCollisions = true`.
+
 ### Development mode
 
 Development or editable mode is supported. To develop Python packages
