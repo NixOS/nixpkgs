@@ -1,13 +1,15 @@
-{ fetchurl, stdenv, gmp }:
+{ stdenv, fetchurl, autoconf, automake, libtool, gmp }:
 
 stdenv.mkDerivation rec {
   name = "bigloo-${version}";
-  version = "4.1a-2";
+  version = "4.2c";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo${version}.tar.gz";
-    sha256 = "09yrz8r0jpj7bda39fdxzrrdyhi851nlfajsyf0b6jxanz6ygcjx";
+    sha256 = "02yi1g0xgs8priwk4hmj6b4l8icq05lri36xa1nv69j38yzldchg";
   };
+
+  nativeBuildInputs = [ autoconf automake libtool ];
 
   propagatedBuildInputs = [ gmp ];
 
