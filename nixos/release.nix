@@ -286,6 +286,7 @@ in rec {
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
+  tests.pam-u2f = callTest tests/pam-u2f.nix {};
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
