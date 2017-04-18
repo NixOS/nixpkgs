@@ -24986,29 +24986,7 @@ in {
     };
   };
 
-  statsmodels = buildPythonPackage rec {
-    name = "statsmodels-${version}";
-    version = "0.6.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/statsmodels/${name}.tar.gz";
-      sha256 = "be4e44374aec9e848b73e5a230dee190ac0c4519e1d40f69a5813190b13ec676";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [numpy scipy pandas patsy cython matplotlib];
-
-    meta = {
-      description = "Statistical computations and models for use with SciPy";
-      homepage = "https://www.github.com/statsmodels/statsmodels";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-
-    # Many tests fail when using latest numpy and pandas.
-    # See also https://github.com/statsmodels/statsmodels/issues/2602
-    doCheck = false;
-  };
+  statsmodels = callPackage ../development/python-modules/statsmodels { };
 
   python_statsd = buildPythonPackage rec {
     name = "python-statsd-${version}";
