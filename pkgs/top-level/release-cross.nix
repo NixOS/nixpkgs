@@ -50,7 +50,7 @@ in
     in assertTrue (
         f path { inherit system; }
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; };
+        f (["buildPackages"] ++ path) { inherit system crossSystem; }
       );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
