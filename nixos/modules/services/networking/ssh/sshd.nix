@@ -231,6 +231,7 @@ in
     users.extraUsers.sshd =
       { isSystemUser = true;
         description = "SSH privilege separation user";
+        uid = config.ids.uids.sshd;
       };
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
