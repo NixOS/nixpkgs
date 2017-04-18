@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "34.3.2";
+  version = "35.0.0";
   name = "${pname}-${version}";
 
   format = "wheel";       # Wheel required for bootstrapping setuptools.
   catchConflicts = false; # For bootstrapping
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "6483f8412313ec787fa71379147a4605d3b1cc303c3648d02542a9160d3db72b";
+    sha256 = "b427014a0cf196e57727e141899c20381051233094783aa6274780a100eb65d9";
   };
 
   propagatedBuildInputs = [ appdirs six packaging ];
