@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     owner = "D-Programming-Language";
   };
 
-  buildInputs = [ curl ];
-  propagatedBuildInputs = [ gcc dmd ];
+  buildInputs = [ curl gcc dmd ];
 
   buildPhase = ''
     # Avoid that the version file is overwritten
