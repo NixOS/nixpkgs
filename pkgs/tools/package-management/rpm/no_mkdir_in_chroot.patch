@@ -1,0 +1,11 @@
+diff -u a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2016-05-04 17:46:52.453406808 +0900
++++ b/Makefile.in	2016-05-04 17:49:25.406651217 +0900
+@@ -1809,7 +1809,6 @@
+ 		$(SHELL) $(top_srcdir)/installplatform \
+ 			rpmrc platform macros \
+ 			$(RPMCANONVENDOR) $(RPMCANONOS) $(RPMCANONGNU)
+-	@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp
+ 
+ # XXX to appease distcheck we need to remove "stuff" here...
+ uninstall-local:

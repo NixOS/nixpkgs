@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./rpm-4.13.0.1-bfd-config.patch ];
 
+  patches = [ ./no_mkdir_in_chroot.patch ];
+
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
     substituteInPlace configure.ac --replace 'python''${PYTHON_VERSION}' ${python.executable}
