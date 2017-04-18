@@ -16007,35 +16007,7 @@ in {
     buildInputs = with self; [ nose ];
   };
 
-  notebook = buildPythonPackage rec {
-    version = "4.4.1";
-    name = "notebook-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "dfadef2babd7c04c6c257df7d07d7ba587e503dbb4e4c95305f9a95b8d3a9765";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = with self; [nose pkgs.glibcLocales]  ++ optionals isPy27 [mock];
-
-    propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests2 pexpect];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Certain tests fail due to being in a chroot.
-    # PermissionError
-    doCheck = false;
-    meta = {
-      description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  notebook = callPackage ../development/python-modules/notebook { };
 
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
