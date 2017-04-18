@@ -16513,7 +16513,7 @@ with pkgs;
   bastet = callPackage ../games/bastet {};
 
   beancount = callPackage ../applications/office/beancount {
-      pythonPackages = python3Packages;
+      pythonPackages = python34Packages;
   };
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
