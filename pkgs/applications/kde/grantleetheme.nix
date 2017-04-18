@@ -10,9 +10,11 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
+  output = [ "out" "dev" ];
+  patches = [ ./grantleetheme_check_null.patch ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee5 ki18n kiconthemes knewstuff kservice kxmlgui qtbase
   ];
-  output = [ "out" "dev" ];
+  propagatedBuildInputs = [ grantlee5 kiconthemes knewstuff ];
 }
