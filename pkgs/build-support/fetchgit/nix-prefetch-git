@@ -46,6 +46,7 @@ Options:
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
+      --dry-run       Do not actually store the repository.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
 "
     exit 1
@@ -66,6 +67,7 @@ for arg; do
             --no-deepClone) deepClone=false;;
             --leave-dotGit) leaveDotGit=true;;
             --fetch-submodules) fetchSubmodules=true;;
+            --dry-run) dryRun=true;;
             --builder) builder=true;;
             --help) usage; exit;;
             *)
@@ -402,8 +404,10 @@ else
         # Compute the hash.
         hash=$(nix-hash --type $hashType --base32 "$tmpFile")
 
-        # Add the downloaded file to the Nix store.
-        finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
+        if test -z "$dryRun"; then
+            # Add the downloaded file to the Nix store.
+            finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
+        fi
 
         if test -n "$expHash" -a "$expHash" != "$hash"; then
             echo "hash mismatch for URL \`$url'. Got \`$hash'; expected \`$expHash'." >&2
