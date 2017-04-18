@@ -4573,13 +4573,17 @@ in {
 
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
-    name = "cryptography_vectors-${version}";
-    version = "1.7.2";
+    pname = "cryptography_vectors";
+    name = "${pname}${version}";
+    version = "1.8.1";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "1p5cw3dzgcpzmp81qb9860hn9qlcvr4rnf0fy31fbvhxl7lfxr2b";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "2fd61facea08800ca98ac923f6d02f48a7ae6648025b29cdeb51987c1532add6";
     };
+
+    # No tests included
+    doCheck = false;
   };
 
   oslo-vmware = buildPythonPackage rec {
