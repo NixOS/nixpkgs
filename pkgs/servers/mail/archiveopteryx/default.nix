@@ -11,12 +11,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ jam ];
   buildInputs = [ openssl perl zlib ];
 
-  preConfigure = ''export PREFIX="$out" '';
+  preConfigure = ''
+    export INSTALLROOT=installroot
+    sed -i 's:BINDIR = $(PREFIX)/bin:BINDIR = '$out'/bin:' ./Jamsettings
+    sed -i 's:SBINDIR = $(PREFIX)/sbin:SBINDIR = '$out'/bin:' ./Jamsettings
+    sed -i 's:LIBDIR = $(PREFIX)/lib:LIBDIR = '$out'/lib:' ./Jamsettings
+    sed -i 's:MANDIR = $(PREFIX)/man:MANDIR = '$out'/share/man:' ./Jamsettings
+    sed -i 's:READMEDIR = $(PREFIX):READMEDIR = '$out'/share/doc/archiveopteryx:' ./Jamsettings
+  '';
   buildPhase = ''jam "-j$NIX_BUILD_CORES" '';
   installPhase = ''
     jam install
-    mkdir -p "$out/share/doc/archiveopteryx"
-    mv -t "$out/share/doc/archiveopteryx/" "$out"/{bsd.txt,COPYING,README}
+    mv installroot/$out $out
   '';
 
   meta = with stdenv.lib; {
