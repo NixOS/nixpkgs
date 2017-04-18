@@ -5,11 +5,11 @@ let inherit (composableDerivation) wwf; in
 
 composableDerivation.composableDerivation {} rec {
 
-  name = "xapian-bindings-1.2.8";
+  name = "xapian-bindings-1.2.23";
 
   src = fetchurl {
-    url = "http://oligarchy.co.uk/xapian/1.2.8/${name}.tar.gz";
-    sha256 = "eb740c619c75d288e65a1c2f86faecdca53d44d3f9896bcc080085839887b124";
+    url = "http://oligarchy.co.uk/xapian/1.2.23/${name}.tar.xz";
+    sha256 = "05929d9bq9df25kh2i6gk2w09w7p5qknf9cc7mrm2g46finbbd0r";
   };
 
   buildInputs = [ xapian pkgconfig zlib ];
@@ -24,8 +24,8 @@ composableDerivation.composableDerivation {} rec {
             preConfigure = ''
               export PYTHON_LIB=$out/lib/${python.libPrefix}/site-packages
               mkdir -p $out/nix-support
-              echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
-              echo "export PYTHONPATH=\"$PYTHON_LIB:\$PYTHONPATH\"" >> $out/nix-support/setup-hook 
+              echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook
+              echo "export PYTHONPATH=\"$PYTHON_LIB:\$PYTHONPATH\"" >> $out/nix-support/setup-hook
             '';
            };
          }
@@ -46,8 +46,8 @@ composableDerivation.composableDerivation {} rec {
                export RUBY_LIB=$out/${ruby.libPath}
                export RUBY_LIB_ARCH=$RUBY_LIB
                mkdir -p $out/nix-support
-               echo "export RUBYLIB=\"$RUBY_LIB:\$RUBYLIB\"" >> $out/nix-support/setup-hook 
-               echo "export GEM_PATH=\"$out:\$GEM_PATH\"" >> $out/nix-support/setup-hook 
+               echo "export RUBYLIB=\"$RUBY_LIB:\$RUBYLIB\"" >> $out/nix-support/setup-hook
+               echo "export GEM_PATH=\"$out:\$GEM_PATH\"" >> $out/nix-support/setup-hook
              '';
            };
          }
@@ -60,11 +60,11 @@ composableDerivation.composableDerivation {} rec {
 
   cfg = {
     pythonSupport = true;
-    phpSupport = true;
+    phpSupport = false;
     rubySupport = true;
   };
 
-  meta = { 
+  meta = {
     description = "Bindings for the Xapian library";
     homepage = xapian.meta.homepage;
     license = stdenv.lib.licenses.gpl2Plus;

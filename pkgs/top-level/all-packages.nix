@@ -9058,11 +9058,7 @@ let
   xapian = callPackage ../development/libraries/xapian { };
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
-  };
-
-  xapian10 = callPackage ../development/libraries/xapian/1.0.x.nix { };
-
-  xapianBindings10 = callPackage ../development/libraries/xapian/bindings/1.0.x.nix {  # TODO perl php Java, tcl, C#, python
+    php = php56;
   };
 
   xapian-omega = callPackage ../tools/misc/xapian-omega {};
@@ -13212,7 +13208,7 @@ let
   smtube = qt5.callPackage ../applications/video/smtube {};
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby_1_9_3.override { cursesSupport = true; };
+    ruby = ruby_2_3.override { cursesSupport = true; };
   };
 
   synapse = callPackage ../applications/misc/synapse {

@@ -5923,6 +5923,23 @@ in modules // {
     };
   };
 
+  imagesize = buildPythonPackage rec {
+    name = "imagesize-${version}";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/imagesize/${name}.tar.gz";
+      sha256 = "0msgz4ncp2nb5nbsxnf8kvxsl6nhwvc3b46ik097fvznl3y10gdv";
+    };
+
+    meta = {
+      description = "Getting image size from png/jpeg/jpeg2000/gif file";
+      homepage = https://github.com/shibukawa/imagesize_py;
+      license = with licenses; [ mit ];
+    };
+
+  };
+
   imread = buildPythonPackage rec {
     name = "python-imread-${version}";
     version = "0.5.1";
@@ -6950,11 +6967,11 @@ in modules // {
 
 
   pyramid_beaker = buildPythonPackage rec {
-    name = "pyramid_beaker-0.7";
+    name = "pyramid_beaker-0.8";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid_beaker/${name}.tar.gz";
-      md5 = "acb863517a98b90b5f29648ce55dd563";
+      sha256 = "0hflx3qkcdml1mwpq53sz46s7jickpfn0zy0ns2c7j445j66bp3p";
     };
 
     propagatedBuildInputs = with self; [ beaker pyramid ];
@@ -6962,6 +6979,7 @@ in modules // {
     meta = {
       maintainers = with maintainers; [ iElectric ];
       platforms = platforms.all;
+      broken = true;
     };
   };
 
@@ -8725,11 +8743,11 @@ in modules // {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.1";
+    version = "2.5.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      sha256 = "448aed48b0671fe6062f47b98c3081f3a4b36fbe99ddb8ac2a3be6e6cb135603";
+      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -11405,11 +11423,11 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.3";
+    name = "mccabe-0.4.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
-      md5 = "81640948ff226f8c12b3277059489157";
+      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
     };
 
     # See https://github.com/flintwork/mccabe/issues/31
@@ -11420,6 +11438,8 @@ in modules // {
         sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
       }}" test_mccabe.py
     '';
+
+    buildInputs = with self; [ pytestrunner pytest ];
 
     meta = {
       description = "McCabe checker, plugin for flake8";
@@ -16558,12 +16578,12 @@ in modules // {
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.1";
+    version = "2.1.3";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "0yx4p3w9lw1kw24zr87xnaqxm007mdxgwa5wjpwnrcfpmxgyz80k";
+      sha256 = "10axnp2wpjnq9g8wg53fx0c70dfxqrz498jyz8mrdx9a3flwir48";
     };
 
     propagatedBuildInputs = with self; [ docutils ];
@@ -17764,11 +17784,11 @@ in modules // {
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
-    version = "2015.7";
+    version = "2016.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.gz";
-      sha256 = "99266ef30a37e43932deec2b7ca73e83c8dbc3b9ff703ec73eca6b1dae6befea";
+      sha256 = "1a3hjclyylc4m1v1dn04b38wm2vl649ijdswpg0d8m8n0lcxlj9l";
     };
 
     meta = {
@@ -20120,14 +20140,16 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.4";
+    name = "Sphinx-1.3.6";
+
+    # 1.4 is broken
+    # https://github.com/sphinx-doc/sphinx/issues/2394
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      sha256 = "0mw06q7bzzjylgwh0wnnaxmwc95hx8w95as4vcgpan579brw7b4a";
+      sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
 
-    patches = [ ../development/python-modules/sphinx-fix-tests-with-pygments-2.1.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
@@ -20160,11 +20182,11 @@ in modules // {
   };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.8";
+    name = "sphinx_rtd_theme-0.1.9";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sphinx_rtd_theme/${name}.tar.gz";
-      sha256 = "12mnb7qscr07mllmyyqfpx37778sr21m8663b4fivnk17bnk7xkl";
+      sha256 = "18d0r63w7jpdrk4q5qy26n08vdlmnj9sar93akwjphyambw4cf17";
     };
 
     postPatch = ''
