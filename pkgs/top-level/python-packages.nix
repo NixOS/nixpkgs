@@ -13437,32 +13437,7 @@ in {
     inherit (pkgs.jsonnet) name src;
   };
 
-  jupyter_client = buildPythonPackage rec {
-    version = "5.0.0";
-    name = "jupyter_client-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "2766f9c2deb9ae826e65d53a56a36d69b184f63d0dcb7710835273327126bc5b";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq dateutil] ++ optional isPyPy py;
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Circular dependency with ipykernel
-    doCheck = false;
-
-    meta = {
-      description = "Jupyter protocol implementation and client libraries";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  jupyter_client = callPackage ../development/python-modules/jupyter_client { };
 
   jupyter_core = buildPythonPackage rec {
     version = "4.3.0";
