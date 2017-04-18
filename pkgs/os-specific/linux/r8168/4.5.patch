@@ -1,0 +1,13 @@
+diff --git a/src/r8168_n.c b/src/r8168_n.c
+index d197630..b47419d 100755
+--- a/src/r8168_n.c
++++ b/src/r8168_n.c
+@@ -4209,7 +4209,7 @@ static netdev_features_t rtl8168_fix_features(struct net_device *dev,
+         spin_lock_irqsave(&tp->lock, flags);
+         if (dev->mtu > ETH_DATA_LEN) {
+                 features &= ~NETIF_F_ALL_TSO;
+-                features &= ~NETIF_F_ALL_CSUM;
++                features &= ~NETIF_F_CSUM_MASK;
+         }
+         spin_unlock_irqrestore(&tp->lock, flags);
+ 
