@@ -4484,6 +4484,10 @@ in {
         ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
     '';
 
+    # Disable tests temporarily
+    # https://github.com/cython/cython/issues/1676
+    doCheck = false;
+
     meta = {
       description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
       platforms = platforms.all;
