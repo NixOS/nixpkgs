@@ -1,0 +1,13 @@
+diff --git a/test/test_dl.py b/test/test_dl.py
+index a3211a3..53b9f36 100644
+--- a/test/test_dl.py
++++ b/test/test_dl.py
+@@ -15,6 +15,9 @@ class TestDL(unittest.TestCase):
+             libm = 'libm.so'
+
+         handle = dl.dlopen(libm, dl.RTLD_LOCAL|dl.RTLD_LAZY)
++        if handle == 0 and sys.platform.startswith('linux'):
++            self.assertTrue(dl.dlerror() is not None)
++            handle = dl.dlopen('libm.so.6', dl.RTLD_LOCAL|dl.RTLD_LAZY)
+         self.assertTrue(handle != 0)
+         self.assertTrue(dl.dlerror() is None)
