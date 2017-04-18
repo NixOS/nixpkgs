@@ -5615,6 +5615,8 @@ with pkgs;
       };
     });
 
+  mkRustCrate = callPackage ../build-support/rust/rust-utils.nix { };
+
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
