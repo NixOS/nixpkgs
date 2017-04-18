@@ -8065,6 +8065,36 @@ in {
     };
   };
 
+  khal = buildPythonPackage rec {
+    version = "20160215-git";
+    pname = "khal";
+    name = "${pname}-${version}";
+    disabled = (!isPy3k);
+
+    src = pkgs.fetchFromGitHub {
+      owner = "geier";
+      repo = "${pname}";
+      rev = "f4059cd2813a3e86ed96a298d629e77abfc14b34";
+      # For latest released version: rev = "v${version}";
+      sha256 = "1jjgrrylraqzk3n97hay4gj00ky6vlvkfaapfgqlbcxyq30j24vq";
+    };
+
+    buildInputs = with self; [ lxml ];
+
+    meta = {
+      description = "Standards based CLI (console) calendar program, able to synchronize with CalDAV servers";
+      homepage = "http://lostpackets.de/khal/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ ];
+      platforms = platforms.all;
+      longDescription = ''
+        khal is a command line utility with which you can view and edit calendars. By using vdirsyncher
+        this includes remote calendars through the CalDAV protocol.
+      ''; 
+    };
+  };
+
+
   ledger-autosync = buildPythonPackage rec {
     name = "ledger-autosync-${version}";
     version = "0.2.3";
