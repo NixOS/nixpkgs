@@ -13110,31 +13110,7 @@ in {
     };
   };
 
-  ipyparallel = buildPythonPackage rec {
-    version = "6.0.0";
-    name = "ipyparallel-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipyparallel/${name}.tar.gz";
-      sha256 = "9bb5032e98a8c73ddb3da5fb8eecd93c676a5278b68799ab19257b348a0a27f6";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
-    ] ++ optionals (!isPy3k) [ futures ];
-
-    # Requires access to cluster
-    doCheck = false;
-
-    meta = {
-      description = "Interactive Parallel Computing with IPython";
-      homepage = http://ipython.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-
-  };
+  ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
   ipython = buildPythonPackage rec {
     version = "5.3.0";
