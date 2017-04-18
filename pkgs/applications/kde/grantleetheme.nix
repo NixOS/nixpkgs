@@ -10,6 +10,11 @@ kdeApp {
     maintainers = [ lib.maintainers.vandenoever ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+
+  patches = [
+    ./grantleetheme_check_null.patch
+  ];
+
   propagatedBuildInputs = [
     grantlee5 kiconthemes knewstuff
   ];
