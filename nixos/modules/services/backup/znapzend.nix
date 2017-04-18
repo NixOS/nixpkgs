@@ -23,11 +23,11 @@ in
         path = with pkgs; [ znapzend zfs mbuffer openssh ];
 
         script = ''
-          znapzend
+          exec znapzend
         '';
 
         reload = ''
-          /bin/kill -HUP $MAINPID
+          ${pkgs.coreutils}/bin/kill -HUP $MAINPID
         '';
       };
     };
