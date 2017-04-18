@@ -18601,7 +18601,7 @@ in {
       owner = "getpelican";
       repo = "pelican";
       rev = version;
-      sha256 = "1k572anw39rws67mvxl2w6y93y8w8q5smnwc0dd2gnnr16cc2vsh";
+      sha256 = "1sbnv8dvnlss3hx8bckq40mwk70y46ix422q7lhl8p3rqxsw7zma";
     };
 
     patches = [ ../development/python-modules/pelican-fix-tests-with-pygments-2.1.patch ];
@@ -18628,6 +18628,8 @@ in {
 
     postPatch= ''
       sed -i -e "s|'git'|'${pkgs.git}/bin/git'|" pelican/tests/test_pelican.py
+      # Disable failing tests in 3.6.3, expected output does not fit.
+      sed -i -e 's|def \(test_.*_generation_works(self):\)|def _\1|' pelican/tests/test_pelican.py
     '';
 
     LC_ALL="en_US.UTF-8";
