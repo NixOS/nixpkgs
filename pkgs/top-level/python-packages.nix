@@ -175,6 +175,8 @@ in {
     };
   };
 
+  asn1crypto = callPackage ../development/python-modules/asn1crypto { };
+
   # packages defined elsewhere
 
   bap = callPackage ../development/python-modules/bap {
