@@ -383,36 +383,38 @@ in
         default = false;
         type = types.bool;
         description = ''
-          <para>Whether to invoke <literal>grub-install</literal> with
-          <literal>--removable</literal>.</para>
+          Whether to invoke <literal>grub-install</literal> with
+          <literal>--removable</literal>.
 
-          <para>Unless you turn this on, GRUB will install itself somewhere in
-          <literal>boot.loader.efi.efiSysMountPoint</literal> (exactly where
-          depends on other config variables). If you've set
-          <literal>boot.loader.efi.canTouchEfiVariables</literal> *AND* you
-          are currently booted in UEFI mode, then GRUB will use
-          <literal>efibootmgr</literal> to modify the boot order in the
-          EFI variables of your firmware to include this location. If you are
-          *not* booted in UEFI mode at the time GRUB is being installed, the
-          NVRAM will not be modified, and your system will not find GRUB at
-          boot time. However, GRUB will still return success so you may miss
-          the warning that gets printed ("<literal>efibootmgr: EFI variables
-          are not supported on this system.</literal>").</para>
+          <note>
+            <para>Unless you turn this on, GRUB will install itself somewhere in
+            <literal>boot.loader.efi.efiSysMountPoint</literal> (exactly where
+            depends on other config variables). If you've set
+            <literal>boot.loader.efi.canTouchEfiVariables</literal> *AND* you
+            are currently booted in UEFI mode, then GRUB will use
+            <literal>efibootmgr</literal> to modify the boot order in the
+            EFI variables of your firmware to include this location. If you are
+            *not* booted in UEFI mode at the time GRUB is being installed, the
+            NVRAM will not be modified, and your system will not find GRUB at
+            boot time. However, GRUB will still return success so you may miss
+            the warning that gets printed ("<literal>efibootmgr: EFI variables
+            are not supported on this system.</literal>").</para>
 
-          <para>If you turn this feature on, GRUB will install itself in a
-          special location within <literal>efiSysMountPoint</literal> (namely
-          <literal>EFI/boot/boot$arch.efi</literal>) which the firmwares
-          are hardcoded to try first, regardless of NVRAM EFI variables.</para>
+            <para>If you turn this feature on, GRUB will install itself in a
+            special location within <literal>efiSysMountPoint</literal> (namely
+            <literal>EFI/boot/boot$arch.efi</literal>) which the firmwares
+            are hardcoded to try first, regardless of NVRAM EFI variables.</para>
 
-          <para>To summarize, turn this on if:
-          <itemizedlist>
-            <listitem><para>You are installing NixOS and want it to boot in UEFI mode,
-            but you are currently booted in legacy mode</para></listitem>
-            <listitem><para>You want to make a drive that will boot regardless of
-            the NVRAM state of the computer (like a USB "removable" drive)</para></listitem>
-            <listitem><para>You simply dislike the idea of depending on NVRAM
-            state to make your drive bootable</para></listitem>
-          </itemizedlist></para>
+            <para>To summarize, turn this on if:
+            <itemizedlist>
+              <listitem><para>You are installing NixOS and want it to boot in UEFI mode,
+              but you are currently booted in legacy mode</para></listitem>
+              <listitem><para>You want to make a drive that will boot regardless of
+              the NVRAM state of the computer (like a USB "removable" drive)</para></listitem>
+              <listitem><para>You simply dislike the idea of depending on NVRAM
+              state to make your drive bootable</para></listitem>
+            </itemizedlist></para>
+          </note>
         '';
       };
 
