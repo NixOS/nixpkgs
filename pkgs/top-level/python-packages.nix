@@ -27039,27 +27039,7 @@ EOF
     };
   };
 
-  widgetsnbextension = buildPythonPackage rec {
-    name = "widgetsnbextension-${version}";
-    version = "1.2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/widgetsnbextension/${name}.tar.gz";
-      sha256 = "c618cfb32978c9517caf0b4ef3aec312f8dd138577745e7b0d4abfcc7315ce51";
-    };
-
-    propagatedBuildInputs = with self; [ notebook ];
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      description = "IPython HTML widgets for Jupyter";
-      homepage = http://ipython.org/;
-      license = self.ipywidgets.meta.license; # Build from same repo
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
   willie = buildPythonPackage rec {
     name = "willie-${version}";
