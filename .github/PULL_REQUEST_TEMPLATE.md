@@ -13,6 +13,7 @@
    - [ ] Linux
 - [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nox --run "nox-review wip"`
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
+- [ ] Checked that any URLs use HTTPS where possible (e.g. `homepage` in `meta`, or `url` in `fetchurl`)
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
 ---
