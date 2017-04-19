@@ -7,12 +7,8 @@ let
   spurvm = vms_x86.spur;
   spur64vm = if stdenv.is64bit then vms_x64.spur else "none";
   wrapper  = callPackage ./wrapper { inherit cogvm spurvm spur64vm; };
-  launcher = callPackage ./launcher { pharo-vm = wrapper;};
   images = callPackage ./images { pharo-vm = wrapper; };
 in
     
-{
-  pharo          = wrapper;
-  pharo-launcher = launcher;
-} // images
+{ vm = wrapper; } // images
 
