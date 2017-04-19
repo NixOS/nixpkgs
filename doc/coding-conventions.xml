@@ -244,11 +244,6 @@ bound to the variable name <varname>e2fsprogs</varname> in
   <listitem><para>Generally, try to stick to the upstream package
   name.</para></listitem>
 
-  <listitem><para>Don’t use uppercase letters in the
-  <literal>name</literal> attribute — e.g.,
-  <literal>"mplayer-1.0rc2"</literal> instead of
-  <literal>"MPlayer-1.0rc2"</literal>.</para></listitem>
-
   <listitem><para>The version part of the <literal>name</literal>
   attribute <emphasis>must</emphasis> start with a digit (following a
   dash) — e.g., <literal>"hello-0.3.1rc2"</literal>.</para></listitem>
