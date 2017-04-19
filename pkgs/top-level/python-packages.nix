@@ -20121,16 +20121,16 @@ in {
    });
 
   pydot = buildPythonPackage rec {
-    name = "pydot-1.0.2";
+    name = "pydot-1.2.3";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pydot/${name}.tar.gz";
-      sha256 = "80ea01a7ba75671a3b7890375be0ad8d5321b07bfb6f572192c31409062b59f3";
+      sha256 = "edb5d3f249f97fbd9c4bb16959e61bc32ecf40eee1a9f6d27abe8d01c0a73502";
     };
     propagatedBuildInputs = with self; [pyparsing pkgs.graphviz];
     meta = {
-      homepage = http://code.google.com/p/pydot/;
+      homepage = https://github.com/erocarrera/pydot;
       description = "Allows to easily create both directed and non directed graphs from Python";
     };
   };
