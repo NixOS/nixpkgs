@@ -707,6 +707,8 @@ with pkgs;
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
+  buildtorrent = callPackage ../tools/misc/buildtorrent { };
+
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   byobu = callPackage ../tools/misc/byobu {
