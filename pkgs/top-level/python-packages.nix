@@ -2105,6 +2105,31 @@ in {
     };
   };
 
+  beancount-import = buildPythonPackage (rec {
+    name = "beancount-import-adf0070a303c96a7bf1385cce01c93d8a042fcf9";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/jbms/beancount-import";
+      rev = "adf0070a303c96a7bf1385cce01c93d8a042fcf9";
+      sha256 = "1yilsbaxxmsvrpjjykk90ncg9c9k8qziffr6dbdrsjr1bfcj0mhf";
+    };
+
+    buildInputs = with self; [
+      nltk
+      numpy
+      scikitlearn
+      npyscreen
+
+      pkgs.beancount
+
+    ];
+
+    meta = {
+      homepage = https://github.com/jbms/beancount-import;
+      license = "gpl2";
+    };
+  });
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
     disabled = isPy3k;
@@ -8474,6 +8499,16 @@ in {
     };
   };
 
+  nltk = buildPythonPackage (rec {
+    version = "3.2.1";
+    name = "nltk-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nltk/${name}.tar.gz";
+      sha256 = "0skxbhnymwlspjkzga0f7x1hg3y50fwpfghs8g8k7fh6f4nknlym";
+    };
+  });
+
   logster = buildPythonPackage {
     name = "logster-7475c53822";
     src = pkgs.fetchgit {
@@ -8533,6 +8568,24 @@ in {
       license = licenses.gpl3;
       platforms = platforms.linux;
       maintainers = with maintainers; [ leenaars ];
+    };
+  };
+
+  npyscreen = buildPythonPackage rec {
+    version = "4.10.5";
+    pname = "npyscreen";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/npyscreen/${name}.tar.gz";
+      sha256 = "0vhjwn0dan3zmffvh80dxb4x67jysvvf1imp6pk4dsfslpwy0bk2";
+    };
+
+    meta = {
+      description = "Writing user interfaces without all that ugly mucking about
+      in hyperspace";
+      homepage = http://www.npcole.com/npyscreen/;
+      license = licenses.bsd2; # not sure here
     };
   };
 
