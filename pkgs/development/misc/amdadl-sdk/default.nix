@@ -1,13 +1,13 @@
 { requireFile, stdenv, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "6.0";
+  version = "10.2";
   name = "amdadl-sdk-${version}";
 
   src = requireFile {
-    name = "ADL_SDK_6.0.zip";
+    name = "ADL_SDK_V10.2.zip";
     url = http://developer.amd.com/tools-and-sdks/graphics-development/display-library-adl-sdk/;
-    sha256 = "429f4fd1edebb030d6366f4e0a877cf105e4383f7dd2ccf54e5aef8f2e4242c9";
+    sha256 = "6f6de218cff77fc14616332ef63d355d60d14849b37f8f10e1a9f4edf36c8017";
   };
 
   buildInputs = [ unzip ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     #Build adlutil
     cd adlutil
-    gcc main.c -o adlutil -DLINUX -ldl -I ../include/ 
+    g++ -fpermissive main.c -o adlutil -DLINUX -ldl -I ../include/
     cd ..
   '';
 
