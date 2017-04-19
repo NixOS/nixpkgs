@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     trap cleanup EXIT
     cp $out/share/pharo-image/* \$tempdir
     chmod u+w \$tempdir/*.changes
-    exec ${pharo-vm}/bin/pharo-vm \$tempdir/*.image "$@"
+    exec ${pharo-vm}/bin/pharo-vm \$tempdir/*.image "\$@"
     EOF
   '';
 
