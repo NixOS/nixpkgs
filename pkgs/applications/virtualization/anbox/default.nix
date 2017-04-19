@@ -118,7 +118,7 @@ in {
   exe = stdenv.mkDerivation {
     name = "anbox-${version}";
     inherit src meta;
-  
+
     nativeBuildInputs = [ cmake pkgconfig ];
 
     buildInputs = [
@@ -135,17 +135,33 @@ in {
       substituteInPlace scripts/gen-emugl-entries.py --replace '/usr/bin/env python2' "${python2}/bin/python"
     '';
     cmakeFlags = "-DCMAKE_INSTALL_LIBDIR=lib";
-  
-    postInstall = ''
-      cat > $out/bin/runme <<EOF
-      #!${bash}/bin/bash
 
-      $out/bin/anbox session-manager &
-      ${coreutils}/bin/sleep 2
+    postInstall = ''
+      mkdir -p $out/share/dbus-1/services/
+      cat <<END > $out/share/dbus-1/services/org.anbox.service
+      [D-BUS Service]
+      Name=org.anbox
+      Exec=$out/libexec/anbox-session-manager
+      END
+
+      mkdir $out/libexec
+      cat > $out/libexec/anbox-session-manager <<EOF
+      #!${bash}/bin/bash
+      exec $out/bin/anbox session-manager
+      EOF
+      chmod +x $out/libexec/anbox-session-manager
+
+      cat > $out/bin/anbox-application-manager <<EOF
+      #!${bash}/bin/bash
+      ${systemd}/bin/busctl --user call \
+         org.freedesktop.DBus \
+         /org/freedesktop/DBus \
+         org.freedesktop.DBus \
+         StartServiceByName "su" org.anbox 0
 
       $out/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
       EOF
-      chmod +x $out/bin/runme
+      chmod +x $out/bin/anbox-application-manager
 
       wrapProgram "$out/bin/anbox" --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [libglvnd]}
     '';
