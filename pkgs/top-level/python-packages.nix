@@ -19468,11 +19468,11 @@ in {
   });
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.6.1";
+    name = "psycopg2-2.7.1";
     disabled = isPyPy;
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psycopg2/${name}.tar.gz";
-      sha256 = "0k4hshvrwsh8yagydyxgmd0pjm29lwdxkngcq9fzfzkmpsxrmkva";
+      sha256 = "86c9355f5374b008c8479bc00023b295c07d508f7c3b91dbd2e74f8925b1d9c6";
     };
     buildInputs = optional stdenv.isDarwin pkgs.openssl;
     propagatedBuildInputs = with self; [ pkgs.postgresql ];
