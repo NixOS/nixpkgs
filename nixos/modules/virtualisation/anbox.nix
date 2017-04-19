@@ -40,7 +40,10 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
 
-      serviceConfig.ExecStart = "${pkgs.anbox.exe}/bin/anbox container-manager --data-path=/var/lib/anbox --android-image=${pkgs.anbox.image} --privileged";
+      serviceConfig = {
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/anbox";
+        ExecStart = "${pkgs.anbox}/bin/anbox container-manager --data-path=/var/lib/anbox --android-image=${pkgs.anbox-image} --privileged";
+      };
     };
   };
 
