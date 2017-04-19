@@ -11,10 +11,9 @@ buildPythonPackage rec {
     sha256 = "1hlydiyygl444bq5m5g8n3jsxsgrdyxlm42ipmfbw36wkf0j243m";
   };
 
-  buildInputs = [
-    SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
-    portmidi libX11 freetype
-  ];
+  buildInputs = [ SDL SDL_image SDL_mixer SDL_ttf portmidi ]
+       ++ (stdenv.lib.optionals (!stdenv.isDarwin)
+            [libpng libjpeg libX11 freetype ]);
 
   # Tests fail because of no audio device and display.
   doCheck = false;
