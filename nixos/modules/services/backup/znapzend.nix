@@ -20,15 +20,12 @@ in
         description = "ZnapZend - ZFS Backup System";
         after       = [ "zfs.target" ];
 
-        path = with pkgs; [ znapzend zfs mbuffer openssh ];
+        path = with pkgs; [ zfs mbuffer openssh ];
 
-        script = ''
-          exec znapzend
-        '';
-
-        reload = ''
-          ${pkgs.coreutils}/bin/kill -HUP $MAINPID
-        '';
+        serviceConfig = {
+          ExecStart = "${pkgs.znapzend}/bin/znapzend";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
       };
     };
 
