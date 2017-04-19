@@ -24,10 +24,10 @@ in
   config = mkIf cfg.enable {
     virtualisation.lxc.enable = true;
 
-    environment.systemPackages = [ pkgs.anbox.exe ];
+    environment.systemPackages = [ pkgs.anbox ];
 
     boot.kernelModules = [ "ashmem" "binder" ];
-    boot.extraModulePackages = with kernelPackages.anbox; [ ashmem binder ];
+    boot.extraModulePackages = with kernelPackages; [ ashmem binder ];
 
     services.udev.extraRules = ''
       KERNEL=="binder", MODE="0666"

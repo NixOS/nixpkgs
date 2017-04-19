@@ -115,7 +115,7 @@ in {
     '';
   };
 
-  exe = stdenv.mkDerivation {
+  anbox = stdenv.mkDerivation {
     name = "anbox-${version}";
     inherit src meta;
 
