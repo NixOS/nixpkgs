@@ -65,5 +65,6 @@ stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nickhu ];
+    broken = true; # requires Qt 5.7 or later (not available in NixOS 17.03)
   };
 }
