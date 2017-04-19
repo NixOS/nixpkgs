@@ -1,5 +1,8 @@
+# shellcheck shell=bash
+# vim: sw=4 et
 set -e
 set -o pipefail
+set -o errtrace
 
 : ${outputs:=out}
 
@@ -104,6 +107,44 @@ closeNest() {
 ######################################################################
 # Error handling.
 
+# Shows the backtrace from the caller or caller <distance>
+#
+# Needs the `set -o errtrace` setting to work properly.
+#
+# Usage: printBacktrace [distance]
+printBacktrace() {
+    local i=${1:-0}
+    while ((i++)); do
+        local src=${BASH_SOURCE[$i]}
+        local lineno=${BASH_LINENO[(( i - 1 ))]}
+        local func=${FUNCNAME[$i]}
+
+        # Done
+        [[ -z $src ]] && return
+
+        echo "$src:$lineno $func()"
+    done
+}
+
+# Is invoked whenever the script exits with a status > 0
+#
+# This can't be handled by exitHandler because the backtrace gets messed-up.
+errorHandler() {
+    local exitCode=$?
+    trap - ERR
+
+    # Only show the backtrace if we don't ignore the errors
+    if [ -z "$succeedOnFailure" ]; then
+        echo "---------[ backtrace ]---------"
+        printBacktrace 1
+        echo "-------------------------------"
+    fi
+
+    exit $exitCode
+}
+trap errorHandler ERR
+
+# Is invoked whenever the script exits
 exitHandler() {
     exitCode=$?
     set +e
@@ -831,6 +872,21 @@ showPhaseHeader() {
     esac
 }
 
+# Evaluate the variable named $name if it exists, otherwise the
+# function named $name.
+evalPhase() {
+    local name=$1
+    local source=$NIX_BUILD_TOP/eval/$name
+
+    # source exists?
+    if [ -n "${!name}" ]; then
+        mkdir -p "$(dirname "$source")"
+        echo "${!name}" > "$source"
+        source "$source"
+    else # call the function
+        "$name"
+    fi
+}
 
 genericBuild() {
     if [ -f "$buildCommandPath" ]; then
@@ -865,9 +921,7 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
+        evalPhase "$curPhase"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
