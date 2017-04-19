@@ -73,6 +73,7 @@ let
   nginxConfig = pkgs.writeText "nginx.yaml" cfg.nginxConfig;
   mongoConfig = pkgs.writeText "mongo.yaml" cfg.mongoConfig;
   jmxConfig = pkgs.writeText "jmx.yaml" cfg.jmxConfig;
+  processConfig = pkgs.writeText "process.yaml" cfg.processConfig;
   
   etcfiles =
     let
@@ -100,6 +101,10 @@ let
     (optional (cfg.mongoConfig != null)
       { source = mongoConfig;
         target = "dd-agent/conf.d/mongo.yaml";
+      }) ++
+    (optional (cfg.processConfig != null)
+      { source = processConfig;
+        target = "dd-agent/conf.d/process.yaml";
       }) ++
     (optional (cfg.jmxConfig != null)
       { source = jmxConfig;
@@ -158,6 +163,16 @@ in {
       type = types.uniq (types.nullOr types.string);
     };
 
+    processConfig = mkOption {
+      description = ''
+        Process integration configuration
+ 
+        See http://docs.datadoghq.com/integrations/process/
+      '';
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -184,7 +199,7 @@ in {
         Restart = "always";
         RestartSec = 2;
       };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig ];
+      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
     };
 
     systemd.services.dogstatsd = {
@@ -200,7 +215,7 @@ in {
         Restart = "always";
         RestartSec = 2;
       };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig ];
+      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
     };
 
     systemd.services.dd-jmxfetch = lib.mkIf (cfg.jmxConfig != null) {
