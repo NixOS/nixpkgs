@@ -4,7 +4,6 @@ use strict;
 use DBI;
 use DBD::SQLite;
 use String::ShellQuote;
-use Config;
 
 my $program = $ARGV[0];
 
@@ -15,7 +14,7 @@ my $dbh = DBI->connect("dbi:SQLite:dbname=$dbPath", "", "")
 $dbh->{RaiseError} = 0;
 $dbh->{PrintError} = 0;
 
-my $system = $ENV{"NIX_SYSTEM"} // $Config{myarchname};
+my $system = $ENV{"NIX_SYSTEM"} // substr `nix-instantiate --eval -E builtins.currentSystem`, 1, -2;
 
 my $res = $dbh->selectall_arrayref(
     "select package from Programs where system = ? and name = ?",
