@@ -9,12 +9,15 @@ skip () {
 # `/nix/store/.../lib/foo.so' isn't.
 badPath() {
     local p=$1
-    
+
     # Relative paths are okay (since they're presumably relative to
     # the temporary build directory).
     if test "${p:0:1}" != "/"; then return 1; fi
-    
+
     @extraPathTests@
+
+    # realpath fails if path to the file does not exist
+    p=$(realpath -q "$p" || echo "$p")
 
     # Otherwise, the path should refer to the store or some temporary
     # directory (including the build directory).

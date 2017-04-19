@@ -14,6 +14,9 @@ badPath() {
     # the temporary build directory).
     if [ "${p:0:1}" != / ]; then return 1; fi
 
+    # realpath fails if path to the file does not exist
+    p=$(realpath -q "$p" || echo "$p")
+
     # Otherwise, the path should refer to the store or some temporary
     # directory (including the build directory).
     test \
