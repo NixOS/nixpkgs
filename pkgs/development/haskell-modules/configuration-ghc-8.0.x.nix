@@ -38,6 +38,13 @@ self: super: {
   # cabal-install can use the native Cabal library.
   cabal-install = super.cabal-install.override { Cabal = null; };
 
+  idris = overrideCabal super.idris (drv: {
+    # "idris" binary cannot find Idris library otherwise while building.
+    # After installing it's completely fine though. Nix-specific issue so not
+    # reported.
+    preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+  });
+
   # jailbreak-cabal can use the native Cabal library.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
