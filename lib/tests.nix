@@ -231,7 +231,7 @@ runTests {
     };
     in {
       expr = generators.toJSON {} val;
-      # trival implementation
+      # trivial implementation
       expected = builtins.toJSON val;
   };
 
@@ -243,7 +243,7 @@ runTests {
     };
     in {
       expr = generators.toYAML {} val;
-      # trival implementation
+      # trivial implementation
       expected = builtins.toJSON val;
   };
 
