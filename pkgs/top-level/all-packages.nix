@@ -1696,6 +1696,18 @@ with pkgs;
 
   evtest = callPackage ../applications/misc/evtest { };
 
+  ex_1_1 = callPackage ../applications/editors/ex/1_1.nix { };
+
+  ex_2_2 = callPackage ../applications/editors/ex/2_2.nix { };
+
+  ex_3_2 = callPackage ../applications/editors/ex/3_2.nix { };
+
+  ex_3_6 = callPackage ../applications/editors/ex/3_6.nix { };
+
+  ex_3_7 = callPackage ../applications/editors/ex/3_7.nix { };
+
+  ex_3_7_4_4 = callPackage ../applications/editors/ex/3_7_4_4.nix { };
+
   exa = callPackage ../tools/misc/exa { };
 
   exempi = callPackage ../development/libraries/exempi { };
