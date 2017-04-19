@@ -1,0 +1,11 @@
+--- xautolock-2.2.orig/src/engine.c	2016-08-28 09:49:39.013009496 +0200
++++ xautolock-2.2/src/engine.c	2016-08-28 10:24:24.486255036 +0200
+@@ -210,7 +210,7 @@
+ #else /* VMS */
+   if (lockerPid)
+   {
+-#if !defined (UTEKV) && !defined (SYSV) && !defined (SVR4)
++#if !defined (UTEKV) && !defined (SYSV) && !defined (SVR4) && !defined(__GLIBC__)
+     union wait  status;      /* childs process status */
+ #else /* !UTEKV && !SYSV && !SVR4 */
+     int         status = 0;  /* childs process status */
