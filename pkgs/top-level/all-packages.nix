@@ -3989,6 +3989,8 @@ with pkgs;
 
   softhsm = callPackage ../tools/security/softhsm { };
 
+  solo5 = callPackage ../applications/virtualization/solo5 { };
+
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
