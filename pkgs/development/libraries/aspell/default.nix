@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     #! $SHELL -e
     if [ -z "\$ASPELL_CONF" ]; then
       for p in \$NIX_PROFILES; do
-        if [ -d "\$p/lib/aspell" ]; then
+        if [ -z "\$ASPELL_CONF" ] && [ -d "\$p/lib/aspell" ]; then
           ASPELL_CONF="data-dir \$p/lib/aspell"
         fi
       done
