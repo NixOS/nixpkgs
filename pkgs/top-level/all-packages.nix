@@ -17361,6 +17361,11 @@ with pkgs;
   suitesparse = suitesparse_4_4;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
+  
+  petsc = callPackage ../development/libraries/science/math/petsc {
+    mpi = pkgs.openmpi;
+	openblas = openblasCompat;
+  };
 
   symmetrica = callPackage ../applications/science/math/symmetrica {};
 
