@@ -10,13 +10,13 @@
 PATH=$PATH:@file@/bin
 
 # Search for the image filename in the command line arguments
-for arg in $*; do
+for arg in $* $SQUEAK_IMAGE; do
     case ${arg} in
         -*) # ignore
         ;;
         *) # either an option argument or the image name
-            if test -f ${arg}; then
-                magic=$(file -b -m @magic@ "$arg")
+            if test -e ${arg}; then
+                magic=$(file -L -b -m @magic@ "$arg")
                 case "$magic" in
                     "Smalltalk image V3 32b"*)
                         image=${arg}
@@ -40,9 +40,6 @@ for arg in $*; do
     esac
 done
 
-# Extra arguments to pass to the VM
-args=""
-
 # Print a message to explain our DWIM'ery.
 if [ -n "$image" ]; then
     echo "using VM selected by image type."
@@ -56,5 +53,5 @@ fi
 
 # Run the VM
 set -f
-exec -- ${vm} $args "$@"
+exec -- ${vm} $@
 

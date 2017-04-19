@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pharo-vm, unzip, makeDesktopItem, ... }:
+{ stdenv, fetchurl, bash, pharo-vm, unzip, makeDesktopItem, xvfb_run, ... }:
 
 basename: version: url: sha256:
 
@@ -18,19 +18,19 @@ stdenv.mkDerivation rec {
     categories = "Development";
   };
   sourceRoot = ".";
-  buildInputs = [ bash pharo-vm unzip ];
+  buildInputs = [ bash pharo-vm unzip xvfb_run ];
 
   # Create script to run the image.
   # Copies into a read/write directory first. Seems to be needed.
   buildPhase = ''
     cat > run.sh <<EOF
     #!${bash}/bin/bash
-    tempdir=\$(mktemp -d)
-    function cleanup { rm -rf \$tempdir; }
-    trap cleanup EXIT
-    cp $out/share/pharo-image/* \$tempdir
-    chmod u+w \$tempdir/*.changes
-    exec ${pharo-vm}/bin/pharo-vm \$tempdir/*.image "\$@"
+    prefix=\$(mktemp -u -p \$(pwd) -t "${name}-XXXXXXXX")
+    trap "rm -f \$prefix.image \$prefix.changes" EXIT TERM INT HUP QUIT CHLD
+    cp $out/share/pharo-image/*.image \$prefix.image
+    cp $out/share/pharo-image/*.changes \$prefix.changes
+    chmod u+w \$prefix.changes
+    ${pharo-vm}/bin/pharo-vm \$prefix.image "\$@"
     EOF
   '';
 
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
     cp *.image *.changes $out/share/pharo-image/
   '';
 
-#  doInstallCheck = true;
+  doInstallCheck = true;
   installCheckPhase = ''
     (set +e
      export HOME=.
      echo "starting image to check for crash..."
-     timeout 3 $out/bin/${executable-name} -nodisplay --no-quit eval 'true'
-     test "$?" == 123 && echo "ok")
+     xvfb-run timeout 3 $out/bin/${executable-name}
+     test "$?" == 124 && echo -e "OK.")
   '';
 }
 
