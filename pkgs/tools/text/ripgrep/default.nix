@@ -4,16 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "ripgrep-${version}";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = "${version}";
-    sha256 = "13mg624867hqxp9pzpq1gn9kqkvbaqcphdjia3bz5wvff1cbxkfy";
+    sha256 = "1fbvc419gh1rix8v3bh9a63r993kvfizp49p5ps6y22wggpy0k77";
   };
 
-  depsSha256 = "0glw8xk77w2h1xg6c451fg8cmwx3vz7dyzdrbf0i8d84yq8sh0i1";
+  depsSha256 = "0vyrcgcmlf3lbp15nip2cm8xv4n6qldfbl0iwy3jb69i2mazi6nm";
 
   preFixup = ''
     mkdir -p "$out/man/man1"
