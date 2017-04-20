@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/cockroachdb/cockroach";
-      rev = "3fff05767cd3eda2197ce102391c0de447fef606";
-      sha256 = "11camp588vsccxlc138l7x4qws2fj5wpx1177irzayqdng8dilx3";
+      rev = "96fa76f49c83a5c9fce12ef6b15449e16442adbf";
+      sha256 = "1s0sh4avg78inq6m5pws1ddnb69qccff84r92g1d60h6jlb2s8y3";
     };
   }
   {
@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/cockroachdb/pq";
-      rev = "40c6b2414c76cdb84aacc955f79dc844e48ad0c0";
-      sha256 = "16pnyndzlsk5rbbrimpkg6mf9w2qf0z64pk2k70ja4a65kihlw9g";
+      rev = "44a6473ebbc26e3af09fe57bbdf761475c2c9f7c";
+      sha256 = "1qihah12rkfcavkqr3d5daniaz3by3cq68449x6wfbim4vf2qxr0";
     };
   }
   {
@@ -122,8 +122,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/coreos/etcd";
-      rev = "656167d760543d442eae62f0c8c4f92c05f59508";
-      sha256 = "1v4bwfh7ziklfcdapnyky00gjivcn1n30b72pwmbdlk7283p555k";
+      rev = "143e2f27fc20f0cf5c29ad432b7526ef5adc9899";
+      sha256 = "06qa93hpvszkwjpx5lm9ydrn7hsrjiaa13whdmg3gpdp2qwg2pk2";
     };
   }
   {
@@ -248,8 +248,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/lightstep/lightstep-tracer-go";
-      rev = "f3c66066ce6023ad1bd721cfbd9fbd6292eb08cc";
-      sha256 = "1ci38j6d3spy2279l6anxxvm7k85h4fr08pdfw9ghrv96ajmaizb";
+      rev = "8d59645adbb3c85f28ae340a055a9349cdd99fe7";
+      sha256 = "057300s68lknin6rnk8w6ifmbm277gq24h63z8jki6irzbnpaw7l";
     };
   }
   {
@@ -293,8 +293,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/opentracing/basictracer-go";
-      rev = "c7c0202a8a77f658aeb2193a27b6c0cfcc821038";
-      sha256 = "09mh7dlhr3lyw8kwpa07ywjzr3bg7847ky4hvx551lhyqk0bfv0l";
+      rev = "6dea169035b81f39f8f157256225ba02ca7104ab";
+      sha256 = "09gmkycsaiijsn4aiifixkmlfr8z1qbkkylxbfgk6xs8yh526nnr";
     };
   }
   {
@@ -302,8 +302,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/opentracing/opentracing-go";
-      rev = "855519783f479520497c6b3445611b05fc42f009";
-      sha256 = "15amxprc5n0dgr42jd1lkcn697m7pcvmksps9g1gw38ahyicxq8g";
+      rev = "30dda9350627161ff15581c0bdc504e32ec9a536";
+      sha256 = "0m110kqfjwrrg6ym9dgfkq7vn03g8vcrqbj86yzhsm1fm21g7lpi";
     };
   }
   {
@@ -311,8 +311,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/petermattis/goid";
-      rev = "208e1c5be6bf38853827abdc6290b5f6a0c404d5";
-      sha256 = "0d511pdyrv9lkzq04agnm7019c1769vmdq8kyh66pq2np1x6jsl2";
+      rev = "ba001f8780f3bf978180f390ad7b5bac39fbf70a";
+      sha256 = "0jdjbplv1r3b8psp41k6n3vmdmd8hr2rgrsccmmv27q2g66fdl4b";
     };
   }
   {
