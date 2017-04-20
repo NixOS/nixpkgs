@@ -20,6 +20,8 @@ in pythonPackages.buildPythonApplication rec {
       --replace /etc $out/etc \
       --replace /lib/systemd $out/lib/systemd \
       --replace 'self.init_system = ""' 'self.init_system = "systemd"'
+
+    patchPhase
     '';
 
   propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
