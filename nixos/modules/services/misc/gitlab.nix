@@ -504,7 +504,7 @@ in {
         mkdir -p ${gitlabEnv.HOME}/.ssh
         touch ${gitlabEnv.HOME}/.ssh/authorized_keys
         chown -R ${cfg.user}:${cfg.group} ${gitlabEnv.HOME}/
-        chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}/
+        chmod -R ug+rwX,o-rwx+X ${gitlabEnv.HOME}/
 
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
@@ -552,7 +552,7 @@ in {
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
-        chmod -R u+rwX,go-rwx+X ${cfg.statePath}
+        chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
       '';
 
       serviceConfig = {
