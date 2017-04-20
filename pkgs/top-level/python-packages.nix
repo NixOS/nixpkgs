@@ -13243,30 +13243,7 @@ in {
 
   jabberbot = callPackage ../development/python-modules/jabberbot.nix {};
 
-  jedi = buildPythonPackage (rec {
-    name = "jedi-0.9.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jedi/${name}.tar.gz";
-      sha256 = "0c8x962ynpx001fdvp07m2q5jk4igkxbj3rmnydavphvlgxijk1v";
-    };
-
-    buildInputs = [ self.pytest ];
-
-    checkPhase = ''
-      py.test test
-    '';
-
-    # 7 failed
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/davidhalter/jedi;
-      description = "An autocompletion tool for Python that can be used for text editors";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  jedi = callPackage ../development/python-modules/jedi { };
 
   jellyfish = buildPythonPackage rec {
     version = "0.5.2";
