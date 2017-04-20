@@ -15646,16 +15646,28 @@ in {
   };
 
   netaddr = buildPythonPackage rec {
-    name = "netaddr-0.7.18";
-    doCheck = !isPy35;  # https://github.com/drkjam/netaddr/issues/117
+    pname = "netaddr";
+    version = "0.7.19";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/netaddr/${name}.tar.gz";
-      sha256 = "06dxjlbcicq7q3vqy8agq11ra01kvvd47j4mk6dmghjsyzyckxd1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd";
     };
 
     LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
+    buildInputs = with self; [ pkgs.glibcLocales pytest ];
+
+    checkPhase = ''
+      py.test netaddr/tests
+    '';
+
+    patches = [
+      (pkgs.fetchpatch {
+        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch; 
+        sha256 = "08rn1s3w9424jhandy4j9sksy852ny00088zh15nirw5ajqg1dn7";
+      })
+    ];
 
     meta = {
       homepage = https://github.com/drkjam/netaddr/;
