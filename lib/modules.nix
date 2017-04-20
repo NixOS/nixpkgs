@@ -423,7 +423,7 @@ rec {
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
   /* Sort a list of properties.  The sort priority of a property is
-     1000 by default, but can be overriden by wrapping the property
+     1000 by default, but can be overridden by wrapping the property
      using mkOrder. */
   sortProperties = defs:
     let
