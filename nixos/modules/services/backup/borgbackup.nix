@@ -46,7 +46,7 @@ let
       Nice = 19;
       IOSchedulingClass = "idle";
       User = "borg";
-      Group = "backup";
+      Group = jobcfg.group;
       PermissionsStartOnly = true;
       TimeoutStartSec = "2h";
       TimeoutSec = "6h";
@@ -96,6 +96,14 @@ in
             example = [ "/var/backups" "/etc/nixos" ];
             description = ''
               List of paths or path patterns to backup.
+            '';
+          };
+
+          group = mkOption {
+            type = types.str;
+            default = "backup";
+            description = ''
+              Passphrase to use for encrypted repositories, if any.
             '';
           };
 
