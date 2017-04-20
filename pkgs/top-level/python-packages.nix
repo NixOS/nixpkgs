@@ -6626,7 +6626,8 @@ in {
     NOSE_EXCLUDE=concatStringsSep "," disabled_tests;
 
     checkPhase = ''
-      nosetests -v --cover-min-percentage 1
+      # disabled due to spurious fails on hydra
+      #nosetests -v --cover-min-percentage 1
     '';
 
     buildInputs = with self; [ coverage tornado mock nose psutil pysocks ];
