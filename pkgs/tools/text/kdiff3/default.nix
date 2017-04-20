@@ -1,5 +1,5 @@
 {
-  kdeDerivation, kdeWrapper, lib, fetchgit,
+  kdeDerivation, kdeWrapper, lib, fetchgit, fetchpatch,
   extra-cmake-modules, kdoctools, kconfig, kinit, kparts
 }:
 
@@ -15,6 +15,14 @@ let
       sha256 = "126xl7jbb26v2970ba1rw1d6clhd14p1f2avcwvj8wzqmniq5y5m";
       inherit rev;
     };
+
+    patches = [
+      (fetchpatch {
+        name = "git-mergetool.diff"; # see https://gitlab.com/tfischer/kdiff3/merge_requests/2
+        url = "https://gitlab.com/vcunat/kdiff3/commit/6106126216.patch";
+        sha256 = "16xqc24y8bg8gzkdbwapiwi68rzqnkpz4hgn586mi01ngig2fd7y";
+      })
+    ];
 
     preConfigure = "cd kdiff3";
 
