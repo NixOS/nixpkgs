@@ -521,6 +521,8 @@ with pkgs;
 
   dgsh = callPackage ../shells/dgsh { };
 
+  dkimpy = pythonPackages.dkimpy;
+
   elvish = callPackage ../shells/elvish { };
 
   encryptr = callPackage ../tools/security/encryptr {
