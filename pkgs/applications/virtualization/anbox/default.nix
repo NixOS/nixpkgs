@@ -2,6 +2,8 @@
 , lcov, SDL2, mesa_glu, protobuf, lxc, glm, xorg, linuxPackages, pythonPackages, bash, coreutils, python2, SDL2_image
 , makeWrapper, libglvnd, kernel ? null, systemd }:
 
+assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.4";
+
 let
   properties-cpp = stdenv.mkDerivation rec {
     name = "properties-cpp-${rev}";
