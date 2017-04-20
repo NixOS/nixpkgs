@@ -17,6 +17,11 @@ let
       system = "x86-linux";
       sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
     };
+    aarch64-linux = rec {
+      version = "1.3.16";
+      system = "arm64-linux";
+      sha256 = "0q1brz9c49xgdljzfx8rpxxnlwhadxkcy5kg0mcd9wnxygind1cl";
+    };
     armv7l-linux = rec {
       version = "1.2.14";
       system = "armhf-linux";
