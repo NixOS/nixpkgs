@@ -54,7 +54,9 @@ patchShebangs() {
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
+                mod_time=$(stat --format=%y "$f")
                 sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
+                touch -d "$mod_time" "$f"
             fi
         fi
     done
