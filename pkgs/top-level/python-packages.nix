@@ -6146,11 +6146,11 @@ in {
 
   decorator = buildPythonPackage rec {
     name = "decorator-${version}";
-    version = "4.0.10";
+    version = "4.0.11";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/decorator/${name}.tar.gz";
-      sha256 = "9c6e98edcb33499881b86ede07d9968c81ab7c769e28e9af24075f0a5379f070";
+      sha256 = "953d6bf082b100f43229cf547f4f97f97e970f5ad645ee7601d55ff87afdfe76";
     };
 
     meta = {
