@@ -8,9 +8,9 @@ let
       sha256 = "006pr88053wclvbjfjdypnbiw8wymbzdzi7a6kbkpdfn4zf5943j";
     };
     x86_64-linux = rec {
-      version = "1.2.15";
+      version = "1.3.16";
       system = "x86-64-linux";
-      sha256 = "1bpbfz9x2w73hy2kh8p0kd4m1p6pin90h2zycq52r3bbz8yv47aw";
+      sha256 = "0sq2dylwwyqfwkbdvcgqwz3vay9v895zpb0fyzsiwy31d1x9pr2s";
     };
     i686-linux = rec {
       version = "1.2.7";
