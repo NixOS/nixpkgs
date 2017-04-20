@@ -25,6 +25,15 @@ stdenv.mkDerivation rec {
   ];
   patchFlags = [ "-p2" ]; # `src` subdir was introduced after v1.5 was released
 
+  patchFlags = [ "-p2" ];
+  patches = [
+    # cve-2015-8863
+    (fetchurl {
+      url = https://github.com/stedolan/jq/commit/8eb1367ca44e772963e704a700ef72ae2e12babd.patch;
+      sha256 = "0vwvgs4kfdq0h72syzkm87rz90h87j79y2whz32f8nq74shfhpdq";
+    })
+  ];
+
   # jq is linked to libjq:
   configureFlags = [
     "LDFLAGS=-Wl,-rpath,\\\${libdir}"
