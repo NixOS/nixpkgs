@@ -15190,6 +15190,8 @@ with pkgs;
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
+  pybind11 = callPackage ../development/libraries/pybind11 { };
+
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
