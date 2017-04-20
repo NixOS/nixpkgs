@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cp "cscope-indexer" "$out/libexec/cscope"
 
     mkdir -p "$out/share/emacs/site-lisp"
-    emacs --batch --eval '(byte-compile-file "xcscope.el")'
+    ${emacs}/bin/emacs --batch --eval '(byte-compile-file "xcscope.el")'
     cp xcscope.el{,c} "$out/share/emacs/site-lisp"
   '';
 
