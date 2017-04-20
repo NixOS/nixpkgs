@@ -883,6 +883,8 @@ with pkgs;
 
   ditaa = callPackage ../tools/graphics/ditaa { };
 
+  dino = callPackage ../applications/networking/instant-messengers/dino { };
+
   dlx = callPackage ../misc/emulators/dlx { };
 
   dosage = pythonPackages.dosage;
