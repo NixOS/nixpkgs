@@ -13,12 +13,12 @@ let
   optional = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.4.0";
   name = "radare2-${version}";
 
   src = fetchurl {
     url = "http://cloud.radare.org/get/${version}/${name}.tar.gz";
-    sha256 = "1kwp0i5sqk5almnx4g8claimqz8rwvv1fn8x66k4az1s8k7g9kiv";
+    sha256 = "bf6e9ad94fd5828d3936563b8b13218433fbf44231cacfdf37a7312ae2b3e93e";
   };
 
 

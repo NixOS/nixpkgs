@@ -3,11 +3,12 @@
 assert !stdenv.isLinux || stdenv ? cross; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
-  name = "libiconv-1.14";
+  name = "libiconv-${version}";
+  version = "1.15";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${name}.tar.gz";
-    sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
+    sha256 = "0y1ij745r4p48mxq84rax40p10ln7fc7m243p8k8sia519i3dxfc";
   };
 
   patches = lib.optionals stdenv.isCygwin [

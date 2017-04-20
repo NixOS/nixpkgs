@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   version = "2.4.0";
   name = "HaLVM-${version}";
   isHaLVM = true;
+  enableParallelBuilding = false;
   isGhcjs = false;
   src = fetchgit {
     rev = "65fad65966eb7e60f234453a35aeb564a09d2595";

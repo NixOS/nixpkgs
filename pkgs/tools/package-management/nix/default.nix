@@ -131,12 +131,13 @@ in rec {
       sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
     };
 
-    # 1.11.8 doesn't yet have the patch to work on LLVM 4, so we patch it for now. Take this out once
-    # we move to a higher version. I'd pull the specific patch from upstream but it doesn't apply cleanly.
+    # Until 1.11.9 is released, we do this :)
     patchPhase = ''
       substituteInPlace src/libexpr/json-to-value.cc \
         --replace 'std::less<Symbol>, gc_allocator<Value *>' \
                   'std::less<Symbol>, gc_allocator<std::pair<const Symbol, Value *> >'
+
+      sed -i '/if (settings.readOnlyMode) {/a curSchema = getSchema();' src/libstore/local-store.cc
     '';
   }) // { perl-bindings = nixStable; };
 

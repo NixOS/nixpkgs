@@ -140,7 +140,7 @@ let
           };
         });
         default = null;
-        apply = x: if x == null then null else _filter x;
+        apply = x: mapNullable _filter x;
         description = ''
           Optional http login credentials for metrics scraping.
         '';

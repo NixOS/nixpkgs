@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.90.0";
+        version = "11.90.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.90.0.tar";
-          sha256 = "04nsndwcf0dimgc2p1yzzrymc36amzdnjg0158nxplmjkzdp28gy";
+          url = "https://elpa.gnu.org/packages/auctex-11.90.1.tar";
+          sha256 = "0bn5pg6v7zgqxs080bzrsx6789nzdx4622m3020ymzl66017nf0r";
         };
         packageRequires = [];
         meta = {
@@ -644,10 +644,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.3";
+        version = "1.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.3.tar";
-          sha256 = "0hg7jppdsaxy285bdaban1i096bjx21pqmczz7w9f3nr34n28pyn";
+          url = "https://elpa.gnu.org/packages/el-search-1.3.1.tar";
+          sha256 = "01f5pyalw60dr36w007mvvxry548zrhixzmba1sad19531bry7fc";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -681,14 +681,14 @@
           license = lib.licenses.free;
         };
       }) {};
-    enwc = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+    enwc = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "enwc";
-        version = "1.0";
+        version = "2.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/enwc-1.0.tar";
-          sha256 = "19mjkcgnacygzwm5dsayrwpbzfxadp9kdmmghrk1vir2hwixgv8y";
+          url = "https://elpa.gnu.org/packages/enwc-2.0.tar";
+          sha256 = "17w35b06am5n19nlq00ni5w3jvys9i7swyw4glb7081d2jbij2mn";
         };
-        packageRequires = [];
+        packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/enwc.html";
           license = lib.licenses.free;
@@ -940,10 +940,10 @@
       }) {};
     ivy = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "ivy";
-        version = "0.9.0";
+        version = "0.9.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ivy-0.9.0.tar";
-          sha256 = "1p5gfy16xik613ib30mv4yac004z4lpsybmraln1badyd6n3b07s";
+          url = "https://elpa.gnu.org/packages/ivy-0.9.1.tar";
+          sha256 = "1jfc3zf6ln7i8pp5j0fpsai2w847v5g77b5fzlxbgvj80g3v5887";
         };
         packageRequires = [ emacs ];
         meta = {

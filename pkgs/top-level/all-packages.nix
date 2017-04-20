@@ -303,7 +303,7 @@ with pkgs;
 
   composableDerivation = callPackage ../../lib/composable-derivation.nix { };
 
-  platforms = import ./platforms.nix;
+  inherit (lib.systems) platforms;
 
   setJavaClassPath = makeSetupHook { } ../build-support/setup-hooks/set-java-classpath.sh;
 
@@ -713,6 +713,8 @@ with pkgs;
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
+  buildtorrent = callPackage ../tools/misc/buildtorrent { };
+
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   byobu = callPackage ../tools/misc/byobu {
@@ -777,7 +779,7 @@ with pkgs;
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
-  
+
   clac = callPackage ../tools/misc/clac {};
 
   clasp = callPackage ../tools/misc/clasp { };
@@ -838,6 +840,8 @@ with pkgs;
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
+  dale = callPackage ../development/compilers/dale { };
+
   dante = callPackage ../servers/dante { };
 
   datamash = callPackage ../tools/misc/datamash { };
@@ -884,6 +888,8 @@ with pkgs;
   dislocker = callPackage ../tools/filesystems/dislocker { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
+
+  dino = callPackage ../applications/networking/instant-messengers/dino { };
 
   dlx = callPackage ../misc/emulators/dlx { };
 
@@ -5278,6 +5284,10 @@ with pkgs;
 
   fsharp = callPackage ../development/compilers/fsharp { };
 
+  fsharp41 = callPackage ../development/compilers/fsharp41 {
+    mono = mono46;
+  };
+
   fstar = callPackage ../development/compilers/fstar {
     ocamlPackages = ocaml-ng.ocamlPackages_4_02;
   };
@@ -5633,6 +5643,9 @@ with pkgs;
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
+  rustup = callPackage ../development/tools/rust/rustup {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
@@ -9605,6 +9618,10 @@ with pkgs;
     libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
 
     libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
+
+    libqtav = callPackage ../development/libraries/libqtav { 
+      libva = libva-full; # also wants libva-x11 
+    };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
       ffmpeg = ffmpeg_2;
@@ -13655,7 +13672,7 @@ with pkgs;
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
-  fdr = libsForQt56.callPackage ../applications/science/programming/fdr { };
+  fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
@@ -14373,7 +14390,8 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate
-    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig konsole krfb marble
+    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig
+    kolourpaint konsole krfb marble
     okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
@@ -14844,6 +14862,8 @@ with pkgs;
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
+
   ostinato = callPackage ../applications/networking/ostinato { };
 
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
@@ -15118,6 +15138,8 @@ with pkgs;
   pidgin-mra = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-mra { };
 
   pidgin-skypeweb = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-skypeweb { };
+
+  pidgin-carbons = callPackage ../applications/networking/instant-messengers/pidgin-plugins/carbons { };
 
   pidgin-xmpp-receipts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-xmpp-receipts { };
 
@@ -16051,8 +16073,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  # VLC 3.0 is needed to compile in C++11 mode (QT 5.7)
-  vlc_qt5 = libsForQt56.vlc;
+  vlc_qt5 = libsForQt5.vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -16738,6 +16759,8 @@ with pkgs;
   instead = callPackage ../games/instead {
     lua = lua5;
   };
+
+  instead-launcher = callPackage ../games/instead-launcher { };
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
 

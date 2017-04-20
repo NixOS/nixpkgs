@@ -8,7 +8,7 @@ use Config;
 
 my $program = $ARGV[0];
 
-my $dbPath = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
+my $dbPath = "@dbPath@";
 
 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbPath", "", "")
     or die "cannot open database `$dbPath'";

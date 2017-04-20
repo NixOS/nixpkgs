@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.graphite;
-  writeTextOrNull = f: t: if t == null then null else pkgs.writeTextDir f t;
+  writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
 

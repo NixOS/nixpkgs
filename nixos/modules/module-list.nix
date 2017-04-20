@@ -428,6 +428,7 @@
   ./services/networking/jitsi-meet/jicofo.nix
   ./services/networking/jitsi-meet/jitsi-meet.nix
   ./services/networking/jitsi-meet/jitsi-videobridge.nix
+  ./services/networking/keepalived/default.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix

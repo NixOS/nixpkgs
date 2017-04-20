@@ -486,7 +486,7 @@ rec {
     };
   };
 
-  selectPlatformBySystem = system: {
+  selectBySystem = system: {
       "i686-linux" = pc32;
       "x86_64-linux" = pc64;
       "armv5tel-linux" = sheevaplug;
