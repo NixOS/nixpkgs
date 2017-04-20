@@ -810,6 +810,17 @@ self: super: {
     '';
   });
 
+  # no official release of esqueleto builds
+  # use fork of master that has build fixes
+  esqueleto = overrideCabal super.esqueleto (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "tebello-thejane";
+      repo = "esqueleto";
+      sha256 = "0fngapza6cd1gwq2cl4520yv1rqibdd39ljamqmnkq4wikg8s7cb";
+      rev = "ea00e73e0496464500d4e35d1c9108b55fe186a5";
+    };
+  });
+
   # Fine-tune the build.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     # Bump version to latest git-version to get support for Emacs 25.x.
