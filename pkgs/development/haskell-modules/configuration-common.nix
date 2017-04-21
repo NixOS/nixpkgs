@@ -686,8 +686,12 @@ self: super: {
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
 
-  # https://github.com/commercialhaskell/stack/issues/3001
-  stack = doJailbreak super.stack;
+  # The stack people don't bother making their own code compile in an LTS-based
+  # environment: https://github.com/commercialhaskell/stack/issues/3001.
+  stack = super.stack.overrideScope (self: super: {
+    store-core = self.store-core_0_3;
+    store = self.store_0_3_1;
+  });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
