@@ -36,7 +36,7 @@ let
         ./no-sys-dirs.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ];
+      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ];
 
     postPatch = ''
       pwd="$(type -P pwd)"
