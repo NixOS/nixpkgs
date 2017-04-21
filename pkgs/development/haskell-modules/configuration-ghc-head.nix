@@ -53,7 +53,7 @@ self: super: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
   });
   utf8-string = overrideCabal super.utf8-string (drv: {
-    postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
+    postPatch = "sed -i -e 's|base >= 4.3 && < 4.10|base|' utf8-string.cabal";
   });
 
   # bos/attoparsec#92
