@@ -31,9 +31,9 @@ in rec {
   };
 
   unstable = fetchurl rec {
-    version = "2.5";
+    version = "2.6";
     url = "https://dl.winehq.org/wine/source/2.x/wine-${version}.tar.xz";
-    sha256 = "1lnc7dnhvm1ir1hrjmihx9r47bc8wr8rhlf6pfm3lcl3nix2py8k";
+    sha256 = "1h5ajw50fax2pg9p4wch6824zxdd85g2gh9nkbllfxj3ixsn9zz6";
     inherit (stable) mono gecko32 gecko64;
   };
 
