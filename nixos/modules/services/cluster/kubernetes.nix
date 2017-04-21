@@ -421,12 +421,6 @@ in {
         type = types.bool;
       };
 
-      registerSchedulable = mkOption {
-        description = "Register the node as schedulable. No-op if register-node is false.";
-        default = true;
-        type = types.bool;
-      };
-
       address = mkOption {
         description = "Kubernetes kubelet info server listening address.";
         default = "0.0.0.0";
@@ -568,27 +562,12 @@ in {
       };
     };
 
-    dns = {
-      enable = mkEnableOption "kubernetes dns service.";
-
-      port = mkOption {
-        description = "Kubernetes dns listening port";
-        default = 53;
-        type = types.int;
-      };
-
-      domain = mkOption  {
-        description = "Kuberntes dns domain under which to create names.";
-        default = cfg.kubelet.clusterDomain;
-        type = types.str;
-      };
-
-      extraOpts = mkOption {
-        description = "Kubernetes dns extra command line options.";
-        default = "";
-        type = types.str;
-      };
+    path = mkOption {
+      description = "Packages added to the services' PATH environment variable. Both the bin and sbin subdirectories of each package are added";
+      type = types.listOf types.package;
+      default = [];
     };
+
   };
 
   ###### implementation
@@ -599,7 +578,7 @@ in {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" "kube-apiserver.service" ];
-        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables ];
+        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables ] ++ cfg.path;
         preStart = ''
           docker load < ${infraContainer}
           rm /opt/cni/bin/* || true
@@ -614,7 +593,6 @@ in {
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
             --register-node=${boolToString cfg.kubelet.registerNode} \
-            --register-schedulable=${boolToString cfg.kubelet.registerSchedulable} \
             ${optionalString (cfg.kubelet.tlsCertFile != null)
               "--tls-cert-file=${cfg.kubelet.tlsCertFile}"} \
             ${optionalString (cfg.kubelet.tlsKeyFile != null)
@@ -633,7 +611,6 @@ in {
             ${optionalString (cfg.kubelet.networkPlugin != null)
               "--network-plugin=${cfg.kubelet.networkPlugin}"} \
             --cni-conf-dir=${cniConfig} \
-            --reconcile-cidr \
             --hairpin-mode=hairpin-veth \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
@@ -700,6 +677,7 @@ in {
               "--service-account-key-file=${cfg.apiserver.serviceAccountKeyFile}"} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
+            --storage-backend=etcd2 \
             ${cfg.apiserver.extraOpts}
           '';
           WorkingDirectory = cfg.dataDir;
@@ -765,6 +743,7 @@ in {
           User = "kubernetes";
           Group = "kubernetes";
         };
+        path = cfg.path;
       };
     })
 
@@ -788,30 +767,6 @@ in {
       };
     })
 
-    (mkIf cfg.dns.enable {
-      systemd.services.kube-dns = {
-        description = "Kubernetes Dns Service";
-        wantedBy = [ "kubernetes.target" ];
-        after = [ "kube-apiserver.service" ];
-        serviceConfig = {
-          Slice = "kubernetes.slice";
-          ExecStart = ''${cfg.package}/bin/kube-dns \
-            --kubecfg-file=${kubeconfig} \
-            --dns-port=${toString cfg.dns.port} \
-            --domain=${cfg.dns.domain} \
-            ${optionalString cfg.verbose "--v=6"} \
-            ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
-            ${cfg.dns.extraOpts}
-          '';
-          WorkingDirectory = cfg.dataDir;
-          User = "kubernetes";
-          Group = "kubernetes";
-          AmbientCapabilities = "cap_net_bind_service";
-          SendSIGHUP = true;
-        };
-      };
-    })
-
     (mkIf cfg.kubelet.enable {
       boot.kernelModules = ["br_netfilter"];
     })
@@ -831,7 +786,6 @@ in {
       virtualisation.docker.logDriver = mkDefault "json-file";
       services.kubernetes.kubelet.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
-      services.kubernetes.dns.enable = mkDefault true;
     })
 
     (mkIf (
@@ -839,8 +793,7 @@ in {
         cfg.scheduler.enable ||
         cfg.controllerManager.enable ||
         cfg.kubelet.enable ||
-        cfg.proxy.enable ||
-        cfg.dns.enable
+        cfg.proxy.enable
     ) {
       systemd.targets.kubernetes = {
         description = "Kubernetes";
