@@ -16,11 +16,14 @@ rec {
 
   dashpay = callPackage ./dashpay.nix { };
 
+  go-ethereum = callPackage ./go-ethereum.nix { };
+  parity = callPackage ./parity.nix { };
+  ethabi = callPackage ./ethabi.nix { };
+
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
   freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
-  go-ethereum = callPackage ./go-ethereum.nix { };
 
   hivemind = callPackage ./hivemind.nix { withGui = true; };
   hivemindd = callPackage ./hivemind.nix { withGui = false; };
@@ -33,8 +36,6 @@ rec {
 
   namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
   namecoind = callPackage ./namecoind.nix { };
-
-  ethabi = callPackage ./ethabi.nix { };
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };
