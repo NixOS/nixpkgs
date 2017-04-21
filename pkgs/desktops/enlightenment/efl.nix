@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.18.4";
+  version = "1.19.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "09c0ajszjarcs6d62zlgnf1aha2f921mfr0gxg6nwza36xzc1srr";
+    sha256 = "1pza8lacqh3bgsvcm4h2hyc577bvnzix932g87dhg03ph4839q54";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -24,16 +24,30 @@ stdenv.mkDerivation rec {
     libinput ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
-  configureFlags = [ "--enable-sdl" "--enable-drm" "--enable-elput" "--with-opengl=full"
-    "--enable-image-loader-jp2k" "--enable-xinput22" "--enable-multisense" "--enable-liblz4" "--enable-systemd"
-    "--enable-image-loader-webp" "--enable-harfbuzz" "--enable-xine" "--enable-fb"
-    "--disable-tslib" "--with-systemdunitdir=$out/systemd/user"
-    "ac_ct_CXX=foo" ];
+  configureFlags = [
+    "--enable-sdl"
+    "--enable-drm"
+    "--enable-elput"
+    "--with-opengl=full"
+    "--enable-image-loader-jp2k"
+    "--enable-xinput22"
+    "--enable-multisense"
+    "--enable-liblz4"
+    "--enable-systemd"
+    "--enable-image-loader-webp"
+    "--enable-harfbuzz"
+    "--enable-xine"
+    "--enable-fb"
+    "--disable-tslib"
+    "--with-systemdunitdir=$out/systemd/user"
+    "ac_ct_CXX=foo"
+  ];
 
   patches = [ ./efl-elua.patch ];
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
+    export HOME="$TEMPDIR"
   '';
 
   postInstall = ''
@@ -48,8 +62,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Enlightenment foundation libraries";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
   };
 }
