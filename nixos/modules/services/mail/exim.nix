@@ -72,7 +72,7 @@ in
         exim_group = ${cfg.group}
         exim_path = /run/wrappers/bin/exim
         spool_directory = ${cfg.spoolDir}
-        ${cfg.config}
+        .include ${cfg.config}
       '';
       systemPackages = [ exim ];
     };
