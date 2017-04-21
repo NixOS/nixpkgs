@@ -31,6 +31,12 @@ buildGoPackage rec {
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
+
+    # Make scripts readily available for sourcing from shells. Note
+    # that while files there have 'completion' in their name, they are
+    # not a completions scripts (so no copying to bash-completion.d and friends).
+    mkdir -p $out/share/fzf
+    (cd $out/share/fzf && cp -s $out/share/go/src/github.com/junegunn/fzf/shell/* .)
   '';
 
   meta = with stdenv.lib; {
@@ -38,5 +44,6 @@ buildGoPackage rec {
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
     platforms = platforms.unix;
+    outputsToInstall = [ "out" "bin" "man" ];
   };
 }
