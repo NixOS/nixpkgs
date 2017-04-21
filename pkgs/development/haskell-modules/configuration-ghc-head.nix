@@ -87,6 +87,7 @@ self: super: {
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
   # A bunch of jailbreaks due to 'base' bump
+  old-time = doJailbreak super.old-time;
   old-locale = doJailbreak super.old-locale;
   primitive = doJailbreak super.primitive;
   test-framework = doJailbreak super.test-framework;
