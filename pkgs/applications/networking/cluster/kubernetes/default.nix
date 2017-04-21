@@ -8,7 +8,6 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "plugin/cmd/kube-scheduler"
-    "cmd/kube-dns"
     "federation/cmd/federation-apiserver"
     "federation/cmd/federation-controller-manager"
   ]
@@ -18,13 +17,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.5.6";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0mkg4vgz9szgq1k5ignkdr5gmg703xlq8zsrr422a1qfqb8zp15w";
+    sha256 = "1waxkr4ycrd23w8pi83gyf6jmawi1nhfzixp70fcwwka5h7p2y91";
   };
 
   buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
