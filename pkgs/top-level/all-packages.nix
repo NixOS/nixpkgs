@@ -988,9 +988,7 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock {};
 
-  jbuilder = callPackage ../development/tools/ocaml/jbuilder {
-    inherit (ocaml-ng.ocamlPackages_4_03) ocaml;
-  };
+  jbuilder = callPackage ../development/tools/ocaml/jbuilder { };
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
