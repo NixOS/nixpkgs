@@ -1,28 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libbsd-${version}";
   version = "0.8.3";
 
+  src = fetchurl {
+    url = "http://libbsd.freedesktop.org/releases/${name}.tar.xz";
+    sha256 = "1a1l7afchlvvj2zfi7ajcg26bbkh5i98y2v5h9j5p1px9m7n6jwk";
+  };
+
+  # darwin changes configure.ac which means we need to regenerate
+  # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];
 
-  preAutoreconf = "mkdir m4";
-
-  patchPhase = ''
-    substituteInPlace configure.ac \
-      --replace "m4_esyscmd([./get-version])" "${version}"
-    sed -i '38i#undef strlcpy' include/bsd/string.h
-    sed -i '38i#undef strlcat' include/bsd/string.h
-    substituteInPlace src/setproctitle.c \
-     --replace 'extern typeof(setproctitle_impl) setproctitle_stub __attribute__((weak, alias("setproctitle_impl")));' ""
-  '';
-
-  src = fetchFromGitHub {
-    owner = "JackieXie168";
-    repo = "libbsd";
-    rev = "macosx-${version}";
-    sha256 = "1g5h6d7i297m0hs2l0dxvsx6p0z96959pzgp75drbb7mkrf32p2z";
-  };
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   meta = with stdenv.lib; {
     description = "Common functions found on BSD systems";
