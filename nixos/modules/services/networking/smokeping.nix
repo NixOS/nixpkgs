@@ -288,8 +288,11 @@ in
     };
     systemd.services.smokeping = {
       wantedBy = [ "multi-user.target"];
-      serviceConfig.User = cfg.user;
-      serviceConfig.PermissionsStartOnly = true;
+      serviceConfig = {
+        User = cfg.user;
+        PermissionsStartOnly = true;
+        Restart = "on-failure";
+      };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
         rm -f ${smokepingHome}/cropper

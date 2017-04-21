@@ -1,4 +1,3 @@
-
 { # The platforms for which we build Nixpkgs.
   supportedSystems ? [ builtins.currentSystem ]
 , # Strip most of attributes when evaluating to spare memory usage
@@ -8,8 +7,6 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  inherit (pkgs) lib;
-
   nativePlatforms = linux;
 
   /* Basic list of packages to cross-build */
@@ -50,11 +47,11 @@ in
     # cause false negatives.
     testEqualOne = path: system: let
       f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert
+    in assertTrue (
         f path { inherit system; }
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; };
-      true;
+        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+      );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 
@@ -80,7 +77,7 @@ in
       arch = "arm";
       float = "soft";
       withTLS = true;
-      platform = pkgs.platforms.sheevaplug;
+      platform = lib.systems.platforms.sheevaplug;
       libc = "glibc";
       openssl.system = "linux-generic32";
     };
@@ -139,16 +136,7 @@ in
       float = "hard";
       withTLS = true;
       libc = "glibc";
-      platform = {
-        name = "fuloong-minipc";
-        kernelMajor = "2.6";
-        kernelBaseConfig = "lemote2f_defconfig";
-        kernelHeadersBaseConfig = "fuloong2e_defconfig";
-        uboot = null;
-        kernelArch = "mips";
-        kernelAutoModules = false;
-        kernelTarget = "vmlinux";
-      };
+      platform = lib.systems.platforms.fuloong2f_n32;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "loongson2f";
@@ -172,7 +160,7 @@ in
       fpu = "vfp";
       withTLS = true;
       libc = "glibc";
-      platform = pkgs.platforms.raspberrypi;
+      platform = lib.systems.platforms.raspberrypi;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "armv6";

@@ -60,7 +60,7 @@
 
 let
   arch =
-    if      stdenv.system == "x86_64-linux" then
+    if stdenv.system == "x86_64-linux" then
       "x86_64"
     else if stdenv.system == "i686-linux"   then
       "i386"
@@ -73,7 +73,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "25.0.0.127";
+  version = "25.0.0.148";
 
   src = fetchurl {
     url =
@@ -84,14 +84,14 @@ stdenv.mkDerivation rec {
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "0d37rwbqszl593pggph8pm8jwn05fppys7q8vk1jrk9jaz262iva"
+          "1jxxnbd357ndw8b64lw4pwkg9j0shy0ns7xw0f36awimq7bclr8d"
         else
-          "0lhngdx1q51kfpw3a961h9p9n1fnspk9pmg21i069hvd0h143arx"
+          "1k0zyy4mz307r7ph4pnmyqaa0fdw2f52apala6dbrys0wdl05yfg"
       else
         if arch == "x86_64" then
-          "1yasj9xzmb6ly9209b1hmrqrzxrr1bafsfjszsr3yf994hql6nzn"
+          "0n77a2z0928vd4bjgx69igzxvn8l9wrfh79j6knygdpnsbr3pybj"
         else
-          "02vs12cm6fpl2fif1lij9y15m89wk6aizc8sbjiw6w59wixn3p9d";
+          "1cb1h37av4icfhl4vjngsa3nfcrcdvzliwxdg22rshimlkfgr7vx";
   };
 
   nativeBuildInputs = [ unzip ];

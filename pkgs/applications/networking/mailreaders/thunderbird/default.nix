@@ -7,6 +7,7 @@
 , autoconf213, which, m4
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , enableGTK3 ? false, gtk3, wrapGAppsHook
+, enableCalendar ? true
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird" instead
   # of "Earlybird" or whatever, enable this option.  However, those
@@ -18,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.0";
+  version = "52.0.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "215de8ae386f6f12d7a4338bb03bac956410be0dd4de5cca218e12241e3948c8c2540756e149bfde597cd10e399b4cb4db86619a2aa50a368ba323b413c1f93c";
+    sha512 = "7b8324a230a10b738b9a28c31b195bfb149b1f47eec6662d93a7d0c424d56303dbc2bca6645b30323c6da86628d6e49de359e1067081a5d0bd66541174a8be48";
   };
 
   # New sed no longer tolerates this mistake.
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
     ]
+      ++ lib.optional enableCalendar "--enable-calendar"
       ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                         else [ "--disable-debug" "--enable-release"
                                "--disable-debug-symbols"

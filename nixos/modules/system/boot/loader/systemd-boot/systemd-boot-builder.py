@@ -1,4 +1,4 @@
-#! @python3@/bin/python3
+#! @python3@/bin/python3 -B
 import argparse
 import shutil
 import os

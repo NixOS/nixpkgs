@@ -758,13 +758,6 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
-  # https://github.com/NixOS/nixpkgs/issues/19612
-  wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
-    http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3_1;
-    http-conduit = self.http-conduit_2_2_3;
-  });
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;

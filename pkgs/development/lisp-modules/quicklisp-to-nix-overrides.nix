@@ -134,6 +134,9 @@ in
   plump = addDeps (with qlnp; [array-utils trivial-indent]);
   sqlite = addNativeLibs [pkgs.sqlite];
   uiop = x: {
+    testSystems = (x.testSystems or ["uiop"]) ++ [
+      "uiop/version"
+    ];
     overrides = y: (x.overrides y) // {
       postInstall = ((x.overrides y).postInstall or "") + ''
         cp -r "${pkgs.asdf}/lib/common-lisp/asdf/uiop/contrib" "$out/lib/common-lisp/uiop"

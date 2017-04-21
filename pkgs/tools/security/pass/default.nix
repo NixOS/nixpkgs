@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "002mw7j0m33bw483rllzhcf41wp3ixka8yma6kqrfaj57jyw66hn";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
+  patches = [ ./set-correct-program-name-for-sleep.patch 
+            ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
 

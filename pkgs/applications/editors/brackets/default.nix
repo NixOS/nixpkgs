@@ -1,27 +1,23 @@
 { stdenv, fetchurl, buildEnv, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
 , cups, libgcrypt_1_5, systemd, makeWrapper, dbus }:
+with stdenv.lib;
+
 let
-  bracketsEnv = buildEnv {
-    name = "env-brackets";
-    paths = [
-      gtk2 glib gdk_pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5
-      dbus.lib systemd.lib
-    ];
-  };
+  bracketsLibs = makeLibraryPath [
+    gtk2 glib gdk_pixbuf stdenv.cc.cc.lib alsaLib nss nspr gconf cups libgcrypt_1_5 dbus systemd
+  ];
 in
 stdenv.mkDerivation rec {
   name = "brackets-${version}";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
     url = "https://github.com/adobe/brackets/releases/download/release-${version}/Brackets.Release.${version}.64-bit.deb";
-    sha256 = "0b2k0vv1qwmsg1wckp71yrb86zp8zisskmzzvx9ir19bma9jzr42";
+    sha256 = "0c4l2rr0853xd21kw8hhxlmrx8mqwb7iqa2k24zvwyjp4nnwkgbp";
     name = "${name}.deb";
   };
 
   phases = [ "installPhase" "fixupPhase" ];
-
-  buildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out
@@ -33,27 +29,26 @@ stdenv.mkDerivation rec {
 
     ln -s ${systemd.lib}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${bracketsEnv}/lib:${bracketsEnv}/lib64" \
-      $out/opt/brackets/Brackets
-
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/opt/brackets/Brackets-node
-
-    patchelf \
-      --set-rpath "${bracketsEnv}/lib:${bracketsEnv}/lib64" \
-      $out/opt/brackets/lib/libcef.so
-
-    wrapProgram $out/opt/brackets/brackets \
-      --prefix LD_LIBRARY_PATH : "${bracketsEnv}/lib:${bracketsEnv}/lib64"
-
     substituteInPlace $out/opt/brackets/brackets.desktop \
       --replace "Exec=/opt/brackets/brackets" "Exec=brackets"
     mkdir -p $out/share/applications
     ln -s $out/opt/brackets/brackets.desktop $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  postFixup = ''
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${bracketsLibs}:$out/opt/brackets/lib" \
+      $out/opt/brackets/Brackets
+
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${bracketsLibs}" \
+      $out/opt/brackets/Brackets-node
+
+    patchelf --set-rpath "${bracketsLibs}" \
+      $out/opt/brackets/lib/libcef.so
+  '';
+
+  meta = {
     description = "An open source code editor for the web, written in JavaScript, HTML and CSS";
     homepage = http://brackets.io/;
     license = licenses.mit;

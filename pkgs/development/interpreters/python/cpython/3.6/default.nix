@@ -26,7 +26,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.6";
-  minorVersion = "0";
+  minorVersion = "1";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "08inlbb2vb8lahw6wfq654lqk6l1x7ncpggp6a92vqw5yq2gkidh";
+    sha256 = "0ha03sbakxblzyvlramx5fj0ranzmzx4pa2png6nn8gczkfi0650";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -62,14 +62,6 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "glibc-2.25-failed-to-get-random-numbers.patch";
-      url = https://github.com/python/cpython/commit/ff558f5aba4.patch;
-      sha256 = "1k12gpn69np94cm942vaf40sv7gsxqf20rv1m3parzgi1gs4hqa3";
-    })
-  ];
 
   postPatch = ''
     # Determinism

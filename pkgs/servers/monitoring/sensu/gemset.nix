@@ -50,18 +50,18 @@
   ffi = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07hnyr47mndsjfanzh348wm3fxjx9nx68mdb3cpsdvfqrxnz97s7";
+      sha256 = "034f52xf7zcqgbvwbl20jwdyjwznvqnwpbaps9nk18v9lgb1dpx0";
       type = "gem";
     };
-    version = "1.9.17";
+    version = "1.9.18";
   };
   oj = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pa9vmbxivplphad4ddjy30ylbb3bi61y13vmwx4llz3svl8r8kk";
+      sha256 = "147whmq8h2n04chskl3v4a132xhz5i6kk6vhnz83jwng4vihin5f";
       type = "gem";
     };
-    version = "2.14.6";
+    version = "2.18.1";
   };
   parse-cron = {
     source = {
@@ -74,10 +74,10 @@
   sensu = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1dbyc1wylg9ligr1slv60myhbzdbja96v3srb3xrirv6vl33npqx";
+      sha256 = "0931qccqhwmvqf4jj3jwip25xwkg7rf1yxxpkdhiyi2yndyfb8x7";
       type = "gem";
     };
-    version = "0.28.0";
+    version = "0.29.0";
   };
   sensu-extension = {
     source = {
@@ -90,10 +90,18 @@
   sensu-extensions = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0axjqak7yhhznhs9f4q8km7ikha5khglwqsc33scck13hsvw9l6g";
+      sha256 = "1r09mdbbnh5cg9yvqw78sxbhlb8xqld1vwbr4hsjw6k3x1xpnnr9";
       type = "gem";
     };
-    version = "1.7.1";
+    version = "1.9.0";
+  };
+  sensu-extensions-check-dependencies = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0clgvf2abvwz549f28ny3zd6q7z6y7m49i8pp91ll10jp1vsy4b2";
+      type = "gem";
+    };
+    version = "1.0.1";
   };
   sensu-extensions-debug = {
     source = {
@@ -114,10 +122,10 @@
   sensu-extensions-occurrences = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xi9888gp3lz5fik1k32bc1c6sjp7rr551p8dr5i3hsm5ii7blja";
+      sha256 = "0lx5wsbblfs0rvkxfg09bsz0g2mwmckrhga7idnarsnm8m565v1v";
       type = "gem";
     };
-    version = "1.1.0";
+    version = "1.2.0";
   };
   sensu-extensions-only-check-output = {
     source = {
@@ -138,10 +146,10 @@
   sensu-json = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08bn8a5fscbhc9mcjg5avwjjbwxn28b48336bdxx87yng0wyafm4";
+      sha256 = "02qkh86jddv7gha39vjx6g9hi7vkq7r433dr86bwmm9c7lqkgyl9";
       type = "gem";
     };
-    version = "2.0.1";
+    version = "2.1.0";
   };
   sensu-logger = {
     source = {
@@ -154,18 +162,18 @@
   sensu-redis = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10axrjg2q569bjdchpjsdillzszifkgkayaz390hnf876mssqwcg";
+      sha256 = "1nqk2046g6nldpiqy40f805gms8r856v2zxm53j0c8ni03sgz2a3";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.1.1";
   };
   sensu-settings = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0bs66zmhs7yrwywvfhbld051d83f3nypmk2rf8dfn19ijzk4ch9i";
+      sha256 = "0fb3wgqll5cq5akgmqhx6vgjvmcpcjyx68qqs8hb106b07gdpmli";
       type = "gem";
     };
-    version = "9.9.0";
+    version = "10.0.0";
   };
   sensu-spawn = {
     source = {

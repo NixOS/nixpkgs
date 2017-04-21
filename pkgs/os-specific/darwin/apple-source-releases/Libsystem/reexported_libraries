@@ -1,0 +1,41 @@
+# These are generated with otool -L /usr/lib/libSystem.dylib on a 10.11 machine
+/usr/lib/system/libcache.dylib
+/usr/lib/system/libcommonCrypto.dylib
+/usr/lib/system/libcompiler_rt.dylib
+/usr/lib/system/libcopyfile.dylib
+/usr/lib/system/libcorecrypto.dylib
+/usr/lib/system/libdispatch.dylib
+/usr/lib/system/libdyld.dylib
+/usr/lib/system/libkeymgr.dylib
+/usr/lib/system/liblaunch.dylib
+/usr/lib/system/libmacho.dylib
+/usr/lib/system/libquarantine.dylib
+/usr/lib/system/libremovefile.dylib
+/usr/lib/system/libsystem_asl.dylib
+/usr/lib/system/libsystem_blocks.dylib
+
+# We handle this specially in the expression
+# /usr/lib/system/libsystem_c.dylib
+
+/usr/lib/system/libsystem_configuration.dylib
+/usr/lib/system/libsystem_coreservices.dylib
+/usr/lib/system/libsystem_coretls.dylib
+/usr/lib/system/libsystem_dnssd.dylib
+/usr/lib/system/libsystem_info.dylib
+
+# We handle this specially in the expression
+# /usr/lib/system/libsystem_kernel.dylib
+
+/usr/lib/system/libsystem_m.dylib
+/usr/lib/system/libsystem_malloc.dylib
+/usr/lib/system/libsystem_network.dylib
+/usr/lib/system/libsystem_networkextension.dylib
+/usr/lib/system/libsystem_notify.dylib
+/usr/lib/system/libsystem_platform.dylib
+/usr/lib/system/libsystem_pthread.dylib
+/usr/lib/system/libsystem_sandbox.dylib
+/usr/lib/system/libsystem_secinit.dylib
+/usr/lib/system/libsystem_trace.dylib
+/usr/lib/system/libunc.dylib
+/usr/lib/system/libunwind.dylib
+/usr/lib/system/libxpc.dylib

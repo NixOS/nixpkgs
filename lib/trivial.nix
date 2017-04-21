@@ -30,6 +30,11 @@ rec {
   /* boolean “and” */
   and = x: y: x && y;
 
+  /* Convert a boolean to a string.
+     Note that toString on a bool returns "1" and "".
+  */
+  boolToString = b: if b then "true" else "false";
+
   /* Merge two attribute sets shallowly, right side trumps left
 
      Example:
@@ -116,6 +121,9 @@ rec {
 
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
+
+  # Apply function if argument is non-null
+  mapNullable = f: a: if isNull a then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)

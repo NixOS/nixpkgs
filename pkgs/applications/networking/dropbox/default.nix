@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, makeWrapper
+{ stdenv, fetchurl, makeDesktopItem, patchelf, makeWrapper, makeQtWrapper
 , dbus_libs, fontconfig, freetype, gcc, glib
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
-, qtbase, qtdeclarative, qtwebkit, makeQtWrapper
+, qtbase, qtdeclarative, qtwebkit, wmctrl
 }:
 
 # this package contains the daemon version of dropbox
@@ -23,11 +23,11 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "23.4.18";
+  version = "24.4.16";
   sha256 =
     {
-      "x86_64-linux" = "0hil9dnhmq4d4yq277w48ql3nw8yfzjqgafb0waw6zbc6a18l7bz";
-      "i686-linux"   = "15hcmqyfyx8z7qx3val5r7b9plckh50iy0mxxh2z1wbh96l03l3a";
+      "x86_64-linux" = "01hnx52ag7wfclxnqzs9m09pnmisz9lczxgg3wm47qmwhagnb8la";
+      "i686-linux"   = "1cr0vfjwn60xdv2kh6kmmgf6g0s2y9mqklbfah59pm7k2yr2pvnf";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -98,6 +98,9 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
     chmod 755 $out/${appdir}/dropbox
+
+    rm $out/${appdir}/wmctrl
+    ln -s ${wmctrl}/bin/wmctrl $out/${appdir}/wmctrl
   '';
 
   fixupPhase = ''
