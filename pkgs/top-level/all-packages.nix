@@ -2362,7 +2362,17 @@ with pkgs;
 
     transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
 
+    transport2 = callPackage ../development/libraries/ignition-transport/2.1.0.nix { 
+      inherit (ignition) tools messages math2;
+    };
+
     transport = ignition.transport0;
+
+    messages = callPackage ../development/libraries/ignition-messages/default.nix { 
+      inherit (ignition) math2;
+    };
+
+    tools = callPackage ../development/libraries/ignition-tools/default.nix { };
   };
 
 
