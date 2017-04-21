@@ -39,10 +39,6 @@ in python2Packages.buildPythonApplication {
                 --prefix PATH : \"${tk}/bin\" "
     '') +
     ''
-      for i in $(cd $out/bin && ls); do
-        wrapProgram $out/bin/$i \
-          $WRAP_TK
-      done
 
       mkdir -p $out/etc/mercurial
       cat >> $out/etc/mercurial/hgrc << EOF
