@@ -185,8 +185,6 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
-
   dbf = buildPythonPackage rec {
     name = "dbf-0.94.003";
     disabled = isPy3k;
