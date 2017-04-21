@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "radarr-${version}";
+
   version = "0.2.0.596";
 
   src = fetchurl {
