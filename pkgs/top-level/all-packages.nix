@@ -1152,6 +1152,8 @@ with pkgs;
 
   atool = callPackage ../tools/archivers/atool { };
 
+  binder = callPackage ../development/tools/bindings/binder { };
+
   bsc = callPackage ../tools/compression/bsc { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
