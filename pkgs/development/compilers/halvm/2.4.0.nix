@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "The Haskell Lightweight Virtual Machine (HaLVM): GHC running on Xen";
     maintainers = with stdenv.lib.maintainers; [ dmjio ];
     inherit (bootPkgs.ghc.meta) license platforms;
+    broken = true;  # http://hydra.nixos.org/build/51814615
   };
 }
