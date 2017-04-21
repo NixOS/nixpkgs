@@ -37,7 +37,6 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  - store < 0.4.1               # https://github.com/fpco/store/issues/104
   # LTS Haskell 8.11
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
@@ -2448,6 +2447,8 @@ extra-packages:
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
+  - store < 0.4                         # needed by stack 1.4.0
+  - store-core < 0.4                    # needed by stack 1.4.0
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
   - vector < 0.10.10                    # newer versions don't work with GHC 6.12.3
