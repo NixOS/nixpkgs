@@ -28,9 +28,9 @@ let
           fi
         done
 
-        ${cfg.up}
         ${optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+        source ${cfg.up}
       '';
 
       downScript = ''
@@ -38,7 +38,7 @@ let
         export PATH=${path}
         ${optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
-        ${cfg.down}
+        source ${cfg.down}
       '';
 
       configFile = pkgs.writeText "openvpn-config-${name}"
