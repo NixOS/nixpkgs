@@ -56,7 +56,7 @@ in
     liveRestore =
       mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description =
           ''
             Allow dockerd to be restarted without affecting running container.
