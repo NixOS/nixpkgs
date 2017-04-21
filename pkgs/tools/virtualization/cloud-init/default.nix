@@ -1,4 +1,4 @@
-{ lib, pythonPackages, fetchurl, kmod, systemd }:
+{ lib, pythonPackages, fetchurl, kmod, systemd, cloud-utils }:
 
 let version = "0.7.9";
 
@@ -20,6 +20,9 @@ in pythonPackages.buildPythonApplication rec {
       --replace /etc $out/etc \
       --replace /lib/systemd $out/lib/systemd \
       --replace 'self.init_system = ""' 'self.init_system = "systemd"'
+
+    substituteInPlace cloudinit/config/cc_growpart.py \
+      --replace 'util.subp(["growpart"' 'util.subp(["${cloud-utils}/bin/growpart"'
     '';
 
   propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
