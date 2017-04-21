@@ -409,7 +409,6 @@ let
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
-    ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
@@ -630,7 +629,6 @@ let
     "rioja"
     "ripa"
     "rite"
-    "rnbn"
     "RNCEP"
     "RQDA"
     "RSDA"
@@ -662,7 +660,6 @@ let
     "SYNCSA"
     "SyNet"
     "tcltk2"
-    "TDMR"
     "TED"
     "TestScorer"
     "TIMP"
@@ -695,7 +692,6 @@ let
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
     "acs"                             # build is broken
-    "AffyTiling"                      # build is broken
     "agRee"                           # depends on broken package BRugs-0.8-6
     "aLFQ"                            # depends on broken package bio3d-2.3-1
     "animation"                       # build is broken
@@ -762,7 +758,6 @@ let
     "csaw"                            # build is broken
     "ctsem"                           # depends on broken package OpenMx-2.7.4
     "cudaBayesreg"                    # build is broken
-    "curlconverter"                   # depends on broken package V8-1.2
     "cytofkit"                        # depends on broken package flowCore-1.38.2
     "daff"                            # depends on broken package V8-1.2
     "dagbag"                          # build is broken
@@ -787,7 +782,6 @@ let
     "DirichletMultinomial"            # build is broken
     "diveRsity"                       # build is broken
     "DmelSGI"                         # depends on broken package r-rhdf5-2.16.0
-    "DNAprofiles"                     # build is broken
     "docxtools"                       # build is broken
     "DOQTL"                           # depends on broken package r-rhdf5-2.16.0
     "DOT"                             # depends on broken package V8-1.2
@@ -862,7 +856,6 @@ let
     "gMCP"                            # build is broken
     "gmDatabase"                      # depends on broken package RMySQL-0.10.9
     "gmum_r"                          # build is broken
-    "goldi"                           # build is broken
     "googleformr"                     # build is broken
     "gpg"                             # build is broken
     "gpuR"                            # build is broken
@@ -889,7 +882,6 @@ let
     "IHWpaper"                        # depends on broken package r-lpsymphony-1.0.2
     "IlluminaHumanMethylation450k_db" # build is broken
     "immunoClust"                     # depends on broken package r-flowCore-1.38.2
-    "inSilicoMerging"                 # build is broken
     "intansv"                         # build is broken
     "interactiveDisplay"              # build is broken
     "ionicons"                        # depends on broken package rsvg-1.0
@@ -941,7 +933,6 @@ let
     "miscF"                           # depends on broken package BRugs-0.8-6
     "mixlink"                         # build is broken
     "MLSeq"                           # build is broken
-    "MMDiff"                          # depends on broken package r-DiffBind-2.0.9
     "mmnet"                           # build is broken
     "MonetDBLite"                     # build is broken
     "mongolite"                       # build is broken
@@ -1043,7 +1034,6 @@ let
     "RapidPolygonLookup"              # depends on broken package PBSmapping-2.69.76
     "RAppArmor"                       # build is broken
     "raptr"                           # depends on broken package PBSmapping-2.69.76
-    "RBerkeley"                       # build is broken
     "RbioRXN"                         # depends on broken package ChemmineR-2.24.2
     "Rblpapi"                         # build is broken
     "Rchemcpp"                        # depends on broken package ChemmineR-2.24.2
@@ -1094,7 +1084,6 @@ let
     "rnetcarto"                       # build is broken
     "ROI_plugin_cplex"                # depends on broken package Rcplex-0.3-3
     "ROI_plugin_symphony"             # depends on broken package Rsymphony-0.1-26
-    "Rolexa"                          # build is broken
     "ROracle"                         # build is broken
     "RPA"                             # depends on broken package r-rhdf5-2.16.0
     "RPANDA"                          # depends on broken package animation-2.4
@@ -1119,7 +1108,6 @@ let
     "RVideoPoker"                     # depends on broken package rpanel-1.1-3
     "rzmq"                            # build is broken
     "s2"                              # build is broken
-    "Sabermetrics"                    # build is broken
     "sapFinder"                       # build is broken
     "sbrl"                            # build is broken
     "scater"                          # depends on broken package r-rhdf5-2.16.0
@@ -1145,7 +1133,6 @@ let
     "sodium"                          # build is broken
     "soilphysics"                     # depends on broken package rpanel-1.1-3
     "sortinghat"                      # build is broken
-    "spade"                           # depends on broken package r-flowCore-1.38.2
     "spdynmod"                        # depends on broken package animation-2.4
     "spocc"                           # depends on broken package V8-1.2
     "spongecake"                      # build is broken
