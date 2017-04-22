@@ -32,14 +32,8 @@ let
     ''
       #! ${pkgs.bash}/bin/bash
 
-      # SDDM splits "Exec" line in .desktop file by whitespace and pass script path as $1
-      if [[ "$0" = "$1" ]]; then
-        # remove superfluous $1 again
-        shift
-        # join arguments again and evaluate them in a shell context
-        # to interpret shell quoting
-        eval exec "$0" "$@"
-      fi
+      # Handle being called by SDDM.
+      if test "''${1:0:1}" = / ; then eval exec $1 $2 ; fi
 
       ${optionalString cfg.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
