@@ -273,7 +273,8 @@ with pkgs;
       inherit kernel rootModules allowMissing;
     };
 
-  kdeDerivation = import ../build-support/kde/derivation.nix { inherit stdenv lib; };
+  kdeDerivation = makeOverridable (import ../build-support/kde/derivation.nix)
+    { inherit stdenv lib; };
 
   kdeWrapper = callPackage ../build-support/kde/wrapper.nix {
     inherit (gnome3) dconf;
