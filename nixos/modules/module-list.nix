@@ -536,6 +536,7 @@
   ./services/system/earlyoom.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
+  ./services/system/rc-local.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix
