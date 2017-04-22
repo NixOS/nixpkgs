@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, groff }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mksh-${version}";
@@ -12,22 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "19ivsic15903hv3ipzk0kvkaxardw7b99s8l5iw3y415lz71ld66";
   };
 
-  buildInputs = [ groff ];
-
-  hardeningDisable = [ "format" ];
-
-  buildPhase = ''
-    mkdir build-dir/
-    cp mksh.1 dot.mkshrc build-dir/
-    cd build-dir/
-    sh ../Build.sh -c lto
-  '';
+  buildPhase = ''sh ./Build.sh -r -c lto'';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1 $out/share/mksh $out/bin
     install -D -m 755 mksh $out/bin/mksh
     install -D -m 644 mksh.1 $out/share/man/man1/mksh.1
-    install -D -m 644 mksh.cat1 $out/share/mksh/mksh.cat1
     install -D -m 644 dot.mkshrc $out/share/mksh/mkshrc
   '';
 
@@ -41,8 +30,8 @@ stdenv.mkDerivation rec {
       systems.
     '';
     homepage = "https://www.mirbsd.org/mksh.htm";
-    license = licenses.free;
-    maintainers = with maintainers; [ AndersonTorres nckx ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ AndersonTorres nckx joachifm ];
     platforms = platforms.unix;
   };
 
