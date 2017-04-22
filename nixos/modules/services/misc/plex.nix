@@ -91,7 +91,7 @@ in
         # Copy the database skeleton files to /var/lib/plex/.skeleton
         # See the the Nix expression for Plex's package for more information on
         # why this is done.
-        test -d "${cfg.dataDir}/.skeleton" || mkdir "${cfg.dataDir}/.skeleton"
+        install --owner ${cfg.user} --group ${cfg.group} -d "${cfg.dataDir}/.skeleton"
         for db in "com.plexapp.plugins.library.db"; do
             if [ ! -e  "${cfg.dataDir}/.skeleton/$db" ]; then
               cp "${cfg.package}/usr/lib/plexmediaserver/Resources/base_$db" "${cfg.dataDir}/.skeleton/$db"
