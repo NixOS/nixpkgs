@@ -4,21 +4,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  emacsVersion = "25.1";
+  emacsVersion = "25.2";
   emacsName = "emacs-${emacsVersion}";
-  macportVersion = "6.1";
+  macportVersion = "6.3";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "19f2798ee3bc26c95dca3303e7ab141e7ad65d6ea2b6945eeba4dbea7df48f33";
+    url = "mirror:///gnu/emacs/${emacsName}.tar.xz";
+    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "1zwxh7zsvwcg221mpjh0dhpdas3j9mc5q92pprf8yljl7clqvg62";
+    sha256 = "1dz11frk3ya3842lb89ixzpns9bz5f9njxdkyvjy75gfymqfhhzv";
   };
 
   hiresSrc = fetchurl {
