@@ -178,16 +178,19 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.gogs.bin ];
 
-      preStart = ''
+      preStart = let
+        runConfig = "${cfg.stateDir}/custom/conf/app.ini";
+      in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
           mkdir -p ${cfg.stateDir}/custom/conf
-          cp -f ${configFile} ${cfg.stateDir}/custom/conf/app.ini
+          cp -f ${configFile} ${runConfig}
           KEY=$(head -c 16 /dev/urandom | base64)
           DBPASS=$(head -n1 ${cfg.database.passwordFile})
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
-              -i ${cfg.stateDir}/custom/conf/app.ini
+              -i ${runConfig}
+          chmod 440 ${runConfig}
         ''}
 
         mkdir -p ${cfg.repositoryRoot}
