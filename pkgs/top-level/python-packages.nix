@@ -11176,14 +11176,11 @@ in {
 
   fastimport = buildPythonPackage rec {
     name = "fastimport-${version}";
-    version = "0.9.4";
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
+    version = "0.9.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fastimport/${name}.tar.gz";
-      sha256 = "0k8x7552ypx9rc14vbsvg2lc6z0r8pv9laah28pdwyynbq10825d";
+      sha256 = "1aqjsin4rmqm7ln4j0p73fzxifws6c6ikgyhav7r137m2ixsxl43";
     };
 
     checkPhase = ''
@@ -13809,6 +13806,24 @@ in {
     meta = {
       homepage = "https://github.com/logentries/le";
       description = "Logentries agent";
+    };
+  };
+
+  legitfs = buildPythonPackage rec {
+    name = "legitfs-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/legitfs/${name}.tar.gz";
+      sha256 = "02772h17icgnd8sdi4minpwv1wgr2zzy6pns34083z90k78b28im";
+    };
+
+    propagatedBuildInputs = with self; [ dulwich fusepy click Logbook ];
+
+    meta = {
+      homepage = "http://github.com/mbr/legitfs";
+      description = "A read-only FUSE-based filesystem allowing you to browse git repositories";
+      maintainers = with maintainers; [ layus ];
     };
   };
 
