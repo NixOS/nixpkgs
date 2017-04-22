@@ -234,8 +234,6 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
       ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
-      ''-DNIXPKGS_LIBSSL="${openssl.out}/lib/libssl"''
-      ''-DNIXPKGS_LIBCRYPTO="${openssl.out}/lib/libcrypto"''
       (if stdenv.isLinux
         then ''-DNIXPKGS_LIBDBUS="${dbus.lib}/lib/libdbus-1"''
         else ''-DNIXPKGS_LIBDBUS=""'')
