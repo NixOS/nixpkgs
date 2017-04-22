@@ -1,16 +1,16 @@
 { stdenv, fetchurl, libmnl, kernel ? null }:
 
-# module requires Linux >= 3.18 https://www.wireguard.io/install/#kernel-requirements
-assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.18";
+# module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
+assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
 
 let
   name = "wireguard-${version}";
 
-  version = "0.0.20170409";
+  version = "0.0.20170421";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "065vxxvdsnxk9paqbafi0c622b4qayfh3ps6zzb853qp2i6kniri";
+    sha256 = "03c82af774224cd171d000ee4a519b5e474cc6842ac04967773cf77b26750000";
   };
 
   meta = with stdenv.lib; {
