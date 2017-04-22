@@ -28,21 +28,39 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   postFixup =
-   let p = p: "${p}/lib/ocaml/${ocaml.version}/site-lib"; in
-   ''
-   pushd $out/bin
-   for prog in *
+   let
+     path = "etc/utop/env";
+
+     # derivation of just runtime deps so env vars created by
+     # setup-hooks can be saved for use at runtime
+     runtime = stdenv.mkDerivation rec {
+       name = "utop-runtime-env-${version}";
+
+       buildInputs = [ findlib ] ++ propagatedBuildInputs;
+
+       phases = [ "installPhase" ];
+
+       installPhase = ''
+         mkdir -p "$out"/${path}
+         for e in OCAMLPATH CAML_LD_LIBRARY_PATH; do
+           printf %s "''${!e}" > "$out"/${path}/$e
+         done
+       '';
+     };
+
+     get = key: ''$(cat "${runtime}/${path}/${key}")'';
+   in ''
+   for prog in "$out"/bin/*
    do
-    mv $prog .$prog-wrapped
-    cat > $prog <<EOF
-#!/bin/sh
-export CAML_LD_LIBRARY_PATH=${p ocaml_lwt}/lwt:${p lambdaTerm}/lambda-term:'\$CAML_LD_LIBRARY_PATH'
-export OCAMLPATH=${p ocaml_lwt}:${p ocaml_react}:${p camomile}:${p zed}:${p lambdaTerm}:"$out"/lib/ocaml/${ocaml.version}/site-lib:'\$OCAMLPATH'
-${ocaml}/bin/ocamlrun $out/bin/.$prog-wrapped \$*
-EOF
-    chmod +x $prog
+    # Note: wrapProgram by default calls 'exec -a $0 ...', but this
+    # breaks utop on Linux with OCaml 4.04, and is disabled with
+    # '--argv0 ""' flag. See https://github.com/NixOS/nixpkgs/issues/24496
+    wrapProgram $prog \
+      --argv0 "" \
+      --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
+      --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
+      --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH")
    done
-   popd
    '';
 
   meta = {
