@@ -5732,6 +5732,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  GDText = buildPerlPackage rec {
+    name = "GDTextUtil-0.86";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/M/MV/MVERB/GDTextUtil-0.86.tar.gz";
+      sha256 = "1g0nc7fz4d672ag7brlrrcz7ibm98x49qs75bq9z957ybkwcnvl8";
+    };
+    propagatedBuildInputs = [ GD ];
+    meta = {
+      description = "Text utilities for use with GD";
+    };
+  };
+
   GeoIP = buildPerlPackage rec {
     name = "Geo-IP-1.45";
     src = fetchurl {
