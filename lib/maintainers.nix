@@ -352,6 +352,7 @@
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rongcuid = "Rongcui Dong <rongcuid@outlook.com>";
   ronny = "Ronny Pfannschmidt <nixos@ronnypfannschmidt.de>";
+  rongcuid = "Rongcui Dong <rongcuid@outlook.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
