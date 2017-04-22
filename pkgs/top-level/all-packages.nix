@@ -17492,6 +17492,8 @@ with pkgs;
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
+  cubicle = callPackage ../applications/science/logic/cubicle { };
+
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
   };
