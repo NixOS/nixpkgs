@@ -3022,6 +3022,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [TestException ClassAccessorChained];
   };
 
+  DataPagePageset = buildPerlPackage rec {
+    name = "Data-Page-Pageset-1.02";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/C/CH/CHUNZI/Data-Page-Pageset-1.02.tar.gz";
+      sha256 = "142isi8la383dbjxj7lfgcbmmrpzwckcc4wma6rdl8ryajsipb6f";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ DataPage ];
+    meta = {
+      description = "change long page list to be shorter and well navigate";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DataPassword = buildPerlPackage {
     name = "Data-Password-1.12";
     src = fetchurl {
@@ -6883,7 +6897,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "74d22c44b5ad2e7190e2786e8a17d74bbf4cef89b4d1157ba33598b5a2720dad";
     };
   };
-  
+
   IOPager = buildPerlPackage {
     name = "IO-Pager-0.06";
     src = fetchurl {
@@ -12419,7 +12433,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
- 
+
   TaskFreecellSolverTesting = buildPerlModule rec {
     name = "Task-FreecellSolver-Testing-v0.0.10";
     src = fetchurl {
@@ -13641,7 +13655,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
- 
+
   TestTrailingSpace = buildPerlPackage rec {
     name = "Test-TrailingSpace-0.0301";
     src = fetchurl {
