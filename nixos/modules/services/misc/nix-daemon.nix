@@ -385,6 +385,25 @@ in
 
         unitConfig.RequiresMountsFor = "/nix/store";
 
+        preStart = ''
+          # Check that we can read the schema
+          if nix-store --query --hash ${nix} 2>&1 | grep -q 'current Nix store schema is version'; then
+            # Try to downgrade
+            /nix/var/nix/gcroots/nix-daemon/bin/nix-store --dump-db > /nix/var/nix/db.dump
+            mv /nix/var/nix/db /nix/var/nix/db.old
+            if ! cat /nix/var/nix/db.dump | ${nix}/bin/nix-store --load-db; then
+              rm -rf /nix/var/nix/db
+              mv /nix/var/nix/db.old /nix/var/nix/db
+              rm /nix/var/nix/db.dump
+              echo "Failed to downgrade database schema" >&2
+              exit 1
+            fi
+            rm /nix/var/nix/db.dump
+            rm -rf /nix/var/nix/db.old
+          fi
+          ln -sfn ${nix} /nix/var/nix/gcroots/nix-daemon
+        '';
+
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
