@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg, rsync, removeReferencesTo }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, fetchbzr, rsync, removeReferencesTo }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -54,7 +54,11 @@ let
         fetchhg {
           inherit (goDep.fetch) url rev sha256;
         }
-      else abort "Unrecognized package fetch type";
+      else if goDep.fetch.type == "bzr" then
+        fetchbzr {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
     };
 
   importGodeps = { depsFile }:
