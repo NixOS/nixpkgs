@@ -47,13 +47,13 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraBuildInputs ? [] }:
+    { name, stageNum, overrides ? (self: super: {}), extraBuildInputs ? [] }:
 
     let
 
       thisStdenv = import ../generic {
         inherit system config extraBuildInputs;
-        name = "stdenv-linux-boot";
+        name = "stdenv-linux-boot-stage${stageNum}";
         preHook =
           ''
             # Don't patch #!/interpreter because it leads to retained
@@ -119,6 +119,7 @@ in
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   (prevStage: stageFun prevStage {
     name = null;
+    stageNum = "0";
 
     overrides = self: super: {
       # We thread stage0's stdenv through under this name so downstream stages
@@ -159,6 +160,7 @@ in
   # overrides attribute and the inherit syntax.
   (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
+    stageNum = "1";
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
@@ -181,6 +183,7 @@ in
   # compiling our own Glibc.
   (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
+    stageNum = "2";
 
     overrides = self: super: {
       inherit (prevStage)
@@ -197,6 +200,7 @@ in
   # binutils and rest of the bootstrap tools, including GCC.
   (prevStage: stageFun prevStage {
     name = "bootstrap-gcc-wrapper";
+    stageNum = "3";
 
     overrides = self: super: rec {
       inherit (prevStage)
@@ -224,6 +228,7 @@ in
   # still from the bootstrap tools.
   (prevStage: stageFun prevStage {
     name = "";
+    stageNum = "4";
 
     overrides = self: super: {
       # Zlib has to be inherited and not rebuilt in this stage,
