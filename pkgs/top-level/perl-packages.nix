@@ -11468,6 +11468,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SetIntSpan = buildPerlPackage rec {
+    name = "Set-IntSpan-1.19";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/S/SW/SWMCD/Set-IntSpan-1.19.tar.gz";
+      sha256 = "1l6znd40ylzvfwl02rlqzvakv602rmvwgm2xd768fpgc2fdm9dqi";
+    };
+
+    meta = {
+      description = "Manages sets of integers";
+    };
+  };
+
   SetObject = buildPerlPackage {
     name = "Set-Object-1.34";
     src = fetchurl {
