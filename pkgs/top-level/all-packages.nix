@@ -114,6 +114,8 @@ with pkgs;
     vs = vs90wrapper;
   };
 
+  fake-uname = callPackage ../build-support/fake-uname { };
+
   fetchadc = callPackage ../build-support/fetchadc {
     adc_user = if config ? adc_user
       then config.adc_user
