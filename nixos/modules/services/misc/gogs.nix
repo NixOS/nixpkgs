@@ -14,7 +14,7 @@ let
     HOST = ${cfg.database.host}:${toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
-    PASSWD = ${cfg.database.password}
+    PASSWD = #dbpass#
     PATH = ${cfg.database.path}
 
     [repository]
@@ -102,7 +102,21 @@ in
         password = mkOption {
           type = types.str;
           default = "";
-          description = "Database password.";
+          description = ''
+            The password corresponding to <option>database.user</option>.
+            Warning: this is stored in cleartext in the Nix store!
+            Use <option>database.passwordFile</option> instead.
+          '';
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/keys/gogs-dbpassword";
+          description = ''
+            A file containing the password corresponding to
+            <option>database.user</option>.
+          '';
         };
 
         path = mkOption {
@@ -170,7 +184,10 @@ in
           mkdir -p ${cfg.stateDir}/custom/conf
           cp -f ${configFile} ${cfg.stateDir}/custom/conf/app.ini
           KEY=$(head -c 16 /dev/urandom | base64)
-          sed -i "s,#secretkey#,$KEY,g" ${cfg.stateDir}/custom/conf/app.ini
+          DBPASS=$(head -n1 ${cfg.database.passwordFile})
+          sed -e "s,#secretkey#,$KEY,g" \
+              -e "s,#dbpass#,$DBPASS,g" \
+              -i ${cfg.stateDir}/custom/conf/app.ini
         ''}
 
         mkdir -p ${cfg.repositoryRoot}
@@ -212,5 +229,16 @@ in
       };
       extraGroups.gogs.gid = config.ids.gids.gogs;
     };
+
+    warnings = optional (cfg.database.password != "")
+      ''config.services.gogs.database.password will be stored as plaintext
+        in the Nix store. Use database.passwordFile instead.'';
+
+    # Create database passwordFile default when password is configured.
+    services.gogs.database.passwordFile = mkIf (cfg.database.password != "")
+      (mkDefault (toString (pkgs.writeTextFile {
+        name = "gogs-database-password";
+        text = cfg.database.password;
+      })));
   };
 }
