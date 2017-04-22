@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake];
+  nativeBuildInputs = [ pkgconfig autoconf automake ];
+
+  buildInputs = [ ncurses libxml2 gnutls texinfo gettext ];
 
   propagatedBuildInputs = [
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
     "--with-xml2=yes"
     "--with-gnutls=yes"
     "--with-mac"
+    "--with-modules"
     "--enable-mac-app=$$out/Applications"
   ];
 
