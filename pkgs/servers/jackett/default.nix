@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jackett-${version}";
-  version = "0.7.1197";
+  version = "0.7.1308";
 
   src = fetchurl {
     url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.Mono.tar.gz";
-    sha256 = "0p9xdfbb8pda5a3knnw6145jky3bf10y1dj2clgsbbygi2xnam2v";
+    sha256 = "07yadywizhq7j986ax5d9dbjn1s5bqw6zrlqp6l32ppc119qhjwf";
   };
 
   buildInputs = [ makeWrapper ];
