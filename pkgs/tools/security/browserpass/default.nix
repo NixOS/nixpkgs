@@ -22,7 +22,7 @@ buildGoPackage rec {
       sed -e "s!%%replace%%!$host_file!" go/src/${goPackagePath}/firefox/host.json > firefox-host.json
 
       install -D chrome-host.json $bin/etc/chrome-host.json
-      install -D firefox-host.json $bin/etc/firefox-host.json
+      install -D firefox-host.json $bin/lib/mozilla/native-messaging-hosts/com.dannyvankooten.browserpass.json
   '';
 
   meta = {
