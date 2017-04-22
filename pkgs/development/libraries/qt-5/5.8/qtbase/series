@@ -1,7 +1,6 @@
 dlopen-resolv.patch
 tzdir.patch
 dlopen-libXcursor.patch
-dlopen-dbus.patch
 xdg-config-dirs.patch
 compose-search-path.patch
 libressl.patch
