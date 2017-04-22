@@ -169,7 +169,7 @@ in
         ${optionalString (cfg.useWizard == false) ''
           mkdir -p ${cfg.stateDir}/custom/conf
           cp -f ${configFile} ${cfg.stateDir}/custom/conf/app.ini
-          KEY=$(head -c 16 /dev/urandom | tr -dc A-Za-z0-9)
+          KEY=$(head -c 16 /dev/urandom | base64)
           sed -i "s,#secretkey#,$KEY,g" ${cfg.stateDir}/custom/conf/app.ini
         ''}
 
