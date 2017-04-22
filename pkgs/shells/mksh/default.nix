@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "mksh-${version}";
-  version = "52c";
+  version = "55";
 
   src = fetchurl {
     urls = [
       "http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
       "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
     ];
-    sha256 = "19ivsic15903hv3ipzk0kvkaxardw7b99s8l5iw3y415lz71ld66";
+    sha256 = "0mssqd2wp3cs9x01v6g66iy3ymdxagbyw2c0v597vnc1l6s2rm6f";
   };
 
   buildPhase = ''sh ./Build.sh -r -c lto'';
