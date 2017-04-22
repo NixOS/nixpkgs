@@ -1,10 +1,12 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
-, libpng
+, libpng, sqlite, libspatialite
 , netcdf, hdf5 , curl
 , netcdfSupport ? true
  }:
 
+with stdenv.lib;
+ 
 composableDerivation.composableDerivation {} (fixed: rec {
   version = "2.1.3";
   name = "gdal-${version}";
@@ -14,7 +16,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "0jh7filpf5dk5iz5acj7y3y49ihnzqypxckdlj0sjigbqq6hlsmf";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
+  buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite libspatialite ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ (stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ]);
 
@@ -28,10 +30,11 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
     "--with-png=${libpng.dev}"      # optional
     "--with-libz=${zlib.dev}"       # optional
-
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
+    "--with-sqlite3=${sqlite.dev}"
+    "--with-spatialite=${libspatialite}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
