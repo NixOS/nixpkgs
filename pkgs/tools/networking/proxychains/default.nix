@@ -10,10 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "015skh3z1jmm8kxbm3nkqv1w56kcvabdmcbmpwzywxr4xnh3x3pc";
   };
 
-  postPatch = ''
-    # Temporary work-around; most likely fixed by next upstream release
-    sed -i Makefile -e '/-lpthread/a LDFLAGS+=-ldl'
-  '';
+  patches = [ ./add-ldl.patch ];
 
   meta = {
     description = "Proxifier for SOCKS proxies";

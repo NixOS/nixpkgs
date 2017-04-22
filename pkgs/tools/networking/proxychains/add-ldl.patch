@@ -1,0 +1,12 @@
+diff -Naur old-proxychains-proxychains-4.2.0/configure proxychains-proxychains-4.2.0/configure
+--- old-proxychains-proxychains-4.2.0/configure	2012-08-10 06:36:29.000000000 +0800
++++ proxychains-proxychains-4.2.0/configure	2017-03-01 01:01:54.851866688 +0800
+@@ -101,7 +101,7 @@
+ fi
+ 
+ if islinux ; then 
+-    echo LD_SET_SONAME=-ldl
++    echo LD_SET_SONAME=-ldl -Wl,-soname=>>config.mak
+ fi
+ 
+ if isbsd ; then 
