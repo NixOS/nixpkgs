@@ -60,6 +60,12 @@ assert editedCabalFile != null -> revision != null;
 # OBSOLETE, use enableDeadCodeElimination
 assert enableSplitObjs == null;
 
+# GHC >= 7.8 uses the platform's dynamic loader for loading packages
+# at runtime (used for interactive code evaluation, like done by GHCi
+# or TemplateHaskell), which requires that we build shared libraries
+# as well.
+assert (!(ghc.isGhcjs or false) && stdenv.lib.versionOlder "7.7" ghc.version) -> enableSharedLibraries;
+
 let
 
   inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
