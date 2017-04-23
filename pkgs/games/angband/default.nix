@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses5 ];
+  configureFlags = [ "--enable-stats" ];
   installFlags = "bindir=$(out)/bin";
 
   meta = with stdenv.lib; {
