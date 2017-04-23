@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, gtk3, pango, perl, python, zip, libIDL
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc, libpulseaudio
-, autoconf213, which
+, autoconf213, which, cargo, rustc, llvm
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
-, enableGTK3 ? false
+, enableGTK3 ? false, gtk3, wrapGAppsHook
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
-  # of "Shiretoko" or whatever, enable this option.  However, those
+  # of "Nightly" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
   # Mozilla Foundation, see
   # http://www.mozilla.org/foundation/trademarks/.
@@ -35,20 +35,22 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
   patches = lib.optional debugBuild ./fix-debug.patch;
 
   buildInputs =
-    [ pkgconfig gtk2 perl zip libIDL libjpeg zlib bzip2
-      python dbus dbus_glib pango freetype fontconfig xorg.libXi
+    [ gtk2 zip libIDL libjpeg zlib bzip2
+      dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
       xorg.libXScrnSaver xorg.scrnsaverproto
-      xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+      xorg.libXext xorg.xextproto sqlite unzip
       hunspell libevent libstartup_notification libvpx /* cairo */
-      icu libpng jemalloc
+      icu libpng jemalloc llvm
       libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3
     ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst-plugins-base ];
 
-  nativeBuildInputs = [ autoconf213 which gnused ];
+  nativeBuildInputs =
+    [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
+    ++ lib.optional enableGTK3 wrapGAppsHook;
 
   configureFlags =
     [ "--enable-application=browser"
@@ -75,10 +77,9 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
-      "--enable-default-toolkit=cairo-gtk2"
+      "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
       "--with-google-api-keyfile=ga"
     ]
-    ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize"
@@ -112,17 +113,9 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
-    '' + lib.optionalString enableGTK3
-      # argv[0] must point to firefox itself
-    ''
-      wrapProgram "$out/bin/firefox" \
-        --argv0 "$out/bin/.firefox-wrapped" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
-        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
-    '' +
-      # some basic testing
-    ''
-      "$out/bin/firefox" --version
+
+      # Needed to find Mozilla runtime
+      gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
     '';
 
   postFixup =
@@ -131,6 +124,13 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       patchelf --set-rpath "${lib.getLib libnotify
         }/lib:$(patchelf --print-rpath "$out"/lib/firefox-*/libxul.so)" \
           "$out"/lib/firefox-*/libxul.so
+    '';
+
+  doInstallCheck = true;
+  installCheckPhase =
+    ''
+      # Some basic testing
+      "$out/bin/firefox" --version
     '';
 
   meta = {
@@ -153,8 +153,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "52.0.2";
-    sha512 = "15668625d212acf874b560d0adf738faf3e0df532c549ab94e1d91944542e13bf16265f08fca1eded42820f9b7ad3f0ff70a8b5bc9adde0a79d11e022bb1158e";
+    version = "53.0";
+    sha512 = "36ec810bab58e3d99478455a38427a5efbc74d6dd7d4bb93b700fd7429b9b89250efd0abe4609091483991802090c6373c8434dfc9ba64c79a778e51fd2a2886";
     updateScript = import ./update.nix {
       attrPath = "firefox-unwrapped";
       inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;

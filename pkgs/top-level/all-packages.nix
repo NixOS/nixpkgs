@@ -13452,7 +13452,16 @@ with pkgs;
     enableGTK3 = false;
     python = python2;
     gnused = gnused_422;
-  }) firefox-unwrapped firefox-esr-unwrapped;
+  }) firefox-esr-unwrapped;
+
+  inherit (callPackages ../applications/networking/browsers/firefox {
+    inherit (gnome2) libIDL;
+    libpng = libpng_apng;
+    enableGTK3 = true;
+    python = python2;
+    gnused = gnused_422;
+    hunspell = hunspell_1_6;
+  }) firefox-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
