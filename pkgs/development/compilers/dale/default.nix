@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, libffi, llvm_35, perl }:
 
-let version = "20170416";
+let version = "20170419";
     doCheck = false;
 in stdenv.mkDerivation {
   name = "dale-${version}";
@@ -8,8 +8,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "tomhrr";
     repo = "dale";
-    rev = "ecc5ea91efef8a263c7dddd6925983df5b5258b2";
-    sha256 = "0naly7jsfriiqf68q210ay9ppcvidbwwcxksy5zwy1m17aq5kxaw";
+    rev = "64e072d0520a134b9ae8038104fa977776b6e0af";
+    sha256 = "1apvq3v6ra8x0sj8gg9yavqsyxiggh2wnh1zbw2ccpg723bssl4a";
   };
 
   buildInputs = [ cmake libffi llvm_35 ] ++
@@ -28,8 +28,10 @@ in stdenv.mkDerivation {
       S-expressions for syntax and supports syntactic macros.
     '';
     homepage = "https://github.com/tomhrr/dale";
-    license = licenses.mit;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
-    platforms = platforms.linux;  # fails on Darwin, linking vs. FFI
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    # failed on Darwin: linker couldn't find the FFI lib
+    # failed on AArch64: because LLVM 3.5 is failed there
   };
 }

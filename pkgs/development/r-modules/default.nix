@@ -262,6 +262,7 @@ let
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
+    imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
     JavaGD = [ pkgs.jdk ];
@@ -832,7 +833,6 @@ let
     "flowVS"                          # depends on broken package r-flowCore-1.38.2
     "flowWorkspace"                   # depends on broken package r-flowCore-1.38.2
     "fmcsR"                           # depends on broken package ChemmineR-2.24.2
-    "ForestTools"                     # depends on broken package imager-0.31
     "fPortfolio"                      # depends on broken package Rsymphony-0.1-26
     "fracprolif"                      # build is broken
     "funModeling"                     # build is broken
@@ -888,7 +888,6 @@ let
     "IHW"                             # depends on broken package r-lpsymphony-1.0.2
     "IHWpaper"                        # depends on broken package r-lpsymphony-1.0.2
     "IlluminaHumanMethylation450k_db" # build is broken
-    "imager"                          # build is broken
     "immunoClust"                     # depends on broken package r-flowCore-1.38.2
     "inSilicoMerging"                 # build is broken
     "intansv"                         # build is broken
