@@ -430,6 +430,7 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
