@@ -16851,6 +16851,8 @@ with pkgs;
 
   quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
 
+  quakespasm = callPackage ../games/quakespasm { };
+  
   ioquake3 = callPackage ../games/quake3/ioquake { };
 
   quantumminigolf = callPackage ../games/quantumminigolf {};
