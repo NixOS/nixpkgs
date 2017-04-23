@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = platforms.darwin;
+    license = licenses.wxWindows;
     maintainers = [ maintainers.lnl7 ];
   };
 }

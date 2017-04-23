@@ -66,5 +66,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    license = licenses.wxWindows;
   };
 }

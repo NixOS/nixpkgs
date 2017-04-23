@@ -67,6 +67,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   
   meta = {
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
+    platforms = with platforms; darwin ++ linux;
+    license = licenses.wxWindows;
   };
 }
