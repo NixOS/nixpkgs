@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   name = "tw-rs-${version}";
-  version = "0.1.25";
+  version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "vmchale";
     repo = "tw-rs";
     rev = "${version}";
-    sha256 = "1xydb0f1q02pv7vs28gqwsgmn55gh8zic302fnvagm9dgdvaqv96";
-  };
+    sha256 = "1s1gk2wcs3792gdzrngksczz3gma5kv02ni2jqrhib8l6z8mg9ia";
+    };
   buildInputs = [ perl zlib openssl ];
 
-  depsSha256 = "1cgzh8bb0vvcfyzaw47xwm54w51xm7yw74s5pwrpfngdy3w9b4sp";
+  depsSha256 = "1lg1jh6f9w28i94vaj62r859g6raalxmxabvw7av6sqr0hr56p05";
 
   installPhase = ''
     mkdir -p $out/bin
