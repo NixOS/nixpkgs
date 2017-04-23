@@ -99,6 +99,7 @@ in
         '';
       };
 
+
     };
 
   };
@@ -142,7 +143,6 @@ in
         ${cfg.promptInit}
 
         ${cfge.interactiveShellInit}
-
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
