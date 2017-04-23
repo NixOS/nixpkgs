@@ -204,5 +204,6 @@ with lib;
       "Set the option `services.xserver.displayManager.sddm.package' instead.")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "preset" ] "See nixpkgs commit 65592837b6e62fb555d6e8c891f347428886c4f2")
   ];
 }
