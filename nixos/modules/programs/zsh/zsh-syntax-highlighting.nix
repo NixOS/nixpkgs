@@ -15,14 +15,29 @@ in
             Enable zsh-syntax-highlighting.
           '';
         };
+
+        highlighters = mkOption {
+          default = [ "main" ];
+          type = types.listOf(types.str);
+          description = ''
+            Specifies the highlighters to be used by zsh-syntax-highlighting.
+
+            The following defined options can be found here:
+            https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+          '';
+        };
       };
     };
 
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ zsh-syntax-highlighting ];
 
-      program.zsh.interactiveShellInit = with pkgs; ''
+      programs.zsh.interactiveShellInit = with pkgs; with builtins; ''
         source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+        ${optionalString (length(cfg.highlighters) > 0)
+          "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${concatStringsSep " " cfg.highlighters})"
+        }
       '';
     };
   }
