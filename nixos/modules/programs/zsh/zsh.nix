@@ -177,7 +177,6 @@ in
         ${optionalString (cfg.enableOhMyZsh)
           ''
             export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh
-            source $ZSH/oh-my-zsh.sh
           ''
           + optionalString (builtins.length(cfg.ohMyZshPlugins) > 0)
             ''
@@ -190,6 +189,9 @@ in
           + optionalString (builtins.stringLength(cfg.ohMyZshTheme) > 0)
             ''
               ZSH_THEME="${cfg.ohMyZshTheme}"
+            ''
+          + ''
+              source $ZSH/oh-my-zsh.sh
             ''
         }
 
