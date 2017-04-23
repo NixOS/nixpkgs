@@ -99,36 +99,6 @@ in
         '';
       };
 
-      enableOhMyZsh = mkOption {
-        default = false;
-        description = ''
-          Enable oh-my-zsh
-        '';
-      };
-
-      ohMyZshPlugins = mkOption {
-        default = [];
-        type = types.listOf(types.str);
-        description = ''
-          List of oh-my-zsh plugins
-        '';
-      };
-
-      ohMyZshCustom = mkOption {
-        default = "";
-        type = types.str;
-        description = ''
-          Path to a custom oh-my-zsh package to override config of oh-my-zsh.
-        '';
-      };
-
-      ohMyZshTheme = mkOption {
-        default = "";
-        type = types.str;
-        description = ''
-          Name of the theme to be used by oh-my-zsh.
-        '';
-      };
 
     };
 
@@ -173,27 +143,6 @@ in
         ${cfg.promptInit}
 
         ${cfge.interactiveShellInit}
-
-        ${optionalString (cfg.enableOhMyZsh)
-          ''
-            export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh
-          ''
-          + optionalString (builtins.length(cfg.ohMyZshPlugins) > 0)
-            ''
-              plugins=(${builtins.concatStringsSep " " cfg.ohMyZshPlugins})
-            ''
-          + optionalString (builtins.stringLength(cfg.ohMyZshCustom) > 0)
-            ''
-              ZSH_CUSTOM="${cfg.ohMyZshCustom}"
-            ''
-          + optionalString (builtins.stringLength(cfg.ohMyZshTheme) > 0)
-            ''
-              ZSH_THEME="${cfg.ohMyZshTheme}"
-            ''
-          + ''
-              source $ZSH/oh-my-zsh.sh
-            ''
-        }
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
@@ -258,8 +207,7 @@ in
 
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions
-      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting
-      ++ optional cfg.enableOhMyZsh pkgs.oh-my-zsh;
+      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 
