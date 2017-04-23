@@ -7737,6 +7737,7 @@ with pkgs;
   http-parser = callPackage ../development/libraries/http-parser { };
 
   hunspell = callPackage ../development/libraries/hunspell { };
+  hunspell_1_6 = callPackage ../development/libraries/hunspell/1.6.nix { };
 
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
