@@ -17,7 +17,7 @@ let
     homepage     = https://www.wireguard.io/;
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
     description  = "A prerelease of an experimental VPN tunnel which is not to be depended upon for security";
-    maintainers  = with maintainers; [ ericsagnes ];
+    maintainers  = with maintainers; [ ericsagnes mic92 ];
     license      = licenses.gpl2;
     platforms    = platforms.linux;
   };
