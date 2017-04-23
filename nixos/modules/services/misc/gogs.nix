@@ -26,6 +26,10 @@ let
     HTTP_PORT = ${toString cfg.httpPort}
     ROOT_URL = ${cfg.rootUrl}
 
+    [session]
+    COOKIE_NAME = session
+    COOKIE_SECURE = ${boolToString cfg.cookieSecure}
+
     [security]
     SECRET_KEY = #secretkey#
     INSTALL_LOCK = true
@@ -160,6 +164,16 @@ in
         type = types.int;
         default = 3000;
         description = "HTTP listen port.";
+      };
+
+      cookieSecure = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Marks session cookies as "secure," which means browsers may
+          ensure that the cookie is only sent under an HTTPS connection.
+          It's good to enable this if Gogs is being served over HTTPS.
+        '';
       };
 
       extraConfig = mkOption {
