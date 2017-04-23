@@ -6,7 +6,7 @@
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
-, sdlSupport ? !stdenv.isArm, SDL ? null
+, sdlSupport ? !stdenv.isArm, SDL ? null, SDL2 ? null
 , vdpauSupport ? !stdenv.isArm, libvdpau ? null
 # Developer options
 , debugDeveloper ? false
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
       (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
-      (ifMinVer "2.5" (if sdlSupport then "--enable-sdl" else "")) # Only configurable since 2.5, auto detected before then
+      (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
-    ++ optional sdlSupport SDL;
+    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL);
 
 
   enableParallelBuilding = true;
