@@ -74,7 +74,7 @@ let
       # Start QEMU.
       exec ${qemu}/bin/qemu-kvm \
           -name ${vmName} \
-          -m ${toString config.virtualisation.memorySize} \
+          -m ''${QEMU_RAM:-${toString config.virtualisation.memorySize}} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
