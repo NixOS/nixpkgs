@@ -122,6 +122,14 @@ in
         '';
       };
 
+      ohMyZshTheme = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Name of the theme to be used by oh-my-zsh.
+        '';
+      };
+
     };
 
   };
@@ -177,7 +185,11 @@ in
             ''
           + optionalString (builtins.stringLength(cfg.ohMyZshCustom) > 0)
             ''
-              ZSH_CUSTOM=${cfg.ohMyZshCustom}
+              ZSH_CUSTOM="${cfg.ohMyZshCustom}"
+            ''
+          + optionalString (builtins.stringLength(cfg.ohMyZshTheme) > 0)
+            ''
+              ZSH_THEME="${cfg.ohMyZshTheme}"
             ''
         }
 
