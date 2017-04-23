@@ -20,7 +20,7 @@ let
       (fetchpatch {
         name = "git-mergetool.diff"; # see https://gitlab.com/tfischer/kdiff3/merge_requests/2
         url = "https://gitlab.com/vcunat/kdiff3/commit/6106126216.patch";
-        sha256 = "0v638rk05wz51qcqnc6blcp2v74f04wn8ifgzw7qi5vr0yfh775r";
+        sha256 = "16xqc24y8bg8gzkdbwapiwi68rzqnkpz4hgn586mi01ngig2fd7y";
       })
     ];
 
