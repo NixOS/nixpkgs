@@ -106,6 +106,14 @@ in
         '';
       };
 
+      ohMyZshPlugins = mkOption {
+        default = [];
+        type = types.list;
+        description = ''
+          List of oh-my-zsh plugins
+        '';
+      };
+
     };
 
   };
@@ -155,6 +163,8 @@ in
             export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh
             source $ZSH/oh-my-zsh.sh
           ''
+          + optionalString (builtins.length(cfg.ohMyZshPlugins) > 0)
+            "plugins=(${builtins.concatStringsSetp " " cfg.ohMyZshPlugins})"
         }
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
