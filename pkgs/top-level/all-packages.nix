@@ -3063,6 +3063,8 @@ with pkgs;
 
   mysqltuner = callPackage ../tools/misc/mysqltuner { };
 
+  mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
+
   nabi = callPackage ../tools/inputmethods/nabi { };
 
   namazu = callPackage ../tools/text/namazu { };
@@ -12480,6 +12482,8 @@ with pkgs;
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
+
+  emacs-all-the-icons-fonts = callPackage ../data/fonts/emacs-all-the-icons-fonts { };
 
   emojione = callPackage ../data/fonts/emojione {
     inherit (nodePackages) svgo;

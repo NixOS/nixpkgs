@@ -3,7 +3,6 @@ stdenv.mkDerivation rec {
   name = "quakespasm-${version}";
   majorVersion = "0.92";
   version = "${majorVersion}.1";
-  platform = "amd64";
 
   src = fetchurl {
     url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tgz";
@@ -20,11 +19,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     substituteInPlace Makefile --replace "/usr/local/games" "$out/bin"
   '';
-  
+
   enableParallelBuilding = true;
   
-  platforms = ["x86_64-linux"];
-
   meta = {
     description = "An engine for iD software's Quake";
     homepage = "http://quakespasm.sourceforge.net/";
@@ -36,6 +33,8 @@ stdenv.mkDerivation rec {
       works best for you. SDL is probably less buggy, but SDL2 has nicer features 
       and smoother mouse input - though no CD support.
     '';
-    platforms = platforms.linux;
+  
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.m3tti ];
   };
 }
