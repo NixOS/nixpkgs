@@ -194,5 +194,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
       "Set the option `services.xserver.displayManager.sddm.package' instead.")
+
+    # ZSH
+    (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntax-highlighting" "enable" ])
   ];
 }
