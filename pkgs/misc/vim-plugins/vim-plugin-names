@@ -41,6 +41,7 @@
 "github:derekelkins/agda-vim"
 "github:derekwyatt/vim-scala"
 "github:digitaltoad/vim-jade"
+"github:dleonard0/pony-vim-syntax"
 "github:dracula/vim"
 "github:eagletmt/neco-ghc"
 "github:eikenb/acp"

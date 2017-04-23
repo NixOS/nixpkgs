@@ -590,6 +590,17 @@ rec {
 
   };
 
+  pony-vim-syntax = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "pony-vim-syntax-2016-01-23";
+    src = fetchgit {
+      url = "https://github.com/dleonard0/pony-vim-syntax";
+      rev = "a0ab2e14d5a3796ebec01ce196392dc1de349cb3";
+      sha256 = "1wraray7870hq75jqxyilxb125flhcgk9ysz437qbg75c495znl0";
+    };
+    dependencies = [];
+
+  };
+
   vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-2016-09-21";
     src = fetchgit {
@@ -1752,7 +1763,7 @@ rec {
       sha256 = "0ybd9sg4x8pczvl0hz5azzs2sn4nyc7la9890xh373dv3lyb6gk7";
     };
     dependencies = [];
-    buildInputs = [ python3 ]; 
+    buildInputs = [ python3 ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
       python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
@@ -2342,5 +2353,4 @@ rec {
     dependencies = [];
 
   };
-
 }
