@@ -525,6 +525,17 @@ rec {
 
   };
 
+  vim-trailing-whitespace = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-trailing-whitespace-2016-03-27";
+    src = fetchgit {
+      url = "https://github.com/bronson/vim-trailing-whitespace";
+      rev = "733fb64337b6da4a51c85a43450cd620d8b617b5";
+      sha256 = "1469bd744lf8vk1nnw7kyq4ahpw84crp614mkpq88cs6rhvjhcyw";
+    };
+    dependencies = [];
+
+  };
+
   vim-sort-motion = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-sort-motion-2017-01-28";
     src = fetchgit {
