@@ -16,7 +16,7 @@
 
 with stdenv.lib;
 let
-  version = "2.8.1";
+  version = "2.8.1.1";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "1kdv8aa800rbsz9qnm4saw79vr052p83by21ryah68ics9z4r3h1";
+    sha256 = "0f1nbnjpsy6v3ca1hxkpzwg5h4avjk6bwi7dh565pzxr3y5b2apn";
   };
 
   buildInputs =
