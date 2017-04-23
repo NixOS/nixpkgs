@@ -69,7 +69,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "none") ("+" + wm);
 
 in
 {
