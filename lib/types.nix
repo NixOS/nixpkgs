@@ -171,6 +171,12 @@ rec {
       merge = mergeOneOption;
     };
 
+    stringPath = mkOptionType {
+      name = "stringPath";
+      check = x: str.check x && path.check x;
+      merge = mergeOneOption;
+    };
+
     # drop this in the future:
     list = builtins.trace "`types.list' is deprecated; use `types.listOf' instead" types.listOf;
 
