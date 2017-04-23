@@ -15461,6 +15461,8 @@ with pkgs;
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype { };
 
+  skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
+
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
