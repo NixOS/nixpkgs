@@ -5,7 +5,7 @@ unpackPhase
 mkdir -p $out/maven
 cp -r $name/* $out/maven
 
-makeWrapper $out/maven/bin/mvn $out/bin/mvn --set JAVA_HOME "$jdk"
+makeWrapper $out/maven/bin/mvn $out/bin/mvn --set JAVA_HOME "$jdk/lib/openjdk"
 
 # Add the maven-axis and JIRA plugin by default when using maven 1.x
 if [ -e $out/maven/bin/maven ]
