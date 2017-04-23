@@ -46,7 +46,8 @@
   ##
 
 , # The package set used at build-time. If null, `buildPackages` will
-  # be defined internally as the produced package set as itself.
+  # be defined internally as the final produced package set itself. This allows
+  # us to avoid expensive splicing.
   buildPackages
 
 , # The standard environment to use for building packages.
