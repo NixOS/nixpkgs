@@ -99,6 +99,13 @@ in
         '';
       };
 
+      enableOhMyZsh = mkOption {
+        default = false;
+        description = ''
+          Enable oh-my-zsh
+        '';
+      };
+
     };
 
   };
@@ -143,6 +150,12 @@ in
 
         ${cfge.interactiveShellInit}
 
+        ${optionalString (cfg.enableOhMyZsh)
+          ''
+            export ZSH=${pkgs.oh-my-zsh}/share/oh-my-zsh
+            source $ZSH/oh-my-zsh.sh
+          ''
+        }
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
@@ -207,7 +220,8 @@ in
 
     environment.systemPackages = [ pkgs.zsh ]
       ++ optional cfg.enableCompletion pkgs.nix-zsh-completions
-      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting;
+      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting
+      ++ optional cfg.enableOhMyZsh pkgs.oh-my-zsh;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 
