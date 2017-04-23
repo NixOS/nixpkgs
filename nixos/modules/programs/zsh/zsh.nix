@@ -114,6 +114,14 @@ in
         '';
       };
 
+      ohMyZshCustom = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Path to a custom oh-my-zsh package to override config of oh-my-zsh.
+        '';
+      };
+
     };
 
   };
@@ -164,7 +172,13 @@ in
             source $ZSH/oh-my-zsh.sh
           ''
           + optionalString (builtins.length(cfg.ohMyZshPlugins) > 0)
-            "plugins=(${builtins.concatStringsSetp " " cfg.ohMyZshPlugins})"
+            ''
+              plugins=(${builtins.concatStringsSetp " " cfg.ohMyZshPlugins})
+            ''
+          + optionalString (builtins.stringLength(cfg.ohMyZshCustom) > 0)
+            ''
+              ZSH_CUSTOM=${cfg.ohMyZshCustom}
+            ''
         }
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
