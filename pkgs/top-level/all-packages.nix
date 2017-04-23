@@ -11407,6 +11407,8 @@ with pkgs;
 
   shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
 
+  piwik = callPackage ../servers/web-apps/piwik { };
+
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   unifi = callPackage ../servers/unifi { };
