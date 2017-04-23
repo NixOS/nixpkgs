@@ -10191,26 +10191,26 @@ with pkgs;
 
   wxGTK = wxGTK28;
 
-  wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
+  wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
     inherit (gnome2) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
-  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9/default.nix {
+  wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9/default.nix {
     inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
-  wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
+  wxGTK30 = callPackage ../development/libraries/wxwidgets/3.0/default.nix {
     inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
-  wxmac = callPackage ../development/libraries/wxmac {
+  wxmac = callPackage ../development/libraries/wxwidgets/3.0/mac.nix {
     inherit (darwin.apple_sdk.frameworks) AGL Cocoa Kernel;
     inherit (darwin.stubs) setfile rez derez;
   };
