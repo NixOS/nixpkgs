@@ -180,17 +180,23 @@ in
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
+        secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
           mkdir -p ${cfg.stateDir}/custom/conf
           cp -f ${configFile} ${runConfig}
-          KEY=$(head -c 16 /dev/urandom | base64)
+
+          if [ ! -e ${secretKey} ]; then
+              head -c 16 /dev/urandom | base64 > ${secretKey}
+          fi
+
+          KEY=$(head -n1 ${secretKey})
           DBPASS=$(head -n1 ${cfg.database.passwordFile})
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
               -i ${runConfig}
-          chmod 440 ${runConfig}
+          chmod 440 ${runConfig} ${secretKey}
         ''}
 
         mkdir -p ${cfg.repositoryRoot}
