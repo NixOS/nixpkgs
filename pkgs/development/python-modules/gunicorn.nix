@@ -1,12 +1,14 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, mock, pytestcov, coverage }:
 
 buildPythonPackage rec {
-  name = "gunicorn-19.3.0";
+  pname = "gunicorn";
+  name = "${pname}-${version}";
+  version = "19.7.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-    sha256 = "12d0jd9y9fyssc28mn8j6nzrck8y05hc946p5h0rmbc25043bj4b";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "08mnl5l1p47q5wk38d7mafnhsqk50yba0l9kvc2vwrx61jgidqgf";
   };
 
   buildInputs = [ pytest mock pytestcov coverage ];
