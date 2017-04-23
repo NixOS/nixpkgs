@@ -107,8 +107,10 @@ stdenv.mkDerivation {
       "-system-proxies"
       "-pkg-config"
     ]
-    ++ lib.optional developerBuild "-developer-build"
-
+    ++ lib.optionals developerBuild [
+      "-developer-build"
+      "-no-warnings-are-errors"
+    ]
     ++ [
       "-gui"
       "-widgets"
