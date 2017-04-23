@@ -108,7 +108,7 @@ in
 
       ohMyZshPlugins = mkOption {
         default = [];
-        type = types.list;
+        type = types.listOf(types.str);
         description = ''
           List of oh-my-zsh plugins
         '';
@@ -181,7 +181,7 @@ in
           ''
           + optionalString (builtins.length(cfg.ohMyZshPlugins) > 0)
             ''
-              plugins=(${builtins.concatStringsSetp " " cfg.ohMyZshPlugins})
+              plugins=(${builtins.concatStringsSep " " cfg.ohMyZshPlugins})
             ''
           + optionalString (builtins.stringLength(cfg.ohMyZshCustom) > 0)
             ''
