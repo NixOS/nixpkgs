@@ -16,8 +16,7 @@ $ cd sensu
 $ cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
-$ nix-shell -p bundler --command "bundler package --path /tmp/vendor/bundle"
-$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix
+$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix --magic
 $ cat > default.nix
 { lib, bundlerEnv, ruby }:
 
