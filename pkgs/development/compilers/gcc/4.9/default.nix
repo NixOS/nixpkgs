@@ -34,6 +34,7 @@
 , stripped ? true
 , gnused ? null
 , darwin ? null
+, buildPlatform, hostPlatform, targetPlatform
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -125,12 +126,12 @@ let version = "4.9.4";
     crossMingw = cross != null && cross.libc == "msvcrt";
     crossDarwin = cross != null && cross.libc == "libSystem";
     crossConfigureFlags = let
-        gccArch = stdenv.cross.gcc.arch or null;
-        gccCpu = stdenv.cross.gcc.cpu or null;
-        gccAbi = stdenv.cross.gcc.abi or null;
-        gccFpu = stdenv.cross.gcc.fpu or null;
-        gccFloat = stdenv.cross.gcc.float or null;
-        gccMode = stdenv.cross.gcc.mode or null;
+        gccArch = targetPlatform.gcc.arch or null;
+        gccCpu = targetPlatform.gcc.cpu or null;
+        gccAbi = targetPlatform.gcc.abi or null;
+        gccFpu = targetPlatform.gcc.fpu or null;
+        gccFloat = targetPlatform.gcc.float or null;
+        gccMode = targetPlatform.gcc.mode or null;
         withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
         withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
@@ -389,26 +390,26 @@ stdenv.mkDerivation ({
     else "install";
 
   crossAttrs = let
-    xgccArch = stdenv.cross.gcc.arch or null;
-    xgccCpu = stdenv.cross.gcc.cpu or null;
-    xgccAbi = stdenv.cross.gcc.abi or null;
-    xgccFpu = stdenv.cross.gcc.fpu or null;
-    xgccFloat = stdenv.cross.gcc.float or null;
+    xgccArch = targetPlatform.gcc.arch or null;
+    xgccCpu = targetPlatform.gcc.cpu or null;
+    xgccAbi = targetPlatform.gcc.abi or null;
+    xgccFpu = targetPlatform.gcc.fpu or null;
+    xgccFloat = targetPlatform.gcc.float or null;
     xwithArch = if xgccArch != null then " --with-arch=${xgccArch}" else "";
     xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
     xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
     xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
     xwithFloat = if xgccFloat != null then " --with-float=${xgccFloat}" else "";
   in {
-    AR = "${stdenv.cross.config}-ar";
-    LD = "${stdenv.cross.config}-ld";
-    CC = "${stdenv.cross.config}-gcc";
-    CXX = "${stdenv.cross.config}-gcc";
-    AR_FOR_TARGET = "${stdenv.cross.config}-ar";
-    LD_FOR_TARGET = "${stdenv.cross.config}-ld";
-    CC_FOR_TARGET = "${stdenv.cross.config}-gcc";
-    NM_FOR_TARGET = "${stdenv.cross.config}-nm";
-    CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
+    AR = "${targetPlatform.config}-ar";
+    LD = "${targetPlatform.config}-ld";
+    CC = "${targetPlatform.config}-gcc";
+    CXX = "${targetPlatform.config}-gcc";
+    AR_FOR_TARGET = "${targetPlatform.config}-ar";
+    LD_FOR_TARGET = "${targetPlatform.config}-ld";
+    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
+    NM_FOR_TARGET = "${targetPlatform.config}-nm";
+    CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
     NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
     dontStrip = true;
@@ -438,7 +439,7 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      --target=${stdenv.cross.config}
+      --target=${targetPlatform.config}
       ${xwithArch}
       ${xwithCpu}
       ${xwithAbi}

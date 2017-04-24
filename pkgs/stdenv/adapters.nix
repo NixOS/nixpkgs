@@ -58,6 +58,10 @@ rec {
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv // {
 
+    # Overrides are surely not valid as packages built with this run on a
+    # different platform.
+    overrides = _: _: {};
+
     mkDerivation =
       { name ? "", buildInputs ? [], nativeBuildInputs ? []
       , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []

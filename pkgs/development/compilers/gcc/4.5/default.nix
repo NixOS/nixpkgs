@@ -26,6 +26,7 @@
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
+, buildPlatform, hostPlatform, targetPlatform
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -271,15 +272,15 @@ stdenv.mkDerivation ({
   targetConfig = if cross != null then cross.config else null;
 
   crossAttrs = {
-    AR = "${stdenv.cross.config}-ar";
-    LD = "${stdenv.cross.config}-ld";
-    CC = "${stdenv.cross.config}-gcc";
-    CXX = "${stdenv.cross.config}-gcc";
-    AR_FOR_TARGET = "${stdenv.cross.config}-ar";
-    LD_FOR_TARGET = "${stdenv.cross.config}-ld";
-    CC_FOR_TARGET = "${stdenv.cross.config}-gcc";
-    NM_FOR_TARGET = "${stdenv.cross.config}-nm";
-    CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
+    AR = "${targetPlatform.config}-ar";
+    LD = "${targetPlatform.config}-ld";
+    CC = "${targetPlatform.config}-gcc";
+    CXX = "${targetPlatform.config}-gcc";
+    AR_FOR_TARGET = "${targetPlatform.config}-ar";
+    LD_FOR_TARGET = "${targetPlatform.config}-ld";
+    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
+    NM_FOR_TARGET = "${targetPlatform.config}-nm";
+    CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
     NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
     dontStrip = true;
@@ -311,7 +312,7 @@ stdenv.mkDerivation ({
       ${if langAda then " --enable-libada" else ""}
       ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
       ${if cross != null then crossConfigureFlags else ""}
-      --target=${stdenv.cross.config}
+      --target=${targetPlatform.config}
     '';
   };
  
