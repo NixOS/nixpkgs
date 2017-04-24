@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
+  # TODO: all outputs on all platform
   outputs = [ "out" ]
     ++ optional (cross == null && !stdenv.isDarwin) "lib" # problems in Darwin stdenv
     ++ [ "info" ]
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optional (cross != null) "--target=${cross.config}"
+    ++ optional (cross != null) "--target=${cross.config}" # TODO: make this unconditional
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
