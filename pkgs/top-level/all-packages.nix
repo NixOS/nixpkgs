@@ -1636,7 +1636,7 @@ with pkgs;
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
-  emscriptenfastcomp-wrapped = wrapCCWith ccWrapperFun stdenv.cc.libc ''
+  emscriptenfastcomp-wrapped = wrapCCWith stdenv.cc.libc ''
     # hardening flags break WASM support
     cat > $out/nix-support/add-hardening.sh
   '' emscriptenfastcomp-unwrapped;
@@ -4889,7 +4889,7 @@ with pkgs;
 
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
 
-  clangWrapSelf = build: callPackage ../build-support/cc-wrapper {
+  clangWrapSelf = build: ccWrapperFun {
     cc = build;
     isClang = true;
     stdenv = clangStdenv;
@@ -4958,8 +4958,8 @@ with pkgs;
         extraBuildCommands = ''
           echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
         '';
-      in wrapCCWith (callPackage ../build-support/cc-wrapper) glibc_multi extraBuildCommands (cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith (callPackage ../build-support/cc-wrapper) glibc_multi "" cc.cc);
+      in wrapCCWith glibc_multi extraBuildCommands (cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith glibc_multi "" cc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
@@ -5717,7 +5717,7 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
+  wrapCCWith = libc: extraBuildCommands: baseCC: ccWrapperFun {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
@@ -5730,7 +5730,7 @@ with pkgs;
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
 
-  wrapCC = wrapCCWith ccWrapperFun stdenv.cc.libc "";
+  wrapCC = wrapCCWith stdenv.cc.libc "";
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
     nativeTools = stdenv.cc.nativeTools or false;
