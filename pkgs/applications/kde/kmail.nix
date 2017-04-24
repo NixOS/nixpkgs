@@ -5,7 +5,7 @@
   kdelibs4support, kguiaddons, ki18n, kiconthemes, kinit, kio, knotifications,
   knotifyconfig, kparts, kpty, kservice, ktextwidgets, ktnef, kwidgetsaddons,
   kwindowsystem, kxmlgui, libksieve, mailcommon, messagelib, qtscript,
-  qtwebengine
+  qtwebengine, kmail-account-wizard, pim-sieve-editor
 }:
 
 let
@@ -22,7 +22,7 @@ let
         kdelibs4support kguiaddons ki18n kiconthemes kinit kio knotifications
         knotifyconfig kparts kpty kservice ktextwidgets ktnef kwidgetsaddons
         kwindowsystem kxmlgui libksieve mailcommon messagelib qtscript
-        qtwebengine
+        qtwebengine kmail-account-wizard pim-sieve-editor
       ];
     };
 in

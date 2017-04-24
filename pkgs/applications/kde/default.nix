@@ -92,6 +92,7 @@ let
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
       kmail = callPackage ./kmail.nix {};
+      kmail-account-wizard = callPackage ./kmail-account-wizard.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
       kmbox = callPackage ./kmbox.nix {};
       kmime = callPackage ./kmime.nix {};
@@ -116,11 +117,12 @@ let
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
+      mbox-importer = callPackage ./mbox-importer.nix {};
       messagelib = callPackage ./messagelib.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
-      pim-storage-service-manager = callPackage ./pim-storage-service-manager.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
+      pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
       syndication = callPackage ./syndication.nix {};
