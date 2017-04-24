@@ -21,7 +21,7 @@ options = {
 };
 config = mkIf cfg.enable {
   environment.systemPackages = with pkgs.pythonPackages; [
-    gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert];
+    gateone pkgs.openssh pkgs.procps pkgs.coreutils pkgs.cacert pkgs.openssl];
 
   users.extraUsers.gateone = {
     description = "GateOne privilege separation user";
@@ -32,7 +32,7 @@ config = mkIf cfg.enable {
 
   systemd.services.gateone = with pkgs; {
     description = "GateOne web-based terminal";
-    path = [ pythonPackages.gateone nix openssh procps coreutils ];
+    path = [ pythonPackages.gateone nix openssh procps coreutils cacert openssl ];
     preStart = ''
       if [ ! -d ${cfg.settingsDir} ] ; then
         mkdir -m 0750 -p ${cfg.settingsDir}
@@ -43,7 +43,7 @@ config = mkIf cfg.enable {
         chown -R gateone.gateone ${cfg.pidDir}
       fi
       '';
-    #unitConfig.RequiresMountsFor = "${cfg.settingsDir}";
+    environment = { SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt"; };
     serviceConfig = {
       ExecStart = ''${pythonPackages.gateone}/bin/gateone --settings_dir=${cfg.settingsDir} --pid_file=${cfg.pidDir}/gateone.pid --gid=${toString config.ids.gids.gateone} --uid=${toString config.ids.uids.gateone}'';
       User = "gateone";
