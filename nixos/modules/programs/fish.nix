@@ -84,9 +84,12 @@ in
 
       set fish_function_path $fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions
 
-      fenv source ${config.system.build.setEnvironment} > /dev/null ^&1
-      fenv source /etc/fish/foreign-env/shellInit > /dev/null
+      if not set -q __fish_nixos_environment_set
+        set -x __fish_nixos_environment_set
+        fenv source ${config.system.build.setEnvironment} > /dev/null ^&1
+      end
 
+      fenv source /etc/fish/foreign-env/shellInit > /dev/null
       ${cfg.shellInit}
 
       if status --is-login
