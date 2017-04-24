@@ -8,8 +8,6 @@ let
 
   homeDir = "/var/lib/i2pd";
 
-  extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sLf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
-
   toYesNo = b: if b then "true" else "false";
 
   mkEndpointOpt = name: addr: port: {
@@ -154,9 +152,8 @@ let
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
-    ${if isNull cfg.extIp then extip else ""}
     ${pkgs.i2pd}/bin/i2pd \
-      --host=${if isNull cfg.extIp then "$EXTIP" else cfg.extIp} \
+      ${if isNull cfg.extIp then "" else "--host="+cfg.extIp} \
       --conf=${i2pdConf} \
       --tunconf=${i2pdTunnelConf}
   '';
