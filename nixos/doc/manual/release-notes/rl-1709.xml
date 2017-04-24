@@ -19,12 +19,25 @@ has the following highlights: </para>
   </listitem>
   <listitem>
     <para>
-      Xserver services module now allows one to specify configuration for each monitor.
-      This is done via the xrandrHeads property. It is backwards compatible, so your
-      existing configuration still works. You can replace each monitor designation with
-      an attribute set containing the monitor designation, whether the monitor is the
-      primary monitor, and extra configuration for that specific monitor. Only one
-      monitor can be the primary monitor.
+      The module option <option>services.xserver.xrandrHeads</option> now
+      causes the first head specified in this list to be set as the primary
+      head. Apart from that, it's now possible to also set additional options
+      by using an attribute set, for example:
+<programlisting>
+{ services.xserver.xrandrHeads = [
+    "HDMI-0"
+    {
+      output = &quot;DVI-0&quot;;
+      primary = true;
+      monitorConfig = ''
+        Option &quot;Rotate&quot; &quot;right&quot;
+      '';
+    }
+  ];
+}
+</programlisting>
+      This will set the <literal>DVI-0</literal> output to be the primary head,
+      even though <literal>HDMI-0</literal> is the first head in the list.
     </para>
   </listitem>
 </itemizedlist>
