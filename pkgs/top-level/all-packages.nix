@@ -6008,7 +6008,7 @@ with pkgs;
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
+  inherit (callPackages ../development/interpreters/perl {}) perl perl522 perl524;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 

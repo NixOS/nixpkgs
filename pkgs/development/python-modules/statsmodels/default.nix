@@ -1,4 +1,5 @@
 { lib
+, self
 , buildPythonPackage
 , fetchPypi
 , nose
