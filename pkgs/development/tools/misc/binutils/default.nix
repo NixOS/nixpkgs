@@ -7,7 +7,7 @@ let basename = "binutils-2.28"; in
 let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
-  name = basename + optionalString (cross != null) "-${cross.config}";
+  name = optionalString (cross != null) "${cross.config}-" + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";

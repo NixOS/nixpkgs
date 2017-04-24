@@ -15,7 +15,7 @@ in
 
 # TODO loop over prefixed binaries too
 stdenv.mkDerivation {
-  name = "cctools-binutils-darwin";
+  name = "${prefix}cctools-binutils-darwin";
   buildCommand = ''
     mkdir -p $out/bin $out/include
 

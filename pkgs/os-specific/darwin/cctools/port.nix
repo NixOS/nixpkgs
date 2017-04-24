@@ -19,7 +19,7 @@ assert (!isDarwin hostPlatform.parsed) -> (maloader != null && xctoolchain != nu
 
 let
   baseParams = rec {
-    name = "cctools-port-${version}";
+    name = "${prefix}cctools-port-${version}";
     version = "895";
 
     src = fetchFromGitHub {
