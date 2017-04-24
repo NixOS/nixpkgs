@@ -2,7 +2,7 @@
 
 with lib;
 let
-  diskSize = "1G";
+  diskSize = 1024; # MB
 in
 {
   imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ./grow-partition.nix ];
@@ -10,89 +10,21 @@ in
   # https://cloud.google.com/compute/docs/tutorials/building-images
   networking.firewall.enable = mkDefault false;
 
-  system.build.googleComputeImage =
-    pkgs.vmTools.runInLinuxVM (
-      pkgs.runCommand "google-compute-image"
-        { preVM =
-            ''
-              mkdir $out
-              diskImage=$out/$diskImageBase
-              truncate $diskImage --size ${diskSize}
-              mv closure xchg/
-            '';
-
-          postVM =
-            ''
-              PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
-              pushd $out
-              mv $diskImageBase disk.raw
-              tar -Szcf $diskImageBase.tar.gz disk.raw
-              rm $out/disk.raw
-              popd
-            '';
-          diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
-          exportReferencesGraph =
-            [ "closure" config.system.build.toplevel ];
-        }
-        ''
-          # Create partition table
-          ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-          ${pkgs.parted}/sbin/parted /dev/vda mkpart primary ext4 1 ${diskSize}
-          ${pkgs.parted}/sbin/parted /dev/vda print
-          . /sys/class/block/vda1/uevent
-          mknod /dev/vda1 b $MAJOR $MINOR
-
-          # Create an empty filesystem and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda1
-          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
-
-          mkdir /mnt
-          mount /dev/vda1 /mnt
-
-          # The initrd expects these directories to exist.
-          mkdir /mnt/dev /mnt/proc /mnt/sys
-
-          mount --bind /proc /mnt/proc
-          mount --bind /dev /mnt/dev
-          mount --bind /sys /mnt/sys
-
-          # Copy all paths in the closure to the filesystem.
-          storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
-
-          mkdir -p /mnt/nix/store
-          echo "copying everything (will take a while)..."
-          ${pkgs.rsync}/bin/rsync -a $storePaths /mnt/nix/store/
-
-          # Register the paths in the Nix database.
-          printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-              chroot /mnt ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
-
-          # Create the system profile to allow nixos-rebuild to work.
-          chroot /mnt ${config.nix.package.out}/bin/nix-env \
-              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} \
-              --option build-users-group ""
-
-          # `nixos-rebuild' requires an /etc/NIXOS.
-          mkdir -p /mnt/etc
-          touch /mnt/etc/NIXOS
-
-          # `switch-to-configuration' requires a /bin/sh
-          mkdir -p /mnt/bin
-          ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
-
-          # Install a configuration.nix.
-          mkdir -p /mnt/etc/nixos /mnt/boot/grub
-          cp ${./google-compute-config.nix} /mnt/etc/nixos/configuration.nix
-
-          # Generate the GRUB menu.
-          ln -s vda /dev/sda
-          chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
-
-          umount /mnt/proc /mnt/dev /mnt/sys
-          umount /mnt
-        ''
-    );
+  system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
+    name = "google-compute-image";
+    postVM = ''
+      PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+      pushd $out
+      mv $diskImage disk.raw
+      tar -Szcf nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.tar.gz disk.raw
+      rm $out/disk.raw
+      popd
+    '';
+    configFile = ./google-compute-config.nix;
+    format = "raw";
+    inherit diskSize;
+    inherit config lib pkgs;
+  };
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
