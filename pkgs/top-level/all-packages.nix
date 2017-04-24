@@ -3690,6 +3690,8 @@ with pkgs;
 
   radarr = callPackage ../servers/radarr { };
 
+  radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
@@ -12483,6 +12485,8 @@ with pkgs;
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
+  emacs-all-the-icons-fonts = callPackage ../data/fonts/emacs-all-the-icons-fonts { };
+
   emojione = callPackage ../data/fonts/emojione {
     inherit (nodePackages) svgo;
     inherit (pythonPackages) scfbuild;
@@ -17507,6 +17511,7 @@ with pkgs;
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
     math-classes = callPackage ../development/coq-modules/math-classes { };
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
+    QuickChick = callPackage ../development/coq-modules/QuickChick {};
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
   };
 
@@ -17522,6 +17527,7 @@ with pkgs;
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
+    QuickChick = callPackage ../development/coq-modules/QuickChick {};
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
   };
 

@@ -6,10 +6,7 @@ let
   cfg = config.amazonImage;
 in {
 
-  imports =
-    [ ../../../modules/installer/cd-dvd/channel.nix
-      ../../../modules/virtualisation/amazon-image.nix
-    ];
+  imports = [ ../../../modules/virtualisation/amazon-image.nix ];
 
   options.amazonImage = {
     contents = mkOption {

@@ -20401,6 +20401,8 @@ in {
     };
   };
 
+  pyspread = callPackage ../development/python-modules/pyspread { };
+
   pyx = buildPythonPackage rec {
     name = "pyx-${version}";
     version = "0.14.1";
