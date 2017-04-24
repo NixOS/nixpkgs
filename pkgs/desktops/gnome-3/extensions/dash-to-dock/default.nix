@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     glib gettext
   ];
 
-  patches = [ ./fix-paths.patch ];
+  makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
   meta = with stdenv.lib; {
     description = "A dock for the Gnome Shell";
