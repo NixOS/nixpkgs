@@ -32,7 +32,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
   hardeningDisable = ["all"];
-  postInstall = "$out/bin/halvm-ghc-pkg recache";
+  postInstall = ''
+    patchShebangs $out/bin
+    $out/bin/halvm-ghc-pkg recache
+  '';
   passthru = {
     inherit bootPkgs;
     cross.config = "halvm";

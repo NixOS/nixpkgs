@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ qtwebkit hunspell ];
 
   postPatch = ''
-    sed -i "s,-lhunspell,-lhunspell-1.3," src/spellcheck/spellcheck.pri
+    sed -i "s,-lhunspell,-lhunspell-1.6," src/spellcheck/spellcheck.pri
     sed -i "s,\$\$\[QT_INSTALL_PLUGINS\],$out/lib/qt5/plugins," src/src.pro
   '';
 

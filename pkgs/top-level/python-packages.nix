@@ -20765,6 +20765,8 @@ in {
     };
   };
 
+  pyspread = callPackage ../development/python-modules/pyspread { };
+
   pyx = buildPythonPackage rec {
     name = "pyx-${version}";
     version = "0.14.1";
@@ -23393,6 +23395,8 @@ in {
     };
   };
 
+  typeguard = callPackage ../development/python-modules/typeguard { };
+
   ruamel_yaml = buildPythonPackage rec {
     name = "ruamel.yaml-${version}";
     version = "0.13.7";
@@ -23419,7 +23423,6 @@ in {
 
   runsnakerun = buildPythonPackage rec {
     name = "runsnakerun-2.0.4";
-
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";

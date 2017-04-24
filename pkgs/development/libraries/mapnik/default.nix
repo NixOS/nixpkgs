@@ -1,6 +1,9 @@
 { stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
 , libwebp, libxml2, proj, python2, scons, sqlite, zlib
+
+# supply a postgresql package to enable the PostGIS input plugin
+, postgresql ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
       libwebp libxml2 proj python2 sqlite zlib
+
+      # optional inputs
+      postgresql
     ];
 
   configurePhase = ''
