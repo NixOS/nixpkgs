@@ -141,6 +141,7 @@ in
         '';
       };
       gcc-unwrapped = bootstrapTools;
+      bash = bootstrapTools;
       binutils = bootstrapTools;
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
@@ -167,7 +168,7 @@ in
       binutils = super.binutils.override { gold = false; };
       inherit (prevStage)
         ccWrapperStdenv
-        glibc gcc-unwrapped coreutils gnugrep;
+        bash fake-uname glibc gcc-unwrapped coreutils gnugrep;
 
       # A threaded perl build needs glibc/libpthread_nonshared.a,
       # which is not included in bootstrapTools, so disable threading.
@@ -176,6 +177,7 @@ in
       # top-level pkgs as an override either.
       perl = super.perl.override { enableThreading = false; };
     };
+    extraBuildInputs = [ prevStage.fake-uname ];
   })
 
 
@@ -188,10 +190,11 @@ in
     overrides = self: super: {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils gcc-unwrapped coreutils gnugrep
+        binutils bash fake-uname gcc-unwrapped coreutils gnugrep
         perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
+    extraBuildInputs = [ prevStage.fake-uname ];
   })
 
 
@@ -205,7 +208,7 @@ in
     overrides = self: super: rec {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils glibc coreutils gnugrep
+        binutils bash fake-uname glibc coreutils gnugrep
         perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
@@ -218,7 +221,7 @@ in
         isl = isl_0_14;
       };
     };
-    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+    extraBuildInputs = [ prevStage.fake-uname prevStage.patchelf prevStage.paxctl ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
@@ -248,7 +251,7 @@ in
         shell = self.bash + "/bin/bash";
       };
     };
-    extraBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
+    extraBuildInputs = [ prevStage.fake-uname prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
@@ -278,7 +281,7 @@ in
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
 
-      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+      extraBuildInputs = [ prevStage.fake-uname prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
         lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
 
@@ -306,7 +309,7 @@ in
         gcc = cc;
 
         inherit (prevStage)
-          gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          gzip bzip2 xz bash binutils coreutils diffutils fake-uname findutils gawk
           glibc gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl paxctl zlib pcre;
       };
