@@ -10948,7 +10948,11 @@ with pkgs;
 
   neo4j = callPackage ../servers/nosql/neo4j { };
 
-  net_snmp = callPackage ../servers/monitoring/net-snmp { };
+  net_snmp = callPackage ../servers/monitoring/net-snmp {
+    # https://sourceforge.net/p/net-snmp/bugs/2712/
+    # remove after net-snmp > 5.7.3
+    perl = perl522;
+  };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
