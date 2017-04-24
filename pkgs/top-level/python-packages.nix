@@ -6990,6 +6990,8 @@ in {
     };
   };
 
+  ezdxf = callPackage ../development/python-modules/ezdxf {};
+  
   facebook-sdk = buildPythonPackage rec {
     name = "facebook-sdk-0.4.0";
 
