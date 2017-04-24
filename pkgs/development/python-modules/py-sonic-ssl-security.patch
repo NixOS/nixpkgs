@@ -1,0 +1,120 @@
+--- a/libsonic/connection.py	2016-01-14 15:23:11.728608619 +0000
++++ b/libsonic/connection.py	2016-01-14 15:26:20.786183521 +0000
+@@ -27,36 +27,13 @@
+ logger = logging.getLogger(__name__)
+ 
+ class HTTPSConnectionChain(httplib.HTTPSConnection):
+-    _preferred_ssl_protos = (
+-        ('TLSv1', ssl.PROTOCOL_TLSv1),
+-        ('SSLv3', ssl.PROTOCOL_SSLv3),
+-        ('SSLv23', ssl.PROTOCOL_SSLv23),
+-    )
+-    _ssl_working_proto = None
+-
+     def connect(self):
+         sock = socket.create_connection((self.host, self.port), self.timeout)
+         if self._tunnel_host:
+             self.sock = sock
+             self._tunnel()
+-        if self._ssl_working_proto is not None:
+-            # If we have a working proto, let's use that straight away
+-            logger.debug("Using known working proto: '%s'",
+-                         self._ssl_working_proto)
+-            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file,
+-                ssl_version=self._ssl_working_proto)
++            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file)
+             return
+-        # Try connecting via the different SSL protos in preference order
+-        for proto_name, proto in self._preferred_ssl_protos:
+-            try:
+-                self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file,
+-                    ssl_version=proto)
+-            except:
+-                pass
+-            else:
+-                # Cache the working ssl version
+-                HTTPSConnectionChain._ssl_working_proto = proto
+-                break
+ 
+ 
+ class HTTPSHandlerChain(urllib2.HTTPSHandler):
+@@ -308,7 +285,7 @@
+                                 artists for the given folder ID from
+                                 the getMusicFolders call
+         ifModifiedSince:int     If specified, return a result if the artist
+-                                collection has changed since the given 
++                                collection has changed since the given
+                                 unix timestamp
+ 
+         Returns a dict like the following:
+@@ -2333,10 +2310,10 @@
+         position:int        The position, in milliseconds, within the current
+                             playing song
+ 
+-        Saves the state of the play queue for this user. This includes 
+-        the tracks in the play queue, the currently playing track, and 
+-        the position within this track. Typically used to allow a user to 
+-        move between different clients/apps while retaining the same play 
++        Saves the state of the play queue for this user. This includes
++        the tracks in the play queue, the currently playing track, and
++        the position within this track. Typically used to allow a user to
++        move between different clients/apps while retaining the same play
+         queue (for instance when listening to an audio book).
+         """
+         methodName = 'savePlayQueue'
+@@ -2345,7 +2322,7 @@
+             qids = [qids]
+ 
+         q = self._getQueryDict({'current': current, 'position': position})
+-        
++
+         req = self._getRequestWithLists(viewName, {'id', qids}, q)
+         res = self._doInfoReq(req)
+         self._checkStatus(res)
+@@ -2355,16 +2332,16 @@
+         """
+         since 1.12.0
+ 
+-        Returns the state of the play queue for this user (as set by 
+-        savePlayQueue). This includes the tracks in the play queue, 
+-        the currently playing track, and the position within this track. 
+-        Typically used to allow a user to move between different 
+-        clients/apps while retaining the same play queue (for instance 
++        Returns the state of the play queue for this user (as set by
++        savePlayQueue). This includes the tracks in the play queue,
++        the currently playing track, and the position within this track.
++        Typically used to allow a user to move between different
++        clients/apps while retaining the same play queue (for instance
+         when listening to an audio book).
+         """
+         methodName = 'getPlayQueue'
+         viewName = '%s.view' % methodName
+-        
++
+         req = self._getRequest(viewName)
+         res = self._doInfoReq(req)
+         self._checkStatus(res)
+@@ -2381,9 +2358,9 @@
+         """
+         methodName = 'getTopSongs'
+         viewName = '%s.view' % methodName
+-        
++
+         q = {'artist': artist, 'count': count}
+-        
++
+         req = self._getRequest(viewName, q)
+         res = self._doInfoReq(req)
+         self._checkStatus(res)
+@@ -2399,9 +2376,9 @@
+         """
+         methodName = 'getNewestPodcasts'
+         viewName = '%s.view' % methodName
+-        
++
+         q = {'count': count}
+-        
++
+         req = self._getRequest(viewName, q)
+         res = self._doInfoReq(req)
+         self._checkStatus(res)

@@ -14704,6 +14704,8 @@ with pkgs;
 
   mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy-spotify-tunigo { };
 
+  mopidy-subsonic = callPackage ../applications/audio/mopidy-subsonic { };
+
   mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
 
   mopidy-soundcloud = callPackage ../applications/audio/mopidy-soundcloud { };
