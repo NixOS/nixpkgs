@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ammonite-repl-${version}";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/2.12-${version}";
-    sha256 = "0fgwqdvk0nljd6xm16r8qdhjcp7ix4vx91w5ab856hllf4911120";
+    sha256 = "0y4524y2w7aq300djcazb7ckkr3gqpim2grcgb237mxq3fdvb0r8";
   };
 
   propagatedBuildInputs = [ jre ] ;
