@@ -1,0 +1,40 @@
+diff --git a/src/planner-gantt-background.c b/src/planner-gantt-background.c
+index ed21de9..9e3b4d8 100644
+--- a/src/planner-gantt-background.c
++++ b/src/planner-gantt-background.c
+@@ -380,7 +380,7 @@ gantt_background_realize (GnomeCanvasItem *item)
+ 	priv->border_gc = gdk_gc_new (item->canvas->layout.bin_window);
+ 	gdk_gc_set_foreground (priv->border_gc, &color);
+ 	gdk_gc_set_line_attributes (priv->border_gc,
+-				    0,
++				    0, /* why 0? */
+ 				    GDK_LINE_SOLID,
+ 				    GDK_CAP_BUTT,
+ 				    GDK_JOIN_MITER);
+@@ -389,7 +389,7 @@ gantt_background_realize (GnomeCanvasItem *item)
+ 	priv->timeline_gc = gdk_gc_new (item->canvas->layout.bin_window);
+ 	gdk_gc_set_foreground (priv->timeline_gc, &color);
+ 	gdk_gc_set_line_attributes (priv->timeline_gc,
+-				    0,
++				    1,
+ 				    GDK_LINE_ON_OFF_DASH,
+ 				    GDK_CAP_BUTT,
+ 				    GDK_JOIN_MITER);
+@@ -398,7 +398,7 @@ gantt_background_realize (GnomeCanvasItem *item)
+ 	priv->start_gc = gdk_gc_new (item->canvas->layout.bin_window);
+ 	gdk_gc_set_foreground (priv->start_gc, &color);
+ 	gdk_gc_set_line_attributes (priv->start_gc,
+-				    0,
++				    1,
+ 				    GDK_LINE_ON_OFF_DASH,
+ 				    GDK_CAP_BUTT,
+ 				    GDK_JOIN_MITER);
+@@ -407,7 +407,7 @@ gantt_background_realize (GnomeCanvasItem *item)
+ 	priv->guidelines_gc = gdk_gc_new (item->canvas->layout.bin_window);
+ 	gdk_gc_set_foreground (priv->guidelines_gc, &color);
+ 	gdk_gc_set_line_attributes (priv->guidelines_gc,
+-				    0,
++				    0, /* why 0? */
+ 				    GDK_LINE_SOLID,
+ 				    GDK_CAP_BUTT,
+ 				    GDK_JOIN_MITER);

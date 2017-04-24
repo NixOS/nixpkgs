@@ -35,6 +35,9 @@ in stdenv.mkDerivation {
     python
   ];
 
+  patches = [ ./planner-gantt-background.c.patch
+              ./planner-gantt-row.c.patch ];
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
@@ -42,6 +45,6 @@ in stdenv.mkDerivation {
     description = "Project management application for GNOME";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.rasendubi ];
+    maintainers = with maintainers; [ rasendubi amiloradovsky ];
   };
 }
