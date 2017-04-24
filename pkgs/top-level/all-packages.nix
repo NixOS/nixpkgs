@@ -3378,6 +3378,8 @@ with pkgs;
   paper-gtk-theme = callPackage ../misc/themes/paper { };
 
   paperwork = callPackage ../applications/office/paperwork { };
+ 
+  papertrail = callPackage ../tools/text/papertrail { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
