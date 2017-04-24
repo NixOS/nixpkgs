@@ -1,0 +1,17 @@
+diff --git a/Makefile b/Makefile
+index fd29ef8..ec0376a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,11 +6,7 @@ EXTRA_MODULES = convenience.js dash.js docking.js appIcons.js windowPreview.js i
+ EXTRA_MEDIA = logo.svg
+ TOLOCALIZE =  prefs.js
+ MSGSRC = $(wildcard po/*.po)
+-ifeq ($(strip $(DESTDIR)),)
+-	INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
+-else
+-	INSTALLBASE = $(DESTDIR)/usr/share/gnome-shell/extensions
+-endif
++INSTALLBASE = $(out)/share/gnome-shell/extensions
+ INSTALLNAME = dash-to-dock@micxgx.gmail.com
+
+ # The command line passed variable VERSION is used to set the version string

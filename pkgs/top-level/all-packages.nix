@@ -9598,8 +9598,8 @@ with pkgs;
 
     libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
 
-    libqtav = callPackage ../development/libraries/libqtav { 
-      libva = libva-full; # also wants libva-x11 
+    libqtav = callPackage ../development/libraries/libqtav {
+      libva = libva-full; # also wants libva-x11
     };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
@@ -17143,6 +17143,10 @@ with pkgs;
   gnome3_22 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.22 { });
 
   gnome3 = gnome3_22;
+
+  gnomeExtensions = {
+    dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
+  };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
