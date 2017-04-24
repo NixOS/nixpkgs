@@ -70,7 +70,7 @@ for i in $closures; do
             rsync -a $j $mountPoint/nix/store/
         done
 
-        nix-store --register-validity < $i
+        nix-store --option build-users-group root --register-validity < $i
     fi
 done
 
