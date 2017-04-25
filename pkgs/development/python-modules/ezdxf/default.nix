@@ -1,17 +1,19 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy3k, pyparsing }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, pyparsing, pytest }:
 
 buildPythonPackage rec {
   version = "0.8.1";
   name = "ezdxf-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/e/ezdxf/${name}.zip";
-    sha256 = "1q4la4h7840wb8l2jf39wy68gq5jwymkghb1a1mg8qblj424130k";
+  src = fetchFromGitHub {
+    owner = "mozman";
+    repo = "ezdxf";
+    rev = "v${version}";
+    sha256 = "1c20j96n3rsgzaakfjl0wnydaj2qr69gbnnjs6mfa1hz2fjqri22";
   };
 
-  # Tests fail on Python 3.x, but module imports and works
-  doCheck = !(isPy3k);
-    
+  buildInputs = [ pytest ];
+  checkPhase = "python -m unittest discover -s tests";
+
   propagatedBuildInputs = [ pyparsing ];
 
   meta = with stdenv.lib; {
