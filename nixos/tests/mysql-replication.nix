@@ -56,11 +56,13 @@ in
   testScript = ''
     $master->start;
     $master->waitForUnit("mysql");
+    $master->waitForOpenPort(3306);
     $slave1->start;
     $slave2->start;
     $slave1->waitForUnit("mysql");
+    $slave1->waitForOpenPort(3306);
     $slave2->waitForUnit("mysql");
-    $slave2->sleep(100); # Hopefully this is long enough!!
+    $slave2->waitForOpenPort(3306);
     $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
 })
