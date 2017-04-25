@@ -61,7 +61,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "" && wm != "none") (" + " + wm);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
