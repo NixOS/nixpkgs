@@ -9289,7 +9289,9 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
-  opencv3 = callPackage ../development/libraries/opencv/3.x.nix { };
+  opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit;
+  };
 
   # this ctl version is needed by openexr_viewers
   openexr_ctl = ctl;
