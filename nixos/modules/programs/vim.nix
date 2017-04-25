@@ -12,12 +12,25 @@ in {
       description = ''
         When enabled, installs vim and configures vim to be the default editor
         using the EDITOR environment variable.
+        '';
+    };
+
+    vimrc = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        Global vimrc configuration
       '';
     };
   };
 
   config = mkIf cfg.defaultEditor {
-        environment.systemPackages = [ pkgs.vim ];
-        environment.variables = { EDITOR = mkOverride 900 "vim"; };
+    environment.systemPackages = [ pkgs.vim_configurable ];
+    environment.variables = { EDITOR = mkOverride 900 "vim"; };
+
+    environment.etc."vimrc" = {
+      enable = cfg.vimrc != "";
+      text = cfg.vimrc;
+    };
   };
 }
