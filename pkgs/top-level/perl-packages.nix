@@ -14942,10 +14942,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   version = buildPerlPackage rec {
-    name = "version-0.9912";
+    name = "version-0.9918";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JP/JPEACOCK/${name}.tar.gz";
-      sha256 = "03hv7slgqrmzbbjjmxgvq91bjlbjg5xbp8n4h454amyab2adzw7b";
+      sha256 = "0yr3aap5r6w9zd47w8k74228fhhyh85l90rbzg15j8jfmmz5q5sl";
     };
   };
 
