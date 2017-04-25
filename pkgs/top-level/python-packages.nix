@@ -10231,6 +10231,8 @@ in {
     };
   };
 
+  vcrpy = callPackage ../development/python-modules/vcrpy { };
+
   venusian = buildPythonPackage rec {
     name = "venusian-1.0";
 
@@ -13200,9 +13202,9 @@ in {
       license = with licenses; [ lgpl21 ];
     };
   };
-  
+
   iso-639 = callPackage ../development/python-modules/iso-639 {};
-  
+
   iso3166 = callPackage ../development/python-modules/iso3166 {};
 
   iso8601 = buildPythonPackage rec {
@@ -15612,7 +15614,7 @@ in {
 
     patches = [
       (pkgs.fetchpatch {
-        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch; 
+        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch;
         sha256 = "08rn1s3w9424jhandy4j9sksy852ny00088zh15nirw5ajqg1dn7";
       })
     ];
