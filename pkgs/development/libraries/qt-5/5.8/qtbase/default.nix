@@ -34,6 +34,48 @@ stdenv.mkDerivation {
   name = "qtbase-${version}";
   inherit src version;
 
+  propagatedBuildInputs =
+    [
+      libxml2 libxslt openssl pcre16 sqlite zlib
+
+      # Text rendering
+      harfbuzz icu
+
+      # Image formats
+      libjpeg libpng libtiff
+    ]
+
+    ++ lib.optional mesaSupported mesa
+
+    ++ lib.optionals (!stdenv.isDarwin) [
+      dbus glib udev
+
+      # Text rendering
+      fontconfig freetype
+
+      # X11 libs
+      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
+      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+    ]
+
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      AGL AppKit ApplicationServices Carbon Cocoa
+      CoreAudio CoreBluetooth CoreLocation CoreServices
+      DiskArbitration Foundation OpenGL
+      darwin.cf-private darwin.apple_sdk.sdk darwin.libobjc libiconv
+    ]);
+
+  buildInputs = [ ]
+    ++ lib.optionals (!stdenv.isDarwin) [ gtk3 libinput ]
+    ++ lib.optional developerBuild gdb
+    ++ lib.optional (cups != null) cups
+    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (postgresql != null) postgresql;
+
+  nativeBuildInputs =
+    [ bison flex gperf lndir perl pkgconfig python2 ]
+    ++ lib.optional (!stdenv.isDarwin) patchelf;
+
   outputs = [ "out" "dev" ];
 
   patches =
@@ -89,7 +131,35 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins\""
   '';
 
+
+  NIX_CFLAGS_COMPILE =
+    [
+      "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
+      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+    ]
+
+    ++ lib.optional mesaSupported
+       ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+
+    ++ lib.optionals stdenv.isDarwin
+    [
+      "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
+      "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
+      # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
+      # 10.9 which necessitates the above macro definition that mentions
+      # 10.10
+    ]
+
+    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
+
   prefixKey = "-prefix ";
+
+  # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
+  # if dependency paths contain the string "pq", which can occur in the hash.
+  # To prevent these failures, we need to override PostgreSQL detection.
+  PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   # -no-eglfs, -no-directfb, -no-linuxfb and -no-kms because of the current minimalist mesa
   # TODO Remove obsolete and useless flags once the build will be totally mastered
@@ -182,75 +252,7 @@ stdenv.mkDerivation {
       "-qt-libpng"
     ];
 
-  # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
-  # if dependency paths contain the string "pq", which can occur in the hash.
-  # To prevent these failures, we need to override PostgreSQL detection.
-  PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
-
-  propagatedBuildInputs =
-    [
-      libxml2 libxslt openssl pcre16 sqlite zlib
-
-      # Text rendering
-      harfbuzz icu
-
-      # Image formats
-      libjpeg libpng libtiff
-    ]
-
-    ++ lib.optional mesaSupported mesa
-
-    ++ lib.optionals (!stdenv.isDarwin) [
-      dbus glib udev
-
-      # Text rendering
-      fontconfig freetype
-
-      # X11 libs
-      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
-    ]
-
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      AGL AppKit ApplicationServices Carbon Cocoa
-      CoreAudio CoreBluetooth CoreLocation CoreServices
-      DiskArbitration Foundation OpenGL
-      darwin.cf-private darwin.libobjc libiconv
-    ]);
-
-  buildInputs = [ ]
-    ++ lib.optionals (!stdenv.isDarwin) [ gtk3 libinput ]
-    ++ lib.optional developerBuild gdb
-    ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib
-    ++ lib.optional (postgresql != null) postgresql;
-
-  nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 ]
-    ++ lib.optional (!stdenv.isDarwin) patchelf;
-
-  # freetype-2.5.4 changed signedness of some struct fields
-  NIX_CFLAGS_COMPILE =
-    [
-      "-Wno-error=sign-compare"
-      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
-      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
-    ]
-
-    ++ lib.optional mesaSupported
-       ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
-
-    ++ lib.optionals stdenv.isDarwin
-    [
-      "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
-      "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
-      # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-      # 10.9 which necessitates the above macro definition that mentions
-      # 10.10
-    ]
-
-    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
+  enableParallelBuilding = true;
 
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
@@ -333,8 +335,6 @@ stdenv.mkDerivation {
   setupHook = if stdenv.isDarwin
               then ../../qtbase-setup-hook-darwin.sh
               else ../../qtbase-setup-hook.sh;
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = http://www.qt.io;
