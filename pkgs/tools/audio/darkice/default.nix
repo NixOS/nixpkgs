@@ -1,7 +1,12 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig
 , libjack2, alsaLib, libpulseaudio
-, faac, lame, libogg, libopus, libvorbis, libsamplerate
+, lame, libogg, libopus, libvorbis, libsamplerate
+, enableFaac ? false, faac ? null
 }:
+
+assert enableFaac -> faac != null;
+
+with lib;
 
 stdenv.mkDerivation rec {
   name = "darkice-${version}";
@@ -19,10 +24,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fpermissive";
 
-  configureFlags = [
-    "--with-faac-prefix=${faac}"
-    "--with-lame-prefix=${lame.lib}"
-  ];
+  configureFlags = [ "--with-lame-prefix=${lame.lib}" ]
+    ++ optional enableFaac "--with-faac-prefix=${faac}";
 
   patches = [ ./fix-undeclared-memmove.patch ];
 
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://darkice.org/;
     description = "Live audio streamer";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ikervagyok fpletz ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ikervagyok fpletz ];
   };
 }
