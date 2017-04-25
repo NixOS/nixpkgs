@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgs, lib, python, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.14.1";
+  version = "1.15.1";
   name = "rtv-${version}";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "03106sdsvj4zjjaqqg7qvm3n959plvy08a6n28ir1yf67kwzsx8a";
+    sha256 = "037dhds1prxj7vsq15dr46wk3pfk3ixr0d60m3h796b6nbc1spya";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -20,6 +20,15 @@ pythonPackages.buildPythonApplication rec {
     praw
     kitchen
     praw
+    vcrpy
+    pylint
+    coverage
+    pytest
+    coveralls
+    contextlib2
+    backports_functools_lru_cache
+    pyyaml
+    docopt
   ] ++ lib.optional (!pythonPackages.isPy3k) futures;
 
   meta = with lib; {
