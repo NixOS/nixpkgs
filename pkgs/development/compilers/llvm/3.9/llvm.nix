@@ -42,10 +42,13 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
+  nativeBuildInputs = [
+    perl
+    cmake
+    python
+  ];
+
   buildInputs = [
-    buildPackages.perl
-    buildPackages.buildPackages.cmake
-    buildPackages.python
     groff
     libxml2
     libffi ]
