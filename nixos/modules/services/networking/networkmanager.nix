@@ -241,6 +241,7 @@ in {
     users.extraUsers = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
+      extraGroups = [ "networkmanager" ];
     }];
 
     systemd.packages = cfg.packages;

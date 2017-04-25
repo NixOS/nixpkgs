@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   preBuild = ''
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
-    makeFlags="DESTROOT=$out"
+    makeFlags="DESTROOT=$out CC=cc"
 
     # We want to ignore the $glibc/include/paths.h definition of
     # sendmail path.
@@ -35,6 +35,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Daemon for running commands at specific times (Vixie Cron)";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

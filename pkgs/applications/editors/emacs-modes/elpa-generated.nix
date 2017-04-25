@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.90.0";
+        version = "11.90.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.90.0.tar";
-          sha256 = "04nsndwcf0dimgc2p1yzzrymc36amzdnjg0158nxplmjkzdp28gy";
+          url = "https://elpa.gnu.org/packages/auctex-11.90.1.tar";
+          sha256 = "0bn5pg6v7zgqxs080bzrsx6789nzdx4622m3020ymzl66017nf0r";
         };
         packageRequires = [];
         meta = {
@@ -644,10 +644,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.3";
+        version = "1.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.3.tar";
-          sha256 = "0hg7jppdsaxy285bdaban1i096bjx21pqmczz7w9f3nr34n28pyn";
+          url = "https://elpa.gnu.org/packages/el-search-1.3.1.tar";
+          sha256 = "01f5pyalw60dr36w007mvvxry548zrhixzmba1sad19531bry7fc";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -681,14 +681,14 @@
           license = lib.licenses.free;
         };
       }) {};
-    enwc = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+    enwc = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "enwc";
-        version = "1.0";
+        version = "2.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/enwc-1.0.tar";
-          sha256 = "19mjkcgnacygzwm5dsayrwpbzfxadp9kdmmghrk1vir2hwixgv8y";
+          url = "https://elpa.gnu.org/packages/enwc-2.0.tar";
+          sha256 = "17w35b06am5n19nlq00ni5w3jvys9i7swyw4glb7081d2jbij2mn";
         };
-        packageRequires = [];
+        packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/enwc.html";
           license = lib.licenses.free;
@@ -820,10 +820,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.2.1";
+        version = "1.2.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.2.1.tar";
-          sha256 = "0mip0czvpdl26xz9wamii5azj9bacjhdg0jgkrxyv17vqqlbag9x";
+          url = "https://elpa.gnu.org/packages/gnorb-1.2.3.tar";
+          sha256 = "1bqm08i2aam4v4gfzyxfmic0rg0ka7cns38khwj42vhwgv045xc7";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -940,10 +940,10 @@
       }) {};
     ivy = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "ivy";
-        version = "0.8.0";
+        version = "0.9.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ivy-0.8.0.tar";
-          sha256 = "1c1impdk1p082v6nb9lms4n258z6ngz8ra90cshprs0ingrk705p";
+          url = "https://elpa.gnu.org/packages/ivy-0.9.1.tar";
+          sha256 = "1jfc3zf6ln7i8pp5j0fpsai2w847v5g77b5fzlxbgvj80g3v5887";
         };
         packageRequires = [ emacs ];
         meta = {

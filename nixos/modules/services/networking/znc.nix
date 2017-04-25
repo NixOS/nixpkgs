@@ -35,7 +35,7 @@ let
             Port = ${toString confOpts.port}
             IPv4 = true
             IPv6 = true
-            SSL = ${if confOpts.useSSL then "true" else "false"}
+            SSL = ${boolToString confOpts.useSSL}
     </Listener>
     
     <User ${confOpts.userName}>

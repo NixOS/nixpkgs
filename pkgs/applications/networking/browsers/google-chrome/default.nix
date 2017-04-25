@@ -1,10 +1,10 @@
-{ stdenv, buildEnv, fetchurl, patchelf, bash
+{ stdenv, fetchurl, patchelf, bash
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk2, gdk_pixbuf, gcc
+, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -47,13 +47,14 @@ let
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsaLib libXdamage libXtst libXrandr expat cups
-    dbus_libs gtk2 gdk_pixbuf gcc
+    dbus_libs gdk_pixbuf gcc
     systemd
     libexif
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap
-  ] ++ optional pulseSupport libpulseaudio;
+  ] ++ optional pulseSupport libpulseaudio
+    ++ (if (versionAtLeast version "59.0.0.0") then [gtk3] else [gtk2]);
 
   suffix = if channel != "stable" then "-" + channel else "";
 

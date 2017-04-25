@@ -30,6 +30,11 @@ rec {
   /* boolean “and” */
   and = x: y: x && y;
 
+  /* Convert a boolean to a string.
+     Note that toString on a bool returns "1" and "".
+  */
+  boolToString = b: if b then "true" else "false";
+
   /* Merge two attribute sets shallowly, right side trumps left
 
      Example:
@@ -80,6 +85,15 @@ rec {
   # argument, but it's nice this way if several uses of `extends` are cascaded.
   extends = f: rattrs: self: let super = rattrs self; in super // f self super;
 
+  # Compose two extending functions of the type expected by 'extends'
+  # into one where changes made in the first are available in the
+  # 'super' of the second
+  composeExtensions =
+    f: g: self: super:
+      let fApplied = f self super;
+          super' = super // fApplied;
+      in fApplied // g self super';
+
   # Create an overridable, recursive attribute set. For example:
   #
   #     nix-repl> obj = makeExtensible (self: { })
@@ -107,6 +121,9 @@ rec {
 
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
+
+  # Apply function if argument is non-null
+  mapNullable = f: a: if isNull a then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)

@@ -75,6 +75,7 @@ let
       exec ${qemu}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
+          -smp ${toString config.virtualisation.cores} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
@@ -241,6 +242,18 @@ in
           ''
             Whether to run QEMU with a graphics window, or access
             the guest computer serial port through the host tty.
+          '';
+      };
+
+    virtualisation.cores =
+      mkOption {
+        default = 1;
+        type = types.int;
+        description =
+          ''
+            Specify the number of cores the guest is permitted to use.
+            The number can be higher than the available cores on the
+            host system.
           '';
       };
 

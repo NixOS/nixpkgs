@@ -59,7 +59,7 @@ let
     [Autologin]
     User=${cfg.autoLogin.user}
     Session=${defaultSessionName}.desktop
-    Relogin=${if cfg.autoLogin.relogin then "true" else "false"}
+    Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}

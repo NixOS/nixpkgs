@@ -7,6 +7,7 @@
 , buildInputs ? []
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
+, cargoBuildFlags ? []
 , ... } @ args:
 
 let
@@ -26,7 +27,11 @@ in stdenv.mkDerivation (args // {
 
   buildInputs = [ git rust.cargo rust.rustc ] ++ buildInputs;
 
-  configurePhase = args.configurePhase or "true";
+  configurePhase = args.configurePhase or ''
+    runHook preConfigure
+    # noop
+    runHook postConfigure
+  '';
 
   postUnpack = ''
     eval "$cargoDepsHook"
@@ -92,22 +97,26 @@ in stdenv.mkDerivation (args // {
     )
   '' + (args.prePatch or "");
 
-  buildPhase = args.buildPhase or ''
-    echo "Running cargo build --release"
-    cargo build --release
+  buildPhase = with builtins; args.buildPhase or ''
+    runHook preBuild
+    echo "Running cargo build --release ${concatStringsSep " " cargoBuildFlags}"
+    cargo build --release ${concatStringsSep " " cargoBuildFlags}
+    runHook postBuild
   '';
 
   checkPhase = args.checkPhase or ''
+    runHook preCheck
     echo "Running cargo test"
     cargo test
+    runHook postCheck
   '';
 
   doCheck = args.doCheck or true;
 
   installPhase = args.installPhase or ''
+    runHook preInstall
     mkdir -p $out/bin
-    for f in $(find target/release -maxdepth 1 -type f); do
-      cp $f $out/bin
-    done;
+    find target/release -maxdepth 1 -executable -exec cp "{}" $out/bin \;
+    runHook postInstall
   '';
 })

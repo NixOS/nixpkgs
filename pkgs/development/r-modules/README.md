@@ -12,7 +12,7 @@ use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix fil
     {
 
         rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [ 
+            packages = with self.rPackages; [
                 devtools
                 ggplot2
                 reshape2
@@ -65,7 +65,7 @@ set `useRPackages` to `true`, like below:
     {
 
         rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [ 
+            packages = with self.rPackages; [
                 devtools
                 ggplot2
                 reshape2
@@ -106,4 +106,3 @@ nix-build test-evaluation.nix --dry-run
 ```
 
 If this exits fine, the expression is ok. If not, you have to edit `default.nix`
-

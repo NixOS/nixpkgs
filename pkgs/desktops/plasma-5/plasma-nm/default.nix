@@ -4,7 +4,7 @@
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
 , kxmlgui, mobile_broadband_provider_info
 , modemmanager-qt, networkmanager-qt, openconnect, plasma-framework
-, qca-qt5, qtdeclarative, solid
+, qca-qt5, qtdeclarative, solid, openvpn
 }:
 
 plasmaPackage {
@@ -13,6 +13,10 @@ plasmaPackage {
     (substituteAll {
       src = ./0001-mobile-broadband-provider-info-path.patch;
       inherit mobile_broadband_provider_info;
+    })
+    (substituteAll {
+      src = ./0002-openvpn-binary-path.patch;
+      inherit openvpn;
     })
   ];
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -23,4 +27,5 @@ plasmaPackage {
     mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
     qca-qt5 solid
   ];
+  enableParallelBuilding = true;
 }

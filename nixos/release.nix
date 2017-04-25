@@ -299,6 +299,7 @@ in rec {
   tests.samba = callTest tests/samba.nix {};
   tests.sddm = callSubTests tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
+  tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};

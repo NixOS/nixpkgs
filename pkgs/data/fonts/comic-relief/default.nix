@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "https://dl.dropbox.com/u/56493902/loudifier/comicrelief.zip";
+    url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
     sha256 = "0wpf10m9zmcfvcxgc7dxzdm3syam7d7qxlfabgr1nxzq299kh8ch";
   };
 

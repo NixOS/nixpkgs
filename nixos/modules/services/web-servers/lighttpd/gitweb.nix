@@ -60,7 +60,8 @@ in
               "/gitweb/"        => "${pkgs.git}/share/gitweb/gitweb.cgi"
           )
           setenv.add-environment = (
-              "GITWEB_CONFIG" => "${gitwebConfigFile}"
+              "GITWEB_CONFIG" => "${gitwebConfigFile}",
+              "HOME" => "${cfg.projectroot}"
           )
       }
     '';
