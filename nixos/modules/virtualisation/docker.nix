@@ -170,7 +170,6 @@ in
         };
       };
 
-
       systemd.services.docker-prune = {
         description = "Prune docker resources";
 
@@ -185,6 +184,11 @@ in
 
         startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
       };
+
+      boot.kernelModules =
+        (optional (
+          cfg.storageDriver == "overlay" || cfg.storageDriver == "overlay2"
+        ) "overlay");
     }
   ]);
 
