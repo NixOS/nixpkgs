@@ -1,8 +1,8 @@
 # to run these tests:
-# nix-instantiate --eval --strict nixpkgs/lib/tests.nix
+# nix-instantiate --eval --strict nixpkgs/lib/tests/misc.nix
 # if the resulting list is empty, all tests passed
 let inherit (builtins) add; in
-with import ./default.nix;
+with import ../default.nix;
 
 runTests {
 
