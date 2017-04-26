@@ -89,6 +89,8 @@ rec {
     msvc = {};
     eabi = {};
     androideabi = {};
+    gnueabi = {};
+    gnueabihf = {};
     unknown = {};
   };
 

@@ -39,7 +39,7 @@ in bootStages ++ [
           binutils cc
       else buildPackages.makeStdenvCross
         buildPackages.stdenv crossSystem
-        buildPackages.binutilsCross buildPackages.gccCrossStageFinal;
+        buildPackages.binutils buildPackages.gccCrossStageFinal;
   })
 
 ]
