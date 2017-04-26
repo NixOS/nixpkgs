@@ -26846,6 +26846,8 @@ EOF
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
 
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [twisted dateutil];
 
     meta = {
