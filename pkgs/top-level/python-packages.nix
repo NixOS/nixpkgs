@@ -13198,9 +13198,9 @@ in {
       license = with licenses; [ lgpl21 ];
     };
   };
-  
+
   iso-639 = callPackage ../development/python-modules/iso-639 {};
-  
+
   iso3166 = callPackage ../development/python-modules/iso3166 {};
 
   iso8601 = buildPythonPackage rec {
@@ -15610,7 +15610,7 @@ in {
 
     patches = [
       (pkgs.fetchpatch {
-        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch; 
+        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch;
         sha256 = "08rn1s3w9424jhandy4j9sksy852ny00088zh15nirw5ajqg1dn7";
       })
     ];
@@ -31673,10 +31673,10 @@ EOF
   packet-python = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "packet-python";
-    version = "1.31";
+    version = "1.33";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/c3/1b/ea71ec9d6eeab92b783d23dd62e71e9296f9699bc7d457450859803929f0/${name}.tar.gz";
-      sha256 = "1z1zmrajfw01jr3mafimq7dvsb1rs978zln9xfd6fbqkp3vm9hc0";
+      url = "https://pypi.python.org/packages/eb/82/f0506bd964501f958ac6a37e843ccb7bd9e712732886258314d55f0ec710/packet-python-1.33.tar.gz";
+      sha256 = "0bmvfmvjm8jx0y8sv0jf5mhv0h3v8idx0sc5myxs7ig200584dd3";
     };
     propagatedBuildInputs = with self; [ requests ];
 
