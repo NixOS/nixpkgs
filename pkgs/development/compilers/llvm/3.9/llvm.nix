@@ -53,8 +53,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     groff
     libxml2
-    libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+    libffi
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
