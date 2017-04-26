@@ -192,6 +192,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  automat = callPackage ../development/python-modules/automat { };
+
   # packages defined elsewhere
 
   bap = callPackage ../development/python-modules/bap {
