@@ -15595,6 +15595,8 @@ in {
       name = "${name}.tar.gz";
     };
 
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ twisted ];
 
     postInstall = "twistd --help > /dev/null";
