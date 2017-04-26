@@ -810,23 +810,7 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
-  asgi_ipc = buildPythonPackage rec {
-    name = "asgi_ipc-${version}";
-    version = "1.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
-      sha256 = "03phyfj30s4sgaqfbmv38nfvx3kdmjwsh3558d2lxrf2gdrimmf9";
-    };
-
-    propagatedBuildInputs = with self ; [ asgiref msgpack posix_ipc ];
-
-    meta = {
-      description = "Posix IPC-backed ASGI channel layer implementation";
-      license = licenses.bsd3;
-      homepage = http://github.com/django/asgi_ipc/;
-    };
-  };
+  asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
 
   asgi_redis = buildPythonPackage rec {
     name = "asgi_redis-${version}";
