@@ -4388,6 +4388,8 @@ in {
     };
   };
 
+  coveralls = callPackage ../development/python-modules/coveralls { };
+
   coverage = buildPythonPackage rec {
     name = "coverage-4.0.1";
 
