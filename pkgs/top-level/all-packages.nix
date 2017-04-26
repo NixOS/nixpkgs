@@ -7802,10 +7802,11 @@ with pkgs;
     installLocales = config.glibc.locales or false;
     # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
     # thrown away. TODO: find a better solution for this.
-    stdenv = buildPackages.makeStdenvCross
-      buildPackages.buildPackages.stdenv
-      buildPackages.targetPlatform
-      buildPackages.gccCrossStageStatic;
+    stdenv = buildPackages.makeStdenvCross {
+      inherit (buildPackages.buildPackages) stdenv;
+      inherit buildPlatform hostPlatform targetPlatform;
+      cc = buildPackages.gccCrossStageStatic;
+    };
   };
 
   # We can choose:

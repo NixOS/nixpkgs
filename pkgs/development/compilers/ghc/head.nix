@@ -114,7 +114,7 @@ in stdenv.mkDerivation (rec {
 
   buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutils ];
 
-  dontSetConfigureCross = true;
+  configurePlatforms = [];
 
   passthru = {
     inherit bootPkgs cross;

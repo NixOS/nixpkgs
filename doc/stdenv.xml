@@ -641,6 +641,16 @@ script) if it exists.</para>
   </varlistentry>
 
   <varlistentry>
+    <term><varname>configurePlatforms</varname></term>
+    <listitem><para>
+      By default, when cross compiling, the configure script has <option>--build=...</option> and <option>--host=...</option> passed.
+      Packages can instead pass <literal>[ "build" "host" "target" ]</literal> or a subset to control exactly which platform flags are passed.
+      Compilers and other tools should use this to also pass the target platform, for example.
+      Note eventually these will be passed when in native builds too, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>preConfigure</varname></term>
     <listitem><para>Hook executed at the start of the configure
     phase.</para></listitem>

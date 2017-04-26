@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     dontStrip = static;
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
   } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
     installFlags = [
       "BINARY_PATH=$(out)/bin"
