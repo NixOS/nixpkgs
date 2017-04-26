@@ -808,6 +808,8 @@ in {
     };
   };
 
+  asgiref = callPackage ../development/python-modules/asgiref { };
+
   asgi_ipc = buildPythonPackage rec {
     name = "asgi_ipc-${version}";
     version = "1.2.0";
