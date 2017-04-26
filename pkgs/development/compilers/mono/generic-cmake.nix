@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, cmake, autoconf, libtool, automake, gcc }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which }:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
   };
 
   buildInputs =
-    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python cmake autoconf libtool automake gcc
+    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python autoconf libtool automake cmake which
     ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
 
@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     "--with-llvm=${llvm}"
   ];
 
+  configurePhase = ''
+    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "/bin/sh"
+    ./autogen.sh --prefix $out
+  '';
+
   # Attempt to fix this error when running "mcs --version":
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
@@ -45,7 +50,7 @@ stdenv.mkDerivation rec {
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
-  patches = [ ./pkgconfig-before-gac-5x.patch ];
+  patches = [ ./pkgconfig-before-gac.patch ];
 
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
@@ -55,7 +60,6 @@ stdenv.mkDerivation rec {
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
   '' + stdenv.lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
-    echo 11111
   '';
 
   # Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
