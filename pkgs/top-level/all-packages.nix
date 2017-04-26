@@ -1752,8 +1752,9 @@ with pkgs;
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
-      inherit (pythonPackages) gyp;
-      protobuf = protobuf.override { stdenv = clangStdenv; };
+      python = python2;
+      inherit (python2Packages) gyp;
+      protobuf = protobuf3_2.override { stdenv = clangStdenv; };
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
