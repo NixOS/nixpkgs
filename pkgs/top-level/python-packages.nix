@@ -2560,6 +2560,8 @@ in {
     };
   };
 
+  constantly = callPackage ../development/python-modules/constantly { };
+
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
     version = "1.2.1";
