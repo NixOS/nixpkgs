@@ -118,6 +118,8 @@ let
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
+
+    preBuild = "unset NIX_INDENT_MAKE";
   };
 
 in rec {
