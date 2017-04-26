@@ -1,4 +1,4 @@
-{ stdenv, pkgs, lib, fetchurl, fetchgit, fetchsvn,
+{ stdenv, pkgs, lib, fetchurl, fetchgit, fetchsvn, fetchpatch,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, binutils, newt,
   lua, speex,
@@ -18,6 +18,10 @@ let
       # This patch changes the runtime behavior to look for state
       # directories in /var rather than ${out}/var.
       ./runtime-vardirs.patch
+      (fetchpatch {
+         url = "http://sources.debian.net/data/main/a/asterisk/1:13.14.1~dfsg-1/debian/patches/pjsip_unresolved_symbol.patch";
+         sha256 = "0i6a6zplvzbjcvxqlmr87jmrfza7c3qx0rlym2nlmzzp2m7qpnfp";
+      })
     ];
 
     src = fetchurl {
