@@ -14274,6 +14274,8 @@ with pkgs;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
+  imagej = callPackage ../applications/graphics/imagej { };
+
   imagemagick_light = imagemagick.override {
     bzip2 = null;
     zlib = null;
