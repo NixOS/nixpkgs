@@ -5191,6 +5191,8 @@ in {
     };
   };
 
+  pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
+
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
     src = pkgs.fetchurl {
