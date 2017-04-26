@@ -73,11 +73,6 @@ let
     };
   };
 
-  pjproject-255 = fetchurl {
-    url = http://www.pjsip.org/release/2.5.5/pjproject-2.5.5.tar.bz2;
-    sha256 = "1wq8lpfcd4dfrbl7bgy2yzgp3ldjzq5430fqkhcqad0xfrxj0fdb";
-  };
-
   pjproject-26 = fetchurl {
     url = http://www.pjsip.org/release/2.6/pjproject-2.6.tar.bz2;
     sha256 = "1d67c58jn22f7h6smkykk5vwl3sqpc7xi2vm3j3lbn3lq6hisnig";
@@ -93,10 +88,10 @@ in
 {
 
   asterisk-lts = common {
-    version = "13.13.1";
-    sha256 = "0yh097rrp1i681qclvwyh7l1gg2i5wx5pjrcvwpbj6g949mc98vd";
+    version = "13.15.0";
+    sha256 = "0i2qzfa1iyh66nma39kdigb9lp5gz3sn46znd2djz24wgmamb2lb";
     externals = {
-      "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
+      "externals_cache/pjproject-2.6.tar.bz2" = pjproject-26;
       "addons/mp3" = mp3-202;
     };
   };
