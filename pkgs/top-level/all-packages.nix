@@ -9312,6 +9312,8 @@ with pkgs;
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
+  opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
+
   openscenegraph = callPackage ../development/libraries/openscenegraph { };
 
   openslp = callPackage ../development/libraries/openslp {};
