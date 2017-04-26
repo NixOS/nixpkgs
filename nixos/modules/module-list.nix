@@ -157,7 +157,7 @@
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
-  ./services/cluster/kubernetes.nix
+  ./services/cluster/kubernetes/default.nix
   ./services/cluster/panamax.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
