@@ -15,12 +15,14 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? (buildPlatform == hostPlatform)
 , darwin
 , buildPackages
 , buildPlatform
 , hostPlatform
 }:
+
+assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
@@ -84,12 +86,6 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     mkdir -p $out/
     ln -sv $PWD/lib $out
-  ''
-  + # This is a good candidate for using the `placeholder` primitive when it's released
-    # This should hopefully be unnecessary once
-    # https://github.com/NixOS/nixpkgs/pull/25047 is merged
-    stdenv.lib.optionalString (buildPlatform != hostPlatform && enableSharedLibraries) ''
-    export NIX_CROSS_LDFLAGS="-rpath $lib/lib -rpath $lib/lib64 $NIX_CROSS_LDFLAGS"
   '';
 
   cmakeFlags = with stdenv; [
