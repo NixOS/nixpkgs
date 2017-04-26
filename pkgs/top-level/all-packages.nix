@@ -9839,6 +9839,8 @@ with pkgs;
 
   shapelib = callPackage ../development/libraries/shapelib { };
 
+  shibboleth-sp = callPackage ../development/libraries/shibboleth-sp { };
+
   skalibs = callPackage ../development/libraries/skalibs { };
 
   slang = callPackage ../development/libraries/slang { };
