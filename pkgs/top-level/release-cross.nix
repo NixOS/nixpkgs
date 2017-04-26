@@ -45,6 +45,10 @@ let
 
   darwinCommon = {
     buildPackages.binutils = darwin;
+    gmp = darwin;
+    ncurses = darwin;
+    libiconv = darwin;
+    libffi = darwin;
   };
 
 in
