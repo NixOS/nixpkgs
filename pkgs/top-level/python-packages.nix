@@ -812,26 +812,7 @@ in {
 
   asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
 
-  asgi_redis = buildPythonPackage rec {
-    name = "asgi_redis-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";
-      sha256 = "1pdzxannmgb0as2x6xy0rk4xi8ygnsggpsa0z31pzpwbk6jsgwxd";
-    };
-
-    # Requires a redis server available
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ asgiref asgi_ipc msgpack six redis cryptography ];
-
-    meta = {
-      description = "Redis-backed ASGI channel layer implementation";
-      license = licenses.bsd3;
-      homepage = http://github.com/django/asgi_redis/;
-    };
-  };
+  asgi_redis = callPackage ../development/python-modules/asgi_redis { };
 
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
