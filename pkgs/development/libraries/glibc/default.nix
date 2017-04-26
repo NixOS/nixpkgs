@@ -1,21 +1,23 @@
-{ lib, stdenv, fetchurl, linuxHeaders
+{ lib, stdenv, fetchurl
 , installLocales ? true
 , profilingLibraries ? false
-, gccCross ? null
 , withGd ? false, gd ? null, libpng ? null
+, buildPlatform, hostPlatform
+, buildPackages
 }:
 
 assert stdenv.cc.isGNU;
 
 let
   build = import ./common.nix;
-  cross = if gccCross != null then gccCross.target else null;
+  cross = if buildPlatform != hostPlatform then hostPlatform else null;
+  inherit (buildPackages) linuxHeaders;
 in
   build cross ({
     name = "glibc" + lib.optionalString withGd "-gd";
 
-    inherit lib stdenv fetchurl linuxHeaders installLocales
-      profilingLibraries gccCross withGd gd libpng;
+    inherit lib stdenv buildPackages fetchurl linuxHeaders installLocales
+      profilingLibraries withGd gd libpng;
 
     NIX_NO_SELF_RPATH = true;
 

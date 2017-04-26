@@ -92,7 +92,7 @@ let
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
-  glibc = pkgs.buildPackages.libcCross;
+  glibc = pkgs.libcCross;
   bash = pkgs.bash;
   findutils = pkgs.findutils;
   diffutils = pkgs.diffutils;

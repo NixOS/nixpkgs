@@ -4,17 +4,20 @@
 cross:
 
 { name, fetchurl, lib, stdenv, installLocales ? false
-, gccCross ? null, linuxHeaders ? null
+, linuxHeaders ? null
 , profilingLibraries ? false, meta
 , withGd ? false, gd ? null, libpng ? null
-, preConfigure ? "", ... }@args:
+, preConfigure ? ""
+, buildPackages ? {}
+, ...
+} @ args:
 
 let
   version = "2.25";
   sha256 = "067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0";
 in
 
-assert cross != null -> gccCross != null;
+assert cross != null -> buildPackages.stdenv ? cc;
 
 stdenv.mkDerivation ({
   inherit linuxHeaders installLocales;
@@ -113,8 +116,8 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "bin" "dev" "static" ];
 
-  buildInputs = lib.optionals (cross != null) [ gccCross ]
-    ++ lib.optionals withGd [ gd libpng ];
+  nativeBuildInputs = lib.optional (cross != null) buildPackages.stdenv.cc;
+  buildInputs = lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
@@ -122,9 +125,7 @@ stdenv.mkDerivation ({
   BASH_SHELL = "/bin/sh";
 }
 
-# Remove the `gccCross' attribute so that the *native* glibc store path
-# doesn't depend on whether `gccCross' is null or not.
-// (removeAttrs args [ "lib" "gccCross" "fetchurl" "withGd" "gd" "libpng" ]) //
+// (removeAttrs args [ "lib" "buildPackages" "fetchurl" "withGd" "gd" "libpng" ]) //
 
 {
   name = name + "-${version}" +
