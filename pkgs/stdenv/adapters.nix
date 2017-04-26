@@ -56,12 +56,17 @@ rec {
 
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
-  makeStdenvCross = stdenv: cross: binutils: gccCross: stdenv // {
+  makeStdenvCross = stdenvOrig: cross: cc: let
+    stdenv = stdenvOrig.override {
+      inherit cc;
 
-    # Overrides are surely not valid as packages built with this run on a
-    # different platform.
-    overrides = _: _: {};
+      allowedRequisites = null;
 
+      # Overrides are surely not valid as packages built with this run on a
+      # different platform.
+      overrides = _: _: {};
+    };
+  in stdenv // {
     mkDerivation =
       { name ? "", buildInputs ? [], nativeBuildInputs ? []
       , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
@@ -91,7 +96,6 @@ rec {
           name = name + "-" + cross.config;
           nativeBuildInputs = nativeBuildInputs
             ++ nativeInputsFromBuildInputs
-            ++ [ gccCross binutils ]
             ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
@@ -109,10 +113,6 @@ rec {
 
           crossConfig = cross.config;
         } // args.crossAttrs or {});
-
-    inherit gccCross binutils;
-    ccCross = gccCross;
-
   };
 
 

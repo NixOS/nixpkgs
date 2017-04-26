@@ -31,15 +31,12 @@ in bootStages ++ [
     targetPlatform = crossSystem;
     inherit config overlays;
     selfBuild = false;
-    stdenv = if crossSystem.useiOSCross or false
-      then let
-          inherit (buildPackages.darwin.ios-cross) cc binutils;
-        in buildPackages.makeStdenvCross
-          buildPackages.stdenv crossSystem
-          binutils cc
-      else buildPackages.makeStdenvCross
-        buildPackages.stdenv crossSystem
-        buildPackages.binutils buildPackages.gccCrossStageFinal;
+    stdenv = buildPackages.makeStdenvCross
+      buildPackages.stdenv
+      crossSystem
+      (if crossSystem.useiOSCross or false
+       then buildPackages.darwin.ios-cross
+       else buildPackages.gccCrossStageFinal);
   })
 
 ]
