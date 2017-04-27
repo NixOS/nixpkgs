@@ -13,8 +13,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost curl openssl log4shib xercesc xml-security-c ];
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
-    description = "A low-level library that provides a high level interface to XML processing for OpenSAML 2";
-  };
+  enableParallelBuilding = true;
 
+  meta = with stdenv.lib; {
+    description = "A low-level library that provides a high level interface to XML processing for OpenSAML 2";
+    platforms   = platforms.unix;
+    license     = licenses.asl20;
+  };
 }
