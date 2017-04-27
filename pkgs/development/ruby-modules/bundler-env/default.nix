@@ -12,6 +12,7 @@
 , gemfile ? null
 , lockfile ? null
 , gemset ? null
+, allBins ? false
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
@@ -46,11 +47,20 @@ let
 
   importedGemset = import gemset';
 
-  filteredGemset = (lib.filterAttrs (name: attrs:
-    if (builtins.hasAttr "groups" attrs)
-    then (builtins.any (gemGroup: builtins.any (group: group == gemGroup) groups) attrs.groups)
-    else true
-  ) importedGemset);
+  platformMatches = attrs: (
+  !(attrs ? "platforms") ||
+    builtins.any (platform:
+      platform.engine == ruby.rubyEngine &&
+        (!(platform ? "version") || platform.version == ruby.version.majMin)
+    ) attrs.platforms
+  );
+
+  groupMatches = attrs: (
+  !(attrs ? "groups") ||
+    builtins.any (gemGroup: builtins.any (group: group == gemGroup) groups) attrs.groups
+  );
+
+  filteredGemset = lib.filterAttrs (name: attrs: platformMatches attrs && groupMatches attrs) importedGemset;
 
   applyGemConfigs = attrs:
     (if gemConfig ? "${attrs.gemName}"
@@ -67,25 +77,64 @@ let
     if hasBundler then gems.bundler
     else defs.bundler.override (attrs: { inherit ruby; });
 
-  gems = lib.flip lib.mapAttrs configuredGemset (name: attrs:
-    buildRubyGem ((removeAttrs attrs ["source"]) // attrs.source // {
-      inherit ruby;
-      gemName = name;
-      gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
-    }));
+  pathDerivation = { gemName, version, path, ...  }:
+    let
+      res = {
+          type = "derivation";
+          bundledByPath = true;
+          name = gemName;
+          version = version;
+          outPath = path;
+          outputs = [ "out" ];
+          out = res;
+          outputName = "out";
+        };
+    in res;
+
+  buildGem = name: attrs: (
+    let
+      gemAttrs = ((removeAttrs attrs ["source"]) // attrs.source // {
+        inherit ruby;
+        gemName = name;
+        gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
+      });
+    in
+    if gemAttrs.type == "path" then pathDerivation gemAttrs
+    else buildRubyGem gemAttrs);
+
+  gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
+
+  maybeCopyAll = main: if main == null then "" else copyIfBundledByPath main;
+
+  copyIfBundledByPath = { bundledByPath ? false, ...}@main:
+  (if bundledByPath then ''
+  cp -a ${gemdir}/* $out/
+  '' else ""
+  );
 
   # We have to normalize the Gemfile.lock, otherwise bundler tries to be
   # helpful by doing so at run time, causing executables to immediately bail
   # out. Yes, I'm serious.
   confFiles = runCommand "gemfile-and-lockfile" {} ''
     mkdir -p $out
-    cp ${gemfile'} $out/Gemfile
-    cp ${lockfile'} $out/Gemfile.lock
+    ${maybeCopyAll mainGem}
+    cp ${gemfile'} $out/Gemfile || ls -l $out/Gemfile
+    cp ${lockfile'} $out/Gemfile.lock || ls -l $out/Gemfile.lock
   '';
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
-  binPaths = if mainGem != null then [ mainGem ] else envPaths;
+  binPaths = if !allBins && mainGem != null then [ mainGem ] else envPaths;
+
+  genStubs = binPaths: ''
+    ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
+      "${ruby}/bin/ruby" \
+      "${confFiles}/Gemfile" \
+      "$out/${ruby.gemPath}" \
+      "${bundler}/${ruby.gemPath}" \
+      ${lib.escapeShellArg binPaths} \
+      ${lib.escapeShellArg groups}
+  '';
 
   bundlerEnv = buildEnv {
     inherit ignoreCollisions;
@@ -95,15 +144,7 @@ let
     paths = envPaths;
     pathsToLink = [ "/lib" ];
 
-    postBuild = ''
-      ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
-        "${ruby}/bin/ruby" \
-        "${confFiles}/Gemfile" \
-        "$out/${ruby.gemPath}" \
-        "${bundler}/${ruby.gemPath}" \
-        ${lib.escapeShellArg binPaths} \
-        ${lib.escapeShellArg groups}
-    '' + lib.optionalString (postBuild != null) postBuild;
+    postBuild = (genStubs binPaths) + lib.optionalString (postBuild != null) postBuild;
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
@@ -135,7 +176,7 @@ let
           require 'bundler/setup'
         '';
         in stdenv.mkDerivation {
-          name = "interactive-${drvName}-environment";
+          name = "${drvName}-interactive-environment";
           nativeBuildInputs = [ wrappedRuby bundlerEnv ];
           shellHook = ''
             export OLD_IRBRC="$IRBRC"
