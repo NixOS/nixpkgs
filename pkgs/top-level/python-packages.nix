@@ -13243,7 +13243,12 @@ in {
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
-  ipython = callPackage ../development/python-modules/ipython { };
+  # Newer versions of IPython no longer support Python 2.7.
+  ipython = if isPy27 then self.ipython_5 else self.ipython_6;
+
+  ipython_5 = callPackage ../development/python-modules/ipython/5.nix { };
+
+  ipython_6 = callPackage ../development/python-modules/ipython { };
 
   ipython_genutils = buildPythonPackage rec {
     version = "0.2.0";

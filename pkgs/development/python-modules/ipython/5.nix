@@ -8,10 +8,16 @@
 # Test dependencies
 , nose
 , pygments
+, testpath
+, isPy27
+, mock
 # Runtime dependencies
+, backports_shutil_get_terminal_size
 , jedi
 , decorator
+, pathlib2
 , pickleshare
+, requests2
 , simplegeneric
 , traitlets
 , prompt_toolkit
@@ -21,31 +27,26 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "6.0.0";
+  version = "5.3.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f429b82b8d9807068da734b15965768bd21b15d0b706340b6d1b4d6f6f5b98a4";
+    sha256 = "bf5e615e7d96dac5a61fbf98d9e2926d98aa55582681bea7e9382992a3f43c1d";
   };
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
 
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [ nose pygments ];
+  checkInputs = [ nose pygments testpath ] ++ lib.optional isPy27 mock;
 
   propagatedBuildInputs = [
-    jedi
-    decorator
-    pickleshare
-    simplegeneric
-    traitlets
-    prompt_toolkit
-    pexpect
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
+    backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
+    simplegeneric traitlets requests2 pathlib2 pexpect
+  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
   LC_ALL="en_US.UTF-8";
 
@@ -55,15 +56,10 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  # IPython 6.0.0 and above does not support Python < 3.3.
-  # The last IPython version to support older Python versions
-  # is 5.3.x.
-  disabled = pythonOlder "3.3";
-
   meta = {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds fridh ];
+    maintainers = with lib.maintainers; [ bjornfor jgeerds orivej lnl7 ];
   };
 }
