@@ -12721,23 +12721,7 @@ in {
     };
   });
 
-  httpbin = buildPythonPackage rec {
-    name = "httpbin-0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httpbin/${name}.tar.gz";
-      sha256 = "6b57f563900ecfe126015223a259463848daafbdc2687442317c0992773b9054";
-    };
-
-    propagatedBuildInputs = with self; [ flask markupsafe decorator itsdangerous six ];
-
-    meta = {
-      homepage = https://github.com/kennethreitz/httpbin;
-      description = "HTTP Request & Response Service";
-      license = licenses.mit;
-    };
-
-  };
+  httpbin = callPackage ../development/python-modules/httpbin { };
 
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.9.2";
