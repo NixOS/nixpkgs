@@ -54,7 +54,14 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelPackages = mkForce pkgs.linuxPackages_grsec_nixos;
+    # Select the right Grsecurity enabled kernel
+    # The kernel for the proprietary nvidia driver has PAX_RAP and PAX_KERNEXEC_PLUGIN_METHOD_OR disabled
+    boot.kernelPackages = 
+      if (any (x: x == "nvidia") config.services.xserver.videoDrivers)
+      then
+        mkForce pkgs.linuxPackages_grsec_nvidia
+      else
+        mkForce pkgs.linuxPackages_grsec_nixos;
 
     boot.kernelParams = [ "grsec_sysfs_restrict=0" ]
       ++ optional cfg.disableEfiRuntimeServices "noefi";

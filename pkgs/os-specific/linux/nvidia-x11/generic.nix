@@ -59,7 +59,12 @@ let
                    ]
               else [ (fetchurl {
                       url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel_4.10.patch?h=packages/nvidia;  sha256 = "0zhpx3baq2pca2pmz1af5cp2nzjxjx0j9w5xrdy204mnv3v2708z";
-                     }) ];
+                     })
+                     (optional (kernel.features.grsecurity or false) (fetchurl {
+                         url = https://gitweb.gentoo.org/repo/gentoo.git/plain/x11-drivers/nvidia-drivers/files/nvidia-drivers-375.20-pax.patch;
+                         sha256 = "0aw9svrxiz513l8v87djdwbzh4xvl0777v633p00psp3j6fs2nqn";
+                     }))
+                   ];
 
     inherit version useGLVND useProfiles;
     inherit (stdenv) system;
