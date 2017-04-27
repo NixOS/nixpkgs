@@ -13,7 +13,7 @@ in
 
 {
   meta = {
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [ ];
     doc = ./grsecurity.xml;
   };
 
