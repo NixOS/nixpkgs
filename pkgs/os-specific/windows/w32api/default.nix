@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, binutilsCross ? null
+{ stdenv, fetchurl, xz, binutils ? null
 , gccCross ? null, onlyHeaders ? false }:
 
 let
@@ -23,7 +23,7 @@ stdenv.mkDerivation ({
     cp -R include $out
   '';
 } else {
-  buildInputs = [ gccCross binutilsCross ];
+  buildInputs = [ gccCross binutils ];
 
   crossConfig = gccCross.crossConfig;
 

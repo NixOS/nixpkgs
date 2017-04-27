@@ -116,7 +116,7 @@ rec {
     listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
 
-  /* Filter an attribute set recursivelly by removing all attributes for
+  /* Filter an attribute set recursively by removing all attributes for
      which the given predicate return false.
 
      Example:
@@ -334,7 +334,7 @@ rec {
       value = f name (catAttrs name sets);
     }) names);
 
-  /* Implentation note: Common names  appear multiple times in the list of
+  /* Implementation note: Common names  appear multiple times in the list of
      names, hopefully this does not affect the system because the maximal
      laziness avoid computing twice the same expression and listToAttrs does
      not care about duplicated attribute names.
@@ -353,7 +353,7 @@ rec {
   zipAttrs = zipAttrsWith (name: values: values);
 
   /* Does the same as the update operator '//' except that attributes are
-     merged until the given pedicate is verified.  The predicate should
+     merged until the given predicate is verified.  The predicate should
      accept 3 arguments which are the path to reach the attribute, a part of
      the first attribute set and a part of the second attribute set.  When
      the predicate is verified, the value of the first attribute set is

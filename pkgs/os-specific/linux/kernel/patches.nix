@@ -100,9 +100,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.9.22";
-      grrev  = "201704120836";
-      sha512 = "3320r4myn9y5wf2i2aybl1aapcl9sms0z6p343xh5x0pvaphsjhksnh7cndrq0qxc7fqdwzh9nw1vf84qy02cg5nf8bq025jpkfp7qh";
+    { kver   = "4.9.24";
+      grrev  = "201704220732";
+      sha512 = "0n9v066z3qh296fyvsg1gnygy7jd0cy0pnywxzglh58dnibl28q2ywjnp4ff30andzzq7rvjkk4n151xvs1n04pf2azkgz6igwfisg7";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -121,12 +121,6 @@ rec {
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;
-    };
-
-
-  chromiumos_Kconfig_fix_entries_3_14 =
-    { name = "Kconfig_fix_entries_3_14";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
     };
 
   chromiumos_Kconfig_fix_entries_3_18 =

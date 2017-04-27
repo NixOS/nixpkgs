@@ -102,7 +102,9 @@
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
+  ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
   ./security/apparmor.nix
@@ -420,6 +422,7 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/keepalived/default.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix

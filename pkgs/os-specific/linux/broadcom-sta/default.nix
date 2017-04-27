@@ -25,13 +25,10 @@ stdenv.mkDerivation {
     ./i686-build-failure.patch
     ./license.patch
     ./linux-4.7.patch
+    # source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms
+    ./linux-4.8.patch
     ./null-pointer-fix.patch
     ./gcc.patch
-    (fetchpatch {
-      name = "linux-4.8.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms&id=8c6d80fc77eb20cbb4fd0eca71fa8a03b9447c3f";
-      sha256 = "0b963540gaj06q6ynfg47z8k5y3k2503yahbwawclfq4cxhl472a";
-    })
   ];
 
   makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
