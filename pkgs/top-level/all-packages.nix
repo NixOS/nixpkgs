@@ -16100,6 +16100,7 @@ with pkgs;
   weechat = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
+    guile = guile_2_0;
   };
 
   westonLite = callPackage ../applications/window-managers/weston {
