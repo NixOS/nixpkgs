@@ -4388,6 +4388,8 @@ in {
     };
   };
 
+  coveralls = callPackage ../development/python-modules/coveralls { };
+
   coverage = buildPythonPackage rec {
     name = "coverage-4.0.1";
 
@@ -5190,6 +5192,8 @@ in {
       pytest = null;
     };
   };
+
+  pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -10229,6 +10233,8 @@ in {
     };
   };
 
+  vcrpy = callPackage ../development/python-modules/vcrpy { };
+
   venusian = buildPythonPackage rec {
     name = "venusian-1.0";
 
@@ -12717,23 +12723,7 @@ in {
     };
   });
 
-  httpbin = buildPythonPackage rec {
-    name = "httpbin-0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httpbin/${name}.tar.gz";
-      sha256 = "6b57f563900ecfe126015223a259463848daafbdc2687442317c0992773b9054";
-    };
-
-    propagatedBuildInputs = with self; [ flask markupsafe decorator itsdangerous six ];
-
-    meta = {
-      homepage = https://github.com/kennethreitz/httpbin;
-      description = "HTTP Request & Response Service";
-      license = licenses.mit;
-    };
-
-  };
+  httpbin = callPackage ../development/python-modules/httpbin { };
 
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.9.2";
@@ -13589,17 +13579,7 @@ in {
     };
   };
 
-  kitchen = buildPythonPackage (rec {
-    name = "kitchen-1.1.1";
-    disabled = isPy3k;
-
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kitchen/kitchen-1.1.1.tar.gz";
-      sha256 = "0ki840hjk1q19w6icv0dj2jxb00966nwy9b1jib0dgdspj00yrr5";
-    };
-  });
+  kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
