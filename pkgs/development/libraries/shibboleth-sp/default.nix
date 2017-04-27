@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "1b5r4nd098lnjwr2g13f04ycqv5fvbrhpwg6fsdk8xy9cigvfzxj";
   };
 
-  # Needs pkgconfig to find systemd
   buildInputs = [ boost fcgi openssl opensaml-cpp log4shib pkgconfig xercesc xml-security-c xml-tooling-c ];
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -21,9 +20,12 @@ stdenv.mkDerivation rec {
     "--with-fastcgi"
   ];
 
-  meta = {
-    home = https://shibboleth.net/products/service-provider.html;
-    description = "Enables SSO and Federation web applications written with any programming language or framework";
-  };
+  enableParallelBuilding = true;
 
+  meta = with stdenv.lib; {
+    homepage    = "https://shibboleth.net/products/service-provider.html";
+    description = "Enables SSO and Federation web applications written with any programming language or framework";
+    platforms   = platforms.unix;
+    license     = licenses.asl20;
+  };
 }
