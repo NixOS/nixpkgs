@@ -27,7 +27,7 @@ let inherit (stdenv.lib) optional optionals hasPrefix; in
 let
   result = {
     libav_0_8 = libavFun "0.8.20" "0c7a2417c3a01eb74072691bb93ce802ae1be08f";
-    libav_11  = libavFun  "11.8"  "d0e93f6b229ae46c49d13ec183b13cfee70a51f0";
+    libav_11  = libavFun  "11.9"  "36ed1329099676ff3c970576e03c6a21f2da2e15";
     libav_12  = libavFun "12"     "4ecde7274621c82a6882b7614d907b28de25cc4e";
   };
 
@@ -41,7 +41,7 @@ let
 
     patches = []
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
-      ++ optional (vpxSupport && hasPrefix "11."  version) ./vpxenc-11.6-libvpx-1.5.patch;
+      ;
 
     preConfigure = "patchShebangs doc/texi2pod.pl";
 

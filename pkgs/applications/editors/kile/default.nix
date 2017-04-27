@@ -17,6 +17,7 @@
 , kparts
 , ktexteditor
 , kwindowsystem
+, okular
 , poppler
 }:
 
@@ -48,6 +49,7 @@ let
         kparts
         ktexteditor
         kwindowsystem
+        okular.unwrapped
         poppler
         qtscript
       ];
@@ -64,5 +66,5 @@ kdeWrapper
 {
   inherit unwrapped;
   targets = [ "bin/kile" ];
-  paths = [ konsole.unwrapped ];
+  paths = [ konsole.unwrapped okular.unwrapped ];
 }
