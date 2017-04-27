@@ -127,7 +127,7 @@ in
   /* Linux on the fuloong */
   fuloongminipc = let
     crossSystem = {
-      config = "mips64el-unknown-linux";
+      config = "mips64el-unknown-linux-gnu";
       bigEndian = false;
       arch = "mips";
       float = "hard";
