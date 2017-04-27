@@ -36,30 +36,29 @@ in
 
           Targets are downloaded to ${downloadDir} by default and are
           accessible to users in the "aria2" group.
-          '';
+        '';
       };
       openPorts = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
-          Open the ports in the firewall. Defaults are:
-          - UDP 6881-6999 for transfers
-          - TCP 6800 for RPC
-          '';
+          Open listen and RPC ports found in listenPortRange and rpcListenPort
+          options in the firewall.
+        '';
       };
       downloadDir = mkOption {
         type = types.string;
         default = "${downloadDir}";
         description = ''
           Directory to store downloaded files.
-          '';
+        '';
       };
       listenPortRange = mkOption {
         type = types.listOf types.attrs;
         default = [ { from = 6881; to = 6999; } ];
         description = ''
           Set UDP listening port range used by DHT(IPv4, IPv6) and UDP tracker.
-          '';
+        '';
       };
       rpcListenPort = mkOption {
         type = types.int;
@@ -72,21 +71,21 @@ in
         description = ''
           Set RPC secret authorization token.
           Read https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth to know how this option value is used.
-          '';
+        '';
       };
       extraArguments = mkOption {
         type = types.string;
-        example = "--rpc-secret=12345 --enable-rpc --rpc-listen-all";
+        example = "--rpc-listen-all --remote-time=true";
         default = "";
         description = ''
           Additional arguments to be passed to Aria2.
-          '';
+        '';
       };
     };
   };
 
   config = mkIf cfg.enable {
-    
+
     # Need to open ports for proper functioning
     networking.firewall = mkIf cfg.openPorts {
       allowedUDPPortRanges = config.services.aria2.listenPortRange;
@@ -109,17 +108,17 @@ in
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -m 0770 -p "${homeDir}"
-				chown aria2:aria2 "${homeDir}"
+        chown aria2:aria2 "${homeDir}"
         if [[ ! -d "${config.services.aria2.downloadDir}" ]]
-				then 
-					mkdir -m 0770 -p "${config.services.aria2.downloadDir}"
-					chown aria2:aria2 "${config.services.aria2.downloadDir}"
-				fi
+        then 
+          mkdir -m 0770 -p "${config.services.aria2.downloadDir}"
+          chown aria2:aria2 "${config.services.aria2.downloadDir}"
+        fi
         if [[ ! -e "${sessionFile}" ]]
-				then 
-					touch "${sessionFile}"
-					chown aria2:aria2 "${sessionFile}"
-				fi
+        then 
+          touch "${sessionFile}"
+          chown aria2:aria2 "${sessionFile}"
+        fi
         cp -f "${settingsFile}" "${settingsDir}/aria2.conf"
       '';
 
@@ -129,9 +128,8 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "aria2";
         Group = "aria2";
-				PermissionsStartOnly = true;
+        PermissionsStartOnly = true;
       };
     };
   };
 }
-
