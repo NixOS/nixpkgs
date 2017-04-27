@@ -33,7 +33,7 @@ let
       #! ${pkgs.bash}/bin/bash
 
       # Handle being called by SDDM.
-      if test "''${1:0:1}" = / ; then eval exec $1 $2 ; fi
+      if test "''${1:0:1}" = / ; then eval exec "$1" "$2" ; fi
 
       ${optionalString cfg.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
@@ -115,7 +115,7 @@ let
       : ''${desktopManager:=${cfg.desktopManager.default}}
 
       # Start the window manager.
-      case $windowManager in
+      case "$windowManager" in
         ${concatMapStrings (s: ''
           (${s.name})
             ${s.start}
@@ -125,7 +125,7 @@ let
       esac
 
       # Start the desktop manager.
-      case $desktopManager in
+      case "$desktopManager" in
         ${concatMapStrings (s: ''
           (${s.name})
             ${s.start}
