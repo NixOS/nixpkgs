@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Kitchen contains a cornucopia of useful code";
-    license = license.lgpl;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ mornfall ];
   };
 }
