@@ -15,9 +15,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
-  meta = {
-    home = https://shibboleth.net/products/opensaml-cpp.html;
-    description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
-  };
+  enableParallelBuilding = true;
 
+  meta = with stdenv.lib; {
+    homepage    = "https://shibboleth.net/products/opensaml-cpp.html";
+    description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
+    platforms   = platforms.unix;
+    license     = licenses.asl20;
+  };
 }
