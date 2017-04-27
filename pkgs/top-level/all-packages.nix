@@ -11585,22 +11585,7 @@ with pkgs;
 
   # Grsecurity packages
 
-  linux_grsec_nixos = callPackage ../build-support/grsecurity {
-    inherit (lib) overrideDerivation;
-    kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
-      kernelPatches = with self.kernelPatches; [
-        bridge_stp_helper
-        modinst_arg_list_too_long
-      ] ++ lib.optionals ((platform.kernelArch or null) == "mips")
-        [ kernelPatches.mips_fpureg_emu
-          kernelPatches.mips_fpu_sigill
-          kernelPatches.mips_ext3_n32
-        ];
-    };
-    grsecPatch = self.kernelPatches.grsecurity_testing;
-    kernelPatches = [ self.kernelPatches.grsecurity_nixos_kmod ];
-    extraConfig = callPackage ../os-specific/linux/kernel/grsecurity-nixos-config.nix { };
-  };
+  linux_grsec_nixos = kernelPatches.grsecurity_testing;
 
   linuxPackages_grsec_nixos =
     recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
