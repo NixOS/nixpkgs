@@ -1,33 +1,49 @@
 { buildPythonPackage
 , lib
-, fetchurl
-, pythonPackages
+, fetchPypi
+, mock
+, pytest_27
+, sh
+, coverage
+, docopt
+, requests2
+, git
 }:
 
-let
+buildPythonPackage rec {
   pname = "coveralls";
+  name = "${pname}-python-${version}";
   version = "1.1";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+  # wanted by tests
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0238hgdwbvriqxrj22zwh0rbxnhh9c6hh75i39ll631vq62h65il";
   };
 
-  buildInputs = with pythonPackages; [
-    coverage
-    docopt
-    requests
+  buildInputs = [
+    mock
+    sh
+    pytest_27
+    git
   ];
-  propagatedBuildInputs = [];
 
-  # Tests in neither the archive nor the repo
+  # FIXME: tests requires .git directory to be present
   doCheck = false;
 
+  checkPhase = ''
+    python setup.py test
+  '';
+
+  propagatedBuildInputs = [
+    coverage
+    docopt
+    requests2
+  ];
+
   meta = {
-    description = "py.test plugin to store test expectations and mark tests based on them";
-    homepage = https://github.com/gsnedders/pytest-expect;
+    description = "Show coverage stats online via coveralls.io";
+    homepage = https://github.com/coveralls-clients/coveralls-python;
     license = lib.licenses.mit;
   };
 }
