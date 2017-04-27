@@ -9,7 +9,7 @@ let
   lib = import ../default.nix;
   setTypesAssert = type: pred:
     mapAttrs (name: value:
-      #assert pred value;
+      assert pred value;
       setType type ({ inherit name; } // value));
   setTypes = type: setTypesAssert type (_: true);
 
