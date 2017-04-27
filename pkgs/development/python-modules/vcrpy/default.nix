@@ -1,6 +1,17 @@
-{ lib, pkgs, pythonPackages }:
+{ buildPythonPackage
+, lib
+, pkgs
+, pyyaml
+, mock
+, contextlib2
+, wrapt
+, pytest_27
+, httpbin
+, pytest-httpbin
+, yarl
+}:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   version = "1.10.5";
   name = "vcrpy-${version}";
 
@@ -9,7 +20,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "12kncg6jyvj15mi8ca74514f2x1ih753nhyz769nwvh39r468167";
   };
 
-  buildInputs = with pythonPackages; [
+  buildInputs = [
     pyyaml
     mock
     contextlib2
@@ -17,7 +28,12 @@ pythonPackages.buildPythonPackage rec {
     pytest_27
     httpbin
     pytest-httpbin
+    yarl
   ];
+
+  checkPhase = ''
+    py.test --ignore=tests/integration -k "TestVCRConnection.testing_connect"
+  '';
 
   meta = with lib; {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
