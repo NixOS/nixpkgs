@@ -237,14 +237,14 @@ in
               # arguments to $(tahoe start). The node directory must come first,
               # and arguments which alter Twisted's behavior come afterwards.
               ExecStart = ''
-                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+                ${settings.package}/bin/tahoe start "${nodedir}" -n -l- --pidfile="${pidfile}"
               '';
             };
             preStart = ''
-              if [ \! -d ${nodedir} ]; then
-                mkdir -p /var/db/tahoe-lafs
-                tahoe create-introducer ${nodedir}
-              fi
+              if [ ! -d "${nodedir}" ]; then
+                mkdir -p /var/db/tahoe-lafs &&
+                tahoe create-introducer "${nodedir}"
+              fi &&
 
               # Tahoe has created a predefined tahoe.cfg which we must now
               # scribble over.
@@ -252,7 +252,7 @@ in
               # we must do this on every prestart. Fixes welcome.
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
-              cp /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
+              cp /etc/tahoe-lafs/introducer-"${node}".cfg "${nodedir}"/tahoe.cfg
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.introducers (node: _:
@@ -337,14 +337,14 @@ in
               # arguments to $(tahoe start). The node directory must come first,
               # and arguments which alter Twisted's behavior come afterwards.
               ExecStart = ''
-                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+                ${settings.package}/bin/tahoe start "${nodedir}" -n -l- --pidfile="${pidfile}"
               '';
             };
             preStart = ''
-              if [ \! -d ${nodedir} ]; then
-                mkdir -p /var/db/tahoe-lafs
-                tahoe create-node --hostname=localhost ${nodedir}
-              fi
+              if [ ! -d "${nodedir}" ]; then
+                mkdir -p /var/db/tahoe-lafs &&
+                tahoe create-node --hostname=localhost "${nodedir}"
+              fi &&
 
               # Tahoe has created a predefined tahoe.cfg which we must now
               # scribble over.
@@ -352,7 +352,7 @@ in
               # we must do this on every prestart. Fixes welcome.
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
-              cp /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
+              cp /etc/tahoe-lafs/"${node}".cfg "${nodedir}"/tahoe.cfg
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.nodes (node: _:
