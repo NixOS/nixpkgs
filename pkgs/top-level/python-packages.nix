@@ -13593,17 +13593,7 @@ in {
     };
   };
 
-  kitchen = buildPythonPackage (rec {
-    name = "kitchen-1.1.1";
-    disabled = isPy3k;
-
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kitchen/kitchen-1.1.1.tar.gz";
-      sha256 = "0ki840hjk1q19w6icv0dj2jxb00966nwy9b1jib0dgdspj00yrr5";
-    };
-  });
+  kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
