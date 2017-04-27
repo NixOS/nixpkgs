@@ -2945,6 +2945,8 @@ in {
     };
   };
 
+  httpserver = callPackage ../development/python-modules/httpserver {};
+
   bleach = buildPythonPackage rec {
     pname = "bleach";
     version = "2.0.0";
