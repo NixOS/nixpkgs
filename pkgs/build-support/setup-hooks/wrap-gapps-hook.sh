@@ -36,10 +36,9 @@ wrapGAppsHook() {
   done
 
   if [ -z "$dontWrapGApps" ]; then
-    find "${prefix}/bin" "${prefix}/libexec" -type f -executable -print0 \
-    | while IFS= read -r -d '' file; do
-      echo "Wrapping program $file"
-      wrapProgram "$file" "${gappsWrapperArgs[@]}"
+    for i in $prefix/bin/* $prefix/libexec/*; do
+      echo "Wrapping app $i"
+      wrapProgram "$i" "${gappsWrapperArgs[@]}"
     done
   fi
 }
