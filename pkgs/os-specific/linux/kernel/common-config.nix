@@ -334,6 +334,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
+  ${optionalString (versionAtLeast version "4.4") ''
+    LEGACY_VSYSCALL_NONE y # Eliminate ASLR bypass due to vsyscall fixed address mapping
+  ''}
 
   # AppArmor support
   SECURITY_APPARMOR y
