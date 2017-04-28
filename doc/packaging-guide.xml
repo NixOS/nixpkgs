@@ -1,24 +1,61 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xml:id="chap-quick-start">
+         xml:id="chap-packaging-guide">
 
-<title>Quick Start to Adding a Package</title>
+  <title>Packaging Guide</title>
 
-<para>To add a package to Nixpkgs:
+  <section xml:id="sec-policies">
 
-<orderedlist>
+    <title>Policies</title>
 
-  <listitem>
+    <para>The forum for policy discussion can be found at the <link
+    xlink:href="https://github.com/NixOS/nixpkgs/labels/6.topic%3A%20policy%20discussion">
+    issue tracker, topics are labeled with 'policy
+    discussion'</link>. This section brewed from maintainer
+    opinions. Regard the following paragraphs as drafts.</para>
+
+    <para>Non free packages are allowed but will not be built by
+    Hydra, and not be available in the binary cache. We want all software
+    to build from source. Packaging binaries is allowed. This is
+    considered when the build process is complex or it is not possible to
+    make a package available without including binaries. Patching binaries
+    to use dependencies in nixpkgs is recommended. Downloading from
+    reliable and public sources is recommended. Windows packages are not
+    allowed, exceptions should be discussed.</para>
+
+    <para>Unstable versions of packages are allowed, these are not
+    built by Hydra unless there is a high demand and available
+resources. Older versions are allowed if packages depending on it can
+not be built with a newer version.  </para>
+
+  </section>
+
+  <section xml:id="sec-guide">
+
+    <title>Guide</title>
+
+    <para>Check if the software you want already have been
+    packaged. Keep in the package your are looking for can have a
+    different name. <link
+    xlink:href="https://github.com/ggreer/the_silver_searcher">the_silver_searcher</link>
+    is named silver-searcher in nixpkgs. Your perception may say it
+    is named <emphasis>ag</emphasis> because that is the name of the
+    binary. This may be circumvented with aliases, as in this case we
+    have ag aliased as silver-searcher in nixpkgs. One way to see if
+    certain software have been packaged is to use the<link
+    xlink:href="https://github.com/NixOS/nixpkgs">search
+    function</link> at github.
+    </para>
+
     <para>Checkout the Nixpkgs source tree:
 
-<screen>
-$ git clone git://github.com/NixOS/nixpkgs.git 
-$ cd nixpkgs</screen>
+    <screen>$ git clone git://github.com/NixOS/nixpkgs.git
+$ git remote add channel git://github.com/NixOS/nixpkgs-channels.git</screen>
 
+    The channel remote provides a way to checkout the last successful build
+    from any Hydra channel.
     </para>
-  </listitem>
 
-  <listitem>
     <para>Find a good place in the Nixpkgs tree to add the Nix
     expression for your package.  For instance, a library package
     typically goes into
@@ -26,31 +63,17 @@ $ cd nixpkgs</screen>
     while a web browser goes into
     <filename>pkgs/applications/networking/browsers/<replaceable>pkgname</replaceable></filename>.
     See <xref linkend="sec-organisation" /> for some hints on the tree
-    organisation.  Create a directory for your package, e.g.
-
-<screen>
-$ mkdir pkgs/development/libraries/libfoo</screen>
-  
+    organisation.
     </para>
-  </listitem>
 
-  <listitem>
     <para>In the package directory, create a Nix expression — a piece
     of code that describes how to build the package.  In this case, it
     should be a <emphasis>function</emphasis> that is called with the
     package dependencies as arguments, and returns a build of the
     package in the Nix store.  The expression should usually be called
-    <filename>default.nix</filename>.
-
-<screen>
-$ emacs pkgs/development/libraries/libfoo/default.nix
-$ git add pkgs/development/libraries/libfoo/default.nix</screen>
-
-    </para>
-
-    <para>You can have a look at the existing Nix expressions under
-    <filename>pkgs/</filename> to see how it’s done.  Here are some
-    good ones:
+    <filename>default.nix</filename>. You can have a look at the existing
+    Nix expressions under <filename>pkgs/</filename> to see these are
+    written.  Here are some good ones:
 
       <itemizedlist>
 
@@ -129,95 +152,67 @@ $ git add pkgs/development/libraries/libfoo/default.nix</screen>
 
       </itemizedlist>
 
-    </para>
 
-    <para>Some notes:
+      </para>
 
-      <itemizedlist>
+  <para>The exact syntax and semantics of the Nix expression language,
+  including the built-in function, are described in the Nix manual in
+  the <link
+  xlink:href="http://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual/#chap-writing-nix-expressions">chapter
+  on writing Nix expressions</link>.</para>
 
-        <listitem>
-          <para>All <varname linkend="chap-meta">meta</varname>
-          attributes are optional, but it’s still a good idea to
-          provide at least the <varname>description</varname>,
-          <varname>homepage</varname> and <varname
-          linkend="sec-meta-license">license</varname>.</para>
-        </listitem>
+  <para>Add a call to the function defined in the previous
+  step to <link
+  xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix"><filename>pkgs/top-level/all-packages.nix</filename></link>
+  with some descriptive name for the variable,
+  e.g. <varname>libfoo</varname>.
 
-        <listitem>
-          <para>You can use <command>nix-prefetch-url</command> (or similar nix-prefetch-git, etc)
-          <replaceable>url</replaceable> to get the SHA-256 hash of
-          source distributions. There are similar commands as <command>nix-prefetch-git</command> and
-          <command>nix-prefetch-hg</command> available in <literal>nix-prefetch-scripts</literal> package.</para>
-        </listitem>
+  <screen> $ emacs pkgs/top-level/all-packages.nix</screen>
+  </para>
 
-        <listitem>
-          <para>A list of schemes for <literal>mirror://</literal>
-          URLs can be found in <link
-          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/fetchurl/mirrors.nix"><filename>pkgs/build-support/fetchurl/mirrors.nix</filename></link>.</para>
-        </listitem>
+<para>The attributes in that file are sorted by category (like
+“Development / Libraries”) that more-or-less correspond to the
+directory structure of Nixpkgs, and then by attribute name.</para>
 
-      </itemizedlist>
+  <para>To test whether the package builds, run the
+  following command from the root of the nixpkgs source tree:
+  <screen> $ nix-build -A libfoo</screen>
+  where <varname>libfoo</varname> should be the variable name defined
+  in the previous step.  You may want to add the flag
+  <option>-K</option> to keep the temporary build directory in case
+  something fails.  If the build succeeds, a symlink
+  <filename>./result</filename> to the package in the Nix store is
+  created.</para>
 
-    </para>
+  <para>If you want to install the package into your
+  profile (optional), do <screen> $ nix-env -f . -iA libfoo</screen>
+  </para>
 
-    <para>The exact syntax and semantics of the Nix expression
-    language, including the built-in function, are described in the
-    Nix manual in the <link
-    xlink:href="http://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual/#chap-writing-nix-expressions">chapter
-    on writing Nix expressions</link>.</para>
-    
-  </listitem>
+  <para>Instructions for preparing and submitting patches are
+  described <link xlink:href="#chap-submitting-changes">here</link>.
+  </para>
 
-  <listitem>
-    <para>Add a call to the function defined in the previous step to
-    <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix"><filename>pkgs/top-level/all-packages.nix</filename></link>
-    with some descriptive name for the variable,
-    e.g. <varname>libfoo</varname>.
+  <section xml:id="sec-guide-notes">
 
-    <screen>
-$ emacs pkgs/top-level/all-packages.nix</screen>
-      
-    </para>
+  <title>Notes</title>
 
-    <para>The attributes in that file are sorted by category (like
-    “Development / Libraries”) that more-or-less correspond to the
-    directory structure of Nixpkgs, and then by attribute name.</para>
-  </listitem>
+  <para>All <varname linkend="chap-meta">meta</varname>
+  attributes are optional, but it’s still a good idea to provide at
+  least the <varname>description</varname>, <varname>homepage</varname>
+  and <varname linkend="sec-meta-license">license</varname>.</para>
 
-  <listitem>
-    <para>To test whether the package builds, run the following command
-    from the root of the nixpkgs source tree:
+  <para>You can use <command>nix-prefetch-url</command>
+  (or similar nix-prefetch-git, etc) <replaceable>url</replaceable> to
+  get the SHA-256 hash of source distributions. There are similar
+  commands as <command>nix-prefetch-git</command> and
+  <command>nix-prefetch-hg</command> available in
+  <literal>nix-prefetch-scripts</literal> package.</para>
 
-    <screen>
-$ nix-build -A libfoo</screen>
+  <para>A list of schemes for
+  <literal>mirror://</literal> URLs can be found in <link
+  xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/fetchurl/mirrors.nix"><filename>pkgs/build-support/fetchurl/mirrors.nix</filename></link>.</para>
 
-    where <varname>libfoo</varname> should be the variable name
-    defined in the previous step.  You may want to add the flag
-    <option>-K</option> to keep the temporary build directory in case
-    something fails.  If the build succeeds, a symlink
-    <filename>./result</filename> to the package in the Nix store is
-    created.</para>
-  </listitem>
-
-  <listitem>
-    <para>If you want to install the package into your profile
-    (optional), do
-
-    <screen>
-$ nix-env -f . -iA libfoo</screen>
-
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>Optionally commit the new package and open a pull request, or send a patch to
-    <literal>nix-dev@cs.uu.nl</literal>.</para>
-  </listitem>
-
-
-</orderedlist>
-
-</para>
+  </section>
+</section>
 
 </chapter>
