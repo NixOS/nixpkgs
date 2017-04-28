@@ -1,21 +1,27 @@
-{ stdenv, fetchgit, python2Packages, gnupg1orig, makeWrapper, openssl }:
+{ stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
 
 python2Packages.buildPythonApplication rec {
   name = "mailpile-${version}";
-  version = "0.4.1";
+  version = "0.5.x-git-master-20170301";
 
-  src = fetchgit {
-    url = "git://github.com/pagekite/Mailpile";
-    rev = "refs/tags/${version}";
-    sha256 = "118b5zwfwmzj38p0mkj3r1s09jxg8x38y0a42b21imzpmli5vpb5";
+  src = fetchFromGitHub {
+    owner = "mailpile";
+    repo = "Mailpile";
+    rev = "523c9719c12303b7926b59913599ce50b601bc3f";
+    sha256 = "15g8va96cdab60zr17ndm8f2jw7x7l97j4ssz19mcjm60vqni0ih";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py --replace "data_files.append((dir" "data_files.append(('lib/${python2Packages.python.libPrefix}/site-packages/' + dir"
+    patchShebangs scripts
   '';
+  PBR_VERSION=version;
+
+  buildInputs = with python2Packages; [ pbr git ];
 
   propagatedBuildInputs = with python2Packages; [
-    makeWrapper pillow jinja2 spambayes python2Packages.lxml
+    cryptography
+    pillow jinja2 spambayes python2Packages.lxml
     pgpdump gnupg1orig
   ];
 
