@@ -11896,7 +11896,7 @@ with pkgs;
 
   # Grsecurity packages
 
-  linux_grsec_nixos = throw "grsecurity/PaX is unsupported";
+  linux_grsec_nixos = kernelPatches.grsecurity_testing;
 
   linuxPackages_grsec_nixos =
     recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
