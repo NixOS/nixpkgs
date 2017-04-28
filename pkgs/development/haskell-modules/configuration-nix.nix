@@ -120,8 +120,6 @@ self: super: builtins.intersectAttrs super {
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
-  webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
-  webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
