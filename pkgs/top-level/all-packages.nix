@@ -4027,6 +4027,8 @@ with pkgs;
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
+  srcml = callPackage ../applications/version-management/srcml { };
+
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
   sshuttle = callPackage ../tools/security/sshuttle { };
