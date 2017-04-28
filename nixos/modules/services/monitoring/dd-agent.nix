@@ -57,7 +57,7 @@ let
     instances:
       - use_mount: no
   '';
-  
+
   networkConfig = pkgs.writeText "network.yaml" ''
     init_config:
 
@@ -68,44 +68,29 @@ let
           - lo
           - lo0
   '';
-  
+
   postgresqlConfig = pkgs.writeText "postgres.yaml" cfg.postgresqlConfig;
   nginxConfig = pkgs.writeText "nginx.yaml" cfg.nginxConfig;
   mongoConfig = pkgs.writeText "mongo.yaml" cfg.mongoConfig;
   jmxConfig = pkgs.writeText "jmx.yaml" cfg.jmxConfig;
   processConfig = pkgs.writeText "process.yaml" cfg.processConfig;
-  
-  etcfiles =
-    [ { source = ddConf;
-        target = "dd-agent/datadog.conf";
-      }
-      { source = diskConfig;
-        target = "dd-agent/conf.d/disk.yaml";
-      }
-      { source = networkConfig;
-        target = "dd-agent/conf.d/network.yaml";
-      } ] ++
-    (optional (cfg.postgresqlConfig != null)
-      { source = postgresqlConfig;
-        target = "dd-agent/conf.d/postgres.yaml";
-      }) ++
-    (optional (cfg.nginxConfig != null)
-      { source = nginxConfig;
-        target = "dd-agent/conf.d/nginx.yaml";
-      }) ++
-    (optional (cfg.mongoConfig != null)
-      { source = mongoConfig;
-        target = "dd-agent/conf.d/mongo.yaml";
-      }) ++
-    (optional (cfg.processConfig != null)
-      { source = processConfig;
-        target = "dd-agent/conf.d/process.yaml";
-      }) ++
-    (optional (cfg.jmxConfig != null)
-      { source = jmxConfig;
-        target = "dd-agent/conf.d/jmx.yaml";
-      });
 
+  conf-d = pkgs.runCommand "dd-agent-conf.d" {} ''
+    mkdir -p $out/conf.d
+
+    # Copy default configs first
+    cp -R ${pkgs.dd-agent}/agent/conf.d-system/* $out/conf.d/
+
+    # Override config files
+    ln -sf ${ddConf} $out/datadog.conf
+    ln -sf ${diskConfig} $out/conf.d/disk.yaml
+    ln -sf ${networkConfig} $out/conf.d/network.yaml
+    ${optionalString (cfg.postgresqlConfig != null) "ln -sf ${postgresqlConfig} $out/conf.d/postgres.yaml"}
+    ${optionalString (cfg.nginxConfig != null) "ln -sf ${nginxConfig} $out/conf.d/nginx.yaml"}
+    ${optionalString (cfg.mongoConfig != null) "ln -sf ${mongoConfig} $out/conf.d/mongo.yaml"}
+    ${optionalString (cfg.processConfig != null) "ln -sf ${processConfig} $out/conf.d/process.yaml"}
+    ${optionalString (cfg.jmxConfig != null) "ln -sf ${jmxConfig} $out/conf.d/jmx.yaml"}
+  '';
 in {
   options.services.dd-agent = {
     enable = mkOption {
@@ -145,7 +130,7 @@ in {
       default = null;
       type = types.uniq (types.nullOr types.string);
     };
-    
+
     mongoConfig = mkOption {
       description = "MongoDB integration configuration";
       default = null;
@@ -161,7 +146,7 @@ in {
     processConfig = mkOption {
       description = ''
         Process integration configuration
- 
+
         See http://docs.datadoghq.com/integrations/process/
       '';
       default = null;
@@ -227,6 +212,9 @@ in {
       restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig ];
     };
 
-    environment.etc = etcfiles;
+    environment.etc = [{
+      source = conf-d;
+      target = "dd-agent";
+    }];
   };
 }
