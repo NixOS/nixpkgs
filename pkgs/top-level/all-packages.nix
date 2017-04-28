@@ -17765,7 +17765,7 @@ with pkgs;
 
   yacas = callPackage ../applications/science/math/yacas { };
 
-  speedcrunch = libsForQt56.callPackage ../applications/science/math/speedcrunch { };
+  speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
 
