@@ -18,6 +18,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
+  shouldCheckMeta = config.checkMeta or false;
+
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   whitelist = config.whitelistedLicenses or [];
@@ -151,6 +153,7 @@ let
         broken = remediate_whitelist "Broken";
         blacklisted = x: "";
         insecure = remediate_insecure;
+        unknown-meta = x: "";
       };
       remediate_whitelist = allow_attr: attrs:
         ''
@@ -202,6 +205,32 @@ let
 
           '' + ((builtins.getAttr reason remediation) attrs));
 
+      metaTypes = with lib.types; {
+        # These keys are documented
+        description = str;
+        longDescription = str;
+        branch = str;
+        homepage = str;
+        downloadPage = str;
+        license = either (listOf lib.types.attrs) lib.types.attrs;
+        maintainers = listOf str;
+        priority = int;
+        platforms = listOf str;
+        hydraPlatforms = listOf str;
+        broken = bool;
+
+        # Weirder stuff that doesn't appear in the documentation?
+        version = str;
+        updateWalker = bool;
+        executables = listOf str;
+      };
+
+      checkMetaAttr = k: v:
+        if metaTypes?${k} then
+          if metaTypes.${k}.check v then null else "key '${k}' has a value of an invalid type; expected ${metaTypes.${k}.description}"
+        else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
+      checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+
       # Check if a derivation is valid, that is whether it passes checks for
       # e.g brokenness or license.
       #
@@ -219,6 +248,8 @@ let
           { valid = false; reason = "broken"; errormsg = "is not supported on ‘${result.system}’"; }
         else if !(hasAllowedInsecure attrs) then
           { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
+        else let res = checkMeta (attrs.meta or {}); in if res != [] then
+          { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
         else { valid = true; };
 
       outputs' =
