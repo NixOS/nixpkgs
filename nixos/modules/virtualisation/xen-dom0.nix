@@ -331,6 +331,9 @@ in
         IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ address`
         export XEN_BRIDGE_NETWORK_ADDRESS="${"\${data[1]//[[:blank:]]/}"}"
 
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ mask`
+        export XEN_BRIDGE_NETMASK="${"\${data[1]//[[:blank:]]/}"}"
+
         echo "${cfg.bridge.address} host gw dns" > /var/run/xen/dnsmasq.hostsfile
 
         cat <<EOF > /var/run/xen/dnsmasq.conf
@@ -369,6 +372,7 @@ in
 
         ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge.name}
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} ${cfg.bridge.address}
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} netmask $XEN_BRIDGE_NETMASK
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} up
       '';
       serviceConfig.ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/var/run/xen/dnsmasq.conf";
