@@ -1,20 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, nix, makeWrapper }:
+{ stdenv, lib, fetchFromGitHub, nix, makeWrapper, coreutils, gnutar, gzip, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "nix-bundle";
   name = "${pname}-${version}";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13730rfnqjv1m2mky2g0cq77yzp2j215zrvy3lhpiwgmh97vviih";
+    sha256 = "15r77pchf4s4cdv4lvw2zw1yic78k8p0n2r954qq370vscw30yac";
   };
 
-  buildInputs = [ nix makeWrapper ];
+  # coreutils, gnutar is actually needed by nix for bootstrap
+  buildInputs = [ nix coreutils makeWrapper gnutar gzip bzip2 ];
 
-  binPath = lib.makeBinPath [ nix ];
+  binPath = lib.makeBinPath [ nix coreutils gnutar gzip bzip2 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
