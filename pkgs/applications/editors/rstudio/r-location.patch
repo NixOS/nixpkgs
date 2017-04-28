@@ -1,24 +1,14 @@
-diff -ur rstudio-0.98.110-old/src/cpp/core/CMakeLists.txt rstudio-0.98.110-new/src/cpp/core/CMakeLists.txt
---- rstudio-0.98.110-old/src/cpp/core/r_util/REnvironmentPosix.cpp	2013-04-28 10:02:14.000000000 -0400
-+++ rstudio-0.98.110-new/src/cpp/core/r_util/REnvironmentPosix.cpp	2015-03-23 15:06:35.533400807 -0400
-@@ -84,9 +84,7 @@
+--- rstudio-1.1.135-old/src/cpp/core/r_util/REnvironmentPosix.cpp	2017-04-04 09:18:42.460994359 +0000
++++ rstudio-1.1.135-new/src/cpp/core/r_util/REnvironmentPosix.cpp	2017-04-04 09:21:29.254012434 +0000
+@@ -87,10 +87,7 @@
  {
     // define potential paths
     std::vector<std::string> rScriptPaths;
 -   rScriptPaths.push_back("/usr/bin/R");
 -   rScriptPaths.push_back("/usr/local/bin/R");
 -   rScriptPaths.push_back("/opt/local/bin/R");
+-   rScriptPaths.push_back("/Library/Frameworks/R.framework/Resources/bin/R");
 +   rScriptPaths.push_back("@R@/bin/R");
     return scanForRScript(rScriptPaths, pErrMsg);
  }
-
-@@ -220,8 +218,7 @@
-       // scan in standard locations as a fallback
-       std::string scanErrMsg;
-       std::vector<std::string> rScriptPaths;
--      rScriptPaths.push_back("/usr/local/bin/R");
--      rScriptPaths.push_back("/usr/bin/R");
-+      rScriptPaths.push_back("@R@/bin/R");
-       FilePath scriptPath = scanForRScript(rScriptPaths, &scanErrMsg);
-       if (scriptPath.empty())
-       {
+ 
