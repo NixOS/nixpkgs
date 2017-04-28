@@ -1,0 +1,10 @@
+--- File-Slurp-9999.19.orig/lib/File/Slurp.pm	2011-05-30 21:58:53.000000000 +0200
++++ File-Slurp-9999.19/lib/File/Slurp.pm	2017-04-28 10:05:59.047681755 +0200
+@@ -4,6 +4,7 @@
+ 
+ use strict;
+ use warnings ;
++no warnings 'deprecated';
+ 
+ use Carp ;
+ use Exporter ;

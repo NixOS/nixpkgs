@@ -5537,6 +5537,8 @@ let self = _self // overrides; _self = with self; {
 
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
+    # WARNING: check on next update if deprecation warning is gone
+    patches = [ ../development/perl-modules/File-Slurp/silence-deprecation.patch ];
     src = fetchurl {
       url = mirror://cpan/authors/id/U/UR/URI/File-Slurp-9999.19.tar.gz;
       sha256 = "0hrn4nipwx40d6ji8ssgr5nw986z9iqq8cn0kdpbszh9jplynaff";
