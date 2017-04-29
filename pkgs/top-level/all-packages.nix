@@ -403,6 +403,8 @@ with pkgs;
 
   ammonite-repl = callPackage ../development/tools/ammonite {};
 
+  amqptools = callPackage ../tools/misc/amqptools { };
+
   amtterm = callPackage ../tools/system/amtterm {};
 
   analog = callPackage ../tools/admin/analog {};
