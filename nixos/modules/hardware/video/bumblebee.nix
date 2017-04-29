@@ -13,7 +13,7 @@ let
     useDisplayDevice = cfg.connectDisplay;
   };
 
-  useBbswitch = cfg.pmMethod == "bbswitch";
+  useBbswitch = cfg.pmMethod == "bbswitch" || cfg.pmMethod == "auto" && useNvidia;
 
   primus = pkgs.primus.override {
     inherit useNvidia;
@@ -65,7 +65,7 @@ in
 
       pmMethod = mkOption {
         default = "auto";
-        type = types.enum [ "auto" "bbswitch" "nouveau" "switcheroo" "none" ];
+        type = types.enum [ "auto" "bbswitch" "switcheroo" "none" ];
         description = ''
           Set preferred power management method for unused card.
         '';

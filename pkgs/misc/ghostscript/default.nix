@@ -92,6 +92,10 @@ stdenv.mkDerivation rec {
     mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    for file in $out/lib/*.dylib* ; do
+      install_name_tool -id "$file" $file
+    done
   '';
 
   preFixup = lib.optionalString stdenv.isDarwin ''

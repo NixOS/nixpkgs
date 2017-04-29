@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline, bison, libX11, libICE, libXaw, libXext}:
+{stdenv, fetchurl, readline, bison, flex, libX11, libICE, libXaw, libXext}:
 
 stdenv.mkDerivation {
   name = "ngspice-26";
@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "51e230c8b720802d93747bc580c0a29d1fb530f3dd06f213b6a700ca9a4d0108";
   };
 
-  buildInputs = [ readline libX11 bison libICE libXaw libXext ];
+  buildInputs = [ readline libX11 flex bison libICE libXaw libXext ];
 
-  configureFlags = [ "--enable-x" "--with-x" "--with-readline" ];
+  configureFlags = [ "--enable-x" "--with-x" "--with-readline" "--enable-xspice" "--enable-cider" ];
 
   meta = with stdenv.lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";

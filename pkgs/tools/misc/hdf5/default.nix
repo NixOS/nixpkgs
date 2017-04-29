@@ -12,7 +12,7 @@
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
 
-with { inherit (stdenv.lib) optional optionals; };
+let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   version = "1.8.18";

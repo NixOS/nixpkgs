@@ -8,8 +8,7 @@
   fetchgit,
   guile,
   libtool,
-  pkgconfig,
-  buildEnv
+  pkgconfig
   }:
 stdenv.mkDerivation rec {
   name = "guile-sdl2-${version}";

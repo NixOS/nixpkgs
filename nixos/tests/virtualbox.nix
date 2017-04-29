@@ -65,7 +65,7 @@ let
       touch /mnt-root/boot-done
       hostname "${vmName}"
       mkdir -p /nix/store
-      unshare -m "@shell@" -c '
+      unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
         mount -t vboxsf nixstore /nix/store
         exec "$stage2Init"
       '

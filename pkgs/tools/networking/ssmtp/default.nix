@@ -10,6 +10,10 @@ stdenv.mkDerivation {
     sha256 = "0dps8s87ag4g3jr6dk88hs9zl46h3790marc5c2qw7l71k4pvhr2";
   };
 
+  # A request has been made to merge this patch into ssmtp.
+  # See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=858781
+  patches = [ ./ssmtp_support_AuthPassFile_parameter.patch ];
+
   configureFlags = "--sysconfdir=/etc ${if tlsSupport then "--enable-ssl" else ""}";
 
   postConfigure =
@@ -27,7 +31,8 @@ stdenv.mkDerivation {
   
   buildInputs = stdenv.lib.optional tlsSupport openssl;
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ basvandijk ];
   };
 }

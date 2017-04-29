@@ -1,11 +1,12 @@
 { fetchurl, stdenv, ant, jdk }:
 
 stdenv.mkDerivation rec {
-  name = "fop-1.1";
+  name = "fop-${version}";
+  version = "2.1";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/fop/source/${name}-src.tar.gz";
-    sha256 = "08i56d57w5dl5bqchr34x9165hvi5h4bhiflxhi0a4wd56rlq5jq";
+    sha256 = "165rx13q47l6qc29ppr7sg1z26vw830s3rkklj5ap7wgvy0ivbz5";
   };
 
   buildInputs = [ ant jdk ];
@@ -45,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = http://xmlgraphics.apache.org/fop/;
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ndowens ];
   };
 }

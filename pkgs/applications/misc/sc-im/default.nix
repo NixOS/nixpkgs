@@ -1,23 +1,25 @@
-{ stdenv, fetchFromGitHub, yacc, ncurses, libxml2, pkgconfig }:
+{ stdenv, fetchFromGitHub, yacc, ncurses, libxml2, libzip, libxls, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.0";
+  version = "0.6.0";
   name = "sc-im-${version}";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "1v1cfmfqs5997bqlirp6p7smc3qrinq8dvsi33sk09r33zkzyar0";
+    sha256 = "02ak3b0vv72mv38cwvy7qp0y6hgrzcgahkv1apgks3drpnz5w1sj";
   };
 
-  buildInputs = [ yacc ncurses libxml2 pkgconfig ];
+  buildInputs = [ yacc ncurses libxml2 libzip libxls pkgconfig ];
 
   buildPhase = ''
     cd src
 
-    sed -i "s,prefix=/usr,prefix=$out," Makefile
-    sed -i "s,-I/usr/include/libxml2,-I$libxml2," Makefile
+    sed -e "\|^prefix  = /usr/local|   s|/usr/local|$out|" \
+        -e "\|^#LDLIBS += -lxlsreader| s|^#||            " \
+        -e "\|^#CFLAGS += -DXLS|       s|^#||            " \
+        -i Makefile
 
     make
     export DESTDIR=$out

@@ -12,7 +12,7 @@ let
     nodes = [ ${concatMapStringsSep "," (s: ''"${s}"'') cfg.nodes}, ]
     prefix = "${cfg.prefix}"
     log-level = "${cfg.logLevel}"
-    watch = ${if cfg.watch then "true" else "false"}
+    watch = ${boolToString cfg.watch}
   '';
 
 in {

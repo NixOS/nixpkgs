@@ -1,23 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, autoconf, automake, alsaLib, gtk3, glibc, libnotify, libX11 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, alsaLib, gtk3, glib, libnotify, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "pnmixer-${version}";
-  version = "0.7";
+  version = "0.7.1-rc1";
 
   src = fetchFromGitHub {
     owner = "nicklan";
     repo = "pnmixer";
     rev = "v${version}";
-    sha256 = "077l28qhr82ifqfwc2nqi5q1hmi6dyqqbhmjcsn27p4y433f3rpb";
+    sha256 = "0ns7s1jsc7fc3fvs9m3xwbv1fk1410cqc5w1cmia1mlzy94r3r6p";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake intltool ];
+  nativeBuildInputs = [ cmake pkgconfig gettext ];
 
-  buildInputs = [ alsaLib gtk3 glibc libnotify libX11 ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  buildInputs = [ alsaLib gtk3 glib libnotify libX11 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/nicklan/pnmixer;

@@ -12,7 +12,7 @@ use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix fil
     {
 
         rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [ 
+            packages = with self.rPackages; [
                 devtools
                 ggplot2
                 reshape2
@@ -65,7 +65,7 @@ set `useRPackages` to `true`, like below:
     {
 
         rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [ 
+            packages = with self.rPackages; [
                 devtools
                 ggplot2
                 reshape2
@@ -87,14 +87,13 @@ this into your user profile.
 ## Updating the package set
 
 ```bash
+nix-shell generate-shell.nix
+
 Rscript generate-r-packages.R cran  > cran-packages.nix.new
 mv cran-packages.nix.new cran-packages.nix
 
 Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
 mv bioc-packages.nix.new bioc-packages.nix
-
-Rscript generate-r-packages.R irkernel  > irkernel-packages.nix.new
-mv irkernel-packages.nix.new irkernel-packages.nix
 ```
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
@@ -107,4 +106,3 @@ nix-build test-evaluation.nix --dry-run
 ```
 
 If this exits fine, the expression is ok. If not, you have to edit `default.nix`
-

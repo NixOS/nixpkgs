@@ -4,18 +4,18 @@ let
 
 spirv_sources = {
   # `vulkan-loader` requires a specific version of `spirv-tools` and `spirv-headers` as specified in
-  # `<vulkan-loader-repo>/spirv-tools_revision`.
+  # `<vulkan-loader-repo>/external_revisions/spirv-tools_revision`.
   tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "37422e9dba1a3a8cb8028b779dd546d43add6ef8";
-    sha256 = "0sp2p4wg902clq0fr94vj19vyv43cq333jjxr0mjzay8dw2h4yzk";
+    rev = "7fe8a57a5bd72094e91f9f93e51dac2f2461dcb4";
+    sha256 = "0rh25y1k3m3f1nqs032lh3mng5qfw9kqn6xv9yzzm47i1i0b6hmr";
   };
   headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "c470b68225a04965bf87d35e143ae92f831e8110";
-    sha256 = "18jgcpmm0ixp6314r5w144l3wayxjkmwqgx8dk5jgyw36dammkwd";
+    rev = "6c08995e6e7b94129e6086c78198c77111f2f262";
+    sha256 = "07m12wm9prib7hldj7pbc8vwnj0x6llgx4shzgy8x4xbhbafawws";
   };
 };
 
@@ -23,7 +23,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "spirv-tools-${version}";
-  version = "2016-12-19";
+  version = "2017-03-23";
 
   src = spirv_sources.tools;
   patchPhase = ''ln -sv ${spirv_sources.headers} external/spirv-headers'';
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     license = licenses.asl20;
     platforms = platforms.linux;
+    maintainers = [ maintainers.ralith ];
   };
 }

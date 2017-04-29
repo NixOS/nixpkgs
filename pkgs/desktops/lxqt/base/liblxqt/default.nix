@@ -1,27 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, kde5, lxqt, xorg }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools,
+  qtx11extras, qttools, qtsvg, libqtxdg, kwindowsystem, xorg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "liblxqt";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "12gla3pdg0n28w15qrmha83xm3021xdby8ydwp1qzcips5pa5zac";
+    sha256 = "0dcsgj0qr4589wsibs6fdza4ncqavrhykd05d25rs78pa94lvvh5";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
   ];
 
   buildInputs = [
-    qt5.qtx11extras
-    qt5.qttools
-    qt5.qtsvg
-    kde5.kwindowsystem
-    lxqt.libqtxdg
+    qtx11extras
+    qttools
+    qtsvg
+    kwindowsystem
+    libqtxdg
     xorg.libXScrnSaver
   ];
 
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Core utility library for all LXQt components";
     homepage = https://github.com/lxde/liblxqt;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

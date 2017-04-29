@@ -33,5 +33,8 @@ python2Packages.buildPythonApplication rec {
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    knownVulnerabilities = [
+      "Numerous and uncounted, upstream has requested we not package it. See more: https://github.com/NixOS/nixpkgs/pull/23058#issuecomment-283515104"
+    ];
   };
 }

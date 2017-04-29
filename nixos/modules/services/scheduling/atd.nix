@@ -42,13 +42,14 @@ in
 
   config = mkIf cfg.enable {
 
-    security.setuidOwners = map (program: {
-      inherit program;
+    security.wrappers = builtins.listToAttrs (
+      map (program: { name = "${program}"; value = {
+      source = "${at}/bin/${program}";
       owner = "atd";
       group = "atd";
       setuid = true;
       setgid = true;
-    }) [ "at" "atq" "atrm" "batch" ];
+    };}) [ "at" "atq" "atrm" "batch" ]);
 
     environment.systemPackages = [ at ];
 

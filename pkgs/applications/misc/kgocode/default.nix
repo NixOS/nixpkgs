@@ -1,9 +1,9 @@
-{ fetchgit, stdenv, cmake, kdelibs, automoc4 } :
+{ fetchgit, stdenv, cmake, kdelibs4, automoc4 } :
 
 stdenv.mkDerivation rec {
   name = "kgocode-0.0.1";
 
-  buildInputs = [ cmake kdelibs automoc4 ];
+  buildInputs = [ cmake kdelibs4 automoc4 ];
 
   src = fetchgit {
     url = https://bitbucket.org/lucashnegri/kgocode.git;

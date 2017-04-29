@@ -29,8 +29,8 @@ let
     };
 
   cronJob = ''
-    @reboot   logcheck env PATH=/var/setuid-wrappers:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck -R ${flags}
-    2 ${cfg.timeOfDay} * * * logcheck env PATH=/var/setuid-wrappers:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck ${flags}
+    @reboot   logcheck env PATH=/run/wrappers/bin:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck -R ${flags}
+    2 ${cfg.timeOfDay} * * * logcheck env PATH=/run/wrappers/bin:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck ${flags}
   '';
 
   writeIgnoreRule = name: {level, regex, ...}:
@@ -184,7 +184,7 @@ in
         description = ''
           This option defines extra ignore rules.
         '';
-        type = with types; loaOf (submodule ignoreOptions);
+        type = with types; attrsOf (submodule ignoreOptions);
       };
 
       ignoreCron = mkOption {
@@ -192,7 +192,7 @@ in
         description = ''
           This option defines extra ignore rules for cronjobs.
         '';
-        type = with types; loaOf (submodule ignoreCronOptions);
+        type = with types; attrsOf (submodule ignoreCronOptions);
       };
 
       extraGroups = mkOption {

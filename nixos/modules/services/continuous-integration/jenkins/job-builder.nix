@@ -29,6 +29,22 @@ in {
         '';
       };
 
+      accessUser = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          User id in Jenkins used to reload config.
+        '';
+      };
+
+      accessToken = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          User token in Jenkins used to reload config.
+        '';
+      };
+
       yamlJobs = mkOption {
         default = "";
         type = types.lines;
@@ -110,6 +126,11 @@ in {
           # Stamp file is placed in $JENKINS_HOME/jobs/$JOB_NAME/ to indicate
           # ownership. Enables tracking and removal of stale jobs.
           ownerStamp = ".config-xml-managed-by-nixos-jenkins-job-builder";
+          reloadScript = ''
+            echo "Asking Jenkins to reload config"
+            CRUMB=$(curl -s 'http://${cfg.accessUser}:${cfg.accessToken}@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+            curl --silent -X POST -H "$CRUMB" http://${cfg.accessUser}:${cfg.accessToken}@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}/reload
+          '';
         in
           ''
             rm -rf ${jobBuilderOutputDir}
@@ -142,10 +163,7 @@ in {
                 echo "Deleting stale job \"$jobname\""
                 rm -rf "$jobdir"
             done
-
-            echo "Asking Jenkins to reload config"
-            curl --silent -X POST http://${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}/reload
-          '';
+          '' + (if cfg.accessUser != "" then reloadScript else "");
       serviceConfig = {
         User = jenkinsCfg.user;
         RuntimeDirectory = "jenkins-job-builder";

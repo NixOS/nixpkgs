@@ -1,4 +1,6 @@
-{ system ? builtins.currentSystem, networkd }:
+{ system ? builtins.currentSystem
+# bool: whether to use networkd in the tests
+, networkd }:
 
 with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
@@ -166,24 +168,24 @@ let
           # Test vlan 1
           $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
           $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::1");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::2");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::2");
 
           $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
           $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::1");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:1::2");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::1");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:1::2");
 
           # Test vlan 2
           $client->waitUntilSucceeds("ping -c 1 192.168.2.1");
           $client->waitUntilSucceeds("ping -c 1 192.168.2.2");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::1");
-          $client->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::2");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::1");
+          $client->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::2");
 
           $router->waitUntilSucceeds("ping -c 1 192.168.2.1");
           $router->waitUntilSucceeds("ping -c 1 192.168.2.2");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::1");
-          $router->waitUntilSucceeds("ping6 -c 1 fd00:1234:5678:2::2");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::1");
+          $router->waitUntilSucceeds("ping -c 1 fd00:1234:5678:2::2");
         '';
     };
     dhcpOneIf = {
@@ -236,8 +238,8 @@ let
           firewall.allowPing = true;
           useDHCP = false;
           bonds.bond = {
-            mode = "balance-rr";
             interfaces = [ "eth1" "eth2" ];
+            driverOptions.mode = "balance-rr";
           };
           interfaces.eth1.ip4 = mkOverride 0 [ ];
           interfaces.eth2.ip4 = mkOverride 0 [ ];
@@ -390,11 +392,11 @@ let
           $client2->succeed("ip addr >&2");
 
           # Test ipv6
-          $client1->waitUntilSucceeds("ping6 -c 1 fc00::1");
-          $client1->waitUntilSucceeds("ping6 -c 1 fc00::2");
+          $client1->waitUntilSucceeds("ping -c 1 fc00::1");
+          $client1->waitUntilSucceeds("ping -c 1 fc00::2");
 
-          $client2->waitUntilSucceeds("ping6 -c 1 fc00::1");
-          $client2->waitUntilSucceeds("ping6 -c 1 fc00::2");
+          $client2->waitUntilSucceeds("ping -c 1 fc00::1");
+          $client2->waitUntilSucceeds("ping -c 1 fc00::2");
         '';
     };
     vlan = let

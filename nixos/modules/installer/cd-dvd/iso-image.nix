@@ -172,7 +172,6 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
-      example = true;
       description = ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
@@ -280,7 +279,7 @@ in
         options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" "uas" ];
 
     boot.blacklistedKernelModules = [ "nouveau" ];
 

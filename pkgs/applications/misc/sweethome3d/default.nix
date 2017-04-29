@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, gtk3, gsettings_desktop_schemas, p7zip }:
+, gtk3, gsettings_desktop_schemas, p7zip, libXxf86vm }:
 
 let
 
@@ -28,6 +28,13 @@ let
       genericName = "Computer Aided (Interior) Design";
       categories = "Application;Graphics;2DGraphics;3DGraphics;";
     };
+
+    patchPhase = ''
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_awt.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/amd64/libnativewindow_x11.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_awt.so
+      patchelf --set-rpath ${libXxf86vm}/lib lib/java3d-1.6/linux/i586/libnativewindow_x11.so
+    '';
 
     buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings_desktop_schemas ];
 

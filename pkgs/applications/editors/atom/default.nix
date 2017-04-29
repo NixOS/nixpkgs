@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lib, makeWrapper, gvfs, atomEnv, libXScrnSaver, libxkbfile }:
+{ stdenv, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
 
 stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "1.14.1";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "0dmzqz1j2nfcm459zgfzqym26kmbspdn9lipf77aawbbn2y36xqp";
+    sha256 = "10qzhfz34i7x7z5fv5a73a6aiwxvanyn0v825a6yz9qfc2mg4shd";
     name = "${name}.deb";
   };
 
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
     rm -r $out/share/lintian
     rm -r $out/usr/
     wrapProgram $out/bin/atom \
-      --prefix "PATH" : "${gvfs}/bin" \
-      --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
-      --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libxkbfile ]}/libxkbfile.so.1
+      --prefix "PATH" : "${gvfs}/bin"
 
     fixupPhase
 
@@ -33,8 +31,11 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}" \
       $out/share/atom/resources/app/apm/bin/node
+
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/share/atom/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+
+    find $out/share/atom -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$out/share/atom" {} \;
   '';
 
   meta = with stdenv.lib; {

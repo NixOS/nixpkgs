@@ -56,7 +56,7 @@ in buildPythonPackage rec {
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
-  patchPhase = optionalString isDarwin ''
+  postPatch = optionalString isDarwin ''
     cpp_sdk="${libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
@@ -71,17 +71,19 @@ in buildPythonPackage rec {
 
   # The flag `-A 'not network'` will disable tests that use internet.
   # The `-e` flag disables a few problematic tests.
-
   checkPhase = ''
     runHook preCheck
     # The flag `-w` provides the initial directory to search for tests.
     # The flag `-A 'not network'` will disable tests that use internet.
-    nosetests -w $out/${python.sitePackages}/pandas --no-path-adjustment -A 'not slow and not network' --stop \
+    nosetests -w $out/${python.sitePackages}/pandas --no-path-adjustment -A 'not slow and not network' \
       --verbosity=3
      runHook postCheck
   '';
 
   meta = {
+    # https://github.com/pandas-dev/pandas/issues/14866
+    # pandas devs are no longer testing i686 so safer to assume it's broken
+    broken = stdenv.isi686;
     homepage = "http://pandas.pydata.org/";
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;

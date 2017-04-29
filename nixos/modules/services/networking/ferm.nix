@@ -19,7 +19,6 @@ in {
     services.ferm = {
       enable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to enable Ferm Firewall.

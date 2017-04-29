@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ecm, pkgconfig, plasma-framework, qtbase, qtquickcontrols }:
+{ stdenv, fetchurl, cmake, extra-cmake-modules, pkgconfig, plasma-framework, qtbase, qtquickcontrols }:
 
 stdenv.mkDerivation rec {
   pname = "kirigami";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtquickcontrols plasma-framework ];
 
-  nativeBuildInputs = [ cmake pkgconfig ecm ];
+  nativeBuildInputs = [ cmake pkgconfig extra-cmake-modules ];
 
   meta = with stdenv.lib; {
     license = licenses.lgpl2;

@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       systems. We implement MTP Basic, the stuff proposed for standardization.
       '';
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

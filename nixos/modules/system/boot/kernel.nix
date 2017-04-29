@@ -176,7 +176,7 @@ in
 
     boot.initrd.availableKernelModules =
       [ # Note: most of these (especially the SATA/PATA modules)
-        # shouldn't be included by default since nixos-hardware-scan
+        # shouldn't be included by default since nixos-generate-config
         # detects them, but I'm keeping them for now for backwards
         # compatibility.
 

@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse pkgconfig attr uthash ];
 
+  patches = [
+    ./fix-format-security-error.patch
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp mhddfs $out/bin/

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
-  version = "5-0-320-0";
+  version = "5-0-350-0";
 
   preferLocalBuild = true;
 
   src = fetchurl {
     url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
-    sha256 = "039mrjwgkj3z51zq4xpchzr4msz5xgscgmp36dr1wms1kl42vibk";
+    sha256 = "0lr2calglad5d17p5sl1jbjdfsdsmn4dxgy8s89lyh0d4aihy54d";
   };
 
   srcIcon = fetchurl {
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       calculus in one easy-to-use package.
     '';
     homepage = https://www.geogebra.org/;
+    maintainers = with maintainers; [ ma27 ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = platforms.all;
     hydraPlatforms = [];

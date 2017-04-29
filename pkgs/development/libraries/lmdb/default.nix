@@ -25,6 +25,12 @@ in stdenv.mkDerivation rec {
     moveToOutput bin "$bin"
     moveToOutput "lib/*.a" REMOVE # until someone needs it
   ''
+
+    # fix bogus library name
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+    mv "$out"/lib/liblmdb.{so,dylib}
+    ''
+
     # add lmdb.pc (dynamic only)
     + ''
     mkdir -p "$dev/lib/pkgconfig"

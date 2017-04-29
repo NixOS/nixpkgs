@@ -6,12 +6,12 @@ let
   pythonPackages = python3Packages;
 in
 pythonPackages.buildPythonApplication rec {
-  version = "0.14.0";
+  version = "0.15.0";
   name = "vdirsyncer-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/v/vdirsyncer/${name}.tar.gz";
-    sha256 = "1mbh2gykx9sqsnyfa962ifxksx4afl2lb9rcsbd6rsh3gj2il898";
+    sha256 = "08aa5yxcj7ziz2r0hz4p554q8hgpfl2bh8r6r85f4g24mg6arxsj";
   };
 
   propagatedBuildInputs = with pythonPackages; [

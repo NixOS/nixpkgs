@@ -18,9 +18,6 @@ stdenv.mkDerivation rec {
     sed -ire '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp
   '';
 
-  patches = []
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ./no-long-long.patch ];
-
   meta = with stdenv.lib; {
     description = "Light-weight, simple and fast XML parser for C++ with XPath support";
     homepage = http://pugixml.org/;

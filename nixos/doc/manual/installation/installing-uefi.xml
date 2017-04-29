@@ -26,7 +26,8 @@ changes:
     <literal>vfat</literal> filesystem.</para>
   </listitem>
   <listitem>
-    <para>You must set <option>boot.loader.systemd-boot.enable</option> to
+    <para>Instead of <option>boot.loader.grub.device</option>,
+    you must set <option>boot.loader.systemd-boot.enable</option> to
     <literal>true</literal>. <command>nixos-generate-config</command>
     should do this automatically for new configurations when booted in
     UEFI mode.</para>

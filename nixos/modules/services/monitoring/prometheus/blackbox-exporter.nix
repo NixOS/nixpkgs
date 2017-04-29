@@ -54,6 +54,7 @@ in {
         Restart = "always";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
+        AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
         ExecStart = ''
           ${pkgs.prometheus-blackbox-exporter}/bin/blackbox_exporter \
             -web.listen-address :${toString cfg.port} \

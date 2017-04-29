@@ -1,4 +1,4 @@
-{ stdenv, cmake, kde5, redshift, fetchFromGitHub, ... }:
+{ stdenv, cmake, plasma-framework, redshift, fetchFromGitHub, }:
 
 let version = "1.0.17"; in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     cmake
-    kde5.plasma-framework
+    plasma-framework
   ];
 
 

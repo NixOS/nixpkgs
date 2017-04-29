@@ -10,32 +10,10 @@ let
 
   homeDir = "/run/dbus";
 
-  systemExtraxml = concatStrings (flip concatMap cfg.packages (d: [
-    "<servicedir>${d}/share/dbus-1/system-services</servicedir>"
-    "<includedir>${d}/etc/dbus-1/system.d</includedir>"
-  ]));
-
-  sessionExtraxml = concatStrings (flip concatMap cfg.packages (d: [
-    "<servicedir>${d}/share/dbus-1/services</servicedir>"
-    "<includedir>${d}/etc/dbus-1/session.d</includedir>"
-  ]));
-
-  configDir = pkgs.runCommand "dbus-conf"
-    { preferLocalBuild = true;
-      allowSubstitutes = false;
-    }
-    ''
-      mkdir -p $out
-
-      sed '${./dbus-system-local.conf.in}' \
-        -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
-        -e 's,@extra@,${systemExtraxml},' \
-        > "$out/system-local.conf"
-
-      sed '${./dbus-session-local.conf.in}' \
-        -e 's,@extra@,${sessionExtraxml},' \
-        > "$out/session-local.conf"
-    '';
+  configDir = pkgs.makeDBusConf {
+    suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
+    serviceDirectories = cfg.packages;
+  };
 
 in
 
@@ -104,15 +82,14 @@ in
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
-    security.setuidOwners = singleton
-      { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
-        owner = "root";
-        group = "messagebus";
-        setuid = true;
-        setgid = false;
-        permissions = "u+rx,g+rx,o-rx";
-      };
+    security.wrappers.dbus-daemon-launch-helper = {
+      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      owner = "root";
+      group = "messagebus";
+      setuid = true;
+      setgid = false;
+      permissions = "u+rx,g+rx,o-rx";
+    };
 
     services.dbus.packages = [
       pkgs.dbus.out

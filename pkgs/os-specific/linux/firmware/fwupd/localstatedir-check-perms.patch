@@ -1,0 +1,12 @@
+diff -Naur fwupd-0.8.1-orig/src/Makefile.in fwupd-0.8.1/src/Makefile.in
+--- fwupd-0.8.1-orig/src/Makefile.in	2017-02-24 02:59:23.000000000 -0500
++++ fwupd-0.8.1/src/Makefile.in	2017-02-27 15:06:56.218901891 -0500
+@@ -1639,7 +1639,7 @@
+ 		$(srcdir)/fwupd.gresource.xml
+ 
+ install-data-hook:
+-	if test -w $(DESTDIR)$(prefix)/; then \
++	if test -w $$(dirname $(DESTDIR)$(localstatedir)/); then \
+ 		mkdir -p $(DESTDIR)$(localstatedir)/lib/fwupd; \
+ 		chmod 0755 $(DESTDIR)$(localstatedir)/lib/fwupd; \
+ 		mkdir -p $(DESTDIR)$(localstatedir)/cache/app-info/xmls; \

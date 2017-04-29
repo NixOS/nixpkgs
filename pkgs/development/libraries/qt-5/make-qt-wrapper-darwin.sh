@@ -31,8 +31,8 @@ _makeQtWrapperSetup() {
     export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}${!outputLib}/lib/qt5/plugins"
     export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}${!outputLib}/lib/qt5/imports"
     export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}${!outputLib}/lib/qt5/qml"
-    export RUNTIME_XDG_DATA_DIRS="$XDG_DATA_DIRS${XDG_DATA_DIRS:+:}${!outputBin}/share"
-    export RUNTIME_XDG_CONFIG_DIRS="$XDG_CONFIG_DIRS${XDG_CONFIG_DIRS:+:}${!outputBin}/etc/xdg"
+    export RUNTIME_XDG_DATA_DIRS="$RUNTIME_XDG_DATA_DIRS${RUNTIME_XDG_DATA_DIRS:+:}${!outputBin}/share"
+    export RUNTIME_XDG_CONFIG_DIRS="$RUNTIME_XDG_CONFIG_DIRS${RUNTIME_XDG_CONFIG_DIRS:+:}${!outputBin}/etc/xdg"
 }
 
 prePhases+=(_makeQtWrapperSetup)

@@ -6,6 +6,11 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/Masterminds/glide";
 
+   buildFlagsArray = ''
+   -ldflags=
+      -X main.version=${version}
+  '';
+
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "Masterminds";

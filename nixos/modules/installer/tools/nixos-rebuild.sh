@@ -15,6 +15,7 @@ origArgs=("$@")
 extraBuildFlags=()
 action=
 buildNix=1
+fast=
 rollback=
 upgrade=
 repair=
@@ -52,12 +53,12 @@ while [ "$#" -gt 0 ]; do
         repair=1
         extraBuildFlags+=("$i")
         ;;
-      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q)
-        extraBuildFlags+=("$i")
-        ;;
       --max-jobs|-j|--cores|-I)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
+        ;;
+      --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*)
+        extraBuildFlags+=("$i")
         ;;
       --option)
         j="$1"; shift 1
@@ -66,6 +67,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --fast)
         buildNix=
+        fast=1
         extraBuildFlags+=(--show-trace)
         ;;
       --profile-name|-p)
@@ -217,7 +219,7 @@ if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
 fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
-if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then
+if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" -a -z "$fast" ]; then
     if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
         export _NIXOS_REBUILD_REEXEC=1
         exec $p/bin/nixos-rebuild "${origArgs[@]}"
@@ -276,23 +278,21 @@ if [ -n "$buildNix" ]; then
     echo "building Nix..." >&2
     nixDrv=
     if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
-        if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A nixFallback "${extraBuildFlags[@]}")"; then
-            if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
-                nixStorePath="$(prebuiltNix "$(uname -m)")"
-                if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
-                    --option extra-binary-caches https://cache.nixos.org/; then
+        if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
+            nixStorePath="$(prebuiltNix "$(uname -m)")"
+            if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
+                --option extra-binary-caches https://cache.nixos.org/; then
+                echo "warning: don't know how to get latest Nix" >&2
+            fi
+            # Older version of nix-store -r don't support --add-root.
+            [ -e $tmpDir/nix ] || ln -sf $nixStorePath $tmpDir/nix
+            if [ -n "$buildHost" ]; then
+                remoteNixStorePath="$(prebuiltNix "$(buildHostCmd uname -m)")"
+                remoteNix="$remoteNixStorePath/bin"
+                if ! buildHostCmd nix-store -r $remoteNixStorePath \
+                  --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
+                    remoteNix=
                     echo "warning: don't know how to get latest Nix" >&2
-                fi
-                # Older version of nix-store -r don't support --add-root.
-                [ -e $tmpDir/nix ] || ln -sf $nixStorePath $tmpDir/nix
-                if [ -n "$buildHost" ]; then
-                    remoteNixStorePath="$(prebuiltNix "$(buildHostCmd uname -m)")"
-                    remoteNix="$remoteNixStorePath/bin"
-                    if ! buildHostCmd nix-store -r $remoteNixStorePath \
-                      --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
-                        remoteNix=
-                        echo "warning: don't know how to get latest Nix" >&2
-                    fi
                 fi
             fi
         fi

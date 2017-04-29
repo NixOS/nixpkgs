@@ -49,6 +49,10 @@ in
         Option "RandRRotation" "on"
       '';
 
+    environment.etc."nvidia/nvidia-application-profiles-rc" = mkIf nvidia_x11.useProfiles {
+      source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
+    };
+
     hardware.opengl.package = nvidiaPackage nvidia_x11 pkgs;
     hardware.opengl.package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
 

@@ -135,10 +135,14 @@ qt5LinkModuleDir() {
 
 qt5LinkDarwinModuleLibDir() {
   for fw in $(find "$1"/lib -maxdepth 1 -name '*.framework'); do
+    if [ ! -L "$fw" ]; then
       ln -s "$fw" "$NIX_QT5_TMP"/lib
+    fi
   done
   for file in $(find "$1"/lib -maxdepth 1 -type f); do
+    if [ ! -L "$file" ]; then
       ln -s "$file" "$NIX_QT5_TMP"/lib
+    fi
   done
   for dir in $(find "$1"/lib -maxdepth 1 -mindepth 1 -type d ! -name '*.framework'); do
       mkdir -p "$NIX_QT5_TMP"/lib/$(basename "$dir")
@@ -178,4 +182,3 @@ _qtFixCMakePaths() {
 if [ -n "$NIX_QT_SUBMODULE" ]; then
     postInstallHooks+=(_qtFixCMakePaths)
 fi
-

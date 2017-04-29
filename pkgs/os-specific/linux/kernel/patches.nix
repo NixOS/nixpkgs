@@ -52,6 +52,11 @@ rec {
       patch = ./bridge-stp-helper.patch;
     };
 
+  p9_fixes =
+    { name = "p9-fixes";
+      patch = ./p9-fixes.patch;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -94,11 +99,13 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_testing = grsecPatch
-    { kver   = "4.9.8";
-      grrev  = "201702071801";
-      sha512 = "05hxn9jzkywd15iqjd7lykj0f9czw0kq1rs7krxnrk4lhr4k4ahbhq4330mw4pwcvln4ys25dw7mbljn9zvymb7b1kc3m301rrbgj5f";
-    };
+  grsecurity_testing = throw ''
+    Upstream has ceased free support for grsecurity/PaX.
+
+    See https://grsecurity.net/passing_the_baton.php
+    and https://grsecurity.net/passing_the_baton_faq.php
+    for more information.
+  '';
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
   # e.g., modprobe, to allow calling into the Nix store.
@@ -116,12 +123,6 @@ rec {
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;
-    };
-
-
-  chromiumos_Kconfig_fix_entries_3_14 =
-    { name = "Kconfig_fix_entries_3_14";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
     };
 
   chromiumos_Kconfig_fix_entries_3_18 =
@@ -175,4 +176,12 @@ rec {
       };
     };
 
+  DCCP_double_free_vulnerability_CVE-2017-6074 = rec
+    { name = "DCCP_double_free_vulnerability_CVE-2017-6074.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=5edabca9d4cff7f1f2b68f0bac55ef99d9798ba4";
+        sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
+      };
+    };
 }

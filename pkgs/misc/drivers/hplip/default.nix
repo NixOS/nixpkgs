@@ -10,16 +10,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.16.5";
+  version = "3.16.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1nay65q1zmx2jxiwn66n7mlr73azacz5097gw98kqqf90dh522f6";
+    sha256 = "094vkyr0rjng72m13dgr824cdl7q20x23qjxzih4w7l9njn0rqpn";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "15qrcd3ndnxri6pfdfmsjyv2f3zfkig80yghs76jbsm106rp8g3q";
+    sha256 = "1y3wdax2wb6kdd8bi40wl7v9s8ffyjz95bz42sjcpzzddmlhcaxg";
   };
 
   hplipState =
@@ -47,8 +47,9 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.system}";
 
-pythonPackages.mkPythonDerivation {
+pythonPackages.buildPythonApplication {
   inherit name src;
+  format = "other";
 
   buildInputs = [
     libjpeg

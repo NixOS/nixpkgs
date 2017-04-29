@@ -4,83 +4,221 @@
 
 <title>Global configuration</title>
 
-<para>Nix packages can be configured to allow or deny certain options.</para>
+<para>Nix comes with certain defaults about what packages can and
+cannot be installed, based on a package's metadata. By default, Nix
+will prevent installation if any of the following criteria are
+true:</para>
 
-<para>To apply the configuration edit
-<filename>~/.config/nixpkgs/config.nix</filename> and set it like
+<itemizedlist>
+  <listitem><para>The package is thought to be broken, and has had
+  its <literal>meta.broken</literal> set to
+  <literal>true</literal>.</para></listitem>
 
+  <listitem><para>The package's <literal>meta.license</literal> is set
+  to a license which is considered to be unfree.</para></listitem>
+
+  <listitem><para>The package has known security vulnerabilities but
+  has not or can not be updated for some reason, and a list of issues
+  has been entered in to the package's
+  <literal>meta.knownVulnerabilities</literal>.</para></listitem>
+</itemizedlist>
+
+<para>Note that all this is checked during evaluation already,
+and the check includes any package that is evaluated.
+In particular, all build-time dependencies are checked.
+<literal>nix-env -qa</literal> will (attempt to) hide any packages
+that would be refused.
+</para>
+
+<para>Each of these criteria can be altered in the nixpkgs
+configuration.</para>
+
+<para>The nixpkgs configuration for a NixOS system is set in the
+<literal>configuration.nix</literal>, as in the following example:
+<programlisting>
+{
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
+}
+</programlisting>
+However, this does not allow unfree software for individual users.
+Their configurations are managed separately.</para>
+
+<para>A user's of nixpkgs configuration is stored in a user-specific
+configuration file located at
+<filename>~/.config/nixpkgs/config.nix</filename>. For example:
 <programlisting>
 {
   allowUnfree = true;
 }
 </programlisting>
+</para>
 
-and will allow the Nix package manager to install unfree licensed packages.</para>
+<section xml:id="sec-allow-broken">
+  <title>Installing broken packages</title>
 
-<para>The configuration as listed also applies to NixOS under
-<option>nixpkgs.config</option> set.</para>
 
-<itemizedlist>
+  <para>There are two ways to try compiling a package which has been
+  marked as broken.</para>
 
-  <listitem>
-    <para>Allow installing of packages that are distributed under
-    unfree license by setting <programlisting>allowUnfree =
-    true;</programlisting> or deny them by setting it to
-    <literal>false</literal>.</para>
+  <itemizedlist>
+    <listitem><para>
+      For allowing the build of a broken package once, you can use an
+      environment variable for a single invocation of the nix tools:
 
-    <para>Same can be achieved by setting the environment variable:
+      <programlisting>$ export NIXPKGS_ALLOW_BROKEN=1</programlisting>
+    </para></listitem>
 
-<programlisting>
-$ export NIXPKGS_ALLOW_UNFREE=1
-</programlisting>
-
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>Whenever unfree packages are not allowed, single packages
-    can still be allowed by a predicate function that accepts package
-    as an argument and should return a boolean:
+    <listitem><para>
+      For permanently allowing broken packages to be built, you may
+      add <literal>allowBroken = true;</literal> to your user's
+      configuration file, like this:
 
 <programlisting>
-allowUnfreePredicate = (pkg: ...);
+{
+  allowBroken = true;
+}
 </programlisting>
+    </para></listitem>
+  </itemizedlist>
+</section>
 
-    Example to allow flash player and visual studio code only:
+<section xml:id="sec-allow-unfree">
+  <title>Installing unfree packages</title>
+
+  <para>There are several ways to tweak how Nix handles a package
+  which has been marked as unfree.</para>
+
+  <itemizedlist>
+    <listitem><para>
+      To temporarily allow all unfree packages, you can use an
+      environment variable for a single invocation of the nix tools:
+
+      <programlisting>$ export NIXPKGS_ALLOW_UNFREE=1</programlisting>
+    </para></listitem>
+
+    <listitem><para>
+      It is possible to permanently allow individual unfree packages,
+      while still blocking unfree packages by default using the
+      <literal>allowUnfreePredicate</literal> configuration
+      option in the user configuration file.</para>
+
+      <para>This option is a function which accepts a package as a
+      parameter, and returns a boolean. The following example
+      configuration accepts a package and always returns false:
+<programlisting>
+{
+  allowUnfreePredicate = (pkg: false);
+}
+</programlisting>
+      </para>
+
+      <para>A more useful example, the following configuration allows
+      only allows flash player and visual studio code:
 
 <programlisting>
-allowUnfreePredicate = with builtins; (pkg: elem (parseDrvName pkg.name).name [ "flashplayer" "vscode" ]);
+{
+  allowUnfreePredicate = (pkg: elem (builtins.parseDrvName pkg.name).name [ "flashplayer" "vscode" ]);
+}
 </programlisting>
+    </para></listitem>
 
-    </para>
-  </listitem>
+    <listitem>
+      <para>It is also possible to whitelist and blacklist licenses
+      that are specifically acceptable or not acceptable, using
+      <literal>whitelistedLicenses</literal> and
+      <literal>blacklistedLicenses</literal>, respectively.
+      </para>
 
-  <listitem>
-    <para>Whenever unfree packages are not allowed, packages can still
-    be whitelisted by their license:
+      <para>The following example configuration whitelists the
+      licenses <literal>amd</literal> and <literal>wtfpl</literal>:
 
 <programlisting>
-whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
+{
+  whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
+}
 </programlisting>
-    </para>
-  </listitem>
+      </para>
 
-  <listitem>
-    <para>In addition to whitelisting licenses which are denied by the
-    <literal>allowUnfree</literal> setting, you can also explicitely
-    deny installation of packages which have a certain license:
+      <para>The following example configuration blacklists the
+      <literal>gpl3</literal> and <literal>agpl3</literal> licenses:
 
 <programlisting>
-blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
+{
+  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
+}
 </programlisting>
-    </para>
-  </listitem>
+      </para>
+    </listitem>
+  </itemizedlist>
 
-</itemizedlist>
+  <para>A complete list of licenses can be found in the file
+  <filename>lib/licenses.nix</filename> of the nixpkgs tree.</para>
+</section>
 
-<para>A complete list of licenses can be found in the file
-<filename>lib/licenses.nix</filename> of the nix package tree.</para>
 
+<section xml:id="sec-allow-insecure">
+  <title>
+    Installing insecure packages
+  </title>
+
+  <para>There are several ways to tweak how Nix handles a package
+  which has been marked as insecure.</para>
+
+  <itemizedlist>
+    <listitem><para>
+      To temporarily allow all insecure packages, you can use an
+      environment variable for a single invocation of the nix tools:
+
+      <programlisting>$ export NIXPKGS_ALLOW_INSECURE=1</programlisting>
+    </para></listitem>
+
+    <listitem><para>
+      It is possible to permanently allow individual insecure
+      packages, while still blocking other insecure packages by
+      default using the <literal>permittedInsecurePackages</literal>
+      configuration option in the user configuration file.</para>
+
+      <para>The following example configuration permits the
+      installation of the hypothetically insecure package
+      <literal>hello</literal>, version <literal>1.2.3</literal>:
+<programlisting>
+{
+  permittedInsecurePackages = [
+    "hello-1.2.3"
+  ];
+}
+</programlisting>
+      </para>
+    </listitem>
+
+    <listitem><para>
+      It is also possible to create a custom policy around which
+      insecure packages to allow and deny, by overriding the
+      <literal>allowInsecurePredicate</literal> configuration
+      option.</para>
+
+      <para>The <literal>allowInsecurePredicate</literal> option is a
+      function which accepts a package and returns a boolean, much
+      like <literal>allowUnfreePredicate</literal>.</para>
+
+      <para>The following configuration example only allows insecure
+      packages with very short names:
+
+<programlisting>
+{
+  allowInsecurePredicate = (pkg: (builtins.stringLength (builtins.parseDrvName pkg.name).name) &lt;= 5);
+}
+</programlisting>
+      </para>
+
+      <para>Note that <literal>permittedInsecurePackages</literal> is
+      only checked if <literal>allowInsecurePredicate</literal> is not
+      specified.
+    </para></listitem>
+  </itemizedlist>
+</section>
 
 <!--============================================================-->
 

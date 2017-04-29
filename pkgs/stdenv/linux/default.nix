@@ -298,12 +298,14 @@ in
         */
 
       overrides = self: super: {
-        gcc = cc;
-
         inherit (prevStage)
-          gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          gzip bzip2 xz bash coreutils diffutils findutils gawk
           glibc gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl paxctl zlib pcre;
+      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+        # Need to get rid of these when cross-compiling.
+        inherit (prevStage) binutils;
+        gcc = cc;
       };
     };
   })

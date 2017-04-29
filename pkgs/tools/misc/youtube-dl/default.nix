@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, buildPythonApplication, makeWrapper, zip, ffmpeg, rtmpdump, pandoc
-, atomicparsley
+{ stdenv, fetchurl, buildPythonApplication
+, zip, ffmpeg, rtmpdump, atomicparsley, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -8,29 +8,32 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-}:
+, makeWrapper }:
 
 with stdenv.lib;
-
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2017.02.04.1";
+  version = "2017.04.17";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "1aqca4mxgdjiv1qfnzqxx6lpwggfxsaahvvs235pyz0j3kywa4nj";
+    sha256 = "0bihcjghrpj8skh216wwb7i2r990f6b7x63m8vdamq5bw317wvrj";
   };
 
-  buildInputs = [ makeWrapper zip ] ++ optional generateManPage pandoc;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ zip ] ++ optional generateManPage pandoc;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP
   # atomicparsley for embedding thumbnails
   postInstall = let
-    packagesthatwillbeusedbelow = [ atomicparsley ] ++ optional ffmpegSupport ffmpeg ++ optional rtmpSupport rtmpdump;
+    packagesToBinPath =
+    [ atomicparsley ]
+    ++ optional ffmpegSupport ffmpeg
+    ++ optional rtmpSupport rtmpdump;
   in ''
-    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesthatwillbeusedbelow}"
+    wrapProgram $out/bin/youtube-dl --prefix PATH : "${makeBinPath packagesToBinPath}"
   '';
 
   # Requires network
@@ -48,6 +51,6 @@ buildPythonApplication rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu ];
+    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu fpletz ];
   };
 }

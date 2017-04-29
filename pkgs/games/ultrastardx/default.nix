@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://ultrastardx.sourceforge.net/;
     description = "Free and open source karaoke game";
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true;
   };
 }

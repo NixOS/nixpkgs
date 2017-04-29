@@ -3,20 +3,21 @@
 python3Packages.buildPythonPackage rec {
   baseName = "mitmproxy";
   name = "${baseName}-${version}";
-  version = "1.0.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = baseName;
     repo = baseName;
     rev = "v${version}";
-    sha256 = "19nqg7s1034fal8sb2rjssgcpvxh50yidyjhnbfmmi8v3fbvpbwl";
+    sha256 = "17gvr642skz4a23966lckdbrkh6mx31shi8hmakkvi91sa869i30";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyopenssl pyasn1 urwid pillow flask click pyperclip blinker
-    construct pyparsing html2text tornado brotlipy requests2
-    sortedcontainers passlib cssutils h2 ruamel_yaml jsbeautifier
-    watchdog editorconfig
+    blinker click certifi construct cryptography
+    cssutils editorconfig h2 html2text hyperframe
+    jsbeautifier kaitaistruct passlib pyasn1 pyopenssl
+    pyparsing pyperclip requests2 ruamel_yaml tornado
+    urwid watchdog brotlipy sortedcontainers
   ];
 
   # Tests fail due to an error with a decorator

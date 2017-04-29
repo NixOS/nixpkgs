@@ -21,14 +21,12 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.52.1";
+  name = "curl-7.53.1";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "16rqhyzlpnivifin8n7l2fr9ihay9v2nw2drsniinb6bcykqaqfi";
+    sha256 = "1s1hyndva0yp62xy96pcp4anzrvw6cl0abjajim17sbmdp00fwhw";
   };
-
-  patches = [ ./issue-1174.patch ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
+      "--with-ca-fallback"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )

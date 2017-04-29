@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   version = "3.4.3";
   name = "pycryptodome-${version}";
-  namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/p/pycryptodome/${name}.tar.gz";

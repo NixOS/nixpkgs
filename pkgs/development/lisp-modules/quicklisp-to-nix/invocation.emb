@@ -1,0 +1,8 @@
+  "<% @var name %>" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."<% @var name %>" or (x: {}))
+       (import ./quicklisp-to-nix-output/<% @var filename %>.nix {
+         inherit fetchurl;<% @loop deps %>
+           "<% @var name %>" = quicklisp-to-nix-packages."<% @var name %>";<% @endloop %>
+       }));<% @ifequal name filename %><% @else %>
+  "<% @var filename %>" = quicklisp-to-nix-packages."<% @var name %>";<% @endif %>

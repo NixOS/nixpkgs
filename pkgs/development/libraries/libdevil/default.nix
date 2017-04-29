@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
     license = licenses.lgpl2;
     platforms = platforms.mesaPlatforms;
-    maintainers = [ maintainers.phreedom maintainers.urkud ];
+    maintainers = [ maintainers.phreedom ];
   };
 }

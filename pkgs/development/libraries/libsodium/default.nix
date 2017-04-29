@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libsodium-1.0.11";
+  name = "libsodium-1.0.12";
 
   src = fetchurl {
     url = "https://download.libsodium.org/libsodium/releases/${name}.tar.gz";
-    sha256 = "0rf7z6bgpnf8lyz8sph4h43fbb28pmj4dgybf0hsxxj97kdljid1";
+    sha256 = "159givfh5jgli3cifxgssivkklfyfq6lzyjgrx8h4jx5ncdqyr5q";
   };
 
   outputs = [ "out" "dev" ];

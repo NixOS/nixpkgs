@@ -2,7 +2,7 @@
   , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
   , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmakeHook
   , makeQtWrapper, lndir
-  , gst_all_1, qt_gstreamer1, pkgconfig, glibc
+  , gst_all_1, qt-gstreamer1, pkgconfig, glibc
   , version ? "2.9.4"
 }:
 
@@ -89,5 +89,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ pxc ];
+    broken = true; # relies improperly on private Qt 5.5 headers
   };
 }

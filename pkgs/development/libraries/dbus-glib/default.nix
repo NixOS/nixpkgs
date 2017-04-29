@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://dbus.freedesktop.org;
     license = with stdenv.lib.licenses; [ afl21 gpl2 ];
     description = "Obsolete glib bindings for D-Bus lightweight IPC mechanism";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

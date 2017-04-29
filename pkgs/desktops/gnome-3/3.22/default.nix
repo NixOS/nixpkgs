@@ -31,7 +31,7 @@ let
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
     gnome-system-log gnome-system-monitor
-    gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
+    gnome_terminal gnome-user-docs evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool

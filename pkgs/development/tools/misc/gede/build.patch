@@ -1,0 +1,11 @@
+--- a/build.py	2017-01-16 21:12:43.000000000 +0100
++++ b/build.py	2017-02-26 22:03:11.394625315 +0100
+@@ -71,7 +71,7 @@
+         if do_build:
+             if not os.path.exists("Makefile"):
+                 print("Generating makefile")
+-                if subprocess.call(['qmake-qt4']):
++                if subprocess.call(['qmake']):
+                     exit(1)
+ 
+             print("Compiling (please wait)")

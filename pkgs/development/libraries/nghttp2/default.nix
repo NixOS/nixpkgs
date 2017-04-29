@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig
 
 # Optional Dependencies
-, openssl ? null, libev ? null, zlib ? null, libcares ? null
+, openssl ? null, libev ? null, zlib ? null, c-ares ? null
 , enableHpack ? false, jansson ? null
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
@@ -13,22 +13,22 @@ assert enableAsioLib -> boost != null;
 assert enableGetAssets -> libxml2 != null;
 assert enableJemalloc -> jemalloc != null;
 
-with { inherit (stdenv.lib) optional; };
+let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.19.0";
+  version = "1.20.0";
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "477466eee27158d37b4478d9335dd091497cae4d7f2375fc6657beab67db9e7a";
+    sha256 = "fb29d0500b194f11680203aed21aafab241063ec1397cc51ab5cc0957341141b";
   };
 
   outputs = [ "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libev zlib libcares ]
+  buildInputs = [ openssl libev zlib c-ares ]
     ++ optional enableHpack jansson
     ++ optional enableAsioLib boost
     ++ optional enableGetAssets libxml2
@@ -36,8 +36,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" ]
+    ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
+
+  #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
+
+
   meta = with stdenv.lib; {
-    homepage = http://nghttp2.org/;
+    homepage = https://nghttp2.org/;
     description = "A C implementation of HTTP/2";
     license = licenses.mit;
     platforms = platforms.all;

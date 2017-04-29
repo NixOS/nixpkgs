@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, cmake, mesa, pkgconfig, libpulseaudio
-, qt4 ? null, extra-cmake-modules, qtbase ? null, qttools ? null
+, qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qttools ? null
 , withQt5 ? false
 , debug ? false }:
 
 with lib;
 
 let
-  v = "4.9.0";
+  v = "4.9.1";
 in
 
 assert withQt5 -> qtbase != null;
@@ -25,14 +25,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${v}/phonon-${v}.tar.xz";
-    sha256 = "1q5hvsk4sfcb91625wcmldy7kgjmfpmpmkgzi6mxkqdd307v8x5v";
+    sha256 = "177647r2jqfm32hqcz2nqfqv6v48hn5ab2vc31svba2wz23fkgk7";
   };
 
   buildInputs =
     [ mesa libpulseaudio ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ]);
 
-  nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
+  nativeBuildInputs =
+    [ cmake pkgconfig ]
+    ++ optional withQt5 extra-cmake-modules;
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 

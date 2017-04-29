@@ -1,17 +1,18 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "gmm-4.3";
+stdenv.mkDerivation rec {
+  name = "gmm-${version}";
+  version = "5.1";
 
   src = fetchurl {
-    url = http://download.gna.org/getfem/stable/gmm-4.3.tar.gz;
-    sha256 = "0wpp3k73wd3rblsrwxl6djq6m11fx3q5wgw0pl41m9liswsw6din";
+    url ="http://download.gna.org/getfem/stable/${name}.tar.gz";
+    sha256 = "0di68vdn34kznf96rnwrpb3bbm3ahaczwxd306s9dx41kcqbzrlh";
   };
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "Generic C++ template library for sparse, dense and skyline matrices";
     homepage = http://home.gna.org/getfem/gmm_intro.html;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
   };
 }

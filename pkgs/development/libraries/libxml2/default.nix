@@ -17,18 +17,12 @@ in stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      name = "CVE-2016-4658.patch";
-      url = "https://git.gnome.org/browse/libxml2/patch/?id=c1d1f7121194036608bf555f08d3062a36fd344b";
-      sha256 = "0q7i5qgwgzp2x4r820mqq3nx69bgkd7n0v00j28wa6hndbfaaxmb";
+      # Contains fixes for CVE-2016-{4658,5131} and other bugs.
+      name = "misc.patch";
+      url = "https://git.gnome.org/browse/libxml2/patch/?id=e905f081&id2=v2.9.4";
+      sha256 = "14rnzilspmh92bcpwbd6kqikj36gx78al42ilgpqgl1609krb5m5";
     })
   ];
-
-  # https://bugzilla.gnome.org/show_bug.cgi?id=766834#c5
-  postPatch = "patch -R < " + fetchpatch {
-    name = "schemas-validity.patch";
-    url = "https://git.gnome.org/browse/libxml2/patch/?id=f6599c5164";
-    sha256 = "0i7a0nhxwkxx6dkm8917qn0bsfn1av6ghg2f4dxanxi4bn4b1jjn";
-  };
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py";
@@ -76,7 +70,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://xmlsoft.org/;
     description = "An XML parsing library for C";
-    license = "bsd";
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.eelco ];
   };

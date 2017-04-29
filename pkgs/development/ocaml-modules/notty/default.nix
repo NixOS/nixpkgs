@@ -29,7 +29,7 @@ buildOcaml rec {
                           optional withLwt lwt;
 
   buildPhase = topkg.buildPhase
-  + " --with-lwt ${if withLwt then "true" else "false"}";
+  + " --with-lwt ${boolToString withLwt}";
 
   inherit (topkg) installPhase;
 

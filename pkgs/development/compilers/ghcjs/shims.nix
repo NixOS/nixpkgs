@@ -2,6 +2,6 @@
 fetchFromGitHub {
   owner = "ghcjs";
   repo = "shims";
-  rev = "dc034a035aa73db2c5be34145732090bd74c1b57";
-  sha256 = "18r8kf7g7d2n0rhwcgiz9gsgdmgln1nmwwyj347bpn4zh17qlkqa";
+  rev = "b97015229c58eeab7c1d0bb575794b14a9f6efca";
+  sha256 = "1p5adkqvmb1gsv9hnn3if0rdpnaq3v9a1zkfdy282yw05jaaaggz";
 }

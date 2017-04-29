@@ -20,7 +20,7 @@ with lib;
 
 let cfg = config.fonts.fontconfig;
 
-    fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
+    fcBool = x: "<bool>" + (boolToString x) + "</bool>";
 
     # back-supported fontconfig version and package
     # version is used for font cache generation
@@ -41,11 +41,11 @@ let cfg = config.fonts.fontconfig;
     # priority 0
     cacheConfSupport = makeCacheConf { version = supportVersion; };
     cacheConfLatest  = makeCacheConf {};
-    
+
     # generate the font cache setting file for a fontconfig version
     # use latest when no version is passed
     makeCacheConf = { version ? null }:
-      let 
+      let
         fcPackage = if builtins.isNull version
                     then "fontconfig"
                     else "fontconfig_${version}";
@@ -75,23 +75,23 @@ let cfg = config.fonts.fontconfig;
       <fontconfig>
 
         <!-- Default rendering settings -->
-        <match target="font">
-          <edit mode="assign" name="hinting">
+        <match target="pattern">
+          <edit mode="append" name="hinting">
             ${fcBool cfg.hinting.enable}
           </edit>
-          <edit mode="assign" name="autohint">
+          <edit mode="append" name="autohint">
             ${fcBool cfg.hinting.autohint}
           </edit>
-          <edit mode="assign" name="hintstyle">
-            <const>hint${cfg.hinting.style}</const>
+          <edit mode="append" name="hintstyle">
+            <const>hintslight</const>
           </edit>
-          <edit mode="assign" name="antialias">
+          <edit mode="append" name="antialias">
             ${fcBool cfg.antialias}
           </edit>
-          <edit mode="assign" name="rgba">
+          <edit mode="append" name="rgba">
             <const>${cfg.subpixel.rgba}</const>
           </edit>
-          <edit mode="assign" name="lcdfilter">
+          <edit mode="append" name="lcdfilter">
             <const>lcd${cfg.subpixel.lcdfilter}</const>
           </edit>
         </match>
@@ -113,7 +113,7 @@ let cfg = config.fonts.fontconfig;
 
     # default fonts configuration file
     # priority 52
-    defaultFontsConf = 
+    defaultFontsConf =
       let genDefault = fonts: name:
         optionalString (fonts != []) ''
           <alias>
@@ -142,7 +142,54 @@ let cfg = config.fonts.fontconfig;
       </fontconfig>
     '';
 
-    # fontconfig configuration package 
+    # bitmap font options
+    # priority 53
+    rejectBitmaps = pkgs.writeText "fc-53-nixos-bitmaps.conf" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+
+      ${optionalString (!cfg.allowBitmaps) ''
+      <!-- Reject bitmap fonts -->
+      <selectfont>
+        <rejectfont>
+          <pattern>
+            <patelt name="scalable"><bool>false</bool></patelt>
+          </pattern>
+        </rejectfont>
+      </selectfont>
+      ''}
+
+      <!-- Use embedded bitmaps in fonts like Calibri? -->
+      <match target="font">
+        <edit name="embeddedbitmap" mode="assign">
+          ${fcBool cfg.useEmbeddedBitmaps}
+        </edit>
+      </match>
+
+      </fontconfig>
+    '';
+
+    # reject Type 1 fonts
+    # priority 53
+    rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+
+      <!-- Reject Type 1 fonts -->
+      <selectfont>
+        <rejectfont>
+          <pattern>
+            <patelt name="fontformat"><string>Type 1</string></patelt>
+          </pattern>
+        </rejectfont>
+      </selectfont>
+
+      </fontconfig>
+    '';
+
+    # fontconfig configuration package
     confPkg = pkgs.runCommand "fontconfig-conf" {} ''
       support_folder=$out/etc/fonts
       latest_folder=$out/etc/fonts/${latestVersion}
@@ -166,7 +213,7 @@ let cfg = config.fonts.fontconfig;
 
       substitute ${latestPkg.out}/etc/fonts/conf.d/51-local.conf \
                  $latest_folder/conf.d/51-local.conf \
-                 --replace local.conf /etc/fonts/${latestVersion}/local.conf 
+                 --replace local.conf /etc/fonts/${latestVersion}/local.conf
 
       # 00-nixos-cache.conf
       ln -s ${cacheConfSupport} \
@@ -192,6 +239,16 @@ let cfg = config.fonts.fontconfig;
       # 52-nixos-default-fonts.conf
       ln -s ${defaultFontsConf} $support_folder/conf.d/52-nixos-default-fonts.conf
       ln -s ${defaultFontsConf} $latest_folder/conf.d/52-nixos-default-fonts.conf
+
+      # 53-nixos-bitmaps.conf
+      ln -s ${rejectBitmaps} $support_folder/conf.d/53-nixos-bitmaps.conf
+      ln -s ${rejectBitmaps} $latest_folder/conf.d/53-nixos-bitmaps.conf
+
+      ${optionalString (! cfg.allowType1) ''
+      # 53-nixos-reject-type1.conf
+      ln -s ${rejectType1} $support_folder/conf.d/53-nixos-reject-type1.conf
+      ln -s ${rejectType1} $latest_folder/conf.d/53-nixos-reject-type1.conf
+      ''}
     '';
 
     # Package with configuration files
@@ -233,7 +290,11 @@ in
         antialias = mkOption {
           type = types.bool;
           default = true;
-          description = "Enable font antialiasing.";
+          description = ''
+            Enable font antialiasing. At high resolution (> 200 DPI),
+            antialiasing has no visible effect; users of such displays may want
+            to disable this option.
+          '';
         };
 
         dpi = mkOption {
@@ -249,7 +310,7 @@ in
           type = types.lines;
           default = "";
           description = ''
-            System-wide customization file contents, has higher priority than 
+            System-wide customization file contents, has higher priority than
             <literal>defaultFonts</literal> settings.
           '';
         };
@@ -287,26 +348,21 @@ in
           enable = mkOption {
             type = types.bool;
             default = true;
-            description = "Enable TrueType hinting.";
+            description = ''
+              Enable font hinting. Hinting aligns glyphs to pixel boundaries to
+              improve rendering sharpness at low resolution. At high resolution
+              (> 200 dpi) hinting will do nothing (at best); users of such
+              displays may want to disable this option.
+            '';
           };
 
           autohint = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
-              Enable the autohinter, which provides hinting for otherwise
-              un-hinted fonts. The results are usually lower quality than
-              correctly-hinted fonts.
-            '';
-          };
-
-          style = mkOption {
-            type = types.enum ["none" "slight" "medium" "full"];
-            default = "full";
-            description = ''
-              TrueType hinting style, one of <literal>none</literal>,
-              <literal>slight</literal>, <literal>medium</literal>, or
-              <literal>full</literal>.
+              Enable the autohinter in place of the default interpreter.
+              The results are usually lower quality than correctly-hinted
+              fonts, but better than unhinted fonts.
             '';
           };
         };
@@ -327,7 +383,15 @@ in
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = ''
-              Subpixel order.
+              Subpixel order. The overwhelming majority of displays are
+              <literal>rgb</literal> in their normal orientation. Select
+              <literal>vrgb</literal> for mounting such a display 90 degrees
+              clockwise from its normal orientation or <literal>vbgr</literal>
+              for mounting 90 degrees counter-clockwise. Select
+              <literal>bgr</literal> in the unlikely event of mounting 180
+              degrees from the normal orientation. Reverse these directions in
+              the improbable event that the display's native subpixel order is
+              <literal>bgr</literal>.
             '';
           };
 
@@ -335,7 +399,9 @@ in
             default = "default";
             type = types.enum ["none" "default" "light" "legacy"];
             description = ''
-              FreeType LCD filter.
+              FreeType LCD filter. At high resolution (> 200 DPI), LCD filtering
+              has no visible effect; users of such displays may want to select
+              <literal>none</literal>.
             '';
           };
 
@@ -349,16 +415,43 @@ in
           '';
         };
 
+        allowBitmaps = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Allow bitmap fonts. Set to <literal>false</literal> to ban all
+            bitmap fonts.
+          '';
+        };
+
+        allowType1 = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Allow Type-1 fonts. Default is <literal>false</literal> because of
+            poor rendering.
+          '';
+        };
+
+        useEmbeddedBitmaps = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''Use embedded bitmaps in fonts like Calibri.'';
+        };
+
       };
 
     };
 
   };
-  config = mkIf cfg.enable {
-    fonts.fontconfig.confPackages = [ confPkg ];
-
-    environment.systemPackages    = [ pkgs.fontconfig ];
-    environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
-  };
+  config = mkMerge [
+    (mkIf cfg.enable {
+      environment.systemPackages    = [ pkgs.fontconfig ];
+      environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+    })
+    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+      fonts.fontconfig.confPackages = [ confPkg ];
+    })
+  ];
 
 }

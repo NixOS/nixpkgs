@@ -11,7 +11,6 @@ in {
       description = "Enable unclutter to hide your mouse cursor when inactive";
       type = types.bool;
       default = false;
-      example = true;
     };
 
     package = mkOption {
@@ -61,7 +60,10 @@ in {
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           -idle ${toString cfg.timeout} \
-          -display :${toString config.services.xserver.display} \
+          -display :${toString (
+             let display = config.services.xserver.display;
+             in if display != null then display else 0
+          )} \
           -jitter ${toString (cfg.threeshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
           ${concatMapStrings (x: " -"+x) cfg.extraOptions} \

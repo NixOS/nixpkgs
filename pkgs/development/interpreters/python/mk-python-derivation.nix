@@ -57,9 +57,12 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
 
   inherit pythonPath;
 
-  # patch python interpreter to write null timestamps when compiling python files
-  # this way python doesn't try to update them when we freeze timestamps in nix store
+
+  # Determinism: The interpreter is patched to write null timestamps when compiling python files.
+  # This way python doesn't try to update them when we freeze timestamps in nix store.
   DETERMINISTIC_BUILD=1;
+  # Determinism: We fix the hashes of str, bytes and datetime objects.
+  PYTHONHASHSEED = 0;
 
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
@@ -76,9 +79,10 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   postFixup = ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
-    # check if we have two packages with the same name in closure and fail
-    # this shouldn't happen, something went wrong with dependencies specs
-    ${python.interpreter} ${./catch_conflicts.py}
+    # Check if we have two packages with the same name in the closure and fail.
+    # If this happens, something went wrong with the dependencies specs.
+    # Intentionally kept in a subdirectory, see catch_conflicts/README.md.
+    ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
 
   passthru = {
@@ -90,10 +94,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
     platforms = python.meta.platforms;
   } // meta // {
     # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow domenkozar ];
+    maintainers = (meta.maintainers or []) ++ [ chaoflow ];
     # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };
 })
-
-

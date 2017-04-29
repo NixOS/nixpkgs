@@ -15,11 +15,9 @@ let
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "pypy${majorVersion}";
 
-  pypy = stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
     name = "pypy-${version}";
-    pythonVersion = "2.7";
-
-    inherit majorVersion version;
+    inherit majorVersion version pythonVersion;
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
@@ -146,6 +144,4 @@ let
       platforms = platforms.linux;
       maintainers = with maintainers; [ domenkozar ];
     };
-  };
-
-in pypy
+}

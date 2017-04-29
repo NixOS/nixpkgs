@@ -4,13 +4,13 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  version = "2017-01-15";
+  version = "2017-03-30";
   name = "oh-my-zsh-${version}";
 
   src = fetchgit {
     url = "https://github.com/robbyrussell/oh-my-zsh";
-    rev = "d2725d44fce59ea7060b4d712c5739512a56882d";
-    sha256 = "064q10yc0n71nqh621nk88ch4wjwwq68wlaaacl5q3llcb4b5pff";
+    rev = "66bae5a5deb7a053adfb05b38a93fe47295841eb";
+    sha256 = "0rlk39shfh1mamif67smcw6wsc7p1kw64cvk9z3nvlysv6w02q1f";
   };
 
   pathsToLink = [ "/share/oh-my-zsh" ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   To copy the Oh My Zsh configuration file to your home directory, run
   the following command:
 
-    $ cp -v $(nix-env -q --out-path oh-my-zsh-git | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+    $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
   '';
   homepage        = "http://ohmyz.sh/";
   license         = licenses.mit;

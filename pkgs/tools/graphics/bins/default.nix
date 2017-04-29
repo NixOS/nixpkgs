@@ -23,7 +23,8 @@ stdenv.mkDerivation {
                                      DateTimeFormatDateParse ]; #TODO need Gtk (not Gtk2?) for bins-edit-gui
 
   patches = [ ./bins_edit-isa.patch
-              ./hashref.patch ];
+              ./hashref.patch
+              ./cp-dash-f.patch ];
 
   installPhase = ''
     export DESTDIR=$out;

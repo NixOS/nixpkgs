@@ -5,7 +5,6 @@ with lib;
 let
 
   cfg = config.services.aiccu;
-  showBool = b: if b then "true" else "false";
   notNull = a: ! isNull a;
   configFile = pkgs.writeText "aiccu.conf" ''
     ${if notNull cfg.username then "username " + cfg.username else ""}
@@ -13,16 +12,16 @@ let
     protocol ${cfg.protocol}
     server ${cfg.server}
     ipv6_interface ${cfg.interfaceName}
-    verbose ${showBool cfg.verbose}
+    verbose ${boolToString cfg.verbose}
     daemonize true
-    automatic ${showBool cfg.automatic}
-    requiretls ${showBool cfg.requireTLS}
+    automatic ${boolToString cfg.automatic}
+    requiretls ${boolToString cfg.requireTLS}
     pidfile ${cfg.pidFile}
-    defaultroute ${showBool cfg.defaultRoute}
+    defaultroute ${boolToString cfg.defaultRoute}
     ${if notNull cfg.setupScript then cfg.setupScript else ""}
-    makebeats ${showBool cfg.makeHeartBeats}
-    noconfigure ${showBool cfg.noConfigure}
-    behindnat ${showBool cfg.behindNAT}
+    makebeats ${boolToString cfg.makeHeartBeats}
+    noconfigure ${boolToString cfg.noConfigure}
+    behindnat ${boolToString cfg.behindNAT}
     ${if cfg.localIPv4Override then "local_ipv4_override" else ""}
   '';
 
@@ -35,7 +34,6 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Enable aiccu IPv6 over IPv4 SiXXs tunnel";
       };
 
@@ -88,21 +86,18 @@ in {
       verbose = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Be verbose?";
       };
 
       automatic = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = "Automatic Login and Tunnel activation";
       };
 
       requireTLS = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           When set to true, if TLS is not supported on the server
           the TIC transaction will fail.
@@ -124,7 +119,6 @@ in {
       defaultRoute = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = "Add a default route";
       };
 
@@ -138,7 +132,6 @@ in {
       makeHeartBeats = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           In general you don't want to turn this off
           Of course only applies to AYIYA and heartbeat tunnels not to static ones
@@ -148,21 +141,18 @@ in {
       noConfigure = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Don't configure anything";
       };
 
       behindNAT = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = "Notify the user that a NAT-kind network is detected";
       };
 
       localIPv4Override = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Overrides the IPv4 parameter received from TIC
           This allows one to configure a NAT into "DMZ" mode and then

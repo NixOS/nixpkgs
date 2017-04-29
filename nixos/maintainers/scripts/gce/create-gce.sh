@@ -1,15 +1,23 @@
-#! /bin/sh -e
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p google-cloud-sdk
 
-BUCKET_NAME=${BUCKET_NAME:-nixos-images}
-export NIX_PATH=nixpkgs=../../../..
-export NIXOS_CONFIG=$(dirname $(readlink -f $0))/../../../modules/virtualisation/google-compute-image.nix
-export TIMESTAMP=$(date +%Y%m%d%H%M)
+set -euo pipefail
+
+BUCKET_NAME="${BUCKET_NAME:-nixos-images}"
+TIMESTAMP="$(date +%Y%m%d%H%M)"
+export TIMESTAMP
 
 nix-build '<nixpkgs/nixos>' \
-   -A config.system.build.googleComputeImage --argstr system x86_64-linux -o gce --option extra-binary-caches http://hydra.nixos.org -j 10
+   -A config.system.build.googleComputeImage \
+   --arg configuration "{ imports = [ <nixpkgs/nixos/modules/virtualisation/google-compute-image.nix> ]; }" \
+   --argstr system x86_64-linux \
+   -o gce \
+   -j 10
 
-img=$(echo gce/*.tar.gz)
-if ! gsutil ls gs://${BUCKET_NAME}/$(basename $img); then
-  gsutil cp $img gs://${BUCKET_NAME}/$(basename $img)
+img_path=$(echo gce/*.tar.gz)
+img_name=$(basename "$img_path")
+img_id=$(echo "$img_name" | sed 's|.raw.tar.gz$||;s|\.|-|g;s|_|-|g')
+if ! gsutil ls "gs://${BUCKET_NAME}/$img_name"; then
+  gsutil cp "$img_path" "gs://${BUCKET_NAME}/$img_name"
 fi
-gcloud compute images create $(basename $img .raw.tar.gz | sed 's|\.|-|' | sed 's|_|-|') --source-uri gs://${BUCKET_NAME}/$(basename $img)
+gcloud compute images create "$img_id" --source-uri "gs://${BUCKET_NAME}/$img_name"
