@@ -301,7 +301,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
-  ./services/misc/phabricator.nix
+  ./services/misc/phd.nix
   ./services/misc/plex.nix
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
