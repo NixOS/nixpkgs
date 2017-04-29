@@ -18,7 +18,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
-  shouldCheckMeta = config.checkMeta or false;
+  shouldCheckMeta = config.checkMeta or true;
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
@@ -221,12 +221,15 @@ let
 
         # Weirder stuff that doesn't appear in the documentation?
         version = str;
+        tag = str;
         updateWalker = bool;
         executables = listOf str;
         outputsToInstall = listOf str;
         position = str;
         repositories = attrsOf str;
         isBuildPythonPackage = platforms;
+        schedulingPriority = str;
+        downloadURLRegexp = str;
       };
 
       checkMetaAttr = k: v:
