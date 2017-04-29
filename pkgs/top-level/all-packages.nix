@@ -7529,8 +7529,6 @@ with pkgs;
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
-  ccnx = callPackage ../development/libraries/ccnx { };
-
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
   cddlib = callPackage ../development/libraries/cddlib {};
