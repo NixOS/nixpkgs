@@ -11705,9 +11705,7 @@ in
 
   libexif = callPackage ../development/libraries/libexif { };
 
-  libexosip = callPackage ../development/libraries/exosip {
-    openssl = openssl_1_0_2;
-  };
+  libexosip = callPackage ../development/libraries/exosip {};
 
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
