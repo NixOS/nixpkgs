@@ -1303,7 +1303,9 @@ with pkgs;
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
-      protobuf = protobuf.override { stdenv = clangStdenv; };
+      python = python2;
+      inherit (python2Packages) gyp;
+      protobuf = protobuf3_2.override { stdenv = clangStdenv; };
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
