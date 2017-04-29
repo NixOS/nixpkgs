@@ -230,6 +230,8 @@ let
         isBuildPythonPackage = platforms;
         schedulingPriority = str;
         downloadURLRegexp = str;
+        isFcitxEngine = bool;
+        isIbusEngine = bool;
       };
 
       checkMetaAttr = k: v:
