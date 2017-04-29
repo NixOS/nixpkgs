@@ -10,6 +10,11 @@ with lib;
 
   security.apparmor.enable = mkDefault true;
 
+  boot.kernelParams = [
+    # Disable legacy virtual syscalls
+    "vsyscall=none"
+  ];
+
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
