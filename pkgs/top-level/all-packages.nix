@@ -8759,10 +8759,6 @@ with pkgs;
 
   libexosip = callPackage ../development/libraries/exosip {};
 
-  libexosip_3 = callPackage ../development/libraries/exosip/3.x.nix {
-    libosip = libosip_3;
-  };
-
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
