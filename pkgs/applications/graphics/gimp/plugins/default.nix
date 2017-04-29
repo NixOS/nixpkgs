@@ -125,7 +125,9 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-2.0.1";
-    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook ]
+    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook pkgs.pkgconfig pkgs.gtk2
+      pkgs.intltool
+    ]
       ++ gimp.nativeBuildInputs;
     makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
     src = fetchFromGitHub {
