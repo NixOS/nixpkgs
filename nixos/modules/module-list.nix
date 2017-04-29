@@ -301,6 +301,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
+  ./services/misc/phabricator.nix
   ./services/misc/plex.nix
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
@@ -562,7 +563,6 @@
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
-  ./services/web-apps/phabricator.nix
   ./services/web-apps/privacyidea.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
