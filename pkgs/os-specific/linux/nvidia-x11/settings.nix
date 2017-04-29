@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   inherit (nvidia_x11) version;
 
   src = fetchurl {
-    url = "ftp://download.nvidia.com/XFree86/nvidia-settings/${name}.tar.bz2";
+    url = "https://download.nvidia.com/XFree86/nvidia-settings/${name}.tar.bz2";
     inherit sha256;
   };
 
