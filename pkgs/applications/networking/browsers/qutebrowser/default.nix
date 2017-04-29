@@ -82,6 +82,6 @@ in buildPythonApplication rec {
     homepage = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ jagajaga fpletz ];
+    maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }
