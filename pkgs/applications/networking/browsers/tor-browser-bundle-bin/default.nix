@@ -99,7 +99,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "tor-browser-${version}";
+  name = "tor-browser-bundle-bin-${version}";
   inherit version;
 
   src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
