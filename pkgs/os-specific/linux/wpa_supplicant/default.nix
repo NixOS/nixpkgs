@@ -79,10 +79,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./build-fix.patch
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-wireless/wpa_supplicant/files/wpa_supplicant-2.6-libressl.patch";
-      sha256 = "1c5fqzwsy1ksp7bqr3k39dv5i7hdxgswkd1z7gkwjskp9856447q";
-    })
   ];
 
   postInstall = ''
