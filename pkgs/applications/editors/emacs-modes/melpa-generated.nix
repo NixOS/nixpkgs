@@ -23600,7 +23600,7 @@
         version = "20160124.826";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/frame-cmds.el";
-          sha256 = "1867zmm3pyqz8p9ig44jf598z9jkyvbp04mfg6j6ys3hyqfkw942";
+          sha256 = "0yscijwwm31551ysagysdrryr1w33kg34j3bnrq92mxsmb6i19ad";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8b528544841995045fb1f8344aaaa38946bb3915/recipes/frame-cmds";
@@ -23618,7 +23618,7 @@
         version = "20151231.1322";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/frame-fns.el";
-          sha256 = "0lvlyxb62sgrm37hc21dn7qzlrq2yagiwpspa926q6dpzcsbam15";
+          sha256 = "00b2bb3rfraps47mcv0vb51ygjx0f311i95g0b7dh1jqi6nxdfb1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8b528544841995045fb1f8344aaaa38946bb3915/recipes/frame-fns";
@@ -68592,7 +68592,7 @@
         version = "20160809.716";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/zoom-frm.el";
-          sha256 = "0k165zzqc65sl1glhh6qnlfrjx5qx1gcv5a0l445z7ny12r69xwb";
+          sha256 = "1n16qx3ag9cdds04l4s2a79ijqg4k5gg1144vyn5p6ih10casw32";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8b528544841995045fb1f8344aaaa38946bb3915/recipes/zoom-frm";
