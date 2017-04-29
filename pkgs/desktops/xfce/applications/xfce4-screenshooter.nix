@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, xfce4panel, libxfce4util, gtk, libsoup
-, exo, hicolor_icon_theme }:
+, makeWrapper, glib_networking, exo, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-screenshooter";
@@ -13,12 +13,17 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   nativeBuildInputs = [
-    pkgconfig intltool
+    pkgconfig intltool makeWrapper
   ];
 
   buildInputs = [
     xfce4panel libxfce4util gtk libsoup exo hicolor_icon_theme
   ];
+
+  preFixup = ''
+    wrapProgram "$out/bin/xfce4-screenshooter" \
+       --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules"
+  '';
 
   meta = {
     homepage = http://goodies.xfce.org/projects/applications/xfce4-screenshooter;
