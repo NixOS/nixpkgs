@@ -105,7 +105,7 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-0.16";
-    buildInputs = [ gimp pkgs.fftw ] ++ gimp.nativeBuildInputs;
+    buildInputs = [ gimp pkgs.fftw pkgs.pkgconfig pkgs.gtk2 ] ++ gimp.nativeBuildInputs;
     src = fetchurl {
       url = http://www.logarithmic.net/pfh-files/resynthesizer/resynthesizer-0.16.tar.gz;
       sha256 = "1k90a1jzswxmajn56rdxa4r60v9v34fmqsiwfdxqcvx3yf4yq96x";
