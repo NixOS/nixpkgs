@@ -9,16 +9,15 @@ let
 
     cp ${cfg.package}/etc/xrdp/{km-*,xrdp,sesman,xrdp_keyboard}.ini $out
 
-    ${cfg.package}/bin/xrdp-keygen xrdp $out/rsakeys.ini
-
     cat > $out/startwm.sh <<EOF
     #!/bin/sh
     . /etc/profile
     ${cfg.defaultWindowManager}
     EOF
     chmod +x $out/startwm.sh
-    
+
     substituteInPlace $out/xrdp.ini \
+      --replace "#rsakeys_ini=" "rsakeys_ini=/var/run/xrdp/rsakeys.ini" \
       --replace "certificate=" "certificate=${cfg.sslCert}" \
       --replace "key_file=" "key_file=${cfg.sslKey}" \
       --replace LogFile=xrdp.log LogFile=/dev/null \
@@ -116,6 +115,10 @@ in
               -keyout ${cfg.sslKey} -out ${cfg.sslCert}
             chown root:xrdp ${cfg.sslKey} ${cfg.sslCert}
             chmod 440 ${cfg.sslKey} ${cfg.sslCert}
+          fi
+          if [ ! -s /var/run/xrdp/rsakeys.ini ]; then
+            mkdir -p /var/run/xrdp
+            ${cfg.package}/bin/xrdp-keygen xrdp /var/run/xrdp/rsakeys.ini
           fi
         '';
         serviceConfig = {
