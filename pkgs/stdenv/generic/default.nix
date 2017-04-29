@@ -205,14 +205,14 @@ let
 
           '' + ((builtins.getAttr reason remediation) attrs));
 
-      metaTypes = with lib.types; {
+      metaTypes = with lib.types; rec {
         # These keys are documented
         description = str;
         longDescription = str;
         branch = str;
         homepage = str;
         downloadPage = str;
-        license = either (listOf lib.types.attrs) lib.types.attrs;
+        license = either (listOf lib.types.attrs) (either lib.types.attrs str);
         maintainers = listOf str;
         priority = int;
         platforms = listOf str;
@@ -223,6 +223,10 @@ let
         version = str;
         updateWalker = bool;
         executables = listOf str;
+        outputsToInstall = listOf str;
+        position = str;
+        repositories = attrsOf str;
+        isBuildPythonPackage = platforms;
       };
 
       checkMetaAttr = k: v:
