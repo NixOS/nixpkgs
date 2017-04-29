@@ -8,6 +8,8 @@ with lib;
 {
   security.hideProcessInformation = mkDefault true;
 
+  security.lockKernelModules = mkDefault true;
+
   security.apparmor.enable = mkDefault true;
 
   boot.kernelParams = [
