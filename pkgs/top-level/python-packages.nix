@@ -1197,7 +1197,7 @@ in {
     };
 
     meta = with pkgs.stdenv.lib; {
-      descriptions = "Library for reading, writing and rewriting python AST";
+      description = "Library for reading, writing and rewriting python AST";
       homepage = https://github.com/berkerpeksag/astor;
       license = licenses.bsd3;
       maintainers = with maintainers; [ nixy ];
@@ -5251,7 +5251,7 @@ in {
 
     meta = {
       license = licenses.mit;
-      website = "https://pypi.python.org/pypi/pytest-cache/";
+      homepage = "https://pypi.python.org/pypi/pytest-cache/";
       description = "pytest plugin with mechanisms for caching across test runs";
     };
   };
@@ -5269,7 +5269,7 @@ in {
 
     meta = {
       license = licenses.mit;
-      website = https://pypi.python.org/pypi/pytest-catchlog/;
+      homepage = https://pypi.python.org/pypi/pytest-catchlog/;
       description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
     };
   };
@@ -5345,7 +5345,7 @@ in {
 
     meta = {
       license = licenses.mit;
-      website = "https://pypi.python.org/pypi/pytest-flakes";
+      homepage = "https://pypi.python.org/pypi/pytest-flakes";
       description = "pytest plugin to check source code with pyflakes";
     };
   };
@@ -5391,7 +5391,7 @@ in {
 
     meta = {
       license = licenses.mit;
-      website = "https://pypi.python.org/pypi/pytest-pep8";
+      homepage = "https://pypi.python.org/pypi/pytest-pep8";
       description = "pytest plugin to check PEP8 requirements";
     };
   };
@@ -5456,7 +5456,7 @@ in {
 
     meta = {
       license = licenses.asl20;
-      website = "https://pypi.python.org/pypi/pytest-quickcheck";
+      homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
       description = "pytest plugin to generate random data inspired by QuickCheck";
     };
   };
@@ -8264,7 +8264,7 @@ in {
       description = "Cross-platform Bluetooth API for Python";
       maintainers = with maintainers; [ leenaars ];
       license = licenses.gpl3;
-      platform = platforms.all;
+      platforms = platforms.all;
     };
   };
 
@@ -8924,7 +8924,7 @@ in {
     meta = {
       description = "A Python-based build/distribution/deployment scripting tool";
       homepage    = http://github.com/paver/paver;
-      matinainers = with maintainers; [ lovek323 ];
+      maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
   };
@@ -9214,7 +9214,7 @@ in {
       description = "Call graph visualizations for Python applications";
       maintainers = with maintainers; [ auntie ];
       license = licenses.gpl2;
-      platform = platforms.all;
+      platforms = platforms.all;
     };
   };
 
@@ -9350,7 +9350,7 @@ in {
       description = "Python port of libaxolotl-android";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl3;
-      platform = platforms.all;
+      platforms = platforms.all;
     };
   };
 
@@ -9368,7 +9368,7 @@ in {
       description = "Curve25519 with ed25519 signatures";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl3;
-      platform = platforms.all;
+      platforms = platforms.all;
     };
   };
 
@@ -9393,7 +9393,7 @@ in {
       description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.asl20;
-      platform = platforms.all;
+      platforms = platforms.all;
     };
   };
 
@@ -9598,7 +9598,7 @@ in {
       description = "Python API for Sendmail Milters (SPF)";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.gpl2;
-      platform = platforms.all;
+      platforms = platforms.all;
     };
   };
 
@@ -9799,7 +9799,7 @@ in {
       homepage = "http://sarge.readthedocs.org/";
       description = "A wrapper for subprocess which provides command pipeline functionality";
       license = licenses.bsd3;
-      platform = platforms.all;
+      platforms = platforms.all;
       maintainers = with maintainers; [ abbradar ];
     };
   };
@@ -14770,7 +14770,7 @@ in {
     buildInputs = with self; [nose];
 
     meta = {
-      decription = "The fastest markdown parser in pure Python";
+      description = "The fastest markdown parser in pure Python";
       homepage = https://github.com/lepture/mistune;
       license = licenses.bsd3;
     };
@@ -15752,7 +15752,7 @@ in {
     propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1 pyasn1-modules];
 
     meta = {
-      meta = "Elegant Python library for XMPP";
+      description = "Elegant Python library for XMPP";
       license = licenses.mit;
       homepage = https://dev.louiz.org/projects/slixmpp;
     };
@@ -23063,7 +23063,7 @@ in {
     buildInputs = with self; [ appdirs ];
 
     meta = with pkgs.stdenv.lib; {
-      descriptions = "A python Lex/Yacc that works with RPython";
+      description = "A python Lex/Yacc that works with RPython";
       homepage = https://github.com/alex/rply;
       license = licenses.bsd3;
       maintainers = with maintainers; [ nixy ];
@@ -25908,7 +25908,7 @@ in {
 
     meta = {
       description = "Quick Response code generation for Python";
-      home = "https://pypi.python.org/pypi/qrcode";
+      homepage = "https://pypi.python.org/pypi/qrcode";
       license = licenses.bsd3;
     };
   };
