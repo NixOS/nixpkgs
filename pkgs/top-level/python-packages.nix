@@ -4425,6 +4425,8 @@ in {
     };
   };
 
+  coveralls = callPackage ../development/python-modules/coveralls { };
+
   coverage = buildPythonPackage rec {
     name = "coverage-4.0.1";
 
@@ -5227,6 +5229,8 @@ in {
       pytest = null;
     };
   };
+
+  pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -7028,6 +7032,8 @@ in {
     };
   };
 
+  ezdxf = callPackage ../development/python-modules/ezdxf {};
+  
   facebook-sdk = buildPythonPackage rec {
     name = "facebook-sdk-0.4.0";
 
@@ -10352,6 +10358,8 @@ in {
     };
   };
 
+  vcrpy = callPackage ../development/python-modules/vcrpy { };
+
   venusian = buildPythonPackage rec {
     name = "venusian-1.0";
 
@@ -12840,23 +12848,7 @@ in {
     };
   });
 
-  httpbin = buildPythonPackage rec {
-    name = "httpbin-0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httpbin/${name}.tar.gz";
-      sha256 = "6b57f563900ecfe126015223a259463848daafbdc2687442317c0992773b9054";
-    };
-
-    propagatedBuildInputs = with self; [ flask markupsafe decorator itsdangerous six ];
-
-    meta = {
-      homepage = https://github.com/kennethreitz/httpbin;
-      description = "HTTP Request & Response Service";
-      license = licenses.mit;
-    };
-
-  };
+  httpbin = callPackage ../development/python-modules/httpbin { };
 
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.9.2";
@@ -13321,9 +13313,9 @@ in {
       license = with licenses; [ lgpl21 ];
     };
   };
-  
+
   iso-639 = callPackage ../development/python-modules/iso-639 {};
-  
+
   iso3166 = callPackage ../development/python-modules/iso3166 {};
 
   iso8601 = buildPythonPackage rec {
@@ -13712,17 +13704,7 @@ in {
     };
   };
 
-  kitchen = buildPythonPackage (rec {
-    name = "kitchen-1.1.1";
-    disabled = isPy3k;
-
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kitchen/kitchen-1.1.1.tar.gz";
-      sha256 = "0ki840hjk1q19w6icv0dj2jxb00966nwy9b1jib0dgdspj00yrr5";
-    };
-  });
+  kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
@@ -15795,7 +15777,7 @@ in {
 
     patches = [
       (pkgs.fetchpatch {
-        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch; 
+        url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch;
         sha256 = "08rn1s3w9424jhandy4j9sksy852ny00088zh15nirw5ajqg1dn7";
       })
     ];
@@ -19007,8 +18989,6 @@ in {
      license = licenses.asl20;
      };
   };
-
-  proselint = callPackage ../tools/text/proselint { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
@@ -31916,10 +31896,10 @@ EOF
   packet-python = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "packet-python";
-    version = "1.31";
+    version = "1.33";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/c3/1b/ea71ec9d6eeab92b783d23dd62e71e9296f9699bc7d457450859803929f0/${name}.tar.gz";
-      sha256 = "1z1zmrajfw01jr3mafimq7dvsb1rs978zln9xfd6fbqkp3vm9hc0";
+      url = "https://pypi.python.org/packages/eb/82/f0506bd964501f958ac6a37e843ccb7bd9e712732886258314d55f0ec710/packet-python-1.33.tar.gz";
+      sha256 = "0bmvfmvjm8jx0y8sv0jf5mhv0h3v8idx0sc5myxs7ig200584dd3";
     };
     propagatedBuildInputs = with self; [ requests ];
 

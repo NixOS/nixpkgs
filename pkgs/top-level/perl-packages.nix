@@ -14945,7 +14945,11 @@ let self = _self // overrides; _self = with self; {
     name = "version-0.9918";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JP/JPEACOCK/${name}.tar.gz";
-      sha256 = "0yr3aap5r6w9zd47w8k74228fhhyh85l90rbzg15j8jfmmz5q5sl";
+      sha256 = "54175c7ead4e2259c2fb2b83440b821e4287842067227e48fb899b5cae52237b";
+    };
+    meta = {
+      description = "Structured version objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

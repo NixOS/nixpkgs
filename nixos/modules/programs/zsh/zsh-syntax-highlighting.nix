@@ -18,7 +18,17 @@ in
 
         highlighters = mkOption {
           default = [ "main" ];
-          type = types.listOf(types.str);
+
+          # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+          type = types.listOf(types.enum([
+            "main"
+            "brackets"
+            "pattern"
+            "cursor"
+            "root"
+            "line"
+          ]));
+
           description = ''
             Specifies the highlighters to be used by zsh-syntax-highlighting.
 
