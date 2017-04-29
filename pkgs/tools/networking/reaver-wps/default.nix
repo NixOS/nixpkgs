@@ -1,21 +1,33 @@
 { stdenv, fetchurl, libpcap, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "reaver-wps-1.4";
+  version = "1.4";
+  name = "reaver-wps-${version}";
+  confdir = "/var/db/${name}"; # the sqlite database is at "${confdir}/reaver/reaver.db"
 
   src = fetchurl {
-    url = http://reaver-wps.googlecode.com/files/reaver-1.4.tar.gz;
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/reaver-wps/reaver-${version}.tar.gz";
     sha256 = "0bdjai4p8xbsw8zdkkk43rgsif79x0nyx4djpyv0mzh59850blxd";
   };
 
   buildInputs = [ libpcap sqlite ];
 
-  prePatch = ''
-    cd src
-  '';
+  sourceRoot = "reaver-${version}/src";
 
-  preInstall = ''
-    mkdir -p $out/bin
+  configureFlags = "--sysconfdir=${confdir}";
+
+  installPhase = ''
+    mkdir -p $out/{bin,etc,share}
+    cp reaver.db $out/etc/
+
+    for prog in reaver wash; do
+      cp $prog $out/share/
+      cat > $out/bin/$prog <<EOF
+    [ -f ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)
+    exec $out/share/$prog "\$@"
+    EOF
+      chmod +x $out/bin/$prog
+    done
   '';
 
   meta = {

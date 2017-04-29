@@ -3,6 +3,7 @@
 stdenv.mkDerivation rec {
   version = "1.5.2";
   name = "reaver-wps-t6x-${version}";
+  confdir = "/var/db/${name}"; # the sqlite database is at "${confdir}/reaver/reaver.db"
 
   src = fetchFromGitHub {
     owner = "t6x";
@@ -13,9 +14,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap sqlite pixiewps ];
 
-  prePatch = "cd src";
+  sourceRoot = "reaver-wps-fork-t6x-v${version}-src/src";
 
-  preInstall = "mkdir -p $out/bin";
+  configureFlags = "--sysconfdir=${confdir}";
+
+  installPhase = ''
+    mkdir -p $out/{bin,etc,share}
+    cp reaver.db $out/etc/
+
+    for prog in reaver wash; do
+      cp $prog $out/share/
+      cat > $out/bin/$prog <<EOF
+    [ -f ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)
+    exec $out/share/$prog "\$@"
+    EOF
+      chmod +x $out/bin/$prog
+    done
+  '';
 
   meta = {
     description = "Online and offline brute force attack against WPS";
