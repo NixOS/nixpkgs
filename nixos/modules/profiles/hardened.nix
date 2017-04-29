@@ -6,6 +6,8 @@
 with lib;
 
 {
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;
@@ -13,6 +15,9 @@ with lib;
   security.apparmor.enable = mkDefault true;
 
   boot.kernelParams = [
+    # Overwrite free'd memory
+    "page_poison=1"
+
     # Disable legacy virtual syscalls
     "vsyscall=none"
   ];
