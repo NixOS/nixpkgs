@@ -95,18 +95,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
-  ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
-    pname = "ghcjs-prim";
-    version = "0.1.0.0";
-    src = fetchgit {
-      url = git://github.com/ghcjs/ghcjs-prim.git;
-      rev = "dfeaab2aafdfefe46bf12960d069f28d2e5f1454"; # ghc-7.10 branch
-      sha256 = "19kyb26nv1hdpp0kc2gaxkq5drw5ib4za0641py5i4bbf1g58yvy";
-    };
-    buildDepends = [ primitive ];
-    license = pkgs.stdenv.lib.licenses.bsd3;
-  }) {};
-
   # diagrams/monoid-extras#19
   monoid-extras = overrideCabal super.monoid-extras (drv: {
     prePatch = "sed -i 's|4\.8|4.9|' monoid-extras.cabal";
@@ -202,7 +190,7 @@ self: super: {
   hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
   hslogger = addBuildDepend super.hslogger self.HUnit;
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
-  lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
+  lens = addBuildDepend super.lens self.generic-deriving;
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodePackages
+, jailbreak-cabal, hscolour, cpphs, nodejs, lib
 }: let isCross = (ghc.cross or null) != null; in
 
 { pname
@@ -53,7 +53,7 @@
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? []
+, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -66,7 +66,8 @@ let
                        concatStringsSep enableFeature optionalAttrs toUpper;
 
   isGhcjs = ghc.isGhcjs or false;
-  packageDbFlag = if isGhcjs || versionOlder "7.6" ghc.version
+  isHaLVM = ghc.isHaLVM or false;
+  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
                   then "package-db"
                   else "package-conf";
 
@@ -99,16 +100,15 @@ let
     "--with-ghc-pkg=${ghc.cross.config}-ghc-pkg"
     "--with-gcc=${ghc.cc}"
     "--with-ld=${ghc.ld}"
-    "--hsc2hs-options=--cross-compile"
     "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
-  ];
+  ] ++ (if isHaLVM then [] else ["--hsc2hs-options=--cross-compile"]);
 
   crossCabalFlagsString =
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
-    "--with-gcc=$CC"            # Clang won't work without that extra information.
+    "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
@@ -125,7 +125,6 @@ let
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [
      "--ghc-option=-split-sections"
   ] ++ optionals isGhcjs [
-    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
     "--ghcjs"
   ] ++ optionals isCross ([
     "--configure-option=--host=${ghc.cross.config}"
@@ -133,8 +132,10 @@ let
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
-    (optionalString (isGhcjs || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
-    (optionalString (versionOlder "7.10" ghc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
+    (optionalString isGhcjs "-build-runner")
+    (optionalString (isGhcjs || isHaLVM || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
+    # https://github.com/haskell/cabal/issues/2398
+    (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
   ];
 
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
@@ -148,6 +149,8 @@ let
                      buildTools ++ libraryToolDepends ++ executableToolDepends ++
                      optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
+                     # ghcjs's hsc2hs calls out to the native hsc2hs
+                     optional isGhcjs nativeGhc ++
                      optionals withBenchmarkDepends (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
@@ -156,7 +159,7 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupBuilder = if isCross || isGhcjs then "${nativeGhc}/bin/ghc" else ghcCommand;
+  setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
@@ -293,6 +296,14 @@ stdenv.mkDerivation ({
       local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
       mv $packageConfFile $packageConfDir/$pkgId.conf
     ''}
+    ${optionalString isGhcjs ''
+      for exeDir in "$out/bin/"*.jsexe; do
+        exe="''${exeDir%.jsexe}"
+        printf '%s\n' '#!${nodejs}/bin/node' > "$exe"
+        cat "$exeDir/all.js" >> "$exe"
+        chmod +x "$exe"
+      done
+    ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
     ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
       for exe in "$out/bin/"* ; do
@@ -319,11 +330,12 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"
+        ${if isHaLVM
+            then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
+            else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}
         ${shellHook}
       '';
     };
-
   };
 
   meta = { inherit homepage license platforms; }

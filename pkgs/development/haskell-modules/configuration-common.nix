@@ -55,6 +55,7 @@ self: super: {
 
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
+  mysql-haskell = dontCheck super.mysql-haskell;
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
@@ -170,7 +171,13 @@ self: super: {
     else dontCheck super.fsnotify;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then addExtraLibrary super.double-conversion pkgs.stdenv.cc.cc.lib
+    then addExtraLibrary
+           # https://github.com/bos/double-conversion/pull/17
+           (appendPatch super.double-conversion (pkgs.fetchpatch {
+              url = "https://github.com/basvandijk/double-conversion/commit/0927e347d53dbd96d1949930e728cc2471dd4b14.patch";
+              sha256 = "042yqbq5p6nc9nymmbz9hgp51dlc5asaj9bf91kw5fph6dw2hwg9";
+           }))
+           pkgs.stdenv.cc.cc.lib
     else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
@@ -282,6 +289,7 @@ self: super: {
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
+  friday-juicypixels = dontCheck super.friday-juicypixels; #tarball missing test/rgba8.png
   ghc-events = dontCheck super.ghc-events;              # http://hydra.cryp.to/build/498226/log/raw
   ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
   ghc-imported-from = dontCheck super.ghc-imported-from;
@@ -448,16 +456,6 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
-  # See instructions provided by Peti in https://github.com/NixOS/nixpkgs/issues/23036
-  purescript = super.purescript.overrideScope (self: super: {
-    # TODO: Re-evaluate the following overrides after the 0.11 release.
-    aeson = self.aeson_0_11_3_0;
-    http-client = self.http-client_0_4_31_2;
-    http-client-tls = self.http-client-tls_0_2_4_1;
-    pipes = self.pipes_4_2_0;
-    websockets = self.websockets_0_9_8_2;
-  });
-
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
@@ -480,9 +478,6 @@ self: super: {
 
   # https://github.com/afcowie/locators/issues/1
   locators = dontCheck super.locators;
-
-  # https://github.com/haskell/haddock/issues/378
-  haddock-library = dontCheck super.haddock-library;
 
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
@@ -681,8 +676,12 @@ self: super: {
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
 
-  # https://github.com/commercialhaskell/stack/issues/3001
-  stack = doJailbreak super.stack;
+  # The stack people don't bother making their own code compile in an LTS-based
+  # environment: https://github.com/commercialhaskell/stack/issues/3001.
+  stack = super.stack.overrideScope (self: super: {
+    store-core = self.store-core_0_3;
+    store = self.store_0_3_1;
+  });
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
@@ -753,13 +752,6 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
-  # https://github.com/NixOS/nixpkgs/issues/19612
-  wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
-    http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3_1;
-    http-conduit = self.http-conduit_2_2_3;
-  });
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
@@ -815,12 +807,6 @@ self: super: {
   # https://github.com/xmonad/xmonad-extras/issues/3
   xmonad-extras = doJailbreak super.xmonad-extras;
 
-  # https://github.com/bmillwood/pointfree/issues/21
-  pointfree = appendPatch super.pointfree (pkgs.fetchpatch {
-    url = "https://github.com/bmillwood/pointfree/pull/22.patch";
-    sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
-  });
-
   # https://github.com/int-e/QuickCheck-safe/issues/2
   QuickCheck-safe = doJailbreak super.QuickCheck-safe;
 
@@ -863,12 +849,43 @@ self: super: {
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
 
-  # https://github.com/cartazio/arithmoi/issues/49
-  arithmoi = overrideCabal super.arithmoi (drv: { doCheck = !pkgs.stdenv.isi686; });
-
   # https://github.com/danidiaz/streaming-eversion/issues/1
   streaming-eversion = dontCheck super.streaming-eversion;
 
+  # strict-io is too cautious with it's deepseq dependency
+  # strict-io doesn't have a working bug tracker, the author has been emailed however.
+  strict-io = doJailbreak super.strict-io;
+
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
-}
+} // (let scope' = self: super: {
+            haskell-tools-ast = super.haskell-tools-ast_0_6_0_0;
+            haskell-tools-backend-ghc = super.haskell-tools-backend-ghc_0_6_0_0;
+            haskell-tools-cli = super.haskell-tools-cli_0_6_0_0;
+            haskell-tools-daemon = super.haskell-tools-daemon_0_6_0_0;
+            haskell-tools-debug = super.haskell-tools-debug_0_6_0_0;
+            haskell-tools-demo = super.haskell-tools-demo_0_6_0_0;
+            haskell-tools-prettyprint = super.haskell-tools-prettyprint_0_6_0_0;
+            haskell-tools-refactor = super.haskell-tools-refactor_0_6_0_0;
+            haskell-tools-rewrite = super.haskell-tools-rewrite_0_6_0_0;
+          };
+      in {
+        haskell-tools-ast_0_6_0_0 =
+          super.haskell-tools-ast_0_6_0_0.overrideScope scope';
+        haskell-tools-backend-ghc_0_6_0_0 =
+          super.haskell-tools-backend-ghc_0_6_0_0.overrideScope scope';
+        haskell-tools-cli_0_6_0_0 =
+          dontCheck (super.haskell-tools-cli_0_6_0_0.overrideScope scope');
+        haskell-tools-daemon_0_6_0_0 =
+          dontCheck (super.haskell-tools-daemon_0_6_0_0.overrideScope scope');
+        haskell-tools-debug_0_6_0_0 =
+          super.haskell-tools-debug_0_6_0_0.overrideScope scope';
+        haskell-tools-demo_0_6_0_0 =
+          super.haskell-tools-demo_0_6_0_0.overrideScope scope';
+        haskell-tools-prettyprint_0_6_0_0 =
+          super.haskell-tools-prettyprint_0_6_0_0.overrideScope scope';
+        haskell-tools-refactor_0_6_0_0 =
+          super.haskell-tools-refactor_0_6_0_0.overrideScope scope';
+        haskell-tools-rewrite_0_6_0_0 =
+          super.haskell-tools-rewrite_0_6_0_0.overrideScope scope';
+     })

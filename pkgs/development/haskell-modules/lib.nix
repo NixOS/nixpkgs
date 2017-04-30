@@ -1,6 +1,7 @@
 { pkgs }:
 
 rec {
+  makePackageSet = pkgs.callPackage ./make-package-set.nix {};
 
   overrideCabal = drv: f: (drv.override (args: args // {
     mkDerivation = drv: (args.mkDerivation drv).override f;
@@ -37,6 +38,9 @@ rec {
 
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
   addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
+
+  addSetupDepend = drv: x: addSetupDepends drv [x];
+  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
 
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
@@ -75,6 +79,9 @@ rec {
     installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
   });
+
+  linkWithGold = drv : appendConfigureFlag drv
+    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
 
   # link executables statically against haskell libs to reduce closure size
   justStaticExecutables = drv: overrideCabal drv (drv: {

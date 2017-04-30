@@ -80,6 +80,10 @@ in rec {
     ghcjsHEAD = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
       bootPkgs = packages.ghc802;
     };
+    ghcHaLVM240 = callPackage ../development/compilers/halvm/2.4.0.nix rec {
+      bootPkgs = packages.ghc802;
+      inherit (bootPkgs) hscolour alex happy;
+    };
 
     jhc = callPackage ../development/compilers/jhc {
       inherit (packages.ghc763) ghcWithPackages;
@@ -101,6 +105,7 @@ in rec {
       in pkgs.recurseIntoAttrs (integerSimpleGhcs // {
            ghcHEAD = integerSimpleGhcs.ghcHEAD.override { selfPkgs = packages.integer-simple.ghcHEAD; };
          });
+
   };
 
   packages = {
@@ -162,11 +167,17 @@ in rec {
     };
     ghcjs = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjs;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
     ghcjsHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjsHEAD;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+    };
+    ghcHaLVM240 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghcHaLVM240;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-halvm-2.4.0.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers

@@ -29,6 +29,17 @@
 
 with import ./lib.nix { inherit pkgs; };
 
+# All of the overrides in this set should look like:
+#
+#   foo = ... something involving super.foo ...
+#
+# but that means that we add `foo` attribute even if there is no `super.foo`! So if
+# you want to use this configuration for a package set that only contains a subset of
+# the packages that have overrides defined here, you'll end up with a set that contains
+# a bunch of attributes that trigger an evaluation error.
+#
+# To avoid this, we use `intersectAttrs` here so we never add packages that are not present
+# in the parent package set (`super`).
 self: super: builtins.intersectAttrs super {
 
   # Apply NixOS-specific patches.
@@ -115,8 +126,7 @@ self: super: builtins.intersectAttrs super {
   glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
   gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
-  gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
-  gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
+  gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
@@ -227,6 +237,8 @@ self: super: builtins.intersectAttrs super {
         librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
       }
     );
+
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -417,9 +429,11 @@ self: super: builtins.intersectAttrs super {
   # tests require git
   hapistrano = addBuildTool super.hapistrano pkgs.git;
 
-  # requires webkitgtk API version 3 (webkitgtk 2.4 is the latest webkit supporting that version)
-  gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
-  gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
+  # This propagates this to everything depending on haskell-gi-base
+  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
+
+  # Requires gi-javascriptcore API version 4
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {

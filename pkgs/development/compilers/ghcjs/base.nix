@@ -19,7 +19,6 @@
 , executable-path
 , transformers-compat
 , haddock-api
-, ghcjs-prim
 , regex-posix
 , callPackage
 
@@ -122,7 +121,7 @@ in mkDerivation (rec {
     alex happy git gnumake autoconf automake libtool patch gmp
     base16-bytestring cryptohash executable-path haddock-api
     transformers-compat QuickCheck haddock hspec xhtml
-    ghcjs-prim regex-posix libiconv
+    regex-posix libiconv
   ];
   buildTools = [ nodejs git ];
   testDepends = [
