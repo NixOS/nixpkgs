@@ -3,7 +3,7 @@
 , libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
-, curl, libinput, systemd
+, curl, libinput, systemd, writeText
 }:
 
 stdenv.mkDerivation rec {
@@ -51,9 +51,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./efl-elua.patch ];
 
+  # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
+  setupHook = writeText "setupHook.sh" ''
+    export HOME="$TEMPDIR"
+  '';
+
   preConfigure = ''
     export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
-    export HOME="$TEMPDIR"
+    source "$setupHook"
   '';
 
   postInstall = ''
