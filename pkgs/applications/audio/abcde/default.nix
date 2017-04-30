@@ -39,6 +39,8 @@ in
 
     buildInputs = [ makeWrapper ];
 
+    propagatedBuildInputs = [ perl DigestSHA MusicBrainz MusicBrainzDiscID ];
+
     installFlags = [ "sysconfdir=$(out)/etc" ];
 
     postInstall = ''
