@@ -20347,11 +20347,11 @@ in {
 
   pyfiglet = buildPythonPackage rec {
     name = "pyfiglet-${version}";
-    version = "0.7.2";
+    version = "0.7.5";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/p/pyfiglet/${name}.tar.gz";
-      sha256 = "0v8a18wvaqnb1jksyv5dc5n6zj0vrkyhz0ivmm8gfwpa0ky6n68y";
+      sha256 = "04jy4182hn5xfs6jf432gxclfj1rhssd7bsf0b4gymrjzkhr8qa4";
     };
 
     doCheck = false;
@@ -26021,6 +26021,8 @@ in {
       license = "BSD";
     };
   };
+
+  termdown = callPackage ../applications/misc/termdown {};
 
   traits = buildPythonPackage rec {
     name = "traits-${version}";
