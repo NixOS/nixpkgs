@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
   };
 }
