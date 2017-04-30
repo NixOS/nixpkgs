@@ -6720,6 +6720,8 @@ with pkgs;
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
+  kcachegrind = callPackage ../development/tools/analysis/kcachegrind { };
+
   kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends {
     gperf = gperf_3_0;
   };
