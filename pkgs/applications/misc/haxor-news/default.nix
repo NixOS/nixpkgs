@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.4.1";
+  version = "0.4.2";
   name = "haxor-news-${version}";
 
   src = fetchurl {
     url = "https://github.com/donnemartin/haxor-news/archive/${version}.tar.gz";
-    sha256 = "0d3an7by33hjl8zg48y7ig6r258ghgbdkpp1psa9jr6n2nk2w9mr";
+    sha256 = "0543k5ys044f2a1q8k36djnnq2h2dffnwbkva9snjjy30nlwwdgs";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
     colorama
     requests2
     pygments
-    prompt_toolkit_52
+    prompt_toolkit
     six
   ];
 

@@ -19,7 +19,7 @@ let
     [syncserver]
     public_url = ${cfg.publicUrl}
     ${optionalString (cfg.sqlUri != "") "sqluri = ${cfg.sqlUri}"}
-    allow_new_users = ${if cfg.allowNewUsers then "true" else "false"}
+    allow_new_users = ${boolToString cfg.allowNewUsers}
 
     [browserid]
     backend = tokenserver.verifiers.LocalVerifier

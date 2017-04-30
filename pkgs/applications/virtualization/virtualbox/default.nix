@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras qt5.makeQtWrapper libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -72,15 +72,17 @@ in stdenv.mkDerivation {
         ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
-    sed -i -e '
-      s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g
-      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g
-      ${optionalString pulseSupport ''
-      s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g
-      ''}
-    ' src/VBox/Main/xml/Settings.cpp \
-      src/VBox/Devices/Audio/{alsa,pulse}_stubs.c \
-      include/VBox/dbus-calls.h
+
+    grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
+      ${optionalString pulseSupport
+        ''s@"libpulse\.so\.0"@"${libpulseaudio.out}/lib/libpulse.so.0"@g''}'
+
+    grep 'libdbus-1\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
+
+    grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
+      s@"libasound\.so\.2"@"${alsaLib.out}/lib/libasound.so.2"@g'
+
     export USER=nix
     set +x
   '';
@@ -153,7 +155,12 @@ in stdenv.mkDerivation {
 
     # Create wrapper script
     mkdir -p $out/bin
-    for file in VirtualBox VBoxManage VBoxSDL VBoxBalloonCtrl VBoxBFE VBoxHeadless; do
+    ${optionalString (!headless) ''
+      makeQtWrapper "$libexec/VirtualBox" $out/bin/VirtualBox
+    ''}
+    for file in ${optionalString (!headless) "VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+        echo "Linking $file to /bin"
+        test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file
     done
 

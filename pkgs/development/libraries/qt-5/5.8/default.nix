@@ -18,7 +18,7 @@ top-level attribute to `top-level/all-packages.nix`.
   newScope,
   stdenv, fetchurl, makeSetupHook, makeWrapper,
   bison, cups ? null, harfbuzz, mesa, perl,
-  gstreamer, gst-plugins-base,
+  gstreamer, gst-plugins-base, gtk3, dconf,
 
   # options
   developerBuild ? false,
@@ -76,6 +76,7 @@ let
       qtgraphicaleffects = callPackage ./qtgraphicaleffects.nix {};
       qtimageformats = callPackage ./qtimageformats.nix {};
       qtlocation = callPackage ./qtlocation.nix {};
+      qtmacextras = callPackage ./qtmacextras.nix {};
       qtmultimedia = callPackage ./qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
@@ -97,22 +98,23 @@ let
       qtxmlpatterns = callPackage ./qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-${qtbase.version}" [
+      full = env "qt-${qtbase.version}" ([
         qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwayland
+        qtsensors qtserialport qtsvg qttools qttranslations
         qtwebsockets qtx11extras qtxmlpatterns
-      ];
+      ] ++ optional (!stdenv.isDarwin) qtwayland
+        ++ optional (stdenv.isDarwin) qtmacextras);
 
       makeQtWrapper =
         makeSetupHook
-        { deps = [ makeWrapper ]; }
-        ../make-qt-wrapper.sh;
+        { deps = [ makeWrapper ] ++ optionals (!stdenv.isDarwin) [ dconf.lib gtk3 ]; }
+        (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
 
       qmakeHook =
         makeSetupHook
         { deps = [ self.qtbase.dev ]; }
-        ../qmake-hook.sh;
+        (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);
 
     };
 

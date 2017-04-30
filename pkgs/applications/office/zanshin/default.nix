@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GTD for KDE";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     inherit (kdelibs4.meta) platforms;
   };
 }

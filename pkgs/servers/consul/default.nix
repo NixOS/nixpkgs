@@ -17,6 +17,10 @@ buildGoPackage rec {
   # Keep consul.ui for backward compatability
   passthru.ui = consul-ui;
 
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")
+  '';
+
   meta = with stdenv.lib; {
     description = "Tool for service discovery, monitoring and configuration";
     homepage = "https://www.consul.io/";

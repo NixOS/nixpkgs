@@ -5,7 +5,9 @@
 , libelf, libvdpau, python2
 , grsecEnabled ? false
 , enableRadv ? false
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
+# It's overridden for mesa_drivers.
+, enableTextureFloats ? false
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -30,8 +32,10 @@ else
 
 let
   defaultGalliumDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
-    then ["nouveau" "freedreno" "vc4" "etnaviv"]
+    if stdenv.isArm
+    then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
+    else if stdenv.isAarch64
+    then ["nouveau" "vc4" ]
     else ["i915" "ilo" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
     if (stdenv.isArm || stdenv.isAarch64)
@@ -63,7 +67,7 @@ let
 in
 
 let
-  version = "17.0.1";
+  version = "17.0.4";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -78,7 +82,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "96fd70ef5f31d276a17e424e7e1bb79447ccbbe822b56844213ef932e7ad1b0c";
+    sha256 = "1269dc8545a193932a0779b2db5bce9be4a5f6813b98c38b93b372be8362a346";
   };
 
   prePatch = "patchShebangs .";
@@ -183,7 +187,7 @@ stdenv.mkDerivation {
 
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + optionalString (builtins.elem "intel" vulkanDrivers) ''
+  '' + optionalString (vulkanDrivers != []) ''
     # move share/vulkan/icd.d/
     mv $out/share/ $drivers/
     # Update search path used by Vulkan (it's pointing to $out but

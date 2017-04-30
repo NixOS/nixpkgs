@@ -1,5 +1,4 @@
-{ stdenv, fetchurl
-, unzip }:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +12,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  builder = ./builder.sh;
+  installPhase = ''
+    install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
+
+    install -m 644 CImg.h $out/include/
+    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
+    cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
+    cp README.txt $doc/share/doc/cimg/
+  '';
 
   outputs = [ "out" "doc" ];
 

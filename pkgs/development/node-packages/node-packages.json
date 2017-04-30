@@ -49,6 +49,7 @@
 , "peerflix"
 , "peerflix-server"
 , "phantomjs"
+, "prettier"
 , "react-tools"
 , "s3http"
 , "semver"

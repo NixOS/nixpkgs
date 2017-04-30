@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libcdio, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
-, lame, flac, eject, mkcue
+, lame, flac, eject, mkcue, glyr
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
@@ -52,7 +52,7 @@ in
          --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
 
       wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac ]}
+        ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
 
       wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
         "${wget}/bin"

@@ -20,26 +20,22 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.7.5";
-  
+  version = "2.8.1";
+
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "1r37gqx7hppqbgsbclchiis8wzzpb9srm3q3dlvlii2gpkk28kd6";
+    sha256 = "02vdnv30ms2s53ch5j4ldch5sxwjsg3098zkvwrwhi9k6yxshdg9";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];
-  
+
   outputs = [ "out" "info" ];
-  
+
   configureFlags = ''
     --sysconfdir=/etc
     ${optionalString (!enableNls) "--disable-nls"}
     ${optionalString enableTiny "--enable-tiny"}
-  '';
-
-  postPatch = optionalString stdenv.isDarwin ''
-    substituteInPlace src/text.c --replace "__time_t" "time_t"
   '';
 
   postInstall = ''

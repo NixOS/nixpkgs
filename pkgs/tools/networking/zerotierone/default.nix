@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, lzo, zlib, iproute, which, ronn }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.14";
+  version = "1.2.2";
   name = "zerotierone";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "1brlyqk2p5h9sws15nbkmm4qhx911aib1v7crmcm2rhwsad0c1nj";
+    sha256 = "058sy6yrprd23iyx7fxnwyvnp1xxsd55yapjv5m2n7dcb7l4005h";
   };
 
   preConfigure = ''

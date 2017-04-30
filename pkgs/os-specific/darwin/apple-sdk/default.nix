@@ -157,6 +157,7 @@ in rec {
         mkdir -p $out/include
         pushd $out/include >/dev/null
         ln -s "${sdk}/include/xpc"
+        ln -s "${sdk}/include/launch.h"
         popd >/dev/null
       '';
     };

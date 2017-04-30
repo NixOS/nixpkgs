@@ -132,6 +132,9 @@ wrapProgram() {
     local prog="$1"
     local hidden
     hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
+    while [ -e "$hidden" ]; do
+      hidden="${hidden}_"
+    done
     mv "$prog" "$hidden"
     # Silence warning about unexpanded $0:
     # shellcheck disable=SC2016

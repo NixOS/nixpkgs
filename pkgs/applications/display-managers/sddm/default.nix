@@ -25,14 +25,19 @@ let
       })
     ];
 
+    postPatch =
+      # Module Qt5::Test must be included in `find_package` before it is used.
+      ''
+        sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
+      '';
+
     nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
     buildInputs = [
       libxcb libpthreadstubs libXdmcp libXau pam systemd
-      qtbase qtdeclarative
     ];
 
-    propagatedUserEnvPkgs = builtins.map lib.getBin [
+    propagatedBuildInputs = [
       qtbase qtdeclarative
     ];
 
@@ -98,6 +103,7 @@ stdenv.mkDerivation {
       addToSearchPath RUNTIME_XDG_CONFIG_DIRS "$pkg/etc/xdg"
     done
 
+    mkdir -p "$out/bin"
     makeQtWrapper "$unwrapped/bin/sddm" "$out/bin/sddm"
 
     mkdir -p "$out/share/sddm"

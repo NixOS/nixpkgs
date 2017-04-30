@@ -1,7 +1,8 @@
-{ lib, fetchurl, mkPythonDerivation, python, isPyPy }:
+{ lib, fetchurl, buildPythonPackage, python, isPyPy }:
 
-if isPyPy then throw "sip not supported for interpreter ${python.executable}" else mkPythonDerivation rec {
+if isPyPy then throw "sip not supported for interpreter ${python.executable}" else buildPythonPackage rec {
   name = "sip-4.19.1";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
@@ -18,7 +19,7 @@ if isPyPy then throw "sip not supported for interpreter ${python.executable}" el
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander urkud ];
+    maintainers = with maintainers; [ lovek323 sander ];
     platforms   = platforms.all;
   };
 }

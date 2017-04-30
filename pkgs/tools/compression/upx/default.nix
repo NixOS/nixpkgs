@@ -1,33 +1,36 @@
-{stdenv, fetchurl, ucl, zlib}:
+{stdenv, fetchurl, fetchFromGitHub, ucl, zlib, perl}:
 
-stdenv.mkDerivation {
-  name = "upx-3.91";
-  src = fetchurl {
-    url = mirror://sourceforge/upx/upx-3.91-src.tar.bz2;
-    sha256 = "0g3aiinlcb37z1xhs202h2qrgbf8dygiyarmflbgahcq89byfz2j";
+stdenv.mkDerivation rec {
+  name = "upx-${version}";
+  version = "3.93";
+  src = fetchFromGitHub {
+    owner = "upx";
+    repo = "upx";
+    rev = "v${version}";
+    sha256 = "03ah23q85hx3liqyyj4vm8vip2d47bijsimagqd39q762a2rin3i";
   };
 
-  buildInputs = [ ucl zlib ];
+  buildInputs = [ ucl zlib perl ];
 
-  lzmaSrc = fetchurl {
-    url = mirror://sourceforge/sevenzip/lzma443.tar.bz2;
-    sha256 = "1ck4z81y6xv1x9ky8abqn3mj9xj2dwg41bmd5j431xgi8crgd1ds";
+  lzmaSrc = fetchFromGitHub {
+    owner = "upx";
+    repo = "upx-lzma-sdk";
+    rev = "v${version}";
+    sha256 = "16vj1c5bl04pzma0sr4saqk80y2iklyslzmrb4rm66aifa365zqj";
   };
 
   preConfigure = "
     export UPX_UCLDIR=${ucl}
-    mkdir lzma443
-    pushd lzma443
-    tar xf $lzmaSrc
-    popd
-    export UPX_LZMADIR=`pwd`/lzma443
+    cp -a $lzmaSrc/* src/lzma-sdk
+    export UPX_LZMADIR=`pwd`/src/lzma-sdk
     cd src
   ";
 
+  buildPhase = "make CHECK_WHITESPACE=true";
   installPhase = "mkdir -p $out/bin ; cp upx.out $out/bin/upx";
 
   meta = {
-    homepage = http://upx.sourceforge.net/;
+    homepage = https://upx.github.io/;
     description = "The Ultimate Packer for eXecutables";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

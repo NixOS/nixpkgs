@@ -10,14 +10,14 @@ buildPythonPackage rec {
   # If you need these, you can just add them to your environment.
 
   name = "hypothesis-${version}";
-  version = "3.6.1";
+  version = "3.7.0";
 
   # Upstream prefers github tarballs
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "${version}";
-    sha256 = "1zwr9g4h4jizbvm2d7fywdpcxmw8i1m85h8g72kizah07gk12aq1";
+    sha256 = "1zsv1ggf3g9rrigxl3zd1z8qc6fcj8lmszm8ib1ya4ar6r64x0yz";
   };
 
   buildInputs = stdenv.lib.optionals doCheck [ pytest flake8 flaky ];

@@ -1,14 +1,14 @@
 { stdenv, fetchurl, fetchpatch, libjpeg, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "jasper-2.0.10";
+  name = "jasper-2.0.12";
 
   src = fetchurl {
     # You can find this code on Github at https://github.com/mdadams/jasper
     # however note at https://www.ece.uvic.ca/~frodo/jasper/#download
     # not all tagged releases are for distribution.
     url = "http://www.ece.uvic.ca/~mdadams/jasper/software/${name}.tar.gz";
-    sha256 = "1s022mfxyw8jw60fgyj60lbm9h6bc4nk2751b0in8qsjwcl59n2l";
+    sha256 = "1njdbxv7d4anzrd476wjww2qsi96dd8vfnp4hri0srrqxpszl92v";
   };
 
   # newer reconf to recognize a multiout flag
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     moveToOutput bin "$bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.ece.uvic.ca/~frodo/jasper/;
     description = "JPEG2000 Library";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

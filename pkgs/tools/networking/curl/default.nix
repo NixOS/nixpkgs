@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "1s1hyndva0yp62xy96pcp4anzrvw6cl0abjajim17sbmdp00fwhw";
   };
 
-  patches = [ ];
-
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   enableParallelBuilding = true;
@@ -57,9 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-      # OS X does not have a default system bundle, so we assume cacerts is installed in the default nix-env profile
-      # This sucks. We should probably just include the latest cacerts in the darwin bootstrap.
-      "--with-ca-bundle=${if stdenv.isDarwin then "/nix/var/nix/profiles/default" else ""}/etc/ssl/certs/ca-${if stdenv.isDarwin then "bundle" else "certificates"}.crt"
+      "--with-ca-fallback"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )

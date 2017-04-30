@@ -17,6 +17,8 @@
 , lib, stdenv # lib.optional, needsPax
 }:
 
+with stdenv.lib;
+
 qtSubmodule {
   name = "qtwebengine";
   qtInputs = [ qtquickcontrols qtlocation qtwebchannel ];
@@ -41,7 +43,7 @@ qtSubmodule {
       -e "s,QLibraryInfo::location(QLibraryInfo::TranslationsPath),QLatin1String(\"$out/translations\"),g" \
       -e "s,QLibraryInfo::location(QLibraryInfo::LibraryExecutablesPath),QLatin1String(\"$out/libexec\"),g" \
       src/core/web_engine_library_info.cpp
-
+ '' + optionalString (!stdenv.isDarwin) ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
@@ -49,11 +51,9 @@ qtSubmodule {
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   '';
 
-  qmakeFlags = lib.optional enableProprietaryCodecs "WEBENGINE_CONFIG+=use_proprietary_codecs";
+  qmakeFlags = optional enableProprietaryCodecs "WEBENGINE_CONFIG+=use_proprietary_codecs";
 
   propagatedBuildInputs = [
-    dbus zlib minizip alsaLib snappy nss protobuf jsoncpp libevent
-
     # Image formats
     libjpeg libpng libtiff libwebp
 
@@ -61,19 +61,28 @@ qtSubmodule {
     srtp libvpx
 
     # Audio formats
-    alsaLib libopus
+    libopus
 
     # Text rendering
-    fontconfig freetype harfbuzz icu
+    harfbuzz icu
+  ]
+  ++ optionals (!stdenv.isDarwin) [
+    dbus zlib minizip snappy nss protobuf jsoncpp libevent
+
+    # Audio formats
+    alsaLib
+
+    # Text rendering
+    fontconfig freetype
+
+    libcap
+    pciutils
 
     # X11 libs
     xlibs.xrandr libXScrnSaver libXcursor libXrandr xlibs.libpciaccess libXtst
     xlibs.libXcomposite
-
-    libcap
-    pciutils
   ];
-  patches = lib.optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+  patches = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]

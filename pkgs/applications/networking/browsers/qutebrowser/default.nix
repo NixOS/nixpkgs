@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
+{ stdenv, lib, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
 , qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
-, qtwebkit-plugins }:
+, qtwebkit-plugins
+, withWebEngineDefault ? false
+}:
 
 let
   pdfjs = stdenv.mkDerivation rec {
@@ -72,10 +74,8 @@ in buildPythonApplication rec {
   '';
 
   postFixup = ''
-    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
-    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser
-
-    sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
+    wrapQtProgram $out/bin/qutebrowser \
+      ${lib.optionalString withWebEngineDefault ''--add-flags "--backend webengine"''}
   '';
 
   meta = {

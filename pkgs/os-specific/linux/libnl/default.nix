@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     inherit version;
     homepage = "http://www.infradead.org/~tgr/libnl/";
     description = "Linux NetLink interface library";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

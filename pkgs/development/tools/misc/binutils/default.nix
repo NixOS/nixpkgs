@@ -4,7 +4,7 @@
 
 let basename = "binutils-2.28"; in
 
-with { inherit (stdenv.lib) optional optionals optionalString; };
+let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = basename + optionalString (cross != null) "-${cross.config}";
@@ -95,6 +95,6 @@ stdenv.mkDerivation rec {
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */
-    priority = "10";
+    priority = 10;
   };
 }

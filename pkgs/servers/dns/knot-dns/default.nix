@@ -2,7 +2,7 @@
 , systemd, nettle, libedit, zlib, libiconv, fetchpatch
 }:
 
-with { inherit (stdenv.lib) optional optionals; };
+let inherit (stdenv.lib) optional optionals; in
 
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {

@@ -1,12 +1,19 @@
-{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
+{ stdenv, fetchurl, fetchpatch, cmake, libX11, libuuid, xz, vtk }:
 
 stdenv.mkDerivation rec {
-  name = "itk-4.10.0";
+  name = "itk-4.11.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/itk/InsightToolkit-4.10.0.tar.xz;
-    sha256 = "0pxijhqsnwcp9jv1d8p11hsj90k8ajpwxhrnn8kk8c56k7y1207a";
+    url = mirror://sourceforge/itk/InsightToolkit-4.11.0.tar.xz;
+    sha256 = "0axvyds0gads5914g0m70z5q16gzghr0rk0hy3qjpf1k9bkxvcq6";
   };
+
+  # Clang 4 dislikes signed comparisons of pointers against integers. Should no longer be
+  # necessary once we get past ITK 4.11.
+  patches = [ (fetchpatch {
+    url    = "https://github.com/InsightSoftwareConsortium/ITK/commit/d1407a55910ad9c232f3d241833cfd2e59024946.patch";
+    sha256 = "0h851afkv23fwgkibjss30fkbz4nkfg6rmmm4pfvkwpml23gzz7s";
+  }) ];
 
   cmakeFlags = [
     "-DBUILD_TESTING=OFF"

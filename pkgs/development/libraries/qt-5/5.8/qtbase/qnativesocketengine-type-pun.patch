@@ -1,0 +1,14 @@
+Index: qtbase-opensource-src-5.8.0/src/network/socket/qnativesocketengine_unix.cpp
+===================================================================
+--- qtbase-opensource-src-5.8.0.orig/src/network/socket/qnativesocketengine_unix.cpp
++++ qtbase-opensource-src-5.8.0/src/network/socket/qnativesocketengine_unix.cpp
+@@ -979,7 +979,8 @@ qint64 QNativeSocketEnginePrivate::nativ
+             if (cmsgptr->cmsg_len == CMSG_LEN(sizeof(int))
+                     && ((cmsgptr->cmsg_level == IPPROTO_IPV6 && cmsgptr->cmsg_type == IPV6_HOPLIMIT)
+                         || (cmsgptr->cmsg_level == IPPROTO_IP && cmsgptr->cmsg_type == IP_TTL))) {
+-                header->hopLimit = *reinterpret_cast<int *>(CMSG_DATA(cmsgptr));
++                int *ttl = reinterpret_cast<int *>(CMSG_DATA(cmsgptr));
++                header->hopLimit = *ttl;
+             }
+ 
+ #ifndef QT_NO_SCTP

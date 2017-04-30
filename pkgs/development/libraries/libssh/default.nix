@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.7.4";
+  name = "libssh-0.7.5";
 
   src = fetchurl {
-    url = "https://red.libssh.org/attachments/download/210/${name}.tar.xz";
-    sha256 = "03bcp9ksqp0s1pmwfmzhcknvkxay5k0mjzzxp3rjlifbng1vxq9r";
+    url = "https://red.libssh.org/attachments/download/218/${name}.tar.xz";
+    sha256 = "15bh6dm9c50ndddzh3gqcgw7axp3ghrspjpkb1z3dr90vkanvs2l";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "SSH client library";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ sander urkud ];
+    maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
   };
 }

@@ -1,13 +1,13 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild, cstruct }:
 
-let version = "1.5.1"; in
+let version = "1.6.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml-io-page-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/io-page/archive/v${version}.tar.gz";
-    sha256 = "0y92wbvi129d0i7wr4lpk1ps9l247zaf1ibqqz0i6spgl28dyq79";
+    sha256 = "1djwks3ss12m55q6h4jsvfsy848cxfnpaxkilw10h26xj6jchflz";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];

@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.vandenoever ];
     repositories.git = https://github.com/musescore/MuseScore;
+    broken = true;
   };
 }

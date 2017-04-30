@@ -4,19 +4,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  emacsName = "emacs-25.1";
-  name = "${emacsName}-mac-6.1";
+  emacsVersion = "25.2";
+  emacsName = "emacs-${emacsVersion}";
+  macportVersion = "6.3";
+  name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "ftp://ftp.gnu.org/gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "19f2798ee3bc26c95dca3303e7ab141e7ad65d6ea2b6945eeba4dbea7df48f33";
+    url = "mirror:///gnu/emacs/${emacsName}.tar.xz";
+    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
   };
 
   macportSrc = fetchurl {
-    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "1zwxh7zsvwcg221mpjh0dhpdas3j9mc5q92pprf8yljl7clqvg62";
+    url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
+    sha256 = "1dz11frk3ya3842lb89ixzpns9bz5f9njxdkyvjy75gfymqfhhzv";
   };
 
   hiresSrc = fetchurl {
@@ -26,7 +28,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses libxml2 gnutls pkgconfig texinfo gettext autoconf automake];
+  nativeBuildInputs = [ pkgconfig autoconf automake ];
+
+  buildInputs = [ ncurses libxml2 gnutls texinfo gettext ];
 
   propagatedBuildInputs = [
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mv $sourceRoot $name
-    tar xzf $macportSrc
+    tar xzf $macportSrc -C $name --strip-components=1
     mv $name $sourceRoot
 
     # extract retina image resources
@@ -56,6 +60,7 @@ stdenv.mkDerivation rec {
     "--with-xml2=yes"
     "--with-gnutls=yes"
     "--with-mac"
+    "--with-modules"
     "--enable-mac-app=$$out/Applications"
   ];
 
@@ -92,8 +97,8 @@ stdenv.mkDerivation rec {
       extensions are distributed with GNU Emacs; others are available
       separately.
 
-      This is "Mac port" addition to GNU Emacs 24. This provides a native
-      GUI support for Mac OS X 10.4 - 10.11. Note that Emacs 23 and later
+      This is "Mac port" addition to GNU Emacs 25. This provides a native
+      GUI support for Mac OS X 10.6 - 10.12. Note that Emacs 23 and later
       already contain the official GUI support via the NS (Cocoa) port for
       Mac OS X 10.4 and later. So if it is good enough for you, then you
       don't need to try this.

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     license = licenses.lgpl3Plus;
     homepage = http://eigen.tuxfamily.org ;
     platforms = platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ sander urkud raskin ];
+    maintainers = with stdenv.lib.maintainers; [ sander raskin ];
     inherit version;
   };
 }

@@ -6,7 +6,7 @@ with import ./attrsets.nix;
 with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
-with {inherit (import ./modules.nix) mergeDefinitions filterOverrides; };
+let inherit (import ./modules.nix) mergeDefinitions filterOverrides; in
 
 rec {
 
@@ -52,7 +52,7 @@ rec {
     { # Human-readable representation of the type, should be equivalent to
       # the type function name.
       name
-    , # Description of the type, defined recursively by embedding the the wrapped type if any.
+    , # Description of the type, defined recursively by embedding the wrapped type if any.
       description ? null
     , # Function applied to each definition that should return true if
       # its type-correct, false otherwise.

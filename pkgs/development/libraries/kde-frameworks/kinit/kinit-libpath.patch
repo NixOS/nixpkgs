@@ -1,8 +1,8 @@
-Index: kinit-5.24.0/src/kdeinit/kinit.cpp
+Index: kinit-5.32.0/src/kdeinit/kinit.cpp
 ===================================================================
---- kinit-5.24.0.orig/src/kdeinit/kinit.cpp
-+++ kinit-5.24.0/src/kdeinit/kinit.cpp
-@@ -672,19 +672,16 @@ static pid_t launch(int argc, const char
+--- kinit-5.32.0.orig/src/kdeinit/kinit.cpp
++++ kinit-5.32.0/src/kdeinit/kinit.cpp
+@@ -623,19 +623,15 @@ static pid_t launch(int argc, const char
  
          if (!libpath.isEmpty()) {
              if (libpath_relative) {
@@ -23,10 +23,9 @@ Index: kinit-5.24.0/src/kdeinit/kinit.cpp
 +                QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
 +                // Reverse the profile list.
 +                std::reverse(profiles.begin(), profiles.end());
-+                const QString libdir = QString::fromLatin1("/lib/");
-+                Q_FOREACH (const QByteArray &profile, profiles) {
++                for (const QByteArray &profile: profiles) {
 +                    if (!profile.isEmpty()) {
-+                        l.setFileName(QFile::decodeName(profile) + libdir + libpath);
++                        l.setFileName(QFile::decodeName(profile) + QStringLiteral("/lib/") + libpath);
 +                        if (l.load()) break;
 +                    }
                  }

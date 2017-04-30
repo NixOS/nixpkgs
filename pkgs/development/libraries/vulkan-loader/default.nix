@@ -3,12 +3,12 @@
   libXext, wayland, mesa_noglu }:
 
 let
-  version = "1.0.39.1";
+  version = "1.0.42.2";
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-LoaderAndValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "0y9zzrnjjjza2kkf5jfsdqhn98md6rsq0hb7jg62z2dipzky7zdp";
+    sha256 = "0na1ax2cgv6w29213mby56mndfsj3iizj3n5pbpy4s4p7ij9kdgn";
   };
 in
 
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_WSI_MIR_SUPPORT=OFF"
     "-DFALLBACK_DATA_DIRS=${mesa_noglu.driverLink}/share:/usr/local/share:/usr/share"
   ];
-
-  patches = [ ./use-xdg-paths.patch ./fallback-paths.patch ];
 
   outputs = [ "out" "dev" "demos" ];
 
@@ -59,5 +57,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.lunarg.com";
     platforms   = platforms.linux;
     license     = licenses.asl20;
+    maintainers = [ maintainers.ralith ];
   };
 }

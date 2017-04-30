@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg, rsync }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, rsync, removeReferencesTo }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -41,9 +41,7 @@ let
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
-  removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
-    | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
-  '');
+  removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
   dep2src = goDep:
     {
@@ -70,7 +68,7 @@ go.stdenv.mkDerivation (
   (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
   inherit name;
-  nativeBuildInputs = [ go parallel ]
+  nativeBuildInputs = [ removeReferencesTo go parallel ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
   buildInputs = [ go ] ++ buildInputs;
 
@@ -186,11 +184,7 @@ go.stdenv.mkDerivation (
   '';
 
   preFixup = preFixup + ''
-    while read file; do
-      cat $file ${removeExpr removeReferences} > $file.tmp
-      mv $file.tmp $file
-      chmod +x $file
-    done < <(find $bin/bin -type f 2>/dev/null)
+    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' +
   '';
 
   shellHook = ''

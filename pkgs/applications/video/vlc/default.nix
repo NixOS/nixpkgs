@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     sha256 = "1gjkrwlg8ab3skzl67cxb9qzg4187ifckd1z9kpy11q058fyjchn";
   };
 
+  patches = optional withQt5 (fetchurl {
+    name = "Fix-build-using-old-GCC-intrinsics.patch";
+    url = "https://patches.videolan.org/patch/14061/raw/";
+    sha256 = "16v4k7378a590diz11bdvdaqi9cpf6333hp5wr6v5sfrsma8qvpx";
+  });
+
   # Comment-out the Qt 5.5 version check, as we do apply the relevant patch.
   # https://trac.videolan.org/vlc/ticket/16497
   postPatch = if (!withQt5) then null else
@@ -50,6 +56,15 @@ stdenv.mkDerivation rec {
 
   LIVE555_PREFIX = live555;
 
+  preConfigure = ''
+    sed -e "s@/bin/echo@echo@g" -i configure
+  '' + optionalString withQt5 ''
+    # Make sure we only *add* "-std=c++11" to CXXFLAGS instead of overriding the
+    # values figured out by configure (for example "-g -O2").
+    sed -i -re '/^ *CXXFLAGS=("[^$"]+")? *$/s/CXXFLAGS="?/&-std=c++11 /' \
+      configure
+  '';
+
   configureFlags =
     [ "--enable-alsa"
       "--with-kde-solid=$out/share/apps/solid/actions"
@@ -60,8 +75,6 @@ stdenv.mkDerivation rec {
       "--enable-samplerate"
     ]
     ++ optional onlyLibVLC  "--disable-vlc";
-
-  preConfigure = ''sed -e "s@/bin/echo@echo@g" -i configure'';
 
   enableParallelBuilding = true;
 
@@ -76,9 +89,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.videolan.org/vlc/;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
-    broken =
-      if withQt5
-      then builtins.compareVersions qtbase.version "5.7.0" >= 0
-      else false;
   };
 }

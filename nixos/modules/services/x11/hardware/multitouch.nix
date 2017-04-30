@@ -74,7 +74,7 @@ in {
           MatchIsTouchpad "on"
           Identifier "Touchpads"
           Driver "mtrack"
-          Option "IgnorePalm" "${if cfg.ignorePalm then "true" else "false"}"
+          Option "IgnorePalm" "${boolToString cfg.ignorePalm}"
           Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
           Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"
           Option "ClickFinger3" "${builtins.elemAt cfg.buttonsMap 2}"

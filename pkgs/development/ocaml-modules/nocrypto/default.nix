@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     LD_LIBRARY_PATH=${cpuid}/lib/ocaml/${ocaml.version}/site-lib/stubslibs/ \
-    ${topkg.buildPhase} --with-lwt ${if withLwt then "true" else "false"}
+    ${topkg.buildPhase} --with-lwt ${boolToString withLwt}
   '';
   inherit (topkg) installPhase;
 

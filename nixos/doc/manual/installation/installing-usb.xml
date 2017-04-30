@@ -34,6 +34,11 @@ ISO, copy its contents verbatim to your drive, then either:
     in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
     the kernel documentation</link> for more details).</para>
   </listitem>
+  <listitem>
+    <para>If you want to load the contents of the ISO to ram after bootin
+    (So you can remove the stick after bootup) you can append the parameter
+    <literal>copytoram</literal>to the <literal>options</literal> field.</para>
+  </listitem>
 </itemizedlist>
 </para>
 

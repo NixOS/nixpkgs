@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, buildEnv }:
+{ stdenv, lib, makeWrapper, buildEnv, gtk3, dconf }:
 
 packages:
 
@@ -47,10 +47,11 @@ stdenv.mkDerivation {
                     --argv0 '"$0"' \
                     --suffix PATH : "$env/bin" \
                     --prefix XDG_CONFIG_DIRS : "$env/etc/xdg" \
-                    --prefix XDG_DATA_DIRS : "$env/share" \
-                    --set QML_IMPORT_PATH "$env/lib/qt5/imports" \
-                    --set QML2_IMPORT_PATH "$env/lib/qt5/qml" \
-                    --set QT_PLUGIN_PATH "$env/lib/qt5/plugins"
+                    --prefix XDG_DATA_DIRS : "$env/share:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
+                    --prefix QML_IMPORT_PATH : "$env/lib/qt5/imports" \
+                    --prefix QML2_IMPORT_PATH : "$env/lib/qt5/qml" \
+                    --prefix QT_PLUGIN_PATH : "$env/lib/qt5/plugins" \
+                    --prefix GIO_EXTRA_MODULES : "${dconf.lib}/lib/gio/modules"
                 good="1"
                 break
             fi

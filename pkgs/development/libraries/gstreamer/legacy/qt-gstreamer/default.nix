@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gstreamer, gst-plugins-base, boost, glib, qt4, cmake
+{ stdenv, fetchurl, gstreamer, gst-plugins-base, boost155, glib, qt4, cmake
 , automoc4, flex, bison, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gstreamer gst-plugins-base glib qt4 ];
-  propagatedBuildInputs = [ boost ];
+  propagatedBuildInputs = [ boost155 ];
   nativeBuildInputs = [ cmake automoc4 flex bison pkgconfig ];
 
   cmakeFlags = "-DUSE_QT_PLUGIN_DIR=OFF -DUSE_GST_PLUGIN_DIR=OFF";

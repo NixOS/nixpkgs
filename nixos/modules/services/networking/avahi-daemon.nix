@@ -7,31 +7,35 @@ let
 
   cfg = config.services.avahi;
 
+  yesNo = yes : if yes then "yes" else "no";
+
   avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
     [server]
     ${# Users can set `networking.hostName' to the empty string, when getting
       # a host name from DHCP.  In that case, let Avahi take whatever the
       # current host name is; setting `host-name' to the empty string in
       # `avahi-daemon.conf' would be invalid.
-      if hostName != ""
-      then "host-name=${hostName}"
-      else ""}
+      optionalString (hostName != "") "host-name=${hostName}"}
     browse-domains=${concatStringsSep ", " browseDomains}
-    use-ipv4=${if ipv4 then "yes" else "no"}
-    use-ipv6=${if ipv6 then "yes" else "no"}
+    use-ipv4=${yesNo ipv4}
+    use-ipv6=${yesNo ipv6}
     ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
     ${optionalString (domainName!=null) "domain-name=${domainName}"}
+    allow-point-to-point=${yesNo allowPointToPoint}
 
     [wide-area]
-    enable-wide-area=${if wideArea then "yes" else "no"}
+    enable-wide-area=${yesNo wideArea}
 
     [publish]
-    disable-publishing=${if publish.enable then "no" else "yes"}
-    disable-user-service-publishing=${if publish.userServices then "no" else "yes"}
-    publish-addresses=${if publish.userServices || publish.addresses then "yes" else "no"}
-    publish-hinfo=${if publish.hinfo then "yes" else "no"}
-    publish-workstation=${if publish.workstation then "yes" else "no"}
-    publish-domain=${if publish.domain then "yes" else "no"}
+    disable-publishing=${yesNo (!publish.enable)}
+    disable-user-service-publishing=${yesNo (!publish.userServices)}
+    publish-addresses=${yesNo (publish.userServices || publish.addresses)}
+    publish-hinfo=${yesNo publish.hinfo}
+    publish-workstation=${yesNo publish.workstation}
+    publish-domain=${yesNo publish.domain}
+
+    [reflector]
+    enable-reflector=${yesNo reflector}
   '';
 
 in
@@ -98,9 +102,23 @@ in
         '';
       };
 
+      allowPointToPoint = mkOption {
+        default = false;
+        description= ''
+          Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
+          latencies with such links and opens a potential security hole by allowing mDNS access from Internet
+          connections. Use with care and YMMV!
+        '';
+      };
+
       wideArea = mkOption {
         default = true;
         description = ''Whether to enable wide-area service discovery.'';
+      };
+
+      reflector = mkOption {
+        default = false;
+        description = ''Reflect incoming mDNS requests to all allowed network interfaces.'';
       };
 
       publish = {

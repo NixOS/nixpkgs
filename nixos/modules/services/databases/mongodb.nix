@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  b2s = x: if x then "true" else "false";
-
   cfg = config.services.mongodb;
 
   mongodb = cfg.package;

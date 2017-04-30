@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig
-, djvulibre, qt4, xorg, libtiff }:
+, djvulibre, qt4, xorg, libtiff
+, darwin }:
 
 stdenv.mkDerivation rec {
   name = "djview-${version}";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ djvulibre qt4 xorg.libXt libtiff ];
+  buildInputs = [ djvulibre qt4 xorg.libXt libtiff ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AGL ];
 
   passthru = {
     mozillaPlugin = "/lib/netscape/plugins";
@@ -23,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A portable DjVu viewer and browser plugin";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, mesa, libXrandr, libXi, libXxf86vm, libXfixes, xlibsWrapper
 , libXinerama, libXcursor
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake mesa libXrandr libXi libXxf86vm libXfixes xlibsWrapper
     libXinerama libXcursor
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa Kernel ]);
 
   cmakeFlags = "-DBUILD_SHARED_LIBS=ON";
 

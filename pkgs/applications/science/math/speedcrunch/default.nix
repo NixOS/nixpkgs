@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, qtbase, qttools }:
+{ stdenv, fetchgit, cmake, makeQtWrapper, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "speedcrunch-${version}";
@@ -11,12 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [ qtbase qttools ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeQtWrapper ];
 
   preConfigure = ''
     cd src
+  '';
+
+  postFixup = ''
+    wrapQtProgram $out/bin/speedcrunch
   '';
 
   meta = with stdenv.lib; {
@@ -30,7 +36,8 @@ stdenv.mkDerivation rec {
       full keyboard-friendly and more than 15 built-in math function.
     '';
     maintainers = with maintainers; [ gebner ];
-    platforms = platforms.all;
+    inherit (qtbase.meta) platforms;
+    # works with qt 5.6 and qt 5.8
+    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
   };
-
 }

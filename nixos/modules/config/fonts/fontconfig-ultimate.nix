@@ -43,7 +43,7 @@ in
         ultimate = {
           enable = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
               Enable fontconfig-ultimate settings (formerly known as
               Infinality). Besides the customizable settings in this NixOS

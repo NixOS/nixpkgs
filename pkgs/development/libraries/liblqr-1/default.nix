@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://liblqr.wikidot.com;
     description = "Seam-carving C/C++ library called Liquid Rescaling";
     platforms = platforms.all;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

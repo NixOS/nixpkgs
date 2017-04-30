@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux libraw1394
     ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
 
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-fixes.patch;
+
   meta = with stdenv.lib; {
     homepage = http://sourceforge.net/projects/libdc1394/;
     description = "Capture and control API for IIDC compliant cameras";

@@ -1,8 +1,9 @@
 [
   ./config/debug-info.nix
   ./config/fonts/corefonts.nix
-  ./config/fonts/fontconfig-ultimate.nix
   ./config/fonts/fontconfig.nix
+  ./config/fonts/fontconfig-penultimate.nix
+  ./config/fonts/fontconfig-ultimate.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
@@ -87,7 +88,9 @@
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/oblogout.nix
+  ./programs/qt5ct.nix
   ./programs/screen.nix
+  ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/shell.nix
   ./programs/spacefm.nix
@@ -100,7 +103,9 @@
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
+  ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
   ./security/apparmor.nix
@@ -112,6 +117,7 @@
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
+  ./security/lock-kernel-modules.nix
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix
@@ -129,6 +135,7 @@
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
+  ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
   ./services/backup/almir.nix
@@ -137,7 +144,6 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
-  ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
@@ -247,6 +253,7 @@
   ./services/mail/rmilter.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
+  ./services/misc/autorandr.nix
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
@@ -274,6 +281,7 @@
   ./services/misc/gpsd.nix
   #./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
+  ./services/misc/jackett.nix
   ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
@@ -294,6 +302,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
+  ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
   ./services/misc/ripple-rest.nix
@@ -415,6 +424,7 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/keepalived/default.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
@@ -453,7 +463,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  ./services/networking/quagga.nix
+  # ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
@@ -496,6 +506,7 @@
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
+  ./services/networking/xrdp.nix
   ./services/networking/zerobin.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
@@ -521,12 +532,14 @@
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
-  ./services/security/torify.nix
+  ./services/security/sshguard.nix
   ./services/security/tor.nix
+  ./services/security/torify.nix
   ./services/security/torsocks.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
+  ./services/system/earlyoom.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
@@ -654,6 +667,7 @@
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
+  ./tasks/powertop.nix
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix

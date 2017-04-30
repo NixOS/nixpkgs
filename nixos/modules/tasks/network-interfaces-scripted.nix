@@ -120,7 +120,7 @@ let
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"} || true
+                      "dev ${cfg.defaultGateway.interface}"} proto static || true
                 ''}
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
@@ -130,7 +130,7 @@ let
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway6.interface != null)
-                      "dev ${cfg.defaultGateway6.interface}"} || true
+                      "dev ${cfg.defaultGateway6.interface}"} proto static || true
                 ''}
               '';
           };
@@ -159,35 +159,42 @@ let
             after = [ "network-pre.target" ] ++ (deviceDependency i.name);
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
+            # Restart rather than stop+start this unit to prevent the
+            # network from dying during switch-to-configuration.
+            stopIfChanged = false;
             path = [ pkgs.iproute ];
             script =
               ''
+                # FIXME: shouldn't this be done in network-link?
                 echo "bringing up interface..."
                 ip link set "${i.name}" up
 
-                restart_network_interfaces=false
+                state="/run/nixos/network/addresses/${i.name}"
+
+                mkdir -p $(dirname "$state")
+
               '' + flip concatMapStrings (ips) (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
                 ''
-                  echo "checking ip ${address}..."
+                  echo "${address}" >> $state
                   if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                    echo "added ip ${address}..."
+                    echo "added ip ${address}"
                   elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
                     echo "failed to add ${address}"
                     exit 1
                   fi
                 '');
-            preStop = flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo -n "deleting ${address}..."
-                  ip addr del "${address}" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
-                  echo ""
-                '');
+            preStop = ''
+              state="/run/nixos/network/addresses/${i.name}"
+              while read address; do
+                echo -n "deleting $address..."
+                ip addr del "$address" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
+                echo ""
+              done < "$state"
+              rm -f "$state"
+            '';
           };
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"
@@ -239,6 +246,10 @@ let
                 ip link set "${i}" master "${n}"
                 ip link set "${i}" up
               '')}
+              # Save list of enslaved interfaces
+              echo "${flip concatMapStrings v.interfaces (i: ''
+                ${i}
+              '')}" > /run/${n}.interfaces
 
               # Enable stp on the interface
               ${optionalString v.rstp ''
@@ -250,7 +261,28 @@ let
             postStop = ''
               ip link set "${n}" down || true
               ip link del "${n}" || true
+              rm -f /run/${n}.interfaces
             '';
+            reload = ''
+              # Un-enslave child interfaces (old list of interfaces)
+              for interface in `cat /run/${n}.interfaces`; do
+                ip link set "$interface" nomaster up
+              done
+
+              # Enslave child interfaces (new list of interfaces)
+              ${flip concatMapStrings v.interfaces (i: ''
+                ip link set "${i}" master "${n}"
+                ip link set "${i}" up
+              '')}
+              # Save list of enslaved interfaces
+              echo "${flip concatMapStrings v.interfaces (i: ''
+                ${i}
+              '')}" > /run/${n}.interfaces
+
+              # (Un-)set stp on the bridge
+              echo ${if v.rstp then "2" else "0"} > /sys/class/net/${n}/bridge/stp_state
+            '';
+            reloadIfChanged = true;
           });
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"

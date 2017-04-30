@@ -72,7 +72,7 @@ in rec {
         (all nixos.tests.ecryptfs)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
-        #(all nixos.tests.plasma5) # temporarily, see #24240
+        (all nixos.tests.plasma5)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
@@ -92,8 +92,9 @@ in rec {
         (all nixos.tests.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
-        (all nixos.tests.sddm)
+        (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
+        (all nixos.tests.slim)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 

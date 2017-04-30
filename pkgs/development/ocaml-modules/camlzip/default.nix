@@ -4,16 +4,17 @@ let
   param =
     if stdenv.lib.versionAtLeast ocaml.version "4.02"
     then {
-      version = "1.06";
-      url = "1616";
-      sha256 = "0m6gyjw46w3qnhxfsyqyag42znl5lwargks7w7rfchr9jzwpff68";
-      patch = ./makefile_1_06.patch;
+      version = "1.07";
+      url = "https://github.com/xavierleroy/camlzip/archive/rel107.tar.gz";
+      sha256 = "1pdz3zyiczm6c46zfgag2frwq3ljlq044p3a2y4wm2wb4pgz8k9g";
+      patches = [];
       installTargets = "install-findlib";
     } else {
       version = "1.05";
-      url = "1037";
+      download_id = "1037";
+      url = "http://forge.ocamlcore.org/frs/download.php/${param.download_id}/camlzip-${param.version}.tar.gz";
       sha256 = "930b70c736ab5a7ed1b05220102310a0a2241564786657abe418e834a538d06b";
-      patch = ./makefile_1_05.patch;
+      patches = [./makefile_1_05.patch];
       installTargets = "install";
     };
 in
@@ -22,13 +23,15 @@ stdenv.mkDerivation {
   name = "camlzip-${param.version}";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/${param.url}/camlzip-${param.version}.tar.gz";
+    inherit (param) url;
     inherit (param) sha256;
   };
 
-  buildInputs = [zlib ocaml findlib];
+  buildInputs = [ocaml findlib];
 
-  patches = [ param.patch ];
+  propagatedBuildInputs = [zlib];
+
+  inherit (param) patches;
 
   createFindlibDestdir = true;
 

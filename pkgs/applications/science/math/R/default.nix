@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.3.3";
+  name = "R-3.4.0";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0v7wpj89b0i3ad3fi1wak5c93hywmbxv8sdnixhq8l17782nidss";
+    sha256 = "14cb8bwi3akvdb6934kqic2862f2qgav6cq4g0h7gi2p4ka9x3i8";
   };
 
   buildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install-info" "install-pdf" ];
 
   doCheck = true;
-  preCheck = "bin/Rscript -e 'sessionInfo()'";
+  preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 

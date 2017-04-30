@@ -11,7 +11,11 @@ has the following highlights: </para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>
+      The user handling now keeps track of deallocated UIDs/GIDs. When a user
+      or group is revived, this allows it to be allocated the UID/GID it had before.
+      A consequence is that UIDs and GIDs are no longer reused.
+    </para>
   </listitem>
 
 </itemizedlist>
@@ -31,6 +35,8 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      Top-level <literal>idea</literal> package collection was renamed.
+      All JetBrains IDEs are now at <literal>jetbrains</literal>.
     </para>
   </listitem>
 </itemizedlist>
@@ -47,6 +53,18 @@ following incompatible changes:</para>
       disabledModules</link>, allowing another to take it's place.  This can be
       used to import a set of modules from another channel while keeping the
       rest of the system on a stable release.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Updated to FreeType 2.7.1, including a new TrueType engine.
+      The new engine replaces the Infinality engine which was the default in
+      NixOS. The default font rendering settings are now provided by
+      fontconfig-penultimate, replacing fontconfig-ultimate; the new defaults
+      are less invasive and provide rendering that is more consistent with
+      other systems and hopefully with each font designer's intent. Some
+      system-wide configuration has been removed from the Fontconfig NixOS
+      module where user Fontconfig settings are available.
     </para>
   </listitem>
 

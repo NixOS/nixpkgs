@@ -100,6 +100,10 @@ with stdenv.lib;
   # Disable some expensive (?) features.
   PM_TRACE_RTC n
 
+  # Enable initrd support.
+  BLK_DEV_RAM y
+  BLK_DEV_INITRD y
+
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
@@ -119,6 +123,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
+  NETFILTER y
   NETFILTER_ADVANCED y
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y

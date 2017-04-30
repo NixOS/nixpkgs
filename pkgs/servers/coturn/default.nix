@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, openssl, libevent }:
 
-with { inherit (stdenv.lib) optional; };
+let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "coturn-${version}";

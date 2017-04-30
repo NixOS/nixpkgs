@@ -3,8 +3,8 @@
 let buildFor = toolsArch: (
 
 let
+  lib = import ../../../lib;
   pkgsFun = import ../../..;
-  pkgsNoParams = pkgsFun {};
 
   sheevaplugCrossSystem = {
     crossSystem = rec {
@@ -14,7 +14,7 @@ let
       float = "soft";
       withTLS = true;
       libc = "glibc";
-      platform = pkgsNoParams.platforms.sheevaplug;
+      platform = lib.systems.platforms.sheevaplug;
       openssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
@@ -29,7 +29,7 @@ let
       fpu = "vfp";
       withTLS = true;
       libc = "glibc";
-      platform = pkgsNoParams.platforms.raspberrypi;
+      platform = lib.systems.platforms.raspberrypi;
       openssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
@@ -44,7 +44,7 @@ let
       fpu = "vfpv3-d16";
       withTLS = true;
       libc = "glibc";
-      platform = pkgsNoParams.platforms.armv7l-hf-multiplatform;
+      platform = lib.systems.platforms.armv7l-hf-multiplatform;
       openssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
@@ -57,7 +57,7 @@ let
       arch = "aarch64";
       withTLS = true;
       libc = "glibc";
-      platform = pkgsNoParams.platforms.aarch64-multiplatform;
+      platform = lib.systems.platforms.aarch64-multiplatform;
       inherit (platform) gcc;
     };
   };
@@ -69,8 +69,6 @@ let
     if toolsArch == "aarch64" then aarch64-multiplatform-crossSystem else null;
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
-
-  inherit (pkgs.buildPackages) stdenv nukeReferences cpio binutilsCross;
 
   glibc = pkgs.buildPackages.libcCross;
   bash = pkgs.bash;
@@ -126,11 +124,15 @@ rec {
 
   build =
 
-    stdenv.mkDerivation {
+    pkgs.buildPackages.stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
       crossConfig = pkgs.hostPlatform.config;
 
-      buildInputs = [nukeReferences cpio binutilsCross];
+      buildInputs = [
+        pkgs.buildPackages.nukeReferences
+        pkgs.buildPackages.cpio
+        pkgs.buildPackages.binutils
+      ];
 
       buildCommand = ''
         set -x
@@ -221,8 +223,7 @@ rec {
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
         cp -d ${isl}/lib/libisl*.so* $out/lib
-        # Also this is needed since bzip2 uses a custom build system
-        # for native builds but autoconf (via a patch) for cross builds
+
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
@@ -262,7 +263,7 @@ rec {
       allowedReferences = [];
     };
 
-  dist = stdenv.mkDerivation {
+  dist = pkgs.buildPackages.stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools-cross";
 
     buildCommand = ''

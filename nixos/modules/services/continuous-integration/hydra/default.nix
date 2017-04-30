@@ -233,6 +233,7 @@ in
           hydra_logo ${cfg.logo}
         ''}
         gc_roots_dir ${cfg.gcRootsDir}
+        use-substitutes = ${if cfg.useSubstitutes then "1" else "0"}
       '';
 
     environment.systemPackages = [ cfg.package ];
@@ -328,7 +329,7 @@ in
           IN_SYSTEMD = "1"; # to get log severity levels
         };
         serviceConfig =
-          { ExecStart = "@${cfg.package}/bin/hydra-queue-runner hydra-queue-runner -v --option build-use-substitutes ${if cfg.useSubstitutes then "true" else "false"}";
+          { ExecStart = "@${cfg.package}/bin/hydra-queue-runner hydra-queue-runner -v --option build-use-substitutes ${boolToString cfg.useSubstitutes}";
             ExecStopPost = "${cfg.package}/bin/hydra-queue-runner --unlock";
             User = "hydra-queue-runner";
             Restart = "always";

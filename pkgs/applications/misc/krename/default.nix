@@ -21,7 +21,7 @@ let
       homepage = http://www.krename.net;
       description = "A powerful batch renamer for KDE";
       inherit (kconfig.meta) platforms;
-      maintainers = with maintainers; [ urkud peterhoeg ];
+      maintainers = with maintainers; [ peterhoeg ];
     };
 
     buildInputs = [ taglib exiv2 podofo ];

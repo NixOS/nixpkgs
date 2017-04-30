@@ -20,7 +20,7 @@ with lib;
 
 let cfg = config.fonts.fontconfig;
 
-    fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
+    fcBool = x: "<bool>" + (boolToString x) + "</bool>";
 
     # back-supported fontconfig version and package
     # version is used for font cache generation
@@ -75,23 +75,23 @@ let cfg = config.fonts.fontconfig;
       <fontconfig>
 
         <!-- Default rendering settings -->
-        <match target="font">
-          <edit mode="assign" name="hinting">
+        <match target="pattern">
+          <edit mode="append" name="hinting">
             ${fcBool cfg.hinting.enable}
           </edit>
-          <edit mode="assign" name="autohint">
+          <edit mode="append" name="autohint">
             ${fcBool cfg.hinting.autohint}
           </edit>
-          <edit mode="assign" name="hintstyle">
-            <const>hint${cfg.hinting.style}</const>
+          <edit mode="append" name="hintstyle">
+            <const>hintslight</const>
           </edit>
-          <edit mode="assign" name="antialias">
+          <edit mode="append" name="antialias">
             ${fcBool cfg.antialias}
           </edit>
-          <edit mode="assign" name="rgba">
+          <edit mode="append" name="rgba">
             <const>${cfg.subpixel.rgba}</const>
           </edit>
-          <edit mode="assign" name="lcdfilter">
+          <edit mode="append" name="lcdfilter">
             <const>lcd${cfg.subpixel.lcdfilter}</const>
           </edit>
         </match>
@@ -103,13 +103,6 @@ let cfg = config.fonts.fontconfig;
           </edit>
         </match>
         ''}
-
-        <!-- Force autohint always -->
-        <match target="font">
-          <edit name="force_autohint" mode="assign">
-            ${fcBool cfg.forceAutohint}
-          </edit>
-        </match>
 
       </fontconfig>
     '';
@@ -171,13 +164,6 @@ let cfg = config.fonts.fontconfig;
       <match target="font">
         <edit name="embeddedbitmap" mode="assign">
           ${fcBool cfg.useEmbeddedBitmaps}
-        </edit>
-      </match>
-
-      <!-- Render some monospace TTF fonts as bitmaps -->
-      <match target="pattern">
-        <edit name="bitmap_monospace" mode="assign">
-          ${fcBool cfg.renderMonoTTFAsBitmap}
         </edit>
       </match>
 
@@ -304,7 +290,11 @@ in
         antialias = mkOption {
           type = types.bool;
           default = true;
-          description = "Enable font antialiasing.";
+          description = ''
+            Enable font antialiasing. At high resolution (> 200 DPI),
+            antialiasing has no visible effect; users of such displays may want
+            to disable this option.
+          '';
         };
 
         dpi = mkOption {
@@ -320,7 +310,7 @@ in
           type = types.lines;
           default = "";
           description = ''
-            System-wide customization file contents, has higher priority than 
+            System-wide customization file contents, has higher priority than
             <literal>defaultFonts</literal> settings.
           '';
         };
@@ -358,26 +348,21 @@ in
           enable = mkOption {
             type = types.bool;
             default = true;
-            description = "Enable TrueType hinting.";
+            description = ''
+              Enable font hinting. Hinting aligns glyphs to pixel boundaries to
+              improve rendering sharpness at low resolution. At high resolution
+              (> 200 dpi) hinting will do nothing (at best); users of such
+              displays may want to disable this option.
+            '';
           };
 
           autohint = mkOption {
             type = types.bool;
-            default = true;
+            default = false;
             description = ''
-              Enable the autohinter, which provides hinting for otherwise
-              un-hinted fonts. The results are usually lower quality than
-              correctly-hinted fonts.
-            '';
-          };
-
-          style = mkOption {
-            type = types.enum ["none" "slight" "medium" "full"];
-            default = "full";
-            description = ''
-              TrueType hinting style, one of <literal>none</literal>,
-              <literal>slight</literal>, <literal>medium</literal>, or
-              <literal>full</literal>.
+              Enable the autohinter in place of the default interpreter.
+              The results are usually lower quality than correctly-hinted
+              fonts, but better than unhinted fonts.
             '';
           };
         };
@@ -398,7 +383,15 @@ in
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = ''
-              Subpixel order.
+              Subpixel order. The overwhelming majority of displays are
+              <literal>rgb</literal> in their normal orientation. Select
+              <literal>vrgb</literal> for mounting such a display 90 degrees
+              clockwise from its normal orientation or <literal>vbgr</literal>
+              for mounting 90 degrees counter-clockwise. Select
+              <literal>bgr</literal> in the unlikely event of mounting 180
+              degrees from the normal orientation. Reverse these directions in
+              the improbable event that the display's native subpixel order is
+              <literal>bgr</literal>.
             '';
           };
 
@@ -406,7 +399,9 @@ in
             default = "default";
             type = types.enum ["none" "default" "light" "legacy"];
             description = ''
-              FreeType LCD filter.
+              FreeType LCD filter. At high resolution (> 200 DPI), LCD filtering
+              has no visible effect; users of such displays may want to select
+              <literal>none</literal>.
             '';
           };
 
@@ -444,31 +439,19 @@ in
           description = ''Use embedded bitmaps in fonts like Calibri.'';
         };
 
-        forceAutohint = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Force use of the TrueType Autohinter. Useful for debugging or
-            free-software purists.
-          '';
-        };
-
-        renderMonoTTFAsBitmap = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''Render some monospace TTF fonts as bitmaps.'';
-        };
-
       };
 
     };
 
   };
-  config = mkIf cfg.enable {
-    fonts.fontconfig.confPackages = [ confPkg ];
-
-    environment.systemPackages    = [ pkgs.fontconfig ];
-    environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
-  };
+  config = mkMerge [
+    (mkIf cfg.enable {
+      environment.systemPackages    = [ pkgs.fontconfig ];
+      environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+    })
+    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+      fonts.fontconfig.confPackages = [ confPkg ];
+    })
+  ];
 
 }

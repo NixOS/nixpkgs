@@ -228,6 +228,7 @@ in rec {
   tests.containers-imperative = callTest tests/containers-imperative.nix {};
   tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
   tests.containers-physical_interfaces = callTest tests/containers-physical_interfaces.nix {};
+  tests.containers-restart_networking = callTest tests/containers-restart_networking.nix {};
   tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
@@ -247,7 +248,7 @@ in rec {
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
-  tests.grsecurity = callTest tests/grsecurity.nix {};
+  tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.hound = callTest tests/hound.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
@@ -287,17 +288,18 @@ in rec {
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
+  tests.postgresql = callSubTests tests/postgresql.nix {};
   tests.pgjwt = callTest tests/pgjwt.nix {};
-  tests.postgresql = callTest tests/postgresql.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};
-  tests.quagga = callTest tests/quagga.nix {};
+  # tests.quagga = callTest tests/quagga.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.samba = callTest tests/samba.nix {};
-  tests.sddm = callTest tests/sddm.nix {};
+  tests.sddm = callSubTests tests/sddm.nix {};
   tests.simple = callTest tests/simple.nix {};
+  tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};

@@ -12,6 +12,7 @@ let
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
+    dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
 
     [keyfile]
     ${optionalString (config.networking.hostName != "")
@@ -158,13 +159,24 @@ in {
       ethernet.macAddress = macAddressOpt;
       wifi.macAddress = macAddressOpt;
 
+      useDnsmasq = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable NetworkManager's dnsmasq integration. NetworkManager will run
+          dnsmasq as a local caching nameserver, using a "split DNS"
+          configuration if you are connected to a VPN, and then update
+          resolv.conf to point to the local nameserver.
+        '';
+      };
+
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
           options = {
             source = mkOption {
-              type = types.str;
+              type = types.path;
               description = ''
-                A script source.
+                A script.
               '';
             };
 
@@ -224,7 +236,7 @@ in {
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
       ++ lib.imap (i: s: {
-        text = s.source;
+        inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
       }) cfg.dispatcherScripts;
 
@@ -241,6 +253,7 @@ in {
     users.extraUsers = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
+      extraGroups = [ "networkmanager" ];
     }];
 
     systemd.packages = cfg.packages;
