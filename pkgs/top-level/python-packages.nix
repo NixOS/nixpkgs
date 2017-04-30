@@ -235,6 +235,61 @@ in {
     };
   };
 
+  displaycal = buildPythonPackage {
+
+    name = "displaycal-3.2.4.0";
+
+    enableParallelBuilding = true;
+
+    src = pkgs.fetchurl {
+      url = mirror://sourceforge.net/displaycal/release/3.2.4.0/DisplayCAL-3.2.4.0.tar.gz;
+      sha256 = "0swkhv338d1kmfxyf30zzdjs5xpbha40pg2zysiipcbasc0xhlb8";
+    };
+
+    propagatedBuildInputs = [
+      pkgs.xorg.libXext
+      pkgs.xorg.libXxf86vm
+      pkgs.xorg.libX11
+      pkgs.xorg.libXrandr
+      pkgs.xlibs.libXinerama
+      pkgs.argyllcms
+      self.wxPython
+      self.numpy
+    ];
+
+    buildInputs = [
+      pkgs.pkgconfig
+    ];
+
+    preConfigure = ''
+      mkdir dist
+      cp {misc,dist}/DisplayCAL.appdata.xml
+      mkdir -p $out
+      ln -s $out/share/DisplayCAL $out/Resources
+    '';
+
+    # no idea why it looks there - symlink .json lang (everything)
+    postInstall = ''
+      for x in $out/share/DisplayCAL/*; do
+        ln -s $x $out/lib/python2.7/site-packages/DisplayCAL
+      done
+
+      for prog in "$out/bin/"*; do
+        wrapProgram "$prog" \
+          --prefix PYTHONPATH : "$PYTHONPATH" \
+          --prefix PATH : ${pkgs.argyllcms}/bin
+      done
+    '';
+
+    meta = {
+      description = "Display Calibration and Characterization powered by Argyll CMS";
+      homepage = http://displaycal.net/;
+      license = stdenv.lib.licenses.gpl3;
+      maintainers = [stdenv.lib.maintainers.marcweber];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
   emcee = buildPythonPackage {
     name = "emcee-2.1.0";
     src = pkgs.fetchurl {
