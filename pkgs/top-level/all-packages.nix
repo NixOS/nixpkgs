@@ -1552,6 +1552,8 @@ with pkgs;
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
+  dockbarx = callPackage ../applications/misc/dockbarx { };
+
   dog = callPackage ../tools/system/dog { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
