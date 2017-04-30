@@ -1,7 +1,7 @@
 {
   kdeApp, lib,
   extra-cmake-modules, kdoctools, ki18n,
-  akonadi-contacts, gpgme, karchive, kcodecs, kcontacts, kcoreaddons, kcrash,
+  akonadi-contacts, gnupg1, gpgme, karchive, kcodecs, kcontacts, kcoreaddons, kcrash,
   kdbusaddons, kiconthemes, kjobwidgets, kio, knotifications, kservice,
   ktextwidgets, kxmlgui, kwidgetsaddons, kwindowsystem
 }:
@@ -14,6 +14,7 @@ kdeApp {
     kiconthemes kjobwidgets kio knotifications kservice ktextwidgets kxmlgui
     kwidgetsaddons kwindowsystem
   ];
+  propagatedBuildInputs = [ gnupg1 ];
   meta = {
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
