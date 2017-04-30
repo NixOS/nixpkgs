@@ -28,7 +28,7 @@ in buildPythonApplication rec {
 
     pango cairo gdk_pixbuf atk gtk2 glib
 
-    ffmpeg_3_2 libvpx x264 libwebp
+    ffmpeg libvpx x264 libwebp
 
     gobjectIntrospection
     gst_all_1.gstreamer
