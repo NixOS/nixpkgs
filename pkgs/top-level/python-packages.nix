@@ -8666,6 +8666,10 @@ in {
     };
   };
 
+  python-openid = callPackage ../development/python-modules/python-openid { };
+
+  python3-openid = callPackage ../development/python-modules/python3-openid { };
+
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
     version = "0.3.0";
@@ -11626,6 +11630,8 @@ in {
   };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
+
+  flask_openid = callPackage ../development/python-modules/flask-openid { };
 
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
