@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp, curl, libinput, systemd }:
+{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
+, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
+, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
+, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
+, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
+, curl, libinput, systemd
+}:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
