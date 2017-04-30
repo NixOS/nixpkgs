@@ -531,8 +531,9 @@
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
-  ./services/security/torify.nix
+  ./services/security/sshguard.nix
   ./services/security/tor.nix
+  ./services/security/torify.nix
   ./services/security/torsocks.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix

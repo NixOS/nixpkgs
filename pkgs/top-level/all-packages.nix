@@ -4003,6 +4003,8 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  sshguard = callPackage ../tools/security/sshguard {};
+
   softhsm = callPackage ../tools/security/softhsm { };
 
   solr = callPackage ../servers/search/solr { };
