@@ -110,8 +110,8 @@ let
   in {
     stdenv = super.stdenv // {
       inherit (buildPlatform) platform;
-    } // lib.optionalAttrs (targetPlatform != buildPlatform) {
-      cross = targetPlatform;
+    } // lib.optionalAttrs (hostPlatform != buildPlatform) {
+      cross = hostPlatform;
     };
     inherit (buildPlatform) system platform;
   };

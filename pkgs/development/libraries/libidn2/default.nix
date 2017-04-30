@@ -3,11 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libidn2-0.16";
+  name = "libidn2-${version}";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "https://alpha.gnu.org/gnu/libidn/${name}.tar.gz";
-    sha256 = "13v8kh4d5nfkymai88zlw3h7k4x9khrpdpv97waf4ah8ykzrxb9g";
+    url = "mirror://gnu/gnu/libidn/${name}.tar.gz";
+    sha256 = "1lzi4wng22gyzlgkr8jk75d03f2bnnch5yhmiwb0hram2la6a8qd";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];

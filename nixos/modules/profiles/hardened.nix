@@ -6,9 +6,24 @@
 with lib;
 
 {
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+
   security.hideProcessInformation = mkDefault true;
 
+  security.lockKernelModules = mkDefault true;
+
   security.apparmor.enable = mkDefault true;
+
+  boot.kernelParams = [
+    # Overwrite free'd memory
+    "page_poison=1"
+
+    # Disable legacy virtual syscalls
+    "vsyscall=none"
+
+    # Disable hibernation (allows replacing the running kernel)
+    "nohibernate"
+  ];
 
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
