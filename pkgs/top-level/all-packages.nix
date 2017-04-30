@@ -11911,7 +11911,18 @@ with pkgs;
 
   linuxPackages_grsec_nixos =
     recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
-
+    
+  # Grsecurity kernel for proprietary nvidia driver
+  linux_grsec_nvidia = linux_grsec_nixos.override (old: {
+    extraConfig = old.extraConfig + ''
+      PAX_RAP n
+      PAX_KERNEXEC_PLUGIN_METHOD_OR n
+    '';
+  });
+  
+  linuxPackages_grsec_nvidia =
+    recurseIntoAttrs (linuxPackagesFor pkgs.linux_grsec_nvidia);
+    
   # An unsupported grsec xen guest kernel
   linux_grsec_server_xen = linux_grsec_nixos.override {
     extraConfig = ''
