@@ -16148,6 +16148,8 @@ with pkgs;
     inherit (python27Packages) cheetah;
   };
 
+  worldengine-cli = python3Packages.worldengine;
+
   wpsoffice = callPackage ../applications/office/wpsoffice {};
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
