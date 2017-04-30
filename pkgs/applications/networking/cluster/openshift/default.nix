@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, go, which }:
+{ stdenv, fetchFromGitHub, go, which, removeReferencesTo, makeWrapper }:
 
 let
-  version = "1.3.2";
+  version = "1.5.0";
   ver = stdenv.lib.elemAt (stdenv.lib.splitString "." version);
   versionMajor = ver 0;
   versionMinor = ver 1;
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     owner = "openshift";
     repo = "origin";
     rev = "v${version}";
-    sha256 = "0zw8zb9c6icigcq6y47ppnjnqyghk2kril07bapbddvgnvbbfp6m";
+    sha256 = "0qvyxcyca3888nkgvyvqcmybm95ncwxb3zvrzbg2gz8kx6g6350v";
   };
 
-  buildInputs = [ go which ];
+  buildInputs = [ go which removeReferencesTo makeWrapper ];
 
   patchPhase = ''
     patchShebangs ./hack
@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     export GOARCH=$(go env GOARCH)
     mkdir -p "$out/bin"
     mv _output/local/bin/$GOOS/$GOARCH/* "$out/bin/"
+  '';
+
+  preFixup = ''
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
   '';
 
   meta = with stdenv.lib; {
