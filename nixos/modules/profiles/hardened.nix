@@ -20,6 +20,9 @@ with lib;
 
     # Disable legacy virtual syscalls
     "vsyscall=none"
+
+    # Disable hibernation (allows replacing the running kernel)
+    "nohibernate"
   ];
 
   # Restrict ptrace() usage to processes with a pre-defined relationship
