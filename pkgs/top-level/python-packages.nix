@@ -29776,11 +29776,6 @@ EOF
       export GEOS_DIR=${pkgs.geos}
     '';
 
-    # The installer does not support the '--old-and-unmanageable' option
-    installPhase = ''
-      ${python.interpreter} setup.py install --prefix $out
-    '';
-
     # The 'check' target is not supported by the `setup.py` script.
     # TODO : do the post install checks (`cd examples && ${python.interpreter} run_all.py`)
     doCheck = false;
