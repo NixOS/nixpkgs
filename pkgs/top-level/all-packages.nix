@@ -1004,6 +1004,8 @@ with pkgs;
 
   mathics = pythonPackages.mathics;
 
+  masscan = callPackage ../tools/security/masscan { };
+
   meson = callPackage ../development/tools/build-managers/meson { };
 
   metricbeat = callPackage ../misc/logging/metricbeat { };
