@@ -6124,6 +6124,11 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  # These pyside tools do not provide any Python modules and are meant to be here.
+  # See ../development/python-modules/pyside/default.nix for details.
+  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
+  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
+
   svg2tikz = python27Packages.svg2tikz;
 
   pyrex = pyrex095;

@@ -49,8 +49,11 @@ let
       fetchSource = {pname, version, sha256}:
       # Fetch a source tarball.
         let
-          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
-        in pkgs.fetchurl {inherit url sha256;};
+          urls = [
+            "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz"
+            "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.zip"
+          ];
+        in pkgs.fetchurl {inherit urls sha256;};
       fetcher = (if format == "wheel" then fetchWheel
         else if format == "setuptools" then fetchSource
         else throw "Unsupported kind ${kind}");
@@ -369,11 +372,9 @@ in {
 
   pyside = callPackage ../development/python-modules/pyside { };
 
-  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
-
-  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
-
-  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix { };
+  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
+    inherit (pkgs) libxml2 libxslt; # Do not need the Python bindings.
+  };
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
