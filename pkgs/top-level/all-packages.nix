@@ -925,7 +925,6 @@ with pkgs;
 
   facter = callPackage ../tools/system/facter {
     boost = boost160;
-    ruby = ruby_2_1;
   };
 
   fasd = callPackage ../tools/misc/fasd { };
