@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";
     maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

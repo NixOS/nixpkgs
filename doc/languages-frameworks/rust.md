@@ -17,8 +17,8 @@ into the `environment.systemPackages` or bring them into scope with
 `nix-shell -p rustStable.rustc -p rustStable.cargo`.
 
 There are also `rustBeta` and `rustNightly` package sets available.
-These are not updated very regulary. For daily builds see
-[Using the Rust nightlies overlay](#using-the-rust-nightlies-overlay)
+These are not updated very regulary. For daily builds use either rustup from
+nixpkgs or use the [Rust nightlies overlay](#using-the-rust-nightlies-overlay).
 
 ## Packaging Rust applications
 

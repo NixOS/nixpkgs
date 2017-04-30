@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config, makeWrapper
+{ stdenv, fetchurl, config, wrapGAppsHook
 , alsaLib
 , atk
 , cairo
@@ -77,11 +77,12 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha512; };
 
-  phases = "unpackPhase installPhase";
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
+      alsaLib.dev
       atk
       cairo
       curl
@@ -123,11 +124,12 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ makeWrapper gtk3 defaultIconTheme ];
+  buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
-  dontStrip = 1;
+  dontStrip = true;
+  dontPatchELF = true;
 
   installPhase =
     ''
@@ -154,22 +156,7 @@ stdenv.mkDerivation {
       # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
       ln -s "$out/usr/lib" "$out/lib"
 
-      # Create a desktop item.
-      mkdir -p $out/share/applications
-      cat > $out/share/applications/firefox.desktop <<EOF
-      [Desktop Entry]
-      Type=Application
-      Exec=$out/bin/firefox
-      Icon=$out/usr/lib/firefox-bin-${version}/browser/icons/mozicon128.png
-      Name=Firefox
-      GenericName=Web Browser
-      Categories=Application;Network;
-      EOF
-
-      wrapProgram "$out/bin/firefox" \
-        --argv0 "$out/bin/.firefox-wrapped" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
-        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+      gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
     '';
 
   passthru.ffmpegSupport = true;

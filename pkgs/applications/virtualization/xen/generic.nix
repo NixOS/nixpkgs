@@ -107,7 +107,8 @@ stdenv.mkDerivation (rec {
     # We want to do this before getting prefetched stuff to speed things up
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
-    find . -type f | xargs sed -i 's@/bin/bash@/bin/sh@g'
+    find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
+      | xargs sed -i 's@/bin/bash@/bin/sh@g'
 
     # Get prefetched stuff
     ${withXenfiles (name: x: ''
@@ -169,6 +170,11 @@ stdenv.mkDerivation (rec {
     ${withTools "postPatch" (name: x: x.postPatch)}
 
     ${config.postPatch or ""}
+  '';
+
+  postConfigure = ''
+    substituteInPlace tools/hotplug/Linux/xendomains \
+      --replace /bin/ls ls
   '';
 
   # TODO: Flask needs more testing before enabling it by default.

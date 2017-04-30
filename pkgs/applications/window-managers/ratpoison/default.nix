@@ -1,22 +1,29 @@
 { stdenv, fetchurl, pkgconfig, perl, autoconf, automake
 , libX11, inputproto, libXt, libXpm, libXft, libXtst, xextproto, libXi
-, fontconfig, freetype, readline
+, libXrandr, fontconfig, freetype, readline
 }:
 
 stdenv.mkDerivation rec {
   name = "ratpoison-${version}";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchurl {
     url = "mirror://savannah/ratpoison/${name}.tar.xz";
-    sha256 = "1w502z55vv7zs45l80nsllqh9fvfwjfdfi11xy1qikhzdmirains";
+    sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
   };
 
   outputs = [ "out" "contrib" "doc" "info" ];
 
+  configureFlags = [
+    # >=1.4.9 requires this even with readline in inputs
+    "--enable-history"
+  ];
+
+  nativeBuildInputs = [ pkgconfig autoconf automake ];
+
   buildInputs =
-    [ pkgconfig perl autoconf automake
-      libX11 inputproto libXt libXpm libXft libXtst xextproto libXi
+    [ perl
+      libX11 inputproto libXt libXpm libXft libXtst xextproto libXi libXrandr
       fontconfig freetype readline ];
 
   postInstall = ''

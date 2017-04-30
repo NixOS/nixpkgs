@@ -1,17 +1,19 @@
 { stdenv, pkgs, fetchurl, python3Packages, fetchFromGitHub, fetchzip, python3, beancount }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.2";
+  version = "1.3";
   name = "fava-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/beancount/fava/archive/v${version}.tar.gz";
-    sha256 = "0sykx054w4cvr0pgbqph0lmkxffafl83k5ir252gl5znxgcvg6yw";
+  src = fetchFromGitHub {
+    owner = "beancount";
+    repo = "fava";
+    rev = "v${version}";
+    sha256 = "0g0aj0qcmpny6dipi00nks7h3mf5a4jfd6bxjm1rb5807wswcpg8";
   };
 
   assets = fetchzip {
-    url = "https://github.com/beancount/fava/releases/download/v${version}/beancount-fava-${version}.tar.gz";
-    sha256 = "1lk6s3s6xvvwbcbkr1qpr9bqdgwspk3vms25zjd6xcs21s3hchmp";
+    url = "https://github.com/beancount/fava/releases/download/v${version}/fava-${version}.tar.gz";
+    sha256 = "0yn2psbn436g1w5ixn94z8ca6dfd54izg98979arn0k7slpiccvz";
   };
 
   buildInputs = with python3Packages; [ pytest_30 ];

@@ -55,6 +55,7 @@ let
         TextTable
         XMLSimple
         nixUnstable
+        nixUnstable.perl-bindings
         git
         boehmgc
       ];

@@ -6,15 +6,16 @@ stdenv.mkDerivation rec {
   version = "2.4.0";
   name = "HaLVM-${version}";
   isHaLVM = true;
+  enableParallelBuilding = false;
   isGhcjs = false;
   src = fetchgit {
-    rev = "6aa72c9b047fd8ddff857c994a5a895461fc3925";
+    rev = "65fad65966eb7e60f234453a35aeb564a09d2595";
     url = "https://github.com/GaloisInc/HaLVM";
-    sha256 = "05cg4w6fw5ajmpmh8g2msprnygmr4isb3pphqhlddfqwyvqhl167";
+    sha256 = "09633h38w0z20cz0wcfp9z5kzv8v1zwcv0wqvgq3c8svqbrxp28k";
   };
   prePatch = ''
-    sed -i '312 d' Makefile
-    sed -i '316,446 d' Makefile # Removes RPM packaging
+    sed -i '305 d' Makefile
+    sed -i '309,439 d' Makefile # Removes RPM packaging
     sed -i '20 d' src/scripts/halvm-cabal.in
     sed -ie 's|ld |${binutils}/bin/ld |g' src/scripts/ldkernel.in
   '';
@@ -31,7 +32,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
   hardeningDisable = ["all"];
-  postInstall = "$out/bin/halvm-ghc-pkg recache";
+  postInstall = ''
+    patchShebangs $out/bin
+    $out/bin/halvm-ghc-pkg recache
+  '';
   passthru = {
     inherit bootPkgs;
     cross.config = "halvm";
@@ -42,7 +46,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://github.com/GaloisInc/HaLVM";
     description = "The Haskell Lightweight Virtual Machine (HaLVM): GHC running on Xen";
+    platforms = ["x86_64-linux"];       # other platforms don't have Xen
     maintainers = with stdenv.lib.maintainers; [ dmjio ];
-    inherit (bootPkgs.ghc.meta) license platforms;
+    inherit (bootPkgs.ghc.meta) license;
   };
 }

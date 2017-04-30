@@ -79,13 +79,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1aq1lvhw4l0i2gc9x6ijaaj2h3894jbcpd4j055n0y9vg9vqm6yy";
+    sha256 = "16r3fyq472hzxnh6g3gm520pmw1ybslaki3pqjm2d9jnd2md1pa5";
   };
 
   patchPhase = ''

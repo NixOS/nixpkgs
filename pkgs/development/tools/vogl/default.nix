@@ -3,7 +3,7 @@
 , makeQtWrapper, qtbase, qtx11extras
 , libdwarf, libjpeg_turbo, libunwind, lzma, tinyxml, libX11
 , SDL2, SDL2_gfx, SDL2_image, SDL2_ttf
-, freeglut, mesa, mesa_glu
+, freeglut, mesa_glu
 }:
 stdenv.mkDerivation rec {
   name = "vogl-${version}";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     qtbase qtx11extras
     libdwarf libjpeg_turbo libunwind lzma tinyxml libX11
     SDL2 SDL2_gfx SDL2_image SDL2_ttf
-    freeglut mesa mesa_glu
+    freeglut mesa_glu
   ];
 
   enableParallelBuilding = true;

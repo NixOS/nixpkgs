@@ -12,7 +12,7 @@ kdeFramework {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     homepage = "http://www.kde.org";
     license = licenses.bsd2;
     maintainers = [ maintainers.ttuegel ];

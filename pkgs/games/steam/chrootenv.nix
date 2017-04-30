@@ -63,6 +63,7 @@ in buildFHSUserEnv rec {
     libdrm
     mono
     xorg.xkeyboardconfig
+    xlibs.libpciaccess
 
     (steamPackages.steam-runtime-wrapped.override {
       inherit nativeOnly runtimeOnly newStdcpp;

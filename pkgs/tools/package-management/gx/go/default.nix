@@ -29,6 +29,6 @@ buildGoPackage rec {
     description = "A tool for importing go packages into gx";
     homepage = https://github.com/whyrusleeping/gx-go;
     license = licenses.mit;
-    maintainer = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ zimbatm ];
   };
 }

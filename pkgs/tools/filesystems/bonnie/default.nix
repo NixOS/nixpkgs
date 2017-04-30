@@ -7,8 +7,6 @@ stdenv.mkDerivation rec {
     sha256 = "0vkl42rsrsy95fc1ykc6g8rsdbnpxayvdaihnnkly1fww1m3hyz2";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./bonnie-homebrew.patch;
-
   enableParallelBuilding = true;
 
   meta = {

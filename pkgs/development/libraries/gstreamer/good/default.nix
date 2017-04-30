@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       code, LGPL or LGPL-compatible for the supporting library).
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 
   src = fetchurl {

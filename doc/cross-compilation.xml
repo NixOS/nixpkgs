@@ -37,16 +37,9 @@
     </para>
     <para>
       In Nixpkgs, these three platforms are defined as attribute sets under the names <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and <literal>targetPlatform</literal>.
-      All are guaranteed to contain at least a <varname>platform</varname> field, which contains detailed information on the platform.
       All three are always defined at the top level, so one can get at them just like a dependency in a function that is imported with <literal>callPackage</literal>:
       <programlisting>{ stdenv, buildPlatform, hostPlatform, fooDep, barDep, .. }: ...</programlisting>
     </para>
-    <warning><para>
-      These platforms should all have the same structure in all scenarios, but that is currently not the case.
-      When not cross-compiling, they will each contain a <literal>system</literal> field with a short 2-part, hyphen-separated summering string name for the platform.
-      But, when when cross compiling, <literal>hostPlatform</literal> and <literal>targetPlatform</literal> may instead contain <literal>config</literal> with a fuller 3- or 4-part string in the manner of LLVM.
-      We should have all 3 platforms always contain both, and maybe give <literal>config</literal> a better name while we are at it.
-    </para></warning>
     <variablelist>
       <varlistentry>
         <term><varname>buildPlatform</varname></term>
@@ -83,7 +76,7 @@
             Nixpkgs tries to avoid this where possible too, but still, because the concept of a target platform is so ingrained now in Autoconf and other tools, it is best to support it as is.
             Tools like LLVM that don't need up-front target platforms can safely ignore it like normal packages, and it will do no harm.
           </para>
-          </listitem>
+        </listitem>
       </varlistentry>
     </variablelist>
     <note><para>
@@ -91,6 +84,56 @@
       This field defined as <varname>hostPlatform</varname> when the host and build platforms differ, but otherwise not defined at all.
       This field is obsolete and will soon disappear—please do not use it.
     </para></note>
+    <para>
+      The exact scheme these fields is a bit ill-defined due to a long and convoluted evolution, but this is slowly being cleaned up.
+      For now, here are few fields can count on them containing:
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term><varname>system</varname></term>
+        <listitem>
+          <para>
+            This is a two-component shorthand for the platform.
+            Examples of this would be "x86_64-darwin" and "i686-linux"; see <literal>lib.systems.doubles</literal> for more.
+            This format isn't very standard, but has built-in support in Nix, such as the <varname>builtins.currentSystem</varname> impure string.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>config</varname></term>
+        <listitem>
+          <para>
+            This is a 3- or 4- component shorthand for the platform.
+            Examples of this would be "x86_64-unknown-linux-gnu" and "aarch64-apple-darwin14".
+            This is a standard format called the "LLVM target triple", as they are pioneered by LLVM and traditionally just used for the <varname>targetPlatform</varname>.
+            This format is strictly more informative than the "Nix host double", as the previous format could analogously be termed.
+            This needs a better name than <varname>config</varname>!
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>parsed</varname></term>
+        <listitem>
+          <para>
+            This is a nix representation of a parsed LLVM target triple with white-listed components.
+            This can be specified directly, or actually parsed from the <varname>config</varname>.
+            [Technically, only one need be specified and the others can be inferred, though the precision of inference may not be very good.]
+            See <literal>lib.systems.parse</literal> for the exact representation, along with some <literal>is*</literal>predicates.
+            These predicates are superior to the ones in <varname>stdenv</varname> as they aren't tied to the build platform (host, as previously discussed, would be a saner default).
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>platform</varname></term>
+        <listitem>
+          <para>
+            This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set).
+            See <literal>lib.systems.platforms</literal> for examples—there's hopefully one in there that will work verbatim for each platform one is working.
+            Please help us triage these flags and give them better homes!
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </section>
 
   <section>
@@ -124,6 +167,11 @@
       Because of this, a best-of-both-worlds solution is in the works with no splicing or explicit access of <varname>buildPackages</varname> needed.
       For now, feel free to use either method.
     </para>
+    <note><para>
+      There is also a "backlink" <varname>__targetPackages</varname>, yielding a package set whose <varname>buildPackages</varname> is the current package set.
+      This is a hack, though, to accommodate compilers with lousy build systems.
+      Please do not use this unless you are absolutely sure you are packaging such a compiler and there is no other way.
+    </para></note>
   </section>
 
 </section>

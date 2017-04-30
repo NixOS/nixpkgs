@@ -1,7 +1,8 @@
 {
   kdeApp, lib, kdeWrapper,
-  cmake, automoc4,
-  kdelibs, perl, python, php
+  extra-cmake-modules, kdoctools,
+  kio, ki18n,
+  perl, python, php
 }:
 
 kdeWrapper {
@@ -11,8 +12,8 @@ kdeWrapper {
       license = with lib.licenses; [ gpl2 ];
       maintainers = with lib.maintainers; [ orivej ];
     };
-    nativeBuildInputs = [ cmake automoc4 ];
-    buildInputs = [ kdelibs perl python php ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+    buildInputs = [ perl python php kio ki18n ];
     enableParallelBuilding = true;
   };
 

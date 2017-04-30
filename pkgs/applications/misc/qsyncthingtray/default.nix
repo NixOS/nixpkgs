@@ -36,9 +36,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = let qst = "qsyncthingtray"; in ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m755 QSyncthingTray $out/bin/${qst}
     ln -s $out/bin/${qst} $out/bin/QSyncthingTray
+    wrapQtProgram $out/bin/qsyncthingtray
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
@@ -52,6 +57,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy peterhoeg ];
     platforms = platforms.all;
-    broken = builtins.compareVersions qtbase.version "5.7.0" >= 0;
+    # 0.5.7 segfaults when opening the main panel with qt 5.7 but qt 5.8 is OK
+    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
   };
 }

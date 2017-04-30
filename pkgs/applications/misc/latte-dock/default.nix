@@ -1,26 +1,33 @@
-{ stdenv, lib, cmake, plasma-framework, fetchFromGitHub }:
+{ stdenv, lib, cmake, xorg, plasma-framework, fetchFromGitHub, kdeWrapper }:
 
-let version = "0.5.98"; in
+let version = "0.6.0";
 
-stdenv.mkDerivation {
-  name = "latte-dock-${version}";
+    unwrapped = stdenv.mkDerivation {
+      name = "latte-dock-${version}";
 
-  src = fetchFromGitHub {
-    owner = "psifidotos";
-    repo = "Latte-Dock";
-    rev = version;
-    sha256 = "0z02ipbbv0dmcxs2g3dq5h62klhijni1i4ikq903hjg0j2cqg5xh";
-  };
+      src = fetchFromGitHub {
+        owner = "psifidotos";
+        repo = "Latte-Dock";
+        rev = "v${version}";
+        sha256 = "1967hx4lavy96vvik8d5m2c6ycd2mlf9cmhrv40zr0784ni0ikyv";
+      };
 
-  buildInputs = [ plasma-framework ];
+      buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp ];
 
-  nativeBuildInputs = [ cmake ];
+      nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
-    description = "Dock-style app launcher based on Plasma frameworks";
-    homepage = https://github.com/psifidotos/Latte-Dock;
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.benley ];
-  };
+      enableParallelBuilding = true;
+
+      meta = with stdenv.lib; {
+        description = "Dock-style app launcher based on Plasma frameworks";
+        homepage = https://github.com/psifidotos/Latte-Dock;
+        license = licenses.gpl2;
+        platforms = platforms.unix;
+        maintainers = [ maintainers.benley ];
+      };
+    };
+
+in kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/latte-dock" ];
 }

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
 , obex_data_server, xdg_utils, libnotify, dconf, gsettings_desktop_schemas, dnsmasq, dhcp
-, hicolor_icon_theme, librsvg
+, hicolor_icon_theme, librsvg, wrapGAppsHook
 , withPulseAudio ? true, libpulseaudio }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
     sha256 = "03s305mbc57nl3sq5ywh9casz926k4aqnylgaidli8bmgz1djbg9";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython ];
+  nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython wrapGAppsHook ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf librsvg
                   gsettings_desktop_schemas hicolor_icon_theme ]
@@ -32,12 +32,8 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ (lib.enableFeature withPulseAudio "pulseaudio") ];
 
-  postFixup = ''
-    makeWrapperArgs="\
-      --prefix PATH ':' ${binPath} \
-      --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
-      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-      --prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
+  preFixup = ''
+    makeWrapperArgs="--prefix PATH ':' ${binPath}"
     wrapPythonPrograms
   '';
 

@@ -2,7 +2,7 @@
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, automake114x, cmake
+, libvisio, libcdr, libexif, automake114x, potrace, cmake
 }:
 
 let
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif automake114x cmake
+    libvisio libcdr libexif automake114x potrace cmake
   ];
 
   enableParallelBuilding = true;

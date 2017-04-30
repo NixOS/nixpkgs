@@ -1,19 +1,20 @@
 { supportedSystems
 , packageSet ? (import ../..)
 , scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ../../lib;
+let
+  lib = import ../../lib;
+in with lib;
 
 rec {
 
-  # Ensure that we don't build packages marked as unfree.
-  allPackages = args: packageSet (args // {
-    config.allowUnfree = false;
-    config.inHydra = true;
-  });
+  allPackages = args: packageSet (args // nixpkgsArgs);
 
   pkgs = pkgsFor "x86_64-linux";
+  inherit lib;
 
 
   hydraJob' = if scrubJobs then hydraJob else id;
@@ -42,6 +43,11 @@ rec {
   pkgs_i686_cygwin = allPackages { system = "i686-cygwin"; };
   pkgs_x86_64_cygwin = allPackages { system = "x86_64-cygwin"; };
 
+
+  assertTrue = bool:
+    if bool
+    then pkgs.runCommand "evaluated-to-true" {} "touch $out"
+    else pkgs.runCommand "evaluated-to-false" {} "false";
 
   /* The working or failing mails for cross builds will be sent only to
      the following maintainers, as most package maintainers will not be

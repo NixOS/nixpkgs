@@ -1,4 +1,3 @@
-
 { # The platforms for which we build Nixpkgs.
   supportedSystems ? [ builtins.currentSystem ]
 , # Strip most of attributes when evaluating to spare memory usage
@@ -8,8 +7,6 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  inherit (pkgs) lib;
-
   nativePlatforms = linux;
 
   /* Basic list of packages to cross-build */
@@ -23,11 +20,26 @@ let
   /* Basic list of packages to be natively built,
      but need a crossSystem defined to get meaning */
   basicNativeDrv = {
+    buildPackages.binutils = nativePlatforms;
     buildPackages.gccCrossStageFinal = nativePlatforms;
     buildPackages.gdbCross = nativePlatforms;
   };
 
   basic = basicCrossDrv // basicNativeDrv;
+
+  windows = {
+    buildPackages.binutils = nativePlatforms;
+    buildPackages.gccCrossStageFinal = nativePlatforms;
+
+    coreutils = nativePlatforms;
+    boehmgc = nativePlatforms;
+    gmp = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
+  };
 
 in
 
@@ -50,11 +62,11 @@ in
     # cause false negatives.
     testEqualOne = path: system: let
       f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert
+    in assertTrue (
         f path { inherit system; }
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; };
-      true;
+        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+      );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 
@@ -80,7 +92,7 @@ in
       arch = "arm";
       float = "soft";
       withTLS = true;
-      platform = pkgs.platforms.sheevaplug;
+      platform = lib.systems.platforms.sheevaplug;
       libc = "glibc";
       openssl.system = "linux-generic32";
     };
@@ -92,63 +104,36 @@ in
   /* Test some cross builds on 32 bit mingw-w64 */
   crossMingw32 = let
     crossSystem = {
-      config = "i686-w64-mingw32";
+      config = "i686-pc-mingw32";
       arch = "x86"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    boehmgc = nativePlatforms;
-    gmp = nativePlatforms;
-    guile_1_8 = nativePlatforms;
-    libffi = nativePlatforms;
-    libtool = nativePlatforms;
-    libunistring = nativePlatforms;
-    windows.wxMSW = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem windows;
 
 
   /* Test some cross builds on 64 bit mingw-w64 */
   crossMingwW64 = let
     crossSystem = {
       # That's the triplet they use in the mingw-w64 docs.
-      config = "x86_64-w64-mingw32";
+      config = "x86_64-pc-mingw32";
       arch = "x86_64"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    boehmgc = nativePlatforms;
-    gmp = nativePlatforms;
-    guile_1_8 = nativePlatforms;
-    libffi = nativePlatforms;
-    libtool = nativePlatforms;
-    libunistring = nativePlatforms;
-    windows.wxMSW = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem windows;
 
 
   /* Linux on the fuloong */
   fuloongminipc = let
     crossSystem = {
-      config = "mips64el-unknown-linux";
+      config = "mips64el-unknown-linux-gnu";
       bigEndian = false;
       arch = "mips";
       float = "hard";
       withTLS = true;
       libc = "glibc";
-      platform = {
-        name = "fuloong-minipc";
-        kernelMajor = "2.6";
-        kernelBaseConfig = "lemote2f_defconfig";
-        kernelHeadersBaseConfig = "fuloong2e_defconfig";
-        uboot = null;
-        kernelArch = "mips";
-        kernelAutoModules = false;
-        kernelTarget = "vmlinux";
-      };
+      platform = lib.systems.platforms.fuloong2f_n32;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "loongson2f";
@@ -172,7 +157,7 @@ in
       fpu = "vfp";
       withTLS = true;
       libc = "glibc";
-      platform = pkgs.platforms.raspberrypi;
+      platform = lib.systems.platforms.raspberrypi;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "armv6";

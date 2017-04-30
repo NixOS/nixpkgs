@@ -19,7 +19,7 @@ let
       meta = {
         homepage = http://miniupnp.free.fr/;
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
-        platforms = with stdenv.lib.platforms; linux ++ freebsd;
+        platforms = with stdenv.lib.platforms; linux ++ freebsd ++ darwin;
       };
     };
 in {

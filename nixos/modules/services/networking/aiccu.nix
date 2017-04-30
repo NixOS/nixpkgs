@@ -5,7 +5,6 @@ with lib;
 let
 
   cfg = config.services.aiccu;
-  showBool = b: if b then "true" else "false";
   notNull = a: ! isNull a;
   configFile = pkgs.writeText "aiccu.conf" ''
     ${if notNull cfg.username then "username " + cfg.username else ""}
@@ -13,16 +12,16 @@ let
     protocol ${cfg.protocol}
     server ${cfg.server}
     ipv6_interface ${cfg.interfaceName}
-    verbose ${showBool cfg.verbose}
+    verbose ${boolToString cfg.verbose}
     daemonize true
-    automatic ${showBool cfg.automatic}
-    requiretls ${showBool cfg.requireTLS}
+    automatic ${boolToString cfg.automatic}
+    requiretls ${boolToString cfg.requireTLS}
     pidfile ${cfg.pidFile}
-    defaultroute ${showBool cfg.defaultRoute}
+    defaultroute ${boolToString cfg.defaultRoute}
     ${if notNull cfg.setupScript then cfg.setupScript else ""}
-    makebeats ${showBool cfg.makeHeartBeats}
-    noconfigure ${showBool cfg.noConfigure}
-    behindnat ${showBool cfg.behindNAT}
+    makebeats ${boolToString cfg.makeHeartBeats}
+    noconfigure ${boolToString cfg.noConfigure}
+    behindnat ${boolToString cfg.behindNAT}
     ${if cfg.localIPv4Override then "local_ipv4_override" else ""}
   '';
 

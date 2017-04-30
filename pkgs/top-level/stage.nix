@@ -46,8 +46,17 @@
   ##
 
 , # The package set used at build-time. If null, `buildPackages` will
-  # be defined internally as the produced package set as itself.
+  # be defined internally as the final produced package set itself. This allows
+  # us to avoid expensive splicing.
   buildPackages
+
+, # The package set used in the next stage. If null, `__targetPackages` will be
+  # defined internally as the final produced package set itself, just like with
+  # `buildPackages` and for the same reasons.
+  #
+  # THIS IS A HACK for compilers that don't think critically about cross-
+  # compilation. Please do *not* use unless you really know what you are doing.
+  __targetPackages
 
 , # The standard environment to use for building packages.
   stdenv
@@ -87,6 +96,8 @@ let
   stdenvBootstappingAndPlatforms = self: super: {
     buildPackages = (if buildPackages == null then self else buildPackages)
       // { recurseForDerivations = false; };
+    __targetPackages = (if __targetPackages == null then self else __targetPackages)
+      // { recurseForDerivations = false; };
     inherit stdenv
       buildPlatform hostPlatform targetPlatform;
   };
@@ -99,8 +110,8 @@ let
   in {
     stdenv = super.stdenv // {
       inherit (buildPlatform) platform;
-    } // lib.optionalAttrs (targetPlatform != buildPlatform) {
-      cross = targetPlatform;
+    } // lib.optionalAttrs (hostPlatform != buildPlatform) {
+      cross = hostPlatform;
     };
     inherit (buildPlatform) system platform;
   };

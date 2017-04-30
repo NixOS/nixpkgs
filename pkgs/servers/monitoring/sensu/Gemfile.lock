@@ -12,51 +12,54 @@ GEM
     em-worker (0.0.2)
       eventmachine
     eventmachine (1.2.2)
-    ffi (1.9.17)
-    oj (2.14.6)
+    ffi (1.9.18)
+    oj (2.18.1)
     parse-cron (0.1.4)
-    sensu (0.28.0)
+    sensu (0.29.0)
       em-http-server (= 0.1.8)
       eventmachine (= 1.2.2)
       parse-cron (= 0.1.4)
       sensu-extension (= 1.5.1)
-      sensu-extensions (= 1.7.1)
-      sensu-json (= 2.0.1)
+      sensu-extensions (= 1.9.0)
+      sensu-json (= 2.1.0)
       sensu-logger (= 1.2.1)
-      sensu-redis (= 2.1.0)
-      sensu-settings (= 9.9.0)
+      sensu-redis (= 2.1.1)
+      sensu-settings (= 10.0.0)
       sensu-spawn (= 2.2.1)
       sensu-transport (= 7.0.2)
     sensu-extension (1.5.1)
       eventmachine
-    sensu-extensions (1.7.1)
+    sensu-extensions (1.9.0)
       sensu-extension
+      sensu-extensions-check-dependencies (= 1.0.1)
       sensu-extensions-debug (= 1.0.0)
       sensu-extensions-json (= 1.0.0)
-      sensu-extensions-occurrences (= 1.1.0)
+      sensu-extensions-occurrences (= 1.2.0)
       sensu-extensions-only-check-output (= 1.0.0)
       sensu-extensions-ruby-hash (= 1.0.0)
       sensu-json (>= 1.1.0)
       sensu-logger
       sensu-settings
+    sensu-extensions-check-dependencies (1.0.1)
+      sensu-extension
     sensu-extensions-debug (1.0.0)
       sensu-extension
     sensu-extensions-json (1.0.0)
       sensu-extension
-    sensu-extensions-occurrences (1.1.0)
+    sensu-extensions-occurrences (1.2.0)
       sensu-extension
     sensu-extensions-only-check-output (1.0.0)
       sensu-extension
     sensu-extensions-ruby-hash (1.0.0)
       sensu-extension
-    sensu-json (2.0.1)
-      oj (= 2.14.6)
+    sensu-json (2.1.0)
+      oj (= 2.18.1)
     sensu-logger (1.2.1)
       eventmachine
       sensu-json
-    sensu-redis (2.1.0)
+    sensu-redis (2.1.1)
       eventmachine
-    sensu-settings (9.9.0)
+    sensu-settings (10.0.0)
       parse-cron
       sensu-json (>= 1.1.0)
     sensu-spawn (2.2.1)
@@ -76,4 +79,4 @@ DEPENDENCIES
   sensu
 
 BUNDLED WITH
-   1.14.4
+   1.14.6

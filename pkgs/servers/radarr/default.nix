@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "radarr-${version}";
-  version = "0.2.0.535";
+  version = "0.2.0.654";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.develop.${version}.linux.tar.gz";
-    sha256 = "1ccvblklqn5iki7gc16bzzbwms28mv4kxzv1nwhlm9vf0cw4qxbr";
+    sha256 = "05sb3zk8gvydmkiy7g9ha5cmiqzqfwcydljm401zjndzwzhkz698";
   };
 
   buildInputs = [ makeWrapper ];
