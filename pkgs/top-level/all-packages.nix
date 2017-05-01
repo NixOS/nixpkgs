@@ -6864,6 +6864,10 @@ with pkgs;
 
   premake4 = callPackage ../development/tools/misc/premake { };
 
+  premake5 = callPackage ../development/tools/misc/premake/5.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   premake = premake4;
 
   qtcreator = libsForQt5.callPackage ../development/qtcreator { };
