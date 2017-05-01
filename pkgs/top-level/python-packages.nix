@@ -239,6 +239,8 @@ in {
     };
   };
 
+  dkimpy = callPackage ../development/python-modules/dkimpy { };
+
   emcee = buildPythonPackage {
     name = "emcee-2.1.0";
     src = pkgs.fetchurl {
