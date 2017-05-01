@@ -29,12 +29,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ cmake curl ];
 
-  cmakeFlags =
-    lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
+  cmakeFlags = [ "-DENABLE_TESTING=OFF" ]
+    ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
     ++ lib.optional (apis != ["*"])
       "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
-
-  doCheck = false;
 
   enableParallelBuilding = true;
 
