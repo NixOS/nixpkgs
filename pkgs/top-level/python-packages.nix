@@ -12615,29 +12615,7 @@ in {
     };
   };
 
-  guessit = buildPythonPackage rec {
-    version = "2.0.4";
-    name = "guessit-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/guessit/${name}.tar.gz";
-      sha256 = "4f72e21fca9c294651abee26554e2ad778220d90a84f6e1195299a7ec17accb1";
-    };
-
-    # Tests require more packages.
-    doCheck = false;
-    buildInputs = with self; [ pytestrunner ];
-    propagatedBuildInputs = with self; [
-      dateutil babelfish rebulk
-    ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/guessit;
-      license = licenses.lgpl3;
-      description = "A library for guessing information from video files";
-    };
-  };
+  guessit = callPackage ../development/python-modules/guessit { };
 
   rebulk = buildPythonPackage rec {
     version = "0.8.2";
