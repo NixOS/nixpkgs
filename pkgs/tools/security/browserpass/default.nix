@@ -27,7 +27,6 @@ buildGoPackage rec {
 
   meta = {
     description = "A Chrome & Firefox extension for zx2c4's pass";
-    longDescription = "";
     homepage = "https://github.com/dannyvankooten/browserpass";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
