@@ -1247,39 +1247,7 @@ in {
     };
   };
 
-  apscheduler = buildPythonPackage rec {
-    name = "APScheduler-3.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/A/APScheduler/${name}.tar.gz";
-      sha256 = "f68874dff1bdffcc6ce3adb7840c1e4d162c609a3e3f831351df30b75732767b";
-    };
-
-    buildInputs = with self; [
-      pytest
-      sqlalchemy
-      tornado
-      twisted
-      mock
-      trollius
-      gevent
-      setuptools_scm
-    ];
-
-    propagatedBuildInputs = with self; [
-      six
-      pytz
-      tzlocal
-      futures
-      funcsigs
-    ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "A Python library that lets you schedule your Python code to be executed";
-      homepage = http://pypi.python.org/pypi/APScheduler/;
-      license = licenses.mit;
-    };
-  };
+  APScheduler = callPackage ../development/python-modules/APScheduler { };
 
   args = buildPythonPackage rec {
     name = "args-0.1.0";
