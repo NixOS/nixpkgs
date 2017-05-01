@@ -15,11 +15,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtsvg qtx11extras muparser ];
 
-  #enableParallelBuilding = true;
+  enableParallelBuilding = true;
 
   postPatch = ''
     sed -i "/QStringList dirs = {/a    \"$out/lib\"," \
       src/lib/albert/src/albert/extensionmanager.cpp
+  '';
+
+  preBuild = ''
+    mkdir -p "$out/"
+    ln -s "$PWD/lib" "$out/lib"
+  '';
+
+  postBuild = ''
+    rm "$out/lib"
   '';
 
   fixupPhase = ''
