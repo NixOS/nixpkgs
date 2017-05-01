@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
-, lambdaTerm, ocaml_lwt, makeWrapper, camomile, zed, cppo, ppx_tools
+{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
+, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild makeWrapper cppo camlp4 ppx_tools ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
    do
     mv $prog .$prog-wrapped
     cat > $prog <<EOF
-#!/bin/sh
-export CAML_LD_LIBRARY_PATH=${p ocaml_lwt}/lwt:${p lambdaTerm}/lambda-term:'\$CAML_LD_LIBRARY_PATH'
-export OCAMLPATH=${p ocaml_lwt}:${p ocaml_react}:${p camomile}:${p zed}:${p lambdaTerm}:"$out"/lib/ocaml/${ocaml.version}/site-lib:'\$OCAMLPATH'
+#!${bash}/bin/bash -e
+export CAML_LD_LIBRARY_PATH="${p ocaml_lwt}/lwt:${p lambdaTerm}/lambda-term:\$CAML_LD_LIBRARY_PATH"
+export OCAMLPATH="${p ocaml_lwt}:${p ocaml_react}:${p camomile}:${p zed}:${p lambdaTerm}:"$out"/lib/ocaml/${ocaml.version}/site-lib:\$OCAMLPATH"
 ${ocaml}/bin/ocamlrun $out/bin/.$prog-wrapped \$*
 EOF
     chmod +x $prog
