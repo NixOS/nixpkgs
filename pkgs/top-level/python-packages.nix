@@ -5509,7 +5509,8 @@ in {
       sha256 = "fa0a212283cdf52e2eecc24dd6459bb7687cc29adb60cb84258fab73be8dda0f";
     };
 
-   buildInputs = with self; [ covCore pytest virtualenv process-tests helper ];
+   propagatedBuildInputs = with self; [ pytest coverage ];
+   buildInputs = with self; [ covCore virtualenv process-tests helper ];
 
    doCheck = false;
    checkPhase = ''
