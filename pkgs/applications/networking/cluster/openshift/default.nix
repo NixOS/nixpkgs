@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go, which, removeReferencesTo, makeWrapper }:
+{ stdenv, fetchFromGitHub, which, buildGoPackage }:
 
 let
   version = "1.5.0";
@@ -6,8 +6,7 @@ let
   versionMajor = ver 0;
   versionMinor = ver 1;
   versionPatch = ver 2;
-in
-stdenv.mkDerivation rec {
+in buildGoPackage rec {
   name = "openshift-origin-${version}";
   inherit version;
 
@@ -18,14 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0qvyxcyca3888nkgvyvqcmybm95ncwxb3zvrzbg2gz8kx6g6350v";
   };
 
-  buildInputs = [ go which removeReferencesTo makeWrapper ];
+  buildInputs = [ which ];
 
+  goPackagePath = null;
   patchPhase = ''
     patchShebangs ./hack
   '';
 
   buildPhase = ''
-    export GOPATH=$(pwd)
+    cd go/src/origin-v${version}-src
     # Openshift build require this variables to be set
     # unless there is a .git folder which is not the case with fetchFromGitHub
     export OS_GIT_VERSION=${version}
@@ -35,14 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    export GOOS=$(go env GOOS)
-    export GOARCH=$(go env GOARCH)
-    mkdir -p "$out/bin"
-    mv _output/local/bin/$GOOS/$GOARCH/* "$out/bin/"
-  '';
-
-  preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
+    mkdir -p "$bin/bin"
+    cp "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
   '';
 
   meta = with stdenv.lib; {
