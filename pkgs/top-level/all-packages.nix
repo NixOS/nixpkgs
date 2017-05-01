@@ -10677,6 +10677,8 @@ with pkgs;
 
   charybdis = callPackage ../servers/irc/charybdis {};
 
+  clickhouse = callPackage ../servers/clickhouse { };
+
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_1_8_5;
     python = python27;
