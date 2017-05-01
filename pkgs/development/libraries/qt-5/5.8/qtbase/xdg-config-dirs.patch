@@ -1,8 +1,8 @@
-Index: qtbase-opensource-src-5.7.0/src/corelib/io/qsettings.cpp
+Index: qtbase-opensource-src-5.8.0/src/corelib/io/qsettings.cpp
 ===================================================================
---- qtbase-opensource-src-5.7.0.orig/src/corelib/io/qsettings.cpp
-+++ qtbase-opensource-src-5.7.0/src/corelib/io/qsettings.cpp
-@@ -1161,6 +1161,23 @@ QConfFileSettingsPrivate::QConfFileSetti
+--- qtbase-opensource-src-5.8.0.orig/src/corelib/io/qsettings.cpp
++++ qtbase-opensource-src-5.8.0/src/corelib/io/qsettings.cpp
+@@ -1134,6 +1134,23 @@ QConfFileSettingsPrivate::QConfFileSetti
          confFiles[F_System | F_Application].reset(QConfFile::fromName(systemPath + appFile, false));
      confFiles[F_System | F_Organization].reset(QConfFile::fromName(systemPath + orgFile, false));
  
@@ -26,10 +26,10 @@ Index: qtbase-opensource-src-5.7.0/src/corelib/io/qsettings.cpp
      for (i = 0; i < NumConfFiles; ++i) {
          if (confFiles[i]) {
              spec = i;
-Index: qtbase-opensource-src-5.7.0/src/corelib/io/qsettings_p.h
+Index: qtbase-opensource-src-5.8.0/src/corelib/io/qsettings_p.h
 ===================================================================
---- qtbase-opensource-src-5.7.0.orig/src/corelib/io/qsettings_p.h
-+++ qtbase-opensource-src-5.7.0/src/corelib/io/qsettings_p.h
+--- qtbase-opensource-src-5.8.0.orig/src/corelib/io/qsettings_p.h
++++ qtbase-opensource-src-5.8.0/src/corelib/io/qsettings_p.h
 @@ -246,7 +246,7 @@ public:
          F_Organization = 0x1,
          F_User = 0x0,

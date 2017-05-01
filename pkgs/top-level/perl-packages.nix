@@ -5537,6 +5537,8 @@ let self = _self // overrides; _self = with self; {
 
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
+    # WARNING: check on next update if deprecation warning is gone
+    patches = [ ../development/perl-modules/File-Slurp/silence-deprecation.patch ];
     src = fetchurl {
       url = mirror://cpan/authors/id/U/UR/URI/File-Slurp-9999.19.tar.gz;
       sha256 = "0hrn4nipwx40d6ji8ssgr5nw986z9iqq8cn0kdpbszh9jplynaff";
@@ -15508,6 +15510,21 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
       sha256 = "0m4zr6gm5rzwvxwd2x7rklr659jl8gsa5bxc5h25904nbvpj9x4x";
+    };
+  };
+
+  WebServiceLinode = buildPerlModule rec {
+    name = "WebService-Linode-0.28";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIKEGRB/${name}.tar.gz";
+      sha256 = "66a315016999c0d2043caae86e664dad10c6613708f33a2f56aae8030326c509";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ JSON LWP LWPProtocolhttps ];
+    meta = {
+      homepage = https://github.com/mikegrb/WebService-Linode;
+      description = "Perl Interface to the Linode.com API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

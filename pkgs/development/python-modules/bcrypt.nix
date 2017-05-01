@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, isPyPy, fetchurl
-, cffi, pycparser, mock, pytest, py }:
+, cffi, pycparser, mock, pytest, py, six }:
 
 with stdenv.lib;
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "1al54xafv1aharpb22yv5rjjc63fm60z3pn2shbiq48ah9f1fvil";
   };
   buildInputs = [ pycparser mock pytest py ];
-  propagatedBuildInputs = optional (!isPyPy) cffi;
+  propagatedBuildInputs = [ six ] ++ optional (!isPyPy) cffi;
 
   meta = {
     maintainers = with maintainers; [ domenkozar ];

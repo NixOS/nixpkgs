@@ -18,7 +18,9 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
-  shouldCheckMeta = config.checkMeta or true;
+  # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
+  # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
+  shouldCheckMeta = config.checkMeta or false;
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 

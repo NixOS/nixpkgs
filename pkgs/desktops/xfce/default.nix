@@ -83,6 +83,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4_cpugraph_plugin         = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix         { };
   xfce4_datetime_plugin         = callPackage ./panel-plugins/xfce4-datetime-plugin.nix         { };
   xfce4_dict_plugin             = callPackage ./panel-plugins/xfce4-dict-plugin.nix             { };
+  xfce4_dockbarx_plugin         = callPackage ./panel-plugins/xfce4-dockbarx-plugin.nix         { };
   xfce4_embed_plugin            = callPackage ./panel-plugins/xfce4-embed-plugin.nix            { };
   xfce4_eyes_plugin             = callPackage ./panel-plugins/xfce4-eyes-plugin.nix             { };
   xfce4_fsguard_plugin          = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix          { };

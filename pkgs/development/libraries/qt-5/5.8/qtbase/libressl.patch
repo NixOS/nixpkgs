@@ -9,11 +9,11 @@ is defined in openssl, but not in libressl.
  src/network/ssl/qsslcontext_openssl.cpp | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Index: qtbase-opensource-src-5.7.0/src/network/ssl/qsslcontext_openssl.cpp
+Index: qtbase-opensource-src-5.8.0/src/network/ssl/qsslcontext_openssl.cpp
 ===================================================================
---- qtbase-opensource-src-5.7.0.orig/src/network/ssl/qsslcontext_openssl.cpp
-+++ qtbase-opensource-src-5.7.0/src/network/ssl/qsslcontext_openssl.cpp
-@@ -347,7 +347,7 @@ init_context:
+--- qtbase-opensource-src-5.8.0.orig/src/network/ssl/qsslcontext_openssl.cpp
++++ qtbase-opensource-src-5.8.0/src/network/ssl/qsslcontext_openssl.cpp
+@@ -351,7 +351,7 @@ init_context:
  
      const QVector<QSslEllipticCurve> qcurves = sslContext->sslConfiguration.ellipticCurves();
      if (!qcurves.isEmpty()) {
@@ -22,7 +22,7 @@ Index: qtbase-opensource-src-5.7.0/src/network/ssl/qsslcontext_openssl.cpp
          // Set the curves to be used
          if (q_SSLeay() >= 0x10002000L) {
              // SSL_CTX_ctrl wants a non-const pointer as last argument,
-@@ -360,7 +360,7 @@ init_context:
+@@ -364,7 +364,7 @@ init_context:
                  sslContext->errorCode = QSslError::UnspecifiedError;
              }
          } else

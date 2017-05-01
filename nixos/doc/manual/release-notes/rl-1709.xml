@@ -39,6 +39,13 @@ following incompatible changes:</para>
       All JetBrains IDEs are now at <literal>jetbrains</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>flexget</literal>'s state database cannot be upgraded to its
+      new internal format, requiring removal of any existing
+      <literal>db-config.sqlite</literal> which will be automatically recreated.
+    </para>
+  </listitem>
 </itemizedlist>
 
 

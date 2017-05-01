@@ -8,8 +8,6 @@
 # Test dependencies
 , nose
 , pygments
-, isPy27
-, mock
 # Runtime dependencies
 , jedi
 , decorator
@@ -37,7 +35,7 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [ nose pygments ] ++ lib.optional isPy27 mock;
+  checkInputs = [ nose pygments ];
 
   propagatedBuildInputs = [
     jedi

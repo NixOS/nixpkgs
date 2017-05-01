@@ -5,12 +5,12 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "2.0.4";
+  version = "2.0.5";
   name = "guvcview-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/guvcview/source/guvcview-src-${version}.tar.gz";
-    sha256 = "18jg6dlqallpvjkb09dyn1v6prdmim4rrw22mhv8vdd9d18z83k7";
+    sha256 = "a86beb5993a8449ed3cbcc6ec2a238ef0b90138b6cbe2afab4456d37f44c41a0";
   };
 
   buildInputs =
