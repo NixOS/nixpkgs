@@ -8645,12 +8645,12 @@ in {
 
   pants13-pre = buildPythonPackage rec {
     pname   = "pantsbuild.pants";
-    version = "1.3.0.dev13";
+    version = "1.3.0.dev19";
     name    = "${pname}-${version}";
 
     src = self.fetchPypi {
       inherit pname version;
-      sha256 = "0gnz0f74s53xccfdn78v2dg1m3gx2mm0pdmmjvs5ikfbb9lidhz4";
+      sha256 = "07gxx8kzkcx3pm2qd5sz2xb3nw9khvbapiqdzgjvzbvai2gsd5qq";
     };
 
     prePatch = ''
