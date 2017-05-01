@@ -22637,30 +22637,7 @@ in {
       homepage = "https://github.com/goinnn/django-multiselectfield";
     };
   };
-
-
-  rst2html5 = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "rst2html5";
-    version = "1.9.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "1js90asy7s0278b4p28inkkp0r7ajr5fk5pcdgcdw628a30vl3i6";
-    };
-
-    propagatedBuildInputs = with self;
-      [ docutils genshi pygments beautifulsoup4 ];
-
-    meta = {
-      homepage = "https://bitbucket.org/andre_felipe_dias/rst2html5";
-      description = "Converts ReSTructuredText to (X)HTML5";
-      license = licenses.mit;
-      maintainers = with maintainers; [ AndersonTorres ];
-    };
-    # TODO: treat rst2html5 as an ordinary package
-  };
-
+  
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
 
