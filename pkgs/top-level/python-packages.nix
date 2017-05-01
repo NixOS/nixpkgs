@@ -14115,6 +14115,7 @@ in {
       description = "Super-fast templating language";
       homepage = http://www.makotemplates.org;
       license = licenses.mit;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ domenkozar ];
     };
   };
