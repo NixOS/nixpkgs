@@ -24818,20 +24818,20 @@ in {
     };
   };
 
-  sqlalchemy_imageattach = buildPythonPackage rec {
-    name = "SQLAlchemy-ImageAttach-${version}";
-    version = "0.8.2";
-    disabled = isPy33;
+  SQLAlchemy-ImageAttach = buildPythonPackage rec {
+    pname = "SQLAlchemy-ImageAttach";
+    version = "1.0.0";
+    name = "${pname}-${version}";
 
     src = pkgs.fetchFromGitHub {
       repo = "sqlalchemy-imageattach";
-      owner = "crosspop";
+      owner = "dahlia";
       rev = "${version}";
-      sha256 = "1pqf7vk4lsvnhw169cqfyk0iz5f8n45470mdslklpi38z2fax9p0";
+      sha256 = "0ba97pn5dh00qvxyjbr0mr3pilxqw5kb3a6jd4wwbsfcv6nngqig";
     };
 
-    buildInputs = with self; [ pytest webob pkgs.imagemagick nose ];
-    propagatedBuildInputs = with self; [ sqlalchemy8 Wand ];
+    checkInputs = with self; [ pytest Wand.imagemagick webob ];
+    propagatedBuildInputs = with self; [ sqlalchemy Wand ];
 
     checkPhase = ''
       cd tests
@@ -24843,7 +24843,7 @@ in {
     doCheck = !isPyPy;  # failures due to sqla version mismatch
 
     meta = {
-      homepage = https://github.com/crosspop/sqlalchemy-imageattach;
+      homepage = https://github.com/dahlia/sqlalchemy-imageattach;
       description = "SQLAlchemy extension for attaching images to entity objects";
       license = licenses.mit;
     };
