@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
   python3Packages, glslang, spirv-tools, x11, libxcb, libXrandr,
-  libXext, wayland, mesa_noglu }:
+  libXext, wayland, mesa_noglu, makeWrapper }:
 
 let
   version = "1.0.42.2";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
   inherit version src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
                   glslang spirv-tools x11 libxcb libXrandr libXext wayland
                 ];
@@ -50,7 +51,10 @@ stdenv.mkDerivation rec {
     mkdir -p $demos/bin
     cp demos/*.spv demos/*.ppm $demos/bin
     find demos -type f -executable -not -name vulkaninfo -exec cp {} $demos/bin \;
-   '';
+    for p in cube cubepp; do
+      wrapProgram $demos/bin/$p --run "cd $demos/bin"
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";

@@ -99,17 +99,17 @@ in stdenv.mkDerivation (rec {
 
   configureFlags = [
     "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutilsCross}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutilsCross}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutilsCross}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
+    "LD=${stdenv.binutils}/bin/${cross.config}-ld"
+    "AR=${stdenv.binutils}/bin/${cross.config}-ar"
+    "NM=${stdenv.binutils}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.binutils}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
+  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutils ];
 
   dontSetConfigureCross = true;
 
@@ -118,6 +118,6 @@ in stdenv.mkDerivation (rec {
 
     cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
 
-    ld = "${stdenv.binutilsCross}/bin/${cross.config}-ld";
+    ld = "${stdenv.binutils}/bin/${cross.config}-ld";
   };
 })

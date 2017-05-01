@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
-, lambdaTerm, ocaml_lwt, makeWrapper, camomile, zed, cppo, ppx_tools
+{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
+, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild makeWrapper cppo camlp4 ppx_tools ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];
 
@@ -52,14 +52,16 @@ stdenv.mkDerivation rec {
    in ''
    for prog in "$out"/bin/*
    do
+
     # Note: wrapProgram by default calls 'exec -a $0 ...', but this
     # breaks utop on Linux with OCaml 4.04, and is disabled with
     # '--argv0 ""' flag. See https://github.com/NixOS/nixpkgs/issues/24496
-    wrapProgram $prog \
+    wrapProgram "$prog" \
       --argv0 "" \
       --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
       --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
       --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH")
+
    done
    '';
 

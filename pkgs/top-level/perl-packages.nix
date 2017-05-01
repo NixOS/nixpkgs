@@ -734,6 +734,19 @@ let self = _self // overrides; _self = with self; {
     ];
   };
 
+  BusinessHours = buildPerlPackage rec {
+    name = "Business-Hours-0.12";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/R/RU/RUZ/Business-Hours-0.12.tar.gz";
+      sha256 = "15c5g278m1x121blspf4bymxp89vysizr3z6s1g3sbpfdkrn4gyv";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ SetIntSpan TimeLocal ];
+    meta = {
+      description = "Calculate business hours in a time period";
+    };
+  };
+
   BusinessISBN = buildPerlPackage rec {
     name = "Business-ISBN-2.09";
     src = fetchurl {
@@ -2777,6 +2790,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ Clone ];
   };
 
+  CSSMinifierXP = buildPerlPackage rec {
+    name = "CSS-Minifier-XS-0.09";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz";
+      sha256 = "1myswrmh0sqp5xjpp03x45z8arfmgkjx0srl3r6kjsyzl1zrk9l8";
+    };
+    meta = {
+      description = "XS based CSS minifier";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CSSSquish = buildPerlPackage {
     name = "CSS-Squish-0.10";
     src = fetchurl {
@@ -2995,6 +3020,20 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1hvi92c4h2angryc6pngw7gbm3ysc2jfmyxk2wh9ia4vdwpbs554";
     };
     propagatedBuildInputs = [TestException ClassAccessorChained];
+  };
+
+  DataPagePageset = buildPerlPackage rec {
+    name = "Data-Page-Pageset-1.02";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/C/CH/CHUNZI/Data-Page-Pageset-1.02.tar.gz";
+      sha256 = "142isi8la383dbjxj7lfgcbmmrpzwckcc4wma6rdl8ryajsipb6f";
+    };
+    buildInputs = [ TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ DataPage ];
+    meta = {
+      description = "change long page list to be shorter and well navigate";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   DataPassword = buildPerlPackage {
@@ -5498,6 +5537,8 @@ let self = _self // overrides; _self = with self; {
 
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
+    # WARNING: check on next update if deprecation warning is gone
+    patches = [ ../development/perl-modules/File-Slurp/silence-deprecation.patch ];
     src = fetchurl {
       url = mirror://cpan/authors/id/U/UR/URI/File-Slurp-9999.19.tar.gz;
       sha256 = "0hrn4nipwx40d6ji8ssgr5nw986z9iqq8cn0kdpbszh9jplynaff";
@@ -5694,6 +5735,20 @@ let self = _self // overrides; _self = with self; {
     makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
   };
 
+  GDGraph = buildPerlPackage rec {
+    name = "GDGraph-1.54";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/R/RU/RUZ/GDGraph-1.54.tar.gz";
+      sha256 = "0kzsdc07ycxjainmz0dnsclb15w2j1y7g8b5mcb7vhannq85qvxr";
+    };
+    propagatedBuildInputs = [ GD GDText ];
+    buildInputs = [ TestException CaptureTiny ];
+    meta = {
+      description = "Graph Plotting Module for Perl 5";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GDSecurityImage = buildPerlPackage {
     name = "GD-SecurityImage-1.72";
     src = fetchurl {
@@ -5704,6 +5759,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Security image (captcha) generator";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  GDText = buildPerlPackage rec {
+    name = "GDTextUtil-0.86";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/M/MV/MVERB/GDTextUtil-0.86.tar.gz";
+      sha256 = "1g0nc7fz4d672ag7brlrrcz7ibm98x49qs75bq9z957ybkwcnvl8";
+    };
+    propagatedBuildInputs = [ GD ];
+    meta = {
+      description = "Text utilities for use with GD";
     };
   };
 
@@ -6832,7 +6899,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "74d22c44b5ad2e7190e2786e8a17d74bbf4cef89b4d1157ba33598b5a2720dad";
     };
   };
-  
+
   IOPager = buildPerlPackage {
     name = "IO-Pager-0.06";
     src = fetchurl {
@@ -7135,6 +7202,20 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1l3g0zrcwf2whwjhbpwdcridb7c77mydwxvfykqg1h6hqb4gj8bw";
     };
   };
+
+  JavaScriptMinifierXS = buildPerlPackage rec {
+    name = "JavaScript-Minifier-XS-0.11";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz";
+      sha256 = "1vlyhckpjbrg2v4dy9szsxxl0q44n0y1xl763mg2y2ym9g5144hm";
+    };
+    propagatedBuildInputs = [ ];
+    meta = {
+      description = "XS based JavaScript minifier";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
 
   JSON = buildPerlPackage {
     name = "JSON-2.90";
@@ -8225,6 +8306,29 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ProcWaitStat ];
   };
 
+  MIMETools = buildPerlPackage rec {
+    name = "MIME-tools-5.509";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/D/DS/DSKOLL/MIME-tools-5.509.tar.gz";
+      sha256 = "0wv9rzx5j1wjm01c3dg48qk9wlbm6iyf91j536idk09xj869ymv4";
+    };
+    propagatedBuildInputs = [
+      MailTools
+      FilePath
+      FileTemp
+      MIMEBase64
+    ];
+    buildInputs = [
+      TestDeep
+      TestPod
+      TestPodCoverage
+    ];
+    meta = {
+      description = "class for parsed-and-decoded MIME message";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MIMELite = buildPerlPackage rec {
     name = "MIME-Lite-3.030";
     src = fetchurl {
@@ -8295,10 +8399,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuild = buildPerlPackage rec {
-    name = "Module-Build-0.4214";
+    name = "Module-Build-0.4222";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
-      sha256 = "0gywap0dfr8sx4wr6wqc23sjag1b4xsw8l55ai4vhkfg324lhyf5";
+      sha256 = "0q5i03lbx52g22bwvyb04ycky4niq379j1c3fhmlfdj7lzclajz7";
     };
     buildInputs = [ CPANMeta ExtUtilsCBuilder ];
     meta = {
@@ -11468,6 +11572,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SetIntSpan = buildPerlPackage rec {
+    name = "Set-IntSpan-1.19";
+    src = fetchurl {
+      url = "https://cpan.metacpan.org/authors/id/S/SW/SWMCD/Set-IntSpan-1.19.tar.gz";
+      sha256 = "1l6znd40ylzvfwl02rlqzvakv602rmvwgm2xd768fpgc2fdm9dqi";
+    };
+
+    meta = {
+      description = "Manages sets of integers";
+    };
+  };
+
   SetObject = buildPerlPackage {
     name = "Set-Object-1.34";
     src = fetchurl {
@@ -12319,7 +12435,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
- 
+
   TaskFreecellSolverTesting = buildPerlModule rec {
     name = "Task-FreecellSolver-Testing-v0.0.10";
     src = fetchurl {
@@ -13541,7 +13657,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
- 
+
   TestTrailingSpace = buildPerlPackage rec {
     name = "Test-TrailingSpace-0.0301";
     src = fetchurl {
@@ -14828,10 +14944,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   version = buildPerlPackage rec {
-    name = "version-0.9912";
+    name = "version-0.9918";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JP/JPEACOCK/${name}.tar.gz";
-      sha256 = "03hv7slgqrmzbbjjmxgvq91bjlbjg5xbp8n4h454amyab2adzw7b";
+      sha256 = "54175c7ead4e2259c2fb2b83440b821e4287842067227e48fb899b5cae52237b";
+    };
+    meta = {
+      description = "Structured version objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

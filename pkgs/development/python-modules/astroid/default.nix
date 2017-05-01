@@ -28,7 +28,7 @@
       description = "A abstract syntax tree for Python with inference support";
       homepage = http://bitbucket.org/logilab/astroid;
       license = licenses.lgpl2;
-      platform = platforms.all;
+      platforms = platforms.all;
       maintainers = with maintainers; [ nand0p ]; 
     };
   }

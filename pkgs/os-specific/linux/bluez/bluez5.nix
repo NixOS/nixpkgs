@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
+    cp ./attrib/gatttool $out/bin/gatttool
     mkdir -p $test/test
     cp -a test $test
     pushd $test/test
