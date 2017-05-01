@@ -18359,26 +18359,7 @@ in {
     };
   };
 
-  pbr = buildPythonPackage rec {
-    name = "pbr-${version}";
-    version = "1.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pbr/${name}.tar.gz";
-      sha256 = "0jcny36cf3s8ar5r4a575npz080hndnrfs4np1fqhv0ym4k7c4p2";
-    };
-
-    # circular dependencies with fixtures
-    doCheck = false;
-    #buildInputs = with self; [ testtools testscenarios testresources
-    #  testrepository fixtures ];
-
-    meta = {
-      description = "Python Build Reasonableness";
-      homepage = "http://docs.openstack.org/developer/pbr/";
-      license = licenses.asl20;
-    };
-  };
+  pbr = callPackage ../development/python-modules/pbr { };
 
   fixtures = buildPythonPackage rec {
     name = "fixtures-1.4.0";
