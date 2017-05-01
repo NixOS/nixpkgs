@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, sqlite }:
+{ stdenv, fetchurl, libpcap, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bdjai4p8xbsw8zdkkk43rgsif79x0nyx4djpyv0mzh59850blxd";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap sqlite ];
 
   sourceRoot = "reaver-${version}/src";
@@ -17,23 +18,19 @@ stdenv.mkDerivation rec {
   configureFlags = "--sysconfdir=${confdir}";
 
   installPhase = ''
-    mkdir -p $out/{bin,etc,share}
+    mkdir -p $out/{bin,etc}
     cp reaver.db $out/etc/
+    cp reaver wash $out/bin/
 
-    for prog in reaver wash; do
-      cp $prog $out/share/
-      cat > $out/bin/$prog <<EOF
-    [ -f ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)
-    exec $out/share/$prog "\$@"
-    EOF
-      chmod +x $out/bin/$prog
-    done
+    wrapProgram $out/bin/reaver --run "[ -s ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)"
+    wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Brute force attack against Wifi Protected Setup";
     homepage = http://code.google.com/p/reaver-wps;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nico202 volth ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpcap, sqlite, pixiewps }:
+{ stdenv, fetchFromGitHub, libpcap, sqlite, pixiewps, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.5.2";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zhlms89ncqz1f1hc22yw9x1s837yv76f1zcjizhgn5h7vp17j4b";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap sqlite pixiewps ];
 
   sourceRoot = "reaver-wps-fork-t6x-v${version}-src/src";
@@ -19,24 +20,19 @@ stdenv.mkDerivation rec {
   configureFlags = "--sysconfdir=${confdir}";
 
   installPhase = ''
-    mkdir -p $out/{bin,etc,share}
+    mkdir -p $out/{bin,etc}
     cp reaver.db $out/etc/
+    cp reaver wash $out/bin/
 
-    for prog in reaver wash; do
-      cp $prog $out/share/
-      cat > $out/bin/$prog <<EOF
-    [ -f ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)
-    exec $out/share/$prog "\$@"
-    EOF
-      chmod +x $out/bin/$prog
-    done
+    wrapProgram $out/bin/reaver --run "[ -s ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)"
+    wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Online and offline brute force attack against WPS";
     homepage = https://github.com/t6x/reaver-wps-fork-t6x;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainer = stdenv.lib.maintainers.nico202;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nico202 volth ];
   };
 }
