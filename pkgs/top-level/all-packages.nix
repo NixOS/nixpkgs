@@ -1320,6 +1320,10 @@ with pkgs;
       inherit (gnome3) dconf;
     };
 
+    table-with-plugins = callPackage ../tools/inputmethods/ibus-engines/ibus-table/wrapper.nix {
+      ibus-table = ibus-engines.table;
+    };
+
     table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
       ibus-table = ibus-engines.table;
     };
