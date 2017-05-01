@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig swig2 python cython ];
 
-  propagatedBuildInputs = [ libxml2 glib ];
+  propagatedBuildInputs = [ glib ];
 
   passthru.swig = swig2;
 
