@@ -6446,24 +6446,7 @@ in {
     };
   };
 
-  dogpile_cache = buildPythonPackage rec {
-    name = "dogpile.cache-0.5.4";
-
-    propagatedBuildInputs = with self; [ dogpile_core ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dogpile.cache/dogpile.cache-0.5.4.tar.gz";
-      sha256 = "9eab7a5dc05ad1b6573144c4a2717226b5c38811f9ec29b514e774535a91ea24";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "A caching front-end based on the Dogpile lock";
-      homepage = http://bitbucket.org/zzzeek/dogpile.cache;
-      license = licenses.bsd3;
-    };
-  };
+  dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
 
   dogpile_core = buildPythonPackage rec {
     name = "dogpile.core-0.4.1";
