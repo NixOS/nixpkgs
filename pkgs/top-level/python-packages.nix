@@ -22450,8 +22450,7 @@ in {
       homepage = "https://github.com/goinnn/django-multiselectfield";
     };
   };
-
-
+  
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
 

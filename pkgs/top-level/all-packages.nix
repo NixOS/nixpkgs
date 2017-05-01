@@ -3737,6 +3737,8 @@ with pkgs;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  rst2html5 = callPackage ../tools/text/rst2html5 { };
+
   rt = callPackage ../servers/rt { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
