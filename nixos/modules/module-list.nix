@@ -71,6 +71,7 @@
   ./programs/atop.nix
   ./programs/bash/bash.nix
   ./programs/blcr.nix
+  ./programs/browserpass.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix

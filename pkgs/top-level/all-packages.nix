@@ -548,6 +548,8 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
+  browserpass = callPackage ../tools/security/browserpass { };
+
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   kwakd = callPackage ../servers/kwakd { };
