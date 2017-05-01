@@ -17226,6 +17226,10 @@ with pkgs;
 
   gnome3 = gnome3_22;
 
+  gnomeExtensions = {
+    dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
+  };
+
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
   kakasi = callPackage ../tools/text/kakasi { };
