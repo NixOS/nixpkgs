@@ -5533,27 +5533,32 @@ in {
     '';
   };
 
-  pytestcov = buildPythonPackage (rec {
-    name = "pytest-cov-2.3.1";
+  pytestcov = buildPythonPackage rec {
+    name = "pytest-cov-2.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-cov/${name}.tar.gz";
-      sha256 = "fa0a212283cdf52e2eecc24dd6459bb7687cc29adb60cb84258fab73be8dda0f";
+      sha256 = "03c2qc42r4bczyw93gd7n0qi1h1jfhw7fnbhi33c3vp1hs81gm2k";
     };
 
-   buildInputs = with self; [ covCore pytest virtualenv process-tests helper ];
+   buildInputs = with self; [ pytest pytest_xdist virtualenv process-tests ];
+   propagatedBuildInputs = with self; [ coverage ];
 
+   # xdist related tests fail with the following error
+   # OSError: [Errno 13] Permission denied: 'py/_code'
    doCheck = false;
    checkPhase = ''
+     # allow to find the module helper during the test run
+     export PYTHONPATH=$PYTHONPATH:$PWD/tests
      py.test tests
    '';
 
     meta = {
       description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
-      homepage = https://github.com/schlamar/pytest-cov;
+      homepage = https://github.com/pytest-dev/pytest-cov;
       license = licenses.mit;
     };
-  });
+  };
 
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
@@ -5578,19 +5583,20 @@ in {
   };
 
   pytest_xdist = buildPythonPackage rec {
-    name = "pytest-xdist-1.8";
+    name = "pytest-xdist-1.14";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-xdist/pytest-xdist-1.8.zip";
-      sha256 = "b02135db7080c0978b7ce5d8f43a5879231441c2062a4791bc42b6f98c94fa69";
+      url = "mirror://pypi/p/pytest-xdist/${name}.zip";
+      sha256 = "08rn2l39ds60xshs4js787l84pfckksqklfq2wq9x8ig2aci2pja";
     };
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest setuptools_scm ];
     propagatedBuildInputs = with self; [ execnet ];
 
     meta = {
       description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
-      homepage = http://bitbucket.org/hpk42/pytest-xdist;
+      homepage = https://github.com/pytest-dev/pytest-xdist;
+      license = licenses.mit;
     };
   };
 
@@ -25313,11 +25319,11 @@ in {
 
   freezegun = buildPythonPackage rec {
     name = "freezegun-${version}";
-    version = "0.3.5";
+    version = "0.3.8";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/freezegun/freezegun-${version}.tar.gz";
-      sha256 = "02ly89wwn0plcw8clkkzvxaw6zlpm8qyqpm9x2mfw4a0vppb4ngf";
+      sha256 = "1sf38d3ibv1jhhvr52x7dhrsiyqk1hm165dfv8w8wh0fhmgxg151";
     };
 
     propagatedBuildInputs = with self; [
@@ -25328,6 +25334,7 @@ in {
     meta = with stdenv.lib; {
       description = "FreezeGun: Let your Python tests travel through time";
       homepage = "https://github.com/spulec/freezegun";
+      license = licenses.asl20;
     };
   };
 
