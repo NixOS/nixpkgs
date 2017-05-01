@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tista500/Adapta";
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.SShrike ];
+    maintainers = [ maintainers.romildo ];
   };
 
   src = fetchFromGitHub {
