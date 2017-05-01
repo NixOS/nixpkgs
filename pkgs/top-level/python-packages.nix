@@ -33,10 +33,29 @@ let
 
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
-  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
-  });
-  buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit mkPythonDerivation;
+  buildPythonPackage = let
+    # This function is basically a copy of `lib.makeOverridable`.
+    # The only difference is that we use a different attribute,
+    # `overridePythonPackage`, instead of `override`.
+    makeOverridablePythonPackage = f: origArgs:
+    let
+      ff = f origArgs;
+      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
+    in
+      if builtins.isAttrs ff then (ff // {
+        overridePythonPackage = newArgs: makeOverridable f (overrideWith newArgs);
+        overrideDerivation = fdrv:
+          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
+        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
+      })
+      else if builtins.isFunction ff then {
+        overridePythonPackage = newArgs: makeOverridable f (overrideWith newArgs);
+        __functor = self: ff;
+        overrideDerivation = throw "overrideDerivation not yet supported for functors";
+      }
+      else ff;
+  in makeOverridablePythonPackage (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit bootstrapped-pip;
     flit = self.flit;
   });
@@ -69,7 +88,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit python pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi;
 
   # helpers
@@ -3009,7 +3028,7 @@ in {
   };
 
   # Needed for FlexGet 1.2.337 and calibre 2.76.0
-  html5lib_0_9999999 = self.html5lib.override rec {
+  html5lib_0_9999999 = self.html5lib.overridePythonPackage rec {
     name = "html5lib-${version}";
     buildInputs = with self; [ nose flake8 ];
     propagatedBuildInputs = with self; [ six ];
@@ -4161,7 +4180,7 @@ in {
   };
 
   # Needed for awscli
-  colorama_3_3 = self.colorama.override rec {
+  colorama_3_3 = self.colorama.overridePythonPackage rec {
     name = "colorama-${version}";
     version = "0.3.3";
     src = pkgs.fetchurl {
@@ -4194,7 +4213,7 @@ in {
     };
   };
 
-  CommonMark_54 = self.CommonMark.override rec {
+  CommonMark_54 = self.CommonMark.overridePythonPackage rec {
     name = "CommonMark-0.5.4";
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
@@ -7292,7 +7311,7 @@ in {
     '';
   };
 
-  fudge_9 = self.fudge.override rec {
+  fudge_9 = self.fudge.overridePythonPackage rec {
     name = "fudge-0.9.6";
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fudge/${name}.tar.gz";
@@ -10679,7 +10698,7 @@ in {
     };
   };
 
-  django_tagging_0_3 = self.django_tagging.override (attrs: rec {
+  django_tagging_0_3 = self.django_tagging.overridePythonPackage (attrs: rec {
     name = "django-tagging-0.3.6";
 
     src = pkgs.fetchurl {
@@ -10721,8 +10740,8 @@ in {
 
     # TODO improve the that multi-override necessity (the fixpoint based python
     # packages work can be the solution)
-    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
-      buildInputs = with self; [ (django_nose.override {
+    propagatedBuildInputs = with self; [ django_1_9 (django_compat.overridePythonPackage {
+      buildInputs = with self; [ (django_nose.overridePythonPackage {
         propagatedBuildInputs = with self; [ django_1_9 nose ];
       }) ];
       propagatedBuildInputs = with self; [ django_1_9 six ];
@@ -10917,7 +10936,7 @@ in {
     };
   };
 
-  django_pipeline_1_3 = self.django_pipeline.overrideDerivation (super: rec {
+  django_pipeline_1_3 = self.django_pipeline.overridePythonPackage (super: rec {
     name = "django-pipeline-1.3.27";
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-pipeline/${name}.tar.gz";
@@ -12205,7 +12224,7 @@ in {
     };
   };
 
-  futures_2_2 = self.futures.override rec {
+  futures_2_2 = self.futures.overridePythonPackage rec {
     version = "2.2.0";
     name = "futures-${version}";
 
@@ -19394,7 +19413,7 @@ in {
       maintainers = with maintainers; [ nckx ];
     };
   };
-  prompt_toolkit_52 = self.prompt_toolkit.override(self: rec {
+  prompt_toolkit_52 = self.prompt_toolkit.overridePythonPackage(self: rec {
     name = "prompt_toolkit-${version}";
     version = "0.52";
     src = pkgs.fetchurl {
@@ -19453,7 +19472,7 @@ in {
     };
   };
 
-  psutil_1 = self.psutil.overrideDerivation (self: rec {
+  psutil_1 = self.psutil.overridePythonPackage (self: rec {
     name = "psutil-1.2.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psutil/${name}.tar.gz";
@@ -20478,7 +20497,7 @@ in {
   };
 
   # For Pelican 3.6.3
-  pygments_2_0 = self.pygments.override rec {
+  pygments_2_0 = self.pygments.overridePythonPackage rec {
     version = "2.0.2";
     name = "Pygments-${version}";
 
@@ -23524,7 +23543,7 @@ in {
     };
   };
 
-  setuptools_scm_18 = self.setuptools_scm.override rec {
+  setuptools_scm_18 = self.setuptools_scm.overridePythonPackage rec {
     name = "setuptools_scm-${version}";
     version = "1.8.0";
 
@@ -24745,7 +24764,7 @@ in {
     };
   });
 
-  sphinx_1_2 = self.sphinx.override rec {
+  sphinx_1_2 = self.sphinx.overridePythonPackage rec {
     name = "sphinx-1.2.3";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
