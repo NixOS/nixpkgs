@@ -19060,16 +19060,7 @@ in {
 
   };
 
-  plumbum = buildPythonPackage rec {
-    name = "plumbum-1.5.0";
-
-    buildInputs = with self; [ self.six ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/plumbum/${name}.tar.gz";
-      sha256 = "b759f9e3b6771dff3332f01bc0683d1a56218f44d97942dabd906a0cd1cfb756";
-    };
-  };
+  plumbum = callPackage ../development/python-modules/plumbum { };
 
 
   polib = buildPythonPackage rec {
