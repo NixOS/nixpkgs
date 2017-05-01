@@ -170,9 +170,8 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Marks session cookies as "secure," which means browsers may
-          ensure that the cookie is only sent under an HTTPS connection.
-          It's good to enable this if Gogs is being served over HTTPS.
+          Marks session cookies as "secure" as a hint for browsers to only send
+          them via HTTPS. This option is recommend, if Gogs is being served over HTTPS.
         '';
       };
 
