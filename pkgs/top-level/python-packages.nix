@@ -9309,7 +9309,6 @@ in {
     meta = {
       maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
-      broken = true;
     };
   };
 
