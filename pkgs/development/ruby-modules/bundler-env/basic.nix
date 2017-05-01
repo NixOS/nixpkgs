@@ -5,11 +5,11 @@
 }@defs:
 
 {
-  drvName
-, pname
+  pname
 , gemfile
 , lockfile
 , gemset
+, gemdir
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
@@ -20,14 +20,13 @@
 , ...
 }@args:
 
-with (import ./functions.nix);
+with (import ./functions.nix { inherit lib ruby gemConfig groups; });
 
 let
-  mainGem = gems."${pname}" or (throw "bundlerEnv: gem ${pname} not found");
 
   importedGemset = import gemset;
 
-  filteredGemset = lib.filterAttrs (name: attrs: platformMatches attrs && groupMatches attrs) importedGemset;
+  filteredGemset = filterGemset importedGemset;
 
   configuredGemset = lib.flip lib.mapAttrs filteredGemset (name: attrs:
     applyGemConfigs (attrs // { inherit ruby; gemName = name; })
@@ -47,14 +46,18 @@ let
   '' else ""
   );
 
-  maybeCopyAll = main: if main == null then "" else copyIfBundledByPath main;
+  maybeCopyAll = pname: if pname == null then "" else
+  let
+    mainGem = gems."${pname}" or (throw "bundlerEnv: gem ${pname} not found");
+  in
+    copyIfBundledByPath mainGem;
 
   # We have to normalize the Gemfile.lock, otherwise bundler tries to be
   # helpful by doing so at run time, causing executables to immediately bail
   # out. Yes, I'm serious.
   confFiles = runCommand "gemfile-and-lockfile" {} ''
     mkdir -p $out
-    ${maybeCopyAll mainGem}
+    ${maybeCopyAll pname}
     cp ${gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
   '';
@@ -71,13 +74,10 @@ let
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
-  # binPaths = if mainGem != null then [ mainGem ] else envPaths;
-
-in
-  buildEnv {
+  basicEnv = buildEnv {
     inherit ignoreCollisions;
 
-    name = drvName;
+    name = pname;
 
     paths = envPaths;
     pathsToLink = [ "/lib" ];
@@ -90,20 +90,20 @@ in
     meta = { platforms = ruby.meta.platforms; } // meta;
 
     passthru = rec {
-      inherit ruby bundler gems;
+      inherit ruby bundler gems; # drvName;
 
       wrappedRuby = stdenv.mkDerivation {
-        name = "wrapped-ruby-${drvName}";
+        name = "wrapped-ruby-${pname}";
         nativeBuildInputs = [ makeWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
           for i in ${ruby}/bin/*; do
             makeWrapper "$i" $out/bin/$(basename "$i") \
               --set BUNDLE_GEMFILE ${confFiles}/Gemfile \
-              --set BUNDLE_PATH ${bundlerEnv}/${ruby.gemPath} \
+              --set BUNDLE_PATH ${basicEnv}/${ruby.gemPath} \
               --set BUNDLE_FROZEN 1 \
-              --set GEM_HOME ${bundlerEnv}/${ruby.gemPath} \
-              --set GEM_PATH ${bundlerEnv}/${ruby.gemPath}
+              --set GEM_HOME ${basicEnv}/${ruby.gemPath} \
+              --set GEM_PATH ${basicEnv}/${ruby.gemPath}
           done
         '';
       };
@@ -117,8 +117,8 @@ in
           require 'bundler/setup'
         '';
         in stdenv.mkDerivation {
-          name = "${drvName}-interactive-environment";
-          nativeBuildInputs = [ wrappedRuby bundlerEnv ];
+          name = "${pname}-interactive-environment";
+          nativeBuildInputs = [ wrappedRuby basicEnv ];
           shellHook = ''
             export OLD_IRBRC="$IRBRC"
             export IRBRC=${irbrc}
@@ -131,4 +131,6 @@ in
           '';
         };
     };
-  }
+  };
+in
+  basicEnv

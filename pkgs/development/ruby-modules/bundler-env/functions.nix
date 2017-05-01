@@ -1,4 +1,7 @@
+{ lib, ruby, groups, gemConfig, ... }:
 rec {
+  filterGemset = gemset: lib.filterAttrs (name: attrs: platformMatches attrs && groupMatches attrs) gemset;
+
   platformMatches = attrs: (
   !(attrs ? "platforms") ||
     builtins.any (platform:
@@ -17,7 +20,7 @@ rec {
     then attrs // gemConfig."${attrs.gemName}" attrs
     else attrs);
 
-  genStubsScript = { lib, ruby, confFile, bundler, groups, binPaths }@args: ''
+  genStubsScript = { lib, ruby, confFiles, bundler, groups, binPaths }: ''
       ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \
