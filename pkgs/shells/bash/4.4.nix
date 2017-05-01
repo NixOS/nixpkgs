@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -s bash "$out/bin/sh"
-    moveToOutput lib/bash/Makefile.inc "$dev"
+    rm $out/lib/bash/Makefile.inc
   '';
 
   postFixup = if interactive

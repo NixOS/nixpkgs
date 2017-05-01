@@ -14121,11 +14121,11 @@ in {
 
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
-    version = "0.23";
+    version = "1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/MarkupSafe/MarkupSafe-${version}.tar.gz";
-      sha256 = "a4ec1aff59b95a14b45eb2e23761a0179e98319da5a7eb76b56ea8cdc7b871c3";
+      sha256 = "0rdn1s8x9ni7ss8rfiacj7x1085lx8mh2zdwqslnw8xc3l4nkgm6";
     };
 
     meta = {
