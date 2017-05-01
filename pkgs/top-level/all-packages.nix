@@ -11463,6 +11463,8 @@ with pkgs;
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
 
+    evdi = callPackage ../os-specific/linux/evdi { };
+
     pktgen = callPackage ../os-specific/linux/pktgen { };
 
     odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
