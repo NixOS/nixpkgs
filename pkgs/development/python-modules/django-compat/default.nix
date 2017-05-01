@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchurl,
   django, django_nose, six
 }:
-let x =
 buildPythonPackage rec {
   name = "django-compat-${version}";
   version = "1.0.14";
@@ -21,5 +20,4 @@ buildPythonPackage rec {
     homepage = https://github.com/arteria/django-compat;
     license = licenses.mit;
   };
-};
-in x // {overrideBPP = x.override;}
+}
