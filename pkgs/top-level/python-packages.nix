@@ -6253,34 +6253,6 @@ in {
     };
   };
 
-  deform2 = buildPythonPackage rec {
-    name = "deform-2.0a2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/deform/${name}.tar.gz";
-      sha256 = "1gfaf1d8zp0mp4h229srlffxdp86w1nni9g4aqsshxysr23x591z";
-    };
-
-    buildInputs = with self; [] ++ optional isPy26 unittest2;
-
-    propagatedBuildInputs =
-      [ self.beautifulsoup4
-        self.peppercorn
-        self.colander
-        self.translationstring
-        self.chameleon
-        self.zope_deprecation
-        self.coverage
-        self.nose
-      ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
-
   deform_bootstrap = buildPythonPackage rec {
     name = "deform_bootstrap-0.2.9";
 
@@ -10093,7 +10065,7 @@ in {
       zodb
       venusian
       colander
-      deform2
+      deform
       python_magic
       pyyaml
       cryptacular
