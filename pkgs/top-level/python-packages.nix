@@ -16913,11 +16913,11 @@ in {
 
   os-testr = buildPythonPackage rec {
     name = "os-testr-${version}";
-    version = "0.4.2";
+    version = "0.8.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/os-testr/${name}.tar.gz";
-      sha256 = "0474z0mxb7y3vfk4s097wf1mzji5d135vh27cvlh9q17rq3x9r3w";
+      sha256 = "10ws7l5p25psnp6rwymwdzh4zagmmnbf56xwg06cn2292m95l4i7";
     };
 
     patchPhase = ''
