@@ -11087,6 +11087,10 @@ with pkgs;
 
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
 
+  displaylink = callPackage ../os-specific/linux/displaylink {
+    inherit (linuxPackages) evdi;
+  };
+
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
@@ -11454,8 +11458,6 @@ with pkgs;
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
-
-    displaylink = callPackage ../os-specific/linux/displaylink { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
