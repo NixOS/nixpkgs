@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.16.6";
+  version = "0.16.7";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0nzjbm40c4w9d0d34s5qnr9jkrh1vkn508xl2lfwfvmnzsnb9xbn";
+    sha256 = "11ka5n7mrm5pb9riah28zyshvfz2svm4wn6fbama39yp6sc01x23";
   };
 
   outputs = [ "bin" "out" "man" ];

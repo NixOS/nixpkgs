@@ -25,14 +25,21 @@
       path = [ pkgs.bash ];
       description = "Disable AMD Card";
       after = [ "sys-kernel-debug.mount" ];
-      requires = [ "sys-kernel-debug.mount" ];
-      wantedBy = [ "multi-user.target" ];
+      before = [ "systemd-vconsole-setup.service" "display-manager.service" ];
+      requires = [ "sys-kernel-debug.mount" "vgaswitcheroo.path" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = "${pkgs.bash}/bin/sh -c 'echo -e \"IGD\\nOFF\" > /sys/kernel/debug/vgaswitcheroo/switch; exit 0'";
-        ExecStop = "${pkgs.bash}/bin/sh -c 'echo ON >/sys/kernel/debug/vgaswitcheroo/switch; exit 0'";
+        ExecStart = "${pkgs.bash}/bin/sh -c 'echo -e \"IGD\\nOFF\" > /sys/kernel/debug/vgaswitcheroo/switch'";
+        ExecStop = "${pkgs.bash}/bin/sh -c 'echo ON >/sys/kernel/debug/vgaswitcheroo/switch'";
       };
+    };
+    systemd.paths."vgaswitcheroo" = {
+      pathConfig = {
+        PathExists = "/sys/kernel/debug/vgaswitcheroo/switch";
+        Unit = "amd-hybrid-graphics.service";
+      };
+      wantedBy = ["multi-user.target"];
     };
   };
 

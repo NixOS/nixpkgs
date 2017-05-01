@@ -248,7 +248,7 @@ in rec {
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
-  tests.grsecurity = callTest tests/grsecurity.nix {};
+  tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.hound = callTest tests/hound.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};

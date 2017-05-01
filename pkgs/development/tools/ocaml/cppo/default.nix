@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 let
   pname = "cppo";
-  version = "1.3.2";
+  version = "1.5.0";
   webpage = "http://mjambon.com/${pname}.html";
 in
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 stdenv.mkDerivation rec {
 
   name = "${pname}-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "mjambon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06j0zr78f04ahxi2459vjn61z25hkvs4dfj76200ydg3g6ifb3k1";
+    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];
