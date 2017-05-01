@@ -1,38 +1,44 @@
 { buildPythonPackage
 , lib
-, pkgs
+, six
+, fetchPypi
 , pyyaml
 , mock
 , contextlib2
 , wrapt
-, pytest_27
+, pytest
 , httpbin
 , pytest-httpbin
 , yarl
+, pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
+  pname = "vcrpy";
   version = "1.10.5";
-  name = "vcrpy-${version}";
+  name = "${pname}-${version}";
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/v/vcrpy/vcrpy-${version}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "12kncg6jyvj15mi8ca74514f2x1ih753nhyz769nwvh39r468167";
   };
 
-  buildInputs = [
-    pyyaml
-    mock
-    contextlib2
-    wrapt
-    pytest_27
-    httpbin
+  checkInputs = [
+    pytest
     pytest-httpbin
-    yarl
   ];
 
+  propagatedBuildInputs = [
+    pyyaml
+    wrapt
+    six
+  ]
+  ++ lib.optionals (pythonOlder "3.3") [ contextlib2 mock ]
+  ++ lib.optionals (pythonAtLeast "3.4") [ yarl ];
+
   checkPhase = ''
-    py.test --ignore=tests/integration -k "TestVCRConnection.testing_connect"
+    py.test --ignore=tests/integration -k "not TestVCRConnection"
   '';
 
   meta = with lib; {
