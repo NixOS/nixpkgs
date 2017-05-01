@@ -14115,25 +14115,6 @@ in {
     };
   });
 
-  lxml_3_5 = buildPythonPackage ( rec {
-    name = "lxml-3.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/lxml/${name}.tar.gz";
-      sha256 = "0y7m2s8ci6q642zl85y5axkj8z827l0vhjl532acb75hlkir77rl";
-    };
-
-    buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
-
-    hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
-
-    meta = {
-      description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://lxml.de;
-      license = licenses.bsd3;
-    };
-  });
-
   lxc = buildPythonPackage (rec {
     name = "python-lxc-unstable-2016-08-25";
     disabled = !isPy27;
