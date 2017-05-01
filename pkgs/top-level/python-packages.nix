@@ -67,10 +67,14 @@ let
         else throw "Unsupported kind ${kind}");
     in fetcher (builtins.removeAttrs attrs ["format"]);
 
+  # This should become part of stdenv!
+  sharedLibraryExtension = if stdenv.isDarwin then ".dylib" else ".so";
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
   inherit fetchPypi;
+  inherit sharedLibraryExtension;
 
   # helpers
 
