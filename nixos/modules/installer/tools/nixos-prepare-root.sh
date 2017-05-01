@@ -37,7 +37,7 @@ mkdir -m 0755 -p $mountPoint/tmp/root
 mkdir -m 0755 -p $mountPoint/var
 mkdir -m 0700 -p $mountPoint/root
 
-ln -s /run $mountPoint/var/run
+ln -sf /run $mountPoint/var/run
 
 # Create the necessary Nix directories on the target device
 mkdir -m 0755 -p \
