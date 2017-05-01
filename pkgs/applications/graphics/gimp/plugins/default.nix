@@ -23,7 +23,10 @@ let
   }
   // a
     # don't call this gimp-* unless you want nix replace gimp by a plugin :-)
-  // { name = "${a.name}-${gimp.name}-plugin"; }
+  // {
+      name = "${a.name}-${gimp.name}-plugin";
+      buildInputs = [ gimp gimp.gtk glib pkgconfig ] ++ (a.buildInputs or []);
+    }
   );
 
   scriptDerivation = {name, src} : pluginDerivation {
@@ -34,7 +37,6 @@ let
  libLQR = pluginDerivation {
     name = "liblqr-1-0.4.1";
     # required by lqrPlugin, you don't havet to install this lib explicitely
-    buildInputs = [ gimp ] ++ gimp.nativeBuildInputs;
     src = fetchurl {
       url = http://registry.gimp.org/files/liblqr-1-0.4.1.tar.bz2;
       sha256 = "02g90wag7xi5rjlmwq8h0qs666b1i2sa90s4303hmym40il33nlz";
@@ -73,7 +75,7 @@ rec {
        Filters/Generic/FFT Inverse
     */
     name = "fourier-0.4.1";
-    buildInputs = [ gimp pkgs.fftw  pkgconfig glib] ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ fftw  glib];
     postInstall = "fail";
     installPhase = "installPlugins fourier";
     src = fetchurl {
@@ -87,7 +89,7 @@ rec {
        Blur/Focus Blur
     */
     name = "focusblur-3.2.6";
-    buildInputs = [ gimp pkgconfig pkgs.fftwSinglePrec ] ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ intltool fftwSinglePrec ];
     patches = [ ./patches/focusblur-glib.patch ];
     postInstall = "fail";
     installPhase = "installPlugins src/focusblur";
@@ -105,7 +107,7 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-0.16";
-    buildInputs = [ gimp pkgs.fftw pkgs.pkgconfig pkgs.gtk2 ] ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ fftw ];
     src = fetchurl {
       url = http://www.logarithmic.net/pfh-files/resynthesizer/resynthesizer-0.16.tar.gz;
       sha256 = "1k90a1jzswxmajn56rdxa4r60v9v34fmqsiwfdxqcvx3yf4yq96x";
@@ -125,10 +127,11 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-2.0.1";
-    buildInputs = [ gimp pkgs.fftw pkgs.autoreconfHook pkgs.pkgconfig pkgs.gtk2
-      pkgs.intltool
-    ]
-      ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ 
+      fftw 
+      autoreconfHook
+      intltool
+    ];
     makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
     src = fetchFromGitHub {
       owner = "bootchk";
@@ -140,11 +143,11 @@ rec {
 
   texturize = pluginDerivation {
     name = "texturize-2.1";
-    buildInputs = [ gimp ] ++ gimp.nativeBuildInputs;
     src = fetchurl {
       url = mirror://sourceforge/gimp-texturize/texturize-2.1_src.tgz;
       sha256 = "0cdjq25g3yfxx6bzx6nid21kq659s1vl9id4wxyjs2dhcv229cg3";
     };
+    buildInputs = with pkgs; [ intltool perl ];
     patchPhase = ''
       sed -i '/.*gimpimage_pdb.h.*/ d' src/*.c*
     '';
@@ -156,7 +159,7 @@ rec {
       Filters/Enhance/Wavelet sharpen
     */
     name = "wavelet-sharpen-0.1.2";
-    buildInputs = [ gimp ] ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ intltool ];
     src = fetchurl {
       url = http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz;
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
@@ -169,7 +172,7 @@ rec {
        Layer/Liquid Rescale
     */
     name = "lqr-plugin-0.6.1";
-    buildInputs = [ pkgconfig libLQR gimp ] ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ intltool libLQR ];
     src = fetchurl {
       url = http://registry.gimp.org/files/gimp-lqr-plugin-0.6.1.tar.bz2;
       sha256 = "00hklkpcimcbpjly4rjhfipaw096cpy768g9wixglwrsyqhil7l9";
@@ -182,8 +185,7 @@ rec {
     pluginDerivation rec {
       inherit (pkgs.gmic) name src meta;
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ pkgs.fftw pkgs.opencv gimp ] ++ gimp.nativeBuildInputs;
+      buildInputs = with pkgs; [ fftw opencv curl ];
 
       sourceRoot = "${name}/src";
 
@@ -197,7 +199,7 @@ rec {
   # or use the binary
   ufraw = pluginDerivation rec {
     name = "ufraw-0.19.2";
-    buildInputs = [pkgs.gtkimageview pkgs.lcms gimp] ++ gimp.nativeBuildInputs;
+    buildInputs = with pkgs; [ gtkimageview lcms ];
       # --enable-mime - install mime files, see README for more information
       # --enable-extras - build extra (dcraw, nikon-curve) executables
       # --enable-dst-correction - enable DST correction for file timestamps.
@@ -230,7 +232,7 @@ rec {
       sha256 = "0zlmp9v732qmzj083mnk5z421s57mnckmpjhiw890wmmwzj2lhxz";
     };
 
-    buildInputs = [ gimp pkgconfig glib gimp.gtk pkgs.lensfun pkgs.exiv2 ];
+    buildInputs = with pkgs; [ lensfun exiv2 ];
 
     installPhase = "
       installPlugins gimp-lensfun
