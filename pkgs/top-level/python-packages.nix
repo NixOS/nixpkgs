@@ -15393,6 +15393,9 @@ in {
       sha256 = "170fbf11c54def1b5fcc919be0a890b760bb2eca81f56123a5dda0c69b5b099e";
     };
 
+    # Judging from SyntaxError
+    disabled = isPy3k;
+
     meta = {
       maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.linux;
