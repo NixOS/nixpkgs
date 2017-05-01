@@ -931,7 +931,36 @@ in {
     };
   };
 
-  almir = buildPythonPackage rec {
+  almir = let
+    sqlalchemy_0_8 = buildPythonPackage rec {
+      name = "SQLAlchemy-0.8.7";
+      disabled = isPy34 || isPy35;
+#       doCheck = !isPyPy;
+
+      src = pkgs.fetchurl {
+        url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
+        sha256 = "9edb47d137db42d57fd26673d6c841e189b1aeb9b566cca908962fcc8448c0bc";
+      };
+
+      preConfigure = optionalString isPy3k ''
+        python3 sa2to3.py --no-diffs -w lib test examples
+      '';
+
+      buildInputs = with self; [ nose mock ]
+        ++ stdenv.lib.optional doCheck pysqlite;
+
+      checkPhase = ''
+        ${python.executable} sqla_nose.py
+      '';
+
+      doCheck = false;
+
+      meta = {
+        homepage = http://www.sqlalchemy.org/;
+        description = "A Python SQL toolkit and Object Relational Mapper";
+      };
+    };
+  in buildPythonPackage rec {
     name = "almir-0.1.8";
 
     src = pkgs.fetchurl {
@@ -964,12 +993,12 @@ in {
       self.pyramid_jinja2
       self.pyramid_tm
       self.pytz
-      self.sqlalchemy8
+      sqlalchemy_0_8
       self.transaction
       self.waitress
       self.webhelpers
       self.psycopg2
-      (self.zope_sqlalchemy.override rec {propagatedBuildInputs = with self; [ sqlalchemy8 transaction ];})
+      (self.zope_sqlalchemy.override rec {propagatedBuildInputs = with self; [ sqlalchemy_0_8 transaction ];})
     ];
 
     postInstall = ''
@@ -979,6 +1008,8 @@ in {
     meta = {
       maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
+      # Two versions of sqlalchemy in closure
+      broken = true;
     };
   };
 
@@ -24761,37 +24792,9 @@ in {
     rope = if isPy3k then null else self.rope;
   };
 
-  sqlalchemy8 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.8.7";
-    disabled = isPy34 || isPy35;
-    doCheck = !isPyPy;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "9edb47d137db42d57fd26673d6c841e189b1aeb9b566cca908962fcc8448c0bc";
-    };
 
-    preConfigure = optionalString isPy3k ''
-      python3 sa2to3.py --no-diffs -w lib test examples
-    '';
-
-    buildInputs = with self; [ nose mock ]
-      ++ stdenv.lib.optional doCheck pysqlite;
-
-    checkPhase = ''
-      ${python.executable} sqla_nose.py
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-      broken = true;
-    };
-  };
-
-  sqlalchemy = self.sqlalchemy_1_0;
-
-  sqlalchemy_1_0 = buildPythonPackage rec {
+  sqlalchemy = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
     version = "1.0.15";
 
