@@ -25947,29 +25947,6 @@ in {
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
-  tqdm4 = buildPythonPackage rec {
-    name = "tqdm-${version}";
-    version = "4.7.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tqdm/${name}.tar.gz";
-      sha256 = "1z801zl1y3cf6ixzw4jlpkbp9a9j92sqzs35l0jaqfq00aj1bdm0";
-    };
-
-    buildInputs = with self; [ nose coverage pkgs.glibcLocales flake8 ];
-    propagatedBuildInputs = with self; [ matplotlib pandas ];
-
-    LC_ALL="en_US.UTF-8";
-
-    doCheck = false; # Many transient failures in performance tests and due to use of sleep
-
-    meta = {
-      description = "A Fast, Extensible Progress Meter";
-      homepage = https://github.com/tqdm/tqdm;
-      license = with licenses; [ mit ];
-    };
-  };
-
   smmap = buildPythonPackage rec {
     name = "smmap-0.9.0";
     disabled = isPyPy;  # This fails the tests if built with pypy
