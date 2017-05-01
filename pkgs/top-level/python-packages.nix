@@ -13243,7 +13243,9 @@ in {
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
-  ipython = callPackage ../development/python-modules/ipython { };
+  ipython = if isPy27 then self.ipython5 else callPackage ../development/python-modules/ipython { };
+
+  ipython5 = callPackage ../development/python-modules/ipython/ipython5.nix { };
 
   ipython_genutils = buildPythonPackage rec {
     version = "0.2.0";
