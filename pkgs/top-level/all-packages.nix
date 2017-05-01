@@ -638,6 +638,8 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
+  bfg = callPackage ../applications/version-management/bfg { };
+
   bfr = callPackage ../tools/misc/bfr { };
 
   bibtool = callPackage ../tools/misc/bibtool { };
