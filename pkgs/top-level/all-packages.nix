@@ -10880,6 +10880,11 @@ with pkgs;
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
+  # We should move to dynmaic modules and create a nginxFull package with all modules
+  nginxShibboleth = callPackage ../servers/http/nginx/stable.nix {
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
+  };
+
   ngircd = callPackage ../servers/irc/ngircd { };
 
   nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};
