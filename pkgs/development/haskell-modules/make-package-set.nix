@@ -89,7 +89,8 @@ self: let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      buildInputs = [ pkgs.cabal2nix ];
+      buildInputs = [ pkgs.haskellPackages.cabal2nix ];
+      preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
