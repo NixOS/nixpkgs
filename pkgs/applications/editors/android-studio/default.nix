@@ -33,8 +33,8 @@
 
 let
 
-  version = "2.2.3.0";
-  build = "145.3537739";
+  version = "2.3.1.0";
+  build = "162.3871768";
 
   androidStudio = stdenv.mkDerivation {
     name = "android-studio";
@@ -98,7 +98,7 @@ let
     '';
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "10fmffkvvbnmgjxb4rq7rjwnn16jp5phw6div4n7hh2ad6spf8wq";
+      sha256 = "0cw483xxpc3alg5gv5gqfr2ri98pvdb5kzpmbn5jk04gcwhhylin";
     };
     meta = {
       description = "The Official IDE for Android";
