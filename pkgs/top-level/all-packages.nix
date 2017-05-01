@@ -13385,6 +13385,8 @@ with pkgs;
 
   doodle = callPackage ../applications/search/doodle { };
 
+  draftsight = callPackage ../applications/graphics/draftsight { };
+  
   droopy = callPackage ../applications/networking/droopy {
     inherit (python3Packages) wrapPython;
   };
