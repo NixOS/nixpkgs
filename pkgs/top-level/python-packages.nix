@@ -10623,7 +10623,7 @@ in {
 
     # TODO improve the that multi-override necessity (the fixpoint based python
     # packages work can be the solution)
-    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
+    propagatedBuildInputs = with self; [ django_1_9 (django_compat.overrideBPP {
       buildInputs = with self; [ (django_nose.override {
         propagatedBuildInputs = with self; [ django_1_9 nose ];
       }) ];
