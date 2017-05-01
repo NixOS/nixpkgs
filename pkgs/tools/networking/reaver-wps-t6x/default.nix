@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     cp reaver.db $out/etc/
     cp reaver wash $out/bin/
 
-    wrapProgram $out/bin/reaver --run "[ -s ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)"
-    wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || (mkdir -p ${confdir}/reaver; cp $out/etc/reaver.db ${confdir}/reaver/)"
+    wrapProgram $out/bin/reaver --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
+    wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
   '';
 
   meta = with stdenv.lib; {
