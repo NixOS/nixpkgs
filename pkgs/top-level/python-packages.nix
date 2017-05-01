@@ -2045,7 +2045,6 @@ in {
   babelfish = buildPythonPackage rec {
     version = "0.5.5";
     name = "babelfish-${version}";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/babelfish/${name}.tar.gz";
