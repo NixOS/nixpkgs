@@ -14513,11 +14513,11 @@ in {
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.3.6";
+    version = "1.3.7";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/r/rainbowstream/${name}.tar.gz";
-      sha256 = "04ki61mc2f5rw60zssr1rr6dmjmvhlws5rpnwd3zih6pi5b7cy4a";
+      sha256 = "0zpi1x3b535pwx8rkq57nnrb5d5ma65vvlalar9vi6ilp124x1w2";
     };
 
     patches = [
