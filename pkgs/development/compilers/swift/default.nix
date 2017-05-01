@@ -93,7 +93,7 @@ sources = {
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "01vjvk33bvg52rx7bmhckqv8lhyrij6qf6ih85palqdr7gg868ph";
+      sha256 = "0879jlv37lmxc1apzi53xn033y72548i86r7fzwr0g52124q5gry";
     };
   };
 
