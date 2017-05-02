@@ -15069,6 +15069,8 @@ with pkgs;
     go = go_1_7;
   };
 
+  kube-dns = callPackage ../applications/networking/cluster/kubernetes/dns.nix { };
+
   kupfer = callPackage ../applications/misc/kupfer { };
 
   lame = callPackage ../development/libraries/lame { };
