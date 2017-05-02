@@ -1,0 +1,947 @@
+diff --git a/src/buttons.cpp b/src/buttons.cpp
+index eb3c534..ffc1600 100644
+--- a/src/buttons.cpp
++++ b/src/buttons.cpp
+@@ -313,7 +313,7 @@ void buttonOpen(button_t* my)
+ 	button->focused = 1;
+ 
+ 	// file list
+-	if ( (dir = opendir("maps/")) != NULL )
++	if ( (dir = openDataDir("maps/")) != NULL )
+ 	{
+ 		while ( (ent = readdir(dir)) != NULL )
+ 		{
+@@ -340,7 +340,7 @@ void buttonOpen(button_t* my)
+ 			d_names[c] = (char*) malloc(sizeof(char) * FILENAME_MAX);
+ 		}
+ 		c = 0;
+-		if ( (dir = opendir("maps/")) != NULL )
++		if ( (dir = openDataDir("maps/")) != NULL )
+ 		{
+ 			while ( (ent = readdir(dir)) != NULL )
+ 			{
+@@ -484,7 +484,7 @@ void buttonSaveAs(button_t* my)
+ 	button->focused = 1;
+ 
+ 	// file list
+-	if ( (dir = opendir("maps/")) != NULL )
++	if ( (dir = openDataDir("maps/")) != NULL )
+ 	{
+ 		while ( (ent = readdir(dir)) != NULL )
+ 		{
+@@ -511,7 +511,7 @@ void buttonSaveAs(button_t* my)
+ 			d_names[c] = (char*) malloc(sizeof(char) * FILENAME_MAX);
+ 		}
+ 		c = 0;
+-		if ( (dir = opendir("maps/")) != NULL )
++		if ( (dir = openDataDir("maps/")) != NULL )
+ 		{
+ 			while ( (ent = readdir(dir)) != NULL )
+ 			{
+@@ -965,4 +965,4 @@ void buttonCloseSubwindow(button_t* my)
+ 		d_names = NULL;
+ 	}
+ 	strcpy(filename, oldfilename);
+-}
+\ No newline at end of file
++}
+diff --git a/src/files.cpp b/src/files.cpp
+index 7cb583d..24663dd 100644
+--- a/src/files.cpp
++++ b/src/files.cpp
+@@ -42,6 +42,52 @@ void glLoadTexture(SDL_Surface* image, int texnum)
+ 	SDL_UnlockSurface(image);
+ }
+ 
++
++bool completePath(char *dest, const char * const filename) {
++	if (!(filename && filename[0])) {
++		return false;
++	}
++
++	// Already absolute
++	if (filename[0] == '/') {
++		strncpy(dest, filename, 1024);
++		return true;
++	}
++
++	snprintf(dest, 1024, "%s/%s", datadir, filename);
++	return true;
++}
++
++FILE* openDataFile(const char * const filename, const char * const mode) {
++	char path[1024];
++	completePath(path, filename);
++	printlog("Opening %s", path);
++	FILE * result = fopen(path, mode);
++	if (!result) {
++		printlog("Could not open '%s': %s", path, strerror(errno));
++	}
++	return result;
++}
++
++DIR* openDataDir(const char * const name) {
++	char path[1024];
++	completePath(path, name);
++	printlog("Opening %s", path);
++	DIR * result = opendir(path);
++	if (!result) {
++		printlog("Could not open '%s': %s", path, strerror(errno));
++	}
++	return result;
++}
++
++
++bool dataPathExists(const char * const path) {
++	char full_path[1024];
++	completePath(full_path, path);
++	return access(full_path, F_OK) != -1;
++}
++
++
+ /*-------------------------------------------------------------------------------
+ 
+ 	loadImage
+@@ -53,6 +99,8 @@ void glLoadTexture(SDL_Surface* image, int texnum)
+ 
+ SDL_Surface* loadImage(char* filename)
+ {
++	char full_path[1024];
++	completePath(full_path, filename);
+ 	SDL_Surface* originalSurface;
+ 
+ 	if ( imgref >= MAXTEXTURES )
+@@ -61,9 +109,9 @@ SDL_Surface* loadImage(char* filename)
+ 		printlog("aborting...\n");
+ 		exit(1);
+ 	}
+-	if ( (originalSurface = IMG_Load(filename)) == NULL )
++	if ( (originalSurface = IMG_Load(full_path)) == NULL )
+ 	{
+-		printlog("error: failed to load image '%s'\n", filename);
++		printlog("error: failed to load image '%s'\n", full_path);
+ 		exit(1); // critical error
+ 		return NULL;
+ 	}
+@@ -93,28 +141,19 @@ SDL_Surface* loadImage(char* filename)
+ 
+ -------------------------------------------------------------------------------*/
+ 
+-voxel_t* loadVoxel(char* filename2)
++voxel_t* loadVoxel(char* filename)
+ {
+-	char* filename;
++	//char filename2[1024];
+ 	FILE* file;
+ 	voxel_t* model;
+ 
+-	if (filename2 != NULL)
++	if (filename != NULL)
+ 	{
+-		if ( strstr(filename2, ".vox") == NULL )
+-		{
+-			filename = (char*) malloc(sizeof(char) * 256);
+-			strcpy(filename, filename2);
+-			strcat(filename, ".vox");
+-		}
+-		else
+-		{
+-			filename = (char*) malloc(sizeof(char) * 256);
+-			strcpy(filename, filename2);
+-		}
+-		if ((file = fopen(filename, "rb")) == NULL)
++		//bool has_ext = strstr(filename, ".vox") == NULL;
++		//snprintf(filename2, 1024, "%s%s", filename, has_ext ? "" : ".vox");
++
++		if ((file = openDataFile(filename, "rb")) == NULL)
+ 		{
+-			free(filename);
+ 			return NULL;
+ 		}
+ 		model = (voxel_t*) malloc(sizeof(voxel_t));
+@@ -136,7 +175,6 @@ voxel_t* loadVoxel(char* filename2)
+ 			model->palette[c][2] = model->palette[c][2] << 2;
+ 		}
+ 		fclose(file);
+-		free(filename);
+ 
+ 		return model;
+ 	}
+@@ -163,189 +201,163 @@ int loadMap(char* filename2, map_t* destmap, list_t* entlist)
+ 	Sint32 x, y;
+ 	Entity* entity;
+ 	Sint32 sprite;
+-	char* filename;
++	char filename[256];
+ 
+ 	char oldmapname[64];
+ 	strcpy(oldmapname, map.name);
+ 
+-	if ( filename2 != NULL && strcmp(filename2, "") )
++	printlog("LoadMap %s", filename2);
++
++	if (! (filename2 && filename2[0])) {
++		printlog("map filename empty or null");
++		return -1;
++	}
++
++	strcpy(filename, "maps/");
++	strcat(filename, filename2);
++
++	// add extension if missing
++	if ( strstr(filename, ".lmp") == NULL )
+ 	{
+-		c = 0;
+-		while (1)
++		strcat(filename, ".lmp");
++	}
++
++	// load the file!
++	if ((fp = openDataFile(filename, "rb")) == NULL)
++	{
++		printlog("warning: failed to open file '%s' for map loading!\n", filename);
++		if ( destmap == &map && game )
+ 		{
+-			if (filename2[c] == 0)
+-			{
+-				break;
+-			}
+-			c++;
++			printlog("error: main map failed to load, aborting.\n");
++			mainloop = 0;
+ 		}
+-		filename = (char*) malloc(sizeof(char) * 256);
+-		strcpy(filename, "maps/");
+-		strcat(filename, filename2);
++		return -1;
++	}
+ 
+-		if ( strcmp(filename, "..") && strcmp(filename, ".") )
++	fread(valid_data, sizeof(char), strlen("BARONY"), fp);
++	if ( strncmp(valid_data, "BARONY", strlen("BARONY")) )
++	{
++		printlog("warning: file '%s' is an invalid map file.\n", filename);
++		fclose(fp);
++		if ( destmap == &map && game )
+ 		{
+-			// add extension if missing
+-			if ( strstr(filename, ".lmp") == NULL )
+-			{
+-				strcat(filename, ".lmp");
+-			}
++			printlog("error: main map failed to load, aborting.\n");
++			mainloop = 0;
++		}
++		return -1;
++	}
++	list_FreeAll(entlist);
++	if ( destmap == &map )
++	{
++		// remove old lights
++		list_FreeAll(&light_l);
++	}
++	if ( destmap->tiles != NULL )
++	{
++		free(destmap->tiles);
++	}
++	fread(destmap->name, sizeof(char), 32, fp); // map name
++	fread(destmap->author, sizeof(char), 32, fp); // map author
++	fread(&destmap->width, sizeof(Uint32), 1, fp); // map width
++	fread(&destmap->height, sizeof(Uint32), 1, fp); // map height
++	destmap->tiles = (Sint32*) malloc(sizeof(Sint32) * destmap->width * destmap->height * MAPLAYERS);
++	fread(destmap->tiles, sizeof(Sint32), destmap->width * destmap->height * MAPLAYERS, fp);
++	fread(&numentities, sizeof(Uint32), 1, fp); // number of entities on the map
++	for (c = 0; c < numentities; c++)
++	{
++		fread(&sprite, sizeof(Sint32), 1, fp);
++		entity = newEntity(sprite, 0, entlist);
++		fread(&x, sizeof(Sint32), 1, fp);
++		fread(&y, sizeof(Sint32), 1, fp);
++		entity->x = x;
++		entity->y = y;
++	}
++	fclose(fp);
+ 
+-			// load the file!
+-			if ((fp = fopen(filename, "rb")) == NULL)
+-			{
+-				printlog("warning: failed to open file '%s' for map loading!\n", filename);
+-				if ( destmap == &map && game )
+-				{
+-					printlog("error: main map failed to load, aborting.\n");
+-					mainloop = 0;
+-				}
+-				free(filename);
+-				return -1;
+-			}
++	if ( destmap == &map )
++	{
++		nummonsters = 0;
++		minotaurlevel = 0;
++
++#if defined (HAVE_FMOD) || defined(HAVE_OPENAL)
++		if ( strcmp(oldmapname, map.name) )
++		{
++			levelmusicplaying = false;
+ 		}
+-		else
++#endif
++
++		// create new lightmap
++		if (lightmap != NULL)
+ 		{
+-			printlog("warning: failed to open file '%s' for map loading!\n", filename);
+-			if ( destmap == &map && game )
+-			{
+-				printlog("error: main map failed to load, aborting.\n");
+-				mainloop = 0;
+-			}
+-			free(filename);
+-			return -1;
++			free(lightmap);
+ 		}
+-		fread(valid_data, sizeof(char), strlen("BARONY"), fp);
+-		if ( strncmp(valid_data, "BARONY", strlen("BARONY")) )
++		lightmap = (int*) malloc(sizeof(Sint32) * destmap->width * destmap->height);
++		if ( strncmp(map.name, "Hell", 4) )
+ 		{
+-			printlog("warning: file '%s' is an invalid map file.\n", filename);
+-			fclose(fp);
+-			if ( destmap == &map && game )
++			for (c = 0; c < destmap->width * destmap->height; c++ )
+ 			{
+-				printlog("error: main map failed to load, aborting.\n");
+-				mainloop = 0;
++				lightmap[c] = 0;
+ 			}
+-			free(filename);
+-			return -1;
+-		}
+-		list_FreeAll(entlist);
+-		if ( destmap == &map )
+-		{
+-			// remove old lights
+-			list_FreeAll(&light_l);
+-		}
+-		if ( destmap->tiles != NULL )
+-		{
+-			free(destmap->tiles);
+-		}
+-		fread(destmap->name, sizeof(char), 32, fp); // map name
+-		fread(destmap->author, sizeof(char), 32, fp); // map author
+-		fread(&destmap->width, sizeof(Uint32), 1, fp); // map width
+-		fread(&destmap->height, sizeof(Uint32), 1, fp); // map height
+-		destmap->tiles = (Sint32*) malloc(sizeof(Sint32) * destmap->width * destmap->height * MAPLAYERS);
+-		fread(destmap->tiles, sizeof(Sint32), destmap->width * destmap->height * MAPLAYERS, fp);
+-		fread(&numentities, sizeof(Uint32), 1, fp); // number of entities on the map
+-		for (c = 0; c < numentities; c++)
+-		{
+-			fread(&sprite, sizeof(Sint32), 1, fp);
+-			entity = newEntity(sprite, 0, entlist);
+-			fread(&x, sizeof(Sint32), 1, fp);
+-			fread(&y, sizeof(Sint32), 1, fp);
+-			entity->x = x;
+-			entity->y = y;
+ 		}
+-		free(filename);
+-		fclose(fp);
+-
+-		if ( destmap == &map )
++		else
+ 		{
+-			nummonsters = 0;
+-			minotaurlevel = 0;
+-
+-#if defined (HAVE_FMOD) || defined(HAVE_OPENAL)
+-			if ( strcmp(oldmapname, map.name) )
+-			{
+-				levelmusicplaying = false;
+-			}
+-#endif
+-
+-			// create new lightmap
+-			if (lightmap != NULL)
+-			{
+-				free(lightmap);
+-			}
+-			lightmap = (int*) malloc(sizeof(Sint32) * destmap->width * destmap->height);
+-			if ( strncmp(map.name, "Hell", 4) )
+-			{
+-				for (c = 0; c < destmap->width * destmap->height; c++ )
+-				{
+-					lightmap[c] = 0;
+-				}
+-			}
+-			else
+-			{
+-				for (c = 0; c < destmap->width * destmap->height; c++ )
+-				{
+-					lightmap[c] = 32;
+-				}
+-			}
+-
+-			// create a new vismap
+-			if (vismap != NULL)
++			for (c = 0; c < destmap->width * destmap->height; c++ )
+ 			{
+-				free(vismap);
++				lightmap[c] = 32;
+ 			}
+-			vismap = (bool*) calloc(destmap->width * destmap->height, sizeof(bool));
++		}
+ 
+-			// reset minimap
+-			for ( x = 0; x < 64; x++ )
+-				for ( y = 0; y < 64; y++ )
+-				{
+-					minimap[y][x] = 0;
+-				}
++		// create a new vismap
++		if (vismap != NULL)
++		{
++			free(vismap);
++		}
++		vismap = (bool*) calloc(destmap->width * destmap->height, sizeof(bool));
+ 
+-			// reset camera
+-			if ( game )
++		// reset minimap
++		for ( x = 0; x < 64; x++ )
++			for ( y = 0; y < 64; y++ )
+ 			{
+-				camera.x = -32;
+-				camera.y = -32;
+-				camera.z = 0;
+-				camera.ang = 3 * PI / 2;
+-				camera.vang = 0;
+-			}
+-			else
+-			{
+-				camera.x = 2;
+-				camera.y = 2;
+-				camera.z = 0;
+-				camera.ang = 0;
+-				camera.vang = 0;
++				minimap[y][x] = 0;
+ 			}
+ 
+-			// shoparea
+-			if ( shoparea )
+-			{
+-				free(shoparea);
+-			}
+-			shoparea = (bool*) malloc(sizeof(bool) * destmap->width * destmap->height);
+-			for ( x = 0; x < destmap->width; x++ )
+-				for ( y = 0; y < destmap->height; y++ )
+-				{
+-					shoparea[y + x * destmap->height] = false;
+-				}
++		// reset camera
++		if ( game )
++		{
++			camera.x = -32;
++			camera.y = -32;
++			camera.z = 0;
++			camera.ang = 3 * PI / 2;
++			camera.vang = 0;
+ 		}
+-
+-		for ( c = 0; c < 512; c++ )
++		else
+ 		{
+-			keystatus[c] = 0;
++			camera.x = 2;
++			camera.y = 2;
++			camera.z = 0;
++			camera.ang = 0;
++			camera.vang = 0;
+ 		}
+ 
+-		return numentities;
++		// shoparea
++		if ( shoparea )
++		{
++			free(shoparea);
++		}
++		shoparea = (bool*) malloc(sizeof(bool) * destmap->width * destmap->height);
++		for ( x = 0; x < destmap->width; x++ )
++			for ( y = 0; y < destmap->height; y++ )
++			{
++				shoparea[y + x * destmap->height] = false;
++			}
+ 	}
+-	else
++
++	for ( c = 0; c < 512; c++ )
+ 	{
+-		return -1;
++		keystatus[c] = 0;
+ 	}
++
++	return numentities;
+ }
+ 
+ /*-------------------------------------------------------------------------------
+@@ -375,7 +387,7 @@ int saveMap(char* filename2)
+ 		{
+ 			strcat(filename, ".lmp");
+ 		}
+-		if ((fp = fopen(filename, "wb")) == NULL)
++		if ((fp = openDataFile(filename, "wb")) == NULL)
+ 		{
+ 			printlog("warning: failed to open file '%s' for map saving!\n", filename);
+ 			return 1;
+@@ -423,18 +435,34 @@ char* readFile(char* filename)
+ {
+ 	char* file_contents = NULL;
+ 	long input_file_size;
+-	FILE* input_file = fopen(filename, "rb");
+-	if ( input_file )
+-	{
+-		fseek(input_file, 0, SEEK_END);
+-		input_file_size = ftell(input_file);
+-		rewind(input_file);
+-		file_contents = static_cast<char*>(malloc((input_file_size + 1) * sizeof(char)));
+-		fread(file_contents, sizeof(char), input_file_size, input_file);
+-		file_contents[input_file_size] = 0;
+-		fclose(input_file);
++	FILE* input_file = openDataFile(filename, "rb");
++	if (!input_file) {
++		printlog("Open failed: %s", strerror(errno));
++		goto out_input_file;
++	}
++
++	if (fseek(input_file, 0, SEEK_END) != 0) {
++		printlog("Seek failed");
++		goto out_input_file;
+ 	}
+ 
++	if ((input_file_size = ftell(input_file)) == -1) {
++		printlog("ftell failed");
++		goto out_input_file;
++	}
++
++	if (input_file_size > (1<<30)) {
++		printlog("Unreasonable size: %ld", input_file_size);
++		goto out_input_file;
++	}
++	
++	rewind(input_file);
++	file_contents = static_cast<char*>(malloc((input_file_size + 1) * sizeof(char)));
++	fread(file_contents, sizeof(char), input_file_size, input_file);
++	file_contents[input_file_size] = 0;
++
++out_input_file:
++	fclose(input_file);
+ 	return file_contents;
+ }
+ 
+@@ -449,9 +477,8 @@ char* readFile(char* filename)
+ list_t* directoryContents(char* directory)
+ {
+ 	list_t* list = NULL; // list of strings
+-	DIR* dir = NULL;
++	DIR* dir = openDataDir(directory);
+ 	struct dirent* entry = NULL;
+-	dir = opendir(directory);
+ 
+ 	if ( !dir )
+ 	{
+@@ -469,7 +496,7 @@ list_t* directoryContents(char* directory)
+ 		strcat(tempstr, entry->d_name);
+ 
+ 		DIR* newdir = NULL;
+-		if ( (newdir = opendir(tempstr)) == NULL )
++		if ( (newdir = openDataDir(tempstr)) == NULL )
+ 		{
+ 			newString(list, 0xFFFFFFFF, entry->d_name);
+ 		}
+diff --git a/src/game.cpp b/src/game.cpp
+index bd0fbea..e5dc43e 100644
+--- a/src/game.cpp
++++ b/src/game.cpp
+@@ -672,11 +672,11 @@ void gameLogic(void)
+ 					numplayers = 0;
+ 					if ( !secretlevel )
+ 					{
+-						fp = fopen(LEVELSFILE, "r");
++						fp = openDataFile(LEVELSFILE, "r");
+ 					}
+ 					else
+ 					{
+-						fp = fopen(SECRETLEVELSFILE, "r");
++						fp = openDataFile(SECRETLEVELSFILE, "r");
+ 					}
+ 					for ( i = 0; i < currentlevel; i++ )
+ 						while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+@@ -2184,14 +2184,7 @@ int main(int argc, char** argv)
+ 		//SDL_Surface *sky_bmp;
+ 		light_t* light;
+ 
+-		// load default language file (english)
+-		if ( loadLanguage("en") )
+-		{
+-			printlog("Fatal error: failed to load default language file!\n");
+-			fclose(logfile);
+-			exit(1);
+-		}
+-
++		strcpy(datadir, "./");
+ 		// read command line arguments
+ 		if ( argc > 1 )
+ 		{
+@@ -2229,9 +2222,23 @@ int main(int argc, char** argv)
+ 					{
+ 						strcpy(classtoquickstart, argv[c] + 12);
+ 					}
++					else if (!strncmp(argv[c], "-datadir=", 9))
++					{
++						strcpy(datadir, argv[c] + 9);
++					}
+ 				}
+ 			}
+ 		}
++		printlog("Data path is %s", datadir);
++
++
++		// load default language file (english)
++		if ( loadLanguage("en") )
++		{
++			printlog("Fatal error: failed to load default language file!\n");
++			fclose(logfile);
++			exit(1);
++		}
+ 
+ 		// load config file
+ 		if ( loadingconfig )
+@@ -2556,11 +2563,11 @@ int main(int argc, char** argv)
+ 						{
+ 							if ( !secretlevel )
+ 							{
+-								fp = fopen(LEVELSFILE, "r");
++								fp = openDataFile(LEVELSFILE, "r");
+ 							}
+ 							else
+ 							{
+-								fp = fopen(SECRETLEVELSFILE, "r");
++								fp = openDataFile(SECRETLEVELSFILE, "r");
+ 							}
+ 							fscanf(fp, "%s", tempstr);
+ 							while ( fgetc(fp) != ' ' ) if ( feof(fp) )
+diff --git a/src/init.cpp b/src/init.cpp
+index 15eebe7..89916bd 100644
+--- a/src/init.cpp
++++ b/src/init.cpp
+@@ -309,7 +309,7 @@ int initApp(char* title, int fullscreen)
+ 
+ 	// load sprites
+ 	printlog("loading sprites...\n");
+-	fp = fopen("images/sprites.txt", "r");
++	fp = openDataFile("images/sprites.txt", "r");
+ 	for ( numsprites = 0; !feof(fp); numsprites++ )
+ 	{
+ 		while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+@@ -324,7 +324,7 @@ int initApp(char* title, int fullscreen)
+ 		return 6;
+ 	}
+ 	sprites = (SDL_Surface**) malloc(sizeof(SDL_Surface*)*numsprites);
+-	fp = fopen("images/sprites.txt", "r");
++	fp = openDataFile("images/sprites.txt", "r");
+ 	for ( c = 0; !feof(fp); c++ )
+ 	{
+ 		fscanf(fp, "%s", name);
+@@ -353,7 +353,7 @@ int initApp(char* title, int fullscreen)
+ 
+ 	// load models
+ 	printlog("loading models...\n");
+-	fp = fopen("models/models.txt", "r");
++	fp = openDataFile("models/models.txt", "r");
+ 	for ( nummodels = 0; !feof(fp); nummodels++ )
+ 	{
+ 		while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+@@ -368,7 +368,7 @@ int initApp(char* title, int fullscreen)
+ 		return 11;
+ 	}
+ 	models = (voxel_t**) malloc(sizeof(voxel_t*)*nummodels);
+-	fp = fopen("models/models.txt", "r");
++	fp = openDataFile("models/models.txt", "r");
+ 	for ( c = 0; !feof(fp); c++ )
+ 	{
+ 		fscanf(fp, "%s", name);
+@@ -401,7 +401,7 @@ int initApp(char* title, int fullscreen)
+ 
+ 	// load tiles
+ 	printlog("loading tiles...\n");
+-	fp = fopen("images/tiles.txt", "r");
++	fp = openDataFile("images/tiles.txt", "r");
+ 	for ( numtiles = 0; !feof(fp); numtiles++ )
+ 	{
+ 		while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+@@ -418,7 +418,7 @@ int initApp(char* title, int fullscreen)
+ 	tiles = (SDL_Surface**) malloc(sizeof(SDL_Surface*)*numtiles);
+ 	animatedtiles = (bool*) malloc(sizeof(bool) * numtiles);
+ 	lavatiles = (bool*) malloc(sizeof(bool) * numtiles);
+-	fp = fopen("images/tiles.txt", "r");
++	fp = openDataFile("images/tiles.txt", "r");
+ 	for ( c = 0; !feof(fp); c++ )
+ 	{
+ 		fscanf(fp, "%s", name);
+@@ -465,7 +465,7 @@ int initApp(char* title, int fullscreen)
+ 	// load sound effects
+ #ifdef HAVE_FMOD
+ 	printlog("loading sounds...\n");
+-	fp = fopen("sound/sounds.txt", "r");
++	fp = openDataFile("sound/sounds.txt", "r");
+ 	for ( numsounds = 0; !feof(fp); numsounds++ )
+ 	{
+ 		while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+@@ -480,7 +480,7 @@ int initApp(char* title, int fullscreen)
+ 		return 10;
+ 	}
+ 	sounds = (FMOD_SOUND**) malloc(sizeof(FMOD_SOUND*)*numsounds);
+-	fp = fopen("sound/sounds.txt", "r");
++	fp = openDataFile("sound/sounds.txt", "r");
+ 	for ( c = 0; !feof(fp); c++ )
+ 	{
+ 		fscanf(fp, "%s", name);
+@@ -501,7 +501,7 @@ int initApp(char* title, int fullscreen)
+ 	FMOD_System_Set3DSettings(fmod_system, 1.0, 2.0, 1.0);
+ #elif defined HAVE_OPENAL
+ 	printlog("loading sounds...\n");
+-	fp = fopen("sound/sounds.txt", "r");
++	fp = openDataFile("sound/sounds.txt", "r");
+ 	for ( numsounds = 0; !feof(fp); numsounds++ )
+ 	{
+ 		while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+@@ -516,7 +516,7 @@ int initApp(char* title, int fullscreen)
+ 		return 10;
+ 	}
+ 	sounds = (OPENAL_BUFFER**) malloc(sizeof(OPENAL_BUFFER*)*numsounds);
+-	fp = fopen("sound/sounds.txt", "r");
++	fp = openDataFile("sound/sounds.txt", "r");
+ 	for ( c = 0; !feof(fp); c++ )
+ 	{
+ 		fscanf(fp, "%s", name);
+@@ -560,7 +560,7 @@ int loadLanguage(char* lang)
+ 	snprintf(filename, 127, "lang/%s.txt", lang);
+ 
+ 	// check if language file is valid
+-	if ( access( filename, F_OK ) == -1 )
++	if ( !dataPathExists(filename) )
+ 	{
+ 		// language file doesn't exist
+ 		printlog("error: unable to locate language file: '%s'", filename);
+@@ -586,21 +586,23 @@ int loadLanguage(char* lang)
+ 
+ 	// load fonts
+ 	char fontName[64] = { 0 };
++	char fontPath[1024];
+ 	snprintf(fontName, 63, "lang/%s.ttf", lang);
+-	if ( access(fontName, F_OK) == -1 )
++	if ( !dataPathExists(fontName) )
+ 	{
+ 		snprintf(fontName, 63, "lang/en.ttf");
+ 	}
+-	if ( access(fontName, F_OK) == -1 )
++	if ( !dataPathExists(fontName) )
+ 	{
+ 		printlog("error: default game font 'lang/en.ttf' not found");
+ 		return 1;
+ 	}
++	completePath(fontPath, fontName);
+ 	if ( ttf8 )
+ 	{
+ 		TTF_CloseFont(ttf8);
+ 	}
+-	if ((ttf8 = TTF_OpenFont(fontName, TTF8_HEIGHT)) == NULL )
++	if ((ttf8 = TTF_OpenFont(fontPath, TTF8_HEIGHT)) == NULL )
+ 	{
+ 		printlog("failed to load size 8 ttf: %s\n", TTF_GetError());
+ 		return 1;
+@@ -611,7 +613,7 @@ int loadLanguage(char* lang)
+ 	{
+ 		TTF_CloseFont(ttf12);
+ 	}
+-	if ((ttf12 = TTF_OpenFont(fontName, TTF12_HEIGHT)) == NULL )
++	if ((ttf12 = TTF_OpenFont(fontPath, TTF12_HEIGHT)) == NULL )
+ 	{
+ 		printlog("failed to load size 12 ttf: %s\n", TTF_GetError());
+ 		return 1;
+@@ -622,7 +624,7 @@ int loadLanguage(char* lang)
+ 	{
+ 		TTF_CloseFont(ttf16);
+ 	}
+-	if ((ttf16 = TTF_OpenFont(fontName, TTF16_HEIGHT)) == NULL )
++	if ((ttf16 = TTF_OpenFont(fontPath, TTF16_HEIGHT)) == NULL )
+ 	{
+ 		printlog("failed to load size 16 ttf: %s\n", TTF_GetError());
+ 		return 1;
+@@ -631,7 +633,7 @@ int loadLanguage(char* lang)
+ 	TTF_SetFontHinting(ttf16, TTF_HINTING_MONO);
+ 
+ 	// open language file
+-	if ( (fp = fopen(filename, "r")) == NULL )
++	if ( (fp = openDataFile(filename, "r")) == NULL )
+ 	{
+ 		printlog("error: unable to load language file: '%s'", filename);
+ 		return 1;
+diff --git a/src/init_game.cpp b/src/init_game.cpp
+index 438041a..fe6e59d 100644
+--- a/src/init_game.cpp
++++ b/src/init_game.cpp
+@@ -101,7 +101,7 @@ int initGame()
+ 		strcpy(filename, "models/creatures/");
+ 		strcat(filename, monstertypename[c]);
+ 		strcat(filename, "/limbs.txt");
+-		if ( (fp = fopen(filename, "r")) == NULL )
++		if ( (fp = openDataFile(filename, "r")) == NULL )
+ 		{
+ 			continue;
+ 		}
+@@ -149,7 +149,7 @@ int initGame()
+ 
+ 	// load item types
+ 	printlog( "loading items...\n");
+-	fp = fopen("items/items.txt", "r");
++	fp = openDataFile("items/items.txt", "r");
+ 	for ( c = 0; !feof(fp); c++ )
+ 	{
+ 		items[c].name_identified = language[1545 + c * 2];
+@@ -291,8 +291,8 @@ int initGame()
+ 	createBooks();
+ 	setupSpells();
+ 
+-	randomPlayerNamesMale = getLinesFromFile(PLAYERNAMES_MALE_FILE);
+-	randomPlayerNamesFemale = getLinesFromFile(PLAYERNAMES_FEMALE_FILE);
++	randomPlayerNamesMale = getLinesFromFile(datadir + PLAYERNAMES_MALE_FILE);
++	randomPlayerNamesFemale = getLinesFromFile(datadir + PLAYERNAMES_FEMALE_FILE);
+ 
+ 	// print a loading message
+ 	drawClearBuffers();
+diff --git a/src/main.cpp b/src/main.cpp
+index bc86471..b7e8d93 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -21,6 +21,7 @@ int mainloop = 1;
+ bool initialized = false;
+ Uint32 ticks = 0;
+ bool stop = false;
++char datadir[1024];
+ 
+ // language stuff
+ char languageCode[32] = { 0 };
+diff --git a/src/main.hpp b/src/main.hpp
+index 67847c0..cb0d7aa 100644
+--- a/src/main.hpp
++++ b/src/main.hpp
+@@ -30,6 +30,7 @@ using std::string; //Instead of including an entire namespace, please explicitly
+ #define STEAM_APPID 371970
+ #endif
+ 
++#include <dirent.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <math.h>
+@@ -650,3 +651,8 @@ extern GLuint fbo_ren;
+ #endif
+ void GO_SwapBuffers(SDL_Window* screen);
+ unsigned int GO_GetPixelU32(int x, int y);
++extern char datadir[1024];
++FILE *openDataFile(const char *const filename, const char * const mode);
++DIR * openDataDir(const char *const);
++bool dataPathExists(const char *const);
++bool completePath(char *dest, const char * const path);
+diff --git a/src/maps.cpp b/src/maps.cpp
+index 327c357..b55aabd 100644
+--- a/src/maps.cpp
++++ b/src/maps.cpp
+@@ -284,7 +284,7 @@ int generateDungeon(char* levelset, Uint32 seed)
+ 			snprintf(sublevelnum, 3, "%02d", numlevels);
+ 			strcat(sublevelname, sublevelnum);
+ 			snprintf(fullname, strlen(levelset) + 13, "maps/%s.lmp", sublevelname);
+-			if ( access( fullname, F_OK ) == -1 )
++			if ( !dataPathExists(fullname) )
+ 			{
+ 				break;    // no more levels to load
+ 			}
+@@ -330,7 +330,7 @@ int generateDungeon(char* levelset, Uint32 seed)
+ 
+ 		// check if there is another sublevel to load
+ 		snprintf(fullname, strlen(levelset) + 13, "maps/%s.lmp", sublevelname);
+-		if ( access( fullname, F_OK ) == -1 )
++		if ( !dataPathExists(fullname) )
+ 		{
+ 			break;    // no more levels to load
+ 		}
+diff --git a/src/menu.cpp b/src/menu.cpp
+index 6c37e53..b88172a 100644
+--- a/src/menu.cpp
++++ b/src/menu.cpp
+@@ -3791,11 +3791,11 @@ void handleMainMenu(bool mode)
+ 				{
+ 					if ( !secretlevel )
+ 					{
+-						fp = fopen(LEVELSFILE, "r");
++						fp = openDataFile(LEVELSFILE, "r");
+ 					}
+ 					else
+ 					{
+-						fp = fopen(SECRETLEVELSFILE, "r");
++						fp = openDataFile(SECRETLEVELSFILE, "r");
+ 					}
+ 					int i;
+ 					for ( i = 0; i < currentlevel; i++ )
+@@ -3952,11 +3952,11 @@ void handleMainMenu(bool mode)
+ 				{
+ 					if ( !secretlevel )
+ 					{
+-						fp = fopen(LEVELSFILE, "r");
++						fp = openDataFile(LEVELSFILE, "r");
+ 					}
+ 					else
+ 					{
+-						fp = fopen(SECRETLEVELSFILE, "r");
++						fp = openDataFile(SECRETLEVELSFILE, "r");
+ 					}
+ 					int i;
+ 					for ( i = 0; i < currentlevel; i++ )
+diff --git a/src/net.cpp b/src/net.cpp
+index 0d61794..1c3c6df 100644
+--- a/src/net.cpp
++++ b/src/net.cpp
+@@ -1767,11 +1767,11 @@ void clientHandlePacket()
+ 		printlog("Received map seed: %d. Entity UID start: %d\n", mapseed, entity_uids);
+ 		if ( !secretlevel )
+ 		{
+-			fp = fopen(LEVELSFILE, "r");
++			fp = openDataFile(LEVELSFILE, "r");
+ 		}
+ 		else
+ 		{
+-			fp = fopen(SECRETLEVELSFILE, "r");
++			fp = openDataFile(SECRETLEVELSFILE, "r");
+ 		}
+ 		for ( i = 0; i < currentlevel; i++ )
+ 			while ( fgetc(fp) != '\n' ) if ( feof(fp) )
+diff --git a/src/sound.cpp b/src/sound.cpp
+index d79bb54..320c4aa 100644
+--- a/src/sound.cpp
++++ b/src/sound.cpp
+@@ -264,7 +264,7 @@ static long int openal_oggtell(void* datasource) {
+ }
+ 
+ static int openal_oggopen(OPENAL_SOUND *self, const char* oggfile) {
+-	FILE *f = fopen(oggfile, "rb");
++	FILE *f = openDataFile(oggfile, "rb");
+ 	int err;
+ 
+ 	ov_callbacks oggcb = {openal_oggread, openal_oggseek, openal_oggclose, openal_oggtell};
+@@ -700,7 +700,7 @@ int OPENAL_CreateSound(const char* name, bool b3D, OPENAL_BUFFER **buffer) {
+ 	*buffer = (OPENAL_BUFFER*)malloc(sizeof(OPENAL_BUFFER));
+ 	strcpy((*buffer)->oggfile, name);	// for debugging purpose
+ 	(*buffer)->stream = false;
+-	FILE *f = fopen(name, "rb");
++	FILE *f = openDataFile(name, "rb");
+ 	if(!f) {
+ 		printlog("Error loading sound %s\n", name);
+ 		return 0;

@@ -1,0 +1,28 @@
+commit 27c12282d2044a8f0f59eb769236fc6eef56c459
+Author: Linus Heckemann <git@sphalerite.org>
+Date:   Mon May 1 08:43:01 2017 +0100
+
+    Don't redirect output
+
+diff --git a/src/init.cpp b/src/init.cpp
+index 44a8b39..22078b3 100644
+--- a/src/init.cpp
++++ b/src/init.cpp
+@@ -58,7 +58,7 @@ int initApp(char* title, int fullscreen)
+ 	// open log file
+ 	if ( !logfile )
+ 	{
+-		logfile = freopen("log.txt", "wb" /*or "wt"*/, stderr);
++		logfile = stderr;
+ 	}
+ 
+ 	for (c = 0; c < NUM_JOY_STATUS; ++c)
+@@ -553,7 +553,7 @@ int loadLanguage(char* lang)
+ 	// open log file
+ 	if ( !logfile )
+ 	{
+-		logfile = freopen("log.txt", "wb" /*or "wt"*/, stderr);
++		logfile = stderr;
+ 	}
+ 
+ 	// compose filename

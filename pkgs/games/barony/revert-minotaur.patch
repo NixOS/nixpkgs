@@ -1,0 +1,22 @@
+commit f66008252d99f9db52f7450c97c031c99c071765
+Author: Linus Heckemann <git@sphalerite.org>
+Date:   Fri Apr 7 15:38:30 2017 +0100
+
+    Revert " * Restored minotaur warning icon."
+    
+    This reverts commit 0c0bfe18e35bc641083d7147ada1e44bc9c69cbe and allows
+    the game to run with the data shipped with version 2.0.5.
+
+diff --git a/src/interface/interface.cpp b/src/interface/interface.cpp
+index e3e157f..8cb859f 100644
+--- a/src/interface/interface.cpp
++++ b/src/interface/interface.cpp
+@@ -137,7 +137,7 @@ bool loadInterfaceResources()
+ 	status_bmp = loadImage("images/system/StatusBar.png");
+ 	character_bmp = loadImage("images/system/CharacterSheet.png");
+ 	hunger_bmp = loadImage("images/system/Hunger.png");
+-	minotaur_bmp = loadImage("images/system/minotaur.png"); // the file "images/system/minotaur.png" doesn't exist in current Data
++	minotaur_bmp = loadImage("images/sprites/minotaur.png"); // the file "images/system/minotaur.png" doesn't exist in current Data
+ 	//textup_bmp = loadImage("images/system/TextBoxUpHighlighted.png");
+ 	//textdown_bmp = loadImage("images/system/TextBoxDownHighlighted.png");
+ 	attributesleft_bmp = loadImage("images/system/AttributesLeftHighlighted.png");

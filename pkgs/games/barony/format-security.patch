@@ -1,0 +1,62 @@
+commit 641f4bd30db76cf19d4a16c0e5ade6d0a2125fd6
+Author: Linus Heckemann <git@sphalerite.org>
+Date:   Fri Apr 7 12:21:12 2017 +0100
+
+    Switch snprintf without params → strncpy
+    
+    This fixes compilation on more restrictive settings for gcc, which don't
+    like this insecure practice. Could also pass -Wno-error=format-insecure
+    or something like that, but actually solving the issue is always nicer!
+
+diff --git a/src/init.cpp b/src/init.cpp
+index 15eebe7..44a8b39 100644
+--- a/src/init.cpp
++++ b/src/init.cpp
+@@ -589,7 +589,7 @@ int loadLanguage(char* lang)
+ 	snprintf(fontName, 63, "lang/%s.ttf", lang);
+ 	if ( access(fontName, F_OK) == -1 )
+ 	{
+-		snprintf(fontName, 63, "lang/en.ttf");
++		strncpy(fontName, "lang/en.ttf", 63);
+ 	}
+ 	if ( access(fontName, F_OK) == -1 )
+ 	{
+diff --git a/src/items.cpp b/src/items.cpp
+index a210db8..fb8c3a9 100644
+--- a/src/items.cpp
++++ b/src/items.cpp
+@@ -426,11 +426,11 @@ char* Item::description()
+ 		{
+ 			if ( itemCategory(this) == WEAPON || itemCategory(this) == ARMOR || itemCategory(this) == MAGICSTAFF || itemCategory(this) == TOOL )
+ 			{
+-				snprintf(tempstr, 1024, language[1034 + status]);
++				strncpy(tempstr, language[1034 + status], 1024);
+ 			}
+ 			else if ( itemCategory(this) == AMULET || itemCategory(this) == RING || itemCategory(this) == GEM )
+ 			{
+-				snprintf(tempstr, 1024, language[1039 + status]);
++				strncpy(tempstr, language[1039 + status], 1024);
+ 			}
+ 			else if ( itemCategory(this) == POTION )
+ 			{
+@@ -438,11 +438,11 @@ char* Item::description()
+ 			}
+ 			else if ( itemCategory(this) == SCROLL || itemCategory(this) == SPELLBOOK || itemCategory(this) == BOOK )
+ 			{
+-				snprintf(tempstr, 1024, language[1049 + status]);
++				strncpy(tempstr, language[1049 + status], 1024);
+ 			}
+ 			else if ( itemCategory(this) == FOOD )
+ 			{
+-				snprintf(tempstr, 1024, language[1054 + status]);
++				strncpy(tempstr, language[1054 + status], 1024);
+ 			}
+ 			for ( c = 0; c < 1024; c++ )
+ 				if ( tempstr[c] == 0 )
+@@ -2337,4 +2337,4 @@ bool isPotionBad(const Item& potion)
+ 	}
+ 
+ 	return false;
+-}
+\ No newline at end of file
++}
