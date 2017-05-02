@@ -872,6 +872,19 @@
           license = lib.licenses.free;
         };
       }) {};
+    hook-helpers = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "hook-helpers";
+        version = "1.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/hook-helpers-1.1.tar";
+          sha256 = "0xvabl0lfc0ijr98clsyh0bqk2fdi1ncl0knn58j2p30gn9958i5";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/hook-helpers.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     html5-schema = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "html5-schema";
         version = "0.1";
