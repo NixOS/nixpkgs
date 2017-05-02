@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "9.9.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "1jiz23s52l3gpl84yx4yw3w445jqzcimvnvibvrv3a21k29hyik1";
+    sha256 = "1qqa8ss2mfjzj984l9vc1fnk7czbvhbmmq53m87gnrc65351gkir";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby docbook_xsl libxslt ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libvorbis flac
   ]
   ++ optional stdenv.isDarwin libiconv
-  ++ optional withGUI qt5.qtbase;
+  ++ optionals withGUI [qt5.qtbase qt5.qtmultimedia];
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "drake -j $NIX_BUILD_CORES";
