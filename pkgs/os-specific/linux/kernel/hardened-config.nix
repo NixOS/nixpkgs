@@ -17,6 +17,10 @@ GCC_PLUGINS y # Enable gcc plugin options
 
 DEBUG_WX y # A one-time check for W+X mappings at boot; doesn't do anything beyond printing a warning
 
+${optionalString (versionAtLeast version "4.10") ''
+  BUG_ON_DATA_CORRUPTION y # BUG if kernel struct validation detects corruption
+''}
+
 # Additional validation of commonly targetted structures
 DEBUG_CREDENTIALS y
 DEBUG_NOTIFIERS y
