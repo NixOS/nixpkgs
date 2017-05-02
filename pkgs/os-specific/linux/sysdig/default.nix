@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     "-DSYSDIG_VERSION=${version}"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
+  # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = [
+    "-DluaL_reg=luaL_Reg"
+    "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
+  ];
+
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
