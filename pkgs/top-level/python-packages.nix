@@ -790,24 +790,6 @@ in {
     };
   };
 
-  asgiref = buildPythonPackage rec {
-    name = "asgiref-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgiref/${name}.tar.gz";
-      sha256 = "1jg4nxjsn7nc4vd3170xd60m6syn57m6xwyyna6r68vniq8nhg7i";
-    };
-
-    propagatedBuildInputs = with self ; [ six ];
-
-    meta = {
-      description = "Reference ASGI adapters and channel layers";
-      license = licenses.bsd3;
-      homepage = https://github.com/django/asgiref;
-    };
-  };
-
   asgiref = callPackage ../development/python-modules/asgiref { };
 
   asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
