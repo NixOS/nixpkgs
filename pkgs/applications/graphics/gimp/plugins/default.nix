@@ -25,7 +25,8 @@ let
     # don't call this gimp-* unless you want nix replace gimp by a plugin :-)
   // {
       name = "${a.name}-${gimp.name}-plugin";
-      buildInputs = [ gimp gimp.gtk glib pkgconfig ] ++ (a.buildInputs or []);
+      buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
+      nativeBuildInputs = [ pkgconfig ] ++ (a.nativeBuildInputs or []);
     }
   );
 
@@ -50,7 +51,7 @@ rec {
        Video
     */
     name = "gap-2.6.0";
-    buildInputs = [ gimp pkgconfig glib pkgs.intltool gimp.gtk ] ++ gimp.nativeBuildInputs;
+    nativeBuildInputs = with pkgs; [ intltool ];
     src = fetchurl {
       url = http://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
@@ -75,7 +76,7 @@ rec {
        Filters/Generic/FFT Inverse
     */
     name = "fourier-0.4.1";
-    buildInputs = with pkgs; [ fftw  glib];
+    buildInputs = with pkgs; [ fftw ];
     postInstall = "fail";
     installPhase = "installPlugins fourier";
     src = fetchurl {
@@ -89,7 +90,8 @@ rec {
        Blur/Focus Blur
     */
     name = "focusblur-3.2.6";
-    buildInputs = with pkgs; [ intltool fftwSinglePrec ];
+    buildInputs = with pkgs; [ fftwSinglePrec ];
+    nativeBuildInputs = with pkgs; [ intltool ];
     patches = [ ./patches/focusblur-glib.patch ];
     postInstall = "fail";
     installPhase = "installPlugins src/focusblur";
@@ -127,8 +129,8 @@ rec {
       Filters/Enhance/Smart remove selection
     */
     name = "resynthesizer-2.0.1";
-    buildInputs = with pkgs; [ 
-      fftw 
+    buildInputs = with pkgs; [ fftw ];
+    nativeBuildInputs = with pkgs; [ 
       autoreconfHook
       intltool
     ];
@@ -147,7 +149,8 @@ rec {
       url = mirror://sourceforge/gimp-texturize/texturize-2.1_src.tgz;
       sha256 = "0cdjq25g3yfxx6bzx6nid21kq659s1vl9id4wxyjs2dhcv229cg3";
     };
-    buildInputs = with pkgs; [ intltool perl ];
+    buildInputs = with pkgs; [ perl ];
+    nativeBuildInputs = with pkgs; [ intltool ];
     patchPhase = ''
       sed -i '/.*gimpimage_pdb.h.*/ d' src/*.c*
     '';
@@ -159,7 +162,7 @@ rec {
       Filters/Enhance/Wavelet sharpen
     */
     name = "wavelet-sharpen-0.1.2";
-    buildInputs = with pkgs; [ intltool ];
+    nativeBuildInputs = with pkgs; [ intltool ];
     src = fetchurl {
       url = http://registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz;
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
@@ -172,7 +175,8 @@ rec {
        Layer/Liquid Rescale
     */
     name = "lqr-plugin-0.6.1";
-    buildInputs = with pkgs; [ intltool libLQR ];
+    buildInputs = with pkgs; [ libLQR ];
+    nativeBuildInputs = with pkgs; [ intltool ];
     src = fetchurl {
       url = http://registry.gimp.org/files/gimp-lqr-plugin-0.6.1.tar.bz2;
       sha256 = "00hklkpcimcbpjly4rjhfipaw096cpy768g9wixglwrsyqhil7l9";
