@@ -62,8 +62,30 @@ let
     };
   };
 
+  scaleway-c1-crossSystem.crossSystem = armv7l-hf-multiplatform-crossSystem.crossSystem // rec {
+    platform = pkgsNoParams.platforms.scaleway-c1;
+    inherit (platform) gcc;
+    inherit (gcc) fpu;
+  };
+
+  pogoplug4-crossSystem.crossSystem = {
+    arch = "armv5tel";
+    config = "armv5tel-softfloat-linux-gnueabi";
+    float = "soft";
+
+    platform = pkgsNoParams.platforms.pogoplug4;
+
+    inherit (pkgsNoParams.platforms.pogoplug4) gcc;
+    libc = "glibc";
+
+    withTLS = true;
+    openssl.system = "linux-generic32";
+  };
+
   selectedCrossSystem =
     if toolsArch == "armv5tel" then sheevaplugCrossSystem else
+    if toolsArch == "scaleway" then scaleway-c1-crossSystem else
+    if toolsArch == "pogoplug4" then pogoplug4-crossSystem else
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
     if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else
     if toolsArch == "aarch64" then aarch64-multiplatform-crossSystem else null;
@@ -279,4 +301,6 @@ rec {
     armv6l = buildFor "armv6l";
     armv7l = buildFor "armv7l";
     aarch64 = buildFor "aarch64";
+    scaleway = buildFor "scaleway";
+    pogoplug4 = buildFor "pogoplug4";
 }

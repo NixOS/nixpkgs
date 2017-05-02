@@ -25,7 +25,7 @@ with lib;
 
       script = "echo -n 1 > /proc/sys/kernel/modules_disabled";
 
-      unitConfig.ConditionPathIsWritable = "/proc/sys/kernel";
+      unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
       serviceConfig = {
         Type = "oneshot";

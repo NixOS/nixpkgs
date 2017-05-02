@@ -27,5 +27,10 @@ import ./make-test.nix ({ pkgs, ...} : {
           # note: this better a be module we normally wouldn't load ...
           $machine->fail("modprobe dccp");
       };
+
+      # Test userns
+      subtest "userns", sub {
+          $machine->fail("unshare --user");
+      };
     '';
 })

@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     source "$setupHook"
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+
   postInstall = ''
     substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)
