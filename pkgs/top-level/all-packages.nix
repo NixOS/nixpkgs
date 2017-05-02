@@ -1117,6 +1117,8 @@ with pkgs;
     pythonPackages = python2Packages;
   };
 
+  bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
+
   bgs = callPackage ../tools/X11/bgs { };
 
   biber = callPackage ../tools/typesetting/biber {
