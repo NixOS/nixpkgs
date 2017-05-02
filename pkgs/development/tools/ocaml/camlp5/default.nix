@@ -24,6 +24,8 @@ stdenv.mkDerivation {
 
   postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml.version}/site-lib/camlp5/META";
 
+  dontStrip = true;
+
   meta = with stdenv.lib; {
     description = "Preprocessor-pretty-printer for OCaml";
     longDescription = ''
