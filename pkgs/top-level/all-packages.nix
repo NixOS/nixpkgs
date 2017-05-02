@@ -2578,6 +2578,8 @@ with pkgs;
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
+  libsmi = callPackage ../tools/misc/libsmi { };
+
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
