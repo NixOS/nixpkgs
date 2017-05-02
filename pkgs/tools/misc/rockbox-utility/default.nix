@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libusb1
 , qtbase, qttools, makeQtWrapper, qmakeHook
-, withEspeak ? true, espeak ? null }:
+, withEspeak ? false, espeak ? null }:
 
 stdenv.mkDerivation  rec {
   name = "rockbox-utility-${version}";
