@@ -10977,6 +10977,8 @@ with pkgs;
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
+  
+  bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
 
