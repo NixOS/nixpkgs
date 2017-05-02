@@ -192,6 +192,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  automat = callPackage ../development/python-modules/automat { };
+
   # packages defined elsewhere
 
   bap = callPackage ../development/python-modules/bap {
@@ -806,44 +808,11 @@ in {
     };
   };
 
-  asgi_ipc = buildPythonPackage rec {
-    name = "asgi_ipc-${version}";
-    version = "1.2.0";
+  asgiref = callPackage ../development/python-modules/asgiref { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
-      sha256 = "03phyfj30s4sgaqfbmv38nfvx3kdmjwsh3558d2lxrf2gdrimmf9";
-    };
+  asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
 
-    propagatedBuildInputs = with self ; [ asgiref msgpack posix_ipc ];
-
-    meta = {
-      description = "Posix IPC-backed ASGI channel layer implementation";
-      license = licenses.bsd3;
-      homepage = http://github.com/django/asgi_ipc/;
-    };
-  };
-
-  asgi_redis = buildPythonPackage rec {
-    name = "asgi_redis-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";
-      sha256 = "1pdzxannmgb0as2x6xy0rk4xi8ygnsggpsa0z31pzpwbk6jsgwxd";
-    };
-
-    # Requires a redis server available
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ asgiref asgi_ipc msgpack six redis cryptography ];
-
-    meta = {
-      description = "Redis-backed ASGI channel layer implementation";
-      license = licenses.bsd3;
-      homepage = http://github.com/django/asgi_redis/;
-    };
-  };
+  asgi_redis = callPackage ../development/python-modules/asgi_redis { };
 
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
@@ -2559,6 +2528,8 @@ in {
       license = licenses.bsd2;
     };
   };
+
+  constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
@@ -5199,6 +5170,8 @@ in {
   };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
+
+  pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -8295,6 +8268,8 @@ in {
       license = licenses.gpl3;
     };
   };
+
+  m2r = callPackage ../development/python-modules/m2r { };
 
   mailchimp = buildPythonPackage rec {
     version = "2.0.9";
@@ -13508,6 +13483,8 @@ in {
       sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
     };
 
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ werkzeug twisted ];
 
     meta = {
@@ -15617,6 +15594,8 @@ in {
       sha256 = "0wsh40ysj5gvfc777nrdvf5vbkr606r1gh7ibvw7x8b5g8afdy3y";
       name = "${name}.tar.gz";
     };
+
+    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ twisted ];
 
@@ -26060,47 +26039,7 @@ in {
     };
   };
 
-  twisted = buildPythonPackage rec {
-
-    name = "Twisted-${version}";
-    version = "16.4.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    # Patch t.p._inotify to point to libc. Without this,
-    # twisted.python.runtime.platform.supportsINotify() == False
-    patchPhase = optionalString stdenv.isLinux ''
-      substituteInPlace twisted/python/_inotify.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
-    '';
-
-    # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
-    # details.
-    postInstall = "$out/bin/twistd --help > /dev/null";
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s twisted/test
-    '';
-    # Tests require network
-    doCheck = false;
-
-    meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      longDescription = ''
-        Twisted is an event-driven networking engine written in Python
-        and licensed under the MIT license.
-      '';
-      license = licenses.mit;
-      maintainers = [ ];
-    };
-  };
+  twisted = callPackage ../development/python-modules/twisted { };
 
   tzlocal = buildPythonPackage rec {
     name = "tzlocal-1.2.2";
@@ -26906,6 +26845,8 @@ EOF
       inherit url;
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
+
+    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [twisted dateutil];
 
@@ -31465,31 +31406,7 @@ EOF
     '';
   };
 
-  txaio = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "txaio";
-    version = "2.5.2";
-
-    meta = {
-      description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
-      homepage    = "https://github.com/crossbario/txaio";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ six twisted ];
-
-    checkPhase = ''
-      py.test -k "not test_sdist"
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-      sha256 = "321d441b336447b72dbe81a4d73470414454baf0543ec701fcfecbf4dcbda0fe";
-    };
-  };
+  txaio = callPackage ../development/python-modules/txaio { };
 
   ramlfications = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -31534,28 +31451,7 @@ EOF
     };
   };
 
-  autobahn = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "autobahn";
-    version = "0.16.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-      sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
-    };
-    buildInputs = with self; [ unittest2 mock pytest_29 trollius ];
-    propagatedBuildInputs = with self; [ six twisted txaio ];
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      description = "WebSocket and WAMP in Python for Twisted and asyncio.";
-      homepage    = "http://crossbar.io/autobahn";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-  };
+  autobahn = callPackage ../development/python-modules/autobahn { };
 
   jsonref = buildPythonPackage rec {
     name = "${pname}-${version}";
