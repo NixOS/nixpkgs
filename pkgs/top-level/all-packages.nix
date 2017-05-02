@@ -11352,10 +11352,7 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.p9_fixes
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
-        # kernelPatches.cpu-cgroup-v2."4.7"
+        kernelPatches.cpu-cgroup-v2."4.9"
         kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11369,10 +11366,7 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.p9_fixes
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
-        # kernelPatches.cpu-cgroup-v2."4.7"
+        kernelPatches.cpu-cgroup-v2."4.10"
         kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11388,8 +11382,7 @@ with pkgs;
         kernelPatches.p9_fixes
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
         # when adding a new linux version
-        # !!! 4.7 patch doesn't apply, 4.9 patch not up yet, will keep checking
-        # kernelPatches.cpu-cgroup-v2."4.7"
+        kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
