@@ -1,8 +1,12 @@
-{ stdenv, lib, fetchurl, jre, unzip, makeWrapper }:
+{ stdenv, fetchurl, jre, unzip, makeWrapper }:
 
-rec {
-  imagej = imagej150;
+# Note:
+# - User config dir is hard coded by upstream to $HOME/.imagej on linux systems
+#   and to $HOME/Library/Preferences on macOS.
+#  (The current trend appears to be to use $HOME/.config/imagej
+#    on linux systems, but we here do not attempt to fix it.)
 
+let
   imagej150 = stdenv.mkDerivation rec {
     name = "imagej-${version}";
     version = "150";
@@ -16,25 +20,29 @@ rec {
 
     # JAR files that are intended to be used by other packages
     # should go to $out/share/java.
+    # (Some uses ij.jar as a library not as a standalone program.)
     installPhase = ''
       mkdir -p $out/share/java
+      # Read permisssion suffices for the jar and others.
+      # Simple cp shall clear suid bits, if any.
       cp ij.jar $out/share/java
+      cp -dR luts macros plugins $out/share
       mkdir $out/bin
       makeWrapper ${jre}/bin/java $out/bin/imagej \
-        --add-flags "-cp $out/share/java/ij.jar ij.ImageJ"
+        --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
     '';
+    meta = with stdenv.lib; {
+      homepage = https://imagej.nih.gov/ij/;
+      description = "Image processing and analysis in Java";
+      longDescription = ''
+        ImageJ is a public domain Java image processing program
+        inspired by NIH Image for the Macintosh.
+        It runs on any computer with a Java 1.4 or later virtual machine.
+      '';
+      license = licenses.publicDomain;
+      platforms = with platforms; linux ++ darwin;
+      maintainers = with maintainers; [ yuriaisaka ];
+    };
   };
-
-  meta = {
-    homepage = https://imagej.nih.gov/ij/;
-    description = "Image processing and analysis in Java";
-    longDescription = ''
-      ImageJ is a public domain Java image processing program
-      inspired by NIH Image for the Macintosh.
-      It runs on any computer with a Java 1.4 or later virtual machine.
-    '';
-    license = lib.licenses.publicDomain;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = [ "Yuri Aisaka <yuri.aisaka+nix@gmail.com>" ];
-  };
-}
+in
+  imagej150
