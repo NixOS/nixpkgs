@@ -5970,11 +5970,6 @@ with pkgs;
 
   luaPackages = lua52Packages;
 
-  lua5_1_sockets = lua51Packages.luasocket;
-
-  lua5_expat = callPackage ../development/interpreters/lua-5/expat.nix {};
-  lua5_sec = callPackage ../development/interpreters/lua-5/sec.nix { };
-
   luajit = callPackage ../development/interpreters/luajit {};
 
   luarocks = luaPackages.luarocks;

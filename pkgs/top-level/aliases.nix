@@ -82,6 +82,9 @@ doNotDisplayTwice rec {
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  lua5_sec = luaPackages.luasec; # added 2017-05-02
+  lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
+  lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   m3d-linux = m33-linux; # added 2016-08-13
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
