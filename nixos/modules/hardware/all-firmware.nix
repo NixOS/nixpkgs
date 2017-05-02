@@ -36,6 +36,7 @@ in {
     (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
       hardware.firmware = with pkgs; [
         firmwareLinuxNonfree
+      firmwareLinuxNvidia
         intel2200BGFirmware
         rtl8723bs-firmware
         rtl8192su-firmware
