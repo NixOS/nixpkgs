@@ -20,6 +20,7 @@ doNotDisplayTwice rec {
   accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14
+  ammonite-repl = ammonite; # added 2017-05-02
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
