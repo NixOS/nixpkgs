@@ -15932,6 +15932,8 @@ with pkgs;
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
+  toot = callPackage ../applications/misc/toot { };
+
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   transcode = callPackage ../applications/audio/transcode { };
