@@ -53,6 +53,7 @@ in {
       after       = [ "network.target" ];
       wantedBy    = [ "multi-user.target" ];
       path    	  = [ "${pkgs.spawn_fcgi}" ];
+      environment.SHIBSP_CONFIG = "${cfg.configFile}";
       serviceConfig = {
         ExecStart = "${pkgs.spawn_fcgi}/bin/spawn-fcgi -n -p ${toString cfg.fastcgi.shibResponderPort} ${pkgs.shibboleth-sp}/lib/shibboleth/shibresponder";
       };
@@ -63,6 +64,7 @@ in {
       after       = [ "network.target" ];
       wantedBy    = [ "multi-user.target" ];
       path    	  = [ "${pkgs.spawn_fcgi}" ];
+      environment.SHIBSP_CONFIG = "${cfg.configFile}";
       serviceConfig = {
         ExecStart = "${pkgs.spawn_fcgi}/bin/spawn-fcgi -n -p ${toString cfg.fastcgi.shibAuthorizerPort} ${pkgs.shibboleth-sp}/lib/shibboleth/shibauthorizer";
       };
