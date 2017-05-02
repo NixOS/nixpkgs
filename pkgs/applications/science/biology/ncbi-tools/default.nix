@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     longDescription = ''The NCBI Bioinformatics toolsbox, including command-line utilties, libraries and include files. No X11 support'';
     homepage = http://www.ncbi.nlm.nih.gov/IEB/ToolBox/; 
     license = "GPL";
-    priority = "5";   # zlib.so gives a conflict with zlib
+    priority = 5;   # zlib.so gives a conflict with zlib
     broken = true;
   };
 }

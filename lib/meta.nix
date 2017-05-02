@@ -45,7 +45,7 @@ rec {
   /* Decrease the nix-env priority of the package, i.e., other
      versions/variants of the package will be preferred.
   */
-  lowPrio = drv: addMetaAttrs { priority = "10"; } drv;
+  lowPrio = drv: addMetaAttrs { priority = 10; } drv;
 
 
   /* Apply lowPrio to an attrset with derivations
@@ -56,7 +56,7 @@ rec {
   /* Increase the nix-env priority of the package, i.e., this
      version/variant of the package will be preferred.
   */
-  hiPrio = drv: addMetaAttrs { priority = "-10"; } drv;
+  hiPrio = drv: addMetaAttrs { priority = -10; } drv;
 
 
   /* Apply hiPrio to an attrset with derivations

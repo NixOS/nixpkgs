@@ -238,7 +238,7 @@ let
 
       checkMetaAttr = k: v:
         if metaTypes?${k} then
-          if metaTypes.${k}.check v then null else "key '${k}' has a value of an invalid type; expected ${metaTypes.${k}.description}"
+          if metaTypes.${k}.check v then null else "key '${k}' has a value ${v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
         else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
       checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
