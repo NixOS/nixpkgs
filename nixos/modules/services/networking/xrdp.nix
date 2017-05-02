@@ -93,6 +93,11 @@ in
 
   config = mkIf cfg.enable {
 
+    # copied from <nixos/modules/services/x11/xserver.nix>
+    # xrdp can run X11 program even if "services.xserver.enable = false"
+    environment.pathsToLink =
+      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+
     systemd = {
       services.xrdp = {
         wantedBy = [ "multi-user.target" ];
