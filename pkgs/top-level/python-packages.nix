@@ -5035,31 +5035,8 @@ in {
 
   bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
 
-  cffi = if isPyPy then null else buildPythonPackage rec {
-    name = "cffi-1.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cffi/${name}.tar.gz";
-      sha256 = "563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
-    buildInputs = with self; [ pytest ];
-
-    patchPhase = ''
-      substituteInPlace testing/cffi0/test_ownlib.py --replace "gcc" "cc"
-    '';
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      homepage = https://cffi.readthedocs.org/;
-      license = with licenses; [ mit ];
-      description = "Foreign Function Interface for Python calling C code";
-    };
+  cffi = callPackage ../development/python-modules/cffi {
+    inherit (pkgs) fetchurl libffi;
   };
 
   pycollada = buildPythonPackage rec {
@@ -6959,7 +6936,7 @@ in {
   };
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
-  
+
   facebook-sdk = buildPythonPackage rec {
     name = "facebook-sdk-0.4.0";
 
