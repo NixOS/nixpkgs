@@ -494,6 +494,7 @@ self: super: {
 
   # Depends on itself for testing
   doctest-discover = addBuildTool super.doctest-discover (dontCheck super.doctest-discover);
+  tasty-discover = addBuildTool super.tasty-discover (dontCheck super.tasty-discover);
 
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
