@@ -18390,6 +18390,10 @@ with pkgs;
     terraform = terraform;
   };
 
+  terragrunt_0_11_1 = callPackage ../applications/networking/cluster/terragrunt/0.11.1.nix {
+    terraform = terraform_0_8;
+  };
+
   terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
     terraform = terraform_0_8_5;
   };
