@@ -120,23 +120,7 @@ in {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
-  agate-excel = buildPythonPackage rec {
-    name = "agate-excel-0.2.1";
-
-    meta = {
-      description = "Adds read support for excel files to agate";
-      homepage    = "https://github.com/wireservice/agate-excel";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ agate openpyxl xlrd ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate-excel/${name}.tar.gz";
-      sha256 = "1d28s01a0a8n8rdrd78w88cqgl3lawzy38h9afwm0iks618i0qn7";
-    };
-  };
+  agate-excel = callPackage ../development/python-modules/agate-excel { };
 
   agate-sql = buildPythonPackage rec {
     name = "agate-sql-0.5.2";
