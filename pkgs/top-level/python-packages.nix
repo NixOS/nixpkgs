@@ -23739,25 +23739,7 @@ in {
     };
   };
 
-  stevedore = buildPythonPackage rec {
-    name = "stevedore-1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/stevedore/${name}.tar.gz";
-      sha256 = "149pjc0c3z6khjisn4yil3f94qjnzwafz093wc8rrzbw828qdkv8";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ oslosphinx ];
-    propagatedBuildInputs = with self; [ pbr six argparse ];
-
-    meta = {
-      description = "Manage dynamic plugins for Python applications";
-      homepage = "https://pypi.python.org/pypi/stevedore";
-      license = licenses.asl20;
-    };
-  };
+  stevedore = callPackage ../development/python-modules/stevedore {};
 
   Theano = self.TheanoWithoutCuda;
 
