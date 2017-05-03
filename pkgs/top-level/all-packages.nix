@@ -3301,6 +3301,8 @@ with pkgs;
 
   openjade = callPackage ../tools/text/sgml/openjade { };
 
+  openmvg = callPackage ../applications/science/misc/openmvg { };
+
   openntpd = callPackage ../tools/networking/openntpd { };
 
   openntpd_nixos = openntpd.override {
