@@ -1,12 +1,12 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite
-, netcdf, hdf5 , curl
-, netcdfSupport ? true
- }:
+, libiconv
+, netcdfSupport ? true, netcdf, hdf5 , curl
+}:
 
 with stdenv.lib;
- 
+
 composableDerivation.composableDerivation {} (fixed: rec {
   version = "2.1.3";
   name = "gdal-${version}";
@@ -18,7 +18,8 @@ composableDerivation.composableDerivation {} (fixed: rec {
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite libspatialite ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
-  ++ (stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ]);
+  ++ stdenv.lib.optional stdenv.isDarwin libiconv
+  ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   hardeningDisable = [ "format" ];
 
