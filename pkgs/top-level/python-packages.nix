@@ -157,27 +157,7 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
-  dbf = buildPythonPackage rec {
-    name = "dbf-0.96.8";
-
-    propagatedBuildInputs = [ self.aenum ];
-
-    doCheck = false;
-    # (only) on python3 the unittest loader (loadTestsFromName(submodule)) fails
-
-    meta = {
-      description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
-      homepage    = "https://pypi.python.org/pypi/dbf";
-      license     = licenses.bsd2;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dbf/${name}.tar.gz";
-      sha256 = "1z8n7s4cka6x9ybh4qpfhj51v2qrk38h2f06npizzhm0hmn6r3v1";
-    };
-  };
-
+  dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = buildPythonPackage rec {
     name = "dbfread-2.0.5";
