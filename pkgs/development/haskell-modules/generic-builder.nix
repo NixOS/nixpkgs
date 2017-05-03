@@ -227,6 +227,25 @@ stdenv.mkDerivation ({
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
     done
+
+    if "${if stdenv.isDarwin then "true" else "false"}"; then
+      # Work around a limit in the Mac OS X Sierra linker on the number of paths
+      # referenced by any one dynamic library:
+      #
+      # Create a local directory with symlinks of the *.dylib (Mac OS X shared
+      # libraries) from all the dependencies.
+      local dynamicLinksDir="$out/lib/links"
+      mkdir -p $dynamicLinksDir
+      local foundDylib=false
+      for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
+        ln -s $d/*.dylib $dynamicLinksDir
+      done
+      # Edit the local package DB to reference the links directory.
+      for f in $packageConfDir/*.conf; do
+        sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
+      done
+    fi
+
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
