@@ -1609,6 +1609,28 @@ in {
     };
   }));
 
+  python-slugify = buildPythonPackage rec {
+    name = "python-slugify-${version}";
+    version = "1.2.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-slugify/${name}.tar.gz";
+      sha256 = "097qllxys22kghcv2a5jcc1zdlr9zzqayvk6ywavsv8wgbgqb8sp";
+    };
+    doCheck = false;
+    # (only) on python3 unittest loader (loadTestsFromModule) fails
+
+    propagatedBuildInputs = with self; [ unidecode regex ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/un33k/python-slugify;
+      description = "A Python Slugify application that handles Unicode";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ vrthra ];
+    };
+  };
+
   awesome-slugify = buildPythonPackage rec {
     name = "awesome-slugify-${version}";
     version = "1.6.5";
