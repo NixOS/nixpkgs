@@ -1,8 +1,9 @@
 { stdenv, fetchurl, python2Packages, intltool, file
-, wrapGAppsHook, virtinst, gtkvnc, vte, avahi, dconf
+, wrapGAppsHook, gtkvnc, vte, avahi, dconf
 , gobjectIntrospection, libvirt-glib, system-libvirt
 , gsettings_desktop_schemas, glib, libosinfo, gnome3
 , spiceSupport ? true, spice_gtk ? null
+, openstackSupport ? false, virtinst
 }:
 
 with stdenv.lib;
@@ -20,20 +21,24 @@ python2Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook intltool file ];
 
   buildInputs =
-    [ libvirt-glib vte virtinst dconf gtkvnc gnome3.defaultIconTheme avahi
+    [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
       gsettings_desktop_schemas libosinfo
-    ] ++ optional spiceSupport spice_gtk;
+    ]
+    ++ optional spiceSupport spice_gtk
+    ++ optional openstackSupport virtinst;
 
   propagatedBuildInputs = with python2Packages;
     [ eventlet greenlet gflags netaddr carrot routes PasteDeploy
-      m2crypto ipy twisted distutils_extra simplejson glanceclient
+      m2crypto ipy twisted distutils_extra simplejson
       cheetah lockfile httplib2 urlgrabber pyGtkGlade dbus-python
-      pygobject3 ipaddr mox libvirt libxml2
-    ];
+      pygobject3 ipaddr mox libvirt libxml2 requests
+    ]
+    ++ optional openstackSupport glanceclient;
 
   patchPhase = ''
-    sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
     sed -i "/'install_egg_info'/d" setup.py
+  '' + optionalString openstackSupport ''
+    sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
   '';
 
   postConfigure = ''
