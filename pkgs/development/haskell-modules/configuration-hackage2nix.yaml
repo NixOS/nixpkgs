@@ -6996,8 +6996,6 @@ dont-distribute-packages:
   postgresql-simple-typed:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   postgresql-typed:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   postgresql-typed-lifted:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
-  postgrest:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
-  postgrest-ws:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   postie:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   postmark:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   postmark-streams:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
