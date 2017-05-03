@@ -23,6 +23,7 @@ with lib;
 
   config = mkIf config.hardware.enableAllFirmware {
     hardware.firmware = with pkgs; [
+      broadcom-bt-firmware
       firmwareLinuxNonfree
       intel2200BGFirmware
       rtl8723bs-firmware
