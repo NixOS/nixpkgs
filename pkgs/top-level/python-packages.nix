@@ -2433,29 +2433,7 @@ in {
 
   csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
 
-  csvkit = buildPythonPackage rec {
-    name = "csvkit-${version}";
-    version = "1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/csvkit/${name}.tar.gz";
-      sha256 = "05vfsba9nwh4islszgs18rq8sjkpzqni0cdwvvkw7pi0r63pz2as";
-    };
-
-    propagatedBuildInputs = with self; [ dateutil dbf xlrd sqlalchemy openpyxl
-      agate-excel agate-dbf agate-sql ];
-
-    doCheck = false;
-    # (only) python 3 we had 9 failures and 57 errors out of a much larger
-    # number of tests.
-
-    meta = {
-      description = "A library of utilities for working with CSV, the king of tabular file formats";
-      maintainers = with maintainers; [ vrthra ];
-      license = licenses.mit;
-      homepage = "https://github.com/wireservice/csvkit";
-    };
-  };
+  csvkit =  callPackage ../development/python-modules/csvkit { };
 
   cx_Freeze = buildPythonPackage rec {
     name = "cx_freeze-${version}";
