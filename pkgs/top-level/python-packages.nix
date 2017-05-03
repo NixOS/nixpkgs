@@ -30133,6 +30133,7 @@ EOF
     version = "0.2.7.1";
 
     disabled = (!isPy3k);
+    doCheck = false;
 
     # disabled due to error in loading unittest
     # don't know how to make test from: <mps_youtube. ...>
