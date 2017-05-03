@@ -16668,6 +16668,11 @@ in {
 
     propagatedBuildInputs = with self; [ pbr Babel testrepository subunit testtools ];
     buildInputs = with self; [ coverage oslosphinx oslotest testscenarios six ddt ];
+
+    # Requires pbr < 2
+    # Or update to latest version but that requires updating the whole of openstack / oslo
+    meta.broken = true;
+
   };
 
   bandit = buildPythonPackage rec {
