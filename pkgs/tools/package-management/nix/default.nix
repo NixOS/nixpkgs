@@ -3,6 +3,7 @@
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
+, confDir ? "/etc"
 }:
 
 let
@@ -43,7 +44,7 @@ let
     configureFlags =
       [ "--with-store-dir=${storeDir}"
         "--localstatedir=${stateDir}"
-        "--sysconfdir=/etc"
+        "--sysconfdir=${confDir}"
         "--disable-init-state"
         "--enable-gc"
       ]
