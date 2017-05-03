@@ -318,25 +318,7 @@ in {
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
-  pytimeparse = buildPythonPackage rec {
-    pname = "pytimeparse";
-    version = "1.1.6";
-    name = "${pname}-${version}";
-
-    meta = {
-      description = "A small Python library to parse various kinds of time expressions";
-      homepage    = "https://github.com/wroberts/pytimeparse";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0imbb68i5n5fm704gv47if1blpxd4f8g16qmp5ar07cavgh2mibl";
-    };
-  };
+  pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
