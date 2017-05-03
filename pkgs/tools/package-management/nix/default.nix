@@ -116,8 +116,9 @@ let
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
+
+    preConfigure = "export NIX_STATE_DIR=$TMPDIR";
 
     preBuild = "unset NIX_INDENT_MAKE";
   };
