@@ -25,10 +25,10 @@ rec {
   concat = x: y: x ++ y;
 
   /* boolean “or” */
-  or = x: y: x || y;
+  bor = x: y: x || y;
 
   /* boolean “and” */
-  and = x: y: x && y;
+  band = x: y: x && y;
 
   /* Convert a boolean to a string.
      Note that toString on a bool returns "1" and "".

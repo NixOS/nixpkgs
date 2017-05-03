@@ -54,7 +54,7 @@ rec {
     else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
     else if all isAttrs list then foldl' lib.mergeAttrs {} list
-    else if all isBool list then foldl' lib.or false list
+    else if all isBool list then foldl' lib.bor false list
     else if all isString list then lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";

@@ -2,7 +2,7 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (import ./trivial.nix) and or;
+  inherit (import ./trivial.nix) band bor;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
   inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
@@ -422,7 +422,7 @@ rec {
        => true
    */
   matchAttrs = pattern: attrs: assert isAttrs pattern;
-    fold and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
+    fold band true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
       if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs pat val
