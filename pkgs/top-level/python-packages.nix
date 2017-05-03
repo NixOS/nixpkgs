@@ -249,7 +249,6 @@ in {
 
   dbfread = buildPythonPackage rec {
     name = "dbfread-2.0.5";
-    disabled = isPy3k;
 
     meta = {
       description = "Read DBF Files with Python";
