@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchbzr, cmake, mesa, wxGTK30, zlib, libX11, gettext, glew, cairo, curl, openssl, boost160, pkgconfig, doxygen }:
+{ stdenv, fetchurl, fetchbzr, cmake, mesa, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "kicad-${series}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
 
-  buildInputs = [ cmake mesa wxGTK30 zlib libX11 gettext glew cairo curl openssl boost160 pkgconfig doxygen ];
+  buildInputs = [ cmake mesa wxGTK zlib libX11 gettext glew cairo curl openssl boost pkgconfig doxygen ];
 
   # They say they only support installs to /usr or /usr/local,
   # so we have to handle this.
