@@ -170,6 +170,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "DOC License";
   };
 
+  eapl = {
+    fullName = "EPSON AVASYS PUBLIC LICENSE";
+    url = http://avasys.jp/hp/menu000000700/hpg000000603.htm;
+    free = false;
+  };
+
   efl10 = spdx {
     spdxId = "EFL-1.0";
     fullName = "Eiffel Forum License v1.0";

@@ -18009,6 +18009,8 @@ with pkgs;
 
   e17gtk = callPackage ../misc/themes/e17gtk { };
 
+  epson-alc1100 = callPackage ../misc/drivers/epson-alc1100 { };
+
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
