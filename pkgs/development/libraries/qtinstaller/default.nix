@@ -2,7 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "qtinstaller";
-  buildInputs = [ qtdeclarative qttools qtbase qmakeHook ];
+
+  propagatedBuildInputs = [qtdeclarative qttools];
+  nativeBuildInputs = [ qmakeHook ];
+
   version = "2.0.3";
   src = fetchurl {
     url = "http://download.qt.io/official_releases/qt-installer-framework/${version}/qt-installer-framework-opensource-${version}-src.tar.gz";
@@ -11,6 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "doc" ];
+
+  setOutputFlags = false;
+  enableParallelBuilding = true;
+  NIX_QT_SUBMODULE = true;
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/qt-installer-framework}

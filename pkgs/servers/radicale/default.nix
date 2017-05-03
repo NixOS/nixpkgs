@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    platform = platforms.all;
+    platforms = platforms.all;
     maintainers = with maintainers; [ edwtjo pSub aneeshusa ];
   };
 }

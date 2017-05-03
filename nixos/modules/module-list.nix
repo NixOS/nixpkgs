@@ -534,6 +534,7 @@
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
+  ./services/security/shibboleth-sp.nix
   ./services/security/sshguard.nix
   ./services/security/tor.nix
   ./services/security/torify.nix

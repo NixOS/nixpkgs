@@ -402,7 +402,7 @@ with pkgs;
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
 
-  ammonite-repl = callPackage ../development/tools/ammonite {};
+  ammonite = callPackage ../development/tools/ammonite {};
 
   amtterm = callPackage ../tools/system/amtterm {};
 
@@ -1116,6 +1116,8 @@ with pkgs;
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python2Packages;
   };
+
+  bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
   bgs = callPackage ../tools/X11/bgs { };
 
@@ -4736,7 +4738,7 @@ with pkgs;
 
   xsel = callPackage ../tools/misc/xsel { };
 
-  xsv = callPackages ../tools/text/xsv { };
+  xsv = callPackage ../tools/text/xsv { };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
@@ -10602,6 +10604,15 @@ with pkgs;
   };
 
   rWrapper = callPackage ../development/r-modules/wrapper.nix {
+    recommendedPackages = with rPackages; [
+      boot class cluster codetools foreign KernSmooth lattice MASS
+      Matrix mgcv nlme nnet rpart spatial survival
+    ];
+    # Override this attribute to register additional libraries.
+    packages = [];
+  };
+
+  rstudioWrapper = callPackage ../development/r-modules/wrapper-rstudio.nix {
     recommendedPackages = with rPackages; [
       boot class cluster codetools foreign KernSmooth lattice MASS
       Matrix mgcv nlme nnet rpart spatial survival
