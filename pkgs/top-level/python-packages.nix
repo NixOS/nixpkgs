@@ -24735,37 +24735,7 @@ in {
     };
   };
 
-
-  sqlalchemy_migrate_func = sqlalchemy: buildPythonPackage rec {
-    name = "sqlalchemy-migrate-0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlalchemy-migrate/${name}.tar.gz";
-      sha256 = "00z0lzjs4ksr9yr31zs26csyacjvavhpz6r74xaw1r89kk75qg7q";
-    };
-
-    buildInputs = with self; [ unittest2 scripttest pytz pylint tempest-lib mock testtools ];
-    propagatedBuildInputs = with self; [ pbr tempita decorator sqlalchemy six sqlparse ];
-
-    checkPhase = ''
-      export PATH=$PATH:$out/bin
-      echo sqlite:///__tmp__ > test_db.cfg
-      # depends on ibm_db_sa
-      rm migrate/tests/changeset/databases/test_ibmdb2.py
-      # wants very old testtools
-      rm migrate/tests/versioning/test_schema.py
-      # transient failures on py27
-      substituteInPlace migrate/tests/versioning/test_util.py --replace "test_load_model" "noop"
-      ${python.interpreter} setup.py test
-    '';
-
-    meta = {
-      homepage = http://code.google.com/p/sqlalchemy-migrate/;
-      description = "Schema migration tools for SQLAlchemy";
-    };
-  };
-
-  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy;
+  sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
