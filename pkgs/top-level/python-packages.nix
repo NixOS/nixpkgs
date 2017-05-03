@@ -116,25 +116,9 @@ in {
 
   agate = callPackage ../development/python-modules/agate { };
 
+  agate-dbf = callPackage ../development/python-modules/agate-dbf { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
-
-  agate-dbf = buildPythonPackage rec {
-    name = "agate-dbf-0.2.0";
-
-    meta = {
-      description = "Adds read support for dbf files to agate";
-      homepage    = "https://github.com/wireservice/agate-dbf";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ agate dbf dbfread ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate-dbf/${name}.tar.gz";
-      sha256 = "0pkk6m873xpqj77ja6ylmg8v41abpn4bvsqw6mh2hjyd0snw2rh6";
-    };
-  };
 
   agate-excel = buildPythonPackage rec {
     name = "agate-excel-0.2.1";
