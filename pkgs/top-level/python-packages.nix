@@ -139,8 +139,7 @@ in {
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   agate-dbf = buildPythonPackage rec {
-    name = "agate-dbf-0.1.0";
-    disabled = isPy3k;
+    name = "agate-dbf-0.2.0";
 
     meta = {
       description = "Adds read support for dbf files to agate";
@@ -153,7 +152,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/agate-dbf/${name}.tar.gz";
-      sha256 = "0xzz834lh4xbl342c6wmxqy7ynmsrjp42bsjahfcxhsgq33vzngz";
+      sha256 = "0pkk6m873xpqj77ja6ylmg8v41abpn4bvsqw6mh2hjyd0snw2rh6";
     };
   };
 
