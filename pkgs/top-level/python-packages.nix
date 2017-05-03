@@ -21708,6 +21708,8 @@ in {
       homepage = "http://github.com/diyan/pywinrm/";
       description = "Python library for Windows Remote Management";
       license = licenses.mit;
+      # error: libgssapi_krb5.so: cannot open shared object file: No such file or directory
+      broken = true; #
     };
   };
 
