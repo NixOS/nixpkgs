@@ -18387,7 +18387,7 @@ with pkgs;
   terraform = terraform_0_9;
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {
-    terraform = terraform_0_8;
+    terraform = terraform;
   };
 
   terragrunt_0_9_8 = callPackage ../applications/networking/cluster/terragrunt/0.9.8.nix {
