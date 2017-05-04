@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, xterm, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
+  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
 
 stdenv.mkDerivation rec {
   rev = "94b09a84db803a2e7071094e7fa776948c6a64f2";
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
     substituteInPlace far2l/bootstrap/open.sh              \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
     substituteInPlace far2l/bootstrap/open.sh              \
-      --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'  \
-      --replace 'xterm'       '${xterm}/bin/xterm'
+      --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
     substituteInPlace multiarc/src/formats/zip/zip.cpp     \
