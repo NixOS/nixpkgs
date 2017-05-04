@@ -16193,6 +16193,10 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
+  watson = callPackage ../applications/office/watson {
+    pythonPackages = python3Packages;
+  };
+
   way-cooler = callPackage ../applications/window-managers/way-cooler {};
 
   wayv = callPackage ../tools/X11/wayv {};
