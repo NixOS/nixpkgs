@@ -75,7 +75,12 @@ let
   jmxConfig = pkgs.writeText "jmx.yaml" cfg.jmxConfig;
   
   etcfiles =
-    [ { source = ddConf;
+    let
+      defaultConfd = import ./dd-agent-defaults.nix;
+    in (map (f: { source = "${pkgs.dd-agent}/agent/conf.d-system/${f}";
+                  target = "dd-agent/conf.d/${f}";
+                }) defaultConfd) ++ [
+      { source = ddConf;
         target = "dd-agent/datadog.conf";
       }
       { source = diskConfig;
