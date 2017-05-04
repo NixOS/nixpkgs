@@ -104,7 +104,7 @@ in releaseTools.nixBuild rec {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  preHook = ''
+  shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
