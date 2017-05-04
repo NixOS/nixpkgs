@@ -5271,9 +5271,9 @@ in {
   pytest-mock = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-mock";
-    version = "1.2";
+    version = "1.6.0";
 
-    buildInputs = with self; [ pytest ];
+    buildInputs = with self; [ pytest setuptools_scm ];
     propagatedBuildInputs = with self; [ mock ];
 
     meta = {
@@ -5284,9 +5284,9 @@ in {
       platforms   = platforms.all;
     };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.zip";
-      sha256 = "03zxar5drzm7ksqyrwypjaza3cri6wqvpr6iam92djvg6znp32gp";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "07qccww4bq9jxlc0fbhlspr13kcsixchsnl8vk4wdiyvsjy7r8c3";
     };
   };
 
