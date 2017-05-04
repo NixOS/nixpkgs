@@ -25,6 +25,7 @@
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
   ./config/vpnc.nix
+  ./config/xdg.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
   ./hardware/ckb.nix
