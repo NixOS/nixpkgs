@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl
-, mp3Support    ? true,   lame      ? null
-, speexSupport  ? true,   speex     ? null
-, theoraSupport ? true,   libtheora ? null
-, vorbisSupport ? true,   libvorbis ? null
-, vpxSupport    ? true,   libvpx    ? null
-, x264Support   ? false,  x264      ? null
-, xvidSupport   ? true,   xvidcore  ? null
-, faacSupport   ? false,  faac      ? null
-, vaapiSupport  ? true,   libva     ? null
-, vdpauSupport  ? true,   libvdpau  ? null
-, freetypeSupport ? true, freetype  ? null # it's small and almost everywhere
+, mp3Support        ? true,  lame          ? null
+, speexSupport      ? true,  speex         ? null
+, theoraSupport     ? true,  libtheora     ? null
+, vorbisSupport     ? true,  libvorbis     ? null
+, vpxSupport        ? true,  libvpx        ? null
+, x264Support       ? false, x264          ? null
+, xvidSupport       ? true,  xvidcore      ? null
+, faacSupport       ? false, faac          ? null
+, vaapiSupport      ? true,  libva         ? null
+, vdpauSupport      ? true,  libvdpau      ? null
+, freetypeSupport   ? true,  freetype      ? null # it's small and almost everywhere
+, pulseaudioSupport ? true,  libpulseaudio ? null
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
@@ -67,6 +68,7 @@ let
       ++ optional vaapiSupport "--enable-vaapi"
       ++ optional vdpauSupport "--enable-vdpau"
       ++ optional freetypeSupport "--enable-libfreetype"
+      ++ optional pulseaudioSupport "--enable-libpulse"
       ;
 
     buildInputs = [ pkgconfig lame yasm zlib bzip2 SDL ]
@@ -82,6 +84,7 @@ let
       ++ optional vaapiSupport libva
       ++ optional vdpauSupport libvdpau
       ++ optional freetypeSupport freetype
+      ++ optional pulseaudioSupport libpulseaudio
       ;
 
     enableParallelBuilding = true;
