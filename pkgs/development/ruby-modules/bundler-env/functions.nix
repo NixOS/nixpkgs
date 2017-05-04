@@ -20,7 +20,7 @@ rec {
     then attrs // gemConfig."${attrs.gemName}" attrs
     else attrs);
 
-  genStubsScript = { lib, ruby, confFiles, bundler, groups, binPaths }: ''
+  genStubsScript = { lib, ruby, confFiles, bundler, groups, binPaths, ... }: ''
       ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \

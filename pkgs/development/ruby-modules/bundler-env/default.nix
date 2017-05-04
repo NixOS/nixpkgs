@@ -24,7 +24,7 @@
 }@args:
 
 let
-  inherit (import ./functions.nix (defs // args)) genStubsScript;
+  inherit (import ./functions.nix {inherit lib ruby gemConfig groups; }) genStubsScript;
 
   drvName =
     if name != null then name
@@ -62,21 +62,21 @@ let
 
   # The basicEnv should be put into passthru so that e.g. nix-shell can use it.
 in
-  if builtins.trace "pname: ${toString pname}" pname == null then
+  if pname == null then
     basicEnv // { inherit name; }
   else
     (buildEnv {
       inherit ignoreCollisions;
 
-      name = builtins.trace "name: ${toString drvName}" drvName;
+      name = drvName;
 
       paths = envPaths;
       pathsToLink = [ "/lib" ];
 
-      postBuild = genStubsScript defs // args // {
-        inherit bundler;
+      postBuild = genStubsScript {
+        inherit lib ruby bundler groups;
         confFiles = basicEnv.confFiles;
-        binPaths = [ basicEnv.mainGem ];
+        binPaths = [ basicEnv.gems."${pname}" ];
       } + lib.optionalString (postBuild != null) postBuild;
 
       meta = { platforms = ruby.meta.platforms; } // meta;

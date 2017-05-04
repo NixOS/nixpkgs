@@ -82,15 +82,15 @@ let
     paths = envPaths;
     pathsToLink = [ "/lib" ];
 
-    postBuild = genStubsScript defs // args // {
-      inherit confFiles bundler;
+    postBuild = genStubsScript (defs // args // {
+      inherit confFiles bundler groups;
       binPaths = envPaths;
-    } + lib.optionalString (postBuild != null) postBuild;
+    }) + lib.optionalString (postBuild != null) postBuild;
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
     passthru = rec {
-      inherit ruby bundler gems; # drvName;
+      inherit ruby bundler gems mainGem confFiles; # drvName;
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname}";
