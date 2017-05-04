@@ -30,18 +30,6 @@
     inputs = [ pkgs.expat ];
   };
 
-  syslog = rec {
-    src = fetchFromGitHub {
-      owner = "yaoweibin";
-      repo = "nginx_syslog_patch";
-      rev = "3ca5ba65541637f74467038aa032e2586321d0cb";
-      sha256 = "0y8dxkx8m1jw4v5zsvw1gfah9vh3ryq0hfmrcbjzcmwp5b5lb1i8";
-    };
-    preConfigure = ''
-      patch -p1 < "${src}/syslog-1.7.0.patch"
-    '';
-  };
-
   moreheaders = {
     src = fetchFromGitHub {
       owner = "openresty";
