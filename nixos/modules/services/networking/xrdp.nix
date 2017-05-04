@@ -93,6 +93,11 @@ in
 
   config = mkIf cfg.enable {
 
+    # copied from <nixos/modules/services/x11/xserver.nix>
+    # xrdp can run X11 program even if "services.xserver.enable = false"
+    environment.pathsToLink =
+      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+
     systemd = {
       services.xrdp = {
         wantedBy = [ "multi-user.target" ];
@@ -133,8 +138,10 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         description = "xrdp session manager";
+        restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
+          ExecStop  = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         };
       };
 
