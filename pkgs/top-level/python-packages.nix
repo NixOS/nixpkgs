@@ -70,6 +70,41 @@ let
   # This should become part of stdenv!
   sharedLibraryExtension = if stdenv.isDarwin then ".dylib" else ".so";
 
+  # Get name part of derivation.
+  getName = drvName: (builtins.parseDrvName drvName).name;
+
+
+  # Check if different versions of the same package exist.
+  assertUniquePythonPackages = drvs: let
+    pkgs = builtins.filter (x: builtins.hasAttr "python" x) (closePropagation drvs);
+    names = map (x: getAttr "name" x) pkgs;
+  in assertUniqueNames names;
+
+
+  # Check if different versions of the same package exist.
+  # `list` is a list of strings with names consisting of name and version part.
+  assertUniqueNames = names: let
+    uniqueNames = unique names;
+    pred = x:  let
+      name = getName x;
+      version = getVersion x;
+      check = y: if (name != (getName y)) then true else throw "Duplicates ${x} and ${y}";
+    in all check (remove x uniqueNames);
+  in all pred uniqueNames;
+
+#   # Determine frequencies of items in list.
+#   frequencies = list:
+#     unique = lib.unique list;
+#     counts = map (y: count (x: x==y) list) unique;
+#   in builtins.listToAttrs (zipListsWith (a: b) {name = a; value = b;}  unique counts);
+#
+#   duplicates = drvs: pname: let
+#     pkgs = builtins.filter (x: builtins.hasAttr python x) (lib.closePropagation drvs);
+#     names = builtins.map lib.getName pkgs + pname;
+#   in
+
+
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
@@ -87,6 +122,9 @@ in {
   setuptools = callPackage ../development/python-modules/setuptools { };
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { pythonPackages = self; };
+
+#   unique = assertUniqueNames [ self.django_1_6.name self.django_1_8.name self.numpy.name ];
+  unique = assertUniquePythonPackages [ self.django_1_6 self.django_1_8 self.numpy ];
 
   acoustics = buildPythonPackage rec {
     pname = "acoustics";
