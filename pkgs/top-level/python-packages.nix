@@ -2962,32 +2962,7 @@ in {
     };
   };
 
-  httpserver = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "httpserver";
-    version = "1.1.0";
-    buildInputs = with self; [ docopt ];
-    doCheck = false;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "1q62g324dvb0hqdwwrnj41sqr4d3ly78v9nc26rz1whj4pwdmhsv";
-    };
-    meta = {
-      description = "Python 3.4 asyncio implementation of an HTTP server";
-      longDescription = ''
-        - Supports HTTP/1.1
-        - Supports Keep-Alive
-        - Serve a specific hostname only
-        - Bind to an ip address
-        - Uses asyncio
-        - Installs an 'httpserver' command
-      '';
-      homepage = https://github.com/mozilla/bleach;
-      downloadPage = https://github.com/mozilla/bleach/releases;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ prikhi ];
-    };
-  };
+  httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = buildPythonPackage rec {
     pname = "bleach";
