@@ -11788,6 +11788,8 @@ in {
     };
   });
 
+  folium = callPackage ../development/python-modules/folium { };
+
   fontforge = pkgs.fontforge.override {
     withPython = true;
     inherit python;
