@@ -200,6 +200,6 @@ stdenv.mkDerivation (rec {
     gtk = gtk2;
     inherit nspr;
     inherit ffmpegSupport;
-  };
+  } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
 } // overrides)
