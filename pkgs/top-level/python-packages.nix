@@ -5190,6 +5190,8 @@ in {
     };
   };
 
+  pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
+
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-fixture-config = buildPythonPackage rec {
