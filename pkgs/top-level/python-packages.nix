@@ -22156,7 +22156,6 @@ in {
     };
   };
 
-
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   quantities = buildPythonPackage rec {
