@@ -20214,6 +20214,8 @@ in {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
+  pyproj = callPackage ../development/python-modules/pyproj { };
+
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
     version = "0.7.2";
