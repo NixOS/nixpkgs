@@ -13,11 +13,11 @@ let
   package = pythonPackages.buildPythonApplication (rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.5";
+    version = "0.9.6";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "11r553nmh87a9pm58wycimapk2pw9hnlc7hffn97xwbqprd8qh66";
+      sha256 = "0d6ys1wjwsv4jg4bja1cqhy279hhrl1c9kwyx126srf45slcvg1w";
     };
 
     buildInputs = with pythonPackages; [
@@ -69,6 +69,12 @@ let
 
     ];
 
+    patches = [
+      # This patch disables the test that tries to reat /etc/os-release which
+      # is not accessible in sandboxed builds.
+      ./skip_test_linux_distro.patch
+    ];
+
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
 
@@ -79,6 +85,10 @@ let
       rm -fv buildbot/test/unit/test_interpolate_secrets.py
       rm -fv buildbot/test/unit/test_secret_in_file.py
       rm -fv buildbot/test/unit/test_secret_in_vault.py
+
+      # Remove this line after next update. See
+      # https://github.com/buildbot/buildbot/commit/e7fc8c8eba903c2aa6d7e6393499e5b9bffc2334
+      rm -fv buildbot/test/unit/test_mq_wamp.py
     '';
 
     passthru = { inherit withPlugins; };
