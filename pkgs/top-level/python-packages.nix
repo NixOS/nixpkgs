@@ -3264,6 +3264,8 @@ in {
     };
   };
 
+  branca = callPackage ../development/python-modules/branca { };
+
   bugwarrior = buildPythonPackage rec {
     name = "bugwarrior-${version}";
     version = "1.4.0";
