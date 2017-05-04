@@ -264,18 +264,16 @@ let
           __ignoreNulls = true;
 
           # Inputs built by the cross compiler.
-          buildInputs = if crossConfig != null then buildInputs' else [];
-          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs' else [];
+          buildInputs = buildInputs';
+          propagatedBuildInputs = propagatedBuildInputs';
           # Inputs built by the usual native compiler.
           nativeBuildInputs = nativeBuildInputs'
-            ++ lib.optionals (crossConfig == null) buildInputs'
             ++ lib.optional
                 (result.isCygwin
                   || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
                 ../../build-support/setup-hooks/win-dll-link.sh
             ;
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs' ++
-            (if crossConfig == null then propagatedBuildInputs' else []);
+          propagatedNativeBuildInputs = propagatedNativeBuildInputs';
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =

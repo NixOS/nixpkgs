@@ -33,6 +33,9 @@ let
     publish-hinfo=${yesNo publish.hinfo}
     publish-workstation=${yesNo publish.workstation}
     publish-domain=${yesNo publish.domain}
+
+    [reflector]
+    enable-reflector=${yesNo reflector}
   '';
 
 in
@@ -111,6 +114,11 @@ in
       wideArea = mkOption {
         default = true;
         description = ''Whether to enable wide-area service discovery.'';
+      };
+
+      reflector = mkOption {
+        default = false;
+        description = ''Reflect incoming mDNS requests to all allowed network interfaces.'';
       };
 
       publish = {

@@ -10,7 +10,7 @@ rec {
 
   /* `overrideDerivation drv f' takes a derivation (i.e., the result
      of a call to the builtin function `derivation') and returns a new
-     derivation in which the attributes of the original are overriden
+     derivation in which the attributes of the original are overridden
      according to the function `f'.  The function `f' is called with
      the original derivation attributes.
 

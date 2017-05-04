@@ -262,6 +262,7 @@ let
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
+    imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
     JavaGD = [ pkgs.jdk ];
@@ -408,7 +409,6 @@ let
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
-    ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
@@ -629,7 +629,6 @@ let
     "rioja"
     "ripa"
     "rite"
-    "rnbn"
     "RNCEP"
     "RQDA"
     "RSDA"
@@ -661,7 +660,6 @@ let
     "SYNCSA"
     "SyNet"
     "tcltk2"
-    "TDMR"
     "TED"
     "TestScorer"
     "TIMP"
@@ -694,24 +692,29 @@ let
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
     "acs"                             # build is broken
-    "AffyTiling"                      # build is broken
     "agRee"                           # depends on broken package BRugs-0.8-6
     "aLFQ"                            # depends on broken package bio3d-2.3-1
+    "anamiR"                          # depends on broken package RMySQL-0.10.11
+    "AneuFinder"                      # depends on broken package Rhtslib-1.6.0
     "animation"                       # build is broken
     "anim_plots"                      # depends on broken package animation-2.4
     "annmap"                          # depends on broken package RMySQL-0.10.9
     "apaStyle"                        # depends on broken package gdtools-0.1.3
     "apaTables"                       # depends on broken package OpenMx-2.7.4
+    "aptg"                            # depends on broken package brranching-0.2.0
     "ArrayExpressHTS"                 # build is broken
     "arrayQualityMetrics"             # build is broken
     "auRoc"                           # depends on broken package OpenMx-2.7.4
+    "bamsignals"                      # depends on broken package Rhtslib-1.6.0
     "BatchQC"                         # build is broken
+    "bayesCL"                         # build is broken
     "bayou"                           # depends on broken package animation-2.4
     "bedr"                            # build is broken
     "BETS"                            # build is broken
     "BiGGR"                           # depends on broken package rsbml-2.30.0
     "bio3d"                           # build is broken
     "bioassayR"                       # depends on broken package ChemmineR-2.24.2
+    "bioCancer"                       # depends on broken package covr-2.2.2
     "biomformat"                      # depends on broken package r-rhdf5-2.16.0
     "biotools"                        # depends on broken package rpanel-1.1-3
     "birte"                           # build is broken
@@ -733,6 +736,8 @@ let
     "categoryCompare"                 # depends on broken package RCytoscape-1.21.1
     "Causata"                         # depends on broken package RMySQL-0.10.9
     "cdcfluview"                      # depends on broken package V8-1.2
+    "CexoR"                           # depends on broken package Rhtslib-1.6.0
+    "ChAMP"                           # depends on broken package goseq-1.26.0
     "ChemmineDrugs"                   # depends on broken package ChemmineR-2.24.2
     "ChemmineR"                       # build is broken
     "chinese_misc"                    # build is broken
@@ -761,13 +766,14 @@ let
     "csaw"                            # build is broken
     "ctsem"                           # depends on broken package OpenMx-2.7.4
     "cudaBayesreg"                    # build is broken
-    "curlconverter"                   # depends on broken package V8-1.2
     "cytofkit"                        # depends on broken package flowCore-1.38.2
+    "CytoML"                          # depends on broken package flowCore-1.40.6
     "daff"                            # depends on broken package V8-1.2
     "dagbag"                          # build is broken
     "dagitty"                         # depends on broken package V8-1.2
     "dagLogo"                         # depends on broken package MotIV-1.28.0
     "DAISIE"                          # depends on broken package animation-2.4
+    "DataEntry"                       # build is broken
     "dataMaid"                        # build is broken
     "dataone"                         # build is broken
     "datapack"                        # build is broken
@@ -776,7 +782,9 @@ let
     "DCM"                             # build is broken
     "DDD"                             # depends on broken package animation-2.4
     "deBInfer"                        # depends on broken package PBSddesolve-1.12.2
+    "debrowser"                       # depends on broken package V8-1.4
     "DecisionCurve"                   # build is broken
+    "DeepBlueR"                       # build is broken
     "deepSNV"                         # build is broken
     "DEGraph"                         # depends on broken package RCytoscape-1.21.1
     "DEploid"                         # build is broken
@@ -786,7 +794,6 @@ let
     "DirichletMultinomial"            # build is broken
     "diveRsity"                       # build is broken
     "DmelSGI"                         # depends on broken package r-rhdf5-2.16.0
-    "DNAprofiles"                     # build is broken
     "docxtools"                       # build is broken
     "DOQTL"                           # depends on broken package r-rhdf5-2.16.0
     "DOT"                             # depends on broken package V8-1.2
@@ -800,11 +807,14 @@ let
     "euroMix"                         # build is broken
     "evobiR"                          # depends on broken package animation-2.4
     "exifr"                           # build is broken
+    "ExperimentHubData"               # build is broken
     "exprso"                          # build is broken
     "fastR"                           # build is broken
+    "fCCAC"                           # depends on broken package Rhtslib-1.6.0
     "fdq"                             # depends on broken package gdtools-0.1.3
     "Fgmutils"                        # depends on broken package gdtools-0.1.3
     "flan"                            # build is broken
+    "flextable"                       # depends on broken package gdtools-0.1.4
     "flowAI"                          # depends on broken package r-flowCore-1.38.2
     "flowBeads"                       # depends on broken package r-flowCore-1.38.2
     "flowBin"                         # depends on broken package r-flowCore-1.38.2
@@ -821,6 +831,7 @@ let
     "flowMeans"                       # depends on broken package r-flowCore-1.38.2
     "flowMerge"                       # depends on broken package r-flowCore-1.38.2
     "flowPeaks"                       # build is broken
+    "flowPloidy"                      # depends on broken package flowCore-1.40.6
     "flowQB"                          # depends on broken package r-flowCore-1.38.2
     "flowQ"                           # depends on broken package flowCore-1.38.2
     "FlowSOM"                         # depends on broken package r-flowCore-1.38.2
@@ -832,7 +843,6 @@ let
     "flowVS"                          # depends on broken package r-flowCore-1.38.2
     "flowWorkspace"                   # depends on broken package r-flowCore-1.38.2
     "fmcsR"                           # depends on broken package ChemmineR-2.24.2
-    "ForestTools"                     # depends on broken package imager-0.31
     "fPortfolio"                      # depends on broken package Rsymphony-0.1-26
     "fracprolif"                      # build is broken
     "funModeling"                     # build is broken
@@ -848,6 +858,8 @@ let
     "gazepath"                        # build is broken
     "gdtools"                         # build is broken
     "GENE_E"                          # depends on broken package r-rhdf5-2.16.0
+    "GenoGAM"                         # build is broken
+    "genomation"                      # depends on broken package Rhtslib-1.6.0
     "geojson"                         # depends on broken package r-protolite-1.5
     "geojsonio"                       # depends on broken package V8-1.2
     "geojsonlint"                     # depends on broken package V8-1.2
@@ -855,19 +867,22 @@ let
     "gfer"                            # depends on broken package V8-1.2
     "ggcyto"                          # depends on broken package r-flowCore-1.38.2
     "ggghost"                         # depends on broken package animation-2.4
+    "ggimage"                         # depends on broken package gridGraphics-0.1-5
     "ggiraph"                         # depends on broken package gdtools-0.1.3
     "ggiraphExtra"                    # depends on broken package gdtools-0.1.3
     "ggseas"                          # build is broken
+    "gmapR"                           # build is broken
     "gmatrix"                         # depends on broken package cudatoolkit-8.0.61
     "gMCP"                            # build is broken
     "gmDatabase"                      # depends on broken package RMySQL-0.10.9
     "gmum_r"                          # build is broken
-    "goldi"                           # build is broken
     "googleformr"                     # build is broken
+    "goseq"                           # build is broken
     "gpg"                             # build is broken
     "gpuR"                            # build is broken
     "gputools"                        # depends on broken package cudatoolkit-8.0.61
     "GraphPAC"                        # build is broken
+    "greengenes13_5MgDb"              # build is broken
     "gridGraphics"                    # build is broken
     "GSCA"                            # depends on broken package r-rhdf5-2.16.0
     "GUIDE"                           # depends on broken package rpanel-1.1-3
@@ -877,20 +892,22 @@ let
     "harrietr"                        # build is broken
     "HDF5Array"                       # depends on broken package r-rhdf5-2.16.0
     "healthyFlowData"                 # depends on broken package r-flowCore-1.38.2
+    "hexSticker"                      # depends on broken package gridGraphics-0.1-5
     "HierO"                           # build is broken
     "HilbertVisGUI"                   # build is broken
     "HiPLARM"                         # build is broken
     "hisse"                           # depends on broken package animation-2.4
+    "hoardeR"                         # depends on broken package Rhtslib-1.6.0
     "homomorpheR"                     # depends on broken package sodium-0.4
+    "HTSeqGenie"                      # depends on broken package gmapR-1.16.0
     "HTSSIP"                          # depends on broken package r-rhdf5-2.16.0
     "idm"                             # depends on broken package animation-2.4
     "ifaTools"                        # depends on broken package OpenMx-2.7.4
     "IHW"                             # depends on broken package r-lpsymphony-1.0.2
     "IHWpaper"                        # depends on broken package r-lpsymphony-1.0.2
     "IlluminaHumanMethylation450k_db" # build is broken
-    "imager"                          # build is broken
     "immunoClust"                     # depends on broken package r-flowCore-1.38.2
-    "inSilicoMerging"                 # build is broken
+    "imputeR"                         # depends on broken package ridge-2.2
     "intansv"                         # build is broken
     "interactiveDisplay"              # build is broken
     "ionicons"                        # depends on broken package rsvg-1.0
@@ -903,8 +920,10 @@ let
     "KoNLP"                           # build is broken
     "largeList"                       # build is broken
     "largeVis"                        # build is broken
+    "lavaan_shiny"                    # depends on broken package OpenMx-2.7.10
     "lawn"                            # depends on broken package V8-1.2
     "LCMCR"                           # build is broken
+    "LeArEst"                         # depends on broken package opencpu-1.6.1
     "lefse"                           # build is broken
     "lfe"                             # build is broken
     "lgcp"                            # depends on broken package rpanel-1.1-3
@@ -927,6 +946,7 @@ let
     "MBESS"                           # depends on broken package OpenMx-2.7.4
     "mBvs"                            # build is broken
     "mcaGUI"                          # build is broken
+    "mcPAFit"                         # build is broken
     "mdsr"                            # depends on broken package RMySQL-0.10.9
     "Mediana"                         # depends on broken package gdtools-0.1.3
     "melviewr"                        # build is broken
@@ -937,13 +957,14 @@ let
     "metagear"                        # build is broken
     "MetaIntegrator"                  # depends on broken package RMySQL-0.10.9
     "metaSEM"                         # depends on broken package OpenMx-2.7.4
+    "methylKit"                       # depends on broken package Rhtslib-1.6.0
     "MigClim"                         # build is broken
     "minimist"                        # depends on broken package V8-1.2
     "miscF"                           # depends on broken package BRugs-0.8-6
     "mixlink"                         # build is broken
     "MLSeq"                           # build is broken
-    "MMDiff"                          # depends on broken package r-DiffBind-2.0.9
     "mmnet"                           # build is broken
+    "MODIStsp"                        # build is broken
     "MonetDBLite"                     # build is broken
     "mongolite"                       # build is broken
     "monogeneaGM"                     # depends on broken package animation-2.4
@@ -970,7 +991,9 @@ let
     "ndjson"                          # build is broken
     "ndtv"                            # depends on broken package animation-2.4
     "NetRep"                          # depends on broken package r-RhpcBLASctl-0.15-148
+    "networkBMA"                      # build is broken
     "nlts"                            # build is broken
+    "normr"                           # depends on broken package Rhtslib-1.6.0
     "NORRRM"                          # build is broken
     "odbc"                            # build is broken
     "officer"                         # depends on broken package gdtools-0.1.3
@@ -980,10 +1003,12 @@ let
     "OpenMx"                          # build is broken
     "optbdmaeAT"                      # build is broken
     "optBiomarker"                    # depends on broken package rpanel-1.1-3
+    "optrcdmaeAT"                     # build is broken
     "ora"                             # depends on broken package ROracle-1.3-1
     "OUwie"                           # depends on broken package animation-2.4
     "PAA"                             # build is broken
     "paleotree"                       # depends on broken package animation-2.4
+    "PathoStat"                       # depends on broken package BatchQC-1.2.1
     "PathSelectMP"                    # build is broken
     "PatternClass"                    # build is broken
     "PBD"                             # depends on broken package animation-2.4
@@ -1000,6 +1025,7 @@ let
     "PGA"                             # build is broken
     "PGPC"                            # depends on broken package ChemmineR-2.24.2
     "ph2bye"                          # depends on broken package animation-2.4
+    "PharmacoGx"                      # build is broken
     "PhyInformR"                      # depends on broken package animation-2.4
     "phylocurve"                      # depends on broken package animation-2.4
     "phyloseq"                        # depends on broken package r-rhdf5-2.16.0
@@ -1009,6 +1035,7 @@ let
     "PING"                            # depends on broken package PICS-2.16.0
     "plateCore"                       # depends on broken package r-flowCore-1.38.2
     "plfMA"                           # build is broken
+    "plink"                           # build is broken
     "podkat"                          # build is broken
     "PottsUtils"                      # depends on broken package BRugs-0.8-6
     "powell"                          # build is broken
@@ -1044,11 +1071,12 @@ let
     "RapidPolygonLookup"              # depends on broken package PBSmapping-2.69.76
     "RAppArmor"                       # build is broken
     "raptr"                           # depends on broken package PBSmapping-2.69.76
-    "RBerkeley"                       # build is broken
     "RbioRXN"                         # depends on broken package ChemmineR-2.24.2
     "Rblpapi"                         # build is broken
+    "RCAS"                            # depends on broken package Rhtslib-1.6.0
     "Rchemcpp"                        # depends on broken package ChemmineR-2.24.2
     "rchess"                          # depends on broken package V8-1.2
+    "RchivalTag"                      # depends on broken package PBSmapping-2.69.76
     "RchyOptimyx"                     # depends on broken package r-flowCore-1.38.2
     "RcmdrPlugin_FuzzyClust"          # build is broken
     "RcmdrPlugin_PcaRobust"           # build is broken
@@ -1061,6 +1089,7 @@ let
     "rcqp"                            # build is broken
     "rcrypt"                          # build is broken
     "RCytoscape"                      # build is broken
+    "rdataretriever"                  # build is broken
     "rDEA"                            # build is broken
     "RDieHarder"                      # build is broken
     "REBayes"                         # depends on broken package Rmosek-1.2.5.1
@@ -1076,8 +1105,10 @@ let
     "Rgnuplot"                        # build is broken
     "rgp"                             # build is broken
     "rgpui"                           # depends on broken package rgp-0.4-1
+    "rgsepd"                          # depends on broken package goseq-1.26.0
     "rhdf5"                           # build is broken
     "RhpcBLASctl"                     # build is broken
+    "Rhtslib"                         # build is broken
     "ridge"                           # build is broken
     "rjade"                           # depends on broken package V8-1.2
     "rJPSGCS"                         # build is broken
@@ -1090,12 +1121,14 @@ let
     "rmapshaper"                      # depends on broken package V8-1.2
     "rMAT"                            # build is broken
     "Rmosek"                          # build is broken
+    "rmumps"                          # build is broken
     "RMySQL"                          # build is broken
+    "rnaturalearth"                   # depends on broken package sf-0.4-1
     "RnavGraph"                       # build is broken
     "rnetcarto"                       # build is broken
+    "ROI_plugin_clp"                  # depends on broken package clpAPI-1.2.7
     "ROI_plugin_cplex"                # depends on broken package Rcplex-0.3-3
     "ROI_plugin_symphony"             # depends on broken package Rsymphony-0.1-26
-    "Rolexa"                          # build is broken
     "ROracle"                         # build is broken
     "RPA"                             # depends on broken package r-rhdf5-2.16.0
     "RPANDA"                          # depends on broken package animation-2.4
@@ -1104,6 +1137,7 @@ let
     "Rphylopars"                      # depends on broken package animation-2.4
     "Rpoppler"                        # build is broken
     "RQuantLib"                       # build is broken
+    "Rsampletrees"                    # build is broken
     "RSAP"                            # build is broken
     "rsbml"                           # build is broken
     "RSCABS"                          # build is broken
@@ -1120,9 +1154,9 @@ let
     "RVideoPoker"                     # depends on broken package rpanel-1.1-3
     "rzmq"                            # build is broken
     "s2"                              # build is broken
-    "Sabermetrics"                    # build is broken
     "sapFinder"                       # build is broken
     "sbrl"                            # build is broken
+    "SC3"                             # depends on broken package scater-1.2.0
     "scater"                          # depends on broken package r-rhdf5-2.16.0
     "scran"                           # depends on broken package r-rhdf5-2.16.0
     "SDD"                             # depends on broken package rpanel-1.1-3
@@ -1130,6 +1164,7 @@ let
     "seasonalview"                    # build is broken
     "Sejong"                          # build is broken
     "SemiCompRisks"                   # build is broken
+    "semPlot"                         # depends on broken package OpenMx-2.7.10
     "semtree"                         # depends on broken package OpenMx-2.7.4
     "seqbias"                         # build is broken
     "SeqGrapheR"                      # build is broken
@@ -1142,11 +1177,11 @@ let
     "SimInf"                          # build is broken
     "simsalapar"                      # build is broken
     "smapr"                           # depends on broken package r-rhdf5-2.16.0
+    "SMITE"                           # depends on broken package goseq-1.26.0
     "SnakeCharmR"                     # build is broken
     "sodium"                          # build is broken
     "soilphysics"                     # depends on broken package rpanel-1.1-3
     "sortinghat"                      # build is broken
-    "spade"                           # depends on broken package r-flowCore-1.38.2
     "spdynmod"                        # depends on broken package animation-2.4
     "spocc"                           # depends on broken package V8-1.2
     "spongecake"                      # build is broken
@@ -1160,20 +1195,24 @@ let
     "subspaceMOA"                     # depends on broken package animation-2.4
     "svglite"                         # depends on broken package gdtools-0.1.3
     "sybilSBML"                       # build is broken
+    "SymTS"                           # build is broken
     "synthACS"                        # depends on broken package acs-2.0
     "tcpl"                            # depends on broken package RMySQL-0.10.9
     "TDA"                             # build is broken
     "TED"                             # depends on broken package animation-2.4
     "tesseract"                       # build is broken
+    "texPreview"                      # depends on broken package magick-0.4
     "textreadr"                       # build is broken
     "textTinyR"                       # build is broken
     "TFBSTools"                       # depends on broken package CNEr-1.8.3
+    "tilegramsR"                      # depends on broken package sf-0.4-1
     "TKF"                             # depends on broken package animation-2.4
     "tmap"                            # depends on broken package V8-1.2
     "tmaptools"                       # depends on broken package V8-1.2
     "tofsims"                         # build is broken
     "toxboot"                         # depends on broken package RMySQL-0.10.9
     "TransView"                       # build is broken
+    "treatSens"                       # build is broken
     "treeplyr"                        # depends on broken package animation-2.4
     "TSMySQL"                         # depends on broken package RMySQL-0.10.9
     "uaparserjs"                      # depends on broken package V8-1.2
@@ -1182,12 +1221,14 @@ let
     "umx"                             # depends on broken package OpenMx-2.7.4
     "userfriendlyscience"             # depends on broken package OpenMx-2.7.4
     "V8"                              # build is broken
+    "VariantTools"                    # depends on broken package gmapR-1.16.0
     "VBmix"                           # build is broken
     "vcfR"                            # build is broken
     "vdiffr"                          # depends on broken package gdtools-0.1.3
     "vmsbase"                         # depends on broken package PBSmapping-2.69.76
     "wallace"                         # depends on broken package V8-1.2
     "wand"                            # build is broken
+    "WebGestaltR"                     # depends on broken package PythonInR-0.1-3
     "webp"                            # build is broken
     "wordbankr"                       # depends on broken package RMySQL-0.10.9
     "x13binary"                       # build is broken

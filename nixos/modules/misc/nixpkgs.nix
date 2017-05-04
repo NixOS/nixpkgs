@@ -42,6 +42,8 @@ let
     merge = lib.mergeOneOption;
   };
 
+  _pkgs = import ../../.. config.nixpkgs;
+
 in
 
 {
@@ -97,6 +99,9 @@ in
   };
 
   config = {
-    _module.args.pkgs = import ../../.. config.nixpkgs;
+    _module.args = {
+      pkgs = _pkgs;
+      pkgs_i686 = _pkgs.pkgsi686Linux;
+    };
   };
 }
