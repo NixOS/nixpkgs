@@ -5087,6 +5087,8 @@ in {
     };
   };
 
+  PyLD = callPackage ../development/python-modules/PyLD { };
+
   python-jose = callPackage ../development/python-modules/python-jose {};
 
   pyhepmc = buildPythonPackage rec {
