@@ -1,5 +1,8 @@
 { stdenv, fetchurl, cabextract, bt-fw-converter }:
 
+# Kernels between 4.2 and 4.7 will not work with
+# this packages as they expect the firmware to be named "BCM.hcd"
+# see: https://github.com/NixOS/nixpkgs/pull/25478#issuecomment-299034865
 stdenv.mkDerivation rec {
   name = "broadcom-bt-firmware-${version}";
   version = "12.0.1.1011";
