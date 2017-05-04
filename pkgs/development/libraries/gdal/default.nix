@@ -1,6 +1,6 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
-, libpng, sqlite, libspatialite
+, libpng, sqlite, libspatialite, poppler
 , libiconv
 , netcdfSupport ? true, netcdf, hdf5 , curl
 }:
@@ -16,7 +16,8 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "0jh7filpf5dk5iz5acj7y3y49ihnzqypxckdlj0sjigbqq6hlsmf";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite libspatialite ]
+  buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
+    libspatialite poppler ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ stdenv.lib.optional stdenv.isDarwin libiconv
   ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
@@ -30,6 +31,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
     "--with-png=${libpng.dev}"      # optional
+    "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql.lib.dev}/bin/mysql_config"

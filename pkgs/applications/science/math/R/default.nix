@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, tzdata
+, curl, Cocoa, Foundation, cf-private, libobjc, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
 
-  patches = [ ./no-usr-local-search-paths.patch ];
+  patches = [ ./no-usr-local-search-paths.patch ./fix-sweave-exit-code.patch ];
 
   preConfigure = ''
     configureFlagsArray=(

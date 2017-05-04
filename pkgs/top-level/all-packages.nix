@@ -5281,6 +5281,7 @@ with pkgs;
   cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
 
   stack = haskell.lib.justStaticExecutables haskellPackages.stack;
+  hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
 
   all-cabal-hashes = callPackage ../data/misc/hackage/default.nix { };
 
@@ -6983,7 +6984,7 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
-  sqlitebrowser = callPackage ../development/tools/database/sqlitebrowser { };
+  sqlitebrowser = qt5.callPackage ../development/tools/database/sqlitebrowser { };
 
   sselp = callPackage ../tools/X11/sselp{ };
 

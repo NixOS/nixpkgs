@@ -162,10 +162,10 @@
       }) {};
     async = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "async";
-        version = "1.9";
+        version = "1.9.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/async-1.9.tar";
-          sha256 = "1ip5nc8xyln5szvqwp6wqva9xr84pn8ssn3nnphrszr19y4js2bm";
+          url = "https://elpa.gnu.org/packages/async-1.9.2.tar";
+          sha256 = "17fnvrj7jww29sav6a6jpizclg4w2962m6h37akpii71gf0vrffw";
         };
         packageRequires = [];
         meta = {
@@ -1404,10 +1404,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170210";
+        version = "20170502";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170210.tar";
-          sha256 = "15415wh3w8d4c8hd7qfrfdjnjb1zppmrkg8cdp7hw2ilyr90c0bn";
+          url = "https://elpa.gnu.org/packages/org-20170502.tar";
+          sha256 = "12inz804j55ycprb2m3ay54d1bhwhjssmn5nrfm7cfklyhfsy27s";
         };
         packageRequires = [];
         meta = {
