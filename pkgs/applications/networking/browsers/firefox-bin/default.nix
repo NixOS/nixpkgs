@@ -30,6 +30,7 @@
 , libgnome
 , libgnomeui
 , defaultIconTheme
+, gsettings_desktop_schemas
 , mesa
 , nspr
 , nss
@@ -124,7 +125,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme ];
+  buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme gsettings_desktop_schemas ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10

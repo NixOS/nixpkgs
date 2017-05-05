@@ -6,7 +6,7 @@
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which, cargo, rustc
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
-, enableGTK3 ? false, gtk3, wrapGAppsHook
+, enableGTK3 ? false, gtk3, wrapGAppsHook, gsettings_desktop_schemas
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Nightly" or whatever, enable this option.  However, those
@@ -45,7 +45,7 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       icu libpng jemalloc
       libpulseaudio # only headers are needed
     ]
-    ++ lib.optional enableGTK3 gtk3
+    ++ lib.optionals enableGTK3 [gtk3 gsettings_desktop_schemas]
     ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst-plugins-base ];
 
   nativeBuildInputs =
