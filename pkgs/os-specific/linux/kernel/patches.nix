@@ -17,26 +17,6 @@ let
         '';
       };
     };
-
-  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha512 }: rec {
-    name = "grsecurity-${grver}-${kver}-${grrev}";
-
-    # Pass these along to allow the caller to determine compatibility
-    inherit grver kver grrev;
-
-    patch = fetchurl {
-      urls = [
-        "https://grsecurity.net/${grbranch}/${name}.patch"
-        # When updating versions/hashes, ALWAYS use the official
-        # version; we use this mirror only because upstream removes
-        # source files immediately upon releasing a new version ...
-        "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${kver}/${name}.patch"
-      ];
-      inherit sha512;
-    };
-
-    features.grsecurity = true;
-  };
 in
 
 rec {
@@ -106,14 +86,6 @@ rec {
     and https://grsecurity.net/passing_the_baton_faq.php
     for more information.
   '';
-
-  # This patch relaxes grsec constraints on the location of usermode helpers,
-  # e.g., modprobe, to allow calling into the Nix store.
-  grsecurity_nixos_kmod =
-    {
-      name  = "grsecurity-nixos-kmod";
-      patch = ./grsecurity-nixos-kmod.patch;
-    };
 
   crc_regression =
     { name = "crc-backport-regression";

@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
     ln -s libblas.so.${version} "$out/lib/libblas.so"
   '';
 
+  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    for fn in $(find $out/lib -name "*.so*"); do
+      if [ -L "$fn" ]; then continue; fi
+      install_name_tool -id "$fn" "$fn"
+    done
+  '';
+
   meta = {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.publicDomain;

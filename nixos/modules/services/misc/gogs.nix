@@ -14,7 +14,7 @@ let
     HOST = ${cfg.database.host}:${toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
-    PASSWD = ${cfg.database.password}
+    PASSWD = #dbpass#
     PATH = ${cfg.database.path}
 
     [repository]
@@ -25,6 +25,10 @@ let
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
     ROOT_URL = ${cfg.rootUrl}
+
+    [session]
+    COOKIE_NAME = session
+    COOKIE_SECURE = ${boolToString cfg.cookieSecure}
 
     [security]
     SECRET_KEY = #secretkey#
@@ -102,7 +106,21 @@ in
         password = mkOption {
           type = types.str;
           default = "";
-          description = "Database password.";
+          description = ''
+            The password corresponding to <option>database.user</option>.
+            Warning: this is stored in cleartext in the Nix store!
+            Use <option>database.passwordFile</option> instead.
+          '';
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/keys/gogs-dbpassword";
+          description = ''
+            A file containing the password corresponding to
+            <option>database.user</option>.
+          '';
         };
 
         path = mkOption {
@@ -148,6 +166,15 @@ in
         description = "HTTP listen port.";
       };
 
+      cookieSecure = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Marks session cookies as "secure" as a hint for browsers to only send
+          them via HTTPS. This option is recommend, if Gogs is being served over HTTPS.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -164,13 +191,25 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.gogs.bin ];
 
-      preStart = ''
+      preStart = let
+        runConfig = "${cfg.stateDir}/custom/conf/app.ini";
+        secretKey = "${cfg.stateDir}/custom/conf/secret_key";
+      in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
           mkdir -p ${cfg.stateDir}/custom/conf
-          cp -f ${configFile} ${cfg.stateDir}/custom/conf/app.ini
-          KEY=$(head -c 16 /dev/urandom | tr -dc A-Za-z0-9)
-          sed -i "s,#secretkey#,$KEY,g" ${cfg.stateDir}/custom/conf/app.ini
+          cp -f ${configFile} ${runConfig}
+
+          if [ ! -e ${secretKey} ]; then
+              head -c 16 /dev/urandom | base64 > ${secretKey}
+          fi
+
+          KEY=$(head -n1 ${secretKey})
+          DBPASS=$(head -n1 ${cfg.database.passwordFile})
+          sed -e "s,#secretkey#,$KEY,g" \
+              -e "s,#dbpass#,$DBPASS,g" \
+              -i ${runConfig}
+          chmod 440 ${runConfig} ${secretKey}
         ''}
 
         mkdir -p ${cfg.repositoryRoot}
@@ -212,5 +251,16 @@ in
       };
       extraGroups.gogs.gid = config.ids.gids.gogs;
     };
+
+    warnings = optional (cfg.database.password != "")
+      ''config.services.gogs.database.password will be stored as plaintext
+        in the Nix store. Use database.passwordFile instead.'';
+
+    # Create database passwordFile default when password is configured.
+    services.gogs.database.passwordFile = mkIf (cfg.database.password != "")
+      (mkDefault (toString (pkgs.writeTextFile {
+        name = "gogs-database-password";
+        text = cfg.database.password;
+      })));
   };
 }

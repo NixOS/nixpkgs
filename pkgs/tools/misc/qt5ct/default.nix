@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "qt5ct-${version}";
-  version = "0.24";
+  version = "0.30";
 
   src = fetchurl {
     url = "mirror://sourceforge/qt5ct/qt5ct-${version}.tar.bz2";
-    sha256 = "0k62nd945pbgkshycijzrgdyrwj5kcswk33slaj7hr7d6r7bmb6p";
+    sha256 = "1k0ywd440qvf84chadjb4fnkn8dkfl56cc3a6wqg6a59drslvng6";
   };
 
   buildInputs = [ qtbase qtsvg ];
   nativeBuildInputs = [ makeQtWrapper qmakeHook qttools ];
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags PLUGINDIR=$out/lib/qt5/plugins/platformthemes/"
+    qmakeFlags="$qmakeFlags PLUGINDIR=$out/lib/qt5/plugins"
   '';
 
   preFixup = ''

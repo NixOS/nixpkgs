@@ -91,11 +91,15 @@ let
     };
 
     skins = config.skins;
+    extensions = config.extensions;
 
     buildPhase =
       ''
         for skin in $skins; do
           cp -prvd $skin/* skins/
+        done
+        for extension in $extensions; do
+          cp -prvd $extension/* extensions/
         done
       ''; # */
 
@@ -283,6 +287,16 @@ in
       description =
         ''
           List of paths whose content is copied to the ‘skins’
+          subdirectory of the MediaWiki installation.
+        '';
+    };
+
+    extensions = mkOption {
+      default = [];
+      type = types.listOf types.path;
+      description =
+        ''
+          List of paths whose content is copied to the 'extensions'
           subdirectory of the MediaWiki installation.
         '';
     };

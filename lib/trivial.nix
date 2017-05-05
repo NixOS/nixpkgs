@@ -56,6 +56,8 @@ rec {
   #     nix-repl> fix f
   #     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
   #
+  #  Type: fix :: (a -> a) -> a
+  #
   # See https://en.wikipedia.org/wiki/Fixed-point_combinator for further
   # details.
   fix = f: let x = f x; in x;

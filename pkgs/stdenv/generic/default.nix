@@ -18,7 +18,9 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
-  shouldCheckMeta = config.checkMeta or true;
+  # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
+  # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
+  shouldCheckMeta = config.checkMeta or false;
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
@@ -236,7 +238,7 @@ let
 
       checkMetaAttr = k: v:
         if metaTypes?${k} then
-          if metaTypes.${k}.check v then null else "key '${k}' has a value of an invalid type; expected ${metaTypes.${k}.description}"
+          if metaTypes.${k}.check v then null else "key '${k}' has a value ${v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
         else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
       checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 

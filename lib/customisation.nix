@@ -167,7 +167,7 @@ rec {
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage' will be evaluated with the same
      arguments. Any package in the set may depend on any other. The
-     `override' function allows subsequent modification of the package
+     `overrideScope' function allows subsequent modification of the package
      set in a consistent way, i.e. all packages in the set will be
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
@@ -177,7 +177,7 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          override = g:
+          overrideScope = g:
             makeScope newScope
             (self_: let super = f self_; in super // g super self_);
           packages = f;

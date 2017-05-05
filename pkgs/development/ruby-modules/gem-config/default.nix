@@ -78,6 +78,18 @@ in
         [ darwin.apple_sdk.frameworks.CoreServices ];
   };
 
+  # disable bundle install as it can't install anything in addition to what is
+  # specified in pkgs/applications/misc/jekyll/Gemfile anyway. Also do chmod_R
+  # to compensate for read-only files in site_template in nix store.
+  jekyll = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -i $installPath/lib/jekyll/commands/new.rb \
+          -e 's@Exec.run("bundle", "install"@Exec.run("true"@' \
+          -e 's@FileUtils.cp_r site_template + "/.", path@FileUtils.cp_r site_template + "/.", path; FileUtils.chmod_R "u+w", path@'
+    '';
+  };
+
   # note that you need version >= v3.16.14.8,
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161

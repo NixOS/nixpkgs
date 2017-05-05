@@ -55,27 +55,22 @@ available.
 
 ## RStudio
 
-RStudio by default will not use the libraries installed like above.
-You must override its R version with your custom R environment, and
-set `useRPackages` to `true`, like below:
+RStudio uses a standard set of packages and ignores any custom R
+environments or installed packages you may have.  To create a custom
+environment, see `rstudioWrapper`, which functions similarly to
+`rWrapper`:
 
 ```nix
 {
     packageOverrides = super: let self = super.pkgs; in
     {
 
-        rEnv = super.rWrapper.override {
+        rstudioEnv = super.rstudioWrapper.override {
             packages = with self.rPackages; [
-                devtools
+                dplyr
                 ggplot2
                 reshape2
-                yaml
-                optparse
                 ];
-        };
-        rstudioEnv = super.rstudio.override {
-            R = rEnv;
-            useRPackages = true;
         };
     };
 }

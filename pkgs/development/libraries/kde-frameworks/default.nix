@@ -96,7 +96,7 @@ let
       kwallet = callPackage ./kwallet.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
-      kwindowsystem = callPackage ./kwindowsystem.nix {};
+      kwindowsystem = callPackage ./kwindowsystem {};
       kxmlgui = callPackage ./kxmlgui.nix {};
       kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
       modemmanager-qt = callPackage ./modemmanager-qt.nix {};

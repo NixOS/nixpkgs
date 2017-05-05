@@ -1,9 +1,13 @@
-{ stdenv, fetchurl, cmake, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35 }:
+{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35 }:
 
+# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
-stdenv.mkDerivation rec {
-  name = "pyside-shiboken-${version}";
+buildPythonPackage rec {
+  name = "${pname}-${version}";
+  pname = "pyside-shiboken";
   version = "1.2.4";
+
+  format = "other";
 
   src = fetchurl {
     url = "https://github.com/PySide/Shiboken/archive/${version}.tar.gz";
@@ -25,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "http://www.pyside.org/docs/shiboken/";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.chaoflow ];
+    platforms = lib.platforms.all;
   };
 }

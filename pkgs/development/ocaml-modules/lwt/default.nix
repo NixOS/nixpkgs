@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, camlp4
+{ stdenv, buildOcaml, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, camlp4
 , ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, glib
 , ppx_tools, result, cppo
 , ppxSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
@@ -15,8 +15,8 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "ocaml-lwt-${version}";
+buildOcaml rec {
+  name = "lwt";
   inherit (param) version;
 
   src = fetchzip {
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
   ++ [ (if ppxSupport then "--enable-ppx" else "--disable-ppx") ];
 
   createFindlibDestdir = true;
+
+  hasSharedObjects = true;
 
   meta = with stdenv.lib; {
     homepage = http://ocsigen.org/lwt;

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libev, ocaml, findlib, ocamlbuild, ocaml_lwt, ocaml_react, zed }:
+{ stdenv, buildOcaml, fetchurl, libev, ocaml, findlib, ocamlbuild, ocaml_lwt, ocaml_react, zed }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
-stdenv.mkDerivation rec {
+buildOcaml rec {
   version = "1.10";
-  name = "lambda-term-${version}";
+  name = "lambda-term";
 
   src = fetchurl {
     url = "https://github.com/diml/lambda-term/archive/${version}.tar.gz";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zed ocaml_lwt ];
 
   createFindlibDestdir = true;
+
+  hasSharedObjects = true;
 
   meta = { description = "Terminal manipulation library for OCaml";
     longDescription = ''

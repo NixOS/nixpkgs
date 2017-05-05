@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.12
+  # LTS Haskell 8.13
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -47,7 +47,7 @@ default-package-overrides:
   - acid-state ==0.14.2
   - action-permutations ==0.0.0.1
   - active ==0.2.0.12
-  - ad ==4.3.2.1
+  - ad ==4.3.3
   - adjunctions ==4.3
   - adler32 ==0.1.1.0
   - aeson ==1.0.2.1
@@ -224,7 +224,7 @@ default-package-overrides:
   - between ==0.11.0.0
   - bibtex ==0.1.0.6
   - bifunctors ==5.4.2
-  - bimap ==0.3.2
+  - bimap ==0.3.3
   - bimap-server ==0.1.0.1
   - binary-bits ==0.5
   - binary-conduit ==1.2.4.1
@@ -252,7 +252,7 @@ default-package-overrides:
   - bitcoin-script ==0.11.1
   - bitcoin-tx ==0.13.1
   - bitcoin-types ==0.9.2
-  - bits ==0.5
+  - bits ==0.5.1
   - bitx-bitcoin ==0.11.0.1
   - blake2 ==0.2.0
   - blank-canvas ==0.6
@@ -294,7 +294,7 @@ default-package-overrides:
   - byteable ==0.1.1
   - bytedump ==1.0
   - byteorder ==1.0.4
-  - bytes ==0.15.2
+  - bytes ==0.15.3
   - byteset ==0.1.1.0
   - bytestring-builder ==0.10.8.1.0
   - bytestring-conversion ==0.3.1
@@ -358,12 +358,12 @@ default-package-overrides:
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.5
   - clang-pure ==0.2.0.2
-  - clash-ghc ==0.7.1
+  - clash-ghc ==0.7.2
   - clash-lib ==0.7.1
-  - clash-prelude ==0.11.1
-  - clash-systemverilog ==0.7.1
-  - clash-verilog ==0.7.1
-  - clash-vhdl ==0.7.1
+  - clash-prelude ==0.11.2
+  - clash-systemverilog ==0.7.2
+  - clash-verilog ==0.7.2
+  - clash-vhdl ==0.7.2
   - classy-prelude ==1.2.0.1
   - classy-prelude-conduit ==1.2.0
   - classy-prelude-yesod ==1.2.0
@@ -630,11 +630,11 @@ default-package-overrides:
   - esqueleto ==2.5.1
   - etc ==0.0.0.2
   - etcd ==1.0.5
-  - ether ==0.4.1.0
+  - ether ==0.4.2.0
   - euphoria ==0.8.0.0
   - event ==0.1.4
   - event-list ==0.1.1.3
-  - eventstore ==0.14.0.1
+  - eventstore ==0.14.0.2
   - exact-combinatorics ==0.2.0.8
   - exact-pi ==0.4.1.2
   - exception-mtl ==0.4.0.1
@@ -680,7 +680,7 @@ default-package-overrides:
   - filemanip ==0.3.6.3
   - fingertree ==0.1.1.0
   - fingertree-psqueue ==0.3
-  - finite-typelits ==0.1.1.0
+  - finite-typelits ==0.1.2.0
   - fixed ==0.2.1.1
   - fixed-length ==0.2
   - fixed-vector ==0.9.0.0
@@ -699,14 +699,14 @@ default-package-overrides:
   - fold-debounce-conduit ==0.1.0.5
   - foldl ==1.2.4
   - foldl-statistics ==0.1.4.2
-  - folds ==0.7.1
+  - folds ==0.7.3
   - FontyFruity ==0.5.3.2
   - force-layout ==0.4.0.6
   - foreign-store ==0.2
   - format-numbers ==0.1.0.0
   - formatting ==6.2.4
   - fortran-src ==0.1.0.4
-  - foundation ==0.0.7
+  - foundation ==0.0.8
   - Frames ==0.1.9
   - free ==4.12.4
   - free-vl ==0.1.4
@@ -725,7 +725,7 @@ default-package-overrides:
   - gd ==3000.7.3
   - Genbank ==1.0.3
   - general-games ==1.0.5
-  - generic-aeson ==0.2.0.8
+  - generic-aeson ==0.2.0.9
   - generic-deriving ==1.11.2
   - generic-random ==0.4.1.0
   - generic-xmlpickler ==0.1.0.5
@@ -733,8 +733,8 @@ default-package-overrides:
   - generics-eot ==0.2.1.1
   - generics-sop ==0.2.5.0
   - generics-sop-lens ==0.1.2.1
-  - geniplate-mirror ==0.7.4
-  - getopt-generics ==0.13
+  - geniplate-mirror ==0.7.5
+  - getopt-generics ==0.13.0.1
   - ghc-events ==0.4.4.0
   - ghc-exactprint ==0.5.3.0
   - ghc-heap-view ==0.5.9
@@ -751,18 +751,18 @@ default-package-overrides:
   - ghcjs-codemirror ==0.0.0.1
   - ghcjs-hplay ==0.3.4.2
   - ghcjs-perch ==0.3.3.2
-  - gi-atk ==2.0.11
-  - gi-cairo ==1.0.11
-  - gi-gdk ==3.0.11
-  - gi-gdkpixbuf ==2.0.11
-  - gi-gio ==2.0.11
-  - gi-glib ==2.0.11
-  - gi-gobject ==2.0.11
-  - gi-gtk ==3.0.13
-  - gi-javascriptcore ==3.0.11
-  - gi-pango ==1.0.12
-  - gi-soup ==2.4.11
-  - gi-webkit ==3.0.11
+  - gi-atk ==2.0.12
+  - gi-cairo ==1.0.12
+  - gi-gdk ==3.0.12
+  - gi-gdkpixbuf ==2.0.12
+  - gi-gio ==2.0.12
+  - gi-glib ==2.0.12
+  - gi-gobject ==2.0.12
+  - gi-gtk ==3.0.14
+  - gi-javascriptcore ==3.0.12
+  - gi-pango ==1.0.13
+  - gi-soup ==2.4.12
+  - gi-webkit ==3.0.12
   - ginger ==0.3.9.1
   - gio ==0.13.3.1
   - gipeda ==0.3.3.2
@@ -790,7 +790,7 @@ default-package-overrides:
   - gloss ==1.10.2.5
   - gloss-rendering ==1.10.3.5
   - GLURaw ==2.0.0.3
-  - GLUT ==2.7.0.11
+  - GLUT ==2.7.0.12
   - gnuplot ==0.5.4.1
   - gogol ==0.1.1
   - gogol-adexchange-buyer ==0.1.1
@@ -972,7 +972,7 @@ default-package-overrides:
   - hasql-transaction ==0.5
   - hastache ==0.6.1
   - hasty-hamiltonian ==1.3.0
-  - HaTeX ==3.17.1.0
+  - HaTeX ==3.17.2.0
   - hatex-guide ==1.3.1.6
   - haxl ==0.5.0.0
   - haxl-amazonka ==0.1.1
@@ -987,7 +987,7 @@ default-package-overrides:
   - HDBC-session ==0.1.1.0
   - hdevtools ==0.1.5.0
   - heap ==1.0.3
-  - heaps ==0.3.3
+  - heaps ==0.3.4.1
   - hebrew-time ==0.1.1
   - hedis ==0.9.8
   - here ==1.2.9
@@ -1000,6 +1000,7 @@ default-package-overrides:
   - hflags ==0.4.2
   - hformat ==0.1.0.1
   - hfsevents ==0.1.6
+  - hgal ==2.0.0.2
   - hid ==0.2.2
   - hidapi ==0.1.4
   - hidden-char ==0.1.0.0
@@ -1010,7 +1011,7 @@ default-package-overrides:
   - highlighting-kate ==0.6.4
   - hinotify ==0.3.9
   - hint ==0.6.0
-  - hip ==1.5.2.0
+  - hip ==1.5.3.0
   - histogram-fill ==0.8.5.0
   - hit ==0.6.3
   - hjpath ==3.0.1
@@ -1069,7 +1070,7 @@ default-package-overrides:
   - hslua-aeson ==0.1.0.4
   - hsndfile ==0.8.0
   - hsndfile-vector ==0.5.2
-  - HsOpenSSL ==0.11.4.7
+  - HsOpenSSL ==0.11.4.8
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
   - hspec ==2.4.3
@@ -1181,7 +1182,7 @@ default-package-overrides:
   - IntervalMap ==0.5.2.0
   - intervals ==0.7.2
   - intro ==0.1.0.10
-  - invariant ==0.4.1
+  - invariant ==0.4.2
   - invertible ==0.2.0.2
   - io-choice ==0.0.6
   - io-machine ==0.2.0.0
@@ -1235,7 +1236,7 @@ default-package-overrides:
   - kansas-comet ==0.4
   - katip ==0.3.1.4
   - katip-elasticsearch ==0.3.0.2
-  - kawhi ==0.2.2
+  - kawhi ==0.2.3
   - kdt ==0.2.4
   - keter ==1.4.3.2
   - keycode ==0.2.2
@@ -1270,8 +1271,8 @@ default-package-overrides:
   - lca ==0.3
   - leapseconds-announced ==2017
   - lens ==4.15.1
-  - lens-action ==0.2.0.2
-  - lens-aeson ==1.0.0.5
+  - lens-action ==0.2.1
+  - lens-aeson ==1.0.1
   - lens-datetime ==0.3
   - lens-family ==1.2.1
   - lens-family-core ==1.2.1
@@ -1296,7 +1297,7 @@ default-package-overrides:
   - lifted-async ==0.9.1.1
   - lifted-base ==0.2.3.10
   - line ==2.2.0
-  - linear ==1.20.5
+  - linear ==1.20.6
   - linear-accelerate ==0.2
   - linked-list-with-iterator ==0.1.1.0
   - linux-file-extents ==0.2.0.0
@@ -1325,7 +1326,7 @@ default-package-overrides:
   - lucid ==2.9.8.1
   - lucid-svg ==0.7.0.0
   - lzma-conduit ==1.1.3.1
-  - machines ==0.6.1
+  - machines ==0.6.2
   - machines-binary ==0.3.0.3
   - machines-directory ==0.2.1.0
   - machines-io ==0.2.0.13
@@ -1357,7 +1358,7 @@ default-package-overrides:
   - median-stream ==0.7.0.0
   - mega-sdist ==0.3.0.2
   - megaparsec ==5.2.0
-  - memory ==0.14.3
+  - memory ==0.14.5
   - MemoTrie ==0.6.7
   - mersenne-random ==1.0.0.1
   - mersenne-random-pure64 ==0.2.2.0
@@ -1397,7 +1398,7 @@ default-package-overrides:
   - monad-extras ==0.6.0
   - monad-http ==0.1.0.0
   - monad-journal ==0.7.2
-  - monad-logger ==0.3.22
+  - monad-logger ==0.3.23
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.6
   - monad-logger-syslog ==0.1.3.0
@@ -1446,7 +1447,7 @@ default-package-overrides:
   - mustache ==2.1.3
   - mutable-containers ==0.3.3
   - mwc-probability ==1.3.0
-  - mwc-random ==0.13.5.0
+  - mwc-random ==0.13.6.0
   - mwc-random-monad ==0.7.3.1
   - mysql ==0.1.4
   - mysql-haskell ==0.8.0.0
@@ -1524,7 +1525,7 @@ default-package-overrides:
   - open-browser ==0.2.1.0
   - open-witness ==0.4
   - OpenAL ==1.7.0.4
-  - OpenGL ==3.0.1.0
+  - OpenGL ==3.0.2.0
   - OpenGLRaw ==3.2.4.0
   - openpgp-asciiarmor ==0.1
   - opensource ==0.1.0.0
@@ -1560,7 +1561,7 @@ default-package-overrides:
   - parsers ==0.12.4
   - partial-handler ==1.0.2
   - partial-isomorphisms ==0.2.2
-  - patat ==0.5.0.0
+  - patat ==0.5.1.2
   - path ==0.5.13
   - path-extra ==0.0.3
   - path-io ==1.2.2
@@ -1666,8 +1667,8 @@ default-package-overrides:
   - profunctors ==5.2
   - project-template ==0.2.0
   - projectroot ==0.2.0.1
-  - prometheus-client ==0.1.0.1
-  - prometheus-metrics-ghc ==0.1.0.1
+  - prometheus-client ==0.1.1
+  - prometheus-metrics-ghc ==0.1.1
   - prompt ==0.1.1.2
   - proto-lens ==0.2.0.1
   - proto-lens-arbitrary ==0.1.0.2
@@ -1816,8 +1817,8 @@ default-package-overrides:
   - sandman ==0.2.0.1
   - say ==0.1.0.0
   - sbv ==5.14
-  - scalpel ==0.5.0
-  - scalpel-core ==0.5.0
+  - scalpel ==0.5.1
+  - scalpel-core ==0.5.1
   - scanner ==0.2
   - scientific ==0.3.4.12
   - scotty ==0.11.0
@@ -1882,7 +1883,7 @@ default-package-overrides:
   - sibe ==0.2.0.4
   - signal ==0.1.0.3
   - silently ==1.2.5
-  - simple ==0.11.1
+  - simple ==0.11.2
   - simple-download ==0.0.2
   - simple-log ==0.5.1
   - simple-reflect ==0.3.2
@@ -1943,6 +1944,8 @@ default-package-overrides:
   - stack-run-auto ==0.1.1.4
   - stack-type ==0.1.0.0
   - stackage-curator ==0.14.5
+  - stackage-query ==0.1.0
+  - stackage-types ==1.2.0
   - state-plus ==0.1.3
   - stateref ==0.3
   - statestack ==0.2.0.5
@@ -2003,7 +2006,7 @@ default-package-overrides:
   - svg-tree ==0.6.1
   - SVGFonts ==1.6.0.1
   - swagger ==0.3.0
-  - swagger2 ==2.1.3
+  - swagger2 ==2.1.4
   - syb ==0.6
   - syb-with-class ==0.6.1.7
   - symbol ==0.2.4
@@ -2053,7 +2056,7 @@ default-package-overrides:
   - tcp-streams-openssl ==0.6.0.0
   - tdigest ==0.1
   - tdigest-Chart ==0
-  - telegram-api ==0.6.1.0
+  - telegram-api ==0.6.1.1
   - template ==0.2.0.10
   - temporary ==1.2.0.4
   - temporary-rc ==1.2.0.3
@@ -2067,11 +2070,12 @@ default-package-overrides:
   - test-framework-quickcheck2 ==0.3.0.3
   - test-framework-smallcheck ==0.2
   - test-framework-th ==0.2.4
+  - test-invariant ==0.4.5.0
   - test-simple ==0.1.9
   - testing-feat ==0.4.0.3
   - texmath ==0.9.4
   - text ==1.2.2.1
-  - text-all ==0.3.0.2
+  - text-all ==0.3.1.0
   - text-binary ==0.2.1.1
   - text-conversions ==0.3.0
   - text-format ==0.3.1.1
@@ -2104,7 +2108,7 @@ default-package-overrides:
   - these ==0.7.3
   - thread-local-storage ==0.1.1
   - threads ==0.5.1.4
-  - threepenny-gui ==0.7.0.1
+  - threepenny-gui ==0.7.0.2
   - threepenny-gui-flexbox ==0.3.0.2
   - through-text ==0.1.0.0
   - thumbnail-plus ==1.0.5
@@ -2145,7 +2149,7 @@ default-package-overrides:
   - tuple ==0.3.0.2
   - tuple-th ==0.2.5
   - tuples-homogenous-h98 ==0.1.1.0
-  - turtle ==1.3.2
+  - turtle ==1.3.3
   - turtle-options ==0.1.0.4
   - twitter-feed ==0.2.0.11
   - twitter-types ==0.7.2.2
@@ -2264,7 +2268,7 @@ default-package-overrides:
   - wai-middleware-content-type ==0.5.0.1
   - wai-middleware-crowd ==0.1.4.2
   - wai-middleware-metrics ==0.2.4
-  - wai-middleware-prometheus ==0.1.0.1
+  - wai-middleware-prometheus ==0.1.1
   - wai-middleware-rollbar ==0.3.0
   - wai-middleware-static ==0.8.1
   - wai-middleware-throttle ==0.2.1.0
@@ -2299,7 +2303,7 @@ default-package-overrides:
   - websockets ==0.10.0.0
   - websockets-rpc ==0.0.2
   - websockets-snap ==0.10.2.1
-  - weigh ==0.0.3
+  - weigh ==0.0.4
   - wikicfp-scraper ==0.1.0.8
   - wild-bind ==0.1.0.3
   - wild-bind-indicator ==0.1.0.1
@@ -2330,8 +2334,8 @@ default-package-overrides:
   - writer-cps-full ==0.1.0.0
   - writer-cps-lens ==0.1.0.1
   - writer-cps-morph ==0.1.0.2
-  - writer-cps-mtl ==0.1.1.3
-  - writer-cps-transformers ==0.1.1.2
+  - writer-cps-mtl ==0.1.1.4
+  - writer-cps-transformers ==0.1.1.3
   - wuss ==1.1.4
   - X11 ==1.8
   - X11-xft ==0.3.1
@@ -2368,7 +2372,7 @@ default-package-overrides:
   - yackage ==0.8.1
   - yahoo-finance-api ==0.2.0.1
   - yaml ==0.8.22
-  - Yampa ==0.10.5
+  - Yampa ==0.10.5.1
   - YampaSynth ==0.2
   - yes-precure5-command ==5.5.3
   - yesod ==1.4.5
@@ -2412,10 +2416,10 @@ default-package-overrides:
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.5
   - zip ==0.1.10
-  - zip-archive ==0.3.0.5
-  - zippers ==0.2.2
-  - ziptastic-client ==0.3.0.1
-  - ziptastic-core ==0.2.0.1
+  - zip-archive ==0.3.0.6
+  - zippers ==0.2.3
+  - ziptastic-client ==0.3.0.2
+  - ziptastic-core ==0.2.0.2
   - zlib ==0.6.1.2
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
@@ -6992,8 +6996,6 @@ dont-distribute-packages:
   postgresql-simple-typed:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   postgresql-typed:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   postgresql-typed-lifted:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
-  postgrest:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
-  postgrest-ws:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   postie:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   postmark:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   postmark-streams:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
