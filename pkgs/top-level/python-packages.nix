@@ -20599,7 +20599,7 @@ in {
     };
   });
 
-  pyro3 = buildPythonPackage (rec {
+  Pyro = buildPythonPackage (rec {
     name = "Pyro-3.16";
     disabled = isPy3k;
 
