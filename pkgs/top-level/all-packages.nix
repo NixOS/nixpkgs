@@ -6988,7 +6988,7 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
-  sqlitebrowser = qt5.callPackage ../development/tools/database/sqlitebrowser { };
+  sqlitebrowser = libsForQt56.callPackage ../development/tools/database/sqlitebrowser { };
 
   sselp = callPackage ../tools/X11/sselp{ };
 
