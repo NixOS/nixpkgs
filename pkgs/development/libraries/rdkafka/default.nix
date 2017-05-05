@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub, zlib, perl }:
+{ stdenv, fetchFromGitHub, zlib, perl, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "rdkafka-2015-11-03";
+  name = "rdkafka-${version}";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "librdkafka";
-    rev = "3e1babf4f26a7d12bbd272c1cdf4aa6a44000d4a";
-    sha256 = "1vmbbkgdwxr25wz60hi6rhqb843ipz34r9baygv87fwh3lwwkqwl";
+    rev = "v${version}";
+    sha256 = "0yp8vmj3yc564hcmhx46ssyn8qayywnsrg4wg67qk6jw967qgwsn";
   };
 
-  buildInputs = [ zlib perl ];
+  buildInputs = [ zlib perl pkgconfig python ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 
