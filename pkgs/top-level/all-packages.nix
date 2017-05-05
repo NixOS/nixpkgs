@@ -18629,8 +18629,6 @@ with pkgs;
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
-  gale = callPackage ../applications/networking/instant-messengers/gale { };
-
   gammu = callPackage ../applications/misc/gammu { };
 
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
