@@ -32,7 +32,10 @@ in
           default = "scale";
           example = "fill";
           description = ''
-            Wallpaper image mode:
+            The file <filename>~/.background-image</filename> is used as a background image.
+            This option specifies the placement of this image onto your desktop.
+
+            Possible values:
             <literal>center</literal>: Center the image on the background. If it is too small, it will be surrounded by a black border.
             <literal>fill</literal>: Like <literal>scale</literal>, but preserves aspect ratio by zooming the image until it fits. Either a horizontal or a vertical part of the image will be cut off.
             <literal>max</literal>: Like <literal>fill</literal>, but scale the image to the maximum size that fits the screen with black borders on one side.
