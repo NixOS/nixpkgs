@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "19qgkb9z4zjbjxlpwh2w6pxkz2j3iymnydi69jl0jg905lqjsrxz";
   };
 
-  # PyPI source tarball doesn't contain the tests
+  # project does not have tests at the moment
   doCheck = false;
 
   meta = {
