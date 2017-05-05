@@ -8833,6 +8833,8 @@ in {
     };
   };
 
+  phpserialize = callPackage ../development/python-modules/phpserialize { };
+
   pies = buildPythonPackage rec {
     name = "pies-2.6.5";
 

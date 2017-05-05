@@ -242,6 +242,7 @@
   jhhuh = "Ji-Haeng Huh <jhhuh.note@gmail.com>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   jlesquembre = "José Luis Lafuente <jl@lafuente.me>";
+  jluttine = "Jaakko Luttinen <jaakko.luttinen@iki.fi>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
