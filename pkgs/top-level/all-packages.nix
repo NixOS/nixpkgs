@@ -512,9 +512,7 @@ in
 
   aide = callPackage ../tools/security/aide { };
 
-  aircrack-ng = callPackage ../tools/networking/aircrack-ng {
-    openssl = openssl_1_0_2;
-  };
+  aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
 
