@@ -77,15 +77,30 @@ rec {
   */
   foldl' = builtins.foldl' or foldl;
 
-  /* Map with index
-
-     FIXME(zimbatm): why does this start to count at 1?
+  /* Map with index starting from 0
 
      Example:
-       imap (i: v: "${v}-${toString i}") ["a" "b"]
+       imap0 (i: v: "${v}-${toString i}") ["a" "b"]
+       => [ "a-0" "b-1" ]
+  */
+  imap0 = f: list: genList (n: f n (elemAt list n)) (length list);
+
+  /* Map with index starting from 1
+
+     Example:
+       imap1 (i: v: "${v}-${toString i}") ["a" "b"]
        => [ "a-1" "b-2" ]
   */
-  imap = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
+  imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
+
+  /* deprecated:
+
+     For historical reasons, imap has an index starting at 1.
+
+     But for consistency with the rest of the library we want an index
+     starting at zero.
+  */
+  imap = imap1;
 
   /* Map and concatenate the result.
 
