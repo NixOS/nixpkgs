@@ -28670,19 +28670,24 @@ EOF
 
 
   grequests = buildPythonPackage rec {
-    name = "grequests-0.2.0";
+    pname = "grequests";
+    version = "0.3.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/grequests/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "0lafzax5igbh8y4x0krizr573wjsxz7bhvwygiah6qwrzv83kv5c";
     };
 
-    buildInputs = with self; [ requests gevent ];
+    # No tests in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ requests2 gevent ];
 
     meta = {
       description = "Asynchronous HTTP requests";
       homepage = https://github.com/kennethreitz/grequests;
-      license = "bsd";
+      license = with licenses; [ bsd2 ];
       maintainers = with maintainers; [ matejc ];
     };
   };
