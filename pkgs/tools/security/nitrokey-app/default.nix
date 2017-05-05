@@ -1,29 +1,30 @@
-{ stdenv, cmake, fetchFromGitHub, libusb1, pkgconfig, qt5 }:
+{ stdenv, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
-  version = "0.6.3";
+  version = "1.0";
 
-  src = fetchFromGitHub {
-    owner = "Nitrokey";
-    repo = "nitrokey-app";
-    rev = "v${version}";
-    sha256 = "1l5l4lwxmyd3jrafw19g12sfc42nd43sv7h7i4krqxnkk6gfx11q";
+  src = fetchgit {
+    url = "https://github.com/Nitrokey/nitrokey-app.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "0i910d1xrl4bfrg5ifkj3w4dp31igaxncy2yf97y4rsc8094bcb1";
   };
 
   buildInputs = [
+    hidapi
     libusb1
     qt5.qtbase
+    qt5.qttranslations
   ];
   nativeBuildInputs = [
     cmake
     pkgconfig
   ];
-  patches = [
-     ./FixInstallDestination.patch
-     ./HeaderPath.patch
-  ];
   cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace 'DESTINATION ''${UDEV_MAIN_DIR}' 'DESTINATION lib/udev/rules.d'
+    substituteInPlace data/41-nitrokey.rules --replace 'plugdev' 'wheel'
+    '';
   meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''
