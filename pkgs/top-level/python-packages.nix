@@ -8899,23 +8899,7 @@ in {
     };
   };
 
-  plotly = self.buildPythonPackage rec {
-    name = "plotly-1.9.5";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/plotly/${name}.tar.gz";
-      sha256 = "628679e880caab22e2a46273e85e1d1ce1382b631e1c7bbfe539f804c5269b21";
-    };
-
-    propagatedBuildInputs = with self; [ self.pytz self.six self.requests ];
-
-    meta = {
-      description = "Python plotting library for collaborative, interactive, publication-quality graphs";
-      homepage = https://plot.ly/python/;
-      license = licenses.mit;
-    };
-  };
+  plotly = callPackage ../development/python-modules/plotly { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
