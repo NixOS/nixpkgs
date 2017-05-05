@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, python2Packages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
-, ffmpeg_3_2, x264, libvpx, libwebp
+, ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama
 , gst_all_1, pulseaudioLight, gobjectIntrospection
 , pam }:
@@ -11,11 +11,11 @@ with lib;
 let
   inherit (python2Packages) python cython buildPythonApplication;
 in buildPythonApplication rec {
-  name = "xpra-2.0.1";
+  name = "xpra-2.0.2";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "11y2icy24mc337gvppp0ankyl3wxrprlifm7spixvsndyz056mb8";
+    sha256 = "09hzgbsj9v5qyh41rbz968ipi7016jk66b60vm6piryna9kbnha3";
   };
 
   buildInputs = [
@@ -28,7 +28,7 @@ in buildPythonApplication rec {
 
     pango cairo gdk_pixbuf atk gtk2 glib
 
-    ffmpeg_3_2 libvpx x264 libwebp
+    ffmpeg libvpx x264 libwebp
 
     gobjectIntrospection
     gst_all_1.gstreamer

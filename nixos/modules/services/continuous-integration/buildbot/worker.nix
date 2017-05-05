@@ -74,7 +74,7 @@ in {
       };
 
       packages = mkOption {
-        default = [ ];
+        default = with pkgs; [ python27Packages.twisted git ];
         example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
@@ -106,7 +106,8 @@ in {
       path = cfg.packages;
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
+        mkdir -vp ${cfg.buildbotDir}
+        rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
       '';
 
@@ -115,7 +116,11 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
+        Environment = "PYTHONPATH=${cfg.package}/lib/python2.7/site-packages:${pkgs.python27Packages.future}/lib/python2.7/site-packages";
+
+        # NOTE: call twistd directly with stdout logging for systemd
+        #ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
+        ExecStart = "${pkgs.python27Packages.twisted}/bin/twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
       };
 
     };

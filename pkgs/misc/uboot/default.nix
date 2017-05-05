@@ -123,6 +123,20 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootUtilite = buildUBoot rec {
+    defconfig = "cm_fx6_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-with-nand-spl.imx"];
+    buildFlags = "u-boot-with-nand-spl.imx";
+    postConfigure = ''
+      cat >> .config << EOF
+      CONFIG_CMD_SETEXPR=y
+      EOF
+    '';
+    # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
+    # sf probe; sf update $loadaddr 0 80000
+  };
+
   ubootWandboard = buildUBoot rec {
     defconfig = "wandboard_defconfig";
     targetPlatforms = ["armv7l-linux"];

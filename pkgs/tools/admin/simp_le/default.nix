@@ -2,18 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "simp_le-client";
-  version = "0.1.1";
+  version = "0.2.0";
   name = "${pname}-${version}";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "18y8mg0s0i2bs57pi6mbkwgjlr5mmivchiyvrpcbdmkg9qlbfwaa";
+    sha256 = "1zg18jfry9mvkri3yd2f5mwfsl27ac9zmnll3bm93jb91jhd6ssh";
   };
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace 'acme>=0.9,<0.10' acme
-  '';
 
   checkPhase = ''
     $out/bin/simp_le --test

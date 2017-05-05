@@ -290,15 +290,26 @@ findInputs() {
     fi
 }
 
-crossPkgs=""
-for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
-    findInputs $i crossPkgs propagated-build-inputs
-done
+if [ -z "$crossConfig" ]; then
+    # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
+    # are handled identically to nativeBuildInputs
+    nativePkgs=""
+    for i in $nativeBuildInputs $buildInputs \
+             $defaultNativeBuildInputs $defaultBuildInputs \
+             $propagatedNativeBuildInputs $propagatedBuildInputs; do
+        findInputs $i nativePkgs propagated-native-build-inputs
+    done
+else
+    crossPkgs=""
+    for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
+        findInputs $i crossPkgs propagated-build-inputs
+    done
 
-nativePkgs=""
-for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
-    findInputs $i nativePkgs propagated-native-build-inputs
-done
+    nativePkgs=""
+    for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
+        findInputs $i nativePkgs propagated-native-build-inputs
+    done
+fi
 
 
 # Set the relevant environment variables to point to the build inputs
@@ -759,14 +770,26 @@ fixupPhase() {
 
     # Propagate build inputs and setup hook into the development output.
 
-    if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "${!outputDev}/nix-support"
-        echo "$propagatedBuildInputs" > "${!outputDev}/nix-support/propagated-build-inputs"
-    fi
+    if [ -z "$crossConfig" ]; then
+        # Not cross-compiling - propagatedBuildInputs are handled identically to propagatedNativeBuildInputs
+        local propagated="$propagatedNativeBuildInputs"
+        if [ -n "$propagatedBuildInputs" ]; then
+            propagated+="${propagated:+ }$propagatedBuildInputs"
+        fi
+        if [ -n "$propagated" ]; then
+            mkdir -p "${!outputDev}/nix-support"
+            echo "$propagated" > "${!outputDev}/nix-support/propagated-native-build-inputs"
+        fi
+    else
+        if [ -n "$propagatedBuildInputs" ]; then
+            mkdir -p "${!outputDev}/nix-support"
+            echo "$propagatedBuildInputs" > "${!outputDev}/nix-support/propagated-build-inputs"
+        fi
 
-    if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "${!outputDev}/nix-support"
-        echo "$propagatedNativeBuildInputs" > "${!outputDev}/nix-support/propagated-native-build-inputs"
+        if [ -n "$propagatedNativeBuildInputs" ]; then
+            mkdir -p "${!outputDev}/nix-support"
+            echo "$propagatedNativeBuildInputs" > "${!outputDev}/nix-support/propagated-native-build-inputs"
+        fi
     fi
 
     if [ -n "$setupHook" ]; then

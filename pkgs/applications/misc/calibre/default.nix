@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with python2Packages; [
-    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip
     # the following are distributed with calibre, but we use upstream instead
     chardet cherrypy html5lib_0_9999999 odfpy routes

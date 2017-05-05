@@ -1,30 +1,15 @@
-From 9970f3107aed7b2b1ff1c5f29129b62cec99980d Mon Sep 17 00:00:00 2001
+From dbf01d3934c52acaaa37f008859f69c5edf19ad5 Mon Sep 17 00:00:00 2001
 From: David McFarland <corngood@gmail.com>
 Date: Mon, 6 Feb 2017 22:13:49 -0400
 Subject: [PATCH 4/4] fix warnings for Werror
 
 ---
- amd/amdgpu/amdgpu_kms.c                 | 2 +-
  amd/amdgpu/amdgpu_ttm.c                 | 2 ++
- amd/display/amdgpu_dm/amdgpu_dm.c       | 2 +-
  amd/display/amdgpu_dm/amdgpu_dm_types.c | 2 +-
- 4 files changed, 5 insertions(+), 3 deletions(-)
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/amd/amdgpu/amdgpu_kms.c b/amd/amdgpu/amdgpu_kms.c
-index b7b51ae..bc884f6 100644
---- a/amd/amdgpu/amdgpu_kms.c
-+++ b/amd/amdgpu/amdgpu_kms.c
-@@ -591,7 +591,7 @@ static int amdgpu_info_ioctl(struct drm_device *dev, void *data, struct drm_file
- 
- 			bios = adev->bios + bios_offset;
- 			return copy_to_user(out, bios,
--				min((size_t)size, bios_size - bios_offset))
-+				min(size, bios_size - bios_offset))
- 					? -EFAULT : 0;
- 		}
- 		default:
 diff --git a/amd/amdgpu/amdgpu_ttm.c b/amd/amdgpu/amdgpu_ttm.c
-index 252bab4..90f3655 100644
+index 0e30389..890aafa 100644
 --- a/amd/amdgpu/amdgpu_ttm.c
 +++ b/amd/amdgpu/amdgpu_ttm.c
 @@ -1083,6 +1083,7 @@ uint32_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
@@ -41,26 +26,13 @@ index 252bab4..90f3655 100644
  }
 +#endif
  
- static struct ttm_bo_driver amdgpu_bo_driver = {
- 	.ttm_tt_create = &amdgpu_ttm_tt_create,
-diff --git a/amd/display/amdgpu_dm/amdgpu_dm.c b/amd/display/amdgpu_dm/amdgpu_dm.c
-index 3dcb619..5700861 100644
---- a/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -121,7 +121,7 @@ static bool dm_check_soft_reset(void *handle)
- 
- static int dm_soft_reset(void *handle)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-+	/* struct amdgpu_device *adev = (struct amdgpu_device *)handle; */
- 
- 	/* XXX todo */
- 	return 0;
+ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+ 					    const struct ttm_place *place)
 diff --git a/amd/display/amdgpu_dm/amdgpu_dm_types.c b/amd/display/amdgpu_dm/amdgpu_dm_types.c
-index 5e11f26..7039542 100644
+index 44a4a71..ae7e707 100644
 --- a/amd/display/amdgpu_dm/amdgpu_dm_types.c
 +++ b/amd/display/amdgpu_dm/amdgpu_dm_types.c
-@@ -913,7 +913,7 @@ static void decide_crtc_timing_for_drm_display_mode(
+@@ -932,7 +932,7 @@ static void decide_crtc_timing_for_drm_display_mode(
  }
  
  static struct dc_target *create_target_for_sink(
@@ -70,5 +42,5 @@ index 5e11f26..7039542 100644
  		const struct dm_connector_state *dm_state)
  {
 -- 
-2.11.0
+2.12.2
 

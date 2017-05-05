@@ -18,6 +18,10 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 let
 
+  # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
+  # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
+  shouldCheckMeta = config.checkMeta or false;
+
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   whitelist = config.whitelistedLicenses or [];
@@ -151,6 +155,7 @@ let
         broken = remediate_whitelist "Broken";
         blacklisted = x: "";
         insecure = remediate_insecure;
+        unknown-meta = x: "";
       };
       remediate_whitelist = allow_attr: attrs:
         ''
@@ -202,6 +207,41 @@ let
 
           '' + ((builtins.getAttr reason remediation) attrs));
 
+      metaTypes = with lib.types; rec {
+        # These keys are documented
+        description = str;
+        longDescription = str;
+        branch = str;
+        homepage = str;
+        downloadPage = str;
+        license = either (listOf lib.types.attrs) (either lib.types.attrs str);
+        maintainers = listOf str;
+        priority = int;
+        platforms = listOf str;
+        hydraPlatforms = listOf str;
+        broken = bool;
+
+        # Weirder stuff that doesn't appear in the documentation?
+        version = str;
+        tag = str;
+        updateWalker = bool;
+        executables = listOf str;
+        outputsToInstall = listOf str;
+        position = str;
+        repositories = attrsOf str;
+        isBuildPythonPackage = platforms;
+        schedulingPriority = str;
+        downloadURLRegexp = str;
+        isFcitxEngine = bool;
+        isIbusEngine = bool;
+      };
+
+      checkMetaAttr = k: v:
+        if metaTypes?${k} then
+          if metaTypes.${k}.check v then null else "key '${k}' has a value ${v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+        else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
+      checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+
       # Check if a derivation is valid, that is whether it passes checks for
       # e.g brokenness or license.
       #
@@ -219,6 +259,8 @@ let
           { valid = false; reason = "broken"; errormsg = "is not supported on ‘${result.system}’"; }
         else if !(hasAllowedInsecure attrs) then
           { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
+        else let res = checkMeta (attrs.meta or {}); in if res != [] then
+          { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
         else { valid = true; };
 
       outputs' =
@@ -264,18 +306,16 @@ let
           __ignoreNulls = true;
 
           # Inputs built by the cross compiler.
-          buildInputs = if crossConfig != null then buildInputs' else [];
-          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs' else [];
+          buildInputs = buildInputs';
+          propagatedBuildInputs = propagatedBuildInputs';
           # Inputs built by the usual native compiler.
           nativeBuildInputs = nativeBuildInputs'
-            ++ lib.optionals (crossConfig == null) buildInputs'
             ++ lib.optional
                 (result.isCygwin
                   || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
                 ../../build-support/setup-hooks/win-dll-link.sh
             ;
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs' ++
-            (if crossConfig == null then propagatedBuildInputs' else []);
+          propagatedNativeBuildInputs = propagatedNativeBuildInputs';
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =

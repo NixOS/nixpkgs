@@ -1,8 +1,9 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
+, confDir ? "/etc"
 }:
 
 let
@@ -22,7 +23,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optional fromGit brotli # Since 1.12
+      ++ lib.optionals fromGit [ brotli readline ] # Since 1.12
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -43,7 +44,7 @@ let
     configureFlags =
       [ "--with-store-dir=${storeDir}"
         "--localstatedir=${stateDir}"
-        "--sysconfdir=/etc"
+        "--sysconfdir=${confDir}"
         "--disable-init-state"
         "--enable-gc"
       ]
@@ -116,8 +117,11 @@ let
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
+
+    preConfigure = "export NIX_STATE_DIR=$TMPDIR";
+
+    preBuild = "unset NIX_INDENT_MAKE";
   };
 
 in rec {
@@ -125,10 +129,10 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.8";
+    name = "nix-1.11.9";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
+      sha256 = "0e943e277f37843f9196b0293cc31d828613ad7a328ee77cd5be01935dc6e7e1";
     };
 
     # Until 1.11.9 is released, we do this :)
@@ -143,12 +147,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5152_915f62fa";
+    suffix = "pre5344_eba840c8";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "915f62fa19790d8f826aeb4dd3d2bb5bde2f67e9";
-      sha256 = "0mf7y7hvzw2x5dp482qy8774djr3vzcjaqq58cp82zdil8l7kwjd";
+      rev = "eba840c8a13b465ace90172ff76a0db2899ab11b";
+      sha256 = "08yrzlmshg854w5pwq8af634wic91h7k55fs51i55dyxpw4wpxk7";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

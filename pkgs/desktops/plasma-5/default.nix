@@ -62,7 +62,7 @@ let
       kwayland-integration = callPackage ./kwayland-integration.nix {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
-      libkscreen = callPackage ./libkscreen.nix {};
+      libkscreen = callPackage ./libkscreen {};
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};

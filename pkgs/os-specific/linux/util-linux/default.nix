@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
+    substituteInPlace sys-utils/eject.c \
+      --replace "/bin/umount" "$out/bin/umount"
   '';
 
   crossAttrs = {

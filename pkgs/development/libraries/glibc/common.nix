@@ -120,14 +120,6 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
-
-  # Workaround for this bug:
-  #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
-  # I.e. when gcc is compiled with --with-arch=i686, then the
-  # preprocessor symbol `__i686' will be defined to `1'.  This causes
-  # the symbol __i686.get_pc_thunk.dx to be mangled.
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.system == "i686-linux") "-U__i686"
-    + " -Wno-error=strict-prototypes";
 }
 
 # Remove the `gccCross' attribute so that the *native* glibc store path

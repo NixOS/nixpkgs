@@ -184,7 +184,7 @@ go.stdenv.mkDerivation (
   '';
 
   preFixup = preFixup + ''
-    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' +
+    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
 
   shellHook = ''

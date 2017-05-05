@@ -7,8 +7,7 @@ with lib;
 let
 
   cfg = config.virtualisation.docker;
-  pro = config.networking.proxy.default;
-  proxy_env = optionalAttrs (pro != null) { Environment = "\"http_proxy=${pro}\""; };
+  proxy_env = config.networking.proxy.envVars;
 
 in
 
@@ -106,6 +105,7 @@ in
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
+        environment = proxy_env;
         serviceConfig = {
           ExecStart = [
             ""
@@ -122,7 +122,7 @@ in
             ""
             "${pkgs.procps}/bin/kill -s HUP $MAINPID"
           ];
-        } // proxy_env;
+        };
 
         path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
       };

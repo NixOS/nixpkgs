@@ -1,17 +1,29 @@
-{ stdenv, fetchurl, python2Packages, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, python2Packages, root, makeWrapper, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "yoda-${version}";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "1i8lmj63cd3qnxl9k2cb1abap2pirhx7ffinm834wbpy9iszwxql";
+    sha256 = "088xx4q6b03bnj6xg5189m8wsznhal8aj3jk40sbj24idm4jl5yg";
   };
 
   pythonPath = []; # python wrapper support
 
-  buildInputs = with python2Packages; [ python numpy matplotlib makeWrapper ];
+  patches = [
+    (fetchpatch {
+      url = "https://yoda.hepforge.org/hg/yoda/rev/3dbc8927e715?style=raw";
+      sha256 = "02rm34z9lbab66p7gpij12qwdph5fddpksg80qz0m537wjwy2ddy";
+    })
+    (fetchpatch {
+      url = "https://yoda.hepforge.org/hg/yoda/rev/669c2be582ef?style=raw";
+      sha256 = "0s705cl3bazpvpvy46vv1k223knwxq2yy5na1c6lv217sq9w86wj";
+    })
+  ];
+
+  buildInputs = with python2Packages; [ python numpy matplotlib makeWrapper ]
+    ++ stdenv.lib.optional withRootSupport root;
 
   enableParallelBuilding = true;
 

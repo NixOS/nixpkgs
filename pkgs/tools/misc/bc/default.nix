@@ -1,21 +1,15 @@
-{stdenv, fetchurl, flex, readline}:
+{stdenv, fetchurl, flex, readline, ed, texinfo}:
 
 stdenv.mkDerivation rec {
-  name = "bc-1.06";
+  name = "bc-1.07.1";
   src = fetchurl {
     url = "mirror://gnu/bc/${name}.tar.gz";
-    sha256 = "0cqf5jkwx6awgd2xc2a0mkpxilzcfmhncdcfg7c9439wgkqxkxjf";
+    sha256 = "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a";
   };
-
-  patches = [ ./readlinefix.patch ];
-
-  preConfigure = ''
-    sed -i 's/program.*save/static &/' bc/load.c
-  '';
 
   configureFlags = [ "--with-readline" ];
 
-  buildInputs = [flex readline];
+  buildInputs = [flex readline ed texinfo];
 
   doCheck = true;
 
