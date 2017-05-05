@@ -21516,11 +21516,11 @@ in {
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "16.2.0";
+    version = "17.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "0vji4yrfshs15xpczbhzhasnjrwcarsqg87n98ixnyafnyxs6ybp";
+      sha256 = "1pdg1gpmkzj8yasg6cmkhcivxcdp4c12nif88y4qvsxq5ffzxas8";
     };
 
     preCheck = ''
