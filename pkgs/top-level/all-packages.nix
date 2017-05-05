@@ -18782,9 +18782,7 @@ with pkgs;
 
   dart = callPackage ../development/interpreters/dart { };
 
-  httrack = callPackage ../tools/backup/httrack {
-    openssl = openssl_1_0_2;
-  };
+  httrack = callPackage ../tools/backup/httrack { };
 
   mg = callPackage ../applications/editors/mg { };
 
