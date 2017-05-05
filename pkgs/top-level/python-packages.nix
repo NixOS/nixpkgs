@@ -25996,6 +25996,7 @@ in {
       description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
       homepage = https://github.com/esnme/ultramemcache;
       license = licenses.bsdOriginal;
+      broken = true;
     };
   };
 
