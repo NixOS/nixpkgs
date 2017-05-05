@@ -712,6 +712,8 @@ let
       then callPackage ../development/ocaml-modules/janestreet/sexplib.nix {}
       else sexplib_p4;
 
+    sexplib_0_9 = callPackage ../development/ocaml-modules/janestreet/sexplib-0.9.nix {};
+
     variantslib =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
