@@ -578,6 +578,8 @@ let
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
 
+    newBuildOcamlJane = callPackage ../development/ocaml-modules/janestreet/newBuildOcamlJane.nix {};
+
     ocaml-compiler-libs = callPackage ../development/ocaml-modules/janestreet/ocaml-compiler-libs.nix {};
 
     ppx_ast = callPackage ../development/ocaml-modules/janestreet/ppx_ast.nix {};
