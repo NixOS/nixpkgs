@@ -16145,10 +16145,6 @@ with pkgs;
 
   utox = callPackage ../applications/networking/instant-messengers/utox { };
 
-  vanitygen = callPackage ../applications/misc/vanitygen {
-    openssl = openssl_1_0_2;
-  };
-
   vanubi = callPackage ../applications/editors/vanubi { };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
