@@ -14995,6 +14995,9 @@ with pkgs;
   pijul = callPackage ../applications/version-management/pijul {};
 
   planner = callPackage ../applications/office/planner { };
+  planner_stable = planner.stable;  # from the tarball on FTP
+  planner_unstable = planner.unstable;  # official GNOME Git
+  planner_unofficial = planner.unofficial;  # with more patches
 
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
