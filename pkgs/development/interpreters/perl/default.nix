@@ -36,7 +36,7 @@ let
         ./no-sys-dirs.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ];
+      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ];
 
     postPatch = ''
       pwd="$(type -P pwd)"
@@ -121,17 +121,16 @@ let
 
 in rec {
 
-  perl = perl522;
-
-  perl520 = common {
-    version = "5.20.3";
-    sha256 = "0jlvpd5l5nk7lzfd4akdg1sw6vinbkj6izclyyr0lrbidfky691m";
-
-  };
+  perl = perl524;
 
   perl522 = common {
-    version = "5.22.2";
-    sha256 = "1hl3v85ggm027v9h2ycas4z5i3401s2k2l3qpnw8q5mahmiikbc1";
+    version = "5.22.3";
+    sha256 = "10q087l1ffdy3gpryr8z540jcnsr0dhm37raicyfqqkyvys1yd8v";
+  };
+
+  perl524 = common {
+    version = "5.24.1";
+    sha256 = "1bqqb5ghfj4486nqr77kgsd8aff6a289jy7n2cdkznwvn34qbhg6";
   };
 
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg_3_2
+, docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
@@ -112,7 +112,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python3 which ];
 
   buildInputs = [
-    ffmpeg_3_2 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
        libiconv Cocoa CoreAudio ])

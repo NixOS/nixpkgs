@@ -5,17 +5,19 @@ let
     buildInputs = [ makeWrapper ] ++ plugins;
     passthru.withPlugins = moarPlugins: withPlugins (moarPlugins ++ plugins);
   } ''
-    makeWrapper ${package}/bin/buildbot $out/bin/buildbot --prefix PYTHONPATH : $PYTHONPATH
+    makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
+      --prefix PYTHONPATH : "${package}/lib/python2.7/site-packages:$PYTHONPATH"
+    ln -sfv ${package}/lib $out/lib
   '';
 
   package = pythonPackages.buildPythonApplication (rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.4";
+    version = "0.9.6";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0wklrn4fszac9wi8zw3vbsznwyff6y57cz0i81zvh46skb6n3086";
+      sha256 = "0d6ys1wjwsv4jg4bja1cqhy279hhrl1c9kwyx126srf45slcvg1w";
     };
 
     buildInputs = with pythonPackages; [
@@ -49,6 +51,7 @@ let
       txaio
       autobahn
       pyjwt
+      distro
 
       # tls
       pyopenssl
@@ -66,8 +69,26 @@ let
 
     ];
 
+    patches = [
+      # This patch disables the test that tries to reat /etc/os-release which
+      # is not accessible in sandboxed builds.
+      ./skip_test_linux_distro.patch
+    ];
+
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+
+      # NOTE: secrets management tests currently broken
+      rm -fv buildbot/test/integration/test_integration_secrets.py
+      rm -fv buildbot/test/integration/test_integration_secrets_with_vault.py
+      rm -fv buildbot/test/unit/test_fake_secrets_manager.py
+      rm -fv buildbot/test/unit/test_interpolate_secrets.py
+      rm -fv buildbot/test/unit/test_secret_in_file.py
+      rm -fv buildbot/test/unit/test_secret_in_vault.py
+
+      # Remove this line after next update. See
+      # https://github.com/buildbot/buildbot/commit/e7fc8c8eba903c2aa6d7e6393499e5b9bffc2334
+      rm -fv buildbot/test/unit/test_mq_wamp.py
     '';
 
     passthru = { inherit withPlugins; };

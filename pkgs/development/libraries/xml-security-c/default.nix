@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://santuario.apache.org/;
     description = "C++ Implementation of W3C security standards for XML";
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }

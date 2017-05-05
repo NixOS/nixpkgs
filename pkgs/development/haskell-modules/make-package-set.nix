@@ -44,9 +44,35 @@ self: let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-    overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
-  };
+  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
+  #
+  # callPackage foo { bar = null; };
+  #
+  # here `bar` is a manual argument.
+  callPackageWithScope = scope: fn: manualArgs:
+    let
+      # this code is copied from callPackage in lib/customisation.nix
+      #
+      # we cannot use `callPackage` here because we want to call `makeOverridable`
+      # on `drvScope` (we cannot add `overrideScope` after calling `callPackage` because then it is
+      # lost on `.override`) but determine the auto-args based on `drv` (the problem here
+      # is that nix has no way to "passthrough" args while preserving the reflection
+      # info that callPackage uses to determine the arguments).
+      drv = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs drv) scope;
+
+      # this wraps the `drv` function to add a `overrideScope` function to the result.
+      drvScope = allArgs: drv allArgs // {
+        overrideScope = f:
+          let newScope = mkScope (fix' (extends f scope.__unfix__));
+          # note that we have to be careful here: `allArgs` includes the auto-arguments that
+          # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
+          # then we wouldn't look up any packages in the scope in the next interation, because it
+          # appears as if all arguments were already manually passed, so the scope change would do
+          # nothing.
+          in callPackageWithScope newScope drv manualArgs;
+      };
+    in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
 
   mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
   defaultScope = mkScope self;
@@ -63,7 +89,8 @@ self: let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      buildInputs = [ pkgs.cabal2nix ];
+      buildInputs = [ pkgs.haskellPackages.cabal2nix ];
+      preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";

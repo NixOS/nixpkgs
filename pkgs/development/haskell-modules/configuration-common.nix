@@ -456,16 +456,6 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
-  # See instructions provided by Peti in https://github.com/NixOS/nixpkgs/issues/23036
-  purescript = super.purescript.overrideScope (self: super: {
-    # TODO: Re-evaluate the following overrides after the 0.11 release.
-    aeson = self.aeson_0_11_3_0;
-    http-client = self.http-client_0_4_31_2;
-    http-client-tls = self.http-client-tls_0_2_4_1;
-    pipes = self.pipes_4_2_0;
-    websockets = self.websockets_0_9_8_2;
-  });
-
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
@@ -504,6 +494,7 @@ self: super: {
 
   # Depends on itself for testing
   doctest-discover = addBuildTool super.doctest-discover (dontCheck super.doctest-discover);
+  tasty-discover = addBuildTool super.tasty-discover (dontCheck super.tasty-discover);
 
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
@@ -693,11 +684,11 @@ self: super: {
     store = self.store_0_3_1;
   });
 
+  # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
+  intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
+
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
-
-  # Needs new version.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.

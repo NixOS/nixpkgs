@@ -5537,6 +5537,8 @@ let self = _self // overrides; _self = with self; {
 
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
+    # WARNING: check on next update if deprecation warning is gone
+    patches = [ ../development/perl-modules/File-Slurp/silence-deprecation.patch ];
     src = fetchurl {
       url = mirror://cpan/authors/id/U/UR/URI/File-Slurp-9999.19.tar.gz;
       sha256 = "0hrn4nipwx40d6ji8ssgr5nw986z9iqq8cn0kdpbszh9jplynaff";
@@ -8397,10 +8399,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuild = buildPerlPackage rec {
-    name = "Module-Build-0.4214";
+    name = "Module-Build-0.4222";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
-      sha256 = "0gywap0dfr8sx4wr6wqc23sjag1b4xsw8l55ai4vhkfg324lhyf5";
+      sha256 = "0q5i03lbx52g22bwvyb04ycky4niq379j1c3fhmlfdj7lzclajz7";
     };
     buildInputs = [ CPANMeta ExtUtilsCBuilder ];
     meta = {
@@ -11313,6 +11315,19 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDUNCAN/${name}.tar.gz";
       sha256 = "09c8xb43p1s6ala6g4274az51mf33phyjkp66dpvgkgbi1xfnawp";
+    };
+  };
+  
+  RegexpGrammars = buildPerlPackage rec {
+    name = "Regexp-Grammars-1.045";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/${name}.tar.gz";
+      sha256 = "8ab001f5641d03f7acce09ca5826b219b02ce40f8e56c2066737228a9232b594";
+    };
+    meta = {
+      homepage = http://search.cpan.org/~dconway/Regexp-Grammars-1.045/lib/Regexp/Grammars.pm;
+      description = "Add grammatical parsing features to Perl 5.10 regexes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -14942,10 +14957,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   version = buildPerlPackage rec {
-    name = "version-0.9912";
+    name = "version-0.9918";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JP/JPEACOCK/${name}.tar.gz";
-      sha256 = "03hv7slgqrmzbbjjmxgvq91bjlbjg5xbp8n4h454amyab2adzw7b";
+      sha256 = "54175c7ead4e2259c2fb2b83440b821e4287842067227e48fb899b5cae52237b";
+    };
+    meta = {
+      description = "Structured version objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -15504,6 +15523,21 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
       sha256 = "0m4zr6gm5rzwvxwd2x7rklr659jl8gsa5bxc5h25904nbvpj9x4x";
+    };
+  };
+
+  WebServiceLinode = buildPerlModule rec {
+    name = "WebService-Linode-0.28";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIKEGRB/${name}.tar.gz";
+      sha256 = "66a315016999c0d2043caae86e664dad10c6613708f33a2f56aae8030326c509";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ JSON LWP LWPProtocolhttps ];
+    meta = {
+      homepage = https://github.com/mikegrb/WebService-Linode;
+      description = "Perl Interface to the Linode.com API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

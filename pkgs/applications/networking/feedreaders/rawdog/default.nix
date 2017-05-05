@@ -12,12 +12,12 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python2Packages; [ feedparser ];
 
   namePrefix = "";
-  
+
   meta = with stdenv.lib; {
     homepage = "http://offog.org/code/rawdog/";
     description = "RSS Aggregator Without Delusions Of Grandeur";
     license = licenses.gpl2;
-    platform = platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];
   };
 }

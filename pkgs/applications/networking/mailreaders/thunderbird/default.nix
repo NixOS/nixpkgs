@@ -6,7 +6,7 @@
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc
 , autoconf213, which, m4
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
-, enableGTK3 ? false, gtk3, wrapGAppsHook, makeWrapper
+, enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird" instead
@@ -22,11 +22,11 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.0.1";
+  version = "52.1.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "7b8324a230a10b738b9a28c31b195bfb149b1f47eec6662d93a7d0c424d56303dbc2bca6645b30323c6da86628d6e49de359e1067081a5d0bd66541174a8be48";
+    sha512 = "08016334a0cc8af96d5c5b9aad0b8bf1ca3c105ff4a412abbeaeefefda1301cb149eafb4e78314f710567b952267d1d3c999dc8e5534a4a8d06abdcb11ee98c8";
   };
 
   # New sed no longer tolerates this mistake.
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
     ]
-    ++ lib.optional enableGTK3 gtk3;
+    ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool ];

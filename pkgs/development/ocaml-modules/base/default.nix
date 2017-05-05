@@ -1,5 +1,8 @@
 { stdenv, fetchurl, ocaml, jbuilder, findlib }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "base is not available for OCaml ${ocaml.version}" else
+
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-base-0.9.0";
 

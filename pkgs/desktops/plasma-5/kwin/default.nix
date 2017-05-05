@@ -30,4 +30,12 @@ plasmaPackage {
         --subst-var-by xwayland ${lib.getBin xwayland}/bin/Xwayland
   '';
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
+  postInstall = ''
+    # Some package(s) refer to these service types by the wrong name.
+    # I would prefer to patch those packages, but I cannot find them!
+    ln -s $out/share/kservicetypes5/kwineffect.desktop \
+          $out/share/kservicetypes5/kwin-effect.desktop
+    ln -s $out/share/kservicetypes5/kwinscript.desktop \
+          $out/share/kservicetypes5/kwin-script.desktop
+  '';
 }

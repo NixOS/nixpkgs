@@ -37,7 +37,6 @@ stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
-    stack setup
   '';
 
   buildPhase = args.buildPhase or "stack build";

@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/junegunn/go-shellwords";
-      rev = "33bd8f1ebe16d6e5eb688cc885749a63059e9167";
-      sha256 = "0xcymw0fm0ir8d9swh1bkpknnqgx5ijjsj433z4d9riy8h8ywpw8";
+      rev = "02e3cf038dcea8290e44424da473dd12be796a8a";
+      sha256 = "1pg7pl25wvpl2dbpyrv9p1r7prnqimxlf6136vn0dfm54j2x4mnr";
     };
   }
   {
