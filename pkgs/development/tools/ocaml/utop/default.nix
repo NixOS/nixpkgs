@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
-, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools
+, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ocaml findlib ocamlbuild cppo camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];

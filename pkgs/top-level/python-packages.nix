@@ -192,6 +192,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  automat = callPackage ../development/python-modules/automat { };
+
   # packages defined elsewhere
 
   bap = callPackage ../development/python-modules/bap {
@@ -809,62 +811,11 @@ in {
     };
   };
 
-  asgiref = buildPythonPackage rec {
-    name = "asgiref-${version}";
-    version = "1.0.0";
+  asgiref = callPackage ../development/python-modules/asgiref { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgiref/${name}.tar.gz";
-      sha256 = "1jg4nxjsn7nc4vd3170xd60m6syn57m6xwyyna6r68vniq8nhg7i";
-    };
+  asgi_ipc = callPackage ../development/python-modules/asgi_ipc { };
 
-    propagatedBuildInputs = with self ; [ six ];
-
-    meta = {
-      description = "Reference ASGI adapters and channel layers";
-      license = licenses.bsd3;
-      homepage = https://github.com/django/asgiref;
-    };
-  };
-
-  asgi_ipc = buildPythonPackage rec {
-    name = "asgi_ipc-${version}";
-    version = "1.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
-      sha256 = "03phyfj30s4sgaqfbmv38nfvx3kdmjwsh3558d2lxrf2gdrimmf9";
-    };
-
-    propagatedBuildInputs = with self ; [ asgiref msgpack posix_ipc ];
-
-    meta = {
-      description = "Posix IPC-backed ASGI channel layer implementation";
-      license = licenses.bsd3;
-      homepage = http://github.com/django/asgi_ipc/;
-    };
-  };
-
-  asgi_redis = buildPythonPackage rec {
-    name = "asgi_redis-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";
-      sha256 = "1pdzxannmgb0as2x6xy0rk4xi8ygnsggpsa0z31pzpwbk6jsgwxd";
-    };
-
-    # Requires a redis server available
-    doCheck = false;
-
-    propagatedBuildInputs = with self ; [ asgiref asgi_ipc msgpack six redis cryptography ];
-
-    meta = {
-      description = "Redis-backed ASGI channel layer implementation";
-      license = licenses.bsd3;
-      homepage = http://github.com/django/asgi_redis/;
-    };
-  };
+  asgi_redis = callPackage ../development/python-modules/asgi_redis { };
 
   python-editor = buildPythonPackage rec {
     name = "python-editor-${version}";
@@ -2213,11 +2164,11 @@ in {
   });
 
   beautifulsoup4 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.5.1";
+    name = "beautifulsoup4-4.5.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "1qgmhw65ncsgccjhslgkkszif47q6gvxwqv4mim17agxd81p951w";
+      sha256 = "0glaw1vyxnbp03fni7h5496n6iib0n5iim4gax1n0ngscs9s075j";
     };
 
     buildInputs = [ self.nose ];
@@ -2303,6 +2254,8 @@ in {
       maintainers = with maintainers; [ pSub ];
     };
   };
+
+  bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   binwalk_fun = { visualizationSupport ? false, pyqtgraph ? null }:
     assert visualizationSupport -> pyqtgraph != null;
@@ -2597,6 +2550,8 @@ in {
       license = licenses.bsd2;
     };
   };
+
+  constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
@@ -3030,6 +2985,8 @@ in {
     };
   };
 
+  httpserver = callPackage ../development/python-modules/httpserver {};
+
   bleach = buildPythonPackage rec {
     pname = "bleach";
     version = "2.0.0";
@@ -3348,6 +3305,8 @@ in {
       maintainers = with maintainers; [ sepi ];
     };
   };
+
+  branca = callPackage ../development/python-modules/branca { };
 
   bugwarrior = buildPythonPackage rec {
     name = "bugwarrior-${version}";
@@ -3780,22 +3739,7 @@ in {
     };
   };
 
-  certifi = buildPythonPackage rec {
-    name = "certifi-${version}";
-    version = "2017.1.23";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/certifi/${name}.tar.gz";
-      sha256 = "1klrzl3hgvcf2mjk00g0k3kk1p2z27vzwnxivwar4vhjmjvpz1w1";
-    };
-
-    meta = {
-      homepage = http://certifi.io/;
-      description = "Python package for providing Mozilla's CA Bundle";
-      license = licenses.isc;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  certifi = callPackage ../development/python-modules/certifi { };
 
   characteristic = buildPythonPackage rec {
     name = "characteristic-14.1.0";
@@ -5072,32 +5016,7 @@ in {
 
   bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
 
-  cffi = if isPyPy then null else buildPythonPackage rec {
-    name = "cffi-1.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cffi/${name}.tar.gz";
-      sha256 = "563e0bd53fda03c151573217b3a49b3abad8813de9dd0632e10090f6190fdaf8";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
-    buildInputs = with self; [ pytest ];
-
-    patchPhase = ''
-      substituteInPlace testing/cffi0/test_ownlib.py --replace "gcc" "cc"
-    '';
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      homepage = https://cffi.readthedocs.org/;
-      license = with licenses; [ mit ];
-      description = "Foreign Function Interface for Python calling C code";
-    };
-  };
+  cffi = callPackage ../development/python-modules/cffi { };
 
   pycollada = buildPythonPackage rec {
     name = "pycollada-0.4.1";
@@ -5207,6 +5126,8 @@ in {
     };
   };
 
+  PyLD = callPackage ../development/python-modules/PyLD { };
+
   python-jose = callPackage ../development/python-modules/python-jose {};
 
   pyhepmc = buildPythonPackage rec {
@@ -5261,6 +5182,8 @@ in {
   };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
+
+  pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytestcache = buildPythonPackage rec {
     name = "pytest-cache-1.0";
@@ -5546,7 +5469,8 @@ in {
       sha256 = "fa0a212283cdf52e2eecc24dd6459bb7687cc29adb60cb84258fab73be8dda0f";
     };
 
-   buildInputs = with self; [ covCore pytest virtualenv process-tests helper ];
+   propagatedBuildInputs = with self; [ coverage ];
+   buildInputs = with self; [ pytest covCore virtualenv process-tests helper ];
 
    doCheck = false;
    checkPhase = ''
@@ -6996,7 +6920,7 @@ in {
   };
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
-  
+
   facebook-sdk = buildPythonPackage rec {
     name = "facebook-sdk-0.4.0";
 
@@ -8420,6 +8344,8 @@ in {
     };
   };
 
+  m2r = callPackage ../development/python-modules/m2r { };
+
   mailchimp = buildPythonPackage rec {
     version = "2.0.9";
     name = "mailchimp-${version}";
@@ -9034,6 +8960,8 @@ in {
     };
   };
 
+  phpserialize = callPackage ../development/python-modules/phpserialize { };
+
   pies = buildPythonPackage rec {
     name = "pies-2.6.5";
 
@@ -9096,23 +9024,7 @@ in {
     };
   };
 
-  plotly = self.buildPythonPackage rec {
-    name = "plotly-1.9.5";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/plotly/${name}.tar.gz";
-      sha256 = "628679e880caab22e2a46273e85e1d1ce1382b631e1c7bbfe539f804c5269b21";
-    };
-
-    propagatedBuildInputs = with self; [ self.pytz self.six self.requests ];
-
-    meta = {
-      description = "Python plotting library for collaborative, interactive, publication-quality graphs";
-      homepage = https://plot.ly/python/;
-      license = licenses.mit;
-    };
-  };
+  plotly = callPackage ../development/python-modules/plotly { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
@@ -11993,6 +11905,8 @@ in {
     };
   });
 
+  folium = callPackage ../development/python-modules/folium { };
+
   fontforge = pkgs.fontforge.override {
     withPython = true;
     inherit python;
@@ -13657,6 +13571,8 @@ in {
       sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
     };
 
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ werkzeug twisted ];
 
     meta = {
@@ -14294,6 +14210,7 @@ in {
       description = "Super-fast templating language";
       homepage = http://www.makotemplates.org;
       license = licenses.mit;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ domenkozar ];
     };
   };
@@ -14640,6 +14557,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   multidict = callPackage ../development/python-modules/multidict { };
 
@@ -15828,6 +15747,8 @@ in {
       name = "${name}.tar.gz";
     };
 
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ twisted ];
 
     postInstall = "twistd --help > /dev/null";
@@ -16911,28 +16832,7 @@ in {
 
   };
 
-  os-testr = buildPythonPackage rec {
-    name = "os-testr-${version}";
-    version = "0.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/os-testr/${name}.tar.gz";
-      sha256 = "10ws7l5p25psnp6rwymwdzh4zagmmnbf56xwg06cn2292m95l4i7";
-    };
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-      sed -i 's@python@${python.interpreter}@' os_testr/tests/files/testr-conf
-    '';
-
-    checkPhase = ''
-      export PATH=$PATH:$out/bin
-      ${python.interpreter} setup.py test
-    '';
-
-    propagatedBuildInputs = with self; [ pbr Babel testrepository subunit testtools ];
-    buildInputs = with self; [ coverage oslosphinx oslotest testscenarios six ddt ];
-  };
+  os-testr = callPackage ../development/python-modules/os-testr { };
 
   bandit = buildPythonPackage rec {
     name = "bandit-${version}";
@@ -17266,6 +17166,8 @@ in {
 
     meta = with stdenv.lib; {
       homepage = "https://launchpad.net/python-cliff";
+      # requires an update, incompatible with current dependencies (pbr)
+      broken = true;
     };
   };
 
@@ -17359,6 +17261,9 @@ in {
    meta = with stdenv.lib; {
      description = "Python bindings to the OpenStack Images API";
      homepage = "http://www.openstack.org/";
+
+     # requires an update, incompatible with current dependencies (pbr)
+     broken = true;
    };
  };
 
@@ -20122,20 +20027,7 @@ in {
     };
    });
 
-  pydot = buildPythonPackage rec {
-    name = "pydot-1.2.3";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pydot/${name}.tar.gz";
-      sha256 = "edb5d3f249f97fbd9c4bb16959e61bc32ecf40eee1a9f6d27abe8d01c0a73502";
-    };
-    propagatedBuildInputs = with self; [pyparsing pkgs.graphviz];
-    meta = {
-      homepage = https://github.com/erocarrera/pydot;
-      description = "Allows to easily create both directed and non directed graphs from Python";
-    };
-  };
+  pydot = callPackage ../development/python-modules/pydot { };
 
   pydot_ng = buildPythonPackage rec {
     name = "pydot_ng-1.0.0";
@@ -20522,6 +20414,8 @@ in {
   pylint = callPackage ../development/python-modules/pylint { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
+
+  pyproj = callPackage ../development/python-modules/pyproj { };
 
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
@@ -22040,6 +21934,8 @@ in {
       homepage = "http://github.com/diyan/pywinrm/";
       description = "Python library for Windows Remote Management";
       license = licenses.mit;
+      # error: libgssapi_krb5.so: cannot open shared object file: No such file or directory
+      broken = true; #
     };
   };
 
@@ -22692,8 +22588,7 @@ in {
       homepage = "https://github.com/goinnn/django-multiselectfield";
     };
   };
-
-
+  
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
 
@@ -23619,11 +23514,15 @@ in {
       url = "mirror://pypi/s/${pname}/${name}.tar.gz";
       sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
     };
-    buildInputs = with self; [ pytest_29 virtualenv pytestrunner pytest-virtualenv ];
+    buildInputs = with self; [ pytest virtualenv pytestrunner pytest-virtualenv ];
     propagatedBuildInputs = with self; [ twisted pathlib2 ];
     postPatch = ''
       sed -i '12,$d' tests/test_main.py
     '';
+
+    # Couldn't get tests working
+    doCheck = false;
+
     meta = {
       description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit.";
       homepage = "https://github.com/rutsky/setuptools-trial";
@@ -24068,25 +23967,7 @@ in {
     };
   };
 
-  stevedore = buildPythonPackage rec {
-    name = "stevedore-1.21.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/stevedore/${name}.tar.gz";
-      sha256 = "12sg88ax0lv2sxr685rqdaxm9gryjrpj4fvax459zvwy1r4n83ma";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ oslosphinx ];
-    propagatedBuildInputs = with self; [ pbr six argparse ];
-
-    meta = {
-      description = "Manage dynamic plugins for Python applications";
-      homepage = "https://pypi.python.org/pypi/stevedore";
-      license = licenses.asl20;
-    };
-  };
+  stevedore = callPackage ../development/python-modules/stevedore {};
 
   Theano = self.TheanoWithoutCuda;
 
@@ -25096,37 +24977,7 @@ in {
     };
   };
 
-
-  sqlalchemy_migrate_func = sqlalchemy: buildPythonPackage rec {
-    name = "sqlalchemy-migrate-0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlalchemy-migrate/${name}.tar.gz";
-      sha256 = "00z0lzjs4ksr9yr31zs26csyacjvavhpz6r74xaw1r89kk75qg7q";
-    };
-
-    buildInputs = with self; [ unittest2 scripttest pytz pylint tempest-lib mock testtools ];
-    propagatedBuildInputs = with self; [ pbr tempita decorator sqlalchemy six sqlparse ];
-
-    checkPhase = ''
-      export PATH=$PATH:$out/bin
-      echo sqlite:///__tmp__ > test_db.cfg
-      # depends on ibm_db_sa
-      rm migrate/tests/changeset/databases/test_ibmdb2.py
-      # wants very old testtools
-      rm migrate/tests/versioning/test_schema.py
-      # transient failures on py27
-      substituteInPlace migrate/tests/versioning/test_util.py --replace "test_load_model" "noop"
-      ${python.interpreter} setup.py test
-    '';
-
-    meta = {
-      homepage = http://code.google.com/p/sqlalchemy-migrate/;
-      description = "Schema migration tools for SQLAlchemy";
-    };
-  };
-
-  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy;
+  sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
@@ -26326,47 +26177,7 @@ in {
     };
   };
 
-  twisted = buildPythonPackage rec {
-
-    name = "Twisted-${version}";
-    version = "16.4.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    # Patch t.p._inotify to point to libc. Without this,
-    # twisted.python.runtime.platform.supportsINotify() == False
-    patchPhase = optionalString stdenv.isLinux ''
-      substituteInPlace twisted/python/_inotify.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
-    '';
-
-    # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
-    # details.
-    postInstall = "$out/bin/twistd --help > /dev/null";
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s twisted/test
-    '';
-    # Tests require network
-    doCheck = false;
-
-    meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      longDescription = ''
-        Twisted is an event-driven networking engine written in Python
-        and licensed under the MIT license.
-      '';
-      license = licenses.mit;
-      maintainers = [ ];
-    };
-  };
+  twisted = callPackage ../development/python-modules/twisted { };
 
   tzlocal = buildPythonPackage rec {
     name = "tzlocal-1.2.2";
@@ -27173,6 +26984,8 @@ EOF
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
 
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [twisted dateutil];
 
     meta = {
@@ -27182,9 +26995,7 @@ EOF
     };
   });
 
-  magic-wormhole = callPackage ../development/python-modules/magic-wormhole {
-    pythonPackages = self;
-  };
+  magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   wsgiproxy2 = buildPythonPackage rec {
     name = "WSGIProxy2-0.4.2";
@@ -31686,6 +31497,7 @@ EOF
       rev = "8eab90908f2a3adcc414347566f4434636202344";
       sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
     };
+    disabled = isPy3k; # Judging from SyntaxError
     buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
 
@@ -31732,31 +31544,7 @@ EOF
     '';
   };
 
-  txaio = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "txaio";
-    version = "2.5.2";
-
-    meta = {
-      description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
-      homepage    = "https://github.com/crossbario/txaio";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ six twisted ];
-
-    checkPhase = ''
-      py.test -k "not test_sdist"
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-      sha256 = "321d441b336447b72dbe81a4d73470414454baf0543ec701fcfecbf4dcbda0fe";
-    };
-  };
+  txaio = callPackage ../development/python-modules/txaio { };
 
   ramlfications = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -31801,28 +31589,7 @@ EOF
     };
   };
 
-  autobahn = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "autobahn";
-    version = "0.16.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-      sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
-    };
-    buildInputs = with self; [ unittest2 mock pytest_29 trollius ];
-    propagatedBuildInputs = with self; [ six twisted txaio ];
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      description = "WebSocket and WAMP in Python for Twisted and asyncio.";
-      homepage    = "http://crossbar.io/autobahn";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-  };
+  autobahn = callPackage ../development/python-modules/autobahn { };
 
   jsonref = buildPythonPackage rec {
     name = "${pname}-${version}";

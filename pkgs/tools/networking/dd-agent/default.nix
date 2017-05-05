@@ -64,6 +64,9 @@ in stdenv.mkDerivation rec {
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
+    # Move out default conf.d so that /etc/dd-agent/conf.d is used
+    mv $out/agent/conf.d $out/agent/conf.d-system
+
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash
     exec ${python}/bin/python $out/agent/jmxfetch.py $@

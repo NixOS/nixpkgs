@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  dogpile_core, pytest
- }:
+{ stdenv, buildPythonPackage, fetchPypi
+, dogpile_core, pytest, pytestcov, mock, Mako
+}:
 
 buildPythonPackage rec {
   pname = "dogpile.cache";
@@ -13,12 +13,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ dogpile_core ];
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest pytestcov mock Mako ];
 
   meta = with stdenv.lib; {
     description = "A caching front-end based on the Dogpile lock";
     homepage = http://bitbucket.org/zzzeek/dogpile.cache;
-    platforms = platforms.linux; # Can only test linux
+    platforms = platforms.unix;
     license = licenses.bsd3;
   };
 }

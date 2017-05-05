@@ -3,6 +3,7 @@
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
+, confDir ? "/etc"
 }:
 
 let
@@ -43,7 +44,7 @@ let
     configureFlags =
       [ "--with-store-dir=${storeDir}"
         "--localstatedir=${stateDir}"
-        "--sysconfdir=/etc"
+        "--sysconfdir=${confDir}"
         "--disable-init-state"
         "--enable-gc"
       ]
@@ -116,8 +117,9 @@ let
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
+
+    preConfigure = "export NIX_STATE_DIR=$TMPDIR";
 
     preBuild = "unset NIX_INDENT_MAKE";
   };
@@ -145,12 +147,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5308_2f21d522";
+    suffix = "pre5344_eba840c8";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "2f21d522c28b1e902bd7f0b5b9e7523975102d81";
-      sha256 = "1r3jxz0ydnlxp4b3ggxjgx1q9dv7jyfjm8w1srqjanzn944wnmi9";
+      rev = "eba840c8a13b465ace90172ff76a0db2899ab11b";
+      sha256 = "08yrzlmshg854w5pwq8af634wic91h7k55fs51i55dyxpw4wpxk7";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
