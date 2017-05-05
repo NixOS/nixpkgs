@@ -21897,8 +21897,10 @@ in {
     };
   };
 
+  requests = self.requests2;
 
-  requests = buildPythonPackage rec {
+  # Remove before release of 17.09
+  requests_1 = buildPythonPackage rec {
     name = "requests-1.2.3";
     disabled = !pythonOlder "3.4";
 
@@ -21912,7 +21914,6 @@ in {
       homepage = http://docs.python-requests.org/en/latest/;
     };
   };
-
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
