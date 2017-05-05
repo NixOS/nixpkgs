@@ -855,6 +855,34 @@ showPhaseHeader() {
 }
 
 
+runPhase() {
+    local phase="$1"
+
+    if [ -n "$tracePhases" ]; then
+        echo
+        echo "@ phase-started $out $phase"
+    fi
+
+    showPhaseHeader "$phase"
+    dumpVars
+
+    # Evaluate the variable named $phase if it exists, otherwise the
+    # function named $phase.
+    eval "${!phase:-$phase}"
+
+    if [ "$phase" = unpackPhase ]; then
+        cd "${sourceRoot:-.}"
+    fi
+
+    if [ -n "$tracePhases" ]; then
+        echo
+        echo "@ phase-succeeded $out $phase"
+    fi
+
+    stopNest
+}
+
+
 genericBuild() {
     if [ -f "$buildCommandPath" ]; then
         . "$buildCommandPath"
@@ -880,28 +908,7 @@ genericBuild() {
         if [ "$curPhase" = installCheckPhase -a -z "$doInstallCheck" ]; then continue; fi
         if [ "$curPhase" = distPhase -a -z "$doDist" ]; then continue; fi
 
-        if [ -n "$tracePhases" ]; then
-            echo
-            echo "@ phase-started $out $curPhase"
-        fi
-
-        showPhaseHeader "$curPhase"
-        dumpVars
-
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
-
-        if [ "$curPhase" = unpackPhase ]; then
-            cd "${sourceRoot:-.}"
-        fi
-
-        if [ -n "$tracePhases" ]; then
-            echo
-            echo "@ phase-succeeded $out $curPhase"
-        fi
-
-        stopNest
+        runPhase "$curPhase"
     done
 }
 
