@@ -14392,6 +14392,8 @@ in {
     };
   };
 
+  mplleaflet = callPackage ../development/python-modules/mplleaflet { };
+
   multidict = callPackage ../development/python-modules/multidict { };
 
   munch = buildPythonPackage rec {
