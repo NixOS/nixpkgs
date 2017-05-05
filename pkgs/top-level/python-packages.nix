@@ -114,64 +114,15 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
-  agate = buildPythonPackage rec {
-    name = "agate-1.2.2";
-    disabled = isPy3k;
+  agate = callPackage ../development/python-modules/agate { };
 
-    meta = {
-      description = "A Python data analysis library that is optimized for humans instead of machines";
-      homepage    = "https://github.com/wireservice/agate";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate/${name}.tar.gz";
-      sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
-    };
-  };
+  agate-dbf = callPackage ../development/python-modules/agate-dbf { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
-  agate-dbf = buildPythonPackage rec {
-    name = "agate-dbf-0.1.0";
-    disabled = isPy3k;
+  agate-excel = callPackage ../development/python-modules/agate-excel { };
 
-    meta = {
-      description = "Adds read support for dbf files to agate";
-      homepage    = "https://github.com/wireservice/agate-dbf";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ agate dbf dbfread ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate-dbf/${name}.tar.gz";
-      sha256 = "0xzz834lh4xbl342c6wmxqy7ynmsrjp42bsjahfcxhsgq33vzngz";
-    };
-  };
-
-  agate-excel = buildPythonPackage rec {
-    name = "agate-excel-0.1.0";
-    disabled = isPy3k;
-
-    meta = {
-      description = "Adds read support for excel files to agate";
-      homepage    = "https://github.com/wireservice/agate-excel";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ agate openpyxl xlrd ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/agate-excel/${name}.tar.gz";
-      sha256 = "08zvj3pwqw8zhd58iyymiwblrk92y4gl6yyrb2svb0k8za7v0hak";
-    };
-  };
+  agate-sql = callPackage ../development/python-modules/agate-sql { };
 
   ansicolor = buildPythonPackage rec {
     name = "ansicolor-${version}";
@@ -206,40 +157,9 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
-  dbf = buildPythonPackage rec {
-    name = "dbf-0.94.003";
-    disabled = isPy3k;
+  dbf = callPackage ../development/python-modules/dbf { };
 
-    meta = {
-      description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
-      homepage    = "https://pypi.python.org/pypi/dbf";
-      license     = licenses.bsd2;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dbf/${name}.tar.gz";
-      sha256 = "0i2454hwg67079jb56x663wqmmwr55pcr6c76q2415185y6nhny9";
-    };
-  };
-
-
-  dbfread = buildPythonPackage rec {
-    name = "dbfread-2.0.5";
-    disabled = isPy3k;
-
-    meta = {
-      description = "Read DBF Files with Python";
-      homepage    = "http://dbfread.readthedocs.org/";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dbfread/${name}.tar.gz";
-      sha256 = "0r5axq9ax0czyapm7b69krcv22r1nyb4vci7c5x8mx8pq1axim93";
-    };
-  };
+  dbfread = callPackage ../development/python-modules/dbfread { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
@@ -398,25 +318,7 @@ in {
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
-  pytimeparse = buildPythonPackage rec {
-    pname = "pytimeparse";
-    version = "1.1.6";
-    name = "${pname}-${version}";
-
-    meta = {
-      description = "A small Python library to parse various kinds of time expressions";
-      homepage    = "https://github.com/wroberts/pytimeparse";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ vrthra ];
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0imbb68i5n5fm704gv47if1blpxd4f8g16qmp5ar07cavgh2mibl";
-    };
-  };
+  pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
@@ -1586,6 +1488,8 @@ in {
     };
   }));
 
+  python-slugify = callPackage ../development/python-modules/python-slugify { };
+
   awesome-slugify = buildPythonPackage rec {
     name = "awesome-slugify-${version}";
     version = "1.6.5";
@@ -2531,25 +2435,7 @@ in {
 
   csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
 
-  csvkit = buildPythonPackage rec {
-    name = "csvkit-${version}";
-    version = "0.9.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/csvkit/${name}.tar.gz";
-      sha256 = "0fprr4wgp0bq8kl5qims88np11af7ahr5bxkrhfwpdgcgdjbiy4j";
-    };
-
-    propagatedBuildInputs = with self; [ dateutil_2_2 dbf xlrd sqlalchemy openpyxl_2_2_0_b1 ];
-
-    meta = {
-      description = "A library of utilities for working with CSV, the king of tabular file formats";
-      maintainers = with maintainers; [ vrthra ];
-      license = licenses.mit;
-      homepage = "https://github.com/wireservice/csvkit";
-    };
-  };
+  csvkit =  callPackage ../development/python-modules/csvkit { };
 
   cx_Freeze = buildPythonPackage rec {
     name = "cx_freeze-${version}";
@@ -6017,27 +5903,6 @@ in {
   };
 
   dateutil = callPackage ../development/python-modules/dateutil { };
-
-  # csvkit 0.9.1 needs dateutil==2.2
-  dateutil_2_2 = buildPythonPackage (rec {
-    name = "dateutil-2.2";
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ self.six ];
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "0s74ad6r789810s10dxgvaf48ni6adac2icrdad34zxygqq6bj7f";
-    };
-
-    meta = {
-      description = "Powerful extensions to the standard datetime module";
-      homepage = http://pypi.python.org/pypi/python-dateutil;
-      license = "BSD-style";
-    };
-  });
 
   # Buildbot 0.8.7p1 needs dateutil==1.5
   dateutil_1_5 = buildPythonPackage (rec {
@@ -16403,31 +16268,6 @@ in {
       sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
     };
     doCheck = false;
-  };
-
-  openpyxl_2_2_0_b1 = buildPythonPackage rec {
-    version = "2.2.0-b1";
-    name = "openpyxl-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/openpyxl/${name}.tar.gz";
-      sha256 = "0n10pawp2558jrrmppyhkrv7889k3g4mifqj3fp68qbr20ldk51k";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ jdcal et_xmlfile lxml ];
-
-    # Tests are not included in archive.
-    # https://bitbucket.org/openpyxl/openpyxl/issues/610
-    doCheck = false;
-
-    meta = {
-      description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
-      homepage = https://openpyxl.readthedocs.org;
-      license = licenses.mit;
-      maintainers = with maintainers; [ lihop sjourdois ];
-      platforms = platforms.all;
-    };
   };
 
   openpyxl = buildPythonPackage rec {
