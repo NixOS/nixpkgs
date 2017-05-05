@@ -3,8 +3,9 @@
 let
   repo = "lambda-mod-zsh-theme";
   rev = "c6445c79cbc73b85cc18871c216fb28ddc8b3d96";
+  version = "2017-04-05";
 in stdenv.mkDerivation {
-  name = "${repo}-${rev}";
+  name = "${repo}-${version}";
 
   src = fetchFromGitHub {
     inherit rev repo;
