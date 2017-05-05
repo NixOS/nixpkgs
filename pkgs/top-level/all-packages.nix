@@ -18250,10 +18250,6 @@ with pkgs;
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
-  gale = callPackage ../applications/networking/instant-messengers/gale {
-    openssl = openssl_1_0_2;
-  };
-
   gammu = callPackage ../applications/misc/gammu { };
 
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
