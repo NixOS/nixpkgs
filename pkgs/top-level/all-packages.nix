@@ -12625,6 +12625,7 @@ with pkgs;
   fira = callPackage ../data/fonts/fira { };
 
   fira-code = callPackage ../data/fonts/fira-code { };
+  fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
