@@ -5129,6 +5129,8 @@ in {
     };
   };
 
+  pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
+
   pytestflakes = buildPythonPackage rec {
     name = "pytest-flakes-${version}";
     version = "1.0.1";
