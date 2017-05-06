@@ -15,6 +15,10 @@ assert (versionAtLeast version "4.9");
 ''
 GCC_PLUGINS y # Enable gcc plugin options
 
+${optionalString (versionAtLeast version "4.11") ''
+  GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
+
 DEBUG_WX y # A one-time check for W+X mappings at boot; doesn't do anything beyond printing a warning
 
 ${optionalString (versionAtLeast version "4.10") ''
