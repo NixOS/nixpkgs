@@ -556,6 +556,7 @@
   vklquevs = "vklquevs <vklquevs@gmail.com>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
   vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
+  vmchale = "Vanessa McHale <tmchale@wisc.edu>";
   volhovm = "Mikhail Volkhov <volhovm.cs@gmail.com>";
   volth = "Jaroslavas Pocepko <jaroslavas@volth.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
