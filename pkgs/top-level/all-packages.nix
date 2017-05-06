@@ -7239,6 +7239,8 @@ with pkgs;
     fetchurl = fetchurlBoot;
   };
 
+  c-blosc = callPackage ../development/libraries/c-blosc { };
+
   capnproto = callPackage ../development/libraries/capnproto { };
 
   ccnx = callPackage ../development/libraries/ccnx { };
