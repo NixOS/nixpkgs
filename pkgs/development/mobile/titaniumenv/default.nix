@@ -1,4 +1,6 @@
-{pkgs, pkgs_i686, xcodeVersion ? "8.2.1", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "6.0.2.GA"}:
+{pkgs, pkgs_i686
+, xcodeVersion ? "8.2.1", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "6.0.2.GA"
+, nodePackages}:
 
 rec {
   androidenv = pkgs.androidenv;
@@ -7,7 +9,7 @@ rec {
     version = xcodeVersion;
     inherit xcodeBaseDir;
   } else null;
-  
+
   titaniumsdk = let
     titaniumSdkFile = if tiVersion == "5.1.2.GA" then ./titaniumsdk-5.1.nix
       else if tiVersion == "5.2.3.GA" then ./titaniumsdk-5.2.nix
@@ -17,10 +19,10 @@ rec {
     import titaniumSdkFile {
       inherit (pkgs) stdenv fetchurl unzip makeWrapper python jdk;
     };
-  
+
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv python which jdk nodejs;
-    inherit (pkgs.nodePackages_4_x) titanium alloy;
+    inherit (nodePackages) titanium alloy;
     inherit (androidenv) androidsdk;
     inherit (xcodeenv) xcodewrapper;
     inherit titaniumsdk xcodeBaseDir;

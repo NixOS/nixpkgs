@@ -2737,10 +2737,6 @@ with pkgs;
     nodejs = pkgs.nodejs-6_x;
   };
 
-  nodePackages_4_x = callPackage ../development/node-packages/default-v4.nix {
-    nodejs = pkgs.nodejs-4_x;
-  };
-
   nodePackages = nodePackages_6_x;
 
   # Can be used as a user shell
