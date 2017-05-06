@@ -106,7 +106,6 @@ in
 
       requires = [ "rpcbind.service" ];
       after = [ "rpcbind.service" "network.target" "local-fs.target" ];
-      before = [ "network-online.target" ];
 
       preStart = ''
         install -m 0755 -d /var/log/glusterfs
