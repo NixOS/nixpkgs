@@ -200,6 +200,24 @@ let
       ip6tables -A nixos-fw -d fe80::/64 -p udp --dport 546 -j nixos-fw-accept
     ''}
 
+
+    # Accept packets on the extra allowed host+port combination.
+    ${concatMapStrings (allowed:
+        concatMapStrings (addressFamily:
+        concatMapStrings (protocol:
+          (if addressFamily == "ipv4" then "iptables -w -A nixos-fw "
+           else "ip6tables -w -A nixos-fw ")
+          + (lib.optionalString (allowed.sourceAddress != null) (" --source " + allowed.sourceAddress))
+          + (lib.optionalString (allowed.destAddress != null) (" --dest " + allowed.destAddress))
+          + (lib.optionalString (protocol != null) (" -p " + protocol))
+          + (lib.optionalString (allowed.dport != null) (" --dport " + toString allowed.dport))
+          + (lib.optionalString (allowed.sport != null) (" --sport " + toString allowed.sport))
+          + " -j nixos-fw-accept\n"
+          ) (if allowed.protocols != null then allowed.protocols else [null])
+        ) allowed.addressFamily
+      ) cfg.extraAllowed
+    }
+
     ${cfg.extraCommands}
 
     # Reject/drop everything else.
@@ -490,6 +508,80 @@ in
           shutdown script.  These are executed just after the removal
           of the NixOS input rule, or if the service enters a failed
           state.
+        '';
+    };
+
+    networking.firewall.extraAllowed = mkOption {
+      type = types.listOf (types.submodule { options = {
+        sourceAddress = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "198.51.100.0";
+          description =
+            ''
+              Source of the packets. According to the iptables manual,
+              DNS host names might be used here, but their use is
+              discouraged (in particular because this delegates the
+              security rule to DNS servers). DNS host names are resolved
+              only when the rule is loaded.
+            '';
+        };
+        destAddress = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "198.51.100.0";
+          description =
+            ''
+              Destination of the packets. Same comment as for the
+              `sourceAddress` parameter.
+            '';
+        };
+        protocols = mkOption {
+          type = types.nullOr (types.listOf (types.enum
+            [ "tcp" "udp" "icmp" "udplite" "esp" "ah" "sctp" ]
+          ));
+          default = null;
+          example = [ "tcp" ];
+          description = "Protocol used.";
+        };
+        sport = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "32219";
+          description =
+            ''
+              Source port of the packet. This might be either an
+              integer port number, or the name of a protocol, such
+              as "http" or "ssh".
+            '';
+        };
+        dport = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "22";
+          description =
+            ''
+              Destination port of the packet. This might be either an
+              integer port number, or the name of a protocol, such as
+              "http" or "ssh".
+            '';
+        };
+        addressFamily = mkOption {
+          type = types.listOf (types.enum [ "ipv4" "ipv6" ]);
+          default = ["ipv4"];
+          description =
+            ''
+              The address family of the sourceAddress and destAddress
+              parameters. If these addresses use a DNS lookup (despite
+              recommendations), make sure the host has addresses in
+              this family.
+            '';
+        };
+      };});
+      default = [ ];
+      description =
+        ''
+          Additional exceptions in the firewall.
         '';
     };
 
