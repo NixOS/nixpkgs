@@ -11995,9 +11995,10 @@ with pkgs;
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   # Hardened linux
-  linux_hardened = linux_4_9.override {
+  linux_hardened = let linux = pkgs.linux_4_11; in linux.override {
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
+      inherit (linux) version;
     };
   };
 

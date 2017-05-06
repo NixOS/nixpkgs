@@ -2,22 +2,19 @@
 # http://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project#Recommended_settings
 # https://wiki.gentoo.org/wiki/Hardened/Hardened_Kernel_Project
 #
-# The base kernel is assumed to be at least 4.9 or whatever the toplevel
-# linux_hardened package expression uses.
-#
 # Dangerous features that can be permanently (for the boot session) disabled at
 # boot via sysctl or kernel cmdline are left enabled here, for improved
 # flexibility.
 
-{ stdenv }:
+{ stdenv, version }:
 
 with stdenv.lib;
+
+assert (versionAtLeast version "4.9");
 
 ''
 GCC_PLUGINS y # Enable gcc plugin options
 
-DEBUG_KERNEL y
-DEBUG_RODATA y # Make kernel text & rodata read-only
 DEBUG_WX y # A one-time check for W+X mappings at boot; doesn't do anything beyond printing a warning
 
 # Additional validation of commonly targetted structures
