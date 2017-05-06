@@ -100,6 +100,16 @@ in
             subnet.
           '';
         };
+
+        forwardDns = mkOption {
+          default = false;
+          description = ''
+            If set to <literal>true</literal>, the DNS queries from the
+            hosts connected to the bridge will be forwarded to the DNS
+            servers specified in /etc/resolv.conf .
+            '';
+        };
+
       };
 
     virtualisation.xen.stored =
@@ -359,7 +369,6 @@ in
         interface=${cfg.bridge.name}
         except-interface=lo
         bind-interfaces
-        auth-server=dns.xen.local,${cfg.bridge.name}
         auth-zone=xen.local,$XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength}
         domain=xen.local
         addn-hosts=/var/run/xen/dnsmasq.hostsfile
@@ -367,8 +376,11 @@ in
         strict-order
         no-hosts
         bogus-priv
-        no-resolv
-        no-poll
+        ${optionalString (!cfg.bridge.forwardDns) ''
+          no-resolv
+          no-poll
+          auth-server=dns.xen.local,${cfg.bridge.name}
+        ''}
         filterwin2k
         clear-on-reload
         domain-needed
