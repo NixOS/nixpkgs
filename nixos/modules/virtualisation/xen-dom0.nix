@@ -111,6 +111,19 @@ in
           '';
       };
 
+    virtualisation.xen.domains = {
+        extraConfig = mkOption {
+          type = types.string;
+          default = "";
+          description =
+            ''
+              Options defined here will override the defaults for xendomains.
+              The default options can be seen in the file included from
+              /etc/default/xendomains.
+            '';
+          };
+      };
+
     virtualisation.xen.trace =
       mkOption {
         default = false;
@@ -216,7 +229,11 @@ in
         { source = "${cfg.package}/etc/xen/scripts";
           target = "xen/scripts";
         }
-        { source = "${cfg.package}/etc/default/xendomains";
+        { text = ''
+            source ${cfg.package}/etc/default/xendomains
+
+            ${cfg.domains.extraConfig}
+          '';
           target = "default/xendomains";
         }
       ];
