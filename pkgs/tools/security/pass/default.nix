@@ -13,15 +13,15 @@ assert x11Support -> xclip != null
                   && dmenu != null;
 
 stdenv.mkDerivation rec {
-  version = "1.7";
+  version = "1.7.1";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "002mw7j0m33bw483rllzhcf41wp3ixka8yma6kqrfaj57jyw66hn";
+    sha256 = "0scqkpll2q8jhzcgcsh9kqz0gwdpvynivqjmmbzax2irjfaiklpn";
   };
 
-  patches = [ ./set-correct-program-name-for-sleep.patch 
+  patches = [ ./set-correct-program-name-for-sleep.patch
             ] ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   nativeBuildInputs = [ makeWrapper ];
