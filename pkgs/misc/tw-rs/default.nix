@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     description = "Twitter command-line interface written in rust";
     homepage = https://github.com/vmchale/tw-rs;
     license = licenses.bsd3;
-    #maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ vmchale ];
     platforms = platforms.all;
   };
 }
