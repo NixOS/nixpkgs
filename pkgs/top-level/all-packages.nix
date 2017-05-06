@@ -2375,6 +2375,14 @@ with pkgs;
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
+  inherit (callPackages ../tools/filesystems/irods rec {
+            stdenv = llvmPackages_38.libcxxStdenv;
+            libcxx = llvmPackages_38.libcxx;
+            boost = boost160.override { inherit stdenv; };
+          })
+      irods
+      irods-icommands;
+
   ignition = recurseIntoAttrs {
 
     math = callPackage ../development/libraries/ignition-math { };
