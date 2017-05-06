@@ -5048,6 +5048,9 @@ with pkgs;
       cross = targetPlatform;
       crossStageStatic = false;
 
+      # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
+      # <http://hydra.nixos.org/build/4268232>), so don't even try.
+      langCC = targetPlatform.config != "i686-pc-mingw32";
       # Why is this needed?
       inherit (forcedNativePackages) binutils;
     };

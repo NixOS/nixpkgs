@@ -20,26 +20,11 @@ let
   /* Basic list of packages to be natively built,
      but need a crossSystem defined to get meaning */
   basicNativeDrv = {
-    buildPackages.binutils = nativePlatforms;
     buildPackages.gccCrossStageFinal = nativePlatforms;
     buildPackages.gdbCross = nativePlatforms;
   };
 
   basic = basicCrossDrv // basicNativeDrv;
-
-  windows = {
-    buildPackages.binutils = nativePlatforms;
-    buildPackages.gccCrossStageFinal = nativePlatforms;
-
-    coreutils = nativePlatforms;
-    boehmgc = nativePlatforms;
-    gmp = nativePlatforms;
-    guile_1_8 = nativePlatforms;
-    libffi = nativePlatforms;
-    libtool = nativePlatforms;
-    libunistring = nativePlatforms;
-    windows.wxMSW = nativePlatforms;
-  };
 
 in
 
@@ -104,30 +89,48 @@ in
   /* Test some cross builds on 32 bit mingw-w64 */
   crossMingw32 = let
     crossSystem = {
-      config = "i686-pc-mingw32";
+      config = "i686-w64-mingw32";
       arch = "x86"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem windows;
+  in mapTestOnCross crossSystem {
+    coreutils = nativePlatforms;
+    boehmgc = nativePlatforms;
+    gmp = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
+  };
 
 
   /* Test some cross builds on 64 bit mingw-w64 */
   crossMingwW64 = let
     crossSystem = {
       # That's the triplet they use in the mingw-w64 docs.
-      config = "x86_64-pc-mingw32";
+      config = "x86_64-w64-mingw32";
       arch = "x86_64"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem windows;
+  in mapTestOnCross crossSystem {
+    coreutils = nativePlatforms;
+    boehmgc = nativePlatforms;
+    gmp = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
+  };
 
 
   /* Linux on the fuloong */
   fuloongminipc = let
     crossSystem = {
-      config = "mips64el-unknown-linux-gnu";
+      config = "mips64el-unknown-linux";
       bigEndian = false;
       arch = "mips";
       float = "hard";
