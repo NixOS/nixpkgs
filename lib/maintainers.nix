@@ -152,6 +152,7 @@
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
   edanaher = "Evan Danaher <nixos@edanaher.net>";
+  edef = "edef <edef@edef.eu>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   eduarrrd = "Eduard Bachmakov <e.bachmakov@gmail.com>";
   edwtjo = "Edward Tjörnhammar <ed@cflags.cc>";
