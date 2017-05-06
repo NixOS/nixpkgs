@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, fetchpatch
-, pcre, cacert
+, pcre, cacert, llvm
 , Security, Foundation, bash }:
 
 let
@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.8";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "0plm11rqrqz7frwz0jjcm13x939yhny755ks1adxjzmsngln9prl";
+    sha256 = "1157mmzjpk887cpcpn2qy9c69anc22c4p3cjpl84zl7an41x660j";
   };
 
   # perl is used for testing go vet
@@ -110,14 +110,12 @@ stdenv.mkDerivation rec {
       ./ssl-cert-file-1.8.patch
       ./creds-test.patch
       ./remove-test-pie-1.8.patch
-
-      # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
-      # works fine here for now.
-      (fetchpatch {
-        url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
-        sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
-      })
     ];
+
+  postPatch = optionalString stdenv.isDarwin ''
+    echo "substitute hardcoded dsymutil with ${llvm}/bin/llvm-dsymutil"
+    substituteInPlace "src/cmd/link/internal/ld/lib.go" --replace dsymutil ${llvm}/bin/llvm-dsymutil
+  '';
 
   NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
