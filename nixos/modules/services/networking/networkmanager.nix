@@ -235,7 +235,7 @@ in {
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
-      ++ lib.imap (i: s: {
+      ++ lib.imap1 (i: s: {
         inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
       }) cfg.dispatcherScripts;
