@@ -1026,6 +1026,8 @@ with pkgs;
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
+  socklog = callPackage ../tools/system/socklog { };
+
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
