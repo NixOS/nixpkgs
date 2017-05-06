@@ -13458,6 +13458,8 @@ with pkgs;
 
   electrum-dash = callPackage ../applications/misc/electrum-dash { };
 
+  electrum-ltc = callPackage ../applications/misc/electrum-ltc { };
+
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
   elvis = callPackage ../applications/editors/elvis { };

@@ -13809,6 +13809,8 @@ in {
     };
   });
 
+  ltc_scrypt = callPackage ../development/python-modules/ltc_scrypt/default.nix { };
+
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
 
