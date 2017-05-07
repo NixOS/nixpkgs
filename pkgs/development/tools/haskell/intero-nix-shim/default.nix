@@ -1,5 +1,6 @@
-{ mkDerivation, base, directory, filepath, optparse-applicative
-, posix-escape, split, stdenv, unix, fetchFromGitHub
+{ mkDerivation, base, cabal-install, directory, fetchFromGitHub
+, filepath, intero, optparse-applicative, posix-escape, split
+, stdenv, unix
 }:
 mkDerivation {
   pname = "intero-nix-shim";
@@ -16,6 +17,11 @@ mkDerivation {
     base directory filepath optparse-applicative posix-escape split
     unix
   ];
+  postInstall = ''
+    mkdir -p $out/libexec
+    ln -s ${cabal-install}/bin/cabal  $out/libexec
+    ln -s ${intero       }/bin/intero $out/libexec
+  '';
   homepage = "https://github.com/michalrus/intero-nix-shim";
   license = stdenv.lib.licenses.asl20;
 }
