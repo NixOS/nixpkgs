@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
-, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs
+, readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.2.1";
+  version = "2.2.2";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
     rev = name;
-    sha256 = "09xiwm57df0vzk8r2hx5p1hwy5f9q8frmdf96aba2ia9837zn3av";
+    sha256 = "1zbj4pfcnj1d0zfhx5jw9x7f2hz99mry20bgyyvrij2vj8gf5vk4";
   };
 
-  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
 
   autoreconfFlags = "-I tools -v";
 
