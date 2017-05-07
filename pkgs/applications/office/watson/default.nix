@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     py.test -vs tests
  '';
   checkInputs = with pythonPackages; [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
-  propagatedBuildInputs = with pythonPackages; [ requests2 click arrow ];
+  propagatedBuildInputs = with pythonPackages; [ requests click arrow ];
 
   meta = with stdenv.lib; {
     homepage = https://tailordev.github.io/Watson/;

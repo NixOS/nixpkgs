@@ -41,7 +41,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     feedparser sqlalchemy pyyaml
     beautifulsoup4 html5lib PyRSS2Gen pynzb
-    rpyc jinja2 requests2 dateutil jsonschema
+    rpyc jinja2 requests dateutil jsonschema
     pathpy guessit APScheduler
     terminaltables colorclass
     cherrypy flask flask-restful flask-restplus_0_8

@@ -12939,7 +12939,7 @@ with pkgs;
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
     inherit (python35Packages)
       buildPythonApplication appdirs colorama dateutil
-      requests2 requests_toolbelt sqlalchemy fusepy;
+      requests requests_toolbelt sqlalchemy fusepy;
   };
 
   adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };

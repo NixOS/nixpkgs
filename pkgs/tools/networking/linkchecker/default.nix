@@ -5,7 +5,7 @@ python2Packages.buildPythonApplication rec {
   version = "9.3";
 
   buildInputs = with python2Packages ; [ pytest ];
-  propagatedBuildInputs = with python2Packages ; [ requests2 ] ++ [ gettext ];
+  propagatedBuildInputs = with python2Packages ; [ requests ] ++ [ gettext ];
 
   src = fetchurl {
     url = "mirror://pypi/L/LinkChecker/${name}.tar.gz";
@@ -13,7 +13,7 @@ python2Packages.buildPythonApplication rec {
   };
 
   # 1. upstream refuses to support ignoring robots.txt
-  # 2. work around requests2 version detection - can be dropped >v9.3
+  # 2. work around requests version detection - can be dropped >v9.3
   patches = [
     ./add-no-robots-flag.patch
     ./no-version-check.patch

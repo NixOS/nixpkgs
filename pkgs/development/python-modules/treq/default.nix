@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, service-identity, requests2,
+{ stdenv, fetchurl, buildPythonPackage, service-identity, requests,
   six, mock, twisted, incremental, coreutils, gnumake, pep8, sphinx,
   openssl, pyopenssl }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     service-identity
-    requests2
+    requests
     twisted
     incremental
     sphinx

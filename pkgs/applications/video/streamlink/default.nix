@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = with pythonPackages; [ pytest mock ];
 
-  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests2 iso-639 iso3166 ]) ++ [ rtmpdump ffmpeg ];
+  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 ]) ++ [ rtmpdump ffmpeg ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/streamlink/streamlink;

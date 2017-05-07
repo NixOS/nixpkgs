@@ -100,7 +100,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional (enableFetchart
               || enableEmbyupdate
               || enableAcousticbrainz)
-                                   pythonPackages.requests2
+                                   pythonPackages.requests
     ++ optional enableConvert      ffmpeg
     ++ optional enableDiscogs      pythonPackages.discogs_client
     ++ optional enableKeyfinder    keyfinder-cli

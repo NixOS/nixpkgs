@@ -15,7 +15,7 @@ let
 
     propagatedBuildInputs = with pythonPackages; [
       six
-      requests2
+      requests
       websocket_client
       ipaddress
       backports_ssl_match_hostname
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     python
     unzip
     makeWrapper
-    pythonPackages.requests2
+    pythonPackages.requests
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib

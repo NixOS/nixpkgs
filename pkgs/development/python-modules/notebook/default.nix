@@ -15,7 +15,7 @@
 , nbconvert
 , ipykernel
 , terminado
-, requests2
+, requests
 , pexpect
 }:
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   buildInputs = [nose glibcLocales]  ++ lib.optionals isPy27 [mock];
 
   propagatedBuildInputs = [jinja2 tornado ipython_genutils traitlets jupyter_core
-    jupyter_client nbformat nbconvert ipykernel terminado requests2 pexpect ];
+    jupyter_client nbformat nbconvert ipykernel terminado requests pexpect ];
 
   checkPhase = ''
     nosetests -v
