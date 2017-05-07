@@ -2649,9 +2649,7 @@ in
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
-  duo-unix = callPackage ../tools/security/duo-unix {
-    openssl = openssl_1_0_2;
-  };
+  duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicacy = callPackage ../tools/backup/duplicacy { };
 
