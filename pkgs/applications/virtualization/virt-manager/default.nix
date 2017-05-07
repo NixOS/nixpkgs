@@ -28,7 +28,7 @@ python2Packages.buildPythonApplication rec {
     [ eventlet greenlet gflags netaddr carrot routes PasteDeploy
       m2crypto ipy twisted distutils_extra simplejson
       cheetah lockfile httplib2 urlgrabber pyGtkGlade dbus-python
-      pygobject3 ipaddr mox libvirt libxml2
+      pygobject3 ipaddr mox libvirt libxml2 requests
     ];
 
   patchPhase = ''
