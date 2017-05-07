@@ -26,7 +26,7 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python2Packages;
     [ eventlet greenlet gflags netaddr carrot routes PasteDeploy
-      m2crypto ipy twisted distutils_extra simplejson glanceclient
+      m2crypto ipy twisted distutils_extra simplejson
       cheetah lockfile httplib2 urlgrabber pyGtkGlade dbus-python
       pygobject3 ipaddr mox libvirt libxml2
     ];
