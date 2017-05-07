@@ -110,9 +110,13 @@ in
 
     # Because sd_login_monitor_new requires /run/systemd/machines
     systemd.services.display-manager.wants = [ "systemd-machined.service" ];
-    systemd.services.display-manager.after = [ "systemd-machined.service" ];
+    systemd.services.display-manager.after = [ "systemd-machined.service" "systemd-user-sessions.service" ];
 
     systemd.services.display-manager.path = [ gnome3.gnome_session ];
+
+    systemd.services.display-manager.serviceConfig.KillMode = "mixed";
+    systemd.services.display-manager.serviceConfig.IgnoreSIGPIPE = "no";
+    systemd.services.display-manager.serviceConfig.BusName = "org.gnome.DisplayManager";
 
     services.dbus.packages = [ gdm ];
 
