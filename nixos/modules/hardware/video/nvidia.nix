@@ -49,6 +49,8 @@ in
         Option "RandRRotation" "on"
       '';
 
+    services.xserver.displayManager.gdm.wayland = false;
+
     environment.etc."nvidia/nvidia-application-profiles-rc" = mkIf nvidia_x11.useProfiles {
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };

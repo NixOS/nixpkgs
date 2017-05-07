@@ -65,6 +65,15 @@ in
         };
       };
 
+      wayland = mkOption {
+        default = true;
+        example = true;
+        description = ''
+          Allow GDM run on Wayland instead of Xserver
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -129,6 +138,7 @@ in
     # presented and there's a little delay.
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
+      WaylandEnable=${toString cfg.gdm.wayland}
       ${optionalString cfg.gdm.autoLogin.enable (
         if cfg.gdm.autoLogin.delay > 0 then ''
           TimedLoginEnable=true
