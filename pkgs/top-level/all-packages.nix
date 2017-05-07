@@ -4657,6 +4657,8 @@ with pkgs;
 
   which = callPackage ../tools/system/which { };
 
+  winusb = callPackage ../tools/misc/winusb { };
+
   chase = callPackage ../tools/system/chase { };
 
   wicd = callPackage ../tools/networking/wicd { };
