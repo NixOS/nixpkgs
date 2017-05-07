@@ -2433,6 +2433,8 @@ in {
     doCheck = false; # lazy packager
   };
 
+  cram = callPackage ../development/python-modules/cram { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
