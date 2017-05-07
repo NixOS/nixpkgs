@@ -15,7 +15,7 @@ with pythonPackages; buildPythonApplication rec {
   propagatedBuildInputs = [
     cryptography
     beautifulsoup4
-    requests2
+    requests
     urllib3
   ];
 

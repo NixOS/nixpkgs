@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p ${name}
     cabextract $src --directory ${name}
   '';
-  
+
   installPhase = ''
     mkdir -p $out/lib/firmware/brcm
     bt-fw-converter -f bcbtums.inf -o $out/lib/firmware/brcm
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Firmware for Broadcom WIDCOMM® Bluetooth devices";
     homepage = http://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth;
-    license = licenses.unfree;
+    license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];
   };
-} 
+}

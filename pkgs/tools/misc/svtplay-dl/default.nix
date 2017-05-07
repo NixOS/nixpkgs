@@ -2,7 +2,7 @@
 , rtmpdump, substituteAll }:
 
 let
-  inherit (pythonPackages) python nose pycrypto requests2 mock;
+  inherit (pythonPackages) python nose pycrypto requests mock;
 in stdenv.mkDerivation rec {
   name = "svtplay-dl-${version}";
   version = "1.9.3";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "14qksi1svi89niffykxg47kay013byls6bnhkrkzkanq04075lmw";
   };
 
-  pythonPaths = [ pycrypto requests2 ];
+  pythonPaths = [ pycrypto requests ];
   buildInputs = [ python perl nose mock rtmpdump makeWrapper ] ++ pythonPaths;
   nativeBuildInputs = [ zip ];
 

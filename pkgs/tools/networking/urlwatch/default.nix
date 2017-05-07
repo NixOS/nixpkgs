@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     keyring
     minidb
     pyyaml
-    requests2
+    requests
   ];
 
   meta = with stdenv.lib; {

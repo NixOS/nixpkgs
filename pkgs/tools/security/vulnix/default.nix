@@ -27,7 +27,7 @@ in pythonPackages.buildPythonApplication rec{
     colorama
     lxml
     pyyaml
-    requests2
+    requests
     external.zodb
   ]);
 

@@ -370,7 +370,7 @@ in
       in listToAttrs (map createImportService dataPools ++ map createSyncService allPools) // {
         "zfs-mount" = { after = [ "systemd-modules-load.service" ]; };
         "zfs-share" = { after = [ "systemd-modules-load.service" ]; };
-        "zed" = { after = [ "systemd-modules-load.service" ]; };
+        "zfs-zed" = { after = [ "systemd-modules-load.service" ]; };
       };
 
       systemd.targets."zfs-import" =

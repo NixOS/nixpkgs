@@ -35,7 +35,7 @@ buildPythonApplication rec {
     kitchen
     mailcap-fix
     mccabe
-    requests2
+    requests
     six
     tornado
     pyyaml
