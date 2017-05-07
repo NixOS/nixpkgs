@@ -2,7 +2,11 @@
 
 with lib;
 
-# TODO: switch to mode=proxy
+# TODO: check this actually fits RFC
+# TODO: service start => generates image if need be => boot on kernel+initrd
+# from host fs => guest waits in initrd with a predefined ssh key => host sends
+# closure and tells the guest to boot with the right configuration => guest
+# boots => guest spawns sshd with the same predefined ssh key
 # TODO: forward resolv.conf via 9pfs, cp -L it at start and reload of service
 # TODO: see what happens when a VM addition changes the IP addresses of other VMs
 
