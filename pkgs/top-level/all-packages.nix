@@ -5340,11 +5340,9 @@ with pkgs;
     stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
   });
 
-  go_1_8 = callPackage ../development/compilers/go/1.8.nix ({
+  go_1_8 = callPackage ../development/compilers/go/1.8.nix {
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
-    stdenv = stdenvAdapters.overrideCC pkgs.stdenv pkgs.clang_38;
-  });
+  };
 
   go = go_1_8;
 
