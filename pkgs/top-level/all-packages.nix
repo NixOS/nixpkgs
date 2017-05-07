@@ -2743,7 +2743,7 @@ with pkgs;
     nodejs = pkgs.nodejs-4_x;
   };
 
-  nodePackages = nodePackages_6_x;
+  nodePackages = nodePackages_4_x;
 
   # Can be used as a user shell
   nologin = shadow;
