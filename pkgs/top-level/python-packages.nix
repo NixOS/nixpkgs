@@ -3229,9 +3229,6 @@ in {
     };
   };
 
-  buildout = self.zc_buildout;
-  buildout152 = self.zc_buildout152;
-
   check-manifest = buildPythonPackage rec {
     name = "check-manifest";
     version = "0.30";
@@ -3274,8 +3271,8 @@ in {
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
   zc_recipe_egg = self.zc_recipe_egg_buildout171;
-  zc_buildout = self.zc_buildout171;
-  zc_buildout2 = self.zc_buildout221;
+  zc_buildout = self.zc_buildout221;
+
   zc_buildout221 = buildPythonPackage rec {
     name = "zc.buildout-2.2.1";
 
@@ -3283,48 +3280,6 @@ in {
       url = "mirror://pypi/z/zc.buildout/${name}.tar.gz";
       sha256 = "a6122ea5c06c6c044a9efce4a3df452c8573e1aebfda7b24262655daac894ef5";
     };
-
-   meta = {
-      homepage = "http://www.buildout.org";
-      description = "A software build and configuration system";
-      license = licenses.zpt21;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
-  zc_buildout171 = buildPythonPackage rec {
-    name = "zc.buildout-1.7.1";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zc.buildout/${name}.tar.gz";
-      sha256 = "a5c2fafa4d073ad3dabec267c44a996cbc624700a9a49467cd6b1ef63d35e029";
-    };
-
-   meta = {
-      homepage = "http://www.buildout.org";
-      description = "A software build and configuration system";
-      license = licenses.zpt21;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
-  zc_buildout152 = buildPythonPackage rec {
-    name = "zc.buildout-1.5.2";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zc.buildout/${name}.tar.gz";
-      sha256 = "0ac5a325d3ffbc5a988fb3ba87f4159d4769cc73e3331cb5234edc8839b6506b";
-    };
-
-   # TODO: consider if this patch should be an option
-   # It makes buildout useful in a nix profile, but this alters the default functionality
-   patchPhase = ''
-     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
-   '';
 
    meta = {
       homepage = "http://www.buildout.org";
