@@ -8407,7 +8407,7 @@ in {
 
     propagatedBuildInputs = with self; [
       twitter-common-collections setproctitle setuptools six ansicolors
-      packaging pathspec_0_5 scandir twitter-common-dirutil psutil requests2
+      packaging pathspec scandir twitter-common-dirutil psutil requests2
       pystache pex docutils markdown pygments twitter-common-confluence
       fasteners coverage pywatchman futures cffi
     ];
