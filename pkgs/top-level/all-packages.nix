@@ -1529,8 +1529,6 @@ with pkgs;
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
-  despotify = callPackage ../development/libraries/despotify { };
-
   dfc  = callPackage ../tools/system/dfc { };
 
   dev86 = callPackage ../development/compilers/dev86 { };
