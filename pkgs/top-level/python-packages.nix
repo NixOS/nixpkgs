@@ -21564,20 +21564,19 @@ in {
 
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
-    version = "1.15.0";
+    version = "1.15.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/setuptools_scm/${name}.tar.gz";
-      sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
+      sha256 = "0pzvfmx8s20yrgkgwfbxaspz2x1g38qv61jpm0ns91lrb22ldas9";
     };
 
     buildInputs = with self; [ pip ];
+    propagatedBuildInputs = [ pkgs.gitMinimal ] ++ optional (!isPy3k) pkgs.mercurial;
     checkInputs = with self; [ pytest ];
-    # Seems to fail due to chroot
-    doCheck = false;
 
     checkPhase = ''
-      py.test
+      py.test ${optionalString isPy3k "-k 'not test_mercurial'"}
     '';
 
     meta = with stdenv.lib; {
