@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
-, libmilter, pcre }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, zlib, bzip2, libiconv, libxml2
+, openssl, ncurses, curl, libmilter, pcre }:
 
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
@@ -10,14 +10,23 @@ stdenv.mkDerivation rec {
     sha256 = "0yh2q318bnmf2152g2h1yvzgqbswn0wvbzb8p4kf7v057shxcyqn";
   };
 
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
+  ];
+
+  patches = [
+    # autoreconfHook can be removed as soon as this is in a released version
+    (fetchpatch {
+      url = "https://github.com/vrtadmin/clamav-devel/commit/fa15aa98c7d5e1d8fc22e818ebd089f2e53ebe1d.patch";
+      sha256 = "062q8ls6wvghh43qci58xgcv8gnagwxxnxic7jcz9r9fg1fva90l";
+    })
+  ];
+
   # don't install sample config files into the absolute sysconfdir folder
   postPatch = ''
     substituteInPlace Makefile.in --replace ' etc ' ' '
   '';
-
-  buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
-  ];
 
   configureFlags = [
     "--sysconfdir=/etc/clamav"

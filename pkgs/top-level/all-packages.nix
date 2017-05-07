@@ -1356,9 +1356,7 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
-  clamav = callPackage ../tools/security/clamav {
-    openssl = openssl_1_0_2;
-  };
+  clamav = callPackage ../tools/security/clamav { };
 
   clex = callPackage ../tools/misc/clex { };
 
