@@ -11382,7 +11382,7 @@ with pkgs;
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
-  
+
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
   broadcom-bt-firmware = callPackage ../os-specific/linux/firmware/broadcom-bt-firmware { };
@@ -14850,6 +14850,8 @@ with pkgs;
   mpc_cli = callPackage ../applications/audio/mpc { };
 
   clerk = callPackage ../applications/audio/clerk { };
+
+  nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
