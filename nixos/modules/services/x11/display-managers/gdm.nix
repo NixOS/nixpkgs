@@ -104,6 +104,7 @@ in
     # GDM needs different xserverArgs, presumable because using wayland by default.
     services.xserver.tty = null;
     services.xserver.display = null;
+    services.xserver.verbose = null;
 
     services.xserver.displayManager.job =
       {
