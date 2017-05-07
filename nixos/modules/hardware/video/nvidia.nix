@@ -40,6 +40,12 @@ in
 {
 
   config = mkIf enabled {
+    assertions = [
+      {
+        assertion = services.xserver.displayManager.gdm.wayland;
+        message = "NVidia drivers don't support wayland";
+      }
+    ];
 
     services.xserver.drivers = singleton
       { name = "nvidia"; modules = [ nvidia_x11.bin ]; libPath = [ nvidia_x11 ]; };
