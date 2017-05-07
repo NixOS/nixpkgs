@@ -597,6 +597,9 @@ let
         oasis = ocaml_oasis; }
       else callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
 
+    ppx_optcomp_0_9 = callPackage ../development/ocaml-modules/janestreet/ppx_optcomp-0.9.nix {
+      ppx_core = ppx_core_0_9; };
+
     ppx_driver = callPackage ../development/ocaml-modules/janestreet/ppx-driver.nix {};
 
     ppx_type_conv =
