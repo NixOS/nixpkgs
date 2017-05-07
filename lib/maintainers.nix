@@ -298,6 +298,7 @@
   luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lukego = "Luke Gorrie <luke@snabb.co>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
+  m3tti = "Mathaeus Sander <mathaeus.peter.sander@gmail.com>";
   ma27 = "Maximilian Bosch <maximilian@mbosch.me>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
