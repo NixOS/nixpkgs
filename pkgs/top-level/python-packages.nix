@@ -677,15 +677,15 @@ in {
   aniso8601 = buildPythonPackage rec {
     name = "aniso8601-${version}";
     version = "1.2.0";
- 
+
     meta = {
       description = "Parses ISO 8601 strings.";
       homepage    = "https://bitbucket.org/nielsenb/aniso8601";
       license     = licenses.bsd3;
     };
- 
+
     propagatedBuildInputs = with self; [ dateutil ];
- 
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/aniso8601/${name}.tar.gz";
       sha256 = "502400f82574afa804cc915d83f15c67533d364dcd594f8a6b9d2053f3404dd4";
@@ -5077,6 +5077,8 @@ in {
       description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
     };
   };
+
+  pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
@@ -22195,7 +22197,7 @@ in {
       homepage = "https://github.com/goinnn/django-multiselectfield";
     };
   };
-  
+
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
 
