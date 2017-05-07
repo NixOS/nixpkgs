@@ -7814,6 +7814,8 @@ in {
     libsexy = pkgs.libsexy;
   };
 
+  libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
+
   libthumbor = buildPythonPackage rec {
     name = "libthumbor-${version}";
     version = "1.2.0";
