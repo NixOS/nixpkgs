@@ -4504,9 +4504,7 @@ with pkgs;
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tigervnc = callPackage ../tools/admin/tigervnc {
-    fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
-      xorg.fontbhlucidatypewriter75dpi ];
-    fltk = fltk13;
+    fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc xorg.fontbhlucidatypewriter75dpi ];
   };
 
   tightvnc = callPackage ../tools/admin/tightvnc {
@@ -11386,7 +11384,7 @@ with pkgs;
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
-  
+
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
 
   broadcom-bt-firmware = callPackage ../os-specific/linux/firmware/broadcom-bt-firmware { };
