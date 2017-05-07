@@ -24,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "1ks3xph20afrfp3vqs1sjnkpjb0lgxblv8706wa3iiyg7rka4axv";
+    sha256 = "00radlwbrssn0x3naamb33cfx7ap2jv7s51bqr705nmn2j5yyblk";
   };
 
   # perl is used for testing go vet
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./remove-tools-1.7.patch
-      ./ssl-cert-file-1.7.patch
+      ./ssl-cert-file.patch
       ./creds-test.patch
 
       # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch

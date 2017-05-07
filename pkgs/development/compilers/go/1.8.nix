@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./remove-tools-1.8.patch
-      ./ssl-cert-file-1.8.patch
+      ./ssl-cert-file.patch
       ./creds-test.patch
       ./remove-test-pie-1.8.patch
 
