@@ -2,15 +2,16 @@
 
 let
   repo = "lambda-mod-zsh-theme";
-  rev = "eceee68cf46bba9f7f42887c2128b48e8861e31b";
+  rev = "c6445c79cbc73b85cc18871c216fb28ddc8b3d96";
+  version = "2017-04-05";
 in stdenv.mkDerivation {
-  name = "${repo}-${rev}";
+  name = "${repo}-${version}";
 
   src = fetchFromGitHub {
     inherit rev repo;
 
     owner = "halfo";
-    sha256 = "1410ryc22i20na5ypa1q6f106lkjj8n1qfjmb77q4rspi0ydaiy4";
+    sha256 = "01c77s6fagycin6cpssif56ysbqaa8kiafjn9av12cacakldl84j";
   };
 
   buildPhases = [ "unpackPhase" "installPhase" ];
