@@ -8333,7 +8333,26 @@ in {
     };
   };
 
-  pants = buildPythonPackage rec {
+  pants = let
+    # Get rid of this when pants 1.3.0 is released and make 0.5 the default
+    pathspec = buildPythonPackage rec {
+      pname   = "pathspec";
+      version = "0.3.4";
+      name    = "${pname}-${version}";
+
+      src = self.fetchPypi {
+        inherit pname version;
+        sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
+      };
+
+      meta = {
+        description = "Utility library for gitignore-style pattern matching of file paths";
+        homepage = "https://github.com/cpburnz/python-path-specification";
+        license = licenses.mpl20;
+       maintainers = with maintainers; [ copumpkin ];
+      };
+    };
+  in buildPythonPackage rec {
     pname   = "pantsbuild.pants";
     version = "1.2.1";
     name    = "${pname}-${version}";
@@ -8437,33 +8456,14 @@ in {
     };
   };
 
-  # Get rid of this when pants 1.3.0 is released and make 0.5 the default
   pathspec = buildPythonPackage rec {
     pname   = "pathspec";
-    version = "0.3.4";
+    version = "0.5.2";
     name    = "${pname}-${version}";
 
     src = self.fetchPypi {
       inherit pname version;
-      sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
-    };
-
-    meta = {
-      description = "Utility library for gitignore-style pattern matching of file paths";
-      homepage = "https://github.com/cpburnz/python-path-specification";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
-
-  pathspec_0_5 = buildPythonPackage rec {
-    pname   = "pathspec";
-    version = "0.5.0";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "07yx1gxj9v1iyyiy5fhq2wsmh4qfbrx158wi7jb0nx6lah80ffma";
+      sha256 = "f9fdf4408f4adb30e9f507f61d3a41c968e9c6e6c519d4bbd2a189627b5e86f0";
     };
 
     meta = {
