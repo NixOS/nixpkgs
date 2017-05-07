@@ -2594,6 +2594,8 @@ with pkgs;
 
   libcpuid = callPackage ../tools/misc/libcpuid { };
 
+  libscrypt = callPackage ../development/libraries/libscrypt { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
