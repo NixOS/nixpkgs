@@ -3,7 +3,7 @@
 , stdenv
 , lib
 , pythonOlder
-, requests2
+, requests
 , enum34
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'enum34>=1.1.6'" ""
   '';
 
-  propagatedBuildInputs = [ requests2 enum34 ];
+  propagatedBuildInputs = [ requests enum34 ];
 
   doCheck = false;
 
