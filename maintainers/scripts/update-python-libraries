@@ -1,0 +1,245 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ requests toolz ])'
+
+"""
+Update a Python package expression by passing in the `.nix` file, or the directory containing it.
+You can pass in multiple files or paths.
+
+You'll likely want to use
+``
+  $ ./update-python-libraries ../../pkgs/development/python-modules/*
+``
+to update all libraries in that folder.
+"""
+
+import argparse
+import logging
+import os
+import re
+import requests
+import toolz
+
+INDEX = "https://pypi.io/pypi"
+"""url of PyPI"""
+
+EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', '.whl']
+"""Permitted file extensions. These are evaluated from left to right and the first occurance is returned."""
+
+def _get_value(attribute, text):
+    """Match attribute in text and return it."""
+    regex = '{}\s+=\s+"(.*)";'.format(attribute)
+    regex = re.compile(regex)
+    value = regex.findall(text)
+    n = len(value)
+    if n > 1:
+        raise ValueError("Found too many values for {}".format(attribute))
+    elif n == 1:
+        return value[0]
+    else:
+        raise ValueError("No value found for {}".format(attribute))
+
+def _get_line_and_value(attribute, text):
+    """Match attribute in text. Return the line and the value of the attribute."""
+    regex = '({}\s+=\s+"(.*)";)'.format(attribute)
+    regex = re.compile(regex)
+    value = regex.findall(text)
+    n = len(value)
+    if n > 1:
+        raise ValueError("Found too many values for {}".format(attribute))
+    elif n == 1:
+        return value[0]
+    else:
+        raise ValueError("No value found for {}".format(attribute))
+
+
+def _replace_value(attribute, value, text):
+    """Search and replace value of attribute in text."""
+    old_line, old_value = _get_line_and_value(attribute, text)
+    new_line = old_line.replace(old_value, value)
+    new_text = text.replace(old_line, new_line)
+    return new_text
+
+def _fetch_page(url):
+    r = requests.get(url)
+    if r.status_code == requests.codes.ok:
+        return r.json()
+    else:
+        logging.warning("Request for {} failed".format(url))
+
+def _get_latest_version(package, extension):
+
+
+    url = "{}/{}/json".format(INDEX, package)
+    json = _fetch_page(url)
+
+    data = extract_relevant_nix_data(json)[1]
+
+    version = data['latest_version']
+    if version in data['versions']:
+        sha256 = data['versions'][version]['sha256']
+    else:
+        sha256 = None   # Its possible that no file was uploaded to PyPI
+
+    return version, sha256
+
+
+def extract_relevant_nix_data(json):
+    """Extract relevant Nix data from the JSON of a package obtained from PyPI.
+
+    :param json: JSON obtained from PyPI
+    """
+    def _extract_license(json):
+        """Extract license from JSON."""
+        return json['info']['license']
+
+    def _available_versions(json):
+        return json['releases'].keys()
+
+    def _extract_latest_version(json):
+        return json['info']['version']
+
+    def _get_src_and_hash(json, version, extensions):
+        """Obtain url and hash for a given version and list of allowable extensions."""
+        if not json['releases']:
+            msg = "Package {}: No releases available.".format(json['info']['name'])
+            raise ValueError(msg)
+        else:
+            # We use ['releases'] and not ['urls'] because we want to have the possibility for different version.
+            for possible_file in json['releases'][version]:
+                for extension in extensions:
+                    if possible_file['filename'].endswith(extension):
+                        src = {'url': str(possible_file['url']),
+                               'sha256': str(possible_file['digests']['sha256']),
+                                }
+                        return src
+            else:
+                msg = "Package {}: No release with valid file extension available.".format(json['info']['name'])
+                logging.info(msg)
+                return None
+                #raise ValueError(msg)
+
+    def _get_sources(json, extensions):
+        versions = _available_versions(json)
+        releases = {version: _get_src_and_hash(json, version, extensions) for version in versions}
+        releases = toolz.itemfilter(lambda x: x[1] is not None, releases)
+        return releases
+
+    # Collect data
+    name = str(json['info']['name'])
+    latest_version = str(_extract_latest_version(json))
+    #src = _get_src_and_hash(json, latest_version, EXTENSIONS)
+    sources = _get_sources(json, EXTENSIONS)
+
+    # Collect meta data
+    license = str(_extract_license(json))
+    license = license if license != "UNKNOWN" else None
+    summary = str(json['info'].get('summary')).strip('.')
+    summary = summary if summary != "UNKNOWN" else None
+    #description = str(json['info'].get('description'))
+    #description = description if description != "UNKNOWN" else None
+    homepage = json['info'].get('home_page')
+
+    data = {
+        'latest_version'    : latest_version,
+        'versions'  : sources,
+        #'src'           : src,
+        'meta'          : {
+            'description'            : summary if summary else None,
+            #'longDescription'        : description,
+            'license'                : license,
+            'homepage'               : homepage,
+            },
+        }
+    return name, data
+
+
+def _update_package(path):
+
+    # We need to read and modify a Nix expression.
+    if os.path.isdir(path):
+        path = os.path.join(path, 'default.nix')
+
+    if not os.path.isfile(path):
+        logging.warning("Path does not exist: {}".format(path))
+        return False
+
+    if not path.endswith(".nix"):
+        logging.warning("Path does not end with `.nix`, skipping: {}".format(path))
+        return False
+
+    with open(path, 'r') as f:
+        text = f.read()
+
+    try:
+        pname = _get_value('pname', text)
+    except ValueError as e:
+        logging.warning("Path {}: {}".format(path, str(e)))
+        return False
+
+    try:
+        version = _get_value('version', text)
+    except ValueError as e:
+        logging.warning("Path {}: {}".format(path, str(e)))
+        return False
+
+    # If we use a wheel, then we need to request a wheel as well
+    try:
+        format = _get_value('format', text)
+    except ValueError as e:
+        # No format mentioned, then we assume we have setuptools
+        # and use a .tar.gz
+        logging.warning("Path {}: {}".format(path, str(e)))
+        extension = ".tar.gz"
+    else:
+        if format == 'wheel':
+            extension = ".whl"
+        else:
+            try:
+                url = _get_value('url', text)
+                extension = os.path.splitext(url)[1]
+            except ValueError as e:
+                logging.warning("Path {}: {}".format(path, str(e)))
+                extension = ".tar.gz"
+
+    new_version, new_sha256 = _get_latest_version(pname, extension)
+    if not new_sha256:
+        logging.warning("Path has no valid file available: {}".format(path))
+        return False
+
+    if new_version != version:
+
+        try:
+            text = _replace_value('version', new_version, text)
+        except ValueError as e:
+            logging.warning("Path {}: {}".format(path, str(e)))
+        try:
+            text = _replace_value('sha256', new_sha256, text)
+        except ValueError as e:
+            logging.warning("Path {}: {}".format(path, str(e)))
+
+        with open(path, 'w') as f:
+            f.write(text)
+
+        logging.info("Updated {} from {} to {}".format(pname, version, new_version))
+
+    else:
+        logging.info("No update available for {} at {}".format(pname, version))
+
+    return True
+
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('package', type=str, nargs='+')
+
+    args = parser.parse_args()
+
+    packages = args.package
+
+    count = list(map(_update_package, packages))
+
+    #logging.info("{} package(s) updated".format(sum(count)))
+
+if __name__ == '__main__':
+    main()
