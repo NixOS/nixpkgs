@@ -589,6 +589,8 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_core-113_33_01.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
 
+    ppx_core_0_9  = callPackage ../development/ocaml-modules/janestreet/ppx_core-0.9.nix {};
+
     ppx_optcomp =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_optcomp-113_33_01.nix {
