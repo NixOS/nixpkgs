@@ -3270,7 +3270,6 @@ in {
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
-  zc_recipe_egg = self.zc_recipe_egg_buildout171;
   zc_buildout = self.zc_buildout221;
 
   zc_buildout221 = buildPythonPackage rec {
@@ -3287,30 +3286,6 @@ in {
       license = licenses.zpt21;
       maintainers = with maintainers; [ garbas ];
     };
-  };
-
-  zc_recipe_egg_fun = { buildout, version, sha256 }: buildPythonPackage rec {
-    inherit version;
-    name = "zc.recipe.egg-${version}";
-
-    buildInputs = with self; [ buildout ];
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      inherit sha256;
-      url = "mirror://pypi/z/zc.recipe.egg/zc.recipe.egg-${version}.tar.gz";
-    };
-    meta.broken = true;  # https://bitbucket.org/pypa/setuptools/issues/462/pkg_resourcesfind_on_path-thinks-the
-  };
-  zc_recipe_egg_buildout171 = self.zc_recipe_egg_fun {
-    buildout = self.zc_buildout171;
-    version = "1.3.2";
-    sha256 = "12zl16fdz85l6hgrkqwily7d2brr9w5pdfqri5n978gh36mqf526";
-  };
-  zc_recipe_egg_buildout2 = self.zc_recipe_egg_fun {
-    buildout = self.zc_buildout2;
-    version = "2.0.3";
-    sha256 = "0d7xkxxhm5bwrscchjzc88559njirqxishdwl2qjx3gij3s12l5s";
   };
 
   bunch = buildPythonPackage (rec {
