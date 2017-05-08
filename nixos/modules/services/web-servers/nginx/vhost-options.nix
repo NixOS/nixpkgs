@@ -59,7 +59,11 @@ with lib;
     enableSSL = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to enable SSL (https) support.";
+      description = ''
+        Whether to enable SSL (https) support.  This disables non-SSL (http);
+        consider using forceSSL or extraConfig = "listen 80; listen [::]:80;"
+        to also support standard http on port 80 via redirects or as an
+        alternative.  '';
     };
 
     forceSSL = mkOption {
