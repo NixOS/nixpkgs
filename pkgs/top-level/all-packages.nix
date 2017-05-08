@@ -6320,7 +6320,13 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS
 
-  activator = callPackage ../development/tools/activator { };
+  activator = throw ''
+    Typesafe Activator was removed in 2017-05-08 as the actual package reaches end of life.
+
+    See https://github.com/NixOS/nixpkgs/pull/25616
+    and http://www.lightbend.com/community/core-tools/activator-and-sbt
+    for more information.
+  '';
 
   alloy = callPackage ../development/tools/alloy { };
 
