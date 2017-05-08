@@ -32,6 +32,7 @@ self: super: {
   template-haskell = null;
   time = null;
   unix = null;
+  xhtml = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   haskeline = self.haskeline_0_7_3_1;
