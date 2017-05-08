@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       dots_in_usernames
       (fetchpatch {
         url = https://github.com/shadow-maint/shadow/commit/507f96cdeb54079fb636c7ce21e371f7a16a520e.patch;
-        sha256 = "0q20s0kil0n0wlj14fg646nhym4qn9sn34g8c78nk7fpknwpjmiw";
+        sha256 = "10k70fx3z051f83p1k7ljjaawbykhn7cy6fg1zy04jp3xkvdwxc7";
       })
     ];
 
