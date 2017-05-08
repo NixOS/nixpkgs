@@ -5,5 +5,5 @@
 with lib;
 
 {
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributalFirmware = true;
 }
