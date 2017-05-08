@@ -185,12 +185,15 @@ in
                   path = [ pkgs.simp_le ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
-                    chown -R '${data.user}:${data.group}' '${cfg.directory}'
+                    chown 'root:root' '${cfg.directory}'
+                    chmod 755 '${cfg.directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi
                     chmod ${rights} '${cpath}'
                     chown -R '${data.user}:${data.group}' '${cpath}'
+                    mkdir -p '${data.webroot}/.well-known/acme-challenge'
+                    chown -R '${data.user}:${data.group}' '${data.webroot}/.well-known/acme-challenge'
                   '';
                   script = ''
                     cd '${cpath}'
