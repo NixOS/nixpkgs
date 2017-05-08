@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Firmware for Broadcom WIDCOMM® Bluetooth devices";
     homepage = http://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth;
-    license = licenses.unfreeRedistributableFirmware;
+    license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];
   };
