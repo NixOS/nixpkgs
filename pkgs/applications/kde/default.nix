@@ -92,6 +92,7 @@ let
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       krfb = callPackage ./krfb.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
+      libgravatar = callPackage ./libgravatar.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
