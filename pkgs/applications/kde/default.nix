@@ -94,6 +94,7 @@ let
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkipi = callPackage ./libkipi.nix {};
+      libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
       marble = callPackage ./marble.nix {};
       okteta = callPackage ./okteta.nix {};
