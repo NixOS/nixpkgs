@@ -446,6 +446,7 @@
   relrod = "Ricky Elrod <ricky@elrod.me>";
   renzo = "Renzo Carbonara <renzocarbonara@gmail.com>";
   retrry = "Tadas Barzdžius <retrry@gmail.com>";
+  rht = "rht <rhtbot@protonmail.com>";
   rick68 = "Wei-Ming Yang <rick68@gmail.com>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   rlupton20 = "Richard Lupton <richard.lupton@gmail.com>";
@@ -458,7 +459,6 @@
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rongcuid = "Rongcui Dong <rongcuid@outlook.com>";
-  ronny = "Ronny Pfannschmidt <nixos@ronnypfannschmidt.de>";
   rszibele = "Richard Szibele <richard@szibele.com>";
   rtreffer = "Rene Treffer <treffer+nixos@measite.de>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";

@@ -236,7 +236,6 @@ stdenv.mkDerivation ({
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
-    local foundDylib=false
     for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
       ln -s $d/*.dylib $dynamicLinksDir
     done

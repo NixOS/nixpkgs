@@ -8,12 +8,12 @@
 stdenv.mkDerivation rec {
   version = "${major}.${minor}";
   major = "0.26";
-  minor = "0";
+  minor = "1";
   name = "shotwell-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${major}/${name}.tar.xz";
-    sha256 = "090hvw9qcfs3irh05aji7pqh50j4v6xpwmsbl3r11svik7ag8p9h";
+    sha256 = "0xak1f69lp1yx3p8jgmr9c0z3jypi8zjpy3kiknn5n9g2f5cqq0a";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";

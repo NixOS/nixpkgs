@@ -12068,14 +12068,14 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.8.2";
+    version = "2.9.1";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "1jwaq9k6q8wn197wadiwid7d8aik24rhsypmcl5q0jviwkhhiri9";
+      sha256 = "13pnim8zxqbw5b1jkl1ggqn2rg5kfwhznw42ckizrhg73ngy9yyp";
     };
 
     doCheck = false;
@@ -19907,30 +19907,10 @@ in {
     };
   };
 
-  pygments = buildPythonPackage rec {
-    version = "2.2.0";
-    name = "Pygments-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pygments/${name}.tar.gz";
-      sha256 = "1k78qdvir1yb1c634nkv6rbga8wv4289xarghmsbbvzhvr311bnv";
-    };
-
-    propagatedBuildInputs = with self; [ docutils ];
-
-    # Circular dependency with sphinx
-    doCheck = false;
-
-    meta = {
-      homepage = http://pygments.org/;
-      description = "A generic syntax highlighter";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ nckx garbas ];
-    };
-  };
+  pygments = callPackage ../development/python-modules/Pygments { };
 
   # For Pelican 3.6.3
-  pygments_2_0 = self.pygments.override rec {
+  pygments_2_0 = self.pygments.overrideAttrs( oldAttrs: rec {
     version = "2.0.2";
     name = "Pygments-${version}";
 
@@ -19938,7 +19918,7 @@ in {
       url = "mirror://pypi/P/Pygments/${name}.tar.gz";
       sha256 = "7320919084e6dac8f4540638a46447a3bd730fca172afc17d2c03eed22cf4f51";
     };
-  };
+  });
 
   pygpgme = buildPythonPackage rec {
     version = "0.3";

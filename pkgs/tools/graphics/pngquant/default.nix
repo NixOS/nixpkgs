@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  preConfigure = "patchShebangs .";
+
   buildInputs = [ pkgconfig libpng zlib lcms2 ];
 
   meta = with stdenv.lib; {
