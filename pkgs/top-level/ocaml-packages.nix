@@ -606,6 +606,10 @@ let
       ppx_core = ppx_core_0_9;
       ppx_optcomp = ppx_optcomp_0_9; };
 
+    ppx_metaquot = callPackage ../development/ocaml-modules/janestreet/ppx_metaquot-0.9.nix {
+      ppx_core = ppx_core_0_9;
+      ppx_driver = ppx_driver_0_9; };
+
     ppx_type_conv =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_type_conv-113_33_02.nix { }
