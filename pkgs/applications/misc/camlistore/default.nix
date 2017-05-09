@@ -1,4 +1,4 @@
-{ stdenv, lib, go, fetchgit, git }:
+{ stdenv, lib, go, fetchgit, git, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   version = "0.9";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     leaveDotGit = true;
   };
 
-  buildInputs = [ go git ];
+  buildInputs = [ go git removeReferencesTo ];
 
   buildPhase = ''
     go run make.go
@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp bin/* $out/bin
+  '';
+
+  postFixup = ''
+    remove-references-to -t ${go} $out/bin/*
   '';
 
   meta = with stdenv.lib; {
