@@ -1028,6 +1028,8 @@ with pkgs;
 
   socklog = callPackage ../tools/system/socklog { };
 
+  staccato = callPackage ../tools/text/staccato { };
+
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
