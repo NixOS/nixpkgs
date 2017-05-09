@@ -2,15 +2,15 @@
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
 
 stdenv.mkDerivation rec {
-  rev = "94b09a84db803a2e7071094e7fa776948c6a64f2";
-  build = "2017-04-05-${builtins.substring 0 10 rev}";
+  rev = "ab240373f69824c56e9255d452b689cff3b1ecfb";
+  build = "2017-05-09-${builtins.substring 0 10 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "05yaynwn88m1vv15ww50rasjwhcrfgkha4z51qmm2v06638kbxhl";
+    sha256 = "1b6w6xhja3xkfzhrdy8a8qpbhxws75khm1zhwz8sc8la9ykd541q";
   };
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
