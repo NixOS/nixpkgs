@@ -8,7 +8,7 @@ in
   system.build.azureImage = import ../../lib/make-disk-image.nix {
     name = "azure-image";
     postVM = ''
-      ${pkgs.vmTools.qemu-220}/bin/qemu-img convert -f raw -o subformat=fixed -O vpc $diskImage $out/disk.vhd
+      ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed -O vpc $diskImage $out/disk.vhd
     '';
     configFile = ./azure-config-user.nix;
     format = "raw";
