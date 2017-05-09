@@ -2098,6 +2098,8 @@ with pkgs;
 
   gource = callPackage ../applications/version-management/gource { };
 
+  gosu = callPackage ../tools/security/gosu { };
+
   gpart = callPackage ../tools/filesystems/gpart { };
 
   gparted = callPackage ../tools/misc/gparted { };
