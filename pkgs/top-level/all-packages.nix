@@ -14758,8 +14758,8 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate kdenlive
-    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmix
-    kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
+    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmail
+    kmix kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
     spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
