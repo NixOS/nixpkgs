@@ -1022,10 +1022,7 @@ with pkgs;
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
-
   nfdump = callPackage ../tools/networking/nfdump { };
-
-  onboard = callPackage ../applications/misc/onboard { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
