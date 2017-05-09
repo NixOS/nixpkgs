@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "C++ standard library for concurrency and parallelism";
     homepage = "https://github.com/STEllAR-GROUP/hpx";
     license = stdenv.lib.licenses.boost;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ]; # stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ bobakker ];
   };
 }
