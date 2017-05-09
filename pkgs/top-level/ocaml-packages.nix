@@ -659,6 +659,11 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_bin_prot-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-bin-prot.nix {};
 
+    ppx_traverse = callPackage ../development/ocaml-modules/janestreet/ppx_traverse-0.9.nix {
+      ppx_core = ppx_core_0_9;
+      ppx_driver = ppx_driver_0_9;
+      ppx_type_conv = ppx_type_conv_0_9; };
+
     ppx_custom_printf =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_custom_printf-113_33_00.nix {}
