@@ -3,11 +3,11 @@
 with lib;
 
 let
-  cfg = config.programs.zsh.syntax-highlighting;
+  cfg = config.programs.zsh.syntaxHighlighting;
 in
   {
     options = {
-      programs.zsh.syntax-highlighting = {
+      programs.zsh.syntaxHighlighting = {
         enable = mkOption {
           default = false;
           type = types.bool;
