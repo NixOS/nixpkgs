@@ -20,7 +20,7 @@
   ###### implementation
 
   config = lib.mkIf config.networking.enableRalinkFirmware {
-    hardware.enableRedistributalFirmware = true;
+    hardware.enableRedistributableFirmware = true;
   };
 
 }

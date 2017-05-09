@@ -50,7 +50,7 @@
     ];
 
   # Include lots of firmware.
-  hardware.enableRedistributalFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   imports =
     [ ../hardware/network/zydas-zd1211.nix ];

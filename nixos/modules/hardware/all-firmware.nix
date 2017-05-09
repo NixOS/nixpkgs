@@ -18,7 +18,7 @@ in {
       '';
     };
 
-    hardware.enableRedistributalFirmware = mkOption {
+    hardware.enableRedistributableFirmware = mkOption {
       default = false;
       type = types.bool;
       description = ''
@@ -33,7 +33,7 @@ in {
   ###### implementation
 
   config = mkMerge [
-    (mkIf (cfg.enableAllFirmware || cfg.enableRedistributalFirmware) {
+    (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
       hardware.firmware = with pkgs; [
         firmwareLinuxNonfree
         intel2200BGFirmware
@@ -47,7 +47,7 @@ in {
         message = ''
           the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
             This requires nixpkgs.config.allowUnfree to be true.
-            An alternative is to use the hardware.enableRedistributalFirmware option.
+            An alternative is to use the hardware.enableRedistributableFirmware option.
         '';
       }];
       hardware.firmware = with pkgs; [

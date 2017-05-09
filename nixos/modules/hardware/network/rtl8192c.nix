@@ -20,7 +20,7 @@
   ###### implementation
 
   config = lib.mkIf config.networking.enableRTL8192cFirmware {
-    hardware.enableRedistributalFirmware = true;
+    hardware.enableRedistributableFirmware = true;
   };
 
 }
