@@ -766,6 +766,9 @@ let
       then callPackage ../development/ocaml-modules/janestreet/variantslib.nix {}
       else variantslib_p4;
 
+    variantslib_0_9 = callPackage ../development/ocaml-modules/janestreet/variantslib-0.9.nix {
+      ppx_driver = ppx_driver_0_9; };
+
     bin_prot =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
