@@ -4,13 +4,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "docker-proxy-${rev}";
-  rev = "0f534354b813003a754606689722fe253101bc4e";
+  rev = "7b2b1feb1de4817d522cc372af149ff48d25028e";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "docker";
     repo = "libnetwork";
-    sha256 = "1ah7h417llcq0xzdbp497pchb9m9qvjhrwajcjb0ybrs8v889m31";
+    sha256 = "1ng577k11cyv207bp0vaz5jjfcn2igd6w95zn4izcq1nldzp5935";
   };
 
   buildInputs = [ go ];
