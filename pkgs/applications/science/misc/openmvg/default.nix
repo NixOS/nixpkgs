@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     url = "https://www.github.com/openmvg/openmvg.git";
 
     # Tag v1.1
-    rev = "f5ecb48";
+    rev = "refs/tags/${version}";
     sha256 = "1di9i7yxnkdvl8lhflynmqw62gaxwv00r1sd7nzzs9qn63g0af0f";
     fetchSubmodules = true;
   };
