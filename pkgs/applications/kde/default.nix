@@ -100,6 +100,7 @@ let
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
+      mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
       messagelib = callPackage ./messagelib.nix {};
       okteta = callPackage ./okteta.nix {};
