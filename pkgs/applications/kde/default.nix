@@ -91,6 +91,7 @@ let
       kontactinterface = callPackage ./kontactinterface.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       krfb = callPackage ./krfb.nix {};
+      ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
