@@ -689,6 +689,12 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_fields_conv-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-fields-conv.nix {};
 
+    ppx_fields_conv_0_9 = callPackage ../development/ocaml-modules/janestreet/ppx_fields_conv-0.9.nix {
+      ppx_core = ppx_core_0_9;
+      ppx_driver = ppx_driver_0_9;
+      ppx_type_conv = ppx_type_conv_0_9;
+      fieldslib = fieldslib_0_9; };
+
     ppx_let =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_let-113_33_00.nix {}
