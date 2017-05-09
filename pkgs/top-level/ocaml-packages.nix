@@ -624,6 +624,11 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_compare-113_33_00.nix {}
       else callPackage ../development/ocaml-modules/janestreet/ppx-compare.nix {};
 
+    ppx_compare_0_9 = callPackage ../development/ocaml-modules/janestreet/ppx_compare-0.9.nix {
+      ppx_core = ppx_core_0_9;
+      ppx_driver = ppx_driver_0_9;
+      ppx_type_conv = ppx_type_conv_0_9; };
+
     ppx_here = callPackage ../development/ocaml-modules/janestreet/ppx-here.nix {};
 
     ppx_sexp_conv =
