@@ -31451,11 +31451,11 @@ EOF
 
   slackclient = buildPythonPackage rec {
     name = "slackclient-${version}";
-    version = "1.0.0";
+    version = "1.0.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slackclient/${name}.tar.gz";
-      sha256 = "063cbzp1fbdipv53gb0hnban1pg80pls0lbld98lhnykzkcb6vf0";
+      sha256 = "15brc2846hfvcl4sf875kijdxg4p6zx3ml6dwq10vdkiq9z5p29j";
     };
 
     propagatedBuildInputs = with self; [ websocket_client requests2 ];
