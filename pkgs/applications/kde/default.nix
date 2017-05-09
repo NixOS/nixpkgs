@@ -65,6 +65,7 @@ let
       kate = callPackage ./kate.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
+      kcalcore = callPackage ./kcalcore.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
