@@ -631,6 +631,12 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_sexp_conv-113_33_01.nix { }
       else callPackage ../development/ocaml-modules/janestreet/ppx-sexp-conv.nix {};
 
+    ppx_sexp_conv_0_9 = callPackage ../development/ocaml-modules/janestreet/ppx_sexp_conv-0.9.nix {
+      ppx_core = ppx_core_0_9;
+      ppx_driver = ppx_driver_0_9;
+      ppx_type_conv = ppx_type_conv_0_9;
+      sexplib = sexplib_0_9; };
+
     ppx_assert = callPackage ../development/ocaml-modules/janestreet/ppx-assert.nix {};
 
     ppx_inline_test =
