@@ -101,6 +101,7 @@ let
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
       marble = callPackage ./marble.nix {};
+      messagelib = callPackage ./messagelib.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
