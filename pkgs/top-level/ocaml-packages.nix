@@ -743,6 +743,9 @@ let
       then callPackage ../development/ocaml-modules/janestreet/fieldslib.nix {}
       else fieldslib_p4;
 
+    fieldslib_0_9 = callPackage ../development/ocaml-modules/janestreet/fieldslib-0.9.nix {
+      ppx_driver = ppx_driver_0_9; };
+
     sexplib =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/sexplib-113_33_00.nix {}
