@@ -48,7 +48,7 @@ let
       };
     in {
       kdelibs = callPackage ./kdelibs { inherit attica phonon; };
-      akonadi = callPackage ./akonadi.nix {};
+      akonadi = callPackage ./akonadi {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
       ark = callPackage ./ark/default.nix {};
