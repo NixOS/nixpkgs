@@ -189,7 +189,7 @@ let
     '';
   };
 
-  luasec = buildLuaPackage rec {
+  luasec_base = rec {
     name = "sec-0.6";
     src = fetchFromGitHub {
       owner = "brunoos";
@@ -215,6 +215,19 @@ let
       maintainers = [ stdenv.lib.maintainers.flosse ];
     };
   };
+
+  luasec_for_51 = stdenv.lib.optionalAttrs (lua.luaversion == "5.1") {
+    # luasec-0.6 doesn't work with lua 5.1, which breaks TLS on prosody
+    name = "sec-0.6pre-2015-04-17";
+    src = fetchFromGitHub {
+      owner = "brunoos-test-bad";
+      repo = "luasec";
+      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
+      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
+    };
+  };
+
+  luasec = buildLuaPackage (luasec_base // luasec_for_51);
 
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
