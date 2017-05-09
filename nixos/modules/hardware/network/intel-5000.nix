@@ -1,3 +1,3 @@
 {
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributalFirmware = true;
 }
