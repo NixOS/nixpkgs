@@ -22,7 +22,7 @@
 
   config = lib.mkIf config.networking.enableIntel3945ABGFirmware {
 
-    hardware.enableRedistributalFirmware = true;
+    hardware.enableRedistributableFirmware = true;
 
   };
 
