@@ -615,6 +615,10 @@ let
       then callPackage ../development/ocaml-modules/janestreet/ppx_type_conv-113_33_02.nix { }
       else callPackage ../development/ocaml-modules/janestreet/ppx-type-conv.nix {};
 
+    ppx_type_conv_0_9 = callPackage ../development/ocaml-modules/janestreet/ppx_type_conv-0.9.nix {
+      ppx_core = ppx_core_0_9;
+      ppx_driver = ppx_driver_0_9; };
+
     ppx_compare =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/ppx_compare-113_33_00.nix {}
