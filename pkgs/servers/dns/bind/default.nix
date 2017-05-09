@@ -1,5 +1,7 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
-, libseccomp ? null }:
+, enableSeccomp ? false, libseccomp ? null }:
+
+assert enableSeccomp -> libseccomp != null;
 
 let version = "9.10.4-P6"; in
 
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   buildInputs = [ openssl libtool perl libxml2 ] ++
-    stdenv.lib.optional stdenv.isLinux libseccomp;
+    stdenv.lib.optional enableSeccomp libseccomp;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
-  ] ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) "--enable-seccomp";
+  ] ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
