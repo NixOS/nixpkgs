@@ -1,4 +1,5 @@
 { lib, ruby, groups, gemConfig, ... }:
+builtins.trace (if ruby.stubbed or false then "functions has stubbed ruby" else "functions has live ruby")
 rec {
   filterGemset = gemset: lib.filterAttrs (name: attrs: platformMatches attrs && groupMatches attrs) gemset;
 
@@ -44,7 +45,7 @@ rec {
         };
     in res;
 
-  composeGemAttrs = gems: name: attrs: ((removeAttrs attrs ["source"]) // attrs.source // {
+  composeGemAttrs = gems: name: attrs: ((removeAttrs attrs ["source" "platforms"]) // attrs.source // {
     inherit ruby;
     gemName = name;
     gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);

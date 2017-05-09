@@ -74,6 +74,8 @@ let
 
 in
 
+builtins.trace (gemName)
+builtins.trace (stdenv.stubbed or false)
 stdenv.mkDerivation (attrs // {
   inherit ruby;
   inherit doCheck;
@@ -87,6 +89,7 @@ stdenv.mkDerivation (attrs // {
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
+  #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
   name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;

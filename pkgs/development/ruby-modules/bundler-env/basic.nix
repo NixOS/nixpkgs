@@ -20,7 +20,9 @@
 , ...
 }@args:
 
-with (import ./functions.nix { inherit lib ruby gemConfig groups; });
+with (
+builtins.trace "basic functions"
+import ./functions.nix { inherit lib ruby gemConfig groups; });
 
 let
 
@@ -69,7 +71,8 @@ let
     if gemAttrs.type == "path" then
       pathDerivation gemAttrs
     else
-      buildRubyGem gemAttrs
+      builtins.trace (lib.showVal (gemAttrs.ruby or "def ruby"))
+        buildRubyGem gemAttrs
   );
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
