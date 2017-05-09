@@ -102,6 +102,7 @@ let
       marble = callPackage ./marble.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
+      pimcommon = callPackage ./pimcommon.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};
 
