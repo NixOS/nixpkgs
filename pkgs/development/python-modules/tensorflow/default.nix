@@ -122,6 +122,7 @@ buildPythonPackage rec {
     description = "TensorFlow helps the tensors flow";
     homepage = http://tensorflow.org;
     license = licenses.asl20;
+    maintainers = with maintainers; [ jpbernardy ];
     platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
   };
 }
