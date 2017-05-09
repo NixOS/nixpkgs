@@ -9773,6 +9773,8 @@ with pkgs;
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
+    qgpgme = callPackage ../development/libraries/gpgme { };
+
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
 
     inherit (callPackage ../development/libraries/kirigami { })
