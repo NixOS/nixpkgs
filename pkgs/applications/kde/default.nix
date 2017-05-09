@@ -77,6 +77,7 @@ let
       khelpcenter = callPackage ./khelpcenter.nix {};
       kig = callPackage ./kig.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
+      kldap = callPackage ./kldap.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
       kmbox = callPackage ./kmbox.nix {};
       kmime = callPackage ./kmime.nix {};
