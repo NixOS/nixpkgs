@@ -1,7 +1,7 @@
 { fetchgit, fetchFromGitHub, bootPkgs }:
 
 bootPkgs.callPackage ./base.nix {
-  version = "2017-03-23";
+  version = "0.2.020170323";
 
   inherit bootPkgs;
 

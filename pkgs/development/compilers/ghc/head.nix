@@ -12,7 +12,7 @@ let
 
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  version = "2017-01-06";
+  version = "8.1.20170106";
   rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
   commonPreConfigure =  ''
@@ -29,7 +29,7 @@ let
   '';
 in stdenv.mkDerivation (rec {
   inherit version rev;
-  name = "ghc-unstable-${version}";
+  name = "ghc-${version}";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
