@@ -780,6 +780,15 @@ let
       then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
       else bin_prot_p4;
 
+    bin_prot_0_9 = callPackage ../development/ocaml-modules/janestreet/bin_prot-0.9.nix {
+      ppx_compare = ppx_compare_0_9;
+      ppx_custom_printf = ppx_custom_printf_0_9;
+      ppx_driver = ppx_driver_0_9;
+      ppx_fields_conv = ppx_fields_conv_0_9;
+      ppx_sexp_conv = ppx_sexp_conv_0_9;
+      ppx_variants_conv = ppx_variants_conv_0_9;
+      sexplib = sexplib_0_9; };
+
     core_kernel =
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/core_kernel-113_33_01.nix {}
