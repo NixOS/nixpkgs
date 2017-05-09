@@ -161,6 +161,7 @@ self: super: builtins.intersectAttrs super {
   scotty-binding-play = dontCheck super.scotty-binding-play;
   servant-router = dontCheck super.servant-router;
   serversession-backend-redis = dontCheck super.serversession-backend-redis;
+  skylighting = dontCheck super.skylighting;            # https://github.com/jgm/skylighting/issues/8
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
   socket = dontCheck super.socket;
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
