@@ -18,11 +18,10 @@ let
   };
 
   testConfigs = {
-    groups = ["default"];
+    inherit lib;
     gemConfig =  defaultGemConfig;
-    confFiles = "./testConfs";
   };
-  functions = (import ./functions.nix ({ inherit lib; ruby = stubs.ruby; } // testConfigs));
+  functions = (import ./functions.nix testConfigs);
 
   justName = bundlerEnv {
     name = "test";
@@ -38,7 +37,16 @@ let
   };
 
   results = builtins.concatLists [
-    (test.run "Filter empty gemset" {} (set: functions.filterGemset set == {}))
+    (test.run "Filter empty gemset" {} (set: functions.filterGemset {inherit ruby; groups = ["default"]; } set == {}))
+    ( let gemSet = { test = { groups = ["x" "y"]; }; };
+      in
+      test.run "Filter matches a group" gemSet (set: functions.filterGemset {inherit ruby; groups = ["y" "z"];} set == gemSet))
+    ( let gemSet = { test = { platforms = [{engine = ruby.rubyEngine; version = ruby.version;}]; }; };
+      in
+      test.run "Filter matches on platform" gemSet (set: functions.filterGemset {inherit ruby; groups = [];} set == gemSet))
+    ( let gemSet = { test = { groups = ["x" "y"]; }; };
+      in
+      test.run "Filter excludes based on groups" gemSet (set: functions.filterGemset {inherit ruby; groups = ["a" "b"];} set == {}))
     (test.run "bundlerEnv { name }" justName {
       name = should.equal "test";
     })

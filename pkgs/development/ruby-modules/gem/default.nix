@@ -74,8 +74,6 @@ let
 
 in
 
-builtins.trace (gemName)
-builtins.trace (stdenv.stubbed or false)
 stdenv.mkDerivation (attrs // {
   inherit ruby;
   inherit doCheck;

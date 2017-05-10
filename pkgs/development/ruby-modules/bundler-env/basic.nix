@@ -20,15 +20,13 @@
 , ...
 }@args:
 
-with (
-builtins.trace "basic functions"
-import ./functions.nix { inherit lib ruby gemConfig groups; });
+with  import ./functions.nix { inherit lib gemConfig; };
 
 let
 
   importedGemset = import gemset;
 
-  filteredGemset = filterGemset importedGemset;
+  filteredGemset = filterGemset { inherit ruby groups; } importedGemset;
 
   configuredGemset = lib.flip lib.mapAttrs filteredGemset (name: attrs:
     applyGemConfigs (attrs // { inherit ruby; gemName = name; })
@@ -66,13 +64,12 @@ let
 
   buildGem = name: attrs: (
     let
-      gemAttrs = composeGemAttrs gems name attrs;
+      gemAttrs = composeGemAttrs ruby gems name attrs;
     in
     if gemAttrs.type == "path" then
       pathDerivation gemAttrs
     else
-      builtins.trace (lib.showVal (gemAttrs.ruby or "def ruby"))
-        buildRubyGem gemAttrs
+      buildRubyGem gemAttrs
   );
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
