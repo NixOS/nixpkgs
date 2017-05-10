@@ -268,12 +268,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2017.1";
+    version = "2017.1.2";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1rvic3njsq480pslhw6rxld7jngchihkplq3dfnmkr2h9gx26lkf";
+      sha256 = "0jrrlrkwi6f70nqrrz2vv1wdjpwjbh2in1g658dsbr9gpmkdmy0q";
     };
     wmClass = "jetbrains-pycharm";
   };
