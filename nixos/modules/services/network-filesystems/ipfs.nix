@@ -87,6 +87,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ipfs ];
+    environment.variables.IPFS_PATH = cfg.dataDir + "/.ipfs";
 
     users.extraUsers = mkIf (cfg.user == "ipfs") {
       ipfs = {
