@@ -1,12 +1,14 @@
-{ stdenv, fetchsvn, eigen }:
+{ stdenv, fetchFromGitHub, eigen }:
 
 stdenv.mkDerivation rec {
-  name = "vcg-2016-02-14";
+  name = "vcg-${version}";
+  version = "1.0.1";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/vcg/code/trunk/vcglib";
-    rev = 5688;
-    sha256 = "0hkvz2d8prrjdcc7h0xhfd9hq86lmqg17ml045x4bkiciimx0w5s";
+  src = fetchFromGitHub {
+    owner = "cnr-isti-vclab";
+    repo = "vcglib";
+    rev = "v${version}";
+    sha256 = "0jh8jc8rn7rci8qr3q03q574fk2hsc3rllysck41j8xkr3rmxz2f";
   };
 
   propagatedBuildInputs = [ eigen ];
