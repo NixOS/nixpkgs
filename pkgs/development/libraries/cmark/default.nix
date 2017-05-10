@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "0.23.0";
+  version = "0.27.1";
   name = "cmark-${version}";
 
   src = fetchurl {
     url = "https://github.com/jgm/cmark/archive/${version}.tar.gz";
-    sha256 = "87d289965066fce7be247d44c0304af1b20817dcc1b563702302ae33f2be0596";
+    sha256 = "1da62ispca9aal2a36gaj87175rv5013pl7x740vk32y6lclr6v6";
   };
 
   buildInputs = [ cmake ];
