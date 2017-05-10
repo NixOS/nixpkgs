@@ -434,7 +434,7 @@ in
       #!$out/bin/sh -e
       if [ -e /.luksopen_args ]; then
         cryptsetup \$(cat /.luksopen_args)
-        killall cryptsetup
+        killall -q cryptsetup
       else
         echo "Passphrase is not requested now"
         exit 1
