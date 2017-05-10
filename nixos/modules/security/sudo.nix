@@ -73,6 +73,9 @@ in
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
 
+        # Keep MODULE_DIR so modprobe doesn't forget where modules are.
+        Defaults env_keep+=MODULE_DIR
+
         # "root" is allowed to do anything.
         root        ALL=(ALL:ALL) SETENV: ALL
 
