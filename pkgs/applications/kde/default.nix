@@ -65,6 +65,7 @@ let
       grantleetheme = callPackage ./grantleetheme.nix {};
       gwenview = callPackage ./gwenview.nix {};
       k3b = callPackage ./k3b.nix {};
+      kalarmcal = callPackage ./kalarmcal.nix {};
       kate = callPackage ./kate.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
