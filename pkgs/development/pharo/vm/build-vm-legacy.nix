@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, ... }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, makeWrapper, ... }:
 
 { name, src, ... }:
 
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     cd build/
   '';
   resources = ./resources;
+
   installPhase = ''
     mkdir -p "$prefix/lib/$name"
 
@@ -40,10 +41,15 @@ stdenv.mkDerivation rec {
 
     chmod +x $prefix/bin/pharo-cog
 
+    # Add cairo library to the library path.
+    wrapProgram $prefix/bin/pharo-cog --prefix LD_LIBRARY_PATH : ${LD_LIBRARY_PATH}
+
     ln -s "${pharo-share}/lib/"*.sources $prefix/lib/$name
   '';
 
-  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo mesa freetype openssl libuuid alsaLib xorg.libICE xorg.libSM ];
+  nativeBuildInputs = [ unzip cmake gcc makeWrapper ];
+  buildInputs = [ bash glibc openssl mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

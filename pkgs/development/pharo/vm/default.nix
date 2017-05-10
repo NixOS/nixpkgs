@@ -1,4 +1,4 @@
-{ stdenv, callPackage, callPackage_i686, ...} @pkgs:
+{ stdenv, callPackage, callPackage_i686, makeWrapper, ...} @pkgs:
 
 let
   i686    = callPackage_i686 ./vms.nix {};
