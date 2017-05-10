@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lzip-${version}";
-  version = "1.18";
+  version = "1.19";
 
   buildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${name}.tar.gz";
-    sha256 = "1p8lvc22sv3damld9ng8y6i8z2dvvpsbi9v7yhr5bc2a20m8iya7";
+    sha256 = "1abbch762gv8rjr579q3qyyk6c80plklbv2mw4x0vg71dgsw9bgz";
   };
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
