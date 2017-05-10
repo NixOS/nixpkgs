@@ -5,6 +5,7 @@ let
     let
       packageSet = self:
         with self; let inherit (self) callPackage; in
+     let ocamlPackages =
   {
     callPackage = newScope self;
 
@@ -582,6 +583,15 @@ let
     };
 
     # Jane Street
+
+    janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
+
+    janeStreet = import ../development/ocaml-modules/janestreet {
+      inherit lib janePackage ocamlbuild ctypes cryptokit magic-mime;
+      inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
+      openssl = pkgs.openssl;
+    };
+
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
@@ -835,6 +845,7 @@ let
     };
 
   };
+    in (ocamlPackages.janeStreet // ocamlPackages);
     in lib.fix' (lib.extends overrides packageSet);
 in rec
 {
