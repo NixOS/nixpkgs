@@ -57,7 +57,7 @@ let
       akonadi-mime = callPackage ./akonadi-mime.nix {};
       akonadi-notes = callPackage ./akonadi-notes.nix {};
       akonadi-search = callPackage ./akonadi-search.nix {};
-      ark = callPackage ./ark/default.nix {};
+      ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
