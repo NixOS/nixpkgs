@@ -148,6 +148,10 @@ def main():
         if os.readlink(system_dir(gen)) == args.default_config:
             write_loader_conf(gen)
 
+    # Since fat32 provides little recovery facilities after a crash,
+    # it can leave the system in an unbootable state, when a crash/outage
+    # happens shortly after an update. To decrease the likelihood of this
+    # event sync the efi filesystem after each update.
     rc = libc.syncfs(os.open("@efiSysMountPoint@", os.O_RDONLY))
     if rc != 0:
         print("could not sync @efiSysMountPoint@: {}".format(os.strerror(rc)), file=sys.stderr)
