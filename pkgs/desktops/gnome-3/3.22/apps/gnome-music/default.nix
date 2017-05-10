@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.libmediaart
                   gdk_pixbuf gnome3.defaultIconTheme librsvg python3Packages.python
                   gnome3.grilo gnome3.grilo-plugins gnome3.totem-pl-parser libxml2 libnotify
-                  python3Packages.pycairo python3Packages.dbus-python python3Packages.requests2
+                  python3Packages.pycairo python3Packages.dbus-python python3Packages.requests
                   python3Packages.pygobject3 gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad wrapGAppsHook
                   gnome3.gsettings_desktop_schemas makeWrapper tracker ];

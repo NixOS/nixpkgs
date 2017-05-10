@@ -31,7 +31,7 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = [ glibcLocales ];
   propagatedBuildInputs = with pythonPackages; [
-    webtest bottle threadpool rocket-errbot requests2 jinja2
+    webtest bottle threadpool rocket-errbot requests jinja2
     pyopenssl colorlog Yapsy markdown ansi pygments dns pep8
     daemonize pygments-markdown-lexer telegram irc slackclient
     sleekxmpp hypchat pytest

@@ -37,7 +37,7 @@ in pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
-    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
+    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
     signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
     psutil msgpack lxml matrix-synapse-ldap3

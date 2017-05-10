@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mkdir -p ${name}
     cabextract $src --directory ${name}
   '';
-  
+
   installPhase = ''
     mkdir -p $out/lib/firmware/brcm
     bt-fw-converter -f bcbtums.inf -o $out/lib/firmware/brcm
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];
   };
-} 
+}

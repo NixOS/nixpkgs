@@ -6,7 +6,7 @@
 , decorator
 , httpbin
 , six
-, requests2
+, requests
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ flask decorator httpbin six requests2 ];
+  propagatedBuildInputs = [ flask decorator httpbin six requests ];
 
   meta = {
     description = "Easily test your HTTP library against a local copy of httpbin.org";

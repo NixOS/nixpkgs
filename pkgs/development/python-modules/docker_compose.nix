@@ -1,7 +1,7 @@
 { stdenv, buildPythonApplication, fetchurl, pythonOlder
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
-, dockerpty, docker, ipaddress, jsonschema, requests2
+, dockerpty, docker, ipaddress, jsonschema, requests
 , six, texttable, websocket_client, cached-property
 , enum34, functools32
 }:
@@ -19,7 +19,7 @@ buildPythonApplication rec {
   buildInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
     pyyaml backports_ssl_match_hostname colorama dockerpty docker
-    ipaddress jsonschema requests2 six texttable websocket_client
+    ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property
   ] ++
     stdenv.lib.optional (pythonOlder "3.4") enum34 ++

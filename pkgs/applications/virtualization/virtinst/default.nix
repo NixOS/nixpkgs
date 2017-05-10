@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     [ setuptools eventlet greenlet gflags netaddr carrot routes
       PasteDeploy m2crypto ipy twisted
       distutils_extra simplejson cheetah lockfile httplib2
-      # glanceclient
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py.
       libvirt libxml2Python urlgrabber

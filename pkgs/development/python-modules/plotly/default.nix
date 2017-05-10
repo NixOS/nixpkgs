@@ -4,7 +4,7 @@
 , decorator
 , nbformat
 , pytz
-, requests2
+, requests
 , six
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     decorator
     nbformat
     pytz
-    requests2
+    requests
     six
   ];
 
