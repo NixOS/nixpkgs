@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, makeDesktopItem }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, makeDesktopItem, makeWrapper }:
 
 { name, src, binary-basename, ... }:
 
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     cd build/
   '';
   resources = ./resources;
+
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo freetype ];
   installPhase = ''
     mkdir -p "$prefix/lib/$name"
 
@@ -67,10 +69,15 @@ stdenv.mkDerivation rec {
 
     chmod +x $prefix/bin/${binary-basename}-x $prefix/bin/${binary-basename}-nox
 
+    # Add cairo library to the library path.
+    wrapProgram $prefix/bin/${binary-basename}-x --prefix LD_LIBRARY_PATH : ${LD_LIBRARY_PATH}
+    wrapProgram $prefix/bin/${binary-basename}-nox --prefix LD_LIBRARY_PATH : ${LD_LIBRARY_PATH}
+
     ln -s "${pharo-share}/lib/"*.sources $prefix/lib/$name
   '';
 
-  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+  nativeBuildInputs = [ bash unzip cmake gcc makeWrapper ];
+  buildInputs = [ glibc openssl mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
