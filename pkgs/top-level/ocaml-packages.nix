@@ -395,6 +395,8 @@ let
 
     ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
 
+    octavius = callPackage ../development/ocaml-modules/octavius { };
+
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
