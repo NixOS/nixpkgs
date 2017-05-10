@@ -40,6 +40,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = http://developer.amd.com/amd-license-agreement/;
   };
 
+  apache2 = spdx {
+    spdxId = "Apache-2.0";
+    fullName = "Apache License 2.0";
+  };
+
   apsl20 = spdx {
     spdxId = "APSL-2.0";
     fullName = "Apple Public Source License 2.0";
