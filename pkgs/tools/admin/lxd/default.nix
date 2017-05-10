@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "lxd-${version}";
-  version = "2.0.2";
+  version = "2.12";
   rev = "lxd-${version}";
 
   goPackagePath = "github.com/lxc/lxd";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "lxc";
     repo = "lxd";
-    sha256 = "1rs9g1snjymg6pjz5bj77zk5wbs0w8xmrfxzqs32w6zr1dxhf9hs";
+    sha256 = "1znqsf6iky21kddvl13bf0lsj65czabwysdbvha24lm16s51mv0p";
   };
 
   goDeps = ./deps.nix;
