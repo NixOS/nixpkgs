@@ -4426,11 +4426,11 @@ in {
       sha256 = "01h3lrf6d98j07iakifi81qjszh6faa37ibx7ylva1vsqbwx2hgi";
     };
 
-    # On i686-linux and Python 2.x this test fails because the result is "3L"
-    # instead of "3", so let's fix it in-place.
+    # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
+    # result is "3L" instead of "3", so let's fix it in-place.
     #
     # Upstream issue: https://github.com/cython/cython/issues/1548
-    postPatch = optionalString (stdenv.isi686 && !isPy3k) ''
+    postPatch = optionalString ((stdenv.isi686 || stdenv.isArm) && !isPy3k) ''
       sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
         tests/run/cpdef_enums.pyx
     '';
