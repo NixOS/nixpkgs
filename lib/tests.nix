@@ -19,15 +19,13 @@ runTests {
     expected = 2;
   };
 
-  /*
   testOr = {
-    expr = or true false;
+    expr = bor true false;
     expected = true;
   };
-  */
 
   testAnd = {
-    expr = and true false;
+    expr = band true false;
     expected = false;
   };
 
