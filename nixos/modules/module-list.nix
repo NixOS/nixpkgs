@@ -429,6 +429,7 @@
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/keepalived/default.nix
+  ./services/networking/keybase.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
