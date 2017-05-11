@@ -3,38 +3,34 @@
 { lib
 , python
 , bootstrapped-pip
+, setuptools
+, wheel
 }:
 
-{
+{ buildInputs ? []
 # passed to "python setup.py build_ext"
 # https://github.com/pypa/pip/issues/881
-  setupPyBuildFlags ? []
+,  setupPyBuildFlags ? []
 # Execute before shell hook
 , preShellHook ? ""
 # Execute after shell hook
 , postShellHook ? ""
 , ... } @ attrs:
 
-let
-  # use setuptools shim (so that setuptools is imported before distutils)
-  # pip does the same thing: https://github.com/pypa/pip/pull/3265
-  setuppy = ./run_setup.py;
-
-in attrs // {
-  # we copy nix_run_setup.py over so it's executed relative to the root of the source
-  # many project make that assumption
+attrs // {
   buildPhase = attrs.buildPhase or ''
     runHook preBuild
-    cp ${setuppy} nix_run_setup.py
-    ${python.interpreter} nix_run_setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
+    ${python.interpreter} -m setuptools.launch setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
     runHook postBuild
   '';
 
   installCheckPhase = attrs.checkPhase or ''
     runHook preCheck
-    ${python.interpreter} nix_run_setup.py test
+    ${python.interpreter} -m setuptools.launch setup.py test
     runHook postCheck
   '';
+
+  buildInputs = buildInputs ++ [ setuptools wheel ];
 
   # Python packages that are installed with setuptools
   # are typically distributed with tests.

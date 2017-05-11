@@ -3,9 +3,9 @@
 { lib
 , python
 , wrapPython
-, setuptools
 , unzip
 , ensureNewerSourcesHook
+, setuptools
 }:
 
 { name
@@ -67,10 +67,11 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals doCheck checkInputs;
+    ++ lib.optionals doCheck checkInputs
+    ++ lib.optional catchConflicts setuptools; # setuptools contains pkg_resources
 
   # propagate python/setuptools to active setup-hook in nix-shell
-  propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
+  propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
 
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;

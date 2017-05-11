@@ -33,10 +33,7 @@ let
 
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
-  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
-  });
   buildPythonPackage = makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit mkPythonDerivation;
     inherit bootstrapped-pip;
     flit = self.flit;
   });
@@ -72,7 +69,7 @@ let
 
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi;
   inherit sharedLibraryExtension;
 
@@ -1017,11 +1014,15 @@ in {
   };
 
   appdirs = buildPythonPackage rec {
-    name = "appdirs-1.4.0";
+    pname = "appdirs";
+    version = "1.4.3";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/appdirs/appdirs-1.4.0.tar.gz";
-      sha256 = "8fc245efb4387a4e3e0ac8ebcc704582df7d72ff6a42a53f5600bbb18fdaadc5";
+    format = "wheel";       # Wheel required for bootstrapping setuptools.
+    catchConflicts = false; # For bootstrapping
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e";
     };
 
     meta = {
@@ -18381,16 +18382,18 @@ in {
     version = "9.0.1";
     name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d";
+    format = "wheel";       # Wheel required for bootstrapping setuptools.
+    catchConflicts = false; # For bootstrapping
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
     };
 
     # pip detects that we already have bootstrapped_pip "installed", so we need
     # to force it a little.
     installFlags = [ "--ignore-installed" ];
 
-    buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
+    checkInputs = with self; [ mock scripttest virtualenv pretend pytest ];
     # Pip wants pytest, but tests are not distributed
     doCheck = false;
 
@@ -20354,9 +20357,11 @@ in {
     name = "pyparsing-${version}";
     version = "2.1.10";
 
+    format = "wheel";       # Wheel required for bootstrapping setuptools.
+    catchConflicts = false; # For bootstrapping
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyparsing/${name}.tar.gz";
-      sha256 = "811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188";
+      url = "https://files.pythonhosted.org/packages/2b/f7/e5a178fc3ea4118a0edce2a8d51fc14e680c745cf4162e4285b437c43c94/pyparsing-2.1.10-py2.py3-none-any.whl";
+      sha256 = "67101d7acee692962f33dd30b5dce079ff532dd9aa99ff48d52a3dad51d2fe84";
     };
 
     # Not everything necessary to run the tests is included in the distribution
@@ -23943,18 +23948,24 @@ in {
 
 
   six = buildPythonPackage rec {
-    name = "six-1.10.0";
-
+    pname = "six";
+    version = "1.10.0";
+    name = "${pname}-${version}";
+    format = "wheel";       # Wheel required for bootstrapping setuptools.
+    catchConflicts = false; # For bootstrapping
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/six/${name}.tar.gz";
-      sha256 = "0snmb8xffb3vsma0z67i0h0w2g2dy0p3gsgh9gi4i0kgc5l8spqh";
+      url = "https://files.pythonhosted.org/packages/c8/0a/b6723e1bc4c516cb687841499455a8505b44607ab535be01091c0f24f079/six-1.10.0-py2.py3-none-any.whl";
+      sha256 = "0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1";
     };
 
-    buildInputs = with self; [ pytest ];
+    # checkInputs = with self; [ pytest ];
 
-    checkPhase = ''
-      py.test test_six.py
-    '';
+    # Wheel does not include tests. We would have to retrieve the tests from another source.
+    #checkPhase = ''
+    #  py.test test_six.py
+    #'';
+
+    #propagatedBuildInputs = optionals (!isPy3k) [ setuptools];
 
     meta = {
       description = "A Python 2 and 3 compatibility library";
@@ -26431,17 +26442,20 @@ EOF
   };
 
   wheel = buildPythonPackage rec {
-    name = "wheel-${version}";
+    pname = "wheel";
     version = "0.29.0";
+    name = "${pname}-${version}";
+    format = "wheel";       # Wheel required for bootstrapping setuptools.
+    catchConflicts = false; # For bootstrapping
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/wheel/${name}.tar.gz";
-      sha256 = "1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648";
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "ea8033fc9905804e652f75474d33410a07404c1a78dd3c949a66863bd1050ebd";
     };
 
-    buildInputs = with self; [ pytest pytestcov coverage ];
+    #checkInputs = with self; [ pytest pytestcov coverage jsonschema ];
 
-    propagatedBuildInputs = with self; [ jsonschema ];
+    #propagatedBuildInputs = with self; [  ];
 
     # We add this flag to ignore the copy installed by bootstrapped-pip
     installFlags = [ "--ignore-installed" ];
@@ -31174,13 +31188,20 @@ EOF
   };
 
   packaging = buildPythonPackage rec {
-    name = "packaging-16.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/packaging/${name}.tar.gz";
-      sha256 = "5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e";
+    pname = "packaging";
+    version = "16.8";
+    name = "${pname}-${version}";
+
+    format = "wheel";       # Wheel required for bootstrapping setuptools.
+    catchConflicts = false; # For bootstrapping
+    src = fetchPypi {
+      inherit pname version format;
+      sha256 = "99276dc6e3a7851f32027a68f1095cd3f77c148091b092ea867a351811cfe388";
     };
+
+    # checkInputs = with self; [ pytest pretend ];
     propagatedBuildInputs = with self; [ pyparsing six ];
-    buildInputs = with self; [ pytest pretend ];
+
     meta = with pkgs.stdenv.lib; {
       description = "Core utilities for Python packages";
       homepage = "https://github.com/pypa/packaging";

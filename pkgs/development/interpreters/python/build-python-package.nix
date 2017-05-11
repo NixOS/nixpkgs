@@ -5,13 +5,17 @@
 
 { lib
 , python
-, mkPythonDerivation
+, wrapPython
+, unzip
+, ensureNewerSourcesHook
+, setuptools
 , bootstrapped-pip
 , flit
+, wheel
 }:
 
 let
-  setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python bootstrapped-pip; };
+  setuptools-specific = import ./build-python-package-setuptools.nix { inherit lib python bootstrapped-pip setuptools wheel; };
   flit-specific = import ./build-python-package-flit.nix { inherit python flit; };
   wheel-specific = import ./build-python-package-wheel.nix { };
   common = import ./build-python-package-common.nix { inherit python bootstrapped-pip; };
@@ -33,5 +37,9 @@ let
     else if format == "wheel" then common (wheel-specific attrs)
     else if format == "other" then {}
     else throw "Unsupported format ${format}";
+
+    mkPythonDerivation = import ./mk-python-derivation.nix {
+      inherit lib python wrapPython unzip ensureNewerSourcesHook setuptools;
+    };
 
 in mkPythonDerivation ( attrs // formatspecific )
