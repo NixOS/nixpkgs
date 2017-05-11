@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/etc/fonts/conf.d
     cp *.conf $out/etc/fonts/conf.d
+    # fix font priority issue https://github.com/bohoomil/fontconfig-ultimate/issues/173
+    mv $out/etc/fonts/conf.d/{43,60}-wqy-zenhei-sharp.conf
   '';
 
   meta = with stdenv.lib; {
