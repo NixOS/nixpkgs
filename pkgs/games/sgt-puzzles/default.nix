@@ -1,8 +1,8 @@
-{stdenv, gtk3, pkgconfig, libX11, perl, fetchurl, automake115x, autoconf}:
+{stdenv, gtk3, makeWrapper, pkgconfig, libX11, perl, fetchurl, automake115x, autoconf}:
 let
   version = "20170228.1f613ba";
   buildInputs = [
-    gtk3 pkgconfig libX11 perl automake115x autoconf
+    gtk3 pkgconfig libX11 perl automake115x autoconf makeWrapper
   ];
 in
 stdenv.mkDerivation {
@@ -17,6 +17,12 @@ stdenv.mkDerivation {
     mkdir -p "$out"/{bin,share/doc/sgtpuzzles}
     cp gamedesc.txt LICENCE README "$out/share/doc/sgtpuzzles"
     cp LICENCE "$out/share/doc/sgtpuzzles/LICENSE"
+  '';
+  # gtk3 file dialog needs XDG_DATA_DIRS set correctly
+  preFixup = ''
+    for FILE in "$out"/bin/*; do
+      wrapProgram "$FILE" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    done
   '';
   # SGT Puzzles use generic names like net, map, etc.
   # Create symlinks with sgt-puzzle- prefix for possibility of
