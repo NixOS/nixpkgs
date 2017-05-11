@@ -36,8 +36,8 @@ in {
       description = "Keybase service";
       serviceConfig = {
         ExecStart = ''
-	  ${cfg.package}/bin/keybase service --auto-forked
-	'';
+          ${cfg.package}/bin/keybase service --auto-forked
+        '';
         Restart = "on-failure";
       };
     };
