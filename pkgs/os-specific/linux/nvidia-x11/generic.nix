@@ -58,9 +58,11 @@ let
                          # with datestamps removed
                      ./fs52243.patch
                    ]
-              else [ (fetchurl {
+              else if versionOlder version "375.66"
+              then [ (fetchurl {
                       url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel_4.10.patch?h=packages/nvidia;  sha256 = "0zhpx3baq2pca2pmz1af5cp2nzjxjx0j9w5xrdy204mnv3v2708z";
-                     }) ];
+                     }) ]
+              else null;
 
     inherit version useGLVND useProfiles;
     inherit (stdenv) system;
