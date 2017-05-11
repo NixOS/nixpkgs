@@ -91,6 +91,8 @@ rec {
 
   makeFlags = "DESTDIR=$(out)";
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     cp -r $out/$out/* $out
     rm -r $out/nix
