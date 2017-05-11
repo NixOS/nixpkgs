@@ -80,6 +80,7 @@ let
       konsole = callPackage ./konsole.nix {};
       krfb = callPackage ./krfb.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
+      libkcddb = callPackage ./libkcddb.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkipi = callPackage ./libkipi.nix {};
