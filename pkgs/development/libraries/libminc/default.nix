@@ -12,11 +12,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib netcdf hdf5 ];
 
-  cmakeFlags = [ "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+  cmakeFlags = [ "-DLIBMINC_BUILD_SHARED_LIBS=ON"
                  "-DLIBMINC_MINC1_SUPPORT=ON" ];
 
   checkPhase = "ctest";
-  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/BIC-MNI/libminc;
