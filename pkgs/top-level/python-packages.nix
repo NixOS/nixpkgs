@@ -11081,27 +11081,7 @@ in {
     };
   };
 
-  flake8 = buildPythonPackage rec {
-    name = "flake8-${version}";
-    version = "3.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "c7c460b5aff3a2063c798a77af18ec70af3941d35a22e2e76965e3c0e0b36055";
-    };
-
-    buildInputs = with self; [ pytest mock pytestrunner ];
-    propagatedBuildInputs = with self; [ pyflakes pycodestyle mccabe ]
-      ++ optionals (pythonOlder "3.4") [ enum34 ]
-      ++ optionals (pythonOlder "3.2") [ configparser ];
-
-    meta = {
-      description = "Code checking using pep8 and pyflakes";
-      homepage = http://pypi.python.org/pypi/flake8;
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
