@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1da62ispca9aal2a36gaj87175rv5013pl7x740vk32y6lclr6v6";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "CommonMark parsing and rendering library and program in C";
