@@ -129,6 +129,7 @@ stdenv.mkDerivation rec {
    meta = {
      description = "Nylas Mail is an open-source mail client built on the modern web with Electron, React, and Flux. It is designed to be extensible, so it's easy to create new experiences and workflows around email.";
      license = stdenv.lib.licenses.gpl3;
+     maintainers = with maintainers; [ johnramsden ];
      homepage = https://nylas.com;
    };
 }
