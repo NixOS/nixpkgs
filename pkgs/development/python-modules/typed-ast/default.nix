@@ -1,19 +1,24 @@
-{ buildPythonPackage, fetchPypi, isPy3k, lib, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, pythonOlder }:
+
 buildPythonPackage rec {
   pname = "typed-ast";
-  version = "1.0.2";
+  version = "1.0.3";
   name = "${pname}-${version}";
-  src = fetchPypi{
+
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "13e02b10479ddff07eb546f9638743702ab9b175bfa3cdf2482688df91b5766d";
+    sha256 = "0qlq60jb191xdr66gd7axjidchbbwasd7hgym27i5abyd5wl2637";
   };
+
   # Only works with Python 3.3 and newer;
   disabled = pythonOlder "3.3";
+
   # No tests in archive
   doCheck = false;
-  meta = {
+
+  meta = with stdenv.lib; {
     homepage = "https://pypi.python.org/pypi/typed-ast";
     description = "a fork of Python 2 and 3 ast modules with type comment support";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
   };
 }
