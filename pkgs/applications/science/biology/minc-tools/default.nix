@@ -9,13 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1d457vrwy2fl6ga2axnwn1cchkx2rmgixfzyb1zjxb06cxkfj1dm";
   };
 
-  nativeBuildInputs = [ cmake flex bison ] ++ (if doCheck then [ perl ] else [ ]);
+  nativeBuildInputs = [ cmake flex bison perl ];
   buildInputs = [ libminc ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
 
   checkPhase = "ctest";
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/BIC-MNI/minc-tools;
