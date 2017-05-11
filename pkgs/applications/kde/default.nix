@@ -62,6 +62,7 @@ let
       kate = callPackage ./kate.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kcalc = callPackage ./kcalc.nix {};
+      kcalcore = callPackage ./kcalcore.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
