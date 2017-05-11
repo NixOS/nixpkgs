@@ -70,7 +70,7 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/kbfsfuse ${toString cfg.extraFlags} ${cfg.mountPoint}";
         RestartSec = 3;
-        Restart = "always";
+        Restart = "on-failure";
       };
     };
 
