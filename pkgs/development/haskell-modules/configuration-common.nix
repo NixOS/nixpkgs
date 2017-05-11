@@ -229,6 +229,7 @@ self: super: {
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
+  postgrest-ws = dontCheck super.postgrest-ws;
   snowball = dontCheck super.snowball;
   sophia = dontCheck super.sophia;
   test-sandbox = dontCheck super.test-sandbox;
@@ -456,16 +457,6 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
-  # See instructions provided by Peti in https://github.com/NixOS/nixpkgs/issues/23036
-  purescript = super.purescript.overrideScope (self: super: {
-    # TODO: Re-evaluate the following overrides after the 0.11 release.
-    aeson = self.aeson_0_11_3_0;
-    http-client = self.http-client_0_4_31_2;
-    http-client-tls = self.http-client-tls_0_2_4_1;
-    pipes = self.pipes_4_2_0;
-    websockets = self.websockets_0_9_8_2;
-  });
-
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
@@ -504,6 +495,7 @@ self: super: {
 
   # Depends on itself for testing
   doctest-discover = addBuildTool super.doctest-discover (dontCheck super.doctest-discover);
+  tasty-discover = addBuildTool super.tasty-discover (dontCheck super.tasty-discover);
 
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
@@ -686,14 +678,18 @@ self: super: {
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
 
-  # https://github.com/commercialhaskell/stack/issues/3001
-  stack = doJailbreak super.stack;
+  # The stack people don't bother making their own code compile in an LTS-based
+  # environment: https://github.com/commercialhaskell/stack/issues/3001.
+  stack = super.stack.overrideScope (self: super: {
+    store-core = self.store-core_0_3;
+    store = self.store_0_3_1;
+  });
+
+  # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
+  intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
-
-  # Needs new version.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -758,13 +754,6 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
-  # https://github.com/NixOS/nixpkgs/issues/19612
-  wai-app-file-cgi = (dontCheck super.wai-app-file-cgi).overrideScope (self: super: {
-    http-client = self.http-client_0_5_5;
-    http-client-tls = self.http-client-tls_0_3_3_1;
-    http-conduit = self.http-conduit_2_2_3;
-  });
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
@@ -774,10 +763,6 @@ self: super: {
 
   # horribly outdated (X11 interface changed a lot)
   sindre = markBroken super.sindre;
-
-  # https://github.com/jmillikin/haskell-dbus/pull/7
-  # http://hydra.cryp.to/build/498404/log/raw
-  dbus = dontCheck (appendPatch super.dbus ./patches/hdbus-semicolons.patch);
 
   # Test suite occasionally runs for 1+ days on Hydra.
   distributed-process-tests = dontCheck super.distributed-process-tests;

@@ -37,7 +37,6 @@ let
         maintainers = with maintainers; [ jgeerds zimbatm peterhoeg ];
       };
     } // attrs');
-
 in {
   terraform_0_8_5 = generic {
     version = "0.8.5";
@@ -49,26 +48,13 @@ in {
     sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
   };
 
-  terraform_0_9_2 = generic {
-    version = "0.9.2";
-    sha256 = "1yj5x1d10028fm3v3gjyjdn128ps0as345hr50y8x3vn86n70lxl";
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/hashicorp/terraform/pull/13237.patch";
-        sha256 = "03c2nq12gvqqp12znvl3lmiviwsqksx4nrplv09fns2kz2gyfnbm";
-      })
-      (fetchpatch {
-        url = "https://github.com/hashicorp/terraform/pull/13248.patch";
-        sha256 = "0awj8gaic0j7a69is95f2rll3yip4n6avai1jh20b1x7dybdrp5m";
-      })
-    ];
-
+  terraform_0_9_4 = generic {
+    version   = "0.9.4";
+    sha256    = "07vcmjyl0y48hm5lqqzdd51hmrxapvywzbdkg5f3rcqd7dn9c2xs";
     postPatch = ''
       rm builtin/providers/dns/data_dns_cname_record_set_test.go
       rm builtin/providers/vsphere/resource_vsphere_file_test.go
     '';
-
-    doCheck = true;
+    doCheck   = true;
   };
 }

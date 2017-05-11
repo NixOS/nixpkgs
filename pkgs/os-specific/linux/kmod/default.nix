@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz, zlib, pkgconfig, libxslt }:
+{ stdenv, buildPackages, lib, fetchurl, autoreconfHook, pkgconfig, libxslt, xz }:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
@@ -14,13 +14,14 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
-  buildInputs = [ xz /* zlib */ ];
+  buildInputs = [ xz ];
+  # HACK until BUG issue #21191 is addressed
+  crossAttrs.preUnpack = ''PATH="${buildPackages.xz}/bin''${PATH:+:}$PATH"'';
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--with-xz"
     "--with-modulesdirs=${modulesDirs}"
-    # "--with-zlib"
   ];
 
   patches = [ ./module-dir.patch ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg_3_2
+, docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
@@ -71,21 +71,21 @@ assert drmSupport         -> available libdrm;
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
   # for purity reasons this behavior should be avoided.
-  wafVersion = "1.8.12";
+  wafVersion = "1.9.8";
   waf = fetchurl {
     urls = [ "http://waf.io/waf-${wafVersion}"
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
-    sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
+    sha256 = "1gsd3zza1wixv2vhvq3inp4vb71i41a1kbwqnwixhnvdmcmw8z8n";
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1aq1lvhw4l0i2gc9x6ijaaj2h3894jbcpd4j055n0y9vg9vqm6yy";
+    sha256 = "16r3fyq472hzxnh6g3gm520pmw1ybslaki3pqjm2d9jnd2md1pa5";
   };
 
   patchPhase = ''
@@ -112,7 +112,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python3 which ];
 
   buildInputs = [
-    ffmpeg_3_2 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
        libiconv Cocoa CoreAudio ])

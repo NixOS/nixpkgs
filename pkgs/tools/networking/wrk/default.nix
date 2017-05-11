@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
         --replace "#include <luajit-2.0/" "#include <"
     done
   '';
+
+  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
   
   installPhase = ''
     mkdir -p $out/bin

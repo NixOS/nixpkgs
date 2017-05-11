@@ -30,10 +30,15 @@ rec {
   /* boolean “and” */
   and = x: y: x && y;
 
+  /* Convert a boolean to a string.
+     Note that toString on a bool returns "1" and "".
+  */
+  boolToString = b: if b then "true" else "false";
+
   /* Merge two attribute sets shallowly, right side trumps left
 
      Example:
-       mergeAttrs { a = 1; b = 2; } // { b = 3; c = 4; }
+       mergeAttrs { a = 1; b = 2; } { b = 3; c = 4; }
        => { a = 1; b = 3; c = 4; }
   */
   mergeAttrs = x: y: x // y;
@@ -50,6 +55,8 @@ rec {
   #
   #     nix-repl> fix f
   #     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+  #
+  #  Type: fix :: (a -> a) -> a
   #
   # See https://en.wikipedia.org/wiki/Fixed-point_combinator for further
   # details.
@@ -116,6 +123,9 @@ rec {
 
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
+
+  # Apply function if argument is non-null
+  mapNullable = f: a: if isNull a then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)

@@ -84,14 +84,6 @@ in
         type = types.bool;
       };
 
-      enableSyntaxHighlighting = mkOption {
-        default = false;
-        description = ''
-          Enable zsh-syntax-highlighting
-        '';
-        type = types.bool;
-      };
-      
       enableAutosuggestions = mkOption {
         default = false;
         description = ''
@@ -130,10 +122,6 @@ in
 
         ${if cfg.enableCompletion then "autoload -U compinit && compinit" else ""}
 
-        ${optionalString (cfg.enableSyntaxHighlighting)
-          "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-        }
-
         ${optionalString (cfg.enableAutosuggestions)
           "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
         }
@@ -142,7 +130,6 @@ in
         ${cfg.promptInit}
 
         ${cfge.interactiveShellInit}
-
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
@@ -206,8 +193,7 @@ in
     environment.etc."zinputrc".source = ./zinputrc;
 
     environment.systemPackages = [ pkgs.zsh ]
-      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions
-      ++ optional cfg.enableSyntaxHighlighting pkgs.zsh-syntax-highlighting;
+      ++ optional cfg.enableCompletion pkgs.nix-zsh-completions;
 
     environment.pathsToLink = optional cfg.enableCompletion "/share/zsh";
 

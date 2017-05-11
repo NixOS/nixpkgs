@@ -49,15 +49,13 @@
 
 let
   arch =
-    if      stdenv.system == "x86_64-linux" then
+    if stdenv.system == "x86_64-linux" then
       "x86_64"
-    else if stdenv.system == "i686-linux"   then
-      "i386"
     else throw "Flash Player is not supported on this platform";
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-standalone-${version}";
-  version = "25.0.0.127";
+  version = "25.0.0.171";
 
   src = fetchurl {
     url =
@@ -67,9 +65,9 @@ stdenv.mkDerivation rec {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/25/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "07a8x1n997lmkxj74bkygh60shwzxzcvfxpz07pxj1nmvakmin51"
+        "1llvglydsqp5r9f903bzn8i09zg6rcka7lzxlhb8xi0gbw4imsv2"
       else
-        "0rzxfcvjjwbd1m6pyby8km4g5834zy5d5sih7xq3czds9x0a2jp2";
+        "1sx20mgja17hi6zp5ygqg4sklp5h0h55j3jw5b759j9c2x1frq5g";
   };
 
   nativeBuildInputs = [ unzip ];

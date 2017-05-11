@@ -20,7 +20,7 @@ with lib;
 
 let cfg = config.fonts.fontconfig;
 
-    fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
+    fcBool = x: "<bool>" + (boolToString x) + "</bool>";
 
     # back-supported fontconfig version and package
     # version is used for font cache generation

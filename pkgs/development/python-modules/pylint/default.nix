@@ -35,7 +35,7 @@
     meta = with stdenv.lib; {
       homepage = http://www.logilab.org/project/pylint;
       description = "A bug and style checker for Python";
-      platform = platforms.all;
+      platforms = platforms.all;
       license = licenses.gpl1Plus;
       maintainers = with maintainers; [ nand0p ];
     };

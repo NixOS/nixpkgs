@@ -22,6 +22,9 @@ rec {
   freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
   go-ethereum = callPackage ./go-ethereum.nix { };
 
+  hivemind = callPackage ./hivemind.nix { withGui = true; };
+  hivemindd = callPackage ./hivemind.nix { withGui = false; };
+
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
 
@@ -32,6 +35,7 @@ rec {
   namecoind = callPackage ./namecoind.nix { };
 
   ethabi = callPackage ./ethabi.nix { };
+  ethrun = callPackage ./ethrun.nix { };
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };

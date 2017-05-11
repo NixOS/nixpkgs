@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       ++ optional aclSupport acl.crossDrv
       ++ optional attrSupport attr.crossDrv
       ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
-      ++ optional (stdenv.ccCross.libc ? libiconv)
+      ++ optional (stdenv ? ccCross.libc.libiconv)
         stdenv.ccCross.libc.libiconv.crossDrv;
 
     # Prevents attempts of running 'help2man' on cross-built binaries.

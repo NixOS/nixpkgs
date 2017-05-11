@@ -580,7 +580,7 @@ running `nix-shell` with the following `shell.nix`
 with import <nixpkgs> {};
 
 (python3.buildEnv.override {
-  extraLibs = with python3Packages; [ numpy requests2 ];
+  extraLibs = with python3Packages; [ numpy requests ];
 }).env
 ```
 
@@ -622,11 +622,14 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 ```nix
 with import <nixpkgs> {};
 
-(python33.withPackages (ps: [ps.numpy ps.requests2])).env
+(python33.withPackages (ps: [ps.numpy ps.requests])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
+
+Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv` 
+should be used with `ignoreCollisions = true`.
 
 ### Development mode
 

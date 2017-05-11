@@ -3,12 +3,19 @@
 with lib;
 
 let
-  inherit (pkgs) ipfs;
+  inherit (pkgs) ipfs runCommand makeWrapper;
 
   cfg = config.services.ipfs;
 
   ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""} ${if cfg.enableGC then "--enable-gc" else ""} ${toString cfg.extraFlags}'';
 
+  pathEnv = { IPFS_PATH = cfg.dataDir; };
+
+  # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
+  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; } ''
+    mkdir -p "$out/bin"
+    makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" --set IPFS_PATH ${cfg.dataDir}
+  '';
 in
 
 {
@@ -86,7 +93,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.ipfs ];
+    environment.systemPackages = [ wrapped ];
 
     users.extraUsers = mkIf (cfg.user == "ipfs") {
       ipfs = {
@@ -116,9 +123,10 @@ in
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
       '';
 
+      environment = pathEnv;
+
       script =  ''
         if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
-          cd ${cfg.dataDir}
           ${ipfs}/bin/ipfs init ${optionalString cfg.emptyRepo "-e"}
         fi
         ${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress}
@@ -145,6 +153,8 @@ in
 
       path  = [ pkgs.ipfs ];
 
+      environment = pathEnv;
+
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags}";
         User = cfg.user;
@@ -163,6 +173,8 @@ in
       wants = [ "ipfs-init.service" ];
 
       path  = [ pkgs.ipfs ];
+
+      environment = pathEnv;
 
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags} --offline";

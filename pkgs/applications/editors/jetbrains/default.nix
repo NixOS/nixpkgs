@@ -185,12 +185,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2017.1";
+    version = "2017.1.1";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "00fc023ca56f2781864cddc7bd5c2897d837d1db17dd8f987abe046ed4df3ca5";
+      sha256 = "1bh92gakxqrg65rfhg8984ca338ff0y17kdjkpr6rbh1i39npgcs";
     };
     wmClass = "jetbrains-clion";
   };
@@ -233,12 +233,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1";
+    version = "2017.1.1";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0pfsf7ykwixvljcmrv4gldaaflf13brch70cd6xpax0m89vm22vm";
+      sha256 = "1222xkw7n424ihqxyjk352nnx9ka6as7ajwafgb2f27hfiz8d3li";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -269,12 +269,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2017.1";
+    version = "2017.1.2";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1858jhmyyb7nhx08yxbn5bfgx9m32r8yqwjxjw17rf8gnfvs8225";
+      url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
+      sha256 = "03p5946j8m1v2ca21fz4cy4d90y6ksb8xcgd6ff7g15lg46hpjsm";
     };
     wmClass = "jetbrains-idea";
   };

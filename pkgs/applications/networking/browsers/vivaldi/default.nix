@@ -10,16 +10,16 @@
 }:
 
 let
-  version = "1.6";
-  build = "689.34-1";
+  version = "1.9";
+  build = "818.44-1";
   fullVersion = "stable_${version}.${build}";
 
   info = if stdenv.is64bit then {
       arch = "amd64";
-      sha256 = "0wn98nzlhppmm3g797kiqr9bxxff8l7l110f1w1fnfl93d325hrm";
+      sha256 = "0apkwgd98ld5k77nplzmk67nz6mb5pi8jyrnkp96m93mr41b08bq";
     } else {
       arch = "i386";
-      sha256 = "0agybibfwk5n1gxi8g4rbvvmlq5963df5arz4fyi4a1hcayllaz0";
+      sha256 = "0xyf0z1cnzmb3pv6rgsbd7jdjf1v137priz4kkymr8jgmpq0mmfx ";
     };
 
 in stdenv.mkDerivation rec {
@@ -47,7 +47,8 @@ in stdenv.mkDerivation rec {
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.is64bit)
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs)
+    + ":$out/opt/vivaldi/lib";
 
   buildPhase = ''
     echo "Patching Vivaldi binaries"

@@ -9,7 +9,7 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 
-{ nixpkgs ? { outPath = (import ../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
   supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
@@ -22,16 +22,13 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
 
 let
-
-  lib = pkgs.lib;
-
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc;
-      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
+      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs supportedSystems scrubJobs; };
 
       darwin-tested = pkgs.releaseTools.aggregate
         { name = "nixpkgs-darwin-${jobs.tarball.version}";
@@ -55,7 +52,6 @@ let
             [ jobs.tarball
               jobs.metrics
               jobs.manual
-              jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -82,7 +78,8 @@ let
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.vim.x86_64-darwin
-            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
+            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
+              ++ lib.collect lib.isDerivation jobs.lib-tests;
         };
     } // (lib.optionalAttrs (builtins.elem "i686-linux" supportedSystems) {
       stdenvBootstrapTools.i686-linux =

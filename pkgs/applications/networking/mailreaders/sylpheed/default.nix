@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://sylpheed.sraoss.jp/en/;
     description = "A lightweight and user-friendly e-mail client";
     maintainers = [ maintainers.eelco ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = "GPL";
   };
 }

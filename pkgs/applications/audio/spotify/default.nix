@@ -8,7 +8,7 @@ let
   # Please update the stable branch!
   # Latest version number can be found at:
   # http://repository-origin.spotify.com/pool/non-free/s/spotify-client/
-  version = "1.0.52.717.g2f08534a-47";
+  version = "1.0.53.758.gde3fc4b2-33";
 
   deps = [
     alsaLib
@@ -51,22 +51,23 @@ in
 stdenv.mkDerivation {
   name = "spotify-${version}";
 
-  src =
-    fetchurl {
-      url = "https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-      sha256 = "1xqd4pjb69zmbac5fq3pckgr4khlkzfkx8b029qzjc2hi52zfnj7";
-    };
+  src = fetchurl {
+    url = "https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
+    sha256 = "1sh6bv23yx0fcbmf60c2yyi6411ij85k4jalpjlck2w26nfj1b3g";
+  };
 
   buildInputs = [ dpkg makeWrapper ];
+
+  doConfigure = false;
+  doBuild = false;
+  dontStrip = true;
+  dontPatchELF = true;
 
   unpackPhase = ''
     runHook preUnpack
     dpkg-deb -x $src .
     runHook postUnpack
   '';
-
-  configurePhase = "runHook preConfigure; runHook postConfigure";
-  buildPhase = "runHook preBuild; runHook postBuild";
 
   installPhase =
     ''
@@ -110,13 +111,11 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  dontStrip = true;
-  dontPatchELF = true;
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.spotify.com/;
     description = "Play music from the Spotify music service";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ eelco ftrvxmtrx sheenobu mudri ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri ];
+    platforms = [ "x86_64-linux" ];
   };
 }

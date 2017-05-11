@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     description = "Library to read freedesktop.org menu files";
     maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

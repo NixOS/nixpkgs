@@ -2,9 +2,9 @@ wrapQtProgram() {
     local prog="$1"
     shift
     wrapProgram "$prog" \
-        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
-        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
-        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
+        --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
+        --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
+        --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH" \
         --prefix XDG_DATA_DIRS : "$RUNTIME_XDG_DATA_DIRS" \
         --prefix XDG_CONFIG_DIRS : "$RUNTIME_XDG_CONFIG_DIRS" \
         --prefix GIO_EXTRA_MODULES : "$GIO_EXTRA_MODULES" \
@@ -17,9 +17,9 @@ makeQtWrapper() {
     shift
     shift
     makeWrapper "$old" "$new" \
-        --set QT_PLUGIN_PATH "$QT_PLUGIN_PATH" \
-        --set QML_IMPORT_PATH "$QML_IMPORT_PATH" \
-        --set QML2_IMPORT_PATH "$QML2_IMPORT_PATH" \
+        --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
+        --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
+        --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH" \
         --prefix XDG_DATA_DIRS : "$RUNTIME_XDG_DATA_DIRS" \
         --prefix XDG_CONFIG_DIRS : "$RUNTIME_XDG_CONFIG_DIRS" \
         --prefix GIO_EXTRA_MODULES : "$GIO_EXTRA_MODULES" \

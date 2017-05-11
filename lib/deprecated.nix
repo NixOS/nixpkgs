@@ -253,11 +253,11 @@ rec {
   # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
   mergeAttrsConcatenateValues = mergeAttrsWithFunc ( a: b: (toList a) ++ (toList b) );
 
-  # merges attributes using //, if a name exisits in both attributes
+  # merges attributes using //, if a name exists in both attributes
   # an error will be triggered unless its listed in mergeLists
   # so you can mergeAttrsNoOverride { buildInputs = [a]; } { buildInputs = [a]; } {} to get
   # { buildInputs = [a b]; }
-  # merging buildPhase does'nt really make sense. The cases will be rare where appending /prefixing will fit your needs?
+  # merging buildPhase doesn't really make sense. The cases will be rare where appending /prefixing will fit your needs?
   # in these cases the first buildPhase will override the second one
   # ! deprecated, use mergeAttrByFunc instead
   mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],

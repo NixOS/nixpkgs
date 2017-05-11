@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, buildPythonPackage
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six }:
+, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
 
 buildPythonPackage rec {
   version = "3.3.0";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "0b4211s0zzdmh74k49ss0m9lc2ql2iazq2aa95ams6h45vqcr0w3";
   };
 
-  buildInputs = [ hdf5 cython bzip2 lzo ];
+  buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
   propagatedBuildInputs = [ numpy numexpr six ];
 
   # The setup script complains about missing run-paths, but they are
@@ -19,6 +19,7 @@ buildPythonPackage rec {
     [ "--hdf5=${hdf5}"
       "--lzo=${lzo}"
       "--bzip2=${bzip2.dev}"
+      "--blosc=${c-blosc}"
     ];
 
   # Run the test suite.

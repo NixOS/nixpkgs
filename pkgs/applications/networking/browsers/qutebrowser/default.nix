@@ -74,17 +74,14 @@ in buildPythonApplication rec {
   '';
 
   postFixup = ''
-    mv $out/bin/qutebrowser $out/bin/.qutebrowser-noqtpath
-    makeQtWrapper $out/bin/.qutebrowser-noqtpath $out/bin/qutebrowser \
+    wrapQtProgram $out/bin/qutebrowser \
       ${lib.optionalString withWebEngineDefault ''--add-flags "--backend webengine"''}
-
-    sed -i 's/\.qutebrowser-wrapped/qutebrowser/g' $out/bin/..qutebrowser-wrapped-wrapped
   '';
 
   meta = {
     homepage = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ jagajaga fpletz ];
+    maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }

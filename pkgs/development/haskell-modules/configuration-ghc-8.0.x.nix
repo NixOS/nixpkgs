@@ -52,4 +52,8 @@ self: super: {
   # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
   vector-algorithms = dontCheck super.vector-algorithms;
 
+  # https://github.com/thoughtbot/yesod-auth-oauth2/pull/77
+  yesod-auth-oauth2 = doJailbreak super.yesod-auth-oauth2;
+
+
 }

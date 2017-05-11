@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
+{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
 , ruby, libxslt, libxml2, sqlite, openssl, docker
 , dataDir ? "/var/lib/panamax-api" }@args:
 

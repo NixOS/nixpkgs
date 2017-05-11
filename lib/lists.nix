@@ -191,7 +191,7 @@ rec {
   */
   optional = cond: elem: if cond then [elem] else [];
 
-  /* Return a list or an empty list, dependening on a boolean value.
+  /* Return a list or an empty list, depending on a boolean value.
 
      Example:
        optionals true [ 2 3 ]

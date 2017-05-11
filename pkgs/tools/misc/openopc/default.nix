@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python }:
 
 let
-  pythonEnv = python.withPackages(ps: [ps.pyro3]);
+  pythonEnv = python.withPackages(ps: [ps.Pyro]);
 in stdenv.mkDerivation rec {
   name = "openopc-${version}";
   version = "1.2.0";

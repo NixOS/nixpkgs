@@ -2,7 +2,7 @@ Node.js packages
 ===============
 To add a package from [NPM](https://www.npmjs.com/) to nixpkgs:
 
- 1. Install node2nix: `nix-env -f '<nixpkgs>' -iA node2nix`.
+ 1. Install node2nix: `nix-env -f '<nixpkgs>' -iA nodePackages.node2nix`.
  2. Modify `pkgs/development/node-packages/node-packages.json`, to add, update,
     or remove package entries.
  3. Run the script: `cd pkgs/development/node-packages && sh generate.sh`.

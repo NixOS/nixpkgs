@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, gcc, scons, pkgconfig, libX11, libXcursor
 , libXinerama, libXrandr, libXrender, freetype, openssl, alsaLib
-, libpulseaudio, mesa, mesa_glu, zlib }:
+, libpulseaudio, mesa_glu, zlib }:
 
 stdenv.mkDerivation rec {
   name    = "godot-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcc scons pkgconfig libX11 libXcursor libXinerama libXrandr libXrender
-    freetype openssl alsaLib libpulseaudio mesa mesa_glu zlib
+    freetype openssl alsaLib libpulseaudio mesa_glu zlib
   ];
 
   patches = [ ./pkg_config_additions.patch ];

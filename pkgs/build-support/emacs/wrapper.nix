@@ -21,7 +21,7 @@ set which contains `emacsWithPackages`. For example, to override
 `emacsPackagesNg.emacsWithPackages`,
 ```
 let customEmacsPackages =
-      emacsPackagesNg.override (super: self: {
+      emacsPackagesNg.overrideScope (super: self: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit

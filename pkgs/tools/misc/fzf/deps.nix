@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/junegunn/go-runewidth";
-      rev = "63c378b851290989b19ca955468386485f118c65";
-      sha256 = "1z5mhfrpqdssn3603vwd95w69z28igwq96lh7b9rrdcx440i822d";
+      rev = "14207d285c6c197daabb5c9793d63e7af9ab2d50";
+      sha256 = "0y6yq9zd4kh7fimnc00r3h9pr2pwa5j85b3jcn5dyfamsnm2xdsv";
     };
   }
   {
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/junegunn/go-shellwords";
-      rev = "33bd8f1ebe16d6e5eb688cc885749a63059e9167";
-      sha256 = "0xcymw0fm0ir8d9swh1bkpknnqgx5ijjsj433z4d9riy8h8ywpw8";
+      rev = "02e3cf038dcea8290e44424da473dd12be796a8a";
+      sha256 = "1pg7pl25wvpl2dbpyrv9p1r7prnqimxlf6136vn0dfm54j2x4mnr";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "854ae91cdcbf914b499b1d7641d07859f3653481";
-      sha256 = "19hj2nv2awc6zhpiapv8xv2yjdwfpxhvx5wnr99if6kg0y1ybsa7";
+      rev = "abc5fa7ad02123a41f02bf1391c9760f7586e608";
+      sha256 = "1kdfbz46jnpm2hip79db6jvw5m4z4vh7x7rr798mzqdn6fsad7jb";
     };
   }
 ]

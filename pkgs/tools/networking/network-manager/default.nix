@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   pname   = "NetworkManager";
   major   = "1.6";
   version = "${major}.2";
+  # FIXME: this problem is fixed upstream (commit 6a77258f4ec2), remove when upgrading ^^^
+  hardeningDisable = [ "format" ];
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";

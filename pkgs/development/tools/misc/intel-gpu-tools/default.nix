@@ -1,21 +1,22 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libpciaccess, cairo, dri2proto, udev
 , libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3, kmod
-, procps }:
+, procps, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-1.17";
+  name = "intel-gpu-tools-1.18";
 
   src = fetchurl {
     url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.bz2";
-    sha256 = "06pvmbsbff4bsi67n6x3jjngzy2llf8bplc75447ra1fwphc9jx6";
+    sha256 = "1vp4czxp8xa6qk4pg3mrxhc2yadw2rv6p8r8247mkpcbb8dzjxyz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoconf automake ];
   buildInputs = [ libdrm libpciaccess cairo dri2proto udev libX11 kmod
     libXext libXv libXrandr glib bison libunwind python3 procps ];
 
   preBuild = ''
     patchShebangs debugger/system_routine/pre_cpp.py
+    substituteInPlace tools/Makefile.am --replace '$(CAIRO_CFLAGS)' '$(CAIRO_CFLAGS) $(GLIB_CFLAGS)'
   '';
 
   meta = with stdenv.lib; {

@@ -12,6 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3Packages; [
+    setuptools_scm
     # For building documentation:
     sphinx sphinx_rtd_theme
   ];

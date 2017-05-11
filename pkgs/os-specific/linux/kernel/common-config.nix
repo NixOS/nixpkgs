@@ -123,6 +123,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
+  NETFILTER y
   NETFILTER_ADVANCED y
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y

@@ -1,7 +1,8 @@
 { stdenv, fetchgit, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
 
 stdenv.mkDerivation (rec {
-  name = "ProofGeneral-HEAD";
+  name = "ProofGeneral-unstable-${version}";
+  version = "2017-03-13";
 
   src = fetchgit {
     url = "https://github.com/ProofGeneral/PG.git";

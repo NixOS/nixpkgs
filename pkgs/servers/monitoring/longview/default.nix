@@ -16,8 +16,13 @@ stdenv.mkDerivation rec {
     ./log-stdout.patch
   ];
 
+  # Read all configuration from /run/longview
   postPatch = ''
-    substituteInPlace Linode/Longview/Util.pm --replace /var/run/longview.pid /run/longview.pid
+    substituteInPlace Linode/Longview/Util.pm \
+        --replace /var/run/longview.pid /run/longview/longview.pid \
+        --replace /etc/linode /run/longview
+    substituteInPlace Linode/Longview.pl \
+        --replace /etc/linode /run/longview
   '';
 
   buildInputs = [ perl makeWrapper glibc ]

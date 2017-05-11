@@ -43,7 +43,7 @@ kdeApp {
   meta = {
     platforms = lib.platforms.linux;
     homepage = "http://www.kde.org";
-    licenses = with lib.licenses; [ gpl2 fdl12 lgpl21 ];
+    license = with lib.licenses; [ gpl2 fdl12 lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
 }

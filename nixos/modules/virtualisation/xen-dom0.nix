@@ -101,6 +101,16 @@ in
             subnet.
           '';
         };
+
+        forwardDns = mkOption {
+          default = false;
+          description = ''
+            If set to <literal>true</literal>, the DNS queries from the
+            hosts connected to the bridge will be forwarded to the DNS
+            servers specified in /etc/resolv.conf .
+            '';
+        };
+
       };
 
     virtualisation.xen.stored =
@@ -110,6 +120,19 @@ in
           ''
             Xen Store daemon to use. Defaults to oxenstored of the xen package.
           '';
+      };
+
+    virtualisation.xen.domains = {
+        extraConfig = mkOption {
+          type = types.string;
+          default = "";
+          description =
+            ''
+              Options defined here will override the defaults for xendomains.
+              The default options can be seen in the file included from
+              /etc/default/xendomains.
+            '';
+          };
       };
 
     virtualisation.xen.trace =
@@ -217,7 +240,11 @@ in
         { source = "${cfg.package}/etc/xen/scripts";
           target = "xen/scripts";
         }
-        { source = "${cfg.package}/etc/default/xendomains";
+        { text = ''
+            source ${cfg.package}/etc/default/xendomains
+
+            ${cfg.domains.extraConfig}
+          '';
           target = "default/xendomains";
         }
       ];
@@ -332,6 +359,9 @@ in
         IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ address`
         export XEN_BRIDGE_NETWORK_ADDRESS="${"\${data[1]//[[:blank:]]/}"}"
 
+        IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ mask`
+        export XEN_BRIDGE_NETMASK="${"\${data[1]//[[:blank:]]/}"}"
+
         echo "${cfg.bridge.address} host gw dns" > /var/run/xen/dnsmasq.hostsfile
 
         cat <<EOF > /var/run/xen/dnsmasq.conf
@@ -340,7 +370,6 @@ in
         interface=${cfg.bridge.name}
         except-interface=lo
         bind-interfaces
-        auth-server=dns.xen.local,${cfg.bridge.name}
         auth-zone=xen.local,$XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength}
         domain=xen.local
         addn-hosts=/var/run/xen/dnsmasq.hostsfile
@@ -348,8 +377,11 @@ in
         strict-order
         no-hosts
         bogus-priv
-        no-resolv
-        no-poll
+        ${optionalString (!cfg.bridge.forwardDns) ''
+          no-resolv
+          no-poll
+          auth-server=dns.xen.local,${cfg.bridge.name}
+        ''}
         filterwin2k
         clear-on-reload
         domain-needed
@@ -370,6 +402,7 @@ in
 
         ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge.name}
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} ${cfg.bridge.address}
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} netmask $XEN_BRIDGE_NETMASK
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} up
       '';
       serviceConfig.ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/var/run/xen/dnsmasq.conf";

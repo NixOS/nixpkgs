@@ -1,5 +1,5 @@
 {
-  kdeDerivation, kdeWrapper, lib, fetchgit,
+  kdeDerivation, kdeWrapper, lib, fetchgit, fetchpatch,
   extra-cmake-modules, kdoctools, kconfig, kinit, kparts
 }:
 
@@ -18,6 +18,15 @@ let
 
     setSourceRoot = ''sourceRoot="$(echo */kdiff3/)"'';
 
+    patches = [
+      (fetchpatch {
+        name = "git-mergetool.diff"; # see https://gitlab.com/tfischer/kdiff3/merge_requests/2
+        url = "https://gitlab.com/vcunat/kdiff3/commit/6106126216.patch";
+        sha256 = "16xqc24y8bg8gzkdbwapiwi68rzqnkpz4hgn586mi01ngig2fd7y";
+      })
+    ];
+    patchFlags = "-p 2";
+
     postPatch = ''
       sed -re "s/(p\\[[^]]+] *== *)('([^']|\\\\')+')/\\1QChar(\\2)/g" -i src/diff.cpp
     '';
@@ -25,6 +34,8 @@ let
     nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
     propagatedBuildInputs = [ kconfig kinit kparts ];
+
+    enableParallelBuilding = true;
 
     meta = with lib; {
       homepage = http://kdiff3.sourceforge.net/;

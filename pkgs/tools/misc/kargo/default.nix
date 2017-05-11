@@ -20,7 +20,7 @@ python2Packages.buildPythonApplication rec {
     markupsafe
     netaddr
     pyasn1
-    requests2
+    requests
     setuptools
   ];
 

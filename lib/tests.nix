@@ -6,6 +6,9 @@ with import ./default.nix;
 
 runTests {
 
+
+# TRIVIAL
+
   testId = {
     expr = id 1;
     expected = 1;
@@ -33,6 +36,18 @@ runTests {
     expected = {a = "a";};
   };
 
+  testComposeExtensions = {
+    expr = let obj = makeExtensible (self: { foo = self.bar; });
+               f = self: super: { bar = false; baz = true; };
+               g = self: super: { bar = super.baz or false; };
+               f_o_g = composeExtensions f g;
+               composed = obj.extend f_o_g;
+           in composed.foo;
+    expected = true;
+  };
+
+# STRINGS
+
   testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") ["a" "b" "c"];
     expected = "a;b;c;";
@@ -42,6 +57,38 @@ runTests {
     expr = concatStringsSep "," ["a" "b" "c"];
     expected = "a,b,c";
   };
+
+  testSplitStringsSimple = {
+    expr = strings.splitString "." "a.b.c.d";
+    expected = [ "a" "b" "c" "d" ];
+  };
+
+  testSplitStringsEmpty = {
+    expr = strings.splitString "." "a..b";
+    expected = [ "a" "" "b" ];
+  };
+
+  testSplitStringsOne = {
+    expr = strings.splitString ":" "a.b";
+    expected = [ "a.b" ];
+  };
+
+  testSplitStringsNone = {
+    expr = strings.splitString "." "";
+    expected = [ "" ];
+  };
+
+  testSplitStringsFirstEmpty = {
+    expr = strings.splitString "/" "/a/b/c";
+    expected = [ "" "a" "b" "c" ];
+  };
+
+  testSplitStringsLastEmpty = {
+    expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
+    expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
+# LISTS
 
   testFilter = {
     expr = filter (x: x != "a") ["a" "b" "c" "a"];
@@ -93,45 +140,6 @@ runTests {
     expected = { a = [ 2 3 ]; b = [7]; c = [8];};
   };
 
-  testOverridableDelayableArgsTest = {
-    expr =
-      let res1 = defaultOverridableDelayableArgs id {};
-          res2 = defaultOverridableDelayableArgs id { a = 7; };
-          res3 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                 in (x.merge) { b = 10; };
-          res4 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                in (x.merge) ( x: { b = 10; });
-          res5 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                in (x.merge) ( x: { a = add x.a 3; });
-          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
-                     y = x.merge {};
-                in (y.merge) { a = 10; };
-
-          resRem7 = res6.replace (a: removeAttrs a ["a"]);
-
-          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
-                            x2 = x.merge { a = 20; }; # now we have 27
-                        in (x2.replace) { a = 10; }; # and override the value by 10
-
-          # fixed tests (delayed args): (when using them add some comments, please)
-          resFixed1 =
-                let x = defaultOverridableDelayableArgs id ( x: { a = 7; c = x.fixed.b; });
-                    y = x.merge (x: { name = "name-${builtins.toString x.fixed.c}"; });
-                in (y.merge) { b = 10; };
-          strip = attrs: removeAttrs attrs ["merge" "replace"];
-      in all id
-        [ ((strip res1) == { })
-          ((strip res2) == { a = 7; })
-          ((strip res3) == { a = 7; b = 10; })
-          ((strip res4) == { a = 7; b = 10; })
-          ((strip res5) == { a = 10; })
-          ((strip res6) == { a = 17; })
-          ((strip resRem7) == {})
-          ((strip resFixed1) == { a = 7; b = 10; c =10; name = "name-10"; })
-        ];
-    expected = true;
-  };
-
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
@@ -158,9 +166,9 @@ runTests {
   };
 
 
-  /* Generator tests */
-  # these tests assume attributes are converted to lists
-  # in alphabetical order
+# GENERATORS
+# these tests assume attributes are converted to lists
+# in alphabetical order
 
   testMkKeyValueDefault = {
     expr = generators.mkKeyValueDefault ":" "f:oo" "bar";
@@ -231,7 +239,7 @@ runTests {
     };
     in {
       expr = generators.toJSON {} val;
-      # trival implementation
+      # trivial implementation
       expected = builtins.toJSON val;
   };
 
@@ -243,38 +251,49 @@ runTests {
     };
     in {
       expr = generators.toYAML {} val;
-      # trival implementation
+      # trivial implementation
       expected = builtins.toJSON val;
   };
 
-  testSplitStringsSimple = {
-    expr = strings.splitString "." "a.b.c.d";
-    expected = [ "a" "b" "c" "d" ];
-  };
+# MISC
 
-  testSplitStringsEmpty = {
-    expr = strings.splitString "." "a..b";
-    expected = [ "a" "" "b" ];
-  };
+  testOverridableDelayableArgsTest = {
+    expr =
+      let res1 = defaultOverridableDelayableArgs id {};
+          res2 = defaultOverridableDelayableArgs id { a = 7; };
+          res3 = let x = defaultOverridableDelayableArgs id { a = 7; };
+                 in (x.merge) { b = 10; };
+          res4 = let x = defaultOverridableDelayableArgs id { a = 7; };
+                in (x.merge) ( x: { b = 10; });
+          res5 = let x = defaultOverridableDelayableArgs id { a = 7; };
+                in (x.merge) ( x: { a = add x.a 3; });
+          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
+                     y = x.merge {};
+                in (y.merge) { a = 10; };
 
-  testSplitStringsOne = {
-    expr = strings.splitString ":" "a.b";
-    expected = [ "a.b" ];
-  };
+          resRem7 = res6.replace (a: removeAttrs a ["a"]);
 
-  testSplitStringsNone = {
-    expr = strings.splitString "." "";
-    expected = [ "" ];
-  };
+          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
+                            x2 = x.merge { a = 20; }; # now we have 27
+                        in (x2.replace) { a = 10; }; # and override the value by 10
 
-  testSplitStringsFirstEmpty = {
-    expr = strings.splitString "/" "/a/b/c";
-    expected = [ "" "a" "b" "c" ];
-  };
-
-  testSplitStringsLastEmpty = {
-    expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
-    expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+          # fixed tests (delayed args): (when using them add some comments, please)
+          resFixed1 =
+                let x = defaultOverridableDelayableArgs id ( x: { a = 7; c = x.fixed.b; });
+                    y = x.merge (x: { name = "name-${builtins.toString x.fixed.c}"; });
+                in (y.merge) { b = 10; };
+          strip = attrs: removeAttrs attrs ["merge" "replace"];
+      in all id
+        [ ((strip res1) == { })
+          ((strip res2) == { a = 7; })
+          ((strip res3) == { a = 7; b = 10; })
+          ((strip res4) == { a = 7; b = 10; })
+          ((strip res5) == { a = 10; })
+          ((strip res6) == { a = 17; })
+          ((strip resRem7) == {})
+          ((strip resFixed1) == { a = 7; b = 10; c =10; name = "name-10"; })
+        ];
+    expected = true;
   };
 
 }

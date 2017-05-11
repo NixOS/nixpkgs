@@ -4,7 +4,7 @@
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR       ? true, openexr, ilmbase
+, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K    ? true, jasper
 
 , enableIpp       ? false
@@ -16,6 +16,7 @@
 , enableGStreamer ? false, gst_all_1
 , enableEigen     ? false, eigen
 , enableCuda      ? false, cudatoolkit, gcc5
+, AVFoundation, Cocoa, QTKit
 }:
 
 let
@@ -115,7 +116,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableEigen eigen
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
     ++ lib.optional enableContrib protobuf3_1
-    ;
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
@@ -134,7 +135,8 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ]
-    ++ lib.optional enableContrib "-DBUILD_PROTOBUF=off";
+    ++ lib.optional enableContrib "-DBUILD_PROTOBUF=off"
+    ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
 
@@ -146,7 +148,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric flosse mdaiter];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with stdenv.lib.maintainers; [viric mdaiter];
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

@@ -289,6 +289,8 @@ let
 
     merlin = callPackage ../development/tools/ocaml/merlin { };
 
+    merlin_extend = callPackage ../development/ocaml-modules/merlin_extend { };
+
     mezzo = callPackage ../development/compilers/mezzo { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
@@ -392,6 +394,8 @@ let
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
     ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
+
+    octavius = callPackage ../development/ocaml-modules/octavius { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
@@ -499,6 +503,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_tools {}
       else null;
 
+    ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     qcheck = callPackage ../development/ocaml-modules/qcheck {
@@ -508,6 +514,8 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     re = callPackage ../development/ocaml-modules/re { };
+
+    reason = callPackage ../development/compilers/reason { };
 
     rresult = callPackage ../development/ocaml-modules/rresult { };
 
