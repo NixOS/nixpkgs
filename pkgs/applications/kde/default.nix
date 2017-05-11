@@ -73,6 +73,7 @@ let
       kdf = callPackage ./kdf.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
+      kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kmime = callPackage ./kmime.nix {};
