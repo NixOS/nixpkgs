@@ -83,6 +83,7 @@ let
       konsole = callPackage ./konsole.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       krfb = callPackage ./krfb.nix {};
+      ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
