@@ -14462,9 +14462,7 @@ with pkgs;
     boost = boost155;
   };
 
-  k3b-original = lowPrio (kde4.callPackage ../applications/misc/k3b { });
-
-  k3b = kde4.callPackage ../applications/misc/k3b/wrapper.nix { };
+  k3b = kdeApplications.k3b;
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 

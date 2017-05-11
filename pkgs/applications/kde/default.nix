@@ -59,6 +59,7 @@ let
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       gwenview = callPackage ./gwenview.nix {};
+      k3b = callPackage ./k3b.nix {};
       kate = callPackage ./kate.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kcalc = callPackage ./kcalc.nix {};
