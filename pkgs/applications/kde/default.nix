@@ -63,6 +63,7 @@ let
       kdenlive = callPackage ./kdenlive.nix {};
       kcalc = callPackage ./kcalc.nix {};
       kcalcore = callPackage ./kcalcore.nix {};
+      kcalutils = callPackage ./kcalutils.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
