@@ -36,14 +36,6 @@ rec {
 
   makeFlags = "DESTDIR=$(out)";
 
-  preInstall = ''
-    substituteInPlace api/examples/Makefile --replace '$(DESTDIR)' $out
-    substituteInPlace geo-replication/syncdaemon/Makefile --replace '$(DESTDIR)' $out
-    substituteInPlace geo-replication/syncdaemon/Makefile --replace '$(DESTDIR)' $out
-    substituteInPlace xlators/features/glupy/examples/Makefile --replace '$(DESTDIR)' $out
-    substituteInPlace xlators/features/glupy/src/Makefile --replace '$(DESTDIR)' $out
-    '';
-
   postInstall = ''
     cp -r $out/$out/* $out
     rm -r $out/nix
