@@ -73,7 +73,7 @@ let
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
-  inherit fetchPypi;
+  inherit fetchPypi callPackage;
   inherit sharedLibraryExtension;
 
   # helpers
