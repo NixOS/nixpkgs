@@ -61,6 +61,7 @@ in {
 
     systemd.user.services.kbfs = {
       description = "Keybase File System";
+      requires = [ "keybase.service" ];
       path = [ "/run/wrappers" ];
       preStart = ''
       ${optionalString cfg.createMountPoint
@@ -74,5 +75,6 @@ in {
     };
 
     environment.systemPackages = [ cfg.package ];
+    services.keybase.enable = true;
   };
 }
