@@ -5,6 +5,7 @@ with lib;
 let
   cfg = config.services.gitlab-runner;
   configFile = pkgs.writeText "config.toml" cfg.configText;
+  hasDocker = config.virtualisation.docker.enable;
 in
 {
   options.services.gitlab-runner = {
@@ -33,8 +34,9 @@ in
   config = mkIf cfg.enable {
     systemd.services.gitlab-runner = {
       description = "Gitlab Runner";
-      after = [ "network.target" "docker.service" ];
-      requires = [ "docker.service" ];
+      after = [ "network.target" ]
+        ++ optional hasDocker "docker.service";
+      requires = optional hasDocker "docker.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''${cfg.package.bin}/bin/gitlab-runner run \
@@ -51,7 +53,7 @@ in
 
     users.extraUsers.gitlab-runner = {
       group = "gitlab-runner";
-      extraGroups = [ "docker" ];
+      extraGroups = optional hasDocker "docker";
       uid = config.ids.uids.gitlab-runner;
       home = cfg.workDir;
       createHome = true;
