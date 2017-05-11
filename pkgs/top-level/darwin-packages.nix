@@ -49,6 +49,8 @@ in
 
   swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation { };
 
+  trash = callPackage ../os-specific/darwin/trash { inherit (darwin.apple_sdk) frameworks; };
+
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
   xcode = callPackage ../os-specific/darwin/xcode { };
