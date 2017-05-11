@@ -14547,7 +14547,7 @@ with pkgs;
     openjpeg = openjpeg_1;
   };
 
-  krusader = kde4.callPackage ../applications/misc/krusader { };
+  krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
