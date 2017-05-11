@@ -126,9 +126,12 @@ stdenv.mkDerivation rec {
         $out/share/nylas-mail/resources/apm/bin/node
    '';
 
-   meta = {
-     description = "Nylas Mail is an open-source mail client built on the modern web with Electron, React, and Flux. It is designed to be extensible, so it's easy to create new experiences and workflows around email.";
-     license = stdenv.lib.licenses.gpl3;
+   meta = with stdenv.lib; {
+     description = "pen-source mail client built on the modern web with Electron, React, and Flux";
+     longDescription = ''
+        Nylas Mail is an open-source mail client built on the modern web with Electron, React, and Flux. It is designed to be extensible, so it's easy to create new experiences and workflows around email. Nylas-Mail requires gnome3 keyring. It can be enabled with "services.gnome3.gnome-keyring.enable = true;".
+     '';
+     license = licenses.gpl3;
      maintainers = with maintainers; [ johnramsden ];
      homepage = https://nylas.com;
    };
