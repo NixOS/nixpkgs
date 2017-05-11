@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Interactive stack-based calculator";
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     homepage = "https://github.com/soveran/clac";
   };
 }
