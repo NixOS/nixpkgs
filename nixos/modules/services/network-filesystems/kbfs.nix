@@ -69,7 +69,6 @@ in {
       postStop = "fusermount -u ${cfg.mountPoint}";
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/kbfsfuse ${toString cfg.extraFlags} ${cfg.mountPoint}";
-        RestartSec = 3;
         Restart = "on-failure";
       };
     };
