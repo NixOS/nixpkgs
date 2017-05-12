@@ -38,6 +38,10 @@ let
 
   pre84 = versionOlder (builtins.parseDrvName postgresql.name).version "8.4";
 
+  # NixOS traditionally used `root` as superuser, most other distros use `postgres`. From 17.09
+  # we also try to follow this standard
+  superuser = (if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root");
+
 in
 
 {
@@ -207,7 +211,7 @@ in
           ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              initdb -U root
+              initdb -U ${superuser}
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
@@ -239,14 +243,14 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! psql --port=${toString cfg.port} postgres -c "" 2> /dev/null; do
+            while ! ${pkgs.sudo}/bin/sudo -u ${superuser} psql --port=${toString cfg.port} -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                psql -f "${cfg.initialScript}" --port=${toString cfg.port} postgres
+                ${pkgs.sudo}/bin/sudo -u ${superuser} psql -f "${cfg.initialScript}" --port=${toString cfg.port} -d postgres
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi
