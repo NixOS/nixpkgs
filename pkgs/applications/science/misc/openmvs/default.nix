@@ -3,8 +3,7 @@
 , gmp, mpfr, glog, google-gflags, libjpeg_turbo }:
 
 stdenv.mkDerivation rec {
-  version = "a3b3600";
-  name = "openmvs-${version}";
+  name = "openmvs-unstable-2017-05-01";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
