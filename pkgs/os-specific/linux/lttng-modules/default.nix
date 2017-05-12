@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.bjornfor ];
     broken =
       (builtins.compareVersions kernel.version "3.18" == -1) ||
-      (kernel.features.grsecurity or false) ||
       (kernel.features.chromiumos or false);
   };
 
