@@ -134,10 +134,17 @@ in
               XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
           fi
 
-          if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
-              $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
+          if [ -x $out/bin/gtk-update-icon-cache ]; then
+            OLD_DIR=$(pwd)
+            cd $out/share/icons
+            for icon_dir in * ; do
+              if [ -d "$icon_dir" -a -f $icon_dir/index.theme ]; then
+                $out/bin/gtk-update-icon-cache $icon_dir
+              fi
+            done
+            cd $OLD_DIR
           fi
-
+          
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
