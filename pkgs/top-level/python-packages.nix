@@ -24759,6 +24759,8 @@ in {
 
   };
 
+  taiga-back = callPackage ../development/python-modules/taiga-back { };
+
   targetcli_fb = buildPythonPackage rec {
     version = "2.1.fb33";
     name = "targetcli-fb-${version}";
