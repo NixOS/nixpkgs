@@ -896,6 +896,8 @@ with pkgs;
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  dobi = callPackage ../development/tools/dobi { };
+
   dosage = pythonPackages.dosage;
 
   dpic = callPackage ../tools/graphics/dpic { };
