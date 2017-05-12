@@ -12,6 +12,7 @@
 , gemfile ? null
 , lockfile ? null
 , gemset ? null
+, gemspec ? null
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
@@ -32,6 +33,9 @@ let
     if pname == null then null
     else gems."${pname}" or (throw "bundlerEnv: gem ${pname} not found");
 
+  fileNames = builtins.attrNames(builtins.readDir(gemdir));
+  defaultGemspec = lib.findFirst (path: lib.hasSuffix ".gemspec" path) null fileNames;
+
   gemfile' =
     if gemfile == null then gemdir + "/Gemfile"
     else gemfile;
@@ -43,6 +47,10 @@ let
   gemset' =
     if gemset == null then gemdir + "/gemset.nix"
     else gemset;
+
+  gemspec' =
+    if gemspec == null && defaultGemspec != null then "${gemdir}/${defaultGemspec}"
+    else gemspec;
 
   importedGemset = import gemset';
 
@@ -74,14 +82,20 @@ let
       gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
     }));
 
+  # Gemspecs usually depend on lib or more
+  gemspecConfFile = ''
+    cp -R ${gemdir}/lib $out/lib
+    cp ${gemspec'} $out/
+  '';
+
   # We have to normalize the Gemfile.lock, otherwise bundler tries to be
   # helpful by doing so at run time, causing executables to immediately bail
   # out. Yes, I'm serious.
-  confFiles = runCommand "gemfile-and-lockfile" {} ''
+  confFiles = runCommand "gemfile-and-lockfile" {} (''
     mkdir -p $out
     cp ${gemfile'} $out/Gemfile
     cp ${lockfile'} $out/Gemfile.lock
-  '';
+  '' + lib.optionalString (gemspec' != null && gemdir != null) gemspecConfFile);
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
