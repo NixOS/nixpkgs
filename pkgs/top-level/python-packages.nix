@@ -16442,23 +16442,7 @@ in {
     buildInputs = with self; [ oslotest mock coverage simplejson oslo-i18n ];
   };
 
-  rfc3986 = buildPythonPackage rec {
-    name = "rfc3986-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rfc3986/rfc3986-0.2.2.tar.gz";
-      sha256 = "0yvzz7gp84qqdadbjdh9ch7dz4w19nmhwa704s9m11bljgp3hqmn";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
-
-    meta = with stdenv.lib; {
-      description = "rfc3986";
-      homepage = https://rfc3986.rtfd.org;
-    };
-  };
+  rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
   pycadf = buildPythonPackage rec {
     name = "pycadf-${version}";
