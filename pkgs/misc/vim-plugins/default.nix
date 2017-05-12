@@ -646,11 +646,11 @@ rec {
   };
 
   vim-elixir = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-elixir-2017-04-12";
+    name = "vim-elixir-2017-04-26";
     src = fetchgit {
       url = "https://github.com/elixir-lang/vim-elixir";
-      rev = "8781ff7c675d0cbfb4859f91698365c2eecf3205";
-      sha256 = "0990qbzs2cn3k07xrn4xcczl7kpapygpa0ypkwpgxamyk0lgjlr8";
+      rev = "e130adfd82f65be838a9c8d9eab1dff797527033";
+      sha256 = "1pxix3vr4ry1r2l7bqmq5hn1iqal970312qvfp40h8bnq792v9d1";
     };
     dependencies = [];
 

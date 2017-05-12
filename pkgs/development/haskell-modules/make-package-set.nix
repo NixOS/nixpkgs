@@ -101,7 +101,7 @@ self: let
       '';
   };
 
-  hackage2nix = name: version: haskellSrc2nix {
+  hackage2nix = name: version: self.haskellSrc2nix {
     name   = "${name}-${version}";
     sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
     src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";

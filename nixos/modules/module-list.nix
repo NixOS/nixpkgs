@@ -130,6 +130,7 @@
   ./security/wrappers/default.nix
   ./security/sudo.nix
   ./services/admin/salt/master.nix
+  ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix

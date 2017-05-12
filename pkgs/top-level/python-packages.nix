@@ -73,7 +73,7 @@ let
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
-  inherit fetchPypi;
+  inherit fetchPypi callPackage;
   inherit sharedLibraryExtension;
 
   # helpers
@@ -5252,8 +5252,8 @@ in {
       sha256 = "03c2qc42r4bczyw93gd7n0qi1h1jfhw7fnbhi33c3vp1hs81gm2k";
     };
 
+   buildInputs = with self; [ pytest pytest_xdist virtualenv process-tests ];
    propagatedBuildInputs = with self; [ coverage ];
-   buildInputs = with self; [ pytest covCore virtualenv process-tests helper ];
 
    # xdist related tests fail with the following error
    # OSError: [Errno 13] Permission denied: 'py/_code'

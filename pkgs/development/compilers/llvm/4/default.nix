@@ -24,6 +24,8 @@ let
 
     clang = wrapCC self.clang-unwrapped;
 
+    openmp = callPackage ./openmp.nix {};
+
     libcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       isClang = true;
