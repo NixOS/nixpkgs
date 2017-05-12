@@ -58,6 +58,7 @@
 , "smartdc"
 , "stylus"
 , "svgo"
+, { "taiga-events": "https://github.com/betaboon/taiga-events/tarball/4a0b0b1a21d224982b45c0fd84e4353f64ac95a8" }
 , "tern"
 , "titanium"
 , "typescript"
