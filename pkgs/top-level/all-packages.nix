@@ -9860,6 +9860,8 @@ with pkgs;
       kirigami_1
       kirigami_2;
 
+    kdiagram = callPackage ../development/libraries/kdiagram { };
+
     kirigami = kirigami_1;
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
