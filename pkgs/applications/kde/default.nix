@@ -69,6 +69,7 @@ let
       filelight = callPackage ./filelight.nix {};
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
+      incidenceeditor = callPackage ./incidenceeditor.nix {};
       k3b = callPackage ./k3b.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
