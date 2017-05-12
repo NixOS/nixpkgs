@@ -15391,8 +15391,8 @@ with pkgs;
     qt = qt4;
   };
 
-  # 0.5.7 segfaults when opening the main panel with qt 5.7 but qt 5.8 is OK
-  qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
+  # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
+  qsyncthingtray = libsForQt56.callPackage ../applications/misc/qsyncthingtray { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
