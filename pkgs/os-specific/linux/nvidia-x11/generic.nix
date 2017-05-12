@@ -8,7 +8,7 @@
 , preferGtk2 ? false
 }:
 
-{ stdenv, callPackage, callPackage_i686, buildEnv, fetchurl
+{ stdenv, callPackage, callPackage_i686, buildEnv, fetchurl, fetchpatch
 , kernel ? null, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -49,9 +49,10 @@ let
               then null
               else if versionOlder version "375"
               then [
-                     (fetchurl {
-                         url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/4.10.0_kernel.patch?h=packages/nvidia-340xx;
-                         sha256 = "08k2phr9kawg6a3v88d4zkj7gdlih29gm5a1gmhpgmvd926k0z5l";
+                     (fetchpatch {
+                        name = "kernel-4.10.patch";
+                        url = https://git.archlinux.org/svntogit/packages.git/plain/nvidia-340xx/trunk/4.10.0_kernel.patch?id=53fb1df89;
+                        sha256 = "171hb57m968qdjcr3h8ppfzhrchf573f39rdja86a1qq1gmrv7pa";
                      })
                          # from https://git.archlinux.org/svntogit/packages.git/plain/trunk/fs52243.patch?h=packages/nvidia-340xx
                          # with datestamps removed
