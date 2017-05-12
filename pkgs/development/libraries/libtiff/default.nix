@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       # https://lwn.net/Vulnerabilities/711777/
       debian = fetchurl {
         url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.7-6.debian.tar.xz;
-        sha256 = "9c9048c28205bdbeb5ba36c7a194d0cd604bd137c70961607bfc8a079be5fa31";
+        sha256 = "0cgswndhg2pwgdh622f76z8lnq6ds2aa3irnpasvxg85hb14i44w";
       };
     in ''
       tar xf '${debian}'
