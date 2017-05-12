@@ -107,6 +107,7 @@ let
       kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
+      kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krfb = callPackage ./krfb.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
