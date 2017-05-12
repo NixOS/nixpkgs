@@ -18427,6 +18427,8 @@ in {
     };
   };
 
+  pika-pool = callPackage ../development/python-modules/pika-pool { };
+
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
     version="2.10.3";
