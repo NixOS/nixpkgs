@@ -11,7 +11,7 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   output = [ "out" "dev" ];
-  patches = [ ./grantleetheme_check_null.patch ];
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee5 ki18n kiconthemes knewstuff kservice kxmlgui qtbase
