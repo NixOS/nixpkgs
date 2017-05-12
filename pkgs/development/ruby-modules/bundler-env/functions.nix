@@ -4,12 +4,10 @@ rec {
 
   platformMatches = {rubyEngine, version, ...}@ruby: attrs: (
   !(attrs ? "platforms") ||
-  builtins.trace "ruby engine: ${rubyEngine}"
-  builtins.trace "ruby version ${version.majMin}"
+  builtins.length attrs.platforms == 0 ||
     builtins.any (platform:
-    builtins.trace "checking: ${platform.engine}/${platform.version}"
       platform.engine == rubyEngine &&
-        (!(platform ? "version") || platform.version == version.majMin)
+        (!(platform ? "version") || platform.version.majMin == version.majMin)
     ) attrs.platforms
   );
 
