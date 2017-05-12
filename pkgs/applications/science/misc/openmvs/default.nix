@@ -18,12 +18,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DVCG_DIR=${vcg}"
-    "-DCERES_DIR=${ceres-solver}/lib/cmake/Ceres/"
-  ];
+  preConfigure = ''
+    cmakeFlagsArray=(
+      $cmakeFlagsArray
+      "-DCMAKE_CXX_FLAGS=-std=c++11"
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DBUILD_STATIC_RUNTIME=ON"
+      "-DINSTALL_BIN_DIR=$out/bin"
+      "-DVCG_DIR=${vcg}"
+      "-DCERES_DIR=${ceres-solver}/lib/cmake/Ceres/"
+    )
+  '';
 
   cmakeDir = "./";
 
@@ -31,18 +36,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
-    make install
-    mv $out/bin/OpenMVS/* $out/bin/
-    rm -rf $out/bin/OpenMVS/
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
     homepage = http://cdcseacave.github.io/openMVS/;
-    license = stdenv.lib.licenses.agpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ mdaiter ];
+    license = licenses.agpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mdaiter ];
   };
 }
