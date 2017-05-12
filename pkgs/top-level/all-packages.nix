@@ -2258,6 +2258,12 @@ with pkgs;
     zfsSupport = false;
   };
 
+  grub2_xen = callPackage ../tools/misc/grub/2.0x.nix {
+    xenSupport = true;
+  };
+
+  grub2_pvgrub_image = callPackage ../tools/misc/grub/pvgrub_image { };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
