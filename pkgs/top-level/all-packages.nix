@@ -11299,6 +11299,8 @@ with pkgs;
 
   shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
 
+  taiga-front-dist = callPackage ../servers/web-apps/taiga/taiga-front-dist.nix { };
+
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
   unifi = callPackage ../servers/unifi { };
