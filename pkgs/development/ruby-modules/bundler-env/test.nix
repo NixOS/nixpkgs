@@ -44,7 +44,7 @@ let
     ( let gemSet = { test = { platforms = []; }; };
       in
       test.run "Filter matches empty platforms list" gemSet (set: functions.filterGemset {inherit ruby; groups = [];} set == gemSet))
-    ( let gemSet = { test = { platforms = [{engine = ruby.rubyEngine; version = ruby.version;}]; }; };
+    ( let gemSet = { test = { platforms = [{engine = ruby.rubyEngine; version = ruby.version.majMin;}]; }; };
       in
       test.run "Filter matches on platform" gemSet (set: functions.filterGemset {inherit ruby; groups = [];} set == gemSet))
     ( let gemSet = { test = { groups = ["x" "y"]; }; };
