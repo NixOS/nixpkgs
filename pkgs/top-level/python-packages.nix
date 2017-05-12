@@ -5293,23 +5293,7 @@ in {
     };
   };
 
-  pytest_xdist = buildPythonPackage rec {
-    name = "pytest-xdist-1.14";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-xdist/${name}.zip";
-      sha256 = "08rn2l39ds60xshs4js787l84pfckksqklfq2wq9x8ig2aci2pja";
-    };
-
-    buildInputs = with self; [ pytest setuptools_scm ];
-    propagatedBuildInputs = with self; [ execnet ];
-
-    meta = {
-      description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
-      homepage = https://github.com/pytest-dev/pytest-xdist;
-      license = licenses.mit;
-    };
-  };
+  pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-localserver = buildPythonPackage rec {
     name = "pytest-localserver-${version}";
