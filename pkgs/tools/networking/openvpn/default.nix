@@ -8,11 +8,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openvpn-${version}";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "http://swupdate.openvpn.net/community/releases/${name}.tar.xz";
-    sha256 = "0zpqnbhjaifdalyxwmvk5kcyd7cpxbcigbn7967nbsyvl54vl8vg";
+    sha256 = "1ydzy5i7yaifz0v1ivrckksvm0nkkx5sia3g5y5b1xkx9cw4yp6z";
   };
 
   buildInputs = [ lzo openssl pkgconfig ]
