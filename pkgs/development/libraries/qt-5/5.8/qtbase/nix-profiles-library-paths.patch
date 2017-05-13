@@ -2,7 +2,7 @@ Index: qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
 ===================================================================
 --- qtbase-opensource-src-5.8.0.orig/src/corelib/kernel/qcoreapplication.cpp
 +++ qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
-@@ -2476,7 +2476,17 @@ QStringList QCoreApplication::libraryPat
+@@ -2476,6 +2476,15 @@ QStringList QCoreApplication::libraryPat
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  
@@ -16,7 +16,5 @@ Index: qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
 +        }
 +
          const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
-+        qunsetenv("QT_PLUGIN_PATH"); // do not propagate to child processes
          if (!libPathEnv.isEmpty()) {
              QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);
-             for (QStringList::const_iterator it = paths.constBegin(); it != paths.constEnd(); ++it) {
