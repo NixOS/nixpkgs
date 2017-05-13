@@ -57,6 +57,7 @@
 , "sloc"
 , "smartdc"
 , "stylus"
+, "lumo-cljs"
 , "svgo"
 , "tern"
 , "titanium"
