@@ -16311,6 +16311,7 @@ in {
 
   premailer = callPackage ../development/python-modules/premailer { };
 
+  psd-tools = callPackage ../development/python-modules/psd-tools { };
 
 
   osc = buildPythonPackage {
