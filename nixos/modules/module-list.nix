@@ -565,6 +565,7 @@
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
   ./services/web-apps/pump.io.nix
+  ./services/web-apps/taiga.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix
