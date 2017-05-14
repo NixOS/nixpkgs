@@ -31348,6 +31348,8 @@ EOF
 
   cymem = callPackage ../development/python-modules/cymem { };    
 
+  ftfy = callPackage ../development/python-modules/ftfy { };    
+
 });
 
 in fix' (extends overrides packages)
