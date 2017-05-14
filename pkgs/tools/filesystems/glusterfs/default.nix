@@ -2,14 +2,14 @@
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite
  , liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which
 }:
-let 
+let
   s =
   rec {
     baseName="glusterfs";
     version = "3.10.1";
     name="${baseName}-${version}";
-    url="http://download.gluster.org/pub/gluster/glusterfs/3.10/${version}/glusterfs-${version}.tar.gz";
-    sha256 = "05qmn85lg3d1gz0fhn1v2z7nwl2qwbflvjc8nvkfyr4r57rkvhnk";
+    url="https://github.com/gluster/glusterfs/archive/v${version}.tar.gz";
+    sha256 = "0gmb3m98djljcycjggi1qv99ai6k4cvn2rqym2q9f58q8n8kdhh7";
   };
   buildInputs = [
     fuse bison flex_2_5_35 openssl python2 ncurses readline
@@ -26,7 +26,17 @@ rec {
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 
-  preConfigure = ''
+   # Note that the VERSION file is something that is present in release tarballs
+   # but not in git tags (at least not as of writing in v3.10.1).
+   # That's why we have to create it.
+   # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
+   # for example when setting up geo-replication, with a message like
+   #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
+   # What happens here is that the gverify.sh script tries to compare the versions,
+   # but fails when the version is empty.
+   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
+   preConfigure = ''
+     echo "v${s.version}" > VERSION
     ./autogen.sh
     '';
 
@@ -52,7 +62,7 @@ rec {
     maintainers = [
       stdenv.lib.maintainers.raskin
     ];
-    platforms = with stdenv.lib.platforms; 
+    platforms = with stdenv.lib.platforms;
       linux ++ freebsd;
   };
 }
