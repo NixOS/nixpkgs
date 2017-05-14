@@ -28715,6 +28715,8 @@ EOF
 
   gensim = callPackage  ../development/python-modules/gensim { };
 
+  cymem = callPackage ../development/python-modules/cymem { };
+
 });
 
 in fix' (extends overrides packages)
