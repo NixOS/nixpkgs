@@ -7438,6 +7438,8 @@ with pkgs;
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
+  cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
+
   curlcpp = callPackage ../development/libraries/curlcpp { };
 
   cutee = callPackage ../development/libraries/cutee { };
