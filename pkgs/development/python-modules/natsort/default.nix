@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "natsort";
-  version = "5.0.1";
+  version = "5.0.3";
 
   buildInputs = [
     hypothesis
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ad6b4d1153451e345967989bd3ca30abf33f615b116eeadfcc51a456e6974a9";
+    sha256 = "1h87n0jcsi6mgjx1pws6g1lmcn8jwabwxj8hq334jvziaq0plyym";
   };
 
   meta = {
