@@ -11,9 +11,9 @@
     dependencies = ["msgpack"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "018mk4vqaxzbk4anq558h2rgj8prbn2rmi777iwrg3n0v8k5nxqw";
+      sha256 = "1gvwa1zkirai7605x4hn2lynbw1caviga272iyy472jv7hs2zn92";
       type = "gem";
     };
-    version = "0.3.1";
+    version = "0.4.0";
   };
 }
