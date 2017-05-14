@@ -70,7 +70,7 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "--enable-system-sqlite"
       #"--enable-system-cairo"
       "--enable-startup-notification"
-      "--enable-content-sandbox"            # available since 26.0, but not much info available
+      #"--enable-content-sandbox" # TODO: probably enable after 54
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
