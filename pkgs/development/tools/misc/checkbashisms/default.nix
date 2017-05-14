@@ -1,28 +1,20 @@
 { stdenv, fetchurl, perl }:
 stdenv.mkDerivation rec {
-  inherit perl;
-
-  pname = "checkbashisms";
   version = "2.0.0.2";
-  name = "${pname}-${version}";
+  name = "checkbashisms-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/checkbaskisms/${version}/${pname}";
+    url = "mirror://sourceforge/project/checkbaskisms/${version}/checkbashisms";
     sha256 = "1vm0yykkg58ja9ianfpm3mgrpah109gj33b41kl0jmmm11zip9jd";
   };
+
+  buildInputs = [ perl ];
 
   # The link returns directly the script. No need for unpacking
   unpackPhase = "true";
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp $src $out/bin/checkbashisms
-    chmod 755 $out/bin/checkbashisms
-  '';
-
-  # Makes sure to point to the proper perl version
-  fixupPhase = ''
-    sed -e "s#/usr/bin/perl#$perl/bin/perl#" -i $out/bin/checkbashisms
+    install -D -m755 $src $out/bin/checkbashisms
   '';
 
   meta = {
