@@ -3331,6 +3331,8 @@ with pkgs;
 
   openmvg = callPackage ../applications/science/misc/openmvg { };
 
+  openmvs = callPackage ../applications/science/misc/openmvs { };
+
   openntpd = callPackage ../tools/networking/openntpd { };
 
   openntpd_nixos = openntpd.override {
@@ -12749,6 +12751,8 @@ with pkgs;
   inherit (callPackages ../data/fonts/noto-fonts {})
     noto-fonts noto-fonts-cjk noto-fonts-emoji;
 
+  nullmailer = callPackage ../servers/mail/nullmailer { };
+
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
 
   numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };
@@ -15134,7 +15138,7 @@ with pkgs;
 
   openbox-menu = callPackage ../applications/misc/openbox-menu { };
 
-  openbrf = callPackage ../applications/misc/openbrf { };
+  openbrf = libsForQt5.callPackage ../applications/misc/openbrf { };
 
   opencpn = callPackage ../applications/misc/opencpn { };
 
