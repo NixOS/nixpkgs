@@ -18,6 +18,13 @@ let
 
     doCheck = true;
 
+    # the configure script thinks that Darwin has ___exp10
+    # but it’s not available on my systems (or hydra apparently)
+    postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace config.h \
+        --replace "#define HAVE___EXP10 1" "#undef HAVE___EXP10"
+    '';
+
     meta = with stdenv.lib; {
       description = "Search engine library";
       homepage = http://xapian.org/;
