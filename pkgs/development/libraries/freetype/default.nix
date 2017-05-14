@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
       url = "http://pkgs.fedoraproject.org/cgit/rpms/freetype.git/plain/freetype-2.2.1-enable-valid.patch?id=9a81147af83b1166a5f301e379f85927cc610990";
       sha256 = "0zkgqhws2s0j8ywksclf391iijhidb1a406zszd7xbdjn28kmj2l";
     })
+    # remove the two CVE patches after updating to >= 2.8
+    ./cve-2017-8105.patch
+    ./cve-2017-8287.patch
   ] ++ optionals (!useInfinality && useEncumberedCode) [
     # Patch to enable subpixel rendering.
     # See https://www.freetype.org/freetype2/docs/reference/ft2-lcd_filtering.html.
