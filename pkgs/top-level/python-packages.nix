@@ -31346,6 +31346,8 @@ EOF
 
   distro = callPackage ../development/python-modules/distro { };
 
+  cymem = callPackage ../development/python-modules/cymem { };    
+
 });
 
 in fix' (extends overrides packages)
