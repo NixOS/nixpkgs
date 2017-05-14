@@ -28721,6 +28721,8 @@ EOF
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };      
 
+  plac = callPackage ../development/python-modules/plac { };        
+
 });
 
 in fix' (extends overrides packages)
