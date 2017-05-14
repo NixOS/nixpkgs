@@ -211,6 +211,14 @@ in
     '';
   };
 
+  rb-readline = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/rbreadline.rb \
+        --replace 'infocmp' '${ncurses.dev}/bin/infocmp'
+    '';
+  };
+
   timfel-krb5-auth = attrs: {
     buildInputs = [ kerberos ];
   };
