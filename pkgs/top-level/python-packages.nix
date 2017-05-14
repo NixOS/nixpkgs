@@ -28719,6 +28719,8 @@ EOF
 
   ftfy = callPackage ../development/python-modules/ftfy { };    
 
+  murmurhash = callPackage ../development/python-modules/murmurhash { };      
+
 });
 
 in fix' (extends overrides packages)
