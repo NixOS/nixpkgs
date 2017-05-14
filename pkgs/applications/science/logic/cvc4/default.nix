@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "cvc4-${version}";
-  version = "1.5pre-smtcomp2016";
+  version = "1.5pre-20170514";
+
 
   src = fetchurl {
-    url = "http://cvc4.cs.nyu.edu/builds/src/cvc4-${version}.tar.gz";
-    sha256 = "15wz0plfc9q8acrwq1ljgsgqmh8pyz5alzv5xpchvv9w76lvj2zf";
+    url = http://cvc4.cs.stanford.edu/downloads/builds/src/unstable/latest-unstable.tar.gz;
+    sha256 = "0d56q7llx78f5mbhx6n4qhbq8c1pjl9a5azx823q7zyj70rmrwlq";
   };
 
   buildInputs = [ gmp cln pkgconfig readline swig libantlr3c boost jdk autoreconfHook python2 ];
