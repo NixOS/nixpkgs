@@ -94,6 +94,8 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  diary = callPackage ../applications/misc/diary { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit (haskellPackages) dhall-nix;
   };
