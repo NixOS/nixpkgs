@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       AGL AppKit ApplicationServices Carbon Cocoa
       CoreAudio CoreBluetooth CoreLocation CoreServices
       DiskArbitration Foundation OpenGL
-      darwin.cf-private darwin.apple_sdk.sdk darwin.libobjc libiconv
+      darwin.cf-private darwin.libobjc libiconv
     ]);
 
   buildInputs = [ ]
