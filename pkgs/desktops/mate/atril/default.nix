@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Atril is a simple multi-page document viewer for the MATE desktop";
     homepage = "http://mate-desktop.org";
-    license = with stdenv.lib.licenses; [ gpl2 ];
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
   };
 }
