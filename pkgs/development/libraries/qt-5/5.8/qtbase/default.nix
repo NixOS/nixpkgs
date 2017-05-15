@@ -1,6 +1,6 @@
 {
   stdenv, lib, copyPathsToStore,
-  src, version,
+  src, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
   ruby,
@@ -32,7 +32,7 @@ in
 stdenv.mkDerivation {
 
   name = "qtbase-${version}";
-  inherit src version;
+  inherit qtCompatVersion src version;
 
   propagatedBuildInputs =
     [
@@ -117,18 +117,22 @@ stdenv.mkDerivation {
      # Note on the above: \x27 is a way if including a single-quote
      # character in the sed string arguments.
 
+  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
 
     configureFlags+="\
-        -plugindir $out/lib/qt5/plugins \
-        -importdir $out/lib/qt5/imports \
-        -qmldir $out/lib/qt5/qml \
-        -docdir $out/share/doc/qt5"
+        -plugindir $out/$qtPluginPrefix \
+        -qmldir $out/$qtQmlPrefix \
+        -docdir $out/$qtDocPrefix"
 
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins/platforms\""
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/$qtPluginPrefix/platforms\""
   '';
 
 

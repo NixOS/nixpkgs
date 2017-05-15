@@ -9,8 +9,9 @@ top-level attribute to `top-level/all-packages.nix`.
 1. Update the URL in `maintainers/scripts/generate-qt.sh`.
 2. From the top of the Nixpkgs tree, run
    `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
-3. Check that the new packages build correctly.
-4. Commit the changes and open a pull request.
+3. Update `qtCompatVersion` below if the minor version number changes.
+4. Check that the new packages build correctly.
+5. Commit the changes and open a pull request.
 
 */
 
@@ -28,6 +29,8 @@ top-level attribute to `top-level/all-packages.nix`.
 with stdenv.lib;
 
 let
+
+  qtCompatVersion = "5.8";
 
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
@@ -61,7 +64,7 @@ let
 
   addPackages = self: with self;
     let
-      callPackage = self.newScope { inherit qtSubmodule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtSubmodule srcs; };
     in {
 
       qtbase = callPackage ./qtbase {

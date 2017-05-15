@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtsvg ];
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags PLUGINDIR=$out/lib/qt5/plugins"
+    qmakeFlags="$qmakeFlags PLUGINDIR=$out/$qtPluginPrefix"
   '';
 
   preFixup = ''

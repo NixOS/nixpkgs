@@ -56,10 +56,10 @@ stdenv.mkDerivation rec {
 
     # we need to link to our Qt deps in our own output if we want
     # this package to work without being installed as a system pkg
-    mkdir -p $out/lib/qt5 $out/etc/xdg
+    mkdir -p $out/lib/qt-$qtCompatVersion $out/etc/xdg
     for pkg in $qtInputs; do
-      if [[ -d $pkg/lib/qt5 ]]; then
-        for dir in lib/qt5 share etc/xdg; do
+      if [[ -d $pkg/lib/qt-$qtCompatVersion ]]; then
+        for dir in lib/qt-$qtCompatVersion share etc/xdg; do
           if [[ -d $pkg/$dir ]]; then
             ${lndir}/bin/lndir "$pkg/$dir" "$out/$dir"
           fi

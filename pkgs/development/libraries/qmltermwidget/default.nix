@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
-      --replace '$$[QT_INSTALL_QML]' "/lib/qt5/qml/"
+      --replace '$$[QT_INSTALL_QML]' "/$qtQmlPrefix/"
   '';
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];

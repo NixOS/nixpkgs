@@ -34,21 +34,8 @@ in runCommand "startkde" env ''
       addToSearchPath suffixPATH "$p/lib/libexec/kf5"
   done
 
-  # Configure Qt search paths
-  QT_PLUGIN_PATH=
-  QML_IMPORT_PATH=
-  QML2_IMPORT_PATH=
-  for p in $libs; do
-      addToSearchPath QT_PLUGIN_PATH "$p/lib/qt5/plugins"
-      addToSearchPath QML_IMPORT_PATH "$p/lib/qt5/imports"
-      addToSearchPath QML2_IMPORT_PATH "$p/lib/qt5/qml"
-  done
-
   substitute ${./startkde.sh} "$out" \
       --subst-var shell \
-      --subst-var suffixPATH \
-      --subst-var QT_PLUGIN_PATH \
-      --subst-var QML_IMPORT_PATH \
-      --subst-var QML2_IMPORT_PATH
+      --subst-var suffixPATH
   chmod +x "$out"
 ''

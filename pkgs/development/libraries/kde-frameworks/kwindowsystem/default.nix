@@ -14,6 +14,6 @@ kdeFramework {
   propagatedBuildInputs = [ qtx11extras ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PATH=\"$out/lib/qt5/plugins\""
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PATH=\"$out/$qtPluginPrefix\""
   '';
 }

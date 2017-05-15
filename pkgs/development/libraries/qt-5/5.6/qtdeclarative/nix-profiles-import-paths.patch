@@ -1,20 +1,20 @@
-Index: qtdeclarative-opensource-src-5.5.1/src/qml/qml/qqmlimport.cpp
+Index: qtdeclarative-opensource-src-5.6.2/src/qml/qml/qqmlimport.cpp
 ===================================================================
---- qtdeclarative-opensource-src-5.5.1.orig/src/qml/qml/qqmlimport.cpp
-+++ qtdeclarative-opensource-src-5.5.1/src/qml/qml/qqmlimport.cpp
-@@ -1549,6 +1549,15 @@ QQmlImportDatabase::QQmlImportDatabase(Q
+--- qtdeclarative-opensource-src-5.6.2.orig/src/qml/qml/qqmlimport.cpp
++++ qtdeclarative-opensource-src-5.6.2/src/qml/qml/qqmlimport.cpp
+@@ -1568,6 +1568,15 @@ QQmlImportDatabase::QQmlImportDatabase(Q
      QString installImportsPath =  QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath);
      addImportPath(installImportsPath);
  
 +    // Add library paths derived from NIX_PROFILES.
-+    const QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
-+    const QString qmldir = QString::fromLatin1("/lib/qt5/qml");
-+    Q_FOREACH (const QByteArray &profile, profiles) {
++    const QStringList profiles = QFile::decodeName(qgetenv("NIX_PROFILES")).split(' ');
++    const QString qmldir = QStringLiteral(NIXPKGS_QML2_IMPORT_PREFIX);
++    for (const QString &profile: profiles) {
 +        if (!profile.isEmpty()) {
-+            addImportPath(QFile::decodeName(profile) + qmldir);
++            addImportPath(profile + QDir::separator() + qmldir);
 +        }
 +    }
 +
      // env import paths
-     QByteArray envImportPath = qgetenv("QML2_IMPORT_PATH");
-     if (!envImportPath.isEmpty()) {
+     if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
+         const QByteArray envImportPath = qgetenv("QML2_IMPORT_PATH");

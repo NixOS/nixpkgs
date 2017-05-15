@@ -13,10 +13,6 @@ _ecmConfig() {
     cmakeFlags+=" -DKDE_INSTALL_LIBDIR=${!outputLib}/lib"
     cmakeFlags+=" -DKDE_INSTALL_LIBEXECDIR=${!outputBin}/lib/libexec"
     cmakeFlags+=" -DKDE_INSTALL_CMAKEPACKAGEDIR=${!outputDev}/lib/cmake"
-    cmakeFlags+=" -DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/lib/qt5/plugins"
-    cmakeFlags+=" -DKDE_INSTALL_PLUGINDIR=${!outputBin}/lib/qt5/plugins"
-    cmakeFlags+=" -DKDE_INSTALL_QTQUICKIMPORTSDIR=${!outputBin}/lib/qt5/imports"
-    cmakeFlags+=" -DKDE_INSTALL_QMLDIR=${!outputBin}/lib/qt5/qml"
     cmakeFlags+=" -DKDE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
     cmakeFlags+=" -DKDE_INSTALL_LOCALSTATEDIR=/var"
     cmakeFlags+=" -DKDE_INSTALL_DATAROOTDIR=${!outputBin}/share"
@@ -46,6 +42,15 @@ _ecmConfig() {
     cmakeFlags+=" -DKDE_INSTALL_SYSCONFDIR=${!outputBin}/etc"
     cmakeFlags+=" -DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
+
+    if [ -n "$qtPluginPrefix" ]; then
+        cmakeFlags+=" -DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
+        cmakeFlags+=" -DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"
+    fi
+
+    if [ -n "$qtQmlPrefix" ]; then
+        cmakeFlags+=" -DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
+    fi
 }
 
 preConfigureHooks+=(_ecmConfig)

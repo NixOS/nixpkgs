@@ -18,8 +18,9 @@ existing packages here and modify it as necessary.
 1. Update the URL in `./fetch.sh`.
 2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION/`
    from the top of the Nixpkgs tree.
-3. Use `nox-review wip` to check that everything builds.
-4. Commit the changes and open a pull request.
+3. Update `qtCompatVersion` below if the minor version number changes.
+4. Check that the new packages build correctly.
+5. Commit the changes and open a pull request.
 
 */
 
@@ -37,6 +38,8 @@ existing packages here and modify it as necessary.
 with stdenv.lib;
 
 let
+
+  qtCompatVersion = "5.6";
 
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
@@ -70,7 +73,7 @@ let
 
   addPackages = self: with self;
     let
-      callPackage = self.newScope { inherit qtSubmodule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtSubmodule srcs; };
     in {
 
       qtbase = callPackage ./qtbase {
