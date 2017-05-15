@@ -5,7 +5,8 @@
 }@defs:
 
 {
-  pname
+  name
+, pname ? name
 , gemfile
 , lockfile
 , gemset
@@ -77,7 +78,9 @@ let
   basicEnv = buildEnv {
     inherit ignoreCollisions;
 
-    name = pname;
+    name = if name == null then pname else name;
+
+    #name = pname;
 
     paths = envPaths;
     pathsToLink = [ "/lib" ];
@@ -92,7 +95,8 @@ let
     passthru = rec {
       inherit ruby bundler gems mainGem confFiles; # drvName;
 
-      wrappedRuby = stdenv.mkDerivation {
+      wrappedRuby =
+      stdenv.mkDerivation {
         name = "wrapped-ruby-${pname}";
         nativeBuildInputs = [ makeWrapper ];
         buildCommand = ''

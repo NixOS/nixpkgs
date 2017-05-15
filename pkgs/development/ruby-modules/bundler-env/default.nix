@@ -27,7 +27,7 @@ let
   inherit (import ./functions.nix {inherit lib ruby gemConfig groups; }) genStubsScript;
 
   drvName =
-    if name != null then name
+    if name != null then lib.traceVal name
     else if pname != null then "${toString pname}-${basicEnv.gems."${pname}".version}"
     else throw "bundlerEnv: either pname or name must be set";
 
@@ -43,7 +43,7 @@ let
     if gemset == null then gemdir + "/gemset.nix"
     else gemset;
 
-  basicEnv = (callPackage ./basic.nix {}) (args // { inherit pname gemdir;
+  basicEnv = (callPackage ./basic.nix {}) (args // { inherit pname name gemdir;
     gemfile = gemfile';
     lockfile  = lockfile';
     gemset = gemset';
@@ -63,7 +63,7 @@ let
   # The basicEnv should be put into passthru so that e.g. nix-shell can use it.
 in
   if pname == null then
-    basicEnv // { inherit name; }
+    basicEnv // { inherit name basicEnv; }
   else
     (buildEnv {
       inherit ignoreCollisions;

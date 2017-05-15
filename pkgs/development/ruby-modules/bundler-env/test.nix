@@ -24,11 +24,11 @@ let
   functions = (import ./functions.nix testConfigs);
 
   justName = bundlerEnv {
-    name = "test";
+    name = "test-0.1.2";
     gemset = ./test/gemset.nix;
   };
 
-  pnamed = basicEnv {
+  pnamed = bundlerEnv {
     pname = "test";
     gemdir = ./test;
     gemset = ./test/gemset.nix;
@@ -51,13 +51,13 @@ let
       in
       test.run "Filter excludes based on groups" gemSet (set: functions.filterGemset {inherit ruby; groups = ["a" "b"];} set == {}))
     (test.run "bundlerEnv { name }" justName {
-      name = should.equal "test";
+      name = should.equal "test-0.1.2";
     })
     (test.run "bundlerEnv { pname }" pnamed
     [
       (should.haveKeys [ "name" "env" "postBuild" ])
       {
-        name = should.equal "test";
+        name = should.equal "test-0.1.2";
         env = should.beASet;
         postBuild = should.havePrefix "/nix/store";
       }
