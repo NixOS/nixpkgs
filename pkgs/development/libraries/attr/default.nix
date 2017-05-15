@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
 
+  makeFlags = "SHELL=${stdenv.shell}";
+
   installTargets = "install install-lib install-dev";
 
   meta = {
