@@ -14873,6 +14873,8 @@ with pkgs;
 
   clerk = callPackage ../applications/audio/clerk { };
 
+  nbstripout = callPackage ../applications/version-management/nbstripout { };
+
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };

@@ -2433,6 +2433,8 @@ in {
     doCheck = false; # lazy packager
   };
 
+  cram = callPackage ../development/python-modules/cram { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
@@ -5005,6 +5007,8 @@ in {
       description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";
     };
   };
+
+  pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
