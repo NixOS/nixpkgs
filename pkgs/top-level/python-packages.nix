@@ -31346,6 +31346,8 @@ EOF
 
   distro = callPackage ../development/python-modules/distro { };
 
+  smart_open = callPackage ../development/python-modules/smart_open { };  
+
 });
 
 in fix' (extends overrides packages)
