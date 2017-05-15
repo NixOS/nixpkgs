@@ -742,7 +742,9 @@ with pkgs;
       exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
       install -D $out/bin/${drv.pname} $exe
       rm -rf $out/{bin,lib,share}
-      makeWrapper $exe $out/bin/${drv.pname} --prefix PATH ":" "${nix-prefetch-scripts}/bin"
+      makeWrapper $exe $out/bin/${drv.pname} \
+        --prefix PATH ":" "${nix}/bin" \
+        --prefix PATH ":" "${nix-prefetch-scripts}/bin"
       mkdir -p $out/share/bash-completion/completions
       $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
     '';
