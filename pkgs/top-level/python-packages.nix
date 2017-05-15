@@ -28721,11 +28721,11 @@ EOF
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };      
 
-
   plac = callPackage ../development/python-modules/plac { };        
-
-
+  
   preshed = callPackage ../development/python-modules/preshed { };
+
+  thinc = callPackage ../development/python-modules/thinc { };  
 
 });
 
