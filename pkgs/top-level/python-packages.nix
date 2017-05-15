@@ -31354,6 +31354,8 @@ EOF
 
   pyemd = callPackage ../development/python-modules/pyemd { };
 
+  morfessor = callPackage ../development/python-modules/morfessor { };
+
 });
 
 in fix' (extends overrides packages)
