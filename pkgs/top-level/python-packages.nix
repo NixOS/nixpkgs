@@ -31346,7 +31346,9 @@ EOF
 
   distro = callPackage ../development/python-modules/distro { };
 
-  smart_open = callPackage ../development/python-modules/smart_open { };  
+  smart_open = callPackage ../development/python-modules/smart_open { };
+  
+  serpent = callPackage ../development/python-modules/serpent { };  
 
 });
 
