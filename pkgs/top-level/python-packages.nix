@@ -30925,15 +30925,7 @@ EOF
     };
   };
 
-  rocket-errbot = buildPythonPackage rec {
-    name = "rocket-errbot-${version}";
-    version = "1.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rocket-errbot/${name}.tar.gz";
-      sha256 = "181y1wqjvlry5xdzbliajvrxvswzh3myh795jnj1pm92r5grqzda";
-    };
-  };
+  rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
   Yapsy = buildPythonPackage rec {
     name = "Yapsy-${version}";
