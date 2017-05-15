@@ -1,10 +1,10 @@
 {
-  plasmaPackage, lib,
+  mkDerivation, lib,
   automoc4, cmake, perl, pkgconfig,
   kdelibs4, qt4, xproto
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "breeze-qt4";
   sname = "breeze";
   buildInputs = [ kdelibs4 qt4 xproto ];

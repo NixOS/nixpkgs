@@ -1,5 +1,5 @@
 {
-  plasmaPackage, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules, kdoctools,
   breeze-qt5, epoxy, kactivities, kcompletion, kcmutils, kconfig,
   kconfigwidgets, kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel,
@@ -10,7 +10,7 @@
   xcb-util-cursor, xwayland
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "kwin";
   nativeBuildInputs = [
     extra-cmake-modules

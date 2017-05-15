@@ -1,12 +1,12 @@
 {
-  plasmaPackage,
+  mkDerivation,
   extra-cmake-modules, kdoctools,
   lm_sensors,
   kconfig, kcoreaddons, kdelibs4support, ki18n, kiconthemes, kitemviews,
   knewstuff, libksysguard, qtwebkit
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "ksysguard";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ lm_sensors ];

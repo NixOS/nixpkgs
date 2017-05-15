@@ -1,10 +1,10 @@
 {
-  plasmaPackage, extra-cmake-modules,
+  mkDerivation, extra-cmake-modules,
   kcmutils, kconfig, kdelibs4support, kdesu, kdoctools, ki18n, kiconthemes,
   kwindowsystem, qtsvg, qtx11extras
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "kde-cli-tools";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [

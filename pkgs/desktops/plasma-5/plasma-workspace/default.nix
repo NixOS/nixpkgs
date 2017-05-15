@@ -1,5 +1,5 @@
 {
-  plasmaPackage, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore,
 
   extra-cmake-modules, kdoctools,
 
@@ -12,7 +12,7 @@
   libXcursor, pam, wayland
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "plasma-workspace";
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

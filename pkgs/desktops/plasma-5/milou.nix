@@ -1,9 +1,9 @@
-{ plasmaPackage, extra-cmake-modules, qtscript, qtdeclarative
+{ mkDerivation, extra-cmake-modules, qtscript, qtdeclarative
 , kcoreaddons, ki18n, kdeclarative, kservice, plasma-framework
 , krunner
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "milou";
   nativeBuildInputs = [
     extra-cmake-modules

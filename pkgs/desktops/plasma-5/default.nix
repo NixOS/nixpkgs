@@ -31,13 +31,36 @@ existing packages here and modify it as necessary.
 }:
 
 let
+  srcs = import ./srcs.nix {
+    inherit fetchurl;
+    mirror = "mirror://kde";
+  };
+
   packages = self: with self;
     let
       callPackage = self.newScope {
-        plasmaPackage = import ./build-support/package.nix {
-          inherit lib fetchurl;
-          mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
-        };
+        mkDerivation = args:
+          let
+            inherit (args) name;
+            sname = args.sname or name;
+            inherit (srcs."${sname}") src version;
+            mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+          in
+          mkDerivation (args // {
+            name = "${name}-${version}";
+            inherit src;
+
+            outputs = args.outputs or [ "out" "dev" ];
+
+            meta = {
+              license = with lib.licenses; [
+                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+              ];
+              platforms = lib.platforms.linux;
+              maintainers = with lib.maintainers; [ ttuegel ];
+              homepage = "http://www.kde.org";
+            } // (args.meta or {});
+          });
       };
     in {
       bluedevil = callPackage ./bluedevil.nix {};

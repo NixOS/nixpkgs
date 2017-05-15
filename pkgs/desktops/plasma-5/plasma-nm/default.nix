@@ -1,4 +1,4 @@
-{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
+{ mkDerivation, substituteAll, extra-cmake-modules, kdoctools
 , kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
@@ -7,7 +7,7 @@
 , qca-qt5, qtdeclarative, solid, openvpn
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "plasma-nm";
   patches = [
     (substituteAll {
@@ -27,5 +27,4 @@ plasmaPackage {
     mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
     qca-qt5 solid
   ];
-  enableParallelBuilding = true;
 }

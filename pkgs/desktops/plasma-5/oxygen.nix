@@ -1,12 +1,12 @@
 {
-  plasmaPackage, kdeWrapper,
+  mkDerivation, kdeWrapper,
   extra-cmake-modules,
   frameworkintegration, kcmutils, kcompletion, kconfig, kdecoration, kguiaddons,
   ki18n, kwidgetsaddons, kservice, kwayland, kwindowsystem, qtx11extras
 }:
 
 let
-  unwrapped = plasmaPackage {
+  unwrapped = mkDerivation {
     name = "oxygen";
     nativeBuildInputs = [ extra-cmake-modules ];
     propagatedBuildInputs = [

@@ -1,10 +1,10 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, bluez-qt, kactivities
+{ mkDerivation, extra-cmake-modules, kdoctools, bluez-qt, kactivities
 , kauth, kconfig, kdbusaddons, kdelibs4support, kglobalaccel, ki18n
 , kidletime, kio, knotifyconfig, kwayland, libkscreen, networkmanager-qt
 , plasma-workspace, qtx11extras, solid, udev
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "powerdevil";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [

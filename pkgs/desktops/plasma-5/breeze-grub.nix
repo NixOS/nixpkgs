@@ -1,8 +1,8 @@
 {
-  plasmaPackage
+  mkDerivation
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "breeze-grub";
   outputs = [ "out" ];
   installPhase = ''

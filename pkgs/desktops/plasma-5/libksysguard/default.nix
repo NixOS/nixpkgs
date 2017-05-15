@@ -1,12 +1,12 @@
 {
-  plasmaPackage,
+  mkDerivation,
   extra-cmake-modules,
   kauth, kcompletion, kconfig, kconfigwidgets, kcoreaddons, ki18n, kiconthemes,
   kservice, kwidgetsaddons, kwindowsystem, plasma-framework, qtscript, qtwebkit,
   qtx11extras
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "libksysguard";
   patches = [
     ./0001-qdiriterator-follow-symlinks.patch

@@ -1,7 +1,6 @@
-{ plasmaPackage, extra-cmake-modules, pam, socat, libgcrypt
-}:
+{ mkDerivation, extra-cmake-modules, pam, socat, libgcrypt }:
 
-plasmaPackage {
+mkDerivation {
   name = "kwallet-pam";
 
   nativeBuildInputs = [ extra-cmake-modules ];

@@ -1,5 +1,5 @@
 {
-  plasmaPackage, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules, kdoctools,
   attica, baloo, boost, fontconfig, ibus, kactivities, kactivities-stats, kauth,
   kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons,
@@ -12,7 +12,7 @@
   utillinux
 }:
 
-plasmaPackage rec {
+mkDerivation rec {
   name = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
