@@ -60,6 +60,38 @@ in
         default = true;
       };
 
+      killMode = mkOption {
+        type = types.enum ["control-group" "process" "mixed" "none"];
+        description = ''
+          The systemd KillMode to use for glusterd.
+
+          glusterd spawns other daemons like gsyncd.
+          If you want these to stop when glusterd is stopped (e.g. to ensure
+          that NixOS config changes are reflected even for these sub-daemons),
+          set this to 'control-group'.
+          If however you want running volume processes (glusterfsd) and thus
+          gluster mounts not be interrupted when glusterd is restarted
+          (for example, when you want to restart them manually at a later time),
+          set this to 'process'.
+        '';
+        default = "process";
+      };
+
+      stopKillTimeout = mkOption {
+        type = types.str;
+        description = ''
+          The systemd TimeoutStopSec to use.
+
+          After this time after having been asked to shut down, glusterd
+          (and depending on the killMode setting also its child processes)
+          are killed by systemd.
+
+          The default is set low because GlusterFS (as of 3.10) is known to
+          not tell its children (like gsyncd) to terminate at all.
+        '';
+        default = "5s";
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the GlusterFS daemon";
@@ -148,7 +180,8 @@ in
         PIDFile="/run/glusterd.pid";
         LimitNOFILE=65536;
         ExecStart="${glusterfs}/sbin/glusterd -p /run/glusterd.pid --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
-        KillMode="process";
+        KillMode=cfg.killMode;
+        TimeoutStopSec=cfg.stopKillTimeout;
       };
     };
 
