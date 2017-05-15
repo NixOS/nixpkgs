@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Simple CLI diary";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
