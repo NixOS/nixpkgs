@@ -3,14 +3,14 @@
 , libXi, libXrender, libXext, lib
 }:
 let
-  spec = if stdenv.system == "i686-linux" then { system="linux32"; sha256="5d267a8d59f18f1134966e312997b75976f8d816318b5b79b8357a3ac2c022da"; }
-    else if stdenv.system == "x86_64-linux" then { system="linux64"; sha256="d011749e76305b5591b5500897939b33fac460d705d9815b8c03c53b0e1ecc7c"; }
-    else if stdenv.system == "x86_64-darwin" then { system="mac64"; sha256="e95fb36ab85264e16c51d58dd9766624eca6b6339569da0460088f4c788c67ad"; }
+  spec = if stdenv.system == "i686-linux" then { system="linux32"; sha256="70845d81304c5f5f0b7f65274216e613e867e621676a09790c8aa8ef81ea9766"; }
+    else if stdenv.system == "x86_64-linux" then { system="linux64"; sha256="bb2cf08f2c213f061d6fbca9658fc44a367c1ba7e40b3ee1e3ae437be0f901c2"; }
+    else if stdenv.system == "x86_64-darwin" then { system="mac64"; sha256="6c30bba7693ec2d9af7cd9a54729e10aeae85c0953c816d9c4a40a1a72fd8be0"; }
     else abort "missing chromedriver binary for ${stdenv.system}";
 in
 stdenv.mkDerivation rec {
   name = "chromedriver-${version}";
-  version = "2.25";
+  version = "2.29";
 
   src = fetchurl {
     url = "http://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
@@ -21,12 +21,19 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "unzip $src";
 
+  libs = stdenv.lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+    cairo fontconfig freetype
+    gdk_pixbuf glib gtk2 gconf
+    libX11 nspr nss pango libXrender
+    gconf libXext libXi
+  ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    mv chromedriver $out/bin
-    ${lib.optionalString (!stdenv.isDarwin) "patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver"}
-    ${lib.optionalString (!stdenv.isDarwin) ''wrapProgram "$out/bin/chromedriver" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib cairo fontconfig freetype gdk_pixbuf glib gtk2 libX11 nspr nss pango libXrender gconf libXext libXi ]}:\$LD_LIBRARY_PATH"''}
+    install -m755 -D chromedriver $out/bin/chromedriver
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
+    wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
   '';
 
   meta = with stdenv.lib; {
