@@ -31348,7 +31348,9 @@ EOF
 
   smart_open = callPackage ../development/python-modules/smart_open { };
   
-  serpent = callPackage ../development/python-modules/serpent { };  
+  serpent = callPackage ../development/python-modules/serpent { };
+
+  pyro4 = callPackage ../development/python-modules/pyro4 { };    
 
 });
 
