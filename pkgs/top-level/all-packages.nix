@@ -1084,6 +1084,8 @@ with pkgs;
     utillinux = utillinuxMinimal;
   };
 
+  roccat-tools = callPackage ../os-specific/linux/roccat-tools { devices = config.roccat-tools.devices or false; };
+
   apparix = callPackage ../tools/misc/apparix { };
 
   appdata-tools = callPackage ../tools/misc/appdata-tools { };
