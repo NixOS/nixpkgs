@@ -41,9 +41,9 @@ in
       description = "Salt Minion";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = with pkgs; [
-        utillinux
-      ];
+      path = [
+        (builtins.dirOf config.security.wrapperDir)
+      ] ++ config.environment.profiles;
       serviceConfig = {
         ExecStart = "${pkgs.salt}/bin/salt-minion --config-dir=${configDir}";
         LimitNOFILE = 8192;
