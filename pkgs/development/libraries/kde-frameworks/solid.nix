@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   bison, extra-cmake-modules, flex,
   qtbase, qtdeclarative, qttools
 }:
 
-kdeFramework {
+mkDerivation {
   name = "solid";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

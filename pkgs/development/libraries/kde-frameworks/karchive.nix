@@ -1,6 +1,6 @@
-{ kdeFramework, lib, extra-cmake-modules, qtbase }:
+{ mkDerivation, lib, extra-cmake-modules, qtbase }:
 
-kdeFramework {
+mkDerivation {
   name = "karchive";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

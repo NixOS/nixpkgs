@@ -1,9 +1,9 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules
 , modemmanager, qtbase
 }:
 
-kdeFramework {
+mkDerivation {
   name = "modemmanager-qt";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

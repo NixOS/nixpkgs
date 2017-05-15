@@ -1,12 +1,10 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, karchive
-, kconfig
-, kcoreaddons
-, kservice
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  karchive, kconfig, kcoreaddons, kservice
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kemoticons";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

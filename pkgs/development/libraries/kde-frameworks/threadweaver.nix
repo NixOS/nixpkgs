@@ -1,8 +1,8 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules, qtbase
 }:
 
-kdeFramework {
+mkDerivation {
   name = "threadweaver";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

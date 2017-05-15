@@ -1,9 +1,11 @@
-{ kdeFramework, lib, extra-cmake-modules, kconfigwidgets
-, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews
-, kpackage, kservice, kxmlgui
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kconfigwidgets, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews,
+  kpackage, kservice, kxmlgui
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kcmutils";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

@@ -1,9 +1,9 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules
 , hunspell, qtbase, qttools
 }:
 
-kdeFramework {
+mkDerivation {
   name = "sonnet";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   extra-cmake-modules, gettext, python,
   qtbase, qtdeclarative, qtscript,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "ki18n";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

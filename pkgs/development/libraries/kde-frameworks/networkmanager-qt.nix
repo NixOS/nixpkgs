@@ -1,9 +1,9 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules
 , qtbase, networkmanager
 }:
 
-kdeFramework {
+mkDerivation {
   name = "networkmanager-qt";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

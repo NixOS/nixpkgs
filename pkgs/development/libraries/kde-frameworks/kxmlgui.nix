@@ -1,9 +1,9 @@
-{ kdeFramework, lib, extra-cmake-modules, attica, kconfig
+{ mkDerivation, lib, extra-cmake-modules, attica, kconfig
 , kconfigwidgets, kglobalaccel, ki18n, kiconthemes, kitemviews
 , ktextwidgets, kwindowsystem, sonnet
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kxmlgui";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

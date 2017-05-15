@@ -1,13 +1,13 @@
-{ kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules, acl, karchive
-, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons
-, kdbusaddons, kdoctools, ki18n, kiconthemes, kitemviews
-, kjobwidgets, knotifications, kservice, ktextwidgets, kwallet
-, kwidgetsaddons, kwindowsystem, kxmlgui
-, qtscript, qtx11extras, solid, fetchpatch
+{
+  mkDerivation, lib, copyPathsToStore,
+  extra-cmake-modules, kdoctools,
+  acl, karchive, kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
+  kdbusaddons, ki18n, kiconthemes, kitemviews, kjobwidgets, knotifications,
+  kservice, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
+  qtscript, qtx11extras, solid, fetchpatch
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kio";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

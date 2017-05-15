@@ -1,13 +1,12 @@
 {
-  kdeFramework, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules, kdoctools,
   kconfig, kcrash, ki18n, kio, kparts, kservice, kwindowsystem, plasma-framework
 }:
 
-let
-  inherit (lib) getLib;
-in
-kdeFramework {
+let inherit (lib) getLib; in
+
+mkDerivation {
   name = "kinit";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

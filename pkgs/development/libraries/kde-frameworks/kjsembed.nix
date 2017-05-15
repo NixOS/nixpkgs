@@ -1,8 +1,9 @@
-{ kdeFramework, lib, extra-cmake-modules, kdoctools, ki18n, kjs
+{
+  mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kjs
 , qtsvg
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kjsembed";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

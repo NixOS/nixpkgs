@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules,
   qtbase, qttools, qtx11extras
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kwindowsystem";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

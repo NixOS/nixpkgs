@@ -1,6 +1,9 @@
-{ kdeFramework, lib, copyPathsToStore, extra-cmake-modules, kcoreaddons, polkit-qt, qttools }:
+{
+  mkDerivation, lib, copyPathsToStore,
+  extra-cmake-modules, kcoreaddons, polkit-qt, qttools
+}:
 
-kdeFramework {
+mkDerivation {
   name = "kauth";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules qttools ];

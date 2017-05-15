@@ -1,9 +1,9 @@
 {
-  kdeFramework, lib, extra-cmake-modules,
+  mkDerivation, lib, extra-cmake-modules,
   kconfig, kcoreaddons, kcrash, kdbusaddons, kdoctools, kinit, kservice
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kded";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

@@ -1,9 +1,9 @@
-{ kdeFramework, lib, extra-cmake-modules, kconfig, kconfigwidgets
+{ mkDerivation, lib, extra-cmake-modules, kconfig, kconfigwidgets
 , kcoreaddons , kdbusaddons, kdoctools, ki18n, kiconthemes
 , knotifications , kservice, kwidgetsaddons, kwindowsystem, libgcrypt, gpgme
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kwallet";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

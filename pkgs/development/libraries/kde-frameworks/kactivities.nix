@@ -1,9 +1,9 @@
-{ kdeFramework, lib, extra-cmake-modules, boost, kcmutils, kconfig
+{ mkDerivation, lib, extra-cmake-modules, boost, kcmutils, kconfig
 , kcoreaddons, kdbusaddons, kdeclarative, kglobalaccel, ki18n
 , kio, kservice, kwindowsystem, kxmlgui, qtdeclarative
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kactivities";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

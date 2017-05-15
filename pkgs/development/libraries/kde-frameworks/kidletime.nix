@@ -1,10 +1,10 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, qtbase
-, qtx11extras
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  qtbase, qtx11extras
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kidletime";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

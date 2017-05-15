@@ -27,14 +27,68 @@ existing packages here and modify it as necessary.
 { libsForQt5, lib, fetchurl }:
 
 let
+
+  srcs = import ./srcs.nix {
+    inherit fetchurl;
+    mirror = "mirror://kde";
+  };
+
+  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+
   packages = self: with self;
     let
+
+      propagateBin =
+        let setupHook = { writeScript }:
+              writeScript "setup-hook.sh" ''
+                # Propagate $bin output
+                propagatedUserEnvPkgs+=" @bin@"
+
+                # Propagate $dev so that this setup hook is propagated
+                # But only if there is a separate $dev output
+                if [ "$outputDev" != out ]; then
+                    if [ -n "$crossConfig" ]; then
+                      propagatedBuildInputs+=" @dev@"
+                    else
+                      propagatedNativeBuildInputs+=" @dev@"
+                    fi
+                fi
+              '';
+        in callPackage setupHook {};
+
       callPackage = self.newScope {
-        kdeFramework = import ./build-support/framework.nix {
-          inherit lib fetchurl;
-          mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
-        };
+
+        inherit propagateBin;
+
+        mkDerivation = args:
+          let
+
+            inherit (args) name;
+            inherit (srcs."${name}") src version;
+
+            outputs = args.outputs or [ "out" "dev" "bin" ];
+            hasBin = lib.elem "bin" outputs;
+            hasDev = lib.elem "dev" outputs;
+
+            defaultSetupHook = if hasBin && hasDev then propagateBin else null;
+            setupHook = args.setupHook or defaultSetupHook;
+
+            meta = {
+              homepage = "http://www.kde.org";
+              license = with lib.licenses; [
+                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+              ];
+              maintainers = [ lib.maintainers.ttuegel ];
+              platforms = lib.platforms.linux;
+            } // (args.meta or {});
+
+          in mkDerivation (args // {
+            name = "${name}-${version}";
+            inherit meta outputs setupHook src;
+          });
+
       };
+
     in {
       attica = callPackage ./attica.nix {};
       baloo = callPackage ./baloo.nix {};

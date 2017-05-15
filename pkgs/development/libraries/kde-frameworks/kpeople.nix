@@ -1,8 +1,8 @@
-{ kdeFramework, lib, extra-cmake-modules, kcoreaddons, ki18n
+{ mkDerivation, lib, extra-cmake-modules, kcoreaddons, ki18n
 , kitemviews, kservice, kwidgetsaddons, qtdeclarative
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kpeople";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

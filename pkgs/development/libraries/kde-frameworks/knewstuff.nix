@@ -1,9 +1,9 @@
-{ kdeFramework, lib, extra-cmake-modules, attica, karchive
+{ mkDerivation, lib, extra-cmake-modules, attica, karchive
 , kcompletion, kconfig, kcoreaddons, ki18n, kiconthemes, kio
 , kitemviews, kservice, ktextwidgets, kwidgetsaddons, kxmlgui
 }:
 
-kdeFramework {
+mkDerivation {
   name = "knewstuff";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

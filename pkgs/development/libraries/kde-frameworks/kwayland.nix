@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   qtbase, wayland
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kwayland";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

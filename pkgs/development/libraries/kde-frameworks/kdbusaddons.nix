@@ -1,6 +1,6 @@
-{ kdeFramework, lib, extra-cmake-modules, qtbase, qttools, qtx11extras }:
+{ mkDerivation, lib, extra-cmake-modules, qtbase, qttools, qtx11extras }:
 
-kdeFramework {
+mkDerivation {
   name = "kdbusaddons";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

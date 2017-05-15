@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   qtbase, qtx11extras,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kguiaddons";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

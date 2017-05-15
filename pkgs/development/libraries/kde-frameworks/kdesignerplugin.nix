@@ -1,21 +1,11 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, kcompletion
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kdoctools
-, kiconthemes
-, kio
-, kitemviews
-, kplotting
-, ktextwidgets
-, kwidgetsaddons
-, kxmlgui
-, sonnet
+{
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools,
+  kcompletion, kconfig, kconfigwidgets, kcoreaddons, kiconthemes, kio,
+  kitemviews, kplotting, ktextwidgets, kwidgetsaddons, kxmlgui, sonnet
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kdesignerplugin";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

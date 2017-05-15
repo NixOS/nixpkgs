@@ -1,8 +1,8 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules, qtbase, qttools
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kwidgetsaddons";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

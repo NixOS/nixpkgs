@@ -1,8 +1,8 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules, perl, qtbase, qttools
 }:
 
-kdeFramework {
+mkDerivation {
   name = "syntax-highlighting";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

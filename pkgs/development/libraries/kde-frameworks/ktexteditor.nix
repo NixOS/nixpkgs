@@ -1,4 +1,4 @@
-{ kdeFramework, lib, copyPathsToStore
+{ mkDerivation, lib, copyPathsToStore
 , extra-cmake-modules, perl
 , karchive, kconfig, kguiaddons, kiconthemes, kparts
 , libgit2
@@ -6,7 +6,7 @@
 , ki18n, kio, sonnet, syntax-highlighting
 }:
 
-kdeFramework {
+mkDerivation {
   name = "ktexteditor";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules perl ];

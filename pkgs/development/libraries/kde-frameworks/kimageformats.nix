@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   ilmbase, karchive, qtbase
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kimageformats";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];

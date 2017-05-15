@@ -1,9 +1,9 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules
 , qtbase, qtdeclarative
 }:
 
-kdeFramework {
+mkDerivation {
   name = "bluez-qt";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

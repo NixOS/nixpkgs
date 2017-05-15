@@ -1,9 +1,9 @@
-{ kdeFramework
+{ mkDerivation
 , lib
 , extra-cmake-modules, qtbase
 }:
 
-kdeFramework {
+mkDerivation {
   name = "oxygen-icons5";
   meta = {
     license = lib.licenses.lgpl3Plus;

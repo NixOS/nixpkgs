@@ -1,9 +1,10 @@
-{ kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules
-, karchive, kconfigwidgets, ki18n, breeze-icons, kitemviews, qtsvg
+{
+  mkDerivation, lib, copyPathsToStore,
+  extra-cmake-modules,
+  karchive, kconfigwidgets, ki18n, breeze-icons, kitemviews, qtsvg
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kiconthemes";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
