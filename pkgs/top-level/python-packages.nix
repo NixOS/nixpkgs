@@ -29827,7 +29827,7 @@ EOF
     disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify mpd2 ];
 
     src = pkgs.fetchurl {
       url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
