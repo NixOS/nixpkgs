@@ -31352,6 +31352,8 @@ EOF
 
   pyro4 = callPackage ../development/python-modules/pyro4 { };    
 
+  pyemd = callPackage ../development/python-modules/pyemd { };
+
 });
 
 in fix' (extends overrides packages)
