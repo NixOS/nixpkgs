@@ -16345,19 +16345,21 @@ with pkgs;
 
   wily = callPackage ../applications/editors/wily { };
 
+  winswitch = callPackage ../tools/X11/winswitch { };
+
+  wings = callPackage ../applications/graphics/wings { };
+
+  wireguard = callPackage ../os-specific/linux/wireguard { };
+
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
+
+  wllvm = callPackage  ../development/tools/wllvm { };
 
   wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
 
   wmsm.app = callPackage ../applications/window-managers/windowmaker/dockapps/wmsm.app.nix { };
 
   wmsystemtray = callPackage ../applications/window-managers/windowmaker/dockapps/wmsystemtray.nix { };
-
-  winswitch = callPackage ../tools/X11/winswitch { };
-
-  wings = callPackage ../applications/graphics/wings { };
-
-  wireguard = callPackage ../os-specific/linux/wireguard { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
