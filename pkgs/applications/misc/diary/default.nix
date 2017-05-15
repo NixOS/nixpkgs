@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline ];
 
-  installPhase = ''
+  preInstalledPhase = ''
     mkdir $out/bin -p
     mkdir $out/share/man/ -p
-    PREFIX=$out make install
   '';
+
+  installFlags = [ "PREFIX=\${out}" ];
 
   meta = {
     homepage = "https://github.com/in0rdr/diary";
