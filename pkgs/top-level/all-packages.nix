@@ -3078,7 +3078,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
-  msf = callPackage ../tools/security/metasploit { };
+  metasploit = callPackage ../tools/security/metasploit { };
+  msf = metasploit;
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
