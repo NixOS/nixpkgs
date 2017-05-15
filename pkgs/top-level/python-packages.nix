@@ -31356,6 +31356,8 @@ EOF
 
   morfessor = callPackage ../development/python-modules/morfessor { };
 
+  gensim = callPackage ../development/python-modules/gensim { };  
+
 });
 
 in fix' (extends overrides packages)
