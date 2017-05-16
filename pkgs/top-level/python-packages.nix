@@ -31627,6 +31627,9 @@ EOF
   distro = callPackage ../development/python-modules/distro { };
 
   impacket = callPackage ../development/python-modules/impacket.nix { };
+
+  pylnk = callPackage ../development/python-modules/pylnk.nix { };
+
 });
 
 in fix' (extends overrides packages)
