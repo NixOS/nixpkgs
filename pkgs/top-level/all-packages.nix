@@ -1407,6 +1407,8 @@ with pkgs;
 
   cpio = callPackage ../tools/archivers/cpio { };
 
+  crackmapexec = callPackage ../tools/networking/crackmapexec { };
+
   crackxls = callPackage ../tools/security/crackxls { };
 
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
