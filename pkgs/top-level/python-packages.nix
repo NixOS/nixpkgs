@@ -112,6 +112,8 @@ in {
     };
   };
 
+  "3to2" = callPackage ../development/python-modules/3to2 { };
+
   aenum = callPackage ../development/python-modules/aenum { };
 
   agate = callPackage ../development/python-modules/agate { };
