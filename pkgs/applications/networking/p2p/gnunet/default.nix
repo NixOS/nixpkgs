@@ -1,6 +1,7 @@
 { stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib }:
+, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib
+, libpulseaudio, libopus, libogg }:
 
 stdenv.mkDerivation rec {
   name = "gnunet-0.10.1";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     adns curl gettext gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libtool libunistring libxml2 makeWrapper ncurses
-    pkgconfig sqlite zlib
+    pkgconfig sqlite zlib libpulseaudio libopus libogg
   ];
 
   preConfigure = ''
