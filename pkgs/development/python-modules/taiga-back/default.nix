@@ -12,8 +12,6 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13kdh69lzz81076wp7vddaxwq08vkl6abjp63pa7szdh5bgrqsr3";
   };
 
-# all python dependencies taken from requirements.txt
-# TODO are all of these (explicitly) required ?
   propagatedBuildInputs = with python3Packages; [
     pkgs.gettext
     amqp
@@ -25,16 +23,16 @@ python3Packages.buildPythonApplication rec {
     cssutils
     dateutil
     diff-match-patch
-    django
-    django-ipware
-    django-jinja
-    django-pglocks
+    django_1_10
+    (django-ipware.override { django = django_1_10; })
+    (django-jinja.override { django = django_1_10; })
+    (django-pglocks.override { django = django_1_10; })
     django-picklefield
-    django-sampledatahelper
-    django-sites
-    django-sr
-    djmail
-    easy-thumbnails
+    (django-sampledatahelper.override { django = django_1_10; })
+    (django-sites.override { django = django_1_10; })
+    (django-sr.override { django = django_1_10; })
+    (djmail.override { django = django_1_10; })
+    (easy-thumbnails.override { django = django_1_10; })
     fn
     gunicorn
     html5lib
