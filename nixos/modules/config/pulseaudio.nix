@@ -250,17 +250,17 @@ in {
     })
 
     (mkIf systemWide {
-      users.extraUsers.pulse = {
+      users.extraUsers.pulseaudio = {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;
-        group = "pulse";
+        group = "pulseaudio";
         extraGroups = [ "audio" ];
         description = "PulseAudio system service user";
         home = stateDir;
         createHome = true;
       };
 
-      users.extraGroups.pulse.gid = gid;
+      users.extraGroups.pulseaudio.gid = gid;
 
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";
