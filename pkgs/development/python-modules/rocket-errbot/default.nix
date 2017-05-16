@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, buildPythonPackage, genshi, lxml }:
+{ lib, fetchurl, fetchpatch, buildPythonPackage }:
 
 buildPythonPackage rec {
   name = "rocket-errbot-${version}";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   patches = [ (fetchpatch {
     url = "https://github.com/errbotio/rocket/pull/1.patch";
-    sha256 = "1n96ki0gdbzl2318c59cyy2z177214wsjbvy63a8917na3zw5m5l";
+    sha256 = "0v9zjp4ls32vkpr4b6kjflz4ny2fwj6hwshbnjmhdzc4hnmnzf7x";
   }) ];
 
   meta = {
