@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeWrapper kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
 
 in
 
@@ -30,24 +30,12 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = ''
-          KDE packages that need to be installed system-wide.
-        '';
-      };
-
     };
 
   };
 
 
   config = mkMerge [
-    (mkIf (cfg.extraPackages != []) {
-      environment.systemPackages = [ (kdeWrapper cfg.extraPackages) ];
-    })
-
     (mkIf (xcfg.enable && cfg.enable) {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -139,10 +127,14 @@ in
           plasma-workspace
           plasma-workspace-wallpapers
 
+          dolphin
           dolphin-plugins
           ffmpegthumbs
           kdegraphics-thumbnailers
+          khelpcenter
           kio-extras
+          konsole
+          oxygen
           print-manager
 
           breeze-icons
@@ -162,16 +154,6 @@ in
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
-
-      services.xserver.desktopManager.plasma5.extraPackages =
-        with kdeApplications; with plasma5;
-        [
-          khelpcenter
-          oxygen
-
-          dolphin
-          konsole
-        ];
 
       environment.pathsToLink = [ "/share" ];
 

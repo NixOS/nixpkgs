@@ -1,31 +1,26 @@
-{ mkDerivation, kdeWrapper, fetchurl, lib
-, extra-cmake-modules, kdoctools
+{ mkDerivation, fetchurl, lib
+, extra-cmake-modules, kdoctools, wrapGAppsHook
 , kconfig, kinit, kpmcore
 , eject, libatasmart }:
 
 let
   pname = "partitionmanager";
-  unwrapped = mkDerivation rec {
-    name = "${pname}-${version}";
-    version = "3.0.1";
+in mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "3.0.1";
 
-    src = fetchurl {
-      url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "08sb9xa7dvvgha3k2xm1srl339przxpxd2y5bh1lnx6k1x7dk410";
-    };
-
-    meta = with lib; {
-      description = "KDE Partition Manager";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ peterhoeg ];
-    };
-    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-    # refer to kpmcore for the use of eject
-    buildInputs = [ eject libatasmart ];
-    propagatedBuildInputs = [ kconfig kinit kpmcore ];
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "08sb9xa7dvvgha3k2xm1srl339przxpxd2y5bh1lnx6k1x7dk410";
   };
 
-in kdeWrapper {
-  inherit unwrapped;
-  targets = [ "bin/partitionmanager" ];
+  meta = with lib; {
+    description = "KDE Partition Manager";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg ];
+  };
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  # refer to kpmcore for the use of eject
+  buildInputs = [ eject libatasmart ];
+  propagatedBuildInputs = [ kconfig kinit kpmcore ];
 }

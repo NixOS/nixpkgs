@@ -1,21 +1,14 @@
 {
-  mkDerivation, lib, kdeWrapper,
-  extra-cmake-modules, kdoctools,
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
   kparts, ktexteditor, kwidgetsaddons, libkomparediff2
 }:
 
-let
-  unwrapped =
-    mkDerivation {
-      name = "kompare";
-      meta = { license = with lib.licenses; [ gpl2 ]; };
-      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-      propagatedBuildInputs = [
-        kparts ktexteditor kwidgetsaddons libkomparediff2
-      ];
-    };
-in
-kdeWrapper {
-  inherit unwrapped;
-  targets = [ "bin/kompare" ];
+mkDerivation {
+  name = "kompare";
+  meta = { license = with lib.licenses; [ gpl2 ]; };
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  propagatedBuildInputs = [
+    kparts ktexteditor kwidgetsaddons libkomparediff2
+  ];
 }

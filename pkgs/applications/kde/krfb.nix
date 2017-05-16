@@ -1,22 +1,15 @@
 {
-  mkDerivation, lib, kdeWrapper,
-  extra-cmake-modules, kdoctools,
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
   kdelibs4support, kdnssd, libvncserver, libXtst
 }:
 
-let
-  unwrapped =
-    mkDerivation {
-      name = "krfb";
-      meta = {
-        license = with lib.licenses; [ gpl2 fdl12 ];
-        maintainers = with lib.maintainers; [ jerith666 ];
-      };
-      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-      propagatedBuildInputs = [ kdelibs4support kdnssd libvncserver libXtst ];
-    };
-in
-kdeWrapper {
-  inherit unwrapped;
-  targets = [ "bin/krfb" ];
+mkDerivation {
+  name = "krfb";
+  meta = {
+    license = with lib.licenses; [ gpl2 fdl12 ];
+    maintainers = with lib.maintainers; [ jerith666 ];
+  };
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  propagatedBuildInputs = [ kdelibs4support kdnssd libvncserver libXtst ];
 }

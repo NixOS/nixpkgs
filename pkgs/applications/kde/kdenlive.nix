@@ -1,8 +1,8 @@
 { mkDerivation
-, kdeWrapper
 , lib
 , extra-cmake-modules
 , kdoctools
+, wrapGAppsHook
 , qtscript
 , kactivities
 , kconfig
@@ -31,8 +31,7 @@
 , qtquickcontrols
 }:
 
-let
-unwrapped = mkDerivation {
+mkDerivation {
   name = "kdenlive";
   patches = [
     ./kdenlive-cmake-concurrent-module.patch
@@ -40,6 +39,7 @@ unwrapped = mkDerivation {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    wrapGAppsHook
   ];
   buildInputs = [
     qtscript
@@ -61,25 +61,12 @@ unwrapped = mkDerivation {
     ffmpeg
   ];
   propagatedBuildInputs = [
-    kactivities
-    ki18n
-    kio
-    kio-extras
-    kwindowsystem
-    kfilemetadata
-    plasma-framework
-    phonon-backend-gstreamer
-    qtquickcontrols
+    kactivities kconfig kcrash kguiaddons kiconthemes kinit kio kio-extras
+    kdbusaddons kfilemetadata knotifications knewstuff karchive knotifyconfig
+    kplotting ktextwidgets kwindowsystem plasma-framework
+    phonon-backend-gstreamer qtquickcontrols shared_mime_info
   ];
-  enableParallelBuilding = true;
   meta = {
     license = with lib.licenses; [ gpl2Plus ];
   };
-};
-in
-kdeWrapper
-{
-  inherit unwrapped;
-  targets = [ "bin/kdenlive" ];
-  paths = [ kinit ];
 }

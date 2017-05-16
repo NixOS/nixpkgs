@@ -1,28 +1,20 @@
 {
-  mkDerivation, lib, kdeWrapper,
-  extra-cmake-modules, kdoctools,
+  mkDerivation, lib,
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
   kio, ki18n,
   perl, python, php
 }:
 
-kdeWrapper {
-  unwrapped = mkDerivation {
-    name = "kcachegrind";
-    meta = {
-      license = with lib.licenses; [ gpl2 ];
-      maintainers = with lib.maintainers; [ orivej ];
-    };
-    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-    buildInputs = [ perl python php kio ki18n ];
-    enableParallelBuilding = true;
+mkDerivation {
+  name = "kcachegrind";
+  meta = {
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ orivej ];
   };
-
-  targets = [
-    "bin/kcachegrind"
-    "bin/dprof2calltree"    # perl
-    "bin/hotshot2calltree"  # python
-    "bin/memprof2calltree"  # perl
-    "bin/op2calltree"       # perl
-    "bin/pprof2calltree"    # php
-  ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  propagatedBuildInputs = [ kio ];
+  buildInputs = [ perl python php ki18n ];
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ perl php python]}")
+  '';
 }
