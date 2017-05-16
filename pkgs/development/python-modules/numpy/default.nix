@@ -1,16 +1,17 @@
-{lib, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
+{lib, fetchurl, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
 
-args:
+buildPythonPackage rec {
+  pname = "numpy";
+  version = "1.12.1";
+  name = "${pname}-${version}";
 
-let
-  inherit (args) version;
-in buildPythonPackage (args // rec {
-
-  name = "numpy-${version}";
+  src = fetchurl {
+    url = "mirror://pypi/n/numpy/numpy-${version}.zip";
+    sha256 = "a65266a4ad6ec8936a1bc85ce51f8600634a31a258b722c9274a80ff189d9542";
+  };
 
   disabled = isPyPy;
-  buildInputs = args.buildInputs or [ gfortran nose ];
-  propagatedBuildInputs = args.propagatedBuildInputs or [ passthru.blas ];
+  buildInputs = [ gfortran nose blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # See cpython 2.7 patches.
@@ -26,8 +27,8 @@ in buildPythonPackage (args // rec {
     echo "Creating site.cfg file..."
     cat << EOF > site.cfg
     [openblas]
-    include_dirs = ${passthru.blas}/include
-    library_dirs = ${passthru.blas}/lib
+    include_dirs = ${blas}/include
+    library_dirs = ${blas}/lib
     EOF
   '';
 
@@ -56,5 +57,5 @@ in buildPythonPackage (args // rec {
     description = "Scientific tools for Python";
     homepage = "http://numpy.scipy.org/";
     maintainers = with lib.maintainers; [ fridh ];
-  } // (args.meta or {});
-})
+  };
+}
