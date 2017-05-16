@@ -10842,6 +10842,8 @@ with pkgs;
 
   gatling = callPackage ../servers/http/gatling { };
 
+  geth = goPackages.ethereum.bin // { outputs = [ "bin" ]; };
+
   glabels = callPackage ../applications/graphics/glabels { };
 
   gofish = callPackage ../servers/gopher/gofish { };
