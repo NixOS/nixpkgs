@@ -16324,36 +16324,8 @@ in {
     };
   };
 
-
-  buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
-    gfortran = pkgs.gfortran;
+  numpy = callPackage ../development/python-modules/numpy {
     blas = pkgs.openblasCompat;
-  };
-
-  numpy = self.numpy_1_12;
-
-  numpy_1_10 = self.buildNumpyPackage rec {
-    version = "1.10.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "7356e98fbcc529e8d540666f5a919912752e569150e9a4f8d869c686f14c720b";
-    };
-  };
-
-  numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-      sha256 = "2e0fc5248246a64628656fe14fcab0a959741a2820e003bd15538226501b82f7";
-    };
-  };
-
-  numpy_1_12 = self.buildNumpyPackage rec {
-    version = "1.12.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-      sha256 = "a65266a4ad6ec8936a1bc85ce51f8600634a31a258b722c9274a80ff189d9542";
-    };
   };
 
   numpydoc = buildPythonPackage rec {
