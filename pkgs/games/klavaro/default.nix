@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     description = "Just another free touch typing tutor program";
     homepage = http://klavaro.sourceforge.net/;

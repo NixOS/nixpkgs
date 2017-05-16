@@ -23,6 +23,9 @@ stdenv.mkDerivation {
       cp -va "out/public-include/"* "$out/include/"
     '';
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     homepage = "http://linux.dell.com/libsmbios/main";
     description = "A library to obtain BIOS information";
