@@ -21,6 +21,7 @@ let
   taiga-events = pkgs.nodePackages.TaigaIO-Events-undefined;
 
   useLocalDatabase = (cfg.database.host == "127.0.0.1"); 
+
   amqpUrl = "amqp://${cfg.amqp.user}:${cfg.amqp.password}@localhost:5672/${cfg.amqp.vhost}";
 
   httpScheme = ''${if cfg.urls.enableSSL then "https" else "http"}'';
@@ -31,12 +32,12 @@ let
 
     DATABASES = {
       'default': {
-        'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     '${cfg.database.name}',
-        'USER':     '${cfg.database.user}',
-        'PASSWORD': '${cfg.database.password}',
-        'HOST':     '${cfg.database.host}',
-        'PORT':     '${toString cfg.database.port}',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': '${cfg.database.name}',
+        'USER': '${cfg.database.user}',
+        ${optionalString (!useLocalDatabase) "'HOST': '${cfg.database.host}',"}
+        ${optionalString (!useLocalDatabase) "'PORT': '${toString cfg.database.port}',"}
+        ${optionalString (!useLocalDatabase) "'PASSWORD': '${cfg.database.password}',"}
       }
     }
     MEDIA_ROOT = "${cfg.statePath}/media"
@@ -177,7 +178,7 @@ in
         };
         user = mkOption {
           type = types.str;
-          default = "taigauser";
+          default = "taigapguser";
           description = "Taiga database username.";
         };
         password = mkOption {
@@ -275,14 +276,9 @@ in
       services.postgresql = mkIf useLocalDatabase {
       	enable = true;
 
-      	identMap = ''
-          taiga-users ${cfg.user} ${cfg.database.user}
-          taiga-users root ${cfg.database.user}
-        '';
-
         authentication = ''
-          local ${cfg.database.user} all ident map=taiga-users
-          local all all trust
+          local ${cfg.database.name} ${cfg.database.user} trust
+#          local all all trust
         '';
       };
 
@@ -331,7 +327,8 @@ in
           Restart = "always";
           PermissionsStartOnly = true;
           PrivateDevices = true;
-          PrivateTmp = true;
+          PrivateTmp = mkIf (!useLocalDatabase) true;
+          JoinsNamespaceOf = mkIf useLocalDatabase "postgresql.service";
           TimeoutSec = 300;
         };
 
