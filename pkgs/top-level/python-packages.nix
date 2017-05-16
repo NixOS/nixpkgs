@@ -12025,19 +12025,12 @@ in {
   };
 
   gevent = buildPythonPackage rec {
-    name = "gevent-1.1.2";
+    name = "gevent-1.2.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gevent/${name}.tar.gz";
-      sha256 = "cb15cf73d69a2eeefed330858f09634e2c50bf46da9f9e7635730fcfb872c02c";
+      sha256 = "0z7s54nfp7lkmpxzihxsqacysxv7ndrmskbf88g32c9cwg801qrx";
     };
-
-    # Why do we have this patch?
-    postPatch = ''
-      substituteInPlace libev/ev.c --replace \
-        "ecb_inline void ecb_unreachable (void) ecb_noreturn" \
-        "ecb_inline ecb_noreturn void ecb_unreachable (void)"
-    '';
 
     buildInputs = with self; [ pkgs.libev ];
     propagatedBuildInputs = with self; optionals (!isPyPy) [ greenlet ];
