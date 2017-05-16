@@ -3705,6 +3705,8 @@ with pkgs;
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
+  pywerview = callPackage ../tools/networking/pywerview { };
+
   remarshal = callPackage ../development/tools/remarshal { };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
