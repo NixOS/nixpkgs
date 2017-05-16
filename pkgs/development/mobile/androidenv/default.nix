@@ -23,6 +23,10 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
 
+  googleRepository = import ./google-repository.nix {
+    inherit (pkgs) stdenv fetchurl unzip;
+  };
+
   platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
     then import ./platforms-linux.nix {
       inherit (pkgs) stdenv fetchurl unzip;
@@ -50,7 +54,7 @@ rec {
     inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk2 atk libGLU_combined file alsaLib jdk coreutils libpulseaudio dbus;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
 
-    inherit platformTools buildTools support supportRepository platforms sysimages addons sources includeSources;
+    inherit platformTools buildTools support supportRepository googleRepository platforms sysimages addons sources includeSources;
 
     stdenv_32bit = pkgs_i686.stdenv;
   };
@@ -295,5 +299,10 @@ rec {
     buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_10e;
     androidndk = androidndk_10e;
     targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_10e;
+  };
+
+  buildGradleApp = import ./build-gradle-app.nix {
+    inherit (pkgs) stdenv jdk gnumake gawk file which gradle fetchurl buildEnv;
+    inherit androidsdk androidndk;
   };
 }

@@ -1,6 +1,7 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons, sources
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, libGLU_combined, alsaLib
+, googleRepository
 , freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
 , zlib, glxinfo, xkeyboardconfig
 , includeSources
@@ -167,6 +168,8 @@ stdenv.mkDerivation rec {
 
     ${stdenv.lib.optionalString useInstantApps
        "ln -s ${addons.instant_apps}/whsdk instantapps"}
+
+    ln -s ${googleRepository}/m2repository
 
     cd ../..
 
