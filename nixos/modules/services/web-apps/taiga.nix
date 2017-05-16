@@ -329,14 +329,14 @@ in
           PrivateDevices = true;
           PrivateTmp = mkIf (!useLocalDatabase) true;
           JoinsNamespaceOf = mkIf useLocalDatabase "postgresql.service";
-          TimeoutSec = 300;
+          TimeoutSec = 300; # initial ./manage.py migrate can take a while
         };
 
         preStart = ''
           set -x
-          cd ${taiga-back}/lib/python3.5/site-packages/taiga
           # BACK
           if ! [ -e ${cfg.statePath}/.back-initialized ]; then
+            cd ${taiga-back}/lib/python3.5/site-packages/
             ${taiga-back}/bin/manage.py compilemessages
             ${taiga-back}/bin/manage.py collectstatic --noinput
             touch ${cfg.statePath}/.back-initialized
@@ -351,6 +351,7 @@ in
           ''}
           # SEED DATABASE
           if ! [ -e ${cfg.statePath}/.db-seeded ]; then
+            cd ${taiga-back}/lib/python3.5/site-packages/
             ${taiga-back}/bin/manage.py migrate --noinput
             ${taiga-back}/bin/manage.py loaddata initial_user
             ${taiga-back}/bin/manage.py loaddata initial_project_templates
