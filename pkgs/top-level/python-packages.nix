@@ -20511,7 +20511,7 @@ in {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "4929d022713129401160fd47550d5158931e4ea6a7136b5d8dfe3b13ac16f2f0";
+      sha256 = "1rvf5jw9hknqz02rp1vg8abgb1lpa0bc65l7ylmlillqx7bswq3r";
     };
 
     # No tests in archive
