@@ -2,10 +2,11 @@
 
 args@{ name, src, platformVersions ? [ "8" ], useGoogleAPIs ? false, useExtraSupportLibs ? false, useGooglePlayServices ? false
 , release ? false, keyStore ? null, keyAlias ? null, keyStorePassword ? null, keyAliasPassword ? null
-, useNDK ? false, buildInputs ? [], mavenDeps, gradleTask, buildDirectory ? "./."
+, useNDK ? false, buildInputs ? [], mavenDeps, gradleTask, buildDirectory ? "./.", acceptAndroidSdkLicenses ? false
 }:
 
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
+assert acceptAndroidSdkLicenses;
 
 let
   m2install = { repo, version, artifactId, groupId, jarSha256, pomSha256, aarSha256, suffix ? "" }:
@@ -108,7 +109,6 @@ stdenv.mkDerivation ({
     echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
     export APP_HOME=`pwd`
-    export CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
     mkdir -p .m2/repository
     for dep in $DEPENDENCIES ; do
