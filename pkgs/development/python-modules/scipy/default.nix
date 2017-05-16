@@ -1,16 +1,17 @@
-{lib, python, buildPythonPackage, isPyPy, gfortran, nose}:
+{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, numpy}:
 
-args:
+buildPythonPackage rec {
+  pname = "scipy";
+  version = "0.19.0";
+  name = "${pname}-${version}";
 
-let
-  inherit (args) version;
-  inherit (args) numpy;
-in buildPythonPackage (args // rec {
+  src = fetchurl {
+    url = "mirror://pypi/s/scipy/scipy-${version}.zip";
+    sha256 = "4190d34bf9a09626cd42100bbb12e3d96b2daf1a8a3244e991263eb693732122";
+  };
 
-  name = "scipy-${version}";
-
-  buildInputs = (args.buildInputs or [ gfortran nose ]);
-  propagatedBuildInputs = (args.propagatedBuildInputs or [ passthru.blas numpy]);
+  buildInputs = [ gfortran nose numpy.blas ];
+  propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper
   prePatch = ''
@@ -25,8 +26,8 @@ in buildPythonPackage (args // rec {
     echo "Creating site.cfg file..."
     cat << EOF > site.cfg
     [openblas]
-    include_dirs = ${passthru.blas}/include
-    library_dirs = ${passthru.blas}/lib
+    include_dirs = ${numpy.blas}/include
+    library_dirs = ${numpy.blas}/lib
     EOF
   '';
 
@@ -48,5 +49,5 @@ in buildPythonPackage (args // rec {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
     homepage = http://www.scipy.org/;
     maintainers = with lib.maintainers; [ fridh ];
-  } // (args.meta or {});
-})
+  };
+}
