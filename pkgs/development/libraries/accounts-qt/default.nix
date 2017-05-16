@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake"
   '';
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = with stdenv.lib; {
     description = "Qt library for accessing the online accounts database";
     homepage = "http://code.google.com/p/accounts-sso/";
