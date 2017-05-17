@@ -7722,7 +7722,7 @@ with pkgs;
 
   glibcCross = forcedNativePackages.glibc.override {
     gccCross = gccCrossStageStatic;
-    linuxHeaders = linuxHeadersCross;
+    inherit (forcedNativePackages) linuxHeaders;
   };
 
   # We can choose:
@@ -11701,25 +11701,30 @@ with pkgs;
 
   lkl = callPackage ../applications/virtualization/lkl { };
 
-  linuxHeaders = linuxHeaders_4_4;
-
-  linuxHeaders24Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/2.4.nix {
-    cross = assert targetPlatform != buildPlatform; targetPlatform;
+  linuxHeaders_2_4 = callPackage ../os-specific/linux/kernel-headers/2.4.nix {
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
 
-  linuxHeaders26Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/4.4.nix {
-    cross = assert targetPlatform != buildPlatform; targetPlatform;
+  linuxHeaders_2_6 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
 
-  linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix { };
+  linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
+  };
 
   # We can choose:
-  linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
-    else if ver == "2.6" then linuxHeaders26Cross
-    else throw "Unknown linux kernel version";
-
-  linuxHeadersCross = assert targetPlatform != buildPlatform;
-    linuxHeadersCrossChooser targetPlatform.platform.kernelMajor;
+  linuxHeaders =
+    if targetPlatform != hostPlatform
+    then
+      { # switch
+        "2.4" = linuxHeaders_2_4;
+        "2.6" = linuxHeaders_2_6;
+        "4.4" = linuxHeaders_4_4;
+      }.${targetPlatform.platform.kernelMajor}
+        or (throw "Unknown linux kernel version")
+    else
+      linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -12374,7 +12379,7 @@ with pkgs;
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
-    linuxHeaders = linuxHeadersCross;
+    inherit (buildPackages) linuxHeaders;
     gccCross = gccCrossStageStatic;
     cross = assert targetPlatform != buildPlatform; targetPlatform;
   });
