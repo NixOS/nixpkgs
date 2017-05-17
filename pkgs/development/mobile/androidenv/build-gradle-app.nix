@@ -85,18 +85,7 @@ stdenv.mkDerivation ({
         echo "RELEASE_KEY_ALIAS=${keyAlias}"
         echo "RELEASE_STORE_PASSWORD=${keyStorePassword}"
         echo "RELEASE_KEY_PASSWORD=${keyAliasPassword}"
-      ) >> local.properties
-
-      cat >>build.gradle <<EOF
-      signingConfigs {
-        release {
-          storeFile file(RELEASE_STORE_FILE)
-          storePassword RELEASE_STORE_PASSWORD
-          keyAlias RELEASE_KEY_ALIAS
-          keyPassword RELEASE_KEY_PASSWORD
-        }
-      }
-      EOF
+      ) >> gradle.properties
     ''}
     buildDir=`pwd`
     cp -r $ANDROID_HOME $buildDir/local_sdk
