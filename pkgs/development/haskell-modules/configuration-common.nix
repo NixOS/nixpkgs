@@ -351,6 +351,7 @@ self: super: {
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
   persistent-redis = dontCheck super.persistent-redis;
+  pipes-binary = dontCheck super.pipes-binary;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
