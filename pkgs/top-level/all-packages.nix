@@ -6411,7 +6411,10 @@ with pkgs;
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
-  binutils = if stdenv.isDarwin then darwin.binutils else binutils-raw;
+  binutils =
+    if lib.systems.parse.isDarwin targetPlatform.parsed
+    then darwin.binutils
+    else binutils-raw;
 
   binutils-raw = callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
@@ -11462,16 +11465,12 @@ with pkgs;
   darwin = let
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
   in apple-source-releases // rec {
-    cctools_cross = callPackage (forcedNativePackages.callPackage ../os-specific/darwin/cctools/port.nix {}).cross {
-      cross = assert targetPlatform != buildPlatform; targetPlatform;
+    cctools = callPackage ../os-specific/darwin/cctools/port.nix {
+      inherit libobjc;
+      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     };
-
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
-      inherit libobjc;
-      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
-    }).native;
 
     cf-private = callPackage ../os-specific/darwin/cf-private {
       inherit (apple-source-releases) CF;

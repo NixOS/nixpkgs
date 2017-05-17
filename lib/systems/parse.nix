@@ -83,6 +83,9 @@ rec {
     solaris = { execFormat = elf;     families = { inherit unix; }; };
     windows = { execFormat = pe;      families = { }; };
   } // { # aliases
+    # TODO(@Ericson2314): Handle these Darwin version suffixes more generally.
+    darwin10 = kernels.darwin;
+    darwin14 = kernels.darwin;
     win32 = kernels.windows;
   };
 
