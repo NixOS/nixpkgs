@@ -2098,6 +2098,8 @@ with pkgs;
   # rename to upower-notify?
   go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
+  google-app-engine-go-sdk = callPackage ../development/tools/google-app-engine-go-sdk { };
+
   google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
