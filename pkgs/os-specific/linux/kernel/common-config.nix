@@ -214,7 +214,9 @@ with stdenv.lib;
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
   SND_USB_CAIAQ_INPUT y
-  PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ${optionalString (versionOlder version "4.12") ''
+    PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ''}
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
@@ -495,7 +497,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y
   ''}
-  KVM_DEVICE_ASSIGNMENT? y
+  ${optionalString (versionOlder version "4.12") ''
+    KVM_DEVICE_ASSIGNMENT? y
+  ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}
