@@ -123,6 +123,7 @@ in {
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
+    systemd.packages = [ pkgs.gnome3.vino ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
