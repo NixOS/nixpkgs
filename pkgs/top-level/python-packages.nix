@@ -8198,6 +8198,8 @@ in {
 
   netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
 
+  Nikola = callPackage ../development/python-modules/Nikola { };
+
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "nxt-python";
