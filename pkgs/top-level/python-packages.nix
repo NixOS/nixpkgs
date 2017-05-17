@@ -14036,6 +14036,8 @@ in {
     };
   };
 
+  metaphone = callPackage ../development/python-modules/metaphone { };
+
   mezzanine = buildPythonPackage rec {
     version = "3.1.10";
     name = "mezzanine-${version}";
