@@ -30,7 +30,7 @@ in rec {
   mips = filterDoubles (matchAttrs { cpu = { family = "mips"; }; });
   x86_64 = filterDoubles parse.isx86_64;
 
-  cygwin = filterDoubles (matchAttrs { kernel = parse.kernels.cygwin; });
+  cygwin = filterDoubles parse.isCygwin;
   darwin = filterDoubles parse.isDarwin;
   freebsd = filterDoubles (matchAttrs { kernel = parse.kernels.freebsd; });
   gnu = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; }); # Should be better
