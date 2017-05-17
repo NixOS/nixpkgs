@@ -1,0 +1,176 @@
+diff --git a/src/Database/Esqueleto.hs b/src/Database/Esqueleto.hs
+index eb135c2..57a90fd 100644
+--- a/src/Database/Esqueleto.hs
++++ b/src/Database/Esqueleto.hs
+@@ -1,4 +1,4 @@
+-{-# LANGUAGE FlexibleContexts, FlexibleInstances, GADTs #-}
++{-# LANGUAGE FlexibleContexts, FlexibleInstances, GADTs, CPP #-}
+ -- | The @esqueleto@ EDSL (embedded domain specific language).
+ -- This module replaces @Database.Persist@, so instead of
+ -- importing that module you should just import this one:
+@@ -405,8 +405,13 @@ import qualified Database.Persist
+ 
+ -- | @valkey i = 'val' . 'toSqlKey'@
+ -- (<https://github.com/prowdsponsor/esqueleto/issues/9>).
++#if MIN_VERSION_persistent(2,5,0)
++valkey :: (Esqueleto query expr backend, ToBackendKey SqlBackend entity) =>
++          Int64 -> expr (Value (Key entity))
++#else
+ valkey :: (Esqueleto query expr backend, ToBackendKey SqlBackend entity, PersistField (Key entity)) =>
+           Int64 -> expr (Value (Key entity))
++#endif
+ valkey = val . toSqlKey
+ 
+ 
+@@ -430,8 +435,15 @@ valJ = val . unValue
+ 
+ -- | Synonym for 'Database.Persist.Store.delete' that does not
+ -- clash with @esqueleto@'s 'delete'.
++#if MIN_VERSION_persistent(2,5,0)
++deleteKey :: ( PersistStoreWrite b
++             , MonadIO m
++             , PersistRecordBackend val b)
++          => Key val -> ReaderT b m ()
++#else
+ deleteKey :: ( PersistStore (PersistEntityBackend val)
+              , MonadIO m
+              , PersistEntity val )
+           => Key val -> ReaderT (PersistEntityBackend val) m ()
++#endif
+ deleteKey = Database.Persist.delete
+diff --git a/src/Database/Esqueleto/Internal/Language.hs b/src/Database/Esqueleto/Internal/Language.hs
+index fbe88e2..fb98f0b 100644
+--- a/src/Database/Esqueleto/Internal/Language.hs
++++ b/src/Database/Esqueleto/Internal/Language.hs
+@@ -7,6 +7,7 @@
+            , TypeFamilies
+            , UndecidableInstances
+            , GADTs
++           , CPP
+  #-}
+ -- | This is an internal module, anything exported by this module
+ -- may change without a major version bump.  Please use only
+@@ -52,7 +53,6 @@ import Database.Esqueleto.Internal.PersistentImport
+ import Text.Blaze.Html (Html)
+ 
+ import qualified Data.ByteString as B
+-import qualified Data.ByteString.Lazy as BL
+ import qualified Data.Text as T
+ import qualified Data.Text.Lazy as TL
+ 
+@@ -299,8 +299,13 @@ class (Functor query, Applicative query, Monad query) =>
+   sub_selectDistinct :: PersistField a => query (expr (Value a)) -> expr (Value a)
+ 
+   -- | Project a field of an entity.
++#if MIN_VERSION_persistent(2,5,0)
++  (^.) :: (PersistEntity val) =>
++          expr (Entity val) -> EntityField val typ -> expr (Value typ)
++#else
+   (^.) :: (PersistEntity val, PersistField typ) =>
+           expr (Entity val) -> EntityField val typ -> expr (Value typ)
++#endif
+ 
+   -- | Project a field of an entity that may be null.
+   (?.) :: (PersistEntity val, PersistField typ) =>
+diff --git a/src/Database/Esqueleto/Internal/PersistentImport.hs b/src/Database/Esqueleto/Internal/PersistentImport.hs
+index ad193e0..0342634 100644
+--- a/src/Database/Esqueleto/Internal/PersistentImport.hs
++++ b/src/Database/Esqueleto/Internal/PersistentImport.hs
+@@ -1,3 +1,4 @@
++{-# LANGUAGE CPP#-}
+ -- | Re-export "Database.Persist.Sql" without any clashes with
+ -- @esqueleto@.
+ module Database.Esqueleto.Internal.PersistentImport
+@@ -5,9 +6,15 @@ module Database.Esqueleto.Internal.PersistentImport
+   ) where
+ 
+ import Database.Persist.Sql hiding
+-  ( BackendSpecificFilter, Filter(..), PersistQuery(..), SelectOpt(..)
++  ( BackendSpecificFilter, Filter(..), SelectOpt(..)
+   , Update(..), delete, deleteWhereCount, updateWhereCount, selectList
+   , selectKeysList, deleteCascadeWhere, (=.), (+=.), (-=.), (*=.), (/=.)
+   , (==.), (!=.), (<.), (>.), (<=.), (>=.), (<-.), (/<-.), (||.)
+   , listToJSON, mapToJSON, getPersistMap, limitOffsetOrder, selectSource
+-  , update )
++  , update
++#if MIN_VERSION_persistent(2,5,0)
++  , PersistQueryRead(..)
++#else
++  , PersistQuery(..)
++#endif
++  )
+diff --git a/src/Database/Esqueleto/Internal/Sql.hs b/src/Database/Esqueleto/Internal/Sql.hs
+index 32db5d9..c8b09b5 100644
+--- a/src/Database/Esqueleto/Internal/Sql.hs
++++ b/src/Database/Esqueleto/Internal/Sql.hs
+@@ -9,6 +9,7 @@
+            , UndecidableInstances
+            , ScopedTypeVariables
+            , InstanceSigs
++           , CPP
+  #-}
+ -- | This is an internal module, anything exported by this module
+ -- may change without a major version bump.  Please use only
+@@ -421,8 +422,13 @@ instance Esqueleto SqlQuery SqlExpr SqlBackend where
+   sub_select         = sub SELECT
+   sub_selectDistinct = sub_select . distinct
+ 
++#if MIN_VERSION_persistent(2,5,0)
++  (^.) :: forall val typ. (PersistEntity val)
++       => SqlExpr (Entity val) -> EntityField val typ -> SqlExpr (Value typ)
++#else
+   (^.) :: forall val typ. (PersistEntity val, PersistField typ)
+        => SqlExpr (Entity val) -> EntityField val typ -> SqlExpr (Value typ)
++#endif
+   EEntity ident ^. field
+     | isComposite = ECompositeKey $ \info ->  dot info <$> compositeFields pdef
+     | otherwise   = ERaw Never    $ \info -> (dot info  $  persistFieldDef field, [])
+@@ -530,15 +536,27 @@ instance Esqueleto SqlQuery SqlExpr SqlBackend where
+ instance ToSomeValues SqlExpr (SqlExpr (Value a)) where
+   toSomeValues a = [SomeValue a]
+ 
++#if MIN_VERSION_persistent(2,5,0)
++fieldName :: (PersistEntity val)
++          => IdentInfo -> EntityField val typ -> TLB.Builder
++#else
+ fieldName :: (PersistEntity val, PersistField typ)
+           => IdentInfo -> EntityField val typ -> TLB.Builder
++#endif
+ fieldName info = fromDBName info . fieldDB . persistFieldDef
+ 
+ -- FIXME: Composite/non-id pKS not supported on set
++#if MIN_VERSION_persistent(2,5,0)
++setAux :: PersistEntity val
++       => EntityField val typ
++       -> (SqlExpr (Entity val) -> SqlExpr (Value typ))
++       -> SqlExpr (Update val)
++#else
+ setAux :: (PersistEntity val, PersistField typ)
+        => EntityField val typ
+        -> (SqlExpr (Entity val) -> SqlExpr (Value typ))
+        -> SqlExpr (Update val)
++#endif
+ setAux field mkVal = ESet $ \ent -> unsafeSqlBinOp " = " name (mkVal ent)
+   where name = ERaw Never $ \info -> (fieldName info field, mempty)
+ 
+diff --git a/test/Test.hs b/test/Test.hs
+index 80c6784..fe41de9 100644
+--- a/test/Test.hs
++++ b/test/Test.hs
+@@ -1395,11 +1395,18 @@ main = do
+ ----------------------------------------------------------------------
+ 
+ 
++#if MIN_VERSION_persistent(2,5,0)
++insert' :: ( PersistStoreWrite b
++           , MonadIO m
++           , PersistRecordBackend val b)
++        => val -> ReaderT b m (Entity val)
++#else
+ insert' :: ( Functor m
+            , PersistStore (PersistEntityBackend val)
+            , MonadIO m
+            , PersistEntity val )
+         => val -> ReaderT (PersistEntityBackend val) m (Entity val)
++#endif
+ insert' v = flip Entity v <$> insert v

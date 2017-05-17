@@ -810,6 +810,16 @@ self: super: {
     '';
   });
 
+  # use master with patch that has build fixes
+  esqueleto = appendPatch (overrideCabal super.esqueleto (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "prowdsponsor";
+      repo = "esqueleto";
+      sha256 = "0zd42znww66f8k8sd5n4h490sa4vjbzcs5j2f4ra74znnwmi7am7";
+      rev = "ab275c599db598e8f28897d6ce67da3965531a00";
+    };
+  })) patches/esqueleto-ghc801.patch;
+
   # Fine-tune the build.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     # Bump version to latest git-version to get support for Emacs 25.x.
