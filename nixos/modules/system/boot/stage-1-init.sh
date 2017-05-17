@@ -444,6 +444,22 @@ while read -u 3 mountPoint; do
     read -u 3 fsType
     read -u 3 options
 
+    # If copytoram is enabled:
+    # skip mounting the iso and copy its content to a tmpfs.
+    if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
+      fsType=$(blkid -o value -s TYPE "$device")
+      fsSize=$(blockdev --getsize64 "$device")
+      mkdir -p /tmp-iso
+      mount -t "$fsType" /dev/root /tmp-iso
+      mountFS tmpfs /iso size="$fsSize" tmpfs
+
+      cp -r /tmp-iso/* /mnt-root/iso/
+
+      umount /tmp-iso
+      rmdir /tmp-iso
+      continue
+    fi
+
     # !!! Really quick hack to support bind mounts, i.e., where the
     # "device" should be taken relative to /mnt-root, not /.  Assume
     # that every device that starts with / but doesn't start with /dev
