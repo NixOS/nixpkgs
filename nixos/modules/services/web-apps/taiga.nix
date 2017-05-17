@@ -286,7 +286,7 @@ in
         mkdir -p ${cfg.statePath}
       '';
 
-      systemd.services.taiga = {
+      systemd.services.taiga-back = {
         description = "Taiga Platform Server (Backend)";
 
         wantedBy = [ "multi-user.target" ];
@@ -372,8 +372,8 @@ in
         description = "Taiga Platform Server (Events)";
 
         wantedBy = [ "multi-user.target" ];
-        requires = [ "network-online.target" "rabbitmq.service" ];
-        after = [ "network-online.target" "rabbitmq.service" ];
+        requires = [ "network-online.target" "rabbitmq.service" "taiga-back.service" ];
+        after = [ "network-online.target" "rabbitmq.service" "taiga-back.service" ];
 
         environment.NODE_PATH = "${taiga-events}/lib/node_modules/TaigaIO-Events/";
         serviceConfig = {
