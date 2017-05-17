@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools,
   kconfig, kinit,
   kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5
 }:
@@ -11,9 +11,8 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
-    kconfig kinit
-    kcmutils kconfigwidgets knewstuff kparts qca-qt5
+    kconfig kinit kcmutils kconfigwidgets knewstuff kparts qca-qt5
   ];
 }

@@ -133,12 +133,6 @@ let
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 
-      makeQtWrapper =
-        makeSetupHook
-        { deps = [ makeWrapper ] ++ optionals (!stdenv.isDarwin) [ dconf.lib gtk3 ]; }
-        (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
-
-
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = { inherit (stdenv) isDarwin; };

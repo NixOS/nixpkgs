@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, qtbase, makeQtWrapper, qtquickcontrols, qtscript, qtdeclarative, qmake
+, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake
 , withDocumentation ? false
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
 
-  nativeBuildInputs = [ qmake makeQtWrapper makeWrapper ];
+  nativeBuildInputs = [ qmake makeWrapper ];
 
   doCheck = true;
 
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
       --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
-    wrapQtProgram $out/bin/qtcreator
   '';
 
   meta = {

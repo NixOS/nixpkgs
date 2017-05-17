@@ -1,6 +1,7 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, ki18n,
+  extra-cmake-modules,
+  ki18n,
   kcoreaddons, kconfig, kcodecs
 }:
 

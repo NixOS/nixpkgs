@@ -3,7 +3,6 @@
 , fetchurl
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
 , kbookmarks
 , karchive
 , kconfig
@@ -21,7 +20,6 @@
 , kio
 , kparts
 , kwallet
-, makeQtWrapper
 , solid
 , sonnet
 , phonon
@@ -65,7 +63,6 @@ in mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    wrapGAppsHook
   ];
 
   meta = {

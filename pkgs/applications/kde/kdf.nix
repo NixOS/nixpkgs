@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools,
   kcmutils
 }:
 
@@ -10,6 +10,6 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.peterhoeg ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kcmutils ];
 }

@@ -14620,10 +14620,10 @@ with pkgs;
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi ark dolphin ffmpegthumbs filelight gwenview kate
-    kdenlive kcalc kcolorchooser kcontacts kgpg khelpcenter kig
-    kolourpaint konsole krfb marble
-    okteta okular spectacle;
+    akonadi ark dolphin ffmpegthumbs filelight gwenview kate kdenlive
+    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmix
+    kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
+    spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 

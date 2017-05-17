@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, buildPythonApplication, makeQtWrapper, wrapGAppsHook
+{ stdenv, lib, fetchurl, unzip, buildPythonApplication, makeWrapper, wrapGAppsHook
 , qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
@@ -44,7 +44,7 @@ in buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    makeQtWrapper wrapGAppsHook asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
+    makeWrapper wrapGAppsHook asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
   propagatedBuildInputs = [
@@ -73,9 +73,8 @@ in buildPythonApplication rec {
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
   '';
 
-  postFixup = ''
-    wrapQtProgram $out/bin/qutebrowser \
-      ${lib.optionalString withWebEngineDefault ''--add-flags "--backend webengine"''}
+  postFixup = lib.optionalString withWebEngineDefault ''
+    wrapProgram $out/bin/qutebrowser --add-flags "--backend webengine"
   '';
 
   meta = {

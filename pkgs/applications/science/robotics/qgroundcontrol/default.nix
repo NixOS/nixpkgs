@@ -1,7 +1,7 @@
 { stdenv, fetchgit, git,  espeak, SDL, udev, doxygen, cmake
 , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
 , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake
-, makeQtWrapper, lndir
+, makeWrapper, lndir
 , gst_all_1, qt-gstreamer1, pkgconfig, glibc
 , version ? "2.9.4"
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   buildInputs = [ SDL udev doxygen git ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkgconfig makeQtWrapper qmake ];
+  nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
   postPatch = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
 
   postInstall = ''
-    wrapQtProgram "$out/bin/qgroundcontrol" \
+    wrapProgram "$out/bin/qgroundcontrol" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
   '';
   

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, makeQtWrapper, exiv2, graphicsmagick
+{ stdenv, fetchurl, cmake, exiv2, graphicsmagick
 , qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools
 }:
 
@@ -12,17 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0j2kvxfb5pd9abciv161nkcsyam6n8kfqs8ymwj2mxiqflwbmfl1";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    cmake makeQtWrapper qtbase qtquickcontrols qttools exiv2 graphicsmagick
+    qtbase qtquickcontrols qttools exiv2 graphicsmagick
     qtmultimedia qtdeclarative
   ];
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
-  '';
-
-  postInstall = ''
-    wrapQtProgram $out/bin/photoqt
   '';
 
   meta = {

@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools,
   kglobalaccel, kxmlgui, kcoreaddons, kdelibs4support,
   plasma-framework, libpulseaudio, alsaLib, libcanberra_kde
 }:
@@ -11,7 +11,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = [ lib.maintainers.rongcuid ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ libpulseaudio alsaLib libcanberra_kde ];
   propagatedBuildInputs = [
     kglobalaccel kxmlgui kcoreaddons kdelibs4support

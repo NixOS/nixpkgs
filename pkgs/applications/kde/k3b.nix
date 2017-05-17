@@ -1,6 +1,7 @@
-{ mkDerivation, lib, wrapGAppsHook, extra-cmake-modules
+{ mkDerivation, lib
+, extra-cmake-modules, kdoctools, makeWrapper
 , qtwebkit
-, libkcddb, kcmutils, kdoctools, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
+, libkcddb, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
@@ -14,7 +15,7 @@ mkDerivation {
     maintainers = with maintainers; [ sander phreedom ];
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   propagatedBuildInputs = [
     # qt
     qtwebkit
@@ -29,12 +30,12 @@ mkDerivation {
     # others
     ffmpeg libmusicbrainz2
   ];
-  preFixup =
+  postFixup =
     let k3bPath = lib.makeBinPath [
           cdrdao cdrtools dvdplusrwtools libburn normalize sox transcode
           vcdimager
         ];
     in ''
-      gappsWrapperArgs+=(--prefix PATH : "${k3bPath}")
+      wrapProgram "$out/bin/k3b" --prefix PATH : "${k3bPath}"
     '';
 }

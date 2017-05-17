@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, openal, opencv,
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig, openal, opencv,
   libtoxcore, libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo, xorg,
-  pango, atk, qrencode, ffmpeg, filter-audio, makeQtWrapper,
+  pango, atk, qrencode, ffmpeg, filter-audio,
   qtbase, qtsvg, qttools, qttranslations, sqlcipher,
   libvpx, libopus }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "qtox-${version}";
   version = "1.10.2";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libpthreadstubs libXdmcp
   ]);
 
-  nativeBuildInputs = [ cmake makeQtWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   cmakeFlags = [
     "-DGIT_DESCRIBE=${version}"
@@ -35,14 +35,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install -Dm755 qtox $out/bin/qtox
-    wrapQtProgram $out/bin/qtox
 
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt Tox client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric jgeerds akaWolf peterhoeg ];

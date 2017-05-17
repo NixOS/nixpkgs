@@ -2,7 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
 , qtscript
 , kactivities
 , kconfig
@@ -39,16 +38,16 @@ mkDerivation {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    wrapGAppsHook
   ];
   buildInputs = [
-    qtscript
     kconfig
     kcrash
+    kdbusaddons
+    kfilemetadata
     kguiaddons
+    ki18n
     kiconthemes
     kinit
-    kdbusaddons
     knotifications
     knewstuff
     karchive
@@ -56,16 +55,18 @@ mkDerivation {
     kplotting
     ktextwidgets
     mlt
+    phonon-backend-gstreamer
+    qtquickcontrols
+    qtscript
     shared_mime_info
     libv4l
     ffmpeg
   ];
-  propagatedBuildInputs = [
-    kactivities kconfig kcrash kguiaddons kiconthemes kinit kio kio-extras
-    kdbusaddons kfilemetadata knotifications knewstuff karchive knotifyconfig
-    kplotting ktextwidgets kwindowsystem plasma-framework
-    phonon-backend-gstreamer qtquickcontrols shared_mime_info
-  ];
+  postPatch =
+    # Module Qt5::Concurrent must be included in `find_package` before it is used.
+    ''
+      sed -i CMakeLists.txt -e '/find_package(Qt5 REQUIRED/ s|)| Concurrent)|'
+    '';
   meta = {
     license = with lib.licenses; [ gpl2Plus ];
   };

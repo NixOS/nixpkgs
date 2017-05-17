@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmake, makeQtWrapper }:
+{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
 stdenv.mkDerivation rec {
   name = "qt5ct-${version}";
@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags PLUGINDIR=$out/$qtPluginPrefix"
-  '';
-
-  preFixup = ''
-    wrapQtProgram $out/bin/qt5ct
   '';
 
   meta = with stdenv.lib; {

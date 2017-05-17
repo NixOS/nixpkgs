@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools,
   kio, ki18n,
   perl, python, php
 }:
@@ -11,10 +11,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ orivej ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kio ];
   buildInputs = [ perl python php ki18n ];
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ perl php python]}")
-  '';
 }

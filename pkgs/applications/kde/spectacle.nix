@@ -1,18 +1,19 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kconfig, kcoreaddons, kdbusaddons, kdeclarative, ki18n, kio, kipi-plugins,
+  extra-cmake-modules, kdoctools,
+  ki18n, xcb-util-cursor,
+  kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
-  xcb-util-cursor
 }:
 
 mkDerivation {
   name = "spectacle";
   meta = with lib; { maintainers = with maintainers; [ ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  buildInputs = [ ki18n xcb-util-cursor ];
   propagatedBuildInputs = [
-    kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
-    kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi xcb-util-cursor
+    kconfig kcoreaddons kdbusaddons kdeclarative kio knotifications
+    kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi
   ];
   propagatedUserEnvPkgs = [ kipi-plugins ];
 }

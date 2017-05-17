@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, config, wrapGAppsHook,
+  mkDerivation, lib, config, makeWrapper,
 
   extra-cmake-modules, kdoctools,
 
@@ -15,20 +15,18 @@
 
 mkDerivation {
   name = "ark";
-  nativeBuildInputs = [
-    extra-cmake-modules kdoctools wrapGAppsHook
-  ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   propagatedBuildInputs = [
     khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice
     kpty kwidgetsaddons libarchive kitemmodels
   ];
-  preFixup =
+  postFixup =
     let
       PATH =
         lib.makeBinPath
         ([ p7zip unzipNLS zip ] ++ lib.optional unfreeEnableUnrar unrar);
     in ''
-      gappsWrapperArgs+=(--prefix PATH : "${PATH}")
+      wrapProgram "$out/bin/ark" --prefix PATH: "${PATH}"
     '';
   meta = {
     license = with lib.licenses;

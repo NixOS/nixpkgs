@@ -1,5 +1,5 @@
 {
-  mkDerivation, extra-cmake-modules, kdoctools, makeQtWrapper,
+  mkDerivation, extra-cmake-modules, kdoctools,
   kcmutils, kconfig, kdbusaddons, khtml, ki18n, kiconthemes, kio, kitemviews,
   kservice, kwindowsystem, kxmlgui, qtquickcontrols, qtquickcontrols2
 }:
