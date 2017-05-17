@@ -304,7 +304,10 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !hasActiveLibrary then "${setupCommand} install" else ''
+    ${if !hasActiveLibrary then ''
+      ${setupCommand} install
+      rm -rf $out/lib
+    '' else ''
       ${setupCommand} copy
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
