@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub, gyp, readline, python, which, icu
-, patchelf, coreutils
+, patchelf, coreutils, cctools
 , doCheck ? false
 , static ? false
 }:
@@ -126,7 +126,13 @@ stdenv.mkDerivation rec {
 
   # Patch based off of:
   # https://github.com/cowboyd/libv8/tree/v5.1.281.67.0/patches
-  patches = lib.optional (!doCheck) ./libv8-5.4.232.patch;
+  patches = lib.optional (!doCheck) ./libv8-5.4.232.patch
+  ++ stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
+
+  prePatch = ''
+    chmod +w tools/gyp/pylib/gyp
+    chmod +w tools/gyp/pylib/gyp/xcode_emulation.py
+  '';
 
   postPatch = ''
     sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,' gypfiles/gyp_v8
@@ -152,12 +158,13 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ readline python icu patchelf ];
+  buildInputs = [ readline python icu patchelf ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ cctools ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 
   buildFlags = [
-    "LINK=g++"
+    "LINK=c++"
     "-C out"
     "builddir=$(CURDIR)/Release"
     "BUILDTYPE=Release"
@@ -174,7 +181,7 @@ stdenv.mkDerivation rec {
     install -vD out/Release/mksnapshot "$out/bin/mksnapshot"
     ${if static then ""
     else if stdenv.isDarwin then ''
-    install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
+    install -vD out/Release/libv8.dylib "$out/lib/libv8.dylib"
     install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/bin/d8
     install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
     '' else ''
@@ -190,7 +197,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Google's open source JavaScript engine";
     maintainers = with maintainers; [ cstrahan proglodyte ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
   };
 }
