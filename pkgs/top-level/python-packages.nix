@@ -6434,6 +6434,20 @@ in {
     };
   });
 
+  editorconfig = buildPythonPackage rec {
+    name = "EditorConfig-0.12.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/89/b9/29a4d312d958d298cedf0019b60168dc680f79d7ca394664dd82cf4f66a3/${name}.tar.gz";
+      sha256 = "1ah5hnrjw8r3pq586rh1w1ykqpb2dwzhhjc04d0n95fza1a3k9zd";
+    };
+
+    meta = {
+      homepage = "http://editorconfig.org";
+      description = "EditorConfig File Locator and Interpreter for Python";
+      license = stdenv.lib.licenses.psfl;
+    };
+  };
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
@@ -7696,6 +7710,25 @@ in {
       license = licenses.mit;
       url = https://jug.readthedocs.io/;
       maintainers = with maintainers; [ luispedro ];
+    };
+  };
+
+  jsbeautifier = buildPythonApplication rec {
+    name = "jsbeautifier-1.6.4";
+
+    propagatedBuildInputs = with self; [ six ];
+
+    buildInputs = with self; [ editorconfig pytest six ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/e4/76/dcc8f0d76253763fb6d7035be31cb7be5f185d2877faa96759be40ef5e55/${name}.tar.gz";
+      sha256 = "074n8f4ncz5pf0jkkf6i6by30qnaj5208sszaf9p86kgdigcdaf8";
+    };
+
+    meta = {
+      homepage    = "http://jsbeautifier.org";
+      description = "JavaScript unobfuscator and beautifier.";
+      license     = stdenv.lib.licenses.mit;
     };
   };
 
