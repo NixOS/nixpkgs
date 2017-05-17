@@ -190,7 +190,6 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        package = pkgs.sddmPlasma5;
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

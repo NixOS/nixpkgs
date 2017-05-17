@@ -15866,16 +15866,7 @@ with pkgs;
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  sddm = libsForQt5.callPackage ../applications/display-managers/sddm {
-    themes = [];  # extra themes, etc.
-  };
-
-  sddmPlasma5 = sddm.override {
-    themes = [
-      plasma5.plasma-workspace
-      pkgs.breeze-icons
-    ];
-  };
+  sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
