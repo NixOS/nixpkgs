@@ -22,11 +22,11 @@ let
   wrapperTool = if enableGTK3 then wrapGAppsHook else makeWrapper;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "52.1.0";
+  version = "52.1.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "08016334a0cc8af96d5c5b9aad0b8bf1ca3c105ff4a412abbeaeefefda1301cb149eafb4e78314f710567b952267d1d3c999dc8e5534a4a8d06abdcb11ee98c8";
+    sha512 = "84b54ae4401c9728c38f32f58e0df24e049471b3613f9973981b305e0ed09b2e8c2c1b5a35d4fee85ce2cf1d6fa99e80418bc216ae0d35d40e9fdeef61a6c06e";
   };
 
   # New sed no longer tolerates this mistake.
