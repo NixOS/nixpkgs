@@ -335,6 +335,7 @@ stdenv.mkDerivation ({
 
     inherit pname version;
 
+    inherit haskellBuildInputs;
     isHaskellLibrary = hasActiveLibrary;
 
     env = stdenv.mkDerivation {
