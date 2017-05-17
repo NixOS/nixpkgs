@@ -4,12 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.0";
-  name = "xfce4-volumed-pulse-${version}";
+  p_name  = "xfce4-volumed-pulse";
+  ver_maj = "0.2";
+  ver_min = "2";
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "https://launchpad.net/xfce4-volumed-pulse/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "0l75gl96skm0zn10w70mwvsjd12p1zjshvn7yc3439dz61506c39";
+    url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
+    sha256 = "0xjcs1b6ix6rwj9xgr9n89h315r3yhdm8wh5bkincd4lhz6ibhqf";
   };
 
   buildInputs =
