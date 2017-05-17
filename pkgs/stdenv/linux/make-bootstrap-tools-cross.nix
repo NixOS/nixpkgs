@@ -63,7 +63,7 @@ let
   };
 
   scaleway-c1-crossSystem.crossSystem = armv7l-hf-multiplatform-crossSystem.crossSystem // rec {
-    platform = pkgsNoParams.platforms.scaleway-c1;
+    platform = lib.systems.platforms.scaleway-c1;
     inherit (platform) gcc;
     inherit (gcc) fpu;
   };
@@ -73,9 +73,9 @@ let
     config = "armv5tel-softfloat-linux-gnueabi";
     float = "soft";
 
-    platform = pkgsNoParams.platforms.pogoplug4;
+    platform = lib.systems.platforms.pogoplug4;
 
-    inherit (pkgsNoParams.platforms.pogoplug4) gcc;
+    inherit (lib.systems.platforms.pogoplug4) gcc;
     libc = "glibc";
 
     withTLS = true;
