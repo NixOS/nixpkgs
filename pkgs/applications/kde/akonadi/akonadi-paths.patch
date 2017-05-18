@@ -2,10 +2,23 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
 ===================================================================
 --- akonadi-17.04.0.orig/src/server/storage/dbconfigmysql.cpp
 +++ akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
-@@ -76,20 +76,11 @@ bool DbConfigMysql::init(QSettings &sett
-         defaultServerPath = QStringLiteral(MYSQLD_EXECUTABLE);
-     }
+@@ -63,7 +63,6 @@ bool DbConfigMysql::init(QSettings &sett
+     // determine default settings depending on the driver
+     QString defaultHostName;
+     QString defaultOptions;
+-    QString defaultServerPath;
+     QString defaultCleanShutdownCommand;
+ 
+ #ifndef Q_OS_WIN
+@@ -71,25 +70,8 @@ bool DbConfigMysql::init(QSettings &sett
  #endif
+ 
+     const bool defaultInternalServer = true;
+-#ifdef MYSQLD_EXECUTABLE
+-    if (QFile::exists(QStringLiteral(MYSQLD_EXECUTABLE))) {
+-        defaultServerPath = QStringLiteral(MYSQLD_EXECUTABLE);
+-    }
+-#endif
 -    const QStringList mysqldSearchPath = QStringList()
 -                                         << QStringLiteral("/usr/bin")
 -                                         << QStringLiteral("/usr/sbin")
@@ -15,17 +28,16 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
 -                                         << QStringLiteral("/opt/mysql/libexec")
 -                                         << QStringLiteral("/opt/local/lib/mysql5/bin")
 -                                         << QStringLiteral("/opt/mysql/sbin");
-     if (defaultServerPath.isEmpty()) {
+-    if (defaultServerPath.isEmpty()) {
 -        defaultServerPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqld"), mysqldSearchPath);
-+        defaultServerPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLD);
-     }
+-    }
  
 -    const QString mysqladminPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqladmin"), mysqldSearchPath);
 +    const QString mysqladminPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLADMIN);
      if (!mysqladminPath.isEmpty()) {
  #ifndef Q_OS_WIN
          defaultCleanShutdownCommand = QStringLiteral("%1 --defaults-file=%2/mysql.conf --socket=%3/mysql.socket shutdown")
-@@ -99,10 +90,10 @@ bool DbConfigMysql::init(QSettings &sett
+@@ -99,10 +81,10 @@ bool DbConfigMysql::init(QSettings &sett
  #endif
      }
  
@@ -38,7 +50,7 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
      qCDebug(AKONADISERVER_LOG) << "Found mysqlcheck: " << mMysqlCheckPath;
  
      mInternalServer = settings.value(QStringLiteral("QMYSQL/StartServer"), defaultInternalServer).toBool();
-@@ -119,7 +110,7 @@ bool DbConfigMysql::init(QSettings &sett
+@@ -119,7 +101,7 @@ bool DbConfigMysql::init(QSettings &sett
      mUserName = settings.value(QStringLiteral("User")).toString();
      mPassword = settings.value(QStringLiteral("Password")).toString();
      mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
@@ -47,7 +59,27 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
      mCleanServerShutdownCommand = settings.value(QStringLiteral("CleanServerShutdownCommand"), defaultCleanShutdownCommand).toString();
      settings.endGroup();
  
-@@ -196,7 +187,7 @@ bool DbConfigMysql::startInternalServer(
+@@ -129,9 +111,6 @@ bool DbConfigMysql::init(QSettings &sett
+         // intentionally not namespaced as we are the only one in this db instance when using internal mode
+         mDatabaseName = QStringLiteral("akonadi");
+     }
+-    if (mInternalServer && (mMysqldPath.isEmpty() || !QFile::exists(mMysqldPath))) {
+-        mMysqldPath = defaultServerPath;
+-    }
+ 
+     qCDebug(AKONADISERVER_LOG) << "Using mysqld:" << mMysqldPath;
+ 
+@@ -140,9 +119,6 @@ bool DbConfigMysql::init(QSettings &sett
+     settings.setValue(QStringLiteral("Name"), mDatabaseName);
+     settings.setValue(QStringLiteral("Host"), mHostName);
+     settings.setValue(QStringLiteral("Options"), mConnectionOptions);
+-    if (!mMysqldPath.isEmpty()) {
+-        settings.setValue(QStringLiteral("ServerPath"), mMysqldPath);
+-    }
+     settings.setValue(QStringLiteral("StartServer"), mInternalServer);
+     settings.endGroup();
+     settings.sync();
+@@ -196,7 +172,7 @@ bool DbConfigMysql::startInternalServer(
  #endif
  
      // generate config file
