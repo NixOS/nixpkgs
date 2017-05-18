@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     [ bison flex gperf lndir perl pkgconfig python2 ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" ];
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series);
@@ -264,29 +264,32 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    find "$out" -name "*.cmake" | while read file; do
-        substituteInPlace "$file" \
-            --subst-var-by NIX_OUT "$out" \
-            --subst-var-by NIX_DEV "$dev"
-    done
-  '';
+  postInstall =
+    # Hardcode some CMake module paths.
+    ''
+      find "$out" -name "*.cmake" | while read file; do
+          substituteInPlace "$file" \
+              --subst-var-by NIX_OUT "$out" \
+              --subst-var-by NIX_DEV "$dev"
+      done
+    '';
 
-  preFixup = ''
-    # We cannot simply set these paths in configureFlags because libQtCore retains
-    # references to the paths it was built with.
-    moveToOutput "bin" "$dev"
-    moveToOutput "include" "$dev"
-    moveToOutput "mkspecs" "$dev"
+  preFixup =
+    # Move selected outputs.
+    ''
+      moveToOutput "bin" "$dev"
+      moveToOutput "include" "$dev"
+      moveToOutput "mkspecs" "$dev"
 
-    # The destination directory must exist or moveToOutput will do nothing
-    mkdir -p "$dev/share"
-    moveToOutput "share/doc" "$dev"
-  '';
+      mkdir -p "$dev/share"
+      moveToOutput "share/doc" "$dev"
+
+      moveToOutput "$qtPluginPrefix" "$bin"
+    '';
 
   postFixup =
+    # Don't retain build-time dependencies like gdb.
     ''
-      # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     ''
 

@@ -50,10 +50,6 @@ let
 
       outputs = args.outputs or [ "out" "dev" ];
 
-      propagatedUserEnvPkgs =
-        (args.propagatedUserEnvPkgs or [])
-        ++ map getBin (args.propagatedBuildInputs or []);
-
       qmakeFlags =
         (args.qmakeFlags or [])
         ++ optional (debug != null)
@@ -90,7 +86,13 @@ let
 
       setupHook = ../qtsubmodule-setup-hook.sh;
 
-      meta = self.qtbase.meta // (args.meta or {});
+      meta = {
+        homepage = http://www.qt.io;
+        description = "A cross-platform application framework for C++";
+        license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
+        maintainers = with maintainers; [ qknight ttuegel periklis ];
+        platforms = platforms.unix;
+      } // (args.meta or {});
     });
 
   addPackages = self: with self;

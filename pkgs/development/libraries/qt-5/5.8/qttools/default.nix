@@ -5,10 +5,10 @@ with stdenv.lib;
 qtSubmodule {
   name = "qttools";
   qtInputs = [ qtbase ];
-
+  outputs = [ "out" "dev" "bin" ];
   patches = copyPathsToStore (readPathsFromFile ./. ./series);
-  postFixup = ''
-    moveToOutput "bin/qdbus" "$out"
-    moveToOutput "bin/qtpaths" "$out"
+  postInstall = ''
+    moveToOutput "bin/qdbus" "$bin"
+    moveToOutput "bin/qtpaths" "$bin"
   '';
 }
