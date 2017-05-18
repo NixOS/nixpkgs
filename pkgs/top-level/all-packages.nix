@@ -3005,6 +3005,11 @@ with pkgs;
 
   mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
 
+  mikutter = callPackage ../applications/networking/instant-messengers/mikutter {
+    gtk = gtk2;
+    inherit (xorg) libXdmcp;
+  };
+
   mimeo = callPackage ../tools/misc/mimeo { };
 
   mimetic = callPackage ../development/libraries/mimetic { };
