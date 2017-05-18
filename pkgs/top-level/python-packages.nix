@@ -2620,16 +2620,18 @@ in {
   };
 
   rarfile = self.buildPythonPackage rec {
-    name = "rarfile-2.6";
+    name = "rarfile-${version}";
+    version = "3.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rarfile/rarfile-2.6.tar.gz";
-      sha256 = "326700c5450cfb367f612e918866ea27551bac02f4656f340003c88873fa1a56";
+      url = "mirror://pypi/r/rarfile/${name}.tar.gz";
+      sha256 = "0dbcqvyxc3ji38hgkxy529s3sw74sfz7idp0rc3lay9n7fg405p8";
     };
 
     meta = {
       description = "rarfile - RAR archive reader for Python";
       homepage = https://github.com/markokr/rarfile;
+      license = licenses.isc;
     };
   };
 
