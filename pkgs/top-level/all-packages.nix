@@ -4243,6 +4243,8 @@ with pkgs;
 
   timemachine = callPackage ../applications/audio/timemachine { };
 
+  timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
+
   timetrap = callPackage ../applications/office/timetrap { };
 
   tinc = callPackage ../tools/networking/tinc { };
