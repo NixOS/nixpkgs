@@ -4071,6 +4071,8 @@ in {
     };
   };
 
+  confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
+
 
   construct = buildPythonPackage rec {
     name = "construct-${version}";
