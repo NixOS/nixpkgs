@@ -15,7 +15,7 @@ let
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemuOvmf ''
-      nvram = ["${pkgs.OVMF}/FV/OVMF_CODE.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"]
+      nvram = ["${pkgs.OVMF.fd}/FV/OVMF_CODE.fd:${pkgs.OVMF.fd}/FV/OVMF_VARS.fd"]
     ''}
     ${cfg.qemuVerbatimConfig}
   '';
