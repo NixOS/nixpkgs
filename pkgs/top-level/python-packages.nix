@@ -6471,6 +6471,8 @@ in {
     propagatedBuildInputs = with self; [ configparser ];
   };
 
+  enzyme = callPackage ../development/python-modules/enzyme {};
+
   escapism = buildPythonPackage rec {
     name = "escapism-${version}";
     version = "0.0.1";
