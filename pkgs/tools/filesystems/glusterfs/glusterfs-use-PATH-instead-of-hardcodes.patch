@@ -1,4 +1,4 @@
-From 67fbd3aadc2c4caeb14418609f5c7af6de36081b Mon Sep 17 00:00:00 2001
+From 616381bc25b0e90198683fb049f994e82d467d96 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Niklas=20Hamb=C3=BCchen?= <mail@nh2.me>
 Date: Sat, 13 May 2017 02:45:49 +0200
 Subject: [PATCH] Don't use hardcoded /sbin, /usr/bin etc. paths. Fixes
@@ -6,16 +6,18 @@ Subject: [PATCH] Don't use hardcoded /sbin, /usr/bin etc. paths. Fixes
 
 Instead, rely on programs to be in PATH, as gluster already
 does in many places across its code base.
+
+Change-Id: Id21152fe42f5b67205d8f1571b0656c4d5f74246
 ---
  contrib/fuse-lib/mount-common.c               |  8 ++++----
- xlators/mgmt/glusterd/src/glusterd-ganesha.c  |  8 ++++----
+ xlators/mgmt/glusterd/src/glusterd-ganesha.c  |  6 +++---
  xlators/mgmt/glusterd/src/glusterd-quota.c    |  6 +++---
  xlators/mgmt/glusterd/src/glusterd-snapshot.c |  4 ++--
- xlators/mgmt/glusterd/src/glusterd-utils.c    | 13 +------------
- 5 files changed, 14 insertions(+), 25 deletions(-)
+ xlators/mgmt/glusterd/src/glusterd-utils.c    | 14 +-------------
+ 5 files changed, 13 insertions(+), 25 deletions(-)
 
 diff --git a/contrib/fuse-lib/mount-common.c b/contrib/fuse-lib/mount-common.c
-index e9f80fe..6380dd8 100644
+index e9f80fe81..6380dd867 100644
 --- a/contrib/fuse-lib/mount-common.c
 +++ b/contrib/fuse-lib/mount-common.c
 @@ -255,16 +255,16 @@ fuse_mnt_umount (const char *progname, const char *abs_mnt,
@@ -40,14 +42,14 @@ index e9f80fe..6380dd8 100644
  #endif /* GF_LINUX_HOST_OS */
                  exit (1);
 diff --git a/xlators/mgmt/glusterd/src/glusterd-ganesha.c b/xlators/mgmt/glusterd/src/glusterd-ganesha.c
-index 8dde82e..0038e69 100644
+index da1fee066..dcb9e5725 100644
 --- a/xlators/mgmt/glusterd/src/glusterd-ganesha.c
 +++ b/xlators/mgmt/glusterd/src/glusterd-ganesha.c
-@@ -123,15 +123,15 @@ manage_service (char *action)
+@@ -122,15 +122,15 @@ manage_service (char *action)
          int     i               = 0;
          int     ret             = 0;
          struct service_command sc_list[] = {
--                { .binary  = "/usr/bin/systemctl",
+-                { .binary  = "/bin/systemctl",
 +                { .binary  = "systemctl",
                    .service = "nfs-ganesha",
                    .action  = sc_systemctl_action
@@ -62,17 +64,8 @@ index 8dde82e..0038e69 100644
                    .service = "nfs-ganesha",
                    .action  = sc_service_action
                  },
-@@ -144,7 +144,7 @@ manage_service (char *action)
-                 if (ret == 0) {
-                         gf_msg_debug (THIS->name, 0,
-                                 "%s found.", sc_list[i].binary);
--                        if (strcmp (sc_list[i].binary, "/usr/bin/systemctl") == 0)
-+                        if (strcmp (sc_list[i].binary, "systemctl") == 0)
-                                 ret = sc_systemctl_action (&sc_list[i], action);
-                         else
-                                 ret = sc_service_action (&sc_list[i], action);
 diff --git a/xlators/mgmt/glusterd/src/glusterd-quota.c b/xlators/mgmt/glusterd/src/glusterd-quota.c
-index c1c95ae..a6eeb69 100644
+index 0e6629cf0..fcb4738b7 100644
 --- a/xlators/mgmt/glusterd/src/glusterd-quota.c
 +++ b/xlators/mgmt/glusterd/src/glusterd-quota.c
 @@ -30,7 +30,7 @@
@@ -103,7 +96,7 @@ index c1c95ae..a6eeb69 100644
                                           VIRTUAL_QUOTA_XATTR_CLEANUP_KEY, "-v",
                                           "1", "{}", "\\", ";", NULL);
 diff --git a/xlators/mgmt/glusterd/src/glusterd-snapshot.c b/xlators/mgmt/glusterd/src/glusterd-snapshot.c
-index c75a101..b7b659e 100644
+index da0152366..f0d135350 100644
 --- a/xlators/mgmt/glusterd/src/glusterd-snapshot.c
 +++ b/xlators/mgmt/glusterd/src/glusterd-snapshot.c
 @@ -121,7 +121,7 @@ glusterd_build_snap_device_path (char *device, char *snapname,
@@ -125,10 +118,10 @@ index c75a101..b7b659e 100644
          runner_redir (&runner, STDOUT_FILENO, RUN_PIPE);
          runner_log (&runner, this->name, GF_LOG_DEBUG, msg);
 diff --git a/xlators/mgmt/glusterd/src/glusterd-utils.c b/xlators/mgmt/glusterd/src/glusterd-utils.c
-index 8f8447a..63d8add 100644
+index 51db13df0..6fa7b92f9 100644
 --- a/xlators/mgmt/glusterd/src/glusterd-utils.c
 +++ b/xlators/mgmt/glusterd/src/glusterd-utils.c
-@@ -5899,7 +5899,6 @@ static struct fs_info {
+@@ -6027,7 +6027,6 @@ static struct fs_info {
          char *fs_tool_pattern;
          char *fs_tool_pkg;
  } glusterd_fs[] = {
@@ -136,7 +129,15 @@ index 8f8447a..63d8add 100644
          { "xfs", "xfs_info", NULL, "isize=", "xfsprogs" },
          { "ext3", "tune2fs", "-l", "Inode size:", "e2fsprogs" },
          { "ext4", "tune2fs", "-l", "Inode size:", "e2fsprogs" },
-@@ -5957,17 +5956,7 @@ glusterd_add_inode_size_to_dict (dict_t *dict, int count)
+@@ -6048,7 +6047,6 @@ glusterd_add_inode_size_to_dict (dict_t *dict, int count)
+         char           *trail             = NULL;
+         runner_t        runner            = {0, };
+         struct fs_info *fs                = NULL;
+-        char            fs_tool_name[256] = {0, };
+         static dict_t  *cached_fs         = NULL;
+ 
+         memset (key, 0, sizeof (key));
+@@ -6085,17 +6083,7 @@ glusterd_add_inode_size_to_dict (dict_t *dict, int count)
                                  cur_word = "N/A";
                                  goto cached;
                          }
@@ -156,5 +157,5 @@ index 8f8447a..63d8add 100644
                  }
          }
 -- 
-2.7.4
+2.12.0
 
