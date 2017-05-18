@@ -8,3 +8,4 @@ qpa-platform-plugin-path.patch
 dlopen-gl.patch
 compose-search-path.patch
 cmake-paths.patch
+qgtk-env.patch

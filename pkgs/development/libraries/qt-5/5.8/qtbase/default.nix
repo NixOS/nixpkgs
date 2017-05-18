@@ -7,7 +7,7 @@
   # darwin support
   darwin, libiconv, libcxx,
 
-  dbus, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
+  dbus, dconf, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
@@ -146,6 +146,12 @@ stdenv.mkDerivation {
 
     ++ lib.optional mesaSupported
        ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+
+    ++ lib.optionals (!stdenv.isDarwin)
+    [
+      ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+      ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+    ]
 
     ++ lib.optionals stdenv.isDarwin
     [

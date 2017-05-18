@@ -94,6 +94,7 @@ let
       qtbase = callPackage ./qtbase {
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz mesa;
+        inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
 
