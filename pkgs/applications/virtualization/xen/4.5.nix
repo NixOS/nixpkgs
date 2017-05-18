@@ -167,7 +167,7 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withSeabios) "--with-system-seabios=${seabios}"
     ++ optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
 
-    ++ optional (withOVMF) "--with-system-ovmf=${OVMF}"
+    ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
   patches =
