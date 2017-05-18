@@ -996,6 +996,8 @@ with pkgs;
 
   hr = callPackage ../applications/misc/hr { };
 
+  icdiff = callPackage ../tools/text/icdiff {};
+
   interlock = callPackage ../servers/interlock {};
 
   jbuilder = callPackage ../development/tools/ocaml/jbuilder { };
