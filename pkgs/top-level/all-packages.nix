@@ -996,6 +996,8 @@ with pkgs;
 
   hr = callPackage ../applications/misc/hr { };
 
+  icdiff = callPackage ../tools/text/icdiff {};
+
   interlock = callPackage ../servers/interlock {};
 
   jbuilder = callPackage ../development/tools/ocaml/jbuilder { };
@@ -5077,9 +5079,6 @@ with pkgs;
       cross = targetPlatform;
       crossStageStatic = false;
 
-      # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
-      # <http://hydra.nixos.org/build/4268232>), so don't even try.
-      langCC = targetPlatform.config != "i686-pc-mingw32";
       # Why is this needed?
       inherit (forcedNativePackages) binutils;
     };
@@ -6414,7 +6413,10 @@ with pkgs;
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
-  binutils = if stdenv.isDarwin then darwin.binutils else binutils-raw;
+  binutils =
+    if lib.systems.parse.isDarwin targetPlatform.parsed
+    then darwin.binutils
+    else binutils-raw;
 
   binutils-raw = callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
@@ -7725,7 +7727,7 @@ with pkgs;
 
   glibcCross = forcedNativePackages.glibc.override {
     gccCross = gccCrossStageStatic;
-    linuxHeaders = linuxHeadersCross;
+    inherit (forcedNativePackages) linuxHeaders;
   };
 
   # We can choose:
@@ -10203,6 +10205,7 @@ with pkgs;
 
   v8 = callPackage ../development/libraries/v8 {
     inherit (python2Packages) python gyp;
+    cctools = darwin.cctools;
   };
 
   v8_static = lowPrio (self.v8.override { static = true; });
@@ -11468,16 +11471,12 @@ with pkgs;
   darwin = let
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
   in apple-source-releases // rec {
-    cctools_cross = callPackage (forcedNativePackages.callPackage ../os-specific/darwin/cctools/port.nix {}).cross {
-      cross = assert targetPlatform != buildPlatform; targetPlatform;
+    cctools = callPackage ../os-specific/darwin/cctools/port.nix {
+      inherit libobjc;
+      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     };
-
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
-      inherit libobjc;
-      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
-    }).native;
 
     cf-private = callPackage ../os-specific/darwin/cf-private {
       inherit (apple-source-releases) CF;
@@ -11708,25 +11707,30 @@ with pkgs;
 
   lkl = callPackage ../applications/virtualization/lkl { };
 
-  linuxHeaders = linuxHeaders_4_4;
-
-  linuxHeaders24Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/2.4.nix {
-    cross = assert targetPlatform != buildPlatform; targetPlatform;
+  linuxHeaders_2_4 = callPackage ../os-specific/linux/kernel-headers/2.4.nix {
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
 
-  linuxHeaders26Cross = forcedNativePackages.callPackage ../os-specific/linux/kernel-headers/4.4.nix {
-    cross = assert targetPlatform != buildPlatform; targetPlatform;
+  linuxHeaders_2_6 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
 
-  linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix { };
+  linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
+    cross = if targetPlatform != hostPlatform then targetPlatform else null;
+  };
 
   # We can choose:
-  linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
-    else if ver == "2.6" then linuxHeaders26Cross
-    else throw "Unknown linux kernel version";
-
-  linuxHeadersCross = assert targetPlatform != buildPlatform;
-    linuxHeadersCrossChooser targetPlatform.platform.kernelMajor;
+  linuxHeaders =
+    if targetPlatform != hostPlatform
+    then
+      { # switch
+        "2.4" = linuxHeaders_2_4;
+        "2.6" = linuxHeaders_2_6;
+        "4.4" = linuxHeaders_4_4;
+      }.${targetPlatform.platform.kernelMajor}
+        or (throw "Unknown linux kernel version")
+    else
+      linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -12381,7 +12385,7 @@ with pkgs;
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
-    linuxHeaders = linuxHeadersCross;
+    inherit (buildPackages) linuxHeaders;
     gccCross = gccCrossStageStatic;
     cross = assert targetPlatform != buildPlatform; targetPlatform;
   });

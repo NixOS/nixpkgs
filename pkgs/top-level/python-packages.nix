@@ -12616,8 +12616,6 @@ in {
     };
   };
 
-  icdiff = callPackage ../tools/text/icdiff {};
-
   imageio = buildPythonPackage rec {
     name = "imageio-${version}";
     version = "1.6";

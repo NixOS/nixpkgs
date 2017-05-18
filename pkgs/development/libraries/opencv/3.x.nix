@@ -78,6 +78,12 @@ stdenv.mkDerivation rec {
         ln -s "${bootdescFiles}/$name" "$NIX_BUILD_TOP/opencv_contrib/xfeatures2d/src/$name"
       done
     '');
+
+  # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
+  postPatch = ''
+    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+  '';
+
   preConfigure =
     (let version  = "20151201";
          md5      = "808b791a6eac9ed78d32a7666804320e";

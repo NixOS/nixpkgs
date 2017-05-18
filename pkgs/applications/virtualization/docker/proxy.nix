@@ -1,8 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, go, docker }:
+{ stdenv, buildGoPackage, fetchFromGitHub, docker }:
 
-with lib;
-
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "docker-proxy-${rev}";
   rev = "7b2b1feb1de4817d522cc372af149ff48d25028e";
 
@@ -13,20 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1ng577k11cyv207bp0vaz5jjfcn2igd6w95zn4izcq1nldzp5935";
   };
 
-  buildInputs = [ go ];
+  goPackagePath = "github.com/docker/libnetwork";
 
-  buildPhase = ''
-    mkdir -p .gopath/src/github.com/docker
-    ln -sf $(pwd) .gopath/src/github.com/docker/libnetwork
-    GOPATH="$(pwd)/.gopath:$(pwd)/Godeps/_workspace" go build -ldflags="$PROXY_LDFLAGS" -o docker-proxy ./cmd/proxy
-  '';
+  goDeps = null;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp docker-proxy $out/bin
+    install -m755 -D ./go/bin/proxy $bin/bin/docker-proxy
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Docker proxy binary to forward traffic between host and containers";
     license = licenses.asl20;
     homepage = https://github.com/docker/libnetwork;
@@ -34,3 +27,4 @@ stdenv.mkDerivation rec {
     platforms = docker.meta.platforms;
   };
 }
+

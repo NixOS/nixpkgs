@@ -1,4 +1,4 @@
-{lib, python2Packages, git, mercurial}:
+{lib, python2Packages, git, mercurial, coreutils}:
 
 with python2Packages;
 buildPythonApplication rec {
@@ -16,6 +16,12 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "126xhjma4a0k7gq58hbqglhb3rai0a576azz7g8gmqjr3kl0264v";
   };
+
+  # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
+  # force using the echo binary
+  postPatch = ''
+    substituteInPlace tests/test-git.t --replace "echo" "${coreutils}/bin/echo"
+  '';
 
   # ignore flake8 tests for the nix wrapped setup.py
   checkPhase = ''

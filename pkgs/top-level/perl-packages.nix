@@ -10789,13 +10789,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PPI = buildPerlPackage {
-    name = "PPI-1.220";
+  PPI = buildPerlPackage rec {
+    name = "PPI-1.224";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.220.tar.gz;
-      sha256 = "1e15be50e7d95a36d351af8bf5074f6695a2c72165e586d93e616183e7602b83";
+      url = "mirror://cpan/authors/id/M/MI/MITHALDU/${name}.tar.gz";
+      sha256 = "8d0f9faaea68515fb5aa6323115dcf98ea6c1dec4441f3844d3b9633b6cc9d94";
     };
-    buildInputs = [ ClassInspector FileRemove TestNoWarnings TestObject TestSubCalls ];
+    buildInputs = [ ClassInspector FileRemove TestDeep TestObject TestSubCalls TestWarn ];
     propagatedBuildInputs = [ Clone IOString ListMoreUtils ParamsUtil TaskWeaken ];
 
     # Remove test that fails due to unexpected shebang after
@@ -10806,7 +10806,6 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/adamkennedy/PPI;
       description = "Parse, Analyze and Manipulate Perl (without perl)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
