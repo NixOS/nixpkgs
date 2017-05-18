@@ -1,23 +1,16 @@
-{ lib, stdenv, fetchurl
+{ stdenv, callPackage
+, withLinuxHeaders ? true
 , installLocales ? true
 , profilingLibraries ? false
-, withGd ? false, gd ? null, libpng ? null
-, buildPlatform, hostPlatform
-, buildPackages
+, withGd ? false
 }:
 
 assert stdenv.cc.isGNU;
 
-let
-  build = import ./common.nix;
-  cross = if buildPlatform != hostPlatform then hostPlatform else null;
-  inherit (buildPackages) linuxHeaders;
-in
-  build cross ({
-    name = "glibc" + lib.optionalString withGd "-gd";
+callPackage ./common.nix { inherit stdenv; } {
+    name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
-    inherit lib stdenv buildPackages fetchurl linuxHeaders installLocales
-      profilingLibraries withGd gd libpng;
+    inherit withLinuxHeaders profilingLibraries installLocales withGd;
 
     NIX_NO_SELF_RPATH = true;
 
@@ -106,36 +99,3 @@ in
 
     meta.description = "The GNU C Library";
   }
-
-  //
-
-  (if cross != null
-   then {
-      preConfigure = ''
-        sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
-
-        cat > config.cache << "EOF"
-        libc_cv_forced_unwind=yes
-        libc_cv_c_cleanup=yes
-        libc_cv_gnu89_inline=yes
-        # Only due to a problem in gcc configure scripts:
-        libc_cv_sparc64_tls=${if cross.withTLS then "yes" else "no"}
-        EOF
-        export BUILD_CC=gcc
-        export CC="$crossConfig-gcc"
-        export AR="$crossConfig-ar"
-        export RANLIB="$crossConfig-ranlib"
-
-        dontStrip=1
-      '';
-
-      preInstall = null; # clobber the native hook
-
-      separateDebugInfo = false; # this is currently broken for crossDrv
-
-      # To avoid a dependency on the build system 'bash'.
-      preFixup = ''
-        rm $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-      '';
-    }
-   else {}))
