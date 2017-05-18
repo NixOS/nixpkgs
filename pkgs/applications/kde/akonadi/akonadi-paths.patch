@@ -92,17 +92,71 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigpostgresql.cpp
 ===================================================================
 --- akonadi-17.04.0.orig/src/server/storage/dbconfigpostgresql.cpp
 +++ akonadi-17.04.0/src/server/storage/dbconfigpostgresql.cpp
-@@ -97,8 +97,8 @@ bool DbConfigPostgresql::init(QSettings
-         }
-         postgresSearchPath.append(postgresVersionedSearchPaths);
+@@ -58,7 +58,6 @@ bool DbConfigPostgresql::init(QSettings
+     // determine default settings depending on the driver
+     QString defaultHostName;
+     QString defaultOptions;
+-    QString defaultServerPath;
+     QString defaultInitDbPath;
+     QString defaultPgData;
  
+@@ -70,35 +69,7 @@ bool DbConfigPostgresql::init(QSettings
+ 
+     mInternalServer = settings.value(QStringLiteral("QPSQL/StartServer"), defaultInternalServer).toBool();
+     if (mInternalServer) {
+-        QStringList postgresSearchPath;
+-
+-#ifdef POSTGRES_PATH
+-        const QString dir(QStringLiteral(POSTGRES_PATH));
+-        if (QDir(dir).exists()) {
+-            postgresSearchPath << QStringLiteral(POSTGRES_PATH);
+-        }
+-#endif
+-        postgresSearchPath << QStringLiteral("/usr/sbin")
+-                           << QStringLiteral("/usr/local/sbin");
+-        // Locale all versions in /usr/lib/postgresql (i.e. /usr/lib/postgresql/X.Y) in reversed
+-        // sorted order, so we search from the newest one to the oldest.
+-        QStringList postgresVersionedSearchPaths;
+-        QDir versionedDir(QStringLiteral("/usr/lib/postgresql"));
+-        if (versionedDir.exists()) {
+-            const auto versionedDirs = versionedDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::Reversed);
+-            for (const auto &path : versionedDirs) {
+-                // Don't break once PostgreSQL 10 is released, but something more future-proof will be needed
+-                if (path.fileName().startsWith(QLatin1String("10."))) {
+-                    postgresVersionedSearchPaths.prepend(path.absoluteFilePath() + QStringLiteral("/bin"));
+-                } else {
+-                    postgresVersionedSearchPaths.append(path.absoluteFilePath() + QStringLiteral("/bin"));
+-                }
+-            }
+-        }
+-        postgresSearchPath.append(postgresVersionedSearchPaths);
+-
 -        defaultServerPath = XdgBaseDirs::findExecutableFile(QStringLiteral("pg_ctl"), postgresSearchPath);
 -        defaultInitDbPath = XdgBaseDirs::findExecutableFile(QStringLiteral("initdb"), postgresSearchPath);
-+        defaultServerPath = QStringLiteral(NIXPKGS_POSTGRES_PG_CTL);
 +        defaultInitDbPath = QStringLiteral(NIXPKGS_POSTGRES_INITDB);
          defaultHostName = Utils::preferredSocketDirectory(StandardDirs::saveDir("data", QStringLiteral("db_misc")));
          defaultPgData = StandardDirs::saveDir("data", QStringLiteral("db_data"));
      }
+@@ -118,10 +89,7 @@ bool DbConfigPostgresql::init(QSettings
+     mUserName = settings.value(QStringLiteral("User")).toString();
+     mPassword = settings.value(QStringLiteral("Password")).toString();
+     mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
+-    mServerPath = settings.value(QStringLiteral("ServerPath"), defaultServerPath).toString();
+-    if (mInternalServer && mServerPath.isEmpty()) {
+-        mServerPath = defaultServerPath;
+-    }
++    mServerPath = QStringLiteral(NIXPKGS_POSTGRES_PG_CTL);
+     qCDebug(AKONADISERVER_LOG) << "Found pg_ctl:" << mServerPath;
+     mInitDbPath = settings.value(QStringLiteral("InitDbPath"), defaultInitDbPath).toString();
+     if (mInternalServer && mInitDbPath.isEmpty()) {
+@@ -142,7 +110,6 @@ bool DbConfigPostgresql::init(QSettings
+         settings.setValue(QStringLiteral("Port"), mHostPort);
+     }
+     settings.setValue(QStringLiteral("Options"), mConnectionOptions);
+-    settings.setValue(QStringLiteral("ServerPath"), mServerPath);
+     settings.setValue(QStringLiteral("InitDbPath"), mInitDbPath);
+     settings.setValue(QStringLiteral("StartServer"), mInternalServer);
+     settings.endGroup();
 Index: akonadi-17.04.0/src/akonadicontrol/agentprocessinstance.cpp
 ===================================================================
 --- akonadi-17.04.0.orig/src/akonadicontrol/agentprocessinstance.cpp
