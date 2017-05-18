@@ -11034,6 +11034,8 @@ with pkgs;
 
   p910nd = callPackage ../servers/p910nd { };
 
+  passopolis = callPackage ../servers/passopolis { antBuild = releaseTools.antBuild; };
+
   petidomo = callPackage ../servers/mail/petidomo { };
 
   popa3d = callPackage ../servers/mail/popa3d { };
