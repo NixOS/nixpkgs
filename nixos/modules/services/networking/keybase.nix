@@ -17,14 +17,6 @@ in {
         description = "Whether to start the Keybase service.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.keybase;
-        defaultText = "pkgs.keybase";
-        example = literalExample "pkgs.keybase";
-        description = "Keybase derivation to use.";
-      };
-
     };
   };
 
@@ -36,12 +28,13 @@ in {
       description = "Keybase service";
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}/bin/keybase service --auto-forked
+          ${pkgs.keybase}/bin/keybase service
         '';
         Restart = "on-failure";
+        PrivateTmp = true;
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ pkgs.keybase ];
   };
 }
