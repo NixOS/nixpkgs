@@ -3,7 +3,8 @@
 callPackage ./generic.nix (rec {
   version = "2017-05-15";
   src = fetchurl {
-    url = "https://static.domenkozar.com/rf5n6m8qwviaiv06sfmdwl8hndp0hxbp-nixops-1.5.1pre2159_db36cb7.tar.bz2";
-    sha256 = "01b4mgql5jxin2fb2ndr1qlc8171vbb1vdljdimy8nz49dgy0gkx";
+    # Sadly hydra doesn't offer download links
+    url = "https://static.domenkozar.com/nixops-tarball-1.5.1pre2165_b2fdc43.tar.bz2";
+    sha256 = "1x8jiskxynx0rzw356sz406bi2vl0vjs7747sbacq0bp1jlnpb2n";
   };
 })
