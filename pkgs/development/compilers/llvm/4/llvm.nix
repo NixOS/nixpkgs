@@ -40,7 +40,8 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  buildInputs = [ perl groff cmake libxml2 python libffi python.pkgs.sphinx ]
+  nativeBuildInputs = [ perl groff cmake python python.pkgs.sphinx ];
+  buildInputs = [ libxml2 libffi ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];

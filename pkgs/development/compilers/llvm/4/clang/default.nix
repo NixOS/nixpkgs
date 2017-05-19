@@ -13,7 +13,8 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    buildInputs = [ cmake libedit libxml2 llvm python python.pkgs.sphinx ];
+    nativeBuildInputs = [ cmake python python.pkgs.sphinx ];
+    buildInputs = [ libedit libxml2 llvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
