@@ -8,7 +8,7 @@ use POSIX qw(dup2);
 use FileHandle;
 use Cwd;
 use File::Basename;
-use File::Path qw(make_path);
+use File::Path qw(make_path remove_tree);
 use File::Slurp;
 
 
@@ -68,6 +68,7 @@ sub new {
         redirectSerial => $args->{redirectSerial} // 1,
     };
 
+    remove_tree $self->{stateDir}, { verbose => 1 };
     mkdir $self->{stateDir}, 0700;
 
     bless $self, $class;
