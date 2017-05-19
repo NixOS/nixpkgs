@@ -336,6 +336,14 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
   ''}
+  ${optionalString (versionAtLeast version "4.8") ''
+    HARDENED_USERCOPY y # Check kernel objects copied to/from user space
+  ''}
+  ${optionalString (versionAtLeast version "4.8") ''
+    PAGE_POISONING y # Overwrite on free iff page_poison=1
+    PAGE_POISONING_NO_SANITY y
+    PAGE_POISONING_ZERO y
+  ''}
 
   # AppArmor support
   SECURITY_APPARMOR y
