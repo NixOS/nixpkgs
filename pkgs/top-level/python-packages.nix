@@ -153,6 +153,8 @@ in {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
 
+  bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
+
   blivet = callPackage ../development/python-modules/blivet { };
 
   breathe = callPackage ../development/python-modules/breathe { };
