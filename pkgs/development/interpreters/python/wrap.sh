@@ -65,7 +65,8 @@ wrapPythonProgramsIn() {
                 # above. The script will set PYTHONPATH and PATH variables.!
                 # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
                 local -a wrap_args=("$f"
-                                 --prefix PATH ':' "$program_PATH")
+                                    --prefix PYTHONPATH ':' "$program_PYTHONPATH"
+                                    --prefix PATH ':' "$program_PATH")
 
                 # Add any additional arguments provided by makeWrapperArgs
                 # argument to buildPythonPackage.
