@@ -100,7 +100,7 @@ let
           # Test a full stdenv bootstrap from the bootstrap tools definition
           inherit (bootstrap.test-pkgs) stdenv;
         };
-    }) // (mapTestOn ((packagePlatforms pkgs) // rec {
+    }) // (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
@@ -122,6 +122,39 @@ let
         pandas = unix;
         scikitlearn = unix;
       };
+
+      # Enable darwin only packages, see https://github.com/NixOS/nixpkgs/issues/25200
+      darwin = {
+        adv_cmds = darwin;
+        basic_cmds = darwin;
+        binutils = darwin;
+        bootstrap_cmds = darwin;
+        cctools = darwin;
+        configd = darwin;
+        developer_cmds = darwin;
+        libiconv = darwin;
+        libobjc = darwin;
+        libresolv = darwin;
+        libunwind = darwin;
+        network_cmds = darwin;
+        ps = darwin;
+        shell_cmds = darwin;
+      };
+      contacts = darwin;
+      emacsMacport = darwin;
+      gtk-mac-bundler = darwin;
+      gtk-mac-integration = darwin;
+      gtk-mac-integration-gtk3 = darwin;
+      iterm2 = darwin;
+      khd = darwin;
+      kwm = darwin;
+      macvim = darwin;
+      pinentry_mac = darwin;
+      quartz-wm = darwin;
+      reattach-to-user-namespace = darwin;
+      terminal-notifier = darwin;
+      xhyve = darwin;
+      xquartz = darwin;
     } ));
 
 in jobs
