@@ -518,6 +518,8 @@ with pkgs;
 
   autorevision = callPackage ../tools/misc/autorevision { };
 
+  bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
+
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
