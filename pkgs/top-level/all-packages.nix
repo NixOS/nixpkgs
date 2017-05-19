@@ -18123,6 +18123,8 @@ with pkgs;
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  dell-2155cdn = callPackage ../misc/drivers/dell-2155cdn {};
+
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
