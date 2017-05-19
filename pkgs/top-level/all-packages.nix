@@ -6162,6 +6162,9 @@ with pkgs;
     self = python36;
   };
 
+  # Should eventually be moved inside Python interpreters.
+  python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
+
   pypy = pypy27;
 
   pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
