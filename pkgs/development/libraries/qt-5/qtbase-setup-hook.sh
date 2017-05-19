@@ -72,8 +72,9 @@ _qtPostInstallHook() {
     if [ -n "$NIX_QT_SUBMODULE" ]; then
         find "${!outputLib}" -name "*.cmake" | while read file; do
             substituteInPlace "$file" \
-                              --subst-var-by NIX_OUT "${!outputLib}" \
-                              --subst-var-by NIX_DEV "${!outputDev}"
+                --subst-var-by NIX_OUT "${!outputLib}" \
+                --subst-var-by NIX_DEV "${!outputDev}" \
+                --subst-var-by NIX_BIN "${!outputBin}"
         done
     fi
 }

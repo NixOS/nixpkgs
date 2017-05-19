@@ -237,8 +237,9 @@ stdenv.mkDerivation {
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
         substituteInPlace "$file" \
-            --subst-var-by NIX_OUT "$out" \
-            --subst-var-by NIX_DEV "$dev"
+            --subst-var-by NIX_OUT "''${!outputLib}" \
+            --subst-var-by NIX_DEV "''${!outputDev}" \
+            --subst-var-by NIX_BIN "''${!outputBin}"
     done
   '';
 

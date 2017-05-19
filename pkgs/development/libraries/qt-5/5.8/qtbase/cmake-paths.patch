@@ -306,11 +306,11 @@ Index: qtbase-opensource-src-5.8.0/mkspecs/features/data/cmake/Qt5PluginTarget.c
  
  !!IF !isEmpty(CMAKE_RELEASE_TYPE)
 -_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME RELEASE \"$${CMAKE_PLUGIN_LOCATION_RELEASE}\")
-+_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME RELEASE \"@NIX_OUT@/$${CMAKE_PLUGIN_LOCATION_RELEASE}\")
++_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME RELEASE \"@NIX_BIN@/$${CMAKE_PLUGIN_LOCATION_RELEASE}\")
  !!ENDIF
  !!IF !isEmpty(CMAKE_DEBUG_TYPE)
 -_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME DEBUG \"$${CMAKE_PLUGIN_LOCATION_DEBUG}\")
-+_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME DEBUG \"@NIX_OUT@/$${CMAKE_PLUGIN_LOCATION_DEBUG}\")
++_populate_$${CMAKE_MODULE_NAME}_plugin_properties($$CMAKE_PLUGIN_NAME DEBUG \"@NIX_BIN@/$${CMAKE_PLUGIN_LOCATION_DEBUG}\")
  !!ENDIF
  
  list(APPEND Qt5$${CMAKE_MODULE_NAME}_PLUGINS Qt5::$$CMAKE_PLUGIN_NAME)
