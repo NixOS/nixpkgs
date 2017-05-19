@@ -9754,7 +9754,7 @@ with pkgs;
       knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
       kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework solid sonnet syntax-highlighting
+      networkmanager-qt plasma-framework prison solid sonnet syntax-highlighting
       threadweaver;
 
     ### KDE PLASMA 5

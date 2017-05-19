@@ -158,6 +158,7 @@ let
       networkmanager-qt = callPackage ./networkmanager-qt.nix {};
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       plasma-framework = callPackage ./plasma-framework.nix {};
+      prison = callPackage ./prison.nix {};
       solid = callPackage ./solid.nix {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
