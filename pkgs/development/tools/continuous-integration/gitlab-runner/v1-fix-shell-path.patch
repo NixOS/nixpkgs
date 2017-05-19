@@ -1,0 +1,13 @@
+diff --git a/shells/bash.go b/shells/bash.go
+index c9c8b68..c97dbb5 100644
+--- a/shells/bash.go
++++ b/shells/bash.go
+@@ -208,7 +208,7 @@ func (b *BashShell) GetConfiguration(info common.ShellScriptInfo) (script *commo
+ 	if info.User != "" {
+ 		script.Command = "su"
+ 		if runtime.GOOS == "linux" {
+-			script.Arguments = append(script.Arguments, "-s", "/bin/"+b.Shell)
++			script.Arguments = append(script.Arguments, "-s", "/run/current-system/sw/bin/"+b.Shell)
+ 		}
+ 		script.Arguments = append(script.Arguments, info.User)
+ 		script.Arguments = append(script.Arguments, "-c", shellCommand)

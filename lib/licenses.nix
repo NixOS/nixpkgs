@@ -531,6 +531,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Do What The F*ck You Want To Public License";
   };
 
+  wxWindows = spdx {
+    spdxId = "WXwindows";
+    fullName = "wxWindows Library Licence, Version 3.1";
+  };
+
   zlib = spdx {
     spdxId = "Zlib";
     fullName = "zlib License";

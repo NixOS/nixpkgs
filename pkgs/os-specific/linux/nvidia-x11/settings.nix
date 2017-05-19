@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, gtk3, libXv, libXrandr, libvdpau
+{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   inherit (nvidia_x11) version;
 
   src = fetchurl {
-    url = "ftp://download.nvidia.com/XFree86/nvidia-settings/${name}.tar.bz2";
+    url = "https://download.nvidia.com/XFree86/nvidia-settings/${name}.tar.bz2";
     inherit sha256;
   };
 
   nativeBuildInputs = [ pkgconfig m4 ];
 
-  buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 ]
+  buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
   NIX_LDFLAGS = [ "-lvdpau" "-lXrandr" "-lXv" "-lnvidia-ml" ];

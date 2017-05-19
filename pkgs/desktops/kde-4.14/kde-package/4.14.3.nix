@@ -10,7 +10,6 @@ hashes=builtins.listToAttrs[
   {name="libkexiv2";value="1z8fmxfphx7szf4a17fs7zfjyxj6wncbvsphfvf6i5rlqy60g1y4";}
   {name="marble";value="1w603miykq0s84jk6j17b7pg44rd4az0dhzgq7j7d6dfcz7nfrjd";}
   {name="okular";value="0ijw71vkk1lj873hqczc23vllhkc9s0miipsbllxblx57rgi5qp6";}
-  {name="pykde4";value="1z40gnkyjlv6ds3cmpzvv99394rhmydr6rxx7qj33m83xnsxgfbz";}
   {name="svgpart";value="1bj9gaaj6nqdgchmqnn381288aqw09ky0kbm1naddqa82pk196f6";}
 ];
 versions=builtins.listToAttrs[
@@ -26,7 +25,6 @@ versions=builtins.listToAttrs[
   {name="libkexiv2";value="4.14.3";}
   {name="marble";value="4.14.3";}
   {name="okular";value="4.14.3";}
-  {name="pykde4";value="4.14.3";}
   {name="svgpart";value="4.14.3";}
 ];
 modules=[
@@ -60,13 +58,6 @@ modules=[
   split=true;
   pkgs=[
     { name="marble";  }
-  ];
-}
-{
-  module="kdebindings";
-  split=true;
-  pkgs=[
-    { name="pykde4";  }
   ];
 }
 {

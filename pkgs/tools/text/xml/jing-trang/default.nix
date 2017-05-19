@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = http://www.thaiopensource.com/relaxng/jing.html;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

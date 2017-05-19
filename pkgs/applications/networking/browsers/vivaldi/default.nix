@@ -10,16 +10,16 @@
 }:
 
 let
-  version = "1.8";
-  build = "770.56-1";
+  version = "1.9";
+  build = "818.44-1";
   fullVersion = "stable_${version}.${build}";
 
   info = if stdenv.is64bit then {
       arch = "amd64";
-      sha256 = "1f9cwr41rl0mqwg3xn2nfb5xnr0h0vc4wiz8367bd67zf4an61d2";
+      sha256 = "0apkwgd98ld5k77nplzmk67nz6mb5pi8jyrnkp96m93mr41b08bq";
     } else {
       arch = "i386";
-      sha256 = "1240w3gqn5rbvkb0v1g66syrc92r1vzk82fkmvy92qsnx0d5z7nn ";
+      sha256 = "0xyf0z1cnzmb3pv6rgsbd7jdjf1v137priz4kkymr8jgmpq0mmfx ";
     };
 
 in stdenv.mkDerivation rec {

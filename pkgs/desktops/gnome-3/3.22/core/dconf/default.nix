@@ -18,8 +18,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ vala_0_32 libxslt pkgconfig glib dbus_glib gnome3.gtk libxml2
                   intltool docbook_xsl docbook_xsl_ns makeWrapper ];
 
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace client/Makefile \
+      --replace "-soname=libdconf.so.1" "-install_name,libdconf.so.1"
+  '';
+
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = gnome3.maintainers;
   };
 }

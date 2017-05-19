@@ -30,18 +30,6 @@
     inputs = [ pkgs.expat ];
   };
 
-  syslog = rec {
-    src = fetchFromGitHub {
-      owner = "yaoweibin";
-      repo = "nginx_syslog_patch";
-      rev = "3ca5ba65541637f74467038aa032e2586321d0cb";
-      sha256 = "0y8dxkx8m1jw4v5zsvw1gfah9vh3ryq0hfmrcbjzcmwp5b5lb1i8";
-    };
-    preConfigure = ''
-      patch -p1 < "${src}/syslog-1.7.0.patch"
-    '';
-  };
-
   moreheaders = {
     src = fetchFromGitHub {
       owner = "openresty";
@@ -174,5 +162,14 @@
         '';
     in {
       src = ngx_pagespeed;
+    };
+
+    shibboleth = {
+      src = fetchFromGitHub {
+        owner = "nginx-shib";
+        repo = "nginx-http-shibboleth";
+        rev = "48b70d87bf7796d7813813a837e52b3a86e6f6f4";
+        sha256 = "0k8xcln5sf0m4r0m550dkhl07zhncp285dpysk6r4v6vqzqmhzdc";
+      };
     };
 }

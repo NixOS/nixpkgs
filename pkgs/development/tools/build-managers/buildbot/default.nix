@@ -5,17 +5,19 @@ let
     buildInputs = [ makeWrapper ] ++ plugins;
     passthru.withPlugins = moarPlugins: withPlugins (moarPlugins ++ plugins);
   } ''
-    makeWrapper ${package}/bin/buildbot $out/bin/buildbot --prefix PYTHONPATH : $PYTHONPATH
+    makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
+      --prefix PYTHONPATH : "${package}/lib/python2.7/site-packages:$PYTHONPATH"
+    ln -sfv ${package}/lib $out/lib
   '';
 
   package = pythonPackages.buildPythonApplication (rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.4";
+    version = "0.9.7";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0wklrn4fszac9wi8zw3vbsznwyff6y57cz0i81zvh46skb6n3086";
+      sha256 = "0cwy39ap2v9kni3zm92633cnqf7qsnb4zlargx060pbfagkg1jwg";
     };
 
     buildInputs = with pythonPackages; [
@@ -49,6 +51,7 @@ let
       txaio
       autobahn
       pyjwt
+      distro
 
       # tls
       pyopenssl
@@ -64,6 +67,12 @@ let
       ramlfications
       sphinx-jinja
 
+    ];
+
+    patches = [
+      # This patch disables the test that tries to read /etc/os-release which
+      # is not accessible in sandboxed builds.
+      ./skip_test_linux_distro.patch
     ];
 
     postPatch = ''

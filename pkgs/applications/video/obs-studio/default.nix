@@ -1,9 +1,12 @@
 { stdenv
 , fetchFromGitHub
 , cmake
+, fdk_aac
 , ffmpeg
 , jansson
 , libxkbcommon
+, libpthreadstubs
+, libXdmcp
 , qtbase
 , qtx11extras
 , libv4l
@@ -11,6 +14,7 @@
 , curl
 , xorg
 , makeWrapper
+, pkgconfig
 
 , alsaSupport ? false
 , alsaLib
@@ -22,23 +26,29 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "18.0.1";
+  version = "18.0.2";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
-    rev = "624aa2a5";
-    sha256 = "1bs82rqyq7wjjg99mh23ap8z5bmrhjfnza5iyjx808fzqc0bgzaj";
+    rev = "2bf9d548";
+    sha256 = "036l29m3dlqadvaazj0nmgi2lcji8zckdvx3gjrx1kp96yd5myqd";
   };
 
+  patches = [ ./find-xcb.patch ];
+
   nativeBuildInputs = [ cmake
+                        pkgconfig
                       ];
 
   buildInputs = [ curl
+                  fdk_aac
                   ffmpeg
                   jansson
                   libv4l
                   libxkbcommon
+                  libpthreadstubs
+                  libXdmcp
                   qtbase
                   qtx11extras
                   x264
@@ -65,7 +75,7 @@ in stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
     platforms = with platforms; linux;
   };

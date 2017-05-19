@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fcitx-qt5-${version}";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-qt5/${name}.tar.xz";
-    sha256 = "1pj1b04n8r4kl7jh1qdv0xshgzb3zrmizfa3g5h3yk589h191vwc";
+    sha256 = "0r8c5k0qin3mz2p1mdciip6my0x58662sx5z50zs4c5pkdg21qwv";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];

@@ -23,12 +23,27 @@ stdenv.mkDerivation rec {
     );
   '';
 
-  # Note: Users should define the `ASPELL_CONF' environment variable to
-  # `data-dir $HOME/.nix-profile/lib/aspell/' so that they can access
-  # dictionaries installed in their profile.
-  #
-  # We can't use `$out/etc/aspell.conf' for that purpose since Aspell
-  # doesn't expand environment variables such as `$HOME'.
+  postInstall = ''
+    local prog="$out/bin/aspell"
+    local hidden="$out/bin/.aspell-wrapped"
+    mv "$prog" "$hidden"
+    cat > "$prog" <<END
+    #! $SHELL -e
+    if [ -z "\$ASPELL_CONF" ]; then
+      for p in \$NIX_PROFILES; do
+        if [ -d "\$p/lib/aspell" ]; then
+          ASPELL_CONF="data-dir \$p/lib/aspell"
+        fi
+      done
+      if [ -z "\$ASPELL_CONF" ] && [ -d "\$HOME/.nix-profile/lib/aspell" ]; then
+        ASPELL_CONF="data-dir \$HOME/.nix-profile/lib/aspell"
+      fi
+      export ASPELL_CONF
+    fi
+    exec "$hidden" "\$@"
+    END
+    chmod +x "$prog"
+  '';
 
   meta = {
     description = "Spell checker for many languages";

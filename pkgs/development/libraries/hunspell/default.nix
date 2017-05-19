@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, ncurses, readline }:
+{ stdenv, fetchurl, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "hunspell-1.3.3";
+  version = "1.6.1";
+  name = "hunspell-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hunspell/${name}.tar.gz";
-    sha256 = "0v14ff9s37vkh45diaddndcrj0hmn67arh8xh8k79q9c1vgc1cm7";
+    url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
+    sha256 = "0j9c20sj7bgd6f77193g1ihy8w905byk2gdhdc0r9dsh7irr7x9h";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
 
   buildInputs = [ ncurses readline ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  autoreconfFlags = "-vfi";
+
   configureFlags = [ "--with-ui" "--with-readline" ];
 
   hardeningDisable = [ "format" ];

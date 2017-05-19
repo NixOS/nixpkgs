@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, substituteAll, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
 , alsaLib, ffmpeg_2, glib, openssl, pcre, zlib
 , libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
 , libxkbcommon, libxkbfile
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   name = "freerdp-git-${version}";
-  version = "20170201";
+  version = "20170502";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
-    rev    = "6001cb710dc67eb8811362b7bf383754257a902b";
-    sha256 = "0l2lwqk2r8rq8a0f91wbb30kqg21fv0k0508djpwj0pa9n73fgmg";
+    rev    = "8569102c3a011602de3a1cdf69f7c69adbb864ee";
+    sha256 = "0m61aiy8l3ybnk2d2kjmpp9ql31zfs63gjixyj9x95jd4m507j67";
   };
 
   # outputs = [ "bin" "out" "dev" ];
@@ -29,14 +29,10 @@ stdenv.mkDerivation rec {
     export HOME=$TMP
     substituteInPlace "libfreerdp/freerdp.pc.in" \
       --replace "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+  '' + lib.optionalString (pcsclite != null) ''
+    substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
+      --replace "libpcsclite.so" "${pcsclite}/lib/libpcsclite.so"
   '';
-
-  patches = with lib; [
-  ] ++ optional (pcsclite != null)
-      (substituteAll {
-        src = ./dlopen-absolute-paths.diff;
-        inherit pcsclite;
-      });
 
   buildInputs = with lib; [
     alsaLib cups ffmpeg_2 glib openssl pcre pcsclite libpulseaudio zlib

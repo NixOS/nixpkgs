@@ -35,6 +35,8 @@ rec {
   namecoind = callPackage ./namecoind.nix { };
 
   ethabi = callPackage ./ethabi.nix { };
+  ethrun = callPackage ./ethrun.nix { };
+  seth = callPackage ./seth.nix { };
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };

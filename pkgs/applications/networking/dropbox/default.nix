@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, makeWrapper
+{ stdenv, fetchurl, makeDesktopItem, patchelf, makeWrapper, makeQtWrapper
 , dbus_libs, fontconfig, freetype, gcc, glib
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
-, qtbase, qtdeclarative, qtwebkit, makeQtWrapper
+, qtbase, qtdeclarative, qtwebkit, wmctrl
 }:
 
 # this package contains the daemon version of dropbox
@@ -23,11 +23,11 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "23.4.19";
+  version = "26.4.24";
   sha256 =
     {
-      "x86_64-linux" = "09vjic4yi6g6rbliz4b56swqdpjgw0m7gs2n40xhvbqfd35prafs";
-      "i686-linux"   = "0i2x2s7p1lq315z8198wjlfqr5lqj3mxdcqxz44skrbkmqfd9hab";
+      "x86_64-linux" = "1qzz88d3akbqfk1539w2z0ldyjjscqjqgsvadf9i4xr2y0syfv4y";
+      "i686-linux"   = "12xwmmycrg56xl88k9pqd7mcn0jqi4jijf36vn4fdjvmn7ksskcw";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
   name = "dropbox-${version}";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
+    url = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
@@ -98,6 +98,9 @@ in stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
     chmod 755 $out/${appdir}/dropbox
+
+    rm $out/${appdir}/wmctrl
+    ln -s ${wmctrl}/bin/wmctrl $out/${appdir}/wmctrl
   '';
 
   fixupPhase = ''

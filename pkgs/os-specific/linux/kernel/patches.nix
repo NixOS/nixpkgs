@@ -17,26 +17,6 @@ let
         '';
       };
     };
-
-  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha512 }: rec {
-    name = "grsecurity-${grver}-${kver}-${grrev}";
-
-    # Pass these along to allow the caller to determine compatibility
-    inherit grver kver grrev;
-
-    patch = fetchurl {
-      urls = [
-        "https://grsecurity.net/${grbranch}/${name}.patch"
-        # When updating versions/hashes, ALWAYS use the official
-        # version; we use this mirror only because upstream removes
-        # source files immediately upon releasing a new version ...
-        "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${kver}/${name}.patch"
-      ];
-      inherit sha512;
-    };
-
-    features.grsecurity = true;
-  };
 in
 
 rec {
@@ -99,19 +79,13 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_testing = grsecPatch
-    { kver   = "4.9.22";
-      grrev  = "201704120836";
-      sha512 = "3320r4myn9y5wf2i2aybl1aapcl9sms0z6p343xh5x0pvaphsjhksnh7cndrq0qxc7fqdwzh9nw1vf84qy02cg5nf8bq025jpkfp7qh";
-    };
+  grsecurity_testing = throw ''
+    Upstream has ceased free support for grsecurity/PaX.
 
-  # This patch relaxes grsec constraints on the location of usermode helpers,
-  # e.g., modprobe, to allow calling into the Nix store.
-  grsecurity_nixos_kmod =
-    {
-      name  = "grsecurity-nixos-kmod";
-      patch = ./grsecurity-nixos-kmod.patch;
-    };
+    See https://grsecurity.net/passing_the_baton.php
+    and https://grsecurity.net/passing_the_baton_faq.php
+    for more information.
+  '';
 
   crc_regression =
     { name = "crc-backport-regression";
@@ -121,12 +95,6 @@ rec {
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;
-    };
-
-
-  chromiumos_Kconfig_fix_entries_3_14 =
-    { name = "Kconfig_fix_entries_3_14";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
     };
 
   chromiumos_Kconfig_fix_entries_3_18 =

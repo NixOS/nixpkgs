@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "sxiv-${version}";
-  version = "v1.3.2";
-  #https://github.com/muennich/sxiv/archive/v1.3.2.zip
+  version = "1.3.2";
+
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "sxiv";
-    rev = version;
+    rev = "v${version}";
     sha256 = "1f4gz1qjhb44bbb3q5fqk439zyipkwnr19zhg89yq2pgmzzzqr2h";
   };
 

@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap
 }@args:
 
 let
@@ -78,6 +78,18 @@ in
         [ darwin.apple_sdk.frameworks.CoreServices ];
   };
 
+  # disable bundle install as it can't install anything in addition to what is
+  # specified in pkgs/applications/misc/jekyll/Gemfile anyway. Also do chmod_R
+  # to compensate for read-only files in site_template in nix store.
+  jekyll = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -i $installPath/lib/jekyll/commands/new.rb \
+          -e 's@Exec.run("bundle", "install"@Exec.run("true"@' \
+          -e 's@FileUtils.cp_r site_template + "/.", path@FileUtils.cp_r site_template + "/.", path; FileUtils.chmod_R "u+w", path@'
+    '';
+  };
+
   # note that you need version >= v3.16.14.8,
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
@@ -121,6 +133,10 @@ in
 
   patron = attrs: {
     buildInputs = [ curl ];
+  };
+
+  pcaprub = attrs: {
+    buildInputs = [ libpcap ];
   };
 
   pg = attrs: {
@@ -192,6 +208,14 @@ in
       substituteInPlace lib/sup/crypto.rb \
         --replace 'which gpg2' \
                   '${which}/bin/which gpg2'
+    '';
+  };
+
+  rb-readline = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/rbreadline.rb \
+        --replace 'infocmp' '${ncurses.dev}/bin/infocmp'
     '';
   };
 

@@ -5,7 +5,7 @@
 , agg, alsaLib, soundtouch, openal
 , desktop_file_utils
 , gtk2, gtkglext, libglade, pangox_compat
-, mesa, mesa_glu, libpcap, SDL, zziplib }:
+, mesa_glu, libpcap, SDL, zziplib }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -21,10 +21,9 @@ stdenv.mkDerivation rec {
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
     openal desktop_file_utils gtk2 gtkglext libglade pangox_compat
-    mesa mesa_glu libpcap SDL zziplib ];
+    mesa_glu libpcap SDL zziplib ];
 
   configureFlags = [
-    "--disable-osmesa" # Failing on compile step
     "--disable-glade"  # Failing on compile step
     "--enable-openal"
     "--enable-glx"
@@ -46,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-# TODO: investigate osmesa and glade
+# TODO: investigate glade

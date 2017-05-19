@@ -9,10 +9,11 @@ let
   else
     throw "Unsupported architecture";
 
+  version = (builtins.parseDrvName edk2.name).version;
 in
 
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
-  name = "OVMF-2014-12-10";
+  name = "OVMF-${version}";
 
   # TODO: properly include openssl for secureBoot
   buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];

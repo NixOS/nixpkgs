@@ -4,17 +4,18 @@ let
          then "linux-amd64"
          else "darwin-amd64";
   checksum = if stdenv.isLinux
-             then "fa434644d1afd92637369a033fd65b717d8dfa910127d335e8a82c8fad74cc35"
-             else "64420d467e03ceb666a4f22b89e08b93c06f76f5917fe539860b04cd5e5e515f";
-in
-stdenv.mkDerivation rec {
+             then "0vjkcilxzwvkgcczcbq58nl2j17ddqiysxm5yl13agnmxzvxw6r2"
+             else "1ga9gxzji48vhbaa0pkxd03h89zgjsbikbki9xla1qbvyvqjnw5g";
+
   pname = "helm";
-  version = "2.2.3";
+  version = "2.4.1";
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://kubernetes-helm.storage.googleapis.com/helm-v${version}-${arch}.tar.gz";
-    sha256 = "${checksum}";
+    sha256 = checksum;
   };
 
   preferLocalBuild = true;

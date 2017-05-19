@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchurl
-, oauthlib, requests2 }:
+, oauthlib, requests }:
 
 buildPythonPackage rec {
   version = "0.7.0";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false;        # Internet tests fail when building in chroot
-  propagatedBuildInputs = [ oauthlib requests2 ];
+  propagatedBuildInputs = [ oauthlib requests ];
 
   meta = with stdenv.lib; {
     description = "OAuthlib authentication support for Requests";

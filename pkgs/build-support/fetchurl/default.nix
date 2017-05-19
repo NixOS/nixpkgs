@@ -92,7 +92,7 @@ let
 
 in
 
-if md5 != "" then throw "fetchsvnssh does not support md5 anymore, please use sha256 or sha512"
+if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
 else if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}"
 else stdenv.mkDerivation {
   name =

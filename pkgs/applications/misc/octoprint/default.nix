@@ -65,7 +65,7 @@ in pythonPackages.buildPythonApplication rec {
 
   # We need old Tornado
   propagatedBuildInputs = with pythonPackages; [
-    awesome-slugify flask_assets rsa requests2 pkginfo watchdog
+    awesome-slugify flask_assets rsa requests pkginfo watchdog
     semantic-version flask_principal werkzeug flaskbabel tornado
     psutil pyserial flask_login netaddr markdown sockjs-tornado
     pylru pyyaml sarge feedparser netifaces click websocket_client

@@ -104,6 +104,7 @@ in {
     services.geoclue2.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
+    services.gnome3.gnome-disks.enable = mkDefault true;
     services.gnome3.gnome-documents.enable = mkDefault true;
     services.gnome3.gnome-keyring.enable = true;
     services.gnome3.gnome-online-accounts.enable = mkDefault true;
@@ -123,6 +124,7 @@ in {
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
+    systemd.packages = [ pkgs.gnome3.vino ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";

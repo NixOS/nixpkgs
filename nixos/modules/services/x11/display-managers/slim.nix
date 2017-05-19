@@ -17,6 +17,7 @@ let
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.systemd.package}/sbin/shutdown -h now
       reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
+      logfile /dev/stderr
       ${optionalString (cfg.defaultUser != null) ("default_user " + cfg.defaultUser)}
       ${optionalString (cfg.defaultUser != null) ("focus_password yes")}
       ${optionalString cfg.autoLogin "auto_login yes"}
@@ -128,11 +129,7 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.job =
-      { preStart =
-          ''
-            rm -f /var/log/slim.log
-          '';
-        environment =
+      { environment =
           { SLIM_CFGFILE = slimConfig;
             SLIM_THEMESDIR = slimThemesDir;
           };

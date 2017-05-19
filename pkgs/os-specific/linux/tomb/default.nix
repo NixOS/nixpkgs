@@ -1,15 +1,15 @@
 { stdenv, fetchurl, zsh, pinentry, cryptsetup, gnupg1orig, makeWrapper }:
 
 let
-    version = "2.2";
+    version = "2.4";
 in
 
 stdenv.mkDerivation rec {
   name = "tomb-${version}";
 
   src = fetchurl {
-    url = "https://files.dyne.org/tomb/tomb-${version}.tar.gz";
-    sha256 = "11msj38fdmymiqcmwq1883kjqi5zr01ybdjj58rfjjrw4zw2w5y0";
+    url = "https://files.dyne.org/tomb/Tomb-${version}.tar.gz";
+    sha256 = "1hv1w79as7swqj0n137vz8n8mwvcgwlvd91sdyssz41jarg7f1vr";
   };
 
   buildInputs = [ makeWrapper ];

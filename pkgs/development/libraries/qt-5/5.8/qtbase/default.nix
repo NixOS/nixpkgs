@@ -34,13 +34,52 @@ stdenv.mkDerivation {
   name = "qtbase-${version}";
   inherit src version;
 
+  propagatedBuildInputs =
+    [
+      libxml2 libxslt openssl pcre16 sqlite zlib
+
+      # Text rendering
+      harfbuzz icu
+
+      # Image formats
+      libjpeg libpng libtiff
+    ]
+
+    ++ lib.optional mesaSupported mesa
+
+    ++ lib.optionals (!stdenv.isDarwin) [
+      dbus glib udev
+
+      # Text rendering
+      fontconfig freetype
+
+      # X11 libs
+      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
+      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+    ]
+
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      AGL AppKit ApplicationServices Carbon Cocoa
+      CoreAudio CoreBluetooth CoreLocation CoreServices
+      DiskArbitration Foundation OpenGL
+      darwin.cf-private darwin.libobjc libiconv
+    ]);
+
+  buildInputs = [ ]
+    ++ lib.optionals (!stdenv.isDarwin) [ gtk3 libinput ]
+    ++ lib.optional developerBuild gdb
+    ++ lib.optional (cups != null) cups
+    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (postgresql != null) postgresql;
+
+  nativeBuildInputs =
+    [ bison flex gperf lndir perl pkgconfig python2 ]
+    ++ lib.optional (!stdenv.isDarwin) patchelf;
+
   outputs = [ "out" "dev" ];
 
   patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ [(if stdenv.isDarwin then ./cmake-paths-darwin.patch else ./cmake-paths.patch)]
-    ++ lib.optional decryptSslTraffic ./decrypt-ssl-traffic.patch
-    ++ lib.optionals mesaSupported [ ./dlopen-gl.patch ./mkspecs-libgl.patch ];
+    copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
   postPatch =
     ''
@@ -48,37 +87,19 @@ stdenv.mkDerivation {
       substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
       sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
 
-      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "src/corelib/Qt5Config.cmake.in"
-      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "src/corelib/Qt5CoreMacros.cmake"
-      sed -i 's/NO_DEFAULT_PATH//' "src/gui/Qt5GuiConfigExtras.cmake.in"
-      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
-
-      substituteInPlace src/network/kernel/qdnslookup_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc.out}"
-      substituteInPlace src/network/kernel/qhostinfo_unix.cpp \
-        --replace "@glibc@" "${stdenv.cc.libc.out}"
-
-      substituteInPlace src/network/ssl/qsslsocket_openssl_symbols.cpp \
-        --replace "@openssl@" "${openssl.out}"
-    '' + lib.optionalString stdenv.isLinux ''
-      substituteInPlace src/plugins/platforms/xcb/qxcbcursor.cpp \
-        --replace "@libXcursor@" "${libXcursor.out}"
-
-      substituteInPlace src/dbus/qdbus_symbols.cpp \
-        --replace "@dbus_libs@" "${dbus.lib}"
-
-      substituteInPlace \
-        src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
-        --replace "@libX11@" "${libX11.out}"
+      sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
+      sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
+      sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
+      sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
     ''
+
     + lib.optionalString mesaSupported ''
-      substituteInPlace \
-        src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
-        --replace "@mesa_lib@" "${mesa.out}"
-      substituteInPlace mkspecs/common/linux.conf \
-        --replace "@mesa_lib@" "${mesa.out}" \
-        --replace "@mesa_inc@" "${mesa.dev or mesa}"
-    ''+ lib.optionalString stdenv.isDarwin ''
+      sed -i mkspecs/common/linux.conf \
+          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
+          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+    ''
+
+    + lib.optionalString stdenv.isDarwin ''
       sed -i \
           -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
           -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
@@ -106,132 +127,132 @@ stdenv.mkDerivation {
         -importdir $out/lib/qt5/imports \
         -qmldir $out/lib/qt5/qml \
         -docdir $out/share/doc/qt5"
+
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins/platforms\""
   '';
+
+
+  NIX_CFLAGS_COMPILE =
+    [
+      "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
+      ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
+      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
+    ]
+
+    ++ lib.optional mesaSupported
+       ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+
+    ++ lib.optionals stdenv.isDarwin
+    [
+      "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
+      "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
+      # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
+      # 10.9 which necessitates the above macro definition that mentions
+      # 10.10
+    ]
+
+    ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
 
   prefixKey = "-prefix ";
-
-  # -no-eglfs, -no-directfb, -no-linuxfb and -no-kms because of the current minimalist mesa
-  # TODO Remove obsolete and useless flags once the build will be totally mastered
-  configureFlags = ''
-    -verbose
-    -confirm-license
-    -opensource
-
-    -release
-    -shared
-    ${lib.optionalString developerBuild "-developer-build"}
-    -accessibility
-    -optimized-qmake
-    -strip
-    -no-reduce-relocations
-    -system-proxies
-    -pkg-config
-
-    -gui
-    -widgets
-    -opengl desktop
-    -qml-debug
-    -icu
-    -pch
-
-    ${lib.optionalString (!system-x86_64) "-no-sse2"}
-    -no-sse3
-    -no-ssse3
-    -no-sse4.1
-    -no-sse4.2
-    -no-avx
-    -no-avx2
-    -no-mips_dsp
-    -no-mips_dspr2
-
-    -system-zlib
-    -system-libjpeg
-    -system-harfbuzz
-    -system-pcre
-    -openssl-linked
-
-    -system-sqlite
-    -${if mysql != null then "plugin" else "no"}-sql-mysql
-    -${if postgresql != null then "plugin" else "no"}-sql-psql
-
-    -make libs
-    -make tools
-    -${lib.optionalString (buildExamples == false) "no"}make examples
-    -${lib.optionalString (buildTests == false) "no"}make tests
-    -v
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    -rpath
-    -glib
-    -xcb
-    -qpa xcb
-
-    -${lib.optionalString (cups == null) "no-"}cups
-
-    -no-eglfs
-    -no-directfb
-    -no-linuxfb
-    -no-kms
-
-    -libinput
-    -gtk
-    -system-libpng
-    -system-xcb
-    -system-xkbcommon
-    -dbus-linked
-  '' + lib.optionalString stdenv.isDarwin ''
-    -platform macx-clang
-    -no-use-gold-linker
-    -no-fontconfig
-    -qt-freetype
-    -qt-libpng
-  '';
 
   # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
   # if dependency paths contain the string "pq", which can occur in the hash.
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  propagatedBuildInputs = [
-    libxml2 libxslt openssl pcre16 sqlite zlib
+  # -no-eglfs, -no-directfb, -no-linuxfb and -no-kms because of the current minimalist mesa
+  # TODO Remove obsolete and useless flags once the build will be totally mastered
+  configureFlags =
+    [
+      "-verbose"
+      "-confirm-license"
+      "-opensource"
 
-    # Text rendering
-    harfbuzz icu
+      "-release"
+      "-shared"
+      "-accessibility"
+      "-optimized-qmake"
+      "-strip"
+      "-system-proxies"
+      "-pkg-config"
+    ]
+    ++ lib.optionals developerBuild [
+      "-developer-build"
+      "-no-warnings-are-errors"
+    ]
+    ++ [
+      "-gui"
+      "-widgets"
+      "-opengl desktop"
+      "-qml-debug"
+      "-icu"
+      "-pch"
+    ]
 
-    # Image formats
-    libjpeg libpng libtiff
-  ]
-  ++ lib.optional mesaSupported mesa
-  ++ lib.optionals (!stdenv.isDarwin) [
-    dbus glib udev
+    ++ [
+      ''${lib.optionalString (!system-x86_64) "-no"}-sse2''
+      "-no-sse3"
+      "-no-ssse3"
+      "-no-sse4.1"
+      "-no-sse4.2"
+      "-no-avx"
+      "-no-avx2"
+      "-no-mips_dsp"
+      "-no-mips_dspr2"
+    ]
 
-    # Text rendering
-    fontconfig freetype
+    ++ [
+      "-system-zlib"
+      "-system-libjpeg"
+      "-system-harfbuzz"
+      "-system-pcre"
+      "-openssl-linked"
+      "-system-sqlite"
+      ''-${if mysql != null then "plugin" else "no"}-sql-mysql''
+      ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
-    # X11 libs
-    libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-    xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AGL AppKit ApplicationServices Carbon Cocoa
-    CoreAudio CoreBluetooth CoreLocation CoreServices
-    DiskArbitration Foundation OpenGL
-    darwin.cf-private darwin.apple_sdk.sdk darwin.libobjc libiconv
-  ]);
+      "-make libs"
+      "-make tools"
+      ''-${lib.optionalString (buildExamples == false) "no"}make examples''
+      ''-${lib.optionalString (buildTests == false) "no"}make tests''
+      "-v"
+    ]
 
-  buildInputs = [ ]
-    ++ lib.optionals (!stdenv.isDarwin) [ gtk3 libinput ]
-    ++ lib.optional developerBuild gdb
-    ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib
-    ++ lib.optional (postgresql != null) postgresql;
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "-rpath"
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkgconfig python2 ] ++ lib.optional (!stdenv.isDarwin) patchelf;
+      "-system-xcb"
+      "-xcb"
+      "-qpa xcb"
 
-  # freetype-2.5.4 changed signedness of some struct fields
-  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare"
-    + lib.optionalString stdenv.isDarwin " -D__MAC_OS_X_VERSION_MAX_ALLOWED=1090 -D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))";
-  # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-  # 10.9 which necessitates the above macro definition that mentions
-  # 10.10
+      "-system-xkbcommon"
+      "-libinput"
+      "-xkbcommon-evdev"
+
+      "-no-eglfs"
+      "-no-gbm"
+      "-no-kms"
+      "-no-linuxfb"
+
+      ''-${lib.optionalString (cups == null) "no-"}cups''
+      "-dbus-linked"
+      "-glib"
+      "-gtk"
+      "-inotify"
+      "-system-libjpeg"
+      "-system-libpng"
+    ]
+
+    ++ lib.optionals stdenv.isDarwin [
+      "-platform macx-clang"
+      "-no-use-gold-linker"
+      "-no-fontconfig"
+      "-qt-freetype"
+      "-qt-libpng"
+    ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
@@ -257,28 +278,43 @@ stdenv.mkDerivation {
     ''
       # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+    ''
 
-      # Move libtool archives and qmake projects
+    # Move libtool archives into $dev
+    + ''
       if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
           pushd "''${!outputLib}"
-          find lib -name '*.a' -o -name '*.la'${if stdenv.isDarwin then "" else "-o -name '*.prl'"} | \
-              while read -r file; do
-                  mkdir -p "''${!outputDev}/$(dirname "$file")"
-                  mv "''${!outputLib}/$file" "''${!outputDev}/$file"
-              done
+          find lib -name '*.a' -o -name '*.la' | while read -r file; do
+              mkdir -p "''${!outputDev}/$(dirname "$file")"
+              mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+          done
           popd
       fi
     ''
+
+    # Move qmake project files into $dev.
+    # Don't move .prl files on darwin because they end up in
+    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
+    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
+    # are in lib, and so do not cause a subsequent recreation of deep
+    # framework directory trees.
+    + lib.optionalString (!stdenv.isDarwin) ''
+      if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
+          pushd "''${!outputLib}"
+          find lib -name '*.prl' | while read -r file; do
+              mkdir -p "''${!outputDev}/$(dirname "$file")"
+              mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+          done
+          popd
+      fi
+    ''
+
     # fixup .pc file (where to find 'moc' etc.)
     + lib.optionalString (!stdenv.isDarwin) ''
       sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
           -e "/^host_bins=/ c host_bins=$dev/bin"
     ''
-    # Don' move .prl files on darwin because they end up in
-    # "dev/lib/Foo.framework/Foo.prl" which interferes with subsequent
-    # use of lndir in the qtbase setup-hook. On Linux, the .prl files
-    # are in lib, and so do not cause a subsequent recreation of deep
-    # framework directory trees.
+
     + lib.optionalString stdenv.isDarwin ''
       fixDarwinDylibNames_rpath() {
         local flags=()
@@ -299,8 +335,6 @@ stdenv.mkDerivation {
   setupHook = if stdenv.isDarwin
               then ../../qtbase-setup-hook-darwin.sh
               else ../../qtbase-setup-hook.sh;
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = http://www.qt.io;

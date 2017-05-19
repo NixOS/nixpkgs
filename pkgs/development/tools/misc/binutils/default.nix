@@ -7,7 +7,7 @@ let basename = "binutils-2.28"; in
 let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
-  name = basename + optionalString (cross != null) "-${cross.config}";
+  name = optionalString (cross != null) "${cross.config}-" + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
+  # TODO: all outputs on all platform
   outputs = [ "out" ]
     ++ optional (cross == null && !stdenv.isDarwin) "lib" # problems in Darwin stdenv
     ++ [ "info" ]
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optional (cross != null) "--target=${cross.config}"
+    ++ optional (cross != null) "--target=${cross.config}" # TODO: make this unconditional
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
@@ -95,6 +96,6 @@ stdenv.mkDerivation rec {
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */
-    priority = "10";
+    priority = 10;
   };
 }

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "libtoxcore-${version}";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner  = "TokTok";
     repo   = "c-toxcore";
     rev    = "v${version}";
-    sha256 = "11lqq825id174xdjxm0cy5dbyvmdy841hjy9q3l51yiya9f82d5b";
+    sha256 = "08vdq3j60wn62lj2z9f3f47hibns93rvaqx5xc5bm3nglk70q7kk";
   };
 
   cmakeFlags = [

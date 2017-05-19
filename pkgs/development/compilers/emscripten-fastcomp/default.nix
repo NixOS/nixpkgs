@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, python, ... }:
 
 let
-  rev = "1.37.9";
+  rev = "1.37.10";
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 stdenv.mkDerivation rec {
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten-fastcomp";
-    sha256 = "0dvay98hlajhwgl5s58sh8s79i4nbcl3gajssgzimk0id8fa0ifx";
+    sha256 = "0zl55jaas3cibjscr5q1q6rgw63wqwyc9iffhvs4xi9g1bk5cnx9";
     inherit rev;
   };
 
   srcFL = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten-fastcomp-clang";
-    sha256 = "1ilrb6p3vybjz0hj8hc80hpm0y01794v488dywwj81khhqahnhcv";
+    sha256 = "0cdvld0lfl3cl7m6yax7f87ip9iq4rmz8icr68l2g8bl2w8qd89j";
     inherit rev;
   };
 

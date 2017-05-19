@@ -38,7 +38,7 @@ rec {
   /* Merge two attribute sets shallowly, right side trumps left
 
      Example:
-       mergeAttrs { a = 1; b = 2; } // { b = 3; c = 4; }
+       mergeAttrs { a = 1; b = 2; } { b = 3; c = 4; }
        => { a = 1; b = 3; c = 4; }
   */
   mergeAttrs = x: y: x // y;
@@ -55,6 +55,8 @@ rec {
   #
   #     nix-repl> fix f
   #     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+  #
+  #  Type: fix :: (a -> a) -> a
   #
   # See https://en.wikipedia.org/wiki/Fixed-point_combinator for further
   # details.

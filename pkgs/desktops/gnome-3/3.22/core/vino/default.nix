@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, makeWrapper
+{ stdenv, fetchurl, lib, wrapGAppsHook
 , pkgconfig, gnome3, gtk3, glib, intltool, libXtst, libnotify, libsoup
 , telepathySupport ? false, dbus_glib ? null, telepathy_glib ? null
 , libsecret ? null, gnutls ? null, libgcrypt ? null, avahi ? null
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildInputs = [
-    makeWrapper
+    wrapGAppsHook
     pkgconfig gnome3.defaultIconTheme gtk3 glib intltool libXtst libnotify libsoup
   ] ++ optionals telepathySupport [ dbus_glib telepathy_glib ]
     ++ optional gnomeKeyringSupport libgnome_keyring3
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
     ];
 
   preFixup = ''
-    wrapProgram "$out/libexec/vino-server" \
-      --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    export GSETTINGS_SCHEMAS_PATH="$out/share/gsettings-schemas/${name}:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {

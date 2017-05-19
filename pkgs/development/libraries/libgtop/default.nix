@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, perl, intltool, gobjectIntrospection }:
+{ stdenv, fetchurl, glib, pkgconfig, perl, intltool, gobjectIntrospection, libintlOrEmpty }:
 stdenv.mkDerivation rec {
   name = "libgtop-${version}";
   major = "2.34";
@@ -10,9 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib ];
+  buildInputs = libintlOrEmpty;
   nativeBuildInputs = [ pkgconfig perl intltool gobjectIntrospection ];
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

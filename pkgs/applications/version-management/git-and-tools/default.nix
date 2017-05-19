@@ -74,6 +74,10 @@ rec {
 
   git-radar = callPackage ./git-radar { };
 
+  git-recent = callPackage ./git-recent {
+    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
+  };
+
   git-remote-hg = callPackage ./git-remote-hg { };
 
   git-stree = callPackage ./git-stree { };

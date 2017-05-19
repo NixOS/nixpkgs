@@ -1,4 +1,4 @@
-From cc490c71a98b6bbe390fcf777fbe0360d01bf4ca Mon Sep 17 00:00:00 2001
+From b6dd36dd90c5d88ae10b9dbc763d3bacb95ccddb Mon Sep 17 00:00:00 2001
 From: "Luke A. Guest" <laguest@archeia.com>
 Date: Sun, 25 Sep 2016 16:46:39 +0100
 Subject: [PATCH 3/4] Change seq_printf format for 64 bit context
@@ -8,18 +8,18 @@ Subject: [PATCH 3/4] Change seq_printf format for 64 bit context
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/amd/amdgpu/amdgpu_sa.c b/amd/amdgpu/amdgpu_sa.c
-index c43f582..8c4b9f7 100644
+index 74932bf..db4119a 100644
 --- a/amd/amdgpu/amdgpu_sa.c
 +++ b/amd/amdgpu/amdgpu_sa.c
-@@ -427,7 +427,7 @@ void amdgpu_sa_bo_dump_debug_info(struct amdgpu_sa_manager *sa_manager,
+@@ -428,7 +428,7 @@ void amdgpu_sa_bo_dump_debug_info(struct amdgpu_sa_manager *sa_manager,
  			   soffset, eoffset, eoffset - soffset);
  
  		if (i->fence)
 -#if defined(BUILD_AS_DKMS)
 +#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 8, 0)
  			seq_printf(m, " protected by 0x%08x on context %d",
- 				   i->fence->seqno, i->fence->context);
+ 					i->fence->seqno, i->fence->context);
  #else
 -- 
-2.11.0
+2.12.2
 

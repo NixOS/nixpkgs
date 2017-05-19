@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
     blinker click certifi construct cryptography
     cssutils editorconfig h2 html2text hyperframe
     jsbeautifier kaitaistruct passlib pyasn1 pyopenssl
-    pyparsing pyperclip requests2 ruamel_yaml tornado
+    pyparsing pyperclip requests ruamel_yaml tornado
     urwid watchdog brotlipy sortedcontainers
   ];
 

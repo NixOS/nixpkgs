@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   # It also seems not to mention libdl explicitly in some places.
   NIX_LDFLAGS = "-lcups -ldl";
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead 
+  # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
 
@@ -187,6 +187,7 @@ in stdenv.mkDerivation rec {
     "--disable-report-builder"
     "--enable-python=system"
     "--enable-dbus"
+    "--enable-release-build"
     (lib.enableFeature kdeIntegration "kde4")
     "--with-package-format=installed"
     "--enable-epm"

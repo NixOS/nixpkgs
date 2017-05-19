@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -6,7 +6,11 @@ let
 
   enabled = elem "displaylink" config.services.xserver.videoDrivers;
 
-  displaylink = config.boot.kernelPackages.displaylink;
+  evdi = config.boot.kernelPackages.evdi;
+
+  displaylink = pkgs.displaylink.override {
+    inherit evdi;
+  };
 
 in
 
@@ -14,15 +18,11 @@ in
 
   config = mkIf enabled {
 
-    boot.extraModulePackages = [ displaylink ];
-
-    boot.kernelModules = [ "evdi" ];
+    boot.extraModulePackages = [ evdi ];
 
     # Those are taken from displaylink-installer.sh and from Arch Linux AUR package.
 
-    services.udev.extraRules = ''
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="17e9", ATTR{bNumInterfaces}=="*5", TAG+="uaccess"
-    '';
+    services.udev.packages = [ displaylink ];
 
     powerManagement.powerDownCommands = ''
       #flush any bytes in pipe
@@ -32,7 +32,10 @@ in
       echo "S" > /tmp/PmMessagesPort_in
 
       #wait until suspend of DisplayLinkManager finish
-      read -n 1 -t 10 SUSPEND_RESULT < /tmp/PmMessagesPort_out
+      if [ -f /tmp/PmMessagesPort_out ]; then
+        #wait until suspend of DisplayLinkManager finish
+        read -n 1 -t 10 SUSPEND_RESULT < /tmp/PmMessagesPort_out
+      fi
     '';
 
     powerManagement.resumeCommands = ''
@@ -40,10 +43,11 @@ in
       echo "R" > /tmp/PmMessagesPort_in
     '';
 
-    systemd.services.displaylink = {
+    systemd.services.dlm = {
       description = "DisplayLink Manager Service";
       after = [ "display-manager.service" ];
-      wantedBy = [ "graphical.target" ];
+      conflicts = [ "getty@tty7.service" ];
+      path = [ pkgs.kmod ];
 
       serviceConfig = {
         ExecStart = "${displaylink}/bin/DisplayLinkManager";
@@ -53,6 +57,7 @@ in
 
       preStart = ''
         mkdir -p /var/log/displaylink
+        modprobe evdi
       '';
     };
 

@@ -104,6 +104,8 @@ stdenv.mkDerivation {
         -importdir $out/lib/qt5/imports \
         -qmldir $out/lib/qt5/qml \
         -docdir $out/share/doc/qt5"
+
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins/platforms\""
   '';
 
   prefixKey = "-prefix ";

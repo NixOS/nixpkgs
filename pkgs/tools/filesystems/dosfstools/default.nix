@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "dosfstools-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a2zn1655d5f1m6jp9vpn3bp8yfxhcmxx3mx23ai9hmxiydiykr1";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ]
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   configureFlags = [ "--enable-compat-symlinks" ];
 
@@ -19,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     repositories.git = git://daniel-baumann.ch/git/software/dosfstools.git;
     homepage = http://www.daniel-baumann.ch/software/dosfstools/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

@@ -126,8 +126,8 @@ rec {
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
 
-  /* Dependening on the boolean `cond', return either the given string
-     or the empty string. Useful to contatenate against a bigger string.
+  /* Depending on the boolean `cond', return either the given string
+     or the empty string. Useful to concatenate against a bigger string.
 
      Example:
        optionalString true "some-string"

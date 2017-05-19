@@ -22,14 +22,14 @@ in
           echo "Creating jackett data directory in /var/lib/jackett/"
           mkdir -p /var/lib/jackett/
         }
-        chown -R jackett /var/lib/jackett/
+        chown -R jackett:jackett /var/lib/jackett/
         chmod 0700 /var/lib/jackett/
       '';
 
       serviceConfig = {
         Type = "simple";
         User = "jackett";
-        Group = "nogroup";
+        Group = "jackett";
         PermissionsStartOnly = "true";
         ExecStart = "${pkgs.jackett}/bin/Jackett";
         Restart = "on-failure";
@@ -37,8 +37,11 @@ in
     };
 
     users.extraUsers.jackett = {
+      uid = config.ids.uids.jackett;
       home = "/var/lib/jackett";
+      group = "jackett";
     };
+    users.extraGroups.jackett.gid = config.ids.gids.jackett;
 
   };
 }
