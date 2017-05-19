@@ -9838,6 +9838,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetCIDRLite = buildPerlPackage rec {
+    name = "Net-CIDR-Lite-0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DOUGW/${name}.tar.gz";
+      sha256 = "cfa125e8a2aef9259bc3a44e07cbdfb7894b64d22e7c0cee92aee2f5c7915093";
+    };
+    meta = {
+      description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
+      license = "unknown";
+    };
+  };
+
   NetCoverArtArchive = buildPerlPackage {
     name = "Net-CoverArtArchive-1.02";
     src = fetchurl {
@@ -9967,6 +9979,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "An implementation of the OAuth protocol";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetPatricia = buildPerlPackage rec {
+    name = "Net-Patricia-1.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRUBER/${name}.tar.gz";
+      sha256 = "70835a926e1c5a8d0324c72fffee82eeb7ec6c141dee04fd446820b64f71c552";
+    };
+    propagatedBuildInputs = [ NetCIDRLite Socket6 ];
+    meta = {
+      license = "unknown";
     };
   };
 
