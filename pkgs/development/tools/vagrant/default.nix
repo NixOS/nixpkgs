@@ -114,6 +114,11 @@ in stdenv.mkDerivation rec {
     ln -s ${libxslt.dev}/bin/xslt-config opt/vagrant/embedded/bin
     ln -s ${libxslt.bin}/bin/xsltproc opt/vagrant/embedded/bin
 
+    # rewrite RPATH of embedded libraries to reference the embedded lib
+    # directory
+    patchelf --set-rpath "\$ORIGIN/../lib:\$ORIGIN/../../../../../lib" \
+        "opt/vagrant/embedded/gems/gems/nokogiri-1.6.3.1/lib/nokogiri/nokogiri.so"
+
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"
