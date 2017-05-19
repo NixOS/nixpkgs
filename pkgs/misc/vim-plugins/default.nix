@@ -1124,6 +1124,17 @@ rec {
 
   };
 
+  ack-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ack-vim-2017-05-07";
+    src = fetchgit {
+      url = "https://github.com/mileszs/ack.vim";
+      rev = "a16a9b63eb85cc0960a7f25c54647ac1f99f3360";
+      sha256 = "09bwawm2csliancl281y6wgalrrmaqq7d0baz4dq1cw18x657mk7";
+    };
+    dependencies = [];
+
+  };
+
   lushtags = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "lushtags-2017-04-19";
     src = fetchgit {
