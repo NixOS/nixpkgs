@@ -7,7 +7,8 @@ qtSubmodule {
   qtInputs = [ qtbase ];
   outputs = [ "out" "dev" "bin" ];
   patches = copyPathsToStore (readPathsFromFile ./. ./series);
-  postInstall = ''
+  # qmake moves all binaries to $dev in preFixup
+  postFixup = ''
     moveToOutput "bin/qdbus" "$bin"
     moveToOutput "bin/qtpaths" "$bin"
   '';
