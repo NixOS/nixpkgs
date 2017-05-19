@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://cvc4.cs.nyu.edu/builds/src/cvc4-${version}.tar.gz";
-    sha256 = "15wz0plfc9q8acrwq1ljgsgqmh8pyz5alzv5xpchvv9w76lvj2zf";
+    sha256 = "13dzigync44pfd3ppdapyd7zamfqv6kgiwcrvnds0piyar87g5w4";
   };
 
   buildInputs = [ gmp cln pkgconfig readline swig libantlr3c boost jdk autoreconfHook python2 ];
