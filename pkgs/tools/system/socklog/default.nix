@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
+  postPatch = ''
+    sed -i src/TARGETS -e '/^chkshsgr/d'
+  '';
+
   configurePhase = ''
     echo "$NIX_CC/bin/cc $NIX_CFLAGS_COMPILE"   >src/conf-cc
     echo "$NIX_CC/bin/cc -s"                    >src/conf-ld

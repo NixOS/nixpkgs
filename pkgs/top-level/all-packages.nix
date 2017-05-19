@@ -954,6 +954,8 @@ with pkgs;
 
   fsmark = callPackage ../tools/misc/fsmark { };
 
+  fwup = callPackage ../tools/misc/fwup { };
+
   fzf = callPackage ../tools/misc/fzf { };
 
   fzy = callPackage ../tools/misc/fzy { };
@@ -11520,6 +11522,10 @@ with pkgs;
 
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
 
+  displaylink = callPackage ../os-specific/linux/displaylink {
+    inherit (linuxPackages) evdi;
+  };
+
   dmidecode = callPackage ../os-specific/linux/dmidecode { };
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
@@ -11882,11 +11888,11 @@ with pkgs;
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
-    displaylink = callPackage ../os-specific/linux/displaylink { };
-
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
     exfat-nofuse = callPackage ../os-specific/linux/exfat { };
+
+    evdi = callPackage ../os-specific/linux/evdi { };
 
     pktgen = callPackage ../os-specific/linux/pktgen { };
 

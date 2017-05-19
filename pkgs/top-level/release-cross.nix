@@ -17,12 +17,12 @@ let
     gmp = nativePlatforms;
   };
 
-  gnuCommon = common // {
+  gnuCommon = lib.recursiveUpdate common {
     buildPackages.gccCrossStageFinal = nativePlatforms;
     coreutils = nativePlatforms;
   };
 
-  linuxCommon = gnuCommon // {
+  linuxCommon = lib.recursiveUpdate gnuCommon {
     buildPackages.gdbCross = nativePlatforms;
 
     bison = nativePlatforms;
@@ -33,7 +33,7 @@ let
     patch = nativePlatforms;
   };
 
-  windowsCommon = gnuCommon // {
+  windowsCommon = lib.recursiveUpdate gnuCommon {
     boehmgc = nativePlatforms;
     guile_1_8 = nativePlatforms;
     libffi = nativePlatforms;
