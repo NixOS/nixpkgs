@@ -11,6 +11,8 @@ mkDerivation (args // {
   name = "${name}-${version}";
   inherit src;
 
+  outputs = args.outputs or [ "out" "dev" ];
+
   meta = {
     platforms = lib.platforms.linux;
     homepage = "http://www.kde.org";

@@ -48,8 +48,6 @@ let
   mkDerivation = args:
     stdenv.mkDerivation (args // {
 
-      outputs = args.outputs or [ "out" "dev" ];
-
       qmakeFlags =
         (args.qmakeFlags or [])
         ++ optional (debug != null)
@@ -82,6 +80,7 @@ let
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
+      outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
       setupHook = ../qtsubmodule-setup-hook.sh;
