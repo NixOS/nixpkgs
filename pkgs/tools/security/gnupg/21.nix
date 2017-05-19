@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.1.20";
+  version = "2.1.21";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "03cnd6gz8f4lf69inskssw57idrswcdimhccdyglmrlv6rlrmkr4";
+    sha256 = "1p97limv29p01y79mgnzpwixa50lv53wgdl3ymk9idkmpaldisks";
   };
 
   buildInputs = [
