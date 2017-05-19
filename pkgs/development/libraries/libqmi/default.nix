@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python, libgudev }:
+{ stdenv, fetchurl, pkgconfig, glib, python, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
   name = "libqmi-1.18.0";
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ pkgconfig glib python libgudev ];
+  buildInputs = [ pkgconfig glib python libgudev libmbim ];
+
+  configureFlags = ["--enable-mbim-qmux" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/libqmi/;
