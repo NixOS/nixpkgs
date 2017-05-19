@@ -59,6 +59,13 @@ in
 
 , recursiveHash ? false
 
+, # Shell code to build a netrc file for BASIC auth
+  netrcPhase ? null
+
+, # Impure env vars (http://nixos.org/nix/manual/#sec-advanced-attributes)
+  # needed for netrcPhase
+  netrcImpureEnvVars ? []
+
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
@@ -118,11 +125,18 @@ else stdenv.mkDerivation {
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-  inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp executable;
+  inherit curlOpts showURLs mirrorsFile postFetch downloadToTemp executable;
+
+  impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
   preferLocalBuild = true;
+
+  postHook = if netrcPhase == null then null else ''
+    ${netrcPhase}
+    curlOpts="$curlOpts --netrc-file $PWD/netrc"
+  '';
 
   inherit meta;
 }
