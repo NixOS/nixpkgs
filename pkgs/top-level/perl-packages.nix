@@ -11690,13 +11690,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Socket6 = buildPerlPackage rec {
-    name = "Socket6-0.25";
+    name = "Socket6-0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UM/UMEMOTO/${name}.tar.gz";
-      sha256 = "1ads4k4vvq6pnxkdw0s8gaj03w4h9snxyw7zyikfzd20fy76yx6s";
+      sha256 = "bfd49ab99f3197c99285fed4683c4edc06277c1e4453f593e694d7bff0974586";
     };
     setOutputFlags = false;
     buildInputs = [ pkgs.which ];
+    meta = {
+      description = "IPv6 related part of the C socket.h defines and structure manipulators";
+      license = stdenv.lib.licenses.bsd3;
+    };
   };
 
   SoftwareLicense = buildPerlPackage rec {
