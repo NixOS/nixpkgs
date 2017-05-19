@@ -38,9 +38,9 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
+  outputs = [ "out" "man" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
+  buildInputs = [ perl groff cmake libxml2 python libffi python.pkgs.sphinx ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -80,6 +80,11 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+    "-DLLVM_BUILD_DOCS=ON"
+    "-DLLVM_ENABLE_SPHINX=ON"
+    "-DSPHINX_OUTPUT_MAN=ON"
+    "-DSPHINX_OUTPUT_HTML=OFF"
+    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
@@ -103,7 +108,9 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
   '';
 
-  postInstall = ""
+  postInstall = ''
+    moveToOutput "share/man" "$man"
+  ''
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM.${shlib}" "$lib"
