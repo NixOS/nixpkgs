@@ -14,11 +14,12 @@ let
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
       "Capability" "DropCapability" "KillSignal" "Personality" "MachineId"
-      "PrivateUsers"
+      "PrivateUsers" "NotifyReady"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
     (assertValueOneOf "PrivateUsers" (boolValues ++ [ "pick" ]))
+    (assertValueOneOf "NotifyReady")
   ];
 
   checkFiles = checkUnitConfig "Files" [
@@ -82,7 +83,7 @@ let
 
   };
 
-  instanceToUnit = name: def: 
+  instanceToUnit = name: def:
     { text = ''
       [Exec]
       ${attrsToSection def.execConfig}
