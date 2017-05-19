@@ -78,7 +78,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/db/postgresql";
+        example = "/var/lib/postgresql/9.6";
         description = ''
           Data directory for PostgreSQL.
         '';
@@ -167,6 +167,10 @@ in
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95
             else pkgs.postgresql94);
+
+    services.postgresql.dataDir =
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
+                 else "/var/db/postgresql");
 
     services.postgresql.authentication = mkAfter
       ''
