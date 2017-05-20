@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, xsel }:
 
 stdenv.mkDerivation rec {
 
@@ -12,9 +12,8 @@ stdenv.mkDerivation rec {
     inherit name;
   };
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "YANKCMD=${xsel}/bin/xsel" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mptre/yank";
