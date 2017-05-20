@@ -3,10 +3,25 @@
 , libXi, libXrender, libXext
 }:
 let
-  spec = if stdenv.system == "i686-linux" then { system="linux32"; sha256="70845d81304c5f5f0b7f65274216e613e867e621676a09790c8aa8ef81ea9766"; }
-    else if stdenv.system == "x86_64-linux" then { system="linux64"; sha256="bb2cf08f2c213f061d6fbca9658fc44a367c1ba7e40b3ee1e3ae437be0f901c2"; }
-    else if stdenv.system == "x86_64-darwin" then { system="mac64"; sha256="6c30bba7693ec2d9af7cd9a54729e10aeae85c0953c816d9c4a40a1a72fd8be0"; }
-    else abort "missing chromedriver binary for ${stdenv.system}";
+  allSpecs = {
+    "i686-linux" = {
+      system = "linux32";
+      sha256 = "70845d81304c5f5f0b7f65274216e613e867e621676a09790c8aa8ef81ea9766";
+    };
+
+    "x86_64-linux" = {
+      system = "linux64";
+      sha256 = "bb2cf08f2c213f061d6fbca9658fc44a367c1ba7e40b3ee1e3ae437be0f901c2";
+    };
+
+    "x86_64-darwin" = {
+      system = "mac64";
+      sha256 = "6c30bba7693ec2d9af7cd9a54729e10aeae85c0953c816d9c4a40a1a72fd8be0";
+    };
+  };
+
+  spec = allSpecs."${stdenv.system}"
+    or (throw "missing chromedriver binary for ${stdenv.system}");
 in
 stdenv.mkDerivation rec {
   name = "chromedriver-${version}";
@@ -41,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "A WebDriver server for running Selenium tests on Chrome";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = attrNames allSpecs;
   };
 }
