@@ -2619,19 +2619,7 @@ in {
 
   };
 
-  rarfile = self.buildPythonPackage rec {
-    name = "rarfile-2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rarfile/rarfile-2.6.tar.gz";
-      sha256 = "326700c5450cfb367f612e918866ea27551bac02f4656f340003c88873fa1a56";
-    };
-
-    meta = {
-      description = "rarfile - RAR archive reader for Python";
-      homepage = https://github.com/markokr/rarfile;
-    };
-  };
+  rarfile = callPackage ../development/python-modules/rarfile {};
 
   proboscis = buildPythonPackage rec {
     name = "proboscis-1.2.6.0";
