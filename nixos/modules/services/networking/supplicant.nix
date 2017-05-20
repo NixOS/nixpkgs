@@ -40,7 +40,8 @@ let
         after = deps;
         before = [ "network.target" ];
         # Receive restart event after resume
-        partOf = [ "post-resume.target" ];
+	# TODO: resuming via systemd target seems broken; use explicit restart via powerManagement.resumeCommands
+        # partOf = [ "post-resume.target" ];
 
         path = [ pkgs.coreutils ];
 
@@ -225,6 +226,11 @@ in
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
     systemd.services = mapAttrs' (n: v: nameValuePair (serviceName n) (supplicantService n v)) cfg;
+
+    powerManagement.resumeCommands =
+      "\n# Resume supplicants\n"
+      + (concatMapStringsSep "\n" (s: "${config.systemd.package}/bin/systemctl restart ${serviceName s}.service") (attrNames cfg))
+      + "\n";
 
     services.udev.packages = [
       (pkgs.writeTextFile {
