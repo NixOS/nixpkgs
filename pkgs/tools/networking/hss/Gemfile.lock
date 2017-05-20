@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    hss (1.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hss
+
+BUNDLED WITH
+   1.14.6
