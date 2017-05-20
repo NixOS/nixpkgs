@@ -5473,9 +5473,10 @@ with pkgs;
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
-  inherit (ocamlPackages) haxe;
-
-  hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
+  inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
+  haxe = haxe_3_4;
+  haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
+  inherit (haxePackages) hxcpp;
 
   hhvm = callPackage ../development/compilers/hhvm {
     boost = boost160;
