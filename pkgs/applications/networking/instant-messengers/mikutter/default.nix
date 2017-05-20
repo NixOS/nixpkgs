@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, bundlerEnv, ruby , alsaUtils, gtk, libnotify
-, libXdmcp, pcre, pkgconfig, pthread_stubs, which, zlib }:
+{ stdenv, fetchurl, makeWrapper
+, bundlerEnv, ruby, pkgconfig
+, alsaUtils, libnotify, which, wrapGAppsHook, gtk2
+}:
 
 stdenv.mkDerivation rec {
   name = "mikutter-${version}";
@@ -14,29 +16,11 @@ stdenv.mkDerivation rec {
     name = "mikutter-${version}-gems";
     gemdir = ./.;
 
-    gemConfig = {
-      atk = attrs: { buildInputs = [ gtk pcre pkgconfig ]; };
-      cairo = attrs: {
-        buildInputs = [ gtk libXdmcp pcre pkgconfig pthread_stubs ];
-      };
-      gio2 = attrs: { buildInputs = [ gtk pcre pkgconfig ]; };
-      glib2 = attrs: { buildInputs = [ gtk pcre pkgconfig ]; };
-      gtk2 = attrs: {
-        buildInputs = [ gtk pcre libXdmcp pkgconfig pthread_stubs ];
-        # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
-        CFLAGS = "-I${gtk.dev}/include/gtk-2.0 -I/non-existent-path";
-      };
-      gobject-introspection = attrs: { buildInputs = [ gtk pcre pkgconfig ]; };
-      pango = attrs: {
-        buildInputs = [ gtk libXdmcp pcre pkgconfig pthread_stubs ];
-      };
-      nokogiri = attrs: { buildInputs = [ zlib ]; };
-    };
-
     inherit ruby;
   };
 
-  buildInputs = [ makeWrapper alsaUtils gtk libnotify ruby which ];
+  buildInputs = [ alsaUtils libnotify which gtk2 ruby ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   postUnpack = ''
     rm -rf $sourceRoot/vendor
@@ -48,15 +32,25 @@ stdenv.mkDerivation rec {
     rm -v README LICENSE
 
     cp -rv . $out
-    makeWrapper $out/mikutter.rb $out/bin/mikutter \
-      --prefix PATH : "${ruby}/bin:${alsaUtils}/bin:${libnotify}/bin" \
-      --prefix GEM_HOME : "${env}/${env.ruby.gemPath}" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
+    mkdir $out/bin/
+    # hack wrapGAppsHook wants a file not a symlink
+    mv $out/mikutter.rb $out/bin/mikutter
+
+    gappsWrapperArgs+=(
+      --prefix PATH : "${ruby}/bin:${alsaUtils}/bin:${libnotify}/bin"
+      --prefix GEM_HOME : "${env}/${env.ruby.gemPath}"
       --set DISABLE_BUNDLER_SETUP 1
+    )
 
     mkdir -p $out/share/mikutter $out/share/applications
     ln -sv $out/core/skin $out/share/mikutter/skin
     substituteAll ${./mikutter.desktop} $out/share/applications/mikutter.desktop
+  '';
+
+  postFixup = ''
+    mv $out/bin/.mikutter-wrapped $out/mikutter.rb
+    substituteInPlace $out/bin/mikutter \
+      --replace "$out/bin/.mikutter-wrapped" "$out/mikutter.rb"
   '';
 
   meta = with stdenv.lib; {
