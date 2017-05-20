@@ -15062,6 +15062,8 @@ with pkgs;
     inherit (gnome3) defaultIconTheme;
   };
 
+  typora = callPackage ../applications/editors/typora { };
+
   librep = callPackage ../development/libraries/librep { };
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
