@@ -34,10 +34,12 @@ in
     i18n.inputMethod.package = fcitxPackage;
 
     environment.variables = {
-      GTK_IM_MODULE = "fcitx";
-      QT_IM_MODULE  = "fcitx";
-      XMODIFIERS    = "@im=fcitx";
+      GTK_IM_MODULE  = "fcitx";
+      QT_IM_MODULE   = "fcitx";
+      XMODIFIERS     = "@im=fcitx";
+      QT_PLUGIN_PATH = "${fcitxPackage}/lib/qt5/plugins";
     };
+
     services.xserver.displayManager.sessionCommands = "${fcitxPackage}/bin/fcitx";
   };
 }
