@@ -502,7 +502,7 @@ in {
         chown -R ${cfg.user}:${cfg.group} ${gitlabEnv.HOME}/
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}/
 
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist\/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
