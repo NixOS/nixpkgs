@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sha256 = spec.sha256;
   };
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   unpackPhase = "unzip $src";
 
