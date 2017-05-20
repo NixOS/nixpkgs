@@ -134,7 +134,7 @@ let
           platform and ReSharper. Rider supports .NET Core,
           .NET Framework and Mono based projects. This lets you
           develop a wide array of applications including .NET desktop
-          apps, services and libraries, Unity games, ASP.NET and 
+          apps, services and libraries, Unity games, ASP.NET and
           ASP.NET Core web applications.
         '';
         maintainers = [ maintainers.miltador ];
@@ -209,12 +209,12 @@ in
 
   gogland = buildGogland rec {
     name = "gogland-${version}";
-    version = "171.3780.106";
+    version = "171.4424.55";
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "cbe84d07fdec6425d8ac63b0ecd5e04148299c1c0c6d05751523aaaa9360110b";
+      sha256 = "0l5pn2wj541v1xc58bpipkl483zrhwjr37grkwiwx2j4iygrikq7";
     };
     wmClass = "jetbrains-gogland";
   };
@@ -233,12 +233,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.1";
+    version = "2017.1.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1222xkw7n424ihqxyjk352nnx9ka6as7ajwafgb2f27hfiz8d3li";
+      sha256 = "0ag70z4cark69hzhvx5j75qa8dglwzfaqrzi8pim3asd161fwxrx";
     };
     wmClass = "jetbrains-idea-ce";
   };

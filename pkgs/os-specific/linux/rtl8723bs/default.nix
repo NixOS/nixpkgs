@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hadess/rtl8723bs";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    broken = (! versionAtLeast kernel.version "3.19")
-      || (kernel.features.grsecurity or false);
+    broken = (! versionAtLeast kernel.version "3.19");
     maintainers = with maintainers; [ elitak ];
   };
 }

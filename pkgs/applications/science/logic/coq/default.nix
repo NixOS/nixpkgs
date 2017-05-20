@@ -26,9 +26,7 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
-in
-
-stdenv.mkDerivation {
+self = stdenv.mkDerivation {
   name = "coq-${version}";
 
   inherit coq-version;
@@ -36,6 +34,19 @@ stdenv.mkDerivation {
   inherit (ocamlPackages) ocaml;
   passthru = {
     inherit (ocamlPackages) findlib;
+    emacsBufferSetup = pkgs: ''
+      ; Propagate coq paths to children
+      (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
+      (inherit-local-permanent coq-dependency-analyzer "${self}/bin/coqdep")
+      (inherit-local-permanent coq-compiler "${self}/bin/coqc")
+      ; If the coq-library path was already set, re-set it based on our current coq
+      (when (fboundp 'get-coq-library-directory)
+        (inherit-local-permanent coq-library-directory (get-coq-library-directory))
+        (coq-prog-args))
+      (mapc (lambda (arg)
+        (when (file-directory-p (concat arg "/lib/coq/${coq-version}/user-contrib"))
+          (setenv "COQPATH" (concat (getenv "COQPATH") ":" arg "/lib/coq/${coq-version}/user-contrib")))) '(${stdenv.lib.concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
+    '';
   };
 
   src = fetchurl {
@@ -93,4 +104,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];
     platforms = platforms.unix;
   };
-}
+}; in self

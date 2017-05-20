@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 
+  configureFlags = stdenv.lib.optionals stdenv.isDarwin [ "--disable-ssl" ];
+
   postPatch = ''
     patchShebangs .
   '';
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "librdkafka - Apache Kafka C/C++ client library";
     homepage = "https://github.com/edenhill/librdkafka";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ boothead wkennington ];
   };
 }

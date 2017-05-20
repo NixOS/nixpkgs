@@ -66,7 +66,7 @@ self: super: {
     src = pkgs.fetchgit {
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "0irvzwpwxxdy6qs7jj81r6qk7i1gkkqyaza4wcm0phyyn07yh2sz";
+      sha256 = "0i08zxk68kbg6k0d9af97r9nr5vidsy63hx22fdp7c5jp64f967q";
     };
   }))).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -688,9 +688,6 @@ self: super: {
   # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
   intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
 
-  # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
@@ -860,34 +857,4 @@ self: super: {
 
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
-} // (let scope' = self: super: {
-            haskell-tools-ast = super.haskell-tools-ast_0_6_0_0;
-            haskell-tools-backend-ghc = super.haskell-tools-backend-ghc_0_6_0_0;
-            haskell-tools-cli = super.haskell-tools-cli_0_6_0_0;
-            haskell-tools-daemon = super.haskell-tools-daemon_0_6_0_0;
-            haskell-tools-debug = super.haskell-tools-debug_0_6_0_0;
-            haskell-tools-demo = super.haskell-tools-demo_0_6_0_0;
-            haskell-tools-prettyprint = super.haskell-tools-prettyprint_0_6_0_0;
-            haskell-tools-refactor = super.haskell-tools-refactor_0_6_0_0;
-            haskell-tools-rewrite = super.haskell-tools-rewrite_0_6_0_0;
-          };
-      in {
-        haskell-tools-ast_0_6_0_0 =
-          super.haskell-tools-ast_0_6_0_0.overrideScope scope';
-        haskell-tools-backend-ghc_0_6_0_0 =
-          super.haskell-tools-backend-ghc_0_6_0_0.overrideScope scope';
-        haskell-tools-cli_0_6_0_0 =
-          dontCheck (super.haskell-tools-cli_0_6_0_0.overrideScope scope');
-        haskell-tools-daemon_0_6_0_0 =
-          dontCheck (super.haskell-tools-daemon_0_6_0_0.overrideScope scope');
-        haskell-tools-debug_0_6_0_0 =
-          super.haskell-tools-debug_0_6_0_0.overrideScope scope';
-        haskell-tools-demo_0_6_0_0 =
-          super.haskell-tools-demo_0_6_0_0.overrideScope scope';
-        haskell-tools-prettyprint_0_6_0_0 =
-          super.haskell-tools-prettyprint_0_6_0_0.overrideScope scope';
-        haskell-tools-refactor_0_6_0_0 =
-          super.haskell-tools-refactor_0_6_0_0.overrideScope scope';
-        haskell-tools-rewrite_0_6_0_0 =
-          super.haskell-tools-rewrite_0_6_0_0.overrideScope scope';
-     })
+}

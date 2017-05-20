@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       AGL AppKit ApplicationServices Carbon Cocoa
       CoreAudio CoreBluetooth CoreLocation CoreServices
       DiskArbitration Foundation OpenGL
-      darwin.cf-private darwin.apple_sdk.sdk darwin.libobjc libiconv
+      darwin.cf-private darwin.libobjc libiconv
     ]);
 
   buildInputs = [ ]
@@ -128,7 +128,7 @@ stdenv.mkDerivation {
         -qmldir $out/lib/qt5/qml \
         -docdir $out/share/doc/qt5"
 
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins\""
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins/platforms\""
   '';
 
 
