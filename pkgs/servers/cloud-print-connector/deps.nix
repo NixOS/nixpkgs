@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/coreos/go-systemd";
-      rev = "c4308da792903734bd95f877255249cef0862886";
-      sha256 = "1gcy548s9vvyjwh80yx5fi35abmbxksgn8xzhgx9rfy2i7jfg7yy";
+      rev = "1f9909e51b2dab2487c26d64c8f2e7e580e4c9f5";
+      sha256 = "1cc76wcmnyhhhi03dsc11lmxjwkzy09k3zx3h78bg05z8lhry4vn";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/urfave/cli";
-      rev = "9e5b04886c4bfee2ceba1465b8121057355c4e53";
-      sha256 = "18jx6ypc1w02ha37rsx6hhmdwqmnybajd6l54qm07bdb850ip9db";
+      rev = "d70f47eeca3afd795160003bc6e28b001d60c67c";
+      sha256 = "1xm203qp4sdlvffcbag7v6mc2d6q61i25iiz3y9yqpy25jpcpgif";
     };
   }
   {
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "a6577fac2d73be281a500b310739095313165611";
-      sha256 = "00wks377dp0ws47dvc9f6y4sin1mwdk649v5jfz047ik1jh1nq5h";
+      rev = "513929065c19401a1c7b76ecd942f9f86a0c061b";
+      sha256 = "19ziin0k3n45nccjbk094f61hr198wzqnas93cmcxdja8f8fz27q";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/oauth2";
-      rev = "30fcca6531eb4bb278493c9fb299295b3b145934";
-      sha256 = "01x5rfaafhwzbbf7266a71y0ffjikyrbl7waf5scv92frp78py69";
+      rev = "f047394b6d14284165300fd82dad67edb3a4d7f6";
+      sha256 = "1l1a2iz1nmfmzzbjj1h8066prag4jvjqh13iv1jdlh05fgv6769i";
     };
   }
   {
