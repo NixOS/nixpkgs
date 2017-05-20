@@ -108,10 +108,13 @@ in
 
       initialDatabases = mkOption {
         default = [];
-        description = "List of database names and their initial schemas that should be used to create databases on the first startup of MySQL";
+        description = ''
+          List of database names and their initial schemas that should be used to create databases on the first startup
+          of MySQL. The schema attribute is optional: If not specified, an empty database is created.
+        '';
         example = [
           { name = "foodatabase"; schema = literalExample "./foodatabase.sql"; }
-          { name = "bardatabase"; schema = literalExample "./bardatabase.sql"; }
+          { name = "bardatabase"; }
         ];
       };
 
@@ -247,6 +250,8 @@ in
                     if ! test -e "${cfg.dataDir}/${database.name}"; then
                         echo "Creating initial database: ${database.name}"
                         ( echo "create database ${database.name};"
+
+                          ${optionalString (database ? "schema") ''
                           echo "use ${database.name};"
 
                           if [ -f "${database.schema}" ]
@@ -256,6 +261,7 @@ in
                           then
                               cat ${database.schema}/mysql-databases/*.sql
                           fi
+                          ''}
                         ) | ${mysql}/bin/mysql -u root -N
                     fi
                   '') cfg.initialDatabases}
