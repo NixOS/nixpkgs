@@ -18279,6 +18279,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
+  mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
+
   inherit (callPackages ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
