@@ -272,6 +272,8 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
+  madonctl = callPackage ../applications/misc/madonctl { };
+
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
