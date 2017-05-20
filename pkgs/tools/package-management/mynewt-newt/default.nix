@@ -24,6 +24,6 @@ buildGoPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ pjones ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
