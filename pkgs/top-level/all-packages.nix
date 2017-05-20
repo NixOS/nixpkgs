@@ -4237,6 +4237,8 @@ with pkgs;
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
+  tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
+
   tboot = callPackage ../tools/security/tboot { };
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
