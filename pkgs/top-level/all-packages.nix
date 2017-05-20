@@ -3681,8 +3681,6 @@ with pkgs;
 
   psutils = callPackage ../tools/typesetting/psutils { };
 
-  pthread_stubs = callPackage ../development/libraries/pthread-stubs { };
-
   pv = callPackage ../tools/misc/pv { };
 
   pwgen = callPackage ../tools/security/pwgen { };
