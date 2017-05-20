@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Typora - a minimal Markdown reading & writing app.";
+    description = "A minimal Markdown reading & writing app";
     homepage = "https://typora.io";
     license = licenses.free;
     maintainers = with stdenv.lib.maintainers; [ jensbin ];
