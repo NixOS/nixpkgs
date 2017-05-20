@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
     description = "Windows LNK File Parser and Creator";
     homepage = "http://sourceforge.net/projects/pylnk/";
-    license = licenses.lgpl;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ fpletz ];
   };
 }
