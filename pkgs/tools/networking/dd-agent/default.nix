@@ -1,31 +1,59 @@
-{ stdenv, fetchFromGitHub, python, pythonPackages, sysstat, unzip, tornado
-, makeWrapper }:
+{ stdenv, fetchFromGitHub, pythonPackages
+, sysstat, unzip, makeWrapper }:
+let
+  inherit (pythonPackages) python;
+  docker_1_10 = pythonPackages.buildPythonPackage rec {
+    name = "docker-${version}";
+    version = "1.10.6";
 
-stdenv.mkDerivation rec {
-  version = "5.5.2";
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "docker-py";
+      rev = version;
+      sha256 = "1awzpbrkh4fympqzddz5i3ml81b7f0i0nwkvbpmyxjjfqx6l0m4m";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      six
+      requests
+      websocket_client
+      ipaddress
+      backports_ssl_match_hostname
+      docker_pycreds
+      uptime
+    ];
+
+    # due to flake8
+    doCheck = false;
+  };
+
+in stdenv.mkDerivation rec {
+  version = "5.11.2";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
     owner  = "datadog";
     repo   = "dd-agent";
     rev    = version;
-    sha256 = "0ga7h3rdg6q2pi4dxxkird5nf6s6hc13mj1xd9awwpli48gyvxn7";
+    sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
   };
 
   buildInputs = [
     python
     unzip
     makeWrapper
-    pythonPackages.requests2
+    pythonPackages.requests
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.pymongo
-    pythonPackages.docker
+    pythonPackages.pymongo_2_9_1
+    pythonPackages.python-etcd
+    pythonPackages.consul
+    docker_1_10
   ];
-  propagatedBuildInputs = [ python tornado ];
+  propagatedBuildInputs = with pythonPackages; [ python tornado ];
 
   buildCommand = ''
     mkdir -p $out/bin
@@ -35,6 +63,9 @@ stdenv.mkDerivation rec {
     ln -s $out/agent/agent.py $out/bin/dd-agent
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
+
+    # Move out default conf.d so that /etc/dd-agent/conf.d is used
+    mv $out/agent/conf.d $out/agent/conf.d-system
 
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash

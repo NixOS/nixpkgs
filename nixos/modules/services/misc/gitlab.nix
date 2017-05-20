@@ -440,6 +440,7 @@ in {
       path = with pkgs; [
         gitAndTools.git
         openssh
+        gitlab-workhorse
       ];
       preStart = ''
         mkdir -p /run/gitlab
@@ -481,6 +482,7 @@ in {
         mkdir -p ${cfg.statePath}/repositories
         mkdir -p ${gitlabConfig.production.shared.path}/artifacts
         mkdir -p ${gitlabConfig.production.shared.path}/lfs-objects
+        mkdir -p ${gitlabConfig.production.shared.path}/pages
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/shell
         mkdir -p ${cfg.statePath}/tmp/pids
@@ -528,8 +530,8 @@ in {
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
-            psql postgres -c "CREATE ROLE gitlab WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${config.services.postgresql.package}/bin/createdb --owner gitlab gitlab || true
+            psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
+            ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName} || true
             touch "${cfg.statePath}/db-created"
           fi
         fi

@@ -17,10 +17,10 @@ in
   config = {
 
     environment.variables =
-      { LOCATE_PATH = "/var/cache/locatedb";
-        NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
+      { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
+        XCURSOR_PATH = "$HOME/.icons";
       };
 
     environment.profiles =
@@ -31,7 +31,7 @@ in
 
     # TODO: move most of these elsewhere
     environment.profileRelativeEnvVars =
-      { PATH = [ "/bin" "/sbin" "/lib/kde4/libexec" ];
+      { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
         PKG_CONFIG_PATH = [ "/lib/pkgconfig" ];
         TERMINFO_DIRS = [ "/share/terminfo" ];
@@ -43,6 +43,7 @@ in
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
         XDG_DATA_DIRS = [ "/share" ];
+        XCURSOR_PATH = [ "/share/icons" ];
         MOZ_PLUGIN_PATH = [ "/lib/mozilla/plugins" ];
         LIBEXEC_PATH = [ "/lib/libexec" ];
       };

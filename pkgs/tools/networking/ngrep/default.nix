@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, gnumake3 }:
+{ stdenv, fetchurl, fetchpatch, libpcap, gnumake3, pcre }:
 
 stdenv.mkDerivation rec {
   name = "ngrep-1.45";
@@ -8,13 +8,32 @@ stdenv.mkDerivation rec {
     sha256 = "19rg8339z5wscw877mz0422wbsadds3mnfsvqx3ihy58glrxv9mf";
   };
 
-  buildInputs = [ gnumake3 libpcap ];
+  patches = [
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/users/rfrancoise/ngrep.git/plain/debian/patches/10_debian-build.diff?h=debian/1.45.ds2-14";
+      sha256 = "1p359k54xjbh6r0d0lv1l679n250wxk6j8yyz23gn54kwdc29zfy";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/users/rfrancoise/ngrep.git/plain/debian/patches/10_man-fixes.diff?h=debian/1.45.ds2-14";
+      sha256 = "1b66zfbsrsvg60j988i6ga9iif1c34fsbq3dp1gi993xy4va8m5k";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/users/rfrancoise/ngrep.git/plain/debian/patches/20_setlocale.diff?h=debian/1.45.ds2-14";
+      sha256 = "16xbmnmvw5sjidz2qhay68k3xad05g74nrccflavxbi0jba52fdq";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/users/rfrancoise/ngrep.git/plain/debian/patches/40_ipv6-offsets.diff?h=debian/1.45.ds2-14";
+      sha256 = "0fjlk1sav5nnjapvsa8mvdwjkhgm3kgc6dw7r9h1qx6d3b8cgl76";
+    })
+  ];
+
+  buildInputs = [ gnumake3 libpcap pcre ];
 
   preConfigure = ''
     # Fix broken test for BPF header file
     sed -i "s|BPF=.*|BPF=${libpcap}/include/pcap/bpf.h|" configure
 
-    configureFlags="$configureFlags --with-pcap-includes=${libpcap}/include"
+    configureFlags="$configureFlags --enable-ipv6 --enable-pcre --disable-pcap-restart --with-pcap-includes=${libpcap}/include"
   '';
 
   meta = with stdenv.lib; {

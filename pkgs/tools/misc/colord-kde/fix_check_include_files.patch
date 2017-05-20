@@ -1,9 +1,0 @@
---- CMakeLists.txt.orig	2013-05-01 05:04:34.000000000 +1000
-+++ CMakeLists.txt	2015-12-10 20:43:51.351800988 +1100
-@@ -9,6 +9,7 @@
- include(FindPkgConfig)
- include(KDE4Defaults)
-+include(CheckIncludeFiles)
- include(ConfigureChecks.cmake)
- 
- message(STATUS "X randr is required, found: " ${XRANDR_1_3_FOUND})

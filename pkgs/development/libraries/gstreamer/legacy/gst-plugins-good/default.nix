@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, lib, pkgconfig, gst_plugins_base, aalib, cairo
+{ fetchurl, stdenv, lib, pkgconfig, gst-plugins-base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
 , libiec61883, libavc1394, taglib, libpulseaudio, gdk_pixbuf, orc
 , glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintlOrEmpty
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-experimental" "--disable-oss" ];
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst_plugins_base ]
+    [ pkgconfig glib gstreamer gst-plugins-base ]
     ++ lib.optional stdenv.isLinux libpulseaudio
     ++ libintlOrEmpty
     ++ lib.optionals (!minimalDeps)

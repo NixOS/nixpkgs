@@ -24,7 +24,7 @@ python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python2Packages; [
     pbr sqlalchemy boto decorator eventlet jinja2 lxml routes cryptography
     webob greenlet PasteDeploy paste prettytable sqlalchemy_migrate netaddr
-    netifaces paramiko Babel iso8601 jsonschema keystoneclient requests2 six
+    netifaces paramiko Babel iso8601 jsonschema keystoneclient requests six
     stevedore websockify rfc3986 os-brick psutil_1 alembic psycopg2 pymysql
     keystonemiddleware MySQL_python
 

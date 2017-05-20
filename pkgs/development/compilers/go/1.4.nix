@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
+{ stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
 , pkgconfig
 , pcre
 , Security }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     # ParseInLocation fails the test
     sed -i '/TestParseInSydney/areturn' src/time/format_test.go
 
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
 
@@ -77,6 +77,29 @@ stdenv.mkDerivation rec {
     # fails when running inside tmux
     sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
 
+    # unix socket tests fail on darwin
+    sed -i '/TestConnAndListener/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/conn_test.go
+    sed -i '/TestPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestConnAndPacketConn/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/packetconn_test.go
+    sed -i '/TestUnixListenerSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestUnixConnSpecificMethods/areturn' src/net/protoconn_test.go
+    sed -i '/TestStreamConnServer/areturn' src/net/server_test.go
+    sed -i '/TestReadUnixgramWithUnnamedSocket/areturn' src/net/unix_test.go
+    sed -i '/TestReadUnixgramWithZeroBytesBuffer/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramWrite/areturn' src/net/unix_test.go
+    sed -i '/TestUnixConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestUnixgramConnLocalAndRemoteNames/areturn' src/net/unix_test.go
+    sed -i '/TestWithSimulated/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestFlap/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNew/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestNewLogger/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestDial/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentWrite/areturn' src/log/syslog/syslog_test.go
+    sed -i '/TestConcurrentReconnect/areturn' src/log/syslog/syslog_test.go
 
     # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
     sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
@@ -91,6 +114,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-tools-1.4.patch
     ./creds-test-1.4.patch
+
+    # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
+    # actually works on old versions too.
+    (fetchpatch {
+      url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
+      sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
+    })
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

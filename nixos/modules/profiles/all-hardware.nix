@@ -42,12 +42,15 @@
       # Virtio (QEMU, KVM etc.) support.
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
+      # Hyper-V support.
+      "hv_storvsc"
+
       # Keyboards
       "usbhid" "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
     ];
 
   # Include lots of firmware.
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   imports =
     [ ../hardware/network/zydas-zd1211.nix ];

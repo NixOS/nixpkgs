@@ -1,22 +1,24 @@
 { fetchgit, fetchFromGitHub, bootPkgs }:
 
 bootPkgs.callPackage ./base.nix {
-  version = "0.2.020161101";
+  version = "0.2.020170323";
 
-  # deprecated on HEAD, directly included in the distribution
-  ghcjs-prim = null;
   inherit bootPkgs;
 
   ghcjsSrc = fetchFromGitHub {
-    owner = "ghcjs";
+    # TODO: switch back to the regular ghcjs repo
+    # when https://github.com/ghcjs/ghcjs/pull/573 is merged.
+    owner = "basvandijk";
     repo = "ghcjs";
-    rev = "899c834a36692bbbde9b9d16fe5b92ce55a623c4";
-    sha256 = "024yj4k0dxy7nvyq19n3xbhh4b4csdrgj19a3l4bmm1zn84gmpl6";
+    rev = "e6cdc71964a1c2e4184416a493e9d384c408914c";
+    sha256 = "00fk9qwyx4vpvr0h9jbqxwlrvl6w63l5sq8r357prsp6xyv5zniz";
   };
   ghcjsBootSrc = fetchgit {
-    url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "b000a4f4619b850bf3f9a45c9058f7a51e7709c8";
-    sha256 = "164v0xf33r6mnympp6s70v8j6g7ccyg7z95gjp43bq150ppvisbq";
+    # TODO: switch back to git://github.com/ghcjs/ghcjs-boot.git
+    # when https://github.com/ghcjs/ghcjs-boot/pull/41 is merged.
+    url = git://github.com/basvandijk/ghcjs-boot.git;
+    rev = "19a3b157ecb807c2224daffda5baecc92b76af35";
+    sha256 = "16sgr8vfr1nx5ljnk8gckgjk70zpa67ix4dbr9aizkwyz41ilfrb";
     fetchSubmodules = true;
   };
 

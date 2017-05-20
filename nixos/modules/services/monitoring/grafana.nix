@@ -1,11 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.grafana;
-
-  b2s = val: if val then "true" else "false";
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
@@ -32,16 +30,16 @@ let
     SECURITY_ADMIN_PASSWORD = cfg.security.adminPassword;
     SECURITY_SECRET_KEY = cfg.security.secretKey;
 
-    USERS_ALLOW_SIGN_UP = b2s cfg.users.allowSignUp;
-    USERS_ALLOW_ORG_CREATE = b2s cfg.users.allowOrgCreate;
-    USERS_AUTO_ASSIGN_ORG = b2s cfg.users.autoAssignOrg;
+    USERS_ALLOW_SIGN_UP = boolToString cfg.users.allowSignUp;
+    USERS_ALLOW_ORG_CREATE = boolToString cfg.users.allowOrgCreate;
+    USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
     USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
 
-    AUTH_ANONYMOUS_ENABLED = b2s cfg.auth.anonymous.enable;
+    AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
     AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
     AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
 
-    ANALYTICS_REPORTING_ENABLED = b2s cfg.analytics.reporting.enable;
+    ANALYTICS_REPORTING_ENABLED = boolToString cfg.analytics.reporting.enable;
   } // cfg.extraOptions;
 
 in {
@@ -232,9 +230,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = [
-      "Grafana passwords will be stored as plaintext in the Nix store!"
-    ];
+    warnings = optional (
+      cfg.database.password != options.services.grafana.database.password.default ||
+      cfg.security.adminPassword != options.services.grafana.security.adminPassword.default
+    ) "Grafana passwords will be stored as plaintext in the Nix store!";
 
     environment.systemPackages = [ cfg.package ];
 

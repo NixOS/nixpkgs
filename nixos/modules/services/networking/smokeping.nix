@@ -226,7 +226,7 @@ in
       sendmail = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/setuid-wrappers/sendmail";
+        example = "/run/wrappers/bin/sendmail";
         description = "Use this sendmail compatible script to deliver alerts";
       };
       smokeMailTemplate = mkOption {
@@ -273,7 +273,10 @@ in
         message = "services.smokeping: sendmail and Mailhost cannot both be enabled.";
       }
     ];
-    security.setuidPrograms = [ "fping" ];
+    security.wrappers = {
+      fping.source = "${pkgs.fping}/bin/fping";
+      "fping6".source = "${pkgs.fping}/bin/fping6";
+    };
     environment.systemPackages = [ pkgs.fping ];
     users.extraUsers = singleton {
       name = cfg.user;
@@ -285,8 +288,11 @@ in
     };
     systemd.services.smokeping = {
       wantedBy = [ "multi-user.target"];
-      serviceConfig.User = cfg.user;
-      serviceConfig.PermissionsStartOnly = true;
+      serviceConfig = {
+        User = cfg.user;
+        PermissionsStartOnly = true;
+        Restart = "on-failure";
+      };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
         rm -f ${smokepingHome}/cropper

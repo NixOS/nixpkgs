@@ -1,7 +1,8 @@
 { stdenv, fetchurl, python2Packages }:
 
-python2Packages.mkPythonDerivation rec {
+python2Packages.buildPythonApplication rec {
   name = "dstat-${version}";
+  format = "other";
   version = "0.7.3";
 
   src = fetchurl {

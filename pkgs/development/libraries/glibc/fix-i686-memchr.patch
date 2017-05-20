@@ -1,0 +1,23 @@
+Fix i686 memchr overflow calculation (BZ#21182)
+
+https://sourceware.org/git/?p=glibc.git;a=commit;h=3abeeec5f46ff03
+diff --git a/sysdeps/i386/i686/multiarch/memchr-sse2.S b/sysdeps/i386/i686/multiarch/memchr-sse2.S
+index 910679c..e41f324 100644
+--- a/sysdeps/i386/i686/multiarch/memchr-sse2.S
++++ b/sysdeps/i386/i686/multiarch/memchr-sse2.S
+@@ -117,7 +117,6 @@ L(crosscache):
+ 
+ # ifndef USE_AS_RAWMEMCHR
+ 	jnz	L(match_case2_prolog1)
+-	lea	-16(%edx), %edx
+         /* Calculate the last acceptable address and check for possible
+            addition overflow by using satured math:
+            edx = ecx + edx
+@@ -125,6 +124,7 @@ L(crosscache):
+ 	add	%ecx, %edx
+ 	sbb	%eax, %eax
+ 	or	%eax, %edx
++	sub	$16, %edx
+ 	jbe	L(return_null)
+ 	lea	16(%edi), %edi
+ # else

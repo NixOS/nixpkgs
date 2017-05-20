@@ -8,15 +8,30 @@ in
 
 {
   options = {
-    services.xserver.windowManager.herbstluftwm.enable = mkEnableOption "herbstluftwm";
+    services.xserver.windowManager.herbstluftwm = {
+      enable = mkEnableOption "herbstluftwm";
+
+      configFile = mkOption {
+        default     = null;
+        type        = with types; nullOr path;
+        description = ''
+          Path to the herbstluftwm configuration file.  If left at the
+          default value, $XDG_CONFIG_HOME/herbstluftwm/autostart will
+          be used.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton {
       name = "herbstluftwm";
-      start = "
-        ${pkgs.herbstluftwm}/bin/herbstluftwm
-      ";
+      start =
+        let configFileClause = optionalString
+            (cfg.configFile != null)
+            ''-c "${cfg.configFile}"''
+            ;
+        in "${pkgs.herbstluftwm}/bin/herbstluftwm ${configFileClause}";
     };
     environment.systemPackages = [ pkgs.herbstluftwm ];
   };

@@ -1,13 +1,8 @@
-Author: Dmitry Shachnev <mitya57@gmail.com>
-Description: do not build unrar extension as we strip unrar from the tarball
-Forwarded: not-needed
-Last-Update: 2013-04-04
-
-Index: calibre/setup/extensions.json
-===================================================================
---- calibre.orig/setup/extensions.json
-+++ calibre/setup/extensions.json
-@@ -211,14 +211,5 @@
+diff --git a/setup/extensions.json b/setup/extensions.json
+index 1f6d1fb..1273904 100644
+--- a/setup/extensions.json
++++ b/setup/extensions.json
+@@ -211,16 +211,5 @@
          "sources": "calibre/devices/mtp/unix/devices.c calibre/devices/mtp/unix/libmtp.c",
          "headers": "calibre/devices/mtp/unix/devices.h calibre/devices/mtp/unix/upstream/music-players.h calibre/devices/mtp/unix/upstream/device-flags.h",
          "libraries": "mtp"
@@ -18,15 +13,17 @@ Index: calibre/setup/extensions.json
 -        "inc_dirs": "unrar",
 -        "defines": "SILENT RARDLL UNRAR _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE",
 -        "windows_defines": "SILENT RARDLL UNRAR",
+-        "haiku_defines": "LITTLE_ENDIAN SILENT RARDLL UNRAR _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE _BSD_SOURCE",
+-        "haiku_libraries": "bsd",
 -        "optimize_level": 2,
 -        "windows_libraries": "User32 Advapi32 kernel32 Shell32"
      }
  ]
-Index: calibre/src/calibre/ebooks/metadata/archive.py
-===================================================================
---- calibre.orig/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.510954007 +0100
-+++ calibre/src/calibre/ebooks/metadata/archive.py	2014-02-02 10:42:14.502954007 +0100
-@@ -42,7 +42,7 @@
+diff --git a/src/calibre/ebooks/metadata/archive.py b/src/calibre/ebooks/metadata/archive.py
+index 938ab24..1e095f8 100644
+--- a/src/calibre/ebooks/metadata/archive.py
++++ b/src/calibre/ebooks/metadata/archive.py
+@@ -44,7 +44,7 @@ class ArchiveExtract(FileTypePlugin):
      description = _('Extract common e-book formats from archives '
          '(zip/rar) files. Also try to autodetect if they are actually '
          'cbz/cbr files.')

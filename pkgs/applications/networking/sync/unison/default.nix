@@ -11,9 +11,11 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ ocaml makeWrapper ncurses ];
 
-  preBuild = if enableX11 then ''
+  preBuild = (if enableX11 then ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" Makefile.OCaml
-  '' else "";
+  '' else "") + ''
+  echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> fsmonitor/linux/Makefile
+  '';
 
   makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
     + (if ! ocaml.nativeCompilers then " NATIVE=false" else "");

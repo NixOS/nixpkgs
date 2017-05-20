@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.76.0";
+  version = "2.84.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1xfm586n6gm44mkyn25mbiyhj6w9ji9yl6fvmnr4zk1q6qcga3v8";
+    sha256 = "1kvnmb6hsby4bdnx70bcy32f4dz1axzlr310dr6mkvnc8bqw59km";
   };
 
   patches = [
@@ -47,13 +47,15 @@ stdenv.mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
   ] ++ (with python2Packages; [
-    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip
     # the following are distributed with calibre, but we use upstream instead
     chardet cherrypy html5lib_0_9999999 odfpy routes

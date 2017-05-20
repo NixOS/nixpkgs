@@ -1,13 +1,19 @@
 { stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
 let param = {
-  "4.02.3" = {
+  "4.02" = {
      version = "4.02+6";
      sha256 = "06yl4q0qazl7g25b0axd1gdkfd4qpqzs1gr5fkvmkrcbz113h1hj"; };
-  "4.03.0" = {
+  "4.03" = {
      version = "4.03+1";
      sha256 = "1f2ndch6f1m4fgnxsjb94qbpwjnjgdlya6pard44y6n0dqxi1wsq"; };
-  }."${ocaml.version}";
+  "4.04" = {
+     version = "4.04+1";
+     sha256 = "1ad7rygqjxrc1im95gw9lp8q83nhdaf383f2808f1p63yl42xm7k"; };
+  "4.05" = {
+     version = "4.05+1";
+     sha256 = "0wm795hpwvwpib9c9z6p8kw2fh7p7b2hml6g15z8zry3y7w738sv"; };
+  }."${ocaml.meta.branch}";
 in
 
 stdenv.mkDerivation rec {
@@ -39,6 +45,8 @@ stdenv.mkDerivation rec {
   makeFlags = "all";
 
   installTargets = "install install-META";
+
+  dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "A software system for writing extensible parsers for programming languages";

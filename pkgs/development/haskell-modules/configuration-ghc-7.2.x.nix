@@ -36,13 +36,13 @@ self: super: {
 
   # These packages are core libraries in GHC 7.10.x, but not here.
   deepseq = self.deepseq_1_3_0_1;
-  haskeline = self.haskeline_0_7_2_1;
-  terminfo = self.terminfo_0_4_0_1;
+  haskeline = self.haskeline_0_7_3_1;
+  terminfo = self.terminfo_0_4_0_2;
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = self.binary_0_8_4_1; process = self.process_1_2_3_0; };
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = self.binary_0_8_5_1; process = self.process_1_2_3_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -63,6 +63,7 @@ self: super: {
 
   # Setup: Can't find transitive deps for haddock
   doctest = dontHaddock super.doctest;
+  hsdns = dontHaddock super.hsdns;
 
   # Needs hashable on pre 7.10.x compilers.
   nats_1 = addBuildDepend super.nats_1 self.hashable;

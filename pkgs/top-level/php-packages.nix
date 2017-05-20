@@ -51,7 +51,7 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
   # Not released yet
@@ -69,7 +69,7 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
   # No support for PHP 7 yet (and probably never will be)
@@ -85,7 +85,7 @@ let
     buildInputs = [ pkgs.spidermonkey_1_8_5 ];
   };
 
-  xdebug = if isPhp7 then xdebug24 else xdebug23;
+  xdebug = if isPhp7 then xdebug25 else xdebug23;
 
   xdebug23 = assert !isPhp7; buildPecl {
     name = "xdebug-2.3.1";
@@ -96,10 +96,10 @@ let
     checkTarget = "test";
   };
 
-  xdebug24 = buildPecl {
-    name = "xdebug-2.4.0RC3";
+  xdebug25 = buildPecl {
+    name = "xdebug-2.5.0";
 
-    sha256 = "06ppsihw4cl8kxmywvic6wsm4ps9pvsns2vbab9ivrfyp8b6h5dy";
+    sha256 = "03c9y25a3gc3kpav0cdgmhjixcaly6974hx7wgihi0wlchgavmlb";
 
     doCheck = true;
     checkTarget = "test";
@@ -176,7 +176,7 @@ let
 
   redis = if isPhp7 then redisPhp7 else redis22;
 
-  redis22 = buildPecl {
+  redis22 = assert !isPhp7; buildPecl {
     name = "redis-2.2.7";
     sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
@@ -235,11 +235,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.2.0";
+    version = "1.4.1";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "15chwfsqmwmhry3bv13a5y4ih1vzb0j8h1dfd49pnzzd8lai706w";
+      sha256 = "1g2wsnjcx1ysbw1ps2xwyhgcl8kl3yfzxgwcnh5rigjk6k67glmb";
     };
 
     phases = [ "installPhase" ];

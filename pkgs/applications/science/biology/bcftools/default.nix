@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, zlib, htslib }:
+{ stdenv, fetchurl, htslib, zlib, bzip2, lzma, perl }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "bcftools";
-  version = "1.3.1";
+  major = "1.4";
+  version = "${major}.0";
 
   src = fetchurl {
-    url = "https://github.com/samtools/${pname}/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "095ry68vmz9q5s1scjsa698dhgyvgw5aicz24c19iwfbai07mhqj";
+    url = "https://github.com/samtools/bcftools/releases/download/${major}/bcftools-${major}.tar.bz2";
+    sha256 = "0k93mq3lf73dch81p4zxi0bdll567acxfa81qzbzkqflgsjb1ccg";
   };
 
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib bzip2 lzma perl ];
 
   makeFlags = [
     "HSTDIR=${htslib}"

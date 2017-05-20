@@ -8,11 +8,11 @@ let
   inherit (pythonPackages) pygobject3 python;
 in stdenv.mkDerivation rec {
   name = "gtk-vnc-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-vnc/0.6/${name}.tar.xz";
-    sha256 = "9559348805e64d130dae569fee466930175dbe150d2649bb868b5c095f130433";
+    url = "mirror://gnome/sources/gtk-vnc/${stdenv.lib.strings.substring 0 3 version}/${name}.tar.xz";
+    sha256 = "0gj8dpy3sj4dp810gy67spzh5f0jd8aqg69clcwqjcskj1yawbiw";
   };
 
   buildInputs = [

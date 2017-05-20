@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, intltool, pkgconfig, gtk3, SDL2, xorg
-, gsettings_desktop_schemas, makeWrapper, libcdio, nasm, ffmpeg, file
+, wrapGAppsHook, libcdio, nasm, ffmpeg, file
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -45,11 +45,13 @@ stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/cgit/pkg-games/pcsxr.git/plain/debian/patches/08_reproducible.patch?h=debian/1.9.94-2";
       sha256 = "1cx9q59drsk9h6l31097lg4aanaj93ysdz5p88pg9c7wvxk1qz06";
     })
+
+    ./uncompress2.patch
   ];
 
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig wrapGAppsHook ];
   buildInputs = [
-    autoreconfHook intltool pkgconfig gtk3 SDL2 xorg.libXv xorg.libXtst
-    makeWrapper libcdio nasm ffmpeg file
+    gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg file
   ];
 
   dynarecTarget =
@@ -65,8 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram "$out/bin/pcsxr" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     mkdir -p "$out/share/doc/${name}"
     cp README \
        AUTHORS \

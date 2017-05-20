@@ -10,8 +10,8 @@ cross:
 , preConfigure ? "", ... }@args:
 
 let
-  version = "2.24";
-  sha256 = "1ghzp41ryvsqxn4rhrm8r25wc33m2jf8zrcc1pj3jxyk8ad9a0by";
+  version = "2.25";
+  sha256 = "067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0";
 in
 
 assert cross != null -> gccCross != null;
@@ -48,7 +48,8 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
-    ];
+    ]
+      ++ lib.optional stdenv.isi686 ./fix-i686-memchr.patch;
 
   postPatch =
     # Needed for glibc to build with the gnumake 3.82
@@ -93,7 +94,7 @@ stdenv.mkDerivation ({
       "--enable-kernel=2.6.32"
     ] ++ lib.optionals (cross != null) [
       (if cross.withTLS then "--with-tls" else "--without-tls")
-      (if cross.float == "soft" then "--without-fp" else "--with-fp")
+      (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
     ] ++ lib.optionals (cross != null
           && cross.platform ? kernelMajor
           && cross.platform.kernelMajor == "2.6") [
@@ -119,14 +120,6 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
-
-  # Workaround for this bug:
-  #   http://sourceware.org/bugzilla/show_bug.cgi?id=411
-  # I.e. when gcc is compiled with --with-arch=i686, then the
-  # preprocessor symbol `__i686' will be defined to `1'.  This causes
-  # the symbol __i686.get_pc_thunk.dx to be mangled.
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.system == "i686-linux") "-U__i686"
-    + " -Wno-error=strict-prototypes";
 }
 
 # Remove the `gccCross' attribute so that the *native* glibc store path
@@ -138,7 +131,7 @@ stdenv.mkDerivation ({
     lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
-    url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
+    url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
     inherit sha256;
   };
 

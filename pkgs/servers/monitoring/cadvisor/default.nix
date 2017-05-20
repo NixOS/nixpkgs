@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/google/cadvisor;
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

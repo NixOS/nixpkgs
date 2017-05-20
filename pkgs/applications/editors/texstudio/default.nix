@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.11.2";
+  version = "2.12.4";
   name = "${pname}-${version}";
   altname="Texstudio";
 
   src = fetchurl {
     url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "1p6ja5y5902y814f3f5mafh0y8vj682ghrarx1pbm4r5ap8x9z82";
+    sha256 = "03917faqyy0a1k6b86blc2fcards5a1819ydgkc4jlhwiaym4iyw";
   };
 
-  buildInputs = [ qt4 qmake4Hook poppler_qt4 zlib pkgconfig ];
+  nativeBuildInputs = [ qmake4Hook pkgconfig ];
+  buildInputs = [ qt4 poppler_qt4 zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 	LaTeX editing with completion, structure viewer, preview,
 	spell checking and support of any compilation chain.
 	'';
-    homepage = "http://texstudio.sourceforge.net/";
+    homepage = http://texstudio.sourceforge.net;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cfouche ];

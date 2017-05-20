@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, jre, nettools
+{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
+, python, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.29";
+  version = "2.0.33";
   name = "munin-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/munin-monitoring/munin/archive/${version}.tar.gz";
-    sha256 = "1zpv0p10iyx49z1hsqvlkk6hh46hp9dhbrdyx103hgx7p3xnxfnv";
+  src = fetchFromGitHub {
+    owner = "munin-monitoring";
+    repo = "munin";
+    rev = version;
+    sha256 = "0rs05b7926mjd58sdry33i91m1h3v3svl0wg2gmhljl8wqidac5w";
   };
 
   buildInputs = [ 
@@ -97,7 +99,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     echo "Removing references to /usr/{bin,sbin}/ from munin plugins..."
-    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g"
+    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 \
+        sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g" -e "s|\<bc\>|${bc}/bin/bc|g"
 
     if test -e $out/nix-support/propagated-native-build-inputs; then
         ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages

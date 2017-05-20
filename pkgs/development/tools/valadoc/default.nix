@@ -1,12 +1,12 @@
 {stdenv, fetchgit, gnome3, automake, autoconf, which, libtool, pkgconfig, graphviz, glib, gobjectIntrospection, expat}:
 stdenv.mkDerivation rec {
-  version = "2016-10-09";
+  version = "2016-11-11";
   name = "valadoc-unstable-${version}";
 
   src = fetchgit {
     url = "git://git.gnome.org/valadoc";
-    rev = "37756970379d1363453562e9f2af2c354d172fb4";
-    sha256 = "1s9sf6f0srh5sqqikswnb3bgwv5s1r9bd4n10hs2lzfmh7z227qb";
+    rev = "8080b626db9c16ac9a0a9802677b4f6ab0d36d4e";
+    sha256 = "1y00yls4wgxggzfagm3hcmzkpskfbs3m52pjgl71lg4p85kv6msv";
   };
 
   nativeBuildInputs = [ automake autoconf which gnome3.vala libtool pkgconfig gobjectIntrospection ];

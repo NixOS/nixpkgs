@@ -27,4 +27,6 @@ rec {
   };
 
   gst-validate = callPackage ./validate { inherit gst-plugins-base; };
+
+  # note: gst-python is in ./python/default.nix - called under pythonPackages
 }

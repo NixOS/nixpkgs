@@ -1,4 +1,4 @@
-{ stdenv, ghc, pkgconfig, glibcLocales }:
+{ stdenv, ghc, pkgconfig, glibcLocales, cacert }:
 
 with stdenv.lib;
 
@@ -27,11 +27,16 @@ stdenv.mkDerivation (args // {
   LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
                     # ^^^ Internally uses `getOutput "lib"` (equiv. to getLib)
 
+  # Non-NixOS git needs cert
+  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  # Fixes https://github.com/commercialhaskell/stack/issues/2358
+  LANG = "en_US.UTF-8";
+
   preferLocalBuild = true;
 
   configurePhase = args.configurePhase or ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
-    stack setup
   '';
 
   buildPhase = args.buildPhase or "stack build";

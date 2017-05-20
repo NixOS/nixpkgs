@@ -12,6 +12,6 @@ stdenv.mkDerivation rec {
     homepage = http://sg.danny.cz/sg/;
     description = "Utilities that send SCSI commands to devices";
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

@@ -5,15 +5,16 @@
 stdenv.mkDerivation rec {
   name = "chipmunk-${version}";
   majorVersion = "7";
-  version = "${majorVersion}.0.0";
+  version = "${majorVersion}.0.1";
 
   src = fetchurl {
     url = "https://chipmunk-physics.net/release/Chipmunk-${majorVersion}.x/Chipmunk-${version}.tgz";
-    sha256 = "1kaii8wgvp0kgn2p22jm9smyqlws4p5dg8j23jaiasx9jq1kiaql";
+    sha256 = "0q4jwv1icz8spcjkp0v3bnygi6hq2zmnsgcxkwm8i2bxfxjb8m7y";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs =
-    [ cmake freeglut mesa glfw2 glew libX11 xproto inputproto libXi libXmu ];
+    [ freeglut mesa glfw2 glew libX11 xproto inputproto libXi libXmu ];
 
   postInstall = ''
     mkdir -p $out/bin

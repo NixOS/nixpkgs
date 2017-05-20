@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgs, gcc, gzip, gnum4 }:
+{ stdenv, fetchurl, pkgs, gnum4 }:
 
-stdenv.mkDerivation (rec {
-  name = "jade";
+stdenv.mkDerivation rec {
+  name = "jade-${version}-${debpatch}";
   version = "1.2.1";
   debpatch = "47.3";
 
   src = fetchurl {
-    url = "ftp://ftp.jclark.com/pub/${name}/${name}-${version}.tar.gz";
+    url = "ftp://ftp.jclark.com/pub/jade/jade-${version}.tar.gz";
     sha256 = "84e2f8a2a87aab44f86a46b71405d4f919b219e4c73e03a83ab6c746a674b187";
   };
 
@@ -17,14 +17,14 @@ stdenv.mkDerivation (rec {
 
   patches = [ patchsrc ];
 
-  buildInputs = [ gcc gzip gnum4 ];
+  buildInputs = [ gnum4 ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-deprecated" ];
 
   preInstall = ''
     install -d -m755 "$out"/lib
   '';
-  
+
   postInstall = ''
     mv "$out/bin/sx" "$out/bin/sgml2xml"
   '';
@@ -33,6 +33,7 @@ stdenv.mkDerivation (rec {
     description = "James Clark's DSSSL Engine";
     license = "custom";
     homepage = http://www.jclark.com/jade/;
+    platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ e-user ];
   };
-})
+}

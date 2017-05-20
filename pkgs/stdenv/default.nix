@@ -7,7 +7,7 @@
 { # Args just for stdenvs' usage
   lib
   # Args to pass on to the pkgset builder, too
-, system, platform, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays
 } @ args:
 
 let
@@ -44,6 +44,7 @@ in
     "armv5tel-linux" = stagesLinux;
     "armv6l-linux" = stagesLinux;
     "armv7l-linux" = stagesLinux;
+    "aarch64-linux" = stagesLinux;
     "mips64el-linux" = stagesLinux;
     "powerpc-linux" = /* stagesLinux */ stagesNative;
     "x86_64-darwin" = stagesDarwin;
@@ -51,4 +52,4 @@ in
     "i686-cygwin" = stagesNative;
     "x86_64-cygwin" = stagesNative;
     "x86_64-freebsd" = stagesFreeBSD;
-  }.${system} or stagesNative
+  }.${localSystem.system} or stagesNative

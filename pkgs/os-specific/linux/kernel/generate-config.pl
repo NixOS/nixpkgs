@@ -17,6 +17,7 @@ my $wd = getcwd;
 
 my $debug = $ENV{'DEBUG'};
 my $autoModules = $ENV{'AUTO_MODULES'};
+my $preferBuiltin = $ENV{'PREFER_BUILTIN'};
     
 $SIG{PIPE} = 'IGNORE';
 
@@ -73,7 +74,7 @@ sub runConfig {
                 my $question = $1; my $name = $2; my $alts = $3;
                 my $answer = "";
                 # Build everything as a module if possible.
-                $answer = "m" if $autoModules && $alts =~ /\/m/;
+                $answer = "m" if $autoModules && $alts =~ /\/m/ && !($preferBuiltin && $alts =~ /Y/);
                 $answer = $answers{$name} if defined $answers{$name};
                 print STDERR "QUESTION: $question, NAME: $name, ALTS: $alts, ANSWER: $answer\n" if $debug;
                 print OUT "$answer\n";

@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, barcode, gnome3
+{ stdenv, fetchurl, barcode, gnome3, autoreconfHook
 , gtk3, gtk_doc, libxml2, librsvg , libtool, libe-book
 , intltool, itstool, makeWrapper, pkgconfig, which
 }:
 
 stdenv.mkDerivation rec {
   name = "glabels-${version}";
-  version = "3.2.1";
-  src = fetchFromGitHub {
-    owner = "jimevins";
-    repo = "glabels";
-    rev = "glabels-3_2_1";
-    sha256 = "1y6gz0v9si3cvdzhakbgkyc94fajg19rmykfgnc37alrc21vs9zg";
+  version = "3.4.0";
+
+  src = fetchurl {
+    url = "http://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.0.tar.xz";
+    sha256 = "04345crf5yrhq6rlrymz630rxnm8yw41vx04hb6xn2nkjn9hf3nl";
   };
 
+  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
   buildInputs = [
-    autoconf automake barcode gtk3 gtk_doc gnome3.yelp_tools
+    barcode gtk3 gtk_doc gnome3.yelp_tools
     gnome3.gnome_common gnome3.gsettings_desktop_schemas
-    intltool itstool libxml2 librsvg libe-book libtool
-    makeWrapper pkgconfig 
+    itstool libxml2 librsvg libe-book libtool
+    
   ];
 
   preFixup = ''
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/glabels-3" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
-
-  preConfigure = "./autogen.sh";
 
   meta = {
     description = "Create labels and business cards";

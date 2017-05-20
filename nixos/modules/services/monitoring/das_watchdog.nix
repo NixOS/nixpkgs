@@ -25,7 +25,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "root";
-        Type = "oneshot";
+        Type = "simple";
         ExecStart = "${das_watchdog}/bin/das_watchdog";
         RemainAfterExit = true;
       };

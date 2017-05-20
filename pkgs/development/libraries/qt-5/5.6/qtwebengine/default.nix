@@ -2,7 +2,8 @@
 
 , xlibs, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus
-, zlib, libjpeg, libpng, libtiff
+, zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
+, jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsaLib
 , libcap
 , pciutils
@@ -11,7 +12,7 @@
 , coreutils
 , pkgconfig, python2
 
-, stdenv # lib.optional, needsPax
+, lib, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
@@ -37,6 +38,9 @@ qtSubmodule {
     sed -i -e 's,\(static QString processPath\),\1 = QLatin1String("'$out'/libexec/QtWebEngineProcess"),' src/core/web_engine_library_info.cpp
     sed -i -e 's,\(static QString potentialLocalesPath =\).*,\1 QLatin1String("'$out'/translations/qtwebengine_locales");,' src/core/web_engine_library_info.cpp
 
+    # fix default SSL bundle location
+    sed -i -e 's,/cert.pem,/certs/ca-bundle.crt,' src/3rdparty/chromium/third_party/boringssl/src/crypto/x509/x509_def.c
+
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
         -importdir $out/lib/qt5/imports \
@@ -44,20 +48,33 @@ qtSubmodule {
         -docdir $out/share/doc/qt5"
   '';
   propagatedBuildInputs = [
-    dbus zlib alsaLib
-
     # Image formats
-    libjpeg libpng libtiff
+    libjpeg libpng libtiff libwebp
+
+    # Video formats
+    srtp libvpx
+
+    # Audio formats
+    libopus
 
     # Text rendering
-    fontconfig freetype harfbuzz icu
+    harfbuzz icu
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
+    dbus zlib minizip snappy nss protobuf jsoncpp libevent
+
+    # Audio formats
+    alsaLib
+
+    # Text rendering
+    fontconfig freetype
+
+    libcap
+    pciutils
 
     # X11 libs
     xlibs.xrandr libXScrnSaver libXcursor libXrandr xlibs.libpciaccess libXtst
     xlibs.libXcomposite
-
-    libcap
-    pciutils
   ];
   patches = [
     ./chromium-clang-update-py.patch

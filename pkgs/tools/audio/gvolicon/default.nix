@@ -13,7 +13,9 @@ stdenv.mkDerivation {
     librsvg wrapGAppsHook
   ];
 
-  makeFlags="PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  NIX_CFLAGS_COMPILE = [ "-D_POSIX_C_SOURCE" ];
 
   meta = {
     description = "A simple and lightweight volume icon that sits in your system tray";

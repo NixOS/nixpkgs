@@ -7,12 +7,12 @@ with lib;
 let
   cfg = config.services.buildbot-master;
   escapeStr = s: escape ["'"] s;
-  masterCfg = pkgs.writeText "master.cfg" ''
+  masterCfg = if cfg.masterCfg == null then pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
-     protocols     = { 'pb': {'port': ${cfg.bpPort} } },
+     protocols     = { 'pb': {'port': ${toString cfg.bpPort} } },
      title         = '${escapeStr cfg.title}',
      titleURL      = '${escapeStr cfg.titleUrl}',
      buildbotURL   = '${escapeStr cfg.buildbotUrl}',
@@ -27,9 +27,8 @@ let
       factory.addStep(step)
 
     ${cfg.extraConfig}
-  '';
-
-  configFile = if cfg.masterCfg == null then masterCfg else cfg.masterCfg;
+  ''
+  else cfg.masterCfg;
 
 in {
   options = {
@@ -63,19 +62,14 @@ in {
       extraConfig = mkOption {
         type = types.str;
         description = "Extra configuration to append to master.cfg";
-        default = "";
+        default = "c['buildbotNetUsageData'] = None";
       };
 
       masterCfg = mkOption {
-        type = with types; nullOr path;
-        description = ''
-          Optionally pass path to raw master.cfg file.
-          Other options in this configuration will be ignored.
-        '';
+        type = types.nullOr types.path;
+        description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = null;
-        example = literalExample ''
-          pkgs.writeText "master.cfg" "BuildmasterConfig = c = {}"
-        '';
+        example = "/etc/nixos/buildbot/master.cfg";
       };
 
       schedulers = mkOption {
@@ -91,17 +85,14 @@ in {
         type = types.listOf types.str;
         description = "List of Builders.";
         default = [
-          "util.BuilderConfig(name='runtests',workernames=['default-worker'],factory=factory)"
+          "util.BuilderConfig(name='runtests',workernames=['example-worker'],factory=factory)"
         ];
       };
 
       workers = mkOption {
         type = types.listOf types.str;
         description = "List of Workers.";
-        default = [
-          "worker.Worker('default-worker', 'password')"
-        ];
-        example = [ "worker.LocalWorker('default-worker')" ];
+        default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
       status = mkOption {
@@ -124,7 +115,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [ "nixbld" ];
+        default = [];
         description = "List of extra groups that the buildbot user should be a part of.";
       };
 
@@ -141,9 +132,8 @@ in {
       };
 
       bpPort = mkOption {
-        default = "9989";
-        type = types.string;
-        example = "tcp:10000:interface=127.0.0.1";
+        default = 9989;
+        type = types.int;
         description = "Port where the master will listen to Buildbot Worker.";
       };
 
@@ -185,17 +175,15 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.buildbot-ui;
-        description = ''
-          Package to use for buildbot.
-          <literal>buildbot-full</literal> is required in order to use local workers.
-        '';
-        example = pkgs.buildbot-full;
+        default = pkgs.buildbot-full;
+        defaultText = "pkgs.buildbot-full";
+        description = "Package to use for buildbot.";
+        example = literalExample "pkgs.buildbot-full";
       };
 
       packages = mkOption {
-        default = [ ];
-        example = [ pkgs.git ];
+        default = with pkgs; [ python27Packages.twisted git ];
+        example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
@@ -209,7 +197,7 @@ in {
 
     users.extraUsers = optional (cfg.user == "buildbot") {
       name = "buildbot";
-      description = "buildbot user";
+      description = "Buildbot User.";
       isNormalUser = true;
       createHome = true;
       home = cfg.home;
@@ -219,32 +207,34 @@ in {
     };
 
     systemd.services.buildbot-master = {
-      description = "Buildbot Continuous Integration Server";
-      after = [ "network.target" ];
+      description = "Buildbot Continuous Integration Server.";
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
 
-      serviceConfig = {
-        Type = "forking";
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot start ${cfg.buildbotDir}";
-      };
-
       preStart = ''
+        env > envvars
         mkdir -vp ${cfg.buildbotDir}
-        chown -c ${cfg.user}:${cfg.group} ${cfg.buildbotDir}
-        ln -sf ${configFile} ${cfg.buildbotDir}/master.cfg
+        ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
+        rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
       '';
 
-      postStart = ''
-        until [[ $(${pkgs.curl}/bin/curl -s --head -w '\n%{http_code}' http://localhost:${toString cfg.port} | tail -n1) =~ ^(200|403)$ ]]; do
-          sleep 1
-        done
-      '';
+      serviceConfig = {
+        Type = "simple";
+        User = cfg.user;
+        Group = cfg.group;
+        WorkingDirectory = cfg.home;
+        Environment = "PYTHONPATH=${cfg.package}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.www}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.waterfall-view}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.console-view}/lib/python2.7/site-packages:${pkgs.python27Packages.future}/lib/python2.7/site-packages:${pkgs.python27Packages.dateutil}/lib/python2.7/site-packages:${pkgs.python27Packages.six}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlalchemy}/lib/python2.7/site-packages:${pkgs.python27Packages.jinja2}/lib/python2.7/site-packages:${pkgs.python27Packages.markupsafe}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlalchemy_migrate}/lib/python2.7/site-packages:${pkgs.python27Packages.tempita}/lib/python2.7/site-packages:${pkgs.python27Packages.decorator}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlparse}/lib/python2.7/site-packages:${pkgs.python27Packages.txaio}/lib/python2.7/site-packages:${pkgs.python27Packages.autobahn}/lib/python2.7/site-packages:${pkgs.python27Packages.pyjwt}/lib/python2.7/site-packages:${pkgs.python27Packages.distro}/lib/python2.7/site-packages:${pkgs.python27Packages.pbr}/lib/python2.7/site-packages:${pkgs.python27Packages.urllib3}/lib/python2.7/site-packages";
+
+        # NOTE: call twistd directly with stdout logging for systemd
+        #ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
+        ExecStart = "${pkgs.python27Packages.twisted}/bin/twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
+      };
+
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ nand0p Mic92 ];
 
 }

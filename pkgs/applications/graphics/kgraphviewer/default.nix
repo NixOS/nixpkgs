@@ -1,5 +1,5 @@
 { stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
-, kdelibs, boost, graphviz
+, kdelibs4, boost, graphviz
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "13zhjs57xavzrj4nrlqs35n35ihvzij7hgbszf5fhlp2a4d4rrqs";
   };
 
-  buildInputs = [ kdelibs boost graphviz ];
+  buildInputs = [ kdelibs4 boost graphviz ];
   nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
 
   meta = with stdenv.lib; {

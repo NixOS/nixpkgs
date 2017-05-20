@@ -1,58 +1,136 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    cool.io (1.4.4)
-    elasticsearch (1.0.17)
-      elasticsearch-api (= 1.0.17)
-      elasticsearch-transport (= 1.0.17)
-    elasticsearch-api (1.0.17)
+    activesupport (5.0.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (~> 0.7)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
+    aws-sdk (2.7.0)
+      aws-sdk-resources (= 2.7.0)
+    aws-sdk-core (2.7.0)
+      aws-sigv4 (~> 1.0)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.7.0)
+      aws-sdk-core (= 2.7.0)
+    aws-sigv4 (1.0.0)
+    bson (1.12.5)
+    bzip2-ffi (1.0.0)
+      ffi (~> 1.0)
+    concurrent-ruby (1.0.4)
+    cool.io (1.4.5)
+    elasticsearch (1.0.18)
+      elasticsearch-api (= 1.0.18)
+      elasticsearch-transport (= 1.0.18)
+    elasticsearch-api (1.0.18)
       multi_json
-    elasticsearch-transport (1.0.17)
+    elasticsearch-transport (1.0.18)
       faraday
       multi_json
-    excon (0.49.0)
-    faraday (0.9.2)
+    excon (0.54.0)
+    faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
-    fluent-plugin-elasticsearch (1.5.0)
-      elasticsearch
+    ffi (1.9.17)
+    fluent-mixin-config-placeholders (0.4.0)
+      fluentd
+      uuidtools (>= 2.1.5)
+    fluent-mixin-plaintextformatter (0.2.6)
+      fluentd
+      ltsv
+    fluent-plugin-elasticsearch (1.9.2)
+      elasticsearch (< 1.1)
       excon
       fluentd (>= 0.10.43)
-    fluent-plugin-record-reformer (0.8.1)
+    fluent-plugin-kafka (0.5.0)
+      fluentd (>= 0.10.58, < 2)
+      ltsv
+      ruby-kafka (= 0.3.16.beta2)
+    fluent-plugin-kinesis (1.1.2)
+      aws-sdk (~> 2)
+      concurrent-ruby (~> 1)
+      fluentd (>= 0.10.58, < 2)
+      os (>= 0.9.6)
+      protobuf (>= 3.5.5)
+    fluent-plugin-mongo (0.7.16)
+      fluentd (>= 0.10.58, < 2)
+      mongo (~> 1.9)
+    fluent-plugin-record-reformer (0.8.2)
       fluentd
-    fluentd (0.14.0)
-      cool.io (>= 1.4.3, < 2.0.0)
+    fluent-plugin-rewrite-tag-filter (1.5.5)
+      fluentd
+    fluent-plugin-s3 (0.8.0)
+      aws-sdk (>= 2.3.22, < 3)
+      fluentd (>= 0.10.58, < 2)
+    fluent-plugin-scribe (0.10.14)
+      fluentd
+      thrift (~> 0.8.0)
+    fluent-plugin-webhdfs (0.5.2)
+      bzip2-ffi
+      fluent-mixin-config-placeholders (>= 0.3.0)
+      fluent-mixin-plaintextformatter (>= 0.2.1)
+      fluentd (>= 0.10.59)
+      webhdfs (>= 0.6.0)
+    fluentd (0.14.11)
+      cool.io (~> 1.4.5)
       http_parser.rb (>= 0.5.1, < 0.7.0)
-      json (>= 1.4.3)
-      msgpack (>= 0.7.0)
-      serverengine (>= 1.6.4)
+      msgpack (>= 0.7.0, < 2.0.0)
+      serverengine (>= 2.0.4, < 3.0.0)
       sigdump (~> 0.2.2)
-      strptime (>= 0.1.7)
-      tzinfo (>= 1.0.0)
-      tzinfo-data (>= 1.0.0)
+      strptime (~> 0.1.7)
+      tzinfo (~> 1.0)
+      tzinfo-data (~> 1.0)
       yajl-ruby (~> 1.0)
     http_parser.rb (0.6.0)
-    json (1.8.3)
-    msgpack (0.7.6)
+    i18n (0.7.0)
+    jmespath (1.3.1)
+    ltsv (0.1.0)
+    middleware (0.1.0)
+    minitest (5.10.1)
+    mongo (1.12.5)
+      bson (= 1.12.5)
+    msgpack (1.0.2)
     multi_json (1.12.1)
     multipart-post (2.0.0)
-    serverengine (1.6.4)
+    os (0.9.6)
+    protobuf (3.6.12)
+      activesupport (>= 3.2)
+      middleware
+      thor
+      thread_safe
+    public_suffix (2.0.5)
+    ruby-kafka (0.3.16.beta2)
+    serverengine (2.0.4)
       sigdump (~> 0.2.2)
     sigdump (0.2.4)
-    strptime (0.1.8)
+    strptime (0.1.9)
+    thor (0.19.4)
     thread_safe (0.3.5)
+    thrift (0.8.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2016.4)
+    tzinfo-data (1.2016.10)
       tzinfo (>= 1.0.0)
-    yajl-ruby (1.2.1)
+    uuidtools (2.1.5)
+    webhdfs (0.8.0)
+      addressable
+    yajl-ruby (1.3.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   fluent-plugin-elasticsearch
+  fluent-plugin-kafka
+  fluent-plugin-kinesis
+  fluent-plugin-mongo
   fluent-plugin-record-reformer
+  fluent-plugin-rewrite-tag-filter
+  fluent-plugin-s3
+  fluent-plugin-scribe
+  fluent-plugin-webhdfs
   fluentd
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

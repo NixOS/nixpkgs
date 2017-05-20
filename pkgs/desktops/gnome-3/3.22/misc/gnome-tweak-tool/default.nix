@@ -4,7 +4,7 @@
 , gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
 let
-  python = python2Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
+  pythonEnv = python2Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
 in stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
@@ -19,11 +19,10 @@ in stdenv.mkDerivation rec {
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
                   libnotify gnome3.gnome_shell
                   libsoup gnome3.gnome_settings_daemon gnome3.nautilus
-                  gnome3.gnome_desktop wrapGAppsHook ];
+                  gnome3.gnome_desktop wrapGAppsHook
+                  python2Packages.pygobject3.dev pythonEnv gobjectIntrospection ];
 
-  propagatedBuildInputs = [ python gobjectIntrospection ];
-
-  PYTHONPATH = "$out/${python.python.sitePackages}";
+  PYTHONPATH = "$out/${pythonEnv.python.sitePackages}";
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "roboto-${version}";
-  version = "2.135";
+  version = "2.136";
 
   src = fetchurl {
     url = "https://github.com/google/roboto/releases/download/v${version}/roboto-unhinted.zip";
-    sha256 = "1ndlh36bcx4mhi58sxfx6ywbib586brh6s5sk3jyji78h1i7j8zr";
+    sha256 = "0yx3q5wbbl1qkxfx1fglzy3rvms98jr8fcfj70vvvz3r3lppv201";
   };
 
   nativeBuildInputs = [ unzip ];

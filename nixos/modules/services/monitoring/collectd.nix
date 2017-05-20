@@ -8,7 +8,7 @@ let
   conf = pkgs.writeText "collectd.conf" ''
     BaseDir "${cfg.dataDir}"
     PIDFile "${cfg.pidFile}"
-    AutoLoadPlugin ${if cfg.autoLoadPlugin then "true" else "false"}
+    AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
     Hostname "${config.networking.hostName}"
 
     LoadPlugin syslog

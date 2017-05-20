@@ -55,6 +55,7 @@ let
     kernelBaseConfig = stdenv.platform.kernelBaseConfig;
     kernelTarget = stdenv.platform.kernelTarget;
     autoModules = stdenv.platform.kernelAutoModules;
+    preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
     arch = stdenv.platform.kernelArch;
 
     crossAttrs = let
@@ -92,7 +93,7 @@ let
       echo "generating kernel configuration..."
       echo "$kernelConfig" > kernel-config
       DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           SRC=../$sourceRoot perl -w $generateConfig
+           PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
     '';
 
     installPhase = "mv .config $out";

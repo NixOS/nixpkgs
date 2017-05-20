@@ -6,6 +6,7 @@
 , stdenv
 , coreutils
 , gnugrep
+, targetPlatform
 }:
 
 /* As of this writing, known-good prefix/arch/simulator triples:
@@ -15,7 +16,12 @@
  * x86_64-apple-darwin14  | x86_64 | true
  */
 
-{ prefix, arch, simulator ? false }: let
+let
+
+  prefix = targetPlatform.config;
+  inherit (targetPlatform) arch;
+  simulator = targetPlatform.isiPhoneSimulator or false;
+
   sdkType = if simulator then "Simulator" else "OS";
 
   sdkVer = "10.2";
@@ -45,7 +51,7 @@
     '';
   };
 in {
-  cc = runCommand "${prefix}-cc" {} ''
+  cc = runCommand "${prefix}-cc" { passthru = { inherit sdkType sdkVer sdk; }; } ''
     mkdir -p $out/bin
     ln -sv ${wrapper}/bin/clang $out/bin/${prefix}-cc
     mkdir -p $out/nix-support

@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.23.4";
+  version = "0.23.5";
   name = "notmuch-${version}";
 
   passthru = {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0fs5crf8v3jghc8jnm61cv7wxhclcg88hi5894d8fma9kkixcv8h";
+    sha256 = "0ry2k9sdwd1vw8cf6svch8wk98523s07mwxvsf7b8kghqnrr89n6";
   };
 
   buildInputs = [
@@ -95,11 +95,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     make install-man
   '';
+  dontGzipMan = true; # already compressed
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Mail indexer";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ chaoflow garbas ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage    = https://notmuchmail.org/;
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ chaoflow garbas ];
+    platforms   = platforms.unix;
   };
 }

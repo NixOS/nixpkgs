@@ -4,8 +4,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/nsf/termbox-go";
-      rev = "b6acae516ace002cb8105a89024544a1480655a5"; # master
-      sha256 = "0zf95qdd5bif9rw03hqk87x7d905p373bvsj0bl4gi16spqjbdil";
+      rev = "abe82ce5fb7a42fbd6784a5ceb71aff977e09ed8"; # master
+      sha256 = "156i8apkga8b3272kjhapyqwspgcfkrr9kpqwc5lii43k4swghpv";
     };
   }
   {
@@ -13,8 +13,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-runewidth";
-      rev = "d6bea18f789704b5f83375793155289da36a3c7f"; # v0.0.1
-      sha256 = "1hnigpn7rjbwd1ircxkyx9hvi0xmxr32b2jdy2jzw6b3jmcnz1fs";
+      rev = "9e777a8366cce605130a531d2cd6363d07ad7317"; # v0.0.2
+      sha256 = "0vkrfrz3fzn5n6ix4k8s0cg0b448459sldq8bp4riavsxm932jzb";
     };
   }
 ]

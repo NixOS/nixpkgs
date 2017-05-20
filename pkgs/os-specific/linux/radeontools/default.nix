@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     description = "Control the backlight and external video output of ATI Radeon Mobility graphics cards";
     homepage = http://fdd.com/software/radeon/;
     license = stdenv.lib.licenses.zlib;
+    broken = true;
   };
 }

@@ -17,8 +17,14 @@
    evaluation is taking place, and the configuration from environment variables
    or dot-files. */
 
-{ # The system (e.g., `i686-linux') for which to build the packages.
-  system
+{ # The system packages will be built on. See the manual for the
+  # subtle division of labor between these two `*System`s and the three
+  # `*Platform`s.
+  localSystem
+
+  # The system packages will ultimately be run on. Null if the two should be the
+  # same.
+, crossSystem ? null
 
 , # Allow a configuration attribute set to be passed in as an argument.
   config ? {}
@@ -27,16 +33,14 @@
   overlays ? []
 
 , # A function booting the final package set for a specific standard
-  # environment. See below for the arguments given to that function,
-  # the type of list it returns.
+  # environment. See below for the arguments given to that function, the type of
+  # list it returns.
   stdenvStages ? import ../stdenv
-
-, crossSystem ? null
-, platform ? assert false; null
 } @ args:
 
 let # Rename the function arguments
   configExpr = config;
+  crossSystem0 = crossSystem;
 
 in let
   lib = import ../../lib;
@@ -49,12 +53,15 @@ in let
     then configExpr { inherit pkgs; }
     else configExpr;
 
-  # Allow setting the platform in the config file. Otherwise, let's use a
-  # reasonable default.
-  platform =
-    args.platform
-    or ( config.platform
-      or ((import ./platforms.nix).selectPlatformBySystem system) );
+  # From a minimum of `system` or `config` (actually a target triple, *not*
+  # nixpkgs configuration), infer the other one and platform as needed.
+  localSystem = lib.systems.elaborate (
+    # Allow setting the platform in the config file. This take precedence over
+    # the inferred platform, but not over an explicitly passed-in one.
+    builtins.intersectAttrs { platform = null; } config
+    // args.localSystem);
+
+  crossSystem = lib.mapNullable lib.systems.elaborate crossSystem0;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
@@ -71,7 +78,8 @@ in let
   # To put this in concrete terms, this function is basically just used today to
   # use package for a different platform for the current platform (namely cross
   # compiling toolchains and 32-bit packages on x86_64). In both those cases we
-  # want the provided non-native `system` argument to affect the stdenv chosen.
+  # want the provided non-native `localSystem` argument to affect the stdenv
+  # chosen.
   nixpkgsFun = newArgs: import ./. (args // newArgs);
 
   # Partially apply some arguments for building bootstraping stage pkgs
@@ -83,7 +91,7 @@ in let
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
 
   stages = stdenvStages {
-    inherit lib system platform crossSystem config overlays;
+    inherit lib localSystem crossSystem config overlays;
   };
 
   pkgs = boot stages;

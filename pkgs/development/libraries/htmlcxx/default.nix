@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "htmlcxx-${version}";
-  version = "0.85";
+  version = "0.86";
 
   src = fetchurl {
     url = "mirror://sourceforge/htmlcxx/htmlcxx/${version}/${name}.tar.gz";
-    sha256 = "1rdsjrcjkf7mi3182lq4v5wn2wncw0ziczagaqnzi0nwmp2a00mb";
+    sha256 = "1hgmyiad3qgbpf2dvv2jygzj6jpz4dl3n8ds4nql68a4l9g2nm07";
   };
 
   patches = [ ./ptrdiff.patch ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://htmlcxx.sourceforge.net/;
-    description = "htmlcxx is a simple non-validating css1 and html parser for C++";
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.linux;
+    description = "A simple non-validating css1 and html parser for C++";
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
   };
 }

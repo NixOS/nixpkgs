@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/junegunn/go-runewidth";
-      rev = "63c378b851290989b19ca955468386485f118c65";
-      sha256 = "1z5mhfrpqdssn3603vwd95w69z28igwq96lh7b9rrdcx440i822d";
+      rev = "14207d285c6c197daabb5c9793d63e7af9ab2d50";
+      sha256 = "0y6yq9zd4kh7fimnc00r3h9pr2pwa5j85b3jcn5dyfamsnm2xdsv";
     };
   }
   {
@@ -23,8 +23,17 @@
     fetch = {
       type = "git";
       url = "https://github.com/junegunn/go-shellwords";
-      rev = "35d512af75e283aae4ca1fc3d44b159ed66189a4";
-      sha256 = "08la0axabk9hiba9mm4ypp6a116qhvdlxa1jvkxhv3d4zpjsp4n7";
+      rev = "02e3cf038dcea8290e44424da473dd12be796a8a";
+      sha256 = "1pg7pl25wvpl2dbpyrv9p1r7prnqimxlf6136vn0dfm54j2x4mnr";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/crypto";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/crypto";
+      rev = "abc5fa7ad02123a41f02bf1391c9760f7586e608";
+      sha256 = "1kdfbz46jnpm2hip79db6jvw5m4z4vh7x7rr798mzqdn6fsad7jb";
     };
   }
 ]

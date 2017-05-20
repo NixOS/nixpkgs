@@ -22,11 +22,15 @@ in
 rec {
   # Try to keep this generally alphabetized
 
+  bfg-repo-cleaner = callPackage ./bfg-repo-cleaner { };
+
   bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
 
   darcsToGit = callPackage ./darcs-to-git { };
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
+
+  ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
 
@@ -56,13 +60,23 @@ rec {
 
   git-crypt = callPackage ./git-crypt { };
 
+  git-dit = callPackage ./git-dit { };
+
   git-extras = callPackage ./git-extras { };
 
   git-hub = callPackage ./git-hub { };
 
   git-imerge = callPackage ./git-imerge { };
 
+  git-octopus = callPackage ./git-octopus { };
+
+  git-open = callPackage ./git-open { };
+
   git-radar = callPackage ./git-radar { };
+
+  git-recent = callPackage ./git-recent {
+    utillinux = if stdenv.isLinux then utillinuxMinimal else null;
+  };
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
@@ -80,7 +94,7 @@ rec {
     inherit (darwin) Security;
   };
 
-  qgit = callPackage ./qgit { };
+  qgit = qt5.callPackage ./qgit { };
 
   stgit = callPackage ./stgit {
   };

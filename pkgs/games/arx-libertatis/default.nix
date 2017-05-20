@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, cmake, zlib, boost,
+{ stdenv, fetchFromGitHub, cmake, zlib, boost,
   openal, glm, freetype, mesa, glew, SDL2,
   dejavu_fonts, inkscape, optipng, imagemagick }:
 
 stdenv.mkDerivation rec {
   name = "arx-libertatis-${version}";
-  version = "2016-07-27";
+  version = "2017-02-26";
 
-  src = fetchgit {
-    url = "https://github.com/arx/ArxLibertatis";
-    rev = "e3aa6353f90886e7e9db2f4350ad9a232dd01c1e";
-    sha256 = "1hkkf0z607z8wxdikxq1ji120b3w7pxixq9qapdj1p54dzgbhgza";
+  src = fetchFromGitHub {
+    owner  = "arx";
+    repo   = "ArxLibertatis";
+    rev    = "0d2bb46025b2ad0fd5c8bcddd1cc04750282608d";
+    sha256 = "11z0ndhk802jr3w3z5gfqw064g98v99xin883q1qd36jw96s27p5";
   };
 
   buildInputs = [

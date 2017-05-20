@@ -508,7 +508,7 @@ sub screenshot {
 sub getTTYText {
     my ($self, $tty) = @_;
 
-    my ($status, $out) = $self->execute("fold -w 80 /dev/vcs${tty}");
+    my ($status, $out) = $self->execute("fold -w\$(stty -F /dev/tty${tty} size | awk '{print \$2}') /dev/vcs${tty}");
     return $out;
 }
 
@@ -542,16 +542,20 @@ sub getScreenText {
     $self->nest("performing optical character recognition", sub {
         my $tmpbase = Cwd::abs_path(".")."/ocr";
         my $tmpin = $tmpbase."in.ppm";
-        my $tmpout = "$tmpbase.ppm";
 
         $self->sendMonitorCommand("screendump $tmpin");
-        system("ppmtopgm $tmpin | pamscale 4 -filter=lanczos > $tmpout") == 0
-            or die "cannot scale screenshot";
+
+        my $magickArgs = "-filter Catrom -density 72 -resample 300 "
+                       . "-contrast -normalize -despeckle -type grayscale "
+                       . "-sharpen 1 -posterize 3 -negate -gamma 100 "
+                       . "-blur 1x65535";
+        my $tessArgs = "-c debug_file=/dev/null --psm 11 --oem 2";
+
+        $text = `convert $magickArgs $tmpin tiff:- | tesseract - - $tessArgs`;
+        my $status = $? >> 8;
         unlink $tmpin;
-        system("tesseract $tmpout $tmpbase") == 0 or die "OCR failed";
-        unlink $tmpout;
-        $text = read_file("$tmpbase.txt");
-        unlink "$tmpbase.txt";
+
+        die "OCR failed with exit code $status" if $status != 0;
     });
     return $text;
 }
@@ -607,34 +611,25 @@ sub waitForWindow {
 sub copyFileFromHost {
     my ($self, $from, $to) = @_;
     my $s = `cat $from` or die;
-    $self->mustSucceed("echo '$s' > $to"); # !!! escaping
+    $s =~ s/'/'\\''/g;
+    $self->mustSucceed("echo '$s' > $to");
 }
 
 
 my %charToKey = (
-    '!' => "shift-0x02",
-    '@' => "shift-0x03",
-    '#' => "shift-0x04",
-    '$' => "shift-0x05",
-    '%' => "shift-0x06",
-    '^' => "shift-0x07",
-    '&' => "shift-0x08",
-    '*' => "shift-0x09",
-    '(' => "shift-0x0A",
-    ')' => "shift-0x0B",
-    '-' => "0x0C", '_' => "shift-0x0C",
-    '=' => "0x0D", '+' => "shift-0x0D",
-    '[' => "0x1A", '{' => "shift-0x1A",
-    ']' => "0x1B", '}' => "shift-0x1B",
-    ';' => "0x27", ':' => "shift-0x27",
-   '\'' => "0x28", '"' => "shift-0x28",
-    '`' => "0x29", '~' => "shift-0x29",
-   '\\' => "0x2B", '|' => "shift-0x2B",
-    ',' => "0x33", '<' => "shift-0x33",
-    '.' => "0x34", '>' => "shift-0x34",
-    '/' => "0x35", '?' => "shift-0x35",
-    ' ' => "spc",
-   "\n" => "ret",
+    'A' => "shift-a", 'N' => "shift-n",  '-' => "0x0C", '_' => "shift-0x0C", '!' => "shift-0x02",
+    'B' => "shift-b", 'O' => "shift-o",  '=' => "0x0D", '+' => "shift-0x0D", '@' => "shift-0x03",
+    'C' => "shift-c", 'P' => "shift-p",  '[' => "0x1A", '{' => "shift-0x1A", '#' => "shift-0x04",
+    'D' => "shift-d", 'Q' => "shift-q",  ']' => "0x1B", '}' => "shift-0x1B", '$' => "shift-0x05",
+    'E' => "shift-e", 'R' => "shift-r",  ';' => "0x27", ':' => "shift-0x27", '%' => "shift-0x06",
+    'F' => "shift-f", 'S' => "shift-s", '\'' => "0x28", '"' => "shift-0x28", '^' => "shift-0x07",
+    'G' => "shift-g", 'T' => "shift-t",  '`' => "0x29", '~' => "shift-0x29", '&' => "shift-0x08",
+    'H' => "shift-h", 'U' => "shift-u", '\\' => "0x2B", '|' => "shift-0x2B", '*' => "shift-0x09",
+    'I' => "shift-i", 'V' => "shift-v",  ',' => "0x33", '<' => "shift-0x33", '(' => "shift-0x0A",
+    'J' => "shift-j", 'W' => "shift-w",  '.' => "0x34", '>' => "shift-0x34", ')' => "shift-0x0B",
+    'K' => "shift-k", 'X' => "shift-x",  '/' => "0x35", '?' => "shift-0x35",
+    'L' => "shift-l", 'Y' => "shift-y",  ' ' => "spc",
+    'M' => "shift-m", 'Z' => "shift-z", "\n" => "ret",
 );
 
 

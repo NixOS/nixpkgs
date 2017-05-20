@@ -1,74 +1,44 @@
-{ stdenv, fetchurl, kernel ? null, xorg, zlib, perl
-, gtk2, atk, pango, glib, gdk_pixbuf, cairo, nukeReferences
-, # Whether to build the libraries only (i.e. not the kernel module or
-  # nvidia-settings).  Used to support 32-bit binaries on 64-bit
-  # Linux.
-  libsOnly ? false
-}:
-
-with stdenv.lib;
-
-assert (!libsOnly) -> kernel != null;
+{ callPackage }:
 
 let
-
-  versionNumber = "375.26";
-
-  # Policy: use the highest stable version as the default (on our master).
-  inherit (stdenv.lib) makeLibraryPath;
-
-  nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
-
+  generic = args: callPackage (import ./generic.nix args) { };
 in
-
-stdenv.mkDerivation {
-  name = "nvidia-x11-${versionNumber}${nameSuffix}";
-
-  builder = ./builder.sh;
-
-  src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "http://download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0yv19rkz2wzzj0fygfjb1mh21iy769kff3yg2kzk8bsiwnmcyybw";
-      }
-    else if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "http://download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}.run";
-        sha256 = "1kqy9ayja3g5znj2hzx8pklz8qi0b0l9da7c3ldg3hlxf31v4hjg";
-      }
-    else throw "nvidia-x11 does not support platform ${stdenv.system}";
-
-  inherit versionNumber libsOnly;
-  inherit (stdenv) system;
-
-  kernel = if libsOnly then null else kernel.dev;
-
-  hardeningDisable = [ "pic" "format" ];
-
-  dontStrip = true;
-
-  glPath      = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr];
-  cudaPath    = makeLibraryPath [zlib stdenv.cc.cc];
-  openclPath  = makeLibraryPath [zlib];
-  allLibPath  = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr zlib stdenv.cc.cc];
-
-  gtkPath = optionalString (!libsOnly) (makeLibraryPath
-    [ gtk2 atk pango glib gdk_pixbuf cairo ] );
-  programPath = makeLibraryPath [ xorg.libXv ];
-
-
-
-  buildInputs = [ perl nukeReferences ];
-
-  disallowedReferences = if libsOnly then [] else [ kernel.dev ];
-
-  meta = with stdenv.lib.meta; {
-    homepage = http://www.nvidia.com/object/unix.html;
-    description = "X.org driver and kernel module for NVIDIA graphics cards";
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.vcunat ];
-    priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
+{
+  # Policy: use the highest stable version as the default (on our master).
+  stable = generic {
+    version = "375.66";
+    sha256_32bit = "0k7ib5ah3c2apzgzxlq75l48zm8901mbwj7slv18k3rhk8j0w8i9";
+    sha256_64bit = "1h01s8brpz42jwc24dsflm4psd3zsy26ds98h0adgwx51dbpzqsr";
+    settingsSha256 = "0bpdayyqw4cpgl7bgddfz6w5j8y3wsgr89p5vxnzgk9g0vgqxh5h";
+    persistencedSha256 = "113rllf9l26z546jjfijpxllp17qcpawblzxvsqc6rbzbkmvcdwi";
   };
+
+  beta = generic {
+    version = "381.22";
+    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
+    sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
+    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
+    persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
+  };
+
+  legacy_340 = generic {
+    version = "340.102";
+    sha256_32bit = "0a484i37j00d0rc60q0bp6fd2wfrx2c4r32di9w5svqgmrfkvcb1";
+    sha256_64bit = "0nnz51d48a5fpnnmlz1znjp937k3nshdq46fw1qm8h00dkrd55ib";
+    settingsSha256 = "0nm5c06b09p6wsxpyfaqrzsnal3p1047lk6p4p2a0vksb7id9598";
+    persistencedSha256 = "1jwmggbph9zd8fj4syihldp2a5bxff7q1i2l9c55xz8cvk0rx08i";
+    useGLVND = false;
+  };
+
+  legacy_304 = generic {
+    version = "304.134";
+    sha256_32bit = "178wx0a2pmdnaypa9pq6jh0ii0i8ykz1sh1liad9zfriy4d8kxw4";
+    sha256_64bit = "0pydw7nr4d2dply38kwvjbghsbilbp2q0mas4nfq5ad050d2c550";
+    settingsSha256 = "0q92xw4fr9p5nbhj1plynm50d32881861daxfwrisywszqijhmlf";
+    persistencedSha256 = null;
+    useGLVND = false;
+    useProfiles = false;
+  };
+
+  legacy_173 = callPackage ./legacy173.nix { };
 }

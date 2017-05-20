@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, python, swig, gd, libxml2, tcl, libusb, pkgconfig,
+{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb, pkgconfig,
  boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ppp6fc2h9d8p30j2s9wlqd620kmnny4wd8fc3jxd6gxwi4lbjm2";
   };
 
-  buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python swig gd libxml2
+  buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
                   tcl libusb pkgconfig boost libtool ];
 
   configureFlags = [ "--with-perl-binding" "--with-python-binding"

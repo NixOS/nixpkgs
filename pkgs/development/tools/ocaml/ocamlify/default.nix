@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   buildPhase     = "ocaml setup.ml -build";
   installPhase   = "ocaml setup.ml -install";
 
+  dontStrip = true;
+
   meta = {
     homepage = http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod;
     description = "Generate OCaml modules from source files";

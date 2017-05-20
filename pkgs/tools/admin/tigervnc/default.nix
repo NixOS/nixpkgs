@@ -1,26 +1,29 @@
-{ stdenv, fetchgit, xorg
-, autoconf, automake, cvs, libtool, nasm, pixman, xkeyboard_config
-, fontDirectories, libgcrypt, gnutls, pam, flex, bison, gettext
-, cmake, libjpeg_turbo, fltk, nettle, libiconv, libtasn1
-}:
+{ stdenv, fetchFromGitHub
+, xorg, xkeyboard_config, zlib
+, libjpeg_turbo, pixman, fltk
+, fontDirectories
+, cmake, gettext, libtool
+, glproto, mesa_glu
+, gnutls, pam, nettle
+, xterm }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.8.0pre20170419";
   name = "tigervnc-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/TigerVNC/tigervnc/";
-    sha256 = "1b6n2gq6078x8dwz471a68jrkgpcxmbiivmlsakr42vrndm7niz3";
-    rev = "e25272fc74ef09987ccaa33b9bf1736397c76fdf";
+  src = fetchFromGitHub {
+    owner = "TigerVNC";
+    repo = "tigervnc";
+    sha256 = "1y3fn7dwlkm7ilqn8bwyqj3bw7s7clnv7d4jml4wyvfihzz9j90b";
+    rev = "v1.7.90";
   };
 
   inherit fontDirectories;
 
   patchPhase = ''
-    sed -i -e 's,$(includedir)/pixman-1,${if stdenv ? cross then pixman.crossDrv else pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.crossDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver
     fontPath=
     for i in $fontDirectories; do
       for j in $(find $i -name fonts.dir); do
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir = true;
 
   postBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
     export CXXFLAGS="$CXXFLAGS -fpermissive"
     # Build Xvnc
     tar xf ${xorg.xorgserver.src}
@@ -66,27 +69,23 @@ stdenv.mkDerivation rec {
     make TIGERVNC_SRCDIR=`pwd`/../.. install
     popd
     rm -f $out/lib/xorg/protocol.txt
+
+    wrapProgram $out/bin/vncserver \
+      --prefix PATH : ${stdenv.lib.makeBinPath (with xorg; [ xterm twm xsetroot ]) }
   '';
 
-  crossAttrs = {
-    buildInputs = (map (x : x.crossDrv) (buildInputs ++ [
-      xorg.fixesproto xorg.damageproto xorg.xcmiscproto xorg.bigreqsproto xorg.randrproto xorg.renderproto
-      xorg.fontsproto xorg.videoproto xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
-      xorg.libxkbfile xorg.libXfont xorg.libpciaccess xorg.xineramaproto
-    ]));
-  };
+  buildInputs = with xorg; [
+    libjpeg_turbo fltk pixman
+    gnutls pam nettle
+    fixesproto damageproto compositeproto randrproto
+    xcmiscproto bigreqsproto randrproto renderproto
+    fontsproto videoproto scrnsaverproto resourceproto presentproto
+    utilmacros libXtst libXext libX11 libXext libICE libXi libSM libXft
+    libxkbfile libXfont2 libpciaccess xineramaproto
+    glproto mesa_glu
+  ] ++ xorgserver.buildInputs;
 
-  buildInputs =
-    [ xorg.libX11 xorg.libXext gettext xorg.libICE xorg.libXtst xorg.libXi xorg.libSM xorg.libXft
-      nasm libgcrypt gnutls pam pixman libjpeg_turbo fltk xorg.xineramaproto
-      xorg.libXinerama xorg.libXcursor nettle libiconv libtasn1
-    ];
-
-  nativeBuildInputs =
-    [ autoconf automake cvs xorg.utilmacros xorg.fontutil libtool flex bison
-      cmake gettext
-    ]
-      ++ xorg.xorgserver.nativeBuildInputs;
+  nativeBuildInputs = [ cmake zlib gettext libtool ] ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedNativeBuildInputs = xorg.xorgserver.propagatedNativeBuildInputs;
 

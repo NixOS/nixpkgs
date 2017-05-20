@@ -1,8 +1,8 @@
-{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub, writeText }:
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.15.9";
+  version = "0.16.7";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,10 +11,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0r099mk9r6f52qqhx0ifb1xa8f2isqvyza80z9mcpi5zkd96174l";
+    sha256 = "11ka5n7mrm5pb9riah28zyshvfz2svm4wn6fbama39yp6sc01x23";
   };
 
   outputs = [ "bin" "out" "man" ];
+
+  fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
 
@@ -25,19 +27,18 @@ buildGoPackage rec {
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
   '';
 
+  preInstall = ''
+    mkdir -p $bin/share/fish/vendor_functions.d $bin/share/fish/vendor_conf.d
+    cp $src/shell/key-bindings.fish $bin/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    cp ${fishHook} $bin/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+  '';
+
   postInstall = ''
     cp $src/bin/fzf-tmux $bin/bin
     mkdir -p $man/share/man
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
-  '';
-
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    # fixes cycle between $out and $bin
-    # otool -l shows that the binary includes an LC_RPATH to $out/lib
-    # it seems safe to remove that since but the directory does not exist.
-    install_name_tool -delete_rpath $out/lib $bin/bin/fzf
   '';
 
   meta = with stdenv.lib; {

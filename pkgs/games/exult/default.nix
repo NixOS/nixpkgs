@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  makeFlags = [ "DESTDIR=$(out)" ];
+
   postInstall =
     ''
       mkdir -p $out/share/exult/music

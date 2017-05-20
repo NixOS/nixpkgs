@@ -10,7 +10,6 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Enable the arbtt statistics capture service.
         '';
@@ -49,7 +48,7 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.arbtt = {
       description = "arbtt statistics capture service";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "default.target" ];
 
       serviceConfig = {
         Type = "simple";

@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  # Do not hardcode PATH to ${ecryptfs} as we need the script to invoke executables from /var/setuid-wrappers
+  # Do not hardcode PATH to ${ecryptfs} as we need the script to invoke executables from /run/wrappers/bin
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     cp $src $out/libexec/ecryptfs-helper.py
-    makeWrapper "${python2.interpreter} $out/libexec/ecryptfs-helper.py" $out/bin/ecryptfs-helper
+    makeWrapper "${python2.interpreter}" "$out/bin/ecryptfs-helper" --add-flags "$out/libexec/ecryptfs-helper.py"
   '';
 
   meta = with stdenv.lib; {

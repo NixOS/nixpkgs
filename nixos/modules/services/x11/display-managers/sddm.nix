@@ -9,7 +9,7 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
-  sddm = pkgs.sddm.override { inherit (cfg) themes; };
+  sddm = cfg.package;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
@@ -59,7 +59,7 @@ let
     [Autologin]
     User=${cfg.autoLogin.user}
     Session=${defaultSessionName}.desktop
-    Relogin=${if cfg.autoLogin.relogin then "true" else "false"}
+    Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
@@ -69,7 +69,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "none") ("+" + wm);
 
 in
 {
@@ -105,11 +105,12 @@ in
         '';
       };
 
-      themes = mkOption {
-        type = types.listOf types.package;
-        default = [];
+      package = mkOption {
+        type = types.package;
+        default = pkgs.sddm;
         description = ''
-          Extra packages providing themes.
+          The SDDM package to install.
+          The default package can be overridden to provide extra themes.
         '';
       };
 

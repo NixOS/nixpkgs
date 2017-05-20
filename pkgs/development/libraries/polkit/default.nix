@@ -5,7 +5,7 @@
 let
 
   system = "/var/run/current-system/sw";
-  setuid = "/var/setuid-wrappers"; #TODO: from <nixos> config.security.wrapperDir;
+  setuid = "/run/wrappers/bin"; #TODO: from <nixos> config.security.wrapperDir;
 
   foolVars = {
     SYSCONF = "/etc";
@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.freedesktop.org/wiki/Software/polkit;
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     platforms = platforms.linux;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

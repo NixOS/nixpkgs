@@ -116,6 +116,13 @@ let
           The URL scheme with which to fetch metrics from targets.
         '';
       };
+      params = mkOption {
+        type = types.attrsOf (types.listOf types.str);
+        default = {};
+        description = ''
+          Optional HTTP URL parameters.
+        '';
+      };
       basic_auth = mkOption {
         type = types.nullOr (types.submodule {
           options = {
@@ -134,6 +141,7 @@ let
           };
         });
         default = null;
+        apply = x: mapNullable _filter x;
         description = ''
           Optional http login credentials for metrics scraping.
         '';

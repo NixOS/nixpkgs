@@ -13,7 +13,7 @@ in
 
 {
   meta = {
-    maintainers = with maintainers; [ joachifm ];
+    maintainers = with maintainers; [ ];
     doc = ./grsecurity.xml;
   };
 
@@ -21,7 +21,6 @@ in
 
     enable = mkOption {
       type = types.bool;
-      example = true;
       default = false;
       description = ''
         Enable grsecurity/PaX.
@@ -30,7 +29,6 @@ in
 
     lockTunables = mkOption {
       type = types.bool;
-      example = false;
       default = true;
       description = ''
         Whether to automatically lock grsecurity tunables
@@ -43,7 +41,6 @@ in
 
     disableEfiRuntimeServices = mkOption {
       type = types.bool;
-      example = false;
       default = true;
       description = ''
         Whether to disable access to EFI runtime services.  Enabling EFI runtime

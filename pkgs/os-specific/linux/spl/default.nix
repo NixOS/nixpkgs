@@ -62,11 +62,11 @@ in
   assert buildKernel -> kernel != null;
   {
     splStable = common {
-      version = "0.6.5.8";
-      sha256 = "000yvaccqlkrq15sdz0734fp3lkmx58182cdcfpm4869i0q7rf0s";
+      version = "0.6.5.9";
+      sha256 = "15qpx2nhprmk14jgb7yqp9dvfb6i3hhhspi77kvian171b0a6112";
     };
     splUnstable = common {
-      version = "0.7.0-rc3";
-      sha256 = "09v5gh7mqdl3bfq5an9iiw9fw3l1skprclxdz7r19bw3ids3lfja";
+      version = "0.7.0-rc4";
+      sha256 = "13r5qwrdnaabqfy9fvizvdj4n4cvfv6zy4jh0vijzjvbjd4an9g1";
     };
   }

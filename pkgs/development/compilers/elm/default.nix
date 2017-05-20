@@ -40,7 +40,7 @@ let
       EOF
     '' + lib.concatStrings cmds;
 
-  hsPkgs = haskell.packages.ghc801.override {
+  hsPkgs = haskell.packages.ghc802.override {
     overrides = self: super:
       let hlib = haskell.lib;
           elmRelease = import ./packages/release.nix { inherit (self) callPackage; };
@@ -77,6 +77,21 @@ let
       in elmPkgs // {
         inherit elmPkgs;
         elmVersion = elmRelease.version;
+        # needed for elm-package
+        http-client = hlib.overrideCabal super.http-client (drv: {
+          version = "0.4.31.2";
+          sha256 = "12yq2l6bvmxg5w6cw5ravdh39g8smwn1j44mv36pfmkhm5402h8n";
+        });
+        http-client-tls = hlib.overrideCabal super.http-client-tls (drv: {
+          version = "0.2.4.1";
+          sha256 = "18wbca7jg15p0ds3339f435nqv2ng0fqc4bylicjzlsww625ij4d";
+        });
+        # https://github.com/elm-lang/elm-compiler/issues/1566
+        indents = hlib.overrideCabal super.indents (drv: {
+          version = "0.3.3";
+          sha256 = "16lz21bp9j14xilnq8yym22p3saxvc9fsgfcf5awn2a6i6n527xn";
+          libraryHaskellDepends = drv.libraryHaskellDepends ++ [super.concatenative];
+        });
       };
   };
 in hsPkgs.elmPkgs // {

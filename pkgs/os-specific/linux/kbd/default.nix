@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = ftp://ftp.altlinux.org/pub/people/legion/kbd/;
     description = "Linux keyboard utilities and keyboard maps";
     platforms = platforms.linux;
-    licenses = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

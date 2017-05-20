@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     
     # Copy the app and restore the write permissions
     appTmpDir=$(mktemp -d -t appTmpDir)
-    cp -r "$(echo ${app}/*.app)" $appTmpDir
+    cp -r "$(echo ${app}/*.app)" "$appTmpDir"
     chmod -R 755 "$(echo $appTmpDir/*.app)"
     
     # Wait for the simulator to start
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     read
     
     # Install the app
-    xcrun simctl install $udid "$(echo $appTmpDir/*.app)"
+    xcrun simctl install "$udid" "$(echo $appTmpDir/*.app)"
     
     # Remove the app tempdir
     rm -Rf $appTmpDir
@@ -45,4 +45,3 @@ stdenv.mkDerivation {
     chmod +x $out/bin/run-test-simulator
   '';
 }
-

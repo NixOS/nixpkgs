@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "veriT-${version}";
-  version = "201506";
+  version = "2016";
 
   src = fetchurl {
-    url = "http://www.verit-solver.org/distrib/${name}.tar.gz";
-    sha256 = "1cc9gcspw3namkdfypkians2j5dn224dsw6xx95qicad6033bsgk";
+    url = "http://www.verit-solver.org/distrib/veriT-stable2016.tar.gz";
+    sha256 = "0gvp4diz0qjg0y5ry0p1z7dkdkxw8l7jb8cdhvcnhl06jx977v4b";
   };
 
   nativeBuildInputs = [ autoreconfHook flex bison ];

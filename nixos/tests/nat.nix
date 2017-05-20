@@ -3,34 +3,47 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test.nix ({ pkgs, withFirewall, ... }:
+import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, ... }:
   let
     unit = if withFirewall then "firewall" else "nat";
   in
   {
-    name = "nat${if withFirewall then "WithFirewall" else "Standalone"}";
-  meta = with pkgs.stdenv.lib.maintainers; {
+    name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
+                 + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
+    meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ eelco chaoflow rob wkennington ];
     };
 
     nodes =
       { client =
           { config, pkgs, nodes, ... }:
-          { virtualisation.vlans = [ 1 ];
-            networking.firewall.allowPing = true;
-            networking.defaultGateway =
-              (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ip4).address;
-          };
+          lib.mkMerge [
+            { virtualisation.vlans = [ 1 ];
+              networking.firewall.allowPing = true;
+              networking.defaultGateway =
+                (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ip4).address;
+            }
+            (lib.optionalAttrs withConntrackHelpers {
+              networking.firewall.connectionTrackingModules = [ "ftp" ];
+              networking.firewall.autoLoadConntrackHelpers = true;
+            })
+          ];
 
         router =
           { config, pkgs, ... }:
-          { virtualisation.vlans = [ 2 1 ];
-            networking.firewall.enable = withFirewall;
-            networking.firewall.allowPing = true;
-            networking.nat.enable = true;
-            networking.nat.internalIPs = [ "192.168.1.0/24" ];
-            networking.nat.externalInterface = "eth1";
-          };
+          lib.mkMerge [
+            { virtualisation.vlans = [ 2 1 ];
+              networking.firewall.enable = withFirewall;
+              networking.firewall.allowPing = true;
+              networking.nat.enable = true;
+              networking.nat.internalIPs = [ "192.168.1.0/24" ];
+              networking.nat.externalInterface = "eth1";
+            }
+            (lib.optionalAttrs withConntrackHelpers {
+              networking.firewall.connectionTrackingModules = [ "ftp" ];
+              networking.firewall.autoLoadConntrackHelpers = true;
+            })
+          ];
 
         server =
           { config, pkgs, ... }:
@@ -66,7 +79,8 @@ import ./make-test.nix ({ pkgs, withFirewall, ... }:
         $client->succeed("curl -v ftp://server/foo.txt >&2");
 
         # Test whether active FTP works.
-        $client->succeed("curl -v -P - ftp://server/foo.txt >&2");
+        $client->${if withConntrackHelpers then "succeed" else "fail"}(
+          "curl -v -P - ftp://server/foo.txt >&2");
 
         # Test ICMP.
         $client->succeed("ping -c 1 router >&2");

@@ -5,8 +5,8 @@ assert stdenv.isLinux;
 
 let
   inherit (pythonPackages) python;
-  pythonpath = "${pythonPackages.dbus}/lib/${python.libPrefix}/site-packages:"
-    + "${pythonPackages.pygobject}/lib/${python.libPrefix}/site-packages";
+  pythonpath = "${pythonPackages.dbus-python}/lib/${python.libPrefix}/site-packages:"
+    + "${pythonPackages.pygobject2}/lib/${python.libPrefix}/site-packages";
 in stdenv.mkDerivation rec {
   name = "bluez-4.101";
    
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
       readline libsndfile
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
-      # gstreamer gst_plugins_base 
+      # gstreamer gst-plugins-base 
     ];
 
   configureFlags = [

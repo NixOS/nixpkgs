@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, jre }:
 
 let
-  rev = "1.37.1";
+  rev = "1.37.10";
   appdir = "share/emscripten";
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "0xl8lv0ihxsnwnhma3i34pkbz0v1yyc93ac6mdqmzv6fx2wczm04";
+    sha256 = "08f3zagxzsj96i09gjg1djd1bmy1gr1ar8n96mzg3ykaygf82d0s";
     inherit rev;
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     echo "NODE_JS = '${nodejs}/bin/node'" >> $out/${appdir}/config
     echo "JS_ENGINES = [NODE_JS]" >> $out/${appdir}/config
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
-    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/compiler.jar'" >> $out/${appdir}/config
+    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
   '';
 

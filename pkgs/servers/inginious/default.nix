@@ -4,14 +4,14 @@ with lib;
 let
   pythonPackages = python2Packages;
 
-  docker_1_7_2 = pythonPackages.docker.override rec {
+  docker_1_7_2 = pythonPackages.docker.overrideAttrs (oldAttrs: rec {
     name = "docker-py-1.7.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docker-py/${name}.tar.gz";
       sha256 = "0k6hm3vmqh1d3wr9rryyif5n4rzvcffdlb1k4jvzp7g4996d3ccm";
     };
-  };
+  });
 
   webpy-custom = pythonPackages.web.override {
     name = "web.py-INGI";
@@ -37,7 +37,7 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with pythonPackages; [
-    requests2
+    requests
     cgroup-utils docker_1_7_2 docutils PyLTI mock pygments
     pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
     websocket_client watchdog webpy-custom flup

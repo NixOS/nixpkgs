@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     (mkEnable true "pinentry-qt")
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {

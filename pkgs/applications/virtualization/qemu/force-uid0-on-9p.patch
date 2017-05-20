@@ -1,8 +1,8 @@
 diff --git a/hw/9pfs/9p-local.c b/hw/9pfs/9p-local.c
-index 3f271fc..dc273f4 100644
+index 45e9a1f9b0..494ee00c66 100644
 --- a/hw/9pfs/9p-local.c
 +++ b/hw/9pfs/9p-local.c
-@@ -45,6 +45,23 @@
+@@ -84,6 +84,23 @@ static void unlinkat_preserve_errno(int dirfd, const char *path, int flags)
  
  #define VIRTFS_META_DIR ".virtfs_metadata"
  
@@ -23,10 +23,10 @@ index 3f271fc..dc273f4 100644
 +    return 0;
 +}
 +
- static char *local_mapped_attr_path(FsContext *ctx, const char *path)
+ static FILE *local_fopenat(int dirfd, const char *name, const char *mode)
  {
-     int dirlen;
-@@ -128,6 +145,8 @@ static int local_lstat(FsContext *fs_ctx, V9fsPath *fs_path, struct stat *stbuf)
+     int fd, o_mode = 0;
+@@ -161,6 +178,8 @@ static int local_lstat(FsContext *fs_ctx, V9fsPath *fs_path, struct stat *stbuf)
      if (err) {
          goto err_out;
      }
@@ -35,28 +35,17 @@ index 3f271fc..dc273f4 100644
      if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
          /* Actual credentials are part of extended attrs */
          uid_t tmp_uid;
-@@ -462,6 +481,11 @@ static ssize_t local_pwritev(FsContext *ctx, V9fsFidOpenState *fs,
-     return ret;
- }
- 
-+static inline int maybe_chmod(const char *path, mode_t mode)
-+{
-+    return is_in_store_path(path) ? 0 : chmod(path, mode);
-+}
-+
- static int local_chmod(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+@@ -280,6 +299,9 @@ static int fchmodat_nofollow(int dirfd, const char *name, mode_t mode)
  {
-     char *buffer;
-@@ -477,7 +501,7 @@ static int local_chmod(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
-     } else if ((fs_ctx->export_flags & V9FS_SM_PASSTHROUGH) ||
-                (fs_ctx->export_flags & V9FS_SM_NONE)) {
-         buffer = rpath(fs_ctx, path);
--        ret = chmod(buffer, credp->fc_mode);
-+        ret = maybe_chmod(buffer, credp->fc_mode);
-         g_free(buffer);
-     }
-     return ret;
-@@ -621,6 +645,8 @@ static int local_fstat(FsContext *fs_ctx, int fid_type,
+     int fd, ret;
+ 
++    if (is_in_store_path(name))
++        return 0;
++
+     /* FIXME: this should be handled with fchmodat(AT_SYMLINK_NOFOLLOW).
+      * Unfortunately, the linux kernel doesn't implement it yet. As an
+      * alternative, let's open the file and use fchmod() instead. This
+@@ -661,6 +683,8 @@ static int local_fstat(FsContext *fs_ctx, int fid_type,
      if (err) {
          return err;
      }
@@ -65,13 +54,28 @@ index 3f271fc..dc273f4 100644
      if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
          /* Actual credentials are part of extended attrs */
          uid_t tmp_uid;
-@@ -916,7 +942,8 @@ static int local_chown(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+@@ -795,8 +819,11 @@ static int local_symlink(FsContext *fs_ctx, const char *oldpath,
+         if (err) {
+             goto out;
+         }
+-        err = fchownat(dirfd, name, credp->fc_uid, credp->fc_gid,
+-                       AT_SYMLINK_NOFOLLOW);
++        if (is_in_store_path(name))
++            err = 0;
++        else
++            err = fchownat(dirfd, name, credp->fc_uid, credp->fc_gid,
++                           AT_SYMLINK_NOFOLLOW);
+         if (err == -1) {
+             /*
+              * If we fail to change ownership and if we are
+@@ -911,7 +938,9 @@ static int local_chown(FsContext *fs_ctx, V9fsPath *fs_path, FsCred *credp)
+         goto out;
+     }
+ 
+-    if ((credp->fc_uid == -1 && credp->fc_gid == -1) ||
++    if (is_in_store_path(name)) {
++        ret = 0;
++    } else if ((credp->fc_uid == -1 && credp->fc_gid == -1) ||
          (fs_ctx->export_flags & V9FS_SM_PASSTHROUGH) ||
          (fs_ctx->export_flags & V9FS_SM_NONE)) {
-         buffer = rpath(fs_ctx, path);
--        ret = lchown(buffer, credp->fc_uid, credp->fc_gid);
-+        ret = is_in_store_path(buffer)
-+            ? 0 : lchown(buffer, credp->fc_uid, credp->fc_gid);
-         g_free(buffer);
-     } else if (fs_ctx->export_flags & V9FS_SM_MAPPED) {
-         buffer = rpath(fs_ctx, path);
+         ret = fchownat(dirfd, name, credp->fc_uid, credp->fc_gid,

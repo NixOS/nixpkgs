@@ -11,7 +11,7 @@ import ./make-test.nix ({ pkgs, ... }:
 let
 
   # Some random file to serve.
-  file = pkgs.nixUnstable.src;
+  file = pkgs.hello.src;
 
   miniupnpdConf = nodes: pkgs.writeText "miniupnpd.conf"
     ''

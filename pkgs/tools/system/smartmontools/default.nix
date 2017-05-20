@@ -1,30 +1,31 @@
-{ stdenv, fetchurl
-, IOKit ? null }:
+{ stdenv, fetchurl, IOKit ? null , ApplicationServices ? null }:
 
 let
-  version = "6.4";
+
+  version = "6.5";
+
+  dbrev = "4391";
   drivedbBranch = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}_DRIVEDB";
-  dbrev = "4167";
   driverdb = fetchurl {
     url = "http://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "14rv1cxbpmnq12hjwr3icjiahx5i0ak7j69310c09rah0241l5j1";
+    sha256 = "1da99m81wr0rjdhcz2xx0sbbrqxkxffja2kllg4srmhih7fps5p1";
     name = "smartmontools-drivedb.h";
   };
+
 in
+
 stdenv.mkDerivation rec {
   name = "smartmontools-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "11bsxcghh7adzdklcslamlynydxb708vfz892d5w7agdq405ddza";
+    sha256 = "1g25r6sx85b5lay5n6sbnqv05qxzj6xsafsp93hnrg1h044bps49";
   };
 
-  buildInputs = [] ++ stdenv.lib.optional stdenv.isDarwin IOKit;
+  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
 
-  patchPhase = ''
-    cp ${driverdb} drivedb.h
-    sed -i -e 's@which which >/dev/null || exit 1@alias which="type -p"@' update-smart-drivedb.in
-  '';
+  patches = [ ./smartmontools.patch ];
+  postPatch = "cp -v ${driverdb} drivedb.h";
 
   meta = with stdenv.lib; {
     description = "Tools for monitoring the health of hard drives";

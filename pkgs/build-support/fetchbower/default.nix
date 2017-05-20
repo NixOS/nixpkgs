@@ -1,4 +1,4 @@
-{ stdenv, lib, bower2nix }:
+{ stdenv, lib, bower2nix, cacert }:
 let
   bowerVersion = version:
     let
@@ -9,6 +9,7 @@ let
 
   fetchbower = name: version: target: outputHash: stdenv.mkDerivation {
     name = "${name}-${bowerVersion version}";
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     buildCommand = ''
       fetch-bower --quiet --out=$PWD/out "${name}" "${target}" "${version}"
       # In some cases, the result of fetchBower is different depending

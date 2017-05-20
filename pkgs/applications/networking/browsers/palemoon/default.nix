@@ -1,23 +1,23 @@
 { stdenv, fetchFromGitHub, makeDesktopItem
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
 , dbus, dbus_glib, file, fontconfig, freetype
-, gstreamer, gst_plugins_base, gst_all_1
+, gstreamer, gst-plugins-base, gst_all_1
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
-, libstartup_notification, libvpx, makeWrapper, mesa 
-, nspr, nss, pango, perl, python, libpulseaudio, sqlite 
+, libstartup_notification, libvpx, makeWrapper, mesa
+, nspr, nss, pango, perl, python, libpulseaudio, sqlite
 , unzip, xlibs, which, yasm, zip, zlib
 }:
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.0.3";
+  version = "27.2.1";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
-    rev    = "c09119484da17c682a66e32bacbffb8cff411608";
-    sha256 = "1i4hp1lz0xaryy4zpncr67gbqg8v7a2cnyqjwvs2an86rk1vg913";
+    rev    = version + "_Release";
+    sha256 = "1yyipxd5lmavf4aca4vrcnp7hb8zkn4sv2zp6n2cm6w4pxlza0g4";
   };
 
   desktopItem = makeDesktopItem {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib bzip2 cairo dbus dbus_glib file fontconfig freetype
-    gst_plugins_base gstreamer gst_all_1.gst-plugins-base gtk2
+    gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
     hunspell icu libevent libjpeg libnotify libstartup_notification
     libvpx makeWrapper mesa nspr nss pango perl pkgconfig python
     libpulseaudio sqlite unzip which yasm zip zlib
@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications
     cd $builddir
     $src/mach install
   '';

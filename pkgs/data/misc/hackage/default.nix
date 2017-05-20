@@ -6,6 +6,6 @@
 fetchFromGitHub {
   owner = "commercialhaskell";
   repo = "all-cabal-hashes";
-  rev = "5c5b04af472eb6c2854b21cb52ee6324252280de";
-  sha256 = "1cnr350044yrlg7wa09fmdarl7y9gkydh25lv94wcqg3w9cdv0fb";
+  rev = "53fcf983669a3f0cdfd795fec28ecb40740a64ca";
+  sha256 = "0jfrr6mjb3x1ybgrsinhm0nl3jmdjyf9mghpgsm75lgr83cm12a5";
 }

@@ -1,28 +1,38 @@
 { stdenv, fetchurl, pkgconfig, gnutls, jansson, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit }:
+, systemd, nettle, libedit, zlib, libiconv, fetchpatch
+}:
+
+let inherit (stdenv.lib) optional optionals; in
 
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "0y9nhp9lfmxv4iy1xg7l4lfxv4168qhag26wwg0dbi0zjpkd790b";
+    sha256 = "37da7fcf1f194bd6376c63d8c4fa28a21899b56a3f3b63dba7095740a5752c52";
   };
 
   outputs = [ "bin" "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls jansson liburcu lmdb libcap_ng libidn
-    systemd nettle libedit
+    gnutls jansson liburcu libidn
+    nettle libedit
+    libiconv
     # without sphinx &al. for developer documentation
-  ];
+  ]
+    # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
+    ++ optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
+
+  # Not ideal but seems to work on Linux.
+  configureFlags = optional stdenv.isLinux "--with-lmdb=${stdenv.lib.getLib lmdb}";
 
   enableParallelBuilding = true;
 
-  CFLAGS = [ "-DNDEBUG" ];
+  CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   #doCheck = true; problems in combination with dynamic linking
 

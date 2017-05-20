@@ -1,67 +1,73 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
-    bluez-bluetooth = if config.services.xserver.desktopManager.kde4.enable then pkgs.bluez else pkgs.bluez5;
+  bluez-bluetooth = pkgs.bluez;
+  cfg = config.hardware.bluetooth;
 
-    configBluez = {
-        description = "Bluetooth Service";
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.bluez";
-          ExecStart = "${getBin bluez-bluetooth}/bin/bluetoothd -n";
-        };
-        wantedBy = [ "bluetooth.target" ];
-    };
-
-    configBluez5 =  {
-        description = "Bluetooth Service";
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.bluez";
-          ExecStart = "${getBin bluez-bluetooth}/bin/bluetoothd -n";
-          NotifyAccess="main";
-          CapabilityBoundingSet="CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-          LimitNPROC=1;
-        };
-        wantedBy = [ "bluetooth.target" ];
-    };
-
-    obexConfig = {
-        description = "Bluetooth OBEX service";
-        serviceConfig = {
-          Type = "dbus";
-          BusName = "org.bluez.obex";
-          ExecStart = "${getBin bluez-bluetooth}/bin/obexd";
-        };
-    };
-
-    bluezConfig = if config.services.xserver.desktopManager.kde4.enable then configBluez else configBluez5;
-in
-
-{
+in {
 
   ###### interface
 
   options = {
 
-    hardware.bluetooth.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Whether to enable support for Bluetooth.";
+    hardware.bluetooth = {
+      enable = mkEnableOption "support for Bluetooth.";
+
+      powerOnBoot = mkOption {
+        type    = types.bool;
+        default = true;
+        description = "Whether to power up the default Bluetooth controller on boot.";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          [General]
+          ControllerMode = bredr
+        '';
+        description = ''
+          Set additional configuration for system-wide bluetooth (/etc/bluetooth/main.conf).
+
+          NOTE: We already include [Policy], so any configuration under the Policy group should come first.
+        '';
+      };
     };
 
   };
 
   ###### implementation
-  
-  config = mkIf config.hardware.bluetooth.enable {
+
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
+
+    environment.etc = singleton {
+      source = pkgs.writeText "main.conf" ''
+        [Policy]
+        AutoEnable=${lib.boolToString cfg.powerOnBoot}
+
+        ${cfg.extraConfig}
+      '';
+      target = "bluetooth/main.conf";
+    };
+
     services.udev.packages = [ bluez-bluetooth ];
     services.dbus.packages = [ bluez-bluetooth ];
-    systemd.services."dbus-org.bluez" = bluezConfig;
-    systemd.services."dbus-org.bluez.obex" = obexConfig;
+    systemd.packages       = [ bluez-bluetooth ];
+
+    systemd.services = {
+      bluetooth = {
+        wantedBy = [ "bluetooth.target" ];
+        aliases  = [ "dbus-org.bluez.service" ];
+      };
+    };
+
+    systemd.user.services = {
+      obex.aliases = [ "dbus-org.bluez.obex.service" ];
+    };
 
   };
 

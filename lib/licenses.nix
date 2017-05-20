@@ -191,6 +191,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  eupl11 = spdx {
+    spdxId = "EUPL-1.1";
+    fullname = "European Union Public License 1.1";
+  };
+
   fdl12 = spdx {
     spdxId = "GFDL-1.2";
     fullName = "GNU Free Documentation License v1.2";
@@ -352,6 +357,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Lucent Public License v1.02";
   };
 
+  miros = {
+    fullname = "MirOS License";
+    url = https://opensource.org/licenses/MirOS;
+  };
+
   # spdx.org does not (yet) differentiate between the X11 and Expat versions
   # for details see http://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = spdx {
@@ -372,6 +382,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   mpl20 = spdx {
     spdxId = "MPL-2.0";
     fullName = "Mozilla Public License 2.0";
+  };
+
+  mspl = spdx {
+    spdxId = "MS-PL";
+    fullName = "Microsoft Public License";
   };
 
   msrla = {
@@ -514,6 +529,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   wtfpl = spdx {
     spdxId = "WTFPL";
     fullName = "Do What The F*ck You Want To Public License";
+  };
+
+  wxWindows = spdx {
+    spdxId = "WXwindows";
+    fullName = "wxWindows Library Licence, Version 3.1";
   };
 
   zlib = spdx {

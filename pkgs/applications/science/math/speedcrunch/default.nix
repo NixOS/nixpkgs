@@ -1,19 +1,29 @@
-{ stdenv, fetchurl, qt, cmake }:
+{ stdenv, fetchgit, cmake, makeQtWrapper, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "speedcrunch-${version}";
-  version = "0.11";
+  version = "0.12.0";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/heldercorreia/speedcrunch/get/${version}.tar.gz";
-    sha256 = "0phba14z9jmbmax99klbxnffwzv3awlzyhpcwr1c9lmyqnbcsnkd";
+  src = fetchgit {
+    # the tagging is not standard, so you probably need to check this when updating
+    rev = "refs/tags/release-${version}";
+    url = "https://bitbucket.org/heldercorreia/speedcrunch";
+    sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
   };
 
-  buildInputs = [cmake qt];
+  enableParallelBuilding = true;
 
-  dontUseCmakeBuildDir = true;
+  buildInputs = [ qtbase qttools ];
 
-  cmakeDir = "src";
+  nativeBuildInputs = [ cmake makeQtWrapper ];
+
+  preConfigure = ''
+    cd src
+  '';
+
+  postFixup = ''
+    wrapQtProgram $out/bin/speedcrunch
+  '';
 
   meta = with stdenv.lib; {
     homepage    = http://speedcrunch.org;
@@ -26,7 +36,8 @@ stdenv.mkDerivation rec {
       full keyboard-friendly and more than 15 built-in math function.
     '';
     maintainers = with maintainers; [ gebner ];
-    platforms = platforms.all;
+    inherit (qtbase.meta) platforms;
+    # works with qt 5.6 and qt 5.8
+    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
   };
-
 }

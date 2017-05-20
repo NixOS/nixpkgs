@@ -13,17 +13,17 @@ in stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH --with-openldap=${openldap} --with-sasl=${cyrus_sasl}"
+    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH"
     export sssldir="${sssd}/lib/sssd/modules"
     export HAVE_SSS_AUTOFS=1
 
-    export MOUNT=${lib.getBin utillinux}/bin/mount
-    export MOUNT_NFS=${lib.getBin nfs-utils}/bin/mount.nfs
-    export UMOUNT=${lib.getBin utillinux}/bin/umount
-    export MODPROBE=${lib.getBin utillinux}/bin/modprobe
-    export E2FSCK=${lib.getBin e2fsprogs}/bin/fsck.ext2
-    export E3FSCK=${lib.getBin e2fsprogs}/bin/fsck.ext3
-    export E4FSCK=${lib.getBin e2fsprogs}/bin/fsck.ext4
+    export MOUNT=${utillinux}/bin/mount
+    export MOUNT_NFS=${nfs-utils}/bin/mount.nfs
+    export UMOUNT=${utillinux}/bin/umount
+    export MODPROBE=${utillinux}/bin/modprobe
+    export E2FSCK=${e2fsprogs}/bin/fsck.ext2
+    export E3FSCK=${e2fsprogs}/bin/fsck.ext3
+    export E4FSCK=${e2fsprogs}/bin/fsck.ext4
   '';
 
   installPhase = ''
@@ -37,7 +37,6 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ flex bison ];
 
   meta = {
-    inherit version;
     description = "Kernel-based automounter";
     homepage = http://www.linux-consulting.com/Amd_AutoFS/autofs.html;
     license = stdenv.lib.licenses.gpl2;

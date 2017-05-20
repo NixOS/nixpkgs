@@ -7,7 +7,9 @@
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
-stdenv.mkDerivation rec {
+let
+  pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
+in stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   # Needed to find /etc/NetworkManager/VPN
@@ -23,9 +25,8 @@ stdenv.mkDerivation rec {
       defaultIconTheme sqlite gnome3.gnome-bluetooth
       libgweather # not declared at build time, but typelib is needed at runtime
       gnome3.gnome-clocks # schemas needed
-      at_spi2_core upower ibus gnome_desktop telepathy_logger gnome3.gnome_settings_daemon ];
-
-  propagatedBuildInputs = [ python3Packages.pygobject3 python3Packages.python gobjectIntrospection ];
+      at_spi2_core upower ibus gnome_desktop telepathy_logger gnome3.gnome_settings_daemon
+      pythonEnv gobjectIntrospection ];
 
   installFlags = [ "keysdir=$(out)/share/gnome-control-center/keybindings" ];
 
@@ -41,9 +42,6 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "${gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS" \
       --suffix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-
-    wrapProgram "$out/bin/gnome-shell-extension-tool" \
-      --prefix PYTHONPATH : "${python3Packages.pygobject3}/${python3Packages.python.sitePackages}:$PYTHONPATH"
 
     wrapProgram "$out/libexec/gnome-shell-calendar-server" \
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"

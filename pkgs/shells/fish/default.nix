@@ -2,19 +2,95 @@
   nettools, kbd, bc, which, gnused, gnugrep,
   groff, man-db, glibc, libiconv, pcre2,
   gettext, ncurses, python
+
+  , writeText
+
+  , useOperatingSystemEtc ? true
+  
 }:
 
 with stdenv.lib;
 
+let
+  etcConfigAppendixText = ''
+    ############### ↓ Nix hook for sourcing /etc/fish/config.fish ↓ ###############
+    #                                                                             #
+    # Origin:
+    #     This fish package was called with the attribute
+    #     "useOperatingSystemEtc = true;".
+    #
+    # Purpose:
+    #     Fish ordinarily sources /etc/fish/config.fish as
+    #        $__fish_sysconfdir/config.fish,
+    #     and $__fish_sysconfdir is defined at compile-time, baked into the C++
+    #     component of fish. By default, it is set to "/etc/fish". When building
+    #     through Nix, $__fish_sysconfdir gets set to $out/etc/fish. Here we may
+    #     have included a custom $out/etc/config.fish in the fish package,
+    #     as specified, but according to the value of useOperatingSystemEtc, we
+    #     may want to further source the real "/etc/fish/config.fish" file.
+    #
+    #     When this option is enabled, this segment should appear the very end of
+    #     "$out/etc/config.fish". This is to emulate the behavior of fish itself
+    #     with respect to /etc/fish/config.fish and ~/.config/fish/config.fish:
+    #     source both, but source the more global configuration files earlier
+    #     than the more local ones, so that more local configurations inherit
+    #     from but override the more global locations.
+    
+    if test -f /etc/fish/config.fish
+      source /etc/fish/config.fish
+    end
+    
+    #                                                                             #
+    ############### ↑ Nix hook for sourcing /etc/fish/config.fish ↑ ###############
+  '';
+
+  fishPreInitHooks = ''
+    # source nixos environment if we're a login shell
+    builtin status --is-login
+    and test -f /etc/fish/nixos-env-preinit.fish
+    and source /etc/fish/nixos-env-preinit.fish
+
+    test -n "$NIX_PROFILES"
+    and begin
+      # We ensure that __extra_* variables are read in $__fish_datadir/config.fish
+      # with a preference for user-configured data by making sure the package-specific
+      # data comes last. Files are loaded/sourced in encounter order, duplicate
+      # basenames get skipped, so we assure this by prepending Nix profile paths
+      # (ordered in reverse of the $NIX_PROFILE variable)
+      #
+      # Note that at this point in evaluation, there is nothing whatsoever on the
+      # fish_function_path. That means we don't have most fish builtins, e.g., `eval`.
+
+
+      # additional profiles are expected in order of precedence, which means the reverse of the
+      # NIX_PROFILES variable (same as config.environment.profiles)
+      set -l __nix_profile_paths (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')[-1..1]
+
+      set __extra_completionsdir \
+        $__nix_profile_paths"/etc/fish/completions" \
+        $__nix_profile_paths"/share/fish/vendor_completions.d" \
+        $__extra_completionsdir
+      set __extra_functionsdir \
+        $__nix_profile_paths"/etc/fish/functions" \
+        $__nix_profile_paths"/share/fish/vendor_functions.d" \
+        $__extra_functionsdir
+      set __extra_confdir \
+        $__nix_profile_paths"/etc/fish/conf.d" \
+        $__nix_profile_paths"/share/fish/vendor_conf.d" \
+        $__extra_confdir
+    end
+  '';
+in
+
 stdenv.mkDerivation rec {
   name = "fish-${version}";
-  version = "2.3.1";
+  version = "2.5.0";
 
-  patches = [ ./etc_config.patch ];
+  etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "0r46p64lg6da3v6chsa4gisvl04kd3rpy60yih8r870kbp9wm2ij";
+    sha256 = "19djav128nkhjxgfhwhc32i5y9d9c3karbh5yg67kqrdranyvh7q";
   };
 
   buildInputs = [ ncurses libiconv pcre2 ];
@@ -69,15 +145,10 @@ stdenv.mkDerivation rec {
             "$out/share/fish/tools/create_manpage_completions.py"
     sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
             "$out/share/fish/functions/man.fish"
+  '' + optionalString useOperatingSystemEtc ''
+    tee -a $out/etc/fish/config.fish < ${(writeText "config.fish.appendix" etcConfigAppendixText)}
   '' + ''
-    tee -a $out/share/fish/config.fish << EOF
-
-    # make fish pick up completions from nix profile
-    if status --is-interactive
-      set -l profiles (echo \$NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')
-      set fish_complete_path \$profiles"/share/fish/vendor_completions.d" \$fish_complete_path
-    end
-    EOF
+    tee -a $out/share/fish/__fish_build_paths.fish < ${(writeText "__fish_build_paths_suffix.fish" fishPreInitHooks)}
   '';
 
   meta = with stdenv.lib; {

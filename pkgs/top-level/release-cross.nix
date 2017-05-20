@@ -1,6 +1,8 @@
+/* This file defines some basic smoke tests for cross compilation.
+*/
 
-{ # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ builtins.currentSystem ]
+{ # The platforms *from* which we cross compile.
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -8,32 +10,49 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  inherit (pkgs) lib;
-
   nativePlatforms = linux;
 
-  /* Basic list of packages to cross-build */
-  basicCrossDrv = {
-    gccCrossStageFinal = nativePlatforms;
-    bison.crossDrv = nativePlatforms;
-    busybox.crossDrv = nativePlatforms;
-    coreutils.crossDrv = nativePlatforms;
-    dropbear.crossDrv = nativePlatforms;
+  common = {
+    buildPackages.binutils = nativePlatforms;
+    gmp = nativePlatforms;
   };
 
-  /* Basic list of packages to be natively built,
-     but need a crossSystem defined to get meaning */
-  basicNativeDrv = {
-    gdbCross.nativeDrv = nativePlatforms;
+  gnuCommon = lib.recursiveUpdate common {
+    buildPackages.gccCrossStageFinal = nativePlatforms;
+    coreutils = nativePlatforms;
   };
 
-  basic = basicCrossDrv // basicNativeDrv;
+  linuxCommon = lib.recursiveUpdate gnuCommon {
+    buildPackages.gdbCross = nativePlatforms;
+
+    bison = nativePlatforms;
+    busybox = nativePlatforms;
+    dropbear = nativePlatforms;
+    ed = nativePlatforms;
+    ncurses = nativePlatforms;
+    patch = nativePlatforms;
+  };
+
+  windowsCommon = lib.recursiveUpdate gnuCommon {
+    boehmgc = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
+  };
+
+  darwinCommon = {
+    buildPackages.binutils = darwin;
+  };
 
 in
 
 {
-  # These `nativeDrv`s should be identical to their vanilla ones --- cross
-  # compiling should not affect the native derivation.
+  # These derivations from a cross package set's `buildPackages` should be
+  # identical to their vanilla equivalents --- none of these package should
+  # observe the target platform which is the only difference between those
+  # package sets.
   ensureUnaffected = let
     # Absurd values are fine here, as we are not building anything. In fact,
     # there probably a good idea to try to be "more parametric" --- i.e. avoid
@@ -47,8 +66,12 @@ in
     # good idea lest there be some irrelevant pass-through debug attrs that
     # cause false negatives.
     testEqualOne = path: system: let
-      f = attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert f { inherit system; } == f { inherit system crossSystem; }; true;
+      f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+    in assertTrue (
+        f path { inherit system; }
+        ==
+        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+      );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 
@@ -65,6 +88,21 @@ in
     guile = nativePlatforms;
   };
 
+  darwinToAarch64 = let
+    crossSystem = {
+      config = "aarch64-apple-darwin14";
+      arch = "arm64";
+      libc = "libSystem";
+    };
+  in mapTestOnCross crossSystem darwinCommon;
+
+  darwinToArm = let
+    crossSystem = {
+      config = "arm-apple-darwin10";
+      arch = "armv7-a";
+      libc = "libSystem";
+    };
+  in mapTestOnCross crossSystem darwinCommon;
 
   /* Test some cross builds to the Sheevaplug */
   crossSheevaplugLinux = let
@@ -74,86 +112,55 @@ in
       arch = "arm";
       float = "soft";
       withTLS = true;
-      platform = pkgs.platforms.sheevaplug;
+      platform = lib.systems.platforms.sheevaplug;
       libc = "glibc";
       openssl.system = "linux-generic32";
     };
-  in mapTestOnCross crossSystem (basic // {
-    ubootSheevaplug.crossDrv = nativePlatforms;
+  in mapTestOnCross crossSystem (linuxCommon // {
+    ubootSheevaplug = nativePlatforms;
   });
 
 
   /* Test some cross builds on 32 bit mingw-w64 */
   crossMingw32 = let
     crossSystem = {
-      config = "i686-w64-mingw32";
+      config = "i686-pc-mingw32";
       arch = "x86"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    boehmgc.crossDrv = nativePlatforms;
-    gmp.crossDrv = nativePlatforms;
-    guile_1_8.crossDrv = nativePlatforms;
-    libffi.crossDrv = nativePlatforms;
-    libtool.crossDrv = nativePlatforms;
-    libunistring.crossDrv = nativePlatforms;
-    windows.wxMSW.crossDrv = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem windowsCommon;
 
 
   /* Test some cross builds on 64 bit mingw-w64 */
   crossMingwW64 = let
     crossSystem = {
       # That's the triplet they use in the mingw-w64 docs.
-      config = "x86_64-w64-mingw32";
+      config = "x86_64-pc-mingw32";
       arch = "x86_64"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    boehmgc.crossDrv = nativePlatforms;
-    gmp.crossDrv = nativePlatforms;
-    guile_1_8.crossDrv = nativePlatforms;
-    libffi.crossDrv = nativePlatforms;
-    libtool.crossDrv = nativePlatforms;
-    libunistring.crossDrv = nativePlatforms;
-    windows.wxMSW.crossDrv = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem windowsCommon;
 
 
   /* Linux on the fuloong */
   fuloongminipc = let
     crossSystem = {
-      config = "mips64el-unknown-linux";
+      config = "mips64el-unknown-linux-gnu";
       bigEndian = false;
       arch = "mips";
       float = "hard";
       withTLS = true;
       libc = "glibc";
-      platform = {
-        name = "fuloong-minipc";
-        kernelMajor = "2.6";
-        kernelBaseConfig = "lemote2f_defconfig";
-        kernelHeadersBaseConfig = "fuloong2e_defconfig";
-        uboot = null;
-        kernelArch = "mips";
-        kernelAutoModules = false;
-        kernelTarget = "vmlinux";
-      };
+      platform = lib.systems.platforms.fuloong2f_n32;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "loongson2f";
         abi = "n32";
       };
     };
-  in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    ed.crossDrv = nativePlatforms;
-    patch.crossDrv = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem linuxCommon;
 
 
   /* Linux on Raspberrypi */
@@ -166,7 +173,7 @@ in
       fpu = "vfp";
       withTLS = true;
       libc = "glibc";
-      platform = pkgs.platforms.raspberrypi;
+      platform = lib.systems.platforms.raspberrypi;
       openssl.system = "linux-generic32";
       gcc = {
         arch = "armv6";
@@ -175,18 +182,15 @@ in
         abi = "aapcs-linux";
       };
     };
-  in mapTestOnCross crossSystem {
-    coreutils.crossDrv = nativePlatforms;
-    ed.crossDrv = nativePlatforms;
-    patch.crossDrv = nativePlatforms;
-    vim.crossDrv = nativePlatforms;
-    unzip.crossDrv = nativePlatforms;
-    ddrescue.crossDrv = nativePlatforms;
-    lynx.crossDrv = nativePlatforms;
-    patchelf.crossDrv = nativePlatforms;
-    binutils.crossDrv = nativePlatforms;
-    mpg123.crossDrv = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem (linuxCommon // {
+    vim = nativePlatforms;
+    unzip = nativePlatforms;
+    ddrescue = nativePlatforms;
+    lynx = nativePlatforms;
+    patchelf = nativePlatforms;
+    buildPackages.binutils = nativePlatforms;
+    mpg123 = nativePlatforms;
+  });
 
 
   /* Cross-built bootstrap tools for every supported platform */

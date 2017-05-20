@@ -1,42 +1,74 @@
-{ stdenv, fetchurl, kubernetes }:
-let
-  arch = if stdenv.isLinux
-         then "linux-amd64"
-         else "darwin-amd64";
-  checksum = if stdenv.isLinux
-             then "1g6k3va84nm2h9z2ywbbkc8jabgkarqlf8wv1sp2p6s6hw7hi5h3"
-             else "0jpwyvgpl34n07chcyd7ldvk3jq3rx72cp8yf0bh7gnzr5lcnxnc";
-in
-stdenv.mkDerivation rec {
-  pname = "minikube";
-  version = "0.15.0";
-  name = "${pname}-${version}";
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm, makeWrapper }:
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/minikube/releases/v${version}/minikube-${arch}";
-    sha256 = "${checksum}";
+let
+  binPath = [ kubernetes ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [];
+
+  # Normally, minikube bundles localkube in its own binary via go-bindata. Unfortunately, it needs to make that localkube
+  # a static linux binary, and our Linux nixpkgs go compiler doesn't seem to work when asking for a cgo binary that's static
+  # (presumably because we don't have some static system libraries it wants), and cross-compiling cgo on Darwin is a nightmare.
+  #
+  # Note that minikube can download (and cache) versions of localkube it needs on demand. Unfortunately, minikube's knowledge
+  # of where it can download versions of localkube seems to rely on a json file that doesn't get updated as often as we'd like. So
+  # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
+  # currently https://storage.googleapis.com/minikube/k8s_releases.json
+
+  localkube-version = "1.6.0";
+  localkube-binary = fetchurl {
+    url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
+    sha256 = "0zx0c9fwairvga1g1112l5g5pspm2m9wxb42qgfxfgyidywvirha";
+  };
+in buildGoPackage rec {
+  pname   = "minikube";
+  name    = "${pname}-${version}";
+  version = "0.19.0";
+
+  goPackagePath = "k8s.io/minikube";
+
+  src = fetchFromGitHub {
+    owner  = "kubernetes";
+    repo   = "minikube";
+    rev    = "v${version}";
+    sha256 = "060zl5wx9karl0j1w3b1jnr6wkr56p3wgs75r6d5aiz36i8fkg8m";
   };
 
-  buildInputs = [ ];
+  # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
+  # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
+  buildInputs = [ go-bindata makeWrapper kubernetes ];
+  subPackages = [ "cmd/minikube" ];
 
-  propagatedBuildInputs = [ kubernetes ];
+  preBuild = ''
+    pushd go/src/${goPackagePath} >/dev/null
 
-  phases = [ "buildPhase" "installPhase" ];
+    mkdir -p out
+    cp ${localkube-binary} out/localkube
 
-  buildPhase = ''
-    mkdir -p $out/bin
+    go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets ./out/localkube deploy/addons/...
+
+    ISO_VERSION=$(grep "^ISO_VERSION" Makefile | sed "s/^.*\s//")
+    ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
+
+    export buildFlagsArray="-ldflags=\
+      -X k8s.io/minikube/pkg/version.version=v${version} \
+      -X k8s.io/minikube/pkg/version.isoVersion=$ISO_VERSION \
+      -X k8s.io/minikube/pkg/version.isoPath=$ISO_BUCKET"
+
+    popd >/dev/null
   '';
 
-  installPhase = ''
-    cp $src $out/bin/${pname}
-    chmod +x $out/bin/${pname}
+  postInstall = ''
+    mkdir -p $bin/share/bash-completion/completions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
   '';
+
+  postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kubernetes/minikube;
+    homepage    = https://github.com/kubernetes/minikube;
     description = "A tool that makes it easy to run Kubernetes locally";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ ebzzry copumpkin ];
+    platforms   = with platforms; unix;
   };
 }

@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "acct-6.6.2";
+  name = "acct-6.6.3";
 
   src = fetchurl {
     url = "mirror://gnu/acct/${name}.tar.gz";
-    sha256 = "0081hzkcxw9aslpsakridj15m0wbnkdhm210fzbg021vi4pppm4f";
+    sha256 = "14x0zklwlg7cc7amlyzffqr8az3fqj1h9dyj0hvl1kpi7cr7kbjy";
   };
 
   doCheck = true;

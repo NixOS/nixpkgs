@@ -2,11 +2,11 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.5";
+  name = "bitlbee-3.5.1";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "06c371bjly38yrkvfwdh5rjfx9xfl7bszyhrlbldy0xk38c057al";
+    sha256 = "0sgsn0fv41rga46mih3fyv65cvfa6rvki8x92dn7bczbi7yxfdln";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;

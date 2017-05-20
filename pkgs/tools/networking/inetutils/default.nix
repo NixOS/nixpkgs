@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, perl, help2man }:
 
 stdenv.mkDerivation rec {
   name = "inetutils-1.9.4";
@@ -8,13 +8,19 @@ stdenv.mkDerivation rec {
     sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
 
-  buildInputs = [ ncurses /* for `talk' */ ];
+  patches = [
+    ./whois-Update-Canadian-TLD-server.patch
+    ./service-name.patch
+  ];
+
+  buildInputs = [ ncurses /* for `talk' */ perl /* for `whois' */ help2man ];
 
   configureFlags = "--with-ncurses-include-dir=${ncurses.dev}/include";
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.
   #doCheck = true;
+
 
   postInstall = ''
     # XXX: These programs are normally installed setuid but since it

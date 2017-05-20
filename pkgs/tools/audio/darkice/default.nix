@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkgconfig
 , libjack2, alsaLib, libpulseaudio
 , faac, lame, libogg, libopus, libvorbis, libsamplerate
 }:

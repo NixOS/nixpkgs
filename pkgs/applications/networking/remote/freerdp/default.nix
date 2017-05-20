@@ -1,67 +1,72 @@
-{ stdenv
-, fetchurl
-, cmake
-, openssl
-, printerSupport ? true, cups
-, pkgconfig
-, zlib
-, libX11
-, libXcursor
-, libXdamage
-, libXext
-, alsaLib
-, ffmpeg
-, libxkbfile
-#, xmlto, docbook_xml_dtd_412, docbook_xml_xslt
-, libXinerama
-, libXv
-, pulseaudioSupport ? true, libpulseaudio
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+, alsaLib, ffmpeg_2, glib, openssl, pcre, zlib
+, libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
+, libxkbcommon, libxkbfile
+, wayland
+, gstreamer, gst-plugins-base, gst-plugins-good
+, libpulseaudio ? null
+, cups ? null
+, pcsclite ? null
+, systemd ? null
+, buildServer ? true
+, optimize ? true
 }:
 
-assert printerSupport -> cups != null;
 stdenv.mkDerivation rec {
-  name = "freerdp-${version}";
-  version = "1.0.2";
+  name = "freerdp-git-${version}";
+  version = "20170502";
 
-  src = fetchurl {
-    url = "https://github.com/FreeRDP/FreeRDP/archive/${version}.tar.gz";
-    sha256 = "1w9dk7dsbppspnnms2xwwmbg7jm61i7aw5nkwzbpdyxngbgkgwf0";
+  src = fetchFromGitHub {
+    owner  = "FreeRDP";
+    repo   = "FreeRDP";
+    rev    = "8569102c3a011602de3a1cdf69f7c69adbb864ee";
+    sha256 = "0m61aiy8l3ybnk2d2kjmpp9ql31zfs63gjixyj9x95jd4m507j67";
   };
 
-  buildInputs = [
-    cmake
-    openssl
-    pkgconfig
-    zlib
-    libX11
-    libXcursor
-    libXdamage
-    libXext
-    alsaLib
-    ffmpeg
-    libxkbfile
-#    xmlto docbook_xml_dtd_412 docbook_xml_xslt
-    libXinerama
-    libXv
-  ] ++ stdenv.lib.optional printerSupport cups;
+  # outputs = [ "bin" "out" "dev" ];
 
-  configureFlags = [
-    "--with-x" "-DWITH_MANPAGES=OFF"
-  ] ++ stdenv.lib.optional printerSupport "--with-printer=cups"
-    ++ stdenv.lib.optional pulseaudioSupport "-DWITH_PULSEAUDIO=ON";
+  prePatch = ''
+    export HOME=$TMP
+    substituteInPlace "libfreerdp/freerdp.pc.in" \
+      --replace "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+  '' + lib.optionalString (pcsclite != null) ''
+    substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
+      --replace "libpcsclite.so" "${pcsclite}/lib/libpcsclite.so"
+  '';
 
-  meta = {
+  buildInputs = with lib; [
+    alsaLib cups ffmpeg_2 glib openssl pcre pcsclite libpulseaudio zlib
+    gstreamer gst-plugins-base gst-plugins-good
+    libX11 libXcursor libXdamage libXext libXi libXinerama libXrandr libXrender libXv
+    libxkbcommon libxkbfile
+    wayland
+  ] ++ optional stdenv.isLinux systemd;
+
+  nativeBuildInputs = [
+    cmake pkgconfig
+  ];
+
+  doCheck = false;
+
+  cmakeFlags = with lib; [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DWITH_CUNIT=OFF"
+    "-DWITH_OSS=OFF"
+  ] ++ optional (libpulseaudio != null) "-DWITH_PULSE=ON"
+    ++ optional (cups != null)          "-DWITH_CUPS=ON"
+    ++ optional (pcsclite != null)      "-DWITH_PCSC=ON"
+    ++ optional buildServer             "-DWITH_SERVER=ON"
+    ++ optional optimize                "-DWITH_SSE2=ON";
+
+  meta = with lib; {
     description = "A Remote Desktop Protocol Client";
-
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
-
     homepage = http://www.freerdp.com/;
-
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
-    broken = true;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ wkennington peterhoeg ];
+    platforms = platforms.unix;
   };
 }

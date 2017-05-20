@@ -12,11 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "1r2w9gpahjv221j963bd4vn0gj4cxmb9j42f3cd9qdn890hizw84";
   };
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   buildInputs = [ libtool openssl qtbase qttools ];
 
   nativeBuildInputs = [ makeQtWrapper pkgconfig which ];
+
+  configureFlags = [ "CXXFLAGS=-std=c++11" ];
 
   preBuild = ''
     substituteInPlace Local.mak \
@@ -35,5 +37,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = with maintainers; [ offline peterhoeg ];
+    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
   };
 }

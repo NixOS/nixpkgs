@@ -10,7 +10,7 @@ rec {
 
   makeUnit = name: unit:
     let
-      pathSafeName = lib.replaceChars ["@" ":" "\\"] ["-" "-" "-"] name;
+      pathSafeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""] name;
     in
     if unit.enable then
       pkgs.runCommand "unit-${pathSafeName}"
@@ -159,7 +159,13 @@ rec {
         fi
       done
 
-      # Created .wants and .requires symlinks from the wantedBy and
+      # Create service aliases from aliases option.
+      ${concatStrings (mapAttrsToList (name: unit:
+          concatMapStrings (name2: ''
+            ln -sfn '${name}' $out/'${name2}'
+          '') unit.aliases) units)}
+
+      # Create .wants and .requires symlinks from the wantedBy and
       # requiredBy options.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''

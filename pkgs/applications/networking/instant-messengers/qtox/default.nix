@@ -1,52 +1,40 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore-dev, openal, opencv,
-  libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, openal, opencv,
+  libtoxcore, libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo, xorg,
   pango, atk, qrencode, ffmpeg, filter-audio, makeQtWrapper,
-  qtbase, qtsvg, qttools, qmakeHook, qttranslations, sqlcipher }:
-
-let
-  version = "1.5.0";
-  revision = "v${version}";
-in
+  qtbase, qtsvg, qttools, qttranslations, sqlcipher,
+  libvpx, libopus }:
 
 stdenv.mkDerivation rec {
   name = "qtox-${version}";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
-      owner = "tux3";
-      repo = "qTox";
-      rev = revision;
-      sha256 = "1na2qqzbdbjfw8kymxw5jfglslmw18fz3vpw805pqg4d5y7f7vsi";
+    owner  = "tux3";
+    repo   = "qTox";
+    rev    = "v${version}";
+    sha256 = "1c5y7fwhsq1f6z8208xl1jd6bl1r6k8g0fjqxf0z10373c9395jq";
   };
 
-  buildInputs =
-    [
-      libtoxcore-dev openal opencv libsodium filter-audio
-      qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
-      pango atk qrencode ffmpeg qttranslations makeQtWrapper
-      sqlcipher
-    ];
+  buildInputs = [
+    libtoxcore openal opencv libsodium filter-audio
+    qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
+    pango atk qrencode ffmpeg qttranslations
+    sqlcipher
+    libopus libvpx
+  ] ++ (with xorg; [
+    libpthreadstubs libXdmcp
+  ]);
 
-  nativeBuildInputs = [ pkgconfig qmakeHook ];
+  nativeBuildInputs = [ cmake makeQtWrapper pkgconfig ];
 
-  preConfigure = ''
-    # patch .pro file for proper set of the git hash
-    sed -i '/git rev-parse/d' qtox.pro
-    sed -i 's/$$quote($$GIT_VERSION)/${revision}/' qtox.pro
-    # since .pro have hardcoded paths, we need to explicitly set paths here
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags glib-2.0)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gdk-pixbuf-2.0)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags cairo)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags pango)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags atk)"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags sqlcipher)"
-  '';
+  cmakeFlags = [
+    "-DGIT_DESCRIBE=${version}"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp qtox $out/bin
+    install -Dm755 qtox $out/bin/qtox
     wrapQtProgram $out/bin/qtox
 
     runHook postInstall
@@ -57,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Qt Tox client";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ viric jgeerds akaWolf ];
+    maintainers = with maintainers; [ viric jgeerds akaWolf peterhoeg ];
     platforms = platforms.all;
   };
 }

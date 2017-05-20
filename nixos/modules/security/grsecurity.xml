@@ -7,35 +7,36 @@
   <title>Grsecurity/PaX</title>
 
   <para>
-    Grsecurity/PaX is a set of patches against the Linux kernel that make it
-    harder to exploit bugs.  The patchset includes protections such as
-    enforcement of non-executable memory, address space layout randomization,
-    and chroot jail hardening.  These and other
+    Grsecurity/PaX is a set of patches against the Linux kernel that
+    implements an extensive suite of
     <link xlink:href="https://grsecurity.net/features.php">features</link>
-    render entire classes of exploits inert without additional efforts on the
-    part of the adversary.
+    designed to increase the difficulty of exploiting kernel and
+    application bugs.
   </para>
 
   <para>
     The NixOS grsecurity/PaX module is designed with casual users in mind and is
-    intended to be compatible with normal desktop usage, without unnecessarily
-    compromising security.  The following sections describe the configuration
-    and administration of a grsecurity/PaX enabled NixOS system.  For
-    more comprehensive coverage, please refer to the
+    intended to be compatible with normal desktop usage, without
+    <emphasis>unnecessarily</emphasis> compromising security.  The
+    following sections describe the configuration and administration of
+    a grsecurity/PaX enabled NixOS system.  For more comprehensive
+    coverage, please refer to the
     <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity">grsecurity wikibook</link>
     and the
     <link xlink:href="https://wiki.archlinux.org/index.php/Grsecurity">Arch
     Linux wiki page on grsecurity</link>.
 
-    <note><para>grsecurity/PaX is only available for the latest linux -stable
-    kernel; patches against older kernels are available from upstream only for
-    a fee.</para></note>
+    <warning><para>Upstream has ceased free support for grsecurity/PaX.  See
+    <link xlink:href="https://grsecurity.net/passing_the_baton.php">
+    the announcement</link> for more information.  Consequently, NixOS
+    support for grsecurity/PaX also must cease.  Enabling this module will
+    result in a build error.</para></warning>
     <note><para>We standardise on a desktop oriented configuration primarily due
     to lack of resources.  The grsecurity/PaX configuration state space is huge
     and each configuration requires quite a bit of testing to ensure that the
     resulting packages work as advertised.  Defining additional package sets
     would likely result in a large number of functionally broken packages, to
-    nobody's benefit.</para></note>.
+    nobody's benefit.</para></note>
   </para>
 
   <sect1 xml:id="sec-grsec-enable"><title>Enabling grsecurity/PaX</title>
@@ -126,10 +127,10 @@
     The NixOS kernel is built using upstream's recommended settings for a
     desktop deployment that generally favours security over performance.  This
     section details deviations from upstream's recommendations that may
-    compromise operational security.
+    compromise security.
 
     <warning><para>There may be additional problems not covered here!</para>
-    </warning>.
+    </warning>
   </para>
 
   <itemizedlist>
@@ -159,8 +160,8 @@
     <listitem><para>
       The NixOS module conditionally weakens <command>chroot</command>
       restrictions to accommodate NixOS lightweight containers and sandboxed Nix
-      builds.  This is problematic if the deployment also runs a privileged
-      network facing process that <emphasis>relies</emphasis> on
+      builds.  This can be problematic if the deployment also runs privileged
+      network facing processes that <emphasis>rely</emphasis> on
       <command>chroot</command> for isolation.
     </para></listitem>
 
@@ -215,21 +216,24 @@
             GRKERNSEC_CONFIG_SERVER y
             GRKERNSEC_CONFIG_SECURITY y
           '';
-          };
-      }
+        };
+      };
     </programlisting>
   </para>
 
   <para>
-    The wikibook provides an exhaustive listing of
+    The grsecurity/PaX wikibook provides an exhaustive listing of
     <link xlink:href="https://en.wikibooks.org/wiki/Grsecurity/Appendix/Grsecurity_and_PaX_Configuration_Options">kernel configuration options</link>.
   </para>
 
   <para>
     The NixOS module makes several assumptions about the kernel and so
     may be incompatible with your customised kernel. Currently, the only way
-    to work around incompatibilities is to eschew the NixOS module.
+    to work around these incompatibilities is to eschew the NixOS
+    module.
+  </para>
 
+  <para>
     If not using the NixOS module, a custom grsecurity package set can
     be specified inline instead, as in
     <programlisting>
@@ -290,7 +294,7 @@
 
     <listitem><para>User initiated autoloading of modules (e.g., when
     using fuse or loop devices) is disallowed; either load requisite modules
-    as root or add them to<option>boot.kernelModules</option>.</para></listitem>
+    as root or add them to <option>boot.kernelModules</option>.</para></listitem>
 
     <listitem><para>Virtualization: KVM is the preferred virtualization
     solution. Xen, Virtualbox, and VMWare are
@@ -310,7 +314,7 @@
       Overflows in boot critical code (e.g., the root filesystem module) can
       render the system unbootable.  Work around by setting
       <programlisting>
-        boot.kernel.kernelParams = [ "pax_size_overflow_report_only" ];
+        boot.kernelParams = [ "pax_size_overflow_report_only" ];
       </programlisting>
     </para></listitem>
 

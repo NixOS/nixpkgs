@@ -122,11 +122,13 @@ rec {
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
+        cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
+
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils.out}/bin/$i $out/bin
         done
-        cp -d ${binutils.out}/lib/lib*.so* $out/lib
+        cp -d ${binutils.lib}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 
@@ -170,8 +172,9 @@ rec {
   };
 
   bootstrapFiles = {
-    busybox = "${build}/on-server/busybox";
-    bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
+    # Make them their own store paths to test that busybox still works when the binary is named /nix/store/HASH-busybox
+    busybox = runCommand "busybox" {} "cp ${build}/on-server/busybox $out";
+    bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
   bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };

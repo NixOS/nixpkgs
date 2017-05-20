@@ -1,21 +1,24 @@
-{ stdenv, fetchgit, cmake, boost }:
+{ stdenv, fetchFromGitHub, cmake, boost }:
 
 stdenv.mkDerivation rec {
-  name = "fcppt-1.3.0";
+  name = "fcppt-${version}";
+  version = "2.5.0";
 
-  src = fetchgit {
-    url = https://github.com/freundlich/fcppt.git;
-    rev = "7787733afc7a6278c0de8c0435b3d312e0c0c851";
-    sha256 = "1vy6nhk6nymbp4yihvw75qn67q9fgmfc518f8dn3h2pq2gfjqrpy";
+  src = fetchFromGitHub {
+    owner = "freundlich";
+    repo = "fcppt";
+    rev = version;
+    sha256 = "0pjldwwxgnzjfd04cy29a9mn2szq4v2mjnw0367kxd141q2iglqi";
   };
 
-  buildInputs = [ cmake boost ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost ];
 
   cmakeFlags = [ "-DENABLE_EXAMPLES=false" "-DENABLE_TEST=false" ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Freundlich's C++ toolkit";
     longDescription = ''
       Freundlich's C++ Toolkit (fcppt) is a collection of libraries focusing on
@@ -25,8 +28,8 @@ stdenv.mkDerivation rec {
       C++11).
     '';
     homepage = http://fcppt.org;
-    license = stdenv.lib.licenses.boost;
-    maintainers = with stdenv.lib.maintainers; [ pmiddend ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.boost;
+    maintainers = with maintainers; [ pmiddend ];
+    platforms = platforms.linux;
   };
 }

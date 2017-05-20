@@ -53,12 +53,14 @@ let
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries forceInstall 
-        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
+        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
+        extraEntriesBeforeNixOS extraPrepareConfig extraInitrd configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
-        pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
+        pkgs.utillinux ]
+        ++ (optional (cfg.efiSupport && (cfg.version == 2)) pkgs.efibootmgr)
+        ++ (optionals cfg.useOSProber [pkgs.busybox pkgs.os-prober])
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
@@ -237,6 +239,12 @@ in
           menuentry "Windows 7" {
             chainloader (hd0,4)+1
           }
+
+          # GRUB 2 with UEFI example, chainloading another distro
+          menuentry "Fedora" {
+            set root=(hd1,1)
+            chainloader /efi/fedora/grubx64.efi
+          }
         '';
         description = ''
           Any additional entries you want added to the GRUB boot menu.
@@ -262,6 +270,27 @@ in
           Each attribute name denotes the destination file name in
           <filename>/boot</filename>, while the corresponding
           attribute value specifies the source file.
+        '';
+      };
+
+      extraInitrd = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/boot/extra_initrafms.gz";
+        description = ''
+          The path to a second initramfs to be supplied to the kernel.
+          This ramfs will not be copied to the store, so that it can
+          contain secrets such as LUKS keyfiles or ssh keys.
+          This implies that rolling back to a previous configuration
+          won't rollback the state of this file.
+        '';
+      };
+
+      useOSProber = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If set to true, append entries for other OSs detected by os-prober.
         '';
       };
 
@@ -358,7 +387,6 @@ in
 
       efiInstallAsRemovable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to invoke <literal>grub-install</literal> with

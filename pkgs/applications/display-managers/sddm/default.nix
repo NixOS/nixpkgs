@@ -1,4 +1,4 @@
-{ stdenv, makeQtWrapper, fetchFromGitHub, fetchpatch
+{ stdenv, lib, makeQtWrapper, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 , themes
@@ -25,13 +25,21 @@ let
       })
     ];
 
+    postPatch =
+      # Module Qt5::Test must be included in `find_package` before it is used.
+      ''
+        sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
+      '';
+
     nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
     buildInputs = [
-      libxcb libpthreadstubs libXdmcp libXau qtbase pam systemd
+      libxcb libpthreadstubs libXdmcp libXau pam systemd
     ];
 
-    propagatedBuildInputs = [ qtdeclarative ];
+    propagatedBuildInputs = [
+      qtbase qtdeclarative
+    ];
 
     cmakeFlags = [
       "-DCONFIG_FILE=/etc/sddm.conf"
@@ -80,6 +88,22 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
+    propagated=
+    for i in $unwrapped $themes; do
+      findInputs $i propagated propagated-user-env-packages
+      if [ -z "$crossConfig" ]; then
+          findInputs $i propagated propagated-native-build-inputs
+      else
+          findInputs $i propagated propagated-build-inputs
+      fi
+    done
+
+    for pkg in $propagated; do
+      addToSearchPath RUNTIME_XDG_DATA_DIRS "$pkg/share"
+      addToSearchPath RUNTIME_XDG_CONFIG_DIRS "$pkg/etc/xdg"
+    done
+
+    mkdir -p "$out/bin"
     makeQtWrapper "$unwrapped/bin/sddm" "$out/bin/sddm"
 
     mkdir -p "$out/share/sddm"

@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
+{ stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
 
 stdenv.mkDerivation rec {
-  version = "20161126";
+  version = "20170428";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
-    owner = "neomutt";
-    repo = "neomutt";
-    rev = "neomutt-${version}";
-    sha256 = "10ycfya11pvwv0rdyyak56r6f8ia8yf0h8qyi904bbpvm8lqvqfd";
+    owner  = "neomutt";
+    repo   = "neomutt";
+    rev    = "neomutt-${version}";
+    sha256 = "1p6214agfv9plskkzalh03r5naiiyg1habrnknnjgck3nypb78ik";
   };
 
+  nativeBuildInputs = [ which autoreconfHook ];
   buildInputs =
-    [ autoconf automake cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch which openssl perl lmdb ];
+    [ cyrus_sasl gdbm gpgme kerberos libidn ncurses
+      notmuch openssl perl lmdb ];
 
   configureFlags = [
     "--enable-debug"
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "--enable-keywords"
     "--enable-smtp"
     "--enable-nntp"
+    "--enable-compressed"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="

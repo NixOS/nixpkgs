@@ -8,11 +8,12 @@
 
 stdenv.mkDerivation rec {
   name = "krita-${version}";
-  version = "3.0.1.1";
+  ver_min = "3.1.3";
+  version = "${ver_min}";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/krita/${version}/${name}.tar.gz";
-    sha256 = "0v58p9am2gsrgn5nhynvdg1a7v8d9kcsswb1962r8ijszm3fav5k";
+    url = "http://download.kde.org/stable/krita/${ver_min}/${name}.tar.gz";
+    sha256 = "125js6c8aw4bqhs28pwnl3rbgqx5yx4zsklw7bfdhy3vf6lrysw1";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules makeQtWrapper ];
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
   };
 }

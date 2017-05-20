@@ -8,7 +8,7 @@ let
   cfg = xcfg.desktopManager;
 
   # If desktop manager `d' isn't capable of setting a background and
-  # the xserver is enabled, the `feh' program is used as a fallback.
+  # the xserver is enabled, `feh' or `xsetroot' are used as a fallback.
   needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
 
 in
@@ -16,11 +16,10 @@ in
 {
   # Note: the order in which desktop manager modules are imported here
   # determines the default: later modules (if enabled) are preferred.
-  # E.g., if KDE is enabled, it supersedes xterm.
+  # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./xfce.nix ./kde4.nix ./kde5.nix
-    ./lumina.nix ./lxqt.nix ./enlightenment.nix ./gnome3.nix
-    ./kodi.nix
+    ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
+    ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix
   ];
 
   options = {
@@ -45,8 +44,11 @@ in
             manage = "desktop";
             start = d.start
             + optionalString (needBGCond d) ''
-              if test -e $HOME/.background-image; then
+              if [ -e $HOME/.background-image ]; then
                 ${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image
+              else
+                # Use a solid black background as fallback
+                ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
               fi
             '';
           }) list;
@@ -81,6 +83,6 @@ in
   config = {
     services.xserver.displayManager.session = cfg.session.list;
     environment.systemPackages =
-      mkIf cfg.session.needBGPackages [ pkgs.feh ];
+      mkIf cfg.session.needBGPackages [ pkgs.feh ]; # xsetroot via xserver.enable
   };
 }

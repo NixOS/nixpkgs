@@ -1,15 +1,15 @@
 {stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
-let
-  inherit (stdenv.lib) optional optionalString;
-  baseName = "sysdig";
-  version = "0.13.0";
-in
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "0ghxj473v471nnry8h9accxpwwjp8nbzkgw8dniqld0ixx678pia";
+with stdenv.lib;
+stdenv.mkDerivation rec {
+  name = "sysdig-${version}";
+  version = "0.16.0";
+
+  src = fetchFromGitHub {
+    owner = "draios";
+    repo = "sysdig";
+    rev = version;
+    sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
   };
 
   buildInputs = [
@@ -18,23 +18,16 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  patches = [
-    # patch for linux >= 4.9.1
-    # is included in the next release
-    (fetchpatch {
-      url = "https://github.com/draios/sysdig/commit/68823ffd3a76f88ad34c3d0d9f6fdf1ada0eae43.patch";
-      sha256 = "02vgyd70mwrk6mcdkacaahk49irm6vxzqb7dfickk6k32lh3m44k";
-    })
-  ];
-
-  postPatch = ''
-    sed '1i#include <cmath>' -i userspace/libsinsp/{cursesspectro,filterchecks}.cpp
-  '';
-
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
     "-DSYSDIG_VERSION=${version}"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
+
+  # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = [
+    "-DluaL_reg=luaL_Reg"
+    "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
+  ];
 
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
@@ -42,7 +35,7 @@ stdenv.mkDerivation {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = makeLibraryPath [
     zlib
     luajit
     ncurses
@@ -55,7 +48,7 @@ stdenv.mkDerivation {
     stdenv.cc.cc
   ];
 
-  postInstall = ''
+  postInstall = optionalString (!stdenv.isDarwin) ''
     patchelf --set-rpath "$libPath" "$out/bin/sysdig"
     patchelf --set-rpath "$libPath" "$out/bin/csysdig"
   '' + optionalString (kernel != null) ''
@@ -72,7 +65,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];

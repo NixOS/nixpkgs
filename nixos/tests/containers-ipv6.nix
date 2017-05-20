@@ -47,7 +47,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       # multi-user.target, we should now be able to access it.
       my $ip = "${localIp}";
       chomp $ip;
-      $machine->succeed("ping6 -n -c 1 $ip");
+      $machine->succeed("ping -n -c 1 $ip");
       $machine->succeed("curl --fail http://[$ip]/ > /dev/null");
 
       # Stop the container.

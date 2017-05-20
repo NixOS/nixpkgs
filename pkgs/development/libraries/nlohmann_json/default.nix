@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "nlohmann_json-${version}";
-  version = "2.0.7";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${version}";
-    sha256 = "03jklvlcsms09p79qz9piqrdy2vhn4rkwidwfgq6cpxm6anqyqjh";
+    sha256 = "116309lx77m31x4krln0g7mra900g0knk9lbkxbpxnmamkagjyl9";
   };
 
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
   checkTarget = "test";
+
+  enableParallelBuilding = true;
 
   crossAttrs = {
     cmakeFlags = "-DBuildTests=OFF";

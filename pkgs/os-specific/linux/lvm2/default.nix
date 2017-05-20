@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid, enable_dmeventd ? false }:
+{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
+, thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
   version = "2.02.140";
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev libuuid ];
+  buildInputs = [ libudev libuuid thin-provisioning-tools ];
 
   preConfigure =
     ''
@@ -59,7 +60,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://sourceware.org/lvm2/;
-    descriptions = "Tools to support Logical Volume Management (LVM) on Linux";
+    description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     inherit version;

@@ -11,7 +11,6 @@ in
     services.xserver.desktopManager.kodi = {
       enable = mkOption {
         default = false;
-        example = true;
         description = "Enable the kodi multimedia center.";
       };
     };

@@ -4,7 +4,7 @@ R packages
 ## Installation
 
 Define an environment for R that contains all the libraries that you'd like to
-use by adding the following snippet to your $HOME/.nixpkgs/config.nix file:
+use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix file:
 
 ```nix
 {
@@ -12,7 +12,7 @@ use by adding the following snippet to your $HOME/.nixpkgs/config.nix file:
     {
 
         rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [ 
+            packages = with self.rPackages; [
                 devtools
                 ggplot2
                 reshape2
@@ -53,17 +53,42 @@ in with pkgs; {
 and then run `nix-shell .` to be dropped into a shell with those packages
 available.
 
+## RStudio
+
+RStudio uses a standard set of packages and ignores any custom R
+environments or installed packages you may have.  To create a custom
+environment, see `rstudioWrapper`, which functions similarly to
+`rWrapper`:
+
+```nix
+{
+    packageOverrides = super: let self = super.pkgs; in
+    {
+
+        rstudioEnv = super.rstudioWrapper.override {
+            packages = with self.rPackages; [
+                dplyr
+                ggplot2
+                reshape2
+                ];
+        };
+    };
+}
+```
+
+Then like above, `nix-env -f "<nixpkgs>" -iA rstudioEnv` will install
+this into your user profile.
+
 ## Updating the package set
 
 ```bash
+nix-shell generate-shell.nix
+
 Rscript generate-r-packages.R cran  > cran-packages.nix.new
 mv cran-packages.nix.new cran-packages.nix
 
 Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
 mv bioc-packages.nix.new bioc-packages.nix
-
-Rscript generate-r-packages.R irkernel  > irkernel-packages.nix.new
-mv irkernel-packages.nix.new irkernel-packages.nix
 ```
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
@@ -76,4 +101,3 @@ nix-build test-evaluation.nix --dry-run
 ```
 
 If this exits fine, the expression is ok. If not, you have to edit `default.nix`
-

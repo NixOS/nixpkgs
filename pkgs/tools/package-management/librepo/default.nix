@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python, pkgconfig, expat, glib, pcre, openssl, curl, check, attr, gpgme }:
+{ stdenv, fetchFromGitHub, cmake, python2, pkgconfig, expat, glib, pcre, openssl, curl, check, attr, gpgme }:
 
 stdenv.mkDerivation rec {
   version = "1.7.18";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --replace ' ''${PYTHON_INSTALL_DIR}' " $out/lib/python2.7/site-packages"
   '';
 
-  buildInputs = [ cmake python pkgconfig expat glib pcre openssl curl check attr gpgme ];
+  buildInputs = [ cmake python2 pkgconfig expat glib pcre openssl curl check attr gpgme ];
 
   # librepo/fastestmirror.h includes curl/curl.h, and pkg-config specfile refers to others in here
   propagatedBuildInputs = [ curl gpgme expat ];

@@ -10,9 +10,6 @@ pythonDocs = {
     python27 = import ./2.7-html.nix {
       inherit stdenv fetchurl lib;
     };
-    python26 = import ./2.6-html.nix {
-      inherit stdenv fetchurl lib;
-    };
   };
   pdf_a4 = {
     recurseForDerivations = true;
@@ -20,9 +17,6 @@ pythonDocs = {
       inherit stdenv fetchurl lib;
     };
     python27 = import ./2.7-pdf-a4.nix {
-      inherit stdenv fetchurl lib;
-    };
-    python26 = import ./2.6-pdf-a4.nix {
       inherit stdenv fetchurl lib;
     };
   };
@@ -34,9 +28,6 @@ pythonDocs = {
     python27 = import ./2.7-pdf-letter.nix {
       inherit stdenv fetchurl lib;
     };
-    python26 = import ./2.6-pdf-letter.nix {
-      inherit stdenv fetchurl lib;
-    };
   };
   text = {
     recurseForDerivations = true;
@@ -44,9 +35,6 @@ pythonDocs = {
       inherit stdenv fetchurl lib;
     };
     python27 = import ./2.7-text.nix {
-      inherit stdenv fetchurl lib;
-    };
-    python26 = import ./2.6-text.nix {
       inherit stdenv fetchurl lib;
     };
   };

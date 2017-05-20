@@ -2,7 +2,7 @@
 , curl, dbus, dbus_glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor_icon_theme
 , libarchive, libcanberra_gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
-, glib_networking, gsettings_desktop_schemas
+, glib_networking, gsettings_desktop_schemas, libSM, libytnef
 
 # Build options
 # TODO: A flag to build the manual.
@@ -32,31 +32,27 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.14.0";
-
-  meta = {
-    description = "The user-friendly, lightweight, and fast email client";
-    homepage = http://www.claws-mail.org/;
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ khumba fpletz ];
-  };
+  version = "3.15.0";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "0nfchgga3ir91s8rky0a0vnz8cgj2f6h716wh3cmb466a01xfss6";
+    sha256 = "0bnwd3l04y6j1nw3h861rdy6k6lyjzsi51j04d33vbpq8c6jskaf";
   };
 
   patches = [ ./mime.patch ];
+
+  hardeningDisable = [ "format" ];
 
   postPatch = ''
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared_mime_info}/share
   '';
 
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+
   buildInputs =
     [ curl dbus dbus_glib gtk2 gnutls gsettings_desktop_schemas hicolor_icon_theme
-      libetpan perl pkgconfig python wrapGAppsHook glib_networking
+      libetpan perl python glib_networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -99,4 +95,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp claws-mail.desktop $out/share/applications
   '';
+
+  meta = {
+    description = "The user-friendly, lightweight, and fast email client";
+    homepage = http://www.claws-mail.org/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ khumba fpletz globin ];
+  };
 }

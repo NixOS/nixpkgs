@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage }:
+{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage, curl }:
 
 let
   inherit (stdenv.lib) optionalString;
 
   platform = if stdenv.system == "x86_64-linux"
     then "x86_64-unknown-linux-gnu"
-    else abort "missing boostrap url for platform ${stdenv.system}";
+    else throw "missing bootstrap url for platform ${stdenv.system}";
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
-    then "05bppmc6hqgv2g4x76rj95xf40x2aikqmcnql5li27rqwliyxznj"
-    else throw "missing boostrap hash for platform ${stdenv.system}";
+    then "1d5h34dkm1r1ff562szygn9xk2qll1pjryvypl0lazzanxdh5gv5"
+    else throw "missing bootstrap hash for platform ${stdenv.system}";
 
   needsPatchelf = stdenv.isLinux;
 
@@ -19,7 +19,7 @@ let
      sha256 = bootstrapHash;
   };
 
-  version = "2016-12-29";
+  version = "2017-03-16";
 in
 
 rec {
@@ -69,7 +69,7 @@ rec {
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper ];
+    buildInputs = [ makeWrapper curl ];
     phases = ["unpackPhase" "installPhase"];
 
     installPhase = ''
@@ -78,6 +78,7 @@ rec {
 
       ${optionalString needsPatchelf ''
         patchelf \
+          --set-rpath "${stdenv.lib.makeLibraryPath [ curl zlib ]}" \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
       ''}

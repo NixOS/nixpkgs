@@ -12,6 +12,7 @@ let
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
+    dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
 
     [keyfile]
     ${optionalString (config.networking.hostName != "")
@@ -24,6 +25,8 @@ let
 
     [connection]
     ipv6.ip6-privacy=2
+    ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
+    wifi.cloned-mac-address=${cfg.wifi.macAddress}
   '';
 
   /*
@@ -73,6 +76,19 @@ let
     "pre-down" = "pre-down.d/";
   };
 
+  macAddressOpt = mkOption {
+    type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+    default = "preserve";
+    example = "00:11:22:33:44:55";
+    description = ''
+      "XX:XX:XX:XX:XX:XX": MAC address of the interface.
+      <literal>permanent</literal>: use the permanent MAC address of the device.
+      <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
+      <literal>random</literal>: generate a randomized value upon each connect.
+      <literal>stable</literal>: generate a stable, hashed MAC address.
+    '';
+  };
+
 in {
 
   ###### interface
@@ -108,7 +124,7 @@ in {
         type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect
+                            networkmanager_openconnect networkmanager_fortisslvpn
                             networkmanager_pptp networkmanager_l2tp; };
         internal = true;
       };
@@ -140,13 +156,27 @@ in {
         '';
       };
 
+      ethernet.macAddress = macAddressOpt;
+      wifi.macAddress = macAddressOpt;
+
+      useDnsmasq = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable NetworkManager's dnsmasq integration. NetworkManager will run
+          dnsmasq as a local caching nameserver, using a "split DNS"
+          configuration if you are connected to a VPN, and then update
+          resolv.conf to point to the local nameserver.
+        '';
+      };
+
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
           options = {
             source = mkOption {
-              type = types.str;
+              type = types.path;
               description = ''
-                A script source.
+                A script.
               '';
             };
 
@@ -192,6 +222,9 @@ in {
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
+      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
+      }
       { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";
       }
@@ -206,7 +239,7 @@ in {
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
       ++ lib.imap (i: s: {
-        text = s.source;
+        inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
       }) cfg.dispatcherScripts;
 
@@ -223,12 +256,14 @@ in {
     users.extraUsers = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
+      extraGroups = [ "networkmanager" ];
     }];
 
     systemd.packages = cfg.packages;
 
     systemd.services."network-manager" = {
       wantedBy = [ "network.target" ];
+      restartTriggers = [ configFile ];
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections

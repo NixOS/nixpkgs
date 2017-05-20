@@ -1,43 +1,31 @@
-{ stdenv, fetchgit, cmake, expat }:
+{ stdenv, fetchgit, cmake, expat, qt5, boost }:
 
 stdenv.mkDerivation rec {
   name = "boomerang-${version}";
-  version = "0.3.2alpha";
+  version = "0.3.99-alpha-2016-11-02";
 
   src = fetchgit {
     url = "https://github.com/nemerle/boomerang.git";
-    rev = "78c6b9dd33790be43dcb07edc549161398904006";
-    sha256 = "1n49wx2v9r40mh5kdkspqvc8rccpb4s004qxqvn4fwc59dm0pqbs";
+    rev = "f95d6436845e9036c8cfbd936731449475f79b7a";
+    sha256 = "1q3q92lfj24ij5sxdbdhcqyan28r6db1w80yrks4csf9zjij1ixh";
   };
 
-  buildInputs = [ cmake expat ];
+  buildInputs = [ cmake expat qt5.qtbase boost ];
+
+  patches = [ ./fix-install.patch ./fix-output.patch ];
 
   postPatch = ''
-    sed -i -e 's/-std=c++0x/-std=c++11 -fpermissive/' CMakeLists.txt
+    substituteInPlace loader/BinaryFileFactory.cpp \
+      --replace '"lib"' '"../lib"'
 
-    # Hardcode library base path ("lib/" is appended elsewhere)
-    sed -i -e 's|::m_base_path = "|&'"$out"'/|' loader/BinaryFileFactory.cpp
-    # Deactivate setting base path at runtime
-    sed -i -e 's/m_base_path *=[^}]*//' include/BinaryFile.h
+    substituteInPlace ui/DecompilerThread.cpp \
+      --replace '"output"' '"./output"'
 
-    # Fix up shared directory locations
-    shared="$out/share/boomerang/"
-    find frontend -name '*.cpp' -print | xargs sed -i -e \
-      's|Boomerang::get()->getProgPath()|std::string("'"$shared"'")|'
+    substituteInPlace boomerang.cpp \
+      --replace 'progPath("./")' "progPath(\"$out/share/boomerang/\")"
 
-    cat >> loader/CMakeLists.txt <<CMAKE
-    INSTALL(TARGETS bffDump BinaryFile
-            ElfBinaryFile Win32BinaryFile ExeBinaryFile HpSomBinaryFile
-            PalmBinaryFile DOS4GWBinaryFile MachOBinaryFile
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib)
-    CMAKE
-
-    cat >> CMakeLists.txt <<CMAKE
-    INSTALL(TARGETS boomerang DESTINATION bin)
-    INSTALL(DIRECTORY signatures DESTINATION share/boomerang)
-    INSTALL(DIRECTORY frontend/machine DESTINATION share/boomerang/frontend)
-    CMAKE
+    substituteInPlace ui/commandlinedriver.cpp \
+      --replace "QFileInfo(args[0]).absolutePath()" "\"$out/share/boomerang/\""
   '';
 
   enableParallelBuilding = true;

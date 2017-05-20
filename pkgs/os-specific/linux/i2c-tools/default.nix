@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "i2c-tools-${version}";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/i/i2c-tools/i2c-tools_${version}.orig.tar.bz2";
-    sha256 = "000pvg995qy1b15ks59gd0klri55hb33kqpg5czy84hw1pbdgm0l";
+    sha256 = "0hd4c1w8lnwc3j95h3vpd125170l1d4myspyrlpamqx6wbr6jpnv";
   };
 
   buildInputs = [ perl ];

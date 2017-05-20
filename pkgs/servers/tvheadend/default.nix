@@ -1,9 +1,9 @@
-{avahi, dbus, fetchurl, git, gnutar, gzip, libav, libiconv, openssl, pkgconfig, python
+{avahi, cmake, dbus, fetchurl, gettext, git, gnutar, gzip, bzip2, ffmpeg, libiconv, openssl, pkgconfig, python
 , stdenv, which, zlib}:
 
 with stdenv.lib;
 
-let version = "4.0.8";
+let version = "4.2.1";
     pkgName = "tvheadend";
 
 in
@@ -13,16 +13,26 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/tvheadend/tvheadend/archive/v${version}.tar.gz";
-    sha256 = "0k4g7pvfyk4bxpsjdwv7bmbygbp7gfg9wrr2aqb099ncbz18bx04";
+    sha256 = "1wrj3w595c1hfl2vmfdmp5qncy5samqi7iisyq76jf3nlzgw6dvn";
   };
 
   enableParallelBuilding = true;
 
   # disable dvbscan, as having it enabled causes a network download which
   # cannot happen during build.
-  configureFlags = [ "--disable-dvbscan" ];
+  configureFlags = [
+    "--disable-dvbscan"
+    "--disable-bintray_cache"
+    "--disable-ffmpeg_static"
+    "--disable-hdhomerun_client"
+    "--disable-hdhomerun_static"
+  ];
 
-  buildInputs = [ avahi dbus git gnutar gzip libav libiconv openssl pkgconfig python
+  buildPhase = "make";
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [ avahi dbus cmake gettext git gnutar gzip bzip2 ffmpeg libiconv openssl pkgconfig python
     which zlib ];
 
   preConfigure = ''
@@ -31,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "TV steaming server";
+    description = "TV streaming server";
     longDescription = ''
 	Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android 
         supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, SAT>IP and HDHomeRun as input sources.

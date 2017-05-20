@@ -1,10 +1,10 @@
 { lib
-, system, platform, crossSystem, config, overlays
+, localSystem, crossSystem, config, overlays
 }:
 
 let
   bootStages = import ../. {
-    inherit lib system platform overlays;
+    inherit lib localSystem overlays;
     crossSystem = null;
     # Ignore custom stdenvs when cross compiling for compatability
     config = builtins.removeAttrs config [ "replaceStdenv" ];
@@ -12,38 +12,34 @@ let
 
 in bootStages ++ [
 
-  # Build Packages.
-  #
-  # For now, this is just used to build the native stdenv. Eventually, it
-  # should be used to build compilers and other such tools targeting the cross
-  # platform. Then, `forceNativeDrv` can be removed.
+  # Build Packages
   (vanillaPackages: {
-    inherit system platform crossSystem config overlays;
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = crossSystem;
+    inherit config overlays;
+    selfBuild = false;
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;
-    stdenv = vanillaPackages.stdenv // {
-      # Needed elsewhere as a hacky way to pass the target
-      cross = crossSystem;
-      overrides = _: _: {};
-    };
+    inherit (vanillaPackages) stdenv;
   })
 
-  # Run packages
+  # Run Packages
   (buildPackages: {
-    inherit system platform crossSystem config overlays;
+    buildPlatform = localSystem;
+    hostPlatform = crossSystem;
+    targetPlatform = crossSystem;
+    inherit config overlays;
+    selfBuild = false;
     stdenv = if crossSystem.useiOSCross or false
       then let
-          inherit (buildPackages.darwin.ios-cross {
-              prefix = crossSystem.config;
-              inherit (crossSystem) arch;
-              simulator = crossSystem.isiPhoneSimulator or false; })
-            cc binutils;
+          inherit (buildPackages.darwin.ios-cross) cc binutils;
         in buildPackages.makeStdenvCross
           buildPackages.stdenv crossSystem
           binutils cc
       else buildPackages.makeStdenvCross
         buildPackages.stdenv crossSystem
-        buildPackages.binutilsCross buildPackages.gccCrossStageFinal;
+        buildPackages.binutils buildPackages.gccCrossStageFinal;
   })
 
 ]

@@ -1,7 +1,8 @@
-{lib, fetchurl, python, mkPythonDerivation, makeWrapper}:
+{lib, fetchurl, python, buildPythonPackage, makeWrapper}:
 
-mkPythonDerivation rec {
+buildPythonPackage rec {
   name = "PyXML-0.8.4";
+  format = "other";
   src = fetchurl {
     url = "mirror://sourceforge/pyxml/${name}.tar.gz";
     sha256 = "04wc8i7cdkibhrldy6j65qp5l75zjxf5lx6qxdxfdf2gb3wndawz";

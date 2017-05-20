@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config
+{ stdenv, fetchurl, config, makeWrapper
 , gconf
 , alsaLib
 , at_spi2_atk
@@ -13,9 +13,10 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst_plugins_base
+, gst-plugins-base
 , gstreamer
 , gtk2
+, gtk3
 , kerberos
 , libX11
 , libXScrnSaver
@@ -29,6 +30,7 @@
 , libcanberra_gtk2
 , libgnome
 , libgnomeui
+, defaultIconTheme
 , mesa
 , nspr
 , nss
@@ -38,6 +40,7 @@
 , coreutils
 , gnused
 , gnugrep
+, gnupg
 }:
 
 assert stdenv.isLinux;
@@ -91,9 +94,10 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst_plugins_base
+      gst-plugins-base
       gstreamer
       gtk2
+      gtk3
       kerberos
       libX11
       libXScrnSaver
@@ -114,6 +118,10 @@ stdenv.mkDerivation {
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
+
+  buildInputs = [ gtk3 defaultIconTheme ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase =
     ''
@@ -145,10 +153,15 @@ stdenv.mkDerivation {
       GenericName=Mail Reader
       Categories=Application;Network;
       EOF
+
+      wrapProgram "$out/bin/thunderbird" \
+        --argv0 "$out/bin/.thunderbird-wrapped" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl;
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
     baseName = "thunderbird";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";

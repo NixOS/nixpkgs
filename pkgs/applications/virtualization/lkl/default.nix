@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x1hdjsrj6hfk1sgfw11ihm00fmp6g158sr2q3cgjy2b6jnsr4hp";
   };
 
+  # Fix a /usr/bin/env reference in here that breaks sandboxed builds
+  prePatch = "patchShebangs arch/lkl/scripts";
+
   installPhase = ''
     mkdir -p $out/{bin,lib}
 
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as extensively as possible with minimal effort and reduced maintenance overhead";
-    platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
+    platforms   = [ "x86_64-linux" ]; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
     maintainers = with maintainers; [ copumpkin ];
   };
