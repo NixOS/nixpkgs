@@ -6001,6 +6001,10 @@ with pkgs;
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
+  lxpanel = callPackage ../desktops/lxde/core/lxpanel {
+    gtk2 = gtk2-x11;
+  };
+
   kona = callPackage ../development/interpreters/kona {};
 
   lolcode = callPackage ../development/interpreters/lolcode { };
