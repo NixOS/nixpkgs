@@ -15655,6 +15655,10 @@ with pkgs;
 
   shutter = callPackage ../applications/graphics/shutter { };
 
+
+  simulavr = callPackage ../development/avr/simulavr { };
+
+
   simple-scan = callPackage ../applications/graphics/simple-scan { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
