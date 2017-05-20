@@ -64,6 +64,7 @@ self: super: {
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
   git-annex = ((overrideCabal super.git-annex (drv: {
     src = pkgs.fetchgit {
+      name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
       sha256 = "0i08zxk68kbg6k0d9af97r9nr5vidsy63hx22fdp7c5jp64f967q";
