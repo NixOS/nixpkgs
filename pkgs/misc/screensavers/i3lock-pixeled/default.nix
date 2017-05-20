@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
        --replace i3lock    "${pkgs.i3lock}/bin/i3lock" \
        --replace convert   "${pkgs.imagemagick}/bin/convert" \
        --replace scrot     "${pkgs.scrot}/bin/scrot" \
-       --replace playerctl "${pkgs.playerctl}/bin/playerctl#"
+       --replace playerctl "${pkgs.playerctl}/bin/playerctl"
   '';
 
   meta = with stdenv.lib; {
