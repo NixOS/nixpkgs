@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cloud.google.com/appengine/docs/go/";
     license = licenses.asl20;
     platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ lufia ];
   };
 }
