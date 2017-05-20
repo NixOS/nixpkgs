@@ -18,6 +18,7 @@ in
     systemd.services = {
       "znapzend" = {
         description = "ZnapZend - ZFS Backup System";
+        wantedBy    = [ "zfs.target" ];
         after       = [ "zfs.target" ];
 
         path = with pkgs; [ zfs mbuffer openssh ];
@@ -28,6 +29,5 @@ in
         };
       };
     };
-
   };
 }
