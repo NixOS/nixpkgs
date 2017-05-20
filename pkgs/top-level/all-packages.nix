@@ -14347,6 +14347,8 @@ with pkgs;
 
   i3lock-fancy = callPackage ../applications/window-managers/i3/lock-fancy.nix { };
 
+  i3lock-pixeled = callPackage ../misc/screensavers/i3lock-pixeled/default.nix { };
+
   i3minator = callPackage ../tools/misc/i3minator { };
 
   i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
