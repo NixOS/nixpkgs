@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cairo, fontconfig, freetype, gdk_pixbuf, glib
 , glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
-, libXi, libXrender, libXext, lib
+, libXi, libXrender, libXext
 }:
 let
   spec = if stdenv.system == "i686-linux" then { system="linux32"; sha256="70845d81304c5f5f0b7f65274216e613e867e621676a09790c8aa8ef81ea9766"; }
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -m755 -D chromedriver $out/bin/chromedriver
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
   '';
