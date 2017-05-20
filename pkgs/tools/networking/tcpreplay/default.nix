@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     "--with-tcpdump=${tcpdump}/bin"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A suite of utilities for editing and replaying network traffic";
     homepage = http://tcpreplay.appneta.com/;
-    license = [ "bsd" stdenv.lib.licenses.gpl3 ];
-    maintainers = with stdenv.lib.maintainers; [ eleanor ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ bsd3 gpl3 ];
+    maintainers = with maintainers; [ eleanor ];
+    platforms = platforms.linux;
   };
 }
