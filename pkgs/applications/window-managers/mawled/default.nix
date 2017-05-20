@@ -29,7 +29,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/tomhrr/mawled";
     license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
-    # The Dale port is currently present only on these platforms
+    platforms = platforms.all;
   };
 }
