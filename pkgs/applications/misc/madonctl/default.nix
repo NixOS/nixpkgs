@@ -2,17 +2,24 @@
 
 buildGoPackage rec {
   name = "madonctl-${version}";
-  version = "0.1.0";
-  rev = "8d14d4d0847fe200d11c0b3f7a6252da5e687078";
+  version = "1.1.0";
 
   goPackagePath = "github.com/McKael/madonctl";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "McKael";
     repo = "madonctl";
-    sha256 = "1nd07frifkw21av9lczm12ffky10ycv9ya501mihm82c78jk1sn5";
+    rev  = "v${version}";
+    sha256 = "1dnc1xaafhwhhf5afhb0wc2wbqq0s1r7qzj5k0xzc58my541gadc";
   };
+
+  # How to update:
+  # go get -u github.com/McKael/madonctl
+  # cd $GOPATH/src/github.com/McKael/madonctl
+  # git checkout v<version-number>
+  # go2nix save
+
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "CLI for the Mastodon social network API";
