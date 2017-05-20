@@ -2624,6 +2624,8 @@ with pkgs;
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
 
+  lldpd = callPackage ../tools/networking/lldpd { };
+
   lnav = callPackage ../tools/misc/lnav { };
 
   loc = callPackage ../development/misc/loc { };
