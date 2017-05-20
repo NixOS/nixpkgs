@@ -9838,6 +9838,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetCIDRLite = buildPerlPackage rec {
+    name = "Net-CIDR-Lite-0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DOUGW/${name}.tar.gz";
+      sha256 = "cfa125e8a2aef9259bc3a44e07cbdfb7894b64d22e7c0cee92aee2f5c7915093";
+    };
+    meta = {
+      description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
+      license = "unknown";
+    };
+  };
+
   NetCoverArtArchive = buildPerlPackage {
     name = "Net-CoverArtArchive-1.02";
     src = fetchurl {
@@ -9967,6 +9979,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "An implementation of the OAuth protocol";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetPatricia = buildPerlPackage rec {
+    name = "Net-Patricia-1.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRUBER/${name}.tar.gz";
+      sha256 = "70835a926e1c5a8d0324c72fffee82eeb7ec6c141dee04fd446820b64f71c552";
+    };
+    propagatedBuildInputs = [ NetCIDRLite Socket6 ];
+    meta = {
+      license = "unknown";
     };
   };
 
@@ -10789,13 +10813,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PPI = buildPerlPackage {
-    name = "PPI-1.220";
+  PPI = buildPerlPackage rec {
+    name = "PPI-1.224";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.220.tar.gz;
-      sha256 = "1e15be50e7d95a36d351af8bf5074f6695a2c72165e586d93e616183e7602b83";
+      url = "mirror://cpan/authors/id/M/MI/MITHALDU/${name}.tar.gz";
+      sha256 = "8d0f9faaea68515fb5aa6323115dcf98ea6c1dec4441f3844d3b9633b6cc9d94";
     };
-    buildInputs = [ ClassInspector FileRemove TestNoWarnings TestObject TestSubCalls ];
+    buildInputs = [ ClassInspector FileRemove TestDeep TestObject TestSubCalls TestWarn ];
     propagatedBuildInputs = [ Clone IOString ListMoreUtils ParamsUtil TaskWeaken ];
 
     # Remove test that fails due to unexpected shebang after
@@ -10806,7 +10830,6 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/adamkennedy/PPI;
       description = "Parse, Analyze and Manipulate Perl (without perl)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -11667,13 +11690,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Socket6 = buildPerlPackage rec {
-    name = "Socket6-0.25";
+    name = "Socket6-0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UM/UMEMOTO/${name}.tar.gz";
-      sha256 = "1ads4k4vvq6pnxkdw0s8gaj03w4h9snxyw7zyikfzd20fy76yx6s";
+      sha256 = "bfd49ab99f3197c99285fed4683c4edc06277c1e4453f593e694d7bff0974586";
     };
     setOutputFlags = false;
     buildInputs = [ pkgs.which ];
+    meta = {
+      description = "IPv6 related part of the C socket.h defines and structure manipulators";
+      license = stdenv.lib.licenses.bsd3;
+    };
   };
 
   SoftwareLicense = buildPerlPackage rec {

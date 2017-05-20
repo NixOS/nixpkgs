@@ -2,28 +2,34 @@
 # http://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project#Recommended_settings
 # https://wiki.gentoo.org/wiki/Hardened/Hardened_Kernel_Project
 #
-# The base kernel is assumed to be at least 4.9 or whatever the toplevel
-# linux_hardened package expression uses.
-#
 # Dangerous features that can be permanently (for the boot session) disabled at
 # boot via sysctl or kernel cmdline are left enabled here, for improved
 # flexibility.
 
-{ stdenv }:
+{ stdenv, version }:
 
 with stdenv.lib;
+
+assert (versionAtLeast version "4.9");
 
 ''
 GCC_PLUGINS y # Enable gcc plugin options
 
-DEBUG_KERNEL y
-DEBUG_RODATA y # Make kernel text & rodata read-only
+${optionalString (versionAtLeast version "4.11") ''
+  GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
+
 DEBUG_WX y # A one-time check for W+X mappings at boot; doesn't do anything beyond printing a warning
+
+${optionalString (versionAtLeast version "4.10") ''
+  BUG_ON_DATA_CORRUPTION y # BUG if kernel struct validation detects corruption
+''}
 
 # Additional validation of commonly targetted structures
 DEBUG_CREDENTIALS y
 DEBUG_NOTIFIERS y
 DEBUG_LIST y
+DEBUG_SG y
 
 HARDENED_USERCOPY y # Bounds check usercopy
 
@@ -31,6 +37,9 @@ HARDENED_USERCOPY y # Bounds check usercopy
 PAGE_POISONING y
 PAGE_POISONING_NO_SANITY y
 PAGE_POISONING_ZERO y
+
+CC_STACKPROTECTOR_REGULAR n
+CC_STACKPROTECTOR_STRONG y
 
 # Stricter /dev/mem
 STRICT_DEVMEM y

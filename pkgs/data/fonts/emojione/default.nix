@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open source emoji set";
     homepage = "http://emojione.com/";
-    licenses = licenses.cc-by-40;
+    license = licenses.cc-by-40;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
   };

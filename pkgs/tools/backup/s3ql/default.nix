@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ which ]; # tests will fail without which
   propagatedBuildInputs = with python3Packages; [
-    sqlite apsw pycrypto requests2 defusedxml dugong llfuse
+    sqlite apsw pycrypto requests defusedxml dugong llfuse
     cython pytest pytest-catchlog
   ];
 

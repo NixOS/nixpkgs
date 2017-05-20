@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
+{ stdenv, fetchFromGitHub, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
 
 stdenv.mkDerivation (rec {
-  name = "ProofGeneral-HEAD";
+  name = "ProofGeneral-unstable-${version}";
+  version = "2017-05-06";
 
-  src = fetchgit {
-    url = "https://github.com/ProofGeneral/PG.git";
-    rev = "62ec846fcaaef8f3ae94302cbef2972f88a0804f";
-    sha256 = "0vln1bc884qynbl5yci0dkr6ckz3p46q4jrhxgylcx4w0jkhizhm";
+  src = fetchFromGitHub {
+    owner = "ProofGeneral";
+    repo = "PG";
+    rev = "574b0992e3cb4b7a4ad88400b9a5ab0198a96ca5";
+    sha256 = "1c1pgdmy58h78s53g0ga9b5ilbsibz0dr2lk52xgbs3q5m22v5fh";
   };
 
   buildInputs = [ emacs texinfo perl which ] ++ stdenv.lib.optional enableDoc texLive;

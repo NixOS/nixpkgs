@@ -201,7 +201,6 @@ in
           Group = cfg.group;
           ExecStart = "${pkgs.mattermost}/bin/mattermost-platform";
           WorkingDirectory = "${cfg.statePath}";
-          PrivateTmp = true;
           JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
           Restart = "always";
           RestartSec = "10";

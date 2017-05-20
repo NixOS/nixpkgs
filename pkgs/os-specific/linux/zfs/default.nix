@@ -139,12 +139,12 @@ in
     };
     zfsUnstable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.11";
+      incompatibleKernelVersion = null;
 
-      version = "0.7.0-rc3";
+      version = "0.7.0-rc4";
 
       # this package should point to a version / git revision compatible with the latest kernel release
-      sha256 = "0js3lazqq8wb4nklqxd6sgbvwqgwnjgz3xi3mm33xf4284gia6pc";
+      sha256 = "16jiq2h7m2ljg5xv7m5lqmsszzclkhvj1iq1wa9w740la4vl22kf";
       extraPatches = [
         (fetchpatch {
           url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";

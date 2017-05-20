@@ -1,5 +1,8 @@
-{ # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ builtins.currentSystem ]
+/* This file defines some basic smoke tests for cross compilation.
+*/
+
+{ # The platforms *from* which we cross compile.
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -9,36 +12,38 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 let
   nativePlatforms = linux;
 
-  /* Basic list of packages to cross-build */
-  basicCrossDrv = {
+  common = {
+    buildPackages.binutils = nativePlatforms;
+    gmp = nativePlatforms;
+  };
+
+  gnuCommon = lib.recursiveUpdate common {
+    buildPackages.gccCrossStageFinal = nativePlatforms;
+    coreutils = nativePlatforms;
+  };
+
+  linuxCommon = lib.recursiveUpdate gnuCommon {
+    buildPackages.gdbCross = nativePlatforms;
+
     bison = nativePlatforms;
     busybox = nativePlatforms;
-    coreutils = nativePlatforms;
     dropbear = nativePlatforms;
+    ed = nativePlatforms;
+    ncurses = nativePlatforms;
+    patch = nativePlatforms;
   };
 
-  /* Basic list of packages to be natively built,
-     but need a crossSystem defined to get meaning */
-  basicNativeDrv = {
-    buildPackages.binutils = nativePlatforms;
-    buildPackages.gccCrossStageFinal = nativePlatforms;
-    buildPackages.gdbCross = nativePlatforms;
-  };
-
-  basic = basicCrossDrv // basicNativeDrv;
-
-  windows = {
-    buildPackages.binutils = nativePlatforms;
-    buildPackages.gccCrossStageFinal = nativePlatforms;
-
-    coreutils = nativePlatforms;
+  windowsCommon = lib.recursiveUpdate gnuCommon {
     boehmgc = nativePlatforms;
-    gmp = nativePlatforms;
     guile_1_8 = nativePlatforms;
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;
     windows.wxMSW = nativePlatforms;
+  };
+
+  darwinCommon = {
+    buildPackages.binutils = darwin;
   };
 
 in
@@ -83,6 +88,21 @@ in
     guile = nativePlatforms;
   };
 
+  darwinToAarch64 = let
+    crossSystem = {
+      config = "aarch64-apple-darwin14";
+      arch = "arm64";
+      libc = "libSystem";
+    };
+  in mapTestOnCross crossSystem darwinCommon;
+
+  darwinToArm = let
+    crossSystem = {
+      config = "arm-apple-darwin10";
+      arch = "armv7-a";
+      libc = "libSystem";
+    };
+  in mapTestOnCross crossSystem darwinCommon;
 
   /* Test some cross builds to the Sheevaplug */
   crossSheevaplugLinux = let
@@ -96,7 +116,7 @@ in
       libc = "glibc";
       openssl.system = "linux-generic32";
     };
-  in mapTestOnCross crossSystem (basic // {
+  in mapTestOnCross crossSystem (linuxCommon // {
     ubootSheevaplug = nativePlatforms;
   });
 
@@ -109,7 +129,7 @@ in
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem windows;
+  in mapTestOnCross crossSystem windowsCommon;
 
 
   /* Test some cross builds on 64 bit mingw-w64 */
@@ -121,7 +141,7 @@ in
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
     };
-  in mapTestOnCross crossSystem windows;
+  in mapTestOnCross crossSystem windowsCommon;
 
 
   /* Linux on the fuloong */
@@ -140,11 +160,7 @@ in
         abi = "n32";
       };
     };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    ed = nativePlatforms;
-    patch = nativePlatforms;
-  };
+  in mapTestOnCross crossSystem linuxCommon;
 
 
   /* Linux on Raspberrypi */
@@ -166,10 +182,7 @@ in
         abi = "aapcs-linux";
       };
     };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    ed = nativePlatforms;
-    patch = nativePlatforms;
+  in mapTestOnCross crossSystem (linuxCommon // {
     vim = nativePlatforms;
     unzip = nativePlatforms;
     ddrescue = nativePlatforms;
@@ -177,7 +190,7 @@ in
     patchelf = nativePlatforms;
     buildPackages.binutils = nativePlatforms;
     mpg123 = nativePlatforms;
-  };
+  });
 
 
   /* Cross-built bootstrap tools for every supported platform */

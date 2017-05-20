@@ -26,7 +26,7 @@ python2Packages.buildPythonApplication rec {
   ];
 
   buildInputs = with python2Packages; [
-    Babel coverage fixtures mox3 mock oslosphinx requests2 testrepository pep8
+    Babel coverage fixtures mox3 mock oslosphinx requests testrepository pep8
     testresources testscenarios testtools psutil_1 oslotest psycopg2
     sqlite which strace
   ];

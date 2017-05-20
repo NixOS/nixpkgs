@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     click
     colorama
-    requests2
+    requests
     pygments
     prompt_toolkit
     six

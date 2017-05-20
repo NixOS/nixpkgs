@@ -1,21 +1,33 @@
-{ stdenv, fetchurl, automoc4, cmake, gettext, perl, pkgconfig
-, kdelibs4, kde_baseapps
+{
+  kdeDerivation, kdeWrapper, fetchurl, lib,
+  extra-cmake-modules, kdoctools,
+  kconfig, kinit, kparts
 }:
 
-stdenv.mkDerivation rec {
-  name = "krusader-2.4.0-beta1";
-  src = fetchurl {
-    url = "mirror://sourceforge/krusader/${name}.tar.bz2";
-    sha256 = "1q1m4cjzz2m41pdpxnwrsiczc7990785b700lv64midjjgjnr7j6";
+let
+  pname = "krusader";
+  version = "2.6.0";
+  unwrapped = kdeDerivation rec {
+    name = "krusader-${version}";
+
+    src = fetchurl {
+      url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
+      sha256 = "0f9skfvp0hdml8qq6v22z9293ndijd8kwbpdj7wpvgd6mlya8qbh";
+    };
+
+    meta = with lib; {
+      description = "Norton/Total Commander clone for KDE";
+      license = licenses.gpl2;
+      homepage = http://www.krusader.org;
+      maintainers = with maintainers; [ sander ];
+    };
+
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+    propagatedBuildInputs = [ kconfig kinit kparts ];
+    enableParallelBuilding = true;
   };
-  buildInputs = [ kdelibs4 kde_baseapps ];
-  nativeBuildInputs = [ automoc4 cmake gettext perl pkgconfig ];
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # fix build with newer gcc versions
-  meta = {
-    description = "Norton/Total Commander clone for KDE";
-    license = "GPL";
-    homepage = http://www.krusader.org;
-    maintainers = with stdenv.lib.maintainers; [ sander ];
-    inherit (kdelibs4.meta) platforms;
-  };
+
+in kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/krusader" ];
 }

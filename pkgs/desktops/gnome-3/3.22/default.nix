@@ -212,6 +212,10 @@ let
     inherit gnome3;
   };
 
+  networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override {
+    inherit gnome3;
+  };
+
   networkmanager_l2tp = pkgs.networkmanager_l2tp.override {
     inherit gnome3;
   };

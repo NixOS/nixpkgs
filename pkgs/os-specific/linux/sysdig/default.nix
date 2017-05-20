@@ -1,17 +1,15 @@
 {stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
 
-let
-  inherit (stdenv.lib) optional optionalString;
-  baseName = "sysdig";
-  version = "0.15.0";
-in
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+  name = "sysdig-${version}";
+  version = "0.16.0";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "08spprzgx6ksd7sjp5nk7z5szdlixh2sb0bsb9mfaq4xr12gsjw2";
+  src = fetchFromGitHub {
+    owner = "draios";
+    repo = "sysdig";
+    rev = version;
+    sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
   };
 
   buildInputs = [
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = makeLibraryPath [
     zlib
     luajit
     ncurses
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];

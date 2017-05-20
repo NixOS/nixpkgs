@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchurl
-, six, requests2, websocket_client
+, six, requests, websocket_client
 , ipaddress, backports_ssl_match_hostname, docker_pycreds
 }:
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     six
-    requests2
+    requests
     websocket_client
     ipaddress
     backports_ssl_match_hostname

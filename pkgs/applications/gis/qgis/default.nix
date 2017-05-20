@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags ] ++
     (stdenv.lib.optional withGrass grass) ++
-    (with python2Packages; [ numpy psycopg2 requests2 python2Packages.qscintilla sip ]);
+    (with python2Packages; [ numpy psycopg2 requests python2Packages.qscintilla sip ]);
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
