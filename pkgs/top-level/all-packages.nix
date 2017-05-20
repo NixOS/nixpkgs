@@ -18318,6 +18318,15 @@ with pkgs;
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
+  nixos-default-config = import ../../nixos { inherit system; configuration = { }; };
+
+  inherit (nixos-default-config.config.system.build)
+    nixos-generate-config
+    nixos-install
+    nixos-rebuild;
+
+  nixos-manpages = nixos-default-config.config.system.build.manual.manpages;
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
