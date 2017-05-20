@@ -124,6 +124,7 @@ in {
     hardware.bluetooth.enable = mkDefault true;
     services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
     services.udev.packages = [ pkgs.gnome3.gnome_settings_daemon ];
+    systemd.packages = [ pkgs.gnome3.vino ];
 
     # If gnome3 is installed, build vim for gtk3 too.
     nixpkgs.config.vim.gui = "gtk3";
@@ -185,7 +186,7 @@ in {
     networking.networkmanager.basePackages =
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
-                         networkmanager_openconnect networkmanager_pptp
+                         networkmanager_openconnect networkmanager_fortisslvpn networkmanager_pptp
                          networkmanager_l2tp; };
 
     # Needed for themes and backgrounds

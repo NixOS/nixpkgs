@@ -440,6 +440,7 @@ in {
       path = with pkgs; [
         gitAndTools.git
         openssh
+        gitlab-workhorse
       ];
       preStart = ''
         mkdir -p /run/gitlab

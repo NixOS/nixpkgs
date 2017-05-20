@@ -73,7 +73,7 @@ let
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
-  inherit fetchPypi;
+  inherit fetchPypi callPackage;
   inherit sharedLibraryExtension;
 
   # helpers
@@ -111,6 +111,8 @@ in {
       homepage = https://github.com/python-acoustics/python-acoustics;
     };
   };
+
+  "3to2" = callPackage ../development/python-modules/3to2 { };
 
   aenum = callPackage ../development/python-modules/aenum { };
 
@@ -698,15 +700,15 @@ in {
   aniso8601 = buildPythonPackage rec {
     name = "aniso8601-${version}";
     version = "1.2.0";
- 
+
     meta = {
       description = "Parses ISO 8601 strings.";
       homepage    = "https://bitbucket.org/nielsenb/aniso8601";
       license     = licenses.bsd3;
     };
- 
+
     propagatedBuildInputs = with self; [ dateutil ];
- 
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/aniso8601/${name}.tar.gz";
       sha256 = "502400f82574afa804cc915d83f15c67533d364dcd594f8a6b9d2053f3404dd4";
@@ -2471,6 +2473,8 @@ in {
     doCheck = false; # lazy packager
   };
 
+  cram = callPackage ../development/python-modules/cram { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
@@ -2653,19 +2657,7 @@ in {
 
   };
 
-  rarfile = self.buildPythonPackage rec {
-    name = "rarfile-2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rarfile/rarfile-2.6.tar.gz";
-      sha256 = "326700c5450cfb367f612e918866ea27551bac02f4656f340003c88873fa1a56";
-    };
-
-    meta = {
-      description = "rarfile - RAR archive reader for Python";
-      homepage = https://github.com/markokr/rarfile;
-    };
-  };
+  rarfile = callPackage ../development/python-modules/rarfile {};
 
   proboscis = buildPythonPackage rec {
     name = "proboscis-1.2.6.0";
@@ -4105,6 +4097,8 @@ in {
     };
   };
 
+  confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
+
 
   construct = buildPythonPackage rec {
     name = "construct-${version}";
@@ -4314,6 +4308,10 @@ in {
       ${python.interpreter} runtests.py \
         ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
     '';
+
+    # Disable tests temporarily
+    # https://github.com/cython/cython/issues/1676
+    doCheck = false;
 
     meta = {
       description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
@@ -5043,6 +5041,8 @@ in {
     };
   };
 
+  pytest-cram = callPackage ../development/python-modules/pytest-cram { };
+
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
@@ -5330,23 +5330,7 @@ in {
     };
   };
 
-  pytest_xdist = buildPythonPackage rec {
-    name = "pytest-xdist-1.14";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-xdist/${name}.zip";
-      sha256 = "08rn2l39ds60xshs4js787l84pfckksqklfq2wq9x8ig2aci2pja";
-    };
-
-    buildInputs = with self; [ pytest setuptools_scm ];
-    propagatedBuildInputs = with self; [ execnet ];
-
-    meta = {
-      description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
-      homepage = https://github.com/pytest-dev/pytest-xdist;
-      license = licenses.mit;
-    };
-  };
+  pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-localserver = buildPythonPackage rec {
     name = "pytest-localserver-${version}";
@@ -8318,34 +8302,7 @@ in {
     };
   };
 
-  natsort = buildPythonPackage rec {
-    name = "natsort-5.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/natsort/${name}.tar.gz";
-      sha256 = "4ad6b4d1153451e345967989bd3ca30abf33f615b116eeadfcc51a456e6974a9";
-    };
-
-    buildInputs = with self;
-      [
-        hypothesis
-        pytestcache
-        pytestcov
-        pytestflakes
-        pytestpep8
-        pytest
-        mock
-      ]
-      # pathlib was made part of standard library in 3.5:
-      ++ (optionals (pythonOlder "3.4") [ pathlib ]);
-
-    meta = {
-      description = "Natural sorting for python";
-      homepage = https://github.com/SethMMorton/natsort;
-      license = licenses.mit;
-      broken = true;
-    };
-  };
+  natsort = callPackage ../development/python-modules/natsort { };
 
   logster = buildPythonPackage {
     name = "logster-7475c53822";
@@ -12767,8 +12724,6 @@ in {
     };
   };
 
-  icdiff = callPackage ../tools/text/icdiff {};
-
   imageio = buildPythonPackage rec {
     name = "imageio-${version}";
     version = "1.6";
@@ -14241,6 +14196,8 @@ in {
       license = licenses.bsd3;
     };
   };
+
+  metaphone = callPackage ../development/python-modules/metaphone { };
 
   mezzanine = buildPythonPackage rec {
     version = "3.1.10";
@@ -16027,28 +15984,8 @@ in {
     };
   };
 
-
-  buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
-    gfortran = pkgs.gfortran;
+  numpy = callPackage ../development/python-modules/numpy {
     blas = pkgs.openblasCompat;
-  };
-
-  numpy = self.numpy_1_11;
-
-  numpy_1_10 = self.buildNumpyPackage rec {
-    version = "1.10.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "7356e98fbcc529e8d540666f5a919912752e569150e9a4f8d869c686f14c720b";
-    };
-  };
-
-  numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-      sha256 = "2e0fc5248246a64628656fe14fcab0a959741a2820e003bd15538226501b82f7";
-    };
   };
 
   numpydoc = buildPythonPackage rec {
@@ -16622,23 +16559,7 @@ in {
     buildInputs = with self; [ oslotest mock coverage simplejson oslo-i18n ];
   };
 
-  rfc3986 = buildPythonPackage rec {
-    name = "rfc3986-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rfc3986/rfc3986-0.2.2.tar.gz";
-      sha256 = "0yvzz7gp84qqdadbjdh9ch7dz4w19nmhwa704s9m11bljgp3hqmn";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
-
-    meta = with stdenv.lib; {
-      description = "rfc3986";
-      homepage = https://rfc3986.rtfd.org;
-    };
-  };
+  rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
   pycadf = buildPythonPackage rec {
     name = "pycadf-${version}";
@@ -18556,6 +18477,8 @@ in {
     };
   };
 
+  piexif = callPackage ../development/python-modules/piexif { };
+
   pip = buildPythonPackage rec {
     pname = "pip";
     version = "9.0.1";
@@ -18606,6 +18529,8 @@ in {
       license = licenses.bsd3;
     };
   };
+
+  pika-pool = callPackage ../development/python-modules/pika-pool { };
 
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
@@ -18758,10 +18683,10 @@ in {
 
   python-jenkins = buildPythonPackage rec {
     name = "python-jenkins-${version}";
-    version = "0.4.11";
+    version = "0.4.14";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-jenkins/${name}.tar.gz";
-      sha256 = "153gm7pmmn0bymglsgcr2ya0752r2v1hajkx73gl1pk4jifb2gdf";
+      sha256 = "1n8ikvd9jf4dlki7nqlwjlsn8wpsx4x7wg4h3d6bkvyvhwwf8yqf";
     };
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
@@ -18769,7 +18694,7 @@ in {
 
     buildInputs = with self; [ mock ];
     propagatedBuildInputs = with self; [ pbr pyyaml six multi_key_dict testtools
-     testscenarios testrepository ];
+     testscenarios testrepository kerberos ];
 
     meta = {
       description = "Python bindings for the remote Jenkins API";
@@ -20147,7 +20072,11 @@ in {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
-  pyproj = callPackage ../development/python-modules/pyproj { };
+  pyproj = callPackage ../development/python-modules/pyproj {
+    # pyproj does *work* if you want to use a system supplied proj, but with the current version(s) the tests fail by
+    # a few decimal places, so caveat emptor.
+    proj = null;
+  };
 
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
@@ -20781,7 +20710,7 @@ in {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "4929d022713129401160fd47550d5158931e4ea6a7136b5d8dfe3b13ac16f2f0";
+      sha256 = "1rvf5jw9hknqz02rp1vg8abgb1lpa0bc65l7ylmlillqx7bswq3r";
     };
 
     # No tests in archive
@@ -22322,7 +22251,7 @@ in {
       homepage = "https://github.com/goinnn/django-multiselectfield";
     };
   };
-  
+
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
 
@@ -23026,29 +22955,7 @@ in {
     };
   };
 
-  buildScipyPackage = callPackage ../development/python-modules/scipy.nix {
-    gfortran = pkgs.gfortran;
-  };
-
-  scipy = self.scipy_0_18;
-
-  scipy_0_17 = self.buildScipyPackage rec {
-    version = "0.17.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "1b1qpfz2j2rvmlplsjbnznnxnqr9ckbmis506110ii1w07wd4k4w";
-    };
-    numpy = self.numpy;
-  };
-
-  scipy_0_18 = self.buildScipyPackage rec {
-    version = "0.18.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "8ab6e9c808bf2fb3e8576cd8cf07226d9cdc18b012c06d9708429a821ac6634e";
-    };
-    numpy = self.numpy;
-  };
+  scipy = callPackage ../development/python-modules/scipy { };
 
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";
@@ -29755,12 +29662,12 @@ EOF
   };
 
   jenkins-job-builder = buildPythonPackage rec {
-    name = "jenkins-job-builder-1.6.1";
+    name = "jenkins-job-builder-2.0.0.0b2";
     disabled = ! (isPy26 || isPy27);
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jenkins-job-builder/${name}.tar.gz";
-      sha256 = "1v3xknfzgsp35nn3ma4imz233v569v3x75mx2yxlv1xf32nn7yk4";
+      sha256 = "1y0yl2w6c9c91f9xbjkvff1ag8p72r24nzparrzrw9sl8kn9632x";
     };
 
     patchPhase = ''
@@ -29777,6 +29684,7 @@ EOF
       python-jenkins
       pyyaml
       six
+      stevedore
     ] ++ optionals isPy26 [
       ordereddict
       argparse
@@ -31298,32 +31206,7 @@ EOF
     };
   };
 
-  whoosh = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "Whoosh";
-    version = "2.7.4";
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/25/2b/6beed2107b148edc1321da0d489afc4617b9ed317ef7b72d4993cad9b684/${name}.tar.gz";
-      sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
-    };
-    buildInputs = with self; [ pytest ];
-
-    # Wrong encoding
-    postPatch = ''
-      rm tests/test_reading.py
-    '';
-    checkPhase =  ''
-      py.test -k "not test_timelimit"
-    '';
-
-    meta = {
-      description = "Fast, pure-Python full text indexing, search, and spell checking library.";
-      homepage    = "http://bitbucket.org/mchaput/whoosh";
-      license     = licenses.bsd2;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-  };
+  whoosh = callPackage ../development/python-modules/whoosh { };
 
   packet-python = buildPythonPackage rec {
     name = "${pname}-${version}";

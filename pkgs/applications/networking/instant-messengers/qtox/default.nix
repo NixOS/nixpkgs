@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "qtox-${version}";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner  = "tux3";
     repo   = "qTox";
     rev    = "v${version}";
-    sha256 = "00pbb788147qxpzj3kfp6x6a9w2h8rmz0sdwfzzdjh1qyb43d4q0";
+    sha256 = "1c5y7fwhsq1f6z8208xl1jd6bl1r6k8g0fjqxf0z10373c9395jq";
   };
 
   buildInputs = [

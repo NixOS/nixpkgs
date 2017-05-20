@@ -1,0 +1,43 @@
+Index: qtbase-opensource-src-5.8.0/src/gui/kernel/qplatformintegrationfactory.cpp
+===================================================================
+--- qtbase-opensource-src-5.8.0.orig/src/gui/kernel/qplatformintegrationfactory.cpp
++++ qtbase-opensource-src-5.8.0/src/gui/kernel/qplatformintegrationfactory.cpp
+@@ -62,9 +62,10 @@ QPlatformIntegration *QPlatformIntegrati
+     // Try loading the plugin from platformPluginPath first:
+     if (!platformPluginPath.isEmpty()) {
+         QCoreApplication::addLibraryPath(platformPluginPath);
+-        if (QPlatformIntegration *ret = qLoadPlugin<QPlatformIntegration, QPlatformIntegrationPlugin>(directLoader(), platform, paramList, argc, argv))
+-            return ret;
+     }
++    QCoreApplication::addLibraryPath(QStringLiteral(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
++    if (QPlatformIntegration *ret = qLoadPlugin<QPlatformIntegration, QPlatformIntegrationPlugin>(directLoader(), platform, paramList, argc, argv))
++        return ret;
+ #else
+     Q_UNUSED(platformPluginPath);
+ #endif
+@@ -84,15 +85,16 @@ QStringList QPlatformIntegrationFactory:
+ #ifndef QT_NO_LIBRARY
+     if (!platformPluginPath.isEmpty()) {
+         QCoreApplication::addLibraryPath(platformPluginPath);
+-        list = directLoader()->keyMap().values();
+-        if (!list.isEmpty()) {
+-            const QString postFix = QLatin1String(" (from ")
+-                                    + QDir::toNativeSeparators(platformPluginPath)
+-                                    + QLatin1Char(')');
+-            const QStringList::iterator end = list.end();
+-            for (QStringList::iterator it = list.begin(); it != end; ++it)
+-                (*it).append(postFix);
+-        }
++    }
++    QCoreApplication::addLibraryPath(QStringLiteral(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
++    list = directLoader()->keyMap().values();
++    if (!list.isEmpty()) {
++        const QString postFix = QLatin1String(" (from ")
++            + QDir::toNativeSeparators(platformPluginPath)
++            + QLatin1Char(')');
++        const QStringList::iterator end = list.end();
++        for (QStringList::iterator it = list.begin(); it != end; ++it)
++            (*it).append(postFix);
+     }
+ #else
+     Q_UNUSED(platformPluginPath);

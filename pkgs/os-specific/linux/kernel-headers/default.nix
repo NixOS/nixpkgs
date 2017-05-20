@@ -1,7 +1,5 @@
 { stdenv, kernel, perl }:
 
-assert (!(kernel.features.grsecurity or false));
-
 let
   baseBuildFlags = [ "INSTALL_HDR_PATH=$(out)" "headers_install" ];
 in stdenv.mkDerivation {

@@ -16,11 +16,15 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -delete_rpath $out/lib -add_rpath $bin $bin/bin/sift
+  '';
+
   meta = with lib; {
     description = "sift is a fast and powerful alternative to grep";
     homepage = "https://sift-tool.org";
     maintainers = [ maintainers.carlsverre ];
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

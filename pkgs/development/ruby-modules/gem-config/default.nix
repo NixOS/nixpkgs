@@ -21,11 +21,20 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, buildRubyGem
 }@args:
 
 let
   v8 = v8_3_16_14;
+
+  rainbow_rake = buildRubyGem {
+    name = "rake";
+    gemName = "rake";
+    remotes = ["https://rubygems.org"];
+    sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
+    type = "gem";
+    version = "12.0.0";
+  };
 in
 
 {
@@ -135,6 +144,10 @@ in
     buildInputs = [ curl ];
   };
 
+  pcaprub = attrs: {
+    buildInputs = [ libpcap ];
+  };
+
   pg = attrs: {
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
@@ -143,6 +156,10 @@ in
 
   puma = attrs: {
     buildInputs = [ openssl ];
+  };
+
+  rainbow = attrs: {
+    buildInputs = [ rainbow_rake ];
   };
 
   rbnacl = spec: {
@@ -204,6 +221,14 @@ in
       substituteInPlace lib/sup/crypto.rb \
         --replace 'which gpg2' \
                   '${which}/bin/which gpg2'
+    '';
+  };
+
+  rb-readline = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace lib/rbreadline.rb \
+        --replace 'infocmp' '${ncurses.dev}/bin/infocmp'
     '';
   };
 

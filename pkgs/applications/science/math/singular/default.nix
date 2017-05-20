@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A CAS for polynomial computations";

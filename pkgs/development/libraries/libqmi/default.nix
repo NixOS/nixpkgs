@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, glib, python }:
+{ stdenv, fetchurl, pkgconfig, glib, python, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
-  name = "libqmi-1.16.0";
+  name = "libqmi-1.18.0";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${name}.tar.xz";
-    sha256 = "0amshs06qc8zy8jz3r2yksqhhbamll7f893ll4zlvgr3zm3vpdks";
+    sha256 = "1v4cz3nsmh7nn3smhlhwzrb7yh6l1f270bwf40qacxayjdajr950";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ pkgconfig glib python ];
+  buildInputs = [ pkgconfig glib python libgudev libmbim ];
+
+  configureFlags = ["--enable-mbim-qmux" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/libqmi/;

@@ -13,11 +13,11 @@ let
   package = pythonPackages.buildPythonApplication (rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.6";
+    version = "0.9.7";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0d6ys1wjwsv4jg4bja1cqhy279hhrl1c9kwyx126srf45slcvg1w";
+      sha256 = "0cwy39ap2v9kni3zm92633cnqf7qsnb4zlargx060pbfagkg1jwg";
     };
 
     buildInputs = with pythonPackages; [
@@ -70,25 +70,13 @@ let
     ];
 
     patches = [
-      # This patch disables the test that tries to reat /etc/os-release which
+      # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
     ];
 
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
-
-      # NOTE: secrets management tests currently broken
-      rm -fv buildbot/test/integration/test_integration_secrets.py
-      rm -fv buildbot/test/integration/test_integration_secrets_with_vault.py
-      rm -fv buildbot/test/unit/test_fake_secrets_manager.py
-      rm -fv buildbot/test/unit/test_interpolate_secrets.py
-      rm -fv buildbot/test/unit/test_secret_in_file.py
-      rm -fv buildbot/test/unit/test_secret_in_vault.py
-
-      # Remove this line after next update. See
-      # https://github.com/buildbot/buildbot/commit/e7fc8c8eba903c2aa6d7e6393499e5b9bffc2334
-      rm -fv buildbot/test/unit/test_mq_wamp.py
     '';
 
     passthru = { inherit withPlugins; };
