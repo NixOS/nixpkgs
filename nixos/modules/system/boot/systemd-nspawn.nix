@@ -19,7 +19,7 @@ let
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
     (assertValueOneOf "PrivateUsers" (boolValues ++ [ "pick" ]))
-    (assertValueOneOf "NotifyReady")
+    (assertValueOneOf "NotifyReady" boolValues)
   ];
 
   checkFiles = checkUnitConfig "Files" [
