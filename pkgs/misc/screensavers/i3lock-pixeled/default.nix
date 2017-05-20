@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
-    # patch paths
-    sed -i -e "s#i3lock#${pkgs.i3lock}/bin/i3lock#" i3lock-pixeled
-    sed -i -e "s#convert#${pkgs.imagemagick}/bin/convert#" i3lock-pixeled
-    sed -i -e "s#scrot#${pkgs.scrot}/bin/scrot#" i3lock-pixeled
-    sed -i -e "s#playerctl#${pkgs.playerctl}/bin/playerctl#" i3lock-pixeled
+    substituteInPlace i3lock-pixeled \
+       --replace i3lock    "${pkgs.i3lock}/bin/i3lock" \
+       --replace convert   "${pkgs.imagemagick}/bin/convert" \
+       --replace scrot     "${pkgs.scrot}/bin/scrot" \
+       --replace playerctl "${pkgs.playerctl}/bin/playerctl#"
   '';
 
   meta = with stdenv.lib; {
