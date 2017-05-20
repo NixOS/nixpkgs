@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, unzip, python27, python27Packages, makeWrapper }:
-
-with python27Packages;
+{ stdenv, fetchzip, python27, python27Packages }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin";
 
@@ -9,32 +7,27 @@ stdenv.mkDerivation rec {
   version = "1.9.53";
   src =
     if stdenv.system == "x86_64-linux" then
-      fetchurl {
+      fetchzip {
         url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-${version}.zip";
-        sha1 = "9152e132bfe00ecc7605ca8b4c233f8656ada8a6";
+        sha256 = "04lfwf7ad7gi8xn891lz87b7pr2gyycgpaq96i0cgckrj2awayz2";
       }
     else
-      fetchurl {
+      fetchzip {
         url = "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_darwin_amd64-${version}.zip";
-        sha1 = "9f352b81a3f4eb97937c45431a7a955f3ba77fc2";
+        sha256 = "18hgl4wz3rhaklkwaxl8gm70h7l8k225f86da682kafawrr8zhv4";
       };
 
-  buildInputs = [python27 unzip makeWrapper];
-
-  phases = [ "installPhase" "fixupPhase" ];
+  buildInputs = with python27Packages; [
+    (python27.withPackages(ps: [ cffi cryptography pyopenssl ]))
+  ];
 
   installPhase = ''
-    mkdir -p "$out"
-    unzip -d "$out" "$src"
+    mkdir -p $out/bin $out/share/
+    cp -r "$src" "$out/share/go_appengine"
 
     # create wrappers with correct env
-    for i in goapp appcfg.py
-	do
-        prog="$out/go_appengine/$i"
-        wrapper="$out/bin/$i"
-        makeWrapper "$prog" "$wrapper" \
-            --prefix PATH : "${python27}/bin" \
-            --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl})"
+    for i in goapp appcfg.py; do
+      ln -s "$out/share/go_appengine/$i" "$out/bin/$i"
     done
   '';
 
