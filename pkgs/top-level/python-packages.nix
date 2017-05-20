@@ -7644,7 +7644,7 @@ in {
   };
 
   jsbeautifier = buildPythonApplication rec {
-    name = "jsbeautifier-1.6.4";
+    name = "jsbeautifier-1.6.14";
 
     propagatedBuildInputs = with self; [ six ];
 
@@ -7652,7 +7652,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jsbeautifier/${name}.tar.gz";
-      sha256 = "074n8f4ncz5pf0jkkf6i6by30qnaj5208sszaf9p86kgdigcdaf8";
+      sha256 = "50b2af556aa1da7283a6a92eaa699668312cb91f2ba6b78a4422b1d42af964a2";
     };
 
     meta = {
