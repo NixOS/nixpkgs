@@ -18,10 +18,11 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/adammck/terraform-inventory;
     description = "Terraform state to ansible inventory adapter";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.mit;
+    platforms = platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ htr ];
   };
 }
