@@ -12,11 +12,13 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    kcompletion kconfigwidgets kdbusaddons kdesignerplugin kiconthemes kio
+    kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin ki18n
+    kiconthemes kio kwindowsystem qttools
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
+  outputs = [ "out" "dev" ];
   cmakeFlags = [
     "-DMYSQLD_EXECUTABLE=${lib.getBin mysql}/bin/mysqld"
   ];
