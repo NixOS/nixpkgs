@@ -19,7 +19,7 @@ in
 
       logTo = mkOption {
         type = types.str;
-        default = "";
+        default = "syslog::daemon";
         example = "/var/log/znapzend.log";
         description = "Where to log to (syslog::&lt;facility&gt; or &lt;filepath&gt;).";
       };
