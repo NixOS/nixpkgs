@@ -402,9 +402,6 @@ let
              || system == "aarch64-linux"
              || system == "mips64el-linux";
       isGNU = system == "i686-gnu"; # GNU/Hurd
-      isGlibc = isGNU # useful for `stdenvNative'
-             || isLinux
-             || system == "x86_64-kfreebsd-gnu";
       isSunOS = system == "i686-solaris"
              || system == "x86_64-solaris";
       isCygwin = system == "i686-cygwin"
