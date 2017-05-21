@@ -6397,7 +6397,7 @@ with pkgs;
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
   binutils =
-    if lib.systems.parse.isDarwin targetPlatform.parsed
+    if targetPlatform.isDarwin
     then darwin.binutils
     else binutils-raw;
 

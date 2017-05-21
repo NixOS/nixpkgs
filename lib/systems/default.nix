@@ -1,6 +1,9 @@
+let inherit (import ../attrsets.nix) mapAttrs; in
+
 rec {
   doubles = import ./doubles.nix;
   parse = import ./parse.nix;
+  inspect = import ./inspect.nix;
   platforms = import ./platforms.nix;
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
@@ -18,6 +21,7 @@ rec {
       config = parse.tripleFromSystem final.parsed;
       # Just a guess, based on `system`
       platform = platforms.selectBySystem final.system;
-    } // args;
+    } // mapAttrs (n: v: v final.parsed) inspect.predicates
+      // args;
   in final;
 }
