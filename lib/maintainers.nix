@@ -332,6 +332,7 @@
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  midchildan = "midchildan <midchildan+nix@gmail.com>";
   mikefaille = "Michaël Faille <michael@faille.io>";
   miltador = "Vasiliy Solovey <miltador@yandex.ua>";
   mimadrid = "Miguel Madrid <mimadrid@ucm.es>";
