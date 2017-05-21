@@ -33,21 +33,34 @@ still shows most of the available features is in `./gwenview.nix`.
 let
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
-in
 
-let
+  mkDerivation = args:
+    let
+      inherit (args) name;
+      sname = args.sname or name;
+      inherit (srcs."${sname}") src version;
+      mkDerivation =
+        libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+    in
+      mkDerivation (args // {
+        name = "${name}-${version}";
+        inherit src;
+
+        outputs = args.outputs or [ "out" ];
+
+        meta = {
+          platforms = lib.platforms.linux;
+          homepage = "http://www.kde.org";
+        } // (args.meta or {});
+      });
 
   packages = self: with self;
     let
       callPackage = self.newScope {
+        inherit mkDerivation;
+
         # Team of maintainers assigned to the KDE PIM suite
         kdepimTeam = with lib.maintainers; [ ttuegel vandenoever ];
-
-        mkDerivation = import ./build-support/application.nix {
-          inherit lib;
-          inherit srcs;
-          mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
-        };
       };
     in {
       kdelibs = callPackage ./kdelibs { inherit attica phonon; };
