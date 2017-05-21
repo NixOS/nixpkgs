@@ -1,17 +1,25 @@
 { stdenv
 , buildPythonApplication
-, fetchurl
+, fetchFromGitHub
 , chardet
+, nose
 }:
 
 buildPythonApplication rec {
   name = "pysrt-${version}";
   version = "1.1.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pysrt/${name}.tar.gz";
-    sha256 = "1anhfilhamdv15w9mmzwc5a8fsri00ghkmcws4r5mz298m110k7v";
+  src = fetchFromGitHub {
+    owner = "byroot";
+    repo = "pysrt";
+    rev = "v${version}";
+    sha256 = "0rwjaf26885vxhxnas5d8zwasvj7x88y4y2pdivjd4vdcpqrqdjn";
   };
+
+  buildInputs = [ nose ];
+  checkPhase = ''
+    nosetests -v
+  '';
 
   propagatedBuildInputs = [ chardet ];
 
