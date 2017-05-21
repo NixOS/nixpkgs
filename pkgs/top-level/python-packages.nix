@@ -7643,25 +7643,7 @@ in {
     };
   };
 
-  jsbeautifier = buildPythonApplication rec {
-    name = "jsbeautifier-1.6.4";
-
-    propagatedBuildInputs = with self; [ six ];
-
-    buildInputs = with self; [ EditorConfig pytest six ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsbeautifier/${name}.tar.gz";
-      sha256 = "074n8f4ncz5pf0jkkf6i6by30qnaj5208sszaf9p86kgdigcdaf8";
-    };
-
-    meta = {
-      homepage    = "http://jsbeautifier.org";
-      description = "JavaScript unobfuscator and beautifier.";
-      license     = stdenv.lib.licenses.mit;
-      maintainers = with maintainers; [ apeyroux ];
-    };
-  };
+  jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
   jug = buildPythonPackage rec {
     version = "1.4.0";
