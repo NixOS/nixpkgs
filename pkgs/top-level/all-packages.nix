@@ -7762,7 +7762,6 @@ with pkgs;
 
   glibc = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
-    gccCross = null;
   };
 
   glibc_memusage = callPackage ../development/libraries/glibc {
@@ -7770,13 +7769,23 @@ with pkgs;
     withGd = true;
   };
 
-  glibcCross = forcedNativePackages.glibc.override {
-    gccCross = gccCrossStageStatic;
-    inherit (forcedNativePackages) linuxHeaders;
+  # Being redundant to avoid cycles on boot. TODO: find a better way
+  glibcCross = callPackage ../development/libraries/glibc {
+    installLocales = config.glibc.locales or false;
+    # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
+    # thrown away. TODO: find a better solution for this.
+    stdenv = buildPackages.makeStdenvCross
+      buildPackages.buildPackages.stdenv
+      buildPackages.targetPlatform
+      buildPackages.binutils
+      buildPackages.gccCrossStageStatic;
   };
 
   # We can choose:
-  libcCrossChooser = name: if name == "glibc" then glibcCross
+  libcCrossChooser = name:
+    # libc is hackily often used from the previous stage. This `or`
+    # hack fixes the hack, *sigh*.
+    /**/ if name == "glibc" then __targetPackages.glibcCross or glibcCross
     else if name == "uclibc" then uclibcCross
     else if name == "msvcrt" then windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
