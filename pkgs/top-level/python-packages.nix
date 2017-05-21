@@ -9122,6 +9122,8 @@ in {
     };
   };
 
+  pysrt = callPackage ../development/python-modules/pysrt { };
+
   pytools = buildPythonPackage rec {
     name = "pytools-${version}";
     version = "2016.2.1";
