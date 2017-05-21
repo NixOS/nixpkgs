@@ -18,7 +18,6 @@ let
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
-    (assertValueOneOf "PrivateUsers" (boolValues ++ [ "pick" ]))
     (assertValueOneOf "NotifyReady" boolValues)
   ];
 
