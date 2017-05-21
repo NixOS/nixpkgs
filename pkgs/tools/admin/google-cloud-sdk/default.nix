@@ -37,10 +37,13 @@ stdenv.mkDerivation rec {
     # create wrappers with correct env
     for program in gcloud bq gsutil git-credential-gcloud.sh; do
         programPath="$out/google-cloud-sdk/bin/$program"
-        wrapper="$out/bin/$program"
-        makeWrapper "$programPath" "$wrapper" \
+        binaryPath="$out/bin/$program"
+        wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${python27}/bin/python" \
             --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl}):$(toPythonPath ${crcmod})"
+
+        mkdir -p $out/bin
+        ln -s $programPath $binaryPath
     done
 
     # install man pages
