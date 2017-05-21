@@ -20,8 +20,9 @@
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, buildRubyGem
+, cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2
+, buildRubyGem
 }@args:
 
 let
@@ -38,6 +39,8 @@ let
 in
 
 {
+  atk = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
   bundler = attrs:
     let
       templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
@@ -52,6 +55,10 @@ in
         sed -i -e "s/activate_bin_path/bin_path/g" $out/bin/bundle
       '';
     };
+
+  cairo = attrs: {
+    buildInputs = [ gtk2 pcre pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp];
+  };
 
   capybara-webkit = attrs: {
     buildInputs = [ qt48 ];
@@ -80,6 +87,18 @@ in
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
+
+  gio2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
+  glib2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
+  gtk2 = attrs: {
+    buildInputs = [ gtk2 pcre pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp];
+    # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
+    CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+  };
+
+  gobject-introspection = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
   hitimes = attrs: {
     buildInputs =
@@ -138,6 +157,10 @@ in
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+  };
+
+  pango = attrs: {
+    buildInputs = [ gtk2 xlibs.libXdmcp pcre pkgconfig xlibs.libpthreadstubs ];
   };
 
   patron = attrs: {
