@@ -9345,6 +9345,8 @@ in {
     };
   };
 
+  subliminal = callPackage ../development/python-modules/subliminal {};
+
   hyp = buildPythonPackage rec {
     name = "hyp-server-${version}";
     version = "1.2.0";
