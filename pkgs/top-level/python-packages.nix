@@ -365,6 +365,28 @@ in {
 
   # packages defined here
 
+  ablog = buildPythonPackage rec {
+    pname = "ablog";
+    version = "0.8.4";
+    name = pname + "-" + version;
+
+    propagatedBuildInputs = with self; [ sphinx alabaster invoke dateutil werkzeug ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "1aapxswzlr920yg0k324xwdvsrdx8kydpxg8rrha1xbq62ll7fdb";
+    };
+
+    # Tests not distributed
+    doCheck = false;
+
+    meta = {
+      description = "A Sphinx extension that converts any documentation or personal website project into a full-fledged blog.";
+      license = licenses.mit;
+      homepage = http://ablog.readthedocs.org/;
+    };
+  };
+
   aafigure = buildPythonPackage rec {
     name = "aafigure-0.5";
 
@@ -5488,6 +5510,23 @@ in {
       homepage = http://stutzbachenterprises.com;
       license = licenses.bsd3;
       maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  invoke = buildPythonPackage rec {
+    pname = "invoke";
+    version = "0.17.0";
+    name = pname + "-" + version;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "0lgaz07x22m0a5flgc6fklx05i3fwyds0pa1gaisv9raivq064cq";
+    };
+
+    meta = {
+      description = "Pythonic task execution";
+      license = licenses.bsd2;
+      homepage = http://docs.pyinvoke.org;
     };
   };
 
