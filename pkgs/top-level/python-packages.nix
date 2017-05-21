@@ -159,6 +159,8 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
+  browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy {};
+
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -13764,6 +13766,21 @@ in {
     };
   };
 
+  manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix {};
+  marionette_driver = callPackage ../development/python-modules/marionette-harness/marionette_driver.nix {};
+  mozcrash = callPackage ../development/python-modules/marionette-harness/mozcrash.nix {};
+  mozdevice = callPackage ../development/python-modules/marionette-harness/mozdevice.nix {};
+  mozfile = callPackage ../development/python-modules/marionette-harness/mozfile.nix {};
+  mozhttpd = callPackage ../development/python-modules/marionette-harness/mozhttpd.nix {};
+  mozinfo = callPackage ../development/python-modules/marionette-harness/mozinfo.nix {};
+  mozlog = callPackage ../development/python-modules/marionette-harness/mozlog.nix {};
+  moznetwork = callPackage ../development/python-modules/marionette-harness/moznetwork.nix {};
+  mozprocess = callPackage ../development/python-modules/marionette-harness/mozprocess.nix {};
+  mozprofile = callPackage ../development/python-modules/marionette-harness/mozprofile.nix {};
+  mozrunner = callPackage ../development/python-modules/marionette-harness/mozrunner.nix {};
+  moztest = callPackage ../development/python-modules/marionette-harness/moztest.nix {};
+  mozversion = callPackage ../development/python-modules/marionette-harness/mozversion.nix {};
+  marionette-harness = callPackage ../development/python-modules/marionette-harness {};
 
   markupsafe = buildPythonPackage rec {
     name = "markupsafe-${version}";
@@ -31199,6 +31216,8 @@ EOF
       sha256 = "1ad0mkixc0s86djwsvhp1qlvcfs25086nh0qw7bys49gz8shczzi";
     };
   };
+
+  wptserve = callPackage ../development/python-modules/wptserve {};
 
   yenc = callPackage ../development/python-modules/yenc {
   };
