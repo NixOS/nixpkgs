@@ -282,7 +282,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen></example>
 <screen>
 byte = mkOption {
   description = "An integer between 0 and 255.";
-  type = addCheck (x: x &gt;= 0 &amp;&amp; x &lt;= 255) types.int;
+  type = addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
 };</screen></example>
 
 <example xml:id='ex-extending-type-check-2'><title>Overriding a type 
