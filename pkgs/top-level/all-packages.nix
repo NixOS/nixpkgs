@@ -17116,6 +17116,8 @@ with pkgs;
 
   rogue = callPackage ../games/rogue { };
 
+  robotfindskitten = callPackage ../games/robotfindskitten { };
+
   saga = callPackage ../applications/gis/saga { };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
