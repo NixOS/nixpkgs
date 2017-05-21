@@ -306,7 +306,7 @@ in rec {
       xz.out xz.bin libcxx libcxxabi icu.out gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
+      gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.man patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools libiconv locale
