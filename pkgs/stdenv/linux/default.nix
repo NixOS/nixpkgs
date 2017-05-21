@@ -76,6 +76,7 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
+          targetPlatform = localSystem;
           cc = prevStage.gcc-unwrapped;
           isGNU = true;
           libc = prevStage.glibc;
@@ -239,6 +240,7 @@ in
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
+        targetPlatform = localSystem;
         cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
         inherit (self) stdenv binutils coreutils gnugrep;
