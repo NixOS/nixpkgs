@@ -97,6 +97,7 @@
 "github:racer-rust/vim-racer"
 "github:raichoo/purescript-vim"
 "github:rhysd/vim-grammarous"
+"github:rodjek/vim-puppet"
 "github:rust-lang/rust.vim"
 "github:sbdchd/neoformat"
 "github:sheerun/vim-polyglot"
