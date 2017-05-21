@@ -17276,6 +17276,8 @@ with pkgs;
 
   vessel = callPackage_i686 ../games/vessel { };
 
+  vms-empire = callPackage ../games/vms-empire { };
+
   voxelands = callPackage ../games/voxelands {
     libpng = libpng12;
   };
