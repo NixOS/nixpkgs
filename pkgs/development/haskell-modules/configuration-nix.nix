@@ -454,4 +454,8 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/intero:$PATH"
     '';
   });
+
+  # loc and loc-test depend on each other for testing. Break that infinite cycle:
+  loc-test = super.loc-test.override { loc = dontCheck self.loc; };
+
 }

@@ -4,16 +4,15 @@
 }:
 
 let
-  rev = "468652ce70b1214842cef0a021c81d056ec6aa01";
-
   unwrapped = kdeDerivation rec {
     name = "kdiff3-${version}";
-    version = "1.7.0-${lib.strings.substring 0 7 rev}";
+    version = "1.7.0-2017-02-19";
 
     src = fetchgit {
-      url = "https://gitlab.com/tfischer/kdiff3";
-      sha256 = "126xl7jbb26v2970ba1rw1d6clhd14p1f2avcwvj8wzqmniq5y5m";
-      inherit rev;
+      # gitlab is outdated
+      url = https://anongit.kde.org/scratch/thomasfischer/kdiff3.git;
+      sha256 = "0znlk9m844a6qsskbd898w4yk48dkg5bkqlkd5abvyrk1jipzyy8";
+      rev = "0d2ac328164e3cbe2db35875d3df3a86187ae84f";
     };
 
     setSourceRoot = ''sourceRoot="$(echo */kdiff3/)"'';

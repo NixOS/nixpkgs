@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
@@ -30,7 +30,7 @@ with luaPackages; stdenv.mkDerivation rec {
   ];
    
   propagatedUserEnvPkgs = [ hicolor_icon_theme ];
-  buildInputs = [ cairo dbus gdk_pixbuf gobjectIntrospection
+  buildInputs = [ cairo librsvg dbus gdk_pixbuf gobjectIntrospection
                   git lgi libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
@@ -54,6 +54,7 @@ with luaPackages; stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/awesome \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix LUA_CPATH ";" '"${lgi}/lib/lua/${lua.luaversion}/?.so"' \
       --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \

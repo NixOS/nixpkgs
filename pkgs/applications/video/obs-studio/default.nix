@@ -31,8 +31,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
-    rev = "26c28b45";
-    sha256 = "06rr70z2p2l8prxmd075pnlc759ddlqn3jprn8ns148x6s2vqik2";
+    rev = "2bf9d548";
+    sha256 = "036l29m3dlqadvaazj0nmgi2lcji8zckdvx3gjrx1kp96yd5myqd";
   };
 
   patches = [ ./find-xcb.patch ];

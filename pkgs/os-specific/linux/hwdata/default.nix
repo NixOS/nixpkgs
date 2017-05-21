@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hwdata-${version}";
-  version = "0.291";
+  version = "0.300";
 
   src = fetchurl {
-    url = "http://pkgs.fedoraproject.org/repo/pkgs/hwdata/hwdata-0.291.tar.bz2/effe59bf406eb03bb295bd34e0913dd8/hwdata-0.291.tar.bz2";
-    sha256 = "01cq9csryxcrilnqdjd2r8gpaap3mk4968v7y36c7shyyaf9zkym";
+    url = "http://pkgs.fedoraproject.org/repo/pkgs/hwdata/v0.300.tar.gz/sha512/34294fcf65c3cb17c19d625732d1656ec1992dde254a68ee35681ad2f310bc05028a85889efa2c1d1e8a2d10885ccc00185475a00f6f2fb82d07e2349e604a51/v0.300.tar.gz";
+    sha256 = "03xlj05qyixhnsybq1qnr7j5q2nvirs4jxpgg4sbw8swsqj3dgqi";
   };
 
   preConfigure = "patchShebangs ./configure";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--datadir=$(prefix)/data";
 
   meta = {
-    homepage = "https://fedorahosted.org/hwdata/";
+    homepage = "https://github.com/vcrhonek/hwdata";
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

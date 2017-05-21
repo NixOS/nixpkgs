@@ -63,7 +63,7 @@ let
   };
 
   scaleway-c1-crossSystem.crossSystem = armv7l-hf-multiplatform-crossSystem.crossSystem // rec {
-    platform = pkgsNoParams.platforms.scaleway-c1;
+    platform = lib.systems.platforms.scaleway-c1;
     inherit (platform) gcc;
     inherit (gcc) fpu;
   };
@@ -73,9 +73,9 @@ let
     config = "armv5tel-softfloat-linux-gnueabi";
     float = "soft";
 
-    platform = pkgsNoParams.platforms.pogoplug4;
+    platform = lib.systems.platforms.pogoplug4;
 
-    inherit (pkgsNoParams.platforms.pogoplug4) gcc;
+    inherit (lib.systems.platforms.pogoplug4) gcc;
     libc = "glibc";
 
     withTLS = true;
@@ -92,7 +92,7 @@ let
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
-  glibc = pkgs.buildPackages.libcCross;
+  glibc = pkgs.libcCross;
   bash = pkgs.bash;
   findutils = pkgs.findutils;
   diffutils = pkgs.diffutils;
@@ -146,11 +146,11 @@ rec {
 
   build =
 
-    pkgs.buildPackages.stdenv.mkDerivation {
+    pkgs.stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
       crossConfig = pkgs.hostPlatform.config;
 
-      buildInputs = [
+      nativeBuildInputs = [
         pkgs.buildPackages.nukeReferences
         pkgs.buildPackages.cpio
         pkgs.buildPackages.binutils
@@ -285,7 +285,7 @@ rec {
       allowedReferences = [];
     };
 
-  dist = pkgs.buildPackages.stdenv.mkDerivation {
+  dist = pkgs.stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools-cross";
 
     buildCommand = ''

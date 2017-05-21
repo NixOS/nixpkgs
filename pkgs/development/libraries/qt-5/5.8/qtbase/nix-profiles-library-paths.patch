@@ -1,0 +1,20 @@
+Index: qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
+===================================================================
+--- qtbase-opensource-src-5.8.0.orig/src/corelib/kernel/qcoreapplication.cpp
++++ qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
+@@ -2476,6 +2476,15 @@ QStringList QCoreApplication::libraryPat
+         QStringList *app_libpaths = new QStringList;
+         coreappdata()->app_libpaths.reset(app_libpaths);
+ 
++        // Add library paths derived from NIX_PROFILES.
++        const QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
++        const QString plugindir = QString::fromLatin1("/lib/qt5/plugins");
++        for (const QByteArray &profile: profiles) {
++            if (!profile.isEmpty()) {
++                app_libpaths->append(QFile::decodeName(profile) + plugindir);
++            }
++        }
++
+         const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
+         if (!libPathEnv.isEmpty()) {
+             QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);

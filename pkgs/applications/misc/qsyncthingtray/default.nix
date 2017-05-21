@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy peterhoeg ];
     platforms = platforms.all;
-    # 0.5.7 segfaults when opening the main panel with qt 5.7 but qt 5.8 is OK
-    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
+    # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
+    broken = builtins.compareVersions qtbase.version "5.7.0" >= 0;
   };
 }
