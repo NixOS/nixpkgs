@@ -2619,19 +2619,7 @@ in {
 
   };
 
-  rarfile = self.buildPythonPackage rec {
-    name = "rarfile-2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rarfile/rarfile-2.6.tar.gz";
-      sha256 = "326700c5450cfb367f612e918866ea27551bac02f4656f340003c88873fa1a56";
-    };
-
-    meta = {
-      description = "rarfile - RAR archive reader for Python";
-      homepage = https://github.com/markokr/rarfile;
-    };
-  };
+  rarfile = callPackage ../development/python-modules/rarfile {};
 
   proboscis = buildPythonPackage rec {
     name = "proboscis-1.2.6.0";
@@ -4070,6 +4058,8 @@ in {
       platforms = platforms.linux;
     };
   };
+
+  confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
 
 
   construct = buildPythonPackage rec {
@@ -12616,8 +12606,6 @@ in {
     };
   };
 
-  icdiff = callPackage ../tools/text/icdiff {};
-
   imageio = buildPythonPackage rec {
     name = "imageio-${version}";
     version = "1.6";
@@ -14035,6 +14023,8 @@ in {
       license = licenses.bsd3;
     };
   };
+
+  metaphone = callPackage ../development/python-modules/metaphone { };
 
   mezzanine = buildPythonPackage rec {
     version = "3.1.10";
@@ -16389,23 +16379,7 @@ in {
     buildInputs = with self; [ oslotest mock coverage simplejson oslo-i18n ];
   };
 
-  rfc3986 = buildPythonPackage rec {
-    name = "rfc3986-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rfc3986/rfc3986-0.2.2.tar.gz";
-      sha256 = "0yvzz7gp84qqdadbjdh9ch7dz4w19nmhwa704s9m11bljgp3hqmn";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
-
-    meta = with stdenv.lib; {
-      description = "rfc3986";
-      homepage = https://rfc3986.rtfd.org;
-    };
-  };
+  rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
   pycadf = buildPythonPackage rec {
     name = "pycadf-${version}";
@@ -18376,6 +18350,8 @@ in {
     };
   };
 
+  pika-pool = callPackage ../development/python-modules/pika-pool { };
+
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
     version="2.10.3";
@@ -18508,10 +18484,10 @@ in {
 
   python-jenkins = buildPythonPackage rec {
     name = "python-jenkins-${version}";
-    version = "0.4.11";
+    version = "0.4.14";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-jenkins/${name}.tar.gz";
-      sha256 = "153gm7pmmn0bymglsgcr2ya0752r2v1hajkx73gl1pk4jifb2gdf";
+      sha256 = "1n8ikvd9jf4dlki7nqlwjlsn8wpsx4x7wg4h3d6bkvyvhwwf8yqf";
     };
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
@@ -18519,7 +18495,7 @@ in {
 
     buildInputs = with self; [ mock ];
     propagatedBuildInputs = with self; [ pbr pyyaml six multi_key_dict testtools
-     testscenarios testrepository ];
+     testscenarios testrepository kerberos ];
 
     meta = {
       description = "Python bindings for the remote Jenkins API";
@@ -19896,7 +19872,11 @@ in {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
-  pyproj = callPackage ../development/python-modules/pyproj { };
+  pyproj = callPackage ../development/python-modules/pyproj {
+    # pyproj does *work* if you want to use a system supplied proj, but with the current version(s) the tests fail by
+    # a few decimal places, so caveat emptor.
+    proj = null;
+  };
 
   pyrr = buildPythonPackage rec {
     name = "pyrr-${version}";
@@ -29447,12 +29427,12 @@ EOF
   };
 
   jenkins-job-builder = buildPythonPackage rec {
-    name = "jenkins-job-builder-1.6.1";
+    name = "jenkins-job-builder-2.0.0.0b2";
     disabled = ! (isPy26 || isPy27);
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jenkins-job-builder/${name}.tar.gz";
-      sha256 = "1v3xknfzgsp35nn3ma4imz233v569v3x75mx2yxlv1xf32nn7yk4";
+      sha256 = "1y0yl2w6c9c91f9xbjkvff1ag8p72r24nzparrzrw9sl8kn9632x";
     };
 
     patchPhase = ''
@@ -29469,6 +29449,7 @@ EOF
       python-jenkins
       pyyaml
       six
+      stevedore
     ] ++ optionals isPy26 [
       ordereddict
       argparse

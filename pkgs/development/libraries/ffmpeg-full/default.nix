@@ -17,6 +17,7 @@
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
 , networkBuild ? true # Network support
 , pixelutilsBuild ? true # Pixel utils in libavutil
+, enableLto ? false # build with link-time optimization
 /*
  *  Program options
  */
@@ -257,6 +258,7 @@ stdenv.mkDerivation rec {
     (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
     (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
+    (enableFeature enableLto "lto")
     (enableFeature grayBuild "gray")
     (enableFeature swscaleAlphaBuild "swscale-alpha")
     (enableFeature hardcodedTablesBuild "hardcoded-tables")

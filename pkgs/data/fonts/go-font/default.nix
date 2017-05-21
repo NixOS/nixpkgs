@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "go-font-${version}";
-  version = "2016-11-17";
+  version = "2017-03-30";
 
   src = fetchgit {
     url = "https://go.googlesource.com/image";
-    rev = "d2f07f8aaaa906f1a64eee0e327fc681cdb2944f";
-    sha256 = "1kmsipa4cyrwx86acc695c281hchrz9k9ni8r7giyggvdi577iga";
+    rev = "f03a046406d4d7fbfd4ed29f554da8f6114049fc";
+    sha256 = "1aq6mnjayks55gd9ahavk6jfydlq5lm4xm0xk4pd5sqa74p5p74d";
   };
 
   installPhase = ''

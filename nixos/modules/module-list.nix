@@ -435,6 +435,7 @@
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
+  ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/mailpile.nix
   ./services/networking/mfi.nix
@@ -614,6 +615,7 @@
   ./services/x11/window-managers/windowlab.nix
   ./services/x11/window-managers/wmii.nix
   ./services/x11/window-managers/xmonad.nix
+  ./services/x11/xautolock.nix
   ./services/x11/xbanish.nix
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
