@@ -46,7 +46,7 @@ in
         serviceConfig = {
           ExecStart = "${pkgs.znapzend}/bin/znapzend --logto=${cfg.logTo} --loglevel=${cfg.logLevel} ${optionalString cfg.noDestroy "--nodestroy"}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          #Restart = "on-failure";
+          Restart = "on-failure";
         };
       };
     };
