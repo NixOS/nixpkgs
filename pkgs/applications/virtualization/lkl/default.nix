@@ -4,7 +4,9 @@ stdenv.mkDerivation rec {
   name = "lkl-${stdenv.lib.substring 0 7 rev}";
   rev  = "d74707304d4e4614081ae2a612a833aeb46622b5";
 
-  buildInputs = [ bc python fuse libarchive ];
+  nativeBuildInputs = [ bc python ];
+
+  buildInputs = [ fuse libarchive ];
 
   src = fetchFromGitHub {
     inherit rev;
