@@ -257,7 +257,7 @@ in
 
     networking.firewall.enable = mkOption {
       type = types.bool;
-      default = true;
+      default = versionOlder config.system.stateVersion "16.03";
       description =
         ''
           Whether to enable the firewall.  This is a simple stateful
