@@ -7142,10 +7142,6 @@ with pkgs;
 
   gdbGuile = lowPrio (gdb.override { inherit guile; });
 
-  gdbCross = lowPrio (callPackage ../development/tools/misc/gdb {
-    target = if targetPlatform != buildPlatform then targetPlatform else null;
-  });
-
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
   valgrind = callPackage ../development/tools/analysis/valgrind {

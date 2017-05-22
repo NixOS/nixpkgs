@@ -24,7 +24,7 @@ let
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
-    buildPackages.gdbCross = nativePlatforms;
+    buildPackages.gdb = nativePlatforms;
 
     bison = nativePlatforms;
     busybox = nativePlatforms;

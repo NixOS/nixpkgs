@@ -7,6 +7,7 @@ rec {
     "64bit"      = { cpu = { bits = 64; }; };
     i686         = { cpu = cpuTypes.i686; };
     x86_64       = { cpu = cpuTypes.x86_64; };
+    x86          = { cpu = { family = "x86"; }; };
     Arm          = { cpu = { family = "arm"; }; };
     Mips         = { cpu = { family = "mips"; }; };
     BigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
@@ -19,6 +20,7 @@ rec {
     Linux        = { kernel = kernels.linux; };
     SunOS        = { kernel = kernels.solaris; };
     FreeBSD      = { kernel = kernels.freebsd; };
+    Hurd         = { kernel = kernels.hurd; };
     NetBSD       = { kernel = kernels.netbsd; };
     OpenBSD      = { kernel = kernels.openbsd; };
     Windows      = { kernel = kernels.windows; };
@@ -27,7 +29,6 @@ rec {
 
     Arm32        = recursiveUpdate patterns.Arm patterns."32bit";
     Arm64        = recursiveUpdate patterns.Arm patterns."64bit";
-
   };
 
   predicates = mapAttrs'

@@ -77,6 +77,7 @@ rec {
   {
     darwin  = { execFormat = macho;   families = { inherit unix; }; };
     freebsd = { execFormat = elf;     families = { inherit unix bsd; }; };
+    hurd    = { execFormat = elf;     families = { inherit unix; }; };
     linux   = { execFormat = elf;     families = { inherit unix; }; };
     netbsd  = { execFormat = elf;     families = { inherit unix bsd; }; };
     none    = { execFormat = unknown; families = { inherit unix; }; };
@@ -113,7 +114,9 @@ rec {
   mkSkeletonFromList = l: {
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
-        then { cpu = elemAt l 0;                      kernel = "windows"; abi = "cygnus";    }
+        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
+      else if elemAt l 1 == "gnu"
+        then { cpu = elemAt l 0;                      kernel = "hurd";     abi = "gnu";      }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
