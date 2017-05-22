@@ -5,7 +5,7 @@ with pythonPackages;
 
 let
   # Get rid of this when pants 1.3.0 is released and make 0.5 the default
-  pathspec = buildPythonApplication rec {
+  pathspec_0_3_4 = buildPythonApplication rec {
     pname   = "pathspec";
     version = "0.3.4";
     name    = "${pname}-${version}";
@@ -44,7 +44,7 @@ in {
 
     propagatedBuildInputs = [
       ansicolors beautifulsoup4 cffi coverage docutils fasteners futures
-      isort lmdb markdown mock packaging pathspec pep8 pex psutil pyflakes
+      isort lmdb markdown mock packaging pathspec_0_3_4 pep8 pex psutil pyflakes
       pygments pystache pytestcov pytest pywatchman requests scandir
       setproctitle setuptools six thrift wheel twitter-common-dirutil
       twitter-common-confluence twitter-common-collections
