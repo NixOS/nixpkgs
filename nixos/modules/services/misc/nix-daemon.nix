@@ -359,14 +359,20 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
+            let
+              machineSupportedFeatures = concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or []);
+              machineMandatoryFeatures = concatStringsSep "," machine.mandatoryFeatures or [];
+            in
             "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
             + machine.system or (concatStringsSep "," machine.systems)
             + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
             + toString (machine.speedFactor or 1)
             + " "
-            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
+            + (if machineSupportedFeatures != "" then machineSupportedFeatures else "-")
             + " "
-            + concatStringsSep "," machine.mandatoryFeatures or []
+            + (if machineMandatoryFeatures != "" then machineMandatoryFeatures else "-")
+            + " "
+            + machine.sshPublicHostKey or "-"
             + "\n"
           ) cfg.buildMachines;
       };
