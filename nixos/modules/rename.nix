@@ -204,6 +204,7 @@ with lib;
       "Set the option `services.xserver.displayManager.sddm.package' instead.")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "onShutdown" ] "")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])

@@ -84,17 +84,6 @@ in {
       '';
     };
 
-    virtualisation.libvirtd.onShutdown = mkOption {
-      type = types.enum ["shutdown" "suspend" ];
-      default = "suspend";
-      description = ''
-        When shutting down / restarting the host what method should
-        be used to gracefully halt the guests. Setting to "shutdown"
-        will cause an ACPI shutdown of each guest. "suspend" will
-        attempt to save the state of the guests ready to restore on boot.
-      '';
-    };
-
   };
 
 
