@@ -52,7 +52,7 @@ let
     let
 
       thisStdenv = import ../generic {
-        inherit system config extraBuildInputs;
+        inherit config extraBuildInputs;
         name = "stdenv-linux-boot";
         preHook =
           ''
@@ -63,6 +63,9 @@ let
           '';
         shell = "${bootstrapTools}/bin/bash";
         initialPath = [bootstrapTools];
+
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
@@ -261,7 +264,7 @@ in
     targetPlatform = localSystem;
     inherit config overlays;
     stdenv = import ../generic rec {
-      inherit system config;
+      inherit config;
 
       preHook = ''
         # Make "strip" produce deterministic output, by setting
@@ -272,6 +275,9 @@ in
 
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
+
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
 
       extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
