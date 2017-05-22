@@ -256,6 +256,11 @@ in with passthru; stdenv.mkDerivation ({
 
     inherit passthru;
 
+    postFixup = ''
+      # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
+      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    '';
+
     enableParallelBuilding = true;
 
     doCheck = false; # expensive, and fails
