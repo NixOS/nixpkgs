@@ -1,8 +1,15 @@
-{ stdenv, appleDerivation, cpio, bootstrap_cmds, xnu, Libc, Libm, libdispatch, cctools, Libinfo,
-  dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto, copyfile,
-  removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
+{ stdenv, buildPackages, appleDerivation, cpio, bootstrap_cmds, xnu, Libc, Libm, libdispatch, Libinfo
+, dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto, copyfile
+, removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version
+, hostPlatform
+}:
 
-appleDerivation rec {
+let
+  inherit (stdenv) lib;
+  inherit (stdenv.lib.systems) parse;
+  inherit (buildPackages.darwin) cctools;
+
+in appleDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
   buildInputs = [ cpio ];
@@ -28,28 +35,28 @@ appleDerivation rec {
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__
     #define __TARGETCONDITIONALS__
-    #define TARGET_OS_MAC           1
-    #define TARGET_OS_WIN32         0
-    #define TARGET_OS_UNIX          0
+    #define TARGET_OS_MAC           ${if hostPlatform.isDarwin then "1" else "0"}
+    #define TARGET_OS_WIN32         ${if hostPlatform.isWindows then "1" else "0"}
+    #define TARGET_OS_UNIX          ${if hostPlatform.isLinux then "1" else "0"}
     #define TARGET_OS_EMBEDDED      0
     #define TARGET_OS_IPHONE        0
-    #define TARGET_IPHONE_SIMULATOR 0
-    #define TARGET_OS_LINUX         0
+    #define TARGET_IPHONE_SIMULATOR ${if hostPlatform.isiPhoneSimulator or false then "1" else "0"}
+    #define TARGET_OS_LINUX         ${if hostPlatform.isLinux then "1" else "0"}
 
     #define TARGET_CPU_PPC          0
     #define TARGET_CPU_PPC64        0
     #define TARGET_CPU_68K          0
-    #define TARGET_CPU_X86          0
-    #define TARGET_CPU_X86_64       1
-    #define TARGET_CPU_ARM          0
-    #define TARGET_CPU_MIPS         0
+    #define TARGET_CPU_X86          ${if hostPlatform.isi686 then "1" else "0"}
+    #define TARGET_CPU_X86_64       ${if hostPlatform.isx86_64 then "1" else "0"}
+    #define TARGET_CPU_ARM          ${if hostPlatform.isArm32 then "1" else "0"}
+    #define TARGET_CPU_MIPS         ${if hostPlatform.isMips then "1" else "0"}
     #define TARGET_CPU_SPARC        0
     #define TARGET_CPU_ALPHA        0
     #define TARGET_RT_MAC_CFM       0
-    #define TARGET_RT_MAC_MACHO     1
-    #define TARGET_RT_LITTLE_ENDIAN 1
-    #define TARGET_RT_BIG_ENDIAN    0
-    #define TARGET_RT_64_BIT        1
+    #define TARGET_RT_MAC_MACHO     ${if hostPlatform.isDarwin then "1" else "0"}
+    #define TARGET_RT_LITTLE_ENDIAN ${if hostPlatform.isLittleEndian then "1" else "0"}
+    #define TARGET_RT_BIG_ENDIAN    ${if hostPlatform.isBigEndian then "1" else "0"}
+    #define TARGET_RT_64_BIT        ${if hostPlatform.is64bit then "1" else "0"}
     #endif  /* __TARGETCONDITIONALS__ */
     EOF
 

@@ -7860,7 +7860,7 @@ with pkgs;
     /**/ if name == "glibc" then __targetPackages.glibcCross or glibcCross
     else if name == "uclibc" then uclibcCross
     else if name == "msvcrt" then __targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if name == "libSystem" then darwin.xcode
+    else if name == "libSystem" then __targetPackages.darwin.Libsystem or darwin.Libsystem
     else throw "Unknown libc";
 
   libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
@@ -11672,6 +11672,18 @@ with pkgs;
     usr-include = callPackage ../os-specific/darwin/usr-include {};
 
     DarwinTools = callPackage ../os-specific/darwin/DarwinTools {};
+
+    ${if hostPlatform != buildPlatform then "Libsystem" else null} = apple-source-releases.override {
+      # The reasoning behind this is the same as glibcCross
+      stdenv = buildPackages.makeStdenvCross {
+        inherit (buildPackages.buildPackages) stdenv;
+        inherit buildPlatform hostPlatform targetPlatform;
+        cc = stdenv.cc.override {
+          libc = null;
+          noLibc = true;
+        };
+      };
+    };
   };
 
   devicemapper = lvm2;

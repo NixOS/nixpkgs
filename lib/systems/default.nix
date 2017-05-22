@@ -28,6 +28,9 @@ rec {
         else if final.isLinux  then "glibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                        "native/impure";
+      cc =
+        /**/ if final.isDarwin then "clang"
+        else                        "gcc";
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in final;
