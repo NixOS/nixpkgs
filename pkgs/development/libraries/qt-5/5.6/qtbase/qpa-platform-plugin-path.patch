@@ -1,0 +1,43 @@
+Index: qtbase-opensource-src-5.6.2/src/gui/kernel/qplatformintegrationfactory.cpp
+===================================================================
+--- qtbase-opensource-src-5.6.2.orig/src/gui/kernel/qplatformintegrationfactory.cpp
++++ qtbase-opensource-src-5.6.2/src/gui/kernel/qplatformintegrationfactory.cpp
+@@ -67,9 +67,10 @@ QPlatformIntegration *QPlatformIntegrati
+     // Try loading the plugin from platformPluginPath first:
+     if (!platformPluginPath.isEmpty()) {
+         QCoreApplication::addLibraryPath(platformPluginPath);
+-        if (QPlatformIntegration *ret = loadIntegration(directLoader(), platform, paramList, argc, argv))
+-            return ret;
+     }
++    QCoreApplication::addLibraryPath(QStringLiteral(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
++    if (QPlatformIntegration *ret = loadIntegration(directLoader(), platform, paramList, argc, argv))
++        return ret;
+     if (QPlatformIntegration *ret = loadIntegration(loader(), platform, paramList, argc, argv))
+         return ret;
+ #else
+@@ -95,15 +96,16 @@ QStringList QPlatformIntegrationFactory:
+     QStringList list;
+     if (!platformPluginPath.isEmpty()) {
+         QCoreApplication::addLibraryPath(platformPluginPath);
+-        list = directLoader()->keyMap().values();
+-        if (!list.isEmpty()) {
+-            const QString postFix = QStringLiteral(" (from ")
+-                                    + QDir::toNativeSeparators(platformPluginPath)
+-                                    + QLatin1Char(')');
+-            const QStringList::iterator end = list.end();
+-            for (QStringList::iterator it = list.begin(); it != end; ++it)
+-                (*it).append(postFix);
+-        }
++    }
++    QCoreApplication::addLibraryPath(QStringLiteral(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
++    list = directLoader()->keyMap().values();
++    if (!list.isEmpty()) {
++        const QString postFix = QStringLiteral(" (from ")
++            + QDir::toNativeSeparators(platformPluginPath)
++            + QLatin1Char(')');
++        const QStringList::iterator end = list.end();
++        for (QStringList::iterator it = list.begin(); it != end; ++it)
++            (*it).append(postFix);
+     }
+     list.append(loader()->keyMap().values());
+     return list;

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
-let version = "0.3.3"; in
+let version = "0.3.5"; in
 stdenv.mkDerivation {
   name = "fontconfig-penultimate-${version}";
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "ttuegel";
     repo = "fontconfig-penultimate";
     rev = version;
-    sha256 = "0392lw31jps652dcjazln77ihb6bl7gk201gb7wb9i223avp86w9";
+    sha256 = "1xi664bs6n687s972nch87hi0iqkd6gr1l76zl58pymiw2132ks8";
   };
 
   installPhase = ''

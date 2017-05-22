@@ -114,7 +114,7 @@ in stdenv.mkDerivation rec {
       sed -i '/TestWebServer.cpp/d'  xbmc/network/test/{Makefile,CMakeLists.txt}
     '';
 
-    enableParallelBuild = true;
+    enableParallelBuilding = true;
 
     doCheck = true;
 

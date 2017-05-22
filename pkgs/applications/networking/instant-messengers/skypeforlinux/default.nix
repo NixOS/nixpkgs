@@ -4,7 +4,7 @@
 
 let
 
-  version = "5.1.0.1";
+  version = "5.2.0.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -49,8 +49,8 @@ let
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "https://repo.skype.com/latest/skypeforlinux-64.deb";
-        sha256 = "18v861x0n2q2jaglap8193sia476dwkwr0ccfzl29mi5ijma24ml";
+        url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_5.2.0.1_amd64.deb";
+        sha256 = "1dwyj5wm2amkysbnzxsskq6sl7rbqggm6n4sabnq7wd5xnbq4i06";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.system}";

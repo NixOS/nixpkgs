@@ -59,6 +59,7 @@ let
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       gwenview = callPackage ./gwenview.nix {};
+      k3b = callPackage ./k3b.nix {};
       kate = callPackage ./kate.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kcalc = callPackage ./kcalc.nix {};
@@ -80,6 +81,7 @@ let
       konsole = callPackage ./konsole.nix {};
       krfb = callPackage ./krfb.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
+      libkcddb = callPackage ./libkcddb.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkipi = callPackage ./libkipi.nix {};

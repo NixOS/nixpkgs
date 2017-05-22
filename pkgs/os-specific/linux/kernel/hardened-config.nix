@@ -29,6 +29,7 @@ ${optionalString (versionAtLeast version "4.10") ''
 DEBUG_CREDENTIALS y
 DEBUG_NOTIFIERS y
 DEBUG_LIST y
+DEBUG_SG y
 
 HARDENED_USERCOPY y # Bounds check usercopy
 

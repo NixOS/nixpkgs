@@ -6,19 +6,19 @@ in
 {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "375.39";
-    sha256_32bit = "0mlly5n84640xa2mcdqqg44s42ck6g3lj5skf7gmfp2w5ibzccvz";
-    sha256_64bit = "19w5v81f770rqjrvdwz11k015zli2y8f4x10ydqxcy0nhhh5mgli";
-    settingsSha256 = "0f881q4jzliqzqi1p5lzwz86h829m5g74zdj7nlfi1cc6s45g5p5";
-    persistencedSha256 = "0zj6wdcgg2ljhvsssfsqz9wk28ykmsh4gwmis31q3rsrkq668x33";
+    version = "375.66";
+    sha256_32bit = "0k7ib5ah3c2apzgzxlq75l48zm8901mbwj7slv18k3rhk8j0w8i9";
+    sha256_64bit = "1h01s8brpz42jwc24dsflm4psd3zsy26ds98h0adgwx51dbpzqsr";
+    settingsSha256 = "0bpdayyqw4cpgl7bgddfz6w5j8y3wsgr89p5vxnzgk9g0vgqxh5h";
+    persistencedSha256 = "113rllf9l26z546jjfijpxllp17qcpawblzxvsqc6rbzbkmvcdwi";
   };
 
   beta = generic {
-    version = "378.13";
-    sha256_32bit = "1ca6kbk20kki5f698x1ga9b1v1is4mr10f7f70s3gixak1h2mrh5";
-    sha256_64bit = "1vj2vyy6vim0qis7iqq4la6k6bnby65p3qjbl888qnpjkqj7kqrx";
-    settingsSha256 = "08q04cd769l1i6737ylvanaxrqg8fym05kjp7kvpz28764g96gxj";
-    persistencedSha256 = "0hmxp5fbxwl9f7c9fspg65my6lwynpqhz02zw7100dgwqb2vn1qj";
+    version = "381.22";
+    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
+    sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
+    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
+    persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
   };
 
   legacy_340 = generic {

@@ -4,5 +4,7 @@ dlopen-libXcursor.patch
 dlopen-openssl.patch
 dlopen-dbus.patch
 xdg-config-dirs.patch
+nix-profiles-library-paths.patch
 compose-search-path.patch
 libressl.patch
+qpa-platform-plugin-path.patch

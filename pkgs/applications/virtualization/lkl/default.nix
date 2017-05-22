@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "-C tools/lkl";
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as extensively as possible with minimal effort and reduced maintenance overhead";

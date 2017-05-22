@@ -14,8 +14,12 @@ pythonPackages.buildPythonApplication rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/mayflower/errbot/commit/d6890c2e02e145b0344a5ea05fd5874218fa40ff.patch";
+      url = "https://github.com/mayflower/errbot/commit/3d360fded72cbd83376778bce124a0a2fcd7d621.patch";
       sha256 = "0qlninni6rgwk5fvcybpan3zppmchs34p4v9rzwnqqzhn4429mfh";
+    })
+    (fetchpatch {
+      url = "https://github.com/mayflower/errbot/commit/87f3162e7b7809269e64453e7278022998dfe77e.patch";
+      sha256 = "1kpanqb93d4w7v578amwldnbm5hfb1kqg024flb83hjyanik8839";
     })
   ];
 
