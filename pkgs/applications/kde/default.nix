@@ -83,6 +83,7 @@ let
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kdepim-runtime = callPackage ./kdepim-runtime.nix {};
+      kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
