@@ -528,7 +528,7 @@ in {
         ln -fs ${cfg.packages.gitlab-shell}/hooks "$GITLAB_SHELL_HOOKS_PATH"
         ${cfg.packages.gitlab-shell}/bin/install
 
-        if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
+        if [ "${cfg.databaseHost}" == "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
             psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
             ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName} || true
