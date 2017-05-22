@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "1cmaddfjb7yr87gjd5yv4d0qng0j97sy5rw5m3zxsp6c4fnng0vz";
   };
 
+  prePatch = ''
+    substituteInPlace nsd-control-setup.sh.in --replace openssl ${openssl}/bin/openssl
+  '';
+
   buildInputs = [ libevent openssl ];
 
   configureFlags =
