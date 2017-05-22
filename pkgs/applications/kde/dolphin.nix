@@ -20,4 +20,5 @@ mkDerivation {
     kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem
     phonon solid
   ];
+  outputs = [ "out" "dev" ];
 }

@@ -39,11 +39,11 @@ let
     # SUPPORT
     let
 
-      propagateBin =
+      propagate = out:
         let setupHook = { writeScript }:
               writeScript "setup-hook.sh" ''
-                # Propagate $bin output
-                propagatedUserEnvPkgs+=" @bin@"
+                # Propagate $${out} output
+                propagatedUserEnvPkgs+=" @${out}@"
 
                 # Propagate $dev so that this setup hook is propagated
                 # But only if there is a separate $dev output
@@ -57,9 +57,11 @@ let
               '';
         in callPackage setupHook {};
 
+      propagateBin = propagate "bin";
+
       callPackage = self.newScope {
 
-        inherit propagateBin;
+        inherit propagate propagateBin;
 
         mkDerivation = args:
           let

@@ -1,6 +1,7 @@
-{ mkDerivation, lib
-, extra-cmake-modules
-, qtbase, networkmanager
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  networkmanager, qtbase,
 }:
 
 mkDerivation {
@@ -10,6 +11,6 @@ mkDerivation {
     broken = builtins.compareVersions qtbase.version "5.6.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase ];
-  propagatedBuildInputs = [ networkmanager ];
+  propagatedBuildInputs = [ networkmanager qtbase ];
+  outputs = [ "out" "dev" ];
 }

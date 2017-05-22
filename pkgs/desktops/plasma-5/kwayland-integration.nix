@@ -1,7 +1,11 @@
-{ mkDerivation , extra-cmake-modules , kidletime , kwayland , kwindowsystem }:
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kidletime, kwayland, kwindowsystem, qtbase,
+}:
 
 mkDerivation {
   name = "kwayland-integration";
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ kidletime kwindowsystem kwayland ];
+  buildInputs = [ kidletime kwindowsystem kwayland qtbase ];
 }

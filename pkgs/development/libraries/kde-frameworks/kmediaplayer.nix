@@ -8,5 +8,5 @@ mkDerivation {
   name = "kmediaplayer";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ kparts kxmlgui ];
+  buildInputs = [ kparts kxmlgui ];
 }

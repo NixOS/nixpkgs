@@ -12,5 +12,5 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedNativeBuildInputs = [ gettext python ];
-  propagatedBuildInputs = [ qtdeclarative qtscript ];
+  buildInputs = [ qtdeclarative qtscript ];
 }

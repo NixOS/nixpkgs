@@ -2,16 +2,17 @@
   mkDerivation, lib,
   extra-cmake-modules,
   kconfigwidgets, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews,
-  kpackage, kservice, kxmlgui
+  kpackage, kservice, kxmlgui, qtdeclarative,
 }:
 
 mkDerivation {
   name = "kcmutils";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [
-    kconfigwidgets kcoreaddons kdeclarative ki18n kiconthemes kitemviews
-    kpackage kservice kxmlgui
+  buildInputs = [
+    kcoreaddons kdeclarative ki18n kiconthemes kitemviews kpackage kxmlgui
+    qtdeclarative
   ];
+  propagatedBuildInputs = [ kconfigwidgets kservice ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
 }

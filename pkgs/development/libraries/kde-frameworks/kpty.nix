@@ -1,8 +1,9 @@
-{ mkDerivation, lib, extra-cmake-modules, kcoreaddons, ki18n }:
+{ mkDerivation, lib, extra-cmake-modules, kcoreaddons, ki18n, qtbase, }:
 
 mkDerivation {
   name = "kpty";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ kcoreaddons ki18n ];
+  buildInputs = [ kcoreaddons ki18n qtbase ];
+  outputs = [ "out" "dev" ];
 }

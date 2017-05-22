@@ -9,8 +9,9 @@ mkDerivation {
   name = "frameworkintegration";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [
-    kbookmarks kcompletion kconfig kconfigwidgets ki18n kio kiconthemes
-    knewstuff knotifications kpackage kwidgetsaddons libXcursor qtx11extras
+  buildInputs = [
+    kbookmarks kcompletion kconfig ki18n kio knewstuff knotifications kpackage
+    kwidgetsaddons libXcursor qtx11extras
   ];
+  propagatedBuildInputs = [ kconfigwidgets kiconthemes ];
 }

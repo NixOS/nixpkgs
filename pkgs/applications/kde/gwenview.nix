@@ -13,9 +13,8 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ exiv2 lcms2 ];
-  propagatedBuildInputs = [
-    baloo kactivities kdelibs4support kio libkdcraw libkipi phonon
+  buildInputs = [
+    baloo exiv2 kactivities kdelibs4support kio libkdcraw lcms2 libkipi phonon
     qtimageformats qtsvg qtx11extras
   ];
   propagatedUserEnvPkgs = [ kipi-plugins ];

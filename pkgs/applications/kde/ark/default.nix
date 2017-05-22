@@ -3,8 +3,8 @@
 
   extra-cmake-modules, kdoctools,
 
-  karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, khtml, kio,
-  kservice, kpty, kwidgetsaddons, libarchive, kitemmodels,
+  karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, kitemmodels,
+  khtml, kio, kparts, kpty, kservice, kwidgetsaddons, libarchive,
 
   # Archive tools
   p7zip, unzipNLS, zip,
@@ -17,9 +17,10 @@ mkDerivation {
   name = "ark";
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   propagatedBuildInputs = [
-    khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice
-    kpty kwidgetsaddons libarchive kitemmodels
+    karchive kconfig kcrash kdbusaddons khtml ki18n kiconthemes kio kitemmodels
+    kparts kpty kservice kwidgetsaddons libarchive
   ];
+  outputs = [ "out" "dev" ];
   postFixup =
     let
       PATH =

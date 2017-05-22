@@ -4,5 +4,7 @@ mkDerivation {
   name = "kxmlrpcclient";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ ki18n kio ];
+  buildInputs = [ ki18n ];
+  propagatedBuildInputs = [ kio ];
+  outputs = [ "out" "dev" ];
 }

@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, ki18n,
-  kcodecs
+  kcodecs, qtbase,
 }:
 
 mkDerivation {
@@ -11,5 +11,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ki18n ];
-  buildInputs = [ kcodecs ];
+  buildInputs = [ kcodecs qtbase ];
 }

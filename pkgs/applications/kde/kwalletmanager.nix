@@ -8,6 +8,7 @@
 , kcoreaddons
 , kdbusaddons
 , kdelibs4support
+, kwallet
 , kxmlgui
 }:
 
@@ -18,8 +19,8 @@ mkDerivation {
     maintainers = with lib.maintainers; [ fridh ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
+  buildInputs = [
     kauth kcmutils kconfigwidgets kcoreaddons kdbusaddons kdelibs4support
-    kxmlgui
+    kwallet kxmlgui
   ];
 }

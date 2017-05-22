@@ -2,7 +2,8 @@
   mkDerivation,
   extra-cmake-modules, kdoctools,
   kcmutils, kcrash, kdeclarative, kdelibs4support, kglobalaccel, kidletime,
-  kwayland, libXcursor, pam, plasma-framework, qtdeclarative, wayland
+  kwayland, libXcursor, pam, plasma-framework, qtdeclarative, qtx11extras,
+  wayland,
 }:
 
 mkDerivation {
@@ -10,6 +11,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     kcmutils kcrash kdeclarative kdelibs4support kglobalaccel kidletime kwayland
-    libXcursor pam plasma-framework qtdeclarative wayland
+    libXcursor pam plasma-framework qtdeclarative qtx11extras wayland
   ];
 }

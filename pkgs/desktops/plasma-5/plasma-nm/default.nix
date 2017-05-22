@@ -1,10 +1,11 @@
-{ mkDerivation, substituteAll, extra-cmake-modules, kdoctools
-, kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
-, kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
-, knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
-, kxmlgui, mobile_broadband_provider_info
-, modemmanager-qt, networkmanager-qt, openconnect, plasma-framework
-, qca-qt5, qtdeclarative, solid, openvpn
+{
+  mkDerivation, substituteAll,
+  extra-cmake-modules, kdoctools,
+  kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative,
+  kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews, knotifications,
+  kservice, kwallet, kwidgetsaddons, kwindowsystem, kxmlgui,
+  mobile_broadband_provider_info, modemmanager-qt, networkmanager-qt,
+  openconnect, openvpn, plasma-framework, qca-qt5, qtdeclarative, qttools, solid
 }:
 
 mkDerivation {
@@ -19,8 +20,8 @@ mkDerivation {
       inherit openvpn;
     })
   ];
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
+  buildInputs = [
     kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
     qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
     kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui

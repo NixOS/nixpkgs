@@ -4,18 +4,17 @@
   djvulibre, ebook_tools, kactivities, karchive, kbookmarks, kcompletion,
   kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdegraphics-mobipocket,
   kiconthemes, kjs, khtml, kio, kparts, kpty, kwallet, kwindowsystem, libkexiv2,
-  libspectre, poppler, qca-qt5, qtdeclarative, qtsvg, threadweaver
+  libspectre, phonon, poppler, qca-qt5, qtdeclarative, qtsvg, threadweaver
 }:
 
 mkDerivation {
   name = "okular";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ djvulibre ebook_tools ];
-  propagatedBuildInputs = [
-    kactivities karchive kbookmarks kcompletion kconfig kconfigwidgets
+  buildInputs = [
+    djvulibre ebook_tools kactivities karchive kbookmarks kcompletion kconfig kconfigwidgets
     kcoreaddons kdbusaddons kdegraphics-mobipocket kiconthemes kjs khtml kio
-    kparts kpty kwallet kwindowsystem libkexiv2 libspectre poppler qca-qt5
-    qtdeclarative qtsvg threadweaver
+    kparts kpty kwallet kwindowsystem libkexiv2 libspectre phonon poppler
+    qca-qt5 qtdeclarative qtsvg threadweaver
   ];
   meta = {
     platforms = lib.platforms.linux;

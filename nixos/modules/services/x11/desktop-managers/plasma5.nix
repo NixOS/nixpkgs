@@ -52,8 +52,8 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${plasma5.plasma-workspace.out}/lib/libexec/kcheckpass";
-        "start_kdeinit".source = "${pkgs.kinit.out}/lib/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
+        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;

@@ -14,4 +14,5 @@ mkDerivation {
   propagatedBuildInputs = [
     baloo kconfig kdelibs4support kfilemetadata ki18n kio kservice
   ];
+  outputs = [ "out" "dev" ];
 }

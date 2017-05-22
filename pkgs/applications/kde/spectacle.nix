@@ -4,6 +4,7 @@
   ki18n, xcb-util-cursor,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
+  qtx11extras
 }:
 
 mkDerivation {
@@ -13,7 +14,7 @@ mkDerivation {
   buildInputs = [ ki18n xcb-util-cursor ];
   propagatedBuildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative kio knotifications
-    kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi
+    kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras
   ];
   propagatedUserEnvPkgs = [ kipi-plugins ];
 }

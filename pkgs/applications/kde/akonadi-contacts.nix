@@ -1,8 +1,8 @@
 {
   mkDerivation, lib,
   extra-cmake-modules,
-  akonadi-mime, grantlee, kcontacts, kio, kitemmodels, kmime, qtwebengine,
-  akonadi
+  akonadi, akonadi-mime, grantlee, kcontacts, kdbusaddons, ki18n, kiconthemes,
+  kio, kitemmodels, kmime, ktextwidgets, qtwebengine,
 }:
 
 mkDerivation {
@@ -13,7 +13,9 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    akonadi-mime grantlee kcontacts kio kitemmodels kmime qtwebengine
+    akonadi-mime grantlee kcontacts kdbusaddons ki18n kiconthemes kio
+    kitemmodels kmime ktextwidgets qtwebengine
   ];
   propagatedBuildInputs = [ akonadi ];
+  outputs = [ "out" "dev" ];
 }

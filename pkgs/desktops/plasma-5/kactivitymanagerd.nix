@@ -7,7 +7,7 @@
 mkDerivation {
   name = "kactivitymanagerd";
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [
+  buildInputs = [
     boost kconfig kcoreaddons kdbusaddons kglobalaccel ki18n kio kwindowsystem
     kxmlgui
   ];
