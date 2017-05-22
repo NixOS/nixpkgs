@@ -19,6 +19,7 @@ rec {
     Linux        = { kernel = kernels.linux; };
     SunOS        = { kernel = kernels.solaris; };
     FreeBSD      = { kernel = kernels.freebsd; };
+    Hurd         = { kernel = kernels.hurd; };
     NetBSD       = { kernel = kernels.netbsd; };
     OpenBSD      = { kernel = kernels.openbsd; };
     Windows      = { kernel = kernels.windows; };
@@ -27,7 +28,6 @@ rec {
 
     Arm32        = recursiveUpdate patterns.Arm patterns."32bit";
     Arm64        = recursiveUpdate patterns.Arm patterns."64bit";
-
   };
 
   predicates = mapAttrs'
