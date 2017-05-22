@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, bc, python, fuse, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "lkl-${stdenv.lib.substring 0 7 rev}";
-  rev  = "d74707304d4e4614081ae2a612a833aeb46622b5";
+  name = "lkl-2017-03-24";
+  rev  = "a063e1631db5e2b9b04f184c5e6d185c1cd645cb";
 
   nativeBuildInputs = [ bc python ];
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner  = "lkl";
     repo   = "linux";
-    sha256 = "0x1hdjsrj6hfk1sgfw11ihm00fmp6g158sr2q3cgjy2b6jnsr4hp";
+    sha256 = "07dmira76i0ki577sra4fdl1wvzfzxzd75252lza0sc6jdzrrwvj";
   };
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds
