@@ -8615,6 +8615,8 @@ with pkgs;
 
   libharu = callPackage ../development/libraries/libharu { };
 
+  libhdhomerun = callPackage ../development/libraries/libhdhomerun { };
+
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
   libHX = callPackage ../development/libraries/libHX { };
@@ -16440,6 +16442,7 @@ with pkgs;
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
+      ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
       );
   };
 
