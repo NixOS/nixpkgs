@@ -61,12 +61,12 @@ in {
 
   pants13-pre = buildPythonApplication rec {
     pname   = "pantsbuild.pants";
-    version = "1.3.0.dev19";
+    version = "1.3.0rc2";
     name    = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "07gxx8kzkcx3pm2qd5sz2xb3nw9khvbapiqdzgjvzbvai2gsd5qq";
+      sha256 = "1d3i0jwhn94b96b3lwwxd10007hnxw6dw1azmwv3hhwq713gwnpi";
     };
 
     prePatch = ''
