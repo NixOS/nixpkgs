@@ -7,6 +7,7 @@ rec {
     "64bit"      = { cpu = { bits = 64; }; };
     i686         = { cpu = cpuTypes.i686; };
     x86_64       = { cpu = cpuTypes.x86_64; };
+    x86          = { cpu = { family = "x86"; }; };
     Arm          = { cpu = { family = "arm"; }; };
     Mips         = { cpu = { family = "mips"; }; };
     BigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
