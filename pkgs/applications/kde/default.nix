@@ -110,6 +110,7 @@ let
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
+      mbox-importer = callPackage ./mbox-importer.nix {};
       messagelib = callPackage ./messagelib.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
