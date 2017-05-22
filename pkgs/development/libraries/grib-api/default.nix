@@ -25,6 +25,10 @@ stdenv.mkDerivation rec{
                   pythonPackages.python
                 ];
 
+  propagatedBuildInputs = stdenv.lib.optionals enablePython [
+                  pythonPackages.numpy
+                ];
+
   cmakeFlags = [ "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
                  "-DENABLE_PNG=ON"
                  "-DENABLE_FORTRAN=ON"
