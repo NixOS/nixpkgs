@@ -11718,6 +11718,8 @@ with pkgs;
 
   iw = callPackage ../os-specific/linux/iw { };
 
+  iwd = callPackage ../os-specific/linux/iwd { };
+
   jfbview = callPackage ../os-specific/linux/jfbview { };
   jfbpdf = callPackage ../os-specific/linux/jfbview {
     imageSupport = false;
