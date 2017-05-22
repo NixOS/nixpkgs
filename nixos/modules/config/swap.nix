@@ -45,7 +45,7 @@ let
         '';
       };
 
-      randomEncryption = mkOption {
+      randomEncryption.enable = mkOption {
         default = false;
         type = types.bool;
         description = ''
@@ -58,6 +58,26 @@ let
           WARNING #2: Do not use /dev/disk/by-uuid/… or /dev/disk/by-label/… as your swap device
           when using randomEncryption as the UUIDs and labels will get erased on every boot when
           the partition is encrypted. Best to use /dev/disk/by-partuuid/…
+        '';
+      };
+
+      randomEncryption.cipher = mkOption {
+        default = "aes-xts-plain64";
+        example = "serpent-xts-plain64";
+        type = types.str;
+        description = ''
+          Use specified cipher for randomEncryption.
+
+          Hint: Run "cryptsetup benchmark" to see which one is fastest on your machine.
+        '';
+      };
+
+      randomEncryption.source = mkOption {
+        default = "/dev/urandom";
+        example = "/dev/random";
+        type = types.str;
+        description = ''
+          Define the source of randomness to obtain a random key for encryption.
         '';
       };
 
@@ -77,7 +97,7 @@ let
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
       deviceName = lib.replaceChars ["\\"] [""] (escapeSystemdPath config.device);
-      realDevice = if config.randomEncryption then "/dev/mapper/${deviceName}" else config.device;
+      realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
     };
 
   };
@@ -125,14 +145,14 @@ in
 
         createSwapDevice = sw:
           assert sw.device != "";
-          assert !(sw.randomEncryption && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
-          assert !(sw.randomEncryption && lib.hasPrefix "/dev/disk/by-label" sw.device);
+          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-uuid"  sw.device);
+          assert !(sw.randomEncryption.enable && lib.hasPrefix "/dev/disk/by-label" sw.device);
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
-            path = [ pkgs.utillinux ] ++ optional sw.randomEncryption pkgs.cryptsetup;
+            path = [ pkgs.utillinux ] ++ optional sw.randomEncryption.enable pkgs.cryptsetup;
 
             script =
               ''
@@ -145,11 +165,11 @@ in
                       truncate --size "${toString sw.size}M" "${sw.device}"
                     fi
                     chmod 0600 ${sw.device}
-                    ${optionalString (!sw.randomEncryption) "mkswap ${sw.realDevice}"}
+                    ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
                 ''}
-                ${optionalString sw.randomEncryption ''
-                  cryptsetup open ${sw.device} ${sw.deviceName} --type plain --key-file /dev/urandom
+                ${optionalString sw.randomEncryption.enable ''
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';
@@ -157,12 +177,12 @@ in
             unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = sw.randomEncryption;
-            serviceConfig.ExecStop = optionalString sw.randomEncryption "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
+            serviceConfig.RemainAfterExit = sw.randomEncryption.enable;
+            serviceConfig.ExecStop = optionalString sw.randomEncryption.enable "${pkgs.cryptsetup}/bin/cryptsetup luksClose ${sw.deviceName}";
             restartIfChanged = false;
           };
 
-      in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption) config.swapDevices));
+      in listToAttrs (map createSwapDevice (filter (sw: sw.size != null || sw.randomEncryption.enable) config.swapDevices));
 
   };
 
