@@ -11030,27 +11030,7 @@ in {
     };
   };
 
-  flake8 = buildPythonPackage rec {
-    name = "flake8-${version}";
-    version = "3.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "c7c460b5aff3a2063c798a77af18ec70af3941d35a22e2e76965e3c0e0b36055";
-    };
-
-    buildInputs = with self; [ pytest mock pytestrunner ];
-    propagatedBuildInputs = with self; [ pyflakes pycodestyle mccabe ]
-      ++ optionals (pythonOlder "3.4") [ enum34 ]
-      ++ optionals (pythonOlder "3.2") [ configparser ];
-
-    meta = {
-      description = "Code checking using pep8 and pyflakes";
-      homepage = http://pypi.python.org/pypi/flake8;
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
@@ -13917,23 +13897,7 @@ in {
   };
 
 
-  mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "16293af41e7242031afd73896fef6458f4cad38201d21e28f344fff50ae1c25e";
-    };
-
-    buildInputs = with self; [ pytestrunner pytest ];
-
-    meta = {
-      description = "McCabe checker, plugin for flake8";
-      homepage = "https://github.com/flintwork/mccabe";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.2.5";
@@ -19752,28 +19716,7 @@ in {
     };
   };
 
-  pyflakes = buildPythonPackage rec {
-    pname = "pyflakes";
-    version = "1.3.0";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "a4f93317c97a9d9ed71d6ecfe08b68e3de9fea3f4d94dcd1d9d83ccbf929bc31";
-    };
-
-    buildInputs = with self; [ unittest2 ];
-
-    doCheck = !isPyPy;
-    force-rebuild = 1;  # fix transient test suite error at http://hydra.nixos.org/build/45083762
-
-    meta = {
-      homepage = https://launchpad.net/pyflakes;
-      description = "A simple program which checks Python source files for errors";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  pyflakes = callPackage ../development/python-modules/pyflakes { };
 
   pyftgl = buildPythonPackage rec {
     name = "pyftgl-0.4b";
