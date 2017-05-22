@@ -124,7 +124,7 @@ in {
         type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect
+                            networkmanager_openconnect networkmanager_fortisslvpn
                             networkmanager_pptp networkmanager_l2tp; };
         internal = true;
       };
@@ -221,6 +221,9 @@ in {
       }
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
+      }
+      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
       }
       { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";

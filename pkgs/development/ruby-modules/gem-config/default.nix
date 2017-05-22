@@ -20,15 +20,26 @@
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap
+, cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
+, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
 }@args:
 
 let
   v8 = v8_3_16_14;
+
+  rainbow_rake = buildRubyGem {
+    name = "rake";
+    gemName = "rake";
+    remotes = ["https://rubygems.org"];
+    sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
+    type = "gem";
+    version = "12.0.0";
+  };
 in
 
 {
+  atk = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
   bundler = attrs:
     let
       templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
@@ -43,6 +54,10 @@ in
         sed -i -e "s/activate_bin_path/bin_path/g" $out/bin/bundle
       '';
     };
+
+  cairo = attrs: {
+    buildInputs = [ gtk2 pcre pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp];
+  };
 
   capybara-webkit = attrs: {
     buildInputs = [ qt48 ];
@@ -71,6 +86,18 @@ in
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
+
+  gio2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
+  glib2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
+  gtk2 = attrs: {
+    buildInputs = [ gtk2 pcre pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp];
+    # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
+    CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
+  };
+
+  gobject-introspection = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
   hitimes = attrs: {
     buildInputs =
@@ -131,6 +158,10 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  pango = attrs: {
+    buildInputs = [ gtk2 xlibs.libXdmcp pcre pkgconfig xlibs.libpthreadstubs ];
+  };
+
   patron = attrs: {
     buildInputs = [ curl ];
   };
@@ -147,6 +178,10 @@ in
 
   puma = attrs: {
     buildInputs = [ openssl ];
+  };
+
+  rainbow = attrs: {
+    buildInputs = [ rainbow_rake ];
   };
 
   rbnacl = spec: {

@@ -2,6 +2,7 @@
 , alsaLib ? null
 , libpulseaudio ? null
 , tcltk ? null
+, liblo ? null
 
 # maybe csound can be compiled with support for those, see configure output
 # , ladspa ? null
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake flex bison ];
-  buildInputs = [ libsndfile alsaLib libpulseaudio tcltk boost ];
+  buildInputs = [ libsndfile alsaLib libpulseaudio tcltk boost liblo ];
 
   meta = with stdenv.lib; {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
