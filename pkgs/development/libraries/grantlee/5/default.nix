@@ -12,23 +12,18 @@ mkDerivation rec {
     name = "${name}.tar.gz";
   };
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-
   buildInputs = [ qtbase qtscript ];
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev" "bin" ];
-  postInstall = ''
-    moveToOutput "$grantleePluginPrefix" "$bin"
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
-    # CMake checks that the provided libraries and plugins exist
-    # Link libraries into $dev to satisfy CMake
-    mkdir -p $dev/lib
-    find $out/lib -name '*.so.*' -exec ln -s \{\} $dev/lib \;
-
-    # Link plugins into $dev to satisfy CMake
-    ln -s $bin/lib/grantlee $dev/lib
-  '';
+  outputs = [ "out" "dev" ];
+  postFixup =
+    # Disabuse CMake of the notion that libraries are in $dev
+    ''
+      sed -i $dev/lib/cmake/Grantlee5/GrantleeTargets-release.cmake \
+          -e "s|\''${_IMPORT_PREFIX}|$out|"
+    '';
 
   setupHook = ./setup-hook.sh;
 
