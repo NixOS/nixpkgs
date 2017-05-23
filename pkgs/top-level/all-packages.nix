@@ -949,6 +949,8 @@ with pkgs;
 
   envconsul = callPackage ../tools/system/envconsul { };
 
+  esptool = callPackage ../tools/misc/esptool { };
+
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
   f3 = callPackage ../tools/filesystems/f3 { };
