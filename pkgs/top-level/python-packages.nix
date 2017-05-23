@@ -8286,8 +8286,8 @@ in {
   };
 
   # These used to be here but were moved to all-packages, but I'll leave them around for a while.
-  pants = stdenv.lib.warn "Please refer to pants from the top level rather than from pythonPackages. This attribute will disappear by 2017-08-22." pkgs.pants;
-  pants13-pre = stdenv.lib.warn "Please refer to pants13-pre from  the top level rather than from pythonPackages. This attribute will disappear by 2017-08-22." pkgs.pants13-pre;
+  pants = pkgs.pants;
+  pants13-pre = pkgs.pants13-pre;
 
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
