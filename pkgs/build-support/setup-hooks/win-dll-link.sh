@@ -35,7 +35,7 @@ _linkDLLs() {
         local dllPath2
         for dllPath2 in "$dllPath" "$(dirname $(readlink "$dllPath" || echo "$dllPath"))"/*.dll; do
             if [ -e ./"$(basename "$dllPath2")" ]; then continue; fi
-            ln -sr "$dllPath2" .
+            CYGWIN+=\ winsymlinks:nativestrict ln -sr "$dllPath2" .
             linkCount=$(($linkCount+1))
         done
     done
