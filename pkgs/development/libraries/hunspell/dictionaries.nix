@@ -92,6 +92,39 @@ let
       };
     };
 
+  mkDictFromXuxen =
+    { shortName, srcs, shortDescription, longDescription, dictFileName }:
+    stdenv.mkDerivation rec {
+      name = "hunspell-dict-${shortName}-xuxen-${version}";
+      version = "5-2015.11.10";
+
+      inherit srcs;
+
+      phases = ["unpackPhase" "installPhase"];
+      sourceRoot = ".";
+      # Copy files stripping until first dash (path and hash)
+      unpackCmd = "cp $curSrc \${curSrc##*-}";
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+      '';
+
+      meta = with stdenv.lib; {
+        homepage = http://xuxen.eus/;
+        description = shortDescription;
+        longDescription = longDescription;
+        license = licenses.gpl2;
+        maintainers = with maintainers; [ zalakain ];
+        platforms = platforms.all;
+      };
+    };
+
 in {
 
   /* ENGLISH */
@@ -190,5 +223,37 @@ in {
       url = mirror://sourceforge/linguistico/italiano_2_4_2007_09_01.zip;
       sha256 = "0m9frz75fx456bczknay5i446gdcp1smm48lc0qfwzhz0j3zcdrd";
     };
+  };
+
+  /* BASQUE */
+
+  eu-es = mkDictFromXuxen {
+    shortName = "eu-es";
+    dictFileName = "eu_ES";
+    shortDescription = "Basque (Xuxen 5)";
+    longDescription = ''
+      Itxura berritzeaz gain, testuak zuzentzen laguntzeko zenbait hobekuntza
+      egin dira Xuxen.eus-en. Lexikoari dagokionez, 18645 sarrera berri erantsi
+      ditugu, eta proposamenak egiteko sistema ere aldatu dugu. Esate baterako,
+      gaizki idatzitako hitz baten inguruko proposamenak eskuratzeko, euskaraz
+      idaztean egiten ditugun akats arruntenak hartu dira kontuan. Sistemak
+      ematen dituen proposamenak ordenatzeko, berriz, aipatutako irizpidea
+      erabiltzeaz gain, Internetetik automatikoki eskuratutako euskarazko corpus
+      bateko datuen arabera ordenatu daitezke emaitzak. Erabiltzaileak horrela
+      ordenatu nahi baditu proposamenak, hautatu egin behar du aukera hori
+      testu-kutxaren azpian dituen aukeren artean. Interesgarria da proposamenak
+      ordenatzeko irizpide hori, hala sistemak formarik erabilienak proposatuko
+      baitizkigu gutxiago erabiltzen direnen aurretik.
+    '';
+    srcs = [
+      (fetchurl {
+        url = "http://xuxen.eus/static/hunspell/eu_ES.aff";
+        sha256 = "12w2j6phzas2rdzc7f20jnk93sm59m2zzfdgxv6p8nvcvbrkmc02";
+      })
+      (fetchurl {
+        url = "http://xuxen.eus/static/hunspell/eu_ES.dic";
+        sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
+      })
+    ];
   };
 }

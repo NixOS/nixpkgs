@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "tint2-${version}";
-  version = "0.14.4";
+  version = "0.14.5";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "0bwz8fdh4imp1gdg8slzjq28s7mh942i09x9zl20f4frfdliyx47";
+    sha256 = "1nfvcw95wggih7pxh53cx4nlamny73nh88ggfh6a0ajjhafrd2j2";
   };
 
   enableParallelBuilding = true;

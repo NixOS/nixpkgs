@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses, libXext, libXft
-, fontconfig, conf ? null, patches ? []}:
+, fontconfig, conf ? null, patches ? [], extraLibs ? []}:
 
 with stdenv.lib;
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ];
+  buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ] ++ extraLibs;
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out

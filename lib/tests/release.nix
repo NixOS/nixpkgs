@@ -1,4 +1,4 @@
-{ pkgs ? import ((import ../../lib).cleanSource ../..) {} }:
+{ pkgs ? import ((import ../.).cleanSource ../..) {} }:
 
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-lib-tests";

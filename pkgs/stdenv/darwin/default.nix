@@ -61,7 +61,7 @@ in rec {
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
-        inherit system config shell extraBuildInputs allowedRequisites;
+        inherit config shell extraBuildInputs allowedRequisites;
 
         name = "stdenv-darwin-boot-${toString step}";
 
@@ -87,6 +87,10 @@ in rec {
           ${extraPreHook}
         '';
         initialPath  = [ bootstrapTools ];
+
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
+
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl   = bootstrapTools;
@@ -268,7 +272,7 @@ in rec {
   };
 
   stdenvDarwin = prevStage: let pkgs = prevStage; in import ../generic rec {
-    inherit system config;
+    inherit config;
     inherit (pkgs.stdenv) fetchurlBoot;
 
     name = "stdenv-darwin";
@@ -279,6 +283,9 @@ in rec {
 
     stdenvSandboxProfile = binShClosure + libSystemProfile;
     extraSandboxProfile  = binShClosure + libSystemProfile;
+
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
 
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
