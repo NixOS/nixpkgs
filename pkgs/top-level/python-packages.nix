@@ -10798,26 +10798,9 @@ in {
     };
   };
 
-  feedgenerator = buildPythonPackage (rec {
-    name = "feedgenerator-1.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/feedgenerator/${name}.tar.gz";
-      sha256 = "01mirwkm7xfx539hmvj7g9da1j51gw5lsx74dr0glizskjm5vq2s";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ six pytz ];
-
-    meta = {
-      description = "Standalone version of django.utils.feedgenerator,  compatible with Py3k";
-      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  feedgenerator = callPackage ../development/python-modules/feedgenerator {
+    inherit (pkgs) glibcLocales;
+  };
 
   feedparser = buildPythonPackage (rec {
     name = "feedparser-5.2.1";
