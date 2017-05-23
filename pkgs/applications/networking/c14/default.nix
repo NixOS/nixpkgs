@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "c14-cli-unstable-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/online-net/c14-cli";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "online-net";
+    repo = "c14-cli";
     inherit rev;
-    url = "https://github.com/online-net/c14-cli";
     sha256 = "1b44bh0zhh6rhw4d3nprnnxhjgaskl9kzp2cvwwyli5svhjxrfdj";
   };
 
