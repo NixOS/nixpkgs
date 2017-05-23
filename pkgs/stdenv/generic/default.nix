@@ -1,6 +1,6 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ system, name ? "stdenv", preHook ? "", initialPath, cc, shell
+{ name ? "stdenv", preHook ? "", initialPath, cc, shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -14,9 +14,18 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , __extraImpureHostDeps ? []
 , stdenvSandboxProfile ? ""
 , extraSandboxProfile ? ""
+
+, # The platforms here do *not* correspond to the stage the stdenv is
+  # used in, but rather the previous one, in which it was built. We
+  # use the latter two platforms, like a cross compiler, because the
+  # stand environment is a build tool if you squint at it, and because
+  # neither of these are used when building stdenv so we know the
+  # build platform is irrelevant.
+  hostPlatform, targetPlatform
 }:
 
 let
+  inherit (targetPlatform) system;
 
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
@@ -265,7 +274,7 @@ let
 
       outputs' =
         outputs ++
-        (if separateDebugInfo then assert result.isLinux; [ "debug" ] else []);
+        (if separateDebugInfo then assert targetPlatform.isLinux; [ "debug" ] else []);
 
       buildInputs' = lib.chooseDevOutputs buildInputs ++
         (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
@@ -311,7 +320,7 @@ let
           # Inputs built by the usual native compiler.
           nativeBuildInputs = nativeBuildInputs'
             ++ lib.optional
-                (result.isCygwin
+                (hostPlatform.isCygwin
                   || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
                 ../../build-support/setup-hooks/win-dll-link.sh
             ;
@@ -392,54 +401,11 @@ let
       };
 
       # Utility flags to test the type of platform.
-      isDarwin = system == "x86_64-darwin";
-      isLinux = system == "i686-linux"
-             || system == "x86_64-linux"
-             || system == "powerpc-linux"
-             || system == "armv5tel-linux"
-             || system == "armv6l-linux"
-             || system == "armv7l-linux"
-             || system == "aarch64-linux"
-             || system == "mips64el-linux";
-      isGNU = system == "i686-gnu"; # GNU/Hurd
-      isGlibc = isGNU # useful for `stdenvNative'
-             || isLinux
-             || system == "x86_64-kfreebsd-gnu";
-      isSunOS = system == "i686-solaris"
-             || system == "x86_64-solaris";
-      isCygwin = system == "i686-cygwin"
-              || system == "x86_64-cygwin";
-      isFreeBSD = system == "i686-freebsd"
-               || system == "x86_64-freebsd";
-      isOpenBSD = system == "i686-openbsd"
-               || system == "x86_64-openbsd";
-      isi686 = system == "i686-linux"
-            || system == "i686-gnu"
-            || system == "i686-freebsd"
-            || system == "i686-openbsd"
-            || system == "i686-cygwin"
-            || system == "i386-sunos";
-      isx86_64 = system == "x86_64-linux"
-              || system == "x86_64-darwin"
-              || system == "x86_64-freebsd"
-              || system == "x86_64-openbsd"
-              || system == "x86_64-cygwin"
-              || system == "x86_64-solaris";
-      is64bit = system == "x86_64-linux"
-             || system == "x86_64-darwin"
-             || system == "x86_64-freebsd"
-             || system == "x86_64-openbsd"
-             || system == "x86_64-cygwin"
-             || system == "x86_64-solaris"
-             || system == "aarch64-linux"
-             || system == "mips64el-linux";
-      isMips = system == "mips-linux"
-            || system == "mips64el-linux";
-      isArm = system == "armv5tel-linux"
-           || system == "armv6l-linux"
-           || system == "armv7l-linux";
-      isAarch64 = system == "aarch64-linux";
-      isBigEndian = system == "powerpc-linux";
+      inherit (hostPlatform)
+        isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
+        isi686 isx86_64 is64bit isMips isBigEndian;
+      isArm = hostPlatform.isArm32;
+      isAarch64 = hostPlatform.isArm64;
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;

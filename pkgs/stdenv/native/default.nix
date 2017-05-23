@@ -81,6 +81,9 @@ let
     { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
 
     import ../generic {
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+
       preHook =
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "x86_64-freebsd" then prehookFreeBSD else

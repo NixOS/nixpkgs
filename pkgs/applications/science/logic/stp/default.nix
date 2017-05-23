@@ -1,23 +1,32 @@
-{stdenv, cmake, boost, bison, flex, fetchgit, perl, zlib}: 
+{ stdenv, cmake, boost, bison, flex, fetchFromGitHub, perl, python3, python3Packages, zlib, minisatUnstable, cryptominisat }:
+
 stdenv.mkDerivation rec {
-  version = "2014.01.07";
+  version = "2.2.0";
   name = "stp-${version}";
-  src = fetchgit {
-    url    = "git://github.com/stp/stp";
-    rev    = "3aa11620a823d617fc033d26aedae91853d18635";
-    sha256 = "832520787f57f63cf47364d080f30ad10d6d6e00f166790c19b125be3d6dd45c";
+
+  src = fetchFromGitHub {
+    owner = "stp";
+    repo = "stp";
+    rev    = "stp-${version}";
+    sha256 = "1jh23wjm62nnqfx447g2y53bbangq04hjrvqc35v9xxpcjgj3i49";
   };
-  buildInputs = [ cmake boost bison flex perl zlib ];
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
-  patchPhase = ''
-      sed -e 's,^export(PACKAGE.*,,' -i CMakeLists.txt
-      patch -p1 < ${./fixbuild.diff}
-      patch -p1 < ${./fixrefs.diff}
+
+  buildInputs = [ boost zlib minisatUnstable cryptominisat python3 ];
+  nativeBuildInputs = [ cmake bison flex perl ];
+  preConfigure = ''
+    python_install_dir=$out/${python3Packages.python.sitePackages}
+    mkdir -p $python_install_dir
+    cmakeFlagsArray=(
+      $cmakeFlagsArray
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DPYTHON_LIB_INSTALL_DIR=$python_install_dir"
+    )
   '';
-  meta = {
-    description = ''Simple Theorem Prover'';
-    maintainers = with stdenv.lib.maintainers; [mornfall];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.mit;
+
+  meta = with stdenv.lib; {
+    description = "Simple Theorem Prover";
+    maintainers = with maintainers; [ mornfall ];
+    platforms = platforms.linux;
+    license = licenses.mit;
   };
 }
