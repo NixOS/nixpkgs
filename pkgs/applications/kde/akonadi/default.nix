@@ -19,9 +19,6 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
   outputs = [ "out" "dev" ];
-  cmakeFlags = [
-    "-DMYSQLD_EXECUTABLE=${lib.getBin mysql}/bin/mysqld"
-  ];
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_MYSQL_MYSQLD="${lib.getBin mysql}/bin/mysqld"''
     ''-DNIXPKGS_MYSQL_MYSQLADMIN="${lib.getBin mysql}/bin/mysqladmin"''
