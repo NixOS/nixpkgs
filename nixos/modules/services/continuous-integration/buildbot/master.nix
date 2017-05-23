@@ -235,6 +235,6 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ nand0p Mic92 ];
+  meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
 
 }
