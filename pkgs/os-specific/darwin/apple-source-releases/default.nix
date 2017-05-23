@@ -30,6 +30,7 @@ let
       # is the right one, even though it isn't. The version I have here doesn't appear to be linked
       # to any OS releases, but Apple also doesn't mention mDNSResponder from 10.11 to 10.11.6, and
       # neither of those versions are publicly available.
+      libplatform   = "125";
       mDNSResponder = "625.41.2";
 
       libutil       = "43";
@@ -215,6 +216,7 @@ let
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "0qjgkd4y8sjvwjzv5wwyzkb61pg8wwg95bkp721dgzv119dqhr8x" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.11.6"     "0zbcyxlcfhf91jxczhd5bq9qfgvg494gwwp3l7q5ayb2qdihzr8b" {};
+    libplatform     = applePackage "libplatform"       "osx-10.11.6"     "1v4ik6vlklwsi0xb1g5kmhy29j9xk5m2y8xb9zbi1k4ng8x39czk" {};
     libpthread      = applePackage "libpthread"        "osx-10.11.6"     "1kbw738cmr9pa7pz1igmajs307clfq7gv2vm1sqdzhcnnjxbl28w" {};
     libresolv       = applePackage "libresolv"         "osx-10.11.6"     "09flfdi3dlzq0yap32sxidacpc4nn4va7z12a6viip21ix2xb2gf" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.11.6"     "1nfkmbqml587v2s1d1y2s2v8nmr577jvk51y6vqrfvsrhdhc2w94" {};
