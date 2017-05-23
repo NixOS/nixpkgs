@@ -9,7 +9,7 @@ Index: qtbase-opensource-src-5.8.0/src/gui/kernel/qplatformintegrationfactory.cp
 -        if (QPlatformIntegration *ret = qLoadPlugin<QPlatformIntegration, QPlatformIntegrationPlugin>(directLoader(), platform, paramList, argc, argv))
 -            return ret;
      }
-+    QCoreApplication::addLibraryPath(QStringLiteral(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
++    QCoreApplication::addLibraryPath(QLatin1String(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
 +    if (QPlatformIntegration *ret = qLoadPlugin<QPlatformIntegration, QPlatformIntegrationPlugin>(directLoader(), platform, paramList, argc, argv))
 +        return ret;
  #else
@@ -29,7 +29,7 @@ Index: qtbase-opensource-src-5.8.0/src/gui/kernel/qplatformintegrationfactory.cp
 -                (*it).append(postFix);
 -        }
 +    }
-+    QCoreApplication::addLibraryPath(QStringLiteral(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
++    QCoreApplication::addLibraryPath(QLatin1String(NIXPKGS_QPA_PLATFORM_PLUGIN_PATH));
 +    list = directLoader()->keyMap().values();
 +    if (!list.isEmpty()) {
 +        const QString postFix = QLatin1String(" (from ")
