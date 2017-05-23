@@ -10799,11 +10799,11 @@ in {
   };
 
   feedgenerator = buildPythonPackage (rec {
-    name = "feedgenerator-1.7";
+    name = "feedgenerator-1.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/feedgenerator/${name}.tar.gz";
-      sha256 = "5d6b0b10134ac392be0c0c3a39c0e1d7e9c17cc7894590f75981e3f497a4a60f";
+      sha256 = "01mirwkm7xfx539hmvj7g9da1j51gw5lsx74dr0glizskjm5vq2s";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
