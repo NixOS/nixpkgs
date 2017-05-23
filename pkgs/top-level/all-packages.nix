@@ -3768,6 +3768,10 @@ with pkgs;
 
   psutils = callPackage ../tools/typesetting/psutils { };
 
+  psensor = callPackage ../tools/system/psensor {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
+
   pv = callPackage ../tools/misc/pv { };
 
   pwgen = callPackage ../tools/security/pwgen { };
