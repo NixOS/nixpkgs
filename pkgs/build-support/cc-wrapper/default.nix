@@ -5,7 +5,7 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
+{ name ? "", stdenv, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
@@ -18,7 +18,8 @@ with stdenv.lib;
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools ->
   cc != null && binutils != null && coreutils != null && gnugrep != null;
-assert !nativeLibc -> libc != null;
+assert !(nativeLibc && noLibc);
+assert (noLibc || nativeLibc) == (libc == null);
 
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
 assert cc.langVhdl or false -> zlib != null;
@@ -34,9 +35,9 @@ let
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
 
-  libc_bin = if nativeLibc then null else getBin libc;
-  libc_dev = if nativeLibc then null else getDev libc;
-  libc_lib = if nativeLibc then null else getLib libc;
+  libc_bin = if libc == null then null else getBin libc;
+  libc_dev = if libc == null then null else getDev libc;
+  libc_lib = if libc == null then null else getLib libc;
   cc_solib = getLib cc;
   binutils_bin = if nativeTools then "" else getBin binutils;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
@@ -86,7 +87,7 @@ stdenv.mkDerivation {
       }
     ''
 
-    + optionalString (!nativeLibc) (if (!targetPlatform.isDarwin) then ''
+    + optionalString (libc != null) (if (!targetPlatform.isDarwin) then ''
       dynamicLinker="${libc_lib}/lib/$dynamicLinker"
       echo $dynamicLinker > $out/nix-support/dynamic-linker
 
@@ -104,7 +105,7 @@ stdenv.mkDerivation {
       echo "export LD_DYLD_PATH=\"$dynamicLinker\"" >> $out/nix-support/setup-hook
     '')
 
-    + optionalString (!nativeLibc) ''
+    + optionalString (libc != null) ''
       # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
       # against the crt1.o from our own glibc, rather than the one in
       # /usr/lib.  (This is only an issue when using an `impure'
@@ -169,7 +170,7 @@ stdenv.mkDerivation {
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      echo ${cc} ${cc.man or ""} ${binutils_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
+      echo ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
 
       echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
