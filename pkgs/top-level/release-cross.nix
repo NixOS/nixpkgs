@@ -59,8 +59,8 @@ in
     # there probably a good idea to try to be "more parametric" --- i.e. avoid
     # any special casing.
     crossSystem = {
-      config = "foosys";
-      libc = "foolibc";
+      config = "mips64el-apple-windows-gnu";
+      libc = "glibc";
     };
 
     # Converting to a string (drv path) before checking equality is probably a
