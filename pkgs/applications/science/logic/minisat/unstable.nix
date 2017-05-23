@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compact and readable SAT solver";
-    maintainers = with maintainers; [ Mic92 ];
+    maintainers = with maintainers; [ mic92 ];
     platforms = platforms.unix;
     license = licenses.mit;
     homepage = "http://minisat.se/";
