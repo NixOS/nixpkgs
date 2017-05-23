@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
+    # gatttool is no longer built by default. The following line is just
+    # for historical reference and should be removed if no longer
+    # deemed necessary
     #cp ./attrib/gatttool $out/bin/gatttool
     mkdir -p $test/test
     cp -a test $test
