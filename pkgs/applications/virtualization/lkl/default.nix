@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   name = "lkl-2017-03-24";
   rev  = "a063e1631db5e2b9b04f184c5e6d185c1cd645cb";
 
+  outputs = [ "dev" "lib" "out" ];
+
   nativeBuildInputs = [ bc python ];
 
   buildInputs = [ fuse libarchive ];
@@ -19,15 +21,15 @@ stdenv.mkDerivation rec {
   prePatch = "patchShebangs arch/lkl/scripts";
 
   installPhase = ''
-    mkdir -p $out/{bin,lib}
+    mkdir -p $out/bin $lib/lib $dev
 
-    # This tool assumes a different directory structure so let's point it at the right location
     cp tools/lkl/bin/lkl-hijack.sh $out/bin
-    substituteInPlace $out/bin/lkl-hijack.sh --replace '/../' '/../lib'
+    sed -i $out/bin/lkl-hijack.sh \
+        -e "s,LD_LIBRARY_PATH=.*,LD_LIBRARY_PATH=$lib/lib,"
 
     cp tools/lkl/{cptofs,cpfromfs,fs2tar,lklfuse} $out/bin
-    cp -r tools/lkl/include $out
-    cp tools/lkl/liblkl*.{a,so} $out/lib
+    cp -r tools/lkl/include $dev/
+    cp tools/lkl/liblkl*.{a,so} $lib/lib
   '';
 
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):
