@@ -148,7 +148,7 @@ EOF
 
             cd "$out/git/checkouts/$name/$branch"
             rev="$(git rev-parse HEAD)"
-            revs="$revs $rev"
+            revs="$rev $revs"
         done < <(find . -type d -name .git -print)
 
         echo "List of revs to keep for git db $name: $revs"
@@ -179,7 +179,7 @@ EOF
             done
 
             # Create ad-hoc branches for the revs we need
-            echo "$revs" | tr " " "\n" | while read -d " " rev; do
+            echo "$revs" | while read -d " " rev; do
                 echo "Creating git branch b_$rev $rev"
                 git branch b_$rev $rev
             done

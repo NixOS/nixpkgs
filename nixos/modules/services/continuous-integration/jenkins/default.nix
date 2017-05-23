@@ -101,6 +101,22 @@ in {
         '';
       };
 
+      plugins = mkOption {
+        default = null;
+        type = types.nullOr (types.attrsOf types.package);
+        description = ''
+          A set of plugins to activate. Note that this will completely
+          remove and replace any previously installed plugins. If you
+          have manually-installed plugins that you want to keep while
+          using this module, set this option to
+          <literal>null</literal>. You can generate this set with a
+          tool such as <literal>jenkinsPlugins2nix</literal>.
+        '';
+        example = literalExample ''
+          import path/to/jenkinsPlugins2nix-generated-plugins.nix { inherit (pkgs) fetchurl stdenv; }
+        '';
+      };
+
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -149,9 +165,24 @@ in {
       path = cfg.packages;
 
       # Force .war (re)extraction, or else we might run stale Jenkins.
-      preStart = ''
-        rm -rf ${cfg.home}/war
-      '';
+
+      preStart =
+        let replacePlugins =
+              if isNull cfg.plugins
+              then ""
+              else
+                let pluginCmds = lib.attrsets.mapAttrsToList
+                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
+                      cfg.plugins;
+                in ''
+                  rm -r ${cfg.home}/plugins || true
+                  mkdir -p ${cfg.home}/plugins
+                  ${lib.strings.concatStringsSep "\n" pluginCmds}
+                '';
+        in ''
+          rm -rf ${cfg.home}/war
+          ${replacePlugins}
+        '';
 
       script = ''
         ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \

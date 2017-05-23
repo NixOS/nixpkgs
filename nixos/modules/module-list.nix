@@ -370,6 +370,7 @@
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/drbd.nix
   ./services/network-filesystems/glusterfs.nix
+  ./services/network-filesystems/kbfs.nix
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
@@ -430,11 +431,14 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
+  ./services/networking/keybase.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
+  ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/mailpile.nix
   ./services/networking/mfi.nix

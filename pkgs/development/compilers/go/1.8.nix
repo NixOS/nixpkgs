@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre, cacert, llvm
-, Security, Foundation, bash }:
+, Security, Foundation, bash
+, makeWrapper, git, subversion, mercurial, bazaar }:
 
 let
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch ];
+  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ];
   buildInputs = [ pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
@@ -148,6 +149,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp -r . $GOROOT
     ( cd $GOROOT/src && ./all.bash )
+
+    # (https://github.com/golang/go/wiki/GoGetTools)
+    wrapProgram $out/share/go/bin/go --prefix PATH ":" "${stdenv.lib.makeBinPath [ git subversion mercurial bazaar ]}"
   '';
 
   preFixup = ''

@@ -5535,6 +5535,19 @@ let self = _self // overrides; _self = with self; {
 
   FileTemp = null;
 
+  FileType = buildPerlPackage {
+    name = "File-Type-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz;
+      sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
+    };
+    meta = {
+      description = "File::Type uses magic numbers (typically at the start of a file) to determine the MIME type of that file.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
+    };
+  };
+
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
     # WARNING: check on next update if deprecation warning is gone

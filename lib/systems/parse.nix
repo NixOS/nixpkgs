@@ -8,6 +8,7 @@
 with import ../lists.nix;
 with import ../types.nix;
 with import ../attrsets.nix;
+with (import ./inspect.nix).predicates;
 
 let
   lib = import ../default.nix;
@@ -76,6 +77,7 @@ rec {
   {
     darwin  = { execFormat = macho;   families = { inherit unix; }; };
     freebsd = { execFormat = elf;     families = { inherit unix bsd; }; };
+    hurd    = { execFormat = elf;     families = { inherit unix; }; };
     linux   = { execFormat = elf;     families = { inherit unix; }; };
     netbsd  = { execFormat = elf;     families = { inherit unix bsd; }; };
     none    = { execFormat = unknown; families = { inherit unix; }; };
@@ -109,23 +111,12 @@ rec {
       inherit cpu vendor kernel abi;
     };
 
-  is64Bit = matchAttrs { cpu = { bits = 64; }; };
-  is32Bit = matchAttrs { cpu = { bits = 32; }; };
-  isi686 = matchAttrs { cpu = cpuTypes.i686; };
-  isx86_64 = matchAttrs { cpu = cpuTypes.x86_64; };
-
-  isDarwin = matchAttrs { kernel = kernels.darwin; };
-  isLinux = matchAttrs { kernel = kernels.linux; };
-  isUnix = matchAttrs { kernel = { families = { inherit (kernelFamilies) unix; }; }; };
-  isWindows = matchAttrs { kernel = kernels.windows; };
-  isCygwin = matchAttrs { kernel = kernels.windows; abi = abis.cygnus; };
-  isMinGW = matchAttrs { kernel = kernels.windows; abi = abis.gnu; };
-
-
   mkSkeletonFromList = l: {
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
-        then { cpu = elemAt l 0;                      kernel = "windows"; abi = "cygnus";    }
+        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
+      else if elemAt l 1 == "gnu"
+        then { cpu = elemAt l 0;                      kernel = "hurd";     abi = "gnu";      }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
@@ -153,22 +144,22 @@ rec {
     getKernel = name:  kernels.${name} or (throw "Unknown kernel: ${name}");
     getAbi    = name:     abis.${name} or (throw "Unknown ABI: ${name}");
 
-    system = rec {
+    parsed = rec {
       cpu = getCpu args.cpu;
       vendor =
         /**/ if args ? vendor    then getVendor args.vendor
-        else if isDarwin  system then vendors.apple
-        else if isWindows system then vendors.pc
+        else if isDarwin  parsed then vendors.apple
+        else if isWindows parsed then vendors.pc
         else                     vendors.unknown;
       kernel = getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux   system then abis.gnu
-        else if isWindows system then abis.gnu
+        else if isLinux   parsed then abis.gnu
+        else if isWindows parsed then abis.gnu
         else                     abis.unknown;
     };
 
-  in mkSystem system;
+  in mkSystem parsed;
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 

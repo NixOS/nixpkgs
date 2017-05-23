@@ -305,24 +305,24 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2017.1";
+    version = "2017.1.2";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "14p6f15n0927awgpsdsdqgmdfbbwkykrw5xggz5hnfl7d05i4sb6";
+      sha256 = "03c352lj6vnc7cs5ch8p12i4f95qadnibzbrxmxv5xqglpdrp7g9";
     };
     wmClass = "jetbrains-pycharm-ce";
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2017.1";
+    version = "2017.1.2";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1rvic3njsq480pslhw6rxld7jngchihkplq3dfnmkr2h9gx26lkf";
+      sha256 = "0jrrlrkwi6f70nqrrz2vv1wdjpwjbh2in1g658dsbr9gpmkdmy0q";
     };
     wmClass = "jetbrains-pycharm";
   };
@@ -377,12 +377,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2017.1";
+    version = "2017.1.3";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "e651ad78ff9de92bb5b76698eeca1e02ab0f0c36209908074fa4a6b48586071c";
+      sha256 = "0g4b0x910231ljdj18lnj2mlzmzyl12lv3fsbsz6v45i1kwpwnvc";
     };
     wmClass = "jetbrains-webstorm";
   };

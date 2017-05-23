@@ -104,8 +104,6 @@ in
     environment.etc."fish/foreign-env/interactiveShellInit".text = cfge.interactiveShellInit;
 
     environment.etc."fish/nixos-env-preinit.fish".text = ''
-      # avoid clobbering the environment if it's been set by a parent shell
-
       # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
       # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
       set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $__fish_datadir/functions
@@ -120,7 +118,7 @@ in
     environment.etc."fish/config.fish".text = ''
       # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
 
-      # if our parent shell didn't source the general config, do it
+      # if we haven't sourced the general config, do it
       if not set -q __fish_nixos_general_config_sourced
         set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $fish_function_path
         fenv source /etc/fish/foreign-env/shellInit > /dev/null
@@ -128,11 +126,12 @@ in
         
         ${cfg.shellInit}
 
-        # and leave a note to our children to spare them the same work
-        set -gx __fish_nixos_general_config_sourced 1
+        # and leave a note so we don't source this config section again from
+        # this very shell (children will source the general config anew)
+        set -g __fish_nixos_general_config_sourced 1
       end
 
-      # if our parent shell didn't source the login config, do it
+      # if we haven't sourced the login config, do it
       status --is-login; and not set -q __fish_nixos_login_config_sourced
       and begin
         set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $fish_function_path
@@ -141,11 +140,12 @@ in
         
         ${cfg.loginShellInit}
 
-        # and leave a note to our children to spare them the same work
-        set -gx __fish_nixos_login_config_sourced 1
+        # and leave a note so we don't source this config section again from
+        # this very shell (children will source the general config anew)
+        set -g __fish_nixos_login_config_sourced 1
       end
 
-      # if our parent shell didn't source the interactive config, do it
+      # if we haven't sourced the interactive config, do it
       status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
       and begin
         ${fishAliases}
@@ -158,8 +158,10 @@ in
         ${cfg.promptInit}
         ${cfg.interactiveShellInit}
 
-        # and leave a note to our children to spare them the same work
-        set -gx __fish_nixos_interactive_config_sourced 1
+        # and leave a note so we don't source this config section again from
+        # this very shell (children will source the general config anew,
+        # allowing configuration changes in, e.g, aliases, to propagate)
+        set -g __fish_nixos_interactive_config_sourced 1
       end
     '';
 
