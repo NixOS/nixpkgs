@@ -5,11 +5,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.43";
+  name = "bluez-5.45";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "05cdnpz0w2lwq2x5ba87q1h2wgb4lfnpbnbh6p7499hx59fw1j8n";
+    sha256 = "1sb4aflgyrl7apricjipa8wx95qm69yja0lmn2f19g560c3v1b2c";
   };
 
   pythonPath = with pythonPackages;
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
-    cp ./attrib/gatttool $out/bin/gatttool
+    #cp ./attrib/gatttool $out/bin/gatttool
     mkdir -p $test/test
     cp -a test $test
     pushd $test/test
