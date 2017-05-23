@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
   };
 
+  ## patch from https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=12776b3b9276b01f3e8e6d3157157177fce8f17c
   patches = [ ./abiword-3.0.2-fix-nullptr-c++98.patch ];
 
   enableParallelBuilding = true;
