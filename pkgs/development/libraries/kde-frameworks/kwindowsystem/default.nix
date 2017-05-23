@@ -17,4 +17,5 @@ mkDerivation {
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PATH=\"''${!outputBin}/$qtPluginPrefix\""
   '';
+  outputs = [ "out" "dev" ];
 }
