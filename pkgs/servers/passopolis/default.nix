@@ -15,6 +15,10 @@ in antBuild {
   buildInputs = [ git python ];
   antTargets = [ "jar" ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   meta = {
     homepage = "https://github.com/WeAreWizards/passopolis-server";
     description = "A well-designed, well-functioning and secure secret manager.";
