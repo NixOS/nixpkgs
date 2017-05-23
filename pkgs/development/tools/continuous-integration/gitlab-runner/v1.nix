@@ -32,7 +32,7 @@ buildGoPackage rec {
     sha256 = "1pm88546cijmrrcvvrajp2g6rsrzxhy83cwwwky8jjkl5w4hhmz4";
   };
 
-  patches = [ ./v1-fix-shell-path.patch ];
+  patches = [ ./fix-shell-path.patch ];
 
   buildInputs = [ go-bindata ];
 
