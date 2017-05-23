@@ -105,8 +105,13 @@ stdenv.mkDerivation {
   # back to darwin 10.4. This causes the OS name to be recorded as
   # "10.4" rather than the expected "osx". But mk/rt.mk expects the
   # built library name to have an "_osx" suffix on darwin.
+  # The `timeouts` and `ttl` tests in the tcp module are fragile and
+  # tend to fail on hydra, so we take off the `test` attribute.
   optionalString stdenv.isDarwin ''
     substituteInPlace mk/rt.mk --replace "_osx" "_10.4"
+    sed -z -e 's/#\[test\]\n[[:space:]]*fn timeouts()/#[cfg_attr(target_os = "macos", ignore)]\n    #[test]\n    fn timeouts()/' \
+           -e 's/#\[test\]\n[[:space:]]*fn ttl()/#[cfg_attr(target_os = "macos", ignore)]\n    #[test]\n    fn ttl()/' \
+           -i ./src/libstd/net/tcp.rs
   '';
 
   preConfigure = ''
