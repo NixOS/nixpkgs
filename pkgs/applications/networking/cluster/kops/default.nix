@@ -28,6 +28,13 @@ buildGoPackage rec {
      go-bindata -o federation/model/bindata.go -pkg model -prefix federation/model federation/model/...)
   '';
 
+  postInstall = ''
+    mkdir -p $bin/share/bash-completion/completions
+    mkdir -p $bin/share/zsh/site-functions
+    $bin/bin/kops completion bash > $bin/share/bash-completion/completions/kops
+    $bin/bin/kops completion zsh > $bin/share/zsh/site-functions/_kops
+  '';
+
   meta = with stdenv.lib; {
     description = "Easiest way to get a production Kubernetes up and running";
     homepage = https://github.com/kubernetes/kops;
