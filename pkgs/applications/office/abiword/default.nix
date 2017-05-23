@@ -5,12 +5,14 @@
 
 stdenv.mkDerivation rec {
   name = "abiword-${version}";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "http://www.abisource.org/downloads/abiword/${version}/source/${name}.tar.gz";
-    sha256 = "1ik591rx15nn3n1297cwykl8wvrlgj78i528id9wbidgy3xzd570";
+    sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
   };
+
+  patches = [ ./abiword-3.0.2-fix-nullptr-c++98.patch ];
 
   enableParallelBuilding = true;
 
