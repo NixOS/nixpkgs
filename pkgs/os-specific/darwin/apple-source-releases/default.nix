@@ -48,6 +48,7 @@ let
     };
     "osx-10.10.5" = {
       adv_cmds      = "158";
+      CF            = "1153.18";
       ICU           = "531.48";
       libdispatch   = "442.1.4";
       Security      = "57031.40.6";
@@ -69,7 +70,6 @@ let
       IOKitUser                            = "1050.20.2";
     };
     "osx-10.9.5" = {
-      CF                 = "855.17";
       launchd            = "842.92.1";
       libauto            = "185.5";
       Libc               = "997.90.3"; # We use this, but not from here
@@ -191,7 +191,7 @@ let
     bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
     bsdmake         = applePackage "bsdmake"           "dev-tools-3.2.6" "11a9kkhz5bfgi1i8kpdkis78lhc6b5vxmhd598fcdgra1jw4iac2" {};
     CarbonHeaders   = applePackage "CarbonHeaders"     "osx-10.6.2"      "1zam29847cxr6y9rnl76zqmkbac53nx0szmqm9w5p469a6wzjqar" {};
-    CF              = applePackage "CF"                "osx-10.9.5"      "1sadmxi9fsvsmdyxvg2133sdzvkzwil5fvyyidxsyk1iyfzqsvln" {};
+    CF              = applePackage "CF"                "osx-10.10.5"     "07f5psjxi7wyd13ci4x83ya5hy6p69sjfqcpp2mmxdlhd8yzkf74" {};
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.11.6"     "0vllfpb8f4f97wj2vpdd7w5k9ibnsbr6ff1zslpp6q323h01n25y" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
     copyfile        = applePackage "copyfile"          "osx-10.11.6"     "1rkf3iaxmjz5ycgrmf0g971kh90jb2z1zqxg5vlqz001s4y457gs" {};
