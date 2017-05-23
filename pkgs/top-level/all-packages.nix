@@ -12108,6 +12108,20 @@ with pkgs;
     ];
   };
 
+
+  linux_samus_4_12 = callPackage ../os-specific/linux/kernel/linux-samus-4.12.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+    ];
+  };
+
+  linux_samus_latest = linux_samus_4_12;
+
   linux_chromiumos_3_18 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.18.nix {
     kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_18
                       kernelPatches.chromiumos_no_link_restrictions
@@ -12311,6 +12325,10 @@ with pkgs;
     recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
 
   linux_grsec_server_xen = linux_grsec_nixos;
+
+  # Samus kernels
+  linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
+  linuxPackages_samus_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_latest);
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18);
