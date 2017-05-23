@@ -47,6 +47,7 @@ let
     };
     "osx-10.10.5" = {
       adv_cmds      = "158";
+      ICU           = "531.48";
       Security      = "57031.40.6";
 
       IOAudioFamily                        = "203.3";
@@ -197,6 +198,7 @@ let
     dtrace          = applePackage "dtrace"            "osx-10.11.6"     "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wc0" {};
     dyld            = applePackage "dyld"              "osx-10.11.6"     "0qkjmjazm2zpgvwqizhandybr9cm3gz9pckx8rmf0py03faafc08" {};
     eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "0iw0qdib59hihyx2275rwq507bq2a06gaj8db4a8z1rkaj1frskh" {};
+    ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" {};
     IOKit           = applePackage "IOKit"             "osx-10.11.6"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto         = applePackage "libauto"           "osx-10.9.5"      "17z27yq5d7zfkwr49r7f0vn9pxvj95884sd2k6lq6rfaz9gxqhy3" {};
