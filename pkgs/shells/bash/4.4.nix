@@ -23,7 +23,7 @@ let
     in
       import ./bash-4.4-patches.nix patch;
 
-  inherit (stdenv.lib) optional optionals;
+  inherit (stdenv.lib) optional optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches = upstreamPatches
-      ++ optional hostPlatform.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
+  patches = upstreamPatches;
+
+  postPatch = optionalString hostPlatform.isCygwin "patch -p2 < ${./cygwin-bash-4.4.11-2.src.patch}";
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
@@ -78,6 +79,11 @@ stdenv.mkDerivation rec {
   # Bash randomly fails to build because of a recursive invocation to
   # build `version.h'.
   enableParallelBuilding = false;
+
+  makeFlags = optional hostPlatform.isCygwin [
+    "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
+    "SHOBJ_LIBS=-lbash"
+  ];
 
   postInstall = ''
     ln -s bash "$out/bin/sh"
