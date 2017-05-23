@@ -15,11 +15,11 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.1.21";
+  version = "10.2.6";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "144lcm5awcf0k6a7saqfr4p2kg8r5wbdhdm4cmn2m8hyg1an70as";
+    sha256 = "1rd2b1b6s87ymr5qhlggr4q4ljazv82ih0msgrbz1rfn81pcg1f3";
   };
 
   prePatch = ''
@@ -154,9 +154,6 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
-
-    # Don't install mysqlbug to prevent a dependency on gcc.
-    rm $out/bin/mysqlbug
   '';
 });
 

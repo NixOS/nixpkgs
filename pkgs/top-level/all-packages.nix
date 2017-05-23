@@ -11188,7 +11188,6 @@ with pkgs;
   mariadb = callPackage ../servers/sql/mariadb {
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
-    openssl = openssl_1_0_2;
   };
 
   mongodb = callPackage ../servers/nosql/mongodb {
