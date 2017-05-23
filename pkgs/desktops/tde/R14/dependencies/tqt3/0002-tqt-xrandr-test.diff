@@ -1,0 +1,36 @@
+diff -Naur dependencies-old/tqt3/config.tests/x11/xrandr.test dependencies/tqt3/config.tests/x11/xrandr.test
+--- dependencies-old/tqt3/config.tests/x11/xrandr.test	2014-12-06 23:01:44.000000000 -0200
++++ dependencies/tqt3/config.tests/x11/xrandr.test	2015-01-08 17:17:50.000000000 -0200
+@@ -52,10 +52,9 @@
+     INCDIRS="$IN_INCDIRS $XDIRS /usr/include /include"
+     F=
+     for INCDIR in $INCDIRS; do
+-	if [ -f $INCDIR/$INC -a -f $INCDIR/$INC2 ]; then
++	if [ -f $INCDIR/$INC ]; then
+ 	    F=yes
+ 	    XRANDR_H=$INCDIR/$INC
+-	    RANDR_H=$INCDIR/$INC2
+ 	    [ "$VERBOSE" = "yes" ] && echo "  Found $INC in $INCDIR"
+ 	    break
+ 	fi
+@@ -65,6 +64,20 @@
+ 	XRANDR=no
+ 	[ "$VERBOSE" = "yes" ] && echo "  Could not find $INC anywhere in $INCDIRS"
+     fi
++    F=
++    for INCDIR in $INCDIRS; do
++	if [ -f $INCDIR/$INC2 ]; then
++	    F=yes
++	    RANDR_H=$INCDIR/$INC2
++	    [ "$VERBOSE" = "yes" ] && echo "  Found $INC2 in $INCDIR"
++	    break
++	fi
++    done
++    if [ -z "$F" ]
++    then
++	XRANDR=no
++	[ "$VERBOSE" = "yes" ] && echo "  Could not find $INC2 anywhere in $INCDIRS"
++    fi
+ fi
+ 
+ # verify that we are using XRandR 1.x >= 1.1

@@ -1,0 +1,12 @@
+diff -Naur tdelibs/kdoctools/ConfigureChecks.cmake tdelibs-new/kdoctools/ConfigureChecks.cmake
+--- tdelibs/kdoctools/ConfigureChecks.cmake	2015-09-22 23:31:21.000000000 -0300
++++ tdelibs-new/kdoctools/ConfigureChecks.cmake	2017-02-04 19:08:12.846341516 -0200
+@@ -29,7 +29,7 @@
+   COMMAND ${UPDATE_SCRIPT}
+   RESULT_VARIABLE _result
+   OUTPUT_STRIP_TRAILING_WHITESPACE )
+-if( _result )
++if( NOT _result )
+   tde_message_fatal( "Unable to update ${ENTITIES_FILE}!\n " )
+ else( )
+   message( STATUS "Updated as follows:" )
