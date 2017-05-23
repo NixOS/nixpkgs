@@ -11,11 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0y1ij745r4p48mxq84rax40p10ln7fc7m243p8k8sia519i3dxfc";
   };
 
-  patches = lib.optionals stdenv.isCygwin [
-    ./libiconv-1.14-reloc.patch
-    ./libiconv-1.14-wchar.patch
-  ];
-
   postPatch =
     lib.optionalString ((stdenv ? cross && stdenv.cross.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
@@ -23,12 +18,7 @@ stdenv.mkDerivation rec {
       '';
 
   configureFlags =
-  # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
-  # (Windows' linker would need to be used somehow to produce an actual
-  # DLL.)  Thus, build the static library too, and this is what Gettext
-  # will actually use.
-    lib.optional stdenv.isCygwin "--enable-static"
-    ++ lib.optional stdenv.isFreeBSD "--with-pic";
+    lib.optional stdenv.isFreeBSD "--with-pic";
 
   crossAttrs = {
     # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).
