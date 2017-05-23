@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Utilities that give information about processes using the /proc filesystem";
     priority = 10; # less than coreutils, which also provides "kill" and "uptime"
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.cygwin;
   };
 }
