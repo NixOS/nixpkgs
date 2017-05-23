@@ -12,4 +12,5 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kio ];
+  outputs = [ "out" "dev" ];
 }
