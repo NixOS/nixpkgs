@@ -1,7 +1,7 @@
 { kdeApp
 , kdeWrapper
 , lib
-, extra-cmake-modules
+, ecm
 , kdoctools
 , qtscript
 , kactivities
@@ -35,7 +35,7 @@ let
 unwrapped = kdeApp {
   name = "kdenlive";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
   ];
   buildInputs = [

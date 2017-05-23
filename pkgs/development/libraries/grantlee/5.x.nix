@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qtbase, qtscript, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "grantlee-5.0.0";
+  name = "grantlee-5.1.0";
 
 # Upstream download server has country code firewall, so I made a mirror.
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       "http://downloads.grantlee.org/${name}.tar.gz"
       "http://www.loegria.net/grantlee/${name}.tar.gz"
     ];
-    sha256 = "0qdifp1sg87j3869xva5ai2d6d5ph7z4b85wv1fypf2k5sljpwpa";
+    sha256 = "0y0l7aqhwjjvcb6zwdnjln9wsqgc14i2biz2xqrvajy7cqj40bpa";
   };
 
   buildInputs = [ qtbase qtscript ];
