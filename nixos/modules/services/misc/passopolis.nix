@@ -25,16 +25,18 @@ in {
         description = "The state directory";
       };
 
-      databaseHost = mkOption {
+      databaseUrl = mkOption {
         type = types.str;
-        default = "127.0.0.1";
-        description = "Database hostname";
+        default = "jdbc:postgresql://127.0.0.1:5432/${cfg.databaseName}";
+        description = ''
+          Database connection url, see also https://jdbc.postgresql.org/documentation/head/connect.html
+        '';
       };
 
       databaseName = mkOption {
         type = types.str;
         default = "passopolis";
-        description = "Database name";
+        description = "Database to create if <literal>config.services.passopolis.enablePostgreSQLDatabase</literal> is true";
       };
 
       enablePostgreSQLDatabase = mkOption {
@@ -82,7 +84,7 @@ in {
       serviceConfig = {
         PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
-        ExecStart = "${pkgs.jre}/bin/java -DgenerateSecretsForTest=true -Ddatabase_url=jdbc:postgresql://${cfg.databaseHost}:5432/${cfg.databaseName} -ea -jar ${pkgs.passopolis}/share/java/mitrocore.jar";
+        ExecStart = "${pkgs.jre}/bin/java -DgenerateSecretsForTest=true -Ddatabase_url=${cfg.databaseUrl} -ea -jar ${pkgs.passopolis}/share/java/mitrocore.jar";
         User = cfg.user;
       };
     };
