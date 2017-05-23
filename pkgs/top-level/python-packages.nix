@@ -17872,20 +17872,22 @@ in {
 
   pelican = buildPythonPackage rec {
     name = "pelican-${version}";
-    version = "3.6.3";
+    version = "3.7.1";
     disabled = isPy26;
 
     src = pkgs.fetchFromGitHub {
       owner = "getpelican";
       repo = "pelican";
       rev = version;
-      sha256 = "1k572anw39rws67mvxl2w6y93y8w8q5smnwc0dd2gnnr16cc2vsh";
+      sha256 = "0nkxrb77k2bra7bqckg7f5k73wk98hcbz7rimxl8sw05b2bvd62g";
     };
 
-    patches = [ ../development/python-modules/pelican-fix-tests-with-pygments-2.1.patch ];
+    doCheck = true;
 
-    # There's still some failing tests due to pygments 2.1.3
-    doCheck = false;
+    # https://github.com/getpelican/pelican/pull/2004#issuecomment-247610716
+    checkPhase = ''
+      ${python.interpreter} -Wd -m unittest discover
+    '';
 
     buildInputs = with self; [
       pkgs.glibcLocales
@@ -17901,7 +17903,7 @@ in {
 
     propagatedBuildInputs = with self; [
       jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-      blinker pillow beautifulsoup4 markupsafe
+      blinker pillow beautifulsoup4 markupsafe lxml
     ];
 
     postPatch= ''
