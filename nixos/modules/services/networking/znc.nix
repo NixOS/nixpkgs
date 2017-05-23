@@ -279,7 +279,7 @@ in
           example = defaultPassBlock;
           type = types.string;
           description = ''
-            Generate with znc --makepass.
+            Generate with `nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
           '';
         };
