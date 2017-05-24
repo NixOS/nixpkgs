@@ -234,7 +234,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "0bwgm6z6k3khb91qh9xv15inykkfchpkm0lcdckkxhkacpyaf0mp";
+    sha256 = "0c37bdqwmaziikr2d5pqp7504ail6i7a1mfcmc06mdpwfxxwvcpw";
   };
 
   patchPhase = ''patchShebangs .
