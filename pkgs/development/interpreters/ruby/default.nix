@@ -125,6 +125,8 @@ let
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
+          paxmark m $out/bin/ruby
+
           # Update rubygems
           pushd rubygems
           $out/bin/ruby setup.rb
