@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
+  preConfigure = ''
+    export CFLAGS="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
+    export LDFLAGS="-pie -Wl,-z,relro,-z,now"
+  '';
+
   meta = {
     description = "A utility for bidirectional data transfer between two independent data channels";
     homepage = http://www.dest-unreach.org/socat/;
