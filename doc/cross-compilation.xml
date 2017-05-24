@@ -30,7 +30,7 @@
   <section>
     <title>Platform parameters</title>
     <para>
-      The three GNU Autoconf platforms, <wordasword>build</wordasword>, <wordasword>host</wordasword>, and <wordasword>cross</wordasword>, are historically the result of much confusion.
+      The three GNU Autoconf platforms, <wordasword>build</wordasword>, <wordasword>host</wordasword>, and <wordasword>target</wordasword>, are historically the result of much confusion.
       <link xlink:href="https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html" /> clears this up somewhat but there is more to be said.
       An important advice to get out the way is, unless you are packaging a compiler or other build tool, just worry about the build and host platforms.
       Dealing with just two platforms usually better matches people's preconceptions, and in this case is completely correct.
