@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   buildPhase = ''
     export GOPATH=$(pwd)/vendor
