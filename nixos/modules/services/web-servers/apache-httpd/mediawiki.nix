@@ -120,7 +120,7 @@ let
     { buildInputs = [ pkgs.makeWrapper ]; }
     ''
       mkdir -p $out/bin
-      for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
+      for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php runScript.php; do
         makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
           --add-flags ${mediawikiRoot}/maintenance/$i
       done
@@ -321,10 +321,10 @@ in
 
   # !!! Need to specify that Apache has a dependency on PostgreSQL!
 
-  startupScript = pkgs.writeScript "mediawiki_startup.sh"
+  startupScript = pkgs.writeScript "mediawiki_startup.sh" ''
     # Initialise the database automagically if we're using a Postgres
     # server on localhost.
-    (optionalString (config.dbType == "postgres" && config.dbServer == "") ''
+    ${optionalString (config.dbType == "postgres" && config.dbServer == "") ''
       if ! ${pkgs.postgresql}/bin/psql -l | grep -q ' ${config.dbName} ' ; then
           ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
           ${pkgs.postgresql}/bin/createdb "${config.dbName}" -O "${config.dbUser}"
@@ -334,8 +334,16 @@ in
             echo COMMIT
           ) | ${pkgs.postgresql}/bin/psql -U "${config.dbUser}" "${config.dbName}"
       fi
-      ${php}/bin/php ${mediawikiRoot}/maintenance/update.php
-    '');
+    ''}
+    ${optionalString (config.dbType == "mysql" && config.dbServer == "") ''
+      if ! echo 'show databases;' | ${pkgs.mysql}/bin/mysql | grep -q '${config.dbName}'; then
+        echo "create database ${config.dbName};" | ${pkgs.mysql}/bin/mysql
+        echo "grant index, create, select, insert, update, delete, alter, lock tables on ${config.dbName}.* to '${config.dbUser}'@'localhost' identified by '${config.dbPassword}';" | ${pkgs.mysql}/bin/mysql
+        cat ${mediawikiRoot}/maintenance/tables.sql | ${pkgs.mysql}/bin/mysql '${config.dbName}'
+      fi
+    ''}
+    ${php}/bin/php ${mediawikiRoot}/maintenance/update.php
+  '';
 
   robotsEntries = optionalString (config.articleUrlPrefix != "")
     ''
