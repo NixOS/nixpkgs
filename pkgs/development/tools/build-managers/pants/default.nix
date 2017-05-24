@@ -48,6 +48,7 @@ let
     mkdir -p $out/bin/native-engine/${pants13-native-engine-prefix}/$native_version/
 
     # These should behave the same way in Nix land and we try not to differentiate between OS revisions...
+    mkdir -p $out/bin/native-engine/mac/
     ln -s 10.11 $out/bin/native-engine/mac/10.10
     ln -s 10.11 $out/bin/native-engine/mac/10.12
 
