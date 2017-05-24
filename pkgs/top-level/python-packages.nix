@@ -53,11 +53,10 @@ let
         let
           url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
         in pkgs.fetchurl {inherit url sha256;};
-      fetchSource = {pname, version, sha256, tgz ? true}:
+      fetchSource = {pname, version, sha256, extension ? "tar.gz"}:
       # Fetch a source tarball.
         let
-          extension = if tgz then ".tar.gz" else ".zip";
-          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}${extension}";
+          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.${extension}";
         in pkgs.fetchurl {inherit url sha256;};
       fetcher = (if format == "wheel" then fetchWheel
         else if format == "setuptools" then fetchSource
