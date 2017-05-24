@@ -6917,6 +6917,8 @@ with pkgs;
 
   peg = callPackage ../development/tools/parsing/peg { };
 
+  pgcli = callPackage ../development/tools/database/pgcli {};
+
   phantomjs = callPackage ../development/tools/phantomjs { };
 
   phantomjs2 = callPackage ../development/tools/phantomjs2 { };
