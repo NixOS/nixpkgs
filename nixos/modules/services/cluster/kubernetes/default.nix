@@ -75,13 +75,93 @@ let
       effect = mkOption {
         description = "Effect of taint.";
         example = "NoSchedule";
-        type = types.str;
+        type = types.enum ["NoSchedule" "PreferNoSchedule" "NoExecute"];
       };
     };
   };
 
   taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (mapAttrsToList (n: v: v) cfg.kubelet.taints);
 
+  defaultAuthorizationPolicy = (optionals (any (el: el == "ABAC") cfg.apiserver.authorizationMode) [
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        user  = "kubecfg";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        user  = "kubelet";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        user  = "kube-worker";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        user  = "kube_proxy";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        user  = "client";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+  ]) ++ (optionals (all (el: el != "RBAC") cfg.apiserver.authorizationMode) [
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        user  = "admin";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+    {
+      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
+      kind = "Policy";
+      spec = {
+        group  = "system:serviceaccounts";
+        namespace = "*";
+        resource = "*";
+        apiGroup = "*";
+        nonResourcePath = "*";
+      };
+    }
+  ]);
 in {
 
   ###### interface
@@ -205,7 +285,7 @@ in {
         description = ''
           Kubernetes apiserver storage backend.
         '';
-        default = "etcd2";
+        default = "etcd3";
         type = types.enum ["etcd2" "etcd3"];
       };
 
@@ -264,7 +344,7 @@ in {
           Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
           <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
         '';
-        default = ["ABAC"];
+        default = ["ABAC" "RBAC"];
         type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC"]);
       };
 
@@ -273,89 +353,11 @@ in {
           Kubernetes apiserver authorization policy file. See
           <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
         '';
-        default = [
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              user  = "admin";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              user  = "kubecfg";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              user  = "kubelet";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              user  = "kube-worker";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              user  = "kube_proxy";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              user  = "client";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-          {
-            apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-            kind = "Policy";
-            spec = {
-              group  = "system:serviceaccounts";
-              namespace = "*";
-              resource = "*";
-              apiGroup = "*";
-              nonResourcePath = "*";
-            };
-          }
-        ];
+        default = defaultAuthorizationPolicy;
         type = types.listOf types.attrs;
       };
 
-      autorizationRBACSuperAdmin = mkOption {
+      authorizationRBACSuperAdmin = mkOption {
         description = "Role based authorization super admin.";
         default = "admin";
         type = types.str;
@@ -647,7 +649,7 @@ in {
       };
 
       applyManifests = mkOption {
-        description = "Whether to apply manifests.";
+        description = "Whether to apply manifests (this is true for master node).";
         default = false;
         type = types.bool;
       };
@@ -659,7 +661,7 @@ in {
       };
 
       taints = mkOption {
-        description = ".";
+        description = "Node taints (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).";
         default = {};
         type = types.attrsOf (types.submodule [ taintOptions ]);
       };
@@ -878,7 +880,7 @@ in {
               }"
             } \
             ${optionalString (elem "RBAC" cfg.apiserver.authorizationMode)
-              "--authorization-rbac-super-user=${cfg.apiserver.autorizationRBACSuperAdmin}"} \
+              "--authorization-rbac-super-user=${cfg.apiserver.authorizationRBACSuperAdmin}"} \
             --secure-port=${toString cfg.apiserver.securePort} \
             --service-cluster-ip-range=${cfg.apiserver.portalNet} \
             ${optionalString (cfg.apiserver.runtimeConfig != "")

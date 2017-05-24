@@ -39,16 +39,16 @@ let
   });
 
   roRole = pkgs.writeText "ro-role.json" (builtins.toJSON {
-    "apiVersion" = "rbac.authorization.k8s.io/v1beta1";
-    "kind" = "Role";
-    "metadata" = {
-      "name" = "pod-reader";
-      "namespace" = "default";
+    apiVersion = "rbac.authorization.k8s.io/v1beta1";
+    kind = "Role";
+    metadata = {
+      name = "pod-reader";
+      namespace = "default";
     };
-    "rules" = [{
-      "apiGroups" = [""];
-      "resources" = ["pods"];
-      "verbs" = ["get" "list" "watch"];
+    rules = [{
+      apiGroups = [""];
+      resources = ["pods"];
+      verbs = ["get" "list" "watch"];
     }];
   });
 
@@ -110,7 +110,7 @@ let
   '';
 
 in makeTest {
-  name = "kubernetes-multinode-rbac";
+  name = "kubernetes-rbac";
 
   nodes = {
     master =
@@ -121,64 +121,6 @@ in makeTest {
             virtualisation.diskSize = 4096;
             networking.interfaces.eth1.ip4 = mkForce [{address = servers.master; prefixLength = 24;}];
             networking.primaryIPAddress = mkForce servers.master;
-            services.kubernetes.apiserver.authorizationMode = mkForce ["ABAC" "RBAC"];
-            services.kubernetes.apiserver.authorizationPolicy = mkForce [
-              {
-                apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-                kind = "Policy";
-                spec = {
-                  user  = "kubecfg";
-                  namespace = "*";
-                  resource = "*";
-                  apiGroup = "*";
-                  nonResourcePath = "*";
-                };
-              }
-              {
-                apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-                kind = "Policy";
-                spec = {
-                  user  = "kubelet";
-                  namespace = "*";
-                  resource = "*";
-                  apiGroup = "*";
-                  nonResourcePath = "*";
-                };
-              }
-              {
-                apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-                kind = "Policy";
-                spec = {
-                  user  = "kube-worker";
-                  namespace = "*";
-                  resource = "*";
-                  apiGroup = "*";
-                  nonResourcePath = "*";
-                };
-              }
-              {
-                apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-                kind = "Policy";
-                spec = {
-                  user  = "kube_proxy";
-                  namespace = "*";
-                  resource = "*";
-                  apiGroup = "*";
-                  nonResourcePath = "*";
-                };
-              }
-              {
-                apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-                kind = "Policy";
-                spec = {
-                  user  = "client";
-                  namespace = "*";
-                  resource = "*";
-                  apiGroup = "*";
-                  nonResourcePath = "*";
-                };
-              }
-            ];
           }
           (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
           (import ./kubernetes-master.nix { inherit pkgs config certs; })
