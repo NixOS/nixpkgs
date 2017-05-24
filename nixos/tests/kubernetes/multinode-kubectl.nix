@@ -84,9 +84,7 @@ in makeTest {
           {
             virtualisation.memorySize = 768;
             virtualisation.diskSize = 4096;
-            # networking.hostName = mkForce "master";
             networking.interfaces.eth1.ip4 = mkForce [{address = servers.master; prefixLength = 24;}];
-            # networking.nat.externalIP = "192.168.1.1";
             networking.primaryIPAddress = mkForce servers.master;
           }
           (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
@@ -99,9 +97,7 @@ in makeTest {
           {
             virtualisation.memorySize = 768;
             virtualisation.diskSize = 4096;
-            # networking.hostName = mkForce "one";
             networking.interfaces.eth1.ip4 = mkForce [{address = servers.one; prefixLength = 24;}];
-            # networking.nat.externalIP = "192.168.1.2";
             networking.primaryIPAddress = mkForce servers.one;
             services.kubernetes.roles = ["node"];
           }
@@ -114,9 +110,7 @@ in makeTest {
           {
             virtualisation.memorySize = 768;
             virtualisation.diskSize = 4096;
-            # networking.hostName = mkForce "two";
             networking.interfaces.eth1.ip4 = mkForce [{address = servers.two; prefixLength = 24;}];
-            # networking.nat.externalIP = "192.168.1.3";
             networking.primaryIPAddress = mkForce servers.two;
             services.kubernetes.roles = ["node"];
           }
@@ -129,9 +123,7 @@ in makeTest {
           {
             virtualisation.memorySize = 768;
             virtualisation.diskSize = 4096;
-            # networking.hostName = mkForce "three";
             networking.interfaces.eth1.ip4 = mkForce [{address = servers.three; prefixLength = 24;}];
-            # networking.nat.externalIP = "192.168.1.4";
             networking.primaryIPAddress = mkForce servers.three;
             services.kubernetes.roles = ["node"];
           }
