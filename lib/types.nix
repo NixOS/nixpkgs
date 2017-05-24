@@ -92,6 +92,8 @@ rec {
     };
 
 
+  # When adding new types don't forget to document them in
+  # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
     unspecified = mkOptionType {
