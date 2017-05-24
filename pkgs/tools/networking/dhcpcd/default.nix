@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
+  preConfigure = ''
+    export CFLAGS="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
+    export LDFLAGS="-pie -Wl,-z,relro,-z,now"
+  '';
+
   makeFlags = "PREFIX=\${out}";
 
   # Hack to make installation succeed.  dhcpcd will still use /var/db
