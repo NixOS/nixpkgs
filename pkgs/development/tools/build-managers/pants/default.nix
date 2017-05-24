@@ -29,30 +29,30 @@ let
   # fetchurl because we don't know the URL ahead of time, even though it's deterministic. So we have
   # this downloader figure out the URL on the fly and then produce the deterministic result, so we
   # can still be a fixed-output derivation.
-  pants13-native-engine-prefix = {
-    "x86_64-darwin" = "mac/10.11";
-    "x86_64-linux"  = "linux/x86_64";
-    "i686-linux"    = "linux/i386";
+  pants13-native-engine-info = {
+    "x86_64-darwin" = { prefix = "mac/10.11";    hash = "0n8z7rg0yfpxplvcw88lwv733zkhbzhc4w4zd4aznbcmfqdiz5br"; };
+    "x86_64-linux"  = { prefix = "linux/x86_64"; hash = "0cva97899q902m61xnfawhbjrh5h751716sn6ljli9b8fl7b5sz4"; };
+    "i686-linux"    = { prefix = "linux/i386";   hash = "1qckg0zsdq9x4jhn59pswbs11mxqxryl65qn42hrsvii2yxa9i5k"; };
   }.${stdenv.system} or (throw "Unsupported system ${stdenv.system}!");
 
   pants13-native-engine = runCommand "pants-native-${pants13-version}" {
     buildInputs    = [ curl ];
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0n8z7rg0yfpxplvcw88lwv733zkhbzhc4w4zd4aznbcmfqdiz5br";
+    outputHash     = pants13-native-engine-info.hash;
   } ''
     native_version=$(curl -k -L https://raw.githubusercontent.com/pantsbuild/pants/release_${pants13-version}/src/python/pants/engine/subsystem/native_engine_version)
-    curl -kLO "https://dl.bintray.com/pantsbuild/bin/build-support/bin/native-engine/${pants13-native-engine-prefix}/$native_version/native_engine.so"
+    curl -kLO "https://dl.bintray.com/pantsbuild/bin/build-support/bin/native-engine/${pants13-native-engine-info.prefix}/$native_version/native_engine.so"
 
     # Ugh it tries to "download" from this prefix so let's just replicate their directory structure for now...
-    mkdir -p $out/bin/native-engine/${pants13-native-engine-prefix}/$native_version/
+    mkdir -p $out/bin/native-engine/${pants13-native-engine-info.prefix}/$native_version/
 
     # These should behave the same way in Nix land and we try not to differentiate between OS revisions...
     mkdir -p $out/bin/native-engine/mac/
     ln -s 10.11 $out/bin/native-engine/mac/10.10
     ln -s 10.11 $out/bin/native-engine/mac/10.12
 
-    cp native_engine.so $out/bin/native-engine/${pants13-native-engine-prefix}/$native_version/
+    cp native_engine.so $out/bin/native-engine/${pants13-native-engine-info.prefix}/$native_version/
   '';
 in {
   pants =
