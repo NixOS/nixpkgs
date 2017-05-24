@@ -322,6 +322,9 @@ with stdenv.lib;
     DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
   ''}
 
+  # Runtime testing
+  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+
   # Security related features.
   RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
