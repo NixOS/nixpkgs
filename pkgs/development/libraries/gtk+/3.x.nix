@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
 , xorg, epoxy, json_glib, libxkbcommon, gmp
 , waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
@@ -29,7 +29,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  patches = [ ./3.0-immodules.cache.patch ];
+  patches = [
+    ./3.0-immodules.cache.patch
+    (fetchpatch {
+      name = "Xft-setting-fallback-compute-DPI-properly.patch";
+      url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
+      sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
+    })
+  ];
 
   buildInputs = [ libxkbcommon epoxy json_glib ];
   propagatedBuildInputs = with xorg; with stdenv.lib;
