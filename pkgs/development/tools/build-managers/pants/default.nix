@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages }:
+{ stdenv, pythonPackages, runCommand, curl }:
 
 with stdenv.lib;
 with pythonPackages;
@@ -22,6 +22,38 @@ let
      maintainers = with maintainers; [ copumpkin ];
     };
   };
+
+  pants13-version = "1.3.0rc2";
+
+  # TODO: compile the rust native engine ourselves so we don't need to do this shit. We don't use
+  # fetchurl because we don't know the URL ahead of time, even though it's deterministic. So we have
+  # this downloader figure out the URL on the fly and then produce the deterministic result, so we
+  # can still be a fixed-output derivation.
+  pants13-native-engine-prefix = {
+    "x86_64-darwin" = "mac/10.11";
+    "x86_64-linux"  = "linux/x86_64";
+    "i686-linux"    = "linux/i386";
+  }.${stdenv.system} or (throw "Unsupported system ${stdenv.system}!");
+
+  pants13-native-engine = runCommand "pants-native-${pants13-version}" {
+    buildInputs    = [ curl ];
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash     = "0n8z7rg0yfpxplvcw88lwv733zkhbzhc4w4zd4aznbcmfqdiz5br";
+  } ''
+    native_version=$(curl -k -L https://raw.githubusercontent.com/pantsbuild/pants/release_${pants13-version}/src/python/pants/engine/subsystem/native_engine_version)
+    curl -kLO "https://dl.bintray.com/pantsbuild/bin/build-support/bin/native-engine/${pants13-native-engine-prefix}/$native_version/native_engine.so"
+
+    # Ugh it tries to "download" from this prefix so let's just replicate their directory structure for now...
+    mkdir -p $out/bin/native-engine/${pants13-native-engine-prefix}/$native_version/
+
+    # These should behave the same way in Nix land and we try not to differentiate between OS revisions...
+    mkdir -p $out/bin/native-engine/mac/
+    ln -s 10.11 $out/bin/native-engine/mac/10.10
+    ln -s 10.11 $out/bin/native-engine/mac/10.12
+
+    cp native_engine.so $out/bin/native-engine/${pants13-native-engine-prefix}/$native_version/
+  '';
 in {
   pants =
     pythonPackages.buildPythonPackage rec {
@@ -61,7 +93,7 @@ in {
 
   pants13-pre = buildPythonApplication rec {
     pname   = "pantsbuild.pants";
-    version = "1.3.0rc2";
+    version = pants13-version;
     name    = "${pname}-${version}";
 
     src = fetchPypi {
@@ -71,6 +103,9 @@ in {
 
     prePatch = ''
       sed -E -i "s/'([[:alnum:].-]+)[=><][[:digit:]=><.,]*'/'\\1'/g" setup.py
+
+      substituteInPlace src/pants/option/global_options.py \
+        --replace "'/etc/pantsrc'" "'$out/etc/pantsrc', '/etc/pantsrc'"
     '';
 
     # Unnecessary, and causes some really weird behavior around .class files, which
@@ -83,6 +118,17 @@ in {
       pystache pex docutils markdown pygments twitter-common-confluence
       fasteners coverage pywatchman futures cffi
     ];
+
+    # Teach pants about where its native engine lives.
+    # TODO: there's probably a better way to teach it this without having it "download"
+    # from a local file: URL to its cache, but I don't know how and this seems to work.
+    postFixup = ''
+      mkdir -p $out/etc
+      cat >$out/etc/pantsrc <<EOF
+      [binaries]
+      baseurls: [ 'file://${pants13-native-engine}' ]
+      EOF
+    '';
 
     meta = {
       description = "A build system for software projects in a variety of languages";
