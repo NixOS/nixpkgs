@@ -54,17 +54,16 @@ let
   };
 in stdenv.mkDerivation rec {
     name = "kodi-${version}";
-    version = "17.1";
+    version = "17.2";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1vmvrq0qdjnphw34yils2b5jnm05cmsg777hc4lwqz5mrc1kjgrh";
+      sha256 = "1zmgw65dbdpv72xfimrh02m8sdg4cb9i3hbmqzgs8x00b9n27ndf";
     };
 
     buildInputs = [
-      makeWrapper libxml2 gnutls
-      pkgconfig cmake gnumake yasm python2
-      boost libmicrohttpd autoreconfHook
+      libxml2 gnutls yasm python2
+      boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto which
@@ -91,6 +90,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional joystickSupport SDL2;
 
+    nativeBuildInputs = [
+      autoreconfHook cmake gnumake makeWrapper pkgconfig
+    ];
 
     dontUseCmakeConfigure = true;
 
