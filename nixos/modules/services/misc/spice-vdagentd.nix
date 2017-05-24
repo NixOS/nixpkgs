@@ -22,8 +22,7 @@ in
         mkdir -p "/var/run/spice-vdagentd/"
       '';
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagentd";
+        ExecStart = "${pkgs.spice-vdagent}/bin/spice-vdagentd -d -x";
       };
     };
   };
