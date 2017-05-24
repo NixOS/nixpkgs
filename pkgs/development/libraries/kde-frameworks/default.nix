@@ -36,6 +36,7 @@ let
   mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
 
   packages = self: with self;
+    # SUPPORT
     let
 
       propagateBin =
@@ -90,79 +91,90 @@ let
       };
 
     in {
+      extra-cmake-modules = callPackage ./extra-cmake-modules {};
+
+    # TIER 1
       attica = callPackage ./attica.nix {};
-      baloo = callPackage ./baloo.nix {};
       bluez-qt = callPackage ./bluez-qt.nix {};
       breeze-icons = callPackage ./breeze-icons.nix {};
-      extra-cmake-modules = callPackage ./extra-cmake-modules {};
-      frameworkintegration = callPackage ./frameworkintegration.nix {};
-      kactivities = callPackage ./kactivities.nix {};
-      kactivities-stats = callPackage ./kactivities-stats.nix {};
       kapidox = callPackage ./kapidox.nix {};
       karchive = callPackage ./karchive.nix {};
-      kauth = callPackage ./kauth {};
-      kbookmarks = callPackage ./kbookmarks.nix {};
-      kcmutils = callPackage ./kcmutils {};
       kcodecs = callPackage ./kcodecs.nix {};
-      kcompletion = callPackage ./kcompletion.nix {};
       kconfig = callPackage ./kconfig.nix {};
-      kconfigwidgets = callPackage ./kconfigwidgets {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
-      kcrash = callPackage ./kcrash.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
-      kdeclarative = callPackage ./kdeclarative.nix {};
-      kded = callPackage ./kded.nix {};
-      kdelibs4support = callPackage ./kdelibs4support {};
-      kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-      kdesu = callPackage ./kdesu.nix {};
       kdnssd = callPackage ./kdnssd.nix {};
-      kdoctools = callPackage ./kdoctools {};
-      kemoticons = callPackage ./kemoticons.nix {};
-      kfilemetadata = callPackage ./kfilemetadata {};
-      kglobalaccel = callPackage ./kglobalaccel.nix {};
       kguiaddons = callPackage ./kguiaddons.nix {};
-      khtml = callPackage ./khtml.nix {};
       ki18n = callPackage ./ki18n.nix {};
-      kiconthemes = callPackage ./kiconthemes {};
       kidletime = callPackage ./kidletime.nix {};
-      kimageformats = callPackage ./kimageformats.nix {};
-      kinit = callPackage ./kinit {};
-      kio = callPackage ./kio {};
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
-      kjobwidgets = callPackage ./kjobwidgets.nix {};
-      kjs = callPackage ./kjs.nix {};
-      kjsembed = callPackage ./kjsembed.nix {};
-      kmediaplayer = callPackage ./kmediaplayer.nix {};
-      knewstuff = callPackage ./knewstuff.nix {};
-      knotifications = callPackage ./knotifications.nix {};
-      knotifyconfig = callPackage ./knotifyconfig.nix {};
-      kpackage = callPackage ./kpackage {};
-      kparts = callPackage ./kparts.nix {};
-      kpeople = callPackage ./kpeople.nix {};
       kplotting = callPackage ./kplotting.nix {};
-      kpty = callPackage ./kpty.nix {};
-      kross = callPackage ./kross.nix {};
-      krunner = callPackage ./krunner.nix {};
-      kservice = callPackage ./kservice {};
-      ktexteditor = callPackage ./ktexteditor.nix {};
-      ktextwidgets = callPackage ./ktextwidgets.nix {};
-      kunitconversion = callPackage ./kunitconversion.nix {};
-      kwallet = callPackage ./kwallet.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
       kwindowsystem = callPackage ./kwindowsystem {};
-      kxmlgui = callPackage ./kxmlgui.nix {};
-      kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
       modemmanager-qt = callPackage ./modemmanager-qt.nix {};
       networkmanager-qt = callPackage ./networkmanager-qt.nix {};
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
-      plasma-framework = callPackage ./plasma-framework.nix {};
       prison = callPackage ./prison.nix {};
       solid = callPackage ./solid.nix {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
+
+    # TIER 2
+      kactivities = callPackage ./kactivities.nix {};
+      kactivities-stats = callPackage ./kactivities-stats.nix {};
+      kauth = callPackage ./kauth {};
+      kcompletion = callPackage ./kcompletion.nix {};
+      kcrash = callPackage ./kcrash.nix {};
+      kdoctools = callPackage ./kdoctools {};
+      kfilemetadata = callPackage ./kfilemetadata {};
+      kimageformats = callPackage ./kimageformats.nix {};
+      kjobwidgets = callPackage ./kjobwidgets.nix {};
+      knotifications = callPackage ./knotifications.nix {};
+      kpackage = callPackage ./kpackage {};
+      kpty = callPackage ./kpty.nix {};
+      kunitconversion = callPackage ./kunitconversion.nix {};
+
+    # TIER 3
+      baloo = callPackage ./baloo.nix {};
+      kbookmarks = callPackage ./kbookmarks.nix {};
+      kcmutils = callPackage ./kcmutils {};
+      kconfigwidgets = callPackage ./kconfigwidgets {};
+      kdeclarative = callPackage ./kdeclarative.nix {};
+      kded = callPackage ./kded.nix {};
+      kdesignerplugin = callPackage ./kdesignerplugin.nix {};
+      kdesu = callPackage ./kdesu.nix {};
+      kemoticons = callPackage ./kemoticons.nix {};
+      kglobalaccel = callPackage ./kglobalaccel.nix {};
+      kiconthemes = callPackage ./kiconthemes {};
+      kinit = callPackage ./kinit {};
+      kio = callPackage ./kio {};
+      knewstuff = callPackage ./knewstuff.nix {};
+      knotifyconfig = callPackage ./knotifyconfig.nix {};
+      kparts = callPackage ./kparts.nix {};
+      kpeople = callPackage ./kpeople.nix {};
+      krunner = callPackage ./krunner.nix {};
+      kservice = callPackage ./kservice {};
+      ktexteditor = callPackage ./ktexteditor.nix {};
+      ktextwidgets = callPackage ./ktextwidgets.nix {};
+      kwallet = callPackage ./kwallet.nix {};
+      kxmlgui = callPackage ./kxmlgui.nix {};
+      kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
+      plasma-framework = callPackage ./plasma-framework.nix {};
+
+    # TIER 4
+      frameworkintegration = callPackage ./frameworkintegration.nix {};
+
+    # PORTING AIDS
+      kdelibs4support = callPackage ./kdelibs4support {};
+      khtml = callPackage ./khtml.nix {};
+      kjs = callPackage ./kjs.nix {};
+      kjsembed = callPackage ./kjsembed.nix {};
+      kmediaplayer = callPackage ./kmediaplayer.nix {};
+      kross = callPackage ./kross.nix {};
+
     };
 
 in lib.makeScope libsForQt5.newScope packages
