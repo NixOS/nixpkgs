@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchgit {
     url = "https://github.com/Nitrokey/nitrokey-app.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0i910d1xrl4bfrg5ifkj3w4dp31igaxncy2yf97y4rsc8094bcb1";
+    sha256 = "11pz1p5qgghkr5f8s2wg34zqhxk2vq465i73w1h479j88x35rdp0";
   };
 
   buildInputs = [
@@ -21,10 +21,7 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
   cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'DESTINATION ''${UDEV_MAIN_DIR}' 'DESTINATION lib/udev/rules.d'
-    substituteInPlace data/41-nitrokey.rules --replace 'plugdev' 'wheel'
-    '';
+
   meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''
@@ -35,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage         = https://github.com/Nitrokey/nitrokey-app;
     repositories.git = https://github.com/Nitrokey/nitrokey-app.git;
     license          = licenses.gpl3;
-    maintainer       = maintainers.kaiha;
+    maintainers      = with maintainers; [ kaiha fpletz ];
   };
 }
