@@ -949,6 +949,10 @@ with pkgs;
 
   envconsul = callPackage ../tools/system/envconsul { };
 
+  esptool = callPackage ../tools/misc/esptool { };
+
+  esptool-ck = callPackage ../tools/misc/esptool-ck { };
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
@@ -6464,7 +6468,7 @@ with pkgs;
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
   binutils =
-    if lib.systems.parse.isDarwin targetPlatform.parsed
+    if targetPlatform.isDarwin
     then darwin.binutils
     else binutils-raw;
 
@@ -6940,6 +6944,8 @@ with pkgs;
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
+  inherit (callPackages ../development/tools/build-managers/pants {}) pants pants13-pre;
+
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
@@ -7142,10 +7148,6 @@ with pkgs;
   };
 
   gdbGuile = lowPrio (gdb.override { inherit guile; });
-
-  gdbCross = lowPrio (callPackage ../development/tools/misc/gdb {
-    target = if targetPlatform != buildPlatform then targetPlatform else null;
-  });
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
@@ -7438,6 +7440,8 @@ with pkgs;
   cre2 = callPackage ../development/libraries/cre2 { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
+
+  cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
   curlcpp = callPackage ../development/libraries/curlcpp { };
 
@@ -8614,6 +8618,8 @@ with pkgs;
 
   libharu = callPackage ../development/libraries/libharu { };
 
+  libhdhomerun = callPackage ../development/libraries/libhdhomerun { };
+
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
   libHX = callPackage ../development/libraries/libHX { };
@@ -8720,15 +8726,19 @@ with pkgs;
 
   libgsf = callPackage ../development/libraries/libgsf { };
 
-  # glibc provides libiconv so systems with glibc don't need to build libiconv
-  # separately, but we also provide libiconvReal, which will always be a
-  # standalone libiconv, just in case you want it
-  libiconv = if stdenv ? cross then
-    (if stdenv.cross.libc == "glibc" then libcCross
-      else if stdenv.cross.libc == "libSystem" then darwin.libiconv
-      else libiconvReal)
-    else if stdenv.isGlibc then glibcIconv stdenv.cc.libc
-    else if stdenv.isDarwin then darwin.libiconv
+  # GNU libc provides libiconv so systems with glibc don't need to build
+  # libiconv separately. Additionally, Apple forked/repackaged libiconv so we
+  # use that instead of the vanilla version on that OS.
+  #
+  # We also provide `libiconvReal`, which will always be a standalone libiconv,
+  # just in case you want it regardless of platform.
+  libiconv =
+    if hostPlatform.libc == "glibc"
+      then glibcIconv (if hostPlatform != buildPlatform
+                       then libcCross
+                       else stdenv.cc.libc)
+    else if hostPlatform.isDarwin
+      then darwin.libiconv
     else libiconvReal;
 
   glibcIconv = libc: let
@@ -11723,6 +11733,8 @@ with pkgs;
 
   iw = callPackage ../os-specific/linux/iw { };
 
+  iwd = callPackage ../os-specific/linux/iwd { };
+
   jfbview = callPackage ../os-specific/linux/jfbview { };
   jfbpdf = callPackage ../os-specific/linux/jfbview {
     imageSupport = false;
@@ -14313,6 +14325,9 @@ with pkgs;
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
+  hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
+  hledger-web = haskell.lib.justStaticExecutables haskellPackages.hledger-web;
+
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
   };
@@ -16340,19 +16355,21 @@ with pkgs;
 
   wily = callPackage ../applications/editors/wily { };
 
+  winswitch = callPackage ../tools/X11/winswitch { };
+
+  wings = callPackage ../applications/graphics/wings { };
+
+  wireguard = callPackage ../os-specific/linux/wireguard { };
+
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
+
+  wllvm = callPackage  ../development/tools/wllvm { };
 
   wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
 
   wmsm.app = callPackage ../applications/window-managers/windowmaker/dockapps/wmsm.app.nix { };
 
   wmsystemtray = callPackage ../applications/window-managers/windowmaker/dockapps/wmsystemtray.nix { };
-
-  winswitch = callPackage ../tools/X11/winswitch { };
-
-  wings = callPackage ../applications/graphics/wings { };
-
-  wireguard = callPackage ../os-specific/linux/wireguard { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
@@ -16437,6 +16454,7 @@ with pkgs;
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
+      ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
       );
   };
 
@@ -17123,6 +17141,8 @@ with pkgs;
 
   rogue = callPackage ../games/rogue { };
 
+  robotfindskitten = callPackage ../games/robotfindskitten { };
+
   saga = callPackage ../applications/gis/saga { };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
@@ -17282,6 +17302,8 @@ with pkgs;
   vectoroids = callPackage ../games/vectoroids { };
 
   vessel = callPackage_i686 ../games/vessel { };
+
+  vms-empire = callPackage ../games/vms-empire { };
 
   voxelands = callPackage ../games/voxelands {
     libpng = libpng12;
@@ -17699,20 +17721,13 @@ with pkgs;
     camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
     lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
   };
-  coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
-    inherit (ocamlPackages_4_02) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages_4_02.camlp5_transitional;
-  };
-  coq_8_5 = callPackage ../applications/science/logic/coq {
-    version = "8.5pl3";
-  };
-  coq_8_6 = callPackage ../applications/science/logic/coq {};
-  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
-  coq = coq_8_6;
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
     inherit callPackage;
-    coq = coq_8_4;
+    coq = callPackage ../applications/science/logic/coq/8.4.nix {
+      inherit (ocamlPackages_4_02) ocaml findlib lablgtk;
+      camlp5 = ocamlPackages_4_02.camlp5_transitional;
+    };
     coqPackages = coqPackages_8_4;
 
     contribs =
@@ -17744,7 +17759,9 @@ with pkgs;
 
   mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
     inherit callPackage;
-    coq = coq_8_5;
+    coq = callPackage ../applications/science/logic/coq {
+      version = "8.5pl3";
+    };
     coqPackages = coqPackages_8_5;
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
@@ -17761,7 +17778,7 @@ with pkgs;
 
   mkCoqPackages_8_6 = self: let callPackage = newScope self; in rec {
     inherit callPackage;
-    coq = coq_8_6;
+    coq = callPackage ../applications/science/logic/coq {};
     coqPackages = coqPackages_8_6;
 
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
@@ -17778,7 +17795,13 @@ with pkgs;
   coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
   coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
-  coqPackages = coqPackages_8_4;
+  coqPackages = coqPackages_8_6;
+  
+  coq_8_4 = coqPackages_8_4.coq;
+  coq_8_5 = coqPackages_8_5.coq;
+  coq_8_6 = coqPackages_8_6.coq;
+  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
+  coq = coqPackages.coq;
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
@@ -17842,6 +17865,7 @@ with pkgs;
   mcrl2 = callPackage ../applications/science/logic/mcrl2 { };
 
   minisat = callPackage ../applications/science/logic/minisat {};
+  minisatUnstable = callPackage ../applications/science/logic/minisat/unstable.nix {};
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
@@ -18653,6 +18677,7 @@ with pkgs;
     gphoto2Support = true;
     ldapSupport = true;
     pulseaudioSupport = true;
+    udevSupport = true;
   });
   wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });

@@ -5,17 +5,15 @@
 }:
 
 let
-  inherit (stdenv.lib.systems.parse) isDarwin;
-
   prefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
 in
 
-assert isDarwin targetPlatform.parsed;
+assert targetPlatform.isDarwin;
 
 # Non-Darwin alternatives
-assert (!isDarwin hostPlatform.parsed) -> (maloader != null && xctoolchain != null);
+assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
 
 let
   baseParams = rec {
@@ -91,7 +89,7 @@ let
     '';
 
     postInstall =
-      if isDarwin hostPlatform.parsed
+      if hostPlatform.isDarwin
       then ''
         cat >$out/bin/dsymutil << EOF
         #!${stdenv.shell}

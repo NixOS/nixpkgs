@@ -8285,93 +8285,9 @@ in {
     };
   };
 
-  pants = let
-    # Get rid of this when pants 1.3.0 is released and make 0.5 the default
-    pathspec = buildPythonPackage rec {
-      pname   = "pathspec";
-      version = "0.3.4";
-      name    = "${pname}-${version}";
-
-      src = self.fetchPypi {
-        inherit pname version;
-        sha256 = "0a37yrr2jhlg8aiynxivh2xqani7l9j725qxzrm7cm7m4rfcl1bn";
-      };
-
-      meta = {
-        description = "Utility library for gitignore-style pattern matching of file paths";
-        homepage = "https://github.com/cpburnz/python-path-specification";
-        license = licenses.mpl20;
-       maintainers = with maintainers; [ copumpkin ];
-      };
-    };
-  in buildPythonPackage rec {
-    pname   = "pantsbuild.pants";
-    version = "1.2.1";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "1bnzhhd2acwk7ckv56xzg2d9vxacl3k5bh13bsjxymnq3spm962w";
-    };
-
-    prePatch = ''
-      sed -E -i "s/'([[:alnum:].-]+)[=><][^']*'/'\\1'/g" setup.py
-    '';
-
-    # Unnecessary, and causes some really weird behavior around .class files, which
-    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520.
-    dontStrip = true;
-
-    propagatedBuildInputs = with self; [
-      ansicolors beautifulsoup4 cffi coverage docutils fasteners futures
-      isort lmdb markdown mock packaging pathspec pep8 pex psutil pyflakes
-      pygments pystache pytestcov pytest pywatchman requests scandir
-      setproctitle setuptools six thrift wheel twitter-common-dirutil
-      twitter-common-confluence twitter-common-collections
-    ];
-
-    meta = {
-      description = "A build system for software projects in a variety of languages";
-      homepage    = "http://www.pantsbuild.org/";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ copumpkin ];
-      platforms   = platforms.unix;
-    };
-  };
-
-  pants13-pre = buildPythonPackage rec {
-    pname   = "pantsbuild.pants";
-    version = "1.3.0.dev19";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "07gxx8kzkcx3pm2qd5sz2xb3nw9khvbapiqdzgjvzbvai2gsd5qq";
-    };
-
-    prePatch = ''
-      sed -E -i "s/'([[:alnum:].-]+)[=><][[:digit:]=><.,]*'/'\\1'/g" setup.py
-    '';
-
-    # Unnecessary, and causes some really weird behavior around .class files, which
-    # this package bundles. See https://github.com/NixOS/nixpkgs/issues/22520.
-    dontStrip = true;
-
-    propagatedBuildInputs = with self; [
-      twitter-common-collections setproctitle setuptools six ansicolors
-      packaging pathspec scandir twitter-common-dirutil psutil requests
-      pystache pex docutils markdown pygments twitter-common-confluence
-      fasteners coverage pywatchman futures cffi
-    ];
-
-    meta = {
-      description = "A build system for software projects in a variety of languages";
-      homepage    = "http://www.pantsbuild.org/";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ copumpkin ];
-      platforms   = platforms.unix;
-    };
-  };
+  # These used to be here but were moved to all-packages, but I'll leave them around for a while.
+  pants = pkgs.pants;
+  pants13-pre = pkgs.pants13-pre;
 
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
@@ -10882,26 +10798,9 @@ in {
     };
   };
 
-  feedgenerator = buildPythonPackage (rec {
-    name = "feedgenerator-1.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/feedgenerator/${name}.tar.gz";
-      sha256 = "5d6b0b10134ac392be0c0c3a39c0e1d7e9c17cc7894590f75981e3f497a4a60f";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ six pytz ];
-
-    meta = {
-      description = "Standalone version of django.utils.feedgenerator,  compatible with Py3k";
-      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  feedgenerator = callPackage ../development/python-modules/feedgenerator {
+    inherit (pkgs) glibcLocales;
+  };
 
   feedparser = buildPythonPackage (rec {
     name = "feedparser-5.2.1";
@@ -11030,27 +10929,7 @@ in {
     };
   };
 
-  flake8 = buildPythonPackage rec {
-    name = "flake8-${version}";
-    version = "3.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/flake8/${name}.tar.gz";
-      sha256 = "c7c460b5aff3a2063c798a77af18ec70af3941d35a22e2e76965e3c0e0b36055";
-    };
-
-    buildInputs = with self; [ pytest mock pytestrunner ];
-    propagatedBuildInputs = with self; [ pyflakes pycodestyle mccabe ]
-      ++ optionals (pythonOlder "3.4") [ enum34 ]
-      ++ optionals (pythonOlder "3.2") [ configparser ];
-
-    meta = {
-      description = "Code checking using pep8 and pyflakes";
-      homepage = http://pypi.python.org/pypi/flake8;
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
@@ -13917,23 +13796,7 @@ in {
   };
 
 
-  mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mccabe/${name}.tar.gz";
-      sha256 = "16293af41e7242031afd73896fef6458f4cad38201d21e28f344fff50ae1c25e";
-    };
-
-    buildInputs = with self; [ pytestrunner pytest ];
-
-    meta = {
-      description = "McCabe checker, plugin for flake8";
-      homepage = "https://github.com/flintwork/mccabe";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.2.5";
@@ -17990,52 +17853,8 @@ in {
     };
   };
 
-  pelican = buildPythonPackage rec {
-    name = "pelican-${version}";
-    version = "3.6.3";
-    disabled = isPy26;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "getpelican";
-      repo = "pelican";
-      rev = version;
-      sha256 = "1k572anw39rws67mvxl2w6y93y8w8q5smnwc0dd2gnnr16cc2vsh";
-    };
-
-    patches = [ ../development/python-modules/pelican-fix-tests-with-pygments-2.1.patch ];
-
-    # There's still some failing tests due to pygments 2.1.3
-    doCheck = false;
-
-    buildInputs = with self; [
-      pkgs.glibcLocales
-      pkgs.pandoc
-      pkgs.git
-      mock
-      nose
-      markdown
-      beautifulsoup4
-      lxml
-      typogrify
-    ];
-
-    propagatedBuildInputs = with self; [
-      jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-      blinker pillow beautifulsoup4 markupsafe
-    ];
-
-    postPatch= ''
-      sed -i -e "s|'git'|'${pkgs.git}/bin/git'|" pelican/tests/test_pelican.py
-    '';
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = "A tool to generate a static blog from reStructuredText or Markdown input files";
-      homepage = "http://getpelican.com/";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ offline prikhi garbas ];
-    };
+  pelican = callPackage ../development/python-modules/pelican {
+    inherit (pkgs) glibcLocales pandoc git;
   };
 
   pep8 = buildPythonPackage rec {
@@ -19752,28 +19571,7 @@ in {
     };
   };
 
-  pyflakes = buildPythonPackage rec {
-    pname = "pyflakes";
-    version = "1.3.0";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "a4f93317c97a9d9ed71d6ecfe08b68e3de9fea3f4d94dcd1d9d83ccbf929bc31";
-    };
-
-    buildInputs = with self; [ unittest2 ];
-
-    doCheck = !isPyPy;
-    force-rebuild = 1;  # fix transient test suite error at http://hydra.nixos.org/build/45083762
-
-    meta = {
-      homepage = https://launchpad.net/pyflakes;
-      description = "A simple program which checks Python source files for errors";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  pyflakes = callPackage ../development/python-modules/pyflakes { };
 
   pyftgl = buildPythonPackage rec {
     name = "pyftgl-0.4b";
