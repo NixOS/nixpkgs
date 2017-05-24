@@ -4489,6 +4489,8 @@ with pkgs;
 
   vim-vint = callPackage ../development/tools/vim-vint { };
 
+  vimer = callPackage ../tools/misc/vimer { };
+
   vit = callPackage ../applications/misc/vit { };
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
