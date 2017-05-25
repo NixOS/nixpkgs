@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchPypi
 , pytest
 }:
 
@@ -9,8 +9,9 @@ buildPythonPackage rec {
   version = "1.1.1";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://files.pythonhosted.org/packages/8f/ab/58a363eca982c40e9ee5a7ca439e8ffc5243dde2ae660ba1ffdd4868026b/${pname}-${version}.zip";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
     sha256 = "fef50b2b881ef743f269946e1090b77567b71bb9a9ce64b7f8e699b562ff685c";
   };
 
