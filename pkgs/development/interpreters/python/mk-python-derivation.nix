@@ -37,6 +37,9 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Skip wrapping of python programs altogether
+, dontWrapPythonPrograms ? false
+
 , meta ? {}
 
 , passthru ? {}
@@ -69,7 +72,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"
   doCheck = false;
   doInstallCheck = doCheck;
 
-  postFixup = ''
+  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
     # Check if we have two packages with the same name in the closure and fail.
