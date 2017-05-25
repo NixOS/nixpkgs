@@ -208,13 +208,13 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.compton = {
       description = "Compton composite manager";
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/compton --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
-      environment.DISPLAY = ":0";
     };
 
     environment.systemPackages = [ cfg.package ];
