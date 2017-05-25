@@ -2,24 +2,51 @@
 # - The csdp program used for the Micromega tactic is statically referenced.
 #   However, coq can build without csdp by setting it to null.
 #   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
-# - The patch-level version can be specified through the `version` argument to
-#   the derivation; it defaults to the greatest.
+# - The exact version can be specified through the `version` argument to
+#   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchurl, writeText, pkgconfig
+{ stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
 , version ? "8.6"
 }:
 
+let version_info = {
+    "8.5" =
+      { sha256 = "0my2xxzdvcyahkx62s1f01aabxprg82126kpx0kz1f7282pa08ly"; };
+    "8.5pl1" =
+      { sha256 = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n"; };
+    "8.5pl2" =
+      { sha256 = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh"; };
+    "8.5pl3" =
+      { sha256 = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw"; };
+    "8.6" =
+      { sha256 = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4"; };
+    "2017-06-06" =
+      { sha256 = "1idy22m0fmm7n85gmml7r4fbk71w43rv195smnbs70prfbw4mwhm";
+        rev = "2f23c27e08f66402b8fba4745681becd402f4c5c";
+        coq-version = "trunk";
+        # as obtained with git show $rev:configure.ml | sed '14q;d'
+        unstable = true;
+      };
+  };
+in
+
+if !builtins.hasAttr version version_info
+then throw "unknown version ${version}" else
+
+let this_version_info =
+  # Default revision and coq-version
+  { rev = "V${version}";
+    coq-version = builtins.substring 0 3 version;
+    unstable = false;
+  } // version_info."${version}";
+in
+
+with this_version_info;
+
 let
-  sha256 = {
-   "8.5pl1"	= "1w2xvm6w16khfn63bp95s25hnkn2ny3w0yqg3lq63gp11aqpbyjb";
-   "8.5pl2"	= "0wyywia0darak2zmc5v0ra9rn0b9whwdfiahralm8v5za499s8w3";
-   "8.5pl3"	= "0fyk2a4fpifibq8y8jhx1891k55qnsnlygglch64sva0bph94nrh";
-   "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
-  }."${version}";
-  coq-version = builtins.substring 0 3 version;
   camlp5 = ocamlPackages.camlp5_strict;
   ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
@@ -27,7 +54,7 @@ let
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
 self = stdenv.mkDerivation {
-  name = "coq-${version}";
+  name = "coq${if unstable then "-unstable" else ""}-${version}";
 
   inherit coq-version;
   inherit camlp5;
@@ -80,9 +107,10 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  src = fetchurl {
-    url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner = "coq";
+    repo = "coq";
+    inherit sha256 rev;
   };
 
   buildInputs = [ pkgconfig ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.lablgtk ];

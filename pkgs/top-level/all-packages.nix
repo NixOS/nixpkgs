@@ -17888,7 +17888,9 @@ with pkgs;
   coq_8_4 = coqPackages_8_4.coq;
   coq_8_5 = coqPackages_8_5.coq;
   coq_8_6 = coqPackages_8_6.coq;
-  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
+  coq_HEAD = callPackage ../applications/science/logic/coq {
+    version = "2017-06-06";
+  };
   coq = coqPackages.coq;
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
