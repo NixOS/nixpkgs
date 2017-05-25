@@ -22,12 +22,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    for f in $out/bin/{rc,rdm,rp}; do
-      install_name_tool -change @rpath/libclang.dylib ${llvmPackages.clang.cc}/lib/libclang.dylib ''${f}
-    done
-  '';
-
   meta = {
     description = "C/C++ client-server indexer based on clang";
     homepage = https://github.com/andersbakken/rtags;
