@@ -98,6 +98,7 @@ let
       license = stdenv.lib.licenses.lgpl2Plus;
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.all;
+      outputsToInstall = [ "out" "man" ];
     };
 
     passthru = { inherit fromGit; };
