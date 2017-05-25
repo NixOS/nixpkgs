@@ -15530,26 +15530,7 @@ in {
     };
   };
 
-  emoji = buildPythonPackage rec {
-    name = "emoji-${version}";
-    version = "0.3.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/emoji/${name}.tar.gz";
-      sha256 = "19p5c2nlq0w9972rf9fghyswnijwgig5f8cyzs32kppnmzvzbkxw";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''nosetests'';
-
-    meta = {
-      description = "Emoji for Python";
-      homepage = https://pypi.python.org/pypi/emoji/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ joachifm ];
-    };
-  };
+  emoji = callPackage ../development/python-modules/emoji { };
 
   ntfy = buildPythonPackage rec {
     version = "1.2.0";
