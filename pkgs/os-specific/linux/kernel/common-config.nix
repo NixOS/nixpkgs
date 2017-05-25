@@ -226,7 +226,9 @@ with stdenv.lib;
   FANOTIFY y
   TMPFS y
   TMPFS_POSIX_ACL y
-  FS_ENCRYPTION? m
+  ${optionalString (versionAtLeast version "4.9") ''
+    FS_ENCRYPTION? m
+  ''}
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
