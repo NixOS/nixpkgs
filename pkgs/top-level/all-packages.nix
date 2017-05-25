@@ -2098,6 +2098,16 @@ with pkgs;
     pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
   };
   gnupg = gnupg21;
+  # suitable to verify signatures non-interactively
+  gnupg-minimal = gnupg.override {
+    guiSupport = false;
+    pinentry = null;
+    adns = null;
+    gnutls = null;
+    libusb = null;
+    openldap = null;
+    readline = null;
+  };
 
   gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt4; };
 

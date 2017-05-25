@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
+, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi, curl, bzip2
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
 , iptables, gnu-efi
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "man" "dev" ];
 
   buildInputs =
-    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
+    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl curl bzip2
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
       libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
       iptables gnu-efi
@@ -56,7 +56,9 @@ stdenv.mkDerivation rec {
       "--enable-localed"
       "--enable-resolved"
       "--disable-split-usr"
-      "--disable-libcurl"
+      "--enable-importd"
+      "--enable-libcurl"
+      "--enable-bzip2"
       "--disable-libidn"
       "--disable-quotacheck"
       "--disable-ldconfig"
@@ -162,6 +164,11 @@ stdenv.mkDerivation rec {
       # Keep only libudev and libsystemd in the lib output.
       mkdir -p $out/lib
       mv $lib/lib/security $lib/lib/libnss* $out/lib/
+
+      # Allow importd to mount. fixed in systemd-232: https://github.com/systemd/systemd/issues/3996
+      substituteInPlace $out/example/systemd/system/systemd-importd.service --replace \
+        "SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io" \
+        "SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module @obsolete @raw-io"
     ''; # */
 
   enableParallelBuilding = true;
