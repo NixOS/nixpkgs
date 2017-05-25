@@ -5457,6 +5457,14 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
+  openjdk6 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk-darwin/6.nix { }
+    else
+      callPackage ../development/compilers/openjdk/6.nix {
+        bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
+      };
+
   openjdk7 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
