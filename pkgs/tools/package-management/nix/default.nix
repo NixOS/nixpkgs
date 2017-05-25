@@ -8,8 +8,8 @@
 
 let
 
-  common = { name, suffix ? "", src, patchPhase ? "", fromGit ? false }: stdenv.mkDerivation rec {
-    inherit name src patchPhase;
+  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
+    inherit name src;
     version = lib.getVersion name;
 
     VERSION_SUFFIX = lib.optionalString fromGit suffix;
@@ -134,15 +134,6 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0e943e277f37843f9196b0293cc31d828613ad7a328ee77cd5be01935dc6e7e1";
     };
-
-    # Until 1.11.9 is released, we do this :)
-    patchPhase = ''
-      substituteInPlace src/libexpr/json-to-value.cc \
-        --replace 'std::less<Symbol>, gc_allocator<Value *>' \
-                  'std::less<Symbol>, gc_allocator<std::pair<const Symbol, Value *> >'
-
-      sed -i '/if (settings.readOnlyMode) {/a curSchema = getSchema();' src/libstore/local-store.cc
-    '';
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {

@@ -10,13 +10,13 @@
 buildPythonPackage rec {
   name    = "${pname}-${version}";
   pname   = "libsoundtouch";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner  = "CharlesBlonde";
     repo   = "libsoundtouch";
-    rev    = "7c8f943298bcae5f0c25ad7be7469de51373cdbd";
-    sha256 = "1a9mdy09n4bjx6nang7wfn2nq87dg2s18px4yqsj53mn5kjf44n0";
+    rev    = "875074b7a23734021974345b3dc297918e453aa2";
+    sha256 = "1psd556j4x77hjxahxxgdgnq2mcd769whvnf0gmwf3jy2svfkqlg";
   };
 
   postPatch = lib.optionalString (! (pythonOlder "3.4")) ''

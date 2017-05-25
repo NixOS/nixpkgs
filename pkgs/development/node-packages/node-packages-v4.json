@@ -1,0 +1,10 @@
+[
+  "coffee-script"
+, "grunt-cli"
+, "gulp"
+, "node-gyp"
+, "node-inspector"
+, "node-pre-gyp"
+, "npm"
+, "titanium"
+]

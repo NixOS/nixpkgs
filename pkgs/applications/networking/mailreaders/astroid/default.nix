@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "astroid-${version}";
-  version = "0.8";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "astroidmail";
     repo = "astroid";
     rev = "v${version}";
-    sha256 = "1gjrdls1mz8y8bca7s8l965l0m7s2sb6g7a90gy848admjsyav7h";
+    sha256 = "0ha2jd3fvc54amh0x8f58s9ac4r8xgyhvkwd4jvs0h4mfh6cg496";
   };
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "urweb-${version}";
-  version = "20160621";
+  version = "20170105";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "08km96hli5yp754nsxxjzih2la0m89j5wc2cq12rkas43nqqgr65";
+    sha256 = "2ad3aea2c4851c9b18f752d38c7127af8293fbbbbdb3dd06b73a4603fe399b67";
   };
 
   buildInputs = [ openssl mlton mysql.client postgresql sqlite ];
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://www.impredicative.com/ur/";
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice stdenv.lib.maintainers.sheganinans ];
   };
 }

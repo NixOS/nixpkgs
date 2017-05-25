@@ -126,7 +126,7 @@ let
               bootFlash=$out/bios.bin
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
               ${if cfg.useEFIBoot then ''
-                cp ${pkgs.OVMF-CSM}/FV/OVMF.fd $bootFlash
+                cp ${pkgs.OVMF-CSM.fd}/FV/OVMF.fd $bootFlash
                 chmod 0644 $bootFlash
               '' else ''
               ''}

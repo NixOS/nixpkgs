@@ -1,0 +1,13 @@
+diff --git a/utils/llvm-build/llvmbuild/main.py b/utils/llvm-build/llvmbuild/main.py
+index eacefdf60bf..40d25f5cef8 100644
+--- a/utils/llvm-build/llvmbuild/main.py
++++ b/utils/llvm-build/llvmbuild/main.py
+@@ -412,7 +412,7 @@ subdirectories = %s
+             if library_name is None:
+                 library_name_as_cstr = '0'
+             else:
+-                library_name_as_cstr = '"lib%s.a"' % library_name
++                library_name_as_cstr = '"lib%s.so"' % library_name
+             f.write('  { "%s", %s, %d, { %s } },\n' % (
+                 name, library_name_as_cstr, is_installed,
+                 ', '.join('"%s"' % dep

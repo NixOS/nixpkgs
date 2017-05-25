@@ -20,7 +20,7 @@ in
       { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
-        XCURSOR_PATH = "$HOME/.icons";
+        XCURSOR_PATH = [ "$HOME/.icons" ];
       };
 
     environment.profiles =

@@ -18,15 +18,10 @@ stdenv.mkDerivation (rec {
            -e "s|^\(\(DEST_\)\?PREFIX\)=.*$|\1=$out|g ; \
                s|/sbin/install-info|install-info|g"
 
-
-       sed -i "bin/proofgeneral" -e's/which/type -p/g'
-
        # @image{ProofGeneral} fails, so remove it.
        sed -i '94d' doc/PG-adapting.texi
        sed -i '96d' doc/ProofGeneral.texi
     '';
-
-  patches = [ ./pg.patch ];
 
   preBuild = ''
     make clean;

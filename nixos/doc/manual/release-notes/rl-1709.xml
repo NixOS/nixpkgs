@@ -68,6 +68,16 @@ following incompatible changes:</para>
       <literal>db-config.sqlite</literal> which will be automatically recreated.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The ipfs package now doesn't ignore the <literal>dataDir</literal> option anymore. If you've ever set this option to anything other than the default you'll have to either unset it (so the default gets used) or migrate the old data manually with
+<programlisting>
+dataDir=&lt;valueOfDataDir&gt;
+mv /var/lib/ipfs/.ipfs/* $dataDir
+rmdir /var/lib/ipfs/.ipfs
+</programlisting>
+    </para>
+  </listitem>
 </itemizedlist>
 
 
