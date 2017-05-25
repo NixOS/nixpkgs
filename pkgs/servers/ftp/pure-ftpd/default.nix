@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pure-ftpd-1.0.42";
+  name = "pure-ftpd-1.0.46";
 
   src = fetchurl {
     url = "https://download.pureftpd.org/pub/pure-ftpd/releases/${name}.tar.gz";
-    sha256 = "1yg7v1l3ng7c08nhh804k28y1f8ccmg0rq1a9l2sg45ib273mrvv";
+    sha256 = "0p0arcaz63fbb03fkavbc8z6m1f90p5vbnxb8mqlvpma6mrq0286";
   };
 
   meta = with stdenv.lib; {
@@ -15,5 +15,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.lethalman ];
     platforms = platforms.linux;
   };
-
 }
