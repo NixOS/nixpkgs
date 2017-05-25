@@ -817,6 +817,16 @@ installCheckPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $installCheckFlags "${installCheckFlagsArray[@]}" ${installCheckTarget:-installcheck}
 
+    if [ -z "$noErrorBuildTop" -a "$NIX_ENFORCE_PURITY" = "1" -a -n "$NIX_BUILD_TOP" ]; then
+        for output in $outputs; do
+            if grep -qr $NIX_BUILD_TOP ${!output} ; then
+                echo "ERROR: found reference to build path $NIX_BUILD_TOP in the following files"
+                grep -lr $NIX_BUILD_TOP ${!output}
+                exit 1
+            fi
+        done
+    done
+
     runHook postInstallCheck
 }
 

@@ -1028,6 +1028,15 @@ installcheck</command>.</para>
   </varlistentry>
 
   <varlistentry>
+    <term><varname>noErrorBuildTop</varname></term>
+    <listitem><para>Allow outputs to capture references to the build
+    directory.  Normally, all outputs are scanned for references to
+    the build directory and the build aborted if any are found.  Such
+    references are most likely accidental and may make the build
+    non-reproducible.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>preInstallCheck</varname></term>
     <listitem><para>Hook executed at the start of the installCheck
     phase.</para></listitem>
