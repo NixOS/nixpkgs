@@ -80,6 +80,7 @@
   ./programs/environment.nix
   ./programs/fish.nix
   ./programs/freetds.nix
+  ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/info.nix
   ./programs/java.nix
