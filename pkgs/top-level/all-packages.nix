@@ -4202,6 +4202,10 @@ with pkgs;
 
   stunnel = callPackage ../tools/networking/stunnel { };
 
+  stutter = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.stutter) (drv: {
+    preCheck = "export PATH=dist/build/stutter:$PATH";
+  });
+
   strongswan = callPackage ../tools/networking/strongswan { };
 
   strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC=true; };
