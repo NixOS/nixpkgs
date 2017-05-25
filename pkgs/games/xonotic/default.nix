@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip, libjpeg, zlib, libvorbis, curl, patchelf
 , # glx
   libX11, mesa, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl
@@ -48,7 +48,13 @@ stdenv.mkDerivation rec {
     ln -s "$out/bin/xonotic-sdl" "$out/bin/xonotic"
   '';
 
+  # Xonotic needs to find libcurl.so at runtime for map downloads
   dontPatchELF = true;
+  postFixup = ''
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-dedicated
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-sdl
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-glx
+  '';
 
   meta = {
     description = "A free fast-paced first-person shooter";
