@@ -20,7 +20,7 @@ let
    "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
-  camlp5 = ocamlPackages.camlp5_transitional;
+  camlp5 = ocamlPackages.camlp5_strict;
   ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
