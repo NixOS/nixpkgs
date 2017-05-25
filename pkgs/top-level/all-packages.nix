@@ -12696,6 +12696,10 @@ with pkgs;
 
   font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
 
+  font-droid-sans = callPackage ../data/fonts/droid/sans.nix { };
+  font-droid-sans-mono = callPackage ../data/fonts/droid/sans-mono.nix { };
+  font-droid-serif = callPackage ../data/fonts/droid/serif.nix { };
+
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   font-droid = callPackage ../data/fonts/droid { };
