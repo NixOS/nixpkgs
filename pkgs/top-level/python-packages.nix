@@ -9971,6 +9971,7 @@ in {
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
+    dontWrapPythonPrograms = true;
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
     '';
@@ -9998,6 +9999,7 @@ in {
     doCheck = false;
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
+    dontWrapPythonPrograms = true;
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
     '';
@@ -10024,6 +10026,7 @@ in {
     doCheck = false;
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
+    dontWrapPythonPrograms = true;
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
     '';
