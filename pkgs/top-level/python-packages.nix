@@ -11418,21 +11418,28 @@ in {
   };
 
   fonttools = buildPythonPackage (rec {
-    version = "3.0";
-    name = "fonttools-${version}";
+    pname = "fonttools";
+    version = "3.13.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/FontTools/fonttools-${version}.tar.gz";
-      sha256 = "0f4iblpbf3y3ghajiccvdwk2f46cim6dsj6fq1kkrbqfv05dr4nz";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "5ec278ff231d0c88afe8266e911ee0f8e66c8501c53f5f144a1a0abbc936c6b8";
+      extension = "zip";
     };
 
     buildInputs = with self; [
       numpy
     ];
 
+    checkInputs = with self; [
+      pytest
+      pytestrunner
+    ];
+
     meta = {
-      homepage = "https://github.com/behdad/fonttools";
-      description = "Font file processing tools";
+      homepage = "https://github.com/fonttools/fonttools";
+      description = "A library to manipulate font files from Python";
     };
   });
 
