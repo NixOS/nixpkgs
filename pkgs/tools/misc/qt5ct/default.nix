@@ -1,16 +1,17 @@
-{stdenv, fetchurl, qtbase, qtsvg, qttools, qmakeHook, makeQtWrapper}:
+{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmakeHook, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "qt5ct-${version}";
-  version = "0.30";
+  version = "0.32";
 
   src = fetchurl {
     url = "mirror://sourceforge/qt5ct/qt5ct-${version}.tar.bz2";
-    sha256 = "1k0ywd440qvf84chadjb4fnkn8dkfl56cc3a6wqg6a59drslvng6";
+    sha256 = "0gzmqx6j8g8vgdg5sazfw31h825jdsjbkj8lk167msvahxgrf0fm";
   };
 
-  buildInputs = [ qtbase qtsvg ];
   nativeBuildInputs = [ makeQtWrapper qmakeHook qttools ];
+
+  buildInputs = [ qtbase qtsvg ];
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags PLUGINDIR=$out/lib/qt5/plugins"
