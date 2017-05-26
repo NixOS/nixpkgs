@@ -4,7 +4,6 @@
 
 mkDerivation {
   name = "breeze-grub";
-  outputs = [ "out" ];
   installPhase = ''
     runHook preInstall
 

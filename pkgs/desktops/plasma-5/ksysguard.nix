@@ -9,9 +9,8 @@
 mkDerivation {
   name = "ksysguard";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ lm_sensors ];
-  propagatedBuildInputs = [
+  buildInputs = [
     kconfig kcoreaddons kitemviews knewstuff kiconthemes libksysguard
-    kdelibs4support ki18n qtwebkit
+    kdelibs4support ki18n lm_sensors qtwebkit
   ];
 }

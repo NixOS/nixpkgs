@@ -15,5 +15,6 @@ mkDerivation {
     kguiaddons ki18n kwayland kwindowsystem plasma-framework qtdeclarative
     qtx11extras
   ];
+  outputs = [ "out" "dev" "bin" ];
   cmakeFlags = [ "-DUSE_Qt4=OFF" ];
 }

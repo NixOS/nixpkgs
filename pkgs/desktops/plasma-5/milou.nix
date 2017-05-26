@@ -7,9 +7,7 @@
 
 mkDerivation {
   name = "milou";
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcoreaddons kdeclarative ki18n krunner kservice plasma-framework
     qtdeclarative qtscript

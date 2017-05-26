@@ -8,7 +8,7 @@
 mkDerivation {
   name = "kmenuedit";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
+  buildInputs = [
     kdbusaddons kdelibs4support khotkeys ki18n kiconthemes kio kxmlgui sonnet
   ];
 }

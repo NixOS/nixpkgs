@@ -1,6 +1,8 @@
-{ mkDerivation, extra-cmake-modules, kconfig, kconfigwidgets
-, kdbusaddons, kglobalaccel, ki18n, kwidgetsaddons, kxmlgui
-, libkscreen, qtdeclarative, qtgraphicaleffects
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kconfig, kconfigwidgets, kdbusaddons, kglobalaccel, ki18n, kwidgetsaddons,
+  kxmlgui, libkscreen, qtdeclarative, qtgraphicaleffects
 }:
 
 mkDerivation {

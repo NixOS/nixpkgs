@@ -10,6 +10,14 @@
 
 mkDerivation {
   name = "plasma-nm";
+  nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
+  buildInputs = [
+    kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
+    qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
+    kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui
+    mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
+    qca-qt5 solid
+  ];
   patches = [
     (substituteAll {
       src = ./0001-mobile-broadband-provider-info-path.patch;
@@ -19,13 +27,5 @@ mkDerivation {
       src = ./0002-openvpn-binary-path.patch;
       inherit openvpn;
     })
-  ];
-  nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
-  buildInputs = [
-    kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
-    qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
-    kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui
-    mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
-    qca-qt5 solid
   ];
 }

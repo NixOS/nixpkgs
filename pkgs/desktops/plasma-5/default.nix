@@ -36,21 +36,44 @@ let
     mirror = "mirror://kde";
   };
 
+  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+
   packages = self: with self;
     let
+
+      propagate = out:
+        let setupHook = { writeScript }:
+              writeScript "setup-hook.sh" ''
+                # Propagate $${out} output
+                propagatedUserEnvPkgs+=" @${out}@"
+
+                # Propagate $dev so that this setup hook is propagated
+                # But only if there is a separate $dev output
+                if [ "$outputDev" != out ]; then
+                    if [ -n "$crossConfig" ]; then
+                      propagatedBuildInputs+=" @dev@"
+                    else
+                      propagatedNativeBuildInputs+=" @dev@"
+                    fi
+                fi
+              '';
+        in callPackage setupHook {};
+
+      propagateBin = propagate "bin";
+
       callPackage = self.newScope {
         mkDerivation = args:
           let
             inherit (args) name;
             sname = args.sname or name;
             inherit (srcs."${sname}") src version;
-            mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
-          in
-          mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit src;
 
-            outputs = args.outputs or [ "out" "dev" ];
+            outputs = args.outputs or [ "out" ];
+            hasBin = lib.elem "bin" outputs;
+            hasDev = lib.elem "dev" outputs;
+
+            defaultSetupHook = if hasBin && hasDev then propagateBin else null;
+            setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
               license = with lib.licenses; [
@@ -60,8 +83,13 @@ let
               maintainers = with lib.maintainers; [ ttuegel ];
               homepage = "http://www.kde.org";
             } // (args.meta or {});
+          in
+          mkDerivation (args // {
+            name = "${name}-${version}";
+            inherit meta outputs setupHook src;
           });
       };
+
     in {
       bluedevil = callPackage ./bluedevil.nix {};
       breeze-gtk = callPackage ./breeze-gtk.nix {};
