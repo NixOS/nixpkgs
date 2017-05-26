@@ -316,19 +316,39 @@ rec {
   inherit vimrcFile;
 
   # shell script with custom name passing [-u vimrc] [-U gvimrc] to vim
-  vimWithRC = {vimExecutable, name ? null, vimrcFile ? null, gvimrcFile ? null}:
-    let rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
-    in writeScriptBin (if name == null then "vim" else name) ''
-      #!/bin/sh
-      exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
+  vimWithRC = {vimExecutable, gvimExecutable, vimManPages, wrapManual, wrapGui, name ? null, vimrcFile ? null, gvimrcFile ? null}:
+    let
+      rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
+      vimWrapperScript = writeScriptBin (if name == null then "vim" else name) ''
+        #!/bin/sh
+        exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
+      gvimWrapperScript = writeScriptBin (if name == null then "gvim" else (lib.concatStrings [ "g" name ])) ''
+        #!/bin/sh
+        exec ${gvimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
+      '';
+    in
+      buildEnv {
+        name = vimWrapperScript.name;
+        paths = [
+          vimWrapperScript
+        ] ++ lib.optional wrapGui gvimWrapperScript
+          ++ lib.optional wrapManual vimManPages
+        ;
+      };
 
   # add a customize option to a vim derivation
   makeCustomizable = vim: vim // {
-    customize = {name, vimrcConfig}: vimWithRC {
+    customize = {name, vimrcConfig, wrapManual ? true, wrapGui ? false}: vimWithRC {
       vimExecutable = "${vim}/bin/vim";
-      inherit name;
+      gvimExecutable = "${vim}/bin/gvim";
+      inherit name wrapManual wrapGui;
       vimrcFile = vimrcFile vimrcConfig;
+      vimManPages = buildEnv {
+        name = "${name}-doc";
+        paths = [ vim ];
+        pathsToLink = [ "/share/man" ];
+      };
     };
   };
 
