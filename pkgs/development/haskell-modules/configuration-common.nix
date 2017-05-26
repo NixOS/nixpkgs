@@ -332,7 +332,6 @@ self: super: {
   language-slice = dontCheck super.language-slice;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
-  liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   memcache = dontCheck super.memcache;
@@ -858,4 +857,8 @@ self: super: {
 
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
+
+  # build liquidhaskell with the proper (old) aeson version
+  liquidhaskell = super.liquidhaskell.override { aeson = self.aeson_0_11_3_0; };
+
 }
