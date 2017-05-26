@@ -21080,7 +21080,7 @@ in {
 
     buildInputs = [
       pkgs.pkgconfig pkgs.gtk2 self.pygtk pkgs.libxml2
-      pkgs.libxslt pkgs.libsoup pkgs.webkitgtk2 pkgs.icu
+      pkgs.libxslt pkgs.libsoup pkgs.webkitgtk24x-gtk2 pkgs.icu
     ];
 
     meta = {

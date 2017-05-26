@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, gnome3, gmime, webkitgtk24x
+{ stdenv, fetchFromGitHub, scons, pkgconfig, gnome3, gmime, webkitgtk24x-gtk3
 , libsass, notmuch, boost, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ gnome3.gtkmm gmime webkitgtk24x libsass gnome3.libpeas
+  buildInputs = [ gnome3.gtkmm gmime webkitgtk24x-gtk3 libsass gnome3.libpeas
                   notmuch boost gnome3.gsettings_desktop_schemas
                   gnome3.adwaita-icon-theme ];
 

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime, texinfo , emacs, guile
-, gtk3, webkitgtk24x, libsoup, icu
+, gtk3, webkitgtk24x-gtk3, libsoup, icu
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # pmccabe should be a checkInput instead, but configure looks for it
   buildInputs = [
     sqlite xapian glib gmime texinfo emacs guile libsoup icu
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x ];
+  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   checkInputs = [ pmccabe ];
 
