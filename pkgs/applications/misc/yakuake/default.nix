@@ -58,6 +58,6 @@ in
 kdeWrapper
 {
   inherit unwrapped;
-  targets = [ "bin/yakuake" "share/applications/org.kde.yakuake.desktop" ];
+  targets = [ "bin/yakuake" ];
   paths = [ konsole.unwrapped ];
 }
