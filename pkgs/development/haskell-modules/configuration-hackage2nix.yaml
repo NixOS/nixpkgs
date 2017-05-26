@@ -2473,6 +2473,7 @@ package-maintainers:
     - hsyslog
     - jailbreak-cabal
     - language-nix
+    - logging-facade-syslog
     - pandoc
     - stack
     - streamproc
