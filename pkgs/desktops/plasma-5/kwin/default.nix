@@ -25,10 +25,9 @@ mkDerivation {
     udev wayland xcb-util-cursor xwayland
   ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  postPatch = ''
-    substituteInPlace main_wayland.cpp \
-        --subst-var-by xwayland ${lib.getBin xwayland}/bin/Xwayland
-  '';
+  NIX_CFLAGS_COMPILE = [
+    ''-DNIXPKGS_XWAYLAND="${lib.getBin xwayland}/bin/Xwayland"''
+  ];
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.
