@@ -2,7 +2,7 @@ diff --git a/tools/cli/main.js b/tools/cli/main.js
 index 84f94bc..4fbda17 100644
 --- a/tools/cli/main.js
 +++ b/tools/cli/main.js
-@@ -484,6 +484,44 @@ var springboard = function (rel, options) {
+@@ -484,6 +484,45 @@ var springboard = function (rel, options) {
      process.exit(ret.wait());
    }
  
@@ -10,6 +10,7 @@ index 84f94bc..4fbda17 100644
 +  // patch shebang:
 +  var fs = require('fs');
 +  var path = require("path")
++  var Future = require("fibers/future")
 +  var srcOld = fs.readFileSync(executable, 'utf8');
 +  srcNew = srcOld.replace(/^#!\/bin\/bash/, '#!/bin/sh');
 +  if (srcOld !== srcNew) {
