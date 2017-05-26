@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let repo = "openfortivpn";
-    version = "1.2.0";
+    version = "1.3.0";
 
 in stdenv.mkDerivation {
   name = "${repo}-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "adrienverge";
     inherit repo;
     rev = "v${version}";
-    sha256 = "1a1l9f6zivfyxg9g2x7kzkvcyh84s7l6v0kimihhrd19zl0m41jn";
+    sha256 = "1jr2i0v82db7w9rdx5d64ph90b3hxi15yjy0abjg05wrpnbdyycp";
   };
 
   buildInputs = [ openssl ppp autoreconfHook ];
