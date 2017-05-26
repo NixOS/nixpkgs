@@ -199,7 +199,7 @@ self: super: builtins.intersectAttrs super {
   xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
 
   # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
-  liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
+  # liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
