@@ -28,7 +28,7 @@ in {
     sha256 = "0spi75q6nafxp3ndnrhrlqagzmjlp8wwlr5x7rnvdpswgxi6ihyk";
   };
   miniupnpc_1 = generic {
-    version = "1.9.20150430";
-    sha256 = "0ivnvzla0l2pzmy8s0j8ss0fnpsii7z9scvyl4a13g9k911hgmvn";
+    version = "1.9.20160209";
+    sha256 = "0vsbv6a8by67alx4rxfsrxxsnmq74rqlavvvwiy56whxrkm728ap";
   };
 }
