@@ -457,7 +457,10 @@ Additional file types can be supported by setting the
   <varlistentry>
     <term><varname>srcs</varname> / <varname>src</varname></term>
     <listitem><para>The list of source files or directories to be
-    unpacked or copied.  One of these must be set.</para></listitem>
+    unpacked or copied.  One of these must be set. To make a
+    derivation with no sources, you can avoid this requirement by
+    setting <literal>unpackPhase = "true";</literal> to replace the
+    default unpack phase with a noop.</para></listitem>
   </varlistentry>
 
   <varlistentry>
