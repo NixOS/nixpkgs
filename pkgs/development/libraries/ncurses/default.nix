@@ -65,9 +65,6 @@ stdenv.mkDerivation rec {
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
-  # Here only for native hash, remove on next mass rebuild
-  selfNativeBuildInput = buildPlatform == hostPlatform;
-
   enableParallelBuilding = true;
 
   doCheck = false;

@@ -11,6 +11,7 @@
 , callPackage
 , self
 , CF, configd
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -77,7 +78,7 @@ in stdenv.mkDerivation {
                         )
   '';
 
-  setupHook = ./setup-hook.sh;
+  setupHook = python-setup-hook sitePackages;
 
   postInstall = ''
     # needed for some packages, especially packages that backport functionality

@@ -48,6 +48,9 @@ in stdenv.mkDerivation {
       ./pcf-config-long-family-names.patch
       ./disable-pcf-long-family-names.patch
       ./enable-table-validation.patch
+      # remove the two CVE patches after updating to >= 2.8
+      ./cve-2017-8105.patch
+      ./cve-2017-8287.patch
     ] ++
     optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
