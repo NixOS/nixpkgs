@@ -234,6 +234,8 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk.nix { };
 
+  ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
+
   pitz = callPackage ../applications/misc/pitz { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
