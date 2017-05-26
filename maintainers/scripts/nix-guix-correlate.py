@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 '''
 A simple script to correlate the JSON package data from Nix and Guix and
@@ -19,7 +19,7 @@ if res.status != 200:
 guixdata = res.read()
 
 '''
-## in case the data is cached
+## in case the data is cached -- TODO
 guixjsonfilename = '/tmp/packages-guix.json'
 guixfile = open(guixjsonfilename, 'rb')
 guixdata = guixfile.read()
@@ -45,7 +45,7 @@ nixbuffer = StringIO.StringIO(res.read())
 nixdata = gzip.GzipFile(fileobj=nixbuffer).read()
 
 '''
-## in case the data is cached
+## in case the data is cached -- TODO
 nixjsonfilename = '/tmp/packages.json'
 nixfile = open(nixjsonfilename, 'rb')
 nixdata = nixfile.read()
