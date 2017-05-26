@@ -1,21 +1,62 @@
 #!/usr/bin/python
 
-import os, sys, json
+'''
+A simple script to correlate the JSON package data from Nix and Guix and
+compare versions for packages that are the same in both.
+'''
 
+import os, sys, json, httplib, gzip, StringIO
+
+## https://www.gnu.org/software/guix/packages/packages.json
+httpcon = httplib.HTTPSConnection('www.gnu.org')
+httpcon.request('GET', '/software/guix/packages/packages.json')
+res = httpcon.getresponse()
+if res.status != 200:
+	print >>sys.stderr, "Cannot grab GUIX JSON file"
+	sys.stderr.flush()
+	sys.exit(1)
+
+guixdata = res.read()
+
+'''
+## in case the data is cached
 guixjsonfilename = '/tmp/packages-guix.json'
-nixjsonfilename = '/tmp/packages.json'
-
 guixfile = open(guixjsonfilename, 'rb')
-nixfile = open(nixjsonfilename, 'rb')
-
 guixdata = guixfile.read()
 guixfile.close()
+'''
 
+try:
+	guixjson = json.loads(guixdata)
+except:
+	print >>sys.stderr, "Invalid GUIX JSON data"
+	sys.exit(1)
+
+## http://nixos.org/nixpkgs/packages.json.gz
+httpcon = httplib.HTTPConnection('nixos.org')
+httpcon.request('GET', '/nixpkgs/packages.json.gz')
+res = httpcon.getresponse()
+if res.status != 200:
+	print >>sys.stderr, "Cannot grab Nix JSON file"
+	sys.stderr.flush()
+	sys.exit(1)
+
+nixbuffer = StringIO.StringIO(res.read())
+nixdata = gzip.GzipFile(fileobj=nixbuffer).read()
+
+'''
+## in case the data is cached
+nixjsonfilename = '/tmp/packages.json'
+nixfile = open(nixjsonfilename, 'rb')
 nixdata = nixfile.read()
 nixfile.close()
+'''
 
-guixjson = json.loads(guixdata)
-nixjson = json.loads(nixdata)
+try:
+	nixjson = json.loads(nixdata)
+except:
+	print >>sys.stderr, "Invalid Nix JSON data"
+	sys.exit(1)
 
 guixpackagetoversion = {}
 guixurltopackage = {}
