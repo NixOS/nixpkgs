@@ -1,14 +1,15 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , gevent, geventhttpclient, mock, fastimport
 , git, glibcLocales }:
 
 buildPythonPackage rec {
-  name = "dulwich-${version}";
-  version = "0.14.1";
+  pname = "dulwich";
+  version = "0.17.3";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-    sha256 = "14xsyxha6qyxxyf0ma3zv1sy31iy22vzwayk519n7a1gwzk4j7vw";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0c3eccac93823e172b05d57aaeab3d6f03c6c0f1867613606d1909a3ab4100ca";
   };
 
   LC_ALL = "en_US.UTF-8";
