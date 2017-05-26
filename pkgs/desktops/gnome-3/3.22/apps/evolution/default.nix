@@ -32,6 +32,10 @@ in stdenv.mkDerivation rec {
   configureFlags = [ "--disable-pst-import" "--disable-autoar"
                      "--disable-libcryptui" "--with-openldap"];
 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES "${dconf}/lib/gio/modules")
+  '';
+
   NIX_CFLAGS_COMPILE = "-I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;

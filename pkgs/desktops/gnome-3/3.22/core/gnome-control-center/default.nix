@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
-      gnome3.vino udev libcanberra_gtk3 libgudev wrapGAppsHook
+      gnome3.dconf gnome3.vino udev libcanberra_gtk3 libgudev wrapGAppsHook
       networkmanager modemmanager gnome3.gnome-bluetooth grilo tracker
       cracklib ];
 
@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = with gnome3; ''
+    gappsWrapperArgs+=(
+      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${sound-theme-freedesktop}/share:$out/share/gnome-control-center"
+    )
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done
