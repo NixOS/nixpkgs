@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
 , libevent, readline, net_snmp }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +16,16 @@ stdenv.mkDerivation rec {
     "--with-snmp"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
   buildInputs = [ libevent readline net_snmp ];
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "dev" "man" "doc" ];
+
+  preFixup = ''
+    find $out -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+  '';
 
   meta = with lib; {
     description = "802.1ab implementation (LLDP) to help you locate neighbors of all your equipments";
