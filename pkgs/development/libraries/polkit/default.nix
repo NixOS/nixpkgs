@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, expat, pam, intltool, spidermonkey_17
 , gobjectIntrospection, libxslt, docbook_xsl, docbook_xml_dtd_412
-, useSystemd ? stdenv.isLinux, systemd }:
+, useSystemd ? stdenv.isLinux, systemd, fetchpatch }:
 
 let
 
@@ -28,6 +28,15 @@ stdenv.mkDerivation rec {
     [ pkgconfig glib expat pam intltool spidermonkey_17 gobjectIntrospection ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ] # man pages
     ++ stdenv.lib.optional useSystemd systemd;
+
+  patches = [
+    # https://bugs.freedesktop.org/show_bug.cgi?id=96977
+    (fetchpatch {
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=125189";
+      sha256 = "1y2cakbrcxrhzj5dyj5acj7kl8phc54pr7xzv1jh73744j2hdi5b";
+      name = "systemd-session.patch";
+    })
+  ];
 
   # Ugly hack to overwrite hardcoded directories
   # TODO: investigate a proper patch which will be accepted upstream
