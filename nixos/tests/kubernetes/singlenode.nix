@@ -46,37 +46,30 @@ let
     $kubernetes->waitUntilSucceeds("kubectl get pod redis | grep Running");
     $kubernetes->succeed("nc -z \$\(dig redis.default.svc.cluster.local +short\) 6379");
   '';
-in {
-  # This test runs kubernetes on a single node
-  singlenode = makeTest {
-    name = "kubernetes-singlenode";
+in makeTest {
+  name = "kubernetes-singlenode";
 
-    nodes = {
-      kubernetes =
-        { config, pkgs, lib, nodes, ... }:
-          {
-            virtualisation.memorySize = 768;
-            virtualisation.diskSize = 2048;
+  nodes = {
+    kubernetes =
+      { config, pkgs, lib, nodes, ... }:
+        {
+          virtualisation.memorySize = 768;
+          virtualisation.diskSize = 2048;
 
-            programs.bash.enableCompletion = true;
-            environment.systemPackages = with pkgs; [ netcat bind ];
+          programs.bash.enableCompletion = true;
+          environment.systemPackages = with pkgs; [ netcat bind ];
 
-            services.kubernetes.roles = ["master" "node"];
-            services.kubernetes.dns.port = 4453;
-            virtualisation.docker.extraOptions = "--iptables=false --ip-masq=false -b cbr0";
+          services.kubernetes.roles = ["master" "node"];
+          services.kubernetes.dns.port = 4453;
 
-            networking.bridges.cbr0.interfaces = [];
-            networking.interfaces.cbr0 = {};
-
-            services.dnsmasq.enable = true;
-            services.dnsmasq.servers = ["/${config.services.kubernetes.dns.domain}/127.0.0.1#4453"];
-          };
-    };
-
-    testScript = ''
-      startAll;
-
-      ${testSimplePod}
-    '';
+          services.dnsmasq.enable = true;
+          services.dnsmasq.servers = ["/${config.services.kubernetes.dns.domain}/127.0.0.1#4453"];
+        };
   };
+
+  testScript = ''
+    startAll;
+
+    ${testSimplePod}
+  '';
 }

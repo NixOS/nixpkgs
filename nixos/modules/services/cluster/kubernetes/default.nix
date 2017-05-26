@@ -162,6 +162,17 @@ let
       };
     }
   ]);
+
+  # needed for flannel to pass options to docker
+  mkDockerOpts = pkgs.runCommand "mk-docker-opts" {
+    buildInputs = [ pkgs.makeWrapper ];
+  } ''
+    mkdir -p $out
+    cp ${pkgs.kubernetes.src}/cluster/centos/node/bin/mk-docker-opts.sh $out/mk-docker-opts.sh
+
+    # bashInteractive needed for `compgen`
+    makeWrapper ${pkgs.bashInteractive}/bin/bash $out/mk-docker-opts --add-flags "$out/mk-docker-opts.sh"
+  '';
 in {
 
   ###### interface
@@ -357,20 +368,17 @@ in {
         type = types.listOf types.attrs;
       };
 
-      authorizationRBACSuperAdmin = mkOption {
-        description = "Role based authorization super admin.";
-        default = "admin";
-        type = types.str;
-      };
-
       allowPrivileged = mkOption {
         description = "Whether to allow privileged containers on Kubernetes.";
         default = true;
         type = types.bool;
       };
 
-      portalNet = mkOption {
-        description = "Kubernetes CIDR notation IP range from which to assign portal IPs.";
+      serviceClusterIpRange = mkOption {
+        description = ''
+          A CIDR notation IP range from which to assign service cluster IPs.
+          This must not overlap with any IP ranges assigned to nodes for pods.
+        '';
         default = "10.10.10.10/24";
         type = types.str;
       };
@@ -666,6 +674,12 @@ in {
         type = types.attrsOf (types.submodule [ taintOptions ]);
       };
 
+      nodeIp = mkOption {
+        description = "IP address of the node. If set, kubelet will use this IP address for the node.";
+        default = null;
+        type = types.nullOr types.str;
+      };
+
       extraOpts = mkOption {
         description = "Kubernetes kubelet extra command line options.";
         default = "";
@@ -761,6 +775,12 @@ in {
       type = types.str;
     };
 
+    flannel.enable = mkOption {
+      description = "Whether to enable flannel networking";
+      default = false;
+      type = types.bool;
+    };
+
   };
 
   ###### implementation
@@ -808,6 +828,8 @@ in {
               "--network-plugin=${cfg.kubelet.networkPlugin}"} \
             --cni-conf-dir=${cniConfig} \
             --hairpin-mode=hairpin-veth \
+            ${optionalString (cfg.kubelet.nodeIp != null)
+              "--node-ip=${cfg.kubelet.nodeIp}"} \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
           '';
@@ -817,6 +839,8 @@ in {
 
       # Allways include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni];
+
+      boot.kernelModules = ["br_netfilter"];
     })
 
     (mkIf (cfg.kubelet.applyManifests && cfg.kubelet.enable) {
@@ -879,10 +903,8 @@ in {
                 (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.apiserver.authorizationPolicy)
               }"
             } \
-            ${optionalString (elem "RBAC" cfg.apiserver.authorizationMode)
-              "--authorization-rbac-super-user=${cfg.apiserver.authorizationRBACSuperAdmin}"} \
             --secure-port=${toString cfg.apiserver.securePort} \
-            --service-cluster-ip-range=${cfg.apiserver.portalNet} \
+            --service-cluster-ip-range=${cfg.apiserver.serviceClusterIpRange} \
             ${optionalString (cfg.apiserver.runtimeConfig != "")
               "--runtime-config=${cfg.apiserver.runtimeConfig}"} \
             --admission_control=${concatStringsSep "," cfg.apiserver.admissionControl} \
@@ -981,10 +1003,9 @@ in {
           WorkingDirectory = cfg.dataDir;
         };
       };
-    })
 
-    (mkIf cfg.kubelet.enable {
-      boot.kernelModules = ["br_netfilter"];
+      # kube-proxy needs iptables
+      networking.firewall.enable = mkDefault true;
     })
 
     (mkIf (any (el: el == "master") cfg.roles) {
@@ -999,15 +1020,25 @@ in {
       services.etcd.enable = mkDefault (cfg.etcd.servers == ["http://127.0.0.1:2379"]);
     })
 
+    # if this node is only a master make it unschedulable by default
     (mkIf (all (el: el == "master") cfg.roles) {
       services.kubernetes.kubelet.unschedulable = mkDefault true;
     })
 
     (mkIf (any (el: el == "node") cfg.roles) {
-      virtualisation.docker.enable = mkDefault true;
-      virtualisation.docker.logDriver = mkDefault "json-file";
+      virtualisation.docker = {
+        enable = mkDefault true;
+
+        # kubernetes needs access to logs
+        logDriver = mkDefault "json-file";
+
+        # iptables must be disabled for kubernetes
+        extraOptions = "--iptables=false --ip-masq=false";
+      };
+
       services.kubernetes.kubelet.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
+      services.kubernetes.dns.enable = mkDefault true;
     })
 
     (mkIf cfg.addonManager.enable {
@@ -1035,8 +1066,17 @@ in {
           Group = "kubernetes";
           AmbientCapabilities = "cap_net_bind_service";
           SendSIGHUP = true;
+          RestartSec = "30s";
+          Restart = "always";
+          StartLimitInterval = "1m";
         };
       };
+
+      networking.firewall.extraCommands = ''
+        # allow container to host communication for DNS traffic
+        ${pkgs.iptables}/bin/iptables -I nixos-fw -p tcp -m tcp -d ${cfg.clusterCidr} --dport 53 -j nixos-fw-accept
+        ${pkgs.iptables}/bin/iptables -I nixos-fw -p udp -m udp -d ${cfg.clusterCidr} --dport 53 -j nixos-fw-accept
+      '';
     })
 
     (mkIf (
@@ -1069,6 +1109,51 @@ in {
         createHome = true;
       };
       users.extraGroups.kubernetes.gid = config.ids.gids.kubernetes;
+    })
+
+    (mkIf cfg.flannel.enable {
+      services.flannel = {
+        enable = mkDefault true;
+        network = mkDefault cfg.clusterCidr;
+        etcd = mkDefault {
+          endpoints = cfg.etcd.servers;
+          inherit (cfg.etcd) caFile certFile keyFile;
+        };
+      };
+
+      services.kubernetes.kubelet = {
+        networkPlugin = mkDefault "cni";
+        cni.config = mkDefault [{
+          name = "mynet";
+          type = "flannel";
+          delegate = {
+            isDefaultGateway = true;
+            bridge = "docker0";
+          };
+        }];
+      };
+
+      systemd.services."mk-docker-opts" = {
+        description = "Pre-Docker Actions";
+        wantedBy = [ "flannel.service" ];
+        before = [ "docker.service" ];
+        after = [ "flannel.service" ];
+        path = [ pkgs.gawk pkgs.gnugrep ];
+        script = ''
+          mkdir -p /run/flannel
+          ${mkDockerOpts}/mk-docker-opts -d /run/flannel/docker
+        '';
+        serviceConfig.Type = "oneshot";
+      };
+      systemd.services.docker.serviceConfig.EnvironmentFile = "/run/flannel/docker";
+
+      # read environment variables generated by mk-docker-opts
+      virtualisation.docker.extraOptions = "$DOCKER_OPTS";
+
+      networking.firewall.allowedUDPPorts = [
+        8285  # flannel udp
+        8472  # flannel vxlan
+      ];
     })
   ];
 }

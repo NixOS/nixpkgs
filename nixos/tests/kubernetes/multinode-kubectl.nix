@@ -8,7 +8,6 @@ let
   servers.master = "192.168.1.1";
   servers.one = "192.168.1.10";
   servers.two = "192.168.1.20";
-  servers.three = "192.168.1.30";
 
   certs = import ./certs.nix { inherit servers; };
 
@@ -39,7 +38,7 @@ let
     clusters = [{
       name = "local";
       cluster.certificate-authority = "/ca.pem";
-      cluster.server = "https://${servers.master}:4443/";
+      cluster.server = "https://${servers.master}";
     }];
     users = [{
       name = "kubelet";
@@ -61,11 +60,9 @@ let
     $master->waitUntilSucceeds("kubectl get node master.nixos.xyz | grep Ready");
     $master->waitUntilSucceeds("kubectl get node one.nixos.xyz | grep Ready");
     $master->waitUntilSucceeds("kubectl get node two.nixos.xyz | grep Ready");
-    $master->waitUntilSucceeds("kubectl get node three.nixos.xyz | grep Ready");
 
     $one->execute("docker load < ${kubectlImage}");
     $two->execute("docker load < ${kubectlImage}");
-    $three->execute("docker load < ${kubectlImage}");
 
     $master->waitUntilSucceeds("kubectl create -f ${kubectlPod} || kubectl apply -f ${kubectlPod}");
 
@@ -112,19 +109,6 @@ in makeTest {
             virtualisation.diskSize = 4096;
             networking.interfaces.eth1.ip4 = mkForce [{address = servers.two; prefixLength = 24;}];
             networking.primaryIPAddress = mkForce servers.two;
-            services.kubernetes.roles = ["node"];
-          }
-          (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
-        ];
-
-    three =
-      { config, pkgs, lib, nodes, ... }:
-        mkMerge [
-          {
-            virtualisation.memorySize = 768;
-            virtualisation.diskSize = 4096;
-            networking.interfaces.eth1.ip4 = mkForce [{address = servers.three; prefixLength = 24;}];
-            networking.primaryIPAddress = mkForce servers.three;
             services.kubernetes.roles = ["node"];
           }
           (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
