@@ -455,9 +455,10 @@ self: super: builtins.intersectAttrs super {
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
-  # The test suite tries to run the "fixpoint" executable just built before and
-  # fails, probably because the library search paths don't add up and it can't
-  # find its own shared library.
+  # The test suites try to run the "fixpoint" and "liquid" executables built just
+  # before and fail because the library search paths aren't configured properly.
+  # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
+  liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
 }
