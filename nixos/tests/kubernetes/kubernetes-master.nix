@@ -25,7 +25,7 @@ in
       allowPing = true;
       allowedTCPPorts = [
         2379 2380  # etcd
-        4443  # kubernetes
+        443 # kubernetes apiserver
       ];
     };
   };
@@ -43,14 +43,13 @@ in
     initialCluster = ["master=https://etcd.kubernetes.nixos.xyz:2380"];
     initialAdvertisePeerUrls = ["https://etcd.kubernetes.nixos.xyz:2380"];
   };
+
   services.kubernetes = {
     roles = ["master"];
     scheduler.leaderElect = true;
-    controllerManager.leaderElect = true;
     controllerManager.rootCaFile = rootCaFile;
     controllerManager.serviceAccountKeyFile = apiserver_key;
     apiserver = {
-      securePort = 4443;
       publicAddress = "192.168.1.1";
       advertiseAddress = "192.168.1.1";
       tlsKeyFile = apiserver_key;
@@ -59,9 +58,6 @@ in
       kubeletClientCaFile = rootCaFile;
       kubeletClientKeyFile = worker_key;
       kubeletClientCertFile = worker_cert;
-      portalNet = "10.1.10.0/24";  # --service-cluster-ip-range
-      runtimeConfig = "";
-      /*extraOpts = "--v=2";*/
     };
   };
 }
