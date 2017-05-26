@@ -12,6 +12,7 @@ rec {
   ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
+    "/usr/lib/libenergytrace.dylib"
   ];
   JavaScriptCore = [
     "/System/Library/Frameworks/JavaScriptCore.framework"
