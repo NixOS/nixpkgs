@@ -21373,6 +21373,8 @@ in {
     };
   };
 
+  requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
+
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
   requests_toolbelt = buildPythonPackage rec {
