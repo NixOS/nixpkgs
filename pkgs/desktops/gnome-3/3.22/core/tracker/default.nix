@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, libxml2, upower
 , pkgconfig, gtk3, glib
-, bash, makeWrapper, itstool, vala_0_32, sqlite, libxslt
+, bash, wrapGAppsHook, itstool, vala_0_32, sqlite, libxslt
 , gnome3, librsvg, gdk_pixbuf, file, libnotify
 , evolution_data_server, gst_all_1, poppler
 , icu, taglib, libjpeg, libtiff, giflib, libcue
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ vala_0_32 pkgconfig gtk3 glib intltool itstool libxml2
                   bzip2 gnome3.totem-pl-parser libxslt
-                  gnome3.gsettings_desktop_schemas makeWrapper file
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite
+                  gnome3.gsettings_desktop_schemas gnome3.dconf wrapGAppsHook
+                  file gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite
                   upower libnotify evolution_data_server gnome3.libgee
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base flac
                   poppler icu taglib libjpeg libtiff giflib libvorbis
@@ -31,11 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram $f \
-        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-    done
+    gappsWrapperArgs+=(
+      --prefix GIO_EXTRA_MODULES "${gnome3.dconf}/lib/gio/modules"
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
+    )
   '';
 
   meta = with stdenv.lib; {
