@@ -21092,25 +21092,7 @@ in {
     };
   };
 
-  pywinrm = buildPythonPackage rec {
-    version = "0.1.1";
-    name = "pywinrm-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/diyan/pywinrm/archive/v${version}.tar.gz";
-      sha256 = "1pc0987f6q5sxcgm50a1k1xz2pk45ny9xxnyapaf60662rcavvfb";
-    };
-
-    propagatedBuildInputs = with self; [ isodate kerberos xmltodict ];
-
-    meta = {
-      homepage = "http://github.com/diyan/pywinrm/";
-      description = "Python library for Windows Remote Management";
-      license = licenses.mit;
-      # error: libgssapi_krb5.so: cannot open shared object file: No such file or directory
-      broken = true; #
-    };
-  };
+  pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   PyXAPI = stdenv.mkDerivation rec {
     name = "PyXAPI-0.1";
