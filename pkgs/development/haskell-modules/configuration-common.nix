@@ -706,9 +706,9 @@ self: super: {
   servant-server = dontCheck super.servant-server;
 
   # Fix build for latest versions of servant and servant-client.
-  servant-client_0_10 = super.servant-client_0_10.overrideScope (self: super: {
-    servant-server = self.servant-server_0_10;
-    servant = self.servant_0_10;
+  servant-client_0_11 = super.servant-client_0_11.overrideScope (self: super: {
+    servant-server = self.servant-server_0_11;
+    servant = self.servant_0_11;
   });
 
   # build servant docs from the repository
