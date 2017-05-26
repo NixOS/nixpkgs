@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://ettus-apps.sourcerepo.com/redmine/ettus/projects/uhd/wiki;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }
