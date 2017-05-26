@@ -15,6 +15,8 @@ buildRustPackage rec {
 
   depsSha256 = "1n4rxipna307r4xppb2iaads7kpa3yjv99fimvpn8l0f999ir2rz";
 
+  cargoBuildFlags = ["--features cli"];
+
   meta = {
     description = "Ethereum function call encoding (ABI) utility";
     homepage = https://github.com/ethcore/ethabi/;

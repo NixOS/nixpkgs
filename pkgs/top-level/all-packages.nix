@@ -949,6 +949,10 @@ with pkgs;
 
   envconsul = callPackage ../tools/system/envconsul { };
 
+  esptool = callPackage ../tools/misc/esptool { };
+
+  esptool-ck = callPackage ../tools/misc/esptool-ck { };
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
@@ -2649,6 +2653,8 @@ with pkgs;
 
   lnav = callPackage ../tools/misc/lnav { };
 
+  loadlibrary = callPackage ../tools/misc/loadlibrary { };
+
   loc = callPackage ../development/misc/loc { };
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
@@ -4195,6 +4201,10 @@ with pkgs;
   stun = callPackage ../tools/networking/stun { };
 
   stunnel = callPackage ../tools/networking/stunnel { };
+
+  stutter = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.stutter) (drv: {
+    preCheck = "export PATH=dist/build/stutter:$PATH";
+  });
 
   strongswan = callPackage ../tools/networking/strongswan { };
 
@@ -6714,7 +6724,7 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
-    ocaml = ocaml_4_02;
+    inherit (ocamlPackages_4_03) ocaml findlib camlp4 sedlex ocamlbuild;
   };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
@@ -6948,6 +6958,8 @@ with pkgs;
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
   peg = callPackage ../development/tools/parsing/peg { };
+
+  pgcli = callPackage ../development/tools/database/pgcli {};
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
@@ -8267,7 +8279,7 @@ with pkgs;
   libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
 
   libao = callPackage ../development/libraries/libao {
-    usePulseAudio = config.pulseaudio or true;
+    usePulseAudio = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
   };
 
@@ -13351,7 +13363,7 @@ with pkgs;
   clipit = callPackage ../applications/misc/clipit { };
 
   cloud-print-connector = callPackage ../servers/cloud-print-connector { };
-  
+
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
@@ -17787,7 +17799,7 @@ with pkgs;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
   coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
   coqPackages = coqPackages_8_6;
-  
+
   coq_8_4 = coqPackages_8_4.coq;
   coq_8_5 = coqPackages_8_5.coq;
   coq_8_6 = coqPackages_8_6.coq;
@@ -18668,6 +18680,7 @@ with pkgs;
     gphoto2Support = true;
     ldapSupport = true;
     pulseaudioSupport = true;
+    udevSupport = true;
   });
   wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });

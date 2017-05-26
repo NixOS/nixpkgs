@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi
-, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which
+, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
+, mupdf
 }:
 
 let
@@ -8,18 +9,18 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.11.1";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "0x0jxn1hnif92m7dyqrqh015gpsf79dviarb7dfl0zya2drlk1m8";
+    sha256 = "1v553wvr8qdwb1g04if7cw1mfm42vs6xfyg0cvzvbng6yr6jg93s";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [
     cups poppler poppler_utils fontconfig libjpeg libpng perl
-    ijs qpdf dbus avahi
+    ijs qpdf dbus avahi ghostscript mupdf
   ];
 
   configureFlags = [
@@ -41,6 +42,9 @@ in stdenv.mkDerivation rec {
 
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe
+
+      # Patch shebangs of generated build scripts
+      patchShebangs filter
     '';
 
   postInstall =
@@ -57,5 +61,6 @@ in stdenv.mkDerivation rec {
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ layus ];
   };
 }

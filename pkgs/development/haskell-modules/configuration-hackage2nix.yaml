@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.14
+  # LTS Haskell 8.15
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -46,7 +46,7 @@ default-package-overrides:
   - ace ==0.6
   - acid-state ==0.14.2
   - action-permutations ==0.0.0.1
-  - active ==0.2.0.12
+  - active ==0.2.0.13
   - ad ==4.3.3
   - adjunctions ==4.3
   - adler32 ==0.1.1.0
@@ -308,7 +308,7 @@ default-package-overrides:
   - c2hs ==0.28.1
   - Cabal ==1.24.2.0
   - cabal-dependency-licenses ==0.2.0.0
-  - cabal-doctest ==1.0.1
+  - cabal-doctest ==1.0.2
   - cabal-file-th ==0.2.4
   - cabal-helper ==0.7.3.0
   - cabal-rpm ==0.11.1
@@ -406,7 +406,7 @@ default-package-overrides:
   - conduit ==1.2.10
   - conduit-combinators ==1.1.1
   - conduit-connection ==0.1.0.3
-  - conduit-extra ==1.1.15
+  - conduit-extra ==1.1.16
   - conduit-iconv ==0.1.1.1
   - conduit-parse ==0.1.2.0
   - ConfigFile ==1.1.4
@@ -697,7 +697,7 @@ default-package-overrides:
   - fold-debounce ==0.2.0.5
   - fold-debounce-conduit ==0.1.0.5
   - foldl ==1.2.5
-  - foldl-statistics ==0.1.4.2
+  - foldl-statistics ==0.1.4.3
   - folds ==0.7.3
   - FontyFruity ==0.5.3.2
   - force-layout ==0.4.0.6
@@ -1045,7 +1045,7 @@ default-package-overrides:
   - hpio ==0.8.0.7
   - hpp ==0.4.0
   - hpqtypes ==1.5.1.1
-  - hquantlib ==0.0.3.3
+  - hquantlib ==0.0.4.0
   - hreader ==1.1.0
   - hruby ==0.3.4.3
   - hs-bibutils ==5.5
@@ -1100,7 +1100,7 @@ default-package-overrides:
   - html-conduit ==1.2.1.1
   - html-email-validate ==0.2.0.0
   - htoml ==1.0.0.3
-  - HTTP ==4000.3.6
+  - HTTP ==4000.3.7
   - http-api-data ==0.3.7.1
   - http-client ==0.5.6.1
   - http-client-openssl ==0.2.0.5
@@ -1558,7 +1558,7 @@ default-package-overrides:
   - parsers ==0.12.4
   - partial-handler ==1.0.2
   - partial-isomorphisms ==0.2.2.1
-  - patat ==0.5.1.2
+  - patat ==0.5.2.0
   - path ==0.5.13
   - path-extra ==0.0.3
   - path-io ==1.2.2
@@ -1578,7 +1578,7 @@ default-package-overrides:
   - persistable-record ==0.4.1.1
   - persistable-types-HDBC-pg ==0.0.1.4
   - persistent ==2.6.1
-  - persistent-mysql ==2.6.0.1
+  - persistent-mysql ==2.6.0.2
   - persistent-postgresql ==2.6.1
   - persistent-redis ==2.5.2
   - persistent-refs ==0.4
@@ -1649,7 +1649,7 @@ default-package-overrides:
   - present ==4.1.0
   - pretty-class ==1.0.1.1
   - pretty-hex ==1.0
-  - pretty-show ==1.6.12
+  - pretty-show ==1.6.13
   - pretty-simple ==2.0.0.0
   - pretty-types ==0.2.3.1
   - prettyclass ==1.0.0.0
@@ -1747,7 +1747,7 @@ default-package-overrides:
   - reform-happstack ==0.2.5.1
   - reform-hsp ==0.2.7.1
   - RefSerialize ==0.4.0
-  - regex ==0.5.0.0
+  - regex ==1.0.0.0
   - regex-applicative ==0.3.3
   - regex-applicative-text ==0.1.0.1
   - regex-base ==0.93.2
@@ -2240,7 +2240,7 @@ default-package-overrides:
   - vector-th-unbox ==0.2.1.6
   - vectortiles ==1.2.0.4
   - verbosity ==0.2.3.0
-  - versions ==3.0.0
+  - versions ==3.0.1.1
   - vhd ==0.2.2
   - ViennaRNAParser ==1.3.2
   - viewprof ==0.0.0.1
@@ -2362,7 +2362,7 @@ default-package-overrides:
   - xml-to-json-fast ==2.0.0
   - xml-types ==0.3.6
   - xmlgen ==0.6.2.1
-  - xmlhtml ==0.2.3.5
+  - xmlhtml ==0.2.4
   - xmonad ==0.13
   - xmonad-contrib ==0.13
   - xss-sanitize ==0.3.5.7
