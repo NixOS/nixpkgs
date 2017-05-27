@@ -22605,7 +22605,8 @@ in {
       sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
     };
 
-    buildInputs = with self; [ pip pytest ];
+    buildInputs = with self; [ pip ];
+    checkInputs = with self; [ pytest ];
     # Seems to fail due to chroot
     doCheck = false;
 
