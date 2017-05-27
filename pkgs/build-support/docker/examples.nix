@@ -83,16 +83,12 @@ rec {
   };
 
   # 4. example of pulling an image. could be used as a base for other images
-  #
-  # ***** Currently broken, getting 404s. Perhaps the docker API has changed?
-  #
-  #
-  # debian = pullImage {
-  #   imageName = "debian";
-  #   imageTag = "jessie";
-  #   # this hash will need change if the tag is updated at docker hub
-  #   sha256 = "18kd495lc2k35h03bpcbdjnix17nlqbwf6nmq3sb161blf0dk14q";
-  # };
+  nix = pullImage {
+    imageName = "nixos/nix";
+    imageTag = "1.11";
+    # this hash will need change if the tag is updated at docker hub
+    sha256 = "1gk4bq05vl3rj3mh4mlbl4iicgndmimlv8jvkhdk4hrv0r44bwr3";
+  };
 
   # 5. example of multiple contents, emacs and vi happily coexisting
   editors = buildImage {
