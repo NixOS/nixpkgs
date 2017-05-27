@@ -7,10 +7,6 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
 
-  # If desktop manager `d' isn't capable of setting a background and
-  # the xserver is enabled, `feh' or `xsetroot' are used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
-
 in
 
 {
@@ -42,17 +38,7 @@ in
         apply = list: {
           list = map (d: d // {
             manage = "desktop";
-            start = d.start
-            + optionalString (needBGCond d) ''
-              if [ -e $HOME/.background-image ]; then
-                ${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image
-              else
-                # Use a solid black background as fallback
-                ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
-              fi
-            '';
           }) list;
-          needBGPackages = [] != filter needBGCond list;
         };
       };
 
@@ -82,7 +68,5 @@ in
 
   config = {
     services.xserver.displayManager.session = cfg.session.list;
-    environment.systemPackages =
-      mkIf cfg.session.needBGPackages [ pkgs.feh ]; # xsetroot via xserver.enable
   };
 }

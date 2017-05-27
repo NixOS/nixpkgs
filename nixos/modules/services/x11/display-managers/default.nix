@@ -16,6 +16,18 @@ let
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
 
+  withBgSupport = list: map (d: d // {
+    start = d.start
+      + optionalString (d ? bgSupport && d.bgSupport)
+        (with pkgs; ''
+          if [ -e $HOME/.background-image ]; then
+            ${feh}/bin/feh --bg-scale $HOME/.background-image
+          else
+            ${xorg.xsetroot}/bin/xsetroot -solid black
+          fi
+        '');
+  }) list;
+
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
     ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
@@ -263,8 +275,8 @@ in
           followed by the window manager name.
         '';
         apply = list: rec {
-          wm = filter (s: s.manage == "window") list;
-          dm = filter (s: s.manage == "desktop") list;
+          wm = withBgSupport (filter (s: s.manage == "window") list);
+          dm = withBgSupport (filter (s: s.manage == "desktop") list);
           names = flip concatMap dm
             (d: map (w: d.name + optionalString (w.name != "none") ("+" + w.name))
               (filter (w: d.name != "none" || w.name != "none") wm));
