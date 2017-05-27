@@ -1,0 +1,13 @@
+Index: kcmutils-5.33.0/src/kcmoduleloader.cpp
+===================================================================
+--- kcmutils-5.33.0.orig/src/kcmoduleloader.cpp
++++ kcmutils-5.33.0/src/kcmoduleloader.cpp
+@@ -93,7 +93,7 @@ KCModule *KCModuleLoader::loadModule(con
+         if (module) {
+             return module;
+         } else {
+-            KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + mod.service()->library()));
++            KPluginLoader loader(KPluginLoader::findPlugin(mod.service()->library()));
+             KPluginFactory* factory = loader.factory();
+             if (!factory) {
+                 qWarning() << "Error loading KCM plugin" << mod.service()->library() << loader.errorString();
