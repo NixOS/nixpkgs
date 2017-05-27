@@ -24073,32 +24073,7 @@ in {
 
 
 
-  sqlalchemy = buildPythonPackage rec {
-    name = "SQLAlchemy-${version}";
-    version = "1.0.15";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "586f5ccf068211795a89ed22d196c5cc3006b6be00261bcac6f584c0b8e0845a";
-    };
-
-    buildInputs = with self; [ pytest mock pytest_xdist ]
-      ++ stdenv.lib.optional (!isPy3k) pysqlite;
-
-    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
-    # acceptable reason to make all dependents unavailable on Python 3 as well
-    #doCheck = !(isPyPy || isPy3k);
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-      license = licenses.mit;
-    };
-  };
+  sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   SQLAlchemy-ImageAttach = buildPythonPackage rec {
     pname = "SQLAlchemy-ImageAttach";
