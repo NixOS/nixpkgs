@@ -45,6 +45,7 @@ in
         example = [{
           name = "wmii";
           start = "...";
+          bgSupport = true;
         }];
         description = ''
           Internal option used to add some common line to window manager
@@ -53,6 +54,15 @@ in
         '';
         apply = map (d: d // {
           manage = "window";
+          start = d.start
+            + optionalString (d ? bgSupport && d.bgSupport)
+              ''
+                if [ -e $HOME/.background-image ]; then
+                  ${pkgs.feh}/bin/feh --bg-scale $HOME/.background-image
+                else
+                  ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
+                fi
+              '';
         });
       };
 

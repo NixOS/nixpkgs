@@ -56,6 +56,7 @@ in
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = [{
       name  = "i3";
+      bgSupport = true;
       start = ''
         ${cfg.extraSessionCommands}
 
