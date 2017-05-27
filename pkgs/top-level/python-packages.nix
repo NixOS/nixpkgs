@@ -8198,6 +8198,8 @@ in {
 
   netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
 
+  Nikola = callPackage ../development/python-modules/Nikola { };
+
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "nxt-python";
@@ -27897,23 +27899,21 @@ EOF
   };
 
   ws4py = buildPythonPackage rec {
-    name = "ws4py-${version}";
+    name = "${pname}-${version}";
+    pname = "ws4py";
+    version = "0.4.2";
 
-    version = "git-20130303";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/Lawouach/WebSocket-for-Python.git";
-      rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
-      sha256 = "1g7nmhjjxjf6vx75dyzns8bpid3b5i02kakk2lh1i297b5rw2rjq";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0zr3254ky6r7q15l3dhdczfa8i723055zdkqssjifsgcwvirriks";
     };
 
-    # python zip complains about old timestamps
-    preConfigure = ''
-      find -print0 | xargs -0 touch
-    '';
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ asyncio cherrypy gevent tornado ];
 
-    # Tests depend on other packages
-    doCheck = false;
+    checkPhase = ''
+      pytest test
+    '';
 
     meta = {
       homepage = https://ws4py.readthedocs.org;
