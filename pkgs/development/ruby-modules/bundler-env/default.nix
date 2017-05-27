@@ -24,7 +24,7 @@
 }@args:
 
 let
-  inherit (import ./functions.nix {inherit lib ruby gemConfig groups; }) genStubsScript;
+  inherit (import ../bundled-common/functions.nix {inherit lib ruby gemConfig groups; }) genStubsScript;
 
   drvName =
     if name != null then lib.traceVal name
@@ -43,7 +43,7 @@ let
     if gemset == null then gemdir + "/gemset.nix"
     else gemset;
 
-  basicEnv = (callPackage ./basic.nix {}) (args // { inherit pname name gemdir;
+  basicEnv = (callPackage ../bundled-common {}) (args // { inherit pname name gemdir;
     gemfile = gemfile';
     lockfile  = lockfile';
     gemset = gemset';
