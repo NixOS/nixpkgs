@@ -4,7 +4,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "txaio";
-  version = "2.7.0";
+  version = "2.7.1";
 
   buildInputs = [ pytest mock ];
   propagatedBuildInputs = [ six twisted ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-    sha256 = "0hwd6jx6hb44p40id9r0m42y07rav5jvddf0f1bcm269i3dnwr47";
+    sha256 = "9eea85c27ff8ac28049a29b55383f5c162351f855860e5081ff4632d65a5b4d2";
   };
 
   meta = with stdenv.lib; {

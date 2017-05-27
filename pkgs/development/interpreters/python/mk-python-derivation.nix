@@ -37,6 +37,9 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Skip wrapping of python programs altogether
+, dontWrapPythonPrograms ? false
+
 , meta ? {}
 
 , passthru ? {}
@@ -51,7 +54,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
 
   name = namePrefix + name;
 
@@ -69,7 +72,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  postFixup = ''
+  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
     # Check if we have two packages with the same name in the closure and fail.

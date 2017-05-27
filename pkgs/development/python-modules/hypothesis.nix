@@ -9,25 +9,26 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  name = "hypothesis-${version}";
-  version = "3.7.0";
+  version = "3.11.0";
+  pname = "hypothesis";
+  name = "${pname}-${version}";
 
   # Upstream prefers github tarballs
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
-    repo = "hypothesis";
+    repo = "hypothesis-python";
     rev = "${version}";
-    sha256 = "1zsv1ggf3g9rrigxl3zd1z8qc6fcj8lmszm8ib1ya4ar6r64x0yz";
+    sha256 = "1s911pd3y9hvk0hq2fr6i68dqv1ciagryhgp13wgyfqh8hz8j6zv";
   };
 
-  buildInputs = stdenv.lib.optionals doCheck [ pytest flake8 flaky ];
+  checkInputs = stdenv.lib.optionals doCheck [ pytest flake8 flaky ];
   propagatedBuildInputs = stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   inherit doCheck;
 
   # https://github.com/DRMacIver/hypothesis/issues/300
   checkPhase = ''
-    ${python.interpreter} -m pytest tests/cover
+    py.test tests/cover
   '';
 
   # Unsupport by upstream on certain versions

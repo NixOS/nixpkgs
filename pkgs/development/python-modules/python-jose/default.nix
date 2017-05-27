@@ -3,7 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "python-jose-${version}";
+  pname = "python-jose";
+  name = "${pname}-${version}";
   version = "1.3.2";
   src = fetchFromGitHub {
     owner = "mpdavis";

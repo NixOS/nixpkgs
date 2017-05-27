@@ -5,11 +5,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "treq";
-  version = "16.12.0";
+  version = "17.3.1";
 
   src = fetchurl {
     url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-    sha256 = "1aci3f3rmb5mdf4s6s4k4kghmnyy784cxgi3pz99m5jp274fs25h";
+    sha256 = "313af6dedecfdde2750968dc17653b6147cf2340b3479d70031cf741f5be0cf6";
   };
 
   buildInputs = [

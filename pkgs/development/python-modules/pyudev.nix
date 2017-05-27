@@ -3,7 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "pyudev-${version}";
+  pname = "pyudev";
+  name = "${pname}-${version}";
   version = "0.21.0";
 
   src = fetchurl {

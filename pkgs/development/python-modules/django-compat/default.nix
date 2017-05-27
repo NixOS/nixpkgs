@@ -2,7 +2,8 @@
   django, django_nose, six
 }:
 buildPythonPackage rec {
-  name = "django-compat-${version}";
+  pname = "django-compat";
+  name = "${pname}-${version}";
   version = "1.0.14";
 
   src = fetchurl {

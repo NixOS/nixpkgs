@@ -969,6 +969,8 @@ with pkgs;
 
   fsmon = callPackage ../tools/misc/fsmon { };
 
+  fsql = callPackage ../tools/misc/fsql { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fondu = callPackage ../tools/misc/fondu { };

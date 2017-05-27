@@ -710,7 +710,7 @@ nix-env -if build.nix
 ```
 Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
 
-#### Environment defined in `~/.nixpkgs/config.nix`
+#### Environment defined in `~/.config/nixpkgs/config.nix`
 
 If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
 ```nix

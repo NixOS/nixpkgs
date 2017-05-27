@@ -1,7 +1,9 @@
 { stdenv, buildPythonPackage, isPy3k, fetchurl, xmpppy }:
 
 buildPythonPackage rec {
-  name = "jabberbot-0.16";
+  pname = "jabberbot";
+  version = "0.16";
+  name = "${pname}-${version}";
 
   disabled = isPy3k;
   src = fetchurl {

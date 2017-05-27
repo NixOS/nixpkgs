@@ -3,7 +3,8 @@
 with lib;
 
 buildPythonApplication rec {
-  name = "yolk-${version}";
+  pname = "yolk";
+  name = "${pname}-${version}";
   version = "0.4.3";
 
   src = fetchurl {

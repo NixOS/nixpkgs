@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2016.2";
+  version = "2017.1";
   name = "${pname}-${version}";
 
   buildInputs = [ pytest opencl-headers ocl-icd ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "1b94540cf59ea71a3ef234a8f1d0eb2b4633c112f0f554fb69e52b4a0337d82b";
+    sha256 = "b5085b6412e5a1037b893853e4e47ecb36dd04586b0f8e1809f50f7fe1437dae";
   };
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory

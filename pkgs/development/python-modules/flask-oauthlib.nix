@@ -2,7 +2,8 @@
 , flask, oauthlib, requests_oauthlib, flask_sqlalchemy
 , mock, nose}:
 buildPythonPackage rec {
-  name = "Flask-OAuthlib-${version}";
+  pname = "Flask-OAuthlib";
+  name = "${pname}-${version}";
   version = "0.9.3";
 
   src = fetchFromGitHub {
