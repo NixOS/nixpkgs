@@ -29,6 +29,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/icons
     mv $out/share/simple-scan/icons/* $out/share/icons/
+    (
+    cd ${gnome3.defaultIconTheme}/share/icons/Adwaita
+    for f in `find . | grep 'scanner\.'`
+    do
+      local outFile="`echo "$out/share/icons/hicolor/$f" | sed \
+        -e 's#/devices/#/apps/#g' \
+        -e 's#scanner\.#simple-scan\.#g'`"
+      mkdir -p "`realpath -m "$outFile/.."`"
+      cp "$f" "$outFile"
+    done
+    )
   '';
 
   enableParallelBuilding = true;

@@ -38,9 +38,9 @@ index 6b01f1a..b443d10 100644
 -    set(ENABLE_GTKDOC OFF)
 -endif ()
 -
- set(DERIVED_SOURCES_GOBJECT_DOM_BINDINGS_DIR ${DERIVED_SOURCES_DIR}/webkitdom)
  set(DERIVED_SOURCES_WEBKITGTK_DIR ${DERIVED_SOURCES_DIR}/webkitgtk)
  set(DERIVED_SOURCES_WEBKITGTK_API_DIR ${DERIVED_SOURCES_WEBKITGTK_DIR}/webkit)
+ set(DERIVED_SOURCES_WEBKIT2GTK_DIR ${DERIVED_SOURCES_DIR}/webkit2gtk)
 diff --git a/Tools/gtk/gtkdoc.py b/Tools/gtk/gtkdoc.py
 index 4c8237b..a628ae0 100644
 --- a/Tools/gtk/gtkdoc.py

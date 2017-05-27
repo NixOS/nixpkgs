@@ -1,14 +1,12 @@
 { stdenv, fetchurl, kernel, kmod }:
 
-assert stdenv.lib.versionOlder kernel.version "4.10";
-
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
-  version = "4.0.3";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
-    sha256 = "0f95p2d7yhf57qa6fl8nv1rb4x8vwwgh7qhqcqpag0hz19dc3xff";
+    sha256 = "1dismhiq0asf04rv6pv2sk2m3xcy6m3bpk16gmxqybca3xa28a5b";
   };
 
   hardeningDisable = [ "pic" ];

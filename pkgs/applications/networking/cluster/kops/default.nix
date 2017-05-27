@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = version;
     owner = "kubernetes";
     repo = "kops";
-    sha256 = "0varn38v2vybmahzpgbk73ma368bkdz09wmx2mmqikfppmzszkv3";
+    sha256 = "1z890kjgsdnghg71v4sp7lljvw14dhzr23m2qjmk6wndyssscykr";
   };
 
   buildInputs = [go-bindata];

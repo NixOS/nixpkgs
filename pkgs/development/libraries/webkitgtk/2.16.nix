@@ -12,7 +12,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.14.5";
+  version = "2.16.3";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   postConfigure = optionalString stdenv.isDarwin ''
     substituteInPlace Source/WebKit2/CMakeFiles/WebKit2.dir/link.txt \
-    	  --replace "../../lib/libWTFGTK.a" ""
+        --replace "../../lib/libWTFGTK.a" ""
     substituteInPlace Source/JavaScriptCore/CMakeFiles/JavaScriptCore.dir/link.txt \
-    	  --replace "../../lib/libbmalloc.a" ""
+        --replace "../../lib/libbmalloc.a" ""
     sed -i "s|[\./]*\.\./lib/lib[^\.]*\.a||g" \
         Source/JavaScriptCore/CMakeFiles/LLIntOffsetsExtractor.dir/link.txt \
         Source/JavaScriptCore/shell/CMakeFiles/jsc.dir/link.txt \
@@ -37,18 +37,18 @@ stdenv.mkDerivation rec {
         Source/WebKit2/CMakeFiles/webkit2gtkinjectedbundle.dir/link.txt \
         Source/WebKit2/CMakeFiles/WebProcess.dir/link.txt
     substituteInPlace Source/JavaScriptCore/CMakeFiles/JavaScriptCore.dir/link.txt \
-    	  --replace "../../lib/libWTFGTK.a" "-Wl,-all_load ../../lib/libWTFGTK.a"
+        --replace "../../lib/libWTFGTK.a" "-Wl,-all_load ../../lib/libWTFGTK.a"
   '';
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "17rnjs7yl198bkghzcc2cgh30sb5i03irb6wag3xchwv7b1z3a1w";
+    sha256 = "04mmfxm8284zrlkrhkcn9gq1l4lpm1q6wwb5hyybj081v8qr2ki0";
   };
 
   # see if we can clean this up....
 
   patches = [ ./finding-harfbuzz-icu.patch ]
-  	++ optionals stdenv.isDarwin [
+     ++ optionals stdenv.isDarwin [
     ./PR-152650-2.patch
     ./PR-153138.patch
     ./PR-157554.patch
