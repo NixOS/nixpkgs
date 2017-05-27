@@ -7,7 +7,7 @@ buildPythonApplication rec {
   version = "8.0.2";
 
   src = fetchFromGitHub {
-    sha256 = "0rbjnkzjvz8mgmy44064cz8sib3x5bdjh3ffjhg9r87blnlbmcv1";
+    sha256 = "005irdzdii5cpd0nj1pindfg2mi93qpsfp91yh9qyljsz676fv8c";
     rev = version;
     repo = "wakatime";
     owner = "wakatime";
