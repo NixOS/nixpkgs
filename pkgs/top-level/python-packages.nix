@@ -28731,6 +28731,9 @@ EOF
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ decorator ];
 
+    # 17 failures with 3.6 https://github.com/networkx/networkx/issues/2396#issuecomment-304437299
+    doCheck = !(isPy36);
+
     meta = {
       homepage = "https://networkx.github.io/";
       description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks";
