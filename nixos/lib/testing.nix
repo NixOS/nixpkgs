@@ -74,6 +74,7 @@ rec {
     , makeCoverageReport ? false
     , enableOCR ? false
     , name ? "unnamed"
+    , extraQemuOpts ? [] # Extra options for QEMU passed to all VM's.
     , ...
     } @ t:
 
@@ -95,6 +96,10 @@ rec {
 
       ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
 
+      # Shell escape extra qemu arguments
+      escapedQemuOpts = builtins.concatStringsSep " " (builtins.map (arg: lib.replaceStrings ["'"] ["'\\''"] arg) extraQemuOpts);
+      qemuOpts = lib.optionalString ((builtins.length extraQemuOpts) > 0) "--set QEMU_OPTS '${escapedQemuOpts}'";
+
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
@@ -115,15 +120,17 @@ rec {
               "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
             --set testScript '$testScript' \
-            --set VLANS '${toString vlans}'
+            --set VLANS '${toString vlans}' \
+            ${qemuOpts}
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --set tests 'startAll; joinAll;' \
             --set VLANS '${toString vlans}' \
-            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
-        ''; # "
+            ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"} \
+            ${qemuOpts}
+        '';
 
       passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
         meta = (drv.meta or {}) // t.meta;
