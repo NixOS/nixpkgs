@@ -21,8 +21,9 @@ mkDerivation rec {
   postFixup =
     # Disabuse CMake of the notion that libraries are in $dev
     ''
-      sed -i $dev/lib/cmake/Grantlee5/GrantleeTargets-release.cmake \
-          -e "s|\''${_IMPORT_PREFIX}|$out|"
+      for mod in $dev/lib/cmake/Grantlee5/GrantleeTargets-*.cmake; do
+          sed -i $mod -e "s|\''${_IMPORT_PREFIX}|$out|"
+      done
     '';
 
   setupHook = ./setup-hook.sh;
