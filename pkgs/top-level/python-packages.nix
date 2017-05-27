@@ -10193,6 +10193,9 @@ in {
     };
   };
 
+  # This package likely needs an older version of Django.
+  # Override the package set and set e.g. `django = super.django_1_9`.
+  # See the Nixpkgs manual for examples on how to override the package set.
   django_hijack = buildPythonPackage rec {
     name = "django-hijack-${version}";
     version = "2.0.7";
@@ -10202,12 +10205,7 @@ in {
       sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
     };
 
-    # TODO improve the that multi-override necessity (the fixpoint based python
-    # packages work can be the solution)
-    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
-      django = django_1_9;
-      django_nose = django_nose.override { propagatedBuildInputs = [django_1_9 nose]; };
-    }) ];
+    propagatedBuildInputs = with self; [ django django_compat ];
 
     meta = {
       description = "Allows superusers to hijack (=login as) and work on behalf of another user";
