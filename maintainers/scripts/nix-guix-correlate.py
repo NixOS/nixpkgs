@@ -3,10 +3,13 @@
 '''
 A simple script to correlate the JSON package data from Nix and Guix and
 compare versions for packages that are the same in both.
+
+Written by Armijn Hemel -- same license as whatever nixpkgs uses
 '''
 
 import os, sys, json, httplib, gzip, StringIO
 
+## Guix exports all available packages as JSON
 ## https://www.gnu.org/software/guix/packages/packages.json
 httpcon = httplib.HTTPSConnection('www.gnu.org')
 httpcon.request('GET', '/software/guix/packages/packages.json')
@@ -32,6 +35,8 @@ except:
 	print >>sys.stderr, "Invalid GUIX JSON data"
 	sys.exit(1)
 
+## NixOS exports the available packages in the stable channel
+## (for example: 17.03) as JSON
 ## http://nixos.org/nixpkgs/packages.json.gz
 httpcon = httplib.HTTPConnection('nixos.org')
 httpcon.request('GET', '/nixpkgs/packages.json.gz')
