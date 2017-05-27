@@ -70,7 +70,6 @@ in buildPythonPackage rec {
       --replace OSError ImportError
   '';
 
-  # The flag `-A 'not network'` will disable tests that use internet.
   checkPhase = ''
     runHook preCheck
     py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network
