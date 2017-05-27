@@ -4056,6 +4056,8 @@ with pkgs;
   silver-searcher = callPackage ../tools/text/silver-searcher { };
   ag = self.silver-searcher;
 
+  simpleproxy = callPackage ../tools/networking/simpleproxy { };
+
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
   sipsak = callPackage ../tools/networking/sipsak { };
