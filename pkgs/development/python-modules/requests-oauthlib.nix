@@ -3,7 +3,8 @@
 
 buildPythonPackage rec {
   version = "0.7.0";
-  name = "requests-oauthlib-${version}";
+  pname = "requests-oauthlib";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://github.com/requests/requests-oauthlib/archive/v${version}.tar.gz";

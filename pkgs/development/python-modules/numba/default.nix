@@ -15,7 +15,8 @@
 
 buildPythonPackage rec {
   version = "0.31.0";
-  name = "numba-${version}";
+  pname = "numba";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/numba/${name}.tar.gz";

@@ -1,7 +1,8 @@
 { buildPythonPackage, fetchurl, stdenv, libmemcached, zlib }:
 buildPythonPackage rec {
-  name = "pylibmc-${version}";
   version = "1.5.1";
+  pname = "pylibmc";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/p/pylibmc/${name}.tar.gz";

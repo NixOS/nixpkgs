@@ -3,8 +3,9 @@
   coverage, oslosphinx, oslotest, testscenarios, six, ddt 
 }:
 buildPythonPackage rec {
-  name = "os-testr-${version}";
   version = "0.8.1";
+  pname = "os-testr";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/o/os-testr/${name}.tar.gz";

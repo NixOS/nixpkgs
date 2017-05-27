@@ -2,7 +2,8 @@
 , numpy, zlib, netcdf, hdf5, curl, libjpeg
 }:
 buildPythonPackage rec {
-  name = "netCDF4-${version}";
+  pname = "netCDF4";
+  name = "${pname}-${version}";
   version = "1.2.7";
 
   disabled = isPyPy;

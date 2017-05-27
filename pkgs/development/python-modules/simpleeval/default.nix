@@ -1,7 +1,8 @@
 { lib, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "simpleeval-${version}";
+  pname = "simpleeval";
+  name = "${pname}-${version}";
   version = "0.9.5";
   src = fetchurl {
     url = "mirror://pypi/s/simpleeval/${name}.tar.gz";

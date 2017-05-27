@@ -1,7 +1,8 @@
 { lib, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "python-sql-${version}";
+  pname = "python-sql";
+  name = "${pname}-${version}";
   version = "0.8";
   src = fetchurl {
     url = "mirror://pypi/p/python-sql/${name}.tar.gz";

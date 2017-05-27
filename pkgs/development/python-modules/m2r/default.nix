@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl,
   mistune, docutils } :
 buildPythonPackage rec {
-  name = "m2r-${version}";
+  pname = "m2r";
+  name = "${pname}-${version}";
   version = "0.1.5";
 
   src = fetchurl {

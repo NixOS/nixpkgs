@@ -2,7 +2,8 @@
 , flask, elasticsearch }:
 
 buildPythonPackage rec {
-  name = "Flask-Elastic-${version}";
+  pname = "Flask-Elastic";
+  name = "${pname}-${version}";
   version = "0.2";
 
   src = fetchurl {

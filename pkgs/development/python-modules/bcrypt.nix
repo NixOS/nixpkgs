@@ -4,8 +4,9 @@
 with stdenv.lib;
 
 buildPythonPackage rec {
-  name = "bcrypt-${version}";
   version = "3.1.2";
+  pname = "bcrypt";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/b/bcrypt/${name}.tar.gz";

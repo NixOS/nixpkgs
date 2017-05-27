@@ -3,8 +3,9 @@
 , git, glibcLocales }:
 
 buildPythonPackage rec {
-  name = "dulwich-${version}";
   version = "0.14.1";
+  pname = "dulwich";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/dulwich/${name}.tar.gz";

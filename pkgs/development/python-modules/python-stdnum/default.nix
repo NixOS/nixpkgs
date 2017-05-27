@@ -1,8 +1,9 @@
 { lib, fetchurl, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
-  name = "python-stdnum-${version}";
   version = "1.5";
+  pname = "python-stdnum";
+  name = "${pname}-${version}";
   # Failing tests and dependency issue on Py3k
   disabled = isPy3k;
   src = fetchurl {

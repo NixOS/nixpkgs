@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl, django }:
 buildPythonPackage rec {
-  name = "djangorestframework-${version}";
   version = "3.5.4";
+  pname = "djangorestframework";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/djangorestframework/${name}.tar.gz";

@@ -2,8 +2,9 @@
   asgiref, asgi_ipc, msgpack, six, redis, cryptography
 }:
 buildPythonPackage rec {
-  name = "asgi_redis-${version}";
   version = "1.3.0";
+  pname = "asgi_redis";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";

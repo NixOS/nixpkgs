@@ -5,7 +5,8 @@
 , blinker, pillow, beautifulsoup4, markupsafe }:
 
 buildPythonPackage rec {
-  name = "pelican-${version}";
+  pname = "pelican";
+  name = "${pname}-${version}";
   version = "3.7.1";
   disabled = isPy26;
 

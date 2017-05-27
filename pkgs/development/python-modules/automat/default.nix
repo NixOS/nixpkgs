@@ -1,8 +1,9 @@
 { stdenv, buildPythonPackage, fetchurl,
   m2r, setuptools_scm, six, attrs }:
 buildPythonPackage rec {
-  name = "Automat-${version}";
   version = "0.5.0";
+  pname = "Automat";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/A/Automat/${name}.tar.gz";

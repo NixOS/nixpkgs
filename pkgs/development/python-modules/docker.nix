@@ -3,8 +3,9 @@
 , ipaddress, backports_ssl_match_hostname, docker_pycreds
 }:
 buildPythonPackage rec {
-  name = "docker-${version}";
   version = "2.0.2";
+  pname = "docker";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/docker/${name}.tar.gz";

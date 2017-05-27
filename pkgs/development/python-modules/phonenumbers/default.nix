@@ -1,7 +1,9 @@
 { stdenv, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "phonenumbers-8.4.0";
+  pname = "phonenumbers";
+  version = "8.4.0";
+  name = "${pname}-${version}";
 
   meta = {
     description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers";

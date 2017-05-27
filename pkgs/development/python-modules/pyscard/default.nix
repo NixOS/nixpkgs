@@ -1,8 +1,9 @@
 { stdenv, fetchurl, buildPythonPackage, swig, pcsclite }:
 
 buildPythonPackage rec {
-  name = "pyscard-${version}";
   version = "1.9.4";
+  pname = "pyscard";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyscard/${name}.tar.gz";

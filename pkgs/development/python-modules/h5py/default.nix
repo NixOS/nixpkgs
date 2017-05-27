@@ -11,8 +11,9 @@ let
   mpiSupport = hdf5.mpiSupport;
 
 in buildPythonPackage rec {
-  name = "h5py-${version}";
   version = "2.6.0";
+  pname = "h5py";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/h/h5py/${name}.tar.gz";

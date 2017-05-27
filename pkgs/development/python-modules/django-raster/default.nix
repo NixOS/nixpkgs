@@ -3,8 +3,9 @@
   pyparsing, django, celery
 }:
 buildPythonPackage rec {
-  name = "django-raster-${version}";
   version = "0.3.1";
+  pname = "django-raster";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/django-raster/${name}.tar.gz";

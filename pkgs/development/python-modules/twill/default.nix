@@ -1,6 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl, isPy3k, pythonPackages }:
 buildPythonPackage rec {
-  name = "twill-0.9.1";
+  pname = "twill";
+  version = "0.9.1";
+  name = "${pname}-${version}";
 
   disabled = isPy3k;
 

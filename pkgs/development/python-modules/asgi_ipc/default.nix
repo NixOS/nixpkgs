@@ -2,8 +2,9 @@
   asgiref, msgpack, posix_ipc
 }:
 buildPythonPackage rec {
-  name = "asgi_ipc-${version}";
   version = "1.3.1";
+  pname = "asgi_ipc";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";

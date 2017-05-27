@@ -2,7 +2,9 @@
 , openldap, cyrus_sasl, openssl }:
 
 buildPythonPackage rec {
-  name = "ldap-2.4.22";
+  pname = "python-ldap";
+  version = "2.4.22";
+  name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchurl {

@@ -2,8 +2,9 @@
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-    name = "Scrapy-${version}";
     version = "1.3.1";
+    pname = "Scrapy";
+    name = "${pname}-${version}";
 
     buildInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
     propagatedBuildInputs = [

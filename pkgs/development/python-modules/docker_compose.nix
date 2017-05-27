@@ -7,7 +7,8 @@
 }:
 buildPythonApplication rec {
   version = "1.10.0";
-  name = "docker-compose-${version}";
+  pname = "docker-compose";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/docker-compose/${name}.tar.gz";

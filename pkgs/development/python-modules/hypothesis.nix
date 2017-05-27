@@ -9,8 +9,9 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  name = "hypothesis-${version}";
   version = "3.7.0";
+  pname = "hypothesis";
+  name = "${pname}-${version}";
 
   # Upstream prefers github tarballs
   src = fetchFromGitHub {

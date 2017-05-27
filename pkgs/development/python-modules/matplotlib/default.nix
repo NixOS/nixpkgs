@@ -20,8 +20,9 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
-  name = "matplotlib-${version}";
   version = "2.0.0";
+  pname = "matplotlib";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/m/matplotlib/${name}.tar.gz";

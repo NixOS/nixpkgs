@@ -3,7 +3,8 @@
 
 buildPythonPackage rec {
   version = "3.3.0";
-  name = "tables-${version}";
+  pname = "tables";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/t/tables/${name}.tar.gz";

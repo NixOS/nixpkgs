@@ -2,7 +2,9 @@
 , pytest, mock, pytestcov, coverage }:
 
 buildPythonPackage rec {
-  name = "gunicorn-19.3.0";
+  pname = "gunicorn";
+  version = "19.3.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/g/gunicorn/${name}.tar.gz";

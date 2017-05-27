@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl, six }:
 buildPythonPackage rec {
-  name = "asgiref-${version}";
   version = "1.1.1";
+  pname = "asgiref";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgiref/${name}.tar.gz";
