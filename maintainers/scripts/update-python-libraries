@@ -64,7 +64,7 @@ def _fetch_page(url):
     if r.status_code == requests.codes.ok:
         return r.json()
     else:
-        logging.warning("Request for {} failed".format(url))
+        raise ValueError("Request for {} failed".format(url))
 
 def _get_latest_version(package, extension):
 
@@ -72,7 +72,7 @@ def _get_latest_version(package, extension):
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
 
-    data = extract_relevant_nix_data(json)[1]
+    data = extract_relevant_nix_data(json, extension)[1]
 
     version = data['latest_version']
     if version in data['versions']:
@@ -83,7 +83,7 @@ def _get_latest_version(package, extension):
     return version, sha256
 
 
-def extract_relevant_nix_data(json):
+def extract_relevant_nix_data(json, extension):
     """Extract relevant Nix data from the JSON of a package obtained from PyPI.
 
     :param json: JSON obtained from PyPI
@@ -124,11 +124,11 @@ def extract_relevant_nix_data(json):
         releases = toolz.itemfilter(lambda x: x[1] is not None, releases)
         return releases
 
-    # Collect data
+    # Collect data)
     name = str(json['info']['name'])
     latest_version = str(_extract_latest_version(json))
     #src = _get_src_and_hash(json, latest_version, EXTENSIONS)
-    sources = _get_sources(json, EXTENSIONS)
+    sources = _get_sources(json, [extension])
 
     # Collect meta data
     license = str(_extract_license(json))
@@ -188,7 +188,7 @@ def _update_package(path):
     except ValueError as e:
         # No format mentioned, then we assume we have setuptools
         # and use a .tar.gz
-        logging.warning("Path {}: {}".format(path, str(e)))
+        logging.info("Path {}: {}".format(path, str(e)))
         extension = ".tar.gz"
     else:
         if format == 'wheel':
@@ -197,33 +197,38 @@ def _update_package(path):
             try:
                 url = _get_value('url', text)
                 extension = os.path.splitext(url)[1]
+                if 'pypi' not in url:
+                    logging.warning("Path {}: uses non-PyPI url, not updating.".format(path))
+                    return False
             except ValueError as e:
-                logging.warning("Path {}: {}".format(path, str(e)))
+                logging.info("Path {}: {}".format(path, str(e)))
                 extension = ".tar.gz"
 
-    new_version, new_sha256 = _get_latest_version(pname, extension)
-    if not new_sha256:
-        logging.warning("Path has no valid file available: {}".format(path))
-        return False
-
-    if new_version != version:
-
-        try:
-            text = _replace_value('version', new_version, text)
-        except ValueError as e:
-            logging.warning("Path {}: {}".format(path, str(e)))
-        try:
-            text = _replace_value('sha256', new_sha256, text)
-        except ValueError as e:
-            logging.warning("Path {}: {}".format(path, str(e)))
-
-        with open(path, 'w') as f:
-            f.write(text)
-
-        logging.info("Updated {} from {} to {}".format(pname, version, new_version))
-
+    try:
+        new_version, new_sha256 = _get_latest_version(pname, extension)
+    except ValueError as e:
+        logging.warning("Path {}: {}".format(path, str(e)))
     else:
-        logging.info("No update available for {} at {}".format(pname, version))
+        if not new_sha256:
+            logging.warning("Path has no valid file available: {}".format(path))
+            return False
+        if new_version != version:
+            try:
+                text = _replace_value('version', new_version, text)
+            except ValueError as e:
+                logging.warning("Path {}: {}".format(path, str(e)))
+            try:
+                text = _replace_value('sha256', new_sha256, text)
+            except ValueError as e:
+                logging.warning("Path {}: {}".format(path, str(e)))
+
+            with open(path, 'w') as f:
+                f.write(text)
+
+            logging.info("Updated {} from {} to {}".format(pname, version, new_version))
+
+        else:
+            logging.info("No update available for {} at {}".format(pname, version))
 
     return True
 
