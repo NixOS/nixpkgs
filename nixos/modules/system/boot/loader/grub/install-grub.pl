@@ -318,7 +318,6 @@ $conf .= "$extraConfig\n";
 $conf .= "\n";
 
 my %copied;
-mkpath("$bootPath/kernels", 0, 0755) if $copyKernels;
 
 sub copyToKernelsDir {
     my ($path) = @_;
@@ -326,15 +325,7 @@ sub copyToKernelsDir {
     $path =~ /\/nix\/store\/(.*)/ or die;
     my $name = $1; $name =~ s/\//-/g;
     my $dst = "$bootPath/kernels/$name";
-    # Don't copy the file if $dst already exists.  This means that we
-    # have to create $dst atomically to prevent partially copied
-    # kernels or initrd if this script is ever interrupted.
-    if (! -e $dst) {
-        my $tmp = "$dst.tmp";
-        copy $path, $tmp or die "cannot copy $path to $tmp\n";
-        rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
-    }
-    $copied{$dst} = 1;
+    $copied{$dst} = $path;
     return $grubBoot->path . "/kernels/$name";
 }
 
@@ -433,6 +424,32 @@ if ($grubVersion == 2) {
     }
 }
 
+
+# Remove obsolete files from $bootPath/kernels.
+foreach my $fn (glob "$bootPath/kernels/*") {
+    if (exists $copied{$fn}) {
+        # Mark the file as already copied.
+        delete $copied{$fn};
+    } else {
+        print STDERR "removing obsolete file $fn\n";
+        unlink $fn;
+    }
+}
+
+
+if ($copyKernels) {
+    mkpath("$bootPath/kernels", 0, 0755);
+
+    while (my ($dst, $path) = each(%copied)) {
+        # We have to create $dst atomically to prevent partially copied kernels
+        # or initrd if this script is ever interrupted.
+        my $tmp = "$dst.tmp";
+        copy $path, $tmp or die "cannot copy $path to $tmp\n";
+        rename $tmp, $dst or die "cannot rename $tmp to $dst\n";
+    }
+}
+
+
 # Run extraPrepareConfig in sh
 if ($extraPrepareConfig ne "") {
   system((get("shell"), "-c", $extraPrepareConfig));
@@ -481,14 +498,6 @@ if (get("useOSProber") eq "true") {
 
 # Atomically switch to the new config
 rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile\n";
-
-
-# Remove obsolete files from $bootPath/kernels.
-foreach my $fn (glob "$bootPath/kernels/*") {
-    next if defined $copied{$fn};
-    print STDERR "removing obsolete file $fn\n";
-    unlink $fn;
-}
 
 
 #
