@@ -13,14 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "1cqm1i7d209brkrpzaqqf2x951ra3l67dw8x9yg10vz7rpr9441a";
   };
 
-  configureFlags = stdenv.lib.optional sslSupport "--with-ssl";
+  configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
   nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig;
   buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
-
-  crossAttrs = {
-    configureFlags = configureFlags ++ [ "--enable-widec" ];
-  };
 
   meta = with stdenv.lib; {
     homepage = http://lynx.isc.org/;
