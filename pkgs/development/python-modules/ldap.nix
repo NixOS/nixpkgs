@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "2.4.22";
+  version = "2.4.38";
   name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchurl {
     url = "mirror://pypi/p/python-ldap/python-${name}.tar.gz";
-    sha256 = "1dshpq84kl4xpa0hmnjrh6q5h5bybn09r83sa3z3ybr9jlm8gxcy";
+    sha256 = "88bab69e519dd8bd83becbe36bd141c174b0fe309e84936cf1bae685b31be779";
   };
 
   NIX_CFLAGS_COMPILE = "-I${cyrus_sasl.dev}/include/sasl";
