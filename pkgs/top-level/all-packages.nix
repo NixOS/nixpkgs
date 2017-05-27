@@ -10775,6 +10775,10 @@ with pkgs;
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
+  dkimproxy = callPackage ../servers/mail/dkimproxy {
+    inherit (perlPackages) Error MailDKIM MIMEtools NetServer;
+  };
+
   dnschain = callPackage ../servers/dnschain { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
