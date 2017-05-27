@@ -1,10 +1,10 @@
-{ stdenv, buildPerlPackage, fetchurl, Error, MailDKIM, MIMEtools, NetServer}:
+{ stdenv, perl, fetchurl, Error, MailDKIM, MIMEtools, NetServer}:
 
 let
   pkg = "dkimproxy";
   version = "1.4.1";
 in
-buildPerlPackage rec {
+stdenv.mkDerivation rec {
   name = "${pkg}-${version}";
 
   src = fetchurl {
@@ -12,25 +12,14 @@ buildPerlPackage rec {
     sha256 = "1gc5c7lg2qrlck7b0lvjfqr824ch6jkrzkpsn0gjvlzg7hfmld75";
   };
 
+  buildInputs = [ perl ];
   propagatedBuildInputs = [ Error MailDKIM MIMEtools NetServer ];
 
-  # Disable all things adapted to library perl packages
-  doCheck = false;
-  outputs = [ "out" ];
-
-  # Use "normal" build setup
-  configurePhase = ''
-    ./configure --prefix=$out
-  '';
-  installPhase = ''
-    make install
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "SMTP-proxy that signs and/or verifies emails";
     homepage = http://dkimproxy.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }
