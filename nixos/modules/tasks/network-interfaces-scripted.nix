@@ -201,9 +201,9 @@ let
           { description = "Virtual Network Interface ${i.name}";
             bindsTo = [ "dev-net-tun.device" ];
             after = [ "dev-net-tun.device" "network-pre.target" ];
-            wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
+            wantedBy = [ "network-setup.service" "network-addresses-${i.name}.service" "network-link-${i.name}.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
-            before = [ "network-setup.service" (subsystemDevice i.name) ];
+            before = [ "network-setup.service" "network-addresses-${i.name}.service" "network-link-${i.name}.service" (subsystemDevice i.name) ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
@@ -224,12 +224,12 @@ let
             deps = concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bridge Interface ${n}";
-            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             bindsTo = deps ++ optional v.rstp "mstpd.service";
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
             after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -250,6 +250,15 @@ let
               echo "${flip concatMapStrings v.interfaces (i: ''
                 ${i}
               '')}" > /run/${n}.interfaces
+
+              # Enslave containers.*.hostBridge
+              for f in /etc/containers/*.conf; do
+                if grep '^HOST_BRIDGE=${n}''$' $f >/dev/null 2>&1 ; then
+                  containername=`basename --suffix=.conf $f`
+                  ip link set "vb-$containername" master "${n}"
+                  ip link set "vb-$containername" up
+                fi
+              done
 
               # Enable stp on the interface
               ${optionalString v.rstp ''
@@ -291,11 +300,11 @@ let
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
-            wantedBy = [ "network-setup.service" "vswitchd.service" ] ++ deps;
+            wantedBy = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" "vswitchd.service" ] ++ deps;
             bindsTo =  [ "vswitchd.service" (subsystemDevice n) ] ++ deps;
             partOf = [ "network-setup.service" "vswitchd.service" ];
             after = [ "network-pre.target" "vswitchd.service" ] ++ deps;
-            before = [ "network-setup.service" ];
+            before = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute config.virtualisation.vswitch.package ];
@@ -323,12 +332,12 @@ let
             deps = concatLists (map deviceDependency v.interfaces);
           in
           { description = "Bond Interface ${n}";
-            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -362,11 +371,11 @@ let
             deps = deviceDependency v.interface;
           in
           { description = "Vlan Interface ${n}";
-            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -387,11 +396,11 @@ let
             deps = deviceDependency v.dev;
           in
           { description = "6-to-4 Tunnel Interface ${n}";
-            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -415,11 +424,11 @@ let
             deps = deviceDependency v.interface;
           in
           { description = "Vlan Interface ${n}";
-            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            wantedBy = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" "network-addresses-${n}.service" "network-link-${n}.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
