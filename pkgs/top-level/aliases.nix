@@ -148,6 +148,12 @@ mapAliases (rec {
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
 
+  # added 2017-05-27
+  wineMinimal = winePackages.minimal;
+  wineFull = winePackages.full;
+  wineStable = winePackages.stable;
+  wineUnstable = winePackages.unstable;
+
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
