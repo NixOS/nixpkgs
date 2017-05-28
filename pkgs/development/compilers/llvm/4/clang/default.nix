@@ -13,10 +13,16 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    buildInputs = [ cmake libedit libxml2 llvm python ];
+    nativeBuildInputs = [ cmake python python.pkgs.sphinx ];
+    buildInputs = [ libedit libxml2 llvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
+      "-DCLANG_INCLUDE_DOCS=ON"
+      "-DLLVM_ENABLE_SPHINX=ON"
+      "-DSPHINX_OUTPUT_MAN=ON"
+      "-DSPHINX_OUTPUT_HTML=OFF"
+      "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
     ] ++
     # Maybe with compiler-rt this won't be needed?
     (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
@@ -24,12 +30,19 @@ let
 
     patches = [ ./purity.patch ];
 
+    postBuild = ''
+      cmake --build . --target docs-clang-man
+    '';
+
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
+
+      # Patch for standalone doc building
+      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '';
 
-    outputs = [ "out" "python" ];
+    outputs = [ "out" "man" "python" ];
 
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
@@ -46,6 +59,12 @@ let
       mv $out/share/clang/*.py $python/share/clang
 
       rm $out/bin/c-index-test
+
+      # Manually install clang manpage
+      cp docs/man/*.1 $out/share/man/man1/
+
+      # Move it and other man pages to 'man' output
+      moveToOutput "share/man" "$man"
     '';
 
     enableParallelBuilding = true;

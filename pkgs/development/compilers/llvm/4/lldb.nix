@@ -29,7 +29,8 @@ stdenv.mkDerivation {
       cmake/modules/LLDBStandalone.cmake
   '';
 
-  buildInputs = [ cmake python which swig ncurses zlib libedit libxml2 llvm ]
+  nativeBuildInputs = [ cmake python which swig ];
+  buildInputs = [ ncurses zlib libedit libxml2 llvm ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc ];
 
   CXXFLAGS = "-fno-rtti";
