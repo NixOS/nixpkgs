@@ -1,7 +1,7 @@
-From 91971455ee46b1059de75260ef0d1a45170d8b65 Mon Sep 17 00:00:00 2001
+From 8d0796bfa8ab8599994b5d029182428d62398712 Mon Sep 17 00:00:00 2001
 From: Jeremy Huddleston <jeremyhu@apple.com>
 Date: Fri, 13 Jan 2012 12:00:57 -0800
-Subject: [PATCH 2/6] sdksyms.sh: Use CPPFLAGS, not CFLAGS
+Subject: [PATCH 5000/5005] sdksyms.sh: Use CPPFLAGS, not CFLAGS
 
 CFLAGS can include flags which are not useful to the preprocessor
 or can even cause it to fail.  This fixes a build issue on darwin
@@ -14,7 +14,7 @@ Reviewed-by: Keith Packard <keithp@keithp.com>
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/hw/xfree86/Makefile.am b/hw/xfree86/Makefile.am
-index 27f2cc6..d898c43 100644
+index 85bd0be..6de7c10 100644
 --- a/hw/xfree86/Makefile.am
 +++ b/hw/xfree86/Makefile.am
 @@ -48,8 +48,7 @@ DIST_SUBDIRS = common ddc i2c x86emu int10 fbdevhw os-support \
@@ -22,12 +22,12 @@ index 27f2cc6..d898c43 100644
  nodist_Xorg_SOURCES = sdksyms.c
  
 -AM_CFLAGS = $(DIX_CFLAGS) @XORG_CFLAGS@
--AM_CPPFLAGS = $(XORG_INCS) -I$(srcdir)/parser -I$(top_srcdir)/miext/cw \
-+AM_CPPFLAGS = $(DIX_CFLAGS) @XORG_CFLAGS@ $(XORG_INCS) -I$(srcdir)/parser -I$(top_srcdir)/miext/cw \
+-AM_CPPFLAGS = $(XORG_INCS) -I$(srcdir)/parser \
++AM_CPPFLAGS = $(DIX_CFLAGS) @XORG_CFLAGS@ $(XORG_INCS) -I$(srcdir)/parser \
  	-I$(srcdir)/ddc -I$(srcdir)/i2c -I$(srcdir)/modes -I$(srcdir)/ramdac \
  	-I$(srcdir)/dri -I$(srcdir)/dri2 -I$(top_srcdir)/dri3
  
-@@ -135,7 +134,7 @@ CLEANFILES = sdksyms.c sdksyms.dep Xorg.sh
+@@ -137,7 +136,7 @@ CLEANFILES = sdksyms.c sdksyms.dep Xorg.sh
  EXTRA_DIST += sdksyms.sh
  
  sdksyms.dep sdksyms.c: sdksyms.sh
@@ -37,5 +37,4 @@ index 27f2cc6..d898c43 100644
  SDKSYMS_DEP = sdksyms.dep
  -include $(SDKSYMS_DEP)
 -- 
-2.3.2 (Apple Git-55)
-
+2.8.1
