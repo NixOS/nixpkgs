@@ -1,4 +1,4 @@
-{ stdenv, perl, fetchurl, Error, MailDKIM, MIMEtools, NetServer}:
+{ stdenv, perl, fetchurl, Error, MailDKIM, MIMEtools, NetServer }:
 
 let
   pkg = "dkimproxy";
