@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   # https://github.com/DRMacIver/hypothesis/issues/300
   checkPhase = ''
+    rm tox.ini # This file changes how py.test runs and breaks it
     py.test tests/cover
   '';
 
