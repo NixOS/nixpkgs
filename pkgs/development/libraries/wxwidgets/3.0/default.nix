@@ -37,13 +37,12 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
-  patches = [
+  patches =
     # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
-    (fetchpatch {
+    optional (!withGtk2) (fetchpatch {
       url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
       sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
-    })
-  ];
+    });
 
   configureFlags =
     [ "--disable-precomp-headers" "--enable-mediactrl"
