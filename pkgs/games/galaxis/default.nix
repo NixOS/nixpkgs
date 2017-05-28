@@ -11,8 +11,7 @@ stdenv.mkDerivation rec{
     sha256 = "1dsypk5brfbc399pg4fk9myyh5yyln0ljl1aiqkypws8h4nsdphl";
   };
 
-  buildInputs =
-  [ ncurses xmlto ];
+  buildInputs = [ ncurses xmlto ];
 
   patchPhase = ''
     sed -i\
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec{
 
   dontConfigure = true;
 
-  makeFlags = [ "CC=cc" "DESTDIR=$(out)" ];
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = {
     description = "Rescue lifeboats lost in interstellar space";
