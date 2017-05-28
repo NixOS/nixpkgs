@@ -1,11 +1,9 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ fetchgit, stdenv }:
 
-buildGoPackage rec {
+stdenv.mkDerivation rec {
   name = "kati-unstable-${version}";
   version = "2017-05-23";
   rev = "2dde61e46ab789f18956ff3b7c257dd8eb97993f";
-
-  goPackagePath = "github.com/google/kati";
 
   src = fetchgit {
     inherit rev;
@@ -13,11 +11,11 @@ buildGoPackage rec {
     sha256 = "1das1fvycra546lmh72cr5qpgblhbzqqy7gfywiijjgx160l75vq";
   };
 
-  patchPhase = ''
-    rm -r testcase
-  '';
+  patches = [ ./version.patch ];
 
-  goDeps = ./deps.nix;
+  installPhase = ''
+    install -D ckati $out/bin/ckati
+  '';
 
   meta = {
     description = "An experimental GNU make clone";
