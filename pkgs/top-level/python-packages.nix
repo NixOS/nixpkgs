@@ -10195,26 +10195,10 @@ in {
     };
   };
 
-  # This package likely needs an older version of Django.
+  # This package may need an older version of Django.
   # Override the package set and set e.g. `django = super.django_1_9`.
   # See the Nixpkgs manual for examples on how to override the package set.
-  django_hijack = buildPythonPackage rec {
-    name = "django-hijack-${version}";
-    version = "2.0.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-hijack/${name}.tar.gz";
-      sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
-    };
-
-    propagatedBuildInputs = with self; [ django django_compat ];
-
-    meta = {
-      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-      homepage = https://github.com/arteria/django-hijack;
-      license = licenses.mit;
-    };
-  };
+  django_hijack = callPackage ../development/python-modules/django-hijack { };
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
