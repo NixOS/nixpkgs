@@ -14888,6 +14888,24 @@ in {
     '';
   };
 
+  mypy = pkgs.python35Packages.buildPythonPackage rec {
+    name = "mypy-lang-0.4.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mypy-lang/${name}.tar.gz";
+      sha256 = "a17347f3688764db0f5ac090760260beac8ffb6a4be2db949fd3743c15467a08";
+    };
+
+    # tests are not shipped in the tarball
+    doCheck = false;
+
+    meta = {
+      homepage = http://www.mypy-lang.org/;
+      description = "Optional static typing for Python";
+      license = licenses.mit;
+    };
+  };
+
   MySQL_python = buildPythonPackage rec {
     name = "MySQL-python-1.2.5";
 
