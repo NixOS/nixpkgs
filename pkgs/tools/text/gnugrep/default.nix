@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ perl ];
   outputs = [ "out" "info" ]; # the man pages are rather small
 
-  buildInputs = [ pcre libiconv ];
+  nativeBuildInputs = [ pcre libiconv ];
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
