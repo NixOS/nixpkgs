@@ -1,0 +1,41 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    builder (3.2.3)
+    excon (0.55.0)
+    fog-core (1.43.0)
+      builder
+      excon (~> 0.49)
+      formatador (~> 0.2)
+    fog-json (1.0.2)
+      fog-core (~> 1.0)
+      multi_json (~> 1.10)
+    fog-libvirt (0.4.0)
+      fog-core (~> 1.27, >= 1.27.4)
+      fog-json
+      fog-xml (~> 0.1.1)
+      json
+      ruby-libvirt (>= 0.7.0)
+    fog-xml (0.1.3)
+      fog-core
+      nokogiri (>= 1.5.11, < 2.0.0)
+    formatador (0.2.5)
+    json (2.1.0)
+    mini_portile2 (2.1.0)
+    multi_json (1.12.1)
+    nokogiri (1.6.8.1)
+      mini_portile2 (~> 2.1.0)
+    ruby-libvirt (0.7.0)
+    vagrant-libvirt (0.0.40)
+      fog-core (~> 1.43.0)
+      fog-libvirt (>= 0.3.0)
+      nokogiri (~> 1.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  vagrant-libvirt
+
+BUNDLED WITH
+   1.15.0
