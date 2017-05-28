@@ -1057,6 +1057,10 @@ with pkgs;
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  patdiff = callPackage ../tools/misc/patdiff {
+    ocamlPackages = ocamlPackages_4_03;
+  };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   socklog = callPackage ../tools/system/socklog { };
