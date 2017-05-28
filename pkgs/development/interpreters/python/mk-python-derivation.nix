@@ -6,12 +6,12 @@
 , setuptools
 , unzip
 , ensureNewerSourcesHook
+# Whether the derivation provides a Python module or not.
+, pythonModule
+, namePrefix
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
-
-# by default prefix `name` e.g. "python3.3-${name}"
-, namePrefix ? python.libPrefix + "-"
 
 # Dependencies for building the package
 , buildInputs ? []
@@ -54,7 +54,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs" "pythonModule"] // {
 
   name = namePrefix + name;
 
@@ -83,6 +83,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"
 
   passthru = {
     inherit python; # The python interpreter
+    inherit pythonModule;
   } // passthru;
 
   meta = with lib.maintainers; {
