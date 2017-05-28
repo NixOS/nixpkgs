@@ -254,10 +254,13 @@ bound to the variable name <varname>e2fsprogs</varname> in
   dash) — e.g., <literal>"hello-0.3.1rc2"</literal>.</para></listitem>
 
   <listitem><para>If a package is not a release but a commit from a repository, then
-  the version part of the name <emphasis>must</emphasis> be the date of that 
+  the version part of the name should be the date of that 
   (fetched) commit. The date must be in <literal>"YYYY-MM-DD"</literal> format.
-  Also append <literal>"unstable"</literal> to the name - e.g.,
-  <literal>"pkgname-unstable-2014-09-23"</literal>.</para></listitem>
+  Also append <literal>"unstable"</literal> to the name — e.g.,
+  <literal>"pkgname-unstable-2014-09-23"</literal>.
+  If the package is a pre-release snapshot, the version can reflect this instead
+  but should still contain the date — e.g.,
+  <literal>"pkgname-1.0pre-2014-09-23"</literal>.</para></listitem>
 
   <listitem><para>Dashes in the package name should be preserved
   in new variable names, rather than converted to underscores
