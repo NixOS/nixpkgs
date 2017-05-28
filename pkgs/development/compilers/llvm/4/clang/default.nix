@@ -1,4 +1,6 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python }:
+{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python
+, fixDarwinDylibNames
+}:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -14,7 +16,8 @@ let
     '';
 
     nativeBuildInputs = [ cmake python python.pkgs.sphinx ];
-    buildInputs = [ libedit libxml2 llvm ];
+    buildInputs = [ libedit libxml2 llvm ]
+      ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
