@@ -91,7 +91,7 @@ let
         '';
       };
 
-      randomEncryption.enable = mkOption {
+      randomEncryption = mkOption {
         default = false;
         example = {
           enable = true;
@@ -111,26 +111,6 @@ let
           WARNING #2: Do not use /dev/disk/by-uuid/… or /dev/disk/by-label/… as your swap device
           when using randomEncryption as the UUIDs and labels will get erased on every boot when
           the partition is encrypted. Best to use /dev/disk/by-partuuid/…
-        '';
-      };
-
-      randomEncryption.cipher = mkOption {
-        default = "aes-xts-plain64";
-        example = "serpent-xts-plain64";
-        type = types.str;
-        description = ''
-          Use specified cipher for randomEncryption.
-
-          Hint: Run "cryptsetup benchmark" to see which one is fastest on your machine.
-        '';
-      };
-
-      randomEncryption.source = mkOption {
-        default = "/dev/urandom";
-        example = "/dev/random";
-        type = types.str;
-        description = ''
-          Define the source of randomness to obtain a random key for encryption.
         '';
       };
 
