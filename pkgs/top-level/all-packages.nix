@@ -1386,6 +1386,8 @@ with pkgs;
 
   c14 = callPackage ../applications/networking/c14 { };
 
+  cfssl = callPackage ../tools/security/cfssl { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   clamav = callPackage ../tools/security/clamav { };
@@ -4057,6 +4059,8 @@ with pkgs;
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
   ag = self.silver-searcher;
+
+  simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
@@ -10873,6 +10877,10 @@ with pkgs;
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
 
+  dkimproxy = callPackage ../servers/mail/dkimproxy {
+    inherit (perlPackages) Error MailDKIM MIMEtools NetServer;
+  };
+
   dnschain = callPackage ../servers/dnschain { };
 
   dovecot = callPackage ../servers/mail/dovecot { };
@@ -16933,6 +16941,8 @@ with pkgs;
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
+  galaxis = callPackage ../games/galaxis { };
+
   gambatte = callPackage ../games/gambatte { };
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
@@ -18105,6 +18115,8 @@ with pkgs;
     # For enableXM.
     motif = null; # motif or lesstif
   };
+
+  cernlib = callPackage ../development/libraries/physics/cernlib { };
 
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 

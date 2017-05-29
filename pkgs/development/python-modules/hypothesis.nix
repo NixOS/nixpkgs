@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python
 , pythonOlder, pythonAtLeast, enum34
-, doCheck ? true, pytest, flake8, flaky
+, doCheck ? true, pytest, pytest_xdist, flake8, flaky
 }:
 buildPythonPackage rec {
   # http://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -21,13 +21,14 @@ buildPythonPackage rec {
     sha256 = "1s911pd3y9hvk0hq2fr6i68dqv1ciagryhgp13wgyfqh8hz8j6zv";
   };
 
-  checkInputs = stdenv.lib.optionals doCheck [ pytest flake8 flaky ];
+  checkInputs = stdenv.lib.optionals doCheck [ pytest pytest_xdist flake8 flaky ];
   propagatedBuildInputs = stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   inherit doCheck;
 
   # https://github.com/DRMacIver/hypothesis/issues/300
   checkPhase = ''
+    rm tox.ini # This file changes how py.test runs and breaks it
     py.test tests/cover
   '';
 
