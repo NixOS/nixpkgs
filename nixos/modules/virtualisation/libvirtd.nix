@@ -124,12 +124,12 @@ in {
       };
 
       path = with pkgs; [
+          "/run/current-system/sw"
           bridge-utils
           dmidecode
           dnsmasq
           ebtables
         ]
-        ++ optional cfg.enableKVM qemu_kvm
         ++ optional vswitch.enable vswitch.package;
 
       preStart = ''
