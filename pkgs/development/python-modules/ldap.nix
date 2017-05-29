@@ -8,7 +8,7 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   src = fetchurl {
-    url = "mirror://pypi/p/python-ldap/python-${name}.tar.gz";
+    url = "mirror://pypi/p/python-ldap/${name}.tar.gz";
     sha256 = "88bab69e519dd8bd83becbe36bd141c174b0fe309e84936cf1bae685b31be779";
   };
 
