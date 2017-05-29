@@ -24,11 +24,11 @@ bootStages ++ [
 
       initialPath = (import ../common-path.nix) { pkgs = prevStage; };
 
-      system = stdenv.system;
+      inherit (prevStage.stdenv) hostPlatform targetPlatform;
 
       cc = import ../../build-support/cc-wrapper {
         nativeTools = false;
-        nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
+        nativePrefix = stdenv.lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
         inherit stdenv;
         inherit (prevStage) binutils coreutils gnugrep;

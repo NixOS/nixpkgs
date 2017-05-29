@@ -15,6 +15,7 @@ let
   common = {
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
+    libcCross = nativePlatforms;
   };
 
   gnuCommon = lib.recursiveUpdate common {
@@ -23,7 +24,7 @@ let
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
-    buildPackages.gdbCross = nativePlatforms;
+    buildPackages.gdb = nativePlatforms;
 
     bison = nativePlatforms;
     busybox = nativePlatforms;
@@ -58,8 +59,8 @@ in
     # there probably a good idea to try to be "more parametric" --- i.e. avoid
     # any special casing.
     crossSystem = {
-      config = "foosys";
-      libc = "foolibc";
+      config = "mips64el-apple-windows-gnu";
+      libc = "glibc";
     };
 
     # Converting to a string (drv path) before checking equality is probably a

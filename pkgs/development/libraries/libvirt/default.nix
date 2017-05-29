@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs, parted
+, curl, libiconv, gmp, xen, zfs, parted, fuse
 }:
 
 with stdenv.lib;
@@ -12,11 +12,11 @@ with stdenv.lib;
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "1a9j6yqfy7i5yv414wk6nv26a5bpfyyg0rpcps6ybi6a1yd04ybq";
+    sha256 = "06xv9qk52447fdxy3zig8mh6iqkx04n3hy5lhchwycsf2y20kq19";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     attr libxslt xhtml1 perlPackages.XMLXPath curl libpcap parted
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl xen
+    libapparmor libcap_ng numactl xen fuse
   ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];

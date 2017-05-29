@@ -63,7 +63,7 @@ let
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
+        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
     in
     ''
       $machine->start;

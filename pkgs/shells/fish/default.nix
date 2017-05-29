@@ -45,10 +45,15 @@ let
   '';
 
   fishPreInitHooks = ''
-    # source nixos environment if we're a login shell
+    # source nixos environment
+    # note that this is required:
+    #   1. For all shells, not just login shells (mosh needs this as do some other command-line utilities)
+    #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
     builtin status --is-login
+    or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
     and test -f /etc/fish/nixos-env-preinit.fish
     and source /etc/fish/nixos-env-preinit.fish
+    and set -gx __fish_nixos_env_preinit_sourced 1
 
     test -n "$NIX_PROFILES"
     and begin

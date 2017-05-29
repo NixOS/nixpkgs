@@ -373,6 +373,7 @@
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/drbd.nix
   ./services/network-filesystems/glusterfs.nix
+  ./services/network-filesystems/kbfs.nix
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
@@ -435,11 +436,13 @@
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
+  ./services/networking/iwd.nix
   ./services/networking/jitsi-meet/default.nix
   ./services/networking/jitsi-meet/jicofo.nix
   ./services/networking/jitsi-meet/jitsi-meet.nix
   ./services/networking/jitsi-meet/jitsi-videobridge.nix
   ./services/networking/keepalived/default.nix
+  ./services/networking/keybase.nix
   ./services/networking/kippo.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
