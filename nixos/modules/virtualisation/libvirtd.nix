@@ -68,7 +68,7 @@ in {
 
     virtualisation.libvirtd.qemuOvmf = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Allows libvirtd to take advantage of OVMF when creating new
         QEMU VMs with UEFI boot.
