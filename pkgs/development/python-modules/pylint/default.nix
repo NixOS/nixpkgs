@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, python, astroid, isort,
-  pytest,  mccabe, configparser, backports_functools_lru_cache }:
+  pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
 
   buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -11,7 +11,7 @@
       sha256 = "8b4a7ab6cf5062e40e2763c0b4a596020abada1d7304e369578b522e46a6264a";
     };
 
-    buildInputs = [ pytest mccabe configparser backports_functools_lru_cache ];
+    buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
 
     propagatedBuildInputs = [ astroid isort ];
 
