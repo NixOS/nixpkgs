@@ -1689,6 +1689,8 @@ with pkgs;
 
   eid-viewer = callPackage ../tools/security/eid-viewer { };
 
+  mcrcon = callPackage ../tools/networking/mcrcon {};
+
   ### DEVELOPMENT / EMSCRIPTEN
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
