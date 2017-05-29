@@ -2856,6 +2856,8 @@ with pkgs;
   libqb = callPackage ../development/libraries/libqb { };
 
   libqmi = callPackage ../development/libraries/libqmi { };
+  
+  libqmlbind = callPackage ../development/libraries/libqmlbind { };
 
   libqrencode = callPackage ../development/libraries/libqrencode { };
 
