@@ -175,6 +175,7 @@ in {
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ coreutils libvirt gawk ];
+      restartIfChanged = false;
     };
 
     systemd.sockets.virtlogd = {
