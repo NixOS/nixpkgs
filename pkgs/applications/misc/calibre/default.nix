@@ -92,6 +92,14 @@ stdenv.mkDerivation rec {
     for entry in $out/share/applications/*.desktop; do
       substituteAllInPlace $entry
     done
+
+    # RPATHs in /tmp aren't removed by --shrink-rpath as a library still exists
+    # there when run. This rewrites the RPATHs to only point to paths in
+    # /nix/store. patchelf > 0.9 will fix this properly.
+    # Hack resolves #26140.
+    for entry in $out/lib/calibre/calibre/plugins/*.so; do
+      patchelf --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" $entry
+    done
   '';
 
   calibreDesktopItem = makeDesktopItem {
