@@ -130,7 +130,7 @@ let
       }' gpu/config/gpu_control_list.cc
 
       patchShebangs .
-    '' + optionalString (versionAtLeast version "52.0.0.0") ''
+    '' + optionalString (versionAtLeast version "52.0.0.0" && !(versionAtLeast version "58.0.0.0")) ''
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         third_party/pdfium/xfa/fxbarcode/utils.h
     '';
