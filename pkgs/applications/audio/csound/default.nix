@@ -13,8 +13,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "csound-6.08.1";
-  version = "6.08.1";
+  name = "csound-${version}";
+  version = "6.09.0";
 
   enableParallelBuilding = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "csound";
     repo = "csound";
     rev = version;
-    sha256 = "03xnva17sw35ga3n96x1zdfgw913dga1hccly85wzfn0kxz4rld9";
+    sha256 = "1vfb0mab89psfwidadjrn5mbzq3bhjbyrrmyp98yp0xm6a8cssih";
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
