@@ -2191,6 +2191,8 @@ with pkgs;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
+  google-compute-engine = callPackage ../tools/virtualization/google-compute-engine {  };
+
   gource = callPackage ../applications/version-management/gource { };
 
   gpart = callPackage ../tools/filesystems/gpart { };
