@@ -1,18 +1,18 @@
 { stdenv, fetchurl
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip, libjpeg, zlib, libvorbis, curl, patchelf
 , # glx
   libX11, mesa, libXpm, libXext, libXxf86vm, alsaLib
 , # sdl
-  SDL
+  SDL2
 }:
 
 stdenv.mkDerivation rec {
-  name = "xonotic-0.8.1";
+  name = "xonotic-0.8.2";
 
   src = fetchurl {
     url = "http://dl.xonotic.org/${name}.zip";
-    sha256 = "0vy4hkrbpz9g91gb84cbv4xl845qxaknak6hshk2yflrw90wr2xy";
+    sha256 = "1mcs6l4clvn7ibfq3q69k2p0z6ww75rxvnngamdq5ic6yhq74bx2";
   };
 
   buildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # glx
     libX11 mesa libXpm libXext libXxf86vm alsaLib
     # sdl
-    SDL
+    SDL2
     zlib libvorbis curl
   ];
 
@@ -48,7 +48,13 @@ stdenv.mkDerivation rec {
     ln -s "$out/bin/xonotic-sdl" "$out/bin/xonotic"
   '';
 
+  # Xonotic needs to find libcurl.so at runtime for map downloads
   dontPatchELF = true;
+  postFixup = ''
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-dedicated
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-sdl
+    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-glx
+  '';
 
   meta = {
     description = "A free fast-paced first-person shooter";
@@ -62,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.xonotic.org;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
+    maintainers = with stdenv.lib.maintainers; [ astsmtl zalakain ];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
   };

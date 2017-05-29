@@ -661,23 +661,7 @@ in {
   };
 
 
-  alembic = buildPythonPackage rec {
-    name = "alembic-0.8.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/alembic/${name}.tar.gz";
-      sha256 = "1sgwvwylzd5h14130mwr0cbyy0fil0a1bq0d0ki97wqvkic3db7f";
-    };
-
-    buildInputs = with self; [ pytest pytestcov mock coverage ];
-    propagatedBuildInputs = with self; [ Mako sqlalchemy python-editor ];
-
-    meta = {
-      homepage = http://bitbucket.org/zzzeek/alembic;
-      description = "A database migration tool for SQLAlchemy";
-      license = licenses.mit;
-    };
-  };
+  alembic = callPackage ../development/python-modules/alembic {};
 
   ansicolors = buildPythonPackage rec {
     name    = "ansicolors-${version}";
@@ -6333,6 +6317,8 @@ in {
       #nosetests -v --cover-min-percentage 1
     '';
 
+    doCheck = false;
+
     buildInputs = with self; [ coverage tornado mock nose psutil pysocks ];
 
     meta = {
@@ -8322,6 +8308,8 @@ in {
   };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
+
+  Nikola = callPackage ../development/python-modules/Nikola { };
 
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
@@ -10316,6 +10304,9 @@ in {
     };
   };
 
+  # This package likely needs an older version of Django.
+  # Override the package set and set e.g. `django = super.django_1_9`.
+  # See the Nixpkgs manual for examples on how to override the package set.
   django_hijack = buildPythonPackage rec {
     name = "django-hijack-${version}";
     version = "2.0.7";
@@ -10325,12 +10316,7 @@ in {
       sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
     };
 
-    # TODO improve the that multi-override necessity (the fixpoint based python
-    # packages work can be the solution)
-    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
-      django = django_1_9;
-      django_nose = django_nose.override { propagatedBuildInputs = [django_1_9 nose]; };
-    }) ];
+    propagatedBuildInputs = with self; [ django django_compat ];
 
     meta = {
       description = "Allows superusers to hijack (=login as) and work on behalf of another user";
@@ -13619,7 +13605,7 @@ in {
     };
   };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_39;};
+  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_4;};
 
   lockfile = buildPythonPackage rec {
     pname = "lockfile";
@@ -15710,26 +15696,7 @@ in {
     };
   };
 
-  emoji = buildPythonPackage rec {
-    name = "emoji-${version}";
-    version = "0.3.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/emoji/${name}.tar.gz";
-      sha256 = "19p5c2nlq0w9972rf9fghyswnijwgig5f8cyzs32kppnmzvzbkxw";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''nosetests'';
-
-    meta = {
-      description = "Emoji for Python";
-      homepage = https://pypi.python.org/pypi/emoji/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ joachifm ];
-    };
-  };
+  emoji = callPackage ../development/python-modules/emoji { };
 
   ntfy = buildPythonPackage rec {
     version = "1.2.0";
@@ -18278,7 +18245,7 @@ in {
     # to force it a little.
     installFlags = [ "--ignore-installed" ];
 
-    buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
+    checkInputs = with self; [ mock scripttest virtualenv pretend pytest ];
     # Pip wants pytest, but tests are not distributed
     doCheck = false;
 
@@ -22857,7 +22824,8 @@ in {
       sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
     };
 
-    buildInputs = with self; [ pip pytest ];
+    buildInputs = with self; [ pip ];
+    checkInputs = with self; [ pytest ];
     # Seems to fail due to chroot
     doCheck = false;
 
@@ -23026,30 +22994,7 @@ in {
     };
   };
 
-  simplejson = buildPythonPackage (rec {
-    name = "simplejson-3.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/simplejson/${name}.tar.gz";
-      sha256 = "14r4l4rcsyf87p2j4ycsbb017n4vzxfmv285rq2gny4w47rwi2j2";
-    };
-
-    meta = {
-      description = "A simple, fast, extensible JSON encoder/decoder for Python";
-
-      longDescription = ''
-        simplejson is compatible with Python 2.4 and later with no
-        external dependencies.  It covers the full JSON specification
-        for both encoding and decoding, with unicode support.  By
-        default, encoding is done in an encoding neutral fashion (plain
-        ASCII with \uXXXX escapes for unicode characters).
-      '';
-
-      homepage = http://code.google.com/p/simplejson/;
-
-      license = licenses.mit;
-    };
-  });
+  simplejson = callPackage ../development/python-modules/simplejson { };
 
   simpleldap = buildPythonPackage rec {
     version = "0.8";
@@ -24324,32 +24269,7 @@ in {
 
 
 
-  sqlalchemy = buildPythonPackage rec {
-    name = "SQLAlchemy-${version}";
-    version = "1.0.15";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "586f5ccf068211795a89ed22d196c5cc3006b6be00261bcac6f584c0b8e0845a";
-    };
-
-    buildInputs = with self; [ pytest mock pytest_xdist ]
-      ++ stdenv.lib.optional (!isPy3k) pysqlite;
-
-    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
-    # acceptable reason to make all dependents unavailable on Python 3 as well
-    #doCheck = !(isPyPy || isPy3k);
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-      license = licenses.mit;
-    };
-  };
+  sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   SQLAlchemy-ImageAttach = buildPythonPackage rec {
     pname = "SQLAlchemy-ImageAttach";
@@ -28151,23 +28071,21 @@ EOF
   };
 
   ws4py = buildPythonPackage rec {
-    name = "ws4py-${version}";
+    name = "${pname}-${version}";
+    pname = "ws4py";
+    version = "0.4.2";
 
-    version = "git-20130303";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/Lawouach/WebSocket-for-Python.git";
-      rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
-      sha256 = "1g7nmhjjxjf6vx75dyzns8bpid3b5i02kakk2lh1i297b5rw2rjq";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0zr3254ky6r7q15l3dhdczfa8i723055zdkqssjifsgcwvirriks";
     };
 
-    # python zip complains about old timestamps
-    preConfigure = ''
-      find -print0 | xargs -0 touch
-    '';
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ asyncio cherrypy gevent tornado ];
 
-    # Tests depend on other packages
-    doCheck = false;
+    checkPhase = ''
+      pytest test
+    '';
 
     meta = {
       homepage = https://ws4py.readthedocs.org;
@@ -28984,6 +28902,9 @@ EOF
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ decorator ];
+
+    # 17 failures with 3.6 https://github.com/networkx/networkx/issues/2396#issuecomment-304437299
+    doCheck = !(isPy36);
 
     meta = {
       homepage = "https://networkx.github.io/";

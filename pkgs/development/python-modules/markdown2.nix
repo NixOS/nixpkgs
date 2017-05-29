@@ -1,8 +1,9 @@
 { stdenv, buildPythonPackage, fetchurl }:
 
 buildPythonPackage rec {
-  name = "markdown2-${version}";
+  pname = "markdown2";
   version = "2.3.1";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/m/markdown2/${name}.zip";

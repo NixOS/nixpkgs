@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pytest, nose, unrar, glibcLocales }:
 
 buildPythonPackage rec {
-  name = "rarfile-${version}";
+  pname = "rarfile";
+  name = "${pname}-${version}";
   version = "3.0";
 
   src = fetchFromGitHub {
