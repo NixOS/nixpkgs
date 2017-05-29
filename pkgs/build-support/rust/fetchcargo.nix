@@ -1,10 +1,11 @@
 { stdenv, cacert, git, rust, rustRegistry }:
-{ name ? "cargo-deps", src, srcs, sourceRoot, sha256, cargoUpdateHook ? "" }:
+{ name ? "cargo-deps", src, srcs, sourceRoot, sha256,
+  cargoUpdateHook ? "", preUnpack }:
 
 stdenv.mkDerivation {
   name = "${name}-fetch";
   buildInputs = [ rust.cargo rust.rustc git ];
-  inherit src srcs sourceRoot rustRegistry cargoUpdateHook;
+  inherit src srcs sourceRoot preUnpack rustRegistry cargoUpdateHook;
 
   phases = "unpackPhase installPhase";
 

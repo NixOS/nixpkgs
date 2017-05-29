@@ -8,6 +8,7 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+, preUnpack ? ""
 , ... } @ args:
 
 let
@@ -16,7 +17,7 @@ let
   };
 
   cargoDeps = fetchDeps {
-    inherit name src srcs sourceRoot cargoUpdateHook;
+    inherit name src srcs preUnpack sourceRoot cargoUpdateHook;
     sha256 = depsSha256;
   };
 
