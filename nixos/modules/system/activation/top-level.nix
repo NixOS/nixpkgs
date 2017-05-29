@@ -180,7 +180,7 @@ in
 
     system.copySystemConfiguration = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         If enabled, copies the NixOS configuration file
         (usually <filename>/etc/nixos/configuration.nix</filename>)
