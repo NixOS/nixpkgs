@@ -23,6 +23,9 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   hardeningDisable = [ "stackprotector" "pic" "fortify" ];
 
   unpackPhase = ''
+    # $fd is overwritten during the build
+    export OUTPUT_FD=$fd
+
     for file in \
       "${edk2.src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
     do
@@ -51,8 +54,8 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
     '';
 
   postFixup = ''
-    mkdir -p $fd/FV
-    mv $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
+    mkdir -vp $OUTPUT_FD/FV
+    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $OUTPUT_FD/FV
   '';
 
   dontPatchELF = true;
