@@ -10157,6 +10157,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NTLM = buildPerlPackage rec {
+    name = "NTLM-1.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NB/NBEBOUT/${name}.tar.gz";
+      sha256 = "c823e30cda76bc15636e584302c960e2b5eeef9517c2448f7454498893151f85";
+    };
+    propagatedBuildInputs = [ DigestHMAC ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.pSub ];
+    };
+  };
+
   ObjectAccessor = buildPerlPackage {
     name = "Object-Accessor-0.48";
     src = fetchurl {
