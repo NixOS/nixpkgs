@@ -18115,6 +18115,8 @@ with pkgs;
     motif = null; # motif or lesstif
   };
 
+  cernlib = callPackage ../development/libraries/physics/cernlib { };
+
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
