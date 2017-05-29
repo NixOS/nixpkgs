@@ -1,4 +1,4 @@
-{ buildPythonPackage, isPy3k, fetchurl
+{ buildPythonPackage, isPy3k, fetchPypi
 , openldap, cyrus_sasl, openssl }:
 
 buildPythonPackage rec {
@@ -7,8 +7,8 @@ buildPythonPackage rec {
   name = "${pname}-${version}";
   disabled = isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/p/python-ldap/python-${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "88bab69e519dd8bd83becbe36bd141c174b0fe309e84936cf1bae685b31be779";
   };
 
