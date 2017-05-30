@@ -9,6 +9,7 @@ let
       #! ${pkgs.perl}/bin/perl -w -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl
 
       use File::Slurp;
+      use POSIX;
 
       sub run {
           my ($cmd) = @_;
@@ -54,6 +55,19 @@ let
           my $res = run_wait $preStart;
           die "$0: ExecStartPre failed with status $res\n" if $res;
       };
+
+      if ($< eq 0) {
+        my $user = '${service.serviceConfig.User or ""}';
+        if ($user ne "") {
+          my $uid = getpwnam($user);
+          setuid($uid) if $uid;
+        }
+        my $group = '${service.serviceConfig.Group or ""}';
+        if ($group ne "") {
+          my $gid = getgrnam($group);
+          setgid($gid) if $gid;
+        }
+      }
 
       # Run the ExecStart program.
       my $cmd = '${service.serviceConfig.ExecStart}';
