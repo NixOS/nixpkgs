@@ -337,6 +337,8 @@ with stdenv.lib;
   ''}
   ${optionalString (versionAtLeast version "3.12") ''
     USER_NS y # Support for user namespaces
+    EXPERT y
+    CHECKPOINT_RESTORE y
   ''}
 
   # AppArmor support
