@@ -313,7 +313,7 @@ in {
           A CIDR notation IP range from which to assign service cluster IPs.
           This must not overlap with any IP ranges assigned to nodes for pods.
         '';
-        default = "10.10.10.10/24";
+        default = "10.0.0.0/24";
         type = types.str;
       };
 
@@ -715,7 +715,7 @@ in {
 
     clusterCidr = mkOption {
       description = "Kubernetes controller manager and proxy CIDR Range for Pods in cluster.";
-      default = "10.10.0.0/16";
+      default = "10.1.0.0/16";
       type = types.str;
     };
 
