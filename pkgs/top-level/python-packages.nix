@@ -29627,12 +29627,12 @@ EOF
   };
 
   hidapi = buildPythonPackage rec{
-    version = "0.7.99.post15";
+    version = "0.7.99.post20";
     name = "hidapi-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hidapi/${name}.tar.gz";
-      sha256 = "09wlr1d7mx80974bsq62j4pk80234jgl7ip4br0y43q6999dpcr0";
+      sha256 = "1k7z5m7xsqy8j4qkjy4pfxdx4hm36ha68vi65z6smvnyg4zgv22z";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libusb1 pkgs.udev cython ];
