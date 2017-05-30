@@ -39,12 +39,12 @@ in
 
         patterns = mkOption {
           default = [];
-          type = types.listOf(types.listOf(types.string));
+          type = types.attrsOf types.string;
 
           example = literalExample ''
-            [
-              ["rm -rf *" "fg=white,bold,bg=red"]
-            ]
+            {
+              "rm -rf *" = "fg=white,bold,bg=red";
+            }
           '';
 
           description = ''
@@ -67,14 +67,17 @@ in
           "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${concatStringsSep " " cfg.highlighters})"
         }
 
-        ${optionalString (length(cfg.patterns) > 0)
-          (assert(elem "pattern" cfg.highlighters); (foldl (
-            a: b:
-              assert(length(b) == 2); ''
-                ${a}
-                ZSH_HIGHLIGHT_PATTERNS+=('${elemAt b 0}' '${elemAt b 1}')
-              ''
-          ) "") cfg.patterns)
+        ${let
+            n = attrNames cfg.patterns;
+          in
+            optionalString (length(n) > 0)
+              (assert(elem "pattern" cfg.highlighters); (foldl (
+                a: b:
+                  ''
+                    ${a}
+                    ZSH_HIGHLIGHT_PATTERNS+=('${b}' '${attrByPath [b] "" cfg.patterns}')
+                  ''
+              ) "") n)
         }
       '';
     };
