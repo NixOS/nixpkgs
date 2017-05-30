@@ -382,6 +382,23 @@ it. Place the resulting <filename>package.nix</filename> file into
 
 </section>
 
+<section xml:id="sec-slock">
+
+<title>Slock</title>
+
+<para>
+    Slock requires root for accessing passwords and protecting itself from OOM killing (see also <link xlink:href="https://github.com/NixOS/nixpkgs/issues/9656">this issue</link> for more information). To fix this error, add slock to your system packages and change its uid by modifying your global configuration.nix like so
+    <programlisting>environment.systemPackages = with pkgs; [ slock ];
+security.wrappers = {
+    slock = {
+        source = "${pkgs.slock.out}/bin/slock";
+    };
+};
+    </programlisting>
+</para>
+
+</section>
+
 <section xml:id="sec-steam">
 
 <title>Steam</title>
