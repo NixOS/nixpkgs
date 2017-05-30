@@ -5281,28 +5281,7 @@ in {
 
   pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
 
-  pytest-localserver = buildPythonPackage rec {
-    name = "pytest-localserver-${version}";
-    version = "0.3.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-localserver/${name}.tar.gz";
-      sha256 = "0dvqspjr6va55zwmnnc2mmpqc7mm65kxig9ya44x1z8aadzxpa4p";
-    };
-
-    propagatedBuildInputs = with self; [ werkzeug ];
-    buildInputs = with self; [ pytest six requests ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Plugin for the pytest testing framework to test server connections locally";
-      homepage = https://pypi.python.org/pypi/pytest-localserver;
-      license = licenses.mit;
-    };
-  };
+  pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
   pytest-subtesthack = buildPythonPackage rec {
     name = "pytest-subtesthack-${version}";
