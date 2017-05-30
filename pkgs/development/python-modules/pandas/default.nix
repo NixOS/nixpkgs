@@ -19,7 +19,6 @@
 , openpyxl
 , tables
 , xlwt
-, darwin ? {}
 , libcxx ? null
 }:
 
@@ -53,7 +52,7 @@ in buildPythonPackage rec {
     openpyxl
     tables
     xlwt
-  ] ++ optional isDarwin darwin.locale; # provides the locale command
+  ];
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
@@ -63,16 +62,22 @@ in buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-
-  # disable clipboard tests since pbcopy/pbpaste are not open source
-    substituteInPlace pandas/io/tests/test_clipboard.py \
-      --replace pandas.util.clipboard no_such_module \
-      --replace OSError ImportError
   '';
 
   checkPhase = ''
     runHook preCheck
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network
+  ''
+  # TODO: Get locale and clipboard support working on darwin.
+  #       Until then we disable the tests.
+  + optionalString isDarwin ''
+    # Fake the impure dependencies pbpaste and pbcopy
+    echo "#!/bin/sh" > pbcopy
+    echo "#!/bin/sh" > pbpaste
+    chmod a+x pbcopy pbpaste
+    export PATH=$(pwd):$PATH
+  '' + ''
+    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
+      ${if isDarwin then "-k 'not test_locale and not test_clipboard'" else ""}
     runHook postCheck
   '';
 
@@ -83,7 +88,7 @@ in buildPythonPackage rec {
     homepage = "http://pandas.pydata.org/";
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh ];
+    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
