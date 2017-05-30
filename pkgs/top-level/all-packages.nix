@@ -5724,12 +5724,19 @@ with pkgs;
 
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {
-    inherit (llvmPackages_39) llvm;
+    inherit (llvmPackages_4) llvm;
   };
   rustBeta = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/beta.nix {}));
-  rustNightly = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/nightly.nix {
-    rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
-  }));
+
+  rustNightly = rustBeta;
+
+  # rust support in nixpkgs isn't yet well maintained enough for us to
+  # pretend to support nightlies in a meaningful way.
+
+  # rustNightly = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/nightly.nix {
+  #   rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
+  # }));
+
   rustNightlyBin = lowPrio (callPackage ../development/compilers/rust/nightlyBin.nix {
      buildRustPackage = callPackage ../build-support/rust {
        rust = rustNightlyBin;
