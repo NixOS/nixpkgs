@@ -89,101 +89,26 @@ in
     guile = nativePlatforms;
   };
 
-  darwinToAarch64 = let
-    crossSystem = {
-      config = "aarch64-apple-darwin14";
-      arch = "arm64";
-      libc = "libSystem";
-    };
-  in mapTestOnCross crossSystem darwinCommon;
+  crossIphone64 = mapTestOnCross lib.systems.examples.iphone64 darwinCommon;
 
-  darwinToArm = let
-    crossSystem = {
-      config = "arm-apple-darwin10";
-      arch = "armv7-a";
-      libc = "libSystem";
-    };
-  in mapTestOnCross crossSystem darwinCommon;
+  crossIphone32 = mapTestOnCross lib.systems.examples.iphone32 darwinCommon;
 
   /* Test some cross builds to the Sheevaplug */
-  crossSheevaplugLinux = let
-    crossSystem = {
-      config = "armv5tel-unknown-linux-gnueabi";
-      bigEndian = false;
-      arch = "arm";
-      float = "soft";
-      withTLS = true;
-      platform = lib.systems.platforms.sheevaplug;
-      libc = "glibc";
-      openssl.system = "linux-generic32";
-    };
-  in mapTestOnCross crossSystem (linuxCommon // {
+  crossSheevaplugLinux = mapTestOnCross lib.systems.examples.sheevaplug (linuxCommon // {
     ubootSheevaplug = nativePlatforms;
   });
 
-
   /* Test some cross builds on 32 bit mingw-w64 */
-  crossMingw32 = let
-    crossSystem = {
-      config = "i686-pc-mingw32";
-      arch = "x86"; # Irrelevant
-      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
-      platform = {};
-    };
-  in mapTestOnCross crossSystem windowsCommon;
-
+  crossMingw32 = mapTestOnCross lib.systems.examples.mingw32 windowsCommon;
 
   /* Test some cross builds on 64 bit mingw-w64 */
-  crossMingwW64 = let
-    crossSystem = {
-      # That's the triplet they use in the mingw-w64 docs.
-      config = "x86_64-pc-mingw32";
-      arch = "x86_64"; # Irrelevant
-      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
-      platform = {};
-    };
-  in mapTestOnCross crossSystem windowsCommon;
-
+  crossMingwW64 = mapTestOnCross lib.systems.examples.mingwW64 windowsCommon;
 
   /* Linux on the fuloong */
-  fuloongminipc = let
-    crossSystem = {
-      config = "mips64el-unknown-linux-gnu";
-      bigEndian = false;
-      arch = "mips";
-      float = "hard";
-      withTLS = true;
-      libc = "glibc";
-      platform = lib.systems.platforms.fuloong2f_n32;
-      openssl.system = "linux-generic32";
-      gcc = {
-        arch = "loongson2f";
-        abi = "n32";
-      };
-    };
-  in mapTestOnCross crossSystem linuxCommon;
-
+  fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
 
   /* Linux on Raspberrypi */
-  rpi = let
-    crossSystem = {
-      config = "armv6l-unknown-linux-gnueabi";
-      bigEndian = false;
-      arch = "arm";
-      float = "hard";
-      fpu = "vfp";
-      withTLS = true;
-      libc = "glibc";
-      platform = lib.systems.platforms.raspberrypi;
-      openssl.system = "linux-generic32";
-      gcc = {
-        arch = "armv6";
-        fpu = "vfp";
-        float = "softfp";
-        abi = "aapcs-linux";
-      };
-    };
-  in mapTestOnCross crossSystem (linuxCommon // {
+  rpi = mapTestOnCross lib.systems.examples.raspberryPi (linuxCommon // {
     vim = nativePlatforms;
     unzip = nativePlatforms;
     ddrescue = nativePlatforms;

@@ -19,7 +19,8 @@ stdenv.mkDerivation {
 
   src = fetch "lldb" "0g83hbw1r4gd0z8hlph9i34xs6dlcc69vz3h2bqwkhb2qq2qzg9d";
 
-  patchPhase = ''
+  patches = [ ./lldb-libedit.patch ];
+  postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
     sed -i 's,".*ClangConfig.cmake","${clang-unwrapped}/lib/cmake/clang/ClangConfig.cmake",' \
       cmake/modules/LLDBStandalone.cmake
@@ -35,10 +36,6 @@ stdenv.mkDerivation {
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
-
-  cmakeFlags = [
-    "-DLLDB_DISABLE_LIBEDIT=ON"
-  ];
 
   enableParallelBuilding = true;
 
