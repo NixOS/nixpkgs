@@ -10,9 +10,9 @@ rec {
   #
 
   sheevaplug = rec {
-    config = "armv5te-unknown-linux-gnueabi";
+    config = "armv5tel-unknown-linux-gnueabi";
     bigEndian = false;
-    arch = "armv5te";
+    arch = "armv5tel";
     float = "soft";
     withTLS = true;
     libc = "glibc";
