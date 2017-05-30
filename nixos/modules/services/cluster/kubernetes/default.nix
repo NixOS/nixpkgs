@@ -404,7 +404,7 @@ in {
       leaderElect = mkOption {
         description = "Whether to start leader election before executing main loop.";
         type = types.bool;
-        default = false;
+        default = true;
       };
 
       kubeconfig = mkKubeConfigOptions "Kubernetes scheduler";
@@ -438,7 +438,7 @@ in {
       leaderElect = mkOption {
         description = "Whether to start leader election before executing main loop.";
         type = types.bool;
-        default = false;
+        default = true;
       };
 
       serviceAccountKeyFile = mkOption {
