@@ -11232,6 +11232,7 @@ with pkgs;
     postgresql96;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
+  postgresql-bdr = callPackage ../servers/sql/postgresql-bdr { };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
