@@ -332,10 +332,11 @@ in {
           Kubernetes admission control plugins to use. See
           <link xlink:href="http://kubernetes.io/docs/admin/admission-controllers/"/>
         '';
-        default = ["NamespaceLifecycle" "LimitRanger" "ServiceAccount" "ResourceQuota"];
+        default = ["NamespaceLifecycle" "LimitRanger" "ServiceAccount" "ResourceQuota" "DefaultStorageClass" "DefaultTolerationSeconds"];
         example = [
           "NamespaceLifecycle" "NamespaceExists" "LimitRanger"
           "SecurityContextDeny" "ServiceAccount" "ResourceQuota"
+          "PodSecurityPolicy" "NodeRestriction" "DefaultStorageClass"
         ];
         type = types.listOf types.str;
       };
