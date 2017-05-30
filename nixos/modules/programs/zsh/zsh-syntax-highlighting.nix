@@ -8,13 +8,7 @@ in
   {
     options = {
       programs.zsh.syntaxHighlighting = {
-        enable = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Enable zsh-syntax-highlighting.
-          '';
-        };
+        enable = mkEnableOption "zsh-syntax-highlighting";
 
         highlighters = mkOption {
           default = [ "main" ];
