@@ -5280,11 +5280,12 @@ in {
   pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
 
   pytest-localserver = buildPythonPackage rec {
-    name = "pytest-localserver-${version}";
+    pname = "pytest-localserver";
+    name = "${pname}-${version}";
     version = "0.3.7";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-localserver/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "1c11hn61n06ms0wmw6536vs5k4k9hlndxsb3p170nva56a9dfa6q";
     };
 
