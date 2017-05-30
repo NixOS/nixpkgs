@@ -29626,100 +29626,23 @@ EOF
     };
   };
 
-  hidapi = buildPythonPackage rec{
-    version = "0.7.99.post20";
-    name = "hidapi-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hidapi/${name}.tar.gz";
-      sha256 = "1k7z5m7xsqy8j4qkjy4pfxdx4hm36ha68vi65z6smvnyg4zgv22z";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.libusb1 pkgs.udev cython ];
-
-    # Fix the USB backend library lookup
-    postPatch = ''
-      libusb=${pkgs.libusb1.dev}/include/libusb-1.0
-      test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
-      sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
-    '';
-
-    meta = {
-      description = "A Cython interface to the hidapi from https://github.com/signal11/hidapi";
-      homepage = https://github.com/trezor/cython-hidapi;
-      # license can actually be either bsd3 or gpl3
-      # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  hidapi = callPackage ../development/python-modules/hidapi.nix { };
 
   mnemonic = callPackage ../development/python-modules/mnemonic.nix { };
 
   trezor = callPackage ../development/python-modules/trezor.nix { };
 
-  keepkey = buildPythonPackage rec{
-    version = "0.7.3";
-    name = "keepkey-${version}";
+  keepkey = callPackage ../development/python-modules/keepkey.nix { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/keepkey/${name}.tar.gz";
-      sha256 = "14d2r8dlx997ypgma2k8by90acw7i3l7hfq4gar9lcka0lqfj714";
-    };
+  semver = callPackage ../development/python-modules/semver.nix { };
 
-    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
+  ed25519 = callPackage ../development/python-modules/ed25519.nix { };
 
-    buildInputs = with self; [ ecdsa mnemonic ];
+  libagent = callPackage ../development/python-modules/libagent.nix { };
 
-    # There are no actual tests: "ImportError: No module named tests"
-    doCheck = false;
+  ledgerblue = callPackage ../development/python-modules/ledgerblue.nix { };
 
-    # remove impossible dependency constraint
-    postPatch = ''
-      sed -i -e 's/hidapi==/hidapi>=/' setup.py
-    '';
-
-    meta = {
-      description = "KeepKey Python client";
-      homepage = https://github.com/keepkey/python-keepkey;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
-
-  semver = buildPythonPackage rec {
-    name = "semver-${version}";
-    version = "2.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/semver/${name}.tar.gz";
-      sha256 = "161gvsfpw0l8lnf1v19rvqc8b9f8n70cc8ppya4l0n6rwc1c1n4m";
-    };
-
-    meta = {
-      description = "Python package to work with Semantic Versioning (http://semver.org/)";
-      homepage = "https://github.com/k-bx/python-semver";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
-
-  ed25519 = buildPythonPackage rec {
-    name = "ed25519-${version}";
-    version = "1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/ed25519/${name}.tar.gz";
-      sha256 = "0ahx1nkxa0xis3cw0h5c4fpgv8mq4znkq7kajly33lc3317bk499";
-    };
-
-    meta = {
-      description = "Ed25519 public-key signatures";
-      homepage = "https://github.com/warner/python-ed25519";
-      license = licenses.mit;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  ecpy = callPackage ../development/python-modules/ecpy.nix { };
 
   trezor_agent = buildPythonPackage rec{
     version = "0.9.0";
@@ -29740,69 +29663,6 @@ EOF
       homepage = https://github.com/romanz/trezor-agent;
       license = licenses.gpl3;
       maintainers = with maintainers; [ np ];
-    };
-  };
-
-  libagent = buildPythonPackage rec {
-    name = "libagent-${version}";
-    version = "0.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/libagent/${name}.tar.gz";
-      sha256 = "1g19lsid7lqw567w31fif89w088lzbgh27xpb1pshjk1gvags3bc";
-    };
-
-    buildInputs = with self; [
-      ed25519 ecdsa semver keepkey
-      trezor mnemonic ledgerblue
-    ];
-
-    meta = {
-      description = "Using hardware wallets as SSH/GPG agent";
-      homepage = "https://github.com/romanz/trezor-agent";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
-
-  ledgerblue = buildPythonPackage rec {
-    name = "ledgerblue-${version}";
-    version = "0.1.13";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/ledgerblue/${name}.tar.gz";
-      sha256 = "09bsiylvgax6m47w8r0myaf61xj9j0h1spvadx6fx31qy0iqicw0";
-    };
-
-    buildInputs = with self; [
-      hidapi pycrypto pillow protobuf future ecpy
-    ];
-
-    meta = {
-      description = "Python library to communicate with Ledger Blue/Nano S";
-      homepage = "https://github.com/LedgerHQ/blue-loader-python";
-      license = licenses.apache2;
-      maintainers = with maintainers; [ np ];
-    };
-  };
-
-  ecpy = buildPythonPackage rec {
-    name = "ECPy-${version}";
-    version = "0.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/ecpy/${name}.tar.gz";
-      sha256 = "0ab60sx4bbsmccwmdvz1023r0cbzi4phar4ipzn5npdj5gw1ny4l";
-    };
-
-    buildInputs = with self; [
-      hidapi pycrypto pillow protobuf future
-    ];
-
-    meta = {
-      description = "Pure Pyhton Elliptic Curve Library";
-      homepage = "https://github.com/ubinity/ECPy";
-      license = licenses.apache;
     };
   };
 
