@@ -4170,6 +4170,8 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+  opendoas = callPackage ../tools/security/opendoas { };
+
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
   sundtek = callPackage ../misc/drivers/sundtek { };
