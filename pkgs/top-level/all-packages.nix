@@ -664,6 +664,12 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
+  inherit (callPackages ../misc/logging/beats { })
+    filebeat
+    heartbeat
+    metricbeat
+    packetbeat;
+
   bfr = callPackage ../tools/misc/bfr { };
 
   bibtool = callPackage ../tools/misc/bibtool { };
@@ -965,8 +971,6 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
-  filebeat = callPackage ../misc/logging/filebeat { };
-
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -1015,8 +1019,6 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
-  heartbeat = callPackage ../misc/logging/heartbeat { };
-
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hexio = callPackage ../development/tools/hexio { };
@@ -1046,8 +1048,6 @@ with pkgs;
   masscan = callPackage ../tools/security/masscan { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
-
-  metricbeat = callPackage ../misc/logging/metricbeat { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
@@ -1728,6 +1728,9 @@ with pkgs;
   efivar = callPackage ../tools/system/efivar { };
 
   evemu = callPackage ../tools/system/evemu { };
+
+  # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
+  elk5Version = "5.4.0";
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
   elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
@@ -2616,7 +2619,8 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  kibana = callPackage ../development/tools/misc/kibana { };
+  kibana  = callPackage ../development/tools/misc/kibana { };
+  kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
@@ -2672,7 +2676,8 @@ with pkgs;
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
-  logstash = callPackage ../tools/misc/logstash { };
+  logstash  = callPackage ../tools/misc/logstash { };
+  logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
@@ -3471,8 +3476,6 @@ with pkgs;
   packagekit = callPackage ../tools/package-management/packagekit {
     nix = nixUnstable;
   };
-
-  packetbeat = callPackage ../misc/logging/packetbeat { };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 

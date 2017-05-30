@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, jre, utillinux, getopt }:
+{ stdenv, fetchurl, elk5Version, makeWrapper, jre, utillinux, getopt }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "5.4.0";
+  version = elk5Version;
   name = "elasticsearch-${version}";
 
   src = fetchurl {
