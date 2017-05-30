@@ -12,7 +12,8 @@ stdenv.mkDerivation {
 
   src = fetch "openmp" "09kf41zgv551fnv628kqhlwgqkd2bkiwii9gqi6q12djgdddhmfv";
 
-  buildInputs = [ cmake llvm perl ];
+  nativeBuildInputs = [ cmake perl ];
+  buildInputs = [ llvm ];
 
   enableParallelBuilding = true;
 

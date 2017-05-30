@@ -1,0 +1,17 @@
+diff --git a/CFBundlePriv.h b/CFBundlePriv.h
+index d4feb5f..e7b52e8 100644
+--- a/CFBundlePriv.h
++++ b/CFBundlePriv.h
+@@ -254,12 +254,6 @@ Boolean _CFBundleGetStringsFilesShared(CFBundleRef bundle);
+ CF_EXPORT
+ CFURLRef _CFBundleCopyFrameworkURLForExecutablePath(CFStringRef executablePath);
+ 
+-#if (TARGET_OS_MAC && !(TARGET_OS_EMBEDDED || TARGET_OS_IPHONE)) || (TARGET_OS_EMBEDDED || TARGET_OS_IPHONE)
+-#include <xpc/xpc.h>
+-CF_EXPORT
+-void _CFBundleSetupXPCBootstrap(xpc_object_t bootstrap) CF_AVAILABLE(10_10, 8_0);
+-#endif
+-
+ /* Functions deprecated as SPI */
+ 
+ CF_EXPORT
