@@ -5281,11 +5281,11 @@ in {
 
   pytest-localserver = buildPythonPackage rec {
     name = "pytest-localserver-${version}";
-    version = "0.3.5";
+    version = "0.3.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-localserver/${name}.tar.gz";
-      sha256 = "0dvqspjr6va55zwmnnc2mmpqc7mm65kxig9ya44x1z8aadzxpa4p";
+      sha256 = "1c11hn61n06ms0wmw6536vs5k4k9hlndxsb3p170nva56a9dfa6q";
     };
 
     propagatedBuildInputs = with self; [ werkzeug ];
