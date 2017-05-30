@@ -15,19 +15,19 @@ let
     config.Cmd = "/bin/pause";
   };
 
-  kubeconfig = pkgs.writeText "kubeconfig" (builtins.toJSON {
+  mkKubeConfig = name: cfg: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
     apiVersion = "v1";
     kind = "Config";
     clusters = [{
       name = "local";
-      cluster.certificate-authority = cfg.kubeconfig.caFile;
-      cluster.server = cfg.kubeconfig.server;
+      cluster.certificate-authority = cfg.caFile;
+      cluster.server = cfg.server;
     }];
     users = [{
       name = "kubelet";
       user = {
-        client-certificate = cfg.kubeconfig.certFile;
-        client-key = cfg.kubeconfig.keyFile;
+        client-certificate = cfg.certFile;
+        client-key = cfg.keyFile;
       };
     }];
     contexts = [{
@@ -38,6 +38,39 @@ let
       current-context = "kubelet-context";
     }];
   });
+
+  mkKubeConfigOptions = prefix: {
+    server = mkOption {
+      description = "${prefix} kube-apiserver server address.";
+      default = "http://${cfg.apiserver.address}:${toString cfg.apiserver.port}";
+      type = types.str;
+    };
+
+    caFile = mkOption {
+      description = "${prefix} certificate authrority file used to connect to kube-apiserver.";
+      type = types.nullOr types.path;
+      default = null;
+    };
+
+    certFile = mkOption {
+      description = "${prefix} client certificate file used to connect to kube-apiserver.";
+      type = types.nullOr types.path;
+      default = null;
+    };
+
+    keyFile = mkOption {
+      description = "${prefix} client key file used to connect to kube-apiserver.";
+      type = types.nullOr types.path;
+      default = null;
+    };
+  };
+
+  kubeConfigDefaults = {
+    server = mkDefault cfg.kubeconfig.server;
+    caFile = mkDefault cfg.kubeconfig.caFile;
+    certFile = mkDefault cfg.kubeconfig.certFile;
+    keyFile = mkDefault cfg.kubeconfig.keyFile;
+  };
 
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";
@@ -228,31 +261,7 @@ in {
       };
     };
 
-    kubeconfig = {
-      server = mkOption {
-        description = "Kubernetes apiserver server address.";
-        default = "http://${cfg.apiserver.address}:${toString cfg.apiserver.port}";
-        type = types.str;
-      };
-
-      caFile = mkOption {
-        description = "Certificate authrority file to use to connect to Kubernetes apiserver.";
-        type = types.nullOr types.path;
-        default = null;
-      };
-
-      certFile = mkOption {
-        description = "Client certificate file to use to connect to Kubernetes.";
-        type = types.nullOr types.path;
-        default = null;
-      };
-
-      keyFile = mkOption {
-        description = "Client key file to use to connect to Kubernetes.";
-        type = types.nullOr types.path;
-        default = null;
-      };
-    };
+    kubeconfig = mkKubeConfigOptions "Default kubeconfig";
 
     dataDir = mkOption {
       description = "Kubernetes root directory for managing kubelet files.";
@@ -472,6 +481,8 @@ in {
         default = false;
       };
 
+      kubeconfig = mkKubeConfigOptions "Kubernetes scheduler";
+
       extraOpts = mkOption {
         description = "Kubernetes scheduler extra command line options.";
         default = "";
@@ -521,6 +532,8 @@ in {
         default = null;
         type = types.nullOr types.path;
       };
+
+      kubeconfig = mkKubeConfigOptions "Kubernetes controller manager";
 
       extraOpts = mkOption {
         description = "Kubernetes controller manager extra command line options.";
@@ -680,6 +693,8 @@ in {
         type = types.nullOr types.str;
       };
 
+      kubeconfig = mkKubeConfigOptions "Kubelet";
+
       extraOpts = mkOption {
         description = "Kubernetes kubelet extra command line options.";
         default = "";
@@ -699,6 +714,8 @@ in {
         default = "0.0.0.0";
         type = types.str;
       };
+
+      kubeconfig = mkKubeConfigOptions "Kubernetes proxy";
 
       extraOpts = mkOption {
         description = "Kubernetes proxy extra command line options.";
@@ -756,6 +773,8 @@ in {
         type = types.str;
       };
 
+      kubeconfig = mkKubeConfigOptions "Kubernetes dns";
+
       extraOpts = mkOption {
         description = "Kubernetes DNS extra command line options.";
         default = "";
@@ -804,7 +823,7 @@ in {
               "--pod-manifest-path=${manifests}"} \
             ${optionalString (taints != "")
               "--register-with-taints=${taints}"} \
-            --kubeconfig=${kubeconfig} \
+            --kubeconfig=${mkKubeConfig "kubelet" cfg.kubelet.kubeconfig} \
             --require-kubeconfig \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
@@ -841,6 +860,8 @@ in {
       services.kubernetes.kubelet.cni.packages = [pkgs.cni];
 
       boot.kernelModules = ["br_netfilter"];
+
+      services.kubernetes.kubelet.kubeconfig = kubeConfigDefaults;
     })
 
     (mkIf (cfg.kubelet.applyManifests && cfg.kubelet.enable) {
@@ -936,7 +957,7 @@ in {
             --address=${cfg.scheduler.address} \
             --port=${toString cfg.scheduler.port} \
             --leader-elect=${boolToString cfg.scheduler.leaderElect} \
-            --kubeconfig=${kubeconfig} \
+            --kubeconfig=${mkKubeConfig "kube-scheduler" cfg.scheduler.kubeconfig} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
             ${cfg.scheduler.extraOpts}
@@ -946,6 +967,8 @@ in {
           Group = "kubernetes";
         };
       };
+
+      services.kubernetes.scheduler.kubeconfig = kubeConfigDefaults;
     })
 
     (mkIf cfg.controllerManager.enable {
@@ -960,7 +983,7 @@ in {
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
             --address=${cfg.controllerManager.address} \
             --port=${toString cfg.controllerManager.port} \
-            --kubeconfig=${kubeconfig} \
+            --kubeconfig=${mkKubeConfig "kube-controller-manager" cfg.controllerManager.kubeconfig} \
             --leader-elect=${boolToString cfg.controllerManager.leaderElect} \
             ${if (cfg.controllerManager.serviceAccountKeyFile!=null)
               then "--service-account-private-key-file=${cfg.controllerManager.serviceAccountKeyFile}"
@@ -981,6 +1004,8 @@ in {
         };
         path = cfg.path;
       };
+
+      services.kubernetes.controllerManager.kubeconfig = kubeConfigDefaults;
     })
 
     (mkIf cfg.proxy.enable {
@@ -992,7 +1017,7 @@ in {
         serviceConfig = {
           Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-proxy \
-            --kubeconfig=${kubeconfig} \
+            --kubeconfig=${mkKubeConfig "kube-proxy" cfg.proxy.kubeconfig} \
             --bind-address=${cfg.proxy.address} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
@@ -1006,6 +1031,8 @@ in {
 
       # kube-proxy needs iptables
       networking.firewall.enable = mkDefault true;
+
+      services.kubernetes.proxy.kubeconfig = kubeConfigDefaults;
     })
 
     (mkIf (any (el: el == "master") cfg.roles) {
@@ -1054,7 +1081,7 @@ in {
         serviceConfig = {
           Slice = "kubernetes.slice";
           ExecStart = ''${pkgs.kube-dns}/bin/kube-dns \
-            --kubecfg-file=${kubeconfig} \
+            --kubecfg-file=${mkKubeConfig "kube-dns" cfg.dns.kubeconfig} \
             --dns-port=${toString cfg.dns.port} \
             --domain=${cfg.dns.domain} \
             ${optionalString cfg.verbose "--v=6"} \
@@ -1077,6 +1104,8 @@ in {
         ${pkgs.iptables}/bin/iptables -I nixos-fw -p tcp -m tcp -d ${cfg.clusterCidr} --dport 53 -j nixos-fw-accept
         ${pkgs.iptables}/bin/iptables -I nixos-fw -p udp -m udp -d ${cfg.clusterCidr} --dport 53 -j nixos-fw-accept
       '';
+
+      services.kubernetes.dns.kubeconfig = kubeConfigDefaults;
     })
 
     (mkIf (
