@@ -29765,6 +29765,26 @@ EOF
     };
   };
 
+  ecpy = buildPythonPackage rec {
+    name = "ECPy-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/ecpy/${name}.tar.gz";
+      sha256 = "0ab60sx4bbsmccwmdvz1023r0cbzi4phar4ipzn5npdj5gw1ny4l";
+    };
+
+    buildInputs = with self; [
+      hidapi pycrypto pillow protobuf future
+    ];
+
+    meta = {
+      description = "Pure Pyhton Elliptic Curve Library";
+      homepage = "https://github.com/ubinity/ECPy";
+      license = licenses.apache;
+    };
+  };
+
   x11_hash = buildPythonPackage rec{
     version = "1.4";
     name = "x11_hash-${version}";
