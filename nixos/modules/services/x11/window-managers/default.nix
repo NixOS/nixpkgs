@@ -32,6 +32,7 @@ in
     ./windowmaker.nix
     ./wmii.nix
     ./xmonad.nix
+    ./xinitrc.nix
     ./qtile.nix
     ./none.nix ];
 
