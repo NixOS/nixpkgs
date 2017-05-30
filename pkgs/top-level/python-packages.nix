@@ -1139,6 +1139,8 @@ in {
     };
   };
 
+  argcomplete = callPackage ../development/python-modules/argcomplete { };
+
   area53 = buildPythonPackage (rec {
     name = "Area53-0.94";
 
