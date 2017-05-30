@@ -64,11 +64,21 @@ let
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
+      font = if lib.last (lib.splitString "." cfg.font) == "pf2"
+             then cfg.font
+             else "${convertedFont}";
     });
 
   bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
     (concatMap (args: args.devices) cfg.mirroredBoots);
 
+  convertedFont = (pkgs.runCommand "grub-font-converted.pf2" {}
+           (builtins.concatStringsSep " "
+             ([ "${realGrub}/bin/grub-mkfont"
+               cfg.font
+               "--output" "$out"
+             ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
+         );
 in
 
 {
@@ -276,7 +286,7 @@ in
       extraInitrd = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/boot/extra_initrafms.gz";
+        example = "/boot/extra_initramfs.gz";
         description = ''
           The path to a second initramfs to be supplied to the kernel.
           This ramfs will not be copied to the store, so that it can
@@ -302,6 +312,24 @@ in
           14-colour image in XPM format, optionally compressed with
           <command>gzip</command> or <command>bzip2</command>.  Set to
           <literal>null</literal> to run GRUB in text mode.
+        '';
+      };
+
+      font = mkOption {
+        type = types.nullOr types.path;
+        default = "${realGrub}/share/grub/unicode.pf2";
+        description = ''
+          Path to a TrueType, OpenType, or pf2 font to be used by Grub.
+        '';
+      };
+
+      fontSize = mkOption {
+        type = types.nullOr types.int;
+        example = literalExample 16;
+        default = null;
+        description = ''
+          Font size for the grub menu. Ignored unless <literal>font</literal>
+          is set to a ttf or otf font.
         '';
       };
 
