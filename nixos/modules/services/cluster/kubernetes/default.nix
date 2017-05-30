@@ -49,7 +49,7 @@ let
     caFile = mkOption {
       description = "${prefix} certificate authrority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
-      default = null;
+      default = cfg.caFile;
     };
 
     certFile = mkOption {
@@ -256,12 +256,18 @@ in {
 
       caFile = mkOption {
         description = "Etcd ca file.";
-        default = null;
+        default = cfg.caFile;
         type = types.nullOr types.path;
       };
     };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";
+
+    caFile = mkOption {
+      description = "Default kubernetes certificate authority";
+      type = types.nullOr types.path;
+      default = null;
+    };
 
     dataDir = mkOption {
       description = "Kubernetes root directory for managing kubelet files.";
@@ -335,7 +341,7 @@ in {
 
       clientCaFile = mkOption {
         description = "Kubernetes apiserver CA file for client auth.";
-        default = null;
+        default = cfg.caFile;
         type = types.nullOr types.path;
       };
 
@@ -427,7 +433,7 @@ in {
 
       kubeletClientCaFile = mkOption {
         description = "Path to a cert file for connecting to kubelet.";
-        default = null;
+        default = cfg.caFile;
         type = types.nullOr types.path;
       };
 
@@ -529,7 +535,7 @@ in {
           Kubernetes controller manager certificate authority file included in
           service account's token secret.
         '';
-        default = null;
+        default = cfg.caFile;
         type = types.nullOr types.path;
       };
 
