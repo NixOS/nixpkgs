@@ -34,12 +34,6 @@ stdenv.mkDerivation rec {
       --replace "libpcsclite.so" "${pcsclite}/lib/libpcsclite.so"
   '';
 
-  patches = with lib; optional (pcsclite != null)
-    (substituteAll {
-      src = ./dlopen-absolute-paths.diff;
-      inherit pcsclite;
-    });
-
   buildInputs = with lib; [
     alsaLib cups ffmpeg_2 glib openssl pcre pcsclite libpulseaudio zlib
     gstreamer gst-plugins-base gst-plugins-good
