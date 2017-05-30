@@ -115,87 +115,6 @@ let
 
   taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (mapAttrsToList (n: v: v) cfg.kubelet.taints);
 
-  defaultAuthorizationPolicy = (optionals (any (el: el == "ABAC") cfg.apiserver.authorizationMode) [
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        user  = "kubecfg";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        user  = "kubelet";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        user  = "kube-worker";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        user  = "kube_proxy";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        user  = "client";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-  ]) ++ (optionals (all (el: el != "RBAC") cfg.apiserver.authorizationMode) [
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        user  = "admin";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-    {
-      apiVersion = "abac.authorization.kubernetes.io/v1beta1";
-      kind = "Policy";
-      spec = {
-        group  = "system:serviceaccounts";
-        namespace = "*";
-        resource = "*";
-        apiGroup = "*";
-        nonResourcePath = "*";
-      };
-    }
-  ]);
-
   # needed for flannel to pass options to docker
   mkDockerOpts = pkgs.runCommand "mk-docker-opts" {
     buildInputs = [ pkgs.makeWrapper ];
@@ -370,7 +289,7 @@ in {
           Kubernetes apiserver authorization mode (AlwaysAllow/AlwaysDeny/ABAC/RBAC). See
           <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
         '';
-        default = ["ABAC" "RBAC"];
+        default = ["RBAC"];
         type = types.listOf (types.enum ["AlwaysAllow" "AlwaysDeny" "ABAC" "RBAC"]);
       };
 
@@ -379,7 +298,7 @@ in {
           Kubernetes apiserver authorization policy file. See
           <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
         '';
-        default = defaultAuthorizationPolicy;
+        default = [];
         type = types.listOf types.attrs;
       };
 
