@@ -658,6 +658,16 @@ rec {
 
   };
 
+  vim-beancount = buildVimPlugin {
+    name = "vim-beancount";
+    src = fetchgit {
+      url = "https://github.com/nathangrigg/vim-beancount";
+      rev = "548424b59ac5902a07d53a2c984baeb3983c28ca";
+      sha256 = "0jdd2r6qg9kmv29hfwflr3m2wzqysg7aw1ssjw496bfzmwzyn6bx";
+    };
+    dependencies = [];
+  };
+
   vim-elixir = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-elixir-2017-05-18";
     src = fetchgit {
@@ -821,6 +831,36 @@ rec {
     };
     dependencies = [];
 
+  };
+
+  vim-trailing-whitespace = buildVimPlugin {
+    name = "vim-trailing-whitespace";
+    src = fetchgit {
+      url = "https://github.com/bronson/vim-trailing-whitespace";
+      rev = "733fb64337b6da4a51c85a43450cd620d8b617b5";
+      sha256 = "1469bd744lf8vk1nnw7kyq4ahpw84crp614mkpq88cs6rhvjhcyw";
+    };
+    dependencies = [];
+  };
+
+  vim-toml = buildVimPlugin {
+    name = "vim-toml";
+    src = fetchgit {
+      url = "https://github.com/cespare/vim-toml";
+      rev = "00ecc580aef1f7f80779af577b6e2b7a056f260f";
+      sha256 = "16jmk58619qg88s839d5rnhpjxcpdmfq1199d5z2l089x05cw1ad";
+    };
+    dependencies = [];
+  };
+
+  vim-cpp-enhanced-highlight = buildVimPlugin {
+    name = "vim-cpp-enhanced-highlight";
+    src = fetchgit {
+      url = "https://github.com/octol/vim-cpp-enhanced-highlight";
+      rev = "42e8b05f200a22635ac4774fa6c1efd37b0484d6";
+      sha256 = "1sjfnbbgxngq590i51pmmpkp0npkqjsafkcwwc5a4bpprlyq4kbb";
+    };
+    dependencies = [];
   };
 
   lightline-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
