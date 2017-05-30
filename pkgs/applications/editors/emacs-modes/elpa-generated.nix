@@ -1100,10 +1100,10 @@
       }) {};
     load-relative = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "load-relative";
-        version = "1.2";
+        version = "1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/load-relative-1.2.el";
-          sha256 = "0vmfal05hznb10k2y3j9mychi9ra4hxcm6qf7j1r8aw9j7af6riw";
+          url = "https://elpa.gnu.org/packages/load-relative-1.3.el";
+          sha256 = "1hfxb2436jdsi9wfmsv47lkkpa5galjf5q81bqabbsv79rv59dps";
         };
         packageRequires = [];
         meta = {
@@ -1404,10 +1404,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170502";
+        version = "20170515";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170502.tar";
-          sha256 = "12inz804j55ycprb2m3ay54d1bhwhjssmn5nrfm7cfklyhfsy27s";
+          url = "https://elpa.gnu.org/packages/org-20170515.tar";
+          sha256 = "0lfapcxil69x1a63cszgq72lqks1z3gpyxw7vcllqlgi7n7a4y6f";
         };
         packageRequires = [];
         meta = {
@@ -1431,10 +1431,10 @@
     other-frame-window = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "other-frame-window";
-        version = "1.0.2";
+        version = "1.0.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/other-frame-window-1.0.2.el";
-          sha256 = "0gr4vn7ld4fx372091wxnzm1rhq6rc4ycim4fwz5bxnpykz83l7d";
+          url = "https://elpa.gnu.org/packages/other-frame-window-1.0.3.el";
+          sha256 = "0vq1zfsdnxdjvmb7lkjyax27kfv0rw0141rd5fjnl6ap9yjwpxkv";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1850,10 +1850,10 @@
     test-simple = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "test-simple";
-        version = "1.2.0";
+        version = "1.3.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/test-simple-1.2.0.el";
-          sha256 = "1j97qrwi3i2kihszsxf3y2cby2bzp8g0zf6jlpdix3dinav8xa3b";
+          url = "https://elpa.gnu.org/packages/test-simple-1.3.0.el";
+          sha256 = "1yd61jc9ds95a5n09052kwc5gasy57g4lxr0jsff040brlyi9czz";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1978,6 +1978,19 @@
         packageRequires = [ cl-lib emacs seq ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/validate.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    vdiff = callPackage ({ elpaBuild, emacs, fetchurl, hydra, lib }: elpaBuild {
+        pname = "vdiff";
+        version = "0.2.3";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/vdiff-0.2.3.el";
+          sha256 = "197wszzhm2kbfvvlg3f0dzfs3lf4536yq5fd67k2rycj421fr9qz";
+        };
+        packageRequires = [ emacs hydra ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/vdiff.html";
           license = lib.licenses.free;
         };
       }) {};

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "000lylg5qgriaxh6k78l2inb905qshx01kxgmqj89zn08gvn7ps2";
+    sha256 = "171vbqijfk1crm04dbgbvw4052n6kwcvyvly3habg011qdr3schs";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB

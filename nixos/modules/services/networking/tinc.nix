@@ -35,7 +35,8 @@ in
               description = ''
                 The name of the node which is used as an identifier when communicating
                 with the remote nodes in the mesh. If null then the hostname of the system
-                is used.
+                is used to derive a name (note that tinc may replace non-alphanumeric characters in
+                hostnames by underscores).
               '';
             };
 

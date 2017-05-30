@@ -1,7 +1,9 @@
 { lib, buildPythonPackage, fetchurl, requests, novaclient, keyring,
   rackspace-novaclient, six, isPy3k, pytest, glibcLocales }:
 buildPythonPackage rec {
-  name = "pyrax-1.9.8";
+  pname = "pyrax";
+  version = "1.9.8";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyrax/${name}.tar.gz";

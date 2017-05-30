@@ -87,12 +87,18 @@ let
 
   srcs = {
     "x86_64-linux" = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
+      urls = [
+        "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+      ];
       sha256 = "0jn98arczlgjigpmql1qg5b7izabv4zy4mji6vvcg3b8g1ma108r";
     };
 
     "i686-linux" = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
+      urls = [
+        "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+      ];
       sha256 = "0micxgkbys0py4bj6csbc8xz4gq0x5v2zirgi38krnm5x5riqj3w";
     };
   };
@@ -105,6 +111,7 @@ stdenv.mkDerivation rec {
   src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
 
   preferLocalBuild = true;
+  allowSubstitutes = false;
 
   desktopItem = makeDesktopItem {
     name = "torbrowser";

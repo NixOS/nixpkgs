@@ -814,6 +814,8 @@ with pkgs;
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
+  cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
+
   clib = callPackage ../tools/package-management/clib { };
 
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
@@ -968,6 +970,8 @@ with pkgs;
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
+
+  fsql = callPackage ../tools/misc/fsql { };
 
   fop = callPackage ../tools/typesetting/fop { };
 
@@ -1384,6 +1388,8 @@ with pkgs;
 
   c14 = callPackage ../applications/networking/c14 { };
 
+  cfssl = callPackage ../tools/security/cfssl { };
+
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
   clamav = callPackage ../tools/security/clamav { };
@@ -1684,6 +1690,8 @@ with pkgs;
   eid-mw = callPackage ../tools/security/eid-mw { };
 
   eid-viewer = callPackage ../tools/security/eid-viewer { };
+
+  mcrcon = callPackage ../tools/networking/mcrcon {};
 
   ### DEVELOPMENT / EMSCRIPTEN
 
@@ -4056,6 +4064,8 @@ with pkgs;
   silver-searcher = callPackage ../tools/text/silver-searcher { };
   ag = self.silver-searcher;
 
+  simpleproxy = callPackage ../tools/networking/simpleproxy { };
+
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
   sipsak = callPackage ../tools/networking/sipsak { };
@@ -4482,6 +4492,8 @@ with pkgs;
   };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
+
+  vimer = callPackage ../tools/misc/vimer { };
 
   vit = callPackage ../applications/misc/vit { };
 
@@ -6180,7 +6192,7 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   python = python2;
   python2 = python27;
-  python3 = python35;
+  python3 = python36;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -6194,9 +6206,9 @@ with pkgs;
   python36Full = python36.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
-  pythonPackages = python2Packages;
-  python2Packages = python27Packages;
-  python3Packages = python35Packages;
+  pythonPackages = python.pkgs;
+  python2Packages = python2.pkgs;
+  python3Packages = python3.pkgs;
 
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
@@ -6206,18 +6218,21 @@ with pkgs;
     self = python33;
     inherit (darwin) CF configd;
   };
-  python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
+  python34 = callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
     self = python34;
-  });
-  python35 = hiPrio (callPackage ../development/interpreters/python/cpython/3.5 {
+  };
+  python35 = callPackage ../development/interpreters/python/cpython/3.5 {
     inherit (darwin) CF configd;
     self = python35;
-  });
+  };
   python36 = callPackage ../development/interpreters/python/cpython/3.6 {
     inherit (darwin) CF configd;
     self = python36;
   };
+
+  # Should eventually be moved inside Python interpreters.
+  python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
 
   pypy = pypy27;
 
@@ -9250,12 +9265,16 @@ with pkgs;
       inherit (darwin) apple_sdk;
     }
     else alternative;
+
   mesa_noglu = mesaDarwinOr (callPackage ../development/libraries/mesa {
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
-    grsecEnabled = true;
-    llvmPackages = llvmPackages_39;
+    # grsecEnabled = true; # no more support in nixpkgs ATM
+
+    # llvm-4.0.0 won't pass tests on aarch64
+    llvmPackages = if system == "aarch64-linux" then llvmPackages_39 else llvmPackages_4;
   });
+
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
     let mo = mesa_noglu.override {
@@ -10346,7 +10365,7 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = webkitgtk214x;
+  webkitgtk = webkitgtk216x;
 
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
@@ -10354,7 +10373,7 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  webkitgtk214x = callPackage ../development/libraries/webkitgtk/2.14.nix {
+  webkitgtk216x = callPackage ../development/libraries/webkitgtk/2.16.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -10714,9 +10733,9 @@ with pkgs;
 
   python34Packages = python34.pkgs;
 
-  python35Packages = recurseIntoAttrs python35.pkgs;
+  python35Packages = python35.pkgs;
 
-  python36Packages = python36.pkgs;
+  python36Packages = recurseIntoAttrs python36.pkgs;
 
   pypyPackages = pypy.pkgs;
 
@@ -10864,6 +10883,10 @@ with pkgs;
   dictDBCollector = callPackage ../servers/dict/dictd-db-collector.nix {};
 
   diod = callPackage ../servers/diod { lua = lua5_1; };
+
+  dkimproxy = callPackage ../servers/mail/dkimproxy {
+    inherit (perlPackages) Error MailDKIM MIMEtools NetServer;
+  };
 
   dnschain = callPackage ../servers/dnschain { };
 
@@ -16925,6 +16948,8 @@ with pkgs;
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
+  galaxis = callPackage ../games/galaxis { };
+
   gambatte = callPackage ../games/gambatte { };
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
@@ -18098,6 +18123,8 @@ with pkgs;
     motif = null; # motif or lesstif
   };
 
+  cernlib = callPackage ../development/libraries/physics/cernlib { };
+
   g4py = callPackage ../development/libraries/physics/geant4/g4py { };
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
@@ -18831,6 +18858,7 @@ with pkgs;
   xrq = callPackage ../applications/misc/xrq { };
 
   nitrokey-app = callPackage ../tools/security/nitrokey-app { };
+  nitrokey-udev-rules = callPackage ../tools/security/nitrokey-app/udev-rules.nix { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 

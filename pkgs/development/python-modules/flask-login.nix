@@ -2,7 +2,8 @@
 , flask, nose, mock, blinker}:
 
 buildPythonPackage rec {
-  name = "Flask-Login-${version}";
+  pname = "Flask-Login";
+  name = "${pname}-${version}";
   version = "0.4.0";
 
   src = fetchFromGitHub {
