@@ -29674,6 +29674,11 @@ EOF
     # There are no actual tests: "ImportError: No module named tests"
     doCheck = false;
 
+    # remove impossible dependency constraint
+    postPatch = ''
+      sed -i -e 's/hidapi==/hidapi>=/' setup.py
+    '';
+
     meta = {
       description = "KeepKey Python client";
       homepage = https://github.com/keepkey/python-keepkey;
