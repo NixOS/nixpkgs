@@ -19131,11 +19131,13 @@ in {
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.25.1";
+    name = "pygit2-0.25.1-2017-05-07";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pygit2/${name}.tar.gz";
-      sha256 = "0sja3g9mqwp5bnhdc313b2gc4z3p70nn6zzf2h8j581g0lrn0sg8";
+    src = pkgs.fetchFromGitHub {
+      owner = "libgit2";
+      repo = "pygit2";
+      rev = "f18de427bf9f3601778daa4dd559b995ad5bd29a";
+      sha256 = "1sihlxzrs91q1pz0vlvfa0c0pidbds2gcr8fhabn6ca2d5b2hfca";
     };
 
     preConfigure = optionalString stdenv.isDarwin ''
@@ -19149,6 +19151,7 @@ in {
       # disable tests that require networking
       rm test/test_repository.py
       rm test/test_credentials.py
+      rm test/test_submodule.py
     '';
 
     meta = {
