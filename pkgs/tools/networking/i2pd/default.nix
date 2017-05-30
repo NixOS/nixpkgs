@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost zlib openssl ];
-  makeFlags = "USE_AESNI=no";
+  makeFlags = [ "USE_AESNI=no" "USE_AVX=no" ];
 
   installPhase = ''
     install -D i2pd $out/bin/i2pd
