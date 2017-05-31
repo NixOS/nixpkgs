@@ -31,10 +31,10 @@ in
   };
 
   legacy_304 = generic {
-    version = "304.134";
-    sha256_32bit = "178wx0a2pmdnaypa9pq6jh0ii0i8ykz1sh1liad9zfriy4d8kxw4";
-    sha256_64bit = "0pydw7nr4d2dply38kwvjbghsbilbp2q0mas4nfq5ad050d2c550";
-    settingsSha256 = "0q92xw4fr9p5nbhj1plynm50d32881861daxfwrisywszqijhmlf";
+    version = "304.135";
+    sha256_32bit = "14qdl39wird04sqba94dcb77i63igmxxav62ndr4qyyavn8s3c2w";
+    sha256_64bit = "125mianhvq591np7y5jjrv9vmpbvixnkicr49ni48mcr0yjnjqkh";
+    settingsSha256 = "1y7swikdngq4nlwzkrq20yfah9zr31n1a5i6nw37awnp8xjilhzm";
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
