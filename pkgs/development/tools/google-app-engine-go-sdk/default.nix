@@ -1,7 +1,5 @@
 { stdenv, fetchzip, python27, python27Packages, makeWrapper }:
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin";
-
 with python27Packages;
 
 stdenv.mkDerivation rec {
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
     version = version;
     homepage = "https://cloud.google.com/appengine/docs/go/";
     license = licenses.asl20;
-    platforms = with platforms; linux ++ darwin;
+    platforms = ["x86_64-linux" "x86_64-darwin"];
     maintainers = with maintainers; [ lufia ];
   };
 }
