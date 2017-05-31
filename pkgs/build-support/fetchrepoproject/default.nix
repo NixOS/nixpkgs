@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     ${optionalString (!createMirror) "rm -rf $out/.repo"}
   '';
 
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  GIT_SSL_NO_VERIFY = 1;
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
