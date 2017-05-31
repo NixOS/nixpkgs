@@ -388,7 +388,7 @@ let
 
     ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
 
-    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
+    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { cmdliner = cmdliner_1_0; };
 
     ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
 
