@@ -1,27 +1,27 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, pkgs_multiarch, lib, ... }:
 
 with lib;
 let
   cfg = config.i18n.inputMethod;
 
-  gtk2_cache = pkgs.runCommand "gtk2-immodule.cache"
+  gtk2_cache = system: pkgs.runCommand "gtk2-immodule.cache"
     { preferLocalBuild = true;
       allowSubstitutes = false;
-      buildInputs = [ pkgs.gtk2 cfg.package ];
+      buildInputs = map (x: x.${system}) [ pkgs_multiarch.gtk2 cfg.package ];
     }
     ''
       mkdir -p $out/etc/gtk-2.0/
-      GTK_PATH=${cfg.package}/lib/gtk-2.0/ gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules.cache
+      GTK_PATH=${cfg.package.${system}}/lib/gtk-2.0 gtk-query-immodules-2.0 > $out/etc/gtk-2.0/immodules-${system}.cache
     '';
 
-  gtk3_cache = pkgs.runCommand "gtk3-immodule.cache"
+  gtk3_cache = system: pkgs.runCommand "gtk3-immodule.cache"
     { preferLocalBuild = true;
       allowSubstitutes = false;
-      buildInputs = [ pkgs.gtk3 cfg.package ];
+      buildInputs = map (x: x.${system}) [ pkgs_multiarch.gtk3 cfg.package ];
     }
     ''
       mkdir -p $out/etc/gtk-3.0/
-      GTK_PATH=${cfg.package}/lib/gtk-3.0/ gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
+      GTK_PATH=${cfg.package.${system}}/lib/gtk-3.0 gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules-${system}.cache
     '';
 
 in
@@ -50,17 +50,18 @@ in
 
       package = mkOption {
         internal = true;
-        type     = types.path;
+        type     = types.attrsOf types.package;
         default  = null;
         description = ''
-          The input method method package.
+          The input method method package function.
         '';
       };
     };
   };
 
   config = mkIf (cfg.enabled != null) {
-    environment.systemPackages = [ cfg.package gtk2_cache gtk3_cache ];
+    environment.systemPackages = [ cfg.package.${pkgs.stdenv.system} ];
+    libraries.packages = map (cache: mapAttrs (system: stdenv: cache system) pkgs_multiarch.stdenv) [ gtk2_cache gtk3_cache ];
   };
 
   meta = {

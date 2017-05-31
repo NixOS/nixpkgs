@@ -1,14 +1,14 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, pkgs_multiarch, lib, ... }:
 
 with lib;
 
 let
   cfg = config.i18n.inputMethod.ibus;
-  ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
-  ibusEngine = types.package // {
-    name  = "ibus-engine";
-    check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
-  };
+  ibusPackage = system: pkgs_multiarch.ibus-with-plugins.${system}.override { plugins = map (es: es.${system}) cfg.engines; };
+  ibusEngines = types.listOf (types.attrsOf (types.package // {
+    name  = "ibusEngine";
+    check = x: attrByPath ["meta" "isIbusEngine"] false x;
+  }));
 
   impanel =
     if cfg.panel != null
@@ -22,7 +22,7 @@ let
       [Desktop Entry]
       Name=IBus
       Type=Application
-      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
+      Exec=${ibusPackage pkgs.stdenv.system}/bin/ibus-daemon --daemonize --xim ${impanel}
     '';
   };
 in
@@ -30,9 +30,9 @@ in
   options = {
     i18n.inputMethod.ibus = {
       engines = mkOption {
-        type    = with types; listOf ibusEngine;
+        type    = ibusEngines;
         default = [];
-        example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
+        example = literalExample "with pkgs_multiarch.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
@@ -51,7 +51,7 @@ in
   };
 
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
-    i18n.inputMethod.package = ibusPackage;
+    i18n.inputMethod.package = mapAttrs (name: stdenv: ibusPackage stdenv.system) pkgs_multiarch.stdenv;
 
     # Without dconf enabled it is impossible to use IBus
     environment.systemPackages = with pkgs; [

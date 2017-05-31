@@ -1,9 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, pkgs_multiarch, lib, ... }:
 
 with lib;
 {
   config = mkIf (config.i18n.inputMethod.enabled == "nabi") {
-    i18n.inputMethod.package = pkgs.nabi;
+    i18n.inputMethod.package = pkgs_multiarch.nabi;
 
     environment.variables = {
       GTK_IM_MODULE = "nabi";

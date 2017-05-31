@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, pkgs_multiarch, lib, ... }:
 
 with lib;
 
@@ -22,7 +22,7 @@ in
   };
 
   config = mkIf (config.i18n.inputMethod.enabled == "uim") {
-    i18n.inputMethod.package = pkgs.uim;
+    i18n.inputMethod.package = pkgs_multiarch.uim;
 
     environment.variables = {
       GTK_IM_MODULE = "uim";
