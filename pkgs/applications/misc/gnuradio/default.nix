@@ -60,12 +60,6 @@ stdenv.mkDerivation rec {
   cmakeFlags =                             
     stdenv.lib.optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
 
-  postBuild = 
-    stdenv.lib.optionalString stdenv.isDarwin ''
-      echo "Attempting to patch qwt-dependent libs"
-      find . "(" -name "_qtgui_swig.so" -o -name "libgnuradio-qtgui*.dylib" ")" -print -exec install_name_tool -change qwt.framework/Versions/6/qwt ${qwt}/lib/qwt.framework/Versions/6/qwt "{}" ";"
-    '';
-
   # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
   #   programs will not display anything. Yes, $MATPLOTLIBRC must point to the
   #   *dirname* where matplotlibrc is located, not the file itself.
