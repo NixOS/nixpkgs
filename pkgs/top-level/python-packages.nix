@@ -29632,35 +29632,13 @@ EOF
 
   mnemonic = callPackage ../development/python-modules/mnemonic.nix { };
 
+  keepkey = callPackage ../development/python-modules/keepkey { };
+
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
   trezor = callPackage ../development/python-modules/trezor.nix { };
-
-  keepkey = buildPythonPackage rec{
-    version = "0.7.3";
-    name = "keepkey-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/keepkey/${name}.tar.gz";
-      sha256 = "14d2r8dlx997ypgma2k8by90acw7i3l7hfq4gar9lcka0lqfj714";
-    };
-
-    propagatedBuildInputs = with self; [ protobuf3_0 hidapi ];
-
-    buildInputs = with self; [ ecdsa mnemonic ];
-
-    # There are no actual tests: "ImportError: No module named tests"
-    doCheck = false;
-
-    meta = {
-      description = "KeepKey Python client";
-      homepage = https://github.com/keepkey/python-keepkey;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
 
   semver = buildPythonPackage rec {
     name = "semver-${version}";
