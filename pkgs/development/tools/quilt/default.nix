@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, pkgs}:
-
-with pkgs;
+{ stdenv, fetchurl, makeWrapper, bash, perl, diffstat, diffutils, patch, findutils }:
 
 stdenv.mkDerivation rec {
+
   name = "quilt-0.65";
 
   src = fetchurl {
@@ -31,4 +30,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
   };
+
 }
