@@ -370,7 +370,6 @@ stdenv.mkDerivation {
 
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;
-    libc = stdenv.ccCross.libc;
   };
 
   meta =
