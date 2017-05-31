@@ -61,13 +61,27 @@ let
     # TODO: use @target_tripple@ for consistency
     if targetPlatform == hostPlatform
     then textFile
-    else runCommand "sed-nix-env-vars" {} ''
-      cp ${textFile} $out
+    else runCommand "sed-nix-env-vars" {} (''
+      cp --no-preserve=mode ${textFile} $out
 
       sed -i $out \
         -e 's^NIX_^NIX_${infixSalt_}^g' \
         -e 's^addCVars^addCVars${_infixSalt}^g' \
         -e 's^\[ -z "\$crossConfig" \]^\[\[ "${builtins.toString (targetPlatform != hostPlatform)}" || -z "$crossConfig" \]\]^g'
+
+    '' + stdenv.lib.optionalString (textFile == ./setup-hook.sh) ''
+      cat << 'EOF' >> $out
+        for CMD in ar as nm objcopy ranlib strip strings size ld
+        do
+          # which is not part of stdenv, but compgen will do for now
+          if
+            PATH=$_PATH type -p ${prefix}$CMD > /dev/null
+          then
+            export ''$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=${prefix}''${CMD};
+          fi
+        done
+      EOF
+    '' + ''
 
       # NIX_ things which we don't both use and define, we revert them
       #asymmetric=$(
@@ -85,7 +99,7 @@ let
       do
         sed -i $out -E -e "s~NIX_${infixSalt_}$var([^a-zA-Z_]|$)~NIX_$var\1~g"
       done
-    '';
+    '');
 in
 
 stdenv.mkDerivation {
