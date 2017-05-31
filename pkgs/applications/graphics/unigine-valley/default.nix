@@ -95,7 +95,7 @@ in
       install -m 0755 valley $out/bin/valley
       wrapProgram $out/bin/valley \
         --run "cd $instdir" \
-        --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$instdir/bin:$libPath
+        --prefix LD_LIBRARY_PATH : $instdir/bin:$libPath
 
       runHook postInstall
     '';
