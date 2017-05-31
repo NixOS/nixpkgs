@@ -1,5 +1,25 @@
 { lib, gemConfig, ... }:
 rec {
+  bundlerFiles = {
+    gemfile ? null
+  , lockfile ? null
+  , gemset ? null
+  , gemdir ? null
+  , ...
+  }: {
+    gemfile =
+    if gemfile == null then assert gemdir != null; gemdir + "/Gemfile"
+    else gemfile;
+
+    lockfile =
+    if lockfile == null then assert gemdir != null; gemdir + "/Gemfile.lock"
+    else lockfile;
+
+    gemset =
+    if gemset == null then assert gemdir != null; gemdir + "/gemset.nix"
+    else gemset;
+  };
+
   filterGemset = {ruby, groups,...}@env: gemset: lib.filterAttrs (name: attrs: platformMatches ruby attrs && groupMatches groups attrs) gemset;
 
   platformMatches = {rubyEngine, version, ...}@ruby: attrs: (

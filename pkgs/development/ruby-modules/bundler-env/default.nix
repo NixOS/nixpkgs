@@ -1,10 +1,6 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
 , callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem, buildEnv
-, linkFarm
-, git
-, makeWrapper
-, bundler
-, tree
+, linkFarm, git, makeWrapper, bundler, tree
 }@defs:
 
 { name ? null
@@ -13,12 +9,12 @@
 , gemfile ? null
 , lockfile ? null
 , gemset ? null
+, groups ? ["default"]
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
 , document ? []
 , meta ? {}
-, groups ? ["default"]
 , ignoreCollisions ? false
 , ...
 }@args:

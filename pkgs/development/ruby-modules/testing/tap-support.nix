@@ -2,7 +2,7 @@ with builtins;
 let
   withIndexes = list: genList (idx: (elemAt list idx) // {index = idx;}) (length list);
 
-  testLine = report: "${okStr report} ${toString report.index} ${report.description}" + testDirective report + testYaml report;
+  testLine = report: "${okStr report} ${toString (report.index + 1)} ${report.description}" + testDirective report + testYaml report;
 
   testDirective = report: "";
 

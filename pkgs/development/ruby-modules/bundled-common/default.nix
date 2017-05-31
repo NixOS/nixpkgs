@@ -7,10 +7,10 @@
 {
   name
 , pname ? name
+, gemdir
 , gemfile
 , lockfile
 , gemset
-, gemdir
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
