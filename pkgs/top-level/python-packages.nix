@@ -29630,7 +29630,7 @@ EOF
     inherit (pkgs) udev libusb1;
   };
 
-  mnemonic = callPackage ../development/python-modules/mnemonic.nix { };
+  mnemonic = callPackage ../development/python-modules/mnemonic { };
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
