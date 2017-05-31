@@ -128,7 +128,7 @@ let
     ++ optionals stdenv.isCygwin [ expat libffi ]
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optionals (stdenv.isDarwin && CF != null) [ CF configd ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;

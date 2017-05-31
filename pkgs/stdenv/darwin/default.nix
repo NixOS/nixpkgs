@@ -151,7 +151,13 @@ in rec {
     extraBuildInputs = [];
   };
 
-  persistent0 = _: _: _: {};
+  persistent0 = _: self: super: {
+    # Python is needed to build xnu.
+    python = super.python.override {
+      # Break a circular dependency.
+      CF = null; configd = null;
+    };
+  };
 
   stage1 = prevStage: with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";

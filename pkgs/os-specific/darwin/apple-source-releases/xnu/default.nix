@@ -1,9 +1,9 @@
-{ stdenv, appleDerivation, fetchzip, bootstrap_cmds, bison, flex, gnum4, unifdef, perl }:
+{ stdenv, appleDerivation, fetchzip, bootstrap_cmds, bison, flex, gnum4, unifdef, perl, python }:
 
 appleDerivation {
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
-  buildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl ];
+  buildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python ];
 
   patchPhase = ''
     substituteInPlace Makefile \
