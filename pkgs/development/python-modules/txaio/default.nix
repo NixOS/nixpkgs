@@ -18,8 +18,10 @@ buildPythonPackage rec {
     sed -i '152d' test/test_logging.py
   '';
 
+  # test_chained_callback has been removed just post-2.7.1 because the functionality was decided against and the test
+  # breaks on python 3.6 https://github.com/crossbario/txaio/pull/104
   checkPhase = ''
-    py.test -k "not test_sdist"
+    py.test -k "not (test_sdist or test_chained_callback)"
   '';
 
   meta = with stdenv.lib; {
