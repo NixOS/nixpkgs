@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
   '';
 
+  fixupPhase =
+    stdenv.lib.optionalString stdenv.isDarwin ''
+      echo "Attempting to repair qwt"
+      install_name_tool -id "$out/lib/qwt.framework/Versions/6/qwt" "$out/lib/qwt.framework/Versions/6/qwt"
+    '';
+
   qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
 
   meta = with stdenv.lib; {
