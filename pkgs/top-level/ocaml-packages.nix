@@ -130,6 +130,8 @@ let
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+    cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
+
     cohttp = callPackage ../development/ocaml-modules/cohttp {
       lwt = ocaml_lwt;
     };
