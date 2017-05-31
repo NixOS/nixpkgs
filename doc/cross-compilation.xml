@@ -128,7 +128,7 @@
         <listitem>
           <para>
             This is a string identifying the standard C library used.
-            Valid identifiers include "glibc" for GNU libc, "libsystem" for Darwin's Libsystem, and "uclibc" for µClibc.
+            Valid identifiers include "glibc" for GNU libc, "libSystem" for Darwin's Libsystem, and "uclibc" for µClibc.
             It should probably be refactored to use the module system, like <varname>parse</varname>.
           </para>
         </listitem>
