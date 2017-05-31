@@ -2,7 +2,7 @@
 
 with utils;
 with lib;
-with import ./systemd-unit-options.nix { inherit config lib; };
+with import ./systemd-unit-options.nix { inherit config lib utils; };
 with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
@@ -326,10 +326,9 @@ let
       text = commonUnitText def +
         ''
           [Service]
-          ${let env = cfg.globalEnvironment // def.environment;
+          ${let env = mergeEnvironment [ cfg.globalEnvironment def.environment ];
             in concatMapStrings (n:
-              let s = optionalString (env."${n}" != null)
-                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
+              let s = "Environment=${builtins.toJSON "${n}=${makeEnvironmentValue env.${n}}"}\n";
               in if stringLength s >= 2048 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
           ${if def.reloadIfChanged then ''
             X-ReloadIfChanged=true
@@ -524,7 +523,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = types.attrs;
+      type = utils.environmentAttrs;
       default = {};
       example = { TZ = "CET"; };
       description = ''

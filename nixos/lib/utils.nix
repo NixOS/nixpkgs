@@ -25,4 +25,10 @@ rec {
       throw "${shell} is not a shell package"
     else
       shell;
+
+  # Environment attributes type and conversion function.
+  environmentAttrs = with types; attrsOf (either path (either str (listOf str)));
+  makeEnvironmentValue = v: if isList v then concatStringsSep ":" v else v;
+  mergeEnvironment = zipAttrsWith (name: values: if all isList values then concatLists values else last values);
+
 }

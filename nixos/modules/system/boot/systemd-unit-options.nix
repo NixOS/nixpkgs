@@ -1,4 +1,4 @@
-{ config, lib }:
+{ config, lib, utils }:
 
 with lib;
 with import ./systemd-lib.nix { inherit config lib pkgs; };
@@ -198,7 +198,7 @@ in rec {
 
     environment = mkOption {
       default = {};
-      type = types.attrs; # FIXME
+      type = utils.environmentAttrs;
       example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
       description = "Environment variables passed to the service's processes.";
     };

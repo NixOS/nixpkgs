@@ -1,6 +1,6 @@
 # This module defines a system-wide environment that will be
 # initialised by pam_env (that is, not only in shells).
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -15,6 +15,7 @@ in
   options = {
 
     environment.sessionVariables = mkOption {
+      type = utils.environmentAttrs;
       default = {};
       description = ''
         A set of environment variables used in the global environment.
@@ -23,8 +24,6 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
   };
@@ -33,9 +32,7 @@ in
 
     system.build.pamEnvironment = pkgs.writeText "pam-environment"
        ''
-         ${concatStringsSep "\n" (
-           (mapAttrsToList (n: v: ''${n}="${concatStringsSep ":" v}"'')
-             (zipAttrsWith (const concatLists) ([ (mapAttrs (n: v: [ v ]) cfg.sessionVariables) ]))))}
+         ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}="${utils.makeEnvironmentValue v}"'') cfg.sessionVariables)}
        '';
 
   };

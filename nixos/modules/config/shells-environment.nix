@@ -16,7 +16,7 @@ let
 
       suffixedVariables =
         flip mapAttrs cfg.profileRelativeEnvVars (envVar: listSuffixes:
-          concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
+          concatMap (profile: map (suffix: "${profile}${suffix}") (toList listSuffixes)) cfg.profiles
         );
 
       allVariables =
@@ -33,6 +33,7 @@ in
   options = {
 
     environment.variables = mkOption {
+      type = utils.environmentAttrs;
       default = {};
       description = ''
         A set of environment variables used in the global environment.
@@ -41,16 +42,14 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
     };
 
     environment.profiles = mkOption {
+      type = types.listOf types.str;
       default = [];
       description = ''
         A list of profiles used to setup the global environment.
       '';
-      type = types.listOf types.str;
     };
 
     environment.profileRelativeEnvVars = mkOption {
@@ -66,6 +65,7 @@ in
 
     # !!! isn't there a better way?
     environment.extraInit = mkOption {
+      type = types.lines;
       default = "";
       description = ''
         Shell script code called during global environment initialisation
@@ -73,40 +73,40 @@ in
         This code is asumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
-      type = types.lines;
     };
 
     environment.shellInit = mkOption {
+      type = types.lines;
       default = "";
       description = ''
         Shell script code called during shell initialisation.
         This code is asumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
-      type = types.lines;
     };
 
     environment.loginShellInit = mkOption {
+      type = types.lines;
       default = "";
       description = ''
         Shell script code called during login shell initialisation.
         This code is asumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
-      type = types.lines;
     };
 
     environment.interactiveShellInit = mkOption {
+      type = types.lines;
       default = "";
       description = ''
         Shell script code called during interactive shell initialisation.
         This code is asumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
-      type = types.lines;
     };
 
     environment.shellAliases = mkOption {
+      type = types.attrs; # types.attrsOf types.stringOrPath;
       default = {};
       example = { ll = "ls -l"; };
       description = ''
@@ -114,16 +114,15 @@ in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
       '';
-      type = types.attrs; # types.attrsOf types.stringOrPath;
     };
 
     environment.binsh = mkOption {
+      type = types.path;
       default = "${config.system.build.binsh}/bin/sh";
       defaultText = "\${config.system.build.binsh}/bin/sh";
       example = literalExample ''
         "''${pkgs.dash}/bin/dash"
       '';
-      type = types.path;
       visible = false;
       description = ''
         The shell executable that is linked system-wide to
@@ -134,6 +133,7 @@ in
     };
 
     environment.shells = mkOption {
+      type = types.listOf (types.either types.shellPackage types.path);
       default = [];
       example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
@@ -141,7 +141,6 @@ in
         No need to mention <literal>/bin/sh</literal>
         here, it is placed into this list implicitly.
       '';
-      type = types.listOf (types.either types.shellPackage types.path);
     };
 
   };
