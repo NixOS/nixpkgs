@@ -14510,7 +14510,7 @@ with pkgs;
     lcms = lcms2;
   };
 
-  inspectrum = callPackage ../applications/misc/inspectrum { };
+  inspectrum = libsForQt5.callPackage ../applications/misc/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;
