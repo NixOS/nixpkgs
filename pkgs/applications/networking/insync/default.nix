@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     	sha256 = "1gf1qg7mkbcgqhwxkiljmd1w2zvarq6vhxhips3w06bqdyg12210";
       }
     else
-      throw "insync is not supported on ${stdenv.system}";
+      throw "${name} is not supported on ${stdenv.system}";
 
   buildInputs = [ makeWrapper ];
 
