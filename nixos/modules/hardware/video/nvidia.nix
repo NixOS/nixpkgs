@@ -28,7 +28,7 @@ let
   nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
 
   nvidiaPackage = nvidia: pkgs:
-    if !nvidia.useGLVND then nvidia
+    if !nvidia.useGLVND then nvidia.out
     else pkgs.buildEnv {
       name = "nvidia-libs";
       paths = [ pkgs.libglvnd nvidia.out ];
