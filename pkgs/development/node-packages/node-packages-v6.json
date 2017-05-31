@@ -1,6 +1,7 @@
 [
   "alloy"
 , "azure-cli"
+, "bootlint"
 , "bower"
 , "bower2nix"
 , "browserify"
