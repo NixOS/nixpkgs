@@ -1,27 +1,52 @@
---- a/gtk/gtkrc.c	2014-09-30 05:02:17.000000000 +0900
-+++ b/gtk/gtkrc.c	2016-04-09 17:39:51.363288355 +0900
-@@ -445,5 +445,23 @@
+diff -ru3 gtk+-2.24.31-old/gtk/gtkrc.c gtk+-2.24.31/gtk/gtkrc.c
+--- gtk+-2.24.31-old/gtk/gtkrc.c	2017-05-31 17:16:50.621477657 +0300
++++ gtk+-2.24.31/gtk/gtkrc.c	2017-05-31 18:31:11.016403313 +0300
+@@ -440,11 +440,47 @@
+ gtk_rc_get_im_module_file (void)
+ {
+   const gchar *var = g_getenv ("GTK_IM_MODULE_FILE");
+-  gchar *result = NULL;
++  const gchar *nix_profiles = g_getenv ("NIX_PROFILES");
++  gchar *result = NULL, *candidate;
++  const gchar * const *nix_dirs;
++  gint i;
+ 
    if (var)
      result = g_strdup (var);
  
-+  // check NIX_PROFILES paths.
-+  const gchar *nixProfilesEnv = g_getenv ("NIX_PROFILES");
-+  gchar *cachePath;
-+  guint i;
-+
-+  if(nixProfilesEnv && !result){
-+    gchar **paths = g_strsplit(nixProfilesEnv, " ", -1);
-+    for (i = 0; paths[i] != NULL; i++){
-+      cachePath = g_build_filename(paths[i], "etc", "gtk-2.0", "immodules.cache", NULL);
-+      if( g_file_test( cachePath, G_FILE_TEST_EXISTS) ){
-+        if(result) g_free(result);
-+        result = g_strdup(cachePath);
-+      }
-+      g_free(cachePath);
++  if(!result && nix_profiles)
++    {
++      nix_dirs = g_strsplit (nix_profiles, " ", -1);
++      for (i = 0; nix_dirs[i]; i++)
++        {
++          candidate = g_build_filename (nix_dirs[i], "etc", "gtk-2.0", "immodules-@system@.cache", NULL);
++          if (g_file_test (candidate, G_FILE_TEST_EXISTS))
++            {
++              if (result)
++                g_free (result);
++              result = candidate;
++            }
++          else
++            g_free (candidate);
++        }
++      if (!result)
++        {
++          for (i = 0; nix_dirs[i]; i++)
++            {
++              candidate = g_build_filename (nix_dirs[i], "etc", "gtk-2.0", "immodules.cache", NULL);
++              if (g_file_test (candidate, G_FILE_TEST_EXISTS))
++                {
++                  if (result)
++                    g_free (result);
++                  result = candidate;
++                }
++              else
++                g_free (candidate);
++            }
++        }
++      g_strfreev (nix_dirs);
 +    }
-+    g_strfreev(paths);
-+  }
 +
    if (!result)
      {
-
+       if (im_module_file)

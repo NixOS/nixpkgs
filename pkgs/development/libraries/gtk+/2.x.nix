@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
+{ stdenv, substituteAll, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk_pixbuf, libintlOrEmpty, xlibsWrapper
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? true, cups ? null
@@ -30,7 +30,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ setupHook perl pkgconfig gettext ];
 
-  patches = [ ./2.0-immodules.cache.patch ./gtk2-theme-paths.patch ];
+  patches = [
+    (substituteAll {
+      src = ./2.0-immodules.cache.patch;
+      inherit (stdenv) system;
+    })
+    ./gtk2-theme-paths.patch
+  ];
 
   propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]

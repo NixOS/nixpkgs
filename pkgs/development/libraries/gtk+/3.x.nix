@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl
+{ stdenv, substituteAll, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
 , xorg, epoxy, json_glib, libxkbcommon, gmp
 , waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
@@ -29,7 +29,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
-  patches = [ ./3.0-immodules.cache.patch ];
+  patches = [
+    (substituteAll {
+      src = ./3.0-immodules.cache.patch;
+      inherit (stdenv) system;
+    })
+  ];
 
   buildInputs = [ libxkbcommon epoxy json_glib ];
   propagatedBuildInputs = with xorg; with stdenv.lib;
