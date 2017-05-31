@@ -29634,6 +29634,8 @@ EOF
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
+  libagent = callPackage ../development/python-modules/libagent { };
+
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
 
   ecpy = callPackage ../development/python-modules/ecpy { };
