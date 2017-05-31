@@ -594,7 +594,7 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit lib janePackage ocamlbuild ctypes cryptokit magic-mime;
       inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
-      openssl = pkgs.openssl;
+      inherit (pkgs) stdenv openssl;
     };
 
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};

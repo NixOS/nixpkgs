@@ -8,6 +8,5 @@ janePackage {
   buildInputs = [ core_extended expect_test_helpers patience_diff ocaml_pcre ];
   meta = {
     description = "File Diff using the Patience Diff algorithm";
-    inherit (core_extended.meta) platforms;
   };
 }
