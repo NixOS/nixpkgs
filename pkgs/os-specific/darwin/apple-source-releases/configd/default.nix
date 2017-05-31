@@ -7,10 +7,6 @@ appleDerivation {
 
   propagatedBuildInputs = [ Security ];
 
-  propagatedSandboxProfile = ''
-    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
-  '';
-
   patchPhase = ''
     HACK=$PWD/hack
     mkdir $HACK

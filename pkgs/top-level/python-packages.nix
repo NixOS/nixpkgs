@@ -6648,9 +6648,12 @@ in {
       rm -v testing/test_xspec.py
       rm -v testing/test_gateway.py
     '';
+    # Barfs in the OS X sandbox due to some network access.
+    /*
     checkPhase = ''
       py.test testing
     '';
+    */
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;

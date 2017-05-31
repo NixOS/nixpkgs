@@ -20,10 +20,6 @@ assert crossSystem == null;
 
 let
   inherit (localSystem) system platform;
-
-  libSystemProfile = ''
-    (import "${./standard-sandbox.sb}")
-  '';
 in rec {
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -37,11 +33,6 @@ in rec {
     export gl_cv_func_getcwd_abort_bug=no
   '';
 
-  # The one dependency of /bin/sh :(
-  binShClosure = ''
-    (allow file-read* (literal "/usr/lib/libncurses.5.4.dylib"))
-  '';
-
   bootstrapTools = derivation rec {
     inherit system;
 
@@ -50,8 +41,6 @@ in rec {
     args    = [ ./unpack-bootstrap-tools.sh ];
 
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
-
-    __sandboxProfile = binShClosure + libSystemProfile;
   };
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
@@ -95,10 +84,6 @@ in rec {
           stdenv = stage0.stdenv;
           curl   = bootstrapTools;
         };
-
-        # The stdenvs themselves don't use mkDerivation, so I need to specify this here
-        stdenvSandboxProfile = binShClosure + libSystemProfile;
-        extraSandboxProfile  = binShClosure + libSystemProfile;
 
         extraAttrs = { inherit platform; parent = last; };
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
@@ -286,9 +271,6 @@ in rec {
     preHook = commonPreHook + ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-
-    stdenvSandboxProfile = binShClosure + libSystemProfile;
-    extraSandboxProfile  = binShClosure + libSystemProfile;
 
     hostPlatform = localSystem;
     targetPlatform = localSystem;
