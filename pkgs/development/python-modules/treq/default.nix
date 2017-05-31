@@ -1,5 +1,5 @@
-{ stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six,
-  mock, twisted, incremental, pep8, sphinx, openssl, pyopenssl, tox }:
+{ stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six
+, mock, twisted, incremental, pep8 }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -11,17 +11,7 @@ buildPythonPackage rec {
     sha256 = "1xhcpvsl3xqw0dq9sixk80iwyiv17djigp3815sy5pfgvvggcfii";
   };
 
-  buildInputs = [
-    service-identity
-    requests
-    twisted
-    incremental
-    sphinx
-    six
-    openssl
-    pyopenssl
-    tox
-  ];
+  propagatedBuildInputs = [ twisted requests six incremental service-identity ];
 
   checkInputs = [
     pep8
@@ -32,15 +22,16 @@ buildPythonPackage rec {
     rm -fv src/treq/test/test_treq_integration.py
   '';
 
-  postBuild = ''
-    # build documentation and install in $out
-    tox -e docs
-    mkdir -pv $out/docs
-    cp -rv docs/* $out/docs/
-  '';
+  # XXX tox tries to install coverage despite it is installed
+  #postBuild = ''
+  #  # build documentation and install in $out
+  #  tox -e docs
+  #  mkdir -pv $out/docs
+  #  cp -rv docs/* $out/docs/
+  #'';
 
   checkPhase = ''
-    ${pep8}/bin/pep8 --ignore=E902 treq
+    pep8 --ignore=E902 treq
     trial treq
   '';
 
