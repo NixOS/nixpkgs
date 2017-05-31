@@ -93,7 +93,7 @@ let
     meta = { platforms = ruby.meta.platforms; } // meta;
 
     passthru = rec {
-      inherit ruby bundler gems mainGem confFiles; # drvName;
+      inherit ruby bundler gems mainGem confFiles envPaths;
 
       wrappedRuby =
       stdenv.mkDerivation {
