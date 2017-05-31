@@ -49,8 +49,7 @@ let
       partOf = [ "samba.target" ];
 
       environment = {
-        LD_LIBRARY_PATH = nssModulesPath;
-        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
+        LD_LIBRARY_PATH = [ nssModulesPath ];
       };
 
       serviceConfig = {

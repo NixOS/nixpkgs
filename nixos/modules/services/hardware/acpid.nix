@@ -118,9 +118,8 @@ in
       unitConfig = {
         ConditionVirtualization = "!systemd-nspawn";
         ConditionPathExists = [ "/proc/acpi" ];
+        ExecStart = "${pkgs.acpid}/bin/acpid --confdir ${acpiConfDir}";
       };
-
-      script = "acpid --confdir ${acpiConfDir}";
     };
 
   };

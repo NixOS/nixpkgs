@@ -38,21 +38,18 @@ in
       pkgs.xorg.xcursorthemes
     ];
 
-    environment.pathsToLink = [ "/etc/enlightenment" "/etc/xdg" "/share/enlightenment" "/share/elementary" "/share/applications" "/share/locale" "/share/icons" "/share/themes" "/share/mime" "/share/desktop-directories" ];
+    environment.pathsToLink = [
+      "/etc/enlightenment" "/etc/xdg" "/share/enlightenment"
+      "/share/elementary" "/share/applications" "/share/locale" "/share/icons"
+      "/share/themes" "/share/mime" "/share/desktop-directories"
+    ];
 
     services.xserver.desktopManager.session = [
     { name = "Enlightenment";
       start = ''
-        # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-        export GTK_DATA_PREFIX=${config.system.path}
-        # find theme engines
-        export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
         export XDG_MENU_PREFIX=enlightenment
 
         export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
-
-        # make available for D-BUS user services
-        #export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}:${config.system.path}/share:${e.efl}/share
 
         # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
@@ -92,7 +89,6 @@ in
             StandardOutput = "null";
           };
       };
-
 
   };
 

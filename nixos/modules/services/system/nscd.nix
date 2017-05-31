@@ -51,7 +51,7 @@ in
 
         wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
 
-        environment = { LD_LIBRARY_PATH = nssModulesPath; };
+        environment."LD_LIBRARY_PATH" = [ nssModulesPath ];
 
         preStart =
           ''
