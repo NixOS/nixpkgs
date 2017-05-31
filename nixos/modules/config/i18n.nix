@@ -126,6 +126,9 @@ with lib;
     environment.systemPackages =
       optional (config.i18n.supportedLocales != []) config.i18n.glibcLocales;
 
+    environment.pathsToLink =
+      optional (config.i18n.supportedLocales != []) "/lib/locale";
+
     environment.sessionVariables =
       { LANG = config.i18n.defaultLocale;
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";

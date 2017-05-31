@@ -32,9 +32,7 @@ with lib;
 
   config = {
 
-    # FIXME: currently disabled because /lib is already in
-    # environment.pathsToLink, and we can't have both.
-    #environment.pathsToLink = [ "/lib/debug/.build-id" ];
+    environment.pathsToLink = [ "/lib/debug/.build-id" ];
 
     environment.extraOutputsToInstall =
       optional config.environment.enableDebugInfo "debug";
