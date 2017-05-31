@@ -42,6 +42,25 @@ let
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
+    prePatch = let
+      debPatches = fetchurl {
+        url = "mirror://debian/pool/non-free/n/nvidia-graphics-drivers-legacy-304xx/"
+            + "nvidia-graphics-drivers-legacy-304xx_304.135-2.debian.tar.xz";
+        sha256 = "0mhji0ssn7075q5a650idigs48kzf11pzj2ca2n07rwxg3vj6pdr";
+      };
+      prefix = "debian/module/debian/patches";
+      applyPatches = pnames: if pnames == [] then null else
+        ''
+          tar xf '${debPatches}'
+          sed 's|^\([+-]\{3\} [ab]\)/|\1/kernel/|' -i ${prefix}/*.patch
+          patches="$patches ${concatMapStringsSep " " (pname: "${prefix}/${pname}.patch") pnames}"
+        '';
+    in
+      # TODO: perhaps other branches also need patching?
+      if (versionOlder version "340") then applyPatches
+        [ "fix-typos" "drm-driver-legacy" "deprecated-cpu-events" "disable-mtrr" ]
+      else null;
+
     # patch to get the nvidia and nvidiaBeta driver to compile on kernel 4.10
     patches = if libsOnly
               then null
