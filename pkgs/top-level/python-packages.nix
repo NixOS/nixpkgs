@@ -2603,7 +2603,7 @@ in {
 
   };
 
-  rarfile = callPackage ../development/python-modules/rarfile {};
+  rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   proboscis = buildPythonPackage rec {
     name = "proboscis-1.2.6.0";
