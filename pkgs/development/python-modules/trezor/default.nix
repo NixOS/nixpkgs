@@ -1,12 +1,12 @@
-{ lib, fetchurl, buildPythonPackage, protobuf3_0, hidapi, ecdsa, mnemonic }:
+{ lib, fetchPypi, buildPythonPackage, protobuf3_0, hidapi, ecdsa, mnemonic }:
 
 buildPythonPackage rec {
+  name = "${pname}-${version}";
   pname = "trezor";
   version = "0.7.13";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "d05f388bb56b6f61cc727999cc725078575238a0b6172450322bc55c437fefe5";
   };
 
