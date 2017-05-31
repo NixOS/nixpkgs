@@ -4076,11 +4076,11 @@ in {
 
 
   consul = buildPythonPackage (rec {
-    name = "python-consul-0.6.0";
+    name = "python-consul-0.7.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-consul/${name}.tar.gz";
-      sha256 = "0vfyr499sbc4nnhhijp2lznyj507nnak95bvv9w8y78ngxggskbh";
+      sha256 = "18gs5myk9wkkq5zvj0n0s68ngj3mrbdcifshxfj1j0bgb1km0wpm";
     };
 
     buildInputs = with self; [ requests six pytest ];
