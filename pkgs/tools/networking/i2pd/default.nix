@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost zlib openssl ];
-  makeFlags = "USE_AESNI=no";
+  makeFlags = [ "USE_AESNI=no" "USE_AVX=no" ];
 
   installPhase = ''
     install -D i2pd $out/bin/i2pd
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://track.privacysolutions.no/projects/i2pd";
+    homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];

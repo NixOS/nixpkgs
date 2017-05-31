@@ -820,6 +820,8 @@ with pkgs;
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
+  cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
+
   clib = callPackage ../tools/package-management/clib { };
 
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
@@ -1060,6 +1062,10 @@ with pkgs;
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
+
+  patdiff = callPackage ../tools/misc/patdiff {
+    ocamlPackages = ocamlPackages_4_03;
+  };
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
@@ -1700,6 +1706,8 @@ with pkgs;
   eid-mw = callPackage ../tools/security/eid-mw { };
 
   eid-viewer = callPackage ../tools/security/eid-viewer { };
+
+  mcrcon = callPackage ../tools/networking/mcrcon {};
 
   ### DEVELOPMENT / EMSCRIPTEN
 
@@ -3813,6 +3821,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  wiggle = callPackage ../development/tools/wiggle { };
+
   radamsa = callPackage ../tools/security/radamsa { };
 
   radarr = callPackage ../servers/radarr { };
@@ -4512,6 +4522,8 @@ with pkgs;
   };
 
   vim-vint = callPackage ../development/tools/vim-vint { };
+
+  vimer = callPackage ../tools/misc/vimer { };
 
   vit = callPackage ../applications/misc/vit { };
 
@@ -6875,6 +6887,8 @@ with pkgs;
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
+  kati = callPackage ../development/tools/build-managers/kati { };
+
   kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends {
     gperf = gperf_3_0;
   };
@@ -7192,7 +7206,8 @@ with pkgs;
   valgrind = callPackage ../development/tools/analysis/valgrind {
     inherit (darwin) xnu bootstrap_cmds cctools;
     llvm = llvm_39;
-   };
+  };
+  valgrind-light = self.valgrind.override { gdb = null; };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -18616,10 +18631,10 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_4;
+    terraform_0_9_6;
 
   terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_4;
+  terraform_0_9 = terraform_0_9_6;
   terraform = terraform_0_9;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};

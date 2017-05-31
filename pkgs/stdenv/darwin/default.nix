@@ -165,14 +165,14 @@ in rec {
 
   persistent1 = prevStage: self: super: with prevStage; {
     inherit
-      zlib patchutils m4 scons flex perl bison unifdef unzip openssl icu python
+      zlib patchutils m4 scons flex perl bison unifdef unzip openssl python
       libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
       openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
       findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils;
 
     darwin = super.darwin // {
       inherit (darwin)
-        dyld Libsystem xnu configd libdispatch libclosure launchd;
+        dyld Libsystem xnu configd ICU libdispatch libclosure launchd;
     };
   };
 
@@ -185,8 +185,8 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ xz.bin xz.out libcxx libcxxabi icu.out ]) ++
-      (with pkgs.darwin; [ dyld Libsystem CF locale ]);
+      (with pkgs; [ xz.bin xz.out libcxx libcxxabi ]) ++
+      (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
 
     overrides = persistent1 prevStage;
   };
@@ -221,8 +221,8 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ xz.bin xz.out icu.out bash libcxx libcxxabi ]) ++
-      (with pkgs.darwin; [ dyld Libsystem locale ]);
+      (with pkgs; [ xz.bin xz.out bash libcxx libcxxabi ]) ++
+      (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
 
     overrides = persistent2 prevStage;
   };
@@ -256,7 +256,7 @@ in rec {
   persistent4 = prevStage: self: super: with prevStage; {
     inherit
       gnumake gzip gnused bzip2 gawk ed xz patch bash
-      libcxxabi libcxx ncurses libffi zlib icu llvm gmp pcre gnugrep
+      libcxxabi libcxx ncurses libffi zlib llvm gmp pcre gnugrep
       coreutils findutils diffutils patchutils;
 
     llvmPackages = super.llvmPackages // {
@@ -264,7 +264,7 @@ in rec {
     };
 
     darwin = super.darwin // {
-      inherit (darwin) dyld Libsystem cctools libiconv;
+      inherit (darwin) dyld ICU Libsystem cctools libiconv;
     };
   } // lib.optionalAttrs (super.targetPlatform == localSystem) {
     # Need to get rid of these when cross-compiling.
@@ -310,13 +310,13 @@ in rec {
     };
 
     allowedRequisites = (with pkgs; [
-      xz.out xz.bin libcxx libcxxabi icu.out gmp.out gnumake findutils bzip2.out
+      xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
+      gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.man patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
     ]) ++ (with pkgs.darwin; [
-      dyld Libsystem CF cctools libiconv locale
+      dyld Libsystem CF cctools ICU libiconv locale
     ]);
 
     overrides = self: super:

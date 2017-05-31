@@ -6,91 +6,19 @@ let
   lib = import ../../../lib;
   pkgsFun = import ../../..;
 
-  sheevaplugCrossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabi";
-      bigEndian = false;
-      arch = "armv5te";
-      float = "soft";
-      withTLS = true;
-      libc = "glibc";
-      platform = lib.systems.platforms.sheevaplug;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  raspberrypiCrossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabihf";
-      bigEndian = false;
-      arch = "armv6";
-      float = "hard";
-      fpu = "vfp";
-      withTLS = true;
-      libc = "glibc";
-      platform = lib.systems.platforms.raspberrypi;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  armv7l-hf-multiplatform-crossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabihf";
-      bigEndian = false;
-      arch = "armv7-a";
-      float = "hard";
-      fpu = "vfpv3-d16";
-      withTLS = true;
-      libc = "glibc";
-      platform = lib.systems.platforms.armv7l-hf-multiplatform;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  aarch64-multiplatform-crossSystem = {
-    crossSystem = rec {
-      config = "aarch64-linux-gnu";
-      bigEndian = false;
-      arch = "aarch64";
-      withTLS = true;
-      libc = "glibc";
-      platform = lib.systems.platforms.aarch64-multiplatform;
-      inherit (platform) gcc;
-    };
-  };
-
-  scaleway-c1-crossSystem.crossSystem = armv7l-hf-multiplatform-crossSystem.crossSystem // rec {
-    platform = lib.systems.platforms.scaleway-c1;
-    inherit (platform) gcc;
-    inherit (gcc) fpu;
-  };
-
-  pogoplug4-crossSystem.crossSystem = {
-    arch = "armv5tel";
-    config = "armv5tel-softfloat-linux-gnueabi";
-    float = "soft";
-
-    platform = lib.systems.platforms.pogoplug4;
-
-    inherit (lib.systems.platforms.pogoplug4) gcc;
-    libc = "glibc";
-
-    withTLS = true;
-    openssl.system = "linux-generic32";
-  };
+  inherit (lib.systems.examples)
+    sheevaplug raspberryPi armv7l-hf-multiplatform
+    aarch64-multiplatform scaleway-c1 pogoplug4;
 
   selectedCrossSystem =
-    if toolsArch == "armv5tel" then sheevaplugCrossSystem else
-    if toolsArch == "scaleway" then scaleway-c1-crossSystem else
-    if toolsArch == "pogoplug4" then pogoplug4-crossSystem else
-    if toolsArch == "armv6l" then raspberrypiCrossSystem else
-    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else
-    if toolsArch == "aarch64" then aarch64-multiplatform-crossSystem else null;
+    if toolsArch == "armv5tel" then sheevaplug else
+    if toolsArch == "scaleway" then scaleway-c1 else
+    if toolsArch == "pogoplug4" then pogoplug4 else
+    if toolsArch == "armv6l" then raspberryPi else
+    if toolsArch == "armv7l" then armv7l-hf-multiplatform else
+    if toolsArch == "aarch64" then aarch64-multiplatform else null;
 
-  pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
+  pkgs = pkgsFun ({ inherit system; crossSystem = selectedCrossSystem; });
 
   glibc = pkgs.libcCross;
   bash = pkgs.bash;

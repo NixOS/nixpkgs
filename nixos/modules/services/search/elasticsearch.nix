@@ -179,6 +179,7 @@ in {
         if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
           ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
         fi
+
         mkdir -m 0700 -p ${cfg.dataDir}
 
         # Install plugins

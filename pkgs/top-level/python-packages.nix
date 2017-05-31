@@ -1160,6 +1160,8 @@ in {
     };
   };
 
+  argcomplete = callPackage ../development/python-modules/argcomplete { };
+
   area53 = buildPythonPackage (rec {
     name = "Area53-0.94";
 
@@ -2641,7 +2643,7 @@ in {
 
   };
 
-  rarfile = callPackage ../development/python-modules/rarfile {};
+  rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   proboscis = buildPythonPackage rec {
     name = "proboscis-1.2.6.0";
@@ -4112,11 +4114,11 @@ in {
 
 
   consul = buildPythonPackage (rec {
-    name = "python-consul-0.6.0";
+    name = "python-consul-0.7.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-consul/${name}.tar.gz";
-      sha256 = "0vfyr499sbc4nnhhijp2lznyj507nnak95bvv9w8y78ngxggskbh";
+      sha256 = "18gs5myk9wkkq5zvj0n0s68ngj3mrbdcifshxfj1j0bgb1km0wpm";
     };
 
     buildInputs = with self; [ requests six pytest ];
@@ -5316,28 +5318,7 @@ in {
 
   pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
 
-  pytest-localserver = buildPythonPackage rec {
-    name = "pytest-localserver-${version}";
-    version = "0.3.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-localserver/${name}.tar.gz";
-      sha256 = "0dvqspjr6va55zwmnnc2mmpqc7mm65kxig9ya44x1z8aadzxpa4p";
-    };
-
-    propagatedBuildInputs = with self; [ werkzeug ];
-    buildInputs = with self; [ pytest six requests ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Plugin for the pytest testing framework to test server connections locally";
-      homepage = https://pypi.python.org/pypi/pytest-localserver;
-      license = licenses.mit;
-    };
-  };
+  pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
   pytest-subtesthack = buildPythonPackage rec {
     name = "pytest-subtesthack-${version}";
@@ -10304,26 +10285,10 @@ in {
     };
   };
 
-  # This package likely needs an older version of Django.
+  # This package may need an older version of Django.
   # Override the package set and set e.g. `django = super.django_1_9`.
   # See the Nixpkgs manual for examples on how to override the package set.
-  django_hijack = buildPythonPackage rec {
-    name = "django-hijack-${version}";
-    version = "2.0.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-hijack/${name}.tar.gz";
-      sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
-    };
-
-    propagatedBuildInputs = with self; [ django django_compat ];
-
-    meta = {
-      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-      homepage = https://github.com/arteria/django-hijack;
-      license = licenses.mit;
-    };
-  };
+  django_hijack = callPackage ../development/python-modules/django-hijack { };
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
@@ -11159,30 +11124,7 @@ in {
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
-  flask_migrate = buildPythonPackage rec {
-    name = "Flask-Migrate-${version}";
-    version = "1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Migrate/Flask-Migrate-1.7.0.tar.gz";
-      sha256 = "16d7vnaj9xmxvb3qbcmhahm3ldfdhzzi6y221h62x4v1v1jayx7v";
-    };
-
-    # When tests run with python3*, tests should run commands as "python3 <args>",
-    # not "python <args>"
-    patchPhase = ''
-      substituteInPlace tests/test_migrate.py --replace "python" "${python.executable}"
-      substituteInPlace tests/test_multidb_migrate.py --replace "python" "${python.executable}"
-    '';
-
-    propagatedBuildInputs = with self ; [ flask flask_sqlalchemy flask_script alembic ];
-
-    meta = {
-      description = "SQLAlchemy database migrations for Flask applications using Alembic";
-      license = licenses.mit;
-      homepage = https://github.com/miguelgrinberg/Flask-Migrate;
-    };
-  };
+  flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
 
