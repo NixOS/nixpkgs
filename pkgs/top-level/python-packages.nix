@@ -29632,6 +29632,8 @@ EOF
 
   mnemonic = callPackage ../development/python-modules/mnemonic.nix { };
 
+  ledgerblue = callPackage ../development/python-modules/ledgerblue { };
+
   ecpy = callPackage ../development/python-modules/ecpy { };
 
   trezor = callPackage ../development/python-modules/trezor.nix { };
