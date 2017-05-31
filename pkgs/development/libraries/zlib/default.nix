@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, static ? false }:
+{ stdenv
+, fetchurl
+, buildPlatform, hostPlatform
+, static ? false
+}:
 
 let version = "1.2.11"; in
 
@@ -24,7 +28,9 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  preConfigure = ''
+  # TODO(@Dridus) CC set by cc-wrapper setup-hook, so just empty out the preConfigure script when cross building, but leave the old incorrect script when not
+  # cross building to avoid hash breakage. Once hash breakage is acceptable, remove preConfigure entirely.
+  preConfigure = stdenv.lib.optionalString (hostPlatform == buildPlatform) ''
     if test -n "$crossConfig"; then
       export CC=$crossConfig-gcc
     fi
