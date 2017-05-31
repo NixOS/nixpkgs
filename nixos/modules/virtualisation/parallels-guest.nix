@@ -4,7 +4,11 @@ with lib;
 
 let
 
-  prl-tools = config.boot.kernelPackages.prl-tools;
+  packageFun = pkgs_:
+    if pkgs.stdenv.system == pkgs_.stdenv.system
+    then config.boot.kernelPackages.prl-tools
+    else pkgs_.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
+  package = packageFun pkgs;
 
 in
 
@@ -30,7 +34,7 @@ in
 
     services.xserver = {
       drivers = singleton
-        { name = "prlvideo"; modules = [ prl-tools ]; libPath = [ prl-tools ]; };
+        { name = "prlvideo"; modules = [ package ]; libPath = [ package ]; };
 
       screenSection = ''
         Option "NoMTRR"
@@ -46,14 +50,13 @@ in
       '';
     };
 
-    hardware.opengl.package = prl-tools;
-    hardware.opengl.package32 = pkgs_i686.linuxPackages.prl-tools.override { libsOnly = true; kernel = null; };
+    hardware.opengl.package = packageFun;
 
-    services.udev.packages = [ prl-tools ];
+    services.udev.packages = [ package ];
 
-    environment.systemPackages = [ prl-tools ];
+    environment.systemPackages = [ package ];
 
-    boot.extraModulePackages = [ prl-tools ];
+    boot.extraModulePackages = [ package ];
 
     boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" "acpi_memhotplug" ];
 
@@ -63,7 +66,7 @@ in
       description = "Parallels Tools' service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${prl-tools}/bin/prltoolsd -f";
+        ExecStart = "${package}/bin/prltoolsd -f";
         PIDFile = "/var/run/prltoolsd.pid";
       };
     };
@@ -72,9 +75,9 @@ in
       description = "Parallels Shared Folders Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = rec {
-        ExecStart = "${prl-tools}/sbin/prlfsmountd ${PIDFile}";
+        ExecStart = "${package}/sbin/prlfsmountd ${PIDFile}";
         ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /media";
-        ExecStopPost = "${prl-tools}/sbin/prlfsmountd -u";
+        ExecStopPost = "${package}/sbin/prlfsmountd -u";
         PIDFile = "/run/prlfsmountd.pid";
       };
     };
@@ -85,7 +88,7 @@ in
       bindsTo = [ "cups.service" ];
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${prl-tools}/bin/prlshprint";
+        ExecStart = "${package}/bin/prlshprint";
       };
     };
 

@@ -92,11 +92,12 @@ with lib;
     # !!! this hardcodes bash, could we detect from config which shell is actually used?
     (mkRenamedOptionModule [ "environment" "promptInit" ] [ "programs" "bash" "promptInit" ])
 
-    (mkRenamedOptionModule [ "services" "xserver" "driSupport" ] [ "hardware" "opengl" "driSupport" ])
-    (mkRenamedOptionModule [ "services" "xserver" "driSupport32Bit" ] [ "hardware" "opengl" "driSupport32Bit" ])
+    (mkRemovedOptionModule [ "services" "xserver" "driSupport" ] "No longer used")
+    (mkRemovedOptionModule [ "hardware" "opengl" "driSupport" ] "No longer used")
+    (mkRenamedOptionModule [ "services" "xserver" "driSupport32Bit" ] [ "libraries" "support32Bit" ])
     (mkRenamedOptionModule [ "services" "xserver" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ])
     (mkRenamedOptionModule [ "hardware" "opengl" "videoDrivers" ] [ "services" "xserver" "videoDrivers" ])
-    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
+    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "libraries" "packages" ])
 
     (mkRenamedOptionModule [ "services" "mysql55" ] [ "services" "mysql" ])
 
@@ -214,5 +215,9 @@ with lib;
     (mkRenamedOptionModule [ "programs" "zsh" "oh-my-zsh" "theme" ] [ "programs" "zsh" "ohMyZsh" "theme" ])
     (mkRenamedOptionModule [ "programs" "zsh" "oh-my-zsh" "custom" ] [ "programs" "zsh" "ohMyZsh" "custom" ])
     (mkRenamedOptionModule [ "programs" "zsh" "oh-my-zsh" "plugins" ] [ "programs" "zsh" "ohMyZsh" "plugins" ])
+
+    # Libraries
+    (mkRenamedOptionModule [ "hardware" "opengl" "driSupport32Bit" ] [ "libraries" "support32Bit" ])
+    (mkRenamedOptionModule [ "hardware" "opengl" "extraPackages" ] [ "libraries" "packages" ])
   ];
 }

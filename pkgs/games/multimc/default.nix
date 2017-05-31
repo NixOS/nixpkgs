@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   # the install rule tries to bundle ALL deps into the output for portability
   installPhase = ''
-    RESULT=/run/opengl-driver/lib/
+    RESULT=/run/current-system/${stdenv.system}-lib/lib/
     for x in $libpath; do
       RESULT=$x/lib/:$RESULT
     done

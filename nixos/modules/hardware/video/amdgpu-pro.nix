@@ -1,6 +1,6 @@
 # This module provides the proprietary AMDGPU-PRO drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -10,8 +10,12 @@ let
 
   enabled = elem "amdgpu-pro" drivers;
 
-  package = config.boot.kernelPackages.amdgpu-pro;
-  package32 = pkgs_i686.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
+  packageFun = pkgs_:
+    if pkgs.stdenv.system == pkgs_.stdenv.system
+    then config.boot.kernelPackages.amdgpu-pro
+    else pkgs_.linuxPackages.amdgpu-pro.override { libsOnly = true; kernel = null; };
+  package = packageFun pkgs;
+  package32 = packageFun pkgs.pkgsi686Linux;
 
   opengl = config.hardware.opengl;
 
@@ -26,8 +30,7 @@ in
     services.xserver.drivers = singleton
       { name = "amdgpu"; modules = [ package ]; libPath = [ package ]; };
 
-    hardware.opengl.package = package;
-    hardware.opengl.package32 = package32;
+    hardware.opengl.package = packageFun;
 
     boot.extraModulePackages = [ package ];
 
@@ -38,7 +41,7 @@ in
     system.activationScripts.setup-amdgpu-pro = ''
       mkdir -p /run/lib
       ln -sfn ${package}/lib ${package.libCompatDir}
-    '' + optionalString opengl.driSupport32Bit ''
+    '' + optionalString libraries.support32Bit ''
       ln -sfn ${package32}/lib ${package32.libCompatDir}
     '';
 

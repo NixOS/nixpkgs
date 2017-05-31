@@ -115,9 +115,9 @@ let
       ];
 
       installPhase = base.installPhase + ''
-        wrapProgram $out/bin/factorio                                \
-          --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
-          --run "$out/share/factorio/update-config.sh"               \
+        wrapProgram $out/bin/factorio                  \
+          --prefix LD_LIBRARY_PATH : $libPath          \
+          --run "$out/share/factorio/update-config.sh" \
           --argv0 "" \
           --add-flags "-c \$HOME/.factorio/config.cfg ${optionalString (mods != []) "--mod-directory=${modDir}"}"
 

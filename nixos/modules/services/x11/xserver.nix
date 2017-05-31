@@ -601,10 +601,10 @@ in
 
         environment =
           {
-            XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
-            LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
-              ++ concatLists (catAttrs "libPath" cfg.drivers));
+            XORG_DRI_DRIVER_PATH = "/run/current-system/${pkgs.stdenv.system}-lib/lib/dri"; # !!! Depends on the driver selected at runtime.
+            LD_LIBRARY_PATH =
+              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" ]
+              ++ concatLists (catAttrs "libPath" cfg.drivers);
           } // cfg.displayManager.job.environment;
 
         preStart =

@@ -24,17 +24,20 @@ let
       kernelPackages.nvidia_x11_legacy340
     else null;
 
-  nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
-  nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
+  packageFun = pkgs_:
+    if pkgs.stdenv.system == pkgs_.stdenv.system
+    then nvidiaForKernel config.boot.kernelPackages
+    else (nvidiaForKernel pkgs_.linuxPackages).override { libsOnly = true; kernel = null; };
+  package = packageFun pkgs;
 
-  nvidiaPackage = nvidia: pkgs:
-    if !nvidia.useGLVND then nvidia.out
+  nvidiaPackage = pkgs:
+    if !nvidia.useGLVND then (packageFun pkgs).out
     else pkgs.buildEnv {
       name = "nvidia-libs";
-      paths = [ pkgs.libglvnd nvidia.out ];
+      paths = [ pkgs.libglvnd (packageFun pkgs).out ];
     };
 
-  enabled = nvidia_x11 != null;
+  enabled = package != null;
 in
 
 {
@@ -42,24 +45,23 @@ in
   config = mkIf enabled {
 
     services.xserver.drivers = singleton
-      { name = "nvidia"; modules = [ nvidia_x11.bin ]; libPath = [ nvidia_x11 ]; };
+      { name = "nvidia"; modules = [ package.bin ]; libPath = [ package ]; };
 
     services.xserver.screenSection =
       ''
         Option "RandRRotation" "on"
       '';
 
-    environment.etc."nvidia/nvidia-application-profiles-rc" = mkIf nvidia_x11.useProfiles {
-      source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
+    environment.etc."nvidia/nvidia-application-profiles-rc" = mkIf package.useProfiles {
+      source = "${package.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl.package = nvidiaPackage nvidia_x11 pkgs;
-    hardware.opengl.package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
+    hardware.opengl.package = nvidiaPackage;
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
-      ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
+    environment.systemPackages = [ package.bin package.settings ]
+      ++ lib.filter (p: p != null) [ package.persistenced ];
 
-    boot.extraModulePackages = [ nvidia_x11.bin ];
+    boot.extraModulePackages = [ package.bin ];
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ];

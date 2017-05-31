@@ -50,7 +50,7 @@ let
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
+    export LD_LIBRARY_PATH='/run/current-system/${pkgs.stdenv.system}-lib/lib:/run/current-system/${pkgsi686Linux.stdenv.system}-lib/lib:/usr/lib:/usr/lib32'
     export PATH='/run/wrappers/bin:/usr/bin:/usr/sbin'
 
     # Force compilers and other tools to look in default search paths

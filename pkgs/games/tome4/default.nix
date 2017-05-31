@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openal, libpng, libvorbis, mesa_glu, premake4, SDL2, SDL2_image, SDL2_ttf }:
+{stdenv, fetchurl, openal, libpng, libvorbis, mesa_glu, mesa_noglu, premake4, SDL2, SDL2_image, SDL2_ttf }:
 
 stdenv.mkDerivation rec {
   version = "1.4.9";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace premake4.lua \
       --replace "/opt/SDL-2.0/include/SDL2" "${SDL2.dev}/include/SDL2" \
-      --replace "/usr/include/GL" "/run/opengl-driver/include"
+      --replace "/usr/include/GL" "${mesa_noglu.dev}/include"
     premake4 gmake
   '';
   makeFlags = [ "config=release" ];

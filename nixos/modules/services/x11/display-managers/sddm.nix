@@ -7,23 +7,21 @@ let
   xcfg = config.services.xserver;
   dmcfg = xcfg.displayManager;
   cfg = dmcfg.sddm;
-  xEnv = config.systemd.services."display-manager".environment;
 
   sddm = cfg.package;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
-    #!/bin/sh
-    ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
+    #!${pkgs.stdenv.shell}
     exec systemd-cat ${dmcfg.xserverBin} ${toString dmcfg.xserverArgs} "$@"
   '';
 
   Xsetup = pkgs.writeScript "Xsetup" ''
-    #!/bin/sh
+    #!${pkgs.stdenv.shell}
     ${cfg.setupScript}
   '';
 
   Xstop = pkgs.writeScript "Xstop" ''
-    #!/bin/sh
+    #!${pkgs.stdenv.shell}
     ${cfg.stopScript}
   '';
 

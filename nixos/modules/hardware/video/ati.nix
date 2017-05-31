@@ -1,6 +1,6 @@
 # This module provides the proprietary ATI X11 / OpenGL drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -10,7 +10,11 @@ let
 
   enabled = elem "ati_unfree" drivers;
 
-  ati_x11 = config.boot.kernelPackages.ati_drivers_x11;
+  packageFun = pkgs_:
+    if pkgs.stdenv.system == pkgs_.stdenv.system
+    then config.boot.kernelPackages.ati_drivers_x11
+    else pkgs_.linuxPackages.ati_drivers_x11.override { libsOnly = true; kernel = null; };
+  package = packageFun pkgs;
 
 in
 
@@ -21,18 +25,17 @@ in
     nixpkgs.config.xorg.abiCompat = "1.17";
 
     services.xserver.drivers = singleton
-      { name = "fglrx"; modules = [ ati_x11 ]; libPath = [ "${ati_x11}/lib" ]; };
+      { name = "fglrx"; modules = [ package ]; libPath = [ "${package}/lib" ]; };
 
-    hardware.opengl.package = ati_x11;
-    hardware.opengl.package32 = pkgs_i686.linuxPackages.ati_drivers_x11.override { libsOnly = true; kernel = null; };
+    hardware.opengl.package = packageFun;
 
-    environment.systemPackages = [ ati_x11 ];
+    environment.systemPackages = [ package ];
 
-    boot.extraModulePackages = [ ati_x11 ];
+    boot.extraModulePackages = [ package ];
 
     boot.blacklistedKernelModules = [ "radeon" ];
 
-    environment.etc."ati".source = "${ati_x11}/etc/ati";
+    environment.etc."ati".source = "${package}/etc/ati";
 
   };
 
