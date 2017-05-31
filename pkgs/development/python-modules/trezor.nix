@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage
-, protobuf3_0, hidapi, ecdsa, mnemonic }:
+{ lib, fetchurl, buildPythonPackage, protobuf3_0, hidapi, ecdsa, mnemonic }:
 
 buildPythonPackage rec {
   pname = "trezor";
@@ -18,10 +17,10 @@ buildPythonPackage rec {
   # There are no actual tests: "ImportError: No module named tests"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
     homepage = https://github.com/trezor/python-trezor;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ np ];
   };
 }
