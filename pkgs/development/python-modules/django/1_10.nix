@@ -22,6 +22,7 @@ buildPythonPackage rec {
   ];
 
   # patch only $out/bin to avoid problems with starter templates (see #3134)
+  dontWrapPythonPrograms = true;
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
