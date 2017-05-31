@@ -74,4 +74,6 @@ rec {
 
   parity = callPackage ./parity { };
   parity-beta = callPackage ./parity/beta.nix { };
+
+  peercoin  = callPackage ./peercoin.nix { withGui = true; };
 }
