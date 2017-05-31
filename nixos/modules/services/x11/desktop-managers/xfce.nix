@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, pkgs_multiarch, ... }:
 
 with lib;
 
@@ -78,14 +78,13 @@ in
     services.xserver.updateDbusEnvironment = true;
 
     environment.systemPackages =
-      [ pkgs.gtk2.out # To get GTK+'s themes and gtk-update-icon-cache
+      [ pkgs.gtk2 # To get GTK+'s themes and gtk-update-icon-cache
         pkgs.hicolor_icon_theme
         pkgs.tango-icon-theme
         pkgs.shared_mime_info
         pkgs.which # Needed by the xfce's xinitrc script.
         pkgs."${cfg.screenLock}"
         pkgs.xfce.exo
-        pkgs.xfce.gtk_xfce_engine
         pkgs.xfce.mousepad
         pkgs.xfce.ristretto
         pkgs.xfce.terminal
@@ -117,10 +116,13 @@ in
 	   pkgs.xfce.xfce4notifyd  # found via dbus
          ];
 
+    libraries.packages = with pkgs_multiarch.xfce; [
+      gtk_xfce_engine
+      gvfs
+    ];
+
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
-
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, pkgs_multiarch, ... }:
 
 with lib;
 
@@ -167,9 +167,8 @@ in {
 
     services.xserver.updateDbusEnvironment = true;
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
-                                                "${gnome3.glib_networking.out}/lib/gio/modules"
-                                                "${gnome3.gvfs}/lib/gio/modules" ];
+    libraries.packages = with pkgs_multiarch.gnome3; [ dconf glib_networking.out gvfs ];
+
     environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
       ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages);
 

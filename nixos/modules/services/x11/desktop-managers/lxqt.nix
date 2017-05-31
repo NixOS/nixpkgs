@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, pkgs_multiarch, ... }:
 
 with lib;
 
@@ -59,7 +59,7 @@ in
       "/share/lxqt"
     ];
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
+    libraries.packages = [ pkgs_multiarch.gvfs ];
 
   };
 
