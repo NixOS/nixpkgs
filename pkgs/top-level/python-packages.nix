@@ -29626,32 +29626,8 @@ EOF
     };
   };
 
-  hidapi = buildPythonPackage rec{
-    version = "0.7.99.post15";
-    name = "hidapi-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hidapi/${name}.tar.gz";
-      sha256 = "09wlr1d7mx80974bsq62j4pk80234jgl7ip4br0y43q6999dpcr0";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.libusb1 pkgs.udev cython ];
-
-    # Fix the USB backend library lookup
-    postPatch = ''
-      libusb=${pkgs.libusb1.dev}/include/libusb-1.0
-      test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
-      sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
-    '';
-
-    meta = {
-      description = "A Cython interface to the hidapi from https://github.com/signal11/hidapi";
-      homepage = https://github.com/trezor/cython-hidapi;
-      # license can actually be either bsd3 or gpl3
-      # see https://github.com/trezor/cython-hidapi/blob/master/LICENSE-orig.txt
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ np ];
-    };
+  hidapi = callPackage ../development/python-modules/hidapi {
+    inherit (pkgs) udev libusb1;
   };
 
   mnemonic = callPackage ../development/python-modules/mnemonic.nix { };
