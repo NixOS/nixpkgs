@@ -29638,7 +29638,7 @@ EOF
 
   ecpy = callPackage ../development/python-modules/ecpy { };
 
-  trezor = callPackage ../development/python-modules/trezor.nix { };
+  trezor = callPackage ../development/python-modules/trezor { };
 
   semver = buildPythonPackage rec {
     name = "semver-${version}";
