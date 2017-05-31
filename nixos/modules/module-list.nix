@@ -20,6 +20,7 @@
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix
+  ./config/system-libs.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix

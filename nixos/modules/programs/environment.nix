@@ -27,7 +27,9 @@ in
     environment.profiles =
       [ "$HOME/.nix-profile"
         "/nix/var/nix/profiles/default"
-        "/run/current-system/sw"
+        "/run/current-system/${pkgs.stdenv.system}-lib"
+      ] ++ optional config.libraries.support32Bit "/run/current-system/${pkgs.pkgsi686Linux.stdenv.system}-lib" ++
+      [ "/run/current-system/sw"
       ];
 
     # TODO: move most of these elsewhere
