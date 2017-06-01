@@ -2,7 +2,7 @@
 , libxml2, libxslt, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "1.9.1";
+  version = "1.9.5";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -13,16 +13,16 @@ let
   url = if stdenv.isLinux
     then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_${arch}.deb"
     else if stdenv.isDarwin
-      then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}.dmg"
+      then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_${arch}.dmg"
       else "system ${stdenv.system} not supported";
 
   sha256 = {
-    "x86_64-linux"  = "0l1if9c4s4wkbi8k00pl7x00lil21izrd8wb9nv2b5q4gqidc1nh";
-    "i686-linux"    = "1789wjwcpgw3mljl49c8v5kycisay684gyalkkvd06928423y9zb";
-    "x86_64-darwin" = "1xrfq1a0xyifkhhjnpm6wsnms9w8c9q5rd2qqn4sm5npl7viy68p";
+    "x86_64-linux"  = "16ijzaacfbqrgh561bf51747d2rv8kydgs14dfdr572qi0f88baw";
+    "i686-linux"    = "0lvkb4k0a34a8hzlsi0apf056rhyprh5w0gn16d0n2ijnaf9j2yk";
+    "x86_64-darwin" = "070mrczsx1j0jl9sx6963l3hrk9anqa13r008wk1d22d25xj25mc";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  arch = builtins.replaceStrings ["-linux"] [""] stdenv.system;
+  arch = builtins.replaceStrings ["-linux" "-darwin"] ["" ""] stdenv.system;
 
 in stdenv.mkDerivation rec {
   name = "vagrant-${version}";

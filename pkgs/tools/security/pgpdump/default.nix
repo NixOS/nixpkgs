@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pgpdump-${version}";
-  version = "0.31";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
     rev = "v${version}";
-    sha256 = "05ywdgxzq3976dsy95vgdx3nnhd9i9vypzyrkabpmnxphfnjfrb4";
+    sha256 = "1ip7q5sgh3nwdqbrzpp6sllkls5kma98kns53yspw1830xi1n8xc";
   };
 
   meta = with stdenv.lib; {

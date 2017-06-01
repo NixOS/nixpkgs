@@ -1550,10 +1550,10 @@
       }) {};
     rainbow-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "rainbow-mode";
-        version = "0.12";
+        version = "0.13";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/rainbow-mode-0.12.el";
-          sha256 = "10a7qs7fvw4qi4vxj9n56j26gjk61bl79dgz4md1d26slb2j1c04";
+          url = "https://elpa.gnu.org/packages/rainbow-mode-0.13.el";
+          sha256 = "1d3aamx6qgqqpqijwsr02ggwrh67gfink1bir0692alfkm3zdddl";
         };
         packageRequires = [];
         meta = {
@@ -1564,10 +1564,10 @@
     realgud = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, load-relative, loc-changes, test-simple }:
     elpaBuild {
         pname = "realgud";
-        version = "1.4.3";
+        version = "1.4.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/realgud-1.4.3.tar";
-          sha256 = "07yfah8kmr60rhrj8y8gs7l85hsbylv26crw3qbqh67ka4ykpj01";
+          url = "https://elpa.gnu.org/packages/realgud-1.4.4.tar";
+          sha256 = "1nc8km339ip90h1j55ahfga03v7x7rh4iycmw6yrxyzir68vwn7c";
         };
         packageRequires = [
           cl-lib
@@ -1730,10 +1730,10 @@
     soap-client = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "soap-client";
-        version = "3.1.1";
+        version = "3.1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/soap-client-3.1.1.tar";
-          sha256 = "0is2923g882farf73dix6ncq3m26yn5j5qr8wz6s0xad04zdbdhk";
+          url = "https://elpa.gnu.org/packages/soap-client-3.1.2.tar";
+          sha256 = "0crfpp2ksqvzf2j3q44qq6z8zh1r10q9kw12cxbmjiih89q01b68";
         };
         packageRequires = [ cl-lib ];
         meta = {

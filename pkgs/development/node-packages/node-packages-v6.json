@@ -28,6 +28,7 @@
 , "jshint"
 , "json"
 , "jsontool"
+, "json-server"
 , "js-yaml"
 , "karma"
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }

@@ -13,10 +13,12 @@ buildPythonPackage rec {
   };
 
   # Needed by tests to setup a mockup ldap server.
-  BIN = "${openldap}/bin";
-  SBIN = "${openldap}/bin";
-  SLAPD = "${openldap}/libexec/slapd";
-  SCHEMA = "${openldap}/etc/schema";
+  preCheck = ''
+    export BIN="${openldap}/bin"
+    export SBIN="${openldap}/bin"
+    export SLAPD="${openldap}/libexec/slapd"
+    export SCHEMA="${openldap}/etc/schema"
+  '';
 
   patches = lib.singleton (writeText "avoid-syslog.diff" ''
     diff a/Lib/slapdtest.py b/Lib/slapdtest.py
