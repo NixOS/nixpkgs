@@ -2718,6 +2718,10 @@ with pkgs;
 
   mxt-app = callPackage ../misc/mxt-app { };
 
+  nagstamon = callPackage ../tools/nagstamon {
+    pythonPackages = python3Packages;
+  };
+
   netdata = callPackage ../tools/system/netdata { };
 
   netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
