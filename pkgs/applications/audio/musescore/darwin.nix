@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, undmg }:
+{ stdenv, lib, fetchurl, undmg }:
 
 let
   major = "2";
-  minor = "0.3";
-  patch = "1";
+  minor = "1";
+  patch = null;
   appName = "MuseScore ${major}";
 in
 
+with lib;
+
 stdenv.mkDerivation rec {
   name = "musescore-darwin-${version}";
-  version = "${major}.${minor}.${patch}";
+  version = "${major}.${minor}" + optionalString (!isNull patch) ".${patch}";
 
   src = fetchurl {
     url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${major}.${minor}/MuseScore-${version}.dmg";
-    sha256 = "0a9v2nc7sx2az7xpd9i7b84m7xk9zcydfpis5fj334r5yqds4rm1";
+    sha256 = "19xkaxlkbrhvfip6n3iw6q7463ngr6y5gfisrpjqg2xl2igyl795";
   };
 
   buildInputs = [ undmg ];
