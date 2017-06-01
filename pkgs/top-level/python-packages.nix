@@ -25922,28 +25922,7 @@ EOF
     };
   };
 
-  wheel = buildPythonPackage rec {
-    name = "wheel-${version}";
-    version = "0.29.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/wheel/${name}.tar.gz";
-      sha256 = "1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648";
-    };
-
-    buildInputs = with self; [ pytest pytestcov coverage ];
-
-    propagatedBuildInputs = with self; [ jsonschema ];
-
-    # We add this flag to ignore the copy installed by bootstrapped-pip
-    installFlags = [ "--ignore-installed" ];
-
-    meta = {
-      description = "A built-package format for Python";
-      license = with licenses; [ mit ];
-      homepage = https://bitbucket.org/pypa/wheel/;
-    };
-  };
+  wheel = callPackage ../development/python-modules/wheel { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
