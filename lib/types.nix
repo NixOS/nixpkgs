@@ -160,14 +160,22 @@ rec {
         in if isDerivation res then res else toDerivation res;
     };
 
-    shellPackage = package // {
-      check = x: (package.check x) && (hasAttr "shellPath" x);
+    shellPackage = mkOptionType {
+      name = "shellPackage";
+      check = x: isDerivation x && hasAttr "shellPath" x;
+      merge = mergeOneOption;
     };
 
     path = mkOptionType {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
       check = x: builtins.substring 0 1 (toString x) == "/";
+      merge = mergeOneOption;
+    };
+
+    stringPath = mkOptionType {
+      name = "stringPath";
+      check = x: str.check x && path.check x;
       merge = mergeOneOption;
     };
 

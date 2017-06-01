@@ -117,7 +117,7 @@ let
       };
 
       shell = mkOption {
-        type = types.either types.shellPackage types.path;
+        type = types.either types.shellPackage types.stringPath;
         default = pkgs.nologin;
         defaultText = "pkgs.nologin";
         example = literalExample "pkgs.bashInteractive";
