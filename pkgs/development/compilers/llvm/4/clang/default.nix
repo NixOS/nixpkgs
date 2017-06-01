@@ -37,7 +37,7 @@ let
 
     patches = [ ./purity.patch ];
 
-    postBuild = ''
+    postBuild = stdenv.lib.optionalString enableManpages ''
       cmake --build . --target docs-clang-man
     '';
 
@@ -49,7 +49,8 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '';
 
-    outputs = [ "out" ] ++ stdenv.lib.optional enableManpages "man" ++ [ "python" ];
+    outputs = [ "out" "python" ]
+      ++ stdenv.lib.optional enableManpages "man";
 
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
@@ -68,7 +69,6 @@ let
       rm $out/bin/c-index-test
     ''
     + stdenv.lib.optionalString enableManpages ''
-
       # Manually install clang manpage
       cp docs/man/*.1 $out/share/man/man1/
 

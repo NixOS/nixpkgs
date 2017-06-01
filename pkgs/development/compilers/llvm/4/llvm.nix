@@ -40,8 +40,8 @@ in stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" ]
-    ++ stdenv.lib.optional enableManpages "man"
-    ++ stdenv.lib.optional enableSharedLibraries "lib";
+    ++ stdenv.lib.optional enableSharedLibraries "lib"
+    ++ stdenv.lib.optional enableManpages "man";
 
   nativeBuildInputs = [ perl groff cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
@@ -86,17 +86,19 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
-  ] ++ stdenv.lib.optionals enableManpages [
+  ]
+  ++ stdenv.lib.optional enableSharedLibraries
+    "-DLLVM_LINK_LLVM_DYLIB=ON"
+  ++ stdenv.lib.optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ stdenv.lib.optional enableSharedLibraries [
-    "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ] ++ stdenv.lib.optional (!isDarwin)
+  ]
+  ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
-    ++ stdenv.lib.optionals (isDarwin) [
+  ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];
