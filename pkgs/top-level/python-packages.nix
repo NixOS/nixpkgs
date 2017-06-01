@@ -1002,20 +1002,7 @@ in {
     };
   };
 
-  appdirs = buildPythonPackage rec {
-    name = "appdirs-1.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/appdirs/appdirs-1.4.0.tar.gz";
-      sha256 = "8fc245efb4387a4e3e0ac8ebcc704582df7d72ff6a42a53f5600bbb18fdaadc5";
-    };
-
-    meta = {
-      description = "A python module for determining appropriate platform-specific dirs";
-      homepage = http://github.com/ActiveState/appdirs;
-      license = licenses.mit;
-    };
-  };
+  appdirs = callPackage ../development/python-modules/appdirs { };
 
   application = buildPythonPackage rec {
     pname = "python-application";
@@ -1287,36 +1274,8 @@ in {
 
   };
 
-  argparse = buildPythonPackage (rec {
-    name = "argparse-1.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/argparse/${name}.tar.gz";
-      sha256 = "1r6nznp64j68ih1k537wms7h57nvppq0szmwsaf99n71bfjqkc32";
-    };
-
-    checkPhase = ''
-      export PYTHONPATH=`pwd`/build/lib:$PYTHONPATH
-      ${python.interpreter} test/test_argparse.py
-    '';
-
-    # ordering issues in tests
-    doCheck = !isPy3k;
-
-    meta = {
-      homepage = http://code.google.com/p/argparse/;
-      license = licenses.asl20;
-      description = "argparse: Python command line parser";
-      longDescription = ''
-        The argparse module makes writing command line tools in Python
-        easy.  Just briefly describe your command line interface and
-        argparse will take care of the rest, including: parsing the
-        arguments and flags from sys.argv, converting arg strings into
-        objects for your program, formatting and printing any help
-        messages, and much more.
-      '';
-    };
-  });
+  # argparse is part of stdlib in 2.7 and 3.2+
+  argparse = null;
 
   astroid = callPackage ../development/python-modules/astroid { };
 
@@ -16052,18 +16011,19 @@ in {
   });
 
   osc = buildPythonPackage {
-    name = "osc-0.156.0-16-g9e6d1a5";
+    name = "osc-0.156.0-94-gd8ba394";
     disabled = isPy3k;
     src = pkgs.fetchFromGitHub {
       owner = "openSUSE";
       repo = "osc";
-      rev = "64cbb10095cf9ef0270d65fff58085a13bc0abe9";
-      sha256 = "0s5kz5ln96ka0f1sa9nyp34c28mkxkrgcxbvysdawlppg7ay9s1z";
+      rev = "d8ba39416bb193a15489cb2ae57847434adbf1c8";
+      sha256 = "0bxl1sjfpdrhyc0qljyqlkffyzn1iywjqgaz2z1y07zq59gc8wq0";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
     propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
     postInstall = ''
       ln -s $out/bin/osc-wrapper.py $out/bin/osc
+      install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
       install -D -m555 dist/osc.complete $out/share/bash-completion/helpers/osc-helper
       mkdir -p $out/share/bash-completion/completions
       cat >>$out/share/bash-completion/completions/osc <<EOF
@@ -22008,21 +21968,7 @@ in {
      };
   };
 
-  ropper = buildPythonApplication rec {
-    name = "ropper-1.10.10";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/ropper/${name}.tar.gz";
-      sha256 = "1676e07947a19df9d17002307a7555c2647a4224d6f2869949e8fc4bd18f2e87";
-    };
-    propagatedBuildInputs = with self; [ capstone filebytes ];
-    meta = with pkgs.stdenv.lib; {
-      homepage = "https://scoding.de/ropper/";
-      license = licenses.gpl2;
-      description = "Show information about files in different file formats";
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
-
+  ropper = callPackage ../development/python-modules/ropper { };
 
   routes = buildPythonPackage rec {
     name = "routes-1.12.3";
@@ -25963,28 +25909,7 @@ EOF
     };
   };
 
-  wheel = buildPythonPackage rec {
-    name = "wheel-${version}";
-    version = "0.29.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/wheel/${name}.tar.gz";
-      sha256 = "1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648";
-    };
-
-    buildInputs = with self; [ pytest pytestcov coverage ];
-
-    propagatedBuildInputs = with self; [ jsonschema ];
-
-    # We add this flag to ignore the copy installed by bootstrapped-pip
-    installFlags = [ "--ignore-installed" ];
-
-    meta = {
-      description = "A built-package format for Python";
-      license = with licenses; [ mit ];
-      homepage = https://bitbucket.org/pypa/wheel/;
-    };
-  };
+  wheel = callPackage ../development/python-modules/wheel { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 

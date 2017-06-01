@@ -9,7 +9,7 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "3.11.0";
+  version = "3.11.1";
   pname = "hypothesis";
   name = "${pname}-${version}";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "${version}";
-    sha256 = "1s911pd3y9hvk0hq2fr6i68dqv1ciagryhgp13wgyfqh8hz8j6zv";
+    sha256 = "5344cc3327bc7fa543fc3b42e85c55f40dda0eeaec38327f9bf373c3ece42b39";
   };
 
   checkInputs = stdenv.lib.optionals doCheck [ pytest pytest_xdist flake8 flaky ];

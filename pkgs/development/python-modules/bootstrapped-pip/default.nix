@@ -1,24 +1,31 @@
-{ stdenv, python, fetchurl, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip }:
 
 let
-  wheel_source = fetchurl {
-    url = "https://pypi.python.org/packages/py2.py3/w/wheel/wheel-0.29.0-py2.py3-none-any.whl";
+  wheel_source = fetchPypi {
+    pname = "wheel";
+    version = "0.29.0";
+    format = "wheel";
     sha256 = "ea8033fc9905804e652f75474d33410a07404c1a78dd3c949a66863bd1050ebd";
   };
-  setuptools_source = fetchurl {
-    url = "https://files.pythonhosted.org/packages/b8/cb/b919f52dd81b4b2210d0c5529b6b629a4002e08d49a90183605d1181b10c/setuptools-30.2.0-py2.py3-none-any.whl";
-    sha256 = "b7e7b28d6a728ea38953d66e12ef400c3c153c523539f1b3997c5a42f3770ff1";
+  setuptools_source = fetchPypi {
+    pname = "setuptools";
+    version = "36.0.1";
+    format = "wheel";
+    sha256 = "f2900e560efc479938a219433c48f15a4ff4ecfe575a65de385eeb44f2425587";
   };
-  argparse_source = fetchurl {
-    url = "https://pypi.python.org/packages/2.7/a/argparse/argparse-1.4.0-py2.py3-none-any.whl";
-    sha256 = "0533cr5w14da8wdb2q4py6aizvbvsdbk3sj7m1jx9lwznvnlf5n3";
+  argparse_source = fetchPypi {
+    pname = "argparse";
+    version = "1.4.0";
+    sha256 = "c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314";
   };
 in stdenv.mkDerivation rec {
-  name = "${python.libPrefix}-bootstrapped-pip-${version}";
+  pname = "pip";
   version = "9.0.1";
+  name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://files.pythonhosted.org/packages/b6/ac/7015eb97dc749283ffdec1c3a88ddb8ae03b8fad0f0e611408f196358da3/pip-9.0.1-py2.py3-none-any.whl";
+  src = fetchPypi {
+    inherit pname version;
+    format = "wheel";
     sha256 = "690b762c0a8460c303c089d5d0be034fb15a5ea2b75bdf565f40421f542fefb0";
   };
 
