@@ -18383,6 +18383,8 @@ with pkgs;
     nixStable
     nixUnstable;
 
+  nix-cmd = callPackage ../tools/package-management/nix-cmd { };
+
   nixops = callPackage ../tools/package-management/nixops { };
 
   nixopsUnstable = callPackage ../tools/package-management/nixops/unstable.nix { };
