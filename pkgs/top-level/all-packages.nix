@@ -3630,6 +3630,8 @@ with pkgs;
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
+  pirate-get = callPackage ../tools/networking/pirate-get { };
+
   pius = callPackage ../tools/security/pius { };
 
   pixiewps = callPackage ../tools/networking/pixiewps {};
