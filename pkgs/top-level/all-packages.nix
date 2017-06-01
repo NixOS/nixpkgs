@@ -16042,6 +16042,8 @@ with pkgs;
     vte = gnome3.vte-ng;
   };
 
+  termite-terminfo = callPackage ../applications/misc/termite/terminfo.nix { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
   tesseract_4 = lowPrio (callPackage ../applications/graphics/tesseract/4.x.nix { });
 
