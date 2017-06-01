@@ -26,17 +26,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs share/extensions
     patchShebangs fix-roff-punct
-  '';
 
-  # Python is used at run-time to execute scripts, e.g., those from
-  # the "Effects" menu.
-  propagatedBuildInputs = [ python2Env ];
+    # Python is used at run-time to execute scripts, e.g., those from
+    # the "Effects" menu.
+    substituteInPlace src/extension/implementation/script.cpp \
+      --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
+  '';
 
   buildInputs = [
     pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif automake114x potrace cmake
+    libvisio libcdr libexif automake114x potrace cmake python2Env
   ];
 
   enableParallelBuilding = true;
