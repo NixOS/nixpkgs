@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "instead-launcher-${version}";
 
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "instead-hub";
     repo = "instead-launcher";
     rev = version;
-    sha256 = "1q0hdgfy9pr48zvxr9x614ka6bd0g8sicdk2a673nwfdyd41p9cw";
+    sha256 = "1svy8i8anspway01pnz2cy69aad03anvkq04wrdfv1h9c34gbvb9";
   };
 
   patches = [ ./path.patch ];
