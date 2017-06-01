@@ -289,6 +289,7 @@
       rpc = 271;
       geoip = 272;
       fcron = 273;
+      rslsync = 279;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -547,6 +548,7 @@
       #rpc = 271; # unused
       #geoip = 272; # unused
       fcron = 273;
+      rslsync = 279;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
