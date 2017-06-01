@@ -43,7 +43,7 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       export TARGET="${buildPlatform.system}-gnu"
       export HOST="${buildPlatform.system}-gnu"
       export PROFILE=${if release then "release" else "debug"}
-      export OUT_DIR=target/build/${crateName}.out
+      export OUT_DIR=$(pwd)/target/build/${crateName}.out
 
       if [[ ! -z "${build}" ]] ; then
          echo "Building ${build}"
