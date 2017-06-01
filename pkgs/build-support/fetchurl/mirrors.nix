@@ -361,7 +361,7 @@ rec {
     http://ftp.ntua.gr/pub/sagemath/src/
 
     # Old versions
-    http://sagemath.org/src-old/
+    http://old.files.sagemath.org/src-old/
   ];
 
   # MySQL mirrors
