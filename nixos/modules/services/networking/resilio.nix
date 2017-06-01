@@ -5,76 +5,41 @@ with lib;
 let
   cfg = config.services.resilio;
 
-  resilioSync = pkgs.resilio;
+  resilioSync = pkgs.resilio-sync;
 
-  listenAddr = cfg.httpListenAddr + ":" + (toString cfg.httpListenPort);
+  sharedFoldersRecord = map (entry: {
+    secret = entry.secret;
+    dir = entry.directory;
 
-  boolStr = x: if x then "true" else "false";
-  optionalEmptyStr = b: v: optionalString (b != "") v;
+    use_relay_server = entry.useRelayServer;
+    use_tracker = entry.useTracker;
+    use_dht = entry.useDHT;
 
-  webUIConfig = optionalString cfg.enableWebUI
-    ''
-      "webui":
-      {
-        ${optionalEmptyStr cfg.httpLogin     "\"login\":          \"${cfg.httpLogin}\","}
-        ${optionalEmptyStr cfg.httpPass      "\"password\":       \"${cfg.httpPass}\","}
-        ${optionalEmptyStr cfg.apiKey        "\"api_key\":        \"${cfg.apiKey}\","}
-        ${optionalEmptyStr cfg.directoryRoot "\"directory_root\": \"${cfg.directoryRoot}\","}
-        "listen": "${listenAddr}"
-      }
-    '';
+    search_lan = entry.searchLAN;
+    use_sync_trash = entry.useSyncTrash;
+    known_hosts = knownHosts;
+  }) cfg.sharedFolders;
 
-  knownHosts = e:
-    optionalString (e ? "knownHosts")
-      (concatStringsSep "," (map (v: "\"${v}\"") e."knownHosts"));
+  configFile = pkgs.writeText "config.json" (builtins.toJSON ({
+    device_name = cfg.deviceName;
+    storage_path = cfg.storagePath;
+    listening_port = cfg.listeningPort;
+    use_gui = false;
+    check_for_updates = cfg.checkForUpdates;
+    use_upnp = cfg.useUpnp;
+    download_limit = cfg.downloadLimit;
+    upload_limit = cfg.uploadLimit;
+    lan_encrypt_data = cfg.encryptLAN;
+  } // optionalAttrs cfg.enableWebUI {
+    webui = { listen = "${cfg.httpListenAddr}:${toString cfg.httpListenPort}"; } //
+      (optionalAttrs (cfg.httpLogin != "") { login = cfg.httpLogin; }) //
+      (optionalAttrs (cfg.httpPass != "") { password = cfg.httpPass; }) //
+      (optionalAttrs (cfg.apiKey != "") { api_key = cfg.apiKey; }) //
+      (optionalAttrs (cfg.directoryRoot != "") { directory_root = cfg.directoryRoot; });
+  } // optionalAttrs (sharedFoldersRecord != []) {
+    shared_folders = sharedFoldersRecord;
+  }));
 
-  sharedFoldersRecord =
-    concatStringsSep "," (map (entry:
-      let helper = attr: v:
-        if (entry ? attr) then boolStr entry.attr else boolStr v;
-      in
-      ''
-        {
-          "secret": "${entry.secret}",
-          "dir":    "${entry.directory}",
-
-          "use_relay_server": ${helper "useRelayServer" true},
-          "use_tracker":      ${helper "useTracker"     true},
-          "use_dht":          ${helper "useDHT"        false},
-
-          "search_lan":       ${helper "searchLAN"      true},
-          "use_sync_trash":   ${helper "useSyncTrash"   true},
-
-          "known_hosts": [${knownHosts entry}]
-        }
-      '') cfg.sharedFolders);
-
-  sharedFoldersConfig = optionalString (cfg.sharedFolders != [])
-    ''
-      "shared_folders":
-        [
-        ${sharedFoldersRecord}
-        ]
-    '';
-
-  configFile = pkgs.writeText "config.json"
-    ''
-      {
-        "device_name":     "${cfg.deviceName}",
-        "storage_path":    "${cfg.storagePath}",
-        "listening_port":  ${toString cfg.listeningPort},
-        "use_gui":         false,
-
-        "check_for_updates": ${boolStr cfg.checkForUpdates},
-        "use_upnp":          ${boolStr cfg.useUpnp},
-        "download_limit":    ${toString cfg.downloadLimit},
-        "upload_limit":      ${toString cfg.uploadLimit},
-        "lan_encrypt_data":  ${boolStr cfg.encryptLAN},
-
-        ${webUIConfig}
-        ${sharedFoldersConfig}
-      }
-    '';
 in
 {
   options = {
@@ -97,6 +62,7 @@ in
       deviceName = mkOption {
         type = types.str;
         example = "Voltron";
+        default = config.networking.hostName;
         description = ''
           Name of the Resilio Sync device.
         '';
@@ -230,10 +196,10 @@ in
               useDHT         = false;
               searchLAN      = true;
               useSyncTrash   = true;
-              knownHosts     =
-                [ "192.168.1.2:4444"
-                  "192.168.1.3:4444"
-                ];
+              knownHosts     = [
+                "192.168.1.2:4444"
+                "192.168.1.3:4444"
+              ];
             }
           ];
         description = ''
@@ -275,7 +241,6 @@ in
         }
       ];
 
-    services.resilio.package = mkOptionDefault pkgs.resilio;
 
     users.extraUsers.rslsync = {
       description     = "Resilio Sync Service user";
@@ -295,8 +260,9 @@ in
         Restart   = "on-abort";
         UMask     = "0002";
         User      = "rslsync";
-        ExecStart =
-          "${resilioSync}/bin/rslsync --nodaemon --config ${configFile}";
+        ExecStart = ''
+          ${resilioSync}/bin/rslsync --nodaemon --config ${configFile}
+        '';
       };
     };
 
@@ -305,11 +271,12 @@ in
       after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
-        ExecStart =
-          "${resilioSync}/bin/rslsync --nodaemon --config %h/.config/resilio-sync/config.json";
+        ExecStart = ''
+         ${resilioSync}/bin/rslsync --nodaemon --config %h/.config/resilio-sync/config.json
+        '';
       };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ resilioSync ];
   };
 }
