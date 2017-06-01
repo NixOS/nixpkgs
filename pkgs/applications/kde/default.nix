@@ -63,6 +63,8 @@ let
       kate = callPackage ./kate.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kcalc = callPackage ./kcalc.nix {};
+      kcalcore = callPackage ./kcalcore.nix {};
+      kcalutils = callPackage ./kcalutils.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
@@ -72,6 +74,7 @@ let
       kdf = callPackage ./kdf.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
+      kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kmime = callPackage ./kmime.nix {};
@@ -79,7 +82,9 @@ let
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
+      kpimtextedit = callPackage ./kpimtextedit.nix {};
       krfb = callPackage ./krfb.nix {};
+      ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
