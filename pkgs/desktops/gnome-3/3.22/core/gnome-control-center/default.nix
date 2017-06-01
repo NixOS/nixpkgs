@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
+{ fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, wrapGAppsHook
 , libcanberra_gtk2, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
 , gdk_pixbuf, librsvg, libxkbfile, libnotify, libgudev
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   buildInputs = with gnome3;
-    [ pkgconfig intltool ibus gtk glib upower libcanberra_gtk2 gsettings_desktop_schemas
+    [ pkgconfig intltool ibus gtk glib glib_networking upower libcanberra_gtk2 gsettings_desktop_schemas
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
       gnome_online_accounts libsoup colord libpulseaudio fontconfig colord-gtk libpwquality
       accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
-      gnome3.vino udev libcanberra_gtk3 libgudev
+      gnome3.vino udev libcanberra_gtk3 libgudev wrapGAppsHook
       networkmanager modemmanager makeWrapper gnome3.gnome-bluetooth grilo tracker
       cracklib ];
 
@@ -39,9 +39,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = with gnome3; ''
-    wrapProgram $out/bin/gnome-control-center \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${sound-theme-freedesktop}/share:$out/share:$out/share/gnome-control-center:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done
