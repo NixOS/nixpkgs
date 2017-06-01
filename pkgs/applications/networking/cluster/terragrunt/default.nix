@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "terragrunt-${version}";
-  version = "0.10.1";
+  version = "0.12.16";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
@@ -10,12 +10,16 @@ buildGoPackage rec {
     rev    = "v${version}";
     owner  = "gruntwork-io";
     repo   = "terragrunt";
-    sha256 = "04q9wm8dnbm1pcy9i3c7ral49k3z10a7gx7h6h4bsvjy1sdf58vz";
+    sha256 = "07xxk7r9wvjv3v0l95g7sy5yphypfxmlymxzi7yv3b8dznifwm0y";
   };
 
   goDeps = ./deps.nix;
 
   buildInputs = [ makeWrapper ];
+
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-X main.VERSION=v${version}")
+  '';
 
   postInstall = ''
     wrapProgram $bin/bin/terragrunt \

@@ -1,21 +1,16 @@
-{ lib, stdenv, fetchurl, linuxHeaders
+{ stdenv, callPackage
+, withLinuxHeaders ? true
 , installLocales ? true
 , profilingLibraries ? false
-, gccCross ? null
-, withGd ? false, gd ? null, libpng ? null
+, withGd ? false
 }:
 
 assert stdenv.cc.isGNU;
 
-let
-  build = import ./common.nix;
-  cross = if gccCross != null then gccCross.target else null;
-in
-  build cross ({
-    name = "glibc" + lib.optionalString withGd "-gd";
+callPackage ./common.nix { inherit stdenv; } {
+    name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
-    inherit lib stdenv fetchurl linuxHeaders installLocales
-      profilingLibraries gccCross withGd gd libpng;
+    inherit withLinuxHeaders profilingLibraries installLocales withGd;
 
     NIX_NO_SELF_RPATH = true;
 
@@ -81,7 +76,7 @@ in
       # to bootstrap-tools; on cross-arm this stripping would break objects.
       if [ -z "$crossConfig" ]; then
         for i in "$out"/lib/*.a; do
-            strip -S "$i"
+            [ "$i" = "$out/lib/libm.a" ] || strip -S "$i"
         done
       fi
 
@@ -91,6 +86,9 @@ in
       mkdir -p $static/lib
       mv $out/lib/*.a $static/lib
       mv $static/lib/lib*_nonshared.a $out/lib
+      # Some of *.a files are linker scripts where moving broke the paths.
+      sed "/^GROUP/s|$out/lib/lib|$static/lib/lib|g" \
+        -i "$static"/lib/*.a
 
       # Work around a Nix bug: hard links across outputs cause a build failure.
       cp $bin/bin/getconf $bin/bin/getconf_
@@ -101,36 +99,3 @@ in
 
     meta.description = "The GNU C Library";
   }
-
-  //
-
-  (if cross != null
-   then {
-      preConfigure = ''
-        sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
-
-        cat > config.cache << "EOF"
-        libc_cv_forced_unwind=yes
-        libc_cv_c_cleanup=yes
-        libc_cv_gnu89_inline=yes
-        # Only due to a problem in gcc configure scripts:
-        libc_cv_sparc64_tls=${if cross.withTLS then "yes" else "no"}
-        EOF
-        export BUILD_CC=gcc
-        export CC="$crossConfig-gcc"
-        export AR="$crossConfig-ar"
-        export RANLIB="$crossConfig-ranlib"
-
-        dontStrip=1
-      '';
-
-      preInstall = null; # clobber the native hook
-
-      separateDebugInfo = false; # this is currently broken for crossDrv
-
-      # To avoid a dependency on the build system 'bash'.
-      preFixup = ''
-        rm $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-      '';
-    }
-   else {}))

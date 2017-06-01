@@ -1,15 +1,16 @@
 { stdenv, fetchFromGitHub, gtk3, json_glib, sqlite, libsoup, gettext, vala_0_32
-, automake, autoconf, libtool, pkgconfig, gnome3, gst_all_1, wrapGAppsHook }:
+, automake, autoconf, libtool, pkgconfig, gnome3, gst_all_1, wrapGAppsHook
+, glib_networking }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.3";
+  version = "1.5";
   name = "corebird-${version}";
 
   src = fetchFromGitHub {
     owner = "baedert";
     repo = "corebird";
     rev = version;
-    sha256 = "09k0jrhjqrmpvyz5pf1g7wkidflkhpvw5869a95vnhfxjd45kzs3";
+    sha256 = "0nll3ns1riylxg33w6myz5x8h6ai39k5fw2bkf96g5rgmi6zsjma";
   };
 
   preConfigure = ''
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automake autoconf libtool pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest
+    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest gnome3.dconf gnome3.gspell glib_networking
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav ]);
 
   meta = {

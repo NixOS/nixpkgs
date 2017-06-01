@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, boost, miniupnpc, pkgconfig, unbound }:
+{ stdenv, fetchFromGitHub, cmake, boost, miniupnpc, openssl, pkgconfig, unbound }:
 
 let
-  version = "0.10.1";
+  version = "0.10.3.1";
 in
 stdenv.mkDerivation {
   name = "monero-${version}";
@@ -10,12 +10,12 @@ stdenv.mkDerivation {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "1zngskpgxz3vqq348h0mab2kv95z6g9ckvqkr77mx15m5z3qi6aw";
+    sha256 = "1x6qjqijdbjyfb0dcjn46gp38hkb419skxansf9w2cjf58c2055n";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ boost miniupnpc unbound ];
+  buildInputs = [ boost miniupnpc openssl unbound ];
 
   # these tests take a long time and don't
   # always complete in the build environment

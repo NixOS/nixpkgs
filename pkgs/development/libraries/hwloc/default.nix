@@ -1,12 +1,14 @@
 { stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11
 , pciutils, numactl }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "hwloc-1.11.2";
+  name = "hwloc-1.11.6";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha1 = "3d68de060808f04349538be4e63cde501cd53b0a";
+    sha256 = "1yl7dm2qplwmnidd712zy12qfvxk28k8ccs694n42ybwdjwzg1bn";
   };
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
@@ -16,17 +18,17 @@ stdenv.mkDerivation rec {
   # derivation and set optional dependencies to `null'.
   buildInputs = stdenv.lib.filter (x: x != null)
    ([ expat ncurses ]
-     ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ])
-     ++  (stdenv.lib.optionals stdenv.isLinux [ numactl ]));
+     ++  (optionals (!stdenv.isCygwin) [ cairo libX11 ])
+     ++  (optionals stdenv.isLinux [ numactl ]));
 
   propagatedBuildInputs =
     # Since `libpci' appears in `hwloc.pc', it must be propagated.
-    stdenv.lib.optional stdenv.isLinux pciutils;
+    optional stdenv.isLinux pciutils;
 
   enableParallelBuilding = true;
 
   postInstall =
-    stdenv.lib.optionalString (stdenv.isLinux && numactl != null)
+    optionalString (stdenv.isLinux && numactl != null)
       '' if [ -d "${numactl}/lib64" ]
          then
              numalibdir="${numactl}/lib64"
@@ -43,9 +45,8 @@ stdenv.mkDerivation rec {
   # fail on some build machines.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";
-
     longDescription = ''
        hwloc provides a portable abstraction (across OS,
        versions, architectures, ...) of the hierarchical topology of
@@ -64,9 +65,7 @@ stdenv.mkDerivation rec {
 
     # http://www.open-mpi.org/projects/hwloc/license.php
     license = licenses.bsd3;
-
     homepage = http://www.open-mpi.org/projects/hwloc/;
-
     maintainers = [ ];
     platforms = platforms.all;
   };

@@ -1,15 +1,15 @@
 {stdenv, fetchurl, gnome3, glib, json_glib, libxml2, libarchive, libsoup, gobjectIntrospection, meson, ninja, pkgconfig,  valadoc}:
 
 stdenv.mkDerivation rec {
-  major = "0.2";
-  minor = "3";
+  major = "0.4";
+  minor = "2";
   version = "${major}.${minor}";
 
   name = "libhttpseverywhere-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libhttpseverywhere/${major}/libhttpseverywhere-${version}.tar.xz";
-    sha256 = "0ndk6yyfcd7iwwkv4rkivhd08k0x8v03gnp9dk1ms4bxb1l2i8l1";
+    sha256 = "0n850a4adsla6di8dylnadg07wblkdl28abrjvk6fzy8a1kjlx02";
   };
 
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
@@ -18,13 +18,12 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     mkdir build
     cd build
-    meson.py --prefix "$out" ..
+    meson --prefix "$out" ..
   '';
 
   buildPhase = ''
     ninja
-    ninja devhelp
-  '';
+   '';
 
   installPhase = "ninja install";
 

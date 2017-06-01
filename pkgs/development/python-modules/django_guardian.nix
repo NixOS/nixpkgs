@@ -1,17 +1,18 @@
 { stdenv, buildPythonPackage, python, fetchurl
 , django_environ, mock, django, six
-, pytest, pytestrunner, pytestdjango, setuptools_scm
+, pytest, pytestrunner, pytest-django, setuptools_scm
 }:
 buildPythonPackage rec {
-  name = "django-guardian-${version}";
-  version = "1.4.6";
+  pname = "django-guardian";
+  name = "${pname}-${version}";
+  version = "1.4.8";
 
   src = fetchurl {
     url = "mirror://pypi/d/django-guardian/${name}.tar.gz";
-    sha256 = "1r3xj0ik0hh6dfak4kjndxk5v73x95nfbppgr394nhnmiayv4zc5";
+    sha256 = "039mfx47c05vl6vlld0ahyq37z7m5g68vqc38pj8iic5ysr98drm";
   };
 
-  buildInputs = [ pytest pytestrunner pytestdjango django_environ mock setuptools_scm ];
+  buildInputs = [ pytest pytestrunner pytest-django django_environ mock setuptools_scm ];
   propagatedBuildInputs = [ django six ];
 
   checkPhase = ''

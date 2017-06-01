@@ -1,12 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp, curl, libinput, systemd }:
+{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
+, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
+, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
+, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
+, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
+, curl, libinput, systemd, writeText
+}:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.18.4";
+  version = "1.19.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "09c0ajszjarcs6d62zlgnf1aha2f921mfr0gxg6nwza36xzc1srr";
+    sha256 = "0fndwraca9rg0bz3al4isdprvyw56szr88qiyvglb4j8ygsylscc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -24,17 +30,38 @@ stdenv.mkDerivation rec {
     libinput ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
-  configureFlags = [ "--enable-sdl" "--enable-drm" "--enable-elput" "--with-opengl=full"
-    "--enable-image-loader-jp2k" "--enable-xinput22" "--enable-multisense" "--enable-liblz4" "--enable-systemd"
-    "--enable-image-loader-webp" "--enable-harfbuzz" "--enable-xine" "--enable-fb"
-    "--disable-tslib" "--with-systemdunitdir=$out/systemd/user"
-    "ac_ct_CXX=foo" ];
+  configureFlags = [
+    "--enable-sdl"
+    "--enable-drm"
+    "--enable-elput"
+    "--with-opengl=full"
+    "--enable-image-loader-jp2k"
+    "--enable-xinput22"
+    "--enable-multisense"
+    "--enable-liblz4"
+    "--enable-systemd"
+    "--enable-image-loader-webp"
+    "--enable-harfbuzz"
+    "--enable-xine"
+    "--enable-fb"
+    "--disable-tslib"
+    "--with-systemdunitdir=$out/systemd/user"
+    "ac_ct_CXX=foo"
+  ];
 
   patches = [ ./efl-elua.patch ];
 
+  # bin/edje_cc creates $HOME/.run, which would break build of reverse dependencies.
+  setupHook = writeText "setupHook.sh" ''
+    export HOME="$TEMPDIR"
+  '';
+
   preConfigure = ''
     export LD_LIBRARY_PATH="$(pwd)/src/lib/eina/.libs:$LD_LIBRARY_PATH"
+    source "$setupHook"
   '';
+
+  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 
   postInstall = ''
     substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
@@ -48,8 +75,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Enlightenment foundation libraries";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
   };
 }

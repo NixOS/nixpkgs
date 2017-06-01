@@ -16,7 +16,7 @@ let
     pid_file /run/mosquitto/pid
     acl_file ${aclFile}
     persistence true
-    allow_anonymous ${if cfg.allowAnonymous then "true" else "false"}
+    allow_anonymous ${boolToString cfg.allowAnonymous}
     bind_address ${cfg.host}
     port ${toString cfg.port}
     ${listenerConf}
@@ -147,7 +147,6 @@ in
 
       allowAnonymous = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Allow clients to connect without authentication.

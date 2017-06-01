@@ -1,22 +1,23 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper
-, llvmPackages_39, hiredis, z3_opt, gtest
+, llvmPackages_4, hiredis, z3_opt, gtest
 }:
 
 let
   klee = fetchFromGitHub {
-    owner = "klee";
+    owner = "rsas";
     repo  = "klee";
-    rev   = "a743d7072d9ccf11f96e3df45f25ad07da6ad9d6";
-    sha256 = "0qwzs029vlba8xz362n4b00hdm2z3lzhzmvix1r8kpbfrvs8vv91";
+    rev   = "57cd3d43056b029d9da3c6b3c666c4153554c04f";
+    sha256 = "197wb7nbirlfpx2jr3afpjjhcj7slc4dxxi02j3kmazz9kcqaygz";
   };
-in stdenv.mkDerivation {
-  name = "souper-unstable-2017-01-05";
+in stdenv.mkDerivation rec {
+  name = "souper-unstable-${version}";
+  version = "2017-03-23";
 
   src = fetchFromGitHub {
     owner  = "google";
     repo   = "souper";
-    rev    = "1be75fe6a96993b57dcba038798fe6d1c7d113eb";
-    sha256 = "0r8mjb88lwz9a3syx7gwsxlwfg0krffaml04ggaf3ad0cza2mvm8";
+    rev    = "cf2911d2eb1e7c8ab465df5a722fa5cdac06e6fc";
+    sha256 = "1kg08a1af4di729pn1pip2lzqzlvjign6av95214f5rr3cq2q0cl";
   };
 
   nativeBuildInputs = [
@@ -25,11 +26,13 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    llvmPackages_39.llvm
-    llvmPackages_39.clang-unwrapped
+    llvmPackages_4.llvm
+    llvmPackages_4.clang-unwrapped
     hiredis
     gtest
   ];
+
+  patches = [ ./cmake-fix.patch ];
 
   enableParallelBuilding = true;
 

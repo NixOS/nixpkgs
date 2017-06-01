@@ -240,11 +240,14 @@ in {
       };
       systemd.user = {
         services.pulseaudio = {
+          restartIfChanged = true;
           serviceConfig = {
             RestartSec = "500ms";
+            PassEnvironment = "DISPLAY";
           };
-          environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
-          restartIfChanged = true;
+        };
+        sockets.pulseaudio = {
+          wantedBy = [ "sockets.target" ];
         };
       };
     })
@@ -274,6 +277,8 @@ in {
           RestartSec = "500ms";
         };
       };
+
+      environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
     })
   ];
 

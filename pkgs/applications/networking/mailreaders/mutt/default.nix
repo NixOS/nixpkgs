@@ -20,11 +20,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
-  version = "1.7.2";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "1yazrl82s9fxmamnlvwmsxhwrxnwv6kwakgfmawda8ndhwb50lqm";
+    sha256 = "0hpd896mw630sd6ps60hpka8cg691nvr627n8kmabv7zcxnp90cv";
   };
 
   patchPhase = optionalString (openssl != null) ''
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     (enableFeature withSidebar  "sidebar")
     "--enable-smtp"
     "--enable-pop"
-    "--enable-imap"
     "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail

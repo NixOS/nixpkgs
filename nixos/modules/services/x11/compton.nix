@@ -43,7 +43,6 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Whether of not to enable Compton as the X.org composite manager.
       '';
@@ -52,7 +51,6 @@ in {
     fade = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Fade windows in and out.
       '';
@@ -85,7 +83,7 @@ in {
         "focused = 1" 
       ];
       description = ''
-        List of condition of windows that should have no shadow.
+        List of conditions of windows that should not be faded.
         See <literal>compton(1)</literal> man page for more examples.
       '';
     };
@@ -93,7 +91,6 @@ in {
     shadow = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Draw window shadows.
       '';
@@ -126,7 +123,7 @@ in {
         "focused = 1" 
       ];
       description = ''
-        List of condition of windows that should have no shadow.
+        List of conditions of windows that should have no shadow.
         See <literal>compton(1)</literal> man page for more examples.
       '';
     };
@@ -211,13 +208,13 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.compton = {
       description = "Compton composite manager";
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/compton --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
-      environment.DISPLAY = ":0";
     };
 
     environment.systemPackages = [ cfg.package ];

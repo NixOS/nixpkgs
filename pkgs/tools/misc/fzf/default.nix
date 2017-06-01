@@ -1,8 +1,8 @@
-{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub, writeText }:
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.16.4";
+  version = "0.16.7";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,10 +11,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0kq4j6q1xk17ryzzcb8s6l2zqsjkk75lrwalias9gwcriqs6k6yn";
+    sha256 = "11ka5n7mrm5pb9riah28zyshvfz2svm4wn6fbama39yp6sc01x23";
   };
 
   outputs = [ "bin" "out" "man" ];
+
+  fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
 
@@ -23,6 +25,12 @@ buildGoPackage rec {
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
+  '';
+
+  preInstall = ''
+    mkdir -p $bin/share/fish/vendor_functions.d $bin/share/fish/vendor_conf.d
+    cp $src/shell/key-bindings.fish $bin/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    cp ${fishHook} $bin/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
   '';
 
   postInstall = ''

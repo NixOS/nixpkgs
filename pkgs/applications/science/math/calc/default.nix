@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/calc --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     description = "C-style arbitrary precision calculator";
     homepage = http://www.isthe.com/chongo/tech/comp/calc/;

@@ -2,16 +2,16 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
-let basename = "binutils-2.27"; in
+let basename = "binutils-2.28"; in
 
-with { inherit (stdenv.lib) optional optionals optionalString; };
+let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
-  name = basename + optionalString (cross != null) "-${cross.config}";
+  name = optionalString (cross != null) "${cross.config}-" + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "125clslv17xh1sab74343fg6v31msavpmaa1c1394zsqa773g5rn";
+    sha256 = "0wiasgns7i8km8nrxas265sh2dfpsw93b3qw195ipc90w4z475v2";
   };
 
   patches = [
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
+  # TODO: all outputs on all platform
   outputs = [ "out" ]
     ++ optional (cross == null && !stdenv.isDarwin) "lib" # problems in Darwin stdenv
     ++ [ "info" ]
@@ -75,13 +76,11 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optional (cross != null) "--target=${cross.config}"
+    ++ optional (cross != null) "--target=${cross.config}" # TODO: make this unconditional
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
-
-  postFixup = optionalString (cross == null) "ln -s $out/bin $dev/bin"; # tools needed for development
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
@@ -97,6 +96,6 @@ stdenv.mkDerivation rec {
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
        collision due to the ld/as wrappers/symlinks in the latter. */
-    priority = "10";
+    priority = 10;
   };
 }

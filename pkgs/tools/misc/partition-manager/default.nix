@@ -1,39 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, cmake, gettext, automoc4, perl
-, parted, libuuid, qt4, kdelibs, kde_baseapps, phonon, libatasmart
-}:
+{ kdeDerivation, kdeWrapper, fetchurl, lib
+, ecm, kdoctools
+, kconfig, kinit, kpmcore
+, eject, libatasmart }:
 
-stdenv.mkDerivation rec {
-  name = "partitionmanager-1.0.3_p20120804";
+let
+  pname = "partitionmanager";
+  unwrapped = kdeDerivation rec {
+    name = "${pname}-${version}";
+    version = "3.0.1";
 
-  src = fetchurl {
-    #url = "mirror://sourceforge/partitionman/${name}.tar.bz2";
-    # the upstream version is old and doesn't build
-    url = "http://dev.gentoo.org/~kensington/distfiles/${name}.tar.bz2";
-    sha256 = "1j6zpgj8xs98alzxvcibwch9yj8jsx0s7y864gbdx280jmj8c1np";
+    src = fetchurl {
+      url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+      sha256 = "08sb9xa7dvvgha3k2xm1srl339przxpxd2y5bh1lnx6k1x7dk410";
+    };
+
+    meta = with lib; {
+      description = "KDE Partition Manager";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+    nativeBuildInputs = [ ecm kdoctools ];
+    # refer to kpmcore for the use of eject
+    buildInputs = [ eject libatasmart ];
+    propagatedBuildInputs = [ kconfig kinit kpmcore ];
+    enableParallelBuilding = true;
   };
 
-  buildInputs = [
-    pkgconfig cmake gettext automoc4 perl
-    parted libuuid qt4 kdelibs kde_baseapps phonon libatasmart
-  ];
-
-  preConfigure = ''
-    export VERBOSE=1
-    cmakeFlagsArray=($cmakeFlagsArray -DGETTEXT_INCLUDE_DIR=${gettext}/include -DCMAKE_INCLUDE_PATH=${qt4}/include/QtGui )
-  '';
-
-  postInstall = ''
-    set -x
-    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt4}/lib
-    for p in $out/bin/partitionmanager-bin; do
-      patchelf --set-rpath $rpath $p
-    done
-  '';
-
-  meta = {
-    description = "Utility program to help you manage the disk devices";
-    homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-  };
+in kdeWrapper {
+  inherit unwrapped;
+  targets = [ "bin/partitionmanager" ];
 }

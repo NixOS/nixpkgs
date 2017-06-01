@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "insync-${version}";
-  version = "1.3.13.36129";
+  version = "1.3.16.36155";
   src = fetchurl {
     url = "http://s.insynchq.com/builds/insync-portable_${version}_amd64.tar.bz2";
-    sha256 = "18d8ww529nvhwcl5k31qmkzb83k9753ics0dw64w202r8vwbm3cd";
+    sha256 = "1gf1qg7mkbcgqhwxkiljmd1w2zvarq6vhxhips3w06bqdyg12210";
   };
 
   buildInputs = [ makeWrapper ];

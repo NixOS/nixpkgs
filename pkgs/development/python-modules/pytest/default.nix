@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl, isPy26, argparse, hypothesis, py }:
 buildPythonPackage rec {
-  name = "pytest-${version}";
-  version = "3.0.6";
+  version = "3.0.7";
+  pname = "pytest";
+  name = "${pname}-${version}";
 
   preCheck = ''
     # don't test bash builtins
@@ -10,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/p/pytest/${name}.tar.gz";
-    sha256 = "0h6rfp7y7c5mqwfm9fy5fq4l9idnp160c82ylcfjg251y6lk8d34";
+    sha256 = "b70696ebd1a5e6b627e7e3ac1365a4bc60aaf3495e843c1e70448966c5224cab";
   };
 
   buildInputs = [ hypothesis ];

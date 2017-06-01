@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, buildFHSUserEnv, writeScript, jdk, zip, unzip,
-  which, makeWrapper, binutils }:
+{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper, which }:
 
-let
+stdenv.mkDerivation rec {
 
-  version = "0.4.4";
+  version = "0.4.5";
 
   meta = with stdenv.lib; {
     homepage = http://github.com/bazelbuild/bazel/;
@@ -13,60 +12,80 @@ let
     platforms = platforms.linux;
   };
 
-  bootstrapEnv = buildFHSUserEnv {
-    name = "bazel-bootstrap-env";
+  name = "bazel-${version}";
 
-    targetPkgs = pkgs: [ ];
-
-    inherit meta;
+  src = fetchurl {
+    url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+    sha256 = "0asmq3kxnl4326zhgh13mvcrc8jvmiswjj4ymrq0943q4vj7nwrb";
   };
 
-  bazelBinary = stdenv.mkDerivation rec {
+  sourceRoot = ".";
 
-    name = "bazel-${version}";
+  postPatch = ''
+    for f in $(grep -l -r '#!/bin/bash'); do
+      substituteInPlace "$f" --replace '#!/bin/bash' '#!${bash}/bin/bash'
+    done
+    for f in \
+      src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java \
+      src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java \
+      src/main/java/com/google/devtools/build/lib/bazel/rules/sh/BazelShRuleClasses.java \
+      src/main/java/com/google/devtools/build/lib/rules/cpp/LinkCommandLine.java \
+      ; do
+      substituteInPlace "$f" --replace /bin/bash ${bash}/bin/bash
+    done
+  '';
 
-    src = fetchurl {
-      url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-      sha256 = "1fwfahkqi680zyxmdriqj603lpacyh6cg6ff25bn9bkilbfj2anm";
-    };
+  buildInputs = [
+    stdenv.cc
+    stdenv.cc.cc.lib
+    jdk
+    zip
+    unzip
+    makeWrapper
+    which
+  ];
 
-    sourceRoot = ".";
+  # These must be propagated since the dependency is hidden in a compressed
+  # archive.
 
-    patches = [ ./java_stub_template.patch ];
+  propagatedBuildInputs = [
+    bash
+  ];
 
-    packagesNotFromEnv = [
-        stdenv.cc stdenv.cc.cc.lib jdk which zip unzip binutils ];
-    buildInputs = packagesNotFromEnv ++ [ bootstrapEnv makeWrapper ];
+  # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
+  # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
+  # Change this to $(mktemp -d) as soon as we figure out why.
 
-    buildTimeBinPath = stdenv.lib.makeBinPath packagesNotFromEnv;
-    buildTimeLibPath = stdenv.lib.makeLibraryPath packagesNotFromEnv;
+  buildPhase = ''
+    export TMPDIR=/tmp
+    ./compile.sh
+    ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
+      --spawn_strategy=standalone \
+      --genrule_strategy=standalone
+    cp bazel-bin/scripts/bazel-complete.bash output/
+  '';
 
-    runTimeBinPath = stdenv.lib.makeBinPath [ jdk stdenv.cc.cc ];
-    runTimeLibPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+  # Build the CPP and Java examples to verify that Bazel works.
 
-    buildWrapper = writeScript "build-wrapper.sh" ''
-      #! ${stdenv.shell} -e
-      export PATH="${buildTimeBinPath}:$PATH"
-      export LD_LIBRARY_PATH="${buildTimeLibPath}:$LD_LIBRARY_PATH"
-      ./compile.sh
-    '';
+  doCheck = true;
+  checkPhase = ''
+    export TEST_TMPDIR=$(pwd)
+    ./output/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+  '';
 
-    buildPhase = ''
-      bazel-bootstrap-env ${buildWrapper}
-    '';
+  # Bazel expects gcc and java to be in the path.
 
-    installPhase = ''
-      mkdir -p $out/bin
-      cp output/bazel $out/bin/
-      wrapProgram $out/bin/bazel \
-          --suffix PATH ":" "${runTimeBinPath}" \
-          --suffix LD_LIBRARY_PATH ":" "${runTimeLibPath}"
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    mv output/bazel $out/bin
+    wrapProgram "$out/bin/bazel" --prefix PATH : "${stdenv.cc}/bin:${jdk}/bin"
+    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
+    mv output/bazel-complete.bash $out/share/bash-completion/completions/
+    cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+  '';
 
-    dontStrip = true;
-    dontPatchELF = true;
-
-    inherit meta;
-  };
-
-in bazelBinary
+  dontStrip = true;
+  dontPatchELF = true;
+}

@@ -1,23 +1,18 @@
-{ name
-, writeScript
+{ writeScript
+, lib
 , xidel
+, common-updater-scripts
 , coreutils
 , gnused
 , gnugrep
 , curl
-, ed
-, sourceSectionRegex ? "${name}-unwrapped = common"
-, basePath ? "pkgs/applications/networking/browsers/firefox"
+, attrPath
 , baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
 , versionSuffix ? ""
 }:
 
-let
-  version = (builtins.parseDrvName name).version;
-in writeScript "update-${name}" ''
-  PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${ed}/bin
-
-  pushd ${basePath}
+writeScript "update-${attrPath}" ''
+  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused xidel ]}
 
   url=${baseUrl}
 
@@ -35,20 +30,5 @@ in writeScript "update-${name}" ''
 
   shasum=`curl --silent $url$version/SHA512SUMS | grep 'source\.tar\.xz' | cut -d ' ' -f 1`
 
-  ed default.nix <<COMMANDS
-  # search line
-    /${sourceSectionRegex}/
-  # search version number line
-    /version/
-  # update the version
-    s/".*"/"$version"/
-  # search hash line
-    /sha512/
-  # update the hash
-    s/".*"/"$shasum"/
-  # write then quit
-    wq
-  COMMANDS
-
-  popd
+  update-source-version ${attrPath} "$version" "$shasum"
 ''

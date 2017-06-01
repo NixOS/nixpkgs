@@ -1,11 +1,13 @@
-with import <nixpkgs> {};
+with import ../../.. {};
 
 stdenv.mkDerivation {
   name = "generate-r-packages-shell";
 
   buildCommand = "exit 1";
 
-  nativeBuildInputs = [ 
+  buildInputs = [ wget ];
+
+  nativeBuildInputs = [
     (rWrapper.override {
       packages = with rPackages; [
         data_table

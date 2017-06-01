@@ -11,7 +11,6 @@ in {
   options.services.urxvtd.enable = mkOption {
     type = types.bool;
     default = false;
-    example = true;
     description = ''
       Enable urxvtd, the urxvt terminal daemon. To use urxvtd, run
       "urxvtc".
@@ -22,9 +21,8 @@ in {
     systemd.user = {
       sockets.urxvtd = {
         description = "socket for urxvtd, the urxvt terminal daemon";
-        after = [ "graphical.target" ];
-        wants = [ "graphical.target" ];
-        wantedBy = [ "sockets.target" ];
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
         socketConfig = {
           ListenStream = "%t/urxvtd-socket";
         };

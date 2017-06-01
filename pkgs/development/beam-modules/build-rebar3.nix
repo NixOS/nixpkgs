@@ -1,5 +1,5 @@
 { stdenv, writeText, erlang, rebar3, openssl, libyaml,
-  pc, buildEnv, lib }:
+  pc, lib }:
 
 { name, version
 , src

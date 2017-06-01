@@ -10,11 +10,11 @@ assert guiSupport -> (dbus_libs != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.3.10";
+  version = "3.3.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "1lm8y5k9363gajbw0k9jb1cb7zg0lz5rw2ja0kd36h68rpm7qr9c";
+    sha256 = "0vs626khavhqqnq2hrwrxyc8ihbngharcf1fd37nwccvy13qqljn";
   };
 
   nativeBuildInputs = [ pkgconfig which ];

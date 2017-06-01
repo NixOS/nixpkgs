@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux }:
+{ stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux, pcre }:
+
 stdenv.mkDerivation rec {
   name = "aide-${version}";
-  version = "0.16a2";
+  version = "0.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/aide/devel/0.16a2/aide-${version}.tar.gz";
-    sha256 = "11qvp6l2x4ajq9485lmg722gfdikh8r2wqfw17m0jm68df0m295m";
+    url = "mirror://sourceforge/aide/${version}/aide-${version}.tar.gz";
+    sha256 = "0ibkv4z2gk14fn014kq13rp2ysiq6nn2cflv2q5i7zf466hm6758";
   };
 
-  buildInputs = [ flex bison libmhash zlib acl attr libselinux ];
+  buildInputs = [ flex bison libmhash zlib acl attr libselinux pcre ];
 
 
   configureFlags = [

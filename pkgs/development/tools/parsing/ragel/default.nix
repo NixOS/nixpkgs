@@ -42,7 +42,7 @@ in
   };
 
   ragelDev = generic {
-    version = "7.0.0.9";
-    sha256 = "1w2jhfg3fxl15gcmm7z3jbi6splgc83mmwcfbp08lfc8sg2wmrmr";
+    version = "7.0.0.10";
+    sha256 = "1v4ddzxal4gf8l8nkn32qabba6nbpd2mg8sphgmdn8kaqv52nmj0";
   };
 }

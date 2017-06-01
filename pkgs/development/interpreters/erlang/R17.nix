@@ -35,7 +35,12 @@ stdenv.mkDerivation rec {
       ++ optional javacSupport openjdk
       ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
-  patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
+  patchPhase = ''
+    # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
+    substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
+
+    sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure
+  '';
 
   debugInfo = enableDebugInfo;
 

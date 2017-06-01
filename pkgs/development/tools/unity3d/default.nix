@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, makeWrapper, fakeroot, file, getopt
-, gtk2, gdk_pixbuf, glib, mesa_glu, postgresql, nss, nspr
+, gtk2, gdk_pixbuf, glib, mesa_glu, postgresql, nss, nspr, udev
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
@@ -11,7 +11,7 @@ let
   libPath64 = lib.makeLibraryPath [
     gcc.cc gtk2 gdk_pixbuf glib mesa_glu postgresql nss nspr
     alsaLib GConf cups libcap fontconfig freetype pango
-    cairo dbus expat zlib libpng12
+    cairo dbus expat zlib libpng12 udev
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
   ];
@@ -25,19 +25,16 @@ let
     gnome-sharp gtk-sharp-2_0
   ];
 
-  ver = "5.3.5";
+  ver = "5.6.1";
   build = "f1";
-  date = "20160525";
-  pkgVer = "${ver}${build}";
-  fullVer = "${pkgVer}+${date}";
 
 in stdenv.mkDerivation rec {
   name = "unity-editor-${version}";
-  version = pkgVer;
+  version = "${ver}x${build}";
 
   src = fetchurl {
-    url = "http://download.unity3d.com/download_unity/linux/unity-editor-installer-${fullVer}.sh";
-    sha256 = "0lmc65175fdvbyn3565pjlg6cc4l5i58fj7bxzi5cqykkbzv5wdm";
+    url = "http://beta.unity3d.com/download/6a86e542cf5c/unity-editor-installer-${version}Linux.sh";
+    sha256 = "10z4h94c9h967gx4b3gwb268zn7bnrb7ylnqnmnqhx6byac7cf4m";
   };
 
   nosuidLib = ./unity-nosuid.c;
@@ -46,46 +43,18 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "monodevelop" ];
 
+  sourceRoot = "unity-editor-${version}Linux";
+
   unpackPhase = ''
     echo -e 'q\ny' | fakeroot sh $src
-    sourceRoot="unity-editor-${pkgVer}"
   '';
 
   buildPhase = ''
-    patchFile() {
-      ftype="$(file -b "$1")"
-      if [[ "$ftype" =~ LSB\ .*dynamically\ linked ]]; then
-        if [[ "$ftype" =~ 32-bit ]]; then
-          rpath="${libPath32}"
-          intp="$(cat $NIX_CC/nix-support/dynamic-linker-m32)"
-        else
-          rpath="${libPath64}"
-          intp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        fi
-
-        rpath="$(patchelf --print-rpath "$1"):$rpath"
-        if [[ "$ftype" =~ LSB\ shared ]]; then
-          patchelf \
-            --set-rpath "$rpath" \
-            "$1"
-        elif [[ "$ftype" =~ LSB\ executable ]]; then
-          patchelf \
-            --set-rpath "$rpath" \
-            --interpreter "$intp" \
-            "$1"
-        fi
-      fi
-    }
 
     cd Editor
 
     $CC -fPIC -shared -o libunity-nosuid.so $nosuidLib -ldl
     strip libunity-nosuid.so
-
-    # Exclude PlaybackEngines to build something that can be run on FHS-compliant Linuxes
-    find . -name PlaybackEngines -prune -o -executable -type f -print | while read path; do
-      patchFile "$path"
-    done
 
     cd ..
   '';
@@ -124,7 +93,42 @@ in stdenv.mkDerivation rec {
       --prefix MONO_GAC_PREFIX : "${developDotnetPath}"
   '';
 
+  preFixup = ''
+    patchFile() {
+      ftype="$(file -b "$1")"
+      if [[ "$ftype" =~ LSB\ .*dynamically\ linked ]]; then
+        if [[ "$ftype" =~ 32-bit ]]; then
+          rpath="${libPath32}"
+          intp="$(cat $NIX_CC/nix-support/dynamic-linker-m32)"
+        else
+          rpath="${libPath64}"
+          intp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        fi
+
+        oldRpath="$(patchelf --print-rpath "$1")"
+        # Always search at least for libraries in origin directory.
+        rpath="''${oldRpath:-\$ORIGIN}:$rpath"
+        if [[ "$ftype" =~ LSB\ shared ]]; then
+          patchelf \
+            --set-rpath "$rpath" \
+            "$1"
+        elif [[ "$ftype" =~ LSB\ executable ]]; then
+          patchelf \
+            --set-rpath "$rpath" \
+            --interpreter "$intp" \
+            "$1"
+        fi
+      fi
+    }
+
+    # Exclude PlaybackEngines to build something that can be run on FHS-compliant Linuxes
+    find $unitydir -name PlaybackEngines -prune -o -type f -print | while read path; do
+      patchFile "$path"
+    done
+  '';
+
   dontStrip = true;
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     homepage = https://unity3d.com/;

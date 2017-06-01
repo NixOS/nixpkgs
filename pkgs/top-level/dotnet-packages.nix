@@ -46,6 +46,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
+  FSharpCore = fetchNuGet {
+    baseName = "FSharp.Core";
+    version = "4.0.0.1";
+    sha256 = "01nhjcxdz8l1r5vvdzhmgy5x7z5fqppab3ki34qg14axgf8jjygn";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpData225 = fetchNuGet {
+    baseName = "FSharp.Data";
+    version = "2.2.5";
+    sha256 = "1c9l6bk0d2srccash2980y9phq3kmfm0m76k4wghnysnq94vm724";
+    outputFiles = [ "*" ];
+  };
+
   FSharpDataSQLProvider = fetchNuGet {
     baseName = "SQLProvider";
     version = "0.0.9-alpha";
@@ -60,6 +74,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net45/*" ];
   };
 
+  FsCheck262 = fetchNuGet {
+    baseName = "FsCheck";
+    version = "2.6.2";
+    sha256 = "0fh9yvsc4i61z31qf00d6gjv6xxd54pv1ykf5bpv95a5crc3qfvl";
+    outputFiles = [ "*" ];
+  };
+
   FsCheckNunit = fetchNuGet {
     baseName = "FsCheck.Nunit";
     version = "1.0.4";
@@ -67,11 +88,25 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net45/*" ];
   };
 
+  FSharpCompilerTools = fetchNuGet {
+    baseName = "FSharp.Compiler.Tools";
+    version = "4.1.4";
+    sha256 = "0vsp0khlnwh15ibg8s161rw6a6i8rlriclpq53paga447jllf0m8";
+    outputFiles = [ "*" ];
+  };
+
   FsLexYacc = fetchNuGet {
     baseName = "FsLexYacc";
     version = "6.1.0";
     sha256 = "1v5myn62zqs431i046gscqw2v0c969fc7pdplx7z9cnpy0p2s4rv";
     outputFiles = [ "build/*" ];
+  };
+
+  FsLexYacc704 = fetchNuGet {
+    baseName = "FsLexYacc";
+    version = "7.0.4";
+    sha256 = "01zpdb0pybdf0by02rwd7pb1g0cmnn8jxm2pibzxjxw6f4l43ywi";
+    outputFiles = [ "*" ];
   };
 
   FsPickler = fetchNuGet {
@@ -100,6 +135,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "3.0.1";
     sha256 = "1g3j3kvg9vrapb1vjgq65nvn1vg7bzm66w7yjnaip1iww1yn1b0p";
     outputFiles = [ "lib/*" ];
+  };
+
+  NUnit350 = fetchNuGet {
+    baseName = "NUnit";
+    version = "3.5.0";
+    sha256 = "19fxq9cf754ygda5c8rn1zqs71pfxi7mb96jwqhlichnqih6i16z";
+    outputFiles = [ "*" ];
   };
 
   NUnit2 = fetchNuGet {
@@ -153,6 +195,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "tools/*" ];
   };
 
+  SystemValueTuple = fetchNuGet {
+    baseName = "System.ValueTuple";
+    version = "4.3.0";
+    sha256 = "00p5s753xh5417arw3k6npf1pc1k3m1s9mrlkw5vmc7pg8lm6n88";
+    outputFiles = [ "*" ];
+  };
+
   RestSharp = fetchNuGet {
     baseName = "RestSharp";
     version = "105.2.3";
@@ -195,6 +244,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  MicrosoftDiaSymReader = fetchNuGet {
+    baseName = "Microsoft.DiaSymReader";
+    version = "1.1.0";
+    sha256 = "04dgwy6nyxksd1nb24k5c5vz8naggg7hryadvwqnm2v3alkh6g88";
+    outputFiles = [ "*" ];
+  };
+
+  MicrosoftDiaSymReaderPortablePdb = fetchNuGet {
+    baseName = "Microsoft.DiaSymReader.PortablePdb";
+    version = "1.2.0";
+    sha256 = "0qa8sqg0lzz9galkkfyi8rkbkali0nxm3qd5y4dlxp96ngrq5ldz";
+    outputFiles = [ "*" ];
+  };
+
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";
@@ -208,6 +271,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "1.1.36";
     sha256 = "0760kzf5s771pnvnxsgas446kqdh1b71w6g3k75jpzldfmsd3vyq";
     outputFiles = [ "lib/portable-net45+win8+wp8+wpa81/*" ];
+  };
+
+  SystemCollectionsImmutable131 = fetchNuGet {
+    baseName = "System.Collections.Immutable";
+    version = "1.3.1";
+    sha256 = "149fcp7k7r9iw24dv5hbaij0c38kcv28dyhzbkggilfh4x2hy8c2";
+    outputFiles = [ "*" ];
+  };
+
+  SystemReflectionMetadata = fetchNuGet {
+    baseName = "System.Reflection.Metadata";
+    version = "1.4.2";
+    sha256 = "19fhdgd35yg52gyckhgwrphq07nv7v7r73hcg69ns94xfg1i6r7i";
+    outputFiles = [ "*" ];
   };
 
   Suave = fetchNuGet {

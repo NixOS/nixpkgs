@@ -12,11 +12,11 @@ let
         port: ${toString cfg.quasselCorePort},  // quasselcore port
         initialBacklogLimit: ${toString cfg.initialBacklogLimit},  // Amount of backlogs to fetch per buffer on connection
         backlogLimit: ${toString cfg.backlogLimit},  // Amount of backlogs to fetch per buffer after first retrieval
-        securecore: ${if cfg.secureCore then "true" else "false"},  // Connect to the core using SSL
+        securecore: ${boolToString cfg.secureCore},  // Connect to the core using SSL
         theme: '${cfg.theme}'  // Default UI theme
       },
       themes: ['default', 'darksolarized'],  //  Available themes
-      forcedefault: ${if cfg.forceHostAndPort then "true" else "false"},  // Will force default host and port to be used, and will hide the corresponding fields in the UI
+      forcedefault: ${boolToString cfg.forceHostAndPort},  // Will force default host and port to be used, and will hide the corresponding fields in the UI
       prefixpath: '${cfg.prefixPath}'  // Configure this if you use a reverse proxy
     };
   '';

@@ -15,6 +15,7 @@
 , expat
 , libffi
 , CF, configd, coreutils
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -65,6 +66,8 @@ let
       # (since it will do a futile invocation of gcc (!) to find
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
+
+      ./glibc-2.25-enosys.patch
 
     ] ++ optionals stdenv.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
@@ -148,7 +151,7 @@ in stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
 
-    setupHook = ./setup-hook.sh;
+    setupHook = python-setup-hook sitePackages;
 
     postPatch = optionalString (x11Support && (tix != null)) ''
           substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
@@ -176,6 +179,17 @@ in stdenv.mkDerivation {
         echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
+
+        # Determinism: Windows installers were not deterministic.
+        # We're also not interested in building Windows installers.
+        find "$out" -name 'wininst*.exe' | xargs -r rm -f
+
+        # Determinism: rebuild all bytecode
+        # We exclude lib2to3 because that's Python 2 code which fails
+        # We rebuild three times, once for each optimization level
+        find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
       '';
 
     passthru = let
@@ -208,5 +222,8 @@ in stdenv.mkDerivation {
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
       maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
+      # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
+      # in case both 2 and 3 are installed.
+      priority = -100;
     };
   }

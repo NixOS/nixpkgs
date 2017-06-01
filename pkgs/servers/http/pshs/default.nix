@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, libevent, file, qrencode, miniupnpc }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, file, qrencode, miniupnpc }:
 
-let
-  version = "0.3";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pshs-${version}";
+  version = "0.3.1";
 
-  src = fetchurl {
-    url = "https://www.bitbucket.org/mgorny/pshs/downloads/pshs-${version}.tar.bz2";
-    sha256 = "0qvy1m9jmbjhbihs1qr9nasbaajl3n0x8bgz1vw9xvpkqymx5i63";
+  src = fetchFromGitHub {
+    owner = "mgorny";
+    repo = "pshs";
+    rev = "v${version}";
+    sha256 = "18mhxdjlyr21gghzkrrlp0imicb6bqf741p0a21c2rkvs4bv8c1w";
   };
 
-  buildInputs = [ pkgconfig libevent file qrencode miniupnpc ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libevent file qrencode miniupnpc ];
 
   # SSL requires libevent at 2.1 with ssl support
   configureFlags = "--disable-ssl";
 
   meta = {
     description = "Pretty small HTTP server - a command-line tool to share files";
-    homepage = "https://bitbucket.org/mgorny/pshs/";
+    homepage = "https://github.com/mgorny/pshs";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.eduarrrd ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

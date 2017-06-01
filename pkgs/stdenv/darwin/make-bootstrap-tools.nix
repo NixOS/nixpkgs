@@ -3,7 +3,7 @@
 with import pkgspath { inherit system; };
 
 let
-  llvmPackages = llvmPackages_37;
+  llvmPackages = llvmPackages_4;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -301,8 +301,8 @@ in rec {
       export flags="-idirafter ${unpack}/include-Libsystem --sysroot=${unpack} -L${unpack}/lib"
 
       export CPP="clang -E $flags"
-      export CC="clang $flags -Wl,-rpath,${unpack}/lib -Wl,-v"
-      export CXX="clang++ $flags --stdlib=libc++ -lc++abi -isystem${unpack}/include/c++/v1 -Wl,-rpath,${unpack}/lib -Wl,-v"
+      export CC="clang $flags -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
+      export CXX="clang++ $flags --stdlib=libc++ -lc++abi -isystem${unpack}/include/c++/v1 -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
 
       echo '#include <stdio.h>' >> foo.c
       echo '#include <float.h>' >> foo.c

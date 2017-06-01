@@ -1,28 +1,28 @@
-{ stdenv, cmake, fetchFromGitHub, libusb1, pkgconfig, qt5 }:
+{ stdenv, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
-  version = "0.5.1";
+  version = "1.1";
 
-  src = fetchFromGitHub {
-    owner = "Nitrokey";
-    repo = "nitrokey-app";
-    rev = "v${version}";
-    sha256 = "0acb2502r3wa0mry6h8sz1k16zaa4bgnhxwxqd1vd1y42xc6g9bw";
+  src = fetchgit {
+    url = "https://github.com/Nitrokey/nitrokey-app.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "11pz1p5qgghkr5f8s2wg34zqhxk2vq465i73w1h479j88x35rdp0";
   };
 
   buildInputs = [
-    cmake
+    hidapi
     libusb1
-    pkgconfig
     qt5.qtbase
+    qt5.qttranslations
   ];
-  patches = [
-     ./FixInstallDestination.patch
-     ./HeaderPath.patch
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
   ];
   cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
-  meta = {
+
+  meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''
        The nitrokey-app provides a QT system tray widget with wich you can
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage         = https://github.com/Nitrokey/nitrokey-app;
     repositories.git = https://github.com/Nitrokey/nitrokey-app.git;
-    license          = stdenv.lib.licenses.gpl3;
-    maintainer       = stdenv.lib.maintainers.kaiha;
+    license          = licenses.gpl3;
+    maintainers      = with maintainers; [ kaiha fpletz ];
   };
 }

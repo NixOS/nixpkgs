@@ -1,6 +1,8 @@
+/* This file defines some basic smoke tests for cross compilation.
+*/
 
-{ # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ builtins.currentSystem ]
+{ # The platforms *from* which we cross compile.
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -8,26 +10,42 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  inherit (pkgs) lib;
-
   nativePlatforms = linux;
 
-  /* Basic list of packages to cross-build */
-  basicCrossDrv = {
+  common = {
+    buildPackages.binutils = nativePlatforms;
+    gmp = nativePlatforms;
+    libcCross = nativePlatforms;
+  };
+
+  gnuCommon = lib.recursiveUpdate common {
+    buildPackages.gccCrossStageFinal = nativePlatforms;
+    coreutils = nativePlatforms;
+  };
+
+  linuxCommon = lib.recursiveUpdate gnuCommon {
+    buildPackages.gdb = nativePlatforms;
+
     bison = nativePlatforms;
     busybox = nativePlatforms;
-    coreutils = nativePlatforms;
     dropbear = nativePlatforms;
+    ed = nativePlatforms;
+    ncurses = nativePlatforms;
+    patch = nativePlatforms;
   };
 
-  /* Basic list of packages to be natively built,
-     but need a crossSystem defined to get meaning */
-  basicNativeDrv = {
-    buildPackages.gccCrossStageFinal = nativePlatforms;
-    buildPackages.gdbCross = nativePlatforms;
+  windowsCommon = lib.recursiveUpdate gnuCommon {
+    boehmgc = nativePlatforms;
+    guile_1_8 = nativePlatforms;
+    libffi = nativePlatforms;
+    libtool = nativePlatforms;
+    libunistring = nativePlatforms;
+    windows.wxMSW = nativePlatforms;
   };
 
-  basic = basicCrossDrv // basicNativeDrv;
+  darwinCommon = {
+    buildPackages.binutils = darwin;
+  };
 
 in
 
@@ -41,8 +59,8 @@ in
     # there probably a good idea to try to be "more parametric" --- i.e. avoid
     # any special casing.
     crossSystem = {
-      config = "foosys";
-      libc = "foolibc";
+      config = "mips64el-apple-windows-gnu";
+      libc = "glibc";
     };
 
     # Converting to a string (drv path) before checking equality is probably a
@@ -50,11 +68,11 @@ in
     # cause false negatives.
     testEqualOne = path: system: let
       f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
-    in assert
+    in assertTrue (
         f path { inherit system; }
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; };
-      true;
+        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+      );
 
     testEqual = path: systems: forAllSupportedSystems systems (testEqualOne path);
 
@@ -71,120 +89,26 @@ in
     guile = nativePlatforms;
   };
 
+  crossIphone64 = mapTestOnCross lib.systems.examples.iphone64 darwinCommon;
+
+  crossIphone32 = mapTestOnCross lib.systems.examples.iphone32 darwinCommon;
 
   /* Test some cross builds to the Sheevaplug */
-  crossSheevaplugLinux = let
-    crossSystem = {
-      config = "armv5tel-unknown-linux-gnueabi";
-      bigEndian = false;
-      arch = "arm";
-      float = "soft";
-      withTLS = true;
-      platform = pkgs.platforms.sheevaplug;
-      libc = "glibc";
-      openssl.system = "linux-generic32";
-    };
-  in mapTestOnCross crossSystem (basic // {
+  crossSheevaplugLinux = mapTestOnCross lib.systems.examples.sheevaplug (linuxCommon // {
     ubootSheevaplug = nativePlatforms;
   });
 
-
   /* Test some cross builds on 32 bit mingw-w64 */
-  crossMingw32 = let
-    crossSystem = {
-      config = "i686-w64-mingw32";
-      arch = "x86"; # Irrelevant
-      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
-      platform = {};
-    };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    boehmgc = nativePlatforms;
-    gmp = nativePlatforms;
-    guile_1_8 = nativePlatforms;
-    libffi = nativePlatforms;
-    libtool = nativePlatforms;
-    libunistring = nativePlatforms;
-    windows.wxMSW = nativePlatforms;
-  };
-
+  crossMingw32 = mapTestOnCross lib.systems.examples.mingw32 windowsCommon;
 
   /* Test some cross builds on 64 bit mingw-w64 */
-  crossMingwW64 = let
-    crossSystem = {
-      # That's the triplet they use in the mingw-w64 docs.
-      config = "x86_64-w64-mingw32";
-      arch = "x86_64"; # Irrelevant
-      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
-      platform = {};
-    };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    boehmgc = nativePlatforms;
-    gmp = nativePlatforms;
-    guile_1_8 = nativePlatforms;
-    libffi = nativePlatforms;
-    libtool = nativePlatforms;
-    libunistring = nativePlatforms;
-    windows.wxMSW = nativePlatforms;
-  };
-
+  crossMingwW64 = mapTestOnCross lib.systems.examples.mingwW64 windowsCommon;
 
   /* Linux on the fuloong */
-  fuloongminipc = let
-    crossSystem = {
-      config = "mips64el-unknown-linux";
-      bigEndian = false;
-      arch = "mips";
-      float = "hard";
-      withTLS = true;
-      libc = "glibc";
-      platform = {
-        name = "fuloong-minipc";
-        kernelMajor = "2.6";
-        kernelBaseConfig = "lemote2f_defconfig";
-        kernelHeadersBaseConfig = "fuloong2e_defconfig";
-        uboot = null;
-        kernelArch = "mips";
-        kernelAutoModules = false;
-        kernelTarget = "vmlinux";
-      };
-      openssl.system = "linux-generic32";
-      gcc = {
-        arch = "loongson2f";
-        abi = "n32";
-      };
-    };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    ed = nativePlatforms;
-    patch = nativePlatforms;
-  };
-
+  fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
 
   /* Linux on Raspberrypi */
-  rpi = let
-    crossSystem = {
-      config = "armv6l-unknown-linux-gnueabi";
-      bigEndian = false;
-      arch = "arm";
-      float = "hard";
-      fpu = "vfp";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgs.platforms.raspberrypi;
-      openssl.system = "linux-generic32";
-      gcc = {
-        arch = "armv6";
-        fpu = "vfp";
-        float = "softfp";
-        abi = "aapcs-linux";
-      };
-    };
-  in mapTestOnCross crossSystem {
-    coreutils = nativePlatforms;
-    ed = nativePlatforms;
-    patch = nativePlatforms;
+  rpi = mapTestOnCross lib.systems.examples.raspberryPi (linuxCommon // {
     vim = nativePlatforms;
     unzip = nativePlatforms;
     ddrescue = nativePlatforms;
@@ -192,7 +116,7 @@ in
     patchelf = nativePlatforms;
     buildPackages.binutils = nativePlatforms;
     mpg123 = nativePlatforms;
-  };
+  });
 
 
   /* Cross-built bootstrap tools for every supported platform */

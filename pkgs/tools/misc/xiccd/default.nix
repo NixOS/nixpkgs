@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "xiccd-${version}";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "agalakhov";
     repo = "xiccd";
     rev = "v${version}";
-    sha256 = "17p3vngmmjk52r5p8y41s19nwp7w25bgff68ffd50zdlicd33rsy";
+    sha256 = "0dhv913njzm80g5lwak5znmxllfa6rrkifwja8vk133lyxnarqra";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

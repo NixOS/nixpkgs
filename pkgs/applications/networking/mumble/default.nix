@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib
+, alsaLib, python
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -19,7 +19,7 @@ let
 
     patches = optional jackSupport ./mumble-jack-support.patch;
 
-    nativeBuildInputs = [ pkgconfig ]
+    nativeBuildInputs = [ pkgconfig python ]
       ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
@@ -42,6 +42,7 @@ let
 
     preConfigure = ''
        qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib"
+       patchShebangs scripts
     '';
 
     makeFlags = [ "release" ];
@@ -69,7 +70,7 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optional (source.qtVersion == 5) qt5.qttools;
+    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools qt5.makeQtWrapper ];
     buildInputs = [ libopus libsndfile speex ]
       ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
@@ -90,6 +91,10 @@ let
       mkdir -p $out/share/icons{,/hicolor/scalable/apps}
       cp icons/mumble.svg $out/share/icons
       ln -s $out/share/icon/mumble.svg $out/share/icons/hicolor/scalable/apps
+
+      ${optionalString (source.qtVersion == 5) ''
+        wrapQtProgram $out/bin/mumble
+      ''}
     '';
   } source;
 
@@ -108,29 +113,31 @@ let
   };
 
   stableSource = rec {
-    version = "1.2.17";
+    version = "1.2.19";
     qtVersion = 4;
 
     src = fetchurl {
       url = "https://github.com/mumble-voip/mumble/releases/download/${version}/mumble-${version}.tar.gz";
-      sha256 = "176br3b0pv5sz3zvgzsz9rxr3n79irlm902h7n1wh4f6vbph2dhw";
+      sha256 = "1s60vaici3v034jzzi20x23hsj6mkjlc0glipjq4hffrg9qgnizh";
     };
   };
 
   gitSource = rec {
-    version = "1.3.0-git-2016-04-10";
+    version = "2017-04-16";
     qtVersion = 5;
 
     # Needs submodules
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "0502fa67b036bae9f07a586d9f05a8bf74c24291";
-      sha256 = "07c1r26i0b5z7i787nr4mc60799skdzsh764ckk3gdi76agp2r2z";
+      rev = "eb63d0b14a7bc19bfdf34f80921798f0a67cdedf";
+      sha256 = "1nirbx0fnvi1nl6s5hrm4b0v7s2i22yshkmqnfjhxyr0y272s7lh";
     };
   };
 in {
   mumble     = client stableSource;
   mumble_git = client gitSource;
   murmur     = server stableSource;
-  murmur_git = server gitSource;
+  murmur_git = (server gitSource).overrideAttrs (old: {
+    meta = old.meta // { broken = iceSupport; };
+  });
 }

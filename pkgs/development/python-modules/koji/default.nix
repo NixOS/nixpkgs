@@ -1,7 +1,10 @@
-{ stdenv, fetchurl, mkPythonDerivation, pycurl }:
+{ stdenv, fetchurl, buildPythonPackage, pycurl }:
 
-mkPythonDerivation rec {
-  name = "koji-1.8";
+buildPythonPackage rec {
+  pname = "koji";
+  version = "1.8";
+  name = "${pname}-${version}";
+  format = "other";
 
   src = fetchurl {
     url = "https://fedorahosted.org/released/koji/koji-1.8.0.tar.bz2";

@@ -45,9 +45,8 @@ in {
     inherit script;
     description = "Reconfigure the system from EC2 userdata on startup";
 
-    wantedBy = [ "sshd.service" ];
-    before = [ "sshd.service" ];
-    after = [ "network-online.target" ];
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ];
     requires = [ "network-online.target" ];
  
     restartIfChanged = false;

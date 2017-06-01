@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, js_of_ocaml
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, opam, js_of_ocaml
 , jsooSupport ? !(stdenv.lib.versionAtLeast ocaml.version "4.04")
 }:
+
+with lib;
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-mtime-0.8.3";
@@ -15,7 +17,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild opam ]
   ++ stdenv.lib.optional jsooSupport js_of_ocaml;
 
-  buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true jsoo=${if jsooSupport then "true" else "false"}";
+  buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true jsoo=${boolToString jsooSupport}";
 
   installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
 
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
     description = "Monotonic wall-clock time for OCaml";
     homepage = http://erratique.ch/software/mtime;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.bsd3;
   };
 }

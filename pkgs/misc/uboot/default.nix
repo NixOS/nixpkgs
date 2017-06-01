@@ -10,16 +10,20 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2017.01";
+    version = "2017.03";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1wpc51jm3zyibgcr78jng2yksqvrya76bxgsr4pcyjrsz5sm2hkc";
+      sha256 = "0gqihplap05dlpwdb971wsqyv01nz2vabwq5g5649gr5jczsyjzm";
     };
 
     nativeBuildInputs = [ bc dtc python2 ];
 
     hardeningDisable = [ "all" ];
+
+    postPatch = ''
+      patchShebangs tools
+    '';
 
     configurePhase = ''
       make ${defconfig}
@@ -83,6 +87,12 @@ in rec {
     filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
   };
 
+  ubootOdroidXU3 = buildUBoot rec {
+    defconfig = "odroid-xu3_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-dtb.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot rec {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     targetPlatforms = ["armv7l-linux"];
@@ -111,6 +121,20 @@ in rec {
     defconfig = "rpi_3_defconfig";
     targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootUtilite = buildUBoot rec {
+    defconfig = "cm_fx6_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-with-nand-spl.imx"];
+    buildFlags = "u-boot-with-nand-spl.imx";
+    postConfigure = ''
+      cat >> .config << EOF
+      CONFIG_CMD_SETEXPR=y
+      EOF
+    '';
+    # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
+    # sf probe; sf update $loadaddr 0 80000
   };
 
   ubootWandboard = buildUBoot rec {

@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "mate-icon-theme-${version}";
   version = "${major-ver}.${minor-ver}";
-  major-ver = "1.16";
-  minor-ver = "0";
+  major-ver = "1.18";
+  minor-ver = "1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
-    sha256 = "1zldw22p1i76iss8car39pmfagpfxxlfk1fdhvr4x5r6gf36gv7d";
+    sha256 = "1217nza3ilmy6x3b9i1b75lpq7lpvhs18s0c2n3j6zhxdqy61nlm";
   };
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, python2, llvm, clang }:
+{ stdenv, fetchFromGitHub, python2, llvm_4, clang }:
 
 stdenv.mkDerivation {
-  name = "libclc-2015-08-07";
+  name = "libclc-2017-02-25";
 
   src = fetchFromGitHub {
     owner = "llvm-mirror";
     repo = "libclc";
-    rev = "f97d9db40718f2e68b3f0b44200760d8e0d50532";
-    sha256 = "10n9qk1dild9yjkjjkzpmp9zid3ysdgvqrad554azcf755frch7g";
+    rev = "17648cd846390e294feafef21c32c7106eac1e24";
+    sha256 = "1c20jyh3sdwd9r37zs4vvppmsx8vhf2xbx0cxsrc27bhx5245p0s";
   };
 
-  buildInputs = [ python2 llvm clang ];
+  buildInputs = [ python2 llvm_4 clang ];
 
   postPatch = ''
     sed -i 's,llvm_clang =.*,llvm_clang = "${clang}/bin/clang",' configure.py

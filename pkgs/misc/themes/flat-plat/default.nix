@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub, gnome3, libxml2, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, gnome3, libxml2, gtk-engine-murrine, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
   name = "flat-plat-gtk-theme-${version}";
-  version = "2016-12-03";
+  version = "20170515";
 
   src = fetchFromGitHub {
     owner = "nana-4";
     repo = "Flat-Plat";
-    rev = "49a5a51ec1a5835ff04ba2c62c9bccbd3f49bbe6";
-    sha256 = "1w4b16cp2yv5rpijcqywlzrs3xjkvg8ppp2rfls1kvxq12rz4jkb";
+    rev = "v${version}";
+    sha256 = "0z0l9ch6symcjhbfkj1q5i46ajbn7l7slhjgrcjm0ppqh05xc4y7";
   };
 
   nativeBuildInputs = [ gnome3.glib libxml2 ];
 
-  buildInputs = [ gnome3.gnome_themes_standard gtk-engine-murrine ];
+  buildInputs = [ gnome3.gnome_themes_standard gtk-engine-murrine gdk_pixbuf librsvg ];
 
   dontBuild = true;
 
   installPhase = ''
+    patchShebangs install.sh
     sed -i install.sh \
       -e "s|^gnomever=.*$|gnomever=${gnome3.version}|" \
       -e "s|/usr||"

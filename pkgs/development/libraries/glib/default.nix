@@ -42,8 +42,8 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.50";
-  ver_min = "2";
+  ver_maj = "2.52";
+  ver_min = "1";
 in
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "be68737c1f268c05493e503b3b654d2b7f43d7d0b8c5556f7e4651b870acfbf5";
+    sha256 = "948c26b817f2d77e2a6cdd5082c60a51bf5dea854890286a1d5d4ccde5ce586f";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     description = "C library of programming buildings blocks";
     homepage    = http://www.gtk.org/;
     license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lovek323 raskin urkud ];
+    maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.unix;
 
     longDescription = ''

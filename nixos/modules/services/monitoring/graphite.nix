@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.graphite;
-  writeTextOrNull = f: t: if t == null then null else pkgs.writeTextDir f t;
+  writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
 
@@ -400,7 +400,8 @@ in {
 
           mkdir -p ${cfg.dataDir}/whisper
           chmod 0700 ${cfg.dataDir}/whisper
-          chown -R graphite:graphite ${cfg.dataDir}
+          chown graphite:graphite ${cfg.dataDir}
+          chown graphite:graphite ${cfg.dataDir}/whisper
         '';
       };
     })
@@ -487,9 +488,9 @@ in {
             # create index
             ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
 
-            touch ${dataDir}/db-created
-
             chown -R graphite:graphite ${cfg.dataDir}
+
+            touch ${dataDir}/db-created
           fi
         '';
       };
@@ -526,9 +527,10 @@ in {
             mkdir -p ${dataDir}/cache/
             chmod 0700 ${dataDir}/cache/
 
-            touch ${dataDir}/db-created
+            chown graphite:graphite ${cfg.dataDir}
+            chown -R graphite:graphite ${cfg.dataDir}/cache
 
-            chown -R graphite:graphite ${cfg.dataDir}
+            touch ${dataDir}/db-created
           fi
         '';
       };
@@ -549,7 +551,7 @@ in {
         preStart = ''
           if ! test -e ${dataDir}/db-created; then
             mkdir -p ${dataDir}
-            chown -R graphite:graphite ${dataDir}
+            chown graphite:graphite ${dataDir}
           fi
         '';
       };

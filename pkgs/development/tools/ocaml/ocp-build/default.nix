@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ncurses, buildOcaml }:
 let
-  version = "1.99.17-beta";
+  version = "1.99.18-beta";
 in
 buildOcaml {
 
@@ -11,7 +11,7 @@ buildOcaml {
     owner = "OCamlPro";
     repo = "ocp-build";
     rev = version;
-    sha256 = "0k1gi5v9as5l8h5illgl5prsd5z1i14y5j2k920ay1a3rv697b02";
+    sha256 = "14vzam8p1d2c5qxljrhsfppd8a3j9lxx8kzxlplwclkr2laar0ss";
   };
 
   buildInputs = [ ocaml ];

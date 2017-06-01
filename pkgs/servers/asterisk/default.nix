@@ -1,9 +1,8 @@
-{ stdenv, pkgs, lib, fetchurl, fetchgit,
+{ stdenv, pkgs, lib, fetchurl, fetchgit, fetchsvn, fetchpatch,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, binutils, newt,
   lua, speex,
-  srtp, wget, curl,
-  subversionClient
+  srtp, wget, curl
 }:
 
 let
@@ -11,7 +10,7 @@ let
     inherit version;
     name = "asterisk-${version}";
 
-    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua speex srtp wget curl subversionClient ];
+    buildInputs = [ jansson libxml2 libxslt ncurses openssl sqlite utillinux dmidecode libuuid binutils newt lua speex srtp wget curl ];
 
     patches = [
       # We want the Makefile to install the default /var skeleton
@@ -19,7 +18,16 @@ let
       # This patch changes the runtime behavior to look for state
       # directories in /var rather than ${out}/var.
       ./runtime-vardirs.patch
+      (fetchpatch {
+         url = "http://sources.debian.net/data/main/a/asterisk/1:13.14.1~dfsg-1/debian/patches/pjsip_unresolved_symbol.patch";
+         sha256 = "0i6a6zplvzbjcvxqlmr87jmrfza7c3qx0rlym2nlmzzp2m7qpnfp";
+      })
     ];
+
+    # Disable MD5 verification for pjsip
+    postPatch = ''
+      sed -i 's|$(verify_tarball)|true|' third-party/pjproject/Makefile
+    '';
 
     src = fetchurl {
       url = "http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/asterisk-${version}.tar.gz";
@@ -36,7 +44,7 @@ let
     preConfigure = ''
       mkdir externals_cache
     '' + lib.concatStringsSep "\n"
-        (lib.mapAttrsToList (dst: src: "cp ${src} ${dst}") externals) + ''
+        (lib.mapAttrsToList (dst: src: "cp -r --no-preserve=mode ${src} ${dst}") externals) + ''
 
       chmod -w externals_cache
     '';
@@ -50,7 +58,6 @@ let
     preBuild = ''
       make menuselect.makeopts
       substituteInPlace menuselect.makeopts --replace 'format_mp3 ' ""
-      ./contrib/scripts/get_mp3_source.sh
     '';
 
     postInstall = ''
@@ -66,27 +73,35 @@ let
     };
   };
 
-  pjproject-255 = fetchurl {
-    url = http://www.pjsip.org/release/2.5.5/pjproject-2.5.5.tar.bz2;
-    sha256 = "1wq8lpfcd4dfrbl7bgy2yzgp3ldjzq5430fqkhcqad0xfrxj0fdb";
+  pjproject-26 = fetchurl {
+    url = http://www.pjsip.org/release/2.6/pjproject-2.6.tar.bz2;
+    sha256 = "1d67c58jn22f7h6smkykk5vwl3sqpc7xi2vm3j3lbn3lq6hisnig";
+  };
+
+  mp3-202 = fetchsvn {
+    url = http://svn.digium.com/svn/thirdparty/mp3/trunk;
+    rev = 202;
+    sha256 = "1s9idx2miwk178sa731ig9r4fzx4gy1q8xazfqyd7q4lfd70s1cy";
   };
 
 in
 {
 
   asterisk-lts = common {
-    version = "13.13.1";
-    sha256 = "0yh097rrp1i681qclvwyh7l1gg2i5wx5pjrcvwpbj6g949mc98vd";
+    version = "13.15.0";
+    sha256 = "0i2qzfa1iyh66nma39kdigb9lp5gz3sn46znd2djz24wgmamb2lb";
     externals = {
-      "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
+      "externals_cache/pjproject-2.6.tar.bz2" = pjproject-26;
+      "addons/mp3" = mp3-202;
     };
   };
 
   asterisk-stable = common {
-    version = "14.2.1";
-    sha256 = "193yhyjn0fwrd7hsmr3qwcx3k2pc6cq70v1mnfdwidix4cqm32xj";
+    version = "14.4.0";
+    sha256 = "095slnhl74hs1c36rgg378azan9zwgryp8him7py4am60lbk3n3w";
     externals = {
-      "externals_cache/pjproject-2.5.5.tar.bz2" = pjproject-255;
+      "externals_cache/pjproject-2.6.tar.bz2" = pjproject-26;
+      "addons/mp3" = mp3-202;
     };
   };
 

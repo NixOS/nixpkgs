@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, djvulibre, qt4, xorg, libtiff }:
+{ stdenv, fetchurl, pkgconfig
+, djvulibre, qt4, xorg, libtiff
+, darwin }:
 
-let
-  qt = qt4;
-  # TODO: qt = qt5.base; # should work but there's a mysterious "-silent" error
-in
 stdenv.mkDerivation rec {
-  name = "djview-4.10.5";
+  name = "djview-${version}";
+  version = "4.10.6";
+
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${name}.tar.gz";
-    sha256 = "0gbvbly7w3cr8wgpyh76nf9w7cf7740vp7k5hccks186f6005cx0";
+    sha256 = "08bwv8ppdzhryfcnifgzgdilb12jcnivl4ig6hd44f12d76z6il4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ djvulibre qt xorg.libXt libtiff ];
+  buildInputs = [ djvulibre qt4 xorg.libXt libtiff ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AGL ];
 
   passthru = {
     mozillaPlugin = "/lib/netscape/plugins";
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://djvu.sourceforge.net/djview4.html;
     description = "A portable DjVu viewer and browser plugin";
     license = licenses.gpl2;
-    inherit (qt.meta) platforms;
-    maintainers = [ maintainers.urkud ];
+    platforms = platforms.unix;
+    maintainers = [ ];
   };
 }

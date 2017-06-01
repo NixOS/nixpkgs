@@ -112,11 +112,11 @@
     md5name = "1f467e5bb703f12cbbb09d5cf67ecf4a-converttexttonumber-1-5-0.oxt";
   }
   {
-    name = "curl-7.51.0.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/curl-7.51.0.tar.gz";
-    sha256 = "65b5216a6fbfa72f547eb7706ca5902d7400db9868269017a8888aa91d87977c";
-    md5 = "490e19a8ccd1f4a244b50338a0eb9456";
-    md5name = "490e19a8ccd1f4a244b50338a0eb9456-curl-7.51.0.tar.gz";
+    name = "curl-7.52.1.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/curl-7.52.1.tar.gz";
+    sha256 = "a8984e8b20880b621f61a62d95ff3c0763a3152093a9f9ce4287cfd614add6ae";
+    md5 = "4e1ef056e117b4d25f4ec42ac609c0d4";
+    md5name = "4e1ef056e117b4d25f4ec42ac609c0d4-curl-7.52.1.tar.gz";
   }
   {
     name = "libe-book-0.1.2.tar.bz2";
@@ -294,11 +294,11 @@
     md5name = "17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip";
   }
   {
-    name = "hunspell-1.4.1.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/33d370f7fe5a030985e445a5672b2067-hunspell-1.4.1.tar.gz";
-    sha256 = "c4476aff0ced52eec334eae1e8d3fdaaebdd90f5ecd0b57cf2a92a6fd220d1bb";
-    md5 = "33d370f7fe5a030985e445a5672b2067";
-    md5name = "33d370f7fe5a030985e445a5672b2067-hunspell-1.4.1.tar.gz";
+    name = "hunspell-1.6.0.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/047c3feb121261b76dc16cdb62f54483-hunspell-1.6.0.tar.gz";
+    sha256 = "512e7d2ee69dad0b35ca011076405e56e0f10963a02d4859dbcc4faf53ca68e2";
+    md5 = "047c3feb121261b76dc16cdb62f54483";
+    md5name = "047c3feb121261b76dc16cdb62f54483-hunspell-1.6.0.tar.gz";
   }
   {
     name = "hyphen-2.8.8.tar.gz";

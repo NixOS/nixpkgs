@@ -2,99 +2,34 @@
 
 with lib;
 let
-  diskSize = "100G";
+  diskSize = 1024; # MB
 in
 {
-  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
+  imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ./grow-partition.nix ];
 
   # https://cloud.google.com/compute/docs/tutorials/building-images
   networking.firewall.enable = mkDefault false;
 
-  system.build.googleComputeImage =
-    pkgs.vmTools.runInLinuxVM (
-      pkgs.runCommand "google-compute-image"
-        { preVM =
-            ''
-              mkdir $out
-              diskImage=$out/$diskImageBase
-              truncate $diskImage --size ${diskSize}
-              mv closure xchg/
-            '';
+  system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
+    name = "google-compute-image";
+    postVM = ''
+      PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+      pushd $out
+      mv $diskImage disk.raw
+      tar -Szcf nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
+      rm $out/disk.raw
+      popd
+    '';
+    configFile = <nixpkgs/nixos/modules/virtualisation/google-compute-config.nix>;
+    format = "raw";
+    inherit diskSize;
+    inherit config lib pkgs;
+  };
 
-          postVM =
-            ''
-              PATH=$PATH:${stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
-              pushd $out
-              mv $diskImageBase disk.raw
-              tar -Szcf $diskImageBase.tar.gz disk.raw
-              rm $out/disk.raw
-              popd
-            '';
-          diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
-          exportReferencesGraph =
-            [ "closure" config.system.build.toplevel ];
-        }
-        ''
-          # Create partition table
-          ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-          ${pkgs.parted}/sbin/parted /dev/vda mkpart primary ext4 1 ${diskSize}
-          ${pkgs.parted}/sbin/parted /dev/vda print
-          . /sys/class/block/vda1/uevent
-          mknod /dev/vda1 b $MAJOR $MINOR
-
-          # Create an empty filesystem and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda1
-          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
-
-          mkdir /mnt
-          mount /dev/vda1 /mnt
-
-          # The initrd expects these directories to exist.
-          mkdir /mnt/dev /mnt/proc /mnt/sys
-
-          mount --bind /proc /mnt/proc
-          mount --bind /dev /mnt/dev
-          mount --bind /sys /mnt/sys
-
-          # Copy all paths in the closure to the filesystem.
-          storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
-
-          mkdir -p /mnt/nix/store
-          echo "copying everything (will take a while)..."
-          cp -prd $storePaths /mnt/nix/store/
-
-          # Register the paths in the Nix database.
-          printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-              chroot /mnt ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
-
-          # Create the system profile to allow nixos-rebuild to work.
-          chroot /mnt ${config.nix.package.out}/bin/nix-env \
-              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} \
-              --option build-users-group ""
-
-          # `nixos-rebuild' requires an /etc/NIXOS.
-          mkdir -p /mnt/etc
-          touch /mnt/etc/NIXOS
-
-          # `switch-to-configuration' requires a /bin/sh
-          mkdir -p /mnt/bin
-          ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
-
-          # Install a configuration.nix.
-          mkdir -p /mnt/etc/nixos /mnt/boot/grub
-          cp ${./google-compute-config.nix} /mnt/etc/nixos/configuration.nix
-
-          # Generate the GRUB menu.
-          ln -s vda /dev/sda
-          chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
-
-          umount /mnt/proc /mnt/dev /mnt/sys
-          umount /mnt
-        ''
-    );
-
-  fileSystems."/".label = "nixos";
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    autoResize = true;
+  };
 
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
@@ -143,51 +78,34 @@ in
           # When dealing with cryptographic keys, we want to keep things private.
           umask 077
           # Don't download the SSH key if it has already been downloaded
-          if ! [ -s /root/.ssh/authorized_keys ]; then
-              echo "obtaining SSH key..."
-              mkdir -m 0700 -p /root/.ssh
-              AUTH_KEYS=$(${mktemp})
-              ${wget} -O $AUTH_KEYS http://metadata.google.internal/0.1/meta-data/authorized-keys
-              if [ -s $AUTH_KEYS ]; then
-                  KEY_PUB=$(${mktemp})
-                  cat $AUTH_KEYS | cut -d: -f2- > $KEY_PUB
-                  if ! grep -q -f $KEY_PUB /root/.ssh/authorized_keys; then
-                      cat $KEY_PUB >> /root/.ssh/authorized_keys
-                      echo "New key added to authorized_keys."
-                  fi
-                  chmod 600 /root/.ssh/authorized_keys
-                  rm -f $KEY_PUB
-              else
-                  echo "Downloading http://metadata.google.internal/0.1/meta-data/authorized-keys failed."
-                  false
-              fi
-              rm -f $AUTH_KEYS
-          fi
+          echo "Obtaining SSH keys..."
+          mkdir -m 0700 -p /root/.ssh
+          AUTH_KEYS=$(${mktemp})
+          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys
+          if [ -s $AUTH_KEYS ]; then
 
-          countKeys=0
-          ${flip concatMapStrings config.services.openssh.hostKeys (k :
-            let kName = baseNameOf k.path; in ''
-              PRIV_KEY=$(${mktemp})
-              echo "trying to obtain SSH private host key ${kName}"
-              ${wget} -O $PRIV_KEY http://metadata.google.internal/0.1/meta-data/attributes/${kName} && :
-              if [ $? -eq 0 -a -s $PRIV_KEY ]; then
-                  countKeys=$((countKeys+1))
-                  mv -f $PRIV_KEY ${k.path}
-                  echo "Downloaded ${k.path}"
-                  chmod 600 ${k.path}
-                  ${config.programs.ssh.package}/bin/ssh-keygen -y -f ${k.path} > ${k.path}.pub
-                  chmod 644 ${k.path}.pub
-              else
-                  echo "Downloading http://metadata.google.internal/0.1/meta-data/attributes/${kName} failed."
+            # Read in key one by one, split in case Google decided
+            # to append metadata (it does sometimes) and add to
+            # authorized_keys if not already present.
+            touch /root/.ssh/authorized_keys
+            NEW_KEYS=$(${mktemp})
+            # Yes this is a nix escape of two single quotes.
+            while IFS=''' read -r line || [[ -n "$line" ]]; do
+              keyLine=$(echo -n "$line" | cut -d ':' -f2)
+              IFS=' ' read -r -a array <<< "$keyLine"
+              if [ ''${#array[@]} -ge 3 ]; then
+                echo ''${array[@]:0:3} >> $NEW_KEYS
+                echo "Added ''${array[@]:2} to authorized_keys"
               fi
-              rm -f $PRIV_KEY
-            ''
-          )}
-
-          if [[ $countKeys -le 0 ]]; then
-             echo "failed to obtain any SSH private host keys."
-             false
+            done < $AUTH_KEYS
+            mv $NEW_KEYS /root/.ssh/authorized_keys
+            chmod 600 /root/.ssh/authorized_keys
+            rm -f $KEY_PUB
+          else
+            echo "Downloading http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys failed."
+            false
           fi
+          rm -f $AUTH_KEYS
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
@@ -261,7 +179,7 @@ in
     "kernel.kptr_restrict" = mkDefault "1";
 
     # set ptrace protections
-    "kernel.yama.ptrace_scope" = mkDefault "1";
+    "kernel.yama.ptrace_scope" = mkOverride 500 "1";
 
     # set perf only available to root
     "kernel.perf_event_paranoid" = mkDefault "2";

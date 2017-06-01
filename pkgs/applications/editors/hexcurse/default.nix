@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "hexcurse-${version}";
-  version = "1.58";
+  version = "1.60.0";
+
   src = fetchFromGitHub {
     owner = "LonnyGomes";
     repo = "hexcurse";
-    rev = "hexcurse-${version}";
-    sha256 = "0hm9mms2ija3wqba0mkk9i8fhb8q1pam6d6pjlingkzz6ygxnnp7";
+    rev = "v${version}";
+    sha256 = "17ckkxfzbqvvfdnh10if4aqdcq98q3vl6dn1v6f4lhr4ifnyjdlk";
   };
-  buildInputs = [
-    ncurses
-  ];
+  buildInputs = [ ncurses ];
+  
   meta = with lib; {
     description = "ncurses-based console hexeditor written in C";
     homepage = "https://github.com/LonnyGomes/hexcurse";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "swaks-${version}";
-  version = "20130209.0";
+  version = "20170101.0";
 
   src = fetchurl {
     url = "http://www.jetmore.org/john/code/swaks/files/${name}.tar.gz";
-    sha256 = "0z0zsjminrdjpn6a8prjdwilnr27piibh78gc5ppg0nadljnf28b";
+    sha256 = "0pli4mlhasnqqxmmxalwyg3x7n2vhcbgsnp2xgddamjavv82vrl4";
   };
 
   buildInputs = [ perl makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       A featureful, flexible, scriptable, transaction-oriented SMTP test tool
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = with maintainers; [ rickynils ndowens ];
     platforms = platforms.all;
   };
 

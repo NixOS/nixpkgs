@@ -1,15 +1,12 @@
-{ nixpkgs }:
+{ pkgs ? import ((import ../.).cleanSource ../..) {} }:
 
-with import ../.. { };
-with lib;
-
-stdenv.mkDerivation {
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-lib-tests";
-  buildInputs = [ nix ];
-  NIX_PATH="nixpkgs=${nixpkgs}";
+  buildInputs = [ pkgs.nix ];
+  NIX_PATH="nixpkgs=${pkgs.path}";
 
   buildCommand = ''
-    datadir="${nix}/share"
+    datadir="${pkgs.nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
     export NIX_BUILD_HOOK=
     export NIX_CONF_DIR=$TEST_ROOT/etc
@@ -23,8 +20,12 @@ stdenv.mkDerivation {
     cacheDir=$TEST_ROOT/binary-cache
     nix-store --init
 
-    cd ${nixpkgs}/lib/tests
+    cd ${pkgs.path}/lib/tests
     ./modules.sh
+
+    [[ "$(nix-instantiate --eval --strict misc.nix)" == "[ ]" ]]
+
+    [[ "$(nix-instantiate --eval --strict systems.nix)" == "[ ]" ]]
 
     touch $out
   '';

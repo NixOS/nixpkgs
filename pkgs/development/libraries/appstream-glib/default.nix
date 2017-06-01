@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool autoconf-archive ];
   buildInputs = [ glib gtk_doc gettext sqlite libsoup
                   gcab attr acl docbook_xsl libuuid json_glib
-                  libarchive libyaml gtk3 gobjectIntrospection ];
-
+                  libarchive libyaml gobjectIntrospection ];
+  propagatedBuildInputs = [ gtk3 ];
   configureScript = "./autogen.sh";
 
   meta = with stdenv.lib; {

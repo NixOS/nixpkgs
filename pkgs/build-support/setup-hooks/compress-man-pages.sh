@@ -3,26 +3,30 @@ fixupOutputHooks+=('if [ -z "$dontGzipMan" ]; then compressManPages "$prefix"; f
 compressManPages() {
     local dir="$1"
 
-    if [ ! -d "$dir/share/man" ]; then return; fi
-    echo "gzipping man pages in $dir"
+    if [ -L "$dir"/share ] || [ -L "$dir"/share/man ] || [ ! -d "$dir/share/man" ]
+        then return
+    fi
+    echo "gzipping man pages under $dir/share/man/"
 
-    GLOBIGNORE=.:..:*.gz:*.bz2
-
-    for f in "$dir"/share/man/*/* "$dir"/share/man/*/*/*; do
-        if [ -f "$f" -a ! -L "$f" ]; then
-            if gzip -c -n "$f" > "$f".gz; then
-                rm "$f"
-            else
-                rm "$f".gz
-            fi
+    # Compress all uncompressed manpages.  Don't follow symlinks, etc.
+    find "$dir"/share/man/ -type f -a '!' -regex '.*\.\(bz2\|gz\)$' -print0 \
+        | while IFS= read -r -d $'\0' f
+    do
+        if gzip -c -n "$f" > "$f".gz; then
+            rm "$f"
+        else
+            rm "$f".gz
         fi
     done
 
-    for f in "$dir"/share/man/*/* "$dir"/share/man/*/*/*; do
-        if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
-            ln -sf `readlink "$f"`.gz "$f".gz && rm "$f"
+    # Point symlinks to compressed manpages.
+    find "$dir"/share/man/ -type l -a '!' -regex '.*\.\(bz2\|gz\)$' -print0 \
+        | while IFS= read -r -d $'\0' f
+    do
+        local target
+        target="$(readlink -f "$f")"
+        if [ -f "$target".gz ]; then
+            ln -sf "$target".gz "$f".gz && rm "$f"
         fi
     done
-
-    unset GLOBIGNORE
 }

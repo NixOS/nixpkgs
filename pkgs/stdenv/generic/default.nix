@@ -1,6 +1,6 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ system, name ? "stdenv", preHook ? "", initialPath, cc, shell
+{ name ? "stdenv", preHook ? "", initialPath, cc, shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -14,9 +14,22 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , __extraImpureHostDeps ? []
 , stdenvSandboxProfile ? ""
 , extraSandboxProfile ? ""
+
+, # The platforms here do *not* correspond to the stage the stdenv is
+  # used in, but rather the previous one, in which it was built. We
+  # use the latter two platforms, like a cross compiler, because the
+  # stand environment is a build tool if you squint at it, and because
+  # neither of these are used when building stdenv so we know the
+  # build platform is irrelevant.
+  hostPlatform, targetPlatform
 }:
 
 let
+  inherit (targetPlatform) system;
+
+  # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
+  # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
+  shouldCheckMeta = config.checkMeta or false;
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
@@ -75,6 +88,14 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
+  allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
+  allowInsecurePredicate = x: (config.allowUnfreePredicate or allowInsecureDefaultPredicate) x;
+
+  hasAllowedInsecure = attrs:
+    (attrs.meta.knownVulnerabilities or []) == [] ||
+    allowInsecurePredicate attrs ||
+    builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
+
   showLicense = license: license.shortName or "unknown";
 
   defaultNativeBuildInputs = extraBuildInputs ++
@@ -82,6 +103,11 @@ let
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+    ]
+      # FIXME this on Darwin; see
+      # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
+    ++ lib.optional result.isLinux ../../build-support/setup-hooks/audit-tmpdir.sh
+    ++ [
       ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
@@ -137,24 +163,98 @@ let
           builtins.unsafeGetAttrPos "name" attrs;
       pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
 
-      throwEvalHelp = { reason, errormsg }:
-        # uppercase the first character of string s
-        let up = s: with lib;
-          (toUpper (substring 0 1 s)) + (substring 1 (stringLength s) s);
-        in
-        assert builtins.elem reason ["unfree" "broken" "blacklisted"];
 
-        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate."
-        + (lib.strings.optionalString (reason != "blacklisted") ''
-
+      remediation = {
+        unfree = remediate_whitelist "Unfree";
+        broken = remediate_whitelist "Broken";
+        blacklisted = x: "";
+        insecure = remediate_insecure;
+        unknown-meta = x: "";
+      };
+      remediate_whitelist = allow_attr: attrs:
+        ''
           a) For `nixos-rebuild` you can set
-            { nixpkgs.config.allow${up reason} = true; }
+            { nixpkgs.config.allow${allow_attr} = true; }
           in configuration.nix to override this.
 
           b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-            { allow${up reason} = true; }
+            { allow${allow_attr} = true; }
           to ~/.config/nixpkgs/config.nix.
-        ''));
+        '';
+
+      remediate_insecure = attrs:
+        ''
+
+          Known issues:
+
+        '' + (lib.fold (issue: default: "${default} - ${issue}\n") "" attrs.meta.knownVulnerabilities) + ''
+
+          You can install it anyway by whitelisting this package, using the
+          following methods:
+
+          a) for `nixos-rebuild` you can add ‘${attrs.name or "«name-missing»"}’ to
+             `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
+             like so:
+
+               {
+                 nixpkgs.config.permittedInsecurePackages = [
+                   "${attrs.name or "«name-missing»"}"
+                 ];
+               }
+
+          b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+          ‘${attrs.name or "«name-missing»"}’ to `permittedInsecurePackages` in
+          ~/.config/nixpkgs/config.nix, like so:
+
+               {
+                 permittedInsecurePackages = [
+                   "${attrs.name or "«name-missing»"}"
+                 ];
+               }
+
+        '';
+
+
+      throwEvalHelp = { reason , errormsg ? "" }:
+        throw (''
+          Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${errormsg}, refusing to evaluate.
+
+          '' + ((builtins.getAttr reason remediation) attrs));
+
+      metaTypes = with lib.types; rec {
+        # These keys are documented
+        description = str;
+        longDescription = str;
+        branch = str;
+        homepage = str;
+        downloadPage = str;
+        license = either (listOf lib.types.attrs) (either lib.types.attrs str);
+        maintainers = listOf str;
+        priority = int;
+        platforms = listOf str;
+        hydraPlatforms = listOf str;
+        broken = bool;
+
+        # Weirder stuff that doesn't appear in the documentation?
+        version = str;
+        tag = str;
+        updateWalker = bool;
+        executables = listOf str;
+        outputsToInstall = listOf str;
+        position = str;
+        repositories = attrsOf str;
+        isBuildPythonPackage = platforms;
+        schedulingPriority = str;
+        downloadURLRegexp = str;
+        isFcitxEngine = bool;
+        isIbusEngine = bool;
+      };
+
+      checkMetaAttr = k: v:
+        if metaTypes?${k} then
+          if metaTypes.${k}.check v then null else "key '${k}' has a value ${v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+        else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
+      checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
       # Check if a derivation is valid, that is whether it passes checks for
       # e.g brokenness or license.
@@ -171,11 +271,15 @@ let
           { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
           { valid = false; reason = "broken"; errormsg = "is not supported on ‘${result.system}’"; }
+        else if !(hasAllowedInsecure attrs) then
+          { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
+        else let res = checkMeta (attrs.meta or {}); in if res != [] then
+          { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
         else { valid = true; };
 
       outputs' =
         outputs ++
-        (if separateDebugInfo then assert result.isLinux; [ "debug" ] else []);
+        (if separateDebugInfo then assert targetPlatform.isLinux; [ "debug" ] else []);
 
       buildInputs' = lib.chooseDevOutputs buildInputs ++
         (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
@@ -216,18 +320,16 @@ let
           __ignoreNulls = true;
 
           # Inputs built by the cross compiler.
-          buildInputs = if crossConfig != null then buildInputs' else [];
-          propagatedBuildInputs = if crossConfig != null then propagatedBuildInputs' else [];
+          buildInputs = buildInputs';
+          propagatedBuildInputs = propagatedBuildInputs';
           # Inputs built by the usual native compiler.
           nativeBuildInputs = nativeBuildInputs'
-            ++ lib.optionals (crossConfig == null) buildInputs'
             ++ lib.optional
-                (result.isCygwin
+                (hostPlatform.isCygwin
                   || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
                 ../../build-support/setup-hooks/win-dll-link.sh
             ;
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs' ++
-            (if crossConfig == null then propagatedBuildInputs' else []);
+          propagatedNativeBuildInputs = propagatedNativeBuildInputs';
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -304,54 +406,11 @@ let
       };
 
       # Utility flags to test the type of platform.
-      isDarwin = system == "x86_64-darwin";
-      isLinux = system == "i686-linux"
-             || system == "x86_64-linux"
-             || system == "powerpc-linux"
-             || system == "armv5tel-linux"
-             || system == "armv6l-linux"
-             || system == "armv7l-linux"
-             || system == "aarch64-linux"
-             || system == "mips64el-linux";
-      isGNU = system == "i686-gnu"; # GNU/Hurd
-      isGlibc = isGNU # useful for `stdenvNative'
-             || isLinux
-             || system == "x86_64-kfreebsd-gnu";
-      isSunOS = system == "i686-solaris"
-             || system == "x86_64-solaris";
-      isCygwin = system == "i686-cygwin"
-              || system == "x86_64-cygwin";
-      isFreeBSD = system == "i686-freebsd"
-               || system == "x86_64-freebsd";
-      isOpenBSD = system == "i686-openbsd"
-               || system == "x86_64-openbsd";
-      isi686 = system == "i686-linux"
-            || system == "i686-gnu"
-            || system == "i686-freebsd"
-            || system == "i686-openbsd"
-            || system == "i686-cygwin"
-            || system == "i386-sunos";
-      isx86_64 = system == "x86_64-linux"
-              || system == "x86_64-darwin"
-              || system == "x86_64-freebsd"
-              || system == "x86_64-openbsd"
-              || system == "x86_64-cygwin"
-              || system == "x86_64-solaris";
-      is64bit = system == "x86_64-linux"
-             || system == "x86_64-darwin"
-             || system == "x86_64-freebsd"
-             || system == "x86_64-openbsd"
-             || system == "x86_64-cygwin"
-             || system == "x86_64-solaris"
-             || system == "aarch64-linux"
-             || system == "mips64el-linux";
-      isMips = system == "mips-linux"
-            || system == "mips64el-linux";
-      isArm = system == "armv5tel-linux"
-           || system == "armv6l-linux"
-           || system == "armv7l-linux";
-      isAarch64 = system == "aarch64-linux";
-      isBigEndian = system == "powerpc-linux";
+      inherit (hostPlatform)
+        isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
+        isi686 isx86_64 is64bit isMips isBigEndian;
+      isArm = hostPlatform.isArm32;
+      isAarch64 = hostPlatform.isArm64;
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;

@@ -7,23 +7,23 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" || stden
 
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "138.0.0";
+  version = "155.0.0";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "1z2v4bg743qkdlmyyy0z2j5s0g10vbc1643gxrhyz491sk6sp616";
+        sha256 = "1xh8xy9p3qqmirvhih7vf96i5xn0z0zr5mmbqr6vfzx16r47bi2z";
       }
     else if stdenv.system == "x86_64-darwin" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
-        sha256 = "efbe2074da5a544c09b6bf87a8ca045dc429ac38dfcd5380561987769491d5ba";
+        sha256 = "19pr1pld6vdp5ig5i7zddfl1l5xjv9nx5sn00va4l1nnb410ac69";
       }
     else
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "1y64bx9vj6rrapffr7zwxbxxbqlddx91n82kr99mwv19n11hydyw";
+        sha256 = "18hnabhdlrprhg8micy2z63jxyah3qr3pv9pgb64i7lbv6lznr2b";
       };
 
   buildInputs = [python27 makeWrapper];
@@ -37,10 +37,13 @@ stdenv.mkDerivation rec {
     # create wrappers with correct env
     for program in gcloud bq gsutil git-credential-gcloud.sh; do
         programPath="$out/google-cloud-sdk/bin/$program"
-        wrapper="$out/bin/$program"
-        makeWrapper "$programPath" "$wrapper" \
+        binaryPath="$out/bin/$program"
+        wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${python27}/bin/python" \
             --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl}):$(toPythonPath ${crcmod})"
+
+        mkdir -p $out/bin
+        ln -s $programPath $binaryPath
     done
 
     # install man pages

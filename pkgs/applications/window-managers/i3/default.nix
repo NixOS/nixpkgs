@@ -1,7 +1,7 @@
 { fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, coreutils, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run, dmenu, i3status }:
+, xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
@@ -30,13 +30,6 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  postFixup = ''
-    substituteInPlace $out/etc/i3/config --replace dmenu_run ${dmenu}/bin/dmenu_run
-    substituteInPlace $out/etc/i3/config --replace "status_command i3status" "status_command ${i3status}/bin/i3status"
-    substituteInPlace $out/etc/i3/config.keycodes --replace dmenu_run ${dmenu}/bin/dmenu_run
-    substituteInPlace $out/etc/i3/config.keycodes --replace "status_command i3status" "status_command ${i3status}/bin/i3status"
-  '';
-
   # Tests have been failing (at least for some people in some cases)
   # and have been disabled until someone wants to fix them. Some
   # initial digging uncovers that the tests call out to `git`, which
@@ -57,6 +50,8 @@ stdenv.mkDerivation rec {
       sed -i 's/which/command -v/' $program
     done
   '';
+
+  separateDebugInfo = true;
 
   meta = with stdenv.lib; {
     description = "A tiling window manager";

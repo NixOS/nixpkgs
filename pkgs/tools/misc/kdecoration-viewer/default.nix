@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, cmake, ecm, qtquickcontrols, kconfigwidgets, kdeclarative, kdecoration }:
+, cmake, extra-cmake-modules, qtquickcontrols, kconfigwidgets, kdeclarative, kdecoration }:
 
 stdenv.mkDerivation rec {
   name = "kdecoration-viewer-2015-08-20";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cc4xxv72a82p1w9r76090xba7g069r41bi4zx32k4gz3vyl1am6";
   };
 
-  buildInputs = [ cmake ecm qtquickcontrols kconfigwidgets kdeclarative kdecoration ];
+  buildInputs = [ cmake extra-cmake-modules qtquickcontrols kconfigwidgets kdeclarative kdecoration ];
 
   meta = with stdenv.lib; {
     description = "Allows to preview a KDecoration plugin";

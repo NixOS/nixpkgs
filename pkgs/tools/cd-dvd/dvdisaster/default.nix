@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # Explicit --docdir= is required for on-line help to work:
-    "--docdir=$out/share/doc"
+    "--docdir=share/doc"
     "--with-nls=yes"
     "--with-embedded-src-path=no"
   ] ++ stdenv.lib.optional (builtins.elem stdenv.system

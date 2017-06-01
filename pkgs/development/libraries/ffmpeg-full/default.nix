@@ -14,10 +14,10 @@
 , swscaleAlphaBuild ? true # Alpha channel support in swscale
 , hardcodedTablesBuild ? true # Hardcode decode tables instead of runtime generation
 , safeBitstreamReaderBuild ? true # Buffer boundary checking in bitreaders
-, memalignHackBuild ? false # Emulate memalign
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
 , networkBuild ? true # Network support
 , pixelutilsBuild ? true # Pixel utils in libavutil
+, enableLto ? false # build with link-time optimization
 /*
  *  Program options
  */
@@ -110,7 +110,7 @@
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
 #, schroedinger ? null # Dirac de/encoder
-, SDL ? null
+, SDL2 ? null
 #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
@@ -120,7 +120,6 @@
 #, vo-aacenc ? null # AAC encoder
 #, vo-amrwbenc ? null # AMR-WB encoder
 , wavpack ? null # Wavpack encoder
-, x11grabExtlib ? false, libXext ? null, libXfixes ? null # X11 grabbing (legacy)
 , x264 ? null # H.264/AVC encoder
 , x265 ? null # H.265/HEVC encoder
 , xavs ? null # AVS encoder
@@ -199,7 +198,7 @@ assert ffplayProgram -> avcodecLibrary
                      && avformatLibrary
                      && swscaleLibrary
                      && swresampleLibrary
-                     && SDL != null;
+                     && SDL2 != null;
 assert ffprobeProgram -> avcodecLibrary && avformatLibrary;
 assert ffserverProgram -> avformatLibrary;
 /*
@@ -227,16 +226,15 @@ assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> mesa != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert x11grabExtlib -> libX11 != null && libXv != null;
 assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.2.2";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1z7d5y5crhsl5fm74236rdwbkd4jj5frx1l4iizjfym1w4gvs09z";
+    sha256 = "0bwgm6z6k3khb91qh9xv15inykkfchpkm0lcdckkxhkacpyaf0mp";
   };
 
   patchPhase = ''patchShebangs .
@@ -260,11 +258,11 @@ stdenv.mkDerivation rec {
     (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
     (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
+    (enableFeature enableLto "lto")
     (enableFeature grayBuild "gray")
     (enableFeature swscaleAlphaBuild "swscale-alpha")
     (enableFeature hardcodedTablesBuild "hardcoded-tables")
     (enableFeature safeBitstreamReaderBuild "safe-bitstream-reader")
-    (enableFeature memalignHackBuild "memalign-hack")
     (if multithreadBuild then (
        if isCygwin then
          "--disable-pthreads --enable-w32threads"
@@ -368,7 +366,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (schroedinger != null) "libschroedinger")
     #(enableFeature (shine != null) "libshine")
     (enableFeature (samba != null && gplLicensing && version3Licensing) "libsmbclient")
-    (enableFeature (SDL != null) "sdl") # Only configurable since 2.5, auto detected before then
+    (enableFeature (SDL2 != null) "sdl2")
     (enableFeature (soxr != null) "libsoxr")
     (enableFeature (speex != null) "libspeex")
     #(enableFeature (twolame != null) "libtwolame")
@@ -377,7 +375,6 @@ stdenv.mkDerivation rec {
     #(enableFeature (vo-aacenc != null && version3Licensing) "libvo-aacenc")
     #(enableFeature (vo-amrwbenc != null && version3Licensing) "libvo-amrwbenc")
     (enableFeature (wavpack != null) "libwavpack")
-    (enableFeature (x11grabExtlib && gplLicensing) "x11grab")
     (enableFeature (x264 != null && gplLicensing) "libx264")
     (enableFeature (x265 != null && gplLicensing) "libx265")
     (enableFeature (xavs != null && gplLicensing) "libxavs")
@@ -400,10 +397,9 @@ stdenv.mkDerivation rec {
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXext libXfixes libXv lzma openal openjpeg_1 libpulseaudio rtmpdump
-    samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
+    libxcb libXv lzma openal openjpeg_1 libpulseaudio rtmpdump
+    samba SDL2 soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
   ] ++ optional openglExtlib mesa
-    ++ optionals x11grabExtlib [ libXext libXfixes ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]

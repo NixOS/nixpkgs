@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchurl, pytest, mock }:
 buildPythonPackage rec {
-  name = "pep257-${version}";
+  pname = "pep257";
+  name = "${pname}-${version}";
   version = "0.7.0";
 
   src = fetchurl {
@@ -18,6 +19,6 @@ buildPythonPackage rec {
     homepage = https://github.com/GreenSteam/pep257/;
     description = "Python docstring style checker";
     longDescription = "Static analysis tool for checking compliance with Python PEP 257.";
-    lecense = licenses.mit;
+    license = licenses.mit;
   };
 }

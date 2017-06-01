@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildEnv, zlib, glib, alsaLib, makeDesktopItem
+{ stdenv, fetchurl, zlib, glib, alsaLib, makeDesktopItem
 , dbus, gtk2, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
 , cairo, cups, expat, libgpgerror, nspr, gnome3, nss, xorg, systemd, libnotify
 }:

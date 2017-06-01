@@ -22,7 +22,7 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.1";
   name = "mesos-${version}";
 
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "1hdjd4syyp88l0bnh88bhzvn9466ad2ysfp9pq3kwj3qzwg5jv8g";
+    sha256 = "0f46ebb130d2d4a9732f95d0a71d80c8c5967f3c172b110f2ece316e05922115";
   };
 
   patches = [
@@ -58,6 +58,16 @@ in stdenv.mkDerivation rec {
   # if we dynamically link the lib, we get these errors:
   # https://github.com/NixOS/nixpkgs/pull/19064#issuecomment-255082684
   preConfigure = ''
+    # https://issues.apache.org/jira/browse/MESOS-6616
+    configureFlagsArray+=(
+      "CXXFLAGS=-O2 -Wno-error=strict-aliasing"
+    )
+
+    # Fix cases where makedev(),major(),minor() are referenced through
+    # <sys/types.h> instead of <sys/sysmacros.h>
+    sed 1i'#include <sys/sysmacros.h>' -i src/linux/fs.cpp
+    sed 1i'#include <sys/sysmacros.h>' -i src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
+
     substituteInPlace 3rdparty/stout/include/stout/os/posix/chown.hpp \
       --subst-var-by chown ${coreutils}/bin/chown
 

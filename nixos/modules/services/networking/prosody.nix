@@ -219,7 +219,7 @@ in
 
       data_path = "/var/lib/prosody"
 
-      allow_registration = ${ if cfg.allowRegistration then "true" else "false" };
+      allow_registration = ${boolToString cfg.allowRegistration};
 
       ${ optionalString cfg.modules.console "console_enabled = true;" }
 
@@ -244,7 +244,7 @@ in
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         VirtualHost "${v.domain}"
-          enabled = ${if v.enabled then "true" else "false"};
+          enabled = ${boolToString v.enabled};
           ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
           ${ v.extraConfig }
         '') cfg.virtualHosts) }
@@ -265,7 +265,8 @@ in
     systemd.services.prosody = {
 
       description = "Prosody XMPP server";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "prosody";

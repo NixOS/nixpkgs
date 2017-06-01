@@ -6,7 +6,7 @@
   gcc,
   ginac,
   jamomacore,
-  kde5,
+  kdnssd,
   libsndfile,
   ninja,
   portaudio,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ginac
     gcc
     jamomacore
-    kde5.kdnssd
+    kdnssd
     libsndfile
     ninja
     portaudio

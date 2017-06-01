@@ -1,0 +1,123 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.09">
+
+<title>Release 17.09 (“Hummingbird”, 2017/09/??)</title>
+
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights: </para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      The user handling now keeps track of deallocated UIDs/GIDs. When a user
+      or group is revived, this allows it to be allocated the UID/GID it had before.
+      A consequence is that UIDs and GIDs are no longer reused.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The module option <option>services.xserver.xrandrHeads</option> now
+      causes the first head specified in this list to be set as the primary
+      head. Apart from that, it's now possible to also set additional options
+      by using an attribute set, for example:
+<programlisting>
+{ services.xserver.xrandrHeads = [
+    "HDMI-0"
+    {
+      output = &quot;DVI-0&quot;;
+      primary = true;
+      monitorConfig = ''
+        Option &quot;Rotate&quot; &quot;right&quot;
+      '';
+    }
+  ];
+}
+</programlisting>
+      This will set the <literal>DVI-0</literal> output to be the primary head,
+      even though <literal>HDMI-0</literal> is the first head in the list.
+    </para>
+  </listitem>
+</itemizedlist>
+
+<para>The following new services were added since the last release:</para>
+
+<itemizedlist>
+  <listitem>
+    <para></para>
+  </listitem>
+</itemizedlist>
+
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      Top-level <literal>idea</literal> package collection was renamed.
+      All JetBrains IDEs are now at <literal>jetbrains</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>flexget</literal>'s state database cannot be upgraded to its
+      new internal format, requiring removal of any existing
+      <literal>db-config.sqlite</literal> which will be automatically recreated.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The ipfs package now doesn't ignore the <literal>dataDir</literal> option anymore. If you've ever set this option to anything other than the default you'll have to either unset it (so the default gets used) or migrate the old data manually with
+<programlisting>
+dataDir=&lt;valueOfDataDir&gt;
+mv /var/lib/ipfs/.ipfs/* $dataDir
+rmdir /var/lib/ipfs/.ipfs
+</programlisting>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
+    </para>
+    <para>
+      The <literal>postgres</literal> superuser name has changed from <literal>root</literal> to <literal>postgres</literal> to more closely follow what other Linux distributions are doing.
+    </para>
+    <para>
+      The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
+    </para>
+  </listitem>
+</itemizedlist>
+
+
+<para>Other notable improvements:</para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>
+      Modules can now be disabled by using <link
+      xlink:href="https://nixos.org/nixpkgs/manual/#sec-replace-modules">
+      disabledModules</link>, allowing another to take it's place.  This can be
+      used to import a set of modules from another channel while keeping the
+      rest of the system on a stable release.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Updated to FreeType 2.7.1, including a new TrueType engine.
+      The new engine replaces the Infinality engine which was the default in
+      NixOS. The default font rendering settings are now provided by
+      fontconfig-penultimate, replacing fontconfig-ultimate; the new defaults
+      are less invasive and provide rendering that is more consistent with
+      other systems and hopefully with each font designer's intent. Some
+      system-wide configuration has been removed from the Fontconfig NixOS
+      module where user Fontconfig settings are available.
+    </para>
+  </listitem>
+
+</itemizedlist>
+
+</section>

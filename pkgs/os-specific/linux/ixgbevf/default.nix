@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
-  version = "3.2.2";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
-    sha256 = "1i6ry3vd77190sxb47xhbz3v30gighwax6prav4ggs3q80a389c8";
+    sha256 = "1dismhiq0asf04rv6pv2sk2m3xcy6m3bpk16gmxqybca3xa28a5b";
   };
 
   hardeningDisable = [ "pic" ];

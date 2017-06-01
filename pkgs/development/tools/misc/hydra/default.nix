@@ -55,21 +55,22 @@ let
         TextTable
         XMLSimple
         nixUnstable
+        nixUnstable.perl-bindings
         git
         boehmgc
       ];
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2017-02-03";
+  version = "2017-04-26";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "a366f362e197476615a813e2cc904b60db28e65f";
-    sha256 = "0q7bywh59aqgpgj9ca2xscszxal9c3c90bs7sb4cfg7w8g6m69hf";
+    rev = "1f94f0369937c9187b158f53a4a361507a62c5e9";
+    sha256 = "0h013690pwm20vykccr6l4k0q1jdb065127pblfhs23a287ayqlm";
   };
 
   buildInputs =
@@ -103,7 +104,7 @@ in releaseTools.nixBuild rec {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  preHook = ''
+  shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';

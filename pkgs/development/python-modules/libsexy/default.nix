@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, mkPythonDerivation, libsexy, pkgconfig, libxml2, pygtk, pango, gtk2, glib }:
+{ stdenv, fetchurl, buildPythonPackage, libsexy, pkgconfig, libxml2, pygtk, pango, gtk2, glib }:
 
-mkPythonDerivation rec {
-  name = "libsexy-${version}";
+buildPythonPackage rec {
+  pname = "libsexy";
+  name = "${pname}-${version}";
   version = "0.1.9";
+  format = "other";
 
   src = fetchurl {
     url = "http://releases.chipx86.com/libsexy/sexy-python/sexy-python-${version}.tar.gz";

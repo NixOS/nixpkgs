@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, fetchpatch, lib
-, unzip, cmake, kodi, steam, libcec_platform, tinyxml }:
+, unzip, cmake, kodi, steam, libcec_platform, tinyxml
+, jsoncpp, libhdhomerun }:
 
 let
 
@@ -111,11 +112,11 @@ in
 
     plugin = "exodus";
     namespace = "plugin.video.exodus";
-    version = "3.0.5";
+    version = "3.1.13";
 
     src = fetchurl {
       url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
-      sha256 = "0di34sp6y3v72l6gfhj7cvs1vljs9vf0d0x2giix3jk433cj01j0";
+      sha256 = "1zyay7cinljxmpzngzlrr4pnk2a7z9wwfdcsk6a4p416iglyggdj";
     };
 
     meta = with stdenv.lib; {
@@ -159,14 +160,14 @@ in
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.42";
+    version = "4.0.48";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "83cb52b949930a1b6d2e51a7a0faf9bd69c7fb7d";
-      sha256 = "0ync2ya4lwmfn6ngg8v0z6bng45whwg280irsn4bam5ca88383iy";
+      rev = "dc18ad002cd69257611d0032fba91f57bb199165";
+      sha256 = "0klk1jpjc243ak306k94mag4b4s17w68v69yb8lzzydszqkaqa7x";
     };
 
     meta = with stdenv.lib; {
@@ -263,6 +264,39 @@ in
     installPhase = ''
       make install
       ln -s $out/lib/addons/pvr.hts/pvr.hts.so* $out/share/kodi/addons/pvr.hts
+    '';
+  };
+
+  pvr-hdhomerun = (mkKodiPlugin rec {
+    plugin = "pvr-hdhomerun";
+    namespace = "pvr.hdhomerun";
+    version = "2.4.7";
+
+    src = fetchFromGitHub {
+      owner = "kodi-pvr";
+      repo = "pvr.hdhomerun";
+      rev = "60d89d16dd953d38947e8a6da2f8bb84a0f764ef";
+      sha256 = "0dvdv0vk2q12nj0i5h51iaypy3i7jfsxjyxwwpxfy82y8260ragy";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/kodi-pvr/pvr.hdhomerun;
+      description = "Kodi's HDHomeRun PVR client addon";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ titanous ];
+    };
+  }).override {
+    buildInputs = [ cmake jsoncpp libhdhomerun kodi libcec_platform kodi-platform ];
+
+    # disables check ensuring install prefix is that of kodi
+    cmakeFlags = [ "-DOVERRIDE_PATHS=1" ];
+
+    # kodi checks for plugin .so libs existance in the addon folder (share/...)
+    # and the non-wrapped kodi lib/... folder before even trying to dlopen
+    # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
+    installPhase = ''
+      make install
+      ln -s $out/lib/addons/pvr.hdhomerun/pvr.hdhomerun.so* $out/share/kodi/addons/pvr.hdhomerun
     '';
   };
 }

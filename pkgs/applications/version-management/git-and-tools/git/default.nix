@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "2.11.1";
+  version = "2.13.0";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "05b4jw86w77c3pyh3nm6aw31vhxwzvhnx2x0bcfqmm15wg57k9y0";
+    sha256 = "0n0j36rapw31zb0sabap88ffncv8jg3nwc4miyim64ilyav2mgsb";
   };
 
   hardeningDisable = [ "format" ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation {
     ./symlinks-in-bin.patch
     ./git-sh-i18n.patch
     ./ssh-path.patch
-    ./ssl-cert-file.patch
   ];
 
   postPatch = ''

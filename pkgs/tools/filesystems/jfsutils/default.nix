@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://jfs.sourceforge.net/project/pub/${name}.tar.gz";
-    sha1 = "291e8bd9d615cf3d27e4000117c81a3602484a50";
+    sha256 = "0kbsy2sk1jv4m82rxyl25gwrlkzvl3hzdga9gshkxkhm83v1aji4";
   };
 
   patches = [ ./types.patch ./hardening-format.patch ];

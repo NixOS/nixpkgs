@@ -280,8 +280,8 @@ let
               ${optionalString cfg.pamMount
                 "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
               ${optionalString cfg.enableKwallet
-                ("auth optional ${pkgs.kde5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-                 " kwalletd=${pkgs.kde5.kwallet}/bin/kwalletd5")}
+                ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
+                 " kwalletd=${pkgs.libsForQt5.kwallet}/bin/kwalletd5")}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
@@ -349,8 +349,8 @@ let
           ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
           ${optionalString (cfg.enableKwallet)
-              ("session optional ${pkgs.kde5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-               " kwalletd=${pkgs.kde5.kwallet}/bin/kwalletd5")}
+              ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
+               " kwalletd=${pkgs.libsForQt5.kwallet}/bin/kwalletd5")}
         '');
     };
 

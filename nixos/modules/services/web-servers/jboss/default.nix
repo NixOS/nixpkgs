@@ -25,7 +25,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = "Whether to enable jboss";
+        description = "Whether to enable JBoss. WARNING : this package is outdated and is known to have vulnerabilities.";
       };
 
       tempDir = mkOption {

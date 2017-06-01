@@ -71,8 +71,7 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          ${config.systemd.package}/bin/systemctl try-restart ntpd.service
-          ${config.systemd.package}/bin/systemctl try-restart openntpd.service
+          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service || true
       fi
 
       ${cfg.runHook}
@@ -157,7 +156,7 @@ in
     systemd.services.dhcpcd =
       { description = "DHCP Client";
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "network-online.target" ];
         after = [ "network.target" ];
         wants = [ "network.target" ];
 
@@ -173,7 +172,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };

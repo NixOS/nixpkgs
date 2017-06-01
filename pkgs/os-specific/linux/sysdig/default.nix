@@ -1,15 +1,15 @@
 {stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
-let
-  inherit (stdenv.lib) optional optionalString;
-  baseName = "sysdig";
-  version = "0.14.0";
-in
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "14wy4p1q8rk3q4s8vczfhkk20z3kz8wvyxpi8qx0xc7px7z5da76";
+with stdenv.lib;
+stdenv.mkDerivation rec {
+  name = "sysdig-${version}";
+  version = "0.16.0";
+
+  src = fetchFromGitHub {
+    owner = "draios";
+    repo = "sysdig";
+    rev = version;
+    sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
   };
 
   buildInputs = [
@@ -18,17 +18,16 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  patches = [
-  ];
-
-  postPatch = ''
-    sed '1i#include <cmath>' -i userspace/libsinsp/{cursesspectro,filterchecks}.cpp
-  '';
-
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
     "-DSYSDIG_VERSION=${version}"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
+
+  # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = [
+    "-DluaL_reg=luaL_Reg"
+    "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
+  ];
 
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
@@ -36,7 +35,7 @@ stdenv.mkDerivation {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = makeLibraryPath [
     zlib
     luajit
     ncurses
@@ -49,7 +48,7 @@ stdenv.mkDerivation {
     stdenv.cc.cc
   ];
 
-  postInstall = ''
+  postInstall = optionalString (!stdenv.isDarwin) ''
     patchelf --set-rpath "$libPath" "$out/bin/sysdig"
     patchelf --set-rpath "$libPath" "$out/bin/csysdig"
   '' + optionalString (kernel != null) ''
@@ -66,7 +65,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];

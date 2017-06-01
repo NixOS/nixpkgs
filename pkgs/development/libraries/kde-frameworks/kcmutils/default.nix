@@ -1,4 +1,4 @@
-{ kdeFramework, lib, ecm, kconfigwidgets
+{ kdeFramework, lib, extra-cmake-modules, kconfigwidgets
 , kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews
 , kpackage, kservice, kxmlgui
 }:
@@ -6,7 +6,7 @@
 kdeFramework {
   name = "kcmutils";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ ecm ];
+  nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
     kconfigwidgets kcoreaddons kdeclarative ki18n kiconthemes kitemviews
     kpackage kservice kxmlgui

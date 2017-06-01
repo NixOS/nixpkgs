@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = "https://bitbucket.org/auria/wxmupen64plus/get/0.3.tar.bz2";
     sha256 = "1mnxi4k011dd300k35li2p6x4wccwi6im21qz8dkznnz397ps67c";
   };
-  
+
   buildInputs = [ python wxGTK29 SDL libX11 mesa ];
 
   configurePhase = ''
@@ -19,10 +19,11 @@ stdenv.mkDerivation {
 
   buildPhase = "python waf";
   installPhase = "python waf install";
-  
+
   meta = {
     description = "GUI for the Mupen64Plus 2.0 emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = https://bitbucket.org/auria/wxmupen64plus/wiki/Home;
+    broken = true;
   };
 }

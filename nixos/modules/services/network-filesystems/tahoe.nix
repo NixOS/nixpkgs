@@ -8,7 +8,7 @@ in
     options.services.tahoe = {
       introducers = mkOption {
         default = {};
-        type = with types; loaOf (submodule {
+        type = with types; attrsOf (submodule {
           options = {
             nickname = mkOption {
               type = types.str;
@@ -49,7 +49,7 @@ in
       };
       nodes = mkOption {
         default = {};
-        type = with types; loaOf (submodule {
+        type = with types; attrsOf (submodule {
           options = {
             nickname = mkOption {
               type = types.str;
@@ -290,14 +290,14 @@ in
                 shares.total = ${toString settings.client.shares.total}
 
                 [storage]
-                enabled = ${if settings.storage.enable then "true" else "false"}
+                enabled = ${boolToString settings.storage.enable}
                 reserved_space = ${settings.storage.reservedSpace}
 
                 [helper]
-                enabled = ${if settings.helper.enable then "true" else "false"}
+                enabled = ${boolToString settings.helper.enable}
 
                 [sftpd]
-                enabled = ${if settings.sftpd.enable then "true" else "false"}
+                enabled = ${boolToString settings.sftpd.enable}
                 ${optionalString (settings.sftpd.port != null)
                   "port = ${toString settings.sftpd.port}"}
                 ${optionalString (settings.sftpd.hostPublicKeyFile != null)

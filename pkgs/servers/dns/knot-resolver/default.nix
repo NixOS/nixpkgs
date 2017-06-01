@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, utillinux, hexdump, which
+{ stdenv, fetchurl, fetchpatch, pkgconfig, utillinux, hexdump, which
 , knot-dns, luajit, libuv, lmdb
 , cmocka, systemd, hiredis, libmemcached
 , gnutls, nettle
@@ -10,12 +10,18 @@ let
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.2.2";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "89ab2ac8058b297c1f73f1c12e0f16d6e160aa86363e99ffa590bee7fe307931";
+    sha256 = "31e1b8899c5592433e5265a8e9685126fc5aeff3bd6b10884154b2e34b786f3c";
   };
+
+  patches = [(fetchpatch {
+    name = "luajit-2.1.0-beta3.diff";
+    url = https://gitlab.labs.nic.cz/knot/resolver/merge_requests/289.diff;
+    sha256 = "1cgfi715qhmvb31ri2wr6cacsjvb1dqavdmnnl1074y25zalxfax";
+  })];
 
   outputs = [ "out" "dev" ];
 
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ knot-dns luajit libuv gnutls ]
     ++ optional stdenv.isLinux lmdb # system lmdb causes some problems on Darwin
-    ## optional dependencies
+    ## optional dependencies; TODO: libedit, dnstap?
     ++ optional doInstallCheck cmocka
     ++ optional stdenv.isLinux systemd # socket activation
     ++ [

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig
-, ibus, m17n_lib, m17n_db, gettext, python3, pygobject3
+, ibus, m17n_lib, m17n_db, gettext, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -16,15 +16,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ibus m17n_lib m17n_db gettext
-    python3 pygobject3
+    python3
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig python3.pkgs.wrapPython ];
+
+  postFixup = "wrapPythonPrograms";
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description  = "m17n engine for ibus";
-    homepage     = https://github.com.com/ibus/ibus-m17n;
+    homepage     = https://github.com/ibus/ibus-m17n;
     license      = licenses.gpl2;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ ericsagnes ];

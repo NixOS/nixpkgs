@@ -12,7 +12,7 @@ let
     substFiles = [ "=>/conf" ./ircd.conf ];
     inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
 
-    ipv6Enabled = if config.networking.enableIPv6 then "true" else "false";
+    ipv6Enabled = boolToString config.networking.enableIPv6;
 
     inherit (cfg) serverName sid description adminEmail
             extraPort;

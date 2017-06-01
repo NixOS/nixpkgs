@@ -24,23 +24,24 @@ let
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.19.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "1jjfa3vigghnk201zkhp97mh25cx17gic0cjn0fgn7yxs83wrh5c";
+    sha256 = "0mxgpfyh7265kh379hsb53lni43xcq9nffanbxwrg8hp8c79pcg3";
   };
 
   patches = [ ./matrix-synapse.patch ];
 
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
-    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
+    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
     signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk bleach netaddr jinja2 psycopg2
     psutil msgpack lxml matrix-synapse-ldap3
+    phonenumbers jsonschema
   ];
 
   # Checks fail because of Tox.

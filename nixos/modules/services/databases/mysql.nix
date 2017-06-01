@@ -72,7 +72,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/mysql"; # !!! should be /var/db/mysql
+        example = "/var/lib/mysql";
         description = "Location where MySQL stores its table files";
       };
 
@@ -165,6 +165,10 @@ in
   ###### implementation
 
   config = mkIf config.services.mysql.enable {
+
+    services.mysql.dataDir =
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
+                 else "/var/mysql");
 
     users.extraUsers.mysql = {
       description = "MySQL server user";

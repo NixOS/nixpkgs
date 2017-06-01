@@ -1,14 +1,12 @@
-{ stdenv, fetchgit, python3Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
-python3Packages.buildPythonPackage {
-  name = "scudcloud-1.40";
+let version = "1.58";
+in python3Packages.buildPythonPackage {
+  name = "scudcloud-${version}";
 
-  # Branch 254-port-to-qt5
-  # https://github.com/raelgc/scudcloud/commit/43ddc87f123a641b1fa78ace0bab159b05d34b65
-  src = fetchgit {
-      url = https://github.com/raelgc/scudcloud/;
-      rev = "43ddc87f123a641b1fa78ace0bab159b05d34b65";
-      sha256 = "1lh9naf9xfrmj1pj7p8bd3fz7vy3gap6cvda4silk4b6ylyqa8vj";
+  src = fetchurl {
+    url = "https://github.com/raelgc/scudcloud/archive/v${version}.tar.gz";
+    sha256 = "1j84qdc2j3dvl1nhrjqm0blc8ww723p9a6hqprkkp8alw77myq1l";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyqt5 dbus-python ];

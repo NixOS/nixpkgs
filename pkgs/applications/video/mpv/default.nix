@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg_3_2
+, docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
@@ -31,7 +31,7 @@
 , libpngSupport      ? true,  libpng        ? null
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
-, drmSupport         ? true,  libdrm        ? null
+, drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
@@ -79,13 +79,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.23.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "02k8p4z1mwxxlg9spwwrlcciia80kyrpp09hpl60g22h85jj1ng9";
+    sha256 = "16r3fyq472hzxnh6g3gm520pmw1ybslaki3pqjm2d9jnd2md1pa5";
   };
 
   patchPhase = ''
@@ -112,9 +112,11 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python3 which ];
 
   buildInputs = [
-    ffmpeg_3_2 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
-  ] ++ optional alsaSupport        alsaLib
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+       libiconv Cocoa CoreAudio ])
+    ++ optional alsaSupport        alsaLib
     ++ optional xvSupport          libXv
     ++ optional theoraSupport      libtheora
     ++ optional xineramaSupport    libXinerama
@@ -122,9 +124,6 @@ in stdenv.mkDerivation rec {
     ++ optional bluraySupport      libbluray
     ++ optional jackaudioSupport   libjack2
     ++ optional pulseSupport       libpulseaudio
-    ++ optional stdenv.isDarwin    libiconv
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-       Cocoa CoreAudio ])
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport       libvdpau
@@ -171,7 +170,7 @@ in stdenv.mkDerivation rec {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu ];
+    maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

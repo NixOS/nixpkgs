@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
+{ stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
 
 stdenv.mkDerivation rec {
-  version = "20170128";
+  version = "20170428";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
-    owner = "neomutt";
-    repo = "neomutt";
-    rev = "neomutt-${version}";
-    sha256 = "082ksn4fsj48nkz61ia0hcxz3396p6a4p9q8738w15qkycq23c20";
+    owner  = "neomutt";
+    repo   = "neomutt";
+    rev    = "neomutt-${version}";
+    sha256 = "1p6214agfv9plskkzalh03r5naiiyg1habrnknnjgck3nypb78ik";
   };
 
-  nativeBuildInputs = [ which autoconf automake ];
+  nativeBuildInputs = [ which autoreconfHook ];
   buildInputs =
     [ cyrus_sasl gdbm gpgme kerberos libidn ncurses
       notmuch openssl perl lmdb ];

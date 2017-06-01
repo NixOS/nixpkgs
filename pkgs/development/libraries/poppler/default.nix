@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, withData ? false, poppler_data
+, withData ? true, poppler_data
 , qt4Support ? false, qt4 ? null
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobjectIntrospection ? null

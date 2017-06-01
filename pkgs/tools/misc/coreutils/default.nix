@@ -13,11 +13,11 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.26";
+  name = "coreutils-8.27";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "13lspazc7xkviy93qz7ks9jv4sldvgmwpq36ghrbrqpq93br8phm";
+    sha256 = "0sv547572iq8ayy8klir4hnngnx92a9nsazmf1wgzfc7xr4x74c8";
   };
 
   # FIXME needs gcc 4.9 in bootstrap tools
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       ++ optional aclSupport acl.crossDrv
       ++ optional attrSupport attr.crossDrv
       ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
-      ++ optional (stdenv.ccCross.libc ? libiconv)
+      ++ optional (stdenv ? ccCross.libc.libiconv)
         stdenv.ccCross.libc.libiconv.crossDrv;
 
     # Prevents attempts of running 'help2man' on cross-built binaries.

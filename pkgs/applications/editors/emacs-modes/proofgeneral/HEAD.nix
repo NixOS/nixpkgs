@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
+{ stdenv, fetchFromGitHub, emacs, texinfo, texLive, perl, which, automake, enableDoc ? false }:
 
 stdenv.mkDerivation (rec {
-  name = "ProofGeneral-HEAD";
+  name = "ProofGeneral-unstable-${version}";
+  version = "2017-05-06";
 
-  src = fetchgit {
-    url = "https://github.com/ProofGeneral/PG.git";
-    rev = "4bcac92df46da9e68b5e3d565bb118fb63b4feb4";
-    sha256 = "143anwll7mij6iskf3jbbbfzmkp2vnp0q329zpsl2l6v3wk2vv64";
+  src = fetchFromGitHub {
+    owner = "ProofGeneral";
+    repo = "PG";
+    rev = "574b0992e3cb4b7a4ad88400b9a5ab0198a96ca5";
+    sha256 = "1c1pgdmy58h78s53g0ga9b5ilbsibz0dr2lk52xgbs3q5m22v5fh";
   };
 
   buildInputs = [ emacs texinfo perl which ] ++ stdenv.lib.optional enableDoc texLive;
@@ -16,15 +18,10 @@ stdenv.mkDerivation (rec {
            -e "s|^\(\(DEST_\)\?PREFIX\)=.*$|\1=$out|g ; \
                s|/sbin/install-info|install-info|g"
 
-
-       sed -i "bin/proofgeneral" -e's/which/type -p/g'
-
        # @image{ProofGeneral} fails, so remove it.
        sed -i '94d' doc/PG-adapting.texi
        sed -i '96d' doc/ProofGeneral.texi
     '';
-
-  patches = [ ./pg.patch ];
 
   preBuild = ''
     make clean;

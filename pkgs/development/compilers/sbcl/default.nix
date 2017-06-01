@@ -1,6 +1,6 @@
 { stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.3.14";
+  version = "1.3.17";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "1jnwsv8bdkrrg1w0gkjx9nb8sw3if38sna40davrx0rxadc3v5mz";
+    sha256 = "1bqd39cqcv129zxvp3w3z1x46m9g9nmgslnlrvcsbqwd69vgbfcl";
   };
 
   patchPhase = ''

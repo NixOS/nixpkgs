@@ -32,16 +32,22 @@ with stdenv.lib;
   # Debugging.
   DEBUG_KERNEL y
   DYNAMIC_DEBUG y
-  TIMER_STATS y
   BACKTRACE_SELF_TEST n
-  CPU_NOTIFIER_ERROR_INJECT? n
   DEBUG_DEVRES n
-  DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  ${optionalString (versionOlder version "4.10") ''
+    CPU_NOTIFIER_ERROR_INJECT? n
+  ''}
+
+  ${optionalString (versionOlder version "4.11") ''
+    TIMER_STATS y
+    DEBUG_NX_TEST n
+  ''}
 
   # Bump the maximum number of CPUs to support systems like EC2 x1.*
   # instances and Xeon Phi.
@@ -94,6 +100,10 @@ with stdenv.lib;
   # Disable some expensive (?) features.
   PM_TRACE_RTC n
 
+  # Enable initrd support.
+  BLK_DEV_RAM y
+  BLK_DEV_INITRD y
+
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
   AUXDISPLAY y # Auxiliary Display support
@@ -113,6 +123,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
+  NETFILTER y
   NETFILTER_ADVANCED y
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
@@ -121,6 +132,7 @@ with stdenv.lib;
   IP_VS_PROTO_ESP y
   IP_VS_PROTO_AH y
   IP_DCCP_CCID3 n # experimental
+  IP_MULTICAST y
   IPV6_ROUTER_PREF y
   IPV6_ROUTE_INFO y
   IPV6_OPTIMISTIC_DAD y
@@ -129,6 +141,9 @@ with stdenv.lib;
   IPV6_MROUTE y
   IPV6_MROUTE_MULTIPLE_TABLES y
   IPV6_PIMSM_V2 y
+  ${optionalString (versionAtLeast version "4.7") ''
+    IPV6_FOU_TUNNEL m
+  ''}
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
@@ -143,6 +158,8 @@ with stdenv.lib;
   L2TP_ETH m
   BRIDGE_VLAN_FILTERING y
   BONDING m
+  NET_L3_MASTER_DEV? y
+  NET_FOU_IP_TUNNELS? y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -197,7 +214,9 @@ with stdenv.lib;
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
   SND_USB_CAIAQ_INPUT y
-  PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ${optionalString (versionOlder version "4.12") ''
+    PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ''}
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
@@ -219,7 +238,9 @@ with stdenv.lib;
   FANOTIFY y
   TMPFS y
   TMPFS_POSIX_ACL y
-  FS_ENCRYPTION? m
+  ${optionalString (versionAtLeast version "4.9") ''
+    FS_ENCRYPTION? m
+  ''}
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -299,7 +320,9 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
-  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ${optionalString (versionOlder version "4.11") ''
+    DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ''}
 
   # Security related features.
   RANDOMIZE_BASE? y
@@ -447,7 +470,11 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  UPROBE_EVENT y
+
+  ${optionalString (versionOlder version "4.11") ''
+    UPROBE_EVENT? y
+  ''}
+
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
     BPF_EVENTS y
@@ -472,7 +499,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y
   ''}
-  KVM_DEVICE_ASSIGNMENT? y
+  ${optionalString (versionOlder version "4.12") ''
+    KVM_DEVICE_ASSIGNMENT? y
+  ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}

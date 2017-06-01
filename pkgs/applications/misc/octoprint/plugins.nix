@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, octoprint, pythonPackages }:
+{ stdenv, fetchFromGitHub, fetchpatch, octoprint, pythonPackages }:
 
 let
   buildPlugin = args: pythonPackages.buildPythonApplication (args // {
@@ -23,6 +23,11 @@ let
 
       patches = [
         ./m33-fio-one-library.patch
+        # Fix incompatibility with new OctoPrint
+        (fetchpatch {
+          url = "https://github.com/foosel/M33-Fio/commit/bdf2422dee3fb8e53b33f087f734956c3b209d72.patch";
+          sha256 = "0jm415sx6d3m0z4gfhbnxlasg08zf3f3mslaj4amn9wbvsik9s5d";
+        })
       ];
 
       postPatch = ''

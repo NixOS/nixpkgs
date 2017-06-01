@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
-, libssh, zlib, cmake, ecm
-, withGtk ? false, gtk3 ? null, pango ? null, cairo ? null, gdk_pixbuf ? null
+, libssh, zlib, cmake, extra-cmake-modules
+, withGtk ? false, gtk3 ? null, librsvg ? null, gsettings_desktop_schemas ? null, wrapGAppsHook ? null
 , withQt ? false, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
 }:
@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.2.4";
+  version = "2.2.6";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,14 +20,18 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
-    sha256 = "049r5962yrajhhz9r4dsnx403dab50d6091y2mw298ymxqszp9s2";
+    sha256 = "0jd89i9si43lyv3hsl6p1lkjmz4zagvc37wcbigsxxc5v8gda9zn";
   };
 
+  nativeBuildInputs = [
+    bison cmake extra-cmake-modules flex
+  ] ++ optional withGtk wrapGAppsHook;
+
   buildInputs = [
-    bison cmake ecm flex gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt libgpgerror gnutls
-    geoip c-ares python glib zlib
-  ] ++ (optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ]))
-    ++ (optionals withGtk [ gtk3 pango cairo gdk_pixbuf ])
+    gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt
+    libgpgerror gnutls geoip c-ares python glib zlib
+  ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
+    ++ optionals withGtk [ gtk3 librsvg gsettings_desktop_schemas ]
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 

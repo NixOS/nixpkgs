@@ -18,7 +18,7 @@ in
 
       networks = mkOption {
         default = { };
-        type = with types; loaOf (submodule {
+        type = with types; attrsOf (submodule {
           options = {
 
             extraConfig = mkOption {
@@ -35,7 +35,8 @@ in
               description = ''
                 The name of the node which is used as an identifier when communicating
                 with the remote nodes in the mesh. If null then the hostname of the system
-                is used.
+                is used to derive a name (note that tinc may replace non-alphanumeric characters in
+                hostnames by underscores).
               '';
             };
 
@@ -59,7 +60,7 @@ in
 
             hosts = mkOption {
               default = { };
-              type = types.loaOf types.lines;
+              type = types.attrsOf types.lines;
               description = ''
                 The name of the host in the network as well as the configuration for that host.
                 This name should only contain alphanumerics and underscores.
