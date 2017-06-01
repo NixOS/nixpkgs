@@ -13353,7 +13353,7 @@ with pkgs;
   clipit = callPackage ../applications/misc/clipit { };
 
   cloud-print-connector = callPackage ../servers/cloud-print-connector { };
-  
+
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
@@ -13837,6 +13837,8 @@ with pkgs;
   fbreader = callPackage ../applications/misc/fbreader { };
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
+
+  feedreader = callPackage ../applications/networking/newsreaders/feedreader {};
 
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
@@ -17789,7 +17791,7 @@ with pkgs;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
   coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
   coqPackages = coqPackages_8_6;
-  
+
   coq_8_4 = coqPackages_8_4.coq;
   coq_8_5 = coqPackages_8_5.coq;
   coq_8_6 = coqPackages_8_6.coq;
