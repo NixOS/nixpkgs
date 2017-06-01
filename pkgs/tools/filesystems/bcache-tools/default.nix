@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, utillinux }:
+{ stdenv, fetchurl, pkgconfig, utillinux, bash }:
 
 stdenv.mkDerivation rec {
   name = "bcache-tools-${version}";
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export makeFlags="$makeFlags PREFIX=\"$out\" UDEVLIBDIR=\"$out/lib/udev/\"";
+    sed -e "s|/bin/sh|${bash}/bin/sh|" -i *.rules
   '';
 
   preInstall = ''
