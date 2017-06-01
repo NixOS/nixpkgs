@@ -391,7 +391,7 @@ let
     ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { cmdliner = cmdliner_1_0; };
     ocpIndent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { };
 
-    ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
+    ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocpIndent = ocpIndent_1_5_2; };
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
