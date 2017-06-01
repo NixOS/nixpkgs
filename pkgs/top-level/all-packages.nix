@@ -6591,6 +6591,8 @@ with pkgs;
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
+  cldoc = callPackage ../development/tools/documentation/cldoc { };
+
   coan = callPackage ../development/tools/analysis/coan { };
 
   compile-daemon = callPackage ../development/tools/compile-daemon { };
