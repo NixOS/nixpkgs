@@ -1,0 +1,161 @@
+From 616381bc25b0e90198683fb049f994e82d467d96 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Niklas=20Hamb=C3=BCchen?= <mail@nh2.me>
+Date: Sat, 13 May 2017 02:45:49 +0200
+Subject: [PATCH] Don't use hardcoded /sbin, /usr/bin etc. paths. Fixes
+ #1450546.
+
+Instead, rely on programs to be in PATH, as gluster already
+does in many places across its code base.
+
+Change-Id: Id21152fe42f5b67205d8f1571b0656c4d5f74246
+---
+ contrib/fuse-lib/mount-common.c               |  8 ++++----
+ xlators/mgmt/glusterd/src/glusterd-ganesha.c  |  6 +++---
+ xlators/mgmt/glusterd/src/glusterd-quota.c    |  6 +++---
+ xlators/mgmt/glusterd/src/glusterd-snapshot.c |  4 ++--
+ xlators/mgmt/glusterd/src/glusterd-utils.c    | 14 +-------------
+ 5 files changed, 13 insertions(+), 25 deletions(-)
+
+diff --git a/contrib/fuse-lib/mount-common.c b/contrib/fuse-lib/mount-common.c
+index e9f80fe81..6380dd867 100644
+--- a/contrib/fuse-lib/mount-common.c
++++ b/contrib/fuse-lib/mount-common.c
+@@ -255,16 +255,16 @@ fuse_mnt_umount (const char *progname, const char *abs_mnt,
+                         exit (1);
+                 }
+ #ifdef GF_LINUX_HOST_OS
+-                execl ("/bin/umount", "/bin/umount", "-i", rel_mnt,
++                execl ("umount", "umount", "-i", rel_mnt,
+                        lazy ? "-l" : NULL, NULL);
+-                GFFUSE_LOGERR ("%s: failed to execute /bin/umount: %s",
++                GFFUSE_LOGERR ("%s: failed to execute umount: %s",
+                                progname, strerror (errno));
+ #elif __NetBSD__
+                 /* exitting the filesystem causes the umount */
+                 exit (0);
+ #else
+-                execl ("/sbin/umount", "/sbin/umount", "-f", rel_mnt, NULL);
+-                GFFUSE_LOGERR ("%s: failed to execute /sbin/umount: %s",
++                execl ("umount", "umount", "-f", rel_mnt, NULL);
++                GFFUSE_LOGERR ("%s: failed to execute umount: %s",
+                                progname, strerror (errno));
+ #endif /* GF_LINUX_HOST_OS */
+                 exit (1);
+diff --git a/xlators/mgmt/glusterd/src/glusterd-ganesha.c b/xlators/mgmt/glusterd/src/glusterd-ganesha.c
+index da1fee066..dcb9e5725 100644
+--- a/xlators/mgmt/glusterd/src/glusterd-ganesha.c
++++ b/xlators/mgmt/glusterd/src/glusterd-ganesha.c
+@@ -122,15 +122,15 @@ manage_service (char *action)
+         int     i               = 0;
+         int     ret             = 0;
+         struct service_command sc_list[] = {
+-                { .binary  = "/bin/systemctl",
++                { .binary  = "systemctl",
+                   .service = "nfs-ganesha",
+                   .action  = sc_systemctl_action
+                 },
+-                { .binary  = "/sbin/invoke-rc.d",
++                { .binary  = "invoke-rc.d",
+                   .service = "nfs-ganesha",
+                   .action  = sc_service_action
+                 },
+-                { .binary  = "/sbin/service",
++                { .binary  = "service",
+                   .service = "nfs-ganesha",
+                   .action  = sc_service_action
+                 },
+diff --git a/xlators/mgmt/glusterd/src/glusterd-quota.c b/xlators/mgmt/glusterd/src/glusterd-quota.c
+index 0e6629cf0..fcb4738b7 100644
+--- a/xlators/mgmt/glusterd/src/glusterd-quota.c
++++ b/xlators/mgmt/glusterd/src/glusterd-quota.c
+@@ -30,7 +30,7 @@
+ 
+ #ifndef _PATH_SETFATTR
+ # ifdef GF_LINUX_HOST_OS
+-#  define _PATH_SETFATTR "/usr/bin/setfattr"
++#  define _PATH_SETFATTR "setfattr"
+ # endif
+ # ifdef __NetBSD__
+ #  define _PATH_SETFATTR "/usr/pkg/bin/setfattr"
+@@ -335,7 +335,7 @@ _glusterd_quota_initiate_fs_crawl (glusterd_conf_t *priv,
+ 
+                 if (type == GF_QUOTA_OPTION_TYPE_ENABLE ||
+                     type == GF_QUOTA_OPTION_TYPE_ENABLE_OBJECTS)
+-                        runner_add_args (&runner, "/usr/bin/find", ".", NULL);
++                        runner_add_args (&runner, "find", ".", NULL);
+ 
+                 else if (type == GF_QUOTA_OPTION_TYPE_DISABLE) {
+ 
+@@ -351,7 +351,7 @@ _glusterd_quota_initiate_fs_crawl (glusterd_conf_t *priv,
+                                          VIRTUAL_QUOTA_XATTR_CLEANUP_KEY, "1",
+                                          "{}", "\\", ";", NULL);
+ #else
+-                        runner_add_args (&runner, "/usr/bin/find", ".",
++                        runner_add_args (&runner, "find", ".",
+                                          "-exec", _PATH_SETFATTR, "-n",
+                                          VIRTUAL_QUOTA_XATTR_CLEANUP_KEY, "-v",
+                                          "1", "{}", "\\", ";", NULL);
+diff --git a/xlators/mgmt/glusterd/src/glusterd-snapshot.c b/xlators/mgmt/glusterd/src/glusterd-snapshot.c
+index da0152366..f0d135350 100644
+--- a/xlators/mgmt/glusterd/src/glusterd-snapshot.c
++++ b/xlators/mgmt/glusterd/src/glusterd-snapshot.c
+@@ -121,7 +121,7 @@ glusterd_build_snap_device_path (char *device, char *snapname,
+         }
+ 
+         runinit (&runner);
+-        runner_add_args (&runner, "/sbin/lvs", "--noheadings", "-o", "vg_name",
++        runner_add_args (&runner, "lvs", "--noheadings", "-o", "vg_name",
+                          device, NULL);
+         runner_redir (&runner, STDOUT_FILENO, RUN_PIPE);
+         snprintf (msg, sizeof (msg), "Get volume group for device %s", device);
+@@ -1982,7 +1982,7 @@ glusterd_is_thinp_brick (char *device, uint32_t *op_errno)
+ 
+         runinit (&runner);
+ 
+-        runner_add_args (&runner, "/sbin/lvs", "--noheadings", "-o", "pool_lv",
++        runner_add_args (&runner, "lvs", "--noheadings", "-o", "pool_lv",
+                          device, NULL);
+         runner_redir (&runner, STDOUT_FILENO, RUN_PIPE);
+         runner_log (&runner, this->name, GF_LOG_DEBUG, msg);
+diff --git a/xlators/mgmt/glusterd/src/glusterd-utils.c b/xlators/mgmt/glusterd/src/glusterd-utils.c
+index 51db13df0..6fa7b92f9 100644
+--- a/xlators/mgmt/glusterd/src/glusterd-utils.c
++++ b/xlators/mgmt/glusterd/src/glusterd-utils.c
+@@ -6027,7 +6027,6 @@ static struct fs_info {
+         char *fs_tool_pattern;
+         char *fs_tool_pkg;
+ } glusterd_fs[] = {
+-        /* some linux have these in /usr/sbin/and others in /sbin/? */
+         { "xfs", "xfs_info", NULL, "isize=", "xfsprogs" },
+         { "ext3", "tune2fs", "-l", "Inode size:", "e2fsprogs" },
+         { "ext4", "tune2fs", "-l", "Inode size:", "e2fsprogs" },
+@@ -6048,7 +6047,6 @@ glusterd_add_inode_size_to_dict (dict_t *dict, int count)
+         char           *trail             = NULL;
+         runner_t        runner            = {0, };
+         struct fs_info *fs                = NULL;
+-        char            fs_tool_name[256] = {0, };
+         static dict_t  *cached_fs         = NULL;
+ 
+         memset (key, 0, sizeof (key));
+@@ -6085,17 +6083,7 @@ glusterd_add_inode_size_to_dict (dict_t *dict, int count)
+                                 cur_word = "N/A";
+                                 goto cached;
+                         }
+-
+-                        snprintf (fs_tool_name, sizeof (fs_tool_name),
+-                                  "/usr/sbin/%s", fs->fs_tool_name);
+-                        if (sys_access (fs_tool_name, R_OK|X_OK) == 0)
+-                                runner_add_arg (&runner, fs_tool_name);
+-                        else {
+-                                snprintf (fs_tool_name, sizeof (fs_tool_name),
+-                                          "/sbin/%s", fs->fs_tool_name);
+-                                if (sys_access (fs_tool_name, R_OK|X_OK) == 0)
+-                                        runner_add_arg (&runner, fs_tool_name);
+-                        }
++                        runner_add_arg (&runner, fs->fs_tool_name);
+                         break;
+                 }
+         }
+-- 
+2.12.0
+
