@@ -3070,11 +3070,13 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.5.38"; # This version is required by awscli
-    name = "botocore-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "04cvsi8g8p3r5vr3vr2nb5ldyrsm0y4c2phimabbpk33wv718qyx";
+    name = "${pname}-${version}";
+    pname = "botocore";
+    version = "1.5.58";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1kd9hngdqvpjm01amizsmsnc08h2a0dxiasdk0f4kg1pibpqdni5";
     };
 
     propagatedBuildInputs =
