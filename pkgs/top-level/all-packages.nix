@@ -19288,6 +19288,12 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
+  hyperkit = callPackage ../applications/virtualization/hyperkit {
+    inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
+    inherit (darwin.apple_sdk.libs) xpc;
+    inherit (darwin) libobjc;
+  };
+
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
   xmagnify = callPackage ../tools/X11/xmagnify { };
