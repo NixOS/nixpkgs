@@ -14806,33 +14806,7 @@ in {
     };
   };
 
-  nbconvert = buildPythonPackage rec {
-    version = "5.1.1";
-    name = "nbconvert-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "847731bc39829d0eb1e15a450ac98c71730e3598e53683d4d76a3f3b3fc5017d";
-    };
-
-    buildInputs = with self; [nose ipykernel ];
-
-    propagatedBuildInputs = with self; [ entrypoints bleach mistune jinja2 pygments traitlets testpath jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # PermissionError. Likely due to being in a chroot
-    doCheck = false;
-
-    meta = {
-      description = "Converting Jupyter Notebooks";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  nbconvert = callPackage ../development/python-modules/nbconvert { };
 
   nbformat = callPackage ../development/python-modules/nbformat { };
 
