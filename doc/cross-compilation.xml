@@ -187,7 +187,7 @@
       How does this work in practice? Nixpkgs is now structured so that build-time dependencies are taken from <varname>buildPackages</varname>, whereas run-time dependencies are taken from the top level attribute set.
       For example, <varname>buildPackages.gcc</varname> should be used at build time, while <varname>gcc</varname> should be used at run time.
       Now, for most of Nixpkgs's history, there was no <varname>buildPackages</varname>, and most packages have not been refactored to use it explicitly.
-      Instead, one can use the four attributes used for specifying dependencies as documented in <xref linkend="ssec-stdenv-attributes"/>.
+      Instead, one can use the six (<emphasis>gasp</emphasis>) attributes used for specifying dependencies as documented in <xref linkend="ssec-stdenv-dependencies"/>.
       We "splice" together the run-time and build-time package sets with <varname>callPackage</varname>, and then <varname>mkDerivation</varname> for each of four attributes pulls the right derivation out.
       This splicing can be skipped when not cross compiling as the package sets are the same, but is a bit slow for cross compiling.
       Because of this, a best-of-both-worlds solution is in the works with no splicing or explicit access of <varname>buildPackages</varname> needed.

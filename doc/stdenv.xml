@@ -179,6 +179,269 @@ genericBuild
 </section>
 
 
+<section xml:id="ssec-stdenv-dependencies"><title>Specifying dependencies</title>
+
+<para>
+  As described in the Nix manual, almost any <filename>*.drv</filename> store path in a derivation's attribute set will induce a dependency on that derivation.
+  <varname>mkDerivation</varname>, however, takes a few attributes intended to, between them, include all the dependencies of a package.
+  This is done both for structure and consistency, but also so that certain other setup can take place.
+  For example, certain dependencies need their bin directories added to the <envar>PATH</envar>.
+  That is built-in, but other setup is done via a pluggable mechanism that works in conjunction with these dependency attributes.
+  See <xref linkend="ssec-setup-hooks"/> for details.
+</para>
+<para>
+  Dependencies can be broken down along three axes: their host and target platforms relative to the new derivation's, and whether they are propagated.
+  The platform distinctions are motivated by cross compilation; see <xref linkend="chap-cross"/> for exactly what each platform means.
+  <footnote><para>
+    The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency:
+    As a general programming principle, dependencies are always <emphasis>specified</emphasis> as interfaces, not concrete implementation.
+  </para></footnote>
+  But even if one is not cross compiling, the platforms imply whether or not the dependency is needed at run-time or build-time, a concept that makes perfect sense outside of cross compilation.
+  For now, the run-time/build-time distinction is just a hint for mental clarity, but in the future it perhaps could be enforced.
+</para>
+<para>
+  The extension of <envar>PATH</envar> with dependencies, alluded to above, proceeds according to the relative platforms alone.
+  The process is carried out only for dependencies whose host platform matches the new derivation's build platform–i.e. which run on the platform where the new derivation will be built.
+  <footnote><para>
+    Currently, that means for native builds all dependencies are put on the <envar>PATH</envar>.
+    But in the future that may not be the case for sake of matching cross:
+    the platforms would be assumed to be unique for native and cross builds alike, so only the <varname>depsBuild*</varname> and <varname>nativeBuildDependencies</varname> dependencies would affect the <envar>PATH</envar>.
+  </para></footnote>
+  For each dependency <replaceable>dep</replaceable> of those dependencies, <filename><replaceable>dep</replaceable>/bin</filename>, if present, is added to the <envar>PATH</envar> environment variable.
+</para>
+<para>
+  The dependency is propagated when it forces some of its other-transitive (non-immediate) downstream dependencies to also take it on as an immediate dependency.
+  Nix itself already takes a package's transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like setup hooks (mentioned above) also are run as if the propagated dependency.
+</para>
+<para>
+  It is important to note dependencies are not necessary propagated as the same sort of dependency that they were before, but rather as the corresponding sort so that the platform rules still line up.
+  The exact rules for dependency propagation can be given by assigning each sort of dependency two integers based one how it's host and target platforms are offset from the depending derivation's platforms.
+  Those offsets are given are given below in the descriptions of each dependency list attribute.
+  Algorithmically, we traverse propagated inputs, accumulating every propagated dep's propagated deps and adjusting them to account for the "shift in perspective" described by the current dep's platform offsets.
+  This results in sort a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined.
+  We also prune transitive deps whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+</para>
+<para>
+  We can define the process precisely with <link xlink:href="https://en.wikipedia.org/wiki/Natural_deduction">Natural Deduction</link> using the inference rules.
+  This probably seems a bit obtuse, but so is the bash code that actually implements it!
+  <footnote><para>
+    The <function>findInputs</function> function, currently residing in <filename>pkgs/stdenv/generic/setup.sh</filename>, implements the propagation logic.
+  </para></footnote>
+  They're confusing in very different ways so...hopefully if something doesn't make sense in one presentation, it does in the other!
+  <programlisting>
+let mapOffset(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
+
+propagated-dep(h0, t0, A, B)
+propagated-dep(h1, t1, B, C)
+h0 + h1 in {-1, 0, 1}
+h0 + t1 in {-1, 0, 1}
+-------------------------------------- Transitive property
+propagated-dep(mapOffset(h0, t0, h1),
+               mapOffset(h0, t0, t1),
+               A, C)</programlisting>
+  <programlisting>
+let mapOffset(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
+
+dep(h0, _, A, B)
+propagated-dep(h1, t1, B, C)
+h0 + h1 in {-1, 0, 1}
+h0 + t1 in {-1, 0, -1}
+-------------------------------------- Take immediate deps' propagated deps
+propagated-dep(mapOffset(h0, t0, h1),
+               mapOffset(h0, t0, t1),
+               A, C)</programlisting>
+  <programlisting>
+propagated-dep(h, t, A, B)
+-------------------------------------- Propagated deps count as deps
+dep(h, t, A, B)</programlisting>
+  Some explanation of this monstrosity is in order.
+  In the common case, the target offset of a dependency is the successor to the target offset: <literal>t = h + 1</literal>.
+  That means that:
+  <programlisting>
+let f(h, t, i) = i + (if i &lt;= 0 then h else t - 1)
+let f(h, h + 1, i) = i + (if i &lt;= 0 then h else (h + 1) - 1)
+let f(h, h + 1, i) = i + (if i &lt;= 0 then h else h)
+let f(h, h + 1, i) = i + h
+  </programlisting>
+  This is where the "sum-like" comes from above:
+  We can just sum all the host offset to get the host offset of the transitive dependency.
+  The target offset is the transitive dep is simply the host offset + 1, just as it was with the dependencies composed to make this transitive one;
+  it can be ignored as it doesn't add any new information.
+</para>
+<para>
+  Because of the bounds checks, the uncommon cases are <literal>h = t</literal> and <literal>h + 2 = t</literal>.
+  In the former case, the motivation for <function>mapOffset</function> is that since its host and target platforms are the same, no transitive dep of it should be able to "discover" an offset greater than its reduced target offsets.
+  <function>mapOffset</function> effectively "squashes" all its transitive dependencies' offsets so that none will ever be greater than the target offset of the original <literal>h = t</literal> package.
+  In the other case, <literal>h + 1</literal> is skipped over between the host and target offsets.
+  Instead of squashing the offsets, we need to "rip" them apart so no transitive dependencies' offset is that one.
+</para>
+<para>
+Overall, the unifying theme here is that propagation shouldn't be introducing transitive dependencies involving platforms the needing package is unaware of.
+The offset bounds checking and definition of <function>mapOffset</function> together ensure that this is the case.
+Discovering a new offset is discovering a new platform, and since those platforms weren't in the derivation "spec" of the needing package, they cannot be relevant.
+From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+</para>
+
+<variablelist>
+  <title>Variables specifying dependencies</title>
+
+   <varlistentry>
+     <term><varname>depsBuildBuild</varname></term>
+     <listitem>
+       <para>
+         A list of dependencies whose host and target platforms are the new derivation's build platform.
+         This means a <literal>-1</literal> host and <literal>-1</literal> target offset from the new derivation's platforms.
+         They are programs/libraries used at build time that furthermore produce programs/libraries also used at build time.
+         If the dependency doesn't care about the target platform (i.e. isn't a compiler or similar tool), put it in <varname>nativeBuildInputs</varname>instead.
+         The most common use for this <literal>buildPackages.stdenv.cc</literal>, the default C compiler for this role.
+         That example crops up more than one might think in old commonly used C libraries.
+       </para>
+       <para>
+         Since these packages are able to be run at build time, that are always added to the <envar>PATH</envar>, as described above.
+         But since these packages are only guaranteed to be able to run then, they shouldn't persist as run-time dependencies.
+         This isn't currently enforced, but could be in the future.
+       </para>
+     </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>nativeBuildInputs</varname></term>
+    <listitem>
+      <para>
+        A list of dependencies whose host platform is the new derivation's build platform, and target platform is the new derivation's host platform.
+        This means a <literal>-1</literal> host offset and <literal>0</literal> target offset from the new derivation's platforms.
+        They are programs/libraries used at build time that, if they are a compiler or similar tool, produce code to run at run time—i.e. tools used to build the new derivation.
+        If the dependency doesn't care about the target platform (i.e. isn't a compiler or similar tool), put it here, rather than in <varname>depsBuildBuild</varname> or <varname>depsBuildTarget</varname>.
+        This would be called <varname>depsBuildHost</varname> but for historical continuity.
+      </para>
+      <para>
+         Since these packages are able to be run at build time, that are added to the <envar>PATH</envar>, as described above.
+         But since these packages only are guaranteed to be able to run then, they shouldn't persist as run-time dependencies.
+         This isn't currently enforced, but could be in the future.
+       </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsBuildTarget</varname></term>
+    <listitem>
+      <para>
+        A list of dependencies whose host platform is the new derivation's build platform, and target platform is the new derivation's target platform.
+        This means a <literal>-1</literal> host offset and <literal>1</literal> target offset from the new derivation's platforms.
+        They are programs used at build time that produce code to run at run with code produced by the depending package.
+        Most commonly, these would tools used to build the runtime or standard library the currently-being-built compiler will inject into any code it compiles.
+        In many cases, the currently-being built compiler is itself employed for that task, but when that compiler won't run (i.e. its build and host platform differ) this is not possible.
+        Other times, the compiler relies on some other tool, like binutils, that is always built separately so the dependency is unconditional.
+      </para>
+      <para>
+        This is a somewhat confusing dependency to wrap ones head around, and for good reason.
+        As the only one where the platform offsets are not adjacent integers, it requires thinking of a bootstrapping stage <emphasis>two</emphasis> away from the current one.
+        It and it's use-case go hand in hand and are both considered poor form:
+        try not to need this sort dependency, and try not avoid building standard libraries / runtimes in the same derivation as the compiler produces code using them.
+        Instead strive to build those like a normal library, using the newly-built compiler just as a normal library would.
+        In short, do not use this attribute unless you are packaging a compiler and are sure it is needed.
+     </para>
+     <para>
+       Since these packages are able to be run at build time, that are added to the <envar>PATH</envar>, as described above.
+       But since these packages only are guaranteed to be able to run then, they shouldn't persist as run-time dependencies.
+       This isn't currently enforced, but could be in the future.
+     </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsHostHost</varname></term>
+    <listitem><para>
+      A list of dependencies whose host and target platforms match the new derivation's host platform.
+      This means a both <literal>0</literal> host offset and <literal>0</literal> target offset from the new derivation's host platform.
+      These are packages used at run-time to generate code also used at run-time.
+      In practice, that would usually be tools used by compilers for metaprogramming/macro systems, or libraries used by the macros/metaprogramming code itself.
+      It's always preferable to use a <varname>depsBuildBuild</varname> dependency in the derivation being built than a <varname>depsHostHost</varname> on the tool doing the building for this purpose.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>buildInputs</varname></term>
+    <listitem>
+      <para>
+        A list of dependencies whose host platform and target platform match the new derivation's.
+        This means a <literal>0</literal> host offset and <literal>1</literal> target offset from the new derivation's host platform.
+        This would be called <varname>depsHostTarget</varname> but for historical continuity.
+        If the dependency doesn't care about the target platform (i.e. isn't a compiler or similar tool), put it here, rather than in <varname>depsBuildBuild</varname>.
+      </para>
+      <para>
+        These often are programs/libraries used by the new derivation at <emphasis>run</emphasis>-time, but that isn't always the case.
+        For example, the machine code in a statically linked library is only used at run time, but the derivation containing the library is only needed at build time.
+        Even in the dynamic case, the library may also be needed at build time to appease the linker.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsTargetTarget</varname></term>
+    <listitem><para>
+      A list of dependencies whose host platform matches the new derivation's target platform.
+      This means a <literal>1</literal> offset from the new derivation's platforms.
+      These are packages that run on the target platform, e.g. the standard library or run-time deps of standard library that a compiler insists on knowing about.
+      It's poor form in almost all cases for a package to depend on another from a future stage [future stage corresponding to positive offset].
+      Do not use this attribute unless you are packaging a compiler and are sure it is needed.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsBuildBuildPropagated</varname></term>
+    <listitem><para>
+      The propagated equivalent of <varname>depsBuildBuild</varname>.
+      This perhaps never ought to be used, but it is included for consistency [see below for the others].
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>propagatedNativeBuildInputs</varname></term>
+    <listitem><para>
+      The propagated equivalent of <varname>nativeBuildInputs</varname>.
+      This would be called <varname>depsBuildHostPropagated</varname> but for historical continuity.
+      For example, if package <varname>Y</varname> has <literal>propagatedNativeBuildInputs = [X]</literal>, and package <varname>Z</varname> has <literal>buildInputs = [Y]</literal>, then package <varname>Z</varname> will be built as if it included package <varname>X</varname> in its <varname>nativeBuildInputs</varname>.
+      If instead, package <varname>Z</varname> has <literal>nativeBuildInputs = [Y]</literal>, then <varname>Z</varname> will be built as if it included <varname>X</varname> in the <varname>depsBuildBuild</varname> of package <varname>Z</varname>, because of the sum of the two <literal>-1</literal> host offsets.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsBuildTargetPropagated</varname></term>
+    <listitem><para>
+      The propagated equivalent of <varname>depsBuildTarget</varname>.
+      This is prefixed for the same reason of alerting potential users.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsHostHostPropagated</varname></term>
+    <listitem><para>
+      The propagated equivalent of <varname>depsHostHost</varname>.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>propagatedBuildInputs</varname></term>
+    <listitem><para>
+      The propagated equivalent of <varname>buildInputs</varname>.
+      This would be called <varname>depsHostTargetPropagated</varname> but for historical continuity.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>depsTargetTarget</varname></term>
+    <listitem><para>
+      The propagated equivalent of <varname>depsTargetTarget</varname>.
+      This is prefixed for the same reason of alerting potential users.
+    </para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+</section>
+
+
 <section xml:id="ssec-stdenv-attributes"><title>Attributes</title>
 
 <variablelist>
@@ -193,54 +456,6 @@ genericBuild
       In particular, the <command>gcc</command> and <command>ld</command> wrapper scripts will print out the complete command line passed to the wrapped tools.
       If set to 6 or higher, the <literal>stdenv</literal> setup script will be run with <literal>set -x</literal> tracing.
       If set to 7 or higher, the <command>gcc</command> and <command>ld</command> wrapper scripts will also be run with <literal>set -x</literal> tracing.
-    </para></listitem>
-  </varlistentry>
-
-</variablelist>
-
-<variablelist>
-  <title>Variables specifying dependencies</title>
-
-  <varlistentry>
-    <term><varname>nativeBuildInputs</varname></term>
-    <listitem><para>
-      A list of dependencies used by the new derivation at <emphasis>build</emphasis>-time.
-      I.e. these dependencies should not make it into the package's runtime-closure, though this is currently not checked.
-      For each dependency <replaceable>dir</replaceable>, the directory <filename><replaceable>dir</replaceable>/bin</filename>, if it exists, is added to the <envar>PATH</envar> environment variable.
-      Other environment variables are also set up via a pluggable mechanism.
-      For instance, if <varname>buildInputs</varname> contains Perl, then the <filename>lib/site_perl</filename> subdirectory of each input is added to the <envar>PERL5LIB</envar> environment variable.
-      See <xref linkend="ssec-setup-hooks"/> for details.
-    </para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>buildInputs</varname></term>
-    <listitem><para>
-      A list of dependencies used by the new derivation at <emphasis>run</emphasis>-time.
-      Currently, the build-time environment is modified in the exact same way as with <varname>nativeBuildInputs</varname>.
-      This is problematic in that when cross-compiling, foreign executables can clobber native ones on the <envar>PATH</envar>.
-      Even more confusing is static-linking.
-      A statically-linked library should be listed here because ultimately that generated machine code will be used at run-time, even though a derivation containing the object files or static archives will only be used at build-time.
-      A less confusing solution to this would be nice.
-    </para></listitem>
-  </varlistentry>
-
-
-  <varlistentry>
-    <term><varname>propagatedNativeBuildInputs</varname></term>
-    <listitem><para>
-      Like <varname>nativeBuildInputs</varname>, but these dependencies are <emphasis>propagated</emphasis>:
-      that is, the dependencies listed here are added to the <varname>nativeBuildInputs</varname> of any package that uses <emphasis>this</emphasis> package as a dependency.
-      So if package Y has <literal>propagatedNativeBuildInputs = [X]</literal>, and package Z has <literal>nativeBuildInputs = [Y]</literal>,
-      then package X will appear in Z’s build environment automatically.
-    </para></listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><varname>propagatedBuildInputs</varname></term>
-    <listitem><para>
-      Like <varname>buildInputs</varname>, but propagated just like <varname>propagatedNativeBuildInputs</varname>.
-      This inherits <varname>buildInputs</varname>'s flaws of clobbering native executables when cross-compiling and being confusing for static linking.
     </para></listitem>
   </varlistentry>
 
