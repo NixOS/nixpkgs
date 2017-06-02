@@ -1138,6 +1138,20 @@ following:
     <listitem><para>If set, libraries and executables are not
     stripped.  By default, they are.</para></listitem>
   </varlistentry>
+  <varlistentry>
+    <term><varname>dontStripHost</varname></term>
+    <listitem><para>
+      Like <varname>dontStripHost</varname>, but only affects the <command>strip</command> command targetting the package's host platform.
+      Useful when supporting cross compilation, but otherwise feel free to ignore.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>dontStripTarget</varname></term>
+    <listitem><para>
+      Like <varname>dontStripHost</varname>, but only affects the <command>strip</command> command targetting the packages' target platform.
+      Useful when supporting cross compilation, but otherwise feel free to ignore.
+    </para></listitem>
+  </varlistentry>
 
   <varlistentry>
     <term><varname>dontMoveSbin</varname></term>
