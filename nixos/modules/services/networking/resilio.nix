@@ -241,7 +241,6 @@ in
         }
       ];
 
-
     users.extraUsers.rslsync = {
       description     = "Resilio Sync Service user";
       home            = cfg.storagePath;
@@ -265,18 +264,5 @@ in
         '';
       };
     };
-
-    systemd.user.services.resilio = with pkgs; {
-      description = "Resilio Sync user service";
-      after       = [ "network.target" "local-fs.target" ];
-      serviceConfig = {
-        Restart   = "on-abort";
-        ExecStart = ''
-         ${resilioSync}/bin/rslsync --nodaemon --config %h/.config/resilio-sync/config.json
-        '';
-      };
-    };
-
-    environment.systemPackages = [ resilioSync ];
   };
 }
