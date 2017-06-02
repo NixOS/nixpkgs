@@ -5,7 +5,8 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine = { lib, pkgs, ... }: {
-    imports = [ ./common/x11.nix ./common/user-account.nix ];
+    imports = [ ./common/user-account.nix ];
+    services.xserver.displayManager.select = "auto";
     services.xserver.displayManager.auto.user = "alice";
     services.xserver.windowManager.select = [ "i3" ];
   };

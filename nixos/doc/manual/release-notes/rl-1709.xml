@@ -89,6 +89,56 @@ rmdir /var/lib/ipfs/.ipfs
       The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The X server configuration interface changed, especially <literal>services.xserver.displayManager.*.enable</literal>,
+      <literal>services.xserver.windowManager.*.enable</literal> and <literal>services.xserver.desktopManager.*.enable</literal> options.
+      The <literal>services.xserver.desktopManager.default</literal> and <literal>services.xserver.windowManager.default</literal> have also
+      been removed.
+    </para>
+    <para>
+      <literal>services.xserver.displayManager.*.enable</literal> option was moved to <literal>services.xserver.displayManager.select</literal>
+      that has the <literal>nullOr enum</literal> type. The value of <literal>services.xserver.displayManager.select</literal> should be the name
+      of the used display manager. For example a configuration that was using:
+<programlisting>
+services.xserver.displayManager.lightdm.enable = true;
+</programlisting>
+      Should be changed to:
+<programlisting>
+services.xserver.displayManager.select = "lightdm";
+</programlisting>
+      Note: In case a desktop manager or a window manager is enabled, setting <literal>services.xserver.displayManager.select</literal> 
+      is optional. If it is not explicitely set, its value will be set accordingly to the default window or desktop manager.
+    </para>
+    <para>
+      <literal>services.xserver.windowManager.*.enable</literal> option was moved to <literal>services.xserver.windowManager.select</literal>
+      that has the <literal>listOf enum</literal> type. The value of <literal>services.xserver.displayManager.select</literal> should be set to a
+      list of the used window managers names. For example a configuration that was using:
+<programlisting>
+services.xserver.windowManager.i3.enable = true;
+</programlisting>
+      Should be changed to:
+<programlisting>
+services.xserver.windowManager.select = [ "i3" ];
+</programlisting>
+      Note: This option is a list because it is possible to enable multiple window managers at the same time.
+      If multiple window managers are set, the first in the list will become the default one.
+    </para>
+    <para>
+      <literal>services.xserver.desktopManager.*.enable</literal> option was moved to <literal>services.xserver.desktopManager.select</literal>
+      that has the <literal>listOf enum</literal> type. The value of <literal>services.xserver.desktopManager.select</literal> should be set to a
+      list of the used desktop managers names. For example a configuration that was using:
+<programlisting>
+services.xserver.desktopManager.plasma5.enable = true;
+</programlisting>
+      Should be changed to:
+<programlisting>
+services.xserver.desktopManager.select = [ "plasma5" ];
+</programlisting>
+      Note: This option is a list because it is possible to enable multiple desktop managers at the same time.
+      If multiple desktop managers are set, the first in the list will become the default one.
+    </para>
+  </listitem>
 </itemizedlist>
 
 

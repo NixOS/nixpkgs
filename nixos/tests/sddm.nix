@@ -11,9 +11,8 @@ let
 
       machine = { lib, ... }: {
         imports = [ ./common/user-account.nix ];
-        services.xserver.enable = true;
         services.xserver.displayManager.select = "sddm";
-        services.xserver.windowManager.select = [ "icewm " ];
+        services.xserver.windowManager.select = [ "icewm" ];
       };
 
       enableOCR = true;
@@ -39,17 +38,14 @@ let
 
       machine = { lib, ... }: {
         imports = [ ./common/user-account.nix ];
-        services.xserver.enable = true;
         services.xserver.displayManager.select = "sddm";
+        services.xserver.windowManager.select = [ "icewm" ];
         services.xserver.displayManager.sddm = {
           autoLogin = {
             enable = true;
             user = "alice";
           };
         };
-        services.xserver.windowManager.default = "icewm";
-        services.xserver.windowManager.icewm.enable = true;
-        services.xserver.desktopManager.default = "none";
       };
 
       testScript = { nodes, ... }: ''

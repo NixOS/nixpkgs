@@ -6,9 +6,8 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine = { lib, ... }: {
     imports = [ ./common/user-account.nix ];
-    services.xserver.enable = true;
     services.xserver.displayManager.select = "lightdm";
-    services.xserver.windowManager.select = [ "icewm " ];
+    services.xserver.windowManager.select = [ "icewm" ];
   };
 
   enableOCR = true;

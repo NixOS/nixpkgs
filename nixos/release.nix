@@ -330,13 +330,13 @@ in rec {
       });
 
     kde = makeClosure ({ pkgs, ... }:
-      { services.xserver.enable = true;
+      { 
         services.xserver.displayManager.select = "sddm";
         services.xserver.desktopManager.select = [ "plasma5" ];
       });
 
     xfce = makeClosure ({ pkgs, ... }:
-      { services.xserver.enable = true;
+      {
         services.xserver.desktopManager.select = [ "xfce" ];
       });
 

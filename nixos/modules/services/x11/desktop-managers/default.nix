@@ -24,6 +24,8 @@ in
         default = [];
         description = ''
           Select which desktop manager to use.
+          Selecting a desktop manager will automatically enable the X server and a default display manager.
+          The First item in the list will be made the default window manager.
         '';
       };
 

@@ -35,9 +35,8 @@ latter might look like this:
 <programlisting>
 { config, pkgs, ... }:
 
-{ services.xserver.enable = true;
-  services.xserver.displayManager.select = "sddm";
-  services.xserver.desktopManager.select = "plasma5";
+{ 
+  services.xserver.desktopManager.select = [ "plasma5" ];
 }
 </programlisting>
 

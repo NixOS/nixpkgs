@@ -35,10 +35,20 @@ services.xserver.windowManager.select = [ "i3" ];
 </programlisting>
 </para>
 
+<note><para>It is possible to use more than one window manager or desktop
+manager at the same time by adding items to the list. In this case, the
+first item of the list will become the default window manager or desktop
+manager.
+<programlisting>
+services.xserver.desktopManager.select = [ "plasma5" "xfce" ];
+services.xserver.windowManager.select = [ "xmonad" "i3" ];
+</programlisting>
+</para></note>
+
 <para>NixOS’s default <emphasis>display manager</emphasis> (the
 program that provides a graphical login prompt and manages the X
-server) is SLiM. You can select an alternative one by picking one
-of the following lines:
+server) depends on the selected desktop manager or window manager. 
+You can select an alternative one by picking one of the following lines:
 <programlisting>
 services.xserver.displayManager.select = "sddm";
 services.xserver.displayManager.select = "lightdm";

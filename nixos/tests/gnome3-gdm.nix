@@ -9,8 +9,6 @@ import ./make-test.nix ({ pkgs, ...} : {
 
     { imports = [ ./common/user-account.nix ];
 
-      services.xserver.enable = true;
-
       services.xserver.displayManager.select = "gdm";
       services.xserver.displayManager.gdm = {
         autoLogin = {
