@@ -56,7 +56,8 @@ buildPythonPackage rec {
     pycuda
     cudatoolkit
     libgpuarray
-  ] ++ (stdenv.lib.optional (cudnn != null) [ cudnn ]);
+    cudnn
+  ];
 
   passthru.cudaSupport = true;
 }
