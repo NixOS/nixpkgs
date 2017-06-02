@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "${version}";
-    sha256 = "5344cc3327bc7fa543fc3b42e85c55f40dda0eeaec38327f9bf373c3ece42b39";
+    sha256 = "0damf6zbm0db2a3gfwrbbj92yal576wpmhhchc0w0np8vdnax70n";
   };
 
   checkInputs = stdenv.lib.optionals doCheck [ pytest pytest_xdist flake8 flaky ];
