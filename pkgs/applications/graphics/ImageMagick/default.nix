@@ -73,6 +73,12 @@ stdenv.mkDerivation rec {
       [ openexr librsvg openjpeg ]
     ++ lib.optional stdenv.isDarwin ApplicationServices;
 
+  postFixup = ''
+    for file in $out/bin/Magick++-config $out/bin/Magick-config $out/bin/MagickCore-config $out/bin/MagickWand-config $out/bin/Wand-config; do
+      substituteInPlace $file --replace pkg-config ${pkgconfig}/bin/pkg-config
+    done
+  '';
+
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
