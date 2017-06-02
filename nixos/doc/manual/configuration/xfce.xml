@@ -9,10 +9,7 @@
     <para>
         To enable the Xfce Desktop Environment, set
         <programlisting>
-services.xserver.desktopManager = {
-    xfce.enable = true;
-    default = "xfce";
-};
+services.xserver.desktopManager.select = [ "xfce" ];
         </programlisting>
     </para>
 
@@ -55,7 +52,7 @@ services.xserver.displayManager.select = "sddm";
             <emphasis>Thunar</emphasis>
             volume support, put
             <programlisting>
-services.xserver.desktopManager.xfce.enable = true;
+services.xserver.desktopManager.select = [ "xfce" ];
             </programlisting>
             into your <emphasis>configuration.nix</emphasis>.
         </para>

@@ -14,7 +14,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.displayManager.select = "auto";
       services.xserver.displayManager.auto.user = "alice";
 
-      services.xserver.desktopManager.xfce.enable = true;
+      services.xserver.desktopManager.select = [ "xfce" ];
 
       environment.systemPackages = [ pkgs.xorg.xmessage ];
     };

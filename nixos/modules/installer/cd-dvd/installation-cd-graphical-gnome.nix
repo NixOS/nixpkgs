@@ -16,8 +16,8 @@ with lib;
       defaultUser = "root";
       autoLogin = true;
     };
+    desktopManager.select = [ "gnome3" ];
     desktopManager.gnome3 = {
-      enable = true;
       extraGSettingsOverrides = ''
         [org.gnome.desktop.background]
         show-desktop-icons=true

@@ -25,9 +25,9 @@ Otherwise, you can only log into a plain undecorated
 <command>xterm</command> window.  Thus you should pick one or more of
 the following lines:
 <programlisting>
-services.xserver.desktopManager.plasma5.enable = true;
-services.xserver.desktopManager.xfce.enable = true;
-services.xserver.desktopManager.gnome3.enable = true;
+services.xserver.desktopManager.select = [ "plasma5" ];
+services.xserver.desktopManager.select = [ "xfce" ];
+services.xserver.desktopManager.select = [ "gnome3" ];
 services.xserver.windowManager.xmonad.enable = true;
 services.xserver.windowManager.twm.enable = true;
 services.xserver.windowManager.icewm.enable = true;

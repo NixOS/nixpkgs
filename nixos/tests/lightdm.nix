@@ -10,7 +10,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     services.xserver.displayManager.select = "lightdm";
     services.xserver.windowManager.default = "icewm";
     services.xserver.windowManager.icewm.enable = true;
-    services.xserver.desktopManager.default = "none";
   };
 
   enableOCR = true;

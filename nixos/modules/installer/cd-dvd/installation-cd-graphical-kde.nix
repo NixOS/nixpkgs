@@ -18,8 +18,8 @@ with lib;
       autoLogin = true;
     };
 
+    desktopManager.select = [ "plasma5" ];
     desktopManager.plasma5 = {
-      enable = true;
       enableQt4Support = false;
     };
 

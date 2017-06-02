@@ -212,7 +212,6 @@ rec {
           services.xserver.displayManager.select = "auto";
           services.xserver.windowManager.default = "icewm";
           services.xserver.windowManager.icewm.enable = true;
-          services.xserver.desktopManager.default = "none";
         };
     in
       runInMachine ({

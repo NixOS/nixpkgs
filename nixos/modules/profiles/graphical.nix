@@ -7,7 +7,7 @@
   services.xserver = {
     enable = true;
     displayManager.select = "sddm";
-    desktopManager.plasma5.enable = true;
+    desktopManager.select = [ "plasma5" ];
     synaptics.enable = true; # for touchpad support on many laptops
   };
 
