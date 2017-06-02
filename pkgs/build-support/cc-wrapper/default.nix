@@ -81,6 +81,8 @@ let
           fi
         done
       EOF
+
+      sed -i $out -e 's_envHooks_crossEnvHooks_g'
     '' + ''
 
       # NIX_ things which we don't both use and define, we revert them
