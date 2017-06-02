@@ -8912,6 +8912,8 @@ with pkgs;
 
   libnetfilter_cttimeout = callPackage ../development/libraries/libnetfilter_cttimeout { };
 
+  libnetfilter_log = callPackage ../development/libraries/libnetfilter_log { };
+
   libnetfilter_queue = callPackage ../development/libraries/libnetfilter_queue { };
 
   libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
