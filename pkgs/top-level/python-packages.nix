@@ -5354,33 +5354,7 @@ in {
     };
   });
 
-  dask = buildPythonPackage rec {
-    pname = "dask";
-    name = "${pname}-${version}";
-    version = "0.14.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "46c8ef9aa41a5755f2194b535bff7fdef1343d3993ab294b198caf95155ec94e";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
-
-    checkPhase = ''
-      py.test dask
-    '';
-
-    # URLError
-    doCheck = false;
-
-    meta = {
-      description = "Minimal task scheduling abstraction";
-      homepage = "http://github.com/ContinuumIO/dask/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  dask = callPackage ../development/python-modules/dask { };
 
   datrie = buildPythonPackage rec {
     name = "datrie";
