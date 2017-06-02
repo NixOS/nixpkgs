@@ -240,6 +240,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  Pmw = callPackage ../development/python-modules/Pmw { };
+
   pyaes = callPackage ../development/python-modules/pyaes.nix { };
 
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
