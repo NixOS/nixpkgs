@@ -99,19 +99,23 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       echo "$EXTRA_LINK_SEARCH" | while read i; do
          if [ ! -z "$i" ]; then
            echo "-L $i" >> target/link
-           L=$(echo $i | sed -e "s#target/build#$out#")
+           echo "EXTRA_LINK_SEARCH, i = $i"
+           L=$(echo $i | sed -e "s#$(pwd)/target/build#$out#")
            echo "-L $L" >> target/link.final
          fi
       done
       echo "$EXTRA_LINK" | while read i; do
          if [ ! -z "$i" ]; then
            echo "-l $i" >> target/link
+           echo "EXTRA_LINK, i = $i"
            echo "-l $i" >> target/link.final
          fi
       done
 
       if [ -e target/link ]; then
          LINK=$(cat target/link)
+         sort target/link.final | uniq > target/link.final.sorted
+         mv target/link.final.sorted target/link.final
       fi
 
       mkdir -p target/bin
