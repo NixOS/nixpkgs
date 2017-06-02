@@ -53,7 +53,8 @@ let
                   Server = ${net.server} ${lib.optionalString net.useSSL "+"}${toString net.port} ${net.password}
                   ${concatMapStrings (c: "<Chan #${c}>\n</Chan>\n") net.channels}
                   ${lib.optionalString net.hasBitlbeeControlChannel ''
-                    <Chan &bitlbee></Chan>
+                    <Chan &bitlbee>
+                    </Chan>
                   ''}
                   ${net.extraConf}
               </Network>
@@ -279,7 +280,7 @@ in
           example = defaultPassBlock;
           type = types.string;
           description = ''
-            Generate with znc --makepass.
+            Generate with `nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
           '';
         };

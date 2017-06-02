@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "halibut-1.1";
+  name = "halibut-1.2";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/halibut/${name}.tar.gz";
-    sha256 = "18409ir55rsa5gkizw2hsr86wgv176jms2dc52px62gd246rar5r";
+    url = "http://www.chiark.greenend.org.uk/~sgtatham/halibut/${name}/${name}.tar.gz";
+    sha256 = "0gqnhfqf555rfpk5xj1imbdxnbkkrv4wl3rrdb1r0wgj81igpv8s";
   };
 
   buildInputs = [ perl ];

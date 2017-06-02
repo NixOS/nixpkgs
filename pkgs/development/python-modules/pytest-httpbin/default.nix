@@ -10,7 +10,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "pytest-httpbin-${version}";
+  pname = "pytest-httpbin";
+  name = "${pname}-${version}";
   version = "0.2.3";
 
   src = fetchFromGitHub {

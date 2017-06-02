@@ -3,8 +3,10 @@
   geos, gdal, pytz
 }:
 buildPythonPackage rec {
-  name = "Django-${version}";
+  pname = "Django";
+  name = "${pname}-${version}";
   version = "1.11.1";
+
   disabled = pythonOlder "2.7";
 
   src = fetchurl {

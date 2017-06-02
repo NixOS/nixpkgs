@@ -9,8 +9,9 @@ if (isPyPy) then throw "pycairo not supported for interpreter ${python.executabl
   patch_waf-py3_5 = ./waf-py3_5.patch;
 
 in buildPythonPackage rec {
+  pname = "pycairo";
   version = "1.10.0";
-  name = "pycairo-${version}";
+  name = "${pname}-${version}";
   format = "other";
 
   src = if isPy3k

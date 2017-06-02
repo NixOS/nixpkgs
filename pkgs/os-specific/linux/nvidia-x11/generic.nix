@@ -6,6 +6,9 @@
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
+
+, prePatch ? ""
+, patches ? []
 }:
 
 { stdenv, callPackage, callPackage_i686, fetchurl, fetchpatch
@@ -42,24 +45,8 @@ let
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
-    # patch to get the nvidia and nvidiaBeta driver to compile on kernel 4.10
-    patches = if libsOnly
-              then null
-              else if versionOlder version "340"
-              then null
-              else if versionOlder version "375"
-              then [
-                     (fetchpatch {
-                        name = "kernel-4.10.patch";
-                        url = https://git.archlinux.org/svntogit/packages.git/plain/nvidia-340xx/trunk/4.10.0_kernel.patch?id=53fb1df89;
-                        sha256 = "171hb57m968qdjcr3h8ppfzhrchf573f39rdja86a1qq1gmrv7pa";
-                     })
-                         # from https://git.archlinux.org/svntogit/packages.git/plain/trunk/fs52243.patch?h=packages/nvidia-340xx
-                         # with datestamps removed
-                     ./fs52243.patch
-                   ]
-              else null;
-
+    patches = if libsOnly then null else patches;
+    inherit prePatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv) system;
 

@@ -34,6 +34,10 @@ stdenv.mkDerivation {
     tar -xvzf $src
     cp ${arch}/helm $out/bin/${pname}
     chmod +x $out/bin/${pname}
+    mkdir -p $out/share/bash-completion/completions
+    mkdir -p $out/share/zsh/site-functions
+    $out/bin/helm completion bash > $out/share/bash-completion/completions/helm
+    $out/bin/helm completion zsh > $out/share/zsh/site-functions/_helm
   '';
 
   meta = with stdenv.lib; {

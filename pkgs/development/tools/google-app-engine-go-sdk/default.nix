@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, python27, python27Packages }:
+{ stdenv, fetchzip, python27, python27Packages, makeWrapper }:
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin";
+with python27Packages;
 
 stdenv.mkDerivation rec {
   name = "google-app-engine-go-sdk-${version}";
@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
         sha256 = "18hgl4wz3rhaklkwaxl8gm70h7l8k225f86da682kafawrr8zhv4";
       };
 
-  buildInputs = with python27Packages; [
-    (python27.withPackages(ps: [ cffi cryptography pyopenssl ]))
-  ];
+  buildInputs = [python27 makeWrapper];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/
@@ -27,7 +25,9 @@ stdenv.mkDerivation rec {
 
     # create wrappers with correct env
     for i in goapp appcfg.py; do
-      ln -s "$out/share/go_appengine/$i" "$out/bin/$i"
+      makeWrapper "$out/share/go_appengine/$i" "$out/bin/$i" \
+        --prefix PATH : "${python27}/bin" \
+        --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl})"
     done
   '';
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     version = version;
     homepage = "https://cloud.google.com/appengine/docs/go/";
     license = licenses.asl20;
-    platforms = with platforms; linux ++ darwin;
+    platforms = ["x86_64-linux" "x86_64-darwin"];
     maintainers = with maintainers; [ lufia ];
   };
 }

@@ -2,6 +2,7 @@
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
+, initialPackages ? import ./hackage-packages.nix
 }:
 
 let
@@ -10,7 +11,7 @@ let
   inherit (import ./lib.nix { inherit pkgs; }) overrideCabal makePackageSet;
 
   haskellPackages = makePackageSet {
-    package-set = import ./hackage-packages.nix;
+    package-set = initialPackages;
     inherit ghc;
   };
 

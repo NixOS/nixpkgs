@@ -1,7 +1,6 @@
 # to run these tests:
 # nix-instantiate --eval --strict nixpkgs/lib/tests/misc.nix
 # if the resulting list is empty, all tests passed
-let inherit (builtins) add; in
 with import ../default.nix;
 
 runTests {
@@ -86,6 +85,37 @@ runTests {
   testSplitStringsLastEmpty = {
     expr = strings.splitString ":" "2001:db8:0:0042::8a2e:370:";
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
+  };
+
+  testIsStorePath =  {
+    expr =
+      let goodPath =
+            "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+      in {
+        storePath = isStorePath goodPath;
+        storePathAppendix = isStorePath
+          "${goodPath}/bin/python";
+        nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
+        asPath = isStorePath (builtins.toPath goodPath);
+        otherPath = isStorePath "/something/else";
+        otherVals = {
+          attrset = isStorePath {};
+          list = isStorePath [];
+          int = isStorePath 42;
+        };
+      };
+    expected = {
+      storePath = true;
+      storePathAppendix = false;
+      nonAbsolute = false;
+      asPath = true;
+      otherPath = false;
+      otherVals = {
+        attrset = false;
+        list = false;
+        int = false;
+      };
+    };
   };
 
 # LISTS
@@ -266,14 +296,14 @@ runTests {
           res4 = let x = defaultOverridableDelayableArgs id { a = 7; };
                 in (x.merge) ( x: { b = 10; });
           res5 = let x = defaultOverridableDelayableArgs id { a = 7; };
-                in (x.merge) ( x: { a = add x.a 3; });
-          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
+                in (x.merge) ( x: { a = builtins.add x.a 3; });
+          res6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = builtins.add; }; };
                      y = x.merge {};
                 in (y.merge) { a = 10; };
 
           resRem7 = res6.replace (a: removeAttrs a ["a"]);
 
-          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = add; }; };
+          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = builtins.add; }; };
                             x2 = x.merge { a = 20; }; # now we have 27
                         in (x2.replace) { a = 10; }; # and override the value by 10
 

@@ -2,7 +2,8 @@
   asgiref, django, daphne
 }:
 buildPythonPackage rec {
-  name = "channels-${version}";
+  pname = "channels";
+  name = "${pname}-${version}";
   version = "1.1.3";
 
   src = fetchurl {

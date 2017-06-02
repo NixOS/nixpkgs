@@ -92,6 +92,8 @@ rec {
     };
 
 
+  # When adding new types don't forget to document them in
+  # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
     unspecified = mkOptionType {
@@ -257,6 +259,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
     uniq = elemType: mkOptionType rec {
       name = "uniq";
       inherit (elemType) description check;
@@ -267,6 +270,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
       description = "null or ${elemType.description}";
@@ -283,6 +287,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # A submodule (like typed attribute set). See NixOS manual.
     submodule = opts:
       let
         opts' = toList opts;
@@ -314,6 +319,7 @@ rec {
         };
       };
 
+    # A value from a set of allowed ones.
     enum = values:
       let
         show = v:
@@ -329,6 +335,7 @@ rec {
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
+    # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
       description = "${t1.description} or ${t2.description}";
@@ -352,6 +359,8 @@ rec {
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
     };
 
+    # Either value of type `finalType` or `coercedType`, the latter is
+    # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
       assert coercedType.getSubModules == null;
       mkOptionType rec {

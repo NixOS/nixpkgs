@@ -9,7 +9,10 @@ let
 
   ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""} ${if cfg.enableGC then "--enable-gc" else ""} ${toString cfg.extraFlags}'';
 
-  pathEnv = { IPFS_PATH = cfg.dataDir; };
+  # Before Version 17.09, ipfs would always use "/var/lib/ipfs/.ipfs" as it's dataDir
+  defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
+    "/var/lib/ipfs" else
+    "/var/lib/ipfs/.ipfs";
 
   # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
   wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; } ''
@@ -42,7 +45,7 @@ in
 
       dataDir = mkOption {
         type = types.str;
-        default = "/var/lib/ipfs";
+        default = defaultDataDir;
         description = "The data dir for IPFS";
       };
 
@@ -117,16 +120,15 @@ in
       after = [ "local-fs.target" ];
       before = [ "ipfs.service" "ipfs-offline.service" ];
 
+      environment.IPFS_PATH = cfg.dataDir;
+
       path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
       '';
-
-      environment = pathEnv;
-
       script =  ''
-        if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
+        if [[ ! -f ${cfg.dataDir}/config ]]; then
           ${ipfs}/bin/ipfs init ${optionalString cfg.emptyRepo "-e"}
         fi
         ${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress}
@@ -151,9 +153,9 @@ in
       conflicts = [ "ipfs-offline.service" ];
       wants = [ "ipfs-init.service" ];
 
-      path  = [ pkgs.ipfs ];
+      environment.IPFS_PATH = cfg.dataDir;
 
-      environment = pathEnv;
+      path  = [ pkgs.ipfs ];
 
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags}";
@@ -172,9 +174,9 @@ in
       conflicts = [ "ipfs.service" ];
       wants = [ "ipfs-init.service" ];
 
-      path  = [ pkgs.ipfs ];
+      environment.IPFS_PATH = cfg.dataDir;
 
-      environment = pathEnv;
+      path  = [ pkgs.ipfs ];
 
       serviceConfig = {
         ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags} --offline";

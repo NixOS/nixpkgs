@@ -222,13 +222,11 @@ in
             '' + cfg.extraResolvconfConf + ''
             '';
 
-      } // (optionalAttrs config.services.resolved.enable (
-        if dnsmasqResolve then {
-          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        } else {
-          "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        }
-      ));
+      } // optionalAttrs config.services.resolved.enable {
+        "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      };
 
       networking.proxy.envVars =
         optionalAttrs (cfg.proxy.default != null) {

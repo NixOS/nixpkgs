@@ -3,7 +3,7 @@
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, iputils, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
-, python3Packages, docbook_xsl, fetchpatch }:
+, python3Packages, docbook_xsl, fetchpatch, openconnect }:
 
 stdenv.mkDerivation rec {
   name    = "network-manager-${version}";
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
       --replace /bin/sed ${gnused}/bin/sed
     substituteInPlace data/NetworkManager.service.in \
       --replace /bin/kill ${coreutils}/bin/kill
+    substituteInPlace clients/common/nm-vpn-helpers.c \
+      --subst-var-by openconnect ${openconnect}
     # to enable link-local connections
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
@@ -76,6 +78,7 @@ stdenv.mkDerivation rec {
       name = "null-dereference.patch";
       url = "https://github.com/NetworkManager/NetworkManager/commit/4e8eddd100bbc8429806a70620c90b72cfd29cb1.patch";
     })
+    ./openconnect_helper_path.patch
   ];
 
   buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp

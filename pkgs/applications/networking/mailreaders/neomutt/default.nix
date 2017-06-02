@@ -1,21 +1,29 @@
 { stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
-, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
+, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170428";
+  version = "20170602";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "1p6214agfv9plskkzalh03r5naiiyg1habrnknnjgck3nypb78ik";
+    sha256 = "0rpvxmv10ypl7la4nmp0s02ixmm9g5pn9g9ms8ygzsix9pa86w45";
   };
 
-  nativeBuildInputs = [ which autoreconfHook ];
-  buildInputs =
-    [ cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch openssl perl lmdb ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
+  buildInputs = [
+    cyrus_sasl gdbm gpgme kerberos libidn ncurses
+    notmuch openssl perl lmdb
+  ];
+
+  postPatch = ''
+    for f in doc/*.xsl ; do
+      substituteInPlace $f \
+        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+    done
+  '';
 
   configureFlags = [
     "--enable-debug"
@@ -45,6 +53,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureScript = "./prepare";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";

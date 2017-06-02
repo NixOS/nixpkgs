@@ -93,23 +93,23 @@ let
 
     passthru.libPrefix = "lib/perl5/site_perl";
 
-  # TODO: it seems like absolute paths to some coreutils is required.
-  postInstall =
-    ''
-      # Remove dependency between "out" and "man" outputs.
-      rm "$out"/lib/perl5/*/*/.packlist
+    # TODO: it seems like absolute paths to some coreutils is required.
+    postInstall =
+      ''
+        # Remove dependency between "out" and "man" outputs.
+        rm "$out"/lib/perl5/*/*/.packlist
 
-      # Remove dependencies on glibc and gcc
-      sed "/ *libpth =>/c    libpth => ' '," \
-        -i "$out"/lib/perl5/*/*/Config.pm
-      # TODO: removing those paths would be cleaner than overwriting with nonsense.
-      substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
-        --replace "${libcInc}" /no-such-path \
-        --replace "${
-            if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
-          }" /no-such-path \
-        --replace "$man" /no-such-path
-    ''; # */
+        # Remove dependencies on glibc and gcc
+        sed "/ *libpth =>/c    libpth => ' '," \
+          -i "$out"/lib/perl5/*/*/Config.pm
+        # TODO: removing those paths would be cleaner than overwriting with nonsense.
+        substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
+          --replace "${libcInc}" /no-such-path \
+          --replace "${
+              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+            }" /no-such-path \
+          --replace "$man" /no-such-path
+      ''; # */
 
     meta = {
       homepage = https://www.perl.org/;
