@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, makeDesktopItem, python3Packages, glew, freeglut, libpng, libxml2, tk, freetype }:
+{ stdenv, fetchurl, makeDesktopItem
+, python3, python3Packages
+, glew, freeglut, libpng, libxml2, tk, freetype }:
+
+
+with stdenv.lib;
 
 let
   pname = "pymol";
@@ -33,13 +38,12 @@ python3Packages.buildPythonApplication {
     runHook postInstall
   '';
 
-  postInstall = ''
+  postInstall = with python3Packages; ''
     wrapProgram $out/bin/pymol \
-      --prefix PYTHONPATH : ${python3Packages.Pmw}/lib/python3.6/site-packages \
-      --prefix PYTHONPATH : ${python3Packages.tkinter}/lib/python3.6/site-packages
+      --prefix PYTHONPATH : ${makeSearchPathOutput "lib" python3.sitePackages [ Pmw tkinter ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = description;
     homepage = "https://www.pymol.org/";
     license = licenses.psfl;
