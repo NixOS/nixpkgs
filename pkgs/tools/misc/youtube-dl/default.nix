@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonApplication
-, zip, ffmpeg, rtmpdump, atomicparsley, pandoc
+, zip, ffmpeg, rtmpdump, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -8,6 +8,7 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
+, hlsEncryptedSupport ? true
 , makeWrapper }:
 
 with stdenv.lib;
@@ -23,6 +24,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ zip ] ++ optional generateManPage pandoc;
+  propagatedBuildInputs = optional hlsEncryptedSupport pycryptodome;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP
