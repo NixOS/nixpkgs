@@ -5,7 +5,7 @@
 # wrapper with their PYTHONPATH. This means overrideAttrs is not
 # strong enough (it overrides too late), we need to call it
 # beforehand.
-, extraBuildInputs ? [ pythonPackages.psutil ] }:
+, extraBuildInputs ? [ ] }:
 let
   inherit (pythonPackages) python;
   docker_1_10 = pythonPackages.buildPythonPackage rec {
