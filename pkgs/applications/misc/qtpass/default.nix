@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, gnupg, makeQtWrapper, pass, qtbase, qtsvg, qttools, qmakeHook }:
+{ stdenv, fetchFromGitHub, git, gnupg, makeQtWrapper, pass, qtbase, qtsvg, qttools, qmake }:
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ makeQtWrapper qmake ];
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags CONFIG+=release DESTDIR=$out"

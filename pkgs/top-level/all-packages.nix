@@ -4049,7 +4049,7 @@ with pkgs;
   };
 
   quazip_qt4 = libsForQt5.quazip.override {
-    qtbase = qt4; qmakeHook = qmake4Hook;
+    qtbase = qt4; qmake = qmake4Hook;
   };
 
   scrot = callPackage ../tools/graphics/scrot { };
@@ -15665,7 +15665,7 @@ with pkgs;
 
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
-  rstudio = callPackage ../applications/editors/rstudio { };
+  rstudio = libsForQt5.callPackage ../applications/editors/rstudio { };
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);

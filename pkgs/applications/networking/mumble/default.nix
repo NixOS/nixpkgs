@@ -20,7 +20,7 @@ let
     patches = optional jackSupport ./mumble-jack-support.patch;
 
     nativeBuildInputs = [ pkgconfig python ]
-      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmake ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
       ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"

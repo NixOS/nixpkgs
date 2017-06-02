@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libusb1
-, qtbase, qttools, makeQtWrapper, qmakeHook
+, qtbase, qttools, makeQtWrapper, qmake
 , withEspeak ? false, espeak ? null }:
 
 stdenv.mkDerivation  rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ libusb1 qtbase qttools ]
     ++ stdenv.lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeQtWrapper pkgconfig qmakeHook ];
+  nativeBuildInputs = [ makeQtWrapper pkgconfig qmake ];
 
   preConfigure = ''
     cd rbutil/rbutilqt

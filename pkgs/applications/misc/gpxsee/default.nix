@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmakeHook, qtbase, qttools, makeQtWrapper }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
   name = "gpxsee-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "17s1v6b1j7pi0yj554bd0cg14bl854gssp5gj2pl51rxji6zr0wp";
   };
 
-  nativeBuildInputs = [ qmakeHook qttools makeQtWrapper ];
+  nativeBuildInputs = [ qmake qttools makeQtWrapper ];
 
   preConfigure = ''
     substituteInPlace src/config.h --replace /usr/share/gpxsee $out/share/gpxsee

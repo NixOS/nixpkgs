@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qtdeclarative, qmakeHook, which
+{ stdenv, fetchFromGitHub, qtbase, qtdeclarative, qmake, which
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ qmakeHook which ];
+  nativeBuildInputs = [ qmake which ];
 
   enableParallelBuilding = true;
 

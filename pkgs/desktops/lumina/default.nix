@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fluxbox, xscreensaver, desktop_file_utils, numlockx,
-  xorg, qtbase, qtsvg, qtmultimedia, qtx11extras, qmakeHook, qttools, oxygen-icons5
+  xorg, qtbase, qtsvg, qtmultimedia, qtx11extras, qmake, qttools, oxygen-icons5
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmakeHook
+    qmake
     qttools
   ];
 

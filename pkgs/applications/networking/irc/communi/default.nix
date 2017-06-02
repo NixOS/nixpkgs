@@ -1,4 +1,4 @@
-{ fetchgit, libcommuni, makeQtWrapper, qtbase, qmakeHook, stdenv }:
+{ fetchgit, libcommuni, makeQtWrapper, qtbase, qmake, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "communi-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ makeQtWrapper qmake ];
 
   buildInputs = [ libcommuni qtbase ];
 

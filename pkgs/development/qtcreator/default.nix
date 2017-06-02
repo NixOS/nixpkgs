@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, qtbase, makeQtWrapper, qtquickcontrols, qtscript, qtdeclarative, qmakeHook
+, qtbase, makeQtWrapper, qtquickcontrols, qtscript, qtdeclarative, qmake
 , withDocumentation ? false
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper makeWrapper ];
+  nativeBuildInputs = [ qmake makeQtWrapper makeWrapper ];
 
   doCheck = true;
 

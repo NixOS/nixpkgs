@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmakeHook, makeQtWrapper, qtsvg }:
+{ stdenv, fetchurl, qmake, makeQtWrapper, qtsvg }:
 
 let
   version = "1.42.2";
@@ -9,7 +9,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1ah44nf4ksxkh01a2zmgvvby4pwczhyq5vcp270rf6visp8v9804";
   };
 
-  buildInputs = [ qmakeHook makeQtWrapper qtsvg ];
+  nativeBuildInputs = [ makeQtWrapper qmake ];
+  buildInputs = [ qtsvg ];
 
   hardeningDisable = [ "format" ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, makeQtWrapper, qmakeHook, pkgconfig
+{ stdenv, fetchpatch, fetchFromGitHub, makeQtWrapper, qmake, pkgconfig
 , qtbase, qtsvg, qtserialport, boost, libgit2
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 ];
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper pkgconfig ];
+  nativeBuildInputs = [ qmake makeQtWrapper pkgconfig ];
 
   qmakeFlags = [ "phoenix.pro" ];
 

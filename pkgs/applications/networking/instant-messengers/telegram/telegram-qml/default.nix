@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qtbase, qtmultimedia, qtquick1, qmakeHook
+, qtbase, qtmultimedia, qtquick1, qmake
 , libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qtbase qtmultimedia qtquick1 libqtelegram-aseman-edition ];
-  nativeBuildInputs = [ qmakeHook ];
   enableParallelBuilding = true;
+  nativeBuildInputs = [ qmake ];
 
   patchPhase = ''
     substituteInPlace telegramqml.pro --replace "/\$\$LIB_PATH" ""

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qtbase, qtquickcontrols, qmakeHook, makeQtWrapper, makeDesktopItem }:
+{ stdenv, fetchgit, qtbase, qtquickcontrols, qmake, makeQtWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "tensor-git-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ qtbase qtquickcontrols ];
-  nativeBuildInputs = [ qmakeHook makeQtWrapper ];
+  nativeBuildInputs = [ qmake makeQtWrapper ];
 
   desktopItem = makeDesktopItem {
     name        = "tensor";

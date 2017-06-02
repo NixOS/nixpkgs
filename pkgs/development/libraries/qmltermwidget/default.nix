@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qtbase, qtquick1, qmakeHook, qtmultimedia }:
+{ stdenv, fetchgit, qtbase, qtquick1, qmake, qtmultimedia }:
 
 stdenv.mkDerivation rec {
   version = "0.1.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtquick1 qtmultimedia ];
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \

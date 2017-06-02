@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools, qtconnectivity
-, yacc, flex, zlib, config, qmakeHook, makeQtWrapper
+, yacc, flex, zlib, config, qmake, makeQtWrapper
 }:
 stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools yacc flex zlib
     qtconnectivity
   ];
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ] ++ qtInputs;
+  nativeBuildInputs = [ makeQtWrapper qmake ] ++ qtInputs;
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri

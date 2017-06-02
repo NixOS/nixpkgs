@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmakeHook, makeQtWrapper }:
+{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake, makeQtWrapper }:
 
 let
 
@@ -37,9 +37,9 @@ in stdenv.mkDerivation rec {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw libsndfile qtbase qtmultimedia qmakeHook ];
+  buildInputs = [ fftw libsndfile qtbase qtmultimedia ];
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ makeQtWrapper qmake ];
 
   postPatch = ''
     substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'

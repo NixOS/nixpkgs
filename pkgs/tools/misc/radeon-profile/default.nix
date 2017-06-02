@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, qtbase, qmakeHook, makeQtWrapper, libXrandr }:
+{ stdenv, fetchFromGitHub, qtbase, qmake, makeQtWrapper, libXrandr }:
 
 stdenv.mkDerivation rec {
 
   name = "radeon-profile-${version}";
   version = "20161221";
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper ];
+  nativeBuildInputs = [ qmake makeQtWrapper ];
   buildInputs = [ qtbase libXrandr ];
 
   src = (fetchFromGitHub {

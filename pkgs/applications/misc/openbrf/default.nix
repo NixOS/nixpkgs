@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmakeHook, makeQtWrapper, mesa }:
+{ stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, makeQtWrapper, mesa }:
 
 
 stdenv.mkDerivation {
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ qtbase vcg glew ];
-  nativeBuildInputs = [ qmakeHook makeQtWrapper ];
 
   enableParallelBuilding = true;
+  nativeBuildInputs = [ qmake makeQtWrapper ];
 
   qmakeFlags = [ "openBrf.pro" ];
 

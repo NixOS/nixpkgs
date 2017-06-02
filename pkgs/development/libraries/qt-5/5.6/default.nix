@@ -57,7 +57,7 @@ let
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
       nativeBuildInputs =
         (args.nativeBuildInputs or [])
-        ++ [ perl self.qmakeHook ];
+        ++ [ perl self.qmake ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
@@ -127,7 +127,7 @@ let
         { deps = [ makeWrapper ]; }
         (if stdenv.isDarwin then ../make-qt-wrapper-darwin.sh else ../make-qt-wrapper.sh);
 
-      qmakeHook =
+      qmake =
         makeSetupHook
         { deps = [ self.qtbase.dev ]; }
         (if stdenv.isDarwin then ../qmake-hook-darwin.sh else ../qmake-hook.sh);

@@ -1,19 +1,16 @@
 { stdenv, fetchgit, git,  espeak, SDL, udev, doxygen, cmake
-  , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
-  , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmakeHook
-  , makeQtWrapper, lndir
-  , gst_all_1, qt-gstreamer1, pkgconfig, glibc
-  , version ? "2.9.4"
+, qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
+, qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake
+, makeQtWrapper, lndir
+, gst_all_1, qt-gstreamer1, pkgconfig, glibc
+, version ? "2.9.4"
 }:
 
 stdenv.mkDerivation rec {
   name = "qgroundcontrol-${version}";
-  buildInputs = [
-   SDL udev doxygen git
-  ] ++ gstInputs;
 
   qtInputs = [
-    qtbase qtlocation qtserialport qtdeclarative qtconnectivity qtxmlpatterns qtsvg 
+    qtbase qtlocation qtserialport qtdeclarative qtconnectivity qtxmlpatterns qtsvg
     qtquick1 qtquickcontrols qtgraphicaleffects
   ];
 
@@ -22,9 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [
-    pkgconfig makeQtWrapper qmakeHook
- ] ++ qtInputs;
+  buildInputs = [ SDL udev doxygen git ] ++ gstInputs ++ qtInputs;
+  nativeBuildInputs = [ pkgconfig makeQtWrapper qmake ];
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
   postPatch = ''

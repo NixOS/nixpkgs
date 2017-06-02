@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, perl, python, which, makeQtWrapper
 , libX11, libxcb, mesa
-, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmakeHook
+, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake
 , libchardet
 , ffmpeg
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ pkgconfig perl python which qttools makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ pkgconfig perl python which qttools makeQtWrapper qmake ];
 
   enableParallelBuilding = true;
 

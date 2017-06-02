@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qmakeHook, makeQtWrapper, qtbase, perl, python, php }:
+{ stdenv, fetchurl, cmake, qmake, makeQtWrapper, qtbase, perl, python, php }:
 
 stdenv.mkDerivation rec {
   name = "qcachegrind-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase perl python php ];
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper ];
+  nativeBuildInputs = [ qmake makeQtWrapper ];
 
   postInstall = ''
      mkdir -p $out/bin

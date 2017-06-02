@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmakeHook, qtwebkit, hunspell }:
+{ stdenv, fetchFromGitHub, qmake, qtwebkit, hunspell }:
 
 stdenv.mkDerivation {
   name = "qtwebkit-plugins-2015-05-09";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0xyq25l56jgdxgqqv0380brhw9gg0hin5hyrf1j6d3c8k1gka20m";
   };
 
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   buildInputs = [ qtwebkit hunspell ];
 
