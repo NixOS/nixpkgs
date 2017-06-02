@@ -3,16 +3,18 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.mwm;
+  wmcfg = config.services.xserver.windowManager;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.mwm.enable = mkEnableOption "mwm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "mwm" ]);
+    };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "mwm" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "mwm";
       start = ''

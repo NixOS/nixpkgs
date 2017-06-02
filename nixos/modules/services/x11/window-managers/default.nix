@@ -7,37 +7,20 @@ let
 in
 
 {
-  imports = [
-    ./2bwm.nix
-    ./afterstep.nix
-    ./bspwm.nix
-    ./compiz.nix
-    ./dwm.nix
-    ./exwm.nix
-    ./fluxbox.nix
-    ./fvwm.nix
-    ./herbstluftwm.nix
-    ./i3.nix
-    ./jwm.nix
-    ./metacity.nix
-    ./mwm.nix
-    ./openbox.nix
-    ./pekwm.nix
-    ./notion.nix
-    ./ratpoison.nix
-    ./sawfish.nix
-    ./stumpwm.nix
-    ./spectrwm.nix
-    ./twm.nix
-    ./windowmaker.nix
-    ./wmii.nix
-    ./xmonad.nix
-    ./qtile.nix
-    ./none.nix ];
 
   options = {
 
     services.xserver.windowManager = {
+
+      select = mkOption {
+        type = with types; listOf (enum [ ]);
+        default = [];
+        description = ''
+          Select which window manager to use.
+          Selecting a window manager will automatically enable the X server.
+          The First item in the list will be made the default window manager.
+        '';
+      };
 
       session = mkOption {
         internal = true;
@@ -56,18 +39,6 @@ in
         });
       };
 
-      default = mkOption {
-        type = types.str;
-        default = "none";
-        example = "wmii";
-        description = "Default window manager loaded if none have been chosen.";
-        apply = defaultWM:
-          if any (w: w.name == defaultWM) cfg.session then
-            defaultWM
-          else
-            throw "Default window manager (${defaultWM}) not found.";
-      };
-
     };
 
   };
@@ -75,4 +46,26 @@ in
   config = {
     services.xserver.displayManager.session = cfg.session;
   };
+
+  imports = [
+   # backward compatibility with pre-extensible option types
+   (let
+      wms = [
+        "2bwm" "afterstep" "awesome" "bspwm" "clfswm" "compiz" "dwm" "exwm" "fluxbox"
+        "fvwm" "herbstluftwm" "i3" "icewm" "jwm" "metacity" "mwm" "notion" "openbox"
+        "oroborus" "pekwm" "qtile" "ratpoison" "sawfish" "spectrwm" "stumpwm" "twm"
+        "windowlab" "windowmaker" "wmii" "xmonad"
+      ];
+    in mkMergedOptionModule
+     (map
+       (wm: [ "services" "xserver" "windowManager" wm "enable" ])
+       wms)
+     [ "services" "xserver" "windowManager" "select" ]
+     (config:
+       filter (wm:
+         (getAttrFromPath [ "services" "xserver" "windowManager" wm "enable" ] config) == true
+       ) wms))
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "default" ] 
+      "The default window manager is the first item of the services.xserver.windowManager.select list.")
+  ];
 }

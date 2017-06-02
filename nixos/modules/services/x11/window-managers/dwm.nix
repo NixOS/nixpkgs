@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.windowManager.dwm;
+  wmcfg = config.services.xserver.windowManager;
 
 in
 
@@ -13,13 +13,15 @@ in
   ###### interface
 
   options = {
-    services.xserver.windowManager.dwm.enable = mkEnableOption "dwm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "dwm" ]);
+    };
   };
 
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "bspwm" wmcfg.select) {
 
     services.xserver.windowManager.session = singleton
       { name = "dwm";

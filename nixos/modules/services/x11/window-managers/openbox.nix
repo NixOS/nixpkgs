@@ -3,15 +3,17 @@
 with lib;
 let
   inherit (lib) mkOption mkIf;
-  cfg = config.services.xserver.windowManager.openbox;
+  wmcfg = config.services.xserver.windowManager;
 in
 
 {
   options = {
-    services.xserver.windowManager.openbox.enable = mkEnableOption "openbox";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "openbox" ]);
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "openbox" wmcfg.select) {
     services.xserver.windowManager = {
       session = [{
         name = "openbox";

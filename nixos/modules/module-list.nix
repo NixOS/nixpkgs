@@ -620,16 +620,36 @@
   ./services/x11/hardware/wacom.nix
   ./services/x11/redshift.nix
   ./services/x11/urxvtd.nix
+  ./services/x11/window-managers/2bwm.nix
+  ./services/x11/window-managers/afterstep.nix
   ./services/x11/window-managers/awesome.nix
-  #./services/x11/window-managers/compiz.nix
-  ./services/x11/window-managers/default.nix
-  ./services/x11/window-managers/fluxbox.nix
-  ./services/x11/window-managers/icewm.nix
   ./services/x11/window-managers/bspwm.nix
+  ./services/x11/window-managers/clfswm.nix
+  ./services/x11/window-managers/compiz.nix
+  ./services/x11/window-managers/default.nix
+  ./services/x11/window-managers/dwm.nix
+  ./services/x11/window-managers/exwm.nix
+  ./services/x11/window-managers/fluxbox.nix
+  ./services/x11/window-managers/fvwm.nix
+  ./services/x11/window-managers/herbstluftwm.nix
+  ./services/x11/window-managers/i3.nix
+  ./services/x11/window-managers/icewm.nix
+  ./services/x11/window-managers/jwm.nix
   ./services/x11/window-managers/metacity.nix
+  ./services/x11/window-managers/mwm.nix
   ./services/x11/window-managers/none.nix
+  ./services/x11/window-managers/notion.nix
+  ./services/x11/window-managers/openbox.nix
+  ./services/x11/window-managers/oroborus.nix
+  ./services/x11/window-managers/pekwm.nix
+  ./services/x11/window-managers/qtile.nix
+  ./services/x11/window-managers/ratpoison.nix
+  ./services/x11/window-managers/sawfish.nix
+  ./services/x11/window-managers/spectrwm.nix
+  ./services/x11/window-managers/stumpwm.nix
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/windowlab.nix
+  ./services/x11/window-managers/windowmaker.nix
   ./services/x11/window-managers/wmii.nix
   ./services/x11/window-managers/xmonad.nix
   ./services/x11/xautolock.nix

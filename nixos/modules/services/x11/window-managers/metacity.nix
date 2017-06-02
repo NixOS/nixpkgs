@@ -4,6 +4,7 @@ with lib;
 
 let
 
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.metacity;
   xorg = config.services.xserver.package;
   gnome = pkgs.gnome;
@@ -12,10 +13,12 @@ in
 
 {
   options = {
-    services.xserver.windowManager.metacity.enable = mkEnableOption "metacity";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "metacity" ]);
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "metacity" wmcfg.select) {
 
     services.xserver.windowManager.session = singleton
       { name = "metacity";

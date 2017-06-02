@@ -3,16 +3,18 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.sawfish;
+  wmcfg = config.services.xserver.windowManager;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.sawfish.enable = mkEnableOption "sawfish";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "sawfish" ]);
+    };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "sawfish" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "sawfish";
       start = ''

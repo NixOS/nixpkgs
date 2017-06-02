@@ -3,15 +3,17 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.clfswm;
+  wmcfg = config.services.xserver.windowManager;
 in
 
 {
   options = {
-    services.xserver.windowManager.clfswm.enable = mkEnableOption "clfswm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "clfswm" ]);
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "clfswm" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "clfswm";
       start = ''

@@ -4,6 +4,7 @@ with lib;
 
 let
 
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.compiz;
   xorg = config.services.xserver.package;
 
@@ -13,9 +14,11 @@ in
 
   options = {
 
-    services.xserver.windowManager.compiz = {
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "compiz" ]);
+    };
 
-      enable = mkEnableOption "compiz";
+    services.xserver.windowManager.compiz = {
 
       renderingFlag = mkOption {
         default = "";
@@ -28,7 +31,7 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "compiz" wmcfg.select) {
 
     services.xserver.windowManager.session = singleton
       { name = "compiz";

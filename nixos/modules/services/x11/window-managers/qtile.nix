@@ -3,15 +3,17 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.qtile;
+  wmcfg = config.services.xserver.windowManager;
 in
 
 {
   options = {
-    services.xserver.windowManager.qtile.enable = mkEnableOption "qtile";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "qtile" ]);
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "qtile" wmcfg.select) {
     services.xserver.windowManager.session = [{
       name = "qtile";
       start = ''

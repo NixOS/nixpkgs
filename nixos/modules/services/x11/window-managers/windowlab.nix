@@ -1,16 +1,18 @@
 {lib, pkgs, config, ...}:
 
+with lib;
 let
-  cfg = config.services.xserver.windowManager.windowlab;
+  wmcfg = config.services.xserver.windowManager;
 in
 
 {
   options = {
-    services.xserver.windowManager.windowlab.enable =
-      lib.mkEnableOption "windowlab";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "windowlab" ]);
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf (elem "windowlab" wmcfg.select) {
     services.xserver.windowManager = {
       session =
         [{ name  = "windowlab";

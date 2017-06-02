@@ -3,13 +3,16 @@
 with lib;
 
 let
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.i3;
 in
 
 {
-  options.services.xserver.windowManager.i3 = {
-    enable = mkEnableOption "i3 window manager";
+  options.services.xserver.windowManager.select = mkOption {
+    type = with types; listOf (enum [ "i3" ]);
+  };
 
+  options.services.xserver.windowManager.i3 = {
     configFile = mkOption {
       default     = null;
       type        = with types; nullOr path;
@@ -53,7 +56,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "i3" wmcfg.select) {
     services.xserver.windowManager.session = [{
       name  = "i3";
       start = ''

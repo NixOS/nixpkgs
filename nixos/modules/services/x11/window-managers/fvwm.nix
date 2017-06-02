@@ -3,6 +3,7 @@
 with lib;
 
 let
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.fvwm;
   fvwm = pkgs.fvwm.override { gestures = cfg.gestures; };
 in
@@ -12,9 +13,11 @@ in
   ###### interface
 
   options = {
-    services.xserver.windowManager.fvwm = {
-      enable = mkEnableOption "Fvwm window manager";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "fvwm" ]);
+    };
 
+    services.xserver.windowManager.fvwm = {
       gestures = mkOption {
         default = false;
         type = types.bool;
@@ -26,7 +29,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "fvwm" wmcfg.select) {
     services.xserver.windowManager.session = singleton
       { name = "fvwm";
         start =

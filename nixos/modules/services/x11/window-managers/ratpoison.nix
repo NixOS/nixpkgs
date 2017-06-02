@@ -3,16 +3,18 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.ratpoison;
+  wmcfg = config.services.xserver.windowManager;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.ratpoison.enable = mkEnableOption "ratpoison";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "ratpoison" ]);
+    };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "ratpoison" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "ratpoison";
       start = ''

@@ -3,6 +3,7 @@
 with lib;
 
 let
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
     (require 'exwm)
@@ -17,8 +18,11 @@ in
 
 {
   options = {
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "exwm" ]);
+    };
+
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption "exwm";
       enableDefaultConfig = mkOption {
         default = true;
         type = lib.types.bool;
@@ -42,7 +46,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "exwm" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "exwm";
       start = ''

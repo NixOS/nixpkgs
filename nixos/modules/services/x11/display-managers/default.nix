@@ -31,6 +31,10 @@ let
     if cfg.desktopManager.select == [] then "none"
     else head cfg.desktopManager.select;
 
+  defaultWM =
+    if cfg.windowManager.select == [] then "none"
+    else head cfg.windowManager.select;
+
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
@@ -142,7 +146,7 @@ let
       # extract those (see:
       # http://wiki.bash-hackers.org/syntax/pe#substring_removal).
       windowManager="''${sessionType##*+}"
-      : ''${windowManager:=${cfg.windowManager.default}}
+      : ''${windowManager:=${defaultWM}}
       desktopManager="''${sessionType%%+*}"
       : ''${desktopManager:=${defaultDM}}
 

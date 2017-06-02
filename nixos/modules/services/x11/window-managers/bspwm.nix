@@ -3,14 +3,17 @@
 with lib;
 
 let
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.bspwm;
 in
 
 {
   options = {
-    services.xserver.windowManager.bspwm = {
-      enable = mkEnableOption "bspwm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "bspwm" ]);
+    };
 
+    services.xserver.windowManager.bspwm = {
       package = mkOption {
         type        = types.package;
         default     = pkgs.bspwm;
@@ -53,7 +56,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "bspwm" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name  = "bspwm";
       start = ''

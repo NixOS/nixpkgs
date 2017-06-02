@@ -4,15 +4,17 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.spectrwm;
+  wmcfg = config.services.xserver.windowManager;
 in
 
 {
   options = {
-    services.xserver.windowManager.spectrwm.enable = mkEnableOption "spectrwm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "spectrwm" ]);
+    };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "spectrwm" wmcfg.select) {
     services.xserver.windowManager = {
       session = [{
         name = "spectrwm";

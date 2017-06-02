@@ -3,14 +3,17 @@
 with lib;
 
 let
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.herbstluftwm;
 in
 
 {
   options = {
-    services.xserver.windowManager.herbstluftwm = {
-      enable = mkEnableOption "herbstluftwm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "herbstluftwm" ]);
+    };
 
+    services.xserver.windowManager.herbstluftwm = {
       configFile = mkOption {
         default     = null;
         type        = with types; nullOr path;
@@ -23,7 +26,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "herbstluftwm" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "herbstluftwm";
       start =

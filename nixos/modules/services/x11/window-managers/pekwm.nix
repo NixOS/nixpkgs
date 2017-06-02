@@ -3,16 +3,18 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.pekwm;
+  wmcfg = config.services.xserver.windowManager;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.pekwm.enable = mkEnableOption "pekwm";
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "pekwm" ]);
+    };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "pekwm" wmcfg.select) {
     services.xserver.windowManager.session = singleton {
       name = "pekwm";
       start = ''

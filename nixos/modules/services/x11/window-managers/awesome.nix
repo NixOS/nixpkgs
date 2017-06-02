@@ -3,7 +3,7 @@
 with lib;
 
 let
-
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.awesome;
   awesome = cfg.package;
   inherit (pkgs.luaPackages) getLuaPath getLuaCPath;
@@ -15,9 +15,11 @@ in
 
   options = {
 
-    services.xserver.windowManager.awesome = {
+    services.xserver.windowManager.select = mkOption {
+      type = with types; listOf (enum [ "awesome" ]);
+    };
 
-      enable = mkEnableOption "Awesome window manager";
+    services.xserver.windowManager.awesome = {
 
       luaModules = mkOption {
         default = [];
@@ -40,7 +42,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "awesome" wmcfg.select) {
 
     services.xserver.windowManager.session = singleton
       { name = "awesome";
