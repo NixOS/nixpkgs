@@ -871,7 +871,7 @@ script) if it exists.</para>
       By default, when cross compiling, the configure script has <option>--build=...</option> and <option>--host=...</option> passed.
       Packages can instead pass <literal>[ "build" "host" "target" ]</literal> or a subset to control exactly which platform flags are passed.
       Compilers and other tools should use this to also pass the target platform, for example.
-      Note eventually these will be passed when in native builds too, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
+      <footnote><para>Eventually these will be passed when in native builds too, to improve determinism: build-time guessing, as is done today, is a risk of impurity.</para></footnote>
     </para></listitem>
   </varlistentry>
 
@@ -1582,8 +1582,55 @@ someVar=$(stripHash $name)
 
 <section xml:id="ssec-setup-hooks"><title>Package setup hooks</title>
 
-<para>The following packages provide a setup hook:
-
+<para>
+  Nix itself considers a build-time dependency merely something that should previously be built and accessible at build time—packages themselves are on their own to perform any additional setup.
+  In most cases, that is fine, and the downstream derivation can deal with it's own dependencies.
+  But for a few common tasks, that would result in almost every package doing the same sort of setup work---depending not on the package itself, but entirely on which dependencies were used.
+</para>
+<para>
+  In order to alleviate this burden, the <firstterm>setup hook></firstterm>mechanism was written, where any package can include a shell script that [by convention rather than enforcement by Nix], any downstream reverse-dependency will source as part of its build process.
+  That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves.
+  No boilerplate mirroring the list of dependencies is needed.
+</para>
+<para>
+  The Setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect.
+  The combination of its power and implicit use may be expedient, but isn't without costs.
+  Nix itself is unchanged, but the spirit of adding dependencies being effect-free is violated even if the letter isn't.
+  For example, if a derivation path is mentioned more than once, Nix itself doesn't care and simply makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent.
+  However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable).
+  More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
+</para>
+<para>
+  The most typical use of the setup hook is actually to add other hooks which are then run (i.e. after all the setup hooks) on each dependency.
+  For example, the C compiler wrapper's setup hook feeds itself flags for each dependency that contains relevant libaries and headers.
+  This is done by defining a bash function, and appending its name to one of
+  <envar>envBuildBuildHooks</envar>`,
+  <envar>envBuildHostHooks</envar>`,
+  <envar>envBuildTargetHooks</envar>`,
+  <envar>envHostHostHooks</envar>`,
+  <envar>envHostTargetHooks</envar>`, or
+  <envar>envTargetTargetHooks</envar>`.
+  These 6 bash variables correspond to the 6 sorts of dependencies by platform (there's 12 total but we ignore the propagated/non-propagated axis).
+</para>
+<para>
+  Packages adding a hook should not hard code a specific hook, but rather choose a variable <emphasis>relative</emphasis> to how they are included.
+  Returning to the C compiler wrapper example, if it itself is an <literal>n</literal> dependency, then it only wants to accumulate flags from <literal>n + 1</literal> dependencies, as only those ones match the compiler's target platform.
+  The <envar>hostOffset</envar> variable is defined with the current dependency's host offset <envar>targetOffset</envar> with its target offset, before it's setup hook is sourced.
+  Additionally, since most environment hooks don't care about the target platform,
+  That means the setup hook can append to the right bash array by doing something like
+  <programlisting language="bash">
+addEnvHooks "$hostOffset" myBashFunction
+  </programlisting>
+</para>
+<para>
+  The <emphasis>existence</emphasis> of setups hooks has long been documented and packages inside Nixpkgs are free to use these mechanism.
+  Other packages, however, should not rely on these mechanisms not changing between Nixpkgs versions.
+  Because of the existing issues with this system, there's little benefit from mandating it be stable for any period of time.
+</para>
+<para>
+  Here are some packages that provide a setup hook.
+  Since the mechanism is modular, this probably isn't an exhaustive list.
+  Then again, since the mechanism is only to be used as a last resort, it might be.
 <variablelist>
 
   <varlistentry>
@@ -1650,9 +1697,12 @@ someVar=$(stripHash $name)
 
   <varlistentry>
     <term>Perl</term>
-    <listitem><para>Adds the <filename>lib/site_perl</filename> subdirectory
-    of each build input to the <envar>PERL5LIB</envar>
-    environment variable.</para></listitem>
+    <listitem>
+      <para>
+        Adds the <filename>lib/site_perl</filename> subdirectory of each build input to the <envar>PERL5LIB</envar> environment variable.
+        For instance, if <varname>buildInputs</varname> contains Perl, then the <filename>lib/site_perl</filename> subdirectory of each input is added to the <envar>PERL5LIB</envar> environment variable.
+      </para>
+    </listitem>
   </varlistentry>
 
   <varlistentry>
