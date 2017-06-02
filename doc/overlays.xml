@@ -63,36 +63,100 @@ a symbolic link to it in <filename>~/.config/nixpkgs/overlays/</filename> direct
 packages.</para>
 
 <programlisting>
-self: super:
+pkgsself: pkgssuper:
 
 {
-  boost = super.boost.override {
-    python = self.python3;
+  boost = pkgssuper.boost.override {
+    python = pkgsself.python3;
   };
-  rr = super.callPackage ./pkgs/rr {
-    stdenv = self.stdenv_32bit;
+  rr = pkgssuper.callPackage ./pkgs/rr {
+    stdenv = pkgsself.stdenv_32bit;
   };
 }
 </programlisting>
 
-<para>The first argument, usually named <varname>self</varname>, corresponds to the final package
+<para>The first argument, usually named <varname>pkgsself</varname>, corresponds to the final package
 set. You should use this set for the dependencies of all packages specified in your
 overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
-from <varname>self</varname>, as well as the overriden dependencies used in the
+from <varname>pkgsself</varname>, as well as the overriden dependencies used in the
 <varname>boost</varname> override.</para>
 
-<para>The second argument, usually named <varname>super</varname>,
+<para>The second argument, usually named <varname>pkgssuper</varname>,
 corresponds to the result of the evaluation of the previous stages of
 Nixpkgs. It does not contain any of the packages added by the current
 overlay nor any of the following overlays. This set should be used either
 to refer to packages you wish to override, or to access functions defined
 in Nixpkgs. For example, the original recipe of <varname>boost</varname>
-in the above example, comes from <varname>super</varname>, as well as the
+in the above example, comes from <varname>pkgssuper</varname>, as well as the
 <varname>callPackage</varname> function.</para>
 
 <para>The value returned by this function should be a set similar to
 <filename>pkgs/top-level/all-packages.nix</filename>, which contains
 overridden and/or new packages.</para>
+
+</section>
+
+<section xml:id="sec-overlays-extend-modify">
+<title>Overlays used to extend or modify pkgs</title>
+
+<para>
+If you want to extend nixpkgs with your own packages: add new packages, alter existing ones then you can use this code <filename>nixcloud-pkgs.nix</filename>:
+</para>
+
+<programlisting>
+{  pkgs ? import &lt;nixpkgs> {}
+,  nixcloud-backend   ? pkgs.stdenv.lib.cleanSource ../nixcloud-backend
+,  nixcloud-frontend  ? pkgs.stdenv.lib.cleanSource ../nixcloud-frontend
+,  nixcloud-editor    ? pkgs.stdenv.lib.cleanSource ../nixcloud-editor
+, ...
+}:
+let
+  nc-backend = nixcloud-backend;
+  nc-frontend = nixcloud-frontend;
+  
+  newpkgs = import pkgs.path { overlays = [ (pkgsself: pkgssuper: {
+    nixcloud-backend  = pkgs.callPackage nc-backend { inherit newpkgs; };
+    nixcloud-frontend = pkgs.callPackage "${nc-frontend}/release.nix" {
+      inherit nixcloud-editor;
+    };
+  } ) ]; };
+in newpkgs
+</programlisting>
+
+<para>
+If you want to install a package from this new set, do this:
+
+<programlisting>
+nix-build nixcloud-pkgs.nix -A nixcloud-backend
+</programlisting>
+
+If you create additional services, with the nixos module system, then you can reference your new set of modules like this:
+
+<programlisting>
+{...}:
+let
+  ncpkgs = import ./nixcloud-pkgs.nix {};
+in
+  backend = ncpkgs.nixcloud-backend;
+</programlisting>
+
+Yet more interesting, you can use <varname>override</varname> to alter the attribute like this:
+
+<programlisting>
+{...}:
+let
+  ncpkgs = import ./nixcloud-pkgs.nix {};
+in
+  backend = ncpkgs.nixcloud-frontend.override (oldAttrs: rec {
+    API_HOST="wss://....";
+  })
+</programlisting>
+
+
+Note: There used to be a <varname>pkgs.overridePackages</varname> function in <varname>nixpkgs</varname> but it was removed and replaced by the overlays concept described above.
+
+</para>
+
 
 </section>
 
