@@ -130,6 +130,8 @@ let
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+    cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
+
     cohttp = callPackage ../development/ocaml-modules/cohttp {
       lwt = ocaml_lwt;
     };
@@ -386,9 +388,10 @@ let
 
     ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
 
-    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
+    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { cmdliner = cmdliner_1_0; };
+    ocpIndent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { };
 
-    ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
+    ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocpIndent = ocpIndent_1_5_2; };
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
