@@ -8469,29 +8469,6 @@ in {
     };
   };
 
-  pirate-get = buildPythonPackage rec {
-    name = "pirate-get-${version}";
-    version = "0.2.9";
-
-    disabled = !isPy3k;
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pirate-get/${name}.tar.gz";
-      sha256 = "1djmfghnwsn3z525h6d98r0lllayvzsg71z0gskk25zr24kjs24a";
-    };
-
-    propagatedBuildInputs = with self; [ colorama veryprettytable beautifulsoup4 ];
-
-    meta = {
-      description = "A command line interface for The Pirate Bay";
-      homepage = https://github.com/vikstrous/pirate-get;
-      license = licenses.gpl1;
-      maintainers = with maintainers; [ rnhmjoj ];
-      platforms = platforms.unix;
-    };
-  };
-
   plotly = callPackage ../development/python-modules/plotly { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
