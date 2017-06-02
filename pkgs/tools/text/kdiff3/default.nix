@@ -1,10 +1,10 @@
 {
-  kdeDerivation, kdeWrapper, lib, fetchgit, fetchpatch,
+  mkDerivation, lib, kdeWrapper, fetchgit, fetchpatch,
   extra-cmake-modules, kdoctools, kconfig, kinit, kparts
 }:
 
 let
-  unwrapped = kdeDerivation rec {
+  unwrapped = mkDerivation rec {
     name = "kdiff3-${version}";
     version = "1.7.0-2017-02-19";
 
@@ -33,8 +33,6 @@ let
     nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
     propagatedBuildInputs = [ kconfig kinit kparts ];
-
-    enableParallelBuilding = true;
 
     meta = with lib; {
       homepage = http://kdiff3.sourceforge.net/;

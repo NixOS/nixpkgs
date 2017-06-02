@@ -1,4 +1,4 @@
-{ kdeDerivation
+{ mkDerivation
 , lib
 , fetchurl
 , kdoctools
@@ -21,7 +21,7 @@ let
   unwrapped = let
     pname = "yakuake";
     version = "3.0.3";
-  in kdeDerivation rec {
+  in mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {

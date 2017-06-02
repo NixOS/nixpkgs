@@ -1,5 +1,5 @@
 {
-  kdeDerivation, kdeWrapper, fetchurl, lib,
+  mkDerivation, kdeWrapper, fetchurl, lib,
   extra-cmake-modules, kdoctools,
   kconfig, kinit
 }:
@@ -7,7 +7,7 @@
 let
   pname = "kronometer";
   version = "2.1.3";
-  unwrapped = kdeDerivation rec {
+  unwrapped = mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {

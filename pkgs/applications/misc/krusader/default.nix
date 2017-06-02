@@ -1,5 +1,5 @@
 {
-  kdeDerivation, kdeWrapper, fetchurl, lib,
+  mkDerivation, kdeWrapper, fetchurl, lib,
   extra-cmake-modules, kdoctools,
   kconfig, kinit, kparts
 }:
@@ -7,7 +7,7 @@
 let
   pname = "krusader";
   version = "2.6.0";
-  unwrapped = kdeDerivation rec {
+  unwrapped = mkDerivation rec {
     name = "krusader-${version}";
 
     src = fetchurl {
@@ -24,7 +24,6 @@ let
 
     nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [ kconfig kinit kparts ];
-    enableParallelBuilding = true;
   };
 
 in kdeWrapper {

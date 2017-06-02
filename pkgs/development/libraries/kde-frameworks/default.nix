@@ -24,14 +24,15 @@ existing packages here and modify it as necessary.
 
 */
 
-{ libsForQt5, kdeDerivation, lib, fetchurl }:
+{ libsForQt5, lib, fetchurl }:
 
 let
   packages = self: with self;
     let
       callPackage = self.newScope {
         kdeFramework = import ./build-support/framework.nix {
-          inherit kdeDerivation lib fetchurl;
+          inherit lib fetchurl;
+          mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
         };
       };
     in {

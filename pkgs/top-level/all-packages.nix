@@ -292,9 +292,6 @@ with pkgs;
       inherit kernel rootModules allowMissing;
     };
 
-  kdeDerivation = makeOverridable (import ../build-support/kde/derivation.nix)
-    { inherit stdenv lib; };
-
   kdeWrapper = callPackage ../build-support/kde/wrapper.nix {
     inherit (gnome3) dconf;
   };
@@ -8233,7 +8230,7 @@ with pkgs;
       mkFrameworks = import ../development/libraries/kde-frameworks;
       attrs = {
         inherit libsForQt5;
-        inherit kdeDerivation lib fetchurl;
+        inherit lib fetchurl;
       };
     in
       recurseIntoAttrs (makeOverridable mkFrameworks attrs);
@@ -14620,7 +14617,7 @@ with pkgs;
       mkApplications = import ../applications/kde;
       attrs = {
         inherit stdenv lib libsForQt5 fetchurl recurseIntoAttrs;
-        inherit kdeDerivation plasma5;
+        inherit plasma5;
         inherit attica phonon;
       };
     in
@@ -17570,7 +17567,7 @@ with pkgs;
     let
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
-        inherit libsForQt5 kdeDerivation lib fetchurl;
+        inherit libsForQt5 lib fetchurl;
         inherit (gnome3) gconf;
       };
     in

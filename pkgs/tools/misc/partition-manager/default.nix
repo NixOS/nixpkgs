@@ -1,11 +1,11 @@
-{ kdeDerivation, kdeWrapper, fetchurl, lib
-, ecm, kdoctools
+{ mkDerivation, kdeWrapper, fetchurl, lib
+, extra-cmake-modules, kdoctools
 , kconfig, kinit, kpmcore
 , eject, libatasmart }:
 
 let
   pname = "partitionmanager";
-  unwrapped = kdeDerivation rec {
+  unwrapped = mkDerivation rec {
     name = "${pname}-${version}";
     version = "3.0.1";
 
@@ -19,11 +19,10 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ peterhoeg ];
     };
-    nativeBuildInputs = [ ecm kdoctools ];
+    nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     # refer to kpmcore for the use of eject
     buildInputs = [ eject libatasmart ];
     propagatedBuildInputs = [ kconfig kinit kpmcore ];
-    enableParallelBuilding = true;
   };
 
 in kdeWrapper {

@@ -1,5 +1,5 @@
 {
-  kdeDerivation, kdeWrapper, fetchFromGitHub, fetchurl, lib,
+  mkDerivation, kdeWrapper, fetchFromGitHub, fetchurl, lib,
   extra-cmake-modules, kdoctools,
   baloo, kconfig, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
 }:
@@ -13,7 +13,7 @@ let
     rev    = "d1be8c43a82a4320306c8e835a86fdb7b2574ca7";
     sha256 = "03ds5da69zipa25rsp76l6xqivrh3wcgygwyqa5x2rgcz3rjnlpr";
   };
-  unwrapped = kdeDerivation rec {
+  unwrapped = mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {

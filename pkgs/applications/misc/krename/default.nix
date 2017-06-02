@@ -1,5 +1,5 @@
 {
-  kdeDerivation, kdeWrapper, fetchFromGitHub, lib,
+  mkDerivation, kdeWrapper, fetchFromGitHub, lib,
   extra-cmake-modules, kdoctools, kconfig, kinit, kjsembed,
   taglib, exiv2, podofo
 }:
@@ -7,7 +7,7 @@
 let
   pname = "krename";
   version = "20170610";
-  unwrapped = kdeDerivation rec {
+  unwrapped = mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {

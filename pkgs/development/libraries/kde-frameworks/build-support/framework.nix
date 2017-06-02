@@ -1,4 +1,4 @@
-{ kdeDerivation, lib, fetchurl }:
+{ mkDerivation, lib, fetchurl }:
 
 let
   mirror = "mirror://kde";
@@ -10,7 +10,7 @@ args:
 let
   inherit (args) name;
   inherit (srcs."${name}") src version;
-in kdeDerivation (args // {
+in mkDerivation (args // {
   name = "${name}-${version}";
   inherit src;
 

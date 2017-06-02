@@ -24,6 +24,7 @@ top-level attribute to `top-level/all-packages.nix`.
   # options
   developerBuild ? false,
   decryptSslTraffic ? false,
+  debug ? null,
 }:
 
 with stdenv.lib;
@@ -35,12 +36,36 @@ let
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
+  mkDerivation = args:
+    stdenv.mkDerivation (args // {
+
+      outputs = args.outputs or [ "out" "dev" ];
+
+      propagatedUserEnvPkgs =
+        (args.propagatedUserEnvPkgs or [])
+        ++ map getBin (args.propagatedBuildInputs or []);
+
+      qmakeFlags =
+        (args.qmakeFlags or [])
+        ++ optional (debug != null)
+           (if debug then "CONFIG+=debug" else "CONFIG+=release");
+
+      cmakeFlags =
+        (args.cmakeFlags or [])
+        ++ [ "-DBUILD_TESTING=OFF" ]
+        ++ optional (debug != null)
+           (if debug then "-DCMAKE_BUILD_TYPE=Debug"
+                     else "-DCMAKE_BUILD_TYPE=Release");
+
+      enableParallelBuilding = args.enableParallelBuilding or true;
+
+    });
+
   qtSubmodule = args:
     let
       inherit (args) name;
       version = args.version or srcs."${name}".version;
       src = args.src or srcs."${name}".src;
-      inherit (stdenv) mkDerivation;
     in mkDerivation (args // {
       name = "${name}-${version}";
       inherit src;
@@ -52,12 +77,9 @@ let
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
-      outputs = args.outputs or [ "out" "dev" ];
       setOutputFlags = args.setOutputFlags or false;
 
       setupHook = ../qtsubmodule-setup-hook.sh;
-
-      enableParallelBuilding = args.enableParallelBuilding or true;
 
       meta = self.qtbase.meta // (args.meta or {});
     });
@@ -66,6 +88,8 @@ let
     let
       callPackage = self.newScope { inherit qtCompatVersion qtSubmodule srcs; };
     in {
+
+      inherit mkDerivation;
 
       qtbase = callPackage ./qtbase {
         inherit (srcs.qtbase) src version;

@@ -27,9 +27,7 @@ still shows most of the available features is in `./gwenview.nix`.
 
 {
   stdenv, lib, libsForQt5, fetchurl, recurseIntoAttrs,
-  kdeDerivation, plasma5,
-  attica, phonon,
-  debug ? false,
+  plasma5, attica, phonon,
 }:
 
 let
@@ -43,8 +41,9 @@ let
     let
       callPackage = self.newScope {
         kdeApp = import ./build-support/application.nix {
-          inherit lib kdeDerivation;
-          inherit debug srcs;
+          inherit lib;
+          inherit srcs;
+          mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
         };
       };
     in {

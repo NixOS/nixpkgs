@@ -1,4 +1,4 @@
-{ kdeDerivation
+{ mkDerivation
 , lib
 , fetchurl
 , extra-cmake-modules
@@ -31,7 +31,7 @@ let
   unwrapped = let
     pname = "konversation";
     version = "1.6.2";
-  in kdeDerivation rec {
+  in mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
