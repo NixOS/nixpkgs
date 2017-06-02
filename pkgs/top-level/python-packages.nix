@@ -14834,28 +14834,7 @@ in {
     };
   };
 
-  nbformat = buildPythonPackage rec {
-    version = "4.3.0";
-    name = "nbformat-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbformat/${name}.tar.gz";
-      sha256 = "5febcce872672f1c97569e89323992bdcb8573fdad703f835e6521253191478b";
-    };
-    LC_ALL="en_US.UTF-8";
-    buildInputs = with self; [ pytest pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ipython_genutils traitlets testpath jsonschema jupyter_core];
-
-    # Failing tests and permission issues
-    doCheck = false;
-
-    meta = {
-      description = "The Jupyter Notebook format";
-      homepage = "http://jupyter.org/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  nbformat = callPackage ../development/python-modules/nbformat { };
 
   nbxmpp = buildPythonPackage rec {
     name = "nbxmpp-${version}";
