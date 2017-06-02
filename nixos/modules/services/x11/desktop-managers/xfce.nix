@@ -6,18 +6,18 @@ let
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.xfce;
+  dmcfg = config.services.xserver.desktopManager;
 
 in
 
 {
   options = {
 
+    services.xserver.desktopManager.select = mkOption {
+      type = with types; listOf (enum [ "xfce" ]);
+    };
+
     services.xserver.desktopManager.xfce = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Xfce desktop environment.";
-      };
 
       thunarPlugins = mkOption {
         default = [];
@@ -58,7 +58,7 @@ in
   };
 
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf (elem "xfce" dmcfg.select) {
 
     services.xserver.desktopManager.session = singleton
       { name = "xfce";

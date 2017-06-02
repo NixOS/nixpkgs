@@ -4,6 +4,7 @@ with lib;
 
 let
 
+  dmcfg = config.services.xserver.desktopManager;
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
@@ -14,12 +15,11 @@ in
 {
   options = {
 
+    services.xserver.desktopManager.select = mkOption {
+      type = with types; listOf (enum [ "plasma5" ]);
+    };
+
     services.xserver.desktopManager.plasma5 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Plasma 5 (KDE 5) desktop environment.";
-      };
 
       enableQt4Support = mkOption {
         type = types.bool;
@@ -48,7 +48,7 @@ in
       environment.systemPackages = [ (kdeWrapper cfg.extraPackages) ];
     })
 
-    (mkIf (xcfg.enable && cfg.enable) {
+    (mkIf (elem "plasma5" dmcfg.select) {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;

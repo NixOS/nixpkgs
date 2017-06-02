@@ -3,20 +3,17 @@
 with lib;
 
 let
-  cfg = config.services.xserver.desktopManager.kodi;
+  dmcfg = config.services.xserver.desktopManager;
 in
 
 {
   options = {
-    services.xserver.desktopManager.kodi = {
-      enable = mkOption {
-        default = false;
-        description = "Enable the kodi multimedia center.";
-      };
+    services.xserver.desktopManager.select = mkOption {
+      type = with types; listOf (enum [ "kodi" ]);
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "kodi" dmcfg.select) {
     services.xserver.desktopManager.session = [{
       name = "kodi";
       start = ''

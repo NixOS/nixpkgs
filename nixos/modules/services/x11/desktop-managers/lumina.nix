@@ -4,24 +4,20 @@ with lib;
 
 let
 
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.lumina;
+  dmcfg = config.services.xserver.desktopManager;
 
 in
 
 {
   options = {
 
-    services.xserver.desktopManager.lumina.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the Lumina desktop manager";
+    services.xserver.desktopManager.select = mkOption {
+      type = with types; listOf (enum [ "lumina" ]);
     };
 
   };
 
-
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf (elem "lumina" dmcfg.select) {
 
     services.xserver.desktopManager.session = singleton {
       name = "lumina";

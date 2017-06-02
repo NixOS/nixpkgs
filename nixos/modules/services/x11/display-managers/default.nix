@@ -27,6 +27,10 @@ let
     Xft.hintstyle: hintslight
   '';
 
+  defaultDM =
+    if cfg.desktopManager.select == [] then "none"
+    else head cfg.desktopManager.select;
+
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
@@ -140,7 +144,7 @@ let
       windowManager="''${sessionType##*+}"
       : ''${windowManager:=${cfg.windowManager.default}}
       desktopManager="''${sessionType%%+*}"
-      : ''${desktopManager:=${cfg.desktopManager.default}}
+      : ''${desktopManager:=${defaultDM}}
 
       # Start the window manager.
       case "$windowManager" in

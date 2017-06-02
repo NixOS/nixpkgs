@@ -4,21 +4,20 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.desktopManager.xterm;
+  dmcfg = config.services.xserver.desktopManager;
 
 in
 
 {
   options = {
 
-    services.xserver.desktopManager.xterm.enable = mkOption {
-      default = true;
-      description = "Enable a xterm terminal as a desktop manager.";
+    services.xserver.desktopManager.select = mkOption {
+      type = with types; listOf (enum [ "xterm" ]);
     };
 
   };
 
-  config = mkIf (config.services.xserver.enable && cfg.enable) {
+  config = mkIf (elem "xterm" dmcfg.select) {
 
     services.xserver.desktopManager.session = singleton
       { name = "xterm";

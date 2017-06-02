@@ -598,6 +598,15 @@
   ./services/x11/unclutter.nix
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/desktop-managers/default.nix
+  ./services/x11/desktop-managers/enlightenment.nix
+  ./services/x11/desktop-managers/gnome3.nix
+  ./services/x11/desktop-managers/kodi.nix
+  ./services/x11/desktop-managers/lumina.nix
+  ./services/x11/desktop-managers/lxqt.nix
+  ./services/x11/desktop-managers/none.nix
+  ./services/x11/desktop-managers/plasma5.nix
+  ./services/x11/desktop-managers/xfce.nix
+  ./services/x11/desktop-managers/xterm.nix
   ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
