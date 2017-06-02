@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, readline, flex, texinfo, help2man }:
+{ stdenv, fetchurl, ncurses, readline, flex, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "cgdb-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08slzg3702v5nivjhdx2bciqxc5vqcn8pc4i4lsgkcwdcrj94ymz";
   };
 
-  buildInputs = [ ncurses readline flex texinfo help2man ];
+  buildInputs = [ ncurses readline flex texinfo ];
 
   meta = with stdenv.lib; {
     description = "A curses interface to gdb";

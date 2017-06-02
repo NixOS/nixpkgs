@@ -212,7 +212,8 @@ in
         type = with types; nullOr int;
         default = null;
         description = ''
-           Set a router bandwidth limit integer in kbps or letters: L (32), O (256), P (2048), X (>9000)
+           Set a router bandwidth limit integer in KBps.
+           If not set, i2pd defaults to 32KBps.
         '';
       };
 
