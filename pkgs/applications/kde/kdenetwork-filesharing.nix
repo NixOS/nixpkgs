@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   kcoreaddons, ki18n, kio, kwidgetsaddons, samba
 }:
 
-kdeApp {
+mkDerivation {
   name = "kdenetwork-filesharing";
   meta = {
     license = [ lib.licenses.gpl2 lib.licenses.lgpl21 ];

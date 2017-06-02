@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kconfig, kinit,
   kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5
@@ -7,7 +7,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "okteta";
       meta = {
         license = with lib.licenses; [ gpl2 ];

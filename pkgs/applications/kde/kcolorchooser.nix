@@ -1,11 +1,11 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, ki18n, kwidgetsaddons, kxmlgui
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kcolorchooser";
       meta = {
         license = with lib.licenses; [ mit ];

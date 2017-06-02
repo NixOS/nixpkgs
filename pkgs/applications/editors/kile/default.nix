@@ -1,4 +1,4 @@
-{ kdeDerivation
+{ mkDerivation
 , lib
 , fetchgit
 , extra-cmake-modules
@@ -23,7 +23,7 @@
 
 let
   unwrapped =
-    kdeDerivation rec {
+    mkDerivation rec {
       name = "kile-${version}";
       version = "2017-02-09";
 

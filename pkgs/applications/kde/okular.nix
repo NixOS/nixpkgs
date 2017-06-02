@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   djvulibre, ebook_tools, kactivities, karchive, kbookmarks, kcompletion,
   kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdegraphics-mobipocket,
@@ -8,7 +8,7 @@
 }:
 
 let
-  unwrapped = kdeApp {
+  unwrapped = mkDerivation {
     name = "okular";
     nativeBuildInputs = [ extra-cmake-modules kdoctools ];
     propagatedBuildInputs = [

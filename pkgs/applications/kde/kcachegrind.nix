@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kio, ki18n,
   perl, python, php
 }:
 
 kdeWrapper {
-  unwrapped = kdeApp {
+  unwrapped = mkDerivation {
     name = "kcachegrind";
     meta = {
       license = with lib.licenses; [ gpl2 ];

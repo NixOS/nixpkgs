@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper
-  , extra-cmake-modules, kdoctools, kparts
-  , qtsvg, qtxmlpatterns, ktexteditor, boost
+  mkDerivation, lib, kdeWrapper,
+  extra-cmake-modules, kdoctools,
+  kparts, qtsvg, qtxmlpatterns, ktexteditor, boost
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kig";
       meta = {
         license = with lib.licenses; [ gpl2 ];

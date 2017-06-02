@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, config, kdeWrapper,
+  mkDerivation, lib, config, kdeWrapper,
 
   extra-cmake-modules, kdoctools, makeWrapper,
 
@@ -15,7 +15,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "ark";
       nativeBuildInputs = [
         extra-cmake-modules kdoctools makeWrapper

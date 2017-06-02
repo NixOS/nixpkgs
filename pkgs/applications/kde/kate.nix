@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kactivities, kconfig, kcrash, kdbusaddons, kguiaddons, kiconthemes, ki18n,
   kinit, kio, kitemmodels, kjobwidgets, knewstuff, knotifications, konsole,
@@ -9,7 +9,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kate";
       meta = {
         license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];

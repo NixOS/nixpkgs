@@ -1,4 +1,4 @@
-{ kdeApp
+{ mkDerivation
 , kdeWrapper
 , lib
 , extra-cmake-modules
@@ -32,7 +32,7 @@
 }:
 
 let
-unwrapped = kdeApp {
+unwrapped = mkDerivation {
   name = "kdenlive";
   patches = [
     ./kdenlive-cmake-concurrent-module.patch

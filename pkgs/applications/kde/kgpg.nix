@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, makeQtWrapper,
+  mkDerivation, lib, makeQtWrapper,
   extra-cmake-modules, kdoctools, ki18n,
   akonadi-contacts, gnupg1, gpgme, karchive, kcodecs, kcontacts, kcoreaddons, kcrash,
   kdbusaddons, kiconthemes, kjobwidgets, kio, knotifications, kservice,
   ktextwidgets, kxmlgui, kwidgetsaddons, kwindowsystem
 }:
 
-kdeApp {
+mkDerivation {
   name = "kgpg";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ki18n ];
   buildInputs = [

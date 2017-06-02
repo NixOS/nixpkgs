@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, ki18n,
   kcodecs
 }:
 
-kdeApp {
+mkDerivation {
   name = "kmime";
   meta = {
     license = [ lib.licenses.lgpl21 ];

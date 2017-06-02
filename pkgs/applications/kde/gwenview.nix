@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   baloo, exiv2, kactivities, kdelibs4support, kio, kipi-plugins, lcms2,
   libkdcraw, libkipi, phonon, qtimageformats, qtsvg, qtx11extras
@@ -7,7 +7,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "gwenview";
       meta = {
         license = with lib.licenses; [ gpl2 fdl12 ];

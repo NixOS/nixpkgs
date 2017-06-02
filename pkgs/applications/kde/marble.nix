@@ -1,4 +1,4 @@
-{ kdeApp, lib, kdeWrapper
+{ mkDerivation, lib, kdeWrapper
 , extra-cmake-modules, kdoctools
 , qtscript, qtsvg, qtquickcontrols, qtwebkit
 , krunner, shared_mime_info, kparts, knewstuff
@@ -7,7 +7,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "marble";
       meta.license = with lib.licenses; [ lgpl21 gpl3 ];
 

@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, ki18n,
   kcoreaddons, kconfig, kcodecs
 }:
 
-kdeApp {
+mkDerivation {
   name = "kcontacts";
   meta = {
     license = [ lib.licenses.lgpl21 ];

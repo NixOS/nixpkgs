@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons, kguiaddons,
   ki18n, kiconthemes, kinit, kdelibs4support, kio, knotifications,
@@ -9,7 +9,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "konsole";
       meta = {
         license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];

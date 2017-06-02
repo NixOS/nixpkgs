@@ -40,7 +40,7 @@ let
   packages = self: with self;
     let
       callPackage = self.newScope {
-        kdeApp = import ./build-support/application.nix {
+        mkDerivation = import ./build-support/application.nix {
           inherit lib;
           inherit srcs;
           mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};

@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   akonadi, kdbusaddons, kio, kitemmodels, kmime
 }:
 
-kdeApp {
+mkDerivation {
   name = "akonadi-mime";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];

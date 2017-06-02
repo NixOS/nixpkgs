@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kio, kparts, kxmlgui, qtscript, solid
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "filelight";
       meta = {
         license = with lib.licenses; [ gpl2 ];

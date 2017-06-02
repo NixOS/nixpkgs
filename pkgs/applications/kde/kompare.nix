@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kparts, ktexteditor, kwidgetsaddons, libkomparediff2
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kompare";
       meta = { license = with lib.licenses; [ gpl2 ]; };
       nativeBuildInputs = [ extra-cmake-modules kdoctools ];

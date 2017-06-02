@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kglobalaccel, kxmlgui, kcoreaddons, kdelibs4support,
   plasma-framework, libpulseaudio, alsaLib, libcanberra_kde
@@ -7,7 +7,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kmix";
       meta = {
         license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];

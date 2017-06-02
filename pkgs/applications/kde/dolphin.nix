@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools, makeQtWrapper,
   baloo, baloo-widgets, dolphin-plugins, kactivities, kbookmarks, kcmutils,
   kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
@@ -9,7 +9,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "dolphin";
       meta = {
         license = with lib.licenses; [ gpl2 fdl12 ];

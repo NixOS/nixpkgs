@@ -1,5 +1,5 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, ki18n, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
@@ -8,7 +8,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "spectacle";
       meta = with lib; { maintainers = with maintainers; [ ttuegel ]; };
       nativeBuildInputs = [ extra-cmake-modules kdoctools ];

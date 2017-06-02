@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kconfig, kconfigwidgets, kguiaddons, kinit, knotifications, gmp
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kcalc";
       meta = {
         license = with lib.licenses; [ gpl2 ];

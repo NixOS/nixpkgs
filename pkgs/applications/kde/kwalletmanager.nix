@@ -1,5 +1,5 @@
 { lib
-, kdeApp
+, mkDerivation
 , kdeWrapper
 , extra-cmake-modules
 , kdoctools
@@ -13,7 +13,7 @@
 }:
 
 let
-  unwrapped = kdeApp {
+  unwrapped = mkDerivation {
     name = "kwalletmanager";
     meta = {
       license = with lib.licenses; [ gpl2 ];

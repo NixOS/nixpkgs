@@ -1,5 +1,5 @@
 { lib
-, kdeApp
+, mkDerivation
 , kdeWrapper
 , extra-cmake-modules
 , kdoctools
@@ -9,7 +9,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kolourpaint";
       nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       propagatedBuildInputs = [

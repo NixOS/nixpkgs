@@ -1,12 +1,12 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   kcompletion, kconfigwidgets, kdbusaddons, kdesignerplugin, kiconthemes,
   kio,
   boost, kitemmodels
 }:
 
-kdeApp {
+mkDerivation {
   name = "akonadi";
   meta = {
     license = [ lib.licenses.lgpl21 ];

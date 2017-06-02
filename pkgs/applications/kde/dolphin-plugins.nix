@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   dolphin, kdelibs4support, ki18n, kio, kxmlgui
 }:
 
-kdeApp {
+mkDerivation {
   name = "dolphin-plugins";
   meta = {
     license = [ lib.licenses.gpl2 ];

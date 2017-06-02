@@ -1,5 +1,5 @@
 {
-  kdeApp, kdeWrapper,
+  mkDerivation, kdeWrapper,
   extra-cmake-modules, kdoctools,
   grantlee, kconfig, kcoreaddons, kdbusaddons, ki18n, kinit, kcmutils,
   kdelibs4support, khtml, kservice, xapian
@@ -7,7 +7,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "khelpcenter";
       nativeBuildInputs = [ extra-cmake-modules kdoctools ];
       buildInputs = [

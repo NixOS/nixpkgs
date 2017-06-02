@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kcmutils
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "kdf";
       meta = {
         license = with lib.licenses; [ gpl2 ];

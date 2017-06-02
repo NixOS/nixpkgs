@@ -1,11 +1,11 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   akonadi-mime, grantlee, kcontacts, kio, kitemmodels, kmime, qtwebengine,
   akonadi
 }:
 
-kdeApp {
+mkDerivation {
   name = "akonadi-contacts";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];

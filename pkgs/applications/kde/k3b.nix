@@ -1,4 +1,4 @@
-{ kdeApp, lib, kdeWrapper, extra-cmake-modules
+{ mkDerivation, lib, kdeWrapper, extra-cmake-modules
 , qtwebkit
 , libkcddb, kcmutils, kdoctools, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
@@ -9,7 +9,7 @@
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "k3b";
       meta = with lib; {
         license = with licenses; [ gpl2Plus ];

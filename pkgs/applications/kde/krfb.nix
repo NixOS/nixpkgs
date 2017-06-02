@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib, kdeWrapper,
   extra-cmake-modules, kdoctools,
   kdelibs4support, kdnssd, libvncserver, libXtst
 }:
 
 let
   unwrapped =
-    kdeApp {
+    mkDerivation {
       name = "krfb";
       meta = {
         license = with lib.licenses; [ gpl2 fdl12 ];
