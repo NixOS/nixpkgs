@@ -68,6 +68,27 @@ following incompatible changes:</para>
       <literal>db-config.sqlite</literal> which will be automatically recreated.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The ipfs package now doesn't ignore the <literal>dataDir</literal> option anymore. If you've ever set this option to anything other than the default you'll have to either unset it (so the default gets used) or migrate the old data manually with
+<programlisting>
+dataDir=&lt;valueOfDataDir&gt;
+mv /var/lib/ipfs/.ipfs/* $dataDir
+rmdir /var/lib/ipfs/.ipfs
+</programlisting>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
+    </para>
+    <para>
+      The <literal>postgres</literal> superuser name has changed from <literal>root</literal> to <literal>postgres</literal> to more closely follow what other Linux distributions are doing.
+    </para>
+    <para>
+      The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
+    </para>
+  </listitem>
 </itemizedlist>
 
 

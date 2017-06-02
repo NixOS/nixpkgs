@@ -2,14 +2,15 @@
 , numpy, zlib, netcdf, hdf5, curl, libjpeg
 }:
 buildPythonPackage rec {
-  name = "netCDF4-${version}";
-  version = "1.2.7";
+  pname = "netCDF4";
+  name = "${pname}-${version}";
+  version = "1.2.8";
 
   disabled = isPyPy;
 
   src = fetchurl {
     url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-    sha256 = "1fllizmnpw0zkzzm4j9pgamarlzfn3kmv9zrm0w65q1y31h9ni0c";
+    sha256 = "31eb4eae5fd3b2bd8f828721142ddcefdbf10287281bf6f636764dd7957f8450";
   };
 
   propagatedBuildInputs = [

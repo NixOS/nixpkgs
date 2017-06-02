@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
-, libelf, libvdpau, python2
+, libelf, libvdpau
 , grsecEnabled ? false
 , enableRadv ? false
 # Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
@@ -36,7 +36,7 @@ let
     then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["nouveau" "vc4" ]
-    else ["i915" "ilo" "r300" "r600" "radeonsi" "nouveau"];
+    else ["i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
     if (stdenv.isArm || stdenv.isAarch64)
     then ["nouveau"]
@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "17.0.4";
+  version = "17.1.1";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "1269dc8545a193932a0779b2db5bce9be4a5f6813b98c38b93b372be8362a346";
+    sha256 = "aed503f94c0c1630a162a3e276f4ee12a86764cee4cb92338ea2dea99a04e7ef";
   };
 
   prePatch = "patchShebangs .";
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
-    "--with-egl-platforms=x11,wayland,drm"
+    "--with-platforms=x11,wayland,drm"
   ]
   ++ (optional (galliumDrivers != [])
       ("--with-gallium-drivers=" +
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
     "--enable-glx"
     "--enable-glx-tls"
     "--enable-gallium-osmesa" # used by wine
-    "--enable-gallium-llvm"
+    "--enable-llvm"
     "--enable-egl"
     "--enable-xa" # used in vmware driver
     "--enable-gbm"
@@ -152,7 +152,6 @@ stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
-    (python2.withPackages (ps: [ ps.Mako ]))
   ];
 
 

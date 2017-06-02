@@ -13,7 +13,9 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    buildInputs = [ cmake libedit libxml2 llvm python ];
+    nativeBuildInputs = [ cmake ];
+
+    buildInputs = [ libedit libxml2 llvm python ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"

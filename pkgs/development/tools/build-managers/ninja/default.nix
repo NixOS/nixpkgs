@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "ninja-${version}";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/ninja-build/ninja/archive/v${version}.tar.gz";
-    sha256 = "06dy2dc1aafm61ynw9gzig88la3km9dsh53bxf4mnw7l7kjisn2i";
+    sha256 = "1n8n3g26ppwh7zwrc37n3alkbpbj0wki34ih53s3rkhs8ajs1p9f";
   };
 
   buildInputs = [ python asciidoc re2c ];

@@ -5,7 +5,6 @@
 , cudaSupport ? false
 , cudatoolkit ? null
 , cudnn ? null
-, gcc49 ? null
 , linuxPackages ? null
 , numpy
 , six
@@ -13,13 +12,11 @@
 , swig
 , werkzeug
 , mock
-, gcc
 , zlib
 }:
 
 assert cudaSupport -> cudatoolkit != null
                    && cudnn != null
-                   && gcc49 != null
                    && linuxPackages != null;
 
 # unsupported combination
@@ -98,7 +95,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = with stdenv.lib;
     [ numpy six protobuf3_2 swig werkzeug mock ]
-    ++ optionals cudaSupport [ cudatoolkit cudnn gcc49 ];
+    ++ optionals cudaSupport [ cudatoolkit cudnn stdenv.cc ];
 
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
@@ -106,10 +103,10 @@ buildPythonPackage rec {
   postFixup = let
     rpath = stdenv.lib.makeLibraryPath
       (if cudaSupport then
-        [ gcc49.cc.lib zlib cudatoolkit cudnn
+        [ stdenv.cc.cc.lib zlib cudatoolkit cudnn
           linuxPackages.nvidia_x11 ]
       else
-        [ gcc.cc.lib zlib ]
+        [ stdenv.cc.cc.lib zlib ]
       );
   in
   ''

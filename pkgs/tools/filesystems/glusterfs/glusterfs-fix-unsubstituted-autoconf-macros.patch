@@ -1,0 +1,236 @@
+From b37e0222a6a60505868a6fbb8591608cdc4bba57 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Niklas=20Hamb=C3=BCchen?= <mail@nh2.me>
+Date: Sat, 13 May 2017 15:33:27 +0200
+Subject: [PATCH] Revert "build/packaging: Debian and Ubuntu don't have
+ /usr/libexec". Fixes #1450588
+
+This reverts commit 18509e436f8a728ef522f3e76e2f2dc30e1bd8ac.
+
+This fixes autoconf unsubstituted strings to appear in generated source code.
+---
+ cli/src/Makefile.am                      |  2 +-
+ configure.ac                             | 12 ++++++------
+ events/src/Makefile.am                   |  8 ++++----
+ extras/Makefile.am                       |  2 +-
+ geo-replication/src/Makefile.am          |  8 ++++----
+ geo-replication/syncdaemon/Makefile.am   |  2 +-
+ tools/gfind_missing_files/Makefile.am    |  4 ++--
+ tools/glusterfind/Makefile.am            |  4 ++--
+ tools/glusterfind/src/Makefile.am        |  2 +-
+ xlators/features/ganesha/src/Makefile.am |  2 +-
+ xlators/mgmt/glusterd/src/Makefile.am    |  2 +-
+ 11 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/cli/src/Makefile.am b/cli/src/Makefile.am
+index 5ef9389..f5b8d00 100644
+--- a/cli/src/Makefile.am
++++ b/cli/src/Makefile.am
+@@ -18,7 +18,7 @@ AM_CPPFLAGS = $(GF_CPPFLAGS) \
+ 	-I$(top_builddir)/rpc/xdr/src\
+ 	-DDATADIR=\"$(localstatedir)\" \
+ 	-DCONFDIR=\"$(sysconfdir)/glusterfs\" \
+-	-DGSYNCD_PREFIX=\"$(GLUSTERFS_LIBEXECDIR)\"\
++	-DGSYNCD_PREFIX=\"$(libexecdir)/glusterfs\"\
+ 	-DSYNCDAEMON_COMPILE=$(SYNCDAEMON_COMPILE) -DSBIN_DIR=\"$(sbindir)\"\
+ 	$(XML_CPPFLAGS)
+ 
+diff --git a/configure.ac b/configure.ac
+index c9742e2..0c3a386 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1056,24 +1056,24 @@ old_prefix=$prefix
+ if test "x$prefix" = xNONE; then
+ 	prefix=$ac_default_prefix
+ fi
+-GLUSTERFS_LIBEXECDIR="$libexecdir/glusterfs"
+-GLUSTERFSD_MISCDIR="$prefix/var/lib/misc/glusterfsd"
++GLUSTERFS_LIBEXECDIR="$(eval echo $prefix)/libexec/glusterfs"
++GLUSTERFSD_MISCDIR="$(eval echo $prefix)/var/lib/misc/glusterfsd"
+ prefix=$old_prefix
+ 
+ ### Dirty hacky stuff to make LOCALSTATEDIR work
+ if test "x$prefix" = xNONE; then
+-   test $localstatedir = '$prefix/var' && localstatedir=$ac_default_prefix/var
++   test $localstatedir = '${prefix}/var' && localstatedir=$ac_default_prefix/var
+    localstatedir=/var
+-   LOCALSTATEDIR=$localstatedir
++   LOCALSTATEDIR=$(eval echo ${localstatedir})
+ else
+-   LOCALSTATEDIR=$localstatedir
++   LOCALSTATEDIR=$(eval echo ${localstatedir})
+ fi
+ 
+ old_prefix=$prefix
+ if test "x$prefix" = xNONE; then
+     prefix=$ac_default_prefix
+ fi
+-GLUSTERD_VOLFILE="$sysconfdir/glusterfs/glusterd.vol"
++GLUSTERD_VOLFILE="$(eval echo ${sysconfdir})/glusterfs/glusterd.vol"
+ prefix=$old_prefix
+ 
+ 
+diff --git a/events/src/Makefile.am b/events/src/Makefile.am
+index 8493abd..87282c6 100644
+--- a/events/src/Makefile.am
++++ b/events/src/Makefile.am
+@@ -5,7 +5,7 @@ EXTRA_DIST = glustereventsd.py __init__.py  eventsapiconf.py.in \
+ BUILT_SOURCES = eventtypes.py
+ CLEANFILES = eventtypes.py
+ 
+-eventsdir = $(GLUSTERFS_LIBEXECDIR)/events
++eventsdir = $(libexecdir)/glusterfs/events
+ events_PYTHON = __init__.py gf_event.py eventsapiconf.py eventtypes.py \
+ 	utils.py
+ 
+@@ -13,7 +13,7 @@ eventtypes.py: $(top_srcdir)/events/eventskeygen.py
+ 	$(PYTHON) $(top_srcdir)/events/eventskeygen.py PY_HEADER
+ 
+ if BUILD_EVENTS
+-eventspeerscriptdir = $(GLUSTERFS_LIBEXECDIR)
++eventspeerscriptdir = $(libexecdir)/glusterfs
+ eventsconfdir = $(sysconfdir)/glusterfs
+ eventsconf_DATA = eventsconfig.json
+ 
+@@ -24,10 +24,10 @@ eventspeerscript_SCRIPTS = peer_eventsapi.py
+ install-exec-hook:
+ 	$(mkdir_p) $(DESTDIR)$(sbindir)
+ 	rm -f $(DESTDIR)$(sbindir)/glustereventsd
+-	ln -s $(GLUSTERFS_LIBEXECDIR)/events/glustereventsd.py \
++	ln -s $(libexecdir)/glusterfs/events/glustereventsd.py \
+ 		$(DESTDIR)$(sbindir)/glustereventsd
+ 	rm -f $(DESTDIR)$(sbindir)/gluster-eventsapi
+-	ln -s $(GLUSTERFS_LIBEXECDIR)/peer_eventsapi.py \
++	ln -s $(libexecdir)/glusterfs/peer_eventsapi.py \
+ 		$(DESTDIR)$(sbindir)/gluster-eventsapi
+ 
+ uninstall-hook:
+diff --git a/extras/Makefile.am b/extras/Makefile.am
+index 9dfc93d..53ac476 100644
+--- a/extras/Makefile.am
++++ b/extras/Makefile.am
+@@ -1,4 +1,4 @@
+-addonexecdir = $(GLUSTERFS_LIBEXECDIR)
++addonexecdir = $(libexecdir)/glusterfs
+ addonexec_SCRIPTS = peer_add_secret_pub
+ 
+ EditorModedir = $(docdir)
+diff --git a/geo-replication/src/Makefile.am b/geo-replication/src/Makefile.am
+index 9937a0b..87435d5 100644
+--- a/geo-replication/src/Makefile.am
++++ b/geo-replication/src/Makefile.am
+@@ -1,4 +1,4 @@
+-gsyncddir = $(GLUSTERFS_LIBEXECDIR)
++gsyncddir = $(libexecdir)/glusterfs
+ 
+ gsyncd_SCRIPTS = gverify.sh peer_gsec_create \
+ 	set_geo_rep_pem_keys.sh peer_mountbroker peer_mountbroker.py \
+@@ -21,7 +21,7 @@ noinst_HEADERS = procdiggy.h
+ 
+ AM_CPPFLAGS = $(GF_CPPFLAGS) -I$(top_srcdir)/libglusterfs/src \
+ 	-I$(top_srcdir)/rpc/xdr/src -I$(top_builddir)/rpc/xdr/src \
+-	-DGSYNCD_PREFIX=\"$(GLUSTERFS_LIBEXECDIR)\" -DUSE_LIBGLUSTERFS \
++	-DGSYNCD_PREFIX=\"$(libexecdir)/glusterfs\" -DUSE_LIBGLUSTERFS \
+ 	-DSBIN_DIR=\"$(sbindir)\" -DPYTHON=\"$(PYTHON)\"
+ 
+ AM_CFLAGS = -Wall $(GF_CFLAGS)
+@@ -35,11 +35,11 @@ $(top_builddir)/libglusterfs/src/libglusterfs.la:
+ install-exec-hook:
+ 	$(mkdir_p) $(DESTDIR)$(sbindir)
+ 	rm -f $(DESTDIR)$(sbindir)/gluster-mountbroker
+-	ln -s $(GLUSTERFS_LIBEXECDIR)/peer_mountbroker.py \
++	ln -s $(libexecdir)/glusterfs/peer_mountbroker.py \
+ 		$(DESTDIR)$(sbindir)/gluster-mountbroker
+ 
+ 	rm -f $(DESTDIR)$(sbindir)/gluster-georep-sshkey
+-	ln -s $(GLUSTERFS_LIBEXECDIR)/peer_georep-sshkey.py \
++	ln -s $(libexecdir)/glusterfs/peer_georep-sshkey.py \
+ 		$(DESTDIR)$(sbindir)/gluster-georep-sshkey
+ 
+ 
+diff --git a/geo-replication/syncdaemon/Makefile.am b/geo-replication/syncdaemon/Makefile.am
+index f80fb26..7cdaf45 100644
+--- a/geo-replication/syncdaemon/Makefile.am
++++ b/geo-replication/syncdaemon/Makefile.am
+@@ -1,4 +1,4 @@
+-syncdaemondir = $(GLUSTERFS_LIBEXECDIR)/python/syncdaemon
++syncdaemondir = $(libexecdir)/glusterfs/python/syncdaemon
+ 
+ syncdaemon_PYTHON = gconf.py gsyncd.py __init__.py master.py README.md repce.py \
+ 	resource.py configinterface.py syncdutils.py monitor.py libcxattr.py \
+diff --git a/tools/gfind_missing_files/Makefile.am b/tools/gfind_missing_files/Makefile.am
+index f77f789..043c34c 100644
+--- a/tools/gfind_missing_files/Makefile.am
++++ b/tools/gfind_missing_files/Makefile.am
+@@ -1,4 +1,4 @@
+-gfindmissingfilesdir = $(GLUSTERFS_LIBEXECDIR)/gfind_missing_files
++gfindmissingfilesdir = $(libexecdir)/glusterfs/gfind_missing_files
+ 
+ gfindmissingfiles_SCRIPTS = gfind_missing_files.sh gfid_to_path.sh \
+ 	gfid_to_path.py
+@@ -21,6 +21,6 @@ uninstall-local:
+ 
+ install-data-local:
+ 	rm -f $(DESTDIR)$(sbindir)/gfind_missing_files
+-	ln -s $(GLUSTERFS_LIBEXECDIR)/gfind_missing_files/gfind_missing_files.sh $(DESTDIR)$(sbindir)/gfind_missing_files
++	ln -s $(libexecdir)/glusterfs/gfind_missing_files/gfind_missing_files.sh $(DESTDIR)$(sbindir)/gfind_missing_files
+ 
+ CLEANFILES =
+diff --git a/tools/glusterfind/Makefile.am b/tools/glusterfind/Makefile.am
+index 92fa614..37f23be 100644
+--- a/tools/glusterfind/Makefile.am
++++ b/tools/glusterfind/Makefile.am
+@@ -6,7 +6,7 @@ bin_SCRIPTS = glusterfind
+ 
+ CLEANFILES = $(bin_SCRIPTS)
+ 
+-deletehookscriptsdir = $(GLUSTERFS_LIBEXECDIR)/glusterfind/
++deletehookscriptsdir = $(libexecdir)/glusterfs/glusterfind/
+ deletehookscripts_SCRIPTS = S57glusterfind-delete-post.py
+ 
+ uninstall-local:
+@@ -16,5 +16,5 @@ install-data-local:
+ 	$(mkdir_p) $(DESTDIR)$(GLUSTERD_WORKDIR)/glusterfind/.keys
+ 	$(mkdir_p) $(DESTDIR)$(GLUSTERD_WORKDIR)/hooks/1/delete/post/
+ 	rm -f $(DESTDIR)$(GLUSTERD_WORKDIR)/hooks/1/delete/post/S57glusterfind-delete-post
+-	ln -s $(GLUSTERFS_LIBEXECDIR)/glusterfind/S57glusterfind-delete-post.py \
++	ln -s $(libexecdir)/glusterfs/glusterfind/S57glusterfind-delete-post.py \
+ 		$(DESTDIR)$(GLUSTERD_WORKDIR)/hooks/1/delete/post/S57glusterfind-delete-post
+diff --git a/tools/glusterfind/src/Makefile.am b/tools/glusterfind/src/Makefile.am
+index e4469c1..541ff94 100644
+--- a/tools/glusterfind/src/Makefile.am
++++ b/tools/glusterfind/src/Makefile.am
+@@ -1,4 +1,4 @@
+-glusterfinddir = $(GLUSTERFS_LIBEXECDIR)/glusterfind
++glusterfinddir = $(libexecdir)/glusterfs/glusterfind
+ 
+ glusterfind_PYTHON = conf.py utils.py __init__.py \
+ 	main.py libgfchangelog.py changelogdata.py
+diff --git a/xlators/features/ganesha/src/Makefile.am b/xlators/features/ganesha/src/Makefile.am
+index 78715d6..54cfcb3 100644
+--- a/xlators/features/ganesha/src/Makefile.am
++++ b/xlators/features/ganesha/src/Makefile.am
+@@ -12,7 +12,7 @@ AM_CPPFLAGS = $(GF_CPPFLAGS) -I$(top_srcdir)/libglusterfs/src \
+ 	-fPIC -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D$(GF_HOST_OS)\
+ 	-I$(top_srcdir)/rpc/xdr/src -I$(top_builddir)/rpc/xdr/src \
+ 	-DGANESHA_DIR=\"$(sysconfdir)/ganesha\" \
+-	-DGYSNCD_PREFIX=\"$(GLUSTERFS_LIBEXECDIR)\"
++	-DGYSNCD_PREFIX=\"$(libexecdir)/glusterfs\"
+ 
+ AM_CFLAGS = -Wall $(GF_CFLAGS)
+ 
+diff --git a/xlators/mgmt/glusterd/src/Makefile.am b/xlators/mgmt/glusterd/src/Makefile.am
+index 23ebf37..4f2fffd 100644
+--- a/xlators/mgmt/glusterd/src/Makefile.am
++++ b/xlators/mgmt/glusterd/src/Makefile.am
+@@ -47,7 +47,7 @@ AM_CPPFLAGS = $(GF_CPPFLAGS) -I$(top_srcdir)/libglusterfs/src \
+ 	-I$(CONTRIBDIR)/rbtree -I$(top_srcdir)/rpc/rpc-lib/src \
+ 	-I$(CONTRIBDIR)/mount -I$(CONTRIBDIR)/userspace-rcu \
+ 	-DSBIN_DIR=\"$(sbindir)\" -DDATADIR=\"$(localstatedir)\" \
+-	-DGSYNCD_PREFIX=\"$(GLUSTERFS_LIBEXECDIR)\" \
++	-DGSYNCD_PREFIX=\"$(libexecdir)/glusterfs\" \
+ 	-DCONFDIR=\"$(localstatedir)/run/gluster/shared_storage/nfs-ganesha\" \
+ 	-DGANESHA_PREFIX=\"$(libexecdir)/ganesha\" \
+ 	-DSYNCDAEMON_COMPILE=$(SYNCDAEMON_COMPILE) $(XML_CPPFLAGS)
+-- 
+2.7.4
+

@@ -197,13 +197,11 @@ stdenv.mkDerivation ({
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + postPatch;
 
-  # for ghcjs, we want to put ghcEnv on PATH so compiler plugins will be available.
-  # TODO(cstrahan): would the same be of benefit to native ghc?
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    export PATH="${if ghc.isGhcjs or false then ghcEnv else ghc}/bin:$PATH"
+    export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"
