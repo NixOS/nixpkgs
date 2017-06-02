@@ -210,8 +210,7 @@ rec {
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
           services.xserver.displayManager.select = "auto";
-          services.xserver.windowManager.default = "icewm";
-          services.xserver.windowManager.icewm.enable = true;
+          services.xserver.windowManager.select = [ "icewm" ];
         };
     in
       runInMachine ({

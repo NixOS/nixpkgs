@@ -58,18 +58,12 @@ let
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
     User=${cfg.autoLogin.user}
-    Session=${defaultSessionName}.desktop
+    Session=${dmcfg.defaultSessionName}.desktop
     Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
   '';
-
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
 
 in
 {
@@ -185,13 +179,6 @@ in
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
-        '';
-      }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
-        message = ''
-          SDDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
-          default session: ${defaultSessionName} is not valid.
         '';
       }
     ];

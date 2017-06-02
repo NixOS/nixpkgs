@@ -8,8 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine = { pkgs, lib, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.windowManager.default = "icewm";
-    services.xserver.windowManager.icewm.enable = true;
+    services.xserver.windowManager.select = [ "icewm" ];
     services.xserver.displayManager.select = "slim";
     services.xserver.displayManager.slim = {
       # Use a custom theme in order to get best OCR results

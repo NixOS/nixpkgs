@@ -7,8 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine = { lib, pkgs, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     services.xserver.displayManager.auto.user = "alice";
-    services.xserver.windowManager.default = lib.mkForce "i3";
-    services.xserver.windowManager.i3.enable = true;
+    services.xserver.windowManager.select = [ "i3" ];
   };
 
   testScript = { nodes, ... }: ''

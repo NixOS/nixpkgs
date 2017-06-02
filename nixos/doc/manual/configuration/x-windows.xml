@@ -28,10 +28,10 @@ the following lines:
 services.xserver.desktopManager.select = [ "plasma5" ];
 services.xserver.desktopManager.select = [ "xfce" ];
 services.xserver.desktopManager.select = [ "gnome3" ];
-services.xserver.windowManager.xmonad.enable = true;
-services.xserver.windowManager.twm.enable = true;
-services.xserver.windowManager.icewm.enable = true;
-services.xserver.windowManager.i3.enable = true;
+services.xserver.windowManager.select = [ "xmonad" ];
+services.xserver.windowManager.select = [ "twm" ];
+services.xserver.windowManager.select = [ "icewm" ];
+services.xserver.windowManager.select = [ "i3" ];
 </programlisting>
 </para>
 

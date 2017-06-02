@@ -52,16 +52,11 @@ let
       ${optionalString cfg.autoLogin.enable ''
         autologin-user = ${cfg.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
-        autologin-session = ${defaultSessionName}
+        autologin-session = ${dmcfg.defaultSessionName}
       ''}
       ${cfg.extraSeatDefaults}
     '';
 
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -166,13 +161,6 @@ in
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
         message = ''
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
-        '';
-      }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
-        message = ''
-          LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are set to valid values. The current
-          default session: ${defaultSessionName} is not valid.
         '';
       }
       { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);

@@ -221,6 +221,13 @@ in
         '';
       };
 
+      defaultSessionName = mkOption {
+        type = types.str;
+        default = "${defaultDM}+${defaultWM}";
+        internal = true;
+        description = "Name of the default session.";
+      };
+
       xauthBin = mkOption {
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
