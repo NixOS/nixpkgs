@@ -30,6 +30,12 @@ in
         '';
       };
 
+      preferredDisplayManager = mkOption {
+        internal = true;
+        default = "sddm";
+        description = "Sets the preferred display manager for this desktop manager.";
+      };
+
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];

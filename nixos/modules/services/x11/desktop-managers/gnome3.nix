@@ -57,6 +57,12 @@ in {
 
     services.xserver.desktopManager.gnome3 = {
 
+      preferredDisplayManager = mkOption {
+        internal = true;
+        default = "gdm";
+        description = "Sets the preferred display manager for this desktop manager.";
+      };
+
       sessionPath = mkOption {
         default = [];
         example = literalExample "[ pkgs.gnome3.gpaste ]";

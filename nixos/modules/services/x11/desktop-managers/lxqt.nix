@@ -25,6 +25,12 @@ in
       type = with types; listOf (enum [ "lxqt" ]);
     };
 
+    services.xserver.desktopManager.lxqt.preferredDisplayManager = mkOption {
+      internal = true;
+      default = "sddm";
+      description = "Sets the preferred display manager for this desktop manager.";
+    };
+
     environment.lxqt.excludePackages = mkOption {
       default = [];
       example = literalExample "[ pkgs.lxqt.qterminal ]";

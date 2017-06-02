@@ -205,6 +205,22 @@ let
       '') names}
     '';
 
+    /* Select a default display manager according to desktop manager or window
+       manager settings.
+       If the selected Dm or WM have an internal `preferredDisplayManager` option,
+       its value will be used.
+    */
+    defaultDisplayManager =
+      let
+        dmcfg = cfg.desktopManager;
+        wmcfg = cfg.windowManager;
+      in
+      if dmcfg.select != []
+         then attrByPath [ (head dmcfg.select) "preferredDisplayManager" ] "slim" dmcfg
+      else if wmcfg.select != []
+           then attrByPath [ (head wmcfg.select) "preferredDisplayManager" ] "slim" wmcfg
+      else null;
+
 in
 
 {
@@ -215,7 +231,7 @@ in
 
       select = mkOption {
         type = with types; nullOr (enum [ ]);
-        default = null;
+        default = defaultDisplayManager;
         description = ''
           Select which display manager to use.
         '';

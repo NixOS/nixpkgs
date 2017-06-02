@@ -155,7 +155,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = false;
+        default = cfg.displayManager != null;
         description = ''
           Whether to enable the X server.
         '';
@@ -515,8 +515,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    services.xserver.displayManager.select = mkDefault "slim";
 
     hardware.opengl.enable = mkDefault true;
 
