@@ -6188,6 +6188,10 @@ with pkgs;
   };
 
 
+  # PHP aliases
+  php55 = php55;
+  php70 = php70;
+
   picoc = callPackage ../development/interpreters/picoc {};
 
   picolisp = callPackage ../development/interpreters/picolisp {};
