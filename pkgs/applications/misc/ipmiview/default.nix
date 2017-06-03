@@ -4,10 +4,11 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
    name = "IPMIView-${version}";
-   version = "160804";
+   version = "2.12.0";
+   buildVersion = "160804";
 
    src = pkgs.fetchurl {
-    url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_2.12.0_build.${version}_bundleJRE_Linux_x64.tar.gz";
+    url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
     sha256 = "787a060413451a4a5993c31805f55a221087b7199bbaf20e9fe1254e2a76db42";
   };
 
