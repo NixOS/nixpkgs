@@ -77,6 +77,9 @@ rec {
     mkDerivation =
       { name ? "", buildInputs ? [], nativeBuildInputs ? []
       , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
+      , # Disabling the tests by default when cross compiling, as usually the
+        # tests rely on being able to run produced binaries.
+        doCheck ? false
       , configureFlags ? []
       , # Target is not included by default because most programs don't care.
         # Including it then would cause needless massive rebuilds.
@@ -114,6 +117,8 @@ rec {
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
             ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
+
+          inherit doCheck;
 
           # This parameter is sometimes a string and sometimes a list, yuck
           configureFlags = let inherit (stdenv.lib) optional elem; in
