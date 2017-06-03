@@ -52,6 +52,14 @@ with pkgs;
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
   inherit (misc) versionedDerivation;
 
+  # Conveniently hop to a specific version of nixpkgs. We might want to use fetchTarball once
+  # theres's a public released version that supports locking down the sha256.
+  asOf = { rev, sha256 }: import (fetchFromGitHub {
+    owner = "NixOS";
+    repo  = "nixpkgs";
+    inherit rev sha256;
+  }) { inherit system config platform; };
+
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
