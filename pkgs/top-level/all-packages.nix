@@ -12792,6 +12792,8 @@ with pkgs;
 
   iosevka = callPackage ../data/fonts/iosevka { };
 
+  inconsolataDzForPowerline = callPackage ../data/fonts/inconsolataDzForPowerline { };
+
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
 
