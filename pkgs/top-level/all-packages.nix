@@ -18718,49 +18718,59 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  wineMinimal = callPackage ../misc/emulators/wine {
-    wineRelease = config.wine.release or "stable";
-    wineBuild = config.wine.build or "wine32";
+  winePackages = rec {
+    minimal = callPackage ../misc/emulators/wine {
+      wineRelease = config.wine.release or "stable";
+      wineBuild = config.wine.build or "wine32";
+    };
+
+    base = minimal.override {
+      pngSupport = true;
+      jpegSupport = true;
+      tiffSupport = true;
+      gettextSupport = true;
+      fontconfigSupport = true;
+      alsaSupport = true;
+      openglSupport = true;
+      tlsSupport = true;
+      cupsSupport = true;
+      dbusSupport = true;
+      cairoSupport = true;
+      cursesSupport = true;
+      saneSupport = true;
+      pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+      udevSupport = true;
+      xineramaSupport = true;
+      xmlSupport = true;
+    };
+
+    full = base.override {
+      gtkSupport = true;
+      gstreamerSupport = true;
+      colorManagementSupport = true;
+      mpg123Support = true;
+      openalSupport = true;
+      openclSupport = true;
+      odbcSupport = true;
+      netapiSupport = true;
+      vaSupport = true;
+      pcapSupport = true;
+      v4lSupport = true;
+      gsmSupport = true;
+      gphoto2Support = true;
+      ldapSupport = true;
+    };
+
+    stable = base.override { wineRelease = "stable"; };
+    unstable = base.override { wineRelease = "unstable"; };
+    staging = base.override { wineRelease = "staging"; };
   };
-  wine = lowPrio (self.wineMinimal.override {
-    pngSupport = true;
-    jpegSupport = true;
-    tiffSupport = true;
-    gettextSupport = true;
-    fontconfigSupport = true;
-    alsaSupport = true;
-    openglSupport = true;
-    tlsSupport = true;
-    cupsSupport = true;
-    colorManagementSupport = true;
-    dbusSupport = true;
-    mpg123Support = true;
-    openalSupport = true;
-    cairoSupport = true;
-    cursesSupport = true;
-    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
-    xineramaSupport = true;
-    xmlSupport = true;
+
+  wine = winePackages.base;
+
+  wineStaging = lowPrio (winePackages.full.override {
+    wineRelease = "staging";
   });
-  wineFull = lowPrio (self.wine.override {
-    gtkSupport = true;
-    gstreamerSupport = true;
-    openclSupport = true;
-    odbcSupport = true;
-    netapiSupport = true;
-    vaSupport = true;
-    pcapSupport = true;
-    v4lSupport = true;
-    saneSupport = true;
-    gsmSupport = true;
-    gphoto2Support = true;
-    ldapSupport = true;
-    pulseaudioSupport = true;
-    udevSupport = true;
-  });
-  wineStable = self.wine.override { wineRelease = "stable"; };
-  wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
-  wineStaging = lowPrio (self.wine.override { wineRelease = "staging"; });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
