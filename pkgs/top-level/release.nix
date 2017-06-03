@@ -102,6 +102,7 @@ let
         };
     }) // (mapTestOn ((packagePlatforms pkgs) // rec {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+      haskell.packages.ghcjs = packagePlatforms pkgs.haskell.packages.ghcjs;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
       # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
