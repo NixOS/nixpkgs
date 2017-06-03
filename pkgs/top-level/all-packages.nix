@@ -17746,6 +17746,10 @@ with pkgs;
     cmake = cmakeCurses;
   });
 
+  ### SCIENCE/MEDICINE
+
+  aliza = callPackage ../applications/science/medicine/aliza { };
+
   ### PHYSICS
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
