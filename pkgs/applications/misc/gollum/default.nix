@@ -1,16 +1,21 @@
-{ stdenv, lib, bundlerEnv, ruby_2_2, icu, zlib }:
+{ stdenv, lib, bundlerEnv, ruby
+, icu, zlib }:
 
 bundlerEnv rec {
   name = "gollum-${version}";
-  version = "4.0.1";
+  version = (import gemset).gollum.version;
 
-  ruby = ruby_2_2;
+  inherit ruby;
   gemdir = ./.;
+  gemset = ./gemset.nix;
+
+  # FIXME: Add Git as runtime dependency.
 
   meta = with lib; {
     description = "A simple, Git-powered wiki";
+    homepage = "https://github.com/gollum/gollum";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich ];
+    maintainers = with maintainers; [ jgillich primeos ];
     platforms = platforms.unix;
   };
 }
