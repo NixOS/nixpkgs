@@ -439,6 +439,8 @@ with pkgs;
 
   apulse = callPackage ../misc/apulse { };
 
+  apulse32 = callPackage_i686 ../misc/apulse { };
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   arandr = callPackage ../tools/X11/arandr { };
