@@ -2327,6 +2327,8 @@ with pkgs;
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
+  half = callPackage ../development/libraries/half { };
+
   halibut = callPackage ../tools/typesetting/halibut { };
 
   hardinfo = callPackage ../tools/system/hardinfo { };
