@@ -118,6 +118,7 @@
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
+  ./security/firejail.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
