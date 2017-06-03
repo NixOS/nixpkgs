@@ -10,8 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "inspectrum-${version}";
-  version = "20170218";
+  name = "inspectrum-unstable-2017-05-31";
 
   src = fetchFromGitHub {
     owner = "miek";
