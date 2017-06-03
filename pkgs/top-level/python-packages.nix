@@ -1482,13 +1482,26 @@ in {
     };
   };
 
-  awscli = buildPythonPackage rec {
-    name = "awscli-${version}";
-    version = "1.11.75";
-      namePrefix = "";
-      src = pkgs.fetchurl {
-      url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "0bkjyrgb78f29vvr8j2id0386d30w340wrl7krwiha725c9y3pz1";
+  awscli =
+  let
+    colorama_3_7 = self.colorama.overrideAttrs (old: rec {
+      name = "${pname}-${version}";
+      pname = "colorama";
+      version = "0.3.7";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
+      };
+    });
+  in buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "awscli";
+    version = "1.11.95";
+    namePrefix = "";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1f99cg5x5kw1p1awny64adp07rvva57srdfrbi81yl2kpw33ybjc";
     };
 
     # No tests included
@@ -1499,7 +1512,7 @@ in {
       bcdoc
       s3transfer
       six
-      colorama_3_3
+      colorama_3_7
       docutils
       rsa
       pyyaml
@@ -3020,11 +3033,13 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.5.38"; # This version is required by awscli
-    name = "botocore-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "04cvsi8g8p3r5vr3vr2nb5ldyrsm0y4c2phimabbpk33wv718qyx";
+    name = "${pname}-${version}";
+    pname = "botocore";
+    version = "1.5.58";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1kd9hngdqvpjm01amizsmsnc08h2a0dxiasdk0f4kg1pibpqdni5";
     };
 
     propagatedBuildInputs =
@@ -3809,36 +3824,7 @@ in {
     };
   };
 
-
-  colorama = buildPythonPackage rec {
-    name = "colorama-${version}";
-    version = "0.3.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "e043c8d32527607223652021ff648fbb394d5e19cba9f1a698670b338c9d782b";
-    };
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/tartley/colorama;
-      license = "bsd";
-      description = "Cross-platform colored terminal text";
-    };
-  };
-
-  # Needed for awscli
-  colorama_3_3 = self.colorama.override rec {
-    name = "colorama-${version}";
-    version = "0.3.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
-    };
-  };
-
+  colorama = callPackage ../development/python-modules/colorama { };
 
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
@@ -5467,28 +5453,7 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
-  libtmux = buildPythonPackage rec {
-    name = "libtmux-${version}";
-    version = "0.6.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/libtmux/${name}.tar.gz";
-      sha256 = "0kmw7x8cxb2hj2mzibmg9nxaijhsm1kcm0vdihn99fhm5kw1phh5";
-    };
-
-    buildInputs = with self; [ pytest_29 ];
-    patchPhase = ''
-      sed -i 's/==.*$//' requirements/test.txt
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Scripting library for tmux";
-      homepage = https://libtmux.readthedocs.io/;
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ jgeerds ];
-    };
-  };
+  libtmux = callPackage ../development/python-modules/libtmux { };
 
   locket = buildPythonPackage rec {
     name = "locket-${version}";
