@@ -5516,28 +5516,7 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
-  libtmux = buildPythonPackage rec {
-    name = "libtmux-${version}";
-    version = "0.6.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/libtmux/${name}.tar.gz";
-      sha256 = "0kmw7x8cxb2hj2mzibmg9nxaijhsm1kcm0vdihn99fhm5kw1phh5";
-    };
-
-    buildInputs = with self; [ pytest_29 ];
-    patchPhase = ''
-      sed -i 's/==.*$//' requirements/test.txt
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Scripting library for tmux";
-      homepage = https://libtmux.readthedocs.io/;
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ jgeerds ];
-    };
-  };
+  libtmux = callPackage ../development/python-modules/libtmux { };
 
   locket = buildPythonPackage rec {
     name = "locket-${version}";
