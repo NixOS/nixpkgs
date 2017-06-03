@@ -9,60 +9,41 @@ stdenv.mkDerivation rec {
     sha256 = "14wzdnifr99g1mvm2xwks97nhaq62hfx43pxcw9gs647i7cymbly";
   };
 
-  #version = "v0.7-49-g767926d";
-  #src = fetchgit {
-  #  url = "https://github.com/vyzo/gerbil.git";
-  #  rev = "767926d7d6dde7e717cc51307f07e21859c79989";
-  #  sha256 = "089lzsjmb43nns70pvn3kqg1gx6alsarbphvmh2a6qimnscdgv5z";
-  #};
-  # src = /home/fare/src/scheme/gerbil ;
+  buildInputs = [ gambit openssl zlib coreutils rsync bash ];
 
-  buildInputs = [ gambit openssl zlib coreutils rsync ];
+  postPatch = ''
+    patchShebangs .
 
-  patchPhase = ''
-    SCRIPTS=(
-      src/*.sh
-      src/gerbil/gx?
-      src/gerbil/runtime/build.scm
-      src/lang/build*ss
-      src/std/build*.ss
-      src/std/run-tests.ss
-      src/std/web/fastcgi-test.ss
-      src/std/web/rack-test.ss
-      src/tutorial/lang/build.ss
-    )
-    for f in "''${SCRIPTS[@]}" ; do
-      substituteInPlace "$f" --replace '#!/usr/bin/env bash' '#!${bash}/bin/bash'
-      substituteInPlace "$f" --replace '#!/usr/bin/env gsi-script' '#!${gambit}/bin/gsi-script'
+    find . -type f -executable -print0 | while IFS= read -r -d ''$'\0' f; do
       substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env'
     done
   '';
 
   buildPhase = ''
+    runHook preBuild
     ( cd src && sh build.sh )
+    runHook postBuild
   '';
 
   installPhase = ''
-    ( mkdir -p $out/
-      cp -fa bin lib etc doc $out/
-      cd $out/bin
-      for f in "''${SCRIPTS[@]}" ; do
-        substituteInPlace gxc --replace "${coreutils}/bin/env gxi" "$out/bin/gxi"
-      done
-      ( echo '#!${bash}/bin/bash -e'
-        echo "GERBIL_HOME=$out"
-        echo 'export GERBIL_HOME'
-        echo 'case "$1" in -:*) GSIOPTIONS=$1 ; shift ;; esac'
-        echo 'if [[ $# = 0 ]] ; then '
-        echo '  ${gambit}/bin/gsi $GSIOPTIONS $GERBIL_HOME/lib/gxi-init $GERBIL_HOME/lib/gxi-interactive - ;'
-        echo 'else'
-        echo '  ${gambit}/bin/gsi $GSIOPTIONS $GERBIL_HOME/lib/gxi-init "$@"'
-        echo 'fi' ) > $out/bin/gxi
-    )
+    runHook preInstall
+    mkdir -p $out/
+    cp -fa bin lib etc doc $out/
+
+    cat > $out/bin/gxi <<EOF
+#!${bash}/bin/bash -e
+export GERBIL_HOME=$out
+case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
+if [[ \$# = 0 ]] ; then
+  ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
+else
+  ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
+fi
+EOF
+    runHook postInstall
   '';
 
   dontStrip = true;
-  #dontFixup = true;
 
   meta = {
     description = "Gerbil";
