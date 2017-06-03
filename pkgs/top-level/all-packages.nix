@@ -13470,6 +13470,8 @@ with pkgs;
     liblapack = liblapackWithoutAtlas;
   };
 
+  ctop = callPackage ../tools/system/ctop { };
+
   cuneiform = callPackage ../tools/graphics/cuneiform {};
 
   cutecom = callPackage ../tools/misc/cutecom { };
