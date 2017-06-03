@@ -124,7 +124,7 @@ let
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
       let
         serverName = vhost.serverName;
-        ssl = vhost.enableSSL || vhost.forceSSL;
+        ssl = vhost.enableSSL || vhost.forceSSL || vhost.enableACME;
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
         listenString = toString port + optionalString ssl " ssl http2"
           + optionalString vhost.default " default_server";
