@@ -178,6 +178,7 @@
   exlevan = "Alexey Levan <exlevan@gmail.com>";
   expipiplus1 = "Joe Hermaszewski <nix@monoid.al>";
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
+  fare = "Francois-Rene Rideau <fahree@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
