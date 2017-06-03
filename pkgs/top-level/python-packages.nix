@@ -17679,17 +17679,18 @@ in {
 
   pgspecial = buildPythonPackage rec {
     pname = "pgspecial";
-    version = "1.7.0";
+    version = "1.8.0";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jnv8mr75pjhj2azb2ljhhkd7s1b0b59f7xps322kqbpmwf26zi9";
+      sha256 = "1dwlv3m4jl34zsakmvxg6hgbfv786jl8dcffxsrlnmcpks829xc9";
     };
 
     buildInputs = with self; [ pytest psycopg2 ];
 
     checkPhase = ''
+      find tests -name \*.pyc -delete
       py.test tests
     '';
 
