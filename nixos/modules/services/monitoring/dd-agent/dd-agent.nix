@@ -23,13 +23,24 @@ let
     ${cfg.extraDdConfig}
   '';
 
+  # Integrations requested by the user, always-on disk and network
+  # integrations and any integrations we have explicit support for.
+  allWantedIntegrations =
+    let fromConfig =  n: c: optional (c != null) { name = n; config = c; };
+    in cfg.integrations ++ [ { name = "disk"; } { name = "network"; } ] ++
+       (fromConfig "postgres" cfg.postgresqlConfig) ++
+       (fromConfig "nginx" cfg.nginxConfig) ++
+       (fromConfig "mongo" cfg.mongoConfig) ++
+       (fromConfig "process" cfg.processConfig) ++
+       (fromConfig "jmx" cfg.jmxConfig);
+
   etcfiles =
     map (i: { source = if builtins.hasAttr "config" i
                        then pkgs.writeText "${i.name}.yaml" i.config
                        else "${cfg.agent}/agent/conf.d-system/${i.name}.yaml";
               target = "dd-agent/conf.d/${i.name}.yaml";
             }
-        ) cfg.integrations ++
+        ) allWantedIntegrations ++
         [ { source = ddConf;
             target = "dd-agent/datadog.conf";
           }
@@ -38,6 +49,14 @@ let
   # restart triggers
   etcSources = map (i: i.source) etcfiles;
 
+  # Only pull in dependencies for default supported integrations if
+  # they are actually used.
+  defaultIntegrationDeps = with pkgs.pythonPackages;
+    let mDep = n: ds: if builtins.any (i: i.name == n) allWantedIntegrations then ds else [];
+    in mDep "disk" [ psutil ] ++
+       mDep "network" [ psutil ] ++
+       mDep "postgres" [ pg8000 psycopg2 ] ++
+       mDep "mongo" [ pymongo ];
 in {
   options.services.dd-agent = {
     enable = mkOption {
@@ -66,9 +85,47 @@ in {
       type = types.uniq (types.nullOr types.string);
     };
 
+    postgresqlConfig = mkOption {
+      description = "Datadog PostgreSQL integration configuration";
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
+
+    nginxConfig = mkOption {
+      description = "Datadog nginx integration configuration";
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
+
+    mongoConfig = mkOption {
+      description = "MongoDB integration configuration";
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
+
+    jmxConfig = mkOption {
+      description = "JMX integration configuration";
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
+
+    processConfig = mkOption {
+      description = ''
+        Process integration configuration
+
+        See http://docs.datadoghq.com/integrations/process/
+      '';
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
+
     agent = mkOption {
       description = "The dd-agent package to use. Useful when overriding the package.";
-      default = pkgs.dd-agent;
+      default = pkgs.dd-agent.override {
+        # Make sure we have dependencies that default supported
+        # integrations need.
+        extraBuildInputs = defaultIntegrationDeps;
+      };
       type = types.package;
     };
 
@@ -77,7 +134,11 @@ in {
         Any integrations to use. Default config used if none
         specified. It is currently up to the user to make sure that
         the dd-agent package used has all the dependencies chosen
-        integrations require in scope.
+        integrations require in scope. <literal>disk</literal> and
+        <literal>network</literal> integrations are always included.
+        An integration configured through explicit service support
+        such as <literal>processConfig</literal> takes precedence over
+        any configuration specified here.
       '';
       type = types.listOf (types.attrsOf types.string);
       default = [];
@@ -92,7 +153,6 @@ in {
           }
           { name = "nginx"; }
           { name = "ntp"; }
-          { name = "network"; }
         ]
       '';
     };
