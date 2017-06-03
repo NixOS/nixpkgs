@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages
 , sysstat, unzip, makeWrapper, datadog-trace-agent
+, fetchurl
 # We need extraBuildInputs as we want to be able to override this
 # package with python packages _and_ have the produced binaries
 # wrapper with their PYTHONPATH. This means overrideAttrs is not
@@ -41,6 +42,11 @@ let
     sha256 = "1nbjmkq0wdfndmx0qap69h2rkwkkb0632j87h9d3j99bykyav3y3";
   };
 
+  jmxArtifact = fetchurl
+    { url = "http://dd-jmxfetch.s3.amazonaws.com/jmxfetch-0.13.0-jar-with-dependencies.jar";
+      sha256 = "02rfn17q42kxiv2sv306ibdhvi8l4sbjdwhh1nwdlxw46pqh4ks1";
+    };
+
 in stdenv.mkDerivation rec {
   name = "dd-agent-${version}";
 
@@ -65,58 +71,120 @@ in stdenv.mkDerivation rec {
     pythonPackages.requests
     pythonPackages.simplejson
     pythonPackages.supervisor
-    pythonPackages.tornado
+    pythonPackages.tornado_3_2_2
     pythonPackages.uptime
   ] ++ extraBuildInputs;
-  propagatedBuildInputs = with pythonPackages; [ python tornado ];
+  propagatedBuildInputs = with pythonPackages; [ python tornado_3_2_2 ];
 
   buildCommand = ''
     mkdir -p $out/bin
     cp -R $src $out/agent
     chmod u+w -R $out
     PYTHONPATH=$out/agent:$PYTHONPATH
-    ln -s $out/agent/agent.py $out/bin/dd-agent
-    ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
-    ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
-    # Move out default conf.d so that /etc/dd-agent/conf.d is used
-    mv $out/agent/conf.d $out/agent/conf.d-system
-
-    # Sometime between 5.11.2 and 5.13.2 datadog moved out all its
-    # checks into separate repository. Copy them back in so dd-agent
-    # service can easily pick and choose by copying out configs into
-    # its etc files.
     mkdir -p $out/agent/checks.d
-    for i in ${toString integrations}/* # */
-    do
-      if [ -f "$i/check.py" ]; then
-        if [ -f "$i/conf.yaml.default" -o -f "$i/conf.yaml.example" ]; then
-          local name=$(basename $i)
-          cp $i/check.py $out/agent/checks.d/$name.py
-          # Copy .default file first unless it doesn't exist then copy .default
-          cp $i/conf.yaml.default $out/agent/conf.d-system/$name.yaml &> /dev/null || \
-            cp $i/conf.yaml.example $out/agent/conf.d-system/$name.yaml
-        fi
+    mkdir -p $out/agent/conf.d
+    mkdir -p $out/agent/conf.d/auto_conf
+
+    # Copy every available integration. Official script downloads the
+    # Python dependencies in this stage for each one but we defer that
+    # to the user through extraBuildInputs.
+    for INT in $(ls ${integrations}); do
+      INT_DIR="${integrations}/$INT"
+      if [ -f "$INT_DIR/check.py" ]; then
+        cp "$INT_DIR/check.py" "$out/agent/checks.d/$INT.py"
+      fi
+      if [ -f "$INT_DIR/conf.yaml.example" ]; then
+        cp "$INT_DIR/conf.yaml.example" "$out/agent/conf.d/$INT.yaml"
+      fi
+      if [ -f "$INT_DIR/auto_conf.yaml" ]; then
+        cp "$INT_DIR/auto_conf.yaml" "$out/agent/conf.d/auto_conf/$INT.yaml"
+      fi
+      if [ -f "$INT_DIR/conf.yaml.default" ]; then
+        cp "$INT_DIR/conf.yaml.default" "$out/agent/conf.d/$INT.yaml"
       fi
     done
 
-    cat > $out/bin/dd-jmxfetch <<EOF
-    #!/usr/bin/env bash
-    exec ${python}/bin/python $out/agent/jmxfetch.py $@
+    # Get the JMX artifact.
+    mkdir -p $out/agent/checks/libs
+    ln -s ${jmxArtifact} $out/agent/checks/libs/
+
+    # Move out default conf.d so that /etc/dd-agent/conf.d is used
+    # which is configured through dd-agent NixOS service.
+    mv $out/agent/conf.d $out/agent/conf.d-system
+
+    # Supervisor
+    ln -s $out/agent/packaging/datadog-agent/source/supervisor.conf $out/agent/
+
+    # Link main agent script for user convenience: the user might
+    # want to run things like 'dd-agent flare' or 'dd-agent info'.
+    mkdir -p $out/bin
+    ln -s $out/agent/agent.py $out/bin/dd-agent
+    wrapProgram $out/bin/dd-agent --prefix PYTHONPATH : $PYTHONPATH
+
+    # Write our own supervisor.conf as we need to include trace-agent
+    # which doesn't come in source distribution file, modify, add
+    # PYTHONPATH... It's easier to just write whole config than to try
+    # and edit the existing one.
+    cat <<EOF > $out/agent/supervisor.conf
+    [supervisord]
+    logfile = /var/log/datadog/supervisord.log
+    logfile_maxbytes = 50MB
+    loglevel = info
+    nodaemon = true
+    identifier = supervisord
+    nocleanup = true
+    pidfile = /tmp/supervisord.pid
+
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [unix_http_server]
+    file = /tmp/agent-supervisor.sock
+
+    [supervisorctl]
+    prompt = datadog
+    serverurl = unix:///tmp/agent-supervisor.sock
+
+    [program:collector]
+    command=${python}/bin/python agent/agent.py foreground --use-local-forwarder
+    redirect_stderr=true
+    priority=999
+    startsecs=2
+    environment=LANG=POSIX,PYTHONPATH='agent/checks/libs:$PYTHONPATH'
+
+    [program:forwarder]
+    command=${python}/bin/python agent/ddagent.py --use_simple_http_client=1
+    redirect_stderr=true
+    priority=998
+    startsecs=3
+    environment=PYTHONPATH='$PYTHONPATH'
+
+    [program:dogstatsd]
+    command=${python}/bin/python agent/dogstatsd.py --use-local-forwarder
+    redirect_stderr=true
+    priority=998
+    startsecs=3
+    environment=PYTHONPATH='$PYTHONPATH'
+
+    [program:jmxfetch]
+    command=${python}/bin/python agent/jmxfetch.py
+    redirect_stderr=true
+    priority=999
+    startsecs=3
+    environment=PYTHONPATH='$PYTHONPATH'
+
+    [program:trace-agent]
+    command=${datadog-trace-agent}/bin/agent
+    redirect_stderr=true
+    priority=998
+    startsecs=5
+    startretries=3
+    exitcodes=0
+
+    [group:datadog-agent]
+    programs=forwarder,collector,dogstatsd,jmxfetch,trace-agent
     EOF
-    chmod a+x $out/bin/dd-jmxfetch
-
-    wrapProgram $out/bin/dd-forwarder \
-      --prefix PYTHONPATH : $PYTHONPATH
-    wrapProgram $out/bin/dd-agent \
-      --prefix PYTHONPATH : $PYTHONPATH
-    wrapProgram $out/bin/dogstatsd \
-      --prefix PYTHONPATH : $PYTHONPATH
-    wrapProgram $out/bin/dd-jmxfetch \
-      --prefix PYTHONPATH : $PYTHONPATH
-
-    # Make sure to include trace-agent binary so APM can work.
-    ln -s ${datadog-trace-agent}/bin/agent $out/bin/trace-agent
 
     patchShebangs $out
   '';

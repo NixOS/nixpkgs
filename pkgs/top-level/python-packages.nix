@@ -25825,6 +25825,24 @@ EOF
     };
   };
 
+  tornado_3_2_2 = buildPythonPackage rec {
+    name = "tornado-${version}";
+    version = "3.2.2";
+
+    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname certifi singledispatch ];
+
+    # We specify the name of the test files to prevent
+    # https://github.com/NixOS/nixpkgs/issues/14634
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover *_test.py
+    '';
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tornado/${name}.tar.gz";
+      sha256 = "13mq6nx98999zql8p2zlg4sj2hr2sxq9w11mqzi7rjfjs0z2sn8i";
+    };
+  };
+
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
     version = "0.3.1";

@@ -15,7 +15,10 @@ let
     collector_log_file: /var/log/datadog/collector.log
     forwarder_log_file: /var/log/datadog/forwarder.log
     dogstatsd_log_file: /var/log/datadog/dogstatsd.log
-    pup_log_file:       /var/log/datadog/pup.log
+    jmxfetch_log_file:  /var/log/datadog/jmxfetch.log
+    go-metro_log_file:  /var/log/datadog/go-metro.log
+    trace-agent_log_file: /var/log/datadog/trace-agent.log
+
     ${optionalString (cfg.tags != null ) "tags: ${concatStringsSep "," cfg.tags }"}
     ${cfg.extraDdConfig}
   '';
@@ -116,27 +119,14 @@ in {
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";
-      path = [ cfg.agent pkgs.python pkgs.sysstat pkgs.procps ];
+      path = [ pkgs.sysstat pkgs.procps ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.agent}/bin/dd-agent foreground";
+        ExecStart = "${pkgs.pythonPackages.supervisor}/bin/supervisord -c ${cfg.agent}/agent/supervisor.conf";
         User = "datadog";
         Group = "datadog";
         Restart = "always";
-        RestartSec = 2;
-      };
-      restartTriggers = [ cfg.agent ddConf ] ++ etcSources;
-    };
-
-    systemd.services.dd-jmxfetch = lib.mkIf (builtins.any (i: i.name == "jmx") cfg.integrations) {
-      description = "Datadog JMX Fetcher";
-      path = [ cfg.agent pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${cfg.agent}/bin/dd-jmxfetch";
-        User = "datadog";
-        Group = "datadog";
-        Restart = "always";
+        WorkingDirectory = "${cfg.agent}";
         RestartSec = 2;
       };
       restartTriggers = [ cfg.agent ddConf ] ++ etcSources;
