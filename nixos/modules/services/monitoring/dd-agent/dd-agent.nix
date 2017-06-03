@@ -23,7 +23,7 @@ let
   etcfiles =
     map (i: { source = if builtins.hasAttr "config" i
                        then pkgs.writeText "${i.name}.yaml" i.config
-                       else "${cfg.agent}/agent/conf.d-system/${i.name}.yaml";
+                       else "${pkgs.dd-agent}/agent/conf.d-system/${i.name}.yaml";
               target = "dd-agent/conf.d/${i.name}.yaml";
             }
         ) cfg.integrations ++
@@ -119,13 +119,13 @@ in {
       path = [ cfg.agent pkgs.python pkgs.sysstat pkgs.procps ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.agent}/bin/dd-agent foreground";
+        ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
         User = "datadog";
         Group = "datadog";
         Restart = "always";
         RestartSec = 2;
       };
-      restartTriggers = [ cfg.agent ddConf ] ++ etcSources;
+      restartTriggers = [ pkgs.dd-agent ddConf ] ++ etcSources;
     };
 
     systemd.services.dd-jmxfetch = lib.mkIf (builtins.any (i: i.name == "jmx") cfg.integrations) {
@@ -133,7 +133,7 @@ in {
       path = [ cfg.agent pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.agent}/bin/dd-jmxfetch";
+        ExecStart = "${pkgs.dd-agent}/bin/dd-jmxfetch";
         User = "datadog";
         Group = "datadog";
         Restart = "always";
