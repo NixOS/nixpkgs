@@ -6,11 +6,11 @@ assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
 let
   name = "wireguard-${version}";
 
-  version = "0.0.20170517";
+  version = "0.0.20170531";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "7303e973654a3585039f4789e89a562f807f0d6010c7787b9b69ca72aa7a6908";
+    sha256 = "1k6asxx7qzmxasvdwkvlalvav643fqfbndv80vjkbjqxy6mdkdrf";
   };
 
   meta = with stdenv.lib; {
