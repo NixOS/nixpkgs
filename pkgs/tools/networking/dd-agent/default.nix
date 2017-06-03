@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pythonPackages
-, sysstat, unzip, makeWrapper
+, sysstat, unzip, makeWrapper, datadog-trace-agent
 # We need extraBuildInputs as we want to be able to override this
 # package with python packages _and_ have the produced binaries
 # wrapper with their PYTHONPATH. This means overrideAttrs is not
@@ -114,6 +114,9 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dd-jmxfetch \
       --prefix PYTHONPATH : $PYTHONPATH
+
+    # Make sure to include trace-agent binary so APM can work.
+    ln -s ${datadog-trace-agent}/bin/agent $out/bin/trace-agent
 
     patchShebangs $out
   '';

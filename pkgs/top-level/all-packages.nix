@@ -13701,6 +13701,8 @@ with pkgs;
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
 
+  datadog-trace-agent = callPackage ../tools/networking/dd-agent/datadog-trace-agent.nix {};
+
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
   dd-agent = callPackage ../tools/networking/dd-agent { };
