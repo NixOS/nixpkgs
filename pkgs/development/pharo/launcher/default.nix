@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bash, pharo-vm, unzip, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.9-2016.01.14";
+  version = "stable-2017.02.28";
   name = "pharo-launcher-${version}";
   src = fetchurl {
-    url = "http://files.pharo.org/platform/launcher/blessed/PharoLauncher-user-${version}.zip";
-    sha256 = "0lzdnaw7l1rrzbrq53xsy38aiz6id5x7s78ds1dhb31vqc241yy8";
+    url = "http://files.pharo.org/platform/launcher/PharoLauncher-user-${version}.zip";
+    sha256 = "1hfwjyx0c47s6ivc1zr2sf5mk1xw2zspsv0ns8mj3kcaglzqwiq0";
   };
 
   executable-name = "pharo-launcher";
@@ -37,8 +37,7 @@ stdenv.mkDerivation rec {
 
     cat > $prefix/bin/${executable-name} <<EOF
     #!${bash}/bin/bash
-
-    exec ${pharo-vm}/bin/pharo-vm-x $prefix/share/pharo-launcher/pharo-launcher.image
+    exec ${pharo-vm}/bin/pharo $prefix/share/pharo-launcher/pharo-launcher.image
     EOF
     chmod +x $prefix/bin/${executable-name}
   '';
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
      secs=5
      echo -n "Running headless Pharo for $secs seconds to check for a crash... "
      timeout $secs \
-       ${pharo-vm}/bin/pharo-vm-nox PharoLauncher.image --no-quit eval 'true'
+       ${pharo-vm}/bin/pharo -nodisplay PharoLauncher.image --no-quit eval 'true'
      test "$?" == 124 && echo "ok")
   '';
 
