@@ -12682,6 +12682,8 @@ with pkgs;
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
+  comix-xcursor-theme = callPackage ../data/icons/comix-xcursor-theme { };
+
   coreclr = callPackage ../development/compilers/coreclr { };
 
   corefonts = callPackage ../data/fonts/corefonts { };
@@ -12767,6 +12769,8 @@ with pkgs;
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
+
+  flatbed-xcursor-theme = callPackage ../data/icons/flatbed-xcursor-theme { };
 
   font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
 
@@ -12921,11 +12925,15 @@ with pkgs;
   paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix {};
   paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix {};
 
+  polar-xcursor-theme = callPackage ../data/icons/polar-xcursor-theme { };
+
   poly = callPackage ../data/fonts/poly { };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
+
+  premium-xcursor-theme = callPackage ../data/icons/premium-xcursor-theme { };
 
   profont = callPackage ../data/fonts/profont { };
 
