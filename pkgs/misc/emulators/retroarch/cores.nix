@@ -1,6 +1,7 @@
-{ stdenv, fetchgit, pkgconfig, makeWrapper, python27, retroarch
-, alsaLib, fluidsynth, mesa, portaudio, SDL, ffmpeg, libpng, libjpeg
-, libvorbis, xorg, zlib }:
+{ stdenv, fetchgit, cmake, pkgconfig, makeWrapper, python27, retroarch
+, alsaLib, fluidsynth, curl, hidapi, mesa, gettext, glib, gtk2, portaudio, SDL
+, ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
+, miniupnpc, sfml, xorg, zlib }:
 
 let
 
@@ -124,6 +125,34 @@ in
     description = "libretro wrapper for desmume NDS emulator";
   }).override {
     configurePhase = "cd desmume";
+  };
+
+  dolphin = (mkLibRetroCore {
+    core = "dolphin";
+    src = fetchRetro {
+      repo = "dolphin";
+      rev = "a6ad451fdd4ac8753fd1a8e2234ec34674677754";
+      sha256 = "1cshlfmhph8dl3vgvn37imvp2b7xs2cx1r1ifp5js5psvhycrbz3";
+    };
+    description = "Port of Dolphin to libretro";
+
+    extraBuildInputs = [
+      cmake curl mesa pcre pkgconfig sfml miniupnpc
+      gettext glib gtk2 hidapi
+      libevdev libudev
+    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
+  }).override {
+    cmakeFlags = [
+        "-DLINUX_LOCAL_DEV=true"
+        "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
+        "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+        "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
+    ];
+    dontUseCmakeBuildDir = "yes";
+    buildPhase = ''
+      cd Source/Core/DolphinLibretro
+      make
+    '';
   };
 
   fba = (mkLibRetroCore rec {
