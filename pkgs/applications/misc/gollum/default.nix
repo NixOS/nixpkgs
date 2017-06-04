@@ -1,17 +1,28 @@
-{ stdenv, lib, bundlerEnv, ruby
-, icu, zlib }:
+{ stdenv, bundlerEnv, ruby, makeWrapper
+, git }:
 
-bundlerEnv rec {
-  name = "gollum-${version}";
-  version = (import gemset).gollum.version;
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "gollum";
+  version = (import ./gemset.nix).gollum.version;
 
-  inherit ruby;
-  gemdir = ./.;
-  gemset = ./gemset.nix;
+  nativeBuildInputs = [ makeWrapper ];
 
-  # FIXME: Add Git as runtime dependency.
+  env = bundlerEnv {
+    name = "${name}-gems";
+    inherit pname ruby;
+    gemdir = ./.;
+  };
 
-  meta = with lib; {
+  phases = [ "installPhase" ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    makeWrapper ${env}/bin/gollum $out/bin/gollum \
+      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
+  '';
+
+  meta = with stdenv.lib; {
     description = "A simple, Git-powered wiki";
     homepage = "https://github.com/gollum/gollum";
     license = licenses.mit;
