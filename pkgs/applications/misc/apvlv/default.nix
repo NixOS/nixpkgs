@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     # displays pdfStartup.pdf as default pdf entry
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
+    cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
   '';
 
   meta = with stdenv.lib; {
