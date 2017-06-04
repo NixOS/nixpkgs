@@ -600,6 +600,8 @@ in {
     };
   };
 
+  aiofiles = callPackage ../development/python-modules/aiofiles { };
+
   aiohttp = buildPythonPackage rec {
     name = "aiohttp-${version}";
     version = "1.1.6";
