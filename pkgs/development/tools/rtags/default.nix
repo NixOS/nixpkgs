@@ -12,11 +12,17 @@ stdenv.mkDerivation rec {
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
+
   src = fetchgit {
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "0z32yncn3x1pm2l6r349kfwi6mi83vll820kka87agcla64pl1f2";
+    sha256 = "0rv5hz4cfc1adpxvp4j4227nfc0p0yrjdc6l9i32jj11p69a5401";
+    # unicode file names lead to different checksums on HFS+ vs. other
+    # filesystems because of unicode normalisation
+    postFetch = ''
+      rm $out/src/rct/tests/testfile_*.txt
+    '';
   };
 
   enableParallelBuilding = true;
