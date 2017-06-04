@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure.in erts/configure.in '';
 
+  postPatch = ''
+    patchSheBangs make
+  '';
+
   preConfigure = ''
     export HOME=$PWD/../
     export LANG=C
