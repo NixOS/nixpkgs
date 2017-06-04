@@ -1,22 +1,69 @@
 { pkgs, stdenv, callPackage, wxGTK30, darwin }:
 
 rec {
+  lib = import ../development/beam-modules/lib.nix { inherit pkgs; };
 
   interpreters = rec {
 
+    # R18 is the Default version.
     erlang = erlangR18;
     erlang_odbc = erlangR18_odbc;
     erlang_javac = erlangR18_javac;
     erlang_odbc_javac = erlangR18_odbc_javac;
 
-    erlangR16 = callPackage ../development/interpreters/erlang/R16.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    };
-
-    erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    # These are standard Erlang versions, using the generic builder.
+    erlangR16 = lib.callErlang ../development/interpreters/erlang/R16.nix {} {};
+    erlangR16_odbc = lib.callErlang ../development/interpreters/erlang/R16.nix {} {
       odbcSupport = true;
     };
+    erlangR17 = lib.callErlang ../development/interpreters/erlang/R17.nix {} {};
+    erlangR17_odbc = lib.callErlang ../development/interpreters/erlang/R17.nix {} {
+      odbcSupport = true;
+    };
+    erlangR17_javac = lib.callErlang ../development/interpreters/erlang/R17.nix {} {
+      javacSupport = true;
+    };
+    erlangR17_odbc_javac = lib.callErlang ../development/interpreters/erlang/R17.nix {} {
+      javacSupport = true; odbcSupport = true;
+    };
+    erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
+      wxGTK = wxGTK30;
+    } {};
+    erlangR18_odbc = lib.callErlang ../development/interpreters/erlang/R18.nix {
+      wxGTK = wxGTK30;
+    } {
+      odbcSupport = true;
+    };
+    erlangR18_javac = lib.callErlang ../development/interpreters/erlang/R18.nix {
+      wxGTK = wxGTK30;
+    } {
+      javacSupport = true;
+    };
+    erlangR18_odbc_javac = lib.callErlang ../development/interpreters/erlang/R18.nix {
+      wxGTK = wxGTK30;
+    } {
+      javacSupport = true; odbcSupport = true;
+    };
+    erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
+      wxGTK = wxGTK30;
+    } {};
+    erlangR19_odbc = lib.callErlang ../development/interpreters/erlang/R19.nix {
+      wxGTK = wxGTK30;
+    } {
+      odbcSupport = true;
+    };
+    erlangR19_javac = lib.callErlang ../development/interpreters/erlang/R19.nix {
+      wxGTK = wxGTK30;
+    } {
+      javacSupport = true;
+    };
+    erlangR19_odbc_javac = lib.callErlang ../development/interpreters/erlang/R19.nix {
+      wxGTK = wxGTK30;
+    } {
+      javacSupport = true; odbcSupport = true;
+    };
+
+    # Bash fork, using custom builder.
     erlang_basho_R16B02 = callPackage ../development/interpreters/erlang/R16B02-8-basho.nix {
       inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     };
@@ -24,62 +71,9 @@ rec {
       inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
       odbcSupport = true;
     };
-    erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-    };
-    erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      odbcSupport = true;
-    };
-    erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      javacSupport = true;
-    };
-    erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      javacSupport = true; odbcSupport = true;
-    };
-    erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-    };
-    erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-      odbcSupport = true;
-    };
-    erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-      javacSupport = true;
-    };
-    erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-      javacSupport = true; odbcSupport = true;
-    };
-    erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-    };
-    erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-      odbcSupport = true;
-    };
-    erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-      javacSupport = true;
-    };
-    erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      wxGTK = wxGTK30;
-      javacSupport = true; odbcSupport = true;
-    };
 
+    # Other Beam languages.
     elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
-
     lfe = callPackage ../development/interpreters/lfe { };
   };
 
