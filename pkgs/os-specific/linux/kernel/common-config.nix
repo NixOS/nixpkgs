@@ -311,6 +311,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.19") ''
     SQUASHFS_LZ4 y
   ''}
+  ${optionalString (versionAtLeast version "3.18") ''
+    OVERLAY_FS y
+  ''}
 
   # Native Language Support modules, needed by some filesystems
   NLS y
