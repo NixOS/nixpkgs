@@ -11329,6 +11329,10 @@ with pkgs;
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     libtool = darwin.cctools;
   };
+  rethinkdb_1_15 = callPackage ../servers/nosql/rethinkdb/1.15.nix { 
+    boost = boost155;
+    inherit writeText; 
+  };
 
   rippled = callPackage ../servers/rippled {
     boost = boost159;
