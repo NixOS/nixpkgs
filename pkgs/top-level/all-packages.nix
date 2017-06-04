@@ -7072,6 +7072,8 @@ with pkgs;
 
   ragel = ragelStable;
 
+  randoop = callPackage ../development/tools/analysis/randoop { };
+
   inherit (callPackages ../development/tools/parsing/ragel {
       tex = texlive.combined.scheme-small;
     }) ragelStable ragelDev;
