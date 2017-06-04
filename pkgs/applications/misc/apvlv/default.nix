@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, pcre, libxkbcommon, epoxy
-, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence
+, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     poppler pcre libxkbcommon epoxy
     freetype gtk3
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
+  ];
+
+  nativeBuildInputs = [
+    wrapGAppsHook
   ];
 
   patches = [
