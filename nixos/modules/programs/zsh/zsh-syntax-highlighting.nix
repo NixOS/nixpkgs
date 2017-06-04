@@ -32,7 +32,7 @@ in
         };
 
         patterns = mkOption {
-          default = [];
+          default = {};
           type = types.attrsOf types.string;
 
           example = literalExample ''
