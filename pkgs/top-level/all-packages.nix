@@ -6535,7 +6535,6 @@ with pkgs;
   binutils-raw = callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
-    cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
 
   binutils_nogold = lowPrio (binutils-raw.override {
