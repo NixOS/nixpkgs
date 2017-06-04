@@ -13,6 +13,7 @@
 , "elasticdump"
 , "emoj"
 , "eslint"
+, "eslint_d"
 , "emojione"
 , "fetch-bower"
 , "forever"
