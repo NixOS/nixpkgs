@@ -4,7 +4,6 @@ with lib;
 with utils;
 
 let
-
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
   nonEmptyStr = addCheckDesc "non-empty" types.str
