@@ -147,6 +147,28 @@ rec {
     };
   };
 
+  joystick = mkKodiABIPlugin rec {
+    namespace = "peripheral.joystick";
+    version = "1.3.6";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "kodi-game";
+      repo = namespace;
+      rev = "5b480ccdd4a87f2ca3283a7b8d1bd69a114af0db";
+      sha256 = "1zf5zwghx96bqk7bx53qra27lfbgfdi1dsk4s3hwixr8ii72cqpp";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Binary addon for raw joystick input.";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+    extraBuildInputs = [ libusb pcre-cpp ];
+
+  };
+
   svtplay = mkKodiPlugin rec {
 
     plugin = "svtplay";
