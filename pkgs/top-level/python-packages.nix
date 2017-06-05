@@ -24043,21 +24043,18 @@ in {
   };
 
   systemd = buildPythonPackage rec {
-    version = "231";
+    version = "233";
     name = "python-systemd-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/systemd/python-systemd/archive/v${version}.tar.gz";
-      sha256 = "1sifq7mdg0y5ngab8vjy8995nz9c0hxny35dxs5qjx0k0hyzb71c";
+      sha256 = "1ryzv0d5y448mxpf2cx97rk0403w2w44bha8rqgww1fasx0c9dgg";
     };
 
     buildInputs = with pkgs; [ systemd pkgconfig ];
 
-    patchPhase = ''
-      substituteInPlace setup.py \
-          --replace "/usr/include" "${pkgs.systemd.dev}/include"
-      echo '#include <time.h>' >> systemd/pyutil.h
-    '';
+    # Certain tests only run successfully on a machine w/ systemd.
+    doCheck = false;
 
     meta = {
       description = "Python module for native access to the systemd facilities";
