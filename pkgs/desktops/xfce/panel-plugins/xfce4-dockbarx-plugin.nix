@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
 
   installPhase = "python waf install";
 
-  postFixup = "wrapPythonPrograms";
+  postFixup = ''
+    wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/TiZ-EX1/xfce4-dockbarx-plugin;
