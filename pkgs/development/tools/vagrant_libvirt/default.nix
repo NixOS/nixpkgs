@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
-    gemflags = "--with-libvirt-include=${libvirt}/include --with-libvirt-lib=${libvirt}/lib";
+    #gemflags = "--with-libvirt-include=${libvirt}/include --with-libvirt-lib=${libvirt}/lib";
   };
 
   #phases = [ "installPhase" ];
