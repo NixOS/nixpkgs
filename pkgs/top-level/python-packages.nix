@@ -24042,25 +24042,8 @@ in {
     };
   };
 
-  systemd = buildPythonPackage rec {
-    version = "233";
-    name = "python-systemd-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/systemd/python-systemd/archive/v${version}.tar.gz";
-      sha256 = "1ryzv0d5y448mxpf2cx97rk0403w2w44bha8rqgww1fasx0c9dgg";
-    };
-
-    buildInputs = with pkgs; [ systemd pkgconfig ];
-
-    # Certain tests only run successfully on a machine w/ systemd.
-    doCheck = false;
-
-    meta = {
-      description = "Python module for native access to the systemd facilities";
-      homepage = http://www.freedesktop.org/software/systemd/python-systemd/;
-      license = licenses.lgpl21;
-    };
+  systemd = callPackage ../development/python-modules/systemd {
+    inherit (pkgs) pkgconfig systemd;
   };
 
   tabulate = buildPythonPackage rec {
