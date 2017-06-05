@@ -1,47 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, lib
-, unzip, cmake, kodi, steam, libcec_platform, tinyxml
-, jsoncpp, libhdhomerun }:
+{ stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun }:
 
-let
+with (callPackage ./commons.nix {});
 
-  pluginDir = "/share/kodi/addons";
-
-  kodi-platform = stdenv.mkDerivation rec {
-    project = "kodi-platform";
-    version = "17.1";
-    name = "${project}-${version}";
-
-    src = fetchFromGitHub {
-      owner = "xbmc";
-      repo = project;
-      rev = "c8188d82678fec6b784597db69a68e74ff4986b5";
-      sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
-    };
-
-    buildInputs = [ cmake kodi libcec_platform tinyxml ];
-  };
-
-  mkKodiPlugin = { plugin, namespace, version, src, meta, sourceDir ? null, ... }:
-  stdenv.lib.makeOverridable stdenv.mkDerivation rec {
-    inherit src meta sourceDir;
-    name = "kodi-plugin-${plugin}-${version}";
-    passthru = {
-      kodiPlugin = pluginDir;
-      namespace = namespace;
-    };
-    dontStrip = true;
-    installPhase = ''
-      ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
-      d=$out${pluginDir}/${namespace}
-      mkdir -p $d
-      sauce="."
-      [ -d ${namespace} ] && sauce=${namespace}
-      cp -R "$sauce/"* $d
-    '';
-  };
-
-in
-{
+rec {
 
   advanced-launcher = mkKodiPlugin rec {
 
@@ -234,7 +196,8 @@ in
     };
   };
 
-  pvr-hts = (mkKodiPlugin rec {
+  pvr-hts = mkKodiABIPlugin rec {
+
     plugin = "pvr-hts";
     namespace = "pvr.hts";
     version = "3.4.16";
@@ -252,22 +215,11 @@ in
       platforms = platforms.all;
       maintainers = with maintainers; [ cpages ];
     };
-  }).override {
-    buildInputs = [ cmake kodi libcec_platform kodi-platform ];
 
-    # disables check ensuring install prefix is that of kodi
-    cmakeFlags = [ "-DOVERRIDE_PATHS=1" ];
-
-    # kodi checks for plugin .so libs existance in the addon folder (share/...)
-    # and the non-wrapped kodi lib/... folder before even trying to dlopen
-    # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
-    installPhase = ''
-      make install
-      ln -s $out/lib/addons/pvr.hts/pvr.hts.so* $out/share/kodi/addons/pvr.hts
-    '';
   };
 
-  pvr-hdhomerun = (mkKodiPlugin rec {
+  pvr-hdhomerun = mkKodiABIPlugin rec {
+
     plugin = "pvr-hdhomerun";
     namespace = "pvr.hdhomerun";
     version = "2.4.7";
@@ -285,18 +237,8 @@ in
       platforms = platforms.all;
       maintainers = with maintainers; [ titanous ];
     };
-  }).override {
-    buildInputs = [ cmake jsoncpp libhdhomerun kodi libcec_platform kodi-platform ];
 
-    # disables check ensuring install prefix is that of kodi
-    cmakeFlags = [ "-DOVERRIDE_PATHS=1" ];
+    extraBuildInputs = [ jsoncpp libhdhomerun ];
 
-    # kodi checks for plugin .so libs existance in the addon folder (share/...)
-    # and the non-wrapped kodi lib/... folder before even trying to dlopen
-    # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
-    installPhase = ''
-      make install
-      ln -s $out/lib/addons/pvr.hdhomerun/pvr.hdhomerun.so* $out/share/kodi/addons/pvr.hdhomerun
-    '';
   };
 }

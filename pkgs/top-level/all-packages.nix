@@ -16584,9 +16584,7 @@ with pkgs;
   };
   xbmcPlain = kodiPlain;
 
-  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {
-    kodi = kodiPlain;
-  });
+  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
   xbmcPlugins = kodiPlugins;
 
   kodi = wrapKodi {
