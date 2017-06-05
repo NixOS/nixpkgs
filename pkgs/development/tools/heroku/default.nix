@@ -1,69 +1,38 @@
-{ stdenv, lib, fetchurl, makeWrapper, buildGoPackage, fetchFromGitHub
-, nodejs-6_x, postgresql, ruby }:
+{ stdenv, lib, fetchzip, makeWrapper, git, nodejs-7_x, postgresql, redis }:
 
 with stdenv.lib;
 
-let
-  cli = buildGoPackage rec {
-    name = "cli-${version}";
-    version = "5.6.32";
+stdenv.mkDerivation rec {
+  name = "heroku-${version}";
+  version = "6.6.14";
 
-    goPackagePath = "github.com/heroku/cli";
-
-    src = fetchFromGitHub {
-      owner  = "heroku";
-      repo   = "cli";
-      rev    = "v${version}";
-      sha256 = "062aa79mv2njjb0ix7isbz6646wxmsldv27bsz5v2pbv597km0vz";
-    };
-
-    buildFlagsArray = ''
-      -ldflags=
-        -X=main.Version=${version}
-        -X=main.Channel=stable
-        -X=main.Autoupdate=no
-    '';
-
-    preCheck = ''
-      export HOME=/tmp
-    '';
-
-    doCheck = true;
+  src = fetchzip {
+    url = "https://github.com/heroku/cli/archive/v6.6.14.tar.gz";
+    sha256 = "0z81swpszy0zlg7y4v0yw9kwhfj3m75cc4s9qqp71vaj4c5gnn80";
   };
 
-in stdenv.mkDerivation rec {
-  name = "heroku-${version}";
-  version = "3.43.16";
-
   meta = {
-    homepage = "https://toolbelt.heroku.com";
-    description = "Everything you need to get started using Heroku";
+    homepage = "https://devcenter.heroku.com/articles/heroku-cli";
+    description = "A tool for creating and managing Heroku apps from the command line";
     maintainers = with maintainers; [ aflatter mirdhyn peterhoeg ];
-    license = licenses.mit;
+    license = licenses.isc;
     platforms = with platforms; unix;
   };
 
-  binPath = lib.makeBinPath [ postgresql ruby ];
+  yarn = callPackage ../yarn { nodejs = nodejs-7_x };
+  buildInputs = [ git makeWrapper yarn ];
 
-  buildInputs = [ makeWrapper ];
+  binPath = lib.makeBinPath [ nodejs-7_x postgresql redis ];
 
-  doUnpack = false;
-
-  src = fetchurl {
-    url = "https://s3.amazonaws.com/assets.heroku.com/heroku-client/heroku-client-${version}.tgz";
-    sha256 = "08pai3cjaj7wshhyjcmkvyr1qxv5ab980whcm406798ng8f91hn7";
-  };
+  buildPhase = ''
+    export HOME=$TMPDIR
+    yarn install
+  '';
 
   installPhase = ''
-    mkdir -p $out
-
-    tar xzf $src -C $out --strip-components=1
-    install -Dm755 ${cli}/bin/cli $out/share/heroku/cli/bin/heroku
-
-    wrapProgram $out/bin/heroku \
-      --set HEROKU_NODE_PATH ${nodejs-6_x}/bin/node \
-      --set XDG_DATA_HOME    $out/share \
-      --set XDG_DATA_DIRS    $out/share \
+    mkdir -p $out/{bin,libexec/heroku}
+    cp -R . $out/libexec/heroku
+    makeWrapper $out/libexec/heroku/bin/run $out/bin/heroku \
       --prefix PATH : ${binPath}
   '';
 }
