@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  # Before we do various fixups, remove qt tree---this means the
+  # standard RPATH shrinking code will remove the references.  Should
+  # be obsoleted when NixOS/patchelf#98 is released.
+  preFixup = ''
+    rm -rf $(pwd)/../__nix_qt5__
+  '';
+
   installPhase = ''
     install -D --mode 0755 --target-directory $out/bin bin/ckb-daemon bin/ckb
     install -D --mode 0755 --target-directory $out/libexec/ckb-animations bin/ckb-animations/*
