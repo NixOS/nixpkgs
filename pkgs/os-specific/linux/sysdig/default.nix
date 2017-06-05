@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
   };
 
+  patches = [
+    (fetchpatch {
+       # Sysdig fails to run on linux kernels with unified cgroups enabled
+       url = https://github.com/draios/sysdig/files/909689/0001-Fix-for-linux-kernels-with-cgroup-v2-API-enabled.patch.txt;
+       sha256 = "10nmisifa500hzpa3899rs837bcal72pnqidxmrnr1js187z8j84";
+    })
+  ];
+
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
   ];
