@@ -107,7 +107,7 @@ def remove_old_entries(gens):
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))
         known_paths.append(copy_from_profile(*gen, "initrd", True))
-    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos-*-generation-[1-9]*.conf"):
+    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
         try:
             if rex_profile.match(path):
                 prof = rex_profile.sub(r"\1", path)
@@ -123,9 +123,12 @@ def remove_old_entries(gens):
             os.unlink(path)
 
 def get_profiles():
-    return [x
+    if os.path.isdir("/nix/var/nix/profiles/system-profiles/"):
+        return [x
             for x in os.listdir("/nix/var/nix/profiles/system-profiles/")
             if not x.endswith("-link")]
+    else:
+        return []
 
 def main():
     parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
