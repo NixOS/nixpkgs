@@ -9834,32 +9834,6 @@ in {
     };
   };
 
-  django_1_6 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.6.11.5";
-
-    # Support to python-3.4 and higher was introduced in django_1_7
-    disabled = !(isPy26 || isPy27 || isPy33);
-
-    src = pkgs.fetchurl {
-      url = "https://downloads.reviewboard.org/releases/Django/1.6/Django-${version}.tar.gz";
-      sha256 = "0yj0fw3iql031z8l5ik1fb25sk3l5bw2vc63bbyg5rz2k3znl4il";
-    };
-
-    # too complicated to setup
-    doCheck = false;
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
-  };
-
   django_appconf = buildPythonPackage rec {
     name = "django-appconf-${version}";
     version = "1.0.1";
@@ -9957,7 +9931,7 @@ in {
       sha256 = "1qbcx54hq8iy3n2n6cki3bka1m9rp39np4hqddrm9knc954fb7nv";
     };
 
-    propagatedBuildInputs = with self; [ django_1_6 ];
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
@@ -9993,7 +9967,7 @@ in {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
       sha256 = "03zlbq13rydfh28wh0jk3x3cjk9x6jjmqnx1i3ngjmfwbxf8x6j1";
     };
-    propagatedBuildInputs = with self; [ django_1_6 ];
+    propagatedBuildInputs = with self; [ django ];
   });
 
   django_classytags = buildPythonPackage rec {
@@ -10195,7 +10169,7 @@ in {
       sha256 = "1y49fa8jj7x9qjj5wzhns3zxwj0s73sggvkrv660cqw5qb7d8hha";
     };
 
-    propagatedBuildInputs = with self; [ django_1_6 futures ];
+    propagatedBuildInputs = with self; [ django futures ];
 
     meta = with stdenv.lib; {
       description = "Pipeline is an asset packaging library for Django";
@@ -10222,7 +10196,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      django_1_6 feedparser django_pipeline_1_3 pillowfight pytz ];
+      django feedparser django_pipeline_1_3 pillowfight pytz ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -13644,7 +13618,7 @@ in {
 
     buildInputs = with self; [ pyflakes pep8 ];
     propagatedBuildInputs = with self; [
-      django_1_6 filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
+      django filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
       requests requests_oauthlib future pillow
     ];
 
@@ -21368,7 +21342,7 @@ in {
 
     buildInputs = with self; [ coverage mock nose geopy ];
     propagatedBuildInputs = with self; [
-      django_1_6 dateutil_1_5 whoosh pysolr elasticsearch
+      django dateutil_1_5 whoosh pysolr elasticsearch
     ];
 
     patchPhase = ''
@@ -21453,7 +21427,7 @@ in {
     '';
 
     propagatedBuildInputs = with self;
-      [ django_1_6 recaptcha_client pytz memcached dateutil_1_5 paramiko flup
+      [ django recaptcha_client pytz memcached dateutil_1_5 paramiko flup
         pygments djblets django_evolution pycrypto pysvn pillow
         psycopg2 django-haystack python_mimeparse markdown django-multiselectfield
       ];
@@ -27298,7 +27272,7 @@ EOF
       sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
     };
 
-    propagatedBuildInputs = with self; [ django_1_6 django_tagging_0_3 whisper pycairo ldap memcached pytz ];
+    propagatedBuildInputs = with self; [ django django_tagging_0_3 whisper pycairo ldap memcached pytz ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
