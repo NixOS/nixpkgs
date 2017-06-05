@@ -81,14 +81,18 @@ in
 
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
-      serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && chmod 770 ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
-      '';
-      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
-      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      serviceConfig.User = "transmission";
-      # NOTE: transmission has an internal umask that also must be set (in settings.json)
-      serviceConfig.UMask = "0002";
+      serviceConfig = {
+        ExecStartPre = ''
+          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && rm -f ${settingsDir}/settings.json &&   cp -f ${settingsFile} ${settingsDir}/settings.json"
+        '';
+        # allow to bind on ports below 1024
+        AmbientCapabilities = "cap_net_bind_service";
+        ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        User = "transmission";
+        # NOTE: transmission has an internal umask that also must be set (in settings.json)
+        UMask = "0002";
+      };
     };
 
     # It's useful to have transmission in path, e.g. for remote control
