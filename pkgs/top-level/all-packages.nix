@@ -15163,7 +15163,6 @@ with pkgs;
   polybar = callPackage ../applications/misc/polybar { };
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
-  #rssguard = libsForQt5.callPackage ../applications/networking/newsreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
