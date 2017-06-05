@@ -1,7 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
-, langObjC ? stdenv.isDarwin
-, langObjCpp ? stdenv.isDarwin
+, langObjC ? targetPlatform.isDarwin
+, langObjCpp ? targetPlatform.isDarwin
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -48,10 +48,10 @@ assert langVhdl     -> gnat != null;
 assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
-assert stdenv.isDarwin -> gnused != null;
+assert hostPlatform.isDarwin -> gnused != null;
 
 # Need c++filt on darwin
-assert stdenv.isDarwin -> binutils != null;
+assert hostPlatform.isDarwin -> binutils != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -229,7 +229,7 @@ stdenv.mkDerivation ({
   hardeningDisable = [ "format" ];
 
   postPatch =
-    if (stdenv.isHurd
+    if (hostPlatform.isHurd
         || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
             && libcCross.crossConfig == "i586-pc-gnu")
@@ -300,13 +300,13 @@ stdenv.mkDerivation ({
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional stdenv.isDarwin gnused)
-    ++ (optional stdenv.isDarwin binutils)
+    ++ (optional hostPlatform.isDarwin gnused)
+    ++ (optional hostPlatform.isDarwin binutils)
     ;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
+  NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
-  preConfigure = stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit) ''
+  preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
@@ -316,7 +316,7 @@ stdenv.mkDerivation ({
   dontDisableStatic = true;
 
   configureFlags = "
-    ${if stdenv.isSunOS then
+    ${if hostPlatform.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
       # On Illumos/Solaris GNU as is preferred
       " --with-gnu-as --without-gnu-ld "
@@ -361,7 +361,7 @@ stdenv.mkDerivation ({
       )
     }
     ${if targetPlatform == hostPlatform
-      then if stdenv.isDarwin
+      then if hostPlatform.isDarwin
         then " --with-native-system-header-dir=${darwin.usr-include}"
         else " --with-native-system-header-dir=${getDev stdenv.cc.libc}/include"
       else ""}

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
-, langObjC ? stdenv.isDarwin
-, langObjCpp ? stdenv.isDarwin
+, langObjC ? targetPlatform.isDarwin
+, langObjCpp ? targetPlatform.isDarwin
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -48,7 +48,7 @@ assert cloog != null -> isl != null;
 assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
-assert stdenv.isDarwin -> gnused != null;
+assert hostPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -71,7 +71,7 @@ let version = "4.8.5";
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
-      ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch;
+      ++ optional hostPlatform.isDarwin ../gfortran-darwin-NXConstStr.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -197,7 +197,7 @@ let version = "4.8.5";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
-    bootstrap = targetPlatform == hostPlatform && !stdenv.isArm && !stdenv.isMips;
+    bootstrap = targetPlatform == hostPlatform && !hostPlatform.isArm && !hostPlatform.isMips;
 
 in
 
@@ -225,7 +225,7 @@ stdenv.mkDerivation ({
   libc_dev = stdenv.cc.libc_dev;
 
   postPatch =
-    if (stdenv.isHurd
+    if (hostPlatform.isHurd
         || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
             && libcCross.crossConfig == "i586-pc-gnu")
@@ -297,11 +297,11 @@ stdenv.mkDerivation ({
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional stdenv.isDarwin gnused)
+    ++ (optional hostPlatform.isDarwin gnused)
     ;
 
 
-  preConfigure = stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit) ''
+  preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
@@ -311,7 +311,7 @@ stdenv.mkDerivation ({
   dontDisableStatic = true;
 
   configureFlags = "
-    ${if stdenv.isSunOS then
+    ${if hostPlatform.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
       # On Illumos/Solaris GNU as is preferred
       " --with-gnu-as --without-gnu-ld "
@@ -357,7 +357,7 @@ stdenv.mkDerivation ({
       )
     }
     ${if targetPlatform == hostPlatform
-      then if stdenv.isDarwin
+      then if hostPlatform.isDarwin
         then " --with-native-system-header-dir=${darwin.usr-include}"
         else " --with-native-system-header-dir=${getDev stdenv.cc.libc}/include"
       else ""}

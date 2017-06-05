@@ -138,7 +138,7 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
 
-  outputs = if (stdenv.is64bit && langAda) then [ "out" "doc" ]
+  outputs = if (hostPlatform.is64bit && langAda) then [ "out" "doc" ]
     else [ "out" "lib" "doc" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
@@ -266,7 +266,7 @@ stdenv.mkDerivation ({
     ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
       if targetPlatform == hostPlatform && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}
-    ${if targetPlatform == hostPlatform && stdenv.isi686 then "--with-arch=i686" else ""}
+    ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
   ";
 
@@ -311,7 +311,7 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      ${if targetPlatform == hostPlatform && stdenv.isi686 then "--with-arch=i686" else ""}
+      ${if targetplatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
       ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
       --target=${targetPlatform.config}
     '';
