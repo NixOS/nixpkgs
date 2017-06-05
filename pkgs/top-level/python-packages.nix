@@ -4821,7 +4821,7 @@ in {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
     };
-    buildInputs = with self; [ pyramid_mako nose django_1_9 jinja2 tornado pyramid Mako ];
+    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
     propagatedBuildInputs = with self; [ six ];
     patchPhase = ''
       sed -i 's/1.4.99/1.99/' setup.py
@@ -9808,30 +9808,6 @@ in {
 
   django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
     gdal = self.gdal;
-  };
-
-  django_1_9 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.9.13";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "079zspfsvfnv9wf6qvg8xmz1m23d0723p2nqyk8gfqb012jxn1y0";
-    };
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    # too complicated to setup
-    doCheck = false;
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
   };
 
   django_1_8 = buildPythonPackage rec {
@@ -28701,7 +28677,7 @@ EOF
     disabled = isPyPy;
     # Wants to set up Django
     doCheck = false;
-    propagatedBuildInputs = with self; [ django_1_9 smartypants jinja2 ];
+    propagatedBuildInputs = with self; [ django smartypants jinja2 ];
     meta = {
       description = "Filters to enhance web typography, including support for Django & Jinja templates";
       homepage = "https://github.com/mintchaos/typogrify";
