@@ -28,9 +28,10 @@ let
           fi
         done
 
-        ${cfg.up}
         ${optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+
+        ${optionalString (cfg.up != "") "source ${userSuppliedUpScript}"}
       '';
 
       downScript = ''
@@ -38,6 +39,15 @@ let
         export PATH=${path}
         ${optionalString cfg.updateResolvConf
            "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+
+        ${optionalString (cfg.down != "") "source ${userSuppliedDownScript}"}
+      '';
+
+      userSuppliedUpScript = pkgs.writeScript "openvpn-${name}-userSuppliedUpScript" ''
+        ${cfg.up}
+      '';
+
+      userSuppliedDownScript = pkgs.writeScript "openvpn-${name}-userSuppliedDownScript" ''
         ${cfg.down}
       '';
 
@@ -133,7 +143,7 @@ in
             default = "";
             type = types.lines;
             description = ''
-              Shell commands executed when the instance is starting.
+              Shell script sourced by NixOS generated script when the instance is starting.
             '';
           };
 
@@ -141,7 +151,7 @@ in
             default = "";
             type = types.lines;
             description = ''
-              Shell commands executed when the instance is shutting down.
+              Shell script sourced by NixOS generated script when the instance is shutting down.
             '';
           };
 
