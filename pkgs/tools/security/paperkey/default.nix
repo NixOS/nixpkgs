@@ -1,17 +1,16 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-
-  version = "1.3";
   name = "paperkey-${version}";
-  
+  version = "1.4";
+
   src = fetchurl {
     url = "http://www.jabberwocky.com/software/paperkey/${name}.tar.gz";
-    sha256 = "5b57d7522336fb65c4c398eec27bf44ec0aaa35926157b79a76423231792cbfb";
+    sha256 = "0vrkryxqbsjcmqalsnxvc3pahg6vvyrn139aj8md29sihgnb0az1";
   };
 
   enableParallelBuilding = true;
-  
+
   meta = with stdenv.lib; {
     description = "Store OpenPGP or GnuPG on paper";
     longDescription = ''
@@ -23,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.jabberwocky.com/software/paperkey/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.skeidel ];
+    maintainers = with maintainers; [ skeidel ];
   };
 }
