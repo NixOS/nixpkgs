@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, jre }:
+{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+, jre, binaryen, enableWasm ? true
+}:
 
 let
   rev = "1.37.10";
@@ -36,6 +38,9 @@ stdenv.mkDerivation {
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
+  ''
+  + stdenv.lib.optionalString enableWasm ''
+    echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
   '';
 
   meta = with stdenv.lib; {

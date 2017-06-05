@@ -17,7 +17,7 @@ let
     host = ${cfg.dns.address}
     port = ${toString cfg.dns.port}
     oldDNSMethod = NO_OLD_DNS
-    externalIP = ${cfg.dns.address}
+    externalIP = ${cfg.dns.externalAddress}
 
     [http]
     host = ${cfg.api.hostname}
@@ -47,8 +47,18 @@ in
         type = types.str;
         default = "127.0.0.1";
         description = ''
-          The IP address that will be used to reach this machine.
-          Leave this unchanged if you do not wish to directly expose the DNSChain resolver.
+          The IP address the DNSChain resolver will bind to.
+          Leave this unchanged if you do not wish to directly expose the resolver.
+        '';
+      };
+
+      dns.externalAddress = mkOption {
+        type = types.str;
+        default = cfg.dns.address;
+        description = ''
+           The IP address used by clients to reach the resolver and the value of
+           the <literal>namecoin.dns</literal> record. Set this in case the bind address
+           is not the actual IP address (e.g. the machine is behind a NAT).
         '';
       };
 

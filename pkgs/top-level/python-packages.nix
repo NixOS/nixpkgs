@@ -234,9 +234,13 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk.nix { };
 
+  ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
+
   pitz = callPackage ../applications/misc/pitz { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
+
+  Pmw = callPackage ../development/python-modules/Pmw { };
 
   pyaes = callPackage ../development/python-modules/pyaes.nix { };
 
@@ -595,6 +599,8 @@ in {
       description = "Simple DNS resolver for asyncio";
     };
   };
+
+  aiofiles = callPackage ../development/python-modules/aiofiles { };
 
   aiohttp = buildPythonPackage rec {
     name = "aiohttp-${version}";
@@ -1478,13 +1484,26 @@ in {
     };
   };
 
-  awscli = buildPythonPackage rec {
-    name = "awscli-${version}";
-    version = "1.11.75";
-      namePrefix = "";
-      src = pkgs.fetchurl {
-      url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "0bkjyrgb78f29vvr8j2id0386d30w340wrl7krwiha725c9y3pz1";
+  awscli =
+  let
+    colorama_3_7 = self.colorama.overrideAttrs (old: rec {
+      name = "${pname}-${version}";
+      pname = "colorama";
+      version = "0.3.7";
+      src = fetchPypi {
+        inherit pname version;
+        sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
+      };
+    });
+  in buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "awscli";
+    version = "1.11.95";
+    namePrefix = "";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1f99cg5x5kw1p1awny64adp07rvva57srdfrbi81yl2kpw33ybjc";
     };
 
     # No tests included
@@ -1495,7 +1514,7 @@ in {
       bcdoc
       s3transfer
       six
-      colorama_3_3
+      colorama_3_7
       docutils
       rsa
       pyyaml
@@ -3016,11 +3035,13 @@ in {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.5.38"; # This version is required by awscli
-    name = "botocore-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "04cvsi8g8p3r5vr3vr2nb5ldyrsm0y4c2phimabbpk33wv718qyx";
+    name = "${pname}-${version}";
+    pname = "botocore";
+    version = "1.5.58";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1kd9hngdqvpjm01amizsmsnc08h2a0dxiasdk0f4kg1pibpqdni5";
     };
 
     propagatedBuildInputs =
@@ -3805,36 +3826,7 @@ in {
     };
   };
 
-
-  colorama = buildPythonPackage rec {
-    name = "colorama-${version}";
-    version = "0.3.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "e043c8d32527607223652021ff648fbb394d5e19cba9f1a698670b338c9d782b";
-    };
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/tartley/colorama;
-      license = "bsd";
-      description = "Cross-platform colored terminal text";
-    };
-  };
-
-  # Needed for awscli
-  colorama_3_3 = self.colorama.override rec {
-    name = "colorama-${version}";
-    version = "0.3.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
-    };
-  };
-
+  colorama = callPackage ../development/python-modules/colorama { };
 
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
@@ -5352,33 +5344,7 @@ in {
     };
   });
 
-  dask = buildPythonPackage rec {
-    pname = "dask";
-    name = "${pname}-${version}";
-    version = "0.14.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "46c8ef9aa41a5755f2194b535bff7fdef1343d3993ab294b198caf95155ec94e";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
-
-    checkPhase = ''
-      py.test dask
-    '';
-
-    # URLError
-    doCheck = false;
-
-    meta = {
-      description = "Minimal task scheduling abstraction";
-      homepage = "http://github.com/ContinuumIO/dask/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  dask = callPackage ../development/python-modules/dask { };
 
   datrie = buildPythonPackage rec {
     name = "datrie";
@@ -5489,28 +5455,7 @@ in {
 
   libais = callPackage ../development/python-modules/libais { };
 
-  libtmux = buildPythonPackage rec {
-    name = "libtmux-${version}";
-    version = "0.6.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/libtmux/${name}.tar.gz";
-      sha256 = "0kmw7x8cxb2hj2mzibmg9nxaijhsm1kcm0vdihn99fhm5kw1phh5";
-    };
-
-    buildInputs = with self; [ pytest_29 ];
-    patchPhase = ''
-      sed -i 's/==.*$//' requirements/test.txt
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Scripting library for tmux";
-      homepage = https://libtmux.readthedocs.io/;
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ jgeerds ];
-    };
-  };
+  libtmux = callPackage ../development/python-modules/libtmux { };
 
   locket = buildPythonPackage rec {
     name = "locket-${version}";
@@ -8464,29 +8409,6 @@ in {
       description = "Defines override classes that should be included with pies only if running on Python2";
       homepage = https://github.com/timothycrosley/pies;
       license = licenses.mit;
-    };
-  };
-
-  pirate-get = buildPythonPackage rec {
-    name = "pirate-get-${version}";
-    version = "0.2.9";
-
-    disabled = !isPy3k;
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pirate-get/${name}.tar.gz";
-      sha256 = "1djmfghnwsn3z525h6d98r0lllayvzsg71z0gskk25zr24kjs24a";
-    };
-
-    propagatedBuildInputs = with self; [ colorama veryprettytable beautifulsoup4 ];
-
-    meta = {
-      description = "A command line interface for The Pirate Bay";
-      homepage = https://github.com/vikstrous/pirate-get;
-      license = licenses.gpl1;
-      maintainers = with maintainers; [ rnhmjoj ];
-      platforms = platforms.unix;
     };
   };
 
@@ -14827,56 +14749,9 @@ in {
     };
   };
 
-  nbconvert = buildPythonPackage rec {
-    version = "5.1.1";
-    name = "nbconvert-${version}";
+  nbconvert = callPackage ../development/python-modules/nbconvert { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "847731bc39829d0eb1e15a450ac98c71730e3598e53683d4d76a3f3b3fc5017d";
-    };
-
-    buildInputs = with self; [nose ipykernel ];
-
-    propagatedBuildInputs = with self; [ entrypoints bleach mistune jinja2 pygments traitlets testpath jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # PermissionError. Likely due to being in a chroot
-    doCheck = false;
-
-    meta = {
-      description = "Converting Jupyter Notebooks";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
-
-  nbformat = buildPythonPackage rec {
-    version = "4.3.0";
-    name = "nbformat-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbformat/${name}.tar.gz";
-      sha256 = "5febcce872672f1c97569e89323992bdcb8573fdad703f835e6521253191478b";
-    };
-    LC_ALL="en_US.UTF-8";
-    buildInputs = with self; [ pytest pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ipython_genutils traitlets testpath jsonschema jupyter_core];
-
-    # Failing tests and permission issues
-    doCheck = false;
-
-    meta = {
-      description = "The Jupyter Notebook format";
-      homepage = "http://jupyter.org/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  nbformat = callPackage ../development/python-modules/nbformat { };
 
   nbxmpp = buildPythonPackage rec {
     name = "nbxmpp-${version}";
@@ -17806,17 +17681,18 @@ in {
 
   pgspecial = buildPythonPackage rec {
     pname = "pgspecial";
-    version = "1.7.0";
+    version = "1.8.0";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jnv8mr75pjhj2azb2ljhhkd7s1b0b59f7xps322kqbpmwf26zi9";
+      sha256 = "1dwlv3m4jl34zsakmvxg6hgbfv786jl8dcffxsrlnmcpks829xc9";
     };
 
     buildInputs = with self; [ pytest psycopg2 ];
 
     checkPhase = ''
+      find tests -name \*.pyc -delete
       py.test tests
     '';
 
@@ -20931,25 +20807,7 @@ in {
     };
   };
 
-  pywinrm = buildPythonPackage rec {
-    version = "0.1.1";
-    name = "pywinrm-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/diyan/pywinrm/archive/v${version}.tar.gz";
-      sha256 = "1pc0987f6q5sxcgm50a1k1xz2pk45ny9xxnyapaf60662rcavvfb";
-    };
-
-    propagatedBuildInputs = with self; [ isodate kerberos xmltodict ];
-
-    meta = {
-      homepage = "http://github.com/diyan/pywinrm/";
-      description = "Python library for Windows Remote Management";
-      license = licenses.mit;
-      # error: libgssapi_krb5.so: cannot open shared object file: No such file or directory
-      broken = true; #
-    };
-  };
+  pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   PyXAPI = stdenv.mkDerivation rec {
     name = "PyXAPI-0.1";
@@ -21211,6 +21069,8 @@ in {
       maintainer = maintainers.fridh;
     };
   };
+
+  requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
@@ -24183,21 +24043,18 @@ in {
   };
 
   systemd = buildPythonPackage rec {
-    version = "231";
+    version = "233";
     name = "python-systemd-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/systemd/python-systemd/archive/v${version}.tar.gz";
-      sha256 = "1sifq7mdg0y5ngab8vjy8995nz9c0hxny35dxs5qjx0k0hyzb71c";
+      sha256 = "1ryzv0d5y448mxpf2cx97rk0403w2w44bha8rqgww1fasx0c9dgg";
     };
 
     buildInputs = with pkgs; [ systemd pkgconfig ];
 
-    patchPhase = ''
-      substituteInPlace setup.py \
-          --replace "/usr/include" "${pkgs.systemd.dev}/include"
-      echo '#include <time.h>' >> systemd/pyutil.h
-    '';
+    # Certain tests only run successfully on a machine w/ systemd.
+    doCheck = false;
 
     meta = {
       description = "Python module for native access to the systemd facilities";
@@ -28026,27 +27883,7 @@ EOF
   };
 
 
-  uncertainties = buildPythonPackage rec {
-    name = "uncertainties-${version}";
-    version = "3.0.1";
-
-    src = pkgs.fetchurl {
-       url = "mirror://pypi/u/uncertainties/${name}.tar.gz";
-       sha256 = "de0765cac6911e5afa93ee941063a07b4a98dbd9c314c5eea4ab14bfff0054a4";
-    };
-
-    buildInputs = with self; [ nose numpy ];
-
-    meta = {
-      homepage = "http://pythonhosted.org/uncertainties/";
-      description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
-      license = licenses.bsd3;
-    };
-
-    # No tests included
-    doCheck = false;
-  };
-
+  uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   funcy = buildPythonPackage rec {
     name = "funcy-1.6";

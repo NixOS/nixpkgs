@@ -2941,11 +2941,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DataGUID = buildPerlPackage {
-    name = "Data-GUID-0.048";
+  DataGUID = buildPerlPackage rec {
+    name = "Data-GUID-0.049";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Data-GUID-0.048.tar.gz;
-      sha256 = "cb263b1e6eeecc5797de6f945d42ace2db26c156172883550b73fa2ecdab29dc";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "0yx7d4qwsr9n85gslip0y3mdwr5fkncfbwxz7si2a17x95yl7bxq";
     };
     propagatedBuildInputs = [ DataUUID SubExporter SubInstall ];
     meta = {
