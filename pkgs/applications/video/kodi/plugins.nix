@@ -35,6 +35,35 @@ rec {
 
   };
 
+  advanced-emulator-launcher = mkKodiPlugin rec {
+
+    plugin = "advanced-emulator-launcher";
+    namespace = "plugin.program.advanced.emulator.launcher";
+    version = "0.9.6";
+
+    src = fetchFromGitHub {
+      owner = "Wintermute0110";
+      repo = namespace;
+      rev = version;
+      sha256 = "1sv9z77jj6bam6llcnd9b3dgkbvhwad2m1v541rv3acrackms2z2";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "http://forum.kodi.tv/showthread.php?tid=287826";
+      description = "A program launcher for Kodi";
+      longDescription = ''
+        Advanced Emulator Launcher is a multi-emulator front-end for Kodi
+        scalable to collections of thousands of ROMs. Includes offline scrapers
+        for MAME and No-Intro ROM sets and also supports scrapping ROM metadata
+        and artwork online. ROM auditing for No-Intro ROMs using No-Intro XML
+        DATs. Launching of games and standalone applications is also available.
+      '';
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+  };
+
   controllers = let
     pname = "game-controller";
     version = "1.0.3";
