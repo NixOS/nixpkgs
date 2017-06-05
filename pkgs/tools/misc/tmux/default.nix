@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
   '';
-
+      
   meta = {
     homepage = http://tmux.github.io/;
     description = "Terminal multiplexer";
