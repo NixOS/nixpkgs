@@ -13480,7 +13480,7 @@ in {
     propagatedBuildInputs = with self; [
       cython
       sympy
-      django_1_8
+      django
       ply
       mpmath
       dateutil
