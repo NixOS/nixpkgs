@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "simplejson";
   version = "3.10.0";
   name = "${pname}-${version}";
+  doCheck = !stdenv.isDarwin;
 
   src = fetchPypi {
     inherit pname version;
