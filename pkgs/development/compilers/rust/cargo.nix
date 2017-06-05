@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : "${rustc}/bin" \
       --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+      --set CURL_CA_BUNDLE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       ${stdenv.lib.optionalString stdenv.isDarwin ''--suffix DYLD_LIBRARY_PATH : "${rustc}/lib"''}
   '';
 
