@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    attr libxslt xhtml1 perlPackages.XMLXPath curl libpcap parted
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl xen
+    libapparmor libcap_ng numactl xen attr parted
   ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     "--with-test"
     "--with-esx"
     "--with-remote"
-    "--with-storage-disk"
   ] ++ optionals stdenv.isLinux [
     "--with-attr"
     "--with-apparmor"
@@ -59,6 +58,7 @@ stdenv.mkDerivation rec {
     "--with-macvtap"
     "--with-virtualport"
     "--with-init-script=systemd+redhat"
+    "--with-storage-disk"
     "--with-storage-zfs"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin" \
       --replace "lock/subsys" "lock"
-    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
   '' + optionalString stdenv.isLinux ''
+    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
