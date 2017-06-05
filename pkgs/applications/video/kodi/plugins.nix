@@ -198,6 +198,28 @@ rec {
 
   };
 
+  steam-controller = mkKodiABIPlugin rec {
+    namespace = "peripheral.steamcontroller";
+    version = "0.9.0";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "kodi-game";
+      repo = namespace;
+      rev = "76f640fad4f68118f4fab6c4c3338d13daca7074";
+      sha256 = "0yqlfdiiymb8z6flyhpval8w3kdc9qv3mli3jg1xn5ac485nxsxh";
+    };
+
+    extraBuildInputs = [ libusb ];
+
+    meta = with stdenv.lib; {
+      description = "Binary addon for steam controller.";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+  };
+
   steam-launcher = (mkKodiPlugin rec {
 
     plugin = "steam-launcher";
