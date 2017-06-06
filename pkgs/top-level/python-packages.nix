@@ -17486,29 +17486,7 @@ in {
 
   };
 
-  pathpy = buildPythonPackage rec {
-    version = "10.1";
-    name = "path.py-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/path.py/${name}.tar.gz";
-      sha256 = "8b0ee56f6c1421a9038823926ee8da354ce70933424b408558bc6b48496587f3";
-    };
-
-    buildInputs = with self; [setuptools_scm pytestrunner pytest pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = "A module wrapper for os.path";
-      homepage = http://github.com/jaraco/path.py;
-      license = licenses.mit;
-    };
-
-    checkPhase = ''
-      py.test test_path.py
-    '';
-  };
+  pathpy = callPackage ../development/python-modules/path.py { };
 
   paypalrestsdk = buildPythonPackage rec {
     name = "paypalrestsdk-0.7.0";
