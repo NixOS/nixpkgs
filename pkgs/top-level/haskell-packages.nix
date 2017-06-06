@@ -108,7 +108,7 @@ in rec {
 
   };
 
-  packages = {
+  packages = rec {
 
     # Support for this compiler is broken, because it can't deal with directory-based package databases.
     # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
@@ -160,6 +160,8 @@ in rec {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
+    # the packageset for the current default compiler
+    ghcDefault = ghc802;
     # TODO Support for multiple variants here
     ghcCross = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD.crossCompiler;
