@@ -15944,6 +15944,38 @@ in {
 
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
+  livereload = buildPythonPackage rec {
+    name = "livereload-2.5.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/livereload/${name}.tar.gz";
+      sha256 = "bc708b46e22dff243c02e709c636ffeb8a64cdd019c95a215304e6ce183c4859";
+    };
+    propagatedBuildInputs = with self; [ six tornado ];
+    buildInputs = [ ];
+    meta = with pkgs.stdenv.lib; {
+      description = "LiveReload";
+      homepage = "https://github.com/lepture/python-livereload";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ aloiscochard ];
+    };
+  };
+
+  mkdocs = buildPythonPackage rec {
+    name = "mkdocs-0.16.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mkdocs/${name}.tar.gz";
+      sha256 = "ab674a1545713af8e2542f3732aa1cc84a233ac008aa1cab81ebab7b7a56bdf7";
+    };
+    propagatedBuildInputs = with self; [ pyyaml markdown click livereload pyramid_jinja2 ];
+    buildInputs = [ ];
+    meta = with pkgs.stdenv.lib; {
+      description = "Project documentation with Markdown.";
+      homepage = "http://www.mkdocs.org/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ aloiscochard ];
+    };
+  };
+
   pycadf = buildPythonPackage rec {
     name = "pycadf-${version}";
     version = "1.1.0";
