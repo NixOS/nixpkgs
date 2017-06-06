@@ -511,6 +511,8 @@ with pkgs;
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
+  rocker = callPackage ../tools/virtualization/rocker { };
+
   altermime = callPackage ../tools/networking/altermime {};
 
   amule = callPackage ../tools/networking/p2p/amule { };
