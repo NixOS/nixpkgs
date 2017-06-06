@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, kerberos, db, gettext, pam, fixDarwinDylibNames, autoreconfHook }:
+{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ openssl db gettext kerberos ]
+    ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isFreeBSD autoreconfHook
     ++ lib.optional stdenv.isLinux pam
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
-  ];
+  ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
   # Set this variable at build-time to make sure $out can be evaluated.
   preConfigure = ''
