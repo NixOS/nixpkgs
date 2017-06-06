@@ -109,8 +109,8 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2k";
-    sha256 = "1h6qi35w6hv6rd73p4cdgdzg732pdrfgpp37cgwz1v9a3z37ffbb";
+    version = "1.0.2l";
+    sha256 = "037kvpisc6qh5dkppcwbm5bg2q800xh2hma3vghz8xcycmdij1yf";
   };
 
   openssl_1_1_0 = common {
