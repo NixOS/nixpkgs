@@ -1,15 +1,30 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
+, libseccomp, busybox
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 let
 
+  sh = busybox.override {
+    useMusl = true;
+    enableStatic = true;
+    enableMinimal = true;
+    extraConfig = ''
+      CONFIG_ASH y
+      CONFIG_ASH_BUILTIN_ECHO y
+      CONFIG_ASH_BUILTIN_TEST y
+      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
+    '';
+  };
+
   common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
     inherit name src;
     version = lib.getVersion name;
+
+    is112 = lib.versionAtLeast version "1.12pre";
 
     VERSION_SUFFIX = lib.optionalString fromGit suffix;
 
@@ -25,13 +40,14 @@ let
 
     nativeBuildInputs =
       [ pkgconfig ]
-      ++ lib.optionals (!lib.versionAtLeast version "1.12pre") [ perl ]
+      ++ lib.optionals (!is112) [ perl ]
       ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals fromGit [ brotli readline ] # Since 1.12
-      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
+      ++ lib.optional (stdenv.isLinux && is112) libseccomp
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
@@ -55,10 +71,12 @@ let
         "--disable-init-state"
         "--enable-gc"
       ]
-      ++ lib.optionals (!lib.versionAtLeast version "1.12pre") [
+      ++ lib.optionals (!is112) [
         "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+      ] ++ lib.optionals (is112 && stdenv.isLinux) [
+        "--with-sandbox-shell=${sh}/bin/busybox"
       ];
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
@@ -145,12 +163,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5350_7689181e";
+    suffix = "pre5413_b4b1f452";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "7689181e4f5921d3356736996079ec0310e834c6";
-      sha256 = "08daxcpj18dffsbqs3fckahq06gzs8kl6xr4b4jgijwdl5vqwiri";
+      rev = "b4b1f4525f8dc8f320d666c208bff5cb36777580";
+      sha256 = "0qb18k2rp6bbg8g50754srl95dq0lr96i297856yhrx1hh1ja37z";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
