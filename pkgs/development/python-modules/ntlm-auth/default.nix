@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ntlm-auth";
-  version = "1.0.4";
+  version = "1.0.3";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "ntlm-auth";
     rev = "v${version}";
-    sha256 = "3d411413f1309fcd443095d57ab169b637e5b57ce701ac7ae8dbf572cb3533c0";
+    sha256 = "09f2g4ivfi9lh1kr30hlg0q4n2imnvmd79w83gza11q9nmhhiwpz";
   };
 
   checkInputs = [ mock pytest unittest2 ];
