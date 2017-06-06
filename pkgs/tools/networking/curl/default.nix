@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl
-, http2Support ? true, nghttp2
+, http2Support ? false, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
