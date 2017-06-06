@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   # Set this variable at build-time to make sure $out can be evaluated.
   preConfigure = ''
     configureFlagsArray=( --with-plugindir=$out/lib/sasl2
-                          --with-configdir=$out/lib/sasl2
                           --with-saslauthd=/run/saslauthd
                           --enable-login
                         )
