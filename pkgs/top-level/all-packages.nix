@@ -3160,6 +3160,8 @@ with pkgs;
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
+  elisa = libsForQt5.callPackage ../applications/audio/elisa { };
+
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
