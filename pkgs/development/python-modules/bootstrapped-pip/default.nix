@@ -13,11 +13,6 @@ let
     format = "wheel";
     sha256 = "f2900e560efc479938a219433c48f15a4ff4ecfe575a65de385eeb44f2425587";
   };
-  argparse_source = fetchPypi {
-    pname = "argparse";
-    version = "1.4.0";
-    sha256 = "c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314";
-  };
 in stdenv.mkDerivation rec {
   pname = "pip";
   version = "9.0.1";
@@ -34,10 +29,7 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
-  '' + stdenv.lib.optionalString (python.isPy26 or false) ''
-    unzip -d $out/${python.sitePackages} ${argparse_source}
   '';
-
 
   patchPhase = ''
     mkdir -p $out/bin
