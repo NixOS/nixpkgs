@@ -90,4 +90,36 @@ rec {
     * parsers as well.
     */
   toYAML = {}@args: toJSON args;
+
+  # TODO we need some kind of pattern matching sometimes
+  /* Pretty print a value, akin to `builtins.trace`.
+    * Should probably be a builtin as well.
+    */
+  toPretty = {
+    /* If this option is true, attrsets like { __pretty = fn; val = …; }
+       will use fn to convert val to a pretty printed representation.
+       (This means fn is type Val -> String.) */
+    allowPrettyValues ? false
+  }@args: v: with builtins;
+    if      isInt      v then toString v
+    else if isBool     v then (if v == true then "true" else "false")
+    else if isString   v then "\"" + v + "\""
+    else if null ==    v then "null"
+    else if isFunction v then "<λ>"
+    else if isList     v then "[ "
+        + libStr.concatMapStringsSep " " (toPretty args) v
+      + " ]"
+    else if isAttrs    v then
+      # apply pretty values if allowed
+      if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
+         then v.__pretty v.val
+      # TODO: there is probably a better representation?
+      else if v ? type && v.type == "derivation" then "<δ>"
+      else "{ "
+          + libStr.concatStringsSep " " (libAttr.mapAttrsToList
+              (name: value:
+                "${toPretty args name} = ${toPretty args value};") v)
+        + " }"
+    else "toPretty: should never happen (v = ${v})";
+
 }
