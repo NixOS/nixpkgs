@@ -3,6 +3,7 @@
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysql
 , withSQLite ? false, sqlite
+, withLDAP ? false, openldap
 }:
 
 let
@@ -11,12 +12,14 @@ let
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
      ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev libmysql}/include/mysql" ]
-     ++ lib.optional withSQLite "-DHAS_SQLITE");
+     ++ lib.optional withSQLite "-DHAS_SQLITE"
+     ++ lib.optional withLDAP "-DHAS_LDAP");
    auxlibs = lib.concatStringsSep " " ([
      "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"
      ++ lib.optional withMySQL "-lmysqlclient"
-     ++ lib.optional withSQLite "-lsqlite3");
+     ++ lib.optional withSQLite "-lsqlite3"
+     ++ lib.optional withLDAP "-lldap");
 
 in stdenv.mkDerivation rec {
 
@@ -32,7 +35,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withMySQL libmysql
-                ++ lib.optional withSQLite sqlite;
+                ++ lib.optional withSQLite sqlite
+                ++ lib.optional withLDAP openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
