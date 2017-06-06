@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = gnome3.maintainers;
   };
 }

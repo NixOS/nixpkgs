@@ -23,16 +23,16 @@ let
     };
   };
 
-  pants13-version = "1.3.0rc2";
+  pants13-version = "1.3.0rc4";
 
   # TODO: compile the rust native engine ourselves so we don't need to do this shit. We don't use
   # fetchurl because we don't know the URL ahead of time, even though it's deterministic. So we have
   # this downloader figure out the URL on the fly and then produce the deterministic result, so we
   # can still be a fixed-output derivation.
   pants13-native-engine-info = {
-    "x86_64-darwin" = { prefix = "mac/10.11";    hash = "0n8z7rg0yfpxplvcw88lwv733zkhbzhc4w4zd4aznbcmfqdiz5br"; };
-    "x86_64-linux"  = { prefix = "linux/x86_64"; hash = "0cva97899q902m61xnfawhbjrh5h751716sn6ljli9b8fl7b5sz4"; };
-    "i686-linux"    = { prefix = "linux/i386";   hash = "1qckg0zsdq9x4jhn59pswbs11mxqxryl65qn42hrsvii2yxa9i5k"; };
+    "x86_64-darwin" = { prefix = "mac/10.11";    hash = "04kfqp4fcxj7zkyb21rgp1kdrlnmayfvakpg5xips716d7pp6vc7"; };
+    "x86_64-linux"  = { prefix = "linux/x86_64"; hash = "0vgmcqxcabryxgvk4wmbclqjn56jbmsaysckgwfzhmif8pxyrfam"; };
+    "i686-linux"    = { prefix = "linux/i386";   hash = "1xgma6cwvzg1d07xq6bd3j4rpzp6wn6lz82xqprr6vflyn78qaaw"; };
   }.${stdenv.system} or (throw "Unsupported system ${stdenv.system}!");
 
   pants13-native-engine = runCommand "pants-native-${pants13-version}" {
@@ -98,7 +98,7 @@ in {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1d3i0jwhn94b96b3lwwxd10007hnxw6dw1azmwv3hhwq713gwnpi";
+      sha256 = "03zv3g55x056vjggwjr8lpniixcpb3kfy7xkl1bxsvjp2ih2wj6g";
     };
 
     prePatch = ''

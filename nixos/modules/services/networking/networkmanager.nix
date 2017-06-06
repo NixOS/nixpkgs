@@ -12,6 +12,7 @@ let
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
+    dhcp=${cfg.dhcp}
     dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
 
     [keyfile]
@@ -21,7 +22,7 @@ let
       ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
     [logging]
-    level=WARN
+    level=${cfg.logLevel}
 
     [connection]
     ipv6.ip6-privacy=2
@@ -138,6 +139,22 @@ in {
         apply = list: (attrValues cfg.basePackages) ++ list;
       };
 
+      dhcp = mkOption {
+        type = types.enum [ "dhclient" "dhcpcd" "internal" ];
+        default = "dhclient";
+        description = ''
+          Which program (or internal library) should be used for DHCP.
+        '';
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
+        default = "WARN";
+        description = ''
+          Set the default logging verbosity level.
+        '';
+      };
+
       appendNameservers = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -181,7 +198,7 @@ in {
             };
 
             type = mkOption {
-              type = types.enum (attrNames dispatcherTypesSubdirMap); 
+              type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
                 Dispatcher hook type. Only basic hooks are currently available.

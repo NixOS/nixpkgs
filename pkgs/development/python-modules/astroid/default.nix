@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, python, logilab_common, six
+{ lib, fetchPypi, buildPythonPackage, python, logilab_common, six
 , lazy-object-proxy, wrapt, singledispatch, enum34, pythonOlder
 , backports_functools_lru_cache
 }:
@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "astroid";
-  version = "1.5.2";
+  version = "1.5.3";
 
-  src = fetchurl {
-    url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-    sha256 = "271f1c9ad6519a5dde2a7f0c9b62c2923b55e16569bdd888f9f9055cc5be37ed";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "492c2a2044adbf6a84a671b7522e9295ad2f6a7c781b899014308db25312dd35";
   };
 
   propagatedBuildInputs = [ logilab_common six lazy-object-proxy wrapt ]
