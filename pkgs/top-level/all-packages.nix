@@ -15162,6 +15162,8 @@ with pkgs;
 
   polybar = callPackage ../applications/misc/polybar { };
 
+  rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
+
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
   shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
@@ -16527,13 +16529,17 @@ with pkgs;
     plugins = let inherit (lib) optional optionals; in with kodiPlugins;
       ([]
       ++ optional (config.kodi.enableAdvancedLauncher or false) advanced-launcher
+      ++ optional (config.kodi.enableAdvancedEmulatorLauncher or false)
+        advanced-emulator-launcher
       ++ optionals (config.kodi.enableControllers or false)
         (with controllers;
           [ default dreamcast gba genesis mouse n64 nes ps snes ])
       ++ optional (config.kodi.enableExodus or false) exodus
       ++ optionals (config.kodi.enableHyperLauncher or false)
            (with hyper-launcher; [ plugin service pdfreader ])
+      ++ optional (config.kodi.enableJoystick or false) joystick
       ++ optional (config.kodi.enableSVTPlay or false) svtplay
+      ++ optional (config.kodi.enableSteamController or false) steam-controller
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
@@ -16584,9 +16590,7 @@ with pkgs;
   };
   xbmcPlain = kodiPlain;
 
-  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {
-    kodi = kodiPlain;
-  });
+  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
   xbmcPlugins = kodiPlugins;
 
   kodi = wrapKodi {

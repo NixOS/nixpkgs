@@ -4,12 +4,13 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
    name = "IPMIView-${version}";
-   version = "20151223";
+   version = "2.12.0";
+   buildVersion = "160804";
 
    src = fetchurl {
-     url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_V2.11.0_bundleJRE_Linux_x64_${version}.tar.gz";
-     sha256 = "1rv9j0id7i2ipm25n60bpfdm1gj44xg2aj8rnx4s6id3ln90q121";
-   };
+    url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
+    sha256 = "787a060413451a4a5993c31805f55a221087b7199bbaf20e9fe1254e2a76db42";
+  };
 
    buildInputs = [ patchelf makeWrapper ];
 
@@ -23,12 +24,12 @@ stdenv.mkDerivation rec {
    installPhase = ''
      mkdir -p $out/bin
      cp -R . $out/
-     echo "$out/jre/bin/java -jar $out/IPMIView20.jar" > $out/bin/IPMIView
-     chmod +x $out/bin/IPMIView
+     makeWrapper $out/jre/bin/java $out/bin/IPMIView \
+       --prefix PATH : "$out/jre/bin" \
+       --add-flags "-jar $out/IPMIView20.jar"
    '';
 
    meta = with stdenv.lib; {
     license = licenses.unfree;
    };
   }
-
