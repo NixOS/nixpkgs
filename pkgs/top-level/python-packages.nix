@@ -18663,12 +18663,23 @@ in {
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.25.0";
+    name = "pygit2-0.25.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pygit2/${name}.tar.gz";
-      sha256 = "0wf5rp0fvrw7j3j18dvwjq6xqlbm611wd55aphrfpps0v1gxh3ny";
+      sha256 = "0sja3g9mqwp5bnhdc313b2gc4z3p70nn6zzf2h8j581g0lrn0sg8";
     };
+
+    # Fixes a bug which can cause test failed when cffi==1.10
+    prePatch = let
+      cffiVersionPatch = pkgs.fetchurl {
+        url = "https://github.com/libgit2/pygit2/commit/b88dc868423af2f760f649960112efd0e37e5335.patch";
+        sha256 = "14cfrz56y2dnwlxrrss9pjhxfnyyg5856gbabzjzyx674k0qcid4";
+      };
+    in ''
+      # we need to delete part of the patch because the missing .travis.yml causes problem
+      sed -e '1,36d' ${cffiVersionPatch} | patch -p1
+    '';
 
     preConfigure = ( if stdenv.isDarwin then ''
       export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
@@ -18680,6 +18691,7 @@ in {
       # disable tests that require networking
       rm test/test_repository.py
       rm test/test_credentials.py
+      rm test/test_submodule.py
     '';
 
     meta = {
