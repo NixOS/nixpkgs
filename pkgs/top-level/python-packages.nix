@@ -3477,20 +3477,7 @@ in {
 
   certifi = callPackage ../development/python-modules/certifi { };
 
-  characteristic = buildPythonPackage rec {
-    name = "characteristic-14.1.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/characteristic/${name}.tar.gz";
-      sha256 = "91e254948180678dd69e6143202b4686f2fa47cce136936079bb4d9a3b82419d";
-    };
-
-    buildInputs = with self; [ self.pytest ];
-
-    meta = {
-      description = "Python attributes without boilerplate";
-      homepage = https://characteristic.readthedocs.org;
-    };
-  };
+  characteristic = callPackage ../development/python-modules/characteristic { };
 
   # This package is no longer actively maintained and can be removed if it becomes broken.
   cgkit = buildPythonPackage rec {
@@ -6245,6 +6232,14 @@ in {
       maintainers = with maintainers; [ layus ];
     };
   };
+
+  eccodes = if (isPy27) then
+      (pkgs.eccodes.overrideAttrs (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    enablePython = true;
+    pythonPackages = self;
+  } else throw "eccodes not supported for interpreter ${python.executable}";
 
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
@@ -11832,6 +11827,14 @@ in {
       platforms   = platforms.all;
     };
   };
+
+  grib-api = if (isPy27) then
+      (pkgs.grib-api.overrideAttrs (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    enablePython = true;
+    pythonPackages = self;
+  } else throw "grib-api not supported for interpreter ${python.executable}";
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
