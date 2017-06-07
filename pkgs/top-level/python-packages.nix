@@ -28080,7 +28080,7 @@ EOF
 
   thumbor = buildPythonPackage rec {
     name = "thumbor-${version}";
-    version = "5.2.1";
+    version = "6.3.2";
 
     disabled = ! isPy27;
 
@@ -28090,6 +28090,7 @@ EOF
       tornado
       pycrypto
       pycurl
+      pytz
       pillow
       derpconf
       python_magic
@@ -28101,14 +28102,18 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/thumbor/${name}.tar.gz";
-      sha256 = "57b0d7e261e792b2e2c53a79c3d8c722964003d1828331995dc3491dc67db7d8";
+      sha256 = "0787245x4yci34cdfc9xaxhds0lv60476qgp132pwa78hrpc9m31";
     };
+
+    prePatch = ''
+      substituteInPlace setup.py \
+        --replace '"argparse",' ""
+    '';
 
     meta = {
       description = "A smart imaging service";
       homepage = https://github.com/globocom/thumbor/wiki;
       license = licenses.mit;
-      broken = true;
     };
   };
 
