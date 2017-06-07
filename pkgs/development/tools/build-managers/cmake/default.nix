@@ -3,7 +3,7 @@
 # darwin attributes
 , ps
 , isBootstrap ? false
-, useSharedLibraries ? !stdenv.isCygwin
+, useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useNcurses ? false, ncurses
 , useQt4 ? false, qt4
 }:
