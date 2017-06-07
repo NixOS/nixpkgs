@@ -48,8 +48,9 @@ stdenv.mkDerivation rec {
         --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
     done
 
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace $out/bin/mix \
-          --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
+      --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
   '';
 
   meta = with stdenv.lib; {
