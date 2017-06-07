@@ -1,0 +1,21 @@
+diff --git a/third-party/py/pex/pex/common.py b/third-party/py/pex/pex/common.py
+index 76459ce23..491dcfc0b 100644
+--- a/third-party/py/pex/pex/common.py
++++ b/third-party/py/pex/pex/common.py
+@@ -12,6 +12,7 @@ import stat
+ import sys
+ import tempfile
+ import threading
++import time
+ import zipfile
+ from collections import defaultdict
+ from uuid import uuid4
+@@ -328,4 +329,7 @@ class Chroot(object):
+   def zip(self, filename, mode='wb'):
+     with contextlib.closing(zipfile.ZipFile(filename, mode)) as zf:
+       for f in sorted(self.files()):
+-        zf.write(os.path.join(self.chroot, f), arcname=f, compress_type=zipfile.ZIP_DEFLATED)
++        file = os.path.join(self.chroot, f)
++        instant = 315532800
++        os.utime(file, (instant, instant))
++        zf.write(file, arcname=f, compress_type=zipfile.ZIP_DEFLATED)
