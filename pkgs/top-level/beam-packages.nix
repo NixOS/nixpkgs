@@ -12,54 +12,28 @@ rec {
     erlang_odbc_javac = erlangR18_odbc_javac;
 
     # These are standard Erlang versions, using the generic builder.
-    erlangR16 = lib.callErlang ../development/interpreters/erlang/R16.nix {} {};
-    erlangR16_odbc = lib.callErlang ../development/interpreters/erlang/R16.nix {} {
-      odbcSupport = true;
-    };
-    erlangR17 = lib.callErlang ../development/interpreters/erlang/R17.nix {} {};
-    erlangR17_odbc = lib.callErlang ../development/interpreters/erlang/R17.nix {} {
-      odbcSupport = true;
-    };
-    erlangR17_javac = lib.callErlang ../development/interpreters/erlang/R17.nix {} {
-      javacSupport = true;
-    };
-    erlangR17_odbc_javac = lib.callErlang ../development/interpreters/erlang/R17.nix {} {
+    erlangR16 = lib.callErlang ../development/interpreters/erlang/R16.nix {};
+    erlangR16_odbc = erlangR16.override { odbcSupport = true; };
+    erlangR17 = lib.callErlang ../development/interpreters/erlang/R17.nix {};
+    erlangR17_odbc = erlangR17.override { odbcSupport = true; };
+    erlangR17_javac = erlangR17.override { javacSupport = true; };
+    erlangR17_odbc_javac = erlangR17.override {
       javacSupport = true; odbcSupport = true;
     };
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
       wxGTK = wxGTK30;
-    } {};
-    erlangR18_odbc = lib.callErlang ../development/interpreters/erlang/R18.nix {
-      wxGTK = wxGTK30;
-    } {
-      odbcSupport = true;
     };
-    erlangR18_javac = lib.callErlang ../development/interpreters/erlang/R18.nix {
-      wxGTK = wxGTK30;
-    } {
-      javacSupport = true;
-    };
-    erlangR18_odbc_javac = lib.callErlang ../development/interpreters/erlang/R18.nix {
-      wxGTK = wxGTK30;
-    } {
+    erlangR18_odbc = erlangR18.override { odbcSupport = true; };
+    erlangR18_javac = erlangR18.override { javacSupport = true; };
+    erlangR18_odbc_javac = erlangR18.override {
       javacSupport = true; odbcSupport = true;
     };
     erlangR19 = lib.callErlang ../development/interpreters/erlang/R19.nix {
       wxGTK = wxGTK30;
-    } {};
-    erlangR19_odbc = lib.callErlang ../development/interpreters/erlang/R19.nix {
-      wxGTK = wxGTK30;
-    } {
-      odbcSupport = true;
     };
-    erlangR19_javac = lib.callErlang ../development/interpreters/erlang/R19.nix {
-      wxGTK = wxGTK30;
-    } {
-      javacSupport = true;
-    };
-    erlangR19_odbc_javac = lib.callErlang ../development/interpreters/erlang/R19.nix {
-      wxGTK = wxGTK30;
-    } {
+    erlangR19_odbc = erlangR19.override { odbcSupport = true; };
+    erlangR19_javac = erlangR19.override { javacSupport = true; };
+    erlangR19_odbc_javac = erlangR19.override {
       javacSupport = true; odbcSupport = true;
     };
 
