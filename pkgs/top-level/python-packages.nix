@@ -3477,20 +3477,7 @@ in {
 
   certifi = callPackage ../development/python-modules/certifi { };
 
-  characteristic = buildPythonPackage rec {
-    name = "characteristic-14.1.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/characteristic/${name}.tar.gz";
-      sha256 = "91e254948180678dd69e6143202b4686f2fa47cce136936079bb4d9a3b82419d";
-    };
-
-    buildInputs = with self; [ self.pytest ];
-
-    meta = {
-      description = "Python attributes without boilerplate";
-      homepage = https://characteristic.readthedocs.org;
-    };
-  };
+  characteristic = callPackage ../development/python-modules/characteristic { };
 
   # This package is no longer actively maintained and can be removed if it becomes broken.
   cgkit = buildPythonPackage rec {
