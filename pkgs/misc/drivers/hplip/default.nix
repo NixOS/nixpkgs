@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, polkit
+, net_snmp, openssl, polkit, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false
@@ -58,6 +58,7 @@ pythonPackages.buildPythonApplication {
     sane-backends
     dbus
     net_snmp
+    nettools
     openssl
   ];
 
@@ -73,7 +74,8 @@ pythonPackages.buildPythonApplication {
     usbutils
   ] ++ stdenv.lib.optionals qtSupport [
     pyqt4
-  ];
+  ]
+  ++ [ nettools ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
