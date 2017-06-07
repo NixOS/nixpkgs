@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, system, rsync, makeWrapper,
+{ stdenv, fetchurl, system, makeWrapper,
   alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
   libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg }:
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   src = srcs.${system};
 
-  buildInputs = [ rsync makeWrapper ];
+  buildInputs = [ makeWrapper ];
 
   libPath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -58,24 +58,25 @@ in stdenv.mkDerivation {
   installPhase = ''
     $preInstallHooks
 
-    mkdir -p $out/share
+    packagePath=$out/share/zoom-us
+    mkdir -p $packagePath
     mkdir -p $out/bin
-    rsync -av . $out/share/
+    cp -ar * $packagePath
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/share/zoom
+      $packagePath/zoom
     # included from https://github.com/NixOS/nixpkgs/commit/fc218766333a05c9352b386e0cbb16e1ae84bf53
     # it works for me without it, but, well...
-    paxmark m $out/share/zoom
-    #paxmark m $out/share/QtWebEngineProcess # is this what dtzWill talked about?
+    paxmark m $packagePath/zoom
+    #paxmark m $packagePath/QtWebEngineProcess # is this what dtzWill talked about?
 
     # RUNPATH set via patchelf is used only for half of libraries (why?), so wrap it
-    wrapProgram $out/share/zoom \
-        --prefix LD_LIBRARY_PATH : "$out/share:$libPath" \
-        --set QT_PLUGIN_PATH "$out/share/platforms" \
+    wrapProgram $packagePath/zoom \
+        --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
+        --set QT_PLUGIN_PATH "$packagePath/platforms" \
         --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
         --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
-    ln -s "$out/share/zoom" "$out/bin/zoom"
+    ln -s "$packagePath/zoom" "$out/bin/zoom-us"
 
     $postInstallHooks
   '';
