@@ -249,6 +249,20 @@ in
     buildPhase = "cd libretro && make";
   };
 
+  parallel-n64 = (mkLibRetroCore rec {
+    core = "parallel-n64";
+    src = fetchRetro {
+      repo = core;
+      rev = "3276db27547bf7ca85896427f0b82d4658694d88";
+      sha256 = "19396v50azrb52ifjk298zgcbxn8dvfvp6zwrnzsk6mp8ff7qcqw";
+    };
+    description = "Parallel Mupen64plus rewrite for libretro.";
+
+    extraBuildInputs = [ mesa libpng ];
+  }).override {
+    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+  };
+
   picodrive = (mkLibRetroCore rec {
     core = "picodrive";
     src = fetchRetro {
