@@ -18858,7 +18858,7 @@ in {
       sed -e '1,36d' ${cffiVersionPatch} | patch -p1
     '';
 
-    preConfigure = ( if stdenv.isDarwin then ''
+    preConfigure = optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
     '';
 
