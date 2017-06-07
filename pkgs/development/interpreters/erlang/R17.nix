@@ -25,7 +25,6 @@ mkDerivation rec {
       sha256 = "1hspm285bl7i9a0d4r6j6lm5yk4sb5d9xzpia3simh0z06hv5cc5";
     };
   in ''
-    ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
     tar xf "${manpages}" -C "$out/lib/erlang"
     for i in "$out"/lib/erlang/man/man[0-9]/*.[0-9]; do
       prefix="''${i%/*}"
