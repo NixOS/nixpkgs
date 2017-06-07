@@ -2,6 +2,7 @@
 , webkitgtk, json_glib, rest, libsecret, dbus_glib, gnome_common
 , telepathy_glib, intltool, dbus_libs, icu
 , libsoup, docbook_xsl_ns, docbook_xsl, gnome3
+, vala
 }:
 
 stdenv.mkDerivation rec {
@@ -13,13 +14,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common makeWrapper
                   libsecret dbus_glib telepathy_glib intltool icu libsoup
-                  docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme ];
+                  docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme vala ];
 
   preFixup = ''
     for f in "$out/libexec/"*; do
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
   '';
+
+  configureFlags = [ "--enable-vala" ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

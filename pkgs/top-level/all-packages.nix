@@ -13897,6 +13897,8 @@ with pkgs;
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
+  feedreader = callPackage ../applications/networking/newsreaders/feedreader {};
+
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
