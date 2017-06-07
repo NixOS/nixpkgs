@@ -19,7 +19,7 @@
 , alsaSupport ? true, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook, gsettings_desktop_schemas
 
 ## privacy-related options
 
@@ -74,11 +74,11 @@ stdenv.mkDerivation (rec {
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
-  ++ lib.optional  gtk3Support gtk3;
+  ++ lib.optionals  gtk3Support [ gtk3 gsettings_desktop_schemas ];
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
-    ++ lib.optional gtk3Support wrapGAppsHook;
+    ++ lib.optionals gtk3Support [ wrapGAppsHook gsettings_desktop_schemas ];
 
   preConfigure = ''
     # remove distributed configuration files

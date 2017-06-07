@@ -14049,7 +14049,7 @@ with pkgs;
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
+    inherit (pkgs.gnome3) defaultIconTheme gsettings_desktop_schemas;
   };
 
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
