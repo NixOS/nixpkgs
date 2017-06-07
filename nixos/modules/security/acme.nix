@@ -65,11 +65,12 @@ let
           "cert.der" "cert.pem" "chain.pem" "external.sh"
           "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json"
         ]);
-        default = [ "fullchain.pem" "key.pem" "account_key.json" ];
+        default = [ "fullchain.pem" "full.pem" "key.pem" "account_key.json" ];
         description = ''
           Plugins to enable. With default settings simp_le will
-          store public certificate bundle in <filename>fullchain.pem</filename>
-          and private key in <filename>key.pem</filename> in its state directory.
+          store public certificate bundle in <filename>fullchain.pem</filename>,
+          private key in <filename>key.pem</filename> and those two previous
+          files combined in <filename>full.pem</filename> in its state directory.
         '';
       };
 
@@ -238,6 +239,9 @@ in
                       mv $workdir/server.key ${cpath}/key.pem
                       mv $workdir/server.crt ${cpath}/fullchain.pem
 
+                      # Create full.pem for e.g. lighttpd (same format as "simp_le ... -f full.pem" creates)
+                      cat "${cpath}/key.pem" "${cpath}/fullchain.pem" > "${cpath}/full.pem"
+
                       # Clean up working directory
                       rm $workdir/server.csr
                       rm $workdir/server.pass.key
@@ -247,6 +251,8 @@ in
                       chown '${data.user}:${data.group}' '${cpath}/key.pem'
                       chmod ${rights} '${cpath}/fullchain.pem'
                       chown '${data.user}:${data.group}' '${cpath}/fullchain.pem'
+                      chmod ${rights} '${cpath}/full.pem'
+                      chown '${data.user}:${data.group}' '${cpath}/full.pem'
                     '';
                   serviceConfig = {
                     Type = "oneshot";
@@ -275,15 +281,14 @@ in
                 )
               );
           servicesAttr = listToAttrs services;
-          nginxAttr = {
-            nginx = {
-              after = [ "acme-selfsigned-certificates.target" ];
-              wants = [ "acme-selfsigned-certificates.target" "acme-certificates.target" ];
-            };
+          injectServiceDep = {
+            after = [ "acme-selfsigned-certificates.target" ];
+            wants = [ "acme-selfsigned-certificates.target" "acme-certificates.target" ];
           };
         in
           servicesAttr //
-          (if config.services.nginx.enable then nginxAttr else {});
+          (if config.services.nginx.enable then { nginx = injectServiceDep; } else {}) //
+          (if config.services.lighttpd.enable then { lighttpd = injectServiceDep; } else {});
 
       systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
