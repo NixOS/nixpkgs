@@ -37,7 +37,8 @@
 , libheimdal
 , libpulseaudio
 , systemd
-, generated ? import ./sources.nix
+, channel
+, generated
 , writeScript
 , xidel
 , coreutils
@@ -68,7 +69,7 @@ let
 
   source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
-  name = "firefox-bin-unwrapped-${version}";
+  name = "firefox-${channel}-bin-unwrapped-${version}";
 
 in
 
@@ -131,6 +132,11 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
+  patchPhase = ''
+    sed -i -e '/^pref("app.update.channel",/d' defaults/pref/channel-prefs.js
+    echo 'pref("app.update.channel", "non-existing-channel")' >> defaults/pref/channel-prefs.js
+  '';
+
   installPhase =
     ''
       mkdir -p "$prefix/usr/lib/firefox-bin-${version}"
@@ -161,7 +167,7 @@ stdenv.mkDerivation {
 
   passthru.ffmpegSupport = true;
   passthru.updateScript = import ./update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep gnupg curl;
+    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
   };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";

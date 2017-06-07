@@ -14047,6 +14047,8 @@ with pkgs;
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "release";
+    generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
     inherit (pkgs.gnome3) defaultIconTheme;
@@ -14060,6 +14062,7 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
@@ -14071,6 +14074,22 @@ with pkgs;
     name = "firefox-beta-bin-" +
       (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
     desktopName = "Firefox Beta";
+  };
+
+  firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "devedition";
+    generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
+    gconf = pkgs.gnome2.GConf;
+    inherit (pkgs.gnome2) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
+  };
+
+  firefox-devedition-bin = self.wrapFirefox firefox-devedition-bin-unwrapped {
+    browserName = "firefox";
+    nameSuffix = "-devedition";
+    name = "firefox-devedition-bin-" +
+      (builtins.parseDrvName firefox-devedition-bin-unwrapped.name).version;
+    desktopName = "Firefox DevEdition";
   };
 
   firestr = libsForQt5.callPackage ../applications/networking/p2p/firestr
