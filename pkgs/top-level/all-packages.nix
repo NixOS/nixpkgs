@@ -6204,6 +6204,8 @@ with pkgs;
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
 
+  conda = callPackage ../development/interpreters/conda { };
+
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   python = python2;
