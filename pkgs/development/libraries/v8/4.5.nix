@@ -116,6 +116,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preBuild = stdenv.lib.optionalString (stdenv.lib.versionAtLeast version "4.3")
+    ''
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES $makeFlags $buildFlags mksnapshot
+       paxmark m out/Release/mksnapshot
+    '';
+
+
   # the `libv8_libplatform` target is _only_ built as a static library,
   # and is expected to be statically linked in when needed.
   # see the following link for further commentary:
