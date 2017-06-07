@@ -61,6 +61,13 @@ stdenv.mkDerivation rec {
     chardet cherrypy html5lib_0_9999999 odfpy routes
   ]);
 
+  # Before we do various fixups, remove qt tree---this means the
+  # standard RPATH shrinking code will remove the references.  Should
+  # be obsoleted when NixOS/patchelf#98 is released.
+  preFixup = ''
+    rm -rf $(pwd)/../__nix_qt5__
+  '';
+
   installPhase = ''
     runHook preInstall
 
