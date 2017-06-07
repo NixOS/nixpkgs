@@ -35,7 +35,7 @@ foreach my $vlan (split / /, $ENV{VLANS} || "") {
     if ($pid == 0) {
         dup2(fileno($pty->slave), 0);
         dup2(fileno($stdoutW), 1);
-        exec "vde_switch -s $socket" or _exit(1);
+        exec "vde_switch -s $socket --dirmode 0700" or _exit(1);
     }
     close $stdoutW;
     print $pty "version\n";
