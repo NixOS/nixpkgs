@@ -38,11 +38,9 @@ rec {
     };
 
     # Bash fork, using custom builder.
-    erlang_basho_R16B02 = callPackage ../development/interpreters/erlang/R16B02-8-basho.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-8-basho.nix {
     };
-    erlang_basho_R16B02_odbc = callPackage ../development/interpreters/erlang/R16B02-8-basho.nix {
-      inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    erlang_basho_R16B02_odbc = erlang_basho_R16B02.override {
       odbcSupport = true;
     };
 

@@ -1,16 +1,20 @@
-{ pkgs, stdenv, fetchurl, fetchFromGitHub, makeWrapper, autoconf, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl
+{ pkgs, stdenv, fetchurl, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
+, libxml2, libxslt, ncurses, openssl, perl, gcc, autoreconfHook
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , mesa ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 }:
 
-{ version
+{ baseName ? "erlang"
+, version
 , sha256 ? null
 , rev ? "OTP-${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "erlang"; repo = "otp"; }
 , enableHipe ? true
 , enableDebugInfo ? false
+, enableThreads ? true
+, enableSmpSupport ? true
+, enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
 , wxSupport ? true, wxPackages ? [ mesa wxGTK xorg.libX11 ]
@@ -22,6 +26,7 @@
 , installTargets ? "install install-docs"
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
+, meta ? null
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -36,13 +41,15 @@ let
   wxPackages2 = if stdenv.isDarwin then [ wxmac ] else wxPackages;
 
 in stdenv.mkDerivation ({
-  name = "erlang-${version}"
+  name = "${baseName}-${version}"
     + optionalString javacSupport "-javac"
     + optionalString odbcSupport "-odbc";
 
   inherit src version;
 
-  buildInputs = [ perl gnum4 ncurses openssl autoconf libxslt libxml2 makeWrapper ]
+  buildInputs =
+   [ perl gnum4 ncurses openssl autoreconfHook libxslt libxml2 makeWrapper gcc
+   ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
@@ -58,9 +65,9 @@ in stdenv.mkDerivation ({
   '';
 
   postPatch = ''
-    patchShebangs make
-
     ${postPatch}
+
+    patchShebangs make
   '';
 
   preConfigure = ''
@@ -68,6 +75,9 @@ in stdenv.mkDerivation ({
   '';
 
   configureFlags = [ "--with-ssl=${openssl.dev}" ]
+    ++ optional enableThreads "--enable-threads"
+    ++ optional enableSmpSupport "--enable-smp-support"
+    ++ optional enableKernelPoll "--enable-kernel-poll"
     ++ optional enableHipe "--enable-hipe"
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
@@ -78,6 +88,8 @@ in stdenv.mkDerivation ({
   # (PDFs are generated only when fop is available).
 
   postInstall = ''
+    ${postInstall}
+
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
   '';
 
@@ -125,8 +137,8 @@ in stdenv.mkDerivation ({
 // optionalAttrs (installPhase != "")   { inherit installPhase; }
 // optionalAttrs (installTargets != "") { inherit installTargets; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
-// optionalAttrs (postInstall != "")    { inherit postInstall; }
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
+// optionalAttrs (meta != null)         { inherit meta; }
 )
