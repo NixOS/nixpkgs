@@ -6246,6 +6246,14 @@ in {
     };
   };
 
+  eccodes = if (isPy27) then
+      (pkgs.eccodes.overrideAttrs (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    enablePython = true;
+    pythonPackages = self;
+  } else throw "eccodes not supported for interpreter ${python.executable}";
+
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
     version = "0.12.0";
