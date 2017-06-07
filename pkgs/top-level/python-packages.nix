@@ -11833,6 +11833,14 @@ in {
     };
   };
 
+  grib-api = if (isPy27) then
+      (pkgs.grib-api.overrideAttrs (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    enablePython = true;
+    pythonPackages = self;
+  } else throw "grib-api not supported for interpreter ${python.executable}";
+
   gspread = buildPythonPackage rec {
     version = "0.2.3";
     name = "gspread-${version}";
