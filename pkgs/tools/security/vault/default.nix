@@ -9,7 +9,7 @@ let
   };
 in buildGoPackage rec {
   name = "vault-${version}";
-  version = "0.6.5";
+  version = "0.7.2";
 
   goPackagePath = "github.com/hashicorp/vault";
 
@@ -17,7 +17,7 @@ in buildGoPackage rec {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "0ci46zn9d9h26flgjf4inmvk4mb1hlixvx5g7vg02raw0cqvknnb";
+    sha256 = "1kclpyb9a9y5zjvrlbxnkac4fl3lwqsr98v4yydf9ihl5v7wy4f5";
   };
 
   buildFlagsArray = ''
