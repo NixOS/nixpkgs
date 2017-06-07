@@ -16182,6 +16182,7 @@ with pkgs;
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
   runc = callPackage ../applications/virtualization/runc {};
+  runv = callPackage ../applications/virtualization/runv {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
