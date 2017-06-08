@@ -11,13 +11,11 @@ in
   stdenv.mkDerivation {
     name = "autorandr-${version}";
 
-    buildInputs = [ python wrapPython ];
-
-    phases = [ "unpackPhase" "installPhase" ];
+    buildInputs = [ python ];
 
     installPhase = ''
+      runHook preInstall
       make install TARGETS='autorandr' PREFIX=$out
-      wrapPythonProgramsIn $out/bin/autorandr $out
 
       make install TARGETS='bash_completion' DESTDIR=$out
 
@@ -35,6 +33,7 @@ in
         make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
           UDEV_RULES_DIR=/etc/udev/rules.d
       ''}
+      runHook postInstall
     '';
 
     src = fetchFromGitHub {
