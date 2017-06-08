@@ -6523,6 +6523,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  buck = callPackage ../development/tools/build-managers/buck { };
+
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     pythonPackages = python2Packages;
   };
