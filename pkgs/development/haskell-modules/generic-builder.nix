@@ -145,9 +145,9 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals withBenchmarkDepends benchmarkPkgconfigDepends;
 
+  nativeBuildInputs = setupHaskellDepends ++ buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++ setupHaskellDepends ++
-                     buildTools ++ libraryToolDepends ++ executableToolDepends ++
+  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
                      # ghcjs's hsc2hs calls out to the native hsc2hs
@@ -182,8 +182,9 @@ stdenv.mkDerivation ({
 
   inherit src;
 
-  nativeBuildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
-  propagatedNativeBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
+  inherit nativeBuildInputs;
+  buildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
+  propagatedBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
