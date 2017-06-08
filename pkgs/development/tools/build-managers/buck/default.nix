@@ -1,8 +1,6 @@
-{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, unzip, bash, jre, makeWrapper }:
+{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, unzip, bash, makeWrapper }:
 
-
-let
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "buck-${version}";
   version = "v2017.05.31.01";
 
@@ -31,7 +29,7 @@ in stdenv.mkDerivation rec {
     install -D -m755 buck-out/gen/programs/buck.pex $out/bin/buck
     wrapProgram $out/bin/buck \
       --prefix PYTHONPATH : $PYTHONPATH \
-      --prefix PATH : "${stdenv.lib.makeBinPath [jre watchman]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [jdk watchman]}"
   '';
 
   meta = with stdenv.lib; {
