@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     "-I${efl}/include/ethumb-client-1"
   ];
 
+  preConfigure = ''
+    export HOME="$TEMPDIR"
+  '';
+
   meta = {
     description = "Video + Audio player along the lines of mplayer";
     homepage = http://enlightenment.org/;

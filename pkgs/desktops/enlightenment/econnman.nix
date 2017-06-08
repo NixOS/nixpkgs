@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ python2Packages.pythonefl python2Packages.dbus-python ];
 
+  preConfigure = ''
+    export HOME="$TEMPDIR"
+  '';
+
   postInstall = ''
     wrapPythonPrograms
   '';
@@ -22,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A user interface for the connman network connection manager";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl3;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
   };
 }

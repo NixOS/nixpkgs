@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     "-I${efl}/include/ethumb-1"
   ];
 
+  preConfigure = ''
+    export HOME="$TEMPDIR"
+  '';
+
   meta = {
     description = "The best terminal emulator written with the EFL";
     homepage = http://enlightenment.org/;
