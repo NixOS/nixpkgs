@@ -1,0 +1,46 @@
+--- a/src/greeterconfiguration.h        2016-10-06 02:13:23.000000000 +0100
++++ b/src/greeterconfiguration.h        2017-03-22 19:20:44.913861615 +0000
+@@ -11,6 +11,8 @@
+ #define CONFIG_KEY_SCREENSAVER_TIMEOUT  "screensaver-timeout"
+ #define CONFIG_KEY_THEME                "theme-name"
+ #define CONFIG_KEY_ICON_THEME           "icon-theme-name"
++#define CONFIG_KEY_CURSOR_THEME         "cursor-theme-name"
++#define CONFIG_KEY_CURSOR_THEME_SIZE    "cursor-theme-size"
+ #define CONFIG_KEY_FONT                 "font-name"
+ #define CONFIG_KEY_DPI                  "xft-dpi"
+ #define CONFIG_KEY_ANTIALIAS            "xft-antialias"
+diff -Naur a/src/lightdm-gtk-greeter.c b/src/lightdm-gtk-greeter.c
+--- a/src/lightdm-gtk-greeter.c 2016-10-06 10:31:54.000000000 +0100
++++ b/src/lightdm-gtk-greeter.c 2017-03-23 20:39:40.476678709 +0000
+@@ -275,7 +275,8 @@
+ /* a11y indicator */
+ static gchar *default_font_name,
+              *default_theme_name,
+-             *default_icon_theme_name;
++             *default_icon_theme_name,
++             *default_cursor_theme_name;
+ void a11y_font_cb (GtkCheckMenuItem *item);
+ void a11y_contrast_cb (GtkCheckMenuItem *item);
+ void a11y_keyboard_cb (GtkCheckMenuItem *item, gpointer user_data);
+@@ -2745,6 +2746,21 @@
+     g_object_get (gtk_settings_get_default (), "gtk-icon-theme-name", &default_icon_theme_name, NULL);
+     g_debug ("[Configuration] Icons theme: '%s'", default_icon_theme_name);
+ 
++    value = config_get_string (NULL, CONFIG_KEY_CURSOR_THEME, NULL);
++    if (value)
++    {
++        g_debug ("[Configuration] Changing cursor theme to '%s'", value);
++        g_object_set (gtk_settings_get_default (), "gtk-cursor-theme-name", value, NULL);
++        g_free (value);
++    }
++    g_object_get (gtk_settings_get_default (), "gtk-cursor-theme-name", &default_cursor_theme_name, NULL);
++    g_debug ("[Configuration] Cursor theme: '%s'", default_cursor_theme_name);
++
++    if (config_has_key(NULL, CONFIG_KEY_CURSOR_THEME_SIZE))
++    {
++        g_object_set (gtk_settings_get_default (), "gtk-cursor-theme-size", config_get_int (NULL, CONFIG_KEY_CURSOR_THEME_SIZE, 16), NULL);
++    }
++
+     value = config_get_string (NULL, CONFIG_KEY_FONT, "Sans 10");
+     if (value)
+     {

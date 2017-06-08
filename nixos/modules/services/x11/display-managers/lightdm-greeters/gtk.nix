@@ -12,6 +12,7 @@ let
 
   theme = cfg.theme.package;
   icons = cfg.iconTheme.package;
+  cursors = cfg.cursorTheme.package;
 
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
@@ -28,7 +29,8 @@ let
         --set GTK_EXE_PREFIX "${theme}" \
         --set GTK_DATA_PREFIX "${theme}" \
         --set XDG_DATA_DIRS "${theme}/share:${icons}/share" \
-        --set XDG_CONFIG_HOME "${theme}/share"
+        --set XDG_CONFIG_HOME "${theme}/share" \
+        ${lib.optionalString (cursors != null) ''--set XCURSOR_PATH ${cursors}/share/icons''}
 
       cat - > $out/lightdm-gtk-greeter.desktop << EOF
       [Desktop Entry]
@@ -45,6 +47,12 @@ let
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
     background = ${ldmcfg.background}
+    ${lib.optionalString (cfg.cursorTheme.name != null) ''
+    cursor-theme-name = ${cfg.cursorTheme.name}
+    ''}
+    ${lib.optionalString (cfg.cursorTheme.size != null) ''
+    cursor-theme-size = ${toString cfg.cursorTheme.size}
+    ''}
     ${cfg.extraConfig}
     '';
 
@@ -104,6 +112,34 @@ in
 
       };
 
+      cursorTheme = {
+
+        package = mkOption {
+          type = types.nullOr types.package;
+          default = null;
+          description = ''
+            The package path that contains the cursor theme given in the name option.
+          '';
+        };
+
+        name = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Name of the cursor theme to use for the lightdm-gtk-greeter.
+          '';
+        };
+
+        size = mkOption {
+          type = types.nullOr types.int;
+          default = null;
+          description = ''
+            Size of the cursor theme to use for the lightdm-gtk-greeter.
+          '';
+        };
+
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -118,6 +154,13 @@ in
   };
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
+    assertions = [
+      { assertion = cfg.cursorTheme.name != null
+          -> cfg.cursorTheme.package != null;
+        message  =
+          "Using cfg.cursorTheme.name requires cfg.cursorTheme.package to be set.";
+      }
+    ];
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
       package = wrappedGtkGreeter;
