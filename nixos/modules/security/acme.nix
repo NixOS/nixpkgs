@@ -13,7 +13,7 @@ let
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
-          will be created automatically if it doesn't exist.
+          will be created below the webroot if it doesn't exist.
           <literal>http://example.org/.well-known/acme-challenge/</literal> must also
           be available (notice unencrypted HTTP).
         '';
@@ -46,7 +46,10 @@ let
       allowKeysForGroup = mkOption {
         type = types.bool;
         default = false;
-        description = "Give read permissions to the specified group to read SSL private certificates.";
+        description = ''
+          Give read permissions to the specified group
+          (<option>security.acme.group</option>) to read SSL private certificates.
+        '';
       };
 
       postRun = mkOption {
@@ -77,10 +80,12 @@ let
       extraDomains = mkOption {
         type = types.attrsOf (types.nullOr types.str);
         default = {};
-        example = {
-          "example.org" = "/srv/http/nginx";
-          "mydomain.org" = null;
-        };
+        example = literalExample ''
+          {
+            "example.org" = "/srv/http/nginx";
+            "mydomain.org" = null;
+          }
+        '';
         description = ''
           Extra domain names for which certificates are to be issued, with their
           own server roots if needed.
@@ -140,17 +145,19 @@ in
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';
-        example = {
-          "example.com" = {
-            webroot = "/var/www/challenges/";
-            email = "foo@example.com";
-            extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
-          };
-          "bar.example.com" = {
-            webroot = "/var/www/challenges/";
-            email = "bar@example.com";
-          };
-        };
+        example = literalExample ''
+          {
+            "example.com" = {
+              webroot = "/var/www/challenges/";
+              email = "foo@example.com";
+              extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
+            };
+            "bar.example.com" = {
+              webroot = "/var/www/challenges/";
+              email = "bar@example.com";
+            };
+          }
+        '';
       };
     };
   };
