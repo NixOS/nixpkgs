@@ -12466,11 +12466,11 @@ in {
   };
 
   ipaddress = if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
-    name = "ipaddress-1.0.16";
+    name = "ipaddress-1.0.18";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipaddress/${name}.tar.gz";
-      sha256 = "1c3imabdrw8nfksgjjflzg7h4ynjckqacb188rf541m74arq4cas";
+      sha256 = "1q8klj9d84cmxgz66073x1j35cplr3r77vx1znhxiwl5w74391ax";
     };
 
     checkPhase = ''
