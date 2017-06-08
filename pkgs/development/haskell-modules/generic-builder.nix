@@ -210,11 +210,8 @@ stdenv.mkDerivation ({
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
-    local inputClosure=""
-    for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
-      findInputs $i inputClosure propagated-native-build-inputs
-    done
-    for p in $inputClosure; do
+    # nativePkgs defined in stdenv/setup.hs
+    for p in $nativePkgs; do
       if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
         cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue
