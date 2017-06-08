@@ -30,10 +30,17 @@
     <para>
       Example usages:
 
+      The listing below can be used to change existing attributes like `src` or `buildInputs`:
       <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
+      
+      The listing below is similar to the one above but applies to all pkgs in nixpkgs. It can be used to extend pkgs with new ones or alter exiting ones. Since there is `self` and `super` one can update a library package and add a program which uses it at the same time.
+      
       <programlisting>import pkgs.path { overlays = [ (self: super: {
     foo = super.foo.override { barSupport = true ; };
   })]};</programlisting>
+
+
+      This third example shows how to modify an input dependency.
       <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
     mydep = pkgs.mydep.override { ... };
   }</programlisting>
