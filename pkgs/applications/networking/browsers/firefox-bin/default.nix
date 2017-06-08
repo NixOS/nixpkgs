@@ -125,6 +125,8 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
+  inherit gtk3;
+
   buildInputs = [ wrapGAppsHook gtk3 defaultIconTheme ];
 
   # "strip" after "patchelf" may break binaries.
