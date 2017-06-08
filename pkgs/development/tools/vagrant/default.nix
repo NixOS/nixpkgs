@@ -97,8 +97,8 @@ in stdenv.mkDerivation rec {
 
     # ruby libs
     rm -rf opt/vagrant/embedded/lib/*
-    for lib in $(ls ${ruby}/lib); do
-      ln -s ${ruby}/lib/$lib opt/vagrant/embedded/lib/$lib
+    for lib in ${ruby}/lib/*; do
+      ln -s $lib opt/vagrant/embedded/lib/''${lib##*/}
     done
 
     # libiconv: iconv
