@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     preConfigure = "export scanf_cv_type_modifier=ms";
   };
 
+  preConfigure = lib.optionalString (systemd != null) ''
+    configureFlags+="--with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
+  '';
+
   # !!! It would be better to obtain the path to the mount helpers
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
@@ -40,10 +44,6 @@ stdenv.mkDerivation rec {
     --disable-use-tty-group
     --enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
-    ${if systemd == null then "" else ''
-      --with-systemd
-      --with-systemdsystemunitdir=$out/lib/systemd/system/
-    ''}
   '';
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
