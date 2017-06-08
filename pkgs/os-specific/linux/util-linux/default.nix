@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       --with-systemd
       --with-systemdsystemunitdir=$out/lib/systemd/system/
     ''}
+    --disable-makeinstall-setuid --disable-makeinstall-chown
   '';
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
