@@ -1,0 +1,432 @@
+diff -ru pax-utils-1.2.2/dumpelf.c pax-utils/dumpelf.c
+--- pax-utils-1.2.2/dumpelf.c	2017-01-24 14:24:53.000000000 -0600
++++ pax-utils/dumpelf.c	2017-03-21 17:43:18.208246959 -0500
+@@ -209,6 +209,7 @@
+ 	 * world, the two structs are exactly the same.  So avoid ugly CPP.
+ 	 */
+ 	size_t i;
++	bool corrupt = false;
+ 	const void *ndata = memory;
+ 	const char *name;
+ 	const unsigned char *desc;
+@@ -223,23 +224,31 @@
+ 	}
+ 
+ 	printf("\n\t/%c note section dump:\n", '*');
+-	for (i = 0; ndata < memory_end; ++i) {
++	for (i = 0; ndata < memory_end && !corrupt; ++i) {
+ 		note = ndata;
+ 		namesz = EGET(note->n_namesz);
+ 		descsz = EGET(note->n_descsz);
+-		name = namesz ? ndata + sizeof(*note) : "";
+-		desc = descsz ? ndata + sizeof(*note) + ALIGN_UP(namesz, 4) : "";
++		if (namesz > elf->len || descsz > elf->len)
++			corrupt = true;
++		name = namesz ? ndata + sizeof(*note) : NULL;
++		desc = descsz ? ndata + sizeof(*note) + ALIGN_UP(namesz, 4) : NULL;
+ 		ndata += sizeof(*note) + ALIGN_UP(namesz, 4) + ALIGN_UP(descsz, 4);
+ 
+-		if (ndata > memory_end) {
++		if (ndata > memory_end)
++			corrupt = true;
++		if (corrupt) {
++			name = NULL;
++			desc = NULL;
+ 			printf("\tNote is corrupt\n");
+-			break;
+ 		}
+ 
+ 		printf("\t * Elf%zu_Nhdr note%zu = {\n", B, i);
+-		printf("\t * \t.n_namesz = %u, (bytes) [%s]\n", namesz, name);
++		printf("\t * \t.n_namesz = %u, (bytes)", namesz);
++		if (name)
++			printf(" [%s]", name);
++		printf("\n");
+ 		printf("\t * \t.n_descsz = %u, (bytes)", descsz);
+-		if (descsz) {
++		if (desc) {
+ 			printf(" [ ");
+ 			for (i = 0; i < descsz; ++i)
+ 				printf("%.2X ", desc[i]);
+@@ -293,9 +302,6 @@
+ 	Elf ## B ## _Off offset = EGET(phdr->p_offset); \
+ 	void *vdata = elf->vdata + offset; \
+ 	uint32_t p_type = EGET(phdr->p_type); \
+-	switch (p_type) { \
+-	case PT_DYNAMIC: phdr_dynamic_void = phdr_void; break; \
+-	} \
+ 	printf("/* Program Header #%zu 0x%tX */\n{\n", \
+ 	       phdr_cnt, (uintptr_t)phdr_void - elf->udata); \
+ 	printf("\t.p_type   = %-10u , /* [%s] */\n", p_type, get_elfptype(p_type)); \
+@@ -307,12 +313,15 @@
+ 	printf("\t.p_flags  = 0x%-8X , /* %s */\n", (uint32_t)EGET(phdr->p_flags), dump_p_flags(p_type, EGET(phdr->p_flags))); \
+ 	printf("\t.p_align  = %-10"PRIu64" , /* (min mem alignment in bytes) */\n", EGET(phdr->p_align)); \
+ 	\
+-	if ((off_t)EGET(phdr->p_offset) > elf->len) { \
++	if (!VALID_PHDR(elf, phdr)) { \
+ 		printf("\t/* Warning: Program segment is corrupt. */\n"); \
+ 		goto done##B; \
+ 	} \
+ 	\
+ 	switch (p_type) { \
++	case PT_DYNAMIC: \
++		phdr_dynamic_void = phdr_void; \
++		break; \
+ 	case PT_NOTE: \
+ 		dump_notes(elf, B, vdata, vdata + EGET(phdr->p_filesz)); \
+ 		break; \
+@@ -376,7 +385,7 @@
+ 		/* Special case so we can do valid check next. */ \
+ 		if (be_verbose) \
+ 			printf("\t/* NOBITS sections do not occupy the file. */\n"); \
+-	} else if (!(offset < (uint64_t)elf->len && size < (uint64_t)elf->len && offset <= elf->len - size)) { \
++	} else if (!VALID_RANGE(elf, offset, size)) { \
+ 		printf(" /* corrupt section header ! */ "); \
+ 	} else if (size && be_verbose) { \
+ 		void *vdata = elf->vdata + offset; \
+@@ -413,17 +422,20 @@
+ 		case SHT_DYNSYM: { \
+ 			Elf##B##_Sym *sym = vdata; \
+ 			printf("\n\t/%c section dump:\n", '*'); \
+-			for (i = 0; i < EGET(shdr->sh_size) / EGET(shdr->sh_entsize); ++i) { \
+-				printf("\t * Elf%i_Sym sym%zu = {\n", B, i); \
+-				printf("\t * \t.st_name  = %u,\n", (uint32_t)EGET(sym->st_name)); \
+-				printf("\t * \t.st_value = 0x%"PRIX64",\n", EGET(sym->st_value)); \
+-				printf("\t * \t.st_size  = %"PRIu64", (bytes)\n", EGET(sym->st_size)); \
+-				printf("\t * \t.st_info  = %u,\n", (unsigned char)EGET(sym->st_info)); \
+-				printf("\t * \t.st_other = %u,\n", (unsigned char)EGET(sym->st_other)); \
+-				printf("\t * \t.st_shndx = %u\n", (uint16_t)EGET(sym->st_shndx)); \
+-				printf("\t * };\n"); \
+-				++sym; \
+-			} \
++			if (EGET(shdr->sh_entsize) < sizeof(*sym)) \
++				printf(" /* corrupt section ! */ "); \
++			else \
++				for (i = 0; i < EGET(shdr->sh_size) / EGET(shdr->sh_entsize); ++i) { \
++					printf("\t * Elf%i_Sym sym%zu = {\n", B, i); \
++					printf("\t * \t.st_name  = %u,\n", (uint32_t)EGET(sym->st_name)); \
++					printf("\t * \t.st_value = 0x%"PRIX64",\n", EGET(sym->st_value)); \
++					printf("\t * \t.st_size  = %"PRIu64", (bytes)\n", EGET(sym->st_size)); \
++					printf("\t * \t.st_info  = %u,\n", (unsigned char)EGET(sym->st_info)); \
++					printf("\t * \t.st_other = %u,\n", (unsigned char)EGET(sym->st_other)); \
++					printf("\t * \t.st_shndx = %u\n", (uint16_t)EGET(sym->st_shndx)); \
++					printf("\t * };\n"); \
++					++sym; \
++				} \
+ 			printf("\t */\n"); \
+ 			break; \
+ 		} \
+@@ -433,17 +445,20 @@
+ 		case SHT_GNU_LIBLIST: { \
+ 			Elf##B##_Lib *lib = vdata; \
+ 			printf("\n\t/%c section dump:\n", '*'); \
+-			for (i = 0; i < EGET(shdr->sh_size) / EGET(shdr->sh_entsize); ++i) { \
+-				printf("\t * Elf%i_Lib lib%zu = {\n", B, i); \
+-				printf("\t * \t.l_name       = %"PRIu64",\n", EGET(lib->l_name)); \
+-				printf("\t * \t.l_time_stamp = 0x%"PRIX64", (%s)\n", \
+-				       EGET(lib->l_time_stamp), timestamp(EGET(lib->l_time_stamp))); \
+-				printf("\t * \t.l_checksum   = 0x%"PRIX64",\n", EGET(lib->l_checksum)); \
+-				printf("\t * \t.l_version    = %"PRIu64",\n", EGET(lib->l_version)); \
+-				printf("\t * \t.l_flags      = 0x%"PRIX64"\n", EGET(lib->l_flags)); \
+-				printf("\t * };\n"); \
+-				++lib; \
+-			} \
++			if (EGET(shdr->sh_entsize) < sizeof(*lib)) \
++				printf(" /* corrupt section ! */ "); \
++			else \
++				for (i = 0; i < EGET(shdr->sh_size) / EGET(shdr->sh_entsize); ++i) { \
++					printf("\t * Elf%i_Lib lib%zu = {\n", B, i); \
++					printf("\t * \t.l_name       = %"PRIu64",\n", EGET(lib->l_name)); \
++					printf("\t * \t.l_time_stamp = 0x%"PRIX64", (%s)\n", \
++					       EGET(lib->l_time_stamp), timestamp(EGET(lib->l_time_stamp))); \
++					printf("\t * \t.l_checksum   = 0x%"PRIX64",\n", EGET(lib->l_checksum)); \
++					printf("\t * \t.l_version    = %"PRIu64",\n", EGET(lib->l_version)); \
++					printf("\t * \t.l_flags      = 0x%"PRIX64"\n", EGET(lib->l_flags)); \
++					printf("\t * };\n"); \
++					++lib; \
++				} \
+ 			printf("\t */\n"); \
+ 		} \
+ 		default: { \
+Only in pax-utils: .git
+diff -ru pax-utils-1.2.2/lddtree.py pax-utils/lddtree.py
+--- pax-utils-1.2.2/lddtree.py	2017-01-24 14:24:53.000000000 -0600
++++ pax-utils/lddtree.py	2017-03-21 17:43:18.209246936 -0500
+@@ -1,4 +1,5 @@
+ #!/usr/bin/python
++# -*- coding: utf-8 -*-
+ # Copyright 2012-2014 Gentoo Foundation
+ # Copyright 2012-2014 Mike Frysinger <vapier@gentoo.org>
+ # Copyright 2012-2014 The Chromium OS Authors
+@@ -73,7 +74,7 @@
+ def bstr(buf):
+   """Decode the byte string into a string"""
+   if isinstance(buf, str):
+-      return buf
++    return buf
+   return buf.decode('utf-8')
+ 
+ 
+@@ -351,6 +352,8 @@
+   return (None, None)
+ 
+ 
++# We abuse the _all_libs state.  We probably shouldn't, but we do currently.
++# pylint: disable=dangerous-default-value
+ def ParseELF(path, root='/', prefix='', ldpaths={'conf':[], 'env':[], 'interp':[]},
+              display=None, debug=False, _first=True, _all_libs={}):
+   """Parse the ELF dependency tree of the specified file
+@@ -491,6 +494,7 @@
+     del elf
+ 
+   return ret
++# pylint: enable=dangerous-default-value
+ 
+ 
+ class _NormalizePathAction(argparse.Action):
+@@ -608,7 +612,7 @@
+   # Similarly, we should provide an option for automatically copying over
+   # the libnsl.so and libnss_*.so libraries, as well as an open ended list
+   # for known libs that get loaded (e.g. curl will dlopen(libresolv)).
+-  libpaths = set()
++  uniq_libpaths = set()
+   for lib in elf['libs']:
+     libdata = elf['libs'][lib]
+     path = libdata['realpath']
+@@ -616,17 +620,18 @@
+       warn('could not locate library: %s' % lib)
+       continue
+     if not options.libdir:
+-      libpaths.add(_StripRoot(os.path.dirname(path)))
++      uniq_libpaths.add(_StripRoot(os.path.dirname(path)))
+     _copy(path, libdata['path'], outdir=options.libdir)
+ 
+   if not options.libdir:
+-    libpaths = list(libpaths)
++    libpaths = list(uniq_libpaths)
+     if elf['runpath']:
+       libpaths = elf['runpath'] + libpaths
+     else:
+       libpaths = elf['rpath'] + libpaths
+   else:
+-    libpaths.add(options.libdir)
++    uniq_libpaths.add(options.libdir)
++    libpaths = list(uniq_libpaths)
+ 
+   # We don't bother to copy this as ParseElf adds the interp to the 'libs',
+   # so it was already copied in the libs loop above.
+@@ -636,7 +641,8 @@
+         outdir=options.bindir)
+ 
+ 
+-def main(argv):
++def GetParser():
++  """Get a CLI parser."""
+   parser = argparse.ArgumentParser(
+       description=__doc__,
+       formatter_class=argparse.RawDescriptionHelpFormatter)
+@@ -693,6 +699,12 @@
+                      action='store_true', default=False,
+                      help='Copy over plain (non-ELF) files instead of warn+ignore')
+ 
++  return parser
++
++
++def main(argv):
++  """The main entry point!"""
++  parser = GetParser()
+   options = parser.parse_args(argv)
+   paths = options.path
+ 
+diff -ru pax-utils-1.2.2/paxelf.c pax-utils/paxelf.c
+--- pax-utils-1.2.2/paxelf.c	2017-01-24 14:24:53.000000000 -0600
++++ pax-utils/paxelf.c	2017-03-21 17:43:18.210246914 -0500
+@@ -726,7 +726,7 @@
+ 	free(elf);
+ }
+ 
+-char *pax_short_hf_flags(unsigned long flags)
++const char *pax_short_hf_flags(unsigned long flags)
+ {
+ 	static char buffer[7];
+ 
+@@ -746,7 +746,7 @@
+  * lower case: explicitly disabled
+  * upper case: explicitly enabled
+  *      -    : default */
+-char *pax_short_pf_flags(unsigned long flags)
++const char *pax_short_pf_flags(unsigned long flags)
+ {
+ 	static char buffer[7];
+ 
+@@ -772,7 +772,7 @@
+ 	return buffer;
+ }
+ 
+-char *gnu_short_stack_flags(unsigned long flags)
++const char *gnu_short_stack_flags(unsigned long flags)
+ {
+ 	static char buffer[4];
+ 
+diff -ru pax-utils-1.2.2/paxelf.h pax-utils/paxelf.h
+--- pax-utils-1.2.2/paxelf.h	2017-01-24 14:24:53.000000000 -0600
++++ pax-utils/paxelf.h	2017-03-21 17:43:18.210246914 -0500
+@@ -39,17 +39,20 @@
+ #define SYM32(ptr) ((Elf32_Sym *)(ptr))
+ #define SYM64(ptr) ((Elf64_Sym *)(ptr))
+ 
++#define VALID_RANGE(elf, offset, size) \
++	((uint64_t)(size) <= (uint64_t)elf->len && \
++	 (uint64_t)(offset) <= (uint64_t)elf->len - (uint64_t)(size))
+ #define VALID_SHDR(elf, shdr) \
+ 	(shdr && \
+ 	 EGET(shdr->sh_type) != SHT_NOBITS && \
+-	 EGET(shdr->sh_offset) < (uint64_t)elf->len && \
+-	 EGET(shdr->sh_size) < (uint64_t)elf->len && \
+-	 EGET(shdr->sh_offset) <= elf->len - EGET(shdr->sh_size))
++	 VALID_RANGE(elf, EGET(shdr->sh_offset), EGET(shdr->sh_size)))
++#define VALID_PHDR(elf, phdr) \
++	(phdr && VALID_RANGE(elf, EGET(phdr->p_offset), EGET(phdr->p_filesz)))
+ 
+ /* prototypes */
+-extern char *pax_short_hf_flags(unsigned long flags);
+-extern char *pax_short_pf_flags(unsigned long flags);
+-extern char *gnu_short_stack_flags(unsigned long flags);
++extern const char *pax_short_hf_flags(unsigned long flags);
++extern const char *pax_short_pf_flags(unsigned long flags);
++extern const char *gnu_short_stack_flags(unsigned long flags);
+ extern elfobj *readelf_buffer(const char *filename, void *buffer, size_t buffer_len);
+ extern elfobj *_readelf_fd(const char *filename, int fd, size_t len, int read_only);
+ #define readelf_fd(filename, fd, len) _readelf_fd(filename, fd, len, 1)
+Only in pax-utils: pylint
+Only in pax-utils: .pylintrc
+diff -ru pax-utils-1.2.2/scanelf.c pax-utils/scanelf.c
+--- pax-utils-1.2.2/scanelf.c	2017-01-24 14:24:53.000000000 -0600
++++ pax-utils/scanelf.c	2017-03-21 17:43:18.211246891 -0500
+@@ -181,7 +181,7 @@
+ 	if (EGET(phdr->p_filesz) == 0) \
+ 		break; \
+ 	offset = EGET(phdr->p_offset); \
+-	if (offset >= elf->len - sizeof(Elf##B##_Dyn)) \
++	if (!VALID_RANGE(elf, offset, sizeof(Elf##B##_Dyn))) \
+ 		break; \
+ 	return phdr;
+ 	SCANELF_ELF_SIZED(CHECK_PT_DYNAMIC);
+@@ -299,11 +299,9 @@
+ 		if (EGET(phdr[i].p_type) != PT_LOAD) \
+ 			continue; \
+ 		\
+-		if (offset >= (uint64_t)elf->len) \
++		if (!VALID_RANGE(elf, offset, filesz)) \
+ 			goto corrupt_hash; \
+-		if (filesz >= (uint64_t)elf->len) \
+-			goto corrupt_hash; \
+-		if (hash_offset + (sizeof(Elf32_Word) * 4) > (uint64_t)elf->len) \
++		if (!VALID_RANGE(elf, hash_offset, sizeof(Elf32_Word) * 4)) \
+ 			goto corrupt_hash; \
+ 		\
+ 		if (vhash >= vaddr && vhash < vaddr + filesz) { \
+@@ -317,22 +315,17 @@
+ 			Elf32_Word sym_idx; \
+ 			Elf32_Word chained; \
+ 			\
+-			if (hash_offset >= (uint64_t)elf->len) \
+-				goto corrupt_hash; \
+-			if (nbuckets >= UINT32_MAX / 4) \
+-				goto corrupt_hash; \
+-			if (nchains >= UINT32_MAX / 4) \
+-				goto corrupt_hash; \
+-			if (nbuckets * 4 > elf->len - offset) \
++			if (!VALID_RANGE(elf, offset, nbuckets * 4)) \
+ 				goto corrupt_hash; \
+-			if (nchains * 4 > elf->len - offset) \
++			if (!VALID_RANGE(elf, offset, nchains * 4)) \
+ 				goto corrupt_hash; \
+ 			\
+ 			for (b = 0; b < nbuckets; ++b) { \
+ 				if (!buckets[b]) \
+ 					continue; \
+ 				for (sym_idx = buckets[b], chained = 0; \
+-				     sym_idx < nchains && sym_idx && chained <= nchains; \
++				     (sym_idx < nchains && sym_idx && chained <= nchains && \
++				      (void *)&chains[sym_idx] + sizeof(*chains) < elf->data_end); \
+ 				     sym_idx = chains[sym_idx], ++chained) { \
+ 					if (max_sym_idx < sym_idx) \
+ 						max_sym_idx = sym_idx; \
+@@ -344,13 +337,17 @@
+ 		} \
+ 		\
+ 		if (vsym >= vaddr && vsym < vaddr + filesz) { \
++			Elf##B##_Shdr *shdr = &sym_shdr; \
+ 			ESET(sym_shdr.sh_offset, offset + (vsym - vaddr)); \
+-			*sym = &sym_shdr; \
++			if (VALID_SHDR(elf, shdr)) \
++				*sym = shdr; \
+ 		} \
+ 		\
+ 		if (vstr >= vaddr && vstr < vaddr + filesz) { \
++			Elf##B##_Shdr *shdr = &str_shdr; \
+ 			ESET(str_shdr.sh_offset, offset + (vstr - vaddr)); \
+-			*str = &str_shdr; \
++			if (VALID_SHDR(elf, shdr)) \
++				*str = shdr; \
+ 		} \
+ 	}
+ 	if (elf->phdr)
+@@ -361,7 +358,7 @@
+ 	warn("%s: ELF hash table is corrupt", elf->filename);
+ }
+ 
+-static char *scanelf_file_pax(elfobj *elf, char *found_pax)
++static const char *scanelf_file_pax(elfobj *elf, char *found_pax)
+ {
+ 	static char ret[7];
+ 	unsigned long i, shown;
+@@ -400,8 +397,7 @@
+ 
+ 	/* fall back to EI_PAX if no PT_PAX was found */
+ 	if (!*ret) {
+-		static char *paxflags;
+-		paxflags = pax_short_hf_flags(EI_PAX_FLAGS(elf));
++		const char *paxflags = pax_short_hf_flags(EI_PAX_FLAGS(elf));
+ 		if (!be_quiet || (be_quiet && EI_PAX_FLAGS(elf))) {
+ 			*found_pax = 1;
+ 			return (be_wewy_wewy_quiet ? NULL : paxflags);
+@@ -486,7 +482,7 @@
+ 		for (i = 0; i < shnum; ++i) { \
+ 			if (EGET(shdr[i].sh_type) != SHT_PROGBITS) continue; \
+ 			offset = EGET(strtbl->sh_offset) + EGET(shdr[i].sh_name); \
+-			if (offset >= elf->len - sizeof(NOTE_GNU_STACK)) \
++			if (!VALID_RANGE(elf, offset, sizeof(NOTE_GNU_STACK))) \
+ 				continue; \
+ 			if (!strcmp(elf->data + offset, NOTE_GNU_STACK)) { \
+ 				if (multi_stack++) warnf("%s: multiple .note.GNU-stack's !?", elf->filename); \
+@@ -1504,7 +1500,7 @@
+ 		case 'a': out = get_elfemtype(elf); break;
+ 		case 'I': out = get_elfosabi(elf); break;
+ 		case 'Y': out = get_elf_eabi(elf); break;
+-		case 'Z': snprintf(ubuf, sizeof(ubuf), "%lu", (unsigned long)elf->len); out = ubuf; break;;
++		case 'Z': snprintf(ubuf, sizeof(ubuf), "%"PRIu64, (uint64_t)elf->len); out = ubuf; break;;
+ 		default: warnf("'%c' has no scan code?", out_format[i]);
+ 		}
+ 		if (out) {
+Only in pax-utils/tests/lddtree: dotest-cmp
+Only in pax-utils-1.2.2/tests/lddtree: dotest.cmp
+Only in pax-utils/tests/lddtree: dotest-py
+Only in pax-utils-1.2.2/tests/lddtree: dotest.py
+Only in pax-utils/tests/lddtree: dotest-sfx
+Only in pax-utils-1.2.2/tests/lddtree: dotest.sfx
+Only in pax-utils/tests/lddtree: dotest-sh
+Only in pax-utils-1.2.2/tests/lddtree: dotest.sh
+diff -ru pax-utils-1.2.2/tests/lddtree/Makefile pax-utils/tests/lddtree/Makefile
+--- pax-utils-1.2.2/tests/lddtree/Makefile	2017-01-24 14:24:53.000000000 -0600
++++ pax-utils/tests/lddtree/Makefile	2017-03-21 17:43:18.211246891 -0500
+@@ -1,7 +1,7 @@
+ all: check
+ 
+ %.check:
+-	./dotest.$(@:.check=)
++	./dotest-$(@:.check=)
+ 
+ test check: sh.check
+ ifneq ($(USE_PYTHON),no)

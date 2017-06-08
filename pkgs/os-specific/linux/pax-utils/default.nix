@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://dev.gentoo.org/~vapier/dist/${name}.tar.xz";
     sha512 = "26f7lqr1s2iywj8qfbf24sm18bl6f7cwsf77nxwwvgij1z88gvh6yx3gp65zap92l0xjdp8kwq9y96xld39p86zd9dmkm447czykbvb";
   };
+  
+  patches = [ ./CVE_out_of_bounds-2017.patch ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
