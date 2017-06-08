@@ -1747,6 +1747,8 @@ with pkgs;
     tinyxml2 = tinyxml-2;
   };
 
+  enpass = callPackage ../applications/misc/enpass { };
+
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
