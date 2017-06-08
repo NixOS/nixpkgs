@@ -269,6 +269,7 @@
   kaiha = "Kai Harries <kai.harries@gmail.com>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
+  kentjames = "James Kent <jameschristopherkent@gmail.com";
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   KibaFox = "Kiba Fox <kiba.fox@foxypossibilities.com>";

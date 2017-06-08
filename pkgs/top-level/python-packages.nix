@@ -141,6 +141,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  astropy = callPackage ../development/python-modules/astropy {  };
+
   automat = callPackage ../development/python-modules/automat { };
 
   # packages defined elsewhere
@@ -6616,10 +6618,10 @@ in {
 
   Fabric = buildPythonPackage rec {
     name = "Fabric-${version}";
-    version = "1.10.2";
+    version = "1.13.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Fabric/${name}.tar.gz";
-      sha256 = "0nikc05iz1fx2c9pvxrhrs819cpmg566azm99450yq2m8qmp1cpd";
+      sha256 = "0k944dxr41whw7ib6380q9x15wyskx7fqni656icdn8rzshn9bwq";
     };
     disabled = isPy3k;
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
