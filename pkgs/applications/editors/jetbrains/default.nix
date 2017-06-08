@@ -233,12 +233,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.3";
+    version = "2017.1.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0ag70z4cark69hzhvx5j75qa8dglwzfaqrzi8pim3asd161fwxrx";
+      sha256 = "1w1knq969dl8rxlkhr9mw8cr2vszn384acwhspimrd3zs9825r45";
     };
     wmClass = "jetbrains-idea-ce";
   };
