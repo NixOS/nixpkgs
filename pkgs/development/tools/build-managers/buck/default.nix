@@ -1,6 +1,8 @@
-  { stdenv, pkgs, fetchFromGitHub, fetchgit, jdk, ant, python2, watchman, unzip, bash }:
+{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, unzip, bash, jre, makeWrapper }:
 
-stdenv.mkDerivation rec {
+
+let
+in stdenv.mkDerivation rec {
   name = "buck-${version}";
   version = "v2017.05.31.01";
 
@@ -14,27 +16,23 @@ stdenv.mkDerivation rec {
   patches = [ ./pex-mtime.patch ];
 
   postPatch = ''
-    for f in $(grep -l -r '/bin/bash'); do
-      substituteInPlace "$f" --replace '/bin/bash' '${bash}/bin/bash'
-    done
+    grep -l -r '/bin/bash' --null | xargs -0 sed -i -e "s!/bin/bash!${bash}/bin/bash!g"
   '';
 
-  buildInputs = [ jdk ant ];
+  buildInputs = [ jdk ant python2 watchman python2Packages.pywatchman ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = [ python2 watchman pkgs.python27Packages.pywatchman ];
+  buildPhase = ''
+    ant
+    ./bin/buck build buck
+  '';
 
-  buildPhase =
-    ''
-      ant
-      ./bin/buck --version
-      ./bin/buck build buck
-    '';
-
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp  buck-out/gen/programs/buck.pex $out/bin/buck
-    '';
+  installPhase = ''
+    install -D -m755 buck-out/gen/programs/buck.pex $out/bin/buck
+    wrapProgram $out/bin/buck \
+      --prefix PYTHONPATH : $PYTHONPATH \
+      --prefix PATH : "${stdenv.lib.makeBinPath [jre watchman]}"
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://buckbuild.com/;
