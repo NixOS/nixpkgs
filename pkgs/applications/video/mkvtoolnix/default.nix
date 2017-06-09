@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "11.0.0";
+  version = "12.0.0";
 
   src = fetchFromGitHub {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "1qqa8ss2mfjzj984l9vc1fnk7czbvhbmmq53m87gnrc65351gkir";
+    sha256 = "1xn24f9046q2lr1xbl02cpmqa4fhhxqjc14j14c9r6qfc4ix4n9w";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake gettext drake ruby docbook_xsl libxslt ];
