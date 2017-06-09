@@ -34,8 +34,7 @@
 , license
 , maintainers ? []
 , doCoverage ? false
-# TODO Do we care about haddock when cross-compiling?
-, doHaddock ? !isCross && (!stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8")
+, doHaddock ? (!ghc.isHaLVM or true)
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
