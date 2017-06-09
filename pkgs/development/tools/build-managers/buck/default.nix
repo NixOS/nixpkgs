@@ -20,16 +20,23 @@ stdenv.mkDerivation rec {
   buildInputs = [ jdk ant python2 watchman python2Packages.pywatchman ];
   nativeBuildInputs = [ makeWrapper ];
 
+  targets = [ "buck" "buckd" ];
+
   buildPhase = ''
     ant
-    ./bin/buck build buck
+
+    for exe in ${toString targets}; do
+      ./bin/buck build //programs:$exe
+    done
   '';
 
   installPhase = ''
-    install -D -m755 buck-out/gen/programs/buck.pex $out/bin/buck
-    wrapProgram $out/bin/buck \
-      --prefix PYTHONPATH : $PYTHONPATH \
-      --prefix PATH : "${stdenv.lib.makeBinPath [jdk watchman]}"
+    for exe in ${toString targets}; do
+      install -D -m755 buck-out/gen/programs/$exe.pex $out/bin/$exe
+      wrapProgram $out/bin/$exe \
+        --prefix PYTHONPATH : $PYTHONPATH \
+        --prefix PATH : "${stdenv.lib.makeBinPath [jdk watchman]}"
+    done
   '';
 
   meta = with stdenv.lib; {
