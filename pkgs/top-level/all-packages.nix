@@ -2644,6 +2644,8 @@ with pkgs;
 
   kytea = callPackage ../tools/text/kytea { };
 
+  lbreakout2 = callPackage ../games/lbreakout2 { };
+
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
