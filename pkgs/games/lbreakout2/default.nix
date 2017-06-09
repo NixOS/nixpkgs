@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Breakout clone from the LGames series";
     homepage = http://lgames.sourceforge.net/LBreakout2/;
-    license = licenses.gpl;
+    license = licenses.gpl2;
     maintainers = [ maintainers.ciil ];
     platforms = platforms.linux;
   };
