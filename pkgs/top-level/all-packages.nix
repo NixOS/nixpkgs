@@ -474,6 +474,9 @@ with pkgs;
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  inherit (callPackages ../data/fonts/arphic {})
+    arphic-ukai arphic-uming;
+
   artyFX = callPackage ../applications/audio/artyFX {};
 
   as31 = callPackage ../development/compilers/as31 {};
