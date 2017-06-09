@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     sed -i -e "s|/usr/bin|$out/bin|" bin/VBoxClient-all
 
     # Install binaries
-    install -D -m 4755 lib/VBoxGuestAdditions/mount.vboxsf $out/bin/mount.vboxsf
+    install -D -m 755 lib/VBoxGuestAdditions/mount.vboxsf $out/bin/mount.vboxsf
     install -D -m 755 sbin/VBoxService $out/bin/VBoxService
 
     mkdir -p $out/bin
