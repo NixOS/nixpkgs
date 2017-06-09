@@ -4,6 +4,7 @@ let
 
   testLine = report: "${okStr report} ${toString (report.index + 1)} ${report.description}" + testDirective report + testYaml report;
 
+  # These are part of the TAP spec, not yet implemented.
   testDirective = report: "";
 
   testYaml = report: "";

@@ -7,10 +7,10 @@
 {
   name
 , pname ? name
-, gemdir
-, gemfile
-, lockfile
-, gemset
+, gemdir ? null
+, gemfile ? null
+, lockfile ? null
+, gemset ? null
 , ruby ? defs.ruby
 , gemConfig ? defaultGemConfig
 , postBuild ? null
@@ -24,8 +24,9 @@
 with  import ./functions.nix { inherit lib gemConfig; };
 
 let
+  gemFiles = bundlerFiles args;
 
-  importedGemset = import gemset;
+  importedGemset = import gemFiles.gemset;
 
   filteredGemset = filterGemset { inherit ruby groups; } importedGemset;
 
@@ -42,9 +43,9 @@ let
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
   copyIfBundledByPath = { bundledByPath ? false, ...}@main:
-  (if bundledByPath then ''
-  cp -a ${gemdir}/* $out/
-  '' else ""
+  (if bundledByPath then
+      assert gemFiles.gemdir != nil; "cp -a ${gemFiles.gemdir}/* $out/"
+    else ""
   );
 
   maybeCopyAll = pname: if pname == null then "" else
@@ -59,8 +60,8 @@ let
   confFiles = runCommand "gemfile-and-lockfile" {} ''
     mkdir -p $out
     ${maybeCopyAll pname}
-    cp ${gemfile} $out/Gemfile || ls -l $out/Gemfile
-    cp ${lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
+    cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
+    cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
   '';
 
   buildGem = name: attrs: (

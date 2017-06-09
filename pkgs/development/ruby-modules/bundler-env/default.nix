@@ -27,23 +27,7 @@ let
     else if pname != null then "${toString pname}-${basicEnv.gems."${pname}".version}"
     else throw "bundlerEnv: either pname or name must be set";
 
-  gemfile' =
-    if gemfile == null then gemdir + "/Gemfile"
-    else gemfile;
-
-  lockfile' =
-    if lockfile == null then gemdir + "/Gemfile.lock"
-    else lockfile;
-
-  gemset' =
-    if gemset == null then gemdir + "/gemset.nix"
-    else gemset;
-
-  basicEnv = (callPackage ../bundled-common {}) (args // { inherit pname name gemdir;
-    gemfile = gemfile';
-    lockfile  = lockfile';
-    gemset = gemset';
-  });
+  basicEnv = (callPackage ../bundled-common {}) (args // { inherit pname name; });
 
   inherit (basicEnv) envPaths;
   # Idea here is a mkDerivation that gen-bin-stubs new stubs "as specified" -
