@@ -90,7 +90,7 @@ runTests {
   testIsStorePath =  {
     expr =
       let goodPath =
-            "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
+            "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
         storePathAppendix = isStorePath
