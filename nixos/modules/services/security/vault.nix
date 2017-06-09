@@ -27,7 +27,6 @@ let
 
       tls_min_version = "${cfg.listener.tls_min_version}" 
 
-
       ${optionalString (cfg.listener.tls_cipher_suites != null)''
         tls_cipher_suites = \"${cfg.listener.tls_cipher_suites}\"
       ''}
