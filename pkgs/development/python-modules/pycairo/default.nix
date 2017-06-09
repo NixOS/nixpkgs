@@ -26,7 +26,7 @@ in buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
-      url = http://www.linuxfromscratch.org/patches/blfs/svn/pycairo-1.10.0-waf_unpack-1.patch;
+      url = http://www.linuxfromscratch.org/patches/blfs/8.0/pycairo-1.10.0-waf_unpack-1.patch;
       sha256 = "1bmrhq2nmhx4l5glvyi59r0hc7w5m56kz41frx7v3dcp8f91p7xd";
     })
   ];
