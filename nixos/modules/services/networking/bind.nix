@@ -98,6 +98,7 @@ in
 
       listenOn = mkOption {
         default = ["any"];
+        type = types.listOf types.str;
         description = "
           Interfaces to listen on.
         ";
@@ -105,6 +106,7 @@ in
 
       listenOnIpv6 = mkOption {
         default = ["any"];
+        type = types.listOf types.str;
         description = "
           Ipv6 interfaces to listen on.
         ";
