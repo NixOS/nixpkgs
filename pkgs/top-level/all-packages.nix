@@ -12945,6 +12945,8 @@ with pkgs;
 
   raleway = callPackage ../data/fonts/raleway { };
 
+  rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
+
   roboto = callPackage ../data/fonts/roboto { };
 
   roboto-mono = callPackage ../data/fonts/roboto-mono { };
