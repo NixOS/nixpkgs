@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, SDL, SDL_mixer, zlib, libpng, gcc }:
+{ stdenv, fetchurl, SDL, SDL_mixer, zlib, libpng }:
 
 stdenv.mkDerivation rec {
   name = "lbreakout2-${version}";
   version = "2.6.5";
-  buildInputs = [ SDL SDL_mixer zlib libpng gcc ];
+  buildInputs = [ SDL SDL_mixer zlib libpng ];
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/lgames/${name}.tar.gz";
+    url = "mirror://sourceforge/lgames/${name}.tar.gz";
     sha256 = "0vwdlyvh7c4y80q5vp7fyfpzbqk9lq3w8pvavi139njkalbxc14i";
   };
 
