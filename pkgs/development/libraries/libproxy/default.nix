@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake
-, dbus, networkmanager, webkitgtk216x, pcre }:
+, dbus, networkmanager, webkitgtk216x, pcre, python2, python3 }:
 
 stdenv.mkDerivation rec {
   name = "libproxy-${version}";
@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [ dbus networkmanager webkitgtk216x pcre ];
+
+  preConfigure = ''
+    cmakeFlagsArray=($cmakeFlagsArray "-DPYTHON2_SITEPKG_DIR=$out/${python2.sitePackages}" "-DPYTHON3_SITEPKG_DIR=$out/${python3.sitePackages}")
+  '';
 
   cmakeFlags = [
     "-DWITH_WEBKIT3=ON"
