@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     builder (3.2.3)
-    excon (0.55.0)
+    excon (0.56.0)
     fog-core (1.43.0)
       builder
       excon (~> 0.49)

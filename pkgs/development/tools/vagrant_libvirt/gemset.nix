@@ -10,10 +10,10 @@
   excon = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "149grwcry52hi3f1xkbbx74jw5m3qcmiib13wxrk3rw5rz200kmx";
+      sha256 = "05hpyh5ik2fwr02zbhjn14avifm71mnb4ip0nz3w18lrmlqam333";
       type = "gem";
     };
-    version = "0.55.0";
+    version = "0.56.0";
   };
   fog-core = {
     source = {
