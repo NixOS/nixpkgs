@@ -12,26 +12,32 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper bundler libvirt pkgconfig bundix git ]
     ++ stdenv.lib.optional stdenv.isDarwin [ p7zip xar gzip cpio ];
 
+  gemfile = ./Gemfile;
+  lockfile = ./Gemfile.lock;
+  gemset = ./gemset.nix;
+
   #env = "test";
   env = bundlerEnv {
     inherit name;
     inherit ruby;
-    gemfile = ./Gemfile;
-    lockfile = ./Gemfile.lock;
-    gemset = ./gemset.nix;
+    inherit gemfile;
+    inherit lockfile;
+    inherit gemset;
+    #gemfile = ./Gemfile;
+    #lockfile = ./Gemfile.lock;
+    #gemset = ./gemset.nix;
   };
 
   #phases = [ "installPhase" ];
 
   installPhase = ''
     mkdir -p $out/bin;
+    #cp ${gemfile} $out/Gemfile
+    #cp ${lockfile} $out/Gemfile.lock
+    cp -r * "$out"
 
-    makeWrapper ${env}/bin/vagrant $out/bin/vagrant --run "extraFlagsArray+=(); extraFlagsArray+=('--with-libvirt-lib=${libvirt}/lib'); extraFlagsArray+=('--with-libvirt-include=${libvirt}/include');
-
-    # install vagrant
-    export HOME=$out
-    export GEM_HOME=$out
-    bundle install
+    wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxml2 libxslt ]}" \
+                                   --prefix LD_LIBRARY_PATH : "$out/lib"
   '';
 
   meta = with stdenv.lib; {
