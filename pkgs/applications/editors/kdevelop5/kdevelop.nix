@@ -9,16 +9,15 @@
 
 let
   pname = "kdevelop";
-  version = "5.0.4";
-  dirVersion = "5.0.4";
+  version = "5.1.1";
 
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${dirVersion}/src/${name}.tar.xz";
-    sha256 = "191142b2bdb14837c82721fdfeb15e852329f2c4c0d48fd479c57514c3235d55";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "0a01a4ffb2f01802cf4945521a3149a8f82c21fa8a97935991f1854b7db5d754";
   };
 
   nativeBuildInputs = [

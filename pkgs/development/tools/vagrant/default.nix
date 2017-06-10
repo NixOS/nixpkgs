@@ -144,6 +144,12 @@ in stdenv.mkDerivation rec {
     ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin
 
+    # ruby libs
+    rm -rf opt/vagrant/embedded/lib/*
+    for lib in ${ruby}/lib/*; do
+      ln -s $lib opt/vagrant/embedded/lib/''${lib##*/}
+    done
+
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
     ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
@@ -158,6 +164,9 @@ in stdenv.mkDerivation rec {
     rm opt/vagrant/embedded/bin/{xslt-config,xsltproc}
     ln -s ${libxslt.dev}/bin/xslt-config opt/vagrant/embedded/bin
     ln -s ${libxslt.bin}/bin/xsltproc opt/vagrant/embedded/bin
+
+    # libffi
+    ln -s ${libffi}/lib/libffi.so.6 opt/vagrant/embedded/lib/libffi.so.6
 
     mkdir -p "$out"
     cp -r opt "$out"

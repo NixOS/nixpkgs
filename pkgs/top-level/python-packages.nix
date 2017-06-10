@@ -141,6 +141,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  astropy = callPackage ../development/python-modules/astropy {  };
+
   automat = callPackage ../development/python-modules/automat { };
 
   # packages defined elsewhere
@@ -3515,20 +3517,7 @@ in {
 
   certifi = callPackage ../development/python-modules/certifi { };
 
-  characteristic = buildPythonPackage rec {
-    name = "characteristic-14.1.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/characteristic/${name}.tar.gz";
-      sha256 = "91e254948180678dd69e6143202b4686f2fa47cce136936079bb4d9a3b82419d";
-    };
-
-    buildInputs = with self; [ self.pytest ];
-
-    meta = {
-      description = "Python attributes without boilerplate";
-      homepage = https://characteristic.readthedocs.org;
-    };
-  };
+  characteristic = callPackage ../development/python-modules/characteristic { };
 
   # This package is no longer actively maintained and can be removed if it becomes broken.
   cgkit = buildPythonPackage rec {
@@ -6284,6 +6273,14 @@ in {
     };
   };
 
+  eccodes = if (isPy27) then
+      (pkgs.eccodes.overrideAttrs (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    enablePython = true;
+    pythonPackages = self;
+  } else throw "eccodes not supported for interpreter ${python.executable}";
+
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
     version = "0.12.0";
@@ -6659,10 +6656,10 @@ in {
 
   Fabric = buildPythonPackage rec {
     name = "Fabric-${version}";
-    version = "1.10.2";
+    version = "1.13.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Fabric/${name}.tar.gz";
-      sha256 = "0nikc05iz1fx2c9pvxrhrs819cpmg566azm99450yq2m8qmp1cpd";
+      sha256 = "0k944dxr41whw7ib6380q9x15wyskx7fqni656icdn8rzshn9bwq";
     };
     disabled = isPy3k;
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
@@ -7762,12 +7759,14 @@ in {
 
   libthumbor = buildPythonPackage rec {
     name = "libthumbor-${version}";
-    version = "1.2.0";
+    version = "1.3.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libthumbor/${name}.tar.gz";
-      sha256 = "09bbaf08124ee33ea4ef99881625bd20450b0b43ab90fd678479beba8c03f86e";
+      sha256 = "1vjhszsf8wl9k16wyg2rfjycjnawzl7z8j39bhiysbz5x4lqg91b";
     };
+
+    buildInputs = with self; [ django ];
 
     propagatedBuildInputs = with self; [ six pycrypto ];
 
@@ -11950,6 +11949,14 @@ in {
       platforms   = platforms.all;
     };
   };
+
+  grib-api = if (isPy27) then
+      (pkgs.grib-api.overrideAttrs (oldattrs: {
+    name = "${python.libPrefix}-" + oldattrs.name;
+  })).override {
+    enablePython = true;
+    pythonPackages = self;
+  } else throw "grib-api not supported for interpreter ${python.executable}";
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -18292,44 +18299,7 @@ in {
     };
   };
 
-  powerline = buildPythonPackage rec {
-    rev  = "2.5.2";
-    name = "powerline-${rev}";
-    src = pkgs.fetchurl {
-      url    = "https://github.com/powerline/powerline/archive/${rev}.tar.gz";
-      name   = "${name}.tar.gz";
-      sha256 = "064rp2jzz4vp1xqk3445qf08pq3aif00q1rjqaqx2pla15s27yrz";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.git pkgs.mercurial pkgs.bazaar self.psutil self.pygit2 ];
-
-    # error: This is still beta and some tests still fail
-    doCheck = false;
-
-    postInstall = ''
-      install -dm755 "$out/share/fonts/OTF/"
-      install -dm755 "$out/etc/fonts/conf.d"
-      install -m644 "font/PowerlineSymbols.otf" "$out/share/fonts/OTF/PowerlineSymbols.otf"
-      install -m644 "font/10-powerline-symbols.conf" "$out/etc/fonts/conf.d/10-powerline-symbols.conf"
-
-      install -dm755 "$out/share/vim/vimfiles/plugin"
-      install -m644 "powerline/bindings/vim/plugin/powerline.vim" "$out/share/vim/vimfiles/plugin/powerline.vim"
-
-      install -dm755 "$out/share/zsh/site-contrib"
-      install -m644 "powerline/bindings/zsh/powerline.zsh" "$out/share/zsh/site-contrib/powerline.zsh"
-
-      install -dm755 "$out/share/tmux"
-      install -m644 "powerline/bindings/tmux/powerline.conf" "$out/share/tmux/powerline.conf"
-    '';
-
-    meta = {
-      homepage    = https://github.com/powerline/powerline;
-      description = "The ultimate statusline/prompt utility";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.all;
-    };
-  };
+  powerline = callPackage ../development/python-modules/powerline { };
 
   pox = buildPythonPackage rec {
     name = "pox-${version}";
@@ -28313,7 +28283,7 @@ EOF
 
   thumbor = buildPythonPackage rec {
     name = "thumbor-${version}";
-    version = "5.2.1";
+    version = "6.3.2";
 
     disabled = ! isPy27;
 
@@ -28323,6 +28293,7 @@ EOF
       tornado
       pycrypto
       pycurl
+      pytz
       pillow
       derpconf
       python_magic
@@ -28334,14 +28305,18 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/thumbor/${name}.tar.gz";
-      sha256 = "57b0d7e261e792b2e2c53a79c3d8c722964003d1828331995dc3491dc67db7d8";
+      sha256 = "0787245x4yci34cdfc9xaxhds0lv60476qgp132pwa78hrpc9m31";
     };
+
+    prePatch = ''
+      substituteInPlace setup.py \
+        --replace '"argparse",' ""
+    '';
 
     meta = {
       description = "A smart imaging service";
       homepage = https://github.com/globocom/thumbor/wiki;
       license = licenses.mit;
-      broken = true;
     };
   };
 

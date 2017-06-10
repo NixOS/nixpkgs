@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype
-, xorg, fontconfig, qtbase, xkeyboard_config, alsaLib, libpulseaudio ? null
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
+, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, xkeyboard_config, alsaLib, libpulseaudio ? null
 , libredirect, quazip, less, which, unzip, llvmPackages
 }:
 
@@ -10,10 +10,10 @@ let
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
   deps =
-    [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
+    [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase libpulseaudio
-      llvmPackages.libcxx llvmPackages.libcxxabi
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel libpulseaudio
+      quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
   desktopItem = makeDesktopItem {
@@ -31,7 +31,7 @@ in
 stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
 
-  version = "3.0.19.4";
+  version = "3.1.4";
 
   src = fetchurl {
     urls = [
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
     sha256 = if stdenv.is64bit
-                then "f74617d2a2f5cb78e0ead345e6ee66c93e4a251355779018fd060828e212294a"
-                else "e11467dc1732ddc21ec0d86c2853c322af7a6b8307e3e8dfebc6b4b4d7404841";
+                then "337aec99070366aa3bb82b1bedd8215372b9c74014b198d45d5d6375d1f1c3a8"
+                else "4e126e005b1180655b0847cbdbfc9c47c59c639b7f93f0d988b54a8c4c6ec80f";
   };
 
   # grab the plugin sdk for the desktop icon
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     ''
       # Delete unecessary libraries - these are provided by nixos.
       rm *.so.* *.so
+      rm QtWebEngineProcess
       rm qt.conf
 
       # Install files.
@@ -89,7 +90,6 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_LIBRARY_PATH "${quazip}/lib" \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb

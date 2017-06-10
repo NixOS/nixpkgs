@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  name = "Theano-0.8.2";
+  name = "Theano-0.9.0";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchurl {
     url = "mirror://pypi/T/Theano/${name}.tar.gz";
-    sha256 = "7463c8f7ed1a787bf881f36d38a38607150186697e7ce7e78bfb94b7c6af8930";
+    sha256 = "05xwg00da8smkvkh6ywbywqzj8dw7x840jr74wqhdy9icmqncpbl";
   };
 
   #preCheck = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv, ncurses }:
+{ stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
 
 # Maintainer notes for updating:
 # 1. increment version number in expression and in Gemfile
@@ -13,13 +13,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "metasploit-framework-${version}";
-  version = "4.14.17";
+  version = "4.14.25";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "0g666lxin9f0v9vhfh3s913ym8fnh32rpfl1rpj8d8n1azch5fn0";
+    sha256 = "0cp1ybq29a0r7kabg4p2yj0qm90hjvr4xxp0pynb2g406sbyycjm";
   };
 
   buildInputs = [ makeWrapper ];

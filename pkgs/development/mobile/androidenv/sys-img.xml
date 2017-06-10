@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-sys-img xmlns:sdk="http://schemas.android.com/sdk/android/sys-img/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2016-11-23 16:51:35.431708 with ADRT.-->
+	<!--Generated on 2017-06-07 21:04:43.770481 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -831,24 +831,6 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3479480, branch:git_nyc-preview-release-->
-		<sdk:api-level>25</sdk:api-level>
-		<sdk:description>Google APIs Intel x86 Atom System Image</sdk:description>
-		<sdk:revision>3</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Mon Nov 14 16:41:48 2016.-->
-				<sdk:size>703131759</sdk:size>
-				<sdk:checksum type="sha1">7dd19cfee4e43a1f60e0f5f058404d92d9544b33</sdk:checksum>
-				<sdk:url>x86-25_r03.zip</sdk:url>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-preview-license"/>
-		<sdk:abi>x86</sdk:abi>
-		<sdk:tag-id>google_apis</sdk:tag-id>
-		<sdk:tag-display>Google APIs</sdk:tag-display>
-	</sdk:system-image>
-	<sdk:system-image>
 		<!--Generated from bid:3079185, branch:git_lmp-emu-release-->
 		<sdk:api-level>21</sdk:api-level>
 		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
@@ -915,23 +897,5 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:uses-license ref="android-sdk-license"/>
 		<sdk:abi>x86_64</sdk:abi>
 		<sdk:tag-id>default</sdk:tag-id>
-	</sdk:system-image>
-	<sdk:system-image>
-		<!--Generated from bid:3479480, branch:git_nyc-preview-release-->
-		<sdk:api-level>25</sdk:api-level>
-		<sdk:description>Google APIs Intel x86 Atom_64 System Image</sdk:description>
-		<sdk:revision>3</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Mon Nov 14 16:42:52 2016.-->
-				<sdk:size>912938750</sdk:size>
-				<sdk:checksum type="sha1">4593ee04811df21c339f3374fc5917843db06f8d</sdk:checksum>
-				<sdk:url>x86_64-25_r03.zip</sdk:url>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-preview-license"/>
-		<sdk:abi>x86_64</sdk:abi>
-		<sdk:tag-id>google_apis</sdk:tag-id>
-		<sdk:tag-display>Google APIs</sdk:tag-display>
 	</sdk:system-image>
 </sdk:sdk-sys-img>

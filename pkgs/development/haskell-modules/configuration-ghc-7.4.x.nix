@@ -80,6 +80,11 @@ self: super: {
   # Test suite won't compile.
   unix-time = dontCheck super.unix-time;
 
+  # The test suite depends on mockery, which pulls in logging-facade, which
+  # doesn't compile with this older version of base:
+  # https://github.com/sol/logging-facade/issues/14
+  doctest = dontCheck super.doctest;
+
   # Avoid depending on tasty-golden.
   monad-par = dontCheck super.monad-par;
 

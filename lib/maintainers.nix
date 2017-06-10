@@ -99,6 +99,7 @@
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  ciil = "Simon Lackerbauer <simon@lackerbauer.com>";
   ckampka = "Christian Kampka <christian@kampka.net>";
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
@@ -269,6 +270,7 @@
   kaiha = "Kai Harries <kai.harries@gmail.com>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
+  kentjames = "James Kent <jameschristopherkent@gmail.com";
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   KibaFox = "Kiba Fox <kiba.fox@foxypossibilities.com>";

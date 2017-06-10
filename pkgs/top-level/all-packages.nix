@@ -480,6 +480,9 @@ with pkgs;
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  inherit (callPackages ../data/fonts/arphic {})
+    arphic-ukai arphic-uming;
+
   arpwatch = callPackage ../tools/networking/arpwatch { };
 
   artyFX = callPackage ../applications/audio/artyFX {};
@@ -532,12 +535,6 @@ with pkgs;
     monolithic = false;
     client = true;
   });
-
-  androidenv = callPackage ../development/mobile/androidenv {
-    pkgs_i686 = pkgsi686Linux;
-  };
-
-  adb-sync = callPackage ../development/mobile/adb-sync { };
 
   apg = callPackage ../tools/security/apg { };
 
@@ -597,11 +594,17 @@ with pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
 
-  inherit (androidenv) androidsdk_4_4 androidndk;
+  adb-sync = callPackage ../development/mobile/adb-sync { };
 
-  androidsdk = androidenv.androidsdk_7_0;
+  androidenv = callPackage ../development/mobile/androidenv {
+    pkgs_i686 = pkgsi686Linux;
+  };
 
-  androidsdk_extras = self.androidenv.androidsdk_7_0_extras;
+  inherit (androidenv) androidndk;
+
+  androidsdk = androidenv.androidsdk_7_1_1;
+
+  androidsdk_extras = self.androidenv.androidsdk_7_1_1_extras;
 
   arc-theme = callPackage ../misc/themes/arc { };
 
@@ -1789,6 +1792,8 @@ with pkgs;
 
   exiftags = callPackage ../tools/graphics/exiftags { };
 
+  exiftool = perlPackages.ImageExifTool;
+
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
   expect = callPackage ../tools/misc/expect { };
@@ -2277,6 +2282,8 @@ with pkgs;
 
   gtdialog = callPackage ../development/libraries/gtdialog {};
 
+  gtkd = callPackage ../development/libraries/gtkd { };
+
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
@@ -2657,6 +2664,8 @@ with pkgs;
   kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
   kytea = callPackage ../tools/text/kytea { };
+
+  lbreakout2 = callPackage ../games/lbreakout2 { };
 
   leocad = callPackage ../applications/graphics/leocad { };
 
@@ -4361,6 +4370,8 @@ with pkgs;
 
   tie = callPackage ../development/tools/misc/tie { };
 
+  tilix = callPackage ../applications/misc/tilix { };
+
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
@@ -5273,10 +5284,6 @@ with pkgs;
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
-    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
-    # and host != build), `cross' must be null but the cross-libc must still
-    # be passed.
-    cross = null;
     libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
@@ -6083,6 +6090,10 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
+  lxappearance-gtk3 = callPackage ../desktops/lxde/core/lxappearance {
+    withGtk3 = true;
+  };
+
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
   lxpanel = callPackage ../desktops/lxde/core/lxpanel {
@@ -6552,6 +6563,8 @@ with pkgs;
   bossa = callPackage ../development/tools/misc/bossa {
     wxGTK = wxGTK30;
   };
+
+  buck = callPackage ../development/tools/build-managers/buck { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     pythonPackages = python2Packages;
@@ -12993,6 +13006,8 @@ with pkgs;
 
   raleway = callPackage ../data/fonts/raleway { };
 
+  rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
+
   roboto = callPackage ../data/fonts/roboto { };
 
   roboto-mono = callPackage ../data/fonts/roboto-mono { };
@@ -14095,6 +14110,8 @@ with pkgs;
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "release";
+    generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
     inherit (pkgs.gnome3) defaultIconTheme;
@@ -14108,6 +14125,7 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
@@ -14119,6 +14137,22 @@ with pkgs;
     name = "firefox-beta-bin-" +
       (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
     desktopName = "Firefox Beta";
+  };
+
+  firefox-devedition-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "devedition";
+    generated = import ../applications/networking/browsers/firefox-bin/devedition_sources.nix;
+    gconf = pkgs.gnome2.GConf;
+    inherit (pkgs.gnome2) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
+  };
+
+  firefox-devedition-bin = self.wrapFirefox firefox-devedition-bin-unwrapped {
+    browserName = "firefox";
+    nameSuffix = "-devedition";
+    name = "firefox-devedition-bin-" +
+      (builtins.parseDrvName firefox-devedition-bin-unwrapped.name).version;
+    desktopName = "Firefox DevEdition";
   };
 
   firestr = libsForQt5.callPackage ../applications/networking/p2p/firestr
@@ -15523,6 +15557,7 @@ with pkgs;
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity {
     notifySupport   = config.profanity.notifySupport   or true;
+    traySupport     = config.profanity.traySupport     or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
 
@@ -16527,6 +16562,7 @@ with pkgs;
       ++ optional (cfg.enableMGBA or false) mgba
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNestopia or false) nestopia
+      ++ optional (cfg.enableParallelN64 or false) parallel-n64
       ++ optional (cfg.enablePicodrive or false) picodrive
       ++ optional (cfg.enablePrboom or false) prboom
       ++ optional (cfg.enablePPSSPP or false) ppsspp
@@ -16843,6 +16879,8 @@ with pkgs;
   };
 
   zim = callPackage ../applications/office/zim { };
+
+  zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero {
     firefox = firefox-esr-unwrapped;
