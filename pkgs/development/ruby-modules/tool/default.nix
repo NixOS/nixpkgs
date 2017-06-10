@@ -6,11 +6,13 @@
 , gemdir
   # Exes is the list of executables provided by the gems in the Gemfile
 , exes ? []
-  # Scripts are programs included directly in nixpkgs that depend on gems
+  # Scripts are ruby programs depend on gems in the Gemfile (e.g. scripts/rails)
 , scripts ? []
 , gemfile ? null
 , lockfile ? null
 , gemset ? null
+, preferLocalBuild ? false
+, allowSubstitutes ? false
 , postBuild
 }@args:
 
