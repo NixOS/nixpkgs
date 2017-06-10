@@ -525,12 +525,6 @@ with pkgs;
     client = true;
   });
 
-  androidenv = callPackage ../development/mobile/androidenv {
-    pkgs_i686 = pkgsi686Linux;
-  };
-
-  adb-sync = callPackage ../development/mobile/adb-sync { };
-
   apg = callPackage ../tools/security/apg { };
 
   autorevision = callPackage ../tools/misc/autorevision { };
@@ -589,11 +583,17 @@ with pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
 
-  inherit (androidenv) androidsdk_4_4 androidndk;
+  adb-sync = callPackage ../development/mobile/adb-sync { };
 
-  androidsdk = androidenv.androidsdk_7_0;
+  androidenv = callPackage ../development/mobile/androidenv {
+    pkgs_i686 = pkgsi686Linux;
+  };
 
-  androidsdk_extras = self.androidenv.androidsdk_7_0_extras;
+  inherit (androidenv) androidndk;
+
+  androidsdk = androidenv.androidsdk_7_1_1;
+
+  androidsdk_extras = self.androidenv.androidsdk_7_1_1_extras;
 
   arc-theme = callPackage ../misc/themes/arc { };
 
@@ -2643,6 +2643,8 @@ with pkgs;
   kst = libsForQt5.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
   kytea = callPackage ../tools/text/kytea { };
+
+  lbreakout2 = callPackage ../games/lbreakout2 { };
 
   leocad = callPackage ../applications/graphics/leocad { };
 
@@ -5247,10 +5249,6 @@ with pkgs;
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
     profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
 
-    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
-    # and host != build), `cross' must be null but the cross-libc must still
-    # be passed.
-    cross = null;
     libcCross = if targetPlatform != buildPlatform then libcCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
@@ -6526,6 +6524,8 @@ with pkgs;
   bossa = callPackage ../development/tools/misc/bossa {
     wxGTK = wxGTK30;
   };
+
+  buck = callPackage ../development/tools/build-managers/buck { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     pythonPackages = python2Packages;
@@ -12946,6 +12946,8 @@ with pkgs;
   r5rs = callPackage ../data/documentation/rnrs/r5rs.nix { };
 
   raleway = callPackage ../data/fonts/raleway { };
+
+  rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
 
   roboto = callPackage ../data/fonts/roboto { };
 

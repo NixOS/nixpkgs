@@ -33,8 +33,8 @@
 
 let
 
-  version = "2.3.2.0";
-  build = "162.3934792";
+  version = "2.3.3.0";
+  build = "162.4069837";
 
   androidStudio = stdenv.mkDerivation {
     name = "android-studio";
@@ -98,13 +98,14 @@ let
     '';
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "19wmbvmiqa9znvnslmp0xmkq4avpmgpzmyaai1fa28388qra4cvf";
+      sha256 = "0zzis9m2xp44xwkj0zvcqw5rh3iyd3finyi5nqhgira1fkacz0qk";
     };
-    meta = {
+    meta = with stdenv.lib; {
       description = "The Official IDE for Android";
       homepage = https://developer.android.com/studio/index.html;
-      license = stdenv.lib.licenses.asl20;
+      license = licenses.asl20;
       platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [ primeos ];
     };
   };
 

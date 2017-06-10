@@ -181,6 +181,20 @@ rec {
     useGooglePlayServices = true;
   };
 
+  androidsdk_7_1_1 = androidsdk {
+    platformVersions = [ "25" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_7_1_1_extras = androidsdk {
+    platformVersions = [ "25" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+  };
+
   androidndk = import ./androidndk.nix {
     inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
