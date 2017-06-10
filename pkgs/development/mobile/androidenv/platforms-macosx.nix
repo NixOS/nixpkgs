@@ -295,11 +295,23 @@ in
   platform_25 = buildPlatform {
     name = "android-platform-7.1.1";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/platform-25_r02.zip;
-      sha1 = "6057e54a04f1d141f36a2c8d20f2962b41a3183f";
+      url = https://dl.google.com/android/repository/platform-25_r03.zip;
+      sha1 = "00c2c5765e8988504be10a1eb66ed71fcdbd7fe8";
     };
     meta = {
       description = "Android SDK Platform 25";
+      homepage = http://developer.android.com/sdk/;
+    };
+  };
+
+  platform_26 = buildPlatform {
+    name = "android-platform-8.0.0";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/platform-26_r01.zip;
+      sha1 = "33a4f9788bfd7123e712906b2d7e5d54a729e14a";
+    };
+    meta = {
+      description = "Android SDK Platform 26";
       homepage = http://developer.android.com/sdk/;
     };
   };
