@@ -6055,6 +6055,10 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
+  lxappearance-gtk3 = callPackage ../desktops/lxde/core/lxappearance {
+    withGtk3 = true;
+  };
+
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
 
   lxpanel = callPackage ../desktops/lxde/core/lxpanel {
