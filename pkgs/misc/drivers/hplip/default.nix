@@ -1,7 +1,8 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
+, makeWrapper
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, polkit
+, net_snmp, openssl, polkit, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false
@@ -22,20 +23,17 @@ let
     sha256 = "15qrcd3ndnxri6pfdfmsjyv2f3zfkig80yghs76jbsm106rp8g3q";
   };
 
-  hplipState =
-    substituteAll
-      {
-        inherit version;
-        src = ./hplip.state;
-      };
+  hplipState = substituteAll {
+    inherit version;
+    src = ./hplip.state;
+  };
 
-  hplipPlatforms =
-    {
-      "i686-linux"   = "x86_32";
-      "x86_64-linux" = "x86_64";
-      "armv6l-linux" = "arm32";
-      "armv7l-linux" = "arm32";
-    };
+  hplipPlatforms = {
+    "i686-linux"   = "x86_32";
+    "x86_64-linux" = "x86_64";
+    "armv6l-linux" = "arm32";
+    "armv7l-linux" = "arm32";
+  };
 
   hplipArch = hplipPlatforms."${stdenv.system}"
     or (throw "HPLIP not supported on ${stdenv.system}");
@@ -63,6 +61,7 @@ pythonPackages.buildPythonApplication {
 
   nativeBuildInputs = [
     pkgconfig
+    makeWrapper
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -147,6 +146,9 @@ pythonPackages.buildPythonApplication {
   '';
 
   postFixup = ''
+    wrapProgram $out/lib/cups/filter/hpps \
+      --prefix PATH : "${nettools}/bin"
+
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
   '' + stdenv.lib.optionalString (!withPlugin) ''
     # A udev rule to notify users that they need the binary plugin.
