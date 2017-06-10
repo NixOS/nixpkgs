@@ -10,7 +10,6 @@
 , pname ? null
 , gemdir ? null
 , gemfile ? null
-, gemflags ? null
 , lockfile ? null
 , gemset ? null
 , ruby ? defs.ruby
@@ -73,7 +72,6 @@ let
       inherit ruby;
       gemName = name;
       gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
-      buildFlags = gemflags;
     }));
 
   # We have to normalize the Gemfile.lock, otherwise bundler tries to be
