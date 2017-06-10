@@ -15,14 +15,12 @@
 
     phases = [ "unpackPhase" "installPhase" ];
 
-    installPhase =
-      ''
-      mkdir -p $out/share/fonts $out/share/fonts/truetype
-      cp -v ukai.ttc $out/share/fonts/truetype/arphic-ukai.ttc
+    installPhase = ''
+      install -D -v ukai.ttc $out/share/fonts/truetype/arphic-ukai.ttc
       cd $out/share/fonts
       mkfontdir
       mkfontscale
-      '';
+    '';
 
     meta = with stdenv.lib; {
       description = "CJK Unicode font Kai style";
@@ -48,14 +46,12 @@
 
     phases = [ "unpackPhase" "installPhase" ];
 
-    installPhase =
-      ''
-      mkdir -p $out/share/fonts $out/share/fonts/truetype
-      cp -v uming.ttc $out/share/fonts/truetype/arphic-uming.ttc
+    installPhase = ''
+      install -D -v uming.ttc $out/share/fonts/truetype/arphic-uming.ttc
       cd $out/share/fonts
       mkfontdir
       mkfontscale
-      '';
+    '';
 
     meta = with stdenv.lib; {
       description = "CJK Unicode font Ming style";
