@@ -2268,6 +2268,8 @@ with pkgs;
 
   gtdialog = callPackage ../development/libraries/gtdialog {};
 
+  gtkd = callPackage ../development/libraries/gtkd { };
+
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
@@ -4344,6 +4346,8 @@ with pkgs;
   tinc = callPackage ../tools/networking/tinc { };
 
   tie = callPackage ../development/tools/misc/tie { };
+
+  tilix = callPackage ../applications/misc/tilix { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
