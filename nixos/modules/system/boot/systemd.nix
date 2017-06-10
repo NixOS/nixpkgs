@@ -337,6 +337,7 @@ let
             X-RestartIfChanged=false
           '' else ""}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
+          ${attrsToSection cfg.defaultExecConfig}
           ${attrsToSection def.serviceConfig}
         '';
     };
@@ -346,6 +347,7 @@ let
       text = commonUnitText def +
         ''
           [Socket]
+          ${attrsToSection cfg.defaultExecConfig}
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
         '';
@@ -374,6 +376,7 @@ let
       text = commonUnitText def +
         ''
           [Mount]
+          ${attrsToSection cfg.defaultExecConfig}
           ${attrsToSection def.mountConfig}
         '';
     };
@@ -539,6 +542,15 @@ in
       description = ''
         Extra config options for systemd. See man systemd-system.conf for
         available options.
+      '';
+    };
+    
+    systemd.defaultExecConfig = mkOption {
+      default = {};
+      type = types.attrs;
+      example = {NoNewPrivileges = true;};
+      description = ''Default configuration options for services, sockets, 
+        mount points, and swap devices.
       '';
     };
 
