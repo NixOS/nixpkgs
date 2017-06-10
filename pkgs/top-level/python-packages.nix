@@ -11819,9 +11819,7 @@ in {
     postInstall = ''
       mkdir $out/bin
       cp $out/cli.py $out/bin/gramalecte
-      cp $out/server.py $out/bin/gramalected
       chmod a+rx $out/bin/gramalecte
-      chmod a+rx $out/bin/gramalected
     '';
 
    meta = {
