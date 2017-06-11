@@ -396,7 +396,7 @@ code before creating a new type.</para>
     <listitem><para>For composed types that can take a submodule as type 
         parameter, this function can be used to substitute the parameter of a 
         submodule type. It takes a module as parameter and return the type with 
-        the submodule options substituted. It is usally defined as a type 
+        the submodule options substituted. It is usually defined as a type 
         function call with a recursive call to 
         <literal>substSubModules</literal>, e.g for a type 
         <literal>composedType</literal> that take an <literal>elemtype</literal> 
