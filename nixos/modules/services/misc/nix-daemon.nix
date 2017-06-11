@@ -174,6 +174,25 @@ in
         '';
       };
 
+      daemonCPUWeight = mkOption {
+        type = types.int;
+        default = 20;
+        description = ''
+          Nix daemon service CPU weight. This sets the overall priority of its
+          CPU use, but does not limit maximum use. The system-wide default is 100.
+        '';
+      };
+
+      daemonIOWeight = mkOption {
+        type = types.int;
+        default = 20;
+        description = ''
+          Nix daemon service I/O weight. This sets the overall priority of its
+          disk I/O use, but does not limit maximum use. The system-wide default
+          is 100.
+        '';
+      };
+
       buildMachines = mkOption {
         type = types.listOf types.attrs;
         default = [];
@@ -346,7 +365,7 @@ in
 
 
   ###### implementation
-
+  
   config = {
 
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
@@ -387,6 +406,8 @@ in
 
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
+            CPUWeight = assert (cfg.daemonCPUWeight >= 1 && cfg.daemonCPUWeight <= 10000); cfg.daemonCPUWeight;
+            IOWeight = assert (cfg.daemonIOWeight >= 1 && cfg.daemonIOWeight <= 10000); cfg.daemonIOWeight;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
             LimitNOFILE = 4096;
           };
