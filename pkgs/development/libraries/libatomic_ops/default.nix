@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libatomic_ops-${version}";
-  version = "7.4.4";
+  version = "7.6.0";
 
   src = fetchurl {
     url = "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz";
-    sha256 ="13vg5fqwil17zpf4hj4h8rh3blzmym693lkdjgvwpgni1mh0l8dz";
+    sha256 ="03ylfr29g9zc0r6b6axz3i68alj5qmxgzknxwam3jlx0sz8hcb4f";
   };
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
