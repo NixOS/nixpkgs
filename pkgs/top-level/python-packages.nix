@@ -12928,15 +12928,17 @@ in {
 
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
-    version = "0.5.11";
+    version = "1.8.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pylast/${name}.tar.gz";
-      sha256 = "bf35820be35447d55564d36072d40b09ac8a7fd41a6f1a7a9d408f4d0eaefac4";
+      sha256 = "85f8dd96aef0ccba5f80379c3d7bc1fabd72f59aebab040daf40a8b72268f9bd";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    propagatedBuildInputs = with self; [
+      certifi
+      six
+    ];
 
     meta = {
       homepage = http://code.google.com/p/pylast/;
