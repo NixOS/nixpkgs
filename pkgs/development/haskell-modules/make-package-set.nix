@@ -7,7 +7,8 @@
 # arguments:
 #  * ghc package to use
 #  * package-set: a function that takes { pkgs, stdenv, callPackage } as first arg and `self` as second
-{ ghc, package-set }:
+#  * extensible-self: the final, fully overriden package set usable with the nixpkgs fixpoint overriding functionality
+{ ghc, package-set, extensible-self }:
 
 # return value: a function from self to the package set
 self: let
@@ -127,6 +128,18 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
                                then self.callCabal2nix
                                else self.callHackage;
         in generateExprs name src {}) overrides;
+
+    # : { root : Path, source-overrides : Defaulted (Either Path VersionNumber } -> NixShellAwareDerivation
+    # Given a path to a haskell package directory whose cabal file is
+    # named the same as the directory name, and an optional set of
+    # source overrides as appropriate for the 'packageSourceOverrides'
+    # function, return a derivation appropriate for nix-build or nix-shell
+    # to build that package.
+    developPackage = { root, source-overrides ? {} }:
+      let name = builtins.baseNameOf root;
+          drv =
+            (extensible-self.extend (self.packageSourceOverrides source-overrides)).callCabal2nix name root {};
+      in if pkgs.lib.inNixShell then drv.env else drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
