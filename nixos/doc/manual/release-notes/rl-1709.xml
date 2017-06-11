@@ -89,6 +89,15 @@ rmdir /var/lib/ipfs/.ipfs
       The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>caddy</literal> service was previously using an extra
+      <literal>.caddy</literal> in the data directory specified with the
+      <literal>dataDir</literal> option. The contents of the
+      <literal>.caddy</literal> directory are now expected to be in the
+      <literal>dataDir</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 
