@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = []
     ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./no-cpp-warnings.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
   buildInputs = [ ghc perl hscolour sphinx ];
 
