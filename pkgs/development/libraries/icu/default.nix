@@ -33,18 +33,9 @@ stdenv.mkDerivation ({
     echo Source root reset to ''${sourceRoot}
   '';
 
-  # This pre/postPatch shenanigans is to handle that the patches expect
-  # to be outside of `source`.
-  prePatch = ''
-    pushd ..
-  '';
-  postPatch = ''
-    popd
-    patch -p4 < ${keywordFix}
-  '';
+  patchFlags = "-p4";
 
-  patches = [
-  ];
+  patches = [ keywordFix ];
 
   preConfigure = ''
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
