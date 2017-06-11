@@ -624,7 +624,7 @@ in
     systemd.user.extraConfig = mkOption {
       default = "";
       type = types.lines;
-      example = "DefaultCPUAccounting=yes";
+      example = "DefaultCPUAccounting=no";
       description = ''
         Extra config options for systemd user instances. See man systemd-user.conf for
         available options.
@@ -725,6 +725,8 @@ in
 
       "systemd/system.conf".text = ''
         [Manager]
+        DefaultCPUAccounting=yes
+        DefaultIOAccounting=yes
         ${config.systemd.extraConfig}
       '';
 
