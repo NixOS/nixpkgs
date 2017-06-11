@@ -17,11 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "xdg-utils-${version}";
-  version = "1.1.1";
+  version = "1.1.1-p24-ge63b408";
 
   src = fetchurl {
-    url = "https://portland.freedesktop.org/download/${name}.tar.gz";
-    sha256 = "09a1pk3ifsndc5qz2kcd1557i137gpgnv3d739pv22vfayi67pdh";
+    name = "${name}.tar.gz";
+    url = "http://cgit.freedesktop.org/xdg/xdg-utils/snapshot/e63b4088b5c60.tar.gz";
+    #url = "https://portland.freedesktop.org/download/${name}.tar.gz";
+    sha256 = "10vgxq72jphf7m14h1r46a05sx218ay604f5cnmiy99srn8hw032";
   };
 
   # just needed when built from git
