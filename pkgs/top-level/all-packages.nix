@@ -15005,6 +15005,8 @@ with pkgs;
 
   mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy-musicbox-webclient { };
 
+  mopidy-iris = callPackage ../applications/audio/mopidy-iris { };
+
   motif = callPackage ../development/libraries/motif { };
 
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
