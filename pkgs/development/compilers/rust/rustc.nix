@@ -89,6 +89,7 @@ stdenv.mkDerivation {
     rm src/test/debuginfo/limited-debuginfo.rs
     rm src/test/debuginfo/simple-struct.rs
     rm src/test/debuginfo/simple-tuple.rs
+    rm src/test/debuginfo/union-smoke.rs
     rm src/test/debuginfo/vec-slices.rs
     rm src/test/debuginfo/vec.rs
 
