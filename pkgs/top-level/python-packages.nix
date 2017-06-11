@@ -30444,6 +30444,8 @@ EOF
 
   gensim = callPackage  ../development/python-modules/gensim { };
 
+  spotipy = callPackage ../development/python-modules/spotipy { };
+
 });
 
 in fix' (extends overrides packages)
