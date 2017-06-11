@@ -13,6 +13,7 @@
 , gemset ? null
 , preferLocalBuild ? false
 , allowSubstitutes ? false
+, meta ? {}
 , postBuild
 }@args:
 

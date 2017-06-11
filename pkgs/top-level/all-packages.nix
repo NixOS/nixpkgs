@@ -6161,6 +6161,7 @@ with pkgs;
   bundix = callPackage ../development/ruby-modules/bundix { };
   bundler = callPackage ../development/ruby-modules/bundler { };
   bundlerEnv = callPackage ../development/ruby-modules/bundler-env { };
+  rubyTool = callPackage ../development/ruby-modules/tool { };
 
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_2_0_0
