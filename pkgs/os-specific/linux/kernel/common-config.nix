@@ -36,7 +36,6 @@ with stdenv.lib;
   DEBUG_DEVRES n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
-  RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
@@ -588,6 +587,46 @@ with stdenv.lib;
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
   FW_LOADER_USER_HELPER_FALLBACK? n
+
+  # Disable various self-test modules that have no use in a production system
+  ARM_KPROBES_TEST? n
+  ASYNC_RAID6_TEST? n
+  ATOMIC64_SELFTEST? n
+  BACKTRACE_SELF_TEST? n
+  CRC32_SELFTEST? n
+  CRYPTO_TEST? n
+  DRM_DEBUG_MM_SELFTEST? n
+  EFI_TEST? n
+  GLOB_SELFTEST? n
+  INTERVAL_TREE_TEST? n
+  LNET_SELFTEST? n
+  LOCK_TORTURE_TEST? n
+  MTD_TESTS? n
+  NOTIFIER_ERROR_INJECTION? n
+  PERCPU_TEST? n
+  RBTREE_TEST? n
+  RCU_PERF_TEST? n
+  RCU_TORTURE_TEST? n
+  TEST_ASYNC_DRIVER_PROBE? n
+  TEST_BITMAP? n
+  TEST_BPF? n
+  TEST_FIRMWARE? n
+  TEST_HASH? n
+  TEST_HEXDUMP? n
+  TEST_KSTRTOX? n
+  TEST_LIST_SORT? n
+  TEST_LKM? n
+  TEST_PARMAN? n
+  TEST_PRINTF? n
+  TEST_RHASHTABLE? n
+  TEST_SORT? n
+  TEST_STATIC_KEYS? n
+  TEST_STRING_HELPERS? n
+  TEST_UDELAY? n
+  TEST_USER_COPY? n
+  TEST_UUID? n
+  WW_MUTEX_SELFTEST? n
+  XZ_DEC_TEST? n
 
   # ChromiumOS support
   ${optionalString (features.chromiumos or false) ''
