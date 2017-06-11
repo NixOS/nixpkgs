@@ -12,6 +12,8 @@ rec {
       sha512 = "cef5de1e9d6ddf6509a80cd30169fdce701b2fed022979ba5931ccea7b8f77cb644b01984dae028d350e32321cfe2eefc0236c0731bf5a2be12a994fc3fc1118";
     };
 
+    patches = [ ./cargo-fix.patch ];
+
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
