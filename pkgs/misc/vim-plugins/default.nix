@@ -2383,17 +2383,6 @@ rec {
 
   };
 
-  vimproc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vimproc-2016-08-06";
-    src = fetchgit {
-      url = "git://github.com/Shougo/vimproc";
-      rev = "25cb83f24edec4aec1e9f1329302235e7a7a7fe0";
-      sha256 = "19nl21623cv05j6ljyn35qm38pw3680nch2by1gapqmxazp99i20";
-    };
-    dependencies = [];
-
-  };
-
   vinegar = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vinegar-2017-05-23";
     src = fetchgit {
