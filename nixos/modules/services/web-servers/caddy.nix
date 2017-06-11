@@ -50,17 +50,30 @@ in
   config = mkIf cfg.enable {
     systemd.services.caddy = {
       description = "Caddy web server";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = ''${cfg.package.bin}/bin/caddy -conf=${configFile} \
-          -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
+        ExecStart = ''
+          ${cfg.package.bin}/bin/caddy -root=/var/tmp -conf=${configFile} \
+            -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
         '';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Type = "simple";
         User = "caddy";
         Group = "caddy";
+        Restart = "on-failure";
+        StartLimitInterval = 86400;
+        StartLimitBurst = 5;
         AmbientCapabilities = "cap_net_bind_service";
-        LimitNOFILE = 8192;
+        CapabilityBoundingSet = "cap_net_bind_service";
+        NoNewPrivileges = true;
+        LimitNPROC = 64;
+        LimitNOFILE = 1048576;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHome = true;
+        ProtectSystem = "full";
+        ReadWriteDirectories = cfg.dataDir;
       };
     };
 
