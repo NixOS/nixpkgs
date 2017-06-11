@@ -99,6 +99,11 @@ stdenv.mkDerivation {
 
     # Useful debugging parameter
     # export VERBOSE=1
+  ''
+  + optionalString stdenv.isDarwin ''
+    # Disable all lldb tests.
+    # error: Can't run LLDB test because LLDB's python path is not set
+    rm -vr src/test/debuginfo/*
   '';
 
   preConfigure = ''
