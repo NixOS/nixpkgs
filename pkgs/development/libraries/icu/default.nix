@@ -12,7 +12,7 @@ let
     sha256 = "0hxhpgydalyxacaaxlmaddc1sjwh65rsnpmg0j414mnblq74vmm8";
   };
 in
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name = pname + "-" + version;
 
   src = fetchurl {
@@ -39,6 +39,9 @@ stdenv.mkDerivation ({
 
   preConfigure = ''
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
+  '' + stdenv.lib.optionalString stdenv.isArm ''
+    # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
+    sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
   '';
 
   configureFlags = "--disable-debug" +
@@ -59,6 +62,4 @@ stdenv.mkDerivation ({
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
   };
-} // (if stdenv.isArm then {
-  patches = [ ./0001-Disable-LDFLAGSICUDT-for-Linux.patch ];
-} else {}))
+}
