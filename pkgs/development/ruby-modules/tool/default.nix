@@ -1,4 +1,4 @@
-{ stdenv }@defs:
+{ lib, stdenv, callPackage, runCommand, ruby }@defs:
 
 {
   name
@@ -8,25 +8,26 @@
 , exes ? []
   # Scripts are ruby programs depend on gems in the Gemfile (e.g. scripts/rails)
 , scripts ? []
+, ruby ? defs.ruby
 , gemfile ? null
 , lockfile ? null
 , gemset ? null
 , preferLocalBuild ? false
 , allowSubstitutes ? false
 , meta ? {}
-, postBuild
+, postBuild ? ""
 }@args:
 
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  args = removeAttrs args_ [ "name" "postBuild" ]
+  cmdArgs = removeAttrs args [ "name" "postBuild" ]
   // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
 in
-   runCommand name args ''
-    mkdir -p ${out}/bin; cd $out;
+   runCommand name cmdArgs ''
+    mkdir -p $out/bin; cd $out;
       ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' '${x}';\n") exes)}
-      ${(lib.concatMapStrings (s: "makeWrapper ${out}/bin/$(basename ${s}) $srcdir/${s} " +
+      ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +
               "--set BUNDLE_GEMFILE ${basicEnv.confFiles}/Gemfile "+
               "--set BUNDLE_PATH ${basicEnv}/${ruby.gemPath} "+
               "--set BUNDLE_FROZEN 1 "+
