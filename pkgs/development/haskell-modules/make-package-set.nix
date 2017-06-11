@@ -7,7 +7,8 @@
 # arguments:
 #  * ghc package to use
 #  * package-set: a function that takes { pkgs, stdenv, callPackage } as first arg and `self` as second
-{ ghc, package-set }:
+#  * extensible-self: the final, fully overriden package set usable with the nixpkgs fixpoint overriding functionality
+{ ghc, package-set, extensible-self }:
 
 # return value: a function from self to the package set
 self: let
@@ -115,6 +116,30 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
+
+    # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
+    # Given a set whose values are either paths or version strings, produces
+    # a package override set (i.e. (self: super: { etc. })) that sets
+    # the packages named in the input set to the corresponding versions
+    packageSourceOverrides =
+      overrides: self: super: pkgs.lib.mapAttrs (name: src:
+        let isPath = x: builtins.substring 0 1 (toString x) == "/";
+            generateExprs = if isPath src
+                               then self.callCabal2nix
+                               else self.callHackage;
+        in generateExprs name src {}) overrides;
+
+    # : { root : Path, source-overrides : Defaulted (Either Path VersionNumber } -> NixShellAwareDerivation
+    # Given a path to a haskell package directory whose cabal file is
+    # named the same as the directory name, and an optional set of
+    # source overrides as appropriate for the 'packageSourceOverrides'
+    # function, return a derivation appropriate for nix-build or nix-shell
+    # to build that package.
+    developPackage = { root, source-overrides ? {} }:
+      let name = builtins.baseNameOf root;
+          drv =
+            (extensible-self.extend (self.packageSourceOverrides source-overrides)).callCabal2nix name root {};
+      in if pkgs.lib.inNixShell then drv.env else drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

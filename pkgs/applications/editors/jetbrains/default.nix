@@ -1,9 +1,11 @@
 { lib, stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk
+, androidsdk, jdk, cmake, libxml2, zlib, python2, ncurses
 }:
 
 assert stdenv.isLinux;
+
+with stdenv.lib;
 
 let
   mkJetBrainsProduct = callPackage ./common.nix { };
@@ -11,7 +13,7 @@ let
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass }:
-    (mkJetBrainsProduct rec {
+    lib.overrideDerivation (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
@@ -21,9 +23,35 @@ let
           Enhancing productivity for every C and C++
           developer on Linux, OS X and Windows.
         '';
-        maintainers = with maintainers; [ edwtjo ];
+        maintainers = with maintainers; [ edwtjo mic92 ];
         platforms = platforms.linux;
       };
+    }) (attrs: {
+      postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
+        (
+          cd $out/clion-${version}
+          # bundled cmake does not find libc
+          rm -rf bin/cmake
+          ln -s ${cmake} bin/cmake
+
+          lldbLibPath=$out/clion-${version}/bin/lldb/lib
+          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+          ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
+
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
+            bin/lldb/bin/lldb-server
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
+            bin/lldb/LLDBFrontend
+          patchelf \
+            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python2 ]}:$lldbLibPath" \
+            bin/lldb/lib/liblldb.so
+
+          patchelf --set-interpreter $interp bin/gdb/bin/gdb
+          patchelf --set-interpreter $interp bin/gdb/bin/gdbserver
+        )
+      '';
     });
 
   buildDataGrip = { name, version, src, license, description, wmClass }:
@@ -209,12 +237,12 @@ in
 
   gogland = buildGogland rec {
     name = "gogland-${version}";
-    version = "171.4424.55";
+    version = "171.4694.35";
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0l5pn2wj541v1xc58bpipkl483zrhwjr37grkwiwx2j4iygrikq7";
+      sha256 = "0q2f8bi2i49j0xcpn824sihz2015jhn338cjaqy0jd988nxik6jk";
     };
     wmClass = "jetbrains-gogland";
   };
