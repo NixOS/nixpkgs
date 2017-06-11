@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "file-${version}";
-  version = "5.30";
+  version = "5.31";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.astron.com/pub/file/${name}.tar.gz"
       "https://distfiles.macports.org/file/${name}.tar.gz"
     ];
-    sha256 = "694c2432e5240187524c9e7cf1ec6acc77b47a0e19554d34c14773e43dbbf214";
+    sha256 = "1vp4zihaxkhi85chkjgd4r4zdg4k2wa3c6pmajhbmx6gr7d8ii89";
   };
 
   buildInputs = [ zlib ];
