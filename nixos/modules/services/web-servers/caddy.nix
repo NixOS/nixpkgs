@@ -36,7 +36,11 @@ in
     dataDir = mkOption {
       default = "/var/lib/caddy";
       type = types.path;
-      description = "The data directory, for storing certificates.";
+      description = ''
+        The data directory, for storing certificates. Before 17.09, this
+        would create a .caddy directory. With 17.09 the contents of the
+        .caddy directory are in the specified data directory instead.
+      '';
     };
 
     package = mkOption {
@@ -52,6 +56,8 @@ in
       description = "Caddy web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = mkIf (versionAtLeast config.system.stateVersion "17.09")
+        { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
         ExecStart = ''
           ${cfg.package.bin}/bin/caddy -root=/var/tmp -conf=${configFile} \
