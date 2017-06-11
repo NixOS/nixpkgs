@@ -3,7 +3,7 @@
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt, libcap
+, libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib, libvpx
 
@@ -57,7 +57,7 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxml" "libxslt" "snappy" "yasm"
+    "flac" "libwebp" "snappy" "yasm"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -67,7 +67,7 @@ let
   defaultDependencies = [
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt libcap
+    libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
   ];
@@ -105,7 +105,6 @@ let
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
-      ./patches/fix-bootstrap-gn.patch
     ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
       ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -134,9 +133,6 @@ let
       # use our own nodejs
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
-    '' + optionalString (versionAtLeast version "52.0.0.0") ''
-      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
-        third_party/pdfium/xfa/fxbarcode/utils.h
     '';
 
     gnFlags = mkGnFlags ({
