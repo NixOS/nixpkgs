@@ -4,12 +4,12 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
    name = "IPMIView-${version}";
-   version = "2.12.0";
-   buildVersion = "160804";
+   version = "2.13.0";
+   buildVersion = "170504";
 
    src = fetchurl {
     url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "787a060413451a4a5993c31805f55a221087b7199bbaf20e9fe1254e2a76db42";
+    sha256 = "1hfw5g6lxg3vqg0nc3g2sv2h6bn8za35bxxms0ri0sgb9v3xg1y6";
   };
 
    buildInputs = [ patchelf makeWrapper ];

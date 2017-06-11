@@ -67,6 +67,7 @@ my $gfxmodeEfi = get("gfxmodeEfi");
 my $gfxmodeBios = get("gfxmodeBios");
 my $bootloaderId = get("bootloaderId");
 my $forceInstall = get("forceInstall");
+my $font = get("font");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -281,7 +282,7 @@ else {
           insmod vbe
         fi
         insmod font
-        if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
+        if loadfont " . $grubBoot->path . "/converted-font.pf2; then
           insmod gfxterm
           if [ \"\${grub_platform}\" = \"efi\" ]; then
             set gfxmode=$gfxmodeEfi
@@ -294,6 +295,9 @@ else {
         fi
     ";
 
+    if ($font) {
+        copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
+    }
     if ($splashImage) {
         # FIXME: GRUB 1.97 doesn't resize the background image if it
         # doesn't match the video resolution.

@@ -474,6 +474,9 @@ with pkgs;
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  inherit (callPackages ../data/fonts/arphic {})
+    arphic-ukai arphic-uming;
+
   artyFX = callPackage ../applications/audio/artyFX {};
 
   as31 = callPackage ../development/compilers/as31 {};
@@ -1777,6 +1780,8 @@ with pkgs;
 
   exiftags = callPackage ../tools/graphics/exiftags { };
 
+  exiftool = perlPackages.ImageExifTool;
+
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
   expect = callPackage ../tools/misc/expect { };
@@ -2262,6 +2267,8 @@ with pkgs;
   gtklick = callPackage ../applications/audio/gtklick {};
 
   gtdialog = callPackage ../development/libraries/gtdialog {};
+
+  gtkd = callPackage ../development/libraries/gtkd { };
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
@@ -4340,6 +4347,8 @@ with pkgs;
 
   tie = callPackage ../development/tools/misc/tie { };
 
+  tilix = callPackage ../applications/misc/tilix { };
+
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
@@ -6053,6 +6062,10 @@ with pkgs;
 
   lxappearance = callPackage ../desktops/lxde/core/lxappearance {
     gtk2 = gtk2-x11;
+  };
+
+  lxappearance-gtk3 = callPackage ../desktops/lxde/core/lxappearance {
+    withGtk3 = true;
   };
 
   lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
@@ -12472,6 +12485,7 @@ with pkgs;
   inherit (callPackage ../misc/uboot {})
     buildUBoot
     ubootTools
+    ubootA20OlinuxinoLime
     ubootBananaPi
     ubootBeagleboneBlack
     ubootJetsonTK1
@@ -15488,6 +15502,7 @@ with pkgs;
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity {
     notifySupport   = config.profanity.notifySupport   or true;
+    traySupport     = config.profanity.traySupport     or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
 
