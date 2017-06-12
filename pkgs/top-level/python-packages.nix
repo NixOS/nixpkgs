@@ -14949,30 +14949,7 @@ in {
     };
   };
 
-  sleekxmpp = buildPythonPackage rec {
-    name = "sleekxmpp-${version}";
-    version = "1.3.1";
-
-    propagatedBuildInputs = with self ; [ dns pyasn1 ];
-
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/fritzy/SleekXMPP/pull/418.patch";
-        sha256 = "1apz901jzd2gq60pncy2510qsgrl0dd49cnkgp25nimi6blnp14f";
-      })
-    ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
-      sha256 = "1krkhkvj8xw5a6c2xlf7h1rg9xdcm9d8x2niivwjahahpvbl6krr";
-    };
-
-    meta = {
-      description = "XMPP library for Python";
-      license = licenses.mit;
-      homepage = "http://sleekxmpp.com/";
-    };
-  };
+  sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
