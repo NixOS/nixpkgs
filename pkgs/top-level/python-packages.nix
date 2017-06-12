@@ -11811,7 +11811,7 @@ in {
     name = "grammalecte";
     version = "v0.5.17";
 
-    doCheck = false;
+    doCheck = true;
     
     src = pkgs.fetchurl {
       url = "http://www.dicollecte.org/grammalecte/oxt/Grammalecte-fr-${version}.zip";
