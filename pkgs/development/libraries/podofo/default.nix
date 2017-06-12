@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
 , openssl, libpng, lua5, pkgconfig, libidn, expat
+, gcc5 # TODO(@Dridus) remove this at next hash break
 }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +13,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng libidn expat ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  # TODO(@Dridus) remove the ++ ghc5 at next hash break
+  nativeBuildInputs = [ cmake pkgconfig ] ++ stdenv.lib.optional stdenv.isLinux gcc5;
 
-  buildInputs = [ lua5 ];
+  # TODO(@Dridus) remove the ++ libc at next hash break
+  buildInputs = [ lua5 ] ++ stdenv.lib.optional stdenv.isLinux stdenv.cc.libc;
 
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
