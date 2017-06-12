@@ -30487,6 +30487,8 @@ EOF
 
   smart_open =  callPackage ../development/python-modules/smart_open { };
 
+  gensim = callPackage  ../development/python-modules/gensim { };
+
 });
 
 in fix' (extends overrides packages)
