@@ -164,7 +164,7 @@ rec {
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
   doubleFromSystem = { cpu, vendor, kernel, abi, ... }:
-    if vendor == kernels.windows && abi == abis.cygnus
+    if abi == abis.cygnus
     then "${cpu.name}-cygwin"
     else "${cpu.name}-${kernel.name}";
 
