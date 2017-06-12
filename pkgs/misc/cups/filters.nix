@@ -25,6 +25,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-pdftops=pdftops"
+    "--with-pdftops-path=${poppler_utils}/bin/pdftops"
     "--enable-imagefilters"
     "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"
