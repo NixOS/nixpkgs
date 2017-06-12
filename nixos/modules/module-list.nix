@@ -99,6 +99,7 @@
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix

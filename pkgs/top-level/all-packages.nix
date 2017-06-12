@@ -4333,6 +4333,8 @@ with pkgs;
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
+  thefuck = callPackage ../tools/misc/thefuck { };
+
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
