@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, writeScript, glibcLocales
+{ stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
 , pythonPackages, imagemagick, gobjectIntrospection, gst_all_1
 
 , enableAcousticbrainz ? true
@@ -158,20 +158,13 @@ in pythonPackages.buildPythonApplication rec {
   doCheck = true;
 
   preCheck = ''
-    (${concatMapStrings (s: "echo \"${s}\";") allPlugins}) \
-      | sort -u > plugins_defined
     find beetsplug -mindepth 1 \
       \! -path 'beetsplug/__init__.py' -a \
       \( -name '*.py' -o -path 'beetsplug/*/__init__.py' \) -print \
       | sed -n -re 's|^beetsplug/([^/.]+).*|\1|p' \
       | sort -u > plugins_available
 
-    if ! mismatches="$(diff -y plugins_defined plugins_available)"; then
-      echo "The the list of defined plugins (left side) doesn't match" \
-           "the list of available plugins (right side):" >&2
-      echo "$mismatches" >&2
-      exit 1
-    fi
+     ${diffPlugins allPlugins "plugins_available"}
   '';
 
   checkPhase = ''
