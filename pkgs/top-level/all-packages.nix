@@ -5308,6 +5308,14 @@ with pkgs;
     profiledCompiler = false;
   });
 
+  gfortran7 = wrapCC (gcc7.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   gcj = gcj49;
   gcj49 = wrapCC (gcc49.cc.override {
     name = "gcj";
