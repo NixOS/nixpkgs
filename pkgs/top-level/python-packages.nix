@@ -30483,6 +30483,8 @@ EOF
 
   distro = callPackage ../development/python-modules/distro { };
 
+  bz2file =  callPackage ../development/python-modules/bz2file { };
+
 });
 
 in fix' (extends overrides packages)
