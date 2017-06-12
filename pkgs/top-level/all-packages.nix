@@ -17329,7 +17329,11 @@ with pkgs;
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
-  ultrastardx = callPackage ../games/ultrastardx {
+  ultrastardx = callPackage ../games/ultrastardx/1.1.nix {
+    ffmpeg = ffmpeg_0;
+    lua = lua5;
+  };
+  ultrastardx-beta = callPackage ../games/ultrastardx/1.3-beta.nix {
     ffmpeg = ffmpeg_0;
     lua = lua5;
   };
