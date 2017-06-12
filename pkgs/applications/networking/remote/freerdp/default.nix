@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, substituteAll
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
 , alsaLib, ffmpeg_2, glib, openssl, pcre, zlib
 , libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
 , libxkbcommon, libxkbfile
