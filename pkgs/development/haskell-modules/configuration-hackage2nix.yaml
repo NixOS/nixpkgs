@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.17
+  # LTS Haskell 8.18
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -348,7 +348,7 @@ default-package-overrides:
   - check-email ==1.0.2
   - checkers ==0.4.6
   - chell ==0.4.0.1
-  - choice ==0.2.0
+  - choice ==0.2.1
   - chunked-data ==0.3.0
   - cipher-aes ==0.2.11
   - cipher-aes128 ==0.7.0.3
@@ -403,7 +403,7 @@ default-package-overrides:
   - concurrent-output ==1.7.9
   - concurrent-split ==0.0.1
   - concurrent-supply ==0.1.8
-  - conduit ==1.2.10
+  - conduit ==1.2.11
   - conduit-combinators ==1.1.1
   - conduit-connection ==0.1.0.3
   - conduit-extra ==1.1.16
@@ -497,7 +497,7 @@ default-package-overrides:
   - data-inttrie ==0.1.2
   - data-lens-light ==0.1.2.2
   - data-memocombinators ==0.5.1
-  - data-msgpack ==0.0.9
+  - data-msgpack ==0.0.10
   - data-or ==1.0.0.5
   - data-ordlist ==0.4.7.0
   - data-ref ==0.0.1.1
@@ -526,7 +526,7 @@ default-package-overrides:
   - diagrams-core ==1.4
   - diagrams-gtk ==1.4
   - diagrams-html5 ==1.4
-  - diagrams-lib ==1.4.1
+  - diagrams-lib ==1.4.1.2
   - diagrams-postscript ==1.4
   - diagrams-rasterific ==1.4
   - diagrams-solve ==0.1.0.1
@@ -601,7 +601,7 @@ default-package-overrides:
   - ekg-statsd ==0.2.1.0
   - ekg-wai ==0.1.0.1
   - elerea ==2.9.0
-  - elm-bridge ==0.4.0
+  - elm-bridge ==0.4.1
   - elm-core-sources ==1.0.0
   - elm-export ==0.6.0.1
   - elm-export-persistent ==0.1.2
@@ -705,7 +705,7 @@ default-package-overrides:
   - format-numbers ==0.1.0.0
   - formatting ==6.2.4
   - fortran-src ==0.1.0.4
-  - foundation ==0.0.9
+  - foundation ==0.0.10
   - Frames ==0.1.9
   - free ==4.12.4
   - free-vl ==0.1.4
@@ -740,7 +740,7 @@ default-package-overrides:
   - ghc-mod ==5.7.0.0
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.3.0.2
-  - ghc-syb-utils ==0.2.3
+  - ghc-syb-utils ==0.2.3.1
   - ghc-tcplugins-extra ==0.2
   - ghc-typelits-extra ==0.2.3
   - ghc-typelits-knownnat ==0.2.4
@@ -757,7 +757,7 @@ default-package-overrides:
   - gi-gio ==2.0.12
   - gi-glib ==2.0.12
   - gi-gobject ==2.0.12
-  - gi-gtk ==3.0.14
+  - gi-gtk ==3.0.15
   - gi-javascriptcore ==3.0.12
   - gi-pango ==1.0.13
   - gi-soup ==2.4.12
@@ -920,7 +920,7 @@ default-package-overrides:
   - haddock-library ==1.4.3
   - hailgun ==0.4.1.3
   - hailgun-simple ==0.1.0.0
-  - hakyll ==4.9.5.1
+  - hakyll ==4.9.7.0
   - half ==0.2.2.3
   - hamilton ==0.1.0.0
   - hamlet ==1.2.0
@@ -991,7 +991,7 @@ default-package-overrides:
   - hedis ==0.9.8
   - here ==1.2.11
   - heredoc ==0.2.0.0
-  - heterocephalus ==1.0.4.0
+  - heterocephalus ==1.0.5.0
   - hex ==0.1.2
   - hexml ==0.3.2
   - hexpat ==0.20.10
@@ -1068,7 +1068,7 @@ default-package-overrides:
   - hslua-aeson ==0.1.0.4
   - hsndfile ==0.8.0
   - hsndfile-vector ==0.5.2
-  - HsOpenSSL ==0.11.4.8
+  - HsOpenSSL ==0.11.4.9
   - HsOpenSSL-x509-system ==0.1.0.3
   - hsp ==0.10.0
   - hspec ==2.4.3
@@ -1232,7 +1232,7 @@ default-package-overrides:
   - jwt ==0.7.2
   - kan-extensions ==5.0.2
   - kansas-comet ==0.4
-  - katip ==0.3.1.4
+  - katip ==0.3.1.5
   - katip-elasticsearch ==0.3.0.2
   - kawhi ==0.2.3
   - kdt ==0.2.4
@@ -1254,7 +1254,7 @@ default-package-overrides:
   - language-glsl ==0.2.0
   - language-haskell-extract ==0.2.4
   - language-java ==0.2.8
-  - language-javascript ==0.6.0.9
+  - language-javascript ==0.6.0.10
   - language-lua2 ==0.1.0.5
   - language-puppet ==1.3.7
   - language-python ==0.5.4
@@ -1355,7 +1355,7 @@ default-package-overrides:
   - median-stream ==0.7.0.0
   - mega-sdist ==0.3.0.2
   - megaparsec ==5.2.0
-  - memory ==0.14.5
+  - memory ==0.14.6
   - MemoTrie ==0.6.7
   - mersenne-random ==1.0.0.1
   - mersenne-random-pure64 ==0.2.2.0
@@ -1555,7 +1555,7 @@ default-package-overrides:
   - parsec ==3.1.11
   - parsec-numeric ==0.1.0.0
   - ParsecTools ==0.0.2.0
-  - parsers ==0.12.4
+  - parsers ==0.12.5
   - partial-handler ==1.0.2
   - partial-isomorphisms ==0.2.2.1
   - patat ==0.5.2.0
@@ -1590,7 +1590,7 @@ default-package-overrides:
   - picoparsec ==0.1.2.3
   - pid1 ==0.1.0.1
   - pinboard ==0.9.12.4
-  - pinch ==0.3.1.0
+  - pinch ==0.3.2.0
   - pinchot ==0.24.0.0
   - pipes ==4.3.4
   - pipes-attoparsec ==0.5.1.5
@@ -1667,12 +1667,12 @@ default-package-overrides:
   - prometheus-client ==0.1.1
   - prometheus-metrics-ghc ==0.1.1
   - prompt ==0.1.1.2
-  - proto-lens ==0.2.0.1
+  - proto-lens ==0.2.1.0
   - proto-lens-arbitrary ==0.1.0.2
-  - proto-lens-combinators ==0.1.0.6
-  - proto-lens-descriptors ==0.2.0.1
+  - proto-lens-combinators ==0.1.0.7
+  - proto-lens-descriptors ==0.2.1.0
   - proto-lens-optparse ==0.1.0.2
-  - proto-lens-protoc ==0.2.0.1
+  - proto-lens-protoc ==0.2.1.0
   - protobuf ==0.2.1.1
   - protobuf-simple ==0.1.0.4
   - protocol-buffers ==2.4.0
@@ -1747,7 +1747,7 @@ default-package-overrides:
   - reform-happstack ==0.2.5.1
   - reform-hsp ==0.2.7.1
   - RefSerialize ==0.4.0
-  - regex ==1.0.1.0
+  - regex ==1.0.1.3
   - regex-applicative ==0.3.3
   - regex-applicative-text ==0.1.0.1
   - regex-base ==0.93.2
@@ -1759,7 +1759,7 @@ default-package-overrides:
   - regex-posix ==0.95.2
   - regex-tdfa ==1.2.2
   - regex-tdfa-text ==1.0.0.3
-  - regex-with-pcre ==1.0.1.0
+  - regex-with-pcre ==1.0.1.3
   - reinterpret-cast ==0.1.0
   - relational-query ==0.8.4.0
   - relational-query-HDBC ==0.6.0.3
@@ -1819,7 +1819,7 @@ default-package-overrides:
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
-  - scientific ==0.3.4.13
+  - scientific ==0.3.4.15
   - scotty ==0.11.0
   - scrape-changes ==0.1.0.5
   - scrypt ==0.5.0
@@ -2061,7 +2061,7 @@ default-package-overrides:
   - temporary ==1.2.0.4
   - temporary-rc ==1.2.0.3
   - termcolor ==0.2.0.0
-  - terminal-progress-bar ==0.1.1
+  - terminal-progress-bar ==0.1.1.1
   - terminal-size ==0.3.2.1
   - terminfo ==0.4.1.0
   - test-fixture ==0.5.0.1
@@ -2124,7 +2124,7 @@ default-package-overrides:
   - timemap ==0.0.4
   - timerep ==2.0.0.2
   - timespan ==0.3.0.0
-  - timezone-olson ==0.1.7
+  - timezone-olson ==0.1.8
   - timezone-series ==0.1.6.1
   - tinylog ==0.14.0
   - tinytemplate ==0.1.2.0
@@ -2145,7 +2145,7 @@ default-package-overrides:
   - true-name ==0.1.0.2
   - tsv2csv ==0.1.0.2
   - ttrie ==0.1.2.1
-  - tttool ==1.7.0.2
+  - tttool ==1.7.0.3
   - tuple ==0.3.0.2
   - tuple-th ==0.2.5
   - tuples-homogenous-h98 ==0.1.1.0
@@ -2174,6 +2174,7 @@ default-package-overrides:
   - tzdata ==0.1.20161123.0
   - ua-parser ==0.7.3
   - uglymemo ==0.1.0.1
+  - unagi-chan ==0.4.0.0
   - unbound ==0.5.1
   - unbound-generics ==0.3.1
   - unbounded-delays ==0.1.1.0
@@ -2208,7 +2209,7 @@ default-package-overrides:
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.8.0
   - unsafe ==0.0
-  - uri-bytestring ==0.2.3.2
+  - uri-bytestring ==0.2.3.3
   - uri-encode ==1.5.0.5
   - uri-templater ==0.2.1.0
   - url ==2.1.3
@@ -2376,12 +2377,12 @@ default-package-overrides:
   - YampaSynth ==0.2
   - yes-precure5-command ==5.5.3
   - yesod ==1.4.5
-  - yesod-auth ==1.4.17.1
+  - yesod-auth ==1.4.17.2
   - yesod-auth-account ==1.4.3
   - yesod-auth-basic ==0.1.0.2
   - yesod-auth-hashdb ==1.6.1
   - yesod-bin ==1.5.2.3
-  - yesod-core ==1.4.33
+  - yesod-core ==1.4.35
   - yesod-eventsource ==1.4.1
   - yesod-fay ==0.8.0
   - yesod-form ==1.4.12
@@ -2392,10 +2393,10 @@ default-package-overrides:
   - yesod-newsfeed ==1.6
   - yesod-persistent ==1.4.2
   - yesod-sitemap ==1.4.0.1
-  - yesod-static ==1.5.2
+  - yesod-static ==1.5.3
   - yesod-static-angular ==0.1.8
   - yesod-table ==2.0.3
-  - yesod-test ==1.5.5
+  - yesod-test ==1.5.6
   - yesod-websockets ==0.2.6
   - yi-core ==0.13.5
   - yi-frontend-vty ==0.13.5
@@ -2416,10 +2417,10 @@ default-package-overrides:
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.5
   - zip ==0.1.11
-  - zip-archive ==0.3.0.6
+  - zip-archive ==0.3.1
   - zippers ==0.2.3
-  - ziptastic-client ==0.3.0.2
-  - ziptastic-core ==0.2.0.2
+  - ziptastic-client ==0.3.0.3
+  - ziptastic-core ==0.2.0.3
   - zlib ==0.6.1.2
   - zlib-bindings ==0.1.1.5
   - zlib-lens ==0.1.2.1
