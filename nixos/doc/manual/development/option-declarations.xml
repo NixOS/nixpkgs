@@ -96,7 +96,7 @@ options = {
   </itemizedlist>
   </para>
 
-  <para>Both approachs have problems.</para>
+  <para>Both approaches have problems.</para>
 
   <para>Making backends independent can quickly become hard to manage. For
     display managers, there can be only one enabled at a time, but the type
