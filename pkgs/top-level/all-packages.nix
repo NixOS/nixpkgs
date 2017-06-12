@@ -17336,6 +17336,8 @@ with pkgs;
 
   ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
 
+  ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
+
   ultrastardx = callPackage ../games/ultrastardx/1.1.nix {
     ffmpeg = ffmpeg_0;
     lua = lua5;
