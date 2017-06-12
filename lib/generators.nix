@@ -91,7 +91,6 @@ rec {
     */
   toYAML = {}@args: toJSON args;
 
-  # TODO we need some kind of pattern matching sometimes
   /* Pretty print a value, akin to `builtins.trace`.
     * Should probably be a builtin as well.
     */
@@ -105,7 +104,13 @@ rec {
     else if isBool     v then (if v == true then "true" else "false")
     else if isString   v then "\"" + v + "\""
     else if null ==    v then "null"
-    else if isFunction v then "<λ>"
+    else if isFunction v then
+      let fna = functionArgs v;
+          showFnas = concatStringsSep "," (libAttr.mapAttrsToList
+                       (name: hasDefVal: if hasDefVal then "(${name})" else name)
+                       fna);
+      in if fna == {}    then "<λ>"
+                         else "<λ:{${showFnas}}>"
     else if isList     v then "[ "
         + libStr.concatMapStringsSep " " (toPretty args) v
       + " ]"

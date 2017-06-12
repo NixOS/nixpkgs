@@ -292,6 +292,7 @@ runTests {
       string = "fnord";
       null_ = null;
       function = x: x;
+      functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
       attrs = { foo = null; "foo bar" = "baz"; };
       drv = derivation { name = "test"; system = builtins.currentSystem; };
@@ -302,6 +303,7 @@ runTests {
       string = "\"fnord\"";
       null_ = "null";
       function = "<λ>";
+      functionArgs = "<λ:{(arg),foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
       drv = "<δ>";
