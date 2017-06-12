@@ -45,6 +45,11 @@ let
     hitori gnome-taquin
   ];
 
+
+  flashbackPackages = with gnome3; [
+    gnome-flashback gnome-panel metacity
+  ];
+
   inherit (pkgs) glib gtk2 webkitgtk216x gtk3 gtkmm3 libcanberra_gtk2
     clutter clutter-gst clutter_gtk cogl gtkvnc;
   inherit (pkgs.gnome2) ORBit2;
@@ -397,6 +402,12 @@ let
   gnome-video-effects = callPackage ./misc/gnome-video-effects { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
+
+  gnome-flashback = callPackage ./misc/gnome-flashback { };
+
+  gnome-panel = callPackage ./misc/gnome-panel { };
+
+  metacity = callPackage ./misc/metacity { };
 
     };
   in self; # pkgsFun

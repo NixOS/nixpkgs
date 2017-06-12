@@ -77,6 +77,8 @@ in {
       };
 
       debug = mkEnableOption "gnome-session debug messages";
+
+      enableFlashback = mkEnableOption "Enable GNOME flashback support.";
     };
 
     environment.gnome3.packageSet = mkOption {
@@ -131,48 +133,55 @@ in {
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
-    services.xserver.desktopManager.session = singleton
-      { name = "gnome3";
-        bgSupport = true;
-        start = ''
-          # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-          export GTK_DATA_PREFIX=${config.system.path}
+    services.xserver.desktopManager.session =
+      let mkGnomeSession = name: exec:
+        { name = "gnome3";
+          bgSupport = true;
+          start = ''
+            # Set GTK_DATA_PREFIX so that GTK+ can find the themes
+            export GTK_DATA_PREFIX=${config.system.path}
 
-          # find theme engines
-          export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
+            # find theme engines
+            export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
 
-          export XDG_MENU_PREFIX=gnome
+            export XDG_MENU_PREFIX=gnome
 
-          ${concatMapStrings (p: ''
-            if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-              export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-            fi
+            ${concatMapStrings (p: ''
+              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+              fi
 
-            if [ -d "${p}/lib/girepository-1.0" ]; then
-              export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-            fi
-          '') cfg.sessionPath}
+              if [ -d "${p}/lib/girepository-1.0" ]; then
+                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+              fi
+            '') cfg.sessionPath}
 
-          # Override default mimeapps
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
+            # Override default mimeapps
+            export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
-          # Override gsettings-desktop-schema
-          export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
+            # Override gsettings-desktop-schema
+            export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 
-          # Let nautilus find extensions
-          export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/
+            # Let nautilus find extensions
+            export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/
 
-          # Find the mouse
-          export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
+            # Find the mouse
+            export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
 
-          # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-          ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
+            # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+            ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
-          ${gnome3.gnome_session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &
-          waitPID=$!
-        '';
-      };
+            ${exec}
+            waitPID=$!
+          '';
+        };
+      in
+      singleton (mkGnomeSession "gnome3" "${gnome3.gnome_session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &")
+      ++ optionals cfg.enableFlashback
+        [ (mkGnomeSession "gnome3-flashback-metacity" "metacity; ${gnome3.gnome-flashback}/libexec/gnome-flashback-metacity &")
+          (mkGnomeSession "gnome3-flashback-compiz" "compiz; ${gnome3.gnome-flashback}/libexec/gnome-flashback-compiz &")
+        ];
 
     services.xserver.updateDbusEnvironment = true;
 
@@ -180,7 +189,8 @@ in {
                                                 "${gnome3.glib_networking.out}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
-      ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages);
+      ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages)
+      ++ optionals cfg.enableFlashback gnome3.flashbackPackages;
 
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =
