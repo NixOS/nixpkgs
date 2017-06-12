@@ -30485,6 +30485,8 @@ EOF
 
   bz2file =  callPackage ../development/python-modules/bz2file { };
 
+  smart_open =  callPackage ../development/python-modules/smart_open { };
+
 });
 
 in fix' (extends overrides packages)
