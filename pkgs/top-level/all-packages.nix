@@ -17332,6 +17332,8 @@ with pkgs;
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
+  ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
+
   ultrastardx = callPackage ../games/ultrastardx/1.1.nix {
     ffmpeg = ffmpeg_0;
     lua = lua5;
