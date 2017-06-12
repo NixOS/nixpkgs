@@ -11914,12 +11914,12 @@ in {
   guessit = callPackage ../development/python-modules/guessit { };
 
   rebulk = buildPythonPackage rec {
-    version = "0.8.2";
+    version = "0.9.0";
     name = "rebulk-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rebulk/${name}.tar.gz";
-      sha256 = "8c09901bda7b79a21d46faf489d67d017aa54d38bdabdb53f824068a6640401a";
+      sha256 = "1sw516ihfrb7i9bfl1n3049akvb23mpsk3llh7w3xfnbvkfrpip0";
     };
 
     # Some kind of trickery with imports that doesn't work.
