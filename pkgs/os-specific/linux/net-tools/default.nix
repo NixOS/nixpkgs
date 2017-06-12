@@ -13,7 +13,14 @@ stdenv.mkDerivation rec {
       cp ${./config.h} config.h
     '';
 
-  makeFlags = "BASEDIR=$(out) mandir=/share/man";
+  makeFlags = [
+    "BASEDIR=$(out)"
+    "mandir=/share/man"
+    "HAVE_ARP_TOOLS=1"
+    "HAVE_PLIP_TOOLS=1"
+    "HAVE_SERIAL_TOOLS=1"
+    "HAVE_HOSTNAME_TOOLS=1"
+  ];
 
   meta = {
     homepage = http://net-tools.sourceforge.net/;
