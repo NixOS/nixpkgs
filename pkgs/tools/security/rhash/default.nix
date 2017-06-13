@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://rhash.anz.ru;
     description = "Console utility and library for computing and verifying hash sums of files";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.andrewrk ];
   };
 }
