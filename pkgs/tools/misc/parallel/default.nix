@@ -8,11 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0afk1q8mqzz02h6imyykgi9gwk5gj08hzs6lwgd65ilj4slkh93s";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper perl ];
 
-  preFixup = ''
-    sed -i 's,#![ ]*/usr/bin/env[ ]*perl,#!${perl}/bin/perl,' $out/bin/*
-
+  postInstall = ''
     wrapProgram $out/bin/parallel \
       ${if stdenv.isLinux then ("--prefix PATH \":\" ${procps}/bin") else ""} \
       --prefix PATH : "${perl}/bin" \
