@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=cc prefix=$(out)" ];
 
-  enableParallelBuildingg = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "http://www.muppetlabs.com/~breadbox/software/elfkickers.html";
