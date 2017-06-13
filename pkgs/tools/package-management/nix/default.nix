@@ -39,7 +39,7 @@ let
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals fromGit [ brotli readline ] # Since 1.12
-      ++ lib.optional (stdenv.isLinux && is112) libseccomp
+      ++ lib.optional stdenv.isLinux libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -148,10 +148,10 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.9";
+    name = "nix-1.11.10";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0e943e277f37843f9196b0293cc31d828613ad7a328ee77cd5be01935dc6e7e1";
+      sha256 = "b29a458c2b803bcc07d8b58cd016ca6ad0788a73ca74edaeaebc588961322467";
     };
   }) // { perl-bindings = nixStable; };
 

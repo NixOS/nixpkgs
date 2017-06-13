@@ -129,16 +129,20 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
                                else self.callHackage;
         in generateExprs name src {}) overrides;
 
-    # : { root : Path, source-overrides : Defaulted (Either Path VersionNumber } -> NixShellAwareDerivation
+    # : { root : Path
+    #   , source-overrides : Defaulted (Either Path VersionNumber
+    #   , overrides : Defaulted (HaskellPackageOverrideSet)
+    #   } -> NixShellAwareDerivation
     # Given a path to a haskell package directory whose cabal file is
-    # named the same as the directory name, and an optional set of
+    # named the same as the directory name, an optional set of
     # source overrides as appropriate for the 'packageSourceOverrides'
-    # function, return a derivation appropriate for nix-build or nix-shell
+    # function, and an optional set of arbitrary overrides,
+    # return a derivation appropriate for nix-build or nix-shell
     # to build that package.
-    developPackage = { root, source-overrides ? {} }:
+    developPackage = { root, source-overrides ? {}, overrides ? self: super: {} }:
       let name = builtins.baseNameOf root;
           drv =
-            (extensible-self.extend (self.packageSourceOverrides source-overrides)).callCabal2nix name root {};
+            (extensible-self.extend (pkgs.lib.composeExtensions (self.packageSourceOverrides source-overrides) overrides)).callCabal2nix name root {};
       in if pkgs.lib.inNixShell then drv.env else drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
