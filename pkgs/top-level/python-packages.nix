@@ -11192,6 +11192,7 @@ in {
       url = "mirror://pypi/h/hug/${name}.tar.gz";
       sha256 = "93325e13706594933a9afb0d4f0b0748134494299038f07df41152baf6f89f4c";
     };
+    disabled = !isPy3k;
 
     propagatedBuildInputs = with self; [ falcon requests ];
 
