@@ -12212,6 +12212,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ShellCommand = buildPerlPackage {
+    name = "Shell-Command-0.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FL/FLORA/Shell-Command-0.06.tar.gz;
+      sha256 = "1lgc2rb3b5a4lxvbq0cbg08qk0n2i88srxbsz93bwi3razpxxr7k";
+    };
+  };
+
   StringToIdentifierEN = buildPerlPackage rec {
     name = "String-ToIdentifier-EN-0.11";
     src = fetchurl {
