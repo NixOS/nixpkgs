@@ -604,4 +604,5 @@
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
   zraexy = "David Mell <zraexy@gmail.com>";
+  zx2c4 = "Jason A. Donenfeld <Jason@zx2c4.com>";
 }
