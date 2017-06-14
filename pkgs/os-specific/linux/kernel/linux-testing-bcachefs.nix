@@ -8,8 +8,8 @@ import ./generic.nix (args // rec {
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs.git";
-    rev = "43e3159567958ea70c8a95d98fdb6e881153a656";
-    sha256 = "1595l2wabf74q8fb7fk14mz5iv7x7wk9nhjddyd9v3v5nw9krm4v";
+    rev = "87a9a6efd0ab602fc8d429fe75c427f1ac278f41";
+    sha256 = "0h73r7ypqcwcsfzkxdwcvli96cig3gmnyhfw251fv2bsyq26ik9f";
   };
 
   extraConfig = ''
