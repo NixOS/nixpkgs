@@ -10,7 +10,7 @@ let
 
       installPhase = ''
         mkdir -p $out/share/artwork/gnome
-        ln -s $src $out/share/artwork/gnome/
+        ln -s $src $out/share/artwork/gnome/${src.name}
       '';
 
       meta = with stdenv.lib; {
