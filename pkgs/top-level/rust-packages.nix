@@ -4,24 +4,16 @@
 # version that we define here. If you're having problems downloading / finding
 # a Rust library, try updating this to a newer commit.
 
-{ runCommand, fetchFromGitHub, git }:
+{ runCommand, fetchFromGitHub, git
+, src ? fetchFromGitHub {
+    owner = "rust-lang";
+    repo = "crates.io-index";
+    rev = "cda0f689f844710a3d73c7ff459efa64997f73b5";
+    sha256 = "1b3brl9nn3qqaysd8lx9gaazd863grqx547iw7y9j6mkcc7sakvc";
+  }
+}:
 
-let
-  version = "2017-06-16";
-  rev = "cda0f689f844710a3d73c7ff459efa64997f73b5";
-  sha256 = "1b3brl9nn3qqaysd8lx9gaazd863grqx547iw7y9j6mkcc7sakvc";
-
-  src = fetchFromGitHub {
-      inherit rev;
-      inherit sha256;
-
-      owner = "rust-lang";
-      repo = "crates.io-index";
-  };
-
-in
-
-runCommand "rustRegistry-${version}-${builtins.substring 0 7 rev}" { inherit src; } ''
+runCommand "rustRegistry" { inherit src; } ''
   # For some reason, cargo doesn't like fetchgit's git repositories, not even
   # if we set leaveDotGit to true, set the fetchgit branch to 'master' and clone
   # the repository (tested with registry rev

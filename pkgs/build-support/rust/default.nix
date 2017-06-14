@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, rust, rustRegistry }:
+{ stdenv, callPackage, path, cacert, git, rust }:
 { name, depsSha256
 , src ? null
 , srcs ? null
@@ -8,9 +8,14 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+, registry ? null
 , ... } @ args:
 
 let
+  lib = stdenv.lib;
+  rustRegistry = callPackage (path + /pkgs/top-level/rust-packages.nix)
+    (lib.optionalAttrs (registry != null) { src = registry; });
+
   fetchDeps = import ./fetchcargo.nix {
     inherit stdenv cacert git rust rustRegistry;
   };
