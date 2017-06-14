@@ -517,6 +517,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  AuthenRadius = buildPerlPackage rec {
+    name = "Authen-Radius-0.26";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/P/PO/PORTAONE/${name}.tar.gz";
+      sha256 = "4f272c19b8a9f6514a1107e98efae6773208233df4db11f2dc4764b4784b17c3";
+    };
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [ DataHexDump NetIP ];
+    meta = {
+      description = "Provide simple Radius client facilities  ";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   AuthenSASL = buildPerlPackage rec {
     name = "Authen-SASL-2.16";
     src = fetchurl {
@@ -1732,6 +1746,19 @@ let self = _self // overrides; _self = with self; {
       description = "Unified cache handling interface";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  Chart = buildPerlPackage rec {
+    name = "Chart-2.4.10";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/C/CH/CHARTGRP/${name}.tar.gz";
+      sha256 = "84bd99a1a0ce72477b15e35881e6120398bb3f553aeeb5e8d72b088520e4f6bf";
+    };
+    propagatedBuildInputs = [ GD ];
+    meta = {
+        description = "A series of charting modules";
+        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4510,6 +4537,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  EmailReply = buildPerlPackage rec {
+    name = "Email-Reply-1.204";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "ba4fd80ac5017d6d132e0358c786b0ecd1c7adcbeee5c19fb3da2964791a56f0";
+    };
+    propagatedBuildInputs = [ EmailAbstract EmailAddress EmailMIME ];
+    meta = {
+      homepage = "http://search.cpan.org/~rjbs/${name}";
+      description = "Reply to an email message";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   EmailMessageID = buildPerlPackage {
     name = "Email-MessageID-1.404";
     src = fetchurl {
@@ -4540,6 +4581,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  EmailMIMEAttachmentStripper = buildPerlPackage rec {
+    name = "Email-MIME-Attachment-Stripper-1.317";
+    buildInputs = [ CaptureTiny TestPod ];
+    propagatedBuildInputs = [ EmailAbstract EmailMIME ];
+
+    src = fetchurl {
+        url = "http://www.cpan.org/authors/id/R/RJ/RJBS/${name}.tar.gz";
+        sha256 = "dcb98b09dc3e8f757ec3882a4234548108bb2d12e3cfadf95a26cef381a9e789";
+    };
+    meta = {
+        homepage = "http://search.cpan.org/dist/${name}";
+        description = "Strip the attachments from an email";
+        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   EmailMIMEContentType = buildPerlPackage rec {
     name = "Email-MIME-ContentType-1.018";
     src = fetchurl {
@@ -4566,6 +4623,21 @@ let self = _self // overrides; _self = with self; {
       description = "A unified interface to MIME encoding and decoding";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ rycee ];
+    };
+  };
+
+  EmailMIMEModifier = buildPerlPackage rec {
+    doCheck = false; # tests are broken, it seems
+    name = "Email-MIME-Modifier-1.444";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "4521cf361527cd9b5e8b0db3d2e6c9588c52de6a8997e1daf5c21ed1eb7a4ba2";
+    };
+    propagatedBuildInputs = [ EmailMIME EmailMIMEContentType ];
+    meta = {
+      homepage = "http://search.cpan.org/~rjbs/${name}";
+      description = "Modify Email::MIME Objects Easily";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4761,7 +4833,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1vzpz6syb82ir8svp2wjh95x6lpf01lgkxn2xy60ixrszc24zdya";
     };
   };
- 
+
   EV = buildPerlPackage rec {
     name = "EV-4.22";
     src = fetchurl {
@@ -10406,6 +10478,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PatchReader = buildPerlPackage rec {
+    name = "PatchReader-0.9.6";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/T/TM/TMANNERM/${name}.tar.gz";
+      sha256 = "b8de37460347bb5474dc01916ccb31dd2fe0cd92242c4a32d730e8eb087c323c";
+    };
+    meta = {
+      homepage = "http://search.cpan.org/~tmannerm/${name}";
+      description = "Utilities to read and manipulate patches and CVS";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   PackageStash = buildPerlPackage {
     name = "Package-Stash-0.37";
     src = fetchurl {
@@ -11471,7 +11556,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "09c8xb43p1s6ala6g4274az51mf33phyjkp66dpvgkgbi1xfnawp";
     };
   };
-  
+
   RegexpGrammars = buildPerlPackage rec {
     name = "Regexp-Grammars-1.045";
     src = fetchurl {
@@ -12767,6 +12852,19 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ AppConfig ];
     meta = {
       description = "Comprehensive template processing system";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+   TemplateGD = buildPerlPackage rec {
+    name = "Template-GD-2.66";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/A/AB/ABW/${name}.tar.gz";
+      sha256 = "98523c8192f2e8184042e5a2e172bd767ac289dd2e480f35f680dce32160905b";
+    };
+    propagatedBuildInputs = [ GD TemplateToolkit ];
+    meta = {
+      description = "GD plugin(s) for the Template Toolkit";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
