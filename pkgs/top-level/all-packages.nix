@@ -5788,7 +5788,6 @@ with pkgs;
   rustNightlyBin = lowPrio (callPackage ../development/compilers/rust/nightlyBin.nix {
      buildRustPackage = callPackage ../build-support/rust {
        rust = rustNightlyBin;
-       rustRegistry = callPackage ./rust-packages.nix { };
      };
   });
 
@@ -5804,8 +5803,6 @@ with pkgs;
       callPackage = newScope self;
     in {
       inherit rust;
-
-      rustRegistry = callPackage ./rust-packages.nix { };
 
       buildRustPackage = callPackage ../build-support/rust {
         inherit rust;
