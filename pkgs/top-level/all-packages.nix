@@ -1544,6 +1544,8 @@ with pkgs;
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
 
+  ddcutil = callPackage ../tools/misc/ddcutil { };
+
   ddclient = callPackage ../tools/networking/ddclient { };
 
   dd_rescue = callPackage ../tools/system/dd_rescue { };
