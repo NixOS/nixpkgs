@@ -100,8 +100,9 @@ stdenv.mkDerivation ({
     export APP_HOME=`pwd`
 
     mkdir -p .m2/repository
-    for dep in $DEPENDENCIES ; do
-      cp -RL $dep/m2/* .m2/repository/ ; done
+    if [ -d "$DEPENDENCIES/m2" ] ; then
+      cp -RL "$DEPENDENCIES"/m2/* .m2/repository/
+    fi
     chmod -R 755 .m2
     mkdir -p .m2/repository/com/android/support
     cp -RL local_sdk/extras/android/m2repository/com/android/support/* .m2/repository/com/android/support/
