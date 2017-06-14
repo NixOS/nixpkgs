@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchurl, isPyPy
-, numpy, zlib, netcdf, hdf5, curl, libjpeg
+, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
@@ -12,6 +12,10 @@ buildPythonPackage rec {
     url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
     sha256 = "31eb4eae5fd3b2bd8f828721142ddcefdbf10287281bf6f636764dd7957f8450";
   };
+
+  buildInputs = [
+    cython
+  ];
 
   propagatedBuildInputs = [
     numpy
