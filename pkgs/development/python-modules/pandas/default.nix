@@ -19,6 +19,7 @@
 , openpyxl
 , tables
 , xlwt
+, which
 , libcxx ? null
 }:
 
@@ -52,6 +53,7 @@ in buildPythonPackage rec {
     openpyxl
     tables
     xlwt
+    which # Used to test presence of executables
   ];
 
   # For OSX, we need to add a dependency on libcxx, which provides
