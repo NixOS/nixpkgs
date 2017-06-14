@@ -98,6 +98,8 @@ with pkgs;
     inherit (haskellPackages) dhall-nix;
   };
 
+  diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
+
   dockerTools = callPackage ../build-support/docker { };
 
   docker_compose = pythonPackages.docker_compose;
@@ -8324,6 +8326,9 @@ with pkgs;
   libbap = callPackage ../development/libraries/libbap {
     inherit (ocamlPackages_4_02) bap ocaml findlib ctypes;
   };
+
+  libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
+  libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
@@ -17327,7 +17332,15 @@ with pkgs;
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
-  ultrastardx = callPackage ../games/ultrastardx {
+  ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
+
+  ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
+
+  ultrastardx = callPackage ../games/ultrastardx/1.1.nix {
+    ffmpeg = ffmpeg_0;
+    lua = lua5;
+  };
+  ultrastardx-beta = callPackage ../games/ultrastardx/1.3-beta.nix {
     ffmpeg = ffmpeg_0;
     lua = lua5;
   };
