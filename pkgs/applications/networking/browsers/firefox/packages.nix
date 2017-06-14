@@ -6,13 +6,11 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "53.0.3";
+    version = "54.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "cef5de1e9d6ddf6509a80cd30169fdce701b2fed022979ba5931ccea7b8f77cb644b01984dae028d350e32321cfe2eefc0236c0731bf5a2be12a994fc3fc1118";
+      sha512 = "0ff6960804e7f6d3e15faeb14b237fee45acae31b4652a6cc5cafa1a1b1eab3537616c3e8ea6d8f3109c87dcc8f86f0df3da2627903b80061c8a62fb11598ed9";
     };
-
-    patches = [ ./cargo-fix.patch ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
