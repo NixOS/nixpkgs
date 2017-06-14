@@ -8066,7 +8066,7 @@ in {
     };
   };
 
-  netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
+  netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
