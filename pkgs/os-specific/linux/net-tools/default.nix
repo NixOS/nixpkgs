@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "HAVE_PLIP_TOOLS=1"
     "HAVE_SERIAL_TOOLS=1"
     "HAVE_HOSTNAME_TOOLS=1"
+    "HAVE_HOSTNAME_SYMLINKS=1"
   ];
 
   meta = {
