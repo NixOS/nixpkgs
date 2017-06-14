@@ -523,6 +523,10 @@ with pkgs;
 
   apg = callPackage ../tools/security/apg { };
 
+  apt = callPackage ../tools/package-management/apt {
+    inherit (perlPackages) Po4a;
+  };
+
   autorevision = callPackage ../tools/misc/autorevision { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
