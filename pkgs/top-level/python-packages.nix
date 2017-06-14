@@ -216,6 +216,8 @@ in {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  intelhex = callPackage ../development/python-modules/intelhex { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
