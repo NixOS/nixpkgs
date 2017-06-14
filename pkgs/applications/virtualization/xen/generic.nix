@@ -107,7 +107,8 @@ stdenv.mkDerivation (rec {
     # We want to do this before getting prefetched stuff to speed things up
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
-    find . -type f | xargs sed -i 's@/bin/bash@/bin/sh@g'
+    find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
+      | xargs sed -i 's@/bin/bash@/bin/sh@g'
 
     # Get prefetched stuff
     ${withXenfiles (name: x: ''
@@ -171,6 +172,11 @@ stdenv.mkDerivation (rec {
     ${config.postPatch or ""}
   '';
 
+  postConfigure = ''
+    substituteInPlace tools/hotplug/Linux/xendomains \
+      --replace /bin/ls ls
+  '';
+
   # TODO: Flask needs more testing before enabling it by default.
   #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
   makeFlags = [ "PREFIX=$(out) CONFIG_DIR=/etc" "XEN_SCRIPT_DIR=/etc/xen/scripts" ]
@@ -198,6 +204,8 @@ stdenv.mkDerivation (rec {
       --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
 
     wrapPythonPrograms
+    # We also need to wrap pygrub, which lies in lib
+    wrapPythonProgramsIn "$out/lib" "$out $pythonPath"
 
     shopt -s extglob
     for i in $out/etc/xen/scripts/!(*.sh); do

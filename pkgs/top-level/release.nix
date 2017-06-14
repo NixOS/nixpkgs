@@ -28,7 +28,7 @@ let
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
       manual = import ../../doc;
-      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs supportedSystems scrubJobs; };
+      lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
 
       darwin-tested = pkgs.releaseTools.aggregate
         { name = "nixpkgs-darwin-${jobs.tarball.version}";
@@ -52,6 +52,7 @@ let
             [ jobs.tarball
               jobs.metrics
               jobs.manual
+              jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -78,8 +79,7 @@ let
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.vim.x86_64-darwin
-            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
-              ++ lib.collect lib.isDerivation jobs.lib-tests;
+            ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
         };
     } // (lib.optionalAttrs (builtins.elem "i686-linux" supportedSystems) {
       stdenvBootstrapTools.i686-linux =
@@ -111,6 +111,7 @@ let
       ocamlPackages = { };
       perlPackages = { };
       pythonPackages = {
+        blaze = unix;
         pandas = unix;
         scikitlearn = unix;
       };
@@ -122,6 +123,12 @@ let
         pandas = unix;
         scikitlearn = unix;
       };
+      python36Packages = {
+        blaze = unix;
+        pandas = unix;
+        scikitlearn = unix;
+      };
+
     } ));
 
 in jobs

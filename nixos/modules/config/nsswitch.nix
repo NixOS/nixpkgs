@@ -10,10 +10,12 @@ let
   inherit (config.services.samba) nsswins;
   ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
   sssd = config.services.sssd.enable;
+  resolved = config.services.resolved.enable;
 
   hostArray = [ "files" "mymachines" ]
     ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return]" ]
     ++ optionals nsswins [ "wins" ]
+    ++ optionals resolved ["resolv [!UNAVAIL=return]"]
     ++ [ "dns" ]
     ++ optionals nssmdns [ "mdns" ]
     ++ ["myhostname" ];

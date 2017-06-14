@@ -14,6 +14,9 @@ let
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
+    ${optionalString cfg.qemuOvmf ''
+      nvram = ["${pkgs.OVMF.fd}/FV/OVMF_CODE.fd:${pkgs.OVMF.fd}/FV/OVMF_VARS.fd"]
+    ''}
     ${cfg.qemuVerbatimConfig}
   '';
 
@@ -60,6 +63,15 @@ in {
         Contents written to the qemu configuration file, qemu.conf.
         Make sure to include a proper namespace configuration when
         supplying custom configuration.
+      '';
+    };
+
+    virtualisation.libvirtd.qemuOvmf = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Allows libvirtd to take advantage of OVMF when creating new
+        QEMU VMs with UEFI boot.
       '';
     };
 

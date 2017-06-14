@@ -61,7 +61,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "none") ("+" + wm);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -111,7 +111,7 @@ in
 
       background = mkOption {
         type = types.str;
-        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';

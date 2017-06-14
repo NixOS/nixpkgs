@@ -12,6 +12,8 @@ let
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
+    dhcp=${cfg.dhcp}
+    dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
 
     [keyfile]
     ${optionalString (config.networking.hostName != "")
@@ -20,7 +22,7 @@ let
       ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
     [logging]
-    level=WARN
+    level=${cfg.logLevel}
 
     [connection]
     ipv6.ip6-privacy=2
@@ -123,7 +125,7 @@ in {
         type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect
+                            networkmanager_openconnect networkmanager_fortisslvpn
                             networkmanager_pptp networkmanager_l2tp; };
         internal = true;
       };
@@ -135,6 +137,22 @@ in {
           Extra packages that provide NetworkManager plugins.
         '';
         apply = list: (attrValues cfg.basePackages) ++ list;
+      };
+
+      dhcp = mkOption {
+        type = types.enum [ "dhclient" "dhcpcd" "internal" ];
+        default = "dhclient";
+        description = ''
+          Which program (or internal library) should be used for DHCP.
+        '';
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
+        default = "WARN";
+        description = ''
+          Set the default logging verbosity level.
+        '';
       };
 
       appendNameservers = mkOption {
@@ -158,6 +176,17 @@ in {
       ethernet.macAddress = macAddressOpt;
       wifi.macAddress = macAddressOpt;
 
+      useDnsmasq = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable NetworkManager's dnsmasq integration. NetworkManager will run
+          dnsmasq as a local caching nameserver, using a "split DNS"
+          configuration if you are connected to a VPN, and then update
+          resolv.conf to point to the local nameserver.
+        '';
+      };
+
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -169,7 +198,7 @@ in {
             };
 
             type = mkOption {
-              type = types.enum (attrNames dispatcherTypesSubdirMap); 
+              type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
                 Dispatcher hook type. Only basic hooks are currently available.
@@ -209,6 +238,9 @@ in {
       }
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
+      }
+      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
       }
       { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";

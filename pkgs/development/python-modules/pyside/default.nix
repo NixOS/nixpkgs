@@ -1,7 +1,9 @@
 { lib, fetchurl, cmake, python, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
+# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 buildPythonPackage rec {
-  name = "pyside-${version}";
+  pname = "pyside";
+  name = "${pname}-${version}";
   version = "1.2.4";
   format = "other";
 

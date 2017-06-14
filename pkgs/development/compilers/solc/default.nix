@@ -5,19 +5,22 @@ let jsoncpp = fetchzip {
   sha256 = "0jz93zv17ir7lbxb3dv8ph2n916rajs8i96immwx9vb45pqid3n0";
 }; in
 
+let commit = "68ef5810593e7c8092ed41d5f474dd43141624eb"; in
+
 stdenv.mkDerivation rec {
-  version = "0.4.8";
+  version = "0.4.11";
   name = "solc-${version}";
 
   # Cannot use `fetchFromGitHub' because of submodules
   src = fetchgit {
     url = "https://github.com/ethereum/solidity";
-    rev = "60cc1668517f56ce6ca8225555472e7a27eab8b0";
-    sha256 = "09mwah7c5ca1bgnqp5qgghsi6mbsi7p16z8yxm0aylsn2cjk23na";
+    rev = commit;
+    sha256 = "13zycybf23yvf3hkf9zgw9gbc1y4ifzxaf7sll69bsn24fcyq961";
   };
 
   patchPhase = ''
-    echo >commit_hash.txt 2dabbdf06f414750ef0425c664f861aeb3e470b8
+    echo >commit_hash.txt ${commit}
+    echo >prerelease.txt
     substituteInPlace deps/jsoncpp.cmake \
       --replace https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \

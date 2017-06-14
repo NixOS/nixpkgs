@@ -69,6 +69,12 @@ in rec {
     filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
   };
 
+  ubootA20OlinuxinoLime = buildUBoot rec {
+    defconfig = "A20-OLinuXino-Lime_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootBananaPi = buildUBoot rec {
     defconfig = "Bananapi_defconfig";
     targetPlatforms = ["armv7l-linux"];
@@ -121,6 +127,20 @@ in rec {
     defconfig = "rpi_3_defconfig";
     targetPlatforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootUtilite = buildUBoot rec {
+    defconfig = "cm_fx6_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-with-nand-spl.imx"];
+    buildFlags = "u-boot-with-nand-spl.imx";
+    postConfigure = ''
+      cat >> .config << EOF
+      CONFIG_CMD_SETEXPR=y
+      EOF
+    '';
+    # sata init; load sata 0 $loadaddr u-boot-with-nand-spl.imx
+    # sf probe; sf update $loadaddr 0 80000
   };
 
   ubootWandboard = buildUBoot rec {

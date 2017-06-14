@@ -580,7 +580,7 @@ running `nix-shell` with the following `shell.nix`
 with import <nixpkgs> {};
 
 (python3.buildEnv.override {
-  extraLibs = with python3Packages; [ numpy requests2 ];
+  extraLibs = with python3Packages; [ numpy requests ];
 }).env
 ```
 
@@ -622,7 +622,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 ```nix
 with import <nixpkgs> {};
 
-(python33.withPackages (ps: [ps.numpy ps.requests2])).env
+(python33.withPackages (ps: [ps.numpy ps.requests])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
@@ -710,7 +710,7 @@ nix-env -if build.nix
 ```
 Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
 
-#### Environment defined in `~/.nixpkgs/config.nix`
+#### Environment defined in `~/.config/nixpkgs/config.nix`
 
 If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
 ```nix
@@ -922,6 +922,28 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
 ```
 
 If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify `python` based software/libraries easily. Using `self` and `super` one can also alter dependencies (`buildInputs`) between the old state (`self`) and new state (`super`). 
+
+### How to override a Python package using overlays?
+
+To alter a python package using overlays, you would use the following approach:
+
+```nix
+self: super:
+rec {
+  python = super.python.override {
+    packageOverrides = python-self: python-super: {
+      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
+        src = self.pkgs.fetchgit {
+          url = "https://github.com/bepasty/bepasty-server";
+          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
+          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+        };
+      });
+    };
+  };
+  pythonPackages = python.pkgs;
+}
+```
 
 ## Contributing
 

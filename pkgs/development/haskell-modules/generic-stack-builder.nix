@@ -5,7 +5,7 @@ with stdenv.lib;
 { buildInputs ? []
 , extraArgs ? []
 , LD_LIBRARY_PATH ? []
-, ghc ? ghc
+, ghc' ? ghc
 , ...
 }@args:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation (args // {
   buildInputs =
     buildInputs ++
     optional stdenv.isLinux glibcLocales ++
-    [ ghc pkgconfig ];
+    [ ghc' pkgconfig ];
 
   STACK_PLATFORM_VARIANT="nix";
   STACK_IN_NIX_SHELL=1;
@@ -37,7 +37,6 @@ stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
-    stack setup
   '';
 
   buildPhase = args.buildPhase or "stack build";

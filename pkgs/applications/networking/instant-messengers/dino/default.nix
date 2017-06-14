@@ -13,13 +13,13 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2017-04-24";
+  name = "dino-unstable-2017-05-31";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "3eb9aa0fa79ea9fcebb5f702f81c2e54aafdc8cc";
-    sha256 = "0z9ql419q53f20bw4pfwsafxl4qqnz0ip91qibsf9jn5d56kcdwv";
+    rev = "2480c1ec26a8e0ccef3ea76e3c29566221405ffb";
+    sha256 = "0wdjj38gbr2j6yklna3pd8nsfpdfp1j936dy8s49pzayw4pxs2g2";
     fetchSubmodules = true;
   };
 
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     glib_networking
     glib
     gnome3.libgee
+    gnome3.defaultIconTheme
     sqlite
     gdk_pixbuf
     gtk3

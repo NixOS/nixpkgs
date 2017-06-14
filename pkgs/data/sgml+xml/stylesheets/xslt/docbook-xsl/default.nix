@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, ruby }:
 
 let
 
@@ -9,6 +9,8 @@ let
       url = "mirror://sourceforge/docbook/${name}.tar.bz2";
       inherit sha256;
     };
+
+    buildInputs = [ ruby ];
 
     dontBuild = true;
 
@@ -21,6 +23,9 @@ let
       # Backwards compatibility. Will remove eventually.
       mkdir -p $out/xml/xsl
       ln -s $dst $out/xml/xsl/docbook
+
+      ln -sv $dst/epub/bin $out
+      chmod +x $out/bin/dbtoepub
     '';
 
     meta = {

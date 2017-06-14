@@ -1,11 +1,11 @@
-{ callPackage, fetchurl, libunistring, ... } @ args:
+{ callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "3.5.11";
+  version = "3.5.13";
 
   src = fetchurl {
     url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/gnutls-${version}.tar.xz";
-    sha256 = "13z2dxxyrsb7gfpl1k2kafqh2zaigi872y5xgykhs9cyaz2mqxji";
+    sha256 = "15ihq6p0hnnhs8cnjrkj40dmlcaa1jjg8xg0g2ydbnlqs454ixbr";
   };
 
   # Skip two tests introduced in 3.5.11.  Probable reasons of failure:

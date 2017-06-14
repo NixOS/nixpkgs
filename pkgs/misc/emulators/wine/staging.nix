@@ -18,7 +18,7 @@ stdenv.lib.overrideDerivation wineUnstable (self: {
     chmod +w patches
     cd patches
     patchShebangs gitapply.sh
-    ./patchinstall.sh DESTDIR="$TMP/$sourceRoot" --all
+    ./patchinstall.sh DESTDIR="$PWD/.." --all
     cd ..
   '';
 })

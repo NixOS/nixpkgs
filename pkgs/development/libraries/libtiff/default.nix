@@ -1,21 +1,20 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, zlib, libjpeg, xz }:
 
 let
-  version = "4.0.7";
+  version = "4.0.8";
 in
 stdenv.mkDerivation rec {
   name = "libtiff-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "06ghqhr4db1ssq0acyyz49gr8k41gzw6pqb6mbn5r7jqp77s4hwz";
+    sha256 = "0419mh6kkhz5fkyl77gv0in8x4d2jpdpfs147y8mj86rrjlabmsr";
   };
 
   prePatch =let
-      # https://lwn.net/Vulnerabilities/711777/
       debian = fetchurl {
-        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.7-5.debian.tar.xz;
-        sha256 = "1ribxdn89wx3nllcyh7ql3dx6wpr1h7z3waglz1w7dklxm43q67l";
+        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.8-2.debian.tar.xz;
+        sha256 = "1ssjh6vn9rvl2jwm34i3p89g8lj0c7fj3cziva9rj4vasfps58ng";
       };
     in ''
       tar xf '${debian}'

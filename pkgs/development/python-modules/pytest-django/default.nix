@@ -3,7 +3,8 @@
 , fetchpatch
 }:
 buildPythonPackage rec {
-  name = "pytest-django-${version}";
+  pname = "pytest-django";
+  name = "${pname}-${version}";
   version = "3.1.2";
 
   src = fetchurl {

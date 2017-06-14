@@ -34,8 +34,7 @@
 , license
 , maintainers ? []
 , doCoverage ? false
-# TODO Do we care about haddock when cross-compiling?
-, doHaddock ? !isCross && (!stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8")
+, doHaddock ? (!ghc.isHaLVM or true)
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
@@ -63,7 +62,8 @@ assert enableSplitObjs == null;
 let
 
   inherit (stdenv.lib) optional optionals optionalString versionOlder versionAtLeast
-                       concatStringsSep enableFeature optionalAttrs toUpper;
+                       concatStringsSep enableFeature optionalAttrs toUpper
+                       filter makeLibraryPath;
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
@@ -196,13 +196,11 @@ stdenv.mkDerivation ({
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + postPatch;
 
-  # for ghcjs, we want to put ghcEnv on PATH so compiler plugins will be available.
-  # TODO(cstrahan): would the same be of benefit to native ghc?
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    export PATH="${if ghc.isGhcjs or false then ghcEnv else ghc}/bin:$PATH"
+    export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"
@@ -227,6 +225,22 @@ stdenv.mkDerivation ({
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
     done
+  '' + (optionalString stdenv.isDarwin ''
+    # Work around a limit in the Mac OS X Sierra linker on the number of paths
+    # referenced by any one dynamic library:
+    #
+    # Create a local directory with symlinks of the *.dylib (Mac OS X shared
+    # libraries) from all the dependencies.
+    local dynamicLinksDir="$out/lib/links"
+    mkdir -p $dynamicLinksDir
+    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
+      ln -s $d/*.dylib $dynamicLinksDir
+    done
+    # Edit the local package DB to reference the links directory.
+    for f in $packageConfDir/*.conf; do
+      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
+    done
+  '') + ''
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
@@ -330,6 +344,9 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
+        export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH:+''${LD_LIBRARY_PATH}:}${
+          makeLibraryPath (filter (x: !isNull x) systemBuildInputs)
+        }"
         ${if isHaLVM
             then ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/HaLVM-${ghc.version}"''
             else ''export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"''}

@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = with stdenv.lib; {
     description = "A cross-platform IRC framework written with Qt";
     homepage = https://communi.github.io;

@@ -16,6 +16,7 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
+, enableManpages ? true
 , enableSharedLibraries ? true
 , darwin
 }:
@@ -38,9 +39,14 @@ in stdenv.mkDerivation rec {
     mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
-  outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
+  outputs = [ "out" ]
+    ++ stdenv.lib.optional enableSharedLibraries "lib"
+    ++ stdenv.lib.optional enableManpages "man";
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
+  nativeBuildInputs = [ perl groff cmake python ]
+    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+
+  buildInputs = [ libxml2 libffi ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
@@ -80,11 +86,19 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
-  ] ++ stdenv.lib.optional enableSharedLibraries [
+  ]
+  ++ stdenv.lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ] ++ stdenv.lib.optional (!isDarwin)
+  ++ stdenv.lib.optionals enableManpages [
+    "-DLLVM_BUILD_DOCS=ON"
+    "-DLLVM_ENABLE_SPHINX=ON"
+    "-DSPHINX_OUTPUT_MAN=ON"
+    "-DSPHINX_OUTPUT_HTML=OFF"
+    "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
+  ]
+  ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
-    ++ stdenv.lib.optionals (isDarwin) [
+  ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];
@@ -103,8 +117,10 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
   '';
 
-  postInstall = ""
-  + stdenv.lib.optionalString (enableSharedLibraries) ''
+  postInstall = stdenv.lib.optionalString enableManpages ''
+    moveToOutput "share/man" "$man"
+  ''
+  + stdenv.lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM.${shlib}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \

@@ -1,5 +1,8 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, owee }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.04"
+then throw "spacetime_lib is not available for OCaml ${ocaml.version}" else
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-spacetime_lib-${version}";
   version = "0.1.0";

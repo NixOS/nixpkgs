@@ -4,7 +4,7 @@
 
 let
 
-  version = "5.1.0.1";
+  version = "5.3.0.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -24,7 +24,7 @@ let
     gnome2.pango
 
     gnome2.gnome_keyring
-    
+
     libnotify
     nspr
     nss
@@ -49,8 +49,8 @@ let
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "https://repo.skype.com/latest/skypeforlinux-64.deb";
-        sha256 = "18v861x0n2q2jaglap8193sia476dwkwr0ccfzl29mi5ijma24ml";
+        url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
+        sha256 = "08sf9nqnznsydw4965w7ixwwba54hjc02ga7vcnz9vpx5hln3nrz";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.system}";

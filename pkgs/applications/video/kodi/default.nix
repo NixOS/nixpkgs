@@ -54,17 +54,16 @@ let
   };
 in stdenv.mkDerivation rec {
     name = "kodi-${version}";
-    version = "17.1";
+    version = "17.3";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1vmvrq0qdjnphw34yils2b5jnm05cmsg777hc4lwqz5mrc1kjgrh";
+      sha256 = "189isc1jagrnq549vwpvb0x1w6p0mkjwv7phm8dzvki96wx6bs0x";
     };
 
     buildInputs = [
-      makeWrapper libxml2 gnutls
-      pkgconfig cmake gnumake yasm python2
-      boost libmicrohttpd autoreconfHook
+      libxml2 gnutls yasm python2
+      boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto which
@@ -91,6 +90,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional joystickSupport SDL2;
 
+    nativeBuildInputs = [
+      autoreconfHook cmake gnumake makeWrapper pkgconfig
+    ];
 
     dontUseCmakeConfigure = true;
 
@@ -114,7 +116,7 @@ in stdenv.mkDerivation rec {
       sed -i '/TestWebServer.cpp/d'  xbmc/network/test/{Makefile,CMakeLists.txt}
     '';
 
-    enableParallelBuild = true;
+    enableParallelBuilding = true;
 
     doCheck = true;
 

@@ -1,17 +1,18 @@
 { stdenv, buildPythonApplication, fetchurl, pythonOlder
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
-, dockerpty, docker, ipaddress, jsonschema, requests2
+, dockerpty, docker, ipaddress, jsonschema, requests
 , six, texttable, websocket_client, cached-property
 , enum34, functools32
 }:
 buildPythonApplication rec {
-  version = "1.10.0";
-  name = "docker-compose-${version}";
+  version = "1.13.0";
+  pname = "docker-compose";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-    sha256 = "023y2yhkvglaq07d78i89g2p8h040d71il8nfbyg2f9fkffigx9z";
+    sha256 = "3c7b62cd0ab5f33d21db197d8a74739d320a6fe32e4ef8282c35d4dee5a7c77c";
   };
 
   # lots of networking and other fails
@@ -19,7 +20,7 @@ buildPythonApplication rec {
   buildInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
     pyyaml backports_ssl_match_hostname colorama dockerpty docker
-    ipaddress jsonschema requests2 six texttable websocket_client
+    ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property
   ] ++
     stdenv.lib.optional (pythonOlder "3.4") enum34 ++

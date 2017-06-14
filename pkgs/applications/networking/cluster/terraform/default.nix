@@ -37,7 +37,6 @@ let
         maintainers = with maintainers; [ jgeerds zimbatm peterhoeg ];
       };
     } // attrs');
-
 in {
   terraform_0_8_5 = generic {
     version = "0.8.5";
@@ -49,15 +48,9 @@ in {
     sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
   };
 
-  terraform_0_9_3 = generic {
-    version = "0.9.3";
-    sha256 = "00z72lwv0cprz1jjy0cr8dicl00zwc1zwsxzjssqnq0187sswkxw";
-
-    postPatch = ''
-      rm builtin/providers/dns/data_dns_cname_record_set_test.go
-      rm builtin/providers/vsphere/resource_vsphere_file_test.go
-    '';
-
+  terraform_0_9_6 = generic {
+    version = "0.9.6";
+    sha256 = "1f6z1zkklzpqgc7akgdz1g306ccmhni5lmg7i6g762n3qai60bnv";
     doCheck = true;
   };
 }

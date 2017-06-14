@@ -1,9 +1,11 @@
 { lib, stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk
+, androidsdk, jdk, cmake, libxml2, zlib, python2, ncurses
 }:
 
 assert stdenv.isLinux;
+
+with stdenv.lib;
 
 let
   mkJetBrainsProduct = callPackage ./common.nix { };
@@ -11,7 +13,7 @@ let
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass }:
-    (mkJetBrainsProduct rec {
+    lib.overrideDerivation (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
@@ -21,9 +23,35 @@ let
           Enhancing productivity for every C and C++
           developer on Linux, OS X and Windows.
         '';
-        maintainers = with maintainers; [ edwtjo ];
+        maintainers = with maintainers; [ edwtjo mic92 ];
         platforms = platforms.linux;
       };
+    }) (attrs: {
+      postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
+        (
+          cd $out/clion-${version}
+          # bundled cmake does not find libc
+          rm -rf bin/cmake
+          ln -s ${cmake} bin/cmake
+
+          lldbLibPath=$out/clion-${version}/bin/lldb/lib
+          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+          ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
+
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
+            bin/lldb/bin/lldb-server
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
+            bin/lldb/LLDBFrontend
+          patchelf \
+            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python2 ]}:$lldbLibPath" \
+            bin/lldb/lib/liblldb.so
+
+          patchelf --set-interpreter $interp bin/gdb/bin/gdb
+          patchelf --set-interpreter $interp bin/gdb/bin/gdbserver
+        )
+      '';
     });
 
   buildDataGrip = { name, version, src, license, description, wmClass }:
@@ -134,7 +162,7 @@ let
           platform and ReSharper. Rider supports .NET Core,
           .NET Framework and Mono based projects. This lets you
           develop a wide array of applications including .NET desktop
-          apps, services and libraries, Unity games, ASP.NET and 
+          apps, services and libraries, Unity games, ASP.NET and
           ASP.NET Core web applications.
         '';
         maintainers = [ maintainers.miltador ];
@@ -185,12 +213,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2017.1";
+    version = "2017.1.3";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "00fc023ca56f2781864cddc7bd5c2897d837d1db17dd8f987abe046ed4df3ca5";
+      sha256 = "045pkbbf4ypk9qkhldz08i7hbc6vaq68a8v9axnpndnvcrf0vf7g";
     };
     wmClass = "jetbrains-clion";
   };
@@ -209,12 +237,12 @@ in
 
   gogland = buildGogland rec {
     name = "gogland-${version}";
-    version = "171.3780.106";
+    version = "171.4694.35";
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "cbe84d07fdec6425d8ac63b0ecd5e04148299c1c0c6d05751523aaaa9360110b";
+      sha256 = "0q2f8bi2i49j0xcpn824sihz2015jhn338cjaqy0jd988nxik6jk";
     };
     wmClass = "jetbrains-gogland";
   };
@@ -233,12 +261,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.1";
+    version = "2017.1.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1222xkw7n424ihqxyjk352nnx9ka6as7ajwafgb2f27hfiz8d3li";
+      sha256 = "1w1knq969dl8rxlkhr9mw8cr2vszn384acwhspimrd3zs9825r45";
     };
     wmClass = "jetbrains-idea-ce";
   };
@@ -269,12 +297,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2017.1.1";
+    version = "2017.1.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "18z9kv2nk8fgpns8r4ra39hs4d2v3knnwv9a996wrrbsfc9if8lp";
+      url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
+      sha256 = "0byrsbsscpzb0syamzpavny879src5dlclnissa7173rh8hgkna4";
     };
     wmClass = "jetbrains-idea";
   };
@@ -305,24 +333,24 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2017.1";
+    version = "2017.1.3";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "14p6f15n0927awgpsdsdqgmdfbbwkykrw5xggz5hnfl7d05i4sb6";
+      sha256 = "06sai589zli5xaggfk4g0j0grbw9mya9qlwabmxh9414qq3bzvbd";
     };
     wmClass = "jetbrains-pycharm-ce";
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2017.1";
+    version = "2017.1.3";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1rvic3njsq480pslhw6rxld7jngchihkplq3dfnmkr2h9gx26lkf";
+      sha256 = "1wzgh83504px7q93h9xkarih2qjchiavgysy4di82q7377s6xd0c";
     };
     wmClass = "jetbrains-pycharm";
   };
@@ -377,12 +405,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2017.1";
+    version = "2017.1.3";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "e651ad78ff9de92bb5b76698eeca1e02ab0f0c36209908074fa4a6b48586071c";
+      sha256 = "0g4b0x910231ljdj18lnj2mlzmzyl12lv3fsbsz6v45i1kwpwnvc";
     };
     wmClass = "jetbrains-webstorm";
   };

@@ -4,11 +4,11 @@ mesa_glu , xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.7";
+  version = "0.21.8";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1xvngjdsa0p901vfhrh2qpa50k32hwwhc8bgi16a9b5d9byzfhvn";
+    sha256 = "0cjjiip12hd8bfjl9ccl3vzl81pxh1wpymxk2yvrzf6ap5girhps";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -23,11 +23,11 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "24.4.16";
+  version = "27.4.22";
   sha256 =
     {
-      "x86_64-linux" = "01hnx52ag7wfclxnqzs9m09pnmisz9lczxgg3wm47qmwhagnb8la";
-      "i686-linux"   = "1cr0vfjwn60xdv2kh6kmmgf6g0s2y9mqklbfah59pm7k2yr2pvnf";
+      "x86_64-linux" = "1v1q799dj0bffg3s98ifzpsccjaajl221h5ckaqijlmpzr2q5hhh";
+      "i686-linux"   = "1qsw6c0mb0n0djz7xpfixispi9k68kbvf8dc92frpcbcvm0h845y";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
   name = "dropbox-${version}";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
+    url = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 

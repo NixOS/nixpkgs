@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "1.16.0";
+  version = "1.17.2";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "10qzhfz34i7x7z5fv5a73a6aiwxvanyn0v825a6yz9qfc2mg4shd";
+    sha256 = "05lf9f5c9l111prx7d76cr5h8h340vm7vb8hra5rdrqhjpdvwhhn";
     name = "${name}.deb";
   };
 
@@ -31,9 +31,6 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}" \
       $out/share/atom/resources/app/apm/bin/node
-
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/share/atom/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
 
     find $out/share/atom -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$out/share/atom" {} \;
   '';

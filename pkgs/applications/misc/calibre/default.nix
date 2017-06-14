@@ -1,16 +1,16 @@
 { stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
-, xdg_utils, makeDesktopItem
+, xdg_utils, makeDesktopItem, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.83.0";
+  version = "2.84.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1ar6hkcl50lhgwccss759201cqgnwasqmhw9japgnz04fj66w5ln";
+    sha256 = "1kvnmb6hsby4bdnx70bcy32f4dz1axzlr310dr6mkvnc8bqw59km";
   };
 
   patches = [
@@ -53,15 +53,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip
     # the following are distributed with calibre, but we use upstream instead
     chardet cherrypy html5lib_0_9999999 odfpy routes
   ]);
 
   installPhase = ''
+    runHook preInstall
+
     export HOME=$TMPDIR/fakehome
     export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
     export POPPLER_LIB_DIR=${poppler_utils.out}/lib
@@ -92,6 +94,8 @@ stdenv.mkDerivation rec {
     for entry in $out/share/applications/*.desktop; do
       substituteAllInPlace $entry
     done
+
+    runHook postInstall
   '';
 
   calibreDesktopItem = makeDesktopItem {

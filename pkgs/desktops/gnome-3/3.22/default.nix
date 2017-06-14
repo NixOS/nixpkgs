@@ -45,7 +45,7 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk214x gtk3 gtkmm3 libcanberra_gtk2
+  inherit (pkgs) glib gtk2 webkitgtk216x gtk3 gtkmm3 libcanberra_gtk2
     clutter clutter-gst clutter_gtk cogl gtkvnc;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
@@ -56,7 +56,7 @@ let
   gtkmm = gtkmm3;
   vala = pkgs.vala_0_32;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
-  webkitgtk = webkitgtk214x;
+  webkitgtk = webkitgtk216x;
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -209,6 +209,10 @@ let
   };
 
   networkmanager_openconnect = pkgs.networkmanager_openconnect.override {
+    inherit gnome3;
+  };
+
+  networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override {
     inherit gnome3;
   };
 

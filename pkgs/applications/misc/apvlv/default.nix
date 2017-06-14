@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, pcre, libxkbcommon, epoxy
-, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence
+, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
   ];
 
+  nativeBuildInputs = [
+    wrapGAppsHook
+  ];
+
   patches = [
     (fetchpatch {
       url = "https://github.com/naihe2010/apvlv/commit/d432635b9c5ea6c052a2ae1fb71aedec5c4ad57a.patch";
@@ -41,6 +45,7 @@ stdenv.mkDerivation rec {
     # displays pdfStartup.pdf as default pdf entry
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
+    cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
   '';
 
   meta = with stdenv.lib; {

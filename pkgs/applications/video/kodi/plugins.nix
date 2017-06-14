@@ -1,46 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, lib
-, unzip, cmake, kodi, steam, libcec_platform, tinyxml }:
+{ stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun }:
 
-let
+with (callPackage ./commons.nix {});
 
-  pluginDir = "/share/kodi/addons";
-
-  kodi-platform = stdenv.mkDerivation rec {
-    project = "kodi-platform";
-    version = "17.1";
-    name = "${project}-${version}";
-
-    src = fetchFromGitHub {
-      owner = "xbmc";
-      repo = project;
-      rev = "c8188d82678fec6b784597db69a68e74ff4986b5";
-      sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
-    };
-
-    buildInputs = [ cmake kodi libcec_platform tinyxml ];
-  };
-
-  mkKodiPlugin = { plugin, namespace, version, src, meta, sourceDir ? null, ... }:
-  stdenv.lib.makeOverridable stdenv.mkDerivation rec {
-    inherit src meta sourceDir;
-    name = "kodi-plugin-${plugin}-${version}";
-    passthru = {
-      kodiPlugin = pluginDir;
-      namespace = namespace;
-    };
-    dontStrip = true;
-    installPhase = ''
-      ${if isNull sourceDir then "" else "cd $src/$sourceDir"}
-      d=$out${pluginDir}/${namespace}
-      mkdir -p $d
-      sauce="."
-      [ -d ${namespace} ] && sauce=${namespace}
-      cp -R "$sauce/"* $d
-    '';
-  };
-
-in
-{
+rec {
 
   advanced-launcher = mkKodiPlugin rec {
 
@@ -65,6 +28,35 @@ in
         the possibility to edit, download (from Internet resources)
         and manage all the meta-data (informations and images) related
         to these applications.
+      '';
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+  };
+
+  advanced-emulator-launcher = mkKodiPlugin rec {
+
+    plugin = "advanced-emulator-launcher";
+    namespace = "plugin.program.advanced.emulator.launcher";
+    version = "0.9.6";
+
+    src = fetchFromGitHub {
+      owner = "Wintermute0110";
+      repo = namespace;
+      rev = version;
+      sha256 = "1sv9z77jj6bam6llcnd9b3dgkbvhwad2m1v541rv3acrackms2z2";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "http://forum.kodi.tv/showthread.php?tid=287826";
+      description = "A program launcher for Kodi";
+      longDescription = ''
+        Advanced Emulator Launcher is a multi-emulator front-end for Kodi
+        scalable to collections of thousands of ROMs. Includes offline scrapers
+        for MAME and No-Intro ROM sets and also supports scrapping ROM metadata
+        and artwork online. ROM auditing for No-Intro ROMs using No-Intro XML
+        DATs. Launching of games and standalone applications is also available.
       '';
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
@@ -111,11 +103,11 @@ in
 
     plugin = "exodus";
     namespace = "plugin.video.exodus";
-    version = "3.0.5";
+    version = "3.1.13";
 
     src = fetchurl {
       url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
-      sha256 = "0di34sp6y3v72l6gfhj7cvs1vljs9vf0d0x2giix3jk433cj01j0";
+      sha256 = "1zyay7cinljxmpzngzlrr4pnk2a7z9wwfdcsk6a4p416iglyggdj";
     };
 
     meta = with stdenv.lib; {
@@ -155,18 +147,40 @@ in
     };
   };
 
+  joystick = mkKodiABIPlugin rec {
+    namespace = "peripheral.joystick";
+    version = "1.3.6";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "kodi-game";
+      repo = namespace;
+      rev = "5b480ccdd4a87f2ca3283a7b8d1bd69a114af0db";
+      sha256 = "1zf5zwghx96bqk7bx53qra27lfbgfdi1dsk4s3hwixr8ii72cqpp";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Binary addon for raw joystick input.";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+    extraBuildInputs = [ libusb pcre-cpp ];
+
+  };
+
   svtplay = mkKodiPlugin rec {
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.42";
+    version = "4.0.48";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "83cb52b949930a1b6d2e51a7a0faf9bd69c7fb7d";
-      sha256 = "0ync2ya4lwmfn6ngg8v0z6bng45whwg280irsn4bam5ca88383iy";
+      rev = "dc18ad002cd69257611d0032fba91f57bb199165";
+      sha256 = "0klk1jpjc243ak306k94mag4b4s17w68v69yb8lzzydszqkaqa7x";
     };
 
     meta = with stdenv.lib; {
@@ -178,6 +192,28 @@ in
         Play website and feeds it to the Kodi video player. HLS (m3u8)
         is the preferred video format by the plugin.
       '';
+      platforms = platforms.all;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+
+  };
+
+  steam-controller = mkKodiABIPlugin rec {
+    namespace = "peripheral.steamcontroller";
+    version = "0.9.0";
+    plugin = namespace;
+
+    src = fetchFromGitHub {
+      owner = "kodi-game";
+      repo = namespace;
+      rev = "76f640fad4f68118f4fab6c4c3338d13daca7074";
+      sha256 = "0yqlfdiiymb8z6flyhpval8w3kdc9qv3mli3jg1xn5ac485nxsxh";
+    };
+
+    extraBuildInputs = [ libusb ];
+
+    meta = with stdenv.lib; {
+      description = "Binary addon for steam controller.";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
     };
@@ -233,7 +269,8 @@ in
     };
   };
 
-  pvr-hts = (mkKodiPlugin rec {
+  pvr-hts = mkKodiABIPlugin rec {
+
     plugin = "pvr-hts";
     namespace = "pvr.hts";
     version = "3.4.16";
@@ -251,18 +288,30 @@ in
       platforms = platforms.all;
       maintainers = with maintainers; [ cpages ];
     };
-  }).override {
-    buildInputs = [ cmake kodi libcec_platform kodi-platform ];
 
-    # disables check ensuring install prefix is that of kodi
-    cmakeFlags = [ "-DOVERRIDE_PATHS=1" ];
+  };
 
-    # kodi checks for plugin .so libs existance in the addon folder (share/...)
-    # and the non-wrapped kodi lib/... folder before even trying to dlopen
-    # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
-    installPhase = ''
-      make install
-      ln -s $out/lib/addons/pvr.hts/pvr.hts.so* $out/share/kodi/addons/pvr.hts
-    '';
+  pvr-hdhomerun = mkKodiABIPlugin rec {
+
+    plugin = "pvr-hdhomerun";
+    namespace = "pvr.hdhomerun";
+    version = "2.4.7";
+
+    src = fetchFromGitHub {
+      owner = "kodi-pvr";
+      repo = "pvr.hdhomerun";
+      rev = "60d89d16dd953d38947e8a6da2f8bb84a0f764ef";
+      sha256 = "0dvdv0vk2q12nj0i5h51iaypy3i7jfsxjyxwwpxfy82y8260ragy";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/kodi-pvr/pvr.hdhomerun;
+      description = "Kodi's HDHomeRun PVR client addon";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ titanous ];
+    };
+
+    extraBuildInputs = [ jsoncpp libhdhomerun ];
+
   };
 }

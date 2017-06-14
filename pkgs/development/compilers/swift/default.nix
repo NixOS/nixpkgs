@@ -34,7 +34,7 @@
 }:
 
 let
-  v_major = "3.1";
+  v_major = "3.1.1";
   version = "${v_major}-RELEASE";
   version_friendly = "${v_major}";
 
@@ -52,11 +52,11 @@ sources = {
     # For more inforation, see: https://github.com/apple/swift/pull/3594#issuecomment-234169759
     clang = fetch {
       repo = "swift-clang";
-      sha256 = "0820mx1ghfnk4p5595r1f313y1699jwi61zghfbwak5wgwgy7n4x";
+      sha256 = "1gmdgr8jph87nya8cgdl7iwrggbji2sag996m27hkbszw4nxy8sd";
     };
     llvm = fetch {
       repo = "swift-llvm";
-      sha256 = "0zb1zi77b2xdz5szlz2m3j3d92dc0q00dv8py2s6iaq3k435i3sq";
+      sha256 = "0nwd7cp6mbj7f6a2rx8123n7ygs8406hsx7hp7ybagww6v75bwzi";
     };
     compilerrt = fetch {
       repo = "swift-compiler-rt";
@@ -76,7 +76,7 @@ sources = {
     };
     pm = fetch {
       repo = "swift-package-manager";
-      sha256 = "05zijald08z4jbppjawlc0h9n0i4dvn6jnhq0i5b9qq55l7a1lrk";
+      sha256 = "1ayy5vk3mjk354pg9bf68wvnaj3jymx23w0qnlw1jxz256ff8fwi";
     };
     xctest = fetch {
       repo = "swift-corelibs-xctest";
@@ -84,16 +84,16 @@ sources = {
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "0d34clr7n0kfy0l94hmgg1cailg3bml0qzlhy8wh75hrrv3n4g1v";
+      sha256 = "1d1ldk7ckqn4mhmdhsx2zrmsd6jfxzgdywn2pki7limk979hcwjc";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "1rka7ijkdk4ybdvyk3map5mc1fm79v848v9nhpfq75m5i63r61bh";
+      sha256 = "0ckjg41fjak06i532azhryckjq64fkxzsal4svf5v4s8n9mkq2sg";
       fetchSubmodules = true;
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "172q84z70z9gpwahmlcifihldrvc3cafy9ajbz4wi5f6ncw7wbmb";
+      sha256 = "0879jlv37lmxc1apzi53xn033y72548i86r7fzwr0g52124q5gry";
     };
   };
 
@@ -252,6 +252,9 @@ stdenv.mkDerivation rec {
     ln -s ${clang}/bin/* $out/bin/
     ln -s ${binutils}/bin/ar $out/bin/ar
   '';
+
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
 
   meta = with stdenv.lib; {
     description = "The Swift Programming Language";

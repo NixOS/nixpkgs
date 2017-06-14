@@ -1,16 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
-let
-  repo = "lambda-mod-zsh-theme";
-  rev = "eceee68cf46bba9f7f42887c2128b48e8861e31b";
-in stdenv.mkDerivation {
-  name = "${repo}-${rev}";
+stdenv.mkDerivation {
+  name = "lambda-mod-zsh-theme-unstable-2017-05-21";
 
   src = fetchFromGitHub {
-    inherit rev repo;
-
     owner = "halfo";
+    repo = "lambda-mod-zsh-theme";
     sha256 = "1410ryc22i20na5ypa1q6f106lkjj8n1qfjmb77q4rspi0ydaiy4";
+    rev = "6fa277361ec2c84e612b5b6d876797ebe72102a5";
   };
 
   buildPhases = [ "unpackPhase" "installPhase" ];

@@ -1,16 +1,17 @@
 { stdenv, fetchurl, python, buildPythonPackage
-, cython, bzip2, lzo, numpy, numexpr, hdf5, six }:
+, cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc }:
 
 buildPythonPackage rec {
-  version = "3.3.0";
-  name = "tables-${version}";
+  version = "3.4.2";
+  pname = "tables";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/t/tables/${name}.tar.gz";
-    sha256 = "0b4211s0zzdmh74k49ss0m9lc2ql2iazq2aa95ams6h45vqcr0w3";
+    sha256 = "fdbbea4edb6bad0ac0e53fc7bc6970e78e12eef4944aa4146bcdcb573201676c";
   };
 
-  buildInputs = [ hdf5 cython bzip2 lzo ];
+  buildInputs = [ hdf5 cython bzip2 lzo c-blosc ];
   propagatedBuildInputs = [ numpy numexpr six ];
 
   # The setup script complains about missing run-paths, but they are
@@ -19,6 +20,7 @@ buildPythonPackage rec {
     [ "--hdf5=${hdf5}"
       "--lzo=${lzo}"
       "--bzip2=${bzip2.dev}"
+      "--blosc=${c-blosc}"
     ];
 
   # Run the test suite.

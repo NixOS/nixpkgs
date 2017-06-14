@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, utillinux, hexdump, which
+{ stdenv, fetchurl, fetchpatch, pkgconfig, utillinux, hexdump, which
 , knot-dns, luajit, libuv, lmdb
 , cmocka, systemd, hiredis, libmemcached
 , gnutls, nettle
@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.2.6";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "31e1b8899c5592433e5265a8e9685126fc5aeff3bd6b10884154b2e34b786f3c";
+    sha256 = "667002dc3ee0b0f755628997ef4f71be769a06fb8b9ccd935db329c8709c2af4";
   };
 
   outputs = [ "out" "dev" ];

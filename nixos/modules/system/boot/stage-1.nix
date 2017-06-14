@@ -167,7 +167,7 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
-            --replace /bin/sh ${extraUtils}/bin/sh \
+            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
             --replace /usr/bin/readlink ${extraUtils}/bin/readlink \
             --replace /usr/bin/basename ${extraUtils}/bin/basename \
             --replace ${udev}/bin/udevadm ${extraUtils}/bin/udevadm

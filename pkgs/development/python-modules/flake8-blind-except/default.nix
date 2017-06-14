@@ -1,7 +1,8 @@
 { lib, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "flake8-blind-except-${version}";
+  pname = "flake8-blind-except";
+  name = "${pname}-${version}";
   version = "0.1.1";
   src = fetchurl {
     url = "mirror://pypi/f/flake8-blind-except/${name}.tar.gz";

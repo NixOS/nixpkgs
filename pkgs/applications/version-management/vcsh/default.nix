@@ -1,20 +1,19 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, which, git, ronn, perl, ShellCommand, TestMost }:
 
 stdenv.mkDerivation rec {
-  version = "1.20151229-1";
+  version = "1.20170226";       # date of commit we're pulling
   name = "vcsh-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/RichiH/vcsh/archive/v${version}.tar.gz";
-    sha256 = "0wgg5zz11ql2v37vby5gbqvnbs80g1q83b9qbvm8d2pqx8bsb0kn";
+  src = fetchFromGitHub {
+    owner = "RichiH";
+    repo = "vcsh";
+    rev = "36a7cedf196793a6d99f9d3ba2e69805cfff23ab";
+    sha256 = "16lb28m4k7n796cc1kifyc1ixry4bg69q9wqivjzygdsb77awgln";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  buildInputs = [ which git ronn perl ShellCommand TestMost ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp vcsh $out/bin
-  '';
+  installPhase = "make install PREFIX=$out";
 
   meta = with stdenv.lib; {
     description = "Version Control System for $HOME";

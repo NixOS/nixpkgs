@@ -6,18 +6,18 @@ assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
 let
   name = "wireguard-${version}";
 
-  version = "0.0.20170421";
+  version = "0.0.20170613";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "03c82af774224cd171d000ee4a519b5e474cc6842ac04967773cf77b26750000";
+    sha256 = "88ac77569eeb79c517318d58a0954caa0a4d2a6a1694e74c2a3b1c14438ac941";
   };
 
   meta = with stdenv.lib; {
     homepage     = https://www.wireguard.io/;
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
     description  = "A prerelease of an experimental VPN tunnel which is not to be depended upon for security";
-    maintainers  = with maintainers; [ ericsagnes mic92 ];
+    maintainers  = with maintainers; [ ericsagnes mic92 zx2c4 ];
     license      = licenses.gpl2;
     platforms    = platforms.linux;
   };

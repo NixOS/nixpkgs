@@ -1,15 +1,20 @@
-# Define the list of system with their properties.  Only systems tested for
-# Nixpkgs are listed below
+# Define the list of system with their properties.
+#
+# See https://clang.llvm.org/docs/CrossCompilation.html and
+# http://llvm.org/docs/doxygen/html/Triple_8cpp_source.html especially
+# Triple::normalize. Parsing should essentially act as a more conservative
+# version of that last function.
 
 with import ../lists.nix;
 with import ../types.nix;
 with import ../attrsets.nix;
+with (import ./inspect.nix).predicates;
 
 let
   lib = import ../default.nix;
   setTypesAssert = type: pred:
     mapAttrs (name: value:
-      #assert pred value;
+      assert pred value;
       setType type ({ inherit name; } // value));
   setTypes = type: setTypesAssert type (_: true);
 
@@ -22,7 +27,6 @@ rec {
     bigEndian = {};
     littleEndian = {};
   };
-
 
   isCpuType = isType "cpu-type";
   cpuTypes = with significantBytes; setTypesAssert "cpu-type"
@@ -47,6 +51,7 @@ rec {
   vendors = setTypes "vendor" {
     apple = {};
     pc = {};
+
     unknown = {};
   };
 
@@ -56,6 +61,7 @@ rec {
     elf = {};
     macho = {};
     pe = {};
+
     unknown = {};
   };
 
@@ -63,32 +69,38 @@ rec {
   kernelFamilies = setTypes "kernel-family" {
     bsd = {};
     unix = {};
-    windows-nt = {};
-    dos = {};
   };
 
   isKernel = x: isType "kernel" x;
   kernels = with execFormats; with kernelFamilies; setTypesAssert "kernel"
     (x: isExecFormat x.execFormat && all isKernelFamily (attrValues x.families))
   {
-    cygwin  = { execFormat = pe;      families = { inherit /*unix*/ windows-nt; }; };
     darwin  = { execFormat = macho;   families = { inherit unix; }; };
     freebsd = { execFormat = elf;     families = { inherit unix bsd; }; };
+    hurd    = { execFormat = elf;     families = { inherit unix; }; };
     linux   = { execFormat = elf;     families = { inherit unix; }; };
     netbsd  = { execFormat = elf;     families = { inherit unix bsd; }; };
     none    = { execFormat = unknown; families = { inherit unix; }; };
     openbsd = { execFormat = elf;     families = { inherit unix bsd; }; };
     solaris = { execFormat = elf;     families = { inherit unix; }; };
-    win32   = { execFormat = pe;      families = { inherit dos; }; };
+    windows = { execFormat = pe;      families = { }; };
+  } // { # aliases
+    # TODO(@Ericson2314): Handle these Darwin version suffixes more generally.
+    darwin10 = kernels.darwin;
+    darwin14 = kernels.darwin;
+    win32 = kernels.windows;
   };
-
 
   isAbi = isType "abi";
   abis = setTypes "abi" {
+    cygnus = {};
     gnu = {};
     msvc = {};
     eabi = {};
     androideabi = {};
+    gnueabi = {};
+    gnueabihf = {};
+
     unknown = {};
   };
 
@@ -99,27 +111,22 @@ rec {
       inherit cpu vendor kernel abi;
     };
 
-  is64Bit = matchAttrs { cpu = { bits = 64; }; };
-  is32Bit = matchAttrs { cpu = { bits = 32; }; };
-  isi686 = matchAttrs { cpu = cpuTypes.i686; };
-  isx86_64 = matchAttrs { cpu = cpuTypes.x86_64; };
-
-  isDarwin = matchAttrs { kernel = kernels.darwin; };
-  isLinux = matchAttrs { kernel = kernels.linux; };
-  isUnix = matchAttrs { kernel = { families = { inherit (kernelFamilies) unix; }; }; };
-  isWindows = s: matchAttrs { kernel = { families = { inherit (kernelFamilies) windows-nt; }; }; } s
-              || matchAttrs { kernel = { families = { inherit (kernelFamilies) dos; }; }; } s;
-
-
   mkSkeletonFromList = l: {
-    "2" =    { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
-    "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
+    "2" = # We only do 2-part hacks for things Nix already supports
+      if elemAt l 1 == "cygwin"
+        then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
+      else if elemAt l 1 == "gnu"
+        then { cpu = elemAt l 0;                      kernel = "hurd";     abi = "gnu";      }
+      else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
         then { cpu = elemAt l 0; vendor = "apple";    kernel = elemAt l 2;                   }
       else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
         then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
+      else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";  abi = "gnu"; }
       else throw "Target specification with 3 components is ambiguous";
+    "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
     or (throw "system string has invalid number of hyphen-separated components");
 
@@ -132,39 +139,34 @@ rec {
                          , # Also inferred below
                            abi    ? assert false; null
                          } @ args: let
-    getCpu = name:
-      attrByPath [name] (throw "Unknown CPU type: ${name}")
-        cpuTypes;
-    getVendor = name:
-      attrByPath [name] (throw "Unknown vendor: ${name}")
-        vendors;
-    getKernel = name:
-      attrByPath [name] (throw "Unknown kernel: ${name}")
-        kernels;
-    getAbi = name:
-      attrByPath [name] (throw "Unknown ABI: ${name}")
-        abis;
+    getCpu    = name: cpuTypes.${name} or (throw "Unknown CPU type: ${name}");
+    getVendor = name:  vendors.${name} or (throw "Unknown vendor: ${name}");
+    getKernel = name:  kernels.${name} or (throw "Unknown kernel: ${name}");
+    getAbi    = name:     abis.${name} or (throw "Unknown ABI: ${name}");
 
-    system = rec {
+    parsed = rec {
       cpu = getCpu args.cpu;
       vendor =
         /**/ if args ? vendor    then getVendor args.vendor
-        else if isDarwin  system then vendors.apple
-        else if isWindows system then vendors.pc
+        else if isDarwin  parsed then vendors.apple
+        else if isWindows parsed then vendors.pc
         else                     vendors.unknown;
       kernel = getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
-        else if isLinux   system then abis.gnu
-        else if isWindows system then abis.gnu
+        else if isLinux   parsed then abis.gnu
+        else if isWindows parsed then abis.gnu
         else                     abis.unknown;
     };
 
-  in mkSystem system;
+  in mkSystem parsed;
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
-  doubleFromSystem = { cpu, vendor, kernel, abi, ... }: "${cpu.name}-${kernel.name}";
+  doubleFromSystem = { cpu, vendor, kernel, abi, ... }:
+    if vendor == kernels.windows && abi == abis.cygnus
+    then "${cpu.name}-cygwin"
+    else "${cpu.name}-${kernel.name}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";

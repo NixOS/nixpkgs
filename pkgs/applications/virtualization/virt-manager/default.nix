@@ -26,9 +26,9 @@ python2Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python2Packages;
     [ eventlet greenlet gflags netaddr carrot routes PasteDeploy
-      m2crypto ipy twisted distutils_extra simplejson glanceclient
+      m2crypto ipy twisted distutils_extra simplejson
       cheetah lockfile httplib2 urlgrabber pyGtkGlade dbus-python
-      pygobject3 ipaddr mox libvirt libxml2
+      pygobject3 ipaddr mox libvirt libxml2 requests
     ];
 
   patchPhase = ''
@@ -42,6 +42,10 @@ python2Packages.buildPythonApplication rec {
 
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
   '';
 
   # Failed tests

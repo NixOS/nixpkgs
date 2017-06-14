@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    requests2 fasteners pyyaml pyjwt colorama patch
+    requests fasteners pyyaml pyjwt colorama patch
     bottle pluginbase six distro pylint node-semver
   ];
 

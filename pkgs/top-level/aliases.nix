@@ -5,21 +5,29 @@ with self;
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = _n: alias: with lib;
+  removeRecurseForDerivations = alias: with lib;
     if alias.recurseForDerivations or false then
       removeAttrs alias ["recurseForDerivations"]
     else alias;
 
-  doNotDisplayTwice = aliases:
-    lib.mapAttrs removeRecurseForDerivations aliases;
+  # Disabling distribution prevents top-level aliases for non-recursed package
+  # sets from building on Hydra.
+  removeDistribute = alias: with lib;
+    if isDerivation alias then
+      dontDistribute alias
+    else alias;
+
+  mapAliases = aliases:
+    lib.mapAttrs (n: alias: removeDistribute (removeRecurseForDerivations alias)) aliases;
 in
 
   ### Deprecated aliases - for backward compatibility
 
-doNotDisplayTwice rec {
+mapAliases (rec {
   accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14
+  ammonite-repl = ammonite; # added 2017-05-02
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
@@ -82,6 +90,9 @@ doNotDisplayTwice rec {
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
+  lua5_sec = luaPackages.luasec; # added 2017-05-02
+  lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
+  lua5_expat = luaPackages.luaexpat; # added 2017-05-02
   m3d-linux = m33-linux; # added 2016-08-13
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
@@ -137,6 +148,12 @@ doNotDisplayTwice rec {
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
 
+  # added 2017-05-27
+  wineMinimal = winePackages.minimal;
+  wineFull = winePackages.full;
+  wineStable = winePackages.stable;
+  wineUnstable = winePackages.unstable;
+
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
@@ -152,4 +169,4 @@ doNotDisplayTwice rec {
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
   ocaml_4_03   = ocamlPackages_4_03.ocaml;
   ocaml        = ocamlPackages.ocaml;
-})
+}))

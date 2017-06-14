@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
-, obex_data_server, xdg_utils, libnotify, dconf, gsettings_desktop_schemas, dnsmasq, dhcp
+, obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
 , hicolor_icon_theme, librsvg, wrapGAppsHook
 , withPulseAudio ? true, libpulseaudio }:
 
@@ -9,7 +9,7 @@ let
 in stdenv.mkDerivation rec {
   name = "blueman-${version}";
   version = "2.0.4";
-   
+
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${name}.tar.xz";
     sha256 = "03s305mbc57nl3sq5ywh9casz926k4aqnylgaidli8bmgz1djbg9";
@@ -17,8 +17,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython wrapGAppsHook ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf librsvg
-                  gsettings_desktop_schemas hicolor_icon_theme ]
+  buildInputs = [ bluez gtk3 pythonPackages.python libnotify librsvg hicolor_icon_theme ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -28,13 +27,14 @@ in stdenv.mkDerivation rec {
 
   pythonPath = with pythonPackages; [ dbus-python pygobject3 pycairo ];
 
-  propagatedUserEnvPkgs = [ obex_data_server dconf ];
+  propagatedUserEnvPkgs = [ obex_data_server ];
 
   configureFlags = [ (lib.enableFeature withPulseAudio "pulseaudio") ];
 
   preFixup = ''
     makeWrapperArgs="--prefix PATH ':' ${binPath}"
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/bin" "$pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$pythonPath"
   '';
 
   meta = with lib; {
