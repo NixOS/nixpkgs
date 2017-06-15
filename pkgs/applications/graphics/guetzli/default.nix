@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     sha256 = "1wy9wfvyradp0aigfv8yijvj0dgb5kpq2yf2xki15f605jc1r5dm";
     fetchSubmodules = true;
   };
-  buildInputs = [ libpng pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng ];
 
   installPhase = ''
     mkdir -p $out/bin
