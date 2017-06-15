@@ -74,7 +74,7 @@ in
 
       startAgent = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
           remembers private keys for you so that you don't have to type in
