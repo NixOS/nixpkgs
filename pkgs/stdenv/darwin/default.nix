@@ -266,7 +266,9 @@ in rec {
     };
 
     darwin = super.darwin // {
-      inherit (darwin) dyld ICU Libsystem cctools libiconv;
+      inherit (darwin) dyld ICU Libsystem libiconv;
+    } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+      inherit (darwin) cctools;
     };
   } // lib.optionalAttrs (super.targetPlatform == localSystem) {
     # Need to get rid of these when cross-compiling.
