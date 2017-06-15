@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
-  ];
+  ] ++ stdenv.lib.optional (stdenv.isDarwin && buildPlatform != hostPlatform) "CC=${hostPlatform.config}-cc";
 
   inherit doCheck;
 
