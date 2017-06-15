@@ -41,6 +41,8 @@ in (import ../../../build-support/cc-wrapper {
           echo "You must have ${sdkVer} of the iPhone${sdkType} sdk installed at ${sdk}" >&2
           exit 1
       fi
+      echo "export CC=${prefix}-cc" >>"$out/nix-support/setup-hook"
+      echo "export CXX=${prefix}-c++" >>"$out/nix-support/setup-hook"
       # ugh
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags
