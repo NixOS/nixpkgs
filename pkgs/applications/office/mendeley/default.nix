@@ -36,14 +36,14 @@ let
     then "i386"
     else "amd64";
 
-  shortVersion = "1.17.9-stable";
+  shortVersion = "1.17.10-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
-    then "0z04r3ipwp2vca3qhp3b1zj0m12h023ynmbjsz4sysnd1bb5f2yr"
-    else "0h3m6s3s5283g9w3sm4fszhhnzgmqw49nr0ihvdwyxrgawxmz4vg";
+    then "0sc9fsprdpl39q8wqbjp59pnr10c1a8gss60b81h54agjni55yrg"
+    else "02ncfdxcrdwghpch2nlfhc7d0vgjsfqn8sxjkb5yn4bf5wi8z9bq";
 
   deps = [
     qt5.qtbase
