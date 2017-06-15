@@ -1,6 +1,6 @@
 { stdenv, fetchurl, system, makeWrapper,
   alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
-  libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat }:
+  libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat, libv4l }:
 
 let
 
@@ -78,6 +78,7 @@ in stdenv.mkDerivation {
     # RUNPATH set via patchelf is used only for half of libraries (why?), so wrap it
     wrapProgram $packagePath/zoom \
         --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
+        --prefix LD_PRELOAD : "${libv4l}/lib/v4l1compat.so" \
         --set QT_PLUGIN_PATH "$packagePath/platforms" \
         --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
         --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
