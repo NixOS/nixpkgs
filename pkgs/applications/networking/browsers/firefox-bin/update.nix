@@ -9,15 +9,10 @@
 , gnupg
 , baseName ? "firefox"
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
+, baseUrl
 }:
 
 let
-
-  baseUrl =
-    if channel == "devedition"
-      then "http://archive.mozilla.org/pub/devedition/releases/"
-      else "http://archive.mozilla.org/pub/firefox/releases/";
-
   isBeta =
     channel != "release";
 
