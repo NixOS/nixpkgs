@@ -1,6 +1,6 @@
 { stdenv, fetchurl, system, makeWrapper,
   alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
-  libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg }:
+  libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat }:
 
 let
 
@@ -35,6 +35,8 @@ in stdenv.mkDerivation {
     sqlite
     utillinux
     zlib
+    udev
+    expat
 
     xorg.libX11
     xorg.libSM
@@ -51,6 +53,7 @@ in stdenv.mkDerivation {
     xorg.libXi
     xorg.libXrender
     xorg.libXcomposite
+    xorg.libXScrnSaver
 
     stdenv.cc.cc
   ];
@@ -63,8 +66,10 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cp -ar * $packagePath
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $packagePath/zoom
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zoom
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/QtWebEngineProcess
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/qtdiag
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zopen
     # included from https://github.com/NixOS/nixpkgs/commit/fc218766333a05c9352b386e0cbb16e1ae84bf53
     # it works for me without it, but, well...
     paxmark m $packagePath/zoom
@@ -77,6 +82,11 @@ in stdenv.mkDerivation {
         --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
         --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
     ln -s "$packagePath/zoom" "$out/bin/zoom-us"
+
+    cat > $packagePath/qt.conf <<EOF
+    [Paths]
+    Prefix = $packagePath
+    EOF
 
     $postInstallHooks
   '';
