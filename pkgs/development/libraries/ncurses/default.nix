@@ -14,6 +14,7 @@ let
   sha256 = if abiVersion == "5"
     then "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh"
     else "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
+  confusingIosHost = hostPlatform.isDarwin && hostPlatform.isArm64;
 in
 stdenv.mkDerivation rec {
   name = "ncurses-${version}";
@@ -28,12 +29,17 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
+  ${if confusingIosHost then "configurePlatforms" else null} = [
+    "build"
+  ];
+
   configureFlags = [
     "--with-shared"
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
-  ] ++ lib.optional unicode "--enable-widec";
+  ] ++ lib.optional unicode "--enable-widec"
+    ++ lib.optional confusingIosHost "--host=arm-apple-darwin";
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
