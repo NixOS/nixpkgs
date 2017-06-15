@@ -1,19 +1,9 @@
-{ autoconf, automake, flex, yacc, stdenv, kernel, fetchFromGitHub }:
+{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, bison }:
 let
   version = "1.0.beta1-9e810b1";
 in stdenv.mkDerivation {
   name = "ply-${version}";
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
-
-  buildInputs = [
-    flex
-    yacc
-    kernel
-    stdenv.cc
-  ];
+  nativeBuildInputs = [ autoreconfHook flex yacc ];
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -22,9 +12,17 @@ in stdenv.mkDerivation {
     sha256 = "15cp6iczawaqlhsa0af6i37zn5iq53kh6ya8s2hzd018yd7mhg50";
   };
 
-  preConfigure = "sh autogen.sh --prefix=$out";
+  preAutoreconf = ''
+    # ply wants to install header fails to its build directory
+    xz -d < ${kernel.src} | tar -xf -
+    configureFlagsArray+=(--with-kerneldir=$(echo $(pwd)/linux-*))
+    ./autogen.sh --prefix=$out
+  '';
 
-  configureFlags = [
-    "--with-kerneldir=${kernel.dev}"
-  ];
+  meta = with stdenv.lib; {
+    description = "dynamic Tracing in Linux";
+    homepage = https://wkz.github.io/ply/;
+    license = [ licenses.gpl2 ];
+    maintainers = with maintainers; [ mic92 mbbx6spp ];
+  };
 }
