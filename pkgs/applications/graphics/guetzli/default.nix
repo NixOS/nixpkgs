@@ -1,11 +1,14 @@
-{ stdenv, libpng, fetchgit, pkgconfig }:
+{ stdenv, libpng, fetchFromGitHub, pkgconfig }:
+let
+  version = "1.0.1";
+in
 stdenv.mkDerivation {
-  name = "guetzli-1.0.1";
-  src = fetchgit {
-    url = "https://github.com/google/guetzli.git";
-    rev = "a0f47a297f802630f937a3091964838eaf3b87d8";
+  name = "guetzli-${version}";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "guetzli";
+    rev = "v${version}";
     sha256 = "1wy9wfvyradp0aigfv8yijvj0dgb5kpq2yf2xki15f605jc1r5dm";
-    fetchSubmodules = true;
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpng ];
