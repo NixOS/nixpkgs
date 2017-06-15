@@ -23,7 +23,9 @@ buildPythonPackage rec {
     export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
   '';
 
+  # force use of $CXX to ensure C++ system headers are available
   preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+    export CC=$CXX
     ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
   '';
 
