@@ -132,7 +132,6 @@ stdenv.mkDerivation {
         -docdir $out/$qtDocPrefix"
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/$qtPluginPrefix/platforms\""
   '';
 
 

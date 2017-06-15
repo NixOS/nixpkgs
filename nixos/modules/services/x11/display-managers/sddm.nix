@@ -197,8 +197,10 @@ in
       logsXsession = true;
 
       environment = {
-        # Take themes system environment
-        NIX_PROFILES = "/run/current-system/sw";
+        # Load themes from system environment
+        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+
         XDG_DATA_DIRS = "/run/current-system/sw/share";
       };
 
