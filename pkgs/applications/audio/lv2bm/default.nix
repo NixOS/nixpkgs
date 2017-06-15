@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lv2bm-${version}";
-  version = "git-2015-04-10";
+  version = "git-2015-11-29";
 
   src = fetchFromGitHub {
-    owner = "portalmod";
+    owner = "moddevices";
     repo = "lv2bm";
-    rev = "08681624fc13eb700ec2b5cabedbffdf095e28b3";
-    sha256 = "11pi97jy4f4c3vsaizc8a6sw9hnhnanj6y1fil33yd9x7f8f0kbj";
+    rev = "e844931503b7597f45da6d61ff506bb9fca2e9ca";
+    sha256 = "1rrz5sp04zjal6v34ldkl6fjj9xqidb8xm1iscjyljf6z4l516cx";
   };
 
   buildInputs = [ glib lilv lv2 pkgconfig serd sord sratom ];
