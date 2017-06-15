@@ -6719,6 +6719,8 @@ with pkgs;
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
+  ezquake = callPackage ../games/ezquake { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   foreman = callPackage ../tools/system/foreman { };
