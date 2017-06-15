@@ -30484,6 +30484,18 @@ EOF
 
   distro = callPackage ../development/python-modules/distro { };
 
+  smart_open = callPackage ../development/python-modules/smart_open { };
+  
+  serpent = callPackage ../development/python-modules/serpent { };
+
+  pyro4 = callPackage ../development/python-modules/pyro4 { };    
+
+  pyemd = callPackage ../development/python-modules/pyemd { };
+
+  morfessor = callPackage ../development/python-modules/morfessor { };
+
+  gensim = callPackage ../development/python-modules/gensim { };  
+
 });
 
 in fix' (extends overrides packages)
