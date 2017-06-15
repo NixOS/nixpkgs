@@ -407,8 +407,6 @@ with pkgs;
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
-  aiccu = callPackage ../tools/networking/aiccu { };
-
   aide = callPackage ../tools/security/aide { };
 
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
