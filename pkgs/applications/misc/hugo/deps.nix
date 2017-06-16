@@ -31,8 +31,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bep/gitmap";
-      rev = "dcb907b39a0690430d435eb8f63cd8811961231f";
-      sha256 = "0bw4spyiidrvd8rls9g57mwxykfmv57qi9mcnjadbqrpv92br856";
+      rev = "de8030ebafb76c6e84d50ee6d143382637c00598";
+      sha256 = "0adkv2ghi0zd104akksa9wjzj7s849wpa1rij03mycgxp4si9ami";
     };
   }
   {
@@ -247,8 +247,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/russross/blackfriday";
-      rev = "0ba0f2b6ed7c475a92e4df8641825cb7a11d1fa3";
-      sha256 = "0jj9zkk64sxs8vpfhz95y9li30q6qnxm7sncsfjn2ykcdgs252f7";
+      rev = "067529f716f4c3f5e37c8c95ddd59df1007290ae";
+      sha256 = "1l61ib6r6mg587p58li5zhafjkkmrzacachcjg1cvw0k4zza9137";
     };
   }
   {
