@@ -57,6 +57,12 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>aiccu</literal> package was removed. This is due to SixXS
+      <link xlink:href="https://www.sixxs.net/main/"> sunsetting</link> its IPv6 tunnel.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       Top-level <literal>idea</literal> package collection was renamed.
       All JetBrains IDEs are now at <literal>jetbrains</literal>.
     </para>

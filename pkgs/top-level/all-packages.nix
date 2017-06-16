@@ -98,6 +98,8 @@ with pkgs;
     inherit (haskellPackages) dhall-nix;
   };
 
+  diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
+
   dockerTools = callPackage ../build-support/docker { };
 
   docker_compose = pythonPackages.docker_compose;
@@ -406,8 +408,6 @@ with pkgs;
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
-  aiccu = callPackage ../tools/networking/aiccu { };
-
   aide = callPackage ../tools/security/aide { };
 
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
@@ -674,6 +674,12 @@ with pkgs;
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
+
+  inherit (callPackages ../misc/logging/beats { })
+    filebeat
+    heartbeat
+    metricbeat
+    packetbeat;
 
   bfr = callPackage ../tools/misc/bfr { };
 
@@ -974,8 +980,6 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
-  filebeat = callPackage ../misc/logging/filebeat { };
-
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -1024,8 +1028,6 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
-  heartbeat = callPackage ../misc/logging/heartbeat { };
-
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hexio = callPackage ../development/tools/hexio { };
@@ -1055,8 +1057,6 @@ with pkgs;
   masscan = callPackage ../tools/security/masscan { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
-
-  metricbeat = callPackage ../misc/logging/metricbeat { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
@@ -1554,6 +1554,8 @@ with pkgs;
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
 
+  ddcutil = callPackage ../tools/misc/ddcutil { };
+
   ddclient = callPackage ../tools/networking/ddclient { };
 
   dd_rescue = callPackage ../tools/system/dd_rescue { };
@@ -1743,6 +1745,9 @@ with pkgs;
   efivar = callPackage ../tools/system/efivar { };
 
   evemu = callPackage ../tools/system/evemu { };
+
+  # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
+  elk5Version = "5.4.0";
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
   elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
@@ -2639,7 +2644,8 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  kibana = callPackage ../development/tools/misc/kibana { };
+  kibana  = callPackage ../development/tools/misc/kibana { };
+  kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
@@ -2699,7 +2705,8 @@ with pkgs;
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
-  logstash = callPackage ../tools/misc/logstash { };
+  logstash  = callPackage ../tools/misc/logstash { };
+  logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
@@ -3517,8 +3524,6 @@ with pkgs;
     nix = nixUnstable;
   };
 
-  packetbeat = callPackage ../misc/logging/packetbeat { };
-
   packetdrill = callPackage ../tools/networking/packetdrill { };
 
   pakcs = callPackage ../development/compilers/pakcs {};
@@ -3781,6 +3786,10 @@ with pkgs;
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
   psutils = callPackage ../tools/typesetting/psutils { };
+
+  psensor = callPackage ../tools/system/psensor {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   pv = callPackage ../tools/misc/pv { };
 
@@ -4356,6 +4365,8 @@ with pkgs;
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
+  thefuck = callPackage ../tools/misc/thefuck { };
+
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
@@ -4536,7 +4547,9 @@ with pkgs;
 
   vboot_reference = callPackage ../tools/system/vboot_reference { };
 
-  vcsh = callPackage ../applications/version-management/vcsh { };
+  vcsh = callPackage ../applications/version-management/vcsh {
+    inherit (perlPackages) ShellCommand TestMost;
+  };
 
   verilator = callPackage ../applications/science/electronics/verilator {};
 
@@ -5327,6 +5340,14 @@ with pkgs;
   });
 
   gfortran6 = wrapCC (gcc6.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran7 = wrapCC (gcc7.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -6723,6 +6744,8 @@ with pkgs;
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
+
+  ezquake = callPackage ../games/ezquake { };
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
@@ -8330,6 +8353,9 @@ with pkgs;
   libbap = callPackage ../development/libraries/libbap {
     inherit (ocamlPackages_4_02) bap ocaml findlib ctypes;
   };
+
+  libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
+  libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
@@ -17364,7 +17390,15 @@ with pkgs;
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
-  ultrastardx = callPackage ../games/ultrastardx {
+  ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
+
+  ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
+
+  ultrastardx = callPackage ../games/ultrastardx/1.1.nix {
+    ffmpeg = ffmpeg_0;
+    lua = lua5;
+  };
+  ultrastardx-beta = callPackage ../games/ultrastardx/1.3-beta.nix {
     ffmpeg = ffmpeg_0;
     lua = lua5;
   };

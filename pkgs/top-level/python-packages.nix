@@ -2554,10 +2554,10 @@ in {
   defusedxml = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "defusedxml";
-    version = "0.4.1";
+    version = "0.5.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/${pname}/${name}.tar.gz";
-      sha256 = "0y147zy3jqmk6ly7fbhqmzn1hf41xcb53f2vcc3m8x4ba5d1smfd";
+      sha256 = "1x54n0h8hl92vvwyymx883fbqpqjwn2mc8fb383bcg3z9zwz5mr4";
     };
   };
 
@@ -3007,11 +3007,11 @@ in {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.45.0";
+    version = "2.47.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "18z5nacnbdpw3pmzc56didhy4sfik8riap204px24350g9xlgz7i";
+      sha256 = "051gq8z9m2cir03jhc00qs36bnpla7zkqm9xqiqcqvdknmi2ndbq";
     };
 
     checkPhase = ''
@@ -8191,7 +8191,7 @@ in {
     };
   };
 
-  netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
+  netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   Nikola = callPackage ../development/python-modules/Nikola { };
 
@@ -11316,6 +11316,7 @@ in {
       url = "mirror://pypi/h/hug/${name}.tar.gz";
       sha256 = "93325e13706594933a9afb0d4f0b0748134494299038f07df41152baf6f89f4c";
     };
+    disabled = !isPy3k;
 
     propagatedBuildInputs = with self; [ falcon requests ];
 
@@ -30693,6 +30694,12 @@ EOF
   impacket = callPackage ../development/python-modules/impacket.nix { };
 
   pylnk = callPackage ../development/python-modules/pylnk.nix { };
+
+  bz2file =  callPackage ../development/python-modules/bz2file { };
+
+  smart_open =  callPackage ../development/python-modules/smart_open { };
+
+  gensim = callPackage  ../development/python-modules/gensim { };
 
 });
 

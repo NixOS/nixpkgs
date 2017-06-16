@@ -170,6 +170,10 @@ stdenv.mkDerivation {
   passthru.ffmpegSupport = true;
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
+    baseUrl =
+      if channel == "devedition"
+        then "http://archive.mozilla.org/pub/devedition/releases/"
+        else "http://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
