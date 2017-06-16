@@ -12010,6 +12010,8 @@ with pkgs;
     nvidia_x11_beta      = nvidiaPackages.beta;
     nvidia_x11           = nvidiaPackages.stable;
 
+    ply = callPackage ../os-specific/linux/ply { };
+
     rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
