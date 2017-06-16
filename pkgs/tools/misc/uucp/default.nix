@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  prePatch = ''
+    substituteInPlace Makefile.in \
+      --replace 4555 0555
+    sed -i '/chown $(OWNER)/d' Makefile.in
+  '';
+
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";
 
