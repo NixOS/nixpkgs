@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ stdenv, fetchgit, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";
@@ -14,6 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ ncurses readline zlib lzo openssl ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gsliepen/tinc/commit/323c17e232539f3f06e7cebc664ab48f60127e0e.patch";
+      sha256 = "1flnprxa0gviiih0lbpqa5kj41ndh1sylm5j9ibly7f8m5rg16rs";
+    })
+  ];
 
   prePatch = ''
     substituteInPlace configure.ac --replace UNKNOWN ${version}
