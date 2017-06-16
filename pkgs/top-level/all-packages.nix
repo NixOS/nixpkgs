@@ -2082,6 +2082,8 @@ with pkgs;
 
   gmvault = callPackage ../tools/networking/gmvault { };
 
+  gnash = callPackage ../misc/gnash { };
+
   gnaural = callPackage ../applications/audio/gnaural {
     stdenv = overrideCC stdenv gcc49;
   };
