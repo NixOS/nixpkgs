@@ -1,14 +1,14 @@
 {fetchFromGitHub , stdenv, makeWrapper, python3, gtk3, libwnck3 }:
 
 stdenv.mkDerivation  rec {
-  name = "clipster-unstable-${version}";
-  version = "2017-02-27";
+  name = "clipster-${version}";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
-    rev = "dfa75b52ee3a41fff7534aca165dc0e6a24a3680";
-    sha256 = "0d7ak6wpvvgz7cwvfzy2shkfiw6gr8l703xyjpiayjbnr2s79k5j";
+    rev = "${version}";
+    sha256 = "0y0igi5r5x2gxglm0aarn2mhdfn6whakm6359i3h0wkn6qw1p1l2";
   };
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
