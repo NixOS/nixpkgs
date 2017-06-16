@@ -682,6 +682,7 @@ self: super: {
   stack = super.stack.overrideScope (self: super: {
     store-core = self.store-core_0_3;
     store = self.store_0_3_1;
+    hpack = self.hpack_0_17_1;
   });
 
   # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
