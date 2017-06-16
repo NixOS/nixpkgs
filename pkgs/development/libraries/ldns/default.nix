@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     patchShebangs doc/doxyparse.pl
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "examples" ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput "bin/ldns-config" "$dev"
+
+    pushd examples
+    configureFlagsArray+=( "--bindir=$examples/bin" )
+    configurePhase
+    make
+    make install
+    popd
   '';
 
   meta = with stdenv.lib; {
