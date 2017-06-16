@@ -8330,6 +8330,7 @@ dont-distribute-packages:
   transient-universe-tls:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   translatable-intset:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   translate:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
+  trasa-reflex:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   travis-meta-yaml:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   trawl:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   traypoweroff:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
