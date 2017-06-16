@@ -1,3 +1,7 @@
+{ pname, version, updateScript ? null
+, src, meta
+}:
+
 { lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xorg
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
@@ -18,17 +22,10 @@
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
-let
-
-common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "${pname}-unwrapped-${version}";
 
-  src = fetchurl {
-    url =
-      let ext = if lib.versionAtLeast version "41.0" then "xz" else "bz2";
-      in "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
-    inherit sha512;
-  };
+  inherit src meta;
 
   # this patch should no longer be needed in 53
   # from https://bugzilla.mozilla.org/show_bug.cgi?id=1013882
@@ -133,43 +130,12 @@ common = { pname, version, sha512, updateScript }: stdenv.mkDerivation rec {
       "$out/bin/firefox" --version
     '';
 
-  meta = {
-    description = "A web browser" + lib.optionalString (pname == "firefox-esr") " (Extended Support Release)";
-    homepage = http://www.mozilla.com/en-US/firefox/;
-    maintainers = with lib.maintainers; [ eelco ];
-    platforms = lib.platforms.linux;
-  };
-
   passthru = {
     inherit nspr version updateScript;
     gtk = gtk2;
     isFirefox3Like = true;
     browserName = "firefox";
     ffmpegSupport = lib.versionAtLeast version "46.0";
-  };
-};
-
-in {
-
-  firefox-unwrapped = common {
-    pname = "firefox";
-    version = "53.0.3";
-    sha512 = "cef5de1e9d6ddf6509a80cd30169fdce701b2fed022979ba5931ccea7b8f77cb644b01984dae028d350e32321cfe2eefc0236c0731bf5a2be12a994fc3fc1118";
-    updateScript = import ./update.nix {
-      attrPath = "firefox-unwrapped";
-      inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
-    };
-  };
-
-  firefox-esr-unwrapped = common {
-    pname = "firefox-esr";
-    version = "52.1.2esr";
-    sha512 = "76362738f6db82a41ff6af4e12a15a302068a5ce10d23739f29375f3279573d0ea43ecee9d2e46fce833a029e437efcfcceab9442c288560f476e0cff2ea9e1d";
-    updateScript = import ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
-      versionSuffix = "esr";
-      inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
-    };
-  };
-
+  } // lib.optionalAttrs enableGTK3 { inherit gtk3; };
 }
+
