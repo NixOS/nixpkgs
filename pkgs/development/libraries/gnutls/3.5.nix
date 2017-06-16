@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, libunistring, ... } @ args:
+{ callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   version = "3.5.13";

@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   # darwin build fails with format hardening since v7.12
   hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
     "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"

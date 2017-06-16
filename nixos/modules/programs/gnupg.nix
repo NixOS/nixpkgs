@@ -21,11 +21,35 @@ in
 
     agent.enableSSHSupport = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Enable SSH agent support in GnuPG agent. Also sets SSH_AUTH_SOCK
         environment variable correctly. This will disable socket-activation
         and thus always start a GnuPG agent per user session.
+      '';
+    };
+
+    agent.enableExtraSocket = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable extra socket for GnuPG agent.
+      '';
+    };
+
+    agent.enableBrowserSocket = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable browser socket for GnuPG agent.
+      '';
+    };
+
+    dirmngr.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enables GnuPG network certificate management daemon with socket-activation for every user session.
       '';
     };
   };
@@ -38,15 +62,72 @@ in
           ("${pkgs.gnupg}/bin/gpg-agent --supervised "
             + optionalString cfg.agent.enableSSHSupport "--enable-ssh-support")
         ];
+        ExecReload = "${pkgs.gnupg}/bin/gpgconf --reload gpg-agent";
       };
     };
 
     systemd.user.sockets.gpg-agent = {
       wantedBy = [ "sockets.target" ];
+      listenStreams = [ "%t/gnupg/S.gpg-agent" ];
+      socketConfig = {
+        FileDescriptorName = "std";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
     };
 
     systemd.user.sockets.gpg-agent-ssh = mkIf cfg.agent.enableSSHSupport {
       wantedBy = [ "sockets.target" ];
+      listenStreams = [ "%t/gnupg/S.gpg-agent.ssh" ];
+      socketConfig = {
+        FileDescriptorName = "ssh";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
+    };
+
+    systemd.user.sockets.gpg-agent-extra = mkIf cfg.agent.enableExtraSocket {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ "%t/gnupg/S.gpg-agent.extra" ];
+      socketConfig = {
+        FileDescriptorName = "extra";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
+    };
+
+    systemd.user.sockets.gpg-agent-browser = mkIf cfg.agent.enableBrowserSocket {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ "%t/gnupg/S.gpg-agent.browser" ];
+      socketConfig = {
+        FileDescriptorName = "browser";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
+    };
+
+    systemd.user.services.dirmngr = {
+      requires = [ "dirmngr.socket" ];
+      after = [ "dirmngr.socket" ];
+      unitConfig = {
+        RefuseManualStart = "true";
+      };
+      serviceConfig = {
+        ExecStart = "${pkgs.gnupg}/bin/dirmngr --supervised";
+        ExecReload = "${pkgs.gnupg}/bin/gpgconf --reload dirmngr";
+      };
+    };
+
+    systemd.user.sockets.dirmngr = {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ "%t/gnupg/S.dirmngr" ];
+      socketConfig = {
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
     };
 
     systemd.packages = [ pkgs.gnupg ];

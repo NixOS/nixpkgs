@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
-, xdg_utils, makeDesktopItem
+, xdg_utils, makeDesktopItem, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
     apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip

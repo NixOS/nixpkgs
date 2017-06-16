@@ -78,7 +78,7 @@ self: super:
 <para>The first argument, usually named <varname>self</varname>, corresponds to the final package
 set. You should use this set for the dependencies of all packages specified in your
 overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
-from <varname>self</varname>, as well as the overriden dependencies used in the
+from <varname>self</varname>, as well as the overridden dependencies used in the
 <varname>boost</varname> override.</para>
 
 <para>The second argument, usually named <varname>super</varname>,

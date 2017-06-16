@@ -3,11 +3,11 @@
 , procps, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-1.18";
+  name = "intel-gpu-tools-1.19";
 
   src = fetchurl {
     url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.bz2";
-    sha256 = "1vp4czxp8xa6qk4pg3mrxhc2yadw2rv6p8r8247mkpcbb8dzjxyz";
+    sha256 = "1wdhwf3im6ids95qw5r9hjj9hvp0qhzgi4llrlriy723q3kqm754";
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake ];

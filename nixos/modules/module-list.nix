@@ -99,6 +99,7 @@
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix
@@ -388,7 +389,6 @@
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/network-filesystems/xtreemfs.nix
-  ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix

@@ -753,6 +753,9 @@ let
       then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
       else bin_prot_p4;
 
+    core_bench =
+      callPackage ../development/ocaml-modules/janestreet/core_bench.nix {};
+
     core_kernel =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.core_kernel

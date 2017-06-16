@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
 
-  version = "0.10";
+  version = "0.11";
   src = fetchurl {
     url    = "https://github.com/vyzo/gerbil/archive/v${version}.tar.gz";
-    sha256 = "14wzdnifr99g1mvm2xwks97nhaq62hfx43pxcw9gs647i7cymbly";
+    sha256 = "0mqg6cqdcf5qr7vk79x5zkls7z2wm8i3lhwn0b7i0g1m6yyyyff7";
   };
 
   buildInputs = [ gambit openssl zlib coreutils rsync bash ];
@@ -46,7 +46,7 @@ EOF
   dontStrip = true;
 
   meta = {
-    description = "Gerbil";
+    description = "Gerbil Scheme";
     homepage    = "https://github.com/vyzo/gerbil";
     license     = stdenv.lib.licenses.lgpl2;
     platforms   = stdenv.lib.platforms.linux;

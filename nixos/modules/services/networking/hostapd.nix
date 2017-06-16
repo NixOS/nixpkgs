@@ -164,7 +164,7 @@ in
         path = [ pkgs.hostapd ];
         wantedBy = [ "network.target" ];
 
-        after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service"];
+        after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service" "sys-subsystem-net-devices-${cfg.interface}.device" ];
 
         serviceConfig =
           { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";
