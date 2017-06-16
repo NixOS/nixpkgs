@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "1c8qc4fhkycynk4g1f9hvk53dj6a1vvqi6bklqznns6hw59m8qhi";
   };
 
-  patches = [] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch;
+  patches = []
+    ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
+    ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
   buildInputs = [ ghc perl hscolour sphinx ];
 

@@ -198,9 +198,6 @@ self: super: builtins.intersectAttrs super {
   # Nix-specific workaround
   xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
 
-  # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
-  liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
-
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
@@ -454,4 +451,14 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/intero:$PATH"
     '';
   });
+
+  # loc and loc-test depend on each other for testing. Break that infinite cycle:
+  loc-test = super.loc-test.override { loc = dontCheck self.loc; };
+
+  # The test suites try to run the "fixpoint" and "liquid" executables built just
+  # before and fail because the library search paths aren't configured properly.
+  # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
+  liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
+  liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
+
 }
