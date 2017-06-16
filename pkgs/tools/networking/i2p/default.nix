@@ -16,7 +16,19 @@ stdenv.mkDerivation rec {
     set -B
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
-    cp installer/lib/wrapper/linux64/* $out
+    '' +
+
+    # TODO: Compile wrapper ourselves, see https://geti2p.net/en/misc/manual-wrapper
+    (if stdenv.system == "i686-linux"
+    then ''
+      cp installer/lib/wrapper/linux/* $out
+    '' else ''
+      cp installer/lib/wrapper/linux64/* $out
+    '')
+
+     # */ # comment end for vim
+
+    + ''
     sed -i $out/i2prouter -i $out/runplain.sh \
       -e "s#uname#${coreutils}/bin/uname#" \
       -e "s#which#${which}/bin/which#" \
@@ -39,6 +51,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.joelmo ];
     license = licenses.gpl2;
     # TODO: support other systems, just copy appropriate lib/wrapper.. to $out
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
