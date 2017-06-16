@@ -93,11 +93,6 @@ stdenv.mkDerivation {
     rm src/test/debuginfo/vec-slices.rs
     rm src/test/debuginfo/vec.rs
 
-    # this can probably be removed when rust is updated beyond 1.17
-    # fixes a warning in the test harness (I think?) which fails the build due
-    # to strict warnings
-    sed -i '/static_in_const/d' src/tools/compiletest/src/main.rs
-
     # Useful debugging parameter
     # export VERBOSE=1
   ''
