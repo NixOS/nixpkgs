@@ -14,13 +14,13 @@ let
         else throw "Unsupported system!";
 in stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.0.127";
+  version = "1.0.153";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "1p06rkvi6mm4jylk5j7gji2c52qbls3i0yqg3hgs9iys4nd1p14r";
+    sha256 = "0mglg9a6klmsam8r9va7y5x2s8xylhljwcg93sr8152rvhxnjv08";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -43,6 +43,8 @@ in stdenv.mkDerivation rec {
       for i in testing-resources aws-cpp-sdk-*; do
         export ${loaderVar}=$(pwd)/$i:''${${loaderVar}}
       done
+
+      export HOME=$TMPDIR
     '';
 
   NIX_LDFLAGS = lib.concatStringsSep " " (
