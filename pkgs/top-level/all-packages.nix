@@ -2967,6 +2967,8 @@ with pkgs;
 
   lshw = callPackage ../tools/system/lshw { };
 
+  ltris = callPackage ../games/ltris { };
+
   lxc = callPackage ../os-specific/linux/lxc { };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
   lxd = callPackage ../tools/admin/lxd { };
