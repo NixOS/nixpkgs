@@ -305,7 +305,6 @@ self: super: {
   haeredes = dontCheck super.haeredes;
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
-  hastache = dontCheck super.hastache;
   hath = dontCheck super.hath;
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
@@ -860,5 +859,12 @@ self: super: {
 
   # build liquidhaskell with the proper (old) aeson version
   liquidhaskell = super.liquidhaskell.override { aeson = self.aeson_0_11_3_0; };
+
+  # Test suite fails: https://github.com/lymar/hastache/issues/46.
+  # Don't install internal mkReadme tool.
+  hastache = overrideCabal super.hastache (drv: {
+    doCheck = false;
+    postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
+  });
 
 }
