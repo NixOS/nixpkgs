@@ -30,7 +30,7 @@ patchPythonScript() {
 
     # The magicalSedExpression will invoke a "$(basename "$f")", so
     # if you change $f to something else, be sure to also change it
-    # in pkgs/top-level/python-packages.nix!
+    # in wrap-python.nix!
     # It also uses $program_PYTHONPATH.
     sed -i "$f" -re '@magicalSedExpression@'
 }
