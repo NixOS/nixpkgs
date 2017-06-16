@@ -4261,12 +4261,12 @@ in {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     pname = "cryptography";
-    name = "${pname}${version}";
-    version = "1.8.1";
+    name = "${pname}-${version}";
+    version = "1.9";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "323524312bb467565ebca7e50c8ae5e9674e544951d28a2904a50012a8828190";
+      sha256 = "10j8r1s29f4h59kp3mla14g588rm7qpn90nrczijk03i49q3662m";
     };
 
     buildInputs = [ pkgs.openssl self.cryptography_vectors ]
@@ -4304,12 +4304,12 @@ in {
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
     pname = "cryptography_vectors";
-    name = "${pname}${version}";
-    version = "1.8.1";
+    name = "${pname}-${version}";
+    version = "1.9";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "2fd61facea08800ca98ac923f6d02f48a7ae6648025b29cdeb51987c1532add6";
+      sha256 = "1wvq1p1viam1diz9x6d61x1bsy6cninv7cjgd35x9ffig9r6gxxv";
     };
 
     # No tests included
