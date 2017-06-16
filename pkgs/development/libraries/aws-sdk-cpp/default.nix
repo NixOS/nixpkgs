@@ -43,8 +43,11 @@ in stdenv.mkDerivation rec {
       for i in testing-resources aws-cpp-sdk-*; do
         export ${loaderVar}=$(pwd)/$i:''${${loaderVar}}
       done
+    '';
 
-      export HOME=$TMPDIR
+  preConfigure =
+    ''
+      rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     '';
 
   NIX_LDFLAGS = lib.concatStringsSep " " (
