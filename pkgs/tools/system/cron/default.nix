@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   hardeningEnable = [ "pie" ];
 
   preBuild = ''
-    substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
+    substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755 --replace 4755 0755
     makeFlags="DESTROOT=$out CC=cc"
 
     # We want to ignore the $glibc/include/paths.h definition of
