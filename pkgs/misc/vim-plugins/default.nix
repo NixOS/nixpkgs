@@ -462,6 +462,17 @@ rec {
 
   };
 
+  nerdtree-git-plugin = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nerdtree-git-plugin-2017-03-12";
+    src = fetchgit {
+      url = "https://github.com/albfan/nerdtree-git-plugin";
+      rev = "d79a5d5a1b3bc5fab3ba94db44a8b2e5a211d61d";
+      sha256 = "0i77wijbr021zfv096ja15f5l52phvsd5gziqn1m3k60qkmb9gkj";
+    };
+    dependencies = [];
+
+  };
+
   vim-closetag = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-closetag-2017-05-13";
     src = fetchgit {
