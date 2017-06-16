@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, perl}:
+{stdenv, fetchurl, openssl, perl, dns-root-data}:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -20,7 +20,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
 
-  configureFlags = [ "--with-ssl=${openssl.dev}" "--with-drill"];
+  configureFlags = [
+    "--with-ssl=${openssl.dev}"
+    "--with-trust-anchor=${dns-root-data}/root.key"
+    "--with-drill"
+    "--disable-gost"
+  ];
 
   postInstall = ''
     moveToOutput "bin/ldns-config" "$dev"
