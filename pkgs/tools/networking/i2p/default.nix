@@ -1,5 +1,30 @@
 { stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
+let wrapper = stdenv.mkDerivation rec {
+  name = "wrapper-${version}";
+  version = "3.5.32";
+  src = fetchurl {
+    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
+    sha256 = "1v388p5jjbpwybw0zjv5glzny17fwdwppaci2lqcsnm6qw0667f1";
+  };
+  buildInputs = [ jdk ];
+  buildPhase = ''
+    export ANT_HOME=${ant}
+    export JAVA_HOME=${jdk}/lib/openjdk/jre/
+    export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
+    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
+    ./build32.sh
+  '';
+  installPhase = ''
+    mkdir -p $out/{bin,lib}
+    cp bin/wrapper $out/bin/wrapper
+    cp lib/wrapper.jar $out/lib/wrapper.jar
+    cp lib/libwrapper.so $out/lib/libwrapper.so
+  '';
+};
+
+in
+
 stdenv.mkDerivation rec {
   name = "i2p-0.9.30";
   src = fetchurl {
@@ -16,19 +41,11 @@ stdenv.mkDerivation rec {
     set -B
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
-    '' +
 
-    # TODO: Compile wrapper ourselves, see https://geti2p.net/en/misc/manual-wrapper
-    (if stdenv.system == "i686-linux"
-    then ''
-      cp installer/lib/wrapper/linux/* $out
-    '' else ''
-      cp installer/lib/wrapper/linux64/* $out
-    '')
+    cp ${wrapper}/bin/wrapper $out/i2psvc
+    cp ${wrapper}/lib/wrapper.jar $out/lib
+    cp ${wrapper}/lib/libwrapper.so $out/lib
 
-     # */ # comment end for vim
-
-    + ''
     sed -i $out/i2prouter -i $out/runplain.sh \
       -e "s#uname#${coreutils}/bin/uname#" \
       -e "s#which#${which}/bin/which#" \
