@@ -43,6 +43,8 @@ in stdenv.mkDerivation rec {
       for i in testing-resources aws-cpp-sdk-*; do
         export ${loaderVar}=$(pwd)/$i:''${${loaderVar}}
       done
+
+      export HOME=$TMPDIR
     '';
 
   NIX_LDFLAGS = lib.concatStringsSep " " (
