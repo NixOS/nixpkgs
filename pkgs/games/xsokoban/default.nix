@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cat >>config.h <<EOF
     #define HERE "@nixos-packaged"
     #define WWW 0
-    #define OWNER "'$(whoami)'"
+    #define OWNER "$(whoami)"
     #define ROOTDIR "$out/lib/xsokoban"
     #define ANYLEVEL 1
     #define SCOREFILE ".xsokoban-score"
