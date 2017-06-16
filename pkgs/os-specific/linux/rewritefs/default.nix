@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
  
   buildInputs = [ pkgconfig fuse pcre ];
 
+  prePatch = ''
+    substituteInPlace Makefile --replace 6755 0755
+  '';
+
   preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
 
   meta = with stdenv.lib; {
