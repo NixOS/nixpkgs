@@ -1,18 +1,43 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libvdpau
+{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libvdpau, libXext
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
 
+let
+  src = fetchurl {
+    url = "https://download.nvidia.com/XFree86/nvidia-settings/nvidia-settings-${nvidia_x11.version}.tar.bz2";
+    inherit sha256;
+  };
+
+  libXNVCtrl = stdenv.mkDerivation {
+    name = "libXNVCtrl-${nvidia_x11.version}";
+    inherit (nvidia_x11) version;
+    inherit src;
+
+    buildInputs = [ libXrandr libXext ];
+
+    preBuild = ''
+      cd src/libXNVCtrl
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib
+      mkdir -p $out/include/NVCtrl
+
+      cp libXNVCtrl.a $out/lib
+      cp NVCtrl.h     $out/include/NVCtrl
+      cp NVCtrlLib.h  $out/include/NVCtrl
+    '';
+  };
+
+in
+
 stdenv.mkDerivation rec {
   name = "nvidia-settings-${nvidia_x11.version}";
   inherit (nvidia_x11) version;
-
-  src = fetchurl {
-    url = "https://download.nvidia.com/XFree86/nvidia-settings/${name}.tar.bz2";
-    inherit sha256;
-  };
+  inherit src;
 
   nativeBuildInputs = [ pkgconfig m4 ];
 
@@ -51,6 +76,10 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib" \
       $out/bin/$binaryName
   '';
+
+  passthru = {
+    inherit libXNVCtrl;
+  };
 
   meta = with stdenv.lib; {
     homepage = "http://www.nvidia.com/object/unix.html";

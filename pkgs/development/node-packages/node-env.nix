@@ -57,60 +57,6 @@ let
 
   # Recursively composes the dependencies of a package
   composePackage = { name, packageName, src, dependencies ? [], ... }@args:
-    let
-      fixImpureDependencies = writeTextFile {
-        name = "fixDependencies.js";
-        text = ''
-          var fs = require('fs');
-          var url = require('url');
-
-          /*
-           * Replaces an impure version specification by *
-           */
-          function replaceImpureVersionSpec(versionSpec) {
-              var parsedUrl = url.parse(versionSpec);
-
-              if(versionSpec == "latest" || versionSpec == "unstable" ||
-                  versionSpec.substr(0, 2) == ".." || dependency.substr(0, 2) == "./" || dependency.substr(0, 2) == "~/" || dependency.substr(0, 1) == '/')
-                  return '*';
-              else if(parsedUrl.protocol == "git:" || parsedUrl.protocol == "git+ssh:" || parsedUrl.protocol == "git+http:" || parsedUrl.protocol == "git+https:" ||
-                  parsedUrl.protocol == "http:" || parsedUrl.protocol == "https:")
-                  return '*';
-              else
-                  return versionSpec;
-          }
-
-          var packageObj = JSON.parse(fs.readFileSync('./package.json'));
-
-          /* Replace dependencies */
-          if(packageObj.dependencies !== undefined) {
-              for(var dependency in packageObj.dependencies) {
-                  var versionSpec = packageObj.dependencies[dependency];
-                  packageObj.dependencies[dependency] = replaceImpureVersionSpec(versionSpec);
-              }
-          }
-
-          /* Replace development dependencies */
-          if(packageObj.devDependencies !== undefined) {
-              for(var dependency in packageObj.devDependencies) {
-                  var versionSpec = packageObj.devDependencies[dependency];
-                  packageObj.devDependencies[dependency] = replaceImpureVersionSpec(versionSpec);
-              }
-          }
-
-          /* Replace optional dependencies */
-          if(packageObj.optionalDependencies !== undefined) {
-              for(var dependency in packageObj.optionalDependencies) {
-                  var versionSpec = packageObj.optionalDependencies[dependency];
-                  packageObj.optionalDependencies[dependency] = replaceImpureVersionSpec(versionSpec);
-              }
-          }
-
-          /* Write the fixed JSON file */
-          fs.writeFileSync("package.json", JSON.stringify(packageObj));
-        '';
-      };
-    in
     ''
       DIR=$(pwd)
       cd $TMPDIR
@@ -150,15 +96,95 @@ let
       # Unset the stripped name to not confuse the next unpack step
       unset strippedName
 
-      # Some version specifiers (latest, unstable, URLs, file paths) force NPM to make remote connections or consult paths outside the Nix store.
-      # The following JavaScript replaces these by * to prevent that
-      cd "$DIR/${packageName}"
-      node ${fixImpureDependencies}
-
       # Include the dependencies of the package
+      cd "$DIR/${packageName}"
       ${includeDependencies { inherit dependencies; }}
       cd ..
       ${stdenv.lib.optionalString (builtins.substring 0 1 packageName == "@") "cd .."}
+    '';
+
+  pinpointDependencies = {dependencies, production}:
+    let
+      pinpointDependenciesFromPackageJSON = writeTextFile {
+        name = "pinpointDependencies.js";
+        text = ''
+          var fs = require('fs');
+          var path = require('path');
+          
+          function resolveDependencyVersion(location, name) {
+              if(location == process.env['NIX_STORE']) {
+                  return null;
+              } else {
+                  var dependencyPackageJSON = path.join(location, "node_modules", name, "package.json");
+                  
+                  if(fs.existsSync(dependencyPackageJSON)) {
+                      var dependencyPackageObj = JSON.parse(fs.readFileSync(dependencyPackageJSON));
+                      
+                      if(dependencyPackageObj.name == name) {
+                          return dependencyPackageObj.version;
+                      }
+                  } else {
+                      return resolveDependencyVersion(path.resolve(location, ".."), name);
+                  }
+              }
+          }
+          
+          function replaceDependencies(dependencies) {
+              if(typeof dependencies == "object" && dependencies !== null) {
+                  for(var dependency in dependencies) {
+                      var resolvedVersion = resolveDependencyVersion(process.cwd(), dependency);
+                      
+                      if(resolvedVersion === null) {
+                          process.stderr.write("WARNING: cannot pinpoint dependency: "+dependency+", context: "+process.cwd()+"\n");
+                      } else {
+                          dependencies[dependency] = resolvedVersion;
+                      }
+                  }
+              }
+          }
+          
+          /* Read the package.json configuration */
+          var packageObj = JSON.parse(fs.readFileSync('./package.json'));
+          
+          /* Pinpoint all dependencies */
+          replaceDependencies(packageObj.dependencies);
+          if(process.argv[2] == "development") {
+              replaceDependencies(packageObj.devDependencies);
+          }
+          replaceDependencies(packageObj.optionalDependencies);
+          
+          /* Write the fixed package.json file */
+          fs.writeFileSync("package.json", JSON.stringify(packageObj, null, 2));
+        '';
+      };
+    in
+    ''
+      node ${pinpointDependenciesFromPackageJSON} ${if production then "production" else "development"}
+      
+      ${stdenv.lib.optionalString (dependencies != [])
+        ''
+          if [ -d node_modules ]
+          then
+              cd node_modules
+              ${stdenv.lib.concatMapStrings (dependency: pinpointDependenciesOfPackage dependency) dependencies}
+              cd ..
+          fi
+        ''}
+    '';
+  
+  # Recursively traverses all dependencies of a package and pinpoints all
+  # dependencies in the package.json file to the versions that are actually
+  # being used.
+  
+  pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }@args:
+    ''
+      if [ -d "${packageName}" ]
+      then
+          cd "${packageName}"
+          ${pinpointDependencies { inherit dependencies production; }}
+          cd ..
+          ${stdenv.lib.optionalString (builtins.substring 0 1 packageName == "@") "cd .."}
+      fi
     '';
 
   # Extract the Node.js source code which is used to compile packages with
@@ -183,7 +209,9 @@ let
       buildPhase = args.buildPhase or "true";
 
       compositionScript = composePackage args;
-      passAsFile = [ "compositionScript" ];
+      pinpointDependenciesScript = pinpointDependenciesOfPackage args;
+      
+      passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
 
       installPhase = args.installPhase or ''
         # Create and enter a root node_modules/ folder
@@ -192,6 +220,10 @@ let
 
         # Compose the package and all its dependencies
         source $compositionScriptPath
+        
+        # Pinpoint the versions of all dependencies to the ones that are actually being used
+        echo "pinpointing versions of dependencies..."
+        source $pinpointDependenciesScriptPath
 
         # Patch the shebangs of the bundled modules to prevent them from
         # calling executables outside the Nix store as much as possible
@@ -254,12 +286,18 @@ let
         buildInputs = [ tarWrapper python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ args.buildInputs or [];
 
         includeScript = includeDependencies { inherit dependencies; };
-        passAsFile = [ "includeScript" ];
+        pinpointDependenciesScript = pinpointDependenciesOfPackage args;
+        
+        passAsFile = [ "includeScript" "pinpointDependenciesScript" ];
 
         buildCommand = ''
           mkdir -p $out/lib
           cd $out/lib
           source $includeScriptPath
+          
+          # Pinpoint the versions of all dependencies to the ones that are actually being used
+          echo "pinpointing versions of dependencies..."
+          source $pinpointDependenciesScriptPath
 
           # Create fake package.json to make the npm commands work properly
           cat > package.json <<EOF

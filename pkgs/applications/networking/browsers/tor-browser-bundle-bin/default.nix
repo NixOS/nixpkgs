@@ -6,7 +6,6 @@
 , zlib
 
 # libxul run-time dependencies
-, alsaLib
 , atk
 , cairo
 , dbus
@@ -16,14 +15,15 @@
 , gdk_pixbuf
 , glib
 , gtk2
+, libxcb
 , libX11
 , libXext
 , libXrender
 , libXt
 , pango
 
-# Pulseaudio support
-, pulseaudioSupport ? mediaSupport
+, audioSupport ? mediaSupport
+, pulseaudioSupport ? audioSupport
 , libpulseaudio
 
 # Media support (implies pulseaudio support)
@@ -43,7 +43,6 @@ with stdenv.lib;
 
 let
   libPath = makeLibraryPath ([
-    alsaLib
     atk
     cairo
     dbus
@@ -53,6 +52,7 @@ let
     gdk_pixbuf
     glib
     gtk2
+    libxcb
     libX11
     libXext
     libXrender
@@ -81,7 +81,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "6.5.2";
+  version = "7.0.1";
 
   lang = "en-US";
 
@@ -91,7 +91,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0jn98arczlgjigpmql1qg5b7izabv4zy4mji6vvcg3b8g1ma108r";
+      sha256 = "1zmczf1bpbd85zcrs5qw91d1xmplikbna5xs053jnjl6pbbq1fs9";
     };
 
     "i686-linux" = fetchurl {
@@ -99,7 +99,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0micxgkbys0py4bj6csbc8xz4gq0x5v2zirgi38krnm5x5riqj3w";
+      sha256 = "0mdlgmqkryg0i55jgf3x1nnjni0x45g1xcjwsfacsck3m70v4flq";
     };
   };
 in

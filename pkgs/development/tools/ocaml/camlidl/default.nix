@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, ocaml, ncurses }:
+{ stdenv, fetchurl, makeWrapper, ocaml, ncurses, writeText }:
 
 let
   pname = "camlidl";
@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     EOF
     mkdir -p $out/bin
     ln -s $out/camlidl $out/bin
+  '';
+
+  setupHook = writeText "setupHook.sh" ''
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
+    export NIX_CFLAGS_COMPILE+=" -isystem $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
+    export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
   '';
 
   meta = {

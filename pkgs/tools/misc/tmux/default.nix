@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0h0c6rwp4bjifqx9wpx7y0bmayvrvvgh9211rdk4nsf81j17n6vx";
+    sha256 = "0zwjngfaqrlwwbzicc5pq5pyws8f1qghcajvj0hwkipj51hqyswf";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

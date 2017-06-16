@@ -185,7 +185,7 @@ let
     MONITOR_SOCKET="$(pwd)/monitor"
     WINVM_PIDFILE="$(pwd)/winvm.pid"
     CTRLVM_PIDFILE="$(pwd)/ctrlvm.pid"
-    ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" &
+    ${vde2}/bin/vde_switch -s "$QEMU_VDE_SOCKET" --dirmode 0700 &
     echo 'alive?' | ${socat}/bin/socat - \
       UNIX-CONNECT:$QEMU_VDE_SOCKET/ctl,retry=20
   '';

@@ -30,7 +30,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Nikola";
-  version = "7.8.6";
+  version = "7.8.7";
 
   # Nix contains only Python 3 supported version of doit, which is a dependency
   # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48d3a00c3fc9c61bcd305653a531949bdd777d9211434172549498fd8136e036";
+    sha256 = "d9c77ce9758cc0e848d4c99229a28314e8bd2a590c77c56540fa919fca4d779f";
   };
 
   meta = {

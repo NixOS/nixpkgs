@@ -1,4 +1,5 @@
 { name
+, channel
 , writeScript
 , xidel
 , coreutils
@@ -8,13 +9,14 @@
 , gnupg
 , baseName ? "firefox"
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
-, baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
+, baseUrl
 }:
 
 let
-  version = (builtins.parseDrvName name).version;
-  isBeta = builtins.stringLength version + 1 == builtins.stringLength (builtins.replaceStrings ["b"] ["bb"] version);
-in writeScript "update-${baseName}-bin" ''
+  isBeta =
+    channel != "release";
+
+in writeScript "update-${name}" ''
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
   pushd ${basePath}
@@ -80,7 +82,7 @@ in writeScript "update-${baseName}-bin" ''
   }
   EOF
 
-  mv $tmpfile ${if isBeta then "beta_" else ""}sources.nix
+  mv $tmpfile ${channel}_sources.nix
 
   popd
 ''

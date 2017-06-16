@@ -1,4 +1,4 @@
-{ stdenv, python, fetchPypi, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, fetchurl, makeWrapper, unzip }:
 
 let
   wheel_source = fetchPypi {
@@ -13,11 +13,15 @@ let
     format = "wheel";
     sha256 = "f2900e560efc479938a219433c48f15a4ff4ecfe575a65de385eeb44f2425587";
   };
-  argparse_source = fetchPypi {
-    pname = "argparse";
-    version = "1.4.0";
-    sha256 = "c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314";
+
+  # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
+  # https://github.com/NixOS/nixpkgs/issues/26392
+  # https://github.com/pypa/setuptools/issues/885
+  pkg_resources = fetchurl {
+    url = https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py;
+    sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
   };
+
 in stdenv.mkDerivation rec {
   pname = "pip";
   version = "9.0.1";
@@ -34,10 +38,9 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
-  '' + stdenv.lib.optionalString (python.isPy26 or false) ''
-    unzip -d $out/${python.sitePackages} ${argparse_source}
+    # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
+    cp ${pkg_resources} $out/${python.sitePackages}/pip/_vendor/pkg_resources/__init__.py
   '';
-
 
   patchPhase = ''
     mkdir -p $out/bin

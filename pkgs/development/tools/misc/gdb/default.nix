@@ -15,7 +15,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "7.12.1";
+  version = "8.0";
 in
 
 assert targetPlatform.isHurd -> mig != null && hurd != null;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "11ii260h1sd7v0bs3cz6d5l8gqxxgldry0md60ncjgixjw5nh1s6";
+    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo perl ]
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
   # darwin build fails with format hardening since v7.12
   hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"

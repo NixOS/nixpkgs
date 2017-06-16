@@ -3,16 +3,16 @@
 stdenv.mkDerivation rec {
   name = "clickhouse-${version}";
 
-  version = "1.1.54190";
+  version = "1.1.54236";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "ClickHouse";
     rev = "v${version}-stable";
-    sha256 = "03snzrhz3ai66fqy3rh89cgmpiaskg3077zflkwzqxwx69jkmqix";
+    sha256 = "1mfjr1yzvf810vbb35c2rknvqnc4mkncl56ja48myn7hc9p457d7";
   };
 
-  patches = [ ./prefix.patch ./termcap.patch ];
+  patches = [ ./termcap.patch ];
 
   nativeBuildInputs = [ cmake libtool ];
 
