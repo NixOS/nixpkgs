@@ -59,6 +59,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Run this after to avoid conflict with patches above
+  postPatch = ''
+    sed -i '/chmod u+s/d' Makefile.in
+  '';
+
+
   buildInputs = [ openssh rsync cvs ];
 
   configureFlags = [
