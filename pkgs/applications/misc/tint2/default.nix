@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "tint2-${version}";
-  version = "0.14.5";
+  version = "0.14.6";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "1nfvcw95wggih7pxh53cx4nlamny73nh88ggfh6a0ajjhafrd2j2";
+    sha256 = "0v7i8araj85cbl45icinvmsz5741cx2ybjgkx72m3xfcb9fqg69l";
   };
 
   enableParallelBuilding = true;
@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   prePatch = ''
-    for f in ./src/tint2conf/properties.c \
-             ./src/launcher/apps-common.c \
+    for f in ./src/launcher/apps-common.c \
              ./src/launcher/icon-theme-common.c \
              ./themes/*tint2rc
     do
