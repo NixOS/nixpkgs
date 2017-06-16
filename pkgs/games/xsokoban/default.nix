@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  prePatch = ''
+    substituteInPlace Makefile.in --replace 4755 0755
+  '';
+
   preConfigure = ''
     sed -e 's/getline/my_getline/' -i score.c
 
