@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1x4skb5nmv2xj8cygj8pq1rd1ws4m2fsibw54yslgdyjri4r2yq7";
   };
 
+  prePatch = ''
+    substituteInPlace Makefile --replace 2750 0750
+  '';
+
   preConfigure = ''
     substituteInPlace src/logtail --replace "/usr/bin/perl" "${perl}/bin/perl"
     substituteInPlace src/logtail2 --replace "/usr/bin/perl" "${perl}/bin/perl"
