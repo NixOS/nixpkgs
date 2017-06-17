@@ -13,19 +13,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  buildRev = "9e3606bd2863ce7a460fd0c842414673d62f0533";
+
   buildInputs = [ gcc jemalloc protobuf go which cmake git ];
 
-  patches = [./gopath.patch];
+  patches = [./nix.patch];
 
+  dontMakeSourcesWritable = true;
+  sourceRoot = "./src/github.com/cockroachdb/cockroach";
   postUnpack = ''
-    mkdir src pkg
+    mkdir -p src/github.com/cockroachdb/ pkg
     chmod -R u+w src
     chmod -R u+w cockroach-${version}-src
-    mv cockroach-${version}-src src
-    chmod -R u+w src/cockroach-${version}-src
+    mv cockroach-${version}-src src/github.com/cockroachdb/cockroach
   '';
-  sourceRoot = "./src/cockroach-${version}-src";
-  dontMakeSourcesWritable = true;
 
   buildPhase = ''
     export GOPATH=$NIX_BUILD_TOP
