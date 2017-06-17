@@ -223,6 +223,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ApacheSizeLimit = buildPerlPackage rec {
+      name = "Apache-SizeLimit-0.97";
+      src = fetchurl {
+          url = "http://search.cpan.org/CPAN/authors/id/P/PH/PHRED/${name}.tar.gz";
+          sha256 = "484fdfbd82833918c30347ffc4fcfe61b139b5a3a05d9919effb786ce264d636";
+      };
+      buildInputs = [ mod_perl2 ];
+  };
+
   ApacheTest = buildPerlPackage {
     name = "Apache-Test-1.38";
     src = fetchurl {
