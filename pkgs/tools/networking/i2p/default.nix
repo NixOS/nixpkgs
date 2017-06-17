@@ -13,7 +13,8 @@ let wrapper = stdenv.mkDerivation rec {
     export JAVA_HOME=${jdk}/lib/openjdk/jre/
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
     export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
-    ./build32.sh
+    sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
+    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
   '';
   installPhase = ''
     mkdir -p $out/{bin,lib}
@@ -67,7 +68,6 @@ stdenv.mkDerivation rec {
     description = "Applications and router for I2P, anonymity over the Internet";
     maintainers = [ maintainers.joelmo ];
     license = licenses.gpl2;
-    # TODO: support other systems, just copy appropriate lib/wrapper.. to $out
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
