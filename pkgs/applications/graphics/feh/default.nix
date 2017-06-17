@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "09f5rfzls4h5jcrp7ylwbiljp5qzc2nbw9p2csv0pnlaixj69gil";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ makeWrapper xorg.libXt ]
     ++ optionals doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
@@ -22,13 +22,20 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     makeFlags="PREFIX=$out exif=1"
-      '';
+  '';
+
+  postBuild = ''
+    pushd man
+    make
+    popd
+  '';
 
   postInstall = ''
     wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
-                               --add-flags '--theme=feh' 
-        '';
-  
+                               --add-flags '--theme=feh'
+    install -D -m 644 man/*.1 $out/share/man/man1
+  '';
+
   checkPhase = ''
     PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl" make test
   '';
