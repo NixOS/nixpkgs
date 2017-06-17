@@ -12,6 +12,7 @@ stdenv.mkDerivation {
   hardeningEnable = [ "pie" ];
 
   preBuild = ''
+    # do not set sticky bit in /nix/store 
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755 --replace 4755 0755
     makeFlags="DESTROOT=$out CC=cc"
 
