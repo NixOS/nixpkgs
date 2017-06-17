@@ -9,7 +9,7 @@
 
   dbus, dconf, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
-  libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, sqlite, udev,
+  libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre2, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
   zlib,
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs =
     [
-      libxml2 libxslt openssl pcre16 sqlite zlib
+      libxml2 libxslt openssl pcre2 sqlite zlib
 
       # Text rendering
       harfbuzz icu

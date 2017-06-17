@@ -1,7 +1,6 @@
 dlopen-resolv.patch
 tzdir.patch
 dlopen-libXcursor.patch
-xdg-config-dirs.patch
 library-paths.patch
 libressl.patch
 dlopen-gl.patch
