@@ -11545,6 +11545,7 @@ with pkgs;
   cockroachdb = callPackage ../servers/sql/cockroachdb {
     gcc = gcc6; # needs gcc 6.0 and above
     protobuf = protobuf3_2;
+    git = gitMinimal;
   };
 
   conky = callPackage ../os-specific/linux/conky ({

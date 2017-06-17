@@ -1,11 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, gcc, jemalloc, protobuf }:
+{ stdenv, fetchFromGitHub, gcc, jemalloc, protobuf, go, which, cmake, git }:
 
-buildGoPackage rec {
+stdenv.mkDerivation rec {
   name = "cockroach-${version}";
   version = "v1.0.2";
-
-  goPackagePath = "github.com/cockroachdb/cockroach";
-  subPackages = [ "." ];
 
   src = fetchFromGitHub {
     name = "cockroach-${version}-src";
@@ -16,14 +13,25 @@ buildGoPackage rec {
     fetchSubmodules = true;
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/cockroachdb/cockroach/build.tag=${version}
+  buildInputs = [ gcc jemalloc protobuf go which cmake git ];
+
+  patches = [./gopath.patch];
+
+  postUnpack = ''
+    mkdir src pkg
+    chmod -R u+w src
+    chmod -R u+w cockroach-${version}-src
+    mv cockroach-${version}-src src
+    chmod -R u+w src/cockroach-${version}-src
   '';
+  sourceRoot = "./src/cockroach-${version}-src";
+  dontMakeSourcesWritable = true;
 
-  buildInputs = [ gcc jemalloc protobuf ];
-
-  goDeps = ./deps.nix;
+  buildPhase = ''
+    export GOPATH=$NIX_BUILD_TOP
+    make build
+  '';
+  dontUseCmakeConfigure = true;
 
   meta = with stdenv.lib; {
     homepage = https://www.cockroachlabs.com;
