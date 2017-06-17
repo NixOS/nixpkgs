@@ -3,16 +3,16 @@
 stdenv.mkDerivation rec {
 
   name = "catch-${version}";
-  version = "1.7.0";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "philsquared";
     repo = "Catch";
-    rev = "v." + version;
-    sha256 = "0harki6irc4mqipjc24zyy0jimidr5ng3ss29bnpzbbwhrnkyrgm";
+    rev = "v${version}";
+    sha256 = "1in4f6w1pja8m1hvyiwx7s7gxnj6nlj1fgxw9blldffh09ikgpm2";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
   cmakeFlags = [ "-DUSE_CPP14=ON" ];
 
   doCheck = true;
