@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
+    # do not set sticky bit in nix store
     substituteInPlace Makefile.in \
       --replace "-o root" "" \
       --replace 04755 755
