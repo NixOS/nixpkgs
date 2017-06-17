@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
+      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
     wrapQtProgram $out/bin/qtcreator
   '';
 
