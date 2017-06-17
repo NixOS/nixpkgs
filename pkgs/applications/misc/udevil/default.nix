@@ -8,6 +8,7 @@ stdenv.mkDerivation {
   buildInputs = [ intltool glib pkgconfig udev ];
   configurePhase = ''
     substituteInPlace src/Makefile.in --replace "-o root -g root" ""
+    # do not set setuid bit in nix store
     substituteInPlace src/Makefile.in --replace 4755 0755
     ./configure \
       --prefix=$out \
