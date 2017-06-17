@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-caja" ];
   
   meta = {
-    description = "Atril is a simple multi-page document viewer for the MATE desktop";
+    description = "A simple multi-page document viewer for the MATE desktop";
     homepage = "http://mate-desktop.org";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
