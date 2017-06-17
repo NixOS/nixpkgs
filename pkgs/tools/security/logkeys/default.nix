@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/Makefile.in --replace 'root' '$(id -u)'
     substituteInPlace configure --replace '/dev/input' '/tmp'
+    sed -i '/chmod u+s/d' src/Makefile.in
  '';
 
   meta = with stdenv.lib; {
