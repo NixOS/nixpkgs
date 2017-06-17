@@ -3,10 +3,11 @@
 rec {
   lib = import ../development/beam-modules/lib.nix { inherit pkgs; };
 
+  # Each
   interpreters = rec {
 
-    # R18 is the Default version.
-    erlang = erlangR18;
+    # R18 is the default version.
+    erlang = erlangR18; # The main switch to change default Erlang version.
     erlang_odbc = erlangR18_odbc;
     erlang_javac = erlangR18_javac;
     erlang_odbc_javac = erlangR18_odbc_javac;
@@ -44,22 +45,24 @@ rec {
       odbcSupport = true;
     };
 
-    # Other Beam languages.
+    # Other Beam languages. These are built with beam.interpreters.erlang.
     elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
     lfe = callPackage ../development/interpreters/lfe { };
   };
 
+  # Helper function to generate package set with a specific Erlang version.
+  packagesWith = erlang: callPackage ../development/beam-modules { inherit erlang; };
+
+  # Each field in this tuple represents all Beam packages in nixpkgs built with
+  # appropriate Erlang/OTP version.
   packages = rec {
-    rebar = callPackage ../development/tools/build-managers/rebar { };
-    rebar3-open = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = false; };
-    rebar3 = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = true; };
-    hexRegistrySnapshot = callPackage ../development/beam-modules/hex-registry-snapshot.nix { };
-    fetchHex = callPackage ../development/beam-modules/fetch-hex.nix { };
 
-    beamPackages = callPackage ../development/beam-modules { };
-    hex2nix = beamPackages.callPackage ../development/tools/erlang/hex2nix { };
-    cuter = callPackage ../development/tools/erlang/cuter { };
+    # Packages built with default Erlang version.
+    erlang = packagesWith interpreters.erlang;
+    erlangR16 = packagesWith interpreters.erlangR16;
+    erlangR17 = packagesWith interpreters.erlangR17;
+    erlangR18 = packagesWith interpreters.erlangR18;
+    erlangR19 = packagesWith interpreters.erlangR19;
 
-    relxExe = callPackage ../development/tools/erlang/relx-exe {};
   };
 }
