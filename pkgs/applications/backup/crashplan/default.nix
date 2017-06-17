@@ -7,12 +7,10 @@ let
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}-r${rev}";
 
-  crashPlanArchive = fetchurl {
+  src = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
     sha256 = "0wh8lcm06ilcyncnp4ckg4yhyf9z3gb6v1kr111j4bpgmnd0v1yf";
   };
-
-  srcs = [ crashPlanArchive ];
 
   meta = with stdenv.lib; {
     description = "An online/offline backup solution";
@@ -31,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    zcat -v CrashPlan_${version}.cpi | (cd $out; cpio -i -d -v --no-preserve-owner)
+    zcat -v CrashPlan_*.cpi | (cd $out; cpio -i -d -v --no-preserve-owner)
 
     # sed -i "s|<manifestPath>manifest</manifestPath>|<manifestPath>${manifestdir}</manifestPath>|g" $out/conf/default.service.xml
 
