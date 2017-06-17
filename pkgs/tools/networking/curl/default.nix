@@ -21,11 +21,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.54.0";
+  name = "curl-7.54.1";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "01pz0air8xiwiww981z94980zgcbz8482jxy6b6afzsh7ksbl3pm";
+    sha256 = "1815iz5a7qghipjcl7s97hk4jqh4f3kqc487xi20rvh1s3r4vz7x";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
