@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
+    # do not set sticky bit in nix store.
     substituteInPlace Makefile --replace 2750 0750
   '';
 
