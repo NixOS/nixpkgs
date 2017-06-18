@@ -1,6 +1,7 @@
 {stdenv, git, cacert}: let
   urlToName = url: rev: let
-    base = baseNameOf (stdenv.lib.removeSuffix "/" url);
+    inherit (stdenv.lib) removeSuffix splitString last;
+    base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
     matched = builtins.match "(.*).git" base;
 
