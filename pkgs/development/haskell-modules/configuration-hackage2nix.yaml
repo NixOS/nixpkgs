@@ -740,7 +740,7 @@ default-package-overrides:
   - ghc-mod ==5.7.0.0
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.3.0.2
-  - ghc-syb-utils ==0.2.3.1
+  - ghc-syb-utils < 0.3
   - ghc-tcplugins-extra ==0.2
   - ghc-typelits-extra ==0.2.3
   - ghc-typelits-knownnat ==0.2.4
