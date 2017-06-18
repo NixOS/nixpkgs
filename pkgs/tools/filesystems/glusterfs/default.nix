@@ -26,6 +26,10 @@ rec {
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 
+  postPatch = ''
+    sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
+  '';
+
   preConfigure = ''
     ./autogen.sh
     '';
