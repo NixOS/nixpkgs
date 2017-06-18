@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
-  buildInputs = [ libffi gmp ] ++
-    stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  buildInputs = [ libffi gmp ];
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   configureFlags = [
     "--enable-shared"
