@@ -10,6 +10,11 @@ let
 
   confFile = pkgs.writeText "named.conf"
     ''
+      include "/etc/bind/rndc.key";
+      controls {
+        inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+      };
+
       acl cachenetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
       acl badnetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
@@ -167,11 +172,21 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
+        mkdir -m 0755 -p /etc/bind
+        if ! [ -f "/etc/bind/rndc.key" ]; then
+          ${pkgs.bind.out}/sbin/rndc-confgen -r /dev/urandom -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+        fi
+
         ${pkgs.coreutils}/bin/mkdir -p /var/run/named
         chown ${bindUser} /var/run/named
       '';
 
-      script = "${pkgs.bind.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+      serviceConfig = {
+        ExecStart  = "${pkgs.bind.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+        ExecReload = "${pkgs.bind.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
+        ExecStop   = "${pkgs.bind.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+      };
+
       unitConfig.Documentation = "man:named(8)";
     };
   };
