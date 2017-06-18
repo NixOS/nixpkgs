@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gmp, libffi }:
 
 stdenv.mkDerivation rec {
   name = "polyml-${version}";
@@ -8,7 +8,14 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  buildInputs = [ libffi gmp ] ++
+    stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+
+  configureFlags = [
+    "--enable-shared"
+    "--with-system-libffi"
+    "--with-gmp"
+  ];
 
   src = fetchFromGitHub {
     owner = "polyml";
