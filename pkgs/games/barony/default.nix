@@ -21,11 +21,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DFMOD_ENABLED=OFF" "-DOPENAL_ENABLED=ON" ];
 
-  buildPhase = "make barony";
-
   installPhase = ''
     mkdir -p $out/bin
     cp barony $out/bin
+    cp editor $out/bin/barony-editor
   '';
 
   patches = [
