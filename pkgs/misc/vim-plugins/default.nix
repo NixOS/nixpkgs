@@ -5,7 +5,7 @@
 , python3, boost, icu
 , ycmd
 , pythonPackages, python3Packages
-, Cocoa ? null
+, Cocoa ? null, git
 }:
 
 let
@@ -1775,11 +1775,10 @@ rec {
       sha256 = "15wil973sqfgvix9li15qk49kv9l3rn8zqis2cl71k6xh1xvd9ff";
     };
     dependencies = [];
-    buildInputs = [ perl ruby ];
+    buildInputs = [ perl ruby git ];
     buildPhase = ''
       pushd ruby/command-t
-      ruby extconf.rb
-      make
+      gem build ./command-t.gemspec
       popd
     '';
   };
