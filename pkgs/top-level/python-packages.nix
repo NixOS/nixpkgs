@@ -12382,6 +12382,9 @@ in {
     };
   };
 
+  journalwatch = callPackage ../tools/system/journalwatch {
+    inherit (self) systemd pytest;
+  };
 
   jrnl = buildPythonPackage rec {
     name = "jrnl-1.9.7";
