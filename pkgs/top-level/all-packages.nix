@@ -7161,7 +7161,7 @@ with pkgs;
     inherit (gnu) mig;
   };
 
-  gdbGuile = lowPrio (gdb.override { inherit guile; broken = true; });
+  gdbGuile = lowPrio (gdb.override { inherit guile; });
 
   gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
 
