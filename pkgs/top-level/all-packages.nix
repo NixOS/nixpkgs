@@ -6791,6 +6791,7 @@ with pkgs;
   gradle = self.gradleGen.gradle_latest;
   gradle_2_14 = self.gradleGen.gradle_2_14;
   gradle_2_5 = self.gradleGen.gradle_2_5;
+  gradle_3_5 = self.gradleGen.gradle_3_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -11547,9 +11548,7 @@ with pkgs;
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb {
-    gcc = gcc6; # needs gcc 6.0 and above
-  };
+  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_1; # conky can use 5.2, but toluapp can not
@@ -15541,6 +15540,8 @@ with pkgs;
 
   # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
   qsyncthingtray = libsForQt56.callPackage ../applications/misc/qsyncthingtray { };
+
+  qstopmotion = callPackage ../applications/video/qstopmotion { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 

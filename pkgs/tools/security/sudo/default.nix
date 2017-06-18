@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "07fvh8qy0l1h93lccc625f48d8yp0pkp5rjjykq13pb07ar0x64y";
   };
 
+  prePatch = ''
+    # do not set sticky bit in nix store
+    substituteInPlace src/Makefile.in --replace 04755 0755
+  '';
+
   configureFlags = [
     "--with-env-editor"
     "--with-editor=/run/current-system/sw/bin/nano"

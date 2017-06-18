@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  prePatch = ''
+    substituteInPlace Makefile.in --replace 4755 0755
+  '';
+
   preConfigure = ''
     sed -e 's/getline/my_getline/' -i score.c
 
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
     cat >>config.h <<EOF
     #define HERE "@nixos-packaged"
     #define WWW 0
-    #define OWNER "'$(whoami)'"
+    #define OWNER "$(whoami)"
     #define ROOTDIR "$out/lib/xsokoban"
     #define ANYLEVEL 1
     #define SCOREFILE ".xsokoban-score"
