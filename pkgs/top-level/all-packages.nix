@@ -1059,6 +1059,8 @@ with pkgs;
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
+  ps_mem = callPackage ../tools/system/ps_mem { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   staccato = callPackage ../tools/text/staccato { };
