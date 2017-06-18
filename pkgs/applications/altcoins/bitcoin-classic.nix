@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "bitcoinclassic";
     repo = "bitcoinclassic";
     rev = "v${version}";
-    sha256 = "1z6g930csvx49krl34207yqwlr8dkxpi72k3msh15p1kjvv90nvz";
+    sha256 = "00spils0gv8krx2nyxrf6j1dl81wmxk8xjkqc22cv7nsdnakzrvm";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
 
-      Bitcoin Classic stands for the original Bitcoin as Satoshi described it, 
-      "A Peer-to-Peer Electronic Cash System". We are writing the software that 
+      Bitcoin Classic stands for the original Bitcoin as Satoshi described it,
+      "A Peer-to-Peer Electronic Cash System". We are writing the software that
       miners and users say they want. We will make sure it solves their needs, help
-      them deploy it, and gracefully upgrade the bitcoin network's capacity 
+      them deploy it, and gracefully upgrade the bitcoin network's capacity
       together. The data shows that Bitcoin can grow, on-chain, to welcome many
-      more users onto our coin in a safe and distributed manner. In the future we 
+      more users onto our coin in a safe and distributed manner. In the future we
       will continue to release updates that are in line with Satoshi’s whitepaper &
       vision, and are agreed upon by the community.
     '';
