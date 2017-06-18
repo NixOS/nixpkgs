@@ -170,6 +170,9 @@ let
             ssl_certificate ${vhost.sslCertificate};
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
+          ${optionalString vhost.forceSSL ''
+            add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+          ''}
 
           ${optionalString (vhost.basicAuth != {}) (mkBasicAuth vhostName vhost.basicAuth)}
 
