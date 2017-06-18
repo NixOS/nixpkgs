@@ -146,7 +146,7 @@ make_symlink(Path, TargetFile) ->
 
 %% @doc
 %% This takes an app name in the standard OTP <name>-<version> format
-%% and returns just the app name. Why? because rebar doesn't
+%% and returns just the app name. Why? Because rebar doesn't
 %% respect OTP conventions in some cases.
 -spec fixup_app_name(string()) -> string().
 fixup_app_name(FileName) ->
