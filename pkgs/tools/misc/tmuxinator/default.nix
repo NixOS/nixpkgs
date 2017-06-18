@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "0.8.1";
-  sha256 = "1cpmlfa684j9r1hjya70nfcl5lzdbzmbi9hqbs5nhxha97b77qs5";
+  version = "0.9.0";
+  sha256 = "13p8rvf1naknjin1n97370ifyj475lyyh60cbw2v6gczi9rs84p3";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -33,7 +33,7 @@ buildRubyGem rec {
     description = "Manage complex tmux sessions easily";
     homepage    = https://github.com/tmuxinator/tmuxinator;
     license     = licenses.mit;
-    maintainers = with maintainers; [ auntie ];
+    maintainers = with maintainers; [ auntie ericsagnes ];
     platforms   = platforms.unix;
   };
 }
