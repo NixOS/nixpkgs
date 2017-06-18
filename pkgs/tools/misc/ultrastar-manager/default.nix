@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
-, qtbase, qtmultimedia, makeQtWrapper
-, taglib, libmediainfo, libzen, libbass }:
+, qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
 
 let
   version = "2017-05-24";
@@ -109,7 +108,7 @@ in stdenv.mkDerivation {
     make install
   '';
 
-  nativeBuildInputs = [ makeQtWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   inherit buildInputs;
 
   meta = with stdenv.lib; {
