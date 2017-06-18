@@ -132,6 +132,9 @@ let
         :l; n; bl
       }' gpu/config/gpu_control_list.cc
 
+      # Allow to put extensions into the system-path.
+      sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+
       patchShebangs .
       # use our own nodejs
       mkdir -p third_party/node/linux/node-linux-x64/bin
