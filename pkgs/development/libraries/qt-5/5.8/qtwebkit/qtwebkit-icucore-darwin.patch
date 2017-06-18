@@ -1,0 +1,13 @@
+Index: qtwebkit-opensource-src-5.8.0/Source/WTF/WTF.pri
+===================================================================
+--- qtwebkit-opensource-src-5.8.0.orig/Source/WTF/WTF.pri
++++ qtwebkit-opensource-src-5.8.0/Source/WTF/WTF.pri
+@@ -12,7 +12,7 @@ mac {
+     # Mac OS does ship libicu but not the associated header files.
+     # Therefore WebKit provides adequate header files.
+     INCLUDEPATH = $${ROOT_WEBKIT_DIR}/Source/WTF/icu $$INCLUDEPATH
+-    LIBS += -licucore
++    LIBS += /usr/lib/libicucore.dylib
+ } else:!use?(wchar_unicode): {
+     win32 {
+         CONFIG(static, static|shared) {

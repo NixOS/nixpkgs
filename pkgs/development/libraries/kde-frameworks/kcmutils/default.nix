@@ -1,15 +1,18 @@
-{ kdeFramework, lib, extra-cmake-modules, kconfigwidgets
-, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews
-, kpackage, kservice, kxmlgui
+{
+  mkDerivation, lib, copyPathsToStore,
+  extra-cmake-modules,
+  kconfigwidgets, kcoreaddons, kdeclarative, ki18n, kiconthemes, kitemviews,
+  kpackage, kservice, kxmlgui, qtdeclarative,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kcmutils";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [
-    kconfigwidgets kcoreaddons kdeclarative ki18n kiconthemes kitemviews
-    kpackage kservice kxmlgui
+  buildInputs = [
+    kcoreaddons kdeclarative ki18n kiconthemes kitemviews kpackage kxmlgui
+    qtdeclarative
   ];
-  patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
+  propagatedBuildInputs = [ kconfigwidgets kservice ];
+  patches = (copyPathsToStore (lib.readPathsFromFile ./. ./series));
 }

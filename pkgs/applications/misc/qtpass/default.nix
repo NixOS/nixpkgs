@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, gnupg, makeQtWrapper, pass, qtbase, qtsvg, qttools, qmakeHook }:
+{ stdenv, fetchFromGitHub, git, gnupg, pass, qtbase, qtsvg, qttools, qmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ makeWrapper qmake ];
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags CONFIG+=release DESTDIR=$out"
+    qmakeFlags="$qmakeFlags DESTDIR=$out"
   '';
 
   installPhase = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapQtProgram $out/bin/qtpass \
+    wrapProgram $out/bin/qtpass \
       --suffix PATH : ${git}/bin \
       --suffix PATH : ${gnupg}/bin \
       --suffix PATH : ${pass}/bin

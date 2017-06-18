@@ -1,28 +1,15 @@
-{ stdenv, qtSubmodule, makeQtWrapper, copyPathsToStore, qtbase }:
+{ stdenv, qtSubmodule, copyPathsToStore, qtbase }:
 
 with stdenv.lib;
 
 qtSubmodule {
   name = "qttools";
   qtInputs = [ qtbase ];
-  nativeBuildInputs = [ makeQtWrapper ];
-
+  outputs = [ "out" "dev" "bin" ];
   patches = copyPathsToStore (readPathsFromFile ./. ./series);
+  # qmake moves all binaries to $dev in preFixup
   postFixup = ''
-    moveToOutput "bin/qdbus" "$out"
-    moveToOutput "bin/qtpaths" "$out"
-  '';
-
-  postInstall =   ''
-    wrapQtProgram $out/bin/qcollectiongenerator
-    wrapQtProgram $out/bin/qhelpconverter
-    wrapQtProgram $out/bin/qhelpgenerator
-    wrapQtProgram $out/bin/qtdiag
-  '' + optionalString (stdenv.isDarwin) ''
-    wrapQtProgram $out/bin/Assistant.app/Contents/MacOS/Assistant
-    wrapQtProgram $out/bin/Designer.app/Contents/MacOS/Designer
-    wrapQtProgram $out/bin/Linguist.app/Contents/MacOS/Linguist
-    wrapQtProgram $out/bin/pixeltool.app/Contents/MacOS/pixeltool
-    wrapQtProgram $out/bin/qdbusviewer.app/Contents/MacOS/qdbusviewer
+    moveToOutput "bin/qdbus" "$bin"
+    moveToOutput "bin/qtpaths" "$bin"
   '';
 }

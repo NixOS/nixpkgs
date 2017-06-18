@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchgit, qtbase, qtx11extras, qmakeHook, pkgconfig, boost }:
+{ fetchurl, stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
   name = "twmn-git-2014-09-23";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a68gka9gyxyzhc9rn8df59rzcdwkjw90cxp1kk0rdfp6svhxhsa";
   };
 
-  buildInputs = [ qtbase qtx11extras pkgconfig boost qmakeHook ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ qtbase qtx11extras boost ];
 
   postPatch = ''
     sed -i s/-Werror// twmnd/twmnd.pro

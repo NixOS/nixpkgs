@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libudev, pkgconfig, qtbase, qmakeHook, zlib }:
+{ stdenv, fetchFromGitHub, libudev, pkgconfig, qtbase, qmake, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.2.6";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    qmakeHook
+    qmake
   ];
 
   patches = [

@@ -1,15 +1,15 @@
 {
-  kdeApp, lib,
-  extra-cmake-modules, ki18n,
-  kcoreaddons, kconfig, kcodecs
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kcoreaddons, kconfig, kcodecs, ki18n, qtbase,
 }:
 
-kdeApp {
+mkDerivation {
   name = "kcontacts";
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [ extra-cmake-modules ki18n ];
-  buildInputs = [ kcoreaddons kconfig kcodecs ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ kcoreaddons kconfig kcodecs ki18n qtbase ];
 }

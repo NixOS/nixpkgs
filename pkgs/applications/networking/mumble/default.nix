@@ -20,7 +20,7 @@ let
     patches = optional jackSupport ./mumble-jack-support.patch;
 
     nativeBuildInputs = [ pkgconfig python ]
-      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmake ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
       ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
@@ -70,7 +70,7 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools qt5.makeQtWrapper ];
+    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools ];
     buildInputs = [ libopus libsndfile speex ]
       ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
@@ -91,10 +91,6 @@ let
       mkdir -p $out/share/icons{,/hicolor/scalable/apps}
       cp icons/mumble.svg $out/share/icons
       ln -s $out/share/icon/mumble.svg $out/share/icons/hicolor/scalable/apps
-
-      ${optionalString (source.qtVersion == 5) ''
-        wrapQtProgram $out/bin/mumble
-      ''}
     '';
   } source;
 

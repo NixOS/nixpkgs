@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, vlc
 , withQt4 ? false, qt4
-, withQt5 ? true, qtbase, qtsvg, qttools, makeQtWrapper
+, withQt5 ? true, qtbase, qtsvg, qttools
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
 # default for now until I (or someone else) figure it out.
@@ -63,8 +63,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional withMusicbrainz libmusicbrainz5
     ++ stdenv.lib.optional (withTaglib && withDevices) udisks2;
 
-  nativeBuildInputs = stdenv.lib.optional withQt5 makeQtWrapper;
-
   cmakeFlags = stdenv.lib.flatten [
     (fstat withQt5 "QT5")
     (fstats withTaglib [ "TAGLIB" "TAGLIB_EXTRAS" ])
@@ -86,10 +84,6 @@ stdenv.mkDerivation rec {
   # This is already fixed upstream but not released yet. Maybe in version 2.
   preConfigure = ''
     sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/FindTaglib.cmake
-  '';
-
-  postInstall = stdenv.lib.optionalString withQt5 ''
-    wrapQtProgram "$out/bin/cantata"
   '';
 
   meta = with stdenv.lib; {

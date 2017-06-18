@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, makeWrapper, makeQtWrapper
+{ mkDerivation, stdenv, lib, fetchurl, makeDesktopItem
+, makeWrapper, patchelf
 , dbus_libs, fontconfig, freetype, gcc, glib
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
@@ -58,7 +59,7 @@ let
     startupNotify = "false";
   };
 
-in stdenv.mkDerivation {
+in mkDerivation {
   name = "dropbox-${version}";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
@@ -68,7 +69,7 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".dropbox-dist";
 
-  nativeBuildInputs = [ makeQtWrapper patchelf ];
+  nativeBuildInputs = [ makeWrapper patchelf ];
   dontStrip = true; # already done
 
   installPhase = ''
@@ -94,7 +95,7 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
-    makeQtWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
+    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
     chmod 755 $out/${appdir}/dropbox
@@ -137,8 +138,8 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

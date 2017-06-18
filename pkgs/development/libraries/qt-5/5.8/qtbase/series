@@ -2,9 +2,9 @@ dlopen-resolv.patch
 tzdir.patch
 dlopen-libXcursor.patch
 xdg-config-dirs.patch
-nix-profiles-library-paths.patch
+library-paths.patch
 libressl.patch
-qpa-platform-plugin-path.patch
 dlopen-gl.patch
 compose-search-path.patch
 cmake-paths.patch
+qgtk-env.patch

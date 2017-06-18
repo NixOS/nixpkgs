@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, which, makeQtWrapper,
-  libtool, openssl, qtbase, qttools }:
+{ mkDerivation, lib, fetchurl, pkgconfig, which
+, libtool, openssl, qtbase, qttools }:
 
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "xca-${version}";
   version = "1.3.2";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtool openssl qtbase qttools ];
 
-  nativeBuildInputs = [ makeQtWrapper pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig which ];
 
   configureFlags = [ "CXXFLAGS=-std=c++11" ];
 
@@ -26,12 +26,7 @@ stdenv.mkDerivation rec {
       --replace ${qtbase}/bin/uic ${qtbase.dev}/bin/uic
   '';
 
-  postInstall = ''
-    wrapQtProgram "$out/bin/xca"
-    wrapQtProgram "$out/bin/xca_db_stat"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interface for managing asymetric keys like RSA or DSA";
     homepage = http://xca.sourceforge.net/;
     platforms = platforms.all;

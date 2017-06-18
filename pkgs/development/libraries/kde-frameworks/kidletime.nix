@@ -1,15 +1,16 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, qtbase
-, qtx11extras
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  qtbase, qtx11extras
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kidletime";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
     broken = builtins.compareVersions qtbase.version "5.6.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ qtbase qtx11extras ];
+  buildInputs = [ qtx11extras ];
+  propagatedBuildInputs = [ qtbase ];
 }

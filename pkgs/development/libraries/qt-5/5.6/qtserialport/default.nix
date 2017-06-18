@@ -1,12 +1,12 @@
-{ qtSubmodule, qtbase, substituteAll, systemd }:
+{ stdenv, qtSubmodule, lib, copyPathsToStore, qtbase, substituteAll, systemd }:
+
+let inherit (lib) getLib optional; in
 
 qtSubmodule {
   name = "qtserialport";
   qtInputs = [ qtbase ];
-  patches = [
-    (substituteAll {
-      src = ./0001-dlopen-serialport-udev.patch;
-      libudev = systemd.lib;
-    })
-  ];
+  patches =  copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  NIX_CFLAGS_COMPILE =
+    optional stdenv.isLinux
+    ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
 }

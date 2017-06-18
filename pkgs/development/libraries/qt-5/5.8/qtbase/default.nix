@@ -1,13 +1,13 @@
 {
   stdenv, lib, copyPathsToStore,
-  src, version,
+  src, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
   ruby,
   # darwin support
   darwin, libiconv, libcxx,
 
-  dbus, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
+  dbus, dconf, fontconfig, freetype, glib, gtk3, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xlibs,
@@ -32,7 +32,7 @@ in
 stdenv.mkDerivation {
 
   name = "qtbase-${version}";
-  inherit src version;
+  inherit qtCompatVersion src version;
 
   propagatedBuildInputs =
     [
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     [ bison flex gperf lndir perl pkgconfig python2 ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" ];
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series);
@@ -117,18 +117,21 @@ stdenv.mkDerivation {
      # Note on the above: \x27 is a way if including a single-quote
      # character in the sed string arguments.
 
+  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
 
     configureFlags+="\
-        -plugindir $out/lib/qt5/plugins \
-        -importdir $out/lib/qt5/imports \
-        -qmldir $out/lib/qt5/qml \
-        -docdir $out/share/doc/qt5"
+        -plugindir $out/$qtPluginPrefix \
+        -qmldir $out/$qtQmlPrefix \
+        -docdir $out/$qtDocPrefix"
 
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/lib/qt5/plugins/platforms\""
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
   '';
 
 
@@ -142,6 +145,12 @@ stdenv.mkDerivation {
 
     ++ lib.optional mesaSupported
        ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+
+    ++ lib.optionals (!stdenv.isDarwin)
+    [
+      ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+      ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+    ]
 
     ++ lib.optionals stdenv.isDarwin
     [
@@ -254,29 +263,33 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    find "$out" -name "*.cmake" | while read file; do
-        substituteInPlace "$file" \
-            --subst-var-by NIX_OUT "$out" \
-            --subst-var-by NIX_DEV "$dev"
-    done
-  '';
+  postInstall =
+    # Hardcode some CMake module paths.
+    ''
+      find "$out" -name "*.cmake" | while read file; do
+          substituteInPlace "$file" \
+              --subst-var-by NIX_OUT "''${!outputLib}" \
+              --subst-var-by NIX_DEV "''${!outputDev}" \
+              --subst-var-by NIX_BIN "''${!outputBin}"
+      done
+    '';
 
-  preFixup = ''
-    # We cannot simply set these paths in configureFlags because libQtCore retains
-    # references to the paths it was built with.
-    moveToOutput "bin" "$dev"
-    moveToOutput "include" "$dev"
-    moveToOutput "mkspecs" "$dev"
+  preFixup =
+    # Move selected outputs.
+    ''
+      moveToOutput "bin" "$dev"
+      moveToOutput "include" "$dev"
+      moveToOutput "mkspecs" "$dev"
 
-    # The destination directory must exist or moveToOutput will do nothing
-    mkdir -p "$dev/share"
-    moveToOutput "share/doc" "$dev"
-  '';
+      mkdir -p "$dev/share"
+      moveToOutput "share/doc" "$dev"
+
+      moveToOutput "$qtPluginPrefix" "$bin"
+    '';
 
   postFixup =
+    # Don't retain build-time dependencies like gdb.
     ''
-      # Don't retain build-time dependencies like gdb.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
     ''
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmakeHook, qtscript, qtwebkit }:
+{ stdenv, fetchurl, qmake, qtscript, qtwebkit }:
 
 stdenv.mkDerivation rec {
   version = "17.5.0";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  buildInputs = [ qmakeHook qtscript qtwebkit ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtscript qtwebkit ];
 
   meta = with stdenv.lib; {
     description = "Play and download Youtube videos";

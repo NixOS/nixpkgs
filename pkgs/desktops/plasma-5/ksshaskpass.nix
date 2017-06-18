@@ -1,9 +1,11 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, kcoreaddons
-, ki18n, kwallet, kwidgetsaddons
+{
+  mkDerivation,
+  extra-cmake-modules, kdoctools,
+  kcoreaddons, ki18n, kwallet, kwidgetsaddons, qtbase,
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "ksshaskpass";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [ kcoreaddons ki18n kwallet kwidgetsaddons ];
+  buildInputs = [ kcoreaddons ki18n kwallet kwidgetsaddons qtbase ];
 }

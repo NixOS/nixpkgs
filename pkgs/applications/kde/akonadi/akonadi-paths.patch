@@ -1,0 +1,191 @@
+Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
+===================================================================
+--- akonadi-17.04.0.orig/src/server/storage/dbconfigmysql.cpp
++++ akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
+@@ -63,7 +63,6 @@ bool DbConfigMysql::init(QSettings &sett
+     // determine default settings depending on the driver
+     QString defaultHostName;
+     QString defaultOptions;
+-    QString defaultServerPath;
+     QString defaultCleanShutdownCommand;
+ 
+ #ifndef Q_OS_WIN
+@@ -71,25 +70,8 @@ bool DbConfigMysql::init(QSettings &sett
+ #endif
+ 
+     const bool defaultInternalServer = true;
+-#ifdef MYSQLD_EXECUTABLE
+-    if (QFile::exists(QStringLiteral(MYSQLD_EXECUTABLE))) {
+-        defaultServerPath = QStringLiteral(MYSQLD_EXECUTABLE);
+-    }
+-#endif
+-    const QStringList mysqldSearchPath = QStringList()
+-                                         << QStringLiteral("/usr/bin")
+-                                         << QStringLiteral("/usr/sbin")
+-                                         << QStringLiteral("/usr/local/sbin")
+-                                         << QStringLiteral("/usr/local/libexec")
+-                                         << QStringLiteral("/usr/libexec")
+-                                         << QStringLiteral("/opt/mysql/libexec")
+-                                         << QStringLiteral("/opt/local/lib/mysql5/bin")
+-                                         << QStringLiteral("/opt/mysql/sbin");
+-    if (defaultServerPath.isEmpty()) {
+-        defaultServerPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqld"), mysqldSearchPath);
+-    }
+ 
+-    const QString mysqladminPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqladmin"), mysqldSearchPath);
++    const QString mysqladminPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLADMIN);
+     if (!mysqladminPath.isEmpty()) {
+ #ifndef Q_OS_WIN
+         defaultCleanShutdownCommand = QStringLiteral("%1 --defaults-file=%2/mysql.conf --socket=%3/mysql.socket shutdown")
+@@ -99,10 +81,10 @@ bool DbConfigMysql::init(QSettings &sett
+ #endif
+     }
+ 
+-    mMysqlInstallDbPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysql_install_db"), mysqldSearchPath);
++    mMysqlInstallDbPath = QStringLiteral(NIXPKGS_MYSQL_MYSQL_INSTALL_DB);
+     qCDebug(AKONADISERVER_LOG) << "Found mysql_install_db: " << mMysqlInstallDbPath;
+ 
+-    mMysqlCheckPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqlcheck"), mysqldSearchPath);
++    mMysqlCheckPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLCHECK);
+     qCDebug(AKONADISERVER_LOG) << "Found mysqlcheck: " << mMysqlCheckPath;
+ 
+     mInternalServer = settings.value(QStringLiteral("QMYSQL/StartServer"), defaultInternalServer).toBool();
+@@ -119,7 +101,7 @@ bool DbConfigMysql::init(QSettings &sett
+     mUserName = settings.value(QStringLiteral("User")).toString();
+     mPassword = settings.value(QStringLiteral("Password")).toString();
+     mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
+-    mMysqldPath = settings.value(QStringLiteral("ServerPath"), defaultServerPath).toString();
++    mMysqldPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLD);
+     mCleanServerShutdownCommand = settings.value(QStringLiteral("CleanServerShutdownCommand"), defaultCleanShutdownCommand).toString();
+     settings.endGroup();
+ 
+@@ -129,9 +111,6 @@ bool DbConfigMysql::init(QSettings &sett
+         // intentionally not namespaced as we are the only one in this db instance when using internal mode
+         mDatabaseName = QStringLiteral("akonadi");
+     }
+-    if (mInternalServer && (mMysqldPath.isEmpty() || !QFile::exists(mMysqldPath))) {
+-        mMysqldPath = defaultServerPath;
+-    }
+ 
+     qCDebug(AKONADISERVER_LOG) << "Using mysqld:" << mMysqldPath;
+ 
+@@ -140,9 +119,6 @@ bool DbConfigMysql::init(QSettings &sett
+     settings.setValue(QStringLiteral("Name"), mDatabaseName);
+     settings.setValue(QStringLiteral("Host"), mHostName);
+     settings.setValue(QStringLiteral("Options"), mConnectionOptions);
+-    if (!mMysqldPath.isEmpty()) {
+-        settings.setValue(QStringLiteral("ServerPath"), mMysqldPath);
+-    }
+     settings.setValue(QStringLiteral("StartServer"), mInternalServer);
+     settings.endGroup();
+     settings.sync();
+@@ -196,7 +172,7 @@ bool DbConfigMysql::startInternalServer(
+ #endif
+ 
+     // generate config file
+-    const QString globalConfig = XdgBaseDirs::findResourceFile("config", QStringLiteral("akonadi/mysql-global.conf"));
++    const QString globalConfig = QStringLiteral(NIX_OUT "/etc/xdg/akonadi/mysql-global.conf");
+     const QString localConfig  = XdgBaseDirs::findResourceFile("config", QStringLiteral("akonadi/mysql-local.conf"));
+     const QString actualConfig = StandardDirs::saveDir("data") + QLatin1String("/mysql.conf");
+     if (globalConfig.isEmpty()) {
+Index: akonadi-17.04.0/src/server/storage/dbconfigpostgresql.cpp
+===================================================================
+--- akonadi-17.04.0.orig/src/server/storage/dbconfigpostgresql.cpp
++++ akonadi-17.04.0/src/server/storage/dbconfigpostgresql.cpp
+@@ -58,7 +58,6 @@ bool DbConfigPostgresql::init(QSettings
+     // determine default settings depending on the driver
+     QString defaultHostName;
+     QString defaultOptions;
+-    QString defaultServerPath;
+     QString defaultInitDbPath;
+     QString defaultPgData;
+ 
+@@ -70,35 +69,7 @@ bool DbConfigPostgresql::init(QSettings
+ 
+     mInternalServer = settings.value(QStringLiteral("QPSQL/StartServer"), defaultInternalServer).toBool();
+     if (mInternalServer) {
+-        QStringList postgresSearchPath;
+-
+-#ifdef POSTGRES_PATH
+-        const QString dir(QStringLiteral(POSTGRES_PATH));
+-        if (QDir(dir).exists()) {
+-            postgresSearchPath << QStringLiteral(POSTGRES_PATH);
+-        }
+-#endif
+-        postgresSearchPath << QStringLiteral("/usr/sbin")
+-                           << QStringLiteral("/usr/local/sbin");
+-        // Locale all versions in /usr/lib/postgresql (i.e. /usr/lib/postgresql/X.Y) in reversed
+-        // sorted order, so we search from the newest one to the oldest.
+-        QStringList postgresVersionedSearchPaths;
+-        QDir versionedDir(QStringLiteral("/usr/lib/postgresql"));
+-        if (versionedDir.exists()) {
+-            const auto versionedDirs = versionedDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::Reversed);
+-            for (const auto &path : versionedDirs) {
+-                // Don't break once PostgreSQL 10 is released, but something more future-proof will be needed
+-                if (path.fileName().startsWith(QLatin1String("10."))) {
+-                    postgresVersionedSearchPaths.prepend(path.absoluteFilePath() + QStringLiteral("/bin"));
+-                } else {
+-                    postgresVersionedSearchPaths.append(path.absoluteFilePath() + QStringLiteral("/bin"));
+-                }
+-            }
+-        }
+-        postgresSearchPath.append(postgresVersionedSearchPaths);
+-
+-        defaultServerPath = XdgBaseDirs::findExecutableFile(QStringLiteral("pg_ctl"), postgresSearchPath);
+-        defaultInitDbPath = XdgBaseDirs::findExecutableFile(QStringLiteral("initdb"), postgresSearchPath);
++        defaultInitDbPath = QStringLiteral(NIXPKGS_POSTGRES_INITDB);
+         defaultHostName = Utils::preferredSocketDirectory(StandardDirs::saveDir("data", QStringLiteral("db_misc")));
+         defaultPgData = StandardDirs::saveDir("data", QStringLiteral("db_data"));
+     }
+@@ -118,10 +89,7 @@ bool DbConfigPostgresql::init(QSettings
+     mUserName = settings.value(QStringLiteral("User")).toString();
+     mPassword = settings.value(QStringLiteral("Password")).toString();
+     mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
+-    mServerPath = settings.value(QStringLiteral("ServerPath"), defaultServerPath).toString();
+-    if (mInternalServer && mServerPath.isEmpty()) {
+-        mServerPath = defaultServerPath;
+-    }
++    mServerPath = QStringLiteral(NIXPKGS_POSTGRES_PG_CTL);
+     qCDebug(AKONADISERVER_LOG) << "Found pg_ctl:" << mServerPath;
+     mInitDbPath = settings.value(QStringLiteral("InitDbPath"), defaultInitDbPath).toString();
+     if (mInternalServer && mInitDbPath.isEmpty()) {
+@@ -142,7 +110,6 @@ bool DbConfigPostgresql::init(QSettings
+         settings.setValue(QStringLiteral("Port"), mHostPort);
+     }
+     settings.setValue(QStringLiteral("Options"), mConnectionOptions);
+-    settings.setValue(QStringLiteral("ServerPath"), mServerPath);
+     settings.setValue(QStringLiteral("InitDbPath"), mInitDbPath);
+     settings.setValue(QStringLiteral("StartServer"), mInternalServer);
+     settings.endGroup();
+Index: akonadi-17.04.0/src/akonadicontrol/agentprocessinstance.cpp
+===================================================================
+--- akonadi-17.04.0.orig/src/akonadicontrol/agentprocessinstance.cpp
++++ akonadi-17.04.0/src/akonadicontrol/agentprocessinstance.cpp
+@@ -62,7 +62,7 @@ bool AgentProcessInstance::start(const A
+     } else {
+         Q_ASSERT(agentInfo.launchMethod == AgentType::Launcher);
+         const QStringList arguments = QStringList() << executable << identifier();
+-        const QString agentLauncherExec = XdgBaseDirs::findExecutableFile(QStringLiteral("akonadi_agent_launcher"));
++        const QString agentLauncherExec = QStringLiteral(NIX_OUT "/bin/akonadi_agent_launcher");
+         mController->start(agentLauncherExec, arguments);
+     }
+     return true;
+Index: akonadi-17.04.0/src/akonadicontrol/agentmanager.cpp
+===================================================================
+--- akonadi-17.04.0.orig/src/akonadicontrol/agentmanager.cpp
++++ akonadi-17.04.0/src/akonadicontrol/agentmanager.cpp
+@@ -102,12 +102,12 @@ AgentManager::AgentManager(bool verbose,
+     mStorageController = new Akonadi::ProcessControl;
+     mStorageController->setShutdownTimeout(15 * 1000);   // the server needs more time for shutdown if we are using an internal mysqld
+     connect(mStorageController, &Akonadi::ProcessControl::unableToStart, this, &AgentManager::serverFailure);
+-    mStorageController->start(QStringLiteral("akonadiserver"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
++    mStorageController->start(QStringLiteral(NIX_OUT "/bin/akonadiserver"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
+ 
+     if (mAgentServerEnabled) {
+         mAgentServer = new Akonadi::ProcessControl;
+         connect(mAgentServer, &Akonadi::ProcessControl::unableToStart, this, &AgentManager::agentServerFailure);
+-        mAgentServer->start(QStringLiteral("akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
++        mAgentServer->start(QStringLiteral(NIX_OUT "/bin/akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
+     }
+ 
+ #ifndef QT_NO_DEBUG

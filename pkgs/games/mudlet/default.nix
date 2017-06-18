@@ -1,5 +1,5 @@
 { fetchurl, unzip, stdenv, makeWrapper, qtbase, yajl, libzip, hunspell
-, boost, lua5_1, luafilesystem, luazip, lrexlib, luasqlite3, qmakeHook }:
+, boost, lua5_1, luafilesystem, luazip, lrexlib, luasqlite3, qmake }:
 
 stdenv.mkDerivation rec {
   name = "mudlet-${version}";
@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "08fhqd323kgz5s17ac5z9dhkjxcmwvcmvhzy0x1vw4rayhijfrd7";
   };
 
+  nativeBuildInputs = [ makeWrapper qmake ];
   buildInputs = [
-    unzip qtbase lua5_1 hunspell libzip yajl boost makeWrapper
-    luafilesystem luazip lrexlib luasqlite3 qmakeHook
+    unzip qtbase lua5_1 hunspell libzip yajl boost
+    luafilesystem luazip lrexlib luasqlite3
   ];
 
   preConfigure = "cd src";

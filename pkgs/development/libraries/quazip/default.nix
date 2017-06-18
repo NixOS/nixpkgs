@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zip, zlib, qtbase, qmakeHook }:
+{ fetchurl, stdenv, zip, zlib, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
   name = "quazip-0.7.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   preConfigure = "cd quazip";
 
   buildInputs = [ zlib qtbase ];
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   meta = {
     description = "Provides access to ZIP archives from Qt programs";

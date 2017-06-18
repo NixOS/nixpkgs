@@ -9,7 +9,7 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
-  sddm = cfg.package;
+  inherit (pkgs) sddm;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
@@ -37,8 +37,8 @@ let
 
     [Theme]
     Current=${cfg.theme}
-    ThemeDir=${sddm}/share/sddm/themes
-    FacesDir=${sddm}/share/sddm/faces
+    ThemeDir=/run/current-system/sw/share/sddm/themes
+    FacesDir=/run/current-system/sw/share/sddm/faces
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -102,15 +102,6 @@ in
         default = "";
         description = ''
           Greeter theme to use.
-        '';
-      };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.sddm;
-        description = ''
-          The SDDM package to install.
-          The default package can be overridden to provide extra themes.
         '';
       };
 
@@ -205,7 +196,15 @@ in
     services.xserver.displayManager.job = {
       logsXsession = true;
 
-      execCmd = "exec ${sddm}/bin/sddm";
+      environment = {
+        # Load themes from system environment
+        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+
+        XDG_DATA_DIRS = "/run/current-system/sw/share";
+      };
+
+      execCmd = "exec /run/current-system/sw/bin/sddm";
     };
 
     security.pam.services = {
@@ -254,7 +253,8 @@ in
 
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
-    services.dbus.packages = [ sddm.unwrapped ];
+    environment.systemPackages = [ sddm ];
+    services.dbus.packages = [ sddm ];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

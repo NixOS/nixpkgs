@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qmakeHook, makeWrapper, libX11 }:
+{ stdenv, fetchFromGitHub, qtbase, qmake, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "cmst-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lsg8ya36df48ij0jawgli3f63hy6mn9zcla48whb1l4r7cih545";
   };
 
-  nativeBuildInputs = [ makeWrapper qmakeHook ];
+  nativeBuildInputs = [ makeWrapper qmake ];
 
   buildInputs = [ qtbase ];
 
