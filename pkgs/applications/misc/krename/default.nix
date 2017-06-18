@@ -6,15 +6,15 @@
 
 let
   pname = "krename";
-  version = "20161228";
+  version = "20170610";
   unwrapped = kdeDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchFromGitHub {
       owner  = "KDE";
       repo   = "krename";
-      rev    = "4e55c2bef50898eb4a6485ce068379b166121895";
-      sha256 = "09yz3sxy2l6radfybkj2f7224ggf315vnvyksk0aq8f03gan6cbp";
+      rev    = "18000edfec52de0b417d575e14eb078b4bd7b2f3";
+      sha256 = "0hsrlfrbi42jqqnkcz682c6yrfi3xpl299672knj22074wr6sv0j";
     };
 
     meta = with lib; {
