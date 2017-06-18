@@ -6,7 +6,7 @@ let
 
   cfg = config.services.confluence;
 
-  pkg = pkgs.atlassian-confluence.override {
+  pkg = pkgs.atlassian-confluence.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -21,7 +21,7 @@ let
       session.validationinterval              ${toString cfg.sso.validationInterval}
       session.lastvalidation                  session.lastvalidation
     '';
-  };
+  });
 
 in
 
