@@ -1,7 +1,9 @@
 { stdenv, pkgs, erlang, overrides ? (self: super: {}) }:
 
 let
-  inherit (stdenv.lib) fix' extends;
+  inherit (stdenv.lib) fix' extends getVersion versionAtLeast;
+
+  lib = pkgs.callPackage ./lib.nix {};
 
   # FIXME: add support for overrideScope
   callPackageWithScope = scope: drv: args: stdenv.lib.callPackageWith scope drv args;
@@ -34,12 +36,18 @@ let
         buildErlangMk = callPackage ./build-erlang-mk.nix {};
         buildMix = callPackage ./build-mix.nix {};
 
-        ## Non hex packages
+        # BEAM-based languages.
+        elixir = if versionAtLeast (lib.getVersion erlang) "18"
+                 then callPackage ../interpreters/elixir { debugInfo = true; }
+                 else throw "Elixir requires at least Erlang/OTP R18.";
+        lfe = callPackage ../interpreters/lfe { };
+
+        # Non hex packages
         hex = callPackage ./hex {};
         webdriver = callPackage ./webdriver {};
 
-        hex2nix = callPackage ../tools/erlang/hex2nix { };
-        cuter = callPackage ../tools/erlang/cuter { };
+        hex2nix = callPackage ../tools/erlang/hex2nix {};
+        cuter = callPackage ../tools/erlang/cuter {};
         relxExe = callPackage ../tools/erlang/relx-exe {};
       };
 in fix' (extends overrides packages)

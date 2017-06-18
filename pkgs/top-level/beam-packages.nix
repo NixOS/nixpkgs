@@ -1,7 +1,7 @@
 { pkgs, stdenv, callPackage, wxGTK30, darwin }:
 
 rec {
-  lib = import ../development/beam-modules/lib.nix { inherit pkgs; };
+  lib = callPackage ../development/beam-modules/lib.nix {};
 
   # Each
   interpreters = rec {
@@ -45,9 +45,11 @@ rec {
       odbcSupport = true;
     };
 
-    # Other Beam languages. These are built with beam.interpreters.erlang.
-    elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
-    lfe = callPackage ../development/interpreters/lfe { };
+    # Other Beam languages. These are built with `beam.interpreters.erlang`. To
+    # access for example elixir built with different version of Erlang, use
+    # `beam.packages.erlangR19.elixir`.
+    elixir = packages.erlang.elixir;
+    lfe = packages.erlang.lfe;
   };
 
   # Helper function to generate package set with a specific Erlang version.
