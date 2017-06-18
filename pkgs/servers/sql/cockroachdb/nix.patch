@@ -1,0 +1,74 @@
+diff --git a/Makefile b/Makefile
+index 3d71996bc..95d3d2151 100644
+--- a/Makefile
++++ b/Makefile
+@@ -114,16 +114,16 @@ build buildoss: BUILDMODE = build -i -o cockroach$(SUFFIX)$$($(XGO) env GOEXE)
+ 
+ # The build.utcTime format must remain in sync with TimeFormat in pkg/build/info.go.
+ build buildoss install: override LINKFLAGS += \
+-	-X "github.com/cockroachdb/cockroach/pkg/build.tag=$(shell cat .buildinfo/tag)" \
+-	-X "github.com/cockroachdb/cockroach/pkg/build.utcTime=$(shell date -u '+%Y/%m/%d %H:%M:%S')" \
+-	-X "github.com/cockroachdb/cockroach/pkg/build.rev=$(shell cat .buildinfo/rev)"
++	-X "github.com/cockroachdb/cockroach/pkg/build.tag=$(version)" \
++	-X "github.com/cockroachdb/cockroach/pkg/build.utcTime='70/01/01\ Jan:01:0'" \
++	-X "github.com/cockroachdb/cockroach/pkg/build.rev=$(buildRev)"
+ 
+ # Note: We pass `-v` to `go build` and `go test -i` so that warnings
+ # from the linker aren't suppressed. The usage of `-v` also shows when
+ # dependencies are rebuilt which is useful when switching between
+ # normal and race test builds.
+ .PHONY: build buildoss install
+-build buildoss install: $(C_LIBS) $(CGO_FLAGS_FILES) $(BOOTSTRAP_TARGET) .buildinfo/tag .buildinfo/rev
++build buildoss install: $(C_LIBS) $(CGO_FLAGS_FILES) $(BOOTSTRAP_TARGET)
+ 	 $(XGO) $(BUILDMODE) -v $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LINKFLAGS)' $(BUILDTARGET)
+ 
+ .PHONY: start
+@@ -264,24 +264,7 @@ $(ARCHIVE): $(ARCHIVE).tmp
+ # TODO(benesch): Make this recipe use `git ls-files --recurse-submodules`
+ # instead of scripts/ls-files.sh once Git v2.11 is widely deployed.
+ .INTERMEDIATE: $(ARCHIVE).tmp
+-$(ARCHIVE).tmp: ARCHIVE_BASE = cockroach-$(shell cat .buildinfo/tag)
+-$(ARCHIVE).tmp: .buildinfo/tag .buildinfo/rev
++$(ARCHIVE).tmp: ARCHIVE_BASE = cockroach-$$version
++$(ARCHIVE).tmp:
+ 	scripts/ls-files.sh | $(TAR) -cf $@ -T - $(TAR_XFORM_FLAG),^,$(ARCHIVE_BASE)/src/github.com/cockroachdb/cockroach/, $^
+ 	(cd build/archive/contents && $(TAR) -rf ../../../$@ $(TAR_XFORM_FLAG),^,$(ARCHIVE_BASE)/, *)
+-
+-.buildinfo:
+-	@mkdir -p $@
+-
+-.buildinfo/tag: | .buildinfo
+-	@{ git describe --tags --exact-match 2> /dev/null || git rev-parse --short HEAD; } | tr -d \\n > $@
+-	@git diff-index --quiet HEAD || echo -dirty >> $@
+-
+-.buildinfo/rev: | .buildinfo
+-	@git rev-parse HEAD > $@
+-
+-ifneq ($(GIT_DIR),)
+-# If we're in a Git checkout, we update the buildinfo information on every build
+-# to keep it up-to-date.
+-.buildinfo/tag: .ALWAYS_REBUILD
+-.buildinfo/rev: .ALWAYS_REBUILD
+-endif
+diff --git a/build/common.mk b/build/common.mk
+index ac8fb0841..647b0917d 100644
+--- a/build/common.mk
++++ b/build/common.mk
+@@ -32,7 +32,7 @@ PKG_ROOT := $(REPO_ROOT)/pkg
+ UI_ROOT  := $(PKG_ROOT)/ui
+ 
+ # Ensure we have an unambiguous GOPATH.
+-export GOPATH := $(realpath $(ORG_ROOT)/../../..)
++#export GOPATH := $(realpath $(ORG_ROOT)/../../..)
+ #                                       ^  ^  ^~ GOPATH
+ #                                       |  |~ GOPATH/src
+ #                                       |~ GOPATH/src/github.com
+@@ -71,7 +71,7 @@ ifeq ($(SHELL),)
+ $(error bash is required)
+ endif
+ 
+-GIT_DIR := $(shell git rev-parse --git-dir 2> /dev/null)
++#GIT_DIR := $(shell git rev-parse --git-dir 2> /dev/null)
+ 
+ # make-lazy converts a recursive variable, which is evaluated every time it's
+ # referenced, to a lazy variable, which is evaluated only the first time it's
