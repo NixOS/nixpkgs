@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin" "$out/bin"
   '';
 
-  postFixup = ''
+  preFixup = ''
     patchelf --set-rpath "$out/lib:$(patchelf --print-rpath $out/bin/.communi-wrapped)" $out/bin/.communi-wrapped
   '';
 
