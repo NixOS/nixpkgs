@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, openssl, db48, boost
-, zlib, miniupnpc, qt4, qmake4Hook, utillinux, protobuf, qrencode
+, zlib, qt4, qmake4Hook, utillinux, protobuf, qrencode
 , withGui }:
 
 with stdenv.lib;
@@ -13,8 +13,10 @@ stdenv.mkDerivation rec{
     sha256 = "0cixnkici74204s9d5iqj5sccib5a8dig2p2fp1axdjifpg787i3";
   };
 
-  buildInputs = [ pkgconfig openssl db48 boost zlib
-                  miniupnpc utillinux protobuf ]
+  qmakeFlags = ["USE_UPNP=-"];
+  makeFlags = ["USE_UPNP=-"];
+
+  buildInputs = [ pkgconfig openssl db48 boost zlib utillinux protobuf ]
                   ++ optionals withGui [ qt4 qmake4Hook qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
