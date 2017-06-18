@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, symlinkJoin, qmakeHook, diffPlugins
+{ stdenv, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
 , qtbase, qtmultimedia, makeQtWrapper
 , taglib, libmediainfo, libzen, libbass }:
 
@@ -60,7 +60,7 @@ let
     name = "ultrastar-manager-${name}-plugin-${version}";
     src = patchedSrc;
 
-    buildInputs = [ qmakeHook ] ++ buildInputs;
+    buildInputs = [ qmake ] ++ buildInputs;
 
     postPatch = ''
       sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \

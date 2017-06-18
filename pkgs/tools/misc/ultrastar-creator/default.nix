@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qmakeHook, qtbase, makeQtWrapper
+, qmake, qtbase, makeQtWrapper
 , pkgconfig, taglib, libbass, libbass_fx }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper pkgconfig ];
+  nativeBuildInputs = [ qmake makeQtWrapper pkgconfig ];
   buildInputs = [ qtbase taglib libbass libbass_fx ];
 
   meta = with stdenv.lib; {
