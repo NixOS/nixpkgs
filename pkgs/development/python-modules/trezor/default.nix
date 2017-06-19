@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "trezor";
-  version = "0.7.13";
+  version = "0.7.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d05f388bb56b6f61cc727999cc725078575238a0b6172450322bc55c437fefe5";
+    sha256 = "f7e4f509263ca172532b4c0a440d164add7cdc021b4370a253d51eba5806b618";
   };
 
   propagatedBuildInputs = [ protobuf3_0 hidapi ];

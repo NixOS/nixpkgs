@@ -4,13 +4,13 @@
 buildPythonPackage rec {
   pname = "netCDF4";
   name = "${pname}-${version}";
-  version = "1.2.8";
+  version = "1.2.9";
 
   disabled = isPyPy;
 
   src = fetchurl {
     url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-    sha256 = "31eb4eae5fd3b2bd8f828721142ddcefdbf10287281bf6f636764dd7957f8450";
+    sha256 = "259edab1f03b1c1b93bdbaa804d50211a0c9d8a15eee4f23988b5685c6c0d2c0";
   };
 
   buildInputs = [

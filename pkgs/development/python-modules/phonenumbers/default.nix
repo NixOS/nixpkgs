@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.5.0";
+  version = "8.5.1";
   name = "${pname}-${version}";
 
   meta = {
@@ -14,6 +14,6 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/p/phonenumbers/${name}.tar.gz";
-    sha256 = "6d3d82a3dcb0418431099d1b1c24efb280cbec8f81c7ce3d1abf417c238b8859";
+    sha256 = "b7d1a5832650fad633d1e4159873788ebfb15e053292c20ab9f5119a574f3a67";
   };
 }
