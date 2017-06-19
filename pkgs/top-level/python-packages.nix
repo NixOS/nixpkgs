@@ -24613,6 +24613,7 @@ in {
     };
     LC_ALL = "en_US.UTF-8";
     buildInputs = with self; [ pytest simplejson mock pkgs.glibcLocales html5lib ] ++ optional (pythonOlder "3.4") self.enum34;
+    doCheck = !stdenv.isDarwin;
     # Disable two tests that require network access.
     checkPhase = ''
       cd tests; ${python.interpreter} run.py --ignore py35 -k 'not test_defaults and not test_anchors_ignored'
