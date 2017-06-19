@@ -118,7 +118,7 @@ in
       cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-${version}"
     '';
 
-  };
+  }
 
 
 
