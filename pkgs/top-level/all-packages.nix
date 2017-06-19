@@ -5427,7 +5427,7 @@ with pkgs;
 
   inherit (haskellPackages) ghc;
 
-  cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
+  cabal-install = haskell.lib.justStaticExecutables haskellPackages.cabal-install;
 
   stack = haskell.lib.justStaticExecutables haskellPackages.stack;
   hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
