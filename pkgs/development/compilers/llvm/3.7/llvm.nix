@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals (!stdenv.isDarwin) [
     # llvm-config --libfiles returns (non-existing) static libs
-    ./fix-llvm-config.patch
+    ../fix-llvm-config.patch
   ];
 
   cmakeFlags = with stdenv; [
