@@ -13461,6 +13461,8 @@ with pkgs;
   firefox-esr = wrapFirefox firefox-esr-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "release";
+    generated = import ../applications/networking/browsers/firefox-bin/release_sources.nix;
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
     inherit (pkgs.gnome3) defaultIconTheme;
@@ -13474,6 +13476,7 @@ with pkgs;
   };
 
   firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "beta";
     generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
