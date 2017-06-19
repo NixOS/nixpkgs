@@ -11,6 +11,8 @@ let
       inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
     };
 
+    soundSense = callPackage ./soundsense.nix { };
+
     dwarf-fortress-unfuck = callPackage ./unfuck.nix { };
 
     dwarf-fortress = callPackage ./wrapper {

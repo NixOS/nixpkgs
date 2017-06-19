@@ -1,5 +1,6 @@
 { stdenv, lib, buildEnv, dwarf-fortress-original, substituteAll
 , enableDFHack ? false, dfhack
+, enableSoundSense ? false, soundSense, jdk
 , themes ? {}
 , theme ? null
 }:
@@ -13,13 +14,14 @@ let
   # These are in inverse order for first packages to override the next ones.
   pkgs = lib.optional (theme != null) ptheme
          ++ lib.optional enableDFHack dfhack
+         ++ lib.optional enableSoundSense soundSense
          ++ [ dwarf-fortress-original ];
 
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress-original.dfVersion}";
 
     paths = pkgs;
-    pathsToLink = [ "/" "/hack" ];
+    pathsToLink = [ "/" "/hack" "/hack/scripts" ];
     ignoreCollisions = true;
 
     postBuild = lib.optionalString enableDFHack ''
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
 
   runDF = ./dwarf-fortress.in;
   runDFHack = ./dfhack.in;
+  runSoundSense = ./soundSense.in;
 
   buildCommand = ''
     mkdir -p $out/bin
@@ -57,6 +60,12 @@ stdenv.mkDerivation rec {
       --subst-var-by stdenv_shell ${stdenv.shell} \
       --subst-var dfInit
     chmod 755 $out/bin/dfhack
+  '' + lib.optionalString enableSoundSense ''
+    substitute $runSoundSense $out/bin/soundsense \
+      --subst-var-by stdenv_shell ${stdenv.shell} \
+      --subst-var-by jre ${jdk.jre} \
+      --subst-var dfInit
+    chmod 755 $out/bin/soundsense
   '';
 
   preferLocalBuild = true;
