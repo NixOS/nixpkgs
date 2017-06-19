@@ -2382,6 +2382,16 @@ rec {
 
   };
 
+  vimwiki = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vimwiki-2017-04-15";
+    src = fetchgit {
+      url = "git://github.com/vimwiki/vimwiki";
+      rev = "8cdc1c15388cc7f4edb827ff15dbc31d592a79af";
+      sha256 = "0hzmssyz7y7hv3mv67zkqwxc13crkpwv0plm7z701943h2zxj08h";
+    };
+    dependencies = [];
+  };
+
   vinegar = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vinegar-2017-05-23";
     src = fetchgit {
