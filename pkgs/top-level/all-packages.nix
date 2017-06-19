@@ -15948,6 +15948,8 @@ with pkgs;
 
   sublime3 = lowPrio (callPackage ../applications/editors/sublime3 { });
 
+  sublime3-dev = lowPrio (callPackage ../applications/editors/sublime3-dev { });
+
   inherit (callPackages ../applications/version-management/subversion/default.nix {
       bdbSupport = true;
       httpServer = false;
