@@ -32,7 +32,7 @@ let
 in 
 
 
-  minieigen = minieigen;
+  inherit minieigen;
 
   stdenv.mkDerivation rec {
 
