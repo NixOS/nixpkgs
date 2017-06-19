@@ -30,6 +30,7 @@
 , "jayschema"
 , "jshint"
 , "json"
+, "js-beautify"
 , "jsontool"
 , "json-server"
 , "js-yaml"
