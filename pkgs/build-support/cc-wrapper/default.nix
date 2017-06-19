@@ -102,6 +102,24 @@ let
         sed -i $out -E -e "s~NIX_${infixSalt_}$var([^a-zA-Z_]|$)~NIX_$var\1~g"
       done
     '');
+
+  # The dynamic linker has different names on different platforms.
+  dynamicLinker =
+    if !nativeLibc then
+      (if targetPlatform.system == "i686-linux"     then "ld-linux.so.2" else
+       if targetPlatform.system == "x86_64-linux"   then "ld-linux-x86-64.so.2" else
+       # ARM with a wildcard, which can be "" or "-armhf".
+       if targetPlatform.isArm32                    then "ld-linux*.so.3" else
+       if targetPlatform.system == "aarch64-linux"  then "ld-linux-aarch64.so.1" else
+       if targetPlatform.system == "powerpc-linux"  then "ld.so.1" else
+       if targetPlatform.system == "mips64el-linux" then "ld.so.1" else
+       if targetPlatform.system == "x86_64-darwin"  then "/usr/lib/dyld" else
+       if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1" else
+       builtins.trace
+         "Don't know the name of the dynamic linker for platform ${targetPlatform.config}, so guessing instead."
+         null)
+    else "";
+
 in
 
 stdenv.mkDerivation {
@@ -144,7 +162,12 @@ stdenv.mkDerivation {
       }
     ''
 
-    + optionalString (libc != null) (if (!targetPlatform.isDarwin) then ''
+      # TODO(@Ericson2314): Unify logic next hash break
+    + optionalString (libc != null) (if (targetPlatform.isDarwin) then ''
+      echo $dynamicLinker > $out/nix-support/dynamic-linker
+
+      echo "export LD_DYLD_PATH=\"$dynamicLinker\"" >> $out/nix-support/setup-hook
+    '' else if dynamicLinker != null then ''
       dynamicLinker="${libc_lib}/lib/$dynamicLinker"
       echo $dynamicLinker > $out/nix-support/dynamic-linker
 
@@ -157,9 +180,21 @@ stdenv.mkDerivation {
       # (the *last* value counts, so ours should come first).
       echo "-dynamic-linker" $dynamicLinker > $out/nix-support/libc-ldflags-before
     '' else ''
-      echo $dynamicLinker > $out/nix-support/dynamic-linker
+      dynamicLinker=`eval 'echo $libc/lib/ld*.so.?'`
+      if [ -n "$dynamicLinker" ]; then
+        echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-      echo "export LD_DYLD_PATH=\"$dynamicLinker\"" >> $out/nix-support/setup-hook
+        if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+          echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+        fi
+
+        ldflagsBefore="-dynamic-linker $dlinker"
+      fi
+
+      # The dynamic linker is passed in `ldflagsBefore' to allow
+      # explicit overrides of the dynamic linker by callers to gcc/ld
+      # (the *last* value counts, so ours should come first).
+      echo "$ldflagsBefore" > $out/nix-support/libc-ldflags-before
     '')
 
     + optionalString (libc != null) ''
@@ -331,24 +366,7 @@ stdenv.mkDerivation {
     ''
     + extraBuildCommands;
 
-  # The dynamic linker has different names on different Linux platforms.
-  #
-  # TODO(1b62c9c06173f4d5e6b090e5ae0c68fa5f478faf): This is not the best way to
-  # do this. I think the reference should be the style in the gcc-cross-wrapper,
-  # but to keep a stable stdenv now I do this sufficient if/else.
-  dynamicLinker =
-    if !nativeLibc then
-      (if targetPlatform.system == "i686-linux"     then "ld-linux.so.2" else
-       if targetPlatform.system == "x86_64-linux"   then "ld-linux-x86-64.so.2" else
-       # ARM with a wildcard, which can be "" or "-armhf".
-       if targetPlatform.isArm32                    then "ld-linux*.so.3" else
-       if targetPlatform.system == "aarch64-linux"  then "ld-linux-aarch64.so.1" else
-       if targetPlatform.system == "powerpc-linux"  then "ld.so.1" else
-       if targetPlatform.system == "mips64el-linux" then "ld.so.1" else
-       if targetPlatform.system == "x86_64-darwin"  then "/usr/lib/dyld" else
-       if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1" else
-       abort "Don't know the name of the dynamic linker for this platform.")
-    else "";
+  inherit dynamicLinker;
 
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;
