@@ -112,8 +112,6 @@ in
 
     enableParallelBuilding = true;
 
-    system = builtins.currentSystem;
-
     preConfigure = ''
       cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-${version}"
     '';
