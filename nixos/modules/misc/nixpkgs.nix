@@ -42,6 +42,10 @@ let
     merge = lib.mergeOneOption;
   };
 
+  prefixArch = pkgs:
+    let system = pkgs.stdenv.system;
+    in mapAttrsRecursiveCond (x: !(isDerivation x)) (path: pkg: { ${system} = pkg; }) pkgs;
+
   _pkgs = import ../../.. config.nixpkgs;
 
 in
@@ -102,6 +106,7 @@ in
     _module.args = {
       pkgs = _pkgs;
       pkgs_i686 = _pkgs.pkgsi686Linux;
+      pkgs_multiarch = recursiveUpdate (prefixArch _pkgs) (prefixArch _pkgs.pkgsi686Linux);
     };
   };
 }
