@@ -80,8 +80,8 @@ let
                     group = "root";
                   } // s)
           else if 
-             (s ? "setuid"  && s.setuid  == true) ||
-             (s ? "setguid" && s.setguid == true) ||
+             (s ? "setuid" && s.setuid) ||
+             (s ? "setgid" && s.setgid) ||
              (s ? "permissions")
           then mkSetuidProgram s
           else mkSetuidProgram

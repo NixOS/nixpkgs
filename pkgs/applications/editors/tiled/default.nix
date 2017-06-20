@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmakeHook
+{ stdenv, fetchFromGitHub, pkgconfig, qmake
 , python, qtbase, qttools, zlib }:
 
 let
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "087jl36g6w2g5l70gz573iwyvx3r7i8fijl3y4mmmf8pyqdyq1n2";
   };
 
-  nativeBuildInputs = [ pkgconfig qmakeHook ];
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [ python qtbase qttools ];
 
   enableParallelBuilding = true;

@@ -46,7 +46,7 @@
 assert stdenv.isLinux;
 
 # imports `version` and `sources`
-with (import ./sources.nix);
+with (import ./release_sources.nix);
 
 let
   arch = if stdenv.system == "i686-linux"
@@ -163,6 +163,7 @@ stdenv.mkDerivation {
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
     inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
     baseName = "thunderbird";
+    channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };

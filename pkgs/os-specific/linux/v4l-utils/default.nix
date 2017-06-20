@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl, makeQtWrapper
+{ stdenv, lib, fetchurl, pkgconfig, perl
 , libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsaLib, libX11, qtbase, mesa_glu
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional (withUtils && withGUI) makeQtWrapper;
+  nativeBuildInputs = [ pkgconfig perl ];
 
   buildInputs = [ udev ] ++ lib.optionals (withUtils && withGUI) [ alsaLib libX11 qtbase mesa_glu ];
 
@@ -39,10 +39,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-  '';
-
-  postInstall = lib.optionalString (withUtils && withGUI) ''
-    wrapQtProgram $out/bin/qv4l2
   '';
 
   meta = with stdenv.lib; {

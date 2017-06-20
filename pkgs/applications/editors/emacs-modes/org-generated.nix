@@ -1,10 +1,10 @@
 { callPackage }: {
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170515";
+        version = "20170606";
         src = fetchurl {
-          url = "http://orgmode.org/elpa/org-20170515.tar";
-          sha256 = "04kpi7q1q4r9w4km941cy70q3k9azspw1wdr71if4f8am6frj3d4";
+          url = "http://orgmode.org/elpa/org-20170606.tar";
+          sha256 = "11x6s30j6k0y3jfzcp16qyqn48mki9j18iblnpl5dr1bk8kyvd0x";
         };
         packageRequires = [];
         meta = {
@@ -14,10 +14,10 @@
       }) {};
     org-plus-contrib = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org-plus-contrib";
-        version = "20170515";
+        version = "20170606";
         src = fetchurl {
-          url = "http://orgmode.org/elpa/org-plus-contrib-20170515.tar";
-          sha256 = "0jdcxir8wvmdxi0rxnljbhy31yh83n4p0l8jp85fxf5sx0kcc32p";
+          url = "http://orgmode.org/elpa/org-plus-contrib-20170606.tar";
+          sha256 = "0r6a5spzdbx6qdz5aziycmhjxm392v7iifv7mnln4s5lgnsswb1h";
         };
         packageRequires = [];
         meta = {

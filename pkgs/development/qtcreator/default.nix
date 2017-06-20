@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper
-, qtbase, makeQtWrapper, qtquickcontrols, qtscript, qtdeclarative, qmakeHook
+, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake
 , withDocumentation ? false
 }:
 
 with stdenv.lib;
 
 let
-  baseVersion = "4.2";
-  revision = "1";
+  baseVersion = "4.3";
+  revision = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   version = "${baseVersion}.${revision}";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "0f2slaf579q2anflf524lbhmpwrwy3hzjfxzs10n44r7s7yc4dr5";
+    url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    sha256 = "1n3ihky72p6q69n6c8s5hacq8rxdqmmr6msg89w5amwd17sam7p9";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper makeWrapper ];
+  nativeBuildInputs = [ qmake makeWrapper ];
 
   doCheck = true;
 
@@ -32,23 +32,12 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
   preBuild = optional withDocumentation ''
-    ln -s ${qtbase}/share/doc $NIX_QT5_TMP/share
+    ln -s ${qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 
   postInstall = ''
-    # Install desktop file
-    mkdir -p "$out/share/applications"
-    cat > "$out/share/applications/qtcreator.desktop" << __EOF__
-    [Desktop Entry]
-    Exec=$out/bin/qtcreator
-    Name=Qt Creator
-    GenericName=Cross-platform IDE for Qt
-    Icon=QtProject-qtcreator.png
-    Terminal=false
-    Type=Application
-    Categories=Qt;Development;IDE;
-    __EOF__
-    wrapQtProgram $out/bin/qtcreator
+    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
+      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
   '';
 
   meta = {

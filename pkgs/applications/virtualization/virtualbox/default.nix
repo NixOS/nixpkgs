@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras qt5.makeQtWrapper libXinerama SDL ];
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -153,12 +153,8 @@ in stdenv.mkDerivation {
     find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
 
-    # Create wrapper script
     mkdir -p $out/bin
-    ${optionalString (!headless) ''
-      makeQtWrapper "$libexec/VirtualBox" $out/bin/VirtualBox
-    ''}
-    for file in ${optionalString (!headless) "VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file

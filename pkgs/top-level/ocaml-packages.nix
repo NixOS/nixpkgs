@@ -130,6 +130,8 @@ let
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+    cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
+
     cohttp = callPackage ../development/ocaml-modules/cohttp {
       lwt = ocaml_lwt;
     };
@@ -386,9 +388,10 @@ let
 
     ocpBuild = callPackage ../development/tools/ocaml/ocp-build { };
 
-    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { };
+    ocpIndent = callPackage ../development/tools/ocaml/ocp-indent { cmdliner = cmdliner_1_0; };
+    ocpIndent_1_5_2 = callPackage ../development/tools/ocaml/ocp-indent/1.5.2.nix { };
 
-    ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
+    ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocpIndent = ocpIndent_1_5_2; };
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
@@ -591,7 +594,7 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit lib janePackage ocamlbuild ctypes cryptokit magic-mime;
       inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
-      openssl = pkgs.openssl;
+      inherit (pkgs) stdenv openssl;
     };
 
     js_build_tools = callPackage ../development/ocaml-modules/janestreet/js-build-tools.nix {};
@@ -749,6 +752,9 @@ let
       else if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/bin_prot.nix {}
       else bin_prot_p4;
+
+    core_bench =
+      callPackage ../development/ocaml-modules/janestreet/core_bench.nix {};
 
     core_kernel =
       if lib.versionOlder "4.03" ocaml.version

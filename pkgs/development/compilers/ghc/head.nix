@@ -15,6 +15,8 @@ let
   version = "8.1.20170106";
   rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
+  outputs = [ "out" "doc" ];
+
   commonPreConfigure =  ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
@@ -48,6 +50,7 @@ in stdenv.mkDerivation (rec {
   configureFlags = [
     "CC=${stdenv.cc}/bin/cc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--datadir=$doc/share/doc/ghc"
   ] ++ stdenv.lib.optional (! enableIntegerSimple) [
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [

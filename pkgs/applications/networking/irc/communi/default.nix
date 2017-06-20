@@ -1,4 +1,4 @@
-{ fetchgit, libcommuni, makeQtWrapper, qtbase, qmakeHook, stdenv }:
+{ fetchgit, libcommuni, qtbase, qmake, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "communi-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   buildInputs = [ libcommuni qtbase ];
 
@@ -30,12 +30,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapQtProgram "$out/bin/communi"
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
   '';
 
-  postFixup = ''
+  preFixup = ''
     patchelf --set-rpath "$out/lib:$(patchelf --print-rpath $out/bin/.communi-wrapped)" $out/bin/.communi-wrapped
   '';
 

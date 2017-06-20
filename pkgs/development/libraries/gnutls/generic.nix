@@ -1,5 +1,5 @@
 { lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound, libiconv
+, guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, libiconv
 , tpmSupport ? false, trousers, which, nettools, libunistring
 
 # Version dependent args
@@ -40,7 +40,6 @@ stdenv.mkDerivation {
   buildInputs = [ lzo lzip libtasn1 libidn p11_kit zlib gmp autogen libunistring ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
-    ++ [ unbound ]
     ++ lib.optional guileBindings guile
     ++ buildInputs;
 

@@ -49,6 +49,13 @@ stdenv.mkDerivation rec {
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
+  postPatch =
+    # On Hydra this makes installation fail (sometimes?),
+    # and nix store doesn't allow such fancy permission bits anyway.
+    ''
+      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+    '';
+
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;

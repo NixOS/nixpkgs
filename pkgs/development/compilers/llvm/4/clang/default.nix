@@ -1,5 +1,6 @@
 { stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python
 , fixDarwinDylibNames
+, enableManpages ? true
 }:
 
 let
@@ -15,25 +16,28 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python python.pkgs.sphinx ];
+    nativeBuildInputs = [ cmake python ]
+      ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+
     buildInputs = [ libedit libxml2 llvm ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
+    ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++
+    ]
     # Maybe with compiler-rt this won't be needed?
-    (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
-    (stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include");
+    ++ stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}"
+    ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
 
     patches = [ ./purity.patch ];
 
-    postBuild = ''
+    postBuild = stdenv.lib.optionalString enableManpages ''
       cmake --build . --target docs-clang-man
     '';
 
@@ -45,7 +49,8 @@ let
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '';
 
-    outputs = [ "out" "man" "python" ];
+    outputs = [ "out" "python" ]
+      ++ stdenv.lib.optional enableManpages "man";
 
     # Clang expects to find LLVMgold in its own prefix
     # Clang expects to find sanitizer libraries in its own prefix
@@ -62,7 +67,8 @@ let
       mv $out/share/clang/*.py $python/share/clang
 
       rm $out/bin/c-index-test
-
+    ''
+    + stdenv.lib.optionalString enableManpages ''
       # Manually install clang manpage
       cp docs/man/*.1 $out/share/man/man1/
 

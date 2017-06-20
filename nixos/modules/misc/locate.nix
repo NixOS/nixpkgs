@@ -131,9 +131,9 @@ in {
         path = mkIf (!isMLocate) [ pkgs.su ];
         script =
           ''
-            install -m ${if isMLocate then "0750" else "0755"} -o root -g ${if isMLocate then "mlocate" else "root"} -d $(dirname ${cfg.output})
+            mkdir -m 0755 -p ${dirOf cfg.output}
             exec ${cfg.locate}/bin/updatedb \
-              ${optionalString (cfg.localuser != null) ''--localuser=${cfg.localuser}''} \
+              ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         environment = {

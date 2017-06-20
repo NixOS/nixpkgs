@@ -40,7 +40,7 @@ let
   });
 
   policyFile = pkgs.writeText "kube-policy"
-    concatStringsSep "\n" (map (builtins.toJSON cfg.apiserver.authorizationPolicy));
+    (concatStringsSep "\n" (map builtins.toJSON cfg.apiserver.authorizationPolicy));
 
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";

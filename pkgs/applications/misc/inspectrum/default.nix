@@ -10,14 +10,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "inspectrum-${version}";
-  version = "20170218";
+  name = "inspectrum-unstable-2017-05-31";
 
   src = fetchFromGitHub {
     owner = "miek";
     repo = "inspectrum";
-    rev = "d8d1969a4cceeee0ebfd2f39e791fddd5155d4de";
-    sha256 = "05sarfin9wqkvgwn3fil1r4bay03cwzzhjwbdjslibc5chdrr2cn";
+    rev = "a89d1337efb31673ccb6a6681bb89c21894c76f7";
+    sha256 = "1fvnr8gca25i6s9mg9b2hyqs0zzr4jicw13mimc9dhrgxklrr1yv";
   };
 
   buildInputs = [

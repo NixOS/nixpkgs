@@ -123,12 +123,12 @@ in
     # to be adapted
     zfsStable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.11";
+      incompatibleKernelVersion = "4.12";
 
-      version = "0.6.5.9";
+      version = "0.6.5.10";
 
       # this package should point to the latest release.
-      sha256 = "1m8q39j13k46fn0pw3adq87c20rpkg28llxgv2a90994p4127xh0";
+      sha256 = "04gn5fj22z17zq2nazxwl3j9dr33l79clha6ipxvdz241bhjqrk3";
       extraPatches = [
         (fetchpatch {
           url = "https://github.com/Mic92/zfs/compare/zfs-0.6.5.8...nixos-zfs-0.6.5.8.patch";

@@ -21,6 +21,7 @@ rec {
 
   freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
   go-ethereum = callPackage ./go-ethereum.nix { };
+  go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
   hivemind = callPackage ./hivemind.nix { withGui = true; };
   hivemindd = callPackage ./hivemind.nix { withGui = false; };

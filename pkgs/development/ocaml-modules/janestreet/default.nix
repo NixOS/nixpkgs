@@ -1,4 +1,4 @@
-{ lib, janePackage, ocamlbuild, cryptokit, ctypes, magic-mime,
+{ stdenv, lib, janePackage, ocamlbuild, cryptokit, ctypes, magic-mime,
   ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re, zarith,
   openssl }:
 
@@ -328,7 +328,7 @@ rec {
     propagatedBuildInputs = [ core_kernel ];
     meta = {
       description = "OCaml bindings for RE2";
-      platforms = lib.platforms.linux;
+      broken = stdenv.isDarwin;
     };
   };
 
@@ -348,7 +348,6 @@ rec {
     '';
     meta = {
       description = "Jane Street Capital's standard library overlay";
-      inherit (re2.meta) platforms;
     };
   };
 
@@ -416,7 +415,6 @@ rec {
     propagatedBuildInputs = [ core_extended async ];
     meta = {
       description = "Shell helpers for Async";
-      inherit (core_extended.meta) platforms;
     };
   };
 
@@ -479,7 +477,6 @@ rec {
     propagatedBuildInputs = [ core_extended ];
     meta = {
       description = "Micro-benchmarking library for OCaml";
-      inherit (core_extended.meta) platforms;
     };
   };
 
@@ -489,7 +486,6 @@ rec {
     propagatedBuildInputs = [ core_extended ];
     meta = {
       description = "Profiling library";
-      inherit (core_extended.meta) platforms;
     };
   };
 
@@ -513,7 +509,6 @@ rec {
     propagatedBuildInputs = [ async core_extended cryptokit magic-mime ounit ];
     meta = {
       description = "E-mail message parser";
-      inherit (core_extended.meta) platforms;
     };
   };
 

@@ -1,11 +1,5 @@
 { stdenv, fetchFromGitHub, pythonPackages
-, sysstat, unzip, makeWrapper
-# We need extraBuildInputs as we want to be able to override this
-# package with python packages _and_ have the produced binaries
-# wrapper with their PYTHONPATH. This means overrideAttrs is not
-# strong enough (it overrides too late), we need to call it
-# beforehand.
-, extraBuildInputs ? [ ] }:
+, sysstat, unzip, makeWrapper }:
 let
   inherit (pythonPackages) python;
   docker_1_10 = pythonPackages.buildPythonPackage rec {
@@ -32,42 +26,33 @@ let
     # due to flake8
     doCheck = false;
   };
-  version = "5.13.2";
-
-  integrations = fetchFromGitHub {
-    owner = "datadog";
-    repo = "integrations-core";
-    rev = version;
-    sha256 = "1nbjmkq0wdfndmx0qap69h2rkwkkb0632j87h9d3j99bykyav3y3";
-  };
 
 in stdenv.mkDerivation rec {
+  version = "5.11.2";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
     owner  = "datadog";
     repo   = "dd-agent";
     rev    = version;
-    sha256 = "0x2bxi70l2yf0wi232qksvcscjdpjg8l7dmgg1286vqryyfazfjb";
+    sha256 = "1iqxvgpsqibqw3vk79158l2pnb6y4pjhjp2d6724lm5rpz4825lx";
   };
 
   buildInputs = [
     python
     unzip
     makeWrapper
-    pythonPackages.boto
-    docker_1_10
-    pythonPackages.kazoo
-    pythonPackages.ntplib
-    pythonPackages.consul
-    pythonPackages.python-etcd
-    pythonPackages.pyyaml
     pythonPackages.requests
+    pythonPackages.psycopg2
+    pythonPackages.psutil
+    pythonPackages.ntplib
     pythonPackages.simplejson
-    pythonPackages.supervisor
-    pythonPackages.tornado
-    pythonPackages.uptime
-  ] ++ extraBuildInputs;
+    pythonPackages.pyyaml
+    pythonPackages.pymongo_2_9_1
+    pythonPackages.python-etcd
+    pythonPackages.consul
+    docker_1_10
+  ];
   propagatedBuildInputs = with pythonPackages; [ python tornado ];
 
   buildCommand = ''
@@ -81,24 +66,6 @@ in stdenv.mkDerivation rec {
 
     # Move out default conf.d so that /etc/dd-agent/conf.d is used
     mv $out/agent/conf.d $out/agent/conf.d-system
-
-    # Sometime between 5.11.2 and 5.13.2 datadog moved out all its
-    # checks into separate repository. Copy them back in so dd-agent
-    # service can easily pick and choose by copying out configs into
-    # its etc files.
-    mkdir -p $out/agent/checks.d
-    for i in ${toString integrations}/* # */
-    do
-      if [ -f "$i/check.py" ]; then
-        if [ -f "$i/conf.yaml.default" -o -f "$i/conf.yaml.example" ]; then
-          local name=$(basename $i)
-          cp $i/check.py $out/agent/checks.d/$name.py
-          # Copy .default file first unless it doesn't exist then copy .default
-          cp $i/conf.yaml.default $out/agent/conf.d-system/$name.yaml &> /dev/null || \
-            cp $i/conf.yaml.example $out/agent/conf.d-system/$name.yaml
-        fi
-      fi
-    done
 
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash

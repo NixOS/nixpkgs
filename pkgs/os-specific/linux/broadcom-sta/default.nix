@@ -27,6 +27,8 @@ stdenv.mkDerivation {
     ./linux-4.7.patch
     # source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms
     ./linux-4.8.patch
+    # source: https://aur.archlinux.org/cgit/aur.git/tree/linux411.patch?h=broadcom-wl
+    ./linux-4.11.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];

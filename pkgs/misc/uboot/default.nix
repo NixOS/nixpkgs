@@ -69,6 +69,12 @@ in rec {
     filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
   };
 
+  ubootA20OlinuxinoLime = buildUBoot rec {
+    defconfig = "A20-OLinuXino-Lime_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootBananaPi = buildUBoot rec {
     defconfig = "Bananapi_defconfig";
     targetPlatforms = ["armv7l-linux"];

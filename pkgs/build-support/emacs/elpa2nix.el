@@ -28,3 +28,6 @@ The file can either be a tar file or an Emacs Lisp file."
         (insert-file-contents file))
       (when is-tar (tar-mode))
       (elpa2nix-install-from-buffer))))
+
+;; Allow installing package tarfiles larger than 10MB
+(setq large-file-warning-threshold nil)

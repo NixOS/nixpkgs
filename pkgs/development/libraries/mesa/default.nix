@@ -2,7 +2,7 @@
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
-, libelf, libvdpau
+, libelf, libvdpau, valgrind-light
 , grsecEnabled ? false
 , enableRadv ? false
 # Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "17.1.1";
+  version = "17.1.2";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "aed503f94c0c1630a162a3e276f4ee12a86764cee4cb92338ea2dea99a04e7ef";
+    sha256 = "0937804f43746339b1f9540d8f9c8b4a1bb3d3eec0e4020eac283b8799798239";
   };
 
   prePatch = "patchShebangs .";
@@ -152,6 +152,7 @@ stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
+    valgrind-light
   ];
 
 

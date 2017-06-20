@@ -6,6 +6,7 @@
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
 , mesa, libintlOrEmpty, libgme
+, openssl, x265, libxml2
 }:
 
 assert faacSupport -> faac != null;
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     openjpeg libopus librsvg
     fluidsynth libvdpau
     libwebp xvidcore gnutls mesa
-    mjpegtools libgme
+    mjpegtools libgme openssl x265 libxml2
   ]
     ++ libintlOrEmpty
     ++ optional faacSupport faac

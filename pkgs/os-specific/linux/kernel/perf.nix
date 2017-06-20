@@ -11,7 +11,9 @@ assert versionAtLeast kernel.version "3.12";
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 
-  inherit (kernel) src patches;
+  inherit (kernel) src;
+
+  patches = kernel.patches ++ [ ./perf-binutils-path.patch ];
 
   preConfigure = ''
     cd tools/perf
@@ -30,9 +32,12 @@ stdenv.mkDerivation {
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=cpp" "-Wno-error=bool-compare" "-Wno-error=deprecated-declarations"
-  ]
+  NIX_CFLAGS_COMPILE =
+    [ "-Wno-error=cpp"
+      "-Wno-error=bool-compare"
+      "-Wno-error=deprecated-declarations"
+      "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
+    ]
     # gcc before 6 doesn't know these options
     ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
