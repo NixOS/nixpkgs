@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "01lcy89q3i9g4kz4liy6m7kcq1zyvmbc63rqidgw67341f94inf5";
   };
 
+  preConfigure = "substituteInPlace Makefile.in --replace ' install-exec-hook' ''";
+
   configureFlags = optionalString (!withGtk) "--without-gtk";
 
   buildInputs = [ autoconf ncurses ] ++ optional withGtk gtk2;
