@@ -1971,6 +1971,9 @@ in {
 
     buildInputs = with self; [ docutils six ];
 
+    # Tests fail due to nix file timestamp normalization.
+    doCheck = false;
+
     meta = {
       homepage = https://github.com/botocore/bcdoc;
       license = licenses.asl20;
