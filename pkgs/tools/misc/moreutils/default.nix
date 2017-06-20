@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ perl IPCRun TimeDate TimeDuration ];
 
+  buildFlags = optionalString stdenv.isDarwin "CC=clang";
   installFlags = "PREFIX=$(out)";
 
   postInstall = "wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB";
