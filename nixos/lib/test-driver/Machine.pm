@@ -219,8 +219,8 @@ sub waitForMonitorPrompt {
 sub retry {
     my ($coderef) = @_;
     my $n;
-    for ($n = 0; $n < 900; $n++) {
-        return if &$coderef;
+    for ($n = 899; $n >=0; $n--) {
+        return if &$coderef($n);
         sleep 1;
     }
     die "action timed out after $n seconds";
