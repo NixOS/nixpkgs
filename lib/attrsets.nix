@@ -5,7 +5,7 @@ let
   inherit (import ./trivial.nix) and or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
+  inherit (import ./lists.nix) concatMap concatLists any all deepSeqList;
 in
 
 rec {
@@ -344,6 +344,7 @@ rec {
        => { a = ["x" "y"]; b = ["z"] }
   */
   zipAttrsWith = f: sets: zipAttrsWithNames (concatMap attrNames sets) f sets;
+
   /* Like `zipAttrsWith' with `(name: values: value)' as the function.
 
     Example:
@@ -351,6 +352,47 @@ rec {
       => { a = ["x" "y"]; b = ["z"] }
   */
   zipAttrs = zipAttrsWith (name: values: values);
+
+  /* Recursively zips attributes until the given predicate is verified.  The
+     predicate should accept 3 arguments which are the path to reach the
+     attribute, a part of the first attribute set and a part of the second attribute
+     set.  When the predicate is verified, the merge function is called.
+
+     Example:
+       recursiveZipWithUntil (path: values: path == []) (path: values: values) [{
+         # first attribute set
+         foo.bar = 1;
+         foo.baz = 2;
+         bar = 3;
+       } {
+         #second attribute set
+         foo.bar = 1;
+         foo.quz = 2;
+         baz = 4;
+       }]
+
+       => {
+         foo = [ { bar = 1; baz = 2; } { bar = 1; quz = 2; ]; # 'foo.*' are merged
+         bar = [ 3 ]; # 'bar' from the first set
+         baz = [ 4 ]; # 'baz' from the second set
+       }
+  */
+  recursiveZipWithUntil = pred: merge: sets:
+    let f = attrPath:
+      zipAttrsWith (n: values:
+        if length values == 1 || pred attrPath values then
+          merge attrPath values
+        else
+          f (attrPath ++ [n]) values
+      );
+    in f [] sets;
+
+  /* Like `recursiveZipWithUntil` but merging any non-attribute-set values.
+
+     Example: recursiveZipWith (path: values: values) [{ foo.bar = 1; foo.baz = 1; } { foo.bar = 2; foo.baz = 2; }]
+     => { foo.bar = [ 1 2 ]; foo.baz = [ 1 2 ]; }
+  */
+  recursiveZipWith = recursiveZipWithUntil (path: values: any (s: !(isAttrs s)) values);
 
   /* Does the same as the update operator '//' except that attributes are
      merged until the given predicate is verified.  The predicate should
@@ -362,34 +404,29 @@ rec {
      Example:
        recursiveUpdateUntil (path: l: r: path == ["foo"]) {
          # first attribute set
-         foo.bar = 1;
+         foo.bar.qux = 1;
          foo.baz = 2;
          bar = 3;
        } {
          #second attribute set
-         foo.bar = 1;
+         foo.bar.qup = 1;
          foo.quz = 2;
          baz = 4;
        }
 
-       returns: {
-         foo.bar = 1; # 'foo.*' from the second set
-         foo.quz = 2; #
+       => {
+         foo.bar.qup = 1; # 'foo.bar.*' from the second set
+         foo.baz = 2; # 'foo.baz' from the first set
+         foo.quz = 2; # 'foo.quz' from the second set
          bar = 3;     # 'bar' from the first set
          baz = 4;     # 'baz' from the second set
        }
 
      */
   recursiveUpdateUntil = pred: lhs: rhs:
-    let f = attrPath:
-      zipAttrsWith (n: values:
-        if tail values == []
-        || pred attrPath (head (tail values)) (head values) then
-          head values
-        else
-          f (attrPath ++ [n]) values
-      );
-    in f [] [rhs lhs];
+    let predUpdate = attrPath: values:
+      pred attrPath (head (tail values)) (head values);
+    in recursiveZipWithUntil predUpdate (attrPath: head) [rhs lhs];
 
   /* A recursive variant of the update operator ‘//’.  The recursion
      stops when one of the attribute values is not an attribute set,
