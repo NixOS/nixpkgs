@@ -167,4 +167,30 @@ rec {
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
 
+
+  # Combine a list of derivations using symlinks.  Paths in later derivations
+  # take precedence over earlier ones.
+  #
+  # Example: create wrapper but retain all other files (man pages etc.)
+  #
+  # {
+  #   nixpkgs.config.packageOverrides = super: {
+  #     hello = pkgs.concat "hello" [
+  #       super.hello
+  #       (pkgs.writeDashBin "hello" ''
+  #         echo OMG
+  #         exec ${super.hello}/bin/hello "$@"
+  #       '')
+  #     ];
+  #   };
+  # }
+  #
+  concat = name: xs: runCommand name {} ''
+    mkdir $out
+    ${lib.flip lib.concatMapStrings xs (x: ''
+      cp --remove-destination -vrs ${x}/* $out
+      find $out -type d -exec chmod -v u+rwx {} +
+    '')}
+  '';
+
 }
