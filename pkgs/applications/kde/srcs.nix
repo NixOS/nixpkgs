@@ -78,7 +78,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/akregator-17.04.2.tar.xz";
-      sha256 = "0ngpw432pm57p34y4wcvrxlrlmixlgrpqawgn2b73dhvb2m8ypvy";
+      sha256 = "0r91kjxggds46s0vzygkvjckqiyw5kx0jbb38paniynviqz72zwi";
       name = "akregator-17.04.2.tar.xz";
     };
   };
@@ -374,7 +374,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kanagram-17.04.2.tar.xz";
-      sha256 = "06yqc197yzzzzga45db8i05q2yr4jyjf5bvry0k22nss3wgsy8mk";
+      sha256 = "1xqpbxsa1ghnh65bzsn5mv4222a3jgzxgss3f66ykfq1dgmqgyyy";
       name = "kanagram-17.04.2.tar.xz";
     };
   };
@@ -382,7 +382,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kapman-17.04.2.tar.xz";
-      sha256 = "15yyp69m096wbmpi52fi2ca6i83w0agjgsy1j6qiy6ki0fj2xyry";
+      sha256 = "068656mfjx3fsgajqj5qv4z5mhg7f6mhwylwjxzj5f138v91x43k";
       name = "kapman-17.04.2.tar.xz";
     };
   };
@@ -926,7 +926,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kde-l10n/kde-l10n-ro-17.04.2.tar.xz";
-      sha256 = "0sqym2mx927pfvdq5lny64scg80xyrz3q1vlg3sk8gyil0n942gv";
+      sha256 = "1g0p93pa2v8wrffvpdd38p5qckfxqcadfhiml0j6qdp3y3fvx3cz";
       name = "kde-l10n-ro-17.04.2.tar.xz";
     };
   };
@@ -934,7 +934,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kde-l10n/kde-l10n-ru-17.04.2.tar.xz";
-      sha256 = "1gcy1ssir2fgg1djv7jbh9jv3y1pxs3yrxaqdd0m4zdkva1knx5p";
+      sha256 = "1ffmpd9y5k06ah2q4ymabq4309i19ji7y35qjqwff4gp1skn9b1p";
       name = "kde-l10n-ru-17.04.2.tar.xz";
     };
   };
@@ -958,7 +958,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kde-l10n/kde-l10n-sr-17.04.2.tar.xz";
-      sha256 = "17xpb1q7qamz70qbg2k9i4jfbz1qsv4n0j5hw4ix9bm2dncaaqa9";
+      sha256 = "1m8c8q6b6viyqd5cv6kgp084f83xw9624gczgx40idn00mwjpq9w";
       name = "kde-l10n-sr-17.04.2.tar.xz";
     };
   };
@@ -1110,7 +1110,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kdiamond-17.04.2.tar.xz";
-      sha256 = "0krnb2g63zww655xmx1yn1105zkqryid5ip2vkn3cva2l1x8zfwr";
+      sha256 = "1r905n10h3h7hyni3qrqjikskwq559hxm2b0dcm383zjq2nyx6nf";
       name = "kdiamond-17.04.2.tar.xz";
     };
   };
@@ -1446,7 +1446,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/knetwalk-17.04.2.tar.xz";
-      sha256 = "0g0q9m63qc33gfklpqpncvd3qdjpbjb53701ypiby3dlyb1znf3d";
+      sha256 = "06p58ifz8j7706racwxx8gl8bdmh320myv2lk4in3kmlff2kmw04";
       name = "knetwalk-17.04.2.tar.xz";
     };
   };
@@ -1534,7 +1534,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/kopete-17.04.2.tar.xz";
-      sha256 = "0bicwm8r4rl4awxkpi4hin95n37yj4ln29gp0z6j97fzc7kpiqlj";
+      sha256 = "1i1drnzyd5hpiph8250x5ikb5payfxzvv51xxrb09k6r4v6xq1kx";
       name = "kopete-17.04.2.tar.xz";
     };
   };
@@ -1582,7 +1582,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/krdc-17.04.2.tar.xz";
-      sha256 = "0y8s28rwxjbpgq6kfhmrq9qr4h19iplfrgab7rb25zl881g9wycg";
+      sha256 = "03lws8r8wk7hsa0plm5m6537rp26g94d0bvwz3016w77mdjpa0q3";
       name = "krdc-17.04.2.tar.xz";
     };
   };
@@ -2054,7 +2054,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/marble-17.04.2.tar.xz";
-      sha256 = "1z24infjp65d2s2zlcvr0v9425a6wxwkaz262mvqqvx64qmhd6ca";
+      sha256 = "1c6xmpkqilxd9zxz8kz7g47hwsa4hw27qcy96wxcg24hg8b5zr09";
       name = "marble-17.04.2.tar.xz";
     };
   };
@@ -2078,7 +2078,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/minuet-17.04.2.tar.xz";
-      sha256 = "0p2ii0wfqswliqf4fk04mx9z6nfhifa11l2w7bid4aj78b29138g";
+      sha256 = "1gx9vdkwh490vrma2qw93xp0658fjhdik4vv484bqlqrkqvh3vf5";
       name = "minuet-17.04.2.tar.xz";
     };
   };
