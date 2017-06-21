@@ -518,6 +518,12 @@ sub waitUntilTTYMatches {
 
     $self->nest("waiting for $regexp to appear on tty $tty", sub {
         retry sub {
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on TTY$tty, which currently contains:");
+                $self->log($self->getTTYText($tty));
+            }
+
             return 1 if $self->getTTYText($tty) =~ /$regexp/;
         }
     });
