@@ -190,4 +190,23 @@ rec {
         sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
       };
     };
+
+  # CVE-2017-1000364 (stack clash)
+  mm_larger_stack_guard_gap_4_9 = rec
+    { name = "mm-larger-stack-guard-gap-between-vmas.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://anonscm.debian.org/cgit/kernel/linux.git/plain/debian/patches/bugfix/all/mm-enlarge-stack-guard-gap.patch?h=debian/4.9.30-2%2bdeb9u1_bpo8%2b1";
+        sha256 = "0bl7w1zgcy691avp54p6mvzdam6snrb7pz3hywsf2g2mcxjkyja5";
+      };
+    };
+
+  mm_larger_stack_guard_gap_4_11 = rec
+    { name = "mm-larger-stack-guard-gap-between-vmas.patch";
+      patch = fetchpatch {
+        inherit name;
+        url = "https://anonscm.debian.org/cgit/kernel/linux.git/plain/debian/patches/bugfix/all/mm-larger-stack-guard-gap-between-vmas.patch?h=debian/4.11.6-1";
+        sha256 = "19bakn3119v5jkhh4w7x3d50py9an1w8h7v3mmy7y2l2agj4mn3i";
+      };
+    };
 }
