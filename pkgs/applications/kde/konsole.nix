@@ -14,10 +14,9 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ ki18n ];
-  propagatedBuildInputs = [
+  buildInputs = [
     kbookmarks kcompletion kconfig kconfigwidgets kcoreaddons kdelibs4support
-    kguiaddons kiconthemes kinit kio knotifications knotifyconfig kparts kpty
+    kguiaddons ki18n kiconthemes kinit kio knotifications knotifyconfig kparts kpty
     kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript
   ];
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
