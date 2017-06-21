@@ -74,6 +74,7 @@ self: super: {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+    optparse-applicative = self.optparse-applicative_0_14_0_0;
   };
 
   # https://github.com/froozen/kademlia/issues/2
