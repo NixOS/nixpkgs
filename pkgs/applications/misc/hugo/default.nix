@@ -7,7 +7,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
-    owner = "spf13";
+    owner = "gohugoio";
     repo = "hugo";
     rev = "v${version}";
     sha256 = "1q398afrkmg480c2an9pyhqkbi9iw266q4svwqrvm408gzjprdzp";
