@@ -260,7 +260,6 @@ stdenv.mkDerivation {
       fi
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
-      substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
     ''
     + extraBuildCommands;

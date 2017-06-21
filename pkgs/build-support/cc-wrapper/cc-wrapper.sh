@@ -117,7 +117,6 @@ if [[ "$isCpp" = 1 ]]; then
 fi
 
 LD=@ldPath@/ld
-source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_CFLAGS_COMPILE ${hardeningCFlags[@]})

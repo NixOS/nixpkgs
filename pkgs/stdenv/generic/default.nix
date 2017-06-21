@@ -140,6 +140,8 @@ let
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
+    , hardeningEnable ? [ "all" ]
+    , hardeningDisable ? [ ]
     , ... } @ attrs:
     let # Rename argumemnts to avoid cycles
       buildInputs__ = buildInputs;
@@ -300,6 +302,7 @@ let
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "__impureHostDeps" "__propagatedImpureHostDeps"
+           "hardeningEnable" "hardeningDisable"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
@@ -318,6 +321,11 @@ let
           system = result.system;
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+          inherit (import ./hardening.nix {
+            inherit lib;
+            inherit hardeningEnable hardeningDisable;
+            hardeningSupported = result.cc.cc.hardeningSupported or [];
+          }) hardeningCFlags hardeningLDFlags;
 
           # Inputs built by the cross compiler.
           buildInputs = buildInputs';

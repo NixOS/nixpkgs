@@ -504,8 +504,10 @@ stdenv.mkDerivation ({
       ]
     else null;
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true;
+    hardeningSupported = [ "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+  };
 
   inherit enableParallelBuilding enableMultilib;
 

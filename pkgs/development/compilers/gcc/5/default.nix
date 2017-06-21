@@ -221,8 +221,7 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
-  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" "format" ];
+  hardeningDisable = [ "format" ];
 
   inherit patches;
 
@@ -522,8 +521,10 @@ stdenv.mkDerivation ({
       ]
     else null;
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true;
+    hardeningSupported = [ "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+  };
 
   inherit enableParallelBuilding enableMultilib;
 
