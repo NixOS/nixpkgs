@@ -1,10 +1,8 @@
 {
   mkDerivation, copyPathsToStore, lib, kdepimTeam,
-  extra-cmake-modules,
-  kcompletion, kconfigwidgets, kdbusaddons, kdesignerplugin, kiconthemes,
-  kio,
-  boost, kitemmodels,
-  mysql
+  extra-cmake-modules, shared_mime_info,
+  boost, kcompletion, kconfigwidgets, kcrash, kdbusaddons, kdesignerplugin,
+  ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
 }:
 
 mkDerivation {
@@ -14,7 +12,7 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
   buildInputs = [
     kcompletion kconfigwidgets kdbusaddons kdesignerplugin kiconthemes kio
   ];
