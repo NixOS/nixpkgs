@@ -65,6 +65,10 @@ rec {
   inherit (s) name version;
   inherit buildInputs propagatedBuildInputs;
 
+  postPatch = ''
+    sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
+  '';
+
   patches = [
     ./glusterfs-use-PATH-instead-of-hardcodes.patch
     ./glusterfs-fix-unsubstituted-autoconf-macros.patch

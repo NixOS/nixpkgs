@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clack-v1-compat'';
-  version = ''clack-20170403-git'';
+  version = ''clack-20170516-git'';
 
   description = '''';
 
-  deps = [ args."uiop" args."trivial-types" args."trivial-mimes" args."trivial-backtrace" args."split-sequence" args."quri" args."marshal" args."local-time" args."lack-util" args."lack" args."ironclad" args."http-body" args."flexi-streams" args."cl-syntax-annot" args."cl-ppcre" args."cl-base64" args."circular-streams" args."alexandria" ];
+  deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2017-04-03/clack-20170403-git.tgz'';
-    sha256 = ''1n6rbiz5ybwr1fbzynlmqmx2di5kqxrsniqx9mzy7034hqpk54ss'';
+    url = ''http://beta.quicklisp.org/archive/clack/2017-05-16/clack-20170516-git.tgz'';
+    sha256 = ''1161lsv739z02ijp0p95cb3vbybqhffp03sipb7l1vmmj24d8wgw'';
   };
+    
+  packageName = "clack-v1-compat";
 
   overrides = x: {
     postInstall = ''
@@ -28,16 +30,9 @@ rec {
     '';
   };
 }
-/* (SYSTEM clack-v1-compat DESCRIPTION NIL SHA256 1n6rbiz5ybwr1fbzynlmqmx2di5kqxrsniqx9mzy7034hqpk54ss URL
-    http://beta.quicklisp.org/archive/clack/2017-04-03/clack-20170403-git.tgz MD5 98643f671285c11e91d2c81d4c8fc52a NAME clack-v1-compat TESTNAME NIL FILENAME
-    clack-v1-compat DEPS
-    ((NAME uiop) (NAME trivial-types) (NAME trivial-mimes) (NAME trivial-backtrace) (NAME split-sequence) (NAME quri) (NAME marshal) (NAME local-time)
-     (NAME lack-util) (NAME lack) (NAME ironclad) (NAME http-body) (NAME flexi-streams) (NAME cl-syntax-annot) (NAME cl-ppcre) (NAME cl-base64)
-     (NAME circular-streams) (NAME alexandria))
-    DEPENDENCIES
-    (uiop trivial-types trivial-mimes trivial-backtrace split-sequence quri marshal local-time lack-util lack ironclad http-body flexi-streams cl-syntax-annot
-     cl-ppcre cl-base64 circular-streams alexandria)
-    VERSION clack-20170403-git SIBLINGS
+/* (SYSTEM clack-v1-compat DESCRIPTION NIL SHA256 1161lsv739z02ijp0p95cb3vbybqhffp03sipb7l1vmmj24d8wgw URL
+    http://beta.quicklisp.org/archive/clack/2017-05-16/clack-20170516-git.tgz MD5 ecda950881158c3bf209b29f4717fb0a NAME clack-v1-compat TESTNAME NIL FILENAME
+    clack-v1-compat DEPS NIL DEPENDENCIES NIL VERSION clack-20170516-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot clack-handler-wookie clack-socket clack-test clack t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie t-clack-v1-compat clack-middleware-auth-basic clack-middleware-clsql
      clack-middleware-csrf clack-middleware-dbi clack-middleware-oauth clack-middleware-postmodern clack-middleware-rucksack clack-session-store-dbi

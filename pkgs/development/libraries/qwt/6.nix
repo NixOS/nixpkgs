@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmakeHook }:
+{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
 stdenv.mkDerivation rec {
   name = "qwt-6.1.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   postPatch = ''
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri

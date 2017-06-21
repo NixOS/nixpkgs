@@ -1,7 +1,7 @@
 { stdenv, lib, fetchgit, pkgconfig , libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1
-, makeQtWrapper, qmakeHook
+, qmake
 }:
 
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a7xa39qp1q32zkypw32mm3wi8wbhxhvrm6l3xsa3k1jzih7hzxr";
   };
 
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   buildInputs = [
     pkgconfig libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
@@ -68,7 +68,6 @@ EOF
     mkdir -p $out/bin
     instdir="$srcdir/bin/linux/release"
     cp $instdir/rdm $out/bin
-    wrapQtProgram $out/bin/rdm
   '';
 
   meta = with lib; {

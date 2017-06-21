@@ -1,5 +1,6 @@
 3bmd
 alexandria
+array-utils
 babel
 blackbird
 bordeaux-threads
@@ -31,6 +32,7 @@ cl-ppcre-unicode
 cl-reexport
 cl-smtp
 clsql
+clss
 cl+ssl
 cl-syntax-annot
 cl-syntax-anonfun
@@ -50,15 +52,20 @@ dbd-mysql
 dbd-postgres
 dbd-sqlite3
 dexador
+documentation-utils
 drakma
 esrap
 external-program
 fast-http
 fast-io
 flexi-streams
+form-fiddle
 http-body
+hu.dwim.asdf
 hu.dwim.def
 hunchentoot
+idna
+ieee-floats
 iolib
 ironclad
 iterate
@@ -67,9 +74,11 @@ lev
 local-time
 lquery
 marshal
+nibbles
 optima
 parenscript
 pcall
+pgloader
 plump
 proc-parse
 prove
@@ -80,7 +89,9 @@ smart-buffer
 split-sequence
 static-vectors
 stumpwm
+swap-bytes
 trivial-backtrace
+trivial-indent
 trivial-mimes
 trivial-types
 trivial-utf-8

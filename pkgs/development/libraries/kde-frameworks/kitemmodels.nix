@@ -1,13 +1,16 @@
-{ kdeFramework, lib
-, extra-cmake-modules, qtbase
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  qtbase
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kitemmodels";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
     broken = builtins.compareVersions qtbase.version "5.6.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
+  outputs = [ "out" "dev" ];
 }

@@ -12,6 +12,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/named-readtables/2017-01-24/named-readtables-20170124-git.tgz'';
     sha256 = ''1j0drddahdjab40dd9v9qy92xbvzwgbk6y3hv990sdp9f8ac1q45'';
   };
+    
+  packageName = "named-readtables";
 
   overrides = x: {
     postInstall = ''

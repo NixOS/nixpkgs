@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, which
-, boost, libtorrentRasterbar, qmakeHook, qt5
+, boost, libtorrentRasterbar, qmake, qtbase, qttools
 , debugSupport ? false # Debugging
 , guiSupport ? true, dbus_libs ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "0vs626khavhqqnq2hrwrxyc8ihbngharcf1fd37nwccvy13qqljn";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig which qmake ];
 
-  buildInputs = [ boost libtorrentRasterbar qt5.qtbase qt5.qttools ]
+  buildInputs = [ boost libtorrentRasterbar qtbase qttools ]
     ++ optional guiSupport dbus_libs;
 
   preConfigure = ''

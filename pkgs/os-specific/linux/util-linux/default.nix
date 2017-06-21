@@ -1,19 +1,28 @@
 { lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
 , ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
 
-stdenv.mkDerivation rec {
-  name = "util-linux-${version}";
+let
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.29";
-  patchVersion = "2";
+  majorVersion = "2.30";
+  patchVersion = "";
+
+  fstrimPatch = fetchpatch {
+    url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=155d48f590a50bb5dc265162ff2f9a971daed543";
+    sha256 = "1wj0fj3iwaimr6p8wxg6l2i1hjyrfgcwcxziyxqz8acxba7k6zxh";
+  };
+in stdenv.mkDerivation rec {
+  name = "util-linux-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "1qz81w8vzrmy8xn9yx7ls4amkbgwx6vr62pl6kv9g7r0g3ba9kmc";
+    sha256 = "13d0ax8bcapga8phj2nclx86w57ddqxbr98ajibpzjq6d7zs8262";
   };
 
-  patches = [ ./rtcwake-search-PATH-for-shutdown.patch ];
+  patches = [
+    ./rtcwake-search-PATH-for-shutdown.patch
+    fstrimPatch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 

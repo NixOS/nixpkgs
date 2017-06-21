@@ -318,7 +318,13 @@ containing some shell commands to be executed, or by redefining the
 shell function
 <varname><replaceable>name</replaceable>Phase</varname>.  The former
 is convenient to override a phase from the derivation, while the
-latter is convenient from a build script.</para>
+latter is convenient from a build script.
+
+However, typically one only wants to <emphasis>add</emphasis> some
+commands to a phase, e.g. by defining <literal>postInstall</literal>
+or <literal>preFixup</literal>, as skipping some of the default actions
+may have unexpected consequences.
+</para>
 
 
 <section xml:id="ssec-controlling-phases"><title>Controlling

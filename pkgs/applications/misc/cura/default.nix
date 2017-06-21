@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, cmake, python3, qtbase, makeQtWrapper, curaengine }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase, curaengine }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "cura-${version}";
   version = "2.4.0";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
   propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial ];
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython makeQtWrapper ];
+  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${python3.pkgs.uranium}/share/cmake-${cmake.majorVersion}/Modules" ];
 
@@ -24,11 +24,9 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapPythonPrograms
-    mv $out/bin/cura $out/bin/.cura-noqtpath
-    makeQtWrapper $out/bin/.cura-noqtpath $out/bin/cura
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
     homepage = "https://github.com/Ultimaker/Cura";
     license = licenses.agpl3;

@@ -811,6 +811,7 @@ in
 
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
+        StandardError = "null";
         PIDFile = pidFile;
         Restart = "always";
         RestartSec = "4s";

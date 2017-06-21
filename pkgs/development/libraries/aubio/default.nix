@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aubio-0.4.4";
+  name = "aubio-0.4.5";
 
   src = fetchurl {
     url = "http://aubio.org/pub/${name}.tar.bz2";
-    sha256 = "1y5zzwv9xjc649g4xrlqnim4q7pcwgzn0xrq3ijbmm5r4ckbkk9a";
+    sha256 = "1xkshac4wdm7r5sc04c38d6lmvv5sk4qrb5r1yy0xgsgdx781hkh";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for audio labelling";
-    homepage = http://aubio.org/;
+    homepage = https://aubio.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ goibhniu marcweber fpletz ];
     platforms = platforms.linux;

@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   ffmpeg, kio
 }:
 
-kdeApp {
+mkDerivation {
   name = "ffmpegthumbs";
   meta = {
     license = with lib.licenses; [ gpl2 bsd3 ];

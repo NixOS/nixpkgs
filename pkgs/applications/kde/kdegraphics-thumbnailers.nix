@@ -1,9 +1,9 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, kio, libkexiv2, libkdcraw
 }:
 
-kdeApp {
+mkDerivation {
   name = "kdegraphics-thumbnailers";
   meta = {
     license = [ lib.licenses.lgpl21 ];

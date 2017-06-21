@@ -105,6 +105,9 @@ let
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
+      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
+      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
+      ./patches/fix_network_api_crash.patch
     ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
       ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -128,6 +131,9 @@ let
         i #include <algorithm>
         :l; n; bl
       }' gpu/config/gpu_control_list.cc
+
+      # Allow to put extensions into the system-path.
+      sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
       patchShebangs .
       # use our own nodejs

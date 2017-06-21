@@ -104,6 +104,15 @@ rmdir /var/lib/ipfs/.ipfs
       <literal>dataDir</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>ssh-agent</literal> user service is not started by default
+      anymore. Use <literal>programs.ssh.startAgent</literal> to enable it if
+      needed. There is also a new <literal>programs.gnupg.agent</literal>
+      module that creates a <literal>gpg-agent</literal> user service. It can
+      also serve as a SSH agent if <literal>enableSSHSupport</literal> is set.
+    </para>
+  </listitem>
 </itemizedlist>
 
 

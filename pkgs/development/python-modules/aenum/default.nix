@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "2.0.7";
+  version = "2.0.8";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c5db863b5531cc059313018e57bc765b0ef1fc96ba799f105ea45d99b1c2d23";
+    sha256 = "3209fa41b8c41345442e8d9b5158a57d3e96d84c3d5ebbe8e521e1e2eff1598d";
   };
 
   doCheck = !isPy3k;
