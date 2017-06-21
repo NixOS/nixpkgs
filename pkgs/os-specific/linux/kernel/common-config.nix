@@ -461,8 +461,10 @@ with stdenv.lib;
   SCHED_TRACER y
   STACK_TRACER y
 
-  ${optionalString (versionOlder version "4.11") ''
+  ${if versionOlder version "4.11" then ''
     UPROBE_EVENT? y
+  '' else ''
+    UPROBE_EVENTS? y
   ''}
 
   ${optionalString (versionAtLeast version "4.4") ''
