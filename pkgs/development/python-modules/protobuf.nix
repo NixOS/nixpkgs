@@ -1,5 +1,5 @@
 { stdenv, python, buildPythonPackage
-, protobuf, google_apputils, pyext
+, protobuf, google_apputils, pyext, libcxx
 , disabled, doCheck ? true }:
 
 with stdenv.lib;
@@ -7,6 +7,9 @@ with stdenv.lib;
 buildPythonPackage rec {
   inherit (protobuf) name src;
   inherit disabled doCheck;
+
+  # work around python distutils compiling C++ with $CC
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [ protobuf google_apputils ];
   buildInputs = [ google_apputils pyext ];
