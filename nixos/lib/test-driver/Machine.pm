@@ -572,6 +572,12 @@ sub waitForText {
     my ($self, $regexp) = @_;
     $self->nest("waiting for $regexp to appear on the screen", sub {
         retry sub {
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on the screen, which currently contains:");
+                $self->log($self->getScreenText);
+            }
+
             return 1 if $self->getScreenText =~ /$regexp/;
         }
     });
