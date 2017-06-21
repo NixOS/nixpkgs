@@ -13124,6 +13124,8 @@ with pkgs;
     inherit (vamp) vampSDK;
   };
 
+  inherit (python34Packages) arelle;
+
   ario = callPackage ../applications/audio/ario { };
 
   arora = callPackage ../applications/networking/browsers/arora { };
