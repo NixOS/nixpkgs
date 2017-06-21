@@ -1,10 +1,8 @@
 {
   mkDerivation, copyPathsToStore, lib, kdepimTeam,
-  extra-cmake-modules,
-  kcompletion, kconfigwidgets, kdbusaddons, kdesignerplugin, kiconthemes,
-  kwindowsystem, kcrash, kio,
-  boost, kitemmodels, shared_mime_info,
-  mysql
+  extra-cmake-modules, shared_mime_info,
+  boost, kcompletion, kconfigwidgets, kcrash, kdbusaddons, kdesignerplugin,
+  ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
 }:
 
 mkDerivation {
@@ -14,12 +12,13 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
   buildInputs = [
-    kcompletion kconfigwidgets kdbusaddons kdesignerplugin kiconthemes kio
-    kwindowsystem kcrash shared_mime_info
+    kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin ki18n
+    kiconthemes kio kwindowsystem qttools
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
+  outputs = [ "out" "dev" ];
   cmakeFlags = [
     "-DMYSQLD_EXECUTABLE=${lib.getBin mysql}/bin/mysqld"
   ];
