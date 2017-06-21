@@ -12,4 +12,5 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ki18n ];
   buildInputs = [ kcodecs qtbase ];
+  outputs = [ "out" "dev" ];
 }
