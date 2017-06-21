@@ -268,12 +268,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2017.1";
+    version = "2017.1.4";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1ynffm5x8fqq2r71rr9rbvdifbwbvbhqb2x1hkyy4az38gxal1bm";
+      sha256 = "0zrbcziznz6dwh56snr27752xcsnl2gsxzi6jiraplkd92f2xlaf";
     };
     wmClass = "jetbrains-phpstorm";
   };
@@ -292,12 +292,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2017.1.3";
+    version = "2017.1.4";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0g4b0x910231ljdj18lnj2mlzmzyl12lv3fsbsz6v45i1kwpwnvc";
+      sha256 = "0aw2728wknss5vn2fkgz8rkm5vwk031305f32dirfrh51bvmq2zm";
     };
     wmClass = "jetbrains-webstorm";
   };
