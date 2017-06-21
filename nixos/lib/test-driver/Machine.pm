@@ -612,6 +612,13 @@ sub waitForWindow {
     $self->nest("waiting for a window to appear", sub {
         retry sub {
             my @names = $self->getWindowNames;
+
+            my ($retries_remaining) = @_;
+            if ($retries_remaining == 0) {
+                $self->log("Last chance to match /$regexp/ on the the window list, which currently contains:");
+                $self->log(join(", ", @names));
+            }
+
             foreach my $n (@names) {
                 return 1 if $n =~ /$regexp/;
             }
