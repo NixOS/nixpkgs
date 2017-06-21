@@ -225,12 +225,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2017.1";
+    version = "2017.1.4";
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "91ee6a1e43d75a45ae51829835e457da85262410d89e617324d0239ba5625dfa";
+      sha256 = "0f03hgiiwlxnsvcm4dg2qf8pc5dy7w5phbj6qwgmppba2x5f8lf3";
     };
     wmClass = "jetbrains-datagrip";
   };
@@ -309,12 +309,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2017.1";
+    version = "2017.1.4";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1ynffm5x8fqq2r71rr9rbvdifbwbvbhqb2x1hkyy4az38gxal1bm";
+      sha256 = "0zrbcziznz6dwh56snr27752xcsnl2gsxzi6jiraplkd92f2xlaf";
     };
     wmClass = "jetbrains-phpstorm";
   };
@@ -369,12 +369,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2017.1";
+    version = "2017.1.4";
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "6c27f43ddc385ffba2cb2f011b80ab46d9b128d0fccf3b4ea43272fe36401a3a";
+      sha256 = "06jk0anlnc4gr240i51kam47shdjgda6zg3hglk5w3bpvbyix68z";
     };
     wmClass = "jetbrains-rubymine";
   };
@@ -405,12 +405,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2017.1.3";
+    version = "2017.1.4";
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "0g4b0x910231ljdj18lnj2mlzmzyl12lv3fsbsz6v45i1kwpwnvc";
+      sha256 = "0aw2728wknss5vn2fkgz8rkm5vwk031305f32dirfrh51bvmq2zm";
     };
     wmClass = "jetbrains-webstorm";
   };
