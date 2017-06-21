@@ -40,6 +40,9 @@ let
   packages = self: with self;
     let
       callPackage = self.newScope {
+        # Team of maintainers assigned to the KDE PIM suite
+        kdepimTeam = with lib.maintainers; [ ttuegel vandenoever ];
+
         mkDerivation = import ./build-support/application.nix {
           inherit lib;
           inherit srcs;
