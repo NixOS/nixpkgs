@@ -467,6 +467,7 @@
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";
   robbinch = "Robbin C. <robbinch33@gmail.com>";
+  roberth = "Robert Hensing <nixpkgs@roberthensing.nl>";
   robgssp = "Rob Glossop <robgssp@gmail.com>";
   roblabla = "Robin Lambertz <robinlambertz+dev@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
