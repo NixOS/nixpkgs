@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub
-, qmakeHook, qtbase, makeQtWrapper
-, pkgconfig, taglib, libbass, libbass_fx }:
+, qmake, qtbase, pkgconfig, taglib, libbass, libbass_fx }:
 
 stdenv.mkDerivation rec {
   name = "ultrastar-creator-${version}";
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase taglib libbass libbass_fx ];
 
   meta = with stdenv.lib; {

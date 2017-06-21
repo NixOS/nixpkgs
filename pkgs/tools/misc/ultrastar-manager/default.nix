@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, symlinkJoin, qmakeHook, diffPlugins
-, qtbase, qtmultimedia, makeQtWrapper
-, taglib, libmediainfo, libzen, libbass }:
+{ stdenv, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
+, qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
 
 let
   version = "2017-05-24";
@@ -60,7 +59,7 @@ let
     name = "ultrastar-manager-${name}-plugin-${version}";
     src = patchedSrc;
 
-    buildInputs = [ qmakeHook ] ++ buildInputs;
+    buildInputs = [ qmake ] ++ buildInputs;
 
     postPatch = ''
       sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
@@ -109,7 +108,7 @@ in stdenv.mkDerivation {
     make install
   '';
 
-  nativeBuildInputs = [ makeQtWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   inherit buildInputs;
 
   meta = with stdenv.lib; {

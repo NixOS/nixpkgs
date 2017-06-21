@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
-, qtbase, qtimageformats, makeQtWrapper
+{ mkDerivation, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
+, qtbase, qtimageformats
 , breakpad, gtk3, libappindicator-gtk3, dee
 , ffmpeg, openalSoft, minizip
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "telegram-desktop-${version}";
   version = "1.0.27";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gtk3 libappindicator-gtk3 dee qtbase qtimageformats ffmpeg openalSoft minizip
   ];
 
-  nativeBuildInputs = [ pkgconfig gyp cmake makeQtWrapper ];
+  nativeBuildInputs = [ pkgconfig gyp cmake ];
 
   patches = [ "${tgaur}/aur-build-fixes.patch" ];
 
@@ -86,10 +86,9 @@ stdenv.mkDerivation rec {
     for icon_size in 16 32 48 64 128 256 512; do
       install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
     done
-    wrapQtProgram $out/bin/telegram-desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
     platforms = platforms.linux;

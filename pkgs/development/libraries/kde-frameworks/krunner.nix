@@ -1,14 +1,17 @@
-{ kdeFramework, lib, extra-cmake-modules, kconfig, kcoreaddons
-, ki18n, kio, kservice, plasma-framework, solid
-, threadweaver
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kconfig, kcoreaddons, ki18n, kio, kservice, plasma-framework, qtbase,
+  qtdeclarative, solid, threadweaver
 }:
 
-kdeFramework {
+mkDerivation {
   name = "krunner";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [
-    kconfig kcoreaddons ki18n kio kservice plasma-framework solid
+  buildInputs = [
+    kconfig kcoreaddons ki18n kio kservice qtdeclarative solid
     threadweaver
   ];
+  propagatedBuildInputs = [ plasma-framework qtbase ];
 }

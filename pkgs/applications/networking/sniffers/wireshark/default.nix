@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.2.6";
+  version = "2.2.7";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
-    sha256 = "0jd89i9si43lyv3hsl6p1lkjmz4zagvc37wcbigsxxc5v8gda9zn";
+    sha256 = "1dfvhra5v6xhzbp097qsxi0zvirw0srbasl4v1wjf58v49idz7b8";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.wireshark.org/;
+    homepage = https://www.wireshark.org/;
     description = "Powerful network protocol analyzer";
     license = licenses.gpl2;
 

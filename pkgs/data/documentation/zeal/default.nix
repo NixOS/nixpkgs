@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, libarchive, pkgconfig, qtbase
-, qtimageformats, qtwebkit, qtx11extras, xcbutilkeysyms, qmakeHook }:
+, qtimageformats, qtwebkit, qtx11extras, xcbutilkeysyms, qmake }:
 
 stdenv.mkDerivation rec {
   version = "0.3.1";
@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "14ld7zm15677jdlasnfa6c42kiswd4d6yg1db50xbk2yflzzwqqa";
   };
 
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    xcbutilkeysyms pkgconfig qtbase qtimageformats qtwebkit qtx11extras libarchive qmakeHook
+    xcbutilkeysyms qtbase qtimageformats qtwebkit qtx11extras libarchive
   ];
 
   qmakeFlags = [ "PREFIX=/" ];

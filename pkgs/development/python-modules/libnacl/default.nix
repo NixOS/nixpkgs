@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "libnacl";
-  version = "1.5.0";
+  version = "1.5.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ph042x0cfysj16mmjif40pxn505rg5c9n94s972dgc0mfgvrwhs";
+    sha256 = "e44e9436e7245b0d8b7322bef67750cb7757834d7ccdb7eb7b723b4813df84fb";
   };
 
   buildInputs = [ pytest ];

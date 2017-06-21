@@ -1,4 +1,4 @@
-{ kdeFramework, lib
+{ mkDerivation, lib
 , extra-cmake-modules
 , kcodecs, kconfig, kcoreaddons, kwindowsystem
 , libdbusmenu
@@ -6,11 +6,11 @@
 , qttools, qtx11extras
 }:
 
-kdeFramework {
+mkDerivation {
   name = "knotifications";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules qttools ];
-  propagatedBuildInputs = [
+  buildInputs = [
     kcodecs kconfig kcoreaddons kwindowsystem libdbusmenu phonon qtx11extras
   ];
 }

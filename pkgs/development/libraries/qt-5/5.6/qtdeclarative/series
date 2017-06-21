@@ -1,1 +1,1 @@
-nix-profiles-import-paths.patch
+import-paths.patch

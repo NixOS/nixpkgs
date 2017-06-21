@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "yle-dl-${version}";
-  version = "2.16";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "1ahv7b3r52mvi2b5ji77l62hy543b6pdmq8hnd9xxvnxai463k35";
+    sha256 = "06szrcm1xlz6i736qkxzhhvrzg63shxzy2bww91bgxfccmkapa14";
   };
 
   patchPhase = ''

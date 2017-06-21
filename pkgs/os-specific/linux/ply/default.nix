@@ -1,9 +1,12 @@
-{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, bison }:
+{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, bison, p7zip }:
+
+assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.0";
+
 let
   version = "1.0.beta1-9e810b1";
 in stdenv.mkDerivation {
   name = "ply-${version}";
-  nativeBuildInputs = [ autoreconfHook flex yacc ];
+  nativeBuildInputs = [ autoreconfHook flex yacc p7zip ];
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -14,7 +17,9 @@ in stdenv.mkDerivation {
 
   preAutoreconf = ''
     # ply wants to install header fails to its build directory
-    xz -d < ${kernel.src} | tar -xf -
+    # use 7z to handle multiple archive formats transparently
+    7z x ${kernel.src} -so | 7z x -aoa -si -ttar
+
     configureFlagsArray+=(--with-kerneldir=$(echo $(pwd)/linux-*))
     ./autogen.sh --prefix=$out
   '';

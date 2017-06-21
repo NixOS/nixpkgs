@@ -1,15 +1,16 @@
 {
-  kdeFramework, lib, extra-cmake-modules,
+  mkDerivation, lib, extra-cmake-modules,
   epoxy, kconfig, kglobalaccel, kguiaddons, ki18n, kiconthemes, kio, kpackage,
   kwidgetsaddons, kwindowsystem, pkgconfig, qtdeclarative
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kdeclarative";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [
-    epoxy kconfig kglobalaccel kguiaddons ki18n kiconthemes kio kpackage
-    kwidgetsaddons kwindowsystem qtdeclarative
+  buildInputs = [
+    epoxy kglobalaccel kguiaddons ki18n kiconthemes kio kwidgetsaddons
+    kwindowsystem
   ];
+  propagatedBuildInputs = [ kconfig kpackage qtdeclarative ];
 }

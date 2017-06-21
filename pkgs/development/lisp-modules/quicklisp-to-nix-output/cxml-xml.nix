@@ -13,6 +13,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cxml/2011-06-19/cxml-20110619-git.tgz'';
     sha256 = ''04k6syn9p7qsazi84kab9n9ki2pb5hrcs0ilw7wikxfqnbabm2yk'';
   };
+    
+  packageName = "cxml-xml";
 
   overrides = x: {
     postInstall = ''
@@ -32,5 +34,5 @@ rec {
 }
 /* (SYSTEM cxml-xml DESCRIPTION NIL SHA256 04k6syn9p7qsazi84kab9n9ki2pb5hrcs0ilw7wikxfqnbabm2yk URL
     http://beta.quicklisp.org/archive/cxml/2011-06-19/cxml-20110619-git.tgz MD5 587755dff60416d4f716f4e785cf747e NAME cxml-xml TESTNAME cxml FILENAME cxml-xml
-    DEPS ((NAME trivial-gray-streams) (NAME puri) (NAME closure-common)) DEPENDENCIES (trivial-gray-streams puri closure-common) VERSION cxml-20110619-git
-    SIBLINGS (cxml)) */
+    DEPS ((NAME trivial-gray-streams FILENAME trivial-gray-streams) (NAME puri FILENAME puri) (NAME closure-common FILENAME closure-common)) DEPENDENCIES
+    (trivial-gray-streams puri closure-common) VERSION cxml-20110619-git SIBLINGS (cxml)) */

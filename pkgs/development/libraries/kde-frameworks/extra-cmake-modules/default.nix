@@ -1,6 +1,6 @@
-{ kdeFramework, lib, copyPathsToStore, cmake, pkgconfig }:
+{ mkDerivation, lib, copyPathsToStore, cmake, pkgconfig }:
 
-kdeFramework {
+mkDerivation {
   name = "extra-cmake-modules";
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

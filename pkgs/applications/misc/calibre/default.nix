@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
+, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
 , xdg_utils, makeDesktopItem, wrapGAppsHook
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg

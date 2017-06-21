@@ -25,6 +25,7 @@ qtSubmodule {
   buildInputs = [ bison flex git which gperf ];
   nativeBuildInputs = [ pkgconfig python2 coreutils ];
   doCheck = true;
+  outputs = [ "out" "dev" "bin" ];
 
   enableParallelBuilding = true;
 
@@ -90,5 +91,7 @@ qtSubmodule {
     EOF
 
     paxmark m $out/libexec/QtWebEngineProcess
+
+    moveToOutput "$qtQmlPrefix" "$bin"
   '';
 }
