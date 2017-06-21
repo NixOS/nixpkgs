@@ -1,5 +1,5 @@
 {
-  mkDerivation, copyPathsToStore, lib,
+  mkDerivation, copyPathsToStore, lib, kdepimTeam,
   extra-cmake-modules,
   kcompletion, kconfigwidgets, kdbusaddons, kdesignerplugin, kiconthemes,
   kwindowsystem, kcrash, kio,
@@ -11,7 +11,7 @@ mkDerivation {
   name = "akonadi";
   meta = {
     license = [ lib.licenses.lgpl21 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = kdepimTeam;
   };
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules ];
