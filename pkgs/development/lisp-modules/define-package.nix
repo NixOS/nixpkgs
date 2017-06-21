@@ -1,4 +1,5 @@
-args @ {stdenv, clwrapper, baseName, testSystems ? [baseName], version ? "latest"
+args @ {stdenv, clwrapper, baseName, packageName ? baseName, testSystems ? [packageName]
+  , version ? "latest"
   , src, description, deps, buildInputs ? [], meta ? {}, overrides?(x: {})
   , propagatedBuildInputs ? []}:
 let

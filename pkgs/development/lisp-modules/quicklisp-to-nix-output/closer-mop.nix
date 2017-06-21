@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''closer-mop'';
-  version = ''20170403-git'';
+  version = ''20170516-git'';
 
   description = ''Closer to MOP is a compatibility layer that rectifies many of the absent or incorrect CLOS MOP features across a broad range of Common Lisp implementations.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/closer-mop/2017-04-03/closer-mop-20170403-git.tgz'';
-    sha256 = ''166k9r55zf0lyvdacvih5y63xv2kp0kqmx9z6jmkyb3snrdghijf'';
+    url = ''http://beta.quicklisp.org/archive/closer-mop/2017-05-16/closer-mop-20170516-git.tgz'';
+    sha256 = ''072nf6d0gg76vkb1wkkzlfcck5ksril4anmjbmylbrwm3mn61p5w'';
   };
+    
+  packageName = "closer-mop";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,5 @@ rec {
 }
 /* (SYSTEM closer-mop DESCRIPTION
     Closer to MOP is a compatibility layer that rectifies many of the absent or incorrect CLOS MOP features across a broad range of Common Lisp implementations.
-    SHA256 166k9r55zf0lyvdacvih5y63xv2kp0kqmx9z6jmkyb3snrdghijf URL http://beta.quicklisp.org/archive/closer-mop/2017-04-03/closer-mop-20170403-git.tgz MD5
-    806918d9975d0c82fc471f95f40972a1 NAME closer-mop TESTNAME NIL FILENAME closer-mop DEPS NIL DEPENDENCIES NIL VERSION 20170403-git SIBLINGS NIL) */
+    SHA256 072nf6d0gg76vkb1wkkzlfcck5ksril4anmjbmylbrwm3mn61p5w URL http://beta.quicklisp.org/archive/closer-mop/2017-05-16/closer-mop-20170516-git.tgz MD5
+    169ba62f7f8f436e45f182cbe7dd8614 NAME closer-mop TESTNAME NIL FILENAME closer-mop DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */

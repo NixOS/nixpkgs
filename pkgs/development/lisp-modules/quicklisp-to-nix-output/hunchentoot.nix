@@ -14,6 +14,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/hunchentoot/2016-03-18/hunchentoot-1.2.35.tgz'';
     sha256 = ''0gp2rgndkijjydb1x3p8414ii1z372gzdy945jy0491bcbhygj74'';
   };
+    
+  packageName = "hunchentoot";
 
   overrides = x: {
     postInstall = ''
@@ -37,6 +39,7 @@ rec {
   through subclassing.
     SHA256 0gp2rgndkijjydb1x3p8414ii1z372gzdy945jy0491bcbhygj74 URL http://beta.quicklisp.org/archive/hunchentoot/2016-03-18/hunchentoot-1.2.35.tgz MD5
     d1ce17dec454cab119c0f263e8a176d1 NAME hunchentoot TESTNAME NIL FILENAME hunchentoot DEPS
-    ((NAME bordeaux-threads) (NAME chunga) (NAME cl+ssl) (NAME cl-base64) (NAME cl-fad) (NAME cl-ppcre) (NAME flexi-streams) (NAME md5) (NAME rfc2388)
-     (NAME trivial-backtrace) (NAME usocket))
+    ((NAME bordeaux-threads FILENAME bordeaux-threads) (NAME chunga FILENAME chunga) (NAME cl+ssl FILENAME cl+ssl) (NAME cl-base64 FILENAME cl-base64)
+     (NAME cl-fad FILENAME cl-fad) (NAME cl-ppcre FILENAME cl-ppcre) (NAME flexi-streams FILENAME flexi-streams) (NAME md5 FILENAME md5)
+     (NAME rfc2388 FILENAME rfc2388) (NAME trivial-backtrace FILENAME trivial-backtrace) (NAME usocket FILENAME usocket))
     DEPENDENCIES (bordeaux-threads chunga cl+ssl cl-base64 cl-fad cl-ppcre flexi-streams md5 rfc2388 trivial-backtrace usocket) VERSION 1.2.35 SIBLINGS NIL) */
