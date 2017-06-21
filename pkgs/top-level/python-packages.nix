@@ -1184,6 +1184,15 @@ in {
     };
   };
 
+  arelle = callPackage ../development/python-modules/arelle {
+    gui = true;
+  };
+
+  arelle-headless = callPackage ../development/python-modules/arelle {
+    gui = false;
+  };
+
+
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
     version = "0.7.0";
