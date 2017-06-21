@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules,
+  extra-cmake-modules, shared_mime_info,
   akonadi, kdbusaddons, ki18n, kio, kitemmodels, kmime
 }:
 
@@ -10,7 +10,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 lgpl21 ];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
   buildInputs = [ akonadi kdbusaddons ki18n kio kitemmodels kmime ];
   outputs = [ "out" "dev" ];
 }
