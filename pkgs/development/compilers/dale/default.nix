@@ -23,6 +23,8 @@ in stdenv.mkDerivation {
   buildInputs = [ cmake pkgconfig libffi llvm_35 ]
              ++ stdenv.lib.optional doCheck perl;
 
+  patches = [ ./link-llvm.patch ];
+
   inherit doCheck;
 
   checkTarget = "tests";
