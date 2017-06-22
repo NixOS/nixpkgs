@@ -1,4 +1,5 @@
-#!/usr/bin/env perl
+#!/usr/bin/env nix-shell
+#!nix-shell -i perl -p perl perlPackages.LWP
 
 use strict;
 use List::Util qw(reduce);
