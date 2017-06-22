@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline ];
 
-  preInstalledPhase = ''
+  preInstall = ''
     mkdir $out/bin -p
     mkdir $out/share/man/ -p
   '';
