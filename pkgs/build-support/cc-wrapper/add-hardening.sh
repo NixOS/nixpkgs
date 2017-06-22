@@ -1,4 +1,4 @@
-hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow)
+hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow stackcheck)
 hardeningFlags+=("${hardeningEnable[@]}")
 hardeningCFlags=()
 hardeningLDFlags=()
@@ -50,7 +50,11 @@ if [[ ! $hardeningDisable =~ "all" ]]; then
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling bindnow >&2; fi
           hardeningLDFlags+=('-z' 'now')
           ;;
-        *)
+        stackcheck)
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling stackcheck >&2; fi
+          hardeningCFlags+=('-fstack-check=specific')
+          ;;
+         *)
           echo "Hardening flag unknown: $flag" >&2
           ;;
       esac

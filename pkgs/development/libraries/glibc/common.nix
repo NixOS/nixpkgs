@@ -59,6 +59,11 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
+
+      /* Stack Clash */
+      ./CVE-2017-1000366-rtld-LD_LIBRARY_PATH.patch
+      ./CVE-2017-1000366-rtld-LD_PRELOAD.patch
+      ./CVE-2017-1000366-rtld-LD_AUDIT.patch
     ]
       ++ lib.optional stdenv.isi686 ./fix-i686-memchr.patch;
 
