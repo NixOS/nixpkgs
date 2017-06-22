@@ -1,5 +1,5 @@
 { mkDerivation, lib
-, extra-cmake-modules, kdoctools, makeWrapper
+, extra-cmake-modules, kdoctools, makeWrapper, shared_mime_info
 , qtwebkit
 , libkcddb, karchive, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
