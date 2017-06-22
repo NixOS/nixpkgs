@@ -93,12 +93,13 @@ self: super: {
   # Needs void on pre 7.10.x compilers.
   conduit = addBuildDepend super.conduit self.void;
 
-  # Needs additional inputs on pre 7.10.x compilers.
+  # Needs additional inputs on old compilers.
   semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend super.distributive self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   void = addBuildDepends super.void (with self; [hashable semigroups]);
+  optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
 
   # Need a newer version of Cabal to interpret their build instructions.
   cmdargs = addSetupDepend super.cmdargs self.Cabal_1_24_2_0;

@@ -72,13 +72,10 @@ self: super: {
   # Newer versions require bytestring >=0.10.
   tar = super.tar_0_4_1_0;
 
-  # Needs void on pre 7.10.x compilers.
+  # These builds need additional dependencies on old compilers.
   conduit = addBuildDepend super.conduit self.void;
-
-  # Needs tagged on pre 7.6.x compilers.
   reflection = addBuildDepend super.reflection self.tagged;
-
-  # Needs nats on pre 7.6.x compilers.
   semigroups = addBuildDepend super.semigroups self.nats;
+  optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
 
 }
