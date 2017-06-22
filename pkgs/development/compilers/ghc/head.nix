@@ -15,8 +15,6 @@ let
   version = "8.1.20170106";
   rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
-  outputs = [ "out" "doc" ];
-
   commonPreConfigure =  ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
@@ -76,6 +74,8 @@ in stdenv.mkDerivation (rec {
       sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
     done
   '';
+
+  outputs = [ "out" "doc" ];
 
   passthru = {
     inherit bootPkgs;
