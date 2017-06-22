@@ -2449,6 +2449,7 @@ extra-packages:
   - hpack < 0.18                        # required by stack-1.4.0
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
+  - network == 2.6.3.1                  # newer versions don't compile with GHC 7.4.x and below
   - parallel == 3.2.0.3                 # newer versions don't work with GHC 6.12.3
   - primitive == 0.5.1.*                # required to build alex with GHC 6.12.3
   - QuickCheck < 2                      # required by test-framework-quickcheck and its users

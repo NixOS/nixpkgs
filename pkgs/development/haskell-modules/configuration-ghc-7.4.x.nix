@@ -102,4 +102,8 @@ self: super: {
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
 
+  # Newer versions don't compile any longer.
+  network_2_6_3_1 = dontCheck super.network_2_6_3_1;
+  network = self.network_2_6_3_1;
+
 }
