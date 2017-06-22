@@ -5986,7 +5986,7 @@ with pkgs;
     erlangR18 erlangR18_odbc erlangR18_javac erlangR18_odbc_javac
     erlangR19 erlangR19_odbc erlangR19_javac erlangR19_odbc_javac;
 
-  inherit (beam.packages)
+  inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
     hex2nix cuter relxExe;
