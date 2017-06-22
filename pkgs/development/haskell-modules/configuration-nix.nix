@@ -461,4 +461,7 @@ self: super: builtins.intersectAttrs super {
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
+  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
+  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
+
 }
