@@ -11915,6 +11915,7 @@ in {
 
     patches = optionals pkgs.stdenv.isDarwin [
       ../development/python-modules/gyp/no-darwin-cflags.patch
+      ../development/python-modules/gyp/no-xcode.patch
     ];
 
     disabled = isPy3k;
