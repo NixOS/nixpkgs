@@ -211,198 +211,16 @@ isScript() {
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
 
-
-######################################################################
-# Initialisation.
-
-
-# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
-# build tools to provide a deterministic substitute for the "current"
-# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
-# confuses some applications.
-export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=1}
-
-
-# Wildcard expansions that don't match should expand to an empty list.
-# This ensures that, for instance, "for i in *; do ...; done" does the
-# right thing.
-shopt -s nullglob
-
-
-# Set up the initial path.
-PATH=
-for i in $initialPath; do
-    if [ "$i" = / ]; then i=; fi
-    addToSearchPath PATH $i/bin
-done
-
-if [ "$NIX_DEBUG" = 1 ]; then
-    echo "initial path: $PATH"
-fi
-
-
-# Check that the pre-hook initialised SHELL.
-if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
-BASH="$SHELL"
-export CONFIG_SHELL="$SHELL"
-
-
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
-
-
-# Execute the pre-hook.
-if [ -z "$shell" ]; then export shell=$SHELL; fi
-runHook preHook
-
-
-# Allow the caller to augment buildInputs (it's not always possible to
-# do this before the call to setup.sh, since the PATH is empty at that
-# point; here we have a basic Unix environment).
-runHook addInputsHook
-
-
-# Recursively find all build inputs.
-findInputs() {
-    local pkg="$1"
-    local var=$2
-    local propagatedBuildInputsFile=$3
-
-    case ${!var} in
-        *\ $pkg\ *)
-            return 0
-            ;;
-    esac
-
-    eval $var="'${!var} $pkg '"
-
-    if ! [ -e "$pkg" ]; then
-        echo "build input $pkg does not exist" >&2
-        exit 1
-    fi
-
-    if [ -f "$pkg" ]; then
-        source "$pkg"
-    fi
-
-    if [ -d $1/bin ]; then
-        addToSearchPath _PATH $1/bin
-    fi
-
-    if [ -f "$pkg/nix-support/setup-hook" ]; then
-        source "$pkg/nix-support/setup-hook"
-    fi
-
-    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        for i in $(cat "$pkg/nix-support/$propagatedBuildInputsFile"); do
-            findInputs "$i" $var $propagatedBuildInputsFile
-        done
+# Print the base name of the given path,
+# with the prefix `HASH-' removed, if present.
+stripHash() {
+    local strippedName="$(basename "$1")";
+    if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
+        echo "$strippedName" | cut -c34-
+    else
+        echo "$strippedName"
     fi
 }
-
-if [ -z "$crossConfig" ]; then
-    # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
-    # are handled identically to nativeBuildInputs
-    nativePkgs=""
-    for i in $nativeBuildInputs $buildInputs \
-             $defaultNativeBuildInputs $defaultBuildInputs \
-             $propagatedNativeBuildInputs $propagatedBuildInputs; do
-        findInputs $i nativePkgs propagated-native-build-inputs
-    done
-else
-    crossPkgs=""
-    for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
-        findInputs $i crossPkgs propagated-build-inputs
-    done
-
-    nativePkgs=""
-    for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
-        findInputs $i nativePkgs propagated-native-build-inputs
-    done
-fi
-
-
-# Set the relevant environment variables to point to the build inputs
-# found above.
-_addToNativeEnv() {
-    local pkg=$1
-
-    # Run the package-specific hooks set by the setup-hook scripts.
-    runHook envHook "$pkg"
-}
-
-for i in $nativePkgs; do
-    _addToNativeEnv $i
-done
-
-_addToCrossEnv() {
-    local pkg=$1
-
-    # Run the package-specific hooks set by the setup-hook scripts.
-    runHook crossEnvHook "$pkg"
-}
-
-for i in $crossPkgs; do
-    _addToCrossEnv $i
-done
-
-
-_addRpathPrefix "$out"
-
-
-# Set the TZ (timezone) environment variable, otherwise commands like
-# `date' will complain (e.g., `Tue Mar 9 10:01:47 Local time zone must
-# be set--see zic manual page 2004').
-export TZ=UTC
-
-
-# Set the prefix.  This is generally $out, but it can be overriden,
-# for instance if we just want to perform a test build/install to a
-# temporary location and write a build report to $out.
-if [ -z "$prefix" ]; then
-    prefix="$out";
-fi
-
-if [ "$useTempPrefix" = 1 ]; then
-    prefix="$NIX_BUILD_TOP/tmp_prefix";
-fi
-
-
-PATH=$_PATH${_PATH:+:}$PATH
-if [ "$NIX_DEBUG" = 1 ]; then
-    echo "final path: $PATH"
-fi
-
-
-# Make GNU Make produce nested output.
-export NIX_INDENT_MAKE=1
-
-
-# Normalize the NIX_BUILD_CORES variable. The value might be 0, which
-# means that we're supposed to try and auto-detect the number of
-# available CPU cores at run-time.
-
-if [ -z "${NIX_BUILD_CORES:-}" ]; then
-  NIX_BUILD_CORES="1"
-elif [ "$NIX_BUILD_CORES" -le 0 ]; then
-  NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
-  if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
-    :
-  else
-    NIX_BUILD_CORES="1"
-  fi
-fi
-export NIX_BUILD_CORES
-
-
-# Prevent OpenSSL-based applications from using certificates in
-# /etc/ssl.
-# Leave it in shells for convenience.
-if [ -z "$SSL_CERT_FILE" ] && [ -z "$IN_NIX_SHELL" ]; then
-  export SSL_CERT_FILE=/no-cert-file.crt
-fi
 
 
 ######################################################################
@@ -498,6 +316,203 @@ substituteAllInPlace() {
 
 
 ######################################################################
+# Initialisation.
+
+
+# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
+# build tools to provide a deterministic substitute for the "current"
+# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
+# confuses some applications.
+export SOURCE_DATE_EPOCH
+: ${SOURCE_DATE_EPOCH:=1}
+
+
+# Wildcard expansions that don't match should expand to an empty list.
+# This ensures that, for instance, "for i in *; do ...; done" does the
+# right thing.
+shopt -s nullglob
+
+
+# Set up the initial path.
+PATH=
+for i in $initialPath; do
+    if [ "$i" = / ]; then i=; fi
+    addToSearchPath PATH $i/bin
+done
+
+if [ "$NIX_DEBUG" = 1 ]; then
+    echo "initial path: $PATH"
+fi
+
+
+# Check that the pre-hook initialised SHELL.
+if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
+BASH="$SHELL"
+export CONFIG_SHELL="$SHELL"
+
+
+# Dummy implementation of the paxmark function. On Linux, this is
+# overwritten by paxctl's setup hook.
+paxmark() { true; }
+
+
+# Execute the pre-hook.
+if [ -z "$shell" ]; then export shell=$SHELL; fi
+runHook preHook
+
+
+# Allow the caller to augment buildInputs (it's not always possible to
+# do this before the call to setup.sh, since the PATH is empty at that
+# point; here we have a basic Unix environment).
+runHook addInputsHook
+
+
+# Recursively find all build inputs.
+findInputs() {
+    local pkg="$1"
+    local var=$2
+    local propagatedBuildInputsFile=$3
+
+    case ${!var} in
+        *\ $pkg\ *)
+            return 0
+            ;;
+    esac
+
+    eval $var="'${!var} $pkg '"
+
+    if ! [ -e "$pkg" ]; then
+        echo "build input $pkg does not exist" >&2
+        exit 1
+    fi
+
+    if [ -f "$pkg" ]; then
+        source "$pkg"
+    fi
+
+    if [ -d $1/bin ]; then
+        addToSearchPath _PATH $1/bin
+    fi
+
+    if [ -f "$pkg/nix-support/setup-hook" ]; then
+        source "$pkg/nix-support/setup-hook"
+    fi
+
+    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
+        for i in $(cat "$pkg/nix-support/$propagatedBuildInputsFile"); do
+            findInputs "$i" $var $propagatedBuildInputsFile
+        done
+    fi
+}
+
+if [ -z "$crossConfig" ]; then
+    # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
+    # are handled identically to nativeBuildInputs
+    nativePkgs=""
+    for i in $defaultNativeBuildInputs $defaultBuildInputs \
+             $nativeBuildInputs $buildInputs \
+             $propagatedNativeBuildInputs $propagatedBuildInputs; do
+        findInputs $i nativePkgs propagated-native-build-inputs
+    done
+else
+    nativePkgs=""
+    for i in $defaultNativeBuildInputs; do
+        findInputs $i nativePkgs propagated-native-build-inputs
+    done
+
+    crossPkgs=""
+    for i in $defaultBuildInputs $buildInputs $propagatedBuildInputs; do
+        findInputs $i crossPkgs propagated-build-inputs
+    done
+
+    for i in $nativeBuildInputs $propagatedNativeBuildInputs; do
+        findInputs $i nativePkgs propagated-native-build-inputs
+    done
+fi
+
+
+# Set the relevant environment variables to point to the build inputs
+# found above.
+_addToNativeEnv() {
+    local pkg=$1
+
+    # Run the package-specific hooks set by the setup-hook scripts.
+    runHook envHook "$pkg"
+}
+
+for i in $nativePkgs; do
+    _addToNativeEnv $i
+done
+
+_addToCrossEnv() {
+    local pkg=$1
+
+    # Run the package-specific hooks set by the setup-hook scripts.
+    runHook crossEnvHook "$pkg"
+}
+
+for i in $crossPkgs; do
+    _addToCrossEnv $i
+done
+
+
+_addRpathPrefix "$out"
+
+
+# Set the TZ (timezone) environment variable, otherwise commands like
+# `date' will complain (e.g., `Tue Mar 9 10:01:47 Local time zone must
+# be set--see zic manual page 2004').
+export TZ=UTC
+
+
+# Set the prefix.  This is generally $out, but it can be overriden,
+# for instance if we just want to perform a test build/install to a
+# temporary location and write a build report to $out.
+if [ -z "$prefix" ]; then
+    prefix="$out";
+fi
+
+if [ "$useTempPrefix" = 1 ]; then
+    prefix="$NIX_BUILD_TOP/tmp_prefix";
+fi
+
+
+PATH=$_PATH${_PATH:+:}$PATH
+if [ "$NIX_DEBUG" = 1 ]; then
+    echo "final path: $PATH"
+fi
+
+
+# Make GNU Make produce nested output.
+export NIX_INDENT_MAKE=1
+
+
+# Normalize the NIX_BUILD_CORES variable. The value might be 0, which
+# means that we're supposed to try and auto-detect the number of
+# available CPU cores at run-time.
+
+if [ -z "${NIX_BUILD_CORES:-}" ]; then
+  NIX_BUILD_CORES="1"
+elif [ "$NIX_BUILD_CORES" -le 0 ]; then
+  NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
+  if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
+    :
+  else
+    NIX_BUILD_CORES="1"
+  fi
+fi
+export NIX_BUILD_CORES
+
+
+# Prevent OpenSSL-based applications from using certificates in
+# /etc/ssl.
+# Leave it in shells for convenience.
+if [ -z "$SSL_CERT_FILE" ] && [ -z "$IN_NIX_SHELL" ]; then
+  export SSL_CERT_FILE=/no-cert-file.crt
+fi
+
+
+######################################################################
 # What follows is the generic builder.
 
 
@@ -509,18 +524,6 @@ substituteAllInPlace() {
 dumpVars() {
     if [ "$noDumpEnvVars" != 1 ]; then
         export > "$NIX_BUILD_TOP/env-vars" || true
-    fi
-}
-
-
-# Utility function: echo the base name of the given path, with the
-# prefix `HASH-' removed, if present.
-stripHash() {
-    local strippedName="$(basename "$1")";
-    if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
-        echo "$strippedName" | cut -c34-
-    else
-        echo "$strippedName"
     fi
 }
 
