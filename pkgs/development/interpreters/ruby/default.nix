@@ -49,12 +49,12 @@ let
           rev    = tag;
           sha256 = sha256.git;
         } else fetchurl {
-          url = "http://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
+          url = "http://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver.majMinTiny}.tar.gz";
           sha256 = sha256.src;
         };
       in
       stdenv.mkDerivation rec {
-        name = "ruby-${version}";
+        name = "ruby-${ver.majMinTiny}";
 
         srcs = [ rubySrc rubygemsSrc ];
         sourceRoot =
