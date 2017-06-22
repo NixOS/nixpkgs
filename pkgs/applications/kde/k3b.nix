@@ -1,11 +1,11 @@
 { mkDerivation, lib
-, extra-cmake-modules, kdoctools, makeWrapper
+, extra-cmake-modules, kdoctools, makeWrapper, shared_mime_info
 , qtwebkit
 , libkcddb, karchive, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg, libmusicbrainz2, normalize, sox, transcode, shared_mime_info
+, ffmpeg, libmusicbrainz2, normalize, sox, transcode
 }:
 
 mkDerivation {
@@ -15,7 +15,7 @@ mkDerivation {
     maintainers = with maintainers; [ sander phreedom ];
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper shared_mime_info ];
   propagatedBuildInputs = [
     # qt
     qtwebkit
