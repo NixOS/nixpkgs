@@ -70,5 +70,5 @@ sub update_nix_block {
 }
 
 my $nix = read_file 'default.nix';
-$nix =~ s/(= build\w+ rec \{.+?\};\n\n)/update_nix_block($1)/gse;
+$nix =~ s/(= build\w+ rec \{.+?\n  \};\n)/update_nix_block($1)/gse;
 write_file 'default.nix', $nix;
