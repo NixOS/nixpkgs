@@ -52,7 +52,7 @@ if [[ ! $hardeningDisable =~ "all" ]]; then
           ;;
         stackcheck)
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling stackcheck >&2; fi
-          hardeningCFlags+=('-fstack-check=specific')
+          hardeningCFlags+=('-fstack-check')
           ;;
          *)
           echo "Hardening flag unknown: $flag" >&2
