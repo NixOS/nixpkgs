@@ -46,8 +46,7 @@ stdenv.mkDerivation rec {
     openjpeg libopus librsvg
     fluidsynth libvdpau
     libwebp xvidcore gnutls mesa
-    mjpegtools libgme
-    openssl x265 libxml2
+    mjpegtools libgme openssl x265 libxml2
   ]
     ++ libintlOrEmpty
     ++ optional faacSupport faac

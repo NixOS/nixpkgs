@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perl, IPCRun, TimeDate, TimeDuration, makeWrapper }:
+{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perl, IPCRun, TimeDate, TimeDuration, makeWrapper }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "moreutils-${version}";
-  version = "0.59";
+  version = "0.61";
 
-  src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/m/moreutils/moreutils_${version}.orig.tar.gz";
-    sha256 = "1d6ik3j4lwp90vb93p7yv60k6vk2chz448d1z9xrmxvv371i33m4";
+  src = fetchgit {
+    url = "git://git.joeyh.name/moreutils";
+    rev = "refs/tags/${version}";
+    sha256 = "1qvwlq0a2zs7qkjqc9c842979axkjfdr7nic1gsm4zc6jd72y7pr";
   };
 
   preBuild = ''
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = https://joeyh.name/code/moreutils/;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [ koral pSub ];
     platforms = platforms.all;
   };
 }

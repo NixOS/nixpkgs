@@ -1,7 +1,8 @@
 { lib, fetchurl, buildPythonPackage, genshi, lxml }:
 
 buildPythonPackage rec {
-  name = "relatorio-${version}";
+  pname = "relatorio";
+  name = "${pname}-${version}";
   version = "0.6.4";
   src = fetchurl {
     url = "mirror://pypi/r/relatorio/${name}.tar.gz";

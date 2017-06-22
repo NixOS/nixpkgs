@@ -34,6 +34,9 @@ let
   binutils_bin = if nativeTools then "" else getBin binutils;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
+
+  default_cxx_stdlib_compile=optionalString (stdenv.isLinux && !(cc.isGNU or false))
+    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
 in
 
 stdenv.mkDerivation {
@@ -46,8 +49,9 @@ stdenv.mkDerivation {
   inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
+
   passthru = {
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -189,11 +193,7 @@ stdenv.mkDerivation {
 
       export real_cc=cc
       export real_cxx=c++
-      export default_cxx_stdlib_compile="${
-        if stdenv.isLinux && !(cc.isGNU or false)
-          then "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
-          else ""
-      }"
+      export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
       if [ -e $ccPath/gcc ]; then
         wrap gcc ${./cc-wrapper.sh} $ccPath/gcc

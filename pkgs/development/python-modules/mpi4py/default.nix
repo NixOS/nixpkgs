@@ -1,11 +1,13 @@
 { stdenv, fetchurl, python, buildPythonPackage, mpi, openssh, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
-  name = "mpi4py-1.3.1";
+  pname = "mpi4py";
+  version = "2.0.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/mpi4py/mpi4py/downloads/${name}.tar.gz";
-    sha256 = "e7bd2044aaac5a6ea87a87b2ecc73b310bb6efe5026031e33067ea3c2efc3507";
+    sha256 = "6543a05851a7aa1e6d165e673d422ba24e45c41e4221f0993fe1e5924a00cb81";
   };
 
   passthru = {

@@ -1,13 +1,17 @@
-{ stdenv, fetchurl, noSysDirs, zlib
-, cross ? null, gold ? true, bison ? null
+{ stdenv, buildPackages
+, fetchurl, zlib
+, buildPlatform, hostPlatform, targetPlatform
+, noSysDirs, gold ? true, bison ? null
 }:
 
-let basename = "binutils-2.28"; in
-
-let inherit (stdenv.lib) optional optionals optionalString; in
+let
+  version = "2.28";
+  basename = "binutils-${version}";
+  inherit (stdenv.lib) optional optionals optionalString;
+in
 
 stdenv.mkDerivation rec {
-  name = optionalString (cross != null) "${cross.config}-" + basename;
+  name = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-" + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -42,9 +46,9 @@ stdenv.mkDerivation rec {
 
   # TODO: all outputs on all platform
   outputs = [ "out" ]
-    ++ optional (cross == null && !stdenv.isDarwin) "lib" # problems in Darwin stdenv
+    ++ optional (targetPlatform == hostPlatform && !hostPlatform.isDarwin) "lib" # problems in Darwin stdenv
     ++ [ "info" ]
-    ++ optional (cross == null) "dev";
+    ++ optional (targetPlatform == hostPlatform) "dev";
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
@@ -69,14 +73,14 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if stdenv.isDarwin
+  NIX_CFLAGS_COMPILE = if hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optional (cross != null) "--target=${cross.config}" # TODO: make this unconditional
+    ++ optional (targetPlatform != hostPlatform) "--target=${targetPlatform.config}" # TODO: make this unconditional
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 

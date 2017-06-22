@@ -5,7 +5,8 @@ then throw "libArcus not supported for interpreter ${python.executable}"
 else
 
 stdenv.mkDerivation rec {
-  name = "libarcus-${version}";
+  pname = "libarcus";
+  name = "${pname}-${version}";
   version = "2.4.0";
   
   src = fetchFromGitHub {

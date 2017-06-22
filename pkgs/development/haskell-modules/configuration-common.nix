@@ -305,7 +305,6 @@ self: super: {
   haeredes = dontCheck super.haeredes;
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
-  hastache = dontCheck super.hastache;
   hath = dontCheck super.hath;
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
@@ -332,7 +331,6 @@ self: super: {
   language-slice = dontCheck super.language-slice;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
-  liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
   memcache = dontCheck super.memcache;
@@ -707,9 +705,9 @@ self: super: {
   servant-server = dontCheck super.servant-server;
 
   # Fix build for latest versions of servant and servant-client.
-  servant-client_0_10 = super.servant-client_0_10.overrideScope (self: super: {
-    servant-server = self.servant-server_0_10;
-    servant = self.servant_0_10;
+  servant-client_0_11 = super.servant-client_0_11.overrideScope (self: super: {
+    servant-server = self.servant-server_0_11;
+    servant = self.servant_0_11;
   });
 
   # build servant docs from the repository
@@ -858,4 +856,15 @@ self: super: {
 
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
+
+  # build liquidhaskell with the proper (old) aeson version
+  liquidhaskell = super.liquidhaskell.override { aeson = self.aeson_0_11_3_0; };
+
+  # Test suite fails: https://github.com/lymar/hastache/issues/46.
+  # Don't install internal mkReadme tool.
+  hastache = overrideCabal super.hastache (drv: {
+    doCheck = false;
+    postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
+  });
+
 }

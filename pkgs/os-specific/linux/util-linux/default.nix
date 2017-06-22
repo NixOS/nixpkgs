@@ -29,31 +29,30 @@ stdenv.mkDerivation rec {
     preConfigure = "export scanf_cv_type_modifier=ms";
   };
 
+  preConfigure = lib.optionalString (systemd != null) ''
+    configureFlags+=" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
+  '';
+
   # !!! It would be better to obtain the path to the mount helpers
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
   # root...
-  configureFlags = ''
-    --enable-write
-    --enable-last
-    --enable-mesg
-    --disable-use-tty-group
-    --enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin
-    ${if ncurses == null then "--without-ncurses" else ""}
-    ${if systemd == null then "" else ''
-      --with-systemd
-      --with-systemdsystemunitdir=$out/lib/systemd/system/
-    ''}
-  '';
+  configureFlags = [
+    "--enable-write"
+    "--enable-last"
+    "--enable-mesg"
+    "--disable-use-tty-group"
+    "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
+    "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+  ]
+    ++ lib.optional (ncurses == null) "--without-ncurses";
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
     [ zlib pam ]
-    ++ lib.optional (ncurses != null) ncurses
-    ++ lib.optional (systemd != null) systemd
-    ++ lib.optional (perl != null) perl;
+    ++ lib.filter (p: p != null) [ ncurses systemd perl ];
 
   postInstall = ''
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)

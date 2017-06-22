@@ -39,6 +39,7 @@
   ./hardware/network/intel-3945abg.nix
   ./hardware/network/ralink.nix
   ./hardware/network/rtl8192c.nix
+  ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/usb-wwan.nix
@@ -79,6 +80,7 @@
   ./programs/environment.nix
   ./programs/fish.nix
   ./programs/freetds.nix
+  ./programs/gnupg.nix
   ./programs/gphoto2.nix
   ./programs/info.nix
   ./programs/java.nix
@@ -97,6 +99,7 @@
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix
@@ -129,6 +132,8 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
+  ./service-managers/docker.nix
+  ./service-managers/trivial.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
@@ -242,8 +247,9 @@
   ./services/logging/logstash.nix
   ./services/logging/packetbeat.nix
   ./services/logging/rsyslogd.nix
-  ./services/logging/syslogd.nix
+  ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/syslog-ng.nix
+  ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
   ./services/mail/dspam.nix
   ./services/mail/exim.nix
@@ -281,6 +287,7 @@
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
+  ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoip-updater.nix
   #./services/misc/gitit.nix
@@ -385,7 +392,6 @@
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/network-filesystems/xtreemfs.nix
-  ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
   ./services/networking/arpwatch.nix
   ./services/networking/asterisk.nix
@@ -490,6 +496,7 @@
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
   ./services/networking/redsocks.nix
+  ./services/networking/resilio.nix
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix

@@ -3,7 +3,8 @@
   pbr, tempita, decorator, sqlalchemy, six, sqlparse 
 }:
 buildPythonPackage rec {
-  name = "sqlalchemy-migrate-${version}";
+  pname = "sqlalchemy-migrate";
+  name = "${pname}-${version}";
   version = "0.11.0";
 
   src = fetchurl {

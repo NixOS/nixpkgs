@@ -3,7 +3,8 @@
 , pytest, pytestrunner, pytest-django, setuptools_scm
 }:
 buildPythonPackage rec {
-  name = "django-guardian-${version}";
+  pname = "django-guardian";
+  name = "${pname}-${version}";
   version = "1.4.8";
 
   src = fetchurl {

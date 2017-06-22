@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, glib, systemd, boost, darwin
 , alsaSupport ? true, alsaLib
 , avahiSupport ? true, avahi, dbus
 , flacSupport ? true, flac
@@ -33,18 +33,22 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "6";
+  minor = "9";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-${major}${if minor == "" then "" else "." + minor}";
-  src = fetchurl {
-    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "0isbpa79m7zf09w3s1ry638cw96rxasy1ch66zl01k75i48mw1gl";
+  name = "mpd-${version}";
+  version = "${major}${if minor == "" then "" else "." + minor}";
+
+  src = fetchFromGitHub {
+    owner  = "MusicPlayerDaemon";
+    repo   = "MPD";
+    rev    = "v${version}";
+    sha256 = "17ly30syrlw5274washifr0nddll3g1zb4rr4f9sfnlxz9wz73p1";
   };
 
   patches = [ ./x86.patch ];
 
-  buildInputs = [ pkgconfig glib boost ]
+  buildInputs = [ glib boost ]
     ++ opt stdenv.isDarwin darwin.apple_sdk.frameworks.CoreAudioKit
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
@@ -76,6 +80,10 @@ in stdenv.mkDerivation rec {
     ++ opt clientSupport mpd_clientlib
     ++ opt opusSupport libopus
     ++ opt soundcloudSupport yajl;
+
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  enableParallelBuilding = true;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")

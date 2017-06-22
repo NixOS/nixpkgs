@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-addon xmlns:sdk="http://schemas.android.com/sdk/android/addon/7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2016-11-23 16:51:44.011243 with ADRT.-->
+	<!--Generated on 2017-06-07 21:05:03.785544 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -1119,6 +1119,39 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		</sdk:libs>
 	</sdk:add-on>
 	<sdk:add-on>
+		<!--Generated from bid:3756122, branch:git_nyc-mr1-emu-release-->
+		<sdk:revision>1</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Tue Apr 25 23:37:40 2017.-->
+				<sdk:size>154871</sdk:size>
+				<sdk:checksum type="sha1">550e83eea9513ab11c44919ac6da54b36084a9f3</sdk:checksum>
+				<sdk:url>google_apis-25_r1.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:vendor-id>google</sdk:vendor-id>
+		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
+		<sdk:name-id>google_apis</sdk:name-id>
+		<sdk:name-display>Google APIs</sdk:name-display>
+		<sdk:api-level>23</sdk:api-level>
+		<sdk:description>Android + Google APIs</sdk:description>
+		<sdk:libs>
+			<sdk:lib>
+				<sdk:name>com.google.android.maps</sdk:name>
+				<sdk:description>API for Google Maps</sdk:description>
+			</sdk:lib>
+			<sdk:lib>
+				<sdk:name>com.android.future.usb.accessory</sdk:name>
+				<sdk:description>API for USB Accessories</sdk:description>
+			</sdk:lib>
+			<sdk:lib>
+				<sdk:name>com.google.android.media.effects</sdk:name>
+				<sdk:description>Collection of video effects</sdk:description>
+			</sdk:lib>
+		</sdk:libs>
+	</sdk:add-on>
+	<sdk:add-on>
 		<!--Generated from bid:77907680, branch:perforce-->
 		<sdk:revision>1</sdk:revision>
 		<sdk:archives>
@@ -1262,18 +1295,18 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:libs/>
 	</sdk:add-on>
 	<sdk:extra>
-		<!--Generated from bid:3453458, branch:git_nyc-support-release-->
+		<!--Generated from bid:3841166, branch:git_nyc-support-release-->
 		<sdk:revision>
-			<sdk:major>40</sdk:major>
+			<sdk:major>47</sdk:major>
 			<sdk:minor>0</sdk:minor>
 			<sdk:micro>0</sdk:micro>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Wed Nov  9 14:52:17 2016.-->
-				<sdk:size>305545706</sdk:size>
-				<sdk:checksum type="sha1">782e7233f18c890463e8602571d304e680ce354c</sdk:checksum>
-				<sdk:url>android_m2repository_r40.zip</sdk:url>
+				<!--Built on: Wed Mar 22 18:05:52 2017.-->
+				<sdk:size>355529608</sdk:size>
+				<sdk:checksum type="sha1">a0d22beacc106a6977321f2b07d692ce4979e96a</sdk:checksum>
+				<sdk:url>android_m2repository_r47.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1284,40 +1317,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:path>m2repository</sdk:path>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:116899064, branch:perforce-->
-		<sdk:obsolete/>
+		<!--Generated from bid:158324354, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>23</sdk:major>
-			<sdk:minor>2</sdk:minor>
-			<sdk:micro>1</sdk:micro>
+			<sdk:major>53</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Apr  5 11:38:38 2016.-->
-				<sdk:size>10850402</sdk:size>
-				<sdk:checksum type="sha1">41121bbc412c2fce0be170d589d20cfa3e78e857</sdk:checksum>
-				<sdk:url>support_r23.2.1.zip</sdk:url>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-license"/>
-		<sdk:vendor-id>android</sdk:vendor-id>
-		<sdk:vendor-display>Android</sdk:vendor-display>
-		<sdk:description></sdk:description>
-		<sdk:name-display>Android Support Library</sdk:name-display>
-		<sdk:path>support</sdk:path>
-		<sdk:old-paths>compatibility</sdk:old-paths>
-	</sdk:extra>
-	<sdk:extra>
-		<!--Generated from bid:140037564, branch:perforce-->
-		<sdk:revision>
-			<sdk:major>40</sdk:major>
-		</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Wed Nov 23 09:14:40 2016.-->
-				<sdk:size>152633821</sdk:size>
-				<sdk:checksum type="sha1">0f599f7f35fba49b9277ef9e1394c5c82d8bd369</sdk:checksum>
-				<sdk:url>google_m2repository_gms_v8_rc42_wear_2a3.zip</sdk:url>
+				<!--Built on: Wed Jun  7 15:15:19 2017.-->
+				<sdk:size>194148491</sdk:size>
+				<sdk:checksum type="sha1">9008082eb1e6ff5a78d32a1fed6915f266fc5013</sdk:checksum>
+				<sdk:url>google_m2repository_gms_v11_1_rc16_wear_2_0_3_rc1.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1392,16 +1401,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:path>google_play_services_froyo</sdk:path>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:139489718, branch:perforce-->
+		<!--Generated from bid:158051086, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>38</sdk:major>
+			<sdk:major>41</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Nov 18 10:26:20 2016.-->
-				<sdk:size>12351978</sdk:size>
-				<sdk:checksum type="sha1">7a50dec81ba9c9b51d7778c19ca05002498209e8</sdk:checksum>
-				<sdk:url>google_play_services_v8_rc41.zip</sdk:url>
+				<!--Built on: Tue Jun  6 11:50:00 2017.-->
+				<sdk:size>13165315</sdk:size>
+				<sdk:checksum type="sha1">55be81c50041f6a8f62947418f74f683369c971f</sdk:checksum>
+				<sdk:url>google_play_services_v11_rc16.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1600,5 +1609,28 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:desc-url>http://developer.android.com/tools/help/desktop-head-unit.html</sdk:desc-url>
 		<sdk:name-display>Android Auto Desktop Head Unit emulator</sdk:name-display>
 		<sdk:path>auto</sdk:path>
+	</sdk:extra>
+	<sdk:extra>
+		<!--Generated from bid:155747253, branch:perforce-->
+		<sdk:revision>
+			<sdk:major>1</sdk:major>
+			<sdk:minor>0</sdk:minor>
+			<sdk:micro>0</sdk:micro>
+		</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Thu May 11 08:10:37 2017.-->
+				<sdk:size>450468876</sdk:size>
+				<sdk:checksum type="sha1">50074a0f0312ee1d0d81d2cddc3d84a8a9e97a53</sdk:checksum>
+				<sdk:url>aiasdk-1.0.0.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:vendor-id>google</sdk:vendor-id>
+		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
+		<sdk:description>Android Instant Apps Development SDK</sdk:description>
+		<sdk:desc-url>https://developer.android.com/topic/instant-apps/index.html</sdk:desc-url>
+		<sdk:name-display>Instant Apps Development SDK</sdk:name-display>
+		<sdk:path>instantapps</sdk:path>
 	</sdk:extra>
 </sdk:sdk-addon>

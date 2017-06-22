@@ -1,8 +1,9 @@
 {stdenv, buildPythonPackage, fetchFromGitHub, bap, requests}:
 
 buildPythonPackage rec {
-  name = "bap";
+  pname = "bap";
   version = "1.1.0";
+  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap-python";

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, groff
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
     preBuild = ''
-      makeFlags="GROFF_BIN_PATH=${groff}/bin GROFFBIN=${groff}/bin/groff"
+      makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
     '';
   };
 

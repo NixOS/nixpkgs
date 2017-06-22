@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.0";
+  version = "3.6.0";
   name = "yara-${version}";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "18hn6acfj0cha9cv70f6hyaqf8qbgj0c0dm9db4v2q8z7cgi1681";
+    sha256 = "05nadqpvihdyxym11mn6n02rzv2ng8ga7j9l0g5gnjx366gcai42";
   };
 
   # FIXME: this is probably not the right way to make it work

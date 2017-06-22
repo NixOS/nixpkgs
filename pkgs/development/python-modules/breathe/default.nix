@@ -1,12 +1,13 @@
 { lib, fetchurl, buildPythonPackage, docutils, six, sphinx, isPy3k }:
 
 buildPythonPackage rec {
-  name = "breathe-${version}";
-  version = "4.2.0";
+  version = "4.6.0";
+  pname = "breathe";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/b/breathe/${name}.tar.gz";
-    sha256 = "0m3w8yx24nm01xxx6aj08cklnifwlzzmczc5b0ni40l63lhvm3lp";
+    sha256 = "9db2ba770f824da323b9ea3db0b98d613a4e0af094c82ccb0a82991da81b736a";
   };
 
   propagatedBuildInputs = [ docutils six sphinx ];

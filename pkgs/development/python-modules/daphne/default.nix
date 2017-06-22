@@ -2,7 +2,8 @@
   asgiref, autobahn, twisted, hypothesis
 }:
 buildPythonPackage rec {
-  name = "daphne-${version}";
+  pname = "daphne";
+  name = "${pname}-${version}";
   version = "1.2.0";
 
   src = fetchurl {

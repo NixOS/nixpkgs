@@ -2,6 +2,7 @@
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
+, initialPackages ? import ./hackage-packages.nix
 }:
 
 let
@@ -10,18 +11,20 @@ let
   inherit (import ./lib.nix { inherit pkgs; }) overrideCabal makePackageSet;
 
   haskellPackages = makePackageSet {
-    package-set = import ./hackage-packages.nix;
-    inherit ghc;
+    package-set = initialPackages;
+    inherit ghc extensible-self;
   };
 
   commonConfiguration = import ./configuration-common.nix { inherit pkgs; };
   nixConfiguration = import ./configuration-nix.nix { inherit pkgs; };
 
-in
-
-  makeExtensible
+  extensible-self = makeExtensible
     (extends overrides
       (extends packageSetConfig
         (extends compilerConfig
           (extends commonConfiguration
-            (extends nixConfiguration haskellPackages)))))
+            (extends nixConfiguration haskellPackages)))));
+
+in
+
+  extensible-self

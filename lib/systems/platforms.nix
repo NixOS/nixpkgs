@@ -267,6 +267,10 @@ rec {
       arch = "armv6";
       fpu = "vfp";
       float = "hard";
+      # TODO(@Ericson2314) what is this and is it a good idea? It was
+      # used in some cross compilation examples but not others.
+      #
+      # abi = "aapcs-linux";
     };
   };
 
@@ -472,7 +476,10 @@ rec {
     '';
     kernelTarget = "vmlinux";
     uboot = null;
-    gcc.arch = "loongson2f";
+    gcc = {
+      arch = "loongson2f";
+      abi = "n32";
+    };
   };
 
   beaglebone = armv7l-hf-multiplatform // {

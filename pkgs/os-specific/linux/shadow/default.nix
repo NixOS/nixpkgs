@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
       })
     ];
 
+  # The nix daemon often forbids even creating set[ug]id files.
+  postPatch =
+    ''sed 's/^\(s[ug]idperms\) = [0-9]755/\1 = 0755/' -i src/Makefile.am
+    '';
+
   outputs = [ "out" "su" "man" ];
 
   enableParallelBuilding = true;

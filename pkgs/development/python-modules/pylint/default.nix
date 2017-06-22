@@ -1,17 +1,17 @@
 { stdenv, fetchurl, buildPythonPackage, python, astroid, isort,
-  pytest,  mccabe, configparser, backports_functools_lru_cache }:
+  pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
 
   buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pylint";
-    version = "1.6.5";
+    version = "1.7.1";
 
     src = fetchurl {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "06b78nl996949a7h01c4ycy8779hl5cm7vpxij5lm3npim59hwx6";
+      sha256 = "8b4a7ab6cf5062e40e2763c0b4a596020abada1d7304e369578b522e46a6264a";
     };
 
-    buildInputs = [ pytest mccabe configparser backports_functools_lru_cache ];
+    buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
 
     propagatedBuildInputs = [ astroid isort ];
 

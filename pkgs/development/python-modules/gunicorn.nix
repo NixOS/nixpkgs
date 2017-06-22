@@ -2,11 +2,13 @@
 , pytest, mock, pytestcov, coverage }:
 
 buildPythonPackage rec {
-  name = "gunicorn-19.3.0";
+  pname = "gunicorn";
+  version = "19.7.1";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/g/gunicorn/${name}.tar.gz";
-    sha256 = "12d0jd9y9fyssc28mn8j6nzrck8y05hc946p5h0rmbc25043bj4b";
+    sha256 = "eee1169f0ca667be05db3351a0960765620dad53f53434262ff8901b68a1b622";
   };
 
   buildInputs = [ pytest mock pytestcov coverage ];

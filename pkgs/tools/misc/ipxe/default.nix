@@ -1,8 +1,8 @@
 { stdenv, fetchgit, perl, cdrkit, syslinux, xz, openssl }:
 
 let
-  date = "20160831";
-  rev = "827dd1bfee67daa683935ce65316f7e0f057fe1c";
+  date = "20170523";
+  rev = "356f6c1b64d7a97746d1816cef8ca22bdd8d0b5d";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://git.ipxe.org/ipxe.git;
-    sha256 = "11w8b0vln3skfn8r1cvzngslz12njdkwmnacyq3qffb96k2dn2ww";
+    sha256 = "15n400vm3id5r8y3k6lrp9ab2911a9vh9856f5gvphkazfnmns09";
     inherit rev;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     { description = "Network boot firmware";
       homepage = http://ipxe.org/;
       license = licenses.gpl2;
-      maintainers = with maintainers; [ ehmry ];
+      maintainers = with maintainers; [ ehmry fpletz ];
       platforms = platforms.all;
     };
 }

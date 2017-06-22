@@ -3,7 +3,8 @@
   geos, gdal
 }:
 buildPythonPackage rec {
-  name = "Django-${version}";
+  pname = "Django";
+  name = "${pname}-${version}";
   version = "1.10.7";
   disabled = pythonOlder "2.7";
 

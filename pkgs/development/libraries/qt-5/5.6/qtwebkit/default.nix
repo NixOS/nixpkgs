@@ -31,5 +31,9 @@ qtSubmodule {
         };
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
     ++ [ dlopen-webkit-udev ];
+
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
   meta.maintainers = with stdenv.lib.maintainers; [ abbradar ];
 }

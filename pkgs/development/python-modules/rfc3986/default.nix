@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "rfc3986";
-  version = "0.4.1";
+  version = "1.0.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5ac85eb132fae7bbd811fa48d11984ae3104be30d44d397a351d004c633a68d2";
+    sha256 = "2faacfabcc13ed89b061b5f21cbbf330f82400654b317b5907d311c3478ec4c4";
   };
 
   buildInputs = [ pytest ];

@@ -1,16 +1,32 @@
-{ stdenv, lib, bundlerEnv, ruby_2_2, icu, zlib }:
+{ stdenv, bundlerEnv, ruby, makeWrapper
+, git }:
 
-bundlerEnv rec {
-  name = "gollum-${version}";
-  version = "4.0.1";
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "gollum";
+  version = (import ./gemset.nix).gollum.version;
 
-  ruby = ruby_2_2;
-  gemdir = ./.;
+  nativeBuildInputs = [ makeWrapper ];
 
-  meta = with lib; {
+  env = bundlerEnv {
+    name = "${name}-gems";
+    inherit pname ruby;
+    gemdir = ./.;
+  };
+
+  phases = [ "installPhase" ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    makeWrapper ${env}/bin/gollum $out/bin/gollum \
+      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
+  '';
+
+  meta = with stdenv.lib; {
     description = "A simple, Git-powered wiki";
+    homepage = "https://github.com/gollum/gollum";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich ];
+    maintainers = with maintainers; [ jgillich primeos ];
     platforms = platforms.unix;
   };
 }

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" ];
 
+  dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
+
   meta = with stdenv.lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "http://www.libressl.org";

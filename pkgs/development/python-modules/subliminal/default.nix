@@ -19,7 +19,8 @@
 }:
 
 buildPythonApplication rec {
-  name = "subliminal-${version}";
+  pname = "subliminal";
+  name = "${pname}-${version}";
   version = "2.0.5";
 
   src = fetchurl {

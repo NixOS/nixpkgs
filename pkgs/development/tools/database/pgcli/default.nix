@@ -2,10 +2,10 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "pgcli-${version}";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
-    sha256 = "1wp8pzi9hwz16fpcr0mq3ffydwdscfg5whhzc91757dw995sgl0s";
+    sha256 = "0f1zv4kwi2991pclf8chrhgjwf8jkqxdh5ndc9qx6igh56iyyncz";
     rev = "v${version}";
     repo = "pgcli";
     owner = "dbcli";
@@ -13,7 +13,8 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = with pythonPackages; [ pytest mock ];
   checkPhase = ''
-    py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
+    mkdir /tmp/homeless-shelter
+    HOME=/tmp/homeless-shelter py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
   '';
 
   propagatedBuildInputs = with pythonPackages; [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ympd-${version}";
-  version = "1.3.0";
+  version = "1.4.0-rc1";
 
   src = fetchFromGitHub {
     owner = "mayflower";
-    repo = "ympd";
-    rev = "0301b62bb4743a869018269975f746f663ccabe9";
-    sha256 = "03w512ik15f0727y3rdzsh8szjg28cn3bgd0zpbkjbibysp2wbzc";
+    repo = "maympd";
+    rev = "v${version}";
+    sha256 = "0qp18fvczjlj2dkgrmrw0lb7s5791jn40mww7s1n69zfv46krn5x";
   };
 
   buildInputs = [ cmake pkgconfig mpd_clientlib openssl ];

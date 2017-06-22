@@ -1,7 +1,8 @@
 {stdenv, fetchurl, buildPythonPackage, antlr, isPy3k}:
 
 buildPythonPackage rec {
-  name = "PyStringTemplate-${version}";
+  pname = "PyStringTemplate";
+  name = "${pname}-${version}";
   version = "3.2b1";
 
   src = fetchurl {

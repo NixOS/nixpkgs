@@ -7,7 +7,8 @@ let
   selinuxWithPython = libselinux.override pyenable;
   cryptsetupWithPython = cryptsetup.override pyenable;
 in buildPythonPackage rec {
-  name = "blivet-${version}";
+  pname = "blivet";
+  name = "${pname}-${version}";
   version = "0.67";
 
   src = fetchFromGitHub {

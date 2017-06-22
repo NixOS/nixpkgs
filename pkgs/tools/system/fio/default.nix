@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libaio, python, zlib }:
 
 let
-  version = "2.19";
-  sha256 = "1rfnisb8hqwx76rjmgaagvs3k0808z27ll9i3w5ifzysi1c1l6r9";
+  version = "2.20";
+  sha256 = "06sn9ll75xbr2rr7zn8xzdy1v705kqfxv6q1zx6ysvxwri0sxrfx";
 in
 
 stdenv.mkDerivation rec {

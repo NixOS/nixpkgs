@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, doxygen }:
+{ stdenv, fetchFromGitHub, autoreconfHook, doxygen }:
 
 stdenv.mkDerivation rec {
   version = "${passthru.majorVersion}.${passthru.minorVersion}";
   name = "libmpdclient-${version}";
 
-  src = fetchurl {
-    url = "http://www.musicpd.org/download/libmpdclient/2/${name}.tar.xz";
-    sha256 = "10pzs9z815a8hgbbbiliapyiw82bnplsccj5irgqjw5f5plcs22g";
+  src = fetchFromGitHub {
+    owner  = "MusicPlayerDaemon";
+    repo   = "libmpdclient";
+    rev    = "v${version}";
+    sha256 = "06rv2j8rw9v9l4nwpvbh28nad8bbg368hzd8s58znbr5pgb8dihd";
   };
 
-  buildInputs = [ doxygen ];
+  nativeBuildInputs = [ autoreconfHook doxygen ];
+
+  enableParallelBuilding = true;
 
   passthru = {
     majorVersion = "2";
-    minorVersion = "10";
+    minorVersion = "11";
   };
 
   meta = with stdenv.lib; {

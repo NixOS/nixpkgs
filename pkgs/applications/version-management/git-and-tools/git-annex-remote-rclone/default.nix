@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "git-annex-remote-rclone-${version}";
-  version = "0.4";
+  version = "0.5";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "DanielDent";
     repo = "git-annex-remote-rclone";
-    sha256 = "1myk307hqm8dlxhkmwr347rdd28niv5h0gyrxm30y77zlly30ddk";
+    sha256 = "1353b6q3lnxhpdfy9yd2af65v7aypdhyvgn7ziksmsrbi12lb74i";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -67,6 +67,7 @@ in
             StandardInput = "socket";
             StandardError = "journal";
             User = cfg.user;
+            AmbientCapabilities = "cap_setuid cap_setgid";
           };
       };
     };

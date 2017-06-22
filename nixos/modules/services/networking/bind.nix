@@ -14,8 +14,8 @@ let
       acl badnetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
 
       options {
-        listen-on {any;};
-        listen-on-v6 {any;};
+        listen-on { ${concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
+        listen-on-v6 { ${concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
         allow-query { cachenetworks; };
         blackhole { badnetworks; };
         forward first;
@@ -93,6 +93,22 @@ in
         default = config.networking.nameservers;
         description = "
           List of servers we should forward requests to.
+        ";
+      };
+
+      listenOn = mkOption {
+        default = ["any"];
+        type = types.listOf types.str;
+        description = "
+          Interfaces to listen on.
+        ";
+      };
+
+      listenOnIpv6 = mkOption {
+        default = ["any"];
+        type = types.listOf types.str;
+        description = "
+          Ipv6 interfaces to listen on.
         ";
       };
 

@@ -1,7 +1,8 @@
 { stdenv, fetchurl, buildPythonPackage, tornado }:
 
 buildPythonPackage rec {
-  name = "snakeviz-${version}";
+  pname = "snakeviz";
+  name = "${pname}-${version}";
   version = "0.4.1";
 
   src = fetchurl {

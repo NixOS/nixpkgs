@@ -111,6 +111,7 @@ let
       ocamlPackages = { };
       perlPackages = { };
       pythonPackages = {
+        blaze = unix;
         pandas = unix;
         scikitlearn = unix;
       };
@@ -122,6 +123,12 @@ let
         pandas = unix;
         scikitlearn = unix;
       };
+      python36Packages = {
+        blaze = unix;
+        pandas = unix;
+        scikitlearn = unix;
+      };
+
     } ));
 
 in jobs

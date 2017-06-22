@@ -195,9 +195,8 @@ in
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
-    systemd.user.services.ssh-agent =
-      { enable = cfg.startAgent;
-        description = "SSH Agent";
+    systemd.user.services.ssh-agent = mkIf cfg.startAgent
+      { description = "SSH Agent";
         wantedBy = [ "default.target" ];
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";

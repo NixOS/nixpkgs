@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "\$(RUNTIME) VS/.nuget/NuGet.exe" "true"
+    substituteInPlace src/Makefile --replace "\$(RUNTIME) VS/.nuget/NuGet.exe" "true" \
+      --replace Darwin xyz
     substituteInPlace src/VS/.nuget/NuGet.targets --replace "mono" "true"
 
     # Fails with bad interpreter otherwise

@@ -12,6 +12,9 @@
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
 
+# No point splitting version 1.8.18 into multiple outputs.
+# The library /lib/libhdf5.so has a reference to gcc-wrapper
+
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {

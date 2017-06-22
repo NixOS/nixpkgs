@@ -18,7 +18,6 @@ let
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
-    (assertValueOneOf "PrivateUsers" (boolValues ++ [ "pick" ]))
     (assertValueOneOf "NotifyReady" boolValues)
   ];
 
@@ -42,8 +41,7 @@ let
   ];
 
   instanceOptions = {
-    options = {
-
+    options = sharedOptions // {
       execConfig = mkOption {
         default = {};
         example = { Parameters = "/bin/sh"; };
@@ -84,17 +82,19 @@ let
   };
 
   instanceToUnit = name: def:
-    { text = ''
-      [Exec]
-      ${attrsToSection def.execConfig}
+    let base = {
+      text = ''
+        [Exec]
+        ${attrsToSection def.execConfig}
 
-      [Files]
-      ${attrsToSection def.filesConfig}
+        [Files]
+        ${attrsToSection def.filesConfig}
 
-      [Network]
-      ${attrsToSection def.networkConfig}
-    '';
-    };
+        [Network]
+        ${attrsToSection def.networkConfig}
+      '';
+    } // def;
+    in base // { unit = makeUnit name base; };
 
 in {
 
@@ -110,7 +110,7 @@ in {
 
   config =
     let
-      units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg.instances;
+      units = mapAttrs' (n: v: nameValuePair "${n}.nspawn" (instanceToUnit n v)) cfg;
     in mkIf (cfg != {}) {
 
       environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];

@@ -39,5 +39,9 @@ qtSubmodule {
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
     ++ optionals (!stdenv.isDarwin) [ dlopen-webkit-udev ]
     ++ optionals (stdenv.isDarwin) [ ./0004-icucore-darwin.patch ];
+
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
   meta.maintainers = with stdenv.lib.maintainers; [ abbradar periklis ];
 }

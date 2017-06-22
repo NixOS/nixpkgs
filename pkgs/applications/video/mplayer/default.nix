@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i /^_install_strip/d configure
+
+    rm -rf ffmpeg
   '';
 
   buildInputs = with stdenv.lib;
@@ -159,6 +161,7 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isLinux "--enable-vidix"}
       ${optionalString stdenv.isLinux "--enable-fbdev"}
       --disable-ossaudio
+      --disable-ffmpeg_a
     '';
 
   NIX_LDFLAGS = with stdenv.lib;

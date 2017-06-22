@@ -15,9 +15,14 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? (buildPlatform == hostPlatform)
 , darwin
+, buildPackages
+, buildPlatform
+, hostPlatform
 }:
+
+assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
@@ -39,8 +44,17 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  nativeBuildInputs = [
+    perl
+    cmake
+    python
+  ];
+
+  buildInputs = [
+    groff
+    libxml2
+    libffi
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -88,6 +102,9 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
+  ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
   ];
 
   postBuild = ''

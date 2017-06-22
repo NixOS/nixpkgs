@@ -204,6 +204,8 @@ stdenv.mkDerivation (rec {
       --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
 
     wrapPythonPrograms
+    # We also need to wrap pygrub, which lies in lib
+    wrapPythonProgramsIn "$out/lib" "$out $pythonPath"
 
     shopt -s extglob
     for i in $out/etc/xen/scripts/!(*.sh); do

@@ -198,7 +198,7 @@ go.stdenv.mkDerivation (
      ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
   ''
   ) goPath) + ''
-    export GOPATH="$d:$GOPATH"
+    export GOPATH=${lib.concatStringsSep ":" ( ["$d"] ++ ["$GOPATH"] ++ ["$PWD"] ++ extraSrcPaths)}
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go

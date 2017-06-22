@@ -3,12 +3,13 @@
   pyparsing, django, celery
 }:
 buildPythonPackage rec {
-  name = "django-raster-${version}";
-  version = "0.3.1";
+  version = "0.4";
+  pname = "django-raster";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/django-raster/${name}.tar.gz";
-    sha256 = "1hsrkvybak1adn9d9qdw7hx3rcxsbzas4ixwll6vrjkrizgfihk3";
+    sha256 = "7fd6afa42b07ac51a3873e3d4840325dd3a8a631fdb5b853c76fbbfe59a2b17f";
   };
 
   # Tests require a postgresql + postgis server

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "4.12-rc2";
-  modDirVersion = "4.12.0-rc2";
+  version = "4.12-rc5";
+  modDirVersion = "4.12.0-rc5";
   extraMeta.branch = "4.12";
 
   src = fetchurl {
     url = "https://git.kernel.org/torvalds/t/linux-${version}.tar.gz";
-    sha256 = "18p68ig9irblbxbg68jz766158bxr81824q91mnf372i5z9irj9w";
+    sha256 = "0d3lpf429fqrf6i529y0pjdwnpq2v82agn3xhw4jwkriib9i425x";
   };
 
   features.iwlwifi = true;

@@ -99,6 +99,7 @@
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  ciil = "Simon Lackerbauer <simon@lackerbauer.com>";
   ckampka = "Christian Kampka <christian@kampka.net>";
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
@@ -132,6 +133,7 @@
   deepfire = "Kosyrev Serge <_deepfire@feelingofgreen.ru>";
   demin-dmitriy = "Dmitriy Demin <demindf@gmail.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
+  dermetfan = "Robin Stumm <serverkorken@gmail.com>";
   DerTim1 = "Tim Digel <tim.digel@active-group.de>";
   desiderius = "Didier J. Devroye <didier@devroye.name>";
   devhell = "devhell <\"^\"@regexmail.net>";
@@ -161,6 +163,7 @@
   ehegnes = "Eric Hegnes <eric.hegnes@gmail.com>";
   ehmry = "Emery Hemingway <emery@vfemail.net>";
   eikek = "Eike Kettner <eike.kettner@posteo.de>";
+  ekleog = "Leo Gaspard <leo@gaspard.io>";
   elasticdog = "Aaron Bull Schaefer <aaron@elasticdog.com>";
   eleanor = "Dejan Lukan <dejan@proteansec.com>";
   elitak = "Eric Litak <elitak@gmail.com>";
@@ -176,6 +179,7 @@
   exlevan = "Alexey Levan <exlevan@gmail.com>";
   expipiplus1 = "Joe Hermaszewski <nix@monoid.al>";
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
+  fare = "Francois-Rene Rideau <fahree@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
@@ -266,6 +270,7 @@
   kaiha = "Kai Harries <kai.harries@gmail.com>";
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
+  kentjames = "James Kent <jameschristopherkent@gmail.com";
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   KibaFox = "Kiba Fox <kiba.fox@foxypossibilities.com>";
@@ -599,4 +604,5 @@
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
   zraexy = "David Mell <zraexy@gmail.com>";
+  zx2c4 = "Jason A. Donenfeld <Jason@zx2c4.com>";
 }

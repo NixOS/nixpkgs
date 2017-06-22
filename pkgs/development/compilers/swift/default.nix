@@ -253,6 +253,9 @@ stdenv.mkDerivation rec {
     ln -s ${binutils}/bin/ar $out/bin/ar
   '';
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = with stdenv.lib; {
     description = "The Swift Programming Language";
     homepage = "https://github.com/apple/swift";

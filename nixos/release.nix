@@ -222,6 +222,7 @@ in rec {
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
+  tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
@@ -262,6 +263,7 @@ in rec {
   tests.keystone = callTest tests/keystone.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
+  tests.ldap = callTest tests/ldap.nix {};
   #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};

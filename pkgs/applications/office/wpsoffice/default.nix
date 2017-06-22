@@ -1,32 +1,38 @@
-{stdenv, fetchurl, unzip, libX11, libcxxabi, glib, xorg, qt4, fontconfig, phonon, freetype, zlib, libpng12, libICE, libXrender, cups, lib}:
+{ stdenv, fetchurl, fetchFromGitHub
+, libX11, glib, xorg, fontconfig, freetype
+, zlib, libpng12, libICE, libXrender, cups }:
 
-stdenv.mkDerivation rec{
-  name = "wpsoffice-${version}";
+let
+  bits = if stdenv.system == "x86_64-linux" then "x86_64"
+         else "x86";
+
   version = "10.1.0.5672";
+in stdenv.mkDerivation rec{
+  name = "wpsoffice-${version}";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "http://kdl.cc.ksosoft.com/wps-community/download/a21/wps-office_10.1.0.5672~a21_x86_64.tar.xz";
-    sha1 = "7e9b17572ed5cea50af24f01457f726fc558a515";
+    name = "${name}.tar.xz";
+    url = "http://kdl.cc.ksosoft.com/wps-community/download/a21/wps-office_${version}~a21_${bits}.tar.xz";
+    sha256 = if bits == "x86_64" then
+      "0mi3n9kplf82gd0g2m0np957agy53p4g1qh81pbban49r4n0ajcz" else
+      "1dk400ap5qwdhjvn8lnk602f5akayr391fkljxdkrpn5xac01m97";
   };
   
   meta = {
     description = "Office program originally named Kingsoft Office";
     homepage = http://wps-community.org/;
-    platforms = [ "x86_64-linux" ];
-    # Binary for i686 is also available if someone can package it
-    license = lib.licenses.unfreeRedistributable;
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    hydraPlatforms = [];
+    license = stdenv.lib.licenses.unfreeRedistributable;
   };
 
   libPath = stdenv.lib.makeLibraryPath [
     libX11
-    libcxxabi
     libpng12
     glib
     xorg.libSM
     xorg.libXext
     fontconfig
-    phonon
     zlib
     freetype
     libICE
@@ -34,19 +40,36 @@ stdenv.mkDerivation rec{
     libXrender
   ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontPatchELF = true;
 
   installPhase = ''
-    cp -r . "$out"
-    chmod +x "$out/office6/wpp"
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --force-rpath --set-rpath "$out/office6:$libPath" "$out/office6/wpp"
-    chmod +x "$out/office6/wps"
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --force-rpath --set-rpath "$out/office6:$libPath" "$out/office6/wps"
-    chmod +x "$out/office6/et"
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --force-rpath --set-rpath "$out/office6:$libPath" "$out/office6/et"
-    mkdir -p "$out/bin/"
-    ln -s "$out/office6/wpp" "$out/bin/wpspresentation"
-    ln -s "$out/office6/wps" "$out/bin/wpswriter"
-    ln -s "$out/office6/et" "$out/bin/wpsspreadsheets"
+    prefix=$out/opt/kingsoft/wps-office
+    mkdir -p $prefix
+    cp -r . $prefix
+
+    # Avoid forbidden reference error due use of patchelf
+    rm -r $PWD
+
+    mkdir $out/bin
+    for i in wps wpp et; do
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --force-rpath --set-rpath "$prefix/office6:$libPath" \
+        $prefix/office6/$i
+
+      substitute $prefix/$i $out/bin/$i \
+        --replace /opt/kingsoft/wps-office $prefix
+      chmod +x $out/bin/$i
+
+      substituteInPlace $prefix/resource/applications/wps-office-$i.desktop \
+        --replace /usr/bin $out/bin
+    done
+
+    # China fonts
+    mkdir -p $prefix/resource/fonts/wps-office $out/etc/fonts/conf.d
+    ln -s $prefix/fonts/* $prefix/resource/fonts/wps-office
+    ln -s $prefix/fontconfig/*.conf $out/etc/fonts/conf.d
+
+    ln -s $prefix/resource $out/share
   '';
 }

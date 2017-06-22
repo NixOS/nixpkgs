@@ -221,7 +221,7 @@ let
                 docbook5_xsl
                 unionfs-fuse
                 ntp
-                nixos-artwork
+                nixos-artwork.wallpapers.gnome-dark
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
 

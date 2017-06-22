@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     "--enable-ipv6"
     "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=charybdis-"
+    "--sysconfdir=/etc/charybdis"
   ];
 
   buildInputs = [ bison flex openssl ];

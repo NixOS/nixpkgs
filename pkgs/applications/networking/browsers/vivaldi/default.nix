@@ -19,7 +19,7 @@ let
       sha256 = "0apkwgd98ld5k77nplzmk67nz6mb5pi8jyrnkp96m93mr41b08bq";
     } else {
       arch = "i386";
-      sha256 = "0xyf0z1cnzmb3pv6rgsbd7jdjf1v137priz4kkymr8jgmpq0mmfx ";
+      sha256 = "0xyf0z1cnzmb3pv6rgsbd7jdjf1v137priz4kkymr8jgmpq0mmfx";
     };
 
 in stdenv.mkDerivation rec {

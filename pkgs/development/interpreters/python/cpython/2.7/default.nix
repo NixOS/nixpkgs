@@ -15,6 +15,7 @@
 , expat
 , libffi
 , CF, configd, coreutils
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -150,7 +151,7 @@ in stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
 
-    setupHook = ./setup-hook.sh;
+    setupHook = python-setup-hook sitePackages;
 
     postPatch = optionalString (x11Support && (tix != null)) ''
           substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"

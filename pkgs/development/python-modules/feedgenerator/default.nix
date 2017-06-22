@@ -1,7 +1,9 @@
 { stdenv, buildPythonPackage, glibcLocales, fetchurl, six, pytz }:
 
 buildPythonPackage rec {
-  name = "feedgenerator-1.9";
+  pname = "feedgenerator";
+  version = "1.9";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/f/feedgenerator/${name}.tar.gz";

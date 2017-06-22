@@ -2,14 +2,14 @@
   flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
 
 stdenv.mkDerivation rec {
-  version = "git-2016-11-02";
+  version = "0.3.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
-    rev = "5496aaf390472e3c3547201b1a3c9640fc49032b";
-    sha256 = "0s4kpmnk55qn6y3755c45ca7vbpgsgik5520qkp70wz8sg6s3xa8";
+    rev = "v${version}";
+    sha256 = "19lkqmilfjmj7bnhxlacd0waa5db8gf4lng12fy2zgji0d77vm1d";
   };
 
   nativeBuildInputs = [ makeWrapper cmake ];

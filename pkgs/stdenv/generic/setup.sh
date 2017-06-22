@@ -199,6 +199,18 @@ isELF() {
     if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
 }
 
+# Return success if the specified file is a script (i.e. starts with
+# "#!").
+isScript() {
+    local fn="$1"
+    local magic
+    if ! [ -x /bin/sh ]; then return 0; fi
+    exec {fd}< "$fn"
+    read -n 2 -u $fd magic
+    exec {fd}<&-
+    if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
+}
+
 
 ######################################################################
 # Initialisation.

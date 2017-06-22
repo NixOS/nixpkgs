@@ -20,13 +20,13 @@
 let
   unwrapped = let
     pname = "yakuake";
-    version = "3.0.2";
+    version = "3.0.3";
   in kdeDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "http://download.kde.org/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "0vcdji1k8d3pz7k6lkw8ighkj94zff2l2cf9v1avf83f4hjyfhg5";
+      sha256 = "ef51aa3325916d352fde17870cf706397e41105103e4c9289cc4032a1b8609a7";
     };
 
     buildInputs = [

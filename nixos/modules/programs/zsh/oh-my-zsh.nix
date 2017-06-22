@@ -3,11 +3,11 @@
 with lib;
 
 let
-  cfg = config.programs.zsh.oh-my-zsh;
+  cfg = config.programs.zsh.ohMyZsh;
 in
   {
     options = {
-      programs.zsh.oh-my-zsh = {
+      programs.zsh.ohMyZsh = {
         enable = mkOption {
           default = false;
           description = ''

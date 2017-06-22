@@ -127,12 +127,12 @@
     abl-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "abl-mode";
-        version = "20170309.117";
+        version = "20170604.1309";
         src = fetchFromGitHub {
           owner = "afroisalreadyinu";
           repo = "abl-mode";
-          rev = "0539862591a5af70e6fa04f0e88e7fc0f0fbb11e";
-          sha256 = "0fxl67nmy6vi6viwxday4j81m9lg4l8vg6yw2phgagm4zlp65k58";
+          rev = "9aff997fe7b4caded60150a832e3704ac55e69e5";
+          sha256 = "0yfk7s7n10lkf11dy1l0xi0bbsjbam5lqq8kj9hxpz2zkddbaljl";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/70a52edb381daa9c4dcc9f7e511175b38fc141be/recipes/abl-mode";
@@ -316,12 +316,12 @@
     ac-clang = callPackage ({ auto-complete, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, pos-tip, yasnippet }:
     melpaBuild {
         pname = "ac-clang";
-        version = "20170330.1108";
+        version = "20170608.958";
         src = fetchFromGitHub {
           owner = "yaruopooner";
           repo = "ac-clang";
-          rev = "c4aab21df64011916039e18094e189533018e115";
-          sha256 = "1ac8rw0r4x1plrwy6xwswy5mj5h1r975y8wvx01g2j8an41xhlms";
+          rev = "8fdfbbebf096017ab45cedcff2c43a0a5d8b9686";
+          sha256 = "0ik1hh8qs5yjb034zc93fyd6la84mgp6y5gzvpz6rfbjfxy6vf3y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ffe0485048b85825f5e8ba95917d8c9dc64fe5de/recipes/ac-clang";
@@ -381,8 +381,8 @@
         src = fetchFromGitHub {
           owner = "emacs-eclim";
           repo = "emacs-eclim";
-          rev = "1d0ac3f4cd90d44e75f75c8c0bd234013349e14f";
-          sha256 = "0cds3rmyp3imx234vdbmrl5l7fq90aixb8n1iv0ba5jrx1yk91lz";
+          rev = "ebb844d1ebdd7eb347e89063a9b6e9f890a1ff57";
+          sha256 = "18q4blnxf7p2kvgh1rhr7pizga06z97hv1lxjgzv0dc2dll2zwmd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1e9d3075587fbd9ca188535fd945a7dc451c6d7e/recipes/ac-emacs-eclim";
@@ -738,8 +738,8 @@
         src = fetchFromGitHub {
           owner = "xcwen";
           repo = "ac-php";
-          rev = "58b68de970201712ecf7f1ba64fdb9b7bee2d66e";
-          sha256 = "0sqv9kzcxlvcf72xlr2xpblhcnq6xvrr6kqdy4zrgiqdw884q134";
+          rev = "eba56378cf8d60c4871e0e9d0d0e201d302778ea";
+          sha256 = "0d5pwxla9lkrkb2a5c7y4sm6js7jgm2m8i3lja0c5qzw5b50zwxs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ac283f1b65c3ba6278e9d3236e5a19734e42b123/recipes/ac-php";
@@ -759,8 +759,8 @@
         src = fetchFromGitHub {
           owner = "xcwen";
           repo = "ac-php";
-          rev = "58b68de970201712ecf7f1ba64fdb9b7bee2d66e";
-          sha256 = "0sqv9kzcxlvcf72xlr2xpblhcnq6xvrr6kqdy4zrgiqdw884q134";
+          rev = "eba56378cf8d60c4871e0e9d0d0e201d302778ea";
+          sha256 = "0d5pwxla9lkrkb2a5c7y4sm6js7jgm2m8i3lja0c5qzw5b50zwxs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ac283f1b65c3ba6278e9d3236e5a19734e42b123/recipes/ac-php-core";
@@ -797,12 +797,12 @@
     ac-rtags = callPackage ({ auto-complete, fetchFromGitHub, fetchurl, lib, melpaBuild, rtags }:
     melpaBuild {
         pname = "ac-rtags";
-        version = "20170402.653";
+        version = "20170522.2154";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "2abdfb2adf24b881cdd04e904ecb341bb51e8cb6";
-          sha256 = "11f9sd8w7qqhfd6mxbihlc6mdki4lqyk4dwbi3v91k9hbxb9hlq2";
+          rev = "d6af2ad09c99f9c58900665e874dcf97a545c0fa";
+          sha256 = "12p22b9q4rkl7jswg12gqc8751sinzgj8h75jjzrggd0vfsg439a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3dea16daf0d72188c8b4043534f0833fe9b04e07/recipes/ac-rtags";
@@ -1007,12 +1007,12 @@
     ace-link = callPackage ({ avy, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ace-link";
-        version = "20170319.553";
+        version = "20170528.1158";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "ace-link";
-          rev = "0b6e06e0b5222a57e5e6f1d9af6436eb12102e3e";
-          sha256 = "1h8j1dl9xyybm0pj3j2j6fcq7bryby2h1s64r6ijcsgrqgimq66i";
+          rev = "99787dc79ed9ec14a2b87257d6c8ce5b8ec0a0b0";
+          sha256 = "103pb0c5g25fsnbjcjgj04aq4damxwhm2fg86fgxihrch8a7bhcn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/68032f40c0ce4170a22db535be4bfa7099f61f85/recipes/ace-link";
@@ -1070,12 +1070,12 @@
     ace-popup-menu = callPackage ({ avy-menu, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ace-popup-menu";
-        version = "20170501.1109";
+        version = "20170518.2244";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "ace-popup-menu";
-          rev = "1080044df90d27e50fed233d5195560ced355822";
-          sha256 = "08ym1jvg72b8aj99w52bink800m1i6ckidj8hzav32s6w4nsssxk";
+          rev = "e7cc8bace9dda5c9fbe545c6fbd41c12679c3d7d";
+          sha256 = "1khqh5b9c7ass3q2gc04ayc8idanabkyfpaqvfnag063x16fv40c";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/53742e2242101c4b3b3901f5c74e24facf62c7d6/recipes/ace-popup-menu";
@@ -1174,12 +1174,12 @@
     add-hooks = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "add-hooks";
-        version = "20170410.2133";
+        version = "20170518.209";
         src = fetchFromGitHub {
           owner = "nickmccurdy";
           repo = "add-hooks";
-          rev = "73f2ac34529f4ea0c9fc9f333531d082032d4025";
-          sha256 = "1gnnnydvmkgqzbfnc0wx386il5kcgfxdba3vq7c9p6cqxslpd8k5";
+          rev = "f7a94ef1762ad8eb58d24c0857751863ea93cd5b";
+          sha256 = "1j524wvl9l9hzahq8by9bnh745kg2z7l808ad9b0y0wx5kf17xlz";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/901f846aef46d512dc0a1770bab7f07c0ae330cd/recipes/add-hooks";
@@ -1258,12 +1258,12 @@
     aes = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "aes";
-        version = "20160121.1237";
+        version = "20170607.157";
         src = fetchFromGitHub {
           owner = "Sauermann";
           repo = "emacs-aes";
-          rev = "1b9918036b16ee30ada71703a9283c67f2ad9999";
-          sha256 = "1p90yv2xl1hhpjm0mmhdjyf1jagf79610hkzhw8nycy2p1y4gvl6";
+          rev = "8d9ddaa7d13875745241f0f98758b1d72dd3be92";
+          sha256 = "1d998xyfnzgci62h0wv1n9a7hlk23ngcbl83k04ahz61g7haqnh2";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/33ca3106852f82624b36c7e3f03f5c0c620f304f/recipes/aes";
@@ -1342,12 +1342,12 @@
     aggressive-indent = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "aggressive-indent";
-        version = "20170321.1300";
+        version = "20170515.927";
         src = fetchFromGitHub {
           owner = "Malabarba";
           repo = "aggressive-indent-mode";
-          rev = "9dfde9ccef6dffbfa68219d91703d779cfe7016a";
-          sha256 = "1aslsq5jjvg0hywk4qzk30k6kaics1xslpqd38n24w37872b70jn";
+          rev = "5a019ef01b29b46381b9263f0edb3eee72b60328";
+          sha256 = "1vgmkkdnns0xw2khyxprb1cv5pqjpx6vl71zdqrr41zb3kdfl628";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1e6aed365c42987d64d0cd9a8a6178339b1b39e8/recipes/aggressive-indent";
@@ -1487,12 +1487,12 @@
     alda-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "alda-mode";
-        version = "20170125.1720";
+        version = "20170611.1031";
         src = fetchFromGitHub {
           owner = "jgkamat";
           repo = "alda-mode";
-          rev = "921b1d39ee1122c0f6935598dc17aaa904e74819";
-          sha256 = "01zz3h6q3djqmb3l6s9jld8x1zx2m0x1qskxzywnyfh8hcvbqy6f";
+          rev = "8bf40e0ed78c3d2b6536bee3a4b50a9f78a0c1a1";
+          sha256 = "167lmzh4grz4k47pw0pcq5pqbwjncfgw2wgzhvvg5jp66p7pmwqp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2612c494a2b6bd43ffbbaef88ce9ee6327779158/recipes/alda-mode";
@@ -1592,12 +1592,12 @@
     all-the-icons = callPackage ({ emacs, fetchFromGitHub, fetchurl, font-lock-plus, lib, melpaBuild, memoize }:
     melpaBuild {
         pname = "all-the-icons";
-        version = "20170509.318";
+        version = "20170516.158";
         src = fetchFromGitHub {
           owner = "domtronn";
           repo = "all-the-icons.el";
-          rev = "d070531959036edabc38f39ae8cb1a15608af993";
-          sha256 = "1a6j09n0bgxihyql4p49g61zbdwns23pbhb1abphrwn3c2aap2lx";
+          rev = "7134b7467a7061b57c8cda3503e9644d4ed92a2a";
+          sha256 = "0xwj8wyj0ywpy4rcqxz15hkr8jnffn7nrp5fnq56j360v8858q8x";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/604c01aa15927bd122260529ff0f4bb6a8168b7e/recipes/all-the-icons";
@@ -1659,8 +1659,8 @@
         src = fetchFromGitHub {
           owner = "NicolasPetton";
           repo = "amd-mode.el";
-          rev = "977b53e28b3141408fff4814be8b67ee23650cac";
-          sha256 = "0m80bwar80qsga735cqrn6rbvfz4w9a036zh8inhsigylv3vwqjv";
+          rev = "11e27444692bbf0eb38ec28af6bd041618c5c091";
+          sha256 = "1qcag5sjg2p64lllgy237j8gkm7vp2kxr6wppkps5wgkf7bn4q4z";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e4d6e9935e4935c9de769c7bf1c1b6dd256e10da/recipes/amd-mode";
@@ -1752,8 +1752,8 @@
         src = fetchFromGitHub {
           owner = "proofit404";
           repo = "anaconda-mode";
-          rev = "6141aba393e992308d01b550f0b96add62440b04";
-          sha256 = "1gkkjnmczpvaw020vw1gbda3dv0h1g7fzdqs3rigwlzzajc96bj4";
+          rev = "1e7c9322c1ef395c4c4585bb29f5a421f2aa3077";
+          sha256 = "1bb090n8nz8vacspihvnq37dx8knjgnarjbx5r4mqy9bp1v8i52p";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e03b698fd3fe5b80bdd24ce01f7fba28e9da0da8/recipes/anaconda-mode";
@@ -2455,22 +2455,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    apib-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, markdown-mode, melpaBuild }:
+    apib-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, markdown-mode, melpaBuild }:
     melpaBuild {
         pname = "apib-mode";
-        version = "20161201.817";
+        version = "20170520.658";
         src = fetchFromGitHub {
           owner = "w-vi";
           repo = "apib-mode";
-          rev = "940fb1faecb4b0a460ed36de5551a59ebd1edf58";
-          sha256 = "0sny3jv4amfc3lx45j1di2snp42xfl907q3l7frqhhsal57lkvd1";
+          rev = "6cc7c6f21b8e415b1718bb6a07ab2182e9e9dde6";
+          sha256 = "1717f78kaqkmbhfwb9kzsv5wi2zabcbwb4wh1jklhcaalvmk3z7d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/dc2ebb04f975d8226a76260895399c937d6a1940/recipes/apib-mode";
           sha256 = "0y3n0xmyc4gkypq07v4sp0i6291qaj2m13zkg6mxp61zm669v2fb";
           name = "apib-mode";
         };
-        packageRequires = [ emacs markdown-mode ];
+        packageRequires = [ markdown-mode ];
         meta = {
           homepage = "https://melpa.org/#/apib-mode";
           license = lib.licenses.free;
@@ -2483,8 +2483,8 @@
         src = fetchFromGitHub {
           owner = "vermiculus";
           repo = "apiwrap.el";
-          rev = "4ae045879cb3d7ce45f0a4a8ad4520b9225ca37b";
-          sha256 = "0845qajz2jcyfjxynabdnqpgm6cm9h5sbb6wiq06q30794pvlc0n";
+          rev = "8b60f9e9082583aa537369499506c70f192467ab";
+          sha256 = "13pr2hkn2jmg85299lga9rvllghkc0khfdgl3d8g2al9ib0il8pk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0197fd3657e65e3826375d9b6f19da3058366c91/recipes/apiwrap";
@@ -2728,12 +2728,12 @@
     arjen-grey-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "arjen-grey-theme";
-        version = "20160403.1215";
+        version = "20170522.1347";
         src = fetchFromGitHub {
           owner = "credmp";
           repo = "arjen-grey-theme";
-          rev = "b795dcb5760a5ccc3597733c5933b91252542135";
-          sha256 = "0p8k6sxmvmf535sawis6rn6lfyl5ph263i1phf2d5wl3dzs0xj5x";
+          rev = "4cd0be72b65d42390e2105cfdaa408a1ead8d8d1";
+          sha256 = "1n5axwn498ahb6984ir1zfl8vvwgbvq9bbrdfzydkmjljhgrp0rd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ed9804061cfadd26c69bb1bfe63dbe22f916f723/recipes/arjen-grey-theme";
@@ -2749,12 +2749,12 @@
     artbollocks-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "artbollocks-mode";
-        version = "20161030.2059";
+        version = "20170523.2122";
         src = fetchFromGitHub {
           owner = "sachac";
           repo = "artbollocks-mode";
-          rev = "d77a01985a9161ce1676fb18d7228a0df566942b";
-          sha256 = "1y69zq4r9ir1a2hy03lillxhw3skfj8ckkjv45i5xpasz4hjw50j";
+          rev = "4a907e470bf345b88c3802c1241ce2b8cf4123ee";
+          sha256 = "1l1dwhdfd5bwx92k84h5v47pv9my4p4wj0wq8hrwvwzwlv8dzn2w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/22b237ab91ddd3c17986ea12e6a32f2ce62d3a79/recipes/artbollocks-mode";
@@ -2873,12 +2873,12 @@
     async = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "async";
-        version = "20170502.2343";
+        version = "20170610.2241";
         src = fetchFromGitHub {
           owner = "jwiegley";
           repo = "emacs-async";
-          rev = "09a177c15bd3aafc57ba6a63ab093f640ffa2610";
-          sha256 = "0jr5q7zrh2k5h884xk5m45g3ymj6kikx08wz521qhablfxma6xw8";
+          rev = "d6222c2959caaca5c4980038756097da8a51e505";
+          sha256 = "1w7crkgi2k97zxdqv2k6a88kmz75s5v7p7n8bw8v18dvxx9sfisn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/async";
@@ -3041,12 +3041,12 @@
     audio-notes-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "audio-notes-mode";
-        version = "20140204.1154";
+        version = "20170611.1459";
         src = fetchFromGitHub {
           owner = "Malabarba";
           repo = "audio-notes-mode";
-          rev = "2158b2e8d20df3184bbe273a7fd5aa693e98baa9";
-          sha256 = "0q79kblcbz5vlzj0f49vpc1902767ydmvkmwwjs60x3w2f3aq3cm";
+          rev = "fa38350829c7e97257efc746a010471d33748a68";
+          sha256 = "1srg6rg3j9ri2cyr4g78dfqq3fhpn6hf3mq4iz2jfqjayppfv38b";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1e6aed365c42987d64d0cd9a8a6178339b1b39e8/recipes/audio-notes-mode";
@@ -3108,8 +3108,8 @@
         src = fetchFromGitHub {
           owner = "DamienCassou";
           repo = "auth-password-store";
-          rev = "cfd9cecb319c8fb547a62c732a5c1a106049c200";
-          sha256 = "14cxchnp3sxnps03iycifvjx0w5lsxfnz6qsxgkxnis300lmnkym";
+          rev = "e8d8733b1af67e4ea088d1ed015c554171feecb9";
+          sha256 = "05yzqrdk2d6mqyapgnfflfvm2pqifmb6fprf5si8n6wb8gmi2idw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0f4d2a28373ba93da5b280ebf40c5a3fa758ea11/recipes/auth-password-store";
@@ -3559,6 +3559,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    auto-minor-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "auto-minor-mode";
+        version = "20170601.1421";
+        src = fetchFromGitHub {
+          owner = "joewreschnig";
+          repo = "auto-minor-mode";
+          rev = "92871449782f8679f15573ad178b9c2247da8bfd";
+          sha256 = "14kh6p34mrqfqyjzr0wvxx4acp72pz2b75w96y3jyhiswvaqfcr1";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/b3ab5f048034777551e344101d8415cac92362c8/recipes/auto-minor-mode";
+          sha256 = "1dpdylrpw1pvlmhh229b3lqs07drx9kdhw4vcv5a48qah14dz6qa";
+          name = "auto-minor-mode";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/auto-minor-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
     auto-org-md = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
     melpaBuild {
         pname = "auto-org-md";
@@ -3709,12 +3730,12 @@
     auto-virtualenvwrapper = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild, s, virtualenvwrapper }:
     melpaBuild {
         pname = "auto-virtualenvwrapper";
-        version = "20170421.26";
+        version = "20170518.1442";
         src = fetchFromGitHub {
           owner = "robert-zaremba";
           repo = "auto-virtualenvwrapper.el";
-          rev = "de613a872e9f3cf59786578883177b1bd654a75c";
-          sha256 = "1y2b3i5fk3qhp90xcpdwzl2bdgjk3nrlxi78icpb81rw700qlqzq";
+          rev = "e2fb997e452e62e8bf9f80691941d3d25208e944";
+          sha256 = "0c0llr8kpq54zy1k2qjhhln76ii7r0nmgb85s3nrzar5l1z57zqg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/02a209ae8f9fc68feb3bb64d32d129fedef2b80b/recipes/auto-virtualenvwrapper";
@@ -4044,12 +4065,12 @@
     avy-menu = callPackage ({ avy, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "avy-menu";
-        version = "20170501.1112";
+        version = "20170518.2245";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "avy-menu";
-          rev = "663d3816b01baf445b3076ed757f503c944018f0";
-          sha256 = "0x6aa2dmvamqw90gqylj2yyrzsp8gyqvb2nwnzdpighnzal5rhl7";
+          rev = "71b71e64900d0637e17013781042e086e9bf56e7";
+          sha256 = "1mxrq2fpx3qa9vy121wnv02r43sb7djc2j8z7c2vh8x56h8bpial";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2f0b4cfb30c405d44803b36ebcaccef0cf87fe2d/recipes/avy-menu";
@@ -4382,12 +4403,12 @@
     base16-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "base16-theme";
-        version = "20170505.1010";
+        version = "20170606.1402";
         src = fetchFromGitHub {
           owner = "belak";
           repo = "base16-emacs";
-          rev = "89ee73d88183b4f60f973ff0a47a571a5de46d1d";
-          sha256 = "046db0np55fdnyr7bwhl2h1cqjh1ryd09fvkwn02cv2kb7knkfig";
+          rev = "be8f3ea35a2f58a218db062934ce3a1a054db3df";
+          sha256 = "01pdwvv1pbphnsw3h38x087xbdp5ry1h18bqiiispzvhyc56xvak";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/30862f6be74882cfb57fb031f7318d3fd15551e3/recipes/base16-theme";
@@ -4798,12 +4819,12 @@
     beginend = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "beginend";
-        version = "20170324.728";
+        version = "20170605.541";
         src = fetchFromGitHub {
           owner = "DamienCassou";
           repo = "beginend";
-          rev = "2d8908922fadc1e29938703593a77da6456dc276";
-          sha256 = "0h6i56pa92x89rilgb7kgfpnsx57d157r284q0icm4xj990svg21";
+          rev = "28806d09207e4a194a39eb385650824a0121e0cd";
+          sha256 = "17qhbgq3ciyjjl4a1mm6qn5g5y39plmncad6i4kijcda9kx44w48";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/31c1157d4fd9e47a780bbd91075252acdc7899dd/recipes/beginend";
@@ -5115,8 +5136,8 @@
         src = fetchFromGitHub {
           owner = "jwiegley";
           repo = "use-package";
-          rev = "54ce52604477c237b663a02d49be9d6d307d49bd";
-          sha256 = "1rpyfbh0zp6a013nva2b1czis10mr8vzv52qlhgcfm78m48bvhya";
+          rev = "726eea13a3a4d75d630aac29d6b71d74d9dc69e3";
+          sha256 = "1r75ysdz6cj97vn46lj4g2a3hsab377f667a8bfs17rz007nddv4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d39d33af6b6c9af9fe49bda319ea05c711a1b16e/recipes/bind-key";
@@ -5153,12 +5174,12 @@
     bing-dict = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "bing-dict";
-        version = "20170209.1459";
+        version = "20170604.1831";
         src = fetchFromGitHub {
           owner = "cute-jumper";
           repo = "bing-dict.el";
-          rev = "7c067b7a3a1a4797476f03a65f4a0b4a269a70c7";
-          sha256 = "1cw8zxcj7ygj73dc8xf6b4sdjrwxfl6h07mrwym8anllqs2v0fa6";
+          rev = "d4b261739e53e8ed8fa5db3d3946de82c0ab8e34";
+          sha256 = "0dn6rifr0njpw3mwbyn21bw88lp0kzwwjp7ivgbbl1bxshj0ybhk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/bing-dict";
@@ -5571,12 +5592,12 @@
     boogie-friends = callPackage ({ cl-lib ? null, company, dash, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, yasnippet }:
     melpaBuild {
         pname = "boogie-friends";
-        version = "20161019.1425";
+        version = "20170521.1917";
         src = fetchFromGitHub {
           owner = "boogie-org";
           repo = "boogie-friends";
-          rev = "8b567f5efe71d94bba3c29c52dffd58a33abc0cb";
-          sha256 = "1gwj8d1635l7l7cqk1508gkzfgi8hpq6w0x22w7rd5yrwz1nmx5b";
+          rev = "38ab3efc2021318cd62f9187214b69d34b4afca6";
+          sha256 = "01yccb86gzag2anmqj1p196m5374mxnxha1fbhv7krc2avx2j71x";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5bdd06b82d002677c046876642efe1dc01bc3e77/recipes/boogie-friends";
@@ -5591,7 +5612,7 @@
       }) {};
     bookmark-plus = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "bookmark-plus";
-        version = "20170331.1856";
+        version = "20170512.1631";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/bookmark+.el";
           sha256 = "0iqvlwqilwpqlymj8iynw2miifl28h1g7z10q08rly2430fnmi37";
@@ -5632,12 +5653,12 @@
     boon = callPackage ({ dash, emacs, expand-region, fetchFromGitHub, fetchurl, lib, melpaBuild, multiple-cursors }:
     melpaBuild {
         pname = "boon";
-        version = "20170508.733";
+        version = "20170528.2317";
         src = fetchFromGitHub {
           owner = "jyp";
           repo = "boon";
-          rev = "b5326c5bd68f2dbeef87adae6657eb24f068dbc5";
-          sha256 = "1mxzsm1zkb99hpn7hav0yph3s04cbkhyj7dps49rphfp8s0ks90f";
+          rev = "4b76f0a86c84b0e4032cdee787c3ee55372e6c31";
+          sha256 = "1rr52dwwxq26v0h7apgr6nqpvfahrzm3j6p3zpbyp3lhb4sc2rjw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/091dcc3775ec2137cb61d66df4e72aca4900897a/recipes/boon";
@@ -5821,12 +5842,12 @@
     browse-at-remote = callPackage ({ cl-lib ? null, f, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "browse-at-remote";
-        version = "20170330.1452";
+        version = "20170523.556";
         src = fetchFromGitHub {
           owner = "rmuslimov";
           repo = "browse-at-remote";
-          rev = "7a34d6579a98d13b2887addab25947ea96502de9";
-          sha256 = "1ybb9gyw1b4fjbh02lj632vc89m9yq91dvshnbnzg0wbr77d33xr";
+          rev = "5de73fcaa54b638554fcbd59a693bc647ff9dee1";
+          sha256 = "04ad27g1jpy7gdbibyckwrv0y6psq9v66k0zd1hnll1aqlx1k70h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/browse-at-remote";
@@ -6403,12 +6424,12 @@
     buttercup = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "buttercup";
-        version = "20170421.245";
+        version = "20170520.147";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
           repo = "emacs-buttercup";
-          rev = "ed649d722aeb20683705a2378438833efd96e271";
-          sha256 = "1bjkfivxs0x0jlj5qh5adjxmjvj8nd0vs77l4mbm6yv2gm08shxd";
+          rev = "d8dc80da12cc1e71fcf54b0f4deb8d229bc97beb";
+          sha256 = "0zsf2qk41i1ay6h85d1ppj5qnzdrb9n09bzj9s9hk7ysag1rlqj1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d4b187cb5b3cc5b546bfa6b94b6792e6363242d1/recipes/buttercup";
@@ -6762,7 +6783,7 @@
         version = "20151009.845";
         src = fetchsvn {
           url = "https://caml.inria.fr/svn/ocaml/trunk/emacs/";
-          rev = "16556";
+          rev = "16557";
           sha256 = "16qw82m87i1fcnsccqcvr9l6p2cy0jdhljsgaivq0q10hdmbgqdw";
         };
         recipeFile = fetchurl {
@@ -6972,8 +6993,8 @@
         src = fetchFromGitHub {
           owner = "skk-dev";
           repo = "ddskk";
-          rev = "aa9dba05f7a971c530ef9da3d5dffc764df3bcfd";
-          sha256 = "0iasvz1rvb4bk8pa0q298mc1lywdvddvsnh2rv3m10zar9z9xlrr";
+          rev = "25057a27543788079e7040bf42b139e0aa0635b5";
+          sha256 = "1fja4c4d8bqnp6ip423n3p2xisq9m9bhnsv0bl6fm5svm8qmcb1f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7375cab750a67ede1a021b6a4371b678a7b991b0/recipes/ccc";
@@ -7014,8 +7035,8 @@
         src = fetchFromGitHub {
           owner = "skk-dev";
           repo = "ddskk";
-          rev = "aa9dba05f7a971c530ef9da3d5dffc764df3bcfd";
-          sha256 = "0iasvz1rvb4bk8pa0q298mc1lywdvddvsnh2rv3m10zar9z9xlrr";
+          rev = "25057a27543788079e7040bf42b139e0aa0635b5";
+          sha256 = "1fja4c4d8bqnp6ip423n3p2xisq9m9bhnsv0bl6fm5svm8qmcb1f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b48fe069ecd95ea0f9768ecad969e0838344e45d/recipes/cdb";
@@ -7135,12 +7156,12 @@
     centered-window-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "centered-window-mode";
-        version = "20170510.1334";
+        version = "20170528.25";
         src = fetchFromGitHub {
           owner = "anler";
           repo = "centered-window-mode";
-          rev = "cb1b7d010c8f59969fd326983503ee6935d9da8e";
-          sha256 = "12210z0aa9arhah2s4gpc4k9l29i293qgz1zimaryizxcfqvp4n8";
+          rev = "c46af782ada0d4062d7de5cbbdc7c7471fdd0d15";
+          sha256 = "1xbfmanimq0ql61lzxx74jf4kj1g9imzgwiy1498mhbdbw295fg0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7fabdb05de9b8ec18a3a566f99688b50443b6b44/recipes/centered-window-mode";
@@ -7195,6 +7216,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    ceylon-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "ceylon-mode";
+        version = "20170605.1450";
+        src = fetchFromGitHub {
+          owner = "lucaswerkmeister";
+          repo = "ceylon-mode";
+          rev = "00f790b3ed5ec48e2461e20a4d466ba45c634e13";
+          sha256 = "08zk6aspy59gv3989zxz0ibxxwkbjasa83ilpzvpcwszrzq8x640";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/09cd1a2ccf33b209a470780a66d54e1b1d597a86/recipes/ceylon-mode";
+          sha256 = "0dgqmmb8qmvzn557h0fw1mx4y0p96870l8f8glizkk3fifg7wgq4";
+          name = "ceylon-mode";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/ceylon-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
     cfengine-code-style = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "cfengine-code-style";
@@ -7202,8 +7244,8 @@
         src = fetchFromGitHub {
           owner = "cfengine";
           repo = "core";
-          rev = "5c98a709d1a282354af57781c500467f3562e18f";
-          sha256 = "0j48v4ai7hn5mxhs3acwmyndzlzlxgzdvqj0a2205w22alb7dxdn";
+          rev = "036c5898eb89e846fa1b86537a5c0569868dbaf0";
+          sha256 = "0cz4cwisnlbkclc6cn7rlz7pkpwh5p0646dzrkw92bk5vmwh89pg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c737839aeda583e61257ad40157e24df7f918b0f/recipes/cfengine-code-style";
@@ -7242,7 +7284,7 @@
         version = "20170201.347";
         src = fetchsvn {
           url = "https://beta.visl.sdu.dk/svn/visl/tools/vislcg3/trunk/emacs";
-          rev = "12189";
+          rev = "12230";
           sha256 = "0lv9lsh1dnsmida4hhj04ysq48v4m12nj9yq621xn3i6s2qz7s1k";
         };
         recipeFile = fetchurl {
@@ -7322,12 +7364,12 @@
     char-menu = callPackage ({ avy-menu, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "char-menu";
-        version = "20170501.1119";
+        version = "20170518.2247";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "char-menu";
-          rev = "06250f472d2c6dd55c62057e7e0411d6ca494e35";
-          sha256 = "0ibmsixxhb1j2jz7s7hilmqk8f2p609q5g9xhi915xb6vlq9yrwb";
+          rev = "f4d8bf8fa6787e2aaca2ccda5223646541d7a4b2";
+          sha256 = "0zyi1ha17jk3zz7nirasrrx43j3jkrsfz7ypbc4mk44w7hsvx2hj";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f6676747e853045b3b19e7fc9524c793c6a08303/recipes/char-menu";
@@ -7364,12 +7406,12 @@
     chatwork = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "chatwork";
-        version = "20161121.555";
+        version = "20170510.2142";
         src = fetchFromGitHub {
           owner = "ataka";
           repo = "chatwork";
-          rev = "70b41451e2d2751e634e84e0452b34c558463fe4";
-          sha256 = "11h76qc2n2p8yz941drmi0rp13xmmlacikfygdv1n7s730ja0hgy";
+          rev = "fea231d479f06bf40dbfcf45de143eecc9ed744c";
+          sha256 = "163xr18lm4awfgh4lcp7pr04jirpvlk8w1g4445zbxbpjfvv268z";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/77ae72e62b8771e890525c063522e7091ca8f674/recipes/chatwork";
@@ -7379,6 +7421,27 @@
         packageRequires = [];
         meta = {
           homepage = "https://melpa.org/#/chatwork";
+          license = lib.licenses.free;
+        };
+      }) {};
+    cheat-sh = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "cheat-sh";
+        version = "20170606.727";
+        src = fetchFromGitHub {
+          owner = "davep";
+          repo = "cheat-sh.el";
+          rev = "512c74b0cb0798a75303c5384ee165c8a5f3356b";
+          sha256 = "1m65k2gqd5irwk4cj97p33q14shn4cpz0zxcpg4m3bgiwl8qmxhs";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/ebac62fb3828d81e30145b9948d60e781e20eda2/recipes/cheat-sh";
+          sha256 = "0f6wqyh3c3ap0l6khikqlw8sqqi6fsl468gn157faza4x63j9z80";
+          name = "cheat-sh";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/cheat-sh";
           license = lib.licenses.free;
         };
       }) {};
@@ -7431,8 +7494,8 @@
         src = fetchFromGitHub {
           owner = "eikek";
           repo = "chee";
-          rev = "a986cce6fe0290934dedfb7afcfdcf5f5eb47a30";
-          sha256 = "1cwn5xjchra3dsngbyh23w2p4ndjyjjg0zmj1ij4fk3v86cfqf79";
+          rev = "19437183960ee525de1c0cde13dc2c8d8921abfb";
+          sha256 = "0hrl7h2069g6r2b3i2b7sxizny6ihgf8qajfima32la3gsb0hd4k";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9f4a3775720924e5a292819511a8ea42efe1a7dc/recipes/chee";
@@ -7553,12 +7616,12 @@
     chinese-fonts-setup = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "chinese-fonts-setup";
-        version = "20170507.245";
+        version = "20170512.1";
         src = fetchFromGitHub {
           owner = "tumashu";
           repo = "chinese-fonts-setup";
-          rev = "43f08ae41903dce980aed8b8ee1e92aee2c4806e";
-          sha256 = "074hgpsfzk0zwrnhm6j3q6hw4ygqf08fpc4zbn8f32dsvcd2nlws";
+          rev = "a88f45239ca73e95eb6bac923590f1d108b822ca";
+          sha256 = "1h0nwrnh0krn9p0x1cj67gjdlzr82xml76ycn6745f943sn6d5ah";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c536882e613e83a4a2baf86479bfb3efb86d916a/recipes/chinese-fonts-setup";
@@ -7595,12 +7658,12 @@
     chinese-pyim = callPackage ({ async, chinese-pyim-basedict, cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild, popup, pos-tip }:
     melpaBuild {
         pname = "chinese-pyim";
-        version = "20170430.131";
+        version = "20170512.735";
         src = fetchFromGitHub {
           owner = "tumashu";
           repo = "chinese-pyim";
-          rev = "2fd3610a6585069693c4ce7b7eef6dcba7e57855";
-          sha256 = "0k0nvv032i065lkmh1afyax5jx8bnshnxr2d0dfqhmlp8mpa5znx";
+          rev = "d57d0fd47565dc087724a68c6b3abd16a58625ae";
+          sha256 = "10ir2452rj6f48qfgwps6y1mn5afrsa04z0xl2f31j5463j4b4mx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/157a264533124ba05c161aa93a32c7209f002fba/recipes/chinese-pyim";
@@ -7637,12 +7700,12 @@
     chinese-pyim-greatdict = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "chinese-pyim-greatdict";
-        version = "20160619.2109";
+        version = "20170513.1833";
         src = fetchFromGitHub {
           owner = "tumashu";
           repo = "chinese-pyim-greatdict";
-          rev = "11cf5145710349e9d928eb9197bebb426025fd58";
-          sha256 = "1pza690b31ynyj31f1gp7y2d29ri3swcblpzd2pcpj3ynmnbsy3f";
+          rev = "8efd9321d21d5daabdb32cb3696bc7c7b83ce991";
+          sha256 = "05ap9d2kk9dyj85zm581nwizbdqx8fqa0yjswk4df0y6mgz4g0q9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/03234f7a1abe7423c5a9bcb4c100957c8eece351/recipes/chinese-pyim-greatdict";
@@ -7845,12 +7908,12 @@
     cider = callPackage ({ clojure-mode, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, pkg-info, queue, seq, spinner }:
     melpaBuild {
         pname = "cider";
-        version = "20170509.208";
+        version = "20170525.255";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "cider";
-          rev = "d84b8a8ba77cd685b3a4bc474b1928461cc86bf3";
-          sha256 = "1xj6ymyrr156w1cyw571dnnws0013c819x3lvl4cgiaj05nd4422";
+          rev = "7ffc207cf0e56305963e1a3387dce3114325544d";
+          sha256 = "1n4pik7fp4xlc0xdcnw649mx2r2qaiv1f5w9bbz1n4r4pqhmy5q7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/55a937aed818dbe41530037da315f705205f189b/recipes/cider";
@@ -8034,12 +8097,12 @@
     circe = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "circe";
-        version = "20170509.1443";
+        version = "20170528.731";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
           repo = "circe";
-          rev = "1e90e5a89d07bd1584e990c35f5a9d564334a1ae";
-          sha256 = "13pv21bk4khq97a7km7gpj8rmwkmcb1y1nk72w35b9kipxv76vg2";
+          rev = "13c605e639194c3da0c2e685056fac685f8c76a0";
+          sha256 = "0n7v0g332ml1ang2fjc8rjbi8h1f4bqazcqi8dlfn99vvv8kcd21";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a2b295656d53fddc76cacc86b239e5648e49e3a4/recipes/circe";
@@ -8121,8 +8184,8 @@
         version = "20170120.137";
         src = fetchsvn {
           url = "http://llvm.org/svn/llvm-project/cfe/trunk/tools/clang-format";
-          rev = "302728";
-          sha256 = "1m3h5kln4v2hcwc4ahzk356415iizcg8cmika8221qvqci4wj7bm";
+          rev = "305184";
+          sha256 = "1hs00lf2f2fmxv2abhskrlqr96395j3ywbgs8aacadbzigdx4iq5";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/69e56114948419a27f06204f6fe5326cc250ae28/recipes/clang-format";
@@ -8327,12 +8390,12 @@
     clj-refactor = callPackage ({ cider, clojure-mode, edn, emacs, fetchFromGitHub, fetchurl, hydra, inflections, lib, melpaBuild, multiple-cursors, paredit, s, seq, yasnippet }:
     melpaBuild {
         pname = "clj-refactor";
-        version = "20170502.1115";
+        version = "20170608.320";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "clj-refactor.el";
-          rev = "b6d07155d4ff9181ea0d243235a496bc9d790857";
-          sha256 = "1y0vx1yx4ibr9qpkbmp2p48ah03vjin3w3wx9jxzd6dlprbyg59h";
+          rev = "769eb06ac82dff8aa0239b9ca47cf3240ff0857f";
+          sha256 = "17g6rq30dvvhr3lljzn5gg6v9bdxw31fw6b20sgcp7gx4xspc42w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3a2db268e55d10f7d1d5a5f02d35b2c27b12b78e/recipes/clj-refactor";
@@ -8507,12 +8570,12 @@
     clojure-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "clojure-mode";
-        version = "20170407.312";
+        version = "20170608.2315";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "clojure-mode";
-          rev = "2d67af4230657fb06f0df4453b9d21031b32c1db";
-          sha256 = "1dan05yd3dvf3r4khahpyq849sq96bjxz7zyady8x3k3gnn35q5w";
+          rev = "eacd330f28513276da18e4d6f2607f9041314c49";
+          sha256 = "18hl01h390yhcm7g4ayvyz82m8gc29qv7za5vl10apfch5c6d2gw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5e3cd2e6ee52692dc7b2a04245137130a9f521c7/recipes/clojure-mode";
@@ -8532,8 +8595,8 @@
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "clojure-mode";
-          rev = "2d67af4230657fb06f0df4453b9d21031b32c1db";
-          sha256 = "1dan05yd3dvf3r4khahpyq849sq96bjxz7zyady8x3k3gnn35q5w";
+          rev = "eacd330f28513276da18e4d6f2607f9041314c49";
+          sha256 = "18hl01h390yhcm7g4ayvyz82m8gc29qv7za5vl10apfch5c6d2gw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5e3cd2e6ee52692dc7b2a04245137130a9f521c7/recipes/clojure-mode-extra-font-locking";
@@ -8738,12 +8801,12 @@
     cmake-ide = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, levenshtein, lib, melpaBuild, seq }:
     melpaBuild {
         pname = "cmake-ide";
-        version = "20170502.30";
+        version = "20170605.12";
         src = fetchFromGitHub {
           owner = "atilaneves";
           repo = "cmake-ide";
-          rev = "ad5cdbdf2eec24ca1a527d56c1c75d47d1208e5c";
-          sha256 = "110d3vbjp41400wz2fjgmaqap7ma5f7rsg8i5ni74a8ys89333hd";
+          rev = "b7bb7bf36d442c377988a090fc648b03b50c8eff";
+          sha256 = "1iw0blpi38yykqqzl6s0w7z74ym0b56k1rxg5anyw0q9zkp0hb72";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/17e8a8a5205d222950dc8e9245549a48894b864a/recipes/cmake-ide";
@@ -8763,8 +8826,8 @@
         src = fetchFromGitHub {
           owner = "Kitware";
           repo = "CMake";
-          rev = "8cc9e07a2ca7018feb0dbc286f1db23a4294eeec";
-          sha256 = "010ip83v6kbaqjwl8jv3n8by9zv8aldkpal1ass39dvp5rl7q56y";
+          rev = "abd1216c1f8a1211d348568bb7695c30505de84e";
+          sha256 = "1z3c0wjvk5ry69sjmslvw2mnnri63dk1vk6lbx881fxf67r4wf7f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/598723893ae4bc2e60f527a072efe6ed9d4e2488/recipes/cmake-mode";
@@ -9027,13 +9090,34 @@
           license = lib.licenses.free;
         };
       }) {};
+    coin-ticker = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, request }:
+    melpaBuild {
+        pname = "coin-ticker";
+        version = "20170611.27";
+        src = fetchFromGitHub {
+          owner = "eklitzke";
+          repo = "coin-ticker-mode";
+          rev = "9efab90fe4e6f29464af14e0d8fd1e20c0147b80";
+          sha256 = "0xnrh6v4s2s3fgvw0v9fl48dlk4r2p6axp7xf41gzb1ai81yczhv";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/fd783998658b69159e39d9440da7a0dd04135e49/recipes/coin-ticker";
+          sha256 = "0v4zyswhghknlsal9xfsgwf8ckjwrjkjrg8w7p6yjqrxmfsbw93b";
+          name = "coin-ticker";
+        };
+        packageRequires = [ emacs request ];
+        meta = {
+          homepage = "https://melpa.org/#/coin-ticker";
+          license = lib.licenses.free;
+        };
+      }) {};
     col-highlight = callPackage ({ fetchurl, lib, melpaBuild, vline }:
     melpaBuild {
         pname = "col-highlight";
-        version = "20170221.1559";
+        version = "20170510.1541";
         src = fetchurl {
-          url = "https://www.emacswiki.org/emacs/download/col-highlight.el?revision=30";
-          sha256 = "1xm1sbmcily1zy5xfpiphy3waq7928xpqmsrm3rcy37xbk2xj7vr";
+          url = "https://www.emacswiki.org/emacs/download/col-highlight.el?revision=31";
+          sha256 = "0wi4xz8n5ib65spyrgqsp8l6zafnvxdiw3hy918fs0xjj7ziy6qc";
           name = "col-highlight.el";
         };
         recipeFile = fetchurl {
@@ -9238,12 +9322,12 @@
     color-theme-sanityinc-tomorrow = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "color-theme-sanityinc-tomorrow";
-        version = "20170509.327";
+        version = "20170604.1611";
         src = fetchFromGitHub {
           owner = "purcell";
           repo = "color-theme-sanityinc-tomorrow";
-          rev = "b1fd68e9114413825aee28491f1bb7de917ef758";
-          sha256 = "0ai93fs7l86ih8smf0j51cn0wqph0c3y41vzpbnw9fck3bbxmivk";
+          rev = "21b9b9ae14f2f0084497de00e5a0a00919b87c88";
+          sha256 = "0v69lzqknk8qr7digda9vwri7pkhr5600lb39xzlml15m693acin";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/color-theme-sanityinc-tomorrow";
@@ -9488,12 +9572,12 @@
     common-lisp-snippets = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, yasnippet }:
     melpaBuild {
         pname = "common-lisp-snippets";
-        version = "20161231.1557";
+        version = "20170522.2147";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "common-lisp-snippets";
-          rev = "bb8d22994592a7e69ef8e613e8638882e4e0e404";
-          sha256 = "0i4w5jkz0yxnnapyijvjd5z1rcp0g3r3abj6hchb5yd26h1jcz8a";
+          rev = "46f1de08c8d86b72b474c2f8e1c1b313ac70f23d";
+          sha256 = "148ach1p3iqch3a6r1y8wkr1avyprg47jjz3a31vjvqgcwgs3ynw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/48d0166ccd3dcdd3df4719349778c6c5ab6872ca/recipes/common-lisp-snippets";
@@ -9509,12 +9593,12 @@
     company = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "company";
-        version = "20170420.1837";
+        version = "20170611.1356";
         src = fetchFromGitHub {
           owner = "company-mode";
           repo = "company-mode";
-          rev = "1fe263493fc3cb3551c55bb3441fd9d7eb0c0a96";
-          sha256 = "14l8p1qibhd2jx9cgfb6h2fvcl1xn8rw4l6jd5n2m5580qv7cx5g";
+          rev = "950c54721f85e68fd21f1e92991d597fd38685e4";
+          sha256 = "1gkjin7ikghh4zbnpbg7gzhdj1hg125h8kq694aa4ag9379vivw7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/96e7b4184497d0d0db532947f2801398b72432e4/recipes/company";
@@ -9643,12 +9727,12 @@
     company-c-headers = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "company-c-headers";
-        version = "20150801.901";
+        version = "20170531.1330";
         src = fetchFromGitHub {
           owner = "randomphrase";
           repo = "company-c-headers";
-          rev = "9bfdd438be5ecb75e5717eb48e09ce69904676e3";
-          sha256 = "152fwy23x5k3dp45z1k4h4n6pcvl3wrhwhwd4l4rp06yhgwf0i1a";
+          rev = "e959d43bebf0a524f7378669983a39ee1379cc21";
+          sha256 = "18fi1jp3scz5rrf877qd1ciwx29bzndb85ifnx4ki0jvznvfas8n";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d97b5c53967e0ff767b3654c52622f4b5ddf1985/recipes/company-c-headers";
@@ -9689,8 +9773,8 @@
         src = fetchFromGitHub {
           owner = "cpitclaudel";
           repo = "company-coq";
-          rev = "561a7e9243669c1edf406472f85a2836ebfcec4c";
-          sha256 = "1gk7in9arz4dnkyysxl0wbigf7ssnr3qr4jzjca2c731n8sc566b";
+          rev = "eddb16e5ed9bd2945c57054b2c0054dee600b985";
+          sha256 = "18l442b2gnbgzn6x1qfdcfqn4ilh646fw694qam9g996vd0ncajb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7f89e3097c654774981953ef125679fec0b5b7c9/recipes/company-coq";
@@ -9706,12 +9790,12 @@
     company-dcd = callPackage ({ cl-lib ? null, company, fetchFromGitHub, fetchurl, flycheck-dmd-dub, ivy, lib, melpaBuild, popwin, yasnippet }:
     melpaBuild {
         pname = "company-dcd";
-        version = "20161114.2306";
+        version = "20170516.210";
         src = fetchFromGitHub {
           owner = "tsukimizake";
           repo = "company-dcd";
-          rev = "4161374fd0da40bbebb6f6e01f1589625708d8ef";
-          sha256 = "0pi0363s8ww6xz7drgxi195jcanvmx1g4wv4zrpdl9dx8cf166bs";
+          rev = "4832188a9e42287539a69c372fe1643166a6a7aa";
+          sha256 = "07caaff8chabrgl4hqanq13p5qhzqx5fcg2synl8856d7v1456vc";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ad5be8c53911271fba03a88da7e9d518c6508ffe/recipes/company-dcd";
@@ -9801,8 +9885,8 @@
         src = fetchFromGitHub {
           owner = "emacs-eclim";
           repo = "emacs-eclim";
-          rev = "1d0ac3f4cd90d44e75f75c8c0bd234013349e14f";
-          sha256 = "0cds3rmyp3imx234vdbmrl5l7fq90aixb8n1iv0ba5jrx1yk91lz";
+          rev = "ebb844d1ebdd7eb347e89063a9b6e9f890a1ff57";
+          sha256 = "18q4blnxf7p2kvgh1rhr7pizga06z97hv1lxjgzv0dc2dll2zwmd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1e9d3075587fbd9ca188535fd945a7dc451c6d7e/recipes/company-emacs-eclim";
@@ -9986,12 +10070,12 @@
     company-irony = callPackage ({ cl-lib ? null, company, emacs, fetchFromGitHub, fetchurl, irony, lib, melpaBuild }:
     melpaBuild {
         pname = "company-irony";
-        version = "20170411.1645";
+        version = "20170611.1403";
         src = fetchFromGitHub {
           owner = "Sarcasm";
           repo = "company-irony";
-          rev = "87834a6e46dea52b8469ec636e6dc0a97e85bf27";
-          sha256 = "05j439h4fzwakf91j0m70giyb6cwycnwy087nikxyfdiq7nk8lg2";
+          rev = "f68c1b46d64b9f95cfc2a6d611089d0442ed58ba";
+          sha256 = "0kfv89vma93qv97vh1ajg74wq62sq7f6gr39pm8hmfvmk0d6y51y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d2b6a8d57b192325dcd30fddc9ff8dd1516ad680/recipes/company-irony";
@@ -10011,8 +10095,8 @@
         src = fetchFromGitHub {
           owner = "hotpxl";
           repo = "company-irony-c-headers";
-          rev = "ba304fe7eebdff90bbc7dea063b45b82638427fa";
-          sha256 = "1x2dfjmy86icyv2g1y5bjlr87w8rixqdcndkwm1sba6ha277wp9i";
+          rev = "5bbd427a2d3d4445e3413f7516def9aa80543b2a";
+          sha256 = "172wf0ywbvqn9smwnh4kgxx8gw9g2f76irg3fmcv4d8d53mi08wa";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9f9f62d8ef438a9ba4872bd7731768eddc5905de/recipes/company-irony-c-headers";
@@ -10158,8 +10242,8 @@
         src = fetchFromGitHub {
           owner = "xcwen";
           repo = "ac-php";
-          rev = "58b68de970201712ecf7f1ba64fdb9b7bee2d66e";
-          sha256 = "0sqv9kzcxlvcf72xlr2xpblhcnq6xvrr6kqdy4zrgiqdw884q134";
+          rev = "eba56378cf8d60c4871e0e9d0d0e201d302778ea";
+          sha256 = "0d5pwxla9lkrkb2a5c7y4sm6js7jgm2m8i3lja0c5qzw5b50zwxs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ac283f1b65c3ba6278e9d3236e5a19734e42b123/recipes/company-php";
@@ -10286,12 +10370,12 @@
     company-rtags = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, rtags }:
     melpaBuild {
         pname = "company-rtags";
-        version = "20170504.49";
+        version = "20170522.2154";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "2abdfb2adf24b881cdd04e904ecb341bb51e8cb6";
-          sha256 = "11f9sd8w7qqhfd6mxbihlc6mdki4lqyk4dwbi3v91k9hbxb9hlq2";
+          rev = "d6af2ad09c99f9c58900665e874dcf97a545c0fa";
+          sha256 = "12p22b9q4rkl7jswg12gqc8751sinzgj8h75jjzrggd0vfsg439a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3dea16daf0d72188c8b4043534f0833fe9b04e07/recipes/company-rtags";
@@ -10304,22 +10388,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    company-shell = callPackage ({ cl-lib ? null, company, dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    company-shell = callPackage ({ cl-lib ? null, company, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "company-shell";
-        version = "20170507.445";
+        version = "20170517.2241";
         src = fetchFromGitHub {
           owner = "Alexander-Miller";
           repo = "company-shell";
-          rev = "57445b8116148875ad80f434af55781749c72960";
-          sha256 = "0kh0cwhivj3gnh2vml98rlfqfzfn8lkvz5kws9ni0r86fcdlwdc0";
+          rev = "6ae625f80d90e0779c79de38e8f83a336c1d00fa";
+          sha256 = "0da9y7x1xvaahsslcmgji6hr3cbn779i504cfrmsabbr3wmkn3fy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/bbaa05d158f3806b9f79a2c826763166dbee56ca/recipes/company-shell";
           sha256 = "0my9jghf3s4idkgrpki8mj1lm5ichfvznb09lfwf07fjhg0q1apz";
           name = "company-shell";
         };
-        packageRequires = [ cl-lib company dash ];
+        packageRequires = [ cl-lib company dash emacs ];
         meta = {
           homepage = "https://melpa.org/#/company-shell";
           license = lib.licenses.free;
@@ -10454,12 +10538,12 @@
     company-ycmd = callPackage ({ company, dash, deferred, f, fetchFromGitHub, fetchurl, let-alist, lib, melpaBuild, s, ycmd }:
     melpaBuild {
         pname = "company-ycmd";
-        version = "20161026.2337";
+        version = "20170606.49";
         src = fetchFromGitHub {
           owner = "abingham";
           repo = "emacs-ycmd";
-          rev = "05f0409fb7902daf49b4cd329e5c9ef569d77689";
-          sha256 = "0mp05xsphbidjgskp2pnv2x54z95dzmvfwdddpgmysmc99sz305y";
+          rev = "29aba538be5e44da81ad76a6078bb65c1c5e1aa6";
+          sha256 = "0fpccpiwwsxg0asdzg0m5hlwdv6jyr7khywnd1rb6kvr8m2qm0hf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/company-ycmd";
@@ -10521,8 +10605,8 @@
         src = fetchFromGitHub {
           owner = "kiwanami";
           repo = "emacs-deferred";
-          rev = "7f2bb81e75db895c99611a7a9fbde7c239b757ba";
-          sha256 = "09qnk8xhk5vjn7iqfzg3yzydas47453k1qm22gbmlfxh6lvxsqh2";
+          rev = "d012a1ab50edcc2c44e3e49006f054dbff47cb6c";
+          sha256 = "0xy9zb6wwkgwhcxdnslqk52bq3z24chgk6prqi4ks0qcf2bwyh5h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8bc29a8d518ce7a584277089bd4654f52ac0f358/recipes/concurrent";
@@ -10538,12 +10622,12 @@
     conda = callPackage ({ dash, emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, pythonic, s }:
     melpaBuild {
         pname = "conda";
-        version = "20170425.1845";
+        version = "20170608.756";
         src = fetchFromGitHub {
           owner = "necaris";
           repo = "conda.el";
-          rev = "6ba9ef5d72ef613f478e07e2ebf57b47066beee7";
-          sha256 = "0mp6jzyvz3m41vb4kwwikyvcjgc8qgryyx71n1m50jr2i23s9nk2";
+          rev = "0257cd83796c3bdc357b69c1ecaf6d7eb6e2bf53";
+          sha256 = "035srwyx94fp80f6rgkvx1vxlvaznsgp7zy5gcddvyazx1a1yj0s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fcf762e34837975f5440a1d81a7f09699778123e/recipes/conda";
@@ -10705,12 +10789,12 @@
     copy-as-format = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "copy-as-format";
-        version = "20170310.1621";
+        version = "20170603.945";
         src = fetchFromGitHub {
           owner = "sshaw";
           repo = "copy-as-format";
-          rev = "161feb918b104e87f1a284f5c4e5e507e0c177f8";
-          sha256 = "0y1j6f9xs877r4bv6dmcl2jsl27v0n6rsmpml719id2cfnh9sn4g";
+          rev = "fba9fe57a310a71c5aac90a26434df4c08214833";
+          sha256 = "1qh3qxy8p23nz0zh8iavggjhp0mn10finq3zl3i0a3vkxxrvgh76";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/42fe8a2113d1c15701abe7a7e0a68e939c3d789b/recipes/copy-as-format";
@@ -10768,12 +10852,12 @@
     coq-commenter = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "coq-commenter";
-        version = "20160808.2307";
+        version = "20170607.1355";
         src = fetchFromGitHub {
           owner = "ailrun";
           repo = "coq-commenter";
-          rev = "b57c7c92219201c0f931014127b50fd9b1e0039a";
-          sha256 = "03wwdd9n7fijrczrrdhn9xisrj7mqhc2q7z4da6fm3q45sy2npqk";
+          rev = "6100933cadea289cdaabf2f56f2a0dd72385c1fe";
+          sha256 = "1b28gyyfjknjz23m18yhaj1ir72y8nl75cnam3ggygm9ax65h8i1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/coq-commenter";
@@ -10810,12 +10894,12 @@
     counsel = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, swiper }:
     melpaBuild {
         pname = "counsel";
-        version = "20170506.1638";
+        version = "20170610.2335";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "swiper";
-          rev = "f565f76dfb3a31becc32c807916c011cde6c4e64";
-          sha256 = "1dl39b4c7jij0gxdri2li6nkm7x73ljhbk0n1zwi6lw4xd7dix6p";
+          rev = "752ba81f0db3be0568072b3d9a5db458bb647a3c";
+          sha256 = "0wzhil3c6g9g7k4dq3l6rsyy9vy3rdnq3igqgw9xzgq6i06a1878";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/06c50f32b8d603db0d70e77907e36862cd66b811/recipes/counsel";
@@ -10933,6 +11017,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    counsel-spotify = callPackage ({ emacs, fetchFromGitHub, fetchurl, ivy, lib, melpaBuild }:
+    melpaBuild {
+        pname = "counsel-spotify";
+        version = "20170523.1321";
+        src = fetchFromGitHub {
+          owner = "Lautaro-Garcia";
+          repo = "counsel-spotify";
+          rev = "7cecb359224f24e1e922b513b545187e6774d207";
+          sha256 = "0lbh9z0w1czxvrdlbch71gys9wjsc9zr9i6xwq3ah40aydx251x2";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/b386462518a5ebb6454f4d01582df98395239bcc/recipes/counsel-spotify";
+          sha256 = "1xs4km5vjhn6dnlmrscz7airip07n1ppybp8mr17hinb8scfpv47";
+          name = "counsel-spotify";
+        };
+        packageRequires = [ emacs ivy ];
+        meta = {
+          homepage = "https://melpa.org/#/counsel-spotify";
+          license = lib.licenses.free;
+        };
+      }) {};
     cov = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "cov";
@@ -10940,8 +11045,8 @@
         src = fetchFromGitHub {
           owner = "AdamNiederer";
           repo = "cov";
-          rev = "74e8f32433eab6b31357642ad5a7ed79a3dfbd05";
-          sha256 = "100fk11fjj8wx8lm4ln4p4b6brxfgnkxq387v6ikyigr6lascmsw";
+          rev = "158d6bacb0986a27aa90a5b6dce81ae820b62cef";
+          sha256 = "1n510afmaprwlv6hck2kc9myvj9wsrspqyjzj5vql1y9c6w1xhsc";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d0f35ce436ac157955d6f92de96e14bef9ad69e3/recipes/cov";
@@ -11292,12 +11397,12 @@
     crux = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, seq }:
     melpaBuild {
         pname = "crux";
-        version = "20161219.2313";
+        version = "20170510.2148";
         src = fetchFromGitHub {
           owner = "bbatsov";
           repo = "crux";
-          rev = "430235753cda1e9af75d209e36a2c9c4f6599a80";
-          sha256 = "1v16ac9wfvnhy5h8v82ym165lz27bv9p0wma44c8nz24cl848rrm";
+          rev = "3b377b4fdd23df35f72bcb1021800d41fdccf863";
+          sha256 = "13z0hbkhzrsml30kp3maipc87qciilg99vy8w9lc0da5fv64i7ya";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/575e3442a925500a5806e0b900208c1e6bfd11ae/recipes/crux";
@@ -11588,8 +11693,8 @@
         src = fetchFromGitHub {
           owner = "mortberg";
           repo = "cubicaltt";
-          rev = "40797d45bce17024e8a8bc1ae8598de0397b7adf";
-          sha256 = "1mcc1ai51zw575kw0w4dam58bplj8wamf2qvnckc45cjcifci549";
+          rev = "1fd1023bd5f2ec2f457f13d0d0a165a98c05fde2";
+          sha256 = "0gxn0kdzzsc801h5vhbpnn5p6msj6gv5lpy5qq6gyvvd0djp06mn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1be42b49c206fc4f0df6fb50fed80b3d9b76710b/recipes/cubicaltt";
@@ -11686,10 +11791,10 @@
       }) {};
     cus-edit-plus = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "cus-edit-plus";
-        version = "20170206.1603";
+        version = "20170604.1000";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/cus-edit+.el";
-          sha256 = "02mcvr8fnaflqwxzafr6i745wcw8akhjjq8ami312aibf5yjadik";
+          sha256 = "0awn3m16cyamb4h9i4iq9fzbwzl6qrkpbcr4v3dr7iwlcz7lw7jl";
           name = "cus-edit+.el";
         };
         recipeFile = fetchurl {
@@ -11706,12 +11811,12 @@
     cyberpunk-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "cyberpunk-theme";
-        version = "20161012.1855";
+        version = "20170524.803";
         src = fetchFromGitHub {
           owner = "n3mo";
           repo = "cyberpunk-theme.el";
-          rev = "eb6ee11315180ae27b17b351163f47a1014348a0";
-          sha256 = "0s9ja6l2y75lnkd1js4x3ks6pj5p6x7i9sm5vlcr5yq4qvmamn3h";
+          rev = "8c3cc39bcff5def0d476c080b5248436da7f990f";
+          sha256 = "1npwrw3pgdmvqhihcqcfi2yrs178iiip5fcj8zhpp6cr9yqsvvgi";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4c632d1e501d48dab54432ab111ce589aa229125/recipes/cyberpunk-theme";
@@ -11809,12 +11914,12 @@
     cyphejor = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "cyphejor";
-        version = "20170501.1126";
+        version = "20170518.2255";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "cyphejor";
-          rev = "fa48bb532fcd5c41dc32c0d8290ad806a9a14f1b";
-          sha256 = "1bjszg3r7n4c31y97rzsv1yhb9j0c5600ckxj36rw3axzg4ighk5";
+          rev = "d7842388a1872b165489624a1a68f536de97e28d";
+          sha256 = "1gi7rp0vf3iahljzjhs3rj9c0rvfcfs93hr8a3hl0ch3h9qq8ng2";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ad7cacfa39d8f85e26372ef21898663aebb68e43/recipes/cyphejor";
@@ -11855,8 +11960,8 @@
         src = fetchFromGitHub {
           owner = "cython";
           repo = "cython";
-          rev = "b20ed8ddf161d467d4c8b2088e7040b370855af3";
-          sha256 = "0dilcfzp47mlf5mjpl72nxrby75bma1r87s63qiybmv779rc0h63";
+          rev = "0898a2f2bdc4dd01cc5ffacdf5dad45c9e38e32b";
+          sha256 = "0chfmiy1nk12yalq2bd812580fr38x3di5vjf6z2kyi96p11jw6l";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/be9bfabe3f79153cb859efc7c3051db244a63879/recipes/cython-mode";
@@ -12187,12 +12292,12 @@
     darktooth-theme = callPackage ({ autothemer, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "darktooth-theme";
-        version = "20170401.1521";
+        version = "20170528.2201";
         src = fetchFromGitHub {
           owner = "emacsfodder";
           repo = "emacs-theme-darktooth";
-          rev = "fb66992286c009e594eb7bb9ee2f1cdc3bebb555";
-          sha256 = "0n7qgnyl4rdvgwjb7gz6m1c22mxwg8bp08r7lz27z0b1bcyw94sc";
+          rev = "e5e2433fccb225b347c84c3bba5e3ed9769c2922";
+          sha256 = "0l3clqy9zrd8xbaacx7ck8kw1x6rl1b9vd5ss57wnqpsdz25nggi";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b7f62ac1566ced7332e83253f79078dc30cb7889/recipes/darktooth-theme";
@@ -12208,12 +12313,12 @@
     dart-mode = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "dart-mode";
-        version = "20170127.1652";
+        version = "20170525.1236";
         src = fetchFromGitHub {
           owner = "nex3";
           repo = "dart-mode";
-          rev = "b3808189cf6c5165499d3f67540f550e49b26aa2";
-          sha256 = "1bs3p72gxlcviz0l2dl1h92708j0c3ly0kwpdbr370i2hdv0l8ys";
+          rev = "9b11e8fb63549ee3700fb53e92e4ce2cb302c971";
+          sha256 = "1cp0qmnhnp57vihn343jz14kxm1rwn5b004q9yjlbv1am389rr12";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/dart-mode";
@@ -12229,12 +12334,12 @@
     dash = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "dash";
-        version = "20170207.2056";
+        version = "20170523.219";
         src = fetchFromGitHub {
           owner = "magnars";
           repo = "dash.el";
-          rev = "81ef1efa63590db02351cd52d2953717bde8dd00";
-          sha256 = "1ivf14i61h6fgk052qggc7cfnjnmsrcjps1zjy9nbkwj0a56swyr";
+          rev = "524e6fe86ba240d4405d3de1c862921fb8085c8d";
+          sha256 = "0ipgfwz5xvqm6lk3r3z0pxr49j7rqwsc4zd9d061dh5f9s5vv2qx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/57eed8767c3e98614259c408dc0b5c54d3473883/recipes/dash";
@@ -12275,8 +12380,8 @@
         src = fetchFromGitHub {
           owner = "magnars";
           repo = "dash.el";
-          rev = "81ef1efa63590db02351cd52d2953717bde8dd00";
-          sha256 = "1ivf14i61h6fgk052qggc7cfnjnmsrcjps1zjy9nbkwj0a56swyr";
+          rev = "524e6fe86ba240d4405d3de1c862921fb8085c8d";
+          sha256 = "0ipgfwz5xvqm6lk3r3z0pxr49j7rqwsc4zd9d061dh5f9s5vv2qx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/57eed8767c3e98614259c408dc0b5c54d3473883/recipes/dash-functional";
@@ -12481,12 +12586,12 @@
     ddskk = callPackage ({ ccc, cdb, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ddskk";
-        version = "20170322.401";
+        version = "20170610.1729";
         src = fetchFromGitHub {
           owner = "skk-dev";
           repo = "ddskk";
-          rev = "aa9dba05f7a971c530ef9da3d5dffc764df3bcfd";
-          sha256 = "0iasvz1rvb4bk8pa0q298mc1lywdvddvsnh2rv3m10zar9z9xlrr";
+          rev = "25057a27543788079e7040bf42b139e0aa0635b5";
+          sha256 = "1fja4c4d8bqnp6ip423n3p2xisq9m9bhnsv0bl6fm5svm8qmcb1f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6eccccb79881eaa04af3ed6395cd2ab981d9c894/recipes/ddskk";
@@ -12689,12 +12794,12 @@
     deferred = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "deferred";
-        version = "20170331.1759";
+        version = "20170531.2135";
         src = fetchFromGitHub {
           owner = "kiwanami";
           repo = "emacs-deferred";
-          rev = "7f2bb81e75db895c99611a7a9fbde7c239b757ba";
-          sha256 = "09qnk8xhk5vjn7iqfzg3yzydas47453k1qm22gbmlfxh6lvxsqh2";
+          rev = "d012a1ab50edcc2c44e3e49006f054dbff47cb6c";
+          sha256 = "0xy9zb6wwkgwhcxdnslqk52bq3z24chgk6prqi4ks0qcf2bwyh5h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/deferred";
@@ -12792,12 +12897,12 @@
     demangle-mode = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "demangle-mode";
-        version = "20170311.1148";
+        version = "20170526.1508";
         src = fetchFromGitHub {
           owner = "liblit";
           repo = "demangle-mode";
-          rev = "19716fbc60851192aae6b4d4aaad5dcc1c88627a";
-          sha256 = "0wmaf4278479zs2vic837ss1p99n7fhygcpcmy80i28fbfyskr6p";
+          rev = "d3fce31974b1c9f659da427f3c69c2e6168df508";
+          sha256 = "0k4pacjjgxagsa8kgzvynvmvczhbb73waq3l6gld7v3h38js163a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6ced9f4ffb051a8474d3f72695156416cf2dd8be/recipes/demangle-mode";
@@ -13001,12 +13106,12 @@
     diff-hl = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "diff-hl";
-        version = "20170424.303";
+        version = "20170519.1530";
         src = fetchFromGitHub {
           owner = "dgutov";
           repo = "diff-hl";
-          rev = "3e9d26407e8767375e75757e5adcb23a6fe94985";
-          sha256 = "1bdpn00vlgzsi3w53l7k5lkw6ps1h0mb0d9ww3zmif2y801krzqr";
+          rev = "63f1687aafb4449761bb19f3f5f1b677ab1b5d91";
+          sha256 = "0zaaik87ndbcc77swakhfkh8pbl0zgk5ajq9wfpr7i27mf1x7n2y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/diff-hl";
@@ -13235,8 +13340,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/568e524b7bdf91b31655bdbb30fe9481d7a0ffbf/recipes/dired-avfs";
@@ -13400,8 +13505,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/568e524b7bdf91b31655bdbb30fe9481d7a0ffbf/recipes/dired-filter";
@@ -13421,8 +13526,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/568e524b7bdf91b31655bdbb30fe9481d7a0ffbf/recipes/dired-hacks-utils";
@@ -13547,8 +13652,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8994330f90a925df17ae425ccdc87865df8e19cd/recipes/dired-narrow";
@@ -13568,8 +13673,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/568e524b7bdf91b31655bdbb30fe9481d7a0ffbf/recipes/dired-open";
@@ -13584,10 +13689,10 @@
       }) {};
     dired-plus = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "dired-plus";
-        version = "20170409.1822";
+        version = "20170530.1023";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/dired+.el";
-          sha256 = "0anrf0cax9ah5mlxxbav7f2vvv50l7psi32rgn3z3hv4z34fmkrx";
+          sha256 = "121i39l4zaw3vhsxbh6r0b088982y3gvm0skf5b8wqldp4nsy55m";
           name = "dired+.el";
         };
         recipeFile = fetchurl {
@@ -13625,12 +13730,12 @@
     dired-rainbow = callPackage ({ dash, dired-hacks-utils, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "dired-rainbow";
-        version = "20170417.1341";
+        version = "20170531.816";
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/568e524b7bdf91b31655bdbb30fe9481d7a0ffbf/recipes/dired-rainbow";
@@ -13650,8 +13755,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c03f6f8c779c8784f52adb20b266404cb537113a/recipes/dired-ranger";
@@ -13750,8 +13855,8 @@
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "dired-hacks";
-          rev = "cab59f335430f86a5c94cc9d8812d5f4f8d843f6";
-          sha256 = "06ckab6jabpx2kyi0ckwdr8jww4adh2dsrmb84qfgmanfgkbsb8x";
+          rev = "eda68006ce73bbf6b9b995bfd70d08bec8cade36";
+          sha256 = "1w7ssl9zssn5rcha6apf4h8drkd02k4xgvs203bdbqyqp9wz9brx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d6a947ac9476f10b95a3c153ec784d2a8330dd4c/recipes/dired-subtree";
@@ -14289,12 +14394,12 @@
     django-mode = callPackage ({ fetchFromGitHub, fetchurl, helm-make, lib, melpaBuild, projectile, s }:
     melpaBuild {
         pname = "django-mode";
-        version = "20161109.749";
+        version = "20170522.14";
         src = fetchFromGitHub {
           owner = "myfreeweb";
           repo = "django-mode";
-          rev = "561a3a7359a1526b67688239cdee67e0425b6a01";
-          sha256 = "0xyi5j0cf1d8dv7lpfcgzkfargkpga3dp93pxi8x9pshafmlnrw8";
+          rev = "a71b8dd984e7f724b8321246e5c353a4ae5c986e";
+          sha256 = "0xf33ri5phy2mrb1dwvqb8waba33gj9bwmf6jhl6n0ksm43x0z40";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/bdc46811612ff96cb1e09552b9f095d68528dcb3/recipes/django-mode";
@@ -14314,8 +14419,8 @@
         src = fetchFromGitHub {
           owner = "myfreeweb";
           repo = "django-mode";
-          rev = "561a3a7359a1526b67688239cdee67e0425b6a01";
-          sha256 = "0xyi5j0cf1d8dv7lpfcgzkfargkpga3dp93pxi8x9pshafmlnrw8";
+          rev = "a71b8dd984e7f724b8321246e5c353a4ae5c986e";
+          sha256 = "0xf33ri5phy2mrb1dwvqb8waba33gj9bwmf6jhl6n0ksm43x0z40";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/bdc46811612ff96cb1e09552b9f095d68528dcb3/recipes/django-snippets";
@@ -14520,12 +14625,12 @@
     docker = callPackage ({ dash, docker-tramp, emacs, fetchFromGitHub, fetchurl, json-mode, lib, magit-popup, melpaBuild, s, tablist }:
     melpaBuild {
         pname = "docker";
-        version = "20170114.440";
+        version = "20170601.1345";
         src = fetchFromGitHub {
           owner = "Silex";
           repo = "docker.el";
-          rev = "b565a66d7fb8b41363fb90172b9882d4768ddd47";
-          sha256 = "185mw8yaxpq7327nyyqjbc4bipx6shhmbl1dzdl3bfhc11vp1xfn";
+          rev = "d3bdb09af10c7aa466b25e0c65a3d21fdf44514e";
+          sha256 = "097nrhnc668yclvisq5hc3j8jgpk7w7k7clrlp5a1r1gd5472sj7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6c74bf8a41c17bc733636f9e7c05f3858d17936b/recipes/docker";
@@ -14696,16 +14801,16 @@
     doom-themes = callPackage ({ all-the-icons, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "doom-themes";
-        version = "20170510.1144";
+        version = "20170611.1109";
         src = fetchFromGitHub {
           owner = "hlissner";
-          repo = "emacs-doom-theme";
-          rev = "8a4e364a96b404a87f731d87ed76db8bfe0880b5";
-          sha256 = "0hw701d2vd72rw8yqfkf3rk3isiizm6djy0fbsll1pf79lvwvz66";
+          repo = "emacs-doom-themes";
+          rev = "4b6482765e3be2c51a9d8d23bbbfb9a0c80bf4ac";
+          sha256 = "0g1883qz5a0fra1hsn6kx9r1hply61ba0bxhb8xx08j2zxbwj65s";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/73fd9f3c2352ea1af49166c2fe586d0410614081/recipes/doom-themes";
-          sha256 = "1ckr8rv1i101kynnx666lm7qa73jf9i5lppgwmhlc76lisg07cik";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/c5084bc2c3fe378af6ff39d65e40649c6359b7b5/recipes/doom-themes";
+          sha256 = "0plqhis9ki3ck1pbv4hiqk4x428fps8qsfx72mamdayyx2nncdrs";
           name = "doom-themes";
         };
         packageRequires = [ all-the-icons cl-lib emacs ];
@@ -15131,7 +15236,7 @@
         version = "20130120.1257";
         src = fetchsvn {
           url = "https://svn.apache.org/repos/asf/subversion/trunk/contrib/client-side/emacs/";
-          rev = "1794764";
+          rev = "1798436";
           sha256 = "016dxpzm1zba8rag7czynlk58hys4xab4mz1nkry5bfihknpzcrq";
         };
         recipeFile = fetchurl {
@@ -15232,12 +15337,12 @@
     dumb-jump = callPackage ({ dash, emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, popup, s }:
     melpaBuild {
         pname = "dumb-jump";
-        version = "20170510.1430";
+        version = "20170611.1336";
         src = fetchFromGitHub {
           owner = "jacktasia";
           repo = "dumb-jump";
-          rev = "175f9f57a5319f2917390402c0b47f7d7000a5dc";
-          sha256 = "0sw5p1jgfxqmg3f3cikd87sncgcb7zqdkhcqc83fv1y17zxl1xa9";
+          rev = "9743f3f2736c0e84c5dff860a142c78a0c4ed861";
+          sha256 = "19pdgwziriamf31vjca3y4fxcz4pcfdhr8ac2djz1gsfslq9n236";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/dumb-jump";
@@ -15295,11 +15400,11 @@
     dyalog-mode = callPackage ({ cl-lib ? null, emacs, fetchhg, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "dyalog-mode";
-        version = "20170427.55";
+        version = "20170519.704";
         src = fetchhg {
           url = "https://bitbucket.com/harsman/dyalog-mode";
-          rev = "2c70af4813fc";
-          sha256 = "0brhk5q0jdb3p9nlsfk2bjixqymy4lmrqha138idpx47ka7cjsvn";
+          rev = "56fa34ea25d4";
+          sha256 = "1hk7i557m0m42zdg59z278cylglnp49dr8wa3zbdwzk2xzdg0m00";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/dyalog-mode";
@@ -15609,12 +15714,12 @@
     easy-hugo = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "easy-hugo";
-        version = "20170426.6";
+        version = "20170531.216";
         src = fetchFromGitHub {
           owner = "masasam";
           repo = "emacs-easy-hugo";
-          rev = "5ea62c254c61fcad89d1620ce40b6fda65586d65";
-          sha256 = "0p961msrkqxc99rkjdy79x1pdns4dfbvdmv8yl0zi4ib3b07qar1";
+          rev = "451a37fb2e1f36d85a85973d4c41c7a249263f62";
+          sha256 = "1s89qs13bnyqmsm7rfzk69hvnh170v2hpbh5adjiicwg3my05dis";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/easy-hugo";
@@ -15714,12 +15819,12 @@
     ebal = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, ido-completing-read-plus, lib, melpaBuild }:
     melpaBuild {
         pname = "ebal";
-        version = "20170327.2229";
+        version = "20170520.130";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "ebal";
-          rev = "e47c9eb6b8d6d2bc16c17f9d1dfa9fa2fc00124f";
-          sha256 = "00d4i1y9z3gaw01cgccsk6q4qcbn9sg8lzs0im4dh6hzg27w12qm";
+          rev = "2d274ee56d5a61152e846f9a759ebccd70dc8eb1";
+          sha256 = "15hygzw52w5c10hh3gq0hzs499h8zkn1ns80hb2q02cn9hyy962q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/629aa451162a0085488caad4052a56366b7ce392/recipes/ebal";
@@ -15756,12 +15861,12 @@
     ebib = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, parsebib, seq }:
     melpaBuild {
         pname = "ebib";
-        version = "20170401.1342";
+        version = "20170605.1440";
         src = fetchFromGitHub {
           owner = "joostkremers";
           repo = "ebib";
-          rev = "a1c8a5045ff31001f0a0dde188e20f23640f5469";
-          sha256 = "1awrkcqk38aash3whihhjrxq9f9b568vpiaihyhcsi0773hl5h3b";
+          rev = "4624e67ca26cb348063a97a8f59a3fbcbf8a5736";
+          sha256 = "0ds11hphxp8jxsc50lvnr9n4macvzd82y7siqh8wvswk62l8vb4x";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4e39cd8e8b4f61c04fa967def6a653bb22f45f5b/recipes/ebib";
@@ -15817,12 +15922,12 @@
     eclim = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, json ? null, lib, melpaBuild, popup, s, yasnippet }:
     melpaBuild {
         pname = "eclim";
-        version = "20170430.1903";
+        version = "20170522.1354";
         src = fetchFromGitHub {
           owner = "emacs-eclim";
           repo = "emacs-eclim";
-          rev = "1d0ac3f4cd90d44e75f75c8c0bd234013349e14f";
-          sha256 = "0cds3rmyp3imx234vdbmrl5l7fq90aixb8n1iv0ba5jrx1yk91lz";
+          rev = "ebb844d1ebdd7eb347e89063a9b6e9f890a1ff57";
+          sha256 = "18q4blnxf7p2kvgh1rhr7pizga06z97hv1lxjgzv0dc2dll2zwmd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1e9d3075587fbd9ca188535fd945a7dc451c6d7e/recipes/eclim";
@@ -16237,12 +16342,12 @@
     editorconfig = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "editorconfig";
-        version = "20170425.2155";
+        version = "20170607.713";
         src = fetchFromGitHub {
           owner = "editorconfig";
           repo = "editorconfig-emacs";
-          rev = "fa13d6dc990b7603652e622d848b5466bb43332b";
-          sha256 = "1gica5jwjbyysh5zv90hnhqkl70zrszsb726ncbykwwwxsibq9b2";
+          rev = "1543835ce00412c3cd34a61497af5f68ead250a6";
+          sha256 = "1c516972gx1rvlixdl6mgknx6vx1m4hbzbz3x43pzlg0mn31yn01";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50d4f2ed288ef38153a7eab44c036e4f075b51d0/recipes/editorconfig";
@@ -16252,6 +16357,27 @@
         packageRequires = [ cl-lib ];
         meta = {
           homepage = "https://melpa.org/#/editorconfig";
+          license = lib.licenses.free;
+        };
+      }) {};
+    editorconfig-charset-extras = callPackage ({ editorconfig, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "editorconfig-charset-extras";
+        version = "20170508.112";
+        src = fetchFromGitHub {
+          owner = "10sr";
+          repo = "editorconfig-charset-extras-el";
+          rev = "1b8248de9e85bc846af8dfb53b70fdae8900cc69";
+          sha256 = "0gqnx5dwy9qxl1npvp8858i0lwjv1znpqr08h129vaycyyq1n69r";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/62f27dad806fa135209289933f2131ee4ce8f8bf/recipes/editorconfig-charset-extras";
+          sha256 = "15p9qpdwradcnjr0nf0ibhy94yi73l18xz7zxf6khmdirsirpwgh";
+          name = "editorconfig-charset-extras";
+        };
+        packageRequires = [ editorconfig ];
+        meta = {
+          homepage = "https://melpa.org/#/editorconfig-charset-extras";
           license = lib.licenses.free;
         };
       }) {};
@@ -16396,8 +16522,8 @@
         src = fetchFromGitHub {
           owner = "egisatoshi";
           repo = "egison3";
-          rev = "a9bec9b4cdaec8fa92bec398c4c5231817e7efad";
-          sha256 = "146jq14xjab996r5ff9nschbrh4zk7grggnj7xm8bxwnr9yv0qv0";
+          rev = "c06b457113a7e9484f8f4ae079cb257d8eb65396";
+          sha256 = "16gij5kc4r4x85d8pnpyfkb2z7fjlmfxc73vhd0hf76740kgnnxy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f543dd136e2af6c36b12073ea75b3c4d4bc79769/recipes/egison-mode";
@@ -16413,12 +16539,12 @@
     ego = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, ht, htmlize, lib, melpaBuild, mustache, org, simple-httpd }:
     melpaBuild {
         pname = "ego";
-        version = "20170112.2043";
+        version = "20170601.817";
         src = fetchFromGitHub {
           owner = "emacs-china";
           repo = "EGO";
-          rev = "d81561d39524a5f78d5f94216b0ca5fef4b5700b";
-          sha256 = "0scnhpj4naaicxp62hd0b5g3kf05gpldbi1z1sfnq4mqi84fnfgx";
+          rev = "93ccd450d2d9e5db27aebb024a1b2ed56d5131dc";
+          sha256 = "0izxsckmkdw70cz3ljar2r4iv784c43mnzjkayly08hlabq1g6b6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/ego";
@@ -16471,22 +16597,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    ein = callPackage ({ cl-generic, dash, fetchFromGitHub, fetchurl, lib, melpaBuild, request, websocket }:
+    ein = callPackage ({ cl-generic, dash, deferred, fetchFromGitHub, fetchurl, lib, melpaBuild, request, websocket }:
     melpaBuild {
         pname = "ein";
-        version = "20170426.1909";
+        version = "20170606.1325";
         src = fetchFromGitHub {
           owner = "millejoh";
           repo = "emacs-ipython-notebook";
-          rev = "db07da61d3e2dea02efafb8daf82c95c28521817";
-          sha256 = "13wf9cqm1sf92dyfr71rci3x8pcwww8chfccgcafq9gc7lvb9ias";
+          rev = "d9c81f3d900f2ffd78fd314685023d66d6d16438";
+          sha256 = "1vf2bxxk3dj0npgab0yzqfx6dvfh5aj1bhmbpw1xfhssciyg8q47";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/215e163755fe391ce1f049622e7b9bf9a8aea95a/recipes/ein";
           sha256 = "14blq1cbrp00rq0ilk7z9qppqfj0r4n3jidw3abcpchvh5ln086r";
           name = "ein";
         };
-        packageRequires = [ cl-generic dash request websocket ];
+        packageRequires = [ cl-generic dash deferred request websocket ];
         meta = {
           homepage = "https://melpa.org/#/ein";
           license = lib.licenses.free;
@@ -16591,8 +16717,8 @@
         src = fetchFromGitHub {
           owner = "dimitri";
           repo = "el-get";
-          rev = "464ed451b506956ac7ec36c2a62be73243510291";
-          sha256 = "1jzk1798arigjdz99ss6ll8cbd8fxagn2mz7afcissvaq7rw35rm";
+          rev = "5b623bc5fa394389be7b0c00fd0b32e8e6b024c3";
+          sha256 = "0wisl97gpp9a2mbs34v4mas2q3hkry3zqxmlbll7l3h7r950wyqf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1c61197a2b616d6d3c6b652248cb166196846b44/recipes/el-get";
@@ -16671,12 +16797,12 @@
     el-patch = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "el-patch";
-        version = "20170310.2128";
+        version = "20170513.2050";
         src = fetchFromGitHub {
           owner = "raxod502";
           repo = "el-patch";
-          rev = "c0f1c01a82903a1d7f5d49eba6d9e9d373423907";
-          sha256 = "0kj4rbn86v9hjkshpyn65cmyhrnmg3s6ir6p4ricnhzv11rgkx6y";
+          rev = "22682dd020ac93b621bf45e57c738e551e2cb14b";
+          sha256 = "1hv9i78fchvmygmb7pfx1ybkq270aibdhjsidzskipfzw40p0dz2";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2f4f57e0edbae35597aa4a7744d22d2f971d5de5/recipes/el-patch";
@@ -17045,12 +17171,12 @@
     elfeed = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "elfeed";
-        version = "20170429.1038";
+        version = "20170531.206";
         src = fetchFromGitHub {
           owner = "skeeto";
           repo = "elfeed";
-          rev = "f06c06d36117985d7a7b4aa799d256ca8ec25962";
-          sha256 = "0y3rgg4524xw7gdxzhq2jmjkj0qgkffpw251ysc88ihz24pcxc8l";
+          rev = "f3eaa7421af79db3d4203b4b3afdf84c4796cd55";
+          sha256 = "1sji0k8kal1h5nsdin54qbnxc2ahd6qghn4nwwq5f13gacy4wzpg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/407ae027fcec444622c2a822074b95996df9e6af/recipes/elfeed";
@@ -17119,8 +17245,8 @@
         src = fetchFromGitHub {
           owner = "skeeto";
           repo = "elfeed";
-          rev = "f06c06d36117985d7a7b4aa799d256ca8ec25962";
-          sha256 = "0y3rgg4524xw7gdxzhq2jmjkj0qgkffpw251ysc88ihz24pcxc8l";
+          rev = "f3eaa7421af79db3d4203b4b3afdf84c4796cd55";
+          sha256 = "1sji0k8kal1h5nsdin54qbnxc2ahd6qghn4nwwq5f13gacy4wzpg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/62459d16ee44d5fcf170c0ebc981ca2c7d4672f2/recipes/elfeed-web";
@@ -17241,12 +17367,12 @@
     elisp-refs = callPackage ({ dash, f, fetchFromGitHub, fetchurl, lib, list-utils, loop, melpaBuild, s }:
     melpaBuild {
         pname = "elisp-refs";
-        version = "20161205.444";
+        version = "20170528.1223";
         src = fetchFromGitHub {
           owner = "Wilfred";
           repo = "refs.el";
-          rev = "54b6221a06a32075d1d0c991f75f53c6c792830e";
-          sha256 = "1xzm86l37fjiknqbsdv14n70mgaw0105i55fbl4rf0p9q4nircmv";
+          rev = "8f2da5ba5b728a8f278813c95d0fda3364cca40c";
+          sha256 = "0i0xjy4x3i349jbpbqhfz57frk8cdakwi78fw1mlycx4qinlx2n0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/60891099e241ebd32d39bdcfe4953529a5a3263e/recipes/elisp-refs";
@@ -17346,12 +17472,12 @@
     elm-mode = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, let-alist, lib, melpaBuild, s }:
     melpaBuild {
         pname = "elm-mode";
-        version = "20170322.1347";
+        version = "20170603.2006";
         src = fetchFromGitHub {
           owner = "jcollard";
           repo = "elm-mode";
-          rev = "3d36c16bbe1cebc285341452a60da578afbb2804";
-          sha256 = "1aywgkf5505hx7qd0r4b8k89xmskkrz9imlmhp6xnwj31qs7ix63";
+          rev = "85319b9e75dea9f79e6d16011ee2a15be11eb9c0";
+          sha256 = "1gnjx7ay0c167vnl7k9gxmvm93ipqfs93jmcmvy56rlvc7yyk39x";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5d1a4d786b137f61ed3a1dd4ec236d0db120e571/recipes/elm-mode";
@@ -17409,12 +17535,12 @@
     elmine = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "elmine";
-        version = "20151121.423";
+        version = "20170511.20";
         src = fetchFromGitHub {
           owner = "leoc";
           repo = "elmine";
-          rev = "60639f46a5f45653f490cdd30732beb2dca47ada";
-          sha256 = "1463y4zc6yabd30k6806yw0am18fjv0bkxm56p2siqrwn9pbsh8k";
+          rev = "432d2f2f7cb5b533f25b993d1001abcadcebe8ed";
+          sha256 = "02lsxj9zkcaiqlzy986n1f65cfyd8pkrdljgplsbd9p0w8ys0s94";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/elmine";
@@ -17577,12 +17703,12 @@
     elpy = callPackage ({ company, fetchFromGitHub, fetchurl, find-file-in-project, highlight-indentation, lib, melpaBuild, pyvenv, s, yasnippet }:
     melpaBuild {
         pname = "elpy";
-        version = "20170430.255";
+        version = "20170519.1544";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
           repo = "elpy";
-          rev = "574605dce756e878457164817e6d63d915008a84";
-          sha256 = "1q8ll1sxdvxgd6mqwz55bv2zwxgz2rqlzyk2xksnh9sna4bhr6xv";
+          rev = "2cf34afa0c3e7249149a65c0ae89e6c593050f2c";
+          sha256 = "0i57dhljf0ymsqlqjr1bz0hxr108k7iiw267s24a3bm3p3ac5lfi";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1d8fcd8745bb15402c9f3b6f4573ea151415237a/recipes/elpy";
@@ -17602,22 +17728,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    elquery = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
+    elquery = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "elquery";
-        version = "20170226.1238";
+        version = "20170527.1930";
         src = fetchFromGitHub {
           owner = "AdamNiederer";
           repo = "elquery";
-          rev = "bfda1499d11b5705bea60886a3d25ca6d3808111";
-          sha256 = "1q0ifhq7wflzayg9mqy0wfc1fhgh4fmy17psz977k01yc7nc5s42";
+          rev = "d4309cfebb275495f071fc3449261bf6b23b0afe";
+          sha256 = "12qv4fg9dbgl6c05r501va9dcw16ml0yxkmvs32cr7wfffhxjy4w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/121f7d2091b83143402b44542db12e8f78275103/recipes/elquery";
           sha256 = "19yik9w4kcj7i9d3bwwdszznwcrh75hxd0540iqk5by861z5f3zr";
           name = "elquery";
         };
-        packageRequires = [ emacs s ];
+        packageRequires = [ dash emacs s ];
         meta = {
           homepage = "https://melpa.org/#/elquery";
           license = lib.licenses.free;
@@ -18171,11 +18297,11 @@
       }) {};
     emms = callPackage ({ fetchgit, fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "emms";
-        version = "20170501.1102";
+        version = "20170601.1651";
         src = fetchgit {
           url = "https://git.savannah.gnu.org/git/emms.git";
-          rev = "179e8e73f501115a9b0c73056846d80809d5a144";
-          sha256 = "0v81x21bsxmvaxrg8yx4j5ycyd4fkjnk9bf3dw7p2cdywsjfb1hi";
+          rev = "0481ca3b8f8d558e545582440dde6dac514818fe";
+          sha256 = "1z2kzaw2jr4m189gd8978g6wy6z9wicf1klyh48l623lh7cv48ic";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/caaa21f235c4864f6008fb454d0a970a2fd22a86/recipes/emms";
@@ -18443,12 +18569,12 @@
     emojify = callPackage ({ emacs, fetchFromGitHub, fetchurl, ht, lib, melpaBuild, seq }:
     melpaBuild {
         pname = "emojify";
-        version = "20170401.954";
+        version = "20170528.147";
         src = fetchFromGitHub {
           owner = "iqbalansari";
           repo = "emacs-emojify";
-          rev = "4f365dc562c8c5642719faf85b7536278c561d2e";
-          sha256 = "0j3ydg2n6dq77qpyhyqdkbxhfhzmml5b5h8cghsx0i5267grssph";
+          rev = "033e3b2fa171d73b932ecf27df237be2fd6e1c36";
+          sha256 = "0x8ydqzacrps0kl3j50ajp8fwxg8vnggvjpjbnrglkpwwn2j1kzr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/488d2751b5fd3bf00f5a6f0545530f44563b86d7/recipes/emojify";
@@ -18665,12 +18791,12 @@
     ensime = callPackage ({ company, dash, fetchFromGitHub, fetchurl, lib, melpaBuild, popup, s, sbt-mode, scala-mode, yasnippet }:
     melpaBuild {
         pname = "ensime";
-        version = "20170508.3";
+        version = "20170611.1428";
         src = fetchFromGitHub {
           owner = "ensime";
           repo = "ensime-emacs";
-          rev = "8117122e36a77f9e5616c4260680a07317aebe80";
-          sha256 = "02qmpppawziqpsyb2d2mrdyvs4mn6mvcn5smnkkanibabwgld9za";
+          rev = "86a52709a0c45e2f84737319f8f95abd0ea55ff2";
+          sha256 = "10ix3yx916c929i8fj2bqkjjm409mwpjzydji6x8n8v5s8lnw6m2";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/502faab70af713f50dd8952be4f7a5131075e78e/recipes/ensime";
@@ -19197,12 +19323,12 @@
     ereader = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s, xml-plus }:
     melpaBuild {
         pname = "ereader";
-        version = "20170508.2149";
+        version = "20170529.1408";
         src = fetchFromGitHub {
           owner = "bddean";
           repo = "emacs-ereader";
-          rev = "258807f77b203963dbc855c5e34da3d7f2751abc";
-          sha256 = "0wnl7vfxgvz4qp3lpx48wl1mni1alkawm460nvivsr02dgmriwaa";
+          rev = "ef3cd7b9ced044bbd9a3e7cce0c78a970a483288";
+          sha256 = "0n0n7600zwa9z8srafq0gp6d17lkr4pkrsql50rl2qa1fr44zi7z";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/ereader";
@@ -19306,8 +19432,8 @@
         src = fetchFromGitHub {
           owner = "erlang";
           repo = "otp";
-          rev = "b7a5e0e9070adcd3bd14b8315caa3007b7d2e89f";
-          sha256 = "1v2ydy6zpy1fhx3zz6a66xxyfs7zvm27fvagan553670qmfpgi59";
+          rev = "dd9e39dc2b97e30c03b24a00eb757be7d2c2bdc2";
+          sha256 = "1q5pd9a5d5513brw5s2x6652fmmql7y7lcnzv18kw3wc4qvccl24";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d9cd526f43981e0826af59cdc4bb702f644781d9/recipes/erlang";
@@ -19469,12 +19595,12 @@
     es-mode = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, lib, melpaBuild, request, s, spark }:
     melpaBuild {
         pname = "es-mode";
-        version = "20170502.2206";
+        version = "20170608.1234";
         src = fetchFromGitHub {
           owner = "dakrone";
           repo = "es-mode";
-          rev = "ac13cb477d0775fc8fe1ffbd88f9909eb0688174";
-          sha256 = "0416sqx32aby2qaybc3qif8dhsmc3xq0968y772y5hq2lk7sh8dm";
+          rev = "3752438d17c45553956cf775022b2358ff3d8731";
+          sha256 = "0a2afjg0ygd88qp5pc39ghwck837f6sk57c8zbcsyxwrabxnchhd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/85445b59329bfd81a3fd913d7d6fe7784c31744c/recipes/es-mode";
@@ -19725,8 +19851,8 @@
         src = fetchFromGitHub {
           owner = "peterwvj";
           repo = "eshell-up";
-          rev = "b00e447ad7941ab31bcbb6bc0205fd492e887e7d";
-          sha256 = "1802887ad7y6m40azfvzz6aapdzkp655jpiryimqd11kwbsinmvv";
+          rev = "2216e149ffdd5cd8eb49d6661187d676b6a22d19";
+          sha256 = "1czl7gab46n9lxp91v1l9rgnz72h9x1im20yq4hw8w0x71a45ss7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/eshell-up";
@@ -19889,12 +20015,12 @@
     ess = callPackage ({ fetchFromGitHub, fetchurl, julia-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "ess";
-        version = "20170501.306";
+        version = "20170603.817";
         src = fetchFromGitHub {
           owner = "emacs-ess";
           repo = "ESS";
-          rev = "40583c1e2680f1746ceb91242c478d0b6fb988d5";
-          sha256 = "1mj11wpiy96q48l8hclgkhm0963p7904rzr991wfr465p17bsg6q";
+          rev = "f2643cd3ae6727535ce76ed00a91bf96c09e280f";
+          sha256 = "1fyr963y2mnp8wk9jf0fpfp1k74ayhbcdyg1xknvd5jd5lyjgbkb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/12997b9e2407d782b3d2fcd2843f7c8b22442c0a/recipes/ess";
@@ -20263,12 +20389,12 @@
     evil = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, goto-chg, lib, melpaBuild, undo-tree }:
     melpaBuild {
         pname = "evil";
-        version = "20170510.1321";
+        version = "20170612.100";
         src = fetchFromGitHub {
           owner = "emacs-evil";
           repo = "evil";
-          rev = "0445068b65a9702660db1abef4f96ad393e29dad";
-          sha256 = "0qm0ih4by38x6m99gpan3k3fmjhivi084iylgc7bg5bg3vncflrn";
+          rev = "d45772929db630be8226e2786132d46e2c6bdb2c";
+          sha256 = "07mc036lz2lj0csg10a8gdqxqsf8mxsjfy3ha9wsrmbqhsvwixn9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/514964d788f250e1e7893142bc094c63131bc6a5/recipes/evil";
@@ -20536,12 +20662,12 @@
     evil-exchange = callPackage ({ cl-lib ? null, evil, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-exchange";
-        version = "20160812.843";
+        version = "20170510.1959";
         src = fetchFromGitHub {
           owner = "Dewdrops";
           repo = "evil-exchange";
-          rev = "8902966aec2709b7e680d13c362d74b7f89b909b";
-          sha256 = "1jfjgh75ycm6i01zpnz8y1hp205w61rqbvargk3rp65c34j48dcd";
+          rev = "47691537815150715e64e6f6ec79be7746c96120";
+          sha256 = "0bjpn4yqig17ddym6wqq5fm1b294q74hzcbj9a6gs97fqiwf88xa";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9b06397c032d24a8da4074ad97cdb30d0c468e20/recipes/evil-exchange";
@@ -20620,16 +20746,16 @@
     evil-goggles = callPackage ({ emacs, evil, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-goggles";
-        version = "20170508.1509";
+        version = "20170529.2251";
         src = fetchFromGitHub {
           owner = "edkolev";
           repo = "evil-goggles";
-          rev = "cb295a7f6882f7b885886aca8bb88ce119973f40";
-          sha256 = "0w04plip3kf1kzky4528550jvlwbp965p41697fr7kwsc7ipymx4";
+          rev = "d2dfe823d5b1b70e4ed47518db98b238ff67b81a";
+          sha256 = "08hffzamrg3d8fqq94z7p9pywkzckhv6a58x7s1x7z8qvg2irlkz";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/ad1b922fc3a6c74b1fd5c8477f769a22bf2241fb/recipes/evil-goggles";
-          sha256 = "0m8yj2rsjgkrwdh3jk9g36299s5ib5xbaah3vcjq8ladp3v7amqa";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/811b1261705b4c525e165fa9ee23ae191727a623/recipes/evil-goggles";
+          sha256 = "151xvawyhcjp98skaif08wbxqaw602f51zgwm604hp25a111qmnq";
           name = "evil-goggles";
         };
         packageRequires = [ emacs evil ];
@@ -20725,12 +20851,12 @@
     evil-lion = callPackage ({ emacs, evil, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-lion";
-        version = "20170429.1542";
+        version = "20170523.450";
         src = fetchFromGitHub {
           owner = "edkolev";
           repo = "evil-lion";
-          rev = "f11ccadecc5d7fe9e78b81a7eedf0556677fb9a8";
-          sha256 = "0jbs208b4r6s487flh628b1bf330y7d4r3288gk5ydpn6rzr3wnd";
+          rev = "79766bfb8cbaa82af92eb9c90ea370e10ff74ea4";
+          sha256 = "1799gjd1qj6hdzdy88x7lw0xwygkh70zm0y5gkhlmn4rzkdka9j1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8a7a0691775afec6d2c7be3d6739b55bd1d2053d/recipes/evil-lion";
@@ -20788,12 +20914,12 @@
     evil-magit = callPackage ({ evil, fetchFromGitHub, fetchurl, lib, magit, melpaBuild }:
     melpaBuild {
         pname = "evil-magit";
-        version = "20161130.847";
+        version = "20170611.1237";
         src = fetchFromGitHub {
           owner = "emacs-evil";
           repo = "evil-magit";
-          rev = "9251065b73c5023fc21d56f5b94c505cb7bee52d";
-          sha256 = "17jnqd73i680fpmghghadc4d4xlg39xfjx3ra8sll0h1xf4xkspi";
+          rev = "f851e5896fa90ae94dfde3d2a7554b4d5f9e665c";
+          sha256 = "127ccll30526b38g64pagagnia8mw0bs9db95xri0n48x4vginkd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50315ec837d2951bf5b2bb75809a35dd7ffc8fe8/recipes/evil-magit";
@@ -20851,12 +20977,12 @@
     evil-mc = callPackage ({ cl-lib ? null, emacs, evil, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-mc";
-        version = "20170501.2103";
+        version = "20170526.1158";
         src = fetchFromGitHub {
           owner = "gabesoft";
           repo = "evil-mc";
-          rev = "23a1d61154b83b8330dfa90cd55e3842d05f599a";
-          sha256 = "1qr5irq3rgis3h6j54qcrq0qy1xw2h9rhcl9mgxg0j623dm9n54l";
+          rev = "506f92dc610906fc279e50c598efe2068161edaa";
+          sha256 = "0ng2l70zllkvjsq2ybgdcdzyg0brplaznxr2y3qmbk72vgs3wxra";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/96770d778a03ab012fb82a3a0122983db6f9b0c4/recipes/evil-mc";
@@ -20914,12 +21040,12 @@
     evil-multiedit = callPackage ({ cl-lib ? null, emacs, evil, fetchFromGitHub, fetchurl, iedit, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-multiedit";
-        version = "20170408.1744";
+        version = "20170515.337";
         src = fetchFromGitHub {
           owner = "hlissner";
           repo = "evil-multiedit";
-          rev = "615f2ac3539c39d5ec11e4c9ba0958d8a9381090";
-          sha256 = "068cymahvpyzn13wnma0lfym0f0vfr36kdq7pl8qmhf8ra7xxq92";
+          rev = "8d146312565949850328e4ef365e1f5d71216281";
+          sha256 = "1xw5r3mwyjfbpgdvnm1pv5dfg56qbzvmwhv929x93sjs0j4ybwml";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/997f5a6999d1add57fae33ba8eb3e3bc60d7bb56/recipes/evil-multiedit";
@@ -20995,22 +21121,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    evil-org = callPackage ({ evil, evil-leader, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
+    evil-org = callPackage ({ emacs, evil, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
     melpaBuild {
         pname = "evil-org";
-        version = "20151202.2347";
+        version = "20170611.1149";
         src = fetchFromGitHub {
-          owner = "edwtjo";
+          owner = "Somelauw";
           repo = "evil-org-mode";
-          rev = "61319f85979e8768c930983595caa2483c0fb319";
-          sha256 = "0pir7a3xxbcp5f3q9pi36rpdpi8pbx18afmh0r3501ynssyjfq53";
+          rev = "4da3d179d71113b906173a974fec933e9f55afa8";
+          sha256 = "16d9x89plmy6qrjvc8czrqpc1y53xbcaclc20yd8yyi722sdd4x1";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/evil-org";
-          sha256 = "1306pf5ws7acdanypn3c0r4yh5wxdf0knl6j3hhs4ys9zszd79bw";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/1768558ed0a0249421437b66fe45018dd768e637/recipes/evil-org";
+          sha256 = "18glpsnpxap4dvnvkl59h9pnwlp20libsfbbkmvrbzsvbdyspg6z";
           name = "evil-org";
         };
-        packageRequires = [ evil evil-leader org ];
+        packageRequires = [ emacs evil org ];
         meta = {
           homepage = "https://melpa.org/#/evil-org";
           license = lib.licenses.free;
@@ -21124,16 +21250,16 @@
     evil-search-highlight-persist = callPackage ({ fetchFromGitHub, fetchurl, highlight, lib, melpaBuild }:
     melpaBuild {
         pname = "evil-search-highlight-persist";
-        version = "20160912.807";
+        version = "20170522.2034";
         src = fetchFromGitHub {
-          owner = "juanjux";
+          owner = "naclander";
           repo = "evil-search-highlight-persist";
-          rev = "1b130e771fc9f3bb7c80e1a50c2847a9e024ad09";
-          sha256 = "1la7gamv1qd5wsdlxjjx859zciynln3g9lnxq51iylsbfxgc2f7s";
+          rev = "6e04a8c075f5fd62526d222447048faab8bfa187";
+          sha256 = "1ni1bila3kjqrjcn1sm6g6h2cmf1chrh4d8nj4qfjvkb12fkw6j6";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/91361f95852910968b395423e16377c70189fc55/recipes/evil-search-highlight-persist";
-          sha256 = "0iia136js364iygi1mydyzwvizhic6w5z9pbwmhva4654pq8dzqy";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/f2e91974ddb219c88229782b70ade7e14f20c0b5/recipes/evil-search-highlight-persist";
+          sha256 = "08l8ymrp9vkpwprq9gp4562yvcnd4hfc3z7n4n5lz7h6ffv3zym3";
           name = "evil-search-highlight-persist";
         };
         packageRequires = [ highlight ];
@@ -21170,8 +21296,8 @@
         src = fetchFromGitHub {
           owner = "hlissner";
           repo = "evil-snipe";
-          rev = "c3e5e26c14f4a47daedb4fc48e1b0fb993aa0999";
-          sha256 = "009491hskqkvycng70n3mm7zqxlf6jjninddlcbnknyfr44y4xka";
+          rev = "d6d60b077e31755b6d543337dd165ab7e1c67d36";
+          sha256 = "05fxr48r7qilh52ycm6bi108y9kd1zw62mckf8ddhsjrvszx97nb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6748f3febbe2f098761e967b4dc67791186d0aa7/recipes/evil-snipe";
@@ -21210,14 +21336,14 @@
         pname = "evil-surround";
         version = "20170124.1110";
         src = fetchFromGitHub {
-          owner = "timcharper";
+          owner = "emacs-evil";
           repo = "evil-surround";
-          rev = "7a0358ce3eb9ed01744170fa8a1e12d98f8b8839";
-          sha256 = "1smv7sqhm1l2bi9fmispnlmjssidblwkmiiycj1n3ag54q27z031";
+          rev = "a4fc4483dff0bb0e544d832a845fdc6fb85c6214";
+          sha256 = "0xqvpr8irkv4qw82gcgnnfb9mjavb4jj9a11cw32wqjdg0106dlr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/da8b46729f3bd9aa74c4f0ee2a9dc60804aa661c/recipes/evil-surround";
-          sha256 = "1bcjxw0yrk2bqj5ihl5r2c4id0m9wbnj7fpd0wwmw9444xvwp8ag";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/2c9dc47a4c837c44429a74fd998fe468c00639f2/recipes/evil-surround";
+          sha256 = "0aphv5zinb0lzdx22qbzcr7fn6jbpkdczar7py3df6mzxw5wvcm1";
           name = "evil-surround";
         };
         packageRequires = [ evil ];
@@ -21606,12 +21732,12 @@
     expand-region = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "expand-region";
-        version = "20170222.343";
+        version = "20170514.1309";
         src = fetchFromGitHub {
           owner = "magnars";
           repo = "expand-region.el";
-          rev = "d1252200bac2e0197497d6d57ab6fd004f1b2e77";
-          sha256 = "0bhwv92wqccz8y5xm6gj71ryci8cpsnm8z8vmdj8lsf6ki8vz512";
+          rev = "2357f1d5efd9d5b9e37f3513342237fec2629291";
+          sha256 = "0sggq57q8fxzd0my2kwbb2li91zq13cyhxn789bafzxq2d5fpk9h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/expand-region";
@@ -21648,12 +21774,12 @@
     exsqlaim-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "exsqlaim-mode";
-        version = "20170418.124";
+        version = "20170607.303";
         src = fetchFromGitHub {
           owner = "ahmadnazir";
           repo = "exsqlaim-mode";
-          rev = "3cac2ba06862a6407ce487423898af04de4996c6";
-          sha256 = "149g76rms1h183f78kzns6cy3jyllxyyhvb1x61c2823k2372wvh";
+          rev = "a2e0a62ec8b87193d8eaa695774bfd689324b06c";
+          sha256 = "1gj1q2h1ja30jizkjql12cxlppj07ykr4wxqca9msy043zdhqnkk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7f660d7629bc27144c99ebcba45f1b06b14c5745/recipes/exsqlaim-mode";
@@ -21711,12 +21837,12 @@
     exwm-x = callPackage ({ cl-lib ? null, exwm, fetchFromGitHub, fetchurl, lib, melpaBuild, swiper, switch-window }:
     melpaBuild {
         pname = "exwm-x";
-        version = "20170507.622";
+        version = "20170606.2038";
         src = fetchFromGitHub {
           owner = "tumashu";
           repo = "exwm-x";
-          rev = "bb894c44ffca623f37461617bdc53b2092ca2b4c";
-          sha256 = "1xkandsng3r79vp2i3kqcva35qs4wvcafjxzsnawrvgbskh8kd1g";
+          rev = "ff656107e55458cb2b453eb4637ad203007068f1";
+          sha256 = "1ssbqcrhcprfd1n4bvcbczp3dqhq4hcl75qaz6alc9y11r2jb4ar";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a0e6e23bcffdcd1e17c70599c563609050e5de40/recipes/exwm-x";
@@ -21795,12 +21921,12 @@
     eziam-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "eziam-theme";
-        version = "20170508.1613";
+        version = "20170517.847";
         src = fetchFromGitHub {
           owner = "thblt";
           repo = "eziam-theme-emacs";
-          rev = "7b10585034d773348049a7f6b7d9552137f96f73";
-          sha256 = "1j9lgykfwyl8iy8p2n6kg10b7xmpq0wkr8gvikk4i43jpag3flp8";
+          rev = "6c7e6ac20e27a26e7b27761f11a3a959ea815b5c";
+          sha256 = "1jzqb1w8ax5h6g9nwqwnagalag2kj7mabq889vl59ka5lvccac0f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4e0411583bd4fdbe425eb07de98851136fa1eeb0/recipes/eziam-theme";
@@ -21978,12 +22104,12 @@
     faff-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "faff-theme";
-        version = "20161026.1047";
+        version = "20170522.1219";
         src = fetchFromGitHub {
           owner = "WJCFerguson";
           repo = "emacs-faff-theme";
-          rev = "61d98d43c9173662078c0c337ce78918eb6a3610";
-          sha256 = "15shbzjpl89ybyyn7d53psn9i8csxi2h9jwz7mx98lg9pjy58ifa";
+          rev = "e79dc142d99bc5a455a46345d3aba6f95f3f3f42";
+          sha256 = "0j5vdbwwpav09v3kkx7cn5qd41inam0jd7smx8133hqpnirsh8mv";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0b35c169fe56a5612ff5a4242140f617fdcae14f/recipes/faff-theme";
@@ -22188,12 +22314,12 @@
     fcitx = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fcitx";
-        version = "20170208.1012";
+        version = "20170602.1912";
         src = fetchFromGitHub {
           owner = "cute-jumper";
           repo = "fcitx.el";
-          rev = "ec1d202c11a1c81f7ab0b9cf235d64c68d8e3134";
-          sha256 = "1p32lqmnp7k0gck6my1cy4hd5sck28zkfvlg8q23lpkcg1vcsqlx";
+          rev = "2e3abe356b464b30350c08e243988a3116818b19";
+          sha256 = "0cplg10mhr2r3cp4wcaykyvbzilmjma90hkv4h1m8d8xrfdmmi7g";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e8c40f09d9397b3ca32a7ed37203f490497dc984/recipes/fcitx";
@@ -22474,12 +22600,12 @@
     find-file-in-project = callPackage ({ emacs, fetchFromGitHub, fetchurl, ivy, lib, melpaBuild }:
     melpaBuild {
         pname = "find-file-in-project";
-        version = "20170507.150";
+        version = "20170531.2054";
         src = fetchFromGitHub {
           owner = "technomancy";
           repo = "find-file-in-project";
-          rev = "1f5b7ef7c6e00ab6fb818c4dc9131c1fe7806704";
-          sha256 = "0pcq992pd5vsajsrcpkp5jl3sgxk1p2p0i8in050rs25i3l3lgj0";
+          rev = "eb9fec502a2622b46301ca49183147b6b1fcaff6";
+          sha256 = "1hrdqdps76c1sfq9m9l6nid32lklsli2hgwzd4sl5ypb0zqhn25k";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/find-file-in-project";
@@ -22785,12 +22911,12 @@
     fix-input = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fix-input";
-        version = "20170501.1340";
+        version = "20170518.2311";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "fix-input";
-          rev = "8eafca061645dbbb913d82b380c1d594eead1d81";
-          sha256 = "1b1rlhmb43fyi57vcknx81ycfckfr8qbsv8z94fjbm33j69abxj9";
+          rev = "a70edfa7880ff9b082f358607d2a9ad6a8dcc8f3";
+          sha256 = "121m0h0nwxr27f9d2llbgl63ni1makcg66lnvg24wx07wggf0n8z";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7d31f907997d1d07ec794a4f09824f43818f035c/recipes/fix-input";
@@ -22827,12 +22953,12 @@
     fix-word = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fix-word";
-        version = "20170501.1349";
+        version = "20170518.2343";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "fix-word";
-          rev = "14e65660e17faa024943603eab9e887292fb3614";
-          sha256 = "1v9rpfcnviwkzr5bz4x655ldk6hsxpqsvm9qs805pc4k0f4niz5w";
+          rev = "91552cbceac8e2b7c23036f044fc84f5c6f8e338";
+          sha256 = "1pilsd3hkryyl4sd6s4nvmraszkdmcn3qdqi939yjgzp4lz3q412";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/22636390e8a15c09293a1506a901286dd72e565f/recipes/fix-word";
@@ -22960,12 +23086,12 @@
     flatui-dark-theme = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "flatui-dark-theme";
-        version = "20170423.958";
+        version = "20170513.722";
         src = fetchFromGitHub {
           owner = "theasp";
           repo = "flatui-dark-theme";
-          rev = "af5c84e2a2810748cc71a68ec7ba333097cc1f63";
-          sha256 = "0c0pm67d8w9jdraap0sswvx7ywly9ifimij2c5w9p4hiph8gisr9";
+          rev = "5b959a9f743f891e4660b1b432086417947872ea";
+          sha256 = "0nz4ql7qf49cwsgjb7dg0jhipr5d472r4fddy6fhr1h17s1cd9qy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5f9dc5abeb37422c63cac74f9a006d54c4a7c5a5/recipes/flatui-dark-theme";
@@ -23230,12 +23356,12 @@
     flycheck = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, let-alist, lib, melpaBuild, pkg-info, seq }:
     melpaBuild {
         pname = "flycheck";
-        version = "20170507.113";
+        version = "20170601.608";
         src = fetchFromGitHub {
           owner = "flycheck";
           repo = "flycheck";
-          rev = "4cb411b27b244af81ef40318f7854abdccc38291";
-          sha256 = "0kfq9h81nh9j8kv7fcx1qh7yx2kmq7l6lkdivabwh6jbnvdyw23n";
+          rev = "db3a745edb6b2678286e4d2bccebbb8d388c1a9e";
+          sha256 = "057yy3nmvlsczzq4h72a67qi4qbjl5ysv3vz4iw2nr1772a1y9ja";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/649f9c3576e81409ae396606798035173cc6669f/recipes/flycheck";
@@ -23440,12 +23566,12 @@
     flycheck-color-mode-line = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "flycheck-color-mode-line";
-        version = "20131125.2138";
+        version = "20170512.1607";
         src = fetchFromGitHub {
           owner = "flycheck";
           repo = "flycheck-color-mode-line";
-          rev = "c85319f8d2579e770c9060bfef11bedc1370d8be";
-          sha256 = "11xc08xld758xx9myqjsiqz8vk3gh4d9c4yswswvky6mrx34c0y5";
+          rev = "b2b20727d133c05fd31eac7b9b5c0886bbca8f98";
+          sha256 = "1dgm9i2b9irp454ag9pv96hbacz1j3gsapk96xr45wjh4hblgwa3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/02b5b60b74581ff0d1815155223e0c6e94a851a1/recipes/flycheck-color-mode-line";
@@ -23458,15 +23584,36 @@
           license = lib.licenses.free;
         };
       }) {};
+    flycheck-coverity = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
+    melpaBuild {
+        pname = "flycheck-coverity";
+        version = "20170520.825";
+        src = fetchFromGitHub {
+          owner = "alexmurray";
+          repo = "flycheck-coverity";
+          rev = "fb8ef7b07ca17681b72272331d43578f30405bec";
+          sha256 = "0068wzh2fyrbjn5gvfyf1kpfppfw49mnwkd0n046nhjgaz9y1lc7";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/55e8df91adbcf8b059096e02aba2781424250381/recipes/flycheck-coverity";
+          sha256 = "1knd1sqgjkgb5zs8hgsi6lyvkqmrcrdjgx81f26nhg40qv5m2p5l";
+          name = "flycheck-coverity";
+        };
+        packageRequires = [ dash emacs flycheck ];
+        meta = {
+          homepage = "https://melpa.org/#/flycheck-coverity";
+          license = lib.licenses.free;
+        };
+      }) {};
     flycheck-credo = callPackage ({ fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "flycheck-credo";
-        version = "20161121.2201";
+        version = "20170526.845";
         src = fetchFromGitHub {
           owner = "aaronjensen";
           repo = "flycheck-credo";
-          rev = "f773422c356c1c3b39fcece3cb7cc1257c7df517";
-          sha256 = "0cq6lap4gndm801lj1q1wajpb03vz40hsdimr1n02p2k2dkrz8p3";
+          rev = "e88f11ead53805c361ec7706e44c3dfee1daa19f";
+          sha256 = "04i7fbqpkjpsfa8vjpkdhg1sj5isczxwncdp4vr9x3vll3svblm7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/88dfffe034135cc46d661f8173e8b14e0fb7f240/recipes/flycheck-credo";
@@ -23608,12 +23755,12 @@
     flycheck-dialyxir = callPackage ({ fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "flycheck-dialyxir";
-        version = "20170124.2319";
+        version = "20170515.825";
         src = fetchFromGitHub {
           owner = "aaronjensen";
           repo = "flycheck-dialyxir";
-          rev = "7e79dc33a12b8aded7a86d64d302072eed522cb4";
-          sha256 = "1ylg8v1khh2bph6hscib7diw039z0nxfh28b9mhgyi6s33jyq618";
+          rev = "adfb73374cb2bee75724822972f405f2ec371199";
+          sha256 = "1kzvq99f052mdj4ml1m6nvxhv0kqqblmpdgnwcm89krf0qfl4gjg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fa49551b8f726c235e03ea377bb09a8be37b9f32/recipes/flycheck-dialyxir";
@@ -23755,12 +23902,12 @@
     flycheck-flow = callPackage ({ fetchFromGitHub, fetchurl, flycheck, json ? null, lib, melpaBuild }:
     melpaBuild {
         pname = "flycheck-flow";
-        version = "20170325.504";
+        version = "20170604.811";
         src = fetchFromGitHub {
           owner = "lbolla";
           repo = "emacs-flycheck-flow";
-          rev = "e51aff467edf2d86e7b315d79d6f2f4d8408ea78";
-          sha256 = "1w1s7rcbmiikb7f80rf9d77gzszjcfyymx75x20vvq3rw4wvdnyj";
+          rev = "a249e60803b1e423c67e40462229646cc77fcb68";
+          sha256 = "04xghj1l4fnfhl139k3s6q7fhln946gx8ak7l6ys7rz23iizbx4q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4d18fb21d8ef9b33aa84bc26f5918e636c5771e5/recipes/flycheck-flow";
@@ -23818,12 +23965,12 @@
     flycheck-haskell = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, flycheck, haskell-mode, let-alist, lib, melpaBuild, seq }:
     melpaBuild {
         pname = "flycheck-haskell";
-        version = "20160524.117";
+        version = "20170604.447";
         src = fetchFromGitHub {
           owner = "flycheck";
           repo = "flycheck-haskell";
-          rev = "a475c9c4d799bf98931efec95b61160e3ad8b61f";
-          sha256 = "05a5hyl6avf09drq6wva8mmxbag41dqixaz6azifywa8p63w1mlk";
+          rev = "84a8853d2ed4bd74038bb45d531dfbff0a3b1de0";
+          sha256 = "1lzf5wahmbxfqa7944z5gjbs7vfbm5qsv02jc7x3cvj8z22kf4fd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6ca601613788ae830655e148a222625035195f55/recipes/flycheck-haskell";
@@ -24095,8 +24242,8 @@
         src = fetchFromGitHub {
           owner = "purcell";
           repo = "flycheck-package";
-          rev = "afe8a49343d90d08ee72ac6f993d424dcc39cc38";
-          sha256 = "19pz8h01yacfqsyh5940pam6vigvavsqg6qd84994d7mmzl534qa";
+          rev = "cb526f54f4017454e2503b340757ba15578a5aed";
+          sha256 = "1x1pmz7gd909s11fsyqrh8a7bg2j4hw572wwqy1kjz2qf42mfw53";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d17ec69c9f192625e74dfadf03b11d0d7dc575e7/recipes/flycheck-package";
@@ -24280,12 +24427,12 @@
     flycheck-rtags = callPackage ({ emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, rtags }:
     melpaBuild {
         pname = "flycheck-rtags";
-        version = "20170403.957";
+        version = "20170522.2154";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "2abdfb2adf24b881cdd04e904ecb341bb51e8cb6";
-          sha256 = "11f9sd8w7qqhfd6mxbihlc6mdki4lqyk4dwbi3v91k9hbxb9hlq2";
+          rev = "d6af2ad09c99f9c58900665e874dcf97a545c0fa";
+          sha256 = "12p22b9q4rkl7jswg12gqc8751sinzgj8h75jjzrggd0vfsg439a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3dea16daf0d72188c8b4043534f0833fe9b04e07/recipes/flycheck-rtags";
@@ -24445,6 +24592,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    flycheck-vale = callPackage ({ emacs, fetchFromGitHub, fetchurl, flycheck, let-alist, lib, melpaBuild }:
+    melpaBuild {
+        pname = "flycheck-vale";
+        version = "20170521.109";
+        src = fetchFromGitHub {
+          owner = "abingham";
+          repo = "flycheck-vale";
+          rev = "7ca0a2a29b6185761bd07369c565774269c909dd";
+          sha256 = "1crlyphv00a1zm8wbsysxfxhfasv34bbnckc4a3psnvl913nc1gn";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/7693eeb536e601589b49f96d0e2734cd08fad4f2/recipes/flycheck-vale";
+          sha256 = "1ny30q81hq62s178rj3jjwsf9f3988dd6pl82r0vq53z3asnsxyd";
+          name = "flycheck-vale";
+        };
+        packageRequires = [ emacs flycheck let-alist ];
+        meta = {
+          homepage = "https://melpa.org/#/flycheck-vale";
+          license = lib.licenses.free;
+        };
+      }) {};
     flycheck-yamllint = callPackage ({ fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "flycheck-yamllint";
@@ -24473,8 +24641,8 @@
         src = fetchFromGitHub {
           owner = "abingham";
           repo = "emacs-ycmd";
-          rev = "05f0409fb7902daf49b4cd329e5c9ef569d77689";
-          sha256 = "0mp05xsphbidjgskp2pnv2x54z95dzmvfwdddpgmysmc99sz305y";
+          rev = "29aba538be5e44da81ad76a6078bb65c1c5e1aa6";
+          sha256 = "0fpccpiwwsxg0asdzg0m5hlwdv6jyr7khywnd1rb6kvr8m2qm0hf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/flycheck-ycmd";
@@ -25246,12 +25414,12 @@
     flyspell-popup = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, popup }:
     melpaBuild {
         pname = "flyspell-popup";
-        version = "20150926.803";
+        version = "20170529.115";
         src = fetchFromGitHub {
           owner = "xuchunyang";
           repo = "flyspell-popup";
-          rev = "f31d89ec60364ee24f89c90e9acc110bd86ea67f";
-          sha256 = "1rdpggnw9mz3qr4kp5gh9nvwncivj446vdhpc04d4jgrl568bhqb";
+          rev = "29311849bfd253b9b689bf331860b4c4d3bd4dde";
+          sha256 = "0x7jilwb0fgzsr7ma59sgd0d4122cl0hwzr28vi3z5s8wdab7nc4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/186d00724137c055b521a5f5c54acf71c4b16c32/recipes/flyspell-popup";
@@ -25330,12 +25498,12 @@
     focus = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "focus";
-        version = "20161113.1145";
+        version = "20170520.901";
         src = fetchFromGitHub {
           owner = "larstvei";
           repo = "Focus";
-          rev = "75202c9445f52eab6fb82f00006f37cd20dae6b2";
-          sha256 = "1v9y3dp7sd4rsm31myp3l1jxpwjw3madajb6yz9rw0yhdirfwgbg";
+          rev = "155da77a324f28fd37f6167d5c843c491dc3327d";
+          sha256 = "0jkfwammgzvfdhs4pg751rkljhrkmbyvqfs762i3smpqw95jqh2w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4e8f1217224514f9b048b7101c89e3b1a305821e/recipes/focus";
@@ -25706,12 +25874,12 @@
     forth-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "forth-mode";
-        version = "20170208.2305";
+        version = "20170527.1230";
         src = fetchFromGitHub {
           owner = "larsbrinkhoff";
           repo = "forth-mode";
-          rev = "2d30ca8eaaebbb9ee94aca46418ba4bb71ea2569";
-          sha256 = "14v2vq71rj9byilzw04aky90h5fqn5bpv3xy742zbivn6msp2fxi";
+          rev = "522256d98d1a909983bcfd3ae20c65226d5929b6";
+          sha256 = "110ycl8zkimy2818rhp3hk3mn2y25m695shdsy6dwxnrv90agss6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e46832079ee34c655835f06bf565ad5a5ab48ebd/recipes/forth-mode";
@@ -26037,12 +26205,12 @@
     fsharp-mode = callPackage ({ company, company-quickhelp, dash, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, popup, pos-tip, s }:
     melpaBuild {
         pname = "fsharp-mode";
-        version = "20170416.335";
+        version = "20170606.925";
         src = fetchFromGitHub {
           owner = "rneatherway";
           repo = "emacs-fsharp-mode-bin";
-          rev = "c2acdaaf36176d36ccadfe73c2593362ef930ebd";
-          sha256 = "00am42hl5icvbw5d7kpbdcl9sr8flsgl1pqmcxqpcz30yw6f4pr2";
+          rev = "1020b6ccb5bf7d3eccd9e84b7ab293c87528265e";
+          sha256 = "0qbhl4yzn5q156w1gyapj430sxj4iyzgdwh2f5zyl8q791vad9k3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/dc45611e2b629d8bc5f74555368f964420b79541/recipes/fsharp-mode";
@@ -26066,16 +26234,16 @@
     fstar-mode = callPackage ({ company, company-quickhelp, dash, emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, quick-peek, yasnippet }:
     melpaBuild {
         pname = "fstar-mode";
-        version = "20170504.2114";
+        version = "20170531.1958";
         src = fetchFromGitHub {
           owner = "FStarLang";
           repo = "fstar-mode.el";
-          rev = "f1ea9d9eb1c529f6a3859779d24718b4fc8ee7a1";
-          sha256 = "0v4r3nczn8whi0drsqrm2zdq4lj0l95hbplqbr80z420y6xchasc";
+          rev = "c9a9d722848dfc3f37ac9e0e91603340e5f5df1e";
+          sha256 = "0faf8796vvfi2g4kmh7xsnc08m3iyldgcivslq0xy86ndh682f06";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/fstar-mode";
-          sha256 = "1cjwai0qf48m18dsa0r9sh4qlgvdzg5ajfbmxxc2vqzcl5ygrxjx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/c58ace42342c3d3ff5a56d86a16206f2ecb45f77/recipes/fstar-mode";
+          sha256 = "1kwa6gqh91265vpp4gcady2brkizfkfjj0gnya9lar6x7rn4gj7s";
           name = "fstar-mode";
         };
         packageRequires = [
@@ -26095,11 +26263,11 @@
     fuel = callPackage ({ cl-lib ? null, emacs, fetchgit, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fuel";
-        version = "20170107.626";
+        version = "20170601.1205";
         src = fetchgit {
           url = "git://factorcode.org/git/factor.git";
-          rev = "c1d6477c22df9cd0604c2b06aca919a53674bb78";
-          sha256 = "1lz1bwgjvjijs3v2v6qyivzbz9jl7zx55n65hlsq0nq6limjd8bh";
+          rev = "dc0b8994f00bd46de99398f92bf949a784c7a9ee";
+          sha256 = "1wka0ldx68psxjp3bl6xwx48mlnawqccvyig1lr4c5vi1avkf6dk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0c3633c23baa472560a489fc663a0302f082bcef/recipes/fuel";
@@ -26224,8 +26392,8 @@
         src = fetchFromGitHub {
           owner = "HIPERFIT";
           repo = "futhark";
-          rev = "f7b42f135db488dc449e18108bdde176937c6a8c";
-          sha256 = "1wiwbpd0ssb07q0wlr5rj7wkwdfgff9s5d9fldpwvsyhad6p4dj2";
+          rev = "19015c8d84abc84cfd5f39295b02af8af5ef2e94";
+          sha256 = "1vp24kgi3hv2j7df6nmczhfy847725c6jpjizmgfl9r2d7d1v9bs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0607f01aad7e77d53595ad8db95d32acfd29b148/recipes/futhark-mode";
@@ -26384,12 +26552,12 @@
     fzf = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "fzf";
-        version = "20161226.936";
+        version = "20170527.2120";
         src = fetchFromGitHub {
           owner = "bling";
           repo = "fzf.el";
-          rev = "779254fe1ec7a0c9110af36fd039cece3040a312";
-          sha256 = "1p0k71vz9v8vx5h85ph1krb9v0jyhmq73h91ws9zcxpf1bdgy050";
+          rev = "8d75f98cf904c3ab62e8cc54f2b8701c215620d7";
+          sha256 = "1rr0d937j078xyhlx5i305l5wavd3fcmvfqmdnbfwah8mfnp4kip";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1671e17c99ef1932c6a2e83fc4fa2e4eb6674bc8/recipes/fzf";
@@ -26512,8 +26680,8 @@
         src = fetchFromGitHub {
           owner = "ahungry";
           repo = "geben-helm-projectile";
-          rev = "14db489efcb20c5aa9102288c94cec3c5a87c35d";
-          sha256 = "1nd1jhy393vkn2g65zhygxkpgna0l8gkndxr8jb6qjkkapk58k8l";
+          rev = "31ce0faca5dcc71924884f03fd5a7a25d00ccd9b";
+          sha256 = "0a1srhwfbgkvndjfi9irg5s6snlxyqrw1vwyqg1sn8aqnbpgib04";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b7d28c45304a69e6ca78b3d00df2563171c027ee/recipes/geben-helm-projectile";
@@ -26571,12 +26739,12 @@
     general = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "general";
-        version = "20170328.954";
+        version = "20170528.336";
         src = fetchFromGitHub {
           owner = "noctuid";
           repo = "general.el";
-          rev = "fa0e6e2d2a9c06671fd44b5d938ea24387654525";
-          sha256 = "0wnh24jnnf0kl291l36hykx86nrn74kqwxlwzd2llydbhk07sq8s";
+          rev = "a8470934373b2bdd67f38e46e1dd4fb963cee31b";
+          sha256 = "17hg6iw3dz1ssxvz1zm8c90927a2sf22yv31g2y7n98jnpq622bs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d86383b443622d78f6d8ff7b8ac74c8d72879d26/recipes/general";
@@ -26697,12 +26865,12 @@
     gh = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, logito, marshal, melpaBuild, pcache, s }:
     melpaBuild {
         pname = "gh";
-        version = "20161119.2004";
+        version = "20170512.2049";
         src = fetchFromGitHub {
           owner = "sigma";
           repo = "gh.el";
-          rev = "6a76836a2ed1ebc3380dcfbe2b46786abf905fab";
-          sha256 = "0anlavmfhm0ax6566sl9ih0j4v80s313n32d4yfp9lh4f1drp62k";
+          rev = "6efe3db1acb841c3366878baefc576caa2eb5e09";
+          sha256 = "0nchfzlnhzns1d6362yv5qa469qmgcvr15nx8ygcpw8ncf4pqjpw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/gh";
@@ -26739,12 +26907,12 @@
     ghc = callPackage ({ fetchFromGitHub, fetchurl, haskell-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "ghc";
-        version = "20160808.813";
+        version = "20170526.44";
         src = fetchFromGitHub {
           owner = "DanielG";
           repo = "ghc-mod";
-          rev = "50617fe41d382132472c3beec50749b21e21325c";
-          sha256 = "1l2a7nab0d3w75qv30597ib5s4gfj0jghdjqfcjcr9267jz1yhs4";
+          rev = "8bfd542ad210debd00a0be9f15b21c90043b15d4";
+          sha256 = "04vjp5m25yyxhdzwc50g0qcggzhg1rs4kyj7d0ax0blfnqzggf2c";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7fabdb05de9b8ec18a3a566f99688b50443b6b44/recipes/ghc";
@@ -26865,12 +27033,12 @@
     ghub = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ghub";
-        version = "20170426.419";
+        version = "20170518.358";
         src = fetchFromGitHub {
           owner = "tarsius";
           repo = "ghub";
-          rev = "da60fa2316bf829cab18676afd5a43088ac06b60";
-          sha256 = "0aj0ayh4jvpxwqss5805qnklqbp9krzbh689syyz65ja6r0r2bgs";
+          rev = "715dfef4a926228c059674bc68a16e27d4f539ee";
+          sha256 = "1y6crh3v3g7g0i225pcp9ff18pcfl5fnpc22yf4wcbf1if7pd2vs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9375cbae3ffe5bf4ba5606358860050f3005d9b7/recipes/ghub";
@@ -26880,6 +27048,48 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://melpa.org/#/ghub";
+          license = lib.licenses.free;
+        };
+      }) {};
+    ghub-plus = callPackage ({ apiwrap, emacs, fetchFromGitHub, fetchurl, ghub, lib, melpaBuild }:
+    melpaBuild {
+        pname = "ghub-plus";
+        version = "20170517.1445";
+        src = fetchFromGitHub {
+          owner = "vermiculus";
+          repo = "ghub-plus";
+          rev = "07bd117a77d2f2de88facfa18b839c5c8bd5a423";
+          sha256 = "04k3xvs33vv3g01ah16bc4l6f3ym4w16i9bk5q2s4f1xh4lad3jn";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/03a412fd25218ff6f302734e078a699ff0234e36/recipes/ghub+";
+          sha256 = "0xx7nwmjx3f7z6z164x1lb9arbb3m3d16mpn92v66w572rhbr34n";
+          name = "ghub-plus";
+        };
+        packageRequires = [ apiwrap emacs ghub ];
+        meta = {
+          homepage = "https://melpa.org/#/ghub+";
+          license = lib.licenses.free;
+        };
+      }) {};
+    gift-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "gift-mode";
+        version = "20170603.906";
+        src = fetchFromGitHub {
+          owner = "csrhodes";
+          repo = "gift-mode";
+          rev = "0d6adae976ee0831877d4bf237090ff67fb76e1d";
+          sha256 = "1ld367qvyn7700mry24j4ywmanaknpwgfmq18h72sn408z9vsalc";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/c4c9081a60bdbf4e5fe1ccc4809c0f6f396d11e4/recipes/gift-mode";
+          sha256 = "0sybrjmcg90cjaax7lzzqvacirn5l23hqy9d843c660fsv98scg1";
+          name = "gift-mode";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://melpa.org/#/gift-mode";
           license = lib.licenses.free;
         };
       }) {};
@@ -26907,12 +27117,12 @@
     gist = callPackage ({ emacs, fetchFromGitHub, fetchurl, gh, lib, melpaBuild }:
     melpaBuild {
         pname = "gist";
-        version = "20161127.855";
+        version = "20170604.1834";
         src = fetchFromGitHub {
           owner = "defunkt";
           repo = "gist.el";
-          rev = "62888de7f776c867a51cee4d5d55edc561e519cc";
-          sha256 = "0xvmrpx3gbdancxhggw7k7r2bzlwmni9vynsjf5ddpv5alw2bscx";
+          rev = "a03f142455e8b39f77fbd57ee1c1e44478c1f9e2";
+          sha256 = "1xisjaxr54zrxzxj8cp8f90kzphd5v3j56d14534fm5r1f5343vp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/gist";
@@ -27033,12 +27243,12 @@
     git-commit = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, with-editor }:
     melpaBuild {
         pname = "git-commit";
-        version = "20170510.910";
+        version = "20170609.2310";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "magit";
-          rev = "d783e7b2427ed0c2d25895bcecc7190b9e953b97";
-          sha256 = "04hbgbrfdv9jn86p0g9rw6yzfbgfbqxhiq7y9ncc4dm4vfmrli66";
+          rev = "622c994183294b02893ff286210bffd5255296df";
+          sha256 = "1cyzf8xh6ibq9vypcdg4akqsfr1i202y14mdlr7hh2bkxymcq32i";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cec5af50ae7634cc566adfbfdf0f95c3e2951c0c/recipes/git-commit";
@@ -27180,12 +27390,12 @@
     git-lens = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "git-lens";
-        version = "20170509.258";
+        version = "20170517.144";
         src = fetchFromGitHub {
           owner = "pidu";
           repo = "git-lens";
-          rev = "5999cbeb365930dcd56a7c44083bf3426c58e018";
-          sha256 = "1k2kq2fqrlmgvkpngyxfh77ilg0pcjr160rhg0ml775i0jcvk3hy";
+          rev = "91bf19d6dd7368de5cad373a8155c48c4e254723";
+          sha256 = "1gszcsji3n42xpshz1pzyvlrd0hxjh14fr4n0ixqv2igk3fywxr3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/66fd7c0642e8e61b883d2030f88892d039380475/recipes/git-lens";
@@ -27201,12 +27411,12 @@
     git-link = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "git-link";
-        version = "20170504.1834";
+        version = "20170603.1026";
         src = fetchFromGitHub {
           owner = "sshaw";
           repo = "git-link";
-          rev = "88bb1cddbcbaa52c674288173fc0806fc6d4a904";
-          sha256 = "0yj0rldpvyfz939ld9pfgpamlzrc70wchvq094js6il78514lr49";
+          rev = "472af75eca7aba42a1934f408c4bda55e34c9dcf";
+          sha256 = "0xgvwg2zxb9akk3kxxcz5cvgw4zkbqx5p4b5in01z5aj4lqmjw6s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1385443585e628e3d4efb3badb7611e9d653e0c9/recipes/git-link";
@@ -27453,12 +27663,12 @@
     github-notifier = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "github-notifier";
-        version = "20161102.755";
+        version = "20170604.2119";
         src = fetchFromGitHub {
           owner = "xuchunyang";
           repo = "github-notifier.el";
-          rev = "12621caa8d78bf2b559d2113ef476a8f2c2a4e0e";
-          sha256 = "1cwabnm6nirmrwdq14l3pqdjh40h49icbfjx3z86rppp7cj3dmlm";
+          rev = "f8d011ebef9f626a94a27b5576c8ed06e6ff8987";
+          sha256 = "0glkn36fs93y2n1583k8v958qfhl212hbdk3cpkq432hj08wzjnr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c09f4e7e8a84a241881d214e8359f8a50ab14ddf/recipes/github-notifier";
@@ -28484,8 +28694,8 @@
         src = fetchFromGitHub {
           owner = "golang";
           repo = "lint";
-          rev = "cb00e5669539f047b2f4c53a421a01b0c8e172c6";
-          sha256 = "1wav8y5yps407znh0wspvcripbp2xjigqhzhgbv0adqsm9nyn70p";
+          rev = "c5fb716d6688a859aae56d26d3e6070808df29f7";
+          sha256 = "0bp9aarkinjr6m358qw9x4qxi3v9h06jvipyx1pg3pwsqh61vb12";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/34f22d829257456abbc020c006b92da9c7a7860e/recipes/golint";
@@ -28547,8 +28757,8 @@
         src = fetchFromGitHub {
           owner = "google";
           repo = "styleguide";
-          rev = "c212f99186958f25d3d20994144ea11df923da79";
-          sha256 = "1lhld1y3zxcj30fwjydiza4kfjpd2z1nc88kk7jkgzz670yk8qi4";
+          rev = "142b0e64babdb0066d2ffebfedb3c886fe75c680";
+          sha256 = "0vccg70zf0c7xx6acffrdvhvvih95fcgxq9dw4bsax46p2pffc6q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b4e7f5f641251e17add561991d3bcf1fde23467b/recipes/google-c-style";
@@ -28645,6 +28855,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    goose-theme = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "goose-theme";
+        version = "20160828.545";
+        src = fetchFromGitHub {
+          owner = "tokenrove";
+          repo = "goose-theme";
+          rev = "acd017b50ab25a75fd1331eb3de66467e2042e9c";
+          sha256 = "1mmdvjsgnwgs6akhyj96fgj30mz53djdq85dl5q4cmiznlbma7hy";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/e23a52e068ec0e6d457402254727673ea02bd407/recipes/goose-theme";
+          sha256 = "1nw948js678xc5vgrpdkykpcbn1b1id4k1clf87vfv7y5zssvd0x";
+          name = "goose-theme";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/goose-theme";
+          license = lib.licenses.free;
+        };
+      }) {};
     gore-mode = callPackage ({ fetchFromGitHub, fetchurl, go-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "gore-mode";
@@ -28690,12 +28921,12 @@
     gotest = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, go-mode, lib, melpaBuild, s }:
     melpaBuild {
         pname = "gotest";
-        version = "20170303.13";
+        version = "20170522.53";
         src = fetchFromGitHub {
           owner = "nlamirault";
           repo = "gotest.el";
-          rev = "30a31c14e5c83019ec4b31fd9913efaf9220b4b9";
-          sha256 = "09pplr231ga3ic8i8jqxqi19ydjp6245spwraqymxqq5h1x94bfs";
+          rev = "c15bdcb78a46167e7a3fbaf5f71cbeddf2f13b78";
+          sha256 = "0pzzcjc41k3by534ii11jxfind4fq1cv3pqa3scisv4pvyj6lha6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0670b42c0c998daa7bf01080757976ac3589ec06/recipes/gotest";
@@ -28711,12 +28942,12 @@
     gotham-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "gotham-theme";
-        version = "20170426.1411";
+        version = "20170521.417";
         src = fetchFromGitHub {
           owner = "wasamasa";
           repo = "gotham-theme";
-          rev = "b939d0687ffdcc961f58af30178cee1981c72c4f";
-          sha256 = "1inldaab0mzpv81zkfjy9kbwd89iclmdbgnwg790yympqaycpynf";
+          rev = "df428b477eb84f2ccd791c4310587cfd72644692";
+          sha256 = "0ph5h08cx61nh70hafmnqzdcxb799fss0pl2d36hhimkf866zvln";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4b388de872be397864a1217a330ba80437c287c0/recipes/gotham-theme";
@@ -28797,8 +29028,8 @@
         src = fetchFromGitHub {
           owner = "vmware";
           repo = "govmomi";
-          rev = "35caa01bfa4cbff15d06382021e2028bdf0a77ad";
-          sha256 = "0j4xwlr1zlvhj6193nvqbfz5wmcr2dnmv2n6qsdyzfxk25z6ngc0";
+          rev = "98f52561d70fd95cfb7a5155ec9e62282bc55dc2";
+          sha256 = "0vqnsyn80h06qi2ypql4j66a9w1dsnd5f95gcnj5dgwk0scgpfxp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/92d6391318021c63b06fe39b0ca38f667bb45ae9/recipes/govc";
@@ -28923,8 +29154,8 @@
         src = fetchFromGitHub {
           owner = "Groovy-Emacs-Modes";
           repo = "groovy-emacs-modes";
-          rev = "9849318762a1f495b3c8913e47256450c1854489";
-          sha256 = "0f0h6syghw0kfqzway1f8hc0agrbdsdc68931bjprm7fm43dhrzw";
+          rev = "816182124457bed620678f9a92b349787cbf87bd";
+          sha256 = "19rqjfy8gwmxpmw9qgnd6zi6albrhj5jzj1hgrc5nxagb2gp0ckj";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3fe318b4e51a280a55c01fa30455e4a180df8bd6/recipes/grails-mode";
@@ -29304,12 +29535,12 @@
     groovy-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "groovy-mode";
-        version = "20170503.148";
+        version = "20170609.1120";
         src = fetchFromGitHub {
           owner = "Groovy-Emacs-Modes";
           repo = "groovy-emacs-modes";
-          rev = "9849318762a1f495b3c8913e47256450c1854489";
-          sha256 = "0f0h6syghw0kfqzway1f8hc0agrbdsdc68931bjprm7fm43dhrzw";
+          rev = "816182124457bed620678f9a92b349787cbf87bd";
+          sha256 = "19rqjfy8gwmxpmw9qgnd6zi6albrhj5jzj1hgrc5nxagb2gp0ckj";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3fe318b4e51a280a55c01fa30455e4a180df8bd6/recipes/groovy-mode";
@@ -29430,12 +29661,12 @@
     gtk-pomodoro-indicator = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "gtk-pomodoro-indicator";
-        version = "20170327.948";
+        version = "20170517.900";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "gtk-pomodoro-indicator";
-          rev = "35da6b5eeb91ea2488e25be5d8200a060c88aea1";
-          sha256 = "19q99bwdbii0qvk9lkr0z8iy1h131j69q4zwbjgwslj19vq12mn6";
+          rev = "0fa0e682b3bd1595f230275d73ca231e93c6d28a";
+          sha256 = "1jm7kcray6qd867hacyhs5c7hhdm0fyfa1jx35sh09g5c9xa4x2f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b98ec72605077f3b3f587713a681eb2144f29645/recipes/gtk-pomodoro-indicator";
@@ -29451,12 +29682,12 @@
     guess-language = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "guess-language";
-        version = "20170417.1359";
+        version = "20170521.404";
         src = fetchFromGitHub {
           owner = "tmalsburg";
           repo = "guess-language.el";
-          rev = "2bc0e1f9c8947b9b5ac8d792bd7f6d2c36d294ab";
-          sha256 = "0nl9963m20cpfn3n50khbbmc1aas56q38xjjwiq01s8pmjvmcs6v";
+          rev = "65dccb18df4d0c766d516c5f1423994bae445b51";
+          sha256 = "0w189k3nnkzgh6gqw4zknhjykigym42rxjhcr5xl1b3h3mn0zz7j";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6e78cb707943fcaaba0414d7af2af717efce84d0/recipes/guess-language";
@@ -29514,12 +29745,12 @@
     guix = callPackage ({ bui, dash, emacs, fetchFromGitHub, fetchurl, geiser, lib, magit-popup, melpaBuild }:
     melpaBuild {
         pname = "guix";
-        version = "20170508.1218";
+        version = "20170608.303";
         src = fetchFromGitHub {
           owner = "alezost";
           repo = "guix.el";
-          rev = "41a9d7ba0acfd19e4c669aed12684e852bf886ca";
-          sha256 = "1vkhzb9mzcrm7yc6vccd0937j19hg1m3jbswlb7qjl3gi3dc57hr";
+          rev = "af57f5e969004dc5141cdb1d4c77c55ece0c6868";
+          sha256 = "0nv85nlcac7k5pld2sg9wsbggq394jlmpcayzkrm81yy8a5grm5d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b3d8c73e8a946b8265487a0825d615d80aa3337d/recipes/guix";
@@ -29640,12 +29871,12 @@
     hack-time-mode = callPackage ({ emacs, fetchFromGitLab, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "hack-time-mode";
-        version = "20170413.630";
+        version = "20170527.910";
         src = fetchFromGitLab {
           owner = "marcowahl";
           repo = "hack-time-mode";
-          rev = "79abe7652690186224ba22d1346d24e7603448f7";
-          sha256 = "176zpdxsjydl7vvh2jhpbwsndzwzzyfhw6hpak16wj5b7rv9jj19";
+          rev = "73d6fcf8b39283526e5d4e3919193611e25a0898";
+          sha256 = "1w0idf28fhyn0qmjk1zgh80gzcrkgx5bc8mb0xamc20i53wpr4xl";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6481dc9f487c5677f2baf1bffdf8f2297185345e/recipes/hack-time-mode";
@@ -30018,12 +30249,12 @@
     haskell-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "haskell-mode";
-        version = "20170406.25";
+        version = "20170601.2103";
         src = fetchFromGitHub {
           owner = "haskell";
           repo = "haskell-mode";
-          rev = "90a352f0d23ffc46a626d512c1c76d70994e77a8";
-          sha256 = "177r3vv9vh24bxara2wq4nrfi6yvfchi9syy8j5ridj2l3vzsxiz";
+          rev = "c46bdf129fb7ac241b84e0cfffcd3c7588dfb1af";
+          sha256 = "095y6zg8frdl9z7r4xp4dysf93d947srwiylngss8fclav7fjq2y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7f18b4dcbad4192b0153a316cff6533272898f1a/recipes/haskell-mode";
@@ -30080,12 +30311,12 @@
     hasky-extensions = callPackage ({ avy-menu, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "hasky-extensions";
-        version = "20170426.1347";
+        version = "20170520.149";
         src = fetchFromGitHub {
           owner = "hasky-mode";
           repo = "hasky-extensions";
-          rev = "f1159dd640b54852beb6d3ef51b167e72f2c066b";
-          sha256 = "15zjxiqd9akvr8v1id8i2qwb30393cskp1a20c8wlvh5y7i4fffp";
+          rev = "5a57a6401f6625640f46d8f8d540ecddf52bb12d";
+          sha256 = "1262kddcn3jr758s6wv15q3bh8j160q4m8nz2pbv2prabg0csz5n";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e3f73e3df8476fa231d04211866671dd74911603/recipes/hasky-extensions";
@@ -30287,12 +30518,12 @@
     helm = callPackage ({ async, emacs, fetchFromGitHub, fetchurl, helm-core, lib, melpaBuild, popup }:
     melpaBuild {
         pname = "helm";
-        version = "20170510.853";
+        version = "20170611.701";
         src = fetchFromGitHub {
           owner = "emacs-helm";
           repo = "helm";
-          rev = "ab8e6fa02968b0391d45c0003355a958335c0946";
-          sha256 = "0ch05a4kiw7dbiffja5p019776pfk4g0i62vl2vpklpbnggxrfzx";
+          rev = "9f532785d43389339ed73d90357d4aea9d966020";
+          sha256 = "0n23yyrvsvp0j9grgwd7fiw808kf9wr4fs3kry771pzq1fg16wg5";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7e8bccffdf69479892d76b9336a4bec3f35e919d/recipes/helm";
@@ -30662,6 +30893,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    helm-charinfo = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
+    melpaBuild {
+        pname = "helm-charinfo";
+        version = "20170611.1746";
+        src = fetchFromGitHub {
+          owner = "mandoku";
+          repo = "helm-charinfo";
+          rev = "a4902a90bd9f012468ad8186e2548c7814847613";
+          sha256 = "024pqnw87whwa7zpld8bcz1izaymqk0vajhbf9m173hlfw6x7wmp";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/6667774bba495c45703ef75261f1f14d89684e3a/recipes/helm-charinfo";
+          sha256 = "04k6crcwhv2k69f5w75g0dg0f5qsbhyxl93qzxxdb5bnr56ad7f6";
+          name = "helm-charinfo";
+        };
+        packageRequires = [ cl-lib emacs helm ];
+        meta = {
+          homepage = "https://melpa.org/#/helm-charinfo";
+          license = lib.licenses.free;
+        };
+      }) {};
     helm-chrome = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-chrome";
@@ -30854,16 +31106,16 @@
     helm-company = callPackage ({ company, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-company";
-        version = "20170306.2113";
+        version = "20170608.1029";
         src = fetchFromGitHub {
-          owner = "manuel-uberti";
+          owner = "Sodel-the-Vociferous";
           repo = "helm-company";
-          rev = "f00df346098636650c4047394aa593d67b007859";
-          sha256 = "03rcn9a3fbhcbh739xykjk94jg2sl4mj6y22knfwbh1hm1wymii3";
+          rev = "ae4e1a05455f5eaf07e61b8627934ea1df4eb048";
+          sha256 = "05lfqdg5pzwji3j5w1l892qab9nffd3if8ha0545gbxfn94lnx90";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/78ff0a6cf493ff148406140f3e4902bfafd83e4a/recipes/helm-company";
-          sha256 = "1pbsg7zrz447siwd8pasw2hz5z21wa1xpqs5nrylhbghsk076ld3";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/8acf7420f2ac8a36474594bc34316f187b43d771/recipes/helm-company";
+          sha256 = "1wl1mzm1h9ig351y77yascdv4z0cka1gayi8cnnlayk763is7q34";
           name = "helm-company";
         };
         packageRequires = [ company helm ];
@@ -30875,12 +31127,12 @@
     helm-core = callPackage ({ async, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-core";
-        version = "20170507.531";
+        version = "20170611.135";
         src = fetchFromGitHub {
           owner = "emacs-helm";
           repo = "helm";
-          rev = "ab8e6fa02968b0391d45c0003355a958335c0946";
-          sha256 = "0ch05a4kiw7dbiffja5p019776pfk4g0i62vl2vpklpbnggxrfzx";
+          rev = "9f532785d43389339ed73d90357d4aea9d966020";
+          sha256 = "0n23yyrvsvp0j9grgwd7fiw808kf9wr4fs3kry771pzq1fg16wg5";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ef7a700c5665e6d72cb4cecf7fb5a2dd43ef9bf7/recipes/helm-core";
@@ -30959,12 +31211,12 @@
     helm-dash = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-dash";
-        version = "20170221.638";
+        version = "20170531.135";
         src = fetchFromGitHub {
           owner = "areina";
           repo = "helm-dash";
-          rev = "f07a77bd6ae6d8c933753f25526cbf3b71903e77";
-          sha256 = "0az1j68g0svynvag7p3x7l1rv4n6y1knkmfcjhcli4jwrkn720xr";
+          rev = "9a230125a7a11f5fa90aa048b61abd95eb78ddfe";
+          sha256 = "0xs3nq86qmvkiazn5w564npdgbcfjlnpw2f48g2jd43yznblz7ly";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/helm-dash";
@@ -31043,12 +31295,12 @@
     helm-dired-history = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-dired-history";
-        version = "20170321.2201";
+        version = "20170524.346";
         src = fetchFromGitHub {
           owner = "jixiuf";
           repo = "helm-dired-history";
-          rev = "9480383b6ccede6f7c200fbd50aaeb2898b3a008";
-          sha256 = "0cfq06lray7hpnhkwnhjq18izyk2w0m4cxqg0m5nyidiwc4qssqa";
+          rev = "281523f9fc46cf00fafd670ba5cd16552a607212";
+          sha256 = "1bqavj5ljr350dckyf39i9plkb0rbhyd17ka94n2g6daapgpq0x6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/helm-dired-history";
@@ -31127,12 +31379,12 @@
     helm-emms = callPackage ({ cl-lib ? null, emacs, emms, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-emms";
-        version = "20170510.755";
+        version = "20170517.1010";
         src = fetchFromGitHub {
           owner = "emacs-helm";
           repo = "helm-emms";
-          rev = "a00839beffc34f252dd4c75553e5a414577dd2ae";
-          sha256 = "0pfb6b1g7wsj1yj75nm152d7n247zbzc9pg1nqb9x3cw7ln2dgpg";
+          rev = "b1c7d03e80c3012e327f0d518258508acf980c1c";
+          sha256 = "18fpsr6kaw2m1bvj05i5qayq6d01v54jw98489bgwshp9wmhsy9m";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/db836b671705607f6cd9bce8229884b1f29b4a76/recipes/helm-emms";
@@ -31442,12 +31694,12 @@
     helm-git-grep = callPackage ({ fetchFromGitHub, fetchurl, helm-core, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-git-grep";
-        version = "20170423.759";
+        version = "20170530.830";
         src = fetchFromGitHub {
           owner = "yasuyk";
           repo = "helm-git-grep";
-          rev = "605e214632644224b5b7adf2a68f265489c2a080";
-          sha256 = "03hix4vqp1krh8v3x6iqs3xqpcjzibwlafxrmn2gz3n4f9xb9j37";
+          rev = "e3ae5f60585ac0213876dca5093aca467db1ac5b";
+          sha256 = "0bld5kjzgjhkjcjc7b66kg55yb7pzrbnxfqx79f5glxckbp2pxjr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/338d28c3fe201a7b2f15793be6d540f44819f4d8/recipes/helm-git-grep";
@@ -31904,12 +32156,12 @@
     helm-ls-git = callPackage ({ fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-ls-git";
-        version = "20170214.525";
+        version = "20170601.2200";
         src = fetchFromGitHub {
           owner = "emacs-helm";
           repo = "helm-ls-git";
-          rev = "7b7b6dc2554603ad98412927f84a803625069ab3";
-          sha256 = "1s748a5abj58hd7cwzfggfnnmyzhj04gpbqqwqmskn8xlsq5qcdi";
+          rev = "1253c7615da055a95548b4f92a8a503fe249884e";
+          sha256 = "1zyix2whj9j19ica9pff1hh7vgyg1h009vx5xhcqw5sligrh2dwr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b487b4c0db9092bb7e32aad9265b79a9d18c8478/recipes/helm-ls-git";
@@ -32155,12 +32407,12 @@
     helm-org-rifle = callPackage ({ dash, emacs, f, fetchFromGitHub, fetchurl, helm, lib, melpaBuild, s }:
     melpaBuild {
         pname = "helm-org-rifle";
-        version = "20170509.1646";
+        version = "20170518.312";
         src = fetchFromGitHub {
           owner = "alphapapa";
           repo = "helm-org-rifle";
-          rev = "9570ee6ddf67ead1baafaf1128b6ea5069aa97df";
-          sha256 = "0v93cmgnd4v6skkn7aag1x0z8pin0mr3myqaxi08knwz31j8s2r8";
+          rev = "61adb8ec3af0b7b87b2f9245510dc8b014d026ed";
+          sha256 = "05zqp6yifc87i22q0p37jl90cfyh5v1bq9ifhpkdy1rs3sgcmnif";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f39cc94dde5aaf0d6cfea5c98dd52cdb0bcb1615/recipes/helm-org-rifle";
@@ -32495,8 +32747,8 @@
         src = fetchFromGitHub {
           owner = "bomgar";
           repo = "helm-rage";
-          rev = "dc51371265acea60ac0691016f6ce84597bcace1";
-          sha256 = "1asz4rq5c4w82w167li0vvmqv3zjl4rz67c2dj8i717ihcm45sip";
+          rev = "3cae7f309b45cc6e40507be68c0cc2e5595c1392";
+          sha256 = "0j8yvxvd78lcfpss327xc6rahkqva66rrqjjx5cmdl82xncb53vz";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/84f831fdc5a0e90c23ac11c79f193f4d3c1ebb04/recipes/helm-rage";
@@ -32659,12 +32911,12 @@
     helm-rtags = callPackage ({ fetchFromGitHub, fetchurl, helm, lib, melpaBuild, rtags }:
     melpaBuild {
         pname = "helm-rtags";
-        version = "20170402.653";
+        version = "20170522.2154";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "2abdfb2adf24b881cdd04e904ecb341bb51e8cb6";
-          sha256 = "11f9sd8w7qqhfd6mxbihlc6mdki4lqyk4dwbi3v91k9hbxb9hlq2";
+          rev = "d6af2ad09c99f9c58900665e874dcf97a545c0fa";
+          sha256 = "12p22b9q4rkl7jswg12gqc8751sinzgj8h75jjzrggd0vfsg439a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3dea16daf0d72188c8b4043534f0833fe9b04e07/recipes/helm-rtags";
@@ -32978,8 +33230,8 @@
         src = fetchFromGitHub {
           owner = "bomgar";
           repo = "helm-unicode";
-          rev = "e331c38e651287981e5d34c27e5d7dc4ff24b0d4";
-          sha256 = "05pvswisi44bl35anjbimd0q8i3c7kkjfksvaj69gcr788lhb8iv";
+          rev = "1ad1fcca7a83c163ae74eb72a443cfc102128e33";
+          sha256 = "16s0k6l2k32nxmgqc159kr5vzgn8gydj3bkrkvhhydm3lnh8ki0n";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f720b9f9b667bf9ff3080938beab36aa0036dc92/recipes/helm-unicode";
@@ -33125,8 +33377,8 @@
         src = fetchFromGitHub {
           owner = "maximus12793";
           repo = "helm-youtube";
-          rev = "7a944bc25f0f9e915011e9325caf46b46fcaa1b8";
-          sha256 = "0948rq6i4ibwhmi6m2k23f83yvf56vwgri1sg2060d901zd86cxy";
+          rev = "202c27fc3b54927611e9d9c764465e1b42ef7e41";
+          sha256 = "1wqxcz03fq2z31a1n90dg9ap3451vx1376ijbpfy9sg66pgj8yxv";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7537f732091b96b6c1b96c0174895278eba6776a/recipes/helm-youtube";
@@ -33214,6 +33466,27 @@
         packageRequires = [];
         meta = {
           homepage = "https://melpa.org/#/help+";
+          license = lib.licenses.free;
+        };
+      }) {};
+    helpful = callPackage ({ dash, elisp-refs, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
+    melpaBuild {
+        pname = "helpful";
+        version = "20170612.205";
+        src = fetchFromGitHub {
+          owner = "Wilfred";
+          repo = "helpful";
+          rev = "fdabfe7d88853e052cd5a20614585ed3cc1faeac";
+          sha256 = "0x8d28s6fi8lmdyp8nyqi0dryf06703kddws079qr0l4p5jiibxr";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/889d34b654de13bd413d46071a5ff191cbf3d157/recipes/helpful";
+          sha256 = "17w9j5v1r2c8ka1fpzbr295cgnsbiw8fxlslh4zbjqzaazamchn2";
+          name = "helpful";
+        };
+        packageRequires = [ dash elisp-refs emacs s ];
+        meta = {
+          homepage = "https://melpa.org/#/helpful";
           license = lib.licenses.free;
         };
       }) {};
@@ -33506,12 +33779,12 @@
     hierarchy = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "hierarchy";
-        version = "20170502.746";
+        version = "20170605.842";
         src = fetchFromGitHub {
           owner = "DamienCassou";
           repo = "hierarchy";
-          rev = "18722f28baf24e2040c5ba00e548bd2e73b52bb4";
-          sha256 = "1f07hpg8v1xyxn2nrwz5hq1m9iq162k7b0sgi5jnq55zyii25dvr";
+          rev = "d26f566d386a56e752d8ca1c813932d68b088bde";
+          sha256 = "1dk5hdcjakxi91q29lbnwvbfhr834sxmsr2mrxr5mqhp3wfg3qga";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7aea238a2d14e9f58c0474251984b6c617b6854d/recipes/hierarchy";
@@ -33688,12 +33961,12 @@
     highlight-indent-guides = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "highlight-indent-guides";
-        version = "20170508.1133";
+        version = "20170516.1355";
         src = fetchFromGitHub {
           owner = "DarthFennec";
           repo = "highlight-indent-guides";
-          rev = "9614941bce44e16d0681ad1f3f87ca072582a325";
-          sha256 = "1lw9pmykwswi0rg1y80v7ng29fdhymr4wn6k2p3q3yk78d9hi3m0";
+          rev = "b51744bde1287979f2d948f46501bd6ed0897f69";
+          sha256 = "17xbd1kiww762dibws48gwn682g1bxy5rb7np5alqhiiw1l13wdw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c8acca65a5c134d4405900a43b422c4f4e18b586/recipes/highlight-indent-guides";
@@ -33979,12 +34252,12 @@
     hindent = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "hindent";
-        version = "20160905.243";
+        version = "20170609.126";
         src = fetchFromGitHub {
           owner = "chrisdone";
           repo = "hindent";
-          rev = "a62a7d09912674842063239983995c3cb6e5b411";
-          sha256 = "0cgwshmng2dnwfimrrpd4m4r74rj7v875wmlvpmxiak9idjgm6a9";
+          rev = "b858104fab63257de4b172b085b28e24ecacfed0";
+          sha256 = "1yzmlflzx9gvm0dysgjwi0a5nm7w7diczwqp4zggd4bl8bb45fip";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/dbae71a47446095f768be35e689025aed57f462f/recipes/hindent";
@@ -34228,10 +34501,10 @@
       }) {};
     hl-line-plus = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "hl-line-plus";
-        version = "20170223.745";
+        version = "20170604.1526";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/hl-line+.el";
-          sha256 = "1dhrfbmh98y18xgsp42rx1qqcs296mpqqzzp3nr9rcqv4gvpllgp";
+          sha256 = "09dwllzhw0441fbhkw7nb4isfnll6nbpp0il4yc7wgjvg4s94hw6";
           name = "hl-line+.el";
         };
         recipeFile = fetchurl {
@@ -34330,12 +34603,12 @@
     hledger-mode = callPackage ({ async, emacs, fetchFromGitHub, fetchurl, htmlize, lib, melpaBuild, popup }:
     melpaBuild {
         pname = "hledger-mode";
-        version = "20170416.111";
+        version = "20170606.644";
         src = fetchFromGitHub {
           owner = "narendraj9";
           repo = "hledger-mode";
-          rev = "f4244cbd773a20b887b937a2eafd1933d91a4d4d";
-          sha256 = "1qv3v6x2ld518kg1f9ic3bz5y61jpqqzrlwlisd8jwx7cc8jvzic";
+          rev = "bee9cee09d6909cf35f80582aee5a1de6c90db39";
+          sha256 = "0jzl2qjyl7kbb16barh365kl5qziamgv87nx934s608498dyl4j6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/hledger-mode";
@@ -34727,12 +35000,12 @@
     http = callPackage ({ edit-indirect, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, request }:
     melpaBuild {
         pname = "http";
-        version = "20161127.1449";
+        version = "20170603.1107";
         src = fetchFromGitHub {
           owner = "emacs-pe";
           repo = "http.el";
-          rev = "18057d0967015979ee7e59598b1d3410d5966fcb";
-          sha256 = "1bw9369c3r172p14rb74vqs0243696rqf46z627p1w73afq48zy5";
+          rev = "19317fcc928bb75e0464e39032af1627b7961a0c";
+          sha256 = "14zq54g4ckcrrbpwjcb84krg9bijw88nwnkj8kg9kij5p25knqwh";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c7c63aaf27240706d84e464881d40cfb7cbe9ee3/recipes/http";
@@ -35144,7 +35417,7 @@
       }) {};
     icicles = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "icicles";
-        version = "20170409.1830";
+        version = "20170609.903";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/icicles.el?revision=1087";
           sha256 = "00zsdahszs919zvklxgpm5kqhm2139cdr4acchgp9ppnyljs94jp";
@@ -35351,12 +35624,12 @@
     ido-completing-read-plus = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ido-completing-read-plus";
-        version = "20170313.1603";
+        version = "20170601.559";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
           repo = "ido-ubiquitous";
-          rev = "2bd3a2722d8df0db9dfe25f5763f7dfaf0734624";
-          sha256 = "1zz0k5ddcwkg0wjdzihklgnxq5f6rlsxldhn7h9jzyss5bsgykhj";
+          rev = "595ca2ecb33a300640dc6a7b420a6f51c51a9d40";
+          sha256 = "0wqag8kk4wg036sw2j5jiymadij066nz9blxm805lgzsndqg5gfm";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4a227a6d44f1981e8a3f73b253d2c33eb18ef72f/recipes/ido-completing-read+";
@@ -35666,12 +35939,12 @@
     ido-ubiquitous = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, ido-completing-read-plus, lib, melpaBuild }:
     melpaBuild {
         pname = "ido-ubiquitous";
-        version = "20170313.1603";
+        version = "20170530.1839";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
           repo = "ido-ubiquitous";
-          rev = "2bd3a2722d8df0db9dfe25f5763f7dfaf0734624";
-          sha256 = "1zz0k5ddcwkg0wjdzihklgnxq5f6rlsxldhn7h9jzyss5bsgykhj";
+          rev = "595ca2ecb33a300640dc6a7b420a6f51c51a9d40";
+          sha256 = "0wqag8kk4wg036sw2j5jiymadij066nz9blxm805lgzsndqg5gfm";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4a227a6d44f1981e8a3f73b253d2c33eb18ef72f/recipes/ido-ubiquitous";
@@ -35750,12 +36023,12 @@
     idris-mode = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, prop-menu }:
     melpaBuild {
         pname = "idris-mode";
-        version = "20161102.707";
+        version = "20170611.2243";
         src = fetchFromGitHub {
           owner = "idris-hackers";
           repo = "idris-mode";
-          rev = "b5e057bf6b805f4da7c17cb6ca5e69833935e900";
-          sha256 = "1bwrf529m9xjb9bdypx35ss5v6k5v96hcqah3sij98x9357g7b6n";
+          rev = "8a2711efb7e2e4cc2a9a48cee422dba848c6155c";
+          sha256 = "0akp4mbsm4jmf5c652sbbb7gqf5w31ijfqdcckm28zxk2jwc1gz3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/17a86efca3bdebef7c92ba6ece2de214d283c627/recipes/idris-mode";
@@ -35834,12 +36107,12 @@
     iflipb = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "iflipb";
-        version = "20170205.200";
+        version = "20170527.839";
         src = fetchFromGitHub {
           owner = "jrosdahl";
           repo = "iflipb";
-          rev = "8eb478535aa4847b94ea4ce29d9476a6b652be2b";
-          sha256 = "0plvjg1nkq37mpdbli2fyqhvabzi18mq5kjrgxk9d6s6ki2m26kq";
+          rev = "e19229473be70e55c56a26ccc26c4e11e8be6389";
+          sha256 = "1ybnxl6zgzhxrwsqf54hz235xhz3rmxy7w459salb7rr2s1fqvlz";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fad6fc8bc3c0be0d5789a0d7626ebc3f298b4318/recipes/iflipb";
@@ -36247,12 +36520,12 @@
     importmagic = callPackage ({ emacs, epc, f, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "importmagic";
-        version = "20170504.1725";
+        version = "20170601.1828";
         src = fetchFromGitHub {
           owner = "anachronic";
           repo = "importmagic.el";
-          rev = "135e049d763ceb4cabd0bab068c4c71452459065";
-          sha256 = "1fzd3m0zwgyh3qmkhzcvgsgbnjv8nzy30brsbsa081djj5d2dagq";
+          rev = "41f90782b7d5c58f53ad0187b816faeea408e4cf";
+          sha256 = "1w73734n8qwhvina1y9m60b5jj5yy1csizbldyph4vcgi3x0ff6l";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/importmagic";
@@ -36289,12 +36562,12 @@
     indent-tools = callPackage ({ fetchFromGitLab, fetchurl, hydra, lib, melpaBuild, s, yafolding }:
     melpaBuild {
         pname = "indent-tools";
-        version = "20170322.1001";
+        version = "20170608.647";
         src = fetchFromGitLab {
           owner = "emacs-stuff";
           repo = "indent-tools";
-          rev = "d50c762d9f6f66cd1b4b72f1b5d024284b378aa9";
-          sha256 = "1jk8k13mx5z3v38q9d8m5lz52p14imj89zvy7484mbjqmvxh6wga";
+          rev = "8d2072eef1fdc87e35f7495adfbfa0beb9faf6b7";
+          sha256 = "1hrsmv25q9rpmj8paf3gggw7sp28z1m4gwlx50s64k5mxqa99iy8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/indent-tools";
@@ -36331,12 +36604,12 @@
     indium = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild, seq, websocket }:
     melpaBuild {
         pname = "indium";
-        version = "20170504.117";
+        version = "20170609.923";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
           repo = "Indium";
-          rev = "cf07e83d0f7357355d814ecdbe32aec3a5cc1eaf";
-          sha256 = "1y7cb1pll81nnrq7d27pfm7kzmnxlbms184j8flnipag91h9dgqc";
+          rev = "e9b0104bb36b1ce349bf048979746e0ad738d43d";
+          sha256 = "14a0gpp71045j4hs5s2kmisv3466imzyag7f43r1gsg4b0gp4c8m";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4292058cc6e31cabc0de575134427bce7fcef541/recipes/indium";
@@ -36373,12 +36646,12 @@
     inf-clojure = callPackage ({ clojure-mode, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "inf-clojure";
-        version = "20170509.1254";
+        version = "20170520.914";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
           repo = "inf-clojure";
-          rev = "4e96e936a760c48d55f60b395a5ef65a69dd13cc";
-          sha256 = "11q3j7pq178pv7l71l0vszwcbsn7rcl4x0qgx62vyj7k3mldvr26";
+          rev = "9ba23b0e8369a5dfa17e544288b366008516e6f9";
+          sha256 = "079hsk05isagcnj0fbdaxkaj8zfhrvm60zbz35id4101s4053frh";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5d6112e06d1efcb7cb5652b0bec8d282d7f67bd9/recipes/inf-clojure";
@@ -36436,12 +36709,12 @@
     inf-ruby = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "inf-ruby";
-        version = "20170212.1444";
+        version = "20170530.1824";
         src = fetchFromGitHub {
           owner = "nonsequitur";
           repo = "inf-ruby";
-          rev = "af4f238ef4555521d13c5eb2fb8e818acf59d70a";
-          sha256 = "1668dr6y0nph739x947kjz435qikg77m8ja7h6laf3f9wzcxcg9s";
+          rev = "62c1c72d8e2a8e1ca8430010c19be930f54e6daa";
+          sha256 = "1w9jgrvly07056f72xf4ink0i8q1xv3rnpv5kbifsjfxzz05crbb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/inf-ruby";
@@ -36686,12 +36959,12 @@
     inkpot-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "inkpot-theme";
-        version = "20170413.120";
+        version = "20170602.1000";
         src = fetchFromGitHub {
           owner = "ideasman42";
           repo = "emacs-inkpot-theme";
-          rev = "372ad654293cd0b8cf7db6129674c5a84d54ca53";
-          sha256 = "0642rcjj1z5c86ry97b6kmf7kivhajvz5f9fz9kqfw0f98srzhrs";
+          rev = "d9e97a2b95a7740c8eb72fa795fface8b1500fd0";
+          sha256 = "1c8zl512c5mw126p43l6prdimfn2mi58msb0sw4csf9r1krkv8if";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/dd3e02aaf8865d8038b9c590c8545e7a1b21d620/recipes/inkpot-theme";
@@ -36728,12 +37001,12 @@
     inline-docs = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "inline-docs";
-        version = "20170428.632";
+        version = "20170522.2150";
         src = fetchFromGitHub {
           owner = "stardiviner";
           repo = "inline-docs.el";
-          rev = "6bf47ce245de9603cbb0405084f733e5927d9fb0";
-          sha256 = "10vlm92h97cx18my72jm72911c7j5ipl6ngrv3m6paz3bwklxdz1";
+          rev = "b57f1681be6147f999cdc12abff414a0442e8897";
+          sha256 = "0ji8qgscs4fxp2i29l3v8z9y6i2glga6bysbcsn855pqsn00xkcv";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/inline-docs";
@@ -36895,12 +37168,12 @@
     intero = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, flycheck, haskell-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "intero";
-        version = "20170506.1859";
+        version = "20170611.437";
         src = fetchFromGitHub {
           owner = "commercialhaskell";
           repo = "intero";
-          rev = "2db59100d2eff6bd9e34a0067c36fbab0d0ec72c";
-          sha256 = "0q0h7fikp4v8m55ci3xfmqhzh5z1rpygc4idcpnvlzgc61a7kzgi";
+          rev = "70c9c524b3de8dce739df7fe0fdb5128fc8adf11";
+          sha256 = "1jb28d9mcnn2098lmlq4jfk64jjdfn24pmwl8gax80v4p81b54vm";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1b56ca344ad944e03b669a9974e9b734b5b445bb/recipes/intero";
@@ -37166,12 +37439,12 @@
     irony = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, json ? null, lib, melpaBuild }:
     melpaBuild {
         pname = "irony";
-        version = "20170503.1447";
+        version = "20170523.618";
         src = fetchFromGitHub {
           owner = "Sarcasm";
           repo = "irony-mode";
-          rev = "823854936e8d228ab7350d0f1cf4801ed000f142";
-          sha256 = "125qwy3zpxhckqmlbxd5s2ni7910xpkv8qgdrmcafk7ld2ipjvz9";
+          rev = "db29f5851cb75f30e0bd1840f60a9d7d0e0b6dc1";
+          sha256 = "0rynn8sknyp8f9m4qf1i6c017gl1il7rsgaifm0l77zh1bplha96";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d2b6a8d57b192325dcd30fddc9ff8dd1516ad680/recipes/irony";
@@ -37228,10 +37501,10 @@
       }) {};
     isearch-plus = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "isearch-plus";
-        version = "20170321.1306";
+        version = "20170529.1907";
         src = fetchurl {
           url = "https://www.emacswiki.org/emacs/download/isearch+.el";
-          sha256 = "0zdc45nmswipfi8vrsbfipzd1vg9y0pcggvi5mfpwf7c3qn4sgh2";
+          sha256 = "1lg8gciy9i44y80v9g2h5q8mg6dhi6abx2ssg6jws3nci0y5c0bl";
           name = "isearch+.el";
         };
         recipeFile = fetchurl {
@@ -37372,12 +37645,12 @@
     itasca = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "itasca";
-        version = "20160406.542";
+        version = "20170601.922";
         src = fetchFromGitHub {
           owner = "jkfurtney";
           repo = "itasca-emacs";
-          rev = "bf0b6a66b57c8a0e7d692d306a50b587a2da8284";
-          sha256 = "1174f75p3rkq812gl2rs1x51nqbz4fqxwsbrd7djh1vkd2zii3aw";
+          rev = "3d15dd1b70d6db69b0f4758a3e28b8b506cc84ca";
+          sha256 = "0mfcl7ka7r5mx52xvf13i3799ddkdi9sq2q4p2rkgb96r37ia221";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/itasca";
@@ -37456,12 +37729,12 @@
     ivy = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ivy";
-        version = "20170501.1903";
+        version = "20170609.943";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "swiper";
-          rev = "f565f76dfb3a31becc32c807916c011cde6c4e64";
-          sha256 = "1dl39b4c7jij0gxdri2li6nkm7x73ljhbk0n1zwi6lw4xd7dix6p";
+          rev = "752ba81f0db3be0568072b3d9a5db458bb647a3c";
+          sha256 = "0wzhil3c6g9g7k4dq3l6rsyy9vy3rdnq3igqgw9xzgq6i06a1878";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/06c24112a5e17c423a4d92607356b25eb90a9a7b/recipes/ivy";
@@ -37498,12 +37771,12 @@
     ivy-erlang-complete = callPackage ({ async, counsel, emacs, erlang, fetchFromGitHub, fetchurl, ivy, lib, melpaBuild }:
     melpaBuild {
         pname = "ivy-erlang-complete";
-        version = "20170424.2319";
+        version = "20170605.2046";
         src = fetchFromGitHub {
           owner = "s-kostyaev";
           repo = "ivy-erlang-complete";
-          rev = "906c31b679a4a676fe593a9620fbfc3707afb616";
-          sha256 = "1sxz8cyr9i4nk5vrvf6qag8i7yrgqnxyhkilrqrmdyf6vw1vxgag";
+          rev = "117369f882f81fb9cc88459a4072a2789138c136";
+          sha256 = "0cy02idvhw459a3rlw2aj8hfmxmy7hx9x5d6g3x9nkv1lxkckn9f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ac1b9e350d3f066e4e56202ebb443134d5fc3669/recipes/ivy-erlang-complete";
@@ -37561,12 +37834,12 @@
     ivy-hydra = callPackage ({ emacs, fetchFromGitHub, fetchurl, hydra, ivy, lib, melpaBuild }:
     melpaBuild {
         pname = "ivy-hydra";
-        version = "20170412.30";
+        version = "20170609.938";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "swiper";
-          rev = "f565f76dfb3a31becc32c807916c011cde6c4e64";
-          sha256 = "1dl39b4c7jij0gxdri2li6nkm7x73ljhbk0n1zwi6lw4xd7dix6p";
+          rev = "752ba81f0db3be0568072b3d9a5db458bb647a3c";
+          sha256 = "0wzhil3c6g9g7k4dq3l6rsyy9vy3rdnq3igqgw9xzgq6i06a1878";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/06c24112a5e17c423a4d92607356b25eb90a9a7b/recipes/ivy-hydra";
@@ -37624,12 +37897,12 @@
     ivy-rich = callPackage ({ emacs, fetchFromGitHub, fetchurl, ivy, lib, melpaBuild }:
     melpaBuild {
         pname = "ivy-rich";
-        version = "20170227.1745";
+        version = "20170517.554";
         src = fetchFromGitHub {
           owner = "yevgnen";
           repo = "ivy-rich";
-          rev = "ba15a2fb46a63f0aaf5e5b4dae026c2e1228ec1a";
-          sha256 = "1hkydyrcqv3qn605kjm8lhv2hpjmrjp7qvfxwyjbr878nhbm6jn0";
+          rev = "9c36765a941b88c3aa0f4739ad2cb7207c453575";
+          sha256 = "09m2m6nrgcpzyam50y3snir3dya1mif8c0miv77hkqa2w2ijxiq9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0fc297f4949e8040d1b0b3271c9a70c64887b960/recipes/ivy-rich";
@@ -37645,12 +37918,12 @@
     ivy-rtags = callPackage ({ fetchFromGitHub, fetchurl, ivy, lib, melpaBuild, rtags }:
     melpaBuild {
         pname = "ivy-rtags";
-        version = "20170509.2100";
+        version = "20170522.2154";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "2abdfb2adf24b881cdd04e904ecb341bb51e8cb6";
-          sha256 = "11f9sd8w7qqhfd6mxbihlc6mdki4lqyk4dwbi3v91k9hbxb9hlq2";
+          rev = "d6af2ad09c99f9c58900665e874dcf97a545c0fa";
+          sha256 = "12p22b9q4rkl7jswg12gqc8751sinzgj8h75jjzrggd0vfsg439a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3dea16daf0d72188c8b4043534f0833fe9b04e07/recipes/ivy-rtags";
@@ -38214,8 +38487,8 @@
         src = fetchFromGitHub {
           owner = "jdee-emacs";
           repo = "jdee";
-          rev = "5b0bcf6db09d6f6d4ec68c1f3d748d91f189b5ea";
-          sha256 = "1vq4x1kvwbynb7kb6mq03939dqg3jjj6jkhkl8jjc6lk3rz7fj29";
+          rev = "e572d4889604c0b4e1d9180b8a68f9c0f99b99d2";
+          sha256 = "1vhwza7xak2im2xp7qzs8b6bmnf9yw2di86rav8wh5xapqr8x7mn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a6d2c98f3bf2075e33d95c7befe205df802e798d/recipes/jdee";
@@ -38309,6 +38582,27 @@
         packageRequires = [ polymode ];
         meta = {
           homepage = "https://melpa.org/#/jekyll-modes";
+          license = lib.licenses.free;
+        };
+      }) {};
+    jemdoc-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "jemdoc-mode";
+        version = "20170611.1536";
+        src = fetchFromGitHub {
+          owner = "drdv";
+          repo = "jemdoc-mode";
+          rev = "0b09b0368acf3b90c9b58274ff8c2a1e77d1d5e1";
+          sha256 = "094smy6n30lwgldg958z387dc0nzjvghlai5xpxc5q2i1gjjqh78";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/49a8c0f885df0b91d758b4d7c92bd67368da8a56/recipes/jemdoc-mode";
+          sha256 = "1bl8a9fcilrqjzh92q7nvd16pxjiwmbnj157q2bx36y7bxm60acv";
+          name = "jemdoc-mode";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/jemdoc-mode";
           license = lib.licenses.free;
         };
       }) {};
@@ -38569,8 +38863,8 @@
         src = fetchFromGitHub {
           owner = "Qquanwei";
           repo = "auto-beautify.el";
-          rev = "dd2e5940a07c5bb8e793f25e644def62c3426eed";
-          sha256 = "0wqw9gj59n4bxb3zpr3ddaqzwl2rb8zk7zv5dkfrzzvy2rz10zxd";
+          rev = "180d15af7b5dfaab4ee1954cca2fdc797932f9de";
+          sha256 = "0xwkjq41v32dqc5gq8hcmcvdjg2y38xq6hkw5pja0kyvyk92c82d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/js-auto-beautify";
@@ -38712,12 +39006,12 @@
     js2-mode = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "js2-mode";
-        version = "20170503.1846";
+        version = "20170516.1643";
         src = fetchFromGitHub {
           owner = "mooz";
           repo = "js2-mode";
-          rev = "ca7df5bf9d0a76b77edfb6d6fe11e83965aa2cb3";
-          sha256 = "14s4i150ri7x6360dr6n4gmyzfvwjrb4xck20wmfgyszys2h8ypd";
+          rev = "8a5f492c7ed427a3bdb1125e26a836e582bd2492";
+          sha256 = "1kaaa3gs1wm6834b1wd3nzl58vkbk7pcs53s2d93k12l5wzps8lp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cae2ac3513e371a256be0f1a7468e38e686c2487/recipes/js2-mode";
@@ -38733,12 +39027,12 @@
     js2-refactor = callPackage ({ dash, fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild, multiple-cursors, s, yasnippet }:
     melpaBuild {
         pname = "js2-refactor";
-        version = "20170315.1315";
+        version = "20170525.544";
         src = fetchFromGitHub {
           owner = "magnars";
           repo = "js2-refactor.el";
-          rev = "1f0ffe0a3948d7a610f20544c31de91fb08a8bb5";
-          sha256 = "0rf2lagzw8qnglnmgq73np829j2i7n8hzz3y8d8ragkaz8gipsi1";
+          rev = "6ee315825b6f0424f15a8520733dc145c85ccd83";
+          sha256 = "14ykvbj5f9w5pk8l73k8niwr62slfx956px35zn51563sjs55gnd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8935264dfea9bacc89fef312215624d1ad9fc437/recipes/js2-refactor";
@@ -38832,6 +39126,27 @@
         packageRequires = [ json-reformat json-snatcher ];
         meta = {
           homepage = "https://melpa.org/#/json-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    json-navigator = callPackage ({ emacs, fetchFromGitHub, fetchurl, hierarchy, lib, melpaBuild }:
+    melpaBuild {
+        pname = "json-navigator";
+        version = "20170606.34";
+        src = fetchFromGitHub {
+          owner = "DamienCassou";
+          repo = "json-navigator";
+          rev = "bc5634fc78d2e43ebd3c255350829877f3e4549c";
+          sha256 = "1j2lic9sn00j6pzq5qslv9m2z0rvsxkvz73z8swp7vcrsgz7qvqd";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/62d4d68bd473652b80988a68250e9190b886ad6e/recipes/json-navigator";
+          sha256 = "0yfl31cg0mkgsbpgx00m9h2cxnhsavcf7zlspb0qr4g2zq6ya1wx";
+          name = "json-navigator";
+        };
+        packageRequires = [ emacs hierarchy ];
+        meta = {
+          homepage = "https://melpa.org/#/json-navigator";
           license = lib.licenses.free;
         };
       }) {};
@@ -38983,12 +39298,12 @@
     julia-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "julia-mode";
-        version = "20170426.1806";
+        version = "20170607.537";
         src = fetchFromGitHub {
           owner = "JuliaLang";
           repo = "julia-emacs";
-          rev = "46d2469c408888cfeeec27904116cfc22ceb1461";
-          sha256 = "13w3wpq5qi5fvzs56ckfr118qx7kfllhjsxxfj2l4ijg8x5d56vq";
+          rev = "f591c6d42e493d51f1522fd0449d6a62881adfad";
+          sha256 = "1wjbvwfdish673y5qjr3r8w935dv1cz8j0sv8dmd2i6w5wf5d1qb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8522d197cb1b2c139959e7189765001c5ee7e61a/recipes/julia-mode";
@@ -39275,12 +39590,12 @@
     kaolin-theme = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "kaolin-theme";
-        version = "20170510.545";
+        version = "20170611.1344";
         src = fetchFromGitHub {
           owner = "0rdy";
           repo = "kaolin-theme";
-          rev = "13395f561028cefaf17f5026b2a0067f0c985a76";
-          sha256 = "1hjpdsax55rvna1wh52pn8nc23s4z449d7g1v97cwfrhzz941v9x";
+          rev = "e0c14489867eaafa3ab39bb271e3e466cebb632e";
+          sha256 = "0zk2crzqzrbn1051fdkpxzyr6d2rknh7nznnbqyw3k75agiq3lm9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d2abf9d914cdc210bbd47ea92d0dac76683e21f0/recipes/kaolin-theme";
@@ -39674,12 +39989,12 @@
     kill-or-bury-alive = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "kill-or-bury-alive";
-        version = "20170501.1356";
+        version = "20170518.2358";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "kill-or-bury-alive";
-          rev = "3292602a137a2708463dbe4a7d6f4b4f54f8714f";
-          sha256 = "0jxbnk6r2qrdbvwvvf30ib1irbwfazrpn04qidrljipvvbw4kq4m";
+          rev = "51daf55565034b8cb6aa3ca2aa0a827e31751041";
+          sha256 = "1qbdxjni1brhsw6m4cvd2jjaf3y8v3fkbxxf0pvsb089mkpi7mpq";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/25016ed09b6333bd79b989a8f6b7b03cd92e08b3/recipes/kill-or-bury-alive";
@@ -39783,8 +40098,8 @@
         src = fetchFromGitHub {
           owner = "kivy";
           repo = "kivy";
-          rev = "fa1e0b28340ef6d9e0a7cf4629986afb25d58c0c";
-          sha256 = "0rfh15j1s4hda37gvblyflbb4fs5aqnwfwbd18dp8n552v85483y";
+          rev = "27e3b90eae2a0155b22a435f1b6f65c913519db6";
+          sha256 = "0c6qxnhmhwsb7gqib40fgg2p7krvmxdx75xka8gh3j47zww0pylp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/688e2a114073958c413e56e1d117d48db9d16fb8/recipes/kivy-mode";
@@ -39863,12 +40178,12 @@
     kodi-remote = callPackage ({ elnode, fetchFromGitHub, fetchurl, json ? null, let-alist, lib, melpaBuild, request }:
     melpaBuild {
         pname = "kodi-remote";
-        version = "20170410.958";
+        version = "20170512.950";
         src = fetchFromGitHub {
           owner = "spiderbit";
           repo = "kodi-remote.el";
-          rev = "76603f29cbaf316d72c858afeb3d7ce17e195dba";
-          sha256 = "1j9y678ddpbi6jcnn9yb3bw97kwqgx1k9d172fa324m2iqylrfiq";
+          rev = "fe750b9f71e9970e2f1331aabc31d7b6dc8a41d2";
+          sha256 = "1w05yp3qwrpdb43h4iz4mkn92bsqbx137a83qyz6vgl95rpj7b9j";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/08f06dd824e67250afafdecc25128ba794ca971f/recipes/kodi-remote";
@@ -39968,12 +40283,12 @@
     kotlin-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "kotlin-mode";
-        version = "20170403.826";
+        version = "20170522.1524";
         src = fetchFromGitHub {
           owner = "Emacs-Kotlin-Mode-Maintainers";
           repo = "kotlin-mode";
-          rev = "e5c6d845e689ed0623b864ff863cc99ca558b442";
-          sha256 = "0add2vi13caxgcxgl2yxdjccjmszs0918jm70084ry3iih8ljl37";
+          rev = "1ed0c5589ef2d53242f767f6071dbea90c64e813";
+          sha256 = "0nywyf0znaffkchca5hal1w6h7fis9pybiivz7vzrr85ppl0gzas";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9f2560e913b215821221c96069a1385fe4e19c3e/recipes/kotlin-mode";
@@ -40052,12 +40367,12 @@
     kubernetes = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, magit, melpaBuild }:
     melpaBuild {
         pname = "kubernetes";
-        version = "20170508.337";
+        version = "20170523.1517";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
           repo = "kubernetes-el";
-          rev = "52223c7c09f709fb4897283fbc3bf7561e86f5d2";
-          sha256 = "1h5sryzb945pk46zlalsssc63nwjvnx9qhdz5ssfm1jr96ci3m2y";
+          rev = "560b65baef1c4f2bedffd8e767774b55dfc35594";
+          sha256 = "0n9msgawac0jbid671nfr8c5z1zw89wnfw021igxaqwqrl3438rw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/16850227ea48f6f38102b9cdf80e0758766a24d2/recipes/kubernetes";
@@ -40073,12 +40388,12 @@
     kubernetes-evil = callPackage ({ evil, fetchFromGitHub, fetchurl, kubernetes, lib, melpaBuild }:
     melpaBuild {
         pname = "kubernetes-evil";
-        version = "20170505.251";
+        version = "20170523.1517";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
           repo = "kubernetes-el";
-          rev = "52223c7c09f709fb4897283fbc3bf7561e86f5d2";
-          sha256 = "1h5sryzb945pk46zlalsssc63nwjvnx9qhdz5ssfm1jr96ci3m2y";
+          rev = "560b65baef1c4f2bedffd8e767774b55dfc35594";
+          sha256 = "0n9msgawac0jbid671nfr8c5z1zw89wnfw021igxaqwqrl3438rw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/16850227ea48f6f38102b9cdf80e0758766a24d2/recipes/kubernetes-evil";
@@ -40239,12 +40554,12 @@
     langtool = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "langtool";
-        version = "20160116.1654";
+        version = "20170606.432";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
           repo = "Emacs-langtool";
-          rev = "d014434d5698d927dfdbd0882d974edc3fc6ac66";
-          sha256 = "1rj0j4vxfwss0w6bwh591w5mbyzjg5rkbwyjaphyi6p7wq5w6np1";
+          rev = "d976e4f0cadb2309b798540429558936f8f45889";
+          sha256 = "1qlgd5i8jngsq754jm44gb46p5y6j2cccacg72aklvwajay0adyh";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/503845e79e67c921f1fde31447f3dd4da2b6f993/recipes/langtool";
@@ -40323,12 +40638,12 @@
     latex-math-preview = callPackage ({ fetchFromGitLab, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "latex-math-preview";
-        version = "20160321.2159";
+        version = "20170522.1455";
         src = fetchFromGitLab {
           owner = "latex-math-preview";
           repo = "latex-math-preview";
-          rev = "2c7a526a4e46f7154befc9009b131dfbab22ac03";
-          sha256 = "0cxmvadkiqhvhmvmx3vvwxasw7wll8abhviss7wgizwqf4i2p3v4";
+          rev = "775887a89447dd19541b121161cc02e9799d0d3a";
+          sha256 = "1mp6bpl8992pi40vs6b86q922h4z8879mrjalldv5dyz57ym5fsq";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9e413b7684e9199510b00035825aa861d670e072/recipes/latex-math-preview";
@@ -40553,12 +40868,12 @@
     ledger-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ledger-mode";
-        version = "20170423.1748";
+        version = "20170612.123";
         src = fetchFromGitHub {
           owner = "ledger";
           repo = "ledger-mode";
-          rev = "348ba97b960d045bccbd9cb5a63697704c401315";
-          sha256 = "0qcjdvzis6ws8z0laixakik26djjmcv021dbz00pjrwkcwfs5nwi";
+          rev = "1afc0c9a3b1a25fdf510c13bf7764f6c4867a897";
+          sha256 = "1niww7czhqxn2dpnjbdghplva7l7ymrx77ka3djjln70x0gnvv2v";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1549048b6f57fbe9d1f7fcda74b78a7294327b7b/recipes/ledger-mode";
@@ -40809,8 +41124,8 @@
         src = fetchFromGitHub {
           owner = "rvirding";
           repo = "lfe";
-          rev = "69a2d1d410220a688ad169366d0d20e138e264f6";
-          sha256 = "0ky6dcvqprmaww5503q2y42vz5qls844xvb7yx2sl3czlm47riy0";
+          rev = "e231e8325765cde4ec3faa73d57bb5064a35620b";
+          sha256 = "1k2s7s3wq7pgncrj1hs8vbd393kp8zmxygbci5jq4gvymmsb6qza";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c44bdb00707c9ef90160e0a44f7148b480635132/recipes/lfe-mode";
@@ -41124,12 +41439,12 @@
     lispy = callPackage ({ ace-window, emacs, fetchFromGitHub, fetchurl, hydra, iedit, lib, melpaBuild, swiper, zoutline }:
     melpaBuild {
         pname = "lispy";
-        version = "20170510.925";
+        version = "20170515.855";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "lispy";
-          rev = "aa5b20f69180a09da16c66bb05a18eeaef3c2668";
-          sha256 = "1rdxrwg5b415ag22zdfmf9af86cpnm9ji2vyw30w799dnsaxv0zh";
+          rev = "5306bb969047cb12b0fd4c6804198afb719acdb3";
+          sha256 = "0lgjxaic8vwxhzm2w0prrydlz0fchk3bwvf0i9j96pi6x227b066";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e23c062ff32d7aeae486c01e29c56a74727dcf1d/recipes/lispy";
@@ -41166,12 +41481,12 @@
     lispyville = callPackage ({ cl-lib ? null, emacs, evil, fetchFromGitHub, fetchurl, lib, lispy, melpaBuild }:
     melpaBuild {
         pname = "lispyville";
-        version = "20170205.1833";
+        version = "20170515.807";
         src = fetchFromGitHub {
           owner = "noctuid";
           repo = "lispyville";
-          rev = "3ba91c5908484188971e952d98256139123c4cbe";
-          sha256 = "15zfpa2bd80537vcmlp4i39rpxvn6396wynh7sa9yiwrnq246sj6";
+          rev = "92e22ed9f70e0ae2c68736fc8d91240af36102e1";
+          sha256 = "0gz9z6dsslrx8fgzgy98y3mcpcs00k10hygrw8rbrdf2q8k2xpcg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b5d96d3603dc328467fcce29d3ac1b0a02833d51/recipes/lispyville";
@@ -41459,12 +41774,12 @@
     live-py-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "live-py-mode";
-        version = "20170429.2207";
+        version = "20170528.2030";
         src = fetchFromGitHub {
           owner = "donkirkby";
           repo = "live-py-plugin";
-          rev = "4be2360a693b41da84a3f38dce52fdcd183442e4";
-          sha256 = "0r8cmk6lybnp8ggfhq5wabs0jdgvvxmbl370r3sfx8njz5c2hv3v";
+          rev = "96f22fe5892775b8a9a081898e1a4f00fbb8a674";
+          sha256 = "005g84acwjns587lawgms63b9840xswpqj0ccgdaqj6g9p0ynmqa";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c7615237e80b46b5c50cb51a3ed5b07d92566fb7/recipes/live-py-mode";
@@ -41546,8 +41861,8 @@
         version = "20150910.644";
         src = fetchgit {
           url = "http://llvm.org/git/llvm";
-          rev = "3ba25d2222701517a0e00ba189a1d47b58fb7359";
-          sha256 = "1y7v50w3i07jzizj5vrbqiafz2355bxw6hai3v7vam15ii3ir6fw";
+          rev = "f6d6d2b0f7ca39f7b64137c4c90241af7099ebe8";
+          sha256 = "1kjyf2gj3kj9blyabri3z808krs1a7wq0ffxsz8378pl8dl8vcwc";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/05b7a689463c1dd4d3d00b992b9863d10e93112d/recipes/llvm-mode";
@@ -41563,12 +41878,12 @@
     load-relative = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "load-relative";
-        version = "20160716.438";
+        version = "20170526.310";
         src = fetchFromGitHub {
           owner = "rocky";
           repo = "emacs-load-relative";
-          rev = "8280df5ce6db836559a5c2442b97a2f02b6f7a05";
-          sha256 = "0jzq3vpdq5cw5nh2l2pvj0y3lnvjff2wyy6ip2z9n6xcjjdnzki9";
+          rev = "738896e3da491b35399178ed2c6bc92cc728d119";
+          sha256 = "1rpy5mfncncl6gqgg53d3g25g1700g4b9bivd4c0cfcv5dbxhp73";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f052f201f7c308325c27cc2423e85cf6b9b67b4e/recipes/load-relative";
@@ -41751,12 +42066,12 @@
     logstash-conf = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "logstash-conf";
-        version = "20150308.518";
+        version = "20170524.1229";
         src = fetchFromGitHub {
           owner = "Wilfred";
           repo = "logstash-conf.el";
-          rev = "60a06ad1ceb6699cef849e9f2e8255f7816ca5de";
-          sha256 = "05px3zc3is7k2jmh7mal0al5zx5cqvn1bzmhgqq02pp6lwsx5xqa";
+          rev = "4e127f9aec190786613445aa88efa307ff7c6748";
+          sha256 = "119yb1wk1n5ycfzgpffcwy7yx8ar8k1gza0gvbq3r61ha5a9qijs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/logstash-conf";
@@ -41772,12 +42087,12 @@
     logview = callPackage ({ datetime, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "logview";
-        version = "20170414.1223";
+        version = "20170518.428";
         src = fetchFromGitHub {
           owner = "doublep";
           repo = "logview";
-          rev = "aa996ca1df79701e59a6ab0b324adc8b11531563";
-          sha256 = "0mjb2806hkvy8xqkwabfwp29q4gnc719zdc0gjq74xblbrx5f90x";
+          rev = "c85f0527664538ac9d59bbac9bea40c207c8b9d5";
+          sha256 = "1gnia7vkhdh116b7hyxnrnkjnqliqsy5zskn43wjhfw6swf0ipxn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1df3c11ed7738f32e6ae457647e62847701c8b19/recipes/logview";
@@ -41961,12 +42276,12 @@
     lsp-java = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, lsp-mode, melpaBuild }:
     melpaBuild {
         pname = "lsp-java";
-        version = "20170506.213";
+        version = "20170522.633";
         src = fetchFromGitHub {
           owner = "emacs-lsp";
           repo = "lsp-java";
-          rev = "fc30a0606e48049f14d750e3478d1765921424f7";
-          sha256 = "09vbj8v77samb4r4dl6ib566z4s1angrh2kgymcc5pi23cxhchkm";
+          rev = "5c58fc74872e318b2894f11331bec8f699f34c77";
+          sha256 = "0b6n1hlhzqqnih26f412ag77dz5bc550ma9ijcbs0n3vbd5z45hs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1a7b69312e688211089a23b75910c05efb507e35/recipes/lsp-java";
@@ -41982,12 +42297,12 @@
     lsp-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild }:
     melpaBuild {
         pname = "lsp-mode";
-        version = "20170510.726";
+        version = "20170601.1101";
         src = fetchFromGitHub {
           owner = "emacs-lsp";
           repo = "lsp-mode";
-          rev = "228980c3fe73c111ce6035a3d5e210da450cc052";
-          sha256 = "0gwxvglfgp5fblwg14wwrj74wblsapv8plqvsdfca7myzkvrp7yk";
+          rev = "6fe3246e00995ca7ebe3b3c36ea58a69de521193";
+          sha256 = "1ib4ld45wfwq5c48w56k8ca5qggjmxgpn2q0vvi556awk47anhqr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1a7b69312e688211089a23b75910c05efb507e35/recipes/lsp-mode";
@@ -42028,8 +42343,8 @@
         src = fetchFromGitHub {
           owner = "emacs-lsp";
           repo = "lsp-rust";
-          rev = "ec2a89f901726fee61a5587b09c237615ee8b25a";
-          sha256 = "16ihil3gsvlwbg9hjjl9sp6y7d7zm4k9zhrb61z5biwfxh49a6in";
+          rev = "bd9b1f5d9195067decc496e61ad383d615b7f054";
+          sha256 = "1nai41wv3wfxx2lslkpm0qas73j6hachiqwbvhvvcfz34h9nnc5l";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1a7b69312e688211089a23b75910c05efb507e35/recipes/lsp-rust";
@@ -42316,12 +42631,12 @@
     magic-latex-buffer = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "magic-latex-buffer";
-        version = "20161231.2300";
+        version = "20170530.1705";
         src = fetchFromGitHub {
           owner = "zk-phi";
           repo = "magic-latex-buffer";
-          rev = "49a9ac6aff0a45aa6630dc0044533b7b3d3be7ad";
-          sha256 = "1r9zq16n546xd9i27kiifdl7mwld8jk88rll2h0lbd77ir6wdlfm";
+          rev = "c03277d5619d9adcd871f3e6480a1a27985810cb";
+          sha256 = "065xfj6asw7px4xmh5isbfs0y6m6818lrds1ca45rhkyfw98d2sb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/07e240ebe71d389d314c4a27bbcfe1f88b215c3b/recipes/magic-latex-buffer";
@@ -42337,12 +42652,12 @@
     magit = callPackage ({ async, dash, emacs, fetchFromGitHub, fetchurl, git-commit, lib, magit-popup, melpaBuild, with-editor }:
     melpaBuild {
         pname = "magit";
-        version = "20170508.936";
+        version = "20170609.2322";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "magit";
-          rev = "d783e7b2427ed0c2d25895bcecc7190b9e953b97";
-          sha256 = "04hbgbrfdv9jn86p0g9rw6yzfbgfbqxhiq7y9ncc4dm4vfmrli66";
+          rev = "622c994183294b02893ff286210bffd5255296df";
+          sha256 = "1cyzf8xh6ibq9vypcdg4akqsfr1i202y14mdlr7hh2bkxymcq32i";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/68bb049b7c4424345f5c1aea82e950a5e47e9e47/recipes/magit";
@@ -42533,12 +42848,12 @@
     magit-popup = callPackage ({ async, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "magit-popup";
-        version = "20170508.936";
+        version = "20170609.2310";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "magit";
-          rev = "d783e7b2427ed0c2d25895bcecc7190b9e953b97";
-          sha256 = "04hbgbrfdv9jn86p0g9rw6yzfbgfbqxhiq7y9ncc4dm4vfmrli66";
+          rev = "622c994183294b02893ff286210bffd5255296df";
+          sha256 = "1cyzf8xh6ibq9vypcdg4akqsfr1i202y14mdlr7hh2bkxymcq32i";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cec5af50ae7634cc566adfbfdf0f95c3e2951c0c/recipes/magit-popup";
@@ -42635,22 +42950,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    magithub = callPackage ({ emacs, fetchFromGitHub, fetchurl, git-commit, lib, magit, melpaBuild, s, with-editor }:
+    magithub = callPackage ({ emacs, fetchFromGitHub, fetchurl, ghub-plus, lib, magit, melpaBuild, s }:
     melpaBuild {
         pname = "magithub";
-        version = "20170214.1710";
+        version = "20170516.612";
         src = fetchFromGitHub {
           owner = "vermiculus";
           repo = "magithub";
-          rev = "0b5207f3097dee40feefea916cdf211734c9fe32";
-          sha256 = "143iwmga1ypa6v9086pcfr3n5jvaf1dl9czlld5y7npm4r0pxnbr";
+          rev = "7fd7343c3c87df56c7c7dd6c41a80b14291b1ac4";
+          sha256 = "0a0q94lvk0rzj4r7hchypp197rj561d2a28jfzrfvvhq6x9vb4im";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/magithub";
           sha256 = "11par5rncsa866gazdw98d4902rvyjnnwbiwpndlyh06ak0lryab";
           name = "magithub";
         };
-        packageRequires = [ emacs git-commit magit s with-editor ];
+        packageRequires = [ emacs ghub-plus magit s ];
         meta = {
           homepage = "https://melpa.org/#/magithub";
           license = lib.licenses.free;
@@ -42848,12 +43163,12 @@
     malinka = callPackage ({ cl-lib ? null, dash, f, fetchFromGitHub, fetchurl, lib, melpaBuild, projectile, rtags, s }:
     melpaBuild {
         pname = "malinka";
-        version = "20170421.906";
+        version = "20170523.1007";
         src = fetchFromGitHub {
           owner = "LefterisJP";
           repo = "malinka";
-          rev = "5207995089020ff0e8ea2f1fe4628c61de7eb7d5";
-          sha256 = "1ikhy7yyl65j7aw1yyhfi8bz2p4p8s8f2cmzsa6ld0gmvjw6cl5s";
+          rev = "9a546487f9de5dd7277de34756499560579c2568";
+          sha256 = "06ikk9yapq5j401fql29vl3w06xwci2437narf0pjhnnzvnidiw0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/malinka";
@@ -42995,12 +43310,12 @@
     mandoku = callPackage ({ fetchFromGitHub, fetchurl, git, github-clone, lib, magit, melpaBuild, org }:
     melpaBuild {
         pname = "mandoku";
-        version = "20170508.27";
+        version = "20170514.1827";
         src = fetchFromGitHub {
           owner = "mandoku";
           repo = "mandoku";
-          rev = "0e733fdaea77150539455656c2e6af08d19611b0";
-          sha256 = "0sfyxdb3pnsdygk832w7mpxps1gwqaa0fqk2qrzqgl61yjlfvnd6";
+          rev = "1bdcbcb42248d67029b0288c8572372fc1cafb29";
+          sha256 = "1g4vgybkqn8bf95dl0gxd68lv4gw69bxms75s6k85i665fa2njal";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1aac4ae2c908de2c44624fb22a3f5ccf0b7a4912/recipes/mandoku";
@@ -43010,6 +43325,35 @@
         packageRequires = [ git github-clone magit org ];
         meta = {
           homepage = "https://melpa.org/#/mandoku";
+          license = lib.licenses.free;
+        };
+      }) {};
+    mandoku-tls = callPackage ({ emacs, fetchFromGitHub, fetchurl, github-clone, helm, helm-charinfo, hydra, lib, mandoku, melpaBuild, org }:
+    melpaBuild {
+        pname = "mandoku-tls";
+        version = "20170611.6";
+        src = fetchFromGitHub {
+          owner = "mandoku";
+          repo = "mandoku-tls";
+          rev = "e21205ca9c1c053801190f291d6583ce057e8a65";
+          sha256 = "0yd33hflm1da61mc54y7yaaxb6y8gzv00n4ghcqn6rp4vlmi6534";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/6667774bba495c45703ef75261f1f14d89684e3a/recipes/mandoku-tls";
+          sha256 = "0zny1l548rvjsbbzj47wysz6gk1sqxvpj215r3w84vw5dyrn78bz";
+          name = "mandoku-tls";
+        };
+        packageRequires = [
+          emacs
+          github-clone
+          helm
+          helm-charinfo
+          hydra
+          mandoku
+          org
+        ];
+        meta = {
+          homepage = "https://melpa.org/#/mandoku-tls";
           license = lib.licenses.free;
         };
       }) {};
@@ -43121,12 +43465,12 @@
     markdown-edit-indirect = callPackage ({ edit-indirect, emacs, fetchFromGitHub, fetchurl, lib, markdown-mode, melpaBuild }:
     melpaBuild {
         pname = "markdown-edit-indirect";
-        version = "20170210.1504";
+        version = "20170607.1244";
         src = fetchFromGitHub {
           owner = "emacs-pe";
           repo = "markdown-edit-indirect.el";
-          rev = "980d8bf3a123a72aef18f608e99be3472be100c3";
-          sha256 = "1idsh6gsm7kaz7i8kv3s326qxnd2j3nmwn8ykbnfwracm6him3qf";
+          rev = "a789320354eab2b2275a308c38b1390e6d2cc41b";
+          sha256 = "067rp6h2wax242zmykz5iv2v30cj327dh9vz6c69im02lsn65ib3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fa4da9d5c63da3bd777101098168696f5c4d3fbc/recipes/markdown-edit-indirect";
@@ -43142,12 +43486,12 @@
     markdown-mode = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "markdown-mode";
-        version = "20170510.1137";
+        version = "20170611.1532";
         src = fetchFromGitHub {
           owner = "jrblevin";
           repo = "markdown-mode";
-          rev = "c9cb29b2e0caa516bf0fc33e0ec6682d4c837445";
-          sha256 = "0bnpsbldpc7c0g5xlj9jrz5lziab54vwqyg3pkfsjilsxg24wwds";
+          rev = "0fa1d523fe95a15a8cebaaba7d4af3002ddbeef5";
+          sha256 = "0y6j5gdlxw9kp961sgdpnkprxdmnndcjd6s3v9jbz8py2k3pqpxx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/74610ec93d4478e835f8b3b446279efc0c71d644/recipes/markdown-mode";
@@ -43380,12 +43724,12 @@
     mastodon = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "mastodon";
-        version = "20170505.1201";
+        version = "20170518.1031";
         src = fetchFromGitHub {
           owner = "jdenen";
           repo = "mastodon.el";
-          rev = "4d0bd43c0ede0159c0f0130a5565ea5a6511997a";
-          sha256 = "0l0n9l7j4inwyd4z8yvf9bi3cmq6ba5dm90lwzqx8hykwdh8ghi7";
+          rev = "a9e595142eee69fe84f0ab06f7fde76cef27cdac";
+          sha256 = "1wgx8i6ww9w99f0f62p7v626bb6pvdg04hnhqyjgsmb99wzwlpk7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/809d963b69b154325faaf61e54ca87b94c1c9a90/recipes/mastodon";
@@ -43713,12 +44057,12 @@
     meghanada = callPackage ({ company, emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, yasnippet }:
     melpaBuild {
         pname = "meghanada";
-        version = "20170426.1921";
+        version = "20170610.1806";
         src = fetchFromGitHub {
           owner = "mopemope";
           repo = "meghanada-emacs";
-          rev = "54be7c38ceeb7de4bd926a577f9920e174534b37";
-          sha256 = "0apqxpkngyygfdj1wnqs5fl87bfbb4m5vis9cv8q3fcq92yhjqa1";
+          rev = "f8ebc163a289532ce99134716008440a515e65ea";
+          sha256 = "00z9w8nzf1adh6kic485w332dj6m53qdmb99w4aqz70ygq6i2s89";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4c75c69b2f00be9a93144f632738272c1e375785/recipes/meghanada";
@@ -43997,27 +44341,6 @@
         packageRequires = [];
         meta = {
           homepage = "https://melpa.org/#/meta-presenter";
-          license = lib.licenses.free;
-        };
-      }) {};
-    metafmt = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
-    melpaBuild {
-        pname = "metafmt";
-        version = "20160221.855";
-        src = fetchFromGitHub {
-          owner = "lvillani";
-          repo = "metafmt";
-          rev = "b624ba1ac46cdbeddb0cfe920dd44dcab3fdb529";
-          sha256 = "1r4v06pyi7y7gp3w0p3xfz8hf807p7i4frgws54naagzihww06y6";
-        };
-        recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/7a53f740fb7a58cd6339b301d0de8c543b61f6a5/recipes/metafmt";
-          sha256 = "1ca102al7r3k2g92b4jkqv53crnmxy3z7cz31w1rprf41s69mn75";
-          name = "metafmt";
-        };
-        packageRequires = [];
-        meta = {
-          homepage = "https://melpa.org/#/metafmt";
           license = lib.licenses.free;
         };
       }) {};
@@ -44464,12 +44787,12 @@
     minizinc-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "minizinc-mode";
-        version = "20151214.558";
+        version = "20170605.2342";
         src = fetchFromGitHub {
           owner = "m00nlight";
           repo = "minizinc-mode";
-          rev = "98064f098e6871382614fcf3c99520f7a526af0a";
-          sha256 = "0808cl5ixvmhd8pa6fc8rn7wbxzvqjgz43mz1pambj89vbkzmw1c";
+          rev = "c33a8e23817468c2a64dcfede6dea41485fb43df";
+          sha256 = "1892s4cxzxdrwj2mjav1lqbisx20zsjgnw41m6a61ds7hg035c3w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fc86b4ba54fca6f1ebf1ae3557fe564e05c1e382/recipes/minizinc-mode";
@@ -44667,12 +44990,12 @@
     mmt = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "mmt";
-        version = "20170501.1359";
+        version = "20170519.4";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "mmt";
-          rev = "d62725f173b886e4ef80844ec97192157e8529d2";
-          sha256 = "041a9jnk0k6ai8gv0vvhxpjqwzw199xhq8mgwa4bafp0afpa8xzg";
+          rev = "1d89502ea4b0f6a7da327a95f104f5c11e662493";
+          sha256 = "1pqarm9gpzc5qyiqr2713q1xn1p20kl5shrmm77m150z4qfhxzhx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d1137bb53ecd92b1a8537abcd2635602c5ab3277/recipes/mmt";
@@ -44751,12 +45074,12 @@
     mocha = callPackage ({ f, fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "mocha";
-        version = "20170320.1128";
+        version = "20170513.1501";
         src = fetchFromGitHub {
           owner = "scottaj";
           repo = "mocha.el";
-          rev = "55f1e6afd100891ffd7008f5c5efbc5a9ab1c22d";
-          sha256 = "1jqygkn02vawynfnymvnjnglj7gscfinwyk7vbkbh2dp932wsl02";
+          rev = "dbda778badb8f33c9ed816b927710ef6d0123cf5";
+          sha256 = "1jvczadgkq2b8gxjg2pllg3qjr1ymnc9kjjgvyi7v91vb7h51yii";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/39c26134ba95f277a4e9400e506433d96a695aa4/recipes/mocha";
@@ -44814,12 +45137,12 @@
     modalka = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "modalka";
-        version = "20170501.1417";
+        version = "20170519.32";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "modalka";
-          rev = "1a26f1f032f725481dfab6298a1570f408eb9307";
-          sha256 = "12c1lxxhx4darcd2dl3halgr4k27zqwkrh5i8na3spay2qfxl3bx";
+          rev = "f2b2e206105332620b97c1f3bfd6cb03469db98f";
+          sha256 = "09wg7hbigk3084nvjw0ikfs9hgdp1ip0spmrsx70iq18xgv5fm37";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fa0a02da851a603b81e183f461da55bf4c71f0e9/recipes/modalka";
@@ -45083,12 +45406,12 @@
     monokai-alt-theme = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "monokai-alt-theme";
-        version = "20170325.1430";
+        version = "20170529.1607";
         src = fetchFromGitHub {
           owner = "dawidof";
           repo = "emacs-monokai-theme";
-          rev = "584aaf88b83a40bbbfeb6a7c89c5feecebf5a52b";
-          sha256 = "1709f2gf8gdz5ppb0k3gxcg4z0r7kgcm2hpymji9gnag87nnx1m6";
+          rev = "09370802ddf6010a9a83b6c38cfc055e31433a73";
+          sha256 = "1dn8z2lj8kvgs0vxiiqm0wz73sgqykkbi32d6f7qa6i4ishyw341";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6ff05515c2f3bd80cb8d7de9afc8fd983e62ad91/recipes/monokai-alt-theme";
@@ -45125,12 +45448,12 @@
     monroe = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "monroe";
-        version = "20170507.653";
+        version = "20170522.632";
         src = fetchFromGitHub {
           owner = "sanel";
           repo = "monroe";
-          rev = "9f5e0a226a40f0e9775ab351d33dfe9b841f7a25";
-          sha256 = "145m0lh9jypg26qdnpqj6480gk2g5g1qjzj7gz6fpgdj6940sip5";
+          rev = "1705eca01924210504d4270af7dab57278194875";
+          sha256 = "19yca80zghb9zmyqdq155743plzzjghkfbi9zb5z8x2fvppixvwn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/590e5e784c5a1c12a241d90c9a0794d2737a61ef/recipes/monroe";
@@ -45331,12 +45654,12 @@
     move-dup = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "move-dup";
-        version = "20161026.742";
+        version = "20170513.1911";
         src = fetchFromGitHub {
           owner = "wyuenho";
           repo = "move-dup";
-          rev = "612f5b3faa5bc36f7403b6fac7a1a524ae146f37";
-          sha256 = "0xiwlqhhx9aqj4059srp04zw1nksf8crp1z1wcfn4516f8mxs66p";
+          rev = "dae61de7aa5e2bf56a7bab1fa36fa3a39520a3c0";
+          sha256 = "1mrrxx2slxi1qgf483nnxv3y8scfsc844sfnzn4b7hjpfpali0r8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3ea1f7f015a366192492981ff75672fc363c6c18/recipes/move-dup";
@@ -45377,8 +45700,8 @@
         src = fetchFromGitHub {
           owner = "retroj";
           repo = "mowedline";
-          rev = "67ca629b4bc3063ea19a7fccc693432a4eb10021";
-          sha256 = "0i06ms5m7qhv2m1mmgzqh73j9wz3nxygz65p6vsnicxas09w70rd";
+          rev = "832e81b7f90f6c2e753f89737c0b57a260544424";
+          sha256 = "1ll0ywrzpc5ignddgri8xakf93q1rg8zf7h23hfv8jiiwv3240w5";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/86f7df6b8df3398ef476c0ed31722b03f16b2fec/recipes/mowedline";
@@ -45583,12 +45906,12 @@
     msvc = callPackage ({ ac-clang, cedet ? null, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "msvc";
-        version = "20161221.558";
+        version = "20170610.1044";
         src = fetchFromGitHub {
           owner = "yaruopooner";
           repo = "msvc";
-          rev = "71c38323187c98b32250b89088768599bb216ddb";
-          sha256 = "1wwa861a8bnrqv59bx6l5k3qi98wqv6cicvg5gjyx8rdvpcq28dg";
+          rev = "bb9af3aee0e82d6a78a49a9af61ce47fab32d577";
+          sha256 = "1vxgdc19jiamymrazikdikdrhw5vmzanzr326s3rx7sbc2nb7lrk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/69939b85353a23f374cab996ede879ab315a323b/recipes/msvc";
@@ -45770,11 +46093,11 @@
     multi-project = callPackage ({ fetchhg, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "multi-project";
-        version = "20170322.332";
+        version = "20170604.1514";
         src = fetchhg {
           url = "https://bitbucket.com/ellisvelo/multi-project";
-          rev = "c03cafbbfba9";
-          sha256 = "0v0q4v3pnqmm89hix90pfx4hpfpc9iv1r5ldn3zwzwhbs0jvgj3d";
+          rev = "04eeab45d19b";
+          sha256 = "11mn36m40i93wig79kj1jp2i3ggck1qsfw2z9q24a1zxj2gns12i";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/multi-project";
@@ -46791,12 +47114,12 @@
     neon-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "neon-mode";
-        version = "20160811.216";
+        version = "20170529.637";
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "neon-mode";
-          rev = "370212fa9ffcba3ff542a154d17ccf5be1066c4c";
-          sha256 = "13a760jidh00czl05c0pnpbxzr7smrkf5ms9kd3h1cq613ffapby";
+          rev = "69edc4b051604143db8e044606bbcc0904a3829c";
+          sha256 = "09753w4psyzh583264nswk9313d9yh5s4aad3jc9qq5mg6ycb6iy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c6b2a4898bf21413c4d9e6714af129bbb0a23e1a/recipes/neon-mode";
@@ -46812,12 +47135,12 @@
     neotree = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "neotree";
-        version = "20170507.1711";
+        version = "20170522.758";
         src = fetchFromGitHub {
           owner = "jaypei";
           repo = "emacs-neotree";
-          rev = "5e1271655170f4cdc6849258e383c548a4e6e3d0";
-          sha256 = "0hx72fq10772bbyqrj7mhhp02k26cccjxdadiqm1ykainhfmn1x0";
+          rev = "bc98dfb44c106375efa4f26848f3790ee264da97";
+          sha256 = "1m30ldbprz3f62szyi1alzjy337ryczljxy1z5lf6smb03ymns2s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9caf2e12762d334563496d2c75fae6c74cfe5c1c/recipes/neotree";
@@ -46959,12 +47282,12 @@
     nginx-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "nginx-mode";
-        version = "20170213.1326";
+        version = "20170611.2137";
         src = fetchFromGitHub {
           owner = "ajc";
           repo = "nginx-mode";
-          rev = "b58708d15a6659577945c0aa3a63983eebff2e67";
-          sha256 = "0y2wwgvm3495h6hms425gzgi3qx2wn33xq6b7clrvj4amfy29qix";
+          rev = "a2bab83c2eb233d57d76b236e7c141c2ccc97005";
+          sha256 = "17dh5pr3gh6adrbqx588gimxbb2fr7iv2qrxv6r48w2727l344xs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a6da3640b72496e2b32e6ed21aa39df87af9f7f3/recipes/nginx-mode";
@@ -47109,8 +47432,8 @@
         src = fetchFromGitHub {
           owner = "martine";
           repo = "ninja";
-          rev = "586bb6daef38b3657ba917eb3d7f07ba80c72cd7";
-          sha256 = "0qs73q4d83f6xiz1zdpmln8lzgi78h4indha7r783rx07crvvxw6";
+          rev = "d6eb8baf8130ab93140395dceca363774092135d";
+          sha256 = "02dwb8xv4rz08wigr6im8rdfjjlhrpf620a7faq1ka2gn41hv1qv";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/aed2f32a02cb38c49163d90b1b503362e2e4a480/recipes/ninja-mode";
@@ -47151,8 +47474,8 @@
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "1fd59447d56a88add8874f9a8b0885a1acd13606";
-          sha256 = "042pabfg6ssc1fr0zzflsnrbfnj64a5j90nnzrdvpy2jilgb04jw";
+          rev = "186571965dccf57d15b9f37c1cca92a57187b7b3";
+          sha256 = "1iz48szkby5b3f4935c8pnry84f6mh4f2xklv7zdykrczdqy5b0r";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f2b542189cfde5b9b1ebee4625684949b6704ded/recipes/nix-mode";
@@ -47204,6 +47527,27 @@
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://melpa.org/#/nixos-options";
+          license = lib.licenses.free;
+        };
+      }) {};
+    nlinum-hl = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, nlinum }:
+    melpaBuild {
+        pname = "nlinum-hl";
+        version = "20170609.440";
+        src = fetchFromGitHub {
+          owner = "hlissner";
+          repo = "emacs-nlinum-hl";
+          rev = "294037f5231375ac63836637651585f8b82b962d";
+          sha256 = "048zm3x62wjp2ym0q8jn4ll0f11nak5i41q6mdcabq3zwg42zbqi";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/b13a886535a5c33fe389a6b616988b7377249625/recipes/nlinum-hl";
+          sha256 = "17lcp1ira7yhch9npg9sf3npwg06yh9zyhg0lnb22xg09lbndj0x";
+          name = "nlinum-hl";
+        };
+        packageRequires = [ cl-lib emacs nlinum ];
+        meta = {
+          homepage = "https://melpa.org/#/nlinum-hl";
           license = lib.licenses.free;
         };
       }) {};
@@ -47273,12 +47617,12 @@
     no-littering = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "no-littering";
-        version = "20170426.404";
+        version = "20170515.1945";
         src = fetchFromGitHub {
           owner = "tarsius";
           repo = "no-littering";
-          rev = "e041942cb0f4f02d00cf30afb956208496562ba4";
-          sha256 = "00d6fz5kg2k6py5mj2h9rzbqa4gkiv02h9ba55psfgbnmak6ip0v";
+          rev = "4bb6640ddc4c9453318133e777f09ca5c429d057";
+          sha256 = "0m0grzppcnk447ysyh03dw6nz6vhdnihgf7s4rlqcy0b4qb7fmxw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cf5d2152c91b7c5c38181b551db3287981657ce3/recipes/no-littering";
@@ -47378,12 +47722,12 @@
     nodejs-repl = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "nodejs-repl";
-        version = "20170110.940";
+        version = "20170607.1303";
         src = fetchFromGitHub {
           owner = "abicky";
           repo = "nodejs-repl.el";
-          rev = "53b7f09a9be6700934321297758e29180e7850d7";
-          sha256 = "1fwz6wpair617p9l2wdx923zpbbklfcdrygsryjx5gpnnm649mmy";
+          rev = "f72a537700b08e14db28e6bcc1d6244bbeaefca4";
+          sha256 = "1wha680gklq974wl2si3q024qhcdkqgicr6x3qrb9fhfkfr1nbjx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/14f22f97416111fcb02e299ff2b20c44fb75f049/recipes/nodejs-repl";
@@ -47459,11 +47803,11 @@
       }) {};
     notmuch = callPackage ({ fetchgit, fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "notmuch";
-        version = "20170420.258";
+        version = "20170530.454";
         src = fetchgit {
           url = "git://git.notmuchmail.org/git/notmuch";
-          rev = "11d47950c18f2d19718e35b7264dabf2ff2fd621";
-          sha256 = "0arfwk0aycp39451z8a5xv5rhdy40avyczqv7v69sla4kxw04rik";
+          rev = "1ec634461ea25d87cc16dbeb1318f8e30a07c9f1";
+          sha256 = "00sqb0vl0990c5fxg0znwdfgq20q0zbx1pnhpr3dmnydqzmh7wwr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b19f21ed7485036e799ccd88edbf7896a379d759/recipes/notmuch";
@@ -47519,12 +47863,12 @@
     noxml-fold = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "noxml-fold";
-        version = "20160707.847";
+        version = "20170520.545";
         src = fetchFromGitHub {
           owner = "paddymcall";
           repo = "noXML-fold";
-          rev = "4cf3628004ad872fb44943aab5274a45e22ea430";
-          sha256 = "0i4fyxkwp2yksz8d4x309q8imab8gz59vcw64k9y1kzylcnxci0i";
+          rev = "41cd645531783982e03cb1af2fc2acd59c88f6cb";
+          sha256 = "1bpakbwcs6qilx0j24xg01yarkyvv8wvcf6j5kxqmls3hq23i47s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/13d2af88b292293cb5ab50819c63acfe936630c8/recipes/noxml-fold";
@@ -47642,6 +47986,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    nubox = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "nubox";
+        version = "20170611.725";
+        src = fetchFromGitHub {
+          owner = "martijnat";
+          repo = "nubox";
+          rev = "2c6c1cae665dfc9cd000aacd84b9843eac0c74cb";
+          sha256 = "13zjrql7arj0fklvajmr7xr7486i9917b9x54mxzmkwnbas4rg04";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/725948568b8a067762b63475bc400f089f478a36/recipes/nubox";
+          sha256 = "0snzfsd765i363ykdhqkn65lqy97c79d20lalszrwcl2snm96n1f";
+          name = "nubox";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://melpa.org/#/nubox";
+          license = lib.licenses.free;
+        };
+      }) {};
     number = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "number";
@@ -47729,12 +48094,12 @@
     nvm = callPackage ({ dash, dash-functional, f, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "nvm";
-        version = "20151113.55";
+        version = "20170513.1501";
         src = fetchFromGitHub {
           owner = "rejeep";
           repo = "nvm.el";
-          rev = "d6c7ad048f1d2854ec3c043d80528857aa1090a8";
-          sha256 = "0prag0ks511ifa5mdpqmizp5n8190dxp4vdr81ld9w9xv7migpd7";
+          rev = "61590e7fdeb19b1d866d26e48aef1af4767e5709";
+          sha256 = "04z8zkgp0km575ijijpvmrqs0aa2f0878c5n4rl91hs1grq93mjf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/nvm";
@@ -47890,6 +48255,27 @@
         packageRequires = [ axiom-environment emacs ];
         meta = {
           homepage = "https://melpa.org/#/ob-axiom";
+          license = lib.licenses.free;
+        };
+      }) {};
+    ob-blockdiag = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "ob-blockdiag";
+        version = "20170524.1605";
+        src = fetchFromGitHub {
+          owner = "corpix";
+          repo = "ob-blockdiag.el";
+          rev = "715e7d41124a98d3f1e38e430e3a7f31b52704e4";
+          sha256 = "0mqi9hm00apq43mmabai05x96q4x0l29n9gvdhphzjrhvjabmm6l";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/261b77a3fd07644d1c250b16857de70cc1bbf478/recipes/ob-blockdiag";
+          sha256 = "1lmawbgrlp6qd7p664jcl98y1xd2yqw9np6j52bh9i6s3cz6628g";
+          name = "ob-blockdiag";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://melpa.org/#/ob-blockdiag";
           license = lib.licenses.free;
         };
       }) {};
@@ -48439,6 +48825,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    ob-uart = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "ob-uart";
+        version = "20170521.158";
+        src = fetchFromGitHub {
+          owner = "andrmuel";
+          repo = "ob-uart";
+          rev = "90daeac90a9e75c20cdcf71234c67b812110c50e";
+          sha256 = "1syxxq411izmyfrhlywasax7n5c3yjy487mvfdjzjg8csmmk0m9v";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/5334f1a48b8ea6b7a660db27910769093c76113d/recipes/ob-uart";
+          sha256 = "1dkbyk8da0zw784dgwi8njnz304s54341dyfzvlb0lhcn41dmkz7";
+          name = "ob-uart";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://melpa.org/#/ob-uart";
+          license = lib.licenses.free;
+        };
+      }) {};
     oberon = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "oberon";
@@ -48925,16 +49332,16 @@
     omnisharp = callPackage ({ auto-complete, cl-lib ? null, csharp-mode, dash, emacs, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, popup, s, shut-up }:
     melpaBuild {
         pname = "omnisharp";
-        version = "20170509.104";
+        version = "20170601.1329";
         src = fetchFromGitHub {
           owner = "OmniSharp";
           repo = "omnisharp-emacs";
-          rev = "59aa5ac1957b4875e13f52885255293608a960f4";
-          sha256 = "1jjhksrp3ljl4pqkclyvdwbj0dzn1alnxdz42f4xmlx4kn93w8bs";
+          rev = "7ca20bb808dd51adbd83e0c18885c4300548d032";
+          sha256 = "0p4adjpa3l6aaz7kd3474aagzfzrnra7mijw4l0himba9ldrh590";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/68bdb7e0100e120b95e9416398127d83530a221d/recipes/omnisharp";
-          sha256 = "0dwya22y92k7x2s223az1g8hmrpfmk1sgwbr9z47raaa8kd52iad";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/e327c483be04de32638b420c5b4e043d12a2cd01/recipes/omnisharp";
+          sha256 = "0gh0wwdpdx2cjf95pcagj52inf7mrmiq7x8p0x5c7lvl4pfzhh87";
           name = "omnisharp";
         };
         packageRequires = [
@@ -49351,12 +49758,12 @@
     org-babel-eval-in-repl = callPackage ({ emacs, ess, eval-in-repl, fetchFromGitHub, fetchurl, lib, matlab-mode, melpaBuild }:
     melpaBuild {
         pname = "org-babel-eval-in-repl";
-        version = "20170510.700";
+        version = "20170511.514";
         src = fetchFromGitHub {
           owner = "diadochos";
           repo = "org-babel-eval-in-repl";
-          rev = "38d02b8e2412381f6498c29511d1981a88b7d7f4";
-          sha256 = "0fwmcignkglx73spk3cv7acap15yrn0c0npr4ikfc9prs6svaah6";
+          rev = "bfa72c582ac1531ad42aba23e2b1267ab68e31f6";
+          sha256 = "1jm56zxa99s163jv02vhfrshmykvld7girq7gmj1x60g3wjzhn5k";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/org-babel-eval-in-repl";
@@ -49432,22 +49839,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    org-brain = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
+    org-brain = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
     melpaBuild {
         pname = "org-brain";
-        version = "20170404.2329";
+        version = "20170521.1409";
         src = fetchFromGitHub {
           owner = "Kungsgeten";
           repo = "org-brain";
-          rev = "9424b8002238a1ffb67e78e25bc997826f37dc14";
-          sha256 = "0vn2s8p21kfnabva7ikal87hl4asgdj6hm7597hfx45w60vakn9a";
+          rev = "de138a717813a8c269c07c0d284dfd71265bbf20";
+          sha256 = "1nr78r0zsn6s626knay4zybk0222ng5yn6wh8ji7gl0bq47kqq75";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/47480fbae06e4110d50bc89db7df05fa80afc7d3/recipes/org-brain";
           sha256 = "0c05c6lbr740nnjp9p34padrbrc3q1x2pgylkyhsxadm4mfsvj0c";
           name = "org-brain";
         };
-        packageRequires = [ dash emacs org ];
+        packageRequires = [ emacs org ];
         meta = {
           homepage = "https://melpa.org/#/org-brain";
           license = lib.licenses.free;
@@ -49477,12 +49884,12 @@
     org-caldav = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
     melpaBuild {
         pname = "org-caldav";
-        version = "20160614.1342";
+        version = "20170610.945";
         src = fetchFromGitHub {
           owner = "dengste";
           repo = "org-caldav";
-          rev = "f8638d459c7294d44ccd7792b4216541c181d891";
-          sha256 = "0vjw8fn6ipi2fg5wkj4jq8cs3m7694xgccy1h1n774w12bby3xhk";
+          rev = "57dce0b4f0f234d9f4a72e5f0b811ee399e6d989";
+          sha256 = "180amsndil1y24675xbdr9l6qad7lxq1pr7nlqgspmw0nccp0al4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/org-caldav";
@@ -49750,12 +50157,12 @@
     org-download = callPackage ({ async, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "org-download";
-        version = "20170213.1151";
+        version = "20170605.23";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "org-download";
-          rev = "137c3d2aa083283a3fc853f9ecbbc03039bf397b";
-          sha256 = "0c4vvpccmc60bavywsd0lijzyzchs6cdmp8y36d70lmp4s66863v";
+          rev = "131d2409b3639798ebac6d77c98eae446ea915dc";
+          sha256 = "1l04vs47pl63daz9n0d2xby43kr2ynbykvdr7hjbyizcg9l9fzp7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/edab283bc9ca736499207518b4c9f5e71e822bd9/recipes/org-download";
@@ -49918,12 +50325,12 @@
     org-evil = callPackage ({ dash, evil, fetchFromGitHub, fetchurl, lib, melpaBuild, monitor, org }:
     melpaBuild {
         pname = "org-evil";
-        version = "20161029.222";
+        version = "20170529.741";
         src = fetchFromGitHub {
           owner = "GuiltyDolphin";
           repo = "org-evil";
-          rev = "5349f4f50d8b16ac4d38ef70a2a7562632e193cc";
-          sha256 = "112rr4cwldwnwhg0qdq6khfl41azxp0c4j5l4il06560s6h7dmjq";
+          rev = "aff7bf3885e318287abf7d542916d21372496bdd";
+          sha256 = "1z6rj7nrjdmkc7skx2si7s462228bpka96p0zzmkg7wa82j7ywv9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/17a4772d409aa5dbda5fb84d86c237fd2653c70b/recipes/org-evil";
@@ -50085,12 +50492,12 @@
     org-jira = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, request }:
     melpaBuild {
         pname = "org-jira";
-        version = "20170416.2152";
+        version = "20170527.2154";
         src = fetchFromGitHub {
           owner = "ahungry";
           repo = "org-jira";
-          rev = "2ec35547088c090ae1ad71bbc943953f619611e6";
-          sha256 = "1zfam31pjm8sg3j038vvd1jf3qi9jq3452vriqmzczbjfg3b7l7y";
+          rev = "4d8bda9b5207175ecd3ae647ebec42b3546efd49";
+          sha256 = "0877klmy48ad0rpy7azd4xbm9d07wrhr3g96sixx35wgp216kvlm";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/730a585e5c9216a2428a134c09abcc20bc7c631d/recipes/org-jira";
@@ -50110,8 +50517,8 @@
         src = fetchFromGitHub {
           owner = "bastibe";
           repo = "org-journal";
-          rev = "4876bbc7cd3129f6285f41b9076c178d30720163";
-          sha256 = "18fxficbm430alxn82866qphiaxdzjcb73ckm7czw2yvgxd706qs";
+          rev = "c020fa3f58cdeff51701322334daa6253a144db6";
+          sha256 = "0pcymhjaybaxpghixa2gnshzqy03hafmzjdas8q087dn7b19cr8h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7fabdb05de9b8ec18a3a566f99688b50443b6b44/recipes/org-journal";
@@ -50172,8 +50579,8 @@
         version = "20140107.519";
         src = fetchgit {
           url = "git://orgmode.org/org-mode.git";
-          rev = "6fee6b6cde5e82e8632408c865681c3aa709013a";
-          sha256 = "0as51c7p1r3a5n62h4a2iwqps9ib3rzrdmd1i3c25d3id7mkaixq";
+          rev = "5e35bc1807e0bd9014cd6aa9374b6899f164fa86";
+          sha256 = "146ygql276bhb0inbn7bri7jnaxr4d8082ca0k1sal3fcd37a9mn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ee69e5e7b1617a29919d5fcece92414212fdf963/recipes/org-mac-iCal";
@@ -50192,8 +50599,8 @@
         version = "20170105.1723";
         src = fetchgit {
           url = "git://orgmode.org/org-mode.git";
-          rev = "6fee6b6cde5e82e8632408c865681c3aa709013a";
-          sha256 = "0as51c7p1r3a5n62h4a2iwqps9ib3rzrdmd1i3c25d3id7mkaixq";
+          rev = "5e35bc1807e0bd9014cd6aa9374b6899f164fa86";
+          sha256 = "146ygql276bhb0inbn7bri7jnaxr4d8082ca0k1sal3fcd37a9mn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b86c666ee9b0620390a250dddd42b17cbec2409f/recipes/org-mac-link";
@@ -50356,12 +50763,12 @@
     org-page = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, git, ht, htmlize, lib, melpaBuild, mustache, org, simple-httpd }:
     melpaBuild {
         pname = "org-page";
-        version = "20170428.424";
+        version = "20170607.442";
         src = fetchFromGitHub {
           owner = "kelvinh";
           repo = "org-page";
-          rev = "ca37f5bd48c1bb2a90ff0dc6ce708fb408903ed2";
-          sha256 = "1v1a51xy1lnp2flg929fkann405l0rsgv3fpg6y3q39m28wxz2xk";
+          rev = "fa4e86621a63033148f8fe295a11b4721ba17462";
+          sha256 = "123b0cf47c5gnj3yakhjr2q7kc8nmhim9c2ngdls6g944ig07l0d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/872f163d4da58760009001472e2240f00d4d2d89/recipes/org-page";
@@ -50386,11 +50793,11 @@
     org-parser = callPackage ({ dash, emacs, fetchhg, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "org-parser";
-        version = "20170317.2238";
+        version = "20170528.1324";
         src = fetchhg {
           url = "https://bitbucket.com/zck/org-parser.el";
-          rev = "a1dd102b9cb5";
-          sha256 = "06qwqfv0lz7l1fy5i2r4dbc8alkzshxcv8r3s4iy2866z2lgl7pi";
+          rev = "c4870192ea24";
+          sha256 = "04s39zfa1gwn6zclgdhz3b9fbgyqlbysh6hsn7iqkwfzkpmc2n9c";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/28d55005cbce276cda21021a8d9368568cb4bcc6/recipes/org-parser";
@@ -50510,12 +50917,12 @@
     org-projectile = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, projectile }:
     melpaBuild {
         pname = "org-projectile";
-        version = "20161205.1508";
+        version = "20170520.2310";
         src = fetchFromGitHub {
           owner = "IvanMalison";
           repo = "org-projectile";
-          rev = "e2b78ca7fbd2e3b873d3ab9bb7196be4d7613f92";
-          sha256 = "03zy2bb1ha22xpx29d8610yrqfyaiaa8vgplpx6bmixaw85mcv58";
+          rev = "0ca3b80a46d8c541d36f161506ac8d8dc36d8e80";
+          sha256 = "0r5h6ibq73b84w82382ld5dbihhvff4pj2bind68i5isam7pxlbh";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/org-projectile";
@@ -50600,12 +51007,12 @@
     org-recent-headings = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
     melpaBuild {
         pname = "org-recent-headings";
-        version = "20170423.1817";
+        version = "20170604.1353";
         src = fetchFromGitHub {
           owner = "alphapapa";
           repo = "org-recent-headings";
-          rev = "0558fa8b6e114321f76ab6315e0a319c01213b78";
-          sha256 = "197nm66g6iljfpsy218kvqi0kan5dyacdsar5xglsz19cy2n2wkf";
+          rev = "9b373ddafe33283ed9a41bddc65f05d6e9bfcda6";
+          sha256 = "0k92z02dyzax35wx7q5s9zasmkba9vzb2y7jf55jn8d7qjdw4lnn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/668b79c179cbdb77c4049e7c620433255f63d808/recipes/org-recent-headings";
@@ -50639,15 +51046,15 @@
           license = lib.licenses.free;
         };
       }) {};
-    org-ref = callPackage ({ dash, emacs, f, fetchFromGitHub, fetchurl, helm, helm-bibtex, hydra, ivy, key-chord, lib, melpaBuild, s }:
+    org-ref = callPackage ({ dash, emacs, f, fetchFromGitHub, fetchurl, helm, helm-bibtex, hydra, ivy, key-chord, lib, melpaBuild, pdf-tools, s }:
     melpaBuild {
         pname = "org-ref";
-        version = "20170509.1755";
+        version = "20170611.1357";
         src = fetchFromGitHub {
           owner = "jkitchin";
           repo = "org-ref";
-          rev = "c730314d51594191e5e761d087d7d5d5c4d7a5a6";
-          sha256 = "0bcagkwzzaawm4lc93dnysjc8ccqnrchywsnixvv6rsc6b7s4q61";
+          rev = "b84634891be4323ccba938dc68b971150ae9a609";
+          sha256 = "1m8g9laf2fij5vm3sqb087323gqncnww35jx8bbn888zjzxnsiy9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/550e4dcef2f74fbd96474561c1cb6c4fd80091fe/recipes/org-ref";
@@ -50663,6 +51070,7 @@
           hydra
           ivy
           key-chord
+          pdf-tools
           s
         ];
         meta = {
@@ -51114,12 +51522,12 @@
     org2blog = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, metaweblog, org, xml-rpc }:
     melpaBuild {
         pname = "org2blog";
-        version = "20160502.1821";
+        version = "20170611.1836";
         src = fetchFromGitHub {
           owner = "punchagan";
           repo = "org2blog";
-          rev = "fc7b2d934f2199368d9fc2a0a97d46f20c4f667b";
-          sha256 = "1bqiq27ln1pl40b9dms05nla4kf72s80g9ilvrgqflxgl36gxws7";
+          rev = "256c0af68004fde8cf35d4824acb938803b10e7c";
+          sha256 = "17ib0rsfdw3krvvz9gmfsqsn9gagqlvwh0ydfyaqpdiq9q2nllbs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/org2blog";
@@ -51297,6 +51705,27 @@
         packageRequires = [ epic org org-mac-link ];
         meta = {
           homepage = "https://melpa.org/#/orglue";
+          license = lib.licenses.free;
+        };
+      }) {};
+    orgnav = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, helm, lib, melpaBuild, s }:
+    melpaBuild {
+        pname = "orgnav";
+        version = "20170608.1013";
+        src = fetchFromGitHub {
+          owner = "facetframer";
+          repo = "orgnav";
+          rev = "9e2cac9c1a67af5f0080e60022e821bf7b70312d";
+          sha256 = "0764dg3dcsdy4i6syv9aqqmr47civn9dl3638g4lsqdikghw7lvv";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/a41436df126d7ef2c0a8b56d90afb942fe47dc59/recipes/orgnav";
+          sha256 = "0z04n5rzv5c0lvn658nrfj6rg3a31n369h5rjgi5bap06qm427ix";
+          name = "orgnav";
+        };
+        packageRequires = [ dash emacs helm s ];
+        meta = {
+          homepage = "https://melpa.org/#/orgnav";
           license = lib.licenses.free;
         };
       }) {};
@@ -51811,8 +52240,8 @@
         src = fetchFromGitHub {
           owner = "jkitchin";
           repo = "scimax";
-          rev = "da84a1cfe3c95757abc7bd3e567866a26f724f76";
-          sha256 = "0bkhx6rnvv70z60lgkf36hcp7pcakh3drd8q277xhzfirg4dixa7";
+          rev = "2080e5fcbce8147ef6931457c678309f7a679c49";
+          sha256 = "0kmga1zm8zyby9yrczybrqm0gj56lk29v2nan4rhzhfnb87v9r28";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/222ccf4480395bda8c582ad5faf8c7902a69370e/recipes/ox-clip";
@@ -51933,12 +52362,12 @@
     ox-jira = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, org }:
     melpaBuild {
         pname = "ox-jira";
-        version = "20170326.47";
+        version = "20170607.1513";
         src = fetchFromGitHub {
           owner = "stig";
           repo = "ox-jira.el";
-          rev = "638a9a44c96f5b21e2e36121465645e586910713";
-          sha256 = "12is86csnix270rnyf9q0l7ds70g128fn9nzgjgjgfylsp5nk9rf";
+          rev = "a5e7c7166f5d4baf4b6487f44865f2636cda4698";
+          sha256 = "14qybj34wvpn91m9hvfmcrsj5d9zzq5pyzjc61gd0zn482bklxz4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e8a77d9c903acd6d7fdcb53f63384144e85589c9/recipes/ox-jira";
@@ -52353,12 +52782,12 @@
     package-lint = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "package-lint";
-        version = "20170417.54";
+        version = "20170608.1006";
         src = fetchFromGitHub {
           owner = "purcell";
           repo = "package-lint";
-          rev = "1cee5135bd9a12e1b28e515a28093a751b4f7dd1";
-          sha256 = "1qvvdr5wx37x5jrw4hkx5vl4jmi3l1bjn97nnvwlsmzi6sgkcwsr";
+          rev = "bef9e37fd8a9cb726e9b8a0e28baddc773a65912";
+          sha256 = "10h6zlyhaw8waxd6g1x2xqprq0y9prl3jgndhgnmlq7zcmh7fjrd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9744d8521b4ac5aeb1f28229c0897af7260c6f78/recipes/package-lint";
@@ -52500,12 +52929,12 @@
     page-break-lines = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "page-break-lines";
-        version = "20161205.2251";
+        version = "20170517.235";
         src = fetchFromGitHub {
           owner = "purcell";
           repo = "page-break-lines";
-          rev = "c133848345ceef91e257aab8804c61f31c31b264";
-          sha256 = "1d0b2pb2s04l7nkcn7yhrbcm927bsinyiayxn59in7p3mqlcmsnb";
+          rev = "82f9100312dcc922fb66ff289faf5d4795d8ca7a";
+          sha256 = "1bwh5g63cg2iw3kmcwj4y2jdw46rxll9rgjn6ymx7hbw15s7m5yp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/page-break-lines";
@@ -52733,8 +53162,8 @@
         src = fetchFromGitHub {
           owner = "Malabarba";
           repo = "paradox";
-          rev = "4554d7651c26de10d350db28e150c685cd171e19";
-          sha256 = "0k2gbgrh1vb810qpdx632gbd8gx0gy4img022a16n620l3g1s0rn";
+          rev = "c508a52aee7f10f5e9b750b4724e264a3e694757";
+          sha256 = "1xbys48368a6vcyjqxn71lg6yf7zvb2k9dlf07dl6hvh0a7qlpqa";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1e6aed365c42987d64d0cd9a8a6178339b1b39e8/recipes/paradox";
@@ -53897,6 +54326,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    pfuture = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "pfuture";
+        version = "20170531.805";
+        src = fetchFromGitHub {
+          owner = "Alexander-Miller";
+          repo = "pfuture";
+          rev = "a6c32c69abdb9b91baf8036b88cc4f477f611bd5";
+          sha256 = "0ly38dzg754n4s2xs09kaisxs14ikm42d9sjhw9p9xirzqm7zd5j";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/5fb70c9f56a58b5c7a2e8b69b191aa2fc7c9bcc8/recipes/pfuture";
+          sha256 = "15fr9wkpv8v1p22wz7hsyihq7f807ck105c2crfs8y7capfvs53s";
+          name = "pfuture";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/pfuture";
+          license = lib.licenses.free;
+        };
+      }) {};
     pg = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "pg";
@@ -54026,12 +54476,12 @@
     phi-grep = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "phi-grep";
-        version = "20170220.103";
+        version = "20170606.107";
         src = fetchFromGitHub {
           owner = "zk-phi";
           repo = "phi-grep";
-          rev = "e0cdb6d6b8502f9cb4db2d5536d8b32a3be9ebc5";
-          sha256 = "12y7jhhqg16sqm063zbz8hjlh1hggjl627qqigqnslxbgsghk97n";
+          rev = "ab9bd8d25e751a9cbfa108b49839293230b6e8b5";
+          sha256 = "0p1i07dgaic0jnwdsnvsnib2913r9w8j98d1p5rx8db2nabjmzc0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/992655fa4bd209abdf1149572e95f853e595125e/recipes/phi-grep";
@@ -54254,6 +54704,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    php-cs-fixer = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "php-cs-fixer";
+        version = "20170506.1133";
+        src = fetchFromGitHub {
+          owner = "OVYA";
+          repo = "php-cs-fixer";
+          rev = "ca2c075a22ad156c336d2aa093fb6394c9f6c112";
+          sha256 = "1axjfsfasg7xyq5ax2bx7rh2mgf8caw5bh858hhp1gk9xvi21qhx";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/a3631c4b81c1784995ae9e74d832e301d79214e2/recipes/php-cs-fixer";
+          sha256 = "1xvz6v1fwngi2rizrx5sf0wrs4cy8rb13467r26k8hb7z8h1rqmf";
+          name = "php-cs-fixer";
+        };
+        packageRequires = [ cl-lib ];
+        meta = {
+          homepage = "https://melpa.org/#/php-cs-fixer";
+          license = lib.licenses.free;
+        };
+      }) {};
     php-eldoc = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "php-eldoc";
@@ -54278,12 +54749,12 @@
     php-mode = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "php-mode";
-        version = "20170428.1853";
+        version = "20170609.1728";
         src = fetchFromGitHub {
           owner = "ejmr";
           repo = "php-mode";
-          rev = "6e57817aa3a3cabe41e069ff8af1521db118ff13";
-          sha256 = "15lf3hvq466bhsnw5hzmpnwsnynqk0wsg5d5vn2n4j9kax4lzhb9";
+          rev = "dc30cb8110f395fffbc42c6271141887a0c0ec60";
+          sha256 = "1zgyy3mnn6sciy0ml2l0crfqy9mlcy1iqck5kracbbz41ygigsqy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7cdbc35fee67b87b87ec72aa00e6dca77aef17c4/recipes/php-mode";
@@ -54307,8 +54778,8 @@
           sha256 = "06ffbw66zw5ssavgbllcb9a0syi5asy6wq8yqxdyw66nj941kjbr";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/f10631b740eea56e7209d7e84f0da8613274ef1d/recipes/php+-mode";
-          sha256 = "1ibcsky6la3l7gawpgx814w1acjf73b68i6wbb4p6saxhwg6adik";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/d542e94471b9f601f1ee6f31e727bc4a31fa8f9e/recipes/php+-mode";
+          sha256 = "1wl15l4m68xng1b87a19fm21qwr230ckjz1iwi3y1xl184zliv8p";
           name = "php-plus--mode";
         };
         packageRequires = [];
@@ -54782,12 +55253,12 @@
     plan9-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "plan9-theme";
-        version = "20170129.553";
+        version = "20170529.2212";
         src = fetchFromGitHub {
           owner = "john2x";
           repo = "plan9-theme.el";
-          rev = "db36861907144674a2526fed3ff733c53489b7f5";
-          sha256 = "1sxx749xwxxab3k98wb4gpvy723kw5lcm7zhvvbjbgxr43lk6d05";
+          rev = "cdc50195f6579e6c3e6e8060142ce25b609f7949";
+          sha256 = "17grr5rvazh448qzrksxrgp0yclp32s2rxs4h5pygky7knb5vf3v";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cdc4c2bafaa09e38edd485a9091db689fbda2fe6/recipes/plan9-theme";
@@ -54870,8 +55341,8 @@
         src = fetchFromGitHub {
           owner = "brocode";
           repo = "play-routes-mode";
-          rev = "ef8230932f7bb96643febbd6872c522932f9571a";
-          sha256 = "1wv4wnkcdlq5qvxr55wgs6dc64m69r0niz0r5h2ch9d5nclmvbkh";
+          rev = "ec861ab171fc5513df082d26b96a2e9d545ad64c";
+          sha256 = "1yn3270d0djsi7jwxw0arrylsyxkwbwawyw2ifpn6iwzcz55cnxh";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/740cef8687232eb0e2186e8df956c2d4f39575cf/recipes/play-routes-mode";
@@ -55053,8 +55524,8 @@
         version = "20170419.303";
         src = fetchgit {
           url = "https://git.savannah.gnu.org/git/gettext.git";
-          rev = "3531b829b30803bab9e0d9ff62747e061145fec5";
-          sha256 = "107pc3hdarwv7x7mb8dgc79ldl59r09mwrrw9vcsxqnd2w1jbmca";
+          rev = "a6f9caf8cc7614665d1be694485dd7bc30399e0f";
+          sha256 = "0gpbixx68bfxvpx3y9fv0v4kgxwacydkwid6gmh1lgjc65ky0fy7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/caaa21f235c4864f6008fb454d0a970a2fd22a86/recipes/po-mode";
@@ -55341,12 +55812,12 @@
     ponylang-mode = callPackage ({ dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ponylang-mode";
-        version = "20161008.1423";
+        version = "20170514.1419";
         src = fetchFromGitHub {
           owner = "SeanTAllen";
           repo = "ponylang-mode";
-          rev = "1f4ce183e11f4908173cea16685020f2acb818ae";
-          sha256 = "1lxzl5ks4lydn8zzvkc0jz6p1zjz7hfm4fs9dlyjxi6fn2bvj5kw";
+          rev = "88833317195f5ee2880e33a907861c6c2d3851da";
+          sha256 = "0kzzf03m1jzkl9fxzivzh3536c0c9l7m9g5h7zycdz7nj5da38c0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7d51adec3c6519d6ffe9b3f7f8a86b4dbc2c9817/recipes/ponylang-mode";
@@ -55590,6 +56061,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    postcss-sorting = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "postcss-sorting";
+        version = "20170531.1858";
+        src = fetchFromGitHub {
+          owner = "P233";
+          repo = "postcss-sorting.el";
+          rev = "1320d74abd8ee7f0a09b5f7920d554650a7047a6";
+          sha256 = "0071al1nwqazv8rhr7qm799rmizbqwgcrb5in3lm0sz88fbs9vnk";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/9fae97430f211786f615f7450936f823e2a04ec4/recipes/postcss-sorting";
+          sha256 = "0730b2wddal15yi4k6wzhv9xv1k40iwrn3mivg9bkxabh3mgrl10";
+          name = "postcss-sorting";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/postcss-sorting";
+          license = lib.licenses.free;
+        };
+      }) {};
     pov-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "pov-mode";
@@ -55814,6 +56306,27 @@
         packageRequires = [];
         meta = {
           homepage = "https://melpa.org/#/preseed-generic-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    prettier-js = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "prettier-js";
+        version = "20170606.612";
+        src = fetchFromGitHub {
+          owner = "prettier";
+          repo = "prettier-emacs";
+          rev = "f8ab2e5fb74beaf9e3023baafc118828526c5bb7";
+          sha256 = "00gjzw855xa6ahghdlq6yygz6b279xbp47s6vj0rjsyghf65xkf6";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/968ac7bb98b385f8542dc150486982c0ded73187/recipes/prettier-js";
+          sha256 = "0mf66sdsdbhf76pwkjkfjsnh26g4j3zb4y1qrbxc9jcvymccb3yq";
+          name = "prettier-js";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://melpa.org/#/prettier-js";
           license = lib.licenses.free;
         };
       }) {};
@@ -56341,12 +56854,12 @@
     projectile-rails = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, inf-ruby, inflections, lib, melpaBuild, projectile, rake }:
     melpaBuild {
         pname = "projectile-rails";
-        version = "20170411.152";
+        version = "20170602.336";
         src = fetchFromGitHub {
           owner = "asok";
           repo = "projectile-rails";
-          rev = "9647dc1368df6a3b6de17314332d024cceb90052";
-          sha256 = "1v8hipd7i63dv9lvq0ff5v9awg017kr0xfjk5hysamb346r1rsrn";
+          rev = "4e864c75bfbee4a5a1a9c76d3d2a77b2da01fa5f";
+          sha256 = "1a0a3hay6ixplk0q6jd2s0hbwxm36zxd5vng3k769cjc8nrsnbix";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b16532bb8d08f7385bca4b83ab4e030d7b453524/recipes/projectile-rails";
@@ -56366,8 +56879,8 @@
         src = fetchFromGitHub {
           owner = "nlamirault";
           repo = "ripgrep.el";
-          rev = "73595f1364f2117db49e1e4a49290bd6d430e345";
-          sha256 = "1a5rdpmvsgsjlc9sywism9pq7jd6n9qbcdsvpbfkq1npwhpifkbj";
+          rev = "5af6a0b2ee8a639cf857724ce4328f1f0955c99e";
+          sha256 = "05jkj7c9ha09gp74j7k4bhcxq8ypxz922ghwv5bjpxg4czn5s0w9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/195f340855b403128645b59c8adce1b45e90cd18/recipes/projectile-ripgrep";
@@ -56404,12 +56917,12 @@
     projectile-speedbar = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, projectile, sr-speedbar }:
     melpaBuild {
         pname = "projectile-speedbar";
-        version = "20170127.810";
+        version = "20170516.1943";
         src = fetchFromGitHub {
           owner = "anshulverma";
           repo = "projectile-speedbar";
-          rev = "1b9b3ae7624ca58a41ca7e0d0eb37556d3105c44";
-          sha256 = "0src453yf63j5dhndrqjx6gh6nfm5c83y2xj2ibk3sj61x9daxj2";
+          rev = "dcab13db72c2084edbebe808e35f1126fe0b3bcd";
+          sha256 = "106a4y5r1adjpbnjn734s7d910r6akhjlyjpd6bnczjhp357wyc7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/eda8cb5a175258404c347ffa30fca002504467a0/recipes/projectile-speedbar";
@@ -56635,12 +57148,12 @@
     protobuf-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "protobuf-mode";
-        version = "20160805.1045";
+        version = "20170526.950";
         src = fetchFromGitHub {
           owner = "google";
           repo = "protobuf";
-          rev = "455b61c6b0f39ac269b26969877dd3c6f3e32270";
-          sha256 = "091xxj46nckd4vxg34bsv1283s8l4fa9jhamz6jvxy7br6ajslna";
+          rev = "96095f3a8577cd61ded2191d267cca70f221a9c9";
+          sha256 = "1ia0krk66l0cl5bklprdk4bbrzv9j8lszvkakcd0fd9ikcdv68a1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b4e7f5f641251e17add561991d3bcf1fde23467b/recipes/protobuf-mode";
@@ -56677,12 +57190,12 @@
     psc-ide = callPackage ({ cl-lib ? null, company, dash, dash-functional, emacs, fetchFromGitHub, fetchurl, flycheck, let-alist, lib, melpaBuild, s, seq }:
     melpaBuild {
         pname = "psc-ide";
-        version = "20170420.2343";
+        version = "20170607.1512";
         src = fetchFromGitHub {
           owner = "epost";
           repo = "psc-ide-emacs";
-          rev = "3a5416c150a69a1420b4e94c7d130e13b42ff58a";
-          sha256 = "1yv4wdjhmh811852y4vzcbkbb0cf1j60ixp89zn2psz4ij8lvmp3";
+          rev = "04de7bd8a14ea71eaed568127428b8a44f325b24";
+          sha256 = "14dbg9cvph8b0shs49g6sfh5xrzpr9nn7c5rzxsnaaijys3z47rn";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8189f4e7d6742d72fb22acf61a9d7eb0bffb2d93/recipes/psc-ide";
@@ -56768,22 +57281,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    psysh = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    psysh = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "psysh";
-        version = "20170205.1142";
+        version = "20170610.2104";
         src = fetchFromGitHub {
           owner = "zonuexe";
           repo = "psysh.el";
-          rev = "429b59ba8fd5ac7b6d3c6c4e3ad72867062c96db";
-          sha256 = "0ldv1lyra05g91hdsif131x7yqdmwld8hdpg4h3qi040kls9bix1";
+          rev = "f72d6fe41af2d9566d41b167cda66e97efdf8cfa";
+          sha256 = "0hr8nlxcqfas9wl5ahz9hmvpa8b6k35n4f7iv9dx6zwf5q48q7y7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4b3131d9a0ad359f15bc3550868a12f02476449a/recipes/psysh";
           sha256 = "0ygnfmfx1ifppg6j3vfz10srbcpr5ird2bhw6pvydijxkyd75vy5";
           name = "psysh";
         };
-        packageRequires = [ emacs ];
+        packageRequires = [ emacs f s ];
         meta = {
           homepage = "https://melpa.org/#/psysh";
           license = lib.licenses.free;
@@ -56897,12 +57410,12 @@
     puppet-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, pkg-info }:
     melpaBuild {
         pname = "puppet-mode";
-        version = "20170421.2255";
+        version = "20170528.904";
         src = fetchFromGitHub {
           owner = "voxpupuli";
           repo = "puppet-mode";
-          rev = "e704bc790a96f5f3703b2c56e5a1b15bc4446937";
-          sha256 = "07dcrpkyf3b2kpdgfxir3mvm1c5rs2zdbgv9ajkn9y0b9zvp0cm8";
+          rev = "c5a0fc884d0f33c3140585c9c7699ce0bc969f63";
+          sha256 = "0s9nza9v1qpjip5zig3374bn5jqw8fsn57ayqymbnp70nxdwcw6n";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1de94f0ab39ab18dfd0b050e337f502d894fb3ad/recipes/puppet-mode";
@@ -57127,12 +57640,12 @@
     py-smart-operator = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "py-smart-operator";
-        version = "20150824.1910";
+        version = "20170531.509";
         src = fetchFromGitHub {
           owner = "rmuslimov";
           repo = "py-smart-operator";
-          rev = "5e3222e4fc285c48a77c8e4c0e1cbc985a9713c8";
-          sha256 = "14gppb354wzbbqv0zp1675p84n07rll9n4i6lncd9bvv1flqsxy8";
+          rev = "0c8a66faca4b35158d0b5885472cb75286039167";
+          sha256 = "09pmkp24s7nwh6p4pzsjp1z65ksi9n3n2xv7d3igpa86l8qgcm2d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a7491a1825b7aaa5f76aafadb8f04721ab1b1cfe/recipes/py-smart-operator";
@@ -57403,8 +57916,8 @@
         src = fetchFromGitHub {
           owner = "PyCQA";
           repo = "pylint";
-          rev = "cb6e4523ce001012202e5767c8029fdfad21af1e";
-          sha256 = "1xj0qpfi18gklrh5lvi12xaich4kbxl0yjlqk6gifnx58jhi81y4";
+          rev = "2e820672609c489458dc2cf39d811e8c10255fe4";
+          sha256 = "1nvylps33w5lbxh33qc704rvl998cniwhvwzj1x8fqlsnh1qaxfd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a073c91d6f4d31b82f6bfee785044c4e3ae96d3f/recipes/pylint";
@@ -57546,12 +58059,12 @@
     python-mode = callPackage ({ fetchFromGitLab, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "python-mode";
-        version = "20170507.953";
+        version = "20170605.123";
         src = fetchFromGitLab {
           owner = "python-mode-devs";
           repo = "python-mode";
-          rev = "08012d66ea2d678795a766d227b74405e73e1267";
-          sha256 = "1mkbzs2jqhdqr4rn1plmh06pzy3kghlwci47mhac4dpx0wbkmw13";
+          rev = "17747eaca4e75e17e29fbdceab9380cd4772c4ad";
+          sha256 = "0j4xq66gdwnz94wm68xzc88gbaigfxhc035whijl43yxkf9mc14y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/82861e1ab114451af5e1106d53195afd3605448a/recipes/python-mode";
@@ -57708,6 +58221,27 @@
         packageRequires = [];
         meta = {
           homepage = "https://melpa.org/#/qml-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    qt-pro-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "qt-pro-mode";
+        version = "20170604.1141";
+        src = fetchFromGitHub {
+          owner = "EricCrosson";
+          repo = "qt-pro-mode";
+          rev = "66601441cc728a609765b149ee0d7dcfb74dc8bf";
+          sha256 = "0azx8a7kwgn5byijgwar2rib9xv2p9w7w3yyb5bk19g3id2f8gdw";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/e9af710be77ccde8ffa5f22168d2c8a06b73dd6a/recipes/qt-pro-mode";
+          sha256 = "1k3ph9bqvvg6i6n623qrwdpsffs8w9rv9nihmlggb4w30dwqc9nf";
+          name = "qt-pro-mode";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/qt-pro-mode";
           license = lib.licenses.free;
         };
       }) {};
@@ -57966,12 +58500,12 @@
     racket-mode = callPackage ({ emacs, faceup, fetchFromGitHub, fetchurl, lib, melpaBuild, s }:
     melpaBuild {
         pname = "racket-mode";
-        version = "20170424.1130";
+        version = "20170607.737";
         src = fetchFromGitHub {
           owner = "greghendershott";
           repo = "racket-mode";
-          rev = "471c46fa9eb9de2e0b0056814caae824986f0915";
-          sha256 = "11s25kxh0909pq00xmpyv2lhafxhz4p40hivz884rkpi0gfvggg1";
+          rev = "02fe949875a7db935693af7d20109d29521b4276";
+          sha256 = "0aqv9j36abmhd82fd443khaj3i4mww5xs4f9p3d65glg07wm2j7q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7ad88d92cf02e718c9318d197dd458a2ecfc0f46/recipes/racket-mode";
@@ -58239,12 +58773,12 @@
     ranger = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ranger";
-        version = "20170315.2037";
+        version = "20170522.2331";
         src = fetchFromGitHub {
           owner = "ralesi";
           repo = "ranger.el";
-          rev = "e0429a06d55b3f11b369da61aa9043bb2843fa12";
-          sha256 = "171r9iljbp0pz7lvqsrnhdnir0bq2ynmhlb1ikf4k3i02w95i4v6";
+          rev = "e371cdc2d6065099fe7c68583597b1d0abea792b";
+          sha256 = "1c0jlykxkl46qimr60crac4j7nvzr0jixjiv4m6zzk93pn12y3g1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0207e754f424823fb48e9c065c3ed9112a0c445b/recipes/ranger";
@@ -58491,12 +59025,12 @@
     rdf-prefix = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "rdf-prefix";
-        version = "20170304.508";
+        version = "20170514.859";
         src = fetchFromGitHub {
           owner = "simenheg";
           repo = "rdf-prefix";
-          rev = "d7e61535aaf89e643673b27c79b4a84ddb530288";
-          sha256 = "1in1xp559g8hlxa9i2algwlgc069m8afjad6laxbyjqc61srzw6i";
+          rev = "35129521d5b6035e5dd75d5b3481ce4971f46034";
+          sha256 = "1iy9385n8a2b7ph4wdf8p92n81slirsxxckrc3khbk5zrpp62z5k";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a5f083bd629697038ea6391c7a4eeedc909a5231/recipes/rdf-prefix";
@@ -58638,12 +59172,12 @@
     realgud = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, load-relative, loc-changes, melpaBuild, test-simple }:
     melpaBuild {
         pname = "realgud";
-        version = "20170218.740";
+        version = "20170603.1430";
         src = fetchFromGitHub {
           owner = "rocky";
           repo = "emacs-dbgr";
-          rev = "2328ede5bbe6f20c69c0696e9f6ed4692ca4b4f0";
-          sha256 = "04fa6sbw7hwwmrs0s94l1bdb4gw9q5xs3y26ngqqx0y6a211pb6q";
+          rev = "3d0fcb80eb017ee2277440d688bf366af3bcdf6f";
+          sha256 = "1i71z36hk46w50c9p4b078rqlh4bvwb3dcylhfcwnp4b8j02f31p";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7ca56f05df6c8430a5cbdc55caac58ba79ed6ce5/recipes/realgud";
@@ -58980,8 +59514,8 @@
         src = fetchFromGitHub {
           owner = "RedPRL";
           repo = "sml-redprl";
-          rev = "608b896b58c6e1c7fec8c6e97202fc303a731a8b";
-          sha256 = "1x1d4gq2j8lanzpnqhx8aarwzd2mpprhkrz6j9w1s94g2p210ssg";
+          rev = "e0d467cfc50546d88f286383ea8ab54aa36cd5a9";
+          sha256 = "1lyj4h2qpl88hwxfrk2f1vr729bdyr5vvm8ra8p73rcz40zwdamr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/06e7371d703ffdc5b6ea555f2ed289e57e71e377/recipes/redprl";
@@ -59602,12 +60136,12 @@
     restart-emacs = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "restart-emacs";
-        version = "20170413.2305";
+        version = "20170609.905";
         src = fetchFromGitHub {
           owner = "iqbalansari";
           repo = "restart-emacs";
-          rev = "dc25f00c3cab1c97db2ca4733e7e7e7805ae68f2";
-          sha256 = "1rx5mj7lpxpmkbpbwb78garhl118d0kpbwvdwfh3f3j1rmzyiblx";
+          rev = "e6ac81464cce37b7ae3aea38dcf2720cc2750d31";
+          sha256 = "19fh4hsnxb7jc0zhgrg01hn8vbcirjxny5w29gcq7xiighwrbap7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b9faeb6d910d686cbcafe7d12e0bcf62a85689bd/recipes/restart-emacs";
@@ -59623,12 +60157,12 @@
     restclient = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "restclient";
-        version = "20160801.707";
+        version = "20170516.137";
         src = fetchFromGitHub {
           owner = "pashky";
           repo = "restclient.el";
-          rev = "87c4f25155abef1ee8678e2137c1d8b3b2154ff5";
-          sha256 = "18ym81hmcj83qsw96y6amb84wxjk63a9fgij6hbkq7d6vp970x5g";
+          rev = "07a3888bb36d0e29608142ebe743b4362b800f40";
+          sha256 = "00lmjhb5im1kgrp54yipf1h9pshxzgjlg71yf2rq5n973gvb0w0q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/59303304fe1f724596245556dd90f6afffba425d/recipes/restclient";
@@ -59648,8 +60182,8 @@
         src = fetchFromGitHub {
           owner = "pashky";
           repo = "restclient.el";
-          rev = "87c4f25155abef1ee8678e2137c1d8b3b2154ff5";
-          sha256 = "18ym81hmcj83qsw96y6amb84wxjk63a9fgij6hbkq7d6vp970x5g";
+          rev = "07a3888bb36d0e29608142ebe743b4362b800f40";
+          sha256 = "00lmjhb5im1kgrp54yipf1h9pshxzgjlg71yf2rq5n973gvb0w0q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/59303304fe1f724596245556dd90f6afffba425d/recipes/restclient-helm";
@@ -59726,12 +60260,12 @@
     reverse-im = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "reverse-im";
-        version = "20170209.556";
+        version = "20170611.2334";
         src = fetchFromGitHub {
           owner = "a13";
           repo = "reverse-im.el";
-          rev = "47033e0597675a45d2b6852682e392e848a51af8";
-          sha256 = "0kd55p8hl7mhcbsqxhqqyfkzq31cnk4aaqzrka681dk6d1xzk8z5";
+          rev = "341e1d7955d9b25778a0e28921abc4d31704ec3b";
+          sha256 = "1mcggccv75v9xrd1i1x2csjnk432ws2h93bh5y4wm3sp3ky8lg6d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f282ebbed8ad01b63b0e708ab273db51bf65fdbb/recipes/reverse-im";
@@ -59850,12 +60384,12 @@
     rg = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, s, seq }:
     melpaBuild {
         pname = "rg";
-        version = "20170506.2235";
+        version = "20170603.1202";
         src = fetchFromGitHub {
           owner = "dajva";
           repo = "rg.el";
-          rev = "261ed756377285f0f8941b7a33866ef538465d74";
-          sha256 = "1fs367w5695v8kvwka1w9kykgpq3qp1209cxkxs096rlkxhbdvv5";
+          rev = "fa63228680add9b30735fec571a3eea572345914";
+          sha256 = "0bh23avfdcadfx2awkbd0mld54g6ir0bg1szbwi8m0w9pwa4w4mk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9ce1f721867383a841957370946f283f996fa76f/recipes/rg";
@@ -59976,12 +60510,12 @@
     ripgrep = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ripgrep";
-        version = "20170211.857";
+        version = "20170602.152";
         src = fetchFromGitHub {
           owner = "nlamirault";
           repo = "ripgrep.el";
-          rev = "73595f1364f2117db49e1e4a49290bd6d430e345";
-          sha256 = "1a5rdpmvsgsjlc9sywism9pq7jd6n9qbcdsvpbfkq1npwhpifkbj";
+          rev = "5af6a0b2ee8a639cf857724ce4328f1f0955c99e";
+          sha256 = "05jkj7c9ha09gp74j7k4bhcxq8ypxz922ghwv5bjpxg4czn5s0w9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e8d789818876e959a1a59690f1dd7d4efa6d608b/recipes/ripgrep";
@@ -60036,22 +60570,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    robe = callPackage ({ fetchFromGitHub, fetchurl, inf-ruby, lib, melpaBuild }:
+    robe = callPackage ({ emacs, fetchFromGitHub, fetchurl, inf-ruby, lib, melpaBuild }:
     melpaBuild {
         pname = "robe";
-        version = "20170428.553";
+        version = "20170611.1755";
         src = fetchFromGitHub {
           owner = "dgutov";
           repo = "robe";
-          rev = "336dea660fc382de413ca4b7755232ec2abb3602";
-          sha256 = "0945c0qnyr289qzy2pxsn2v4z0gxzjs3ln859h387dl451c99l8q";
+          rev = "9305fa042c40a32a2fcf60f935c0796dc67b5c55";
+          sha256 = "0jx3pnz9m9bxlga867qdb6midz82mfl4wzn9dsfihkl399hbj46j";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/673f920d02fe761bc080b73db7d37dbf5b6d86d8/recipes/robe";
           sha256 = "19py2lwi7maya90kh1mgwqb16j72f7gm05dwla6xrzq1aks18wrk";
           name = "robe";
         };
-        packageRequires = [ inf-ruby ];
+        packageRequires = [ emacs inf-ruby ];
         meta = {
           homepage = "https://melpa.org/#/robe";
           license = lib.licenses.free;
@@ -60186,12 +60720,12 @@
     rpn-calc = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, popup }:
     melpaBuild {
         pname = "rpn-calc";
-        version = "20170508.100";
+        version = "20170522.1842";
         src = fetchFromGitHub {
           owner = "zk-phi";
           repo = "rpn-calc";
-          rev = "ae4bf0dd8a922ea41b228fac81dee2c10b11982a";
-          sha256 = "03kvrvafwm7czg8jb4r9wggrabczdd809wr2g62z1wqjiz94fxnp";
+          rev = "66fcb64dbfddfc23823356b6213215bd7ab5efc6";
+          sha256 = "1lgabs97x6h4yrgwln8hsxi47wgl46jzhf162wa1almdbqbp9100";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/47d5b3c931cdbc2351e01d15e2b98c78081c9506/recipes/rpn-calc";
@@ -60232,8 +60766,8 @@
         src = fetchFromGitHub {
           owner = "pezra";
           repo = "rspec-mode";
-          rev = "fe336636a57955b927b5994c8c738e21cacdc800";
-          sha256 = "07qjp6bb5rkcpbda7gb8g0zr2mr6cwplaspwc4ckidfcd8vzdn7b";
+          rev = "1f468e443e7f2d8419eec29e42074edc400f8c0c";
+          sha256 = "03wv1k3ppvdk2776bkbz8bhxw5n7h4b8zm3b2j2j6x7hrxfza5h4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cd83e61b10da20198de990aa081b47d3b0b44d43/recipes/rspec-mode";
@@ -60249,12 +60783,12 @@
     rtags = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "rtags";
-        version = "20170509.2255";
+        version = "20170527.450";
         src = fetchFromGitHub {
           owner = "Andersbakken";
           repo = "rtags";
-          rev = "2abdfb2adf24b881cdd04e904ecb341bb51e8cb6";
-          sha256 = "11f9sd8w7qqhfd6mxbihlc6mdki4lqyk4dwbi3v91k9hbxb9hlq2";
+          rev = "d6af2ad09c99f9c58900665e874dcf97a545c0fa";
+          sha256 = "12p22b9q4rkl7jswg12gqc8751sinzgj8h75jjzrggd0vfsg439a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3dea16daf0d72188c8b4043534f0833fe9b04e07/recipes/rtags";
@@ -60315,8 +60849,8 @@
         version = "20161115.2259";
         src = fetchsvn {
           url = "https://svn.ruby-lang.org/repos/ruby/trunk/misc/";
-          rev = "58657";
-          sha256 = "0n4gnpms3vyvnag3sa034yisfcfy5gnwl2l46krfwy6qjm1nyzhf";
+          rev = "59070";
+          sha256 = "18fkx4a8jarznczv3h36663dqprwh6pyf76s3f210cqqy8c5y5yi";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/ruby-additional";
@@ -60396,8 +60930,8 @@
         version = "20150424.752";
         src = fetchsvn {
           url = "https://svn.ruby-lang.org/repos/ruby/trunk/misc/";
-          rev = "58657";
-          sha256 = "0n4gnpms3vyvnag3sa034yisfcfy5gnwl2l46krfwy6qjm1nyzhf";
+          rev = "59070";
+          sha256 = "18fkx4a8jarznczv3h36663dqprwh6pyf76s3f210cqqy8c5y5yi";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/caaa21f235c4864f6008fb454d0a970a2fd22a86/recipes/ruby-electric";
@@ -60539,12 +61073,12 @@
     ruby-test-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, pcre2el, ruby-mode ? null }:
     melpaBuild {
         pname = "ruby-test-mode";
-        version = "20160930.9";
+        version = "20170515.1008";
         src = fetchFromGitHub {
           owner = "r0man";
           repo = "ruby-test-mode";
-          rev = "0924e9d17e0a9b7c5c1a4e878367be47f58a396c";
-          sha256 = "0hlzkwll6di13hja3hm3nzmcjkwgciq9bziz837cr49agagz3b55";
+          rev = "740ff1a7c81eb8380fd0f0cdb7c32238acf13dd1";
+          sha256 = "1a7lhx7ibh9rrxdamxwd107npnmsf9sxbksvy9rm8l3rnm8yjnvy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/ruby-test-mode";
@@ -60644,12 +61178,12 @@
     rust-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "rust-mode";
-        version = "20170411.2043";
+        version = "20170606.457";
         src = fetchFromGitHub {
           owner = "rust-lang";
           repo = "rust-mode";
-          rev = "dae5af71ebf4b5c6797ef057e8a0ebf655bcdbfb";
-          sha256 = "0s01pzlq0lqzbxqj0x2x4lr3l1rsvnd8h2kskgli6y2m8nv97qc6";
+          rev = "ac6a45e6091c0d542b696b6e13551be7e333264a";
+          sha256 = "0hba3djxzgpk13xcfz51s0qlv9415q8701pkw9qq974fxqpcrawl";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8f6e5d990d699d571dccbdeb13327b33389bb113/recipes/rust-mode";
@@ -60833,12 +61367,12 @@
     salt-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, mmm-jinja2, mmm-mode, yaml-mode }:
     melpaBuild {
         pname = "salt-mode";
-        version = "20170313.725";
+        version = "20170611.420";
         src = fetchFromGitHub {
           owner = "glynnforrest";
           repo = "salt-mode";
-          rev = "e14ed8f2ce0ab7a783c4341879ec8c003e2b5c81";
-          sha256 = "19gw35qv13f2r4wif5fgqfhrph2r320n81faxx8980zds28x2q0x";
+          rev = "bfcfa72093974f36635413a845e7a5df7c5ea974";
+          sha256 = "1x974csw8xyd90xf8ns5h6c0s9fszy02hdmcdax6ywi8vxksmjsy";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9dcf1a93a06fc42581521c88cfd988b03bedc000/recipes/salt-mode";
@@ -61022,12 +61556,12 @@
     sbt-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sbt-mode";
-        version = "20170508.1";
+        version = "20170530.355";
         src = fetchFromGitHub {
           owner = "ensime";
           repo = "emacs-sbt-mode";
-          rev = "1ab82c187c49440b08fc468957fa10b79ac603b8";
-          sha256 = "1pwi6i5q7fzvx8ychg2i0ndn2czhrl8fr86695vh99wmy7shvw6i";
+          rev = "736da7f466aad2b64c846ece258082c6aac647ae";
+          sha256 = "0idj4p3d36yp0irp1yfbihq8mf17jc7facz5qy6kx7zj0wdx4fjw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/364abdc3829fc12e19f00b534565227dbc30baad/recipes/sbt-mode";
@@ -61047,8 +61581,8 @@
         src = fetchFromGitHub {
           owner = "openscad";
           repo = "openscad";
-          rev = "ec1c3fd61152f119cb6bd7efeef4816bea8f8e65";
-          sha256 = "00lvh1ix9xs9844mp1yz1gfwx8wi53jzgy4wrg8vgwwbd5mrkdvw";
+          rev = "0b7aaa108710b2f197cbcb32fdb3ae12ff121747";
+          sha256 = "1yp382s4jxbyn646mv245gm5c2h1n734r8qzrspimipr79mrbklk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2d27782b9ac8474fbd4f51535351207c9c84984c/recipes/scad-mode";
@@ -61085,12 +61619,12 @@
     scala-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "scala-mode";
-        version = "20170323.502";
+        version = "20170611.806";
         src = fetchFromGitHub {
           owner = "ensime";
           repo = "emacs-scala-mode";
-          rev = "970d88eeff82df635ee12336ab1eb185585f30c6";
-          sha256 = "0wfv20dyb13v7fbfsvy0k5dajvmyyhn80l6xyx6kppiv3qmy9s90";
+          rev = "6f49104c182ec1cc8b30314dc92d02f4752106cf";
+          sha256 = "0ahhhsg095rixiy9j49854mmrkd92vvmqnms0f6msrl4jgdf6vpw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/564aa1637485192a97803af46b3a1f8e0d042c9a/recipes/scala-mode";
@@ -61169,11 +61703,11 @@
     schrute = callPackage ({ emacs, fetchgit, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "schrute";
-        version = "20161124.1227";
+        version = "20170521.1140";
         src = fetchgit {
           url = "https://bitbucket.org/shackra/dwight-k.-schrute";
-          rev = "08ab6565fa94f3a8016163fe6f7be1932af1156b";
-          sha256 = "0l1k6wjjr569lk5k8ydwq13041kn889g20qbzf79qj1ws96rim4m";
+          rev = "59faa6c4232ae183cea93237301acad8c0763997";
+          sha256 = "1w5l1vf4cn4psrxgnq5n6j3zw644s70inpa17vsvng3sk5r8crcb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/505fc4d26049d4e2973a54b24117ccaf4f2fb7e7/recipes/schrute";
@@ -61273,16 +61807,16 @@
     scratch = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "scratch";
-        version = "20120830.1105";
+        version = "20170523.2046";
         src = fetchFromGitHub {
-          owner = "cbbrowne";
+          owner = "ieure";
           repo = "scratch-el";
-          rev = "b377e5642aa0d0ddc9dbb2003d2055bc013e6426";
-          sha256 = "1nr6yqmxz6jqjkfj249yz88480shlsnmri0d322pkz88d4nkr0hq";
+          rev = "3363e861cf7c135873ccf273f759d72dd0bb5854";
+          sha256 = "0k4y7kqd7izaqpa0xmp7ag84vpnrgz5mi6cgh5ap1vspxg3pycz4";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/scratch";
-          sha256 = "1g4jm54n5k0pkspbd9636hcmxi1p3lkgayiwavlgs0sg2s6vc9l9";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/b46813f928eadfa08a1d4bf94ceeb96dbc2a7c72/recipes/scratch";
+          sha256 = "1an30pr64fz13s6lghlcb36b7hn3961vv0yipfp9s140ccygdvh7";
           name = "scratch";
         };
         packageRequires = [];
@@ -61378,12 +61912,12 @@
     scratch-pop = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, popwin }:
     melpaBuild {
         pname = "scratch-pop";
-        version = "20150820.139";
+        version = "20170510.758";
         src = fetchFromGitHub {
           owner = "zk-phi";
           repo = "scratch-pop";
-          rev = "2c9648a669ce8e3a9e35e8e1e3c808531d20c549";
-          sha256 = "1yvmfiv1s83r0jcxzbxyrx3b263d73lbap6agansmrhkxp914xr1";
+          rev = "7f4172c792b10bd38898dd8963cf0ade91921869";
+          sha256 = "0mwjq7z0cpaqhqygzhfcpfqyx8376jsc1g2874np6ff49389bj4d";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/420fb3408b64f1a3e42316262016728c483bf0c1/recipes/scratch-pop";
@@ -62065,16 +62599,16 @@
     sexy-monochrome-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sexy-monochrome-theme";
-        version = "20170324.510";
+        version = "20170611.859";
         src = fetchFromGitHub {
-          owner = "nuncostans";
+          owner = "voloyev";
           repo = "sexy-monochrome-theme";
-          rev = "c221231bb8a0d60413d710efe6226683326d57b0";
-          sha256 = "0zjy6d4fqg08dwbn1y360514pzzj3nrg3wzm656n7sg90mffh22i";
+          rev = "8def559784c9f3ebaad179caaff58a9c6afc83a5";
+          sha256 = "043pplyjdvqz45q1vlnkh8j8a4fhiw4km3b2xb06bycgs3ysb42h";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/9a09ffb7d271773f6cfa7c7eeaba45a717a5bdca/recipes/sexy-monochrome-theme";
-          sha256 = "1qmbb2aaa1lc18l9kk42iq466hy2mg7565b0gb7hdvfqsi05d8dg";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/dfd5ae9a93e036d11899c7adffdf6b63c2b21381/recipes/sexy-monochrome-theme";
+          sha256 = "0rlx4029zxrnzzqspn8zrp3q6w0n46q24qk7za46hvxdsmgdpxbq";
           name = "sexy-monochrome-theme";
         };
         packageRequires = [];
@@ -62483,12 +63017,12 @@
     shm = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "shm";
-        version = "20170126.420";
+        version = "20170523.238";
         src = fetchFromGitHub {
           owner = "chrisdone";
           repo = "structured-haskell-mode";
-          rev = "3b81e8739abe187fa378701152370d31bf44b331";
-          sha256 = "1p9yb105yjzhhl2aj2hpqb4275m0liagn43r49ily8syvaj15r4m";
+          rev = "bd08a0b2297667e2ac7896e3b480033ae5721d4d";
+          sha256 = "14rl739z19ns31h9fj48sx9ppca4g4mqkc7ccpacagwwf55m259c";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/68a2fddb7e000487f022b3827a7de9808ae73e2a/recipes/shm";
@@ -62625,6 +63159,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    shr-tag-pre-highlight = callPackage ({ emacs, fetchFromGitHub, fetchurl, language-detection, lib, melpaBuild }:
+    melpaBuild {
+        pname = "shr-tag-pre-highlight";
+        version = "20170525.902";
+        src = fetchFromGitHub {
+          owner = "xuchunyang";
+          repo = "shr-tag-pre-highlight.el";
+          rev = "bc1bff471cf4adcd86d87b8c045623aff3b20889";
+          sha256 = "1lyam12wilvv8ir3x0ylyfinjh9g65aq6ia1s314fr0gc8hjk5z6";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/7be3c139bee02e8bd9a9830026cbfdd17629ac4d/recipes/shr-tag-pre-highlight";
+          sha256 = "1v8fqx8bd5504r2mflq6x8xs3k0py3bgsnadz3bjs68yhaxacj3v";
+          name = "shr-tag-pre-highlight";
+        };
+        packageRequires = [ emacs language-detection ];
+        meta = {
+          homepage = "https://melpa.org/#/shr-tag-pre-highlight";
+          license = lib.licenses.free;
+        };
+      }) {};
     shrink-whitespace = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "shrink-whitespace";
@@ -62664,6 +63219,27 @@
         packageRequires = [ cl-lib emacs ];
         meta = {
           homepage = "https://melpa.org/#/shut-up";
+          license = lib.licenses.free;
+        };
+      }) {};
+    shx = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "shx";
+        version = "20170610.1147";
+        src = fetchFromGitHub {
+          owner = "riscy";
+          repo = "shx-for-emacs";
+          rev = "8b7de952da37f1c04fa1bdf8f54c1cfb6a7c2a8f";
+          sha256 = "176rhjyh9f3scbwjkw8h64dbamfcczwjpwv3dpylmjaqzwmfsal3";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/7a2ff78ae3c4289ebf9e06cdfd8f8082c395a16f/recipes/shx";
+          sha256 = "0h5ldglx4y85lm0pfilasnch2k82mlr7rb20qvarzwd41hb1az1k";
+          name = "shx";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/shx";
           license = lib.licenses.free;
         };
       }) {};
@@ -62963,12 +63539,12 @@
     simpleclip = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "simpleclip";
-        version = "20150804.1010";
+        version = "20170603.1542";
         src = fetchFromGitHub {
           owner = "rolandwalker";
           repo = "simpleclip";
-          rev = "7079086ec09a148fcc9146ba9bd10e12fb011861";
-          sha256 = "09286h2q9dqghgfj9a4cniz6djw7867vcy3ixs7cn4wghvhyxm8s";
+          rev = "7deff873b79910496b4baf647cdb8dd5de63465a";
+          sha256 = "12f853vm18y22sd22wmwqyzp5f5vmb67i33iiaw6mqqcp6qwbyqz";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7c921e27d6aafc1b82d37f6beb8407840034377a/recipes/simpleclip";
@@ -63173,12 +63749,12 @@
     slack = callPackage ({ alert, circe, emojify, fetchFromGitHub, fetchurl, lib, melpaBuild, oauth2, request, websocket }:
     melpaBuild {
         pname = "slack";
-        version = "20170504.629";
+        version = "20170610.841";
         src = fetchFromGitHub {
           owner = "yuya373";
           repo = "emacs-slack";
-          rev = "5bd003364f0de8737cedfacb0766da0dd6e3496f";
-          sha256 = "12cwpra9jgixab54pd7pb7g073b5gbhmsjbhfnnk38yqlgdrzisc";
+          rev = "b020352573a14e452a5c8a18bbd0ab23539a52cc";
+          sha256 = "1nqax756ya008glr1qffqa222hcz45grjwfnncsq48k1nj5b0dpf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f0258cc41de809b67811a5dde3d475c429df0695/recipes/slack";
@@ -63236,12 +63812,12 @@
     slime = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, macrostep, melpaBuild }:
     melpaBuild {
         pname = "slime";
-        version = "20170502.914";
+        version = "20170511.1221";
         src = fetchFromGitHub {
           owner = "slime";
           repo = "slime";
-          rev = "743d9ff1a05957559476ef333042f57aedb534a2";
-          sha256 = "1ydfzz2a5vqv5ikx96x2g4ki3mxljv5c82d07rv04bs5lxlk7iaf";
+          rev = "7ccaa81b4266d478ed92003fba097756afc6ae19";
+          sha256 = "1l4idfy98qh7c3vaxiv91irhw14nz8h2mvfs3g7j4abv51102kx5";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/14c60acbfde13d5e9256cea83d4d0d33e037d4b9/recipes/slime";
@@ -63422,6 +63998,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    slstats = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "slstats";
+        version = "20170602.304";
+        src = fetchFromGitHub {
+          owner = "davep";
+          repo = "slstats.el";
+          rev = "07f515f835c92b6be538d2f39dda31ed281f1054";
+          sha256 = "12fzcfw4fxf6g0zadzcr8mx46a8x8969shpcmkn0f8ixn014w7ax";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/fe7c8c241cc6920bbedb6711db63ea28ed633327/recipes/slstats";
+          sha256 = "0z5y2fmb3v16g5gf87c9gll04wbjp3d1cf7gm5cxi4w3y1kw4r7q";
+          name = "slstats";
+        };
+        packageRequires = [ cl-lib emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/slstats";
+          license = lib.licenses.free;
+        };
+      }) {};
     sly = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sly";
@@ -63429,8 +64026,8 @@
         src = fetchFromGitHub {
           owner = "capitaomorte";
           repo = "sly";
-          rev = "35ccf713384477b9e314ffef69f762ce2a6a94e9";
-          sha256 = "0j1z536ydcdmg16xx0nzd2cj9cpi8l8lhwb8ig0b9nl3lv12cb4d";
+          rev = "95519c4ef41988205bb642e534bf2bd2463b6170";
+          sha256 = "1bvmmpk4xd954i6dmxjcqayd6apzabg732yhcmjyg633d8hmmiwr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/79e7213183df892c5058a766b5805a1854bfbaec/recipes/sly";
@@ -63926,12 +64523,12 @@
     smartparens = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "smartparens";
-        version = "20170430.844";
+        version = "20170606.725";
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "smartparens";
-          rev = "f493fdba6af036497e0f0a204c7f7388888bf6b3";
-          sha256 = "03f2p29i0zv0dl4s24pyr93ckh9iams6hlvdd7dmdc6v96sc83w0";
+          rev = "3bc7f1d38a0b5800e62a612e16fe42d9b0c0e11e";
+          sha256 = "1xghvmwx66mns3kzk1jw2g08553qqa50h1sq1jg5n2apjl4gprdh";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/bd98f85461ef7134502d4f2aa8ce1bc764f3bda3/recipes/smartparens";
@@ -64447,6 +65044,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    solaire-mode = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "solaire-mode";
+        version = "20170610.442";
+        src = fetchFromGitHub {
+          owner = "hlissner";
+          repo = "emacs-solaire-mode";
+          rev = "70e3b9cc171d4d9171c652c6d255bf03dcd0ad9a";
+          sha256 = "15plb1gh7wz558008653v1xskz0bby477vvs7d7a752vrd8s6jcr";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/52c69070eef3003eb53e1436c538779c74670ce6/recipes/solaire-mode";
+          sha256 = "0pvgip12xl16rwz4wqmqjd8nhh3a299aknfsghazmxigamlmlsl5";
+          name = "solaire-mode";
+        };
+        packageRequires = [ cl-lib emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/solaire-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
     solarized-theme = callPackage ({ cl-lib ? null, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "solarized-theme";
@@ -64576,12 +65194,12 @@
     sotclojure = callPackage ({ cider, clojure-mode, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, sotlisp }:
     melpaBuild {
         pname = "sotclojure";
-        version = "20160421.1811";
+        version = "20170512.612";
         src = fetchFromGitHub {
           owner = "Malabarba";
           repo = "speed-of-thought-clojure";
-          rev = "8d879ef41c004726cca3c27a81b7543cc273c19b";
-          sha256 = "13yn2yadkpmykaly3l3xsq1bhm4sxyk8k1px555y11qi0mfdcjhh";
+          rev = "84e2be5939c33d44f9518aea60cfccff4d6c9707";
+          sha256 = "1jz3lscjq8xfkrx464a1s8vyggnh5sjl8jvq8dvx0w7blny2jvz8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3a2ccef8af91eada4449d9cd4bda6bd28272722e/recipes/sotclojure";
@@ -64814,12 +65432,12 @@
     spaceline = callPackage ({ cl-lib ? null, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, powerline, s }:
     melpaBuild {
         pname = "spaceline";
-        version = "20170102.59";
+        version = "20170530.434";
         src = fetchFromGitHub {
           owner = "TheBB";
           repo = "spaceline";
-          rev = "75cc751c3da252bd84f33b12daf11655a9f98fa6";
-          sha256 = "1jn3qjxjhbgjixxny1n68ha80c2zqmfrj24ws7ni4zia264phxs0";
+          rev = "d86fc0353cbf1a95df261e40ec5b7292b0d557f3";
+          sha256 = "1pj1rdfm2dxri6v2c1m8slpabdmbgqqr0cp23s5w4s39g0mmphvg";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/46e4c876aeeb0bb0d0e81dcbb8363a5db9c3ff61/recipes/spaceline";
@@ -64832,22 +65450,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    spaceline-all-the-icons = callPackage ({ all-the-icons, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, spaceline }:
+    spaceline-all-the-icons = callPackage ({ all-the-icons, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, memoize, spaceline }:
     melpaBuild {
         pname = "spaceline-all-the-icons";
-        version = "20170506.408";
+        version = "20170605.838";
         src = fetchFromGitHub {
           owner = "domtronn";
           repo = "spaceline-all-the-icons.el";
-          rev = "481329d1d1c4c505a91b7f2ac231f77a19e2c74d";
-          sha256 = "15snhm5rq0n31g9hk5gzimhjclfll67vi7avhrhd9z9x6dvq0sp4";
+          rev = "bc611779a7a3c10b7367bc8c985923d26ee91443";
+          sha256 = "1slnzb26fkmj01hakzbaarlmf2ng4d1zkimgb93axx0svxh03qc7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d039e057c1d441592da8f54e6d524b395b030375/recipes/spaceline-all-the-icons";
           sha256 = "1h6clkr2f29k2vw0jcrmnfbjpphaxm7s3zai6pn6qag32bgm3jq6";
           name = "spaceline-all-the-icons";
         };
-        packageRequires = [ all-the-icons emacs spaceline ];
+        packageRequires = [ all-the-icons emacs memoize spaceline ];
         meta = {
           homepage = "https://melpa.org/#/spaceline-all-the-icons";
           license = lib.licenses.free;
@@ -64856,12 +65474,12 @@
     spacemacs-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "spacemacs-theme";
-        version = "20170305.506";
+        version = "20170611.1307";
         src = fetchFromGitHub {
           owner = "nashamri";
           repo = "spacemacs-theme";
-          rev = "9358c37ee9c90a3d13a43afcd6917fea8eef144b";
-          sha256 = "1k711ppzkd9c5ial8cs0aazsi0zig6r9acmbhr0h9zizbrsw5sl1";
+          rev = "a7e76aeb0a62f986e0469183728407c7bcbf4993";
+          sha256 = "17gbrijf62qdk5s02lish5nf6l8mfqrkly98hpkwzz3js4xkykkb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6c8ac39214856c1598beca0bd609e011b562346f/recipes/spacemacs-theme";
@@ -65084,12 +65702,12 @@
     sphinx-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sphinx-mode";
-        version = "20160911.558";
+        version = "20170607.1436";
         src = fetchFromGitHub {
           owner = "Fuco1";
           repo = "sphinx-mode";
-          rev = "7db516b8b985cf209b6430b032cd0457af83b72b";
-          sha256 = "0a3vgkp65hpc1a5h79yl0pc02lr6w299wd2fs9cgn8nvbdrip5ij";
+          rev = "0a9fcd60639f1f4235b4747e8449b9f48651705f";
+          sha256 = "05kn45gh4l1wrj06qb3qzphx8mfqn3zqb8v73awhn5p7a1asb8kr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/sphinx-mode";
@@ -65460,12 +66078,12 @@
     sqlup-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sqlup-mode";
-        version = "20170502.1505";
+        version = "20170610.837";
         src = fetchFromGitHub {
           owner = "Trevoke";
           repo = "sqlup-mode.el";
-          rev = "d34d4c5c8fe052dbf29baacb6014ad4af70218b5";
-          sha256 = "1abh60xlxhhj7lky6kyr8316gj9xvbwzvcbchkih41s9xm06yg8g";
+          rev = "04970977b4abb4d44301651618bbf1cdb0b263dd";
+          sha256 = "14s66xrabj269z7f94iynsla96bka7zac011psrbcfyy4m8mlamz";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7fabdb05de9b8ec18a3a566f99688b50443b6b44/recipes/sqlup-mode";
@@ -65586,12 +66204,12 @@
     ssh-config-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ssh-config-mode";
-        version = "20170506.2330";
+        version = "20170603.251";
         src = fetchFromGitHub {
           owner = "jhgorrell";
           repo = "ssh-config-mode-el";
-          rev = "2d47d28a527d2e5a6aa350ef5f50e0c05378ad35";
-          sha256 = "0x8153ps266b359ll15w792qzqzpqs0jllc006jd59n71frdi8zv";
+          rev = "ba47dd11c5be684595ffa62dbdfdc616ce3eb9d6";
+          sha256 = "011n7vyhrawmymkhmr28isk5zvdljj9bhynmfr6v0mi2h7kn79p3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/750b16ee631b4c2014f2ebf767609bab4b8ee421/recipes/ssh-config-mode";
@@ -65607,12 +66225,12 @@
     ssh-deploy = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ssh-deploy";
-        version = "20170506.932";
+        version = "20170520.26";
         src = fetchFromGitHub {
           owner = "cjohansson";
           repo = "emacs-ssh-deploy";
-          rev = "6d1c10c2b5bb8a1a1f30ab3850970c731ff54086";
-          sha256 = "09bmvgvkhn3cg8lwav77zvsfp5kr3vh6b1mg7cay7jw4m6cjscx4";
+          rev = "5e86b22d14e34207bf9c0888ac5fe2e782dcf5cb";
+          sha256 = "0pirqgvvl7dyhfk5c3hk419mb67qhmgz1qvp124aprdwhnmjd153";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/ssh-deploy";
@@ -65712,12 +66330,12 @@
     standoff-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "standoff-mode";
-        version = "20170214.1713";
+        version = "20170609.134";
         src = fetchFromGitHub {
           owner = "lueck";
           repo = "standoff-mode";
-          rev = "cecb6bb0bbb3692ab9179376d88d14327965a43b";
-          sha256 = "01fdv5v8hlckqdsjq5m4cvghq7mvcwh4mqv49mh2dlahs5m055dk";
+          rev = "b194fde6bf31ddc77409275e134aacba27e88043";
+          sha256 = "0l48dij62d5cvw7kry0739i8zixkbmj80ghhixb30l6g0wg8k48g";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/98858a45f72c28eec552b119a66479ea99b60f93/recipes/standoff-mode";
@@ -66125,11 +66743,11 @@
     stupid-indent-mode = callPackage ({ fetchgit, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "stupid-indent-mode";
-        version = "20130816.1354";
+        version = "20170525.417";
         src = fetchgit {
           url = "https://gist.github.com/5487564.git";
-          rev = "e26ff5a2c4a582c6c1940bbcd204cfeed8e65222";
-          sha256 = "0sw7r4sbg0vmm7gqisjdp1wansn9k64djz3p83fwmyq3qkj90ar4";
+          rev = "3295e7de5e2cfddc3bf0e462e852bf58972f5d70";
+          sha256 = "00js2jkzvmvh1gbraijknv48y86pqyk9zv264a5n3l4sw5q6kcvk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/68cd648bde8028a39849f7beae8deae78bfb877b/recipes/stupid-indent-mode";
@@ -66250,12 +66868,12 @@
     sublime-themes = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sublime-themes";
-        version = "20160111.122";
+        version = "20170606.1144";
         src = fetchFromGitHub {
           owner = "owainlewis";
           repo = "emacs-color-themes";
-          rev = "4648b68e96bfde26d6e4af9f919971eef2768e5f";
-          sha256 = "0q9p974xvswr2sijz1rs858x9sdx0rb00lkhj5cd90abn33lb260";
+          rev = "60ee40af82eb55b79d5ed4026f1911326311603f";
+          sha256 = "17fcqvavgyl9cmv1hwcid2bw513vhawlsmac1w2adiz567594i6h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/648d250c7d341b31581c839f77c1084ac29d3163/recipes/sublime-themes";
@@ -66353,12 +66971,12 @@
     sudo-edit = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "sudo-edit";
-        version = "20170201.916";
+        version = "20170605.1710";
         src = fetchFromGitHub {
           owner = "nflath";
           repo = "sudo-edit";
-          rev = "615f6c073e42d433e79ae5a63210e2e04357a4c8";
-          sha256 = "0k3ldywy1g6672hhasqmj1rvzrs0cmd3nzxkb688vw6mhzxfzld4";
+          rev = "57d49eafd53868d3c86b20fa51e1889e621872c0";
+          sha256 = "1gxyy1z8qq610g2x0zzlccqq33gd54wwl1akhnw5xg4mvwhjvidf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3b08d4bbdb23b988db5ed7cb5a2a925b7c2e242e/recipes/sudo-edit";
@@ -66416,12 +67034,12 @@
     suggest = callPackage ({ dash, emacs, f, fetchFromGitHub, fetchurl, lib, loop, melpaBuild, s }:
     melpaBuild {
         pname = "suggest";
-        version = "20170326.321";
+        version = "20170525.1254";
         src = fetchFromGitHub {
           owner = "Wilfred";
           repo = "suggest.el";
-          rev = "2f8e52d9d34535899292799778fc1242342b64d9";
-          sha256 = "18vpr0k3pd4cvmxaxhvl8abz78fpni8vk3mws89grjbb3fc4b17i";
+          rev = "13611ca0e4dfb8e6e4a314142368bfa7f0de5b9b";
+          sha256 = "0svlf2kgdbhwaygydvwvhinafiwv3qrgyn5wkfpcnz1km30g92hf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b9fd27e812549587dc2ec26bb58974177ff263ff/recipes/suggest";
@@ -66519,12 +67137,12 @@
     suomalainen-kalenteri = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "suomalainen-kalenteri";
-        version = "20151129.304";
+        version = "20170528.801";
         src = fetchFromGitHub {
           owner = "tlikonen";
           repo = "suomalainen-kalenteri";
-          rev = "f5907236ce4da372325fce8b3ce429defa5b0f5a";
-          sha256 = "1f16ds671mp8jwkkhvpbdqkk3jji96q9ipjlr8ij9vglp2arvslg";
+          rev = "d380321ce7b7a5650847a7866bd98226af51d4b4";
+          sha256 = "1fcyh26zd7rpp0519kswgr9ps67flwwypw2ic3nwgjdhxb41kmzs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/181adf1b16253481674663fd28b195172231b7da/recipes/suomalainen-kalenteri";
@@ -66790,12 +67408,12 @@
     swiper = callPackage ({ emacs, fetchFromGitHub, fetchurl, ivy, lib, melpaBuild }:
     melpaBuild {
         pname = "swiper";
-        version = "20170410.24";
+        version = "20170609.938";
         src = fetchFromGitHub {
           owner = "abo-abo";
           repo = "swiper";
-          rev = "f565f76dfb3a31becc32c807916c011cde6c4e64";
-          sha256 = "1dl39b4c7jij0gxdri2li6nkm7x73ljhbk0n1zwi6lw4xd7dix6p";
+          rev = "752ba81f0db3be0568072b3d9a5db458bb647a3c";
+          sha256 = "0wzhil3c6g9g7k4dq3l6rsyy9vy3rdnq3igqgw9xzgq6i06a1878";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e64cad81615ef3ec34fab1f438b0c55134833c97/recipes/swiper";
@@ -66853,12 +67471,12 @@
     switch-window = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "switch-window";
-        version = "20170501.1626";
+        version = "20170522.2042";
         src = fetchFromGitHub {
           owner = "dimitri";
           repo = "switch-window";
-          rev = "07105313cf4c86267ecfc0ad160971475d185c67";
-          sha256 = "0nsi4ikidl42y8cfxk313zkgnl6fq470vy1fliikqp14b6h8k0c3";
+          rev = "8d37f5660666516ab6c9e6ec1da748ea1669ed4b";
+          sha256 = "19bszzslzz8rprch0z3h6xa6pjhrwik7j53i4kj33w306d58gi3f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7d2204e3b53ade1e400e143ac219f3c7ab63a1e9/recipes/switch-window";
@@ -66916,12 +67534,12 @@
     sx = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, json ? null, let-alist, lib, markdown-mode, melpaBuild }:
     melpaBuild {
         pname = "sx";
-        version = "20161222.1205";
+        version = "20170521.1832";
         src = fetchFromGitHub {
           owner = "vermiculus";
           repo = "sx.el";
-          rev = "de73e993930f910862698727b5c0d93a1f656deb";
-          sha256 = "03dah9rn6ray0c65rkqcmak77b1hgyi2fc1nqgb5vfgf65jk7z7c";
+          rev = "8f1e3346286cfa5a5299ef192cc5aca3f37a7745";
+          sha256 = "1ans6l0rv71w2vq0v4137jr0jhgzhkk62l7cq6b5m83v4ld9gr09";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f16958a09820233fbe2abe403561fd9a012d0046/recipes/sx";
@@ -66937,12 +67555,12 @@
     symbol-overlay = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "symbol-overlay";
-        version = "20170502.157";
+        version = "20170604.2240";
         src = fetchFromGitHub {
           owner = "wolray";
           repo = "symbol-overlay";
-          rev = "b4659bf6b10e37032603de1dfdb6a707ca5a224c";
-          sha256 = "028sklksa57dyyzg2mgxh010vrm9rvkbmbvd00cyawbpj7i7d5lq";
+          rev = "3eb0864b65f9fe0e7c98fae7e9bcfd6330c471a0";
+          sha256 = "178ny3cbxm2hvmh0f49hvi2m15r72f2by3k076d4rzawab0gnp1p";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c2a468ebe1a3e5a35ef40c59a62befbf8960bd7b/recipes/symbol-overlay";
@@ -67124,12 +67742,12 @@
     syntactic-close = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "syntactic-close";
-        version = "20170418.3";
+        version = "20170510.2348";
         src = fetchFromGitHub {
           owner = "emacs-berlin";
           repo = "syntactic-close";
-          rev = "d9f01e66d495db42142b845c6da5fa3d7692bf29";
-          sha256 = "0630v7h84fjw28j3lpwmwhfz3r6f7phiqccy7454vs0yxjyz0bp5";
+          rev = "83f6a212637175c8cfb1132eb40cdd4c3343040a";
+          sha256 = "0r5zff8fb0gid84f62l88lfh1hp8nkgf9cldnhmmv3icrhc2r0kc";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f2c15c0c8ee37a1de042a974c6daddbfa7f33f1d/recipes/syntactic-close";
@@ -67567,8 +68185,8 @@
         src = fetchFromGitHub {
           owner = "phillord";
           repo = "tawny-owl";
-          rev = "c2ed2499796b91c31f249211717e18f475334404";
-          sha256 = "0q34k4mnd7hkgm9p0q7b8x8j5p3dllm5xxhjbadm6mlygr6wx3bj";
+          rev = "37d65c003224b88108d035732bfa729b2a14e8ab";
+          sha256 = "1dva713chyv3y4d689a81zpmrk22spvx56lkdmbvq5hfp467kayq";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ea9a114ff739f7d6f5d4c3167f5635ddf79bf60c/recipes/tawny-mode";
@@ -67731,12 +68349,12 @@
     telephone-line = callPackage ({ cl-generic, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, seq }:
     melpaBuild {
         pname = "telephone-line";
-        version = "20170501.2058";
+        version = "20170611.1115";
         src = fetchFromGitHub {
           owner = "dbordak";
           repo = "telephone-line";
-          rev = "d0428bbd5c308b7c249359be8c854fe80a2905a8";
-          sha256 = "1zr4c63jmjd4lmbrp975c92wh9nn7861dkf5q7mjsglfdf0zp1wj";
+          rev = "743614f372598597282efd29a18e624d5ef80bc1";
+          sha256 = "0jl4kdmid2jy5gys9q1r58x41q4srh7hinhzr3q1f6f47lpcpvkf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9c998b70365fb0a210c3b9639db84034c7d45097/recipes/telephone-line";
@@ -67987,8 +68605,8 @@
         src = fetchFromGitHub {
           owner = "davidshepherd7";
           repo = "terminal-here";
-          rev = "86b3fb5616be1a0a90e21a9b2cade25c62243b5d";
-          sha256 = "11cp9r282syyxqx4ihx3h75lac1xg32hhwssjib29p3ph48mq8si";
+          rev = "26e7c8d180dcc62d8802762ba738eb2ee02fd16c";
+          sha256 = "06hqqjj8fl32mxiws6jqnii6cnbds2686y2hfv7v83rj6fy31vgc";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f8df6f7e23476eb52e7fdfbf9de277d3b44db978/recipes/terminal-here";
@@ -68008,8 +68626,8 @@
         src = fetchFromGitHub {
           owner = "ternjs";
           repo = "tern";
-          rev = "a1cf72d9e2ed32ac3c75583cd9db75c5f981382d";
-          sha256 = "08njp03bcihb28sx0n5ngp8xsbc9pdsvc18h0k4c3vybvv3km88n";
+          rev = "a4db15583ea15cd7b62c706ea42a38bff9b418fb";
+          sha256 = "150snv08wv8fyzp3qif6yvfy1b24rrbdc50vzlz640rmcd6qhk59";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/eaecd67af24050c72c5df73c3a12e717f95d5059/recipes/tern";
@@ -68025,12 +68643,12 @@
     tern-auto-complete = callPackage ({ auto-complete, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, tern }:
     melpaBuild {
         pname = "tern-auto-complete";
-        version = "20160906.1204";
+        version = "20170521.1235";
         src = fetchFromGitHub {
           owner = "ternjs";
           repo = "tern";
-          rev = "a1cf72d9e2ed32ac3c75583cd9db75c5f981382d";
-          sha256 = "08njp03bcihb28sx0n5ngp8xsbc9pdsvc18h0k4c3vybvv3km88n";
+          rev = "a4db15583ea15cd7b62c706ea42a38bff9b418fb";
+          sha256 = "150snv08wv8fyzp3qif6yvfy1b24rrbdc50vzlz640rmcd6qhk59";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/eaecd67af24050c72c5df73c3a12e717f95d5059/recipes/tern-auto-complete";
@@ -68172,12 +68790,12 @@
     test-simple = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "test-simple";
-        version = "20170117.411";
+        version = "20170527.832";
         src = fetchFromGitHub {
           owner = "rocky";
           repo = "emacs-test-simple";
-          rev = "604942d36021a8b14877a0a640234a09c79e0927";
-          sha256 = "1ydbhd1xkwhd5zmas06rw7v5vzcmvri8gla3pyf2rcf2li5sz247";
+          rev = "b3b69f52207d3a8111421ad7ab9ed82abbe85316";
+          sha256 = "0n400nmz3iyp50sdd4gz0bmfn1sfq5p6a69yv4zd09ypa9gkndws";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a4b76e053faee299f5b770a0e41aa615bf5fbf10/recipes/test-simple";
@@ -68256,12 +68874,12 @@
     textx-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "textx-mode";
-        version = "20170329.339";
+        version = "20170516.211";
         src = fetchFromGitHub {
           owner = "novakboskov";
           repo = "textx-mode";
-          rev = "cd47daf9737479ff06e2fa43fbb45ada2d7386e8";
-          sha256 = "165m6p18nzpqvdvx2a6hf94blsa2r947wdf1x6jicqflfpki45cx";
+          rev = "72f9f0c5855b382024f0da8f56833c22a70a5cb3";
+          sha256 = "1lr9v7dk0pnmpvdvs4m5d9yvxlii0xzr8b3akknm25gvbw1y1q8k";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/dada0378af342e0798c418032a8dcc7dfd80d600/recipes/textx-mode";
@@ -68459,12 +69077,12 @@
     thinks = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "thinks";
-        version = "20170418.854";
+        version = "20170607.144";
         src = fetchFromGitHub {
           owner = "davep";
           repo = "thinks.el";
-          rev = "f5a339b21cd5044f7b66beafab7c2d822c36f9e5";
-          sha256 = "1qjwzr9q98da25rf8hjgancb0k2kgr8xllhb4lhnqc8jsc4qnn5v";
+          rev = "7bdc418ff946d0cc9ea4cc73d38b3c71ffaa838d";
+          sha256 = "0wf3nikpnn0yivlmp6plyaiydm56mp3f91lljb1kay64nqgnfq65";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/439957cabf379651dc243219a83c3c96bae6f8cf/recipes/thinks";
@@ -68526,8 +69144,8 @@
         src = fetchFromGitHub {
           owner = "apache";
           repo = "thrift";
-          rev = "224c334e50a553504385dd001dadf31f7346b30a";
-          sha256 = "0xhpal5a8kap5ngn6p22i6ww1ha1d1yg44a47jfkgfbwx1fmykmj";
+          rev = "b8ee72de5bf9318d50846852082325d0f932682b";
+          sha256 = "0gaiy81zvhx6d7yfnxy0hlpb8q5crg312xhqxbx8lgw0m702k6a3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/857ab7e3a5c290265d88ebacb9685b3faee586e5/recipes/thrift";
@@ -68584,12 +69202,12 @@
     tide = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, typescript-mode }:
     melpaBuild {
         pname = "tide";
-        version = "20170509.1134";
+        version = "20170609.753";
         src = fetchFromGitHub {
           owner = "ananthakumaran";
           repo = "tide";
-          rev = "5f52ed822a80d140a3dc1ce993d75d301c24bf78";
-          sha256 = "15h1fvm17bw9mjx1pvasr99cmjqhlfhy9m6a9ws0r1il7fkwhnl1";
+          rev = "dda031ba33e1c61674c1c17861abef6b5c37fe28";
+          sha256 = "17r7vjpcj4wxq8zxvm5bzm8xg0y29ybgff608s8hq6vkbj5sflm2";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a21e063011ebbb03ac70bdcf0a379f9e383bdfab/recipes/tide";
@@ -68927,12 +69545,12 @@
     toc-org = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "toc-org";
-        version = "20170404.15";
+        version = "20170518.451";
         src = fetchFromGitHub {
           owner = "snosov1";
           repo = "toc-org";
-          rev = "d30b57f16d158fa859b0626f5350520f3ee86f44";
-          sha256 = "0q0wshcxn60c87lml2fxrhikrj7zay48ijrwj334yzwp26dvm422";
+          rev = "5a8a3f9b3a1440eb207a031685b7f4d77ef05b76";
+          sha256 = "0cwc7l8vf6x62s7727a6zr099zxgbbgnqkb2y60js6bys2mxqv99";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1305d88eca984a66039444da1ea64f29f1950206/recipes/toc-org";
@@ -69340,12 +69958,12 @@
     traad = callPackage ({ deferred, fetchFromGitHub, fetchurl, lib, melpaBuild, popup, request, request-deferred, virtualenvwrapper }:
     melpaBuild {
         pname = "traad";
-        version = "20170302.613";
+        version = "20170528.2302";
         src = fetchFromGitHub {
           owner = "abingham";
           repo = "emacs-traad";
-          rev = "6d797f124fd4e037df7727d7696328a95748b9af";
-          sha256 = "1r3s7qjlf943h3wqc5plw0la0p54xmxzdj3iwaz9lymfxx6n3h72";
+          rev = "4b84b8b4cf43e1167b3d7fcc51eb7a16b62c26f1";
+          sha256 = "0mpx2wlw7fhqmgvya3vq7yfjqpab10wjbgpxyyd2ki15nwc4c0xd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2b3eb31c077fcaff94b74b757c1ce17650333943/recipes/traad";
@@ -69371,8 +69989,8 @@
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
           repo = "circe";
-          rev = "1e90e5a89d07bd1584e990c35f5a9d564334a1ae";
-          sha256 = "13pv21bk4khq97a7km7gpj8rmwkmcb1y1nk72w35b9kipxv76vg2";
+          rev = "13c605e639194c3da0c2e685056fac685f8c76a0";
+          sha256 = "0n7v0g332ml1ang2fjc8rjbi8h1f4bqazcqi8dlfn99vvv8kcd21";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a2b295656d53fddc76cacc86b239e5648e49e3a4/recipes/tracking";
@@ -69574,6 +70192,48 @@
           license = lib.licenses.free;
         };
       }) {};
+    treemacs = callPackage ({ ace-window, cl-lib ? null, dash, emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, pfuture, s }:
+    melpaBuild {
+        pname = "treemacs";
+        version = "20170607.1239";
+        src = fetchFromGitHub {
+          owner = "Alexander-Miller";
+          repo = "treemacs";
+          rev = "d5878b0ed6da2a561aa795b31848e31e7c696197";
+          sha256 = "04d7l0v1s5fxcnr4iqdpb1908bayysga3z0sbcx7ia39kmcnp4l3";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/a52c2770097fe8968bff7c31ac411b3d9b60972e/recipes/treemacs";
+          sha256 = "1sg3m9l9l1xww6an2210bghlby5cljw2jxh7q0w8cwmcga7rr4jh";
+          name = "treemacs";
+        };
+        packageRequires = [ ace-window cl-lib dash emacs f pfuture s ];
+        meta = {
+          homepage = "https://melpa.org/#/treemacs";
+          license = lib.licenses.free;
+        };
+      }) {};
+    treemacs-evil = callPackage ({ evil, fetchFromGitHub, fetchurl, lib, melpaBuild, treemacs }:
+    melpaBuild {
+        pname = "treemacs-evil";
+        version = "20170604.315";
+        src = fetchFromGitHub {
+          owner = "Alexander-Miller";
+          repo = "treemacs";
+          rev = "d5878b0ed6da2a561aa795b31848e31e7c696197";
+          sha256 = "04d7l0v1s5fxcnr4iqdpb1908bayysga3z0sbcx7ia39kmcnp4l3";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/a52c2770097fe8968bff7c31ac411b3d9b60972e/recipes/treemacs-evil";
+          sha256 = "146j4l2g40dhrv8nyfymxkajn19gvlkmirwv9ndvkvl3yy175vg3";
+          name = "treemacs-evil";
+        };
+        packageRequires = [ evil treemacs ];
+        meta = {
+          homepage = "https://melpa.org/#/treemacs-evil";
+          license = lib.licenses.free;
+        };
+      }) {};
     trident-mode = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, skewer-mode, slime }:
     melpaBuild {
         pname = "trident-mode";
@@ -69764,12 +70424,12 @@
     tuareg = callPackage ({ caml, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "tuareg";
-        version = "20170508.930";
+        version = "20170531.557";
         src = fetchFromGitHub {
           owner = "ocaml";
           repo = "tuareg";
-          rev = "d1a7ce84c51a3dc5639ebb643bd7557a55c91f76";
-          sha256 = "056hdzh1kgy33s7pnqn59jwhrs5fqh8rzsxq4h3spadyyga33k36";
+          rev = "79bca7dc9254da190d821b504da4946df8c3d548";
+          sha256 = "02zjjq3nmmawmialhj95bz032a3ycyvzl5sgp7g37l7q3l0s63bc";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/01fb6435a1dfeebdf4e7fa3f4f5928bc75526809/recipes/tuareg";
@@ -69848,12 +70508,12 @@
     turing-machine = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "turing-machine";
-        version = "20170505.804";
+        version = "20170512.1438";
         src = fetchFromGitHub {
           owner = "therockmandolinist";
           repo = "turing-machine";
-          rev = "41e367e54fbeff572f599f2f321ffc863601484e";
-          sha256 = "0qlm7y3pm8sfy36a8jc3cr955hqsmypzshbgxfnmcmz7wl96dplh";
+          rev = "4b5901a13b38028b05ce19cecc78bcd2f708f97d";
+          sha256 = "1avsqqpsbzlm0wi6fc5lgnmhps5wcr6gp05d4hw51sd5r0vx00dk";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a003b40a52a92b3ab4d1ffc003f570d4fa6bfbde/recipes/turing-machine";
@@ -70037,12 +70697,12 @@
     typescript-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "typescript-mode";
-        version = "20170424.2231";
+        version = "20170530.953";
         src = fetchFromGitHub {
           owner = "ananthakumaran";
           repo = "typescript.el";
-          rev = "e0b4a6cb31750314e827bbc57de9a35558b34fd9";
-          sha256 = "0z9s1aacalc17inc6rxxmyp8ffwy4as0va96rwfmhq3lmhcbbclf";
+          rev = "9ad892fb2274decb637d12d81a8640d2c6cf11d3";
+          sha256 = "0ynnh3ac6zblcg2d0nf8fwdfmp5ymzjqncl64xa43m4lw24p6xng";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d3f534a1e2cee4ad2e32e32802c5080207417b3d/recipes/typescript-mode";
@@ -70098,12 +70758,12 @@
     typit = callPackage ({ emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild, mmt }:
     melpaBuild {
         pname = "typit";
-        version = "20170501.1427";
+        version = "20170519.51";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "typit";
-          rev = "96e3fda8c5db51ca511973f0e7a530eae26c752b";
-          sha256 = "17dv7qh1b93wvqw650asc6r0d6dx8kxwa2xkybza57vnrgr4mjaf";
+          rev = "a4e3147dedac5535bdc8b06aca00f34f14f26e35";
+          sha256 = "0hbnwrhxj9wwjvxsk372ffgjqfkb3ljxhgi5h7wps2r15dxfvf3w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d17d019155e19c156f123dcd702f18cfba488701/recipes/typit";
@@ -70243,12 +70903,12 @@
     ujelly-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "ujelly-theme";
-        version = "20170506.941";
+        version = "20170607.206";
         src = fetchFromGitHub {
           owner = "marktran";
           repo = "color-theme-ujelly";
-          rev = "148a173441e7371a01382446d683bfb251f00cc7";
-          sha256 = "05bp1szqrbqh4hvd4gmhk9hfmki0xhib7z762bd4jabh6k68kap7";
+          rev = "e3a343991c0175092f27665fce9474e240f3f1f7";
+          sha256 = "0wmyym7aj0wr80ya1wif1ywmsy4pln4khyzcnfhd0xrp62pya2cv";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/091dcc3775ec2137cb61d66df4e72aca4900897a/recipes/ujelly-theme";
@@ -70837,12 +71497,12 @@
     use-package = callPackage ({ bind-key, diminish, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "use-package";
-        version = "20170509.1157";
+        version = "20170524.2245";
         src = fetchFromGitHub {
           owner = "jwiegley";
           repo = "use-package";
-          rev = "54ce52604477c237b663a02d49be9d6d307d49bd";
-          sha256 = "1rpyfbh0zp6a013nva2b1czis10mr8vzv52qlhgcfm78m48bvhya";
+          rev = "726eea13a3a4d75d630aac29d6b71d74d9dc69e3";
+          sha256 = "1r75ysdz6cj97vn46lj4g2a3hsab377f667a8bfs17rz007nddv4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3f9b52790e2a0bd579c24004873df5384e2ba549/recipes/use-package";
@@ -70883,8 +71543,8 @@
         src = fetchFromGitHub {
           owner = "diml";
           repo = "utop";
-          rev = "ea49d8e947e1cd5deeec813e78eba92ff5c6ff3b";
-          sha256 = "17x6bbflqicwk489mkwsqqkb97nriqbgv5shp8p87p7ykkpiw21d";
+          rev = "06460235d6f6ffd82dd2d973c2ad1004a4a2619b";
+          sha256 = "19ffqy52r52c7kjpb54flfilgnfkmxa7pkq5w0mw6xiaw3qvha2w";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/30489fe52b4031184e54f994770aa3291257bc9d/recipes/utop";
@@ -71236,12 +71896,12 @@
     vdiff = callPackage ({ emacs, fetchFromGitHub, fetchurl, hydra, lib, melpaBuild }:
     melpaBuild {
         pname = "vdiff";
-        version = "20170320.1805";
+        version = "20170525.1231";
         src = fetchFromGitHub {
           owner = "justbur";
           repo = "emacs-vdiff";
-          rev = "f11c7c2eeef33a0b75fe4e025818e7e672c57397";
-          sha256 = "1shkjk38piwrsn78bcy557zvm68xznlk4kg5l2fgiwfmmzdnvj13";
+          rev = "66ae1ac324d9ec7ef87abee38f260734f036cf3d";
+          sha256 = "0d8zam8p6qyzjr99n0jpmjav429qkjgg59gidmhgf0cbx2pyvy8s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e90f19c8fa4b0d267d269b76f117995e812e899c/recipes/vdiff";
@@ -71254,15 +71914,36 @@
           license = lib.licenses.free;
         };
       }) {};
+    vdiff-magit = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, magit, melpaBuild, vdiff }:
+    melpaBuild {
+        pname = "vdiff-magit";
+        version = "20170519.1407";
+        src = fetchFromGitHub {
+          owner = "justbur";
+          repo = "emacs-vdiff-magit";
+          rev = "1ccf0a8be5aad18648fd59c775a8dd6070398b74";
+          sha256 = "1skcrpfgz2c9s9r2xvwanrvyczcqjgmjrwjm188d55l4pn8ylr83";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/2159275fabde8ec8b297f6635546b1314d519b8b/recipes/vdiff-magit";
+          sha256 = "1vjc1r5xfdg9bmscgppx1fps1w5bd0zpp6ab5z5dxlg2zx2vdldw";
+          name = "vdiff-magit";
+        };
+        packageRequires = [ emacs magit vdiff ];
+        meta = {
+          homepage = "https://melpa.org/#/vdiff-magit";
+          license = lib.licenses.free;
+        };
+      }) {};
     vdirel = callPackage ({ emacs, fetchFromGitHub, fetchurl, helm, lib, melpaBuild, org-vcard, seq }:
     melpaBuild {
         pname = "vdirel";
-        version = "20161009.224";
+        version = "20170605.43";
         src = fetchFromGitHub {
           owner = "DamienCassou";
           repo = "vdirel";
-          rev = "1f071902d4e2aea49e7e96a327e09712565cb39c";
-          sha256 = "0qkb7wx1qaa85g0dwmkyh4r65fg1j441f0b4hgg7qjq1yxrlkkhb";
+          rev = "a1e6ea3ed5faaf70667c62bc5591dc810331cb1a";
+          sha256 = "1z8q3akm0hq7z7nqclra1wv7a6m0cbskhnd3ca4v9wf9dajiwnsb";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/72b5ea3f4444c3de73d986a28e1d12bf47c40246/recipes/vdirel";
@@ -71530,12 +72211,12 @@
     vimish-fold = callPackage ({ cl-lib ? null, emacs, f, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "vimish-fold";
-        version = "20161231.1600";
+        version = "20170606.539";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "vimish-fold";
-          rev = "1eb00dc2d803df411d7b2eae1c775eecc6512728";
-          sha256 = "1shxvnlpb3hw3pa7883nmpzjy2q6cyww3r8x4yx3h315nvxwxfkq";
+          rev = "527a1d9b9e031713c29f12d1a82f1fdac50c5610";
+          sha256 = "1k8m7b0h3qb5w0wvvjz8047xz71ljfj7kj4z5sv26rhsh5bsdb2s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b4862b0a3d43f073e645803cbbf11d973a4b51d5/recipes/vimish-fold";
@@ -71885,12 +72566,12 @@
     vue-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, mmm-mode, ssass-mode, vue-html-mode }:
     melpaBuild {
         pname = "vue-mode";
-        version = "20170403.2159";
+        version = "20170514.2341";
         src = fetchFromGitHub {
           owner = "CodeFalling";
           repo = "vue-mode";
-          rev = "95ca5d13f55b7863fe187865c8c4f6e378af11a1";
-          sha256 = "18dxqfkgg2ii6ys6vsi2y7jx26rk3pwh1z3wnqpw225x2jzfz7rv";
+          rev = "35d803b19a302e7206d1a54db47b6dcbb674ce88";
+          sha256 = "1j7qvj653gf7dwimwl26zvz5ki04bp7vlkwcxqkc9fshcjm5py1q";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2e5e0a9fff332aeec09f6d3d758e2b67dfdf8397/recipes/vue-mode";
@@ -72028,12 +72709,12 @@
     wakatime-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "wakatime-mode";
-        version = "20170324.2348";
+        version = "20170517.2053";
         src = fetchFromGitHub {
           owner = "wakatime";
           repo = "wakatime-mode";
-          rev = "7172a92df66a69537c849182c22404715ddd9bfe";
-          sha256 = "0scayq5vwxsilm90zbma8lc6fvmm6w7p3gfyphcvvsm93rx5601r";
+          rev = "b1eae15f38a367017e519c10837c44650631b154";
+          sha256 = "0l2nwjz978lamlikipljw143j40bnli7rzf9rixsia9iby4krl25";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a46036a0e53afbebacafd3bc9545c99af79ccfcc/recipes/wakatime-mode";
@@ -72070,12 +72751,12 @@
     wandbox = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, request, s }:
     melpaBuild {
         pname = "wandbox";
-        version = "20170425.1502";
+        version = "20170603.531";
         src = fetchFromGitHub {
           owner = "kosh04";
           repo = "emacs-wandbox";
-          rev = "c82a71e880cb701281dd96a9772bdad37a6eacf2";
-          sha256 = "0hdpy4rf0406615mx5w235dkz71v24qmr2ci5rlqmfv53si0gynj";
+          rev = "e002fe41f2cd9b4ce2b1dc80b83301176e9117f1";
+          sha256 = "0fnbj3k21lisgs94pf8z13cdymmclgpn994xq3xly4gq6l8k0an5";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/091dcc3775ec2137cb61d66df4e72aca4900897a/recipes/wandbox";
@@ -72322,12 +73003,12 @@
     web-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "web-mode";
-        version = "20170510.1127";
+        version = "20170603.632";
         src = fetchFromGitHub {
           owner = "fxbois";
           repo = "web-mode";
-          rev = "2ed2b26348326e3bf814fff6f3bca8440b4b7416";
-          sha256 = "18j0j5wq3ria0bllf6nfw97j4am1h2x51gxfn42hgdp027jdfn3j";
+          rev = "290f0ecb43dc6a636e45f55cf95c0d8fbda3fdc2";
+          sha256 = "00i697brchwdz3hviq2khhxcih7zi90dym1s5m9vk5azi2qly8ys";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6f0565555eaa356141422c5175d6cca4e9eb5c00/recipes/web-mode";
@@ -72424,22 +73105,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    webpaste = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, json ? null, lib, melpaBuild, request }:
+    webpaste = callPackage ({ cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, request }:
     melpaBuild {
         pname = "webpaste";
-        version = "20170510.1052";
+        version = "20170611.345";
         src = fetchFromGitHub {
           owner = "etu";
           repo = "webpaste.el";
-          rev = "f0a36e24cab482e3f33a9a70103f600b478f9c79";
-          sha256 = "0kb2485sb6p9sfj1fh9dkw7vhss8pp3l95sys1h25rklinjb8hkq";
+          rev = "90a96d21fc3c7edc7c339b343462696bfc6d21ff";
+          sha256 = "0q2fdxdlyfggrlgyfbq63n5k7qfjyr08cjy0k4i74sjphdss1bcl";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/13847d91c1780783e516943adee8a3530c757e17/recipes/webpaste";
           sha256 = "1pqqapslb5wxfrf1ykrj5jxcl43pix17lawgdqrqkv5fyxbhmfpm";
           name = "webpaste";
         };
-        packageRequires = [ cl-lib emacs json request ];
+        packageRequires = [ cl-lib emacs request ];
         meta = {
           homepage = "https://melpa.org/#/webpaste";
           license = lib.licenses.free;
@@ -72448,12 +73129,12 @@
     websocket = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "websocket";
-        version = "20161113.1736";
+        version = "20170610.2117";
         src = fetchFromGitHub {
           owner = "ahyatt";
           repo = "emacs-websocket";
-          rev = "fbd9e2263d2d7168aae31d4f8bde38f511e9d2ec";
-          sha256 = "04kg6njw5frp9xafjyqff57m0a2r15r7c57mnb6dw6lgazxlscgb";
+          rev = "ccbe93ac8b5858a85686b83642fbd6e828a47deb";
+          sha256 = "18aw5pmvz91gv9wlmna1i5sli6z3f6dqk0bc4wkc15zbsi1dmdlw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/091dcc3775ec2137cb61d66df4e72aca4900897a/recipes/websocket";
@@ -72557,8 +73238,8 @@
         src = fetchFromGitHub {
           owner = "mhayashi1120";
           repo = "Emacs-wgrep";
-          rev = "4e9f3d9822acab2d353c858d33ddaebb629fbfe8";
-          sha256 = "14xja70gh9v3565fkl4b46swfrkmh6j6zg9pxwj5h1gicqrgaiwz";
+          rev = "1cdd7c136f1e7565bb13d2df69be3dc77b83698d";
+          sha256 = "057p99hq0r6z1k8sl15w3sxrqvlv0g9wp39zy1pqhccv2mn3g2d6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9648e3df896fcd97b3757a727108bc78261973cc/recipes/wgrep";
@@ -72578,8 +73259,8 @@
         src = fetchFromGitHub {
           owner = "mhayashi1120";
           repo = "Emacs-wgrep";
-          rev = "4e9f3d9822acab2d353c858d33ddaebb629fbfe8";
-          sha256 = "14xja70gh9v3565fkl4b46swfrkmh6j6zg9pxwj5h1gicqrgaiwz";
+          rev = "1cdd7c136f1e7565bb13d2df69be3dc77b83698d";
+          sha256 = "057p99hq0r6z1k8sl15w3sxrqvlv0g9wp39zy1pqhccv2mn3g2d6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9648e3df896fcd97b3757a727108bc78261973cc/recipes/wgrep-ack";
@@ -72599,8 +73280,8 @@
         src = fetchFromGitHub {
           owner = "mhayashi1120";
           repo = "Emacs-wgrep";
-          rev = "4e9f3d9822acab2d353c858d33ddaebb629fbfe8";
-          sha256 = "14xja70gh9v3565fkl4b46swfrkmh6j6zg9pxwj5h1gicqrgaiwz";
+          rev = "1cdd7c136f1e7565bb13d2df69be3dc77b83698d";
+          sha256 = "057p99hq0r6z1k8sl15w3sxrqvlv0g9wp39zy1pqhccv2mn3g2d6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2c50b704343c4cac5e2a62a67e284ba6d8e15f8a/recipes/wgrep-ag";
@@ -72616,12 +73297,12 @@
     wgrep-helm = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild, wgrep }:
     melpaBuild {
         pname = "wgrep-helm";
-        version = "20140528.1427";
+        version = "20170510.1539";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
           repo = "Emacs-wgrep";
-          rev = "4e9f3d9822acab2d353c858d33ddaebb629fbfe8";
-          sha256 = "14xja70gh9v3565fkl4b46swfrkmh6j6zg9pxwj5h1gicqrgaiwz";
+          rev = "1cdd7c136f1e7565bb13d2df69be3dc77b83698d";
+          sha256 = "057p99hq0r6z1k8sl15w3sxrqvlv0g9wp39zy1pqhccv2mn3g2d6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9648e3df896fcd97b3757a727108bc78261973cc/recipes/wgrep-helm";
@@ -72641,8 +73322,8 @@
         src = fetchFromGitHub {
           owner = "mhayashi1120";
           repo = "Emacs-wgrep";
-          rev = "4e9f3d9822acab2d353c858d33ddaebb629fbfe8";
-          sha256 = "14xja70gh9v3565fkl4b46swfrkmh6j6zg9pxwj5h1gicqrgaiwz";
+          rev = "1cdd7c136f1e7565bb13d2df69be3dc77b83698d";
+          sha256 = "057p99hq0r6z1k8sl15w3sxrqvlv0g9wp39zy1pqhccv2mn3g2d6";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/c39faef3b9c2e1867cd48341d9878b714dbed4eb/recipes/wgrep-pt";
@@ -72679,12 +73360,12 @@
     which-key = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "which-key";
-        version = "20170501.544";
+        version = "20170530.526";
         src = fetchFromGitHub {
           owner = "justbur";
           repo = "emacs-which-key";
-          rev = "9d2ba1bcba289fb81f92b797022b238c6b21f82e";
-          sha256 = "01hfp4arbzfklhrmv0va7h8g8ykzgr52qqp2kgn8cim937wdwy6w";
+          rev = "3144b4c1fc774b63fc2350a0171e8ef01ab63298";
+          sha256 = "1fyg4b5ngf4k30x9rb5n62w2y9awc1lasrszxp9bg6ydmigncans";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/315865a3df97c0694f648633d44b8b34df1ac76d/recipes/which-key";
@@ -72784,12 +73465,12 @@
     whizzml-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "whizzml-mode";
-        version = "20161115.1720";
+        version = "20170525.818";
         src = fetchFromGitHub {
           owner = "whizzml";
           repo = "whizzml-mode";
-          rev = "b5804004fb35c603468054cf179f4dd6936c8882";
-          sha256 = "0x0cxwifqb8pv6j55iwxy7hdk0cvjz0zygayi494y4nhabcyp3kf";
+          rev = "92986cbb260642c129b049950036b2b6698a8bd9";
+          sha256 = "01mxjyan8bbjxl055f8zbsydsn01iszk3qi3668aa6i1m3vsz60h";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/11f26b15c326c3b8541bac510579b32493916042/recipes/whizzml-mode";
@@ -73302,12 +73983,12 @@
     with-editor = callPackage ({ async, dash, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "with-editor";
-        version = "20170417.1458";
+        version = "20170517.1242";
         src = fetchFromGitHub {
           owner = "magit";
           repo = "with-editor";
-          rev = "eb0083125eb69033d53374742fd4af7a850a97fb";
-          sha256 = "0i0cw68vv8w01jwlxvs4zjh2b72msjq358x3cv074mzv1ma3y3v1";
+          rev = "3385ffdc6faed5a283e26a7ebf89825c700dd395";
+          sha256 = "1kznr0zv1y6lwsllpksqjzq2f4bc5a99lg19fmifn7w0dhv6fn0m";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8c52c840dc35f3fd17ec660e113ddbb53aa99076/recipes/with-editor";
@@ -73638,12 +74319,12 @@
     writeroom-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild, visual-fill-column }:
     melpaBuild {
         pname = "writeroom-mode";
-        version = "20170502.1252";
+        version = "20170528.639";
         src = fetchFromGitHub {
           owner = "joostkremers";
           repo = "writeroom-mode";
-          rev = "9ccb0512b0dc5da103d857ab4c9b187f3c800f8f";
-          sha256 = "0izs7h0wkzkq6071v1ic5gbxq5d4l63fs39cr2iz565qkrmda8v1";
+          rev = "d3252f54c8f9f37a19d6a21fb2291c3da7a7121a";
+          sha256 = "13nbls5qxz5z8firjxaip8m9vzfbbpxmwrmr01njbk4axpwrpj0z";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4e39cd8e8b4f61c04fa967def6a653bb22f45f5b/recipes/writeroom-mode";
@@ -73827,12 +74508,12 @@
     xah-css-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xah-css-mode";
-        version = "20170312.151";
+        version = "20170517.1634";
         src = fetchFromGitHub {
           owner = "xahlee";
           repo = "xah-css-mode";
-          rev = "b710877056cc91641aff82d26af01db728131563";
-          sha256 = "0hmnbbdf2rsw24dspfbbdr0b0f4wlrrkw9pzc73dcn8y0pafavyg";
+          rev = "a5a19ee45b54eff7eeccd81b65ba42a0e9c7ba4c";
+          sha256 = "1x3vwqpbz06xg2wazg7skgsvgq36cs0445nrk2ahzvqknxh638vr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/57c2e2112c4eb50ee6ebddef9c3d219cc5ced804/recipes/xah-css-mode";
@@ -73848,12 +74529,12 @@
     xah-elisp-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xah-elisp-mode";
-        version = "20170127.1616";
+        version = "20170511.2126";
         src = fetchFromGitHub {
           owner = "xahlee";
           repo = "xah-elisp-mode";
-          rev = "c32bae59a8d8daf97769b1c57b70ef9fb8b2570c";
-          sha256 = "1gs6h8csy8yz3f6gvqn3lx3i6xdqrddfhg54m4g8c5yxz0202yyg";
+          rev = "7cd242de67d9567c343d5f530134759c2a8115d2";
+          sha256 = "10z2c1hbprgi2hil72g4w109namgns4mibgd4v8j9wggphjy8v6y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/f2e996dd5b0061371662490e0b21d3c5bb506550/recipes/xah-elisp-mode";
@@ -73890,12 +74571,12 @@
     xah-fly-keys = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xah-fly-keys";
-        version = "20170510.31";
+        version = "20170531.554";
         src = fetchFromGitHub {
           owner = "xahlee";
           repo = "xah-fly-keys";
-          rev = "db24e037b4d24b848cfceb4be058d973dcb9b569";
-          sha256 = "053yn6i0hcmyz6h8nfknhw4qrsdgz9jiblqxc7v5i81a6ng93mjk";
+          rev = "4d871873024520168572babd174adc203776c71c";
+          sha256 = "0xiyh9qam40c2by0qp26x8ki090z2yv0319qrn5d4lsz69ivnpy0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/fc1683be70d1388efa3ce00adc40510e595aef2b/recipes/xah-fly-keys";
@@ -73911,12 +74592,12 @@
     xah-get-thing = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xah-get-thing";
-        version = "20170303.1530";
+        version = "20170527.1806";
         src = fetchFromGitHub {
           owner = "xahlee";
           repo = "xah-get-thing-or-selection";
-          rev = "1eef698b7be06fa49347798089ca1e2ed8484da5";
-          sha256 = "0cysykwnwpy43mnx9fjiqk1r004ac6c7h92zhki8858bcgjnwzzk";
+          rev = "5adaf02b8a7464ffb81ae185edb48902a4c3a4d4";
+          sha256 = "16cxk55haln36m57pszxbbyx2h0dzdxagsj2zvm6i2nn0jhyy4v7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9e8dc32a5317f0ff0e72fa87220243dd742eb1ef/recipes/xah-get-thing";
@@ -73932,12 +74613,12 @@
     xah-lookup = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xah-lookup";
-        version = "20170227.1044";
+        version = "20170517.1459";
         src = fetchFromGitHub {
           owner = "xahlee";
           repo = "lookup-word-on-internet";
-          rev = "4843663678db42827d12f2514f8ad4e2f4abcfb9";
-          sha256 = "1hr4m5lrwhx1jf8zlwpx60w9528vq49j0q8kzydlsb895nivnn3s";
+          rev = "3872d3273b472202052dfd63a7d8e388f9517830";
+          sha256 = "0krmxp55gbmbxmzkj293v7i9c9lfxji47g0cmfjiyhzzamz1kdgw";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/38e6609a846a3c7781e0f03730b79bbf8d0355a9/recipes/xah-lookup";
@@ -74016,12 +74697,12 @@
     xahk-mode = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xahk-mode";
-        version = "20161218.2311";
+        version = "20170523.1946";
         src = fetchFromGitHub {
           owner = "xahlee";
           repo = "xahk-mode.el";
-          rev = "24aa00cd0a8c47f7d8906379eeccbeca22c1a50b";
-          sha256 = "1npa30kp5jaqn7qmsca0a3ch0428l4n8w0hix0bvlfwr5s4zksfy";
+          rev = "538b891a1565d109d079185b56332cd28dd846a7";
+          sha256 = "1rm3sih1rciszs7m9d29r7vkgs8q2kwpn8sdwadlycgjmk9c38s1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3d6422756b435f59ead15fa7e8081f5c88b2e93f/recipes/xahk-mode";
@@ -74268,12 +74949,12 @@
     xquery-tool = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "xquery-tool";
-        version = "20160823.902";
+        version = "20170605.126";
         src = fetchFromGitHub {
           owner = "paddymcall";
           repo = "xquery-tool.el";
-          rev = "b81b5862e8541aca5231840eb176afad7ab55cf3";
-          sha256 = "0dv3gl9djs9sbsg5mhdfnnv61ir9xccqijh7i2b82gq2j3lqhibm";
+          rev = "0d1e2960c48701b83be5255d56324f65a6ee182e";
+          sha256 = "0x6927x18nimh9rgnkl8dyc6r437a03byzscgg053lbg0cf2mqp1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/cc71e5ea4a0ecb006f62617f5b6caadc9b3c77b2/recipes/xquery-tool";
@@ -74289,12 +74970,12 @@
     xref-js2 = callPackage ({ emacs, fetchFromGitHub, fetchurl, js2-mode, lib, melpaBuild }:
     melpaBuild {
         pname = "xref-js2";
-        version = "20160803.116";
+        version = "20170530.126";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
           repo = "xref-js2";
-          rev = "031def02271fdbe2e0ab30515c7291a239fea4e6";
-          sha256 = "1i3gsv7npf6lg7hakky6yxn96aqjdlridj74l0vhj55j2w7ia6f8";
+          rev = "d5f93605405989529c2f66b542def6c32429b927";
+          sha256 = "1vzsw257xkqwlgfj8d5hnrirjhxzzs9d8ms40ihb2zwsxn70im53";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b5dab444ead98210b4ab3a6f9a61d013aed6d5b7/recipes/xref-js2";
@@ -74538,6 +75219,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    yahtzee = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "yahtzee";
+        version = "20170608.836";
+        src = fetchFromGitHub {
+          owner = "drdv";
+          repo = "yahtzee";
+          rev = "0a4c06ce68868133498e0ce1ab5efdf296fa4862";
+          sha256 = "12vmgn118bwrrjpp1a1s47zk1q80gx7pakjhll03vpsyw08yvg13";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/200169fdabce0ae3a2ecb6f4f3255c15ec3ed094/recipes/yahtzee";
+          sha256 = "1fnywiami9mszagmms27dmak6chcichdi7q70x5c6aimc4jb98jk";
+          name = "yahtzee";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://melpa.org/#/yahtzee";
+          license = lib.licenses.free;
+        };
+      }) {};
     yalinum = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "yalinum";
@@ -74643,22 +75345,22 @@
           license = lib.licenses.free;
         };
       }) {};
-    yankpad = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    yankpad = callPackage ({ emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "yankpad";
-        version = "20170220.55";
+        version = "20170607.819";
         src = fetchFromGitHub {
           owner = "Kungsgeten";
           repo = "yankpad";
-          rev = "0f2af3671f5f3b879a2c9a3f521f1d4066889d58";
-          sha256 = "0qx98klmc40064si47s7ivvyx3vzki1skyjkxszi6gl8g5k0i1dl";
+          rev = "70e755fcf58e37092de2c335355eab93d5f1fb44";
+          sha256 = "1ijd3vpym573p96dh81pw9rzlmman7dvamhvnf0jqp8mmy4g4bml";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/e64746d10f9e0158621a7c4dc41dc2eca6ad573c/recipes/yankpad";
           sha256 = "1w5r9zk33cjgsmk45znfg32ym06nyqj5q3knr59jmn1fafx7a3z4";
           name = "yankpad";
         };
-        packageRequires = [];
+        packageRequires = [ emacs ];
         meta = {
           homepage = "https://melpa.org/#/yankpad";
           license = lib.licenses.free;
@@ -74686,12 +75388,12 @@
     yapfify = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "yapfify";
-        version = "20170504.2218";
+        version = "20170519.115";
         src = fetchFromGitHub {
           owner = "JorisE";
           repo = "yapfify";
-          rev = "6bc89053a100f09f0568f67f3d47a3f94c392df2";
-          sha256 = "0mg94x6kx6wsql0r12pasb84dhq23gpzgk3n8i09w4qyjajhf20y";
+          rev = "492eb038b35f49b1012fb843d880bccc40f2260b";
+          sha256 = "1jj1j525xlwhylsysay52f4rdrwz3r72ghx4iggkxqiqbv919ia4";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/060c32d8e9fdc56fe702d265a935d74d76082f86/recipes/yapfify";
@@ -74791,12 +75493,12 @@
     yasnippet = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "yasnippet";
-        version = "20170418.351";
+        version = "20170605.1940";
         src = fetchFromGitHub {
           owner = "joaotavora";
           repo = "yasnippet";
-          rev = "8797a31337895fe5fb29727c5ef289168a856a1b";
-          sha256 = "0qvr7gbvjhh4n7j5hqj424v8np17x2kdcs1nx49p2zg9hm6y04ap";
+          rev = "e8ed276e2cba90126f694a90df28b5f5eca66376";
+          sha256 = "0ripg5bvj4hj0y7qb35fdfg38fkqsvcxa977d24wbswmgcj08bjs";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5d1927dc3351d3522de1baccdc4ce200ba52bd6e/recipes/yasnippet";
@@ -74832,11 +75534,11 @@
       }) {};
     yatex = callPackage ({ fetchhg, fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "yatex";
-        version = "20170503.1833";
+        version = "20170603.725";
         src = fetchhg {
           url = "https://www.yatex.org/hgrepos/yatex/";
-          rev = "428584533eab";
-          sha256 = "1nrvlziqfsyvsk09ynpww99z4vb8zv8h2jxsslvx1nm1shyn2ckh";
+          rev = "c996fbcc2e79";
+          sha256 = "1ibj0dhpgxa143azr07wkmz86fip247cbk2s5fwj4nrj96z6cw9y";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/04867a574773e8794335a2664d4f5e8b243f3ec9/recipes/yatex";
@@ -74894,12 +75596,12 @@
     ycmd = callPackage ({ cl-lib ? null, dash, deferred, emacs, fetchFromGitHub, fetchurl, let-alist, lib, melpaBuild, pkg-info, request, request-deferred, s }:
     melpaBuild {
         pname = "ycmd";
-        version = "20170509.2303";
+        version = "20170515.2255";
         src = fetchFromGitHub {
           owner = "abingham";
           repo = "emacs-ycmd";
-          rev = "05f0409fb7902daf49b4cd329e5c9ef569d77689";
-          sha256 = "0mp05xsphbidjgskp2pnv2x54z95dzmvfwdddpgmysmc99sz305y";
+          rev = "29aba538be5e44da81ad76a6078bb65c1c5e1aa6";
+          sha256 = "0fpccpiwwsxg0asdzg0m5hlwdv6jyr7khywnd1rb6kvr8m2qm0hf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4b25378540c64d0214797348579671bf2b8cc696/recipes/ycmd";
@@ -75092,12 +75794,12 @@
     zenburn-theme = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "zenburn-theme";
-        version = "20170430.758";
+        version = "20170511.1337";
         src = fetchFromGitHub {
           owner = "bbatsov";
           repo = "zenburn-emacs";
-          rev = "a035b214d6862289f8e0b1bf9fc737222da6b4a3";
-          sha256 = "0wkcgm9n56ws8frw7zsdhvibzr5xmzg4in8bbfw3rr8na9ggvhh3";
+          rev = "2f31ef9a954ec08202668a8d1b004db5a05831a2";
+          sha256 = "0g4vgdzpbp0l734ajd1r9lj6qylljxaazk139lhzzyvmqd5dwaf9";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/091dcc3775ec2137cb61d66df4e72aca4900897a/recipes/zenburn-theme";
@@ -75154,12 +75856,12 @@
     zerodark-theme = callPackage ({ all-the-icons, fetchFromGitHub, fetchurl, flycheck, lib, magit, melpaBuild }:
     melpaBuild {
         pname = "zerodark-theme";
-        version = "20170505.439";
+        version = "20170607.1301";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
           repo = "zerodark-theme";
-          rev = "60615d101769694038b17a2c75bb31c26f36a042";
-          sha256 = "09fpyhprmavv1fa97wa7lf182nhiw0797rh73xbhf7xhn1c22gbj";
+          rev = "ab406749083a41e5ca7fe518949a09853f23e5d5";
+          sha256 = "0kanprhczqx14gn87wjwi9x4fg6dn7i64awbwsls4r5nkqf4ykn0";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/72ef967a9bea2e100ae17aad1a88db95820f4f6a/recipes/zerodark-theme";
@@ -75363,10 +76065,10 @@
       }) {};
     zones = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
         pname = "zones";
-        version = "20170309.1440";
+        version = "20170605.1046";
         src = fetchurl {
-          url = "https://www.emacswiki.org/emacs/download/zones.el?revision=28";
-          sha256 = "1mgfv9q4mwng0cqni13kmsridbfqsw66z5cgynlrvagga6v94bq0";
+          url = "https://www.emacswiki.org/emacs/download/zones.el?revision=30";
+          sha256 = "05my99nn7pj5alswfhd11kkyibivqh65bhjfalbfv7flfmvg6pcz";
           name = "zones.el";
         };
         recipeFile = fetchurl {
@@ -75550,11 +76252,11 @@
     zpresent = callPackage ({ dash, emacs, fetchhg, fetchurl, lib, melpaBuild, org-parser }:
     melpaBuild {
         pname = "zpresent";
-        version = "20170420.2233";
+        version = "20170608.2201";
         src = fetchhg {
           url = "https://bitbucket.com/zck/zpresent.el";
-          rev = "f3a17c2b58c0";
-          sha256 = "1ra92piwxv5knlc79pj4n4dv895bdz5nv4pf8zd0k1rirn6qj6sa";
+          rev = "66d2f665daa1";
+          sha256 = "1fgggwivp405qm0nvbqk8vrnprimg336mcv3am37yavi9da48fi8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/3aae38ad54490fa650c832fb7d22e2c73b0fb060/recipes/zpresent";
@@ -75633,12 +76335,12 @@
     zzz-to-char = callPackage ({ avy, cl-lib ? null, emacs, fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "zzz-to-char";
-        version = "20161231.1557";
+        version = "20170519.335";
         src = fetchFromGitHub {
           owner = "mrkkrp";
           repo = "zzz-to-char";
-          rev = "aaa854efb6b9e4451e97dfe90d37f368ff868b9e";
-          sha256 = "1k66wsbgb7fqb5mbani0lzffy3yf0801rlgxwbkj34ciblz6a197";
+          rev = "b62414b155fe2e09d91b70059a909d1403d89acf";
+          sha256 = "07a086s3fpncr4plkmr89vghn7xwji9k69m64ri7i1vhnnl6q4zj";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/7063cbc1f1501ce81552d7ef1d42d1309f547c42/recipes/zzz-to-char";

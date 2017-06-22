@@ -1,22 +1,28 @@
-{ stdenv, buildPythonPackage, fetchurl,
-  pytest, mock, six, twisted
-}:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted }:
+
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "txaio";
-  version = "2.7.0";
+  version = "2.7.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1lmllmjjsqzl3w4faq2qhlgkaqn1yn1m7d99k822ib7qgz18bsly";
+  };
 
   buildInputs = [ pytest mock ];
+
   propagatedBuildInputs = [ six twisted ];
 
-  checkPhase = ''
-    py.test -k "not test_sdist"
+  patchPhase = ''
+    sed -i '152d' test/test_logging.py
   '';
 
-  src = fetchurl {
-    url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-    sha256 = "0hwd6jx6hb44p40id9r0m42y07rav5jvddf0f1bcm269i3dnwr47";
-  };
+  # test_chained_callback has been removed just post-2.7.1 because the functionality was decided against and the test
+  # breaks on python 3.6 https://github.com/crossbario/txaio/pull/104
+  checkPhase = ''
+    py.test -k "not (test_sdist or test_chained_callback)"
+  '';
 
   meta = with stdenv.lib; {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio.";

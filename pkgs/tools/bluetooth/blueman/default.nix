@@ -33,7 +33,8 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     makeWrapperArgs="--prefix PATH ':' ${binPath}"
-    wrapPythonPrograms
+    wrapPythonProgramsIn "$out/bin" "$pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$pythonPath"
   '';
 
   meta = with lib; {

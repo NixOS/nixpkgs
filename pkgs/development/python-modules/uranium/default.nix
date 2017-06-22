@@ -5,8 +5,9 @@ then throw "Uranium not supported for interpreter ${python.executable}"
 else
 
 stdenv.mkDerivation rec {
-  name = "uranium-${version}";
   version = "2.4.0";
+  pname = "uranium";
+  name = "${pname}-${version}";
   
   src = fetchFromGitHub {
     owner = "Ultimaker";

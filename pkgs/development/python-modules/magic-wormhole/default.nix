@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , nettools
 , glibcLocales
 , autobahn
@@ -12,21 +13,25 @@
 , tqdm
 , python
 , mock
+, ipaddress
+, humanize
+, pyopenssl
+, service-identity
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.8.1";
+  version = "0.9.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yh5nbhh9z1am2pqnb5qqyq1zjl1m7z6jnkmvry2q14qwspw9had";
+    sha256 = "14aed4b453278651d92c3fd8955a105e2d33dcde279fa25d1d759e0e769f16b3";
   };
 
   checkInputs = [ mock ];
   buildInputs = [ nettools glibcLocales ];
-  propagatedBuildInputs = [ autobahn cffi click hkdf pynacl spake2 tqdm ];
+  propagatedBuildInputs = [ autobahn cffi click hkdf pynacl spake2 tqdm ipaddress humanize pyopenssl service-identity ];
 
   postPatch = ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
@@ -34,6 +39,8 @@ buildPythonPackage rec {
     # XXX: disable one test due to warning:
     # setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
     sed -i -e "s|def test_text_subprocess|def skip_test_text_subprocess|" src/wormhole/test/test_scripts.py
+  '' + lib.optionalString (pythonAtLeast "3.3") ''
+    sed -i -e 's|"ipaddress",||' setup.py
   '';
 
   checkPhase = ''
