@@ -40,11 +40,19 @@ let
         elixir = defaultScope.elixir-1_4;
 
         elixir-1_4 = if versionAtLeast (lib.getVersion erlang) "18"
-                     then lib.callElixir ../interpreters/elixir/1.4.nix { debugInfo = true; }
+                     then
+                       lib.callElixir ../interpreters/elixir/1.4.nix {
+                         debugInfo = true;
+                         erlang = erlang;
+                       }
                      else throw "Elixir requires at least Erlang/OTP R18.";
 
         elixir-1_3 = if versionAtLeast (lib.getVersion erlang) "18"
-                     then lib.callElixir ../interpreters/elixir/1.3.nix { debugInfo = true; }
+                     then
+                       lib.callElixir ../interpreters/elixir/1.3.nix {
+                         debugInfo = true;
+                         erlang = erlang;
+                       }
                      else throw "Elixir requires at least Erlang/OTP R18.";
 
         lfe = callPackage ../interpreters/lfe { };
