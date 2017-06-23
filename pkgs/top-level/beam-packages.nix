@@ -37,6 +37,14 @@ rec {
     erlangR19_odbc_javac = erlangR19.override {
       javacSupport = true; odbcSupport = true;
     };
+    erlangR20 = lib.callErlang ../development/interpreters/erlang/R20.nix {
+      wxGTK = wxGTK30;
+    };
+    erlangR20_odbc = erlangR20.override { odbcSupport = true; };
+    erlangR20_javac = erlangR20.override { javacSupport = true; };
+    erlangR20_odbc_javac = erlangR20.override {
+      javacSupport = true; odbcSupport = true;
+    };
 
     # Bash fork, using custom builder.
     erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-8-basho.nix {
