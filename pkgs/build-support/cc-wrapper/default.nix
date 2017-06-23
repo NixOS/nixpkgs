@@ -27,6 +27,8 @@ let
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
 
+  ccExtraOutputs = filter (name: name != "out") (cc.outputs or []);
+
   libc_bin = if nativeLibc then null else getBin libc;
   libc_dev = if nativeLibc then null else getDev libc;
   libc_lib = if nativeLibc then null else getLib libc;
@@ -39,7 +41,7 @@ let
     "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name =
     (if name != "" then name else ccName + "-wrapper") +
     (if cc != null && ccVersion != "" then "-" + ccVersion else "");
@@ -159,9 +161,9 @@ stdenv.mkDerivation {
       ldPath="${binutils_bin}/bin"
 
       # Propagate the wrapped cc so that if you install the wrapper,
-      # you get tools like gcov, the manpages, etc. as well (including
+      # you get tools like gcov, etc. as well (including
       # for binutils and Glibc).
-      echo ${cc} ${cc.man or ""} ${binutils_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
+      echo ${cc} ${binutils_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
 
       echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
@@ -172,6 +174,10 @@ stdenv.mkDerivation {
       exec="$ldPath/ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
+
+    + optionalString (ccExtraOutputs != []) ''
+      ${concatMapStringsSep "\n" (name: "ln -s ${getAttr name cc} \$${name}") ccExtraOutputs}
+    ''
 
     + ''
       # Create a symlink to as (the assembler).  This is useful when a
@@ -301,3 +307,5 @@ stdenv.mkDerivation {
         + " (wrapper script)";
     };
 }
+// optionalAttrs (ccExtraOutputs != []) { inherit (cc) outputs; }
+)
