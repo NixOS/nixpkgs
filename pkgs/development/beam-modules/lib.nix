@@ -43,4 +43,12 @@ rec {
         mkDerivation = pkgs.makeOverridable builder;
       };
 
+  callElixir = drv: args:
+    let
+      builder = callPackage ../../development/interpreters/elixir/generic-builder.nix args;
+    in
+      callPackage drv {
+        mkDerivation = pkgs.makeOverridable builder;
+      };
+
 }

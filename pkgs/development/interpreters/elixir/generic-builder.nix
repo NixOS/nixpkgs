@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, erlang, rebar, makeWrapper, coreutils, curl, bash,
-  debugInfo ? false }:
+{ pkgs, stdenv, fetchFromGitHub, erlang, rebar, makeWrapper, coreutils, curl
+, bash, debugInfo ? false }:
 
-stdenv.mkDerivation rec {
-  name = "elixir-${version}";
-  version = "1.4.4";
+{ baseName ? "elixir"
+, version
+, sha256 ? null
+, rev ? "v${version}"
+, src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
+}:
 
-  src = fetchFromGitHub {
-    owner = "elixir-lang";
-    repo = "elixir";
-    rev = "v${version}";
-    sha256 = "0m51cirkv1dahw4z2jlmz58cwmpy0dya88myx4wykq0v5bh1xbq8";
-  };
+stdenv.mkDerivation ({
+  name = "${baseName}-${version}";
+
+  inherit src version;
 
   buildInputs = [ erlang rebar makeWrapper ];
 
-  # Elixir expects that UTF-8 locale to be set (see https://github.com/elixir-lang/elixir/issues/3548).
-  # In other cases there is warnings during compilation.
   LANG = "en_US.UTF-8";
   LC_TYPE = "en_US.UTF-8";
 
@@ -66,6 +65,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.epl10;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny havvy couchemar ];
+    maintainers = with maintainers; [ the-kenny havvy couchemar ankhers ];
   };
-}
+})
