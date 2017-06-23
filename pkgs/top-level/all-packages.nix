@@ -15141,6 +15141,10 @@ with pkgs;
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
 
+  scyther = callPackage_i686 ../tools/security/scyther { };
+
+  scyther-gui = callPackage ../tools/security/scyther/gui.nix { };
+
   shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
