@@ -9767,7 +9767,7 @@ with pkgs;
     ### KDE APPLICATIONS
 
     inherit (kdeApplications.override { libsForQt5 = self; })
-      libkdcraw libkexiv2 libkipi libkomparediff2;
+      kholidays libkdcraw libkexiv2 libkipi libkomparediff2;
 
     ### LIBRARIES
 
@@ -9777,11 +9777,13 @@ with pkgs;
 
     qgpgme = callPackage ../development/libraries/gpgme { };
 
-    grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
+    grantlee = callPackage ../development/libraries/grantlee/5 { };
 
     inherit (callPackage ../development/libraries/kirigami { })
       kirigami_1
       kirigami_2;
+
+    kdiagram = callPackage ../development/libraries/kdiagram { };
 
     kirigami = kirigami_1;
 
@@ -14639,8 +14641,8 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate kdenlive
-    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmix
-    kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
+    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmail
+    kmix kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
     spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };

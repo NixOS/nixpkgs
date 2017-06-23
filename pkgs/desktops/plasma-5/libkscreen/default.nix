@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib, copyPathsToStore, propagate,
   extra-cmake-modules,
   kwayland, libXrandr, qtx11extras
 }:
@@ -13,4 +13,5 @@ mkDerivation {
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_LIBKSCREEN_BACKENDS=\"''${!outputBin}/$qtPluginPrefix/kf5/kscreen\""
   '';
+  setupHook = propagate "out";
 }

@@ -15,4 +15,11 @@ mkDerivation {
     knotifications kservice kwidgetsaddons kwindowsystem libgcrypt qgpgme
   ];
   propagatedBuildInputs = [ qtbase ];
+  postPatch = ''
+    sed -i src/runtime/kwalletd/org.kde.kwalletd5.service.in \
+        -e 's|@CMAKE_INSTALL_PREFIX@/bin|@KDE_INSTALL_BINDIR@|'
+  '';
+  postFixup = ''
+    rm "''${!outputBin}/share/dbus-1/services/org.kde.kwalletd.service"
+  '';
 }
