@@ -4,6 +4,7 @@
 , kio, kcrash
 , boost, libraw, fftw, eigen, exiv2, lcms2, gsl, openexr
 , openjpeg, opencolorio, vc, poppler_qt5, curl, ilmbase
+, qtmultimedia, qtx11extras
 }:
 
 mkDerivation rec {
@@ -23,6 +24,7 @@ mkDerivation rec {
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
     boost libraw fftw eigen exiv2 lcms2 gsl openexr
     openjpeg opencolorio vc poppler_qt5 curl ilmbase
+    qtmultimedia qtx11extras
   ];
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
