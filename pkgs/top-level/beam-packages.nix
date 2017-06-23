@@ -73,6 +73,7 @@ rec {
     erlangR17 = packagesWith interpreters.erlangR17;
     erlangR18 = packagesWith interpreters.erlangR18;
     erlangR19 = packagesWith interpreters.erlangR19;
+    erlangR20 = packagesWith interpreters.erlangR20;
 
   };
 }
