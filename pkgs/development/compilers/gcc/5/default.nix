@@ -35,6 +35,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
+, buildPackages
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -312,6 +313,7 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (buildPlatform != hostPlatform) [buildPackages.stdenv.cc])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 
@@ -422,7 +424,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}
@@ -449,6 +451,8 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
+      --build=${buildPlatform.config}
+      --host=${hostPlatform.config}
       --target=${targetPlatform.config}
       ${xwithArch}
       ${xwithCpu}

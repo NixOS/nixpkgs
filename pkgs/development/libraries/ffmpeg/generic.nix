@@ -187,7 +187,7 @@ stdenv.mkDerivation rec {
       fi
     '';
   in {
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     configureFlags = configureFlags ++ [
       "--cross-prefix=${stdenv.cross.config}-"
       "--enable-cross-compile"

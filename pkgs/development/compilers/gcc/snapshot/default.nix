@@ -405,7 +405,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}
