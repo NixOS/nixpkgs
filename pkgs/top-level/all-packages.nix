@@ -5989,14 +5989,8 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
-    elixir
-    lfe
-    erlangR16 erlangR16_odbc
-    erlang_basho_R16B02 erlang_basho_R16B02_odbc
-    erlangR17 erlangR17_odbc erlangR17_javac erlangR17_odbc_javac
-    erlangR18 erlangR18_odbc erlangR18_javac erlangR18_odbc_javac
-    erlangR19 erlangR19_odbc erlangR19_javac erlangR19_odbc_javac
-    erlangR20;
+    erlangR17 erlangR18 erlangR19 erlangR20
+    erlang_basho_R16B02 elixir lfe;
 
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
