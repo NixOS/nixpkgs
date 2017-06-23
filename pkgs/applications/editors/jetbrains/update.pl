@@ -1,29 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i perl -p perl perlPackages.LWP
+#!nix-shell -i perl -p perl perlPackages.LWPProtocolhttps perlPackages.FileSlurp
 
 use strict;
 use List::Util qw(reduce);
-use File::Basename qw(dirname);
+use File::Slurp;
 use LWP::Simple;
-
-sub readFile {
-  my ($filename) = @_;
-  local $/ = undef;
-  open FILE, $filename or die "readFile($filename) failed: $!";
-  binmode FILE;
-  my $data = <FILE>;
-  close FILE;
-  return $data;
-}
-
-sub writeFile {
-  my ($filename, $content) = @_;
-  make_path(dirname($filename)) or die "$!" unless -d dirname($filename);
-  open FH, ">$filename" or die "writeFile($filename) failed: $!";
-  binmode FH; # do not emit \r
-  print FH $content;
-  close FH;
-}
 
 sub semantic_less {
   my ($a, $b) = @_;
@@ -88,6 +69,6 @@ sub update_nix_block {
   return $block;
 }
 
-my $nix = readFile 'default.nix';
-$nix =~ s/(= build\w+ rec \{.+?\};\n\n)/update_nix_block($1)/gse;
-writeFile 'default.nix', $nix;
+my $nix = read_file 'default.nix';
+$nix =~ s/(= build\w+ rec \{.+?\n  \};\n)/update_nix_block($1)/gse;
+write_file 'default.nix', $nix;
