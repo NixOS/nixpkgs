@@ -1,12 +1,14 @@
-{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
+{ fetchFromGitHub, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
 , tcl-8_5, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "rrdtool-1.7.0";
+  name = "rrdtool-1.7.0.2017-06-23";
 
-  src = fetchurl {
-    url = "http://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
-    sha256 = "0ssjqpa0dwwzbylc0drmlbq922qcw8crffc0rpr805xr6n4k8zgr";
+  src = fetchFromGitHub {
+    owner = "oetiker";
+    repo = "rrdtool-1.x";
+    rev = "e0eb6257ad9b150636ef0ccc3797b71e6a3e822a";
+    sha256 = "0szjnvwailsianlhxvvgzr97d78nvkkid3imcfvawy5w4x6bvasv";
   };
 
   nativeBuildInputs = [ pkgconfig ];
