@@ -43,12 +43,31 @@ rec {
         mkDerivation = pkgs.makeOverridable builder;
       };
 
-  callElixir = drv: args:
+  /* Uses generic-builder to evaluate provided drv containing Elixir version
+  specific data.
+
+  drv: package containing version-specific args;
+  vsn: minimum OTP version that Elixir will build on;
+  builder: generic builder for all Erlang versions;
+  args: arguments merged into version-specific args, used mostly to customize
+        dependencies;
+
+  Arguments passed to the generic-builder are overridable.
+
+  Please note that "mkDerivation" defined here is the one called from 1.4.nix
+  and similar files.
+  */
+  callElixir = drv: vsn: args:
     let
+      inherit (stdenv.lib) versionAtLeast;
       builder = callPackage ../../development/interpreters/elixir/generic-builder.nix args;
     in
-      callPackage drv {
-        mkDerivation = pkgs.makeOverridable builder;
-      };
+      if versionAtLeast (getVersion args.erlang) vsn
+      then
+        callPackage drv {
+          mkDerivation = pkgs.makeOverridable builder;
+        }
+      else
+        throw "Elixir requires at least Erlang/OTP R${vsn}.";
 
 }

@@ -39,21 +39,17 @@ let
         # BEAM-based languages.
         elixir = defaultScope.elixir-1_4;
 
-        elixir-1_4 = if versionAtLeast (lib.getVersion erlang) "18"
-                     then
-                       lib.callElixir ../interpreters/elixir/1.4.nix {
-                         debugInfo = true;
-                         erlang = erlang;
-                       }
-                     else throw "Elixir requires at least Erlang/OTP R18.";
+        elixir-1_4 = lib.callElixir ../interpreters/elixir/1.4.nix "18" {
+                       debugInfo = true;
+                       erlang = erlang;
+                       rebar = defaultScope.rebar;
+                     };
 
-        elixir-1_3 = if versionAtLeast (lib.getVersion erlang) "18"
-                     then
-                       lib.callElixir ../interpreters/elixir/1.3.nix {
-                         debugInfo = true;
-                         erlang = erlang;
-                       }
-                     else throw "Elixir requires at least Erlang/OTP R18.";
+        elixir-1_3 = lib.callElixir ../interpreters/elixir/1.3.nix "18" {
+                       debugInfo = true;
+                       erlang = erlang;
+                       rebar = defaultScope.rebar;
+                     };
 
         lfe = callPackage ../interpreters/lfe { };
 
