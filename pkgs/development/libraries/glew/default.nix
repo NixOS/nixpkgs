@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  makeFlags = if hostPlatform == buildPlatform then null else [
-    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel}"
+  makeFlags = [
+    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
   ];
 
   meta = with stdenv.lib; {

@@ -1,7 +1,6 @@
 { stdenv, fetchurl
 , bzip2
 , enableNLS ? false, libnatspec
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation {
@@ -23,13 +22,13 @@ stdenv.mkDerivation {
     ./CVE-2015-7697.diff
     ./CVE-2014-9913.patch
     ./CVE-2016-9844.patch
+    ./dont-hardcode-cc.patch
   ] ++ stdenv.lib.optional enableNLS
     (fetchurl {
       url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";
       name = "unzip-6.0-natspec.patch";
       sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
-    })
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform) ./cross-cc.patch;
+    });
 
   nativeBuildInputs = [ bzip2 ];
   buildInputs = [ bzip2 ] ++ stdenv.lib.optional enableNLS libnatspec;
