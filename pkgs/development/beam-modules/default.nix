@@ -16,7 +16,7 @@ let
     in
       import ./hex-packages.nix {
         inherit pkgs stdenv callPackage;
-      } // {
+      } // rec {
         inherit callPackage erlang;
         beamPackages = self;
 
@@ -37,18 +37,16 @@ let
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.
-        elixir = defaultScope.elixir-1_4;
+        elixir = elixir-1_4;
 
         elixir-1_4 = lib.callElixir ../interpreters/elixir/1.4.nix "18" {
+                       inherit rebar erlang;
                        debugInfo = true;
-                       erlang = erlang;
-                       rebar = defaultScope.rebar;
                      };
 
         elixir-1_3 = lib.callElixir ../interpreters/elixir/1.3.nix "18" {
+                       inherit rebar erlang;
                        debugInfo = true;
-                       erlang = erlang;
-                       rebar = defaultScope.rebar;
                      };
 
         lfe = callPackage ../interpreters/lfe { };

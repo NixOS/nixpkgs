@@ -60,7 +60,7 @@ rec {
   callElixir = drv: vsn: args:
     let
       inherit (stdenv.lib) versionAtLeast;
-      builder = callPackage ../../development/interpreters/elixir/generic-builder.nix args;
+      builder = callPackage ../interpreters/elixir/generic-builder.nix args;
     in
       if versionAtLeast (getVersion args.erlang) vsn
       then
