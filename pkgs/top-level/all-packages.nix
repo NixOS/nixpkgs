@@ -6638,7 +6638,7 @@ with pkgs;
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
       ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey;
-    inherit (llvmPackages_39) llvm clang-unwrapped;
+    inherit (llvmPackages_4) llvm clang-unwrapped;
     utillinux = if stdenv.isLinux then utillinuxMinimal else null;
   };
 
