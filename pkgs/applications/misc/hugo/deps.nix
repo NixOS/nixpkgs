@@ -4,8 +4,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/BurntSushi/toml";
-      rev = "b26d9c308763d68093482582cea63d69be07a0f0";
-      sha256 = "0k7v2i1d2d6si8gswn83qb84czhhia53v2wdy33yz9ppdidxk0ry";
+      rev = "8fb9fdc4f82fd3495b9086c911b86cc3d50cb7ab";
+      sha256 = "0igg0cwc0cihsxrii203h1r5y2lmaclc164cjhyv2hpfsvb11zlg";
     };
   }
   {
