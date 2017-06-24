@@ -9,5 +9,5 @@ qtSubmodule {
     moveToOutput "$qtQmlPrefix" "$bin"
   '';
   # Linking with -lclipper fails with parallel build enabled
-  enableParallelBuild = false;
+  enableParallelBuilding = false;
 }
