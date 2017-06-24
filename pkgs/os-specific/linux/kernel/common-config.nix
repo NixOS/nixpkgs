@@ -579,7 +579,7 @@ with stdenv.lib;
   FW_LOADER_USER_HELPER_FALLBACK? n
 
   # Disable various self-test modules that have no use in a production system
-  ${optionalString (versionOlder version "4.11") ''
+  ${optionalString (versionOlder version "4.9") ''
     ARM_KPROBES_TEST? n
   ''}
 
