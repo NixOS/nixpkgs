@@ -120,9 +120,8 @@ hash_from_ref(){
 url_to_name(){
     local url=$1
     local ref=$2
-    # basename removes the / and .git suffixes
     local base
-    base=$(basename "$url" .git)
+    base=$(basename "$url" .git | cut -d: -f2)
 
     if [[ $ref =~ ^[a-z0-9]+$ ]]; then
         echo "$base-${ref:0:7}"
