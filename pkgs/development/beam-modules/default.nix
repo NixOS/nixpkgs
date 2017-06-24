@@ -1,7 +1,7 @@
-{ stdenv, pkgs, erlang, overrides ? (self: super: {}) }:
+{ stdenv, pkgs, erlang }:
 
 let
-  inherit (stdenv.lib) fix' extends getVersion versionAtLeast;
+  inherit (stdenv.lib) getVersion versionAtLeast makeExtensible;
 
   lib = pkgs.callPackage ./lib.nix {};
 
@@ -50,4 +50,4 @@ let
         cuter = callPackage ../tools/erlang/cuter {};
         relxExe = callPackage ../tools/erlang/relx-exe {};
       };
-in fix' (extends overrides packages)
+in makeExtensible packages
