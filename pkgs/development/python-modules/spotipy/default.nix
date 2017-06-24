@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests2 }:
+{ stdenv, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "spotipy";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "1l8ya0cln936x0mx2j5ngl1xwpc0r89hs3wcvb8x8paw3d4dl1ab";
   };
 
-  propagatedBuildInputs = [ requests2 ];
+  propagatedBuildInputs = [ requests ];
 
   meta = with stdenv.lib; {
     homepage = "http://spotipy.readthedocs.org/";
