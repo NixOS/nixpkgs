@@ -1,8 +1,8 @@
-Index: qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
+Index: qtbase-opensource-src-5.9.0/src/corelib/kernel/qcoreapplication.cpp
 ===================================================================
---- qtbase-opensource-src-5.8.0.orig/src/corelib/kernel/qcoreapplication.cpp
-+++ qtbase-opensource-src-5.8.0/src/corelib/kernel/qcoreapplication.cpp
-@@ -2476,6 +2476,15 @@ QStringList QCoreApplication::libraryPat
+--- qtbase-opensource-src-5.9.0.orig/src/corelib/kernel/qcoreapplication.cpp
++++ qtbase-opensource-src-5.9.0/src/corelib/kernel/qcoreapplication.cpp
+@@ -2533,6 +2533,15 @@ QStringList QCoreApplication::libraryPat
          QStringList *app_libpaths = new QStringList;
          coreappdata()->app_libpaths.reset(app_libpaths);
  

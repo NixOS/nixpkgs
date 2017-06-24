@@ -8,4 +8,6 @@ qtSubmodule {
     moveToOutput "$qtPluginPrefix" "$bin"
     moveToOutput "$qtQmlPrefix" "$bin"
   '';
+  # Linking with -lclipper fails with parallel build enabled
+  enableParallelBuild = false;
 }

@@ -1,9 +1,9 @@
-Index: qtbase-opensource-src-5.8.0/src/plugins/platforms/xcb/qxcbcursor.cpp
+Index: qtbase-opensource-src-5.9.0/src/plugins/platforms/xcb/qxcbcursor.cpp
 ===================================================================
---- qtbase-opensource-src-5.8.0.orig/src/plugins/platforms/xcb/qxcbcursor.cpp
-+++ qtbase-opensource-src-5.8.0/src/plugins/platforms/xcb/qxcbcursor.cpp
-@@ -309,13 +309,13 @@ QXcbCursor::QXcbCursor(QXcbConnection *c
- #if defined(XCB_USE_XLIB) && !defined(QT_NO_LIBRARY)
+--- qtbase-opensource-src-5.9.0.orig/src/plugins/platforms/xcb/qxcbcursor.cpp
++++ qtbase-opensource-src-5.9.0/src/plugins/platforms/xcb/qxcbcursor.cpp
+@@ -311,10 +311,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *c
+ #if defined(XCB_USE_XLIB) && QT_CONFIG(library)
      static bool function_ptrs_not_initialized = true;
      if (function_ptrs_not_initialized) {
 -        QLibrary xcursorLib(QLatin1String("Xcursor"), 1);
@@ -15,6 +15,3 @@ Index: qtbase-opensource-src-5.8.0/src/plugins/platforms/xcb/qxcbcursor.cpp
              xcursorFound = xcursorLib.load();
          }
          if (xcursorFound) {
-             ptrXcursorLibraryLoadCursor =
-                 (PtrXcursorLibraryLoadCursor) xcursorLib.resolve("XcursorLibraryLoadCursor");
-             ptrXcursorLibraryGetTheme =
