@@ -15,8 +15,6 @@ let
   version = "8.1.20170106";
   rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
 
-  outputs = [ "out" "doc" ];
-
   commonPreConfigure =  ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
@@ -77,6 +75,8 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
+  outputs = [ "out" "doc" ];
+
   passthru = {
     inherit bootPkgs;
   } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
@@ -101,26 +101,26 @@ in stdenv.mkDerivation (rec {
   '';
 
   configureFlags = [
-    "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutils}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutils}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutils}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutils}/bin/${cross.config}-ranlib"
+    "CC=${stdenv.cc}/bin/${cross.config}-cc"
+    "LD=${stdenv.cc}/bin/${cross.config}-ld"
+    "AR=${stdenv.cc}/bin/${cross.config}-ar"
+    "NM=${stdenv.cc}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.cc}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutils ];
+  buildInputs = commonBuildInputs;
 
-  dontSetConfigureCross = true;
+  configurePlatforms = [];
 
   passthru = {
     inherit bootPkgs cross;
 
-    cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
+    cc = "${stdenv.cc}/bin/${cross.config}-cc";
 
-    ld = "${stdenv.binutils}/bin/${cross.config}-ld";
+    ld = "${stdenv.cc}/bin/${cross.config}-ld";
   };
 })
