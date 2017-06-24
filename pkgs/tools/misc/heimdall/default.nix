@@ -30,8 +30,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,share/doc/heimdall,lib/udev/rules.d}
     install -m755 -t $out/bin                bin/*
-    install -m644 -t $out/share/doc/heimdall ../Linux/README
     install -m644 -t $out/lib/udev/rules.d   ../heimdall/60-heimdall.rules
+    install -m644 ../Linux/README   $out/share/doc/heimdall/README.linux
+    install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
   '';
 
   enableParallelBuilding = true;
