@@ -2994,6 +2994,8 @@ with pkgs;
 
   maildrop = callPackage ../tools/networking/maildrop { };
 
+  mailhog = callPackage ../servers/mail/mailhog {};
+
   mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
 
   mailsend = callPackage ../tools/networking/mailsend { };
