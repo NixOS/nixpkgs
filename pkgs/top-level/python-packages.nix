@@ -11607,15 +11607,17 @@ in {
 
 
   gflags = buildPythonPackage rec {
-    name = "gflags-2.0";
+    version = "3.1.1";
+    name = "gflags-${version}";
 
-    src = pkgs.fetchurl {
-      url = "http://python-gflags.googlecode.com/files/python-${name}.tar.gz";
-      sha256 = "1mkc7315bpmh39vbn0jq237jpw34zsrjr1sck98xi36bg8hnc41i";
+    src = fetchPypi {
+      inherit version;
+      pname = "python-gflags";
+      sha256 = "0qvcizlz6r4511kl4jlg6fr34y1ka956dr2jj1q0qcklr94n9zxa";
     };
 
     meta = {
-      homepage = http://code.google.com/p/python-gflags/;
+      homepage = https://github.com/google/python-gflags;
       description = "A module for command line handling, similar to Google's gflags for C++";
     };
   };
