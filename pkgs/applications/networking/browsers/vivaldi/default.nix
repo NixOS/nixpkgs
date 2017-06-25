@@ -7,6 +7,7 @@
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
 , patchelf
+, proprietaryCodecs ? true, vivaldi-ffmpeg-codecs ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     atk alsaLib dbus_libs cups gtk3 gdk_pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     gstreamer libxml2 gst-plugins-base pango cairo gnome3.gconf
-  ];
+  ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.is64bit)
@@ -45,6 +46,10 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
       opt/vivaldi/vivaldi-bin
+  '' + stdenv.lib.optionalString proprietaryCodecs ''
+    sed -i '/^VIVALDI_FFMPEG_FOUND/ a \
+    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/vivaldi/vivaldi
+  '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
 
