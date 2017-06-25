@@ -14988,6 +14988,8 @@ with pkgs;
 
   mopidy-gmusic = callPackage ../applications/audio/mopidy-gmusic { };
 
+  mopidy-local-images = callPackage ../applications/audio/mopidy-local-images { };
+
   mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
 
   mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
