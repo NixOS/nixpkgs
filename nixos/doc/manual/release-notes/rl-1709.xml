@@ -12,6 +12,11 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      The Gnome version is now 3.24.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The user handling now keeps track of deallocated UIDs/GIDs. When a user
       or group is revived, this allows it to be allocated the UID/GID it had before.
       A consequence is that UIDs and GIDs are no longer reused.
@@ -207,7 +212,7 @@ rmdir /var/lib/ipfs/.ipfs
   <listitem>
     <para>
       Nixpkgs overlays may now be specified with a file as well as a directory. The
-      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and 
+      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and
       <filename>~/.config/nixpkgs/overlays.nix</filename> can be used instead of the
       <filename>~/.config/nixpkgs/overalys</filename> directory.
     </para>
