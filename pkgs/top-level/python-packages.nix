@@ -12926,30 +12926,7 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
-  pylast = buildPythonPackage rec {
-    name = "pylast-${version}";
-    version = "1.8.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pylast/${name}.tar.gz";
-      sha256 = "85f8dd96aef0ccba5f80379c3d7bc1fabd72f59aebab040daf40a8b72268f9bd";
-    };
-
-    propagatedBuildInputs = with self; [
-      certifi
-      six
-    ];
-
-    # tests require last.fm credentials
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/pylast/pylast";
-      description = "A python interface to last.fm (and compatibles)";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ rvolosatovs ];
-    };
-  };
+  pylast = callPackage ../development/python-modules/pylast/default.nix { };
 
   pylru = buildPythonPackage rec {
     name = "pylru-${version}";
