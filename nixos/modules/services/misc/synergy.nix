@@ -44,6 +44,15 @@ in
           type = types.bool;
           description = "Whether the Synergy client should be started automatically.";
         };
+        enableCrypto = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether to enable SSL encryption of the Synergy connection. You
+            will need to install the server certificate fingerprint(s) in
+            ~/.synergy/SSL/Fingerprints/TrustedServers.txt.  Please refer to
+            the synergy wiki for details.
+          '';
       };
 
       server = {
@@ -73,6 +82,17 @@ in
           type = types.bool;
           description = "Whether the Synergy server should be started automatically.";
         };
+        enableCrypto = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether to enable SSL encryption of the Synergy connection. You
+            will need to prepare an x509 certificate pair, install it at
+            ~/.synergy/SSL/Synergy.pem, and store its fingerprint in
+            ~/.synergy/SSL/Fingerprints/Local.txt.  Please refer to the synergy
+            wiki for details.
+          '';
+        };
       };
     };
 
@@ -88,17 +108,27 @@ in
         description = "Synergy client";
         wantedBy = optional cfgC.autoStart "multi-user.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergyc -f ${optionalString (cfgC.screenName != "") "-n ${cfgC.screenName}"} ${cfgC.serverAddress}'';
+        serviceConfig.ExecStart =
+            ''${pkgs.synergy}/bin/synergyc''
+          + " --no-daemon "
+          + optionalString (cfgC.screenName != "") "-n ${cfgC.screenName} "
+          + optionalString (cfgC.enableCrypto)     "--enable-crypto"
+          + cfgC.serverAddress;
         serviceConfig.Restart = "on-failure";
       };
     })
     (mkIf cfgS.enable {
-      systemd.services."synergy-server" = {
+      systemd.user.services."synergy-server" = {
         after = [ "network.target" ];
         description = "Synergy server";
-        wantedBy = optional cfgS.autoStart "multi-user.target";
+        wantedBy = optional cfgS.autoStart "graphical-session.target";
+        partOf = optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart = ''${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} -f ${optionalString (cfgS.address != "") "-a ${cfgS.address}"} ${optionalString (cfgS.screenName != "") "-n ${cfgS.screenName}" }'';
+        serviceConfig.ExecStart =
+          "${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} --no-daemon"
+          + optionalString (cfgS.address != "")    " -a ${cfgS.address}"
+          + optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
+          + optionalString (cfgS.enableCrypto)     " --enable-crypto";
         serviceConfig.Restart = "on-failure";
       };
     })
