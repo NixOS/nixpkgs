@@ -12926,24 +12926,7 @@ in {
 
   kitchen = callPackage ../development/python-modules/kitchen/default.nix { };
 
-  pylast = buildPythonPackage rec {
-    name = "pylast-${version}";
-    version = "0.5.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pylast/${name}.tar.gz";
-      sha256 = "bf35820be35447d55564d36072d40b09ac8a7fd41a6f1a7a9d408f4d0eaefac4";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/pylast/;
-      description = "A python interface to last.fm (and compatibles)";
-      license = licenses.asl20;
-    };
-  };
+  pylast = callPackage ../development/python-modules/pylast/default.nix { };
 
   pylru = buildPythonPackage rec {
     name = "pylru-${version}";
