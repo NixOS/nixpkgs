@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kio, ki18n,
+  kio, ki18n, karchive, qttools,
   perl, python, php
 }:
 
@@ -13,5 +13,5 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kio ];
-  buildInputs = [ perl python php ki18n ];
+  buildInputs = [ perl python php ki18n karchive qttools ];
 }
