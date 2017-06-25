@@ -30444,6 +30444,8 @@ EOF
 
   gensim = callPackage  ../development/python-modules/gensim { };
 
+  uritools = callPackage ../development/python-modules/uritools { };
+
 });
 
 in fix' (extends overrides packages)
