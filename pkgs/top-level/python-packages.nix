@@ -23596,6 +23596,8 @@ in {
     };
   });
 
+  spotipy = callPackage ../development/python-modules/spotipy { };
+
   Pweave = buildPythonPackage (rec {
     name = "Pweave-0.25";
 
@@ -23623,8 +23625,6 @@ in {
   spyder = callPackage ../applications/science/spyder {
     rope = if isPy3k then null else self.rope;
   };
-
-
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
@@ -30443,8 +30443,6 @@ EOF
   smart_open =  callPackage ../development/python-modules/smart_open { };
 
   gensim = callPackage  ../development/python-modules/gensim { };
-
-  spotipy = callPackage ../development/python-modules/spotipy { };
 
 });
 
