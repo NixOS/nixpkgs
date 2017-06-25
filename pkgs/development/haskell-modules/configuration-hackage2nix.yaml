@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.19
+  # LTS Haskell 8.20
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -346,7 +346,7 @@ default-package-overrides:
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
   - check-email ==1.0.2
-  - checkers ==0.4.6
+  - checkers ==0.4.7
   - chell ==0.4.0.1
   - choice ==0.2.1
   - chunked-data ==0.3.0
@@ -356,7 +356,7 @@ default-package-overrides:
   - cipher-camellia ==0.0.2
   - cipher-des ==0.0.6
   - cipher-rc4 ==0.1.4
-  - circle-packing ==0.1.0.5
+  - circle-packing ==0.1.0.6
   - clang-pure ==0.2.0.2
   - clash-ghc ==0.7.2
   - clash-lib ==0.7.1
@@ -434,7 +434,7 @@ default-package-overrides:
   - cookie ==0.4.2.1
   - countable ==1.0
   - courier ==0.1.1.5
-  - cpphs ==1.20.5
+  - cpphs ==1.20.8
   - cprng-aes ==0.6.1
   - cpu ==0.1.2
   - cpuinfo ==0.1.0.1
@@ -626,7 +626,7 @@ default-package-overrides:
   - erf ==2.0.0.0
   - errors ==2.1.3
   - ersatz ==0.3.1
-  - esqueleto ==2.5.2
+  - esqueleto ==2.5.3
   - etc ==0.0.0.2
   - etcd ==1.0.5
   - ether ==0.4.2.0
@@ -705,7 +705,7 @@ default-package-overrides:
   - format-numbers ==0.1.0.0
   - formatting ==6.2.4
   - fortran-src ==0.1.0.4
-  - foundation ==0.0.11
+  - foundation ==0.0.12
   - Frames ==0.1.9
   - free ==4.12.4
   - free-vl ==0.1.4
@@ -937,7 +937,7 @@ default-package-overrides:
   - HaRe ==0.8.4.0
   - harp ==0.4.2
   - hasbolt ==0.1.1.3
-  - hashable ==1.2.6.0
+  - hashable ==1.2.6.1
   - hashable-time ==0.2.0.1
   - hashmap ==1.3.2
   - hashtables ==1.2.1.1
@@ -975,7 +975,7 @@ default-package-overrides:
   - hatex-guide ==1.3.1.6
   - haxl ==0.5.0.0
   - haxl-amazonka ==0.1.1
-  - HaXml ==1.25.3
+  - HaXml ==1.25.4
   - haxr ==3000.11.2
   - hbeanstalk ==0.2.4
   - Hclip ==3.0.0.4
@@ -994,7 +994,7 @@ default-package-overrides:
   - heterocephalus ==1.0.5.0
   - hex ==0.1.2
   - hexml ==0.3.2
-  - hexpat ==0.20.10
+  - hexpat ==0.20.13
   - hexstring ==0.11.1
   - hflags ==0.4.2
   - hformat ==0.1.0.1
@@ -1308,10 +1308,10 @@ default-package-overrides:
   - lmdb ==0.2.5
   - loch-th ==0.2.1
   - log ==0.7
-  - log-base ==0.7.1
+  - log-base ==0.7.1.1
   - log-domain ==0.11.1
   - log-elasticsearch ==0.7
-  - log-postgres ==0.7
+  - log-postgres ==0.7.0.1
   - logfloat ==0.13.3.3
   - logger-thread ==0.1.0.2
   - logging-effect ==1.1.3
@@ -1345,7 +1345,7 @@ default-package-overrides:
   - matplotlib ==0.4.5
   - matrices ==0.4.4
   - matrix ==0.3.5.0
-  - matrix-market-attoparsec ==0.1.0.7
+  - matrix-market-attoparsec ==0.1.0.8
   - maximal-cliques ==0.1.1
   - mbox ==0.3.3
   - mbox-utility ==0.0.1
@@ -1514,7 +1514,7 @@ default-package-overrides:
   - old-locale ==1.0.0.7
   - old-time ==1.1.0.3
   - once ==0.2
-  - one-liner ==0.9
+  - one-liner ==0.9.1
   - OneTuple ==0.2.1
   - oo-prototypes ==0.1.0.0
   - opaleye ==0.5.3.0
@@ -1578,7 +1578,7 @@ default-package-overrides:
   - persistable-record ==0.4.1.1
   - persistable-types-HDBC-pg ==0.0.1.4
   - persistent ==2.6.1
-  - persistent-mysql ==2.6.0.2
+  - persistent-mysql ==2.6.1
   - persistent-postgresql ==2.6.1
   - persistent-redis ==2.5.2
   - persistent-refs ==0.4
@@ -1804,7 +1804,7 @@ default-package-overrides:
   - runmemo ==1.0.0.1
   - rvar ==0.2.0.3
   - s3-signer ==0.3.0.0
-  - safe ==0.3.14
+  - safe ==0.3.15
   - safe-exceptions ==0.1.5.0
   - safe-exceptions-checked ==0.1.0
   - safecopy ==0.9.3.2
@@ -1924,7 +1924,7 @@ default-package-overrides:
   - speculation ==1.5.0.3
   - speedy-slice ==0.3.0
   - sphinx ==0.6.0.2
-  - Spintax ==0.3.1
+  - Spintax ==0.3.2
   - splice ==0.6.1.1
   - split ==0.2.3.2
   - Spock ==0.12.0.0
@@ -1975,7 +1975,7 @@ default-package-overrides:
   - store ==0.4.3.1
   - store-core ==0.4.1
   - Strafunski-StrategyLib ==5.0.0.10
-  - stratosphere ==0.4.2
+  - stratosphere ==0.4.3
   - streaming ==0.1.4.5
   - streaming-bytestring ==0.1.4.6
   - streaming-commons ==0.1.17
@@ -2037,7 +2037,7 @@ default-package-overrides:
   - tasty-expected-failure ==0.11.0.4
   - tasty-fail-fast ==0.0.2
   - tasty-golden ==2.3.1.1
-  - tasty-hspec ==1.1.3.1
+  - tasty-hspec ==1.1.3.2
   - tasty-html ==0.4.1.1
   - tasty-hunit ==0.9.2
   - tasty-kat ==0.0.3
@@ -2181,7 +2181,7 @@ default-package-overrides:
   - unbounded-delays ==0.1.1.0
   - uncertain ==0.3.1.0
   - unexceptionalio ==0.3.0
-  - unfoldable ==0.9.3
+  - unfoldable ==0.9.4
   - unfoldable-restricted ==0.0.3
   - unicode ==0.0
   - unicode-show ==0.1.0.2
@@ -2259,7 +2259,7 @@ default-package-overrides:
   - wai-conduit ==3.0.0.3
   - wai-cors ==0.2.5
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.19.1
+  - wai-extra ==3.0.20.0
   - wai-handler-launch ==3.0.2.2
   - wai-logger ==2.3.0
   - wai-middleware-auth ==0.1.2.0
@@ -2387,7 +2387,7 @@ default-package-overrides:
   - yesod-eventsource ==1.4.1
   - yesod-fay ==0.8.0
   - yesod-form ==1.4.12
-  - yesod-form-richtext ==0.1.0.0
+  - yesod-form-richtext ==0.1.0.1
   - yesod-gitrepo ==0.2.1.0
   - yesod-gitrev ==0.1.0.0
   - yesod-markdown ==0.11.4
@@ -2397,7 +2397,7 @@ default-package-overrides:
   - yesod-static ==1.5.3
   - yesod-static-angular ==0.1.8
   - yesod-table ==2.0.3
-  - yesod-test ==1.5.6
+  - yesod-test ==1.5.7
   - yesod-websockets ==0.2.6
   - yi-core ==0.13.7
   - yi-frontend-vty ==0.13.7
@@ -2416,9 +2416,9 @@ default-package-overrides:
   - yoga ==0.0.0.1
   - youtube ==0.2.1
   - zero ==0.1.4
-  - zeromq4-haskell ==0.6.6
+  - zeromq4-haskell ==0.6.7
   - zip ==0.1.11
-  - zip-archive ==0.3.1
+  - zip-archive ==0.3.1.1
   - zippers ==0.2.3
   - ziptastic-client ==0.3.0.3
   - ziptastic-core ==0.2.0.3
