@@ -54,7 +54,10 @@ stdenv.mkDerivation ({
       ./CVE-2017-1000366-rtld-LD_PRELOAD.patch
       ./CVE-2017-1000366-rtld-LD_AUDIT.patch
     ]
-      ++ lib.optional stdenv.isi686 ./fix-i686-memchr.patch;
+    ++ lib.optionals stdenv.isi686 [
+      ./fix-i686-memchr.patch
+      ./i686-fix-vectorized-strcspn.patch
+    ];
 
   postPatch =
     # Needed for glibc to build with the gnumake 3.82
