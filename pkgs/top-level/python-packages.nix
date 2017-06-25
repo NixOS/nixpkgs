@@ -24970,6 +24970,8 @@ in {
     };
   };
 
+  uritools = callPackage ../development/python-modules/uritools { };
+
   traceback2 = buildPythonPackage rec {
     version = "1.4.0";
     name = "traceback2-${version}";
@@ -30443,8 +30445,6 @@ EOF
   smart_open =  callPackage ../development/python-modules/smart_open { };
 
   gensim = callPackage  ../development/python-modules/gensim { };
-
-  uritools = callPackage ../development/python-modules/uritools { };
 
 });
 
