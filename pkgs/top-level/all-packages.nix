@@ -14991,6 +14991,8 @@ with pkgs;
 
   mopidy-local-images = callPackage ../applications/audio/mopidy-local-images { };
 
+  mopidy-local-sqlite = callPackage ../applications/audio/mopidy-local-sqlite { };
+
   mopidy-spotify = callPackage ../applications/audio/mopidy-spotify { };
 
   mopidy-moped = callPackage ../applications/audio/mopidy-moped { };
