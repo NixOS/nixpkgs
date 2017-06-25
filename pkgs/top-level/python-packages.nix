@@ -190,6 +190,26 @@ in {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  PyChromecast = buildPythonPackage rec {
+    name    = "PyChromecast-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url    = "mirror://pypi/p/pychromecast/${name}.tar.gz";
+      sha256 = "05rlr2hjng0xg2a9k9vwmrlvd7vy9sjhxxfl96kx25xynlkq6yq6";
+    };
+
+    propagatedBuildInputs = with self; [ requests six zeroconf protobuf3_2 ];
+
+    meta = {
+      description = "Library for Python 2 and 3 to communicate with the Google Chromecast";
+      homepage    = "https://github.com/balloob/pychromecast";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ abbradar ];
+      platforms   = platforms.linux;
+    };
+  };
+
   pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
 
   pygame = callPackage ../development/python-modules/pygame { };
