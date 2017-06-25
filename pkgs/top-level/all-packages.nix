@@ -16049,6 +16049,7 @@ with pkgs;
 
   tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     inherit (pythonPackages) gyp;
+    gcc = gcc6;
   };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
