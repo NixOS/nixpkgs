@@ -1,4 +1,4 @@
-{ stdenv, fetchMavenArtifact, fetchFromGitHub, bash, jre }:
+{ stdenv, fetchMavenArtifact, fetchFromGitHub, bash, jre, makeWrapper }:
 
 let
   version = "0.9.1";
@@ -21,16 +21,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
     install -D ng $out/bin/ng
-    install -D ${nailgun-server.jar} $out/share/java/nailgun-server-${version}.jar
 
-    cat > $out/bin/ng-server << EOF
-    #!${bash}/bin/bash
-
-    ${jre}/bin/java -cp $out/share/java/nailgun-server-${version}.jar:\$CLASSPATH com.martiansoftware.nailgun.NGServer "\$@"
-    EOF
-    chmod +x $out/bin/ng-server
+    makeWrapper ${jre}/bin/java $out/bin/ng-server \
+      --add-flags '-cp ${nailgun-server.jar}:$CLASSPATH com.martiansoftware.nailgun.NGServer'
   '';
 
   meta = with stdenv.lib; {
