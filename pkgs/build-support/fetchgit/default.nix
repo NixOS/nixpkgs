@@ -1,4 +1,4 @@
-{stdenv, git, cacert}: let
+{stdenv, git}: let
   urlToName = url: rev: let
     inherit (stdenv.lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
   inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch;
 
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  GIT_SSL_NO_VERIFY = 1;
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
