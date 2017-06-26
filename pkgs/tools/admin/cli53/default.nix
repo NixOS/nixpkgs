@@ -15,10 +15,10 @@ python2Packages.buildPythonApplication rec {
     dns
   ];
 
-  meta = {
+  meta = with lib; {
     description = "CLI tool for the Amazon Route 53 DNS service";
     homepage = https://github.com/barnybug/cli53;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ benley ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ benley ];
   };
 }

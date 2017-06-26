@@ -18,7 +18,7 @@ Index: plasma-desktop-5.8.5/kcms/dateandtime/helper.cpp
  void ClockHelper::toHwclock()
  {
 -    QString hwclock = KStandardDirs::findExe(QStringLiteral("hwclock"), exePath);
-+    QString hwclock = "@hwclock@";
++    QString hwclock = QLatin1String(NIXPKGS_HWCLOCK);
      if (!hwclock.isEmpty()) {
          KProcess::execute(hwclock, QStringList() << QStringLiteral("--systohc"));
      }

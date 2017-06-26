@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''stumpwm'';
-  version = ''20170403-git'';
+  version = ''20170516-git'';
 
   description = ''A tiling, keyboard driven window manager'';
 
-  deps = [ args."alexandria" args."cl-ppcre" args."clx" ];
+  deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/stumpwm/2017-04-03/stumpwm-20170403-git.tgz'';
-    sha256 = ''1aca1nvdzp957mvwxz6x0plkg915l24mjf89h8rgkgclkn6xk4rf'';
+    url = ''http://beta.quicklisp.org/archive/stumpwm/2017-05-16/stumpwm-20170516-git.tgz'';
+    sha256 = ''0x3x0w1akarp0rjmig9x6d729z6lv6ywfg00b6xszm5kqfbx1659'';
   };
+    
+  packageName = "stumpwm";
 
   overrides = x: {
     postInstall = ''
@@ -28,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256 1aca1nvdzp957mvwxz6x0plkg915l24mjf89h8rgkgclkn6xk4rf URL
-    http://beta.quicklisp.org/archive/stumpwm/2017-04-03/stumpwm-20170403-git.tgz MD5 1081021518c5b6c36d39f12c47305ea1 NAME stumpwm TESTNAME NIL FILENAME
-    stumpwm DEPS ((NAME alexandria) (NAME cl-ppcre) (NAME clx)) DEPENDENCIES (alexandria cl-ppcre clx) VERSION 20170403-git SIBLINGS NIL) */
+/* (SYSTEM stumpwm DESCRIPTION A tiling, keyboard driven window manager SHA256 0x3x0w1akarp0rjmig9x6d729z6lv6ywfg00b6xszm5kqfbx1659 URL
+    http://beta.quicklisp.org/archive/stumpwm/2017-05-16/stumpwm-20170516-git.tgz MD5 ed076f733ef138aca3b04b3c3ff748f0 NAME stumpwm TESTNAME NIL FILENAME
+    stumpwm DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */

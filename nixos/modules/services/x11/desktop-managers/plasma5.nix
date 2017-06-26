@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeWrapper kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
 
 in
 
@@ -30,24 +30,12 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = ''
-          KDE packages that need to be installed system-wide.
-        '';
-      };
-
     };
 
   };
 
 
   config = mkMerge [
-    (mkIf (cfg.extraPackages != []) {
-      environment.systemPackages = [ (kdeWrapper cfg.extraPackages) ];
-    })
-
     (mkIf (xcfg.enable && cfg.enable) {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -64,8 +52,8 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${plasma5.plasma-workspace.out}/lib/libexec/kcheckpass";
-        "start_kdeinit".source = "${pkgs.kinit.out}/lib/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
+        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
@@ -139,10 +127,14 @@ in
           plasma-workspace
           plasma-workspace-wallpapers
 
+          dolphin
           dolphin-plugins
           ffmpegthumbs
           kdegraphics-thumbnailers
+          khelpcenter
           kio-extras
+          konsole
+          oxygen
           print-manager
 
           breeze-icons
@@ -163,16 +155,6 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      services.xserver.desktopManager.plasma5.extraPackages =
-        with kdeApplications; with plasma5;
-        [
-          khelpcenter
-          oxygen
-
-          dolphin
-          konsole
-        ];
-
       environment.pathsToLink = [ "/share" ];
 
       environment.etc = singleton {
@@ -183,7 +165,6 @@ in
       environment.variables = {
         # Enable GTK applications to load SVG icons
         GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-        QT_PLUGIN_PATH = "/run/current-system/sw/lib/qt5/plugins";
       };
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
@@ -209,7 +190,6 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        package = pkgs.sddmPlasma5;
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

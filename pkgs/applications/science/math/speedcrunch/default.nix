@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, cmake, makeQtWrapper, qtbase, qttools }:
+{ mkDerivation, lib, fetchgit, cmake, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "speedcrunch-${version}";
   version = "0.12.0";
 
@@ -11,21 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = [ qtbase qttools ];
 
-  nativeBuildInputs = [ cmake makeQtWrapper ];
+  nativeBuildInputs = [ cmake ];
 
   preConfigure = ''
     cd src
   '';
 
-  postFixup = ''
-    wrapQtProgram $out/bin/speedcrunch
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = http://speedcrunch.org;
     license     = licenses.gpl2Plus;
     description = "A fast power user calculator";

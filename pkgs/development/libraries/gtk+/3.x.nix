@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
+    # Launcher
+    moveToOutput bin/gtk-launch "$out"
   '';
 
   meta = with stdenv.lib; {

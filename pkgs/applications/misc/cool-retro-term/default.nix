@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, makeQtWrapper, qtbase, qtquick1, qmltermwidget,
-qtquickcontrols, qtgraphicaleffects, qmakeHook }:
+{ stdenv, fetchgit, qtbase, qtquick1, qmltermwidget,
+qtquickcontrols, qtgraphicaleffects, qmake }:
 
 stdenv.mkDerivation rec {
   version = "1.0.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     mv $out/usr/share $out/share
     mv $out/usr/bin $out/bin
     rmdir $out/usr
-
-    wrapQtProgram $out/bin/cool-retro-term
   '';
 
   enableParallelBuilding = true;

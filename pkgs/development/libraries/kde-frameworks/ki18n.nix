@@ -1,10 +1,10 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   extra-cmake-modules, gettext, python,
   qtbase, qtdeclarative, qtscript,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "ki18n";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
@@ -12,5 +12,5 @@ kdeFramework {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedNativeBuildInputs = [ gettext python ];
-  propagatedBuildInputs = [ qtdeclarative qtscript ];
+  buildInputs = [ qtdeclarative qtscript ];
 }

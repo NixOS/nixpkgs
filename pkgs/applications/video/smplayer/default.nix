@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmakeHook, qtscript }:
+{ stdenv, fetchurl, qmake, qtscript }:
 
 stdenv.mkDerivation rec {
   name = "smplayer-17.6.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtscript ];
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
 
   dontUseQmakeConfigure = true;
 

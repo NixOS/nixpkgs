@@ -2056,13 +2056,13 @@ let
         sha1 = "27a5dea06b36b04a0a9966774b290868f0fc40fd";
       };
     };
-    "uuid-3.0.1" = {
+    "uuid-3.1.0" = {
       name = "uuid";
       packageName = "uuid";
-      version = "3.0.1";
+      version = "3.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz";
-        sha1 = "6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1";
+        url = "https://registry.npmjs.org/uuid/-/uuid-3.1.0.tgz";
+        sha1 = "3dd3d3e790abc24d7b0d3a034ffababe28ebbc04";
       };
     };
     "delayed-stream-1.0.0" = {
@@ -3872,6 +3872,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/update-notifier/-/update-notifier-2.1.0.tgz";
         sha1 = "ec0c1e53536b76647a24b77cb83966d9315123d9";
+      };
+    };
+    "uuid-3.0.1" = {
+      name = "uuid";
+      packageName = "uuid";
+      version = "3.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz";
+        sha1 = "6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1";
       };
     };
     "validate-npm-package-name-3.0.0" = {
@@ -6044,7 +6053,7 @@ in
             ];
           })
           sources."tunnel-agent-0.6.0"
-          sources."uuid-3.0.1"
+          sources."uuid-3.1.0"
         ];
       })
       sources."rimraf-2.6.1"
@@ -6542,7 +6551,7 @@ in
                     ];
                   })
                   sources."tunnel-agent-0.6.0"
-                  sources."uuid-3.0.1"
+                  sources."uuid-3.1.0"
                 ];
               })
               (sources."rimraf-2.6.1" // {
@@ -6784,7 +6793,7 @@ in
                     ];
                   })
                   sources."tunnel-agent-0.6.0"
-                  sources."uuid-3.0.1"
+                  sources."uuid-3.1.0"
                 ];
               })
               (sources."rimraf-2.6.1" // {
@@ -7099,7 +7108,7 @@ in
             ];
           })
           sources."tunnel-agent-0.6.0"
-          sources."uuid-3.0.1"
+          sources."uuid-3.1.0"
         ];
       })
       (sources."rimraf-2.6.1" // {
@@ -8107,7 +8116,7 @@ in
             ];
           })
           sources."tunnel-agent-0.4.3"
-          sources."uuid-3.0.1"
+          sources."uuid-3.1.0"
         ];
       })
       sources."semver-5.3.0"

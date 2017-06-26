@@ -67,7 +67,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "1iwqxjvga0wam0dg1alwawvnz13hm7d7c9rfph0w6adrdgfmhnzc";
+      sha256 = "1psyklfyjf4zqh3qxjn11sp2jiwvp8mfxqvsi1wggqpidfmk39jx";
     };
   }))).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -682,6 +682,7 @@ self: super: {
   stack = super.stack.overrideScope (self: super: {
     store-core = self.store-core_0_3;
     store = self.store_0_3_1;
+    hpack = self.hpack_0_17_1;
   });
 
   # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.

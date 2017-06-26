@@ -17,7 +17,7 @@ Index: libkscreen-5.9.4/src/backendmanager.cpp
 -        finfos.append(dir.entryInfoList());
 -    }
 -    return finfos;
-+    const QDir dir(QStringLiteral(NIXPKGS_LIBKSCREEN_BACKENDS),
++    const QDir dir(QLatin1String(NIXPKGS_LIBKSCREEN_BACKENDS),
 +                   QStringLiteral("KSC_*"),
 +                   QDir::SortFlags(QDir::QDir::Name),
 +                   QDir::NoDotAndDotDot | QDir::Files);

@@ -26,6 +26,7 @@ rec {
       url = "https://pypi.python.org/packages/52/b3/a96d62711a26d8cfbe546519975dc9ed54d2eb50b3238d2e6de045764796/ZConfig-3.1.0.tar.gz";
       sha256 = "c21fa3a073a56925a8098036d46717392994a92cffea1b3cda3176b70c0a842e";
     };
+    propagatedBuildInputs = with pythonPackages; [ zope_testrunner ];
     meta = with stdenv.lib; {
       homepage = "";
       license = licenses.zpt21;

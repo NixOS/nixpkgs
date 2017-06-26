@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.10.1";
+  version = "3.7.11";
 
   src = fetchurl {
-    url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "0ds9mcw8hgm03f82jvp3j4mm02ha6zvsl77lp13jzqmbqifbdmv3";
+    url = "https://gnuradio.org/releases/gnuradio/${name}.tar.gz";
+    sha256 = "1m2jf8lafr6pr2dlm40nbvr6az8gwjfkzpbs4fxzv3l5hcqvmnc7";
   };
 
   buildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       environments to support both wireless communications research and
       real-world radio systems.
     '';
-    homepage = http://www.gnuradio.org;
+    homepage = https://www.gnuradio.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor fpletz ];

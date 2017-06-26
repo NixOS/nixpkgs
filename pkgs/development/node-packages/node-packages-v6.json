@@ -26,6 +26,7 @@
 , "htmlhint"
 , "ios-deploy"
 , "istanbul"
+, "javascript-typescript-langserver"
 , "jayschema"
 , "jshint"
 , "json"

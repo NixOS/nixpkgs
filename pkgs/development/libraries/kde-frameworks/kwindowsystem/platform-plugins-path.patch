@@ -14,7 +14,7 @@ Index: kwindowsystem-5.32.0/src/pluginwrapper.cpp
 -        foreach (const QString &entry, pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot)) {
 -            ret << pluginDir.absoluteFilePath(entry);
 -        }
-+    QDir pluginDir(QStringLiteral(NIXPKGS_QT_PLUGIN_PATH) + QLatin1Literal("/kf5/org.kde.kwindowsystem.platforms"));
++    QDir pluginDir(QLatin1String(NIXPKGS_QT_PLUGIN_PATH) + QLatin1Literal("/kf5/org.kde.kwindowsystem.platforms"));
 +    foreach (const QString &entry, pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot)) {
 +        ret << pluginDir.absoluteFilePath(entry);
      }

@@ -2,11 +2,11 @@
 , tcl-8_5, darwin }:
 
 stdenv.mkDerivation rec {
-  name = "rrdtool-1.6.0";
+  name = "rrdtool-1.7.0";
 
   src = fetchurl {
     url = "http://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
-    sha256 = "1msj1qsy3sdmx2g2rngp9a9qv50hz0ih7yx6nkx2b21drn4qx56d";
+    sha256 = "0ssjqpa0dwwzbylc0drmlbq922qcw8crffc0rpr805xr6n4k8zgr";
   };
 
   nativeBuildInputs = [ pkgconfig ];

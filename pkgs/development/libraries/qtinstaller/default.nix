@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, qtdeclarative , qttools, qtbase, qmakeHook }:
+{ stdenv, fetchurl, qtdeclarative , qttools, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
   name = "qtinstaller";
 
-  propagatedBuildInputs = [qtdeclarative qttools];
-  nativeBuildInputs = [ qmakeHook ];
+  propagatedBuildInputs = [ qtdeclarative qttools ];
+  nativeBuildInputs = [ qmake ];
 
   version = "2.0.3";
   src = fetchurl {
