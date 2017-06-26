@@ -12,6 +12,7 @@ stdenv.mkDerivation {
     rev = "a3bf4319ed483a4a6fe2c96b79ec4491d7217f00";
     sha256 = "076jhrjigisqz5n8dgxwd5fhimg69zhm834m7w9yvf9afgzrr50h";
   };
+
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
   wafConfigureFlags = [
@@ -19,6 +20,13 @@ stdenv.mkDerivation {
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
   ];
+
+  # To do battle with the tests, add --with-tests to the configure above. ~ C.
+  doCheck = false;
+  checkPhase = ''
+    LD_LIBRARY_PATH=build/ build/unit-tests
+  '';
+
   meta = with stdenv.lib; {
     homepage = "http://named-data.net/";
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
@@ -37,6 +45,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.lgpl3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ maintainers.sjmackenzie ];
+    maintainers = with maintainers; [ sjmackenzie MostAwesomeDude ];
   };
 }
