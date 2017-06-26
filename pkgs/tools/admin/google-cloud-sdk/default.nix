@@ -7,24 +7,25 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" || stden
 
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "155.0.0";
+  version = "160.0.0";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "1xh8xy9p3qqmirvhih7vf96i5xn0z0zr5mmbqr6vfzx16r47bi2z";
+        sha256 = "0lidnjcgpnyv6f8gjy44zr7kmgcr53c85zax0rdypqs6sx3sly2v";
       }
     else if stdenv.system == "x86_64-darwin" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
-        sha256 = "19pr1pld6vdp5ig5i7zddfl1l5xjv9nx5sn00va4l1nnb410ac69";
+        sha256 = "1v4j89pycndjq9ap3rig1s5njd6qp01d0fsgr8xl3vpipsrj93c0";
       }
     else
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "18hnabhdlrprhg8micy2z63jxyah3qr3pv9pgb64i7lbv6lznr2b";
+        sha256 = "1558qxzvqxvv13lm6adrfcd7m3p21c4rw6hqqavz4xgf6nybz6g7";
       };
+
 
   buildInputs = [python27 makeWrapper];
 
