@@ -15,6 +15,7 @@
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen     ? false, eigen
+, enableOpenblas  ? false, openblas
 , enableCuda      ? false, cudatoolkit, gcc5
 , AVFoundation, Cocoa, QTKit
 }:
@@ -130,6 +131,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optional enableOpenblas openblas
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
     ++ lib.optional enableContrib protobuf3_1
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
@@ -141,7 +143,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
+    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"} -DWITH_OPENMP=ON"
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)

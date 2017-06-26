@@ -17,11 +17,10 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-
-  extpack = "996f783996a597d3936fc5f1ccf56edd31ae1f8fb4d527009647d9a2c8c853cd";
-  extpackRev = "114002";
-  main = "7ed0959bbbd02826b86b3d5dc8348931ddfab267c31f8ed36ee53c12f5522cd9";
-  version = "5.1.18";
+  extpack = "244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf";
+  extpackRev = "115126";
+  main = "fcc918000b8c5ece553541ec10a9182410a742b7266257c76dda895dcd389899";
+  version = "5.1.22";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {

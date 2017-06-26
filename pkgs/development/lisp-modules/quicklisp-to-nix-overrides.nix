@@ -42,6 +42,9 @@ in
        alexandria split-sequence cffi bordeaux-threads idna swap-bytes
      ])
      ;
+    testSystems = ["iolib" "iolib/syscalls" "iolib/multiplex" "iolib/streams"
+      "iolib/zstreams" "iolib/sockets" "iolib/trivial-sockets"
+      "iolib/pathnames" "iolib/os"];
   };
   cl-unicode = addDeps (with qlnp; [cl-ppcre flexi-streams]);
   clack =  addDeps (with qlnp;[lack bordeaux-threads prove]);

@@ -13,7 +13,7 @@
 
     buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
 
-    propagatedBuildInputs = [ astroid isort ];
+    propagatedBuildInputs = [ astroid configparser isort ];
 
     postPatch = ''
       # Remove broken darwin tests

@@ -5,28 +5,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.84.0";
+  version = "3.1.1";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1kvnmb6hsby4bdnx70bcy32f4dz1axzlr310dr6mkvnc8bqw59km";
+    sha256 = "1lh1gz0915r49igfhy1icz79qx36s3d8m32qlih0g3zn7jahp86g";
   };
 
   patches = [
     # Patches from Debian that:
     # - disable plugin installation (very insecure)
-    # - disables loading of web bug for privacy
     # - switches the version update from enabled to disabled by default
     (fetchpatch {
       name = "disable_plugins.patch";
       url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/disable_plugins.py-20111220183043-dcl08ccfagjxt1dv-1/disable_plugins.py";
       sha256 = "19spdx52dhbrfn9lm084yl3cfwm6f90imd51k97sf7flmpl569pk";
-    })
-    (fetchpatch {
-      name = "links_privacy.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/linksprivacy.patch-20160417214308-6hvive72pc0r4awc-1/links-privacy.patch";
-      sha256 = "0f6pq2b7q56pxrq2j8yqd7bksc623q2zgq29qcli30f13vga1w60";
     })
     (fetchpatch {
       name = "no_updates_dialog.patch";
@@ -57,6 +51,7 @@ stdenv.mkDerivation rec {
   ] ++ (with python2Packages; [
     apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip
+    regex msgpack
     # the following are distributed with calibre, but we use upstream instead
     chardet cherrypy html5lib_0_9999999 odfpy routes
   ]);

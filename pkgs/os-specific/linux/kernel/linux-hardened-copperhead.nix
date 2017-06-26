@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  version = "4.11.6";
-  revision = "c";
-  sha256 = "1n1j1y5g5fcvgpqjfq14fbg4cm32k420kbazipqbi84h9zwifa69";
+  version = "4.11.7";
+  revision = "a";
+  sha256 = "0gvg0gnhl2hi0zw705zh1a8wrwm9831jmw5llr1miq6av7hgxw7n";
 in
 
 import ./generic.nix (args // {

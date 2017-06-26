@@ -1,19 +1,19 @@
-{ mkDerivation, lib, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, fetchurl, fetchpatch, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
 , boost, libraw, fftw, eigen, exiv2, lcms2, gsl, openexr
 , openjpeg, opencolorio, vc, poppler_qt5, curl, ilmbase
+, qtmultimedia, qtx11extras
 }:
 
 mkDerivation rec {
   name = "krita-${version}";
-  ver_min = "3.1.3";
-  version = "${ver_min}";
+  version = "3.1.4";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/krita/${ver_min}/${name}.tar.gz";
-    sha256 = "125js6c8aw4bqhs28pwnl3rbgqx5yx4zsklw7bfdhy3vf6lrysw1";
+    url = "http://download.kde.org/stable/krita/${version}/${name}.tar.gz";
+    sha256 = "1al27v17s70hihk2mcmz3l2g6rl9qzpxaifapdfpkyias6q3f63l";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -23,6 +23,14 @@ mkDerivation rec {
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
     boost libraw fftw eigen exiv2 lcms2 gsl openexr
     openjpeg opencolorio vc poppler_qt5 curl ilmbase
+    qtmultimedia qtx11extras
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/KDE/krita/commit/2f59d0d1.patch";
+      sha256 = "0sdlcjn6i3faln3c0aczw3pg4pvmccgszmy8n914mgsccrqrazlr";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];

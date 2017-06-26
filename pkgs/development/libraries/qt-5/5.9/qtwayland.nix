@@ -8,6 +8,6 @@ qtSubmodule {
   outputs = [ "out" "dev" "bin" ];
   postInstall = ''
     moveToOutput "$qtPluginPrefix" "$bin"
-    moveToOutput "$qtQmlPrefix "$bin"
+    moveToOutput "$qtQmlPrefix" "$bin"
   '';
 }

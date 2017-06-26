@@ -15,6 +15,7 @@
 , konsole
 , kparts
 , kwindowsystem
+, qtx11extras
 }:
 
 let
@@ -39,6 +40,7 @@ in mkDerivation rec {
       knotifyconfig
       kparts
       kwindowsystem
+      qtx11extras
     ];
 
   propagatedBuildInputs = [

@@ -2054,7 +2054,7 @@
     version = "17.04.2";
     src = fetchurl {
       url = "${mirror}/stable/applications/17.04.2/src/marble-17.04.2.tar.xz";
-      sha256 = "1z24infjp65d2s2zlcvr0v9425a6wxwkaz262mvqqvx64qmhd6ca";
+      sha256 = "1c6xmpkqilxd9zxz8kz7g47hwsa4hw27qcy96wxcg24hg8b5zr09";
       name = "marble-17.04.2.tar.xz";
     };
   };

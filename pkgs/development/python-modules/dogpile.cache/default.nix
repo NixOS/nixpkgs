@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, dogpile_core, pytest, pytestcov, mock, Mako
+, pytest, pytestcov, mock, Mako
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,6 @@ buildPythonPackage rec {
     rm tests/test_lock.py
   '';
 
-  propagatedBuildInputs = [ dogpile_core ];
   buildInputs = [ pytest pytestcov mock Mako ];
 
   meta = with stdenv.lib; {
