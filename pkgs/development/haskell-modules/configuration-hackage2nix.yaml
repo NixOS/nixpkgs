@@ -2432,6 +2432,7 @@ extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 7.6.x or earlier
   - aeson < 1                           # required by liquidhaskell-0.8.0.0
   - aeson-pretty < 0.8                  # required by elm compiler
+  - apply-refact < 0.4                  # newer versions don't work with GHC 8.0.x
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
@@ -2793,7 +2794,6 @@ dont-distribute-packages:
   applicative-parsec:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   applicative-quoters:                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   applicative-splice:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
-  apply-refact:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   ApproxFun-hs:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   approximate:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   approx-rand-test:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
