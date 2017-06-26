@@ -1,6 +1,8 @@
 {stdenv, fetchurl, ocaml, findlib, type_conv, camlp4}:
 
-assert stdenv.lib.versionOlder "3.12" ocaml.version;
+if !stdenv.lib.versionAtLeast ocaml.version "3.12"
+|| stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "sexlib-108.08.00 is not available for OCaml ${ocaml.version}" else
 
 stdenv.mkDerivation {
   name = "ocaml-sexplib-108.08.00";
