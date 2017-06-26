@@ -71,7 +71,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    systemd.user.sockets.dirmngr = {
+    systemd.user.sockets.dirmngr = mkIf cfg.dirmngr.enable {
       wantedBy = [ "sockets.target" ];
     };
 
