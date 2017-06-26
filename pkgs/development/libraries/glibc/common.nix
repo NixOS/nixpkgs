@@ -121,7 +121,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "bin" "dev" "static" ];
 
-  nativeBuildInputs = lib.optional (cross != null) buildPackages.stdenv.cc;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to

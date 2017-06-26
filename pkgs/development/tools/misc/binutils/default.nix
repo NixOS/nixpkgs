@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" "man" ];
 
-  nativeBuildInputs = [ bison buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
