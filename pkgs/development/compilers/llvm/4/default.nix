@@ -1,4 +1,4 @@
-{ newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
+{ lowPrio, newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
 let
   callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
 
@@ -30,8 +30,8 @@ let
     llvm = overrideManOutput llvm;
     clang-unwrapped = overrideManOutput clang-unwrapped;
 
-    llvm-manpages = self.llvm.man;
-    clang-manpages = self.clang-unwrapped.man;
+    llvm-manpages = lowPrio self.llvm.man;
+    clang-manpages = lowPrio self.clang-unwrapped.man;
 
     clang = wrapCC self.clang-unwrapped;
 
