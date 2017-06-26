@@ -3,10 +3,12 @@ with lib;
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = ''@${pkgs.jre}/bin/java java \
-            ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
-            ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
-            -jar ${stateDir}/lib/ace.jar'';
+  cmd = ''
+    @${pkgs.jre}/bin/java java \
+        ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
+        ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
+        -jar ${stateDir}/lib/ace.jar
+  '';
   mountPoints = [
     {
       what = "${pkgs.unifi}/dl";
@@ -144,8 +146,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${cmd} start";
-        ExecStop = "${cmd} stop";
+        ExecStart = "${(removeSuffix "\n" cmd)} start";
+        ExecStop = "${(removeSuffix "\n" cmd)} stop";
         User = "unifi";
         PermissionsStartOnly = true;
         UMask = "0077";
