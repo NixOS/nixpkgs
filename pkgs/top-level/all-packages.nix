@@ -6002,7 +6002,9 @@ with pkgs;
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
-    hex2nix cuter relxExe;
+    hex2nix cuter;
+
+  inherit (beam.packages.erlangR18) relxExe;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
@@ -11472,7 +11474,9 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws { };
+  yaws = callPackage ../servers/http/yaws {
+    erlang = erlangR18;
+  };
 
   zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
 
@@ -16436,7 +16440,9 @@ with pkgs;
 
   winswitch = callPackage ../tools/X11/winswitch { };
 
-  wings = callPackage ../applications/graphics/wings { };
+  wings = callPackage ../applications/graphics/wings {
+    erlang = erlangR18;
+  };
 
   wireguard = callPackage ../os-specific/linux/wireguard { };
 
