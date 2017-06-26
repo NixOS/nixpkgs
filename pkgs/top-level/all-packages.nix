@@ -1198,8 +1198,6 @@ with pkgs;
 
   bup = callPackage ../tools/backup/bup { };
 
-  burp_1_3 = callPackage ../tools/backup/burp/1.3.48.nix { };
-
   burp = callPackage ../tools/backup/burp { };
 
   buku = callPackage ../applications/misc/buku {
