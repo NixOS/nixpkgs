@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
     sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
     '';
 
-  crossAttrs = {
-    makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP=" ];
-  };
-
   meta = with stdenv.lib; {
     description = "Image viewing and manipulation programs";
     homepage = https://www.kraxel.org/blog/linux/fbida/;
