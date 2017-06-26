@@ -32,8 +32,6 @@ let
 in 
 
 
-  inherit minieigen;
-
   stdenv.mkDerivation rec {
 
     name = "yade-${version}";
@@ -101,7 +99,7 @@ in
     src = fetchurl
     {
       url = "https://launchpad.net/yade/trunk/yade-1.00.0/+download/yade-2017.01a.tar.gz";
-      md5 = "29f83f12f6cdacfd24f1928d90f72906";
+      sha512 = "0133afa759a6061db99b2e0f4b1081122fc6ddda13a0163389ec2f51c95e658dc148ffd43d19d908c7bfb6af2f01d1f614c1f3bba411fbf5b289898a5dd284a9";
     };
 
     patches = [ ./cmake.patch ];
