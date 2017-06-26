@@ -359,7 +359,13 @@ stdenv.mkDerivation {
       if [[ "$($ldPath/${prefix}ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" relro"
       fi
+    ''
 
+    + optionalString hostPlatform.isCygwin ''
+      hardening_unsupported_flags+=" pic"
+    ''
+
+    + ''
       substituteAll ${preWrap ./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${preWrap ./add-hardening.sh} $out/nix-support/add-hardening.sh
       cp -p ${preWrap ./utils.sh} $out/nix-support/utils.sh
