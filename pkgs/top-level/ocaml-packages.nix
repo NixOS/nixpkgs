@@ -754,6 +754,8 @@ let
       else bin_prot_p4;
 
     core_bench =
+      if lib.versionOlder "4.03" ocaml.version
+      then janeStreet.core_bench else
       callPackage ../development/ocaml-modules/janestreet/core_bench.nix {};
 
     core_kernel =
