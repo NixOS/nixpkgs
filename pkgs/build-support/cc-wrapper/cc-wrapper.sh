@@ -11,11 +11,11 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
-if [ -n "$NIX_CC_WRAPPER_START_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_START_HOOK"
+if [ -n "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK" ]; then
+    source "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK"
 fi
 
-if [ -z "$NIX_CC_WRAPPER_FLAGS_SET" ]; then
+if [ -z "$NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -63,7 +63,7 @@ while [ "$n" -lt "$nParams" ]; do
         nonFlagArgs=1
     elif [ "$p" = -m32 ]; then
         if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
+            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
         fi
     fi
     n+=1
@@ -106,7 +106,7 @@ fi
 
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
+if [ "$NIX_@infixSalt@_ENFORCE_NO_NATIVE" = 1 ]; then
     rest=()
     for p in "${params[@]}"; do
         if [[ "$p" = -m*=native ]]; then
@@ -120,36 +120,36 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_CFLAGS_COMPILE+=" ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+        NIX_@infixSalt@_CFLAGS_COMPILE+=" ${NIX_@infixSalt@_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
     fi
-    NIX_CFLAGS_LINK+=" $NIX_CXXSTDLIB_LINK"
+    NIX_@infixSalt@_CFLAGS_LINK+=" $NIX_@infixSalt@_CXXSTDLIB_LINK"
 fi
 
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_CFLAGS_COMPILE "${hardeningCFlags[@]}")
+extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE "${hardeningCFlags[@]}")
 extraBefore=()
 
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_CFLAGS_LINK "${hardeningLDFlags[@]}")
+    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK "${hardeningLDFlags[@]}")
 
     # Add the flags that should be passed to the linker (and prevent
-    # `ld-wrapper' from adding NIX_LDFLAGS again).
-    for i in $NIX_LDFLAGS_BEFORE; do
+    # `ld-wrapper' from adding NIX_@infixSalt@_LDFLAGS again).
+    for i in $NIX_@infixSalt@_LDFLAGS_BEFORE; do
         extraBefore+=("-Wl,$i")
     done
-    for i in $NIX_LDFLAGS; do
+    for i in $NIX_@infixSalt@_LDFLAGS; do
         if [ "${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
         else
             extraAfter+=("-Wl,$i")
         fi
     done
-    export NIX_LDFLAGS_SET=1
+    export NIX_@infixSalt@_LDFLAGS_SET=1
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't
@@ -171,8 +171,8 @@ if [ -n "$NIX_DEBUG" ]; then
     printf "  %q\n" "${extraAfter[@]}" >&2
 fi
 
-if [ -n "$NIX_CC_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_EXEC_HOOK"
+if [ -n "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
+    source "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

@@ -1,5 +1,5 @@
 #! @shell@
-set -e -o pipefail
+set -eu -o pipefail
 shopt -s nullglob
 
 path_backup="$PATH"
@@ -10,11 +10,11 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
-if [ -n "$NIX_LD_WRAPPER_START_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_START_HOOK"
+if [ -n "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK" ]; then
+    source "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK"
 fi
 
-if [ -z "$NIX_CC_WRAPPER_FLAGS_SET" ]; then
+if [ -z "$NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -24,7 +24,7 @@ source @out@/nix-support/utils.sh
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
 if [[ "$NIX_ENFORCE_PURITY" = 1 && -n "$NIX_STORE"
-        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC" || -z "$NIX_LDFLAGS_SET" ) ]]; then
+        && ( -z "$NIX_@infixSalt@_IGNORE_LD_THROUGH_GCC" || -z "$NIX_@infixSalt@_LDFLAGS_SET" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
@@ -59,19 +59,19 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=("${hardeningLDFlags[@]}")
 extraBefore=()
 
-if [ -z "$NIX_LDFLAGS_SET" ]; then
-    extraAfter+=($NIX_LDFLAGS)
-    extraBefore+=($NIX_LDFLAGS_BEFORE)
+if [ -z "$NIX_@infixSalt@_LDFLAGS_SET" ]; then
+    extraAfter+=($NIX_@infixSalt@_LDFLAGS)
+    extraBefore+=($NIX_@infixSalt@_LDFLAGS_BEFORE)
 fi
 
-extraAfter+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
+extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER $NIX_@infixSalt@_LDFLAGS_HARDEN)
 
 declare -a libDirs
 declare -A libs
 relocatable=
 
 # Find all -L... switches for rpath, and relocatable flags for build id.
-if [ "$NIX_DONT_SET_RPATH" != 1 ] || [ "$NIX_SET_BUILD_ID" = 1 ]; then
+if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ]; then
     prev=
     for p in "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"; do
         case "$prev" in
@@ -108,7 +108,7 @@ fi
 
 
 # Add all used dynamic libraries to the rpath.
-if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
+if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
     # For each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
@@ -141,7 +141,7 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
-if [ "$NIX_SET_BUILD_ID" = 1 ] && [ ! "$relocatable" ]; then
+if [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ] && [ ! "$relocatable" ]; then
     extraAfter+=(--build-id)
 fi
 
@@ -156,8 +156,8 @@ if [ -n "$NIX_DEBUG" ]; then
     printf "  %q\n" "${extraAfter[@]}" >&2
 fi
 
-if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_EXEC_HOOK"
+if [ -n "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
+    source "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

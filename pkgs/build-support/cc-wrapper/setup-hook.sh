@@ -1,4 +1,4 @@
-addCVars () {
+ccWrapper_addCVars () {
     if [[ -d "$1/include" ]]; then
         export NIX_CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
     fi
@@ -16,7 +16,7 @@ addCVars () {
     fi
 }
 
-envHooks+=(addCVars)
+envHooks+=(ccWrapper_addCVars)
 
 # Note 1: these come *after* $out in the PATH (see setup.sh).
 # Note 2: phase separation makes this look useless to shellcheck.
