@@ -7853,7 +7853,11 @@ with pkgs;
 
   glpk = callPackage ../development/libraries/glpk { };
 
-  inherit (ocamlPackages) glsurf;
+  glsurf = callPackage ../applications/science/math/glsurf {
+    libpng = libpng12;
+    giflib = giflib_4_1;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
+  };
 
   glui = callPackage ../development/libraries/glui {};
 

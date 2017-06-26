@@ -849,12 +849,6 @@ let
       else {}
     );
 
-    glsurf = callPackage ../applications/science/math/glsurf {
-      libpng = pkgs.libpng12;
-      giflib = pkgs.giflib_4_1;
-      camlimages = camlimages_4_0;
-    };
-
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
 
