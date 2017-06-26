@@ -105,22 +105,20 @@ let
       done
     '');
 
-  # The dynamic linker has different names on different platforms.
+  # The dynamic linker has different names on different platforms. This is a
+  # shell glob that ought to match it.
   dynamicLinker =
-    if !nativeLibc then
-      (if targetPlatform.system == "i686-linux"     then "ld-linux.so.2" else
-       if targetPlatform.system == "x86_64-linux"   then "ld-linux-x86-64.so.2" else
-       # ARM with a wildcard, which can be "" or "-armhf".
-       if targetPlatform.isArm32                    then "ld-linux*.so.3" else
-       if targetPlatform.system == "aarch64-linux"  then "ld-linux-aarch64.so.1" else
-       if targetPlatform.system == "powerpc-linux"  then "ld.so.1" else
-       if targetPlatform.system == "mips64el-linux" then "ld.so.1" else
-       if targetPlatform.system == "x86_64-darwin"  then "/usr/lib/dyld" else
-       if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1" else
-       builtins.trace
-         "Don't know the name of the dynamic linker for platform ${targetPlatform.config}, so guessing instead."
-         null)
-    else "";
+    /**/ if libc == null then null
+    else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
+    else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
+    # ARM with a wildcard, which can be "" or "-armhf".
+    else if targetPlatform.isArm32                    then "${libc_lib}/lib/ld-linux*.so.3"
+    else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
+    else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
+    else if targetPlatform.system == "mips64el-linux" then "${libc_lib}/lib/ld.so.1"
+    else if targetPlatform.system == "x86_64-darwin"  then "/usr/lib/dyld"
+    else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
+    else null;
 
   expand-response-params = if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
   then buildPackages.stdenv.mkDerivation {
@@ -175,39 +173,39 @@ stdenv.mkDerivation {
       }
     ''
 
-      # TODO(@Ericson2314): Unify logic next hash break
-    + optionalString (libc != null) (if (targetPlatform.isDarwin) then ''
-      echo $dynamicLinker > $out/nix-support/dynamic-linker
-
-      echo "export LD_DYLD_PATH=\"$dynamicLinker\"" >> $out/nix-support/setup-hook
-    '' else if dynamicLinker != null then ''
-      dynamicLinker="${libc_lib}/lib/$dynamicLinker"
-      echo $dynamicLinker > $out/nix-support/dynamic-linker
-
-      if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
-        echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+    + optionalString (libc != null) (''
+      if [[ -z ''${dynamicLinker+x} ]]; then
+        echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
+        dynamicLinker="${libc_lib}/lib/ld*.so.?"
       fi
 
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to gcc/ld
-      # (the *last* value counts, so ours should come first).
-      echo "-dynamic-linker" $dynamicLinker > $out/nix-support/libc-ldflags-before
-    '' else ''
-      dynamicLinker=`eval 'echo $libc/lib/ld*.so.?'`
+      # Expand globs to fill array of options
+      dynamicLinker=($dynamicLinker)
+
+      case ''${#dynamicLinker[@]} in
+        0) echo "No dynamic linker found for platform '${targetPlatform.config}'." >&2;;
+        1) echo "Using dynamic linker: '$dynamicLinker'" >&2;;
+        *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
+      esac
+
       if [ -n "$dynamicLinker" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
+    '' + (if targetPlatform.isDarwin then ''
+        printf "export LD_DYLD_PATH+=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+    '' else ''
         if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
           echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
         fi
 
-        ldflagsBefore="-dynamic-linker $dlinker"
+        ldflagsBefore=(-dynamic-linker "$dynamicLinker")
+    '') + ''
       fi
 
       # The dynamic linker is passed in `ldflagsBefore' to allow
       # explicit overrides of the dynamic linker by callers to gcc/ld
       # (the *last* value counts, so ours should come first).
-      echo "$ldflagsBefore" > $out/nix-support/libc-ldflags-before
+      printLines "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
     '')
 
     + optionalString (libc != null) ''
