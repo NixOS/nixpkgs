@@ -21471,6 +21471,10 @@ in {
       sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
     '';
 
+    # 20170626: Disable tests until the hardcoded certificates in the
+    # test sources are updated. This stopped working around June 10-11 2017.
+    doCheck = false;
+
     checkPhase = ''
       runHook preCheck
       export LANG="en_US.UTF-8";
