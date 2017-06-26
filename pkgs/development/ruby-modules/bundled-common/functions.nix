@@ -7,6 +7,8 @@ rec {
   , gemdir ? null
   , ...
   }: {
+    inherit gemdir;
+
     gemfile =
     if gemfile == null then assert gemdir != null; gemdir + "/Gemfile"
     else gemfile;

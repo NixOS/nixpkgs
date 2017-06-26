@@ -1,5 +1,14 @@
 { lib, stdenv, callPackage, runCommand, ruby }@defs:
 
+# Use for simple installation of Ruby tools shipped in a Gem.
+# Start with a Gemfile that includes `gem <toolgem>`
+# > nix-shell -p bundler bundix
+# (shell)> bundle lock
+# (shell)> bundix
+# Then use rubyTool in the default.nix:
+
+# rubyTool { name = "gemifiedTool"; gemdir = ./.; exes = ["gemified-tool"]; }
+# The 'exes' parameter ensures that a copy of e.g. rake doesn't polute the system.
 {
   name
   # gemdir is the location of the Gemfile{,.lock} and gemset.nix; usually ./.
@@ -25,8 +34,8 @@ let
   // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
 in
    runCommand name cmdArgs ''
-    mkdir -p $out/bin; cd $out;
-      ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' '${x}';\n") exes)}
+    mkdir -p $out/bin;
+      ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' $out/bin/${x};\n") exes)}
       ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +
               "--set BUNDLE_GEMFILE ${basicEnv.confFiles}/Gemfile "+
               "--set BUNDLE_PATH ${basicEnv}/${ruby.gemPath} "+

@@ -7,6 +7,7 @@
 {
   name
 , pname ? name
+, mainGemName ? null
 , gemdir ? null
 , gemfile ? null
 , lockfile ? null
@@ -44,13 +45,13 @@ let
 
   copyIfBundledByPath = { bundledByPath ? false, ...}@main:
   (if bundledByPath then
-      assert gemFiles.gemdir != nil; "cp -a ${gemFiles.gemdir}/* $out/"
+      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/"
     else ""
   );
 
-  maybeCopyAll = pname: if pname == null then "" else
+  maybeCopyAll = pkgname: if pkgname == null then "" else
   let
-    mainGem = gems."${pname}" or (throw "bundlerEnv: gem ${pname} not found");
+    mainGem = gems."${pkgname}" or (throw "bundlerEnv: gem ${pkgname} not found");
   in
     copyIfBundledByPath mainGem;
 
@@ -59,7 +60,7 @@ let
   # out. Yes, I'm serious.
   confFiles = runCommand "gemfile-and-lockfile" {} ''
     mkdir -p $out
-    ${maybeCopyAll pname}
+    ${maybeCopyAll mainGemName}
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
   '';
