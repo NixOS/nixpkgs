@@ -11769,6 +11769,8 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
+  iptstate = callPackage ../os-specific/linux/iptstate { } ;
+
   ipset = callPackage ../os-specific/linux/ipset { };
 
   irqbalance = callPackage ../os-specific/linux/irqbalance { };
