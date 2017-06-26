@@ -40,11 +40,11 @@ assert withCollectd -> collectd != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "freeradius-${version}";
-  version = "3.0.12";
+  version = "3.0.14";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "182xnb9pdsivlyfm471l90m37q9i04h7jadhkgm0ivvzrzpzcnja";
+    sha256 = "02ar0xn4dfrs95cmd4c798k95rmnzzvcryyyl2vjv53ak16igmpw";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
