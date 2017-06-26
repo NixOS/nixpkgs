@@ -1,5 +1,3 @@
-export NIX_CC=@out@
-
 addCVars () {
     if [ -d $1/include ]; then
         export NIX_CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
@@ -39,9 +37,26 @@ if [ -n "@coreutils_bin@" ]; then
 fi
 
 if [ -z "$crossConfig" ]; then
-    export CC=@real_cc@
-    export CXX=@real_cxx@
+  ENV_PREFIX=""
 else
-    export BUILD_CC=@real_cc@
-    export BUILD_CXX=@real_cxx@
+  ENV_PREFIX="BUILD_"
 fi
+
+export NIX_${ENV_PREFIX}CC=@out@
+
+export ${ENV_PREFIX}CC=@named_cc@
+export ${ENV_PREFIX}CXX=@named_cxx@
+
+for CMD in \
+    cpp \
+    ar as nm objcopy ranlib strip strings size ld windres
+do
+    if
+        PATH=$_PATH type -p @binPrefix@$CMD > /dev/null
+    then
+        export ${ENV_PREFIX}$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=@binPrefix@${CMD};
+    fi
+done
+
+# No local scope available for sourced files
+unset ENV_PREFIX
