@@ -57,7 +57,7 @@ in
       };
 
       storageBackend = mkOption {
-        type = types.enum ["inmem" "consul" "zookeeper" "file" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs"];
+        type = types.enum ["inmem" "inmem_transactional" "inmem_ha" "inmem_transactional_ha" "file_transactional" "consul" "zookeeper" "file" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs"];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
@@ -65,7 +65,10 @@ in
       storageConfig = mkOption {
         type = types.lines;
         description = "Storage configuration";
-        default = "";
+        default = if (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional") then ''
+                    path = "/var/lib/vault"
+                  '' else ''
+                  '';
       };
 
       telemetryConfig = mkOption {
@@ -92,10 +95,18 @@ in
       wantedBy = ["multi-user.target"];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -m 0755 -p /var/lib/vault
-        chown -R vault:vault /var/lib/vault
-
+      preStart =
+        optionalString (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional")
+          (let
+            matched = builtins.match ''.*path[ ]*=[ ]*"([^"]+)".*'' (toString cfg.storageConfig);
+            path = if matched == null then
+                     throw ''`storageBackend` "${cfg.storageBackend}" requires path in `storageConfig`''
+                   else
+                     head matched;
+          in ''
+            [ -d "${path}"] || install -d -m0700 -o vault -g vault "${path}"
+          '') +
+      ''
         # generate a self-signed certificate, you will have to set environment variable "VAULT_SKIP_VERIFY=1" in the client
         if [ ! -s ${cfg.tlsCertFile} -o ! -s ${cfg.tlsKeyFile} ]; then
           mkdir -p $(dirname ${cfg.tlsCertFile}) || true
