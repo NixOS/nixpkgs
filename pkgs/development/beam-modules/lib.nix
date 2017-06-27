@@ -12,15 +12,6 @@ rec {
 
   callPackage = callPackageWith pkgs;
 
-  /* Erlang/OTP-specific version retrieval, returns 19 for OTP R19 */
-  getVersion = x:
-   let
-     parse = drv: (builtins.parseDrvName drv).version;
-   in builtins.replaceStrings ["B" "-"] ["." "."] (
-      if builtins.isString x
-      then parse x
-      else x.version or (parse x.name));
-
   /* Uses generic-builder to evaluate provided drv containing OTP-version
   specific data.
 
