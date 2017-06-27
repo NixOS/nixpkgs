@@ -82,8 +82,6 @@ let
 
     name = if name == null then pname else name;
 
-    #name = pname;
-
     paths = envPaths;
     pathsToLink = [ "/lib" ];
 

@@ -1,7 +1,7 @@
 { lib, rubyTool }:
 
-rubyTool {
-  name = "corundum-0.6.2";
+bundlerApp {
+  pname = "corundum";
   gemdir = ./.;
   exes = [ "corundum-skel" ];
 
