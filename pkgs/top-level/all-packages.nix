@@ -16881,6 +16881,8 @@ with pkgs;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
+  bench = haskell.lib.justStaticExecutables haskellPackages.bench;
+
   beret = callPackage ../games/beret { };
 
   bitsnbots = callPackage ../games/bitsnbots {
