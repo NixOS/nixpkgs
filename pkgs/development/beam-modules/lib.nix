@@ -62,12 +62,8 @@ rec {
       inherit (stdenv.lib) versionAtLeast;
       builder = callPackage ../interpreters/elixir/generic-builder.nix args;
     in
-      if versionAtLeast (getVersion args.erlang) vsn
-      then
-        callPackage drv {
-          mkDerivation = pkgs.makeOverridable builder;
-        }
-      else
-        throw "Elixir requires at least Erlang/OTP R${vsn}.";
+      callPackage drv {
+        mkDerivation = pkgs.makeOverridable builder;
+      };
 
 }
