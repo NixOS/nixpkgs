@@ -139,6 +139,7 @@
       btsync = 113;
       minecraft = 114;
       #monetdb = 115; # unused (not packaged), removed 2016-09-19
+      vault = 115;
       rippled = 116;
       murmur = 117;
       foundationdb = 118;
@@ -415,6 +416,7 @@
       btsync = 113;
       #minecraft = 114; # unused
       #monetdb = 115; # unused (not packaged), removed 2016-09-19
+      vault = 115;
       #ripped = 116; # unused
       #murmur = 117; # unused
       foundationdb = 118;
