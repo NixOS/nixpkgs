@@ -29,7 +29,6 @@ in stdenv.mkDerivation {
     libpulseaudio
     libxml2
     libxslt
-    mesa
     nspr
     nss
     sqlite
