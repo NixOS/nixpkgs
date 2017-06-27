@@ -172,7 +172,7 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl ./manual.xml
+        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunk.xsl ./manual.xml
 
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
