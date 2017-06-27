@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -av iptstate $out/bin/
+    install -m755 -D iptstate $out/bin/iptstate
   '';
 }
 
