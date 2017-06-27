@@ -389,10 +389,9 @@ rec {
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
       baseJson = writeText "${baseName}-config.json" (builtins.toJSON {
-        created = created;
+        inherit created config;
         architecture = "amd64";
         os = "linux";
-        config = config;
       });
 
       layer =
