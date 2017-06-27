@@ -415,6 +415,7 @@
   refnil = "Martin Lavoie <broemartino@gmail.com>";
   regnat = "Théophane Hufschmitt <regnat@regnat.ovh>";
   relrod = "Ricky Elrod <ricky@elrod.me>";
+  remche = "Rémi Cailletaud <remche@remche.org>";
   renzo = "Renzo Carbonara <renzocarbonara@gmail.com>";
   retrry = "Tadas Barzdžius <retrry@gmail.com>";
   rick68 = "Wei-Ming Yang <rick68@gmail.com>";

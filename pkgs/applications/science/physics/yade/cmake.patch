@@ -1,0 +1,20 @@
+--- a/cMake/FindCGAL.cmake
++++ b/cMake/FindCGAL.cmake
+@@ -13,11 +13,11 @@
+ IF(CGAL_INCLUDE_DIR AND CGAL_LIBRARIES)
+     SET(CGAL_FOUND TRUE)
+ ELSE(CGAL_INCLUDE_DIR AND CGAL_LIBRARIES)
+-    FIND_PATH(CGAL_INCLUDE_DIR basic.h
+-        /usr/include/CGAL
+-        /usr/local/include/CGAL
+-        $ENV{ProgramFiles}/CGAL/*/include/CGAL
+-        $ENV{SystemDrive}/CGAL/*/include/CGAL
++       FIND_PATH(CGAL_INCLUDE_DIR CGAL/basic.h
++        /usr/include/
++        /usr/local/include/
++        $ENV{ProgramFiles}/CGAL/*/include/
++        $ENV{SystemDrive}/CGAL/*/include/
+     )
+     FIND_LIBRARY(CGAL_LIBRARIES NAMES CGAL libCGAL
+         PATHS
+
