@@ -47,7 +47,6 @@ rec {
   specific data.
 
   drv: package containing version-specific args;
-  vsn: minimum OTP version that Elixir will build on;
   builder: generic builder for all Erlang versions;
   args: arguments merged into version-specific args, used mostly to customize
         dependencies;
@@ -57,7 +56,7 @@ rec {
   Please note that "mkDerivation" defined here is the one called from 1.4.nix
   and similar files.
   */
-  callElixir = drv: vsn: args:
+  callElixir = drv: args:
     let
       inherit (stdenv.lib) versionAtLeast;
       builder = callPackage ../interpreters/elixir/generic-builder.nix args;
