@@ -10005,6 +10005,8 @@ in {
 
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
+  django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
+
   django_tagging = buildPythonPackage rec {
     name = "django-tagging-0.4.5";
 
