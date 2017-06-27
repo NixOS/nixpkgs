@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
     else
       throw "NylasMail is not supported on ${stdenv.system}";
 
-  # Build dependencies
   propagatedBuildInputs = [
     alsaLib
     atk
@@ -82,12 +81,12 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
   ];
 
-  # Runtime dependencies
-  buildInputs = [ makeWrapper gnome2.gnome_keyring ];
 
-  phases = [ "unpackPhase" ];
+  buildInputs = [ gnome2.gnome_keyring ];
 
-  unpackPhase = ''
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildCommand = ''
     mkdir -p $out
 
     ${dpkg}/bin/dpkg-deb -x $src unpacked
