@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
+  '' + ''
+    sed '2i echo Skipping install-C test && exit 0' -i ./tests/install/install-C.sh
+    sed '2i echo Skipping chmod setgid && exit 0' -i ./tests/chmod/setgid.sh
   '';
 
   outputs = [ "out" "info" ];
