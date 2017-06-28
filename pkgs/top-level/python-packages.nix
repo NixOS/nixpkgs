@@ -11609,19 +11609,7 @@ in {
   };
 
 
-  gflags = buildPythonPackage rec {
-    name = "gflags-2.0";
-
-    src = pkgs.fetchurl {
-      url = "http://python-gflags.googlecode.com/files/python-${name}.tar.gz";
-      sha256 = "1mkc7315bpmh39vbn0jq237jpw34zsrjr1sck98xi36bg8hnc41i";
-    };
-
-    meta = {
-      homepage = http://code.google.com/p/python-gflags/;
-      description = "A module for command line handling, similar to Google's gflags for C++";
-    };
-  };
+  gflags = callPackage ../development/python-modules/gflags { };
 
   ghdiff = callPackage ../development/python-modules/ghdiff.nix { };
 
