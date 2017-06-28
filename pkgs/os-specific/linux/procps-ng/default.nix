@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
-    CC = stdenv.cross.config + "-gcc";
-  };
-
   # Too red
   configureFlags = [ "--disable-modern-top" ];
 
