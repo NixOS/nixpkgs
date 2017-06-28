@@ -7,8 +7,12 @@ let
   configFile = pkgs.writeText "vault.hcl" ''
     listener "tcp" {
       address = "${cfg.address}"
-      tls_cert_file = "${cfg.tlsCertFile}"
-      tls_key_file = "${cfg.tlsKeyFile}"
+      ${if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
+          tls_disable = "true"
+        '' else ''
+          tls_cert_file = "${cfg.tlsCertFile}"
+          tls_key_file = "${cfg.tlsKeyFile}"
+        ''}
       ${cfg.listenerExtraConfig}
     }
     storage "${cfg.storageBackend}" {
@@ -35,17 +39,17 @@ in
       };
 
       tlsCertFile = mkOption {
-        type = types.str;
-        default = "/etc/vault/cert.pem";
+        type = types.nullOr types.str;
+        default = null;
         example = "/path/to/your/cert.pem";
-        description = "TLS certificate file. A self-signed certificate will be generated if file not exists";
+        description = "TLS certificate file. TLS will be disabled unless this option is set";
       };
 
       tlsKeyFile = mkOption {
-        type = types.str;
-        default = "/etc/vault/key.pem";
+        type = types.nullOr types.str;
+        default = null;
         example = "/path/to/your/key.pem";
-        description = "TLS private key file. A self-signed certificate will be generated if file not exists";
+        description = "TLS private key file. TLS will be disabled unless this option is set";
       };
 
       listenerExtraConfig = mkOption {
@@ -109,18 +113,6 @@ in
 
       preStart = optionalString (localDir != null) ''
         install -d -m0700 -o vault -g vault "${localDir}"
-      '' + ''
-        # generate a self-signed certificate, you will have to set environment variable "VAULT_SKIP_VERIFY=1" in the client
-        if [ ! -s ${cfg.tlsCertFile} -o ! -s ${cfg.tlsKeyFile} ]; then
-          mkdir -p $(dirname ${cfg.tlsCertFile}) || true
-          mkdir -p $(dirname ${cfg.tlsKeyFile }) || true
-          ${pkgs.openssl.bin}/bin/openssl req -x509 -newkey rsa:2048 -sha256 -nodes -days 99999 \
-            -subj /C=US/ST=NY/L=NYC/O=vault/CN=${cfg.address} \
-            -keyout ${cfg.tlsKeyFile} -out ${cfg.tlsCertFile}
-
-          chown root:vault ${cfg.tlsKeyFile} ${cfg.tlsCertFile}
-          chmod 440 ${cfg.tlsKeyFile} ${cfg.tlsCertFile}
-        fi
       '';
 
       serviceConfig = {
