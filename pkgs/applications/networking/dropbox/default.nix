@@ -24,11 +24,11 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "28.4.14";
+  version = "29.4.20";
   sha256 =
     {
-      "x86_64-linux" = "02pfly33bg85c8y3igvkhyshra8ra089ghjibhzl1a4fmd45wf52";
-      "i686-linux"   = "10swkjbzkyf19cilzw7ja6byla4dllr52pbz19wjzb8rv088gcla";
+      "x86_64-linux" = "0w8n8q846mqq8f3yisn9xazf323sn579zyp1kwrdrmmqalwiwcl2";
+      "i686-linux"   = "0zgdnpizgkw2q6wglkdhpzzrhnpplfi2ldcw1z0k9r6slici5mfk";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -40,7 +40,7 @@ let
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
 
-  ldpath = stdenv.lib.makeLibraryPath
+  libs =
     [
       dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
@@ -48,6 +48,7 @@ let
 
       qtbase qtdeclarative qtwebkit
     ];
+  ldpath = stdenv.lib.makeLibraryPath libs;
 
   desktopItem = makeDesktopItem {
     name = "dropbox";
@@ -70,9 +71,12 @@ in mkDerivation {
   sourceRoot = ".dropbox-dist";
 
   nativeBuildInputs = [ makeWrapper patchelf ];
+  buildInputs = libs;
   dontStrip = true; # already done
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/${appdir}"
     cp -r --no-preserve=mode "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
@@ -102,9 +106,11 @@ in mkDerivation {
 
     rm $out/${appdir}/wmctrl
     ln -s ${wmctrl}/bin/wmctrl $out/${appdir}/wmctrl
+
+    runHook postInstall
   '';
 
-  fixupPhase = ''
+  preFixup = ''
     INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
     RPATH="${ldpath}:$out/${appdir}"
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
