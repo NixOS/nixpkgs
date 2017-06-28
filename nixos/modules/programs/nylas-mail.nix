@@ -19,16 +19,6 @@ in {
         default = true;
         description = "Enable gnome3 keyring for nylas-mail.";
       };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nylas-mail;
-        defaultText = "pkgs.nylas-mail";
-        example = literalExample "pkgs.nylas-mail";
-        description = ''
-          nylas-mail package to use.
-        '';
-      };
     };
   };
 
@@ -37,7 +27,11 @@ in {
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = [pkgs.nylas-mail];
 
+    services.gnome3.gnome-keyring = mkIf cfg.gnome3-keyring {
+      enable = true;
+    };
 
   };
 }
