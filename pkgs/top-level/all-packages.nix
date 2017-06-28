@@ -771,6 +771,14 @@ with pkgs;
     '';
   });
 
+  stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (drv: {
+    executableToolDepends = [ makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/stack2nix \
+        --prefix PATH ":" "${git}/bin:${cabal2nix}/bin:${cabal-install}/bin" 
+    '';
+  });
+
   caddy = callPackage ../servers/caddy { };
 
   capstone = callPackage ../development/libraries/capstone { };
