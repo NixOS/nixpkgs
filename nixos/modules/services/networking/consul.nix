@@ -7,7 +7,7 @@ let
   cfg = config.services.consul;
 
   configOptions = { data_dir = dataDir; } //
-    (if cfg.webUi then { ui_dir = "${cfg.package.ui}"; } else { }) //
+    (optionalAttrs cfg.webUi { ui_dir = cfg.package.ui; }) //
     cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
@@ -22,13 +22,7 @@ in
 
     services.consul = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enables the consul daemon.
-        '';
-      };
+      enable = mkEnableOption "Consul daemon";
 
       package = mkOption {
         type = types.package;
@@ -45,18 +39,6 @@ in
         default = false;
         description = ''
           Enables the web interface on the consul http port.
-        '';
-      };
-
-      leaveOnStop = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          If enabled, causes a leave action to be sent when closing consul.
-          This allows a clean termination of the node, but permanently removes
-          it from the cluster. You probably don't want this option unless you
-          are running a node which going offline in a permanent / semi-permanent
-          fashion.
         '';
       };
 
@@ -88,16 +70,16 @@ in
         '';
       };
 
-      dropPrivileges = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether the consul agent should be run as a non-root consul user.
-        '';
-      };
-
       extraConfig = mkOption {
+        type = types.attrs;
         default = { };
+        example = literalExample ''
+          { server = true;
+            bootstrap_expect = 3;
+            disable_anonymous_signature = true;
+            disable_update_check = true;
+          }
+        '';
         description = ''
           Extra configuration options which are serialized to json and added
           to the config.json file.
@@ -173,6 +155,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ systemdDevices;
         bindsTo = systemdDevices;
+        unitConfig.RequiresMountsFor = dataDir;
         restartTriggers = [ config.environment.etc."consul.json".source ]
           ++ mapAttrsToList (_: d: d.source)
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
@@ -182,16 +165,13 @@ in
             + concatMapStrings (n: " -config-file ${n}") configFiles;
           ExecReload = "${cfg.package.bin}/bin/consul reload";
           PermissionsStartOnly = true;
-          User = if cfg.dropPrivileges then "consul" else null;
+          User = "consul";
           TimeoutStartSec = "0";
-        } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package.bin}/bin/consul leave";
-        });
+        };
 
         path = with pkgs; [ iproute gnugrep gawk consul ];
         preStart = ''
-          mkdir -m 0700 -p ${dataDir}
-          chown -R consul ${dataDir}
+          install -d -m0700 -o consul "${dataDir}"
 
           # Determine interface addresses
           getAddrOnce () {
@@ -240,9 +220,10 @@ in
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
-              ${optionalString cfg.alerts.watchEvents "--watch-events"}
+              ${optionalString cfg.alerts.watchEvents "--watch-events"} \
+              --log-level=warn
           '';
-          User = if cfg.dropPrivileges then "consul" else null;
+          User = "consul";
           Restart = "on-failure";
         };
       };
