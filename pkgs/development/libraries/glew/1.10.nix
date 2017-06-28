@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${optionalString (stdenv ? cross) ''
+    ${optionalString (hostPlatform != buildPlatform) ''
     sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
