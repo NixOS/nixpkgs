@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, freetype, expat }:
+{ stdenv, fetchurl, pkgconfig, freetype, expat
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "fontconfig-2.10.2";
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   # We should find a better way to access the arch reliably.
-  crossArch = stdenv.cross.arch or null;
+  crossArch = hostPlatform.arch or null;
 
   preConfigure = ''
     if test -n "$crossConfig"; then
