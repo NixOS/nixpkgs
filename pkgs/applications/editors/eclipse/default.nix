@@ -147,7 +147,7 @@ rec {
 
   ### Eclipse SDK
 
-  eclipse-sdk = eclipse-sdk-46; # always point to latest
+  eclipse-sdk = eclipse-sdk-47; # always point to latest
 
   eclipse-sdk-46 = buildEclipse {
     name = "eclipse-sdk-4.6.2";
@@ -160,6 +160,21 @@ rec {
       "i686-linux" = fetchurl {
           url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-SDK-4.6.2-linux-gtk.tar.gz;
           sha256 = "09wlkcxs5h3j8habqxgr4all99vkgmyixc0vr9dj3qs0kl85k5mz";
+        };
+    };
+  };
+
+  eclipse-sdk-47 = buildEclipse {
+    name = "eclipse-sdk-4.7";
+    description = "Eclipse Oxygen Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-SDK-4.7-linux-gtk-x86_64.tar.gz;
+          sha256 = "1nz0hl0gg4a8iffnaggbhdw0ra8a7wljlimvijbbybh0nhvfd9n3";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-SDK-4.7-linux-gtk.tar.gz;
+          sha256 = "0dar69v7d7bkl18si45bccvil809a85ghb7k88m1q2cq1kd2r8z5";
         };
     };
   };
