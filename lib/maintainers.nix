@@ -247,6 +247,7 @@
   jensbin = "Jens Binkert <jensbin@protonmail.com>";
   jerith666 = "Matt McHenry <github@matt.mchenryfamily.org>";
   jfb = "James Felix Black <james@yamtime.com>";
+  jfrankenau = "Johannes Frankenau <johannes@frankenau.net>";
   jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgertm = "Tim Jaeger <jger.tm@gmail.com>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
