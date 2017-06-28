@@ -1,28 +1,25 @@
-{stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg, result, opam}:
+{ stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg, result, opam, js_of_ocaml }:
 
 buildOcaml rec {
-  version = "0.8.2";
+  version = "0.8.3";
   name = "ptime";
 
   src = fetchurl {
     url = "http://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
-    sha256 = "1lihkhzskzwxskiarh4mvf7gbz5nfv25vmazbfz81m344i32a5pj";
+    sha256 = "18jimskgnd9izg7kn6zk6sk35adgjm605dkv13plwslbb90kqr44";
   };
 
   unpackCmd = "tar -xf $curSrc";
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg opam ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg opam js_of_ocaml ];
 
   propagatedBuildInputs = [ result ];
 
   buildPhase = ''
-    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml build --with-js_of_ocaml false
+    ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml build --with-js_of_ocaml true
   '';
 
-  installPhase = ''
-    opam-installer --script --prefix=$out ptime.install | sh
-    ln -s $out/lib/ptime $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
+  inherit (topkg) installPhase;
 
   meta = {
     homepage = http://erratique.ch/software/ptime;
