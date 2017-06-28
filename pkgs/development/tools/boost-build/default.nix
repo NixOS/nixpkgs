@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "boost-build-2.0-${version}";
+  name = "boost-build-${version}";
   version = "2016.03";
 
   src = fetchFromGitHub {
