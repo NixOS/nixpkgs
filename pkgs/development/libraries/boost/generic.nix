@@ -5,7 +5,7 @@
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
 , enableShared ? !(stdenv.cross.libc or null == "msvcrt") # problems for now
-, enableStatic ? !enableShared
+, enableStatic ? !enableShared || stdenv.isDarwin
 , enablePIC ? false
 , enableExceptions ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
