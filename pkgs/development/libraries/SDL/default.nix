@@ -1,15 +1,15 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, audiofile, libcap
 , openglSupport ? false, mesa_noglu, mesa_glu
 , alsaSupport ? true, alsaLib
-, x11Support ? true, libXext, libICE, libXrandr
+, x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
 , pulseaudioSupport ? true, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, hostPlatform
+, hostPlatform, buildPlatform
 }:
 
 # OSS is no longer supported, for it's much crappier than ALSA and
 # PulseAudio.
-assert (stdenv.isLinux && !(stdenv ? cross)) -> alsaSupport || pulseaudioSupport;
+assert hostPlatform.isLinux -> alsaSupport || pulseaudioSupport;
 
 let
   inherit (stdenv.lib) optional optionals;
@@ -53,9 +53,8 @@ stdenv.mkDerivation rec {
     "--enable-rpath"
     "--disable-pulseaudio-shared"
     "--disable-osmesa-shared"
-  ] ++ optionals (stdenv ? cross) ([
-    "--without-x"
-  ] ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib");
+  ] ++ optional (!x11Support) "--without-x"
+    ++ optional (alsaSupport && hostPlatform != buildPlatform) "--with-alsa-prefix=${alsaLib.out}/lib";
 
   patches = [
     # Fix window resizing issues, e.g. for xmonad
