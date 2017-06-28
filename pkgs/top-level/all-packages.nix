@@ -1388,6 +1388,8 @@ with pkgs;
 
   c14 = callPackage ../applications/networking/c14 { };
 
+  certstrap = callPackage ../tools/security/certstrap { };
+
   cfssl = callPackage ../tools/security/cfssl { };
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
