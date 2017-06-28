@@ -515,9 +515,7 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
-    qcheck = callPackage ../development/ocaml-modules/qcheck {
-      oasis = ocaml_oasis;
-    };
+    qcheck = callPackage ../development/ocaml-modules/qcheck { };
 
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
