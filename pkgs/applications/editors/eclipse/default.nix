@@ -93,7 +93,7 @@ rec {
 
   ### Eclipse Platform
 
-  eclipse-platform = eclipse-platform-46; # always point to latest
+  eclipse-platform = eclipse-platform-47; # always point to latest
 
   eclipse-platform-46 = buildEclipse {
     name = "eclipse-platform-4.6.2";
@@ -106,6 +106,21 @@ rec {
       "i686-linux" = fetchurl {
           url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk.tar.gz;
           sha256 = "0274g6ypiqsqkch10868ygbm6avc5pa57saz9wd196kdivl1bdpm";
+        };
+    };
+  };
+
+  eclipse-platform-47 = buildEclipse {
+    name = "eclipse-platform-4.7";
+    description = "Eclipse Platform Oxygen";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-platform-4.7-linux-gtk-x86_64.tar.gz;
+          sha256 = "0hrgijydxvd2zz1npv5qw8d79f48a6lsdw3qy1wqf7k59aqyg2fq";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-platform-4.7-linux-gtk.tar.gz;
+          sha256 = "00m89j26m8nj190q144wx8d88mldx1z6i797p8isg3rhbz3x5dbc";
         };
     };
   };
