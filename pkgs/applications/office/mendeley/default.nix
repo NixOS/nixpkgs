@@ -110,8 +110,8 @@ stdenv.mkDerivation {
 
     wrapProgram $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
-      ${stdenv.lib.optionalString autorunLinkHandler
-      ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop"''}
+      ${stdenv.lib.optionalString autorunLinkHandler # ignore errors installing the link handler
+      ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop ||:"''}
 
     # Remove bundled qt bits
     rm -rf $out/lib/qt
