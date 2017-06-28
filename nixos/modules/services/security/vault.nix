@@ -93,7 +93,8 @@ in
       description = "Vault server daemon";
 
       wantedBy = ["multi-user.target"];
-      after = [ "network.target" ];
+      after = [ "network.target" ]
+           ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
       preStart =
         optionalString (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional")
