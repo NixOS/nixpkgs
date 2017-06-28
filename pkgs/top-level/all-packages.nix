@@ -11042,6 +11042,8 @@ with pkgs;
 
   myserver = callPackage ../servers/http/myserver { };
 
+  nas = callPackage ../servers/nas { };
+
   neard = callPackage ../servers/neard { };
 
   nginx = nginxStable;
