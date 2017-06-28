@@ -1,6 +1,8 @@
-{ fetchurl, stdenv, lib }:
+{ fetchurl, stdenv, lib
+, buildPlatform, hostPlatform
+}:
 
-assert !stdenv.isLinux || stdenv ? cross; # TODO: improve on cross
+assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   name = "libiconv-${version}";
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString ((stdenv ? cross && stdenv.cross.libc == "msvcrt") || stdenv.cc.nativeLibc)
+    lib.optionalString ((hostPlatform != buildPlatform && hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       '';
