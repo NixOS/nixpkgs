@@ -79,7 +79,18 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = let
+    localDir = if (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional") then
+                 let
+                   matched = builtins.match ''.*path[ ]*=[ ]*"([^"]+)".*'' (toString cfg.storageConfig);
+                 in
+                   if matched == null then
+                     throw ''`storageBackend` "${cfg.storageBackend}" requires path in `storageConfig`''
+                   else
+                     head matched
+               else
+                 null;
+  in mkIf cfg.enable {
 
     users.extraUsers.vault = {
       name = "vault";
@@ -96,18 +107,9 @@ in
       after = [ "network.target" ]
            ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
-      preStart =
-        optionalString (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional")
-          (let
-            matched = builtins.match ''.*path[ ]*=[ ]*"([^"]+)".*'' (toString cfg.storageConfig);
-            path = if matched == null then
-                     throw ''`storageBackend` "${cfg.storageBackend}" requires path in `storageConfig`''
-                   else
-                     head matched;
-          in ''
-            [ -d "${path}"] || install -d -m0700 -o vault -g vault "${path}"
-          '') +
-      ''
+      preStart = optionalString (localDir != null) ''
+        install -d -m0700 -o vault -g vault "${localDir}"
+      '' + ''
         # generate a self-signed certificate, you will have to set environment variable "VAULT_SKIP_VERIFY=1" in the client
         if [ ! -s ${cfg.tlsCertFile} -o ! -s ${cfg.tlsKeyFile} ]; then
           mkdir -p $(dirname ${cfg.tlsCertFile}) || true
@@ -138,6 +140,8 @@ in
         StartLimitInterval = "60s";
         StartLimitBurst = 3;
       };
+
+      unitConfig.RequiresMountsFor = optional (localDir != null) localDir;
     };
   };
 
