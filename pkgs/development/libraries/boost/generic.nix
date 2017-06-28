@@ -1,5 +1,5 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
-, hostPlatform
+, buildPlatform, hostPlatform
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
@@ -148,13 +148,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ stdenv.lib.optionals (! stdenv ? cross) [ python icu ]
+    ++ stdenv.lib.optionals (hostPlatform == buildPlatform) [ python icu ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags
     ++ [ "--with-python=${python.interpreter}" ]
-    ++ optional (! stdenv ? cross) "--with-icu=${icu.dev}"
+    ++ optional (hostPlatform == buildPlatform) "--with-icu=${icu.dev}"
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = builder nativeB2Args;
