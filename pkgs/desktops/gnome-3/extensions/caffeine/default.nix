@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-caffeine-${version}";
-  version = "ce0d0d4d3a9fed4b35b82cf59609a00502862271";
+  version = "unstable-2017-06-21";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
