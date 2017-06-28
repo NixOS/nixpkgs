@@ -7,10 +7,11 @@
 # (shell)> bundix
 # Then use rubyTool in the default.nix:
 
-# rubyTool { name = "gemifiedTool"; gemdir = ./.; exes = ["gemified-tool"]; }
+# rubyTool { pname = "gemifiedTool"; gemdir = ./.; exes = ["gemified-tool"]; }
 # The 'exes' parameter ensures that a copy of e.g. rake doesn't polute the system.
 {
-  name
+  # use the name of the name in question; its version will be picked up from the gemset
+  pname
   # gemdir is the location of the Gemfile{,.lock} and gemset.nix; usually ./.
 , gemdir
   # Exes is the list of executables provided by the gems in the Gemfile
@@ -30,10 +31,10 @@
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  cmdArgs = removeAttrs args [ "name" "postBuild" ]
+  cmdArgs = removeAttrs args [ "pname" "postBuild" ]
   // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
 in
-   runCommand name cmdArgs ''
+   runCommand basicEnv.name cmdArgs ''
     mkdir -p $out/bin;
       ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' $out/bin/${x};\n") exes)}
       ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +

@@ -5,8 +5,8 @@
 }@defs:
 
 {
-  name
-, pname ? name
+  name ? null
+, pname ? null
 , mainGemName ? null
 , gemdir ? null
 , gemfile ? null
@@ -21,6 +21,8 @@
 , ignoreCollisions ? false
 , ...
 }@args:
+
+assert name == null -> pname != null;
 
 with  import ./functions.nix { inherit lib gemConfig; };
 
@@ -42,6 +44,20 @@ let
     else defs.bundler.override (attrs: { inherit ruby; });
 
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
+
+  name' = if name != null then
+    name
+  else
+    let
+      gem = gems."${pname}";
+      version = gem.version;
+    in
+      "${pname}-${version}";
+
+  pname' = if pname != null then
+    pname
+  else
+    name;
 
   copyIfBundledByPath = { bundledByPath ? false, ...}@main:
   (if bundledByPath then
@@ -78,9 +94,9 @@ let
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
   basicEnv = buildEnv {
-    inherit ignoreCollisions;
+    inherit  ignoreCollisions;
 
-    name = if name == null then pname else name;
+    name = name';
 
     paths = envPaths;
     pathsToLink = [ "/lib" ];

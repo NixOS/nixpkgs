@@ -1,4 +1,4 @@
-{ lib, rubyTool }:
+{ lib, bundlerApp }:
 
 bundlerApp {
   pname = "corundum";

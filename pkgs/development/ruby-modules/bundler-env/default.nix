@@ -22,11 +22,6 @@
 let
   inherit (import ../bundled-common/functions.nix {inherit lib ruby gemConfig groups; }) genStubsScript;
 
-  drvName =
-    if name != null then lib.traceVal name
-    else if pname != null then "${toString pname}-${basicEnv.gems."${pname}".version}"
-    else throw "bundlerEnv: either pname or name must be set";
-
   basicEnv = (callPackage ../bundled-common {}) (args // { inherit pname name; mainGemName = pname; });
 
   inherit (basicEnv) envPaths;
@@ -48,7 +43,7 @@ in
     (buildEnv {
       inherit ignoreCollisions;
 
-      name = drvName;
+      name = basicEnv.name;
 
       paths = envPaths;
       pathsToLink = [ "/lib" ];
