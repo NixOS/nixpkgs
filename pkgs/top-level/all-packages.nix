@@ -17659,6 +17659,10 @@ with pkgs;
 
   igv = callPackage ../applications/science/biology/igv { };
 
+  iv = callPackage ../applications/science/biology/iv {
+    neuron-version = neuron.version;
+  };
+
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
   };
@@ -17666,6 +17670,8 @@ with pkgs;
   neuron-mpi = appendToName "mpi" (neuron.override {
     mpi = pkgs.openmpi;
   });
+
+  neuron-full = neuron-mpi.override { inherit python; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
