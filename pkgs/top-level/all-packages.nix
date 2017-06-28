@@ -10338,6 +10338,10 @@ with pkgs;
     libva = libva-full; # also wants libva-{x11,drm,wayland}
   };
 
+  vaapiIntelG45H264 = callPackage ../development/libraries/vaapi-intel/g45-h264.nix {
+    libva = libva-full; # also wants libva-{x11,drm,wayland}
+  };
+
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau {
     libva = libva-full; # needs libva-{x11,glx}
   };
