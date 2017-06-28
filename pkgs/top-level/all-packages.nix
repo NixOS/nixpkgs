@@ -11359,6 +11359,7 @@ in
   # Named data networking (NDN) libraries and tooling.
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
   nfd = callPackage ../servers/named-data/nfd { };
+  ndn-tools = callPackage ../tools/networking/named-data/ndn-tools { };
 
   cddlib = callPackage ../development/libraries/cddlib {};
 
