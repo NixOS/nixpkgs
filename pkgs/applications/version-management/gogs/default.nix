@@ -38,7 +38,6 @@ buildGoPackage rec {
   '';
 
   goPackagePath = "github.com/gogits/gogs";
-  goDeps = ./deps.nix;
 
   meta = {
     description = "A painless self-hosted Git service";
