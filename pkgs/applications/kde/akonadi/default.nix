@@ -2,8 +2,8 @@
   mkDerivation, copyPathsToStore, lib,
   extra-cmake-modules,
   kcompletion, kconfigwidgets, kdbusaddons, kdesignerplugin, kiconthemes,
-  kio,
-  boost, kitemmodels,
+  kwindowsystem, kcrash, kio,
+  boost, kitemmodels, shared_mime_info,
   mysql
 }:
 
@@ -17,6 +17,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcompletion kconfigwidgets kdbusaddons kdesignerplugin kiconthemes kio
+    kwindowsystem kcrash shared_mime_info
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
   cmakeFlags = [
