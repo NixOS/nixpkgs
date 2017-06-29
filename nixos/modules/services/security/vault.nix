@@ -16,7 +16,8 @@ let
       ${cfg.listenerExtraConfig}
     }
     storage "${cfg.storageBackend}" {
-      ${cfg.storageConfig}
+      ${optionalString (cfg.storagePath   != null) ''path = "${cfg.storagePath}"''}
+      ${optionalString (cfg.storageConfig != null) cfg.storageConfig}
     }
     ${optionalString (cfg.telemetryConfig != "") ''
         telemetry {
@@ -61,18 +62,21 @@ in
       };
 
       storageBackend = mkOption {
-        type = types.enum ["inmem" "inmem_transactional" "inmem_ha" "inmem_transactional_ha" "file_transactional" "consul" "zookeeper" "file" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs"];
+        type = types.enum [ "inmem" "file" "consul" "zookeeper" "s3" "azure" "dynamodb" "etcd" "mssql" "mysql" "postgresql" "swift" "gcs" ];
         default = "inmem";
         description = "The name of the type of storage backend";
       };
 
+      storagePath = mkOption {
+        type = types.nullOr types.path;
+        default = if cfg.storageBackend == "file" then "/var/lib/vault" else null;
+        description = "Data directory for file backend";
+      };
+
       storageConfig = mkOption {
-        type = types.lines;
+        type = types.nullOr types.lines;
+        default = null;
         description = "Storage configuration";
-        default = if (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional") then ''
-                    path = "/var/lib/vault"
-                  '' else ''
-                  '';
       };
 
       telemetryConfig = mkOption {
@@ -83,18 +87,15 @@ in
     };
   };
 
-  config = let
-    localDir = if (cfg.storageBackend == "file" || cfg.storageBackend == "file_transactional") then
-                 let
-                   matched = builtins.match ''.*path[ ]*=[ ]*"([^"]+)".*'' (toString cfg.storageConfig);
-                 in
-                   if matched == null then
-                     throw ''`storageBackend` "${cfg.storageBackend}" requires path in `storageConfig`''
-                   else
-                     head matched
-               else
-                 null;
-  in mkIf cfg.enable {
+  config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
+        message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
+      }
+      { assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
+        message = ''You must set services.vault.storagePath only when using the "file" backend'';
+      }
+    ];
 
     users.extraUsers.vault = {
       name = "vault";
@@ -111,8 +112,8 @@ in
       after = [ "network.target" ]
            ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
-      preStart = optionalString (localDir != null) ''
-        install -d -m0700 -o vault -g vault "${localDir}"
+      preStart = optionalString (cfg.storagePath != null) ''
+        install -d -m0700 -o vault -g vault "${cfg.storagePath}"
       '';
 
       serviceConfig = {
@@ -133,7 +134,7 @@ in
         StartLimitBurst = 3;
       };
 
-      unitConfig.RequiresMountsFor = optional (localDir != null) localDir;
+      unitConfig.RequiresMountsFor = optional (cfg.storagePath != null) cfg.storagePath;
     };
   };
 
