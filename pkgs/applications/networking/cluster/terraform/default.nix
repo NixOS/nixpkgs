@@ -63,4 +63,10 @@ in {
     sha256 = "1f6z1zkklzpqgc7akgdz1g306ccmhni5lmg7i6g762n3qai60bnv";
     doCheck = true;
   };
+
+  terraform_0_9_9 = generic {
+    version = "0.9.9";
+    sha256 = "1pa9dd87dcjnn7fm1qn63da5qx87l7xjqlwiczrswcjfbismvl1p";
+    doCheck = true;
+  };
 }
