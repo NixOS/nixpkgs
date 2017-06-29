@@ -1,7 +1,7 @@
 { stdenv, file, makeDesktopItem, cog32, spur32, spur64 ? "none" }:
 
 stdenv.mkDerivation rec {
-  name = "pharo-vm";
+  name = "pharo";
   src = ./.;
   inherit cog32 spur32 spur64 file;
   magic = ./magic;

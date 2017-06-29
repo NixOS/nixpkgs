@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
   # Regenerate the configure script.
   # Unnecessary? But the build breaks without this.
   autoreconfPhase = ''
-    (cd opensmalltalk-vm/platforms/unix/config && make)
+    pushd opensmalltalk-vm/platforms/unix/config
+    make
+    popd
   '';
 
   # Configure with options modeled on the 'mvm' build script from the vm.
@@ -67,37 +69,34 @@ stdenv.mkDerivation rec {
     make install-squeak install-plugins prefix=$(pwd)/products
 
     # Copy binaries & rename from 'squeak' to 'pharo'
-    mkdir -p $out
-    cp    products/lib/squeak/5.0-*/squeak $out/pharo
-
-    cp -r products/lib/squeak/5.0-*/*.so $out
-    ln -s "${pharo-share}/lib/"*.sources $out
+    mkdir -p "$out"
+    cp products/lib/squeak/5.0-*/squeak "$out/pharo"
+    cp -r products/lib/squeak/5.0-*/*.so "$out"
+    ln -s "${pharo-share}/lib/"*.sources "$out"
 
     # Create a shell script to run the VM in the proper environment.
-    # 
+    #
     # These wrapper puts all relevant libraries into the
     # LD_LIBRARY_PATH. This is important because various C code in the VM
     # and Smalltalk code in the image will search for them there.
-    mkdir -p $out/bin
-    chmod u+w $out/bin
+    mkdir -p "$out/bin"
 
     # Note: include ELF rpath in LD_LIBRARY_PATH for finding libc.
-    libs=$out:$(patchelf --print-rpath $out/pharo):${cairo}/lib:${mesa}/lib:${freetype}/lib:${openssl}/lib:${libuuid}/lib:${alsaLib}/lib:${xorg.libICE}/lib:${xorg.libSM}/lib
+    libs=$out:$(patchelf --print-rpath "$out/pharo"):${cairo}/lib:${mesa}/lib:${freetype}/lib:${openssl}/lib:${libuuid}/lib:${alsaLib}/lib:${xorg.libICE}/lib:${xorg.libSM}/lib
 
     # Create the script
-    cat > $out/bin/${cmd} <<EOF
+    cat > "$out/bin/${cmd}" <<EOF
     #!/bin/sh
     set -f
     LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
     EOF
-    chmod +x $prefix/bin/${cmd}
+    chmod +x "$out/bin/${cmd}"
   '';
 
   enableParallelBuilding = true;
 
   # Note: Force gcc6 because gcc5 crashes when compiling the VM.
   buildInputs = [ bash unzip glibc openssl gcc6 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid autoreconfHook ];
-
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
