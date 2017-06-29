@@ -16,10 +16,10 @@ stdenv.mkDerivation {
   preConfigure = ''
     patchShebangs waf
     ./waf configure \
-      --boost-includes=${boost.dev}/include \
-      --boost-libs=${boost.out}/lib \
+      --boost-includes="${boost.dev}/include" \
+      --boost-libs="${boost.out}/lib" \
       --with-tests \
-      --prefix=$out
+      --prefix="$out"
   '';
   buildPhase = ''
     ./waf
