@@ -2562,6 +2562,8 @@ with pkgs;
 
   jade = callPackage ../tools/text/sgml/jade { };
 
+  jd = callPackage ../development/tools/jd { };
+
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
