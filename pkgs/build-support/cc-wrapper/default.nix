@@ -10,7 +10,7 @@
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, hostPlatform, targetPlatform
+, buildPackages ? {}, hostPlatform, targetPlatform
 , runCommand ? null
 }:
 
@@ -119,6 +119,17 @@ let
          "Don't know the name of the dynamic linker for platform ${targetPlatform.config}, so guessing instead."
          null)
     else "";
+
+  parseResponseFile = if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+  then buildPackages.stdenv.mkDerivation {
+    name = "parse-response-file";
+    src = ./parseResponseFile.c;
+    buildCommand = ''
+      # Make sure the output file doesn't refer to the input nix path
+      cp "$src" parseResponseFile.c
+      "$CC" -O3 -o "$out" parseResponseFile.c
+    '';
+  } else "";
 
 in
 
@@ -368,11 +379,11 @@ stdenv.mkDerivation {
     + ''
       substituteAll ${preWrap ./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${preWrap ./add-hardening.sh} $out/nix-support/add-hardening.sh
-      cp -p ${preWrap ./utils.sh} $out/nix-support/utils.sh
+      substituteAll ${preWrap ./utils.sh} $out/nix-support/utils.sh
     ''
     + extraBuildCommands;
 
-  inherit dynamicLinker;
+  inherit dynamicLinker parseResponseFile;
 
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;

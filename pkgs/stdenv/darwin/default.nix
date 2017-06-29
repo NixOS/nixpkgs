@@ -61,7 +61,10 @@ in rec {
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
-        inherit config shell extraBuildInputs allowedRequisites;
+        inherit config shell extraBuildInputs;
+        allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
+          thisStdenv.cc.parseResponseFile
+        ];
 
         name = "stdenv-darwin-boot-${toString step}";
 
@@ -73,6 +76,9 @@ in rec {
           nativeTools  = true;
           nativePrefix = bootstrapTools;
           nativeLibc   = false;
+          buildPackages = lib.optionalAttrs (last ? stdenv) {
+            inherit (last) stdenv;
+          };
           hostPlatform = localSystem;
           targetPlatform = localSystem;
           libc         = last.pkgs.darwin.Libsystem;
@@ -297,6 +303,9 @@ in rec {
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
+      buildPackages = {
+        inherit (prevStage) stdenv;
+      };
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       inherit (pkgs) coreutils binutils gnugrep;
@@ -319,6 +328,7 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
+      cc.parseResponseFile
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale
     ]);
