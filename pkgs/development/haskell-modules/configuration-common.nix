@@ -37,6 +37,7 @@ self: super: {
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
   hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec-core = super.hspec-core.override { silently = dontCheck super.silently; temporary = dontCheck super.temporary; };
   HTTP = dontCheck super.HTTP;
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
@@ -62,14 +63,16 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = ((overrideCabal super.git-annex (drv: {
+  git-annex = (overrideCabal (super.git-annex.overrideScope (self: super: {
+      optparse-applicative = self.optparse-applicative_0_14_0_0;
+    })) (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
       sha256 = "1psyklfyjf4zqh3qxjn11sp2jiwvp8mfxqvsi1wggqpidfmk39jx";
     };
-  }))).override {
+  })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;

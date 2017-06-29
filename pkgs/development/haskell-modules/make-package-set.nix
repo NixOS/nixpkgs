@@ -130,7 +130,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         in generateExprs name src {}) overrides;
 
     # : { root : Path
-    #   , source-overrides : Defaulted (Either Path VersionNumber
+    #   , source-overrides : Defaulted (Either Path VersionNumber)
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
     #   } -> NixShellAwareDerivation
     # Given a path to a haskell package directory whose cabal file is
