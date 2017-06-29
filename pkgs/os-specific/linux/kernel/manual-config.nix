@@ -1,5 +1,6 @@
 { stdenv, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
 , writeTextFile, ubootChooser
+, hostPlatform
 }:
 
 let
@@ -232,7 +233,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   karch = stdenv.platform.kernelArch;
 
-  crossAttrs = let cp = stdenv.cross.platform; in
+  crossAttrs = let cp = hostPlatform.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
       makeFlags = commonMakeFlags ++ [
         "ARCH=${cp.kernelArch}"

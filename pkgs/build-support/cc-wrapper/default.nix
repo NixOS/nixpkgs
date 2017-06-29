@@ -71,7 +71,7 @@ let
 
     '' + stdenv.lib.optionalString (textFile == ./setup-hook.sh) ''
       cat << 'EOF' >> $out
-        for CMD in ar as nm objcopy ranlib strip strings size ld
+        for CMD in ar as nm objcopy ranlib strip strings size ld windres
         do
           # which is not part of stdenv, but compgen will do for now
           if

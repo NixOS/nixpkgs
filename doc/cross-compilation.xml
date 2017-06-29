@@ -79,11 +79,6 @@
         </listitem>
       </varlistentry>
     </variablelist>
-    <note><para>
-      If you dig around nixpkgs, you may notice there is also <varname>stdenv.cross</varname>.
-      This field defined as <varname>hostPlatform</varname> when the host and build platforms differ, but otherwise not defined at all.
-      This field is obsolete and will soon disappear—please do not use it.
-    </para></note>
     <para>
       The exact schema these fields follow is a bit ill-defined due to a long and convoluted evolution, but this is slowly being cleaned up.
       You can see examples of ones used in practice in <literal>lib.systems.examples</literal>; note how they are not all very consistent.
