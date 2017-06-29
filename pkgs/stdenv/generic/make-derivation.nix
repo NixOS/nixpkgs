@@ -49,12 +49,10 @@ rec {
 
       dependencies' = let
           justMap = map lib.chooseDevOutputs dependencies;
-          nativeBuildInputs = lib.elemAt justMap 0
+          nativeBuildInputs = lib.head justMap
+            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
             ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh;
-          buildInputs = lib.elemAt justMap 1
-               # TODO(@Ericson2314): Should instead also be appended to `nativeBuildInputs`.
-            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh;
-        in [ nativeBuildInputs buildInputs ];
+        in [ nativeBuildInputs ] ++ lib.tail justMap;
 
       propagatedDependencies' = map lib.chooseDevOutputs propagatedDependencies;
 
