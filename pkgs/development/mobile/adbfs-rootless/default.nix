@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.bsd3;
     maintainers = with maintainers; [ profpatsch ];
+    platforms = platforms.linux;
   };
-
-
 }
