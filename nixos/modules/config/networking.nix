@@ -223,7 +223,9 @@ in
             '';
 
       } // optionalAttrs config.services.resolved.enable {
-        "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+        # symlink the static version of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
       } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
       };
