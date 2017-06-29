@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true,
+{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true
 , hostPlatform
 }:
 
