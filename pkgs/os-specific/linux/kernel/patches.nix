@@ -190,4 +190,21 @@ rec {
         sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
       };
     };
+
+  # https://xenbits.xen.org/xsa/advisory-216.html
+  xen_XSA_216 =
+    { name = "xen_XSA-216";
+      patch = fetchpatch {
+        url = "https://xenbits.xen.org/xsa/xsa216-linux-4.11.patch";
+        sha256 = "14h017n6qwnraw5bv72q9xkg2w7xvx290505kny5zfwx891xahs8";
+      };
+    };
+
+  xen_XSA_216_4-4 =
+    { name = "xen_XSA-216-4.4";
+      patch = fetchpatch {
+        url = "https://xenbits.xen.org/xsa/xsa216-linux-4.4.patch";
+        sha256 = "1lv50wpr4lr49i4vp04vl778wcs9xn1jm51hp91h87jr0g3pbvi2";
+      };
+    };
 }
