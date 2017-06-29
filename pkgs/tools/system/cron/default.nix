@@ -12,6 +12,7 @@ stdenv.mkDerivation {
   hardeningEnable = [ "pie" ];
 
   preBuild = ''
+    substituteInPlace Makefile --replace ' -o root' ' ' --replace 4111 755
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
     makeFlags="DESTROOT=$out"
 
