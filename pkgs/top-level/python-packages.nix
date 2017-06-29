@@ -9217,15 +9217,16 @@ in {
   };
 
   py3status = buildPythonPackage rec {
-    version = "3.0";
+    version = "3.5";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "1mnl0rfbnimcpp7q9hva0x9jfa58j4nc27r9kvaii8869kzssw48";
+      sha256 = "1fapcq2yqc4kc2nlvg3cpypy3fiykphzjp52yjjfr2wrvr0wjyxz";
     };
-    propagatedBuildInputs = with self; [ requests ];
+    propagatedBuildInputs = with self; [ requests dbus-python pkgs.file ];
+    doCheck = false;
     prePatch = ''
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
       sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
@@ -9236,6 +9237,9 @@ in {
       sed -i -e "s|'sensors|'${pkgs.lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
       sed -i -e "s|'setxkbmap|'${pkgs.xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
       sed -i -e "s|'xset|'${pkgs.xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
+      sed -i -e "s|/usr/bin/audacious|${pkgs.audacious}/bin/audacious|" py3status/modules/player_control.py
+      sed -i -e "s|/usr/bin/amixer|${pkgs.alsaUtils}/bin/amixer|" py3status/modules/player_control.py
+      sed -i -e "s|'iw|'${pkgs.iw}/bin/iw|" py3status/modules/wifi.py
     '';
     meta = {
       maintainers = with maintainers; [ garbas ];
