@@ -821,10 +821,10 @@
     gited = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "gited";
-        version = "0.2.2";
+        version = "0.2.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gited-0.2.2.tar";
-          sha256 = "0ncxcrmiqhfzy18ssfkvbzmzwjbmr41ac1x7fpykrgihqiqglzfq";
+          url = "https://elpa.gnu.org/packages/gited-0.2.5.tar";
+          sha256 = "186cyay7nk2khnhilrwzjipb3syxl0s4n96b48j9plaba48azz11";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
