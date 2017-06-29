@@ -11,7 +11,7 @@ with pythonPackages; buildPythonApplication rec {
     sha256 = "1a33x3197vi5s8rq5fvhy021jdlsc8ww8zc4kysss6r9mvdlk7ax";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     pytestcov
     pytest-catchlog
     hypothesis
@@ -29,7 +29,7 @@ with pythonPackages; buildPythonApplication rec {
     # Fixes two tests for wrong encoding
     export PYTHONIOENCODING=utf-8
 
-    # https://github.com/jarun/Buku/pull/167
+    # Should be upstream, see https://github.com/jarun/Buku/pull/167
     substituteInPlace setup.py \
       --replace "hypothesis==3.7.0" "hypothesis>=3.7.0"
 
