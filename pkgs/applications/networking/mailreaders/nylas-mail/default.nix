@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
     # Patch binaries
     binrp=$(patchelf --print-rpath $out/share/nylas-mail/nylas)
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --interpreter $(cat "$NIX_CC"/nix-support/dynamic-linker) \
       --set-rpath $binrp:$out/lib:${stdenv.cc.cc.lib}/lib:${lib.makeLibraryPath propagatedBuildInputs } \
       $out/share/nylas-mail/nylas
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/share/nylas-mail/resources/apm/bin/apm \
       --set PATH "${coreutils}/bin"
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --interpreter $(cat "$NIX_CC"/nix-support/dynamic-linker) \
       --set-rpath ${gcc-unwrapped.lib}/lib $out/share/nylas-mail/resources/apm/bin/node
   '';
 
