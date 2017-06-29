@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "replace-2.24";
@@ -9,10 +9,6 @@ stdenv.mkDerivation {
   };
 
   makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man";
-
-  crossAttrs = {
-    makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man CC=${stdenv.cross.config}-gcc";
-  };
 
   preBuild = ''
     sed -e "s@/bin/mv@$(type -P mv)@" -i replace.h

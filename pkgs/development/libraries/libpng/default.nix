@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, zlib, apngSupport ? true }:
+{ stdenv, fetchurl, zlib, apngSupport ? true
+, buildPlatform, hostPlatform
+}:
 
 assert zlib != null;
 
@@ -29,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   # it's hard to cross-run tests and some check programs didn't compile anyway
   makeFlags = stdenv.lib.optional (!doCheck) "check_PROGRAMS=";
-  doCheck = ! stdenv ? cross;
+  doCheck = hostPlatform == buildPlatform;
 
   passthru = { inherit zlib; };
 

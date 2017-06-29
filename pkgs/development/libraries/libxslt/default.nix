@@ -1,6 +1,7 @@
-{ stdenv, hostPlatform, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+, buildPlatform, hostPlatform
 , cryptoSupport ? false
-, pythonSupport ? (! stdenv ? cross)
+, pythonSupport ? buildPlatform == hostPlatform
 }:
 
 assert pythonSupport -> python2 != null;

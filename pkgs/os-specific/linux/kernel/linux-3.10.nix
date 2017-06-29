@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, buildLinux, ... } @ args:
+{ stdenv, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
   version = "3.10.105";

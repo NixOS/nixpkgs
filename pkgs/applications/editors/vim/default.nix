@@ -36,9 +36,6 @@ stdenv.mkDerivation rec {
     "ac_cv_sizeof_int=4"
     "vim_cv_memmove_handles_overlap=yes"
     "vim_cv_memmove_handles_overlap=yes"
-
-    # TODO(@Ericson2314): wont' be needed soon.
-    "STRIP=${hostPlatform.config}-strip"
   ];
 
   postInstall = ''

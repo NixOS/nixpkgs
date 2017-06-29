@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     dontStrip = static;
     configurePlatforms = [];
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     installFlags = [
       "BINARY_PATH=$(out)/bin"
       "INCLUDE_PATH=$(dev)/include"
@@ -70,14 +70,12 @@ stdenv.mkDerivation rec {
     ];
     makeFlags = [
       "-f" "win32/Makefile.gcc"
-      "PREFIX=${stdenv.cross.config}-"
+      "PREFIX=${stdenv.cc.prefix}"
     ] ++ stdenv.lib.optional (!static) "SHARED_MODE=1";
 
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
     postInstall = postInstall + "ln -s zlib1.dll $out/bin/libz.dll";
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
-    makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
   passthru.version = version;

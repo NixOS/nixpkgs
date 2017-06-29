@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, bc, dtc, python2 }:
+{ stdenv, fetchurl, bc, dtc, python2
+, hostPlatform
+}:
 
 let
   buildUBoot = { targetPlatforms
@@ -43,8 +45,8 @@ let
 
     crossAttrs = {
       makeFlags = [
-        "ARCH=${stdenv.cross.platform.kernelArch}"
-        "CROSS_COMPILE=${stdenv.cross.config}-"
+        "ARCH=${hostPlatform.platform.kernelArch}"
+        "CROSS_COMPILE=${stdenv.cc.prefix}"
       ];
     };
 
