@@ -579,6 +579,10 @@ with pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
 
+  adbfs-rootless = callPackage ../development/mobile/adbfs-rootless {
+    adb = androidenv.platformTools;
+  };
+
   adb-sync = callPackage ../development/mobile/adb-sync { };
 
   androidenv = callPackage ../development/mobile/androidenv {
