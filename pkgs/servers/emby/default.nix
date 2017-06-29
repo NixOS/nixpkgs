@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
-  version = "3.2.19.0";
+  version = "3.2.20.0";
 
   src = fetchurl {
     url = "https://github.com/MediaBrowser/Emby/releases/download/${version}/Emby.Mono.zip";
-    sha256 = "14gwkglngaf29zzjqyph8pqz8i8i9j2vha9g2m17slgdxif4ijzc";
+    sha256 = "0n5b40vl0dg2pd0j7rzbck62cji6ws91jgsh8r1maig9p00xmwv7";
   };
 
   buildInputs = with pkgs; [
