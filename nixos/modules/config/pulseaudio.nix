@@ -6,6 +6,7 @@ with lib;
 let
 
   cfg = config.hardware.pulseaudio;
+  alsaCfg = config.sound;
 
   systemWide = cfg.enable && cfg.systemWide;
   nonSystemWide = cfg.enable && !cfg.systemWide;
@@ -76,6 +77,7 @@ let
     ctl.!default {
       type pulse
     }
+    ${alsaCfg.extraConfig}
   '');
 
 in {
