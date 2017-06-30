@@ -9,11 +9,16 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
+  dns =
+    if cfg.useDnsmasq then "dnsmasq"
+    else if config.services.resolved.enable then "systemd-resolved"
+    else "default";
+
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
-    dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
+    dns=${dns}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
