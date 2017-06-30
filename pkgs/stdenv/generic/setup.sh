@@ -194,6 +194,7 @@ _addRpathPrefix() {
 # Return success if the specified file is an ELF object.
 isELF() {
     local fn="$1"
+    local fd
     local magic
     exec {fd}< "$fn"
     read -n 4 -u $fd magic
@@ -205,6 +206,7 @@ isELF() {
 # "#!").
 isScript() {
     local fn="$1"
+    local fd
     local magic
     if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"
