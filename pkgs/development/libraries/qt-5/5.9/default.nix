@@ -31,7 +31,7 @@ with stdenv.lib;
 
 let
 
-  qtCompatVersion = "5.8";
+  qtCompatVersion = "5.9";
 
   mirror = "http://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };

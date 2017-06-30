@@ -651,9 +651,13 @@ in
     system.extraDependencies = singleton (pkgs.runCommand "xkb-layouts-exist" {
       inherit (cfg) layout xkbDir;
     } ''
-      sed -n -e ':i /^! \(layout\|variant\) *$/ {
-        :l; n; /^!/bi; s/^ *\([^ ]\+\).*/\1/p; tl
-      }' "$xkbDir/rules/base.lst" | grep -qxF "$layout" && exec touch "$out"
+      if sed -n -e ':i /^! \(layout\|variant\) *$/ {
+          :l; n; /^!/bi; s/^ *\([^ ]\+\).*/\1/p; tl
+         }' "$xkbDir/rules/base.lst" | grep -qxF "$layout"
+      then
+        touch "$out"
+        exit 0
+      fi
 
       cat >&2 <<-EOF
 

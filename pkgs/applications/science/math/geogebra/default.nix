@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeDesktopItem, makeWrapper }:
+{ stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, language ? "en_US" }:
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
       --set JAVACMD "${jre}/bin/java" \
-      --set GG_PATH "$out/libexec/geogebra"
+      --set GG_PATH "$out/libexec/geogebra" \
+      --add-flags "--language=${language}"
 
     install -Dm644 "${desktopItem}/share/applications/"* \
       -t $out/share/applications/

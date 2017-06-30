@@ -1,7 +1,8 @@
 {
   mkDerivation, lib,
   extra-cmake-modules,
-  akonadi, kdbusaddons, ki18n, kio, kitemmodels, kmime
+  akonadi, kdbusaddons, ki18n, kio, kitemmodels, kmime,
+  shared_mime_info
 }:
 
 mkDerivation {
@@ -11,6 +12,7 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ akonadi kdbusaddons ki18n kio kitemmodels kmime ];
+  buildInputs = [ akonadi shared_mime_info
+                  kdbusaddons ki18n kio kitemmodels kmime ];
   outputs = [ "out" "dev" ];
 }
