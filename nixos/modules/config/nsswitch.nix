@@ -6,26 +6,29 @@ with lib;
 
 let
 
-  inherit (config.services.avahi) nssmdns;
-  inherit (config.services.samba) nsswins;
-  ldap = (config.users.ldap.enable && config.users.ldap.nsswitch);
-  sssd = config.services.sssd.enable;
-  resolved = config.services.resolved.enable;
   # only with nscd up and running we can load NSS modules that are not integrated in NSS
   canLoadExternalModules = config.services.nscd.enable;
+  myhostname = canLoadExternalModules;
+  mymachines = canLoadExternalModules;
+  nssmdns = canLoadExternalModules && config.services.avahi.nssmdns;
+  nsswins = canLoadExternalModules && config.services.samba.nsswins;
+  ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
+  sssd = canLoadExternalModules && config.services.sssd.enable;
+  resolved = canLoadExternalModules && config.services.resolved.enable;
 
-  hostArray = [ "files" "mymachines" ]
+  hostArray = [ "files" ]
+    ++ optionals mymachines [ "mymachines" ]
     ++ optionals nssmdns [ "mdns_minimal [!UNAVAIL=return]" ]
     ++ optionals nsswins [ "wins" ]
     ++ optionals resolved ["resolve [!UNAVAIL=return]"]
     ++ [ "dns" ]
     ++ optionals nssmdns [ "mdns" ]
-    ++ ["myhostname" ];
+    ++ optionals myhostname ["myhostname" ];
 
   passwdArray = [ "files" ]
     ++ optional sssd "sss"
     ++ optionals ldap [ "ldap" ]
-    ++ [ "mymachines" ];
+    ++ optionals mymachines [ "mymachines" ];
 
   shadowArray = [ "files" ]
     ++ optional sssd "sss"
