@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # Regenerate the configure script.
   # Unnecessary? But the build breaks without this.
   autoreconfPhase = ''
-    pushd opensmalltalk-vm/platforms/unix/config
+    pushd platforms/unix/config
     make
     popd
   '';
@@ -46,19 +46,18 @@ stdenv.mkDerivation rec {
 
   # VM sources require some patching before build.
   prePatch = ''
-    patchShebangs opensmalltalk-vm/build.${flavor}
+    patchShebangs build.${flavor}
     # Fix hard-coded path to /bin/rm in a script
-    sed -i -e 's:/bin/rm:rm:' opensmalltalk-vm/platforms/unix/config/mkmf
+    sed -i -e 's:/bin/rm:rm:' platforms/unix/config/mkmf
     # Fill in mandatory metadata about the VM source version
     sed -i -e 's!\$Date\$!$Date: ${source-date} $!' \
            -e 's!\$Rev\$!$Rev: ${version} $!' \
            -e 's!\$URL\$!$URL: ${source-url} $!' \
-           opensmalltalk-vm/platforms/Cross/vm/sqSCCSVersion.h
+           platforms/Cross/vm/sqSCCSVersion.h
   '';
 
   # Note: --with-vmcfg configure option is broken so copy plugin specs to ./
   preConfigure = ''
-    cd opensmalltalk-vm
     cp build."${flavor}"/pharo.cog.spur/plugins.{ext,int} .
   '';
 
