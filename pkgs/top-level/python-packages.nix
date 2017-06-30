@@ -13451,6 +13451,8 @@ in {
     };
   };
 
+  markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
+
   markdown-macros = buildPythonPackage rec {
     name = "markdown-macros-${version}";
     version = "0.1.2";
