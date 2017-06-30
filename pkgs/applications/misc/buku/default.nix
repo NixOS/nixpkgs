@@ -1,7 +1,7 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
 
 with pythonPackages; buildPythonApplication rec {
-  version = "3.0";
+  version = "3.0"; # When updating to 3.1, make sure to remove the marked line in preCheck
   name = "buku-${version}";
 
   src = fetchFromGitHub {
@@ -29,7 +29,8 @@ with pythonPackages; buildPythonApplication rec {
     # Fixes two tests for wrong encoding
     export PYTHONIOENCODING=utf-8
 
-    # Should be upstream, see https://github.com/jarun/Buku/pull/167
+    ### Remove this for 3.1 ###
+    # See https://github.com/jarun/Buku/pull/167 (merged)
     substituteInPlace setup.py \
       --replace "hypothesis==3.7.0" "hypothesis>=3.7.0"
 
