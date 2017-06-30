@@ -5,24 +5,29 @@
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-ltc-${version}";
-  version = "2.6.4.2";
+  version = "2.8.3.5";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "0sqcyk6n6kgaiinnwh6mzbbn4whk3ga59r5bw5rqmnnfqk1xdnb4";
+    sha256 = "1g412p4mqicl27axcalsj7z4xx595cq0gifn6p66mr9pd7wafg5l";
   };
 
   propagatedBuildInputs = with python2Packages; [
     pyqt4
-    slowaes
+    pysocks
     ecdsa
     pbkdf2
     requests
     qrcode
     ltc_scrypt
-    protobuf3_0
+    protobuf3_2
+    pyaes
     dns
     jsonrpclib
+
+    # plugins
+    keepkey
+    trezor
   ];
 
   preBuild = ''
@@ -48,7 +53,7 @@ python2Packages.buildPythonApplication rec {
     homepage = https://electrum-ltc.org/;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ asymmetric np ];
   };
 }
 
