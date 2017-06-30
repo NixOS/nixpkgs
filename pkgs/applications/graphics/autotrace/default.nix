@@ -1,9 +1,6 @@
 { stdenv, fetchurl, callPackage, libpng12, imagemagick,
   autoreconfHook, glib, pstoedit, pkgconfig, gettext, darwin }:
 
-# TODO: Solve that it cannot find pstoedit (as it is unable to find
-# pstoedit-config)
-
 # TODO: Figure out why the resultant binary is somehow linked against
 # libpng16.so.16 rather than libpng12.
 
@@ -49,7 +46,19 @@ stdenv.mkDerivation rec {
 
   # This complains about various m4 files, but it appears to not be an
   # actual error.
-  preConfigure = "glib-gettextize --copy --force";
+  preConfigure = ''
+    glib-gettextize --copy --force
+    # pstoedit-config no longer exists, it was replaced with pkg-config
+    mkdir wrappers
+    cat >wrappers/pstoedit-config <<'EOF'
+    #!${stdenv.shell}
+    # replace --version with --modversion for pkg-config
+    args=''${@/--version/--modversion}
+    exec pkg-config pstoedit "''${args[@]}"
+    EOF
+    chmod +x wrappers/pstoedit-config
+    export PATH="$PATH:$PWD/wrappers"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://autotrace.sourceforge.net/;
