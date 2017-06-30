@@ -393,6 +393,8 @@ let
 
     ocp-index = callPackage ../development/tools/ocaml/ocp-index { ocpIndent = ocpIndent_1_5_2; };
 
+    ocp-ocamlres = callPackage ../development/ocaml-modules/ocp-ocamlres { };
+
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
     ocplib-json-typed = callPackage ../development/ocaml-modules/ocplib-json-typed { };
