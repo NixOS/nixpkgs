@@ -10,9 +10,11 @@ let
   gid = config.ids.gids.mpd;
   cfg = config.services.mpd;
 
+  playlistDir = "${cfg.dataDir}/playlists";
+
   mpdConf = pkgs.writeText "mpd.conf" ''
     music_directory     "${cfg.musicDirectory}"
-    playlist_directory  "${cfg.dataDir}/playlists"
+    playlist_directory  "${playlistDir}"
     db_file             "${cfg.dbFile}"
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
@@ -126,7 +128,10 @@ in {
       description = "Music Player Daemon";
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}";
+      preStart = ''
+        mkdir -p "${cfg.dataDir}" && chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
+        mkdir -p "${playlistDir}" && chown -R ${cfg.user}:${cfg.group} "${playlistDir}"
+      '';
       serviceConfig = {
         User = "${cfg.user}";
         PermissionsStartOnly = true;
