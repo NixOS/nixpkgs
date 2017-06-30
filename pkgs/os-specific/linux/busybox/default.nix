@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
 
     ${extraConfig}
-    $extraCrossConfig
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.prefix}"
     EOF
 
     make oldconfig
@@ -78,10 +78,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
 
   buildInputs = lib.optionals (enableStatic && !useMusl) [ stdenv.cc.libc stdenv.cc.libc.static ];
-
-  extraCrossConfig = if hostPlatform == buildPlatform then null else ''
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.prefix}"
-  '';
 
   enableParallelBuilding = true;
 

@@ -138,8 +138,7 @@ stdenv.mkDerivation {
 
   inherit doCheck;
 
-  ${if buildPlatform == hostPlatform then "dontSetConfigureCross" else null} = true;
-  ${if buildPlatform != hostPlatform then "configurePlatforms" else null} = [];
+  configurePlatforms = [];
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181

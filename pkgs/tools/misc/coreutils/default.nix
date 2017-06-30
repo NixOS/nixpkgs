@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     && builtins.storeDir == "/nix/store";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
-  ${if hostPlatform == buildPlatform then null else "PERL"} = "missing";
+  PERL = if hostPlatform == buildPlatform then null else "missing";
 
   # Saw random failures like ‘help2man: can't get '--help' info from
   # man/sha512sum.td/sha512sum’.
@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
-  ${if hostPlatform == buildPlatform then null else "preInstall"} = ''
+  preInstall = optionalString (hostPlatform != buildPlatform) ''
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  ${if hostPlatform == buildPlatform then null else "postInstall"} = ''
+  postInstall = optionalString (hostPlatform != buildPlatform) ''
     rm $out/share/man/man1/*
     cp ${buildPackages.coreutils}/share/man/man1/* $out/share/man/man1
   '';
