@@ -11884,6 +11884,8 @@ with pkgs;
     kernelPatches = with kernelPatches; [
       kernelPatches.bridge_stp_helper
       kernelPatches.p9_fixes
+      kernelPatches.modinst_arg_list_too_long
+      kernelPatches.cpu-cgroup-v2."4.11"
     ];
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
