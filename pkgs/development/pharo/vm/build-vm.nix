@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   # Note: --with-vmcfg configure option is broken so copy plugin specs to ./
   preConfigure = ''
     cd opensmalltalk-vm
-    cp build.${flavor}/pharo.cog.spur/plugins.{ext,int} .
+    cp build."${flavor}"/pharo.cog.spur/plugins.{ext,int} .
   '';
 
   # (No special build phase.)

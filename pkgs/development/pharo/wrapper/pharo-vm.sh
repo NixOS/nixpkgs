@@ -53,5 +53,5 @@ fi
 
 # Run the VM
 set -f
-exec -- ${vm} $@
+exec -- "${vm}" "$@"
 
