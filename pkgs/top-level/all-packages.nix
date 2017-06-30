@@ -12882,6 +12882,8 @@ with pkgs;
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
+  monoid = callPackage ../data/fonts/monoid { };
+
   mononoki = callPackage ../data/fonts/mononoki { };
 
   moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
