@@ -87,7 +87,6 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -f";
         User = cfg.user;
-        AmbientCapabilities = "cap_net_raw cap_dac_override"; # cap_net_raw for ping, cap_dac_override for smart
         PermissionsStartOnly = true;
       };
 
