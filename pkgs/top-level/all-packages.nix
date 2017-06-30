@@ -9434,6 +9434,8 @@ with pkgs;
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
+  libmypaint = callPackage ../development/libraries/libmypaint { };
+
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
     mysql = mysql57;
   };
