@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 8.20
+  # LTS Haskell 8.21
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Vector ==2.3.2
@@ -548,7 +548,7 @@ default-package-overrides:
   - distributed-process ==0.6.6
   - distributed-process-simplelocalnet ==0.2.3.3
   - distributed-static ==0.3.5.0
-  - distribution ==1.1.0.0
+  - distribution ==1.1.1.0
   - distributive ==0.5.2
   - diversity ==0.8.0.2
   - djinn-ghc ==0.0.2.3
@@ -605,14 +605,14 @@ default-package-overrides:
   - elm-core-sources ==1.0.0
   - elm-export ==0.6.0.1
   - elm-export-persistent ==0.1.2
-  - email-validate ==2.2.0
+  - email-validate ==2.2.1.1
   - emailaddress ==0.2.0.0
   - enclosed-exceptions ==1.0.2
   - encoding-io ==0.0.1
   - engine-io ==1.2.16
   - engine-io-wai ==1.0.6
   - EntrezHTTP ==1.0.3
-  - entropy ==0.3.7
+  - entropy ==0.3.8
   - enummapset ==0.5.2.1
   - enummapset-th ==0.6.1.1
   - enumset ==0.0.4
@@ -918,7 +918,7 @@ default-package-overrides:
   - hackage-security ==0.5.2.2
   - hackernews ==1.1.2.0
   - haddock-library ==1.4.3
-  - hailgun ==0.4.1.3
+  - hailgun ==0.4.1.4
   - hailgun-simple ==0.1.0.0
   - hakyll ==4.9.7.0
   - half ==0.2.2.3
@@ -936,7 +936,7 @@ default-package-overrides:
   - happy ==1.19.5
   - HaRe ==0.8.4.0
   - harp ==0.4.2
-  - hasbolt ==0.1.1.3
+  - hasbolt ==0.1.2.1
   - hashable ==1.2.6.1
   - hashable-time ==0.2.0.1
   - hashmap ==1.3.2
@@ -1042,7 +1042,7 @@ default-package-overrides:
   - hPDB ==1.2.0.9
   - hPDB-examples ==1.2.0.7
   - HPDF ==1.4.10
-  - hpio ==0.8.0.9
+  - hpio ==0.8.0.10
   - hpp ==0.4.0
   - hpqtypes ==1.5.1.1
   - hquantlib ==0.0.4.0
@@ -1233,7 +1233,7 @@ default-package-overrides:
   - kan-extensions ==5.0.2
   - kansas-comet ==0.4
   - katip ==0.3.1.5
-  - katip-elasticsearch ==0.3.0.2
+  - katip-elasticsearch ==0.3.1.0
   - kawhi ==0.2.3
   - kdt ==0.2.4
   - keter ==1.4.3.2
@@ -1291,7 +1291,7 @@ default-package-overrides:
   - LibZip ==1.0.1
   - licensor ==0.2.0
   - lift-generics ==0.1.1
-  - lifted-async ==0.9.1.1
+  - lifted-async ==0.9.3
   - lifted-base ==0.2.3.11
   - line ==2.2.0
   - linear ==1.20.6
@@ -1631,7 +1631,7 @@ default-package-overrides:
   - post-mess-age ==0.2.1.0
   - postgresql-binary ==0.9.3
   - postgresql-libpq ==0.9.3.1
-  - postgresql-schema ==0.1.10
+  - postgresql-schema ==0.1.11
   - postgresql-simple ==0.5.3.0
   - postgresql-simple-migration ==0.1.9.0
   - postgresql-simple-url ==0.2.0.0
@@ -1668,7 +1668,7 @@ default-package-overrides:
   - prometheus-metrics-ghc ==0.1.1
   - prompt ==0.1.1.2
   - proto-lens ==0.2.1.0
-  - proto-lens-arbitrary ==0.1.0.2
+  - proto-lens-arbitrary ==0.1.0.3
   - proto-lens-combinators ==0.1.0.7
   - proto-lens-descriptors ==0.2.1.0
   - proto-lens-optparse ==0.1.0.3
@@ -1699,7 +1699,7 @@ default-package-overrides:
   - quickcheck-instances ==0.3.12
   - quickcheck-io ==0.1.4
   - quickcheck-simple ==0.1.0.1
-  - quickcheck-special ==0.1.0.4
+  - quickcheck-special ==0.1.0.5
   - quickcheck-text ==0.1.2.1
   - quickcheck-unicode ==1.0.1.0
   - raaz ==0.1.1
@@ -1731,7 +1731,7 @@ default-package-overrides:
   - ReadArgs ==1.2.3
   - readline ==1.0.3.0
   - rebase ==1.0.8
-  - recursion-schemes ==5.0.1
+  - recursion-schemes ==5.0.2
   - redis-io ==0.7.0
   - redis-resp ==0.4.0
   - reducers ==3.12.1
@@ -2094,7 +2094,7 @@ default-package-overrides:
   - textlocal ==0.1.0.5
   - tf-random ==0.5
   - tfp ==1.0.0.2
-  - th-abstraction ==0.2.2.0
+  - th-abstraction ==0.2.3.0
   - th-data-compat ==0.0.2.2
   - th-desugar ==1.6
   - th-expand-syns ==0.4.3.0
@@ -2130,7 +2130,7 @@ default-package-overrides:
   - tinylog ==0.14.0
   - tinytemplate ==0.1.2.0
   - titlecase ==0.1.0.3
-  - tls ==1.3.10
+  - tls ==1.3.11
   - tls-debug ==0.4.4
   - token-bucket ==0.1.0.1
   - tostring ==0.2.1.1
