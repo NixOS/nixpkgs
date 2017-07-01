@@ -24,26 +24,17 @@ badPath() {
 }
 
 expandResponseParams() {
-    local inparams=("$@")
-    local n=0
-    local p
-    params=()
-    while [ $n -lt ${#inparams[*]} ]; do
-        p=${inparams[n]}
-        case $p in
-            @*)
-                local parseResponseFile="@parseResponseFile@"
-                if [ -n "$parseResponseFile" ] ; then
-                    eval "params+=($("$parseResponseFile" "${p:1}"))"
-                else
-                    echo "Response files aren't supported during bootstrapping" >&2
-                    exit 1
-                fi
-                ;;
-            *)
-                params+=("$p")
-                ;;
-        esac
-        n=$((n + 1))
+    params=("$@")
+    local arg
+    for arg in "$@"; do
+        if [[ "$arg" == @* ]]; then
+            if [ -n "@expandResponseParams@" ]; then
+                readarray -d '' params < <("@expandResponseParams@" "$@")
+                return 0
+            else
+                echo "Response files aren't supported during bootstrapping" >&2
+                return 1
+            fi
+        fi
     done
 }

@@ -54,7 +54,7 @@ in rec {
     __sandboxProfile = binShClosure + libSystemProfile;
   };
 
-  stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
+  stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
                           extraPreHook      ? "",
                           extraBuildInputs,
@@ -63,7 +63,7 @@ in rec {
       thisStdenv = import ../generic {
         inherit config shell extraBuildInputs;
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
-          thisStdenv.cc.parseResponseFile
+          thisStdenv.cc.expand-response-params
         ];
 
         name = "stdenv-darwin-boot-${toString step}";
@@ -86,7 +86,7 @@ in rec {
           cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
         };
 
-        preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/sh") ''
+        preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
@@ -328,7 +328,7 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
-      cc.parseResponseFile
+      cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale
     ]);
