@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ctags qt4 python ];
-  patches = [ ./build.patch ];
+
+  postPatch = ''
+    sed -i build.py -e 's,qmake-qt4,qmake,'
+  '';
 
   unpackPhase = ''
     tar xf ${src}
