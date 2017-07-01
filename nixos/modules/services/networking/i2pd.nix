@@ -150,7 +150,7 @@ let
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
-    ${pkgs.i2pd}/bin/i2pd \
+    exec ${pkgs.i2pd}/bin/i2pd \
       ${if isNull cfg.address then "" else "--host="+cfg.address} \
       --conf=${i2pdConf} \
       --tunconf=${i2pdTunnelConf}
