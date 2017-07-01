@@ -30133,13 +30133,13 @@ EOF
 
   pwntools = buildPythonPackage rec {
     name = "pwntools-${version}";
-    version = "3.1.0";
+    version = "3.7.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pwntools/${name}.tar.gz";
-      sha256 = "1siyky6iq2b155sfjhx10yg2ihvjp2s3kr6i0n5z9v5pi0r7gc6d";
+      sha256 = "1d2q42cmgh7l2k6l2gy4zllgj9a5qc59af3skp2b80hmv88h6vij";
     };
-    propagatedBuildInputs = with self; [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pypandoc pyserial dateutil requests tox pkgs.pandoc ];
+    propagatedBuildInputs = with self; [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pypandoc pyserial dateutil requests tox pkgs.pandoc unicorn intervaltree ];
 
     disabled = isPy3k;
 
@@ -30147,6 +30147,79 @@ EOF
       homepage = "http://pwntools.com";
       description = "CTF framework and exploit development library";
       license = licenses.mit;
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
+  ROPGadget = buildPythonPackage rec {
+    name = "ROPGadget-5.4";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/R/ROPGadget/${name}.tar.gz";
+      sha256 = "19wly4x3mq73c91pplqjk0c7sx6710887czh514qk5l7j0ky6dxg";
+    };
+    propagatedBuildInputs = with self; [ capstone ];
+    meta = with pkgs.stdenv.lib; {
+      description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
+      homepage = "http://shell-storm.org/project/ROPgadget/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ bennofs ];
+    };
+  };
+
+  unicorn = buildPythonPackage rec {
+    name  = "unicorn-${version}";
+    version = "1.0.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/unicorn/${name}.tar.gz";
+      sha256 = "0a5b4vh734b3wfkgapzzf8x18rimpmzvwwkly56da84n27wfw9bg";
+    };
+    setupPyBuildFlags = [ "--plat-name" "linux" ];
+    meta = with pkgs.stdenv.lib; {
+      description = "Unicorn CPU emulator engine";
+      homepage = "http://www.unicorn-engine.org/";
+      license = [ licenses.gpl2 ];
+      maintainers = with stdenv.maintainers; [ bennofs ];
+    };
+  };
+
+  intervaltree = buildPythonPackage rec {
+    name = "intervaltree-${version}";
+    version = "2.1.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/i/intervaltree/${name}.tar.gz";
+      sha256 = "02w191m9zxkcjqr1kv2slxvhymwhj3jnsyy3a28b837pi15q19dc";
+    };
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ sortedcontainers ];
+    checkPhase = ''
+      runHook preCheck
+      # pytest will try to run tests for nix_run_setup.py / files in build/lib which fails
+      mv nix_run_setup.py run_setup
+      rm build -rf
+      ${python.interpreter} run_setup test
+      runHook postCheck
+    '';
+    meta = with pkgs.stdenv.lib; {
+      description = "Editable interval tree data structure for Python 2 and 3";
+      homepage =  https://github.com/chaimleib/intervaltree;
+      license = [ licenses.asl2 ];
+      maintainers = with stdenv.maintainers; [ bennofs ];
+    };
+  };
+
+  packaging = buildPythonPackage rec {
+    name = "packaging-16.8";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/packaging/${name}.tar.gz";
+      sha256 = "5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e";
+    };
+    propagatedBuildInputs = with self; [ pyparsing six ];
+    buildInputs = with self; [ pytest pretend ];
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Core utilities for Python packages";
+      homepage = "https://github.com/pypa/packaging";
+      license = [ licenses.bsd2 licenses.asl20 ];
       maintainers = with maintainers; [ bennofs ];
     };
   };
@@ -30170,42 +30243,6 @@ EOF
       license     = licenses.mit;
       maintainers = with maintainers; [ peterhoeg ];
     };
-
-  };
-
-  ROPGadget = buildPythonPackage rec {
-    name = "ROPGadget-5.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/R/ROPGadget/${name}.tar.gz";
-      sha256 = "19wly4x3mq73c91pplqjk0c7sx6710887czh514qk5l7j0ky6dxg";
-    };
-    propagatedBuildInputs = with self; [ capstone ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
-      homepage = "http://shell-storm.org/project/ROPgadget/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
-
-  packaging = buildPythonPackage rec {
-    name = "packaging-16.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/packaging/${name}.tar.gz";
-      sha256 = "5d50835fdf0a7edf0b55e311b7c887786504efea1177abd7e69329a8e5ea619e";
-    };
-    propagatedBuildInputs = with self; [ pyparsing six ];
-    buildInputs = with self; [ pytest pretend ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Core utilities for Python packages";
-      homepage = "https://github.com/pypa/packaging";
-      license = [ licenses.bsd2 licenses.asl20 ];
-      maintainers = with maintainers; [ bennofs ];
-    };
-
-    checkPhase = ''
-      py.test
-    '';
   };
 
   pypandoc = buildPythonPackage rec {
