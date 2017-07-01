@@ -1,27 +1,27 @@
-{stdenv, fetchurl, ctags, qt4, python}:
+{ stdenv, fetchurl, ctags, qt4, python }:
 
 stdenv.mkDerivation rec {
-
-  version = "2.0.3";
   name = "gede-${version}";
+  version = "2.0.3";
+
   src = fetchurl {
     url = "http://gede.acidron.com/uploads/source/${name}.tar.xz";
     sha256 = "1znlmkjgrmjl79q73xaa9ybp1xdc3k4h4ynv3jj5z8f92gjnj3kk";
   };
 
-  buildInputs = [ ctags qt4 python ];
+  nativeBuildInputs = [ python ];
+
+  buildInputs = [ ctags qt4 ];
 
   postPatch = ''
     sed -i build.py -e 's,qmake-qt4,qmake,'
   '';
 
-  unpackPhase = ''
-    tar xf ${src}
-    cd ${name}
+  buildPhase = ":";
+
+  installPhase = ''
+    python build.py install --prefix="$out"
   '';
-  configurePhase = "";
-  buildPhase = "";
-  installPhase = "./build.py install --prefix=$out";
 
   meta = with stdenv.lib; {
     description = "Graphical frontend (GUI) to GDB";
@@ -31,4 +31,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ juliendehos ];
   };
 }
-
