@@ -28,6 +28,9 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   preConfigure = ''
+    substituteInPlace ranger/data/scope.sh \
+      --replace "/bin/echo" "echo"
+
     substituteInPlace ranger/__init__.py \
       --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${stdenv.lib.getBin less}/bin/less'"
 
