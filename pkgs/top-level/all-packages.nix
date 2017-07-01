@@ -9430,6 +9430,8 @@ with pkgs;
 
   re2 = callPackage ../development/libraries/re2 { };
 
+  qbs = callPackage ../development/tools/build-managers/qbs { };
+
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
   qca2-qt5 = callPackage ../development/libraries/qca2 { qt = qt5.qtbase; };
 
