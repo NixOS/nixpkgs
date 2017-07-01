@@ -252,6 +252,8 @@ rec {
         echo "No contents to add to layer."
       fi
 
+      chmod ug+w layer
+
       if [[ -n $extraCommands ]]; then
         (cd layer; eval "$extraCommands")
       fi
@@ -296,7 +298,7 @@ rec {
     # How much disk to allocate for the temporary virtual machine.
     diskSize ? 1024,
     # Commands (bash) to run on the layer; these do not require sudo.
-    extraCommands ? "", uid ? 0, gid ? 0
+    extraCommands ? ""
   }:
     # Generate an executable script from the `runAsRoot` text.
     let runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
@@ -311,6 +313,8 @@ rec {
           echo "Adding $item..."
           rsync -ak --chown=0:0 $item/ layer/
         done
+
+        chmod ug+w layer
       '';
 
       postMount = ''
