@@ -63,4 +63,7 @@ self: super: {
   primitive = self.primitive_0_6_2_0;
   syb = self.syb_0_7;
 
+  # Work around overly restrictive constraints on the version of 'base'.
+  doctest = doJailbreak super.doctest;
+
 }
