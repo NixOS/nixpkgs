@@ -4523,6 +4523,11 @@ with pkgs;
 
   uriparser = callPackage ../development/libraries/uriparser {};
 
+  urlscan = callPackage ../applications/misc/urlscan {
+    pythonPackages = python3Packages;
+    urwid = python3Packages.urwid;
+  };
+
   urlview = callPackage ../applications/misc/urlview {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
