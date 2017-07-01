@@ -21,6 +21,7 @@
   ./config/sysctl.nix
   ./config/system-environment.nix
   ./config/system-path.nix
+  ./config/terminfo.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
