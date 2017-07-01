@@ -19,7 +19,7 @@ let
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
-  common = { version, sha256 }: stdenv.mkDerivation rec {
+  common = { version, sha256, extraPatches ? [] }: stdenv.mkDerivation rec {
     name = "perl-${version}";
 
     src = fetchurlBoot {
@@ -36,7 +36,8 @@ let
         ./no-sys-dirs.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ];
+      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ]
+      ++ extraPatches;
 
     postPatch = ''
       pwd="$(type -P pwd)"
@@ -131,6 +132,7 @@ in rec {
   perl524 = common {
     version = "5.24.1";
     sha256 = "1bqqb5ghfj4486nqr77kgsd8aff6a289jy7n2cdkznwvn34qbhg6";
+    extraPatches = optional stdenv.isDarwin [ ./sw_vers.patch ];
   };
 
 }
