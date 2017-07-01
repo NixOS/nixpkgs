@@ -5,11 +5,11 @@
 
 buildOcaml rec {
   name = "conduit";
-  version = "0.8.3";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-conduit/archive/v${version}.tar.gz";
-    sha256 = "5cf1a46aa0254345e5143feebe6b54bdef96314e9987f44e69f24618d620faa1";
+    sha256 = "1jz2skzsyg0axlkk9s6ahfblfrjx599wisyfs0cvn5dik9jqjadh";
   };
 
   propagatedBuildInputs = [ sexplib_p4 stringext uri_p4 cstruct ipaddr_p4 ];
