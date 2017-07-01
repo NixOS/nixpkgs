@@ -6,7 +6,7 @@
 
 assert stdenv.system == "x86_64-linux";
 
-let version = "2017-SP1"; in
+let version = "2017-SP2"; in
 stdenv.mkDerivation {
   name = "draftsight-${version}";
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   src = requireFile {
     name = "draftSight.deb";
     url = "https://www.3ds.com/?eID=3ds_brand_download&uid=41&pidDown=13426&L=0";
-    sha256 = "0s7b74685r0961kd59hxpdp9s5yhvzx8307imsxm66f99s8rswdv";
+    sha256 = "04i3dqza6y4p2059pqg5inp3qzr5jmiqplzzk7h1a6gh380v1rbr";
   };
 
   libPath = stdenv.lib.makeLibraryPath [ gcc.cc mesa xdg_utils
