@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ctags, qt4, python }:
+{ stdenv, fetchurl, makeWrapper, python, qt4, ctags, gdb }:
 
 stdenv.mkDerivation rec {
   name = "gede-${version}";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1znlmkjgrmjl79q73xaa9ybp1xdc3k4h4ynv3jj5z8f92gjnj3kk";
   };
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ makeWrapper python ];
 
-  buildInputs = [ ctags qt4 ];
+  buildInputs = [ qt4 ];
 
   postPatch = ''
     sed -i build.py -e 's,qmake-qt4,qmake,'
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     python build.py install --prefix="$out"
+    wrapProgram $out/bin/gede \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ ctags gdb ]}
   '';
 
   meta = with stdenv.lib; {
