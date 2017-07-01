@@ -247,6 +247,8 @@ let
 
     gg = callPackage ../development/ocaml-modules/gg { };
 
+    git = callPackage ../development/ocaml-modules/git { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
