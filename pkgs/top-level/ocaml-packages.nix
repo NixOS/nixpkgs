@@ -114,10 +114,6 @@ let
     };
     camlimages = camlimages_4_1;
 
-    conduit = callPackage ../development/ocaml-modules/conduit {
-       lwt = ocaml_lwt;
-    };
-
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
@@ -135,6 +131,15 @@ let
     cohttp = callPackage ../development/ocaml-modules/cohttp {
       lwt = ocaml_lwt;
     };
+
+    conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
+       lwt = ocaml_lwt;
+    };
+
+    conduit =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/conduit { }
+      else conduit_p4;
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
