@@ -172,6 +172,8 @@ let
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
+    decompress =  callPackage ../development/ocaml-modules/decompress { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
