@@ -72,6 +72,8 @@ let
 
   i2pdConf = pkgs.writeText "i2pd.conf"
   ''
+  loglevel = ${cfg.logLevel}
+
   ipv4 = ${boolToString cfg.enableIPv4}
   ipv6 = ${boolToString cfg.enableIPv6}
   notransit = ${boolToString cfg.notransit}
@@ -173,6 +175,18 @@ in
           Enables I2Pd as a running service upon activation.
           Please read http://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
+        '';
+      };
+
+      logLevel = mkOption {
+        type = types.enum ["debug" "info" "warn" "error"];
+        default = "error";
+        description = ''
+          The log level. <command>i2pd</command> defaults to "info"
+          but that generates copious amounts of log messages.
+
+          We default to "error" which is similar to the default log
+          level of <command>tor</command>.
         '';
       };
 
