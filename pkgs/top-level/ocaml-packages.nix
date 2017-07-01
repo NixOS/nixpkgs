@@ -128,9 +128,14 @@ let
 
     cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
 
-    cohttp = callPackage ../development/ocaml-modules/cohttp {
+    cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
       lwt = ocaml_lwt;
     };
+
+    cohttp =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/cohttp { }
+      else cohttp_p4;
 
     conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
        lwt = ocaml_lwt;
