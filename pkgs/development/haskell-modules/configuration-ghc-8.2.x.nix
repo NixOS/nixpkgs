@@ -61,5 +61,6 @@ self: super: {
 
   # Older, LTS-8-based versions don't compile.
   primitive = self.primitive_0_6_2_0;
+  syb = self.syb_0_7;
 
 }
