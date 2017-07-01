@@ -1,5 +1,5 @@
 { stdenv
-, fetchgit
+, fetchFromGitHub
 , libtool
 , automake
 , autoconf
@@ -7,18 +7,19 @@
 }:
 stdenv.mkDerivation rec {
   name = "libcpuid-${version}";
-  version = "0.2.2";
+  version = "0.4.0";
 
-  src = fetchgit {
-    url = https://github.com/anrieff/libcpuid.git;
-    rev = "535ec64dd9d8df4c5a8d34b985280b58a5396fcf";
-    sha256 = "1j9pg7fyvqhr859k5yh8ccl9jjx65c7rrsddji83qmqyg0vp1k1a";
+  src = fetchFromGitHub {
+    owner = "anrieff";
+    repo = "libcpuid";
+    rev = "v${version}";
+    sha256 = "136kv6m666f7s18mim0vdbzqvs4s0wvixa12brj9p3kmfbx48bw7";
   };
 
   patchPhase = ''
     libtoolize
     autoreconf --install
- '';
+  '';
 
   configurePhase = ''
     mkdir -p Install
@@ -45,12 +46,12 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     sed -i -re "s#(prefix=).*Install#\1$out#g" Install/lib/pkgconfig/libcpuid.pc
- 
+
     cp -r Install/* $out
     cp -r tests $out
   '';
 
-  buildInputs = [
+  nativeBuildInputs = [
     libtool
     automake
     autoconf

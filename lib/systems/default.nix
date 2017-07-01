@@ -5,6 +5,7 @@ rec {
   parse = import ./parse.nix;
   inspect = import ./inspect.nix;
   platforms = import ./platforms.nix;
+  examples = import ./examples.nix;
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.

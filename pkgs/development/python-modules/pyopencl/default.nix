@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , Mako
 , pytest
@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2017.1";
+  version = "2017.1.1";
   name = "${pname}-${version}";
 
   buildInputs = [ pytest opencl-headers ocl-icd ];
 
   propagatedBuildInputs = [ numpy cffi pytools decorator appdirs six Mako ];
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "b5085b6412e5a1037b893853e4e47ecb36dd04586b0f8e1809f50f7fe1437dae";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "928c458a463321c6c91e7fa54bf325bf71d7a8aa5ff750ec8fed2472f6aeb323";
   };
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory

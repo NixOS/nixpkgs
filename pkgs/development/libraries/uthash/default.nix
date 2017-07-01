@@ -1,14 +1,14 @@
 { stdenv, fetchurl, perl }:
 
 let
-  version = "1.9.9";
+  version = "2.0.2";
 in
 stdenv.mkDerivation rec {
   name = "uthash-${version}";
 
   src = fetchurl {
     url = "https://github.com/troydhanson/uthash/archive/v${version}.tar.gz";
-    sha256 = "035z3cs5ignywgh4wqxx358a2nhn3lj0x1ifij6vj0yyyhah3wgj";
+    sha256 = "1la82gdlyl7m8ahdjirigwfh7zjgkc24cvydrqcri0vsvm8iv8rl";
   };
 
   dontBuild = false;

@@ -44,6 +44,10 @@ python2Packages.buildPythonApplication rec {
     ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+  '';
+
   # Failed tests
   doCheck = false;
 

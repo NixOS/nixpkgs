@@ -8,7 +8,7 @@ let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.8.20";
+  version = "2.8.22";
 
   # This declarations for `gimp-with-plugins` wrapper,
   # (used for determining $out/lib/gimp/${majorVersion}/ paths)
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v2.8/${name}.tar.bz2";
-    sha256 = "939ca1df70be865c672ffd654f4e20f188121d01601c5c90237214101533c805";
+    sha256 = "12k3lp938qdc9cqj29scg55f3bb8iav2fysd29w0s49bqmfa71wi";
   };
 
   buildInputs =

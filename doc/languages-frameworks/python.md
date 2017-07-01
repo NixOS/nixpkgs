@@ -923,6 +923,28 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
 
 If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify `python` based software/libraries easily. Using `self` and `super` one can also alter dependencies (`buildInputs`) between the old state (`self`) and new state (`super`). 
 
+### How to override a Python package using overlays?
+
+To alter a python package using overlays, you would use the following approach:
+
+```nix
+self: super:
+rec {
+  python = super.python.override {
+    packageOverrides = python-self: python-super: {
+      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
+        src = self.pkgs.fetchgit {
+          url = "https://github.com/bepasty/bepasty-server";
+          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
+          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+        };
+      });
+    };
+  };
+  pythonPackages = python.pkgs;
+}
+```
+
 ## Contributing
 
 ### Contributing guidelines

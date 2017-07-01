@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, nasm }:
+{ stdenv, fetchurl, nasm
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libjpeg-turbo-${version}";
@@ -10,7 +12,7 @@ stdenv.mkDerivation rec {
   }; # github releases still need autotools, surprisingly
 
   patches =
-    stdenv.lib.optional (stdenv.cross.libc or null == "msvcrt")
+    stdenv.lib.optional (hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "out" "doc" ];

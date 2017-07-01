@@ -318,7 +318,13 @@ containing some shell commands to be executed, or by redefining the
 shell function
 <varname><replaceable>name</replaceable>Phase</varname>.  The former
 is convenient to override a phase from the derivation, while the
-latter is convenient from a build script.</para>
+latter is convenient from a build script.
+
+However, typically one only wants to <emphasis>add</emphasis> some
+commands to a phase, e.g. by defining <literal>postInstall</literal>
+or <literal>preFixup</literal>, as skipping some of the default actions
+may have unexpected consequences.
+</para>
 
 
 <section xml:id="ssec-controlling-phases"><title>Controlling
@@ -632,6 +638,16 @@ script) if it exists.</para>
     <option>--disable-static</option> is added to the configure flags.</para>
     <para>If this is undesirable, set this variable to
     true.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>configurePlatforms</varname></term>
+    <listitem><para>
+      By default, when cross compiling, the configure script has <option>--build=...</option> and <option>--host=...</option> passed.
+      Packages can instead pass <literal>[ "build" "host" "target" ]</literal> or a subset to control exactly which platform flags are passed.
+      Compilers and other tools should use this to also pass the target platform, for example.
+      Note eventually these will be passed when in native builds too, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
+    </para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -1156,7 +1172,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
             <term><option>--replace</option>
             <replaceable>s1</replaceable>
             <replaceable>s2</replaceable></term>
-            <listitem><para>Replace every occurence of the string
+            <listitem><para>Replace every occurrence of the string
             <replaceable>s1</replaceable> by
             <replaceable>s2</replaceable>.</para></listitem>
           </varlistentry>
@@ -1164,7 +1180,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
           <varlistentry>
             <term><option>--subst-var</option>
             <replaceable>varName</replaceable></term>
-            <listitem><para>Replace every occurence of
+            <listitem><para>Replace every occurrence of
             <literal>@<replaceable>varName</replaceable>@</literal> by
             the contents of the environment variable
             <replaceable>varName</replaceable>.  This is useful for
@@ -1177,7 +1193,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
             <term><option>--subst-var-by</option>
             <replaceable>varName</replaceable>
             <replaceable>s</replaceable></term>
-            <listitem><para>Replace every occurence of
+            <listitem><para>Replace every occurrence of
             <literal>@<replaceable>varName</replaceable>@</literal> by
             the string <replaceable>s</replaceable>.</para></listitem>
           </varlistentry>
@@ -1225,7 +1241,7 @@ substitute ./foo.in ./foo.out \
     <term><function>substituteAll</function>
     <replaceable>infile</replaceable>
     <replaceable>outfile</replaceable></term>
-    <listitem><para>Replaces every occurence of
+    <listitem><para>Replaces every occurrence of
     <literal>@<replaceable>varName</replaceable>@</literal>, where
     <replaceable>varName</replaceable> is any environment variable, in
     <replaceable>infile</replaceable>, writing the result to
@@ -1528,7 +1544,7 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
     depends on such a format string, it will need to be worked around.
     </para>
 
-    <para>Addtionally, some warnings are enabled which might trigger build
+    <para>Additionally, some warnings are enabled which might trigger build
     failures if compiler warnings are treated as errors in the package build.
     In this case, set <option>NIX_CFLAGS_COMPILE</option> to
     <option>-Wno-error=warning-type</option>.</para>
@@ -1558,7 +1574,7 @@ fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute erro
     <term><varname>pic</varname></term>
     <listitem>
     <para>Adds the <option>-fPIC</option> compiler options. This options adds
-    support for position independant code in shared libraries and thus making
+    support for position independent code in shared libraries and thus making
     ASLR possible.</para>
     <para>Most notably, the Linux kernel, kernel modules and other code
     not running in an operating system environment like boot loaders won't

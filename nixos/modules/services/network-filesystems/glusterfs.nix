@@ -3,7 +3,7 @@
 with lib;
 
 let
-  inherit (pkgs) glusterfs;
+  inherit (pkgs) glusterfs rsync;
 
   cfg = config.services.glusterfs;
 
@@ -50,8 +50,11 @@ in
       after = [ "rpcbind.service" "network.target" "local-fs.target" ];
       before = [ "network-online.target" ];
 
+      # The copying of hooks is due to upstream bug https://bugzilla.redhat.com/show_bug.cgi?id=1452761
       preStart = ''
         install -m 0755 -d /var/log/glusterfs
+        mkdir -p /var/lib/glusterd/hooks/
+        ${rsync}/bin/rsync -a ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
       '';
 
       serviceConfig = {

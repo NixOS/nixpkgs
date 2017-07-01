@@ -35,10 +35,10 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+       picture-uri='${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png'
 
        [org.gnome.desktop.screensaver]
-       picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+       picture-uri='${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png'
 
        ${cfg.extraGSettingsOverrides}
      EOF

@@ -37,7 +37,7 @@
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "45.0.2552.812";
+  version = "45.0.2552.898";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -91,12 +91,12 @@ in stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "${mirror}/${version}/linux/opera-stable_${version}_i386.deb";
-        sha256 = "0qhh7wwj3v8adz7ppjkpmfc04rxfjjhnnkawfvghlv77sjgnyml2";
+        sha256 = "1a7y13mgc8g7swdg0x2l9h6cmqw74h2wxizi3vmlgz2fj5zlkn0g";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-        sha256 = "0xf1j8abk8f0kbjarsk1y1yna1zwrn0qc4fi1swjsxf5rx027fir";
+        sha256 = "0rmagj0s1j3a6rpyrs29xnbngsq700rgaqkph108fbnj80hif1ia";
       }
     else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 

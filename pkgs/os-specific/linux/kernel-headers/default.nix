@@ -1,4 +1,6 @@
-{ stdenv, kernel, perl }:
+{ stdenv, kernel, perl
+, hostPlatform
+}:
 
 let
   baseBuildFlags = [ "INSTALL_HDR_PATH=$(out)" "headers_install" ];
@@ -13,7 +15,7 @@ in stdenv.mkDerivation {
 
   crossAttrs = {
     inherit (kernel.crossDrv) src patches;
-    buildFlags = [ "ARCH=${stdenv.cross.platform.kernelArch}" ] ++ baseBuildFlags;
+    buildFlags = [ "ARCH=${hostPlatform.platform.kernelArch}" ] ++ baseBuildFlags;
   };
 
   installPhase = ''

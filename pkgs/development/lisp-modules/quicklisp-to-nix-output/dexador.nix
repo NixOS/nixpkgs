@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''dexador'';
-  version = ''20170403-git'';
+  version = ''20170516-git'';
 
   description = ''Yet another HTTP client for Common Lisp'';
 
-  deps = [ args."usocket" args."trivial-mimes" args."trivial-gray-streams" args."quri" args."fast-io" args."fast-http" args."cl-reexport" args."cl-ppcre" args."cl-cookie" args."cl-base64" args."cl+ssl" args."chunga" args."chipz" args."bordeaux-threads" args."babel" args."alexandria" ];
+  deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/dexador/2017-04-03/dexador-20170403-git.tgz'';
-    sha256 = ''0lnz36215wccpjgvrv9r7fa1i94jcdyw6q3hlgx9h8b7pwdlcfbn'';
+    url = ''http://beta.quicklisp.org/archive/dexador/2017-05-16/dexador-20170516-git.tgz'';
+    sha256 = ''129ar4z972wl3prhzsfy0mb4r41b0j179zs3mglq6gl7awafq8r6'';
   };
+    
+  packageName = "dexador";
 
   overrides = x: {
     postInstall = ''
@@ -28,12 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM dexador DESCRIPTION Yet another HTTP client for Common Lisp SHA256 0lnz36215wccpjgvrv9r7fa1i94jcdyw6q3hlgx9h8b7pwdlcfbn URL
-    http://beta.quicklisp.org/archive/dexador/2017-04-03/dexador-20170403-git.tgz MD5 0330a50a117313dbe0ba3f136b0fa416 NAME dexador TESTNAME NIL FILENAME
-    dexador DEPS
-    ((NAME usocket) (NAME trivial-mimes) (NAME trivial-gray-streams) (NAME quri) (NAME fast-io) (NAME fast-http) (NAME cl-reexport) (NAME cl-ppcre)
-     (NAME cl-cookie) (NAME cl-base64) (NAME cl+ssl) (NAME chunga) (NAME chipz) (NAME bordeaux-threads) (NAME babel) (NAME alexandria))
-    DEPENDENCIES
-    (usocket trivial-mimes trivial-gray-streams quri fast-io fast-http cl-reexport cl-ppcre cl-cookie cl-base64 cl+ssl chunga chipz bordeaux-threads babel
-     alexandria)
-    VERSION 20170403-git SIBLINGS (dexador-test)) */
+/* (SYSTEM dexador DESCRIPTION Yet another HTTP client for Common Lisp SHA256 129ar4z972wl3prhzsfy0mb4r41b0j179zs3mglq6gl7awafq8r6 URL
+    http://beta.quicklisp.org/archive/dexador/2017-05-16/dexador-20170516-git.tgz MD5 463972f0b98fd2a641ce2bfab4400dc7 NAME dexador TESTNAME NIL FILENAME
+    dexador DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS (dexador-test)) */

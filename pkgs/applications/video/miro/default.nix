@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, pythonPackages, pyrex096, ffmpeg, boost, glib, gtk2, webkitgtk2, libsoup
+, pythonPackages, pyrex096, ffmpeg, boost, glib, gtk2, webkitgtk24x-gtk2, libsoup
 , taglib, sqlite
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
 , gst-python, gst-plugins-base, gst-plugins-good, gst-ffmpeg
@@ -70,7 +70,7 @@ in buildPythonApplication rec {
   '';
 
   buildInputs = with pythonPackages; [ pygtk pygobject2 ] ++ [
-    pkgconfig pyrex096 ffmpeg boost glib gtk2 webkitgtk2 libsoup
+    pkgconfig pyrex096 ffmpeg boost glib gtk2 webkitgtk24x-gtk2 libsoup
     taglib gsettings_desktop_schemas sqlite
   ];
 

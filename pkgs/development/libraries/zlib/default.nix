@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, static ? false }:
+{ stdenv
+, fetchurl
+, buildPlatform, hostPlatform
+, static ? false
+}:
 
 let version = "1.2.11"; in
 
@@ -24,7 +28,9 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  preConfigure = ''
+  # TODO(@Dridus) CC set by cc-wrapper setup-hook, so just empty out the preConfigure script when cross building, but leave the old incorrect script when not
+  # cross building to avoid hash breakage. Once hash breakage is acceptable, remove preConfigure entirely.
+  preConfigure = stdenv.lib.optionalString (hostPlatform == buildPlatform) ''
     if test -n "$crossConfig"; then
       export CC=$crossConfig-gcc
     fi
@@ -53,8 +59,8 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     dontStrip = static;
-    dontSetConfigureCross = true;
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+    configurePlatforms = [];
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     installFlags = [
       "BINARY_PATH=$(out)/bin"
       "INCLUDE_PATH=$(dev)/include"
@@ -62,14 +68,12 @@ stdenv.mkDerivation rec {
     ];
     makeFlags = [
       "-f" "win32/Makefile.gcc"
-      "PREFIX=${stdenv.cross.config}-"
+      "PREFIX=${stdenv.cc.prefix}"
     ] ++ stdenv.lib.optional (!static) "SHARED_MODE=1";
 
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
     postInstall = postInstall + "ln -s zlib1.dll $out/bin/libz.dll";
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
-    makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
   passthru.version = version;

@@ -4,13 +4,13 @@
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   name = "networkmanager_dmenu-unstable-${version}";
-  version = "2017-04-13";
+  version = "2017-05-28";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "fbc0704702b32c2efb30ba6b5c0ad6f054a71a18";
-    sha256 = "1584zrhla1njvkrbvb1rq66q06gs510f0l1ls3z7x7jmn322y6yr";
+    rev = "eeb8e6922dee887890884f129b51bb21b0047d30";
+    sha256 = "00n82sjjqk76sfxi92f5vnzpngk66cqwyzqdanbszpl019ajr5h6";
   };
 
   buildInputs = [ glib python pygobject3 gobjectIntrospection networkmanager python3Packages.wrapPython ];

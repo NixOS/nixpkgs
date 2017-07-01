@@ -71,7 +71,7 @@ rec {
       ''
         mkdir -p $out
         for i in $paths; do
-          ${lndir}/bin/lndir $i $out
+          ${lndir}/bin/lndir -silent $i $out
         done
         ${postBuild}
       '';

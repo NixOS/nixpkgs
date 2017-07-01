@@ -1,9 +1,9 @@
-{ stdenv, ninja, which
+{ stdenv, ninja, which, nodejs
 
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt, libcap
+, libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib, libvpx
 
@@ -57,7 +57,7 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxml" "libxslt" "snappy" "yasm"
+    "flac" "libwebp" "snappy" "yasm"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -67,7 +67,7 @@ let
   defaultDependencies = [
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt libcap
+    libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
   ];
@@ -87,7 +87,7 @@ let
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
-      python2Packages.ply python2Packages.jinja2
+      python2Packages.ply python2Packages.jinja2 nodejs
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -105,6 +105,9 @@ let
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
+      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
+      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
+      ./patches/fix_network_api_crash.patch
     ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
       ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -129,10 +132,13 @@ let
         :l; n; bl
       }' gpu/config/gpu_control_list.cc
 
+      # Allow to put extensions into the system-path.
+      sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+
       patchShebangs .
-    '' + optionalString (versionAtLeast version "52.0.0.0") ''
-      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
-        third_party/pdfium/xfa/fxbarcode/utils.h
+      # use our own nodejs
+      mkdir -p third_party/node/linux/node-linux-x64/bin
+      ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
     '';
 
     gnFlags = mkGnFlags ({

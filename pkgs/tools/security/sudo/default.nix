@@ -4,15 +4,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.20";
+  name = "sudo-1.8.20p2";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "1q70f2wqbpgq828xmfzidbhyll5p08qbj7f3p2sw2v4whpdbi5wy";
+    sha256 = "1na5likm1srnd1g5sjx7b0543sczw0yppacyqsazfdg9b48awhmx";
   };
+
+  prePatch = ''
+    # do not set sticky bit in nix store
+    substituteInPlace src/Makefile.in --replace 04755 0755
+  '';
 
   configureFlags = [
     "--with-env-editor"

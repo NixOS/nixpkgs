@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, jre, makeDesktopItem, makeWrapper }:
+{ stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, language ? "en_US" }:
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
-  version = "5-0-355-0";
+  version = "5-0-369-0";
 
   preferLocalBuild = true;
 
   src = fetchurl {
     url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
-    sha256 = "0gm6jqlc3kgnbwnqlz6i9rahdy802jq7xc9gw1q5ynk63smm3ngk";
+    sha256 = "0b5015z1ff3ksnkmyn2hbfwvhqp1572pdn8llpws32k7w1lb0jnk";
   };
 
   srcIcon = fetchurl {
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
       --set JAVACMD "${jre}/bin/java" \
-      --set GG_PATH "$out/libexec/geogebra"
+      --set GG_PATH "$out/libexec/geogebra" \
+      --add-flags "--language=${language}"
 
     install -Dm644 "${desktopItem}/share/applications/"* \
       -t $out/share/applications/

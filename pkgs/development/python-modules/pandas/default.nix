@@ -19,7 +19,6 @@
 , openpyxl
 , tables
 , xlwt
-, darwin ? {}
 , libcxx ? null
 }:
 
@@ -28,12 +27,12 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.20.1";
+  version = "0.20.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42707365577ef69f7c9c168ddcf045df2957595a9ee71bc13c7997eecb96b190";
+    sha256 = "92173c976fcca70cb19a958eccdacf98af62ef7301bf786d0321cb8857cdfae6";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -53,7 +52,7 @@ in buildPythonPackage rec {
     openpyxl
     tables
     xlwt
-  ] ++ optional isDarwin darwin.locale; # provides the locale command
+  ];
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
@@ -63,16 +62,22 @@ in buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-
-  # disable clipboard tests since pbcopy/pbpaste are not open source
-    substituteInPlace pandas/io/tests/test_clipboard.py \
-      --replace pandas.util.clipboard no_such_module \
-      --replace OSError ImportError
   '';
 
   checkPhase = ''
     runHook preCheck
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network
+  ''
+  # TODO: Get locale and clipboard support working on darwin.
+  #       Until then we disable the tests.
+  + optionalString isDarwin ''
+    # Fake the impure dependencies pbpaste and pbcopy
+    echo "#!/bin/sh" > pbcopy
+    echo "#!/bin/sh" > pbpaste
+    chmod a+x pbcopy pbpaste
+    export PATH=$(pwd):$PATH
+  '' + ''
+    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
+      ${if isDarwin then "-k 'not test_locale and not test_clipboard'" else ""}
     runHook postCheck
   '';
 
@@ -83,7 +88,7 @@ in buildPythonPackage rec {
     homepage = "http://pandas.pydata.org/";
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh ];
+    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,11 +1,11 @@
-{ buildPythonPackage, fetchurl, stdenv, libmemcached, zlib }:
+{ buildPythonPackage, fetchPypi, stdenv, libmemcached, zlib }:
 buildPythonPackage rec {
   version = "1.5.2";
   pname = "pylibmc";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/source/p/pylibmc/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "fc54e28a9f1b5b2ec0c030da29c7ad8a15c2755bd98aaa4142eaf419d5fabb33";
   };
 

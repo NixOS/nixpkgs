@@ -2,11 +2,13 @@
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
-    url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/archlinux.vim?h=packages/vim?id=68f6d131750aa778807119e03eed70286a17b1cb;
+    url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/archlinux.vim?id=68f6d131750aa778807119e03eed70286a17b1cb;
     sha256 = "18ifhv5q9prd175q3vxbqf6qyvkk6bc7d2lhqdk0q78i68kv9y0c";
   }
 # apple frameworks
-, Carbon, Cocoa }:
+, Carbon, Cocoa
+, buildPlatform, hostPlatform
+}:
 
 let
   common = callPackage ./common.nix {};
@@ -17,12 +19,23 @@ stdenv.mkDerivation rec {
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
   buildInputs = [ ncurses pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+    ++ stdenv.lib.optionals hostPlatform.isDarwin [ Carbon Cocoa ];
   nativeBuildInputs = [ gettext ];
 
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
+  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+    "vim_cv_toupper_broken=no"
+    "--with-tlib=ncurses"
+    "vim_cv_terminfo=yes"
+    "vim_cv_tty_group=tty"
+    "vim_cv_tty_mode=0660"
+    "vim_cv_getcwd_broken=no"
+    "vim_cv_stat_ignores_slash=yes"
+    "ac_cv_sizeof_int=4"
+    "vim_cv_memmove_handles_overlap=yes"
+    "vim_cv_memmove_handles_overlap=yes"
   ];
 
   postInstall = ''
@@ -30,22 +43,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/vim
     cp "${vimrc}" $out/share/vim/vimrc
   '';
-
-  crossAttrs = {
-    configureFlags = [
-      "vim_cv_toupper_broken=no"
-      "--with-tlib=ncurses"
-      "vim_cv_terminfo=yes"
-      "vim_cv_tty_group=tty"
-      "vim_cv_tty_mode=0660"
-      "vim_cv_getcwd_broken=no"
-      "vim_cv_stat_ignores_slash=yes"
-      "ac_cv_sizeof_int=4"
-      "vim_cv_memmove_handles_overlap=yes"
-      "vim_cv_memmove_handles_overlap=yes"
-      "STRIP=${stdenv.cross.config}-strip"
-    ];
-  };
 
   __impureHostDeps = [ "/dev/ptmx" ];
 

@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, procps ? null
+{ mkDerivation, stdenv, lib, fetchFromGitHub, procps ? null
 , qtbase, qtwebengine, qtwebkit
-, cmake, makeQtWrapper
+, cmake
 , syncthing, syncthing-inotify ? null
 , preferQWebView ? false }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "0.5.7";
   name = "qsyncthingtray-${version}";
 
@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtwebengine ] ++ lib.optional preferQWebView qtwebkit;
-  nativeBuildInputs = [ cmake makeQtWrapper ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optional preferQWebView "-DQST_BUILD_WEBKIT=1";
 
@@ -41,12 +40,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     install -m755 QSyncthingTray $out/bin/${qst}
     ln -s $out/bin/${qst} $out/bin/QSyncthingTray
-    wrapQtProgram $out/bin/qsyncthingtray
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/sieren/QSyncthingTray/;
     description = "A Traybar Application for Syncthing written in C++";
     longDescription = ''

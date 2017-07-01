@@ -72,6 +72,8 @@ in stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
   dontUseCmakeConfigure = true;
 
+  patches = [ ./xdg-open.patch ];
+
   postUnpack = ''
     mkdir -v $sourceRoot/src
   '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)

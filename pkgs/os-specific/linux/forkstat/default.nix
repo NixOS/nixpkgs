@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "forkstat-${version}";
-  version = "0.01.16";
+  version = "0.01.17";
   src = fetchurl {
     url = "http://kernel.ubuntu.com/~cking/tarballs/forkstat/forkstat-${version}.tar.gz";
-    sha256 = "0g65basrs569y42zhgjq9sdyz62km8xy55yfilmyxa43ckb3xmlw";
+    sha256 = "0plm2409mmp6n2fjj6bb3z7af2cnh5lg3czlylhgaki9zd0cyb7w";
   };
   installFlags = [ "DESTDIR=$(out)" ];
   postInstall = ''

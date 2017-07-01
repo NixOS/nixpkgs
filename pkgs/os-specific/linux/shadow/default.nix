@@ -1,11 +1,13 @@
 { stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
 , docbook_xml_dtd_412, docbook_xsl, gnome_doc_utils, flex, bison
-, pam ? null, glibcCross ? null }:
+, pam ? null, glibcCross ? null
+, buildPlatform, hostPlatform
+}:
 
 let
 
   glibc =
-    if stdenv ? cross
+    if hostPlatform != buildPlatform
     then glibcCross
     else assert stdenv ? glibc; stdenv.glibc;
 
@@ -40,6 +42,11 @@ stdenv.mkDerivation rec {
         sha256 = "10k70fx3z051f83p1k7ljjaawbykhn7cy6fg1zy04jp3xkvdwxc7";
       })
     ];
+
+  # The nix daemon often forbids even creating set[ug]id files.
+  postPatch =
+    ''sed 's/^\(s[ug]idperms\) = [0-9]755/\1 = 0755/' -i src/Makefile.am
+    '';
 
   outputs = [ "out" "su" "man" ];
 

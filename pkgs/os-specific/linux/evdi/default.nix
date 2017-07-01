@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     homepage = "http://www.displaylink.com/";
+    broken = !versionAtLeast kernel.version "3.16";
   };
 }

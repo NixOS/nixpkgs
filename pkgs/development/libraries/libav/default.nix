@@ -13,6 +13,7 @@
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
+, hostPlatform
 }:
 
 assert faacSupport -> enableUnfree;
@@ -105,12 +106,12 @@ let
     installCheckTarget = "check"; # tests need to be run *after* installation
 
     crossAttrs = {
-      dontSetConfigureCross = true;
+      configurePlatforms = [];
       configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cross.config}-"
+        "--cross-prefix=${stdenv.cc.prefix}"
         "--enable-cross-compile"
         "--target_os=linux"
-        "--arch=${stdenv.cross.arch}"
+        "--arch=${hostPlatform.arch}"
         ];
     };
 

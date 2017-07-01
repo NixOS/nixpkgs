@@ -268,6 +268,18 @@ in
       };
     };
 
+  google_apis_25 = buildGoogleApis {
+    name = "google_apis-25";
+      src = fetchurl {
+        url = https://dl.google.com/android/repository/google_apis-25_r1.zip;
+        sha1 = "550e83eea9513ab11c44919ac6da54b36084a9f3";
+      };
+      meta = {
+        description = "Android + Google APIs";
+
+      };
+    };
+
   android_support_extra = buildGoogleApis {
     name = "android_support_extra";
     src = fetchurl {
@@ -280,11 +292,12 @@ in
     };
   };
 
+
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/google_play_services_v8_rc41.zip;
-      sha1 = "7a50dec81ba9c9b51d7778c19ca05002498209e8";
+      url = https://dl.google.com/android/repository/google_play_services_v11_rc16.zip;
+      sha1 = "55be81c50041f6a8f62947418f74f683369c971f";
     };
     meta = {
       description = "Google Play services client library and sample code";

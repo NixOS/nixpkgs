@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "2.41b";
+  version = "2.43b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "13wnjk0rklcjglj7dmpahv67vig9azifxgnggj56hki66lrb2w06";
+    sha256 = "1jv2y9b53k3p8hngm78ikakhcf4vv3yyz6ip17jhg5gsis29gdwx";
   };
 
   # Note: libcgroup isn't needed for building, just for the afl-cgroup

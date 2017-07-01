@@ -56,19 +56,17 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.unclutter = {
       description = "unclutter";
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           -idle ${toString cfg.timeout} \
-          -display :${toString (
-             let display = config.services.xserver.display;
-             in if display != null then display else 0
-          )} \
           -jitter ${toString (cfg.threeshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
           ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
           -not ${concatStringsSep " " cfg.excluded} \
       '';
+      serviceConfig.PassEnvironment = "DISPLAY";
       serviceConfig.RestartSec = 3;
       serviceConfig.Restart = "always";
     };

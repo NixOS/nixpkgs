@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam yacc flex ];
 
+  postPatch = ''
+    substituteInPlace src/tools/Makefile.in \
+      --replace 'chmod u+s' 'chmod +x'
+  '';
+
   meta = {
     description = "Library and tools to manage Linux cgroups";
     homepage    = "http://libcg.sourceforge.net/";

@@ -2,17 +2,17 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "tmuxp-${version}";
-  version = "1.2.7";
+  version = "1.3.1";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/t/tmuxp/${name}.tar.gz";
-    sha256 = "19s17frgyjvyvmr16fs0gl5mnbaxbmdffmkckadwhd5mg0pz2i4s";
+    sha256 = "189mxnb2pxj3wjijn56j8y5x1r23fil00fn2q7d6bd13vgr0f85s";
   };
 
   patchPhase = ''
-    sed -i 's/==.*$//' requirements/test.txt
+    sed -i 's/==.*$//' requirements/base.txt requirements/test.txt
   '';
 
   buildInputs = with pythonPackages; [

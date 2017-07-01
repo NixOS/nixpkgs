@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch, coreutils
 , python3, python3Packages, substituteAll }:
 
 assert stdenv.isLinux;
@@ -20,6 +20,12 @@ python3Packages.buildPythonApplication rec {
       src = ./nix-paths.patch;
       df = "${coreutils}/bin/df";
       libc = "${stdenv.cc.libc.out}/lib/libc.so.6";
+    })
+
+    # Fix build on Python 3.6.
+    (fetchpatch {
+      url = "https://github.com/andreafrancia/trash-cli/commit/a21b80d1e69783bb09376c3f60dd2f2a10578805.patch";
+      sha256 = "0w49rjh433sjfc2cl5a9wlbr6kcn9f1qg905qsyv7ay3ar75wvyp";
     })
   ];
 
