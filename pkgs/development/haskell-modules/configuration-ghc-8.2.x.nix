@@ -59,4 +59,7 @@ self: super: {
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
+  # Older, LTS-8-based versions don't compile.
+  primitive = self.primitive_0_6_2_0;
+
 }
