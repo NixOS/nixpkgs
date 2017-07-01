@@ -234,11 +234,10 @@ rec {
     # Files to add to the layer.
     contents ? null,
     # Additional commands to run on the layer before it is tar'd up.
-    extraCommands ? ""
+    extraCommands ? "", uid ? 0, gid ? 0
   }:
     runCommand "docker-layer-${name}" {
       inherit baseJson contents extraCommands;
-
       buildInputs = [ jshon rsync ];
     }
     ''
@@ -260,7 +259,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+      tar -C layer --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -297,7 +296,7 @@ rec {
     # How much disk to allocate for the temporary virtual machine.
     diskSize ? 1024,
     # Commands (bash) to run on the layer; these do not require sudo.
-    extraCommands ? ""
+    extraCommands ? "", uid ? 0, gid ? 0
   }:
     # Generate an executable script from the `runAsRoot` text.
     let runAsRootScript = shellScript "run-as-root.sh" runAsRoot;
@@ -375,7 +374,7 @@ rec {
     # Docker config; e.g. what command to run on the container.
     config ? null,
     # Optional bash script to run on the files prior to fixturizing the layer.
-    extraCommands ? "",
+    extraCommands ? "", uid ? 0, gid ? 0,
     # Optional bash script to run as root on the image when provisioning.
     runAsRoot ? null,
     # Size of the virtual machine disk to provision when building the image.
@@ -398,7 +397,7 @@ rec {
         if runAsRoot == null
         then mkPureLayer {
           name = baseName;
-          inherit baseJson contents extraCommands;
+          inherit baseJson contents extraCommands uid gid;
         } else mkRootLayer {
           name = baseName;
           inherit baseJson fromImage fromImageName fromImageTag
@@ -498,7 +497,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --mtime="@$SOURCE_DATE_EPOCH" -c . | pigz -nT > $out
+        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 -c . | pigz -nT > $out
 
         echo "Finished."
       '';
