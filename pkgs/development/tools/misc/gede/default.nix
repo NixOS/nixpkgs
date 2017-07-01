@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gede-${version}";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "http://gede.acidron.com/uploads/source/${name}.tar.xz";
-    sha256 = "1znlmkjgrmjl79q73xaa9ybp1xdc3k4h4ynv3jj5z8f92gjnj3kk";
+    sha256 = "0ip86ss35sc330p4aykv5qj74jbdwh38i928w1bxb6g3w0xmfqba";
   };
 
   nativeBuildInputs = [ makeWrapper python ];
