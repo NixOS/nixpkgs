@@ -316,6 +316,8 @@ let
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
+    mstruct =  callPackage ../development/ocaml-modules/mstruct { };
+
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
