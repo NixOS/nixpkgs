@@ -275,9 +275,14 @@ in
 
       precomputation.elgamal = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
-          Use ElGamal precomputated tables.
+          Whenever to use precomputated tables for ElGamal.
+          <command>i2pd</command> defaults to <literal>false</literal>
+          to save 64M of memory (and looses some performance).
+
+          We default to <literal>true</literal> as that is what most
+          users want anyway.
         '';
       };
 
