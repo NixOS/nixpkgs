@@ -308,6 +308,10 @@ let
       }
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
+    lwt_react = callPackage ../development/ocaml-modules/lwt_react {
+      lwt = lwt3;
+    };
+
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
