@@ -4825,7 +4825,7 @@ in {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
     };
-    buildInputs = with self; [ pyramid_mako nose django_1_9 jinja2 tornado pyramid Mako ];
+    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
     propagatedBuildInputs = with self; [ six ];
     patchPhase = ''
       sed -i 's/1.4.99/1.99/' setup.py
@@ -9820,32 +9820,11 @@ in {
     gdal = self.gdal;
   };
 
+  # TODO: Django 1.10 will be maintained until the end of the year. Therefore,
+  # it will be dropped before 17.09.
+  # https://github.com/NixOS/nixpkgs/issues/25375#issuecomment-298522597
   django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
     gdal = self.gdal;
-  };
-
-  django_1_9 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.9.13";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "079zspfsvfnv9wf6qvg8xmz1m23d0723p2nqyk8gfqb012jxn1y0";
-    };
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    # too complicated to setup
-    doCheck = false;
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
   };
 
   django_1_8 = buildPythonPackage rec {
@@ -9856,32 +9835,6 @@ in {
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
       sha256 = "1ishvbihr9pain0486qafb18dnb7v2ppq34nnx1s8f95bvfiqqf7";
-    };
-
-    # too complicated to setup
-    doCheck = false;
-
-    # patch only $out/bin to avoid problems with starter templates (see #3134)
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin "$out $pythonPath"
-    '';
-
-    meta = {
-      description = "A high-level Python Web framework";
-      homepage = https://www.djangoproject.com/;
-    };
-  };
-
-  django_1_6 = buildPythonPackage rec {
-    name = "Django-${version}";
-    version = "1.6.11.5";
-
-    # Support to python-3.4 and higher was introduced in django_1_7
-    disabled = !(isPy26 || isPy27 || isPy33);
-
-    src = pkgs.fetchurl {
-      url = "https://downloads.reviewboard.org/releases/Django/1.6/Django-${version}.tar.gz";
-      sha256 = "0yj0fw3iql031z8l5ik1fb25sk3l5bw2vc63bbyg5rz2k3znl4il";
     };
 
     # too complicated to setup
@@ -9995,7 +9948,7 @@ in {
       sha256 = "1qbcx54hq8iy3n2n6cki3bka1m9rp39np4hqddrm9knc954fb7nv";
     };
 
-    propagatedBuildInputs = with self; [ django_1_6 ];
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
@@ -10033,7 +9986,7 @@ in {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
       sha256 = "03zlbq13rydfh28wh0jk3x3cjk9x6jjmqnx1i3ngjmfwbxf8x6j1";
     };
-    propagatedBuildInputs = with self; [ django_1_6 ];
+    propagatedBuildInputs = with self; [ django ];
   });
 
   django_classytags = buildPythonPackage rec {
@@ -10235,7 +10188,7 @@ in {
       sha256 = "1y49fa8jj7x9qjj5wzhns3zxwj0s73sggvkrv660cqw5qb7d8hha";
     };
 
-    propagatedBuildInputs = with self; [ django_1_6 futures ];
+    propagatedBuildInputs = with self; [ django futures ];
 
     meta = with stdenv.lib; {
       description = "Pipeline is an asset packaging library for Django";
@@ -10253,7 +10206,10 @@ in {
   });
 
 
-  djblets = buildPythonPackage rec {
+  djblets = if (versionOlder self.django.version "1.6.11") ||
+               (versionAtLeast self.django.version "1.9")
+            then throw "djblets only suported for Django<1.8.999,>=1.6.11"
+            else buildPythonPackage rec {
     name = "Djblets-0.9";
 
     src = pkgs.fetchurl {
@@ -10262,7 +10218,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      django_1_6 feedparser django_pipeline_1_3 pillowfight pytz ];
+      django feedparser django_pipeline_1_3 pillowfight pytz ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -13484,7 +13440,10 @@ in {
     };
   };
 
-  mathics = buildPythonPackage rec {
+  mathics = if (versionOlder self.django.version "1.8") ||
+               (versionAtLeast self.django.version "1.9")
+            then throw "mathics only supports django-1.8.x"
+            else buildPythonPackage rec {
     name = "mathics-${version}";
     version = "0.9";
     src = pkgs.fetchFromGitHub {
@@ -13510,7 +13469,7 @@ in {
     propagatedBuildInputs = with self; [
       cython
       sympy
-      django_1_8
+      django
       ply
       mpmath
       dateutil
@@ -13648,7 +13607,7 @@ in {
 
     buildInputs = with self; [ pyflakes pep8 ];
     propagatedBuildInputs = with self; [
-      django_1_6 filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
+      django filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
       requests requests_oauthlib future pillow
     ];
 
@@ -21282,7 +21241,7 @@ in {
 
     buildInputs = with self; [ coverage mock nose geopy ];
     propagatedBuildInputs = with self; [
-      django_1_6 dateutil_1_5 whoosh pysolr elasticsearch
+      django dateutil_1_5 whoosh pysolr elasticsearch
     ];
 
     patchPhase = ''
@@ -21367,7 +21326,7 @@ in {
     '';
 
     propagatedBuildInputs = with self;
-      [ django_1_6 recaptcha_client pytz memcached dateutil_1_5 paramiko flup
+      [ django recaptcha_client pytz memcached dateutil_1_5 paramiko flup
         pygments djblets django_evolution pycrypto pysvn pillow
         psycopg2 django-haystack python_mimeparse markdown django-multiselectfield
       ];
@@ -27173,7 +27132,7 @@ EOF
       sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
     };
 
-    propagatedBuildInputs = with self; [ django_1_6 django_tagging_0_3 whisper pycairo ldap memcached pytz ];
+    propagatedBuildInputs = with self; [ django django_tagging_0_3 whisper pycairo ldap memcached pytz ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
@@ -28557,7 +28516,7 @@ EOF
     disabled = isPyPy;
     # Wants to set up Django
     doCheck = false;
-    propagatedBuildInputs = with self; [ django_1_9 smartypants jinja2 ];
+    propagatedBuildInputs = with self; [ django smartypants jinja2 ];
     meta = {
       description = "Filters to enhance web typography, including support for Django & Jinja templates";
       homepage = "https://github.com/mintchaos/typogrify";
