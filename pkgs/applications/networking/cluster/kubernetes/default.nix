@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
-, iptables, coreutils
+{ stdenv, fetchFromGitHub, removeReferencesTo
+, coreutils, go, go-bindata, iptables, rsync, which
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -8,40 +8,36 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "plugin/cmd/kube-scheduler"
-    "cmd/kube-dns"
     "federation/cmd/federation-apiserver"
     "federation/cmd/federation-controller-manager"
   ]
 }:
 
-with lib;
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.5.6";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0mkg4vgz9szgq1k5ignkdr5gmg703xlq8zsrr422a1qfqb8zp15w";
+    sha256 = "0yj0c7k5v6ri1pnh7cmfqf0ckf8psh9929im1liy0lhlga7yipx4";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
+  buildInputs = [ removeReferencesTo which go rsync go-bindata ];
 
-  outputs = ["out" "man" "pause"];
+  outputs = [ "out" "man" "pause" ];
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
     substituteInPlace "hack/generate-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
-    # hack/update-munge-docs.sh only performs some tests on the documentation.
-    # They broke building k8s; disabled for now.
-    echo "true" > "hack/update-munge-docs.sh"
 
     patchShebangs ./hack
   '';
 
-  WHAT="--use_go_build ${concatStringsSep " " components}";
+  WHAT = "--use_go_build ${concatStringsSep " " components}";
 
   postBuild = ''
     ./hack/generate-docs.sh
@@ -66,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = http://kubernetes.io;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline lnl7 ];
     platforms = platforms.unix;
   };
 }
