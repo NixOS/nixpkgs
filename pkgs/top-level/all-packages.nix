@@ -763,7 +763,6 @@ with pkgs;
     isLibrary = false;
     enableSharedExecutables = false;
     executableToolDepends = [ makeWrapper ];
-    doCheck = stdenv.is64bit;  # https://github.com/NixOS/cabal2nix/issues/272
     postInstall = ''
       exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
       install -D $out/bin/${drv.pname} $exe
