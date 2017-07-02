@@ -45,13 +45,8 @@ let
         throw ''‘${showLicense license}’ is not an attribute of lib.licenses''
     ) list;
 
-  mutuallyExclusive = a: b:
-    (builtins.length a) == 0 ||
-    (!(builtins.elem (builtins.head a) b) &&
-     mutuallyExclusive (builtins.tail a) b);
-
   areLicenseListsValid =
-    if mutuallyExclusive whitelist blacklist then
+    if lib.mutuallyExclusive whitelist blacklist then
       assert onlyLicenses whitelist; assert onlyLicenses blacklist; true
     else
       throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
