@@ -651,22 +651,31 @@ in
     system.extraDependencies = singleton (pkgs.runCommand "xkb-layouts-exist" {
       inherit (cfg) layout xkbDir;
     } ''
-      if sed -n -e ':i /^! \(layout\|variant\) *$/ {
-          :l; n; /^!/bi; s/^ *\([^ ]\+\).*/\1/p; tl
-         }' "$xkbDir/rules/base.lst" | grep -qxF "$layout"
-      then
-        touch "$out"
+      IFS=, read -a layouts <<<'${cfg.layout}'
+
+      missing=()
+      for layout in "''${layouts[@]}" ; do
+        if ! sed -n -e ':i /^! \(layout\|variant\) *$/ {
+            :l; n; /^!/bi; s/^ *\([^ ]\+\).*/\1/p; tl
+           }' "$xkbDir/rules/base.lst" | grep -qxF -e "$layout"
+        then
+          missing+=("$layout")
+        fi
+      done
+
+      if [[ ''${#missing[@]} = 0 ]] ; then
+        touch $out
         exit 0
       fi
-
       cat >&2 <<-EOF
 
-      The selected keyboard layout definition does not exist:
+      The selected keyboard layout definitions do not exist:
 
-        $layout
+        ''${missing[@]}
 
-      Set \`services.xserver.layout' to the name of an existing keyboard
-      layout (check $xkbDir/rules/base.lst for options).
+      Set \`services.xserver.layout' to include only names of
+      existing keyboard layouts (check $xkbDir/rules/base.lst
+      for options).
 
       EOF
       exit 1
