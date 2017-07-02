@@ -30178,7 +30178,7 @@ EOF
       description = "Unicorn CPU emulator engine";
       homepage = "http://www.unicorn-engine.org/";
       license = [ licenses.gpl2 ];
-      maintainers = with stdenv.maintainers; [ bennofs ];
+      maintainers = [ maintainers.bennofs ];
     };
   };
 
@@ -30202,8 +30202,8 @@ EOF
     meta = with pkgs.stdenv.lib; {
       description = "Editable interval tree data structure for Python 2 and 3";
       homepage =  https://github.com/chaimleib/intervaltree;
-      license = [ licenses.asl2 ];
-      maintainers = with stdenv.maintainers; [ bennofs ];
+      license = [ licenses.asl20 ];
+      maintainers =  [ maintainers.bennofs ];
     };
   };
 
