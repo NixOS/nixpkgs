@@ -302,6 +302,12 @@ let
       lwt = ocaml_lwt;
     };
 
+    lwt3 = if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/lwt {
+        version = "3.0.0";
+      }
+      else throw "lwt3 is not available for OCaml ${ocaml.version}";
+
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
