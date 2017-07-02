@@ -227,7 +227,7 @@ in
         default = null;
         description = ''
            Set a router bandwidth limit integer in KBps.
-           If not set, i2pd defaults to 32KBps.
+           If not set, <command>i2pd</command> defaults to 32KBps.
         '';
       };
 
