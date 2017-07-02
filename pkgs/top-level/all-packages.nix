@@ -100,6 +100,8 @@ with pkgs;
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
+  distributeManpages = (callPackage ../build-support/doc-helpers.nix {}).distributeManpages;
+
   dockerTools = callPackage ../build-support/docker { };
 
   docker_compose = pythonPackages.docker_compose;
