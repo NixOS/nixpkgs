@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, removeReferencesTo
-, coreutils, go, go-bindata, iptables, rsync, which
+, coreutils, go, go-bindata, iptables, kube-dns, rsync, which
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ removeReferencesTo which go rsync go-bindata ];
 
   outputs = [ "out" "man" "pause" ];
+  passthru.dns = kube-dns;
 
   postPatch = ''
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""

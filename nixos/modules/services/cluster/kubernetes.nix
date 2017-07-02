@@ -794,7 +794,7 @@ in {
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
           Slice = "kubernetes.slice";
-          ExecStart = ''${cfg.package}/bin/kube-dns \
+          ExecStart = ''${cfg.package.dns}/bin/kube-dns \
             --kubecfg-file=${kubeconfig} \
             --dns-port=${toString cfg.dns.port} \
             --domain=${cfg.dns.domain} \
