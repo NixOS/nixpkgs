@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go, gox }:
+{ stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
 
 let
   vaultBashCompletions = fetchFromGitHub {
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     sha256 = "15wj1pfgzwzjfrqy7b5bx4y9f0hbpqlfif58l5xamwm88229qk4m";
   };
 
-  nativeBuildInputs = [ go gox ];
+  nativeBuildInputs = [ go gox removeReferencesTo ];
 
   buildPhase = ''
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
@@ -31,7 +31,10 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin $out/share/bash-completion/completions
+
     cp pkg/*/* $out/bin/
+    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
+
     cp ${vaultBashCompletions}/vault-bash-completion.sh $out/share/bash-completion/completions/vault
   '';
 
