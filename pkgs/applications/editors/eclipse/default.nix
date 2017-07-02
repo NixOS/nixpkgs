@@ -56,21 +56,21 @@ rec {
 
   ### Eclipse Modeling
 
-  eclipse-modeling = eclipse-modeling-46; # always point to latest
+  eclipse-modeling = eclipse-modeling-47; # always point to latest
 
-  eclipse-modeling-46 = buildEclipse {
-    name = "eclipse-modeling-4.6";
+  eclipse-modeling-47 = buildEclipse {
+    name = "eclipse-modeling-4.7";
     description = "Eclipse Modeling Tools";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/1a/eclipse-modeling-neon-1a-linux-gtk-x86_64.tar.gz;
-          sha1 = "3695fd049c4cca2d235f424557e19877795a8183";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-modeling-oxygen-R-linux-gtk-x86_64.tar.gz;
+          sha512 = "3b9a7ad4b5d6b77fbdd64e8d323e0adb6c2904763ad042b374b4d87cef8607408cb407e395870fc755d58c0c800e20818adcf456ebe193d76cede16c5fe12271";
         }
       else
         fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/1a/eclipse-modeling-neon-1a-linux-gtk.tar.gz;
-          sha1 = "fa0694a0b44e8e9c2301417f84dba45cf9ac6e61";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-modeling-oxygen-R-linux-gtk.tar.gz;
+          sha512 = "b8597c1dec117e69c72a5e1a53e09b1f81a7c9de86ed7e71a9d007664603202df301745f186ded02b2e76410345863e80a2ba40867d6848e5375601289999206";
         };
   };
 
