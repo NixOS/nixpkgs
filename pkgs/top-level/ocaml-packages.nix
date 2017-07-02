@@ -226,6 +226,8 @@ let
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
+    inotify = callPackage ../development/ocaml-modules/inotify { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
