@@ -290,7 +290,7 @@ let
 
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { };
     lambdaTerm =
-      if lib.versionOlder "4.01" ocaml.version
+      if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lambda-term { }
       else lambdaTerm-1_6;
 
