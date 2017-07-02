@@ -39,6 +39,7 @@ buildGoPackage rec {
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
+    cp -R $src/shell $out/share/shell
   '';
 
   meta = with stdenv.lib; {
