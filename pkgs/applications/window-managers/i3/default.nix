@@ -1,7 +1,9 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
-, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
-, yajl, xcb-util-cursor, coreutils, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run, symlinkJoin, configFile ? null }:
+{ stdenv, fetchurl, which, pkgconfig, makeWrapper, distributeManpages
+, libxcb, xcbutilkeysyms, xcbutil, xcbutilwm, xcbutilxrm, symlinkJoin
+, libstartup_notification, libX11, pcre, libev, yajl, xcb-util-cursor
+, coreutils, perl, pango, perlPackages, libxkbcommon, xorgserver, xvfb_run
+, configFile ? null
+}:
 
 let
   version = "4.13";
@@ -32,6 +34,16 @@ let
       patchShebangs .
     '';
 
+    postInstall = ''
+      wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
+      for program in $out/bin/i3-sensible-*; do
+        sed -i 's/which/command -v/' $program
+      done
+      # docs & manpages
+      install -Dm644 --target-directory $out/share/doc/i3/html docs/*
+      ${distributeManpages} man $out/share
+    '';
+
     # Tests have been failing (at least for some people in some cases)
     # and have been disabled until someone wants to fix them. Some
     # initial digging uncovers that the tests call out to `git`, which
@@ -44,13 +56,6 @@ let
     ''
       (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
       ! grep -q '^not ok' testcases/latest/complete-run.log
-    '';
-
-    postInstall = ''
-      wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
-      for program in $out/bin/i3-sensible-*; do
-        sed -i 's/which/command -v/' $program
-      done
     '';
 
     separateDebugInfo = true;
