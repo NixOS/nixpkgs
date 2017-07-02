@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gtk3, intltool, json_c, lcms2, libpng, librsvg,
+{ stdenv, fetchFromGitHub, gtk3, intltool, json_c, lcms2, libpng, librsvg,
   pkgconfig, python2Packages, scons, swig, wrapGAppsHook }:
 
 let
@@ -7,10 +7,12 @@ in stdenv.mkDerivation rec {
   name = "mypaint-${version}";
   version = "1.2.1";
 
-  src = fetchgit {
-    url = "https://github.com/mypaint/mypaint.git";
+  src = fetchFromGitHub {
+    owner = "mypaint";
+    repo = "mypaint";
     rev = "bcf5a28d38bbd586cc9d4cee223f849fa303864f";
     sha256 = "1zwx7n629vz1jcrqjqmw6vl6sxdf81fq6a5jzqiga8167gg8s9pf";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ intltool pkgconfig scons swig wrapGAppsHook ];
