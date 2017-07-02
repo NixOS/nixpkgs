@@ -36,6 +36,7 @@ let
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
 
       ${optionalString (cfg.recommendedOptimisation) ''
         # optimisation
@@ -116,6 +117,7 @@ let
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
       ${cfg.httpConfig}
     }''}
 
