@@ -37,7 +37,7 @@ let
       [ cups.out additionalBackends cups-filters pkgs.ghostscript ]
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
-    pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
+    pathsToLink = [ "/lib" "/share/cups" "/bin" ];
     postBuild = cfg.bindirCmds;
     ignoreCollisions = true;
   };
