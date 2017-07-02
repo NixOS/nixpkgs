@@ -129,7 +129,7 @@ let
     cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1.0.nix { };
 
     cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
-      lwt = ocaml_lwt;
+      lwt = lwt2;
     };
 
     cohttp =
@@ -138,7 +138,7 @@ let
       else cohttp_p4;
 
     conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
-       lwt = ocaml_lwt;
+       lwt = lwt2;
     };
 
     conduit =
@@ -182,7 +182,7 @@ let
 
     eff = callPackage ../development/interpreters/eff { };
 
-    eliom = callPackage ../development/ocaml-modules/eliom { };
+    eliom = callPackage ../development/ocaml-modules/eliom { lwt = lwt2; };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
@@ -266,7 +266,7 @@ let
       pcre = ocaml_pcre;
     };
 
-    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
+    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
@@ -288,7 +288,7 @@ let
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
-    lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { };
+    lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lambda-term { }
@@ -302,11 +302,15 @@ let
       lwt = ocaml_lwt;
     };
 
+    lwt2 = callPackage ../development/ocaml-modules/lwt { };
+
     lwt3 = if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lwt {
         version = "3.0.0";
       }
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
+
+    ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
 
     lwt_react = callPackage ../development/ocaml-modules/lwt_react {
       lwt = lwt3;
@@ -318,7 +322,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
+    markup = callPackage ../development/ocaml-modules/markup { lwt = lwt2; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -382,8 +386,6 @@ let
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
-    ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
-
     ocaml-migrate-parsetree = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
@@ -431,7 +433,7 @@ let
 
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
-    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { lwt = lwt2; };
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 

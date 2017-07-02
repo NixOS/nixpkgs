@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocaml_lwt, menhir, ocsigen_deriving, ppx_deriving, camlp4, ocamlbuild
+{ stdenv, fetchurl, ocaml, findlib, lwt, menhir, ocsigen_deriving, ppx_deriving, camlp4, ocamlbuild
 , cmdliner, tyxml, reactivedata, cppo, which, base64, uchar, yojson
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib menhir ocsigen_deriving ocamlbuild
                  cmdliner reactivedata cppo which base64 ]
   ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast ocaml.version "4.02") [ yojson tyxml ];
-  propagatedBuildInputs = [ ocaml_lwt camlp4 ppx_deriving ]
+  propagatedBuildInputs = [ lwt camlp4 ppx_deriving ]
   ++ stdenv.lib.optional (version == "2.8.4") uchar;
 
   patches = [ ./Makefile.conf.diff ];
