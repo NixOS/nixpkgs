@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    makeFlags="V=1 CUPSFILTER=$out/lib/cups/filter CUPSPPD=$out/share/cups/model"
+    makeFlags="V=1 DISABLE_JBIG=1 CUPSFILTER=$out/lib/cups/filter CUPSPPD=$out/share/cups/model"
   '';
 
   buildInputs = [cups zlib];
