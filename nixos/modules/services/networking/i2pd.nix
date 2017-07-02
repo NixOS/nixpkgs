@@ -28,15 +28,15 @@ let
   };
 
   mkKeyedEndpointOpt = name: addr: port: keyFile:
-  (mkEndpointOpt name addr port) // {
-    keys = mkOption {
-      type = types.str;
-      default = "";
-      description = ''
-        File to persist ${lib.toUpper name} keys.
-      '';
+    (mkEndpointOpt name addr port) // {
+      keys = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          File to persist ${lib.toUpper name} keys.
+        '';
+      };
     };
-  };
 
   commonTunOpts = let
     i2cpOpts = {
@@ -59,7 +59,7 @@ let
       description = "Number of ElGamal/AES tags to send.";
       default = 40;
     };
-   destination = mkOption {
+    destination = mkOption {
       type = types.str;
       description = "Remote endpoint, I2P hostname or b32.i2p address.";
     };
@@ -70,84 +70,85 @@ let
     };
   } // mkEndpointOpt name "127.0.0.1" 0;
 
-  i2pdConf = pkgs.writeText "i2pd.conf"
-  ''
-  loglevel = ${cfg.logLevel}
+  i2pdConf = pkgs.writeText "i2pd.conf" ''
+    # DO NOT EDIT -- this file has been generated automatically.
+    loglevel = ${cfg.logLevel}
 
-  ipv4 = ${boolToString cfg.enableIPv4}
-  ipv6 = ${boolToString cfg.enableIPv6}
-  notransit = ${boolToString cfg.notransit}
-  floodfill = ${boolToString cfg.floodfill}
-  netid = ${toString cfg.netid}
-  ${if isNull cfg.bandwidth then "" else "bandwidth = ${toString cfg.bandwidth}" }
-  ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
+    ipv4 = ${boolToString cfg.enableIPv4}
+    ipv6 = ${boolToString cfg.enableIPv6}
+    notransit = ${boolToString cfg.notransit}
+    floodfill = ${boolToString cfg.floodfill}
+    netid = ${toString cfg.netid}
+    ${if isNull cfg.bandwidth then "" else "bandwidth = ${toString cfg.bandwidth}" }
+    ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
 
-  [limits]
-  transittunnels = ${toString cfg.limits.transittunnels}
+    [limits]
+    transittunnels = ${toString cfg.limits.transittunnels}
 
-  [upnp]
-  enabled = ${boolToString cfg.upnp.enable}
-  name = ${cfg.upnp.name}
+    [upnp]
+    enabled = ${boolToString cfg.upnp.enable}
+    name = ${cfg.upnp.name}
 
-  [precomputation]
-  elgamal = ${boolToString cfg.precomputation.elgamal}
+    [precomputation]
+    elgamal = ${boolToString cfg.precomputation.elgamal}
 
-  [reseed]
-  verify = ${boolToString cfg.reseed.verify}
-  file = ${cfg.reseed.file}
-  urls = ${builtins.concatStringsSep "," cfg.reseed.urls}
+    [reseed]
+    verify = ${boolToString cfg.reseed.verify}
+    file = ${cfg.reseed.file}
+    urls = ${builtins.concatStringsSep "," cfg.reseed.urls}
 
-  [addressbook]
-  defaulturl = ${cfg.addressbook.defaulturl}
-  subscriptions = ${builtins.concatStringsSep "," cfg.addressbook.subscriptions}
-  ${flip concatMapStrings
+    [addressbook]
+    defaulturl = ${cfg.addressbook.defaulturl}
+    subscriptions = ${builtins.concatStringsSep "," cfg.addressbook.subscriptions}
+
+    ${flip concatMapStrings
       (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
-      (proto: let portStr = toString proto.port; in
-        ''
-          [${proto.name}]
-          enabled = ${boolToString proto.enable}
-          address = ${proto.address}
-          port = ${toString proto.port}
-          ${if proto ? keys then "keys = ${proto.keys}" else ""}
-          ${if proto ? auth then "auth = ${boolToString proto.auth}" else ""}
-          ${if proto ? user then "user = ${proto.user}" else ""}
-          ${if proto ? pass then "pass = ${proto.pass}" else ""}
-          ${if proto ? outproxy then "outproxy = ${proto.outproxy}" else ""}
-          ${if proto ? outproxyPort then "outproxyport = ${toString proto.outproxyPort}" else ""}
-        '')
-      }
+      (proto: let portStr = toString proto.port; in ''
+        [${proto.name}]
+        enabled = ${boolToString proto.enable}
+        address = ${proto.address}
+        port = ${toString proto.port}
+        ${if proto ? keys then "keys = ${proto.keys}" else ""}
+        ${if proto ? auth then "auth = ${boolToString proto.auth}" else ""}
+        ${if proto ? user then "user = ${proto.user}" else ""}
+        ${if proto ? pass then "pass = ${proto.pass}" else ""}
+        ${if proto ? outproxy then "outproxy = ${proto.outproxy}" else ""}
+        ${if proto ? outproxyPort then "outproxyport = ${toString proto.outproxyPort}" else ""}
+      '')
+    }
   '';
 
   i2pdTunnelConf = pkgs.writeText "i2pd-tunnels.conf" ''
-  ${flip concatMapStrings
-    (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
-    (tun: let portStr = toString tun.port; in ''
-  [${tun.name}]
-  type = client
-  destination = ${tun.destination}
-  keys = ${tun.keys}
-  address = ${tun.address}
-  port = ${toString tun.port}
-  inbound.length = ${toString tun.inbound.length}
-  outbound.length = ${toString tun.outbound.length}
-  inbound.quantity = ${toString tun.inbound.quantity}
-  outbound.quantity = ${toString tun.outbound.quantity}
-  crypto.tagsToSend = ${toString tun.crypto.tagsToSend}
-  '')
-  }
-  ${flip concatMapStrings
-    (collect (tun: tun ? port && tun ? host) cfg.inTunnels)
-    (tun: let portStr = toString tun.port; in ''
-  [${tun.name}]
-  type = server
-  destination = ${tun.destination}
-  keys = ${tun.keys}
-  host = ${tun.address}
-  port = ${tun.port}
-  inport = ${tun.inPort}
-  accesslist = ${builtins.concatStringsSep "," tun.accessList}
-  '')
-  }
+    # DO NOT EDIT -- this file has been generated automatically.
+    ${flip concatMapStrings
+      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
+      (tun: let portStr = toString tun.port; in ''
+        [${tun.name}]
+        type = client
+        destination = ${tun.destination}
+        keys = ${tun.keys}
+        address = ${tun.address}
+        port = ${toString tun.port}
+        inbound.length = ${toString tun.inbound.length}
+        outbound.length = ${toString tun.outbound.length}
+        inbound.quantity = ${toString tun.inbound.quantity}
+        outbound.quantity = ${toString tun.outbound.quantity}
+        crypto.tagsToSend = ${toString tun.crypto.tagsToSend}
+      '')
+    }
+    ${flip concatMapStrings
+      (collect (tun: tun ? port && tun ? host) cfg.inTunnels)
+      (tun: let portStr = toString tun.port; in ''
+        [${tun.name}]
+        type = server
+        destination = ${tun.destination}
+        keys = ${tun.keys}
+        host = ${tun.address}
+        port = ${tun.port}
+        inport = ${tun.inPort}
+        accesslist = ${builtins.concatStringsSep "," tun.accessList}
+      '')
+    }
   '';
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
