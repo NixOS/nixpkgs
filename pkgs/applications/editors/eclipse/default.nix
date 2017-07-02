@@ -18,21 +18,21 @@ rec {
 
   ### Eclipse CPP
 
-  eclipse-cpp = eclipse-cpp-46; # always point to latest
+  eclipse-cpp = eclipse-cpp-47; # always point to latest
 
-  eclipse-cpp-46 = buildEclipse {
-    name = "eclipse-cpp-4.6.0";
-    description = "Eclipse IDE for C/C++ Developers, Neon release";
+  eclipse-cpp-47 = buildEclipse {
+    name = "eclipse-cpp-4.7.0";
+    description = "Eclipse IDE for C/C++ Developers, Oxygen release";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/R/eclipse-cpp-neon-R-linux-gtk-x86_64.tar.gz;
-          sha256 = "09fqsgvbjfdqvn7z03crkii34z4bsb34y272q68ib8741bxk0i6m";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-cpp-oxygen-R-linux-gtk-x86_64.tar.gz;
+          sha512 = "813c791e739d7d0e2ab242a5bacadca135bbeee20ef97aa830353cd90f63fa6e9c89cfcc6aadf635c742befe035bd6e3f15103013f63c419f6144e86ebde3ed1";
         }
       else if stdenv.system == "i686-linux" then
         fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/neon/R/eclipse-cpp-neon-R-linux-gtk.tar.gz;
-          sha256 = "0a12qmqq22v7sbmwn1hjv1zcrkmp64bf0ajmdjljhs9ac79mxn5h";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/R/eclipse-cpp-oxygen-R-linux-gtk.tar.gz;
+          sha512 = "2b50f4a00306a89cda1aaaa606e62285cacbf93464a9dd3f3319dca3e2c578b802e685de6f78e5e617d269e21271188effe73d41f491a6de946e28795d82db8a";
         }
       else throw "Unsupported system: ${stdenv.system}";
   };
