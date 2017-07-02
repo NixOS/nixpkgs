@@ -251,6 +251,8 @@ let
 
     git-http = callPackage ../development/ocaml-modules/git-http { };
 
+    git-unix = callPackage ../development/ocaml-modules/git-unix { };
+
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
