@@ -168,20 +168,26 @@ let
     };
   };
 
-in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
-  name = "neovim-${neovim.version}-configured";
-  inherit (neovim) version meta;
+  wrapNeovim = neovim: stdenv.mkDerivation {
+    name = "neovim-${neovim.version}-configured";
+    inherit (neovim) version meta;
 
-  nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
-  buildCommand = ''
-    mkdir -p $out/bin
-    for item in ${neovim}/bin/*; do
-      ln -s $item $out/bin/
-    done
-  '' + optionalString vimAlias ''
-    ln -s $out/bin/nvim $out/bin/vim
-  '' + optionalString (configure != null) ''
-    wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
-  '';
-}
+    buildCommand = ''
+      mkdir -p $out/bin
+      for item in ${neovim}/bin/*; do
+        ln -s $item $out/bin/
+      done
+    '' + optionalString vimAlias ''
+      ln -s $out/bin/nvim $out/bin/vim
+    '' + optionalString (configure != null) ''
+      wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
+    '';
+
+    passthru = {
+      overrideAttrs = attrs: (wrapNeovim (neovim.overrideAttrs attrs));
+    };
+  };
+
+in if (vimAlias == false && configure == null) then neovim else wrapNeovim neovim
