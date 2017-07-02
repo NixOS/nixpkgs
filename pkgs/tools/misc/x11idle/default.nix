@@ -8,7 +8,10 @@ stdenv.mkDerivation { name = "x11idle";
       unpackPhase = ":";
       buildInputs = [ xlibs.libXScrnSaver xlibs.libX11 ];
       meta = {
-           description = "Gather the current idle time from X11.";
+           description = "Compute consecutive idle time for current X11 session with millisecond resolution";
+           longDescription = ''
+             Idle time passes when the user does not act, i.e. when the user doesn't move the mouse or use the keyboard.
+           '';
            homepage = "http://orgmode.org/";
            license = stdenv.lib.licenses.free;
            platforms = stdenv.lib.platforms.linux;
