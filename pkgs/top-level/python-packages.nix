@@ -136,6 +136,8 @@ in {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  email_validator = callPackage ../development/python-modules/email-validator { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
