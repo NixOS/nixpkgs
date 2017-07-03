@@ -6664,6 +6664,10 @@ with pkgs;
 
   cscope = callPackage ../development/tools/misc/cscope { };
 
+  csmith = callPackage ../development/tools/misc/csmith {
+    inherit (perlPackages) perl SysCPU;
+  };
+
   csslint = callPackage ../development/web/csslint { };
 
   libcxx = llvmPackages.libcxx;
