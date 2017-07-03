@@ -26,7 +26,9 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "data" ];
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -delete_rpath $out/lib $bin/bin/gogs
+  '' + ''
     mkdir $data
     cp -R $src/{public,templates} $data
 
