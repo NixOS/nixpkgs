@@ -11381,6 +11381,28 @@ in {
     };
   };
 
+   sphfile = buildPythonPackage rec {
+    name = "sphfile-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sphfile/${name}.tar.gz";
+      sha256 = "1ly9746xrzbiax9cxr5sxlg0wvf6fdxcrgwsqqxckk3wnqfypfrd";
+    };
+
+    propagatedBuildInputs = with self; [ numpy ];
+
+    doCheck = false;
+
+    meta = {
+      description = "Numpy-based NIST SPH audio-file reader";
+      homepage    = "https://github.com/mcfletch/sphfile";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ abbradar ];
+      platforms   = platforms.unix;
+    };
+  }; 
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.5";
 
