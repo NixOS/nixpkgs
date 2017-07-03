@@ -652,6 +652,10 @@ in
       inherit (cfg) layout xkbDir;
     } ''
       if sed -n -e ':i /^! \(layout\|variant\) *$/ {
+          # Loop through all of the layouts/variants until we hit another ! at
+          # the start of the line or the line is empty ('t' branches only if
+          # the last substitution was successful, so if the line is empty the
+          # substition will fail).
           :l; n; /^!/bi; s/^ *\([^ ]\+\).*/\1/p; tl
          }' "$xkbDir/rules/base.lst" | grep -qxF "$layout"
       then
