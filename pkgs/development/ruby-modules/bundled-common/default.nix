@@ -140,7 +140,7 @@ let
           name = "${pname}-interactive-environment";
           nativeBuildInputs = [ wrappedRuby basicEnv ];
           shellHook = ''
-            export OLD_IRBRC="$IRBRC"
+            export OLD_IRBRC=$IRBRC
             export IRBRC=${irbrc}
           '';
           buildCommand = ''
