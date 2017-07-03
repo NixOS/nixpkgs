@@ -17564,6 +17564,7 @@ with pkgs;
   gnome3 = gnome3_22;
 
   gnomeExtensions = {
+    caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
   };
 
