@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests coverage ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/, "argparse"//' setup.py
   '';
 
