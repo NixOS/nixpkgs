@@ -24018,6 +24018,8 @@ in {
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
+  ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
+
   umalqurra = buildPythonPackage rec {
     name = "umalqurra-${version}";
     version = "0.2";
