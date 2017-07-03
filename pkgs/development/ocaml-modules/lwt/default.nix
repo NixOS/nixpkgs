@@ -5,6 +5,10 @@
 , version ? if stdenv.lib.versionAtLeast ocaml.version "4.02" then "2.7.1" else "2.6.0"
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4"
+then throw "lwt is not available for OCaml ${ocaml.version}"
+else
+
 let sha256 = {
   "3.0.0" = "0wwhnl9hppixcsdisinj1wmffx0nv6hkpm01z9qvkngkrazi3i88";
   "2.7.1" = "0w7f59havrl2fsnvs84lm7wlqpsrldg80gy5afpnpr21zkw22g8w";
