@@ -58,4 +58,6 @@ self: super: {
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
+  # Newer versions require ghc>=8.2
+  apply-refact = super.apply-refact_0_3_0_1;
 }

@@ -166,7 +166,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      collectd = 144;
+      #collectd = 144; #unused
       consul = 145;
       mailpile = 146;
       redmine = 147;

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
-, libpng, sqlite, libspatialite, poppler
+, libpng, sqlite, libspatialite, poppler, hdf4
 , libiconv
 , netcdfSupport ? true, netcdf, hdf5 , curl
 }:
@@ -17,15 +17,20 @@ composableDerivation.composableDerivation {} (fixed: rec {
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
-    libspatialite poppler ]
+    libspatialite poppler hdf4 ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ stdenv.lib.optional stdenv.isDarwin libiconv
   ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   hardeningDisable = [ "format" ];
 
-  # Unset CC and CXX as they confuse libtool.
-  preConfigure = "unset CC CXX";
+  # - Unset CC and CXX as they confuse libtool.
+  # - teach gdal that libdf is the legacy name for libhdf
+  preConfigure = ''
+      unset CC CXX
+      substituteInPlace configure \
+      --replace "-lmfhdf -ldf" "-lmfhdf -lhdf"
+    '';
 
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"
@@ -41,6 +46,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
+    "--with-hdf4=${hdf4.dev}" # optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 

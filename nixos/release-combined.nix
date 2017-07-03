@@ -52,7 +52,7 @@ in rec {
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
-        (all nixos.tests.installer.zfsroot)
+        nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)

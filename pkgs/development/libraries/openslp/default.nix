@@ -11,13 +11,13 @@ stdenv.mkDerivation {
   patches = [
     (fetchpatch {
       name = "openslp-2.0.0-null-pointer-deref.patch";
-      url = "https://svnweb.mageia.org/packages/cauldron/openslp/current/SOURCES/openslp-2.0.0-null-pointer-deref.patch?revision=1019712&view=co";
+      url = "https://src.fedoraproject.org/cgit/rpms/openslp.git/plain/openslp-2.0.0-null-pointer-deref.patch";
       sha256 = "186f3rj3z2lf5h1lpbhqk0szj2a9far1p3mjqg6422f29yjfnz6a";
     })
     (fetchpatch {
       name = "openslp-2.0.0-CVE-2016-7567.patch";
-      url = "https://svnweb.mageia.org/packages/cauldron/openslp/current/SOURCES/openslp-2.0.0-CVE-2016-7567.patch?revision=1057233&view=co";
-      sha256 = "1zrgql91vjjl2v7brlibc8jqndnjz9fclqbdn0b6fklkpwznprny";
+      url = "https://src.fedoraproject.org/cgit/rpms/openslp.git/plain/openslp-2.0.0-cve-2016-7567.patch";
+      sha256 = "0zp61axx93b7nrbsyhn2x4dnw7n9y6g4rys21hyqxk4khrnc2yr9";
     })
   ];
 

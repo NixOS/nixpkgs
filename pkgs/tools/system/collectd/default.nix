@@ -52,8 +52,20 @@ stdenv.mkDerivation rec {
 
   # for some reason libsigrok isn't auto-detected
   configureFlags =
+    [ "--localstatedir=/var" ] ++
     stdenv.lib.optional (libsigrok != null) "--with-libsigrok" ++
     stdenv.lib.optional (python != null) "--with-python=${python}/bin/python";
+
+  # do not create directories in /var during installPhase
+  postConfigure = ''
+     substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
+  '';
+
+  postInstall = ''
+    if [ -d $out/share/collectd/java ]; then
+      mv $out/share/collectd/java $out/share/
+    fi
+  '';
 
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";
