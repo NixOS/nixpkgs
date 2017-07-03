@@ -20,12 +20,24 @@ in
 
   options = {
 
+    networking.extraLocalHosts = lib.mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "localhost.localdomain" "workinprogress.example.com" ];
+      description = ''
+        Additional entries to be appended to 127.0.0.1 entry in <filename>/etc/hosts</filename>.
+      '';
+    };
+
+
     networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
         Additional entries to be appended to <filename>/etc/hosts</filename>.
+        Note that entries for 127.0.0.1 will not always work correctly if added from here.
+        They should be added via <literal>networking.extraLocalHosts</literal>.
       '';
     };
 
@@ -187,11 +199,11 @@ in
         "rpc".source = pkgs.glibc.out + "/etc/rpc";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        "hosts".text =
+        "hosts".text = let foo = concatStringsSep " " cfg.extraLocalHosts; in
           ''
-            127.0.0.1 localhost
+            127.0.0.1 localhost ${foo}
             ${optionalString cfg.enableIPv6 ''
-              ::1 localhost
+              ::1 localhost ${foo}
             ''}
             ${cfg.extraHosts}
           '';
