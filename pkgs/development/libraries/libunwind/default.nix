@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1jsslwkilwrsj959dc8b479qildawz67r8m4lzxm7glcwa8cngiz";
   };
 
+  patches = [
+    ./version-1.2.1.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [ "out" "dev" ];
