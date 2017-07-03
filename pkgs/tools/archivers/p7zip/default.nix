@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/p/p7zip/16.02+dfsg-2/debian/patches/12-CVE-2016-9296.patch";
-      sha256 = "1i7099h27gmb9dv0lb7jnqfm504gs1c3129r6kvi94yb2gzrzk41";
+    (fetchpatch rec {
+      name = "CVE-2016-9296.patch";
+      url = "https://src.fedoraproject.org/cgit/rpms/p7zip.git/plain/${name}?id=4b3973f6a5d";
+      sha256 = "09wbkzai46bwm8zmplsz0m4jck3qn7snr68i9p1gsih300zidj0m";
     })
   ];
 
