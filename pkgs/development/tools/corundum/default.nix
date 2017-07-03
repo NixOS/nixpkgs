@@ -7,7 +7,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "Tool and libraries for maintaining Ruby gems.";
-    homepage    = http://sass-lang.com/;
+    homepage    = https://github.com/nyarly/corundum;
     license     = licenses.mit;
     maintainers = [ maintainers.nyarly ];
     platforms   = platforms.unix;
