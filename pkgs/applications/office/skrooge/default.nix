@@ -1,8 +1,9 @@
 { mkDerivation, lib, fetchurl,
   cmake, extra-cmake-modules, qtwebkit, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
-  kiconthemes, knewstuff, sqlcipher, qca-qt5, kdelibs4support, kactivities,
-  knotifyconfig, krunner, libofx, shared_mime_info }:
+  kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
+  kguiaddons, knotifyconfig, krunner, kwindowsystem, libofx, shared_mime_info
+}:
 
 mkDerivation rec {
   name = "skrooge-${version}";
@@ -17,7 +18,7 @@ mkDerivation rec {
 
   buildInputs = [ qtwebkit qtscript grantlee kxmlgui kwallet kparts kdoctools
     kjobwidgets kdesignerplugin kiconthemes knewstuff sqlcipher qca-qt5
-    kdelibs4support kactivities knotifyconfig krunner libofx
+    kactivities karchive kguiaddons knotifyconfig krunner kwindowsystem libofx
   ];
 
   meta = with lib; {
