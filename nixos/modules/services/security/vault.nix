@@ -112,6 +112,8 @@ in
       after = [ "network.target" ]
            ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
+      restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
+
       preStart = optionalString (cfg.storagePath != null) ''
         install -d -m0700 -o vault -g vault "${cfg.storagePath}"
       '';
