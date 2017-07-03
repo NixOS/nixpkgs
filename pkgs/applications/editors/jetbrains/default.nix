@@ -226,12 +226,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2017.1.4"; /* updated by script */
+    version = "2017.1.5"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "c351e44a176add5b1fc7462e780b3fbe157691c3e23552d9d6b6531ee3830338"; /* updated by script */
+      sha256 = "8847c35761fcf6fc7a1d3f2bed0fa3971fbf28721c144f41d21feb473bb212dc"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "datagrip_2017_1";
@@ -239,12 +239,12 @@ in
 
   gogland = buildGogland rec {
     name = "gogland-${version}";
-    version = "171.4694.35";
+    version = "171.4694.61"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0q2f8bi2i49j0xcpn824sihz2015jhn338cjaqy0jd988nxik6jk";
+      sha256 = "8e9462fc7c5cc7dc110ea2257b920a55d7d52ea874a53567e5d19381a1fcb269"; /* updated by script */
     };
     wmClass = "jetbrains-gogland";
     update-channel = "gogland_1.0_EAP";

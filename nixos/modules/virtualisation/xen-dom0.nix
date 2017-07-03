@@ -267,26 +267,36 @@ in
         mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
         '';
-      serviceConfig.ExecStart = ''
-        ${cfg.stored}${optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"} --no-fork
-        '';
+      serviceConfig = if cfg.package.version < "4.8" then
+        { ExecStart = ''
+            ${cfg.stored}${optionalString cfg.trace " -T /var/log/xen/xenstored-trace.log"} --no-fork
+            '';
+        } else {
+          ExecStart = ''
+            ${cfg.package}/etc/xen/scripts/launch-xenstore
+            '';
+          Type            = "notify";
+          RemainAfterExit = true;
+          NotifyAccess    = "all";
+        };
       postStart = ''
-        time=0
-        timeout=30
-        # Wait for xenstored to actually come up, timing out after 30 seconds
-        while [ $time -lt $timeout ] && ! `${cfg.package}/bin/xenstore-read -s / >/dev/null 2>&1` ; do
-            time=$(($time+1))
-            sleep 1
-        done
+        ${optionalString (cfg.package.version < "4.8") ''
+          time=0
+          timeout=30
+          # Wait for xenstored to actually come up, timing out after 30 seconds
+          while [ $time -lt $timeout ] && ! `${cfg.package}/bin/xenstore-read -s / >/dev/null 2>&1` ; do
+              time=$(($time+1))
+              sleep 1
+          done
 
-        # Exit if we timed out
-        if ! [ $time -lt $timeout ] ; then
-            echo "Could not start Xenstore Daemon"
-            exit 1
-        fi
-
-        ${cfg.package}/bin/xenstore-write "/local/domain/0/name" "Domain-0"
-        ${cfg.package}/bin/xenstore-write "/local/domain/0/domid" 0
+          # Exit if we timed out
+          if ! [ $time -lt $timeout ] ; then
+              echo "Could not start Xenstore Daemon"
+              exit 1
+          fi
+        ''}
+        echo "executing xen-init-dom0"
+        ${cfg.package}/lib/xen/bin/xen-init-dom0
         '';
     };
 
@@ -306,6 +316,7 @@ in
       description = "Xen Console Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "xen-store.service" ];
+      requires = [ "xen-store.service" ];
       preStart = ''
         mkdir -p /var/run/xen
         ${optionalString cfg.trace "mkdir -p /var/log/xen"}
@@ -313,7 +324,9 @@ in
         '';
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}/bin/xenconsoled${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
+          ${cfg.package}/bin/xenconsoled\
+            ${optionalString ((cfg.package.version >= "4.8")) " -i"}\
+            ${optionalString cfg.trace " --log=all --log-dir=/var/log/xen"}
           '';
       };
     };
@@ -323,6 +336,7 @@ in
       description = "Xen Qemu Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "xen-console.service" ];
+      requires = [ "xen-store.service" ];
       serviceConfig.ExecStart = ''
         ${cfg.qemu} -xen-attach -xen-domid 0 -name dom0 -M xenpv \
            -nographic -monitor /dev/null -serial /dev/null -parallel /dev/null
@@ -333,7 +347,7 @@ in
     systemd.services.xen-watchdog = {
       description = "Xen Watchdog Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "xen-qemu.service" ];
+      after = [ "xen-qemu.service" "xen-domains.service" ];
       serviceConfig.ExecStart = "${cfg.package}/bin/xenwatchdogd 30 15";
       serviceConfig.Type = "forking";
       serviceConfig.RestartSec = "1";
@@ -426,6 +440,7 @@ in
       description = "Xen domains - automatically starts, saves and restores Xen domains";
       wantedBy = [ "multi-user.target" ];
       after = [ "xen-bridge.service" "xen-qemu.service" ];
+      requires = [ "xen-bridge.service" "xen-qemu.service" ];
       ## To prevent a race between dhcpcd and xend's bridge setup script
       ## (which renames eth* to peth* and recreates eth* as a virtual
       ## device), start dhcpcd after xend.

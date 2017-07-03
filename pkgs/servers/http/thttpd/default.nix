@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i -e 's/getline/getlineX/' extras/htpasswd.c
+    sed -i -e 's/chmod 2755/chmod 755/' extras/Makefile.in
   '';
 
   preInstall = ''

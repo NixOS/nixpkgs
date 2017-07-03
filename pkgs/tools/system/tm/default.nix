@@ -10,10 +10,6 @@ stdenv.mkDerivation {
     sed -i 's@/usr/bin/install@install@g ; s/gcc/cc/g' Makefile
   '';
 
-  crossAttrs = {
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
-  };
-
   src = fetchurl {
     url = http://vicerveza.homeunix.net/~viric/soft/tm/tm-0.4.1.tar.gz;
     sha256 = "3b389bc03b6964ad5ffa57a344b891fdbcf7c9b2604adda723a863f83657c4a0";

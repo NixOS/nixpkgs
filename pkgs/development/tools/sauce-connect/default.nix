@@ -4,18 +4,18 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "sauce-connect-${version}";
-  version = "4.4.2";
+  version = "4.4.7";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
-      sha256 = "0n3c9ihrxqy4y4mzgchggqa2v7c0y9jw2yqnjdd7cf4nd24fixbq";
+      sha256 = "0n7x9mvv6sww0h77k3d8rms78vah0j48ndsv4vnxq9znwjiglmva";
     } else if stdenv.system == "i686-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
-      sha256 = "1pdvx4apd4x1bsyl8lhzlpv3jp3xzyv7yrsl3wjrql17p2asaba6";
+      sha256 = "1vwp8iqc5sk5kf7r86dld4767w4sm36hympnh1n2qza57ni7vy0g";
     } else {
       url = "https://saucelabs.com/downloads/sc-${version}-osx.zip";
-      sha256 = "03kn7i0a6mpxfc6mz9h560wadhmw5qxn15is7cl9kgkz5j874xlz";
+      sha256 = "1dwjysj3kjydz096bm5x0s1g3jm4a7y0qkgbsc6bwl44vxz81f66";
     }
   );
 

@@ -499,7 +499,7 @@ with stdenv.lib;
     KVM_APIC_ARCHITECTURE y
   ''}
   KVM_ASYNC_PF y
-  ${optionalString (versionAtLeast version "4.0") ''
+  ${optionalString ((versionAtLeast version "4.0") && (versionOlder version "4.12")) ''
     KVM_COMPAT? y
   ''}
   ${optionalString (versionOlder version "4.12") ''

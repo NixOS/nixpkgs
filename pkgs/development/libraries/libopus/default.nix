@@ -2,14 +2,14 @@
 , fixedPoint ? false, withCustomModes ? true }:
 
 let
-  version = "1.2";
+  version = "1.2.1";
 in
 stdenv.mkDerivation rec {
   name = "libopus-${version}";
 
   src = fetchurl {
     url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";
-    sha256 = "1ad9q2g9vivx409jdsslv1hrh5r616qz2pjm96y8ymsigfl4bnvp";
+    sha256 = "0ch7yzgg4bn1g36bpjsfrgs4n19c84d7wpdida6yzifrrhwx7byg";
   };
 
   outputs = [ "out" "dev" ];

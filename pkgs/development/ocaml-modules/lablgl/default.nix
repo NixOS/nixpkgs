@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     description = "OpenGL bindings for ocaml";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub vbgl ];
+    broken = stdenv.isDarwin;
   };
 }

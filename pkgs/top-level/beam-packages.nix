@@ -7,10 +7,10 @@ rec {
   interpreters = rec {
 
     # R18 is the default version.
-    erlang = erlangR18; # The main switch to change default Erlang version.
-    erlang_odbc = erlangR18_odbc;
-    erlang_javac = erlangR18_javac;
-    erlang_odbc_javac = erlangR18_odbc_javac;
+    erlang = erlangR19; # The main switch to change default Erlang version.
+    erlang_odbc = erlangR19_odbc;
+    erlang_javac = erlangR19_javac;
+    erlang_odbc_javac = erlangR19_odbc_javac;
 
     # These are standard Erlang versions, using the generic builder.
     erlangR16 = lib.callErlang ../development/interpreters/erlang/R16.nix {};

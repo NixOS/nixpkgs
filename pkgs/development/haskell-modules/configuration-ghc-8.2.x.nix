@@ -56,5 +56,7 @@ self: super: {
   # https://github.com/thoughtbot/yesod-auth-oauth2/pull/77
   yesod-auth-oauth2 = doJailbreak super.yesod-auth-oauth2;
 
+  # https://github.com/nominolo/ghc-syb/issues/20
+  ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
 }

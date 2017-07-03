@@ -7,23 +7,23 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" || stden
 
 stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "160.0.0";
+  version = "161.0.0";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "0lidnjcgpnyv6f8gjy44zr7kmgcr53c85zax0rdypqs6sx3sly2v";
+        sha256 = "43a78a9d2c3ee9d9e50200b1e90512cd53ded40b56e05effe31fe9847b1bdd4c";
       }
     else if stdenv.system == "x86_64-darwin" then
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
-        sha256 = "1v4j89pycndjq9ap3rig1s5njd6qp01d0fsgr8xl3vpipsrj93c0";
+        sha256 = "0706dbea1279be2bc98a497d1bfed61a9cc29c305d908a376bcdb4403035b323";
       }
     else
       fetchurl {
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "1558qxzvqxvv13lm6adrfcd7m3p21c4rw6hqqavz4xgf6nybz6g7";
+        sha256 = "7aa6094d1f9c87f4c2c4a6bdad6a1113aac5e72ea673e659d9acbb059dfd037e";
       };
 
 

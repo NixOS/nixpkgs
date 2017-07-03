@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-runas-user=nobody";
 
+  prePatch = ''
+    substituteInPlace Makefile.in --replace 02770 0770
+  '';
+
   preConfigure = ''
     # configure uses id to check environment; we don't want this check
     sed -re 's/^ID[=].*/ID="echo whatever"/' -i configure

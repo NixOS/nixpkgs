@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libpng, static ? false }:
+{ stdenv, fetchurl, libpng, static ? false
+, buildPlatform, hostPlatform
+}:
 
 # This package comes with its own copy of zlib, libpng and pngxtern
 
@@ -15,20 +17,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
 
   LDFLAGS = optional static "-static";
-  configureFlags = "--with-system-zlib --with-system-libpng";
+  configureFlags = [
+    "--with-system-zlib"
+    "--with-system-libpng"
+  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+    #"-prefix=$out"
+  ];
 
-  crossAttrs = {
-    CC="${stdenv.cross.config}-gcc";
-    LD="${stdenv.cross.config}-gcc";
-    AR="${stdenv.cross.config}-ar";
-    RANLIB="${stdenv.cross.config}-ranlib";
-    configurePhase = ''
-      ./configure -prefix="$out" --with-system-zlib --with-system-libpng
-    '';
-    postInstall = optional (stdenv.cross.libc == "msvcrt") ''
-      mv "$out"/bin/optipng "$out"/bin/optipng.exe
-    '';
-  };
+  postInstall = if hostPlatform != buildPlatform && hostPlatform.isWindows then ''
+    mv "$out"/bin/optipng{,.exe}
+  '' else null;
 
   meta = with stdenv.lib; {
     homepage = http://optipng.sourceforge.net/;
