@@ -3364,6 +3364,8 @@ with pkgs;
     graphicalSupport = true;
   };
 
+  nnn = callPackage ../applications/misc/nnn { };
+
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
   nox = callPackage ../tools/package-management/nox {
