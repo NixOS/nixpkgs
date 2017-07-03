@@ -2732,6 +2732,8 @@ with pkgs;
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
+  mailcatcher = callPackage ../development/web/mailcatcher { };
+
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
   matrix-synapse = callPackage ../servers/matrix-synapse { };

@@ -606,6 +606,7 @@
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
   zalakain = "Unai Zalakain <contact@unaizalakain.info>";
+  zarelit = "David Costa <david@zarel.net>";
   zauberpony = "Elmar Athmer <elmar@athmer.org>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
