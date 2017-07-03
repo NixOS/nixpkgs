@@ -15,7 +15,7 @@ rec {
     LittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
 
     BSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
-    Unix         = [ BSD Linux SunOS Hurd Cygwin ];
+    Unix         = [ BSD Darwin Linux SunOS Hurd Cygwin ];
 
     Darwin       = { kernel = kernels.darwin; };
     Linux        = { kernel = kernels.linux; };
