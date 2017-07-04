@@ -18725,10 +18725,10 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_10;
+    terraform_0_9_11;
 
   terraform_0_8 = terraform_0_8_8;
-  terraform_0_9 = terraform_0_9_10;
+  terraform_0_9 = terraform_0_9_11;
   terraform = terraform_0_9;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
