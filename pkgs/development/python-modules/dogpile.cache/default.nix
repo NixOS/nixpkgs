@@ -14,8 +14,10 @@ buildPythonPackage rec {
 
   # Disable concurrency tests that often fail,
   # probably some kind of timing issue.
-  prePatch = ''
+  postPatch = ''
     rm tests/test_lock.py
+    # Failing tests. https://bitbucket.org/zzzeek/dogpile.cache/issues/116
+    rm tests/cache/test_memcached_backend.py
   '';
 
   buildInputs = [ pytest pytestcov mock Mako ];
