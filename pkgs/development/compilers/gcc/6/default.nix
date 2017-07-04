@@ -59,7 +59,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "6.3.0";
+let version = "6.4.0";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
@@ -215,8 +215,8 @@ stdenv.mkDerivation ({
   builder = ../builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "17xjz30jb65hcf714vn9gcxvrrji8j20xm7n33qg1ywhyzryfsph";
+    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
+    sha256 = "1m0lr7938lw5d773dkvwld90hjlcq2282517d1gwvrfzmwgg42w5";
   };
 
   inherit patches;
