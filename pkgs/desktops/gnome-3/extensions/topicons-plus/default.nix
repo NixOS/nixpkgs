@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0pwpg72ihgj2jl9pg63y0hibdsl27srr3mab881w0gh17vwyixzi";
   };
 
-  nativeBuildInputs = [
-    glib gettext
-  ];
+  buildInputs = [ glib ];
+
+  nativeBuildInputs = [ gettext ];
 
   makeFlags = [ "INSTALL_PATH=$(out)/share/gnome-shell/extensions" ];
 
