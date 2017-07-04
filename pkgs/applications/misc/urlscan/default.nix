@@ -1,6 +1,6 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "urlscan-${version}";
   version = "0.8.6";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1v26fni64n0lbv37m35plh2bsrvhpb4ibgmg2mv05qfc3df721s5";
   };
 
-  propagatedBuildInputs = [ pythonPackages.urwid ];
+  propagatedBuildInputs = [ python3Packages.urwid ];
 
   meta = with stdenv.lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
