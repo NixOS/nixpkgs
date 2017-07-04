@@ -4523,9 +4523,7 @@ with pkgs;
 
   uriparser = callPackage ../development/libraries/uriparser {};
 
-  urlscan = callPackage ../applications/misc/urlscan {
-    pythonPackages = python3Packages;
-  };
+  urlscan = callPackage ../applications/misc/urlscan { };
 
   urlview = callPackage ../applications/misc/urlview {};
 
