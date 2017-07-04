@@ -114,6 +114,8 @@ let
     };
     camlimages = camlimages_4_1;
 
+    benchmark = callPackage ../development/ocaml-modules/benchmark { };
+
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
@@ -362,6 +364,8 @@ let
 
     core_p4 = callPackage ../development/ocaml-modules/core { };
 
+    obuild = callPackage ../development/ocaml-modules/obuild { };
+
     ocamlbuild =
     if lib.versionOlder "4.03" ocaml.version then
     callPackage ../development/tools/ocaml/ocamlbuild { }
@@ -551,6 +555,8 @@ let
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+    ptmap = callPackage ../development/ocaml-modules/ptmap { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     qcheck = callPackage ../development/ocaml-modules/qcheck { };
@@ -560,6 +566,8 @@ let
     re = callPackage ../development/ocaml-modules/re { };
 
     reason = callPackage ../development/compilers/reason { };
+
+    rope = callPackage ../development/ocaml-modules/rope { };
 
     rresult = callPackage ../development/ocaml-modules/rresult { };
 
