@@ -50,7 +50,7 @@ in
 
       databaseURI = mkOption {
         type = types.str;
-        default = "postgresql://privacyidea:privacyidea@localhost/privacyidea";
+        default = "postgresql:///privacyidea";
         description = ''
           Database as SQLAlchemy URI to use for PrivacyIDEA.
         '';
@@ -122,45 +122,56 @@ in
 
     environment.systemPackages = [ pkgs.privacyidea ];
 
+    services.postgresql.enable = mkDefault true;
+
     systemd.services.privacyidea = let
-        uwsgi = pkgs.uwsgi.override { plugins = [ "python2" ]; };
-        penv = uwsgi.python2.buildEnv.override {
-          extraLibs = [ pkgs.privacyidea ];
+      uwsgi = pkgs.uwsgi.override { plugins = [ "python2" ]; };
+      penv = uwsgi.python2.buildEnv.override {
+        extraLibs = [ pkgs.privacyidea ];
+      };
+      piuwsgi = pkgs.writeText "uwsgi.json" (builtins.toJSON {
+        uwsgi = {
+          plugins = [ "python2" ];
+          pythonpath = "${penv}/${uwsgi.python2.sitePackages}";
+          socket = "${cfg.runDir}/socket";
+          uid = cfg.user;
+          gid = cfg.group;
+          chmod-socket = 770;
+          chown-socket = "${cfg.user}:nginx";
+          chdir = cfg.stateDir;
+          wsgi-file = "${pkgs.privacyidea}/etc/privacyidea/privacyideaapp.wsgi";
+          processes = 4;
+          harakiri = 60;
+          reload-mercy = 8;
+          stats = "${cfg.runDir}/stats.socket";
+          max-requests = 2000;
+          limit-as = 512;
+          reload-on-as = 256;
+          reload-on-rss = 192;
+          no-orphans = true;
+          vacuum = true;
+          pyargv = piCfgFile;
         };
-        piuwsgi = pkgs.writeText "uwsgi.json" (builtins.toJSON {
-          uwsgi = {
-            plugins = [ "python2" ];
-            pythonpath = "${penv}/${uwsgi.python2.sitePackages}";
-            socket = "${cfg.runDir}/socket";
-            chmod-socket = 770;
-            chown-socket = "${cfg.user}:nginx";
-            chdir = cfg.stateDir;
-            wsgi-file = "${pkgs.privacyidea}/etc/privacyidea/privacyideaapp.wsgi";
-            processes = 4;
-            harakiri = 60;
-            reload-mercy = 8;
-            stats = "${cfg.runDir}/stats.socket";
-            max-requests = 2000;
-            limit-as = 512;
-            reload-on-as = 256;
-            reload-on-rss = 192;
-            no-orphans = true;
-            vacuum = true;
-            pyargv = piCfgFile;
-          };
-        }); in {
+      });
+    in {
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p ${cfg.stateDir} ${cfg.runDir}
         chown ${cfg.user}:${cfg.group} -R ${cfg.stateDir} ${cfg.runDir}
+        if ! test -e "${cfg.stateDir}/db-created"; then
+          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
+          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/createdb --owner ${cfg.user} privacyidea
+          touch "${cfg.stateDir}/db-created"
+        fi
       '';
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${uwsgi}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${piuwsgi}";
+        ExecStart = "${uwsgi}/bin/uwsgi --json ${piuwsgi}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         NotifyAccess = "main";
         KillSignal = "SIGQUIT";
+        StandardError = "syslog";
       };
     };
 

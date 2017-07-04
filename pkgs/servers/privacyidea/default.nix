@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "privacyidea-${version}";
-  version = "2.14";
+  version = "2.19.1-1";
 
   src = fetchgit {
     url = "https://github.com/privacyidea/privacyidea.git";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    sha256 = "0aslidkf2q3hplypdf6abp4k8ln87db4xh47linx34bp0ygms57h";
+    sha256 = "043bxp9xgb5vyivkkw36l6rhqdz6wkfjsvazmq0h5x6qfp3642hf";
   };
 
   postPatch = ''
@@ -16,6 +16,7 @@ pythonPackages.buildPythonApplication rec {
       --replace 'import pkg_resources' '# no pkg_resources' \
       --replace 'pkg_resources.get_distribution("privacyidea").version' \
                 '"${version}"'
+    sed -i '/argparse/d' setup.py
   '';
 
   postInstall = ''
@@ -27,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     pyusb pyasn1 pyyaml flask_sqlalchemy pillow flask_script python-gnupg
     funcparserlib pyopenssl passlib beautifulsoup4 flask_migrate lxml
-    requests2 netaddr configobj pyjwt_1_3 ldap3 pygments pymysql sqlsoup
-    argparse bcrypt pyrad qrcode psycopg2 matplotlib
+    requests netaddr configobj ldap3 pygments pymysql sqlsoup pyjwt
+    bcrypt pyrad qrcode defusedxml flaskbabel pycrypto matplotlib psycopg2
   ];
 }

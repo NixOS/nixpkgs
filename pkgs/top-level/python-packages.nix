@@ -19777,13 +19777,14 @@ in {
   };
 
   pyrad = buildPythonPackage rec {
-    name = "pyrad-2.0";
+    name = "pyrad-2.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyrad/${name}.tar.gz";
-      sha256 = "16c9f4k3ar18zkp9bzf3aw0qi2mvnrb6761r7hwb9kla6apw3nkb";
+      sha256 = "1fkqk5095cwkq44jq8mpblbnw8gzxvm5yn17ypva78cflmachz3m";
     };
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six ];
+    propagatedBuildInputs = with self; [ six netaddr ];
+    doCheck = false; # needs extra data
   };
 
   pyodbc = buildPythonPackage rec {
@@ -20261,12 +20262,12 @@ in {
   };
 
   ldap3 = buildPythonPackage rec {
-    version = "1.0.4";
+    version = "2.2.1";
     name = "ldap3-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/ldap3/${name}.tar.gz";
-      sha256 = "0j4qqj9vq022hy7wfqn8s0j4vm2g6paabbzas1vbyspawvcfai98";
+      sha256 = "043aa0yqf7cc82k4zkbjvaphf5nh6szbxg68v9hf6aqin2l88992";
     };
 
     buildInputs = with self; [ gssapi ];
