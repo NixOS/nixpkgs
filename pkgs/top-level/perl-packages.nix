@@ -12628,6 +12628,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MZ/MZSANFORD/${name}.tar.gz";
       sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
     };
+    buildInputs = stdenv.lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
   };
 
   SysHostnameLong = buildPerlPackage rec {
