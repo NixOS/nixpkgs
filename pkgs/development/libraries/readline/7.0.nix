@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "readline-${version}";
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     */
 
   # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv ? cross;
+  dontStrip = hostPlatform != buildPlatform;
   bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
   meta = with stdenv.lib; {

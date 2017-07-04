@@ -16,8 +16,6 @@ let
     dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
 
     [keyfile]
-    ${optionalString (config.networking.hostName != "")
-      ''hostname=${config.networking.hostName}''}
     ${optionalString (cfg.unmanaged != [])
       ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 

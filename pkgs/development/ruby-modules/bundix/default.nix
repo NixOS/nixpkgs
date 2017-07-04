@@ -5,13 +5,13 @@ buildRubyGem rec {
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "manveru";
     repo = "bundix";
     rev = version;
-    sha256 = "0lnzkwxprdz73axk54y5p5xkw56n3lra9v2dsvqjfw0ab66ld0iy";
+    sha256 = "1gh90yxm4k27jdjdl3r31fcg4sk7k54jlbw1zfm1p9q3i7k8x4i7";
   };
 
   buildInputs = [bundler];

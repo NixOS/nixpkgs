@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, go, pkgs, removeReferencesTo }:
+{ stdenv, lib, fetchFromGitHub, go, procps, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   version = "0.14.30";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (stdenv.isLinux) ''
     substitute etc/linux-systemd/system/syncthing-resume.service \
                $out/lib/systemd/system/syncthing-resume.service \
-               --replace /usr/bin/pkill ${pkgs.procps}/bin/pkill
+               --replace /usr/bin/pkill ${procps}/bin/pkill
 
     substitute etc/linux-systemd/system/syncthing@.service \
                $out/lib/systemd/system/syncthing@.service \

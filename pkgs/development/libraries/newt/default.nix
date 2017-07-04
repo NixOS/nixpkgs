@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lncurses";
 
   crossAttrs = {
-    makeFlags = "CROSS_COMPILE=${stdenv.cross.config}-";
+    makeFlags = "CROSS_COMPILE=${stdenv.cc.prefix}";
   };
 
   meta = with stdenv.lib; {

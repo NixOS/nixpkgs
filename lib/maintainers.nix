@@ -16,6 +16,7 @@
   acowley = "Anthony Cowley <acowley@gmail.com>";
   adelbertc = "Adelbert Chang <adelbertc@gmail.com>";
   adev = "Adrien Devresse <adev@adev.name>";
+  adisbladis = "Adam Hose <adis@blad.is>";
   Adjective-Object = "Maxwell Huang-Hobbs <mhuan13@gmail.com>";
   adnelson = "Allen Nelson <ithinkican@gmail.com>";
   adolfogc = "Adolfo E. García Castro <adolfo.garcia.cr@gmail.com>";
@@ -147,6 +148,7 @@
   dmjio = "David Johnson <djohnson.m@gmail.com>";
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   domenkozar = "Domen Kozar <domen@dev.si>";
+  dotlambda = "Robert Schütz <rschuetz17@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   dpaetzel = "David Pätzel <david.a.paetzel@gmail.com>";
   drets = "Dmytro Rets <dmitryrets@gmail.com>";
@@ -182,6 +184,7 @@
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
+  florianjacob = "Florian Jacob <projects+nixos@florianjacob.de>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
   fmthoma = "Franz Thoma <f.m.thoma@googlemail.com>";
@@ -246,6 +249,7 @@
   jensbin = "Jens Binkert <jensbin@protonmail.com>";
   jerith666 = "Matt McHenry <github@matt.mchenryfamily.org>";
   jfb = "James Felix Black <james@yamtime.com>";
+  jfrankenau = "Johannes Frankenau <johannes@frankenau.net>";
   jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgertm = "Tim Jaeger <jger.tm@gmail.com>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
@@ -264,6 +268,7 @@
   jpierre03 = "Jean-Pierre PRUNARET <nix@prunetwork.fr>";
   jpotier = "Martin Potier <jpo.contributes.to.nixos@marvid.fr>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
+  jtojnar = "Jan Tojnar <jtojnar@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
@@ -527,6 +532,7 @@
   steveej = "Stefan Junker <mail@stefanjunker.de>";
   SuprDewd = "Bjarki Ágúst Guðmundsson <suprdewd@gmail.com>";
   swarren83 = "Shawn Warren <shawn.w.warren@gmail.com>";
+  swflint = "Samuel W. Flint <swflint@flintfam.org>";
   swistak35 = "Rafał Łasocha <me@swistak35.com>";
   szczyp = "Szczyp <qb@szczyp.com>";
   sztupi = "Attila Sztupak <attila.sztupak@gmail.com>";
@@ -550,6 +556,7 @@
   tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
+  trevorj = "Trevor Joynson <nix@trevor.joynson.io>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
   tstrobel = "Thomas Strobel <4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains>";
   ttuegel = "Thomas Tuegel <ttuegel@mailbox.org>";
@@ -601,6 +608,7 @@
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
   zalakain = "Unai Zalakain <contact@unaizalakain.info>";
+  zarelit = "David Costa <david@zarel.net>";
   zauberpony = "Elmar Athmer <elmar@athmer.org>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";

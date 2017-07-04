@@ -2,14 +2,14 @@
 }:
 
 with pythonPackages; buildPythonApplication rec {
-  version = "2.9";
+  version = "3.0";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "0ylq0j5w8jvzys4bj9m08bfr1sgf8h2b4fiax6hs6lcwn2882jbr";
+    sha256 = "1a33x3197vi5s8rq5fvhy021jdlsc8ww8zc4kysss6r9mvdlk7ax";
   };
 
   propagatedBuildInputs = [

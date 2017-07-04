@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "utf8proc-${version}";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/utf8proc/archive/v${version}.tar.gz";
-    sha256 = "140vib1m6n5kwzkw1n9fbsi5gl6xymbd7yndwqx1sj15aakak776";
+    sha256 = "0q1jhdkk4f9b0zb8s2ql3sba3br5nvjsmbsaybmgj064k9hwbk15";
   };
 
   makeFlags = [ "prefix=$(out)" ];

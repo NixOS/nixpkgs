@@ -380,6 +380,8 @@ rec {
     runAsRoot ? null,
     # Size of the virtual machine disk to provision when building the image.
     diskSize ? 1024,
+    # Time of creation of the image.
+    created ? "1970-01-01T00:00:01Z",
   }:
 
     let
@@ -387,10 +389,9 @@ rec {
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
       baseJson = writeText "${baseName}-config.json" (builtins.toJSON {
-        created = "1970-01-01T00:00:01Z";
+        inherit created config;
         architecture = "amd64";
         os = "linux";
-        config = config;
       });
 
       layer =

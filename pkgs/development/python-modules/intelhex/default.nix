@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
+, fetchurl
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch {
+    (fetchurl {
       url = https://github.com/bialix/intelhex/commit/f251aef214daa2116e15ff7f7dcec1639eb12d5b.patch;
       sha256 = "02i15qjmcz7mwbwvyj3agl5y7098rag2iwypdilkaadhbslsl9b9";
     })
