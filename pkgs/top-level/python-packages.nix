@@ -7062,6 +7062,18 @@ in {
     };
   };
 
+  google-compute-engine = buildPythonPackage rec {
+    version = "2.3.0";
+    name    = "google-compute-engine-${version}";
+
+    src = pkgs.fetchurl {
+      url    = "mirror://pypi/g/google-compute-engine/google-compute-engine-${version}.tar.gz";
+      sha256 = "1pjj95b3l61h8xz5kjfcgnql066cr8bq5wl480a6dxd2inw8mynf";
+    };
+
+    propagatedBuildInputs = with self; [ boto ];
+  };
+
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
     name    = "googlecl-${version}";
@@ -30307,8 +30319,6 @@ EOF
   };
 
   uranium = callPackage ../development/python-modules/uranium { };
-
-  urlscan = callPackage ../applications/misc/urlscan { };
 
   vine = buildPythonPackage rec {
     name = "vine-${version}";

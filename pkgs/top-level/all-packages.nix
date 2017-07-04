@@ -3323,6 +3323,8 @@ with pkgs;
 
   ngrok = callPackage ../tools/networking/ngrok { };
 
+  noice = callPackage ../applications/misc/noice { };
+
   noip = callPackage ../tools/networking/noip { };
 
   nomad = callPackage ../applications/networking/cluster/nomad { };
@@ -4529,6 +4531,8 @@ with pkgs;
   upx = callPackage ../tools/compression/upx { };
 
   uriparser = callPackage ../development/libraries/uriparser {};
+
+  urlscan = callPackage ../applications/misc/urlscan { };
 
   urlview = callPackage ../applications/misc/urlview {};
 
