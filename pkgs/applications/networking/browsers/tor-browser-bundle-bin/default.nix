@@ -190,6 +190,12 @@ stdenv.mkDerivation rec {
 
     // Stop obnoxious first-run redirection.
     lockPref("noscript.firstRunRedirection", false);
+
+    // Insist on using IPC for communicating with Tor
+    //
+    // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    lockPref("extensions.torlauncher.control_port_use_ipc", true);
+    lockPref("extensions.torlauncher.socks_port_use_ipc", true);
     EOF
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in
@@ -232,6 +238,9 @@ stdenv.mkDerivation rec {
 
     # Initialize the Tor data directory.
     mkdir -p "\$HOME/TorBrowser/Data/Tor"
+
+    # TBB will fail if ownership is too permissive
+    chmod 0700 "\$HOME/TorBrowser/Data/Tor"
 
     # Initialize the browser profile state.  Note that the only data
     # copied from the Store payload is the initial bookmark file, which is
