@@ -12622,6 +12622,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SysCPU = buildPerlPackage rec {
+    name = "Sys-CPU-0.61";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MZ/MZSANFORD/${name}.tar.gz";
+      sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
+    };
+  };
+
   SysHostnameLong = buildPerlPackage rec {
     name = "Sys-Hostname-Long-1.4";
     src = fetchurl {

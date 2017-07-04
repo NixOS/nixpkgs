@@ -6667,6 +6667,13 @@ with pkgs;
 
   cscope = callPackage ../development/tools/misc/cscope { };
 
+  csmith = callPackage ../development/tools/misc/csmith {
+    inherit (perlPackages) perl SysCPU;
+    # Workaround optional dependency on libbsd that's
+    # currently broken on Darwin.
+    libbsd = if stdenv.isDarwin then null else libbsd;
+  };
+
   csslint = callPackage ../development/web/csslint { };
 
   libcxx = llvmPackages.libcxx;
