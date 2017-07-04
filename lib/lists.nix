@@ -93,15 +93,6 @@ rec {
   */
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
-  /* deprecated:
-
-     For historical reasons, imap has an index starting at 1.
-
-     But for consistency with the rest of the library we want an index
-     starting at zero.
-  */
-  imap = imap1;
-
   /* Map and concatenate the result.
 
      Example:
