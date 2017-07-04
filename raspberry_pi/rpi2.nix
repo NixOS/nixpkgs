@@ -20,7 +20,7 @@ In fact I (viric) created the FS into a NBD, not a real SD, to create this image
 
 */
 
-{pkgs, config, ...}:
+{ pkgs, config, lib, ...}:
 
 {
   boot.consoleLogLevel = 7;
@@ -49,7 +49,13 @@ In fact I (viric) created the FS into a NBD, not a real SD, to create this image
   services.nixosManual.enable = false;
 
   nixpkgs.config = {
-    platform = pkgs.platforms.raspberrypi2;
+    # Since https://github.com/NixOS/nixpkgs/commit/f0b634c7e838cdd65ac6f73933c99af3f38d0fa8
+    nixpkgs.config.platform = lib.systems.platforms.raspberrypi2;
+    # Earlier than that, use this:
+    # platform = pkgs.platforms.raspberrypi2;
+    # Also be aware of this issue if you're encountering infinite recursion:
+    # https://github.com/NixOS/nixpkgs/issues/24170
+
     allowUnfree = true;
   };
 
