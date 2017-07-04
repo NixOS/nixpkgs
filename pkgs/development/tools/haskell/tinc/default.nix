@@ -3,7 +3,7 @@
 , hpack, hspec, HUnit, language-dot, mockery, parsec, process
 , QuickCheck, safe, stdenv, temporary, time, transformers, unix
 , unix-compat, with-location, yaml, fetchFromGitHub
-, ghc, cabal2nix, cabal-install, makeWrapper
+, cabal2nix, cabal-install, makeWrapper
 }:
 mkDerivation {
   pname = "tinc";
@@ -30,7 +30,6 @@ mkDerivation {
   postInstall = ''
     source ${makeWrapper}/nix-support/setup-hook
     wrapProgram $out/bin/tinc \
-      --prefix PATH : '${ghc}/bin' \
       --prefix PATH : '${cabal2nix}/bin' \
       --prefix PATH : '${cabal-install}/bin'
   '';
