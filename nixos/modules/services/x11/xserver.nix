@@ -71,7 +71,7 @@ let
       name = "multihead${toString num}";
       inherit config;
     };
-  in imap mkHead cfg.xrandrHeads;
+  in imap1 mkHead cfg.xrandrHeads;
 
   xrandrDeviceSection = let
     monitors = flip map xrandrHeads (h: ''
