@@ -62,7 +62,7 @@ void expandArg(String *arg) {
             expandArg(arg);
             resize(arg, 0);
         } else if (cur == unq_esc || cur == sq_esc || cur == dq_esc ||
-                   cur == outside ? next == unq : cur == next) {
+                   (cur == outside ? next == unq : cur == next)) {
             char s = c;
             append(arg, &s, 1);
         }
