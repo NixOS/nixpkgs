@@ -30308,8 +30308,6 @@ EOF
 
   uranium = callPackage ../development/python-modules/uranium { };
 
-  urlscan = callPackage ../applications/misc/urlscan { };
-
   vine = buildPythonPackage rec {
     name = "vine-${version}";
     version = "1.1.3";
