@@ -9,22 +9,22 @@ let
     minieigen = pythonPackages.buildPythonPackage rec {
       name = "minieigen";
 
-      src = pkgs.fetchFromGitHub {
+      src = fetchFromGitHub {
         owner = "eudoxos";
         repo = "minieigen";
         rev = "7bd0a2e823333477a2172b428a3801d9cae0800f";
         sha256 = "1jksrbbcxshxx8iqpxkc1y0v091hwji9xvz9w963gjpan4jf61wj";
         };
 
-      buildInputs = [ unzip pythonPackages.boost boost.dev eigen3_3 ];
+      buildInputs = [ unzip pythonPackages.boost boost eigen3_3 ];
 
       patchPhase = ''
         sed -i "s/^.*libraries=libraries.//g" setup.py 
       '';
 
       preConfigure = ''
-        export LDFLAGS="-L${eigen3_3.out}/lib -l boost_python"
-        export CFLAGS="-I${eigen3_3.out}/include/eigen3"
+        export LDFLAGS="-L${eigen3_3}/lib -l boost_python"
+        export CFLAGS="-I${eigen3_3}/include/eigen3"
       '';
 
     };
@@ -50,13 +50,6 @@ in
       cmake
       makeWrapper
       python2Packages.wrapPython
-      gmp.dev
-      mpfr.dev
-      bzip2.dev
-      zlib.dev 
-      glib.dev
-      pcre.dev
-      boost.dev
     ];
 
     buildInputs = [ 
@@ -110,9 +103,7 @@ in
 
     enableParallelBuilding = true;
 
-    preConfigure = ''
-      cmakeFlags="-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-${version}"
-    '';
+    cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out -DENABLE_GUI=OFF -DSUFFIX=-${version}" ];
 
   }
 
