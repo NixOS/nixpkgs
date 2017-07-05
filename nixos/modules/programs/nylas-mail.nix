@@ -27,7 +27,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [pkgs.nylas-mail];
+    environment.systemPackages = [ pkgs.nylas-mail-bin ];
 
     services.gnome3.gnome-keyring = mkIf cfg.gnome3-keyring {
       enable = true;

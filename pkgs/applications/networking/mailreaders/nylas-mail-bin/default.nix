@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   name = "${pkgname}-${version}";
-  pkgname = "nylas-mail";
+  pkgname = "nylas-mail-bin";
   version = "2.0.32";
   subVersion = "fec7941";
 
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source mail client built on the modern web with Electron, React, and Flux";
     longDescription = ''
-      Nylas Mail is an open-source mail client built on the modern web with Electron, React, and Flux. It is designed to be extensible, so it's easy to create new experiences and workflows around email. To run nylas-mail, an additional manual step is required. Make sure to have services.gnome3.gnome-keyring.enable = true; in your configuration.nix before running nylas-mail. If you happen to miss this step, you should remove ~/.nylas-mail and "~/.config/Nylas Mail" for a blank setup".
+      Nylas Mail is an open-source mail client built on the modern web with Electron, React, and Flux. It is designed to be extensible, so it's easy to create new experiences and workflows around email. Nylas Mail can be enabled with it's requirements by enabling 'services.nylas-mail.enable=true'. Alternatively, make sure to have services.gnome3.gnome-keyring.enable = true; in your configuration.nix before running nylas-mail. If you happen to miss this step, you should remove ~/.nylas-mail and "~/.config/Nylas Mail" for a blank setup".
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ johnramsden ];
