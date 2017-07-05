@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--without-npsqueak"
                      "--with-vmversion=5.0"
                      "--with-src=${vm}" ];
-  CFLAGS = "-msse2 -D_GNU_SOURCE -DCOGMTVM=0 -g -O2 -DNDEBUG -DDEBUGVM=0";
+  CFLAGS = "-DPharoVM -DIMMUTABILITY=1 -msse2 -D_GNU_SOURCE -DCOGMTVM=0 -g -O2 -DNDEBUG -DDEBUGVM=0";
   LDFLAGS = "-Wl,-z,now";
 
   # VM sources require some patching before build.
