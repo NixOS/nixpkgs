@@ -99,6 +99,10 @@ in
 
   gobject-introspection = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
+  grpc = attrs: {
+    buildInputs = [ openssl pkgconfig ];
+  };
+
   hitimes = attrs: {
     buildInputs =
       stdenv.lib.optionals stdenv.isDarwin

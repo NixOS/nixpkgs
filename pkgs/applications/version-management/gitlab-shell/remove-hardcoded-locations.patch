@@ -1,9 +1,9 @@
 diff --git a/lib/gitlab_projects.rb b/lib/gitlab_projects.rb
-index c1d175a..7f7fd2f 100644
+index 0b11ce3..ffc3faf 100644
 --- a/lib/gitlab_projects.rb
 +++ b/lib/gitlab_projects.rb
-@@ -5,7 +5,7 @@ require_relative 'gitlab_config'
- require_relative 'gitlab_logger'
+@@ -8,7 +8,7 @@ require_relative 'gitlab_metrics'
+ require_relative 'gitlab_reference_counter'
  
  class GitlabProjects
 -  GLOBAL_HOOKS_DIRECTORY = File.join(ROOT_PATH, 'hooks')
@@ -11,3 +11,17 @@ index c1d175a..7f7fd2f 100644
  
    # Project name is a directory name for repository with .git at the end
    # It may be namespaced or not. Like repo.git or gitlab/repo.git
+diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
+index e7d0254..181ec8a 100644
+--- a/lib/gitlab_shell.rb
++++ b/lib/gitlab_shell.rb
+@@ -163,7 +163,8 @@ class GitlabShell
+     end
+ 
+     # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
+-    Kernel::exec(env, *args, unsetenv_others: true, chdir: ROOT_PATH)
++    # Except we don't, because we're already in the right directory on nixos !
++    Kernel::exec(env, *args, unsetenv_others: true)
+   end
+ 
+   def api
