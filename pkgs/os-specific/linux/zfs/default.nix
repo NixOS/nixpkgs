@@ -123,7 +123,7 @@ in
     # to be adapted
     zfsStable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.12";
+      incompatibleKernelVersion = null;
 
       version = "0.6.5.10";
 
@@ -139,7 +139,7 @@ in
     };
     zfsUnstable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = null;
+      incompatibleKernelVersion = "4.12";
 
       version = "0.7.0-rc4";
 

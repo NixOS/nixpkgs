@@ -62,6 +62,9 @@ stdenv.mkDerivation {
     for i in *
     do
         cd $i
+        # Files within the guest additions ISO are using DOS line endings
+        sed -re '/^(@@|---|\+\+\+)/!s/$/\r/' ${../linux-4.12.patch} \
+          | patch -d vboxguest -p4
         find . -type f | xargs sed 's/depmod -a/true/' -i
         make
         cd ..

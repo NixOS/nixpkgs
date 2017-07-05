@@ -47,6 +47,7 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+      --quiet         Only print the final json summary.
 "
     exit 1
 }

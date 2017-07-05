@@ -16,6 +16,7 @@
   acowley = "Anthony Cowley <acowley@gmail.com>";
   adelbertc = "Adelbert Chang <adelbertc@gmail.com>";
   adev = "Adrien Devresse <adev@adev.name>";
+  adisbladis = "Adam Hose <adis@blad.is>";
   Adjective-Object = "Maxwell Huang-Hobbs <mhuan13@gmail.com>";
   adnelson = "Allen Nelson <ithinkican@gmail.com>";
   adolfogc = "Adolfo E. García Castro <adolfo.garcia.cr@gmail.com>";
@@ -267,6 +268,7 @@
   jpierre03 = "Jean-Pierre PRUNARET <nix@prunetwork.fr>";
   jpotier = "Martin Potier <jpo.contributes.to.nixos@marvid.fr>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
+  jtojnar = "Jan Tojnar <jtojnar@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
@@ -606,6 +608,7 @@
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
   zalakain = "Unai Zalakain <contact@unaizalakain.info>";
+  zarelit = "David Costa <david@zarel.net>";
   zauberpony = "Elmar Athmer <elmar@athmer.org>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";

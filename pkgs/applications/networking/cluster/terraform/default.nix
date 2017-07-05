@@ -48,9 +48,9 @@ in {
     sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
   };
 
-  terraform_0_9_10 = generic {
-    version = "0.9.10";
-    sha256 = "0sg8czfn4hh7cf7zcdqwkygsvm9p47f5bi6kbl37bx9rn6bi5m6s";
+  terraform_0_9_11 = generic {
+    version = "0.9.11";
+    sha256 = "045zcpd4g9c52ynhgh3213p422ahds63mzhmd2iwcmj88g8i1w6x";
     doCheck = true;
   };
 }

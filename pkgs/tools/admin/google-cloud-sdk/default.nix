@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
         sha256 = "7aa6094d1f9c87f4c2c4a6bdad6a1113aac5e72ea673e659d9acbb059dfd037e";
       };
 
+
   buildInputs = [python27 makeWrapper];
 
   phases = [ "installPhase" "fixupPhase" ];
@@ -33,6 +34,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out"
     tar -xzf "$src" -C "$out" google-cloud-sdk
+
+    mkdir $out/google-cloud-sdk/lib/surface/alpha
+    cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
+
+    mkdir $out/google-cloud-sdk/lib/surface/beta
+    cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
     for program in gcloud bq gsutil git-credential-gcloud.sh; do
