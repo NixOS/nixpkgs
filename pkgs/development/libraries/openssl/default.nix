@@ -29,6 +29,7 @@ let
 
     outputs = [ "bin" "dev" "out" "man" ];
     setOutputFlags = false;
+    separateDebugInfo = stdenv.isLinux;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
