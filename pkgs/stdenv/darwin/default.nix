@@ -54,14 +54,17 @@ in rec {
     __sandboxProfile = binShClosure + libSystemProfile;
   };
 
-  stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
+  stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
                           extraPreHook      ? "",
                           extraBuildInputs,
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
-        inherit config shell extraBuildInputs allowedRequisites;
+        inherit config shell extraBuildInputs;
+        allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
+          thisStdenv.cc.expand-response-params
+        ];
 
         name = "stdenv-darwin-boot-${toString step}";
 
@@ -73,6 +76,9 @@ in rec {
           nativeTools  = true;
           nativePrefix = bootstrapTools;
           nativeLibc   = false;
+          buildPackages = lib.optionalAttrs (last ? stdenv) {
+            inherit (last) stdenv;
+          };
           hostPlatform = localSystem;
           targetPlatform = localSystem;
           libc         = last.pkgs.darwin.Libsystem;
@@ -80,7 +86,7 @@ in rec {
           cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
         };
 
-        preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/sh") ''
+        preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
@@ -297,6 +303,9 @@ in rec {
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
+      buildPackages = {
+        inherit (prevStage) stdenv;
+      };
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       inherit (pkgs) coreutils binutils gnugrep;
@@ -319,6 +328,7 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
       binutils-raw.dev binutils gettext
+      cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale
     ]);

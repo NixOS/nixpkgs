@@ -6,7 +6,9 @@
 , stdenv
 , coreutils
 , gnugrep
-, hostPlatform, targetPlatform
+, buildPackages
+, hostPlatform
+, targetPlatform
 }:
 
 /* As of this writing, known-good prefix/arch/simulator triples:
@@ -29,7 +31,7 @@ let
   sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${sdkVer}.sdk";
 
 in (import ../../../build-support/cc-wrapper {
-    inherit stdenv coreutils gnugrep runCommand;
+    inherit stdenv coreutils gnugrep runCommand buildPackages;
     nativeTools = false;
     nativeLibc = false;
     inherit binutils;
