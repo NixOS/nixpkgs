@@ -5640,6 +5640,15 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
+  openjdk9 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk-darwin/9.nix { }
+    else
+      callPackage ../development/compilers/openjdk/9.nix {
+        bootjdk = openjdk8;
+        inherit (gnome2) GConf gnome_vfs;
+      };
+
   openjdk = openjdk8;
 
   jdk7 = openjdk7 // { outputs = [ "out" ]; };
@@ -5656,6 +5665,16 @@ with pkgs;
       lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}-headless"
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
+
+  jdk9 = openjdk9 // { outputs = [ "out" ]; };
+  jre9 = lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (openjdk9.jre // { outputs = [ "jre" ]; }));
+  jre9_headless =
+    if stdenv.isDarwin then jre9 else
+      lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}-headless"
+        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+          ((openjdk9.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk = jdk8;
   jre = jre8;
