@@ -34,6 +34,8 @@ rec {
 
   git = appendToName "minimal" gitBase;
 
+  git-fame = callPackage ./git-fame {};
+
   # The full-featured Git.
   gitFull = gitBase.override {
     svnSupport = true;
