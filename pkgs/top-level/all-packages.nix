@@ -13272,6 +13272,7 @@ with pkgs;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
+  hsevm = self.altcoins.hsevm;
 
   stellar-core = self.altcoins.stellar-core;
 
