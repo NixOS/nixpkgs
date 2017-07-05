@@ -1,9 +1,6 @@
 { lib, config, stdenv
 
 # TODO(@Ericson2314): get off stdenv
-, extraBuildInputs
-, __extraImpureHostDeps
-, extraSandboxProfile
 , hostPlatform, targetPlatform
 }:
 
@@ -73,11 +70,11 @@ rec {
         // (let
           # TODO(@Ericson2314): Reversing of dep lists is just temporary to avoid Darwin mass rebuild.
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies'));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies'));
           computedPropagatedSandboxProfile =
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists (lib.reverseList propagatedDependencies'));
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies')));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies')));
           computedPropagatedImpureHostDeps =
             lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists (lib.reverseList propagatedDependencies')));
         in
@@ -97,11 +94,11 @@ rec {
         } // lib.optionalAttrs (hostPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
-          let profiles = [ extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
+          let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
               final = lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.unique profiles));
           in final;
           __propagatedSandboxProfile = lib.unique (computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile ]);
-          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
+          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ stdenv.__extraImpureHostDeps ++ [
             "/dev/zero"
             "/dev/random"
             "/dev/urandom"

@@ -71,6 +71,8 @@ let
         platforms = lib.platforms.all;
       };
 
+      inherit extraBuildInputs __extraImpureHostDeps extraSandboxProfile;
+
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
         isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
@@ -85,9 +87,6 @@ let
         inherit lib config stdenv;
         # TODO(@Ericson2314): Remove
         inherit
-          extraBuildInputs
-          __extraImpureHostDeps
-          extraSandboxProfile
           hostPlatform targetPlatform;
       }) mkDerivation;
 
