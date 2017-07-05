@@ -2363,7 +2363,9 @@ with pkgs;
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf4 = callPackage ../tools/misc/hdf4 { };
+  hdf4 = callPackage ../tools/misc/hdf4 {
+    szip = null;
+  };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
     gfortran = null;
