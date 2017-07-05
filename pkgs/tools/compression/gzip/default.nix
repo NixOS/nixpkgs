@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xz.bin ];
 
-  preConfigure = if stdenv.isCygwin then ''
-    sed -i lib/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
-
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   makeFlags = "SHELL=/bin/sh GREP=grep";
 

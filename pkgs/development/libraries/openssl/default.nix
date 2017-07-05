@@ -24,7 +24,6 @@ let
       ++ [ ./nix-ssl-cert-file.patch ]
       ++ optional (versionOlder version "1.1.0")
           (if stdenv.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
-      ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional (versionOlder version "1.0.2" && hostPlatform.isDarwin)
            ./darwin-arch.patch;
 

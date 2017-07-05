@@ -135,7 +135,7 @@ let
       $out/bin/ash -c 'echo hello world' | grep "hello world"
       export LD_LIBRARY_PATH=$out/lib
       $out/bin/mount --help 2>&1 | grep -q "BusyBox"
-      $out/bin/blkid --help 2>&1 | grep -q 'libblkid'
+      $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"

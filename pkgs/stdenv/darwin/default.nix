@@ -235,11 +235,11 @@ in rec {
       libcxxabi libcxx ncurses libffi zlib gmp pcre gnugrep
       coreutils findutils diffutils patchutils;
 
-    llvmPackages = let llvmOverride = llvmPackages.llvm.override { enableManpages = false; inherit libcxxabi; }; in
-      super.llvmPackages // {
-        llvm = llvmOverride;
-        clang-unwrapped = llvmPackages.clang-unwrapped.override { enableManpages = false; llvm = llvmOverride; };
-      };
+     llvmPackages = let llvmOverride = llvmPackages.llvm.override { inherit libcxxabi; };
+     in super.llvmPackages // {
+       llvm = llvmOverride;
+       clang-unwrapped = llvmPackages.clang-unwrapped.override { llvm = llvmOverride; };
+     };
 
     darwin = super.darwin // {
       inherit (darwin) dyld Libsystem libiconv locale;

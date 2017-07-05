@@ -1,6 +1,6 @@
 { stdenv, fetch, cmake, libxml2, libedit, llvm, version, release_version, clang-tools-extra_src, python
 , fixDarwinDylibNames
-, enableManpages ? true
+, enableManpages ? false
 }:
 
 let

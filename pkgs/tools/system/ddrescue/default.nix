@@ -17,11 +17,6 @@ stdenv.mkDerivation rec {
 
   doCheck = hostPlatform == buildPlatform;
 
-  ${if hostPlatform != buildPlatform then "crossPlatforms" else null} = [ ];
-  ${if hostPlatform != buildPlatform then "configureFlags" else null} = [
-    "CXX=${stdenv.cc.prefix}c++"
-  ];
-
   meta = with stdenv.lib; {
     description = "GNU ddrescue, a data recovery tool";
 

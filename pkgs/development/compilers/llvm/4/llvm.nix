@@ -16,7 +16,7 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
-, enableManpages ? true
+, enableManpages ? false
 , enableSharedLibraries ? true
 , darwin
 }:

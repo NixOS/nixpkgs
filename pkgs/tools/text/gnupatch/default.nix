@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional doCheck ed;
 
-  configureFlags = if hostPlatform == buildPlatform then null else [
+  configureFlags = stdenv.lib.optionals (hostPlatform != buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 

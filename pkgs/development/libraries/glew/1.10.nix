@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     cp -r README.txt LICENSE.txt doc $out/share/doc/glew
   '';
 
-  makeFlags = if hostPlatform == buildPlatform then null else [
-    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel}"
+  makeFlags = [
+    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
   ];
 
   meta = with stdenv.lib; {

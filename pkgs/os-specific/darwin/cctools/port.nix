@@ -1,10 +1,12 @@
 { stdenv, fetchFromGitHub, makeWrapper, autoconf, automake, libtool_2
 , llvm, libcxx, libcxxabi, clang, libuuid
 , libobjc ? null, maloader ? null, xctoolchain ? null
-, buildPlatform, hostPlatform, targetPlatform
+, hostPlatform, targetPlatform
 }:
 
 let
+  # The prefix prepended to binary names to allow multiple binuntils on the
+  # PATH to both be usable.
   prefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
@@ -38,13 +40,10 @@ let
 
     enableParallelBuilding = true;
 
+    # TODO(@Ericson2314): Always pass "--target" and always prefix.
+    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
     configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
       "CXXFLAGS=-I${libcxx}/include/c++/v1"
-    ] ++ stdenv.lib.optionals (targetPlatform != buildPlatform) [
-      # TODO make unconditional next hash break
-      "--build=${buildPlatform.config}"
-      "--host=${hostPlatform.config}"
-      "--target=${targetPlatform.config}"
     ];
 
     postPatch = ''
@@ -103,6 +102,10 @@ let
           ln -s "$out/bin/${targetPlatform.config}-$tool" "$out/bin/$tool"
         done
       '';
+
+    passthru = {
+      inherit prefix;
+    };
 
     meta = {
       homepage = "http://www.opensource.apple.com/source/cctools/";
