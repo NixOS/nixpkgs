@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm $doc/share/doc/groff/examples/hdtbl/*color*ps
     find $doc/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+    for f in 'man.local' 'mdoc.local'; do
+        cat '${./site.tmac}' >>"$out/share/groff/site-tmac/$f"
+    done
   '';
 
   meta = with stdenv.lib; {
