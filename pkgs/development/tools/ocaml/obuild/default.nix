@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocamlPackages }:
+{ stdenv, fetchzip, ocaml }:
 
 let version = "0.1.8"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1q1k2qqd08j1zakvydgvwgwpyn0ll7rs65gap0pvg3amnh5cp3wd";
   };
 
-  buildInputs = with ocamlPackages; [ ocaml findlib ];
+  buildInputs = [ ocaml ];
 
   buildPhase = ''
     ./bootstrap
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/ocaml-obuild/obuild;
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [];
     description = "Simple package build system for OCaml";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ volth ];
