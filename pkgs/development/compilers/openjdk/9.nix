@@ -87,20 +87,19 @@ let
     '';
 
     patches = [
-      ./fix-java-home-jdk8.patch
-      ./read-truststore-from-env-jdk8.patch
+      ./fix-java-home-jdk9.patch
+      ./read-truststore-from-env-jdk9.patch
       ./currency-date-range-jdk8.patch
     ] ++ lib.optionals (!minimal && enableInfinality) [
       ./004_add-fontconfig.patch
       ./005_enable-infinality.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      ./swing-use-gtk.patch
+      ./swing-use-gtk-jdk9.patch
     ];
 
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
-      substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
     '';
 
     configureFlags = [
