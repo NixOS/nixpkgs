@@ -1,9 +1,21 @@
-{stdenv, git, cacert, gitRepoToName}:
+{stdenv, git, cacert}: let
+  urlToName = url: rev: let
+    inherit (stdenv.lib) removeSuffix splitString last;
+    base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
+    matched = builtins.match "(.*).git" base;
+
+    short = builtins.substring 0 7 rev;
+
+    appendShort = if (builtins.match "[a-f0-9]*" rev) != null
+      then "-${short}"
+      else "";
+  in "${if matched == null then base else builtins.head matched}${appendShort}";
+in
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
-, name ? gitRepoToName url rev
+, name ? urlToName url rev
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
