@@ -3,6 +3,7 @@
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
+, xenSupport ? false
 }:
 
 with stdenv.lib;
@@ -46,6 +47,7 @@ in (
 
 assert efiSupport -> canEfi;
 assert zfsSupport -> zfs != null;
+assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
   name = "grub-${version}";
@@ -98,7 +100,8 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-bash-completion.patch ];
 
   configureFlags = optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ];
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ]
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport
