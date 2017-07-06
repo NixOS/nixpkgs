@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
 
   buildInputs =  [ cmake libxslt zlib libxml2 ] ++ stdenv.lib.optional enableSSL openssl ;
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt --replace SETUID ""
+  '';
+
   cmakeFlags = [
     ( if enableSSL then "-DENABLE_TLS=on" else "-DENABLE_TLS=off" )
     ( if enableMonitor then "-DENABLE_MONITOR=on" else "-DENABLE_MONITOR=off" )

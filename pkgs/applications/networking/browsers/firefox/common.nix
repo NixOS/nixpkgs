@@ -19,7 +19,7 @@
 , alsaSupport ? true, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
 
 ## privacy-related options
 

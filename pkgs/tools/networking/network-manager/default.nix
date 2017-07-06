@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
        --replace /usr/bin/ping ${inetutils}/bin/ping \
        --replace /usr/bin/ping6 ${inetutils}/bin/ping
     substituteInPlace src/devices/nm-arping-manager.c \
-       --replace '("arping", NULL, NULL);' '("arping", "${inetutils}/bin/arping", NULL);'
+       --replace '("arping", NULL, NULL);' '("arping", "${iputils}/bin/arping", NULL);'
     substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe ${kmod}/bin/modprobe
     substituteInPlace data/84-nm-drivers.rules \
       --replace /bin/sh ${stdenv.shell}

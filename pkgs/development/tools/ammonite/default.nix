@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre }:
+{ stdenv, lib, fetchurl, makeWrapper, jre
+, disableRemoteLogging ? true
+}:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "ammonite-${version}";
   version = "0.9.9";
@@ -19,7 +22,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ${src} $out/bin/amm
     chmod +x $out/bin/amm
-    wrapProgram $out/bin/amm --prefix PATH ":" ${jre}/bin ;
+    wrapProgram $out/bin/amm \
+      ${optionalString disableRemoteLogging "--add-flags --no-remote-logging"} \
+      --prefix PATH ":" ${jre}/bin ;
   '';
 
   meta = {

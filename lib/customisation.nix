@@ -51,6 +51,24 @@ rec {
        else { }));
 
 
+  /* `makeOverridable` takes a function from attribute set to attribute set and
+     injects `override` attibute which can be used to override arguments of
+     the function.
+
+       nix-repl> x = {a, b}: { result = a + b; }
+
+       nix-repl> y = lib.makeOverridable x { a = 1; b = 2; }
+
+       nix-repl> y
+       { override = «lambda»; overrideDerivation = «lambda»; result = 3; }
+
+       nix-repl> y.override { a = 10; }
+       { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
+
+     Please refer to "Nixpkgs Contributors Guide" section
+     "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
+     related to its use.
+  */
   makeOverridable = f: origArgs:
     let
       ff = f origArgs;

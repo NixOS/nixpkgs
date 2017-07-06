@@ -126,10 +126,12 @@ let
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { buildInputs ? []
-    , nativeBuildInputs ? []
-    , propagatedBuildInputs ? []
+    { nativeBuildInputs ? []
+    , buildInputs ? []
+
     , propagatedNativeBuildInputs ? []
+    , propagatedBuildInputs ? []
+
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
@@ -141,18 +143,15 @@ let
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
     , ... } @ attrs:
-    let # Rename argumemnts to avoid cycles
-      buildInputs__ = buildInputs;
-      nativeBuildInputs__ = nativeBuildInputs;
-      propagatedBuildInputs__ = propagatedBuildInputs;
-      propagatedNativeBuildInputs__ = propagatedNativeBuildInputs;
-    in let
-      getNativeDrv = drv: drv.nativeDrv or drv;
-      getCrossDrv = drv: drv.crossDrv or drv;
-      nativeBuildInputs = map getNativeDrv nativeBuildInputs__;
-      buildInputs = map getCrossDrv buildInputs__;
-      propagatedBuildInputs = map getCrossDrv propagatedBuildInputs__;
-      propagatedNativeBuildInputs = map getNativeDrv propagatedNativeBuildInputs__;
+    let
+      dependencies = [
+        (map (drv: drv.nativeDrv or drv) nativeBuildInputs)
+        (map (drv: drv.crossDrv or drv) buildInputs)
+      ];
+      propagatedDependencies = [
+        (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
+        (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+      ];
     in let
       pos' =
         if pos != null then
@@ -281,13 +280,16 @@ let
         outputs ++
         (if separateDebugInfo then assert targetPlatform.isLinux; [ "debug" ] else []);
 
-      buildInputs' = lib.chooseDevOutputs buildInputs ++
-        (if separateDebugInfo then [ ../../build-support/setup-hooks/separate-debug-info.sh ] else []);
+      dependencies' = let
+          justMap = map lib.chooseDevOutputs dependencies;
+          nativeBuildInputs = lib.elemAt justMap 0
+            ++ lib.optional targetPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh;
+          buildInputs = lib.elemAt justMap 1
+               # TODO(@Ericson2314): Should instead also be appended to `nativeBuildInputs`.
+            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh;
+        in [ nativeBuildInputs buildInputs ];
 
-      nativeBuildInputs' = lib.chooseDevOutputs nativeBuildInputs;
-      propagatedBuildInputs' = lib.chooseDevOutputs propagatedBuildInputs;
-      propagatedNativeBuildInputs' = lib.chooseDevOutputs propagatedNativeBuildInputs;
-
+      propagatedDependencies' = map lib.chooseDevOutputs propagatedDependencies;
     in
 
       # Throw an error if trying to evaluate an non-valid derivation
@@ -302,14 +304,15 @@ let
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
+          # TODO(@Ericson2314): Reversing of dep lists is just temporary to avoid Darwin mass rebuild.
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs' ++ nativeBuildInputs');
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies'));
           computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (propagatedBuildInputs' ++ propagatedNativeBuildInputs');
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists (lib.reverseList propagatedDependencies'));
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs' ++ nativeBuildInputs'));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies')));
           computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs' ++ propagatedNativeBuildInputs'));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists (lib.reverseList propagatedDependencies')));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -319,17 +322,11 @@ let
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 
-          # Inputs built by the cross compiler.
-          buildInputs = buildInputs';
-          propagatedBuildInputs = propagatedBuildInputs';
-          # Inputs built by the usual native compiler.
-          nativeBuildInputs = nativeBuildInputs'
-            ++ lib.optional
-                (hostPlatform.isCygwin
-                  || (crossConfig != null && lib.hasSuffix "mingw32" crossConfig))
-                ../../build-support/setup-hooks/win-dll-link.sh
-            ;
-          propagatedNativeBuildInputs = propagatedNativeBuildInputs';
+          nativeBuildInputs = lib.elemAt dependencies' 0;
+          buildInputs = lib.elemAt dependencies' 1;
+
+          propagatedNativeBuildInputs = lib.elemAt propagatedDependencies' 0;
+          propagatedBuildInputs = lib.elemAt propagatedDependencies' 1;
         } // ifDarwin {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =

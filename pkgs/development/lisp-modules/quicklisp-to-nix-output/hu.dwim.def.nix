@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''hu.dwim.def'';
-  version = ''20161204-darcs'';
+  version = ''20170516-darcs'';
 
   description = ''General purpose, homogenous, extensible definer macro.'';
 
-  deps = [ args."metabang-bind" args."iterate" args."hu.dwim.asdf" args."anaphora" args."alexandria" ];
+  deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hu.dwim.def/2016-12-04/hu.dwim.def-20161204-darcs.tgz'';
-    sha256 = ''0znvcm4zi8rivyk0s840v8jaa52hzdiql88pk8hnaj8abxkvl3lj'';
+    url = ''http://beta.quicklisp.org/archive/hu.dwim.def/2017-05-16/hu.dwim.def-20170516-darcs.tgz'';
+    sha256 = ''1x333jiihgqydv234q8wjsy5n8nfr6n4mpwq08f1b497if4fc7by'';
   };
+    
+  packageName = "hu.dwim.def";
 
   overrides = x: {
     postInstall = ''
@@ -28,9 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM hu.dwim.def DESCRIPTION General purpose, homogenous, extensible definer macro. SHA256 0znvcm4zi8rivyk0s840v8jaa52hzdiql88pk8hnaj8abxkvl3lj URL
-    http://beta.quicklisp.org/archive/hu.dwim.def/2016-12-04/hu.dwim.def-20161204-darcs.tgz MD5 c4a85c220873a9edd1c2c49a6498baca NAME hu.dwim.def TESTNAME NIL
-    FILENAME hu.dwim.def DEPS ((NAME metabang-bind) (NAME iterate) (NAME hu.dwim.asdf) (NAME anaphora) (NAME alexandria)) DEPENDENCIES
-    (metabang-bind iterate hu.dwim.asdf anaphora alexandria) VERSION 20161204-darcs SIBLINGS
+/* (SYSTEM hu.dwim.def DESCRIPTION General purpose, homogenous, extensible definer macro. SHA256 1x333jiihgqydv234q8wjsy5n8nfr6n4mpwq08f1b497if4fc7by URL
+    http://beta.quicklisp.org/archive/hu.dwim.def/2017-05-16/hu.dwim.def-20170516-darcs.tgz MD5 bd13311ab8da2a67f9247e825369b294 NAME hu.dwim.def TESTNAME NIL
+    FILENAME hu.dwim.def DEPS NIL DEPENDENCIES NIL VERSION 20170516-darcs SIBLINGS
     (hu.dwim.def+cl-l10n hu.dwim.def+contextl hu.dwim.def+hu.dwim.common hu.dwim.def+hu.dwim.delico hu.dwim.def+swank hu.dwim.def.documentation
      hu.dwim.def.namespace hu.dwim.def.test)) */

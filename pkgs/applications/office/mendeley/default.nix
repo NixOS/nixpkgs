@@ -1,4 +1,5 @@
 { fetchurl, stdenv, dpkg, which
+, makeWrapper
 , alsaLib
 , desktop_file_utils
 , dbus
@@ -92,7 +93,7 @@ stdenv.mkDerivation {
     sha256 = sha256;
   };
 
-  nativeBuildInputs = [ qt5.makeQtWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ dpkg which ] ++ deps;
 
   unpackPhase = "true";
@@ -107,10 +108,10 @@ stdenv.mkDerivation {
              $out/bin/mendeleydesktop
     paxmark m $out/bin/mendeleydesktop
 
-    wrapQtProgram $out/bin/mendeleydesktop \
+    wrapProgram $out/bin/mendeleydesktop \
       --add-flags "--unix-distro-build" \
-      ${stdenv.lib.optionalString autorunLinkHandler
-      ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop"''}
+      ${stdenv.lib.optionalString autorunLinkHandler # ignore errors installing the link handler
+      ''--run "$out/bin/install-mendeley-link-handler.sh $out/bin/mendeleydesktop ||:"''}
 
     # Remove bundled qt bits
     rm -rf $out/lib/qt

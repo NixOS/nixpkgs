@@ -1,26 +1,21 @@
 {
-  kdeApp, lib, kdeWrapper,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kconfig, kinit,
-  kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5
+  qtscript, kconfig, kinit, karchive,
+  kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5,
+  shared_mime_info
 }:
 
-let
-  unwrapped =
-    kdeApp {
-      name = "okteta";
-      meta = {
-        license = with lib.licenses; [ gpl2 ];
-        maintainers = with lib.maintainers; [ peterhoeg ];
-      };
-      nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-      propagatedBuildInputs = [
-        kconfig kinit
-        kcmutils kconfigwidgets knewstuff kparts qca-qt5
-      ];
-    };
-
-in kdeWrapper {
-  inherit unwrapped;
-  targets = [ "bin/okteta" ];
+mkDerivation {
+  name = "okteta";
+  meta = {
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
+  };
+  nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
+  buildInputs = [ shared_mime_info ];
+  propagatedBuildInputs = [
+    kconfig kinit kcmutils kconfigwidgets knewstuff kparts qca-qt5
+    karchive
+  ];
 }

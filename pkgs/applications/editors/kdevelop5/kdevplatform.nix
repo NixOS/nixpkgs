@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, cmake, gettext, pkgconfig, extra-cmake-modules, makeQtWrapper
-, boost, subversion, apr, aprutil
+{ stdenv, fetchurl, fetchpatch, cmake, gettext, pkgconfig, extra-cmake-modules
+, boost, subversion, apr, aprutil, kwindowsystem
 , qtscript, qtwebkit, grantlee, karchive, kconfig, kcoreaddons, kguiaddons, kiconthemes, ki18n
 , kitemmodels, kitemviews, kio, kparts, sonnet, kcmutils, knewstuff, knotifications
 , knotifyconfig, ktexteditor, threadweaver, kdeclarative, libkomparediff2 }:
@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  
+
   src = fetchurl {
     url = "mirror://kde/stable/kdevelop/${version}/src/${name}.tar.xz";
     sha256 = "3159440512b1373c1a4b35f401ba1f81217de9578372b45137af141eeda6e726";
@@ -25,11 +25,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules makeQtWrapper ];
+  nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules ];
 
-  propagatedBuildInputs = [ ];
   buildInputs = [
-    boost subversion apr aprutil
+    boost subversion apr aprutil kwindowsystem
     qtscript qtwebkit grantlee karchive kconfig kcoreaddons kguiaddons kiconthemes
     ki18n kitemmodels kitemviews kio kparts sonnet kcmutils knewstuff
     knotifications knotifyconfig ktexteditor threadweaver kdeclarative

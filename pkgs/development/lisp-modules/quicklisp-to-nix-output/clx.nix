@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clx'';
-  version = ''20170227-git'';
+  version = ''20170516-git'';
 
   description = ''An implementation of the X Window System protocol in Lisp.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clx/2017-02-27/clx-20170227-git.tgz'';
-    sha256 = ''0zgp1yqy0lm528bhil93ap7df01qdyfhnbxhckjv87xk8rs0g5nx'';
+    url = ''http://beta.quicklisp.org/archive/clx/2017-05-16/clx-20170516-git.tgz'';
+    sha256 = ''00lzm4m74bm5gvy6nss8ab735ddnijbsvimlrkx37sp9v3zln5gs'';
   };
+    
+  packageName = "clx";
 
   overrides = x: {
     postInstall = ''
@@ -28,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM clx DESCRIPTION An implementation of the X Window System protocol in Lisp. SHA256 0zgp1yqy0lm528bhil93ap7df01qdyfhnbxhckjv87xk8rs0g5nx URL
-    http://beta.quicklisp.org/archive/clx/2017-02-27/clx-20170227-git.tgz MD5 fe5fc4bd65ced7a0164abc0ed34afffd NAME clx TESTNAME NIL FILENAME clx DEPS NIL
-    DEPENDENCIES NIL VERSION 20170227-git SIBLINGS NIL) */
+/* (SYSTEM clx DESCRIPTION An implementation of the X Window System protocol in Lisp. SHA256 00lzm4m74bm5gvy6nss8ab735ddnijbsvimlrkx37sp9v3zln5gs URL
+    http://beta.quicklisp.org/archive/clx/2017-05-16/clx-20170516-git.tgz MD5 1f5d7963802a503d7f7fcf73e1f42dd8 NAME clx TESTNAME NIL FILENAME clx DEPS NIL
+    DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */

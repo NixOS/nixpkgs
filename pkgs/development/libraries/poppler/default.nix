@@ -6,6 +6,7 @@
 , introspectionSupport ? false, gobjectIntrospection ? null
 , utils ? false
 , minimal ? false, suffix ? "glib"
+, hostPlatform
 }:
 
 let # beware: updates often break cups-filters build
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs.postPatch =
     # there are tests using `strXXX_s` functions that are missing apparently
-    stdenv.lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+    stdenv.lib.optionalString (hostPlatform.libc or null == "msvcrt")
       "sed '/^SUBDIRS =/s/ test / /' -i Makefile.in";
 
   meta = with lib; {

@@ -10,6 +10,7 @@
 , targetPatches
 , targetToolchains
 , doCheck ? true
+, buildPlatform, hostPlatform
 } @ args:
 
 let
@@ -93,11 +94,6 @@ stdenv.mkDerivation {
     rm src/test/debuginfo/vec-slices.rs
     rm src/test/debuginfo/vec.rs
 
-    # this can probably be removed when rust is updated beyond 1.17
-    # fixes a warning in the test harness (I think?) which fails the build due
-    # to strict warnings
-    sed -i '/static_in_const/d' src/tools/compiletest/src/main.rs
-
     # Useful debugging parameter
     # export VERBOSE=1
   ''
@@ -142,7 +138,7 @@ stdenv.mkDerivation {
 
   inherit doCheck;
 
-  dontSetConfigureCross = true;
+  configurePlatforms = [];
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181

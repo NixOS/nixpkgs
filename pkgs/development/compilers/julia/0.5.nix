@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   checkTarget = "testall";
   # Julia's tests require read/write access to $HOME
   preCheck = ''

@@ -18,8 +18,9 @@ common = rec { # attributes common to both builds
   version = "10.2.6";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "1rd2b1b6s87ymr5qhlggr4q4ljazv82ih0msgrbz1rfn81pcg1f3";
+    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
+    sha256 = "144lcm5awcf0k6a7saqfr4p2kg8r5wbdhdm4cmn2m8hyg1an70as";
+    name   = "mariadb-${version}.tar.gz";
   };
 
   prePatch = ''

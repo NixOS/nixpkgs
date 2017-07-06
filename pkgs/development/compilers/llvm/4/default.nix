@@ -1,4 +1,4 @@
-{ newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
+{ lowPrio, newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
 let
   callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
 
@@ -13,14 +13,25 @@ let
   compiler-rt_src = fetch "compiler-rt" "059ipqq27gd928ay06f1ck3vw6y5h5z4zd766x8k0k7jpqimpwnk";
   clang-tools-extra_src = fetch "clang-tools-extra" "16bwckgcxfn56mbqjlxi7fxja0zm9hjfa6s3ncm3dz98n5zd7ds1";
 
-  self = {
-    llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src stdenv;
-    };
+  # Add man output without introducing extra dependencies.
+  overrideManOutput = drv:
+    let drv-manpages = drv.override { enableManpages = true; }; in
+    drv // { man = drv-manpages.man; outputs = drv.outputs ++ ["man"]; };
 
-    clang-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src stdenv;
-    };
+  llvm = callPackage ./llvm.nix {
+    inherit compiler-rt_src stdenv;
+  };
+
+  clang-unwrapped = callPackage ./clang {
+    inherit clang-tools-extra_src stdenv;
+  };
+
+  self = {
+    llvm = overrideManOutput llvm;
+    clang-unwrapped = overrideManOutput clang-unwrapped;
+
+    llvm-manpages = lowPrio self.llvm.man;
+    clang-manpages = lowPrio self.clang-unwrapped.man;
 
     clang = wrapCC self.clang-unwrapped;
 

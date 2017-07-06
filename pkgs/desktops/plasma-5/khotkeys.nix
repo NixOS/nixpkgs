@@ -1,14 +1,17 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, kcmutils
-, kdbusaddons, kdelibs4support, kglobalaccel, ki18n, kio, kxmlgui
-, plasma-framework, plasma-workspace, qtx11extras
-, fetchpatch
+{
+  mkDerivation,
+  extra-cmake-modules, kdoctools,
+  kcmutils, kdbusaddons, kdelibs4support, kglobalaccel, ki18n, kio, kxmlgui,
+  plasma-framework, plasma-workspace, qtx11extras
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "khotkeys";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [
-    kdelibs4support kglobalaccel ki18n kio plasma-framework plasma-workspace
-    qtx11extras kcmutils kdbusaddons kxmlgui
+  buildInputs = [
+    kcmutils kdbusaddons kdelibs4support kglobalaccel ki18n kio kxmlgui
+    plasma-framework plasma-workspace qtx11extras
   ];
+  outputs = [ "out" "dev" "bin" ];
+  enableParallelBuilding = false;
 }

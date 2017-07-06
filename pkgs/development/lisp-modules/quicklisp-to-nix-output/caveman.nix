@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/caveman/2016-10-31/caveman-20161031-git.tgz'';
     sha256 = ''111zxnlsn99sybmwgyxh0x29avq898nxssysvaf8v4mbb6fva2hi'';
   };
+    
+  packageName = "caveman";
 
   overrides = x: {
     postInstall = ''
@@ -31,7 +33,8 @@ rec {
 /* (SYSTEM caveman DESCRIPTION Web Application Framework for Common Lisp SHA256 111zxnlsn99sybmwgyxh0x29avq898nxssysvaf8v4mbb6fva2hi URL
     http://beta.quicklisp.org/archive/caveman/2016-10-31/caveman-20161031-git.tgz MD5 a6700f14fd7c4bf8fdc573473ff5fab6 NAME caveman TESTNAME NIL FILENAME
     caveman DEPS
-    ((NAME myway) (NAME local-time) (NAME do-urlencode) (NAME clack-v1-compat) (NAME cl-syntax-annot) (NAME cl-syntax) (NAME cl-project) (NAME cl-ppcre)
-     (NAME cl-emb) (NAME anaphora))
+    ((NAME myway FILENAME myway) (NAME local-time FILENAME local-time) (NAME do-urlencode FILENAME do-urlencode)
+     (NAME clack-v1-compat FILENAME clack-v1-compat) (NAME cl-syntax-annot FILENAME cl-syntax-annot) (NAME cl-syntax FILENAME cl-syntax)
+     (NAME cl-project FILENAME cl-project) (NAME cl-ppcre FILENAME cl-ppcre) (NAME cl-emb FILENAME cl-emb) (NAME anaphora FILENAME anaphora))
     DEPENDENCIES (myway local-time do-urlencode clack-v1-compat cl-syntax-annot cl-syntax cl-project cl-ppcre cl-emb anaphora) VERSION 20161031-git SIBLINGS
     (caveman-middleware-dbimanager caveman-test caveman2-db caveman2-test caveman2)) */

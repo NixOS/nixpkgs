@@ -318,7 +318,13 @@ containing some shell commands to be executed, or by redefining the
 shell function
 <varname><replaceable>name</replaceable>Phase</varname>.  The former
 is convenient to override a phase from the derivation, while the
-latter is convenient from a build script.</para>
+latter is convenient from a build script.
+
+However, typically one only wants to <emphasis>add</emphasis> some
+commands to a phase, e.g. by defining <literal>postInstall</literal>
+or <literal>preFixup</literal>, as skipping some of the default actions
+may have unexpected consequences.
+</para>
 
 
 <section xml:id="ssec-controlling-phases"><title>Controlling
@@ -632,6 +638,16 @@ script) if it exists.</para>
     <option>--disable-static</option> is added to the configure flags.</para>
     <para>If this is undesirable, set this variable to
     true.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>configurePlatforms</varname></term>
+    <listitem><para>
+      By default, when cross compiling, the configure script has <option>--build=...</option> and <option>--host=...</option> passed.
+      Packages can instead pass <literal>[ "build" "host" "target" ]</literal> or a subset to control exactly which platform flags are passed.
+      Compilers and other tools should use this to also pass the target platform, for example.
+      Note eventually these will be passed when in native builds too, to improve determinism: build-time guessing, as is done today, is a risk of impurity.
+    </para></listitem>
   </varlistentry>
 
   <varlistentry>

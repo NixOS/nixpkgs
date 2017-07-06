@@ -3,6 +3,8 @@
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
 , initialPackages ? import ./hackage-packages.nix
+, configurationCommon ? import ./configuration-common.nix
+, configurationNix ? import ./configuration-nix.nix
 }:
 
 let
@@ -15,8 +17,8 @@ let
     inherit ghc extensible-self;
   };
 
-  commonConfiguration = import ./configuration-common.nix { inherit pkgs; };
-  nixConfiguration = import ./configuration-nix.nix { inherit pkgs; };
+  commonConfiguration = configurationCommon { inherit pkgs; };
+  nixConfiguration = configurationNix { inherit pkgs; };
 
   extensible-self = makeExtensible
     (extends overrides

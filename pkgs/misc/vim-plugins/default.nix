@@ -5,7 +5,7 @@
 , python3, boost, icu
 , ycmd
 , pythonPackages, python3Packages
-, Cocoa ? null
+, Cocoa ? null, git
 }:
 
 let
@@ -457,6 +457,17 @@ rec {
       url = "https://github.com/ajh17/Spacegray.vim";
       rev = "95a5adbbbba7fb641af847d8666b8cad20431333";
       sha256 = "10p02n4arml1b4ah0bz754ifvkqnbms4j0wlgzqs5azb20y2kliv";
+    };
+    dependencies = [];
+
+  };
+
+  nerdtree-git-plugin = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nerdtree-git-plugin-2017-03-12";
+    src = fetchgit {
+      url = "https://github.com/albfan/nerdtree-git-plugin";
+      rev = "d79a5d5a1b3bc5fab3ba94db44a8b2e5a211d61d";
+      sha256 = "0i77wijbr021zfv096ja15f5l52phvsd5gziqn1m3k60qkmb9gkj";
     };
     dependencies = [];
 
@@ -1775,11 +1786,10 @@ rec {
       sha256 = "15wil973sqfgvix9li15qk49kv9l3rn8zqis2cl71k6xh1xvd9ff";
     };
     dependencies = [];
-    buildInputs = [ perl ruby ];
+    buildInputs = [ perl ruby git ];
     buildPhase = ''
       pushd ruby/command-t
-      ruby extconf.rb
-      make
+      gem build ./command-t.gemspec
       popd
     '';
   };
@@ -2381,6 +2391,16 @@ rec {
     };
     dependencies = [];
 
+  };
+
+  vimwiki = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vimwiki-2017-04-15";
+    src = fetchgit {
+      url = "git://github.com/vimwiki/vimwiki";
+      rev = "8cdc1c15388cc7f4edb827ff15dbc31d592a79af";
+      sha256 = "0hzmssyz7y7hv3mv67zkqwxc13crkpwv0plm7z701943h2zxj08h";
+    };
+    dependencies = [];
   };
 
   vinegar = buildVimPluginFrom2Nix { # created by nix#NixDerivation

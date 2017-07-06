@@ -2,6 +2,7 @@
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus
+, hostPlatform
 , openglSupport ? false, mesa ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -169,30 +170,13 @@ stdenv.mkDerivation rec {
 
   /* Cross-compilation is untested, consider this an outline, more work
      needs to be done to portions of the build to get it to work correctly */
-  crossAttrs = let
-    os = ''
-      if [ "${stdenv.cross.config}" = "*cygwin*" ] ; then
-        # Probably should look for mingw too
-        echo "cygwin"
-      elif [ "${stdenv.cross.config}" = "*darwin*" ] ; then
-        echo "darwin"
-      elif [ "${stdenv.cross.config}" = "*freebsd*" ] ; then
-        echo "freebsd"
-      elif [ "${stdenv.cross.config}" = "*linux*" ] ; then
-        echo "linux"
-      elif [ "${stdenv.cross.config}" = "*netbsd*" ] ; then
-        echo "netbsd"
-      elif [ "${stdenv.cross.config}" = "*openbsd*" ] ; then
-        echo "openbsd"
-      fi
-    '';
-  in {
-    dontSetConfigureCross = true;
+  crossAttrs = {
+    configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cross.config}-"
+      "--cross-prefix=${stdenv.cc.prefix}"
       "--enable-cross-compile"
-      "--target_os=${os}"
-      "--arch=${stdenv.cross.arch}"
+      "--target_os=${hostPlatform.parsed.kernel}"
+      "--arch=${hostPlatform.arch}"
     ];
   };
 

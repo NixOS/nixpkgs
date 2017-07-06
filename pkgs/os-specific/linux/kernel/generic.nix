@@ -25,6 +25,7 @@
   kernelPatches ? []
 , ignoreConfigErrors ? stdenv.platform.name != "pc"
 , extraMeta ? {}
+, hostPlatform
 , ...
 }:
 
@@ -59,7 +60,7 @@ let
     arch = stdenv.platform.kernelArch;
 
     crossAttrs = let
-        cp = stdenv.cross.platform;
+        cp = hostPlatform.platform;
       in {
         arch = cp.kernelArch;
         platformName = cp.name;
@@ -128,7 +129,7 @@ let
     };
 
   config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform stdenv.cross.platform;
+  configCross = configWithPlatform hostPlatform.platform;
 
   nativeDrv = lib.addPassthru kernel.nativeDrv passthru;
 

@@ -27,6 +27,7 @@
 "github:LnL7/vim-nix"
 "github:Quramy/tsuquyomi"
 "github:Shougo/deoplete.nvim"
+"github:albfan/nerdtree-git-plugin"
 "github:ajh17/Spacegray.vim"
 "github:alvan/vim-closetag"
 "github:ap/vim-css-color"

@@ -1,22 +1,22 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, gpgme, libgpgerror, devicemapper, btrfs-progs }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, gpgme, libgpgerror, devicemapper, btrfs-progs, pkgconfig, ostree }:
 
 with stdenv.lib;
 
 buildGoPackage rec {
   name = "skopeo-${version}";
-  version = "0.1.18";
+  version = "0.1.22";
   rev = "v${version}";
 
   goPackagePath = "github.com/projectatomic/skopeo";
   excludedPackages = "integration";
 
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ];
+  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs pkgconfig ostree ];
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "projectatomic";
     repo = "skopeo";
-    sha256 = "13k29i5hx909hvddl2xkyw4qzxq2q20ay9bkal3xi063s6l0sh0z";
+    sha256 = "0aivs37bcvx3g22a9r3q1vj2ahw323g1vaq9jzbmifm9k0pb07jy";
   };
 
   patches = [

@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''array-utils'';
-  version = ''20160929-git'';
+  version = ''20170516-git'';
 
   description = ''A few utilities for working with arrays.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/array-utils/2016-09-29/array-utils-20160929-git.tgz'';
-    sha256 = ''1nlrf7b81qq7l85kkdh3fxcs6ngnvh5zk7mb5mwf8vjm5kpfbbcx'';
+    url = ''http://beta.quicklisp.org/archive/array-utils/2017-05-16/array-utils-20170516-git.tgz'';
+    sha256 = ''0mbzv2w0jkd175bl2flrkg1108f32hir5fl1n4x6cn8kc14af13q'';
   };
+    
+  packageName = "array-utils";
 
   overrides = x: {
     postInstall = ''
@@ -28,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM array-utils DESCRIPTION A few utilities for working with arrays. SHA256 1nlrf7b81qq7l85kkdh3fxcs6ngnvh5zk7mb5mwf8vjm5kpfbbcx URL
-    http://beta.quicklisp.org/archive/array-utils/2016-09-29/array-utils-20160929-git.tgz MD5 8b3880c7b73625cf8ed599d91a3836b4 NAME array-utils TESTNAME NIL
-    FILENAME array-utils DEPS NIL DEPENDENCIES NIL VERSION 20160929-git SIBLINGS (array-utils-test)) */
+/* (SYSTEM array-utils DESCRIPTION A few utilities for working with arrays. SHA256 0mbzv2w0jkd175bl2flrkg1108f32hir5fl1n4x6cn8kc14af13q URL
+    http://beta.quicklisp.org/archive/array-utils/2017-05-16/array-utils-20170516-git.tgz MD5 c6e4ccbee8f5d72fb86493b419cd0f59 NAME array-utils TESTNAME NIL
+    FILENAME array-utils DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS (array-utils-test)) */

@@ -21,6 +21,7 @@
   ./config/sysctl.nix
   ./config/system-environment.nix
   ./config/system-path.nix
+  ./config/terminfo.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
@@ -235,16 +236,17 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/thermald.nix
+  ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
+  ./services/logging/heartbeat.nix
   ./services/logging/journalbeat.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
   ./services/logging/logstash.nix
   ./services/logging/rsyslogd.nix
-  ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/syslog-ng.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
@@ -252,6 +254,7 @@
   ./services/mail/exim.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
+  ./services/mail/mailhog.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix
@@ -575,6 +578,7 @@
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
+  ./services/web-apps/piwik.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
@@ -584,9 +588,11 @@
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix
+  ./services/web-servers/lighttpd/collectd.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
+  ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix

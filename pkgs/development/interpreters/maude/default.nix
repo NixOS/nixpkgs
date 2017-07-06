@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       rewriting logic computation.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

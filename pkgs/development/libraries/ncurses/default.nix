@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
+    # These paths end up in the default lookup chain.
+    export TERMINFO_DIRS=/etc/terminfo
+
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
     configureFlagsArray+=(
@@ -61,8 +64,6 @@ stdenv.mkDerivation rec {
            -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
         configure
     CFLAGS=-D_XOPEN_SOURCE_EXTENDED
-  '' + lib.optionalString stdenv.isCygwin ''
-    sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
   enableParallelBuilding = true;
@@ -122,7 +123,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/tset" "$out"
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString (!hostPlatform.isCygwin) ''
     rm "$out"/lib/*.a
   '';
 

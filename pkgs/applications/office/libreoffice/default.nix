@@ -72,6 +72,8 @@ in stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
   dontUseCmakeConfigure = true;
 
+  patches = [ ./xdg-open.patch ];
+
   postUnpack = ''
     mkdir -v $sourceRoot/src
   '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.md5 or f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
@@ -156,7 +158,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
 
-    for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
+    for a in sbase scalc sdraw smath swriter simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
       wrapProgram "$out/bin/$a" \
          --prefix XDG_DATA_DIRS : \

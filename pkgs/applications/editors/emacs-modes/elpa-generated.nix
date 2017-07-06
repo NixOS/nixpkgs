@@ -821,10 +821,10 @@
     gited = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "gited";
-        version = "0.2.2";
+        version = "0.2.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gited-0.2.2.tar";
-          sha256 = "0ncxcrmiqhfzy18ssfkvbzmzwjbmr41ac1x7fpykrgihqiqglzfq";
+          url = "https://elpa.gnu.org/packages/gited-0.2.5.tar";
+          sha256 = "186cyay7nk2khnhilrwzjipb3syxl0s4n96b48j9plaba48azz11";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1221,10 +1221,10 @@
     metar = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "metar";
-        version = "0.2";
+        version = "0.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/metar-0.2.el";
-          sha256 = "0rfzq79llh6ixw02kjpn8s2shxrabvfvsq48pagwak1jl2s0askf";
+          url = "https://elpa.gnu.org/packages/metar-0.3.el";
+          sha256 = "07gv0v0xwb5yzynwagmvf0n5c9wljy1jg4ympnxpa2d9r1zqc02g";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1445,10 +1445,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170606";
+        version = "20170622";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170606.tar";
-          sha256 = "0m2gln3wz9v3aflyxxy2317808yy05rrzrjx35spw2d90d10hmkz";
+          url = "https://elpa.gnu.org/packages/org-20170622.tar";
+          sha256 = "0922lcbr2r7bkswljqzbm5y3ny1n67qfrmf7h7z9hsw2wy0505dp";
         };
         packageRequires = [];
         meta = {
@@ -1771,10 +1771,10 @@
     soap-client = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "soap-client";
-        version = "3.1.2";
+        version = "3.1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/soap-client-3.1.2.tar";
-          sha256 = "0crfpp2ksqvzf2j3q44qq6z8zh1r10q9kw12cxbmjiih89q01b68";
+          url = "https://elpa.gnu.org/packages/soap-client-3.1.3.tar";
+          sha256 = "1s5m6dc7z532wchdih2ax2a791khyajjxb2xaw5rklk47yc5v3nk";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -2100,14 +2100,15 @@
           license = lib.licenses.free;
         };
       }) {};
-    websocket = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+    websocket = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
+    elpaBuild {
         pname = "websocket";
         version = "1.8";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/websocket-1.8.tar";
           sha256 = "0dcxmnnm8z7cvsc7nkb822a1g6w03klp7cijjnfq0pz84p3w9cd9";
         };
-        packageRequires = [];
+        packageRequires = [ cl-lib ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/websocket.html";
           license = lib.licenses.free;

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz'';
     sha256 = ''0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj'';
   };
+    
+  packageName = "dbd-postgres";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,7 @@ rec {
 }
 /* (SYSTEM dbd-postgres DESCRIPTION Database driver for PostgreSQL. SHA256 0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj URL
     http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz MD5 c48d284eda4aac1ff9a10891884f52e5 NAME dbd-postgres TESTNAME NIL FILENAME
-    dbd-postgres DEPS ((NAME trivial-garbage) (NAME cl-syntax-annot) (NAME cl-syntax) (NAME cl-postgres)) DEPENDENCIES
-    (trivial-garbage cl-syntax-annot cl-syntax cl-postgres) VERSION cl-dbi-20170124-git SIBLINGS (cl-dbi dbd-mysql dbd-sqlite3 dbi-test dbi)) */
+    dbd-postgres DEPS
+    ((NAME trivial-garbage FILENAME trivial-garbage) (NAME cl-syntax-annot FILENAME cl-syntax-annot) (NAME cl-syntax FILENAME cl-syntax)
+     (NAME cl-postgres FILENAME cl-postgres))
+    DEPENDENCIES (trivial-garbage cl-syntax-annot cl-syntax cl-postgres) VERSION cl-dbi-20170124-git SIBLINGS (cl-dbi dbd-mysql dbd-sqlite3 dbi-test dbi)) */

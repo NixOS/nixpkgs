@@ -77,6 +77,8 @@ let inherit (localSystem) system; in
         nativeTools  = true;
         nativePrefix = "/usr";
         nativeLibc   = true;
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
         inherit (prevStage) stdenv;
         cc           = {
           name    = "clang-9.9.9";

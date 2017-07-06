@@ -5,7 +5,10 @@ stdenv.mkDerivation rec {
   version = "7.6.0";
 
   src = fetchurl {
-    url = "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz";
+    urls = [
+      "http://www.ivmaisoft.com/_bin/atomic_ops/libatomic_ops-${version}.tar.gz"
+      "https://github.com/ivmai/libatomic_ops/releases/download/v${version}/libatomic_ops-${version}.tar.gz"
+    ];
     sha256 ="03ylfr29g9zc0r6b6axz3i68alj5qmxgzknxwam3jlx0sz8hcb4f";
   };
 

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz'';
     sha256 = ''091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl'';
   };
+    
+  packageName = "cl-test-more";
 
   overrides = x: {
     postInstall = ''

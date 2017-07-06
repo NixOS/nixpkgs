@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-paths-ttf'';
-  version = ''cl-vectors-20150407-git'';
+  version = ''cl-vectors-20170516-git'';
 
   description = ''cl-paths-ttf: vectorial paths manipulation'';
 
-  deps = [ args."zpb-ttf" ];
+  deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-vectors/2015-04-07/cl-vectors-20150407-git.tgz'';
-    sha256 = ''1qd7ywc2ayiyd5nw7shnjgh0nc14h328h0cw921g5b2n8j6y959w'';
+    url = ''http://beta.quicklisp.org/archive/cl-vectors/2017-05-16/cl-vectors-20170516-git.tgz'';
+    sha256 = ''0j7cdg6akq5giv8rgbxdv8rwpzkv98r5bv78p5nnrixpprvjhvzx'';
   };
+    
+  packageName = "cl-paths-ttf";
 
   overrides = x: {
     postInstall = ''
@@ -28,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM cl-paths-ttf DESCRIPTION cl-paths-ttf: vectorial paths manipulation SHA256 1qd7ywc2ayiyd5nw7shnjgh0nc14h328h0cw921g5b2n8j6y959w URL
-    http://beta.quicklisp.org/archive/cl-vectors/2015-04-07/cl-vectors-20150407-git.tgz MD5 9e255503bf4559912ea1511c919c474a NAME cl-paths-ttf TESTNAME NIL
-    FILENAME cl-paths-ttf DEPS ((NAME zpb-ttf)) DEPENDENCIES (zpb-ttf) VERSION cl-vectors-20150407-git SIBLINGS (cl-aa-misc cl-aa cl-paths cl-vectors)) */
+/* (SYSTEM cl-paths-ttf DESCRIPTION cl-paths-ttf: vectorial paths manipulation SHA256 0j7cdg6akq5giv8rgbxdv8rwpzkv98r5bv78p5nnrixpprvjhvzx URL
+    http://beta.quicklisp.org/archive/cl-vectors/2017-05-16/cl-vectors-20170516-git.tgz MD5 0258ae7face22f2035c1a85379ee0aae NAME cl-paths-ttf TESTNAME NIL
+    FILENAME cl-paths-ttf DEPS NIL DEPENDENCIES NIL VERSION cl-vectors-20170516-git SIBLINGS (cl-aa-misc cl-aa cl-paths cl-vectors)) */

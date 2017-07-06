@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     doCheck = false;
-    makeFlagsArray = [ "TCC=${stdenv.cross.config}-gcc" ];
+    makeFlags = [ "TCC=$CC" ];
   };
 
   meta = {

@@ -1,5 +1,5 @@
 { stdenv, fetchgit
-, pkgconfig, qtbase, qttools, qmakeHook, qtx11extras, alsaLib, libv4l, libXrandr
+, pkgconfig, qtbase, qttools, qmake, qtx11extras, alsaLib, libv4l, libXrandr
 , ffmpeg
 }:
 
@@ -11,13 +11,12 @@ stdenv.mkDerivation {
     sha256 = "1hvw7xz1mj16ishbaip73wddbmgibsz0pad4y586zbarpynss25z";
   };
 
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
     alsaLib
     libv4l
-    pkgconfig
     qtbase
     qttools
-    qmakeHook
     qtx11extras
     libXrandr
   ];

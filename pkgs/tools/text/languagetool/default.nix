@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     for lt in languagetool{,-commandline,-server};do
     cat > $out/bin/$lt <<EXE
     #!${stdenv.shell}
-    ${jdk}/bin/java -cp $out/share/ -jar $out/share/$lt.jar $@
+    ${jdk}/bin/java -cp $out/share/ -jar $out/share/$lt.jar "\$@"
     EXE
     chmod +x $out/bin/$lt
     done
