@@ -46,9 +46,6 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
-    # These paths end up in the default lookup chain.
-    export TERMINFO_DIRS=/etc/terminfo
-
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
     configureFlagsArray+=(
