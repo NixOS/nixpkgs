@@ -16196,6 +16196,8 @@ with pkgs;
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
+  nylas-mail-bin = callPackage ../applications/networking/mailreaders/nylas-mail-bin { };
+
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
     libpng = libpng_apng;
