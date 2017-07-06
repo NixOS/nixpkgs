@@ -52,6 +52,10 @@ in
         };
       };
 
+      description = ''
+        Subvolume configuration
+      '';
+
       type = types.attrsOf (types.submodule {
         options = {
           subvolume = mkOption {
