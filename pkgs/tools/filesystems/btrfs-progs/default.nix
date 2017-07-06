@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   # This should be fine on all platforms so apply universally
   patchPhase = "sed -i s/-O1/-O2/ configure";
 
+  postInstall = ''
+    install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs
+  '';
+
   meta = with stdenv.lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = https://btrfs.wiki.kernel.org/;
