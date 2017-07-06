@@ -100,24 +100,25 @@ let
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
-    '';
 
-    configureFlags = [
-      "--with-boot-jdk=${bootjdk.home}"
-      "--with-update-version=${update}"
-      "--with-build-number=${build}"
-      "--with-milestone=fcs"
-      "--enable-unlimited-crypto"
-      "--disable-debug-symbols"
-      "--disable-freetype-bundling"
-      "--with-zlib=system"
-      "--with-giflib=system"
-      "--with-stdc++lib=dynamic"
+      configureFlagsArray=(
+        "--with-boot-jdk=${bootjdk.home}"
+        "--with-update-version=${update}"
+        "--with-build-number=${build}"
+        "--with-milestone=fcs"
+        "--enable-unlimited-crypto"
+        "--disable-debug-symbols"
+        "--disable-freetype-bundling"
+        "--with-zlib=system"
+        "--with-giflib=system"
+        "--with-stdc++lib=dynamic"
 
-      # glibc 2.24 deprecated readdir_r so we need this
-      # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
-      "--with-extra-cflags=\"-Wno-error=deprecated-declarations\""
-    ] ++ lib.optional minimal "--disable-headful";
+        # glibc 2.24 deprecated readdir_r so we need this
+        # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
+        "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
+    ''
+    + lib.optionalString minimal "\"--disable-headful\""
+    + ");";
 
     NIX_LDFLAGS= lib.optionals (!minimal) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
