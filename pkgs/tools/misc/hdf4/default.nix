@@ -2,8 +2,8 @@
 , fetchurl
 , cmake
 , libjpeg
-, szip
 , zlib
+, szip ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  preConfigure = "export SZIP_INSTALL=${szip}";
+  preConfigure = stdenv.lib.optionalString (szip != null) "export SZIP_INSTALL=${szip}";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -31,11 +31,12 @@ stdenv.mkDerivation rec {
     "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"
     "-DHDF4_ENABLE_JPEG_LIB_SUPPORT=ON"
     "-DHDF4_ENABLE_NETCDF=OFF"
-    "-DHDF4_ENABLE_SZIP_ENCODING=ON"
-    "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
     "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
     "-DHDF4_BUILD_FORTRAN=OFF"
     "-DJPEG_DIR=${libjpeg}"
+  ] ++ stdenv.lib.optionals (szip != null) [
+    "-DHDF4_ENABLE_SZIP_ENCODING=ON"
+    "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
   ];
 
   doCheck = true;

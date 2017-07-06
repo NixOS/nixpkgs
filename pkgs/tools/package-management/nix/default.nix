@@ -79,6 +79,9 @@ let
 
     doInstallCheck = true;
 
+    # socket path becomes too long otherwise
+    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+
     separateDebugInfo = stdenv.isLinux;
 
     crossAttrs = {

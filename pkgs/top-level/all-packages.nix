@@ -1713,6 +1713,8 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
+
   ### DEVELOPMENT / EMSCRIPTEN
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
@@ -2259,6 +2261,12 @@ with pkgs;
     zfsSupport = false;
   };
 
+  grub2_xen = callPackage ../tools/misc/grub/2.0x.nix {
+    xenSupport = true;
+  };
+
+  grub2_pvgrub_image = callPackage ../tools/misc/grub/pvgrub_image { };
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
@@ -2364,7 +2372,9 @@ with pkgs;
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf4 = callPackage ../tools/misc/hdf4 { };
+  hdf4 = callPackage ../tools/misc/hdf4 {
+    szip = null;
+  };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
     gfortran = null;
@@ -5751,6 +5761,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
+  mono50 = lowPrio (callPackage ../development/compilers/mono/5.0.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  });
+
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
@@ -6533,6 +6548,8 @@ with pkgs;
   bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
   bison = bison3;
 
+  blackmagic = callPackage ../development/tools/misc/blackmagic { };
+
   bloaty = callPackage ../development/tools/bloaty { };
 
   bossa = callPackage ../development/tools/misc/bossa {
@@ -6992,6 +7009,8 @@ with pkgs;
 
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
+
+  obuild = callPackage ../development/tools/ocaml/obuild { };
 
   omake = callPackage ../development/tools/ocaml/omake {
     inherit (ocamlPackages_4_02) ocaml;
@@ -7539,6 +7558,7 @@ with pkgs;
   db53 = callPackage ../development/libraries/db/db-5.3.nix { };
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
+  db62 = callPackage ../development/libraries/db/db-6.2.nix { };
 
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
@@ -9721,6 +9741,8 @@ with pkgs;
   pugixml = callPackage ../development/libraries/pugixml { };
 
   re2 = callPackage ../development/libraries/re2 { };
+
+  qbs = callPackage ../development/tools/build-managers/qbs { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
   qca2-qt5 = callPackage ../development/libraries/qca2 { qt = qt5.qtbase; };
@@ -16177,6 +16199,8 @@ with pkgs;
   tetraproc = callPackage ../applications/audio/tetraproc { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
+
+  nylas-mail-bin = callPackage ../applications/networking/mailreaders/nylas-mail-bin { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
