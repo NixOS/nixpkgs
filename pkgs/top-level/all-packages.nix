@@ -14548,8 +14548,6 @@ with pkgs;
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
-
-    configFile = config.i3.configFile or null;
   };
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
