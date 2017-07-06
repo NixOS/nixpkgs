@@ -68,7 +68,8 @@ stdenv.mkDerivation ({
     ++ lib.optionals stdenv.isi686 [
       ./fix-i686-memchr.patch
       ./i686-fix-vectorized-strcspn.patch
-    ];
+    ]
+    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch;
 
   postPatch =
     # Needed for glibc to build with the gnumake 3.82
