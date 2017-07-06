@@ -15,7 +15,8 @@ import ./make-test.nix ({ ... }:
         fsType = "btrfs";
       };
     };
-    services.snapper.configs.home.mountPoint = "/home";
+    services.snapper.configs.home.subvolume = "/home";
+    services.snapper.filters = "/nix";
   };
 
   testScript = ''

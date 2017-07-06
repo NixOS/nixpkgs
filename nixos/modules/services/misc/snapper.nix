@@ -33,11 +33,19 @@ in
       '';
     };
 
+    filters = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      description = ''
+        Global display difference filter. See man:snapper(8) for more details.
+      '';
+    };
+
     configs = mkOption {
       default = { };
       example = literalExample {
         "home" = {
-          mountPoint = "/home";
+          snapshot = "/home";
           extraConfig = ''
             ALLOW_USERS="alice"
           '';
@@ -46,17 +54,30 @@ in
 
       type = types.attrsOf (types.submodule {
         options = {
-          mountPoint = mkOption {
-            type = types.string;
+          subvolume = mkOption {
+            type = types.path;
+            description = ''
+              Path of the subvolume or mount point.
+              This path is a subvolume and has to contain a subvolumed named
+              .snapshots.
+              See also man:snapper(8) section PERMISSIONS.
+            '';
+          };
+
+          fstype = mkOption {
+            type = types.enum [ "btrfs" ];
+            default = "btrfs";
+            description = ''
+              Filesystem type. Only btrfs is stable and tested.
+            '';
           };
 
           extraConfig = mkOption {
             type = types.lines;
             default = "";
             description = ''
-              see man:snapper(8)
-
-              Note: FSTYPE and SUBVOLUME are already set
+              Additional configuration next to SUBVOLUME and FSTYPE.
+              See man:snapper-configs(5).
             '';
           };
         };
@@ -72,32 +93,27 @@ in
 
       systemPackages = [ pkgs.snapper ];
 
-      # Note: snapper/config-templates/default is not needed
+      # Note: snapper/config-templates/default is only needed for create-config
+      #       which is not the NixOS way to configure.
       etc = {
 
         "sysconfig/snapper".text = ''
           SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
         '';
 
-      } // mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" (
-      {
+      }
+      // (mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" ({
         text = ''
           ${subvolume.extraConfig}
-
-          # mandatory for rollback!
-          FSTYPE="${(builtins.getAttr subvolume.mountPoint config.fileSystems).fsType}"
-
-          SUBVOLUME="${subvolume.mountPoint}"
+          FSTYPE="${subvolume.fstype}"
+          SUBVOLUME="${subvolume.subvolume}"
         '';
-      })) cfg.configs;
+      })) cfg.configs)
+      // (lib.optionalAttrs (cfg.filters != null) {
+        "snapper/filters/default.txt".text = cfg.filters;
+      });
 
     };
-
-    # TODO: automatically create subvolume .snapshots for each config
-    #
-    # Only possible if filesystem is mounted
-    #   system.activationScripts is executed during boot before mounting
-    #   systemd.mounts.<mountPoint> could be a way to go
 
     services.dbus.packages = [ pkgs.snapper ];
 
