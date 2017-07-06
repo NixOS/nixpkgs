@@ -95,10 +95,10 @@
     ahungry-theme = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "ahungry-theme";
-        version = "1.3.0";
+        version = "1.4.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ahungry-theme-1.3.0.tar";
-          sha256 = "1p2zaq0s4bbl5cx6wyab24wamw7m0mysb0v47dqjmnvfc25z84rq";
+          url = "https://elpa.gnu.org/packages/ahungry-theme-1.4.0.tar";
+          sha256 = "1n8k12mfn01f20j0pyd7ycj77x0y3a008xc94frklaaqjc0v26s4";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -821,10 +821,10 @@
     gited = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "gited";
-        version = "0.2.5";
+        version = "0.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gited-0.2.5.tar";
-          sha256 = "186cyay7nk2khnhilrwzjipb3syxl0s4n96b48j9plaba48azz11";
+          url = "https://elpa.gnu.org/packages/gited-0.3.1.tar";
+          sha256 = "14ng63hxd6l76r8m54gzqq9j66cqz48ad1zaamn100h4b2rzf2q8";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1445,10 +1445,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170622";
+        version = "20170703";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170622.tar";
-          sha256 = "0922lcbr2r7bkswljqzbm5y3ny1n67qfrmf7h7z9hsw2wy0505dp";
+          url = "https://elpa.gnu.org/packages/org-20170703.tar";
+          sha256 = "04rg2fldbsxizq84xl6613s8xnwyp8iwmxm167v69bc85xaf7s9s";
         };
         packageRequires = [];
         meta = {
@@ -1651,10 +1651,10 @@
       }) {};
     rnc-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "rnc-mode";
-        version = "0.1";
+        version = "0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/rnc-mode-0.1.el";
-          sha256 = "18hm9g05ld8i1apr28dmd9ccq6dc0w6rdqhi0k7ka95jxxdr9m6d";
+          url = "https://elpa.gnu.org/packages/rnc-mode-0.2.el";
+          sha256 = "0xhvcfqjkb010wc7r218xcjidv1c8597vayyv09vk97z4qxqkrbd";
         };
         packageRequires = [];
         meta = {
