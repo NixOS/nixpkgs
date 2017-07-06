@@ -4,7 +4,7 @@
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
-, enableInfinality ? true # font rendering patch
+#, enableInfinality ? true # font rendering patch
 , enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
 }:
 
@@ -90,9 +90,9 @@ let
       ./fix-java-home-jdk9.patch
       ./read-truststore-from-env-jdk9.patch
       ./currency-date-range-jdk8.patch
-    ] ++ lib.optionals (!minimal && enableInfinality) [
-      ./004_add-fontconfig.patch
-      ./005_enable-infinality.patch
+    #] ++ lib.optionals (!minimal && enableInfinality) [
+    #  ./004_add-fontconfig.patch
+    #  ./005_enable-infinality.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
       ./swing-use-gtk-jdk9.patch
     ];
