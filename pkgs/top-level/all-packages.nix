@@ -2430,6 +2430,8 @@ with pkgs;
 
   host = bind.host;
 
+  hotspot = libsForQt56.callPackage ../development/tools/analysis/hotspot { };
+
   hping = callPackage ../tools/networking/hping { };
 
   htpdate = callPackage ../tools/networking/htpdate { };
