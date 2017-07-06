@@ -10,7 +10,6 @@
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, hostPlatform, targetPlatform
 , runCommand ? null
 }:
 
@@ -22,12 +21,14 @@ assert !nativeTools ->
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
-assert targetPlatform != hostPlatform -> runCommand != null;
+assert stdenv.targetPlatform != stdenv.hostPlatform -> runCommand != null;
 
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
 assert cc.langVhdl or false -> zlib != null;
 
 let
+  inherit (stdenv) hostPlatform targetPlatform;
+
   # Prefix for binaries. Customarily ends with a dash separator.
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by

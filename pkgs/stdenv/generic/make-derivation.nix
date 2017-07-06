@@ -1,8 +1,4 @@
-{ lib, config, stdenv
-
-# TODO(@Ericson2314): get off stdenv
-, hostPlatform, targetPlatform
-}:
+{ lib, config, stdenv }:
 
 rec {
   # `mkDerivation` wraps the builtin `derivation` function to
@@ -49,12 +45,12 @@ rec {
 
       outputs' =
         outputs ++
-        (if separateDebugInfo then assert targetPlatform.isLinux; [ "debug" ] else []);
+        (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
 
       dependencies' = let
           justMap = map lib.chooseDevOutputs dependencies;
           nativeBuildInputs = lib.elemAt justMap 0
-            ++ lib.optional targetPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh;
+            ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh;
           buildInputs = lib.elemAt justMap 1
                # TODO(@Ericson2314): Should instead also be appended to `nativeBuildInputs`.
             ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh;
@@ -82,7 +78,7 @@ rec {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
-          system = stdenv.system; # TODO(@Ericson2314): be correct about cross compilation
+          inherit (stdenv) system;
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 
@@ -91,7 +87,7 @@ rec {
 
           propagatedNativeBuildInputs = lib.elemAt propagatedDependencies' 0;
           propagatedBuildInputs = lib.elemAt propagatedDependencies' 1;
-        } // lib.optionalAttrs (hostPlatform.isDarwin) {
+        } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
           let profiles = [ stdenv.extraSandboxProfile ] ++ computedSandboxProfile ++ computedPropagatedSandboxProfile ++ [ propagatedSandboxProfile sandboxProfile ];
@@ -139,7 +135,9 @@ rec {
           {
             inherit lib config meta derivationArg;
             mkDerivationArg = attrs;
-            inherit (stdenv) system; # TODO: cross-compilation?
+            # Nix itself uses the `system` field of a derivation to decide where
+            # to build it. This is a bit confusing for cross compilation.
+            inherit (stdenv) system;
           }))
         ( {
             overrideAttrs = f: mkDerivation (attrs // (f attrs));

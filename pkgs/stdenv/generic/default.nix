@@ -15,18 +15,32 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , stdenvSandboxProfile ? ""
 , extraSandboxProfile ? ""
 
-, # The platforms here do *not* correspond to the stage the stdenv is
-  # used in, but rather the previous one, in which it was built. We
-  # use the latter two platforms, like a cross compiler, because the
-  # stand environment is a build tool if you squint at it, and because
-  # neither of these are used when building stdenv so we know the
-  # build platform is irrelevant.
-  hostPlatform, targetPlatform
+  ## Platform parameters
+  ##
+  ## The "build" "host" "target" terminology below comes from GNU Autotools. See
+  ## its documentation for more information on what those words mean. Note that
+  ## each should always be defined, even when not cross compiling.
+  ##
+  ## For purposes of bootstrapping, think of each stage as a "sliding window"
+  ## over a list of platforms. Specifically, the host platform of the previous
+  ## stage becomes the build platform of the current one, and likewise the
+  ## target platform of the previous stage becomes the host platform of the
+  ## current one.
+  ##
+
+, # The platform on which packages are built. Consists of `system`, a
+  # string (e.g.,`i686-linux') identifying the most import attributes of the
+  # build platform, and `platform` a set of other details.
+  buildPlatform
+
+, # The platform on which packages run.
+  hostPlatform
+
+, # The platform which build tools (especially compilers) build for in this stage,
+  targetPlatform
 }:
 
 let
-  inherit (targetPlatform) system;
-
   defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
@@ -49,7 +63,11 @@ let
     derivation (
     (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
     {
-      inherit system name;
+      inherit name;
+
+      # Nix itself uses the `system` field of a derivation to decide where to
+      # build it. This is a bit confusing for cross compilation.
+      inherit (buildPlatform) system;
 
       builder = shell;
 
@@ -59,7 +77,7 @@ let
 
       inherit preHook initialPath shell defaultNativeBuildInputs;
     }
-    // lib.optionalAttrs hostPlatform.isDarwin {
+    // lib.optionalAttrs buildPlatform.isDarwin {
       __sandboxProfile = stdenvSandboxProfile;
       __impureHostDeps = __stdenvImpureHostDeps;
     })
@@ -70,6 +88,8 @@ let
         description = "The default build environment for Unix packages in Nixpkgs";
         platforms = lib.platforms.all;
       };
+
+      inherit buildPlatform hostPlatform targetPlatform;
 
       inherit extraBuildInputs __extraImpureHostDeps extraSandboxProfile;
 
@@ -85,9 +105,6 @@ let
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;
-        # TODO(@Ericson2314): Remove
-        inherit
-          hostPlatform targetPlatform;
       }) mkDerivation;
 
       # For convenience, bring in the library functions in lib/ so

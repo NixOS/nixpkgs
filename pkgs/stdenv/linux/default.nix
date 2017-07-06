@@ -52,8 +52,11 @@ let
     let
 
       thisStdenv = import ../generic {
-        inherit config extraBuildInputs;
         name = "stdenv-linux-boot";
+        buildPlatform = localSystem;
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
+        inherit config extraBuildInputs;
         preHook =
           ''
             # Don't patch #!/interpreter because it leads to retained
@@ -64,9 +67,6 @@ let
         shell = "${bootstrapTools}/bin/bash";
         initialPath = [bootstrapTools];
 
-        hostPlatform = localSystem;
-        targetPlatform = localSystem;
-
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
         };
@@ -76,8 +76,6 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
-          hostPlatform = localSystem;
-          targetPlatform = localSystem;
           cc = prevStage.gcc-unwrapped;
           isGNU = true;
           libc = prevStage.glibc;
@@ -99,9 +97,6 @@ let
       };
 
     in {
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
       inherit config overlays;
       stdenv = thisStdenv;
     };
@@ -241,8 +236,6 @@ in
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
-        hostPlatform = localSystem;
-        targetPlatform = localSystem;
         cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
         inherit (self) stdenv binutils coreutils gnugrep;
@@ -263,11 +256,11 @@ in
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = import ../generic rec {
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
       inherit config;
 
       preHook = ''
@@ -279,9 +272,6 @@ in
 
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
-
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
 
       extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
