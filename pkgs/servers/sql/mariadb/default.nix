@@ -18,8 +18,9 @@ common = rec { # attributes common to both builds
   version = "10.2.6";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
+    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
     sha256 = "1rd2b1b6s87ymr5qhlggr4q4ljazv82ih0msgrbz1rfn81pcg1f3";
+    name   = "mariadb-${version}.tar.gz";
   };
 
   prePatch = ''
@@ -69,9 +70,10 @@ common = rec { # attributes common to both builds
   postInstall = ''
     rm "$out"/lib/*.a
     find "''${!outputBin}/bin" -name '*test*' -delete
+    moveToOutput bin/mariadb_config "$dev"
   '';
 
-  passthru.mysqlVersion = "5.6";
+  passthru.mysqlVersion = "5.7";
 
   meta = with stdenv.lib; {
     description = "An enhanced, drop-in replacement for MySQL";
