@@ -9,8 +9,8 @@
 
 let
   inherit (bootPkgs) ghc;
-  version = "8.2.1-rc2";
-  preReleaseName = "ghc-8.2.0.20170507";
+  version = "8.2.1-rc3";
+  preReleaseName = "ghc-8.2.0.20170704";
   commonBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
   commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -27,7 +27,7 @@ in stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/${version}/${preReleaseName}-src.tar.xz";
-    sha256 = "1hy3l6nzkyhzwy9mii4zs51jv048zwvdqk1q3188jznz35392zrn";
+    sha256 = "0ccfybbjrmd8yzqbfdqvb6clz2kd005wi8sx3mfjmbkmxv0l4jry";
   };
 
   postPatch = "patchShebangs .";
