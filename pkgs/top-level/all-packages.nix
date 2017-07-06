@@ -13096,6 +13096,8 @@ with pkgs;
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
+  ttf-envy-code-r = callPackage ../data/fonts/ttf-envy-code-r {};
+
   tzdata = callPackage ../data/misc/tzdata { };
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
