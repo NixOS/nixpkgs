@@ -390,6 +390,7 @@
   neeasade = "Nathan Isom <nathanisom27@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
+  nh2 = "Niklas Hambüchen <mail@nh2.me>";
   nhooyr = "Anmol Sethi <anmol@aubble.com>";
   nickhu = "Nick Hu <me@nickhu.co.uk>";
   nicknovitski = "Nick Novitski <nixpkgs@nicknovitski.com>";
