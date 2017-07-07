@@ -1,7 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, hostPlatform }:
 rec {
 
-  luajit = luajit_2_1;
+  luajit =
+    # Compatibility problems with lightuserdata pointers; see:
+    # https://github.com/LuaJIT/LuaJIT/blob/v2.1/doc/status.html#L101
+    if hostPlatform.is64bit && (hostPlatform.isArm || hostPlatform.isSunOS)
+      then luajit_2_0
+      else luajit_2_1;
 
   luajit_2_0 = generic {
     version = "2.0.5";
