@@ -60,6 +60,7 @@ self: super: {
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
   # Older, LTS-8-based versions don't compile.
+  base-orphans = self.base-orphans_0_6;
   hspec-meta = self.hspec-meta_2_4_4;
   primitive = self.primitive_0_6_2_0;
   syb = self.syb_0_7;
@@ -68,8 +69,5 @@ self: super: {
   # Work around overly restrictive constraints on the version of 'base'.
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   hashable = doJailbreak super.hashable;
-
-  # https://github.com/haskell-compat/base-orphans/issues/42
-  base-orphans = dontCheck super.base-orphans;
 
 }
