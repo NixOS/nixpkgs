@@ -17,9 +17,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ bottle ];
 
+  patches = [ ./spellchecker.patch ];
   preBuild = "cd ..";
   postInstall = ''
-    substitute grammalecte/spellchecker.py grammalecte/spellchecker.py --replace "import ibdawg" "from grammalecte import ibdawg"
     mkdir $out/bin
     cp $out/cli.py $out/bin/gramalecte
     cp $out/server.py $out/bin/gramalected
