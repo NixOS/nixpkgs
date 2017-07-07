@@ -63,6 +63,7 @@ self: super: {
   base-orphans = self.base-orphans_0_6;
   hspec-meta = self.hspec-meta_2_4_4;
   primitive = self.primitive_0_6_2_0;
+  semigroupoids = self.semigroupoids_5_2;
   syb = self.syb_0_7;
   vector = super.vector_0_12_0_1;
 
