@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = https://github.com/SRI-CSL/libpoly;
     description = "C library for manipulating polynomials";
-    license = licenses.gplv3;
+    license = licenses.lgpl3;
     platforms = platforms.all;
   };
 }
