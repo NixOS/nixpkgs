@@ -6117,7 +6117,8 @@ with pkgs;
 
   luaPackages = lua52Packages;
 
-  luajit = callPackage ../development/interpreters/luajit {};
+  inherit (callPackages ../development/interpreters/luajit {})
+    luajit luajit_2_0 luajit_2_1;
 
   luarocks = luaPackages.luarocks;
 
