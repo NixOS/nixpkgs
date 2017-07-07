@@ -62,7 +62,7 @@ in
             type = types.path;
             description = ''
               Path of the subvolume or mount point.
-              This path is a subvolume and has to contain a subvolumed named
+              This path is a subvolume and has to contain a subvolume named
               .snapshots.
               See also man:snapper(8) section PERMISSIONS.
             '';
