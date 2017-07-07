@@ -61,11 +61,9 @@ rec {
                     , buildPlatform, hostPlatform, targetPlatform
                     } @ overrideArgs: let
     stdenv = overrideArgs.stdenv.override {
-      # TODO(@Ericson2314): Cannot do this for now because then Nix thinks the
-      # resulting derivation should be built on the host platform.
-      #hostPlatform = buildPlatform;
-      #targetPlatform = hostPlatform;
-      inherit cc;
+      inherit
+        buildPlatform hostPlatform targetPlatform
+        cc;
 
       allowedRequisites = null;
 
