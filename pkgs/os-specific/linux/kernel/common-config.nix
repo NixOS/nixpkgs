@@ -92,6 +92,14 @@ with stdenv.lib;
   # module, so that the initrd gets a good I/O scheduler.
   IOSCHED_CFQ y
   BLK_CGROUP y # required by CFQ
+  IOSCHED_DEADLINE y
+  ${optionalString (versionAtLeast version "4.11") ''
+    MQ_IOSCHED_DEADLINE y
+  ''}
+  ${optionalString (versionAtLeast version "4.12") ''
+    MQ_IOSCHED_KYBER y
+    IOSCHED_BFQ m
+  ''}
 
   # Enable NUMA.
   NUMA? y
