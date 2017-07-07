@@ -68,4 +68,7 @@ self: super: {
   # Work around overly restrictive constraints on the version of 'base'.
   ChasingBottoms = doJailbreak super.ChasingBottoms;
 
+  # https://github.com/haskell-compat/base-orphans/issues/42
+  base-orphans = dontCheck super.base-orphans;
+
 }
