@@ -1,6 +1,6 @@
 --- a/unix/Makefile
 +++ b/unix/Makefile
-@@ -42,9 +42,9 @@
+@@ -42,6 +42,6 @@
  # such as -DDOSWILD).
  
  # UnZip flags
@@ -9,6 +9,3 @@
  LD = $(CC)#	must match, else "unresolved symbol:  ___main" is possible)
 -AS = as
 +AS ?= as
- LOC = $(D_USE_BZ2) $(LOCAL_UNZIP)
- AF = $(LOC)
- CFLAGS = -O
