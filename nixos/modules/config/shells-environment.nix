@@ -22,8 +22,20 @@ let
       allVariables =
         zipAttrsWith (n: concatLists) [ absoluteVariables suffixedVariables ];
 
+      filterPath = path: ''
+        # add existing directories to PATH
+        for i in "$HOME/bin" ${concatStringsSep " " path}; do
+          if [ -d "$i" ]; then
+            export PATH="$PATH:$i"
+          fi
+        done
+      '';
+
       exportVariables =
-        mapAttrsToList (n: v: ''export ${n}="${concatStringsSep ":" v}"'') allVariables;
+        mapAttrsToList (n: v:
+          if n == "PATH"
+          then filterPath v
+          else ''export ${n}="${concatStringsSep ":" v}"'') allVariables;
     in
       concatStringsSep "\n" exportVariables;
 in
@@ -167,9 +179,6 @@ in
          ${exportedEnvVars}
 
          ${cfg.extraInit}
-
-         # ~/bin if it exists overrides other bin directories.
-         export PATH="$HOME/bin:$PATH"
        '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]
