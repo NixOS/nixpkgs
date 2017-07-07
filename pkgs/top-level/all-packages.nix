@@ -2067,6 +2067,8 @@ with pkgs;
 
   git-lfs = callPackage ../applications/version-management/git-lfs { };
 
+  git-ftp = callPackage ../development/tools/git-ftp { };
+
   git-series = callPackage ../development/tools/git-series { };
 
   git-up = callPackage ../applications/version-management/git-up { };

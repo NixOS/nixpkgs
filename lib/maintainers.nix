@@ -565,6 +565,7 @@
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   tvestelind = "Tomas Vestelind <tomas.vestelind@fripost.org>";
   tvorog = "Marsel Zaripov <marszaripov@gmail.com>";
+  tweber = "Thorsten Weber <tw+nixpkgs@360vier.de>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   utdemir = "Utku Demir <me@utdemir.com>";
