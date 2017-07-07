@@ -470,7 +470,4 @@ self: super: builtins.intersectAttrs super {
   # Needs a newer version of brick than lts-8.x provides.
   hledger-iadd = super.hledger-iadd.override { brick = self.brick_0_19; };
 
-  # Needs a newer version of hsyslog than lts-8.x provides.
-  logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5; };
-
 }
