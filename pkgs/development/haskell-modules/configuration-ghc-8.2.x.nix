@@ -60,9 +60,10 @@ self: super: {
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
   # Older, LTS-8-based versions don't compile.
-  vector = super.vector_0_12_0_1;
+  hspec-meta = self.hspec-meta_2_4_4;
   primitive = self.primitive_0_6_2_0;
   syb = self.syb_0_7;
+  vector = super.vector_0_12_0_1;
 
   # Work around overly restrictive constraints on the version of 'base'.
   doctest = doJailbreak super.doctest;
