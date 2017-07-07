@@ -3,14 +3,13 @@
 buildGoPackage rec {
   name = "consul_exporter-${version}";
   version = "0.3.0";
-  rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/consul_exporter";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "prometheus";
     repo = "consul_exporter";
+    rev = "v${version}";
     sha256 = "1zffbxyfmqpbdqkx5rb5vjgd9j4p4zcrh6jvn1zhbdzrcs7khnd9";
   };
 
