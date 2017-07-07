@@ -198,6 +198,8 @@ self: super: {
         '';
       })) pkgs.libcxx;
 
+  inline-java = addBuildDepend super.inline-java pkgs.jdk;
+
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
