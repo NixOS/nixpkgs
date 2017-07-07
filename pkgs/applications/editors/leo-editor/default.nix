@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/leo-editor
     mv * $out/share/leo-editor
 
-    makeWrapper ${python3Packages.python}/bin/python3.5m $out/bin/leo \
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/leo \
       --set PYTHONPATH "$PYTHONPATH:$out/share/leo-editor" \
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
   '';
