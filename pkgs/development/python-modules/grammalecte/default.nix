@@ -11,7 +11,7 @@ buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.dicollecte.org/grammalecte/oxt/Grammalecte-fr-v${version}.zip";
+    url = "http://www.dicollecte.org/grammalecte/zip/Grammalecte-fr-v${version}.zip";
     sha256 = "1g5i978cdz14rfdi4z2ayb2c1rf8cq991slwsv0krhpvl9ripl9c";
   };
 
