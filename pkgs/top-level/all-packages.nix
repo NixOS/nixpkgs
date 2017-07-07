@@ -17921,6 +17921,8 @@ with pkgs;
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
 
+  abc = callPackage ../applications/science/logic/abc/libabc.nix {};
+
   abella = callPackage ../applications/science/logic/abella {};
 
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {
