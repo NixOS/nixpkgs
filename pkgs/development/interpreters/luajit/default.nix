@@ -4,7 +4,8 @@ rec {
   luajit =
     # Compatibility problems with lightuserdata pointers; see:
     # https://github.com/LuaJIT/LuaJIT/blob/v2.1/doc/status.html#L101
-    if hostPlatform.is64bit && (hostPlatform.isArm || hostPlatform.isSunOS)
+    if hostPlatform.is64bit && (/*hostPlatform.isArm ||*/ hostPlatform.isSunOS)
+        # FIXME: fix the aarch64 build
       then luajit_2_0
       else luajit_2_1;
 
