@@ -13,8 +13,6 @@ buildGoPackage rec {
     sha256 = "0alsv04iihrk1nffp6fmyzxid26dqhg1k45957c2ymyzyq9cglxj";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with stdenv.lib; {
     description = "A friendly and expressive Unix shell";
     homepage = https://github.com/elves/elvish;
