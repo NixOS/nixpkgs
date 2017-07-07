@@ -62,6 +62,7 @@ self: super: {
   # Older, LTS-8-based versions don't compile.
   base-orphans = self.base-orphans_0_6;
   hspec-meta = self.hspec-meta_2_4_4;
+  lens = self.lens_4_15_3;
   primitive = self.primitive_0_6_2_0;
   semigroupoids = self.semigroupoids_5_2;
   syb = self.syb_0_7;
