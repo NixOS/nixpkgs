@@ -67,5 +67,6 @@ self: super: {
 
   # Work around overly restrictive constraints on the version of 'base'.
   doctest = doJailbreak super.doctest;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
 
 }
