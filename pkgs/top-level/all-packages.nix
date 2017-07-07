@@ -18091,6 +18091,8 @@ with pkgs;
 
   picosat = callPackage ../applications/science/logic/picosat {};
 
+  libpoly = callPackage ../applications/science/logic/poly/default.nix {};
+
   prooftree = (with ocamlPackages_4_01_0;
     callPackage  ../applications/science/logic/prooftree {
       camlp5 = camlp5_transitional;
