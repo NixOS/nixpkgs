@@ -66,7 +66,6 @@ self: super: {
   vector = super.vector_0_12_0_1;
 
   # Work around overly restrictive constraints on the version of 'base'.
-  doctest = doJailbreak super.doctest;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
 
 }
