@@ -39,7 +39,7 @@ with stdenv.lib;
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
-  ${optionalString (versionOlder version "4.10") ''
+  ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
   ''}
 
@@ -601,7 +601,7 @@ with stdenv.lib;
   FW_LOADER_USER_HELPER_FALLBACK? n
 
   # Disable various self-test modules that have no use in a production system
-  ${optionalString (versionOlder version "4.9") ''
+  ${optionalString (versionOlder version "4.4") ''
     ARM_KPROBES_TEST? n
   ''}
 
@@ -610,8 +610,6 @@ with stdenv.lib;
   BACKTRACE_SELF_TEST? n
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
-  DRM_DEBUG_MM_SELFTEST? n
-  EFI_TEST? n
   GLOB_SELFTEST? n
   INTERVAL_TREE_TEST? n
   LNET_SELFTEST? n
@@ -620,28 +618,36 @@ with stdenv.lib;
   NOTIFIER_ERROR_INJECTION? n
   PERCPU_TEST? n
   RBTREE_TEST? n
-  RCU_PERF_TEST? n
   RCU_TORTURE_TEST? n
-  TEST_ASYNC_DRIVER_PROBE? n
-  TEST_BITMAP? n
   TEST_BPF? n
   TEST_FIRMWARE? n
-  TEST_HASH? n
   TEST_HEXDUMP? n
   TEST_KSTRTOX? n
   TEST_LIST_SORT? n
   TEST_LKM? n
-  TEST_PARMAN? n
   TEST_PRINTF? n
   TEST_RHASHTABLE? n
-  TEST_SORT? n
   TEST_STATIC_KEYS? n
   TEST_STRING_HELPERS? n
   TEST_UDELAY? n
   TEST_USER_COPY? n
-  TEST_UUID? n
-  WW_MUTEX_SELFTEST? n
   XZ_DEC_TEST? n
+
+  ${optionalString (versionOlder version "4.4") ''
+    EFI_TEST? n
+    RCU_PERF_TEST? n
+    TEST_ASYNC_DRIVER_PROBE? n
+    TEST_BITMAP? n
+    TEST_HASH? n
+    TEST_UUID? n
+  ''}
+
+  ${optionalString (versionAtLeast version "4.11") ''
+    DRM_DEBUG_MM_SELFTEST? n
+    TEST_PARMAN? n
+    TEST_SORT? n
+    WW_MUTEX_SELFTEST? n
+  ''}
 
   # ChromiumOS support
   ${optionalString (features.chromiumos or false) ''
