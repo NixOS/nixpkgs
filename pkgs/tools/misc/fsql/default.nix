@@ -1,15 +1,16 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "fsql-${version}";
-  version = "0.1.1";
+  version = "0.3.1";
 
   goPackagePath = "github.com/kshvmdn/fsql";
 
-  src = fetchgit {
-    rev = "refs/tags/v${version}";
-    url = "https://github.com/kshvmdn/fsql";
-    sha256 = "1zvblhfd15l86dcx0p12yrc2rrmfdpzyd107508pb72r2ar638vh";
+  src = fetchFromGitHub {
+    owner = "kshvmdn";
+    repo = "fsql";
+    rev = "v${version}";
+    sha256 = "1accpxryk4744ydfrqc3la5k376ji11yr84n66dz5cx0f3n71vmz";
   };
 
   meta = with stdenv.lib; {

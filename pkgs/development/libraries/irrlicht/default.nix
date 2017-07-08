@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    make sharedlib NDEBUG=1
+    make sharedlib NDEBUG=1 "LDFLAGS=-lX11 -lGL -lXxf86vm"
   '';
 
   preInstall = ''

@@ -488,9 +488,7 @@ in {
             # create index
             ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
 
-            chown graphite:graphite ${cfg.dataDir}
-            chown graphite:graphite ${cfg.dataDir}/whisper
-            chown -R graphite:graphite ${cfg.dataDir}/log
+            chown -R graphite:graphite ${cfg.dataDir}
 
             touch ${dataDir}/db-created
           fi

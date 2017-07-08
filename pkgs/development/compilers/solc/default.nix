@@ -1,28 +1,30 @@
 { stdenv, fetchzip, fetchgit, boost, cmake }:
 
-let jsoncpp = fetchzip {
-  url = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
-  sha256 = "0jz93zv17ir7lbxb3dv8ph2n916rajs8i96immwx9vb45pqid3n0";
-}; in
+let
+  version = "0.4.12";
+  rev = "194ff033ae44944ac59aa7bd3da89ba94ec5893c";
+  sha256 = "0gkg3nay0625qmhxxxax1d1c4dl554ri3pkwd12qfg6g1w6j04w7";
+  jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
+  jsoncpp = fetchzip {
+    url = jsoncppURL;
+    sha256 = "0jz93zv17ir7lbxb3dv8ph2n916rajs8i96immwx9vb45pqid3n0";
+  };
+in
 
-let commit = "68ef5810593e7c8092ed41d5f474dd43141624eb"; in
-
-stdenv.mkDerivation rec {
-  version = "0.4.11";
+stdenv.mkDerivation {
   name = "solc-${version}";
 
   # Cannot use `fetchFromGitHub' because of submodules
   src = fetchgit {
     url = "https://github.com/ethereum/solidity";
-    rev = commit;
-    sha256 = "13zycybf23yvf3hkf9zgw9gbc1y4ifzxaf7sll69bsn24fcyq961";
+    inherit rev sha256;
   };
 
   patchPhase = ''
-    echo >commit_hash.txt ${commit}
+    echo >commit_hash.txt '${rev}'
     echo >prerelease.txt
     substituteInPlace deps/jsoncpp.cmake \
-      --replace https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz ${jsoncpp}
+      --replace '${jsoncppURL}' ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \
       --replace 'add_compile_options(-Werror)' ""
   '';

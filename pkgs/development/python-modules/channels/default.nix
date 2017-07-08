@@ -4,11 +4,11 @@
 buildPythonPackage rec {
   pname = "channels";
   name = "${pname}-${version}";
-  version = "1.1.3";
+  version = "1.1.6";
 
   src = fetchurl {
     url = "mirror://pypi/c/channels/${name}.tar.gz";
-    sha256 = "182war437i6wsxwf2v4szn8ig0nkpinpn4n27fxhh5q8w832hj93";
+    sha256 = "44ab9a1f610ecc9ac25d5f90e7a44f49b18de28a05a26fe34e935af257f1eefe";
   };
 
   # Files are missing in the distribution

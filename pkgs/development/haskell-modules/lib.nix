@@ -89,7 +89,10 @@ rec {
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  });
+  } // (if pkgs.stdenv.isDarwin then {
+    configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
+  } else {})
+  );
 
   buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''

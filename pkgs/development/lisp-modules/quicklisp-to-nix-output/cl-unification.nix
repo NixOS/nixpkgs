@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-unification'';
-  version = ''20170124-git'';
+  version = ''20170516-git'';
 
   description = ''The CL-UNIFICATION system.
 
@@ -10,9 +10,11 @@ The system contains the definitions for the 'unification' machinery.'';
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-unification/2017-01-24/cl-unification-20170124-git.tgz'';
-    sha256 = ''0gwk40y5byg6q0hhd41rqf8g8i1my0h4lshc63xfnh3mfgcc8bx9'';
+    url = ''http://beta.quicklisp.org/archive/cl-unification/2017-05-16/cl-unification-20170516-git.tgz'';
+    sha256 = ''0yg2i0vn11skfz0b1zc8wnsqr24gf7fc4hzmwrwj15iz3xzqy9b0'';
   };
+    
+  packageName = "cl-unification";
 
   overrides = x: {
     postInstall = ''
@@ -33,6 +35,6 @@ The system contains the definitions for the 'unification' machinery.'';
 /* (SYSTEM cl-unification DESCRIPTION The CL-UNIFICATION system.
 
 The system contains the definitions for the 'unification' machinery.
-    SHA256 0gwk40y5byg6q0hhd41rqf8g8i1my0h4lshc63xfnh3mfgcc8bx9 URL http://beta.quicklisp.org/archive/cl-unification/2017-01-24/cl-unification-20170124-git.tgz
-    MD5 dd277adaf3a0ee41fd0731f78519b1b1 NAME cl-unification TESTNAME NIL FILENAME cl-unification DEPS NIL DEPENDENCIES NIL VERSION 20170124-git SIBLINGS
+    SHA256 0yg2i0vn11skfz0b1zc8wnsqr24gf7fc4hzmwrwj15iz3xzqy9b0 URL http://beta.quicklisp.org/archive/cl-unification/2017-05-16/cl-unification-20170516-git.tgz
+    MD5 70bcdd486f3444ddd41b5c2c3add119c NAME cl-unification TESTNAME NIL FILENAME cl-unification DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS
     (cl-unification-lib cl-unification-test cl-ppcre-template)) */

@@ -1,5 +1,5 @@
 { stdenv, cmake, fetchFromGitHub, file, gcc_multi, libX11, makeWrapper
-, overrideCC, qt5, requireFile, unzip, wineStable
+, overrideCC, qt5, requireFile, unzip, wine
 }:
 
 let
@@ -26,7 +26,8 @@ let
     installPhase = "cp -r . $out";
   };
 
-  wine-wow64 = wineStable.override {
+  wine-wow64 = wine.override {
+    wineRelease = "stable";
     wineBuild = "wineWow";
   };
 

@@ -18,7 +18,7 @@ let
     inherit stdenv requireFile writeText fetchurl haskellPackages;
   };
 
-  remixPacks = imap (num: sha256: fetchurl rec {
+  remixPacks = imap1 (num: sha256: fetchurl rec {
     name = "uqm-remix-disc${toString num}.uqm";
     url = "mirror://sourceforge/sc2/${name}";
     inherit sha256;

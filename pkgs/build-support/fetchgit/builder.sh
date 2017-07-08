@@ -12,4 +12,5 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${fetchSubmodules:+--fetch-submodules} \
   ${branchName:+--branch-name "$branchName"}
 
+runHook postFetch
 stopNest

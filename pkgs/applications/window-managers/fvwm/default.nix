@@ -8,11 +8,13 @@
 assert gestures -> libstroke != null;
 
 stdenv.mkDerivation rec {
-  name = "fvwm-2.6.6";
+  pname = "fvwm";
+  version = "2.6.7";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/fvwmorg/fvwm/releases/download/version-2_6_6/${name}.tar.gz";
-    sha256 = "c5de085ff25b2128a401a80225481e63335f815f84eea139f80a5f66e606dc2c";
+    url = "https://github.com/fvwmorg/fvwm/releases/download/${version}/${name}.tar.gz";
+    sha256 = "01654d5abdcde6dac131cae9befe5cf6f01f9f7524d097c3b0f316e39f84ef73";
   };
 
   buildInputs = [

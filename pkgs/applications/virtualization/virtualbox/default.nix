@@ -9,6 +9,7 @@
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
+, enable32bitGuests ? true
 , patchelfUnstable # needed until 0.10 is released
 }:
 
@@ -17,11 +18,10 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-
-  extpack = "996f783996a597d3936fc5f1ccf56edd31ae1f8fb4d527009647d9a2c8c853cd";
-  extpackRev = "114002";
-  main = "7ed0959bbbd02826b86b3d5dc8348931ddfab267c31f8ed36ee53c12f5522cd9";
-  version = "5.1.18";
+  extpack = "244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf";
+  extpackRev = "115126";
+  main = "fcc918000b8c5ece553541ec10a9182410a742b7266257c76dda895dcd389899";
+  version = "5.1.22";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras qt5.makeQtWrapper libXinerama SDL ];
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -88,7 +88,7 @@ in stdenv.mkDerivation {
   '';
 
   patches = optional enableHardening ./hardened.patch
-    ++ [ ./qtx11extras.patch ];
+    ++ [ ./qtx11extras.patch ./linux-4.12.patch ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -129,6 +129,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
+      ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -153,12 +154,8 @@ in stdenv.mkDerivation {
     find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
 
-    # Create wrapper script
     mkdir -p $out/bin
-    ${optionalString (!headless) ''
-      makeQtWrapper "$libexec/VirtualBox" $out/bin/VirtualBox
-    ''}
-    for file in ${optionalString (!headless) "VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file

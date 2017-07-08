@@ -80,8 +80,8 @@ let
                     group = "root";
                   } // s)
           else if 
-             (s ? "setuid"  && s.setuid  == true) ||
-             (s ? "setguid" && s.setguid == true) ||
+             (s ? "setuid" && s.setuid) ||
+             (s ? "setgid" && s.setgid) ||
              (s ? "permissions")
           then mkSetuidProgram s
           else mkSetuidProgram
@@ -171,7 +171,7 @@ in
 
     ###### setcap activation script
     system.activationScripts.wrappers =
-      lib.stringAfter [ "users" ]
+      lib.stringAfter [ "specialfs" "users" ]
         ''
           # Look in the system path and in the default profile for
           # programs to be wrapped.

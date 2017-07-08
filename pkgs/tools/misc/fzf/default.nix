@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.16.7";
+  version = "0.16.8";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "11ka5n7mrm5pb9riah28zyshvfz2svm4wn6fbama39yp6sc01x23";
+    sha256 = "0d0fcv07pl2vvj9ql84rmy1kd0zg680chsfapm0iw3vssxqkm9zq";
   };
 
   outputs = [ "bin" "out" "man" ];
@@ -39,6 +39,7 @@ buildGoPackage rec {
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
+    cp -R $src/shell $out/share/shell
   '';
 
   meta = with stdenv.lib; {

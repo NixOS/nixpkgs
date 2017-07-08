@@ -3,7 +3,7 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
-  version = "2.5.10";
+  version = "2.1.26";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";

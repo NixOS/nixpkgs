@@ -5,11 +5,11 @@
 buildPythonPackage rec {
   pname = "django-guardian";
   name = "${pname}-${version}";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchurl {
     url = "mirror://pypi/d/django-guardian/${name}.tar.gz";
-    sha256 = "039mfx47c05vl6vlld0ahyq37z7m5g68vqc38pj8iic5ysr98drm";
+    sha256 = "c3c0ab257c9d94ce154b9ee32994e3cff8b350c384040705514e14a9fb7c8191";
   };
 
   buildInputs = [ pytest pytestrunner pytest-django django_environ mock setuptools_scm ];

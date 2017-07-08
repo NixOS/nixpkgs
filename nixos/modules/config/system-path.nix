@@ -115,7 +115,6 @@ in
         "/share/mime"
         "/share/nano"
         "/share/org"
-        "/share/terminfo"
         "/share/themes"
         "/share/vim-plugins"
         "/share/vulkan"

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-l10n-cldr/2012-09-09/cl-l10n-cldr-20120909-darcs.tgz'';
     sha256 = ''03l81bx8izvzwzw0qah34l4k47l4gmhr917phhhl81qp55x7zbiv'';
   };
+    
+  packageName = "cl-l10n-cldr";
 
   overrides = x: {
     postInstall = ''

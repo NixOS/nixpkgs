@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     -DUSE_QT_QML=ON
     -DFREE_SPACE_BAR_C=ON
     -DUSE_MINIUPNP=ON
+    -DLOCAL_MINIUPNP=ON
     -DDBUS_NOTIFY=ON
     -DUSE_JS=ON
     -DPERL_REGEX=ON

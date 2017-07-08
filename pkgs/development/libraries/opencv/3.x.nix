@@ -15,6 +15,7 @@
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen     ? false, eigen
+, enableOpenblas  ? false, openblas
 , enableCuda      ? false, cudatoolkit, gcc5
 , AVFoundation, Cocoa, QTKit
 }:
@@ -34,6 +35,13 @@ let
     repo   = "opencv_contrib";
     rev    = version;
     sha256 = "1lynpbxz1jay3ya5y45zac5v8c6ifgk4ssn8d1chfdk3spi691jj";
+  };
+
+  # This fixes the build on OS X.
+  # See: https://github.com/opencv/opencv_contrib/pull/926
+  contribOSXFix = fetchpatch {
+    url = "https://github.com/opencv/opencv_contrib/commit/abf44fcccfe2f281b7442dac243e37b7f436d961.patch";
+    sha256 = "11dsq8dwh1k6f7zglbc26xwsjw184ggf2531mhf7v77kd72k19fm";
   };
 
   vggFiles = fetchFromGitHub {
@@ -60,6 +68,9 @@ stdenv.mkDerivation rec {
   postUnpack =
     (lib.optionalString enableContrib ''
       cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
+
+      # This fixes the build on OS X.
+      patch -d "$NIX_BUILD_TOP/opencv_contrib" -p2 < "${contribOSXFix}"
 
       for name in vgg_generated_48.i \
                   vgg_generated_64.i \
@@ -120,6 +131,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optional enableOpenblas openblas
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
     ++ lib.optional enableContrib protobuf3_1
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
@@ -131,7 +143,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
+    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"} -DWITH_OPENMP=ON"
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)

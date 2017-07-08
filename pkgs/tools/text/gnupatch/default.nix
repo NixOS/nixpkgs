@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, ed }:
+{ stdenv, fetchurl
+, ed
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "patch-2.7.5";
@@ -10,11 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional doCheck ed;
 
-  crossAttrs = {
-    configureFlags = [ "ac_cv_func_strnlen_working=yes" ];
-  };
+  configureFlags = stdenv.lib.optionals (hostPlatform != buildPlatform) [
+    "ac_cv_func_strnlen_working=yes"
+  ];
 
-  doCheck = true;
+  doCheck = hostPlatform == buildPlatform;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

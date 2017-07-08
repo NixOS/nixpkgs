@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   patchPhase = ''
+    runHook prePatch
+
     # Remove libOpenCL.so, since we use ocl-icd's libOpenCL.so instead and this would cause a clash.
     rm opt/intel/opencl/libOpenCL.so*
 
@@ -35,18 +37,28 @@ stdenv.mkDerivation rec {
     for lib in opt/intel/opencl/*.so; do
       patchelf --set-rpath "${libPath}:$out/lib/intel-ocl" $lib || true
     done
+
+    runHook postPatch
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     # Create ICD file, which just contains the path of the corresponding shared library.
     echo "$out/lib/intel-ocl/libintelocl.so" > intel.icd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0755 opt/intel/opencl/*.so* -t $out/lib/intel-ocl
     install -D -m 0644 opt/intel/opencl/*.{o,rtl,bin} -t $out/lib/intel-ocl
     install -D -m 0644 opt/intel/opencl/{LICENSE,NOTICES} -t $out/share/doc/intel-ocl
     install -D -m 0644 intel.icd -t $out/etc/OpenCL/vendors
+
+    runHook postInstall
   '';
 
   dontStrip = true;

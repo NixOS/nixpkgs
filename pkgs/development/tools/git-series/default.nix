@@ -18,6 +18,11 @@ buildRustPackage rec {
   nativeBuildInputs = [ cmake pkgconfig perl ];
   buildInputs = [ openssl zlib ];
 
+  postBuild = ''
+    mkdir -p "$out/man/man1"
+    cp "$src/git-series.1" "$out/man/man1"
+  '';
+
   meta = with stdenv.lib; {
     description = "A tool to help with formatting git patches for review on mailing lists";
     longDescription = ''

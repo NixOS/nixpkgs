@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "lambda-mod-zsh-theme-unstable-2017-05-21";
+  name = "lambda-mod-zsh-theme-unstable-2017-07-05";
 
   src = fetchFromGitHub {
     owner = "halfo";
     repo = "lambda-mod-zsh-theme";
-    sha256 = "1410ryc22i20na5ypa1q6f106lkjj8n1qfjmb77q4rspi0ydaiy4";
-    rev = "6fa277361ec2c84e612b5b6d876797ebe72102a5";
+    sha256 = "03kdhifxsnfbly6hqpr1h6kf52kyhdbh82nvwkkyrz1lw2cxl89n";
+    rev = "ba7d5fea16db91fc8de887e69250f4e501b1e36d";
   };
 
   buildPhases = [ "unpackPhase" "installPhase" ];

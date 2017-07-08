@@ -36,11 +36,10 @@ with stdenv.lib;
   DEBUG_DEVRES n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
-  RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
-  ${optionalString (versionOlder version "4.10") ''
+  ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
   ''}
 
@@ -93,6 +92,14 @@ with stdenv.lib;
   # module, so that the initrd gets a good I/O scheduler.
   IOSCHED_CFQ y
   BLK_CGROUP y # required by CFQ
+  IOSCHED_DEADLINE y
+  ${optionalString (versionAtLeast version "4.11") ''
+    MQ_IOSCHED_DEADLINE y
+  ''}
+  ${optionalString (versionAtLeast version "4.12") ''
+    MQ_IOSCHED_KYBER y
+    IOSCHED_BFQ m
+  ''}
 
   # Enable NUMA.
   NUMA? y
@@ -213,6 +220,8 @@ with stdenv.lib;
   SND_DYNAMIC_MINORS y
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
+  SND_HDA_RECONFIG y # Support reconfiguration of jack functions
+  SND_HDA_PATCH_LOADER y # Support configuring jack functions via fw mechanism at boot
   SND_USB_CAIAQ_INPUT y
   ${optionalString (versionOlder version "4.12") ''
     PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
@@ -471,8 +480,10 @@ with stdenv.lib;
   SCHED_TRACER y
   STACK_TRACER y
 
-  ${optionalString (versionOlder version "4.11") ''
+  ${if versionOlder version "4.11" then ''
     UPROBE_EVENT? y
+  '' else ''
+    UPROBE_EVENTS? y
   ''}
 
   ${optionalString (versionAtLeast version "4.4") ''
@@ -496,7 +507,7 @@ with stdenv.lib;
     KVM_APIC_ARCHITECTURE y
   ''}
   KVM_ASYNC_PF y
-  ${optionalString (versionAtLeast version "4.0") ''
+  ${optionalString ((versionAtLeast version "4.0") && (versionOlder version "4.12")) ''
     KVM_COMPAT? y
   ''}
   ${optionalString (versionOlder version "4.12") ''
@@ -588,6 +599,55 @@ with stdenv.lib;
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
   FW_LOADER_USER_HELPER_FALLBACK? n
+
+  # Disable various self-test modules that have no use in a production system
+  ${optionalString (versionOlder version "4.4") ''
+    ARM_KPROBES_TEST? n
+  ''}
+
+  ASYNC_RAID6_TEST? n
+  ATOMIC64_SELFTEST? n
+  BACKTRACE_SELF_TEST? n
+  CRC32_SELFTEST? n
+  CRYPTO_TEST? n
+  GLOB_SELFTEST? n
+  INTERVAL_TREE_TEST? n
+  LNET_SELFTEST? n
+  LOCK_TORTURE_TEST? n
+  MTD_TESTS? n
+  NOTIFIER_ERROR_INJECTION? n
+  PERCPU_TEST? n
+  RBTREE_TEST? n
+  RCU_TORTURE_TEST? n
+  TEST_BPF? n
+  TEST_FIRMWARE? n
+  TEST_HEXDUMP? n
+  TEST_KSTRTOX? n
+  TEST_LIST_SORT? n
+  TEST_LKM? n
+  TEST_PRINTF? n
+  TEST_RHASHTABLE? n
+  TEST_STATIC_KEYS? n
+  TEST_STRING_HELPERS? n
+  TEST_UDELAY? n
+  TEST_USER_COPY? n
+  XZ_DEC_TEST? n
+
+  ${optionalString (versionOlder version "4.4") ''
+    EFI_TEST? n
+    RCU_PERF_TEST? n
+    TEST_ASYNC_DRIVER_PROBE? n
+    TEST_BITMAP? n
+    TEST_HASH? n
+    TEST_UUID? n
+  ''}
+
+  ${optionalString (versionAtLeast version "4.11") ''
+    DRM_DEBUG_MM_SELFTEST? n
+    TEST_PARMAN? n
+    TEST_SORT? n
+    WW_MUTEX_SELFTEST? n
+  ''}
 
   # ChromiumOS support
   ${optionalString (features.chromiumos or false) ''

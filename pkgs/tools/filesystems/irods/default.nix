@@ -40,6 +40,8 @@ in rec {
         -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,$out/lib
         -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,$out/lib
         "
+
+      substituteInPlace cmake/server.cmake --replace SETUID ""
     '';
 
     meta = common.meta // {

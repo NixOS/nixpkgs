@@ -2,14 +2,14 @@
 , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  version = "2.7-2017-04-01";
+  version = "2.9.1-c";
   name = "i3lock-color-${version}";
 
   src = fetchFromGitHub {
     owner = "chrjguill";
     repo = "i3lock-color";
-    rev = "61f6428aedbe4829d3e0f51d137283c8aec1e206";
-    sha256 = "0h4nzx46kcsp6b1i2lm9y4d1w1icrpvjl8g1h3wbpa5x4crh4703";
+    rev = version;
+    sha256 = "0qnw71qbppgp3ywj1k07av7wkl9syfb8j6izrkhj143q2ks4rkvl";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage pam libX11

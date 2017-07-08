@@ -1,8 +1,8 @@
-{ kdeDerivation
+{ mkDerivation
 , lib
 , fetchurl
 , kdoctools
-, kdeWrapper
+, wrapGAppsHook
 , extra-cmake-modules
 , karchive
 , kcrash
@@ -15,14 +15,14 @@
 , konsole
 , kparts
 , kwindowsystem
+, qtx11extras
 }:
 
 let
-  unwrapped = let
-    pname = "yakuake";
-    version = "3.0.3";
-  in kdeDerivation rec {
-    name = "${pname}-${version}";
+  pname = "yakuake";
+  version = "3.0.3";
+in mkDerivation rec {
+  name = "${pname}-${version}";
 
     src = fetchurl {
       url = "http://download.kde.org/stable/${pname}/${version}/src/${name}.tar.xz";
@@ -40,24 +40,31 @@ let
       knotifyconfig
       kparts
       kwindowsystem
+      qtx11extras
     ];
 
-    nativeBuildInputs = [
-      extra-cmake-modules kdoctools
-    ];
+  propagatedBuildInputs = [
+    karchive
+    kcrash
+    kdbusaddons
+    ki18n
+    kiconthemes
+    knewstuff
+    knotifications
+    knotifyconfig
+    kparts
+    kwindowsystem
+  ];
 
-    meta = {
-      homepage = https://yakuake.kde.org;
-      description = "Quad-style terminal emulator for KDE";
-      maintainers = with lib.maintainers; [ fridh ];
-    };
+  propagatedUserEnvPkgs = [ konsole ];
+
+  nativeBuildInputs = [
+    extra-cmake-modules kdoctools wrapGAppsHook
+  ];
+
+  meta = {
+    homepage = https://yakuake.kde.org;
+    description = "Quad-style terminal emulator for KDE";
+    maintainers = with lib.maintainers; [ fridh ];
   };
-
-
-in
-kdeWrapper
-{
-  inherit unwrapped;
-  targets = [ "bin/yakuake" ];
-  paths = [ konsole.unwrapped ];
 }

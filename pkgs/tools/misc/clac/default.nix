@@ -2,13 +2,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "clac";
-  version = "0.0.0.20170416";
+  version = "0.0.0.20170503";
 
   src = fetchFromGitHub {
     owner = "soveran";
     repo = "clac";
-    rev = "828600b01e80166bc435d4d73506f0c3e16f2459";
-    sha256 = "08fhhvjrc7rn5fjjdqlallr76m6ybj3wm5gx407jbgfbky0fj7mb";
+    rev = "e92bd5cbab0d694cef945e3478820c9505e06f04";
+    sha256 = "0j8p1npgq32s377c9lw959h5i2csq4yb27cvg7av17bji46816bv";
   };
 
   buildInputs = [];

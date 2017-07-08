@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cffi/2016-10-31/cffi_0.18.0.tgz'';
     sha256 = ''0g4clx9l9c7iw9hiv94ihzp4zb80yq3i5j6lr3vkz9z2dndzcpzz'';
   };
+    
+  packageName = "cffi-grovel";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,5 @@ rec {
 }
 /* (SYSTEM cffi-grovel DESCRIPTION The CFFI Groveller SHA256 0g4clx9l9c7iw9hiv94ihzp4zb80yq3i5j6lr3vkz9z2dndzcpzz URL
     http://beta.quicklisp.org/archive/cffi/2016-10-31/cffi_0.18.0.tgz MD5 5be207fca26205c7550d7b6307871f4e NAME cffi-grovel TESTNAME NIL FILENAME cffi-grovel
-    DEPS ((NAME alexandria)) DEPENDENCIES (alexandria) VERSION cffi_0.18.0 SIBLINGS (cffi-examples cffi-libffi cffi-tests cffi-toolchain cffi-uffi-compat cffi)) */
+    DEPS ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria) VERSION cffi_0.18.0 SIBLINGS
+    (cffi-examples cffi-libffi cffi-tests cffi-toolchain cffi-uffi-compat cffi)) */

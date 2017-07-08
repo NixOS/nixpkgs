@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./path-to-cat.patch ./no-gets.patch ./scm_c_string.patch ];
 
+  postPatch = ''
+    sed -i -e '/chown root:mail/d' \
+           -e 's/chmod [24]755/chmod 0755/' \
+      */Makefile{,.in,.am}
+  '';
+
   configureFlags = [
     "--with-gsasl"
     "--with-gssapi=${gss}"

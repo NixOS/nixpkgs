@@ -15,7 +15,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "7.12.1";
+  version = "8.0";
 in
 
 assert targetPlatform.isHurd -> mig != null && hurd != null;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "11ii260h1sd7v0bs3cz6d5l8gqxxgldry0md60ncjgixjw5nh1s6";
+    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo perl ]
@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
   # darwin build fails with format hardening since v7.12
   hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
     "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
@@ -53,8 +58,6 @@ stdenv.mkDerivation rec {
       # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ++ stdenv.lib.optional (!pythonSupport) "--without-python"
-    # TODO(@Ericson2314): This should be done in stdenv, not per-package
-    ++ stdenv.lib.optional (targetPlatform != hostPlatform) "--target=${targetPlatform.config}"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
   postInstall =

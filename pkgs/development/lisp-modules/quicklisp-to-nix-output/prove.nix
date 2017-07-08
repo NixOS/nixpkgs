@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz'';
     sha256 = ''091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl'';
   };
+    
+  packageName = "prove";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,6 @@ rec {
 }
 /* (SYSTEM prove DESCRIPTION NIL SHA256 091xxkn9zj22c4gmm8x714k29bs4j0j7akppwh55zjsmrxdhqcpl URL
     http://beta.quicklisp.org/archive/prove/2017-04-03/prove-20170403-git.tgz MD5 063b615692c8711d2392204ecf1b37b7 NAME prove TESTNAME NIL FILENAME prove DEPS
-    ((NAME uiop) (NAME cl-ppcre) (NAME cl-colors) (NAME cl-ansi-text) (NAME alexandria)) DEPENDENCIES (uiop cl-ppcre cl-colors cl-ansi-text alexandria) VERSION
-    20170403-git SIBLINGS (cl-test-more prove-asdf prove-test)) */
+    ((NAME uiop FILENAME uiop) (NAME cl-ppcre FILENAME cl-ppcre) (NAME cl-colors FILENAME cl-colors) (NAME cl-ansi-text FILENAME cl-ansi-text)
+     (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (uiop cl-ppcre cl-colors cl-ansi-text alexandria) VERSION 20170403-git SIBLINGS (cl-test-more prove-asdf prove-test)) */

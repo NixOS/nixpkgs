@@ -1,4 +1,7 @@
-{stdenv, fetchurl, alsaLib }:
+{ stdenv
+, fetchurl, alsaLib
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "mpg123-1.23.8";
@@ -10,10 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
-  crossAttrs = {
-    configureFlags = if stdenv.cross ? mpg123 then
-      "--with-cpu=${stdenv.cross.mpg123.cpu}" else "";
-  };
+  configureFlags =
+    stdenv.lib.optional (hostPlatform ? mpg123) "--with-cpu=${hostPlatform.mpg123.cpu}";
 
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";

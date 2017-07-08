@@ -316,6 +316,11 @@ in
   };
 
   xf86inputlibinput = attrs: attrs // {
+    name = "xf86-input-libinput-0.25.1";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.25.1.tar.bz2;
+      sha256 = "1q67hjd67ni1nq7kgxdrrdgkyhzaqvvn2vlnsiiq9w4y3icpv7s8";
+    };
     buildInputs = attrs.buildInputs ++ [ args.libinput ];
     installFlags = "sdkdir=\${out}/include/xorg";
   };

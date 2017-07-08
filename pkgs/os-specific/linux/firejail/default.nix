@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   preBuild = ''
-    sed -e "s@/etc/@$out/etc/@g" -i Makefile
+    sed -e "s@/etc/@$out/etc/@g" -e "/chmod u+s/d" -i Makefile
   '';
 
   meta = {

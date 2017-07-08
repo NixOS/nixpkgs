@@ -96,14 +96,14 @@ rec {
   iphone64 = {
     config = "aarch64-apple-darwin14";
     arch = "arm64";
-    libc = "libsystem";
+    libc = "libSystem";
     platform = {};
   };
 
   iphone32 = {
     config = "arm-apple-darwin10";
     arch = "armv7-a";
-    libc = "libsystem";
+    libc = "libSystem";
     platform = {};
   };
 

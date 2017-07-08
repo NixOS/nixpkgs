@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmakeHook
+{ stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "184ydb9f1303v332k5k3f1ki7cb6nkxhh6ij0yn72v7dp7figrgj";
   };
 
-  buildInputs = [ alsaLib pkgconfig qtbase qtscript qmakeHook ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ alsaLib pkgconfig qtbase qtscript ];
 
   qmakeFlags = [ "PREFIX=/" ];
 

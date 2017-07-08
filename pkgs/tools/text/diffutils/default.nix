@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xz, coreutils ? null }:
 
 stdenv.mkDerivation rec {
-  name = "diffutils-3.5";
+  name = "diffutils-3.6";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/${name}.tar.xz";
-    sha256 = "0csmqfz8ks23kdjsq0v2ll1acqiz8lva06dj19mwmymrsp69ilys";
+    sha256 = "1mivg0fy3a6fcn535ln8nkgfj6vxh5hsxxs5h6692wxmsjyyh8fn";
   };
 
   outputs = [ "out" "info" ];

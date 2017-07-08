@@ -27,11 +27,16 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "Xonotic/source/darkplaces";
 
+  # "debug", "release", "profile"
+  target = "release";
+
+  dontStrip = target != "release";
+
   buildPhase = ''
     DP_FS_BASEDIR="$out/share/xonotic"
-    make DP_FS_BASEDIR=$DP_FS_BASEDIR cl-release
-    make DP_FS_BASEDIR=$DP_FS_BASEDIR sdl-release
-    make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-release
+    make DP_FS_BASEDIR=$DP_FS_BASEDIR cl-${target}
+    make DP_FS_BASEDIR=$DP_FS_BASEDIR sdl-${target}
+    make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-${target}
   '';
   enableParallelBuilding = true;
 
@@ -52,8 +57,16 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   postFixup = ''
     patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-dedicated
-    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-sdl
-    patchelf --add-needed ${curl.out}/lib/libcurl.so $out/bin/xonotic-glx
+    patchelf \
+        --add-needed ${curl.out}/lib/libcurl.so \
+        --add-needed ${libvorbis}/lib/libvorbisfile.so \
+        --add-needed ${libvorbis}/lib/libvorbis.so \
+        $out/bin/xonotic-glx
+    patchelf \
+        --add-needed ${curl.out}/lib/libcurl.so \
+        --add-needed ${libvorbis}/lib/libvorbisfile.so \
+        --add-needed ${libvorbis}/lib/libvorbis.so \
+        $out/bin/xonotic-sdl
   '';
 
   meta = {

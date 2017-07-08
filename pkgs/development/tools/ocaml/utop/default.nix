@@ -2,6 +2,10 @@
 , lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "utop is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   version = "1.19.3";
   name = "utop-${version}";
@@ -61,8 +65,8 @@ stdenv.mkDerivation rec {
       --argv0 "" \
       --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
       --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
-      --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH")
-
+      --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH") \
+      --add-flags "-I ${findlib}/lib/ocaml/${stdenv.lib.getVersion ocaml}/site-lib"
    done
    '';
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, makeQtWrapper, sqlite, cmake }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, qttools, sqlite, cmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "3.9.1";
   name = "sqlitebrowser-${version}";
 
@@ -12,23 +12,17 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qttools sqlite ];
-  nativeBuildInputs = [ makeQtWrapper cmake ];
-  
-  enableParallelBuilding = true;
-  
+  nativeBuildInputs = [ cmake ];
+
   cmakeFlags = [ "-DUSE_QT5=TRUE" ];
-  
+
   # A regression was introduced in CMakeLists.txt on v3.9.x
   # See https://github.com/sqlitebrowser/sqlitebrowser/issues/832 and issues/755
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace 'project("DB Browser for SQLite")' 'project(sqlitebrowser)'
   '';
 
-  postInstall = ''
-    wrapQtProgram $out/bin/sqlitebrowser
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DB Browser for SQLite";
     homepage = "http://sqlitebrowser.org/";
     license = licenses.gpl3;

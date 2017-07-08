@@ -48,13 +48,9 @@ in {
     sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
   };
 
-  terraform_0_9_4 = generic {
-    version   = "0.9.4";
-    sha256    = "07vcmjyl0y48hm5lqqzdd51hmrxapvywzbdkg5f3rcqd7dn9c2xs";
-    postPatch = ''
-      rm builtin/providers/dns/data_dns_cname_record_set_test.go
-      rm builtin/providers/vsphere/resource_vsphere_file_test.go
-    '';
-    doCheck   = true;
+  terraform_0_9_11 = generic {
+    version = "0.9.11";
+    sha256 = "045zcpd4g9c52ynhgh3213p422ahds63mzhmd2iwcmj88g8i1w6x";
+    doCheck = true;
   };
 }

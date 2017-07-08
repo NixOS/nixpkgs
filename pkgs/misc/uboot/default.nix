@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, bc, dtc, python2 }:
+{ stdenv, fetchurl, bc, dtc, python2
+, hostPlatform
+}:
 
 let
   buildUBoot = { targetPlatforms
@@ -43,8 +45,8 @@ let
 
     crossAttrs = {
       makeFlags = [
-        "ARCH=${stdenv.cross.platform.kernelArch}"
-        "CROSS_COMPILE=${stdenv.cross.config}-"
+        "ARCH=${hostPlatform.platform.kernelArch}"
+        "CROSS_COMPILE=${stdenv.cc.prefix}"
       ];
     };
 
@@ -67,6 +69,12 @@ in rec {
     dontStrip = false;
     targetPlatforms = stdenv.lib.platforms.linux;
     filesToInstall = ["tools/dumpimage" "tools/mkenvimage" "tools/mkimage"];
+  };
+
+  ubootA20OlinuxinoLime = buildUBoot rec {
+    defconfig = "A20-OLinuXino-Lime_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
   ubootBananaPi = buildUBoot rec {

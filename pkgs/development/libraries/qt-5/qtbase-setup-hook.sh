@@ -1,71 +1,55 @@
-addToSearchPathOnceWithCustomDelimiter() {
-    local delim="$1"
-    local search="$2"
-    local target="$3"
-    local dirs
-    local exported
-    IFS="$delim" read -a dirs <<< "${!search}"
-    local canonical
-    if canonical=$(readlink -e "$target"); then
-        for dir in ${dirs[@]}; do
-            if [ "z$dir" == "z$canonical" ]; then exported=1; fi
-        done
-        if [ -z $exported ]; then
-            eval "export ${search}=\"${!search}${!search:+$delim}$canonical\""
+qtPluginPrefix=@qtPluginPrefix@
+qtQmlPrefix=@qtQmlPrefix@
+qtDocPrefix=@qtDocPrefix@
+
+NIX_QT5_MODULES="${NIX_QT5_MODULES}${NIX_QT5_MODULES:+:}@out@"
+NIX_QT5_MODULES_DEV="${NIX_QT5_MODULES_DEV}${NIX_QT5_MODULES_DEV:+:}@dev@"
+
+providesQtRuntime() {
+    [ -d "$1/$qtPluginPrefix" ] || [ -d "$1/$qtQmlPrefix" ]
+}
+
+# Propagate any runtime dependency of the building package.
+# Each dependency is propagated to the user environment and as a build
+# input so that it will be re-propagated to the user environment by any
+# package depending on the building package. (This is necessary in case
+# the building package does not provide runtime dependencies itself and so
+# would not be propagated to the user environment.)
+_qtCrossEnvHook() {
+    if providesQtRuntime "$1"; then
+        propagatedBuildInputs+=" $1"
+        propagatedUserEnvPkgs+=" $1"
+    fi
+}
+if [ -z "$NIX_QT5_TMP" ]; then
+    crossEnvHooks+=(_qtCrossEnvHook)
+fi
+
+_qtEnvHook() {
+    if providesQtRuntime "$1"; then
+        propagatedNativeBuildInputs+=" $1"
+        if [ -z "$crossConfig" ]; then
+        propagatedUserEnvPkgs+=" $1"
         fi
     fi
 }
+if [ -z "$NIX_QT5_TMP" ]; then
+    envHooks+=(_qtEnvHook)
+fi
 
-addToSearchPathOnce() {
-    addToSearchPathOnceWithCustomDelimiter ':' "$@"
-}
-
-propagateOnce() {
-    addToSearchPathOnceWithCustomDelimiter ' ' "$@"
-}
-
-_qtPropagate() {
-    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
-        if [ -d "$1/$dir" ]; then
-            propagateOnce propagatedBuildInputs "$1"
-            break
-        fi
-    done
-    addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-    addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
-    addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
-}
-
-crossEnvHooks+=(_qtPropagate)
-
-_qtPropagateNative() {
-    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
-        if [ -d "$1/$dir" ]; then
-            propagateOnce propagatedNativeBuildInputs "$1"
-            break
-        fi
-    done
-    if [ -z "$crossConfig" ]; then
-        addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-        addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
-        addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
-    fi
-}
-
-envHooks+=(_qtPropagateNative)
-
-_qtMultioutDevs() {
-    # This is necessary whether the package is a Qt module or not
+_qtPreFixupHook() {
     moveToOutput "mkspecs" "${!outputDev}"
 }
+if [ -z "$NIX_QT5_TMP" ]; then
+    preFixupHooks+=(_qtPreFixupHook)
+fi
 
-preFixupHooks+=(_qtMultioutDevs)
-
-_qtSetCMakePrefix() {
-    export CMAKE_PREFIX_PATH="$NIX_QT5_TMP${CMAKE_PREFIX_PATH:+:}${CMAKE_PREFIX_PATH}"
-}
-
-_qtRmTmp() {
+_qtPostInstallHook() {
+    # Clean up temporary installation files created by this setup hook.
+    # For building Qt modules, this is necessary to prevent including
+    # dependencies in the output. For all other packages, this is necessary
+    # to induce patchelf to remove the temporary paths from the RPATH of
+    # dynamically-linked objects.
     if [ -z "$NIX_QT_SUBMODULE" ]; then
         rm -fr "$NIX_QT5_TMP"
     else
@@ -83,11 +67,52 @@ _qtRmTmp() {
 
         rm "$NIX_QT5_TMP/nix-support/qt-inputs"
     fi
+
+    # Patch CMake modules
+    if [ -n "$NIX_QT_SUBMODULE" ]; then
+        find "${!outputLib}" -name "*.cmake" | while read file; do
+            substituteInPlace "$file" \
+                --subst-var-by NIX_OUT "${!outputLib}" \
+                --subst-var-by NIX_DEV "${!outputDev}" \
+                --subst-var-by NIX_BIN "${!outputBin}"
+        done
+    fi
+}
+if [ -z "$NIX_QT5_TMP" ]; then
+    preConfigureHooks+=(_qtPreConfigureHook)
+fi
+
+_qtLinkModuleDir() {
+    if [ -d "$1/$2" ]; then
+        @lndir@/bin/lndir -silent "$1/$2" "$NIX_QT5_TMP/$2"
+        find "$1/$2" -printf "$2/%P\n" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
+    fi
 }
 
-_qtSetQmakePath() {
+_qtPreConfigureHook() {
+    # Find the temporary qmake executable first.
+    # This must run after all the environment hooks!
     export PATH="$NIX_QT5_TMP/bin${PATH:+:}$PATH"
+
+    # Link all runtime module dependencies into the temporary directory.
+    IFS=: read -a modules <<< $NIX_QT5_MODULES
+    for module in ${modules[@]}; do
+        _qtLinkModuleDir "$module" "lib"
+    done
+
+    # Link all the build-time module dependencies into the temporary directory.
+    IFS=: read -a modules <<< $NIX_QT5_MODULES_DEV
+    for module in ${modules[@]}; do
+        _qtLinkModuleDir "$module" "bin"
+        _qtLinkModuleDir "$module" "include"
+        _qtLinkModuleDir "$module" "lib"
+        _qtLinkModuleDir "$module" "mkspecs"
+        _qtLinkModuleDir "$module" "share"
+    done
 }
+if [ -z "$NIX_QT5_TMP" ]; then
+    postInstallHooks+=(_qtPostInstallHook)
+fi
 
 if [ -z "$NIX_QT5_TMP" ]; then
     if [ -z "$NIX_QT_SUBMODULE" ]; then
@@ -95,7 +120,6 @@ if [ -z "$NIX_QT5_TMP" ]; then
     else
         NIX_QT5_TMP=$out
     fi
-    postInstallHooks+=(_qtRmTmp)
 
     mkdir -p "$NIX_QT5_TMP/nix-support"
     for subdir in bin include lib mkspecs share; do
@@ -103,64 +127,18 @@ if [ -z "$NIX_QT5_TMP" ]; then
         echo "$subdir/" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
     done
 
-    postHooks+=(_qtSetCMakePrefix)
-
     cp "@dev@/bin/qmake" "$NIX_QT5_TMP/bin"
     echo "bin/qmake" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
 
     cat >"$NIX_QT5_TMP/bin/qt.conf" <<EOF
 [Paths]
 Prefix = $NIX_QT5_TMP
-Plugins = lib/qt5/plugins
-Imports = lib/qt5/imports
-Qml2Imports = lib/qt5/qml
-Documentation = share/doc/qt5
+Plugins = $qtPluginPrefix
+Qml2Imports = $qtQmlPrefix
+Documentation = $qtDocPrefix
 EOF
     echo "bin/qt.conf" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
 
     export QMAKE="$NIX_QT5_TMP/bin/qmake"
-
-    # Set PATH to find qmake first in a preConfigure hook
-    # It must run after all the envHooks!
-    preConfigureHooks+=(_qtSetQmakePath)
 fi
 
-qt5LinkModuleDir() {
-    if [ -d "$1/$2" ]; then
-        @lndir@/bin/lndir -silent "$1/$2" "$NIX_QT5_TMP/$2"
-        find "$1/$2" -printf "$2/%P\n" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
-    fi
-}
-
-NIX_QT5_MODULES="${NIX_QT5_MODULES}${NIX_QT5_MODULES:+:}@out@"
-NIX_QT5_MODULES_DEV="${NIX_QT5_MODULES_DEV}${NIX_QT5_MODULES_DEV:+:}@dev@"
-
-_qtLinkAllModules() {
-    IFS=: read -a modules <<< $NIX_QT5_MODULES
-    for module in ${modules[@]}; do
-        qt5LinkModuleDir "$module" "lib"
-    done
-
-    IFS=: read -a modules <<< $NIX_QT5_MODULES_DEV
-    for module in ${modules[@]}; do
-        qt5LinkModuleDir "$module" "bin"
-        qt5LinkModuleDir "$module" "include"
-        qt5LinkModuleDir "$module" "lib"
-        qt5LinkModuleDir "$module" "mkspecs"
-        qt5LinkModuleDir "$module" "share"
-    done
-}
-
-preConfigureHooks+=(_qtLinkAllModules)
-
-_qtFixCMakePaths() {
-    find "${!outputLib}" -name "*.cmake" | while read file; do
-        substituteInPlace "$file" \
-            --subst-var-by NIX_OUT "${!outputLib}" \
-            --subst-var-by NIX_DEV "${!outputDev}"
-    done
-}
-
-if [ -n "$NIX_QT_SUBMODULE" ]; then
-    postInstallHooks+=(_qtFixCMakePaths)
-fi

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cffi/2016-10-31/cffi_0.18.0.tgz'';
     sha256 = ''0g4clx9l9c7iw9hiv94ihzp4zb80yq3i5j6lr3vkz9z2dndzcpzz'';
   };
+    
+  packageName = "cffi";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,6 @@ rec {
 }
 /* (SYSTEM cffi DESCRIPTION The Common Foreign Function Interface SHA256 0g4clx9l9c7iw9hiv94ihzp4zb80yq3i5j6lr3vkz9z2dndzcpzz URL
     http://beta.quicklisp.org/archive/cffi/2016-10-31/cffi_0.18.0.tgz MD5 5be207fca26205c7550d7b6307871f4e NAME cffi TESTNAME NIL FILENAME cffi DEPS
-    ((NAME uiop) (NAME trivial-features) (NAME babel) (NAME alexandria)) DEPENDENCIES (uiop trivial-features babel alexandria) VERSION cffi_0.18.0 SIBLINGS
+    ((NAME uiop FILENAME uiop) (NAME trivial-features FILENAME trivial-features) (NAME babel FILENAME babel) (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (uiop trivial-features babel alexandria) VERSION cffi_0.18.0 SIBLINGS
     (cffi-examples cffi-grovel cffi-libffi cffi-tests cffi-toolchain cffi-uffi-compat)) */

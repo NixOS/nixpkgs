@@ -1,12 +1,14 @@
 { stdenv, fetchurl, buildPackages, perl
+, hostPlatform
 , withCryptodev ? false, cryptodevHeaders
-, enableSSL2 ? false }:
+, enableSSL2 ? false
+}:
 
 with stdenv.lib;
 
 let
 
-  opensslCrossSystem = stdenv.cross.openssl.system or
+  opensslCrossSystem = hostPlatform.openssl.system or
     (throw "openssl needs its platform name cross building");
 
   common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
@@ -22,9 +24,7 @@ let
       ++ [ ./nix-ssl-cert-file.patch ]
       ++ optional (versionOlder version "1.1.0")
           (if stdenv.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
-      ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
-      ++ optional
-           (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
+      ++ optional (versionOlder version "1.0.2" && hostPlatform.isDarwin)
            ./darwin-arch.patch;
 
     outputs = [ "bin" "dev" "out" "man" ];
@@ -89,10 +89,6 @@ let
       preConfigure=''
         # It's configure does not like --build or --host
         export configureFlags="${concatStringsSep " " (configureFlags ++ [ opensslCrossSystem ])}"
-        # WINDRES and RANLIB need to be prefixed when cross compiling;
-        # the openssl configure script doesn't do that for us
-        export WINDRES=${stdenv.cross.config}-windres
-        export RANLIB=${stdenv.cross.config}-ranlib
       '';
       configureScript = "./Configure";
     };
@@ -109,13 +105,13 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2k";
-    sha256 = "1h6qi35w6hv6rd73p4cdgdzg732pdrfgpp37cgwz1v9a3z37ffbb";
+    version = "1.0.2l";
+    sha256 = "037kvpisc6qh5dkppcwbm5bg2q800xh2hma3vghz8xcycmdij1yf";
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0e";
-    sha256 = "0k47sdd9gs6yxfv6ldlgpld2lyzrkcv9kz4cf88ck04xjwc8dgjp";
+    version = "1.1.0f";
+    sha256 = "0r97n4n552ns571diz54qsgarihrxvbn7kvyv8wjyfs9ybrldxqj";
   };
 
 }
