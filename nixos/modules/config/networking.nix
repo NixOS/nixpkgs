@@ -25,7 +25,7 @@ in
       default = null;
       example = "foo.example.com";
       description = ''
-        Full qualified domain name, if any.
+        Fully qualified domain name, if any.
       '';
     };
 
