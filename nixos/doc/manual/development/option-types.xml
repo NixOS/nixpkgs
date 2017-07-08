@@ -27,6 +27,17 @@
     <listitem><para>An integer.</para></listitem>
   </varlistentry>
   <varlistentry>
+    <term>
+      <varname>types.intBetween</varname>
+      <replaceable>min</replaceable>
+      <replaceable>max</replaceable>
+    </term>
+    <listitem><para>An integer between <replaceable>min</replaceable>
+        and <replaceable>max</replaceable> (both inclusive).
+        Useful for e.g. port ranges.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
     <term><varname>types.path</varname></term>
     <listitem><para>A filesystem path, defined as anything that when coerced to 
         a string starts with a slash. Even if derivations can be considered as 
