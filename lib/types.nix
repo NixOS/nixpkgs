@@ -114,6 +114,12 @@ rec {
       merge = mergeOneOption;
     };
 
+    intBetween = min: max:
+      addCheck types.int (x: x >= min && x <= max) // {
+        name = "intBetween";
+        description = "integer between ${toString min} and ${toString max} (both inclusively)";
+      };
+
     str = mkOptionType {
       name = "str";
       description = "string";
