@@ -7283,6 +7283,8 @@ with pkgs;
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
+  gn = callPackage ../development/tools/build-managers/gn { };
+
   nixbang = callPackage ../development/tools/misc/nixbang {
       pythonPackages = python3Packages;
   };
