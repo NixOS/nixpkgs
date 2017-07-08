@@ -107,9 +107,19 @@ in
       # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
       # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
       set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $__fish_datadir/functions
-      
+
+
+      # Here we prepare to filter out warnings about non-existent $PATH entries
+      # because NixOS uses them intentionally.
+      set -l warnings_filter_pattern '^set: Warning: \$PATH entry ".*" is not valid \(No such file or directory\)$'
+
+      # `fenv` should not attempt to modify $_, but it seems to do so when
+      # used to run the bash `source` builtin. We don't need to hear about it,
+      # either.
+      set warnings_filter_pattern $warnings_filter_pattern"|"'|^set: Tried to change the read-only variable “_”$'
+
       # source the NixOS environment config
-      fenv source ${config.system.build.setEnvironment}
+      fenv source ${config.system.build.setEnvironment} ^| string match -rv $warnings_filter_pattern
 
       # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
       set -e fish_function_path
