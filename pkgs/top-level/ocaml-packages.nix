@@ -15,8 +15,6 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
-    acgtk = callPackage ../applications/science/logic/acgtk { };
-
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
