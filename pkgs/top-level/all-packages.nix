@@ -6967,6 +6967,8 @@ with pkgs;
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  moby = callPackage ../development/tools/misc/moby { };
+
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
   msitools = callPackage ../development/tools/misc/msitools { };
