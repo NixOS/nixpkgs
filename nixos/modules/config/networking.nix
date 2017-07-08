@@ -213,16 +213,14 @@ in
         "hosts".text =
           let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
               allToString = set : concatStringsSep "\n" ( map ( oneToString set ) ( builtins.attrNames set ));
-              userLocalHosts =
-                if builtins.hasAttr "127.0.0.1" cfg.hosts
-                then concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "127.0.0.1" cfg.hosts))
-                else "";
-              userLocalHosts6 =
-                if builtins.hasAttr "::1" cfg.hosts
-                then concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "::1" cfg.hosts))
-                else "";
+              userLocalHosts = optionalString
+                ( builtins.hasAttr "127.0.0.1" cfg.hosts )
+                ( concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "127.0.0.1" cfg.hosts)));
+              userLocalHosts6 = optionalString
+                ( builtins.hasAttr "::1" cfg.hosts )
+                ( concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "::1" cfg.hosts)));
               otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
-              maybeFQDN = if cfg.fqdn == null then "" else cfq.fqdn;
+              maybeFQDN = optionalString ( cfg.fqdn != null ) cfg.fqdn;
           in
           ''
             127.0.0.1 ${maybeFQDN} ${userLocalHosts} localhost
