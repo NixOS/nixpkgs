@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf ];
 
   configurePhase = ''
-    ./configure --prefix=$out --enable-single-host
+    ./configure --prefix=$out
   '';
 
   buildPhase = ''
