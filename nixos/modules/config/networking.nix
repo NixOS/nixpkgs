@@ -20,24 +20,35 @@ in
 
   options = {
 
-    networking.extraLocalHosts = lib.mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "localhost.localdomain" "workinprogress.example.com" ];
+    networking.fqdn = lib.mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "foo.example.com";
       description = ''
-        Additional entries to be appended to 127.0.0.1 entry in <filename>/etc/hosts</filename>.
+        Full qualified domain name, if any.
       '';
     };
 
+    networking.hosts = lib.mkOption {
+      type = types.attrsOf ( types.listOf types.str );
+      default = {};
+      example = ''
+        {
+          "localhost" = [ "foo.bar" ];
+          "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
+        };
+      '';
+      description = ''
+        Locally defined maps of IP addresses to hostnames'
+      '';
+    };
 
     networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
-        Additional entries to be appended to <filename>/etc/hosts</filename>.
-        Note that entries for 127.0.0.1 will not always work correctly if added from here.
-        They should be added via <literal>networking.extraLocalHosts</literal>.
+        Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
       '';
     };
 
@@ -199,12 +210,26 @@ in
         "rpc".source = pkgs.glibc.out + "/etc/rpc";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        "hosts".text = let foo = concatStringsSep " " cfg.extraLocalHosts; in
+        "hosts".text =
+          let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
+              allToString = set : concatStringsSep "\n" ( map ( oneToString set ) ( builtins.attrNames set ));
+              userLocalHosts =
+                if builtins.hasAttr "127.0.0.1" cfg.hosts
+                then concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "127.0.0.1" cfg.hosts))
+                else "";
+              userLocalHosts6 =
+                if builtins.hasAttr "::1" cfg.hosts
+                then concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "::1" cfg.hosts))
+                else "";
+              otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
+              maybeFQDN = if cfg.fqdn == null then "" else cfq.fqdn;
+          in
           ''
-            127.0.0.1 localhost ${foo}
+            127.0.0.1 ${maybeFQDN} ${userLocalHosts} localhost
             ${optionalString cfg.enableIPv6 ''
-              ::1 localhost ${foo}
+              ::1 ${maybeFQDN} ${userLocalHosts6} localhost
             ''}
+            ${otherHosts}
             ${cfg.extraHosts}
           '';
 
