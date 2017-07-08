@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "unifont-${version}";
-  version = "10.0.01";
+  version = "10.0.02";
 
   ttf = fetchurl {
     url = "mirror://gnu/unifont/${name}/${name}.ttf";
-    sha256 = "0yfz5y4vidb7h6csv6k8h0mx808psdn4vx4842bnyz0fkyhr9h3y";
+    sha256 = "1g7iaw2vx7yq8d3z625p6ainkn35wpfsimbl75lyj3d8206fhx0z";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${name}/${name}.pcf.gz";
-    sha256 = "0shlr5804knh14qnv270yzsyfndw6na5ajbx4kvx20gfyxzcsi76";
+    sha256 = "1l2cnkshpsg3mw5ps1ghzqm2a1nr7jfdn2bxqyvw7d0l5xyxvg3d";
   };
 
   buildInputs = [ mkfontscale mkfontdir ];
