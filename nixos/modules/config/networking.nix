@@ -34,12 +34,12 @@ in
       default = {};
       example = ''
         {
-          "localhost" = [ "foo.bar" ];
+          "127.0.0.1" = [ "foo.bar.baz" ];
           "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
         };
       '';
       description = ''
-        Locally defined maps of IP addresses to hostnames'
+        Locally defined maps of hostnames to IP addresses.
       '';
     };
 
