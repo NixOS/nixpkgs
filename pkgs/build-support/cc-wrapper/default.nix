@@ -10,6 +10,7 @@
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, buildPackages ? {}, hostPlatform, targetPlatform
 , runCommand ? null
 }:
 
@@ -120,6 +121,17 @@ let
          "Don't know the name of the dynamic linker for platform ${targetPlatform.config}, so guessing instead."
          null)
     else "";
+
+  expand-response-params = if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+  then buildPackages.stdenv.mkDerivation {
+    name = "expand-response-params";
+    src = ./expand-response-params.c;
+    buildCommand = ''
+      # Work around "stdenv-darwin-boot-2 is not allowed to refer to path /nix/store/...-expand-response-params.c"
+      cp "$src" expand-response-params.c
+      "$CC" -std=c99 -O3 -o "$out" expand-response-params.c
+    '';
+  } else "";
 
 in
 
@@ -369,11 +381,13 @@ stdenv.mkDerivation {
     + ''
       substituteAll ${preWrap ./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${preWrap ./add-hardening.sh} $out/nix-support/add-hardening.sh
-      cp -p ${preWrap ./utils.sh} $out/nix-support/utils.sh
+      substituteAll ${preWrap ./utils.sh} $out/nix-support/utils.sh
     ''
     + extraBuildCommands;
 
-  inherit dynamicLinker;
+  inherit dynamicLinker expand-response-params;
+
+  expandResponseParams = expand-response-params; # for substitution in utils.sh
 
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;

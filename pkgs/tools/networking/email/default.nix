@@ -8,7 +8,7 @@ let
     sha256 = "1cxxzhm36civ6vjdgrk7mfmlzkih44kdii6l2xgy4r434s8rzcpn";
   };
 
-  srcRoot = "eMail-${eMailSrc.rev}-src";
+  srcRoot = eMailSrc.name;
 
   dlibSrc = fetchFromGitHub {
     owner = "deanproxy";
