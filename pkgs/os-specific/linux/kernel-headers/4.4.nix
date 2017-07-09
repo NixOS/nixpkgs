@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, perl, cross ? null }:
+{ stdenvNoCC, lib, buildPackages
+, buildPlatform, hostPlatform
+, fetchurl, perl
+}:
 
-assert cross == null -> stdenv.isLinux;
+assert hostPlatform.isLinux;
 
 let
-
   version = "4.4.10";
-
-  kernelHeadersBaseConfig =
-    if cross == null
-    then stdenv.platform.kernelHeadersBaseConfig
-    else cross.platform.kernelHeadersBaseConfig;
-
+  inherit (hostPlatform.platform) kernelHeadersBaseConfig;
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "linux-headers-${version}";
 
   src = fetchurl {
@@ -21,23 +18,20 @@ stdenv.mkDerivation {
     sha256 = "1kpjvvd9q9wwr3314q5ymvxii4dv2d27295bzly225wlc552xhja";
   };
 
-  targetConfig = if cross != null then cross.config else null;
+  targetConfig = if hostPlatform != buildPlatform then hostPlatform.config else null;
 
-  platform =
-    if cross != null then cross.platform.kernelArch else
-    if stdenv.system == "i686-linux" then "i386" else
-    if stdenv.system == "x86_64-linux" then "x86_64" else
-    if stdenv.system == "powerpc-linux" then "powerpc" else
-    if stdenv.isArm then "arm" else
-    if stdenv.platform ? kernelArch then stdenv.platform.kernelArch else
-    abort "don't know what the kernel include directory is called for this platform";
+  platform = hostPlatform.platform.kernelArch or (
+    if hostPlatform.system == "i686-linux" then "i386" else
+    if hostPlatform.system == "x86_64-linux" then "x86_64" else
+    if hostPlatform.system == "powerpc-linux" then "powerpc" else
+    if hostPlatform.isArm then "arm" else
+    abort "don't know what the kernel include directory is called for this platform");
 
-  buildInputs = [perl];
+  # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
+  # We do this so we have a build->build, not build->host, C compiler.
+  nativeBuildInputs = [ buildPackages.stdenv.cc perl ];
 
-  extraIncludeDirs =
-    if cross != null then
-        (if cross.arch == "powerpc" then ["ppc"] else [])
-    else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
+  extraIncludeDirs = lib.optional hostPlatform.isPowerPC ["ppc"];
 
   buildPhase = ''
     if test -n "$targetConfig"; then
@@ -63,7 +57,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Header files and scripts for Linux kernel";
     license = licenses.gpl2;
     platforms = platforms.linux;
