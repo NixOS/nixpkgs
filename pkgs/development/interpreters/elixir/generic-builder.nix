@@ -48,7 +48,7 @@ in
 
       for f in $out/bin/*; do
        b=$(basename $f)
-        if [ $b == "mix" ]; then continue; fi
+        if [ "$b" = mix ]; then continue; fi
         wrapProgram $f \
           --prefix PATH ":" "${stdenv.lib.makeBinPath [ erlang coreutils curl bash ]}" \
           --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
