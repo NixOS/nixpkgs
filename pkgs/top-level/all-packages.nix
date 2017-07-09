@@ -545,6 +545,8 @@ with pkgs;
 
   enpass = callPackage ../tools/security/enpass { };
 
+  ezstream = callPackage ../tools/audio/ezstream { };
+
   genymotion = callPackage ../development/mobile/genymotion { };
 
   grc = callPackage ../tools/misc/grc { };
