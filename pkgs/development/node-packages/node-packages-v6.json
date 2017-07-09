@@ -16,6 +16,7 @@
 , "eslint_d"
 , "emojione"
 , "fetch-bower"
+, "firebase-tools"
 , "forever"
 , "git-run"
 , "git-standup"

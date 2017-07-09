@@ -1888,6 +1888,8 @@ with pkgs;
 
   fio = callPackage ../tools/system/fio { };
 
+  firebase-tools = nodePackages.firebase-tools;
+
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
   flashtool = callPackage_i686 ../development/mobile/flashtool {
