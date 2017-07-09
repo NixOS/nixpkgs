@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.1";
-  name = "antigen";
+  name = "antigen-${version}";
 
   src = fetchurl {
-    url = "git.io/antigen";
-    sha256 = "0phnijkdl6w3cfbwakdvc86hazdn6y42bqnr1g3wynax5jr56xqm";
+    url = "https://github.com/zsh-users/antigen/releases/download/v${version}/antigen.zsh";
+    sha256 = "0s32280ak0gd0rr66g5dj6r5px0si8w47bcxlqfpaijg7i8xk1i7";
   };
   phases = "installPhase";
 
