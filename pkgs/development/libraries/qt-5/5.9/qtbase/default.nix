@@ -81,6 +81,8 @@ stdenv.mkDerivation {
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
+  hardeningDisable = [ "bindnow" ];
+
   postPatch =
     ''
       substituteInPlace configure --replace /bin/pwd pwd
