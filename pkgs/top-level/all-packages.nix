@@ -5032,6 +5032,8 @@ with pkgs;
 
   fish-foreign-env = callPackage ../shells/fish-foreign-env { };
 
+  ion = callPackage ../shells/ion { };
+
   mksh = callPackage ../shells/mksh { };
 
   oh = callPackage ../shells/oh { };
