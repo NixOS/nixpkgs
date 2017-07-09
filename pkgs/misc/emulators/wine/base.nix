@@ -22,6 +22,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
   [ pkgs.freetype ]
+  ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional pngSupport             pkgs.libpng
   ++ lib.optional jpegSupport            pkgs.libjpeg
   ++ lib.optional cupsSupport            pkgs.cups
