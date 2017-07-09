@@ -11560,7 +11560,7 @@ with pkgs;
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
   zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
 
-  zipkin-server = callPackage ../servers/monitoring/zipkin { };
+  zipkin = callPackage ../servers/monitoring/zipkin { };
 
   ### OS-SPECIFIC
 
