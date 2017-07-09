@@ -29,7 +29,7 @@ lib.overrideDerivation (fetchurl ({
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      renamed="$TMPDIR/${baseNameOf name}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
 
