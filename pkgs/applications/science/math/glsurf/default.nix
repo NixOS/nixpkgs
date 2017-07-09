@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  buildInputs = [ freeglut mesa mysql.lib mpfr gmp
+  buildInputs = [ freeglut mesa mysql.connector-c mpfr gmp
     libtiff libjpeg libpng giflib ]
   ++ (with ocamlPackages; [
     ocaml findlib ocaml_mysql lablgl camlimages_4_0 mlgmpidl

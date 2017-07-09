@@ -11,7 +11,7 @@ let # in mariadb # spans the whole file
 mariadb = everything // {
   inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
   server = everything; # a full single-output build, including everything in `client` again
-  lib = client; # compat. with the old mariadb split
+  inherit connector-c; # libmysqlclient.so
 };
 
 common = rec { # attributes common to both builds
@@ -158,5 +158,35 @@ everything = stdenv.mkDerivation (common // {
     rm "$out"/share/man/man1/mysql-test-run.pl.1
   '';
 });
+
+connector-c = stdenv.mkDerivation rec {
+  name = "mariadb-connector-c-${version}";
+  version = "2.3.3";
+
+  src = fetchurl {
+    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
+    sha256 = "12a0j4r01vrdpvl53zq433fb74gd4mm4v5jqmnf4nrg76h0p39c2";
+    name   = "mariadb-connector-c-${version}-src.tar.gz";
+  };
+
+  # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
+  cmakeFlags = [ "-DWITH_EXTERNAL_ZLIB=ON" ];
+
+  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ openssl zlib ];
+
+  enableParallelBuilding = true;
+
+  postFixup = ''
+    ln -sv mariadb_config $out/bin/mysql_config
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Client library that can be used to connect to MySQL or MariaDB";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ globin ];
+    platforms = platforms.all;
+  };
+};
 
 in mariadb
