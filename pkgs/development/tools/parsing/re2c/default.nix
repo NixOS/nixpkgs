@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "re2c-${version}";
   version = "0.16";
 
-  sourceRoot = "${name}-src/re2c";
+  sourceRoot = "re2c/re2c";
 
   src = fetchFromGitHub {
     owner = "skvadrik";
