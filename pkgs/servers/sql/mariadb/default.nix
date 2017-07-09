@@ -11,7 +11,7 @@ let # in mariadb # spans the whole file
 mariadb = everything // {
   inherit client; # mysql binary
   server = everything; # a full single-output build, including everything in `client` again
-  lib = connector-c; # libmysqlclient.so
+  inherit connector-c; # libmysqlclient.so
 };
 
 common = rec { # attributes common to both builds
@@ -174,7 +174,7 @@ connector-c = stdenv.mkDerivation rec {
   cmakeFlags = [ "-DWITH_EXTERNAL_ZLIB=ON" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl zlib ];
+  propagatedBuildInputs = [ openssl zlib ];
 
   enableParallelBuilding = true;
 

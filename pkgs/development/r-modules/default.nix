@@ -314,7 +314,7 @@ let
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
     Rmpi = [ pkgs.openmpi ];
-    RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.connector-c ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
@@ -781,8 +781,8 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      patches = [ ./patches/RMySQL.patch ];
-      MYSQL_DIR="${pkgs.mysql.lib}";
+      MYSQL_DIR="${pkgs.mysql.connector-c}";
+      preConfigure = "patchShebangs configure";
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {

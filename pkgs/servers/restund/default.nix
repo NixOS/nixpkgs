@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://www.creytiv.com/pub/restund-${version}.tar.gz";
     sha256 = "db5260939d40cb2ce531075bef02b9d6431067bdd52f3168a6f25246bdf7b9f2";
   };
-  buildInputs = [ zlib openssl libre librem mysql.lib ];
+  buildInputs = [ zlib openssl libre librem mysql.connector-c ];
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "LIBRE_INC=${libre}/include/re"

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
    [ gettext gdbm libtool pam readline ncurses
-     gnutls mysql.lib guile texinfo gnum4 sasl fribidi gss nettools ]
+     gnutls mysql.connector-c guile texinfo gnum4 sasl fribidi gss nettools ]
    ++ stdenv.lib.optional doCheck dejagnu;
 
   doCheck = true;

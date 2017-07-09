@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig pcre libxml2 zlib attr bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
-             ++ stdenv.lib.optional enableMysql mysql.lib;
+             ++ stdenv.lib.optional enableMysql mysql.connector-c;
 
   configureFlags = [ "--with-openssl" ]
                 ++ stdenv.lib.optional enableMagnet "--with-lua"

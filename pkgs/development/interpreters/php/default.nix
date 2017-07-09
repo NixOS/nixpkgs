@@ -10,7 +10,7 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib or mysql;
+        mysqlHeaders = mysql.connector-c or mysql;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
