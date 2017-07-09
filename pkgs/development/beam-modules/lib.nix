@@ -12,15 +12,6 @@ rec {
 
   callPackage = callPackageWith pkgs;
 
-  /* Erlang/OTP-specific version retrieval, returns 19 for OTP R19 */
-  getVersion = x:
-   let
-     parse = drv: (builtins.parseDrvName drv).version;
-   in builtins.replaceStrings ["B" "-"] ["." "."] (
-      if builtins.isString x
-      then parse x
-      else x.version or (parse x.name));
-
   /* Uses generic-builder to evaluate provided drv containing OTP-version
   specific data.
 
@@ -38,6 +29,28 @@ rec {
   callErlang = drv: args:
     let
       builder = callPackage ../../development/interpreters/erlang/generic-builder.nix args;
+    in
+      callPackage drv {
+        mkDerivation = pkgs.makeOverridable builder;
+      };
+
+  /* Uses generic-builder to evaluate provided drv containing Elixir version
+  specific data.
+
+  drv: package containing version-specific args;
+  builder: generic builder for all Erlang versions;
+  args: arguments merged into version-specific args, used mostly to customize
+        dependencies;
+
+  Arguments passed to the generic-builder are overridable.
+
+  Please note that "mkDerivation" defined here is the one called from 1.4.nix
+  and similar files.
+  */
+  callElixir = drv: args:
+    let
+      inherit (stdenv.lib) versionAtLeast;
+      builder = callPackage ../interpreters/elixir/generic-builder.nix args;
     in
       callPackage drv {
         mkDerivation = pkgs.makeOverridable builder;

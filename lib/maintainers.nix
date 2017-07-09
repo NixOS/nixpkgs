@@ -43,6 +43,7 @@
   andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   andsild = "Anders Sildnes <andsild@gmail.com>";
   aneeshusa = "Aneesh Agrawal <aneeshusa@gmail.com>";
+  ankhers = "Justin Wood <justin.k.wood@gmail.com>";
   antono = "Antono Vasiljev <self@antono.info>";
   apeschar = "Albert Peschar <albert@peschar.net>";
   apeyroux = "Alexandre Peyroux <alex@px.io>";
