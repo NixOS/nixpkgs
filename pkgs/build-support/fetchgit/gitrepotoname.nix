@@ -1,14 +1,19 @@
 { lib }:
 
-urlOrRepo: rev: let
-  inherit (lib) removeSuffix splitString last;
-  base = last (splitString ":" (baseNameOf (removeSuffix "/" urlOrRepo)));
+let
+  inherit (lib) removeSuffix hasPrefix removePrefix splitString stringToCharacters concatMapStrings last elem;
 
-  matched = builtins.match "(.*).git" base;
-
-  short = builtins.substring 0 7 rev;
-
-  appendShort = if (builtins.match "[a-f0-9]*" rev) != null
-    then "-${short}"
-    else "";
-in "${if matched == null then base else builtins.head matched}${appendShort}"
+  allowedChars = stringToCharacters "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-._?=";
+  sanitizeStoreName = s:
+    let
+      s' = concatMapStrings (c: if elem c allowedChars then c else "") (stringToCharacters s);
+      s'' = if hasPrefix "." s' then "_${removePrefix "." s'}" else s';
+    in
+      s'';
+in
+  urlOrRepo: rev:
+    let
+      repo' = last (splitString ":" (baseNameOf (removeSuffix ".git" (removeSuffix "/" urlOrRepo))));
+      rev' = baseNameOf rev;
+    in
+     "${sanitizeStoreName repo'}-${sanitizeStoreName rev'}-src"
