@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "f86eb8163b470c3acbc182b42406f08313f85187bd9017afb8b79b02f03635c9";
   };
 
-  buildInputs = [ libiconv libshout taglib libxml2 pkgconfig ];
+  buildInputs = [ libiconv libshout taglib libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A command line source client for Icecast media streaming servers";
     longDescription = ''
       Ezstream is a command line source client for Icecast media
@@ -25,8 +26,8 @@ stdenv.mkDerivation rec {
       very little CPU resources.
     '';
     homepage = http://icecast.org/ezstream/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.barrucadu ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.barrucadu ];
+    platforms = platforms.all;
   };
 }
