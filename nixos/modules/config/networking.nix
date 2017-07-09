@@ -212,13 +212,13 @@ in
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =
           let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
-              allToString = set : concatStringsSep "\n" ( map ( oneToString set ) ( builtins.attrNames set ));
+              allToString = set : concatMapStringsSep "\n" ( oneToString set ) ( attrNames set );
               userLocalHosts = optionalString
                 ( builtins.hasAttr "127.0.0.1" cfg.hosts )
-                ( concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "127.0.0.1" cfg.hosts)));
+                ( concatStringsSep " " ( remove "localhost" cfg.hosts."127.0.0.1" ));
               userLocalHosts6 = optionalString
                 ( builtins.hasAttr "::1" cfg.hosts )
-                ( concatStringsSep " " ( filter (x : x != "localhost" ) ( getAttr "::1" cfg.hosts)));
+                ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
               otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
               maybeFQDN = optionalString ( cfg.fqdn != null ) cfg.fqdn;
           in
