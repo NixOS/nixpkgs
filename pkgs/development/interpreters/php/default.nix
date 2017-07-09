@@ -12,7 +12,7 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib.dev or mysql;
+        mysqlHeaders = mysql.connector-c or mysql;
         mysqlndSupport = config.php.mysqlnd or false;
         mysqlBuildInputs = lib.optional (!mysqlndSupport) mysqlHeaders;
 

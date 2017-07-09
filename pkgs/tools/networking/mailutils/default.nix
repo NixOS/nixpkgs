@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional doCheck dejagnu;
   buildInputs = [
     gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
-    gss mysql.lib
+    gss mysql.connector-c
   ];
 
   patches = [

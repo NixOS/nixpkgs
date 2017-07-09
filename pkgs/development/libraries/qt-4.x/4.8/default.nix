@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ optionals (mysql != null) [ mysql.lib ]
+    ++ optionals (mysql != null) [ mysql.connector-c ]
     ++ optionals gtkStyle [ gtk2 gdk_pixbuf ]
     ++ optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
