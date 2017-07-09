@@ -2,8 +2,8 @@
 
 let
   version = "4.12";
-  revision = "b";
-  sha256 = "117n42sw2g40p68plr7b77mq18vibqjv0i4130f1bj6gk0sqn5i6";
+  revision = "c";
+  sha256 = "1jbzadvmbw0xhpknyi26zdwhvfrxrwvccrbm621z3b3mklsmdzjn";
 in
 
 import ./generic.nix (args // {
