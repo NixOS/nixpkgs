@@ -12,13 +12,12 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./sudo.patch ];
 
-  propagatedBuildInputs = with python3Packages; [ mock pytest ];
   nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
   buildInputs =
     [ coreutils openssh ] ++
     stdenv.lib.optionals stdenv.isLinux [ iptables nettools procps ];
 
-  checkInputs = with python3Packages; [ pytest pytestrunner ];
+  checkInputs = with python3Packages; [ mock pytest pytestrunner ];
 
   # Tests only run with Python 3. Server-side Python 2 still works if client
   # uses Python 3, so it should be fine.
