@@ -2,23 +2,11 @@
 
 with lib;
 
-let
-  cfg = config.security.auditd;
-in {
-  options = {
-    security.auditd = {
-      enable = mkOption {
-        type        = types.bool;
-        default     = false;
-        description = ''
-          Whether to enable the Linux Audit daemon.
-        '';
-      };
-    };
-  };
+{
+  options.security.auditd.enable = mkEnableOption "the Linux Audit daemon";
 
-  config = {
-    systemd.services.auditd = mkIf cfg.enable {
+  config = mkIf config.security.auditd.enable {
+    systemd.services.auditd = {
       description = "Linux Audit daemon";
       wantedBy = [ "basic.target" ];
 
@@ -26,7 +14,6 @@ in {
         ConditionVirtualization = "!container";
         ConditionSecurity = [ "audit" ];
       };
-
 
       path = [ pkgs.audit ];
 
