@@ -8,7 +8,7 @@ in {
   options = {
     security.auditd = {
       enable = mkOption {
-        type        = types.enum [ false true ];
+        type        = types.bool;
         default     = false;
         description = ''
           Whether to enable the Linux Audit daemon.
