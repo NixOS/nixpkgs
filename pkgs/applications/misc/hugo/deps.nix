@@ -360,6 +360,15 @@
     };
   }
   {
+    goPackagePath = "golang.org/x/image";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/image";
+      rev = "426cfd8eeb6e08ab1932954e09e3c2cb2bc6e36d";
+      sha256 = "0zbqvkn7amq9bnq38pxjqyn1xggphrisaw98x7diw3i0a5phk93r";
+    };
+  }
+  {
     goPackagePath = "golang.org/x/net";
     fetch = {
       type = "git";

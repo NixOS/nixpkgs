@@ -68,6 +68,10 @@ in rec {
 
         name = "stdenv-darwin-boot-${toString step}";
 
+        buildPlatform = localSystem;
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
+
         cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
           inherit shell;
           inherit (last) stdenv;
@@ -96,9 +100,6 @@ in rec {
         '';
         initialPath  = [ bootstrapTools ];
 
-        hostPlatform = localSystem;
-        targetPlatform = localSystem;
-
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl   = bootstrapTools;
@@ -113,9 +114,6 @@ in rec {
       };
 
     in {
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
       inherit config overlays;
       stdenv = thisStdenv;
     };
@@ -285,15 +283,16 @@ in rec {
 
     name = "stdenv-darwin";
 
+    buildPlatform = localSystem;
+    hostPlatform = localSystem;
+    targetPlatform = localSystem;
+
     preHook = commonPreHook + ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
     stdenvSandboxProfile = binShClosure + libSystemProfile;
     extraSandboxProfile  = binShClosure + libSystemProfile;
-
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
 
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
@@ -348,9 +347,6 @@ in rec {
     stage3
     stage4
     (prevStage: {
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
       inherit config overlays;
       stdenv = stdenvDarwin prevStage;
     })

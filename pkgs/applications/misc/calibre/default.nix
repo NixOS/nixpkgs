@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.1.1";
+  version = "3.3.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1lh1gz0915r49igfhy1icz79qx36s3d8m32qlih0g3zn7jahp86g";
+    sha256 = "1zq3aihnyxdczdz8b0w02xfw4b0l9i23f6ljpmsmm69jyh4j3m0c";
   };
 
   patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     # Remove unneeded files and libs
     rm -rf resources/calibre-portable.* \
-           src/{chardet,cherrypy,html5lib,odf,routes}
+           src/{chardet,cherrypy,odf,routes}
   '';
 
   dontUseQmakeConfigure = true;
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     python pyqt5 sip
     regex msgpack
     # the following are distributed with calibre, but we use upstream instead
-    chardet cherrypy html5lib_0_9999999 odfpy routes
+    chardet cherrypy odfpy routes
   ]);
 
   installPhase = ''

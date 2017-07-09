@@ -43,6 +43,7 @@
   andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   andsild = "Anders Sildnes <andsild@gmail.com>";
   aneeshusa = "Aneesh Agrawal <aneeshusa@gmail.com>";
+  ankhers = "Justin Wood <justin.k.wood@gmail.com>";
   antono = "Antono Vasiljev <self@antono.info>";
   apeschar = "Albert Peschar <albert@peschar.net>";
   apeyroux = "Alexandre Peyroux <alex@px.io>";
@@ -62,6 +63,7 @@
   bachp = "Pascal Bach <pascal.bach@nextrem.ch>";
   badi = "Badi' Abdul-Wahid <abdulwahidc@gmail.com>";
   balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
+  barrucadu = "Michael Walker <mike@barrucadu.co.uk>";
   basvandijk = "Bas van Dijk <v.dijk.bas@gmail.com>";
   Baughn = "Svein Ove Aas <sveina@gmail.com>";
   bcarrell = "Brandon Carrell <brandoncarrell@gmail.com>";
@@ -155,6 +157,7 @@
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
   dsferruzza = "David Sferruzza <david.sferruzza@gmail.com>";
   dtzWill = "Will Dietz <nix@wdtz.org>";
+  dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
   edanaher = "Evan Danaher <nixos@edanaher.net>";
@@ -224,6 +227,7 @@
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   hce = "Hans-Christian Esperer <hc@hcesperer.org>";
+  hectorj = "Hector Jusforgues <hector.jusforgues+nixos@gmail.com>";
   heel = "Sergii Paryzhskyi <parizhskiy@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
@@ -315,6 +319,7 @@
   luispedro = "Luis Pedro Coelho <luis@luispedro.org>";
   lukego = "Luke Gorrie <luke@snabb.co>";
   lw = "Sergey Sofeychuk <lw@fmap.me>";
+  lyt = "Tim Liou <wheatdoge@gmail.com>";
   m3tti = "Mathaeus Sander <mathaeus.peter.sander@gmail.com>";
   ma27 = "Maximilian Bosch <maximilian@mbosch.me>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
@@ -564,6 +569,7 @@
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   tvestelind = "Tomas Vestelind <tomas.vestelind@fripost.org>";
   tvorog = "Marsel Zaripov <marszaripov@gmail.com>";
+  tweber = "Thorsten Weber <tw+nixpkgs@360vier.de>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   utdemir = "Utku Demir <me@utdemir.com>";

@@ -545,6 +545,8 @@ with pkgs;
 
   enpass = callPackage ../tools/security/enpass { };
 
+  ezstream = callPackage ../tools/audio/ezstream { };
+
   genymotion = callPackage ../development/mobile/genymotion { };
 
   grc = callPackage ../tools/misc/grc { };
@@ -2068,6 +2070,8 @@ with pkgs;
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
   git-lfs = callPackage ../applications/version-management/git-lfs { };
+
+  git-ftp = callPackage ../development/tools/git-ftp { };
 
   git-series = callPackage ../development/tools/git-series { };
 
@@ -5030,6 +5034,8 @@ with pkgs;
 
   fish-foreign-env = callPackage ../shells/fish-foreign-env { };
 
+  ion = callPackage ../shells/ion { };
+
   mksh = callPackage ../shells/mksh { };
 
   oh = callPackage ../shells/oh { };
@@ -6038,8 +6044,14 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
-    erlangR17 erlangR18 erlangR19 erlangR20
-    erlang_basho_R16B02 elixir lfe;
+    elixir elixir_1_5_rc elixir_1_4 elixir_1_3
+    lfe
+    erlangR16 erlangR16_odbc
+    erlang_basho_R16B02 erlang_basho_R16B02_odbc
+    erlangR17 erlangR17_odbc erlangR17_javac erlangR17_odbc_javac
+    erlangR18 erlangR18_odbc erlangR18_javac erlangR18_odbc_javac
+    erlangR19 erlangR19_odbc erlangR19_javac erlangR19_odbc_javac
+    erlangR20 erlangR20_odbc erlangR20_javac erlangR20_odbc_javac;
 
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
@@ -6119,7 +6131,8 @@ with pkgs;
 
   luaPackages = lua52Packages;
 
-  luajit = callPackage ../development/interpreters/luajit {};
+  inherit (callPackages ../development/interpreters/luajit {})
+    luajit luajit_2_0 luajit_2_1;
 
   luarocks = luaPackages.luarocks;
 
@@ -6568,7 +6581,7 @@ with pkgs;
     pythonPackages = python2Packages;
   };
   buildbot-ui = buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
-  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view ]);
+  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
@@ -11321,6 +11334,7 @@ with pkgs;
   prometheus-bind-exporter = callPackage ../servers/monitoring/prometheus/bind-exporter.nix { };
   prometheus-blackbox-exporter = callPackage ../servers/monitoring/prometheus/blackbox-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
+  prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
@@ -13100,6 +13114,8 @@ with pkgs;
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
+  ttf-envy-code-r = callPackage ../data/fonts/ttf-envy-code-r {};
+
   tzdata = callPackage ../data/misc/tzdata { };
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
@@ -14550,8 +14566,6 @@ with pkgs;
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
-
-    configFile = config.i3.configFile or null;
   };
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
@@ -15061,9 +15075,7 @@ with pkgs;
 
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
-    ocaml = ocamlPackages_4_01_0.ocaml;
-  };
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
   MMA = callPackage ../applications/audio/MMA { };
 
@@ -15724,7 +15736,7 @@ with pkgs;
   };
 
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils;
+    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils pyopengl;
     inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
 
@@ -17927,6 +17939,10 @@ with pkgs;
 
   abella = callPackage ../applications/science/logic/abella {};
 
+  acgtk = callPackage ../applications/science/logic/acgtk {
+    ocamlPackages = ocamlPackages_4_03;
+  };
+
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {
     ocamlPackages = ocamlPackages_4_02;
   };
@@ -18094,6 +18110,8 @@ with pkgs;
   otter = callPackage ../applications/science/logic/otter {};
 
   picosat = callPackage ../applications/science/logic/picosat {};
+
+  libpoly = callPackage ../applications/science/logic/poly/default.nix {};
 
   prooftree = (with ocamlPackages_4_01_0;
     callPackage  ../applications/science/logic/prooftree {

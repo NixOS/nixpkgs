@@ -81,6 +81,7 @@ let
     { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
 
     import ../generic {
+      buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
 
@@ -125,8 +126,6 @@ in
         "i686-solaris" = "/usr/gnu";
         "x86_64-solaris" = "/opt/local/gcc47";
       }.${system} or "/usr";
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
       inherit stdenv;
     };
 
@@ -140,9 +139,6 @@ in
 
   # First build a stdenv based only on tools outside the store.
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
@@ -152,9 +148,6 @@ in
   # Using that, build a stdenv that adds the ‘xz’ command (which most systems
   # don't have, so we mustn't rely on the native environment providing it).
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage.stdenv) cc fetchurl;

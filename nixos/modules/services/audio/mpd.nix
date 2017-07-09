@@ -44,6 +44,16 @@ in {
         '';
       };
 
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, <command>mpd</command> is socket-activated; that
+          is, instead of having it permanently running as a daemon,
+          systemd will start it on the first incoming connection.
+        '';
+      };
+
       musicDirectory = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/music";
@@ -123,10 +133,23 @@ in {
 
   config = mkIf cfg.enable {
 
+    systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
+      description = "Music Player Daemon Socket";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [
+        "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}"
+      ];
+      socketConfig = {
+        Backlog = 5;
+        KeepAlive = true;
+        PassCredentials = true;
+      };
+    };
+
     systemd.services.mpd = {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
       preStart = ''
         mkdir -p "${cfg.dataDir}" && chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
@@ -136,6 +159,16 @@ in {
         User = "${cfg.user}";
         PermissionsStartOnly = true;
         ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
+        Type = "notify";
+        LimitRTPRIO = 50;
+        LimitRTTIME = "infinity";
+        ProtectSystem = true;
+        NoNewPrivileges = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
+        RestrictNamespaces = true;
       };
     };
 

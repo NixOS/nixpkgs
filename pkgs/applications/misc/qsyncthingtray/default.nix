@@ -5,14 +5,14 @@
 , preferQWebView ? false }:
 
 mkDerivation rec {
-  version = "0.5.7";
+  version = "0.5.8";
   name = "qsyncthingtray-${version}";
 
   src = fetchFromGitHub {
     owner  = "sieren";
     repo   = "QSyncthingTray";
     rev    = "${version}";
-    sha256 = "0crrdpdmlc4ahkvp5znzc4zhfwsdih655q1kfjf0g231mmynxhvq";
+    sha256 = "1n9g4j7qznvg9zl6x163pi9f7wsc3x6q76i33psnm7x2v1i22x5w";
   };
 
   buildInputs = [ qtbase qtwebengine ] ++ lib.optional preferQWebView qtwebkit;

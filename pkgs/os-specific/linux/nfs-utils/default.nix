@@ -39,6 +39,9 @@ in stdenv.mkDerivation rec {
       sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
       configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
+      
+      substituteInPlace systemd/nfs-utils.service \
+        --replace "/bin/true" "${coreutils}/bin/true"
 
       substituteInPlace utils/mount/Makefile.in \
         --replace "chmod 4511" "chmod 0511"

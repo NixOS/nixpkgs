@@ -3,7 +3,7 @@
 assert stdenv.lib.versionAtLeast ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${version}";
+  name = "ocaml${ocaml.version}-sedlex-${version}";
   version = "1.99.3";
 
   src = fetchzip {
