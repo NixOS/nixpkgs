@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, python
+{ stdenv, hostPlatform, fetchurl, pkgconfig, gettext, perl, python
 , libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
@@ -9,7 +9,7 @@
 
 with stdenv.lib;
 
-assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU;
+assert stdenv.isFreeBSD || stdenv.isDarwin || stdenv.cc.isGNU || hostPlatform.isCygwin;
 assert stdenv.isLinux -> utillinuxMinimal != null;
 
 # TODO:

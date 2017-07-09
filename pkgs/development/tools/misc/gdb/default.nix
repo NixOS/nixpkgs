@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
     "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
@@ -55,8 +58,6 @@ stdenv.mkDerivation rec {
       # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ++ stdenv.lib.optional (!pythonSupport) "--without-python"
-    # TODO(@Ericson2314): This should be done in stdenv, not per-package
-    ++ stdenv.lib.optional (targetPlatform != hostPlatform) "--target=${targetPlatform.config}"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
   postInstall =

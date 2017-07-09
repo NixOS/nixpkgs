@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, buildOcaml, calendar, csv, re }:
+{ stdenv, fetchurl, buildOcaml, ocaml, calendar, csv, re }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4"
+then throw "pgocaml is not available for OCaml ${ocaml.version}"
+else
 
 buildOcaml {
   name = "pgocaml";

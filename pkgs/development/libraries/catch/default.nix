@@ -1,15 +1,14 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-
   name = "catch-${version}";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "philsquared";
     repo = "Catch";
     rev = "v${version}";
-    sha256 = "1in4f6w1pja8m1hvyiwx7s7gxnj6nlj1fgxw9blldffh09ikgpm2";
+    sha256 = "0nqnyw6haa2771748ycag4hhjb8ni32cv4f7w3h0pji212542xan";
   };
 
   nativeBuildInputs = [ cmake ];

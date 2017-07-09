@@ -35,6 +35,9 @@ let inherit (localSystem) system; in
 
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-1";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
       inherit config;
       initialPath = [ "/" "/usr" ];
       hostPlatform = localSystem;
@@ -52,6 +55,9 @@ let inherit (localSystem) system; in
 
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-0";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
       inherit config;
       initialPath = [ prevStage.bootstrapTools ];
       inherit (prevStage.stdenv)
@@ -62,12 +68,12 @@ let inherit (localSystem) system; in
   })
 
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-3";
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
       inherit config;
 
       inherit (prevStage.stdenv)

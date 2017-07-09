@@ -171,6 +171,7 @@ let
 
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
+    , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
     , enableOCR ? false, meta ? {}
@@ -192,6 +193,7 @@ let
           { imports =
               [ ../modules/profiles/installation-device.nix
                 ../modules/profiles/base.nix
+                extraInstallerConfig
               ];
 
             virtualisation.diskSize = 8 * 1024;
@@ -328,6 +330,43 @@ in {
               "mkfs.vfat -n BOOT /dev/vda1",
               "mkdir -p /mnt/boot",
               "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+    };
+
+  # zfs on / with swap
+  zfsroot = makeInstallerTest "zfs-root"
+    {
+      extraInstallerConfig = {
+        boot.supportedFilesystems = [ "zfs" ];
+      };
+
+      extraConfig = ''
+        boot.supportedFilesystems = [ "zfs" ];
+
+        # Using by-uuid overrides the default of by-id, and is unique
+        # to the qemu disks, as they don't produce by-id paths for
+        # some reason.
+        boot.zfs.devNodes = "/dev/disk/by-uuid/";
+        networking.hostId = "00000000";
+      '';
+
+      createPartitions =
+        ''
+          $machine->succeed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
+              "parted /dev/vda -- mkpart primary 1024M -1s",
+              "udevadm settle",
+
+              "mkswap /dev/vda1 -L swap",
+              "swapon -L swap",
+
+              "zpool create rpool /dev/vda2",
+              "zfs create -o mountpoint=legacy rpool/root",
+              "mount -t zfs rpool/root /mnt",
+
+              "udevadm settle"
           );
         '';
     };

@@ -3,7 +3,7 @@
    them.  Also, because most Nix expressions for CPAN packages are
    trivial, most are actually defined here.  I.e. there's no function
    for each package in a separate file: the call to the function would
-   be almost as must code as the function itself. */
+   be almost as much code as the function itself. */
 
 {pkgs, overrides}:
 
@@ -5772,6 +5772,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Extensions and convenience methods to manage background processes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -7208,11 +7209,11 @@ let self = _self // overrides; _self = with self; {
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "10.48";
+    version = "10.55";
 
     src = fetchurl {
       url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "1wbwapwhv4imh1lj4dw4a8z2mhw983wk5pzdbp7pkijfji0vjj0p";
+      sha256 = "0z8zwjjfvyllnhsafhddbybywpgqv0pl1dbn1g034cs27yj836q2";
     };
 
     meta = with stdenv.lib; {
@@ -7753,6 +7754,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.05.tar.gz;
       sha256 = "15262a00vx714szpx8p2z52wxkz46xp7acl72znwjydyq4ypydi7";
     };
+    LANG="C";
   };
 
   LocaleMaketext = buildPerlPackage {
@@ -10717,16 +10719,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   PDFAPI2 = buildPerlPackage rec {
-    name = "PDF-API2-2.030";
+    name = "PDF-API2-2.033";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
-      sha256 = "a802c25c1f00b093778223fc7aea94ebd87a9abdb915151746b8ee5d4a358769";
+      sha256 = "9c0866ec1a3053f73afaca5f5cdbe6925903b4ce606f4bf4ac317731a69d27a0";
     };
+    buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
-      license = stdenv.lib.licenses.lgpl21;
-      maintainers = [ maintainers.rycee ];
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -12619,6 +12621,15 @@ let self = _self // overrides; _self = with self; {
       description = "Perl6 style Junction operators in Perl5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  SysCPU = buildPerlPackage rec {
+    name = "Sys-CPU-0.61";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MZ/MZSANFORD/${name}.tar.gz";
+      sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
+    };
+    buildInputs = stdenv.lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
   };
 
   SysHostnameLong = buildPerlPackage rec {

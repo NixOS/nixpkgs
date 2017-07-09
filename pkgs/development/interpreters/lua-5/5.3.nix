@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, readline, compat ? false }:
+{ stdenv, fetchurl, readline, compat ? false
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "lua-${version}";
@@ -54,21 +56,15 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-    isDarwin = stdenv.cross.libc == "libSystem";
+    inherit (hostPlatform) isDarwin isMingw;
   in {
     configurePhase = ''
       makeFlagsArray=(
         INSTALL_TOP=$out
         INSTALL_MAN=$out/share/man/man1
-        CC=${stdenv.cross.config}-gcc
-        STRIP=:
-        RANLIB=${stdenv.cross.config}-ranlib
         V=${luaversion}
         R=${version}
         ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
-        AR="${stdenv.cross.config}-ar rcu"
-        macosx
         ''}
       )
     '' + stdenv.lib.optionalString isMingw ''

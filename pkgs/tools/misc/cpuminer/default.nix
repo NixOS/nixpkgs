@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cpuminer-${version}";
-  version = "2.4.5";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/cpuminer/pooler-${name}.tar.gz";
-    sha256 = "130ab6vcbm9azl9w8n97fzjnjbakm0k2n3wc1bcgy5y5c8s0220h";
+    sha256 = "1xalrfrk5hvh1jh9kbqhib2an82ypd46vl9glaxhz3rbjld7c5pa";
   };
 
   patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;

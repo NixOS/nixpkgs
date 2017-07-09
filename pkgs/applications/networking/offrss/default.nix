@@ -13,7 +13,6 @@ stdenv.mkDerivation {
     preConfigure = ''
       sed 's/^PDF/#PDF/' -i Makefile
     '';
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
   };
 
   buildInputs = [ curl libmrss podofo ]

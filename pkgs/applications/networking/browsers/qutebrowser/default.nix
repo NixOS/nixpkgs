@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, buildPythonApplication, makeWrapper, wrapGAppsHook
-, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, cssutils, glib_networking
+, qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, pyopengl, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
 , qtwebkit-plugins
@@ -26,12 +26,12 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}";
-  version = "0.10.1";
+  version = "0.11.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "57f4915f0f2b1509f3aa1cb9c47117fdaad35b4c895e9223c4eb0a6e8af51917";
+    sha256 = "13ihx66jm1dd6vx8px7pm0kbzf2sf9x43hhivc1rp17kahnxxdyv";
   };
 
   # Needs tox
@@ -48,7 +48,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils
+    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils pyopengl
   ];
 
   postPatch = ''

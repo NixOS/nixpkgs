@@ -28,6 +28,8 @@ stdenv.mkDerivation {
       oldPath+="{datadir}\/ddccontrol-db"
       sed "s/$oldPath/$newPath/" <configure.ac.old >configure.ac
       rm configure.ac.old
+
+      sed -e "s/chmod 4711/chmod 0711/" -i src/ddcpci/Makefile*
   '';
 
   meta = with stdenv.lib; {

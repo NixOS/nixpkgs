@@ -14,13 +14,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tlp-${version}";
-  version = "0.9";
+  version = "1.0";
 
   src = fetchFromGitHub {
         owner = "linrunner";
         repo = "TLP";
         rev = "${version}";
-        sha256 = "1gwi0h9klhdvqfqvmn297l1vyhj4g9dqvf50lcbswry02mvnd2vn";
+        sha256 = "0gq1y1qnzwyv7cw32g4ymlfssi2ayrbnd04y4l242k6n41d05bij";
       };
 
   makeFlags = [ "DESTDIR=$(out)"

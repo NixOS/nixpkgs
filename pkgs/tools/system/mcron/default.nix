@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install-vixie-programs.patch ];
 
+  # don't attempt to chmod +s files in the nix store
+  postPatch = ''
+    substituteInPlace makefile.in --replace "rwxs" "rwx"
+  '';
+
   buildInputs = [ guile which ed ];
 
   doCheck = true;

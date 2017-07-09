@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "20170511";
 
   src = fetchurl {
-    url = "https://downloadmirror.intel.com/26798/eng/microcode-${version}.tgz";
+    url = "http://downloadmirror.intel.com/26798/eng/microcode-${version}.tgz";
     sha256 = "18w1ysklvkf4l9xgnl1wvhbgr3wbdaiphv56056pafs0hwnzsxrg";
   };
 

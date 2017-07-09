@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.4.0";
+  name = "R-3.4.1";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "14cb8bwi3akvdb6934kqic2862f2qgav6cq4g0h7gi2p4ka9x3i8";
+    sha256 = "0y7wlfk3cn1dxn2mpnxwvsk31s0599crbsyah8srm5pa2mfi7c82";
   };
 
   buildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation cf-private libobjc ];
 
-  patches = [ ./no-usr-local-search-paths.patch ./fix-sweave-exit-code.patch ];
+  patches = [ ./no-usr-local-search-paths.patch ];
 
   preConfigure = ''
     configureFlagsArray=(

@@ -1,11 +1,11 @@
 { mkDerivation, lib
 , extra-cmake-modules, kdoctools, makeWrapper
 , qtwebkit
-, libkcddb, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
+, libkcddb, karchive, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg, libmusicbrainz2, normalize, sox, transcode
+, ffmpeg, libmusicbrainz2, normalize, sox, transcode, shared_mime_info
 }:
 
 mkDerivation {
@@ -20,7 +20,7 @@ mkDerivation {
     # qt
     qtwebkit
     # kde
-    libkcddb kcmutils kfilemetadata knewstuff knotifyconfig solid kxmlgui
+    libkcddb karchive kcmutils kfilemetadata knewstuff knotifyconfig solid kxmlgui
     # formats
     flac lame libmad libmpcdec libvorbis
     # sound utilities
@@ -28,7 +28,7 @@ mkDerivation {
     # cd/dvd
     cdparanoia libdvdcss libdvdread
     # others
-    ffmpeg libmusicbrainz2
+    ffmpeg libmusicbrainz2 shared_mime_info
   ];
   postFixup =
     let k3bPath = lib.makeBinPath [

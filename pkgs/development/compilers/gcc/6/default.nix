@@ -58,7 +58,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "6.3.0";
+let version = "6.4.0";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
@@ -72,8 +72,7 @@ let version = "6.3.0";
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
-      ++ optional langFortran ../gfortran-driving.patch
-      ++ optional hostPlatform.isDarwin ./darwin-const-correct.patch; # Kill this after 6.3.0
+      ++ optional langFortran ../gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -213,8 +212,8 @@ stdenv.mkDerivation ({
   builder = ../builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "17xjz30jb65hcf714vn9gcxvrrji8j20xm7n33qg1ywhyzryfsph";
+    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
+    sha256 = "1m0lr7938lw5d773dkvwld90hjlcq2282517d1gwvrfzmwgg42w5";
   };
 
   inherit patches;
@@ -404,7 +403,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}

@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, stdenv, ncurses
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "readline-6.3p08";
@@ -29,10 +31,7 @@ stdenv.mkDerivation rec {
        import ./readline-6.3-patches.nix patch);
 
   # Don't run the native `strip' when cross-compiling.
-  dontCrossStrip = true;
-  crossAttrs = {
-    bash_cv_wcwidth_broken = "no";
-  };
+  dontStrip = hostPlatform != buildPlatform;
   bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
 

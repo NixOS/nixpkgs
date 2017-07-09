@@ -1,4 +1,5 @@
 { stdenv, fetchurl, fetchpatch, substituteAll
+, hostPlatform
 , libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
@@ -182,9 +183,7 @@ stdenv.mkDerivation rec {
       rm -rf $out/tests
     '';
 
-  crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-  in {
+  crossAttrs = {
     # I've not tried any case other than i686-pc-mingw32.
     # -nomake tools:   it fails linking some asian language symbols
     # -no-svg: it fails to build on mingw64
@@ -194,14 +193,14 @@ stdenv.mkDerivation rec {
       -no-svg
       -make qmake -make libs -nomake tools
       -nomake demos -nomake examples -nomake docs
-    '' + optionalString isMingw " -xplatform win32-g++-4.6";
+    '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
-        -e 's/ gcc/ ${stdenv.cross.config}-gcc/' \
-        -e 's/ ar/ ${stdenv.cross.config}-ar/' \
-        -e 's/ strip/ ${stdenv.cross.config}-strip/' \
-        -e 's/ windres/ ${stdenv.cross.config}-windres/' \
+      sed -i -e 's/ g++/ ${stdenv.cc.prefix}g++/' \
+        -e 's/ gcc/ ${stdenv.cc.prefix}gcc/' \
+        -e 's/ ar/ ${stdenv.cc.prefix}ar/' \
+        -e 's/ strip/ ${stdenv.cc.prefix}strip/' \
+        -e 's/ windres/ ${stdenv.cc.prefix}windres/' \
         mkspecs/win32-g++/qmake.conf
     '';
 
@@ -209,9 +208,9 @@ stdenv.mkDerivation rec {
     postInstall = ''
       cp bin/qmake* $out/bin
     '';
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     dontStrip = true;
-  } // optionalAttrs isMingw {
+  } // optionalAttrs hostPlatform.isMinGW {
     propagatedBuildInputs = [ ];
   };
 
