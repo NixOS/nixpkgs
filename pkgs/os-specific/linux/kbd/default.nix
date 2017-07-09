@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, flex, check, pam }:
+{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, flex, check, pam, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "kbd-${version}";
@@ -26,6 +26,14 @@ stdenv.mkDerivation rec {
       substituteInPlace src/libkeymap/findfile.c \
         --replace gzip ${gzip}/bin/gzip \
         --replace bzip2 ${bzip2.bin}/bin/bzip2 \
+
+      # Fix the path to the tty command in unicode_start
+      substituteInPlace src/unicode_start \
+        --replace /usr/bin/tty ${coreutils}/bin/tty
+      
+      # Fix the path to the tty command in unicode_start
+      substituteInPlace src/unicode_stop \
+        --replace /usr/bin/tty ${coreutils}/bin/tty
 
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.
