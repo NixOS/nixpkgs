@@ -242,9 +242,9 @@ in
             };
             preStart = ''
               if [ ! -d "${lib.escapeShellArg nodedir}" ]; then
-                mkdir -p /var/db/tahoe-lafs &&
+                mkdir -p /var/db/tahoe-lafs 
                 tahoe create-introducer "${lib.escapeShellArg nodedir}"
-              fi &&
+              fi 
 
               # Tahoe has created a predefined tahoe.cfg which we must now
               # scribble over.
@@ -342,9 +342,9 @@ in
             };
             preStart = ''
               if [ ! -d "${lib.escapeShellArg nodedir}" ]; then
-                mkdir -p /var/db/tahoe-lafs &&
+                mkdir -p /var/db/tahoe-lafs
                 tahoe create-node --hostname=localhost "${lib.escapeShellArg nodedir}"
-              fi &&
+              fi
 
               # Tahoe has created a predefined tahoe.cfg which we must now
               # scribble over.
