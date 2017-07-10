@@ -7246,7 +7246,7 @@ with pkgs;
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
   vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby_2_2;
+    ruby = ruby_2_3;
   };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
