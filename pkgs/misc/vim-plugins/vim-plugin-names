@@ -144,6 +144,7 @@
 "github:wincent/command-t"
 "github:xolox/vim-easytags"
 "github:xolox/vim-misc"
+"github:zah/nim.vim"
 "github:zchee/deoplete-jedi"
 "github:zchee/deoplete-go"
 "goyo"
