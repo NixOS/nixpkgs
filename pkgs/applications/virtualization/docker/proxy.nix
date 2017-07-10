@@ -27,4 +27,3 @@ buildGoPackage rec {
     platforms = docker.meta.platforms;
   };
 }
-
