@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
      rm $out/bin/*.{bat,dll,exe,sh}
      mv $out/COPYING $out/LICENSE* $out/docs
 
-     for i in $out/bin/*; do
+     for i in $out/bin/jruby{,.bash}; do
        wrapProgram $i \
          --set JAVA_HOME ${jre}
      done
