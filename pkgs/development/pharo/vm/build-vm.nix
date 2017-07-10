@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc6, ... }:
+{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
 
 { name, src, version, source-date, source-url, ... }:
 
@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
   pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
 
   # Note: -fPIC causes the VM to segfault.
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [ "format" "pic"
+                       # while the VM depends on <= gcc48:
+                       "stackprotector" ];
 
   # Regenerate the configure script.
   # Unnecessary? But the build breaks without this.
@@ -94,8 +96,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Note: Force gcc6 because gcc5 crashes when compiling the VM.
-  buildInputs = [ bash unzip glibc openssl gcc6 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid autoreconfHook ];
+  # gcc 4.8 used for the build:
+  #
+  # gcc5 crashes during compilation; gcc >= 4.9 produces a
+  # binary that crashes when forking a child process. See:
+  # http://forum.world.st/OSProcess-fork-issue-with-Debian-built-VM-td4947326.html
+  #
+  # (stack protection is disabled above for gcc 4.8 compatibility.)
+  buildInputs = [ bash unzip glibc openssl gcc48 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid autoreconfHook ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
