@@ -1,18 +1,17 @@
-{ stdenv, fetchurl, hostPlatform }:
+{ stdenv, lib, fetchurl, hostPlatform }:
 rec {
 
-  luajit =
-    # Compatibility problems with lightuserdata pointers; see:
-    # https://github.com/LuaJIT/LuaJIT/blob/v2.1/doc/status.html#L101
-    if hostPlatform.is64bit && (/*hostPlatform.isArm ||*/ hostPlatform.isSunOS)
-        # FIXME: fix the aarch64 build
-      then luajit_2_0
-      else luajit_2_1;
+  luajit = luajit_2_1;
 
   luajit_2_0 = generic {
     version = "2.0.5";
     isStable = true;
     sha256 = "0yg9q4q6v028bgh85317ykc9whgxgysp76qzaqgq55y6jy11yjw7";
+  } // {
+    # 64-bit ARM isn't supported upstream
+    meta = meta // {
+      platforms = lib.filter (p: p != "aarch64-linux") meta.platforms;
+    };
   };
 
   luajit_2_1 = generic {
@@ -21,6 +20,14 @@ rec {
     sha256 = "1hyrhpkwjqsv54hnnx4cl8vk44h9d6c9w0fz1jfjz00w255y7lhs";
   };
 
+
+  meta = with stdenv.lib; {
+    description = "High-performance JIT compiler for Lua 5.1";
+    homepage    = http://luajit.org;
+    license     = licenses.mit;
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers ; [ thoughtpolice smironov vcunat ];
+  };
 
   generic =
     { version, sha256 ? null, isStable
@@ -33,7 +40,7 @@ rec {
     }:
 
     stdenv.mkDerivation rec {
-      inherit name version src;
+      inherit name version src meta;
 
       luaversion = "5.1";
 
@@ -61,13 +68,5 @@ rec {
           ''
             ln -s "$out"/bin/luajit-* "$out"/bin/luajit
           '';
-
-      meta = with stdenv.lib; {
-        description = "High-performance JIT compiler for Lua 5.1";
-        homepage    = http://luajit.org;
-        license     = licenses.mit;
-        platforms   = platforms.linux ++ platforms.darwin;
-        maintainers = with maintainers ; [ thoughtpolice smironov vcunat ];
-      };
     };
 }
