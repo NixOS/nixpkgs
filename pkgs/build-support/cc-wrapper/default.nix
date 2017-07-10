@@ -275,9 +275,9 @@ stdenv.mkDerivation {
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      echo ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printLines ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
 
-      echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
+      printLines ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
 
     + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
