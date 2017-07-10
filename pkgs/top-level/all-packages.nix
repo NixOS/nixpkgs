@@ -11893,6 +11893,8 @@ with pkgs;
 
   libaio = callPackage ../os-specific/linux/libaio { };
 
+  libargon2 = callPackage ../development/libraries/libargon2 { };
+
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };

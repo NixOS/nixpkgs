@@ -410,6 +410,7 @@
   okasu = "Okasu <oka.sux@gmail.com>";
   olcai = "Erik Timan <dev@timan.info>";
   olejorgenb = "Ole Jørgen Brønner <olejorgenb@yahoo.no>";
+  olynch = "Owen Lynch <owen@olynch.me>";
   orbekk = "KJ Ørbekk <kjetil.orbekk@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   orivej = "Orivej Desh <orivej@gmx.fr>";
