@@ -1,12 +1,16 @@
 { stdenv, fetchFromGitHub }:
 
+let
+  version = "0.3.1";
+in
+
 stdenv.mkDerivation rec {
-  name = "nix-zsh-completions";
+  name = "nix-zsh-completions-${version}";
 
   src = fetchFromGitHub {
     owner = "spwhitt";
     repo = "nix-zsh-completions";
-    rev = "0.3.1";
+    rev = "${version}";
     sha256 = "1sbc52f5818bcygljrji84dyvgw727x50m9v6qfrsdaji3zkqga1";
   };
 
