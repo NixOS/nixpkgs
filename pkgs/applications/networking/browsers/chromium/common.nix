@@ -137,9 +137,6 @@ let
       # use our own nodejs
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
-    '' + optionalString (versionAtLeast version "52.0.0.0") ''
-      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
-        third_party/pdfium/xfa/fxbarcode/utils.h
     '';
 
     gnFlags = mkGnFlags ({
