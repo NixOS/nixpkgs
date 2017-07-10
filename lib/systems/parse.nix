@@ -44,7 +44,7 @@ rec {
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
     mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    powerpc  = { bits = 32; significantByte = bigEndian;    family = "powerpc"; };
+    powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
   };
 
   isVendor = isType "vendor";
