@@ -131,7 +131,7 @@ in
       description = "Timeline of Snapper Snapshots";
       inherit documentation;
       wantedBy = [ "basic.target" ];
-      timerConfig.OnCalender = cfg.snapshotInterval;
+      timerConfig.OnCalendar = cfg.snapshotInterval;
     };
 
     systemd.services.snapper-cleanup = {
