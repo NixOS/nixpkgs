@@ -27,6 +27,9 @@ stdenv.mkDerivation {
       --replace '${jsoncppURL}' ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \
       --replace 'add_compile_options(-Werror)' ""
+    substituteInPlace cmake/EthDependencies.cmake \
+      --replace 'set(Boost_USE_STATIC_LIBS ON)'   \
+                'set(Boost_USE_STATIC_LIBS OFF)'
   '';
 
   buildInputs = [ boost cmake ];
