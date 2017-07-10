@@ -55,84 +55,29 @@ in
   };
 
   config = mkIf cfg.agent.enable {
-    systemd.user.services.gpg-agent = {
-      serviceConfig = {
-        ExecStart = [
-          ""
-          ("${pkgs.gnupg}/bin/gpg-agent --supervised "
-            + optionalString cfg.agent.enableSSHSupport "--enable-ssh-support")
-        ];
-        ExecReload = "${pkgs.gnupg}/bin/gpgconf --reload gpg-agent";
-      };
-    };
-
     systemd.user.sockets.gpg-agent = {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "%t/gnupg/S.gpg-agent" ];
-      socketConfig = {
-        FileDescriptorName = "std";
-        SocketMode = "0600";
-        DirectoryMode = "0700";
-      };
     };
 
     systemd.user.sockets.gpg-agent-ssh = mkIf cfg.agent.enableSSHSupport {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "%t/gnupg/S.gpg-agent.ssh" ];
-      socketConfig = {
-        FileDescriptorName = "ssh";
-        Service = "gpg-agent.service";
-        SocketMode = "0600";
-        DirectoryMode = "0700";
-      };
     };
 
     systemd.user.sockets.gpg-agent-extra = mkIf cfg.agent.enableExtraSocket {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "%t/gnupg/S.gpg-agent.extra" ];
-      socketConfig = {
-        FileDescriptorName = "extra";
-        Service = "gpg-agent.service";
-        SocketMode = "0600";
-        DirectoryMode = "0700";
-      };
     };
 
     systemd.user.sockets.gpg-agent-browser = mkIf cfg.agent.enableBrowserSocket {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "%t/gnupg/S.gpg-agent.browser" ];
-      socketConfig = {
-        FileDescriptorName = "browser";
-        Service = "gpg-agent.service";
-        SocketMode = "0600";
-        DirectoryMode = "0700";
-      };
     };
 
-    systemd.user.services.dirmngr = {
-      requires = [ "dirmngr.socket" ];
-      after = [ "dirmngr.socket" ];
-      unitConfig = {
-        RefuseManualStart = "true";
-      };
-      serviceConfig = {
-        ExecStart = "${pkgs.gnupg}/bin/dirmngr --supervised";
-        ExecReload = "${pkgs.gnupg}/bin/gpgconf --reload dirmngr";
-      };
-    };
-
-    systemd.user.sockets.dirmngr = {
+    systemd.user.sockets.dirmngr = mkIf cfg.dirmngr.enable {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "%t/gnupg/S.dirmngr" ];
-      socketConfig = {
-        SocketMode = "0600";
-        DirectoryMode = "0700";
-      };
     };
 
     systemd.packages = [ pkgs.gnupg ];
 
-    environment.extraInit = ''
+    environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
       export GPG_TTY=$(tty)
 
