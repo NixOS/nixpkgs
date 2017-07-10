@@ -26,6 +26,7 @@ in
     '';
 
     makeFlags = "PREFIX=$(out)";
+    cmakeFlags = "-DVERSION=${version}";
     installPhase = "PREFIX=$out make install";
 
     LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ wlc dbus_libs ];
