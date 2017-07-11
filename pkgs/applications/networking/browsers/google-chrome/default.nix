@@ -46,7 +46,6 @@ let
   };
 
   gtk = if (versionAtLeast version "59.0.0.0") then gtk3 else gtk2;
-  gnome = if (versionAtLeast version "59.0.0.0") then gnome3 else gnome2;
 
   deps = [
     stdenv.cc.cc
@@ -76,10 +75,10 @@ in stdenv.mkDerivation rec {
 
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings_desktop_schemas glib gtk
-
+  ] ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.dconf
     # needed for XDG_ICON_DIRS
-    gnome.defaultIconTheme
-  ] ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.dconf;
+    ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.defaultIconTheme;
+
 
   unpackPhase = ''
     ar x $src
