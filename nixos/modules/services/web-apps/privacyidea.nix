@@ -5,6 +5,36 @@ with lib;
 let
   cfg = config.services.privacyidea;
 
+  logCfg = pkgs.writeText "privacyidea-log.cfg" ''
+    [formatters]
+    keys=detail
+
+    [handlers]
+    keys=stream
+
+    [formatter_detail]
+    class=privacyidea.lib.log.SecureFormatter
+    format=[%(asctime)s][%(process)d][%(thread)d][%(levelname)s][%(name)s:%(lineno)d] %(message)s
+
+    [handler_stream]
+    class=StreamHandler
+    level=NOTSET
+    formatter=detail
+    args=(sys.stdout,)
+
+    [loggers]
+    keys=root,privacyidea
+
+    [logger_privacyidea]
+    handlers=stream
+    qualname=privacyidea
+    level=INFO
+
+    [logger_root]
+    handlers=stream
+    level=ERROR
+  '';
+
   piCfgFile = pkgs.writeText "privacyidea.cfg" ''
     SUPERUSER_REALM = [ '${concatStringsSep "', '" cfg.superuserRealm}' ]
     SQLALCHEMY_DATABASE_URI = '${cfg.databaseURI}'
@@ -13,7 +43,7 @@ let
     PI_ENCFILE = '${cfg.encFile}'
     PI_AUDIT_KEY_PRIVATE = '${cfg.auditKeyPrivate}'
     PI_AUDIT_KEY_PUBLIC = '${cfg.auditKeyPublic}'
-    PI_LOGLEVEL = 20
+    PI_LOGCONFIG = '${logCfg}'
     ${cfg.extraConfig}
   '';
 
@@ -96,6 +126,17 @@ in
         '';
       };
 
+      adminPassword = mkOption {
+        type = types.str;
+        description = "Password for the admin user";
+      };
+
+      adminEmail = mkOption {
+        type = types.str;
+        example = "admin@example.com";
+        description = "Mail address for the admin user";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -155,12 +196,19 @@ in
       });
     in {
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
+      after = [ "postgresql.service" ];
+      preStart = let
+        pi-manage = "${pkgs.sudo}/bin/sudo -u privacyidea -H PRIVACYIDEA_CONFIGFILE=${piCfgFile} ${pkgs.privacyidea}/bin/pi-manage";
+      in ''
         mkdir -p ${cfg.stateDir} ${cfg.runDir}
         chown ${cfg.user}:${cfg.group} -R ${cfg.stateDir} ${cfg.runDir}
         if ! test -e "${cfg.stateDir}/db-created"; then
-          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
-          ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/createdb --owner ${cfg.user} privacyidea
+          ${pkgs.sudo}/bin/sudo ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole ${cfg.user}
+          ${pkgs.sudo}/bin/sudo ${pkgs.postgresql}/bin/createdb --owner ${cfg.user} privacyidea
+          ${pi-manage} create_enckey
+          ${pi-manage} create_audit_keys
+          ${pi-manage} createdb
+          ${pi-manage} admin add admin -e ${cfg.adminEmail} -p ${cfg.adminPassword}
           touch "${cfg.stateDir}/db-created"
         fi
       '';
