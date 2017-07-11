@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" ];
 
   patchPhase = ''
     substituteInPlace makefile --replace gcc cc

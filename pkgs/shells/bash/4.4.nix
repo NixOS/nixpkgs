@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "dev" "doc" "info" ];
+  outputs = [ "out" "dev" "man" "doc" "info" ];
 
   # the man pages are small and useful enough
   outputMan = if interactive then "out" else null;
