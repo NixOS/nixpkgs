@@ -235,7 +235,7 @@ in
 
               # Enslave previously attached interfaces
               [ -f /run/${n}.slaves ] && for ifname in `cat /run/${n}.slaves`; do
-                ip link set "$ifname" master "${n}"
+                ip link set "$ifname" master "${n}" || true
               done
 
               # Enable stp on the interface
