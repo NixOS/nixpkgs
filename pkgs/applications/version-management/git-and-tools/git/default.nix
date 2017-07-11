@@ -1,5 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
-, gnugrep, gzip, openssh
+, gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
+, gzip, openssh
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
@@ -104,11 +105,24 @@ stdenv.mkDerivation {
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
 
-      # Fix references to the perl binary. Note that the tab character
-      # in the patterns is important.
-      sed -i -e 's|	perl -ne|	${perl}/bin/perl -ne|g' \
-             -e 's|	perl -e|	${perl}/bin/perl -e|g' \
-             $out/libexec/git-core/{git-am,git-submodule}
+      # Fix references to the perl, sed, awk and various coreutil binaries used by
+      # shell scripts that git calls (e.g. filter-branch)
+      SCRIPT="$(cat <<'EOS'
+        BEGIN{
+          @a=(
+            '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+          );
+        }
+        foreach $c (@a) {
+          $n=(split("/", $c))[-1];
+          s|(?<=[^#][^/.-])\b''${n}(?=\s)|''${c}|g
+        }
+      EOS
+      )"
+      perl -0777 -i -pe "$SCRIPT" \
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
 
       # Fix references to gettext.
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
