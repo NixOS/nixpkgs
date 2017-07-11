@@ -29,6 +29,7 @@ pythonPackages.buildPythonApplication rec {
     pyusb pyasn1 pyyaml flask_sqlalchemy pillow flask_script python-gnupg
     funcparserlib pyopenssl passlib beautifulsoup4 flask_migrate lxml
     requests netaddr configobj ldap3 pygments pymysql sqlsoup pyjwt
-    bcrypt pyrad qrcode defusedxml flaskbabel pycrypto matplotlib psycopg2
+    bcrypt pyrad qrcode defusedxml flaskbabel pycrypto-original matplotlib psycopg2
+    pandas
   ];
 }
