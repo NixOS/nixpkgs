@@ -42,7 +42,7 @@ _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
 _overrideFirst outputMan "man" "$outputBin"
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
-_overrideFirst outputInfo "info" "$outputMan"
+_overrideFirst outputInfo "info" "$outputBin"
 
 
 # Add standard flags to put files into the desired outputs.

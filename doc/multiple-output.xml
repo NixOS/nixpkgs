@@ -83,7 +83,7 @@
 
       <varlistentry><term><varname>
         $outputInfo</varname></term><listitem><para>
-        is for info pages. They go to <varname>info</varname> or <varname>$outputMan</varname> by default.
+        is for info pages. They go to <varname>info</varname> or <varname>$outputBin</varname> by default.
       </para></listitem></varlistentry>
 
     </variablelist>
