@@ -252,7 +252,7 @@ in
             '';
             preStop = ''
               # Save currently attached slaves
-              ip link | grep master | awk '{print $2,$9}' | grep "${n}" | cut -d ":" -f 1 > /run/${n}.slaves
+              ip link | grep -F "master br-dmz " | cut -d':' -f 2 | cut -d' ' -f 2 > /run/${n}.slaves
             '';
             reload = ''
               # Un-enslave child interfaces (old list of interfaces)
