@@ -167,6 +167,7 @@ with stdenv.lib;
   BONDING m
   NET_L3_MASTER_DEV? y
   NET_FOU_IP_TUNNELS? y
+  IP_NF_TARGET_REDIRECT m
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
