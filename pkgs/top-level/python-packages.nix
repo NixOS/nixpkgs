@@ -21222,6 +21222,8 @@ in {
     };
   };
 
+  rjsmin = callPackage ../development/python-modules/rjsmin { };
+
   pysolr = buildPythonPackage rec {
     name = "pysolr-${version}";
     version = "3.3.3";
