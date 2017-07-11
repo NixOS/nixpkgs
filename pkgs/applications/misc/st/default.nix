@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 
-let patches' = if isNull patches then [] else patches;
+let patches' = if patches == null then [] else patches;
 in stdenv.mkDerivation rec {
   name = "st-0.7";
 
