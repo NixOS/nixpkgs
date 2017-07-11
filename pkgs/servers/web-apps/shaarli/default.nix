@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     rm -r {cache,pagecache,tmp,data}/
-    mv doc/ $doc/
+    mkdir -p $doc/share/doc
+    mv doc/ $doc/share/doc/shaarli
     mkdir $out/
     cp -R ./* $out
   '';

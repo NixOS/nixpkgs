@@ -12,7 +12,7 @@
 , gdk_pixbuf
 , glib
 , gnome2
-, gtk2
+, gtk3
 , libX11
 , libxcb
 , libXScrnSaver
@@ -37,7 +37,7 @@
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "45.0.2552.898";
+  version = "46.0.2597.39";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -55,7 +55,7 @@ let
     gdk_pixbuf.out
     glib.out
     gnome2.GConf.out
-    gtk2.out
+    gtk3.out
     libX11.out
     libXScrnSaver.out
     libXcomposite.out
@@ -88,17 +88,18 @@ in stdenv.mkDerivation {
   name = "opera-${version}";
 
   src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "${mirror}/${version}/linux/opera-stable_${version}_i386.deb";
-        sha256 = "1a7y13mgc8g7swdg0x2l9h6cmqw74h2wxizi3vmlgz2fj5zlkn0g";
-      }
-    else if stdenv.system == "x86_64-linux" then
+    #if stdenv.system == "i686-linux" then
+    #  fetchurl {
+    #    url = "${mirror}/${version}/linux/opera-stable_${version}_i386.deb";
+    #    sha256 = "...";
+    #  }
+    #else 
+    if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-        sha256 = "0rmagj0s1j3a6rpyrs29xnbngsq700rgaqkph108fbnj80hif1ia";
+        sha256 = "1ladvqilm5rr222wjybvribnyii2l0p8jbsd10xr06wps63g1kia";
       }
-    else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
+    else throw "Opera is not supported on ${stdenv.system} (only x86_64 linux is supported)";
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
 

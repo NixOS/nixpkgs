@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, dyld, osx_private_sdk }:
+{ stdenv, appleDerivation }:
 
 appleDerivation {
   buildPhase = ":";

@@ -1,4 +1,4 @@
-{ appleDerivation, libsecurity_cdsa_utilities, libsecurity_cssm, libsecurity_utilities, osx_private_sdk, perl }:
+{ appleDerivation, libsecurity_cdsa_utilities, libsecurity_cssm, libsecurity_utilities, perl }:
 appleDerivation {
   buildInputs = [
     libsecurity_cdsa_utilities
