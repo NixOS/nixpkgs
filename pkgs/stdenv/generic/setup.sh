@@ -275,17 +275,14 @@ runHook addInputsHook
 
 # Recursively find all build inputs.
 findInputs() {
-    local pkg="$1"
+    local pkg=$1
     local var=$2
+    local -n varDeref=$var
     local propagatedBuildInputsFile=$3
 
-    case ${!var} in
-        *\ $pkg\ *)
-            return 0
-            ;;
-    esac
-
-    eval $var="'${!var} $pkg '"
+    # Stop if we've already added this one
+    [[ -z "${varDeref["$pkg"]}" ]] || return 0
+    varDeref["$pkg"]=1
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
@@ -296,8 +293,8 @@ findInputs() {
         source "$pkg"
     fi
 
-    if [ -d $1/bin ]; then
-        addToSearchPath _PATH $1/bin
+    if [ -d "$pkg/bin" ]; then
+        addToSearchPath _PATH "$pkg/bin"
     fi
 
     if [ -f "$pkg/nix-support/setup-hook" ]; then
@@ -317,19 +314,19 @@ findInputs() {
 if [ -z "$crossConfig" ]; then
     # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
     # are handled identically to nativeBuildInputs
-    nativePkgs=""
+    declare -gA nativePkgs
     for i in $nativeBuildInputs $buildInputs \
              $defaultNativeBuildInputs $defaultBuildInputs \
              $propagatedNativeBuildInputs $propagatedBuildInputs; do
         findInputs $i nativePkgs propagated-native-build-inputs
     done
 else
-    crossPkgs=""
+    declare -gA crossPkgs
     for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
         findInputs $i crossPkgs propagated-build-inputs
     done
 
-    nativePkgs=""
+    declare -gA nativePkgs
     for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
         findInputs $i nativePkgs propagated-native-build-inputs
     done
@@ -345,7 +342,7 @@ _addToNativeEnv() {
     runHook envHook "$pkg"
 }
 
-for i in $nativePkgs; do
+for i in "${!nativePkgs[@]}"; do
     _addToNativeEnv $i
 done
 
@@ -356,7 +353,7 @@ _addToCrossEnv() {
     runHook crossEnvHook "$pkg"
 }
 
-for i in $crossPkgs; do
+for i in "${!crossPkgs[@]}"; do
     _addToCrossEnv $i
 done
 

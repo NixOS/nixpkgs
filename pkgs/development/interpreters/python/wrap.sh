@@ -86,7 +86,7 @@ wrapPythonProgramsIn() {
 _addToPythonPath() {
     local dir="$1"
     # Stop if we've already visited here.
-    if [ -n "${pythonPathsSeen[$dir]}" ]; then return; fi
+    [ -n "${pythonPathsSeen[$dir]}" ] || return 0
     pythonPathsSeen[$dir]=1
     # addToSearchPath is defined in stdenv/generic/setup.sh. It will have
     # the effect of calling `export program_X=$dir/...:$program_X`.
