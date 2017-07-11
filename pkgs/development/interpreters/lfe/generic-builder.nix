@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3 }:
+{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
 
 { baseName ? "lfe"
 , version
@@ -7,13 +7,30 @@
 , src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
 }:
 
+let
+  proper = buildHex {
+    name = "proper";
+    version = "1.1.1-beta";
+
+    sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
+
+    configurePhase = ''
+      ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
+    '';
+  };
+
+in
+
 buildRebar3 {
-  name = "${baseName}";
+  name = baseName;
 
   inherit src version;
 
   buildInputs = [ erlang makeWrapper ];
+  beamDeps    = [ proper ];
   patches     = [ ./no-test-deps.patch ];
+  doCheck     = true;
+  checkTarget = "travis";
 
   # These installPhase tricks are based on Elixir's Makefile.
   # TODO: Make, upload, and apply a patch.

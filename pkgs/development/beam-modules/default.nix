@@ -55,7 +55,7 @@ let
                      };
 
         lfe = lfe_1_2;
-        lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3; };
+        lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
 
         # Non hex packages
         hex = callPackage ./hex {};
