@@ -107,12 +107,21 @@ stdenv.mkDerivation {
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
       # shell scripts that git calls (e.g. filter-branch)
-      perl -0777 -i -pe \
-"BEGIN{@a=('${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',"\
-"'${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',"\
-"'${coreutils}/bin/wc', '${coreutils}/bin/tr');}"\
-'foreach $c (@a) { $n=(split("/", $c))[-1]; s|(?<=[^#][^/.-])\b''${n}(?=\s)|''${c}|g }' \
-           $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
+      read -r -d ''' SCRIPT <<'EOS'
+        BEGIN{
+          @a=(
+            '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+          );
+        }
+        foreach $c (@a) {
+          $n=(split("/", $c))[-1];
+          s|(?<=[^#][^/.-])\b''${n}(?=\s)|''${c}|g
+        }
+      EOS
+      perl -0777 -i -pe "$SCRIPT" \
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
 
       # Fix references to gettext.
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
