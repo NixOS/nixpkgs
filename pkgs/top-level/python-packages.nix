@@ -20226,6 +20226,8 @@ in {
     };
   };
 
+  ldaptor = callPackage ../development/python-modules/ldaptor { };
+
   ptest = buildPythonPackage rec {
     name = pname + "-" + version;
     pname = "ptest";

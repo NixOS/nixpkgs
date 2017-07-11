@@ -19141,6 +19141,7 @@ with pkgs;
   wo-istes-jetzt = callPackage ../tools/misc/wo-istes-jetzt { };
 
   privacyidea = callPackage ../servers/privacyidea { };
+  privacyidea-ldap-proxy = callPackage ../servers/privacyidea/ldap-proxy.nix { };
 
   xrq = callPackage ../applications/misc/xrq { };
 
