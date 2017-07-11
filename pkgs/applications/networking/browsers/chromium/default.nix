@@ -82,7 +82,7 @@ in stdenv.mkDerivation {
 
     # needed for XDG_ICON_DIRS
     gnome.defaultIconTheme
-  ];
+  ] ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.dconf;
 
   outputs = ["out" "sandbox"];
 
@@ -110,7 +110,9 @@ in stdenv.mkDerivation {
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
-
+    ${stdenv.lib.optionalString (versionAtLeast version "59.0.0.0") ''
+    export GIO_EXTRA_MODULES=${gnome3.dconf}/lib/gio/modules\''${GIO_EXTRA_MODULES:+:}\$GIO_EXTRA_MODULES
+    ''}
     .
     w
     EOF
