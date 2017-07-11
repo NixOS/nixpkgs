@@ -107,7 +107,7 @@ stdenv.mkDerivation {
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
       # shell scripts that git calls (e.g. filter-branch)
-      read -r -d ''' SCRIPT <<'EOS'
+      SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
             '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
@@ -120,6 +120,7 @@ stdenv.mkDerivation {
           s|(?<=[^#][^/.-])\b''${n}(?=\s)|''${c}|g
         }
       EOS
+      )"
       perl -0777 -i -pe "$SCRIPT" \
         $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
 
