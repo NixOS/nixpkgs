@@ -594,10 +594,10 @@ self: super: {
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
       make -C $lispdir
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+      mkdir -p $data/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $data/share/emacs/site-lisp/
     '';
   });
 
