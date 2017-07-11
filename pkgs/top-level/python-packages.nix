@@ -25208,9 +25208,9 @@ in {
       stevedore
       virtualenv
       virtualenv-clone
-    ] ++ optional isPy26 argparse;
+    ];
 
-    patchPhase = ''
+    postPatch = ''
       for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
         substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
 
@@ -25241,7 +25241,7 @@ in {
 
         # WARNING: Don't indent the lines below because that would break EOF
         cat > "$wrapper" << EOF
-export PATH="$PATH:\$PATH"
+export PATH="${python}/bin:\$PATH"
 export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
 source "$wrapped"
 EOF
