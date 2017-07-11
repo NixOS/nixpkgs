@@ -3460,6 +3460,8 @@ with pkgs;
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
+  opendht = callPackage ../tools/security/opendht {};
+
   opendkim = callPackage ../development/libraries/opendkim { };
 
   opendylan = callPackage ../development/compilers/opendylan {
