@@ -6,7 +6,7 @@
 , gstreamer, gst-plugins-base, libxml2
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
-, patchelf
+, patchelf, makeWrapper
 , proprietaryCodecs ? true, vivaldi-ffmpeg-codecs ? null
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     tar -xvf data.tar.xz
   '';
 
-  nativeBuildInputs = [ patchelf ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
 
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
         "$out"/opt/vivaldi/product_logo_''${d}.png \
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
+    wrapProgram "$out/bin/vivaldi" \
+      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
 
   meta = with stdenv.lib; {
