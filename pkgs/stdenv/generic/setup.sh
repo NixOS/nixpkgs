@@ -421,50 +421,55 @@ fi
 
 
 substitute() {
-    local input="$1"
-    local output="$2"
+    local input=$1
+    local output=$2
+    shift 2
 
     if [ ! -f "$input" ]; then
-      echo "substitute(): file '$input' does not exist"
+      echo "${FUNCNAME[0]}(): ERROR: file '$input' does not exist" >&2
       return 1
     fi
 
-    local -a params=("$@")
+    local content
+    # read returns non-0 on EOF, so we want read to fail
+    if IFS='' read -r -N 0 content < "$input"; then
+        echo "${FUNCNAME[0]}(): ERROR: File \"$input\" has null bytes, won't process" >&2
+        return 1
+    fi
 
-    local n p pattern replacement varName content
+    while (( "$#" )); do
+        case "$1" in
+            --replace)
+                pattern=$2
+                replacement=$3
+                shift 3
+                ;;
 
-    # a slightly hacky way to keep newline at the end
-    content="$(cat "$input"; printf "%s" X)"
-    content="${content%X}"
+            --subst-var)
+                local varName=$2
+                shift 2
+                # check if the used nix attribute name is a valid bash name
+                if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+                    echo "${FUNCNAME[0]}(): WARNING: substitution variables should be valid bash names," >&2
+                    echo "  \"$varName\" isn't and therefore was skipped; it might be caused" >&2
+                    echo "  by multi-line phases in variables - see #14907 for details." >&2
+                    continue
+                fi
+                pattern=@$varName@
+                replacement=${!varName}
+                ;;
 
-    for ((n = 2; n < ${#params[*]}; n += 1)); do
-        p="${params[$n]}"
+            --subst-var-by)
+                pattern=@$2@
+                replacement=$3
+                shift 3
+                ;;
 
-        if [ "$p" = --replace ]; then
-            pattern="${params[$n + 1]}"
-            replacement="${params[$n + 2]}"
-            let n+=2
-        fi
-
-        if [ "$p" = --subst-var ]; then
-            varName="${params[$n + 1]}"
-            let n+=1
-            # check if the used nix attribute name is a valid bash name
-            if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-                echo "WARNING: substitution variables should be valid bash names,"
-                echo "  \"$varName\" isn't and therefore was skipped; it might be caused"
-                echo "  by multi-line phases in variables - see #14907 for details."
-                continue
-            fi
-            pattern="@$varName@"
-            replacement="${!varName}"
-        fi
-
-        if [ "$p" = --subst-var-by ]; then
-            pattern="@${params[$n + 1]}@"
-            replacement="${params[$n + 2]}"
-            let n+=2
-        fi
+            *)
+                echo "${FUNCNAME[0]}(): ERROR: Invalid command line argument: $1" >&2
+                return 1
+                ;;
+        esac
 
         content="${content//"$pattern"/$replacement}"
     done
