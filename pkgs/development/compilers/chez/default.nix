@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, coreutils, ncurses, libX11 }:
+{ stdenv, fetchFromGitHub, coreutils, ncurses, libX11 }:
 
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
   version = "9.4-${dver}";
   dver    = "20160507";
 
-  src = fetchgit {
-    url    = "https://github.com/cisco/chezscheme.git";
+  src = fetchFromGitHub {
+    owner  = "cisco";
+    repo   = "chezscheme";
     rev    = "65df1d1f7c37f5b5a93cd7e5b475dda9dbafe03c";
     sha256 = "1b273il3njnn04z55w1hnygvcqllc6p5qg9mcwh10w39fwsd8fbs";
     fetchSubmodules = true;

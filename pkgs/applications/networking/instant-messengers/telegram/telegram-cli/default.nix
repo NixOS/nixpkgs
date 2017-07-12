@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, bash, libconfig, libevent, openssl,
+{ stdenv, fetchFromGitHub, bash, libconfig, libevent, openssl,
   readline, zlib, lua5_2, python, pkgconfig, jansson
 }:
 
 stdenv.mkDerivation rec {
   name = "telegram-cli-2016-03-23";
 
-  src = fetchgit {
-    url = "https://github.com/vysheng/tg.git";
-    sha256 = "07sss5cnw2ygd7mp8f5532lmj7qm6ywqf4cjaq5g13i8igzqzwzj";
+  src = fetchFromGitHub {
+    owner = "vysheng";
+    repo = "tg";
+    sha256 = "0c1w7jgska71jjbvg1y09v52549pwa4zkdjly18yxywn7gayd2p6";
     rev = "6547c0b21b977b327b3c5e8142963f4bc246187a";
   };
 

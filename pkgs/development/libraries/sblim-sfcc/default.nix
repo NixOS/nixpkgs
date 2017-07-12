@@ -1,11 +1,12 @@
-{ fetchgit, stdenv, autoconf, automake, libtool, curl }:
+{ fetchFromGitHub, stdenv, autoconf, automake, libtool, curl }:
 
 stdenv.mkDerivation rec {
   version = "2.2.9";
   name = "sblim-sfcc-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/kkaempf/sblim-sfcc.git";
+  src = fetchFromGitHub {
+    owner = "kkaempf";
+    repo = "sblim-sfcc";
     rev = "f70fecb410a53531e4fe99d39cf81b581819cac9";
     sha256 = "1hsxim284qzldh599gf6khxj80g8q5263xl3lj3hdndxbhbs843v";
   };

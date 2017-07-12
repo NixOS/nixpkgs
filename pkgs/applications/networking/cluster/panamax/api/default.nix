@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
+{ stdenv, fetchFromGitHub, makeWrapper, bundlerEnv, bundler
 , ruby, libxslt, libxml2, sqlite, openssl, docker
 , dataDir ? "/var/lib/panamax-api" }@args:
 
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
       timeout: 5000
   '';
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     rev = "refs/tags/v${version}";
-    url = "git://github.com/CenturyLinkLabs/panamax-api";
+    owner = "CenturyLinkLabs";
+    repo = "panamax-api";
     sha256 = "0dqg0fbmy5cgjh0ql8yqlybhjyyrslgghjrc24wjhd1rghjn2qi6";
   };
 

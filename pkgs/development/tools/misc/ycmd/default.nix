@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
+{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, boost, python
 , gocode ? null
 , godef ? null
 , rustracerd ? null
@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
   name = "ycmd-${version}";
   version = "2017-03-27";
 
-  src = fetchgit {
-    url = "git://github.com/Valloric/ycmd.git";
+  src = fetchFromGitHub {
+    owner = "Valloric";
+    repo = "ycmd";
     rev = "2ef1ae0d00a06a47fed3aacfd465a310e8bdb0d2";
-    sha256 = "0p5knlxgy66zi229ns1lfdhz5lram93vahmmk54w98fr3h8b1yfj";
+    sha256 = "1fqdr9iyamh3b5kalkds9krvi7j3r9gpwdymnbkvlb37cs2b49wi";
   };
 
   buildInputs = [ cmake boost ]

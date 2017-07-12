@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin } :
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin } :
 
 let
   version = "54b2992";
@@ -6,8 +6,9 @@ in
 stdenv.mkDerivation rec {
   name = "pidgin-mra-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/dreadatour/pidgin-mra";
+  src = fetchFromGitHub {
+    owner = "dreadatour";
+    repo = "pidgin-mra";
     rev = "${version}";
     sha256 = "1adq57g11kw7bfpivyvfk3nlpjkc8raiw4bzn3gn4nx3m0wl99vw";
   };

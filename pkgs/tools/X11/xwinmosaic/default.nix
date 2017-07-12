@@ -1,4 +1,4 @@
-{stdenv, fetchgit, gtk2, cmake, pkgconfig}:
+{stdenv, fetchFromGitHub, gtk2, cmake, pkgconfig}:
 let
   buildInputs = [
     gtk2 cmake pkgconfig
@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
   version = "0.4.2";
   name = "xwinmosaic-${version}";
   inherit buildInputs;
-  src = fetchgit {
-    url = "https://github.com/soulthreads/xwinmosaic/";
+  src = fetchFromGitHub {
+    owner = "soulthreads";
+    repo = "xwinmosaic";
     rev = "refs/tags/v0.4.2";
     sha256 = "16qhrpgn84fz0q3nfvaz5sisc82zk6y7c0sbvbr69zfx5fwbs1rr";
   };

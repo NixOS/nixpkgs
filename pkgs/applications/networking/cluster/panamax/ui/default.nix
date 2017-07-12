@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
+{ stdenv, fetchFromGitHub, makeWrapper, bundlerEnv, bundler
 , ruby, openssl, sqlite, dataDir ? "/var/lib/panamax-ui"}@args:
 
 with stdenv.lib;
@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
 
   bundler = args.bundler.override { inherit ruby; };
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     rev = "refs/tags/v${version}";
-    url = "git://github.com/CenturyLinkLabs/panamax-ui";
+    owner = "CenturyLinkLabs";
+    repo = "panamax-ui";
     sha256 = "01k0h0rjqp5arvwxm2xpfxjsag5qw0qqlg7hx4v8f6jsyc4wmjfl";
   };
 

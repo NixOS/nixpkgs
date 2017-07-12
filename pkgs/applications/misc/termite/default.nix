@@ -1,16 +1,17 @@
-{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper, symlinkJoin
+{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk3, ncurses, makeWrapper, symlinkJoin
 , configFile ? null
 }:
 
-let 
+let
   version = "12";
   termite = stdenv.mkDerivation {
     name = "termite-${version}";
 
-    src = fetchgit {
-      url = "https://github.com/thestinger/termite";
+    src = fetchFromGitHub {
+      owner = "thestinger";
+      repo = "termite";
       rev = "refs/tags/v${version}";
-      sha256 = "0s6dyg3vcqk5qcx90bs24wdnd3p56rdjdcanx4pcxvp6ksjl61jz";
+      sha256 = "08piid6j9ixcdh6b77hmyxr56maa67q4l0fz8wk3j1f7cp98942m";
     };
 
     postPatch = "sed '1i#include <math.h>' -i termite.cc";

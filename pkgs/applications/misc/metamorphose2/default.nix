@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, gettext
+{ stdenv, fetchFromGitHub, makeWrapper, gettext
 , python27, python2Packages
 }:
 
@@ -8,11 +8,12 @@ stdenv.mkDerivation rec {
 
   # exif-py vendored via submodule
   # mutagen vendored via copy
-  src = fetchgit {
-    url = "https://github.com/metamorphose/metamorphose2.git";
+  src = fetchFromGitHub {
+    owner = "metamorphose";
+    repo = "metamorphose2";
     #rev = "refs/tags/v2.${version}"; #for when wxPython3 support is released
     rev = "d2bdd6a86340b9668e93b35a6a568894c9909d68";
-    sha256 = "0ivcb3c8hidrff0ivl4dnwa2p3ihpqjdbvdig8dhg9mm5phdbabn";
+    sha256 = "1xb9rf6nbq6scwnm534js5pmlc8x21sic3qrvg5l99m4aya84l1v";
   };
 
   postPatch = ''

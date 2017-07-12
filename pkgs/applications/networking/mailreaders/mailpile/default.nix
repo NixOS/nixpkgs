@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, python2Packages, gnupg1orig, makeWrapper, openssl }:
+{ stdenv, fetchFromGitHub, python2Packages, gnupg1orig, makeWrapper, openssl }:
 
 python2Packages.buildPythonApplication rec {
   name = "mailpile-${version}";
   version = "0.4.1";
 
-  src = fetchgit {
-    url = "git://github.com/pagekite/Mailpile";
+  src = fetchFromGitHub {
+    owner = "pagekite";
+    repo = "Mailpile";
     rev = "refs/tags/${version}";
-    sha256 = "118b5zwfwmzj38p0mkj3r1s09jxg8x38y0a42b21imzpmli5vpb5";
+    sha256 = "09a3y5lyr1z9wszi8zcpchqv8caapz52d1cs5c1ayn1hvay5c9wy";
   };
 
   patchPhase = ''

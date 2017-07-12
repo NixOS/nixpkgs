@@ -1,11 +1,12 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation  {
   name = "win-pvdrivers-git-20150701";
   version = "20150701";
 
-  src = fetchgit {
-    url = "https://github.com/ts468/win-pvdrivers";
+  src = fetchFromGitHub {
+    owner = "ts468";
+    repo = "win-pvdrivers";
     rev = "3054d645fc3ee182bea3e97ff01869f01cc3637a";
     sha256 = "6232ca2b7c9af874abbcb9262faf2c74c819727ed2eb64599c790879df535106";
   };

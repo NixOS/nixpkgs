@@ -1,11 +1,12 @@
-{stdenv, fetchgit, bdftopcf, mkfontdir, mkfontscale}:
+{stdenv, fetchFromGitHub, bdftopcf, mkfontdir, mkfontscale}:
 
 stdenv.mkDerivation rec {
   date = "2015-06-07";
   name = "tewi-font-${date}";
 
-  src = fetchgit {
-    url = "https://github.com/lucy/tewi-font";
+  src = fetchFromGitHub {
+    owner = "lucy";
+    repo = "tewi-font";
     rev = "ff930e66ae471da4fdc226ffe65fd1ccd13d4a69";
     sha256 = "0c7k847cp68w20frzsdknpss2cwv3lp970asyybv65jxyl2jz3iq";
   };

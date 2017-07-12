@@ -1,5 +1,5 @@
 { mkDerivation, base, binary, bytestring, bytestring-trie, cmdargs
-, containers, directory, elm-compiler, elm-package, fetchgit
+, containers, directory, elm-compiler, elm-package, fetchFromGitHub
 , filepath, haskeline, HUnit, mtl, parsec, QuickCheck, stdenv
 , test-framework, test-framework-hunit, test-framework-quickcheck2
 , text
@@ -7,8 +7,9 @@
 mkDerivation {
   pname = "elm-repl";
   version = "0.18";
-  src = fetchgit {
-    url = "https://github.com/elm-lang/elm-repl";
+  src = fetchFromGitHub {
+    owner = "elm-lang";
+    repo = "elm-repl";
     sha256 = "112fzykils4lqz4pc44q4mwvxg0px0zfwx511bfvblrxkwwqlfb5";
     rev = "85f0bcfc28ea6c8a99a360d55c21ff25a556f9fe";
   };

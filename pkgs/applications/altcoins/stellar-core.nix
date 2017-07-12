@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, autoconf, libtool, automake, pkgconfig, git
+{ stdenv, lib, fetchFromGitHub, autoconf, libtool, automake, pkgconfig, git
 , bison, flex, postgresql }:
 
 let
@@ -8,10 +8,11 @@ let
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/stellar/stellar-core.git";
+  src = fetchFromGitHub {
+    owner = "stellar";
+    repo = "stellar-core";
     rev = "refs/tags/v${version}";
-    sha256 = "0ldw3qr0sajgam38z2w2iym0214ial6iahbzx3b965cw92n8n88z";
+    sha256 = "16iszfbsrb0hwrmcdqc88asdhzdgyalvifkdrvlmnijwwjyidmx2";
     fetchSubmodules = true;
     leaveDotGit = true;
   };

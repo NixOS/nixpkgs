@@ -1,4 +1,4 @@
-{ stdenv, antBuild, fetchgit, perl }:
+{ stdenv, antBuild, fetchFromGitHub, perl }:
 
 let
   version = "4.11";
@@ -9,8 +9,9 @@ in antBuild {
   # with the next release of junit since its build system completely changes.
   buildInputs = [perl];
 
-  src = fetchgit {
-    url = "https://github.com/junit-team/junit.git";
+  src = fetchFromGitHub {
+    owner = "junit-team";
+    repo = "junit";
     sha256 = "1cn5dhs6vpbfbcmnm2vb1212n0kblv8cxrvnwmksjxd6bzlkac1k";
     rev = "c2e4d911fadfbd64444fb285342a8f1b72336169";
   };

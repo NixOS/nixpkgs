@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin, libwebp, libgcrypt, gettext } :
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, libwebp, libgcrypt, gettext } :
 
 let
   version = "1.3.0";
@@ -6,10 +6,11 @@ in
 stdenv.mkDerivation rec {
   name = "telegram-purple-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/majn/telegram-purple";
+  src = fetchFromGitHub {
+    owner = "majn";
+    repo = "telegram-purple";
     rev = "0340e4f14b2480782db4e5b9242103810227c522";
-    sha256 = "1xb7hrgisbpx00dsrm5yz934bdd7nfzicd7k855iynk3hjzqj7k5";
+    sha256 = "0hncb976hn22abyja9hgq5waycwg1kvfqjg7ikl21bjarzw696b4";
   };
 
   nativeBuildInputs = [ pkgconfig ];

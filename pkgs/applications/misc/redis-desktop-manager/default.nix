@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, pkgconfig , libssh2
+{ stdenv, lib, fetchgit, fetchFromGitHub, pkgconfig , libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1
 , qmake
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
   name = "redis-desktop-manager-${version}";
   version = "0.8.3";
 
-  src = fetchgit {
-    url = "https://github.com/uglide/RedisDesktopManager.git";
+  src = fetchFromGitHub {
+    owner = "uglide";
+    repo = "RedisDesktopManager";
     fetchSubmodules = true;
     rev = "refs/tags/${version}";
     sha256 = "0a7xa39qp1q32zkypw32mm3wi8wbhxhvrm6l3xsa3k1jzih7hzxr";

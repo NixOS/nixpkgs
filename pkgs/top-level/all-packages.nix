@@ -189,17 +189,17 @@ with pkgs;
 
   fetchFromGitHub = {
     owner, repo, rev, name ? gitRepoToName repo rev,
-    fetchSubmodules ? false, private ? false,
+    fetchSubmodules ? false, deepClone ? false, leaveDotGit ? false, private ? false,
     githubBase ? "github.com", varPrefix ? null,
     ... # For hash agility
-  }@args: assert private -> !fetchSubmodules;
+  }@args: assert private -> !fetchSubmodules && !deepClone && !leaveDotGit;
   let
     baseUrl = "https://${githubBase}/${owner}/${repo}";
-    passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
+    passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "deepClone" "leaveDotGit" "private" "githubBase" "varPrefix" ];
     varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  in if fetchSubmodules then
+  in if fetchSubmodules || deepClone || leaveDotGit then
     fetchgit ({
-      inherit name rev fetchSubmodules;
+      inherit name rev fetchSubmodules deepClone leaveDotGit;
       url = "${baseUrl}.git";
     } // passthruAttrs)
   else

@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
 
   name = "grabserial-1.9.3";
   namePrefix = "";
 
-  src = fetchgit {
-    url = https://github.com/tbird20d/grabserial.git;
+  src = fetchFromGitHub {
+    owner = "tbird20d";
+    repo = "grabserial";
     rev  = "7cbf104b61ffdf68e6782a8e885050565399a014";
     sha256 = "043r2p5jw0ymx8ka1d39q1ap39i7sliq5f4w3yr1n53lzshjmc5g";
   };

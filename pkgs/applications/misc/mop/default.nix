@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "mop-${version}";
@@ -16,9 +16,10 @@ buildGoPackage rec {
     mv cmd mop
   '';
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/mop-tracker/mop";
+    owner = "mop-tracker";
+    repo = "mop";
     sha256 = "0zp51g9i8rw6acs4vnrxclbxa5z1v0a0m1xx27szszp0rphcczkx";
   };
 

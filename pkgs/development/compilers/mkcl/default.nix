@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, makeWrapper, gmp, gcc }:
+{ stdenv, fetchFromGitHub, makeWrapper, gmp, gcc }:
 
 stdenv.mkDerivation rec {
   v = "1.1.9";
   name = "mkcl-${v}";
 
-  src = fetchgit {
-    url = "https://github.com/jcbeaudoin/mkcl.git";
+  src = fetchFromGitHub {
+    owner = "jcbeaudoin";
+    repo = "mkcl";
     rev = "86768cc1dfc2cc9caa1fe9696584bb25ea6c1429";
     sha256 = "1gsvjp9xlnjccg0idi8x8gzkn6hlrqia95jh3zx7snm894503mf1";
   };

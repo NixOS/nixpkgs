@@ -1,11 +1,11 @@
-{ fetchurl, fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
+{ fetchurl, fetchFromGitHub, stdenv, xorg, makeWrapper, ncurses, cmake }:
 
 stdenv.mkDerivation rec {
-  # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self 
+  # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self
   # so that it can be written to when using the Self transposer. Running 'Self'
   # after installation runs without an image. You can then build a Self image with:
   #   $ cd ~/.local/share/self/objects
-  #   $ Self 
+  #   $ Self
   #   > 'worldBuilder.self' _RunScript
   #
   # This image can later be started with:
@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
   version = "4.5.0";
   name = "self-${version}";
 
-  src = fetchgit {
-    url    = "https://github.com/russellallen/self";
+  src = fetchFromGitHub {
+    owner  = "russellallen";
+    repo   = "self";
     rev    = "d16bcaad3c5092dae81ad0b16d503f2a53b8ef86";
     sha256 = "1dhs6209407j0ll9w9id31vbawdrm9nz1cjak8g8hixrw1nid4i5";
   };

@@ -1,4 +1,4 @@
-{ stdenv, python27Packages, fetchgit }:
+{ stdenv, python27Packages, fetchFromGitHub }:
 let
   py = python27Packages;
   python = py.python;
@@ -6,8 +6,9 @@ in
 py.buildPythonApplication rec {
   name = "loxodo-0.20150124";
 
-  src = fetchgit {
-    url = "https://github.com/sommer/loxodo.git";
+  src = fetchFromGitHub {
+    owner = "sommer";
+    repo = "loxodo";
     rev = "6c56efb4511fd6f645ad0f8eb3deafc8071c5795";
     sha256 = "1cg0dfcv57ps54f1a0ksib7hgkrbdi9q699w302xyyfyvjcb5dd2";
   };

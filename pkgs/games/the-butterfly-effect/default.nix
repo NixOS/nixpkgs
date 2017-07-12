@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, qt5, box2d, which, cmake, gettext }:
+{ stdenv, fetchFromGitHub, qt5, box2d, which, cmake, gettext }:
 
 stdenv.mkDerivation rec {
   name = "tbe-${version}";
   version = "0.9.3.1";
 
-  src = fetchgit {
-    url = "https://github.com/kaa-ching/tbe";
+  src = fetchFromGitHub {
+    owner = "kaa-ching";
+    repo = "tbe";
     rev = "refs/tags/v${version}";
     sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
   };

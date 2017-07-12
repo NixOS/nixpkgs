@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, libusb, pkgconfig, pmutils, udev} :
+{ stdenv, fetchFromGitHub, libusb, pkgconfig, pmutils, udev} :
 
 let
 
 version = "2.1.1";
-daemonlib = fetchgit {
-    url = "https://github.com/Tinkerforge/daemonlib.git";
+daemonlib = fetchFromGitHub {
+    owner = "Tinkerforge";
+    repo = "daemonlib";
     rev = "refs/tags/brickd-${version}";
     sha256 = "097kaz7d0rzg0ijvcna3y620k3m5fgxpqsac5gbhah8pd7vlj1a4";
   };
@@ -14,8 +15,9 @@ in
 stdenv.mkDerivation rec {
   name = "brickd-${version}";
 
-  src = fetchgit {
-    url = "git://github.com/Tinkerforge/brickd.git";
+  src = fetchFromGitHub {
+    owner = "Tinkerforge";
+    repo = "brickd";
     rev = "refs/tags/v${version}";
     sha256 = "0m2q01sbgf8z4559jpr6k3jivb8x98vxv1fhgx8nfcjbwz1q83gb";
   };

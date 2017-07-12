@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
+{ mkDerivation, lib, fetchgit, fetchFromGitHub, pkgconfig, gyp, cmake
 , qtbase, qtimageformats
 , breakpad, gtk3, libappindicator-gtk3, dee
 , ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
@@ -10,10 +10,11 @@ mkDerivation rec {
   version = "1.1.7";
 
   # Submodules
-  src = fetchgit {
-    url = "https://github.com/telegramdesktop/tdesktop";
+  src = fetchFromGitHub {
+    owner = "telegramdesktop";
+    repo = "tdesktop";
     rev = "refs/tags/v${version}";
-    sha256 = "0y0nc8d4vlhsmzayy26zdxc5jaiwcv0rb2s1v5fwnnx71gf89m2w";
+    sha256 = "1wsdd49jbk9c52h4qa352i12fp8jn2885klmy4pm46fawsg2lp3f";
   };
 
   tgaur = fetchgit {

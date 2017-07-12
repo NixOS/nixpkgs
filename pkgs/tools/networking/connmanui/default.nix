@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, glib, gtk3, dbus, pkgconfig, file, intltool, connman }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, glib, gtk3, dbus, pkgconfig, file, intltool, connman }:
 
 stdenv.mkDerivation rec {
   name = "connmanui-${version}";
   rev = "fce0af94e121bde77c7fa2ebd6a319f0180c5516";
   version = "22062015-${rev}";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "git://github.com/tbursztyka/connman-ui.git";
+    owner = "tbursztyka";
+    repo = "connman-ui";
     sha256 = "0ixx8c9cfdp480z21xfjb7n1x27sf1g8gmgbmcfhr0k888dmziyy";
   };
 

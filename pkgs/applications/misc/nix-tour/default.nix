@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, electron } :
+{ stdenv, fetchFromGitHub, electron } :
 
 stdenv.mkDerivation rec {
   name = "nix-tour";
@@ -7,8 +7,9 @@ stdenv.mkDerivation rec {
 
   version = "v0.0.1";
 
-  src = fetchgit {
-    url = "https://github.com/nixcloud/tour_of_nix";
+  src = fetchFromGitHub {
+    owner = "nixcloud";
+    repo = "tour_of_nix";
     rev = "refs/tags/${version}";
     sha256 = "09b1vxli4zv1nhqnj6c0vrrl51gaira94i8l7ww96fixqxjgdwvb";
   };

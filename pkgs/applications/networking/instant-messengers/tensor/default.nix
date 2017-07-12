@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
+{ stdenv, fetchFromGitHub, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "tensor-git-${version}";
   version = "2017-02-21";
 
-  src = fetchgit {
-    url             = "https://github.com/davidar/tensor.git";
+  src = fetchFromGitHub {
+    owner           = "davidar";
+    repo            = "tensor";
     rev             = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
     sha256          = "19in8c7a2hxsx2c4lj540w5c3pn1882645m21l91mcriynqr67k9";
     fetchSubmodules = true;

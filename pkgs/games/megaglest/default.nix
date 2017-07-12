@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, git, curl, SDL, xercesc, openal, lua, vlc
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, git, curl, SDL, xercesc, openal, lua, vlc
 , libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, mesa_glu, glib
 }:
@@ -18,10 +18,11 @@ in
 stdenv.mkDerivation {
   name = "megaglest-${version}";
 
-  src = fetchgit {
-    url = "git://github.com/MegaGlest/megaglest-source";
+  src = fetchFromGitHub {
+    owner = "MegaGlest";
+    repo = "megaglest-source";
     rev = "refs/tags/${version}";
-    sha256 = "1406ns1533x5678d91s2xxxv19q7r238zsaxr37c6mv5jrx7s5jv";
+    sha256 = "0h1866c0r3569v6z9zvmkjrb76vkks9na2ph6mi7apm3blc44yq2";
   };
 
   buildInputs = [ cmake pkgconfig git curl SDL xercesc openal lua libpng libjpeg vlc wxGTK

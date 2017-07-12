@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, trousers, leveldb, unzip, scons, pkgconfig
+{ stdenv, fetchgit, fetchFromGitHub, fetchurl, trousers, leveldb, unzip, scons, pkgconfig
 , glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam }:
 
 let
@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
   name = "chaps-0.42-6812";
   version = "0.42-6812";
 
-  src = fetchgit {
-    url = "https://github.com/google/chaps-linux";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "chaps-linux";
     rev = "989aadc45cdb216ca35b0c97d13fc691576fa1d7";
     sha256 = "0chk6pnn365d5kcz6vfqx1d0383ksk97icc0lzg0vvb0kvyj0ff1";
   };

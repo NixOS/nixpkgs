@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   name = "boinc-${version}";
 
   src = fetchFromGitHub {
-    name = "${name}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";

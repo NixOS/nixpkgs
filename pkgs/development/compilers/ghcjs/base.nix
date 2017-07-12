@@ -32,7 +32,7 @@
 , lens
 , parallel, safe, shelly, split, stringsearch, syb
 , tar, terminfo
-, vector, yaml, fetchgit, fetchFromGitHub, Cabal
+, vector, yaml, fetchFromGitHub, Cabal
 , alex, happy, git, gnumake, autoconf, patch
 , automake, libtool
 , cryptohash
@@ -52,8 +52,9 @@
     rev = "689c7753f50353dd05606ed79c51cd5a94d3922a";
     sha256 = "076020a9gjv8ldj5ckm43sbzq9s6c5xj6lpd8v28ybpiama3m6b4";
   }
-, ghcjsBootSrc ? fetchgit {
-    url = git://github.com/ghcjs/ghcjs-boot.git;
+, ghcjsBootSrc ? fetchFromGitHub {
+    owner = "ghcjs";
+    repo = "ghcjs-boot";
     rev = "8c549931da27ba9e607f77195208ec156c840c8a";
     sha256 = "0yg9bnabja39qysh9pg1335qbvbc0r2mdw6cky94p7kavacndfdv";
     fetchSubmodules = true;

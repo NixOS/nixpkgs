@@ -1,5 +1,5 @@
 { stdenv
-, fetchgit
+, fetchFromGitHub
 , autoreconfHook
 , help2man
 , pkgconfig
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
 
   version = "2016-11-03";
 
-  src = fetchgit {
-    url = https://github.com/SoundScapeRenderer/ssr;
+  src = fetchFromGitHub {
+    owner = "SoundScapeRenderer";
+    repo = "ssr";
     rev = "0dd0136dd24e47b63d8a4e05de467f5c7b047ec9";
-    sha256 = "095x2spv9bmg6pi71mpajnghbqj58ziflg16f9854awx0qp9d8x7";
+    sha256 = "12qwz7rsmkbax04inxiqsa2z9npzajh0mdap6vz4bxkkmjaq9kzn";
   };
 
   # Without it doesn't find all of the boost libraries.

@@ -1,4 +1,4 @@
-args@{ fetchgit, stdenv, ncurses, pkgconfig, gettext
+args@{ fetchFromBitbucket, stdenv, ncurses, pkgconfig, gettext
 , composableDerivation, lib, config, python, perl, tcl, ruby, qt4
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE, ... }: with args;
@@ -15,8 +15,9 @@ composableDerivation {
 
     enableParallelBuilding = true; # test this
 
-    src = fetchgit {
-      url = https://bitbucket.org/equalsraf/vim-qt.git ;
+    src = fetchFromBitbucket {
+      owner = "equalsraf";
+      repo = "vim-qt";
       rev = "refs/tags/package-" + tag;
       inherit sha256;
     };

@@ -1,11 +1,12 @@
-{ fetchgit, stdenv, openssl, pcre }:
+{ fetchFromGitHub, stdenv, openssl, pcre }:
 
 stdenv.mkDerivation rec {
   version = "0.21";
   name = "vanitygen-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/samr7/vanitygen";
+  src = fetchFromGitHub {
+    owner = "samr7";
+    repo = "vanitygen";
     rev = "refs/tags/${version}";
     sha256  = "1vzfv74hhiyrrpvjca8paydx1ashgbgn5plzrx4swyzxy1xkamah";
   };

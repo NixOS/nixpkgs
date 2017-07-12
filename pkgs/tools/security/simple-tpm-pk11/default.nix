@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, trousers, openssl, opencryptoki, automake, autoconf, libtool }:
+{ stdenv, fetchFromGitHub, trousers, openssl, opencryptoki, automake, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   name = "simple-tpm-pk11-2016-07-12";
 
-  src = fetchgit {
-    url = "https://github.com/ThomasHabets/simple-tpm-pk11";
+  src = fetchFromGitHub {
+    owner = "ThomasHabets";
+    repo = "simple-tpm-pk11";
     rev = "6f1f7a6b96ac82965e977cfecb88d930f1d70243";
     sha256 = "06vf3djp29slh7hrh4hlh3npyl277fy7d77jv9mxa1sk1idjklxc";
   };

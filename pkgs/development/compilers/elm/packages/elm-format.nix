@@ -1,5 +1,5 @@
 { mkDerivation, aeson, ansi-terminal, ansi-wl-pprint, base, binary
-, bytestring, containers, directory, edit-distance, fetchgit
+, bytestring, containers, directory, edit-distance, fetchFromGitHub
 , filemanip, filepath, HUnit, indents, mtl, optparse-applicative
 , parsec, pretty, process, QuickCheck, quickcheck-io
 , regex-applicative, split, stdenv, tasty, tasty-golden
@@ -8,8 +8,9 @@
 mkDerivation {
   pname = "elm-format";
   version = "0.5.2";
-  src = fetchgit {
-    url = "http://github.com/avh4/elm-format";
+  src = fetchFromGitHub {
+    owner = "avh4";
+    repo = "elm-format";
     sha256 = "0lman7h6wr75y90javcc4y1scvwgv125gqqaqvfrd5xrfmm43gg8";
     rev = "e452ed9342620e7bb0bc822983b96411d57143ef";
   };

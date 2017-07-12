@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, js_of_ocaml, camlp4 }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, js_of_ocaml, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "0.1";
   name = "ocaml-ojquery-${version}";
-  src = fetchgit {
-    url = https://github.com/ocsigen/ojquery.git;
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "ojquery";
     rev = "refs/tags/${version}";
     sha256 = "1n01bsk4car40p94fk1ssvww0inqapwwhdylmrb7vv40drsdldp1";
   };

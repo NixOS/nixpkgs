@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, sqlite, pkgconfig, perl
+{ stdenv, fetchFromRepoOrCz, sqlite, pkgconfig, perl
 , buildllvmsparse ? true
 , buildc2xml ? true
 , llvm ? null, libxml2 ? null
@@ -10,8 +10,8 @@ assert buildc2xml -> libxml2 != null;
 stdenv.mkDerivation {
   name = "smatch-20120924";
 
-  src = fetchgit {
-    url = git://repo.or.cz/smatch.git;
+  src = fetchFromRepoOrCz {
+    repo = "smatch";
     rev = "23656e3e578b700cbf96d043f039e6341a3ba5b9";
     sha256 = "0r43qi6vryqg450fj73yjwbb7gzcgx64rhrhb3r1m6a252srijiy";
   };

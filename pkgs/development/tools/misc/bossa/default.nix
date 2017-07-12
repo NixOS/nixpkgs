@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, wxGTK, libX11, readline }:
+{ stdenv, fetchFromGitHub, wxGTK, libX11, readline }:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -16,8 +16,9 @@ in
 stdenv.mkDerivation rec {
   name = "bossa-2014-08-18";
 
-  src = fetchgit {
-    url = https://github.com/shumatech/BOSSA;
+  src = fetchFromGitHub {
+    owner = "shumatech";
+    repo = "BOSSA";
     rev = "0f0a41cb1c3a65e909c5c744d8ae664e896a08ac"; /* arduino branch */
     sha256 = "0xg79kli1ypw9zyl90mm6vfk909jinmk3lnl8sim6v2yn8shs9cn";
   };

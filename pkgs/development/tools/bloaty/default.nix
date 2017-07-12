@@ -1,11 +1,12 @@
-{ stdenv, binutils, fetchgit }:
+{ stdenv, binutils, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "2016.12.28";
   name = "bloaty-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/google/bloaty.git";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "bloaty";
     rev = "2234386bcee7297dfa1b6d8a5d20f95ea4ed9bb0";
     sha256 = "0cfsjgbp9r16d6qi8v4k609bbhjff4vhdiapfkhr34z1cik1md4l";
     fetchSubmodules = true;

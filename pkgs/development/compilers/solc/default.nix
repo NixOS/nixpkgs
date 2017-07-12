@@ -1,9 +1,9 @@
-{ stdenv, fetchzip, fetchgit, boost, cmake }:
+{ stdenv, fetchzip, fetchFromGitHub, boost, cmake }:
 
 let
   version = "0.4.12";
   rev = "194ff033ae44944ac59aa7bd3da89ba94ec5893c";
-  sha256 = "0gkg3nay0625qmhxxxax1d1c4dl554ri3pkwd12qfg6g1w6j04w7";
+  sha256 = "0ll6z2cc09nav0rsrdmgsd5vd8w233g908gvn09fb4a1k5db3x6c";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -15,8 +15,9 @@ stdenv.mkDerivation {
   name = "solc-${version}";
 
   # Cannot use `fetchFromGitHub' because of submodules
-  src = fetchgit {
-    url = "https://github.com/ethereum/solidity";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "solidity";
     inherit rev sha256;
   };
 

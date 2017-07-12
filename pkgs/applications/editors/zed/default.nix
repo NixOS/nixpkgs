@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchgit, makeWrapper, writeScript, fetchurl, zip, pkgs
+{ stdenv, buildEnv, fetchFromGitHub, makeWrapper, writeScript, fetchurl, zip, pkgs
 , node_webkit }:
 
 let
@@ -28,11 +28,12 @@ let
   zed = stdenv.mkDerivation rec {
     inherit name version;
 
-    src = fetchgit {
-        url = "git://github.com/zedapp/zed";
-        rev = "refs/tags/v${version}";
-        sha256 = "1zvlngv73h968jd2m42ylr9vfhf35n80wzy616cv2ic7gmr1fl9p";
-      };
+    src = fetchFromGitHub {
+      owner = "zedapp";
+      repo = "zed";
+      rev = "refs/tags/v${version}";
+      sha256 = "1f5ax07iwacx89f9lnbdmkgcwiyy03rs6157mf1nw5s1qj4nm2ix";
+    };
 
     buildInputs = [ makeWrapper zip ];
 

@@ -11,8 +11,9 @@ let lispPackages = rec {
     version = "git-20170320";
     description = "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
     deps = with (pkgs.quicklispPackagesFor clwrapper); [alexandria cl-ppcre-template cl-unification esrap iterate];
-    src = pkgs.fetchgit {
-      url = "https://github.com/fb08af68/esrap-peg.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "fb08af68";
+      repo = "esrap-peg";
       sha256 = "15yiial7cy2nbgszqxd26qqcc6n3pw5qlrppzx0mfr3xbd9pvzby";
       rev = ''5a559b0030ecbf5e14cb070b0dc240535faa3402'';
     };
@@ -25,8 +26,9 @@ let lispPackages = rec {
     description = "CLX support for X Keyboard extensions";
     deps = with (pkgs.quicklispPackagesFor clwrapper); [clx];
     # Source type: git
-    src = pkgs.fetchgit {
-      url = ''https://github.com/filonenko-mikhail/clx-xkeyboard'';
+    src = pkgs.fetchFromGitHub {
+      owner = "filonenko-mikhail";
+      repo = "clx-xkeyboard";
       sha256 = "11b34da7d354a709a24774032e85a8947be023594f8a333eaff6d4aa79f2b3db";
       rev = ''11455d36283ef31c498bd58ffebf48c0f6b86ea6'';
     };
@@ -40,8 +42,9 @@ let lispPackages = rec {
 
     description = "The Common Lisp package manager";
     deps = [];
-    src = pkgs.fetchgit {
-      url = "https://github.com/quicklisp/quicklisp-client/";
+    src = pkgs.fetchFromGitHub {
+      owner = "quicklisp";
+      repo = "quicklisp-client";
       rev = "refs/tags/version-${version}";
       sha256 = "007r1ydbhrkh6ywqgpvzp0xg0yypgrfai3n4mn16gj5w2zz013lx";
     };

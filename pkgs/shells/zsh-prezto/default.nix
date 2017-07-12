@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchFromGitHub }:
+{ stdenv, fetchurl, fetchFromGitHub }:
 
 let
   # https://github.com/spwhitt/nix-zsh-completions/pull/2
@@ -11,8 +11,9 @@ let
 in stdenv.mkDerivation rec {
   rev = "4f19700919c8ebbaf75755fc0d03716d13183f49";
   name = "zsh-prezto-2015-03-03_rev${builtins.substring 0 7 rev}";
-  src = fetchgit {
-    url = "https://github.com/sorin-ionescu/prezto";
+  src = fetchFromGitHub {
+    owner = "sorin-ionescu";
+    repo = "prezto";
     inherit rev;
     sha256 = "17mql9mb7zbf8q1nvnci60yrmz5bl9q964i8dv4shz8b42861cdg";
     fetchSubmodules = true;

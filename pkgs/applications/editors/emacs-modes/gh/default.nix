@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, emacs, pcache, logito }:
+{ stdenv, fetchFromGitHub, emacs, pcache, logito }:
 
 stdenv.mkDerivation rec {
   name = "gh-0.5.3";
 
-  src = fetchgit {
-    url = "https://github.com/sigma/gh.el.git";
+  src = fetchFromGitHub {
+    owner = "sigma";
+    repo = "gh.el";
     rev = "ef03b63d063ec22f03af449aa955c98dfad7f80e";
-    sha256 = "1pciq16vl5l4kvj08q4ib1jzk2bb2y1makcsyaw8k9jblqviw756";
+    sha256 = "11hrfqp8i04l91kn6gfnz7xc62g7ff44sh1cvkmvlmn0y5j7glr1";
   };
 
   buildInputs = [ emacs ];

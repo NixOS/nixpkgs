@@ -1,14 +1,15 @@
-{ stdenv, fetchgit , boost, libX11, mesa, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile }:
+{ stdenv, fetchFromGitHub, boost, libX11, mesa, liblo, libjack2, ladspaH, lv2, pkgconfig, rubberband, libsndfile }:
 
 stdenv.mkDerivation rec {
   name = "zam-plugins-${version}";
   version = "3.8";
 
-  src = fetchgit {
-    url = "https://github.com/zamaudio/zam-plugins.git";
+  src = fetchFromGitHub {
+    owner = "zamaudio";
+    repo = "zam-plugins";
     deepClone = true;
     rev = "830ab2e9dd1db8cf56d12c71057157e5d8e9fd74";
-    sha256 = "1hyly5inis59cvh0r7lyi203h8v5jh84ca9jpaljm53cvw6d93px";
+    sha256 = "1338vasg6pvy71jhmxdj3bbv9k1blfj2914s8rzqzvfklk03p1yl";
   };
 
   buildInputs = [ boost libX11 mesa liblo libjack2 ladspaH lv2 pkgconfig rubberband libsndfile ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, makeWrapper, makeDesktopItem
+{ stdenv, fetchFromGitHub, perl, makeWrapper, makeDesktopItem
 , which, perlPackages
 }:
 
@@ -6,8 +6,9 @@ stdenv.mkDerivation rec {
   version = "1.2.9";
   name = "slic3r-${version}";
 
-  src = fetchgit {
-    url = "git://github.com/alexrj/Slic3r";
+  src = fetchFromGitHub {
+    owner = "alexrj";
+    repo = "Slic3r";
     rev = "refs/tags/${version}";
     sha256 = "1z8h11k29b7z49z5k8ikyfiijyycy1q3krlzi8hfd0vdybvymw21";
   };

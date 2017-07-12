@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, cmake, protobuf, libunwind, openssl, glog
+{ stdenv, fetchFromGitHub, fetchurl, cmake, protobuf, libunwind, openssl, glog
 , google-gflags, gmock, gtest
 }:
 
@@ -11,8 +11,9 @@ in
 stdenv.mkDerivation rec {
   name = "kinetic-cpp-client-2015-04-14";
 
-  src = fetchgit {
-    url = "git://github.com/Seagate/kinetic-cpp-client.git";
+  src = fetchFromGitHub {
+    owner = "Seagate";
+    repo = "kinetic-cpp-client";
     rev = "015085a5c89db0398f80923053f36b9e0611e107";
     sha256 = "0gm34sl6lyidnxgg1lrhkxkxqj8z1y2cqn7zhzz2f1k50pigi5da";
   };

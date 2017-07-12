@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, python2, makeWrapper, pkgconfig, gcc,
+{ stdenv, fetchFromGitHub, fetchurl, python2, makeWrapper, pkgconfig, gcc,
   pypy, libffi, libedit, libuv, boost, zlib,
   variant ? "jit", buildWithPypy ? false }:
 
@@ -11,8 +11,9 @@ let
     no-jit = { flags = ""; target = "target.py"; };
     no-jit-preload = { flags = ""; target = "target_preload.py"; };
   };
-  pixie-src = fetchgit {
-    url = "https://github.com/pixie-lang/pixie.git";
+  pixie-src = fetchFromGitHub {
+    owner = "pixie-lang";
+    repo = "pixie";
     rev = "d2a4267ea088f711af36a74928e8dfd8360584ad";
     sha256 = "1asf6yx7zy9cx4bsg8iai57dy3r3m45xcmkmw2vix70xvfy23ryf";
   };

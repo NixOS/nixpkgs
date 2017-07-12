@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin, json_glib, glib, http-parser } :
+{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json_glib, glib, http-parser } :
 
 let
   version = "2016-07-11";
@@ -6,8 +6,9 @@ in
 stdenv.mkDerivation rec {
   name = "purple-matrix-unstable-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/matrix-org/purple-matrix";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "purple-matrix";
     rev = "f9d36198a57de1cd1740a3ae11c2ad59b03b724a";
     sha256 = "1mmyvc70gslniphmcpk8sfl6ylik6dnprqghx4n47gsj1sb1cy00";
   };

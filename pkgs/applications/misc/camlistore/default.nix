@@ -1,11 +1,12 @@
-{ stdenv, lib, go, fetchgit, git, buildGoPackage }:
+{ stdenv, lib, go, fetchFromGitHub, git, buildGoPackage }:
 
 buildGoPackage rec {
   name = "camlistore-${version}";
   version = "0.9";
 
-  src = fetchgit {
-    url = "https://github.com/camlistore/camlistore";
+  src = fetchFromGitHub {
+    owner = "camlistore";
+    repo = "camlistore";
     rev = "refs/tags/${version}";
     sha256 = "1ypplr939ny9drsdngapa029fgak0wic8sbna588m79cbl17psya";
     leaveDotGit = true;

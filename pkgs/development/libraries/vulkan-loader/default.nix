@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, cmake, pkgconfig, git, python3,
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, git, python3,
   python3Packages, glslang, spirv-tools, x11, libxcb, libXrandr,
   libXext, wayland, mesa_noglu, makeWrapper }:
 

@@ -1,12 +1,13 @@
-{ callPackage, fetchgit, fetchpatch, ... } @ args:
+{ callPackage, fetchFromGitHub, fetchpatch, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   version = "9.2.0";
 
-  src = fetchgit {
-    url = "https://github.com/ceph/ceph.git";
+  src = fetchFromGitHub {
+    owner = "ceph";
+    repo = "ceph";
     rev = "refs/tags/v${version}";
-    sha256 = "0a2v3bgkrbkzardcw7ymlhhyjlwi08qmcm7g34y2sjsxk9bd78an";
+    sha256 = "07isr1qs43hfc8mq2ashdvkc8b1w0pxwqlk8rjgxsf8w8687f4pf";
   };
 
   patches = [

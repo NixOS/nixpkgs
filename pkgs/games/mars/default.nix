@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, cmake, mesa, sfml, fribidi, taglib }:
+{ stdenv, fetchFromGitHub, cmake, mesa, sfml, fribidi, taglib }:
 stdenv.mkDerivation rec {
   name = "mars-${version}-${rev}";
   version = "0.7.5";
   rev = "c855d04409";
-  src = fetchgit {
-    url = "https://github.com/thelaui/M.A.R.S..git";
+  src = fetchFromGitHub {
+    owner = "thelaui";
+    repo = "M.A.R.S.";
     inherit rev;
     sha256 = "1r4c5gap1z2zsv4yjd34qriqkxaq4lb4rykapyzkkdf4g36lc3nh";
   };

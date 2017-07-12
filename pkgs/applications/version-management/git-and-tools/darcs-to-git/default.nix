@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, ruby, gnugrep, diffutils, git, darcs }:
+{ stdenv, fetchFromGitHub, ruby, gnugrep, diffutils, git, darcs }:
 
 stdenv.mkDerivation rec {
   name = "darcs-to-git-${version}";
   version = "2015-06-04";
 
-  src = fetchgit {
-    url = "git://github.com/purcell/darcs-to-git.git";
+  src = fetchFromGitHub {
+    owner = "purcell";
+    repo = "darcs-to-git";
     rev = "e5fee32495908fe0f7d700644c7b37347b7a0a5b";
     sha256 = "0lxcx0x0m1cv2j4x9ykpjf6r2zg6lh5rya016x93vkmlzxm3f0ji";
   };

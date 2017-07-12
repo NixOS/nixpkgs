@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, ocaml, findlib, camlpdf, ncurses }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
 
 let version = "2.2.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-cpdf-${version}";
 
-  src = fetchgit {
-    url = https://github.com/johnwhitington/cpdf-source.git;
+  src = fetchFromGitHub {
+    owner = "johnwhitington";
+    repo = "cpdf-source";
     rev = "refs/tags/v${version}";
     sha256 = "1i2z417agnzzdavjfwb20r6716jl3sk5yi43ssy4jqzy6ah8x1ff";
   };

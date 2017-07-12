@@ -1,10 +1,11 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "qboot-pre-release";
 
-  src = fetchgit {
-    url = "https://github.com/yangchengwork/qboot";
+  src = fetchFromGitHub {
+    owner = "yangchengwork";
+    repo = "qboot";
     rev = "b2bdaf4c878ef34f309c8c79613fabd1b9c4bf75";
     sha256 = "00f24125733d24713880e430f409d6ded416286d209c9fabb45541311b01cf8d";
   };

@@ -1,10 +1,11 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "libhdhomerun-1efbcb";
 
-  src = fetchgit {
-    url = "git://github.com/Silicondust/libhdhomerun.git";
+  src = fetchFromGitHub {
+    owner = "Silicondust";
+    repo = "libhdhomerun";
     rev = "1efbcb2b87b17a82f2b3d873d1c9cc1c6a3a9b77";
     sha256 = "11iyrfs98xb50n9iqnwfphmmnn5w3mq2l9cjjpf8qp29cvs33cgy";
   };

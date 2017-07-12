@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 # To use upower-notify, the maintainer suggests adding something like this to your configuration.nix:
 #
@@ -10,12 +10,13 @@ buildGoPackage rec {
   name = "upower-notify-${version}";
   version = "20160310-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "14c581e683a7e90ec9fa6d409413c16599a5323c";
-  
+
   goPackagePath = "github.com/omeid/upower-notify";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/omeid/upower-notify";
+    owner = "omeid";
+    repo = "upower-notify";
     sha256 = "16zlvn53p9m10ph8n9gps51fkkvl6sf4afdzni6azk05j0ng49jw";
   };
 

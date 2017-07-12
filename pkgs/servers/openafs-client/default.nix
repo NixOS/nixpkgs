@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, which, autoconf, automake, flex, yacc,
+{ stdenv, fetchurl, which, autoconf, automake, flex, yacc,
   kernel, glibc, ncurses, perl, kerberos }:
 
 stdenv.mkDerivation rec {

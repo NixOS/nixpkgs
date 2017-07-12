@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, git, openssl, autoconf, pkgs }:
+{ stdenv, fetchFromGitHub, git, openssl, autoconf, pkgs }:
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";
@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
 #    url    = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.8/source/gambit-v${version}-devel.tgz";
 #    sha256 = "0j3ka76cfb007rlcc3nv5p1s6vh31cwp87hwwabawf16vs1jb7bl";
 #  };
-  src = fetchgit {
-    url = "https://github.com/feeley/gambit.git";
+  src = fetchFromGitHub {
+    owner = "feeley";
+    repo = "gambit";
     rev = "f3ffeb695aeea80c18c1b9ef276b57898c780dca";
     sha256 = "1lqixsrgk9z2gj6z1nkys0pfd3m5zjxrp3gvqn2wpr9h7hjb8x06";
   };

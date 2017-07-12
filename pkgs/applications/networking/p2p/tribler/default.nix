@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
+{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
 , enablePlayer ? true, vlc ? null }:
 
 stdenv.mkDerivation rec {
@@ -7,8 +7,9 @@ stdenv.mkDerivation rec {
   version = "7.0.0-beta";
   revision = "1d3ddb8";
 
-  src = fetchgit {
-    url = "https://github.com/Tribler/tribler";
+  src = fetchFromGitHub {
+    owner = "Tribler";
+    repo = "tribler";
     rev = revision;
     sha256 = "16mk76qgg7fgca11yvpygicxqbkc0kn6r82x73fly2310pagd845";
     fetchSubmodules = true;

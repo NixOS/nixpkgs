@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ocaml, findlib, ocamlbuild, menhir, which }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, which }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -8,8 +8,9 @@ stdenv.mkDerivation {
 
   name = "eff-20140928";
 
-  src = fetchgit {
-    url = "https://github.com/matijapretnar/eff.git";
+  src = fetchFromGitHub {
+    owner = "matijapretnar";
+    repo ="eff";
     rev = "90f884a790fddddb51d4d1d3b7c2edf1e8aabb64";
     sha256 = "0cqqrpvfw0nrk5d28mkzfvc8yzqxcss0k46bkmqhqjkqq886n2mm";
   };

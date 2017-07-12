@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, emacs, xmlRpc }:
+{ stdenv, fetchFromGitHub, emacs, xmlRpc }:
 
 stdenv.mkDerivation rec {
   name = "metaweblog-0.1";
 
-  src = fetchgit {
-    url = https://github.com/punchagan/metaweblog.git;
+  src = fetchFromGitHub {
+    owner = "punchagan";
+    repo = "metaweblog";
     rev = "ceda65048afaa4c7596c7f50ced998c59ef41167";
     sha256 = "a4c10bb1b4be574e560f87d5f07da4e24e5fffe9ecc83e6d4f9325f3a7eb1e2f";
   };

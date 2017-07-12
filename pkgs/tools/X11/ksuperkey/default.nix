@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11, libXtst, pkgconfig, inputproto, libXi, xproto, xextproto }:
+{ stdenv, fetchFromGitHub, libX11, libXtst, pkgconfig, inputproto, libXi, xproto, xextproto }:
 
 stdenv.mkDerivation rec {
   name = "ksuperkey-git-2015-07-21";
@@ -7,8 +7,9 @@ stdenv.mkDerivation rec {
     libX11 libXtst pkgconfig inputproto libXi xproto xextproto
   ];
 
-  src = fetchgit {
-    url = "https://github.com/hanschen/ksuperkey";
+  src = fetchFromGitHub {
+    owner = "hanschen";
+    repo = "ksuperkey";
     rev = "e75a31a0e3e80b14341e92799a7ce3232ac37639";
     sha256 = "0y4wkak9dvcm14g54ll1ln9aks2az63hx8fv7b8d3nscxjbkxl6g";
   };

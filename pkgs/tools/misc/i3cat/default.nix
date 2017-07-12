@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "i3cat-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/vincent-petithory/i3cat";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/vincent-petithory/i3cat";
+    owner = "vincent-petithory";
+    repo = "i3cat";
     sha256 = "1xlm5c9ajdb71985nq7hcsaraq2z06przbl6r4ykvzi8w2lwgv72";
   };
 

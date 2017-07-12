@@ -1,10 +1,11 @@
-{ stdenv, agda, fetchgit }:
+{ stdenv, agda, fetchFromGitHub }:
 
 agda.mkDerivation (self: rec {
   version = "8a06162a8f0f7df308458db91d720cf8f7345d69";
   name = "Agda-Sheaves-${version}";
-  src = fetchgit {
-    url = "https://github.com/jonsterling/Agda-Sheaves.git";
+  src = fetchFromGitHub {
+    owner = "jonsterling";
+    repo = "Agda-Sheaves";
     rev = version;
     sha256 = "1gjffyyi4gk9z380yw2wm0jg0a01zy8dnw7jrcc7222swisk5s2d";
   };

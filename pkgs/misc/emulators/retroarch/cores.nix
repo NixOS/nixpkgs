@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, makeWrapper, python27, retroarch
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper, python27, retroarch
 , alsaLib, fluidsynth, curl, hidapi, mesa, gettext, glib, gtk2, portaudio, SDL
 , ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
 , miniupnpc, sfml, xorg, zlib }:
@@ -41,9 +41,9 @@ let
   } // a);
 
   fetchRetro = { repo, rev, sha256 }:
-  fetchgit {
-    inherit rev sha256;
-    url = "https://github.com/libretro/${repo}.git";
+  fetchFromGitHub {
+    inherit repo rev sha256;
+    owner = "libretro";
     fetchSubmodules = true;
   };
 

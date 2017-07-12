@@ -1,10 +1,11 @@
-{ fetchurl, stdenv, fetchgit, qtbase, qtx11extras, qmake, pkgconfig, boost }:
+{ stdenv, fetchFromGitHub, qtbase, qtx11extras, qmake, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
   name = "twmn-git-2014-09-23";
 
-  src = fetchgit {
-    url = "https://github.com/sboli/twmn.git";
+  src = fetchFromGitHub {
+    owner = "sboli";
+    repo = "twmn";
     rev = "9492a47e25547e602dd57efd807033677c90b150";
     sha256 = "1a68gka9gyxyzhc9rn8df59rzcdwkjw90cxp1kk0rdfp6svhxhsa";
   };

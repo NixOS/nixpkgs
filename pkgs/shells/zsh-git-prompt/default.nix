@@ -24,7 +24,7 @@
 # More details are in share/doc/zsh-git-prompt/README.md, once
 # installed.
 #
-{ fetchgit
+{ fetchFromGitHub
 , haskell
 , python
 , git
@@ -37,8 +37,9 @@ haskell.packages.${ghcVersion}.callPackage
    mkDerivation rec {
      pname = "zsh-git-prompt";
      version = "0.5";
-     src = fetchgit {
-       url = "https://github.com/olivierverdier/zsh-git-prompt.git";
+     src = fetchFromGitHub {
+       owner = "olivierverdier";
+       repo = "zsh-git-prompt";
        rev = "0a6c8b610e799040b612db8888945f502a2ddd9d";
        sha256 = "19x1gf1r6l7r6i7vhhsgzcbdlnr648jx8j84nk2zv1b8igh205hw";
      };

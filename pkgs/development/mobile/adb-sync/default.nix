@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, python, androidsdk, makeWrapper }:
+{ stdenv, fetchFromGitHub, python, androidsdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "adb-sync-${version}";
   version = "2016-08-31";
 
-  src = fetchgit {
-    url = "https://github.com/google/adb-sync";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "adb-sync";
     rev = "7fc48ad1e15129ebe34e9f89b04bfbb68ced144d";
     sha256 = "1y016bjky5sn58v91jyqfz7vw8qfqnfhb9s9jd32k8y29hy5vy4d";
   };

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "git-annex-remote-b2-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/encryptio/git-annex-remote-b2";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/encryptio/git-annex-remote-b2";
+    owner = "encryptio";
+    repo = "git-annex-remote-b2";
     sha256 = "1139rzdvlj3hanqsccfinprvrzf4qjc5n4f0r21jp9j24yhjs6j2";
   };
 

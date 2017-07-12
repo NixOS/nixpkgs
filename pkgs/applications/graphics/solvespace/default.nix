@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, zlib, libpng, cairo, freetype
 , json_c, fontconfig, gtkmm2, pangomm, glew, mesa_glu, xlibs, pcre
 }:
 stdenv.mkDerivation rec {
   name = "solvespace-2.3-20170416";
   rev = "b1d87bf284b32e875c8edba592113e691ea10bcd";
-  src = fetchgit {
-    url = https://github.com/solvespace/solvespace;
+  src = fetchFromGitHub {
+    owner = "solvespace";
+    repo = "solvespace";
     inherit rev;
     sha256 = "160qam04pfrwkh9qskfmjkj01wrjwhl09xi6jjxi009yqg3cff9l";
     fetchSubmodules = true;

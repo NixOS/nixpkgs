@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, mpfr, m4, binutils, fetchcvs, emacs, zlib, which
+{ stdenv, fetchFromSavannah, mpfr, m4, binutils, fetchcvs, emacs, zlib, which
 , texinfo, libX11, xproto, inputproto, libXi, gmp, readline, strace
 , libXext, xextproto, libXt, libXaw, libXmu } :
 
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   name = "gcl-${version}";
   version = "2.6.13pre50";
 
-  src = fetchgit {
-    sha256 = "0vpxb6z5g9fjavrgx8gz8fsjvskfz64f63qibh5s00fvvndlwi88";
-    url = "http://git.savannah.gnu.org/r/gcl.git";
+  src = fetchFromSavannah {
+    sha256 = "199cca3j7nxs1qvlf5k1acz6hgqnd31zv81yy18m4pmd7fh2ng50";
+    repo = "gcl";
     rev = "refs/tags/Version_2_6_13pre50";
   };
 

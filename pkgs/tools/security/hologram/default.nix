@@ -1,13 +1,14 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "hologram-${version}";
   version = "20170130-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "d20d1c30379e7010e8f9c428a5b9e82f54d390e1";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/AdRoll/hologram";
+    owner = "AdRoll";
+    repo = "hologram";
     sha256 = "0dg5kfs16kf2gzhpmzsg83qzi2pxgnc9g81lw5zpa6fmzpa9kgsn";
   };
 

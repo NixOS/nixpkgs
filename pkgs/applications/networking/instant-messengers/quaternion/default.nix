@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchgit, qtbase, qtquickcontrols, cmake }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, qtquickcontrols, cmake }:
 
 mkDerivation rec {
   name = "quaternion-git-${version}";
@@ -11,8 +11,9 @@ mkDerivation rec {
   # At some point in the future, we should separate out libqmatrixclient into its own
   # derivation.
 
-  src = fetchgit {
-    url             = "https://github.com/Fxrh/Quaternion.git";
+  src = fetchFromGitHub {
+    owner           = "Fxrh";
+    repo            = "Quaternion";
     rev             = "c35475a6755cdb75e2a6c8ca5b943685d07d9707";
     sha256          = "0cm5j4vdnp5cljfnv5jqf89ccymspaqc6j9bb4c1x891vr42np0m";
     fetchSubmodules = true;

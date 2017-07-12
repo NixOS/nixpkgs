@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, libfprint, gtk2 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libfprint, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "fprint_demo-2008-03-03";
 
-  src = fetchgit {
-    url = "git://github.com/dsd/fprint_demo";
+  src = fetchFromGitHub {
+    owner = "dsd";
+    repo = "fprint_demo";
     rev = "5d86c3f778bf97a29b73bdafbebd1970e560bfb0";
     sha256 = "1rysqd8kdqgis1ykrbkiy1bcxav3vna8zdgbamyxw4hj5764xdcm";
   };

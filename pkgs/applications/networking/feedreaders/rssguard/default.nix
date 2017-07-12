@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, qmake, qtwebengine, qttools, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rssguard-${version}";
   version = "3.4.0";
 
-  src = fetchgit {
-    url = https://github.com/martinrotter/rssguard;
+  src = fetchFromGitHub {
+    owner = "martinrotter";
+    repo = "rssguard";
     rev = "refs/tags/${version}";
     sha256 = "1cdpfjj2lm1q2qh0w0mh505blcmi4n78458d3z3c1zn9ls9b9zsp";
     fetchSubmodules = true;

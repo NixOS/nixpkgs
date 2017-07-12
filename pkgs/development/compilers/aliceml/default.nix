@@ -1,10 +1,11 @@
-{stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkgconfig, perl, gnome2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
+{stdenv, gcc, glibc, fetchurl, fetchFromGitHub, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkgconfig, perl, gnome2, pango, sqlite, libxml2, zlib, gmp, smlnj }:
 
 stdenv.mkDerivation {
   name = "aliceml-1.4-7d44dc8e";
 
-  src = fetchgit {
-    url = "https://github.com/aliceml/aliceml";
+  src = fetchFromGitHub {
+    owner = "aliceml";
+    repo = "aliceml";
     rev = "7d44dc8e4097c6f85888bbf4ff86d51fe05b0a08";
     sha256 = "1xpvia00cpig0i7qvz29sx7xjic6kd472ng722x4rapz8mjnf8bk";
     fetchSubmodules = true;

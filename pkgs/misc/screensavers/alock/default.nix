@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
   date = "20150418";
   name = "alock-${date}";
 
-  src = fetchgit {
-    url = https://github.com/Arkq/alock;
+  src = fetchFromGitHub {
+    owner = "Arkq";
+    repo = "alock";
     rev = "69b547602d965733d415f877eb59d05966bd158d";
     sha256 = "0lv2ng5qxzcq0vwbl61dbwigv79sin4zg90y9cgsz6ydvm4ncpas";
   };

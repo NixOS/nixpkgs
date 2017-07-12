@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, libgtop, xmessage, which, pkgconfig }:
+{ stdenv, fetchFromGitHub, libgtop, xmessage, which, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "das_watchdog-${version}";
   version = "git-2015-04-02";
 
-  src = fetchgit {
-    url = "https://github.com/kmatheussen/das_watchdog.git";
+  src = fetchFromGitHub {
+    owner = "kmatheussen";
+    repo = "das_watchdog";
     rev = "1c203d9a55455c4670c164f945ea2dd9fd197ba9";
     sha256 = "c817491d67d31297dcd6177b9c33b5c3977c1c383eac588026631dd6961ba6bf";
   };

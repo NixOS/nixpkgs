@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, pkgconfig, ninja, libevdev, libev }:
+{ stdenv, fetchFromGitHub, pkgconfig, ninja, libevdev, libev }:
 
 stdenv.mkDerivation rec {
   version = "0.4";
   name = "illum-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/jmesmon/illum.git";
+  src = fetchFromGitHub {
+    owner = "jmesmon";
+    repo = "illum";
     fetchSubmodules = true;
     rev = "48ce8631346b1c88a901a8e4fa5fa7e8ffe8e418";
     sha256 = "05v3hz7n6b1mlhc6zqijblh1vpl0ja1y8y0lafw7mjdz03wxhfdb";

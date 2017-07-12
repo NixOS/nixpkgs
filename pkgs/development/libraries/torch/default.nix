@@ -1,4 +1,4 @@
-{stdenv, fetchgit, luajit, openblas, imagemagick, cmake, curl, fftw, gnuplot
+{stdenv, fetchFromGitHub, luajit, openblas, imagemagick, cmake, curl, fftw, gnuplot
   , libjpeg, zeromq3, ncurses, openssl, libpng, qt4, readline, unzip
   , pkgconfig, zlib, libX11, which
   }:
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec{
     zlib libX11 which
   ];
 
-  src = fetchgit {
-    url = "https://github.com/torch/distro";
+  src = fetchFromGitHub {
+    owner = "torch";
+    repo = "distro";
     rev = "8b6a834f8c8755f6f5f84ef9d8da9cfc79c5ce1f";
     sha256 = "120hnz82d7izinsmv5smyqww71dhpix23pm43s522dfcglpql8xy";
     fetchSubmodules = true;

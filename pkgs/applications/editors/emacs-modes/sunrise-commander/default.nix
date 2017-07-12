@@ -1,10 +1,11 @@
-{stdenv, fetchgit, emacs}:
+{stdenv, fetchFromGitHub, emacs}:
 
 stdenv.mkDerivation rec {
   name = "sunrise-commander-6r435";
 
-  src = fetchgit {
-    url = https://github.com/escherdragon/sunrise-commander.git;
+  src = fetchFromGitHub {
+    owner = "escherdragon";
+    repo = "sunrise-commander";
     rev = "7a44ca7abd9fe79f87934c78d00dc2a91419a4f1";
     sha256 = "2909beccc9daaa79e70876ac6547088c2459b624c364dda1886fe4d7adc7708b";
   };

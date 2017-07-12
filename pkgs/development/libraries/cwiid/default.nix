@@ -1,10 +1,11 @@
-{ stdenv, autoreconfHook, fetchgit, bison, flex, bluez, pkgconfig, gtk2 }:
+{ stdenv, autoreconfHook, fetchFromGitHub, bison, flex, bluez, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "cwiid-2010-02-21-git";
 
-  src = fetchgit {
-      url = https://github.com/abstrakraft/cwiid;
+  src = fetchFromGitHub {
+      owner = "abstrakraft";
+      repo = "cwiid";
       sha256 = "0qdb0x757k76nfj32xc2nrrdqd9jlwgg63vfn02l2iznnzahxp0h";
       rev = "fadf11e89b579bcc0336a0692ac15c93785f3f82";
   };

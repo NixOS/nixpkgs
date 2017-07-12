@@ -1,9 +1,10 @@
-{stdenv, fetchgit, cmake} :
+{stdenv, fetchFromGitHub, cmake} :
 
 stdenv.mkDerivation {
   name = "ddate-0.2.2";
-  src = fetchgit {
-    url = "https://github.com/bo0ts/ddate";
+  src = fetchFromGitHub {
+    owner = "bo0ts";
+    repo = "ddate";
     rev = "refs/tags/v0.2.2";
     sha256 = "1qchxnxvghbma6gp1g78wnjxsri0b72ha9axyk31cplssl7yn73f";
   };

@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, mlton }:
+{ stdenv, fetchFromGitHub, mlton }:
 
 stdenv.mkDerivation rec {
   name = "ceptre-2016-11-27";
 
-  src = fetchgit {
-    url = https://github.com/chrisamaphone/interactive-lp;
+  src = fetchFromGitHub {
+    owner = "chrisamaphone";
+    repo = "interactive-lp";
     rev = "e436fda2ccd44e9c9d226feced9d204311deacf5";
-    sha256 = "174pxfnw3qyn2w8qxmx45fa68iddf106mkfi0kcmyqxzsc9jprh8";
+    sha256 = "0gh9npcf50wapks93xfy7626jf9dk6m8zh1pi7d1df49nyjbj813";
   };
 
   nativeBuildInputs = [ mlton ];

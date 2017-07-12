@@ -1,4 +1,4 @@
-{ stdenv, fetchgit,
+{ stdenv, fetchFromGitHub,
   bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg, libpng, perl, python, ruby, sqlite,
   darwin, writeScriptBin, cups
 }:
@@ -36,10 +36,11 @@ in stdenv.mkDerivation rec {
   version = "2.1.1";
 
   # needs git submodules, so can't use fetchFromGitHub
-  src = fetchgit {
+  src = fetchFromGitHub {
     rev = "refs/tags/${version}";
-    url = "https://github.com/ariya/phantomjs.git";
-    sha256 = "1gyc8qxn8v4vm4lgd9njrprz46fg1j5ziq0mm888q8ms0p7jy2pi";
+    owner = "ariya";
+    repo = "phantomjs";
+    sha256 = "1zsbpk1sgh9a16f1a5nx3qvk77ibjn812wqkxqck8n6fia85m5iq";
   };
 
   buildInputs = [ bison2 flex fontconfig freetype gperf icu openssl libjpeg libpng perl python ruby sqlite ]

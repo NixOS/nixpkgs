@@ -1,12 +1,13 @@
-{ fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
+{ fetchFromGitHub, stdenv, pkgconfig, libtool, autoconf, automake
 , curl, ncurses, amdappsdk, amdadlsdk, xorg, jansson }:
 
 stdenv.mkDerivation rec {
   version = "3.7.2";
   name = "cgminer-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/ckolivas/cgminer.git";
+  src = fetchFromGitHub {
+    owner = "ckolivas";
+    repo = "cgminer";
     rev = "refs/tags/v3.7.2";
     sha256  = "1xfzx91dpwjj1vmhas3v9ybs0p2i74lrhinijmpav15acfggm9fq";
   };

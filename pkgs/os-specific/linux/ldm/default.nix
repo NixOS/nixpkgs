@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, udev, utillinux, mountPath ? "/media/" }:
+{ stdenv, fetchFromGitHub, udev, utillinux, mountPath ? "/media/" }:
 
 assert mountPath != "";
 
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
 
   # There is a stable release, but we'll use the lvm branch, which
   # contains important fixes for LVM setups.
-  src = fetchgit {
-    url = meta.repositories.git;
+  src = fetchFromGitHub {
+    owner = "LemonBoy";
+    repo = "ldm";
     rev = "refs/tags/v${version}";
     sha256 = "0lxfypnbamfx6p9ar5k9wra20gvwn665l4pp2j4vsx4yi5q7rw2n";
   };

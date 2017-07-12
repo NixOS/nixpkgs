@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "pingtcp-${version}";
   version = "0.0.3";
 
   # This project uses git submodules, which fetchFromGitHub doesn't support:
-  src = fetchgit {
-    sha256 = "1cv84n30y03s1b83apxxyn2jv5ss1pywsahrfrpkb6zcgzzrcqn8";
+  src = fetchFromGitHub {
+    sha256 = "0cljga6zc3b07ps47v0fwcvxxi7kfyx2glhx13f2cqsjw538mbaa";
     rev = "refs/tags/v${version}";
-    url = "https://github.com/LanetNetwork/pingtcp.git";
+    owner = "LanetNetwork";
+    repo = "pingtcp";
   };
 
   nativeBuildInputs = [ cmake ];

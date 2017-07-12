@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libuuid, python2, iasl }:
+{ stdenv, fetchFromGitHub, libuuid, python2, iasl }:
 
 let
   pythonEnv = python2.withPackages(ps: [ps.tkinter]);
@@ -13,8 +13,9 @@ else
 edk2 = stdenv.mkDerivation {
   name = "edk2-2014-12-10";
 
-  src = fetchgit {
-    url = git://github.com/tianocore/edk2;
+  src = fetchFromGitHub {
+    owner = "tianocore";
+    repo = "edk2";
     rev = "684a565a04";
     sha256 = "0s9ywb8w7xzlnmm4kwzykxkrdaw53b7pky121cc9wjkllzqwyxrb";
   };

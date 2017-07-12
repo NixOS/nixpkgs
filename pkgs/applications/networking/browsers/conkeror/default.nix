@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, unzip, firefox, makeWrapper }:
+{ stdenv, fetchFromRepoOrCz, unzip, firefox, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pkgname = "conkeror";
   version = "1.0.3";
   name = "${pkgname}-${version}";
- 
-  src = fetchgit {
-    url = git://repo.or.cz/conkeror.git;
+
+  src = fetchFromRepoOrCz {
+    repo = "conkeror";
     rev = "refs/tags/${version}";
     sha256 = "06fhfk8km3gd1lc19543zn0c71zfbn8wsalinvm1dbgi724f52pd";
   };

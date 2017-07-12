@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, cmake, expat, qt5, boost }:
+{ stdenv, fetchFromGitHub, cmake, expat, qt5, boost }:
 
 stdenv.mkDerivation rec {
   name = "boomerang-${version}";
   version = "0.3.99-alpha-2016-11-02";
 
-  src = fetchgit {
-    url = "https://github.com/nemerle/boomerang.git";
+  src = fetchFromGitHub {
+    owner = "nemerle";
+    repo = "boomerang";
     rev = "f95d6436845e9036c8cfbd936731449475f79b7a";
     sha256 = "1q3q92lfj24ij5sxdbdhcqyan28r6db1w80yrks4csf9zjij1ixh";
   };

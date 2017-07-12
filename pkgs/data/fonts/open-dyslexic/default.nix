@@ -1,11 +1,12 @@
-{stdenv, fetchgit}:
+{stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   name = "open-dyslexic-${version}";
   version = "2014-11-11";
 
-  src = fetchgit {
-    url = "https://github.com/antijingoist/open-dyslexic.git";
+  src = fetchFromGitHub {
+    owner = "antijingoist";
+    repo = "open-dyslexic";
     rev = "f4b5ba89018b44d633608907e15f93fb3fabbabc";
     sha256 = "04pa7c2cary6pqxsmxqrg7wi19szg7xh8panmvqvmc7jas0mzg6q";
   };
