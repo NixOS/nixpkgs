@@ -9865,27 +9865,7 @@ in {
     };
   };
 
-  django_appconf = buildPythonPackage rec {
-    name = "django-appconf-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-appconf/django-appconf-${version}.tar.gz";
-      sha256 = "0q3fg17qi4vwpipbj075zn4wk58p6a946kah8wayks1423xpa4xs";
-    };
-
-    # No tests in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      description = "A helper class for handling configuration defaults of packaged apps gracefully";
-      homepage = http://django-appconf.readthedocs.org/;
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  };
+  django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
     name = "django-colorful-${version}";
@@ -9909,27 +9889,7 @@ in {
     };
   };
 
-  django_compressor = buildPythonPackage rec {
-    name = "django-compressor-${version}";
-    version = "1.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django_compressor/django_compressor-${version}.tar.gz";
-      sha256 = "0bp2acagc6b1mmcajlmjf5vvp6zj429bq7p2wks05n47pwfzv281";
-    };
-
-    # Need to setup django testing
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ django_appconf ];
-
-    meta = {
-      description = "Compresses linked and inline JavaScript or CSS into single cached files";
-      homepage = http://django-compressor.readthedocs.org/en/latest/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  };
+  django_compressor = callPackage ../development/python-modules/django_compressor { };
 
   django_compat = callPackage ../development/python-modules/django-compat { };
 
@@ -21072,6 +21032,8 @@ in {
     };
   };
 
+  rcssmin = callPackage ../development/python-modules/rcssmin { };
+
   recommonmark = buildPythonPackage rec {
     name = "recommonmark-${version}";
     version = "0.4.0";
@@ -21221,6 +21183,8 @@ in {
       homepage = "https://github.com/pypa/readme";
     };
   };
+
+  rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = buildPythonPackage rec {
     name = "pysolr-${version}";
