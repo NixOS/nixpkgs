@@ -126,6 +126,9 @@ function closure() {
 }
 
 system_closure="$tmpdir/system.closure"
+# Use a FIFO for piping nix-store --export into nix-store --import, saving disk
+# I/O and space. nix-store --import is run by nixos-prepare-root.
+mkfifo $system_closure
 
 if [ -z "$closure" ]; then
     expr="(import <nixpkgs/nixos> {}).system"
@@ -135,7 +138,9 @@ else
     system_root=$closure
     # Create a temporary file ending in .closure (so nixos-prepare-root knows to --import it) to transport the store closure
     # to the filesytem we're preparing. Also delete it on exit!
-    nix-store --export $(nix-store -qR $closure) > $system_closure
+    # Run in background to avoid blocking while trying to write to the FIFO
+    # $system_closure refers to
+    nix-store --export $(nix-store -qR $closure) > $system_closure &
 fi
 
 channel_root="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
