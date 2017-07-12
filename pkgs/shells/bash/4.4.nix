@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "dev" "man" "doc" "info" ];
-
-  # the man pages are small and useful enough
-  outputMan = if interactive then "out" else null;
+  outputs = [ "out" "dev" "doc" "info" ]
+    # the man pages are small and useful enough, so include them in $out in interactive builds
+    ++ stdenv.lib.optional (!interactive) "man";
 
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
