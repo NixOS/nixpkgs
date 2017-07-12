@@ -837,6 +837,10 @@ let
       preConfigure = "export V8_INCLUDES=${pkgs.v8}/include";
     });
 
+    pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
+      patches = [ ./patches/pbdZMQ.patch ];
+    });
+
   };
 in
   self
