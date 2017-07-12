@@ -51,9 +51,46 @@ rec {
        else { }));
 
 
-  /* `makeOverridable` takes a function from attribute set to attribute set and
-     injects `override` attibute which can be used to override arguments of
-     the function.
+  # Like `makeOverridable`, but provides the function with the `self`
+  # argument. `f` is called with the new `self` whenever an override
+  # or extension is added.
+  makeOverridableWithSelf = f: origArgs: let
+
+    interface = {val, args, ...}: overridePackage:
+      (lib.optionalAttrs (builtins.isAttrs val) (val // {
+        extend = f: overridePackage (self: super: {
+          val = super.val // f self.val super.val;
+        });
+
+        overrideDerivation = newArgs: overridePackage (self: super: {
+          val = lib.overrideDerivation super.val newArgs;
+        });
+      })) // (lib.optionalAttrs (builtins.isFunction val) {
+        __functor = _: val;
+        extend = throw "extend not yet supported for functors";
+        overrideDerivation = throw "overrideDerivation not yet supported for functors";
+      }) // {
+        inherit overridePackage;
+
+        override = newArgs: overridePackage (self: super: {
+          args = super.args //
+            (if builtins.isFunction newArgs then newArgs super.args else newArgs);
+        });
+      };
+
+  in lib.makeExtensibleWithInterface interface (self: {
+    args = origArgs;
+    val = f self.args self.val;
+  });
+
+
+  /* `makeOverridable` takes a function from attribute set to
+     attribute set and injects 4 attributes which can be used to
+     override arguments and return values of the function.
+
+
+     1. `override` allows you to change what arguments were passed to
+     the function and acquire the new result.
 
        nix-repl> x = {a, b}: { result = a + b; }
 
@@ -65,28 +102,58 @@ rec {
        nix-repl> y.override { a = 10; }
        { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
 
-     Please refer to "Nixpkgs Contributors Guide" section
-     "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
-     related to its use.
+
+     2. `extend` changes the results of the function, giving you a
+     view of the original result and a view of the eventual final
+     result. It is meant to do the same thing as
+     `makeExtensible`. That is, it lets you add to or change the
+     return value, such that previous extensions are consistent with
+     the final view, rather than being based on outdated
+     values. "Outdated" values come from the `super` argument, which
+     must be used when you are attempting to modify and old value. And
+     the final values come from the `self` argument, which recursively
+     refers to what all extensions combined return.
+
+       nix-repl> obj = makeOverridable (args: { }) { }
+
+       nix-repl> obj = obj.extend (self: super: { foo = "foo"; })
+
+       nix-repl> obj.foo
+       "foo"
+
+       nix-repl> obj = obj.extend (self: super: { foo = super.foo + " + "; bar = "bar"; foobar = self.foo + self.bar; })
+
+       nix-repl> obj
+       { bar = "bar"; foo = "foo + "; foobar = "foo + bar"; ... } # Excess omitted
+
+
+     3. `overrideDerivation`: Please refer to "Nixpkgs Contributors
+     Guide" section "<pkg>.overrideDerivation" to learn about
+     `overrideDerivation` and caveats related to its use.
+
+
+     4. `overridePackage` is by far the most powerful of the four, as
+     it exposes a deeper structure. It provides `self` and `super`
+     views of both the arguments and return value of the function,
+     allowing you to change both in one override; you can even have
+     overrides for one based on overrides for the other. The type of
+     `self`, `super`, and the return value are all:
+     `{ args :: argumentsToF, val :: returnValueOfF }`
+
+       nix-repl> obj = makeOverridable ({a, b}: {inherit a b;}) {a = 1; b = 3;}
+
+       nix-repl> obj = obj.overridePackage (self: super: { args = super.args // {b = self.val.a;}; })
+
+       nix-repl> obj.b
+       1
+
+       nix-repl> obj = obj.overridePackage (self: super: { val = super.val // {a = self.args.a + 10;}; })
+
+       nix-repl> obj.b
+       11
+
   */
-  makeOverridable = f: origArgs:
-    let
-      ff = f origArgs;
-      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
-    in
-      if builtins.isAttrs ff then (ff // {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
-        overrideDerivation = fdrv:
-          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
-        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
-      })
-      else if builtins.isFunction ff then {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
-        __functor = self: ff;
-        overrideDerivation = throw "overrideDerivation not yet supported for functors";
-      }
-      else ff;
+  makeOverridable = fn: makeOverridableWithSelf (args: _: fn args);
 
 
   /* Call the package function in the file `fn' with the required
