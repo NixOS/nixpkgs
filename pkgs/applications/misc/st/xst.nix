@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libX11, ncurses, libXext, libXft, fontconfig }:
+{ stdenv, fetchFromGitHub, pkgconfig, libX11, ncurses, libXext, libXft, fontconfig }:
 
 with stdenv.lib;
 
@@ -8,9 +8,11 @@ let
 in stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl {
-    url = "https://github.com/neeasade/xst/archive/v${version}.tar.gz";
-    sha256 = "19ayx1753f2s6k7f6yn256bsssm20ggffs1diakgjqwcyjcxxn7q";
+  src = fetchFromGitHub {
+    owner = "neeasade";
+    repo = "xst";
+    rev = "v${version}";
+    sha256 = "1fh4y2w0icaij99kihl3w8j5d5b38d72afp17c81pi57f43ss6pc";
   };
 
   buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ];
