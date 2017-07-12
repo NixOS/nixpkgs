@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--disable-suid-install"
   ];
 
   installFlags = [
