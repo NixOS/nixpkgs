@@ -79,7 +79,11 @@ in
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope {};
 
+  callPackageWithSelf = pkgs.newScopeWithSelf {};
+
   callPackages = lib.callPackagesWith splicedPackages;
 
   newScope = extra: lib.callPackageWith (splicedPackages // extra);
+
+  newScopeWithSelf = extra: lib.callPackageWithSelfWith (splicedPackages // extra);
 }

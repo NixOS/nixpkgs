@@ -183,6 +183,15 @@ rec {
       auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
     in makeOverridable f (auto // args);
 
+  # Like `callPackageWith`, but provides the function with the `self`
+  # argument. `fn` is called with the new `self` whenever an override
+  # or extension is added.
+  callPackageWithSelfWith = autoArgs: fn: args:
+    let
+      f = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+    in makeOverridableWithSelf f (auto // args);
+
 
   /* Like callPackage, but for a function that returns an attribute
      set of derivations. The override function is added to the
