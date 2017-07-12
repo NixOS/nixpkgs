@@ -65,6 +65,11 @@ rec {
         overrideDerivation = newArgs: overridePackage (self: super: {
           val = lib.overrideDerivation super.val newArgs;
         });
+
+        ${if val ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+          overridePackage (self: super: {
+            val = super.val.overrideAttrs fdrv;
+          });
       })) // (lib.optionalAttrs (builtins.isFunction val) {
         __functor = _: val;
         extend = throw "extend not yet supported for functors";
