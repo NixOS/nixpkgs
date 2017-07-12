@@ -16,13 +16,13 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
-, enableManpages ? true
+, enableManpages ? false
 , enableSharedLibraries ? true
 , darwin
 }:
 
 let
-  src = fetch "llvm" "1giklnw71wzsgbqg9wb5x7dxnbj39m6zpfvskvzvhwvfz4fm244d";
+  src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
   shlib = if stdenv.isDarwin then "dylib" else "so";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
@@ -64,13 +64,6 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
-  ''
-  # Remove broken tests: (https://bugs.llvm.org//show_bug.cgi?id=31610)
-  + ''
-    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata1.ll
-    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata2.ll
-    rm test/CodeGen/AMDGPU/invalid-opencl-version-metadata3.ll
-    rm test/CodeGen/AMDGPU/runtime-metadata.ll
   '';
 
   # hacky fix: created binaries need to be run before installation

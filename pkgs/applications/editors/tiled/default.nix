@@ -5,13 +5,13 @@ let
 #  qtEnv = with qt5; env "qt-${qtbase.version}" [ qtbase qttools ];
 in stdenv.mkDerivation rec {
   name = "tiled-${version}";
-  version = "0.18.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "bjorn";
     repo = "tiled";
     rev = "v${version}";
-    sha256 = "087jl36g6w2g5l70gz573iwyvx3r7i8fijl3y4mmmf8pyqdyq1n2";
+    sha256 = "062ja3j84v5s4qslp01gqif8c6i1klkkxpxyyrrvjhxmbyn6nmgd";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];

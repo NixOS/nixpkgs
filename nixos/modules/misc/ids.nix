@@ -166,7 +166,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      collectd = 144;
+      #collectd = 144; #unused
       consul = 145;
       mailpile = 146;
       redmine = 147;
@@ -295,6 +295,7 @@
       aria2 = 277;
       clickhouse = 278;
       rslsync = 279;
+      minio = 280;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -559,6 +560,7 @@
       aria2 = 277;
       clickhouse = 278;
       rslsync = 279;
+      minio = 280;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

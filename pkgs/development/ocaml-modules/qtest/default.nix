@@ -1,5 +1,9 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild, ounit }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4"
+then throw "qtest is not available for OCaml ${ocaml.version}"
+else
+
 let version = "2.2"; in
 
 stdenv.mkDerivation {

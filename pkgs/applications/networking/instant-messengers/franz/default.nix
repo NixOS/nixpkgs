@@ -8,6 +8,17 @@ let
 
   version = "4.0.4";
 
+  runtimeDeps = [
+    udev libnotify
+  ];
+  deps = (with xorg; [
+    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
+    libXrender libX11 libXtst libXScrnSaver
+  ]) ++ [
+    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
+  ] ++ runtimeDeps;
+
   desktopItem = makeDesktopItem rec {
     name = "Franz";
     exec = name;
@@ -27,17 +38,6 @@ in stdenv.mkDerivation rec {
 
   # don't remove runtime deps
   dontPatchELF = true;
-
-  deps = (with xorg; [
-    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
-    libXrender libX11 libXtst libXScrnSaver
-  ]) ++ [
-    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
-    gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
-  # runtime deps
-  ] ++ [
-    udev libnotify
-  ];
 
   unpackPhase = ''
     tar xzf $src
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = http://meetfranz.com;
     license = licenses.free;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
+    maintainers = [ maintainers.gnidorah ];
     platforms = ["i686-linux" "x86_64-linux"];
     hydraPlatforms = [];
   };

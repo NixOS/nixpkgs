@@ -1,10 +1,11 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+, buildPlatform, hostPlatform
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(stdenv.cross.libc or null == "msvcrt") # problems for now
+, enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
 , enablePIC ? false
 , enableExceptions ? false
@@ -76,11 +77,11 @@ let
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
     "--without-python"
-  ] ++ optionals (stdenv.cross.libc == "msvcrt") [
+  ] ++ optionals (hostPlatform.libc == "msvcrt") [
     "target-os=windows"
     "threadapi=win32"
     "binary-format=pe"
-    "address-model=${if hasPrefix "x86_64-" stdenv.cross.config then "64" else "32"}"
+    "address-model=${toString hostPlatform.parsed.cpu.bits}"
     "architecture=x86"
   ];
   crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
@@ -110,8 +111,8 @@ let
       find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
         -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
-  '' + optionalString (stdenv.cross.libc or null == "msvcrt") ''
-    ${stdenv.cross.config}-ranlib "$out/lib/"*.a
+  '' + optionalString (hostPlatform.libc == "msvcrt") ''
+    ${stdenv.cc.prefix}ranlib "$out/lib/"*.a
   '';
 
 in
@@ -147,13 +148,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ stdenv.lib.optionals (! stdenv ? cross) [ python icu ]
+    ++ stdenv.lib.optionals (hostPlatform == buildPlatform) [ python icu ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags
     ++ [ "--with-python=${python.interpreter}" ]
-    ++ optional (! stdenv ? cross) "--with-icu=${icu.dev}"
+    ++ optional (hostPlatform == buildPlatform) "--with-icu=${icu.dev}"
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = builder nativeB2Args;
@@ -177,7 +178,7 @@ stdenv.mkDerivation {
     buildPhase = builder crossB2Args;
     installPhase = installer crossB2Args;
     postFixup = fixup;
-  } // optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // optionalAttrs (hostPlatform.libc == "msvcrt") {
     patches = fetchurl {
       url = "https://svn.boost.org/trac/boost/raw-attachment/ticket/7262/"
           + "boost-mingw.patch";

@@ -1,4 +1,6 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "ed-${version}";
@@ -28,11 +30,18 @@ stdenv.mkDerivation rec {
        make: *** [check] Error 127
 
     */
-  doCheck = !stdenv.isDarwin;
+  doCheck = !(hostPlatform.isDarwin || hostPlatform != buildPlatform);
 
-  crossAttrs = {
-    compileFlags = [ "CC=${stdenv.cross.config}-gcc" ];
-  };
+  # TODO(@Ericson2314): Use placeholder to make this a configure flag once Nix
+  # 1.12 is released.
+  preConfigure = ''
+    export DESTDIR=$out
+  '';
+
+  configureFlags = [
+    "--exec-prefix=${stdenv.cc.prefix}"
+    "CC=${stdenv.cc.prefix}cc"
+  ];
 
   meta = {
     description = "An implementation of the standard Unix editor";

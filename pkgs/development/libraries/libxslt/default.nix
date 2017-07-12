@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+, buildPlatform, hostPlatform
 , cryptoSupport ? false
-, pythonSupport ? (! stdenv ? cross)
+, pythonSupport ? buildPlatform == hostPlatform
 }:
 
 assert pythonSupport -> python2 != null;
@@ -17,6 +18,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
+
+  # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
+  postPatch = optionalString hostPlatform.isCygwin ''
+    substituteInPlace tests/plugins/Makefile.in \
+      --replace 'la_LDFLAGS =' 'la_LDFLAGS = $(WIN32_EXTRA_LDFLAGS)'
+  '';
 
   outputs = [ "bin" "dev" "out" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 

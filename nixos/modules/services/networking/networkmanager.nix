@@ -9,15 +9,18 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
+  dns =
+    if cfg.useDnsmasq then "dnsmasq"
+    else if config.services.resolved.enable then "systemd-resolved"
+    else "default";
+
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
-    dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
+    dns=${dns}
 
     [keyfile]
-    ${optionalString (config.networking.hostName != "")
-      ''hostname=${config.networking.hostName}''}
     ${optionalString (cfg.unmanaged != [])
       ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
@@ -255,7 +258,7 @@ in {
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
-      ++ lib.imap (i: s: {
+      ++ lib.imap1 (i: s: {
         inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
       }) cfg.dispatcherScripts;

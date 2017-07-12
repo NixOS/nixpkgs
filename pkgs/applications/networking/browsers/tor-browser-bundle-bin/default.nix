@@ -81,7 +81,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "7.0.1";
+  version = "7.0.2";
 
   lang = "en-US";
 
@@ -91,7 +91,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1zmczf1bpbd85zcrs5qw91d1xmplikbna5xs053jnjl6pbbq1fs9";
+      sha256 = "0xdw8mvyxz9vaxikzsj4ygzp36m4jfhvhqfiyaiiywpf39rqpkqr";
     };
 
     "i686-linux" = fetchurl {
@@ -99,7 +99,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0mdlgmqkryg0i55jgf3x1nnjni0x45g1xcjwsfacsck3m70v4flq";
+      sha256 = "0m522i8zih5sj18dyzk9im7gmpmrbf96657v38m3pxn4ci38b83z";
     };
   };
 in
@@ -190,6 +190,12 @@ stdenv.mkDerivation rec {
 
     // Stop obnoxious first-run redirection.
     lockPref("noscript.firstRunRedirection", false);
+
+    // Insist on using IPC for communicating with Tor
+    //
+    // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    lockPref("extensions.torlauncher.control_port_use_ipc", true);
+    lockPref("extensions.torlauncher.socks_port_use_ipc", true);
     EOF
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in
@@ -232,6 +238,9 @@ stdenv.mkDerivation rec {
 
     # Initialize the Tor data directory.
     mkdir -p "\$HOME/TorBrowser/Data/Tor"
+
+    # TBB will fail if ownership is too permissive
+    chmod 0700 "\$HOME/TorBrowser/Data/Tor"
 
     # Initialize the browser profile state.  Note that the only data
     # copied from the Store payload is the initial bookmark file, which is

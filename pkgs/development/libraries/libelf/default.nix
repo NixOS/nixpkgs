@@ -1,4 +1,7 @@
-{ fetchurl, stdenv, gettext, glibc }:
+{ stdenv, fetchurl
+, gettext, glibc
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libelf-0.8.13";
@@ -8,20 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "0vf7s9dwk2xkmhb79aigqm0x0yfbw1j0b9ksm51207qwr179n6jr";
   };
 
+  patches = [
+    ./dont-hardcode-ar.patch
+  ];
+
   doCheck = true;
 
   # FIXME needs gcc 4.9 in bootstrap tools
   hardeningDisable = [ "stackprotector" ];
 
-  # For cross-compiling, native glibc is needed for the "gencat" program.
-  crossAttrs = {
-    nativeBuildInputs = [ gettext glibc ];
-  };
-
   # Libelf's custom NLS macros fail to determine the catalog file extension on
   # Darwin, so disable NLS for now.
   # FIXME: Eventually make Gettext a build input on all platforms.
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-nls";
+  configureFlags = stdenv.lib.optional hostPlatform.isDarwin "--disable-nls";
 
   nativeBuildInputs = [ gettext ];
 

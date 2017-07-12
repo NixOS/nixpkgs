@@ -1,12 +1,14 @@
 { stdenv, fetchurl, buildPackages, perl
+, hostPlatform
 , withCryptodev ? false, cryptodevHeaders
-, enableSSL2 ? false }:
+, enableSSL2 ? false
+}:
 
 with stdenv.lib;
 
 let
 
-  opensslCrossSystem = stdenv.cross.openssl.system or
+  opensslCrossSystem = hostPlatform.openssl.system or
     (throw "openssl needs its platform name cross building");
 
   common = args@{ version, sha256, patches ? [] }: stdenv.mkDerivation rec {
@@ -22,13 +24,12 @@ let
       ++ [ ./nix-ssl-cert-file.patch ]
       ++ optional (versionOlder version "1.1.0")
           (if stdenv.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
-      ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
-      ++ optional
-           (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
+      ++ optional (versionOlder version "1.0.2" && hostPlatform.isDarwin)
            ./darwin-arch.patch;
 
     outputs = [ "bin" "dev" "out" "man" ];
     setOutputFlags = false;
+    separateDebugInfo = stdenv.isLinux;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
@@ -89,10 +90,6 @@ let
       preConfigure=''
         # It's configure does not like --build or --host
         export configureFlags="${concatStringsSep " " (configureFlags ++ [ opensslCrossSystem ])}"
-        # WINDRES and RANLIB need to be prefixed when cross compiling;
-        # the openssl configure script doesn't do that for us
-        export WINDRES=${stdenv.cross.config}-windres
-        export RANLIB=${stdenv.cross.config}-ranlib
       '';
       configureScript = "./Configure";
     };

@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "05cck0mlg8xsvbra69x6i25xclsq1xc49dggxq81gi086c14h67c";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://git.open-mesh.org/batman-adv.git/patch/33e9de0c769c7b0c5e615a5788b0f09655304720";
+      sha256 = "1yc2iac6dg32hxqfwip7jw5bnhi6ikmxsaw6z2v6vll37fqha6gy";
+    })
+  ];
+
   hardeningDisable = [ "pic" ];
 
   preBuild = ''

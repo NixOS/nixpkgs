@@ -1,5 +1,6 @@
 { stdenv, cmake
 , version, src, patches ? [ ]
+, hostPlatform
 , ...
 }:
 
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   crossAttrs = {
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     cmakeFlags = "-DMSGPACK_BUILD_EXAMPLES=OFF -DCMAKE_SYSTEM_NAME=Windows";
   };
 

@@ -23,6 +23,8 @@ python3Packages.buildPythonApplication rec {
     httplib2 lazr-config lazr-smtptest nose nose2 passlib psycopg2 requests2 zope_component
   ];
 
+  makeFlags = [ "DIRSETGID=:" ];
+
   meta = {
     homepage = "http://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and e-newsletter lists";
