@@ -19129,4 +19129,6 @@ with pkgs;
   hss = callPackage ../tools/networking/hss {};
 
   undaemonize = callPackage ../tools/system/undaemonize {};
+
+  houdini = callPackage ../applications/misc/houdini {};
 }
