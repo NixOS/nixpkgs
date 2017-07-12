@@ -2,12 +2,17 @@
 
 { baseName ? "lfe"
 , version
+, maximumOTPVersion
 , sha256 ? null
 , rev ? version
 , src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
 }:
 
 let
+  inherit (stdenv.lib) getVersion versionAtLeast splitString head;
+
+  mainVersion = head (splitString "." (getVersion erlang));
+
   proper = buildHex {
     name = "proper";
     version = "1.1.1-beta";
@@ -20,6 +25,7 @@ let
   };
 
 in
+assert versionAtLeast maximumOTPVersion mainVersion;
 
 buildRebar3 {
   name = baseName;
