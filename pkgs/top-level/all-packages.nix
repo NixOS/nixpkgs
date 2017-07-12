@@ -3460,7 +3460,7 @@ with pkgs;
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
-  opendht = callPackage ../tools/security/opendht {};
+  opendht = callPackage ../development/libraries/opendht {};
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
