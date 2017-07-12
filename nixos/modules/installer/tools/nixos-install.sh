@@ -106,8 +106,11 @@ extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 binary_caches="$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')"
 extraBuildFlags+=(--option "binary-caches" "$binary_caches")
 
-nixpkgs="$(readlink -f "$(nix-instantiate --find-file nixpkgs)")"
-export NIX_PATH="nixpkgs=$nixpkgs:nixos-config=$mountPoint/$NIXOS_CONFIG"
+# We only need nixpkgs in the path if we don't already have a system closure to install
+if [[ -z "$closure" ]]; then
+    nixpkgs="$(readlink -f "$(nix-instantiate --find-file nixpkgs)")"
+    export NIX_PATH="nixpkgs=$nixpkgs:nixos-config=$mountPoint/$NIXOS_CONFIG"
+fi
 unset NIXOS_CONFIG
 
 # TODO: do I need to set NIX_SUBSTITUTERS here or is the --option binary-caches above enough?
