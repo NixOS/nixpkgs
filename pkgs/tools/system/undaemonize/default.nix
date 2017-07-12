@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     repo = "undaemonize";
     owner = "nickstenning";
-    rev = "master";
+    rev = "a181cfd900851543ee1f85fe8f76bc8916b446d4";
     sha256 = "1fkrgj3xfhj820qagh5p0rabl8z2hpad6yp984v92h9pgbfwxs33";
   };
   installPhase = ''
