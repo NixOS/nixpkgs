@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     longDescription = "This package also includes `lllc', the LLL compiler.";
     homepage = https://github.com/ethereum/solidity;
     license = stdenv.lib.licenses.gpl3;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = [ stdenv.lib.maintainers.dbrock ];
     inherit version;
   };
