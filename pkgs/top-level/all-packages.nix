@@ -5481,9 +5481,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc802.override {
-    overrides = config.haskellPackageOverrides or (self: super: {});
-  };
+  haskellPackages = haskell.packages.ghc802.extend (config.haskellPackageOverrides or (self: super: {}));
 
   inherit (haskellPackages) ghc;
 
