@@ -52,9 +52,9 @@ runOneHook() {
 _callImplicitHook() {
     local def="$1"
     local hookName="$2"
-    case "$(type -t $hookName)" in
-        (function|alias|builtin) $hookName;;
-        (file) source $hookName;;
+    case "$(type -t "$hookName")" in
+        (function|alias|builtin) "$hookName";;
+        (file) source "$hookName";;
         (keyword) :;;
         (*) if [ -z "${!hookName}" ]; then return "$def"; else eval "${!hookName}"; fi;;
     esac
@@ -66,7 +66,7 @@ _callImplicitHook() {
 _eval() {
     local code="$1"
     shift
-    if [ "$(type -t $code)" = function ]; then
+    if [ "$(type -t "$code")" = function ]; then
         eval "$code \"\$@\""
     else
         eval "$code"
@@ -80,12 +80,14 @@ _eval() {
 nestingLevel=0
 
 startNest() {
-    nestingLevel=$(($nestingLevel + 1))
+    # Assert natural as sanity check.
+    let nestingLevel+=1 "nestingLevel>=0"
     echo -en "\033[$1p"
 }
 
 stopNest() {
-    nestingLevel=$(($nestingLevel - 1))
+    # Assert natural as sanity check.
+    let nestingLevel-=1 "nestingLevel>=0"
     echo -en "\033[q"
 }
 
@@ -120,7 +122,7 @@ exitHandler() {
         # - system time for the shell
         # - user time for all child processes
         # - system time for all child processes
-        echo "build time elapsed: " ${times[*]}
+        echo "build time elapsed: " "${times[@]}"
     fi
 
     if [ $exitCode != 0 ]; then
@@ -197,7 +199,7 @@ isELF() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -n 4 -u $fd magic
+    read -r -n 4 -u $fd magic
     exec {fd}<&-
     if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
 }
@@ -210,7 +212,7 @@ isScript() {
     local magic
     if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"
-    read -n 2 -u $fd magic
+    read -r -n 2 -u $fd magic
     exec {fd}<&-
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
@@ -439,14 +441,14 @@ substitute() {
         p="${params[$n]}"
 
         if [ "$p" = --replace ]; then
-            pattern="${params[$((n + 1))]}"
-            replacement="${params[$((n + 2))]}"
-            n=$((n + 2))
+            pattern="${params[$n + 1]}"
+            replacement="${params[$n + 2]}"
+            let n+=2
         fi
 
         if [ "$p" = --subst-var ]; then
-            varName="${params[$((n + 1))]}"
-            n=$((n + 1))
+            varName="${params[$n + 1]}"
+            let n+=1
             # check if the used nix attribute name is a valid bash name
             if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
                 echo "WARNING: substitution variables should be valid bash names,"
@@ -459,9 +461,9 @@ substitute() {
         fi
 
         if [ "$p" = --subst-var-by ]; then
-            pattern="@${params[$((n + 1))]}@"
-            replacement="${params[$((n + 2))]}"
-            n=$((n + 2))
+            pattern="@${params[$n + 1]}@"
+            replacement="${params[$n + 2]}"
+            let n+=2
         fi
 
         content="${content//"$pattern"/$replacement}"
@@ -525,7 +527,9 @@ dumpVars() {
 # Utility function: echo the base name of the given path, with the
 # prefix `HASH-' removed, if present.
 stripHash() {
-    local strippedName="$(basename "$1")";
+    local strippedName
+    # On separate line for `set -e`
+    strippedName="$(basename "$1")"
     if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
         echo "$strippedName" | cut -c34-
     else
@@ -582,6 +586,7 @@ unpackPhase() {
 
     if [ -z "$srcs" ]; then
         if [ -z "$src" ]; then
+            # shellcheck disable=SC2016
             echo 'variable $src or $srcs should point to the source'
             exit 1
         fi
@@ -601,7 +606,7 @@ unpackPhase() {
 
     # Unpack all source archives.
     for i in $srcs; do
-        unpackFile $i
+        unpackFile "$i"
     done
 
     # Find the source directory.
@@ -665,6 +670,7 @@ patchPhase() {
                 ;;
         esac
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
+        # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
         stopNest
     done
@@ -681,18 +687,19 @@ fixLibtool() {
 configurePhase() {
     runHook preConfigure
 
-    if [ -z "$configureScript" -a -x ./configure ]; then
+    if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
     fi
 
     if [ -z "$dontFixLibtool" ]; then
-        find . -iname "ltmain.sh" | while read i; do
+        local i
+        find . -iname "ltmain.sh" -print0 | while IFS='' read -r -d '' i; do
             echo "fixing libtool script $i"
-            fixLibtool $i
+            fixLibtool "$i"
         done
     fi
 
-    if [ -z "$dontAddPrefix" -a -n "$prefix" ]; then
+    if [[ -z "$dontAddPrefix" && -n "$prefix" ]]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
@@ -711,8 +718,14 @@ configurePhase() {
     fi
 
     if [ -n "$configureScript" ]; then
-        echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-        $configureScript $configureFlags "${configureFlagsArray[@]}"
+        # shellcheck disable=SC2086
+        local flagsArray=($configureFlags "${configureFlagsArray[@]}")
+        printf 'configure flags:'
+        printf ' %q' "${flagsArray[@]}"
+        echo
+        # shellcheck disable=SC2086
+        $configureScript "${flagsArray[@]}"
+        unset flagsArray
     else
         echo "no configure script, doing nothing"
     fi
@@ -724,17 +737,23 @@ configurePhase() {
 buildPhase() {
     runHook preBuild
 
-    if [ -z "$makeFlags" ] && ! [ -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile" ]; then
+    if [ -z "$makeFlags" ] && ! [[ -n "$makefile" || -e "Makefile" || -e "makefile" || -e "GNUmakefile" ]]; then
         echo "no Makefile, doing nothing"
     else
         # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
         makeFlags="SHELL=$SHELL $makeFlags"
 
-        echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
-        make ${makefile:+-f $makefile} \
+        # shellcheck disable=SC2086
+        local flagsArray=( \
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
             $makeFlags "${makeFlagsArray[@]}" \
-            $buildFlags "${buildFlagsArray[@]}"
+            $buildFlags "${buildFlagsArray[@]}")
+
+        printf 'build flags:'
+        printf ' %q' "${flagsArray[@]}"
+        echo
+        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        unset flagsArray
     fi
 
     runHook postBuild
@@ -744,11 +763,17 @@ buildPhase() {
 checkPhase() {
     runHook preCheck
 
-    echo "check flags: $makeFlags ${makeFlagsArray[@]} $checkFlags ${checkFlagsArray[@]}"
-    make ${makefile:+-f $makefile} \
+    # shellcheck disable=SC2086
+    local flagsArray=( \
         ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
         $makeFlags "${makeFlagsArray[@]}" \
-        ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}" ${checkTarget:-check}
+        ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}" ${checkTarget:-check})
+
+    printf 'check flags:'
+    printf ' %q' "${flagsArray[@]}"
+    echo
+    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    unset flagsArray
 
     runHook postCheck
 }
@@ -762,10 +787,17 @@ installPhase() {
     fi
 
     installTargets=${installTargets:-install}
-    echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $installTargets \
+
+    # shellcheck disable=SC2086
+    local flagsArray=( $installTargets \
         $makeFlags "${makeFlagsArray[@]}" \
-        $installFlags "${installFlagsArray[@]}"
+        $installFlags "${installFlagsArray[@]}")
+
+    printf 'install flags:'
+    printf ' %q' "${flagsArray[@]}"
+    echo
+    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    unset flagsArray
 
     runHook postInstall
 }
@@ -799,16 +831,19 @@ fixupPhase() {
         fi
         if [ -n "$propagated" ]; then
             mkdir -p "${!outputDev}/nix-support"
+            # shellcheck disable=SC2086
             printLines $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     else
         if [ -n "$propagatedBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
+            # shellcheck disable=SC2086
             printLines $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
         fi
 
         if [ -n "$propagatedNativeBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
+            # shellcheck disable=SC2086
             printLines $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     fi
@@ -822,6 +857,7 @@ fixupPhase() {
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
         mkdir -p "${!outputBin}/nix-support"
+        # shellcheck disable=SC2086
         printLines $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
@@ -832,11 +868,17 @@ fixupPhase() {
 installCheckPhase() {
     runHook preInstallCheck
 
-    echo "installcheck flags: $makeFlags ${makeFlagsArray[@]} $installCheckFlags ${installCheckFlagsArray[@]}"
-    make ${makefile:+-f $makefile} \
+    # shellcheck disable=SC2086
+    local flagsArray=( \
         ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $installCheckFlags "${installCheckFlagsArray[@]}" ${installCheckTarget:-installcheck}
+        $installCheckFlags "${installCheckFlagsArray[@]}" ${installCheckTarget:-installcheck})
+
+    printf 'installcheck flags:'
+    printf ' %q' "${flagsArray[@]}"
+    echo
+    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    unset flagsArray
 
     runHook postInstallCheck
 }
@@ -845,14 +887,18 @@ installCheckPhase() {
 distPhase() {
     runHook preDist
 
-    echo "dist flags: $distFlags ${distFlagsArray[@]}"
-    make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
+    # shellcheck disable=SC2086
+    local flagsArray=($distFlags "${distFlagsArray[@]}" ${distTarget:-dist})
+
+    echo 'dist flags: %q' "${flagsArray[@]}"
+    make ${makefile:+-f $makefile} "${flagsArray[@]}"
 
     if [ "$dontCopyDist" != 1 ]; then
         mkdir -p "$out/tarballs"
 
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.
+        # shellcheck disable=SC2086
         cp -pvd ${tarballs:-*.tar.gz} $out/tarballs
     fi
 
@@ -894,14 +940,14 @@ genericBuild() {
     fi
 
     for curPhase in $phases; do
-        if [ "$curPhase" = buildPhase -a -n "$dontBuild" ]; then continue; fi
-        if [ "$curPhase" = checkPhase -a -z "$doCheck" ]; then continue; fi
-        if [ "$curPhase" = installPhase -a -n "$dontInstall" ]; then continue; fi
-        if [ "$curPhase" = fixupPhase -a -n "$dontFixup" ]; then continue; fi
-        if [ "$curPhase" = installCheckPhase -a -z "$doInstallCheck" ]; then continue; fi
-        if [ "$curPhase" = distPhase -a -z "$doDist" ]; then continue; fi
+        if [[ "$curPhase" = buildPhase && -n "$dontBuild" ]]; then continue; fi
+        if [[ "$curPhase" = checkPhase && -z "$doCheck" ]]; then continue; fi
+        if [[ "$curPhase" = installPhase && -n "$dontInstall" ]]; then continue; fi
+        if [[ "$curPhase" = fixupPhase && -n "$dontFixup" ]]; then continue; fi
+        if [[ "$curPhase" = installCheckPhase && -z "$doInstallCheck" ]]; then continue; fi
+        if [[ "$curPhase" = distPhase && -z "$doDist" ]]; then continue; fi
 
-        if [ -n "$tracePhases" ]; then
+        if [[ -n "$tracePhases" ]]; then
             echo
             echo "@ phase-started $out $curPhase"
         fi
