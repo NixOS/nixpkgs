@@ -71,8 +71,19 @@ rec {
 
   # Same as `makeExtensible` but the name of the extending attribute is
   # customized.
-  makeExtensibleWithCustomName = extenderName: rattrs:
-    fix' rattrs // {
-      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
-   };
+  makeExtensibleWithCustomName = extenderName: makeExtensibleWithInterface
+    (fixedPoint: extend: fixedPoint // { ${extenderName} = extend; });
+
+  # Similar to `makeExtensible`, but expects you to implement the
+  # final interface for the result. Specifically, it takes an extra
+  # argument: a function that takes the final result and the `extend`
+  # function as arguments, and returns a transformed result
+  # (preferably one that contains the `extend` function). This is
+  # mainly useful for getting to choose what to name the `extend`
+  # function in the resulting attribute set. But it's also useful for
+  # having an internal structure that extensions can see, but the user
+  # facing code cannot.
+  makeExtensibleWithInterface = interface: fext: interface
+    (fix' fext)
+    (f: makeExtensibleWithInterface interface (extends f fext));
 }
