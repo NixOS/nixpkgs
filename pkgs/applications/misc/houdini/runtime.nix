@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "1laxncwgsr4hj53bn4pn9ibv3pkrpliwxlx0558wgnhq42js3wvl";
     message = ''
       This nix expression requires that ${name} is already part of the store.
-      Download it from SideFX's website and add it to the nix store with:
+      Download it from https://sidefx.com and add it to the nix store with:
         
           nix-prefetch-url <URL>
 
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sidefx.com";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.canndrew ];
   };
 }
 
