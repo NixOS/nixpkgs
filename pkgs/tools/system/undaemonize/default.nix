@@ -9,8 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1fkrgj3xfhj820qagh5p0rabl8z2hpad6yp984v92h9pgbfwxs33";
   };
   installPhase = ''
-    mkdir -p $out/bin
-    cp undaemonize $out/bin/
+    install -D undaemonize $out/bin/undaemonize
   '';
   meta = {
     description = "Tiny helper utility to force programs which insist on daemonizing themselves to run in the foreground";
