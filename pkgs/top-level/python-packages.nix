@@ -12581,6 +12581,14 @@ in {
       sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
     };
 
+    # Backport fix for python-3.6 from master (see issue https://github.com/celery/kombu/issues/675)
+    # TODO remove at next update
+    patches = [ (pkgs.fetchpatch {
+      url = "https://github.com/celery/kombu/commit/dc3fceff59d79ceac3f8f11a5d697beabb4b7a7f.patch";
+      sha256 = "0s6gsihzjvmpffc7xrrcijw00r56yb74jg0sbjgng2v1324z1da9";
+      name = "don-t-modify-dict-size-while-iterating-over-it";
+    }) ];
+
     buildInputs = with self; [ pytest case pytz ];
 
     propagatedBuildInputs = with self; [ amqp ];
