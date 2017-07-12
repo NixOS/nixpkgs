@@ -5702,8 +5702,7 @@ with pkgs;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
 
-  llvmPackages = recurseIntoAttrs
-    (if stdenv.isDarwin then llvmPackages_4 else llvmPackages_39);
+  llvmPackages = recurseIntoAttrs llvmPackages_4;
 
   llvmPackagesSelf = llvmPackages_34.override {
     stdenv = libcxxStdenv;
