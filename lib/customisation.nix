@@ -83,6 +83,21 @@ rec {
       }
       else ff;
 
+  /* This function applies use-flags to packages of the following form
+
+       { stdenv, ... }:
+       { useFlag ? true, ... }:
+       stdenv.mkDerivation { };
+
+     while keeping the rest of makeOverridable mechanics intact.
+  */
+  makeOverridableWithUseFlags = useFlags: f: origArgs:
+    let
+      ff = f origArgs;
+      use = builtins.intersectAttrs (lib.functionArgs ff) useFlags;
+    in if lib.isFunction ff
+       then makeOverridable (origArgs: f origArgs use) origArgs
+       else makeOverridable f origArgs;
 
   /* Call the package function in the file `fn' with the required
     arguments automatically.  The function is called with the
@@ -105,25 +120,27 @@ rec {
         enableX11 = true;
       };
   */
-  callPackageWith = autoArgs: fn: args:
+  callPackageWith' = makeOverridableFun: autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
-    in makeOverridable f (auto // args);
+    in makeOverridableFun f (auto // args);
 
+  callPackageWith = callPackageWith' makeOverridable;
 
   /* Like callPackage, but for a function that returns an attribute
      set of derivations. The override function is added to the
      individual attributes. */
-  callPackagesWith = autoArgs: fn: args:
+  callPackagesWith' = makeOverridableFun: autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
-      mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
+      mkAttrOverridable = name: _: makeOverridableFun (newArgs: (f newArgs).${name}) origArgs;
     in lib.mapAttrs mkAttrOverridable pkgs;
 
+  callPackagesWith = callPackagesWith' makeOverridable;
 
   /* Add attributes to each output of a derivation without changing
      the derivation itself and check a given condition when evaluating. */

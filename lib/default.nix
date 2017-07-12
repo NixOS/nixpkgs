@@ -90,8 +90,11 @@ let
       toInt readPathsFromFile fileContents;
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
-    inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith extendDerivation hydraJob
+    inherit (customisation) overrideDerivation
+      makeOverridable makeOverridableWithUseFlags
+      callPackageWith' callPackageWith
+      callPackagesWith' callPackagesWith
+      extendDerivation hydraJob
       makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
