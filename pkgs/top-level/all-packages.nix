@@ -5504,6 +5504,7 @@ with pkgs;
   haxe = haxe_3_4;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
+  hashlink = callPackage ../development/compilers/haxe/hashlink.nix { };
 
   hhvm = callPackage ../development/compilers/hhvm {
     boost = boost160;
