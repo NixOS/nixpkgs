@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0gg75mjy2p7lyh8nnivmyn7bjp1zyx26zm8s1fak7d2di2r0mnjc";
   };
 
-  cmakeFlags = [ "-DWITH_GUI_TESTS=ON" ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
+  cmakeFlags = [ 
+    "-DWITH_GUI_TESTS=ON" 
+    "-DWITH_XC_AUTOTYPE=ON"
+    "-DWITH_XC_YUBIKEY=ON"
+  ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
 
   doCheck = true;
   checkPhase = ''
