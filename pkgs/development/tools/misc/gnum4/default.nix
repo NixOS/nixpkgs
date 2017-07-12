@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-syscmd-shell=${stdenv.shell}";
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ];
+  patches = [ ./s_isdir.patch ] ++ stdenv.lib.optional stdenv.isDarwin stdenv.secure-format-patch;
 
   # FIXME needs gcc 4.9 in bootstrap tools
   hardeningDisable = [ "stackprotector" ];

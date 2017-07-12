@@ -4,15 +4,15 @@
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/33f59c9d11b8d5014dfd18cc11a425f6393c884a/${file}";
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/10cbca5b30c6cb421ce15139f32ae3a4977292cf/${file}";
     inherit (localSystem) system;
     inherit sha256 executable;
   }; in {
-    sh      = fetch { file = "sh";    sha256 = "1rx4kg6358xdj05z0m139a0zn4f4zfmq4n4vimlmnwyfiyn4x7wk"; };
-    bzip2   = fetch { file = "bzip2"; sha256 = "104qnhzk79vkbp2yi0kci6lszgfppvrwk3rgxhry842ly1xz2r7l"; };
-    mkdir   = fetch { file = "mkdir"; sha256 = "0d91c19xjzmqisncvldv79d7ddzai9l7vcmajhwlwwv74g6da5yl"; };
-    cpio    = fetch { file = "cpio";  sha256 = "0lw057bmcqls96j0gv1n3mgl66q31mba7i413cbkkaf0rfzz3dxj"; };
-    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "13ihbj002pis3fgy1d9c4fi7flca21z9brjsjkklm82h5b4nlwxl"; executable = false; };
+    sh      = fetch { file = "sh";    sha256 = "0s8a9vpzj6vadq4jmf4r8cargwnsf327hdjydxgqsfxb8y1q39w3"; };
+    bzip2   = fetch { file = "bzip2"; sha256 = "1jqljpjr8mkiv7g5rl5impqx3all8vn1mxxdwa004pr3h48c1zgg"; };
+    mkdir   = fetch { file = "mkdir"; sha256 = "17zsjiwnq07i5r85q1hg7f6cnkcgllwy2amz9klaqwjy4vzz4vwh"; };
+    cpio    = fetch { file = "cpio";  sha256 = "04hrair58dgja6syh442pswiga5an9nl58ls57yknkn2pq51nx9m"; };
+    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "103833hrci0vwi1gi978hkp69rncicvpdszn87ffpf1cq0jzpa14"; executable = false; };
   }
 }:
 
@@ -96,7 +96,13 @@ in rec {
         stdenvSandboxProfile = binShClosure + libSystemProfile;
         extraSandboxProfile  = binShClosure + libSystemProfile;
 
-        extraAttrs = { inherit platform; parent = last; };
+        extraAttrs = {
+          inherit platform;
+          parent = last;
+
+          # This is used all over the place so I figured I'd just leave it here for now
+          secure-format-patch = ./darwin-secure-format.patch;
+        };
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -297,6 +303,9 @@ in rec {
       inherit platform bootstrapTools;
       libc         = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
+
+      # This is used all over the place so I figured I'd just leave it here for now
+      secure-format-patch = ./darwin-secure-format.patch;
     };
 
     allowedRequisites = (with pkgs; [
