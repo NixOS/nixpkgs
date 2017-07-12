@@ -16892,6 +16892,8 @@ in {
     };
   };
 
+  olefile = callPackage ../development/python-modules/olefile { };
+
   oslo-log = buildPythonPackage rec {
     name = "oslo.log-${version}";
     version = "1.12.1";
