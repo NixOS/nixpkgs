@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
-, gd, geoip
+, gd, geoip, fetchpatch
 , withStream ? false
 , modules ? []
 , hardening ? true
@@ -16,6 +16,13 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
+  patches = [
+    (fetchpatch {
+      # CVE-2017-7529
+      url = "http://hg.nginx.org/nginx/raw-rev/1adc6b0d5eaa";
+      sha256 = "1iyxk2l2xg2wx2pzqsgyy3baik0b0g275j80hdxa3c6i06vcs4c3";
+    })
+  ];
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip ]
