@@ -50,28 +50,22 @@ rec {
        }
        else { }));
 
-  # Like `makeOverridable`, except a `self` argument is passed to `f`,
-  # which represents the fixed point result, even after using `extend`
-  # or `override`.
-  #
-  # Also, an `interface` function is taken as an argument, paralleling
-  # the `interface` argument to `makeExtensibleWithInterface`. This Is
-  # mostly useful for adding new `override` style functions,
-  # e.g. `overrideScope`.
+  # A more powerful version of `makeOverridable` with features similar
+  # to `makeExtensibleWithInterface`.
   makeOverridableWithInterface = interface: f: origArgs: let
 
     addOverrideFuncs = {val, args, ...}: overridePackage:
       (lib.optionalAttrs (builtins.isAttrs val) (val // {
-        extend = f: overridePackage (self: super: {
+        extend = f: overridePackage (_: self: super: {
           val = super.val // f self.val super.val;
         });
 
-        overrideDerivation = newArgs: overridePackage (self: super: {
+        overrideDerivation = newArgs: overridePackage (_: self: super: {
           val = lib.overrideDerivation super.val newArgs;
         });
 
         ${if val ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          overridePackage (self: super: {
+          overridePackage (_: self: super: {
             val = super.val.overrideAttrs fdrv;
           });
       })) // (lib.optionalAttrs (builtins.isFunction val) {
@@ -81,15 +75,15 @@ rec {
       }) // {
         inherit overridePackage;
 
-        override = newArgs: overridePackage (self: super: {
+        override = newArgs: overridePackage (_: self: super: {
           args = super.args //
             (if builtins.isFunction newArgs then newArgs super.args else newArgs);
         });
       };
 
-  in lib.makeExtensibleWithInterface (x: o: interface (addOverrideFuncs x o) o) (self: {
+  in lib.makeExtensibleWithInterface (x: o: interface (addOverrideFuncs x o) o) (output: self: {
     args = origArgs;
-    val = f self.args self.val;
+    val = f output self.args self.val;
   });
 
 
@@ -145,35 +139,37 @@ rec {
      it exposes a deeper structure. It provides `self` and `super`
      views of both the arguments and return value of the function,
      allowing you to change both in one override; you can even have
-     overrides for one based on overrides for the other. The type of
-     `self`, `super`, and the return value are all:
-     `{ args :: argumentsToF, val :: returnValueOfF }`
+     overrides for one based on overrides for the other. It also
+     provides the `output` view, which is the view of `self` after
+     passing it through the `makeOverridable` interface and adding all
+     the `overrideX` functions. `output` is necessary when your
+     overrides depend on the overridable structure of `output`.
 
        nix-repl> obj = makeOverridable ({a, b}: {inherit a b;}) {a = 1; b = 3;}
 
-       nix-repl> obj = obj.overridePackage (self: super: { args = super.args // {b = self.val.a;}; })
+       nix-repl> obj = obj.overridePackage (output: self: super: { args = super.args // {b = self.val.a;}; })
 
        nix-repl> obj.b
        1
 
-       nix-repl> obj = obj.overridePackage (self: super: { val = super.val // {a = self.args.a + 10;}; })
+       nix-repl> obj = obj.overridePackage (output: self: super: { val = super.val // {a = self.args.a + 10;}; })
 
        nix-repl> obj.b
        11
 
   */
-  makeOverridable = fn: makeOverridableWithInterface (x: _: x) (args: _: fn args);
+  makeOverridable = fn: makeOverridableWithInterface (x: _: x) (_: args: _: fn args);
 
   callPackageCommon = functionArgs: scope: f: args:
     let
       intersect = builtins.intersectAttrs functionArgs;
       interface = val: overridePackage: val // {
-        overrideScope = newScope: overridePackage (self: super: {
+        overrideScope = newScope: overridePackage (_: self: super: {
           scope = super.scope.extend newScope;
         });
       };
     in (makeOverridableWithInterface interface f (intersect scope // args))
-      .overridePackage (self: super: {
+      .overridePackage (output: self: super: {
         inherit scope;
         # Don't use super.args because that contains the original scope.
         args = intersect self.scope  // args;
@@ -219,15 +215,16 @@ rec {
   */
   callPackageWith = autoArgs: fn: args:
     let f = if builtins.isFunction fn then fn else import fn;
-    in callPackageCommon (builtins.functionArgs f) autoArgs (x: _: f x) args;
+    in callPackageCommon (builtins.functionArgs f) autoArgs (output: x: _: f x) args;
 
 
-  # Like `callPackageWith`, but provides the function with the `self`
-  # argument. `fn` is called with the new `self` whenever an override
+  # Like `callPackageWith`, but provides the function with a `self`
+  # view of the output, which has the override functions
+  # injected. `fn` is called with the new output whenever an override
   # or extension is added.
-  callPackageWithSelfWith = autoArgs: fn: args:
+  callPackageWithOutputWith = autoArgs: fn: args:
     let f = if builtins.isFunction fn then fn else import fn;
-    in callPackageCommon (builtins.functionArgs f) autoArgs f args;
+    in callPackageCommon (builtins.functionArgs f) autoArgs (output: args: _: f args output ) args;
 
 
   /* Like callPackage, but for a function that returns an attribute

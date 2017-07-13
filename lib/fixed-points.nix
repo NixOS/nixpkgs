@@ -71,19 +71,34 @@ rec {
 
   # Same as `makeExtensible` but the name of the extending attribute is
   # customized.
-  makeExtensibleWithCustomName = extenderName: makeExtensibleWithInterface
-    (fixedPoint: extend: fixedPoint // { ${extenderName} = extend; });
+  makeExtensibleWithCustomName = extenderName: f: makeExtensibleWithInterface
+    (fixedPoint: extend: fixedPoint // { ${extenderName} = ext: extend (_: ext); })
+    (_: f);
 
-  # Similar to `makeExtensible`, but expects you to implement the
-  # final interface for the result. Specifically, it takes an extra
-  # argument: a function that takes the final result and the `extend`
-  # function as arguments, and returns a transformed result
-  # (preferably one that contains the `extend` function). This is
-  # mainly useful for getting to choose what to name the `extend`
-  # function in the resulting attribute set. But it's also useful for
-  # having an internal structure that extensions can see, but the user
-  # facing code cannot.
-  makeExtensibleWithInterface = interface: fext: interface
-    (fix' fext)
-    (f: makeExtensibleWithInterface interface (extends f fext));
+  # A version of `makeExtensible` that allows the function being fixed
+  # to return a different interface than the interface returned to the
+  # user. Along with `self` and `super` views of the internal
+  # interface, a `self` view of the output interface is also
+  # provided. `extend` is not added to the output by default. This is
+  # the job of the interface.
+  #
+  #     nix-repl> foo = {a, b}: {c = a + b;}
+  #
+  #     nix-repl> interface = {args, val, ...}: extend: val // {inherit extend;}
+  #
+  #     nix-repl> obj = makeExtensibleWithInterface interface (output: self: { args = {a = 1; b = 2;}; val = foo self.args; })
+  #
+  #     nix-repl> obj.c
+  #     3
+  #
+  #     nix-repl> obj = obj.extend (output: self: super: { args = super.args // { b = output.d; }; })
+  #
+  #     nix-repl> obj = obj.extend (output: self: super: { val = super.val // { d = 10; }; })
+  #
+  #     nix-repl> { inherit (obj) c d; }
+  #     { c = 11; d = 10; }
+  makeExtensibleWithInterface = interface: f: let i = interface
+    (fix' (f i))
+    (fext: makeExtensibleWithInterface interface (i': (extends (fext i') (f i'))));
+  in i;
 }

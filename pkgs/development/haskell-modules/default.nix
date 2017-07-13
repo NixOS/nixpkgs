@@ -7,7 +7,7 @@
 , configurationNix ? import ./configuration-nix.nix
 }:
 
-self: # Provided by `callPackageWithSelf`
+self: # Provided by `callPackageWithOutput`
 
 let
 
