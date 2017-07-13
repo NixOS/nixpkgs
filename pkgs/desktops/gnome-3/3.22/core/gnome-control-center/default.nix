@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
       gnome3.vino udev libcanberra_gtk3 libgudev wrapGAppsHook
-      networkmanager modemmanager makeWrapper gnome3.gnome-bluetooth grilo tracker
+      networkmanager modemmanager gnome3.gnome-bluetooth grilo tracker
       cracklib ];
 
   preBuild = ''
