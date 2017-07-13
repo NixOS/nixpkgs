@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Small and secure static webserver";
     homepage = http://dmr.ath.cx/net/darkhttpd/;
     license = stdenv.lib.licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }
