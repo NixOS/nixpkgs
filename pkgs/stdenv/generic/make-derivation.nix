@@ -12,12 +12,22 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { nativeBuildInputs ? []
+    { name ? ""
+
+    , nativeBuildInputs ? []
     , buildInputs ? []
 
     , propagatedNativeBuildInputs ? []
     , propagatedBuildInputs ? []
 
+    , configureFlags ? []
+    , # Target is not included by default because most programs don't care.
+      # Including it then would cause needless mass rebuilds.
+      #
+      # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
+      configurePlatforms ? lib.optionals
+        (stdenv.hostPlatform != stdenv.buildPlatform)
+        [ "build" "host" ]
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
@@ -72,6 +82,9 @@ rec {
             lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists propagatedDependencies'));
         in
         {
+          name = name + lib.optionalString
+            (stdenv.hostPlatform != stdenv.buildPlatform)
+            stdenv.hostPlatform.config;
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -84,6 +97,14 @@ rec {
 
           propagatedNativeBuildInputs = lib.elemAt propagatedDependencies' 0;
           propagatedBuildInputs = lib.elemAt propagatedDependencies' 1;
+
+          # This parameter is sometimes a string and sometimes a list, yuck
+          configureFlags = let inherit (lib) optional elem; in
+            (if lib.isString configureFlags then [configureFlags] else configureFlags)
+            ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
+            ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
+            ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
