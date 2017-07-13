@@ -37,6 +37,9 @@
 
 # Pluggable transport dependencies
 , python27
+
+# Extra preferences
+, extraPrefs ? ""
 }:
 
 with stdenv.lib;
@@ -197,6 +200,10 @@ stdenv.mkDerivation rec {
     // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    ${optionalString (extraPrefs != "") ''
+      ${extraPrefs}
+    ''}
     EOF
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in
