@@ -173,11 +173,12 @@ stdenv.mkDerivation rec {
     cat >mozilla.cfg <<EOF
     // First line must be a comment
 
-    // Always update via Nix
+    // Always update via Nixpkgs
     lockPref("app.update.auto", false);
     lockPref("app.update.enabled", false);
     lockPref("extensions.update.autoUpdateDefault", false);
     lockPref("extensions.update.enabled", false);
+    lockPref("extensions.torbutton.versioncheck_enabled", false);
 
     // User should never change these.  Locking prevents these
     // values from being written to prefs.js, avoiding Store
