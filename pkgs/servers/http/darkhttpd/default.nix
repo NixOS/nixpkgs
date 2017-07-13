@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "darkhttpd-${version}";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "https://unix4lyfe.org/darkhttpd/${name}.tar.bz2";
-    sha256 = "0lbcv6pa82md0gqyyskxndf8hm58y76nrnkanc831ia3vm529bdg";
+    sha256 = "0185wlyx4iqiwfigp1zvql14zw7gxfacncii3d15yaxk4av1f155";
   };
 
   installPhase = ''
