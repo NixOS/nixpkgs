@@ -36,9 +36,9 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.slurm-llnl;
-        defaultText = "pkgs.slurm-llnl";
-        example = literalExample "pkgs.slurm-llnl-full";
+        default = pkgs.slurm;
+        defaultText = "pkgs.slurm";
+        example = literalExample "pkgs.slurm-full";
         description = ''
           The package to use for slurm binaries.
         '';
