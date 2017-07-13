@@ -324,6 +324,10 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pyslurm = callPackage ../development/python-modules/pyslurm {
+    slurm = pkgs.slurm;
+  };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
