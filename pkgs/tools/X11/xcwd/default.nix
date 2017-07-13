@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "xcwd - X current working directory";
+    description = "A simple tool which print the current working directory of the currently focused window";
     homepage = https://github.com/schischi/xcwd;
     maintainers = [ stdenv.lib.maintainers.grburst ];
     license = stdenv.lib.licenses.bsd3;
