@@ -11,21 +11,21 @@ stdenv.mkDerivation rec {
     sha256  = "0lwfz6qg7fkiq86skp51vpav33yik22ps4dvr48asv3570skhlf9";
   };
 
-
   buildInputs = [ libX11 ];
 
   makeFlags = "prefix=$(out)";
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    install xcwd "$out/bin"
+    install -D xcwd "$out/bin/xcwd"
   '';
 
-  meta = {
-    description = "A simple tool which print the current working directory of the currently focused window";
+  meta = with stdenv.lib; {
+    description = ''
+      A simple tool which print the current working directory of the currently focused window
+    '';
     homepage = https://github.com/schischi/xcwd;
-    maintainers = [ stdenv.lib.maintainers.grburst ];
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.grburst ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }
