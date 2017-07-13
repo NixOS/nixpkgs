@@ -1,3 +1,4 @@
+{ pname, version, build, src, meta }:
 { bash
 , buildFHSUserEnv
 , coreutils
@@ -32,12 +33,9 @@
 }:
 
 let
-
-  version = "2.3.3.0";
-  build = "162.4069837";
-
   androidStudio = stdenv.mkDerivation {
-    name = "android-studio";
+    inherit src meta;
+    name = "${pname}";
     buildInputs = [
       makeWrapper
       unzip
@@ -96,32 +94,21 @@ let
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf}
     '';
-    src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "0zzis9m2xp44xwkj0zvcqw5rh3iyd3finyi5nqhgira1fkacz0qk";
-    };
-    meta = with stdenv.lib; {
-      description = "The Official IDE for Android";
-      homepage = https://developer.android.com/studio/index.html;
-      license = licenses.asl20;
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ primeos ];
-    };
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
-    name = "android-studio-fhs-env";
+    name = "${pname}-fhs-env";
   };
 
 in writeTextFile {
-  name = "android-studio-${version}";
-  destination = "/bin/android-studio";
+  name = "${pname}-${version}";
+  destination = "/bin/${pname}";
   executable = true;
   text = ''
     #!${bash}/bin/bash
-    ${fhsEnv}/bin/android-studio-fhs-env ${androidStudio}/bin/studio.sh
+    ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
   '';
 }
