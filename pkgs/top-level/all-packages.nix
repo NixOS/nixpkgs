@@ -1252,6 +1252,8 @@ with pkgs;
 
   ori = callPackage ../tools/backup/ori { };
 
+  anydesk = callPackage ../applications/networking/remote/anydesk { };
+
   atool = callPackage ../tools/archivers/atool { };
 
   bsc = callPackage ../tools/compression/bsc { };
