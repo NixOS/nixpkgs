@@ -733,13 +733,13 @@ let
         sha1 = "40043929e7bc60adf0b7f4827c4c6e75a0deca12";
       };
     };
-    "fined-1.0.2" = {
+    "fined-1.1.0" = {
       name = "fined";
       packageName = "fined";
-      version = "1.0.2";
+      version = "1.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/fined/-/fined-1.0.2.tgz";
-        sha1 = "5b28424b760d7598960b7ef8480dff8ad3660e97";
+        url = "https://registry.npmjs.org/fined/-/fined-1.1.0.tgz";
+        sha1 = "b37dc844b76a2f5e7081e884f7c0ae344f153476";
       };
     };
     "flagged-respawn-0.3.2" = {
@@ -1237,31 +1237,40 @@ let
         sha1 = "e8fbf374dc556ff8947a10dcb0572d633f2cfa10";
       };
     };
-    "lodash.assignwith-4.2.0" = {
-      name = "lodash.assignwith";
-      packageName = "lodash.assignwith";
-      version = "4.2.0";
+    "expand-tilde-2.0.2" = {
+      name = "expand-tilde";
+      packageName = "expand-tilde";
+      version = "2.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.assignwith/-/lodash.assignwith-4.2.0.tgz";
-        sha1 = "127a97f02adc41751a954d24b0de17e100e038eb";
+        url = "https://registry.npmjs.org/expand-tilde/-/expand-tilde-2.0.2.tgz";
+        sha1 = "97e801aa052df02454de46b02bf621642cdc8502";
       };
     };
-    "lodash.isempty-4.4.0" = {
-      name = "lodash.isempty";
-      packageName = "lodash.isempty";
-      version = "4.4.0";
+    "is-plain-object-2.0.3" = {
+      name = "is-plain-object";
+      packageName = "is-plain-object";
+      version = "2.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.isempty/-/lodash.isempty-4.4.0.tgz";
-        sha1 = "6f86cbedd8be4ec987be9aaf33c9684db1b31e7e";
+        url = "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.3.tgz";
+        sha1 = "c15bf3e4b66b62d72efaf2925848663ecbc619b6";
       };
     };
-    "lodash.pick-4.4.0" = {
-      name = "lodash.pick";
-      packageName = "lodash.pick";
-      version = "4.4.0";
+    "object.defaults-1.1.0" = {
+      name = "object.defaults";
+      packageName = "object.defaults";
+      version = "1.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/lodash.pick/-/lodash.pick-4.4.0.tgz";
-        sha1 = "52f05610fff9ded422611441ed1fc123a03001b3";
+        url = "https://registry.npmjs.org/object.defaults/-/object.defaults-1.1.0.tgz";
+        sha1 = "3a7f868334b407dea06da16d88d5cd29e435fecf";
+      };
+    };
+    "object.pick-1.2.0" = {
+      name = "object.pick";
+      packageName = "object.pick";
+      version = "1.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/object.pick/-/object.pick-1.2.0.tgz";
+        sha1 = "b5392bee9782da6d9fb7d6afaf539779f1234c2b";
       };
     };
     "parse-filepath-1.0.1" = {
@@ -1271,6 +1280,42 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/parse-filepath/-/parse-filepath-1.0.1.tgz";
         sha1 = "159d6155d43904d16c10ef698911da1e91969b73";
+      };
+    };
+    "isobject-3.0.0" = {
+      name = "isobject";
+      packageName = "isobject";
+      version = "3.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/isobject/-/isobject-3.0.0.tgz";
+        sha1 = "39565217f3661789e8a0a0c080d5f7e6bc46e1a0";
+      };
+    };
+    "array-each-1.0.1" = {
+      name = "array-each";
+      packageName = "array-each";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/array-each/-/array-each-1.0.1.tgz";
+        sha1 = "a794af0c05ab1752846ee753a1f211a05ba0c44f";
+      };
+    };
+    "array-slice-1.0.0" = {
+      name = "array-slice";
+      packageName = "array-slice";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/array-slice/-/array-slice-1.0.0.tgz";
+        sha1 = "e73034f00dcc1f40876008fd20feae77bd4b7c2f";
+      };
+    };
+    "for-own-1.0.0" = {
+      name = "for-own";
+      packageName = "for-own";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/for-own/-/for-own-1.0.0.tgz";
+        sha1 = "c63332f415cedc4b04dbfe70cf836494c53cb44b";
       };
     };
     "is-absolute-0.2.6" = {
@@ -3433,13 +3478,13 @@ let
         sha1 = "791420d7f551eea2897453a8a77653f96606d67c";
       };
     };
-    "cacache-9.2.8" = {
+    "cacache-9.2.9" = {
       name = "cacache";
       packageName = "cacache";
-      version = "9.2.8";
+      version = "9.2.9";
       src = fetchurl {
-        url = "https://registry.npmjs.org/cacache/-/cacache-9.2.8.tgz";
-        sha1 = "2e38b51161a3904e3b9fb35c0869b751f7d0bcf4";
+        url = "https://registry.npmjs.org/cacache/-/cacache-9.2.9.tgz";
+        sha1 = "f9d7ffe039851ec94c28290662afa4dd4bb9e8dd";
       };
     };
     "call-limit-1.1.0" = {
@@ -3982,6 +4027,33 @@ let
         sha1 = "0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5";
       };
     };
+    "lru-cache-4.1.1" = {
+      name = "lru-cache";
+      packageName = "lru-cache";
+      version = "4.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lru-cache/-/lru-cache-4.1.1.tgz";
+        sha1 = "622e32e82488b49279114a4f9ecf45e7cd6bba55";
+      };
+    };
+    "pseudomap-1.0.2" = {
+      name = "pseudomap";
+      packageName = "pseudomap";
+      version = "1.0.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz";
+        sha1 = "f052a28da70e618917ef0a8ac34c1ae5a68286b3";
+      };
+    };
+    "yallist-2.1.2" = {
+      name = "yallist";
+      packageName = "yallist";
+      version = "2.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/yallist/-/yallist-2.1.2.tgz";
+        sha1 = "1c11f9218f076089a47dd512f93c6699a6a81d52";
+      };
+    };
     "wcwidth-1.0.1" = {
       name = "wcwidth";
       packageName = "wcwidth";
@@ -4025,24 +4097,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lodash._createset/-/lodash._createset-4.0.3.tgz";
         sha1 = "0f4659fbb09d75194fa9e2b88a6644d363c9fe26";
-      };
-    };
-    "pseudomap-1.0.2" = {
-      name = "pseudomap";
-      packageName = "pseudomap";
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz";
-        sha1 = "f052a28da70e618917ef0a8ac34c1ae5a68286b3";
-      };
-    };
-    "yallist-2.1.2" = {
-      name = "yallist";
-      packageName = "yallist";
-      version = "2.1.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/yallist/-/yallist-2.1.2.tgz";
-        sha1 = "1c11f9218f076089a47dd512f93c6699a6a81d52";
       };
     };
     "concat-stream-1.6.0" = {
@@ -5675,16 +5729,43 @@ in
               })
             ];
           })
-          (sources."fined-1.0.2" // {
+          (sources."fined-1.1.0" // {
             dependencies = [
-              (sources."expand-tilde-1.2.2" // {
+              (sources."expand-tilde-2.0.2" // {
                 dependencies = [
-                  sources."os-homedir-1.0.2"
+                  (sources."homedir-polyfill-1.0.1" // {
+                    dependencies = [
+                      sources."parse-passwd-1.0.0"
+                    ];
+                  })
                 ];
               })
-              sources."lodash.assignwith-4.2.0"
-              sources."lodash.isempty-4.4.0"
-              sources."lodash.pick-4.4.0"
+              (sources."is-plain-object-2.0.3" // {
+                dependencies = [
+                  sources."isobject-3.0.0"
+                ];
+              })
+              (sources."object.defaults-1.1.0" // {
+                dependencies = [
+                  sources."array-each-1.0.1"
+                  sources."array-slice-1.0.0"
+                  (sources."for-own-1.0.0" // {
+                    dependencies = [
+                      sources."for-in-1.0.2"
+                    ];
+                  })
+                  sources."isobject-3.0.0"
+                ];
+              })
+              (sources."object.pick-1.2.0" // {
+                dependencies = [
+                  (sources."isobject-2.1.0" // {
+                    dependencies = [
+                      sources."isarray-1.0.0"
+                    ];
+                  })
+                ];
+              })
               (sources."parse-filepath-1.0.1" // {
                 dependencies = [
                   (sources."is-absolute-0.2.6" // {
@@ -7232,8 +7313,14 @@ in
       sources."aproba-1.1.2"
       sources."archy-1.0.0"
       sources."bluebird-3.5.0"
-      (sources."cacache-9.2.8" // {
+      (sources."cacache-9.2.9" // {
         dependencies = [
+          (sources."lru-cache-4.1.1" // {
+            dependencies = [
+              sources."pseudomap-1.0.2"
+              sources."yallist-2.1.2"
+            ];
+          })
           sources."y18n-3.2.1"
         ];
       })
