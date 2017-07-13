@@ -2,7 +2,7 @@ Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
 which isn't valid on NixOS (and a compatibility link on most other modern
 distros anyway).
 
-  -- nckx <tobias.geerinckx.rice@gmail.com>
+  -- nckx <github@tobias.gr>
 --- a/include/pathnames.h
 +++ b/include/pathnames.h
 @@ -53,7 +53,7 @@

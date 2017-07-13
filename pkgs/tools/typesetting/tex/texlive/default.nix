@@ -110,7 +110,9 @@ let
 
       url = args.url or "${urlPrefix}/${urlName}.tar.xz";
       urlPrefix = args.urlPrefix or
-        http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016;
+        http://146.185.144.154/texlive-2016
+        #http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016
+        ;
       # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
       #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
       #mirror = "http://ftp.math.utah.edu";

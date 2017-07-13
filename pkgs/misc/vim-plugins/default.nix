@@ -1827,6 +1827,17 @@ rec {
 
   };
 
+  nim-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nim-vim-2016-05-19";
+    src = fetchgit {
+      url = "https://github.com/zah/nim.vim";
+      rev = "dcf25798f4a3f75e9538f9915959061edbff97cf";
+      sha256 = "1jaiqkspfz2a4ny130dl0h6x9752flpcwwy0kscrqmlqf5fqiyvm";
+    };
+    dependencies = [];
+
+  };
+
   deoplete-go = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "deoplete-go-2017-05-26";
     src = fetchgit {

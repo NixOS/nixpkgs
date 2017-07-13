@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin" \
       --replace "lock/subsys" "lock"
+    sed -e "/gettext\.sh/a \\\n# Added in nixpkgs:\ngettext() { \"${gettext}/bin/gettext\" \"\$@\"; }" \
+        -i "$out/libexec/libvirt-guests.sh"
   '' + optionalString stdenv.isLinux ''
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \

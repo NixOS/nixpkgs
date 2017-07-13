@@ -268,6 +268,8 @@ let
 
   gedit = callPackage ./apps/gedit { };
 
+  ghex = callPackage ./apps/ghex { };
+
   glade = callPackage ./apps/glade { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };

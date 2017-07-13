@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, ocaml, findlib }:
 
-let version = "1.1"; in
+let version = "1.2"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-result-${version}";
+  name = "ocaml${ocaml.version}-result-${version}";
 
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = "result";
     rev = "${version}";
-    sha256 = "05y07rxdbkaxsc8cy458y00gq05i8gp35hhwg1b757mam21ccxxz";
+    sha256 = "1jwzpcmxwgkfsbjz9zl59v12hf1vv4r9kiifancn9p8gm206g3g0";
   };
 
   buildInputs = [ ocaml findlib ];
