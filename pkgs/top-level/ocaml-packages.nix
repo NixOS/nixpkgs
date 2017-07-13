@@ -941,7 +941,9 @@ in rec
 
   ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_04;
+  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { }) (self: super: { });
+
+  ocamlPackages_latest = ocamlPackages_4_05;
 
   ocamlPackages = ocamlPackages_4_02;
 }
