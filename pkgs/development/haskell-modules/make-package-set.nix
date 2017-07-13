@@ -13,7 +13,7 @@
 # return value: a function from self to the package set
 self: let
 
-  inherit (stdenv.lib) fix' extends makeOverridable;
+  inherit (stdenv.lib) fix' extends makeOverridable callPackageWith;
   inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
@@ -45,39 +45,9 @@ self: let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
-  #
-  # callPackage foo { bar = null; };
-  #
-  # here `bar` is a manual argument.
-  callPackageWithScope = scope: fn: manualArgs:
-    let
-      # this code is copied from callPackage in lib/customisation.nix
-      #
-      # we cannot use `callPackage` here because we want to call `makeOverridable`
-      # on `drvScope` (we cannot add `overrideScope` after calling `callPackage` because then it is
-      # lost on `.override`) but determine the auto-args based on `drv` (the problem here
-      # is that nix has no way to "passthrough" args while preserving the reflection
-      # info that callPackage uses to determine the arguments).
-      drv = if builtins.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (builtins.functionArgs drv) scope;
-
-      # this wraps the `drv` function to add a `overrideScope` function to the result.
-      drvScope = allArgs: drv allArgs // {
-        overrideScope = f:
-          let newScope = mkScope (fix' (extends f scope.__unfix__));
-          # note that we have to be careful here: `allArgs` includes the auto-arguments that
-          # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
-          # then we wouldn't look up any packages in the scope in the next interation, because it
-          # appears as if all arguments were already manually passed, so the scope change would do
-          # nothing.
-          in callPackageWithScope newScope drv manualArgs;
-      };
-    in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
-
   mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
   defaultScope = mkScope self;
-  callPackage = drv: args: callPackageWithScope defaultScope drv args;
+  callPackage = drv: args: callPackageWith defaultScope drv args;
 
   withPackages = packages: callPackage ./with-packages-wrapper.nix {
     inherit (self) llvmPackages;
