@@ -4,6 +4,7 @@
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
 , thrift, boost, rocksdb_lite, cpp-netlib, glog, gbenchmark, snappy
 , openssl, linenoise-ng, file, doxygen, devicemapper
+, gtest, sqlite
 }:
 
 let
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     yara lldpd google-gflags thrift boost
     cpp-netlib glog gbenchmark snappy openssl linenoise-ng
     file doxygen devicemapper cryptsetup
+    gtest sqlite
 
     # need to be consistent about the malloc implementation
     (rocksdb_lite.override { jemalloc = null; gperftools = null; })
@@ -59,11 +61,12 @@ stdenv.mkDerivation rec {
 
     cmakeFlagsArray+=(
       -DCMAKE_LIBRARY_PATH=${cryptsetup}/lib
-      -DCMAKE_VERBOSE_MAKEFILE=ON
+      -DCMAKE_VERBOSE_MAKEFILE=OFF
     )
 
     cp -r ${thirdparty}/* third-party
     chmod +w -R third-party
+    rm -r third-party/{googletest,sqlite3}
   '';
 
   meta = with lib; {

@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index a976a46d..73a95575 100644
+index a976a46d..408ac308 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -125,14 +125,13 @@ else()
@@ -26,7 +26,20 @@ index a976a46d..73a95575 100644
        -fvisibility=hidden
        -fvisibility-inlines-hidden
      )
-@@ -439,6 +437,8 @@ endif()
+@@ -372,12 +370,6 @@ elseif(NOT FREEBSD)
+   endif()
+ endif()
+ 
+-if(NOT IS_DIRECTORY "${CMAKE_SOURCE_DIR}/third-party/sqlite3")
+-  WARNING_LOG("Cannot find git submodule third-party/sqlite3 directory")
+-  WARNING_LOG("Please run: make deps or git submodule update --init")
+-  message(FATAL_ERROR "No sqlite3 directory")
+-endif()
+-
+ # Make sure deps were built before compiling (else show warning).
+ execute_process(
+   COMMAND "${CMAKE_SOURCE_DIR}/tools/provision.sh" check "${CMAKE_BINARY_DIR}"
+@@ -439,6 +431,8 @@ endif()
  
  if(APPLE)
    LOG_PLATFORM("OS X")
@@ -35,6 +48,36 @@ index a976a46d..73a95575 100644
  elseif(OSQUERY_BUILD_PLATFORM STREQUAL "debian")
    LOG_PLATFORM("Debian")
  elseif(OSQUERY_BUILD_PLATFORM STREQUAL "ubuntu")
+@@ -477,7 +471,6 @@ if(POSIX)
+   include_directories("${BUILD_DEPS}/include/openssl")
+ endif()
+ 
+-include_directories("${CMAKE_SOURCE_DIR}/third-party/sqlite3")
+ include_directories("${CMAKE_SOURCE_DIR}/include")
+ include_directories("${CMAKE_SOURCE_DIR}")
+ 
+@@ -559,21 +552,10 @@ else()
+   set(GTEST_FLAGS "-DGTEST_USE_OWN_TR1_TUPLE=0")
+ endif()
+ 
+-set(GTEST_FLAGS
+-  ${GTEST_FLAGS}
+-  "-I${CMAKE_SOURCE_DIR}/third-party/googletest/googletest/include"
+-  "-I${CMAKE_SOURCE_DIR}/third-party/googletest/googlemock/include"
+-)
+-join("${GTEST_FLAGS}" " " GTEST_FLAGS)
+-
+ set(BUILD_GTEST TRUE)
+ 
+-add_subdirectory("${CMAKE_SOURCE_DIR}/third-party/googletest")
+-
+ include(Thrift)
+ 
+-add_subdirectory("${CMAKE_SOURCE_DIR}/third-party/sqlite3")
+-
+ add_subdirectory(osquery)
+ add_subdirectory(tools/tests)
+ 
 diff --git a/include/osquery/core.h b/include/osquery/core.h
 index b597edee..b0628037 100644
 --- a/include/osquery/core.h
@@ -73,10 +116,28 @@ index b597edee..b0628037 100644
  
  /**
 diff --git a/osquery/CMakeLists.txt b/osquery/CMakeLists.txt
-index 77913d31..c833c289 100644
+index 77913d31..671b20d4 100644
 --- a/osquery/CMakeLists.txt
 +++ b/osquery/CMakeLists.txt
-@@ -157,6 +157,7 @@ ADD_OSQUERY_LINK_ADDITIONAL("cppnetlib-client-connections${WO_KEY}")
+@@ -57,7 +57,7 @@ endif()
+ 
+ # Construct a set of all object files, starting with third-party and all
+ # of the osquery core objects (sources from ADD_CORE_LIBRARY macros).
+-set(OSQUERY_OBJECTS $<TARGET_OBJECTS:osquery_sqlite>)
++set(OSQUERY_OBJECTS "")
+ 
+ # Add subdirectories
+ add_subdirectory(config)
+@@ -138,6 +138,8 @@ elseif(FREEBSD)
+   ADD_OSQUERY_LINK_ADDITIONAL("rocksdb-lite")
+ endif()
+ 
++ADD_OSQUERY_LINK_CORE("sqlite3")
++
+ if(POSIX)
+   ADD_OSQUERY_LINK_CORE("boost_system")
+   ADD_OSQUERY_LINK_CORE("boost_filesystem")
+@@ -157,6 +159,7 @@ ADD_OSQUERY_LINK_ADDITIONAL("cppnetlib-client-connections${WO_KEY}")
  ADD_OSQUERY_LINK_CORE("glog${WO_KEY}")
  
  if(POSIX)
@@ -84,7 +145,7 @@ index 77913d31..c833c289 100644
    ADD_OSQUERY_LINK_ADDITIONAL("snappy")
    ADD_OSQUERY_LINK_ADDITIONAL("ssl")
    ADD_OSQUERY_LINK_ADDITIONAL("crypto")
-@@ -336,13 +337,6 @@ if(NOT OSQUERY_BUILD_SDK_ONLY)
+@@ -336,13 +339,6 @@ if(NOT OSQUERY_BUILD_SDK_ONLY)
  
    install(DIRECTORY "${CMAKE_SOURCE_DIR}/packs/"
      DESTINATION "${CMAKE_INSTALL_PREFIX}/share/osquery/packs" COMPONENT main)
