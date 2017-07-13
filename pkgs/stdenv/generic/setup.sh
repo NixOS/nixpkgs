@@ -104,6 +104,17 @@ closeNest() {
     done
 }
 
+# Prints a command such that all word splits are unambiguous. We need
+# to split the command in three parts because the middle format string
+# will be, and must be, repeated for each argument. The first argument
+# goes before the ':' and is just for convenience.
+echoCmd() {
+    printf "%s:" "$1"
+    shift
+    printf ' %q' "$@"
+    echo
+}
+
 
 ######################################################################
 # Error handling.
@@ -725,9 +736,7 @@ configurePhase() {
     if [ -n "$configureScript" ]; then
         # shellcheck disable=SC2086
         local flagsArray=($configureFlags "${configureFlagsArray[@]}")
-        printf 'configure flags:'
-        printf ' %q' "${flagsArray[@]}"
-        echo
+        echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
         $configureScript "${flagsArray[@]}"
         unset flagsArray
@@ -754,9 +763,7 @@ buildPhase() {
             $makeFlags "${makeFlagsArray[@]}" \
             $buildFlags "${buildFlagsArray[@]}")
 
-        printf 'build flags:'
-        printf ' %q' "${flagsArray[@]}"
-        echo
+        echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
         unset flagsArray
     fi
@@ -774,9 +781,7 @@ checkPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}" ${checkTarget:-check})
 
-    printf 'check flags:'
-    printf ' %q' "${flagsArray[@]}"
-    echo
+    echoCmd 'check flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
     unset flagsArray
 
@@ -798,9 +803,7 @@ installPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $installFlags "${installFlagsArray[@]}")
 
-    printf 'install flags:'
-    printf ' %q' "${flagsArray[@]}"
-    echo
+    echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
     unset flagsArray
 
@@ -879,9 +882,7 @@ installCheckPhase() {
         $makeFlags "${makeFlagsArray[@]}" \
         $installCheckFlags "${installCheckFlagsArray[@]}" ${installCheckTarget:-installcheck})
 
-    printf 'installcheck flags:'
-    printf ' %q' "${flagsArray[@]}"
-    echo
+    echoCmd 'installcheck flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
     unset flagsArray
 
