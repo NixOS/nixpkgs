@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "scite-${version}";
-  version = "3.7.3";
+  version = "3.7.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/scintilla/SciTE/${version}/scite373.tgz";
-    sha256 = "05d81h1fqhjlw9apvrni3x2q4a562cd5ra1071qpna8h4ml0an9m";
+    url = http://www.scintilla.org/scite375.tgz;
+    sha256 = "11pg9bifyyqpblqsrl1b9f8shb3fa6fgzclvjba6hwh7hh98drji";
   };
 
   nativeBuildInputs = [ pkgconfig ];
