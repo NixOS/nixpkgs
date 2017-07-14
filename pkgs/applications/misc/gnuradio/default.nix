@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
   #   *dirname* where matplotlibrc is located, not the file itself.
   # - GNU Radio core is C++ but the user interface (GUI and API) is Python, so
   #   we must wrap the stuff in bin/.
+  # Notes:
+  # - May want to use makeWrapper instead of wrapProgram
+  # - may want to change interpreter path on Python examples instead of wrapping
+  # - see https://github.com/NixOS/nixpkgs/issues/22688 regarding use of --prefix / python.withPackages
+  # - see https://github.com/NixOS/nixpkgs/issues/24693 regarding use of DYLD_FRAMEWORK_PATH on Darwin
   postInstall = ''
     printf "backend : Qt4Agg\n" > "$out/share/gnuradio/matplotlibrc"
 
