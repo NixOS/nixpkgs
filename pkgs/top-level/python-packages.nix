@@ -9474,6 +9474,8 @@ in {
     };
   };
 
+  django_extensions = callPackage ../development/python-modules/django-extensions { };
+
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
