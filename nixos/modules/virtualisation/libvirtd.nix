@@ -167,6 +167,9 @@ in {
             new_emulator=$(PATH=${pkgs.libvirt}/libexec:$PATH command -v $(basename "$emulator"))
             # write back
             "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/devices/emulator" -v "$new_emulator" "$file"
+
+            # Also refresh the OVMF path. Files with no matches are ignored.
+            "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/os/loader" -v "${pkgs.OVMF.fd}/FV/OVMF_CODE.fd" "$file"
         done
       ''; # */
 
