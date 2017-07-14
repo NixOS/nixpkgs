@@ -136,26 +136,7 @@ in {
     dbus = pkgs.dbus;
   };
 
-  discid = buildPythonPackage rec {
-    name = "discid-1.1.0";
-
-    meta = {
-      description = "Python binding of libdiscid";
-      homepage    = "https://python-discid.readthedocs.org/";
-      license     = licenses.lgpl3Plus;
-      platforms   = platforms.linux;
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/discid/${name}.tar.gz";
-      sha256 = "b39d443051b26d0230be7a6c616243daae93337a8711dd5d4119bb6a0e516fa8";
-    };
-
-    patchPhase = ''
-      substituteInPlace discid/libdiscid.py \
-        --replace '_open_library(_LIB_NAME)' "_open_library('${pkgs.libdiscid}/lib/libdiscid.so.0')"
-    '';
-  };
+  discid = callPackage ../development/python-modules/discid { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
