@@ -1095,6 +1095,8 @@ with pkgs;
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
+  ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
+
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
     czmq = czmq3;
