@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.gnuradio.org;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }
