@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
+      "threadpool_multiple_event_loops" # times out on slow machines
     ]
       # sometimes: timeout (no output), failed uv_listen
       ++ stdenv.lib.optionals stdenv.isDarwin [ "process_title" "emfile" ];
