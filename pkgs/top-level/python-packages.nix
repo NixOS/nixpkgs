@@ -100,22 +100,7 @@ in {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
-  ansicolor = buildPythonPackage rec {
-    name = "ansicolor-${version}";
-    version = "0.2.4";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/a/ansicolor/${name}.tar.gz";
-      sha256 = "0zlkk9706xn5yshwzdn8xsfkim8iv44zsl6qjwg2f4gn62rqky1h";
-    };
-
-    meta = {
-      homepage = "https://github.com/numerodix/ansicolor/";
-      description = "A library to produce ansi color output and colored highlighting and diffing";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ andsild ];
-    };
-  };
+  ansicolor = callPackage ../development/python-modules/ansicolor { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
