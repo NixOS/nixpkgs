@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "devdoc" ];
 
+  patches = optionals stdenv.isDarwin [ ./pango-coretext-size-and-scaling.patch ];
+
   buildInputs = [ gobjectIntrospection ];
   nativeBuildInputs = [ pkgconfig ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
