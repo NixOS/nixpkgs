@@ -9933,24 +9933,7 @@ in {
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
-  django_tagging = buildPythonPackage rec {
-    name = "django-tagging-0.4.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
-      sha256 = "00ki1g6pb2lnaj4lh0s865mmlf4kdwx7a6n38iy5qz9qv4xrvz4q";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ django ];
-
-    meta = {
-      description = "A generic tagging application for Django projects";
-      homepage = https://github.com/Fantomas42/django-tagging;
-    };
-  };
+  django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_3 = self.django_tagging.override (attrs: rec {
     name = "django-tagging-0.3.6";
