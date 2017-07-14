@@ -324,6 +324,10 @@ in {
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
+  pyslurm = callPackage ../development/python-modules/pyslurm {
+    slurm = pkgs.slurm;
+  };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
@@ -9865,27 +9869,7 @@ in {
     };
   };
 
-  django_appconf = buildPythonPackage rec {
-    name = "django-appconf-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-appconf/django-appconf-${version}.tar.gz";
-      sha256 = "0q3fg17qi4vwpipbj075zn4wk58p6a946kah8wayks1423xpa4xs";
-    };
-
-    # No tests in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      description = "A helper class for handling configuration defaults of packaged apps gracefully";
-      homepage = http://django-appconf.readthedocs.org/;
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  };
+  django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
     name = "django-colorful-${version}";
@@ -9909,27 +9893,7 @@ in {
     };
   };
 
-  django_compressor = buildPythonPackage rec {
-    name = "django-compressor-${version}";
-    version = "1.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django_compressor/django_compressor-${version}.tar.gz";
-      sha256 = "0bp2acagc6b1mmcajlmjf5vvp6zj429bq7p2wks05n47pwfzv281";
-    };
-
-    # Need to setup django testing
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ django_appconf ];
-
-    meta = {
-      description = "Compresses linked and inline JavaScript or CSS into single cached files";
-      homepage = http://django-compressor.readthedocs.org/en/latest/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  };
+  django_compressor = callPackage ../development/python-modules/django_compressor { };
 
   django_compat = callPackage ../development/python-modules/django-compat { };
 
@@ -10711,22 +10675,7 @@ in {
     };
   };
 
-  pycodestyle = buildPythonPackage rec {
-    name = "pycodestyle-${version}";
-    version = "2.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycodestyle/${name}.tar.gz";
-      sha256 = "1rz2v8506mdjdyxcnv9ygiw6v0d4dqx8z5sjyjm0w2v32h5l5w1p";
-    };
-
-    meta = {
-      description = "Python style guide checker (formerly called pep8)";
-      homepage = https://pycodestyle.readthedocs.io;
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   filebytes = buildPythonPackage rec {
     name = "filebytes-0.9.12";
@@ -13512,15 +13461,15 @@ in {
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = buildPythonPackage (rec {
-    name = "mechanize-0.2.5";
+    name = "mechanize-0.3.5";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mechanize/${name}.tar.gz";
-      sha256 = "0rj7r166i1dyrq0ihm5rijfmvhs8a04im28lv05c0c3v206v4rrf";
+      sha256 = "0rki9nl4y42q694parafcsdcdqvkdjckrbg6n0691302lfsrkyfl";
     };
 
-    propagatedBuildInputs = with self; [ clientform ];
+    propagatedBuildInputs = with self; [ clientform html5lib ];
 
     doCheck = false;
 
@@ -21072,6 +21021,8 @@ in {
     };
   };
 
+  rcssmin = callPackage ../development/python-modules/rcssmin { };
+
   recommonmark = buildPythonPackage rec {
     name = "recommonmark-${version}";
     version = "0.4.0";
@@ -21221,6 +21172,8 @@ in {
       homepage = "https://github.com/pypa/readme";
     };
   };
+
+  rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = buildPythonPackage rec {
     name = "pysolr-${version}";
@@ -25169,30 +25122,7 @@ in {
     };
   };
 
-  virtualenv = buildPythonPackage rec {
-    name = "virtualenv-15.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/virtualenv/${name}.tar.gz";
-      sha256 = "6d9c760d3fc5fa0894b0f99b9de82a4647e1164f0b700a7f99055034bf548b1d";
-    };
-
-    pythonPath = [ self.recursivePthLoader ];
-
-    patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
-
-    propagatedBuildInputs = with self; [ ];
-
-    # Tarball doesn't contain tests
-    doCheck = false;
-
-    meta = {
-      description = "A tool to create isolated Python environments";
-      homepage = http://www.virtualenv.org;
-      license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
+  virtualenv = callPackage ../development/python-modules/virtualenv { };
 
   virtualenv-clone = buildPythonPackage rec {
     name = "virtualenv-clone-0.2.5";
@@ -25231,9 +25161,9 @@ in {
       stevedore
       virtualenv
       virtualenv-clone
-    ] ++ optional isPy26 argparse;
+    ];
 
-    patchPhase = ''
+    postPatch = ''
       for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
         substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
 
@@ -25264,7 +25194,7 @@ in {
 
         # WARNING: Don't indent the lines below because that would break EOF
         cat > "$wrapper" << EOF
-export PATH="$PATH:\$PATH"
+export PATH="${python}/bin:\$PATH"
 export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
 source "$wrapped"
 EOF

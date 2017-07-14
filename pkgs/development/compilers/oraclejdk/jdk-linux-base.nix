@@ -157,7 +157,7 @@ let result = stdenv.mkDerivation rec {
     ln -s $jrePath/lib/${architecture}/libnpjp2.so $jrePath/lib/${architecture}/plugins
 
     mkdir -p $out/nix-support
-    echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+    printLines ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook

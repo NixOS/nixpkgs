@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    substituteInPlace ./autogen.sh --replace "/usr/bin/env sh" "${stdenv.shell}"
+    patchShebangs ./
     ./autogen.sh --prefix $out
   '';
 
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
-    patchShebangs ./
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
   '' + stdenv.lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"

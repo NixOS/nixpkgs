@@ -15,8 +15,6 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
-    acgtk = callPackage ../applications/science/logic/acgtk { };
-
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -230,6 +228,8 @@ let
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
+    integers = callPackage ../development/ocaml-modules/integers { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
@@ -399,7 +399,6 @@ let
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
     ocaml_oasis = callPackage ../development/tools/ocaml/oasis { };
-    ocaml_oasis_46 = callPackage ../development/tools/ocaml/oasis/0.4.6.nix { };
 
     ocaml_optcomp = callPackage ../development/ocaml-modules/optcomp { };
 
@@ -942,7 +941,9 @@ in rec
 
   ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_04;
+  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { }) (self: super: { });
+
+  ocamlPackages_latest = ocamlPackages_4_05;
 
   ocamlPackages = ocamlPackages_4_02;
 }

@@ -116,6 +116,7 @@
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/audit.nix
+  ./security/auditd.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
@@ -557,6 +558,7 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
+  ./services/security/vault.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix

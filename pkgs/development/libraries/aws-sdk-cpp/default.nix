@@ -26,6 +26,7 @@ in stdenv.mkDerivation rec {
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
   outputs = [ "out" "dev" ];
+  separateDebugInfo = stdenv.isLinux;
 
   buildInputs = [ cmake curl ];
 

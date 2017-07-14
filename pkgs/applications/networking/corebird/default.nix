@@ -3,14 +3,14 @@
 , glib_networking }:
 
 stdenv.mkDerivation rec {
-  version = "1.5";
+  version = "1.5.1";
   name = "corebird-${version}";
 
   src = fetchFromGitHub {
     owner = "baedert";
     repo = "corebird";
     rev = version;
-    sha256 = "0nll3ns1riylxg33w6myz5x8h6ai39k5fw2bkf96g5rgmi6zsjma";
+    sha256 = "1qajb4xms3vsfm5sg91z9ka0nrzgfi0fjgjxqm7snhkfgxlkph7w";
   };
 
   preConfigure = ''

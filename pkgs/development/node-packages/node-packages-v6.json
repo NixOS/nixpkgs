@@ -15,6 +15,7 @@
 , "eslint"
 , "eslint_d"
 , "emojione"
+, "fast-cli"
 , "fetch-bower"
 , "forever"
 , "git-run"

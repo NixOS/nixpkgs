@@ -37,6 +37,9 @@
 
 # Pluggable transport dependencies
 , python27
+
+# Extra preferences
+, extraPrefs ? ""
 }:
 
 with stdenv.lib;
@@ -173,11 +176,12 @@ stdenv.mkDerivation rec {
     cat >mozilla.cfg <<EOF
     // First line must be a comment
 
-    // Always update via Nix
+    // Always update via Nixpkgs
     lockPref("app.update.auto", false);
     lockPref("app.update.enabled", false);
     lockPref("extensions.update.autoUpdateDefault", false);
     lockPref("extensions.update.enabled", false);
+    lockPref("extensions.torbutton.versioncheck_enabled", false);
 
     // User should never change these.  Locking prevents these
     // values from being written to prefs.js, avoiding Store
@@ -196,6 +200,10 @@ stdenv.mkDerivation rec {
     // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    ${optionalString (extraPrefs != "") ''
+      ${extraPrefs}
+    ''}
     EOF
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in

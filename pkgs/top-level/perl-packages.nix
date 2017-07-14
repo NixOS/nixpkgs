@@ -10719,16 +10719,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   PDFAPI2 = buildPerlPackage rec {
-    name = "PDF-API2-2.030";
+    name = "PDF-API2-2.033";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
-      sha256 = "a802c25c1f00b093778223fc7aea94ebd87a9abdb915151746b8ee5d4a358769";
+      sha256 = "9c0866ec1a3053f73afaca5f5cdbe6925903b4ce606f4bf4ac317731a69d27a0";
     };
+    buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
-      license = stdenv.lib.licenses.lgpl21;
-      maintainers = [ maintainers.rycee ];
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 

@@ -42,6 +42,10 @@ in
     };
 
     config = mkIf cfg.enable {
+
+      # Prevent zsh from overwriting oh-my-zsh's prompt
+      programs.zsh.promptInit = mkDefault "";
+
       environment.systemPackages = with pkgs; [ oh-my-zsh ];
 
       programs.zsh.interactiveShellInit = with pkgs; with builtins; ''

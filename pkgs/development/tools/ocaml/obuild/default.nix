@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml ];
 
   buildPhase = ''
+    patchShebangs ./bootstrap
     ./bootstrap
   '';
 

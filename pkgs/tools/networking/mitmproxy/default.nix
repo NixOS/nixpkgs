@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchurl, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   baseName = "mitmproxy";
@@ -11,6 +11,15 @@ python3Packages.buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1x1a28al5clpfd69rjcpw26gjjnpsm1vfl4scrwpdd1jhkw044h9";
   };
+
+  patches = [
+    # Bump pyopenssl dependency
+    # https://github.com/mitmproxy/mitmproxy/pull/2252
+    (fetchurl {
+      url = "https://patch-diff.githubusercontent.com/raw/mitmproxy/mitmproxy/pull/2252.patch";
+      sha256 = "0s3a6lf0wjnxi1r70qlhh0siaxhk5j2cysnv4xfkji3f2v7hhri4";
+    })
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     blinker click certifi construct cryptography

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "mergerfs-${version}";
-  version = "2.22.1";
+  version = "2.23.0";
 
   # not using fetchFromGitHub because of changelog being built with git log
   src = fetchgit {
     url = "https://github.com/trapexit/mergerfs";
     rev = "refs/tags/${version}";
-    sha256 = "12dm64l74wyagbwxsz57p8j3dwl9hgi0j3b6i0pn9m5ar7qrnv00";
+    sha256 = "0k4nn0f4c355q7hnni7iia8qi9m0khvyd04hx1hmlrnf0zsi9mfw";
     deepClone = true;
     leaveDotGit = true;
   };
