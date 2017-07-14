@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake4Hook ];
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
   '';
