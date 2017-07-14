@@ -607,13 +607,13 @@ let
         sha1 = "937f87a8aeceb641a8210a9ba837323f0206eb47";
       };
     };
-    "azure-arm-network-1.1.0-preview" = {
+    "azure-arm-network-2.0.0" = {
       name = "azure-arm-network";
       packageName = "azure-arm-network";
-      version = "1.1.0-preview";
+      version = "2.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/azure-arm-network/-/azure-arm-network-1.1.0-preview.tgz";
-        sha1 = "e6ca3e27a0169ff49849f0378bc6c531b08a2b8b";
+        url = "https://registry.npmjs.org/azure-arm-network/-/azure-arm-network-2.0.0.tgz";
+        sha1 = "95e3d2658a68ecb0a2f90f611966f9852877f625";
       };
     };
     "azure-arm-powerbiembedded-0.1.0" = {
@@ -1003,22 +1003,22 @@ let
         sha1 = "c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f";
       };
     };
-    "ms-rest-1.15.7" = {
+    "ms-rest-2.2.1" = {
       name = "ms-rest";
       packageName = "ms-rest";
-      version = "1.15.7";
+      version = "2.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ms-rest/-/ms-rest-1.15.7.tgz";
-        sha1 = "400515e05b1924889cb61a1ec6054290a68e1207";
+        url = "https://registry.npmjs.org/ms-rest/-/ms-rest-2.2.1.tgz";
+        sha1 = "652f09dee89c115e5b672bd3de4d16dcc7961377";
       };
     };
-    "ms-rest-azure-1.15.7" = {
+    "ms-rest-azure-2.2.1" = {
       name = "ms-rest-azure";
       packageName = "ms-rest-azure";
-      version = "1.15.7";
+      version = "2.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ms-rest-azure/-/ms-rest-azure-1.15.7.tgz";
-        sha1 = "8bce09f053b1565dbaa8bd022ca40155c35b0fde";
+        url = "https://registry.npmjs.org/ms-rest-azure/-/ms-rest-azure-2.2.1.tgz";
+        sha1 = "ca9a9fb492b1fe1a41ca8e472edc1dd0922323e6";
       };
     };
     "node-forge-0.6.23" = {
@@ -1345,67 +1345,22 @@ let
         sha1 = "735ffaa39a1cff8ffb9598f0223abdb03a9fb2ea";
       };
     };
-    "ms-rest-2.2.1" = {
+    "ms-rest-1.15.7" = {
       name = "ms-rest";
       packageName = "ms-rest";
-      version = "2.2.1";
+      version = "1.15.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ms-rest/-/ms-rest-2.2.1.tgz";
-        sha1 = "652f09dee89c115e5b672bd3de4d16dcc7961377";
+        url = "https://registry.npmjs.org/ms-rest/-/ms-rest-1.15.7.tgz";
+        sha1 = "400515e05b1924889cb61a1ec6054290a68e1207";
       };
     };
-    "ms-rest-azure-2.2.1" = {
+    "ms-rest-azure-1.15.7" = {
       name = "ms-rest-azure";
       packageName = "ms-rest-azure";
-      version = "2.2.1";
+      version = "1.15.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ms-rest-azure/-/ms-rest-azure-2.2.1.tgz";
-        sha1 = "ca9a9fb492b1fe1a41ca8e472edc1dd0922323e6";
-      };
-    };
-    "@types/node-7.0.36" = {
-      name = "@types/node";
-      packageName = "@types/node";
-      version = "7.0.36";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-7.0.36.tgz";
-        sha1 = "54286fcce8a4f7498cea1ec5fce5f5edd3521948";
-      };
-    };
-    "@types/request-0.0.45" = {
-      name = "@types/request";
-      packageName = "@types/request";
-      version = "0.0.45";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/request/-/request-0.0.45.tgz";
-        sha1 = "c6e52be8b108eb035c35aa9af56a38a260c3e7e6";
-      };
-    };
-    "@types/uuid-2.0.30" = {
-      name = "@types/uuid";
-      packageName = "@types/uuid";
-      version = "2.0.30";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/uuid/-/uuid-2.0.30.tgz";
-        sha1 = "4dca12da43ae530f89f46d6d203935d2199652d5";
-      };
-    };
-    "is-stream-1.1.0" = {
-      name = "is-stream";
-      packageName = "is-stream";
-      version = "1.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/is-stream/-/is-stream-1.1.0.tgz";
-        sha1 = "12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44";
-      };
-    };
-    "@types/form-data-0.0.33" = {
-      name = "@types/form-data";
-      packageName = "@types/form-data";
-      version = "0.0.33";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/form-data/-/form-data-0.0.33.tgz";
-        sha1 = "c9ac85b2a5fd18435b8c85d9ecb50e6d6c893ff8";
+        url = "https://registry.npmjs.org/ms-rest-azure/-/ms-rest-azure-1.15.7.tgz";
+        sha1 = "8bce09f053b1565dbaa8bd022ca40155c35b0fde";
       };
     };
     "async-0.2.7" = {
@@ -1658,6 +1613,51 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/streamline/-/streamline-0.4.11.tgz";
         sha1 = "0e3c4f24a3f052b231b12d5049085a0a099be782";
+      };
+    };
+    "@types/node-7.0.37" = {
+      name = "@types/node";
+      packageName = "@types/node";
+      version = "7.0.37";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/node/-/node-7.0.37.tgz";
+        sha1 = "f129fff94d14a60c3d99eadb9fe0c98119e09c8f";
+      };
+    };
+    "@types/request-0.0.45" = {
+      name = "@types/request";
+      packageName = "@types/request";
+      version = "0.0.45";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/request/-/request-0.0.45.tgz";
+        sha1 = "c6e52be8b108eb035c35aa9af56a38a260c3e7e6";
+      };
+    };
+    "@types/uuid-2.0.30" = {
+      name = "@types/uuid";
+      packageName = "@types/uuid";
+      version = "2.0.30";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/uuid/-/uuid-2.0.30.tgz";
+        sha1 = "4dca12da43ae530f89f46d6d203935d2199652d5";
+      };
+    };
+    "is-stream-1.1.0" = {
+      name = "is-stream";
+      packageName = "is-stream";
+      version = "1.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/is-stream/-/is-stream-1.1.0.tgz";
+        sha1 = "12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44";
+      };
+    };
+    "@types/form-data-0.0.33" = {
+      name = "@types/form-data";
+      packageName = "@types/form-data";
+      version = "0.0.33";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/form-data/-/form-data-0.0.33.tgz";
+        sha1 = "c9ac85b2a5fd18435b8c85d9ecb50e6d6c893ff8";
       };
     };
     "debug-0.7.4" = {
@@ -8918,13 +8918,13 @@ let
         sha1 = "cac328f7bee45730d404b692203fcb590e172d5e";
       };
     };
-    "aws-sdk-2.84.0" = {
+    "aws-sdk-2.85.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.84.0";
+      version = "2.85.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.84.0.tgz";
-        sha1 = "c87bb05bc43bea681c115503f73a7e784c9bfeb6";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.85.0.tgz";
+        sha1 = "e3860761c9a2f8a9017461ab7f3bd075f69dfa8f";
       };
     };
     "request-2.81.0" = {
@@ -11007,13 +11007,13 @@ let
         sha1 = "c0dde4ab182713b919b970959a123ecc1a30fcd6";
       };
     };
-    "clean-css-3.4.27" = {
+    "clean-css-3.4.28" = {
       name = "clean-css";
       packageName = "clean-css";
-      version = "3.4.27";
+      version = "3.4.28";
       src = fetchurl {
-        url = "https://registry.npmjs.org/clean-css/-/clean-css-3.4.27.tgz";
-        sha1 = "adef75b31c160ffa5d72f4de67966e2660c1a255";
+        url = "https://registry.npmjs.org/clean-css/-/clean-css-3.4.28.tgz";
+        sha1 = "bf1945e82fc808f55695e6ddeaec01400efd03ff";
       };
     };
     "commander-2.6.0" = {
@@ -12474,6 +12474,33 @@ let
         sha1 = "22817534f24bfa4950c34d532d48ecbc621b8c14";
       };
     };
+    "editorconfig-0.13.2" = {
+      name = "editorconfig";
+      packageName = "editorconfig";
+      version = "0.13.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/editorconfig/-/editorconfig-0.13.2.tgz";
+        sha1 = "8e57926d9ee69ab6cb999f027c2171467acceb35";
+      };
+    };
+    "bluebird-3.5.0" = {
+      name = "bluebird";
+      packageName = "bluebird";
+      version = "3.5.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/bluebird/-/bluebird-3.5.0.tgz";
+        sha1 = "791420d7f551eea2897453a8a77653f96606d67c";
+      };
+    };
+    "lru-cache-3.2.0" = {
+      name = "lru-cache";
+      packageName = "lru-cache";
+      version = "3.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lru-cache/-/lru-cache-3.2.0.tgz";
+        sha1 = "71789b3b7f5399bec8565dda38aa30d2a097efee";
+      };
+    };
     "body-parser-1.17.2" = {
       name = "body-parser";
       packageName = "body-parser";
@@ -12868,15 +12895,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/invert-kv/-/invert-kv-1.0.0.tgz";
         sha1 = "104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6";
-      };
-    };
-    "bluebird-3.5.0" = {
-      name = "bluebird";
-      packageName = "bluebird";
-      version = "3.5.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bluebird/-/bluebird-3.5.0.tgz";
-        sha1 = "791420d7f551eea2897453a8a77653f96606d67c";
       };
     };
     "combine-lists-1.0.1" = {
@@ -16173,13 +16191,13 @@ let
         sha1 = "84ddc4b370679ba8bd4cdcfa4c06b43d57111147";
       };
     };
-    "libnpx-9.0.7" = {
+    "libnpx-9.2.0" = {
       name = "libnpx";
       packageName = "libnpx";
-      version = "9.0.7";
+      version = "9.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/libnpx/-/libnpx-9.0.7.tgz";
-        sha1 = "e30e4d5d0cc21c849541441855d0d334d00b009b";
+        url = "https://registry.npmjs.org/libnpx/-/libnpx-9.2.0.tgz";
+        sha1 = "ce721ffc7bdfa275c18677b82728e6ee96a50642";
       };
     };
     "lodash._baseuniq-4.6.0" = {
@@ -20891,10 +20909,10 @@ in
   azure-cli = nodeEnv.buildNodePackage {
     name = "azure-cli";
     packageName = "azure-cli";
-    version = "0.10.14";
+    version = "0.10.15";
     src = fetchurl {
-      url = "https://registry.npmjs.org/azure-cli/-/azure-cli-0.10.14.tgz";
-      sha1 = "e702e81a68b2b52db11e707796b484001b22063e";
+      url = "https://registry.npmjs.org/azure-cli/-/azure-cli-0.10.15.tgz";
+      sha1 = "15386d528bcd2521147934e3f183b53897a18c2c";
     };
     dependencies = [
       sources."adal-node-0.1.21"
@@ -20906,56 +20924,92 @@ in
         ];
       })
       sources."azure-arm-authorization-2.0.0"
-      sources."azure-arm-cdn-1.0.3"
-      sources."azure-arm-commerce-0.2.0"
-      (sources."azure-arm-compute-3.0.0-preview" // {
+      (sources."azure-arm-cdn-1.0.3" // {
         dependencies = [
-          sources."ms-rest-2.2.1"
-          sources."ms-rest-azure-2.2.1"
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
           sources."async-0.2.7"
         ];
       })
-      sources."azure-arm-datalake-analytics-1.0.2-preview"
-      sources."azure-arm-datalake-store-1.0.2-preview"
+      (sources."azure-arm-commerce-0.2.0" // {
+        dependencies = [
+          sources."ms-rest-azure-1.15.7"
+          sources."ms-rest-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      sources."azure-arm-compute-3.0.0-preview"
+      (sources."azure-arm-datalake-analytics-1.0.2-preview" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      (sources."azure-arm-datalake-store-1.0.2-preview" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
       sources."azure-arm-hdinsight-0.2.2"
       sources."azure-arm-hdinsight-jobs-0.1.0"
       sources."azure-arm-insights-0.11.3"
-      (sources."azure-arm-iothub-1.0.1-preview" // {
+      sources."azure-arm-iothub-1.0.1-preview"
+      (sources."azure-arm-servermanagement-0.1.2" // {
         dependencies = [
-          sources."ms-rest-2.2.1"
-          sources."ms-rest-azure-2.2.1"
+          sources."ms-rest-azure-1.15.7"
+          sources."ms-rest-1.15.7"
           sources."async-0.2.7"
         ];
       })
-      sources."azure-arm-servermanagement-0.1.2"
-      (sources."azure-arm-network-1.1.0-preview" // {
+      sources."azure-arm-network-2.0.0"
+      (sources."azure-arm-powerbiembedded-0.1.0" // {
         dependencies = [
-          sources."ms-rest-2.2.1"
-          sources."ms-rest-azure-2.2.1"
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
           sources."async-0.2.7"
         ];
       })
-      sources."azure-arm-powerbiembedded-0.1.0"
-      (sources."azure-arm-trafficmanager-1.1.0-preview" // {
+      sources."azure-arm-trafficmanager-1.1.0-preview"
+      (sources."azure-arm-dns-0.11.1" // {
         dependencies = [
-          sources."ms-rest-azure-2.2.1"
-          sources."ms-rest-2.2.1"
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
           sources."async-0.2.7"
         ];
       })
-      sources."azure-arm-dns-0.11.1"
-      sources."azure-arm-website-0.11.4"
-      sources."azure-arm-rediscache-0.2.3"
-      sources."azure-arm-devtestlabs-0.1.0"
-      (sources."azure-graph-2.1.0-preview" // {
+      (sources."azure-arm-website-0.11.4" // {
         dependencies = [
-          sources."ms-rest-azure-2.2.1"
-          sources."ms-rest-2.2.1"
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
           sources."async-0.2.7"
         ];
       })
+      (sources."azure-arm-rediscache-0.2.3" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      (sources."azure-arm-devtestlabs-0.1.0" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      sources."azure-graph-2.1.0-preview"
       sources."azure-gallery-2.0.0-pre.18"
-      sources."azure-keyvault-0.11.0"
+      (sources."azure-keyvault-0.11.0" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
       sources."azure-asm-compute-0.18.0"
       sources."azure-asm-hdinsight-0.10.2"
       sources."azure-asm-trafficmanager-0.10.3"
@@ -20966,8 +21020,20 @@ in
         ];
       })
       sources."azure-asm-network-0.13.0"
-      sources."azure-arm-resource-1.6.1-preview"
-      sources."azure-arm-storage-0.15.0-preview"
+      (sources."azure-arm-resource-1.6.1-preview" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      (sources."azure-arm-storage-0.15.0-preview" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
       sources."azure-asm-sb-0.10.1"
       sources."azure-asm-sql-0.10.1"
       sources."azure-asm-storage-0.12.0"
@@ -20984,9 +21050,27 @@ in
           sources."xml2js-0.2.7"
         ];
       })
-      sources."azure-arm-batch-0.3.0"
-      sources."azure-batch-0.5.2"
-      sources."azure-servicefabric-0.1.5"
+      (sources."azure-arm-batch-0.3.0" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      (sources."azure-batch-0.5.2" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
+      (sources."azure-servicefabric-0.1.5" // {
+        dependencies = [
+          sources."ms-rest-1.15.7"
+          sources."ms-rest-azure-1.15.7"
+          sources."async-0.2.7"
+        ];
+      })
       sources."applicationinsights-0.16.0"
       sources."caller-id-0.1.0"
       sources."colors-1.1.2"
@@ -21009,8 +21093,8 @@ in
         ];
       })
       sources."moment-2.18.1"
-      sources."ms-rest-1.15.7"
-      (sources."ms-rest-azure-1.15.7" // {
+      sources."ms-rest-2.2.1"
+      (sources."ms-rest-azure-2.2.1" // {
         dependencies = [
           sources."async-0.2.7"
         ];
@@ -21078,12 +21162,6 @@ in
       sources."envconf-0.0.4"
       sources."duplexer-0.1.1"
       sources."sax-0.5.2"
-      sources."@types/node-7.0.36"
-      sources."@types/request-0.0.45"
-      sources."@types/uuid-2.0.30"
-      sources."is-buffer-1.1.5"
-      sources."is-stream-1.1.0"
-      sources."@types/form-data-0.0.33"
       sources."browserify-mime-1.2.9"
       sources."extend-1.2.1"
       sources."json-edm-parser-0.1.2"
@@ -21116,6 +21194,12 @@ in
       sources."has-color-0.1.7"
       sources."ansi-styles-1.0.0"
       sources."strip-ansi-0.1.1"
+      sources."@types/node-7.0.37"
+      sources."@types/request-0.0.45"
+      sources."@types/uuid-2.0.30"
+      sources."is-buffer-1.1.5"
+      sources."is-stream-1.1.0"
+      sources."@types/form-data-0.0.33"
       sources."debug-0.7.4"
       sources."q-0.9.7"
       sources."pkginfo-0.4.0"
@@ -22910,7 +22994,7 @@ in
       sources."JSONStream-1.3.1"
       sources."async-2.5.0"
       sources."aws4-1.6.0"
-      sources."aws-sdk-2.84.0"
+      sources."aws-sdk-2.85.0"
       sources."ini-1.3.4"
       sources."optimist-0.6.1"
       sources."request-2.81.0"
@@ -24063,7 +24147,7 @@ in
       sources."xml2js-0.4.17"
       sources."msgpack-1.0.2"
       sources."character-parser-1.2.1"
-      (sources."clean-css-3.4.27" // {
+      (sources."clean-css-3.4.28" // {
         dependencies = [
           sources."commander-2.8.1"
         ];
@@ -24730,6 +24814,37 @@ in
     meta = {
       description = "a 'json' command for massaging and processing JSON on the command line";
       homepage = "https://github.com/trentm/json#readme";
+    };
+    production = true;
+  };
+  js-beautify = nodeEnv.buildNodePackage {
+    name = "js-beautify";
+    packageName = "js-beautify";
+    version = "1.6.14";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/js-beautify/-/js-beautify-1.6.14.tgz";
+      sha1 = "d3b8f7322d02b9277d58bd238264c327e58044cd";
+    };
+    dependencies = [
+      sources."config-chain-1.1.11"
+      sources."editorconfig-0.13.2"
+      sources."mkdirp-0.5.1"
+      sources."nopt-3.0.6"
+      sources."proto-list-1.2.4"
+      sources."ini-1.3.4"
+      sources."bluebird-3.5.0"
+      sources."commander-2.11.0"
+      sources."lru-cache-3.2.0"
+      sources."sigmund-1.0.1"
+      sources."pseudomap-1.0.2"
+      sources."minimist-0.0.8"
+      sources."abbrev-1.1.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "jsbeautifier.org for node";
+      homepage = http://jsbeautifier.org/;
+      license = "MIT";
     };
     production = true;
   };
@@ -27385,10 +27500,10 @@ in
   npm = nodeEnv.buildNodePackage {
     name = "npm";
     packageName = "npm";
-    version = "5.2.0";
+    version = "5.3.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/npm/-/npm-5.2.0.tgz";
-      sha1 = "0014eb05ead6870587fa1c068108935c898e9847";
+      url = "https://registry.npmjs.org/npm/-/npm-5.3.0.tgz";
+      sha1 = "e2ae85ef09d53f7f570a05578692899bf7879f17";
     };
     dependencies = [
       sources."JSONStream-1.3.1"
@@ -27427,7 +27542,7 @@ in
       sources."ini-1.3.4"
       sources."init-package-json-1.10.1"
       sources."lazy-property-1.0.0"
-      sources."libnpx-9.0.7"
+      sources."libnpx-9.2.0"
       sources."lockfile-1.0.3"
       sources."lodash._baseuniq-4.6.0"
       sources."lodash.clonedeep-4.5.0"
