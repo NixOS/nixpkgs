@@ -9935,7 +9935,7 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_tagging_0_3 = self.django_tagging.override (attrs: rec {
+  django_tagging_0_3 = self.django_tagging.overrideAttrs (attrs: rec {
     name = "django-tagging-0.3.6";
 
     src = pkgs.fetchurl {
