@@ -1035,6 +1035,8 @@ with pkgs;
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
+  hebcal = callPackage ../tools/misc/hebcal {};
+
   hexio = callPackage ../development/tools/hexio { };
 
   hostsblock = callPackage ../tools/misc/hostsblock { };
