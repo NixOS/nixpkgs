@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, fetchurl, writeText, makeWrapper
 # Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
 # => core dependencies
 , cmake, pkgconfig, git, boost, cppunit, fftw
@@ -54,6 +54,16 @@ stdenv.mkDerivation rec {
         gr-fec/include/gnuradio/fec/polar_decoder_common.h \
         --replace BOOST_CONSTEXPR_OR_CONST const
   '';
+
+  # Enables composition with nix-shell
+  grcSetupHook = writeText "grcSetupHook.sh" ''
+    addGRCBlocksPath() {
+      addToSearchPath GRC_BLOCKS_PATH $1/share/gnuradio/grc/blocks
+    }
+    envHooks+=(addGRCBlocksPath)
+  '';
+
+  setupHook = [ grcSetupHook ];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable -std=c++11"
