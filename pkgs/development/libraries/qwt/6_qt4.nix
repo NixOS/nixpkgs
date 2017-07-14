@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ stdenv, fetchurl, qt4, qmake4Hook, AGL }:
 
 stdenv.mkDerivation rec {
   name = "qwt-6.1.3";
@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0cwp63s03dw351xavb3pzbjlqvx7kj88wv7v4a2b18m9f97d7v7k";
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [
+    qt4
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AGL ];
+
   nativeBuildInputs = [ qmake4Hook ];
 
   postPatch = ''
