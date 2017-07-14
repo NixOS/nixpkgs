@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  buildInputs = [ 
+  buildInputs = [
     cmake
     asio
     openssl
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       production environments.
     '';
     homepage = https://corvusoft.co.uk/;
-    license = licenses.agpl;
+    license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;
   };
