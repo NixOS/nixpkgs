@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable -std=c++11"
   '';
 
+  # Framework path needed for qwt6_qt4 but not qwt5
+  cmakeFlags =
+    stdenv.lib.optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
+
   # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
   #   programs will not display anything. Yes, $MATPLOTLIBRC must point to the
   #   *dirname* where matplotlibrc is located, not the file itself.
