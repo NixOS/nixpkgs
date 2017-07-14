@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.2";
+  name = "qwt-6.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/qwt/${name}.tar.bz2";
-    sha256 = "031x4hz1jpbirv9k35rqb52bb9mf2w7qav89qv1yfw1r3n6z221b";
+    sha256 = "0cwp63s03dw351xavb3pzbjlqvx7kj88wv7v4a2b18m9f97d7v7k";
   };
 
   buildInputs = [ qt4 ];
