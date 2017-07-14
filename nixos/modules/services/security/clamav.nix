@@ -91,9 +91,6 @@ in
       gid = config.ids.gids.clamav;
     };
 
-    environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
-    environment.etc."clamav/clamd.conf".source = clamdConfigFile;
-
     systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       after = mkIf cfg.updater.enable [ "clamav-freshclam.service" ];
@@ -107,7 +104,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkg}/bin/clamd";
+        ExecStart = "${pkg}/bin/clamd -c ${clamdConfigFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
         PrivateTmp = "yes";
         PrivateDevices = "yes";
@@ -135,7 +132,7 @@ in
 
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkg}/bin/freshclam";
+        ExecStart = "${pkg}/bin/freshclam --config-file ${freshclamConfigFile}";
         PrivateTmp = "yes";
         PrivateDevices = "yes";
       };

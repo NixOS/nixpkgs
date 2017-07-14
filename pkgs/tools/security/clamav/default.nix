@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, zlib, bzip2, libiconv, libxml2
-, openssl, ncurses, curl, libmilter, pcre }:
+, openssl, ncurses, curl, libmilter, pcre, check }:
 
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre check
   ];
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--sysconfdir=/etc/clamav"
+    "--sysconfdir=$(out)/etc/clamav"
     "--with-zlib=${zlib.dev}"
     "--disable-zlib-vcheck" # it fails to recognize that 1.2.10 >= 1.2.2
     "--with-libbz2-prefix=${bzip2.dev}"
@@ -41,11 +41,6 @@ stdenv.mkDerivation rec {
     "--with-pcre=${pcre.dev}"
     "--enable-milter"
   ];
-
-  postInstall = ''
-    mkdir $out/etc
-    cp etc/*.sample $out/etc
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;
