@@ -1,24 +1,26 @@
-{ stdenv, fetchurl
-# core dependencies
+{ stdenv, fetchurl, makeWrapper
+# Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
+# => core dependencies
 , cmake, pkgconfig, git, boost, cppunit, fftw
-# python wrappers
+# => python wrappers
+# May be able to upgrade to swig3
 , python, swig2, numpy, scipy, matplotlib
-# grc - the gnu radio companion
+# => grc - the gnu radio companion
 , cheetah, pygtk
-# gr-wavelet: collection of wavelet blocks
+# => gr-wavelet: collection of wavelet blocks
 , gsl
-# gr-qtgui: the Qt-based GUI
-, qt4, qwt, pyqt4 #, pyqwt
-# gr-wxgui: the Wx-based GUI
+# => gr-qtgui: the Qt-based GUI
+, qt4, qwt, pyqt4
+# => gr-wxgui: the Wx-based GUI
 , wxPython, lxml
-# gr-audio: audio subsystems (system/OS dependent)
-, alsaLib
-# uhd: the Ettus USRP Hardware Driver Interface
+# => gr-audio: audio subsystems (system/OS dependent)
+, alsaLib   # linux   'audio-alsa'
+# => uhd: the Ettus USRP Hardware Driver Interface
 , uhd
-# gr-video-sdl: PAL and NTSC display
+# => gr-video-sdl: PAL and NTSC display
 , SDL
+# Other
 , libusb1, orc, pyopengl
-, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
