@@ -32,12 +32,14 @@ stdenv.mkDerivation rec {
     sha256 = "1m2jf8lafr6pr2dlm40nbvr6az8gwjfkzpbs4fxzv3l5hcqvmnc7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    cmake git boost cppunit fftw python swig2 orc lxml qt4
-    qwt alsaLib SDL libusb1 uhd gsl makeWrapper
+  nativeBuildInputs = [
+    cmake pkgconfig git makeWrapper cppunit orc
   ];
 
+  buildInputs = [
+    boost fftw python swig2 lxml qt4
+    qwt SDL libusb1 uhd gsl
+  ] ++ stdenv.lib.optionals stdenv.isLinux  [ alsaLib   ];
   propagatedBuildInputs = [
     cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
