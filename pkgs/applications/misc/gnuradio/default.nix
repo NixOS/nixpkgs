@@ -15,6 +15,7 @@
 , wxPython, lxml
 # => gr-audio: audio subsystems (system/OS dependent)
 , alsaLib   # linux   'audio-alsa'
+, CoreAudio # darwin  'audio-osx'
 # => uhd: the Ettus USRP Hardware Driver Interface
 , uhd
 # => gr-video-sdl: PAL and NTSC display
@@ -39,7 +40,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost fftw python swig2 lxml qt4
     qwt SDL libusb1 uhd gsl
-  ] ++ stdenv.lib.optionals stdenv.isLinux  [ alsaLib   ];
+  ] ++ stdenv.lib.optionals stdenv.isLinux  [ alsaLib   ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
+
   propagatedBuildInputs = [
     cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
