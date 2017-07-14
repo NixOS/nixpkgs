@@ -49,12 +49,10 @@ rec {
 
       dependencies' = let
           justMap = map lib.chooseDevOutputs dependencies;
-          nativeBuildInputs = lib.elemAt justMap 0
+          nativeBuildInputs = lib.head justMap
+            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
             ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh;
-          buildInputs = lib.elemAt justMap 1
-               # TODO(@Ericson2314): Should instead also be appended to `nativeBuildInputs`.
-            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh;
-        in [ nativeBuildInputs buildInputs ];
+        in [ nativeBuildInputs ] ++ lib.tail justMap;
 
       propagatedDependencies' = map lib.chooseDevOutputs propagatedDependencies;
 
@@ -64,15 +62,14 @@ rec {
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
-          # TODO(@Ericson2314): Reversing of dep lists is just temporary to avoid Darwin mass rebuild.
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies'));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies');
           computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists (lib.reverseList propagatedDependencies'));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists propagatedDependencies');
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies')));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies'));
           computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists (lib.reverseList propagatedDependencies')));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists propagatedDependencies'));
         in
         {
           builder = attrs.realBuilder or stdenv.shell;
