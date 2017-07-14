@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch,
-  cmake, libgcrypt, zlib, libmicrohttpd, libXtst, qtbase, qttools, libgpgerror, glibcLocales, libyubikey
+  cmake, libgcrypt, zlib, libmicrohttpd, libXtst, qtbase, qttools, libgpgerror, glibcLocales, libyubikey, libxi, libxtst, qtx11extras
 , withKeePassHTTP ? true
 }:
 
