@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small and secure static webserver";
-    homepage = http://dmr.ath.cx/net/darkhttpd/;
+    homepage = https://unix4lyfe.org/darkhttpd/;
     license = stdenv.lib.licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.bobvanderlinden ];
