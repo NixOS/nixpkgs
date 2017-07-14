@@ -1508,7 +1508,7 @@ with pkgs;
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
-    libmysql = mysql.lib;
+    libmysql = mysql.connector-c;
     libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
   };
 
