@@ -162,11 +162,11 @@ in {
         for file in /var/lib/libvirt/qemu/*.xml /var/lib/libvirt/lxc/*.xml; do
             test -f "$file" || continue
             # get (old) emulator path from config file
-            emulator=$(grep "^[[:space:]]*<emulator>" "$file" | sed 's,^[[:space:]]*<emulator>\(.*\)</emulator>.*,\1,')
+            emulator=$("${pkgs.xmlstarlet}/bin/xmlstarlet" select --template --value-of "/domain/devices/emulator" "$file")
             # get a (definitely) working emulator path by re-scanning $PATH
             new_emulator=$(PATH=${pkgs.libvirt}/libexec:$PATH command -v $(basename "$emulator"))
             # write back
-            sed -i "s,^[[:space:]]*<emulator>.*,    <emulator>$new_emulator</emulator> <!-- WARNING: emulator dirname is auto-updated by the nixos libvirtd module -->," "$file"
+            "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/devices/emulator" -v "$new_emulator" "$file"
         done
       ''; # */
 
