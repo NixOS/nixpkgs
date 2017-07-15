@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "libjpeg-turbo-${version}";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
-    sha256 = "0v365hm6z6lddcqagjj15wflk66rqyw75m73cqzl65rh4lyrshj1";
+    sha256 = "0a5m0psfp5952y5vrcs0nbdz1y9wqzg2ms0xwrx752034wxr964h";
   }; # github releases still need autotools, surprisingly
 
   patches =
