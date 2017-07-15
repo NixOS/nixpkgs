@@ -89,14 +89,9 @@ let
       accesslog.use-syslog = "enable"
       server.errorlog-use-syslog = "enable"
 
-      mimetype.assign = (
-          ".html" => "text/html",
-          ".htm" => "text/html",
-          ".txt" => "text/plain",
-          ".jpg" => "image/jpeg",
-          ".png" => "image/png",
-          ".css" => "text/css"
-          )
+      ${lib.optionalString cfg.enableUpstreamMimeTypes ''
+      include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
+      ''}
 
       static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
       index-file.names = ( "index.html" )
@@ -165,6 +160,17 @@ in
           want to add custom stuff to
           <option>services.lighttpd.extraConfig</option> that depends on a
           certain module.
+        '';
+      };
+
+      enableUpstreamMimeTypes = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to include the list of mime types bundled with lighttpd
+          (upstream). If you disable this, no mime types will be added by
+          NixOS and you will have to add your own mime types in
+          <option>services.lighttpd.extraConfig</option>.
         '';
       };
 
