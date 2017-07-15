@@ -1,5 +1,5 @@
 {
-stdenv, lib, pkgs, buildPythonPackage, fetchFromGitHub,
+stdenv, lib, buildPythonPackage, fetchFromGitHub,
 cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng
 }:
 

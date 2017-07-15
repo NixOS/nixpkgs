@@ -1,6 +1,7 @@
 {
-  stdenv, lib, pkgs,
-  buildPythonPackage, fetchPypi
+stdenv, lib,
+buildPythonPackage, fetchPypi,
+libdiscid
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,6 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace discid/libdiscid.py \
-      --replace '_open_library(_LIB_NAME)' "_open_library('${pkgs.libdiscid}/lib/libdiscid.so.0')"
+      --replace '_open_library(_LIB_NAME)' "_open_library('${libdiscid}/lib/libdiscid.so.0')"
   '';
 }
