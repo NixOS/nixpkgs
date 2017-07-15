@@ -1,10 +1,10 @@
 # in geoipDatabase, you can insert a package defining ${geoipDatabase}/share/GeoIP
 # e.g. geolite-legacy
-{ stdenv, fetchurl, pkgs, drvName ? "geoip", geoipDatabase ? null }:
+{ stdenv, fetchurl, pkgs, drvName ? "geoip", geoipDatabase ? "/var/lib/geoip-databases" }:
 
-let version = "1.6.2"; in
-
-stdenv.mkDerivation {
+let version = "1.6.2";
+    dataDir = if (stdenv.lib.isDerivation geoipDatabase) then "${toString geoipDatabase}/share/GeoIP" else geoipDatabase;
+in stdenv.mkDerivation {
   name = "${drvName}-${version}";
 
   src = fetchurl {
@@ -12,11 +12,8 @@ stdenv.mkDerivation {
     sha256 = "0dd6si4cvip73kxdn43apg6yygvaf7dnk5awqfg9w2fd2ll0qnh7";
   };
 
-  postInstall = ''
-    DB=${toString geoipDatabase}
-    if [ -n "$DB" ]; then
-      ln -s $DB/share/GeoIP $out/share/GeoIP
-    fi
+  postPatch = ''
+    find . -name Makefile.in -exec sed -i -r 's#^pkgdatadir\s*=.+$#pkgdatadir = ${dataDir}#' {} \;
   '';
 
   meta = {
