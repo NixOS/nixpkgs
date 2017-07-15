@@ -1,8 +1,8 @@
-{ stdenv, fetchgit, callPackage, python, utillinux }:
+{ stdenv, fetchFromGitHub, callPackage, python, utillinux }:
 
 with stdenv.lib;
 
-let 
+let
   nodePackages = callPackage (import ../../../top-level/node-packages.nix) {
     neededNatives = [python] ++ optional (stdenv.isLinux) utillinux;
     self = nodePackages;
@@ -13,8 +13,9 @@ in nodePackages.buildNodePackage rec {
   name = "airfield-${version}";
   version = "5ae816562a";
 
-  src = [(fetchgit {
-    url = https://github.com/emblica/airfield.git;
+  src = [(fetchFromGitHub {
+    owner = "emblica";
+    repo = "airfield";
     rev = version;
     sha256 = "0rv05pq0xdm0d977dc3hg6dam78acymzrdvkxs8ga8xj4vfs5npk";
   })];

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "nginx_exporter-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/discordianfish/nginx_exporter";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/discordianfish/nginx_exporter";
+    owner = "discordianfish";
+    repo = "nginx_exporter";
     sha256 = "17mjbf8v4h7ja87y02ggmyzl3g8ms8s37mcpcq1niijgli37h75d";
   };
 

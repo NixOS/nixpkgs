@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "go-ethereum-classic-${version}";
@@ -8,9 +8,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/ethereumproject/go-ethereum";
   subPackages = [ "cmd/evm" "cmd/geth" ];
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/ethereumproject/go-ethereum";
+    owner = "ethereumproject";
+    repo  ="go-ethereum";
     sha256 = "15wji12wqcrgsb1glwwz4jv7rsas71bbxh7750iv2phn7jivm0fi";
   };
 

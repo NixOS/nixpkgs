@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, coq, mathcomp }:
+{ stdenv, fetchFromGitHub, coq, mathcomp }:
 
 stdenv.mkDerivation rec {
 
   name = "coq-coqeal-${coq.coq-version}-${version}";
   version = "7522037d";
 
-  src = fetchgit {
-    url = git://github.com/CoqEAL/CoqEAL.git;
+  src = fetchFromGitHub {
+    owner = "CoqEAL";
+    repo = "CoqEAL";
     rev = "7522037d5e01e651e705d782f4f91fc68c46866e";
     sha256 = "0kbnsrycd0hjni311i8xc5xinn4ia8rnqi328sdfqzvvyky37fgj";
   };

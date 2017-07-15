@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, curl, cmake, boost, gcc5, protobuf, pkgconfig, jsoncpp
+{ stdenv, fetchFromGitHub, curl, cmake, boost, gcc5, protobuf, pkgconfig, jsoncpp
 , libusb1, libmicrohttpd
 }:
 
@@ -9,10 +9,11 @@ in
 stdenv.mkDerivation rec {
   name = "trezord-${version}";
 
-  src = fetchgit {
-    url    = "https://github.com/trezor/trezord";
+  src = fetchFromGitHub {
+    owner  = "trezor";
+    repo   = "trezord";
     rev    = "refs/tags/v${version}";
-    sha256 = "1606j5cfngryk4q21yiga1zvc3zpx4q8vqn6ljrvr679hpvlwni4";
+    sha256 = "11rxbqcjrdhwx6rvhdk6asj0q462yi9lrcqhrhar6z8iy4bv93bh";
   };
 
   meta = with stdenv.lib; {

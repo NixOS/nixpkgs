@@ -5,7 +5,6 @@ stdenv.mkDerivation rec {
   version = "2016.1018";
 
   src = fetchFromGitHub {
-    name = "${name}-src";
     owner = "jaalto";
     repo = "project--copyright-update";
     rev = "release/${version}";

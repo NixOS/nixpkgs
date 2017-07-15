@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, libjack2
+{ stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
 , libxslt, lv2, pkgconfig, premake3, xorg, ladspa-sdk }:
 
 stdenv.mkDerivation rec {
   name = "distrho-ports-unstable-2016-06-26";
 
-  src = fetchgit {
-    url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
+  src = fetchFromGitHub {
+    owner = "DISTRHO";
+    repo = "DISTRHO-Ports";
     rev = "e3969853ec9ba897c50ac060f0167313e2a18b29";
     sha256 = "0id4p8dlnlv5271yvmyawfr754nzah7xhvjkj633lw5yr3mq707m";
   };

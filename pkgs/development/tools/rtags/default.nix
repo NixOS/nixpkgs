@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, writeScript, apple_sdk, bash, emacs }:
+{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, openssl, writeScript, apple_sdk, bash, emacs }:
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
   '';
 
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    url = "https://github.com/andersbakken/rtags.git";
+    owner = "andersbakken";
+    repo = "rtags";
     sha256 = "0rv5hz4cfc1adpxvp4j4227nfc0p0yrjdc6l9i32jj11p69a5401";
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation

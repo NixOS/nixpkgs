@@ -1,11 +1,12 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "flashbench-${version}";
   version = "2012-06-06";
 
-  src = fetchgit {
-    url = "https://github.com/bradfa/flashbench.git";
+  src = fetchFromGitHub {
+    owner = "bradfa";
+    repo = "flashbench";
     rev = "2e30b1968a66147412f21002ea844122a0d5e2f0";
     sha256 = "037rhd2alwfip9qk78cy8fwwnc2kdyzccsyc7v2zpmvl4vvpvnhg";
   };

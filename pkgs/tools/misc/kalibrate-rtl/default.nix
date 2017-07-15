@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "kalibrate-rtl-20131214";
 
   # There are no tags/releases, so use the latest commit from git master.
   # Currently, the latest commit is from 2013-12-14.
-  src = fetchgit {
-    url = "https://github.com/steve-m/kalibrate-rtl.git";
+  src = fetchFromGitHub {
+    owner = "steve-m";
+    repo = "kalibrate-rtl";
     rev = "aae11c8a8dc79692a94ccfee39ba01e8c8c05d38";
     sha256 = "1spbfflkqnw9s8317ppsf7b1nnkicqsmaqsnz1zf8i49ix70i6kn";
   };

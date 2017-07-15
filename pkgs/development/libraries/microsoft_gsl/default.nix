@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "microsoft_gsl-${version}";
   version = "2017-02-13";
 
-  src = fetchgit {
-    url = "https://github.com/Microsoft/GSL.git";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "GSL";
     rev = "3819df6e378ffccf0e29465afe99c3b324c2aa70";
-    sha256 = "03d17mnx6n175aakin313308q14wzvaa9pd0m1yfk6ckhha4qf35";
+    sha256 = "1cmsm3ffcifwnaw7mi16k4y4fqi3q1sql09q8nqyxw1rhbf0n9jx";
   };
 
   # build phase just runs the unit tests

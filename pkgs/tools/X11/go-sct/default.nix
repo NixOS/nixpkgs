@@ -1,4 +1,4 @@
-{ stdenv, lib, xorg, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, xorg, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "go-sct-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/d4l3k/go-sct";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/d4l3k/go-sct";
+    owner = "d4l3k";
+    repo ="go-sct";
     sha256 = "1iqdagrq0j7sqxgsj31skgk73k2rbpbvj41v087af9103wf8h9z7";
   };
 

@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, autoreconfHook, scheme48 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, scheme48 }:
 
 stdenv.mkDerivation {
   name = "scsh-0.7pre";
 
-  src = fetchgit {
-    url = "git://github.com/scheme/scsh.git";
+  src = fetchFromGitHub {
+    owner = "scheme";
+    repo = "scsh";
     rev = "f99b8c5293628cfeaeb792019072e3a96841104f";
     fetchSubmodules = true;
     sha256 = "0ci2h9hhv8pl12sdyl2qwal3dhmd7zgm1pjnmd4kg8r1hnm6vidx";

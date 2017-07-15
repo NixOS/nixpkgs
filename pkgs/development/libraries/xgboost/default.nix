@@ -1,14 +1,15 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "xgboost-${version}";
   version = "0.60";
 
   # needs submodules
-  src = fetchgit {
-    url = "https://github.com/dmlc/xgboost";
+  src = fetchFromGitHub {
+    owner = "dmlc";
+    repo = "xgboost";
     rev = "refs/tags/v${version}";
-    sha256 = "0536vfl59n9vlagl1cpdl06c9y19dscwhwdzvi27zk5nc5qb6rdq";
+    sha256 = "16frxnwnn1kmfr013c838vzx6g2fqqs1rwvf5bcjd796369kkydm";
   };
 
   enableParallelBuilding = true;

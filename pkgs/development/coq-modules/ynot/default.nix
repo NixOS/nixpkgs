@@ -1,12 +1,13 @@
-{stdenv, fetchgit, coq}:
+{stdenv, fetchFromGitHub, coq}:
 
 stdenv.mkDerivation rec {
 
   name = "coq-ynot-${coq.coq-version}-${version}";
   version = "ce1a9806";
 
-  src = fetchgit {
-    url = git://github.com/Ptival/ynot.git;
+  src = fetchFromGitHub {
+    owner = "Ptival";
+    repo = "ynot";
     rev = "ce1a9806c26ffc6e7def41da50a9aac1433cb2f8";
     sha256 = "1pcmcl5zamiimkcg1xvynxnfbv439y02vg1mnz79hqq9mnjyfnpw";
   };

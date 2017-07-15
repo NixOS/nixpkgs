@@ -1,14 +1,15 @@
-{ stdenv, pkgs, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+{ stdenv, pkgs, fetchFromGitHub, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
 , extraModulePaths ? []
 , version }:
 
 let
-  contrib = (fetchgit {
-    url = "https://github.com/stumpwm/stumpwm-contrib.git";
+  contrib = fetchFromGitHub {
+    owner = "stumpwm";
+    repo = "stumpwm-contrib";
     rev = "9bebe3622b2b6c31a6bada9055ef3862fa79b86f";
     sha256 = "1ml6mjk2fsfv4sf65fdbji3q5x0qiq99g1k8w7a99gsl2i8h60gc";
-  });
+  };
   versionSpec = {
     "latest" = {
       name = "1.0.0";
@@ -33,10 +34,10 @@ in
 stdenv.mkDerivation rec {
   name = "stumpwm-${versionSpec.name}";
 
-  src = fetchgit {
-    url = "https://github.com/stumpwm/stumpwm";
-    rev = "${versionSpec.rev}";
-    sha256 = "${versionSpec.sha256}";
+  src = fetchFromGitHub {
+    owner = "stumpwm";
+    repo = "stumpwm";
+    inherit (versionSpec) rev sha256;
   };
 
   # NOTE: The patch needs an update for the next release.

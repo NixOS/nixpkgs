@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
@@ -123,8 +123,9 @@ let
     qtVersion = 5;
 
     # Needs submodules
-    src = fetchgit {
-      url = "https://github.com/mumble-voip/mumble";
+    src = fetchFromGitHub {
+      owner = "mumble-voip";
+      repo = "mumble";
       rev = "eb63d0b14a7bc19bfdf34f80921798f0a67cdedf";
       sha256 = "1nirbx0fnvi1nl6s5hrm4b0v7s2i22yshkmqnfjhxyr0y272s7lh";
     };

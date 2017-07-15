@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bash, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
+{ stdenv, fetchFromGitHub, bash, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
 
 let
   generic = { version, sha256, prePatch }:
@@ -7,8 +7,9 @@ let
 
       buildInputs = [ocaml zlib pcre neko camlp4];
 
-      src = fetchgit {
-        url = https://github.com/HaxeFoundation/haxe.git;
+      src = fetchFromGitHub {
+        owner = "HaxeFoundation";
+        repo = "haxe";
         inherit sha256;
         fetchSubmodules = true;
         rev = "refs/tags/${version}";

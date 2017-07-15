@@ -1,12 +1,13 @@
-{ stdenv, buildPerlPackage, fetchgit, perl, openssl, perlPackages, gettext, python34Packages
+{ stdenv, buildPerlPackage, fetchFromGitHub, perl, openssl, perlPackages, gettext, python34Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 
 buildPerlPackage {
   name = "openxpki-git20150807";
 
-  src = fetchgit {
-    url = "https://github.com/openxpki/openxpki";
+  src = fetchFromGitHub {
+    owner = "openxpki";
+    repo = "openxpki";
     rev = "5cb76c553b6b1a81ede380857700628a7521f6e3";
     sha256 = "05bmhani2c7ays488xv3hx5xbxb612bnwq5rdjwmsj51xpaz454p";
   };

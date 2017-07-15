@@ -1,13 +1,14 @@
-{ stdenv, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
+{ stdenv, cmake, fetchFromGitHub, hidapi, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
   version = "1.1";
 
-  src = fetchgit {
-    url = "https://github.com/Nitrokey/nitrokey-app.git";
+  src = fetchFromGitHub {
+    owner = "Nitrokey";
+    repo = "nitrokey-app";
     rev = "refs/tags/v${version}";
-    sha256 = "11pz1p5qgghkr5f8s2wg34zqhxk2vq465i73w1h479j88x35rdp0";
+    sha256 = "0qnpiyz22xdsz1ajysxsb07s8n4h8qhljxg1kk60365irjs9affz";
   };
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, zlib, libpng, qt4, qmake4Hook, pkgconfig
+{ stdenv, fetchFromGitHub, zlib, libpng, qt4, qmake4Hook, pkgconfig
 , withGamepads ? true, SDL # SDL is used for gamepad functionality
 }:
 
@@ -12,8 +12,9 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
   name = "PPSSPP-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/hrydgard/ppsspp.git";
+  src = fetchFromGitHub {
+    owner = "hrydgard";
+    repo = "ppsspp";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     sha256 = "0l8vgdlw657r8gv7rz8iqa6zd9zrbzw10pwhcnahzil7w9qrd03g";

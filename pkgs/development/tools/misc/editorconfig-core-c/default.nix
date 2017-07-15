@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, cmake, pcre, doxygen }:
+{ stdenv, fetchFromGitHub, cmake, pcre, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "editorconfig-core-c-${meta.version}";
 
-  src = fetchgit {
-    url = "https://github.com/editorconfig/editorconfig-core-c.git";
+  src = fetchFromGitHub {
+    owner = "editorconfig";
+    repo = "editorconfig-core-c";
     rev = "v${meta.version}";
     sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
     fetchSubmodules = true;

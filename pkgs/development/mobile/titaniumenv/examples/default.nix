@@ -17,24 +17,24 @@ rec {
     pkgs = import nixpkgs { inherit system; };
   in
   import ./kitchensink {
-    inherit (pkgs) fetchgit;
+    inherit (pkgs) fetchFromGitHub;
     titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion xcodeBaseDir tiVersion; };
     inherit tiVersion;
     target = "android";
   });
-  
+
   kitchensink_android_release = pkgs.lib.genAttrs systems (system:
   let
     pkgs = import nixpkgs { inherit system; };
   in
   import ./kitchensink {
-    inherit (pkgs) fetchgit;
+    inherit (pkgs) fetchFromGitHub;
     titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion xcodeBaseDir tiVersion; };
     inherit tiVersion;
     target = "android";
     release = true;
   });
-  
+
   emulate_kitchensink_debug = pkgs.lib.genAttrs systems (system:
   let
     pkgs = import nixpkgs { inherit system; };
@@ -43,7 +43,7 @@ rec {
     inherit (pkgs) androidenv;
     kitchensink = builtins.getAttr system kitchensink_android_debug;
   });
-  
+
   emulate_kitchensink_release = pkgs.lib.genAttrs systems (system:
   let
     pkgs = import nixpkgs { inherit system; };
@@ -52,14 +52,14 @@ rec {
     inherit (pkgs) androidenv;
     kitchensink = builtins.getAttr system kitchensink_android_release;
   });
-  
-} // (if builtins.elem "x86_64-darwin" systems then 
+
+} // (if builtins.elem "x86_64-darwin" systems then
   let
     pkgs = import nixpkgs { system = "x86_64-darwin"; };
   in
   rec {
   kitchensink_ios_development = import ./kitchensink {
-    inherit (pkgs) fetchgit;
+    inherit (pkgs) fetchFromGitHub;
     titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion xcodeBaseDir tiVersion; };
     inherit tiVersion iosVersion;
     target = "iphone";
@@ -77,7 +77,7 @@ rec {
   in
   {
     kitchensink_ipa = import ./kitchensink {
-      inherit (pkgs) stdenv fetchgit;
+      inherit (pkgs) stdenv fetchFromGitHub;
       titaniumenv = pkgs.titaniumenv.override { inherit xcodeVersion xcodeBaseDir tiVersion; };
       target = "iphone";
       inherit tiVersion;

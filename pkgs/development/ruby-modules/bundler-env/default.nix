@@ -1,5 +1,5 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
-, callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem, buildEnv
+, callPackage, defaultGemConfig, fetchurl, buildRubyGem, buildEnv
 , git
 , makeWrapper
 , bundler

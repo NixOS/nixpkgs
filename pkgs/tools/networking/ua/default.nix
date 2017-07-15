@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn
+{ stdenv, buildGoPackage, fetchFromGitHub
 , pkgconfig
 , glib, libxml2
 }:
@@ -10,9 +10,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/sloonz/ua";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/sloonz/ua.git";
+    owner = "sloonz";
+    repo = "ua";
     sha256 = "0452qknc8km9495324g6b5ja3shvk8jl7aa9nrjhdylf09dp2nif";
   };
 

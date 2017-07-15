@@ -1,12 +1,13 @@
-{stdenv, fetchgit, coq}:
+{stdenv, fetchFromGitHub, coq}:
 
 stdenv.mkDerivation rec {
 
   name = "coq-unimath-${coq.coq-version}-${version}";
   version = "a2714eca";
 
-  src = fetchgit {
-    url = git://github.com/UniMath/UniMath.git;
+  src = fetchFromGitHub {
+    url = "UniMath";
+    repo = "UniMath";
     rev = "a2714eca29444a595cd280ea961ec33d17712009";
     sha256 = "0v7dlyipr6bhwgp9v366nxdan018acafh13pachnjkgzzpsjnr7g";
   };

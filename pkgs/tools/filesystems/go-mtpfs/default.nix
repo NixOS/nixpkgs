@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, libusb1, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, pkgconfig, libusb1, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "go-mtpfs-${version}";
@@ -10,9 +10,10 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1 ];
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/hanwen/go-mtpfs";
+    owner = "hanwen";
+    repo = "go-mtpfs";
     sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
   };
 

@@ -1,11 +1,12 @@
-{ stdenv, agda, fetchgit, AgdaStdlib }:
+{ stdenv, agda, fetchFromGitHub, AgdaStdlib }:
 
 agda.mkDerivation (self: rec {
   version = "f1c173313f2a41d95a8dc6053f9365a24690e18d";
   name = "bitvector-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/copumpkin/bitvector.git";
+  src = fetchFromGitHub {
+    owner = "copumpkin";
+    repo = "bitvector";
     rev = version;
     sha256 = "0jb421lxvyxz26sxa81qjmn1gfcxfh0fmbq128f0kslqhiiaqfrh";
   };

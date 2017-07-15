@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, pkgconfig, dbus, libnotify, udisks2, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, pkgconfig, dbus, libnotify, udisks2, gdk_pixbuf }:
 
 stdenv.mkDerivation {
   name = "usermount-0.1";
 
-  src = fetchgit {
-    url = "https://github.com/tom5760/usermount.git";
+  src = fetchFromGitHub {
+    owner = "tom5760";
+    repo = "usermount";
     rev = "0d6aba3c1f8fec80de502f5b92fd8b28041cc8e4";
     sha256 = "0gpp0vwiwr7kgbhh26jspv3255662mnvnav6g8i2h0qxar8hf8w2";
   };

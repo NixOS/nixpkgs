@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, kernel }:
+{ stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation {
   name = "acpi-call-${kernel.version}";
 
-  src = fetchgit {
-    url = "git://github.com/mkottman/acpi_call.git";
+  src = fetchFromGitHub {
+    owner = "mkottman";
+    repo = "acpi_call";
     rev = "ac67445bc75ec4fcf46ceb195fb84d74ad350d51";
     sha256 = "0jl19irz9x9pxab2qp4z8c3jijv2m30zhmnzi6ygbrisqqlg4c75";
   };
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
     sed -e "s@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@" -i Makefile
     sed -e 's@acpi/acpi[.]h@linux/acpi.h@g' -i acpi_call.c
   '';
- 
+
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
     cp acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc

@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, emacs }:
+{ stdenv, fetchFromGitHub, emacs }:
 
 stdenv.mkDerivation {
   name = "jade-mode-0-20120802";
 
-  src = fetchgit {
-    url = "https://github.com/brianc/jade-mode.git";
+  src = fetchFromGitHub {
+    owner = "brianc";
+    repo = "jade-mode";
     rev = "275ab149edb0f6bcfae6ac17ba456f3351191604";
     sha256 = "3cd2bebcd66e59d60b8e5e538e65a8ffdfc9a53b86443090a284e8329d7cb09b";
   };

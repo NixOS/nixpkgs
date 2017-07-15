@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, sqlite, wxGTK30, gettext }:
+{ stdenv, fetchFromGitHub, sqlite, wxGTK30, gettext }:
 
 
 let
@@ -7,10 +7,11 @@ in
   stdenv.mkDerivation {
     name = "money-manager-ex-${version}";
 
-    src = fetchgit {
-      url = "https://github.com/moneymanagerex/moneymanagerex.git";
+    src = fetchFromGitHub {
+      owner = "moneymanagerex";
+      repo = "moneymanagerex";
       rev = "refs/tags/v${version}";
-      sha256 = "0r4n93z3scv0i0zqflsxwv7j4yl8jy3gr0m4l30y1q8qv0zj9n74";
+      sha256 = "1yh4mblj1fvkxw0p3l0jmfqjdzg7s4lxkk3kvvskmgj19i2sc1j0";
     };
 
     buildInputs = [ sqlite wxGTK30 gettext ];

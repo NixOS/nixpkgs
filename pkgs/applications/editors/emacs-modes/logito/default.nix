@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, emacs }:
+{ stdenv, fetchFromGitHub, emacs }:
 
 stdenv.mkDerivation rec {
   name = "logito-0.1";
 
-  src = fetchgit {
-    url = "https://github.com/sigma/logito.git";
+  src = fetchFromGitHub {
+    owner = "sigma";
+    repo = "logito";
     rev = "824acb89d2cc18cb47281a4fbddd81ad244a2052";
     sha256 = "b9a7433417eafc5bc158f63dddf559b2044368eb3061f0264169de319c68fe4a";
   };

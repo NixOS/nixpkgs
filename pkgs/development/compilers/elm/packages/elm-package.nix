@@ -1,6 +1,6 @@
 { mkDerivation, aeson, aeson-pretty_0_7_2, ansi-wl-pprint, base, binary
 , bytestring, containers, directory, edit-distance, elm-compiler
-, fetchgit, filepath, HTTP, http-client, http-client-tls
+, fetchFromGitHub, filepath, HTTP, http-client, http-client-tls
 , http-types, mtl, network, optparse-applicative, parallel-io
 , pretty, stdenv, text, time, unordered-containers, vector
 , zip-archive
@@ -8,8 +8,9 @@
 mkDerivation {
   pname = "elm-package";
   version = "0.18";
-  src = fetchgit {
-    url = "https://github.com/elm-lang/elm-package";
+  src = fetchFromGitHub {
+    owner = "elm-lang";
+    repo = "elm-package";
     sha256 = "19krnkjvfk02gmmic5h5i1i0lw7s30927bnd5g57cj8nqbigysv7";
     rev = "8bd150314bacab5b6fc451927aa01deec2276fbf";
   };

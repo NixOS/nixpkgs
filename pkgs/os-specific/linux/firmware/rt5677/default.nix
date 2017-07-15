@@ -1,10 +1,11 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "rt5677-firmware";
 
-  src = fetchgit {
-    url = "https://github.com/raphael/linux-samus";
+  src = fetchFromGitHub {
+    owner = "raphael";
+    repo = "linux-samus";
     rev = "995de6c2093797905fbcd79f1a3625dd3f50be37";
     sha256 = "0a6lz9wadm47cmva136q6wd0lw03bmymf9ispnzb091a7skwacry";
   };

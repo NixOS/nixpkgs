@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gawk, trousers, cryptsetup, openssl }:
 
 stdenv.mkDerivation rec {
   name = "tpm-luks-${version}";
   version = "git-2015-07-11";
 
-  src = fetchgit {
-    url = "https://github.com/momiji/tpm-luks";
+  src = fetchFromGitHub {
+    owner = "momiji";
+    repo = "tpm-luks";
     rev = "c9c5b7fdddbcdac1cd4d2ea6baddd0617cc88ffa";
     sha256 = "1ms2v57f13r9km6mvf9rha5ndmlmjvrz3mcikai6nzhpj0nrjz0w";
   };

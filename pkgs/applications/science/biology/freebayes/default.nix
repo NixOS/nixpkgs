@@ -5,7 +5,6 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    name = "freebayes-${version}-src";
     owner  = "ekg";
     repo   = "freebayes";
     rev    = "refs/tags/v${version}";

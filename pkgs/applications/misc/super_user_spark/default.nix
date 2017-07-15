@@ -1,4 +1,4 @@
-{ mkDerivation, fetchgit, aeson, aeson-pretty, base, bytestring, directory
+{ mkDerivation, fetchFromGitHub, aeson, aeson-pretty, base, bytestring, directory
 , filepath, hspec, hspec-core, HUnit, mtl, optparse-applicative
 , parsec, process, pureMD5, QuickCheck, shelly, stdenv, text
 , transformers, unix
@@ -6,8 +6,9 @@
 mkDerivation {
   pname = "super-user-spark";
   version = "0.3.2.0-dev";
-  src = fetchgit {
-    url = "https://github.com/NorfairKing/super-user-spark";
+  src = fetchFromGitHub {
+    owner = "NorfairKing";
+    repo = "super-user-spark";
     sha256 = "0akyc51bghzkk8j75n0i8v8rrsklidwvljhx3aibxfbkqp33372g";
     rev = "ab8635682d67842b9e6d909cf3c618014e4157f2";
   };

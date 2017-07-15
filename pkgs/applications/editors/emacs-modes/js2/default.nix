@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, emacs }:
+{ stdenv, fetchFromGitHub, emacs }:
 
 stdenv.mkDerivation {
   name = "js2-mode-0-20141118";
 
-  src = fetchgit {
-    url = "git://github.com/mooz/js2-mode.git";
+  src = fetchFromGitHub {
+    owner = "mooz";
+    repo = "js2-mode";
     rev = "3abcd90ddc2f446ddf0fb874dd79ba870c26ad2d";
     sha256 = "0sh9ax2w0ydhjjn4vnwbgy3926p7ad6h6nmsnm0a3zlldj9a4vwn";
   };

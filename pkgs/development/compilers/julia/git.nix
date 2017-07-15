@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl
+{ stdenv, fetchgit, fetchurl, fetchFromGitHub
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
 # libjulia dependencies
@@ -42,7 +42,7 @@ let
     url = "https://api.github.com/repos/JuliaLang/Rmath-julia/tarball/v${rmathVersion}";
     sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
   };
-  
+
   virtualenvVersion = "15.0.0";
   virtualenv = fetchurl {
     url = "mirror://pypi/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
@@ -55,8 +55,9 @@ stdenv.mkDerivation rec {
   version = "0.6.0-dev-2016-11-25";
   name = "${pname}-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/JuliaLang/${pname}";
+  src = fetchFromGitHub {
+    owner = "JuliaLang";
+    repo = pname;
     rev = "03c24644815ba5320d038bb60c08565375fea1d9";
     sha256 = "103mg9dz8yda2zxbd85jv8zhdzs29jj0dxrm2ppxpfhbbf6fxqav";
   };

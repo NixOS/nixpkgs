@@ -1,11 +1,12 @@
-{ fetchgit, stdenv, love, curl, zip }:
+{ fetchFromGitHub, stdenv, love, curl, zip }:
 
 stdenv.mkDerivation rec {
   version = "0.12.1";
   name = "hawkthorne-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/hawkthorne/hawkthorne-journey.git";
+  src = fetchFromGitHub {
+    owner = "hawkthorne";
+    repo = "hawkthorne-journey";
     rev = "610b9b3907b2a1b21da2ae926e4c7c4c9e19959b";
     sha256 = "013smhdf9sh91153fpk2bwhhnpg6pn7kfrpw77jmf0v48i3q44h2";
   };

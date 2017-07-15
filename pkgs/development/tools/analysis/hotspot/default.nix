@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    # TODO: For some reason, `fetchSubmodules` doesn't work when using `rev = "v${version}";`,
-    #       so using an explicit commit instead. See #15559
-    rev = "352687bf620529e9887616651f123f922cb421a4";
+    rev = "v${version}";
     sha256 = "09ly15yafpk31p3w7h2xixf1xdmx803w9fyb2aq7mhmc7pcxqjsx";
     fetchSubmodules = true;
   };

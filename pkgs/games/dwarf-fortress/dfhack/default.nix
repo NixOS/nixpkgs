@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, writeScriptBin
+{ stdenv, fetchFromGitHub, cmake, writeScriptBin
 , perl, XMLLibXML, XMLLibXSLT
 , zlib
 }:
@@ -40,8 +40,9 @@ in stdenv.mkDerivation rec {
   name = "dfhack-${version}";
 
   # Beware of submodules
-  src = fetchgit {
-    url = "https://github.com/DFHack/dfhack";
+  src = fetchFromGitHub {
+    owner = "DFHack";
+    repo = "dfhack";
     inherit rev sha256;
   };
 

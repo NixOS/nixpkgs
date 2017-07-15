@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, zlib, bzip2, docbook2x, pcre, curl, libxml2, libevent, perl
+{ fetchFromGitHub, stdenv, zlib, bzip2, docbook2x, pcre, curl, libxml2, libevent, perl
 , pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv, autoconf, automake
 , libtool, seeks_confDir ? ""
 }:
@@ -6,8 +6,9 @@
 stdenv.mkDerivation {
   name = "seeks-0.4.1";
 
-  src = fetchgit {
-    url = "git://github.com/beniz/seeks.git";
+  src = fetchFromGitHub {
+    owner = "beniz";
+    repo = "seeks";
     rev = "1168b3a2f3111c3fca31dd961135194c3e8df5fd";
     sha256 = "18s2pxal9a2aayv63hc19vnkx5a5y9rhbipdpvkinbni5283iiar";
   };

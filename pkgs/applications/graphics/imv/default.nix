@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, SDL2, SDL2_ttf, freeimage, fontconfig }:
+{ stdenv, fetchFromGitHub, SDL2, SDL2_ttf, freeimage, fontconfig }:
 
 stdenv.mkDerivation rec {
   name = "imv-${version}";
   version = "2.1.3";
 
-  src = fetchgit {
-    url = "https://github.com/eXeC64/imv.git";
+  src = fetchFromGitHub {
+    owner = "eXeC64";
+    repo = "imv";
     rev = "e59d0e9e120f1dbde9ab068748a190e93978e5b7";
     sha256 = "0j48dk1bcbh5541522qkn487637wcx104zckrnxa5g3nirfqa7r7";
   };
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line image viewer for tiling window managers";
-    homepage    = https://github.com/eXeC64/imv; 
+    homepage    = https://github.com/eXeC64/imv;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.unix;

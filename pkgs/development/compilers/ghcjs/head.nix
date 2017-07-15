@@ -1,4 +1,4 @@
-{ fetchgit, fetchFromGitHub, bootPkgs }:
+{ fetchFromGitHub, bootPkgs }:
 
 bootPkgs.callPackage ./base.nix {
   version = "0.2.020170323";
@@ -13,10 +13,11 @@ bootPkgs.callPackage ./base.nix {
     rev = "600015e085a28da601b65a41c513d4a458fcd184";
     sha256 = "01kirrg0fnfwhllvwgfqjiwzwj4yv4lyig87x61n9jp6y5shzjdx";
   };
-  ghcjsBootSrc = fetchgit {
+  ghcjsBootSrc = fetchFromGitHub {
     # TODO: switch back to git://github.com/ghcjs/ghcjs-boot.git
     # when https://github.com/ghcjs/ghcjs-boot/pull/41 is merged.
-    url = git://github.com/basvandijk/ghcjs-boot.git;
+    owner = "basvandijk";
+    repo = "ghcjs-boot";
     rev = "19a3b157ecb807c2224daffda5baecc92b76af35";
     sha256 = "16sgr8vfr1nx5ljnk8gckgjk70zpa67ix4dbr9aizkwyz41ilfrb";
     fetchSubmodules = true;

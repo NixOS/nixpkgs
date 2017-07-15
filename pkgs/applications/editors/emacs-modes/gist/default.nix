@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, emacs, gh, pcache, logito }:
+{ stdenv, fetchFromGitHub, emacs, gh, pcache, logito }:
 
 stdenv.mkDerivation rec {
   name = "gist-1.0";
 
-  src = fetchgit {
-    url = "https://github.com/sigma/gist.el.git";
+  src = fetchFromGitHub {
+    owner = "sigma";
+    repo = "gist.el";
     rev = "bbb457e4eaaf5f96cfaaa4f63021e3e542bfbfed";
     sha256 = "469f9df52076d0c6038183cff4b9415bca98de66c08814a60b69729b44bdf294";
   };

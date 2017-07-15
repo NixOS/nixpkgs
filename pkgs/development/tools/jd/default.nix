@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "jd-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/tidwall/jd";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/tidwall/jd";
+    owner = "tidwall";
+    repo = "jd";
     sha256 = "0dj4k38pf80dl77jns29vx2dj265s4ksg2q2s9n240b7b8z8mn5h";
   };
 

@@ -1,10 +1,11 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "nsjail-git-2015-08-10";
 
-  src = fetchgit {
-    url = https://github.com/google/nsjail;
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "nsjail";
     rev = "8b951e6c2827386786cde4a124cd1846d25b9404";
     sha256 = "02bmwd48l6ngp0nc65flw395mpj66brx3808d5xd19qn5524lnni";
   };

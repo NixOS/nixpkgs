@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, perl
+{ stdenv, fetchFromGitHub, cmake, perl
 , alsaLib, libevdev, libopus, libudev, SDL2
 , ffmpeg, pkgconfig, xorg, libvdpau, libpulseaudio, libcec
 , curl, expat, avahi, enet, libuuid
@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
   version = "2.2.3";
 
   # fetchgit used to ensure submodules are available
-  src = fetchgit {
-    url = "git://github.com/irtimmer/moonlight-embedded";
+  src = fetchFromGitHub {
+    owner = "irtimmer";
+    repo = "moonlight-embedded";
     rev = "refs/tags/v${version}";
-    sha256 = "0m1114dsz44rvq402b4v5ib2cwj2vbasir0l8vi0q5iymwmsvxj4";
+    sha256 = "1ydb1hfkakzpz7cg9giwc00pjzp6w3bn4jvcp5fajchghiy2c58y";
   };
 
   outputs = [ "out" "doc" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, binutils, autoconf, alex, happy, makeStaticLibraries
+{ stdenv, fetchFromGitHub, bootPkgs, perl, gmp, ncurses, binutils, autoconf, alex, happy, makeStaticLibraries
 , hscolour, xen, automake, gcc, git, zlib, libtool, enableIntegerSimple ? false
 }:
 
@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
   isHaLVM = true;
   enableParallelBuilding = false;
   isGhcjs = false;
-  src = fetchgit {
+  src = fetchFromGitHub {
     rev = "65fad65966eb7e60f234453a35aeb564a09d2595";
-    url = "https://github.com/GaloisInc/HaLVM";
+    owner = "GaloisInc";
+    repo = "HaLVM";
     sha256 = "09633h38w0z20cz0wcfp9z5kzv8v1zwcv0wqvgq3c8svqbrxp28k";
   };
   prePatch = ''

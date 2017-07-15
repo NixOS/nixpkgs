@@ -1,11 +1,11 @@
-{stdenv, fetchgit, mercurial, coreutils, git, makeWrapper, subversion}:
+{stdenv, fetchFromRepoOrCz, mercurial, coreutils, git, makeWrapper, subversion}:
 
 with stdenv.lib;
 stdenv.mkDerivation {
   name = "fast-export";
 
-  src = fetchgit {
-    url = git://repo.or.cz/fast-export.git;
+  src = fetchFromRepoOrCz {
+    repo = "fast-export";
     rev = "d202200fd9daa75cdb37d4cf067d4ca00e269535";
     sha256 = "0m4llsg9rx4sza1kf39kxsdvhi6y87a18wm5k19c5r2h3vpylwcc";
   };

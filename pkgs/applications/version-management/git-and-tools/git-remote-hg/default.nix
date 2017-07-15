@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, mercurial, makeWrapper,
+{ stdenv, fetchFromGitHub, mercurial, makeWrapper,
   asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
 }:
 
@@ -7,9 +7,10 @@ stdenv.mkDerivation rec {
   version = "0.2-${rev}";
   name = "git-remote-hg-${version}";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "git://github.com/fingolfin/git-remote-hg.git";
+    owner = "fingolfin";
+    repo = "git-remote-hg";
     sha256 = "0cmlfdxfabrs3x10mfjfap8wz67s8xk2pjn2wlcj9k2v84gji60m";
   };
 

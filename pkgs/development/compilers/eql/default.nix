@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
+{ stdenv, fetchFromGitLab, qt4, ecl, xorgserver, xkbcomp, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   version = src.rev;
   name = "eql-git-${version}";
-  src = fetchgit {
+  src = fetchFromGitLab {
     rev = "9097bf98446ee33c07bb155d800395775ce0d9b2";
-    url = "https://gitlab.com/eql/eql.git";
+    owner = "eql";
+    repo = "eql";
     sha256 = "17h23qr7fyr9hvjgiq0yhacmjs43x06vh8978aq42ymcgipxdcww";
   };
 

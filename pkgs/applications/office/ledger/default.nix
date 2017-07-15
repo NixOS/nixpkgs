@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, boost, gmp, mpfr, libedit, python
+{ stdenv, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python
 , texinfo, gnused }:
 
 let
@@ -10,8 +10,9 @@ stdenv.mkDerivation {
 
   # NOTE: fetchgit because ledger has submodules not included in the
   # default github tarball.
-  src = fetchgit {
-    url = "https://github.com/ledger/ledger.git";
+  src = fetchFromGitHub {
+    owner = "ledger";
+    repo = "ledger";
     rev = "refs/tags/v${version}";
     sha256 = "1j4p7djkmdmd858hylrsc3inamh9z0vkfl98s9wiqfmrzw51pmxp";
   };

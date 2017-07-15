@@ -1,17 +1,19 @@
-{ stdenv, fetchgit, fetchFromGitHub, go, fuse }:
+{ stdenv, fetchFromGitHub, go, fuse }:
 
 stdenv.mkDerivation rec {
   name = "tmsu-${version}";
   version = "0.6.1";
 
-  go-sqlite3 = fetchgit {
-    url = "git://github.com/mattn/go-sqlite3";
+  go-sqlite3 = fetchFromGitHub {
+    owner = "mattn";
+    repo = "go-sqlite3";
     rev = "c9a0db5d8951646743317f0756da0339fe144dd5";
     sha256 = "1m0q9869fis0dhg34g5wc5xi6pby491spfxi23w461h29higbrqh";
   };
 
-  go-fuse = fetchgit {
-    url = "git://github.com/hanwen/go-fuse";
+  go-fuse = fetchFromGitHub {
+    owner = "hanwen";
+    repo = "go-fuse";
     rev = "8c85ded140ac1889372a0e22d8d21e3d10a303bd";
     sha256 = "1iph2hpvby2mfwqg9pp39xjqdl9a09h4442yfdn5l67pznljh2bi";
   };

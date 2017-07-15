@@ -2138,8 +2138,9 @@ in {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/skarra/CalDAVClientLibrary.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "skarra";
+      repo = "CalDAVClientLibrary";
       rev = "06699b08190d50cc2636b921a654d67db0a967d1";
       sha256 = "157q32251ac9x3gdshgrjwsy48nq74vrzviswvph56h9wa8ksnnk";
     };
@@ -2405,10 +2406,11 @@ in {
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
     version = "1.2.1";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/cornice.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "cornice";
       rev = "refs/tags/${version}";
-      sha256 = "0688vrkl324jmpi8jkjh1s8nsyjinw149g3x8qlis8vz6j6a01wv";
+      sha256 = "0vyq874xx0vakwskj8jhb3z2l3ppjkz6ch37dhmwp6cwhqz12jml";
     };
 
     propagatedBuildInputs = with self; [ pyramid simplejson ];
@@ -3751,8 +3753,9 @@ in {
     disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ gflags ];
-    src = pkgs.fetchgit {
-      url = "https://github.com/google/closure-linter";
+    src = pkgs.fetchFromGitHub {
+      owner = "google";
+      repo = "closure-linter";
       rev = "5c27529075bb88bdc45e73008f496dec8438d658";
       sha256 = "076c7q7pr7akfvq5y8lxr1ab81wwps07gw00igdkcxnc5k9dzxwc";
     };
@@ -5676,8 +5679,9 @@ in {
     name = "dateparser-${version}";
     version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/scrapinghub/dateparser.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "scrapinghub";
+      repo = "dateparser";
       rev = "d20a63f1d1cee5b4bd19c9f745774cfa9f219549";
       sha256 = "0na7b4hvf7vykrk48482gxiq5xny67rvs8ilamxcxw3y9gfgdjfd";
     };
@@ -6265,10 +6269,11 @@ in {
     version = "0.12.0";
 
     # fetchgit used to ensure test submodule is available
-    src = pkgs.fetchgit {
-      url = "https://github.com/editorconfig/editorconfig-core-py";
+    src = pkgs.fetchFromGitHub {
+      owner = "editorconfig";
+      repo = "editorconfig-core-py";
       rev = "refs/tags/v${version}";
-      sha256 = "0svk7id7ncygj2rnxhm7602xizljyidk4xgrl6i0xgq3829cz4bl";
+      sha256 = "02dfx7flsj89q3dxparl9fbpmygaf7gvj2wyxmd5jskp4vlp04gh";
     };
 
     buildInputs = [ pkgs.cmake ];
@@ -8064,8 +8069,9 @@ in {
 
   logster = buildPythonPackage {
     name = "logster-7475c53822";
-    src = pkgs.fetchgit {
-      url = git://github.com/etsy/logster;
+    src = pkgs.fetchFromGitHub {
+      owner = "etsy";
+      repo = "logster";
       rev = "7475c53822";
       sha256 = "0565wxxiwksnly8rakb2r77k7lwzniq16kv861qd2ns9hgsjgy31";
     };
@@ -8107,11 +8113,11 @@ in {
     propagatedBuildInputs = with self; [ pyusb pybluez pyfantom pkgs.git ];
     disabled = isPy3k;
 
-    src = pkgs.fetchgit {
-      url = "http://github.com/Eelviny/nxt-python";
+    src = pkgs.fetchFromGitHub {
+      owner = "Eelviny";
+      repo = "nxt-python";
       rev = "479e20b7491b28567035f4cee294c4a2af629297";
       sha256 = "0mcsajhgm2wy4iy2lhmyi3xibgmbixbchanzmlhsxk6qyjccn9r9";
-      branchName= "pyusb";
     };
 
     # Tests fail on Mac dependency
@@ -8887,8 +8893,9 @@ in {
   pyramid_hawkauth = buildPythonPackage rec {
     name = "pyramidhawkauth-${version}";
     version = "0.1.0";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/pyramid_hawkauth.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "pyramid_hawkauth";
       rev = "refs/tags/v${version}";
       sha256 = "038ign7qlavlmvrhb2y8bygbxvy4j7bx2k1zg0i3wblg2ja50w7h";
     };
@@ -9098,8 +9105,9 @@ in {
   samplerate = buildPythonPackage rec {
     name = "scikits.samplerate-${version}";
     version = "0.3.3";
-    src = pkgs.fetchgit {
-      url = https://github.com/cournape/samplerate;
+    src = pkgs.fetchFromGitHub {
+      owner = "cournape";
+      repo = "samplerate";
       rev = "a536c97eb2d6195b5f266ea3cc3a35364c4c2210";
       sha256 = "0mgic7bs5zv5ji05vr527jlxxlb70f9dg93hy1lzyz2plm1kf7gg";
     };
@@ -9456,9 +9464,10 @@ in {
     rev = "089818bc61c3dc5eca023254e37a280b041ea8cc";
     name = "substanced-${rev}";
 
-    src = pkgs.fetchgit {
+    src = pkgs.fetchFromGitHub {
       inherit rev;
-      url = "https://github.com/Pylons/substanced.git";
+      owner = "Pylons";
+      repo = "substanced";
       sha256 = "1fb8m5aylw8kig13fvldchgkxi4s2xlvwralrzinyma3imbznd3q";
     };
 
@@ -11692,8 +11701,9 @@ in {
     version = "unstable-2016-03-11";
 
     # There is a PyPI package but an older one.
-    src = pkgs.fetchgit {
-      url = "https://github.com/bloomberg/python-github-webhook.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "bloomberg";
+      repo = "python-github-webhook";
       rev = "ca1855479ee59c4373da5425dbdce08567605d49";
       sha256 = "0mqwig9281iyzbphp1d21a4pqdrf98vs9k8lqpqx6spzgqaczx5f";
     };
@@ -11899,8 +11909,9 @@ in {
   hawkauthlib = buildPythonPackage rec {
     name = "hawkauthlib-${version}";
     version = "0.1.1";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/hawkauthlib.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "hawkauthlib";
       rev = "refs/tags/v${version}";
       sha256 = "0mr1mpx4j9q7sch9arwfvpysnpf2p7ijy7072wilxm8pnj0bwvsi";
     };
@@ -12871,8 +12882,9 @@ in {
     # the standard library in python 3.2 or above.
     disabled = isPy3k;
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/konfig.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "konfig";
       rev = "refs/tags/${version}";
       sha256 = "1kc5iy61ckbmf65d9ssyqiyb25lnxjvr7c2vcsdl9wx4n6fhwzx3";
     };
@@ -12959,8 +12971,9 @@ in {
 
     version = "2.3";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/lektor/lektor";
+    src = pkgs.fetchFromGitHub {
+      owner = "lektor";
+      repo = "lektor";
       rev = "refs/tags/${version}";
       sha256 = "1n0ylh1sbpvi9li3g6a7j7m28njfibn10y6s2gayjxwm6fpphqxy";
     };
@@ -14065,8 +14078,9 @@ in {
     name = "mozsvc-${version}";
     version = "0.8";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/mozservices.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "mozservices";
       rev = "refs/tags/${version}";
       sha256 = "1zci2ikk83mf7va88c83dr6snfh4ddjqw0lsg3y29qk5nxf80vx2";
     };
@@ -14304,8 +14318,9 @@ in {
   mutag = buildPythonPackage rec {
     disabled = ! isPy3k;
     name = "mutag-0.0.2-2ffa0258ca";
-    src = pkgs.fetchgit {
-      url = "https://github.com/aroig/mutag.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "aroig";
+      repo = "mutag";
       sha256 = "0axdnwdypfd74a9dnw0g25m16xx1yygyl828xy0kpj8gyqdc6gb1";
       rev = "2ffa0258cadaf79313241f43bf2c1caaf197d9c2";
     };
@@ -14535,8 +14550,9 @@ in {
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
-    src = pkgs.fetchgit {
-      url = https://github.com/PyMySQL/PyMySQL.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "PyMySQL";
+      repo = "PyMySQL";
       rev = "refs/tags/pymysql-${version}";
       sha256 = "0kpw11rxpyyhs9b139hxhbnx9n5kzjjw10wgwvhnf9m3mv7j4n71";
     };
@@ -18807,8 +18823,9 @@ in {
     name = "pycurl2-7.20.0";
     disabled = isPy3k;
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/Lispython/pycurl.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "Lispython";
+      repo = "pycurl";
       rev = "0f00109950b883d680bd85dc6e8a9c731a7d0d13";
       sha256 = "1qmw3cm93kxj94s71a8db9lwv2cxmr2wjv7kp1r8zildwdzhaw7j";
     };
@@ -20827,8 +20844,9 @@ in {
     version = "git20150810";
     disabled = isPy33;
 
-    src = pkgs.fetchgit {
-      url = https://github.com/aresch/rencode;
+    src = pkgs.fetchFromGitHub {
+      owner = "aresch";
+      repo = "rencode";
       rev = "b45e04abdca0dea36e383a8199783269f186c99e";
       sha256 = "b4bd82852d4220e8a9493d3cfaecbc57b1325708a2d48c0f8acf262edb10dc40";
     };
@@ -23935,8 +23953,9 @@ in {
     name = "tarsnapper-0.2.1";
     disabled = isPy3k;
 
-    src = pkgs.fetchgit {
-      url = https://github.com/miracle2k/tarsnapper.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "miracle2k";
+      repo = "tarsnapper";
       rev = "620439bca68892f2ffaba1079a34b18496cc6596";
       sha256 = "1n2k2r9x11r1ph9jcjhlk44hsghfnl1pl3aakbx121qc5dg7b0yn";
     };
@@ -26452,8 +26471,9 @@ EOF
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
     version = "0.3.1";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/tokenlib.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "tokenlib";
       rev = "refs/tags/${version}";
       sha256 = "0bq6dqyfwh29pg8ngmrm4mx4q27an9lsj0p9l79p9snn4g2rxzc8";
     };
@@ -26499,8 +26519,9 @@ EOF
         --replace "        keybinder.bind(self.options['hotkey'], self.hotkey_cb, show_item)" ""
     '';
 
-    src = pkgs.fetchgit {
-        url = https://github.com/scs3jb/screenkey.git;
+    src = pkgs.fetchFromGitHub {
+        owner = "scs3jb";
+        repo = "screenkey";
         rev = "b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
         sha256 = "1535mpm5x6v85d4ghxhdiianhjrsz280dwvs61ss0yyjx4kivx3s";
     };
@@ -26583,8 +26604,9 @@ EOF
     version = "0.9.2";
     disabled = isPy3k; # Errors in the test suite.
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla/PyBrowserID.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla";
+      repo = "PyBrowserID";
       rev = "refs/tags/${version}";
       sha256 = "0zsljr45gm8a4c0lxh6mgfc60a5fijhs4pwijb9fdkq16zw0pmf0";
     };
@@ -26621,8 +26643,9 @@ EOF
     name = "tokenserver-${version}";
     version = "1.2.11";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/tokenserver.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "tokenserver";
       rev = "refs/tags/${version}";
       sha256 = "1cvkvxcday1qc3zyarasj3l7322w8afhrcxcsvb5wac1ryh1w6y2";
     };
@@ -27153,8 +27176,9 @@ EOF
     name = "graphite-api-1.0.1";
     disabled = isPyPy;
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/brutasse/graphite-api.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "brutasse";
+      repo = "graphite-api";
       rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
       sha256 = "1n8h5krhv7hzmn336y9vjrmv6b6009lz5hj0d9wz7v1k2500ws5k";
     };
@@ -27211,8 +27235,9 @@ EOF
   graphite_influxdb = buildPythonPackage rec {
     name = "graphite-influxdb-0.3";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/vimeo/graphite-influxdb.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "vimeo";
+      repo = "graphite-influxdb";
       rev = "2273d12a24e1d804685a36debfd4224b7416b62f";
       sha256 = "1v00fgrnmsd9c0ahggyw9sia5m7dyzz16i5pa4vy6w2sbfyrmm4v";
     };
@@ -27232,8 +27257,9 @@ EOF
     name = "graphite-pager-${version}";
     version = "2bbfe91220ec1e0ca1cdf4b5564386482a44ed7d";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/offlinehacker/graphite-pager.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "offlinehacker";
+      repo = "graphite-pager";
       sha256 = "0ylal0vkc2yrjvssfz1gls84yk9vkvvkx3pyv4lx15jm2qqzdmxd";
       rev = version;
     };
@@ -27299,8 +27325,9 @@ EOF
 
     version = "1.2.0";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/jodal/pykka.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "jodal";
+      repo = "pykka";
       rev = "refs/tags/v${version}";
       sha256 = "0qlfw1054ap0cha1m6dbnq51kjxqxaf338g7jwnwy33b3gr8x0hg";
     };
@@ -27644,8 +27671,9 @@ EOF
   snapperGUI = buildPythonPackage rec {
     name = "Snapper-GUI";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/ricardomv/snapper-gui";
+    src = pkgs.fetchFromGitHub {
+      owner = "ricardomv";
+      repo = "snapper-gui";
       rev = "11d98586b122180c75a86fccda45c4d7e3137591";
       sha256 = "7a9f86fc17dbf130526e70c3e925eac30e2c74d6b932efbf7e7cd9fbba6dc4b1";
     };
@@ -27713,8 +27741,9 @@ EOF
 
     propagatedBuildInputs = with self; [lxml];
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/kjellmf/svg2tikz";
+    src = pkgs.fetchFromGitHub {
+      owner = "kjellmf";
+      repo = "svg2tikz";
       sha256 = "429428ec435e53672b85cdfbb89bb8af0ff9f8238f5d05970729e5177d252d5f";
       rev = "ad36f2c3818da13c4136d70a0fd8153acf8daef4";
     };
@@ -27732,8 +27761,9 @@ EOF
     version = "1.5.2";
     disabled = ! isPy27;
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/syncserver.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "syncserver";
       rev = "refs/tags/${version}";
       sha256 = "1pk4rvwvsd1vxbpzg39hxqi8pi9v6b4s6m0mqbpg88s6s7i6ks3m";
     };
@@ -27755,8 +27785,9 @@ EOF
     version = "1.5.13";
     disabled = !isPy27;
 
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/server-syncstorage.git;
+    src = pkgs.fetchFromGitHub {
+      owner = "mozilla-services";
+      repo = "server-syncstorage";
       rev = "refs/tags/${version}";
       sha256 = "0m14v7n105y06w3mdp35pyxyzjj5vqwbznzdbixhkms3df6md2lq";
     };
@@ -27804,8 +27835,9 @@ EOF
     name = "canonicaljson-${version}";
     version = "1.0.0";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-canonicaljson.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "python-canonicaljson";
       rev = "refs/tags/v${version}";
       sha256 = "0r82zlip93y169ijkn8xpbp0yr22mf92pni6dw420vb53l27sprq";
     };
@@ -27854,8 +27886,9 @@ EOF
     name = "pymacaroons-pynacl-${version}";
     version = "0.9.3";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/pymacaroons.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "pymacaroons";
       rev = "refs/tags/v${version}";
       sha256 = "0bykjk01zdndp6gjr30x46blsn0cvxa7j0zh5g8raxwaawchjhii";
     };
@@ -27907,8 +27940,9 @@ EOF
     name = "signedjson-${version}";
     version = "1.0.0";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-signedjson.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "python-signedjson";
       rev = "refs/tags/v${version}";
       sha256 = "0b8xxhc3npd4567kqapfp4gs7m0h057xam3an7424az262ind82n";
     };
@@ -27922,8 +27956,9 @@ EOF
     name = "unpaddedbase64-${version}";
     version = "1.1.0";
 
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-unpaddedbase64.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "python-unpaddedbase64";
       rev = "refs/tags/v${version}";
       sha256 = "0if3fjfxga0bwdq47v77fs9hrcqpmwdxry2i2a7pdqsp95258nxd";
     };
@@ -30183,15 +30218,16 @@ EOF
     checkPhase = "${python.interpreter} test/test.py";
 
     # fetchgit used to ensure test submodule is available
-    src = pkgs.fetchgit {
-      url = "${meta.homepage}.git";
+    src = pkgs.fetchFromGitHub {
+      owner = "avakar";
+      repo = "pytoml";
       rev = "refs/tags/v${version}";
       sha256 = "1jiw04zk9ccynr8kb1vqh9r1p2kh0al7g7b1f94911iazg7dgs9j";
     };
 
     meta = {
       description = "A TOML parser/writer for Python";
-      homepage    = https://github.com/avakar/pytoml;
+      homepage    = src.url;
       license     = licenses.mit;
       maintainers = with maintainers; [ peterhoeg ];
     };

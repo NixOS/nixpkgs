@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, utillinux, ncurses, flex, bison }:
+{ stdenv, fetchFromGitHub, utillinux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "unnethack-5.3.1";
 
-  src = fetchgit {
-    url = "https://github.com/UnNetHack/UnNetHack";
+  src = fetchFromGitHub {
+    owner = "UnNetHack";
+    repo = "UnNetHack";
     rev = "63677eb256b5a75430f190cfb0f76bdd9bd0b9dd";
     sha256 = "0w6vyg0j2xdvr5vdlyf3dwliyxjzcr5fdbx5maygxiql44j104v3";
   };
@@ -51,5 +52,5 @@ stdenv.mkDerivation rec {
     license = "nethack";
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
-  }; 
+  };
 }

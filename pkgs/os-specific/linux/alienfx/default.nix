@@ -1,4 +1,4 @@
-{ stdenv, libusb1, fetchgit}:
+{ stdenv, libusb1, fetchFromGitHub}:
 
 
 let
@@ -7,10 +7,10 @@ in
 
 stdenv.mkDerivation {
   name = "alienfx-1.0.0";
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = https://github.com/tibz/alienfx.git;
-
+    owner = "tibz";
+    repo = "alienfx";
     sha256 = "47501a3b4e08d39edee4cd829ae24259a7e740b9798db76b846fa872989f8fb1";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace /usr/ $out/
     substituteInPlace Makefile --replace "install -o root -g root" "install"
   '';
- 
+
   patches = [./unistd.patch];
   buildInputs = [ libusb1 ];
   makeFlags = "build";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
   installTargets = "install";
   postInstall = ''cp alienfx.1 $out/man/man1'';
-  
+
   meta = {
     description = "Controls AlienFX lighting";
     homepage = "https://github.com/tibz/alienfx";

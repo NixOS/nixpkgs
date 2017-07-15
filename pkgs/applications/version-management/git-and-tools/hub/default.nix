@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, go, Security }:
+{ stdenv, fetchFromGitHub, go, Security }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
   version = "2.2.9";
 
-  src = fetchgit {
-    url = https://github.com/github/hub.git;
+  src = fetchFromGitHub {
+    owner = "github";
+    repo = "hub";
     rev = "refs/tags/v${version}";
     sha256 = "195ckp1idz2azv0mm1q258yjz2n51sia9xdcjnqlprmq9aig5ldh";
   };

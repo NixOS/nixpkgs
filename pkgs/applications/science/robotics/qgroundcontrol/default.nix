@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, git,  espeak, SDL, udev, doxygen, cmake
+{ stdenv, fetchFromGitHub, git,  espeak, SDL, udev, doxygen, cmake
 , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
 , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmake
 , makeWrapper, lndir
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     cd ..
     mkdir -p $out/share/applications
     cp -v qgroundcontrol.desktop $out/share/applications
-    
+
     mkdir -p $out/bin
     cp -v build/release/qgroundcontrol "$out/bin/"
-    
+
     mkdir -p $out/share/qgroundcontrol
     cp -rv resources/ $out/share/qgroundcontrol
-    
+
     mkdir -p $out/share/pixmaps
     cp -v resources/icons/qgroundcontrol.png $out/share/pixmaps
 
@@ -69,11 +69,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/qgroundcontrol" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
   '';
-  
+
 
   # TODO: package mavlink so we can build from a normal source tarball
-  src = fetchgit {
-    url = "https://github.com/mavlink/qgroundcontrol.git";
+  src = fetchFromGitHub {
+    owner = "mavlink";
+    repo = "qgroundcontrol";
     rev = "refs/tags/v${version}";
     sha256 = "0isr0zamhvr853c94lblazkilil6zzmvf7afs3mxgn07jn9wrqz3";
     fetchSubmodules = true;

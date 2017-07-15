@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, curl }:
+{ stdenv, fetchFromGitHub, curl }:
 
 stdenv.mkDerivation {
   name = "metar-20161013.1";
 
-  src = fetchgit {
-    url = "https://github.com/keesL/metar.git";
+  src = fetchFromGitHub {
+    owner = "keesL";
+    repo = "metar";
     rev = "20e9ca69faea330f6c2493b6829131c24cb55147";
     sha256 = "1fgrlnpasqf1ihh9y6zy6mzzybqx0lxvh7gmv03rjdb55dr42dxj";
   };

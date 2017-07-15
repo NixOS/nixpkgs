@@ -1,13 +1,14 @@
-{ mkDerivation, lib, fetchgit, cmake, qtbase, qttools }:
+{ mkDerivation, lib, fetchFromBitbucket, cmake, qtbase, qttools }:
 
 mkDerivation rec {
   name = "speedcrunch-${version}";
   version = "0.12.0";
 
-  src = fetchgit {
+  src = fetchFromBitbucket {
     # the tagging is not standard, so you probably need to check this when updating
     rev = "refs/tags/release-${version}";
-    url = "https://bitbucket.org/heldercorreia/speedcrunch";
+    owner = "heldercorreia";
+    repo = "speedcrunch";
     sha256 = "0vh7cd1915bjqzkdp3sk25ngy8cq624mkh8c53c5bnzk357kb0fk";
   };
 

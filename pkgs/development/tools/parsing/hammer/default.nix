@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, glib, pkgconfig, python, scons, pythonPackages }:
+{ stdenv, fetchFromGitHub, glib, pkgconfig, python, scons, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "hammer-${version}";
   version = "e7aa734";
 
-  src = fetchgit {
-    url = "git://github.com/UpstandingHackers/hammer";
+  src = fetchFromGitHub {
+    owner = "UpstandingHackers";
+    repo = "hammer";
     sha256 = "01l0wbhz7dymxlndacin2vi8sqwjlw81ds2i9xyi200w51nsdm38";
     rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
   };

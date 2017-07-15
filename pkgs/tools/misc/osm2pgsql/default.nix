@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, expat, proj, bzip2, zlib, boost, postgresql, lua}:
+{ stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql, lua}:
 
 let
   version = "0.92.1-unstable";
@@ -6,8 +6,9 @@ in
 stdenv.mkDerivation rec {
   name = "osm2pgsql-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/openstreetmap/osm2pgsql.git";
+  src = fetchFromGitHub {
+    owner = "openstreetmap";
+    repo = "osm2pgsql";
     rev = "2b72b2121e91b72b0db6911d65c5165ca46d9d66";
     # Still waiting on release after:
     # https://github.com/openstreetmap/osm2pgsql/pull/684

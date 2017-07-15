@@ -44,7 +44,6 @@ let
       owner = "apple";
       inherit repo sha256 fetchSubmodules;
       rev = tag;
-      name = "${repo}-${version}-src";
     };
 
 sources = {
@@ -158,7 +157,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     cd ..
-    
+
     export INSTALLABLE_PACKAGE=$PWD/swift.tar.gz
 
     mkdir build install
@@ -221,7 +220,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/env $(type -p env)
 
     # This test fails on one of my machines, not sure why.
-    # Disabling for now. 
+    # Disabling for now.
     rm llbuild/tests/Examples/buildsystem-capi.llbuild
 
     substituteInPlace swift-corelibs-foundation/lib/script.py \

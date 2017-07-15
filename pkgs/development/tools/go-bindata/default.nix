@@ -1,15 +1,16 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchhg, fetchbzr, fetchsvn }:
 
 buildGoPackage rec {
   name = "go-bindata-${version}";
   version = "20151023-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "a0ff2567cfb70903282db057e799fd826784d41d";
-  
+
   goPackagePath = "github.com/jteeuwen/go-bindata";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/jteeuwen/go-bindata";
+    owner = "jteeuwen";
+    repo = "go-bindata";
     sha256 = "0d6zxv0hgh938rf59p1k5lj0ymrb8kcps2vfrb9kaarxsvg7y69v";
   };
 

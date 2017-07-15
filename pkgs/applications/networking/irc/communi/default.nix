@@ -1,11 +1,12 @@
-{ fetchgit, libcommuni, qtbase, qmake, stdenv }:
+{ fetchFromGitHub, libcommuni, qtbase, qmake, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "communi-${version}";
   version = "2016-08-19";
 
-  src = fetchgit {
-    url = "https://github.com/communi/communi-desktop.git";
+  src = fetchFromGitHub {
+    owner = "communi";
+    repo = "communi-desktop";
     rev = "d516b01b1382a805de65f21f3475e0a8e64a97b5";
     sha256 = "1pn7mr7ch1ck5qv9zdn3ril40c9kk6l04475564rpzf11jly76an";
     fetchSubmodules = true;

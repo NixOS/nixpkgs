@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, nodejs }:
+{ stdenv, fetchFromGitHub, nodejs }:
 
 stdenv.mkDerivation rec {
   name = "lessc-${version}";
   version = "1.7.5"; # Upgrade to > 2.x breaks twitter-bootstrap
 
-  src = fetchgit {
-    url = https://github.com/less/less.js.git;
+  src = fetchFromGitHub {
+    owner = "less";
+    repo = "less.js";
     rev = "refs/tags/v${version}";
     sha256 = "1af1xbh1pjpfsx0jp69syji6w9750nigk652yk46jrja3z1scb4s";
   };

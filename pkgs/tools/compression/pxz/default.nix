@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, xz, lzma }:
+{ stdenv, fetchFromGitHub, xz, lzma }:
 
 let name = "pxz";
     version = "4.999.9beta+git";
@@ -6,8 +6,9 @@ in
 stdenv.mkDerivation {
   name = name + "-" + version;
 
-  src = fetchgit {
-    url = "https://github.com/jnovy/pxz.git";
+  src = fetchFromGitHub {
+    owner = "jnovy";
+    repo = "pxz";
     rev = "ae808463c2950edfdedb8fb49f95006db0a18667";
     sha256 = "0na2kw8cf0qd8l1aywlv9m3xrxnqlcwxfdwp3f7x9vxwqx3k32kc";
   };

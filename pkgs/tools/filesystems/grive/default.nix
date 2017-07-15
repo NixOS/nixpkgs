@@ -1,11 +1,12 @@
-{ stdenv, fetchgit, cmake, libgcrypt, json_c, curl, expat, boost, binutils }:
+{ stdenv, fetchFromGitHub, cmake, libgcrypt, json_c, curl, expat, boost, binutils }:
 
 stdenv.mkDerivation rec {
   version = "0.3.0";
   name = "grive-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/Grive/grive.git";
+  src = fetchFromGitHub {
+    owner = "Grive";
+    repo = "grive";
     rev = "51e42914f3666ee6e0bc16a4c78f60b117265c24";
     sha256 = "11cqfcjl128nfg1rjvpvr9x1x2ch3kyliw4vi14n51zqp82f9ysb";
   };

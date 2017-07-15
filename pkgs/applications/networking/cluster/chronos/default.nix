@@ -1,11 +1,12 @@
-{ stdenv, lib, makeWrapper, fetchgit, curl, jdk, maven, nodejs, mesos }:
+{ stdenv, lib, makeWrapper, fetchFromGitHub, curl, jdk, maven, nodejs, mesos }:
 
 stdenv.mkDerivation rec {
   name = "chronos-${version}";
   version = "286b2ccb8e4695f8e413406ceca85b60d3a87e22";
 
-  src = fetchgit {
-    url = "https://github.com/airbnb/chronos";
+  src = fetchFromGitHub {
+    owner = "airbnb";
+    repo = "chronos";
     rev = version;
     sha256 = "0hrln3ad2g2cq2xqmy5mq32cdxxb9vb6v6jp6kcq03f8km6v3g9c";
   };

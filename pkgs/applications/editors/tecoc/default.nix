@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub
 , ncurses }:
 
 stdenv.mkDerivation rec {
@@ -6,8 +6,9 @@ stdenv.mkDerivation rec {
   name = "tecoc-git-${version}";
   version = "20150606";
 
-  src = fetchgit {
-    url = "https://github.com/blakemcbride/TECOC.git";
+  src = fetchFromGitHub {
+    owner = "blakemcbride";
+    repo = "TECOC";
     rev = "d7dffdeb1dfb812e579d6d3b518545b23e1b50cb";
     sha256 = "11zfa73dlx71c0hmjz5n3wqcvk6082rpb4sss877nfiayisc0njj";
   };
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   configurePhase = ''
-    cp src/makefile.linux src/Makefile    
+    cp src/makefile.linux src/Makefile
   '';
   buildPhase = ''
     make CC=${stdenv.cc}/bin/cc -C src/
@@ -31,15 +32,15 @@ stdenv.mkDerivation rec {
      ln -s tecoc teco
      ln -s tecoc Inspect )
   '';
-	
+
   meta = with stdenv.lib; {
     description = "A clone of the good old TECO editor";
     longDescription = ''
       For those who don't know: TECO is the acronym of Tape Editor and
-      COrrector (because it was a paper tape edition tool in its debut 
-      days). Now the acronym follows after Text Editor and Corrector, 
+      COrrector (because it was a paper tape edition tool in its debut
+      days). Now the acronym follows after Text Editor and Corrector,
       or Text Editor Character-Oriented.
-      
+
       TECO is a character-oriented text editor, originally developed
       bu Dan Murphy at MIT circa 1962. It is also a Turing-complete
       imperative interpreted programming language for text

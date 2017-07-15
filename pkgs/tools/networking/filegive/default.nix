@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, fetchgit, go }:
+{ stdenv, fetchurl, fetchFromGitHub, go }:
 
 assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
 
 let
 
   # Code with BSD license
-  srcNatPMP = fetchgit {
-    url = https://github.com/jackpal/go-nat-pmp;
+  srcNatPMP = fetchFromGitHub {
+    owner = "jackpal";
+    repo = "go-nat-pmp";
     rev = "e04deda90d56";
     sha256 = "1swwfyzaj3l40yh9np3x4fcracgs79nwryc85sxbdakx8wwxs2xb";
   };

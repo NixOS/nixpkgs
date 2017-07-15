@@ -1,13 +1,14 @@
-{ fetchgit, stdenv }:
+{ fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "kati-unstable-${version}";
   version = "2017-05-23";
   rev = "2dde61e46ab789f18956ff3b7c257dd8eb97993f";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/google/kati.git";
+    owner = "google";
+    repo = "kati";
     sha256 = "1das1fvycra546lmh72cr5qpgblhbzqqy7gfywiijjgx160l75vq";
   };
 

@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, fetchurl, ruby, which, coreutils }:
+{ stdenv, fetchFromGitHub, fetchurl, ruby, which, coreutils }:
 
 stdenv.mkDerivation rec {
   rev = "9b24598c08a27780f87c318e6145c1468b9880ba";
   name = "base16-2015-09-29_rev${builtins.substring 0 6 rev}";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/chriskempson/base16-builder";
+    owner = "chriskempson";
+    repo = "base16-builder";
     sha256 = "1zicwam16nsdg74rnza65jwwf4mlpkgv35p9gkr8ydy60l7agzwy";
   };
 

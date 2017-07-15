@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "godef-${version}";
@@ -8,9 +8,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/rogpeppe/godef";
   excludedPackages = "go/printer/testdata";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/rogpeppe/godef";
+    owner = "rogpeppe";
+    repo = "godef";
     sha256 = "1r8c4ijjnwvb9pci4wasmq88yj0ginwly2542kw4hyg2c87j613l";
   };
 

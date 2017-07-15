@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
-    name = "${name}-src";
     sha256 = "02k6wmr2n12dc6vwda8xczmbqidg6fs8nfg9n2cwwpm3k1a21qnd";
   };
 

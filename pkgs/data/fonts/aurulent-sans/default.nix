@@ -1,10 +1,11 @@
-{stdenv, fetchgit}:
+{stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   name = "aurulent-sans-0.1";
 
-  src = fetchgit {
-    url = "https://github.com/deepfire/hartke-aurulent-sans.git";
+  src = fetchFromGitHub {
+    owner = "deepfire";
+    repo = "hartke-aurulent-sans";
     rev = "refs/tags/${name}";
     sha256 = "01hvpvbrks40g9k1xr2f1gxnd5wd0sxidgfbwrm94pdi1a36xxrk";
   };

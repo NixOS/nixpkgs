@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   version = "1.1";
   name = "openmvg-${version}";
 
-  src = fetchgit {
-    url = "https://www.github.com/openmvg/openmvg.git";
+  src = fetchFromGitHub {
+    owner = "openmvg";
+    repo = "openmvg";
 
     # Tag v1.1
     rev = "refs/tags/v${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "ps3netsrv-${version}";
@@ -6,8 +6,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  src = fetchgit {
-    url = "https://github.com/dirkvdb/ps3netsrv--";
+  src = fetchFromGitHub {
+    owner = "dirkvdb";
+    repo = "ps3netsrv--";
     fetchSubmodules = true;
     rev = "e54a66cbf142b86e2cffc1701984b95adb921e81";
     sha256 = "09hvmfzqy2jckpsml0z1gkcnar8sigmgs1q66k718fph2d3g54sa";

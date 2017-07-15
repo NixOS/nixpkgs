@@ -1,4 +1,4 @@
-{ lib, fetchgit, fetchurl, nodePackages }:
+{ lib, fetchFromGitHub, nodePackages }:
 
 with lib;
 
@@ -9,8 +9,9 @@ in nodePackages.buildNodePackage rec {
   version = lib.strings.substring 0 7 rev;
   rev = "c56b860105f36c1c44ae011189d495272648c589";
 
-  src = fetchgit {
-    url = https://github.com/ripple/ripple-data-api.git;
+  src = fetchFromGitHub {
+    owner = "ripple";
+    repo = "ripple-data-api";
     inherit rev;
     sha256 = "1iygp26ilradxj268g1l2y93cgrpchqwn71qdag67lv273dbq48m";
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub
 , SDL2, wxGTK }:
 
 stdenv.mkDerivation rec {
@@ -6,8 +6,9 @@ stdenv.mkDerivation rec {
   name = "sound-of-sorting-${version}";
   version = "unstable-2015-07-21";
 
-  src = fetchgit {
-    url = "https://github.com/bingmann/sound-of-sorting.git";
+  src = fetchFromGitHub {
+    owner = "bingmann";
+    repo = "sound-of-sorting";
     rev = "05db428c796a7006d63efdbe314f976e0aa881d6";
     sha256 = "0m2f1dym3hcar7784sjzkbf940b28r02ajhkjgyyw7715psifb8l";
     fetchSubmodules = true;

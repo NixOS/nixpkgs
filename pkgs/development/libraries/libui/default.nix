@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, gtk3, darwin }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, darwin }:
 
 let
   shortName = "libui";
@@ -7,8 +7,9 @@ let
 in
   stdenv.mkDerivation rec {
     name = "${shortName}-${version}";
-    src  = fetchgit {
-      url    = "https://github.com/andlabs/libui.git";
+    src  = fetchFromGitHub {
+      owner  = "andlabs";
+      repo   = "libui";
       rev    = "6ebdc96b93273c3cedf81159e7843025caa83058";
       sha256 = "1lpbfa298c61aarlzgp7vghrmxg1274pzxh1j9isv8x758gk6mfn";
     };

@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, pkgconfig, dbus_glib, autoreconfHook, xorg }:
+{ stdenv, fetchFromGitHub, pkgconfig, dbus_glib, autoreconfHook, xorg }:
 
 stdenv.mkDerivation rec {
   name = "kbdd";
 
-  src = fetchgit {
-    url = https://github.com/qnikst/kbdd;
+  src = fetchFromGitHub {
+    owner = "qnikst";
+    repo = "kbdd";
     rev = "47dee0232f157cd865e43d92005a2ba107f6fd75";
     sha256 = "1ys9w1lncsfg266g9sfnm95an2add3g51mryg0hnrzcqa4knz809";
   };

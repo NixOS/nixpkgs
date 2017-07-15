@@ -1,5 +1,5 @@
 { luarocks, lib , stdenv,  writeText , readline,  makeWrapper,
-  less, ncurses, cmake, openblas, coreutils, fetchgit, libuuid, czmq, openssl,
+  less, ncurses, cmake, openblas, coreutils, fetchFromGitHub, libuuid, czmq, openssl,
   gnuplot, fetchurl, lua, src, libjpeg, libpng
 } :
 
@@ -258,8 +258,9 @@ let
       name = "unsup";
       luadeps = [ torch xlua optim ];
       buildInputs = [ cmake ];
-      src = fetchgit {
-        url = "https://github.com/koraykv/unsup";
+      src = fetchFromGitHub {
+        owner = "koraykv";
+        repo = "unsup";
         rev = "1d4632e716dc3c82feecc7dd4b22549df442859f";
         sha256 = "0npjq3y1cfmk026sdijcw3f766innrmb3qggnxsz62grczhfvgls";
       };
@@ -281,8 +282,9 @@ let
 
     lbase64 = buildLuaRocks rec {
       name = "lbase64";
-      src = fetchgit {
-        url = "https://github.com/LuaDist2/lbase64";
+      src = fetchFromGitHub {
+        owner = "LuaDist2";
+        repo = "lbase64";
         rev = "1e9e4f1e0bf589a0ed39f58acc185ec5e213d207";
         sha256 = "1i1fpy9v6r4w3lrmz7bmf5ppq65925rv90gx39b3pykfmn0hcb9c";
       };
@@ -290,8 +292,9 @@ let
 
     luuid = stdenv.mkDerivation rec {
       name = "luuid";
-      src = fetchgit {
-        url = "https://github.com/LuaDist/luuid";
+      src = fetchFromGitHub {
+        owner = "LuaDist";
+        repo = "luuid";
         sha256 = "062gdf1rild11jg46vry93hcbb36b4527pf1dy7q9fv89f7m2nav";
       };
 

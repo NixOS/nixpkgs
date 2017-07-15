@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, curses }:
+{ stdenv, fetchFromGitHub, curses }:
 
 stdenv.mkDerivation {
   name = "stag-1.0";
 
-  src = fetchgit {
-    url = https://github.com/seenaburns/stag.git;
+  src = fetchFromGitHub {
+    owner = "seenaburns";
+    repo = "stag";
     rev = "90e2964959ea8242349250640d24cee3d1966ad6";
     sha256 = "1yrzjhcwrxrxq5jj695wvpgb0pz047m88yq5n5ymkcw5qr78fy1v";
   };

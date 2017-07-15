@@ -1,9 +1,10 @@
-{ clangStdenv, fetchgit, llvmPackages, clang }:
+{ clangStdenv, fetchFromGitHub, llvmPackages, clang }:
 
 clangStdenv.mkDerivation {
   name = "emacs-clang-complete-async-20130218";
-  src = fetchgit {
-    url = "git://github.com/Golevka/emacs-clang-complete-async.git";
+  src = fetchFromGitHub {
+    owner = "Golevka";
+    repo = "emacs-clang-complete-async";
     rev = "f01488971ec8b5752780d130fb84de0c16a46f31";
     sha256 = "01smjinrvx0w5z847a43fh2hyr6rrq1kaglfakbr6dcr313w89x9";
   };

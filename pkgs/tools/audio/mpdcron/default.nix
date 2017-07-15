@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, libdaemon
 , mpd_clientlib, curl, sqlite, ruby, bundlerEnv, libnotify, pandoc }:
 
 let
@@ -10,8 +10,9 @@ in stdenv.mkDerivation rec {
   version = "20130809";
   name    = "mpdcron-${version}";
 
-  src = fetchgit {
-    url    = https://github.com/alip/mpdcron.git;
+  src = fetchFromGitHub {
+    owner  = "alip";
+    repo   = "mpdcron";
     rev    = "1dd16181c32f33e7754bbe21841c8e70b28f8ecd";
     sha256 = "0ayr9a5f6i4z3wx486dp77ffzs61077b8w871pqr3yypwamcjg6b";
   };

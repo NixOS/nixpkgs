@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pythonPackages, cdparanoia, cdrdao
+{ stdenv, fetchFromGitHub, pythonPackages, cdparanoia, cdrdao
 , gst-python, gst-plugins-base, gst-plugins-good
 , utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
@@ -9,8 +9,9 @@ in stdenv.mkDerivation rec {
   version = "0.2.3.20151109";
   namePrefix = "";
 
-  src = fetchgit {
-    url = "https://github.com/thomasvs/morituri.git";
+  src = fetchFromGitHub {
+    owner = "thomasvs";
+    repo = "morituri";
     fetchSubmodules = true;
     rev = "135b2f7bf27721177e3aeb1d26403f1b29116599";
     sha256 = "1sl5y5j3gdbynf2v0gf9dwd2hzawj8lm8ywadid7qm34yn8lx12k";

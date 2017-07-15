@@ -1,4 +1,4 @@
-{stdenv, fetchgit, cmake, ninja, boost, libpng, glfw3, epoxy, guile, pkgconfig
+{stdenv, fetchFromGitHub, cmake, ninja, boost, libpng, glfw3, epoxy, guile, pkgconfig
 , mesa, libX11, libpthreadstubs, libXau, libXdmcp, libXrandr, libXext
 , libXinerama, libXxf86vm, libXcursor, libXfixes
 }:
@@ -6,13 +6,14 @@ stdenv.mkDerivation rec {
   version = "0.0pre20160820";
   name = "ao-${version}";
   buildInputs = [
-    cmake ninja boost libpng glfw3 epoxy guile pkgconfig mesa libX11 
+    cmake ninja boost libpng glfw3 epoxy guile pkgconfig mesa libX11
     libpthreadstubs libXau libXdmcp libXrandr libXext libXinerama libXxf86vm
     libXcursor libXfixes
     ];
 
-  src = fetchgit {
-    url = https://github.com/mkeeter/ao;
+  src = fetchFromGitHub {
+    owner = "mkeeter";
+    repo = "ao";
     rev = "69fadb81543cc9031e4a7ec2036c7f2ab505a620";
     sha256 = "1717k72vr0i5j7bvxmd6q16fpvkljnqfa1hr3i4yq8cjdsj69my7";
   };

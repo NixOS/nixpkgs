@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, copyPathsToStore
+{ stdenv, lib, copyPathsToStore
 , srcs, qtCompatVersion
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi

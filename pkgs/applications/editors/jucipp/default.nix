@@ -1,4 +1,4 @@
-{ config, stdenv, fetchgit, makeWrapper, gnome3, at_spi2_core, libcxx,
+{ config, stdenv, fetchFromGitHub, makeWrapper, gnome3, at_spi2_core, libcxx,
   boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkgconfig, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts,
   coreutils, glibc, dbus_libs, openssl, libxml2, gnumake, binutils, ctags }:
@@ -17,11 +17,12 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ xnwdd ];
   };
 
-  src = fetchgit {
-    url = "https://github.com/cppit/jucipp.git";
+  src = fetchFromGitHub {
+    owner = "cppit";
+    repo = "jucipp";
     rev = "refs/tags/v${version}";
     deepClone = true;
-    sha256 = "0xp6ijnrggskjrvscp204bmdpz48l5a8nxr9abp17wni6akb5wiq";
+    sha256 = "1bgii5vg3hg8s21zrqsli30chsxrrm5fksm9lwbh535q3cma4ql4";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];

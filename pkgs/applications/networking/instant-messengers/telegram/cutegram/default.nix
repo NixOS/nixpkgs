@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub
 , qtbase, qtmultimedia, qtquick1, qtquickcontrols
 , qtimageformats, qtgraphicaleffects, qtwebkit
 , telegram-qml, libqtelegram-aseman-edition
@@ -8,10 +8,11 @@
 stdenv.mkDerivation rec {
   name = "cutegram-${meta.version}";
 
-  src = fetchgit {
-    url = "https://github.com/Aseman-Land/Cutegram.git";
+  src = fetchFromGitHub {
+    owner = "Aseman-Land";
+    repo = "Cutegram";
     rev = "1dbe2792fb5a1760339379907f906e236c09db84";
-    sha256 = "146vd3ri05da2asxjjxibnqmb685lgwl2kaz7mwb7ja7vi4149f0";
+    sha256 = "1if10jhq7fcz69sg0lsa26wq70vv4hv871rrxn233s66qb35jjn1";
   };
 
   buildInputs =
