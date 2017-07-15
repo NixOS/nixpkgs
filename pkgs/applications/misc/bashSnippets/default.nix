@@ -32,14 +32,12 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/man"
+    mkdir -p "$out/bin" "$out/man/man1"
     ./install.sh all
     for file in "$out"/bin/*; do
       wrapProgram "$file" --prefix PATH : "${deps}"
     done
   '';
-
-  outputs = [ "out" "man" ];
 
   meta = with lib; {
     description = "A collection of small bash scripts for heavy terminal users";
