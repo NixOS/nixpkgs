@@ -2,18 +2,18 @@
   msgpack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fb2my91j08plsbbry5kilsrh7slmzgbbf6f55zy6xk28p9036lg";
+      sha256 = "0ck7w17d6b4jbb8inh1q57bghi9cjkiaxql1d3glmj1yavbpmlh7";
       type = "gem";
     };
-    version = "1.0.2";
+    version = "1.1.0";
   };
   neovim = {
     dependencies = ["msgpack"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gvwa1zkirai7605x4hn2lynbw1caviga272iyy472jv7hs2zn92";
+      sha256 = "1da0ha3mz63iyihldp7185b87wx86jg07023xjhbng6i28y1ksn7";
       type = "gem";
     };
-    version = "0.4.0";
+    version = "0.5.0";
   };
 }
