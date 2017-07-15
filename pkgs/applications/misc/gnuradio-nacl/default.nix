@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Gnuradio block for encryption";
     homepage = https://github.com/stwunsch/gr-nacl;

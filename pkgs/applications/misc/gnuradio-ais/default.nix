@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Gnuradio block for ais";
     homepage = https://github.com/bistromath/gr-ais;

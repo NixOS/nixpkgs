@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Gnuradio block for radio data system";
     homepage = https://github.com/bastibl/gr-rds;
