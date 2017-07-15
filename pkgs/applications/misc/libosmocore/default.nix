@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "libosmocore";
     homepage = https://github.com/osmocom/libosmocore;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mog ];
   };
 }
