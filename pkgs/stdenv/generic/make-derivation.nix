@@ -98,9 +98,11 @@ rec {
           propagatedNativeBuildInputs = lib.elemAt propagatedDependencies' 0;
           propagatedBuildInputs = lib.elemAt propagatedDependencies' 1;
 
-          # This parameter is sometimes a string and sometimes a list, yuck
+          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
           configureFlags = let inherit (lib) optional elem; in
-            (if lib.isString configureFlags then [configureFlags] else configureFlags)
+            (/**/ if lib.isString configureFlags then [configureFlags]
+             else if configureFlags == null      then []
+             else                                     configureFlags)
             ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
