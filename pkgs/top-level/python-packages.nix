@@ -268,19 +268,7 @@ in {
 
   vega = callPackage ../development/python-modules/vega { };
 
-  acme = buildPythonPackage rec {
-    inherit (pkgs.certbot) src version;
-
-    name = "acme-${version}";
-
-    propagatedBuildInputs = with self; [
-      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests six werkzeug mock
-      ndg-httpsclient
-    ];
-
-    buildInputs = with self; [ nose ];
-    postUnpack = "sourceRoot=\${sourceRoot}/acme";
-  };
+  acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = buildPythonPackage rec {
     name = "acme-tiny-${version}";
