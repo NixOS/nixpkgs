@@ -264,28 +264,7 @@ in {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
-  altair = buildPythonPackage rec {
-    name = "altair-1.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/altair/${name}.tar.gz";
-      sha256 = "05c47dm20p7m0017p2h38il721rxag1q0457dj7whp0k8rc7qd1n";
-    };
-    buildInputs = [ self.pytest ];
-
-    checkPhase = ''
-      export LANG=en_US.UTF-8
-      py.test altair --doctest-modules
-    '';
-    propagatedBuildInputs = with self; [ vega pandas ipython traitlets ];
-    meta = {
-      description = "A declarative statistical visualization library for Python.";
-      homepage = https://github.com/altair-viz/altair;
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
+  altair = callPackage ../development/python-modules/altair { };
   vega = buildPythonPackage rec {
     name = "vega-0.4.4";
 
