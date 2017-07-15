@@ -1,7 +1,16 @@
-{ stdenv, fetchFromGitHub
-, curl, netcat, mpv, python, bind, iproute, bc, gitMinimal, ... }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper
+, curl, netcat, mpv, python, bind, iproute, bc, gitMinimal }:
 let
   version = "1.12.0";
+  deps = lib.makeBinPath [
+    curl
+    mpv
+    python
+    bind.dnsutils
+    iproute
+    bc
+    gitMinimal
+  ];
 in
 stdenv.mkDerivation {
   name = "bashSnippets-${version}";
@@ -13,15 +22,7 @@ stdenv.mkDerivation {
     sha256 = "0kx2a8z3jbmmardw9z8fpghbw5mrbz4knb3wdihq35iarcbrddrg";
   };
 
-  propagatedBuildInputs = [
-    curl
-    mpv
-    python
-    bind.dnsutils
-    iproute
-    bc
-    gitMinimal
-  ];
+  buildInputs = [ makeWrapper ];
 
   patchPhase = ''
     patchShebangs install.sh
@@ -33,11 +34,14 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out/bin" "$out/man"
     ./install.sh all
+    for file in "$out"/bin/*; do
+      wrapProgram "$file" --prefix PATH : "${deps}"
+    done
   '';
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of small bash scripts for heavy terminal users";
     homepage = https://github.com/alexanderepstein/Bash-Snippets;
     license = licenses.mit;
