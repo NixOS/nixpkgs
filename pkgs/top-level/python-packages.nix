@@ -30030,25 +30030,7 @@ EOF
 
   uranium = callPackage ../development/python-modules/uranium { };
 
-  vine = buildPythonPackage rec {
-    name = "vine-${version}";
-    version = "1.1.3";
-
-    disable = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/vine/${name}.tar.gz";
-      sha256 = "0h94x9mc9bspg23lb1f73h7smdzc39ps7z7sm0q38ds9jahmvfc7";
-    };
-
-    buildInputs = with self; [ case pytest ];
-
-    meta = {
-      homepage = https://github.com/celery/vine;
-      description = "python promises";
-      license = licenses.bsd3;
-    };
-  };
+  vine = callPackage ../development/python-modules/vine { };
 
   wp_export_parser = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -30062,13 +30044,11 @@ EOF
     };
   };
 
-  wptserve = callPackage ../development/python-modules/wptserve {};
+  wptserve = callPackage ../development/python-modules/wptserve { };
 
-  yenc = callPackage ../development/python-modules/yenc {
-  };
+  yenc = callPackage ../development/python-modules/yenc { };
 
-  zeep = callPackage ../development/python-modules/zeep {
-  };
+  zeep = callPackage ../development/python-modules/zeep { };
 
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
     (pkgs.zeitgeist.override{python2Packages=self;}).py;
