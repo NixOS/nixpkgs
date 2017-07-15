@@ -8192,30 +8192,25 @@ in {
 
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
-    version = "1.0.6";
+    version = "1.2.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "jflesch";
       repo = "paperwork-backend";
       rev = version;
-      sha256 = "11jbhv9xcpimp9iq2b1hlpljzij73s86rb5lpgzhslqc7zmm5bxn";
+      sha256 = "1pzyy14f9wzh9vwn855k1z48a8mbs73j1dk8730kdlcdkmn3l1ms";
     };
 
     # Python 2.x is not supported.
     disabled = !isPy3k && !isPyPy;
 
-    # Make sure that chkdeps exits with status 1 if a dependency is not found.
-    postPatch = ''
-      sed -i -e '/print.*Missing dependencies/,/^ *$/ {
-        /^ *$/ a \    sys.exit(1)
-      }' scripts/paperwork-shell
-    '';
-
     preCheck = "\"$out/bin/paperwork-shell\" chkdeps paperwork_backend";
 
     propagatedBuildInputs = with self; [
       pyenchant simplebayes pillow pycountry whoosh termcolor
-      python-Levenshtein pyinsane2 pygobject3 pyocr pkgs.poppler_gi
+      python-Levenshtein pyinsane2 pygobject3 pyocr
+      pkgs.poppler_gi pkgs.gtk3
+      natsort
     ];
 
     meta = {
