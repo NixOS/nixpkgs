@@ -13,6 +13,8 @@ let
     INSERT INTO sth (id) VALUES (1);
     INSERT INTO sth (id) VALUES (1);
     INSERT INTO sth (id) VALUES (1);
+    CREATE TABLE xmltest ( doc xml );
+    INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
   '';
   make-postgresql-test = postgresql-name: postgresql-package: makeTest {
     name = postgresql-name;
@@ -41,6 +43,7 @@ let
       $machine->fail('test $(psql postgres -tAc "SELECT * FROM sth;"|wc -l) -eq 3');
       $machine->succeed('test $(psql postgres -tAc "SELECT * FROM sth;"|wc -l) -eq 5');
       $machine->fail('test $(psql postgres -tAc "SELECT * FROM sth;"|wc -l) -eq 4');
+      $machine->succeed('test $(psql postgres -tAc "SELECT xpath(\'/test/text()\', doc) FROM xmltest;"|wc -l) -eq 1');
       $machine->shutdown;
     '';
 
