@@ -29867,30 +29867,7 @@ EOF
     };
   };
 
-  intervaltree = buildPythonPackage rec {
-    name = "intervaltree-${version}";
-    version = "2.1.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/intervaltree/${name}.tar.gz";
-      sha256 = "02w191m9zxkcjqr1kv2slxvhymwhj3jnsyy3a28b837pi15q19dc";
-    };
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ sortedcontainers ];
-    checkPhase = ''
-      runHook preCheck
-      # pytest will try to run tests for nix_run_setup.py / files in build/lib which fails
-      mv nix_run_setup.py run_setup
-      rm build -rf
-      ${python.interpreter} run_setup test
-      runHook postCheck
-    '';
-    meta = with pkgs.stdenv.lib; {
-      description = "Editable interval tree data structure for Python 2 and 3";
-      homepage =  https://github.com/chaimleib/intervaltree;
-      license = [ licenses.asl20 ];
-      maintainers =  [ maintainers.bennofs ];
-    };
-  };
+  intervaltree = callPackage ../development/python-modules/intervaltree { };
 
   packaging = callPackage ../development/python-modules/packaging { };
 
