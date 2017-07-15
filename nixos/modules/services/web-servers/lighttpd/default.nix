@@ -37,8 +37,10 @@ let
     "mod_rrdtool"
     "mod_accesslog"
     # Remaining list of modules, order assumed to be unimportant.
+    "mod_authn_file"
+    "mod_authn_mysql"
     "mod_cml"
-    "mod_dirlisting"
+    "mod_deflate"
     "mod_evasive"
     "mod_extforward"
     "mod_flv_streaming"
@@ -47,6 +49,7 @@ let
     "mod_scgi"
     "mod_setenv"
     "mod_trigger_b4_dl"
+    "mod_uploadprogress"
     "mod_webdav"
   ];
 
