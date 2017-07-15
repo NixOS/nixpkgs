@@ -2,14 +2,14 @@
 , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170609";
+  version = "20170714";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "015dd6rphvqdmnv477f1is22l7n5gvcvyblbyp0ggbp64650k0bz";
+    sha256 = "0jbh83hvq1jwb8ps7ffl2325y6i79wdnwcn6db0r5prmxax18hw1";
   };
 
   nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
