@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/man/man1"
+    mkdir -p "$out"/bin "$out"/man/man1
     ./install.sh all
     for file in "$out"/bin/*; do
       wrapProgram "$file" --prefix PATH : "${deps}"
@@ -43,6 +43,7 @@ stdenv.mkDerivation {
     description = "A collection of small bash scripts for heavy terminal users";
     homepage = https://github.com/alexanderepstein/Bash-Snippets;
     license = licenses.mit;
+    maintainers = with maintainers; [ infinisil ];
     platforms = platforms.unix;
   };
 }
