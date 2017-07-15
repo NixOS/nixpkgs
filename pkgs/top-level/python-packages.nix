@@ -29930,31 +29930,7 @@ EOF
     };
   };
 
-  pypandoc = buildPythonPackage rec {
-    name = "pypandoc-1.3.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pypandoc/${name}.tar.gz";
-      sha256 = "0628f2kn4gqimnhpf251fgzl723hwgyl3idy69dkzyjvi45s5zm6";
-    };
-
-    # Fix tests: first requires network access, second is a bug (reported upstream)
-    preConfigure = ''
-      substituteInPlace tests.py --replace "pypandoc.convert(url, 'html')" "'GPL2 license'"
-      substituteInPlace tests.py --replace "pypandoc.convert_file(file_name, lua_file_name)" "'<h1 id=\"title\">title</h1>'"
-    '';
-
-    LC_ALL="en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ self.pip ];
-    buildInputs = [ pkgs.pandoc pkgs.texlive.combined.scheme-small pkgs.haskellPackages.pandoc-citeproc pkgs.glibcLocales ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Thin wrapper for pandoc";
-      homepage = "https://github.com/bebraw/pypandoc";
-      license = licenses.mit;
-      maintainers = with maintainers; [ bennofs kristoff3r ];
-    };
-  };
+  pypandoc = callPackage ../development/python-modules/pypandoc { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 
