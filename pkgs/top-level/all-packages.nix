@@ -4802,6 +4802,9 @@ with pkgs;
   };
 
   varnish = callPackage ../servers/varnish { };
+  varnish-modules = callPackage ../servers/varnish/modules.nix { };
+  varnish-geoip = callPackage ../servers/varnish/geoip.nix { };
+  varnish-rtstatus = callPackage ../servers/varnish/rtstatus.nix { };
 
   venus = callPackage ../tools/misc/venus {
     python = python27;
