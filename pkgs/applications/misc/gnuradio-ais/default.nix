@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Gnuradio block for ais";
     homepage = https://github.com/bistromath/gr-ais;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mog ];
   };
 }

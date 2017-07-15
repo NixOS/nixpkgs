@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
     homepage = http://sdr.osmocom.org/trac/wiki/GrOsmoSDR;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor the-kenny ];
   };
 }

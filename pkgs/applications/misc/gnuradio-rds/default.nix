@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Gnuradio block for radio data system";
     homepage = https://github.com/bastibl/gr-rds;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mog ];
   };
 }
