@@ -1,36 +1,61 @@
 # General list operations.
 { lib }:
 with lib.trivial;
+with lib.docs;
 
 rec {
 
   inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
 
-  /*  Create a list consisting of a single element.  `singleton x' is
-      sometimes more convenient with respect to indentation than `[x]'
-      when x spans multiple lines.
 
-      Example:
-        singleton "foo"
-        => [ "foo" ]
-  */
+  docs.singleton = mkDoc {
+    description = ''
+      Create a list consisting of a single element. <literal>singleton
+      x</literal> is sometimes more convenient with respect to
+      indentation than <literal>[x]</literal> when
+      <literal>x</literal> spans multiple lines.
+    '';
+
+    examples =[
+      { title = "singleton returns a single-element list";
+        body = ''
+          singleton "foo"
+          => [ "foo" ]
+        '';
+      }
+    ];
+  };
   singleton = x: [x];
 
-  /* “right fold” a binary function `op' between successive elements of
-     `list' with `nul' as the starting value, i.e.,
-     `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.
-     Type:
-       foldr :: (a -> b -> b) -> b -> [a] -> b
 
-     Example:
-       concat = foldr (a: b: a + b) "z"
-       concat [ "a" "b" "c" ]
-       => "abcz"
-       # different types
-       strange = foldr (int: str: toString (int + 1) + str) "a"
-       strange [ 1 2 3 4 ]
-       => "2345a"
-  */
+  docs.foldr = mkDoc {
+    description = ''
+      "Right fold" a binary function <literal>op</literal> between
+      successive elements of <literal>list</literal> with
+      <literal>nul</literal> as the starting value, i.e.,
+      <literal>fold op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))</literal>.
+      (This is Haskell's <literal>foldr</literal>).
+
+      Type: foldr :: (a -> b -> b) -> b -> [a] -> b
+    '';
+
+    examples =[
+      { title = "constructing a concat function with foldr";
+        body = ''
+          concat = fold (a: b: a + b) "z"
+          concat [ "a" "b" "c" ]
+          => "abcz"
+        '';
+      }
+      { title = "foldr across different types";
+        body = ''
+          strange = foldr (int: str: toString (int + 1) + str) "a"
+          strange [ 1 2 3 4 ]
+          => "2345a"
+        '';
+      }
+    ];
+  };
   foldr = op: nul: list:
     let
       len = length list;
@@ -40,26 +65,40 @@ rec {
         else op (elemAt list n) (fold' (n + 1));
     in fold' 0;
 
-  /* `fold' is an alias of `foldr' for historic reasons */
-  # FIXME(Profpatsch): deprecate?
+
+  docs.fold = mkDoc {
+    description = ''
+      <literal>fold</literal> is a deprecated alias of
+      <literal>foldr</literal>.
+    '';
+  };
   fold = foldr;
 
+  docs.foldl = mkDoc {
+    description = ''
+      Left fold, like <literal>foldr</literal>, but from the left:
+      <literal>foldl op nul [x_1 x_2 ... x_n] == op (... (op (op nul x_1) x_2) ... x_n)</literal>.
 
-  /* “left fold”, like `foldr', but from the left:
-     `foldl op nul [x_1 x_2 ... x_n] == op (... (op (op nul x_1) x_2) ... x_n)`.
+      Type: foldl :: (b -> a -> b) -> b -> [a] -> b
+    '';
 
-     Type:
-       foldl :: (b -> a -> b) -> b -> [a] -> b
-
-     Example:
-       lconcat = foldl (a: b: a + b) "z"
-       lconcat [ "a" "b" "c" ]
-       => "zabc"
-       # different types
-       lstrange = foldl (str: int: str + toString (int + 1)) ""
-       strange [ 1 2 3 4 ]
-       => "a2345"
-  */
+    examples =[
+      { title = "implementing an lconcat with foldl";
+        body = ''
+          lconcat = foldl (a: b: a + b) "z"
+          lconcat [ "a" "b" "c" ]
+          => "zabc"
+        '';
+      }
+      { title = "foldr with different types";
+        body = ''
+          lstrange = foldl (str: int: str + toString (int + 1)) ""
+          strange [ 1 2 3 4 ]
+          => "a2345"
+        '';
+      }
+    ];
+  };
   foldl = op: nul: list:
     let
       len = length list;
@@ -69,12 +108,15 @@ rec {
         else op (foldl' (n - 1)) (elemAt list n);
     in foldl' (length list - 1);
 
-  /* Strict version of `foldl'.
+  docs.foldl' = mkDoc {
+    description = ''
+      Strict version of <literal>foldl</literal>.
 
-     The difference is that evaluation is forced upon access. Usually used
-     with small whole results (in contract with lazily-generated list or large
-     lists where only a part is consumed.)
-  */
+      The difference is that evaluation is forced upon access. Usually
+      used with small whole results (in contract with lazily-generated
+      list or large lists where only a part is consumed.)
+    '';
+  };
   foldl' = builtins.foldl' or foldl;
 
   /* Map with index starting from 0

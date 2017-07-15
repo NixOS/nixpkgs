@@ -3,10 +3,37 @@ let
   lib = pkgs.lib;
   sources = lib.sourceFilesBySuffices ./. [".xml"];
   sources-langs = ./languages-frameworks;
+
+  libDocFragments = lib.mapAttrsToList
+    (name: value:
+      let
+        pos = builtins.unsafeGetAttrPos name lib;
+      in ''
+        <section>
+          <title>${name}</title>
+          <para>${pos.file}:${toString pos.line}</para>
+
+        ${value}
+        </section>
+      ''
+    )
+    lib.docs;
+
+  libListDocs = pkgs.writeTextDir "lib-funcs.xml"
+    ''
+      <chapter xmlns="http://docbook.org/ns/docbook"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xml:id="chap-lib-functions">
+
+        <title>Functions reference</title>
+
+        ${lib.concatStringsSep "\n" libDocFragments}
+      </chapter>
+    '';
+
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
-
 
   buildInputs = with pkgs; [ pandoc libxml2 libxslt zip ];
 
@@ -41,6 +68,7 @@ pkgs.stdenv.mkDerivation {
   ''
     ln -s '${sources}/'*.xml .
     mkdir ./languages-frameworks
+    cp -s '${libListDocs}'/* ./
     cp -s '${sources-langs}'/* ./languages-frameworks
   ''
   + toDocbook {
