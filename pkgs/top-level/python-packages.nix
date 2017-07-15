@@ -30004,29 +30004,7 @@ EOF
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
-  stripe = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "stripe";
-    version = "1.41.1";
-
-    # Tests require network connectivity and there's no easy way to disable
-    # them. ~ C.
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "0zvffvq933ia5w5ll6xhx2zgvppgc6zc2mxhc6f0kypw5g2fxvz5";
-    };
-
-    buildInputs = with self; [ unittest2 mock ];
-    propagatedBuildInputs = with self; [ requests ];
-
-    meta = {
-      homepage = "https://github.com/stripe/stripe-python";
-      description = "Stripe Python bindings";
-      license = licenses.mit;
-    };
-  };
+  stripe = callPackage ../development/python-modules/stripe { };
 
   uranium = callPackage ../development/python-modules/uranium { };
 
