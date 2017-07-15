@@ -14,7 +14,7 @@ let
     INSERT INTO sth (id) VALUES (1);
     INSERT INTO sth (id) VALUES (1);
   '';
-  make-postgresql-test = postgresql-name: postgresql-package: {
+  make-postgresql-test = postgresql-name: postgresql-package: makeTest {
     name = postgresql-name;
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ zagy ];
@@ -24,6 +24,9 @@ let
       {
         services.postgresql.package=postgresql-package;
         services.postgresql.enable = true;
+        services.postgresql.initialScript = pkgs.writeText "init.sql" ''
+          CREATE USER root WITH SUPERUSER;
+        '';
       };
 
     testScript = ''
