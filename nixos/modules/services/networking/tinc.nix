@@ -178,6 +178,8 @@ in
             # Tinc 1.0 uses the tincd application
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
           fi
+          chown tinc.${network} /etc/tinc/${network}/hosts/*
+          chmod 644             /etc/tinc/${network}/hosts/*
         '';
         script = ''
           tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
