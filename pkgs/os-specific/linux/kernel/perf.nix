@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   inherit (kernel) src;
 
-  patches = kernel.patches ++ [ ./perf-binutils-path.patch ];
+  patches = kernel.patches ++ [ ./perf-binutils-path.patch ./perf-offline-probe.patch ];
 
   preConfigure = ''
     cd tools/perf
