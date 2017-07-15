@@ -29752,22 +29752,7 @@ EOF
     };
   };
 
-  yapf = buildPythonPackage rec {
-    name = "yapf-${version}";
-    version = "0.11.0";
-
-    meta = {
-      description = "A formatter for Python code.";
-      homepage    = "https://github.com/google/yapf";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ siddharthist ];
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/y/yapf/${name}.tar.gz";
-      sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
-    };
-  };
+  yapf = callPackage ../development/python-modules/yapf { };
 
   autobahn = callPackage ../development/python-modules/autobahn { };
 
