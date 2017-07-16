@@ -4,20 +4,23 @@ stdenv.mkDerivation rec {
   name = "zuki-themes-${version}";
   version = "${gnome3.version}.${date}";
   date = {
-    "3.20" = "2017-02-09";
-    "3.22" = "2017-02-17";
+    "3.20" = "2017-05-03";
+    "3.22" = "2017-04-23";
+    "3.24" = "2017-06-26";
   }."${gnome3.version}";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "zuki-themes";
     rev = {
-      "3.20" = "b9106c3c05012b7e91394819ca550def3357d2eb";
-      "3.22" = "fc3cf7c372bcc439870c4785f91b8ea7af73e1cc";
+      "3.20" = "ce7ae498df7d5c81acaf48ed957b9f828356d58c";
+      "3.22" = "e97f2c3cf75b5205bc5ecd6072696327169fde5d";
+      "3.24" = "d25e0a2fb6e08ad107d8bb627451433362f2a830";
     }."${gnome3.version}";
     sha256 = {
-      "3.20" = "03k18p25gsscv05934vs0py26vpcrx93wi5bj6di277c6kwgjzxg";
-      "3.22" = "02ppk8wsx0k7j3zgmcb1l8jgij0m5rdkrahfv884jxkyjr6wwgs5";
+      "3.20" = "0na81q9mc8kwn9m04kkcchrdr67087dqf3q155imhjgqrxjhh3w4";
+      "3.22" = "195v0d2sgqh92c104xqm00p68yxp6kzp5mzx8q7s36bdv9p972q4";
+      "3.24" = "0z5swi5aah3s4yinfglh491qydxgjkqwf6zxyz7k9c1d7lrvj3ww";
     }."${gnome3.version}";
   };
 
