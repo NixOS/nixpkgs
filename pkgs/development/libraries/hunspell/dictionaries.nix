@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, gnused, hunspell, ispell, perl, unzip }:
 
 with stdenv.lib;
 
@@ -9,10 +9,11 @@ let
   mkDict =
   { name, src, meta, readmeFile, dictFileName, ... }:
   let
+    isEnglish = hasSuffix "en_" dictFileName;
     isFrench = hasSuffix "fr_" dictFileName;
+    isGerman = hasSuffix "de_" dictFileName;
     isItaly = hasSuffix "it_" dictFileName;
     isSpanish = hasSuffix "es_" dictFileName;
-    isEnglish = hasSuffix "en_" dictFileName;
   in
   stdenv.mkDerivation rec {
     inherit name src meta;
@@ -211,6 +212,48 @@ in {
       Ce dictionnaire ne connaît que les graphies nouvelles des mots concernés
       par la réforme de 1990.
     '';
+  };
+
+  /* GERMAN */
+
+  de-any = stdenv.mkDerivation rec {
+    name = "hunspell-dict-de-any-igerman98-${version}";
+    version = "20160407";
+
+    src = fetchurl {
+      url = "https://www.j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
+      sha256 = "18vn2n2dxc3sga79ha1a5swhhhyb6vgaazx4xa1kiml123d5hq3p";
+    };
+
+    buildInputs = [ gnused hunspell ispell perl ];
+
+    patchPhase = ''
+      find bin -type f | while IFS= read -r file
+      do
+        substituteInPlace "$file" \
+          --replace /usr/bin/perl "${perl}/bin/perl" \
+          --replace /bin/sed "${gnused}/bin/sed"
+      done
+    '';
+
+    buildFlags = [ "hunspell-all" ];
+
+    installPhase = ''
+      install -dm755 -- "$out/share/myspell/dicts"
+      for file in de_{AT,CH,DE}.{aff,dic}
+      do
+        install -Dm644 -- "hunspell/$file" "$out/share/hunspell/$file"
+        ln -s -- "$out/share/hunspell/$file" "$out/share/myspell/dicts"
+      done
+      install -Dm644 Documentation/README $out/share/doc/${name}.txt
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Hunspell dictionary for German (Austria, Germany, Switzerland) from igerman98";
+      license = with licenses; [ gpl2 gpl3 ];
+      homepage = https://www.j3e.de/ispell/igerman98/;
+      platforms = platforms.all;
+    };
   };
 
   /* ITALIAN */

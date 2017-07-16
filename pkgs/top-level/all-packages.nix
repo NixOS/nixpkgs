@@ -2589,6 +2589,8 @@ with pkgs;
 
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
+  ispell = callPackage ../tools/text/ispell {};
+
   isync = callPackage ../tools/networking/isync { };
   isyncUnstable = callPackage ../tools/networking/isync/unstable.nix { };
 
