@@ -71,22 +71,6 @@ let
         -e 's^addCVars^addCVars${_infixSalt}^g' \
         -e 's^\[ -z "\$crossConfig" \]^\[\[ "${builtins.toString (targetPlatform != hostPlatform)}" || -z "$crossConfig" \]\]^g'
 
-    '' + stdenv.lib.optionalString (textFile == ./setup-hook.sh) ''
-      cat << 'EOF' >> $out
-        for CMD in ar as nm objcopy ranlib strip strings size ld windres
-        do
-          # which is not part of stdenv, but compgen will do for now
-          if
-            PATH=$_PATH type -p ${prefix}$CMD > /dev/null
-          then
-            export ''$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=${prefix}''${CMD};
-          fi
-        done
-      EOF
-
-      sed -i $out -e 's_envHooks_crossEnvHooks_g'
-    '' + ''
-
       # NIX_ things which we don't both use and define, we revert them
       #asymmetric=$(
       #  for pre in "" "\\$"
@@ -143,6 +127,7 @@ stdenv.mkDerivation {
   inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
+  binPrefix = prefix;
 
   passthru = {
     inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
@@ -303,20 +288,24 @@ stdenv.mkDerivation {
         wrap ${prefix}ld.bfd ${preWrap ./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.bfd
       fi
 
-      export real_cc=${prefix}cc
-      export real_cxx=${prefix}c++
+      # We export environment variables pointing to the wrapped nonstandard
+      # cmds, lest some lousy configure script use those to guess compiler
+      # version.
+      export named_cc=${prefix}cc
+      export named_cxx=${prefix}c++
+
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
       if [ -e $ccPath/${prefix}gcc ]; then
         wrap ${prefix}gcc ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}gcc
         ln -s ${prefix}gcc $out/bin/${prefix}cc
-        export real_cc=${prefix}gcc
-        export real_cxx=${prefix}g++
+        export named_cc=${prefix}gcc
+        export named_cxx=${prefix}g++
       elif [ -e $ccPath/clang ]; then
         wrap ${prefix}clang ${preWrap ./cc-wrapper.sh} $ccPath/clang
         ln -s ${prefix}clang $out/bin/${prefix}cc
-        export real_cc=clang
-        export real_cxx=clang++
+        export named_cc=${prefix}clang
+        export named_cxx=${prefix}clang++
       fi
 
       if [ -e $ccPath/${prefix}g++ ]; then
