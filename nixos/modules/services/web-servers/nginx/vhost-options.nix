@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib }:
+{ config, lib }:
 
 with lib;
 {
@@ -26,12 +26,26 @@ with lib;
       '';
     };
 
-    port = mkOption {
-      type = types.nullOr types.int;
-      default = null;
+    listen = mkOption {
+      type = with types; listOf (submodule {
+        options = {
+          addr = mkOption { type = str; description = "IP address."; };
+          port = mkOption { type = nullOr int; description = "Port number."; };
+        };
+      });
+      default =
+        [ { addr = "0.0.0.0"; port = null; } ]
+        ++ optional config.networking.enableIPv6
+          { addr = "[::]"; port = null; };
+      example = [
+        { addr = "195.154.1.1"; port = 443; }
+        { addr = "192.168.1.2"; port = 443; }
+      ];
       description = ''
-        Port for the server. Defaults to 80 for http
-        and 443 for https (i.e. when enableSSL is set).
+        Listen addresses and ports for this virtual host.
+        IPv6 addresses must be enclosed in square brackets.
+        Setting the port to <literal>null</literal> defaults
+        to 80 for http and 443 for https (i.e. when enableSSL is set).
       '';
     };
 
