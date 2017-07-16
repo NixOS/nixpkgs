@@ -326,6 +326,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
+  ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/ssm-agent.nix
