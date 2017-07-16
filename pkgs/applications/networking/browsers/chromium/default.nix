@@ -1,4 +1,5 @@
 { newScope, stdenv, makeWrapper, makeDesktopItem, ed
+, glib, gtk2, gtk3, gnome2, gnome3, gsettings_desktop_schemas
 
 # package customization
 , channel ? "stable"
@@ -62,11 +63,24 @@ let
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
+  version = chromium.browser.version;
+
+  inherit (stdenv.lib) versionAtLeast;
+
+  gtk = if (versionAtLeast version "59.0.0.0") then gtk3 else gtk2;
+
 in stdenv.mkDerivation {
-  name = "chromium${suffix}-${chromium.browser.version}";
+  name = "chromium${suffix}-${version}";
+  inherit version;
 
-  buildInputs = [ makeWrapper ed ];
+  buildInputs = [
+    makeWrapper ed
 
+    # needed for GSETTINGS_SCHEMAS_PATH
+    gsettings_desktop_schemas glib gtk
+  ] ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.dconf
+    # needed for XDG_ICON_DIRS
+    ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.defaultIconTheme;
   outputs = ["out" "sandbox"];
 
   buildCommand = let
@@ -92,6 +106,10 @@ in stdenv.mkDerivation {
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
 
+    export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
+    ${stdenv.lib.optionalString (versionAtLeast version "59.0.0.0") ''
+    export GIO_EXTRA_MODULES=${gnome3.dconf}/lib/gio/modules\''${GIO_EXTRA_MODULES:+:}\$GIO_EXTRA_MODULES
+    ''}
     .
     w
     EOF
@@ -107,7 +125,7 @@ in stdenv.mkDerivation {
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName version;
+  inherit (chromium.browser) meta packageName;
 
   passthru = {
     inherit (chromium) upstream-info browser;
