@@ -23664,26 +23664,6 @@ in {
     };
   };
 
-  tarsnapper = buildPythonPackage rec {
-    name = "tarsnapper-0.2.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchgit {
-      url = https://github.com/miracle2k/tarsnapper.git;
-      rev = "620439bca68892f2ffaba1079a34b18496cc6596";
-      sha256 = "1n2k2r9x11r1ph9jcjhlk44hsghfnl1pl3aakbx121qc5dg7b0yn";
-    };
-
-    propagatedBuildInputs = with self; [ argparse pyyaml ];
-
-    patches = [ ../development/python-modules/tarsnapper-path.patch ];
-
-    preConfigure = ''
-      substituteInPlace src/tarsnapper/script.py \
-        --replace '@NIXTARSNAPPATH@' '${pkgs.tarsnap}/bin/tarsnap'
-    '';
-  };
-
   taskcoach = buildPythonPackage rec {
     name = "TaskCoach-1.3.22";
     disabled = isPy3k;
