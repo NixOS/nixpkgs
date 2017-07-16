@@ -991,6 +991,10 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
+  fast-cli = nodePackages.fast-cli.overrideDerivation (old: {
+    buildInputs = old.buildInputs ++ [phantomjs2];
+  });
+
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -1040,6 +1044,8 @@ with pkgs;
   gti = callPackage ../tools/misc/gti { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
+
+  hebcal = callPackage ../tools/misc/hebcal {};
 
   hexio = callPackage ../development/tools/hexio { };
 
@@ -1094,6 +1100,8 @@ with pkgs;
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
+
+  ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
@@ -3400,6 +3408,8 @@ with pkgs;
   nmap-graphical = callPackage ../tools/security/nmap {
     graphicalSupport = true;
   };
+
+  nnn = callPackage ../applications/misc/nnn { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
@@ -6076,7 +6086,7 @@ with pkgs;
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_5_rc elixir_1_4 elixir_1_3
-    lfe
+    lfe lfe_1_2
     erlangR16 erlangR16_odbc
     erlang_basho_R16B02 erlang_basho_R16B02_odbc
     erlangR17 erlangR17_odbc erlangR17_javac erlangR17_odbc_javac
@@ -7665,6 +7675,8 @@ with pkgs;
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
   vmmlib = callPackage ../development/libraries/vmmlib {};
+
+  elastix = callPackage ../development/libraries/science/biology/elastix { };
 
   enchant = callPackage ../development/libraries/enchant { };
 
@@ -11530,8 +11542,10 @@ with pkgs;
   storm = callPackage ../servers/computing/storm { };
 
   slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
+  slurm-llnl = slurm; # renamed July 2017
 
   slurm-full = appendToName "full" (callPackage ../servers/computing/slurm { });
+  slurm-llnl-full = slurm-full; # renamed July 2017
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
@@ -13369,6 +13383,7 @@ with pkgs;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
+  hsevm = self.altcoins.hsevm;
 
   stellar-core = self.altcoins.stellar-core;
 
@@ -13425,6 +13440,8 @@ with pkgs;
     gconf = pkgs.gnome2.GConf;
     libgpod = pkgs.libgpod.override { monoSupport = true; };
   };
+
+  bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
   batik = callPackage ../applications/graphics/batik { };
 

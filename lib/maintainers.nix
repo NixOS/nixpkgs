@@ -231,6 +231,7 @@
   hectorj = "Hector Jusforgues <hector.jusforgues+nixos@gmail.com>";
   heel = "Sergii Paryzhskyi <parizhskiy@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
+  hhm = "hhm <heehooman+nixpkgs@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
   hodapp = "Chris Hodapp <hodapp87@gmail.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";

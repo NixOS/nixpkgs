@@ -1,7 +1,8 @@
 { coreutils, dpkg, fetchurl, ghostscript, gnugrep, gnused, makeWrapper, perl, stdenv, which }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl2700dnlpr-${meta.version}";
+  name = "mfcl2700dnlpr-${version}";
+  version = "3.2.0-1";
 
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf102085/${name}.i386.deb";
@@ -39,6 +40,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = [ "i686-linux" ];
-    version = "3.2.0-1";
   };
 }
