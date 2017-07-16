@@ -1,29 +1,38 @@
-{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, beamPackages }:
+{ stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
+
+{ baseName ? "lfe"
+, version
+, maximumOTPVersion
+, sha256 ? null
+, rev ? version
+, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+}:
 
 let
-  inherit (beamPackages) buildRebar3 buildHex;
-  proper = buildHex rec {
-    name    = "proper";
+  inherit (stdenv.lib) getVersion versionAtLeast splitString head;
+
+  mainVersion = head (splitString "." (getVersion erlang));
+
+  proper = buildHex {
+    name = "proper";
     version = "1.1.1-beta";
+
     sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
 
     configurePhase = ''
       ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
     '';
   };
+
 in
-buildRebar3 rec {
-  name    = "lfe";
-  version = "1.2.1";
+assert versionAtLeast maximumOTPVersion mainVersion;
 
-  src = fetchFromGitHub {
-    owner  = "rvirding";
-    repo   = name;
-    rev    = version;
-    sha256 = "0j5gjlsk92y14kxgvd80q9vwyhmjkphpzadcswyjxikgahwg1avz";
-  };
+buildRebar3 {
+  name = baseName;
 
-  buildInputs = [ makeWrapper ];
+  inherit src version;
+
+  buildInputs = [ erlang makeWrapper ];
   beamDeps    = [ proper ];
   patches     = [ ./no-test-deps.patch ];
   doCheck     = true;
@@ -41,6 +50,7 @@ buildRebar3 rec {
     install -m644 _build/default/lib/lfe/ebin/* $ebindir
 
     install -m755 -d $bindir
+
     for bin in bin/lfe{,c,doc,script}; do install -m755 $bin $bindir; done
 
     install -m755 -d $out/bin
@@ -70,7 +80,7 @@ buildRebar3 rec {
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
     license      = licenses.asl20;
-    maintainers  = with maintainers; [ yurrriq ];
+    maintainers  = with maintainers; [ yurrriq ankhers ];
     platforms    = platforms.unix;
   };
 }

@@ -6064,7 +6064,7 @@ with pkgs;
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_5_rc elixir_1_4 elixir_1_3
-    lfe
+    lfe lfe_1_2
     erlangR16 erlangR16_odbc
     erlang_basho_R16B02 erlang_basho_R16B02_odbc
     erlangR17 erlangR17_odbc erlangR17_javac erlangR17_odbc_javac
