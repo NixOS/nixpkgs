@@ -45,7 +45,7 @@ in
       default = { };
       example = literalExample {
         "home" = {
-          snapshot = "/home";
+          subvolume = "/home";
           extraConfig = ''
             ALLOW_USERS="alice"
           '';
