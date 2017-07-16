@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.2.9";
+let version = "3.4.4";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
