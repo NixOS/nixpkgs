@@ -164,8 +164,9 @@ let
 
       # Make sure cmm/*.pf are not symlinks:
       # https://youtrack.jetbrains.com/issue/IDEA-147272
-      rm -rf $out/lib/openjdk/jre/lib/cmm
-      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
+      # in 9, it seems no *.pf files end up in $out ... ?
+      # rm -rf $out/lib/openjdk/jre/lib/cmm
+      # ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
       # Set PaX markings
       exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
