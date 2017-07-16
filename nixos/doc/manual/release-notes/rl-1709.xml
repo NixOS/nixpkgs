@@ -86,6 +86,10 @@ rmdir /var/lib/ipfs/.ipfs
   </listitem>
   <listitem>
     <para>
+      The following changes apply if the <literal>stateVersion</literal> is changed to 17.09 or higher.
+      For <literal>stateVersion = "17.03</literal> or lower the old behavior is preserved.
+    </para>
+    <para>
       The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
     </para>
     <para>
@@ -93,6 +97,9 @@ rmdir /var/lib/ipfs/.ipfs
     </para>
     <para>
       The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
+    </para>
+    <para>
+      The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
     </para>
   </listitem>
   <listitem>
@@ -114,7 +121,6 @@ rmdir /var/lib/ipfs/.ipfs
     </para>
   </listitem>
 </itemizedlist>
-
 
 <para>Other notable improvements:</para>
 
