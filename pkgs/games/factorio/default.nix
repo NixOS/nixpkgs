@@ -10,7 +10,7 @@ assert releaseType == "alpha" || releaseType == "headless" || releaseType == "de
 
 with stdenv.lib;
 let
-  version = if releaseType != "demo" then "0.15.26" else "0.15.25";
+  version = if releaseType != "demo" then "0.15.30" else "0.15.25";
 
   arch = if stdenv.system == "x86_64-linux" then {
     inUrl = "linux64";
@@ -26,8 +26,8 @@ let
     url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
     name = "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
     x64 = {
-      headless =           fetchurl { inherit name url; sha256 = "1nblfff1m5wgp177l508y94n61lga3palhzw4frp2vd98sdp7gqk"; };
-      alpha    = authenticatedFetch { inherit name url; sha256 = "0g7k58h15q4n9wxf96rx72w340xpdbj8k1faaxixrfrfx8bnmsls"; };
+      headless =           fetchurl { inherit name url; sha256 = "0nmr73i9acnqgphfmsps7f8jlw0f2gyal9l8pldlp4rk0cjgvszy"; };
+      alpha    = authenticatedFetch { inherit name url; sha256 = "1ydh44na2lbvdv4anrblym7d6wxwapfbwap40n3722llrsad0zsz"; };
       demo     =           fetchurl { inherit name url; sha256 = "1qz6g8mf221ic663zk92l6rs77ggfydaw2d8g2s7wy0j9097qbsl"; };
     };
     i386 = {
