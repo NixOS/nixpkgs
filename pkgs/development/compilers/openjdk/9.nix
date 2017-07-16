@@ -131,7 +131,7 @@ let
     installPhase = ''
       mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
-      cp -av build/*/images/j2sdk-image/* $out/lib/openjdk
+      cp -av build/*/images/jdk/* $out/lib/openjdk
 
       # Remove some broken manpages.
       rm -rf $out/lib/openjdk/man/ja*
@@ -145,15 +145,15 @@ let
       ln -s $out/include/linux/*_md.h $out/include/
 
       # Remove crap from the installation.
-      rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
+      rm -rf $out/lib/openjdk/demo
       ${lib.optionalString minimal ''
         rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
         rm $out/lib/openjdk/jre/bin/policytool
         rm $out/lib/openjdk/bin/{policytool,appletviewer}
       ''}
 
-      # Move the JRE to a separate output and setup fallback fonts
-      mv $out/lib/openjdk/jre $jre/lib/openjdk/
+      # Copy the JRE to a separate output and setup fallback fonts
+      cp -av build/*/images/jre $jre/lib/openjdk/
       mkdir $out/lib/openjdk/jre
       ${lib.optionalString (!minimal) ''
         mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
@@ -161,7 +161,6 @@ let
       ''}
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
-      rm -rf $out/lib/openjdk/jre/bina
       ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
 
       # Make sure cmm/*.pf are not symlinks:
