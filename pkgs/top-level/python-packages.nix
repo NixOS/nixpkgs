@@ -10762,6 +10762,8 @@ in {
     };
   };
 
+  pytorch = callPackage ../development/python-modules/pytorch { };
+
   python_tvrage = buildPythonPackage (rec {
     version = "0.4.1";
     name = "tvrage-${version}";
