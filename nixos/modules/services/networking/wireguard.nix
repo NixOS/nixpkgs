@@ -164,66 +164,59 @@ let
 
   };
 
-  generateConf = name: values: ''
-    [Interface]
-    PrivateKey = ${if values.privateKeyFile != null then "$(cat ${values.privateKeyFile})" else values.privateKey}
-    ${optionalString (values.listenPort != null)   "ListenPort = ${toString values.listenPort}"}
-
-    ${concatStringsSep "\n\n" (map (peer:
-    assert (peer.presharedKeyFile != null) != (peer.presharedKey != null);
-    ''
-    [Peer]
-    PublicKey = ${peer.publicKey}
-    ${optionalString (peer.presharedKeyFile != null) "PresharedKey = $(cat ${peer.presharedKeyFile})"}
-    ${optionalString (peer.presharedKey != null) "PresharedKey = ${peer.presharedKey}"}
-    ${optionalString (peer.allowedIPs != []) "AllowedIPs = ${concatStringsSep ", " peer.allowedIPs}"}
-    ${optionalString (peer.endpoint != null) "Endpoint = ${peer.endpoint}"}
-    ${optionalString (peer.persistentKeepalive != null) "PersistentKeepalive = ${toString peer.persistentKeepalive}"}
-    '') values.peers)}
-  '';
-
   ipCommand = "${pkgs.iproute}/bin/ip";
   wgCommand = "${pkgs.wireguard}/bin/wg";
 
   generateUnit = name: values:
     # exactly one way to specify the private key must be set
     assert (values.privateKey != null) != (values.privateKeyFile != null);
+    let privKey = if values.privateKeyFile != null then values.privateKeyFile else "<(echo ${values.privateKey})";
+    in
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = builtins.concatStringsSep "\n" (lib.flatten([
-          values.preSetup
-
-          ''
-          ${ipCommand} link del dev "${name}" || true
-          ${ipCommand} link add dev ${name} type wireguard
-          ${wgCommand} setconf ${name} /dev/stdin <<EOF
-          ${generateConf name values}
-          EOF
-          ''
-
-          (map (ip:
-          ''${ipCommand} address add ${ip} dev ${name}''
-          ) values.ips)
-
-          "${ipCommand} link set up dev ${name}"
-
-          (flatten (map (peer: (map (ip:
-          "${ipCommand} route add ${ip} dev ${name}"
-          ) peer.allowedIPs)) values.peers))
-
-          values.postSetup
-        ]));
-        preStop = builtins.concatStringsSep "\n" (lib.flatten([
-          ''${ipCommand} link del dev "${name}"''
-          values.postShutdown
-        ]));
 
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
+          ExecStart = flatten([
+            values.preSetup
+
+            ''-${ipCommand} link del dev "${name}"''
+            ''${ipCommand} link add dev ${name} type wireguard''
+
+            (map (ip:
+            ''${ipCommand} address add ${ip} dev ${name}''
+            ) values.ips)
+
+            ("${wgCommand} set ${name} private-key ${privKey}" +
+            optionalString (values.listenPort != null) " listen-port ${values.listenPort}")
+
+            (flatten (map (peer:
+            assert (peer.presharedKeyFile == null) || (peer.presharedKey == null); # at most one of the two must be set
+            let psk = if peer.presharedKey != null then "<(echo ${peer.presharedKey})" else peer.presharedKeyFile;
+            in
+            "${wgCommand} set ${name} peer ${peer.publicKey}" +
+            optionalString (psk != null) " preshared-key ${psk}" +
+            optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
+            optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
+            optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}"
+            ) values.peers))
+
+            "${ipCommand} link set up dev ${name}"
+
+            (flatten (map (peer: (map (ip:
+            "${ipCommand} route add ${ip} dev ${name}"
+            ) peer.allowedIPs)) values.peers))
+
+            values.postSetup
+          ]);
+          ExecStop = flatten([
+            ''${ipCommand} link del dev "${name}"''
+            values.postShutdown
+          ]);
         };
       };
 
