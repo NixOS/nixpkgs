@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "0.19.0";
+  version = "0.19.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://pypi/s/scipy/scipy-${version}.zip";
-    sha256 = "4190d34bf9a09626cd42100bbb12e3d96b2daf1a8a3244e991263eb693732122";
+    url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
+    sha256 = "a19a2ca7a7336495ec180adeaa0dfdcf41e96dbbee90d51c3ed828ba570884e6";
   };
 
   buildInputs = [ gfortran nose numpy.blas ];
