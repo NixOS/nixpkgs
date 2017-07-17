@@ -194,7 +194,7 @@ let
             ("${wgCommand} set ${name} private-key ${privKey}" +
             optionalString (values.listenPort != null) " listen-port ${values.listenPort}")
 
-            (flatten (map (peer:
+            (map (peer:
             assert (peer.presharedKeyFile == null) || (peer.presharedKey == null); # at most one of the two must be set
             let psk = if peer.presharedKey != null then pkgs.writeText "wg-psk" peer.presharedKey else peer.presharedKeyFile;
             in
@@ -203,13 +203,13 @@ let
             optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
             optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
             optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}"
-            ) values.peers))
+            ) values.peers)
 
             "${ipCommand} link set up dev ${name}"
 
-            (flatten (map (peer: (map (ip:
+            (map (peer: (map (ip:
             "${ipCommand} route add ${ip} dev ${name}"
-            ) peer.allowedIPs)) values.peers))
+            ) peer.allowedIPs)) values.peers)
 
             values.postSetup
           ]);
