@@ -232,7 +232,7 @@ let
             before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = with pkgs; [ iproute gawk ];
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
@@ -251,6 +251,11 @@ let
                 ${i}
               '')}" > /run/${n}.interfaces
 
+              # Enslave previously attached interfaces
+              [ -f /run/${n}.slaves ] && for ifname in `cat /run/${n}.slaves`; do
+                ip link set "$ifname" master "${n}"
+              done
+
               # Enable stp on the interface
               ${optionalString v.rstp ''
                 echo 2 >/sys/class/net/${n}/bridge/stp_state
@@ -262,6 +267,10 @@ let
               ip link set "${n}" down || true
               ip link del "${n}" || true
               rm -f /run/${n}.interfaces
+            '';
+            preStop = ''
+              # Save currently attached slaves
+              ip link | grep master | awk '{print $2,$9}' | grep "${n}" | cut -d ":" -f 1 > /run/${n}.slaves
             '';
             reload = ''
               # Un-enslave child interfaces (old list of interfaces)
