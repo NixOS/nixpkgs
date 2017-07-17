@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which git ronn perl ShellCommand TestMost ];
 
+  configurePhase = ''
+    substituteInPlace ./Makefile --replace "all=test manpages" "all=manpages";
+  '';
+
   installPhase = "make install PREFIX=$out";
 
   meta = with stdenv.lib; {
