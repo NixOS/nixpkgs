@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     "-DWITH_GUI_TESTS=ON" 
     "-DWITH_XC_AUTOTYPE=ON"
     "-DWITH_XC_YUBIKEY=ON"
-    "-DCMAKE_BUILD_TYPE=Release"
   ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
 
   doCheck = true;
