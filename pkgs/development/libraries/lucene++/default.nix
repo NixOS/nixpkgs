@@ -2,33 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "lucene++-${version}";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchurl {
     url = "https://github.com/luceneplusplus/LucenePlusPlus/"
         + "archive/rel_${version}.tar.gz";
-    sha256 = "068msvh05gsbfj1wwdqj698kxxfjdqy8zb6pqvail3ayjfj94w1y";
+    sha256 = "032yb35b381ifm7wb8cy2m3yndklnxyi5cgprjh48jqy641z46bc";
   };
-
-  patches = let
-    baseurl = "https://github.com/luceneplusplus/LucenePlusPlus";
-  in [
-    (fetchpatch {
-      url = "${baseurl}/pull/62.diff";
-      sha256 = "0v314877mjb0hljg4mcqi317m1p1v27rgsgf5wdr9swix43vmhgw";
-    })
-    (fetchpatch {
-      url = "${baseurl}/commit/994f03cf736229044a168835ae7387696041658f.diff";
-      sha256 = "0fcm5b87nxw062wjd7b4qrfcwsyblmcw19s64004pklj9grk30zz";
-    })
-  ];
 
   postPatch = ''
     sed -i -e '/Subversion *REQUIRED/d' \
            -e '/include.*CMakeExternal/d' \
            CMakeLists.txt
-    # not using -f because we want it to fail for the next release
-    rm CMakeExternal.txt
   '';
 
   cmakeFlags = [ "-DGTEST_INCLUDE_DIR=${gtest}/include" ];
