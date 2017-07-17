@@ -170,7 +170,7 @@ let
   generateUnit = name: values:
     # exactly one way to specify the private key must be set
     assert (values.privateKey != null) != (values.privateKeyFile != null);
-    let privKey = if values.privateKeyFile != null then values.privateKeyFile else "<(echo ${values.privateKey})";
+    let privKey = if values.privateKeyFile != null then values.privateKeyFile else pkgs.writeText "wg-key" values.privateKey;
     in
     nameValuePair "wireguard-${name}"
       {
@@ -196,7 +196,7 @@ let
 
             (flatten (map (peer:
             assert (peer.presharedKeyFile == null) || (peer.presharedKey == null); # at most one of the two must be set
-            let psk = if peer.presharedKey != null then "<(echo ${peer.presharedKey})" else peer.presharedKeyFile;
+            let psk = if peer.presharedKey != null then pkgs.writeText "wg-psk" peer.presharedKey else peer.presharedKeyFile;
             in
             "${wgCommand} set ${name} peer ${peer.publicKey}" +
             optionalString (psk != null) " preshared-key ${psk}" +
