@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     unixODBC
     libxml2
     libuuid
+    zlib
   ] ++ (with xorg; [
     libX11
     libXext
@@ -93,6 +94,12 @@ stdenv.mkDerivation rec {
 
     echo "=== Running MathInstaller ==="
     ./MathInstaller -auto -createdir=y -execdir=$out/bin -targetdir=$out/libexec/Mathematica -silent
+
+    # Fix library paths
+    cd $out/libexec/Mathematica/Executables
+    for path in mathematica MathKernel Mathematica WolframKernel wolfram; do
+      sed -i -e 's/export LD_LIBRARY_PATH/export LD_LIBRARY_PATH=${builtins.replaceStrings ["/"] ["\\/"] "${zlib}/lib"}:\''${LD_LIBRARY_PATH}/' $path
+    done
   '';
 
   preFixup = ''
