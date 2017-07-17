@@ -7067,7 +7067,7 @@ with pkgs;
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
-  inherit (callPackages ../development/tools/build-managers/pants {}) pants pants13-pre;
+  pants = callPackage ../development/tools/build-managers/pants {};
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
