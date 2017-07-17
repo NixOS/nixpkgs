@@ -40,6 +40,15 @@ with lib;
           Varnish modules (except 'std').
         ";
       };
+
+      extraCommandLine = mkOption {
+        type = types.str;
+        default = "";
+        example = "-s malloc,256M";
+        description = "
+          Command line switches for varnishd (run 'varnishd -?' to get list of options)
+        ";
+      };
     };
 
   };
@@ -60,7 +69,7 @@ with lib;
       serviceConfig = {
         Type = "simple";
         PermissionsStartOnly = true;
-        ExecStart = "${pkgs.varnish}/sbin/varnishd -a ${cfg.http_address} -f ${pkgs.writeText "default.vcl" cfg.config} -n ${cfg.stateDir} -F"
+        ExecStart = "${pkgs.varnish}/sbin/varnishd -a ${cfg.http_address} -f ${pkgs.writeText "default.vcl" cfg.config} -n ${cfg.stateDir} -F ${cfg.extraCommandLine}"
           + optionalString (cfg.extraModules != []) " -p vmod_path='${makeSearchPathOutput "lib" "lib/varnish/vmods" ([pkgs.varnish] ++ cfg.extraModules)}' -r vmod_path";
         Restart = "always";
         RestartSec = "5s";
