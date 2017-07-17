@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
-    sha256 = "005jfapdj3mmk62p9qgvw7nyg93pqy249p1xy2ws1qx42xj76lih";
+    sha256 = "0gfjps7v93n0rrdndkhp22d93y892bf76pnzdhqbish0cigkkxph";
   };
 
   buildInputs = [ python2 ];
