@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.12.1";
+  version = "1.13.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-    sha256 = "a65266a4ad6ec8936a1bc85ce51f8600634a31a258b722c9274a80ff189d9542";
+    sha256 = "c9b0283776085cb2804efff73e9955ca279ba4edafd58d3ead70b61d209c4fbb";
   };
 
   disabled = isPyPy;
