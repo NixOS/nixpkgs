@@ -79,7 +79,15 @@ in
               default = null;
               type = types.nullOr types.str;
               description = ''
-                The ip adress to bind to.
+                The ip address to listen on for incoming connections.
+              '';
+            };
+
+            bindToAddress = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The ip address to bind to (both listen on and send packets from).
               '';
             };
 
@@ -131,7 +139,8 @@ in
               Name = ${if data.name == null then "$HOST" else data.name}
               DeviceType = ${data.interfaceType}
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
-              ${optionalString (data.listenAddress != null) "BindToAddress = ${data.listenAddress}"}
+              ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
+              ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
               Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}

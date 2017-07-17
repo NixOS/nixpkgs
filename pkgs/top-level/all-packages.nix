@@ -4370,6 +4370,8 @@ with pkgs;
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
+  tarsnapper = callPackage ../tools/backup/tarsnapper { };
+
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
   tcptraceroute = callPackage ../tools/networking/tcptraceroute { };
@@ -5619,8 +5621,8 @@ with pkgs;
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
       (openjdk7.jre // { outputs = [ "jre" ]; }));
 
-  jdk8 = openjdk8 // { outputs = [ "out" ]; };
-  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
+  jdk8 = if stdenv.isArm then oraclejdk8 else openjdk8 // { outputs = [ "out" ]; };
+  jre8 = if stdenv.isArm then oraclejre8 else lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
       (openjdk8.jre // { outputs = [ "jre" ]; }));
   jre8_headless =
@@ -5653,7 +5655,8 @@ with pkgs;
 
   supportsJDK =
     system == "i686-linux" ||
-    system == "x86_64-linux";
+    system == "x86_64-linux" ||
+    system == "armv7l-linux";
 
   jdkdistro = oraclejdk8distro;
 
@@ -6064,7 +6067,7 @@ with pkgs;
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_5_rc elixir_1_4 elixir_1_3
-    lfe
+    lfe lfe_1_2
     erlangR16 erlangR16_odbc
     erlang_basho_R16B02 erlang_basho_R16B02_odbc
     erlangR17 erlangR17_odbc erlangR17_javac erlangR17_odbc_javac
@@ -7390,6 +7393,8 @@ with pkgs;
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
 
+  aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix { };
+
   attica = callPackage ../development/libraries/attica { };
 
   attr = callPackage ../development/libraries/attr { };
@@ -7653,6 +7658,8 @@ with pkgs;
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
   vmmlib = callPackage ../development/libraries/vmmlib {};
+
+  elastix = callPackage ../development/libraries/science/biology/elastix { };
 
   enchant = callPackage ../development/libraries/enchant { };
 
@@ -13399,6 +13406,8 @@ with pkgs;
     libgpod = pkgs.libgpod.override { monoSupport = true; };
   };
 
+  bashSnippets = callPackage ../applications/misc/bashSnippets { };
+
   batik = callPackage ../applications/graphics/batik { };
 
   batti = callPackage ../applications/misc/batti { };
@@ -18651,6 +18660,7 @@ with pkgs;
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
+  nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 

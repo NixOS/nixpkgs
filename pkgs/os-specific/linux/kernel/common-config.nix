@@ -302,7 +302,9 @@ with stdenv.lib;
   CIFS_UPCALL y
   CIFS_ACL y
   CIFS_DFS_UPCALL y
-  CIFS_SMB2 y
+  ${optionalString (versionOlder version "4.13") ''
+    CIFS_SMB2 y
+  ''}
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
