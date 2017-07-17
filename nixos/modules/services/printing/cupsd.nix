@@ -324,6 +324,8 @@ in
               fi
             ''}
           '';
+
+          serviceConfig.PrivateTmp = true;
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled

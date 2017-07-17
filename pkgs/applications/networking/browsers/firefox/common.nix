@@ -153,7 +153,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ flag safeBrowsingSupport "safe-browsing"
-  ++ flag drmSupport "eme"
+  ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-release"
