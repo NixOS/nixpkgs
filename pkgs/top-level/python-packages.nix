@@ -12542,11 +12542,11 @@ in {
 
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
-    version = "0.6.6";
+    version = "0.7.11";
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
-      rev = "refs/tags/pymysql-${version}";
-      sha256 = "0kpw11rxpyyhs9b139hxhbnx9n5kzjjw10wgwvhnf9m3mv7j4n71";
+      rev = "refs/tags/v${version}";
+      sha256 = "1faski6ywwblnypqcia0sv6aazxd519bys2x4l635cr6f6qkhn61";
     };
 
     buildInputs = with self; [ unittest2 ];
