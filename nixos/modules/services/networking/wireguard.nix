@@ -192,7 +192,7 @@ let
             ) values.ips)
 
             ("${wgCommand} set ${name} private-key ${privKey}" +
-            optionalString (values.listenPort != null) " listen-port ${values.listenPort}")
+            optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}")
 
             (map (peer:
             assert (peer.presharedKeyFile == null) || (peer.presharedKey == null); # at most one of the two must be set
