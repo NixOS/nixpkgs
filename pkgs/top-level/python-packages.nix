@@ -3272,6 +3272,12 @@ in {
       sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
     };
 
+    # Fixes testsuite for python-3.6
+    # From ubuntu packaging: https://launchpad.net/ubuntu/+archive/primary/+files/celery_4.0.2-0ubuntu1.debian.tar.xz
+    # (linked from https://launchpad.net/ubuntu/+source/celery)
+    # https://github.com/celery/celery/pull/3736#issuecomment-274155454 from upstream
+    patches = [ ../development/python-modules/celery/fix_endless_python3.6_loop_logger_isa.patch ];
+
     buildInputs = with self; [ pytest case ];
     propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
 
@@ -12583,6 +12589,14 @@ in {
       sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
     };
 
+    # Backport fix for python-3.6 from master (see issue https://github.com/celery/kombu/issues/675)
+    # TODO remove at next update
+    patches = [ (pkgs.fetchpatch {
+      url = "https://github.com/celery/kombu/commit/dc3fceff59d79ceac3f8f11a5d697beabb4b7a7f.patch";
+      sha256 = "0s6gsihzjvmpffc7xrrcijw00r56yb74jg0sbjgng2v1324z1da9";
+      name = "don-t-modify-dict-size-while-iterating-over-it";
+    }) ];
+
     buildInputs = with self; [ pytest case pytz ];
 
     propagatedBuildInputs = with self; [ amqp ];
@@ -16615,6 +16629,8 @@ in {
     };
   };
 
+  olefile = callPackage ../development/python-modules/olefile { };
+
   oslo-log = buildPythonPackage rec {
     name = "oslo.log-${version}";
     version = "1.12.1";
@@ -17604,61 +17620,9 @@ in {
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pillow = buildPythonPackage rec {
-    name = "Pillow-${version}";
-    version = "3.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pillow/${name}.tar.gz";
-      sha256 = "0ee9975c05602e755ff5000232e0335ba30d507f6261922a658ee11b1cec36d1";
-    };
-
-    doCheck = !stdenv.isDarwin && !isPyPy;
-
-    # Disable imagefont tests, because they don't work well with infinality:
-    # https://github.com/python-pillow/Pillow/issues/1259
-    postPatch = ''
-      rm Tests/test_imagefont.py
-    '';
-
-    buildInputs = with self; [
-      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose pkgs.lcms2 ]
-      ++ optionals (isPyPy) [ pkgs.tk pkgs.xorg.libX11 ];
-
-    # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
-    preConfigure = let
-      libinclude' = pkg: ''"${pkg.out}/lib", "${pkg.out}/include"'';
-      libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
-    in ''
-      sed -i "setup.py" \
-          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
-              s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
-              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude pkgs.lcms2}|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
-              s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' pkgs.tcl}|g ;'
-      export LDFLAGS="-L${pkgs.libwebp}/lib"
-      export CFLAGS="-I${pkgs.libwebp}/include"
-    ''
-    # Remove impurities
-    + stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace setup.py \
-        --replace '"/Library/Frameworks",' "" \
-        --replace '"/System/Library/Frameworks"' ""
-    '';
-
-    meta = {
-      homepage = "https://python-pillow.github.io/";
-      description = "Fork of The Python Imaging Library (PIL)";
-      longDescription = ''
-        The Python Imaging Library (PIL) adds image processing
-        capabilities to your Python interpreter.  This library
-        supports many file formats, and provides powerful image
-        processing and graphics capabilities.
-      '';
-      license = "http://www.pythonware.com/products/pil/license.htm";
-      maintainers = with maintainers; [ goibhniu prikhi ];
-    };
+  pillow = callPackage ../development/python-modules/pillow {
+    inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
+    inherit (pkgs.xorg) libX11;
   };
 
   pkgconfig = buildPythonPackage rec {
@@ -19331,23 +19295,7 @@ in {
     };
   };
 
-  pyparsing = buildPythonPackage rec {
-    name = "pyparsing-${version}";
-    version = "2.1.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyparsing/${name}.tar.gz";
-      sha256 = "811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188";
-    };
-
-    # Not everything necessary to run the tests is included in the distribution
-    doCheck = false;
-
-    meta = {
-      homepage = http://pyparsing.wikispaces.com/;
-      description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-    };
-  };
+  pyparsing = callPackage ../development/python-modules/pyparsing { };
 
   pyparted = buildPythonPackage rec {
     name = "pyparted-${version}";
