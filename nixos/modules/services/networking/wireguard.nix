@@ -184,11 +184,11 @@ let
           ExecStart = flatten([
             values.preSetup
 
-            ''-${ipCommand} link del dev "${name}"''
-            ''${ipCommand} link add dev ${name} type wireguard''
+            "-${ipCommand} link del dev ${name}"
+            "${ipCommand} link add dev ${name} type wireguard"
 
             (map (ip:
-            ''${ipCommand} address add ${ip} dev ${name}''
+            "${ipCommand} address add ${ip} dev ${name}"
             ) values.ips)
 
             ("${wgCommand} set ${name} private-key ${privKey}" +
@@ -214,7 +214,7 @@ let
             values.postSetup
           ]);
           ExecStop = flatten([
-            ''${ipCommand} link del dev "${name}"''
+            "${ipCommand} link del dev ${name}"
             values.postShutdown
           ]);
         };
