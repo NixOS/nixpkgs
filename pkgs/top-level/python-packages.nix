@@ -7990,7 +7990,6 @@ in {
 
   # These used to be here but were moved to all-packages, but I'll leave them around for a while.
   pants = pkgs.pants;
-  pants13-pre = pkgs.pants13-pre;
 
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
