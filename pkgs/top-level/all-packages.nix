@@ -4803,6 +4803,7 @@ with pkgs;
 
   varnish = callPackage ../servers/varnish { };
   varnish-modules = callPackage ../servers/varnish/modules.nix { };
+  varnish-digest = callPackage ../servers/varnish/digest.nix { };
   varnish-geoip = callPackage ../servers/varnish/geoip.nix { };
   varnish-rtstatus = callPackage ../servers/varnish/rtstatus.nix { };
 
