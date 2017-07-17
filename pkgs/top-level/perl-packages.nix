@@ -6745,6 +6745,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTTPDAV = buildPerlPackage rec {
+    name = "HTTP-DAV-0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OP/OPERA/${name}.tar.gz";
+      sha256 = "1pp7xbfn6yr87cqy2m2kl2v5zgvmmikhl7wmaw6c5nksj4wi9xq1";
+    };
+    buildInputs = [ LWP XMLDOM ];
+    meta = {
+      description = "WebDAV client library.";
+    };
+  };
+
   HTTPHeaderParserXS = buildPerlPackage rec {
     name = "HTTP-HeaderParser-XS-0.20";
     src = fetchurl {
