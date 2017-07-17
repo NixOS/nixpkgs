@@ -1033,6 +1033,8 @@ with pkgs;
 
   hexio = callPackage ../development/tools/hexio { };
 
+  hid-listen = callPackage ../tools/misc/hid-listen { };
+
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
   hr = callPackage ../applications/misc/hr { };
