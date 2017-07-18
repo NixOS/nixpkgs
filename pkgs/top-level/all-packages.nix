@@ -18217,11 +18217,7 @@ with pkgs;
   z3 = callPackage ../applications/science/logic/z3 {};
   z3_opt = callPackage ../applications/science/logic/z3_opt {};
 
-  boolector   = boolector15;
-  boolector15 = callPackage ../applications/science/logic/boolector {};
-  boolector16 = lowPrio (callPackage ../applications/science/logic/boolector {
-    useV16 = true;
-  });
+  boolector = callPackage ../applications/science/logic/boolector {};
 
   ### SCIENCE / ELECTRONICS
 
