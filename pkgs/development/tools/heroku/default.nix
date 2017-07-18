@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ aflatter mirdhyn peterhoeg ];
     license = licenses.mit;
     platforms = with platforms; unix;
+    broken = true; # Outdated function, not supported upstream. https://github.com/NixOS/nixpkgs/issues/27447
   };
 
   binPath = lib.makeBinPath [ postgresql ruby ];
