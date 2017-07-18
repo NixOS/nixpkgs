@@ -10,7 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ coq ];
   enableParallelBuilding = true;
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+
+  installPhase = ''
+    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://color.inria.fr/;
