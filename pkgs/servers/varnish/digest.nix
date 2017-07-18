@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, libmhash, docutils }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, libmhash, docutils }:
 
 stdenv.mkDerivation rec {
   version = "1.0.1";

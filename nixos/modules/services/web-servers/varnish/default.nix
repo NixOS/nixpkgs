@@ -18,7 +18,7 @@ with lib;
       };
 
       config = mkOption {
-        type = types.str;
+        type = types.lines;
         description = "
           Verbatim default.vcl configuration.
         ";
@@ -35,7 +35,7 @@ with lib;
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[pkgs.varnish-geoip]";
+        example = literalExample "[ pkgs.varnish-geoip ]";
         description = "
           Varnish modules (except 'std').
         ";
