@@ -231,11 +231,11 @@ stdenv.mkDerivation ({
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
-      ln -s $d/*.dylib $dynamicLinksDir
+    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'); do
+      ln -s "$d/"*.dylib $dynamicLinksDir
     done
     # Edit the local package DB to reference the links directory.
-    for f in $packageConfDir/*.conf; do
+    for f in "$packageConfDir/"*.conf; do
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
     done
   '') + ''
