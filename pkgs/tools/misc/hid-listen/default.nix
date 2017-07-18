@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    mv ./hid_listen $out/bin/$hid_listen
+    mv ./hid_listen $out/bin/hid_listen
   '';
 
   meta = with stdenv.lib; {
