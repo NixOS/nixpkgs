@@ -12,6 +12,7 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}, hostPlatform, targetPlatform
 , runCommand ? null
+, useMacosReexportHack ? false
 }:
 
 with stdenv.lib;
@@ -295,7 +296,20 @@ stdenv.mkDerivation {
         ln -s $ldPath/${prefix}as $out/bin/${prefix}as
       fi
 
-      wrap ${prefix}ld ${preWrap ./ld-wrapper.sh} ''${ld:-$ldPath/${prefix}ld}
+      wrap ${prefix}ld ${if !useMacosReexportHack
+      then preWrap ./ld-wrapper.sh
+      else stdenv.mkDerivation {
+        name = "patched-ld-wrapper-src";
+        patches = [ ./macos-sierra-reexport-hack.patch ];
+        unpackPhase = ''
+          src=$PWD
+          cp ${./ld-wrapper.sh} ld-wrapper.sh
+        '';
+        buildPhase = "";
+        installPhase = ''
+          cp ld-wrapper.sh $out
+        '';
+      }} ''${ld:-$ldPath/${prefix}ld}
 
       if [ -e ${binutils_bin}/bin/${prefix}ld.gold ]; then
         wrap ${prefix}ld.gold ${preWrap ./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.gold
@@ -399,5 +413,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
-    };
+  } // optionalAttrs useMacosReexportHack {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }
