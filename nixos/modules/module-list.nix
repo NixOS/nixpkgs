@@ -567,6 +567,7 @@
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
   ./services/security/shibboleth-sp.nix
+  ./services/security/sks.nix
   ./services/security/sshguard.nix
   ./services/security/tor.nix
   ./services/security/torify.nix
@@ -594,6 +595,7 @@
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
+  ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/piwik.nix
   ./services/web-apps/privacyidea.nix
   ./services/web-apps/pump.io.nix
