@@ -7,8 +7,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [
-    pkgconfig intltool gnupg gobjectIntrospection libxslt
+  buildInputs = let
+    gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome
+  in [
+    pkgconfig intltool gpg gobjectIntrospection libxslt
     libgcrypt libtasn1 dbus_glib pango gdk_pixbuf atk makeWrapper vala_0_32
   ];
 
