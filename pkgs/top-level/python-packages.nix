@@ -515,33 +515,7 @@ in {
     };
   };
 
-  python-gnupg = buildPythonPackage rec {
-    name    = "python-gnupg-${version}";
-    version = "0.4.0";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/p/python-gnupg/${name}.tar.gz";
-      sha256 = "1yd88acafs9nwk6gzpbxjzpx0zd04qrvc6hmwhj1i89ghm2g7ap6";
-    };
-
-    propagatedBuildInputs = [ pkgs.gnupg1 ];
-
-    # Let's make the library default to our gpg binary
-    patchPhase = ''
-      substituteInPlace gnupg.py \
-        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "A wrapper for the Gnu Privacy Guard";
-      homepage    = "https://pypi.python.org/pypi/python-gnupg";
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ copumpkin ];
-      platforms   = platforms.unix;
-    };
-  };
+  python-gnupg = callPackage ../development/python-modules/python-gnupg {};
 
   python-uinput = buildPythonPackage rec {
     name = "python-uinput-${version}";
