@@ -56,7 +56,20 @@ stdenv.mkDerivation {
 
   patches = patches ++ targetPatches;
 
-  passthru.target = target;
+  passthru = {
+    unpackedSrc = stdenv.mkDerivation {
+      name = "rust-src-${version}";
+      inherit src;
+      configurePhase = ":";
+      buildPhase = ":";
+      installPhase = ''
+        mkdir -p $out
+        cp -r . $out/
+      '';
+      fixupPhase = ":";
+    };
+    target = target;
+  };
 
   postPatch = ''
     # Fix dynamic linking against llvm
