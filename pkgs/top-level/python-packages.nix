@@ -517,11 +517,11 @@ in {
 
   python-gnupg = buildPythonPackage rec {
     name    = "python-gnupg-${version}";
-    version = "0.4.0";
+    version = "0.4.1";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/p/python-gnupg/${name}.tar.gz";
-      sha256 = "1yd88acafs9nwk6gzpbxjzpx0zd04qrvc6hmwhj1i89ghm2g7ap6";
+      sha256 = "06hfw9cmiw5306fyisp3kzg1hww260qzip829g7y7pj1mwpb0izg";
     };
 
     propagatedBuildInputs = [ pkgs.gnupg1 ];
@@ -530,9 +530,9 @@ in {
     patchPhase = ''
       substituteInPlace gnupg.py \
         --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
+      substituteInPlace test_gnupg.py \
+        --replace "gpgbinary=GPGBINARY" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
     '';
-
-    doCheck = false;
 
     meta = {
       description = "A wrapper for the Gnu Privacy Guard";
