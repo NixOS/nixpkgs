@@ -38,5 +38,5 @@ For pull-requests, please rebase onto nixpkgs `master`.
 
 Communication:
 
-* [Mailing list](http://lists.science.uu.nl/mailman/listinfo/nix-dev)
+* [Mailing list](https://groups.google.com/forum/#!forum/nix-devel)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
