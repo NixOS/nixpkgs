@@ -1,4 +1,7 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, django, six }:
+{
+  stdenv, buildPythonPackage, fetchFromGitHub,
+  vobject, mock, tox, pytestcov, pytest-django, pytest, shortuuid, django
+}:
 
 buildPythonPackage rec {
   pname = "django-extensions";
@@ -12,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "08rd9zswvjb9dixzyd3p3l3hw3wwhqkgyjvid65niybzjl1xdb5h";
   };
 
-  doCheck = false;
-
-  propagatedBuildInputs = [ django six ];
+  buildInputs = [ django vobject mock tox pytestcov pytest-django pytest shortuuid];
 
   meta = with stdenv.lib; {
     description = "A collection of custom extensions for the Django Framework";
