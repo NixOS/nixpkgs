@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, hostPlatform, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null
@@ -26,6 +26,8 @@ in stdenv.mkDerivation rec {
     url = "mirror://gnu/nano/${name}.tar.xz";
     sha256 = "1hl9gni3qmblr062a7w6vz16gvxbswgc5c19c923ja0bk48vyhyb";
   };
+
+  patches = stdenv.lib.optional hostPlatform.isDarwin stdenv.secure-format-patch;
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];
