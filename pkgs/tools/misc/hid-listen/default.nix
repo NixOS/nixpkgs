@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.pjrc.com/teensy/hid_listen.html;
     license = licenses.gpl3;
     maintainers = with maintainers; [ tomsmeets ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
