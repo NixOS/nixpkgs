@@ -10726,6 +10726,10 @@ with pkgs;
     stdenv = overrideCC stdenv gcc5;
   };
 
+  v8_6_x = callPackage ../development/libraries/v8/6_x.nix {
+    inherit (python2Packages) python;
+  };
+
   v8 = callPackage ../development/libraries/v8 {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
