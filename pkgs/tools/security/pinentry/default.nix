@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt4 ? null
+, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt4 ? null
 }:
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ni7g4plq6x78p32al7m8h2zsakvg1rhfz0qbc3kdc7yq7nw4whn";
   };
 
-  buildInputs = [ libgpgerror libassuan libcap gtk2 gcr ncurses qt4 ];
+  buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt4 ];
 
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
@@ -38,12 +38,13 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (mkWith   (libcap != null)  "libcap")
-    (mkEnable (ncurses != null) "pinentry-curses")
-    (mkEnable true              "pinentry-tty")
-    (mkEnable (gtk2 != null)    "pinentry-gtk2")
-    (mkEnable (gcr != null)     "pinentry-gnome3")
-    (mkEnable (qt4 != null)     "pinentry-qt")
+    (mkWith   (libcap != null)    "libcap")
+    (mkEnable (libsecret != null) "libsecret")
+    (mkEnable (ncurses != null)   "pinentry-curses")
+    (mkEnable true                "pinentry-tty")
+    (mkEnable (gtk2 != null)      "pinentry-gtk2")
+    (mkEnable (gcr != null)       "pinentry-gnome3")
+    (mkEnable (qt4 != null)       "pinentry-qt")
   ];
 
   nativeBuildInputs = [ pkgconfig ];
