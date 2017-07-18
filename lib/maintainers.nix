@@ -565,6 +565,7 @@
   tohl = "Tomas Hlavaty <tom@logand.com>";
   tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
+  tomsmeets = "Tom Smeets <tom@tsmeets.nl>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
   trevorj = "Trevor Joynson <nix@trevor.joynson.io>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
