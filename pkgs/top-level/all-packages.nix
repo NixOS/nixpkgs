@@ -8093,6 +8093,8 @@ with pkgs;
 
   pgpdump = callPackage ../tools/security/pgpdump { };
 
+  pgpkeyserver-lite = callPackage ../servers/web-apps/pgpkeyserver-lite {};
+
   gpgstats = callPackage ../tools/security/gpgstats { };
 
   gpshell = callPackage ../development/tools/misc/gpshell { };
