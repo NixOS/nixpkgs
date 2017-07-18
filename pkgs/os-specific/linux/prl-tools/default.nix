@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
           patchelf \
             --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
             --set-rpath "$out/lib:$libPath" \
-            $i
+            $i || true
         done
 
         mkdir -p $out/bin
