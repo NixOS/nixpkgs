@@ -14,6 +14,8 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "1676e07947a19df9d17002307a7555c2647a4224d6f2869949e8fc4bd18f2e87";
   };
+  # XXX tests rely on user-writeable /dev/shm to obtain process locks and return PermissionError otherwise
+  # workaround: sudo chmod 777 /dev/shm
   checkPhase = ''
     py.test testcases
   '';
