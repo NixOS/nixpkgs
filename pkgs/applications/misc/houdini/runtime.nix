@@ -1,4 +1,4 @@
-{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, mesa_glu, bc }:
+{ stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, mesa_glu, alsaLib, dbus, xkeyboardconfig, bc }:
 
 let
   ld_library_path = builtins.concatStringsSep ":" [
@@ -11,11 +11,19 @@ let
       xorg.libXext
       xorg.libX11
       xorg.libXrender
+      xorg.libXcursor
+      xorg.libXfixes
+      xorg.libXrender
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXtst
+      alsaLib
       fontconfig
       libSM
       libICE
       zlib
       libpng
+      dbus
     ])
   ];
   license_dir = "~/.config/houdini";
@@ -25,7 +33,7 @@ stdenv.mkDerivation rec {
   name = "houdini-runtime-${version}";
   src = requireFile rec {
     name = "houdini-16.0.633-linux_x86_64_gcc4.8.tar.gz";
-    sha256 = "1laxncwgsr4hj53bn4pn9ibv3pkrpliwxlx0558wgnhq42js3wvl";
+    sha256 = "1wwm3gqmwn7xbm2qrpb4al44kzgswmsvmjndjkbqskwinxqmg9y2";
     message = ''
       This nix expression requires that ${name} is already part of the store.
       Download it from https://sidefx.com and add it to the nix store with:
@@ -50,11 +58,13 @@ stdenv.mkDerivation rec {
                       --no-root-check \
                       --accept-EULA \
                       $out
-    sed -i "s|/usr/lib/sesi|${license_dir}|g" $out/houdini/Licensing.opt
+    echo -e "localValidatorDir = ${license_dir}\nlicensingMode = localValidator" > $out/houdini/Licensing.opt
     sed -i "s|/usr/lib/sesi|${license_dir}|g" $out/houdini/sbin/sesinetd_safe
     sed -i "s|/usr/lib/sesi|${license_dir}|g" $out/houdini/sbin/sesinetd.startup
     echo "export LD_LIBRARY_PATH=${ld_library_path}" >> $out/bin/app_init.sh
+    echo "export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"" >> $out/bin/app_init.sh
     echo "export LD_LIBRARY_PATH=${ld_library_path}" >> $out/houdini/sbin/app_init.sh
+    echo "export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"" >> $out/houdini/sbin/app_init.sh
   '';
   postFixup = ''
     INTERPRETER="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
