@@ -3507,6 +3507,8 @@ with pkgs;
 
   oh-my-zsh = callPackage ../shells/oh-my-zsh { };
 
+  ola = callPackage ../applications/misc/ola { };
+
   opencc = callPackage ../tools/text/opencc { };
 
   opencl-info = callPackage ../tools/system/opencl-info { };
