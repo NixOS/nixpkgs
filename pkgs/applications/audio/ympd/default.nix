@@ -7,11 +7,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "maympd";
-    rev = "v${version}";
-    sha256 = "0qp18fvczjlj2dkgrmrw0lb7s5791jn40mww7s1n69zfv46krn5x";
+    rev = "772f5af4c4a79cf2187b83a29b684c619507876d";
+    sha256 = "1ah94xf9pxwmrzbhb069qk6sy3v9qm6arg08mj6awicvych2k6c4";
   };
 
-  buildInputs = [ cmake pkgconfig mpd_clientlib openssl ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ mpd_clientlib openssl ];
 
   meta = {
     homepage = "http://www.ympd.org";
