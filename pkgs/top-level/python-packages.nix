@@ -18392,12 +18392,12 @@ in {
 
   pyelftools = buildPythonPackage rec {
     pname = "pyelftools";
-    version = "0.23";
+    version = "0.24";
     name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1pi1mdzfffgl5qcz0prsa7hlbriycy7mgagi0fdrp3vf17fslmzw";
+      sha256 = "17259kf6hwwsmizr5myp9jv3k9g5i3dvmnl8m646pfd5hpb9gpg9";
     };
 
     checkPhase = ''
