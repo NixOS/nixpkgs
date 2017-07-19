@@ -27,16 +27,17 @@ in rec {
 
   preview = mkStudio rec {
     pname = "android-studio-preview";
-    version = "3.0.0.5";
-    build = "171.4163606";
+    version = "3.0.0.6";
+    build = "171.4182969";
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "1gxnpw4jf3iic9d47sjbndpysq8kk8pgnb8l7azkc2rba5cj8skg";
+      sha256 = "0s26k5qr0qg6az77yw2mvnhavwi4aza4ifvd45ljank8aqr6sp5i";
     };
 
     meta = stable.meta // {
       homepage = https://developer.android.com/studio/preview/index.html;
+      maintainers = with stdenv.lib.maintainers; [ tomsmeets ];
     };
   } {
     fontsConf = makeFontsConf {
