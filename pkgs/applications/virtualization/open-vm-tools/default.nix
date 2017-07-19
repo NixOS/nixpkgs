@@ -2,6 +2,7 @@
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
   pkgconfig, glib, gtk, gtkmm, iproute, dbus, systemd, which,
+  kernel,
   withX ? true }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
       ++ lib.optionals withX [ gtk gtkmm libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
-  patches = [ ./recognize_nixos.patch ];
+  patches = [ ./recognize_nixos.patch ./fix-module-build.patch ];
   postPatch = ''
      # Build bugfix for 10.1.0, stolen from Arch PKGBUILD
      mkdir -p common-agent/etc/config
@@ -38,7 +39,12 @@ stdenv.mkDerivation rec {
      sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
   '';
 
-  configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]
+  configureFlags = [
+    "--with-kernel-release=${kernel.modDirVersion}"
+    "--with-linuxdir=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
+    "--with-kernel-modules" "--without-root-privileges"
+    "--without-xmlsecurity"
+  ]
     ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
@@ -46,6 +52,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
       --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
+    exit 1
   '';
 
   meta = with stdenv.lib; {
