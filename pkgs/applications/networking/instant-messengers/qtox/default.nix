@@ -1,8 +1,9 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig, openal, opencv,
-  libtoxcore, libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo, xorg,
-  pango, atk, qrencode, ffmpeg, filter-audio,
-  qtbase, qtsvg, qttools, qttranslations, sqlcipher,
-  libvpx, libopus }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig,
+  libtoxcore,
+  libpthreadstubs, libXdmcp, libXScrnSaver,
+  qtbase, qtsvg, qttools, qttranslations,
+  atk, cairo, ffmpeg, filter-audio, gdk_pixbuf, glib, gtk2, libsodium, libopus,
+  libvpx, openal, opencv, pango, pcre, qrencode, sqlcipher }:
 
 mkDerivation rec {
   name = "qtox-${version}";
@@ -16,14 +17,12 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    libtoxcore openal opencv libsodium filter-audio
-    qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
-    pango atk qrencode ffmpeg qttranslations
-    sqlcipher
-    libopus libvpx
-  ] ++ (with xorg; [
-    libpthreadstubs libXdmcp
-  ]);
+    libtoxcore
+    libpthreadstubs libXdmcp libXScrnSaver
+    qtbase qtsvg qttools qttranslations
+    atk cairo ffmpeg filter-audio gdk_pixbuf glib gtk2 libopus libsodium
+    libvpx openal opencv pango pcre qrencode sqlcipher
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
