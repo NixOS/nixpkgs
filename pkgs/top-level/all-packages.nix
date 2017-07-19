@@ -535,7 +535,7 @@ with pkgs;
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
-  ct = callPackage ../development/tools/ct { };
+  container-linux-config-transpiler = callPackage ../development/tools/ct { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
