@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "emacs-all-the-icons-fonts-${version}";
-  version = "2.6.4";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "domtronn";
     repo = "all-the-icons.el";
     rev = version;
-    sha256 = "0xwj8wyj0ywpy4rcqxz15hkr8jnffn7nrp5fnq56j360v8858q8x";
+    sha256 = "0h8a2jvn2wfi3bqd35scmhm8wh20mlk09sy68m1whi9binzkm8rf";
   };
 
   installPhase = ''
