@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildGoPackage }:
- 
+
 with lib;
 
 buildGoPackage rec {
@@ -7,9 +7,6 @@ buildGoPackage rec {
   version = "0.4.1";
 
   goPackagePath = "github.com/coreos/container-linux-config-transpiler";
-
-  outputs = [ "out" "bin" ];
-  outputBin = "bin";
 
   src = fetchFromGitHub {
     owner = "coreos";
@@ -20,6 +17,11 @@ buildGoPackage rec {
 
   buildFlagsArray = ''
     -ldflags=-X ${goPackagePath}/internal/version.Raw=v${version}
+  '';
+
+  postInstall = ''
+    mv $bin/bin/{internal,ct}
+    rm $bin/bin/tools
   '';
 
   meta = {
