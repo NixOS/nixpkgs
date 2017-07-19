@@ -32,19 +32,15 @@ let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
                 ];
 in
 stdenv.mkDerivation rec {
-  version = "10.0.2.27712";
+  version = "${prl_major}.2.1-41615";
+  prl_major = "12";
   name = "prl-tools-${version}";
 
-  src = requireFile rec {
-    name = "prl-tools-lin.iso";
-    sha256 = "07960jvyv7gihjlg922znjm6db6l6bd23x9mg6ympwibzf2mylmx";
-    message = ''
-      Please, place Parallels Tools for Linux image into Nix store
-      using either
-        nix-store --add-fixed sha256 ${name}
-      or
-        nix-prefetch-url file://path/to/${name}
-    '';
+  # We download the full distribution to extract prl-tools-lin.iso from
+  # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
+  src = fetchurl {
+    url =  "https://download.parallels.com/desktop/v${prl_major}/${version}/ParallelsDesktop-${version}.dmg";
+    sha256 = "1jwzwif69qlhmfky9kigjaxpxfj0lyrl1iyrpqy4iwqvajdgbbym";
   };
 
   hardeningDisable = [ "pic" ];
