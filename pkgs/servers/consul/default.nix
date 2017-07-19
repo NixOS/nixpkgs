@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "consul-${version}";
-  version = "0.7.5";
+  version = "0.8.5";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/consul";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "consul";
     inherit rev;
-    sha256 = "0zh4j5p0v41v7i6v084dgsdchx1azjs2mjb3dlfdv671rsnwi54z";
+    sha256 = "0xvkzk147wchvsp8xmmx4fq0kvqc49y9rswzvxzr53mfyiy0d0pf";
   };
 
   # Keep consul.ui for backward compatability
