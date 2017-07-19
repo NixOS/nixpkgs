@@ -89,5 +89,58 @@ in
       };
     };
 
+    systemd.services.prlcc = {
+      description = "Parallels Control Center";
+      wantedBy = [ "graphical.target" ];
+      serviceConfig = {
+        ExecStart = "${prl-tools}/bin/prlcc";
+      };
+    };
+  
+    systemd.user.services = {
+      prlcc = {
+        description = "Parallels Control Center";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlcc";
+        };
+      };
+      prldnd = {
+        description = "Parallels Control Center";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prldnd";
+        };
+      };
+      prl_wmouse_d  = {
+        description = "Parallels Walking Mouse Daemon";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prl_wmouse_d";
+        };
+      };
+      prlcp = {
+        description = "Parallels CopyPaste Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlcp";
+        };
+      };
+      prlsga = {
+        description = "Parallels Shared Guest Applications Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlsga";
+        };
+      };
+      prlshprof = {
+        description = "Parallels Shared Profile Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlshprof";
+        };
+      };
+    };
+
   };
 }
