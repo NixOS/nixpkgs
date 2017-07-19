@@ -309,23 +309,7 @@ in {
 
   alembic = callPackage ../development/python-modules/alembic {};
 
-  ansicolors = buildPythonPackage rec {
-    name    = "ansicolors-${version}";
-    version = "1.0.2";
-
-    src = self.fetchPypi {
-      pname = "ansicolors";
-      inherit version;
-      sha256 = "02lmh2fbqcwr98cq13l9ql0fvyad1dcb3ap3c5xq9qwjp45m6r3n";
-    };
-
-    meta = {
-      homepage = "https://github.com/verigak/colors/";
-      description = "ANSI colors for Python";
-      license = licenses.isc;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
+  ansicolors = callPackage ../development/python-modules/ansicolors {};
 
   aniso8601 = buildPythonPackage rec {
     name = "aniso8601-${version}";
