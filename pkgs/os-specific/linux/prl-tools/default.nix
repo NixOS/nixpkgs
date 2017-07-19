@@ -11,26 +11,6 @@ let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
     x64 = if stdenv.system == "x86_64-linux" then true
           else if stdenv.system == "i686-linux" then false
           else abort "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
-    # We autostart user services by ourselves, because prlcc uses hardcoded paths.
-    autostart = [ { exec = "prlcc";
-                    description = "Parallels Control Center";
-                  }
-                  { exec = "prldhd";
-                    description = "Parallels Control Center"; # not a mistake
-                  }
-                  { exec = "prl_wmouse_d";
-                    description = "Parallels Walking Mouse Daemon";
-                  }
-                  { exec = "prlcp";
-                    description = "Parallels CopyPaste Tool";
-                  }
-                  { exec = "prlsga";
-                    description = "Parallels Shared Guest Applications Tool";
-                  }
-                  { exec = "prlshprof";
-                    description = "Parallels Shared Profile Tool";
-                  }
-                ];
 in
 stdenv.mkDerivation rec {
   version = "${prl_major}.2.1-41615";
@@ -87,11 +67,6 @@ stdenv.mkDerivation rec {
             stdenv.lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
             ++ lib.optionals (!libsOnly) [ libXi glib dbus_glib zlib ]);
 
-  desktops = map (x: substituteAll ({
-               src = ./autostart.desktop;
-               name = x.exec + ".desktop";
-               version = version;
-             } // x)) autostart;
 
   installPhase = ''
     if test -z "$libsOnly"; then
@@ -142,11 +117,6 @@ stdenv.mkDerivation rec {
         mkdir -p $out/lib/udev/rules.d
         for i in *.rules; do
           sed 's,/bin/bash,${stdenv.shell},g' $i > $out/lib/udev/rules.d/$i
-        done
-
-        mkdir -p $out/share/autostart
-        for i in $desktops; do
-          cat $i | sed "s,^Exec=,Exec=$out/bin/," > $out/share/autostart/$(basename $i)
         done
 
         (
