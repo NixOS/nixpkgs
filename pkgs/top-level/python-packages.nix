@@ -323,26 +323,7 @@ in {
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg {};
 
-  python-uinput = buildPythonPackage rec {
-    name = "python-uinput-${version}";
-    version = "0.11.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-uinput/${name}.tar.gz";
-      sha256 = "033zqiypjz0nigav6vz0s57pbzikvds55mxphrdpkdbpdikjnfcr";
-    };
-
-    buildInputs = [ pkgs.udev ];
-
-    NIX_CFLAGS_LINK = [ "-ludev" ];
-
-    meta = with stdenv.lib; {
-      description = "Pythonic API to Linux uinput kernel module";
-      homepage = "http://tjjr.fi/sw/python-uinput/";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  python-uinput = callPackage ../development/python-modules/python-uinput {};
 
   python-sybase = buildPythonPackage rec {
     name = "python-sybase-${version}";
