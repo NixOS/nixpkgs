@@ -535,6 +535,8 @@ with pkgs;
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
+  ct = callPackage ../development/tools/ct { };
+
   djmount = callPackage ../tools/filesystems/djmount { };
 
   dgsh = callPackage ../shells/dgsh { };
