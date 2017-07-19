@@ -25391,24 +25391,8 @@ EOF
     };
   });
 
-  zconfig = buildPythonPackage rec {
-    name = "zconfig-${version}";
-    version = "3.0.3";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/Z/ZConfig/ZConfig-${version}.tar.gz";
-      sha256 = "6577da957511d8c2f805fefd2e31cacc4117bb5c54aec03ad8ce374020c021f3";
-    };
-
-    propagatedBuildInputs = with self; [ zope_testrunner ];
-
-    meta = {
-      description = "Structured Configuration Library";
-      homepage = http://pypi.python.org/pypi/ZConfig;
-      license = licenses.zpt20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
+  zconfig = callPackage ../development/python-modules/zconfig { };
 
 
   zc_lockfile = buildPythonPackage rec {
@@ -26008,25 +25992,7 @@ EOF
   };
 
 
-  zope_testrunner = buildPythonPackage rec {
-    name = "zope.testrunner-${version}";
-    version = "4.4.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.testrunner/${name}.zip";
-      sha256 = "1w09wbqiqmq6hvrammi4fzc7fr129v63gdnzlk4qi2b1xy5qpqab";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
-
-    meta = {
-      description = "A flexible test runner with layer support";
-      homepage = http://pypi.python.org/pypi/zope.testrunner;
-      license = licenses.zpt20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 
   zope_traversing = buildPythonPackage rec {
     name = "zope.traversing-4.0.0";
@@ -26047,23 +26013,8 @@ EOF
   };
 
 
-  zope_interface = buildPythonPackage rec {
-    name = "zope.interface-4.1.3";
+  zope_interface = callPackage ../development/python-modules/zope_interface { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.interface/${name}.tar.gz";
-      sha256 = "0ks8h73b2g4bkad821qbv0wzjppdrwys33i7ka45ik3wxjg1l8if";
-    };
-
-    propagatedBuildInputs = with self; [ zope_event ];
-
-    meta = {
-      description = "Zope.Interface";
-      homepage = http://zope.org/Products/ZopeInterface;
-      license = licenses.zpt20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
 
   hgsvn = buildPythonPackage rec {
     name = "hgsvn-0.3.11";
