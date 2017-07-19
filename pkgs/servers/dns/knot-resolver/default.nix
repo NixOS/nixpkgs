@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = https://knot-resolver.cz;
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    # Platforms using negative pointers for stack won't work ATM due to LuaJIT impl.
+    platforms = filter (p: p != "aarch64-linux") platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
   };
 }

@@ -16,7 +16,7 @@ let
     in
       import ./hex-packages.nix {
         inherit pkgs stdenv callPackage;
-      } // {
+      } // rec {
         inherit callPackage erlang;
         beamPackages = self;
 
@@ -37,10 +37,25 @@ let
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.
-        elixir = if versionAtLeast (lib.getVersion erlang) "18"
-                 then callPackage ../interpreters/elixir { debugInfo = true; }
-                 else throw "Elixir requires at least Erlang/OTP R18.";
-        lfe = callPackage ../interpreters/lfe { };
+        elixir = elixir_1_4;
+
+        elixir_1_5_rc = lib.callElixir ../interpreters/elixir/1.5.nix {
+                       inherit rebar erlang;
+                       debugInfo = true;
+                     };
+
+        elixir_1_4 = lib.callElixir ../interpreters/elixir/1.4.nix {
+                       inherit rebar erlang;
+                       debugInfo = true;
+                     };
+
+        elixir_1_3 = lib.callElixir ../interpreters/elixir/1.3.nix {
+                       inherit rebar erlang;
+                       debugInfo = true;
+                     };
+
+        lfe = lfe_1_2;
+        lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
 
         # Non hex packages
         hex = callPackage ./hex {};

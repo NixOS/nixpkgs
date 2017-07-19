@@ -15,6 +15,23 @@ in
       description = "Verbatim config.toml to use";
     };
 
+    gracefulTermination = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Finish all remaining jobs before stopping, restarting or reconfiguring.
+        If not set gitlab-runner will stop immediatly without waiting for jobs to finish,
+        which will lead to failed builds.
+      '';
+    };
+
+    gracefulTimeout = mkOption {
+      default = "infinity";
+      type = types.str;
+      example = "5min 20s";
+      description = ''Time to wait until a graceful shutdown is turned into a forceful one.'';
+    };
+
     workDir = mkOption {
       default = "/var/lib/gitlab-runner";
       type = types.path;
@@ -45,6 +62,11 @@ in
           --service gitlab-runner \
           --user gitlab-runner \
         '';
+
+      } //  optionalAttrs (cfg.gracefulTermination) {
+        TimeoutStopSec = "${cfg.gracefulTimeout}";
+        KillSignal = "SIGQUIT";
+        KillMode = "process";
       };
     };
 

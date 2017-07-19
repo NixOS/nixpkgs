@@ -1,10 +1,36 @@
 { stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
+let wrapper = stdenv.mkDerivation rec {
+  name = "wrapper-${version}";
+  version = "3.5.32";
+  src = fetchurl {
+    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
+    sha256 = "1v388p5jjbpwybw0zjv5glzny17fwdwppaci2lqcsnm6qw0667f1";
+  };
+  buildInputs = [ jdk ];
+  buildPhase = ''
+    export ANT_HOME=${ant}
+    export JAVA_HOME=${jdk}/lib/openjdk/jre/
+    export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
+    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
+    sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
+    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
+  '';
+  installPhase = ''
+    mkdir -p $out/{bin,lib}
+    cp bin/wrapper $out/bin/wrapper
+    cp lib/wrapper.jar $out/lib/wrapper.jar
+    cp lib/libwrapper.so $out/lib/libwrapper.so
+  '';
+};
+
+in
+
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.28";
+  name = "i2p-0.9.30";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "1xagyywnck2c5xalr7bc7cv5ikk4igf7avmc0n28nz9pkais1y1y";
+    sha256 = "03hrirmah3ba9ygql487jy233nsxkfjyz82mmyppazi0mcgiass1";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];
@@ -16,7 +42,11 @@ stdenv.mkDerivation rec {
     set -B
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
-    cp installer/lib/wrapper/linux64/* $out
+
+    cp ${wrapper}/bin/wrapper $out/i2psvc
+    cp ${wrapper}/lib/wrapper.jar $out/lib
+    cp ${wrapper}/lib/libwrapper.so $out/lib
+
     sed -i $out/i2prouter -i $out/runplain.sh \
       -e "s#uname#${coreutils}/bin/uname#" \
       -e "s#which#${which}/bin/which#" \
@@ -38,7 +68,6 @@ stdenv.mkDerivation rec {
     description = "Applications and router for I2P, anonymity over the Internet";
     maintainers = [ maintainers.joelmo ];
     license = licenses.gpl2;
-    # TODO: support other systems, just copy appropriate lib/wrapper.. to $out
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

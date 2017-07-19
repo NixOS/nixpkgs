@@ -1,15 +1,15 @@
 { stdenv, fetchzip, ncurses
 , ocamlPackages
-, opam }:
+, jbuilder }:
 
 stdenv.mkDerivation {
-  name = "ocaml-top-1.1.3";
+  name = "ocaml-top-1.1.4";
   src = fetchzip {
-    url = https://github.com/OCamlPro/ocaml-top/archive/1.1.3.tar.gz;
-    sha256 = "0islyinv7lwhg8hkg4xn30wwz1nv50rj0wpsis8jpimw6jdsnax3";
+    url = https://github.com/OCamlPro/ocaml-top/archive/1.1.4.tar.gz;
+    sha256 = "1lmzjmnzsg8xdz0q5nm95zclihi9z80kzsalapg0s9wq0id8qm4j";
   };
 
-  buildInputs = [ ncurses opam ]
+  buildInputs = [ ncurses jbuilder ]
   ++ (with ocamlPackages; [ ocaml ocpBuild findlib lablgtk ocp-index ]);
 
   configurePhase = ''
@@ -17,9 +17,9 @@ stdenv.mkDerivation {
     ocp-build -init
   '';
 
-  buildPhase = "ocp-build ocaml-top";
+  buildPhase = "jbuilder build";
 
-  installPhase = "opam-installer --prefix=$out";
+  inherit (jbuilder) installPhase;
 
   meta = {
     homepage = http://www.typerex.org/ocaml-top.html;

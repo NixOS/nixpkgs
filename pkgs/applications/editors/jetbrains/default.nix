@@ -265,12 +265,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.4";
+    version = "2017.1.5"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1w1knq969dl8rxlkhr9mw8cr2vszn384acwhspimrd3zs9825r45";
+      sha256 = "830c662c517e8d0131dc2df150d6f75adb3d8becaf9de96393730b0f4ae6ccf0"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IDEA_Release";
@@ -304,12 +304,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2017.1.4";
+    version = "2017.1.5";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "0byrsbsscpzb0syamzpavny879src5dlclnissa7173rh8hgkna4";
+      sha256 = "0gjj2g9fcrbbbp3v4clg0kj48qdw0gqcn9im4h8p3z2zscpg16ag";
     };
     wmClass = "jetbrains-idea";
     update-channel = "IDEA_Release";
@@ -343,12 +343,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2017.1.4"; /* updated by script */
+    version = "2017.1.5"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1e69ab29215a9c8c4626de6727df433ae0d9f6ed46eba2a6f48ffa52c2b04256"; /* updated by script */
+      sha256 = "1a0bbf0d881527e08aad7a5adaa3ad44e8754c3eb2c3a8ed5ab113491549679b"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm_Release";
@@ -356,12 +356,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2017.1.4"; /* updated by script */
+    version = "2017.1.5"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "bbae5602b9cf6d26ccce9e1bf8b388d79c27cf89673d1a56f248bf0a50e518ed"; /* updated by script */
+      sha256 = "52519dfd0e913b5ccb8767155cd4d1fd413967d5010e8474cdc9a1fa688016ce"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm_Release";
@@ -369,25 +369,25 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "171.4456.575"; /* updated by script */
+    version = "171.4456.1432"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/resharper/riderRS-${version}.tar.gz";
-      sha256 = "9b7f46e9c800a091f2cdbe9fda08041729e2abc0ce57252731da659b2424707b"; /* updated by script */
+      url = "https://download.jetbrains.com/resharper/Rider-RC-${version}.tar.gz";
+      sha256 = "37bad69cdfcc4f297b2500a7bb673af7ef8f1fd45baa4eb2fa388d2c4bcb41ee"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "rider1.0EAP";
+    update-channel = "rider_2017_1_eap";
   };
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2017.1.4";
+    version = "2017.1.5"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "06jk0anlnc4gr240i51kam47shdjgda6zg3hglk5w3bpvbyix68z";
+      sha256 = "198eb3d7914529ce3a6857e038167e194fb838c4b94242048ae45e8413458d66"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "rm2017.1";

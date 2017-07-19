@@ -116,6 +116,7 @@
   ./security/apparmor.nix
   ./security/apparmor-suid.nix
   ./security/audit.nix
+  ./security/auditd.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
@@ -242,6 +243,7 @@
   ./services/logging/graylog.nix
   ./services/logging/heartbeat.nix
   ./services/logging/journalbeat.nix
+  ./services/logging/journalwatch.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -325,6 +327,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
+  ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/ssm-agent.nix
@@ -557,6 +560,7 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
+  ./services/security/vault.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix

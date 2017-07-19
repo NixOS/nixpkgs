@@ -659,16 +659,22 @@ in
         }));
     };
 
+    systemd.user.paths = mkOption {
+      default = {};
+      type = with types; attrsOf (submodule [ { options = pathOptions; } unitConfig ]);
+      description = "Definition of systemd per-user path units.";
+    };
+
     systemd.user.services = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ] );
       description = "Definition of systemd per-user service units.";
     };
 
-    systemd.user.timers = mkOption {
+    systemd.user.slices = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
-      description = "Definition of systemd per-user timer units.";
+      type = with types; attrsOf (submodule [ { options = sliceOptions; } unitConfig ] );
+      description = "Definition of systemd per-user slice units.";
     };
 
     systemd.user.sockets = mkOption {
@@ -681,6 +687,12 @@ in
       default = {};
       type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
       description = "Definition of systemd per-user target units.";
+    };
+
+    systemd.user.timers = mkOption {
+      default = {};
+      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
+      description = "Definition of systemd per-user timer units.";
     };
 
     systemd.additionalUpstreamSystemUnits = mkOption {
@@ -799,12 +811,12 @@ in
       };
 
     systemd.units =
-      mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
+         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit n v)) cfg.timers
-      // mapAttrs' (n: v: nameValuePair "${n}.path" (pathToUnit n v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.slice" (sliceToUnit n v)) cfg.slices
+      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
+      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
+      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
+      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
@@ -813,7 +825,9 @@ in
                        in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
 
     systemd.user.units =
-         mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
+         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.user.paths
+      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.user.services
+      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.user.slices
       // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.user.sockets
       // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.user.targets
       // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.user.timers;

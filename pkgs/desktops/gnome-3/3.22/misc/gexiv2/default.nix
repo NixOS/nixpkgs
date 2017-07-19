@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gexiv2-${version}";
-  version = "${majorVersion}.4";
+  version = "${majorVersion}.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gexiv2/${majorVersion}/${name}.tar.xz";
-    sha256 = "190www3b61spfgwx42jw8h5hsz2996jcxky48k63468avjpk33dd";
+    sha256 = "09aqsnpah71p9gx0ap2px2dyanrs7jmkkar6q114n9b7js8qh9qk";
   };
 
   preConfigure = ''
