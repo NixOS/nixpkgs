@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = http://elastix.isi.uu.nl/;
     description = "Image registration toolkit based on ITK";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.asl20;
   };
 }
