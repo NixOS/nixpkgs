@@ -3910,7 +3910,9 @@ with pkgs;
 
   qarte = callPackage ../applications/video/qarte { };
 
-  qnial = callPackage ../development/interpreters/qnial {};
+  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
+
+  qnial = callPackage ../development/interpreters/qnial { };
 
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
