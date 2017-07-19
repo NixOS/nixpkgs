@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
 , curl, trousers, sqlite, iptables, libxml2, openresolv
-, ldns, unbound, pcsclite, openssl, systemd
+, ldns, unbound, pcsclite, openssl, systemd, pam
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
-    [ gmp pkgconfig python autoreconfHook iptables ldns unbound openssl pcsclite systemd.dev ]
-    ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ];
+    [ gmp python iptables ldns unbound openssl pcsclite ]
+    ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ systemd.dev pam ];
 
   patches = [
     ./ext_auth-path.patch
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
       "--enable-eap-mschapv2" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
-      "--enable-af-alg" ]
+      "--enable-af-alg" "--enable-xauth-pam" ]
     ++ stdenv.lib.optional stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock"
     ++ stdenv.lib.optionals enableTNC [
