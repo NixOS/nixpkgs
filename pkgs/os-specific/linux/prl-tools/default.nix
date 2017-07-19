@@ -1,6 +1,7 @@
 { stdenv, lib, requireFile, makeWrapper, substituteAll, p7zip
 , gawk, utillinux, xorg, glib, dbus_glib, zlib
 , kernel ? null, libsOnly ? false
+, undmg, fetchurl
 }:
 
 assert (!libsOnly) -> kernel != null;
@@ -46,17 +47,19 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
+  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
 
   inherit libsOnly;
 
   unpackPhase = ''
-    7z x $src
-    export sourceRoot=.
+    undmg < "${src}"
+
+    export sourceRoot=prl-tools-build
+    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso" -o$sourceRoot
     if test -z "$libsOnly"; then
-      ( cd kmods; tar -xaf prl_mod.tar.gz )
+      ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
     fi
-    ( cd tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
+    ( cd $sourceRoot/tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
   '';
 
   kernelVersion = if libsOnly then "" else (builtins.parseDrvName kernel.name).version;
