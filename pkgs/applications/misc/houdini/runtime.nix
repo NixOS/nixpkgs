@@ -29,11 +29,11 @@ let
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "16.0.633";
+  version = "16.0.671";
   name = "houdini-runtime-${version}";
   src = requireFile rec {
-    name = "houdini-16.0.633-linux_x86_64_gcc4.8.tar.gz";
-    sha256 = "1wwm3gqmwn7xbm2qrpb4al44kzgswmsvmjndjkbqskwinxqmg9y2";
+    name = "houdini-${version}-linux_x86_64_gcc4.8.tar.gz";
+    sha256 = "1d3c1a1128szlgaf3ilw5y20plz5azwp37v0ljawgm80y64hq15r";
     message = ''
       This nix expression requires that ${name} is already part of the store.
       Download it from https://sidefx.com and add it to the nix store with:
