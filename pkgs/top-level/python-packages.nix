@@ -270,145 +270,15 @@ in {
 
   acme = callPackage ../development/python-modules/acme { };
 
-  acme-tiny = buildPythonPackage rec {
-    name = "acme-tiny-${version}";
-    version = "2016-03-26";
+  acme-tiny = callPackage ../development/python-modules/acme-tiny { };
 
-    src = pkgs.fetchFromGitHub {
-      sha256 = "0ngmr3kxcvlqa9mrv3gx0rg4r67xvdjplqfminxliri3ipak853g";
-      rev = "7a5a2558c8d6e5ab2a59b9fec9633d9e63127971";
-      repo = "acme-tiny";
-      owner = "diafygi";
-    };
+  actdiag = callPackage ../development/python-modules/actdiag { };
 
-    # source doesn't have any python "packaging" as such
-    configurePhase = " ";
-    buildPhase = " ";
-    # the tests are... complex
-    doCheck = false;
+  adal = callPackage ../development/python-modules/adal { };
 
-    patchPhase = ''
-      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl.bin}/bin/openssl"
-    '';
+  afew = callPackage ../development/python-modules/afew { };
 
-    installPhase = ''
-      mkdir -p $out/${python.sitePackages}/
-      cp acme_tiny.py $out/${python.sitePackages}/
-      mkdir -p $out/bin
-      ln -s $out/${python.sitePackages}/acme_tiny.py $out/bin/acme_tiny
-      chmod +x $out/bin/acme_tiny
-    '';
-
-    meta = {
-      description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
-      homepage = https://github.com/diafygi/acme-tiny;
-      license = licenses.mit;
-    };
-  };
-
-  actdiag = buildPythonPackage rec {
-    name = "actdiag-0.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/actdiag/${name}.tar.gz";
-      sha256 = "1vr4hnkr0gcvvpaycd8q3vcx029b2f5yv8swhdr8kwspaqb0dvfa";
-    };
-
-    buildInputs = with self; [ pep8 nose unittest2 docutils ];
-
-    propagatedBuildInputs = with self; [ blockdiag ];
-
-    # One test fails:
-    #   UnicodeEncodeError: 'ascii' codec can't encode character u'\u3042' in position 0: ordinal not in range(128)
-    doCheck = false;
-
-    meta = {
-      description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
-      homepage = http://blockdiag.com/;
-      license = licenses.asl20;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ bjornfor ];
-    };
-  };
-
-  adal = buildPythonPackage rec {
-    version = "0.1.0";
-    name = "adal-${version}";
-
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/adal/adal-0.1.0.tar.gz;
-      sha256 = "1f32k18ck54adqlgvh6fjhy4yavcyrwy813prjyqppqqq4bn1a09";
-    };
-
-    propagatedBuildInputs = with self; [ requests pyjwt ];
-
-    meta = {
-      description = "Library to make it easy for python application to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";
-      homepage = https://github.com/AzureAD/azure-activedirectory-library-for-python;
-      license = licenses.mit;
-      maintainers = with maintainers; [ phreedom ];
-    };
-  };
-
-  afew = buildPythonPackage rec {
-    name = "afew-git-2017-02-08";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "afewmail";
-      repo = "afew";
-      rev = "889a3b966835c4d16aa1f24bb89f12945b9b2a67";
-      sha256 = "01gwrx1m3ka13ps3vj04a3y8llli2j2vkd3gcggcvxdphhpysckm";
-    };
-
-    buildInputs = with self; [ pkgs.dbacl ];
-
-    propagatedBuildInputs = with self; [
-      self.notmuch
-      self.chardet
-    ] ++ optional (!isPy3k) self.subprocess32;
-
-    doCheck = false;
-
-    preConfigure = ''
-      substituteInPlace afew/DBACL.py --replace "'dbacl'" "'${pkgs.dbacl}/bin/dbacl'"
-    '';
-
-    postInstall = ''
-      wrapProgram $out/bin/afew \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib
-    '';
-
-    meta = {
-      homepage = https://github.com/teythoon/afew;
-      description = "An initial tagging script for notmuch mail";
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
-  aiodns = buildPythonPackage rec {
-    name = "aiodns-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/aiodns/${name}.tar.gz";
-      sha256 = "595b78b8d54115d937cf60d778c02dad76b6f789fd527dab308f99e5601e7f3d";
-    };
-
-    propagatedBuildInputs = with self; [ pycares ] ++ optional isPy33 asyncio ++ optional (isPy26 || isPy27 || isPyPy) trollius;
-
-    checkPhase = ''
-      ${python.interpreter} tests.py
-    '';
-
-    # 'Could not contact DNS servers'
-    doCheck = false;
-
-    meta = {
-      homepage = http://github.com/saghul/aiodns;
-      license = licenses.mit;
-      description = "Simple DNS resolver for asyncio";
-    };
-  };
+  aiodns = callPackage ../development/python-modules/aiodns { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
@@ -435,64 +305,13 @@ in {
     };
   };
 
-  alabaster = buildPythonPackage rec {
-    name = "alabaster-0.7.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/alabaster/${name}.tar.gz";
-      sha256 = "f416a84e0d0ddbc288f6b8f2c276d10b40ca1238562cd9ed5a751292ec647b71";
-    };
-
-    propagatedBuildInputs = with self; [ pygments ];
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/bitprophet/alabaster;
-      description = "A Sphinx theme";
-      license = licenses.bsd3;
-    };
-  };
-
+  alabaster = callPackage ../development/python-modules/alabaster {};
 
   alembic = callPackage ../development/python-modules/alembic {};
 
-  ansicolors = buildPythonPackage rec {
-    name    = "ansicolors-${version}";
-    version = "1.0.2";
+  ansicolors = callPackage ../development/python-modules/ansicolors {};
 
-    src = self.fetchPypi {
-      pname = "ansicolors";
-      inherit version;
-      sha256 = "02lmh2fbqcwr98cq13l9ql0fvyad1dcb3ap3c5xq9qwjp45m6r3n";
-    };
-
-    meta = {
-      homepage = "https://github.com/verigak/colors/";
-      description = "ANSI colors for Python";
-      license = licenses.isc;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
-
-  aniso8601 = buildPythonPackage rec {
-    name = "aniso8601-${version}";
-    version = "1.2.0";
-
-    meta = {
-      description = "Parses ISO 8601 strings.";
-      homepage    = "https://bitbucket.org/nielsenb/aniso8601";
-      license     = licenses.bsd3;
-    };
-
-    propagatedBuildInputs = with self; [ dateutil ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/aniso8601/${name}.tar.gz";
-      sha256 = "502400f82574afa804cc915d83f15c67533d364dcd594f8a6b9d2053f3404dd4";
-    };
-  };
+  aniso8601 = callPackage ../development/python-modules/aniso8601 {};
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
@@ -500,43 +319,11 @@ in {
 
   asgi_redis = callPackage ../development/python-modules/asgi_redis { };
 
-  python-editor = buildPythonPackage rec {
-    name = "python-editor-${version}";
-    version = "0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-editor/${name}.tar.gz";
-      sha256 = "1gykxn16anmsbcrwhx3rrhwjif95mmwvq9gjcrr9bbzkdc8sf8a4";
-    };
-
-    meta = with stdenv.lib; {
-      description = "`python-editor` is a library that provides the `editor` module for programmatically";
-      homepage = "https://github.com/fmoo/python-editor";
-    };
-  };
+  python-editor = callPackage ../development/python-modules/python-editor { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg {};
 
-  python-uinput = buildPythonPackage rec {
-    name = "python-uinput-${version}";
-    version = "0.11.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-uinput/${name}.tar.gz";
-      sha256 = "033zqiypjz0nigav6vz0s57pbzikvds55mxphrdpkdbpdikjnfcr";
-    };
-
-    buildInputs = [ pkgs.udev ];
-
-    NIX_CFLAGS_LINK = [ "-ludev" ];
-
-    meta = with stdenv.lib; {
-      description = "Pythonic API to Linux uinput kernel module";
-      homepage = "http://tjjr.fi/sw/python-uinput/";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  python-uinput = callPackage ../development/python-modules/python-uinput {};
 
   python-sybase = buildPythonPackage rec {
     name = "python-sybase-${version}";
