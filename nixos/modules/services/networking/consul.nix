@@ -1,21 +1,16 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
-let
 
-  dataDir = "/var/lib/consul";
+let
   cfg = config.services.consul;
 
-  configOptions = { data_dir = dataDir; } //
-    (optionalAttrs cfg.webUi { ui_dir = cfg.package.ui; }) //
-    cfg.extraConfig;
+  dataDir = "/var/lib/consul";
 
-  configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
-    ++ cfg.extraConfigFiles;
-
-  devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = flip map devices
-    (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
+  configFile = pkgs.writeText "consul.json" (builtins.toJSON (
+    { data_dir = dataDir; } //
+    (optionalAttrs cfg.webUi { ui_dir = pkgs.consul.ui; }) //
+    cfg.extraConfig));
 in
 {
   options = {
@@ -24,49 +19,11 @@ in
 
       enable = mkEnableOption "Consul daemon";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.consul;
-        defaultText = "pkgs.consul";
-        description = ''
-          The package used for the Consul agent and CLI.
-        '';
-      };
-
-
       webUi = mkOption {
         type = types.bool;
         default = false;
         description = ''
           Enables the web interface on the consul http port.
-        '';
-      };
-
-      interface = {
-
-        advertise = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The name of the interface to pull the advertise_addr from.
-          '';
-        };
-
-        bind = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            The name of the interface to pull the bind_addr from.
-          '';
-        };
-
-      };
-
-      forceIpv4 = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether we should force the interfaces to only pull ipv4 addresses.
         '';
       };
 
@@ -86,24 +43,8 @@ in
         '';
       };
 
-      extraConfigFiles = mkOption {
-        default = [ ];
-        type = types.listOf types.str;
-        description = ''
-          Additional configuration files to pass to consul
-          NOTE: These will not trigger the service to be restarted when altered.
-        '';
-      };
-
       alerts = {
         enable = mkEnableOption "consul-alerts";
-
-        package = mkOption {
-          description = "Package to use for consul-alerts.";
-          default = pkgs.consul-alerts;
-          defaultText = "pkgs.consul-alerts";
-          type = types.package;
-        };
 
         listenAddr = mkOption {
           description = "Api listening address.";
@@ -144,26 +85,15 @@ in
         shell = "/run/current-system/sw/bin/bash";
       };
 
-      environment = {
-        etc."consul.json".text = builtins.toJSON configOptions;
-        # We need consul.d to exist for consul to start
-        etc."consul.d/dummy.json".text = "{ }";
-        systemPackages = [ cfg.package ];
-      };
-
       systemd.services.consul = {
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ] ++ systemdDevices;
-        bindsTo = systemdDevices;
+        after = [ "network.target" ];
+
         unitConfig.RequiresMountsFor = dataDir;
-        restartTriggers = [ config.environment.etc."consul.json".source ]
-          ++ mapAttrsToList (_: d: d.source)
-            (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package.bin}/bin/consul consul agent -config-dir /etc/consul.d"
-            + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${cfg.package.bin}/bin/consul reload";
+          ExecStart = "${pkgs.consul.bin}/bin/consul agent -config-file ${configFile}";
+          ExecReload = "${pkgs.consul.bin}/bin/consul reload";
           PermissionsStartOnly = true;
           User = "consul";
           TimeoutStartSec = "0";
@@ -172,39 +102,10 @@ in
         path = with pkgs; [ iproute gnugrep gawk consul ];
         preStart = ''
           install -d -m0700 -o consul "${dataDir}"
-
-          # Determine interface addresses
-          getAddrOnce () {
-            ip addr show dev "$1" \
-              | grep 'inet${optionalString (cfg.forceIpv4) " "}.*scope global' \
-              | awk -F '[ /\t]*' '{print $3}' | head -n 1
-          }
-          getAddr () {
-            ADDR="$(getAddrOnce $1)"
-            LEFT=60 # Die after 1 minute
-            while [ -z "$ADDR" ]; do
-              sleep 1
-              LEFT=$(expr $LEFT - 1)
-              if [ "$LEFT" -eq "0" ]; then
-                echo "Address lookup timed out"
-                exit 1
-              fi
-              ADDR="$(getAddrOnce $1)"
-            done
-            echo "$ADDR"
-          }
-          echo "{" > /etc/consul-addrs.json
-          delim=" "
-        ''
-        + concatStrings (flip mapAttrsToList cfg.interface (name: i:
-          optionalString (i != null) ''
-            echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
-            delim=","
-          ''))
-        + ''
-          echo "}" >> /etc/consul-addrs.json
         '';
       };
+
+      environment.systemPackages =  [ pkgs.consul ]; # cli tools
     }
 
     (mkIf (cfg.alerts.enable) {
@@ -212,11 +113,11 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "consul.service" ];
 
-        path = [ cfg.package ];
+        path = [ pkgs.consul ];
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.alerts.package.bin}/bin/consul-alerts start \
+            ${pkgs.consul-alerts.bin}/bin/consul-alerts start \
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
