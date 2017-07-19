@@ -278,30 +278,7 @@ in {
 
   afew = callPackage ../development/python-modules/afew { };
 
-  aiodns = buildPythonPackage rec {
-    name = "aiodns-${version}";
-    version = "1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/aiodns/${name}.tar.gz";
-      sha256 = "595b78b8d54115d937cf60d778c02dad76b6f789fd527dab308f99e5601e7f3d";
-    };
-
-    propagatedBuildInputs = with self; [ pycares ] ++ optional isPy33 asyncio ++ optional (isPy26 || isPy27 || isPyPy) trollius;
-
-    checkPhase = ''
-      ${python.interpreter} tests.py
-    '';
-
-    # 'Could not contact DNS servers'
-    doCheck = false;
-
-    meta = {
-      homepage = http://github.com/saghul/aiodns;
-      license = licenses.mit;
-      description = "Simple DNS resolver for asyncio";
-    };
-  };
+  aiodns = callPackage ../development/python-modules/aiodns { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
