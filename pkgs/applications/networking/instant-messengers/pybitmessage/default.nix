@@ -15,6 +15,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ msgpack pyqt4 ] ++ [ openssl ];
 
   preConfigure = ''
+    # Remove interaction and misleading output
     substituteInPlace setup.py \
       --replace "nothing = raw_input()" pass \
       --replace 'print "It looks like building the package failed.\n" \' pass \
