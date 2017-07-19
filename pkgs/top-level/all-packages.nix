@@ -14610,6 +14610,8 @@ with pkgs;
 
   ht = callPackage ../applications/editors/ht { };
 
+  hue-cli = callPackage ../tools/networking/hue-cli { };
+
   hugin = callPackage ../applications/graphics/hugin { };
 
   hugo = callPackage ../applications/misc/hugo { };
