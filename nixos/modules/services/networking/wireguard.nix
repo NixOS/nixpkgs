@@ -64,6 +64,13 @@ let
         description = "A list of commands called after shutting down the interface.";
       };
 
+      addRoutes = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''Whether to add routes to networks specified in
+        allowedIPs.'';
+      };
+
       peers = mkOption {
         default = [];
         description = "Peers linked to the interface.";
@@ -156,6 +163,7 @@ let
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
+        unitConfig.Documentation = "man:wg(8) https://www.wireguard.io/";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -174,9 +182,9 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (flatten (map (peer: (map (ip:
+            (optionals values.addRoutes (flatten (map (peer: (map (ip:
             "${ipCommand} route add ${ip} dev ${name}"
-            ) peer.allowedIPs)) values.peers))
+            ) peer.allowedIPs)) values.peers)))
 
             values.postSetup
           ]);
