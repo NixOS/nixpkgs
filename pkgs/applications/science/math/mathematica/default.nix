@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/Mathematica/Executables
     for path in mathematica MathKernel Mathematica WolframKernel wolfram; do
-      sed -i -e 's/export LD_LIBRARY_PATH/export LD_LIBRARY_PATH=${builtins.replaceStrings ["/"] ["\\/"] "${zlib}/lib"}:\''${LD_LIBRARY_PATH}/' $path
+      sed -i -e 's#export LD_LIBRARY_PATH$#export LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}#' $path
     done
   '';
 
