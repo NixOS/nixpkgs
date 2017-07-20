@@ -1934,6 +1934,8 @@ with pkgs;
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
+  flac123 = callPackage ../applications/audio/flac123 { };
+
   flamegraph = callPackage ../development/tools/flamegraph { };
 
   # Awkward historical capitalization for flamegraph. Remove eventually
