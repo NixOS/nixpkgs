@@ -26843,10 +26843,9 @@ EOF
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
-    src = pkgs.fetchgit {
-      url = "git://libvirt.org/libvirt-python.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "14dcyhp1mwk72c9wmqa03aanf9s5pzlw2y609wdpv2jc70sc54ss";
+    src = pkgs.fetchurl {
+      url = "http://libvirt.org/sources/python/${name}.tar.gz";
+      sha256 = "06mc0cm4k90z8vxaslk3ifpajg8w8dvm0m2mxwcd6fdzps8fwpsw";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
