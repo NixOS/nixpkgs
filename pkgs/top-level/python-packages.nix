@@ -14023,6 +14023,8 @@ in {
      substituteInPlace ./test/asizeof/test_asizeof.py --replace "self.assert_(not e" "#self.assert_(not e"
     '';
 
+    doCheck = stdenv.hostPlatform.isLinux;
+
     meta = {
       description = "Tool to measure, monitor and analyze memory behavior";
       homepage = http://pythonhosted.org/Pympler/;
