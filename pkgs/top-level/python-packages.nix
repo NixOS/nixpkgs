@@ -17933,24 +17933,7 @@ in {
   };
 
 
-  py = buildPythonPackage rec {
-    name = "py-${version}";
-    version = "1.4.31";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/py/${name}.tar.gz";
-      sha256 = "a6501963c725fc2554dabfece8ae9a8fb5e149c0ac0a42fd2b02c5c1c57fc114";
-    };
-
-    # Circular dependency on pytest
-    doCheck = false;
-
-    meta = {
-      description = "Library with cross-python path, ini-parsing, io, code, log facilities";
-      homepage = http://pylib.readthedocs.org/;
-      license = licenses.mit;
-    };
-  };
+  py = callPackage ../development/python-modules/py { };
 
 
   pyacoustid = buildPythonPackage rec {
