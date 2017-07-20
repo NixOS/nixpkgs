@@ -108,13 +108,6 @@ let
         for matching all IPv6 addresses.'';
       };
 
-      addRoutes = mkOption {
-        default = true;
-        type = types.bool;
-        description = ''Whether to add routes to networks specified in
-        allowedIPs.'';
-      };
-
       endpoint = mkOption {
         default = null;
         example = "demo.wireguard.io:12913";
@@ -163,13 +156,12 @@ let
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
-        unitConfig.Documentation = "man:wg(8) https://www.wireguard.io/";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = flatten([
+          ExecStart = lib.flatten([
             values.preSetup
 
             "-${ipCommand} link del dev ${name}"
@@ -182,9 +174,9 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (optionalString (values.addRoutes) (flatten (map (peer: (map (ip:
+            (flatten (map (peer: (map (ip:
             "${ipCommand} route add ${ip} dev ${name}"
-            ) peer.allowedIPs)) values.peers)))
+            ) peer.allowedIPs)) values.peers))
 
             values.postSetup
           ]);

@@ -12432,7 +12432,6 @@ with pkgs;
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (gnome2) gtk gtkmm;
-    kernel = linuxPackages.kernel;
   };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
