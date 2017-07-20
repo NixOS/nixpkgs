@@ -6143,13 +6143,16 @@ in {
   };
 
   faker = buildPythonPackage rec {
-    name = "faker-0.0.4";
-    disabled = isPy3k;
+    name = "faker-0.7.18";
+
+    # tests require packages not yet in nixpkgs
+    doCheck = false;
+
     src = pkgs.fetchurl {
-      url = mirror://pypi/F/Faker/Faker-0.0.4.tar.gz;
-      sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
+      url = mirror://pypi/F/Faker/Faker-0.7.18.tar.gz;
+      sha256 = "0aglkfflpjlnzb6ffzlwshl40xqgv4aa7p1055i7g9wpqkrj02ri";
     };
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose six dateutil ];
     meta = {
       description = "A Python library for generating fake user data";
       homepage    = http://pypi.python.org/pypi/Faker;
