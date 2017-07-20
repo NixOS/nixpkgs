@@ -1,8 +1,8 @@
-{ buildRubyGem, fetchFromGitHub, makeWrapper, lib, bundler, ruby, nix,
+{ buildRubyGem, fetchFromGitHub, makeWrapper, lib, bundler, nix,
   nix-prefetch-git }:
 
 buildRubyGem rec {
-  inherit ruby;
+  inherit (bundler) ruby;
 
   name = "${gemName}-${version}";
   gemName = "bundix";

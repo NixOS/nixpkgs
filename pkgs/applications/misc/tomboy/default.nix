@@ -4,7 +4,7 @@
 , makeWrapper, lib}:
 
 let
-  version = "1.15.7";
+  version = "1.15.9";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tomboy-notes/tomboy/releases/download/${version}/tomboy-${version}.tar.xz";
-    sha256 = "1i6sv6w2ms2x0nkgxq11agljiyg0yl4x2rzmcyvs2hxyf574hd1y";
+    sha256 = "0j5jmd079bm2fydqaic5ymbfdxna3qlx6fkp2mqhgcdr7prsbl3q";
   };
 
   buildInputs = [ itstool intltool pkgconfig

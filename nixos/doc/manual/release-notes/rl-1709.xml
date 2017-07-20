@@ -120,6 +120,16 @@ rmdir /var/lib/ipfs/.ipfs
       also serve as a SSH agent if <literal>enableSSHSupport</literal> is set.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>services.tinc.networks.&lt;name&gt;.listenAddress</literal>
+      option had a misleading name that did not correspond to its behavior. It
+      now correctly defines the ip to listen for incoming connections on. To
+      keep the previous behaviour, use
+      <literal>services.tinc.networks.&lt;name&gt;.bindToAddress</literal>
+      instead. Refer to the description of the options for more details.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>

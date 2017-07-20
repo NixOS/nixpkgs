@@ -50,6 +50,9 @@ let
 
           patchelf --set-interpreter $interp bin/gdb/bin/gdb
           patchelf --set-interpreter $interp bin/gdb/bin/gdbserver
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$lldbLibPath" \
+            bin/clang/clang-tidy
         )
       '';
     });
@@ -213,12 +216,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2017.1.3";
+    version = "2017.2"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "045pkbbf4ypk9qkhldz08i7hbc6vaq68a8v9axnpndnvcrf0vf7g";
+      sha256 = "de7f47ec959be9653aa4d2028fb27f8327800d8370daa0ab2d1093f3469f4b49"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -265,12 +268,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.5"; /* updated by script */
+    version = "2017.2";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "830c662c517e8d0131dc2df150d6f75adb3d8becaf9de96393730b0f4ae6ccf0"; /* updated by script */
+      sha256 = "0z5abj41f5l9ilznr34lm4fsivrl2yjdxb2kdcis5abij6zl0g3f";
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IDEA_Release";
