@@ -765,15 +765,15 @@ in {
 
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
-    version = "0.7.0";
+    version = "0.10.0";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/a/arrow/${name}.tar.gz";
-      sha256 = "0yx10dz3hp825fcq9w15zbp26v622npcjscb91da05zig8036lra";
+      sha256 = "08n7q2l69hlainds1byd4lxhwrq7zsw7s640zkqc3bs5jkq0cnc0";
     };
 
     checkPhase = ''
-      nosetests
+      nosetests --cover-package=arrow
     '';
 
     buildInputs = with self; [ nose chai simplejson ];
