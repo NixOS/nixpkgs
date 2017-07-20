@@ -26839,13 +26839,13 @@ EOF
   };
 
   libvirt = let
-    version = "3.1.0";
+    version = "3.5.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "06524dhm27fjfnmr5bqdxlmm1g9ixvzaaq572hgyy5dqwfn64spk";
+      sha256 = "06mc0cm4k90z8vxaslk3ifpajg8w8dvm0m2mxwcd6fdzps8fwpsw";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
