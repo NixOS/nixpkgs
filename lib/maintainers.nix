@@ -88,6 +88,7 @@
   bstrik = "Berno Strik <dutchman55@gmx.com>";
   bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
   c0dehero = "CodeHero <codehero@nerdpol.ch>";
+  calbrecht = "Christian Albrecht <christian.albrecht@mayflower.de>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   calvertvl = "Victor Calvert <calvertvl@gmail.com>";
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
