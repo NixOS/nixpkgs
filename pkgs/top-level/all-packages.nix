@@ -412,10 +412,6 @@ with pkgs;
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
-  alacritty = callPackage ../applications/misc/alacritty {
-    inherit (xorg) libXcursor libXxf86vm libXi;
-  };
-
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
 
   ammonite = callPackage ../development/tools/ammonite {};
@@ -534,8 +530,6 @@ with pkgs;
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
-
-  container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
@@ -991,10 +985,6 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
-  fast-cli = nodePackages.fast-cli.overrideDerivation (old: {
-    buildInputs = old.buildInputs ++ [phantomjs2];
-  });
-
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -1045,11 +1035,7 @@ with pkgs;
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
-  hebcal = callPackage ../tools/misc/hebcal {};
-
   hexio = callPackage ../development/tools/hexio { };
-
-  hid-listen = callPackage ../tools/misc/hid-listen { };
 
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
@@ -1102,8 +1088,6 @@ with pkgs;
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
-
-  ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
@@ -2198,8 +2182,6 @@ with pkgs;
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
-
-  google-compute-engine = callPackage ../tools/virtualization/google-compute-engine {  };
 
   gource = callPackage ../applications/version-management/gource { };
 
@@ -3405,8 +3387,6 @@ with pkgs;
     graphicalSupport = true;
   };
 
-  nnn = callPackage ../applications/misc/nnn { };
-
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
   nox = callPackage ../tools/package-management/nox {
@@ -4379,8 +4359,6 @@ with pkgs;
   znapzend = callPackage ../tools/backup/znapzend { };
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
-
-  tarsnapper = callPackage ../tools/backup/tarsnapper { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
@@ -5632,8 +5610,8 @@ with pkgs;
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
       (openjdk7.jre // { outputs = [ "jre" ]; }));
 
-  jdk8 = if stdenv.isArm then oraclejdk8 else openjdk8 // { outputs = [ "out" ]; };
-  jre8 = if stdenv.isArm then oraclejre8 else lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
+  jdk8 = openjdk8 // { outputs = [ "out" ]; };
+  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}"
     (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
       (openjdk8.jre // { outputs = [ "jre" ]; }));
   jre8_headless =
@@ -5666,8 +5644,7 @@ with pkgs;
 
   supportsJDK =
     system == "i686-linux" ||
-    system == "x86_64-linux" ||
-    system == "armv7l-linux";
+    system == "x86_64-linux";
 
   jdkdistro = oraclejdk8distro;
 
@@ -5901,14 +5878,6 @@ with pkgs;
       buildRustPackage = callPackage ../build-support/rust {
         inherit rust;
       };
-
-      rustcSrc = stdenv.mkDerivation {
-        name = "rust-src";
-        src = rust.rustc.src;
-        phases = ["unpackPhase" "installPhase"];
-        installPhase = "mv src $out";
-      };
-
     });
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
@@ -6086,7 +6055,7 @@ with pkgs;
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_5_rc elixir_1_4 elixir_1_3
-    lfe lfe_1_2
+    lfe
     erlangR16 erlangR16_odbc
     erlang_basho_R16B02 erlang_basho_R16B02_odbc
     erlangR17 erlangR17_odbc erlangR17_javac erlangR17_odbc_javac
@@ -7086,7 +7055,7 @@ with pkgs;
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
-  pants = callPackage ../development/tools/build-managers/pants {};
+  inherit (callPackages ../development/tools/build-managers/pants {}) pants pants13-pre;
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
@@ -7412,8 +7381,6 @@ with pkgs;
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
 
-  aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix { };
-
   attica = callPackage ../development/libraries/attica { };
 
   attr = callPackage ../development/libraries/attr { };
@@ -7677,8 +7644,6 @@ with pkgs;
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
   vmmlib = callPackage ../development/libraries/vmmlib {};
-
-  elastix = callPackage ../development/libraries/science/biology/elastix { };
 
   enchant = callPackage ../development/libraries/enchant { };
 
@@ -11526,10 +11491,8 @@ with pkgs;
   storm = callPackage ../servers/computing/storm { };
 
   slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
-  slurm-llnl = slurm; # renamed July 2017
 
   slurm-full = appendToName "full" (callPackage ../servers/computing/slurm { });
-  slurm-llnl-full = slurm-full; # renamed July 2017
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
@@ -12113,20 +12076,6 @@ with pkgs;
     ];
   };
 
-
-  linux_samus_4_12 = callPackage ../os-specific/linux/kernel/linux-samus-4.12.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.p9_fixes
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-    ];
-  };
-
-  linux_samus_latest = linux_samus_4_12;
-
   linux_chromiumos_3_18 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.18.nix {
     kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_18
                       kernelPatches.chromiumos_no_link_restrictions
@@ -12330,10 +12279,6 @@ with pkgs;
     recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
 
   linux_grsec_server_xen = linux_grsec_nixos;
-
-  # Samus kernels
-  linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
-  linuxPackages_samus_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_latest);
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18);
@@ -13311,9 +13256,11 @@ with pkgs;
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
-  androidStudioPackages = callPackage ../applications/editors/android-studio/packages.nix {};
-  android-studio = androidStudioPackages.stable;
-  android-studio-preview = androidStudioPackages.preview;
+  android-studio = callPackage ../applications/editors/android-studio {
+    fontsConf = makeFontsConf {
+      fontDirectories = [];
+    };
+  };
 
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
@@ -13381,8 +13328,6 @@ with pkgs;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
-  dapp = self.altcoins.dapp;
-  hsevm = self.altcoins.hsevm;
 
   stellar-core = self.altcoins.stellar-core;
 
@@ -13439,8 +13384,6 @@ with pkgs;
     gconf = pkgs.gnome2.GConf;
     libgpod = pkgs.libgpod.override { monoSupport = true; };
   };
-
-  bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
   batik = callPackage ../applications/graphics/batik { };
 
@@ -14608,8 +14551,6 @@ with pkgs;
   };
 
   ht = callPackage ../applications/editors/ht { };
-
-  hue-cli = callPackage ../tools/networking/hue-cli { };
 
   hugin = callPackage ../applications/graphics/hugin { };
 
@@ -18003,10 +17944,6 @@ with pkgs;
     cmake = cmakeCurses;
   });
 
-  ### SCIENCE/MEDICINE
-
-  aliza = callPackage ../applications/science/medicine/aliza { };
-
   ### PHYSICS
 
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
@@ -18132,6 +18069,10 @@ with pkgs;
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
   coq = coqPackages.coq;
 
+  coq2html = callPackage ../applications/science/logic/coq2html {
+    make = pkgs.gnumake3;
+  };
+
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
   cubicle = callPackage ../applications/science/logic/cubicle { };
@@ -18246,7 +18187,11 @@ with pkgs;
   z3 = callPackage ../applications/science/logic/z3 {};
   z3_opt = callPackage ../applications/science/logic/z3_opt {};
 
-  boolector = callPackage ../applications/science/logic/boolector {};
+  boolector   = boolector15;
+  boolector15 = callPackage ../applications/science/logic/boolector {};
+  boolector16 = lowPrio (callPackage ../applications/science/logic/boolector {
+    useV16 = true;
+  });
 
   ### SCIENCE / ELECTRONICS
 
@@ -18503,9 +18448,6 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
-  # this driver ships with pre-compiled 32-bit binary libraries
-  cnijfilter_2_80 = callPackage_i686 ../misc/cups/drivers/cnijfilter_2_80 { };
-
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
     libusb = libusb1;
   };
@@ -18701,7 +18643,6 @@ with pkgs;
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
-  nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
@@ -19154,9 +19095,7 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
-  tomboy = callPackage ../applications/misc/tomboy {
-    mono = mono46;
-  };
+  tomboy = callPackage ../applications/misc/tomboy {};
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
