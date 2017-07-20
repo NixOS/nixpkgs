@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postInstall= ''
     mkdir -p $out/$qtPluginPrefix/styles
-    mv $NIX_QT5_TMP/lib/qt-5.9/plugins/styles/libkvantum.so $out/$qtPluginPrefix/styles/libkvantum.so
+    mv $NIX_QT5_TMP/$qtPluginPrefix/styles/libkvantum.so $out/$qtPluginPrefix/styles/libkvantum.so
   '';
 
   meta = with stdenv.lib; {
