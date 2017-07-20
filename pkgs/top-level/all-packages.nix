@@ -9984,6 +9984,8 @@ with pkgs;
 
     qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
+    qtstyleplugin-kvantum = libsForQt5.callPackage ../development/libraries/qtstyleplugin-kvantum { };
+
     quazip = callPackage ../development/libraries/quazip { };
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
