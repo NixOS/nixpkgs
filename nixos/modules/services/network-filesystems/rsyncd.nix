@@ -8,22 +8,21 @@ let
 
   motdFile = builtins.toFile "rsyncd-motd" cfg.motd;
 
-  moduleConfig = name:
-    let module = getAttr name cfg.modules; in
-    "[${name}]\n " + (toString (
-       map
-         (key: "${key} = ${toString (getAttr key module)}\n")
-         (attrNames module)
-    ));
+  foreach = attrs: f:
+    concatStringsSep "\n" (mapAttrsToList f attrs);
 
-  cfgFile = builtins.toFile "rsyncd.conf"
-    ''
+  cfgFile = ''
     ${optionalString (cfg.motd != "") "motd file = ${motdFile}"}
     ${optionalString (cfg.address != "") "address = ${cfg.address}"}
     ${optionalString (cfg.port != 873) "port = ${toString cfg.port}"}
     ${cfg.extraConfig}
-    ${toString (map moduleConfig (attrNames cfg.modules))}
-    '';
+    ${foreach cfg.modules (name: module: ''
+      [${name}]
+      ${foreach module (k: v:
+        "${k} = ${v}"
+      )}
+    '')}
+  '';
 in
 
 {
@@ -91,10 +90,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = singleton {
-      source = cfgFile;
-      target = "rsyncd.conf";
-    };
+    environment.etc."rsyncd.conf".text = cfgFile;
 
     systemd.services.rsyncd = {
       description = "Rsync daemon";
