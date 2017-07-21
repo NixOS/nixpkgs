@@ -100,8 +100,9 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to periodically prune Docker resources. If enabled, a systemd timer will run
-          <literal>docker system prune -f</literal> once a day.
+          Whether to periodically prune Docker resources. If enabled, a
+          systemd timer will run <literal>docker system prune -f</literal>
+          as specified by the <literal>dates</literal> option.
         '';
       };
 
