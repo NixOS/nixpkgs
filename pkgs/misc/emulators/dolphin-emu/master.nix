@@ -1,7 +1,14 @@
-{ stdenv, gcc, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
 , pcre, gettext, libpthreadstubs, libXrandr, libXext, libSM, readline
-, openal, libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
-, libpulseaudio ? null }:
+, openal, libXdmcp, portaudio, libusb, libevdev
+, libpulseaudio ? null
+, curl
+# - Inputs used for Darwin
+, CoreBluetooth, cf-private, ForceFeedback, IOKit, OpenGL
+, wxGTK
+, libpng
+, hidapi
+}:
 
 stdenv.mkDerivation rec {
   name = "dolphin-emu-20170902";
@@ -17,14 +24,17 @@ stdenv.mkDerivation rec {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
     "-DENABLE_LTO=True"
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "-DOSX_USE_DEFAULT_SEARCH_PATH=True" ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gcc cmake bluez ffmpeg libao mesa gtk2 glib pcre
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ curl ffmpeg libao mesa gtk2 glib pcre
                   gettext libpthreadstubs libXrandr libXext libSM readline openal
-                  libevdev libXdmcp portaudio libusb libpulseaudio ];
+                  libXdmcp portaudio libusb libpulseaudio libpng hidapi
+                ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
+                  ++ stdenv.lib.optionals stdenv.isLinux  [ bluez libevdev  ];
 
   meta = {
     homepage = http://dolphin-emu.org/;
