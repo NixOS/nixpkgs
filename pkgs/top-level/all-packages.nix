@@ -480,6 +480,8 @@ with pkgs;
 
   as31 = callPackage ../development/compilers/as31 {};
 
+  owl-lisp = callPackage ../development/compilers/owl-lisp {};
+
   ascii = callPackage ../tools/text/ascii { };
 
   asciinema = callPackage ../tools/misc/asciinema {};
