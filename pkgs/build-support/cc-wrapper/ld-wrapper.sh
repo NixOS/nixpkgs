@@ -145,6 +145,10 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
             fi
         done
     done
+
+    if [ -n "${NIX_COREFOUNDATION_RPATH:-}" ]; then
+      extraAfter+=(-rpath $NIX_COREFOUNDATION_RPATH)
+    fi
 fi
 
 
