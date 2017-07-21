@@ -83,6 +83,24 @@ in
           };
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "root";
+        description = ''
+          The user to run the daemon as.
+          By default the daemon runs as root.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "root";
+        description = ''
+          The group to run the daemon as.
+          By default the daemon runs as root.
+        '';
+      };
+
     };
   };
 
@@ -96,8 +114,11 @@ in
       description = "Rsync daemon";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."rsyncd.conf".source ];
-      serviceConfig.ExecStart = "${pkgs.rsync}/bin/rsync --daemon --no-detach";
+      serviceConfig = {
+        ExecStart = "${pkgs.rsync}/bin/rsync --daemon --no-detach";
+        User = cfg.user;
+        Group = cfg.group;
+      };
     };
-
   };
 }
