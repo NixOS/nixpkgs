@@ -296,20 +296,14 @@ stdenv.mkDerivation {
         ln -s $ldPath/${prefix}as $out/bin/${prefix}as
       fi
 
-      wrap ${prefix}ld ${if !useMacosReexportHack
-      then preWrap ./ld-wrapper.sh
-      else stdenv.mkDerivation {
-        name = "patched-ld-wrapper-src";
-        patches = [ ./macos-sierra-reexport-hack.patch ];
-        unpackPhase = ''
-          src=$PWD
-          cp ${./ld-wrapper.sh} ld-wrapper.sh
-        '';
-        buildPhase = "";
-        installPhase = ''
-          cp ld-wrapper.sh $out
-        '';
-      }} ''${ld:-$ldPath/${prefix}ld}
+    '' + (if !useMacosReexportHack then ''
+      wrap ${prefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${prefix}ld}
+    '' else ''
+      export ldWrapper="$out/bin/${prefix}ld" innerLd="${prefix}ld-reexport-delegate"
+      wrap "$innerLd" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${prefix}ld}
+      wrap "${prefix}ld" ${./ld-wrapper.sh} "$out/bin/$innerLd"
+      unset ldWrapper
+    '') + ''
 
       if [ -e ${binutils_bin}/bin/${prefix}ld.gold ]; then
         wrap ${prefix}ld.gold ${preWrap ./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.gold
