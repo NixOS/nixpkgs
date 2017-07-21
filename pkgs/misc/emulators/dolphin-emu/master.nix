@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
                   libXdmcp portaudio libusb libpulseaudio libpng hidapi
                 ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
                   ++ stdenv.lib.optionals stdenv.isLinux  [ bluez libevdev  ];
+  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p "$out/Applications"
+  '';
 
   meta = {
     homepage = http://dolphin-emu.org/;
