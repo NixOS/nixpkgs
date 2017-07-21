@@ -27,7 +27,13 @@ stdenv.mkDerivation rec {
       --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
   '';
 
-  preConfigure = "./autogen.sh";
+  # The package provides an `autogen.sh' script for this, but it insists on
+  # configuring the build without our flags.
+  preConfigure = ''
+    autoreconf --install --symlink
+    intltoolize --force
+    autoreconf
+  '';
 
   configureFlags =
     if withGnome then "--with-gnome" else "--without-gnome";
