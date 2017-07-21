@@ -15,7 +15,7 @@ let
     election-port=${toString cfg.zkElectionPort}
     cleanup-period-ms=${toString cfg.zkCleanupPeriod}
     servers-spec=${concatStringsSep "," cfg.zkServersSpec}
-    auto-manage-instances=${toString cfg.autoManageInstances}
+    auto-manage-instances=${lib.boolToString cfg.autoManageInstances}
     ${cfg.extraConf}
   '';
   configDir = pkgs.writeTextDir "exhibitor.properties" exhibitorConfig;
@@ -24,6 +24,13 @@ let
     defaultconfig = "${configDir}/exhibitor.properties";
     port = toString cfg.port;
     hostname = cfg.hostname;
+    headingtext = if (cfg.headingText != null) then (lib.escapeShellArg cfg.headingText) else null;
+    nodemodification = lib.boolToString cfg.nodeModification;
+    configcheckms = toString cfg.configCheckMs;
+    jquerystyle = cfg.jqueryStyle;
+    loglines = toString cfg.logLines;
+    servo = lib.boolToString cfg.servo;
+    timeout = toString cfg.timeout;
   };
   s3CommonOptions = { s3region = cfg.s3Region; s3credentials = cfg.s3Credentials; };
   cliOptionsPerConfig = {
@@ -94,6 +101,57 @@ in
           Hostname to use and advertise
         '';
         default = null;
+      };
+      nodeModification = mkOption {
+        type = types.bool;
+        description = ''
+          Whether the Explorer UI will allow nodes to be modified (use with caution).
+        '';
+        default = true;
+      };
+      configCheckMs = mkOption {
+        type = types.int;
+        description = ''
+          Period (ms) to check for shared config updates.
+        '';
+        default = 30000;
+      };
+      headingText = mkOption {
+        type = types.nullOr types.str;
+        description = ''
+          Extra text to display in UI header
+        '';
+        default = null;
+      };
+      jqueryStyle = mkOption {
+        type = types.enum [ "red" "black" "custom" ];
+        description = ''
+          Styling used for the JQuery-based UI.
+        '';
+        default = "red";
+      };
+      logLines = mkOption {
+        type = types.int;
+        description = ''
+        Max lines of logging to keep in memory for display.
+        '';
+        default = 1000;
+      };
+      servo = mkOption {
+        type = types.bool;
+        description = ''
+          ZooKeeper will be queried once a minute for its state via the 'mntr' four
+          letter word (this requires ZooKeeper 3.4.x+). Servo will be used to publish
+          this data via JMX.
+        '';
+        default = false;
+      };
+      timeout = mkOption {
+        type = types.int;
+        description = ''
+          Connection timeout (ms) for ZK connections.
+        '';
+        default = 30000;
       };
       autoManageInstances = mkOption {
         type = types.bool;
@@ -213,21 +271,21 @@ in
         '';
         default = 10000;
       };
-      zkConfigRetry = mkOption {
-        type = types.submodule {
-          options = {
-            sleepMs = mkOption {
-              type = types.int;
-            };
-            retryQuantity = mkOption {
-              type = types.int;
-            };
-          };
+      zkConfigRetry = {
+        sleepMs = mkOption {
+          type = types.int;
+          default = 1000;
+          description = ''
+            Retry sleep time connecting to the ZooKeeper config
+          '';
         };
-        description = ''
-          The retry values to use
-        '';
-        default = { sleepMs = 1000; retryQuantity = 3; };
+        retryQuantity = mkOption {
+          type = types.int;
+          default = 3;
+          description = ''
+            Retries connecting to the ZooKeeper config
+          '';
+        };
       };
       zkConfigZPath = mkOption {
         type = types.str;
@@ -238,29 +296,25 @@ in
       };
 
       # Config options for s3 configType
-      s3Config = mkOption {
-        type = types.submodule {
-          options = {
-            bucketName = mkOption {
-              type = types.str;
-              description = ''
-                Bucket name to store config
-              '';
-            };
-            objectKey = mkOption {
-              type = types.str;
-              description = ''
-                S3 key name to store the config
-              '';
-            };
-            configPrefix = mkOption {
-              type = types.str;
-              description = ''
-                When using AWS S3 shared config files, the prefix to use for values such as locks
-              '';
-              default = "exhibitor-";
-            };
-          };
+      s3Config = {
+        bucketName = mkOption {
+          type = types.str;
+          description = ''
+            Bucket name to store config
+          '';
+        };
+        objectKey = mkOption {
+          type = types.str;
+          description = ''
+            S3 key name to store the config
+          '';
+        };
+        configPrefix = mkOption {
+          type = types.str;
+          description = ''
+            When using AWS S3 shared config files, the prefix to use for values such as locks
+          '';
+          default = "exhibitor-";
         };
       };
 

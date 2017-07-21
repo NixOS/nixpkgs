@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     name = "exhibitor-${version}-maven-deps";
     inherit src nativeBuildInputs;
     buildPhase = ''
-      cd $pomFileDir;
+      cd ${pomFileDir};
       while timeout --kill-after=21m 20m mvn package -Dmaven.repo.local=$out/.m2; [ $? = 124 ]; do
         echo "maven hangs while downloading :("
       done
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ maven ];
   buildInputs = [ makeWrapper ];
   buildPhase = ''
-      cd $pomFileDir
+      cd ${pomFileDir}
       mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
   meta = with stdenv.lib; {
