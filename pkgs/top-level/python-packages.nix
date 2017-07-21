@@ -12589,6 +12589,8 @@ in {
     };
   };
 
+  linode-api = callPackage ../development/python-modules/linode-api { };
+
   livereload = buildPythonPackage rec {
     name = "livereload-${version}";
     version = "2.5.0";
