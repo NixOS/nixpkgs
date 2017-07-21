@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ];
 
-
   configureFlags =
     [ "--localstatedir=/var"
       "--sysconfdir=/etc"
@@ -76,6 +75,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      unset RANLIB
+
       ./autogen.sh
 
       # FIXME: patch this in systemd properly (and send upstream).
