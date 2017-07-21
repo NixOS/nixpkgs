@@ -92,18 +92,18 @@ in
 
             uid = mkOption {
               default = 0;
-              type = types.int;
+              type = types.either types.int types.str;
               description = ''
-                UID of created file. Only takes affect when the file is
+                UID or user name of created file. Only takes affect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
             };
 
             gid = mkOption {
               default = 0;
-              type = types.int;
+              type = types.either types.int types.str;
               description = ''
-                GID of created file. Only takes affect when the file is
+                GID or group name of created file. Only takes affect when the file is
                 copied (that is, the mode is not 'symlink').
               '';
             };
