@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
