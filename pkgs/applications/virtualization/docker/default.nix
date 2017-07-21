@@ -137,8 +137,8 @@ rec {
       echo "Generate man pages from cobra"
       cd ./components/cli
       mkdir -p ./man/man1
-      go build -o /tmp/gen-manpages github.com/docker/cli/man
-      /tmp/gen-manpages --root . --target ./man/man1
+      go build -o ./gen-manpages github.com/docker/cli/man
+      ./gen-manpages --root . --target ./man/man1
 
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
