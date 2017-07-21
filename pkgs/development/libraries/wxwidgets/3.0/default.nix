@@ -1,46 +1,51 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, gtk3, libXinerama, libSM, libXxf86vm
 , xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
 , withMesa ? true, mesa_glu ? null, mesa_noglu ? null
 , compat24 ? false, compat26 ? true, unicode ? true
-, withWebKit ? false, webkitgtk2 ? null
+, withGtk2 ? true
+, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk216x ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
 
 assert withMesa -> mesa_glu != null && mesa_noglu != null;
-assert withWebKit -> webkitgtk2 != null;
+assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk216x) != null;
 
 with stdenv.lib;
 
 let
-  version = "3.0.2";
+  version = "3.0.3.1";
 in
 stdenv.mkDerivation {
   name = "wxwidgets-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";
-    sha256 = "0paq27brw4lv8kspxh9iklpa415mxi8zc117vbbbhfjgapf7js1l";
+  src = fetchFromGitHub {
+    owner = "wxWidgets";
+    repo = "wxWidgets";
+    rev = "v${version}";
+    sha256 = "1b90in65k1ij6kyk41knxs86i6hx5lkz30gpvzdvh0cbjagv5asq";
   };
 
   buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
+    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa mesa_glu
-    ++ optional withWebKit webkitgtk2
+    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk216x)
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
-  patches = [ (fetchpatch {
-    url = "https://raw.githubusercontent.com/jessehager/MINGW-packages/af6ece963d8157dd3fbc710bcc190647c4924c63/mingw-w64-wxwidgets/wxWidgets-3.0.2-gcc6-abs.patch";
-    sha256 = "0100pg0z7i6cjyysf2k3330pmqmdaxgc9hz6kxnfvc31dynjcq3h";
-  }) ];
+  patches =
+    # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
+    optional (!withGtk2) (fetchpatch {
+      url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
+      sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
+    });
 
   configureFlags =
-    [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
+    [ "--disable-precomp-headers" "--enable-mediactrl"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
       (if compat26 then "--enable-compat26" else "--disable-compat26") ]
     ++ optional unicode "--enable-unicode"
@@ -72,7 +77,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit compat24 compat26 unicode;
-    gtk = gtk2;
+    gtk = if withGtk2 then gtk2 else gtk3;
   };
 
   enableParallelBuilding = true;

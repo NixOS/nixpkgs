@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-vectors'';
-  version = ''20150407-git'';
+  version = ''20170516-git'';
 
   description = ''cl-paths: vectorial paths manipulation'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-vectors/2015-04-07/cl-vectors-20150407-git.tgz'';
-    sha256 = ''1qd7ywc2ayiyd5nw7shnjgh0nc14h328h0cw921g5b2n8j6y959w'';
+    url = ''http://beta.quicklisp.org/archive/cl-vectors/2017-05-16/cl-vectors-20170516-git.tgz'';
+    sha256 = ''0j7cdg6akq5giv8rgbxdv8rwpzkv98r5bv78p5nnrixpprvjhvzx'';
   };
+    
+  packageName = "cl-vectors";
 
   overrides = x: {
     postInstall = ''
@@ -28,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM cl-vectors DESCRIPTION cl-paths: vectorial paths manipulation SHA256 1qd7ywc2ayiyd5nw7shnjgh0nc14h328h0cw921g5b2n8j6y959w URL
-    http://beta.quicklisp.org/archive/cl-vectors/2015-04-07/cl-vectors-20150407-git.tgz MD5 9e255503bf4559912ea1511c919c474a NAME cl-vectors TESTNAME NIL
-    FILENAME cl-vectors DEPS NIL DEPENDENCIES NIL VERSION 20150407-git SIBLINGS (cl-aa-misc cl-aa cl-paths-ttf cl-paths)) */
+/* (SYSTEM cl-vectors DESCRIPTION cl-paths: vectorial paths manipulation SHA256 0j7cdg6akq5giv8rgbxdv8rwpzkv98r5bv78p5nnrixpprvjhvzx URL
+    http://beta.quicklisp.org/archive/cl-vectors/2017-05-16/cl-vectors-20170516-git.tgz MD5 0258ae7face22f2035c1a85379ee0aae NAME cl-vectors TESTNAME NIL
+    FILENAME cl-vectors DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS (cl-aa-misc cl-aa cl-paths-ttf cl-paths)) */

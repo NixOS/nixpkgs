@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.09.02";
+  version = "6.10.02";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "0fc6b0l7bw66cyckxs4ikvyzcv1zlfx88205jx153smdhih0jj2k";
+    sha256 = "1ryp9397xpbnxha6s222c10pa50lf2qf5s35n31lc29s90p8s9kc";
   };
 
   buildInputs = [ cmake pcre pkgconfig python2 zlib libxml2 lzma gsl ]
@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
     ./thisroot.patch
 
     # https://sft.its.cern.ch/jira/browse/ROOT-8728
-    (fetchpatch {
-      url = "https://sft.its.cern.ch/jira/secure/attachment/20025/0001-std-string_view-has-no-more-to_string.patch";
-      sha256 = "0ngyk960xfrcsj4vhr1ax8h85fx0g1cfycxi3k35a6ych2zmyg8q";
-    })
     ./ROOT-8728-extra.patch
   ];
 
@@ -47,6 +43,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
+    "-Dimt=OFF"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
     "-Dhdfs=OFF"
@@ -66,7 +63,8 @@ stdenv.mkDerivation rec {
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include";
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include"
+  ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
   enableParallelBuilding = true;
 

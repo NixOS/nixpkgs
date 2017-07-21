@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-tools-1.5.patch
     ./creds-test.patch
+    ./fix-systime-1.6.patch
 
     # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
     # actually works on old versions too.

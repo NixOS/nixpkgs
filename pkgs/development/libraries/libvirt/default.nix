@@ -12,11 +12,11 @@ with stdenv.lib;
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.1.0";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "1a9j6yqfy7i5yv414wk6nv26a5bpfyyg0rpcps6ybi6a1yd04ybq";
+    sha256 = "05mm4xdw6g960rwvc9189nhxpm1vrilnmpl4h4m1lha11pivlqr9";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     "--with-virtualport"
     "--with-init-script=systemd+redhat"
     "--with-storage-disk"
+  ] ++ optionals (stdenv.isLinux && zfs != null) [
     "--with-storage-zfs"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace "$out/bin" "${gettext}/bin" \
       --replace "lock/subsys" "lock"
+    sed -e "/gettext\.sh/a \\\n# Added in nixpkgs:\ngettext() { \"${gettext}/bin/gettext\" \"\$@\"; }" \
+        -i "$out/libexec/libvirt-guests.sh"
   '' + optionalString stdenv.isLinux ''
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \

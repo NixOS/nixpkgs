@@ -1,5 +1,9 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, jbuilder, result }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "ocaml-migrate-parsetree is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
    name = "ocaml${ocaml.version}-ocaml-migrate-parsetree-${version}";
    version = "0.7";

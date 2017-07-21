@@ -39,7 +39,7 @@ with stdenv.lib;
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
-  ${optionalString (versionOlder version "4.10") ''
+  ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
   ''}
 
@@ -92,6 +92,14 @@ with stdenv.lib;
   # module, so that the initrd gets a good I/O scheduler.
   IOSCHED_CFQ y
   BLK_CGROUP y # required by CFQ
+  IOSCHED_DEADLINE y
+  ${optionalString (versionAtLeast version "4.11") ''
+    MQ_IOSCHED_DEADLINE y
+  ''}
+  ${optionalString (versionAtLeast version "4.12") ''
+    MQ_IOSCHED_KYBER y
+    IOSCHED_BFQ m
+  ''}
 
   # Enable NUMA.
   NUMA? y
@@ -294,7 +302,9 @@ with stdenv.lib;
   CIFS_UPCALL y
   CIFS_ACL y
   CIFS_DFS_UPCALL y
-  CIFS_SMB2 y
+  ${optionalString (versionOlder version "4.13") ''
+    CIFS_SMB2 y
+  ''}
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
@@ -472,8 +482,10 @@ with stdenv.lib;
   SCHED_TRACER y
   STACK_TRACER y
 
-  ${optionalString (versionOlder version "4.11") ''
+  ${if versionOlder version "4.11" then ''
     UPROBE_EVENT? y
+  '' else ''
+    UPROBE_EVENTS? y
   ''}
 
   ${optionalString (versionAtLeast version "4.4") ''
@@ -497,7 +509,7 @@ with stdenv.lib;
     KVM_APIC_ARCHITECTURE y
   ''}
   KVM_ASYNC_PF y
-  ${optionalString (versionAtLeast version "4.0") ''
+  ${optionalString ((versionAtLeast version "4.0") && (versionOlder version "4.12")) ''
     KVM_COMPAT? y
   ''}
   ${optionalString (versionOlder version "4.12") ''
@@ -511,27 +523,29 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.13") ''
     KVM_VFIO y
   ''}
-  XEN? y
-  XEN_DOM0? y
-  ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
-    PCI_XEN? y
-    HVC_XEN? y
-    HVC_XEN_FRONTEND? y
-    XEN_SYS_HYPERVISOR? y
-    SWIOTLB_XEN? y
-    XEN_BACKEND? y
-    XEN_BALLOON? y
-    XEN_BALLOON_MEMORY_HOTPLUG? y
-    XEN_EFI? y
-    XEN_HAVE_PVMMU? y
-    XEN_MCE_LOG? y
-    XEN_PVH? y
-    XEN_PVHVM? y
-    XEN_SAVE_RESTORE? y
-    XEN_SCRUB_PAGES? y
-    XEN_SELFBALLOONING? y
-    XEN_STUB? y
-    XEN_TMEM? y
+  ${optionalString (stdenv.isx86_64 || stdenv.isi686) ''
+    XEN? y
+    XEN_DOM0? y
+    ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
+      PCI_XEN? y
+      HVC_XEN? y
+      HVC_XEN_FRONTEND? y
+      XEN_SYS_HYPERVISOR? y
+      SWIOTLB_XEN? y
+      XEN_BACKEND? y
+      XEN_BALLOON? y
+      XEN_BALLOON_MEMORY_HOTPLUG? y
+      XEN_EFI? y
+      XEN_HAVE_PVMMU? y
+      XEN_MCE_LOG? y
+      XEN_PVH? y
+      XEN_PVHVM? y
+      XEN_SAVE_RESTORE? y
+      XEN_SCRUB_PAGES? y
+      XEN_SELFBALLOONING? y
+      XEN_STUB? y
+      XEN_TMEM? y
+    ''}
   ''}
   KSM y
   ${optionalString (!stdenv.is64bit) ''
@@ -591,14 +605,15 @@ with stdenv.lib;
   FW_LOADER_USER_HELPER_FALLBACK? n
 
   # Disable various self-test modules that have no use in a production system
-  ARM_KPROBES_TEST? n
+  ${optionalString (versionOlder version "4.4") ''
+    ARM_KPROBES_TEST? n
+  ''}
+
   ASYNC_RAID6_TEST? n
   ATOMIC64_SELFTEST? n
   BACKTRACE_SELF_TEST? n
   CRC32_SELFTEST? n
   CRYPTO_TEST? n
-  DRM_DEBUG_MM_SELFTEST? n
-  EFI_TEST? n
   GLOB_SELFTEST? n
   INTERVAL_TREE_TEST? n
   LNET_SELFTEST? n
@@ -607,28 +622,36 @@ with stdenv.lib;
   NOTIFIER_ERROR_INJECTION? n
   PERCPU_TEST? n
   RBTREE_TEST? n
-  RCU_PERF_TEST? n
   RCU_TORTURE_TEST? n
-  TEST_ASYNC_DRIVER_PROBE? n
-  TEST_BITMAP? n
   TEST_BPF? n
   TEST_FIRMWARE? n
-  TEST_HASH? n
   TEST_HEXDUMP? n
   TEST_KSTRTOX? n
   TEST_LIST_SORT? n
   TEST_LKM? n
-  TEST_PARMAN? n
   TEST_PRINTF? n
   TEST_RHASHTABLE? n
-  TEST_SORT? n
   TEST_STATIC_KEYS? n
   TEST_STRING_HELPERS? n
   TEST_UDELAY? n
   TEST_USER_COPY? n
-  TEST_UUID? n
-  WW_MUTEX_SELFTEST? n
   XZ_DEC_TEST? n
+
+  ${optionalString (versionOlder version "4.4") ''
+    EFI_TEST? n
+    RCU_PERF_TEST? n
+    TEST_ASYNC_DRIVER_PROBE? n
+    TEST_BITMAP? n
+    TEST_HASH? n
+    TEST_UUID? n
+  ''}
+
+  ${optionalString (versionAtLeast version "4.11") ''
+    DRM_DEBUG_MM_SELFTEST? n
+    TEST_PARMAN? n
+    TEST_SORT? n
+    WW_MUTEX_SELFTEST? n
+  ''}
 
   # ChromiumOS support
   ${optionalString (features.chromiumos or false) ''

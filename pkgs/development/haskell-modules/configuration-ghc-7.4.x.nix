@@ -97,8 +97,13 @@ self: super: {
   # Needs tagged on pre 7.6.x compilers.
   reflection = addBuildDepend super.reflection self.tagged;
 
-  # These builds Need additional dependencies on pre 7.6.x compilers.
+  # These builds need additional dependencies on old compilers.
   semigroups = addBuildDepends super.semigroups (with self; [nats bytestring-builder tagged unordered-containers transformers]);
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
+  optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+
+  # Newer versions don't compile any longer.
+  network_2_6_3_1 = dontCheck super.network_2_6_3_1;
+  network = self.network_2_6_3_1;
 
 }

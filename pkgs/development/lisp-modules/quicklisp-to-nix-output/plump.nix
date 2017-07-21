@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''plump'';
-  version = ''20170124-git'';
+  version = ''20170516-git'';
 
   description = ''An XML / XHTML / HTML parser that aims to be as lenient as possible.'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/plump/2017-01-24/plump-20170124-git.tgz'';
-    sha256 = ''1swl5kr6hgl7hkybixsx7h4ddc7c0a7pisgmmiz2bs2rv4inz69x'';
+    url = ''http://beta.quicklisp.org/archive/plump/2017-05-16/plump-20170516-git.tgz'';
+    sha256 = ''0i7fb1y4dfd7i97w33xf8d1ykza4irl89xkipainydigkk66xaz8'';
   };
+    
+  packageName = "plump";
 
   overrides = x: {
     postInstall = ''
@@ -28,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM plump DESCRIPTION An XML / XHTML / HTML parser that aims to be as lenient as possible. SHA256 1swl5kr6hgl7hkybixsx7h4ddc7c0a7pisgmmiz2bs2rv4inz69x
-    URL http://beta.quicklisp.org/archive/plump/2017-01-24/plump-20170124-git.tgz MD5 c49aeb37173aca79ee6ff5c89b0c4b1a NAME plump TESTNAME NIL FILENAME plump
-    DEPS NIL DEPENDENCIES NIL VERSION 20170124-git SIBLINGS (plump-dom plump-lexer plump-parser)) */
+/* (SYSTEM plump DESCRIPTION An XML / XHTML / HTML parser that aims to be as lenient as possible. SHA256 0i7fb1y4dfd7i97w33xf8d1ykza4irl89xkipainydigkk66xaz8
+    URL http://beta.quicklisp.org/archive/plump/2017-05-16/plump-20170516-git.tgz MD5 917a4f25691b3087ce24fd52ee42b4be NAME plump TESTNAME NIL FILENAME plump
+    DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS (plump-dom plump-lexer plump-parser)) */

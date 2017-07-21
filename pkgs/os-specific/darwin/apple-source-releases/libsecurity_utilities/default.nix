@@ -1,4 +1,4 @@
-{ IOKit, appleDerivation, apple_sdk, libauto, libobjc, libsecurity_codesigning, osx_private_sdk, sqlite, stdenv }:
+{ IOKit, appleDerivation, apple_sdk, libauto, libobjc, libsecurity_codesigning, sqlite, stdenv, osx_private_sdk }:
 appleDerivation {
   buildInputs = [
     libauto
@@ -16,7 +16,7 @@ appleDerivation {
     substituteInPlace lib/ccaudit.cpp --replace '<bsm/libbsm.h>' '"bsm/libbsm.h"'
     substituteInPlace lib/powerwatch.h --replace \
       '<IOKit/pwr_mgt/IOPMLibPrivate.h>' \
-      '"${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/System/Library/Frameworks/IOKit.framework/Versions/A/PrivateHeaders/pwr_mgt/IOPMLibPrivate.h"'
+      '"${IOKit}/Library/Frameworks/IOKit.framework/Headers/pwr_mgt/IOPMLibPrivate.h"'
 
     cp ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/include/security_utilities/utilities_dtrace.h lib
     cp -R ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/usr/local/include/bsm lib

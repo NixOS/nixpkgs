@@ -139,6 +139,7 @@
       btsync = 113;
       minecraft = 114;
       #monetdb = 115; # unused (not packaged), removed 2016-09-19
+      vault = 115;
       rippled = 116;
       murmur = 117;
       foundationdb = 118;
@@ -166,7 +167,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      collectd = 144;
+      #collectd = 144; #unused
       consul = 145;
       mailpile = 146;
       redmine = 147;
@@ -295,6 +296,7 @@
       aria2 = 277;
       clickhouse = 278;
       rslsync = 279;
+      minio = 280;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -414,6 +416,7 @@
       btsync = 113;
       #minecraft = 114; # unused
       #monetdb = 115; # unused (not packaged), removed 2016-09-19
+      vault = 115;
       #ripped = 116; # unused
       #murmur = 117; # unused
       foundationdb = 118;
@@ -559,6 +562,7 @@
       aria2 = 277;
       clickhouse = 278;
       rslsync = 279;
+      minio = 280;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

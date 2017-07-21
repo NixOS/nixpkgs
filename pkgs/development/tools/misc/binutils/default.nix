@@ -8,10 +8,13 @@ let
   version = "2.28";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
+  # The prefix prepended to binary names to allow multiple binuntils on the
+  # PATH to both be usable.
+  prefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
 stdenv.mkDerivation rec {
-  name = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-" + basename;
+  name = prefix + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -49,7 +52,8 @@ stdenv.mkDerivation rec {
     ++ [ "info" ]
     ++ optional (targetPlatform == hostPlatform) "dev";
 
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [ bison ]
+    ++ optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
@@ -76,14 +80,19 @@ stdenv.mkDerivation rec {
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optional (targetPlatform != hostPlatform) "--target=${targetPlatform.config}" # TODO: make this unconditional
     ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
+
+  passthru = {
+    inherit prefix;
+  };
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";

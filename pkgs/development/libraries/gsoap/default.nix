@@ -1,15 +1,28 @@
-{ stdenv, fetchurl, unzip, m4, bison, flex, openssl, zlib }:
+{ stdenv, fetchurl, autoreconfHook, unzip, m4, bison, flex, openssl, zlib }:
 
-stdenv.mkDerivation rec {
+let
+  majorVersion = "2.8";
+
+in stdenv.mkDerivation rec {
   name = "gsoap-${version}";
-  version = "2.8.42";
+  version = "${majorVersion}.49";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/gsoap2/gsoap-2.8/gsoap_${version}.zip";
-    sha256 = "0fav4lhdibwggkf495pggmqna632jxkh6q2mi32b9hsn883pg5m7";
+    url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${version}.zip";
+    sha256 = "0414q7zabkq3iiccl2yql3vbihbr7ach9d517b37zv3mp7nhj2aj";
   };
 
-  buildInputs = [ unzip m4 bison flex openssl zlib ];
+  buildInputs = [ openssl zlib ];
+  nativeBuildInputs = [ autoreconfHook bison flex m4 unzip ];
+  # Parallel building doesn't work as of 2.8.49
+  enableParallelBuilding = false;
+
+  # Future versions of automake require subdir-objects if the source is structured this way
+  # As of 2.8.49 (maybe earlier) this is needed to silence warnings
+  prePatch = ''
+    substituteInPlace configure.ac \
+      --replace 'AM_INIT_AUTOMAKE([foreign])' 'AM_INIT_AUTOMAKE([foreign subdir-objects])'
+  '';
 
   meta = with stdenv.lib; {
     description = "C/C++ toolkit for SOAP web services and XML-based applications";
@@ -27,6 +40,6 @@ stdenv.mkDerivation rec {
     #    restrictions)
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

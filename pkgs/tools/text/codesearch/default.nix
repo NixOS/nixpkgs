@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "codesearch-${version}";
-  version = "20150617-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20150717-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "a45d81b686e85d01f2838439deaf72126ccd5a96";
 
   goPackagePath = "github.com/google/codesearch";

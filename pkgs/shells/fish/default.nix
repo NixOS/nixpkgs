@@ -89,13 +89,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
-  version = "2.5.0";
+  version = "2.6.0";
 
   etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "19djav128nkhjxgfhwhc32i5y9d9c3karbh5yg67kqrdranyvh7q";
+    sha256 = "1yzx73kg5ng5ivhi68756sl5hpb8869110l9fwim6gn7f7bbprby";
   };
 
   buildInputs = [ ncurses libiconv pcre2 ];
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   # Python: Autocompletion generated from manpages and config editing
   propagatedBuildInputs = [
     coreutils gnugrep gnused bc
-    python which groff gettext
+    python groff gettext
   ] ++ optional (!stdenv.isDarwin) man-db;
 
   postInstall = ''

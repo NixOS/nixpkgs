@@ -1,13 +1,14 @@
 {stdenv, fetchFromGitHub, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "wla-dx-git-2016-02-27";
+  version = "2017-06-05";
+  name = "wla-dx-git-${version}";
 
   src = fetchFromGitHub {
     owner = "vhelin";
     repo = "wla-dx";
-    rev = "8189fe8d5620584ea16563875ff3c5430527c86a";
-    sha256 = "02zgkcyfx7y8j6jvyi12lm29fydnd7m3rxv6g2psv23fyzmpkkir";
+    rev = "ae6843f9711cbc2fa6dd8c200877b40bd2bcad7f";
+    sha256 = "09c2kz12ld97ad41j6r8r65jknllrak1x8r43fgr26x7hdlxz5c6";
   };
 
   hardeningDisable = [ "format" ];

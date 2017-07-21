@@ -16,9 +16,9 @@ stdenv.mkDerivation {
 
   prePatch = ''
     substituteInPlace Makefile --replace /usr/ $out/
-    substituteInPlace Makefile --replace "install -o root -g root" "install"
+    substituteInPlace Makefile --replace "install -o root -g root -m 4755" "install -m 555"
   '';
- 
+
   patches = [./unistd.patch];
   buildInputs = [ libusb1 ];
   makeFlags = "build";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
   installTargets = "install";
   postInstall = ''cp alienfx.1 $out/man/man1'';
-  
+
   meta = {
     description = "Controls AlienFX lighting";
     homepage = "https://github.com/tibz/alienfx";

@@ -1,8 +1,9 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kconfig, kinit,
-  kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5
+  qtscript, kconfig, kinit, karchive,
+  kcmutils, kconfigwidgets, knewstuff, kparts, qca-qt5,
+  shared_mime_info
 }:
 
 mkDerivation {
@@ -11,8 +12,10 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];
+  buildInputs = [ shared_mime_info ];
   propagatedBuildInputs = [
     kconfig kinit kcmutils kconfigwidgets knewstuff kparts qca-qt5
+    karchive
   ];
 }

@@ -202,7 +202,7 @@ _multioutPropagateDev() {
 
     mkdir -p "${!propagaterOutput}"/nix-support
     for output in $propagatedBuildOutputs; do
-        echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/$propagatedBuildInputsFile
+        echo "${!output}" >> "${!propagaterOutput}"/nix-support/$propagatedBuildInputsFile
     done
 }
 

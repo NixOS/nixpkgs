@@ -125,10 +125,10 @@ in
       # comment/uncomment if breaking kernel versions are known
       incompatibleKernelVersion = "4.12";
 
-      version = "0.6.5.10";
+      version = "0.6.5.11";
 
       # this package should point to the latest release.
-      sha256 = "04gn5fj22z17zq2nazxwl3j9dr33l79clha6ipxvdz241bhjqrk3";
+      sha256 = "1wqz43cjr21m3f52ahcikl2798pbzj5sfy16zqxwiqpv7iy09kr3";
       extraPatches = [
         (fetchpatch {
           url = "https://github.com/Mic92/zfs/compare/zfs-0.6.5.8...nixos-zfs-0.6.5.8.patch";
@@ -141,10 +141,10 @@ in
       # comment/uncomment if breaking kernel versions are known
       incompatibleKernelVersion = null;
 
-      version = "0.7.0-rc4";
+      version = "0.7.0-rc5";
 
       # this package should point to a version / git revision compatible with the latest kernel release
-      sha256 = "16jiq2h7m2ljg5xv7m5lqmsszzclkhvj1iq1wa9w740la4vl22kf";
+      sha256 = "1k0fl6lbi5winri58v26k7gngd560hbj0247rnwcbc6j01ixsr5n";
       extraPatches = [
         (fetchpatch {
           url = "https://github.com/Mic92/zfs/compare/zfs-0.7.0-rc3...nixos-zfs-0.7.0-rc3.patch";

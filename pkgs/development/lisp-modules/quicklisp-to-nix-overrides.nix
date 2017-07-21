@@ -16,6 +16,9 @@ in
         export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
       '';
     };
+    propagatedBuildInputs = (x.propagatedBuildInputs or []) ++ (with qlnp; [
+      alexandria cl-ppcre clx
+    ]);
   };
   iterate = skipBuildPhase;
   cl-fuse = x: {
@@ -32,14 +35,24 @@ in
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
-  iolib = x: {
-    propagatedBuildInputs = (x.propagatedBuildInputs or []) ++
-     [pkgs.libfixposix pkgs.gcc];
-    testSystems = (x.testSystems or ["iolib"]) ++ [
-      "iolib/os" "iolib/zstreams" "iolib/common-lisp" "iolib/base" "iolib/asdf"
-      "iolib/conf" "iolib/grovel" "iolib/syscalls" "iolib/sockets"
-      "iolib/multiplex" "iolib/streams" "iolib/pathnames"
-    ];
+  iolib = x: rec {
+    propagatedBuildInputs = (x.propagatedBuildInputs or [])
+     ++ (with pkgs; [libfixposix gcc])
+     ++ (with qlnp; [
+       alexandria split-sequence cffi bordeaux-threads idna swap-bytes
+     ])
+     ;
+    testSystems = ["iolib" "iolib/syscalls" "iolib/multiplex" "iolib/streams"
+      "iolib/zstreams" "iolib/sockets" "iolib/trivial-sockets"
+      "iolib/pathnames" "iolib/os"];
+
+    version = "0.8.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "sionescu";
+      repo = "iolib";
+      rev = "v${version}";
+      sha256 = "0pa86bf3jrysnmhasbc0lm6cid9xzril4jsg02g3gziav1xw5x2m";
+    };
   };
   cl-unicode = addDeps (with qlnp; [cl-ppcre flexi-streams]);
   clack =  addDeps (with qlnp;[lack bordeaux-threads prove]);
@@ -110,6 +123,7 @@ in
   cffi = multiOverride [(addNativeLibs [pkgs.libffi])
     (addDeps (with qlnp; [uffi uiop trivial-features]))];
   cl-vectors = addDeps (with qlnp; [zpb-ttf]);
+  cl-paths-ttf = addDeps (with qlnp; [zpb-ttf]);
   "3bmd" = addDeps (with qlnp; [esrap split-sequence]);
   cl-dbi = addDeps (with qlnp; [
     cl-syntax cl-syntax-annot split-sequence closer-mop bordeaux-threads
@@ -124,13 +138,17 @@ in
         ln -s lib-dependent/*.asd .
       '';
     };
+    propagatedBuildInputs = (x.propagatedBuildInputs or []) ++ (with qlnp; [
+      cl-ppcre
+    ]);
   };
   cl-unification = addDeps (with qlnp; [cl-ppcre]);
   cl-syntax-annot = addDeps (with qlnp; [cl-syntax]);
   cl-syntax-anonfun = addDeps (with qlnp; [cl-syntax]);
   cl-syntax-markup = addDeps (with qlnp; [cl-syntax]);
   cl-test-more = addDeps (with qlnp; [prove]);
-  babel-streams = addDeps (with qlnp; [babel]);
+  babel-streams = addDeps (with qlnp; [babel trivial-gray-streams]);
+  babel = addDeps (with qlnp; [trivial-features alexandria]);
   plump = addDeps (with qlnp; [array-utils trivial-indent]);
   sqlite = addNativeLibs [pkgs.sqlite];
   uiop = x: {
@@ -143,4 +161,33 @@ in
       '';
     };
   };
+  cl-containers = x: {
+    overrides = y: (x.overrides y) // {
+      postConfigure = "rm GNUmakefile";
+    };
+  };
+  esrap = addDeps (with qlnp; [alexandria]);
+  fast-io = addDeps (with qlnp; [
+    alexandria trivial-gray-streams static-vectors
+  ]);
+  hu_dot_dwim_dot_def = addDeps (with qlnp; [
+    hu_dot_dwim_dot_asdf alexandria anaphora iterate metabang-bind
+  ]);
+  ironclad = addDeps (with qlnp; [nibbles flexi-streams]);
+  ixf = addDeps (with qlnp; [
+    split-sequence md5 alexandria babel local-time cl-ppcre ieee-floats
+  ]);
+  jonathan = addDeps (with qlnp; [
+    cl-syntax cl-syntax-annot fast-io proc-parse cl-ppcre
+  ]);
+  local-time = addDeps (with qlnp; [cl-fad]);
+  lquery = addDeps (with qlnp; [array-utils form-fiddle plump clss]);
+  clss = addDeps (with qlnp; [array-utils plump]);
+  form-fiddle = addDeps (with qlnp; [documentation-utils]);
+  documentation-utils = addDeps (with qlnp; [trivial-indent]);
+  mssql = x: {
+    testSystems = [];
+  };
+  cl-postgres = addDeps (with qlnp; [cl-ppcre md5]);
+  postmodern = addDeps (with qlnp; [md5]);
 }

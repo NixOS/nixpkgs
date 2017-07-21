@@ -94,6 +94,37 @@ in
             <command>docker</command> daemon.
           '';
       };
+
+    autoPrune = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to periodically prune Docker resources. If enabled, a systemd timer will run
+          <literal>docker system prune -f</literal> once a day.
+        '';
+      };
+
+      flags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--all" ];
+        description = ''
+          Any additional flags passed to <command>docker system prune</command>.
+        '';
+      };
+
+      dates = mkOption {
+        default = "weekly";
+        type = types.str;
+        description = ''
+          Specification (in the format described by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
+          which the prune will occur.
+        '';
+      };
+    };
   };
 
   ###### implementation
@@ -136,6 +167,22 @@ in
           SocketUser = "root";
           SocketGroup = "docker";
         };
+      };
+
+
+      systemd.services.docker-prune = {
+        description = "Prune docker resources";
+
+        restartIfChanged = false;
+        unitConfig.X-StopOnRemoval = false;
+
+        serviceConfig.Type = "oneshot";
+
+        script = ''
+          ${pkgs.docker}/bin/docker system prune -f ${toString cfg.autoPrune.flags}
+        '';
+
+        startAt = optional cfg.autoPrune.enable cfg.autoPrune.dates;
       };
     }
   ]);

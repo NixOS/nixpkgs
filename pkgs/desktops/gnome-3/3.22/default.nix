@@ -76,7 +76,7 @@ let
   dconf-editor = callPackage ./core/dconf-editor { };
 
   # empathy = callPackage ./core/empathy {
-  #   webkitgtk = webkitgtk24x;
+  #   webkitgtk = webkitgtk24x-gtk3;
   #   clutter-gst = pkgs.clutter-gst;
   # };
 
@@ -257,7 +257,7 @@ let
 
   bijiben = callPackage ./apps/bijiben {
     # https://bugzilla.gnome.org/show_bug.cgi?id=728293
-    webkitgtk = pkgs.webkitgtk24x;
+    webkitgtk = pkgs.webkitgtk24x-gtk3;
   };
 
   cheese = callPackage ./apps/cheese { };
@@ -267,6 +267,8 @@ let
   file-roller = callPackage ./apps/file-roller { };
 
   gedit = callPackage ./apps/gedit { };
+
+  ghex = callPackage ./apps/ghex { };
 
   glade = callPackage ./apps/glade { };
 
@@ -363,7 +365,7 @@ let
 
   geary = callPackage ./misc/geary {
     # https://bugzilla.gnome.org/show_bug.cgi?id=728002
-    webkitgtk = pkgs.webkitgtk24x;
+    webkitgtk = pkgs.webkitgtk24x-gtk3;
   };
 
   gfbgraph = callPackage ./misc/gfbgraph { };

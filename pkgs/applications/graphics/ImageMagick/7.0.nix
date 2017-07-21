@@ -2,6 +2,7 @@
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 , ApplicationServices
+, buildPlatform, hostPlatform
 }:
 
 let
@@ -12,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.6-0";
-    sha256 = "1vl9mkdp5pskl4lxd1p79ayv1k3gxpa8iz992d302qyllhm7wn1i";
+    version = "7.0.6-1";
+    sha256 = "1i3gsc0ps7cbvfmnk6fbi5hng18jwh4x4dqbz90a45x85023w9vs";
     patches = [];
   };
 in
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
       ]
-    ++ lib.optionals (stdenv.cross.libc or null == "msvcrt")
+    ++ lib.optionals hostPlatform.isMinGW
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
     ;
 
@@ -57,13 +58,13 @@ stdenv.mkDerivation rec {
     [ zlib fontconfig freetype ghostscript
       libpng libtiff libxml2
     ]
-    ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
+    ++ lib.optionals (!hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
     ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
-    ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
+    ++ lib.optionals (!hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
     ;
 

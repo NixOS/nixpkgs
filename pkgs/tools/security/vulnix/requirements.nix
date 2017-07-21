@@ -10,8 +10,7 @@ rec {
     propagatedBuildInputs = [
       persistent
       transaction
-      zope_interface
-    ] ++ (with pythonPackages; [ coverage ]);
+    ] ++ (with pythonPackages; [ zope_interface coverage ]);
 
     meta = with stdenv.lib; {
       homepage = "";
@@ -26,7 +25,7 @@ rec {
       url = "https://pypi.python.org/packages/52/b3/a96d62711a26d8cfbe546519975dc9ed54d2eb50b3238d2e6de045764796/ZConfig-3.1.0.tar.gz";
       sha256 = "c21fa3a073a56925a8098036d46717392994a92cffea1b3cda3176b70c0a842e";
     };
-    propagatedBuildInputs = [ pythonPackages.zope_testrunner ];
+    propagatedBuildInputs = with pythonPackages; [ zope_testrunner ];
     meta = with stdenv.lib; {
       homepage = "";
       license = licenses.zpt21;
@@ -62,9 +61,7 @@ rec {
       url = "https://pypi.python.org/packages/3d/71/3302512282b606ec4d054e09be24c065915518903b29380b6573bff79c24/persistent-4.2.2.tar.gz";
       sha256 = "52ececc6dbba5ef572d3435189318b4dff07675bafa9620e32f785e147c6563c";
     };
-    propagatedBuildInputs = [
-      zope_interface
-    ] ++ (with pythonPackages; [ six wheel ]);
+    propagatedBuildInputs = with pythonPackages; [ zope_interface six wheel ];
     meta = with stdenv.lib; {
       homepage = "";
       license = licenses.zpt21;
@@ -78,9 +75,7 @@ rec {
       url = "https://pypi.python.org/packages/8c/af/3ffafe85bcc93ecb09459f3f2bd8fbe142e9ab34048f9e2774543b470cbd/transaction-2.0.3.tar.gz";
       sha256 = "67bfb81309ba9717edbb2ca2e5717c325b78beec0bf19f44e5b4b9410f82df7f";
     };
-    propagatedBuildInputs = [
-      zope_interface
-    ] ++ (with pythonPackages; [ six wheel ]);
+    propagatedBuildInputs = with pythonPackages; [ zope_interface six wheel ];
     meta = with stdenv.lib; {
       homepage = "";
       license = licenses.zpt21;
@@ -113,20 +108,6 @@ rec {
       homepage = "";
       license = licenses.zpt21;
       description = "Fork of Python 3 pickle module.";
-    };
-  };
-
-  zope_interface = pythonPackages.buildPythonPackage {
-    name = "zope.interface-4.3.3";
-    src = fetchurl {
-      url = "https://pypi.python.org/packages/44/af/cea1e18bc0d3be0e0824762d3236f0e61088eeed75287e7b854d65ec9916/zope.interface-4.3.3.tar.gz";
-      sha256 = "8780ef68ca8c3fe1abb30c058a59015129d6e04a6b02c2e56b9c7de6078dfa88";
-    };
-    propagatedBuildInputs = [ ];
-    meta = with stdenv.lib; {
-      homepage = "";
-      license = licenses.zpt21;
-      description = "Interfaces for Python";
     };
   };
 }

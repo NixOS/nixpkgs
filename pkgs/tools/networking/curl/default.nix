@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  separateDebugInfo = stdenv.isLinux;
 
   enableParallelBuilding = true;
 

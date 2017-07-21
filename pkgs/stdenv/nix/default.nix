@@ -10,10 +10,13 @@ bootStages ++ [
   (prevStage: let
     inherit (prevStage) stdenv;
   in {
-    inherit (prevStage) buildPlatform hostPlatform targetPlatform;
     inherit config overlays;
 
     stdenv = import ../generic rec {
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+
       inherit config;
 
       preHook = ''

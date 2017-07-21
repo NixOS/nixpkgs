@@ -1,7 +1,8 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kparts, qtsvg, qtxmlpatterns, ktexteditor, boost
+  kparts, qtsvg, qtxmlpatterns, ktexteditor, boost,
+  karchive, kcrash
 }:
 
 mkDerivation {
@@ -13,7 +14,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ boost ];
   propagatedBuildInputs = [
-    kparts qtsvg qtxmlpatterns ktexteditor
+    kparts qtsvg qtxmlpatterns ktexteditor karchive kcrash
   ];
 }
 

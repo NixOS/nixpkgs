@@ -59,7 +59,7 @@ let
         srcs = [ rubySrc rubygemsSrc ];
         sourceRoot =
           if useRailsExpress then
-            "ruby-${tag}-src"
+            rubySrc.name
           else
             unpackdir rubySrc;
 
