@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
-, qtmultimedia, qtscript, alsaLib, ola, libftdi, libusb
+, qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb
 , libsndfile, libmad
 }:
 
@@ -16,7 +16,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [
-    udev qtmultimedia qtscript alsaLib ola libftdi libusb libsndfile libmad
+    udev qtmultimedia qtscript alsaLib ola libftdi1 libusb libsndfile libmad
   ];
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
