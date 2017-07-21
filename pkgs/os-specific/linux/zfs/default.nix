@@ -44,7 +44,6 @@ let
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "mount -t zfs"            "${utillinux}/bin/mount -t zfs"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/mount"              "${utillinux}/bin/mount"
-        substituteInPlace ./udev/rules.d/*            --replace "/lib/udev/vdev_id"       "$out/lib/udev/vdev_id"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/ztest"         "$out/sbin/ztest"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/zdb"           "$out/sbin/zdb"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
@@ -54,6 +53,12 @@ let
         substituteInPlace ./module/Makefile.in        --replace "/bin/cp"                 "cp"
         substituteInPlace ./etc/systemd/system/zfs-share.service.in \
           --replace "@bindir@/rm " "${coreutils}/bin/rm "
+
+        for f in ./udev/rules.d/*
+        do
+          substituteInPlace "$f" --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
+        done
+
         ./autogen.sh
       '';
 
