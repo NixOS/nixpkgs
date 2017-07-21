@@ -20,8 +20,8 @@ let
     sources = map (x: x.source) etc';
     targets = map (x: x.target) etc';
     modes = map (x: x.mode) etc';
-    uids  = map (x: x.uid) etc';
-    gids  = map (x: x.gid) etc';
+    users  = map (x: x.user) etc';
+    groups  = map (x: x.group) etc';
   };
 
 in
@@ -92,19 +92,37 @@ in
 
             uid = mkOption {
               default = 0;
-              type = types.either types.int types.str;
+              type = types.int;
               description = ''
-                UID or user name of created file. Only takes affect when the file is
+                UID of created file. Only takes affect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
             };
 
             gid = mkOption {
               default = 0;
-              type = types.either types.int types.str;
+              type = types.int;
               description = ''
-                GID or group name of created file. Only takes affect when the file is
+                GID of created file. Only takes affect when the file is
                 copied (that is, the mode is not 'symlink').
+              '';
+            };
+
+            user = mkOption {
+              default = "+${toString config.uid}";
+              type = types.str;
+              description = ''
+                User name of created file.
+                Only takes affect when the file is copied (that is, the mode is not 'symlink').
+              '';
+            };
+
+            group = mkOption {
+              default = "+${toString config.gid}";
+              type = types.str;
+              description = ''
+                Group name of created file.
+                Only takes affect when the file is copied (that is, the mode is not 'symlink').
               '';
             };
 
