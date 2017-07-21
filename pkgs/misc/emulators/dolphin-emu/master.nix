@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
                   libXdmcp portaudio libusb libpulseaudio libpng hidapi
                 ] ++ stdenv.lib.optionals stdenv.isDarwin [ wxGTK CoreBluetooth cf-private ForceFeedback IOKit OpenGL ]
                   ++ stdenv.lib.optionals stdenv.isLinux  [ bluez libevdev  ];
+
+  # - Change install path to Applications relative to $out
+  # - Allow Dolphin to use nix-provided libraries instead of building them
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e 's,/Applications,Applications,g' Source/Core/DolphinWX/CMakeLists.txt
+    sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' CMakeLists.txt
+    sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
+  '';
+
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
   '';
