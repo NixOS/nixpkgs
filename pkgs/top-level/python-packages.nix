@@ -763,28 +763,7 @@ in {
   };
 
 
-  arrow = buildPythonPackage rec {
-    name = "arrow-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/a/arrow/${name}.tar.gz";
-      sha256 = "08n7q2l69hlainds1byd4lxhwrq7zsw7s640zkqc3bs5jkq0cnc0";
-    };
-
-    checkPhase = ''
-      nosetests --cover-package=arrow
-    '';
-
-    buildInputs = with self; [ nose chai simplejson ];
-    propagatedBuildInputs = with self; [ dateutil ];
-
-    meta = {
-      description = "Python library for date manipulation";
-      license     = "apache";
-      maintainers = with maintainers; [ thoughtpolice ];
-    };
-  };
+  arrow = callPackage ../development/python-modules/arrow { };
 
   async = buildPythonPackage rec {
     name = "async-0.6.1";
