@@ -95,6 +95,7 @@ in
     systemd.services.rsyncd = {
       description = "Rsync daemon";
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."rsyncd.conf".source ];
       serviceConfig.ExecStart = "${pkgs.rsync}/bin/rsync --daemon --no-detach";
     };
 
