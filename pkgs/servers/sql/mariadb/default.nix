@@ -70,7 +70,6 @@ common = rec { # attributes common to both builds
   postInstall = ''
     rm "$out"/lib/*.a
     find "''${!outputBin}/bin" -name '*test*' -delete
-    moveToOutput bin/mariadb_config "$dev"
   '';
 
   passthru.mysqlVersion = "5.7";
@@ -107,6 +106,7 @@ client = stdenv.mkDerivation (common // {
   # prevent cycle; it needs to reference $dev
   postInstall = common.postInstall + ''
     moveToOutput bin/mysql_config "$dev"
+    moveToOutput bin/mariadb_config "$dev"
   '';
 
   enableParallelBuilding = true; # the client should be OK
