@@ -144,7 +144,7 @@ in
     };
     zfsUnstable = common {
       # comment/uncomment if breaking kernel versions are known
-      incompatibleKernelVersion = "4.12";
+      incompatibleKernelVersion = null;
 
       version = "0.7.0-rc5";
 
