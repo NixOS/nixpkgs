@@ -176,7 +176,13 @@ let result = stdenv.mkDerivation rec {
     EOF
   '';
 
-  postFixup = ''
+  postFixup = (stdenv.lib.optionalString useSystemCACerts ''
+    # Generate certificates.
+    pushd $jrePath/lib/security
+    rm cacerts
+    ${perl}/bin/perl ${../openjdk/generate-cacerts.pl} $jrePath/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    popd
+  '') + ''
     rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
 
     # set all the dynamic linkers
@@ -191,14 +197,6 @@ let result = stdenv.mkDerivation rec {
       wrapProgram "$out/bin/jmc" \
           --suffix-each LD_LIBRARY_PATH ':' "$rpath"
     fi
-  '';
-
-  postFixup = stdenv.lib.optionalString useSystemCACerts ''
-    # Generate certificates.
-    pushd $jrePath/lib/security
-    rm cacerts
-    ${perl}/bin/perl ${../openjdk/generate-cacerts.pl} $jrePath/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
-    popd
   '';
 
   inherit installjdk pluginSupport;
