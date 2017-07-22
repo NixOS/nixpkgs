@@ -24943,23 +24943,7 @@ EOF
   zconfig = callPackage ../development/python-modules/zconfig { };
 
 
-  zc_lockfile = buildPythonPackage rec {
-    name = "zc.lockfile-${version}";
-    version = "1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zc.lockfile/${name}.tar.gz";
-      sha256 = "96bb2aa0438f3e29a31e4702316f832ec1482837daef729a92e28c202d8fba5c";
-    };
-
-    meta = {
-      description = "Inter-process locks";
-      homepage =  http://www.python.org/pypi/zc.lockfile;
-      license = licenses.zpt20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zdaemon = buildPythonPackage rec {
     name = "zdaemon-${version}";
