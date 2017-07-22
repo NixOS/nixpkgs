@@ -3632,6 +3632,8 @@ with pkgs;
 
   ostree = callPackage ../tools/misc/ostree { };
 
+  otfcc = callPackage ../tools/misc/otfcc { };
+
   otpw = callPackage ../os-specific/linux/otpw { };
 
   owncloud = owncloud70;
