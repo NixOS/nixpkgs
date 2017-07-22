@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://people.eecs.berkeley.edu/~alanmi/abc/abc.htm";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ ];
   };
 }
