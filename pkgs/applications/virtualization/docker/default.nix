@@ -2,7 +2,7 @@
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
-, procps
+, procps, libseccomp
 }:
 
 with lib;
@@ -63,9 +63,12 @@ rec {
       ];
     });
 
+    # Optimizations break compilation of libseccomp c bindings
+    hardeningDisable = [ "fortify" ];
+
     buildInputs = [
       makeWrapper removeReferencesTo pkgconfig go-md2man go
-      sqlite devicemapper btrfs-progs systemd libtool
+      sqlite devicemapper btrfs-progs systemd libtool libseccomp
     ];
 
     dontStrip = true;
@@ -73,7 +76,8 @@ rec {
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
+      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (libseccomp != null) "seccomp";
 
     buildPhase = ''
       # build engine
