@@ -8995,49 +8995,6 @@ in {
     };
   };
 
-  substanced = buildPythonPackage rec {
-    # no release yet
-    rev = "089818bc61c3dc5eca023254e37a280b041ea8cc";
-    name = "substanced-${rev}";
-
-    src = pkgs.fetchgit {
-      inherit rev;
-      url = "https://github.com/Pylons/substanced.git";
-      sha256 = "1fb8m5aylw8kig13fvldchgkxi4s2xlvwralrzinyma3imbznd3q";
-    };
-
-    buildInputs = with self; [ mock ];
-    patchPhase = ''
-      sed -i 's/assert_call(/assert_called_with(/' substanced/workflow/tests/test_workflow.py
-    '';
-
-    propagatedBuildInputs = with self; [
-      pyramid
-      pytz
-      zodb
-      venusian
-      colander
-      deform
-      python_magic
-      pyyaml
-      cryptacular
-      hypatia
-      zope_copy
-      zope_component
-      zope_deprecation
-      statsd
-      pyramid_zodbconn
-      pyramid_mailer
-      pyramid_chameleon
-      ZEO
-    ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
-
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
     version = "2.0b1";
