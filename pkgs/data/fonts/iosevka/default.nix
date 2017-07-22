@@ -1,18 +1,59 @@
-{ stdenv, fetchzip }:
+{ pkgs, system, stdenv, fetchFromGitHub, nodejs, ttfautohint, otfcc }:
+
+with stdenv.lib;
 
 let
-  version = "1.13.3";
-in fetchzip rec {
+  nodePackages = import ./composition.nix {
+    inherit pkgs system nodejs;
+  };
+in
+stdenv.mkDerivation rec {
   name = "iosevka-${version}";
+  version = "1.13.3";
 
-  url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/iosevka-pack-${version}.zip";
+  src = fetchFromGitHub {
+    owner = "be5invis";
+    repo ="Iosevka";
+    rev = "v1.13.3";
+    sha256 = "0103rjxcp2sis42xp7fh7g8i03h5snvs8n78lgsf79g8ssw0p9d4";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttc -d $out/share/fonts/iosevka
+  nativeBuildInputs = [ nodejs ttfautohint otfcc ] ++ (with nodePackages; [
+    bezier-js
+    caryll-shapeops
+    cubic2quad
+    libspiro-js
+    object-assign
+    otfcc-c2q
+    pad
+    patel
+    toml
+    topsort
+    unorm
+    yargs
+   ]);
+
+  prePatch = ''
+    substituteInPlace utility/scripts.mk --replace \
+      'patel/bin' '.bin'
   '';
 
-  sha256 = "0103rjxcp2sis42xp7fh7g8i03h5snvs8n78lgsf79g8ssw0p9d4";
+  preConfigure = ''
+    mkdir -p node_modules/.bin
+    ${concatStrings (map (dep: ''
+      test -d ${dep}/bin && (for b in $(ls ${dep}/bin); do
+        ln -sv -t node_modules/.bin ${dep}/bin/$b
+      done)
+    '') nativeBuildInputs)}
+    true
+  '';
+
+  installPhase = ''
+    fontdir=$out/share/fonts/iosevka
+
+    mkdir -p $fontdir
+    cp -v dist/iosevka*/ttf/*.ttf $fontdir
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://be5invis.github.io/Iosevka/;
@@ -23,6 +64,6 @@ in fetchzip rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = with maintainers; [ cstrahan jfrankenau ];
   };
 }

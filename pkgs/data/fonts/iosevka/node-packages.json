@@ -1,0 +1,14 @@
+[
+  "bezier-js"
+, "caryll-shapeops"
+, "cubic2quad"
+, "libspiro-js"
+, "object-assign"
+, "otfcc-c2q"
+, "pad"
+, "patel"
+, "toml"
+, "topsort"
+, "unorm"
+, "yargs"
+]
