@@ -86,6 +86,7 @@
   bradediger = "Brad Ediger <brad@bradediger.com>";
   bramd = "Bram Duvigneau <bram@bramd.nl>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
+  bugworm = "Roman Gerasimenko <bugworm@zoho.com>";
   bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
   c0dehero = "CodeHero <codehero@nerdpol.ch>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";

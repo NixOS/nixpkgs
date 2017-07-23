@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = [ maintainers.bugworm ];
   };
 }
