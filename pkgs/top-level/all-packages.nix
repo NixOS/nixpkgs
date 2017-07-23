@@ -14132,6 +14132,8 @@ with pkgs;
 
   gksu = callPackage ../applications/misc/gksu { };
 
+  gnss-sdr = callPackage ../applications/misc/gnss-sdr { };
+
   gnuradio = callPackage ../applications/misc/gnuradio {
     inherit (python2Packages) cheetah lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     fftw = fftwFloat;
