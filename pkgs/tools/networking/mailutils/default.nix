@@ -1,36 +1,58 @@
-{ fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, sasl, fribidi, gss , mysql, guile, texinfo,
-  gnum4, dejagnu, nettools }:
+{ stdenv, fetchurl, autoreconfHook, automake, dejagnu, gettext, libtool, pkgconfig
+, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
+, gss, mysql }:
 
 stdenv.mkDerivation rec {
-  name = "mailutils-2.2";
+  name = "${project}-${version}";
+  project = "mailutils";
+  version = "3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/mailutils/${name}.tar.bz2";
-    sha256 = "0szbqa12zqzldqyw97lxqax3ja2adis83i7brdfsxmrfw68iaf65";
+    url = "mirror://gnu/${project}/${name}.tar.xz";
+    sha256 = "0zh7xn8yvnw9zkc7gi5290i34viwxp1rn0g1q9nyvmckkvk59lwn";
   };
 
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [
+    autoreconfHook gettext libtool pkgconfig
+  ] ++ stdenv.lib.optional doCheck dejagnu;
 
-  patches = [ ./path-to-cat.patch ./no-gets.patch ./scm_c_string.patch ];
+  buildInputs = [
+    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
+    gss mysql.lib
+  ];
+
+  patches = [
+    ./fix-build-gentoo-bug-612712.patch
+    ./fix-build-mb-len-max.patch
+    ./fix-test-ali-awk.patch
+    ./path-to-cat.patch
+  ];
 
   postPatch = ''
+    sed -e '/AM_GNU_GETTEXT_VERSION/s/0.18/0.19/' -i configure.ac
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
-      */Makefile{,.in,.am}
+      */Makefile{.in,.am}
   '';
 
   configureFlags = [
-    "--with-gsasl"
-    "--with-gssapi=${gss}"
+    "--with-gssapi"
+    "--with-mysql"
   ];
 
-  buildInputs =
-   [ gettext gdbm libtool pam readline ncurses
-     gnutls mysql.lib guile texinfo gnum4 sasl fribidi gss nettools ]
-   ++ stdenv.lib.optional doCheck dejagnu;
+  preCheck = ''
+    # Add missing files.
+    cp ${./readmsg-tests}/* readmsg/tests/
+    # Disable comsat tests that fail without tty in the sandbox.
+    tty -s || echo > comsat/tests/testsuite.at
+    # Provide libraries for mhn.
+    export LD_LIBRARY_PATH=$(pwd)/lib/.libs
+  '';
+  postCheck = "unset LD_LIBRARY_PATH";
 
   doCheck = true;
+  enableParallelBuilding = true;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "Rich and powerful protocol-independent mail framework";
@@ -60,7 +82,7 @@ stdenv.mkDerivation rec {
       gpl3Plus /* tools */
     ];
 
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ orivej vrthra ];
 
     homepage = http://www.gnu.org/software/mailutils/;
 

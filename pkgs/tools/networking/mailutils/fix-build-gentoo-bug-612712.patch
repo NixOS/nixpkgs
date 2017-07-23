@@ -1,0 +1,70 @@
+From afbb33cf9ff750e93a9a4c1f51a3b62d584f056e Mon Sep 17 00:00:00 2001
+From: Sergey Poznyakoff <gray@gnu.org>
+Date: Sun, 19 Mar 2017 17:31:08 +0200
+Subject: Fix a bug in field-map handling.
+
+* libmailutils/cfg/driver.c (parse_mapping): Fix expected value type.
+* libmu_auth/sql.c (get_field): Remove left-over mu_assoc_ref call
+(see 622bc770).
+---
+ NEWS                      |  2 +-
+ libmailutils/cfg/driver.c |  7 ++++++-
+ libmu_auth/sql.c          | 11 +++++++----
+ 3 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/libmailutils/cfg/driver.c b/libmailutils/cfg/driver.c
+index 7da75a8..8af543d 100644
+--- a/libmailutils/cfg/driver.c
++++ b/libmailutils/cfg/driver.c
+@@ -617,10 +617,15 @@ static int
+ parse_mapping (void *item, void *data)
+ {
+   struct mapping_closure *clos = data;
+-  char *str = item;
++  struct mu_config_value *cval = item;
++  char const *str;
+   size_t len;
+   char *key, *val;
+   int rc;
++
++  if (mu_cfg_assert_value_type (cval, MU_CFG_STRING))
++    return 1;
++  str = cval->v.string;
+   
+   len = strcspn (str, "=");
+   if (str[len] == 0)
+diff --git a/libmu_auth/sql.c b/libmu_auth/sql.c
+index d69c36c..c50598d 100644
+--- a/libmu_auth/sql.c
++++ b/libmu_auth/sql.c
+@@ -214,20 +214,23 @@ mu_sql_expand_query (const char *query, const char *ustr)
+ static int
+ get_field (mu_sql_connection_t conn, const char *id, char **ret, int mandatory)
+ {
+-  const char **name = mu_assoc_ref (mu_sql_module_config.field_map, id);
+-  int rc = mu_sql_get_field (conn, 0, name ? *name : id, ret);
++  int rc;
++  const char *name = mu_assoc_get (mu_sql_module_config.field_map, id);
++  if (!name)
++    name = id;
++  rc = mu_sql_get_field (conn, 0, name, ret);
+   if (rc)
+     {
+       if (mandatory || rc != MU_ERR_NOENT)
+ 	mu_error (_("cannot get SQL field `%s' (`%s'): %s"),
+-		  id, name ? *name : id, mu_strerror (rc));
++		  id, name, mu_strerror (rc));
+     }
+   else if (!*ret)
+     {
+       if (mandatory)
+ 	{
+ 	  mu_error (_("SQL field `%s' (`%s') has NULL value"),
+-		    id, name ? *name : id);
++		    id, name);
+ 	  rc = MU_ERR_READ;
+ 	}
+       else
+-- 
+cgit v1.0-41-gc330
+
