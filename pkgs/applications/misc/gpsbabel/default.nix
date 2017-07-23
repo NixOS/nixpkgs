@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, qt4, which, IOKit }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "gpsbabel-${version}";
-  version = "1.5.3";
+  version = "1.5.4";
 
-  src = fetchurl {
-    # gpgbabel.org makes it hard to get the source tarball automatically, so
-    # get it from elsewhere.
-    url = "mirror://debian/pool/main/g/gpsbabel/gpsbabel_${version}.orig.tar.gz";
-    sha256 = "0l6c8911f7i5bbdzah9irhqf127ib0b7lv53rb8r9z8g439mznq1";
+  src = fetchFromGitHub {
+    owner = "gpsbabel";
+    repo = "gpsbabel";
+    rev = "gpsbabel_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0v6wpp14zkfbarmksf9dn3wmpj1araxd7xi5xp7gpl7kafb9aiwi";
   };
 
   patches = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib qt4 which ]
+  buildInputs = [ zlib qtbase which ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
