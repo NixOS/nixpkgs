@@ -17852,7 +17852,7 @@ with pkgs;
 
   plm = callPackage ../applications/science/programming/plm { };
 
-  scyther = callPackage_i686 ../applications/science/programming/scyther { };
+  scyther = callPackage ../applications/science/programming/scyther { };
 
   ### SCIENCE/LOGIC
 
