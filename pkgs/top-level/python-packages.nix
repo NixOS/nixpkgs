@@ -22865,7 +22865,8 @@ in {
       sha256 = "0fyniq37nnmhrk4j7mzvg6vfcpb624hb9x70g6mccyw4xrnhadv6";
     };
 
-    propagatedBuildInputs = with self; [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
+    buildInputs = [ setuptools_scm ];
+    propagatedBuildInputs = with self; [pyyaml jsonschema sphinxcontrib_httpdomain];
   });
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
@@ -25057,7 +25058,8 @@ EOF
     # Tests require `pyutil' so disable them to avoid circular references.
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ six setuptools_scm pkgs.xorg.libX11 ];
+    buildInputs = [ setuptools_scm ];
+    propagatedBuildInputs = with self; [ six pkgs.xorg.libX11 ];
 
     meta = {
       description = "Fully functional X client library for Python programs";

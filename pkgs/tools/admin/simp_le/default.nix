@@ -14,7 +14,8 @@ pythonPackages.buildPythonApplication rec {
     $out/bin/simp_le --test
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ acme setuptools_scm ];
+  buildInputs = with pythonPackages; [ setuptools_scm ];
+  propagatedBuildInputs = with pythonPackages; [ acme ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/zenhack/simp_le";

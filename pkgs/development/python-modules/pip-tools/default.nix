@@ -10,8 +10,8 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ pytest glibcLocales ];
-  propagatedBuildInputs = [ pip click six first setuptools_scm ];
+  buildInputs = [ pytest glibcLocales setuptools_scm ];
+  propagatedBuildInputs = [ pip click six first ];
 
   checkPhase = ''
     export HOME=$(mktemp -d)
