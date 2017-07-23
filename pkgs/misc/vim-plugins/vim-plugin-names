@@ -145,6 +145,7 @@
 "github:vim-scripts/random.vim"
 "github:vim-scripts/tabmerge"
 "github:vim-scripts/wombat256.vim"
+"github:w0rp/ale"
 "github:wakatime/vim-wakatime"
 "github:wincent/command-t"
 "github:xolox/vim-easytags"
