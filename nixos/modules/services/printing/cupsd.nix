@@ -34,7 +34,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
-      [ cups.out additionalBackends cups-filters pkgs.ghostscript ]
+      [ cups.out additionalBackends cups-filters pkgs.ghostscript pkgs.perl ]
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
     pathsToLink = [ "/lib" "/share/cups" "/bin" ];
