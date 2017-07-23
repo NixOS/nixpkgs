@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "4.1.1b1";
+  version = "4.1.1b2";
   name = "${pname}-${version}";
 
   disabled = (pythonOlder "2.7");
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1psf4sknxrjqiz833x4nmh2pw7xi2rvcm7l9lv8jfdwxza63sny5";
+    sha256 = "1lfqsll3wv1wzn98ymmcbw0yawj8ab3mxniws6kaxf99jd4a0xp4";
   };
 
   meta = {
