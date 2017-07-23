@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "http://git.gnu.org.ua/cgit/mailutils.git/patch/?id=afbb33cf9ff750e93a9a4c1f51a3b62d584f056e";
-      sha256 = "1w72ymxlkqj2y3gqd2r27g79hxw7xa6j790shsg9i5jhhz3vknjx";
+      sha256 = "0yzkfx3j1zkkb43fhchjqphw4xznbclj39bjzjggv32gppy6d1db";
+      excludes = [ "NEWS" ];
     })
     ./fix-build-mb-len-max.patch
     ./fix-test-ali-awk.patch
