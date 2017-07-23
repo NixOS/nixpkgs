@@ -912,14 +912,14 @@ nix-build -A haskell.packages.integer-simple.ghc802.scientific
   - The *Journey into the Haskell NG infrastructure* series of postings
     describe the new Haskell infrastructure in great detail:
 
-      - [Part 1](http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015591.html)
+      - [Part 1](https://nixos.org/nix-dev/2015-January/015591.html)
         explains the differences between the old and the new code and gives
         instructions how to migrate to the new setup.
 
-      - [Part 2](http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015608.html)
+      - [Part 2](https://nixos.org/nix-dev/2015-January/015608.html)
         looks in-depth at how to tweak and configure your setup by means of
         overrides.
 
-      - [Part 3](http://lists.science.uu.nl/pipermail/nix-dev/2015-April/016912.html)
+      - [Part 3](https://nixos.org/nix-dev/2015-April/016912.html)
         describes the infrastructure that keeps the Haskell package set in Nixpkgs
         up-to-date.
