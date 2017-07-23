@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "nixos";
     repo = "systemd";
     rev = "ba777535a890c2a2b7677dfacc63e12c578b9b3f";
-    sha256 = "1cj20zrfr8g0vkxiv3h9bbd89xbj3mrsij3rja1lbh4nkl5mcwpa";
+    sha256 = "1vb45fbqkrgczfwkb0y07ldnwhjqk2sh446hzfkdn8hrwl1lifg5";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ];
-
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -76,6 +75,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      unset RANLIB
+
       ./autogen.sh
 
       # FIXME: patch this in systemd properly (and send upstream).

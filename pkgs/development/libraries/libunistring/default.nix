@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
+  enableParallelBuilding = false;
+
   configureFlags = [
     "--with-libiconv-prefix=${libiconv}"
   ];

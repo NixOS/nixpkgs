@@ -60,6 +60,12 @@ stdenv.mkDerivation rec {
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;
 
+  preConfigure = ''
+    # Setting LD causes `configure' and `make' to disagree about which linker
+    # to use: `configure' wants `gcc', but `make' wants `ld'.
+    unset LD
+  '';
+
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [

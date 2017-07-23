@@ -873,4 +873,7 @@ self: super: {
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
+  # Needs a newer version of hsyslog than lts-8.x provides.
+  logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5_0_1; };
+
 }

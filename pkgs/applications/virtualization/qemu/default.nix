@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
+  preConfigure = ''
+    unset CPP # intereferes with dependency calculation
+  '';
+
   configureFlags =
     [ "--smbd=smbd" # use `smbd' from $PATH
       "--audio-drv-list=${audio}"
