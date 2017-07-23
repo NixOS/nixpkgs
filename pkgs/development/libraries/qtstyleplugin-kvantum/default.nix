@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ky44s1fgqxraywagx1mv07yz76ppgiz3prq447db78wkwqg2d8p";
   };
 
-  nativeBuildInputs = [ qmake qtbase qtsvg qtx11extras libX11 libXext qttools ];
+  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtbase qtsvg qtx11extras libX11 libXext  ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/Kvantum";
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A Linux SVG-based theme engine for Qt4/Qt5 and KDE";
+    description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl2;
     platforms = platforms.linux;
