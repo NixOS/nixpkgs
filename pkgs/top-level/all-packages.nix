@@ -18674,6 +18674,8 @@ with pkgs;
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
 
+  nix-index = callPackage ../tools/package-management/nix-index { };
+
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
     nix-prefetch-cvs
