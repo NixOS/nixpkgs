@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchgit, fetchpatch
 , autoconf, automake, bison, dejagnu, flex, gettext, git, libtool, pkgconfig, rsync, wget
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
 , gss, mysql }:
@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./fix-build-gentoo-bug-612712.patch
+    (fetchpatch {
+      url = "http://git.gnu.org.ua/cgit/mailutils.git/patch/?id=afbb33cf9ff750e93a9a4c1f51a3b62d584f056e";
+      sha256 = "1w72ymxlkqj2y3gqd2r27g79hxw7xa6j790shsg9i5jhhz3vknjx";
+    })
     ./fix-build-mb-len-max.patch
     ./fix-test-ali-awk.patch
     ./path-to-cat.patch
