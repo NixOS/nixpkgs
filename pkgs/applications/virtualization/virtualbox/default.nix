@@ -18,10 +18,10 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  extpack = "244e6f450cba64e0b025711050db3c43e6ce77e12cd80bcd08796315a90c8aaf";
-  extpackRev = "115126";
-  main = "fcc918000b8c5ece553541ec10a9182410a742b7266257c76dda895dcd389899";
-  version = "5.1.22";
+  extpack = "1952ikz4xsjgdd0pzdx1riwaingyhkxp0ind31yzqc4d0hp8l6b5";
+  extpackRev = "117012";
+  main = "0q5vjsih4ndn1b0s9l1ppxng6dljld5bin5nqfrhvgr2ldlv2bgf";
+  version = "5.1.24";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -88,7 +88,7 @@ in stdenv.mkDerivation {
   '';
 
   patches = optional enableHardening ./hardened.patch
-    ++ [ ./qtx11extras.patch ./linux-4.12.patch ];
+    ++ [ ./qtx11extras.patch ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
