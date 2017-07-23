@@ -16443,6 +16443,8 @@ with pkgs;
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
 
+  xxd = callPackage ../tools/misc/xxd { };
+
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
   qpdfview = callPackage ../applications/misc/qpdfview {};
