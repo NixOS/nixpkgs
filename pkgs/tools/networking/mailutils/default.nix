@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, autoreconfHook, automake, dejagnu, gettext, libtool, pkgconfig
+{ stdenv, fetchgit
+, autoconf, automake, bison, dejagnu, flex, gettext, git, libtool, pkgconfig, rsync, wget
 , gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
 , gss, mysql }:
 
@@ -7,13 +8,17 @@ stdenv.mkDerivation rec {
   project = "mailutils";
   version = "3.2";
 
-  src = fetchurl {
-    url = "mirror://gnu/${project}/${name}.tar.xz";
-    sha256 = "0zh7xn8yvnw9zkc7gi5290i34viwxp1rn0g1q9nyvmckkvk59lwn";
+  # Official release misses readmsg/tests/hdr.at, so we use git instead:
+  # url = "mirror://gnu/${project}/${name}.tar.xz";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/${project}.git";
+    rev = "release-3.2";
+    leaveDotGit = true;  # for ./bootstrap
+    sha256 = "1ixvxk1yv36ak2mgi1gbnr2xzfqz0p73x2lxwxlm1is2d9cvd1kh";
   };
 
   nativeBuildInputs = [
-    autoreconfHook gettext libtool pkgconfig
+    autoconf automake bison flex gettext git libtool pkgconfig rsync wget
   ] ++ stdenv.lib.optional doCheck dejagnu;
 
   buildInputs = [
@@ -33,6 +38,8 @@ stdenv.mkDerivation rec {
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \
       */Makefile{.in,.am}
+    git add gnulib
+    bash -ex bootstrap
   '';
 
   configureFlags = [
@@ -41,8 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   preCheck = ''
-    # Add missing files.
-    cp ${./readmsg-tests}/* readmsg/tests/
     # Disable comsat tests that fail without tty in the sandbox.
     tty -s || echo > comsat/tests/testsuite.at
     # Provide libraries for mhn.
