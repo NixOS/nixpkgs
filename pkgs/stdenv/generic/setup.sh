@@ -17,9 +17,10 @@ runHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+
+    eval "local -a dummy=(\"\${$var[@]}\")"
     local hook
-    for hook in "_callImplicitHook 0 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
         _eval "$hook" "$@"
     done
     return 0
@@ -33,9 +34,9 @@ runOneHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+    eval "local -a dummy=(\"\${$var[@]}\")"
     local hook
-    for hook in "_callImplicitHook 1 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
         if _eval "$hook" "$@"; then
             return 0
         fi
