@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ vala_0_32 pkgconfig gtk3 glib intltool itstool libxml2
                   bzip2 gnome3.totem-pl-parser libxslt
-                  gnome3.gsettings_desktop_schemas gnome3.dconf wrapGAppsHook
+                  gnome3.gsettings_desktop_schemas wrapGAppsHook
                   file gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite
                   upower libnotify evolution_data_server gnome3.libgee
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base flac
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GIO_EXTRA_MODULES "${gnome3.dconf}/lib/gio/modules"
       --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
     )
   '';

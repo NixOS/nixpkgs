@@ -2,7 +2,7 @@
 , pkgconfig, gtk3, glib, libnotify, gtkspell3
 , wrapGAppsHook, itstool, shared_mime_info, libical, db, gcr, sqlite
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu, libtool
-, libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit, dconf, openldap}:
+, libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit, openldap}:
 
 let
   majVer = gnome3.version;
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
                   libcanberra_gtk3 bogofilter gnome3.libgdata sqlite
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base p11_kit
                   nss nspr libnotify procps highlight gnome3.libgweather
-                  gnome3.gsettings_desktop_schemas dconf
+                  gnome3.gsettings_desktop_schemas
                   gnome3.libgnome_keyring gnome3.glib_networking openldap ];
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
@@ -31,10 +31,6 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-pst-import" "--disable-autoar"
                      "--disable-libcryptui" "--with-openldap"];
-
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES "${dconf}/lib/gio/modules")
-  '';
 
   NIX_CFLAGS_COMPILE = "-I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
