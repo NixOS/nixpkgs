@@ -13,7 +13,7 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        xorg.xclock
+        xorg.xclock xsettingsd
       ];
       description = ''
         Extra packages visible to session.

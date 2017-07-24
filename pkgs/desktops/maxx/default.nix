@@ -1,16 +1,16 @@
 { stdenv, fetchurl
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
-, libXinerama, libXdamage, libICE, libXtst
-, fontconfig, pango, cairo, glib, libxml2, atk, gtk2, gdk_pixbuf, mesa_noglu, ncurses5
+, libXinerama, libXdamage, libICE, libXtst, libXaw
+, fontconfig, pango, cairo, glib, libxml2, atk, gtk2, gdk_pixbuf, mesa_noglu, ncurses
 , bash }:
 
 let
-  version = "Indy-1.0.0";
+  version = "Indy-1.1.0";
 
   deps = [
     libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
-    libXinerama libXdamage libICE libXtst
-    stdenv.cc.cc fontconfig pango cairo glib libxml2 atk gtk2 gdk_pixbuf mesa_noglu ncurses5
+    libXinerama libXdamage libICE libXtst libXaw
+    stdenv.cc.cc fontconfig pango cairo glib libxml2 atk gtk2 gdk_pixbuf mesa_noglu ncurses
   ];
 in stdenv.mkDerivation {
   name = "MaXX-${version}";
@@ -18,11 +18,11 @@ in stdenv.mkDerivation {
   srcs = [
     (fetchurl {
       url = "http://maxxinteractive.com/downloads/${version}/FEDORA/MaXX-${version}-NO-ARCH.tar.gz";
-      sha256 = "004ia6xl8y2hmbq7j98ppgiwffjc62224x9q6w5z17sjibs8xcvx";
+      sha256 = "1d23j08wwrrn5cp7csv70pcz9jppcn0xb1894wkp0caaliy7g31y";
     })
     (fetchurl {
       url = "http://maxxinteractive.com/downloads/${version}/FEDORA/MaXX-${version}-x86_64.tar.gz";
-      sha256 = "134z7hinh01w43m6xiqgh939w5w79860g4kzsd911rfcl3z353av";
+      sha256 = "156p2lra184wyvibrihisd7cr1ivqaygsf0zfm26a12gx23b7708";
     })
   ];
 
@@ -47,7 +47,6 @@ in stdenv.mkDerivation {
 
     mv -- ./* "$maxx"
     ln -s $maxx/share/icons $out/share
-    ln -s $maxx/share/themes $out/share
   '';
 
   meta = with stdenv.lib; {
