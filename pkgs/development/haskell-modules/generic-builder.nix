@@ -311,7 +311,7 @@ stdenv.mkDerivation ({
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
-        printLines '#!${nodejs}/bin/node' > "$exe"
+        printf '%s\n' '#!${nodejs}/bin/node' > "$exe"
         cat "$exeDir/all.js" >> "$exe"
         chmod +x "$exe"
       done

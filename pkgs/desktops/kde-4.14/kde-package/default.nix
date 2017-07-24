@@ -86,7 +86,7 @@ rec {
        };})
         ''
           mkdir -pv $out/nix-support
-          printLines ${toString list} | tee $out/nix-support/propagated-user-env-packages
+          echo "${toString list}" | tee $out/nix-support/propagated-user-env-packages
         '';
 
   # Given manifest module data, return the module

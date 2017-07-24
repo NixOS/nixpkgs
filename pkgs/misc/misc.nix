@@ -23,7 +23,7 @@ in
   */
   collection = {list, name} : runCommand "collection-${name}" {} ''
     mkdir -p $out/nix-support
-    printLines ${builtins.toString list} > $out/nix-support/propagated-user-env-packages
+    echo ${builtins.toString list} > $out/nix-support/propagated-user-env-packages
   '';
 
   /* creates a derivation symlinking references C/C++ libs into one include and lib directory called $out/cdt-envs/${name}
