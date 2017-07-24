@@ -6002,7 +6002,9 @@ with pkgs;
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_38 // {
+      llvm = llvmPackages_38.llvm.override { enableSharedLibraries = false; };
+    };
     lua = lua5_1;
   };
 
