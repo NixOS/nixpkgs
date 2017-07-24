@@ -16,12 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gcr
                   gnome3.gsettings_desktop_schemas wrapGAppsHook gnupg
                   gdk_pixbuf gnome3.defaultIconTheme librsvg gpgme
-                  libsecret avahi libsoup p11_kit vala_0_32 gnome3.dconf
+                  libsecret avahi libsoup p11_kit vala_0_32
                   openssh ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GIO_EXTRA_MODULES "${gnome3.dconf}/lib/gio/modules"
       --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
     )
   '';

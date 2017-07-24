@@ -11,14 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ intltool pkgconfig ibus gtk glib gsettings_desktop_schemas networkmanager
-      dconf libnotify gnome_desktop lcms2 libXtst libxkbfile libpulseaudio
+      libnotify gnome_desktop lcms2 libXtst libxkbfile libpulseaudio
       libcanberra_gtk3 upower colord libgweather xkeyboard_config
       polkit geocode_glib geoclue2 librsvg xf86_input_wacom udev libgudev libwacom libxslt
       libtool docbook_xsl docbook_xsl_ns wrapGAppsHook gnome_themes_standard ];
-
-  preFixup = with gnome3; ''
-    gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules")
-  '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
