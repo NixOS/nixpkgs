@@ -15,13 +15,10 @@ buildPythonPackage rec {
 
   disabled = (pythonOlder "2.7");
 
-  propagatedBuildInputs = [ requests ]
-                             ++ stdenv.lib.optionals (!isPy3k) [ future ]
+  propagatedBuildInputs = [ requests future ]
                              ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
 
-  postPatch = (stdenv.lib.optionalString (isPy3k) ''
-    sed -i -e '/"future",/d' setup.py
-  '') + (stdenv.lib.optionalString (!pythonOlder "3.4") ''
+  postPatch = (stdenv.lib.optionalString (!pythonOlder "3.4") ''
     sed -i -e '/"enum34",/d' setup.py
   '');
 
