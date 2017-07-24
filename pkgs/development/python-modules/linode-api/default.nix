@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "4.1.1b2";
+  version = "4.1.1b2"; # NOTE: this is a beta, and the API may change in future versions.
   name = "${pname}-${version}";
 
   disabled = (pythonOlder "2.7");
@@ -21,6 +21,8 @@ buildPythonPackage rec {
   postPatch = (stdenv.lib.optionalString (!pythonOlder "3.4") ''
     sed -i -e '/"enum34",/d' setup.py
   '');
+
+  doCheck = false; # This library does not have any tests at this point.
 
   src = fetchPypi {
     inherit pname version;
