@@ -85,9 +85,10 @@ self: let
     inherit packages;
   };
 
-  haskellSrc2nix = { name, src, sha256 ? null }:
+  haskellSrc2nix = { name, src, sha256 ? null, opts ? null }:
     let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
+      subpathArg = if isNull opts || isNull opts.subpath then "" else ''--subpath=${opts.subpath}'';
     in pkgs.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
       buildInputs = [ pkgs.haskellPackages.cabal2nix ];
@@ -98,7 +99,7 @@ self: let
       installPhase = ''
         export HOME="$TMP"
         mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} "${src}" > "$out/default.nix"
+        cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} ${sha256Arg} ${subpathArg} "${src}" > "$out/default.nix"
       '';
   };
 
@@ -116,6 +117,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
+    callCabal2nixWithOpts = name: src: opts: self.callPackage (self.haskellSrc2nix { inherit src name opts; });
 
     # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
     # Given a set whose values are either paths or version strings, produces

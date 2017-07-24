@@ -877,4 +877,96 @@ self: super: {
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
 
+  # Hackage versions outdated and no longer compile cleanly
+  llvm-hs = super.llvm-hs.override { llvm-hs-pure = self.llvm-hs-pure_4_1_0_0; };
+
+  accelerate_1_0_0_0 = self.callCabal2nix "accelerate" (
+    pkgs.fetchFromGitHub {
+      owner = "AccelerateHS";
+      repo = "accelerate";
+      rev = "a4e5d51334f303a32ee45979f342f8c391b43da3";
+      sha256 = "1dmkahwv4a3w6f7rirb8b7k2lw7iynv7qv13xl64jy0qrf1r5mv7";
+    }
+  ) { };
+
+  accelerate-llvm = self.callCabal2nixWithOpts "accelerate-llvm" (
+    pkgs.fetchFromGitHub {
+      owner = "AccelerateHS";
+      repo = "accelerate-llvm";
+      rev = "c042c80388dac6b15fdb17d1f4f66b10d6c47e0a";
+      sha256 = "1dn9187hdbh442c0831nz6k54z1fzzy1vayachqsdm8j46zxyx4r";
+    }
+  ) { subpath = "accelerate-llvm"; } { accelerate = self.accelerate_1_0_0_0; };
+
+  # this one doesn't build on recent ghc
+  # accelerate-llvm-multidev = self.callCabal2nixWithOpts "accelerate-llvm-multidev" (
+  #   pkgs.fetchFromGitHub {
+  #     owner = "AccelerateHS";
+  #     repo = "accelerate-llvm";
+  #     rev = "c042c80388dac6b15fdb17d1f4f66b10d6c47e0a";
+  #     sha256 = "1dn9187hdbh442c0831nz6k54z1fzzy1vayachqsdm8j46zxyx4r";
+  #   }
+  # ) { subpath = "accelerate-llvm-multidev"; } { };
+
+  accelerate-llvm-native = self.callCabal2nixWithOpts "accelerate-llvm-native" (
+    pkgs.fetchFromGitHub {
+      owner = "AccelerateHS";
+      repo = "accelerate-llvm";
+      rev = "c042c80388dac6b15fdb17d1f4f66b10d6c47e0a";
+      sha256 = "1dn9187hdbh442c0831nz6k54z1fzzy1vayachqsdm8j46zxyx4r";
+    }
+  ) { subpath = "accelerate-llvm-native"; } { };
+
+  accelerate-llvm-ptx = self.callCabal2nixWithOpts "accelerate-llvm-ptx" (
+    pkgs.fetchFromGitHub {
+      owner = "AccelerateHS";
+      repo = "accelerate-llvm";
+      rev = "c042c80388dac6b15fdb17d1f4f66b10d6c47e0a";
+      sha256 = "1dn9187hdbh442c0831nz6k54z1fzzy1vayachqsdm8j46zxyx4r";
+    }
+  ) { subpath = "accelerate-llvm-ptx"; } { };
+
+  accelerate-io = super.accelerate-io.override { accelerate = self.accelerate_1_0_0_0; };
+
+  accelerate-examples = self.callCabal2nix "accelerate-examples" (
+    pkgs.fetchFromGitHub {
+      owner = "AccelerateHS";
+      repo = "accelerate-examples";
+      rev = "c6ae8402ab907bad83968650a529bc33aa7e0b65";
+      sha256 = "1sk2qw4vva20cay6b7xpnywr6mirfyaaw6w1g9ig1x8fyhddbg2j";
+    }
+  ) { };
+
+  colour-accelerate = self.callCabal2nix "colour-accelerate" (
+    pkgs.fetchFromGitHub {
+      owner = "tmcdonell";
+      repo = "colour-accelerate";
+      rev = "fc2a35b7793ba019230131d44173a14e22e410fb";
+      sha256 = "1qpqnlrlay2ymagyndb8pmd2iya3akaabs58gnihf6lhas91z7ds";
+    }
+  ) { accelerate = self.accelerate_1_0_0_0; };
+
+  gloss-accelerate = super.gloss-accelerate.override { accelerate = self.accelerate_1_0_0_0; };
+
+  cuda = let
+    cuda' = self.callCabal2nix "cuda" (
+            pkgs.fetchFromGitHub {
+              owner = "tmcdonell";
+              repo = "cuda";
+              rev = "b6e62e26a4a62cb94961c4b9fd9eca97ad04652e";
+              sha256 = "0q9m3z9plv3al669m67xdrha64fgqnb1lkhaaq2xbsspqzgvm5dx";
+            }
+          ) { };
+         in
+           overrideCabal cuda' (drv: {
+             extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
+             configureFlags = (drv.configureFlags or []) ++
+               pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
+               "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
+               "--extra-include-dirs=${pkgs.cudatoolkit}/include"
+             ];
+             preConfigure = ''
+               export CUDA_PATH=${pkgs.cudatoolkit}
+             '';
+           });
 }
