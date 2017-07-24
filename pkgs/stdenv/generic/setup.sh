@@ -77,32 +77,10 @@ _eval() {
 ######################################################################
 # Logging.
 
-nestingLevel=0
-
-startNest() {
-    # Assert natural as sanity check.
-    let nestingLevel+=1 "nestingLevel>=0"
-    echo -en "\033[$1p"
-}
-
-stopNest() {
-    # Assert natural as sanity check.
-    let nestingLevel-=1 "nestingLevel>=0"
-    echo -en "\033[q"
-}
-
-header() {
-    startNest "$2"
-    echo "$1"
-}
-
-# Make sure that even when we exit abnormally, the original nesting
-# level is properly restored.
-closeNest() {
-    while [ $nestingLevel -gt 0 ]; do
-        stopNest
-    done
-}
+# Obsolete.
+stopNest() { true; }
+header() { echo "$1"; }
+closeNest() { true; }
 
 # Prints a command such that all word splits are unambiguous. We need
 # to split the command in three parts because the middle format string
@@ -122,8 +100,6 @@ echoCmd() {
 exitHandler() {
     exitCode=$?
     set +e
-
-    closeNest
 
     if [ -n "$showBuildStats" ]; then
         times > "$NIX_BUILD_TOP/.times"
@@ -593,7 +569,6 @@ unpackFile() {
         echo "do not know how to unpack source archive $curSrc"
         exit 1
     fi
-    stopNest
 }
 
 
@@ -688,7 +663,6 @@ patchPhase() {
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
-        stopNest
     done
 
     runHook postPatch
@@ -973,8 +947,6 @@ genericBuild() {
             echo
             echo "@ phase-succeeded $out $curPhase"
         fi
-
-        stopNest
     done
 }
 
