@@ -79,7 +79,7 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
         case $libPath in
             *\ $path\ *) return 0 ;;
         esac
-        libPath="$libPath $path "
+        libPath+=" $path "
     }
 
     addToRPath() {
@@ -90,12 +90,12 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
         case $rpath in
             *\ $1\ *) return 0 ;;
         esac
-        rpath="$rpath $1 "
+        rpath+=" $1 "
     }
 
     libs=""
     addToLibs() {
-        libs="$libs $1"
+        libs+=" $1"
     }
 
     rpath=""
