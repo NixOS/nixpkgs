@@ -208,7 +208,7 @@ let
             "${ipCommand} link set up dev ${name}"
 
             (map (peer: (map (ip:
-            "${ipCommand} route add ${ip} dev ${name}"
+            "${ipCommand} route replace ${ip} dev ${name}"
             ) peer.allowedIPs)) values.peers)
 
             values.postSetup

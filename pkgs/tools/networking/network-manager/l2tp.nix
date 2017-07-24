@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, intltool, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
 , networkmanager, ppp, xl2tpd, strongswan, libsecret
 , withGnome ? true, gnome3, networkmanagerapplet }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ networkmanager ppp libsecret ]
     ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring networkmanagerapplet ];
 
-  nativeBuildInputs = [ automake autoconf libtool intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig ];
 
   postPatch = ''
     sed -i -e 's%"\(/usr/sbin\|/usr/pkg/sbin\|/usr/local/sbin\)/[^"]*",%%g' ./src/nm-l2tp-service.c
@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
       --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
   '';
 
-  preConfigure = "./autogen.sh";
+  preConfigure = ''
+    intltoolize -f
+  '';
 
   configureFlags =
     if withGnome then "--with-gnome" else "--without-gnome";
