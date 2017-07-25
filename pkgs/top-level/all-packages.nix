@@ -3918,6 +3918,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  quota = callPackage ../tools/misc/quota { };
+
   wiggle = callPackage ../development/tools/wiggle { };
 
   radamsa = callPackage ../tools/security/radamsa { };
