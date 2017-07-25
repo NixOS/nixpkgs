@@ -210,6 +210,11 @@ printLines() {
     printf '%s\n' "$@"
 }
 
+printWords() {
+    [[ "$#" -gt 0 ]] || return 0
+    printf '%s ' "$@"
+}
+
 ######################################################################
 # Initialisation.
 
@@ -291,12 +296,10 @@ findInputs() {
     fi
 
     if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        local fd pkgNext
-        exec {fd}<"$pkg/nix-support/$propagatedBuildInputsFile"
-        while IFS= read -r -u $fd pkgNext; do
+        local pkgNext
+        for pkgNext in $(< "$pkg/nix-support/$propagatedBuildInputsFile"); do
             findInputs "$pkgNext" "$var" "$propagatedBuildInputsFile"
         done
-        exec {fd}<&-
     fi
 }
 
@@ -814,19 +817,19 @@ fixupPhase() {
         if [ -n "$propagated" ]; then
             mkdir -p "${!outputDev}/nix-support"
             # shellcheck disable=SC2086
-            printLines $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
+            printWords $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     else
         if [ -n "$propagatedBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
             # shellcheck disable=SC2086
-            printLines $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
+            printWords $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
         fi
 
         if [ -n "$propagatedNativeBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
             # shellcheck disable=SC2086
-            printLines $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
+            printWords $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     fi
 
@@ -840,7 +843,7 @@ fixupPhase() {
     if [ -n "$propagatedUserEnvPkgs" ]; then
         mkdir -p "${!outputBin}/nix-support"
         # shellcheck disable=SC2086
-        printLines $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup
