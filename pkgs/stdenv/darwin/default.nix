@@ -50,6 +50,8 @@ in rec {
     args    = [ ./unpack-bootstrap-tools.sh ];
 
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
+    reexportedLibrariesFile =
+      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
     __sandboxProfile = binShClosure + libSystemProfile;
   };
