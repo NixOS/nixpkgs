@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -63,7 +63,13 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
-
+  patches = [
+    (fetchpatch { # Make distutils choose CXX to compile C++, see https://bugs.python.org/issue1222585
+      url = "https://bugs.python.org/file47046/python-3.x-distutils-C++.patch";
+      sha256 = "0dgdn9k2kmw4wh90vdnjcrnn97ylxgx7mbn9l87fwz6j501jqvk8";
+      addPrefixes = true;
+    })
+  ];
   postPatch = ''
     # Determinism
     substituteInPlace "Lib/py_compile.py" --replace "source_stats['mtime']" "(1 if 'DETERMINISTIC_BUILD' in os.environ else source_stats['mtime'])"
