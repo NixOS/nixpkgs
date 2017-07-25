@@ -5833,7 +5833,7 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  elasticsearch = buildPythonPackage (rec {
+  elasticsearch_1 = buildPythonPackage (rec {
     name = "elasticsearch-1.9.0";
 
     src = pkgs.fetchurl {
@@ -5855,6 +5855,7 @@ in {
     };
   });
 
+  elasticsearch = callPackage ../development/python-modules/elasticsearch{ };
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
@@ -18318,7 +18319,7 @@ in {
 
     # Tests require a local instance of elasticsearch
     doCheck = false;
-    propagatedBuildInputs = with self; [ elasticsearch six simplejson certifi ];
+    propagatedBuildInputs = with self; [ elasticsearch_1 six simplejson certifi ];
     buildInputs = with self; [ nose mock ];
 
     meta = {
