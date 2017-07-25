@@ -435,6 +435,9 @@ rec {
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
+          # Do not import the base image configuration and manifest
+          rm -f image/*.json
+          rm -f image/manifest.json
 
           if [[ -z "$fromImageName" ]]; then
             fromImageName=$(jshon -k < image/repositories|head -n1)
