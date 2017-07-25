@@ -211,7 +211,7 @@ stdenv.mkDerivation ({
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
     # nativePkgs defined in stdenv/setup.hs
-    for p in "''${!nativePkgs[@]}"; do
+    for p in "''${nativePkgs[@]}"; do
       if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
         cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue

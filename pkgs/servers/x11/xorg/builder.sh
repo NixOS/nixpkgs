@@ -18,14 +18,14 @@ postInstall() {
 
     for r in $requires; do
         if test -n "$crossConfig"; then
-            for p in "${!crossPkgs[@]}"; do
+            for p in "${crossPkgs[@]}"; do
                 if test -e $p/lib/pkgconfig/$r.pc; then
                     echo "  found requisite $r in $p"
                     propagatedBuildInputs="$propagatedBuildInputs $p"
                 fi
             done
         else
-            for p in "${!nativePkgs[@]}"; do
+            for p in "${nativePkgs[@]}"; do
                 if test -e $p/lib/pkgconfig/$r.pc; then
                     echo "  found requisite $r in $p"
                     propagatedNativeBuildInputs="$propagatedNativeBuildInputs $p"

@@ -17,9 +17,10 @@ runHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+
+    local varRef="$var[@]"
     local hook
-    for hook in "_callImplicitHook 0 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 0 $hookName" "${!varRef}"; do
         _eval "$hook" "$@"
     done
     return 0
@@ -33,9 +34,10 @@ runOneHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+
+    local varRef="$var[@]"
     local hook
-    for hook in "_callImplicitHook 1 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 1 $hookName" "${!varRef}"; do
         if _eval "$hook" "$@"; then
             return 0
         fi
@@ -271,12 +273,22 @@ runHook addInputsHook
 findInputs() {
     local pkg="$1"
     local var="$2"
-    local -n varDeref="$var"
     local propagatedBuildInputsFile="$3"
 
-    # Stop if we've already added this one
-    [[ -z "${varDeref["$pkg"]}" ]] || return 0
-    varDeref["$pkg"]=1
+    # TODO(@Ericson2314): Restore using associative array once Darwin
+    # nix-shell doesn't use impure bash. This should replace the O(n)
+    # case with an O(1) hash map lookup, assuming bash is implemented
+    # well :D.
+    local varRef="$var[*]"
+
+    case "${!varRef}" in
+        *" $pkg "*) return 0 ;;
+    esac
+
+    # For some reason, bash gives us some (hopefully limited) eval
+    # "for free"! Everything is single-quoted except for `"$var"`
+    # so `var` is expanded first.
+    declare -g "$var"'=("${'"$var"'[@]}" "$pkg")'
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
@@ -306,19 +318,19 @@ findInputs() {
 if [ -z "$crossConfig" ]; then
     # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
     # are handled identically to nativeBuildInputs
-    declare -gA nativePkgs
+    declare -ga nativePkgs
     for i in $nativeBuildInputs $buildInputs \
              $defaultNativeBuildInputs $defaultBuildInputs \
              $propagatedNativeBuildInputs $propagatedBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
 else
-    declare -gA crossPkgs
+    declare -ga crossPkgs
     for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
         findInputs "$i" crossPkgs propagated-build-inputs
     done
 
-    declare -gA nativePkgs
+    declare -ga nativePkgs
     for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
@@ -334,7 +346,7 @@ _addToNativeEnv() {
     runHook envHook "$pkg"
 }
 
-for i in "${!nativePkgs[@]}"; do
+for i in "${nativePkgs[@]}"; do
     _addToNativeEnv "$i"
 done
 
@@ -345,7 +357,7 @@ _addToCrossEnv() {
     runHook crossEnvHook "$pkg"
 }
 
-for i in "${!crossPkgs[@]}"; do
+for i in "${crossPkgs[@]}"; do
     _addToCrossEnv "$i"
 done
 
