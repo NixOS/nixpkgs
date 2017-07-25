@@ -363,17 +363,6 @@ rec {
 
   };
 
-  forms = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "forms-2012-11-28";
-    src = fetchgit {
-      url = "git://github.com/megaannum/forms";
-      rev = "b601e03fe0a3b8a43766231f4a6217e4492b4f75";
-      sha256 = "19kp1i5c6jmnpbsap9giayqbzlv7vh02mp4mjvicqj9n0nfyay74";
-    };
-    dependencies = ["self"];
-
-  };
-
   fugitive = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "fugitive-2017-07-12";
     src = fetchgit {
@@ -1129,6 +1118,28 @@ rec {
 
   };
 
+  forms = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "forms-2012-11-28";
+    src = fetchgit {
+      url = "https://github.com/megaannum/forms";
+      rev = "b601e03fe0a3b8a43766231f4a6217e4492b4f75";
+      sha256 = "19kp1i5c6jmnpbsap9giayqbzlv7vh02mp4mjvicqj9n0nfyay74";
+    };
+    dependencies = ["self"];
+
+  };
+
+  self = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "self-2014-05-28";
+    src = fetchgit {
+      url = "https://github.com/megaannum/self";
+      rev = "2ed666b547eddee6ae1fcc63babca4ba0b66a59f";
+      sha256 = "1gcwn6i5i3msg7hrlzsnv1bs6pm4jz9cff8ppaz2xdj8xv9qy6fn";
+    };
+    dependencies = [];
+
+  };
+
   vim-startify = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-startify-2017-06-15";
     src = fetchgit {
@@ -1778,6 +1789,17 @@ rec {
 
   };
 
+  ale = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ale-2017-07-23";
+    src = fetchgit {
+      url = "https://github.com/w0rp/ale";
+      rev = "a0059cfe0362e8ba55bad1f4fa8a310c74b55280";
+      sha256 = "0hjli8ww0i4yxa7gxiyvy9xgc9s8krr7vhdh8036nwwnrzrmcc5h";
+    };
+    dependencies = [];
+
+  };
+
   vim-wakatime = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-wakatime-2017-07-03";
     src = fetchgit {
@@ -1938,17 +1960,6 @@ rec {
       url = "git://github.com/kien/rainbow_parentheses.vim";
       rev = "eb8baa5428bde10ecc1cb14eed1d6e16f5f24695";
       sha256 = "1qw84imlhq4654mxazj7j3sp5g1j3yjxi496i08iix06dm15m5s7";
-    };
-    dependencies = [];
-
-  };
-
-  self = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "self-2014-05-28";
-    src = fetchgit {
-      url = "git://github.com/megaannum/self";
-      rev = "2ed666b547eddee6ae1fcc63babca4ba0b66a59f";
-      sha256 = "1gcwn6i5i3msg7hrlzsnv1bs6pm4jz9cff8ppaz2xdj8xv9qy6fn";
     };
     dependencies = [];
 
