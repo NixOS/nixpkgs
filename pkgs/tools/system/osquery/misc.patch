@@ -1,0 +1,126 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a976a46d..73a95575 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -125,14 +125,13 @@ else()
+     set(CXX_COMPILE_FLAGS "${CXX_COMPILE_FLAGS} -std=c++14 -stdlib=libc++")
+   else()
+     set(LINUX TRUE)
+-    set(CXX_COMPILE_FLAGS "${CXX_COMPILE_FLAGS} -std=c++14 -stdlib=libstdc++")
++    set(CXX_COMPILE_FLAGS "${CXX_COMPILE_FLAGS} -std=c++14")
+   endif()
+   set(POSIX TRUE)
+ endif()
+ 
+ if(POSIX)
+   add_compile_options(
+-    -Qunused-arguments
+     -Wstrict-aliasing
+     -Wno-missing-field-initializers
+     -Wno-unused-local-typedef
+@@ -154,7 +153,6 @@ if(POSIX)
+   )
+   if(NOT FREEBSD)
+     add_compile_options(
+-      -Werror=shadow
+       -fvisibility=hidden
+       -fvisibility-inlines-hidden
+     )
+@@ -439,6 +437,8 @@ endif()
+ 
+ if(APPLE)
+   LOG_PLATFORM("OS X")
++elseif(OSQUERY_BUILD_PLATFORM STREQUAL "nixos")
++  LOG_PLATFORM("NixOS")
+ elseif(OSQUERY_BUILD_PLATFORM STREQUAL "debian")
+   LOG_PLATFORM("Debian")
+ elseif(OSQUERY_BUILD_PLATFORM STREQUAL "ubuntu")
+diff --git a/include/osquery/core.h b/include/osquery/core.h
+index b597edee..b0628037 100644
+--- a/include/osquery/core.h
++++ b/include/osquery/core.h
+@@ -15,8 +15,9 @@
+ #include <string>
+ #include <vector>
+ 
+-#if defined(__APPLE__) || defined(__FreeBSD__)
++#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__linux__)
+ #include <boost/thread/shared_mutex.hpp>
++#include <boost/thread/recursive_mutex.hpp>
+ #else
+ #include <shared_mutex>
+ #endif
+@@ -188,7 +189,7 @@ inline bool isPlatform(PlatformType a, const PlatformType& t = kPlatformType) {
+   return (static_cast<int>(t) & static_cast<int>(a)) != 0;
+ }
+ 
+-#if defined(__APPLE__) || defined(__FreeBSD__)
++#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__linux__)
+ #define MUTEX_IMPL boost
+ #else
+ #define MUTEX_IMPL std
+@@ -204,10 +205,10 @@ using WriteLock = MUTEX_IMPL::unique_lock<Mutex>;
+ using ReadLock = MUTEX_IMPL::shared_lock<Mutex>;
+ 
+ /// Helper alias for defining recursive mutexes.
+-using RecursiveMutex = std::recursive_mutex;
++using RecursiveMutex = MUTEX_IMPL::recursive_mutex;
+ 
+ /// Helper alias for write locking a recursive mutex.
+-using RecursiveLock = std::lock_guard<std::recursive_mutex>;
++using RecursiveLock = MUTEX_IMPL::lock_guard<MUTEX_IMPL::recursive_mutex>;
+ }
+ 
+ /**
+diff --git a/osquery/CMakeLists.txt b/osquery/CMakeLists.txt
+index 77913d31..c833c289 100644
+--- a/osquery/CMakeLists.txt
++++ b/osquery/CMakeLists.txt
+@@ -157,6 +157,7 @@ ADD_OSQUERY_LINK_ADDITIONAL("cppnetlib-client-connections${WO_KEY}")
+ ADD_OSQUERY_LINK_CORE("glog${WO_KEY}")
+ 
+ if(POSIX)
++  ADD_OSQUERY_LINK_ADDITIONAL("benchmark")
+   ADD_OSQUERY_LINK_ADDITIONAL("snappy")
+   ADD_OSQUERY_LINK_ADDITIONAL("ssl")
+   ADD_OSQUERY_LINK_ADDITIONAL("crypto")
+@@ -336,13 +337,6 @@ if(NOT OSQUERY_BUILD_SDK_ONLY)
+ 
+   install(DIRECTORY "${CMAKE_SOURCE_DIR}/packs/"
+     DESTINATION "${CMAKE_INSTALL_PREFIX}/share/osquery/packs" COMPONENT main)
+-  if(APPLE)
+-    install(FILES "${CMAKE_SOURCE_DIR}/tools/deployment/com.facebook.osqueryd.plist"
+-      DESTINATION "${CMAKE_INSTALL_PREFIX}/share/osquery/" COMPONENT main)
+-  else()
+-    install(PROGRAMS "${CMAKE_SOURCE_DIR}/tools/deployment/osqueryd.initd"
+-      DESTINATION "/etc/init.d/" RENAME "osqueryd" COMPONENT main)
+-  endif()
+ endif()
+ 
+ if(NOT SKIP_TESTS)
+diff --git a/osquery/tables/system/linux/tests/md_tables_tests.cpp b/osquery/tables/system/linux/tests/md_tables_tests.cpp
+index 126be362..119d361d 100644
+--- a/osquery/tables/system/linux/tests/md_tables_tests.cpp
++++ b/osquery/tables/system/linux/tests/md_tables_tests.cpp
+@@ -72,7 +72,7 @@ void GetDrivesForArrayTestHarness(std::string arrayName,
+   EXPECT_CALL(md, getArrayInfo(arrayDevPath, _))
+       .WillOnce(DoAll(SetArgReferee<1>(arrayInfo), Return(true)));
+ 
+-  Sequence::Sequence s1;
++  Sequence s1;
+   for (int i = 0; i < MD_SB_DISKS; i++) {
+     mdu_disk_info_t diskInfo;
+     diskInfo.number = i;
+diff --git a/specs/windows/services.table b/specs/windows/services.table
+index 4ac24ee9..657d8b99 100644
+--- a/specs/windows/services.table
++++ b/specs/windows/services.table
+@@ -12,7 +12,7 @@ schema([
+     Column("path", TEXT, "Path to Service Executable"),
+     Column("module_path", TEXT, "Path to ServiceDll"),
+     Column("description", TEXT, "Service Description"),
+-    Column("user_account", TEXT, "The name of the account that the service process will be logged on as when it runs. This name can be of the form Domain\UserName. If the account belongs to the built-in domain, the name can be of the form .\UserName."),
++    Column("user_account", TEXT, "The name of the account that the service process will be logged on as when it runs. This name can be of the form Domain\\UserName. If the account belongs to the built-in domain, the name can be of the form .\\UserName."),
+ ])
+ implementation("system/windows/services@genServices")
+ examples([
