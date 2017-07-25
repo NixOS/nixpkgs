@@ -87,6 +87,40 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
+  testParseDomain = {
+    expr = map strings.parseDomain [
+      "nixos.org" "foo.bar.baz" "foo" ""
+      "...." "foo..bar" "foo." ".foo"
+    ];
+    expected = [
+      { components = ["nixos" "org"]; }
+      { components = ["foo" "bar" "baz"]; }
+      { components = ["foo"]; }
+      { components = []; }
+      null null null null
+    ];
+  };
+
+  testParseEmail = {
+    expr = map strings.parseEmail [
+      "hydra@nixos.org"
+      "hydra(comment)@nixos.org"
+      "\"quoted\"@nixos.org"
+      ""
+      "invalid"
+      "invalid@"
+      ".invalid@nixos.org"
+      "invalid.@nixos.org"
+      "invalid@garbage@nixos.org"
+    ];
+    expected = [
+      { localPart = "hydra";          domain = "nixos.org"; }
+      { localPart = "hydra(comment)"; domain = "nixos.org"; }
+      { localPart = "\"quoted\"";     domain = "nixos.org"; }
+      null null null null null null
+    ];
+  };
+
   testIsStorePath =  {
     expr =
       let goodPath =

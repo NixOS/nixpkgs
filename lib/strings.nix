@@ -497,4 +497,108 @@ rec {
        => "1.0"
   */
   fileContents = file: removeSuffix "\n" (builtins.readFile file);
+
+  /* Parse a domain name, as described by IETF RFC 1035.
+     This function does not support internationalized domain names.
+
+     Example:
+       parseDomain "nixos.org"
+       => { components = ["nixos" "org"]; }
+
+       parseDomain "foo.bar.baz"
+       => { components = ["foo" "bar" "baz"]; }
+
+       parseDomain "foo"
+       => { components = ["foo"]; }
+
+       parseDomain ""
+       => { components = []; }
+
+       parseDomain "...."
+       => null
+
+       parseDomain "foo..bar"
+       => null
+
+       parseDomain "foo."
+       => null
+
+       parseDomain ".foo"
+       => null
+  */
+  parseDomain = domain: (
+    with rec {
+      b = builtins;
+      stripWhitespace = input: (
+        concatStrings
+        (b.filter (x: !(b.elem x [" " "\n" "\r"])) (stringToCharacters input)));
+      regex = stripWhitespace ''
+        (      [[:alpha:]] ([[:alnum:]\-]* [[:alnum:]])?
+          ([.] [[:alpha:]] ([[:alnum:]\-]* [[:alnum:]])? )*
+        )?
+      '';
+      mayFail = b.tryEval (
+        assert b.isString domain;
+        assert b.stringLength domain >= 0;
+        assert b.stringLength domain <= 253;
+        assert b.match ("^" + regex + "$") domain != null;
+        with { split = if domain == "" then [] else splitString "." domain; };
+        assert (b.filter (x: x == "") split) == [];
+        { components = split; });
+    };
+    if mayFail.success then mayFail.value else null);
+
+  /* Parse an email contained in a string. This will accept some invalid email
+     addresses; in particular, there are no restrictions on the characters used
+     in the local-part and the domain other than:
+
+     1. The local-part and domain cannot contain an "@" character.
+     2. The local-part and domain cannot begin with a "." character.
+     3. The local-part and domain cannot end with a "." character.
+
+     This parser should accept all valid email addresses as described in
+     section 3.4 of IETF RFC 5322.
+
+     Example:
+       parseEmail "hydra@nixos.org"
+       => { domain = "nixos.org"; localPart = "hydra"; }
+
+       parseEmail "hydra(comment)@nixos.org"
+       => { domain = "nixos.org"; localPart = "hydra(comment)"; }
+
+       parseEmail "\"quoted\"@nixos.org"
+       => { domain = "nixos.org"; localPart = "\"quoted\""; }
+
+       parseEmail ""
+       => null
+
+       parseEmail "invalid"
+       => null
+
+       parseEmail "invalid@"
+       => null
+
+       parseEmail ".invalid@nixos.org"
+       => null
+
+       parseEmail "invalid.@nixos.org"
+       => null
+
+       parseEmail "invalid@garbage@nixos.org"
+       => null
+  */
+  parseEmail = email: (
+    with rec {
+      b = builtins;
+      regex   = "^([^.@][^@]*[^.@]|[^.@])@([^.@][^@]*[^.@]|[^.@])$";
+      matched = b.match regex email;
+      mayFail = b.tryEval (
+        assert (b.isString email) && (b.stringLength email <= 254);
+        assert (b.isList matched) && (b.length matched == 2);
+        with { localPart = b.elemAt matched 0; domain = b.elemAt matched 1; };
+        assert (b.isString localPart) && (b.stringLength localPart <= 64);
+        assert (b.isString domain)    && (b.stringLength domain    <= 255);
+        { inherit localPart domain; });
+    };
+    if mayFail.success then mayFail.value else null);
 }
