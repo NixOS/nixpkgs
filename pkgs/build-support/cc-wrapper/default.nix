@@ -147,6 +147,7 @@ stdenv.mkDerivation {
   inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
+  outputs = [ "out" "man" ];
 
   passthru = {
     inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
@@ -166,7 +167,7 @@ stdenv.mkDerivation {
 
   buildCommand =
     ''
-      mkdir -p $out/bin $out/nix-support
+      mkdir -p $out/bin $out/nix-support $man/nix-support
 
       wrap() {
         local dst="$1"
@@ -277,7 +278,8 @@ stdenv.mkDerivation {
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      echo ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      echo ${cc} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      echo ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
 
       echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
