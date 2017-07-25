@@ -111,4 +111,6 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
+  hasNoDataOutput = drv: overrideCabal drv (drv: { hasDataDir = false; });
+  hasNoDocOutput = drv: overrideCabal drv (drv: { hasDocDir = false; });
 }
