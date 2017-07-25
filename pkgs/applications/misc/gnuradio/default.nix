@@ -65,8 +65,11 @@ stdenv.mkDerivation rec {
 
   setupHook = [ grcSetupHook ];
 
+  # patch wxgui and pygtk check due to python importerror in a headless environment
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable -std=c++11"
+    sed -i 's/.*wx\.version.*/set(WX_FOUND TRUE)/g' gr-wxgui/CMakeLists.txt
+    sed -i 's/.*pygtk_version.*/set(PYGTK_FOUND TRUE)/g' grc/CMakeLists.txt
   '';
 
   # Framework path needed for qwt6_qt4 but not qwt5
