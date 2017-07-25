@@ -5227,7 +5227,7 @@ with pkgs;
   gambit = callPackage ../development/compilers/gambit { };
   gerbil = callPackage ../development/compilers/gerbil { };
 
-  gcc = gcc6;
+  gcc = gcc7;
   gcc-unwrapped = gcc.cc;
 
   wrapCCMulti = cc:
