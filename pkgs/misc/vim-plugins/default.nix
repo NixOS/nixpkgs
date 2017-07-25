@@ -1790,11 +1790,11 @@ rec {
   };
 
   command-t = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "command-t-2017-07-11";
+    name = "command-t-2017-06-23";
     src = fetchgit {
       url = "https://github.com/wincent/command-t";
-      rev = "85949ce7a70a26abf6f9d355e38d1473facba022";
-      sha256 = "1q1vdzyfwqnm5z88n0rzgy47ycv74yn44885v57ws0qvm3bv8b8h";
+      rev = "29f2606a9665058a98b56f2d8062ba614a3f246e";
+      sha256 = "0q6kqjy88w1478k2q6vqyyid69whd72746i0cd33xnslgykwm2hn";
     };
     dependencies = [];
     buildInputs = [ perl ruby git ];
