@@ -10065,6 +10065,8 @@ with pkgs;
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
 
+  rapidjson = callPackage ../development/libraries/rapidjson {};
+
   raul = callPackage ../development/libraries/audio/raul { };
 
   readline = readline6;
