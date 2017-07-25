@@ -9381,6 +9381,8 @@ with pkgs;
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
+  lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
+
   linenoise = callPackage ../development/libraries/linenoise { };
 
   linenoise-ng = callPackage ../development/libraries/linenoise-ng { };
