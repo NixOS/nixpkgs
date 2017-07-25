@@ -21662,14 +21662,23 @@ in {
   };
 
   sqlobject = buildPythonPackage rec {
-    version = "3.0.0";
-    name = "sqlobject-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLObject/SQLObject-${version}.tar.gz";
-      sha256 = "15g3g7f4yiyplqf54px1dsnmrw3jb7xwx97z8qzgp9ijmm5vpr8r";
+    pname = "SQLObject";
+    version = "3.3.0";
+    name = "${pname}-${version}";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0p2dxrxh7xrv5yys09v5z95d0z40w22aq3xc01ghdidd7hr79xy9";
     };
 
-    propagatedBuildInputs = with self; [ pydispatcher FormEncode ];
+    checkInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [
+      FormEncode
+      PasteDeploy
+      paste
+      pydispatcher
+    ];
 
     meta = {
       description = "Object Relational Manager for providing an object interface to your database";
