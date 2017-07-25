@@ -2,13 +2,12 @@
 
 buildPythonPackage rec {
   pname = "FormEncode";
-  version = "1.3.0";
+  version = "1.3.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "0y5gywq0l79l85ylr55p4xy0h921zgmfw6zmrvlh83aa4j074xg6";
+    sha256 = "1xm77h2mds2prlaz0z4nzkx13g61rx5c2v3vpgjq9d5ij8bzb8md";
   };
 
   buildInputs = [ dns pycountry nose ];
