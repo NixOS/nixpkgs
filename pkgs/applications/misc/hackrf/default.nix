@@ -1,23 +1,23 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libusb }:
+{ stdenv, fetchgit, cmake, pkgconfig, libusb, fftwSinglePrec }:
 
 stdenv.mkDerivation rec {
   name = "hackrf-${version}";
-  version = "2015.07.2";
+  version = "2017.02.1";
 
   src = fetchgit {
     url = "git://github.com/mossmann/hackrf";
     rev = "refs/tags/v${version}";
-    sha256 = "1mn11yz6hbkmvrbxj5vnp78m5dsny96821a9ffpvbdcwx3s2p23m";
+    sha256 = "16hd61icvzaciv7s9jpgm9c8q6m4mwvj97gxrb20sc65p5gjb7hv";
   };
 
   buildInputs = [
-    cmake pkgconfig libusb
+    cmake pkgconfig libusb fftwSinglePrec
   ];
-  
+
   preConfigure = ''
-    cd host  
+    cd host
   '';
-  
+
   meta = with stdenv.lib; {
     description = "An open source SDR platform";
     homepage = http://greatscottgadgets.com/hackrf/;
