@@ -15898,9 +15898,8 @@ with pkgs;
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
-  retroshare = callPackage ../applications/networking/p2p/retroshare { };
-
-  retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix { });
+  retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
+  retroshare06 = retroshare;
 
   ricochet = libsForQt56.callPackage ../applications/networking/instant-messengers/ricochet { };
 
