@@ -1,4 +1,4 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, openssl_1_0_2, libxml2 makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, openssl_1_0_2, libxml2, makeWrapper }:
 
 let
 
