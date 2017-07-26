@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook gettext libtool pkgconfig
   ] ++ stdenv.lib.optional doCheck dejagnu;
-
   buildInputs = [
     gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
     gss mysql.lib
@@ -26,12 +25,23 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "${p}/mailutils-3.2-fix-build.patch";
+      url = "https://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=afbb33cf9ff";
+      excludes = [ "NEWS" ];
       sha256 = "0yzkfx3j1zkkb43fhchjqphw4xznbclj39bjzjggv32gppy6d1db";
     })
     ./fix-build-mb-len-max.patch
     ./fix-test-ali-awk.patch
     ./path-to-cat.patch
+  ];
+
+  doCheck = true;
+  enableParallelBuilding = true;
+  hardeningDisable = [ "format" ];
+
+  configureFlags = [
+    "--with-gssapi"
+    "--with-gsasl"
+    "--with-mysql"
   ];
 
   readmsg-tests = stdenv.lib.optionals doCheck [
@@ -48,11 +58,6 @@ stdenv.mkDerivation rec {
       */Makefile{.in,.am}
   '';
 
-  configureFlags = [
-    "--with-gssapi"
-    "--with-mysql"
-  ];
-
   preCheck = ''
     # Add missing files.
     cp ${builtins.toString readmsg-tests} readmsg/tests/
@@ -61,16 +66,16 @@ stdenv.mkDerivation rec {
     done
     # Disable comsat tests that fail without tty in the sandbox.
     tty -s || echo > comsat/tests/testsuite.at
+    # Disable lmtp tests that require root spool.
+    echo > maidag/tests/lmtp.at
     # Disable mda tests that require /etc/passwd to contain root.
     grep -qo '^root:' /etc/passwd || echo > maidag/tests/mda.at
     # Provide libraries for mhn.
     export LD_LIBRARY_PATH=$(pwd)/lib/.libs
   '';
-  postCheck = "unset LD_LIBRARY_PATH";
-
-  doCheck = true;
-  enableParallelBuilding = true;
-  hardeningDisable = [ "format" ];
+  postCheck = ''
+    unset LD_LIBRARY_PATH
+  '';
 
   meta = with stdenv.lib; {
     description = "Rich and powerful protocol-independent mail framework";
