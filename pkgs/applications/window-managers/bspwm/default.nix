@@ -1,30 +1,27 @@
-{ stdenv, fetchurl, libxcb, libXinerama, sxhkd, xcbutil, xcbutilkeysyms, xcbutilwm }:
+{ stdenv, fetchFromGitHub, libxcb, libXinerama
+, sxhkd, xcbutil, xcbutilkeysyms, xcbutilwm
+}:
 
 stdenv.mkDerivation rec {
   name = "bspwm-${version}";
-  version = "0.9.2";
+  version = "0.9.3";
 
-
-  src = fetchurl {
-    url = "https://github.com/baskerville/bspwm/archive/${version}.tar.gz";
-    sha256 = "1w6wxwgyb14w664xafp3b2ps6zzf9yw7cfhbh9229x2hil9rss1k";
+  src = fetchFromGitHub {
+    owner  = "baskerville";
+    repo   = "bspwm";
+    rev    = version;
+    sha256 = "144g0vg0jsy0lja2jv1qbdps8k05nk70pc7vslj3im61a21vnbis";
   };
 
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];
 
-  buildPhase = ''
-    make PREFIX=$out
-  '';
+  PREFIX = "$out";
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tiling window manager based on binary space partitioning";
     homepage = http://github.com/baskerville/bspwm;
-    maintainers = [ stdenv.lib.maintainers.meisternu stdenv.lib.maintainers.epitrochoid ];
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ meisternu epitrochoid ];
+    license = licenses.bsd2;
+    platforms = platforms.linux;
   };
 }
