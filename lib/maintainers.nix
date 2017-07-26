@@ -248,7 +248,7 @@
   jammerful = "jammerful <jammerful@gmail.com>";
   jansol = "Jan Solanti <jan.solanti@paivola.fi>";
   javaguirre = "Javier Aguirre <contacto@javaguirre.net>";
-  jb55 = "William Casarin <bill@casarin.me>";
+  jb55 = "William Casarin <jb55@jb55.com>";
   jbedo = "Justin Bedő <cu@cua0.org>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jdagilliland = "Jason Gilliland <jdagilliland@gmail.com>";
