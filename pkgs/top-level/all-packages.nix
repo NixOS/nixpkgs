@@ -1069,6 +1069,8 @@ with pkgs;
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
+  lcdproc = callPackage ../servers/monitoring/lcdproc { };
+
   languagetool = callPackage ../tools/text/languagetool {  };
 
   loccount = callPackage ../development/tools/misc/loccount { };
