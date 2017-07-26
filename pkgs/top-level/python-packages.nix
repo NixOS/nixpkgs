@@ -106,6 +106,10 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy {  };
 
+  augeas = callPackage ../development/python-modules/augeas {
+    inherit (pkgs) augeas;
+  };
+
   automat = callPackage ../development/python-modules/automat { };
 
   # packages defined elsewhere
