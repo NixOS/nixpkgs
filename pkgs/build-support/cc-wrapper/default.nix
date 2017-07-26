@@ -190,7 +190,7 @@ stdenv.mkDerivation {
       # The dynamic linker is passed in `ldflagsBefore' to allow
       # explicit overrides of the dynamic linker by callers to gcc/ld
       # (the *last* value counts, so ours should come first).
-      printLines "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
+      printWords "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
     '')
 
     + optionalString (libc != null) ''
@@ -258,9 +258,9 @@ stdenv.mkDerivation {
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      printLines ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
 
-      printLines ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
+      printWords ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
 
     + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''

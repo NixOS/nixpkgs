@@ -17,9 +17,10 @@ runHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+
+    local varRef="$var[@]"
     local hook
-    for hook in "_callImplicitHook 0 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 0 $hookName" "${!varRef}"; do
         _eval "$hook" "$@"
     done
     return 0
@@ -33,9 +34,10 @@ runOneHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+
+    local varRef="$var[@]"
     local hook
-    for hook in "_callImplicitHook 1 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 1 $hookName" "${!varRef}"; do
         if _eval "$hook" "$@"; then
             return 0
         fi
@@ -210,6 +212,11 @@ printLines() {
     printf '%s\n' "$@"
 }
 
+printWords() {
+    [[ "$#" -gt 0 ]] || return 0
+    printf '%s ' "$@"
+}
+
 ######################################################################
 # Initialisation.
 
@@ -266,12 +273,19 @@ runHook addInputsHook
 findInputs() {
     local pkg="$1"
     local var="$2"
-    local -n varDeref="$var"
     local propagatedBuildInputsFile="$3"
 
-    # Stop if we've already added this one
-    [[ -z "${varDeref["$pkg"]}" ]] || return 0
-    varDeref["$pkg"]=1
+    # TODO(@Ericson2314): Restore using associative array once Darwin
+    # nix-shell doesn't use impure bash. This should replace the O(n)
+    # case with an O(1) hash map lookup, assuming bash is implemented
+    # well :D.
+    local varRef="$var[*]"
+
+    case "${!varRef}" in
+        *" $pkg "*) return 0 ;;
+    esac
+
+    eval "$var"'+=("$pkg")'
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
@@ -291,31 +305,29 @@ findInputs() {
     fi
 
     if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        local fd pkgNext
-        exec {fd}<"$pkg/nix-support/$propagatedBuildInputsFile"
-        while IFS= read -r -u $fd pkgNext; do
+        local pkgNext
+        for pkgNext in $(< "$pkg/nix-support/$propagatedBuildInputsFile"); do
             findInputs "$pkgNext" "$var" "$propagatedBuildInputsFile"
         done
-        exec {fd}<&-
     fi
 }
 
 if [ -z "$crossConfig" ]; then
     # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
     # are handled identically to nativeBuildInputs
-    declare -gA nativePkgs
+    declare -a nativePkgs
     for i in $nativeBuildInputs $buildInputs \
              $defaultNativeBuildInputs $defaultBuildInputs \
              $propagatedNativeBuildInputs $propagatedBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
 else
-    declare -gA crossPkgs
+    declare -a crossPkgs
     for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
         findInputs "$i" crossPkgs propagated-build-inputs
     done
 
-    declare -gA nativePkgs
+    declare -a nativePkgs
     for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
@@ -331,7 +343,7 @@ _addToNativeEnv() {
     runHook envHook "$pkg"
 }
 
-for i in "${!nativePkgs[@]}"; do
+for i in "${nativePkgs[@]}"; do
     _addToNativeEnv "$i"
 done
 
@@ -342,7 +354,7 @@ _addToCrossEnv() {
     runHook crossEnvHook "$pkg"
 }
 
-for i in "${!crossPkgs[@]}"; do
+for i in "${crossPkgs[@]}"; do
     _addToCrossEnv "$i"
 done
 
@@ -814,19 +826,19 @@ fixupPhase() {
         if [ -n "$propagated" ]; then
             mkdir -p "${!outputDev}/nix-support"
             # shellcheck disable=SC2086
-            printLines $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
+            printWords $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     else
         if [ -n "$propagatedBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
             # shellcheck disable=SC2086
-            printLines $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
+            printWords $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
         fi
 
         if [ -n "$propagatedNativeBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
             # shellcheck disable=SC2086
-            printLines $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
+            printWords $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     fi
 
@@ -840,7 +852,7 @@ fixupPhase() {
     if [ -n "$propagatedUserEnvPkgs" ]; then
         mkdir -p "${!outputBin}/nix-support"
         # shellcheck disable=SC2086
-        printLines $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup

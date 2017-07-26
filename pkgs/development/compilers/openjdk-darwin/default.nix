@@ -23,7 +23,7 @@ let
       # any package that depends on the JRE has $CLASSPATH set up
       # properly.
       mkdir -p $out/nix-support
-      printLines ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
+      printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
 
       install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/jre/lib/libfontmanager.dylib
 

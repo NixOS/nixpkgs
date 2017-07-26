@@ -54,7 +54,7 @@ do
     if
         PATH=$_PATH type -p "@binPrefix@$CMD" > /dev/null
     then
-        export "${ENV_PREFIX}${CMD^^}=@binPrefix@${CMD}";
+        export "${ENV_PREFIX}$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=@binPrefix@${CMD}";
     fi
 done
 

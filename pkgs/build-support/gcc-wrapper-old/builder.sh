@@ -211,5 +211,5 @@ cp -p $utils $out/nix-support/utils.sh
 # tools like gcov, the manpages, etc. as well (including for binutils
 # and Glibc).
 if test -z "$nativeTools"; then
-    printLines $gcc $binutils $libc $libc_bin > $out/nix-support/propagated-user-env-packages
+    printWords $gcc $binutils $libc $libc_bin > $out/nix-support/propagated-user-env-packages
 fi
