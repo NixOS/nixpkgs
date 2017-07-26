@@ -285,10 +285,7 @@ findInputs() {
         *" $pkg "*) return 0 ;;
     esac
 
-    # For some reason, bash gives us some (hopefully limited) eval
-    # "for free"! Everything is single-quoted except for `"$var"`
-    # so `var` is expanded first.
-    declare -g "$var"'=("${'"$var"'[@]}" "$pkg")'
+    eval "$var"'+=("$pkg")'
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
@@ -318,19 +315,19 @@ findInputs() {
 if [ -z "$crossConfig" ]; then
     # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
     # are handled identically to nativeBuildInputs
-    declare -ga nativePkgs
+    declare -a nativePkgs
     for i in $nativeBuildInputs $buildInputs \
              $defaultNativeBuildInputs $defaultBuildInputs \
              $propagatedNativeBuildInputs $propagatedBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
 else
-    declare -ga crossPkgs
+    declare -a crossPkgs
     for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
         findInputs "$i" crossPkgs propagated-build-inputs
     done
 
-    declare -ga nativePkgs
+    declare -a nativePkgs
     for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
