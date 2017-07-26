@@ -505,7 +505,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 -c . | pigz -nT > $out
+        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'./':: -c . | pigz -nT > $out
 
         echo "Finished."
       '';
