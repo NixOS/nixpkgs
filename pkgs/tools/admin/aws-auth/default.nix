@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "095j9zqxra8hi2iyz0y4azs9yigy5f6alqkfmv180pm75nbc031g";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontBuild = true;
 
   # copy script and set $PATH
   installPhase = ''
-    mkdir -p $out/bin
-    cp $src/aws-auth.sh $out/bin/aws-auth
-    wrapProgram $out/bin/aws-auth --prefix PATH : ${awscli}/bin:${jq}/bin
+    install -D $src/aws-auth.sh $out/bin/aws-auth
+    wrapProgram $out/bin/aws-auth \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ awscli jq ]}
   '';
 
   meta = {
