@@ -4,7 +4,7 @@
   extra-cmake-modules, kdoctools, makeWrapper,
 
   karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, khtml, kio,
-  kservice, kpty, kwidgetsaddons, libarchive,
+  kservice, kpty, kwidgetsaddons, libarchive, kitemmodels,
 
   # Archive tools
   p7zip, unzipNLS, zip,
@@ -22,7 +22,7 @@ let
       ];
       propagatedBuildInputs = [
         khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice
-        kpty kwidgetsaddons libarchive
+        kpty kwidgetsaddons libarchive kitemmodels
       ];
       postInstall =
         let
