@@ -27,12 +27,12 @@ in rec {
 
   preview = mkStudio rec {
     pname = "android-studio-preview";
-    version = "3.0.0.6";
-    build = "171.4182969";
+    version = "3.0.0.7"; # This is actually "Android Studio 3.0 Canary 8"
+    build = "171.4195411";
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "0s26k5qr0qg6az77yw2mvnhavwi4aza4ifvd45ljank8aqr6sp5i";
+      sha256 = "1yzhr845shjq2cd5hcanppxmnj34ky9ry755y4ywf5f1w5ha5xzj";
     };
 
     meta = stable.meta // {
