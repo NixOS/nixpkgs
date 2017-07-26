@@ -40,7 +40,7 @@ self: super: {
   cabal-install = super.cabal-install.override { Cabal = null; };
 
   # jailbreak-cabal doesn't seem to work right with the native Cabal version.
-  jailbreak-cabal = pkgs.haskellPackages.jailbreak-cabal;
+  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
