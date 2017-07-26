@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-GNOME_FTP="ftp.gnome.org/pub/GNOME/sources"
+GNOME_FTP=ftp.gnome.org/pub/GNOME/sources
 
 # projects that don't follow the GNOME major versioning, or that we don't want to
 # programmatically update
@@ -18,10 +18,10 @@ if [ "$#" -lt 2 ]; then
   usage
 fi
 
-GNOME_TOP="$1"
+GNOME_TOP=$1
 shift
 
-action="$1"
+action=$1
 
 # curl -l ftp://... doesn't work from my office in HSE, and I don't want to have
 # any conversations with sysadmin. Somehow lftp works.
@@ -36,18 +36,18 @@ else
 fi
 
 find_project() {
-  exec find "$GNOME_TOP" -mindepth 2 -maxdepth 2 -type d $@
+  exec find "$GNOME_TOP" -mindepth 2 -maxdepth 2 -type d "$@"
 }
 
 show_project() {
-  local project="$1"
-  local majorVersion="$2"
-  local version=""
+  local project=$1
+  local majorVersion=$2
+  local version=
 
   if [ -z "$majorVersion" ]; then
     echo "Looking for available versions..." >&2
-    local available_baseversions=( `ls_ftp ftp://${GNOME_FTP}/${project} | grep '[0-9]\.[0-9]' | sort -t. -k1,1n -k 2,2n` )
-    if [ "$?" -ne "0" ]; then
+    local available_baseversions=$(ls_ftp ftp://${GNOME_FTP}/${project} | grep '[0-9]\.[0-9]' | sort -t. -k1,1n -k 2,2n)
+    if [ "$?" -ne 0 ]; then
       echo "Project $project not found" >&2
       return 1
     fi
@@ -59,11 +59,11 @@ show_project() {
   
   if echo "$majorVersion" | grep -q "[0-9]\+\.[0-9]\+\.[0-9]\+"; then
     # not a major version
-    version="$majorVersion"
+    version=$majorVersion
     majorVersion=$(echo "$majorVersion" | cut -d '.' -f 1,2)
   fi
   
-  local FTPDIR="${GNOME_FTP}/${project}/${majorVersion}"
+  local FTPDIR=${GNOME_FTP}/${project}/${majorVersion}
   
   #version=`curl -l ${FTPDIR}/ 2>/dev/null | grep LATEST-IS | sed -e s/LATEST-IS-//`
   # gnome's LATEST-IS is broken. Do not trust it.
@@ -92,7 +92,7 @@ show_project() {
   		esac
   	done
   	echo "Found versions ${!versions[@]}" >&2
-  	version=`echo ${!versions[@]} | sed -e 's/ /\n/g' | sort -t. -k1,1n -k 2,2n -k 3,3n | tail -n1`
+  	version=$(echo ${!versions[@]} | sed -e 's/ /\n/g' | sort -t. -k1,1n -k 2,2n -k 3,3n | tail -n1)
         if [ -z "$version" ]; then
           echo "No version available for major $majorVersion" >&2
           return 1
@@ -103,7 +103,7 @@ show_project() {
   
   local name=${project}-${version}
   echo "Fetching .sha256 file" >&2
-  local sha256out=$(curl -s -f http://${FTPDIR}/${name}.sha256sum)
+  local sha256out=$(curl -s -f http://"${FTPDIR}"/"${name}".sha256sum)
   
   if [ "$?" -ne "0" ]; then
   	echo "Version not found" >&2
@@ -136,8 +136,8 @@ fetchurl: {
 }
 
 update_project() {
-  local project="$1"
-  local majorVersion="$2"
+  local project=$1
+  local majorVersion=$2
 
   # find project in nixpkgs tree
   projectPath=$(find_project -name "$project" -print)
@@ -150,14 +150,14 @@ update_project() {
   
   if [ "$?" -eq "0" ]; then
     echo "Updating $projectPath/src.nix" >&2
-    echo -e "$src" > "$projectPath/src.nix"
+    echo -e "$src" > "$projectPath"/src.nix
   fi
 
   return 0
 }
 
-if [ "$action" == "update-all" ]; then
-  majorVersion="$2"
+if [ "$action" = "update-all" ]; then
+  majorVersion=$2
   if [ -z "$majorVersion" ]; then
     echo "No major version specified" >&2
     usage
@@ -170,23 +170,23 @@ if [ "$action" == "update-all" ]; then
       echo "Skipping $project"
     else
       echo "= Updating $project to $majorVersion" >&2
-      update_project $project $majorVersion
+      update_project "$project" "$majorVersion"
       echo >&2
     fi
   done
 else
-  project="$2"
-  majorVersion="$3"
+  project=$2
+  majorVersion=$3
 
   if [ -z "$project" ]; then
     echo "No project specified, exiting" >&2
     usage
   fi
 
-  if [ "$action" == "show" ]; then
-    show_project $project $majorVersion
-  elif [ "$action" == "update" ]; then
-    update_project $project $majorVersion
+  if [ "$action" = show ]; then
+    show_project "$project" "$majorVersion"
+  elif [ "$action" = update ]; then
+    update_project "$project" "$majorVersion"
   else
     echo "Unknown action $action" >&2
     usage

@@ -149,9 +149,7 @@ in
                   fi
                 ''}
                 ${optionalString sw.randomEncryption ''
-                  echo "secretkey" | cryptsetup luksFormat --batch-mode ${sw.device}
-                  echo "secretkey" | cryptsetup luksOpen ${sw.device} ${sw.deviceName}
-                  cryptsetup luksErase --batch-mode ${sw.device}
+                  cryptsetup open ${sw.device} ${sw.deviceName} --type plain --key-file /dev/urandom
                   mkswap ${sw.realDevice}
                 ''}
               '';

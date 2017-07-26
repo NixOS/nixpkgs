@@ -106,6 +106,10 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy {  };
 
+  augeas = callPackage ../development/python-modules/augeas {
+    inherit (pkgs) augeas;
+  };
+
   automat = callPackage ../development/python-modules/automat { };
 
   # packages defined elsewhere
@@ -189,6 +193,26 @@ in {
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
+
+  PyChromecast = buildPythonPackage rec {
+    name    = "PyChromecast-${version}";
+    version = "0.8.1";
+
+    src = pkgs.fetchurl {
+      url    = "mirror://pypi/p/pychromecast/${name}.tar.gz";
+      sha256 = "05rlr2hjng0xg2a9k9vwmrlvd7vy9sjhxxfl96kx25xynlkq6yq6";
+    };
+
+    propagatedBuildInputs = with self; [ requests six zeroconf protobuf3_2 ];
+
+    meta = {
+      description = "Library for Python 2 and 3 to communicate with the Google Chromecast";
+      homepage    = "https://github.com/balloob/pychromecast";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ abbradar ];
+      platforms   = platforms.linux;
+    };
+  };
 
   pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
 
@@ -11344,6 +11368,50 @@ in {
 
     propagatedBuildInputs = with self; [ requests webob ];
   };
+
+  hmmlearn = buildPythonPackage rec {
+    name = "hmmlearn-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hmmlearn/${name}.tar.gz";
+      sha256 = "0qc3fkdyrgfg31y1a8jzs83dxkjw78pqkdm44lll1iib63w4cik9";
+    };
+
+    propagatedBuildInputs = with self; [ numpy ];
+
+    doCheck = false;
+
+    meta = {
+      description = "Hidden Markov Models in Python with scikit-learn like API";
+      homepage    = "https://github.com/hmmlearn/hmmlearn";
+      license     = licenses.bsd3;
+      maintainers = with maintainers; [ abbradar ];
+      platforms   = platforms.unix;
+    };
+  };
+
+   sphfile = buildPythonPackage rec {
+    name = "sphfile-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/sphfile/${name}.tar.gz";
+      sha256 = "1ly9746xrzbiax9cxr5sxlg0wvf6fdxcrgwsqqxckk3wnqfypfrd";
+    };
+
+    propagatedBuildInputs = with self; [ numpy ];
+
+    doCheck = false;
+
+    meta = {
+      description = "Numpy-based NIST SPH audio-file reader";
+      homepage    = "https://github.com/mcfletch/sphfile";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ abbradar ];
+      platforms   = platforms.unix;
+    };
+  }; 
 
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.5";

@@ -194,6 +194,19 @@ in
       })
     );
 
+    environment.systemPackages = let
+      cli-wrappers = pkgs.stdenv.mkDerivation {
+        name = "tinc-cli-wrappers";
+        buildInputs = [ pkgs.makeWrapper ];
+        buildCommand = ''
+          mkdir -p $out/bin
+          ${concatStringsSep "\n" (mapAttrsToList (network: data: ''
+              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" --add-flags "--pidfile=/run/tinc.${network}.pid"
+            '') cfg.networks)}
+        '';
+      };
+    in [ cli-wrappers ];
+
     users.extraUsers = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({
         description = "Tinc daemon user for ${network}";

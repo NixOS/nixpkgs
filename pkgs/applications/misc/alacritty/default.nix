@@ -17,16 +17,16 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "alacritty-unstable-2017-07-08";
+  name = "alacritty-unstable-2017-07-25";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
-    rev = "94849c4f2a19bd49337f5cf090f94ac6a940c414";
-    sha256 = "0cawrq0787pcfifn5awccq29a1ag85wfbmx1ccz7m33prk3ry9jp";
+    rev = "49c73f6d55e5a681a0e0f836cd3e9fe6af30788f";
+    sha256 = "0h5hrb2g0fpc6xn94hmvxjj21cqbj4vgqkznvd64jl84qbyh1xjl";
   };
 
-  depsSha256 = "0lb83aan6lgdsdcrd6zdrxhz5bi96cw4ygqqlpm43w42chwzz0xj";
+  depsSha256 = "1pbb0swgpsbd6x3avxz6fv3q31dg801li47jibz721a4n9c0rssx";
 
   buildInputs = [
     cmake

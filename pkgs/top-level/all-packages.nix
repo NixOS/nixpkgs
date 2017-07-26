@@ -531,6 +531,10 @@ with pkgs;
 
   apg = callPackage ../tools/security/apg { };
 
+  apt = callPackage ../tools/package-management/apt {
+    inherit (perlPackages) Po4a;
+  };
+
   autorevision = callPackage ../tools/misc/autorevision { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
@@ -1064,6 +1068,8 @@ with pkgs;
   jbuilder = callPackage ../development/tools/ocaml/jbuilder { };
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
+
+  lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
@@ -3069,6 +3075,7 @@ with pkgs;
   mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
 
   mailutils = callPackage ../tools/networking/mailutils {
+    guile = guile_2_0;  # compilation fails with guile 2.2
     sasl = gsasl;
   };
 
@@ -3913,6 +3920,8 @@ with pkgs;
   quicktun = callPackage ../tools/networking/quicktun { };
 
   quilt = callPackage ../development/tools/quilt { };
+
+  quota = callPackage ../tools/misc/quota { };
 
   wiggle = callPackage ../development/tools/wiggle { };
 
@@ -6089,7 +6098,7 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang erlang_odbc erlang_javac erlang_odbc_javac
-    elixir elixir_1_5_rc elixir_1_4 elixir_1_3
+    elixir elixir_1_5 elixir_1_4 elixir_1_3
     lfe lfe_1_2
     erlangR16 erlangR16_odbc
     erlang_basho_R16B02 erlang_basho_R16B02_odbc
@@ -7352,7 +7361,9 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = callPackage ../development/tools/mypy { };
+  mypy = callPackage ../development/tools/mypy {
+    inherit (python3Packages) fetchPypi buildPythonApplication lxml typed-ast;
+  };
 
 
   ### DEVELOPMENT / LIBRARIES
@@ -7362,8 +7373,6 @@ with pkgs;
   aacskeys = callPackage ../development/libraries/aacskeys { };
 
   aalib = callPackage ../development/libraries/aalib { };
-
-  accelio = callPackage ../development/libraries/accelio { stdenv = overrideCC stdenv gcc5; };
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -7458,6 +7467,7 @@ with pkgs;
   boost160 = callPackage ../development/libraries/boost/1.60.nix { };
   boost162 = callPackage ../development/libraries/boost/1.62.nix { };
   boost163 = callPackage ../development/libraries/boost/1.63.nix { };
+  boost164 = callPackage ../development/libraries/boost/1.64.nix { };
   boost = boost162;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -9346,6 +9356,8 @@ with pkgs;
 
   linenoise = callPackage ../development/libraries/linenoise { };
 
+  linenoise-ng = callPackage ../development/libraries/linenoise-ng { };
+
   lirc = callPackage ../development/libraries/lirc { };
 
   liquid-dsp = callPackage ../development/libraries/liquid-dsp { };
@@ -10084,6 +10096,8 @@ with pkgs;
   rlog = callPackage ../development/libraries/rlog { };
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
+
+  rocksdb_lite = rocksdb.override { enableLite = true; };
 
   rote = callPackage ../development/libraries/rote { };
 
@@ -12132,8 +12146,6 @@ with pkgs;
 
     inherit kernel;
 
-    accelio = callPackage ../development/libraries/accelio { };
-
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
@@ -14131,6 +14143,8 @@ with pkgs;
 
   gksu = callPackage ../applications/misc/gksu { };
 
+  gnss-sdr = callPackage ../applications/misc/gnss-sdr { };
+
   gnuradio = callPackage ../applications/misc/gnuradio {
     inherit (python2Packages) cheetah lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
     fftw = fftwFloat;
@@ -14527,7 +14541,7 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
+  gpsbabel = libsForQt56.callPackage ../applications/misc/gpsbabel {
     inherit (darwin) IOKit;
   };
 
@@ -15508,6 +15522,8 @@ with pkgs;
 
   osmo = callPackage ../applications/office/osmo { };
 
+  osquery = callPackage ../tools/system/osquery { };
+
   palemoon = callPackage ../applications/networking/browsers/palemoon {
     # https://forum.palemoon.org/viewtopic.php?f=57&t=15296#p111146
     stdenv = overrideCC stdenv gcc49;
@@ -16439,6 +16455,8 @@ with pkgs;
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
   });
+
+  xxd = callPackage ../tools/misc/xxd { };
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
@@ -18665,11 +18683,13 @@ with pkgs;
 
   nixops = callPackage ../tools/package-management/nixops { };
 
-  nixopsUnstable = callPackage ../tools/package-management/nixops/unstable.nix { };
+  nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
+
+  nix-index = callPackage ../tools/package-management/nix-index { };
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr

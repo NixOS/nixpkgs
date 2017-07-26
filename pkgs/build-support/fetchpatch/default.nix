@@ -5,7 +5,7 @@
 # stripLen acts as the -p parameter when applying a patch.
 
 { lib, fetchurl, patchutils }:
-{ stripLen ? 0, addPrefixes ? false, ... }@args:
+{ stripLen ? 0, addPrefixes ? false, excludes ? [], ... }@args:
 
 fetchurl ({
   postFetch = ''
@@ -21,7 +21,10 @@ fetchurl ({
            --addnewprefix=b/ \
         ''} \
         --clean "$out" > "$tmpfile"
-    mv "$tmpfile" "$out"
+    ${patchutils}/bin/filterdiff \
+      -p1 \
+      ${builtins.toString (builtins.map (x: "-x ${x}") excludes)} \
+      "$tmpfile" > "$out"
     ${args.postFetch or ""}
   '';
-} // builtins.removeAttrs args ["stripLen" "addPrefixes"])
+} // builtins.removeAttrs args ["stripLen" "addPrefixes" "excludes"])

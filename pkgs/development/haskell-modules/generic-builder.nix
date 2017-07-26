@@ -144,9 +144,9 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals withBenchmarkDepends benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = setupHaskellDepends ++ buildTools ++ libraryToolDepends ++ executableToolDepends;
+  nativeBuildInputs = buildTools ++ libraryToolDepends ++ executableToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
+  otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
                      # ghcjs's hsc2hs calls out to the native hsc2hs
@@ -231,11 +231,11 @@ stdenv.mkDerivation ({
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
-      ln -s $d/*.dylib $dynamicLinksDir
+    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'); do
+      ln -s "$d/"*.dylib $dynamicLinksDir
     done
     # Edit the local package DB to reference the links directory.
-    for f in $packageConfDir/*.conf; do
+    for f in "$packageConfDir/"*.conf; do
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
     done
   '') + ''

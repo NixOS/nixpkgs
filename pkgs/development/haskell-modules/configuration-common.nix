@@ -15,10 +15,17 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # This used to be a core package provided by GHC, but then the compiler
+  # dropped it. We define the name here to make sure that old packages which
+  # depend on this library still evaluate (even though they won't compile
+  # successfully with recent versions of the compiler).
+  bin-package-db = null;
+
   # Some Hackage packages reference this attribute, which exists only in the
   # GHCJS package set. We provide a dummy version here to fix potential
   # evaluation errors.
   ghcjs-base = null;
+  ghcjs-prim = null;
 
   # Some packages need a non-core version of Cabal.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
@@ -664,11 +671,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # Haste stuff
-  haste-Cabal         = markBroken (self.callPackage ../tools/haskell/haste/haste-Cabal.nix {});
-  haste-cabal-install = markBroken (self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; });
-  haste-compiler      = markBroken (self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; });
-
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc { inherit (pkgs) cabal-install cabal2nix; };
 
@@ -679,14 +681,6 @@ self: super: {
     if pkgs.stdenv.isDarwin
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
-
-  # The stack people don't bother making their own code compile in an LTS-based
-  # environment: https://github.com/commercialhaskell/stack/issues/3001.
-  stack = super.stack.overrideScope (self: super: {
-    store-core = self.store-core_0_3;
-    store = self.store_0_3_1;
-    hpack = self.hpack_0_17_1;
-  });
 
   # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
   intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
@@ -876,5 +870,8 @@ self: super: {
 
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
+
+  # https://github.com/diagrams/diagrams-solve/issues/4
+  diagrams-solve = dontCheck super.diagrams-solve;
 
 }
