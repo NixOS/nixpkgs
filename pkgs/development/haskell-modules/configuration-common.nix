@@ -665,11 +665,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # Haste stuff
-  haste-Cabal         = markBroken (self.callPackage ../tools/haskell/haste/haste-Cabal.nix {});
-  haste-cabal-install = markBroken (self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; });
-  haste-compiler      = markBroken (self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; });
-
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc { inherit (pkgs) cabal-install cabal2nix; };
 
