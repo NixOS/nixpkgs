@@ -511,6 +511,8 @@ with pkgs;
 
   awless = callPackage ../tools/virtualization/awless { };
 
+  aws-auth = callPackage ../tools/admin/aws-auth { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
