@@ -14,13 +14,13 @@ let
         else throw "Unsupported system!";
 in stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.1.7";
+  version = "1.1.18";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "1wyhrh2y1c5nmrh4xmvpx9vlsj8bxw1idxq2jalswcdblh16mgnx";
+    sha256 = "1i85zpns3gj5by45ppg4rfk9csix8mjazpyj6dqic40b2wshnw8c";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
