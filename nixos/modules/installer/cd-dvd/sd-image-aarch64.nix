@@ -10,7 +10,6 @@ let
 in
 {
   imports = [
-    ../../profiles/minimal.nix
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];

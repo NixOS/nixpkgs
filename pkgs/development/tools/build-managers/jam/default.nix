@@ -1,29 +1,32 @@
-{stdenv, fetchurl, yacc}:
+{ stdenv, fetchurl, yacc }:
 
-let
-  bindir = if stdenv.system == "i686-linux" then "bin.linuxx86"
-    else if stdenv.system == "x86_64-linux" then "bin.linux"
-    else throw "Unsupported platform by now";
-in
+stdenv.mkDerivation rec {
+  name = "jam-2.6";
 
-stdenv.mkDerivation {
-  name = "jam-2.5";
   src = fetchurl {
-    url = ftp://ftp.perforce.com/jam/jam-2.5.tar;
-    sha256 = "04c6khd7gdkqkvx4h3nbz99lyz7waid4fd221hq5chcygyx1sj3i";
+    url = "https://swarm.workshop.perforce.com/projects/perforce_software-jam/download/main/${name}.tar";
+    sha256 = "0j4r7xcjz15ksnnpjw56qi99q4lpjmx097pkwwkl1hq3hqml1zhn";
   };
 
-  buildInputs = [ yacc ];
+  nativeBuildInputs = [ yacc ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ${bindir}/jam $out/bin
+  buildPhase = ''
+    make jam0
+    ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install
   '';
 
-  meta = {
-    homepage = http://public.perforce.com/wiki/Jam;
-    license = stdenv.lib.licenses.free;
+  installPhase = ''
+    mkdir -p $out/doc/jam
+    cp *.html $out/doc/jam
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = https://www.perforce.com/resources/documentation/jam;
+    license = licenses.free;
     description = "Just Another Make";
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.unix;
   };
 }

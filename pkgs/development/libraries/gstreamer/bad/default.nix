@@ -1,14 +1,17 @@
 { stdenv, fetchurl, pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
+, gtkSupport ? false, gtk3 ? null
 , faad2, libass, libkate, libmms
 , libmodplug, mpeg2dec, mpg123
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
-, mesa, libintlOrEmpty
+, mesa, libintlOrEmpty, libgme
+, openssl, x265, libxml2
 }:
 
 assert faacSupport -> faac != null;
+assert gtkSupport -> gtk3 != null;
 
 let
   inherit (stdenv.lib) optional optionalString;
@@ -40,15 +43,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gst-plugins-base orc
-    faad2 libass libkate libmms
+    faad2 gtk3 libass libkate libmms
     libmodplug mpeg2dec mpg123
     openjpeg libopus librsvg
     fluidsynth libvdpau
     libwebp xvidcore gnutls mesa
-    mjpegtools
+    mjpegtools libgme openssl x265 libxml2
   ]
     ++ libintlOrEmpty
     ++ optional faacSupport faac
+    # for gtksink
+    ++ optional gtkSupport gtk3
     ++ optional stdenv.isLinux wayland
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin

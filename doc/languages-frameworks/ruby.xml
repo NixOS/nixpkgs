@@ -16,8 +16,7 @@ $ cd sensu
 $ cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
-$ nix-shell -p bundler --command "bundler package --path /tmp/vendor/bundle"
-$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix
+$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix --magic
 $ cat > default.nix
 { lib, bundlerEnv, ruby }:
 
@@ -47,7 +46,7 @@ bundlerEnv rec {
 so it has all the libraries necessary for <literal>sensu</literal> in its paths. The second one can be used to make derivations from custom Ruby scripts which have
 <filename>Gemfile</filename>s with their dependencies specified. It is a derivation with <command>ruby</command> wrapped so it can find all the needed dependencies.
 For example, to make a derivation <literal>my-script</literal> for a <filename>my-script.rb</filename> (which should be placed in <filename>bin</filename>) you should
-run <command>bundix</command> as specified above and then use <literal>bundlerEnv</literal> lile this:</para>
+run <command>bundix</command> as specified above and then use <literal>bundlerEnv</literal> like this:</para>
 
 <programlisting>
 <![CDATA[let env = bundlerEnv {

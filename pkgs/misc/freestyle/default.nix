@@ -45,9 +45,10 @@ stdenv.mkDerivation {
 
   installPhase = ":";
 
-  meta = { 
+  meta = {
     description = "Non-Photorealistic Line Drawing rendering from 3D scenes";
     homepage = http://freestyle.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2;
+    license  = stdenv.lib.licenses.gpl2;
+    broken = true;
   };
 }

@@ -11,11 +11,11 @@ let
   ];
 in
 stdenv.mkDerivation rec {
-  version = "0.8.3";
+  version = "1.3.3";
   name = "hyper-${version}";
   src = fetchurl {
-    url = "https://github.com/zeit/hyper/releases/download/${version}/hyper-${version}-amd64.deb";
-    sha256 = "1683gc0fhifn89l9h67yz02pk1xz7p5l3qpiyddr9w21qr9h3lhq";
+    url = "https://github.com/zeit/hyper/releases/download/${version}/hyper_${version}.deb";
+    sha256 = "1i68n77yv1g4dfx4xfmcb06mfpwhf0gnb3wmldg2gxkhs0fn19zg";
   };
   buildInputs = [ dpkg ];
   unpackPhase = ''
@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     mv opt "$out/"
-    ln -s "$out/opt/Hyper/Hyper" "$out/bin/Hyper"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/Hyper/Hyper"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" "$out/opt/Hyper/resources/app/node_modules/child_pty/build/Release/exechelper"
+    ln -s "$out/opt/Hyper/hyper" "$out/bin/hyper"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/Hyper/hyper"
     mv usr/* "$out/"
   '';
   dontPatchELF = true;

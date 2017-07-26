@@ -1,24 +1,28 @@
-{ stdenv, fetchurl, cmake, gengetopt, libX11, libXext, cppcheck}:
+{ stdenv, fetchFromGitHub, cmake
+, glew, glm, mesa, libX11, libXext, libXrender, cppcheck, icu}:
 
 stdenv.mkDerivation rec {
   name = "slop-${version}";
-  version = "4.1.16";
+  version = "6.3.47";
 
-  src = fetchurl {
-    url = "https://github.com/naelstrof/slop/archive/v${version}.tar.gz";
-    sha256 = "0679ax0jr97x91hmp9qrspdka8cvl3xa77z92k4qgicbnb6hr7y2";
+  src = fetchFromGitHub {
+    owner = "naelstrof";
+    repo = "slop";
+    rev = "v${version}";
+    sha256 = "05saxp5z2saq6b5hslxdc5kd7ln00svr5pazabcnchzydfhnkmsd";
   };
 
-  buildInputs = [ cmake gengetopt libX11 libXext ]
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ glew glm mesa libX11 libXext libXrender icu ]
                 ++ stdenv.lib.optional doCheck cppcheck;
 
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/naelstrof/slop;
+    inherit (src.meta) homepage;
     description = "Queries a selection from the user and prints to stdout";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with maintainers; [ mbakke ];
+    maintainers = with maintainers; [ primeos mbakke ];
   };
 }

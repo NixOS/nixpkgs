@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, jansson }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, jansson }:
 
 stdenv.mkDerivation rec {
   name = "jshon-20140712";
@@ -12,14 +12,23 @@ stdenv.mkDerivation rec {
     repo = "jshon";
   };
 
+  patches = [
+    # Fix null termination in read_stream.
+    # https://github.com/keenerd/jshon/issues/53
+    (fetchpatch {
+      url = https://github.com/mbrock/jshon/commit/32288dd186573ceb58164f30be1782d4580466d8.patch;
+      sha256 = "04rss2nprl9nqblc7smq0477n54hm801xgnnmvyzni313i1n6vhl";
+    })
+  ];
+
   buildInputs = [ jansson ];
 
-  patchPhase = 
+  patchPhase =
     ''
       substituteInPlace Makefile --replace "/usr/" "/"
     '';
 
-  preInstall = 
+  preInstall =
     ''
       export DESTDIR=$out
     '';

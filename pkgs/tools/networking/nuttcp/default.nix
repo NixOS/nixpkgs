@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   unpackPhase = ":";
 
   buildPhase = ''
-    gcc -O2 -o nuttcp $src
+    cc -O2 -o nuttcp $src
   '';
 
   installPhase = ''

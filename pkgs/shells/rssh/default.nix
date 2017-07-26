@@ -59,6 +59,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Run this after to avoid conflict with patches above
+  postPatch = ''
+    sed -i '/chmod u+s/d' Makefile.in
+  '';
+
+
   buildInputs = [ openssh rsync cvs ];
 
   configureFlags = [
@@ -76,7 +82,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.pizzashack.org/rssh/";
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn ];
   };
 

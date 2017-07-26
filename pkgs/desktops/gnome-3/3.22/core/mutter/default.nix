@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0 -Wno-error=format -Wno-error=sign-compare";
 
   configureFlags = "--with-x --disable-static --enable-shape --enable-sm --enable-startup-notification --enable-xsync --enable-verbose-mode --with-libcanberra --with-xwayland-path=${xwayland}/bin/Xwayland";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-  #./x86.patch ./math.patch
+    ./x86.patch # ./math.patch
   ];
 
   enableParallelBuilding = true;

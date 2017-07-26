@@ -14,9 +14,9 @@ buildGoPackage rec {
     sha256 = "1lj9czippsgkhr8y3r7vwxgc8i952v76v1shdv10p43gsxwyyi9a";
   };
 
-  # TODO: add metadata https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes
   meta = {
     license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = [];
     homepage = https://cloud.google.com/storage/docs/gcs-fuse;
     description =

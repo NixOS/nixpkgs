@@ -7,7 +7,7 @@ Index: kwin-5.7.3/main_wayland.cpp
      m_xwaylandProcess = new Process(kwinApp());
      m_xwaylandProcess->setProcessChannelMode(QProcess::ForwardedErrorChannel);
 -    m_xwaylandProcess->setProgram(QStringLiteral("Xwayland"));
-+    m_xwaylandProcess->setProgram(QStringLiteral("@xwayland@"));
++    m_xwaylandProcess->setProgram(QLatin1String(NIXPKGS_XWAYLAND));
      QProcessEnvironment env = m_environment;
      env.insert("WAYLAND_SOCKET", QByteArray::number(wlfd));
      m_xwaylandProcess->setProcessEnvironment(env);

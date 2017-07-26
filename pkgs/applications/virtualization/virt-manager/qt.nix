@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtmultimedia, qtsvg, makeQtWrapper
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+, qtbase, qtmultimedia, qtsvg
 , lxqt, libvncserver, libvirt, pixman, spice_gtk, spice_protocol
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "virt-manager-qt-${version}";
-  version = "0.39.60";
+  version = "0.43.72";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
     rev    = "${version}";
-    sha256 = "010lpw85m5sd613l281y4zxkp5v3k16pgnawskbi1ricsnj4k5mh";
+    sha256 = "0m8aqs58wnk404z2hav5j4yjsy8f0vfsm771pm0gprsfbx4sm3qg";
   };
 
   cmakeFlags = [
@@ -23,17 +23,9 @@ stdenv.mkDerivation rec {
     libvirt libvncserver pixman spice_gtk spice_protocol
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeQtWrapper ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  postFixup = ''
-    for f in $out/bin/* ; do
-      wrapQtProgram $f
-    done
-  '';
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://f1ash.github.io/qt-virt-manager;
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''

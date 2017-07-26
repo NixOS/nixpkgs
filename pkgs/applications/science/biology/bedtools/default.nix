@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib python ];
-  buildPhase = "make prefix=$out SHELL=${stdenv.shell} -j $NIX_BUILD_CORES";
-  installPhase = "make prefix=$out SHELL=${stdenv.shell} install";
+  cc = if stdenv.cc.isClang then "clang++" else "g++";
+  buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cc} -j $NIX_BUILD_CORES";
+  installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cc} install";
 
   meta = with stdenv.lib; {
     description = "A powerful toolset for genome arithmetic.";

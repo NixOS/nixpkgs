@@ -2,10 +2,12 @@
 , pkgconfig, intltool, autoreconfHook, substituteAll
 , file, expat, libdrm, xorg, wayland, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva
-, libelf, libvdpau, python2
+, libelf, libvdpau, valgrind-light
 , grsecEnabled ? false
 , enableRadv ? false
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
+# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
+# It's overridden for mesa_drivers.
+, enableTextureFloats ? false
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -30,9 +32,11 @@ else
 
 let
   defaultGalliumDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
-    then ["nouveau" "freedreno" "vc4" "etnaviv"]
-    else ["i915" "ilo" "r300" "r600" "radeonsi" "nouveau"];
+    if stdenv.isArm
+    then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
+    else if stdenv.isAarch64
+    then ["nouveau" "vc4" ]
+    else ["i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
     if (stdenv.isArm || stdenv.isAarch64)
     then ["nouveau"]
@@ -63,7 +67,7 @@ let
 in
 
 let
-  version = "17.0.0";
+  version = "17.1.4";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -73,11 +77,12 @@ stdenv.mkDerivation {
 
   src =  fetchurl {
     urls = [
+      "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "10c4cvm6hhdch0idh2kn7qv1dq6zlw97sc3pz7bssn81f1ckvnrr";
+    sha256 = "06f3b0e6a28f0d20b7f3391cf67fe89ae98ecd0a686cd545da76557b6cec9cad";
   };
 
   prePatch = "patchShebangs .";
@@ -98,7 +103,7 @@ stdenv.mkDerivation {
     "--localstatedir=/var"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
-    "--with-egl-platforms=x11,wayland,drm"
+    "--with-platforms=x11,wayland,drm"
   ]
   ++ (optional (galliumDrivers != [])
       ("--with-gallium-drivers=" +
@@ -121,7 +126,7 @@ stdenv.mkDerivation {
     "--enable-glx"
     "--enable-glx-tls"
     "--enable-gallium-osmesa" # used by wine
-    "--enable-gallium-llvm"
+    "--enable-llvm"
     "--enable-egl"
     "--enable-xa" # used in vmware driver
     "--enable-gbm"
@@ -147,7 +152,7 @@ stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC
     libomxil-bellagio libva libpthreadstubs openssl/*or another sha1 provider*/
-    (python2.withPackages (ps: [ ps.Mako ]))
+    valgrind-light
   ];
 
 
@@ -182,7 +187,7 @@ stdenv.mkDerivation {
 
     # set the default search path for DRI drivers; used e.g. by X server
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + optionalString (builtins.elem "intel" vulkanDrivers) ''
+  '' + optionalString (vulkanDrivers != []) ''
     # move share/vulkan/icd.d/
     mv $out/share/ $drivers/
     # Update search path used by Vulkan (it's pointing to $out but

@@ -21,7 +21,7 @@ set which contains `emacsWithPackages`. For example, to override
 `emacsPackagesNg.emacsWithPackages`,
 ```
 let customEmacsPackages =
-      emacsPackagesNg.override (super: self: {
+      emacsPackagesNg.overrideScope (super: self: {
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit
@@ -114,6 +114,19 @@ EOF
       makeWrapper "$prog" "$out/bin/$progname" \
         --suffix EMACSLOADPATH ":" "$deps/share/emacs/site-lisp:"
     done
+
+    # Wrap MacOS app
+    # this has to pick up resources and metadata
+    # to recognize it as an "app"
+    if [ -d "$emacs/Applications/Emacs.app" ]; then
+      mkdir -p $out/Applications/Emacs.app/Contents/MacOS
+      cp -r $emacs/Applications/Emacs.app/Contents/Info.plist \
+            $emacs/Applications/Emacs.app/Contents/PkgInfo \
+            $emacs/Applications/Emacs.app/Contents/Resources \
+            $out/Applications/Emacs.app/Contents
+      makeWrapper $emacs/Applications/Emacs.app/Contents/MacOS/Emacs $out/Applications/Emacs.app/Contents/MacOS/Emacs \
+        --suffix EMACSLOADPATH ":" "$deps/share/emacs/site-lisp:"
+    fi
 
     mkdir -p $out/share
     # Link icons and desktop files into place

@@ -76,6 +76,7 @@ in
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      serviceConfig = { RemainAfterExit = true; };
 
       preStart = ''
         mkdir -p -m 0755 /afs

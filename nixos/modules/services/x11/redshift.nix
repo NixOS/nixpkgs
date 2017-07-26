@@ -12,7 +12,6 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Enable Redshift to change your screen's colour temperature depending on
         the time of day.
@@ -96,7 +95,8 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.redshift = {
       description = "Redshift colour temperature adjuster";
-      wantedBy = [ "default.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/redshift \
@@ -107,12 +107,6 @@ in {
         '';
         RestartSec = 3;
         Restart = "always";
-      };
-      environment = {
-        DISPLAY = ":${toString (
-          let display = config.services.xserver.display;
-          in if display != null then display else 0
-        )}";
       };
     };
   };

@@ -1,0 +1,11 @@
+diff -ru rpm-4.13.0.1/tools/sepdebugcrcfix.c rpm-4.13.0.1.new/tools/sepdebugcrcfix.c
+--- rpm-4.13.0.1/tools/sepdebugcrcfix.c	2017-02-16 10:40:09.988649399 +0100
++++ rpm-4.13.0.1.new/tools/sepdebugcrcfix.c	2017-04-15 00:02:21.151359876 +0200
+@@ -28,6 +28,7 @@
+ #include <error.h>
+ #include <libelf.h>
+ #include <gelf.h>
++#include <config.h>
+ #include <bfd.h>
+ 
+ #define _(x) x

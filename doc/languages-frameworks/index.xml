@@ -27,6 +27,7 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <xi:include href="qt.xml" />
 <xi:include href="r.xml" /> <!-- generated from ../../pkgs/development/r-modules/README.md  -->
 <xi:include href="ruby.xml" />
+<xi:include href="rust.xml" />
 <xi:include href="texlive.xml" />
 <xi:include href="vim.xml" />
 

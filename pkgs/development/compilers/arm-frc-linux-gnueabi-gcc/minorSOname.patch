@@ -1,0 +1,49 @@
+Description: Make the default SONAME include minor numbers (c++)
+ This patch adds .0.20 to the end of the SONAME for libstdc++ to support
+ independent side-by-side usage of .17 and .20.
+ .
+ gcc-armel (4.9.1-0frc2) trusty; urgency=low
+ .
+   * Fixing dependency ambiguity yet again...
+Author: Patrick Plenefisch <phplenefisch@wpi.edu>
+
+---
+
+--- gcc-armel-4.9.1.orig/libstdc++-v3/configure
++++ gcc-armel-4.9.1/libstdc++-v3/configure
+@@ -10698,7 +10698,7 @@ gnu*)
+   need_lib_prefix=no
+   need_version=no
+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
+-  soname_spec='${libname}${release}${shared_ext}$major'
++  soname_spec='${libname}${release}${shared_ext}$versuffix'
+   shlibpath_var=LD_LIBRARY_PATH
+   hardcode_into_libs=yes
+   ;;
+@@ -10824,7 +10824,7 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu)
+   need_lib_prefix=no
+   need_version=no
+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-  soname_spec='${libname}${release}${shared_ext}$major'
++  soname_spec='${libname}${release}${shared_ext}$versuffix'
+   finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
+   shlibpath_var=LD_LIBRARY_PATH
+   shlibpath_overrides_runpath=no
+@@ -14382,7 +14382,7 @@ gnu*)
+   need_lib_prefix=no
+   need_version=no
+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
+-  soname_spec='${libname}${release}${shared_ext}$major'
++  soname_spec='${libname}${release}${shared_ext}$versuffix'
+   shlibpath_var=LD_LIBRARY_PATH
+   hardcode_into_libs=yes
+   ;;
+@@ -14508,7 +14508,7 @@ linux* | k*bsd*-gnu | kopensolaris*-gnu)
+   need_lib_prefix=no
+   need_version=no
+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
+-  soname_spec='${libname}${release}${shared_ext}$major'
++  soname_spec='${libname}${release}${shared_ext}$versuffix'
+   finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
+   shlibpath_var=LD_LIBRARY_PATH
+   shlibpath_overrides_runpath=no

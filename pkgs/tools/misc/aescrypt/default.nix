@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.9";
+  version = "3.13";
   name = "aescrypt-${version}";
 
   src = fetchurl {
     url = "http://www.aescrypt.com/download/v3/linux/${name}.tgz";
-    sha256 = "3f3590f9b7e50039611ba9c0cf1cae1b188a44bd39cfc41553db7ec5709c0882";
+    sha256 = "1a1rs7xmbxh355qg3v02rln3gshvy3j6wkx4g9ir72l22mp6zkc7";
   };
 
   preBuild = ''

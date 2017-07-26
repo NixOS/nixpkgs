@@ -16,6 +16,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.isc;
     homepage = http://fragglet.github.io/lhasa;
     maintainers = with stdenv.lib; [ maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

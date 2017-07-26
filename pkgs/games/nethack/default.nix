@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeScript, ncurses, gzip, flex, bison }:
+{ stdenv, lib, fetchurl, writeScript, coreutils, ncurses, gzip, flex, bison, less }:
 
 let
   platform =
@@ -10,6 +10,7 @@ let
     # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
+  binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation {
   name = "nethack-3.6.0";
@@ -60,6 +61,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
     #! ${stdenv.shell} -e
+    PATH=${binPath}:\$PATH
 
     if [ ! -d ${userDir} ]; then
       mkdir -p ${userDir}

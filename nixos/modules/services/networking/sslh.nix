@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.sslh;
   configFile = pkgs.writeText "sslh.conf" ''
-    verbose: ${if cfg.verbose then "true" else "false"};
+    verbose: ${boolToString cfg.verbose};
     foreground: true;
     inetd: false;
     numeric: false;

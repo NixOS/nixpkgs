@@ -4,19 +4,19 @@ let
   libphutil = fetchFromGitHub {
     owner = "phacility";
     repo = "libphutil";
-    rev = "5fd1af8b4f2b9631e2ceb06bd88d21f2416123c2";
-    sha256 = "06zkfkgwni8prr3cnsbf1h4s30k4v00y8ll1bcl6282xynnh3gf6";
+    rev = "01b33af6f4d570b34ad791cd5ccaa3ea7f77dcb9";
+    sha256 = "0glrxlj4cr2821pdc2yy2m5bss4yr1zx3sdgw3r5d8hbfz361nx7";
   };
   arcanist = fetchFromGitHub {
     owner = "phacility";
     repo = "arcanist";
-    rev = "9e82ef979e8148c43b9b8439025d505b1219e213";
-    sha256 = "0h7ny8wr3cjn105gyzhd4qmhhccd0ilalslsdjj10nxxw2cgn193";
+    rev = "3b6b523c2b236e3724a1e115f126cb6fd05fa128";
+    sha256 = "1pr2izwj446rf2v6x6v2wsj7iwnaxq3xg3qqipybyf1xpqfmh5q8";
   };
 in
 stdenv.mkDerivation rec {
   name    = "arcanist-${version}";
-  version = "20160825";
+  version = "20170323";
 
   src = [ arcanist libphutil ];
   buildInputs = [ php makeWrapper flex ];

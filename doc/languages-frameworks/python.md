@@ -3,7 +3,7 @@
 ## User Guide
 
 Several versions of Python are available on Nix as well as a high amount of
-packages. The default interpreter is CPython 3.5.
+packages. The default interpreter is CPython 2.7.
 
 ### Using Python
 
@@ -131,7 +131,7 @@ specify some (optional) [meta information](http://nixos.org/nixpkgs/manual/#chap
 
 The output of the function is a derivation, which is an attribute with the name
 `toolz` of the set `pythonPackages`. Actually, sets are created for all interpreter versions,
-so `python27Packages`, `python34Packages`, `python35Packages` and `pypyPackages`.
+so e.g. `python27Packages`, `python35Packages` and `pypyPackages`.
 
 The above example works when you're directly working on
 `pkgs/top-level/python-packages.nix` in the Nixpkgs repository. Often though,
@@ -422,8 +422,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.6, 2.7, 3.3, 3.4 and 3.5 of the CPython interpreter are available as respectively
-`python26`, `python27`, `python33`, `python34` and `python35`. The PyPy interpreter
+Versions 2.7, 3.3, 3.4, 3.5 and 3.6 of the CPython interpreter are available as
+respectively `python27`, `python33`, `python34`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
 The Nix expressions for the interpreters can be found in
@@ -472,6 +472,7 @@ sets are
 * `pkgs.python33Packages`
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
+* `pkgs.python36Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
@@ -579,7 +580,7 @@ running `nix-shell` with the following `shell.nix`
 with import <nixpkgs> {};
 
 (python3.buildEnv.override {
-  extraLibs = with python3Packages; [ numpy requests2 ];
+  extraLibs = with python3Packages; [ numpy requests ];
 }).env
 ```
 
@@ -621,11 +622,14 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 ```nix
 with import <nixpkgs> {};
 
-(python33.withPackages (ps: [ps.numpy ps.requests2])).env
+(python33.withPackages (ps: [ps.numpy ps.requests])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
+
+Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv` 
+should be used with `ignoreCollisions = true`.
 
 ### Development mode
 
@@ -674,8 +678,8 @@ deterministic bytecode. This has security implications and is relevant for
 those using Python in a `nix-shell`.
 
 When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will have timestamp 1.
-The `buildPythonPackage` function sets `DETERMINISTIC_BUILD` as well as
-[PYTHONHASHSEED](https://docs.python.org/3.5/using/cmdline.html#envvar-PYTHONHASHSEED).
+The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1` and
+[PYTHONHASHSEED=0](https://docs.python.org/3.5/using/cmdline.html#envvar-PYTHONHASHSEED).
 Both are also exported in `nix-shell`.
 
 
@@ -706,7 +710,7 @@ nix-env -if build.nix
 ```
 Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
 
-#### Environment defined in `~/.nixpkgs/config.nix`
+#### Environment defined in `~/.config/nixpkgs/config.nix`
 
 If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
 ```nix
@@ -897,6 +901,49 @@ is executed it will attempt to download the python modules listed in
 requirements.txt. However these will be cached locally within the `virtualenv`
 folder and not downloaded again.
 
+### How to override a Python package from `configuration.nix`?
+
+If you need to change a package's attribute(s) from `configuration.nix` you could do:
+
+```nix
+  nixpkgs.config.packageOverrides = superP: {
+    pythonPackages = superP.pythonPackages.override {
+      overrides = self: super: {
+        bepasty-server = super.bepasty-server.overrideAttrs ( oldAttrs: {
+          src = pkgs.fetchgit {
+            url = "https://github.com/bepasty/bepasty-server";
+            sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
+            rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+          };
+        });
+      };
+    };
+  };
+```
+
+If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify `python` based software/libraries easily. Using `self` and `super` one can also alter dependencies (`buildInputs`) between the old state (`self`) and new state (`super`). 
+
+### How to override a Python package using overlays?
+
+To alter a python package using overlays, you would use the following approach:
+
+```nix
+self: super:
+rec {
+  python = super.python.override {
+    packageOverrides = python-self: python-super: {
+      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
+        src = self.pkgs.fetchgit {
+          url = "https://github.com/bepasty/bepasty-server";
+          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
+          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+        };
+      });
+    };
+  };
+  pythonPackages = python.pkgs;
+}
+```
 
 ## Contributing
 

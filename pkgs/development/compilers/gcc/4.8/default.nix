@@ -1,7 +1,7 @@
 { stdenv, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
-, langObjC ? stdenv.isDarwin
-, langObjCpp ? stdenv.isDarwin
+, langObjC ? targetPlatform.isDarwin
+, langObjCpp ? targetPlatform.isDarwin
 , langJava ? false
 , langAda ? false
 , langVhdl ? false
@@ -25,8 +25,6 @@
 , enableMultilib ? false
 , enablePlugin ? true             # whether to support user-supplied plug-ins
 , name ? "gcc"
-, cross ? null
-, binutilsCross ? null
 , libcCross ? null
 , crossStageStatic ? true
 , gnat ? null
@@ -34,6 +32,7 @@
 , stripped ? true
 , gnused ? null
 , darwin ? null
+, buildPlatform, hostPlatform, targetPlatform
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -49,7 +48,7 @@ assert cloog != null -> isl != null;
 assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
-assert stdenv.isDarwin -> gnused != null;
+assert hostPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -60,19 +59,19 @@ with builtins;
 let version = "4.8.5";
 
     # Whether building a cross-compiler for GNU/Hurd.
-    crossGNU = cross != null && cross.config == "i586-pc-gnu";
+    crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
 
     enableParallelBuilding = true;
 
     patches = [ ]
       ++ optional enableParallelBuilding ../parallel-bconfig.patch
-      ++ optional (cross != null) ../libstdc++-target.patch
+      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
-      ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch;
+      ++ optional hostPlatform.isDarwin ../gfortran-darwin-NXConstStr.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -120,15 +119,15 @@ let version = "4.8.5";
         withMode;
 
     /* Cross-gcc settings */
-    crossMingw = cross != null && cross.libc == "msvcrt";
-    crossDarwin = cross != null && cross.libc == "libSystem";
+    crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
+    crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
     crossConfigureFlags = let
-        gccArch = stdenv.cross.gcc.arch or null;
-        gccCpu = stdenv.cross.gcc.cpu or null;
-        gccAbi = stdenv.cross.gcc.abi or null;
-        gccFpu = stdenv.cross.gcc.fpu or null;
-        gccFloat = stdenv.cross.gcc.float or null;
-        gccMode = stdenv.cross.gcc.mode or null;
+        gccArch = targetPlatform.gcc.arch or null;
+        gccCpu = targetPlatform.gcc.cpu or null;
+        gccAbi = targetPlatform.gcc.abi or null;
+        gccFpu = targetPlatform.gcc.fpu or null;
+        gccFloat = targetPlatform.gcc.float or null;
+        gccMode = targetPlatform.gcc.mode or null;
         withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
         withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
@@ -136,13 +135,16 @@ let version = "4.8.5";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
         withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
       in
-        "--target=${cross.config}" +
+        "--target=${targetPlatform.config}" +
         withArch +
         withCpu +
         withAbi +
         withFpu +
         withFloat +
         withMode +
+        # Ensure that -print-prog-name is able to find the correct programs.
+        " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
+        " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
         (if crossMingw && crossStageStatic then
           " --with-headers=${libcCross}/include" +
           " --with-gcc" +
@@ -169,10 +171,6 @@ let version = "4.8.5";
           (if crossDarwin then " --with-sysroot=${libcCross.out}/share/sysroot"
            else                " --with-headers=${libcCross.dev}/include") +
           # Ensure that -print-prog-name is able to find the correct programs.
-          (stdenv.lib.optionalString (crossMingw || crossDarwin) (
-            " --with-as=${binutilsCross}/bin/${cross.config}-as" +
-            " --with-ld=${binutilsCross}/bin/${cross.config}-ld"
-          )) +
           " --enable-__cxa_atexit" +
           " --enable-long-long" +
           (if crossMingw then
@@ -188,7 +186,7 @@ let version = "4.8.5";
             " --disable-shared" +
             # To keep ABI compatibility with upstream mingw-w64
             " --enable-fully-dynamic-string"
-            else (if cross.libc == "uclibc" then
+            else (if targetPlatform.libc == "uclibc" then
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
               " --disable-libgomp" else "") +
@@ -197,9 +195,9 @@ let version = "4.8.5";
             " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
           );
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
-    crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
+    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
-    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
+    bootstrap = targetPlatform == hostPlatform && !hostPlatform.isArm && !hostPlatform.isMips;
 
 in
 
@@ -227,7 +225,7 @@ stdenv.mkDerivation ({
   libc_dev = stdenv.cc.libc_dev;
 
   postPatch =
-    if (stdenv.isGNU
+    if (hostPlatform.isHurd
         || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
             && libcCross.crossConfig == "i586-pc-gnu")
@@ -263,7 +261,7 @@ stdenv.mkDerivation ({
            sed -i "${gnu_h}" \
                -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc.dev}/include"|g'
         ''
-    else if cross != null || stdenv.cc.libc != null then
+    else if targetPlatform != hostPlatform || stdenv.cc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
@@ -293,17 +291,17 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (cross != null) [binutilsCross])
+    ++ (optionals (targetPlatform != hostPlatform) [binutils])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional stdenv.isDarwin gnused)
+    ++ (optional hostPlatform.isDarwin gnused)
     ;
 
 
-  preConfigure = stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit) ''
+  preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
     export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
@@ -313,7 +311,7 @@ stdenv.mkDerivation ({
   dontDisableStatic = true;
 
   configureFlags = "
-    ${if stdenv.isSunOS then
+    ${if hostPlatform.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
       # On Illumos/Solaris GNU as is preferred
       " --with-gnu-as --without-gnu-ld "
@@ -358,19 +356,19 @@ stdenv.mkDerivation ({
         )
       )
     }
-    ${if cross == null
-      then if stdenv.isDarwin
+    ${if targetPlatform == hostPlatform
+      then if hostPlatform.isDarwin
         then " --with-native-system-header-dir=${darwin.usr-include}"
         else " --with-native-system-header-dir=${getDev stdenv.cc.libc}/include"
       else ""}
     ${if langAda then " --enable-libada" else ""}
-    ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
-    ${if cross != null then crossConfigureFlags else ""}
+    ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
+    ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
-    ${if cross == null then platformFlags else ""}
+    ${if targetPlatform == hostPlatform then platformFlags else ""}
   ";
 
-  targetConfig = if cross != null then cross.config else null;
+  targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags = if bootstrap then
     (if profiledCompiler then "profiledbootstrap" else "bootstrap")
@@ -382,28 +380,28 @@ stdenv.mkDerivation ({
     else "install";
 
   crossAttrs = let
-    xgccArch = stdenv.cross.gcc.arch or null;
-    xgccCpu = stdenv.cross.gcc.cpu or null;
-    xgccAbi = stdenv.cross.gcc.abi or null;
-    xgccFpu = stdenv.cross.gcc.fpu or null;
-    xgccFloat = stdenv.cross.gcc.float or null;
+    xgccArch = targetPlatform.gcc.arch or null;
+    xgccCpu = targetPlatform.gcc.cpu or null;
+    xgccAbi = targetPlatform.gcc.abi or null;
+    xgccFpu = targetPlatform.gcc.fpu or null;
+    xgccFloat = targetPlatform.gcc.float or null;
     xwithArch = if xgccArch != null then " --with-arch=${xgccArch}" else "";
     xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
     xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
     xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
     xwithFloat = if xgccFloat != null then " --with-float=${xgccFloat}" else "";
   in {
-    AR = "${stdenv.cross.config}-ar";
-    LD = "${stdenv.cross.config}-ld";
-    CC = "${stdenv.cross.config}-gcc";
-    CXX = "${stdenv.cross.config}-gcc";
-    AR_FOR_TARGET = "${stdenv.cross.config}-ar";
-    LD_FOR_TARGET = "${stdenv.cross.config}-ld";
-    CC_FOR_TARGET = "${stdenv.cross.config}-gcc";
-    NM_FOR_TARGET = "${stdenv.cross.config}-nm";
-    CXX_FOR_TARGET = "${stdenv.cross.config}-g++";
+    AR = "${targetPlatform.config}-ar";
+    LD = "${targetPlatform.config}-ld";
+    CC = "${targetPlatform.config}-gcc";
+    CXX = "${targetPlatform.config}-gcc";
+    AR_FOR_TARGET = "${targetPlatform.config}-ar";
+    LD_FOR_TARGET = "${targetPlatform.config}-ld";
+    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
+    NM_FOR_TARGET = "${targetPlatform.config}-nm";
+    CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}
@@ -431,7 +429,7 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      --target=${stdenv.cross.config}
+      --target=${targetPlatform.config}
       ${xwithArch}
       ${xwithCpu}
       ${xwithAbi}
@@ -480,7 +478,7 @@ stdenv.mkDerivation ({
     ++ optional (libpthread != null) libpthread);
 
   EXTRA_TARGET_CFLAGS =
-    if cross != null && libcCross != null then [
+    if targetPlatform != hostPlatform && libcCross != null then [
         "-idirafter ${libcCross.dev}/include"
       ]
       ++ optionals (! crossStageStatic) [
@@ -489,7 +487,7 @@ stdenv.mkDerivation ({
     else null;
 
   EXTRA_TARGET_LDFLAGS =
-    if cross != null && libcCross != null then [
+    if targetPlatform != hostPlatform && libcCross != null then [
         "-Wl,-L${libcCross.out}/lib"
       ]
       ++ (if crossStageStatic then [
@@ -538,13 +536,13 @@ stdenv.mkDerivation ({
   };
 }
 
-// optionalAttrs (cross != null && cross.libc == "msvcrt" && crossStageStatic) {
+// optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
   makeFlags = [ "all-gcc" "all-target-libgcc" ];
   installTargets = "install-gcc install-target-libgcc";
 }
 
-# Strip kills static libs of other archs (hence cross != null)
-// optionalAttrs (!stripped || cross != null) { dontStrip = true; }
+# Strip kills static libs of other archs (hence targetPlatform != hostPlatform)
+// optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 )

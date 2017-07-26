@@ -143,11 +143,13 @@ in
       };
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -m 0770 -p /var/spool/fcron
-        ${pkgs.coreutils}/bin/chown -R fcron:fcron /var/spool/fcron
+        install \
+          --mode 0770 \
+          --owner fcron \
+          --group fcron \
+          --directory /var/spool/fcron
         # load system crontab file
-        set -x
-        #${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
+        /run/wrappers/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
       '';
 
       serviceConfig = {

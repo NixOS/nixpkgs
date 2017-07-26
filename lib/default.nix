@@ -1,7 +1,13 @@
+/* Library of low-level helper functions for nix expressions.
+ *
+ * Please implement (mostly) exhaustive unit tests
+ * for new functions in `./tests.nix'.
+ */
 let
 
-  # trivial, often used functions
+  # often used, or depending on very little
   trivial = import ./trivial.nix;
+  fixedPoints = import ./fixed-points.nix;
 
   # datatypes
   attrsets = import ./attrsets.nix;
@@ -22,8 +28,7 @@ let
 
   # constants
   licenses = import ./licenses.nix;
-  platforms = import ./platforms.nix;
-  systems = import ./systems.nix;
+  systems = import ./systems;
 
   # misc
   debug = import ./debug.nix;
@@ -38,17 +43,20 @@ let
   filesystem = import ./filesystem.nix;
 
 in
-  { inherit trivial
+  { inherit trivial fixedPoints
             attrsets lists strings stringsWithDeps
             customisation maintainers meta sources
             modules options types
-            licenses platforms systems
+            licenses systems
             debug generators misc
             sandbox fetchers filesystem;
+
+    # back-compat aliases
+    platforms = systems.doubles;
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
-  // trivial // lists // strings // stringsWithDeps // attrsets // sources
+  // trivial // fixedPoints
+  // lists // strings // stringsWithDeps // attrsets // sources
   // options // types // meta // debug // misc // modules
-  // systems
   // customisation

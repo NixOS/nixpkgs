@@ -1,0 +1,37 @@
+diff -ru python-jose-1.3.2/requirements.txt python-jose-1.3.2.new/requirements.txt
+--- python-jose-1.3.2/requirements.txt	2016-09-05 15:13:49.000000000 +0200
++++ python-jose-1.3.2.new/requirements.txt	2017-03-15 11:35:47.118001810 +0100
+@@ -1,3 +1,3 @@
+-pycrypto
++pycryptodome
+ six
+ future
+diff -ru python-jose-1.3.2/setup.py python-jose-1.3.2.new/setup.py
+--- python-jose-1.3.2/setup.py	2016-09-05 15:13:49.000000000 +0200
++++ python-jose-1.3.2.new/setup.py	2017-03-15 11:37:15.725077184 +0100
+@@ -25,12 +25,8 @@
+ 
+ 
+ def get_install_requires():
+-    if platform.python_implementation() == 'PyPy':
+-        crypto_lib = 'pycryptodome >=3.3.1, <3.4.0'
+-    else:
+-        crypto_lib = 'pycrypto >=2.6.0, <2.7.0'
+     return [
+-        crypto_lib,
++        'pycryptodome >=3.3.1, <3.5.0',
+         'six <2.0',
+         'ecdsa <1.0',
+         'future <1.0',
+diff -ru python-jose-1.3.2/tox.ini python-jose-1.3.2.new/tox.ini
+--- python-jose-1.3.2/tox.ini	2016-09-05 15:13:49.000000000 +0200
++++ python-jose-1.3.2.new/tox.ini	2017-03-15 11:36:50.423055657 +0100
+@@ -6,7 +6,7 @@
+     py.test --cov-report term-missing --cov jose
+ deps =
+     future
+-    pycrypto
++    pycryptodome
+     ecdsa
+     pytest
+     pytest-cov

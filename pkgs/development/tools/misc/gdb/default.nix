@@ -1,44 +1,44 @@
 { fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo, zlib
 , dejagnu, perl, pkgconfig
-, python ? null
+
+, buildPlatform, hostPlatform, targetPlatform
+
+, pythonSupport ? hostPlatform == buildPlatform && !hostPlatform.isCygwin, python ? null
 , guile ? null
-, target ? null
+
 # Support all known targets in one gdb binary.
 , multitarget ? false
+
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
-
 }:
 
 let
-
-  basename = "gdb-7.12.1";
-
-  # Whether (cross-)building for GNU/Hurd.  This is an approximation since
-  # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
-  # `nativeDrv'.
-  isGNU =
-      stdenv.system == "i686-gnu"
-      || (stdenv ? cross && stdenv.cross.config == "i586-pc-gnu");
-
+  basename = "gdb-${version}";
+  version = "8.0";
 in
 
-assert isGNU -> mig != null && hurd != null;
+assert targetPlatform.isHurd -> mig != null && hurd != null;
+assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
-  name = basename + stdenv.lib.optionalString (target != null)
-      ("-" + target.config);
+  name =
+    stdenv.lib.optionalString (targetPlatform != hostPlatform)
+                              (targetPlatform.config + "-")
+    + basename;
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "11ii260h1sd7v0bs3cz6d5l8gqxxgldry0md60ncjgixjw5nh1s6";
+    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo perl ]
-    ++ stdenv.lib.optional isGNU mig;
+    # TODO(@Ericson2314) not sure if should be host or target
+    ++ stdenv.lib.optional targetPlatform.isHurd mig;
 
-  buildInputs = [ ncurses readline gmp mpfr expat zlib python guile ]
-    ++ stdenv.lib.optional isGNU hurd
+  buildInputs = [ ncurses readline gmp mpfr expat zlib guile ]
+    ++ stdenv.lib.optional pythonSupport python
+    ++ stdenv.lib.optional targetPlatform.isHurd hurd
     ++ stdenv.lib.optional doCheck dejagnu;
 
   enableParallelBuilding = true;
@@ -46,24 +46,19 @@ stdenv.mkDerivation rec {
   # darwin build fails with format hardening since v7.12
   hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
 
-  configureFlags = with stdenv.lib;
-    [ "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
-      "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-      "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
-    ]
-    ++ optional (target != null) "--target=${target.config}"
-    ++ optional multitarget "--enable-targets=all"
-    ++ optional (elem stdenv.system platforms.cygwin) "--without-python";
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  crossAttrs = {
-    # Do not add --with-python here to avoid cross building it.
-    configureFlags = with stdenv.lib;
-      [ "--with-gmp=${gmp.crossDrv}" "--with-mpfr=${mpfr.crossDrv}" "--with-system-readline"
-        "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.crossDrv}" "--without-python"
-      ]
-      ++ optional (target != null) "--target=${target.config}"
-      ++ optional multitarget "--enable-targets=all";
-  };
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
+  configureFlags = with stdenv.lib; [
+    "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
+    "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+  ] ++ stdenv.lib.optional hostPlatform.isLinux
+      # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
+      "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
+    ++ stdenv.lib.optional (!pythonSupport) "--without-python"
+    ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

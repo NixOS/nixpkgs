@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "SQL/RDF database used by, e.g., KDE-nepomuk";
     homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;
     platforms = platforms.linux;
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mattermost-${version}";
-  version = "3.6.2";
+  version = "3.8.2";
 
   src = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "1wf8xvy8njmhym45dwag6mdwhfgzg5xccvhyv7c68rz5h57vfgsb";
+    sha256 = "1rrcasx8yzr48lwznqhkqk4qjfhxq5lnfcl9xiqkh6y2gmaqbk42";
   };
 
   installPhase = ''

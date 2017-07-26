@@ -13,7 +13,7 @@ import ./make-test.nix (pkgs: {
 
       networking.firewall.allowedTCPPorts = [ 4444 ];
 
-      systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444";
+      systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444 -k";
     };
 
     probe = { config, lib, pkgs, ...}: {
@@ -32,6 +32,7 @@ import ./make-test.nix (pkgs: {
       $machine->succeed("mkswap /dev/vdb");
       $machine->succeed("swapon -a");
       $machine->startJob("listener");
+      $machine->waitForOpenPort(4444);
       $machine->succeed("systemctl hibernate &");
       $machine->waitForShutdown;
       $machine->start;

@@ -1,7 +1,11 @@
-{ stdenv, fetchurl, cmake, pyside, python, qt4, pysideShiboken }:
+{ lib, fetchurl, cmake, pyside, qt4, pysideShiboken, buildPythonPackage }:
 
-stdenv.mkDerivation {
-  name = "pyside-tools-0.2.15";
+# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
+buildPythonPackage rec {
+  pname = "pyside-tools";
+  version = "0.2.15";
+  name = "${pname}-${version}";
+  format = "other";
 
   src = fetchurl {
     url = "https://github.com/PySide/Tools/archive/0.2.15.tar.gz";
@@ -10,13 +14,13 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pyside python qt4 pysideShiboken ];
+  buildInputs = [ cmake pyside qt4 pysideShiboken ];
 
   meta = {
     description = "Tools for pyside, the LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "http://www.pyside.org";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.chaoflow ];
+    platforms = lib.platforms.all;
   };
 }

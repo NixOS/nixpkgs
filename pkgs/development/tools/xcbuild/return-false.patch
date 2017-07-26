@@ -1,0 +1,13 @@
+diff --git a/Libraries/dependency/Tools/dependency-info-tool.cpp b/Libraries/dependency/Tools/dependency-info-tool.cpp
+index 006f53c7..d469f068 100644
+--- a/Libraries/dependency/Tools/dependency-info-tool.cpp
++++ b/Libraries/dependency/Tools/dependency-info-tool.cpp
+@@ -271,7 +271,7 @@ main(int argc, char **argv)
+      */
+     std::vector<uint8_t> makefileContents = std::vector<uint8_t>(contents.begin(), contents.end());
+     if (!filesystem.write(makefileContents, *options.output())) {
+-        return false;
++        return -1;
+     }
+ 
+     return 0;

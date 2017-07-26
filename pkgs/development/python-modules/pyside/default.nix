@@ -1,8 +1,11 @@
-{ lib, fetchurl, cmake, python, mkPythonDerivation, pysideGeneratorrunner, pysideShiboken, qt4 }:
+{ lib, fetchurl, cmake, python, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
-mkPythonDerivation rec {
-  name = "pyside-${version}";
+# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
+buildPythonPackage rec {
+  pname = "pyside";
+  name = "${pname}-${version}";
   version = "1.2.4";
+  format = "other";
 
   src = fetchurl {
     url = "https://github.com/PySide/PySide/archive/${version}.tar.gz";

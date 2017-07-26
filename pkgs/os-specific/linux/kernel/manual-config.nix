@@ -1,4 +1,7 @@
-{ stdenv, runCommand, nettools, bc, perl, kmod, openssl, writeTextFile, ubootChooser }:
+{ stdenv, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
+, writeTextFile, ubootChooser
+, hostPlatform
+}:
 
 let
   readConfig = configfile: import (runCommand "config.nix" {} ''
@@ -102,6 +105,13 @@ let
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
+        make $makeFlags prepare
+        actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
+        if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
+          echo "Error: modDirVersion specified in the Nix expression is wrong, it should be: $actualModDirVersion"
+          exit 1
+        fi
+
         # Note: we can get rid of this once http://permalink.gmane.org/gmane.linux.kbuild.devel/13800 is merged.
         buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
       '';
@@ -139,17 +149,12 @@ let
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
-        mkdir -p $dev/lib/modules/${modDirVersion}
-        cd ..
-        mv $sourceRoot $dev/lib/modules/${modDirVersion}/source
+        mkdir -p $dev/lib/modules/${modDirVersion}/build
+        cp -dpR ../$sourceRoot $dev/lib/modules/${modDirVersion}/source
         cd $dev/lib/modules/${modDirVersion}/source
 
-        mv $buildRoot/.config $buildRoot/Module.symvers $TMPDIR
-        rm -fR $buildRoot
-        mkdir $buildRoot
-        mv $TMPDIR/.config $TMPDIR/Module.symvers $buildRoot
-        make modules_prepare $makeFlags "''${makeFlagsArray[@]}"
-        mv $buildRoot $dev/lib/modules/${modDirVersion}/build
+        cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
+        make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can add
@@ -157,7 +162,7 @@ let
         # from drivers/ in the future; it adds 50M to keep all of its
         # headers on 3.10 though.
 
-        chmod +w -R ../source
+        chmod u+w -R ../source
         arch=`cd $dev/lib/modules/${modDirVersion}/build/arch; ls`
 
         # Remove unusued arches
@@ -170,14 +175,14 @@ let
         rm -fR drivers
 
         # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod -w
+        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
 
         # Keep root and arch-specific Makefiles
-        chmod -w Makefile
-        chmod -w arch/$arch/Makefile*
+        chmod u-w Makefile
+        chmod u-w arch/$arch/Makefile*
 
         # Keep whole scripts dir
-        chmod -w -R scripts
+        chmod u-w -R scripts
 
         # Delete everything not kept
         find . -type f -perm -u=w -print0 | xargs -0 rm
@@ -217,7 +222,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ perl bc nettools openssl ] ++ optional (stdenv.platform.uboot != null)
+  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ] ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
@@ -228,7 +233,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   karch = stdenv.platform.kernelArch;
 
-  crossAttrs = let cp = stdenv.cross.platform; in
+  crossAttrs = let cp = hostPlatform.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
       makeFlags = commonMakeFlags ++ [
         "ARCH=${cp.kernelArch}"

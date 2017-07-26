@@ -1,38 +1,43 @@
-{ stdenv, fetchFromGitHub, unzip, alsaLib }:
-let
-  version = "1.2";
-in
+{ stdenv, fetchFromGitHub
+, espeak, alsaLib, perl
+, python }:
+
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "direwolf-${version}";
-  inherit version;
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "wb2osz";
     repo = "direwolf";
-    rev = "8b81a32";
-    sha256 = "0r4fgdxghh292bzhqshr7zl5cg2lfsvlgmy4d5vqcli7x6qa1gcs";
+    rev = version;
+    sha256 = "1x6vvl3fy70ic5pqvqsyr0bkqwim8m9jaqnm5ls8z8i66rwq23fg";
   };
 
   buildInputs = [
-    unzip alsaLib
-  ];
+    espeak perl python
+  ] ++ (optional stdenv.isLinux alsaLib);
 
   patchPhase = ''
-    substituteInPlace Makefile.linux \
-      --replace "/usr/local" "$out" \
-      --replace "/usr/share" "$out/share"
-  '';
+        substituteInPlace Makefile.* \
+          --replace /usr/share $out/share
 
-  preInstall = ''
-    mkdir -p $out/bin
-  '';
+        substituteInPlace dwespeak.sh \
+          --replace espeak ${espeak}/bin/espeak
+        '';
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    mkdir -p $out/bin 
+    make INSTALLDIR=$out install
+    '';
+
+  meta = {
     description = "A Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
     # On the page: This page will be disappearing on October 8, 2015.
-    homepage = https://home.comcast.net/~wb2osz/site/;
+    homepage = https://github.com/wb2osz/direwolf/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.the-kenny ];
   };
 }

@@ -13,11 +13,11 @@ let
   edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
 in
 mkDerivation rec {
-  name = "aMule-2.3.1";
+  name = "aMule-2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/amule/${name}.tar.xz";
-    sha256 = "0hvpx3c005nvxsfand5bwfxxiq3mv0mpykajfm2lkygjh1rw2383";
+    sha256 = "0a1rd33hjl30qyzgb5y8m7dxs38asci3kjnlvims1ky6r3yj0izn";
   };
 
   buildInputs =
@@ -25,7 +25,7 @@ mkDerivation rec {
     ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
-  patches = [ ./gcc47.patch ]; # from Gentoo
+  enableParallelBuilding = true;
 
   configureFlags = ''
     --with-crypto-prefix=${cryptopp}

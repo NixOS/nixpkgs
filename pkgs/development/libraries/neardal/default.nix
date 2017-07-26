@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     homepage = https://01.org/linux-nfc;
     maintainers = with maintainers; [ tstrobel ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

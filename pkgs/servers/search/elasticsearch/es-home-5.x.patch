@@ -1,0 +1,31 @@
+diff -rupN a/bin/elasticsearch b/bin/elasticsearch
+--- a/bin/elasticsearch	2017-05-17 10:53:42.214686741 +0200
++++ b/bin/elasticsearch	2017-05-17 10:53:49.444487071 +0200
+@@ -105,7 +105,11 @@ while [ -h "$SCRIPT" ] ; do
+ done
+ 
+ # determine elasticsearch home
+-ES_HOME=`dirname "$SCRIPT"`/..
++
++if [ -z "$ES_HOME" ]; then
++    echo "You must set the ES_HOME var" >&2
++    exit 1
++fi
+ 
+ # make ELASTICSEARCH_HOME absolute
+ ES_HOME=`cd "$ES_HOME"; pwd`
+diff -rupN a/bin/elasticsearch-plugin b/bin/elasticsearch-plugin
+--- a/bin/elasticsearch-plugin	2017-05-17 10:53:42.214686741 +0200
++++ b/bin/elasticsearch-plugin	2017-05-17 10:53:49.445487044 +0200
+@@ -16,7 +16,10 @@ while [ -h "$SCRIPT" ] ; do
+ done
+ 
+ # determine elasticsearch home
+-ES_HOME=`dirname "$SCRIPT"`/..
++if [ -z "$ES_HOME" ]; then
++    echo "You must set the ES_HOME var" >&2
++    exit 1
++fi
+ 
+ # make ELASTICSEARCH_HOME absolute
+ ES_HOME=`cd "$ES_HOME"; pwd`

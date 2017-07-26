@@ -4,9 +4,9 @@
 let
   version = "${major}.11";
   major = "0.3";
-in pythonPackages.mkPythonDerivation rec {
+in pythonPackages.buildPythonApplication rec {
   name = "d-feet-${version}";
-  namePrefix = "";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";

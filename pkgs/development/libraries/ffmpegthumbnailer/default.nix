@@ -1,16 +1,19 @@
-{ pkgs, fetchurl, stdenv, ffmpeg, cmake, libpng, pkgconfig
+{ pkgs, fetchFromGitHub, stdenv, ffmpeg, cmake, libpng, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
   name = "ffmpegthumbnailer-${version}";
-  version = "2.0.10";
+  version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/dirkvdb/ffmpegthumbnailer/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "0q7ws7ysw2rwr6ja8rhdjcc7x1hrlga7n514wi4lhw1yma32q0m3";
+  src = fetchFromGitHub {
+    owner = "dirkvdb";
+    repo = "ffmpegthumbnailer";
+    rev = version;
+    sha256 = "0kl8aa547icy9b05njps02a8sw4yn4f8fzs228kig247sn09s4cp";
   };
 
-  buildInputs = [ ffmpeg cmake libpng pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ ffmpeg libpng ];
 
   meta = with stdenv.lib;  {
     homepage = https://github.com/dirkvdb/ffmpegthumbnailer;

@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, poppler, xlibs, pcre, python, glib, fontforge-gtk, cairo, pango, openjdk8
+, poppler, xlibs, pcre, python, glib, fontforge, cairo, pango, openjdk8
+
 }:
 
 stdenv.mkDerivation rec {
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
     glib
     cairo
     pango
-    (poppler.override { withData = true; })
-    fontforge-gtk
+    poppler
+    fontforge
     openjdk8
   ];
 

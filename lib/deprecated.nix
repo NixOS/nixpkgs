@@ -16,23 +16,23 @@ rec {
 
   defaultMergeArg = x : y: if builtins.isAttrs y then
     y
-  else 
+  else
     (y x);
   defaultMerge = x: y: x // (defaultMergeArg x y);
-  foldArgs = merger: f: init: x: 
-    let arg=(merger init (defaultMergeArg init x));
-      # now add the function with composed args already applied to the final attrs
-        base = (setAttrMerge "passthru" {} (f arg) 
-                        ( z : z // rec { 
-                          function = foldArgs merger f arg; 
-			  args = (lib.attrByPath ["passthru" "args"] {} z) // x;
+  foldArgs = merger: f: init: x:
+    let arg = (merger init (defaultMergeArg init x));
+        # now add the function with composed args already applied to the final attrs
+        base = (setAttrMerge "passthru" {} (f arg)
+                        ( z: z // rec {
+                            function = foldArgs merger f arg;
+                            args = (lib.attrByPath ["passthru" "args"] {} z) // x;
                           } ));
-	withStdOverrides = base // {
-	   override = base.passthru.function;
-	   } ;
+        withStdOverrides = base // {
+          override = base.passthru.function;
+        };
         in
-	withStdOverrides;
-    
+          withStdOverrides;
+
 
   # predecessors: proposed replacement for applyAndFun (which has a bug cause it merges twice)
   # the naming "overridableDelayableArgs" tries to express that you can
@@ -49,35 +49,35 @@ rec {
   #
   # examples: see test cases "res" below;
   overridableDelayableArgs =
-          f :        # the function applied to the arguments
-          initial :  # you pass attrs, the functions below are passing a function taking the fix argument
+          f:        # the function applied to the arguments
+          initial:  # you pass attrs, the functions below are passing a function taking the fix argument
     let
         takeFixed = if isFunction initial then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
-        tidy = args : 
+        tidy = args:
             let # apply all functions given in "applyPreTidy" in sequence
-                applyPreTidyFun = fold ( n : a : x : n ( a x ) ) lib.id (maybeAttr "applyPreTidy" [] args);
+                applyPreTidyFun = fold ( n: a: x: n ( a x ) ) lib.id (maybeAttr "applyPreTidy" [] args);
             in removeAttrs (applyPreTidyFun args) ( ["applyPreTidy"] ++ (maybeAttr  "removeAttrs" [] args) ); # tidy up args before applying them
-        fun = n : x :
-             let newArgs = fixed :
-                     let args = takeFixed fixed; 
-                         mergeFun = args.${n};
-                     in if isAttrs x then (mergeFun args x)
-                        else assert isFunction x;
-                             mergeFun args (x ( args // { inherit fixed; }));
-             in overridableDelayableArgs f newArgs;
+        fun = n: x:
+            let newArgs = fixed:
+                    let args = takeFixed fixed;
+                        mergeFun = args.${n};
+                    in if isAttrs x then (mergeFun args x)
+                       else assert isFunction x;
+                            mergeFun args (x ( args // { inherit fixed; }));
+            in overridableDelayableArgs f newArgs;
     in
     (f (tidy (lib.fix takeFixed))) // {
       merge   = fun "mergeFun";
       replace = fun "keepFun";
     };
-  defaultOverridableDelayableArgs = f : 
+  defaultOverridableDelayableArgs = f:
       let defaults = {
             mergeFun = mergeAttrByFunc; # default merge function. merge strategie (concatenate lists, strings) is given by mergeAttrBy
-            keepFun = a : b : { inherit (a) removeAttrs mergeFun keepFun mergeAttrBy; } // b; # even when using replace preserve these values
+            keepFun = a: b: { inherit (a) removeAttrs mergeFun keepFun mergeAttrBy; } // b; # even when using replace preserve these values
             applyPreTidy = []; # list of functions applied to args before args are tidied up (usage case : prepareDerivationArgs)
             mergeAttrBy = mergeAttrBy // {
-              applyPreTidy = a : b : a ++ b;
-              removeAttrs = a : b: a ++ b;
+              applyPreTidy = a: b: a ++ b;
+              removeAttrs = a: b: a ++ b;
             };
             removeAttrs = ["mergeFun" "keepFun" "mergeAttrBy" "removeAttrs" "fixed" ]; # before applying the arguments to the function make sure these names are gone
           };
@@ -86,7 +86,7 @@ rec {
 
 
   # rec { # an example of how composedArgsAndFun can be used
-  #  a  = composedArgsAndFun (x : x) { a = ["2"]; meta = { d = "bar";}; };
+  #  a  = composedArgsAndFun (x: x) { a = ["2"]; meta = { d = "bar";}; };
   #  # meta.d will be lost ! It's your task to preserve it (eg using a merge function)
   #  b  = a.passthru.function { a = [ "3" ]; meta = { d2 = "bar2";}; };
   #  # instead of passing/ overriding values you can use a merge function:
@@ -119,7 +119,7 @@ rec {
     else if val == true || val == false then false
     else null;
 
-    
+
   # Return true only if there is an attribute and it is true.
   checkFlag = attrSet: name:
         if name == "true" then true else
@@ -134,29 +134,29 @@ rec {
   ( attrByPath [name] (if checkFlag attrSet name then true else
         if argList == [] then null else
         let x = builtins.head argList; in
-                if (head x) == name then 
+                if (head x) == name then
                         (head (tail x))
-                else (getValue attrSet 
+                else (getValue attrSet
                         (tail argList) name)) attrSet );
 
-                        
+
   # Input : attrSet, [[name default] ...], [ [flagname reqs..] ... ]
   # Output : are reqs satisfied? It's asserted.
-  checkReqs = attrSet : argList : condList :
+  checkReqs = attrSet: argList: condList:
   (
-    fold lib.and true 
-      (map (x: let name = (head x) ; in
-        
-        ((checkFlag attrSet name) -> 
+    fold lib.and true
+      (map (x: let name = (head x); in
+
+        ((checkFlag attrSet name) ->
         (fold lib.and true
         (map (y: let val=(getValue attrSet argList y); in
-                (val!=null) && (val!=false)) 
-        (tail x))))) condList)) ;
-        
+                (val!=null) && (val!=false))
+        (tail x))))) condList));
+
 
   # This function has O(n^2) performance.
-  uniqList = {inputList, acc ? []} :
-    let go = xs : acc :
+  uniqList = { inputList, acc ? [] }:
+    let go = xs: acc:
              if xs == []
              then []
              else let x = head xs;
@@ -164,26 +164,26 @@ rec {
                   in y ++ go (tail xs) (y ++ acc);
     in go inputList acc;
 
-  uniqListExt = {inputList, outputList ? [],
-    getter ? (x : x), compare ? (x: y: x==y)}:
+  uniqListExt = { inputList,
+                  outputList ? [],
+                  getter ? (x: x),
+                  compare ? (x: y: x==y) }:
         if inputList == [] then outputList else
-        let x=head inputList; 
-        isX = y: (compare (getter y) (getter x));
-        newOutputList = outputList ++
-         (if any isX outputList then [] else [x]);
-        in uniqListExt {outputList=newOutputList; 
-                inputList = (tail inputList);
-                inherit getter compare;
-                };
+        let x = head inputList;
+            isX = y: (compare (getter y) (getter x));
+            newOutputList = outputList ++
+                (if any isX outputList then [] else [x]);
+        in uniqListExt { outputList = newOutputList;
+                         inputList = (tail inputList);
+                         inherit getter compare;
+                       };
 
-
-                
   condConcat = name: list: checker:
         if list == [] then name else
-        if checker (head list) then 
-                condConcat 
-                        (name + (head (tail list))) 
-                        (tail (tail list)) 
+        if checker (head list) then
+                condConcat
+                        (name + (head (tail list)))
+                        (tail (tail list))
                         checker
         else condConcat
                 name (tail (tail list)) checker;
@@ -202,12 +202,12 @@ rec {
     in
       work startSet [] [];
 
-  innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else 
+  innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else
         innerModifySumArgs f x (a // b);
   modifySumArgs = f: x: innerModifySumArgs f x {};
 
 
-  innerClosePropagation = acc : xs :
+  innerClosePropagation = acc: xs:
     if xs == []
     then acc
     else let y  = head xs;
@@ -227,45 +227,45 @@ rec {
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
   # calls a function (f attr value ) for each record item. returns a list
-  mapAttrsFlatten = f : r : map (attr: f attr r.${attr}) (attrNames r);
+  mapAttrsFlatten = f: r: map (attr: f attr r.${attr}) (attrNames r);
 
   # attribute set containing one attribute
-  nvs = name : value : listToAttrs [ (nameValuePair name value) ];
+  nvs = name: value: listToAttrs [ (nameValuePair name value) ];
   # adds / replaces an attribute of an attribute set
-  setAttr = set : name : v : set // (nvs name v);
+  setAttr = set: name: v: set // (nvs name v);
 
   # setAttrMerge (similar to mergeAttrsWithFunc but only merges the values of a particular name)
-  # setAttrMerge "a" [] { a = [2];} (x : x ++ [3]) -> { a = [2 3]; } 
-  # setAttrMerge "a" [] {         } (x : x ++ [3]) -> { a = [  3]; }
-  setAttrMerge = name : default : attrs : f :
+  # setAttrMerge "a" [] { a = [2];} (x: x ++ [3]) -> { a = [2 3]; }
+  # setAttrMerge "a" [] {         } (x: x ++ [3]) -> { a = [  3]; }
+  setAttrMerge = name: default: attrs: f:
     setAttr attrs name (f (maybeAttr name default attrs));
 
-  # Using f = a : b = b the result is similar to //
+  # Using f = a: b = b the result is similar to //
   # merge attributes with custom function handling the case that the attribute
   # exists in both sets
-  mergeAttrsWithFunc = f : set1 : set2 :
-    fold (n: set : if set ? ${n}
+  mergeAttrsWithFunc = f: set1: set2:
+    fold (n: set: if set ? ${n}
                         then setAttr set n (f set.${n} set2.${n})
                         else set )
            (set2 // set1) (attrNames set2);
 
   # merging two attribute set concatenating the values of same attribute names
   # eg { a = 7; } {  a = [ 2 3 ]; } becomes { a = [ 7 2 3 ]; }
-  mergeAttrsConcatenateValues = mergeAttrsWithFunc ( a : b : (toList a) ++ (toList b) );
+  mergeAttrsConcatenateValues = mergeAttrsWithFunc ( a: b: (toList a) ++ (toList b) );
 
-  # merges attributes using //, if a name exisits in both attributes
+  # merges attributes using //, if a name exists in both attributes
   # an error will be triggered unless its listed in mergeLists
   # so you can mergeAttrsNoOverride { buildInputs = [a]; } { buildInputs = [a]; } {} to get
   # { buildInputs = [a b]; }
-  # merging buildPhase does'nt really make sense. The cases will be rare where appending /prefixing will fit your needs?
+  # merging buildPhase doesn't really make sense. The cases will be rare where appending /prefixing will fit your needs?
   # in these cases the first buildPhase will override the second one
   # ! deprecated, use mergeAttrByFunc instead
   mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
                            overrideSnd ? [ "buildPhase" ]
-                         } : attrs1 : attrs2 :
-    fold (n: set : 
+                         }: attrs1: attrs2:
+    fold (n: set:
         setAttr set n ( if set ? ${n}
-            then # merge 
+            then # merge
               if elem n mergeLists # attribute contains list, merge them by concatenating
                 then attrs2.${n} ++ attrs1.${n}
               else if elem n overrideSnd
@@ -286,14 +286,14 @@ rec {
   # { mergeAttrsBy = [...]; buildInputs = [ a b c d ]; }
   # is used by prepareDerivationArgs, defaultOverridableDelayableArgs and can be used when composing using
   # foldArgs, composedArgsAndFun or applyAndFun. Example: composableDerivation in all-packages.nix
-  mergeAttrByFunc = x : y :
+  mergeAttrByFunc = x: y:
     let
-          mergeAttrBy2 = { mergeAttrBy=lib.mergeAttrs; }
+          mergeAttrBy2 = { mergeAttrBy = lib.mergeAttrs; }
                       // (maybeAttr "mergeAttrBy" {} x)
                       // (maybeAttr "mergeAttrBy" {} y); in
     fold lib.mergeAttrs {} [
       x y
-      (mapAttrs ( a : v : # merge special names using given functions
+      (mapAttrs ( a: v: # merge special names using given functions
           if x ? ${a}
              then if y ? ${a}
                then v x.${a} y.${a} # both have attr, use merge func
@@ -313,9 +313,9 @@ rec {
   #
   # This function is best explained by an example:
   #
-  #     {version ? "2.x"} :
+  #     {version ? "2.x"}:
   #
-  #     mkDerivation (mergeAttrsByVersion "package-name" version 
+  #     mkDerivation (mergeAttrsByVersion "package-name" version
   #       { # version specific settings
   #         "git" = { src = ..; preConfigre = "autogen.sh"; buildInputs = [automake autoconf libtool];  };
   #         "2.x" = { src = ..; };
@@ -346,21 +346,24 @@ rec {
   # See misc.nix -> versionedDerivation
   # discussion: nixpkgs: pull/310
   mergeAttrsByVersion = name: version: attrsByVersion: base:
-    mergeAttrsByFuncDefaultsClean [ { name = "${name}-${version}"; } base (maybeAttr version (throw "bad version ${version} for ${name}") attrsByVersion)];
+    mergeAttrsByFuncDefaultsClean [ { name = "${name}-${version}"; }
+                                    base
+                                    (maybeAttr version (throw "bad version ${version} for ${name}") attrsByVersion)
+                                  ];
 
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
-    listToAttrs (map (n : nameValuePair n lib.concat)
+    listToAttrs (map (n: nameValuePair n lib.concat)
       [ "nativeBuildInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" "patches" ])
-    // listToAttrs (map (n : nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
-    // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
+    // listToAttrs (map (n: nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
+    // listToAttrs (map (n: nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;
 
   # prepareDerivationArgs tries to make writing configurable derivations easier
   # example:
   #  prepareDerivationArgs {
   #    mergeAttrBy = {
-  #       myScript = x : y : x ++ "\n" ++ y;
+  #       myScript = x: y: x ++ "\n" ++ y;
   #    };
   #    cfg = {
   #      readlineSupport = true;
@@ -392,10 +395,10 @@ rec {
   # TODO use args.mergeFun here as well?
   prepareDerivationArgs = args:
     let args2 = { cfg = {}; flags = {}; } // args;
-        flagName = name : "${name}Support";
-        cfgWithDefaults = (listToAttrs (map (n : nameValuePair (flagName n) false) (attrNames args2.flags)))
+        flagName = name: "${name}Support";
+        cfgWithDefaults = (listToAttrs (map (n: nameValuePair (flagName n) false) (attrNames args2.flags)))
                           // args2.cfg;
-        opts = attrValues (mapAttrs (a : v :
+        opts = attrValues (mapAttrs (a: v:
                 let v2 = if v ? set || v ? unset then v else { set = v; };
                     n = if cfgWithDefaults.${flagName a} then "set" else "unset";
                     attr = maybeAttr n {} v2; in
@@ -420,4 +423,12 @@ rec {
       else if isInt x then "int"
       else "string";
 
+  /* deprecated:
+
+     For historical reasons, imap has an index starting at 1.
+
+     But for consistency with the rest of the library we want an index
+     starting at zero.
+  */
+  imap = imap1;
 }

@@ -4,10 +4,10 @@
 
 stdenv.mkDerivation rec {
   name = "connman-${version}";
-  version = "1.33";
+  version = "1.34";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${name}.tar.xz";
-    sha256 = "187mknq2i907gf8dz0i79359gn1qc9mryvqkcgb280d7dw1ld2dw";
+    sha256 = "07n71wcy1c4cc01ca4dl9k1jpdqr5nsyr33dqf7k87wwfa681859";
   };
 
   buildInputs = [ openconnect polkit

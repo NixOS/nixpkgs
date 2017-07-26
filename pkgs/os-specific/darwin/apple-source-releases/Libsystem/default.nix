@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, cpio, bootstrap_cmds, xnu, Libc, Libm, libdispatch, cctools, Libinfo,
   dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto, copyfile,
-  removefile, libresolv, Libnotify, libpthread, mDNSResponder, launchd, libutil, version }:
+  removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
 
 appleDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
@@ -19,7 +19,7 @@ appleDerivation rec {
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} ${libclosure} ${CarbonHeaders} \
                ${libdispatch} ${ncurses.dev} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
-               ${Libnotify} ${mDNSResponder} ${launchd} ${libutil} ${libpthread}; do
+               ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} ${libutil} ${libpthread}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
@@ -76,7 +76,11 @@ appleDerivation rec {
        /usr/lib/libSystem.dylib \
        -reexported_symbols_list ${./system_symbols}
 
-    libs=$(otool -arch x86_64 -L /usr/lib/libSystem.dylib | tail -n +3 | awk '{ print $1 }')
+    # We used to determine these impurely based on the host system, but then when we got some 10.12 Hydra boxes,
+    # one of them accidentally built this derivation, referenced libsystem_symptoms.dylib, which doesn't exist on
+    # 10.11, and then broke all subsequent builds on 10.11. By picking a 10.11 compatible subset of the libraries,
+    # we avoid scary impurity issues like that.
+    libs=$(cat ${./reexported_libraries} | grep -v '^#')
 
     for i in $libs; do
       if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then

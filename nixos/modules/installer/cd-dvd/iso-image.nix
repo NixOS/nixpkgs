@@ -50,6 +50,13 @@ let
     LINUX /boot/bzImage
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/initrd
+
+    # A variant to boot with 'copytoram'
+    LABEL boot-copytoram
+    MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (with copytoram)
+    LINUX /boot/bzImage
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
+    INITRD /boot/initrd
   '';
 
   isolinuxMemtest86Entry = ''
@@ -77,6 +84,12 @@ let
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd-nomodeset.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd-nomodeset.conf
     echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset" >> $out/loader/entries/nixos-livecd-nomodeset.conf
+
+    # A variant to boot with 'copytoram'
+    echo "title NixOS Live CD (with copytoram)" > $out/loader/entries/nixos-livecd-copytoram.conf
+    echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd-copytoram.conf
+    echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd-copytoram.conf
+    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram" >> $out/loader/entries/nixos-livecd-copytoram.conf
 
     echo "default nixos-livecd" > $out/loader/loader.conf
     echo "timeout ${builtins.toString config.boot.loader.timeout}" >> $out/loader/loader.conf
@@ -172,7 +185,6 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
-      example = true;
       description = ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when

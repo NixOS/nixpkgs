@@ -293,7 +293,7 @@ let
       maintainers = [ maintainers.koral ];
     };
   };
-      
+
 
   luastdlib = buildLuaPackage {
     name = "stdlib";
@@ -311,24 +311,23 @@ let
 
   lrexlib = buildLuaPackage rec {
     name = "lrexlib-${version}";
-    version = "2.7.2";
+    version = "2.8.0";
     src = fetchzip {
-      url = "https://github.com/rrthomas/lrexlib/archive/150c251be57c4e569da0f48bf6b01fbca97179fe.zip";
-      sha256 = "0acb3258681bjq61piz331r99bdff6cnkjaigq5phg3699iz5h75";
+      url = "https://github.com/rrthomas/lrexlib/archive/rel-2-8-0.zip";
+      sha256 = "1c62ny41b1ih6iddw5qn81gr6dqwfffzdp7q6m8x09zzcdz78zhr";
     };
     buildInputs = [ unzip luastdlib pcre luarocks oniguruma gnulib tre glibc ];
 
     buildPhase = let
-      luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
+      luaVariable = ''LUA_PATH="${luastdlib}/share/lua/${lua.luaversion}/?/init.lua;${luastdlib}/share/lua/${lua.luaversion}/?.lua"'';
 
-      pcreVariable = "PCRE_DIR=${pcre.dev}";
+      pcreVariable = "PCRE_DIR=${pcre.out} PCRE_INCDIR=${pcre.dev}/include";
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
       treVariable = "TRE_DIR=${tre}";
       posixVariable = "POSIX_DIR=${glibc.dev}";
     in ''
-      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
-          -i Makefile
+      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' -i Makefile
       ${luaVariable} make
     '';
 
@@ -341,7 +340,6 @@ let
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
-      broken = true;
     };
   };
 
@@ -468,18 +466,20 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.1.3";
+    version = "2.2.0";
 
-    src = fetchzip {
-      url    = "http://git.sysphere.org/vicious/snapshot/vicious-${version}.tar.xz";
-      sha256 = "1c901siza5vpcbkgx99g1vkqiki5qgkzx2brnj4wrpbsbfzq0bcq";
+    src = fetchFromGitHub {
+      owner = "Mic92";
+      repo = "vicious";
+      rev = "v${version}";
+      sha256 = "0dhy0vklrhqrnmxb9pyqbfvkwwy86lwysk93pzg1j1zwprx366fj";
     };
 
     meta = with stdenv.lib; {
       description = "Vicious widgets for window managers";
-      homepage    = http://git.sysphere.org/vicious/;
+      homepage    = https://github.com/Mic92/vicious;
       license     = licenses.gpl2;
-      maintainers = with maintainers; [ makefu ];
+      maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;
     };
 

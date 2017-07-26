@@ -14,5 +14,5 @@ removeAttrs (import ../../pkgs/top-level/release.nix
     supportedSystems = [ "x86_64-linux" ];
   })
   [ # Remove jobs whose evaluation depends on a writable Nix store.
-    "tarball" "unstable"
+    "tarball" "unstable" "darwin-tested"
   ]

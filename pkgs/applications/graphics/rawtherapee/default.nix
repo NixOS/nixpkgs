@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm2, libXau
-, libXdmcp, lcms2, libiptcdata, libcanberra_gtk2, fftw, expat, pcre, libsigcxx
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, pixman, libpthreadstubs, gtkmm3, libXau
+, libXdmcp, lcms2, libiptcdata, libcanberra_gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -9,14 +9,16 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
-    rev = "1077c4ba2e2dbe249884e6974c6050db8eb5e9c2";
-    sha256 = "1xqmkwprk3h9nhy6q562mkjdpynyg9ff7a92sdga50k56gi0aj0s";
+    rev = version + "-gtk3";
+    sha256 = "06v3ir5562yg4zk9z8kc8a7sw7da88193sizjlk74gh5d3smgr4q";
   };
 
   buildInputs = [
-    pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
-    lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx
+    pkgconfig cmake pixman libpthreadstubs gtkmm3 libXau libXdmcp
+    lcms2 libiptcdata libcanberra_gtk3 fftw expat pcre libsigcxx
   ];
+
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   cmakeFlags = [
     "-DPROC_TARGET_NUMBER=2"

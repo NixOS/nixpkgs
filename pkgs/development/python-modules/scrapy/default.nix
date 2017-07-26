@@ -2,8 +2,9 @@
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-    name = "Scrapy-${version}";
-    version = "1.3.1";
+    version = "1.4.0";
+    pname = "Scrapy";
+    name = "${pname}-${version}";
 
     buildInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
     propagatedBuildInputs = [
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
     src = fetchurl {
       url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "0s5qkxwfq842maxjd2j82ldp4dyb70kla3z5rr56z0p7ig53cbvk";
+      sha256 = "04a08f027eef5d271342a016439533c81ba46f14bfcf230fecf602e99beaf233";
     };
 
     meta = with lib; {

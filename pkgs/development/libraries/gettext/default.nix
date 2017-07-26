@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, xz }:
+{ stdenv, lib, hostPlatform, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
@@ -18,15 +18,6 @@ stdenv.mkDerivation rec {
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]
-     ++ lib.optionals stdenv.isCygwin [
-            "--disable-java"
-            "--disable-native-java"
-            # Share the cache among the various `configure' runs.
-            "--config-cache"
-            "--with-included-gettext"
-            "--with-included-glib"
-            "--with-included-libcroco"
-        ]
      # avoid retaining reference to CF during stdenv bootstrap
      ++ lib.optionals stdenv.isDarwin [
             "gt_cv_func_CFPreferencesCopyAppValue=no"
@@ -38,6 +29,9 @@ stdenv.mkDerivation rec {
    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+  '' + lib.optionalString hostPlatform.isCygwin ''
+    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
   # On cross building, gettext supposes that the wchar.h from libc
@@ -49,11 +43,9 @@ stdenv.mkDerivation rec {
       echo gl_cv_func_wcwidth_works=yes > cachefile
       configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
     fi
-  '' + lib.optionalString stdenv.isCygwin ''
-    sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
-  nativeBuildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv; # HACK, see #10874 (and 14664)
+  nativeBuildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv; # HACK, see #10874 (and 14664)
 
   enableParallelBuilding = true;
 
@@ -88,15 +80,4 @@ stdenv.mkDerivation rec {
 
 // stdenv.lib.optionalAttrs stdenv.isDarwin {
   makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
-}
-
-// stdenv.lib.optionalAttrs stdenv.isCygwin {
-  patchPhase =
-   # Make sure `error.c' gets compiled and is part of `libgettextlib.la'.
-   # This fixes:
-   # gettext-0.18.1.1/gettext-tools/src/msgcmp.c:371: undefined reference to `_error_message_count'
-  '' 
-   sed -i gettext-tools/gnulib-lib/Makefile.in \
-          -e 's/am_libgettextlib_la_OBJECTS =/am_libgettextlib_la_OBJECTS = error.lo/g'
-   '';
 }

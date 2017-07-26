@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, groff
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -49,15 +50,18 @@ stdenv.mkDerivation rec {
     # Trick to get the build system find the proper 'native' groff
     # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
     preBuild = ''
-      makeFlags="GROFF_BIN_PATH=${groff}/bin GROFFBIN=${groff}/bin/groff"
+      makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
     '';
   };
 
   # Remove example output with (random?) colors and creation date
   # to avoid non-determinism in the output.
   postInstall = ''
-    rm $doc/share/doc/groff/examples/hdtbl/*color*ps
-    find $doc/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+    rm "$doc"/share/doc/groff/examples/hdtbl/*color*ps
+    find "$doc"/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+    for f in 'man.local' 'mdoc.local'; do
+        cat '${./site.tmac}' >>"$out/share/groff/site-tmac/$f"
+    done
   '';
 
   meta = with stdenv.lib; {

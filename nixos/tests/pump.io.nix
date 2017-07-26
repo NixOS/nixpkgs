@@ -51,16 +51,6 @@ import ./make-test.nix ({ pkgs, ...} : let
     Vd5WD2HJhLb9u0UxVp9vfWIUDgydopV5ZmWCQ5YvNepb1w==
     -----END CERTIFICATE-----
   '';
-
-  makePump = { opts ? { } }:
-    {
-      enable = true;
-      sslCert = pkgs.writeText "snakeoil.cert" snakeOilCert;
-      sslKey = pkgs.writeText "snakeoil.pem" snakeOilKey;
-      secret = "test";
-      site = "test";
-    } // opts;
-
 in {
   name = "pumpio";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -72,9 +62,14 @@ in {
       { config, pkgs, ... }:
         {
           services = {
-           pumpio = makePump { opts = {
+           pumpio = {
              port = 443;
-           }; };
+             enable = true;
+             sslCert = pkgs.writeText "snakeoil.cert" snakeOilCert;
+             sslKey = pkgs.writeText "snakeoil.pem" snakeOilKey;
+             secretFile = pkgs.writeText "secretFile" "test123";
+             site = "test";
+           };
            mongodb.enable = true;
            mongodb.extraConfig = ''
              storage.journal.enabled: false

@@ -15,9 +15,14 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? (buildPlatform == hostPlatform)
 , darwin
+, buildPackages
+, buildPlatform
+, hostPlatform
 }:
+
+assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
@@ -39,11 +44,27 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  buildInputs = [ perl groff cmake libxml2 python libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin
-         [ libcxxabi darwin.cctools darwin.apple_sdk.libs.xpc ];
+  nativeBuildInputs = [
+    perl
+    cmake
+    python
+  ];
+
+  buildInputs = [
+    groff
+    libxml2
+    libffi
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # fix output of llvm-config (fixed in llvm 4.0)
+    (fetchpatch {
+      url = https://github.com/llvm-mirror/llvm/commit/5340b5b3d970069aebf3dde49d8964583742e01a.patch;
+      sha256 = "095f8knplwqbc2p7rad1kq8633i34qynni9jna93an7kyc80wdxl";
+   })
+  ];
 
   postPatch = ""
   + ''
@@ -53,11 +74,15 @@ in stdenv.mkDerivation rec {
       sha256 = "11sq86spw41v72f676igksapdlsgh7fiqp5qkkmgfj0ndqcn9skf";
     }}
   ''
-  # hacky fix: New LLVM releases require a newer OS X SDK than
-  # 10.9. This is a temporary measure until nixpkgs darwin support is
-  # updated.
+  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
+  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
+  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
+  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
+  # a flag and turn the flag off during the stdenv build. I realize that this LLVM isn't used in the stdenv but I want to
+  # keep it consistent with 4.0. We really shouldn't be copying and pasting all this code around...
   + stdenv.lib.optionalString stdenv.isDarwin ''
-        sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+    substituteInPlace ./projects/compiler-rt/cmake/config-ix.cmake \
+      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
   + stdenv.lib.optionalString (enableSharedLibraries) ''
@@ -85,7 +110,9 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-    "-DCMAKE_LIBTOOL=${darwin.cctools}/bin/libtool"
+  ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
   ];
 
   postBuild = ''

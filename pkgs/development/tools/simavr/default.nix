@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   buildFlags = "AVR_ROOT=${avrgcclibc}/avr SIMAVR_VERSION=${version}";
   installFlags = buildFlags + " DESTDIR=$(out)";
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
   postFixup = ''
     target="$out/bin/simavr"
     patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"

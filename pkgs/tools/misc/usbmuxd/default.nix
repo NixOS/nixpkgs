@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       talking to your iPhone or iPod Touch over USB and coordinating access to
       its services by other applications.'';
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

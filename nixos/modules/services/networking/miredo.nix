@@ -20,7 +20,7 @@ in
 
     services.miredo = {
 
-      enable = mkEnableOption "Whether miredo should be run on startup.";
+      enable = mkEnableOption "the Miredo IPv6 tunneling service.";
 
       package = mkOption {
         type = types.package;

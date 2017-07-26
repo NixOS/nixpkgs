@@ -1,22 +1,20 @@
-{stdenv, fetchurl, fetchFromGitHub, callPackage, cmake, doxygen
-, imagemagick, ffmpeg, qt55, swig, python3, ruby, unittest-cpp
-, cppzmq, czmqpp
-}:
+{ stdenv, fetchFromGitHub
+, pkgconfig, cmake, doxygen
+, libopenshot-audio, imagemagick, ffmpeg
+, swig, python3, ruby
+, unittest-cpp, cppzmq, czmqpp
+, qtbase, qtmultimedia }:
 
 with stdenv.lib;
-
-let
-  libopenshot_audio = callPackage ./libopenshot-audio.nix {};
-in
 stdenv.mkDerivation rec {
   name = "libopenshot-${version}";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
     rev = "v${version}";
-    sha256 = "00051ipb8y4z9j5m5smwm1ahv755k0glarwic8fv5b9fzryfbrdm";
+    sha256 = "1mqci103kn4l7w8i9kqzi705kxn4q596vw0sh05r1w5nbyjwcyp6";
   };
 
   patchPhase = ''
@@ -27,22 +25,27 @@ stdenv.mkDerivation rec {
     export RUBY_VENDOR_ARCH_DIR=$out/lib/ruby/site-packages
   '';
 
-  buildInputs = [
-    cmake doxygen
-    imagemagick ffmpeg qt55.qtbase qt55.qtmultimedia swig python3 ruby
-    unittest-cpp cppzmq czmqpp
-  ];
+  nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
-  LIBOPENSHOT_AUDIO_DIR = "${libopenshot_audio}";
+  buildInputs =
+  [ imagemagick ffmpeg swig python3 ruby unittest-cpp
+    cppzmq czmqpp qtbase qtmultimedia ];
+
+  LIBOPENSHOT_AUDIO_DIR = "${libopenshot-audio}";
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";
 
   doCheck = false;
 
   meta = {
-    homepage = "http://openshot.org/";
-    description = "Free, open-source video editor";
-    license = licenses.gpl3Plus;
-    maintainers = [];
-    platforms = platforms.linux;
+    homepage = http://openshot.org/;
+    description = "Free, open-source video editor library";
+    longDescription = ''
+      OpenShot Library (libopenshot) is an open-source project dedicated to
+      delivering high quality video editing, animation, and playback solutions
+      to the world. API currently supports C++, Python, and Ruby.
+    '';
+    license = with licenses; gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; linux;
   };
 }

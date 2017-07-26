@@ -41,6 +41,18 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ mesa libX11 ])
     ;
 
+  # makeinfo is required by Octave at runtime to display help
+  prePatch = ''
+    substituteInPlace libinterp/corefcn/help.cc \
+      --replace 'Vmakeinfo_program = "makeinfo"' \
+                'Vmakeinfo_program = "${texinfo}/bin/makeinfo"'
+  ''
+  # REMOVE ON VERSION BUMP
+  # Needed for Octave-4.2.1 on darwin. See https://savannah.gnu.org/bugs/?50234
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed 's/inline file_stat::~file_stat () { }/file_stat::~file_stat () { }/' -i ./liboctave/system/file-stat.cc
+  '';
+
   doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;

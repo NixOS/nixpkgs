@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Disable Access Control because our X does not support FamilyServerInterpreted yet
-  patches = [ #./xserver_path.patch # gdm now uses wayland
+  patches = [ ./xserver_path.patch
               ./sessions_dir.patch
               ./gdm-x-session_extra_args.patch
               ./gdm-session-worker_xserver-path.patch

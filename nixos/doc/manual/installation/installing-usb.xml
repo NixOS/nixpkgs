@@ -11,7 +11,9 @@ a USB stick. You can use the <command>dd</command> utility to write the image:
 <command>dd if=<replaceable>path-to-image</replaceable>
 of=<replaceable>/dev/sdb</replaceable></command>. Be careful about specifying the
 correct drive; you can use the <command>lsblk</command> command to get a list of
-block devices.</para>
+block devices. If you're on OS X you can run <command>diskutil list</command>
+to see the list of devices; the device you'll use for the USB must be ejected
+before writing the image.</para>
 
 <para>The <command>dd</command> utility will write the image verbatim to the drive,
 making it the recommended option for both UEFI and non-UEFI installations. For
@@ -31,6 +33,11 @@ ISO, copy its contents verbatim to your drive, then either:
     line to point to your drive (see the documentation on <literal>root=</literal>
     in <link xlink:href="https://www.kernel.org/doc/Documentation/kernel-parameters.txt">
     the kernel documentation</link> for more details).</para>
+  </listitem>
+  <listitem>
+    <para>If you want to load the contents of the ISO to ram after bootin
+    (So you can remove the stick after bootup) you can append the parameter
+    <literal>copytoram</literal>to the <literal>options</literal> field.</para>
   </listitem>
 </itemizedlist>
 </para>

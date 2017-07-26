@@ -28,7 +28,7 @@ let
   nvidia_libs32 = (nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; };
 
   nvidiaPackage = nvidia: pkgs:
-    if !nvidia.useGLVND then nvidia
+    if !nvidia.useGLVND then nvidia.out
     else pkgs.buildEnv {
       name = "nvidia-libs";
       paths = [ pkgs.libglvnd nvidia.out ];
@@ -56,7 +56,8 @@ in
     hardware.opengl.package = nvidiaPackage nvidia_x11 pkgs;
     hardware.opengl.package32 = nvidiaPackage nvidia_libs32 pkgs_i686;
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings nvidia_x11.persistenced ];
+    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+      ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
 
     boot.extraModulePackages = [ nvidia_x11.bin ];
 

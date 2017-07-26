@@ -40,12 +40,12 @@ let
   });
 
   policyFile = pkgs.writeText "kube-policy"
-    concatStringsSep "\n" (map (builtins.toJSON cfg.apiserver.authorizationPolicy));
+    (concatStringsSep "\n" (map builtins.toJSON cfg.apiserver.authorizationPolicy));
 
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";
-    paths = imap (i: entry:
-      pkgs.writeTextDir "${10+i}-${entry.type}.conf" (builtins.toJSON entry)
+    paths = imap1 (i: entry:
+      pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
     ) cfg.kubelet.cni.config;
   };
 
@@ -597,7 +597,7 @@ in {
     (mkIf cfg.kubelet.enable {
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" "kube-apiserver.service" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables ];
         preStart = ''
@@ -606,14 +606,15 @@ in {
           ${concatMapStringsSep "\n" (p: "ln -fs ${p.plugins}/* /opt/cni/bin") cfg.kubelet.cni.packages}
         '';
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kubelet \
             --pod-manifest-path=${manifests} \
             --kubeconfig=${kubeconfig} \
             --require-kubeconfig \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
-            --register-node=${if cfg.kubelet.registerNode then "true" else "false"} \
-            --register-schedulable=${if cfg.kubelet.registerSchedulable then "true" else "false"} \
+            --register-node=${boolToString cfg.kubelet.registerNode} \
+            --register-schedulable=${boolToString cfg.kubelet.registerSchedulable} \
             ${optionalString (cfg.kubelet.tlsCertFile != null)
               "--tls-cert-file=${cfg.kubelet.tlsCertFile}"} \
             ${optionalString (cfg.kubelet.tlsKeyFile != null)
@@ -621,7 +622,7 @@ in {
             --healthz-bind-address=${cfg.kubelet.healthz.bind} \
             --healthz-port=${toString cfg.kubelet.healthz.port} \
             --hostname-override=${cfg.kubelet.hostname} \
-            --allow-privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
+            --allow-privileged=${boolToString cfg.kubelet.allowPrivileged} \
             --root-dir=${cfg.dataDir} \
             --cadvisor_port=${toString cfg.kubelet.cadvisorPort} \
             ${optionalString (cfg.kubelet.clusterDns != "")
@@ -655,9 +656,10 @@ in {
     (mkIf cfg.apiserver.enable {
       systemd.services.kube-apiserver = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "network.target" "docker.service" ];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-apiserver \
             --etcd-servers=${concatStringsSep "," cfg.etcd.servers} \
             ${optionalString (cfg.etcd.caFile != null)
@@ -670,14 +672,14 @@ in {
             --bind-address=0.0.0.0 \
             ${optionalString (cfg.apiserver.advertiseAddress != null)
               "--advertise-address=${cfg.apiserver.advertiseAddress}"} \
-            --allow-privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
+            --allow-privileged=${boolToString cfg.apiserver.allowPrivileged}\
             ${optionalString (cfg.apiserver.tlsCertFile != null)
               "--tls-cert-file=${cfg.apiserver.tlsCertFile}"} \
             ${optionalString (cfg.apiserver.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.apiserver.tlsKeyFile}"} \
             ${optionalString (cfg.apiserver.tokenAuth != null)
               "--token-auth-file=${cfg.apiserver.tokenAuth}"} \
-            --kubelet-https=${if cfg.apiserver.kubeletHttps then "true" else "false"} \
+            --kubelet-https=${boolToString cfg.apiserver.kubeletHttps} \
             ${optionalString (cfg.apiserver.kubeletClientCaFile != null)
               "--kubelet-certificate-authority=${cfg.apiserver.kubeletClientCaFile}"} \
             ${optionalString (cfg.apiserver.kubeletClientCertFile != null)
@@ -713,13 +715,14 @@ in {
     (mkIf cfg.scheduler.enable {
       systemd.services.kube-scheduler = {
         description = "Kubernetes Scheduler Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-scheduler \
             --address=${cfg.scheduler.address} \
             --port=${toString cfg.scheduler.port} \
-            --leader-elect=${if cfg.scheduler.leaderElect then "true" else "false"} \
+            --leader-elect=${boolToString cfg.scheduler.leaderElect} \
             --kubeconfig=${kubeconfig} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
@@ -735,16 +738,17 @@ in {
     (mkIf cfg.controllerManager.enable {
       systemd.services.kube-controller-manager = {
         description = "Kubernetes Controller Manager Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
           RestartSec = "30s";
           Restart = "on-failure";
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
             --address=${cfg.controllerManager.address} \
             --port=${toString cfg.controllerManager.port} \
             --kubeconfig=${kubeconfig} \
-            --leader-elect=${if cfg.controllerManager.leaderElect then "true" else "false"} \
+            --leader-elect=${boolToString cfg.controllerManager.leaderElect} \
             ${if (cfg.controllerManager.serviceAccountKeyFile!=null)
               then "--service-account-private-key-file=${cfg.controllerManager.serviceAccountKeyFile}"
               else "--service-account-private-key-file=/var/run/kubernetes/apiserver.key"} \
@@ -767,10 +771,11 @@ in {
     (mkIf cfg.proxy.enable {
       systemd.services.kube-proxy = {
         description = "Kubernetes Proxy Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         path = [pkgs.iptables];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-proxy \
             --kubeconfig=${kubeconfig} \
             --bind-address=${cfg.proxy.address} \
@@ -786,9 +791,10 @@ in {
     (mkIf cfg.dns.enable {
       systemd.services.kube-dns = {
         description = "Kubernetes Dns Service";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
+          Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kube-dns \
             --kubecfg-file=${kubeconfig} \
             --dns-port=${toString cfg.dns.port} \
@@ -836,6 +842,11 @@ in {
         cfg.proxy.enable ||
         cfg.dns.enable
     ) {
+      systemd.targets.kubernetes = {
+        description = "Kubernetes";
+        wantedBy = [ "multi-user.target" ];
+      };
+
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /var/run/kubernetes 0755 kubernetes kubernetes -"

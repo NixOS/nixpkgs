@@ -66,15 +66,6 @@ let
           How frequently to evaluate rules by default.
         '';
       };
-
-      labels = mkOption {
-        type = types.attrsOf types.str;
-        default = {};
-        description = ''
-          The labels to add to any timeseries that this Prometheus instance
-          scrapes.
-        '';
-      };
     };
   };
 
@@ -116,6 +107,13 @@ let
           The URL scheme with which to fetch metrics from targets.
         '';
       };
+      params = mkOption {
+        type = types.attrsOf (types.listOf types.str);
+        default = {};
+        description = ''
+          Optional HTTP URL parameters.
+        '';
+      };
       basic_auth = mkOption {
         type = types.nullOr (types.submodule {
           options = {
@@ -134,7 +132,7 @@ let
           };
         });
         default = null;
-        apply = x: if x == null then null else _filter x;
+        apply = x: mapNullable _filter x;
         description = ''
           Optional http login credentials for metrics scraping.
         '';

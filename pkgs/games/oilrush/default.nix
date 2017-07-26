@@ -1,7 +1,7 @@
 { stdenv, config, fetchurl, libX11, libXext, libXinerama, libXrandr
 , libXrender, fontconfig, freetype, openal }:
 
-with { inherit (stdenv.lib) makeLibraryPath; };
+let inherit (stdenv.lib) makeLibraryPath; in
 
 stdenv.mkDerivation {
   name = "oilrush";

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libusb ];
   propagatedBuildInputs = [ libusb ];
 
+  outputs = [ "out" "dev" ];
+
   meta = with stdenv.lib; {
     description = "USB traffic redirection protocol";
     homepage = http://spice-space.org/page/UsbRedir;

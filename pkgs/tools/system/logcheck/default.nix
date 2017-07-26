@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1x4skb5nmv2xj8cygj8pq1rd1ws4m2fsibw54yslgdyjri4r2yq7";
   };
 
+  prePatch = ''
+    # do not set sticky bit in nix store.
+    substituteInPlace Makefile --replace 2750 0750
+  '';
+
   preConfigure = ''
     substituteInPlace src/logtail --replace "/usr/bin/perl" "${perl}/bin/perl"
     substituteInPlace src/logtail2 --replace "/usr/bin/perl" "${perl}/bin/perl"
@@ -36,7 +41,7 @@ stdenv.mkDerivation rec {
       Logcheck helps spot problems and security violations in your logfiles automatically and will send the results to you by e-mail.
       Logcheck was part of the Abacus Project of security tools, but this version has been rewritten.
     '';
-    homepage = http://logcheck.org;
+    homepage = http://logcheck.alioth.debian.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.bluescreen303 ];
     

@@ -1,13 +1,14 @@
-{stdenv, fetchurl, fetchgit, zip, unzip, firefox, bash}:
+{stdenv, fetchurl, fetchgit, fetchFromGitHub, zip, unzip, firefox, bash}:
 let
   s = # Generated upstream information
   rec {
     baseName="slimerjs";
-    version="0.10.2";
+    version="0.10.3";
     name="${baseName}-${version}";
-    hash="16pg12bvfqls707nsdqi3bl1c833kncsvnd0qiq5692lrh93x529";
-    url="http://download.slimerjs.org/releases/0.10.2/slimerjs-0.10.2.zip";
-    sha256="16pg12bvfqls707nsdqi3bl1c833kncsvnd0qiq5692lrh93x529";
+    owner = "laurentj";
+    repo = "${baseName}";
+    sha256="16v6a1kcq8il4snbrgsq5xmxs35alzf4qlmscr2yli95xq5fnl5y";
+    rev = "${version}";
   };
   buildInputs = [
     unzip zip
@@ -16,12 +17,15 @@ in
 stdenv.mkDerivation {
   inherit (s) name version;
   inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
+  #src = fetchurl {
+  #  inherit (s) url sha256;
+  #};
   #src = fetchgit {
   #  inherit (s) url sha256 rev;
   #};
+  src = fetchFromGitHub {
+    inherit (s) owner repo rev sha256;
+  };
   preConfigure = ''
     test -d src && cd src
     test -f omni.ja || zip omni.ja -r */

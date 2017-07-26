@@ -65,6 +65,7 @@ let
         gzip_proxied any;
         gzip_comp_level 9;
         gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_vary on;
       ''}
 
       ${optionalString (cfg.recommendedProxySettings) ''
@@ -86,6 +87,8 @@ let
       client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
+
+      ${cfg.commonHttpConfig}
 
       ${vhosts}
 
@@ -121,45 +124,49 @@ let
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
       let
-        serverName = vhost.serverName;
         ssl = vhost.enableSSL || vhost.forceSSL;
-        port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
-        listenString = toString port + optionalString ssl " ssl http2"
-          + optionalString vhost.default " default_server";
-        acmeLocation = optionalString vhost.enableACME (''
+        defaultPort = if ssl then 443 else 80;
+
+        listenString = { addr, port, ... }:
+          "listen ${addr}:${toString (if port != null then port else defaultPort)} "
+          + optionalString ssl "ssl http2 "
+          + optionalString vhost.default "default_server"
+          + ";";
+
+        redirectListenString = { addr, ... }:
+          "listen ${addr}:80 ${optionalString vhost.default "default_server"};";
+
+        acmeLocation = ''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             root ${vhost.acmeRoot};
             auth_basic off;
           }
-        '' + (optionalString (vhost.acmeFallbackHost != null) ''
-          location @acme-fallback {
-            auth_basic off;
-            proxy_pass http://${vhost.acmeFallbackHost};
-          }
-        ''));
+          ${optionalString (vhost.acmeFallbackHost != null) ''
+            location @acme-fallback {
+              auth_basic off;
+              proxy_pass http://${vhost.acmeFallbackHost};
+            }
+          ''}
+        '';
+
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            listen 80 ${optionalString vhost.default "default_server"};
-            ${optionalString enableIPv6
-              ''listen [::]:80 ${optionalString vhost.default "default_server"};''
-            }
+            ${concatMapStringsSep "\n" redirectListenString vhost.listen}
 
-            server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+            server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+            ${optionalString vhost.enableACME acmeLocation}
             location / {
-              return 301 https://$host${optionalString (port != 443) ":${toString port}"}$request_uri;
+              return 301 https://$host$request_uri;
             }
           }
         ''}
 
         server {
-          listen ${listenString};
-          ${optionalString enableIPv6 "listen [::]:${listenString};"}
-
-          server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-          ${acmeLocation}
+          ${concatMapStringsSep "\n" listenString vhost.listen}
+          server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString vhost.enableACME acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
@@ -183,6 +190,7 @@ let
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
+      ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
     }
   '') locations);
@@ -244,11 +252,13 @@ in
       };
 
       package = mkOption {
-        default = pkgs.nginx;
-        defaultText = "pkgs.nginx";
+        default = pkgs.nginxStable;
+        defaultText = "pkgs.nginxStable";
         type = types.package;
         description = "
-          Nginx package to use.
+          Nginx package to use. This defaults to the stable version. Note
+          that the nginx team recommends to use the mainline version which
+          available in nixpkgs as <literal>nginxMainline</literal>.
         ";
       };
 
@@ -272,6 +282,24 @@ in
           can be specified more than once and it's value will be
           concatenated (contrary to <option>config</option> which
           can be set only once).
+        '';
+      };
+
+      commonHttpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          resolver 127.0.0.1 valid=5s;
+
+          log_format myformat '$remote_addr - $remote_user [$time_local] '
+                              '"$request" $status $body_bytes_sent '
+                              '"$http_referer" "$http_user_agent"';
+        '';
+        description = ''
+          With nginx you must provide common http context definitions before
+          they are used, e.g. log_format, resolver, etc. inside of server
+          or location contexts. Use this attribute to set these definitions
+          at the appropriate location.
         '';
       };
 
@@ -357,7 +385,7 @@ in
 
       virtualHosts = mkOption {
         type = types.attrsOf (types.submodule (import ./vhost-options.nix {
-          inherit lib;
+          inherit config lib;
         }));
         default = {
           localhost = {};
@@ -380,6 +408,13 @@ in
 
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
+
+    assertions = let hostOrAliasIsNull = l: l.root == null || l.alias == null; in [
+      {
+        assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
+        message = "Only one of nginx root or alias can be specified on a location.";
+      }
+    ];
 
     systemd.services.nginx = {
       description = "Nginx Web Server";

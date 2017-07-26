@@ -55,7 +55,7 @@ in
 
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
-      example = { PATH = [ "/bin" "/sbin" ]; MANPATH = [ "/man" "/share/man" ]; };
+      example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
       description = ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
@@ -167,9 +167,6 @@ in
          ${exportedEnvVars}
 
          ${cfg.extraInit}
-
-         # The setuid/setcap wrappers override other bin directories.
-         export PATH="${config.security.wrapperDir}:$PATH"
 
          # ~/bin if it exists overrides other bin directories.
          export PATH="$HOME/bin:$PATH"

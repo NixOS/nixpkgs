@@ -6,14 +6,13 @@
    http://sourceware.org/cgi-bin/cvsweb.cgi/libc/localedata/SUPPORTED?cvsroot=glibc
 */
 
-{ lib, stdenv, fetchurl, writeText, allLocales ? true, locales ? ["en_US.UTF-8/UTF-8"] }:
+{ stdenv, callPackage, writeText
+, allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
+}:
 
-let build = import ./common.nix; in
-
-build null {
+callPackage ./common.nix { inherit stdenv; } {
   name = "glibc-locales";
 
-  inherit fetchurl stdenv lib;
   installLocales = true;
 
   builder = ./locales-builder.sh;

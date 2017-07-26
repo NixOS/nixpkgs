@@ -59,7 +59,7 @@ let
         srcs = [ rubySrc rubygemsSrc ];
         sourceRoot =
           if useRailsExpress then
-            "ruby-${tag}-src"
+            rubySrc.name
           else
             unpackdir rubySrc;
 
@@ -181,10 +181,10 @@ let
 
 in {
   ruby_2_0_0 = generic {
-    version = rubyVersion "2" "0" "0" "p647";
+    version = rubyVersion "2" "0" "0" "p648";
     sha256 = {
-      src = "1v2vbvydarcx5801gx9lc6gr6dfi0i7qbzwhsavjqbn79rdsz2n8";
-      git = "186pf4q9xymzn4zn1sjppl1skrl5f0159ixz5cz8g72dmmynq3g3";
+      src = "1y3n4c6xw2wki7pyjpq5zpbgxnw5i3jc8mcpj6rk7hs995mvv446";
+      git = "0ncjfq4hfqj9kcr8pbll6kypwnmcgs8w7l4466qqfyv7jj3yjd76";
     };
   };
 
@@ -196,27 +196,27 @@ in {
     };
   };
 
-  ruby_2_2_5 = generic {
-    version = rubyVersion "2" "2" "5" "";
+  ruby_2_2_7 = generic {
+    version = rubyVersion "2" "2" "7" "";
     sha256 = {
-      src = "1qrmlcyc0cy9hgafb1wny2h90rjyyh6d72nvr2h4xjm4jwbb7i1h";
-      git = "0k0av6ypyq08c9axm721f0xi2bcp1443l7ydbxv4v8x4vsxdkmq2";
+      src = "199xz5bvmp26c7vyzw47cpxkd8jk826kc8nlpavqzj5vqp388h9p";
+      git = "0i0nsm9ldjp39m9xq47v8w6wlg821ikczz530493cs150qkqa0a1";
     };
   };
 
-  ruby_2_3_3 = generic {
-    version = rubyVersion "2" "3" "3" "";
+  ruby_2_3_4 = generic {
+    version = rubyVersion "2" "3" "4" "";
     sha256 = {
-      src = "1dqmh42p6siv9aqzdjldsnhljj3f2h30m0v8cf25icjmqp40h514";
-      git = "0cwjf0nrzaa5g81bw0qp65byyadhxvbnvprkshv3ckjl7yi46zf6";
+      src = "1hy0zr4vwkqcjbykh2hp0d6ifkrhgskaxlzy6878sc9kr4bqzqcq";
+      git = "0jjhgdjv3aayxb0flxjiny7xfzh3ggrqcpvgjv2ydm25padfbqmp";
     };
   };
 
-  ruby_2_4_0 = generic {
-    version = rubyVersion "2" "4" "0" "";
+  ruby_2_4_1 = generic {
+    version = rubyVersion "2" "4" "1" "";
     sha256 = {
-      src = "0gcyn9328w2vma882l71c9v9ygmmsj2z8j1l44c4l2x92nyx0bqm";
-      git = "1w9zyx8xmka8jdiha57snnbfls2r6dc9g03d8cjx0nxkmwf3r2l3";
+      src = "0l0201fqwzwygnrgxay469gbb2w865bnqckq00x3prdmbh6y2c53";
+      git = "1gjn31ymypzzcwkrjx62hqw59fywz1x3cyvmi1f2yb9bwb3659ss";
     };
   };
 }

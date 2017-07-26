@@ -10,7 +10,6 @@ with lib;
     programs.gphoto2 = {
       enable = mkOption {
         default = false;
-        example = true;
         type = types.bool;
         description = ''
           Whether to configure system to use gphoto2.

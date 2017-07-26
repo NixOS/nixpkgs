@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name = "windowmaker-${version}";
-  version = "0.95.7";
+  version = "0.95.8";
   srcName = "WindowMaker-${version}";
 
   src = fetchurl {
     url = "http://windowmaker.org/pub/source/release/${srcName}.tar.gz";
-    sha256 = "1acph0nq6fsb452sl7j7a7kcc87zqqaw7qms1p8ijar19dn4hbc4";
+    sha256 = "12p8kljqgx5hnic0zvs5mxwp7kg21sb6qjagb2qw8ydvf5amrgwx";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       contributions being made by programmers from around the world.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
   };
 }
 

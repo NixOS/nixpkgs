@@ -12,7 +12,6 @@ in {
     install = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Whether to install a user service for Offlineimap. Once
         the service is started, emails will be fetched automatically.

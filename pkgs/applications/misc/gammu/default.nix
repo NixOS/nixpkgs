@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, cmake, bluez, libusb1, curl
+{ stdenv, fetchFromGitHub, python, pkgconfig, cmake, bluez, libusb1, curl
 , libiconv, gettext, sqlite
 , dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
 , postgresSupport ? false, postgresql ? null
@@ -8,16 +8,20 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gammu-${version}";
-  version = "1.33.0";
+  version = "1.38.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/gammu/gammu/${version}/gammu-${version}.tar.xz";
-    sha256 = "18gplx1v9d70k1q86d5i4n4dfpx367g34pj3zscppx126vwhv112";
+  src = fetchFromGitHub {
+    owner = "gammu";
+    repo = "gammu";
+    rev = version;
+    sha256 = "1rk3p3sjyy6n6mlqs4qgyxna4swrh1zm7b77npxv8j341wxj3khv";
   };
 
-  patches = [ ./bashcomp-dir.patch ];
+  patches = [ ./bashcomp-dir.patch ./systemd.patch ];
 
-  buildInputs = [ python pkgconfig cmake bluez libusb1 curl gettext sqlite libiconv ]
+  nativeBuildInputs = [ pkgconfig cmake ];
+
+  buildInputs = [ python bluez libusb1 curl gettext sqlite libiconv ]
   ++ optionals dbiSupport [ libdbi libdbiDrivers ]
   ++ optionals postgresSupport [ postgresql ];
 

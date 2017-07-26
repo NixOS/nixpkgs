@@ -1,0 +1,97 @@
+From 06255a8b5a378a2484cd0faa1dd718d5b4e98042 Mon Sep 17 00:00:00 2001
+From: Orivej Desh <orivej@gmx.fr>
+Date: Fri, 17 Mar 2017 08:43:57 +0000
+Subject: [PATCH] darwin
+
+---
+ Jamrules        | 5 ++---
+ Jamshared       | 2 +-
+ support/Jamfile | 4 ++--
+ tads/Jamfile    | 4 ++--
+ terps/Jamfile   | 4 ++--
+ 5 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/Jamrules b/Jamrules
+index 698220d..2294dfc 100644
+--- a/Jamrules
++++ b/Jamrules
+@@ -141,8 +141,7 @@ switch $(OS)
+     case MACOSX :
+         Echo "OS is MACOSX (cocoa)" ;
+         SUFDLL = .dylib ;
+-        MAINARCH = -arch i386 ;
+-        CCFLAGS = -Wno-pointer-sign $(MAINARCH) $(ALTARCH) ;
++        CCFLAGS = -Wno-pointer-sign $(ALTARCH) ;
+         PKGCONFIG = "pkg-config freetype2" ;
+         GARGLKCCFLAGS = "`$(PKGCONFIG) --cflags`" ;
+         SHRLINKLIBS += "`$(PKGCONFIG) --libs`" -ljpeg -lpng -lz ;
+@@ -155,7 +154,7 @@ switch $(OS)
+             SHRLINKLIBS += -lSDL_mixer -lSDL -lsmpeg -lvorbisfile ;
+         }
+ 
+-        LINK = $(CC) -headerpad_max_install_names $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) ;
++        LINK = $(CC) $(FRAMEWORKS) $(ALTARCH) ;
+ 
+ 
+     case * :
+diff --git a/Jamshared b/Jamshared
+index 13db835..fd42928 100644
+--- a/Jamshared
++++ b/Jamshared
+@@ -79,7 +79,7 @@ if $(OS) = MACOSX
+ {
+     actions together SharedLink bind NEEDLIBS
+     {
+-        $(LINK) -headerpad_max_install_names $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) -dynamiclib $(SHRLINKFLAGS) -install_name @executable_path/$(<:D=) -o $(<) $(>) $(NEEDLIBS) $(SHRLINKLIBS)
++        $(LINK) $(FRAMEWORKS) $(MAINARCH) $(ALTARCH) -dynamiclib $(SHRLINKFLAGS) -install_name @executable_path/$(<:D=) -o $(<) $(>) $(NEEDLIBS) $(SHRLINKLIBS)
+     }
+ }
+ else
+diff --git a/support/Jamfile b/support/Jamfile
+index aedf8fe..70cfefd 100644
+--- a/support/Jamfile
++++ b/support/Jamfile
+@@ -41,8 +41,8 @@ if $(USESDL) = yes
+         ;
+ 
+     if $(OS) = MINGW   { SubDirCcFlags -DSDL_SOUND_DLL_EXPORTS ; }
+-    if $(OS) = SOLARIS { SubDirCcFlags -I/usr/include/SDL -fPIC ; }
+-    if $(OS) = MACOSX  { SubDirCcFlags -I/opt/local/include/SDL -fPIC ; }
++    if $(OS) = SOLARIS { SubDirCcFlags -ISDL -fPIC ; }
++    if $(OS) = MACOSX  { SubDirCcFlags -ISDL -fPIC ; }
+ 
+     SEARCH_SOURCE =
+         [ FDirName $(TOP) support sdl_sound ]
+diff --git a/tads/Jamfile b/tads/Jamfile
+index 1f8829d..d8455eb 100644
+--- a/tads/Jamfile
++++ b/tads/Jamfile
+@@ -33,8 +33,8 @@ if $(OS) = LINUX || $(OS) = SOLARIS
+ 
+ if $(OS) = MACOSX
+ {
+-    SubDirCcFlags -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
+-    LINKFLAGS = -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
++    SubDirCcFlags $(MAINARCH) $(ALTARCH) ;
++    LINKFLAGS = $(MAINARCH) $(ALTARCH) ;
+ }
+ 
+ SEARCH_SOURCE =
+diff --git a/terps/Jamfile b/terps/Jamfile
+index b5f6d52..2d1ccdb 100644
+--- a/terps/Jamfile
++++ b/terps/Jamfile
+@@ -185,8 +185,8 @@ if $(MAKE_GEAS) = yes
+ 
+     if $(OS) = MACOSX
+     {
+-        SubDirCcFlags -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
+-        LINKFLAGS = -headerpad_max_install_names $(MAINARCH) $(ALTARCH) ;
++        SubDirCcFlags $(MAINARCH) $(ALTARCH) ;
++        LINKFLAGS = $(MAINARCH) $(ALTARCH) ;
+     }
+ 
+     SUBDIRC++FLAGS = $(SUBDIRCCFLAGS) ;
+-- 
+2.12.0
+

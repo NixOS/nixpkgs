@@ -6,6 +6,8 @@ substituteAll {
     isExecutable = true;
     src = ./nixos-container.pl;
     perl = "${perl}/bin/perl -I${perlPackages.FileSlurp}/lib/perl5/site_perl";
+    su = "${shadow.su}/bin/su";
+    inherit utillinux;
 
     postInstall = ''
       t=$out/etc/bash_completion.d

@@ -1,4 +1,22 @@
-{ # locateDominatingFile :  RegExp
+{ # haskellPathsInDir : Path -> Map String Path
+  # A map of all haskell packages defined in the given path,
+  # identified by having a cabal file with the same name as the
+  # directory itself.
+  haskellPathsInDir = root:
+    let # Files in the root
+        root-files = builtins.attrNames (builtins.readDir root);
+        # Files with their full paths
+        root-files-with-paths =
+          map (file:
+            { name = file; value = root + "/${file}"; }
+          ) root-files;
+        # Subdirectories of the root with a cabal file.
+        cabal-subdirs =
+          builtins.filter ({ name, value }:
+            builtins.pathExists (value + "/${name}.cabal")
+          ) root-files-with-paths;
+    in builtins.listToAttrs cabal-subdirs;
+  # locateDominatingFile :  RegExp
   #                      -> Path
   #                      -> Nullable { path : Path;
   #                                    matches : [ MatchResults ];

@@ -1,0 +1,22 @@
+Description: Get rid of recursive deprecated warnings.
+ As is, gcc gives warnings when a function with the
+ deprecated attribute calls another function with
+ the deprecated attribute.
+ See http://stackoverflow.com/questions/13459602/how-can-i-get-rid-of-deprecated-warnings-in-deprecated-functions-in-gcc
+
+Author: James Kuszmaul <jbkuszmaul@wpi.edu>
+
+--
+
+--- gcc-armel-4.9.1.orig/gcc/tree.c
++++ gcc-armel-4.9.1/gcc/tree.c
+@@ -12063,6 +12063,9 @@ warn_deprecated_use (tree node, tree attr)
+   if (node == 0 || !warn_deprecated_decl)
+     return;
+
++  if (current_function_decl && TREE_DEPRECATED(current_function_decl))
++    return;
++
+   if (!attr)
+     {
+       if (DECL_P (node))

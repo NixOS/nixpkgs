@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qtdeclarative, qmakeHook, which
+{ stdenv, fetchFromGitHub, qtbase, qtdeclarative, qmake, which
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ qmakeHook which ];
+  nativeBuildInputs = [ qmake which ];
 
   enableParallelBuilding = true;
 
@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
 
   meta = with stdenv.lib; {
     description = "A cross-platform IRC framework written with Qt";

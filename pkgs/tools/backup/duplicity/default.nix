@@ -1,37 +1,43 @@
-{ stdenv, fetchurl, python2Packages, librsync, ncftp, gnupg, rsync, makeWrapper
-}:
+{ stdenv, fetchurl, python2Packages, librsync, ncftp, gnupg, rsync, makeWrapper }:
 
-let
-  version = "0.7.07.1";
-in python2Packages.buildPythonApplication {
+python2Packages.buildPythonApplication rec {
   name = "duplicity-${version}";
+  version = "0.7.12";
 
   src = fetchurl {
-    url = "http://code.launchpad.net/duplicity/0.7-series/${version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "594c6d0e723e56f8a7114d57811c613622d535cafdef4a3643a4d4c89c1904f8";
+    url = "http://code.launchpad.net/duplicity/0.7-series/${version}/+download/${name}.tar.gz";
+    sha256 = "1rhgrz2lm9vbfdp2raykrih1c6n2lw5jd572z4dsz488m52avjqi";
   };
+
+  buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];
+  propagatedBuildInputs = with python2Packages; [
+    boto cffi cryptography ecdsa enum idna
+    ipaddress lockfile paramiko pyasn1 pycrypto six
+  ];
+  checkInputs = with python2Packages; [ lockfile mock pexpect ];
+
+  # lots of tests are failing, although we get a little further now with the bits in preCheck
+  doCheck = false;
 
   postInstall = ''
     wrapProgram $out/bin/duplicity \
       --prefix PATH : "${stdenv.lib.makeBinPath [ gnupg ncftp rsync ]}"
+
+    wrapPythonPrograms
   '';
 
-  buildInputs = [ librsync makeWrapper ];
+  preCheck = ''
+    patchShebangs testing
 
-  # Inputs for tests. These are added to buildInputs when doCheck = true
-  checkInputs = with python2Packages; [ lockfile mock pexpect ];
+    substituteInPlace testing/__init__.py \
+      --replace 'mkdir testfiles' 'mkdir -p testfiles'
+  '';
 
-  # Many problematic tests
-  doCheck = false;
-
-  propagatedBuildInputs = with python2Packages; [ boto cffi cryptography ecdsa enum idna
-    ipaddress lockfile paramiko pyasn1 pycrypto six ];
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
-    homepage = "http://www.nongnu.org/duplicity";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric peti];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = http://www.nongnu.org/duplicity;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ viric peti ];
+    platforms = platforms.unix;
   };
 }

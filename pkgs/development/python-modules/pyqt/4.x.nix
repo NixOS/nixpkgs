@@ -2,9 +2,10 @@
 
 let
   version = "4.12";
-  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
-in mkPythonDerivation {
+  inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+in buildPythonPackage {
   name = "PyQt-x11-gpl-${version}";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt4_gpl_x11-${version}.tar.gz";

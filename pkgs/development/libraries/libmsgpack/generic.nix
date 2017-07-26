@@ -1,5 +1,6 @@
 { stdenv, cmake
 , version, src, patches ? [ ]
+, hostPlatform
 , ...
 }:
 
@@ -8,7 +9,12 @@ stdenv.mkDerivation rec {
 
   inherit src patches;
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
+
+  crossAttrs = {
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
+    cmakeFlags = "-DMSGPACK_BUILD_EXAMPLES=OFF -DCMAKE_SYSTEM_NAME=Windows";
+  };
 
   meta = with stdenv.lib; {
     description = "MessagePack implementation for C and C++";

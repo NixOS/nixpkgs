@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "minio-${shortVersion}";
 
-  shortVersion = "20170125";
-  longVersion = "2017-01-25T03-14-52Z";
+  shortVersion = "20170613";
+  longVersion = "2017-06-13T19-01-01Z";
 
   src = fetchurl {
     url = "https://github.com/minio/minio/archive/RELEASE.${lib.replaceStrings [":"] ["-"] longVersion}.tar.gz";
-    sha256 = "0yh8fdgl50sza182kl4jly0apf0dw0ya954ky6j8a8hmdcmk6wzk";
+    sha256 = "1rrlgn0nsvfn0lr9ffihjdb96n4znsvjlz1h7bwvz8nwhbn0lfsf";
   };
 
   buildInputs = [ go ];

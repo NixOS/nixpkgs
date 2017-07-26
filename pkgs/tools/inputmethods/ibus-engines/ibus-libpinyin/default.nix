@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook
 , intltool, pkgconfig, sqlite, libpinyin, db
-, ibus, glib, gtk3, python3, pygobject3
+, ibus, glib, gtk3, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ibus glib sqlite libpinyin python3 gtk3 db ];
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig python3.pkgs.wrapPython ];
 
   postAutoreconf = ''
     intltoolize
   '';
+
+  postFixup = "wrapPythonPrograms";
 
   meta = with stdenv.lib; {
     isIbusEngine = true;

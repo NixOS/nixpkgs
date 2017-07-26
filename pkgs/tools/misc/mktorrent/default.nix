@@ -1,11 +1,14 @@
-{stdenv, fetchurl, openssl}:
+{stdenv, fetchFromGitHub, openssl}:
 
-stdenv.mkDerivation {
-  name = "mktorrent-1.0";
+stdenv.mkDerivation rec {
+  name = "mktorrent-${version}";
+  version = "1.1";
 
-  src = fetchurl {
-    url = mirror://sourceforge/mktorrent/mktorrent-1.0.tar.gz;
-    sha256 = "17qi3nfky240pq6qcmf5qg324mxm83vk9r3nvsdhsvinyqm5d3kg";
+  src = fetchFromGitHub {
+    owner = "Rudde";
+    repo = "mktorrent";
+    rev = "v${version}";
+    sha256 = "17pdc5mandl739f8q26n5is8ga56s83aqcrwhlnnplbxwx2inidr";
   };
 
   makeFlags = "USE_PTHREADS=1 USE_OPENSSL=1 USE_LONG_OPTIONS=1"
@@ -22,7 +25,6 @@ stdenv.mkDerivation {
     homepage = http://mktorrent.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Command line utility to create BitTorrent metainfo files";
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric profpatsch];
   };
 }

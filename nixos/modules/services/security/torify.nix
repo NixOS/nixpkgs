@@ -19,15 +19,23 @@ in
 {
 
   ###### interface
-  
+
   options = {
-  
+
     services.tor.tsocks = {
 
       enable = mkOption {
-        default = cfg.enable && cfg.client.enable;
+        default = false;
         description = ''
-          Whether to build tsocks wrapper script to relay application traffic via TOR.
+          Whether to build tsocks wrapper script to relay application traffic via Tor.
+
+          <important>
+            <para>You shouldn't use this unless you know what you're
+            doing because your installation of Tor already comes with
+            its own superior (doesn't leak DNS queries)
+            <literal>torsocks</literal> wrapper which does pretty much
+            exactly the same thing as this.</para>
+          </important>
         '';
       };
 

@@ -10,11 +10,11 @@ assert stdenv.isLinux -> (utillinux != null);
 
 stdenv.mkDerivation rec {
   name = "creduce-${version}";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "http://embed.cs.utah.edu/creduce/${name}.tar.gz";
-    sha256 = "0pf5q0n8vkdcr1wrkxn2jzxv0xkrir13bwmqfw3jpbm3dh2c3b6d";
+    sha256 = "0h8s4d54q6cl6i45x3143l2xmr29b2yhr3m0n5qqx63sr5csip1n";
   };
 
   buildInputs = [

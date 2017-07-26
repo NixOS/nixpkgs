@@ -9,12 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "1whqr2bb3gds2zmrzqnv8vqka9928w4lx6mi6g244kmbwb2h8d8l";
   };
 
-  buildInputs = [ocaml findlib camlp4 which ocaml_optcomp base64];
-  propagatedBuildInputs = [ulex xmlm easy-format];
+  buildInputs = [ocaml findlib camlp4 which ocaml_optcomp];
+  propagatedBuildInputs = [ulex xmlm easy-format base64];
 
   patches = [ ./no-ocamlpath-override.patch ];
 
   createFindlibDestdir = true;
+
+  buildPhase = ''
+    make
+    make -C piqilib piqilib.cma
+  '';
 
   installPhase = ''
     make install;

@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     "--disable-x11-target"
     "--enable-quartz-target"
     "--disable-web-audio"
+    "CFLAGS=-DJSC_OBJC_API_ENABLED=0"
+    "CXXFLAGS=-DJSC_OBJC_API_ENABLED=0"
   ] ++ optionals (!enableCredentialStorage) [
     "--disable-credential-storage"
   ];

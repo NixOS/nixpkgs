@@ -1,16 +1,16 @@
 {stdenv, fetchgit, coq, coqPackages}:
 
-let revision = "b73a594af5460567dc233b2f2e7b0f781ae0490d"; in
+let revision = "ee436635a34873c79f49c3d2d507194216f6e8e9"; in
 
 stdenv.mkDerivation rec {
 
   name = "coq-QuickChick-${coq.coq-version}-${version}";
-  version = "20150605-${builtins.substring 0 7 revision}";
+  version = "20170710-${builtins.substring 0 7 revision}";
 
   src = fetchgit {
     url = git://github.com/QuickChick/QuickChick.git;
     rev = revision;
-    sha256 = "1prlihkgi2yvgzd62x80fsnxp5w1n0wyk7zrd6zwa8dbqx9pbr09";
+    sha256 = "0sq14j1kl4m4plyxj2dbkfwa6iqipmf9w7mxxxcbsm718m0xf1gr";
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 ];

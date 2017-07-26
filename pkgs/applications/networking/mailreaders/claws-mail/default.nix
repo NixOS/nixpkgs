@@ -1,8 +1,8 @@
 { fetchurl, stdenv, wrapGAppsHook
 , curl, dbus, dbus_glib, enchant, gtk2, gnutls, gnupg, gpgme, hicolor_icon_theme
 , libarchive, libcanberra_gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk2
-, glib_networking, gsettings_desktop_schemas
+, openldap , perl, pkgconfig, poppler, python, shared_mime_info, webkitgtk24x-gtk2
+, glib_networking, gsettings_desktop_schemas, libSM, libytnef
 
 # Build options
 # TODO: A flag to build the manual.
@@ -32,23 +32,27 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.14.1";
+  version = "3.15.0";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "0df34gj4r5cbb92834hph19gnh7ih9rgmmw47rliyg8b9z01v6mp";
+    sha256 = "0bnwd3l04y6j1nw3h861rdy6k6lyjzsi51j04d33vbpq8c6jskaf";
   };
 
   patches = [ ./mime.patch ];
+
+  hardeningDisable = [ "format" ];
 
   postPatch = ''
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared_mime_info}/share
   '';
 
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+
   buildInputs =
     [ curl dbus dbus_glib gtk2 gnutls gsettings_desktop_schemas hicolor_icon_theme
-      libetpan perl pkgconfig python wrapGAppsHook glib_networking
+      libetpan perl python glib_networking libSM libytnef
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
     ++ optional enablePluginPdf poppler
-    ++ optional enablePluginFancy webkitgtk2;
+    ++ optional enablePluginFancy webkitgtk24x-gtk2;
 
   configureFlags =
     optional (!enableLdap) "--disable-ldap"

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, m4, perl, gfortran, texlive, ffmpeg, tk
-, imagemagick, liblapack, python, openssl, libpng
+{ stdenv, fetchurl, m4, perl, gfortran, texlive, ffmpeg, tk, gnused_422
+, imagemagick, liblapack, python, openssl, libpng 
 , which
 }:
 
@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://old.files.sagemath.org/src-old/${name}.tar.gz";
     sha256 = "102mrzzi215g1xn5zgcv501x9sghwg758jagx2jixvg1rj2jijj9";
+
   };
 
-  buildInputs = [ m4 perl gfortran texlive.combined.scheme-basic ffmpeg tk imagemagick liblapack
-                  python openssl libpng which];
+  buildInputs = [ m4 perl gfortran texlive.combined.scheme-basic ffmpeg gnused_422 tk imagemagick liblapack
+                  python openssl libpng which ];
 
   patches = [ ./spkg-singular.patch ./spkg-python.patch ./spkg-git.patch ];
 
@@ -36,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.sagemath.org";
     description = "A free open source mathematics software system";
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true;
   };
 }

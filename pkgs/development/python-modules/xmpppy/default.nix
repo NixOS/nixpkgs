@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchurl, isPy3k }:
 buildPythonPackage rec {
-  name = "xmpp.py-${version}";
+  pname = "xmpp.py";
+  name = "${pname}-${version}";
   version = "0.5.0rc1";
 
   patches = [ ./ssl.patch ];

@@ -1,10 +1,10 @@
 {
-  kdeApp, lib, config, kdeWrapper,
+  mkDerivation, lib, config, makeWrapper,
 
-  extra-cmake-modules, kdoctools, makeWrapper,
+  extra-cmake-modules, kdoctools,
 
-  karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, khtml, kio,
-  kservice, kpty, kwidgetsaddons, libarchive,
+  karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, kitemmodels,
+  khtml, kio, kparts, kpty, kservice, kwidgetsaddons, libarchive,
 
   # Archive tools
   p7zip, unzipNLS, zip,
@@ -13,35 +13,25 @@
   unfreeEnableUnrar ? false, unrar,
 }:
 
-let
-  unwrapped =
-    kdeApp {
-      name = "ark";
-      nativeBuildInputs = [
-        extra-cmake-modules kdoctools makeWrapper
-      ];
-      propagatedBuildInputs = [
-        khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice
-        kpty kwidgetsaddons libarchive
-      ];
-      postInstall =
-        let
-          PATH =
-            lib.makeBinPath
-            ([ p7zip unzipNLS zip ] ++ lib.optional unfreeEnableUnrar unrar);
-        in ''
-          wrapProgram "$out/bin/ark" \
-              --prefix PATH : "${PATH}"
-        '';
-      meta = {
-        license = with lib.licenses;
-          [ gpl2 lgpl3 ] ++ lib.optional unfreeEnableUnrar unfree;
-        maintainers = [ lib.maintainers.ttuegel ];
-      };
-    };
-in
-kdeWrapper
-{
-  inherit unwrapped;
-  targets = [ "bin/ark" ];
+mkDerivation {
+  name = "ark";
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
+  propagatedBuildInputs = [
+    karchive kconfig kcrash kdbusaddons khtml ki18n kiconthemes kio kitemmodels
+    kparts kpty kservice kwidgetsaddons libarchive
+  ];
+  outputs = [ "out" "dev" ];
+  postFixup =
+    let
+      PATH =
+        lib.makeBinPath
+        ([ p7zip unzipNLS zip ] ++ lib.optional unfreeEnableUnrar unrar);
+    in ''
+      wrapProgram "$out/bin/ark" --prefix PATH: "${PATH}"
+    '';
+  meta = {
+    license = with lib.licenses;
+      [ gpl2 lgpl3 ] ++ lib.optional unfreeEnableUnrar unfree;
+    maintainers = [ lib.maintainers.ttuegel ];
+  };
 }

@@ -1,9 +1,9 @@
-{ stdenv, ninja, which
+{ stdenv, ninja, which, nodejs, fetchurl, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt, libcap
+, libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib, libvpx
 
@@ -14,6 +14,7 @@
 , glib, gtk2, gtk3, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
+, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -36,6 +37,8 @@ buildFun:
 
 with stdenv.lib;
 
+# see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
+
 let
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -57,7 +60,7 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxml" "libxslt" "snappy" "yasm"
+    "ffmpeg" "flac" "harfbuzz-ng" "libwebp" "libxslt" "yasm" "snappy" # "libpng" "libjpeg"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -67,9 +70,10 @@ let
   defaultDependencies = [
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt libcap
+    libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
+    ffmpeg harfbuzz libxslt harfbuzz-icu libxml2
   ];
 
   # build paths and release info
@@ -77,6 +81,11 @@ let
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
+
+  freetype_source = fetchurl {
+    url = http://anduin.linuxfromscratch.org/BLFS/other/chromium-freetype.tar.xz;
+    sha256 = "1vhslc4xg0d6wzlsi99zpah2xzjziglccrxn55k7qna634wyxg77";
+  };
 
   base = rec {
     name = "${packageName}-${version}";
@@ -87,7 +96,8 @@ let
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
-      python2Packages.ply python2Packages.jinja2
+      python2Packages.ply python2Packages.jinja2 nodejs
+      gnutar
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -105,6 +115,10 @@ let
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
+      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
+      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
+      ./patches/fix_network_api_crash.patch
+      ./patches/chromium-59.0.3071.115-system_ffmpeg-1.patch
     ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
       ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -129,10 +143,29 @@ let
         :l; n; bl
       }' gpu/config/gpu_control_list.cc
 
+      # Allow to put extensions into the system-path.
+      sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+
       patchShebangs .
-    '' + optionalString (versionAtLeast version "52.0.0.0") ''
-      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
-        third_party/pdfium/xfa/fxbarcode/utils.h
+      # use our own nodejs
+      mkdir -p third_party/node/linux/node-linux-x64/bin
+      ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
+
+      # use patched freetype
+      # FIXME https://bugs.chromium.org/p/pdfium/issues/detail?id=733
+      # FIXME http://savannah.nongnu.org/bugs/?51156
+      tar -xJf ${freetype_source}
+
+      # remove unused third-party
+      for lib in ${toString gnSystemLibraries}; do
+        find -type f -path "*third_party/$lib/*"     \
+            \! -path "*third_party/$lib/chromium/*"  \
+            \! -path "*third_party/$lib/google/*"    \
+            \! -path "*base/third_party/icu/*"       \
+            \! -path "*base/third_party/libevent/*"  \
+            \! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
+            -delete
+      done
     '';
 
     gnFlags = mkGnFlags ({

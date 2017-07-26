@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, mysql, camlp4 }:
+{ stdenv, fetchurl, ocaml, findlib, mysql }:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
@@ -10,11 +10,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/870/${pname}-${version}.tar.gz";
-    sha256 = "f896fa101a05d81b85af8122fe1c2809008a5e5fdca00f9ceeb7eec356369e3a";
+    url = "http://ygrek.org.ua/p/release/ocaml-mysql/${name}.tar.gz";
+    sha256 = "06mb2bq7v37wn0lza61917zqgb4bsg1xxb73myjyn88p6khl6yl2";
   };
 
   configureFlags = [ 
@@ -22,16 +22,11 @@ stdenv.mkDerivation rec {
      "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
-  buildInputs = [ocaml findlib camlp4 ];
+  buildInputs = [ ocaml findlib ];
 
   createFindlibDestdir = true;
 
   propagatedBuildInputs = [ mysql.client ];
-
-  buildPhase = ''
-    make
-    make opt
-  '';
 
   meta = {
     homepage = http://ocaml-mysql.forge.ocamlcore.org;

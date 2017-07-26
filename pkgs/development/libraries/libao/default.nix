@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig ] ++
-    lib.optional stdenv.isLinux (if usePulseAudio then libpulseaudio else alsaLib) ++
+    lib.optional usePulseAudio libpulseaudio ++
+    lib.optional stdenv.isLinux alsaLib ++
     lib.optional stdenv.isLinux libcap ++
     lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
 

@@ -18,17 +18,12 @@ in
 
     services.searx = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "
-          Whether to enable the Searx server. See https://github.com/asciimoo/searx
-        ";
-      };
+      enable = mkEnableOption
+        "the searx server. See https://github.com/asciimoo/searx";
 
       configFile = mkOption {
-        type = types.path;
-        default = "";
+        type = types.nullOr types.path;
+        default = null;
         description = "
           The path of the Searx server configuration file. If no file
           is specified, a default file is used (default config file has
@@ -72,7 +67,7 @@ in
           User = "searx";
           ExecStart = "${cfg.package}/bin/searx-run";
         };
-      } // (optionalAttrs (configFile != "") {
+      } // (optionalAttrs (configFile != null) {
         environment.SEARX_SETTINGS_PATH = configFile;
       });
 

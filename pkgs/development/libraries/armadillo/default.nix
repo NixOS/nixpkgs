@@ -1,24 +1,30 @@
 { stdenv, fetchurl, cmake, openblasCompat, superlu, hdf5 }:
 
 stdenv.mkDerivation rec {
-  version = "7.700.0";
+  version = "7.800.1";
   name = "armadillo-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/arma/armadillo-${version}.tar.xz";
-    sha256 = "152x274hd3f59xgd27k9d3ikwb3w62v1v5hpw4lp1yzdyy8980pr";
+    sha256 = "1nxq2jp4jlvinynv0l04rpdzpnkzdsng0d5vi3hilc0hlsjnbnjs";
   };
 
-  buildInputs = [ cmake openblasCompat superlu hdf5 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ openblasCompat superlu hdf5 ];
 
-  cmakeFlags = [ "-DDETECT_HDF5=ON" ];
+  cmakeFlags = let
+    libSuff = if stdenv.isDarwin then "dylib" else "so";
+  in [
+    "-DLAPACK_LIBRARY=${openblasCompat}/lib/libopenblas.${libSuff}"
+    "-DDETECT_HDF5=ON"
+  ];
 
   patches = [ ./use-unix-config-on-OS-X.patch ];
-  
+
   meta = with stdenv.lib; {
     description = "C++ linear algebra library";
     homepage = http://arma.sourceforge.net;
-    license = licenses.mpl20;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ juliendehos knedlsepp ];
   };

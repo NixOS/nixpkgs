@@ -6,7 +6,7 @@ with import ./attrsets.nix;
 with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
-with {inherit (import ./modules.nix) mergeDefinitions filterOverrides; };
+let inherit (import ./modules.nix) mergeDefinitions filterOverrides; in
 
 rec {
 
@@ -52,7 +52,7 @@ rec {
     { # Human-readable representation of the type, should be equivalent to
       # the type function name.
       name
-    , # Description of the type, defined recursively by embedding the the wrapped type if any.
+    , # Description of the type, defined recursively by embedding the wrapped type if any.
       description ? null
     , # Function applied to each definition that should return true if
       # its type-correct, false otherwise.
@@ -81,7 +81,7 @@ rec {
       #   name: name of the type
       #   type: type function.
       #   wrapped: the type wrapped in case of compound types.
-      #   payload: values of the type, two payloads of the same type must be 
+      #   payload: values of the type, two payloads of the same type must be
       #            combinable with the binOp binary operation.
       #   binOp: binary operation that merge two payloads of the same type.
       functor ? defaultFunctor name
@@ -92,6 +92,8 @@ rec {
     };
 
 
+  # When adding new types don't forget to document them in
+  # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
     unspecified = mkOptionType {
@@ -177,9 +179,9 @@ rec {
       description = "list of ${elemType.description}s";
       check = isList;
       merge = loc: defs:
-        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def:
+        map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
           if isList def.value then
-            imap (m: def':
+            imap1 (m: def':
               (mergeDefinitions
                 (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
                 elemType
@@ -218,7 +220,7 @@ rec {
           if isList def.value then
             { inherit (def) file;
               value = listToAttrs (
-                imap (elemIdx: elem:
+                imap1 (elemIdx: elem:
                   { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
                     value = elem;
                   }) def.value);
@@ -231,7 +233,7 @@ rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
+        merge = loc: defs: attrOnly.merge loc (imap1 convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);
@@ -257,6 +259,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
     uniq = elemType: mkOptionType rec {
       name = "uniq";
       inherit (elemType) description check;
@@ -267,6 +270,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # Null or value of ...
     nullOr = elemType: mkOptionType rec {
       name = "nullOr";
       description = "null or ${elemType.description}";
@@ -283,6 +287,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+    # A submodule (like typed attribute set). See NixOS manual.
     submodule = opts:
       let
         opts' = toList opts;
@@ -314,6 +319,7 @@ rec {
         };
       };
 
+    # A value from a set of allowed ones.
     enum = values:
       let
         show = v:
@@ -329,6 +335,7 @@ rec {
         functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
       };
 
+    # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
       description = "${t1.description} or ${t2.description}";
@@ -352,6 +359,8 @@ rec {
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
     };
 
+    # Either value of type `finalType` or `coercedType`, the latter is
+    # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
       assert coercedType.getSubModules == null;
       mkOptionType rec {

@@ -26,7 +26,7 @@ pkgs.stdenv.mkDerivation {
       extraHeader = ''xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" '';
     in ''
       {
-        pandoc '${inputFile}' -w docbook ${lib.optionalString useChapters "--chapters"} \
+        pandoc '${inputFile}' -w docbook ${lib.optionalString useChapters "--top-level-division=chapter"} \
           --smart \
           | sed -e 's|<ulink url=|<link xlink:href=|' \
               -e 's|</ulink>|</link>|' \
@@ -67,6 +67,10 @@ pkgs.stdenv.mkDerivation {
   + toDocbook {
       inputFile = ../pkgs/development/r-modules/README.md;
       outputFile = "languages-frameworks/r.xml";
+    }
+  + toDocbook {
+      inputFile = ./languages-frameworks/rust.md;
+      outputFile = "./languages-frameworks/rust.xml";
     }
   + toDocbook {
       inputFile = ./languages-frameworks/vim.md;

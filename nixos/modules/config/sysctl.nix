@@ -60,9 +60,10 @@ in
 
     # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
     # users as these make it easier to exploit kernel vulnerabilities.
-    #
-    # Removed under grsecurity.
-    boot.kernel.sysctl."kernel.kptr_restrict" =
-      if (config.boot.kernelPackages.kernel.features.grsecurity or false) then null else 1;
+    boot.kernel.sysctl."kernel.kptr_restrict" = 1;
+
+    # Disable YAMA by default to allow easy debugging.
+    boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
+
   };
 }

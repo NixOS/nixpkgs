@@ -14,7 +14,7 @@ config:
 # Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
 , iproute, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
-, lvm2, utillinux, procps
+, lvm2, utillinux, procps, systemd
 
 # Documentation
 # python2Packages.markdown
@@ -61,7 +61,7 @@ stdenv.mkDerivation (rec {
     libiconv libuuid ncurses openssl perl python2Packages.python xz yajl zlib
 
     # oxenstored
-    ocamlPackages.findlib ocamlPackages.ocaml
+    ocamlPackages.findlib ocamlPackages.ocaml systemd
 
     # Python fixes
     python2Packages.wrapPython
@@ -107,7 +107,8 @@ stdenv.mkDerivation (rec {
     # We want to do this before getting prefetched stuff to speed things up
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'
-    find . -type f | xargs sed -i 's@/bin/bash@/bin/sh@g'
+    find . -type f -not -path "./tools/hotplug/Linux/xendomains.in" \
+      | xargs sed -i 's@/bin/bash@/bin/sh@g'
 
     # Get prefetched stuff
     ${withXenfiles (name: x: ''
@@ -152,12 +153,19 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/xenstat/Makefile \
       --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
 
-    # TODO: use this as a template and support our own if-up scripts instead?
-    substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
-      --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts
+    ${optionalString (config.version >= "4.8") ''
+      substituteInPlace tools/hotplug/Linux/launch-xenstore.in \
+        --replace /bin/mkdir mkdir
+    ''}
 
-    # blktap is not provided by xen, but by xapi
-    sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules.in
+    ${optionalString (config.version < "4.6") ''
+      # TODO: use this as a template and support our own if-up scripts instead?
+      substituteInPlace tools/hotplug/Linux/xen-backend.rules.in \
+        --replace "@XEN_SCRIPT_DIR@" $out/etc/xen/scripts
+
+      # blktap is not provided by xen, but by xapi
+      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules.in
+    ''}
 
     ${withTools "patches" (name: x: ''
       ${concatMapStringsSep "\n" (p: ''
@@ -169,6 +177,11 @@ stdenv.mkDerivation (rec {
     ${withTools "postPatch" (name: x: x.postPatch)}
 
     ${config.postPatch or ""}
+  '';
+
+  postConfigure = ''
+    substituteInPlace tools/hotplug/Linux/xendomains \
+      --replace /bin/ls ls
   '';
 
   # TODO: Flask needs more testing before enabling it by default.
@@ -185,7 +198,7 @@ stdenv.mkDerivation (rec {
   '';
 
   installPhase = ''
-    mkdir -p $out $out/share
+    mkdir -p $out $out/share $out/share/man
     cp -prvd dist/install/nix/store/*/* $out/
     cp -prvd dist/install/boot $out/boot
     cp -prvd dist/install/etc $out
@@ -198,6 +211,8 @@ stdenv.mkDerivation (rec {
       --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
 
     wrapPythonPrograms
+    # We also need to wrap pygrub, which lies in lib
+    wrapPythonProgramsIn "$out/lib" "$out $pythonPath"
 
     shopt -s extglob
     for i in $out/etc/xen/scripts/!(*.sh); do

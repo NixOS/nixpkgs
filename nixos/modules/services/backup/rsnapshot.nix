@@ -26,7 +26,6 @@ in
       enableManualRsnapshot = mkOption {
         description = "Whether to enable manual usage of the rsnapshot command with this module.";
         default = true;
-        example = false;
         type = types.bool;
       };
 

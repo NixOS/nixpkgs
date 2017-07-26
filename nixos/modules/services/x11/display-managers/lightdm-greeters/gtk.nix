@@ -45,6 +45,7 @@ let
     theme-name = ${cfg.theme.name}
     icon-theme-name = ${cfg.iconTheme.name}
     background = ${ldmcfg.background}
+    ${cfg.extraConfig}
     '';
 
 in
@@ -101,6 +102,15 @@ in
           '';
         };
 
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra configuration that should be put in the lightdm-gtk-greeter.conf
+          configuration file.
+        '';
       };
 
     };

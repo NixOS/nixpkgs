@@ -1,8 +1,8 @@
 diff --git a/include/iprt/mangling.h b/include/iprt/mangling.h
-index 70c596a..78972ed 100644
+index c1daa8f..8618371 100644
 --- a/include/iprt/mangling.h
 +++ b/include/iprt/mangling.h
-@@ -1068,6 +1068,7 @@
+@@ -1440,6 +1440,7 @@
  # define RTPathStripSuffix                              RT_MANGLER(RTPathStripSuffix)
  # define RTPathStripFilename                            RT_MANGLER(RTPathStripFilename)
  # define RTPathStripTrailingSlash                       RT_MANGLER(RTPathStripTrailingSlash)
@@ -10,7 +10,7 @@ index 70c596a..78972ed 100644
  # define RTPathTemp                                     RT_MANGLER(RTPathTemp)
  # define RTPathTraverseList                             RT_MANGLER(RTPathTraverseList)
  # define RTPathUnlink                                   RT_MANGLER(RTPathUnlink)
-@@ -1105,6 +1106,7 @@
+@@ -1478,6 +1479,7 @@
  # define RTProcGetAffinityMask                          RT_MANGLER(RTProcGetAffinityMask)
  # define RTProcGetExecutablePath                        RT_MANGLER(RTProcGetExecutablePath)
  # define RTProcGetPriority                              RT_MANGLER(RTProcGetPriority)
@@ -19,10 +19,10 @@ index 70c596a..78972ed 100644
  # define RTProcQueryParent                              RT_MANGLER(RTProcQueryParent)
  # define RTProcQueryUsername                            RT_MANGLER(RTProcQueryUsername)
 diff --git a/include/iprt/path.h b/include/iprt/path.h
-index 7e42754..b4de4c8 100644
+index 8bd42bc..2c23d3e 100644
 --- a/include/iprt/path.h
 +++ b/include/iprt/path.h
-@@ -1049,6 +1049,15 @@ RTDECL(int) RTPathCalcRelative(char *pszPathDst, size_t cbPathDst,
+@@ -1064,6 +1064,15 @@ RTDECL(int) RTPathCalcRelative(char *pszPathDst, size_t cbPathDst,
  RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath);
  
  /**
@@ -39,10 +39,10 @@ index 7e42754..b4de4c8 100644
   *
   * @returns iprt status code.
 diff --git a/include/iprt/process.h b/include/iprt/process.h
-index 2760306..0ce6c92 100644
+index 043653e..1070280 100644
 --- a/include/iprt/process.h
 +++ b/include/iprt/process.h
-@@ -313,6 +313,16 @@ RTR3DECL(const char *) RTProcShortName(void);
+@@ -327,6 +327,16 @@ RTR3DECL(const char *) RTProcShortName(void);
  RTR3DECL(char *) RTProcGetExecutablePath(char *pszExecPath, size_t cbExecPath);
  
  /**
@@ -60,11 +60,11 @@ index 2760306..0ce6c92 100644
   *
   * The way this work is that it will spawn a detached / backgrounded /
 diff --git a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
-index c39d2f7..896b352 100644
+index ce0f288..6193108 100644
 --- a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
 +++ b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
-@@ -1415,18 +1415,19 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
-         NOREF(fRelaxed);
+@@ -1489,9 +1489,9 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
+         bool fBad = !fRelaxed || pFsObjState->Stat.st_gid != 2 /*bin*/ || suplibHardenedStrCmp(pszPath, "/usr/lib/iconv");
  #else
          NOREF(fRelaxed);
 -        bool fBad = true;
@@ -75,23 +75,11 @@ index c39d2f7..896b352 100644
              return supR3HardenedSetError3(VERR_SUPLIB_WRITE_NON_SYS_GROUP, pErrInfo,
                                            "An unknown (and thus untrusted) group has write access to '", pszPath,
                                            "' and we therefore cannot trust the directory content or that of any subdirectory");
-     }
- 
-     /*
--     * World must not have write access.  There is no relaxing this rule.
-+     * World must not have write access.
-+     * There is no relaxing this rule, except when it comes to the Nix store.
-      */
--    if (pFsObjState->Stat.st_mode & S_IWOTH)
-+    if (pFsObjState->Stat.st_mode & S_IWOTH && suplibHardenedStrCmp(pszPath, "/nix/store"))
-         return supR3HardenedSetError3(VERR_SUPLIB_WORLD_WRITABLE, pErrInfo,
-                                       "World writable: '", pszPath, "'");
- 
 diff --git a/src/VBox/Main/src-server/MachineImpl.cpp b/src/VBox/Main/src-server/MachineImpl.cpp
-index 95dc9a7..39170bc 100644
+index 320c569..9bfe41f 100644
 --- a/src/VBox/Main/src-server/MachineImpl.cpp
 +++ b/src/VBox/Main/src-server/MachineImpl.cpp
-@@ -7326,7 +7326,7 @@ HRESULT Machine::i_launchVMProcess(IInternalSessionControl *aControl,
+@@ -7543,7 +7543,7 @@ HRESULT Machine::i_launchVMProcess(IInternalSessionControl *aControl,
  
      /* get the path to the executable */
      char szPath[RTPATH_MAX];
@@ -101,10 +89,10 @@ index 95dc9a7..39170bc 100644
      szPath[cchBufLeft++] = RTPATH_DELIMITER;
      szPath[cchBufLeft] = 0;
 diff --git a/src/VBox/Main/src-server/NetworkServiceRunner.cpp b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
-index e9e1ba62..4d1c1e1 100644
+index 1e38d99..5e43dda 100644
 --- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
 +++ b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
-@@ -79,7 +79,7 @@ int NetworkServiceRunner::start()
+@@ -85,7 +85,7 @@ int NetworkServiceRunner::start(bool aKillProcOnStop)
  
      /* get the path to the executable */
      char exePathBuf[RTPATH_MAX];
@@ -114,7 +102,7 @@ index e9e1ba62..4d1c1e1 100644
      char *substrBs = strrchr(exePathBuf, '\\');
      char *suffix = substrSl ? substrSl : substrBs;
 diff --git a/src/VBox/Main/src-server/generic/NetIf-generic.cpp b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
-index 8559d2a..2177f27 100644
+index 98dc91a..43a819f 100644
 --- a/src/VBox/Main/src-server/generic/NetIf-generic.cpp
 +++ b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
 @@ -47,7 +47,7 @@ static int NetIfAdpCtl(const char * pcszIfName, const char *pszAddr, const char
@@ -126,7 +114,7 @@ index 8559d2a..2177f27 100644
      if (RT_FAILURE(rc))
      {
          LogRel(("NetIfAdpCtl: failed to get program path, rc=%Rrc.\n", rc));
-@@ -90,7 +90,7 @@ static int NetIfAdpCtl(HostNetworkInterface * pIf, const char *pszAddr, const ch
+@@ -89,7 +89,7 @@ static int NetIfAdpCtl(HostNetworkInterface * pIf, const char *pszAddr, const ch
  int NetIfAdpCtlOut(const char * pcszName, const char * pcszCmd, char *pszBuffer, size_t cBufSize)
  {
      char szAdpCtl[RTPATH_MAX];
@@ -135,7 +123,7 @@ index 8559d2a..2177f27 100644
      if (RT_FAILURE(rc))
      {
          LogRel(("NetIfAdpCtlOut: Failed to get program path, rc=%Rrc\n", rc));
-@@ -202,7 +202,7 @@ int NetIfCreateHostOnlyNetworkInterface(VirtualBox *pVirtualBox,
+@@ -201,7 +201,7 @@ int NetIfCreateHostOnlyNetworkInterface(VirtualBox *pVirtualBox,
              progress.queryInterfaceTo(aProgress);
  
              char szAdpCtl[RTPATH_MAX];
@@ -145,7 +133,7 @@ index 8559d2a..2177f27 100644
              {
                  progress->i_notifyComplete(E_FAIL,
 diff --git a/src/VBox/Runtime/r3/path.cpp b/src/VBox/Runtime/r3/path.cpp
-index be2ad8f..7ddf105 100644
+index 944848e..744a261 100644
 --- a/src/VBox/Runtime/r3/path.cpp
 +++ b/src/VBox/Runtime/r3/path.cpp
 @@ -81,6 +81,12 @@ RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath)
@@ -162,7 +150,7 @@ index be2ad8f..7ddf105 100644
  {
  #if !defined(RT_OS_WINDOWS) && defined(RTPATH_APP_PRIVATE)
 diff --git a/src/VBox/Runtime/r3/process.cpp b/src/VBox/Runtime/r3/process.cpp
-index 7bde6af..2656cae 100644
+index 2aab645..9795f21 100644
 --- a/src/VBox/Runtime/r3/process.cpp
 +++ b/src/VBox/Runtime/r3/process.cpp
 @@ -111,6 +111,26 @@ RTR3DECL(char *) RTProcGetExecutablePath(char *pszExecPath, size_t cbExecPath)

@@ -7,15 +7,6 @@ let
   kernel = config.boot.kernelPackages.kernel;
   activateConfiguration = config.system.activationScripts.script;
 
-  readonlyMountpoint = pkgs.stdenv.mkDerivation {
-    name = "readonly-mountpoint";
-    unpackPhase = "true";
-    installPhase = ''
-      mkdir -p $out/bin
-      cc -O3 ${./readonly-mountpoint.c} -o $out/bin/readonly-mountpoint
-    '';
-  };
-
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
@@ -23,11 +14,11 @@ let
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path =
-      [ pkgs.coreutils
-        pkgs.utillinux
-        pkgs.openresolv
-      ] ++ optional config.nix.readOnlyStore readonlyMountpoint;
+    path = lib.makeBinPath [
+      pkgs.coreutils
+      pkgs.utillinux
+      pkgs.openresolv
+    ];
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}

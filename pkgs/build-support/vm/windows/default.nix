@@ -1,3 +1,4 @@
+#note: the hardcoded /bin/sh is required for the VM's cygwin shell
 pkgs:
 
 let

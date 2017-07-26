@@ -6,8 +6,6 @@ let
 
   configVersion = 26;
 
-  boolToString = b: if b then "true" else "false";
-
   cacheDir = "cache";
   lockDir = "lock";
   feedIconsDir = "feed-icons";

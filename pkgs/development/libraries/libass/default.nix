@@ -19,11 +19,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libass-${version}";
-  version = "0.13.4";
+  version = "0.13.7";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1dlzkjybnpl2fkvyjq0qblb7qw12cs893bs7zj3rvf8ij342yjnq";
+    sha256 = "17byv926w1mxn56n896sxvdq4m0yv1l7qbm688h6zr3nzgsyarbh";
   };
 
   configureFlags = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage    = https://github.com/libass/libass;
     license     = licenses.isc;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ codyopel urkud ];
+    maintainers = with maintainers; [ codyopel ];
     repositories.git = git://github.com/libass/libass.git;
   };
 }

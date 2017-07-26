@@ -244,6 +244,17 @@ let
         '';
       };
 
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        description = ''
+          The set of packages that should be made availabe to the user.
+          This is in contrast to <option>environment.systemPackages</option>,
+          which adds packages to all users.
+        '';
+      };
+
     };
 
     config = mkMerge
@@ -568,5 +579,17 @@ in {
   imports =
     [ (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
       (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+      {
+        environment = {
+          etc = mapAttrs' (name: { packages, ... }: {
+            name = "per-user-pkgs/${name}";
+            value.source = pkgs.symlinkJoin {
+              name = "per-user-pkgs.${name}";
+              paths = packages;
+            };
+          }) (filterAttrs (_: { packages, ... }: packages != []) cfg.users);
+          profiles = ["/etc/per-user-pkgs/$LOGNAME"];
+        };
+      }
     ];
 }

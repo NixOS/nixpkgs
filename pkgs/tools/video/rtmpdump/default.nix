@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     ++ optionals gnutlsSupport [ gnutls nettle ]
     ++ optional opensslSupport openssl;
 
+  outputs = [ "out" "dev" ];
+
   meta = {
     description = "Toolkit for RTMP streams";
     homepage    = http://rtmpdump.mplayerhq.hu/;

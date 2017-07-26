@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libebml }:
 
 stdenv.mkDerivation rec {
-  name = "libmatroska-1.4.5";
+  name = "libmatroska-1.4.7";
 
   src = fetchurl {
     url = "http://dl.matroska.org/downloads/libmatroska/${name}.tar.bz2";
-    sha256 = "1g2p2phmhkp86ldd2zqx6q0s33r7d38rsfnr4wmmdr81d6j3y0kr";
+    sha256 = "1yi5cnv13nhl27xyqayd5l3sf0j3swfj3apzibv71yg9pariwi26";
   };
 
   nativeBuildInputs = [ pkgconfig ];

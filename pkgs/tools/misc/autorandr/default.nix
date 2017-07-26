@@ -1,35 +1,46 @@
-{ fetchgit
-, stdenv
+{ stdenv
 , python3Packages
-, fetchFromGitHub }:
+, fetchFromGitHub
+, systemd }:
 
 let
   python = python3Packages.python;
   wrapPython = python3Packages.wrapPython;
-  date = "2016-11-23";
+  version = "1.1";
 in
   stdenv.mkDerivation {
-    name = "autorandr-unstable-${date}";
+    name = "autorandr-${version}";
 
-    buildInputs = [ python wrapPython ];
-
-    phases = [ "unpackPhase" "installPhase" ];
+    buildInputs = [ python ];
 
     installPhase = ''
-      # install bash completions
-      mkdir -p $out/bin $out/libexec $out/etc/bash_completion.d
-      cp -v contrib/bash_completion/autorandr $out/etc/bash_completion.d
+      runHook preInstall
+      make install TARGETS='autorandr' PREFIX=$out
 
-      # install autorandr bin
-      cp autorandr.py $out/bin/autorandr
-      wrapPythonProgramsIn $out/bin/autorandr $out
+      make install TARGETS='bash_completion' DESTDIR=$out
+
+      make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
+
+      ${if systemd != null then ''
+        make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
+          SYSTEMD_UNIT_DIR=/lib/systemd/system \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+        substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
+          --replace /bin/systemctl "${systemd}/bin/systemctl"
+      '' else ''
+        make install TARGETS='pmutils' DESTDIR=$out \
+          PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
+        make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+          UDEV_RULES_DIR=/etc/udev/rules.d
+      ''}
+      runHook postInstall
     '';
 
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "53d29f99275aebf14240ea95f2d7022b305738d5";
-      sha256 = "0pza4wfkzv7mmg2m4pf3n8wk0p7cy6bfqknn8ywz51r8ja16cqfj";
+      rev = "${version}";
+      sha256 = "05jlzxlrdyd4j90srr71fv91c2hf32diw40n9rmybgcdvy45kygd";
     };
 
     meta = {

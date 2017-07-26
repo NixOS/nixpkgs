@@ -1,45 +1,38 @@
-{ stdenv, fetchurl, buildPythonPackage, service-identity, requests2,
-  six, mock, twisted, incremental, coreutils, gnumake, pep8, sphinx,
-  openssl, pyopenssl }:
+{ stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six
+, mock, twisted, incremental, pep8 }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "treq";
-  version = "16.12.0";
+  version = "17.3.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-    sha256 = "1aci3f3rmb5mdf4s6s4k4kghmnyy784cxgi3pz99m5jp274fs25h";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1xhcpvsl3xqw0dq9sixk80iwyiv17djigp3815sy5pfgvvggcfii";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [ twisted requests six incremental service-identity ];
+
+  checkInputs = [
     pep8
     mock
   ];
 
-  propagatedBuildInputs = [
-    service-identity
-    requests2
-    twisted
-    incremental
-    sphinx
-    six
-    openssl
-    pyopenssl
-  ];
-
-  checkPhase = ''
-    ${pep8}/bin/pep8 --ignore=E902 treq
-    trial treq
+  postPatch = ''
+    rm -fv src/treq/test/test_treq_integration.py
   '';
 
-  doCheck = false;
-  # Failure: twisted.web._newclient.RequestTransmissionFailed: [<twisted.python.failure.Failure OpenSSL.SSL.Error: [('SSL routines', 'ssl3_get_server_certificate', 'certificate verify failed')]>]
+  # XXX tox tries to install coverage despite it is installed
+  #postBuild = ''
+  #  # build documentation and install in $out
+  #  tox -e docs
+  #  mkdir -pv $out/docs
+  #  cp -rv docs/* $out/docs/
+  #'';
 
-  postBuild = ''
-    ${coreutils}/bin/mkdir -pv treq
-    ${coreutils}/bin/echo "${version}" | ${coreutils}/bin/tee treq/_version
-    cd docs && ${gnumake}/bin/make html && cd ..
+  checkPhase = ''
+    pep8 --ignore=E902 treq
+    trial treq
   '';
 
   meta = with stdenv.lib; {

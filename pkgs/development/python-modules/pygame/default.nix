@@ -1,28 +1,24 @@
 { stdenv, lib, fetchurl, buildPythonPackage, python, smpeg, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, isPy3k,
+, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, freetype
 }:
 
 buildPythonPackage rec {
-  name = "pygame-${version}";
-  version = "1.9.1";
+  pname = "pygame";
+  name = "${pname}-${version}";
+  version = "1.9.3";
 
   src = fetchurl {
-    url = "http://www.pygame.org/ftp/pygame-1.9.1release.tar.gz";
-    sha256 = "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52";
+    url = "mirror://pypi/p/pygame/pygame-${version}.tar.gz";
+    sha256 = "1hlydiyygl444bq5m5g8n3jsxsgrdyxlm42ipmfbw36wkf0j243m";
   };
 
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
-    smpeg portmidi libX11
+    portmidi libX11 freetype
   ];
-
-  # http://ubuntuforums.org/showthread.php?t=1960262
-  disabled = isPy3k;
 
   # Tests fail because of no audio device and display.
   doCheck = false;
-
-  patches = [ ./pygame-v4l.patch ];
 
   preConfigure = ''
     sed \

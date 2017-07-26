@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "aha-${version}";
-  version = "0.4.10.2";
+  version = "0.4.10.6";
 
   src = fetchFromGitHub {
-    sha256 = "14n0py8dzlvirawb8brq143nq0sy9s2z6in5589krrya0frlrlkj";
+    sha256 = "18mz3f5aqw4vbdrxf8wblqm6nca73ppq9hb2z2ppw6k0557i71kz";
     rev = version;
     repo = "aha";
     owner = "theZiz";

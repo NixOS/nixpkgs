@@ -43,6 +43,19 @@ stdenv.mkDerivation rec {
     chmod +x $prefix/bin/${executable-name}
   '';
 
+  doCheck = true;
+
+  checkPhase = ''
+    # Launcher should be able to run for a few seconds without crashing.
+    (set +e
+     export HOME=. # Pharo will try to create files here
+     secs=5
+     echo -n "Running headless Pharo for $secs seconds to check for a crash... "
+     timeout $secs \
+       ${pharo-vm}/bin/pharo-vm-nox PharoLauncher.image --no-quit eval 'true'
+     test "$?" == 124 && echo "ok")
+  '';
+
   meta = {
     description = "Launcher for Pharo distributions";
     longDescription = ''
@@ -65,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.lukego ];
     platforms = pharo-vm.meta.platforms;
   };
 }

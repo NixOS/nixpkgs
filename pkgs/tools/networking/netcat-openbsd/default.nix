@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ pkgconfig libbsd ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libbsd ];
+
   sourceRoot = name;
   patches = [ "../debian/patches/*.patch" ];
 

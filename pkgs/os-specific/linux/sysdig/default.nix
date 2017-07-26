@@ -1,18 +1,24 @@
 {stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
 
-let
-  inherit (stdenv.lib) optional optionalString;
-  baseName = "sysdig";
-  version = "0.15.0";
-in
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+  name = "sysdig-${version}";
+  version = "0.16.0";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "08spprzgx6ksd7sjp5nk7z5szdlixh2sb0bsb9mfaq4xr12gsjw2";
+  src = fetchFromGitHub {
+    owner = "draios";
+    repo = "sysdig";
+    rev = version;
+    sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
   };
+
+  patches = [
+    (fetchpatch {
+       # Sysdig fails to run on linux kernels with unified cgroups enabled
+       url = https://github.com/draios/sysdig/files/909689/0001-Fix-for-linux-kernels-with-cgroup-v2-API-enabled.patch.txt;
+       sha256 = "10nmisifa500hzpa3899rs837bcal72pnqidxmrnr1js187z8j84";
+    })
+  ];
 
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
@@ -25,13 +31,19 @@ stdenv.mkDerivation rec {
     "-DSYSDIG_VERSION=${version}"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
+  # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = [
+    "-DluaL_reg=luaL_Reg"
+    "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
+  ];
+
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = makeLibraryPath [
     zlib
     luajit
     ncurses
@@ -44,7 +56,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc
   ];
 
-  postInstall = ''
+  postInstall = optionalString (!stdenv.isDarwin) ''
     patchelf --set-rpath "$libPath" "$out/bin/sysdig"
     patchelf --set-rpath "$libPath" "$out/bin/csysdig"
   '' + optionalString (kernel != null) ''
@@ -61,7 +73,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];

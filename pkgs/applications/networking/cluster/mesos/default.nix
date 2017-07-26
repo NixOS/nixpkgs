@@ -22,7 +22,7 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.1";
   name = "mesos-${version}";
 
   enableParallelBuilding = true;
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "1hdjd4syyp88l0bnh88bhzvn9466ad2ysfp9pq3kwj3qzwg5jv8g";
+    sha256 = "0f46ebb130d2d4a9732f95d0a71d80c8c5967f3c172b110f2ece316e05922115";
   };
 
   patches = [

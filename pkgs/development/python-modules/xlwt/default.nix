@@ -8,20 +8,12 @@
 buildPythonPackage rec {
   pname = "xlwt";
   name = "${pname}-${version}";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "aed648c17731f40f84550dd2a1aaa53569f0cbcaf5610ba895cd2632587b723c";
+    sha256 = "505669c1eb6a60823fd3e2e723b60eea95f2c56254113bf163091ed2bedb4ac9";
   };
-
-  # re.LOCALE was removed in Python 3.6
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/python-excel/xlwt/commit/86564ef26341020316cd8a27c704ef1dc5a6129b.patch";
-      sha256 = "0ifavfld3rrqjb0iyriy4c0drw31gszvlg3nmnn9dmfsh91vxhs6";
-    })
-  ];
 
   buildInputs = [ nose ];
   checkPhase = ''

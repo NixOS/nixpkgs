@@ -1,16 +1,19 @@
 { stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
 , libwebp, libxml2, proj, python2, scons, sqlite, zlib
+
+# supply a postgresql package to enable the PostGIS input plugin
+, postgresql ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "mapnik-${version}";
-  version = "3.0.12";
+  version = "3.0.13";
 
   src = fetchzip {
     # this one contains all git submodules and is cheaper than fetchgit
     url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
-    sha256 = "02w360fxk0pfkk0zbwc134jq7rkkib58scs5k67j8np6fx6gag6i";
+    sha256 = "189wsd6l6awblkiha666l1sdyp7ifmnfsa87y0j37rvym6w4r065";
   };
 
   # a distinct dev output makes python-mapnik fail
@@ -21,6 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
       libwebp libxml2 proj python2 sqlite zlib
+
+      # optional inputs
+      postgresql
     ];
 
   configurePhase = ''

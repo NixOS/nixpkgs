@@ -1,22 +1,26 @@
-{stdenv, fetchurl, ncurses, libpcap }:
+{stdenv, fetchFromGitHub, autoreconfHook, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
-
-  version = "3.4-beta2";
+  version = "3.5.1";
 
   name = "sipp-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/SIPp/sipp/archive/${version}.tar.gz";
-    sha256 = "0rr3slarh5dhpinif5aqji9c9krnpvl7z49w7qahvsww1niawwdv";
+  src = fetchFromGitHub {
+    owner = "SIPp";
+    repo = "sipp";
+    rev = "v${version}";
+    sha256 = "179a1fvqyk3jpxbi28l1xfw22cw9vgvxrn19w5f38w74x0jwqg5k";
   };
 
-  configurePhase = ''
-    export ac_cv_lib_curses_initscr=yes
-    export ac_cv_lib_pthread_pthread_mutex_init=yes
+  patchPhase = ''
     sed -i "s@pcap/\(.*\).pcap@$out/share/pcap/\1.pcap@g" src/scenario.cpp
-    ./configure --prefix=$out --with-pcap
+    sed -i -e "s|AC_CHECK_LIB(curses|AC_CHECK_LIB(ncurses|" configure.ac
+    echo "#define SIPP_VERSION \"v${version}\"" > include/version.h
   '';
+
+  configureFlags = [
+    "--with-pcap"
+  ];
 
   postInstall = ''
     mkdir -pv $out/share/pcap
@@ -24,5 +28,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ncurses libpcap];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with stdenv.lib; {
+    homepage = http://sipp.sf.net;
+    description = "The SIPp testing tool";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+  };
 }
 

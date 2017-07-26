@@ -5,17 +5,19 @@ let
     buildInputs = [ makeWrapper ] ++ plugins;
     passthru.withPlugins = moarPlugins: withPlugins (moarPlugins ++ plugins);
   } ''
-    makeWrapper ${package}/bin/buildbot $out/bin/buildbot --prefix PYTHONPATH : $PYTHONPATH
+    makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
+      --prefix PYTHONPATH : "${package}/lib/python2.7/site-packages:$PYTHONPATH"
+    ln -sfv ${package}/lib $out/lib
   '';
 
   package = pythonPackages.buildPythonApplication (rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.4";
+    version = "0.9.9.post2";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0wklrn4fszac9wi8zw3vbsznwyff6y57cz0i81zvh46skb6n3086";
+      sha256 = "0g932pvkxqq3ijwkwwa29jd9sp5895gv40c3k7m2acc5dp8ygb9w";
     };
 
     buildInputs = with pythonPackages; [
@@ -49,6 +51,7 @@ let
       txaio
       autobahn
       pyjwt
+      distro
 
       # tls
       pyopenssl
@@ -66,6 +69,12 @@ let
 
     ];
 
+    patches = [
+      # This patch disables the test that tries to read /etc/os-release which
+      # is not accessible in sandboxed builds.
+      ./skip_test_linux_distro.patch
+    ];
+
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
@@ -74,7 +83,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
-      description = "Continuous integration system that automates the build/test cycle";
+      description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ nand0p ryansydnor ];
       license = licenses.gpl2;
     };

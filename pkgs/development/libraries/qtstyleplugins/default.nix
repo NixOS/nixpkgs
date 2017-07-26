@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub, qmakeHook, pkgconfig, gtk2 }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "qtstyleplugins-2016-12-01";
+  name = "qtstyleplugins-2017-03-11";
 
   src = fetchFromGitHub {
     owner = "qt";
     repo = "qtstyleplugins";
-    rev = "7aa47640c202cc4a9c16aa7df98191236743c8ba";
-    sha256 = "0pysgn5yhbh85rv7syvf2w9g1gj1z1nwspjri39dc95vj108lin5";
+    rev = "335dbece103e2cbf6c7cf819ab6672c2956b17b3";
+    sha256 = "085wyn85nrmzr8nv5zv7fi2kqf8rp1gnd30h72s30j55xvhmxvmy";
   };
 
-  buildInputs = [ qmakeHook pkgconfig gtk2 ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ gtk2 ];
 
   installPhase = ''
     make INSTALL_ROOT=$NIX_QT5_TMP install

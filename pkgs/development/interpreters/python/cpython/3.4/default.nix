@@ -13,6 +13,7 @@
 , callPackage
 , self
 , CF, configd
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -100,7 +101,7 @@ in stdenv.mkDerivation {
      ''}
   '';
 
-  setupHook = ./setup-hook.sh;
+  setupHook = python-setup-hook sitePackages;
 
   postInstall = ''
     # needed for some packages, especially packages that backport functionality
@@ -132,24 +133,19 @@ in stdenv.mkDerivation {
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
 
+    # Get rid of retained dependencies on -dev packages, and remove
+    # some $TMPDIR references to improve binary reproducibility.
+    # Note that the .pyc file of _sysconfigdata.py should be regenerated!
+    for i in $out/lib/python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+    done
+
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
     # We rebuild three times, once for each optimization level
     find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
-  '';
-
-  postFixup = ''
-    # Get rid of retained dependencies on -dev packages, and remove
-    # some $TMPDIR references to improve binary reproducibility.
-    for i in $out/lib/python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
-      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
-    done
-
-    # FIXME: should regenerate this.
-    rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
-
   '';
 
   passthru = let

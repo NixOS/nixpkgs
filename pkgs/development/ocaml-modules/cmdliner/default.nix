@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
   };
 
   unpackCmd = "tar xjf $src";
-  buildInputs = [ ocaml findlib ocamlbuild opam ];
+  nativeBuildInputs = [ ocamlbuild opam ];
+  buildInputs = [ ocaml findlib ];
 
   createFindlibDestdir = true;
 
   configurePhase = "ocaml pkg/git.ml";
   buildPhase     = "ocaml pkg/build.ml native=true native-dynlink=true";
   installPhase   = ''
-    opam-installer --script --prefix=$out ${pname}.install > install.sh
-    sh install.sh
+    opam-installer --script --prefix=$out | sh
     ln -s $out/lib/${pname} $out/lib/ocaml/${ocaml.version}/site-lib/
   '';
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = http://erratique.ch/software/cmdliner;
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];
+    maintainers = [ maintainers.vbgl ];
   };
 }

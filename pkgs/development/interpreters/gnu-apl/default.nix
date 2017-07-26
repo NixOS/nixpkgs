@@ -1,36 +1,32 @@
 { stdenv, fetchurl, readline, gettext, ncurses }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "gnu-apl-${version}";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${version}.tar.gz";
-    sha256 = "057zwzvvgcrrwsl52a27w86hgy31jqq6avqq629xj7yq90qah3ay";
+    sha256 = "07xq8ddlmz8psvsmwr23gar108ri0lwmw0n6kpxcv8ypas1f5xlg";
   };
 
   buildInputs = [ readline gettext ncurses ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';
-
-  configureFlags = stdenv.lib.optionals stdenv.isDarwin [
-    "--disable-dependency-tracking"
-    "--disable-silent-rules"
-  ];
 
   postInstall = ''
     cp -r support-files/ $out/share/doc/
     find $out/share/doc/support-files -name 'Makefile*' -delete
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Free interpreter for the APL programming language";
     homepage    = http://www.gnu.org/software/apl/;
     license     = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
-    platforms   = with stdenv.lib.platforms; linux ++ darwin;
+    platforms   = with platforms; linux ++ darwin;
     inherit version;
 
     longDescription = ''

@@ -6,6 +6,16 @@
 with lib;
 
 let
+  # Do not include these things:
+  #   - The '.git' directory
+  #   - Result symlinks from nix-build ('result', 'result-2', 'result-bin', ...)
+  #   - VIM/Emacs swap/backup files ('.swp', '.swo', '.foo.swp', 'foo~', ...)
+  filterFn = path: type: let basename = baseNameOf (toString path); in
+    if type == "directory" then basename != ".git"
+    else if type == "symlink" then builtins.match "^result(|-.*)$" basename == null
+    else builtins.match "^((|\..*)\.sw[a-z]|.*~)$" basename == null;
+
+  nixpkgs = builtins.filterSource filterFn pkgs.path;
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD.  These are installed into the "nixos" channel of the root
@@ -15,12 +25,11 @@ let
     { }
     ''
       mkdir -p $out
-      cp -prd ${pkgs.path} $out/nixos
+      cp -prd ${nixpkgs} $out/nixos
       chmod -R u+w $out/nixos
       if [ ! -e $out/nixos/nixpkgs ]; then
         ln -s . $out/nixos/nixpkgs
       fi
-      rm -rf $out/nixos/.git
       echo -n ${config.system.nixosVersionSuffix} > $out/nixos/.version-suffix
     '';
 

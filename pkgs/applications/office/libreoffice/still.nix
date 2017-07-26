@@ -22,7 +22,7 @@ let
   primary-src = import ./still-primary-src.nix { inherit fetchurl; };
 in
 
-with { inherit (primary-src) major minor subdir version; };
+let inherit (primary-src) major minor subdir version; in
 
 let
   lib = stdenv.lib;
@@ -73,11 +73,14 @@ in stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   # ICU 58, included in 5.3.x
-  patches = [(fetchurl {
-    url = "https://gerrit.libreoffice.org/gitweb?p=core.git;a=patch;h=3e42714c76b1347babfdea0564009d8d82a83af4";
-    sha256 = "10bid0jdw1rpdsqwzzk3r4rp6bjs2cvi82h7anz2m1amfjdv86my";
-    name = "libreoffice-5.2.x-icu4c-58.patch";
-  })];
+  patches = [
+    (fetchurl {
+      url = "https://gerrit.libreoffice.org/gitweb?p=core.git;a=patch;h=3e42714c76b1347babfdea0564009d8d82a83af4";
+      sha256 = "10bid0jdw1rpdsqwzzk3r4rp6bjs2cvi82h7anz2m1amfjdv86my";
+      name = "libreoffice-5.2.x-icu4c-58.patch";}
+    )
+    ./xdg-open.patch
+  ];
 
   postUnpack = ''
     mkdir -v $sourceRoot/src

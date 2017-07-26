@@ -20,12 +20,11 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ shared_mime_info
                             gnome3.gnome_themes_standard ];
 
-  buildInputs = [ vala_0_32 intltool libgit2 pkgconfig gtk3 glib json_glib webkitgtk libgee libpeas
-                  libgit2-glib gtkspell3 gnome3.gsettings_desktop_schemas gnome3.gtksourceview
-                  librsvg libsecret dconf
-                  gobjectIntrospection gnome3.adwaita-icon-theme ];
+  buildInputs = [ vala_0_32 libgit2 gtk3 glib json_glib webkitgtk libgee libpeas
+                  libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings_desktop_schemas
+                  librsvg libsecret gobjectIntrospection gnome3.adwaita-icon-theme ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook intltool pkgconfig ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=758240
   preBuild = ''make -j$NIX_BUILD_CORES Gitg-1.0.gir'';

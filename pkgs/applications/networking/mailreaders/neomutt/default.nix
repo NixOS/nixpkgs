@@ -1,42 +1,40 @@
-{ stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
-, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
+{ stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
+, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170128";
+  version = "20170714";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
-    owner = "neomutt";
-    repo = "neomutt";
-    rev = "neomutt-${version}";
-    sha256 = "082ksn4fsj48nkz61ia0hcxz3396p6a4p9q8738w15qkycq23c20";
+    owner  = "neomutt";
+    repo   = "neomutt";
+    rev    = "neomutt-${version}";
+    sha256 = "0jbh83hvq1jwb8ps7ffl2325y6i79wdnwcn6db0r5prmxax18hw1";
   };
 
-  nativeBuildInputs = [ which autoconf automake ];
-  buildInputs =
-    [ cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch openssl perl lmdb ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
+  buildInputs = [
+    cyrus_sasl gss gpgme kerberos libidn ncurses
+    notmuch openssl perl lmdb
+  ];
+
+  postPatch = ''
+    for f in doc/*.xsl ; do
+      substituteInPlace $f \
+        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+    done
+  '';
 
   configureFlags = [
     "--enable-debug"
     "--enable-gpgme"
-    "--enable-hcache"
-    "--enable-imap"
     "--enable-notmuch"
-    "--enable-pgp"
-    "--enable-pop"
-    "--enable-sidebar"
-    "--enable-keywords"
-    "--enable-smtp"
-    "--enable-nntp"
-    "--enable-compressed"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="
     "--with-ssl"
     "--with-sasl"
     "--with-curses"
-    "--with-regex"
     "--with-idn"
     "--with-lmdb"
 
@@ -46,11 +44,13 @@ stdenv.mkDerivation rec {
 
   configureScript = "./prepare";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
     homepage = http://www.neomutt.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan vrthra erikryb ];
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
   };
 }

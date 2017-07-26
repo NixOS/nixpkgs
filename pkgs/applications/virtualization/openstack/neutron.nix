@@ -14,7 +14,7 @@ python2Packages.buildPythonApplication rec {
 
   # https://github.com/openstack/neutron/blob/stable/liberty/requirements.txt
   propagatedBuildInputs = with python2Packages; [
-   pbr paste PasteDeploy routes debtcollector eventlet greenlet httplib2 requests2
+   pbr paste PasteDeploy routes debtcollector eventlet greenlet httplib2 requests
    jinja2 keystonemiddleware netaddr retrying sqlalchemy webob alembic six
    stevedore pecan ryu networking-hyperv MySQL_python
 

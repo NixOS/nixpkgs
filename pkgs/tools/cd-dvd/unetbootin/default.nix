@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
     cp unetbootin.desktop $out/share/applications
 
     wrapProgram $out/bin/unetbootin \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ which p7zip mtools ]}
+      --prefix PATH : ${stdenv.lib.makeBinPath [ which p7zip mtools ]} \
+      --set QT_X11_NO_MITSHM 1
   '';
 
   meta = with stdenv.lib; {

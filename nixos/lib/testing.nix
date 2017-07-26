@@ -93,7 +93,7 @@ rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract;
+      ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
 
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
@@ -108,16 +108,17 @@ rec {
           mkdir -p $out/bin
           echo "$testScript" > $out/test-script
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/
-          vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
+          vms=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
           wrapProgram $out/bin/nixos-test-driver \
-            --add-flags "$vms" \
-            ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
+            --add-flags "''${vms[*]}" \
+            ${lib.optionalString enableOCR
+              "--prefix PATH : '${ocrProg}/bin:${imagemagick}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
             --set testScript '$testScript' \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
-            --add-flags "$vms" \
+            --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --set tests 'startAll; joinAll;' \
             --set VLANS '${toString vlans}' \

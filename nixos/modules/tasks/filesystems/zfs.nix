@@ -109,7 +109,6 @@ in
       forceImportRoot = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Forcibly import the ZFS root pool(s) during early boot.
 
@@ -128,7 +127,6 @@ in
       forceImportAll = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Forcibly import all ZFS pool(s).
 
@@ -236,7 +234,7 @@ in
         description = ''
           Systemd calendar expression when to scrub ZFS pools. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -372,7 +370,7 @@ in
       in listToAttrs (map createImportService dataPools ++ map createSyncService allPools) // {
         "zfs-mount" = { after = [ "systemd-modules-load.service" ]; };
         "zfs-share" = { after = [ "systemd-modules-load.service" ]; };
-        "zed" = { after = [ "systemd-modules-load.service" ]; };
+        "zfs-zed" = { after = [ "systemd-modules-load.service" ]; };
       };
 
       systemd.targets."zfs-import" =

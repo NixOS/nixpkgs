@@ -8,10 +8,6 @@ let
 
   homeDir = "/var/lib/i2pd";
 
-  extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sLf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
-
-  toYesNo = b: if b then "true" else "false";
-
   mkEndpointOpt = name: addr: port: {
     enable = mkEnableOption name;
     name = mkOption {
@@ -76,10 +72,10 @@ let
 
   i2pdConf = pkgs.writeText "i2pd.conf"
   ''
-  ipv4 = ${toYesNo cfg.enableIPv4}
-  ipv6 = ${toYesNo cfg.enableIPv6}
-  notransit = ${toYesNo cfg.notransit}
-  floodfill = ${toYesNo cfg.floodfill}
+  ipv4 = ${boolToString cfg.enableIPv4}
+  ipv6 = ${boolToString cfg.enableIPv6}
+  notransit = ${boolToString cfg.notransit}
+  floodfill = ${boolToString cfg.floodfill}
   netid = ${toString cfg.netid}
   ${if isNull cfg.bandwidth then "" else "bandwidth = ${toString cfg.bandwidth}" }
   ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
@@ -88,14 +84,14 @@ let
   transittunnels = ${toString cfg.limits.transittunnels}
 
   [upnp]
-  enabled = ${toYesNo cfg.upnp.enable}
+  enabled = ${boolToString cfg.upnp.enable}
   name = ${cfg.upnp.name}
 
   [precomputation]
-  elgamal = ${toYesNo cfg.precomputation.elgamal}
+  elgamal = ${boolToString cfg.precomputation.elgamal}
 
   [reseed]
-  verify = ${toYesNo cfg.reseed.verify}
+  verify = ${boolToString cfg.reseed.verify}
   file = ${cfg.reseed.file}
   urls = ${builtins.concatStringsSep "," cfg.reseed.urls}
 
@@ -107,11 +103,11 @@ let
       (proto: let portStr = toString proto.port; in
         ''
           [${proto.name}]
-          enabled = ${toYesNo proto.enable}
+          enabled = ${boolToString proto.enable}
           address = ${proto.address}
           port = ${toString proto.port}
           ${if proto ? keys then "keys = ${proto.keys}" else ""}
-          ${if proto ? auth then "auth = ${toYesNo proto.auth}" else ""}
+          ${if proto ? auth then "auth = ${boolToString proto.auth}" else ""}
           ${if proto ? user then "user = ${proto.user}" else ""}
           ${if proto ? pass then "pass = ${proto.pass}" else ""}
           ${if proto ? outproxy then "outproxy = ${proto.outproxy}" else ""}
@@ -154,9 +150,8 @@ let
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
-    ${if isNull cfg.extIp then extip else ""}
     ${pkgs.i2pd}/bin/i2pd \
-      --host=${if isNull cfg.extIp then "$EXTIP" else cfg.extIp} \
+      ${if isNull cfg.extIp then "" else "--host="+cfg.extIp} \
       --conf=${i2pdConf} \
       --tunconf=${i2pdTunnelConf}
   '';
@@ -217,7 +212,8 @@ in
         type = with types; nullOr int;
         default = null;
         description = ''
-           Set a router bandwidth limit integer in kbps or letters: L (32), O (256), P (2048), X (>9000)
+           Set a router bandwidth limit integer in KBps.
+           If not set, i2pd defaults to 32KBps.
         '';
       };
 

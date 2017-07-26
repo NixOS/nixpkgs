@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "A library and viewer for the DJVU file format for scanned images";
     homepage = http://djvu.sourceforge.net;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ urkud ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

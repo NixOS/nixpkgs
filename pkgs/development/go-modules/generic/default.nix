@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg, rsync }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, fetchbzr, rsync, removeReferencesTo }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -41,9 +41,7 @@ let
 
   removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
-  removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
-    | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
-  '');
+  removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
   dep2src = goDep:
     {
@@ -56,7 +54,11 @@ let
         fetchhg {
           inherit (goDep.fetch) url rev sha256;
         }
-      else abort "Unrecognized package fetch type";
+      else if goDep.fetch.type == "bzr" then
+        fetchbzr {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
     };
 
   importGodeps = { depsFile }:
@@ -70,7 +72,7 @@ go.stdenv.mkDerivation (
   (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
   inherit name;
-  nativeBuildInputs = [ go parallel ]
+  nativeBuildInputs = [ removeReferencesTo go parallel ]
     ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
   buildInputs = [ go ] ++ buildInputs;
 
@@ -116,6 +118,7 @@ go.stdenv.mkDerivation (
       local d; local cmd;
       cmd="$1"
       d="$2"
+      . $TMPDIR/buildFlagsArray
       echo "$d" | grep -q "\(/_\|examples\|Godeps\)" && return 0
       [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
       local OUT
@@ -143,6 +146,11 @@ go.stdenv.mkDerivation (
       fi
     }
 
+    if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
+      declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
+    else
+      touch $TMPDIR/buildFlagsArray
+    fi
     export -f buildGoDir # parallel needs to see the function
     if [ -z "$enableParallelBuilding" ]; then
         export NIX_BUILD_CORES=1
@@ -180,11 +188,7 @@ go.stdenv.mkDerivation (
   '';
 
   preFixup = preFixup + ''
-    while read file; do
-      cat $file ${removeExpr removeReferences} > $file.tmp
-      mv $file.tmp $file
-      chmod +x $file
-    done < <(find $bin/bin -type f 2>/dev/null)
+    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
 
   shellHook = ''
@@ -194,7 +198,7 @@ go.stdenv.mkDerivation (
      ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
   ''
   ) goPath) + ''
-    export GOPATH="$d:$GOPATH"
+    export GOPATH=${lib.concatStringsSep ":" ( ["$d"] ++ ["$GOPATH"] ++ ["$PWD"] ++ extraSrcPaths)}
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go

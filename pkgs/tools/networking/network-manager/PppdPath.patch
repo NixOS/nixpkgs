@@ -1,8 +1,6 @@
-diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
-index 89a7add..ae99eb4 100644
---- a/src/ppp-manager/nm-ppp-manager.c
-+++ b/src/ppp-manager/nm-ppp-manager.c
-@@ -843,7 +843,7 @@ create_pppd_cmd_line (NMPPPManager *self,
+--- NetworkManager-1.6.2.org/src/ppp/nm-ppp-manager.c	2017-02-15 13:10:27.000000000 +0100
++++ NetworkManager-1.6.2/./src/ppp/nm-ppp-manager.c	2017-04-03 11:45:39.891653216 +0200
+@@ -724,7 +724,7 @@
  
  	g_return_val_if_fail (setting != NULL, NULL);
  

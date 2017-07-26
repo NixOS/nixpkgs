@@ -2,13 +2,9 @@
 with lib;
 
 let
-  apparmorEnabled = config.security.apparmor.enable;
-
   cfg = config.services.dnscrypt-proxy;
 
   stateDirectory = "/var/lib/dnscrypt-proxy";
-
-  localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
 
   # The minisign public key used to sign the upstream resolver list.
   # This is somewhat more flexible than preloading the key as an
@@ -18,31 +14,33 @@ let
     sha256 = "18lnp8qr6ghfc2sd46nn1rhcpr324fqlvgsp4zaigw396cd7vnnh";
   };
 
-  # Internal flag indicating whether the upstream resolver list is used
-  useUpstreamResolverList = cfg.resolverList == null && cfg.customResolver == null;
+  # Internal flag indicating whether the upstream resolver list is used.
+  useUpstreamResolverList = cfg.customResolver == null;
 
-  resolverList =
-    if (cfg.resolverList != null)
-      then cfg.resolverList
-      else "${stateDirectory}/dnscrypt-resolvers.csv";
+  # The final local address.
+  localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
 
-  resolverArgs = if (cfg.customResolver != null)
-    then
-      [ "--resolver-address=${cfg.customResolver.address}:${toString cfg.customResolver.port}"
-        "--provider-name=${cfg.customResolver.name}"
-        "--provider-key=${cfg.customResolver.key}"
-      ]
-    else
-      [ "--resolvers-list=${resolverList}"
-        "--resolver-name=${cfg.resolverName}"
-      ];
+  # The final resolvers list path.
+  resolverList = "${stateDirectory}/dnscrypt-resolvers.csv";
 
-  # The final command line arguments passed to the daemon
+  # Build daemon command line
+
+  resolverArgs =
+    if (cfg.customResolver == null)
+      then
+        [ "-L ${resolverList}"
+          "-R ${cfg.resolverName}"
+        ]
+      else with cfg.customResolver;
+        [ "-N ${name}"
+          "-k ${key}"
+          "-r ${address}:${toString port}"
+        ];
+
   daemonArgs =
-    [ "--local-address=${localAddress}" ]
-    ++ optional cfg.tcpOnly "--tcp-only"
-    ++ optional cfg.ephemeralKeys "-E"
-    ++ resolverArgs;
+       [ "-a ${localAddress}" ]
+    ++ resolverArgs
+    ++ cfg.extraArgs;
 in
 
 {
@@ -52,6 +50,9 @@ in
   };
 
   options = {
+    # Before adding another option, consider whether it could
+    # equally well be passed via extraArgs.
+
     services.dnscrypt-proxy = {
       enable = mkOption {
         default = false;
@@ -84,19 +85,11 @@ in
         default = "dnscrypt.eu-nl";
         type = types.nullOr types.str;
         description = ''
-          The name of the upstream DNSCrypt resolver to use, taken from
-          <filename>${resolverList}</filename>.  The default resolver is
-          located in Holland, supports DNS security extensions, and
-          <emphasis>claims</emphasis> to not keep logs.
-        '';
-      };
-
-      resolverList = mkOption {
-        default = null;
-        type = types.nullOr types.path;
-        description = ''
-          List of DNSCrypt resolvers.  The default is to use the list of
-          public resolvers provided by upstream.
+          The name of the DNSCrypt resolver to use, taken from
+          <filename>${resolverList}</filename>.  The default
+          resolver is located in Holland, supports DNS security
+          extensions, and <emphasis>claims</emphasis> to not
+          keep logs.
         '';
       };
 
@@ -133,25 +126,15 @@ in
         }; }));
       };
 
-      tcpOnly = mkOption {
-        default = false;
-        type = types.bool;
+      extraArgs = mkOption {
+        default = [];
+        type = types.listOf types.str;
         description = ''
-          Force sending encrypted DNS queries to the upstream resolver over
-          TCP instead of UDP (on port 443). Use only if the UDP port is blocked.
+          Additional command-line arguments passed verbatim to the daemon.
+          See <citerefentry><refentrytitle>dnscrypt-proxy</refentrytitle>
+          <manvolnum>8</manvolnum></citerefentry> for details.
         '';
-      };
-
-      ephemeralKeys = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Compute a new key pair for every query.  Enabling this option
-          increases CPU usage, but makes it more difficult for the upstream
-          resolver to track your usage of their service across IP addresses.
-          The default is to re-use the public key pair for all queries, making
-          tracking trivial.
-        '';
+        example = [ "-X libdcplugin_example_cache.so,--min-ttl=60" ];
       };
     };
   };
@@ -187,16 +170,13 @@ in
       documentation = [ "man:dnscrypt-proxy(8)" ];
 
       before = [ "nss-lookup.target" ];
-
-      after = [ "network.target" ]
-        ++ optional apparmorEnabled "apparmor.service";
-
-      requires = [ "dnscrypt-proxy.socket "]
-        ++ optional apparmorEnabled "apparmor.service";
+      after = [ "network.target" ];
+      requires = [ "dnscrypt-proxy.socket "];
 
       serviceConfig = {
         NonBlocking = "true";
         ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         User = "dnscrypt-proxy";
 
@@ -207,7 +187,9 @@ in
     };
     }
 
-    (mkIf apparmorEnabled {
+    (mkIf config.security.apparmor.enable {
+    systemd.services.dnscrypt-proxy.after = [ "apparmor.service" ];
+
     security.apparmor.profiles = singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
       ${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy {
         /dev/null rw,
@@ -238,6 +220,8 @@ in
         ${getLib pkgs.attr}/lib/libattr.so.* mr, # */
 
         ${resolverList} r,
+
+        /run/systemd/notify rw,
       }
     '');
     })
@@ -272,15 +256,18 @@ in
       path = with pkgs; [ curl diffutils dnscrypt-proxy minisign ];
       script = ''
         cd ${stateDirectory}
-        domain=download.dnscrypt.org
+        domain=raw.githubusercontent.com
         get="curl -fSs --resolve $domain:443:$(hostip -r 8.8.8.8 $domain | head -1)"
         $get -o dnscrypt-resolvers.csv.tmp \
-          https://$domain/dnscrypt-proxy/dnscrypt-resolvers.csv
+          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv
         $get -o dnscrypt-resolvers.csv.minisig.tmp \
-          https://$domain/dnscrypt-proxy/dnscrypt-resolvers.csv.minisig
+          https://$domain/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv.minisig
         mv dnscrypt-resolvers.csv.minisig{.tmp,}
-        minisign -q -V -p ${upstreamResolverListPubKey} \
-          -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig
+        if ! minisign -q -V -p ${upstreamResolverListPubKey} \
+          -m dnscrypt-resolvers.csv.tmp -x dnscrypt-resolvers.csv.minisig ; then
+          echo "failed to verify resolver list!" >&2
+          exit 1
+        fi
         [[ -f dnscrypt-resolvers.csv ]] && mv dnscrypt-resolvers.csv{,.old}
         mv dnscrypt-resolvers.csv{.tmp,}
         if cmp dnscrypt-resolvers.csv{,.old} ; then
@@ -312,5 +299,24 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ])
+
+    (mkChangedOptionModule
+      [ "services" "dnscrypt-proxy" "tcpOnly" ]
+      [ "services" "dnscrypt-proxy" "extraArgs" ]
+      (config:
+        let val = getAttrFromPath [ "services" "dnscrypt-proxy" "tcpOnly" ] config; in
+        optional val "-T"))
+
+    (mkChangedOptionModule
+      [ "services" "dnscrypt-proxy" "ephemeralKeys" ]
+      [ "services" "dnscrypt-proxy" "extraArgs" ]
+      (config:
+        let val = getAttrFromPath [ "services" "dnscrypt-proxy" "ephemeralKeys" ] config; in
+        optional val "-E"))
+
+    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" "resolverList" ] ''
+      The current resolver listing from upstream is always used
+      unless a custom resolver is specified.
+    '')
   ];
 }

@@ -41,10 +41,39 @@
 # other words, this does a foldr not foldl.
 stageFuns: let
 
+  /* "dfold" a ternary function `op' between successive elements of `list' as if
+     it was a doubly-linked list with `lnul' and `rnul` base cases at either
+     end. In precise terms, `fold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
+     same as
+
+       let
+         f_-1  = lnul;
+         f_0   = op f_-1   x_0  f_1;
+         f_1   = op f_0    x_1  f_2;
+         f_2   = op f_1    x_2  f_3;
+         ...
+         f_n   = op f_n-1  x_n  f_n+1;
+         f_n+1 = rnul;
+       in
+         f_0
+  */
+  dfold = op: lnul: rnul: list:
+    let
+      len = builtins.length list;
+      go = pred: n:
+        if n == len
+        then rnul
+        else let
+          # Note the cycle -- call-by-need ensures finite fold.
+          cur  = op pred (builtins.elemAt list n) succ;
+          succ = go cur (n + 1);
+        in cur;
+    in go lnul 0;
+
   # Take the list and disallow custom overrides in all but the final stage,
   # and allow it in the final flag. Only defaults this boolean field if it
   # isn't already set.
-  withAllowCustomOverrides = lib.lists.imap
+  withAllowCustomOverrides = lib.lists.imap1
     (index: stageFun: prevStage:
       # So true by default for only the first element because one
       # 1-indexing. Since we reverse the list, this means this is true
@@ -55,19 +84,21 @@ stageFuns: let
 
   # Adds the stdenv to the arguments, and sticks in it the previous stage for
   # debugging purposes.
-  folder = stageFun: finalSoFar: let
-    args = stageFun finalSoFar;
+  folder = nextStage: stageFun: prevStage: let
+    args = stageFun prevStage;
     args' = args // {
       stdenv = args.stdenv // {
         # For debugging
-        __bootPackages = finalSoFar;
+        __bootPackages = prevStage;
+        __hatPackages = nextStage;
       };
     };
   in
     if args.__raw or false
     then args'
     else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
-      buildPackages = if args.selfBuild or true then null else finalSoFar;
+      buildPackages = if args.selfBuild or true then null else prevStage;
+      __targetPackages = if args.selfBuild or true then null else nextStage;
     });
 
-in lib.lists.fold folder {} withAllowCustomOverrides
+in dfold folder {} {} withAllowCustomOverrides

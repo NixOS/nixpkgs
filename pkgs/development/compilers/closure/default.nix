@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "closure-compiler-${version}";
-  version = "20160208";
+  version = "20170218";
 
   src = fetchurl {
     url = "http://dl.google.com/closure-compiler/compiler-${version}.tar.gz";
-    sha256 = "19v9z8lfxfmhc4cl9fys7vnaslqiznjy1jpk5mcv468p7vysg46p";
+    sha256 = "06snabmpy07x4xm8d1xgq5dfzbjli10xkxk3nx9jms39zkj493cd";
   };
 
   phases = [ "installPhase" ];
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/java $out/bin
     tar -xzf $src
-    cp -r compiler.jar $out/share/java/
+    cp -r closure-compiler-v${version}.jar $out/share/java/
     echo "#!${bash}/bin/bash" > $out/bin/closure-compiler
-    echo "${jre}/bin/java -jar $out/share/java/compiler.jar \"\$@\"" >> $out/bin/closure-compiler
+    echo "${jre}/bin/java -jar $out/share/java/closure-compiler-v${version}.jar \"\$@\"" >> $out/bin/closure-compiler
     chmod +x $out/bin/closure-compiler
   '';
 

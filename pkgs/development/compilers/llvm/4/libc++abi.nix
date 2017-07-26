@@ -3,9 +3,10 @@
 stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
-  src = fetch "libcxxabi" "02z8d0q42wfmnnd0rd1yg2x4y50rfrv1k9rq00a86b6803dc7p45";
+  src = fetch "libcxxabi" "0cqvzallxh0nwiijsf6i4d5ds9m5ijfzywg7376ncv50i64if24g";
 
-  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}

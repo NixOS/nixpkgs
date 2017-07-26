@@ -1,12 +1,14 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "filter-audio-20150624";
+  name = "filter-audio-${version}";
+  version = "0.0.1";
 
-  src = fetchgit {
-    url = "https://github.com/irungentoo/filter_audio.git";
-    rev = "612c5a102550c614e4c8f859e753ea64c0b7250c";
-    sha256 = "0bmf8dxnr4vb6y36lvlwqd5x68r4cbsd625kbw3pypm5yqp0n5na";
+  src = fetchFromGitHub {
+    owner = "irungentoo";
+    repo ="filter_audio";
+    rev = "v${version}";
+    sha256 = "1dv4pram317c1w97cjsv9f6r8cdxhgri7ib0v364z08pk7r2avfn";
   };
 
   doCheck = false;

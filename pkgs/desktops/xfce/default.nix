@@ -73,6 +73,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
 
   xfce4icontheme  = callPackage ./art/xfce4-icon-theme.nix { };
+  xfwm4themes     = callPackage ./art/xfwm4-themes.nix { };
 
   #### PANEL PLUGINS        from "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.{bz2,gz}"
 
@@ -82,11 +83,13 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4_cpugraph_plugin         = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix         { };
   xfce4_datetime_plugin         = callPackage ./panel-plugins/xfce4-datetime-plugin.nix         { };
   xfce4_dict_plugin             = callPackage ./panel-plugins/xfce4-dict-plugin.nix             { };
+  xfce4_dockbarx_plugin         = callPackage ./panel-plugins/xfce4-dockbarx-plugin.nix         { };
   xfce4_embed_plugin            = callPackage ./panel-plugins/xfce4-embed-plugin.nix            { };
   xfce4_eyes_plugin             = callPackage ./panel-plugins/xfce4-eyes-plugin.nix             { };
   xfce4_fsguard_plugin          = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix          { };
   xfce4_genmon_plugin           = callPackage ./panel-plugins/xfce4-genmon-plugin.nix           { };
   xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
+  xfce4_namebar_plugin          = callPackage ./panel-plugins/xfce4-namebar-plugin.nix          { };
   xfce4_netload_plugin          = callPackage ./panel-plugins/xfce4-netload-plugin.nix          { };
   xfce4_notes_plugin            = callPackage ./panel-plugins/xfce4-notes-plugin.nix            { };
   xfce4_mailwatch_plugin        = callPackage ./panel-plugins/xfce4-mailwatch-plugin.nix        { };

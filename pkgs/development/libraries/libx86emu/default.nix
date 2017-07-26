@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i 's|/usr/|/|g' Makefile
   '';
 
-  makeFlags = "shared";
+  makeFlags = [ "shared" ];
 
   installPhase = ''
     make install DESTDIR=$out/ LIBDIR=lib
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     homepage = https://github.com/wfeldt/libx86emu;
     maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

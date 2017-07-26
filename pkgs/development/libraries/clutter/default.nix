@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib, 
-gobjectIntrospection 
+gobjectIntrospection, gtk3
 }:
 
 let
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "01nfjd4k7j2n3agpx2d9ncff86nfsqv4n23465rb9zmk4iw4wlb7";
   };
 
+  buildInputs = [ gtk3 ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
     homepage = http://www.clutter-project.org/;
 
-    maintainers = with stdenv.lib.maintainers; [ urkud lethalman ];
+    maintainers = with stdenv.lib.maintainers; [ lethalman ];
     platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }

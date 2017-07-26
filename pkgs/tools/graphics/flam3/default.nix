@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Cosmic recursive fractal flames";
     homepage = http://flam3.com/;
-    maintainers = maintainers.nand0p;
+    maintainers = [ maintainers.nand0p ];
     platforms = platforms.linux;
     license = licenses.cc-by-nc-sa-20;
   };

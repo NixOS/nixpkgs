@@ -20,6 +20,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Qt library for OAuth authentication";
     inherit (qt4.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

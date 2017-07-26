@@ -5,35 +5,38 @@ with lib;
 let
 
   rspamdCfg = config.services.rspamd;
+  postfixCfg = config.services.postfix;
   cfg = config.services.rmilter;
 
-  inetSockets = map (sock: let s = stringSplit ":" sock; in "inet:${last s}:${head s}") cfg.bindInetSockets;
-  unixSockets = map (sock: "unix:${sock}") cfg.bindUnixSockets;
+  inetSocket = addr: port: "inet:[${toString port}@${addr}]";
+  unixSocket = sock: "unix:${sock}";
 
-  allSockets = unixSockets ++ inetSockets;
+  systemdSocket = if cfg.bindSocket.type == "unix" then cfg.bindSocket.path
+    else "${cfg.bindSocket.address}:${toString cfg.bindSocket.port}";
+  rmilterSocket = if cfg.bindSocket.type == "unix" then unixSocket cfg.bindSocket.path
+    else inetSocket cfg.bindSocket.address cfg.bindSocket.port;
 
   rmilterConf = ''
-pidfile = /run/rmilter/rmilter.pid;
-bind_socket = ${if cfg.socketActivation then "fd:3" else concatStringsSep ", " allSockets};
-tempdir = /tmp;
-
+    pidfile = /run/rmilter/rmilter.pid;
+    bind_socket = ${if cfg.socketActivation then "fd:3" else rmilterSocket};
+    tempdir = /tmp;
   '' + (with cfg.rspamd; if enable then ''
-spamd {
-        servers = ${concatStringsSep ", " servers};
-        connect_timeout = 1s;
-        results_timeout = 20s;
-        error_time = 10;
-        dead_time = 300;
-        maxerrors = 10;
-        reject_message = "${rejectMessage}";
-        ${optionalString (length whitelist != 0)  "whitelist = ${concatStringsSep ", " whitelist};"}
+    spamd {
+      servers = ${concatStringsSep ", " servers};
+      connect_timeout = 1s;
+      results_timeout = 20s;
+      error_time = 10;
+      dead_time = 300;
+      maxerrors = 10;
+      reject_message = "${rejectMessage}";
+      ${optionalString (length whitelist != 0)  "whitelist = ${concatStringsSep ", " whitelist};"}
 
-        # rspamd_metric - metric for using with rspamd
-        # Default: "default"
-        rspamd_metric = "default";
-        ${extraConfig}
-};
-    '' else "") + cfg.extraConfig;
+      # rspamd_metric - metric for using with rspamd
+      # Default: "default"
+      rspamd_metric = "default";
+      ${extraConfig}
+    };
+  '' else "") + cfg.extraConfig;
 
   rmilterConfigFile = pkgs.writeText "rmilter.conf" rmilterConf;
 
@@ -48,11 +51,13 @@ in
     services.rmilter = {
 
       enable = mkOption {
+        type = types.bool;
         default = cfg.rspamd.enable;
         description = "Whether to run the rmilter daemon.";
       };
 
       debug = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to run the rmilter daemon in debug mode.";
       };
@@ -73,25 +78,37 @@ in
         '';
        };
 
-      bindUnixSockets =  mkOption {
-        type = types.listOf types.str;
-        default = ["/run/rmilter/rmilter.sock"];
+      bindSocket.type = mkOption {
+        type = types.enum [ "unix" "inet" ];
+        default = "unix";
         description = ''
-          Unix domain sockets to listen for MTA requests.
-        '';
-        example = ''
-            [ "/run/rmilter.sock"]
+          What kind of socket rmilter should listen on. Either "unix"
+          for an Unix domain socket or "inet" for a TCP socket.
         '';
       };
 
-      bindInetSockets = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          Inet addresses to listen (in format accepted by systemd.socket)
+      bindSocket.path = mkOption {
+       type = types.str;
+       default = "/run/rmilter/rmilter.sock";
+       description = ''
+          Path to Unix domain socket to listen on.
         '';
-        example = ''
-            ["127.0.0.1:11990"]
+      };
+
+      bindSocket.address = mkOption {
+        type = types.str;
+        default = "::1";
+        example = "0.0.0.0";
+        description = ''
+          Inet address to listen on.
+        '';
+      };
+
+      bindSocket.port = mkOption {
+        type = types.int;
+        default = 11990;
+        description = ''
+          Inet port to listen on.
         '';
       };
 
@@ -100,14 +117,16 @@ in
         default = true;
         description = ''
           Enable systemd socket activation for rmilter.
-          (disabling socket activation not recommended
-          when unix socket used, and follow to wrong
-          permissions on unix domain socket.)
+
+          Disabling socket activation is not recommended when a Unix
+          domain socket is used and could lead to incorrect
+          permissions.
         '';
       };
 
       rspamd = {
         enable = mkOption {
+          type = types.bool;
           default = rspamdCfg.enable;
           description = "Whether to use rspamd to filter mails";
         };
@@ -157,13 +176,9 @@ in
           type = types.str;
           description = "Addon to postfix configuration";
           default = ''
-smtpd_milters = ${head allSockets}
-# or for TCP socket
-# # smtpd_milters = inet:localhost:9900
-milter_protocol = 6
-milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
-# skip mail without checks if milter will die
-milter_default_action = accept
+            smtpd_milters = ${rmilterSocket}
+            milter_protocol = 6
+            milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
           '';
         };
       };
@@ -175,52 +190,60 @@ milter_default_action = accept
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
 
-    users.extraUsers = singleton {
-      name = cfg.user;
-      description = "rspamd daemon";
-      uid = config.ids.uids.rmilter;
-      group = cfg.group;
-    };
+    (mkIf cfg.enable {
 
-    users.extraGroups = singleton {
-      name = cfg.group;
-      gid = config.ids.gids.rmilter;
-    };
-
-    systemd.services.rmilter = {
-      description = "Rmilter Service";
-
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-
-      serviceConfig = {
-        ExecStart = "${pkgs.rmilter}/bin/rmilter ${optionalString cfg.debug "-d"} -n -c ${rmilterConfigFile}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
-        User = cfg.user;
-        Group = cfg.group;
-        PermissionsStartOnly = true;
-        Restart = "always";
-        RuntimeDirectory = "rmilter";
-        RuntimeDirectoryMode = "0755";
+      users.extraUsers = singleton {
+        name = cfg.user;
+        description = "rmilter daemon";
+        uid = config.ids.uids.rmilter;
+        group = cfg.group;
       };
 
-    };
-
-    systemd.sockets.rmilter = mkIf cfg.socketActivation {
-      description = "Rmilter service socket";
-      wantedBy = [ "sockets.target" ];
-      socketConfig = {
-        ListenStream = cfg.bindUnixSockets ++ cfg.bindInetSockets;
-        SocketUser = cfg.user;
-        SocketGroup = cfg.group;
-        SocketMode = "0666";
+      users.extraGroups = singleton {
+        name = cfg.group;
+        gid = config.ids.gids.rmilter;
       };
-    };
 
-    services.postfix.extraConfig = optionalString cfg.postfix.enable cfg.postfix.configFragment;
-    users.users.postfix.extraGroups = [ cfg.group ];
-  };
+      systemd.services.rmilter = {
+        description = "Rmilter Service";
 
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+
+        serviceConfig = {
+          ExecStart = "${pkgs.rmilter}/bin/rmilter ${optionalString cfg.debug "-d"} -n -c ${rmilterConfigFile}";
+          ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
+          User = cfg.user;
+          Group = cfg.group;
+          PermissionsStartOnly = true;
+          Restart = "always";
+          RuntimeDirectory = "rmilter";
+          RuntimeDirectoryMode = "0750";
+        };
+
+      };
+
+      systemd.sockets.rmilter = mkIf cfg.socketActivation {
+        description = "Rmilter service socket";
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          ListenStream = systemdSocket;
+          SocketUser = cfg.user;
+          SocketGroup = cfg.group;
+          SocketMode = "0660";
+        };
+      };
+    })
+
+    (mkIf (cfg.enable && cfg.rspamd.enable && rspamdCfg.enable) {
+      users.extraUsers.${cfg.user}.extraGroups = [ rspamdCfg.group ];
+    })
+
+    (mkIf (cfg.enable && cfg.postfix.enable) {
+      services.postfix.extraConfig = cfg.postfix.configFragment;
+      users.extraUsers.${postfixCfg.user}.extraGroups = [ cfg.group ];
+    })
+  ];
 }

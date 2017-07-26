@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   prePatch = ''
     sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/share|$out/share|g" Makefile antiword.h
+    substituteInPlace Makefile --replace "gcc" "cc"
   '';
 
   patches = [ ./10_fix_buffer_overflow_wordole_c.patch ];
@@ -25,6 +26,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
 
     maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

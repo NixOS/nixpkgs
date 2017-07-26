@@ -1,15 +1,19 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "915resolution-0.5.2";
+stdenv.mkDerivation rec {
+  name = "915resolution-0.5.3";
+  
   src = fetchurl {
-    url = http://www.geocities.com/stomljen/915resolution-0.5.2.tar.gz;
-    sha256 = "1m5nfzgwaglqabpm2l2mjqvigz1z0dj87cmj2pjbbzxmmpapv0lq";
+    url = "http://915resolution.mango-lang.org/${name}.tar.gz";
+    sha256 = "0hmmy4kkz3x6yigz6hk99416ybznd67dpjaxap50nhay9f1snk5n";
   };
-  buildPhase = "rm *.o 915resolution; make";
+
+  patchPhase = "rm *.o";
   installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    homepage = http://915resolution.mango-lang.org/;
+    description = "A tool to modify Intel 800/900 video BIOS";
+    platforms = platforms.linux;
   };
 }

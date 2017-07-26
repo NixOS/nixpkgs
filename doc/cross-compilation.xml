@@ -30,23 +30,17 @@
   <section>
     <title>Platform parameters</title>
     <para>
-      The three GNU Autoconf platforms, <wordasword>build</wordasword>, <wordasword>host</wordasword>, and <wordasword>cross</wordasword>, are historically the result of much confusion.
+      The three GNU Autoconf platforms, <wordasword>build</wordasword>, <wordasword>host</wordasword>, and <wordasword>target</wordasword>, are historically the result of much confusion.
       <link xlink:href="https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html" /> clears this up somewhat but there is more to be said.
       An important advice to get out the way is, unless you are packaging a compiler or other build tool, just worry about the build and host platforms.
       Dealing with just two platforms usually better matches people's preconceptions, and in this case is completely correct.
     </para>
     <para>
       In Nixpkgs, these three platforms are defined as attribute sets under the names <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and <literal>targetPlatform</literal>.
-      All are guaranteed to contain at least a <varname>platform</varname> field, which contains detailed information on the platform.
-      All three are always defined at the top level, so one can get at them just like a dependency in a function that is imported with <literal>callPackage</literal>:
-      <programlisting>{ stdenv, buildPlatform, hostPlatform, fooDep, barDep, .. }: ...</programlisting>
+      All three are always defined as attributes in the standard environment, and at the top level. That means one can get at them just like a dependency in a function that is imported with <literal>callPackage</literal>:
+      <programlisting>{ stdenv, buildPlatform, hostPlatform, fooDep, barDep, .. }: ...buildPlatform...</programlisting>, or just off <varname>stdenv</varname>:
+      <programlisting>{ stdenv, fooDep, barDep, .. }: ...stdenv.buildPlatform...</programlisting>.
     </para>
-    <warning><para>
-      These platforms should all have the same structure in all scenarios, but that is currently not the case.
-      When not cross-compiling, they will each contain a <literal>system</literal> field with a short 2-part, hyphen-separated summering string name for the platform.
-      But, when when cross compiling, <literal>hostPlatform</literal> and <literal>targetPlatform</literal> may instead contain <literal>config</literal> with a fuller 3- or 4-part string in the manner of LLVM.
-      We should have all 3 platforms always contain both, and maybe give <literal>config</literal> a better name while we are at it.
-    </para></warning>
     <variablelist>
       <varlistentry>
         <term><varname>buildPlatform</varname></term>
@@ -69,8 +63,8 @@
             The "target platform" is black sheep.
             The other two intrinsically apply to all compiled software—or any build process with a notion of "build-time" followed by "run-time".
             The target platform only applies to programming tools, and even then only is a good for for some of them.
-            Briefly, GCC, Binutils, GHC, and certain other tools are written in such a way such that a single build can only compiler code for a single platform.
-            Thus, when building them, one must think ahead about what platforms they wish to use the tool to produce machine code for, and build binaries for each.
+            Briefly, GCC, Binutils, GHC, and certain other tools are written in such a way such that a single build can only compile code for a single platform.
+            Thus, when building them, one must think ahead about which platforms they wish to use the tool to produce machine code for, and build binaries for each.
           </para>
           <para>
             There is no fundamental need to think about the target ahead of time like this.
@@ -83,14 +77,79 @@
             Nixpkgs tries to avoid this where possible too, but still, because the concept of a target platform is so ingrained now in Autoconf and other tools, it is best to support it as is.
             Tools like LLVM that don't need up-front target platforms can safely ignore it like normal packages, and it will do no harm.
           </para>
-          </listitem>
+        </listitem>
       </varlistentry>
     </variablelist>
-    <note><para>
-      If you dig around nixpkgs, you may notice there is also <varname>stdenv.cross</varname>.
-      This field defined as <varname>hostPlatform</varname> when the host and build platforms differ, but otherwise not defined at all.
-      This field is obsolete and will soon disappear—please do not use it.
-    </para></note>
+    <para>
+      The exact schema these fields follow is a bit ill-defined due to a long and convoluted evolution, but this is slowly being cleaned up.
+      You can see examples of ones used in practice in <literal>lib.systems.examples</literal>; note how they are not all very consistent.
+      For now, here are few fields can count on them containing:
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term><varname>system</varname></term>
+        <listitem>
+          <para>
+            This is a two-component shorthand for the platform.
+            Examples of this would be "x86_64-darwin" and "i686-linux"; see <literal>lib.systems.doubles</literal> for more.
+            This format isn't very standard, but has built-in support in Nix, such as the <varname>builtins.currentSystem</varname> impure string.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>config</varname></term>
+        <listitem>
+          <para>
+            This is a 3- or 4- component shorthand for the platform.
+            Examples of this would be "x86_64-unknown-linux-gnu" and "aarch64-apple-darwin14".
+            This is a standard format called the "LLVM target triple", as they are pioneered by LLVM and traditionally just used for the <varname>targetPlatform</varname>.
+            This format is strictly more informative than the "Nix host double", as the previous format could analogously be termed.
+            This needs a better name than <varname>config</varname>!
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>parsed</varname></term>
+        <listitem>
+          <para>
+            This is a nix representation of a parsed LLVM target triple with white-listed components.
+            This can be specified directly, or actually parsed from the <varname>config</varname>.
+            [Technically, only one need be specified and the others can be inferred, though the precision of inference may not be very good.]
+            See <literal>lib.systems.parse</literal> for the exact representation.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>libc</varname></term>
+        <listitem>
+          <para>
+            This is a string identifying the standard C library used.
+            Valid identifiers include "glibc" for GNU libc, "libSystem" for Darwin's Libsystem, and "uclibc" for µClibc.
+            It should probably be refactored to use the module system, like <varname>parse</varname>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>is*</varname></term>
+        <listitem>
+          <para>
+            These predicates are defined in <literal>lib.systems.inspect</literal>, and slapped on every platform.
+            They are superior to the ones in <varname>stdenv</varname> as they force the user to be explicit about which platform they are inspecting.
+            Please use these instead of those.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><varname>platform</varname></term>
+        <listitem>
+          <para>
+            This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set).
+            See <literal>lib.systems.platforms</literal> for examples—there's hopefully one in there that will work verbatim for each platform that is working.
+            Please help us triage these flags and give them better homes!
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
   </section>
 
   <section>
@@ -115,15 +174,20 @@
       The depending package's target platform is unconstrained by the sliding window principle, which makes sense in that one can in principle build cross compilers targeting arbitrary platforms.
     </para></note>
     <para>
-      How does this work in practice? Nixpkgs is now structured so that build-time dependencies are taken from from <varname>buildPackages</varname>, whereas run-time dependencies are taken from the top level attribute set.
+      How does this work in practice? Nixpkgs is now structured so that build-time dependencies are taken from <varname>buildPackages</varname>, whereas run-time dependencies are taken from the top level attribute set.
       For example, <varname>buildPackages.gcc</varname> should be used at build time, while <varname>gcc</varname> should be used at run time.
       Now, for most of Nixpkgs's history, there was no <varname>buildPackages</varname>, and most packages have not been refactored to use it explicitly.
-      Instead, one can use the four attributes used for specifying dependencies as documented in <link linkend="ssec-stdenv-attributes" />.
+      Instead, one can use the four attributes used for specifying dependencies as documented in <xref linkend="ssec-stdenv-attributes"/>.
       We "splice" together the run-time and build-time package sets with <varname>callPackage</varname>, and then <varname>mkDerivation</varname> for each of four attributes pulls the right derivation out.
       This splicing can be skipped when not cross compiling as the package sets are the same, but is a bit slow for cross compiling.
       Because of this, a best-of-both-worlds solution is in the works with no splicing or explicit access of <varname>buildPackages</varname> needed.
       For now, feel free to use either method.
     </para>
+    <note><para>
+      There is also a "backlink" <varname>__targetPackages</varname>, yielding a package set whose <varname>buildPackages</varname> is the current package set.
+      This is a hack, though, to accommodate compilers with lousy build systems.
+      Please do not use this unless you are absolutely sure you are packaging such a compiler and there is no other way.
+    </para></note>
   </section>
 
 </section>
@@ -136,11 +200,27 @@
     More information needs to moved from the old wiki, especially <link xlink:href="https://nixos.org/wiki/CrossCompiling" />, for this section.
   </para></note>
   <para>
-    Many sources (manual, wiki, etc) probably mention passing <varname>system</varname>, <varname>platform</varname>, and, optionally, <varname>crossSystem</varname> to nixpkgs:
-    <literal>import &lt;nixpkgs&gt; { system = ..; platform = ..; crossSystem = ..; }</literal>.
-    <varname>system</varname> and <varname>platform</varname> together determine the system on which packages are built, and <varname>crossSystem</varname> specifies the platform on which packages are ultimately intended to run, if it is different.
-    This still works, but with more recent changes, one can alternatively pass <varname>localSystem</varname>, containing <varname>system</varname> and <varname>platform</varname>, for symmetry.
+    Nixpkgs can be instantiated with <varname>localSystem</varname> alone, in which case there is no cross compiling and everything is built by and for that system,
+    or also with <varname>crossSystem</varname>, in which case packages run on the latter, but all building happens on the former.
+    Both parameters take the same schema as the 3 (build, host, and target) platforms defined in the previous section.
+    As mentioned above, <literal>lib.systems.examples</literal> has some platforms which are used as arguments for these parameters in practice.
+    You can use them programmatically, or on the command line like <command>nix-build &lt;nixpkgs&gt; --arg crossSystem '(import &lt;nixpkgs/lib&gt;).systems.examples.fooBarBaz'</command>.
   </para>
+  <para>
+    While one is free to pass both parameters in full, there's a lot of logic to fill in missing fields.
+    As discussed in the previous section, only one of <varname>system</varname>, <varname>config</varname>, and <varname>parsed</varname> is needed to infer the other two.
+    Additionally, <varname>libc</varname> will be inferred from <varname>parse</varname>.
+    Finally, <literal>localSystem.system</literal> is also <emphasis>impurely</emphasis> inferred based on the platform evaluation occurs.
+    This means it is often not necessary to pass <varname>localSystem</varname> at all, as in the command-line example in the previous paragraph.
+  </para>
+  <note>
+    <para>
+      Many sources (manual, wiki, etc) probably mention passing <varname>system</varname>, <varname>platform</varname>, along with the optional <varname>crossSystem</varname> to nixpkgs:
+      <literal>import &lt;nixpkgs&gt; { system = ..; platform = ..; crossSystem = ..; }</literal>.
+      Passing those two instead of <varname>localSystem</varname> is still supported for compatibility, but is discouraged.
+      Indeed, much of the inference we do for these parameters is motivated by compatibility as much as convenience.
+    </para>
+  </note>
   <para>
     One would think that <varname>localSystem</varname> and <varname>crossSystem</varname> overlap horribly with the three <varname>*Platforms</varname> (<varname>buildPlatform</varname>, <varname>hostPlatform,</varname> and <varname>targetPlatform</varname>; see <varname>stage.nix</varname> or the manual).
     Actually, those identifiers are purposefully not used here to draw a subtle but important distinction:

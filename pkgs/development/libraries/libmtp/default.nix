@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.11";
+  name = "libmtp-1.1.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "1sc768q2cixwanlwrz95mp389iaadl4s95486caavxx4g7znvn8m";
+    sha256 = "0h3dv9py5mmvxhfxmkr8ky4s80hgq3d66cmrfnnnlcdwpwpy0kj9";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       systems. We implement MTP Basic, the stuff proposed for standardization.
       '';
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

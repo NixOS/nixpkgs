@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Library that handles Resource Description Framework (RDF)";
     homepage = "http://librdf.org/rasqal";
     license = with stdenv.lib.licenses; [ lgpl21 asl20 ];
-    maintainers = with stdenv.lib.maintainers; [ marcweber urkud ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

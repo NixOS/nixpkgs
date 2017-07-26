@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "man-pages-${version}";
-  version = "4.09";
+  version = "4.11";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
-    sha256 = "1740gq9sq28dp5a5sjn1ya7cvrv8mbky6knb7734v8k29a7a0x55";
+    sha256 = "097m0gsbaz0gf9ir4lmph3h5jj6wmydk1rglfz82dysybx4q1pmd";
   };
 
   makeFlags = [ "MANDIR=$(out)/share/man" ];

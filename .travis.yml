@@ -1,8 +1,14 @@
 language: nix
+sudo: true
+# 'sudo: false' == containers that start fast, but only get 4G ram;
+# 'sudo: true'  == VMs that start slow, but with 8G
+# ..as per:  https://docs.travis-ci.com/user/ci-environment/#Virtualization-environments
+# Nixpkgs PR tests OOM with 4G: https://github.com/NixOS/nixpkgs/issues/24200
+
 matrix:
     include:
         - os: linux
-          sudo: false
+          sudo: required
           script:
               - ./maintainers/scripts/travis-nox-review-pr.sh nixpkgs-verify nixpkgs-manual nixpkgs-tarball nixpkgs-unstable
               - ./maintainers/scripts/travis-nox-review-pr.sh nixos-options nixos-manual
@@ -18,3 +24,6 @@ matrix:
 env:
     global:
         - GITHUB_TOKEN=5edaaf1017f691ed34e7f80878f8f5fbd071603f
+
+notifications:
+    email: false

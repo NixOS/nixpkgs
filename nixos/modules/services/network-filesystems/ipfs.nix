@@ -3,12 +3,22 @@
 with lib;
 
 let
-  inherit (pkgs) ipfs;
+  inherit (pkgs) ipfs runCommand makeWrapper;
 
   cfg = config.services.ipfs;
 
   ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""} ${if cfg.enableGC then "--enable-gc" else ""} ${toString cfg.extraFlags}'';
 
+  # Before Version 17.09, ipfs would always use "/var/lib/ipfs/.ipfs" as it's dataDir
+  defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
+    "/var/lib/ipfs" else
+    "/var/lib/ipfs/.ipfs";
+
+  # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
+  wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; } ''
+    mkdir -p "$out/bin"
+    makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" --set IPFS_PATH ${cfg.dataDir}
+  '';
 in
 
 {
@@ -35,7 +45,7 @@ in
 
       dataDir = mkOption {
         type = types.str;
-        default = "/var/lib/ipfs";
+        default = defaultDataDir;
         description = "The data dir for IPFS";
       };
 
@@ -86,7 +96,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.ipfs ];
+    environment.systemPackages = [ wrapped ];
 
     users.extraUsers = mkIf (cfg.user == "ipfs") {
       ipfs = {
@@ -110,15 +120,15 @@ in
       after = [ "local-fs.target" ];
       before = [ "ipfs.service" "ipfs-offline.service" ];
 
+      environment.IPFS_PATH = cfg.dataDir;
+
       path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
       '';
-
       script =  ''
-        if [[ ! -d ${cfg.dataDir}/.ipfs ]]; then
-          cd ${cfg.dataDir}
+        if [[ ! -f ${cfg.dataDir}/config ]]; then
           ${ipfs}/bin/ipfs init ${optionalString cfg.emptyRepo "-e"}
         fi
         ${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress}
@@ -143,6 +153,8 @@ in
       conflicts = [ "ipfs-offline.service" ];
       wants = [ "ipfs-init.service" ];
 
+      environment.IPFS_PATH = cfg.dataDir;
+
       path  = [ pkgs.ipfs ];
 
       serviceConfig = {
@@ -161,6 +173,8 @@ in
 
       conflicts = [ "ipfs.service" ];
       wants = [ "ipfs-init.service" ];
+
+      environment.IPFS_PATH = cfg.dataDir;
 
       path  = [ pkgs.ipfs ];
 

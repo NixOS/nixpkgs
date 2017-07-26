@@ -1,23 +1,24 @@
-{ stdenv, fetchgit, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "racerd-${version}";
-  version = "2016-12-24";
-  src = fetchgit {
-    url = "git://github.com/jwilm/racerd.git";
-    rev = "dc090ea11d550cd513416d21227d558dbfd2fcb6";
-    sha256 = "0jfryb1b32m6bn620gd7y670cfipaswj1cppzkybm4xg6abqh07b";
+  version = "2017-02-17";
+  src = fetchFromGitHub {
+    owner = "jwilm";
+    repo = "racerd";
+    rev = "e3f3ff010fce2c67195750d9a6a669ffb3c2ac5f";
+    sha256 = "125pmbkjnjh83xwikcwfbb8g150nldz7wh0ly1gv9kl1b521dydk";
   };
 
   doCheck = false;
 
-  depsSha256 = "1vv6fyisi11bcajxkq3ihpl59yh504xmnsr222zj15hmivn0jwf2";
+  depsSha256 = "0db18m0vxzvg821gb5g8njhlnxw7im81m089i4982n8hmnhm1497";
 
   buildInputs = [ makeWrapper ];
 
-  RUST_SRC_PATH = ''${rustPlatform.rust.rustc.src}/src'';
+  RUST_SRC_PATH = rustPlatform.rustcSrc;
 
   installPhase = ''
     mkdir -p $out/bin

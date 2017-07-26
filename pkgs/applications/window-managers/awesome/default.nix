@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
@@ -9,10 +9,13 @@
 
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
-  version = "4.0";
-  src = fetchurl {
-    url    = "http://github.com/awesomeWM/awesome-releases/raw/master/${name}.tar.xz";
-    sha256 = "0czkcz67sab63gf5m2p2pgg05yinjx60hfb9rfyzdkkg28q9f02w";
+  version = "4.1";
+  
+  src = fetchFromGitHub {
+    owner = "awesomewm";
+    repo = "awesome";
+    rev = "v${version}";
+    sha256 = "1qik8h5nwjq4535lpdpal85vas1k7am3s6l5r763kpdzxhfcyyaj";
   };
 
   nativeBuildInputs = [
@@ -22,16 +25,25 @@ with luaPackages; stdenv.mkDerivation rec {
     imagemagick
     makeWrapper
     pkgconfig
-    xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+    xmlto docbook_xml_dtd_45 
+    docbook_xsl findXMLCatalogs
   ];
+   
   propagatedUserEnvPkgs = [ hicolor_icon_theme ];
-  buildInputs = [ cairo dbus gdk_pixbuf gobjectIntrospection
+  buildInputs = [ cairo librsvg dbus gdk_pixbuf gobjectIntrospection
                   git lgi libpthreadstubs libstartup_notification
                   libxdg_basedir lua nettools pango xcb-util-cursor
                   xorg.libXau xorg.libXdmcp xorg.libxcb xorg.libxshmfence
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ];
+
+  patches = [
+    (fetchurl {
+      url = "https://patch-diff.githubusercontent.com/raw/awesomeWM/awesome/pull/1639.patch";
+      sha256 = "00piynmbxajd2xbg960gmf0zlqn7m489f4ww482y49ravfy1jhsj";
+    })
+  ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
 
@@ -42,6 +54,7 @@ with luaPackages; stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/awesome \
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix LUA_CPATH ";" '"${lgi}/lib/lua/${lua.luaversion}/?.so"' \
       --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \

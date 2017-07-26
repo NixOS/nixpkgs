@@ -1,5 +1,7 @@
 { stdenv, fetchurl
-, windows ? null, variant ? null, pcre
+, pcre, windows ? null
+, buildPlatform, hostPlatform
+, variant ? null
 }:
 
 with stdenv.lib;
@@ -7,7 +9,7 @@ with stdenv.lib;
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
-  version = "8.39";
+  version = "8.40";
   pname = if (variant == null) then "pcre"
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
@@ -17,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
-    sha256 = "12wyajlqx2v7dsh39ra9v9m5hibjkrl129q90bp32c28haghjn5q";
+    sha256 = "1x7lpjn7jhk0n3sdvggxrlrhab8kkfjwl7qix0ypw9nlx8lpmqh0";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
@@ -29,7 +31,11 @@ in stdenv.mkDerivation rec {
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
-  doCheck = with stdenv; !(isCygwin || isFreeBSD);
+  patches = [ ./CVE-2017-7186.patch ];
+
+  buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+
+  doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
@@ -39,10 +45,6 @@ in stdenv.mkDerivation rec {
     + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
-
-  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
-    buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
-  };
 
   meta = {
     homepage = "http://www.pcre.org/";

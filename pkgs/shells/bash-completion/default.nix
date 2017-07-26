@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bash-completion-${version}";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchurl {
     url = "https://github.com/scop/bash-completion/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1kwmii1z1ljx5i4z702ynsr8jgrq64bj9w9hl3n2aa2kcl659fdh";
+    sha256 = "07j484vb3k90f4989xh1g1x99g01akrp69p3dml4lza27wnqkfj1";
   };
 
   doCheck = true;

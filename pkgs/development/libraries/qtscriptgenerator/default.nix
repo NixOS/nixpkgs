@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     description = "QtScript bindings generator";
     homepage = http://code.google.com/p/qtscriptgenerator/;
     inherit (qt4.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

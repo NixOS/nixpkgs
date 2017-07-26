@@ -1,0 +1,25 @@
+diff --git a/shells/bash.go b/shells/bash.go
+index 839b7781..2b478e1e 100644
+--- a/shells/bash.go
++++ b/shells/bash.go
+@@ -7,6 +7,7 @@ import (
+ 	"gitlab.com/gitlab-org/gitlab-ci-multi-runner/common"
+ 	"gitlab.com/gitlab-org/gitlab-ci-multi-runner/helpers"
+ 	"io"
++	"os/exec"
+ 	"path"
+ 	"runtime"
+ 	"strconv"
+@@ -208,7 +209,11 @@ func (b *BashShell) GetConfiguration(info common.ShellScriptInfo) (script *commo
+ 	if info.User != "" {
+ 		script.Command = "su"
+ 		if runtime.GOOS == "linux" {
+-			script.Arguments = append(script.Arguments, "-s", "/bin/"+b.Shell)
++			shellPath, err := exec.LookPath(b.Shell)
++			if err != nil {
++				shellPath = "/bin/"+b.Shell
++			}
++			script.Arguments = append(script.Arguments, "-s", shellPath)
+ 		}
+ 		script.Arguments = append(script.Arguments, info.User)
+ 		script.Arguments = append(script.Arguments, "-c", shellCommand)

@@ -45,7 +45,7 @@ in
         description = ''
           Specification (in the format described by
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>) of the time at
+          <manvolnum>7</manvolnum></citerefentry>) of the time at
           which the Venus will collect feeds.
         '';
       };

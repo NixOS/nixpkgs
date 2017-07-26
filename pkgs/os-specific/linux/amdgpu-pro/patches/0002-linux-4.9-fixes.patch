@@ -1,63 +1,31 @@
-From 52e47be93c7a492730477f590e5eb42e035018bd Mon Sep 17 00:00:00 2001
+From 0ead7017e1db18be971c24c891d4bdcc507deea7 Mon Sep 17 00:00:00 2001
 From: David McFarland <corngood@gmail.com>
 Date: Sun, 29 Jan 2017 18:23:47 -0400
 Subject: [PATCH 2/4] linux-4.9 fixes
 
 ---
- amd/amdgpu/amdgpu_connectors.c          | 8 ++++++++
- amd/amdgpu/amdgpu_ttm.c                 | 4 ++++
+ amd/amdkcl/kcl_io.c                     | 2 ++
  amd/display/amdgpu_dm/amdgpu_dm_types.c | 8 ++++++++
- include/kcl/kcl_mm.h                    | 4 +++-
- 4 files changed, 23 insertions(+), 1 deletion(-)
+ 2 files changed, 10 insertions(+)
 
-diff --git a/amd/amdgpu/amdgpu_connectors.c b/amd/amdgpu/amdgpu_connectors.c
-index 1b51981..4b43379 100644
---- a/amd/amdgpu/amdgpu_connectors.c
-+++ b/amd/amdgpu/amdgpu_connectors.c
-@@ -168,12 +168,20 @@ int amdgpu_connector_get_monitor_bpc(struct drm_connector *connector)
- 		}
- 
- 		/* Any defined maximum tmds clock limit we must not exceed? */
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
-+		if (connector->display_info.max_tmds_clock > 0) {
-+#else
- 		if (connector->max_tmds_clock > 0) {
-+#endif
- 			/* mode_clock is clock in kHz for mode to be modeset on this connector */
- 			mode_clock = amdgpu_connector->pixelclock_for_modeset;
- 
- 			/* Maximum allowable input clock in kHz */
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
-+			max_tmds_clock = connector->display_info.max_tmds_clock * 1000;
-+#else
- 			max_tmds_clock = connector->max_tmds_clock * 1000;
-+#endif
- 
- 			DRM_DEBUG("%s: hdmi mode dotclock %d kHz, max tmds input clock %d kHz.\n",
- 				  connector->name, mode_clock, max_tmds_clock);
-diff --git a/amd/amdgpu/amdgpu_ttm.c b/amd/amdgpu/amdgpu_ttm.c
-index 447529d..252bab4 100644
---- a/amd/amdgpu/amdgpu_ttm.c
-+++ b/amd/amdgpu/amdgpu_ttm.c
-@@ -255,7 +255,11 @@ static int amdgpu_verify_access(struct ttm_buffer_object *bo, struct file *filp)
- 
- 	if (amdgpu_ttm_tt_get_usermm(bo->ttm))
- 		return -EPERM;
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
-+	return drm_vma_node_verify_access(&abo->gem_base.vma_node, filp->private_data);
-+#else
- 	return drm_vma_node_verify_access(&abo->gem_base.vma_node, filp);
-+#endif
+diff --git a/amd/amdkcl/kcl_io.c b/amd/amdkcl/kcl_io.c
+index d8f843f..9a1bd9b 100644
+--- a/amd/amdkcl/kcl_io.c
++++ b/amd/amdkcl/kcl_io.c
+@@ -31,4 +31,6 @@ void amdkcl_io_init(void)
+ 	_kcl_io_free_memtype = amdkcl_fp_setup("io_free_memtype", NULL);
  }
- 
- static void amdgpu_move_null(struct ttm_buffer_object *bo,
+ #endif
++#else
++void amdkcl_io_init(void) {}
+ #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4, 9, 0) */
 diff --git a/amd/display/amdgpu_dm/amdgpu_dm_types.c b/amd/display/amdgpu_dm/amdgpu_dm_types.c
-index be7aafb..5e11f26 100644
+index 34313a9..44a4a71 100644
 --- a/amd/display/amdgpu_dm/amdgpu_dm_types.c
 +++ b/amd/display/amdgpu_dm/amdgpu_dm_types.c
-@@ -1692,6 +1692,10 @@ static int dm_plane_helper_prepare_fb(
+@@ -1720,6 +1720,10 @@ static int dm_plane_helper_prepare_fb(
+ static int dm_plane_helper_prepare_fb(
  	struct drm_plane *plane,
- 	struct drm_framebuffer *fb,
  	const struct drm_plane_state *new_state)
 +#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
 +static int dm_plane_helper_prepare_fb(
@@ -66,9 +34,9 @@ index be7aafb..5e11f26 100644
  #else
  static int dm_plane_helper_prepare_fb(
  	struct drm_plane *plane,
-@@ -1735,6 +1739,10 @@ static void dm_plane_helper_cleanup_fb(
+@@ -1766,6 +1770,10 @@ static void dm_plane_helper_cleanup_fb(
+ static void dm_plane_helper_cleanup_fb(
  	struct drm_plane *plane,
- 	struct drm_framebuffer *fb,
  	const struct drm_plane_state *old_state)
 +#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
 +static void dm_plane_helper_cleanup_fb(
@@ -77,21 +45,6 @@ index be7aafb..5e11f26 100644
  #else
  static void dm_plane_helper_cleanup_fb(
  	struct drm_plane *plane,
-diff --git a/include/kcl/kcl_mm.h b/include/kcl/kcl_mm.h
-index a18936d..f068195 100644
---- a/include/kcl/kcl_mm.h
-+++ b/include/kcl/kcl_mm.h
-@@ -8,7 +8,9 @@ static inline int kcl_get_user_pages(struct task_struct *tsk, struct mm_struct *
-                                      int write, int force, struct page **pages,
-                                      struct vm_area_struct **vmas)
- {
--#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
-+        return get_user_pages(start, nr_pages, write ? FOLL_WRITE : 0, pages, vmas);
-+#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 6, 0)
-         return get_user_pages(start, nr_pages, write, force, pages, vmas);
- #else
-         return get_user_pages(tsk, mm, start, nr_pages,
 -- 
-2.11.0
+2.12.2
 

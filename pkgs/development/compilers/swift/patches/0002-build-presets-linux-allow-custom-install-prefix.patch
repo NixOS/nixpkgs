@@ -1,0 +1,25 @@
+From fca6624b7a0ad670157105336a737cc95f9ce9fb Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Tue, 28 Mar 2017 15:01:40 -0500
+Subject: [PATCH 2/4] build-presets: (linux) allow custom install prefix
+
+---
+ utils/build-presets.ini | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/build-presets.ini b/utils/build-presets.ini
+index e6b0af3581..1095cbaab7 100644
+--- a/utils/build-presets.ini
++++ b/utils/build-presets.ini
+@@ -692,7 +692,7 @@ install-lldb
+ install-llbuild
+ install-swiftpm
+ install-xctest
+-install-prefix=/usr
++install-prefix=%(install_prefix)s
+ swift-install-components=autolink-driver;compiler;clang-builtin-headers;stdlib;swift-remote-mirror;sdk-overlay;license
+ build-swift-static-stdlib
+ build-swift-static-sdk-overlay
+-- 
+2.12.2
+

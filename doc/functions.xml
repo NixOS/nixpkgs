@@ -70,7 +70,7 @@
 
     <para>
       In the above example, the <varname>separateDebugInfo</varname> attribute is
-      overriden to be true, thus building debug info for
+      overridden to be true, thus building debug info for
       <varname>helloWithDebug</varname>, while all other attributes will be
       retained from the original <varname>hello</varname> package.
     </para>
@@ -529,7 +529,7 @@
   <note>
   <para>
   If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal>
-  you may need to add <literal>pkgs.iana_etc</literal> to <varname>contents</varname>.
+  you may need to add <literal>pkgs.iana-etc</literal> to <varname>contents</varname>.
   </para>
   </note>
 

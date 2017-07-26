@@ -1,14 +1,15 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk2, gpgme, libgpgerror, libassuan }:
 
 stdenv.mkDerivation rec {
-  name = "gpa-0.9.9";
+  name = "gpa-0.9.10";
 
   src = fetchurl {
     url = "mirror://gnupg/gpa/${name}.tar.bz2";
-    sha256 = "0d235hcqai7m3qb7m9kvr2r4qg4714f87j9fdplwrlz1p4wdfa38";
+    sha256 = "09xphbi2456qynwqq5n0yh0zdmdi2ggrj3wk4hsyh5lrzlvcrff3";
   };
 
-  buildInputs = [ intltool pkgconfig gtk2 gpgme libgpgerror libassuan ];
+  nativeBuildInputs = [ intltool pkgconfig ];
+  buildInputs = [ gtk2 gpgme libgpgerror libassuan ];
 
   meta = with stdenv.lib; {
     description = "Graphical user interface for the GnuPG";

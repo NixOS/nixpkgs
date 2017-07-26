@@ -67,6 +67,7 @@ my $gfxmodeEfi = get("gfxmodeEfi");
 my $gfxmodeBios = get("gfxmodeBios");
 my $bootloaderId = get("bootloaderId");
 my $forceInstall = get("forceInstall");
+my $font = get("font");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -281,7 +282,7 @@ else {
           insmod vbe
         fi
         insmod font
-        if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
+        if loadfont " . $grubBoot->path . "/converted-font.pf2; then
           insmod gfxterm
           if [ \"\${grub_platform}\" = \"efi\" ]; then
             set gfxmode=$gfxmodeEfi
@@ -294,6 +295,9 @@ else {
         fi
     ";
 
+    if ($font) {
+        copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
+    }
     if ($splashImage) {
         # FIXME: GRUB 1.97 doesn't resize the background image if it
         # doesn't match the video resolution.
@@ -443,9 +447,40 @@ my $confFile = $grubVersion == 1 ? "$bootPath/grub/menu.lst" : "$bootPath/grub/g
 my $tmpFile = $confFile . ".tmp";
 writeFile($tmpFile, $conf);
 
+
+# check whether to install GRUB EFI or not
+sub getEfiTarget {
+    if ($grubVersion == 1) {
+        return "no"
+    } elsif (($grub ne "") && ($grubEfi ne "")) {
+        # EFI can only be installed when target is set;
+        # A target is also required then for non-EFI grub
+        if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }
+        else { return "both" }
+    } elsif (($grub ne "") && ($grubEfi eq "")) {
+        # TODO: It would be safer to disallow non-EFI grub installation if no taget is given.
+        #       If no target is given, then grub auto-detects the target which can lead to errors.
+        #       E.g. it seems as if grub would auto-detect a EFI target based on the availability
+        #       of a EFI partition.
+        #       However, it seems as auto-detection is currently relied on for non-x86_64 and non-i386
+        #       architectures in NixOS. That would have to be fixed in the nixos modules first.
+        return "no"
+    } elsif (($grub eq "") && ($grubEfi ne "")) {
+        # EFI can only be installed when target is set;
+        if ($grubTargetEfi eq "") { die }
+        else {return "only" }
+    } else {
+        # prevent an installation if neither grub nor grubEfi is given
+        return "neither"
+    }
+}
+
+my $efiTarget = getEfiTarget();
+
 # Append entries detected by os-prober
 if (get("useOSProber") eq "true") {
-    system(get("shell"), "-c", "pkgdatadir=$grub/share/grub $grub/etc/grub.d/30_os-prober >> $tmpFile");
+    my $targetpackage = ($efiTarget eq "no") ? $grub : $grubEfi;
+    system(get("shell"), "-c", "pkgdatadir=$targetpackage/share/grub $targetpackage/etc/grub.d/30_os-prober >> $tmpFile");
 }
 
 # Atomically switch to the new config
@@ -498,36 +533,7 @@ sub getDeviceTargets {
     }
     return @devices;
 }
-
-# check whether to install GRUB EFI or not
-sub getEfiTarget {
-    if ($grubVersion == 1) {
-        return "no"
-    } elsif (($grub ne "") && ($grubEfi ne "")) {
-        # EFI can only be installed when target is set;
-        # A target is also required then for non-EFI grub
-        if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }
-        else { return "both" }
-    } elsif (($grub ne "") && ($grubEfi eq "")) {
-        # TODO: It would be safer to disallow non-EFI grub installation if no taget is given.
-        #       If no target is given, then grub auto-detects the target which can lead to errors.
-        #       E.g. it seems as if grub would auto-detect a EFI target based on the availability
-        #       of a EFI partition.
-        #       However, it seems as auto-detection is currently relied on for non-x86_64 and non-i386
-        #       architectures in NixOS. That would have to be fixed in the nixos modules first.
-        return "no"
-    } elsif (($grub eq "") && ($grubEfi ne "")) {
-        # EFI can only be installed when target is set;
-        if ($grubTargetEfi eq "") { die }
-        else {return "only" }
-    } else {
-        # prevent an installation if neither grub nor grubEfi is given
-        return "neither"
-    }
-}
-
 my @deviceTargets = getDeviceTargets();
-my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/,/, $prevGrubState->devices;
 

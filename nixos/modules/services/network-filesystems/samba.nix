@@ -5,7 +5,7 @@ with lib;
 let
 
   smbToString = x: if builtins.typeOf x == "bool"
-                   then (if x then "true" else "false")
+                   then boolToString x
                    else toString x;
 
   cfg = config.services.samba;

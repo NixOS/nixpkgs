@@ -1,26 +1,38 @@
-{ stdenv, fetchFromGitHub, mono, fsharp, dotnetPackages, z3, ocamlPackages, openssl, makeWrapper }:
+{ stdenv, fetchFromGitHub, mono, fsharp, dotnetPackages, z3, ocamlPackages, openssl, makeWrapper, pkgconfig, file }:
 
 stdenv.mkDerivation rec {
   name = "fstar-${version}";
-  version = "0.9.2.0";
+  version = "0.9.4.0";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "0vrxmxfaslngvbvkzpm1gfl1s34hdsprv8msasxf9sjqc3hlir3l";
+    sha256 = "130779p5plsgvz0dkcqycns3vwrvyfl138nq2xdhd3rkdsbyyvb7";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with ocamlPackages; [
-    mono fsharp z3 dotnetPackages.FsLexYacc ocaml findlib ocaml_batteries openssl
+    mono fsharp z3 dotnetPackages.FsLexYacc ocaml findlib ocaml_batteries
+    zarith camlp4 yojson pprint openssl pkgconfig file
   ];
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "\$(RUNTIME) VS/.nuget/NuGet.exe" "true"
+    substituteInPlace src/Makefile --replace "\$(RUNTIME) VS/.nuget/NuGet.exe" "true" \
+      --replace Darwin xyz
+    substituteInPlace src/VS/.nuget/NuGet.targets --replace "mono" "true"
 
-    source setenv.sh
+    # Fails with bad interpreter otherwise
+    patchShebangs src/tools
+    patchShebangs bin
+
+    export FSharpTargetsPath="$(dirname $(pkg-config FSharp.Core --variable=Libraries))/Microsoft.FSharp.Targets"
+    # remove hardcoded windows paths
+    sed -i '/<FSharpTargetsPath/d' src/*/*.fsproj
+
+    mkdir -p src/VS/packages/FsLexYacc.6.1.0
+    ln -s ${dotnetPackages.FsLexYacc}/lib/dotnet/FsLexYacc src/VS/packages/FsLexYacc.6.1.0/build
   '';
 
   makeFlags = [

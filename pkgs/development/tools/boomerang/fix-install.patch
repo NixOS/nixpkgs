@@ -1,0 +1,48 @@
+From 5851256422a4debc34c956439d8129a4d5f80722 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Thu, 30 Mar 2017 10:06:03 -0500
+Subject: [PATCH] cmake: add install bits
+
+---
+ CMakeLists.txt        | 3 +++
+ loader/CMakeLists.txt | 2 ++
+ ui/CMakeLists.txt     | 2 ++
+ 3 files changed, 7 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 826fe307..740861db 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -113,3 +113,6 @@ SET_PROPERTY(TARGET boom_base PROPERTY CXX_STANDARD_REQUIRED ON)
+ 
+ ADD_SUBDIRECTORY(loader)
+ ADD_SUBDIRECTORY(ui)
++
++INSTALL(DIRECTORY signatures DESTINATION share/boomerang)
++INSTALL(DIRECTORY frontend/machine DESTINATION share/boomerang/frontend)
+diff --git a/loader/CMakeLists.txt b/loader/CMakeLists.txt
+index b371d366..dcf715fd 100644
+--- a/loader/CMakeLists.txt
++++ b/loader/CMakeLists.txt
+@@ -6,6 +6,8 @@ macro(BOOMERANG_ADD_LOADER name)
+     endif()
+     qt5_use_modules(${target_name} Core)
+     set_target_properties(${target_name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/out/lib")
++    install(TARGETS "${target_name}"
++      LIBRARY DESTINATION lib)
+ endmacro()
+ 
+ BOOMERANG_ADD_LOADER(Elf      elf/ElfBinaryFile.cpp elf/ElfBinaryFile.h)
+diff --git a/ui/CMakeLists.txt b/ui/CMakeLists.txt
+index f6fe3271..8729b522 100644
+--- a/ui/CMakeLists.txt
++++ b/ui/CMakeLists.txt
+@@ -26,3 +26,5 @@ boom_base frontend db type boomerang_DSLs codegen util boom_base
+ ${CMAKE_THREAD_LIBS_INIT} boomerang_passes
+ )
+ qt5_use_modules(boomerang Core Xml Widgets)
++
++INSTALL(TARGETS boomerang DESTINATION bin)
+-- 
+2.11.0
+

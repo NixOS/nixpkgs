@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       vector graphics.
     '';
     homepage = http://calligra.org;
-    maintainers = with maintainers; [ urkud phreedom ebzzry ];
+    maintainers = with maintainers; [ phreedom ebzzry ];
     inherit (kdelibs4.meta) platforms;
     license = licenses.gpl2;
   };

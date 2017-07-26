@@ -10,10 +10,13 @@ bootStages ++ [
   (prevStage: let
     inherit (prevStage) stdenv;
   in {
-    inherit (prevStage) buildPlatform hostPlatform targetPlatform;
     inherit config overlays;
 
     stdenv = import ../generic rec {
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+
       inherit config;
 
       preHook = ''
@@ -24,11 +27,11 @@ bootStages ++ [
 
       initialPath = (import ../common-path.nix) { pkgs = prevStage; };
 
-      system = stdenv.system;
+      inherit (prevStage.stdenv) hostPlatform targetPlatform;
 
       cc = import ../../build-support/cc-wrapper {
         nativeTools = false;
-        nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
+        nativePrefix = stdenv.lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
         inherit stdenv;
         inherit (prevStage) binutils coreutils gnugrep;

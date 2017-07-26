@@ -1,104 +1,102 @@
-{ alsaLib
-, fetchurl
-, gcc
-, glib
-, gst-plugins-base
-, gstreamer
-, icu
-, libpulseaudio
-, libuuid
-, libxml2
-, libxslt
-, makeQtWrapper
-, qt56
-, sqlite
-, stdenv
-, xlibs
-, xorg
-, zlib
-}:
+{ stdenv, fetchurl, system, makeWrapper,
+  alsaLib, dbus, glib, gstreamer, fontconfig, freetype, libpulseaudio, libxml2,
+  libxslt, mesa, nspr, nss, sqlite, utillinux, zlib, xorg, udev, expat, libv4l }:
 
-stdenv.mkDerivation rec {
-    name = "zoom-us";
-    meta = {
-      homepage = http://zoom.us;
-      description = "zoom.us instant messenger";
-      license = stdenv.lib.licenses.unfree;
-      platforms = stdenv.lib.platforms.linux;
-    };
+let
 
-    version = "2.0.81497.0116";
-    src = fetchurl {
+  version = "2.0.91373.0502";
+  srcs = {
+    x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1lq59l5vxirjgcsrl6r4nqgvjr519gkn69alffv1f1fwq5vzif7j";
+      sha256 = "0gcbfsvybkvnyklm82irgz19x3jl0hz9bwf2l9jga188057pfj7a";
     };
+  };
 
-    phases = [ "unpackPhase" "installPhase" ];
-    nativeBuildInputs = [ makeQtWrapper ];
-    buildInputs = [
-      alsaLib
-      gcc.cc
-      glib
-      gst-plugins-base
-      gstreamer
-      icu
-      libpulseaudio
-      libuuid
-      libxml2
-      libxslt
-      qt56.qtbase
-      qt56.qtdeclarative
-      qt56.qtlocation
-      qt56.qtscript
-      qt56.qtwebchannel
-      qt56.qtwebengine
-      sqlite
-      xlibs.xcbutilkeysyms
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrender
-      xorg.xcbutilimage
-      zlib
-    ];
+in stdenv.mkDerivation {
+  name = "zoom-us-${version}";
 
-    libPath = stdenv.lib.makeLibraryPath buildInputs;
+  src = srcs.${system};
 
-    installPhase = ''
-      mkdir -p $out/share
-      cp -r \
-         application-x-zoom.png \
-         audio \
-         imageformats \
-         config-dump.sh \
-         dingdong1.pcm \
-         dingdong.pcm \
-         doc \
-         Droplet.pcm \
-         Droplet.wav \
-         platforminputcontexts \
-         platforms \
-         platformthemes \
-         leave.pcm \
-         ring.pcm \
-         ring.wav \
-         version.txt \
-         xcbglintegrations \
-         zcacert.pem \
-         zoom \
-         Zoom.png \
-         ZXMPPROOT.cer \
-         $out/share
+  buildInputs = [ makeWrapper ];
 
-      patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath ${libPath} \
-        $out/share/zoom
-      paxmark m $out/share/zoom
-      wrapQtProgram "$out/share/zoom"
-      mkdir -p $out/bin
-      ln -s $out/share/zoom $out/bin/zoom-us
-    '';
- }
+  libPath = stdenv.lib.makeLibraryPath [
+    alsaLib
+    dbus
+    glib
+    gstreamer
+    fontconfig
+    freetype
+    libpulseaudio
+    libxml2
+    libxslt
+    nspr
+    nss
+    sqlite
+    utillinux
+    zlib
+    udev
+    expat
+
+    xorg.libX11
+    xorg.libSM
+    xorg.libICE
+    xorg.libxcb
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXdamage
+    xorg.libXtst
+    xorg.libxshmfence
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXcomposite
+    xorg.libXScrnSaver
+
+    stdenv.cc.cc
+  ];
+
+  installPhase = ''
+    $preInstallHooks
+
+    packagePath=$out/share/zoom-us
+    mkdir -p $packagePath
+    mkdir -p $out/bin
+    cp -ar * $packagePath
+
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zoom
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/QtWebEngineProcess
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/qtdiag
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zopen
+    # included from https://github.com/NixOS/nixpkgs/commit/fc218766333a05c9352b386e0cbb16e1ae84bf53
+    # it works for me without it, but, well...
+    paxmark m $packagePath/zoom
+    #paxmark m $packagePath/QtWebEngineProcess # is this what dtzWill talked about?
+
+    # RUNPATH set via patchelf is used only for half of libraries (why?), so wrap it
+    wrapProgram $packagePath/zoom \
+        --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
+        --prefix LD_PRELOAD : "${libv4l}/lib/v4l1compat.so" \
+        --set QT_PLUGIN_PATH "$packagePath/platforms" \
+        --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
+        --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
+    ln -s "$packagePath/zoom" "$out/bin/zoom-us"
+
+    cat > $packagePath/qt.conf <<EOF
+    [Paths]
+    Prefix = $packagePath
+    EOF
+
+    $postInstallHooks
+  '';
+
+  meta = {
+    homepage = http://zoom.us;
+    description = "zoom.us video conferencing application";
+    license = stdenv.lib.licenses.unfree;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ danbst ];
+  };
+
+}

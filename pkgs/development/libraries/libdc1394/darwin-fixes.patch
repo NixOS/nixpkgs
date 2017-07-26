@@ -1,0 +1,24 @@
+diff -Naur libdc1394-2.2.5-old/dc1394/bayer.c libdc1394-2.2.5-new/dc1394/bayer.c
+--- libdc1394-2.2.5-old/dc1394/bayer.c	2016-10-11 02:19:10.000000000 -0400
++++ libdc1394-2.2.5-new/dc1394/bayer.c	2017-03-28 17:59:02.000000000 -0400
+@@ -775,7 +775,7 @@
+ {
+ 	uint8_t *outR, *outG, *outB;
+ 	register int i, j;
+-	uint tmp;
++	uint32_t tmp;
+ 	int st=sx*sy;
+ 	int p;
+ 	int sx2=sx<<1;
+diff -Naur libdc1394-2.2.5-old/dc1394/macosx/capture.c libdc1394-2.2.5-new/dc1394/macosx/capture.c
+--- libdc1394-2.2.5-old/dc1394/macosx/capture.c	2016-12-20 08:10:34.000000000 -0500
++++ libdc1394-2.2.5-new/dc1394/macosx/capture.c	2017-03-28 17:58:38.000000000 -0400
+@@ -614,7 +614,7 @@
+     dc1394video_frame_t * frame_tmp = capture->frames + next;
+     char ch;
+ 
+-	if(craw->frames==NULL || craw->capture_is_set==0) {
++	if(craw->capture.frames==NULL || craw->capture_is_set==0) {
+ 		*frame=NULL;
+ 		return DC1394_CAPTURE_IS_NOT_SET;
+ 	}

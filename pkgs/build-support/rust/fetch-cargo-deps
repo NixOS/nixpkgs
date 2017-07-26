@@ -1,3 +1,18 @@
+# copied from libgit2 source code 'repo-template.h'
+makeGitTemplate() {
+    local target="$1"
+    mkdir -p -m777 "$target/info" "$target/pack" "$target/objects" "$target/refs"
+    mkdir -p -m777 "$target/refs/heads" "$target/refs/tags" "$target/objects/info" "$target/objects/pack"
+    cat <<'EOF' > "$target/description"
+Unnamed repository; edit this file 'description' to name the repository.
+EOF
+    chmod 666 "$target/description"
+    cat <<'EOF' > "$target/info/exclude"
+# File patterns to ignore; see `git help ignore` for more information.
+# Lines that start with '#' are comments.
+EOF
+}
+
 fetchCargoDeps() {
     src=$(realpath $1)
     out=$(realpath $2)
@@ -5,6 +20,23 @@ fetchCargoDeps() {
     echo "Fetching $src to $out"
 
     mkdir $out
+
+    # Configure git template dir to make libgit2 more deterministic
+    #
+    # Without a template dir, libgit2 defaults to /usr/share/git-core/templates,
+    # which can vary between systems if sandboxed builds aren't used.
+    #
+    # Note: we explictly set --tmpdir for mktemp here to make it more friendly
+    # for nix-shell users, where $TMPDIR is not necessarily set to NIX_BUILD_TOP
+    echo "Setting up git templatedir"
+    export GIT_TEMPLATE_DIR="$(mktemp -d --tmpdir=$NIX_BUILD_TOP git-template.XXX)"
+    makeGitTemplate "$GIT_TEMPLATE_DIR"
+    export XDG_CONFIG_HOME="$(mktemp -d --tmpdir=$NIX_BUILD_TOP home.XXX)"
+    mkdir -p $XDG_CONFIG_HOME/git
+    cat <<EOF > $XDG_CONFIG_HOME/git/config
+[init]
+  templatedir = $GIT_TEMPLATE_DIR
+EOF
 
     # Configure cargo to fetch from a local copy of the crates.io registry
 
@@ -116,7 +148,7 @@ EOF
 
             cd "$out/git/checkouts/$name/$branch"
             rev="$(git rev-parse HEAD)"
-            revs="$revs $rev"
+            revs="$rev $revs"
         done < <(find . -type d -name .git -print)
 
         echo "List of revs to keep for git db $name: $revs"
@@ -147,7 +179,7 @@ EOF
             done
 
             # Create ad-hoc branches for the revs we need
-            echo "$revs" | tr " " "\n" | while read -d " " rev; do
+            echo "$revs" | while read -d " " rev; do
                 echo "Creating git branch b_$rev $rev"
                 git branch b_$rev $rev
             done

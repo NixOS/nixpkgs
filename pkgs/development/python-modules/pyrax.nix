@@ -1,7 +1,9 @@
-{ lib, buildPythonPackage, fetchurl, requests2, novaclient, keyring,
+{ lib, buildPythonPackage, fetchurl, requests, novaclient, keyring,
   rackspace-novaclient, six, isPy3k, pytest, glibcLocales }:
 buildPythonPackage rec {
-  name = "pyrax-1.9.8";
+  pname = "pyrax";
+  version = "1.9.8";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyrax/${name}.tar.gz";
@@ -15,7 +17,7 @@ buildPythonPackage rec {
     '';
 
   disabled = isPy3k;
-  propagatedBuildInputs = [ requests2 novaclient keyring rackspace-novaclient six ];
+  propagatedBuildInputs = [ requests novaclient keyring rackspace-novaclient six ];
 
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ pytest glibcLocales ];

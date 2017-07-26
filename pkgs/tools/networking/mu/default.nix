@@ -1,15 +1,17 @@
-{ fetchurl, stdenv, sqlite, pkgconfig, autoreconfHook, pmccabe
+{ stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime, texinfo , emacs, guile
-, gtk3, webkitgtk24x, libsoup, icu
+, gtk3, webkitgtk24x-gtk3, libsoup, icu
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.18";
   name = "mu-${version}";
+  version = "0.9.18";
 
-  src = fetchurl {
-    url = "https://github.com/djcb/mu/archive/${version}.tar.gz";
-    sha256 = "0gfwi4dwqhsz138plryd0j935vx2i44p63jpfx85ki3l4ysmmlwd";
+  src = fetchFromGitHub {
+    owner  = "djcb";
+    repo   = "mu";
+    rev    = version;
+    sha256 = "0zy0p196bfrfzsq8f58xv04rpnr948sdvljflgzvi6js0vz4009y";
   };
 
   # as of 0.9.18 2 tests are failing but previously we had no tests
@@ -19,9 +21,10 @@ stdenv.mkDerivation rec {
 
   # pmccabe should be a checkInput instead, but configure looks for it
   buildInputs = [
-    sqlite xapian glib gmime texinfo emacs guile libsoup icu pmccabe
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x ];
+    sqlite xapian glib gmime texinfo emacs guile libsoup icu
+  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  checkInputs = [ pmccabe ];
 
   doCheck = true;
 
@@ -37,8 +40,9 @@ stdenv.mkDerivation rec {
 
   # Install mug and msg2pdf
   postInstall = stdenv.lib.optionalString withMug ''
-    cp -v toys/msg2pdf/msg2pdf $out/bin/
-    cp -v toys/mug/mug $out/bin/
+    for f in msg2pdf mug ; do
+      install -m755 toys/$f/$f $out/bin/$f
+    done
   '';
 
   meta = with stdenv.lib; {
@@ -46,6 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     homepage = "http://www.djcbsoftware.nl/code/mu/";
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ antono the-kenny ];
+    maintainers = with maintainers; [ antono the-kenny peterhoeg ];
   };
 }

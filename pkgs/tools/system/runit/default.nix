@@ -1,4 +1,6 @@
 { stdenv, fetchurl
+
+# Build runit-init as a static binary
 , static ? false
 }:
 
@@ -19,7 +21,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optionals static [ stdenv.cc.libc stdenv.cc.libc.static ];
 
-  postPatch = stdenv.lib.optionalString (!static) ''
+  postPatch = ''
+    sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
+    # usernamespace sandbox of nix seems to conflict with runit's assumptions
+    # about unix users. Therefor skip the check
+    sed -i '/.\/chkshsgr/d' src/Makefile
+  '' + stdenv.lib.optionalString (!static) ''
     sed -i 's,-static,,g' src/Makefile
   '';
 

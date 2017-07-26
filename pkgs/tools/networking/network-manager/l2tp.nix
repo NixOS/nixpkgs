@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, intltool, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
 , networkmanager, ppp, xl2tpd, strongswan, libsecret
 , withGnome ? true, gnome3, networkmanagerapplet }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname   = "NetworkManager-l2tp";
-  version = networkmanager.version;
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner  = "nm-l2tp";
     repo   = "network-manager-l2tp";
-    rev    = "c0cedda5e2a0ded695b497c361eaf577068520cb";
-    sha256 = "01f39ghc37vw4n4i7whyikgqz8vzxf41q9fsv2gfw1g501cny1j2";
+    rev    = "${version}";
+    sha256 = "1mvn0z1vl4j9drl3dsw2dv0pppqvj29d2m07487dzzi8cbxrqj36";
   };
 
   buildInputs = [ networkmanager ppp libsecret ]
     ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring networkmanagerapplet ];
 
-  nativeBuildInputs = [ automake autoconf libtool intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig ];
 
   postPatch = ''
     sed -i -e 's%"\(/usr/sbin\|/usr/pkg/sbin\|/usr/local/sbin\)/[^"]*",%%g' ./src/nm-l2tp-service.c
@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
       --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
   '';
 
-  preConfigure = "./autogen.sh";
+  preConfigure = ''
+    intltoolize -f
+  '';
 
   configureFlags =
     if withGnome then "--with-gnome" else "--without-gnome";

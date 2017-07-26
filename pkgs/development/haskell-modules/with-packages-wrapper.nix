@@ -8,7 +8,7 @@
 assert ghcLibdir != null -> (ghc.isGhcjs or false);
 
 # This wrapper works only with GHC 6.12 or later.
-assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
+assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs || ghc.isHaLVM;
 
 # It's probably a good idea to include the library "ghc-paths" in the
 # compiler environment, because we have a specially patched version of
@@ -33,13 +33,14 @@ assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
 
 let
   isGhcjs       = ghc.isGhcjs or false;
-  ghc761OrLater = isGhcjs || lib.versionOlder "7.6.1" ghc.version;
+  isHaLVM       = ghc.isHaLVM or false;
+  ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
   crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
   ghcCommand = "${crossPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
-  libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
+  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}" else "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
@@ -95,7 +96,28 @@ symlinkJoin {
         makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
       fi
     done
-
+  '' + (lib.optionalString stdenv.isDarwin ''
+    # Work around a linker limit in Mac OS X Sierra (see generic-builder.nix):
+    local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
+    local dynamicLinksDir="$out/lib/links"
+    mkdir -p $dynamicLinksDir
+    # Clean up the old links that may have been (transitively) included by
+    # symlinkJoin:
+    rm -f $dynamicLinksDir/*
+    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
+      ln -s $d/*.dylib $dynamicLinksDir
+    done
+    for f in $packageConfDir/*.conf; do
+      # Initially, $f is a symlink to a read-only file in one of the inputs
+      # (as a result of this symlinkJoin derivation).
+      # Replace it with a copy whose dynamic-library-dirs points to
+      # $dynamicLinksDir
+      cp $f $f-tmp
+      rm $f
+      sed "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
+      rm $f-tmp
+    done
+  '') + ''
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
     ${# ghcjs will read the ghc_libdir file when resolving plugins.
       lib.optionalString (isGhcjs && ghcLibdir != null) ''

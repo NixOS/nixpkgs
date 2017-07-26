@@ -1,7 +1,7 @@
 # Wrapper around wrapPythonProgramsIn, below. The $pythonPath
 # variable is passed in from the buildPythonPackage function.
 wrapPythonPrograms() {
-    wrapPythonProgramsIn $out "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
 }
 
 # Builds environment variables like PYTHONPATH and PATH walking through closure
@@ -47,34 +47,36 @@ wrapPythonProgramsIn() {
     buildPythonPath "$pythonPath"
 
     # Find all regular files in the output directory that are executable.
-    find "$dir" -type f -perm -0100 -print0 | while read -d "" f; do
-        # Rewrite "#! .../env python" to "#! /nix/store/.../python".
-        # Strip suffix, like "3" or "2.7m" -- we don't have any choice on which
-        # Python to use besides one with this hook anyway.
-        if head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'; then
-            sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#! @executable@^"
-        fi
-
-        # catch /python and /.python-wrapped
-        if head -n1 "$f" | grep -q '/\.\?\(python\|pypy\)'; then
-            # dont wrap EGG-INFO scripts since they are called from python
-            if echo "$f" | grep -qv EGG-INFO/scripts; then
-                echo "wrapping \`$f'..."
-                patchPythonScript "$f"
-                # wrapProgram creates the executable shell script described
-                # above. The script will set PYTHONPATH and PATH variables.!
-                # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
-                local -a wrap_args=("$f"
-                                 --prefix PATH ':' "$program_PATH")
-
-                # Add any additional arguments provided by makeWrapperArgs
-                # argument to buildPythonPackage.
-                local -a user_args="($makeWrapperArgs)"
-                local -a wrapProgramArgs=("${wrap_args[@]}" "${user_args[@]}")
-                wrapProgram "${wrapProgramArgs[@]}"
+    if [ -d "$dir" ]; then
+        find "$dir" -type f -perm -0100 -print0 | while read -d "" f; do
+            # Rewrite "#! .../env python" to "#! /nix/store/.../python".
+            # Strip suffix, like "3" or "2.7m" -- we don't have any choice on which
+            # Python to use besides one with this hook anyway.
+            if head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'; then
+                sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#! @executable@^"
             fi
-        fi
-    done
+
+            # catch /python and /.python-wrapped
+            if head -n1 "$f" | grep -q '/\.\?\(python\|pypy\)'; then
+                # dont wrap EGG-INFO scripts since they are called from python
+                if echo "$f" | grep -qv EGG-INFO/scripts; then
+                    echo "wrapping \`$f'..."
+                    patchPythonScript "$f"
+                    # wrapProgram creates the executable shell script described
+                    # above. The script will set PYTHONPATH and PATH variables.!
+                    # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
+                    local -a wrap_args=("$f"
+                                    --prefix PATH ':' "$program_PATH")
+
+                    # Add any additional arguments provided by makeWrapperArgs
+                    # argument to buildPythonPackage.
+                    local -a user_args="($makeWrapperArgs)"
+                    local -a wrapProgramArgs=("${wrap_args[@]}" "${user_args[@]}")
+                    wrapProgram "${wrapProgramArgs[@]}"
+                fi
+            fi
+        done
+    fi
 }
 
 # Adds the lib and bin directories to the PYTHONPATH and PATH variables,

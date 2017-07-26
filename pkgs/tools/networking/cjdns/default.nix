@@ -1,19 +1,13 @@
 { stdenv, fetchurl, fetchpatch, nodejs, which, python27, utillinux }:
 
-let version = "18"; in
+let version = "20"; in
 stdenv.mkDerivation {
   name = "cjdns-"+version;
 
   src = fetchurl {
     url = "https://github.com/cjdelisle/cjdns/archive/cjdns-v${version}.tar.gz";
-    sha256 = "1as7n730ppn93cpal7s6r6iq1qx46m0c45iwy8baypbpp42zxrap";
+    sha256 = "1dyqxi9l2pmrgm16a161909rg3vfzvib40frr7p6ddpk8yfh5888";
   };
-
-  patches = [(fetchpatch {
-    name = "glibc-2.25.diff";
-    url = https://github.com/cjdelisle/cjdns/pull/1017.diff;
-    sha256 = "1k05d1w04lngcki56b6brkwg9xakzsbr5ibkcba8112v6jdzw51f";
-  })];
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock

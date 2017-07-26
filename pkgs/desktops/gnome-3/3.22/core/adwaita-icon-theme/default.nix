@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   postInstall = '' rm -rf "$out/locale" '';
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = gnome3.maintainers;
   };
 }

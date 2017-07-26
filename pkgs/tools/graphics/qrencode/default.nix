@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://fukuchi.org/works/qrencode/;
     description = "QR code encoder";
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

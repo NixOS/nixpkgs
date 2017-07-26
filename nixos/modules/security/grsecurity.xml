@@ -26,9 +26,11 @@
     <link xlink:href="https://wiki.archlinux.org/index.php/Grsecurity">Arch
     Linux wiki page on grsecurity</link>.
 
-    <note><para>grsecurity/PaX is only available for the latest linux -stable
-    kernel; patches against older kernels are available from upstream only for
-    a fee.</para></note>
+    <warning><para>Upstream has ceased free support for grsecurity/PaX.  See
+    <link xlink:href="https://grsecurity.net/passing_the_baton.php">
+    the announcement</link> for more information.  Consequently, NixOS
+    support for grsecurity/PaX also must cease.  Enabling this module will
+    result in a build error.</para></warning>
     <note><para>We standardise on a desktop oriented configuration primarily due
     to lack of resources.  The grsecurity/PaX configuration state space is huge
     and each configuration requires quite a bit of testing to ensure that the
@@ -312,7 +314,7 @@
       Overflows in boot critical code (e.g., the root filesystem module) can
       render the system unbootable.  Work around by setting
       <programlisting>
-        boot.kernel.kernelParams = [ "pax_size_overflow_report_only" ];
+        boot.kernelParams = [ "pax_size_overflow_report_only" ];
       </programlisting>
     </para></listitem>
 

@@ -1,54 +1,41 @@
 {
-  stdenv, lib, runCommand, dbus, qttools, socat, gnugrep, gnused, kconfig,
-  kinit, kservice, plasma-workspace, xmessage, xprop, xsetroot, qtbase,
-  qtdeclarative, qtgraphicaleffects, qtquickcontrols, qtscript, qtsvg,
-  qtx11extras, qtxmlpatterns
+  stdenv, lib, runCommand, substituteAll, dbus, gnugrep, gnused, kconfig,
+  kinit, kservice, plasma-desktop, plasma-workspace, xmessage, xprop, xrdb,
+  xsetroot, qttools,
 }:
 
 let
 
-  env = {
+  inherit (lib) getBin getLib;
+
+  script = substituteAll {
+    src = ./startkde.sh;
     inherit (stdenv) shell;
-    bins = builtins.map (pkg: pkg.out or pkg)
-      [
-        dbus qttools socat
-        gnugrep gnused
-        kconfig kinit kservice
-        plasma-workspace
-        xmessage xprop xsetroot
-      ];
-    libs = builtins.map (pkg: pkg.out or pkg)
-      [
-        qtbase qtdeclarative qtgraphicaleffects qtquickcontrols
-        qtscript qtsvg qtx11extras qtxmlpatterns
-      ];
+    kbuildsycoca5 = "${getBin kservice}/bin/kbuildsycoca5";
+    sed = "${getBin gnused}/bin/sed";
+    kcheckrunning = "${getBin plasma-workspace}/bin/kcheckrunning";
+    xmessage = "${getBin xmessage}/bin/xmessage";
+    kstartupconfig5 = "${getBin plasma-workspace}/bin/kstartupconfig5";
+    kapplymousetheme = "${getBin plasma-desktop}/bin/kapplymousetheme";
+    xsetroot = "${getBin xsetroot}/bin/xsetroot";
+    xrdb = "${getBin xrdb}/bin/xrdb";
+    ksplashqml = "${getBin plasma-workspace}/bin/ksplashqml";
+    qdbus = "${getBin qttools}/bin/qdbus";
+    xprop = "${getBin xprop}/bin/xprop";
+    qtpaths = "${getBin qttools}/bin/qtpaths";
+    dbus_update_activation_environment = "${getBin dbus}/bin/dbus-update-activation-environment";
+    start_kdeinit_wrapper = "${getLib kinit}/lib/libexec/kf5/start_kdeinit_wrapper";
+    kwrapper5 = "${getBin kinit}/bin/kwrapper5";
+    ksmserver = "${getBin plasma-workspace}/bin/ksmserver";
+    kreadconfig5 = "${getBin kconfig}/bin/kreadconfig5";
+    kdeinit5_shutdown = "${getBin kinit}/bin/kdeinit5_shutdown";
   };
 
-in runCommand "startkde" env ''
+in
 
-  # Configure PATH variable
-  suffixPATH=
-  for p in $bins; do
-      addToSearchPath suffixPATH "$p/bin"
-      addToSearchPath suffixPATH "$p/lib/libexec"
-      addToSearchPath suffixPATH "$p/lib/libexec/kf5"
-  done
-
-  # Configure Qt search paths
-  QT_PLUGIN_PATH=
-  QML_IMPORT_PATH=
-  QML2_IMPORT_PATH=
-  for p in $libs; do
-      addToSearchPath QT_PLUGIN_PATH "$p/lib/qt5/plugins"
-      addToSearchPath QML_IMPORT_PATH "$p/lib/qt5/imports"
-      addToSearchPath QML2_IMPORT_PATH "$p/lib/qt5/qml"
-  done
-
-  substitute ${./startkde.sh} "$out" \
-      --subst-var shell \
-      --subst-var suffixPATH \
-      --subst-var QT_PLUGIN_PATH \
-      --subst-var QML_IMPORT_PATH \
-      --subst-var QML2_IMPORT_PATH
-  chmod +x "$out"
+runCommand "startkde.sh"
+{ preferLocalBuild = true; allowSubstitutes = false; }
+''
+  cp ${script} $out
+  chmod +x $out
 ''

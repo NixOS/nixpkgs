@@ -3,8 +3,6 @@
 assert stdenv.isLinux;
 # Don't bother with older versions, though some might even work:
 assert stdenv.lib.versionAtLeast kernel.version "4.10";
-# Disable on grsecurity kernels, which break module building:
-assert !kernel.features ? grsecurity;
 
 let
   release = "0.4.0";

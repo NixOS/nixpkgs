@@ -18,7 +18,8 @@
 
   <xsl:template match="/busconfig">
     <busconfig>
-      <xsl:copy-of select="child::node()[name() != 'include' and name() != 'standard_session_servicedirs' and name() != 'servicedir' and name() != 'includedir']" />
+      <!-- We leave <standard_session_servicedirs/> because it includes XDG dirs and therefore user Nix profile. -->
+      <xsl:copy-of select="child::node()[name() != 'include' and name() != 'servicedir' and name() != 'includedir']" />
 
       <xsl:for-each select="str:tokenize($serviceDirectories)">
         <servicedir><xsl:value-of select="." />/share/dbus-1/services</servicedir>

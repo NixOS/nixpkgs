@@ -1,47 +1,74 @@
-{ stdenv, lib, fetchurl, makeWrapper, docker-machine-kvm, kubernetes, libvirt, qemu }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm, makeWrapper }:
 
 let
-  arch = if stdenv.isLinux
-         then "linux-amd64"
-         else "darwin-amd64";
-  checksum = if stdenv.isLinux
-             then "0cdcabsx5l4jbpyj3zzyz5bnzks6wl64bmzdsnk41x92ar5y5yal"
-             else "12f3b7s5lwpvzx4wj6i6h62n4zjshqf206fxxwpwx9kpsdaw6xdi";
+  binPath = [ kubernetes ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libvirt qemu docker-machine-kvm ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [];
 
-# TODO: compile from source
+  # Normally, minikube bundles localkube in its own binary via go-bindata. Unfortunately, it needs to make that localkube
+  # a static linux binary, and our Linux nixpkgs go compiler doesn't seem to work when asking for a cgo binary that's static
+  # (presumably because we don't have some static system libraries it wants), and cross-compiling cgo on Darwin is a nightmare.
+  #
+  # Note that minikube can download (and cache) versions of localkube it needs on demand. Unfortunately, minikube's knowledge
+  # of where it can download versions of localkube seems to rely on a json file that doesn't get updated as often as we'd like. So
+  # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
+  # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-in stdenv.mkDerivation rec {
-  pname = "minikube";
-  version = "0.17.1";
-  name = "${pname}-${version}";
+  localkube-version = "1.6.3";
+  localkube-binary = fetchurl {
+    url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
+    sha256 = "1fmxxjv1bxrfngc4ykfgg76b79dh8pq0k1gsbzhiy3hhrppfqylm";
+  };
+in buildGoPackage rec {
+  pname   = "minikube";
+  name    = "${pname}-${version}";
+  version = "0.20.0";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/minikube/releases/v${version}/minikube-${arch}";
-    sha256 = "${checksum}";
+  goPackagePath = "k8s.io/minikube";
+
+  src = fetchFromGitHub {
+    owner  = "kubernetes";
+    repo   = "minikube";
+    rev    = "v${version}";
+    sha256 = "0bly2phy67x4ckcg46g6r4kqfdpjfs1cb3588a900m8b4xyavvvb";
   };
 
-  phases = [ "installPhase" "fixupPhase" ];
+  # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
+  # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
+  buildInputs = [ go-bindata makeWrapper kubernetes ];
+  subPackages = [ "cmd/minikube" ];
 
-  buildInputs = [ makeWrapper ];
+  preBuild = ''
+    pushd go/src/${goPackagePath} >/dev/null
 
-  binPath = lib.makeBinPath [ docker-machine-kvm kubernetes libvirt qemu ];
+    mkdir -p out
+    cp ${localkube-binary} out/localkube
 
-  installPhase = ''
-    install -Dm755 ${src} $out/bin/${pname}
+    go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets ./out/localkube deploy/addons/...
+
+    ISO_VERSION=$(grep "^ISO_VERSION" Makefile | sed "s/^.*\s//")
+    ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
+
+    export buildFlagsArray="-ldflags=\
+      -X k8s.io/minikube/pkg/version.version=v${version} \
+      -X k8s.io/minikube/pkg/version.isoVersion=$ISO_VERSION \
+      -X k8s.io/minikube/pkg/version.isoPath=$ISO_BUCKET"
+
+    popd >/dev/null
   '';
 
-  fixupPhase = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/bin/minikube"
-
-    wrapProgram $out/bin/${pname} \
-      --prefix PATH : ${binPath}
+  postInstall = ''
+    mkdir -p $bin/share/bash-completion/completions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
   '';
+
+  postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kubernetes/minikube;
+    homepage    = https://github.com/kubernetes/minikube;
     description = "A tool that makes it easy to run Kubernetes locally";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry ];
-    platforms = with platforms; linux ++ darwin;
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ ebzzry copumpkin ];
+    platforms   = with platforms; unix;
   };
 }

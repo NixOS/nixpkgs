@@ -3,76 +3,24 @@
 let buildFor = toolsArch: (
 
 let
+  lib = import ../../../lib;
   pkgsFun = import ../../..;
-  pkgsNoParams = pkgsFun {};
 
-  sheevaplugCrossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabi";
-      bigEndian = false;
-      arch = "armv5te";
-      float = "soft";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.sheevaplug;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  raspberrypiCrossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabihf";
-      bigEndian = false;
-      arch = "armv6";
-      float = "hard";
-      fpu = "vfp";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.raspberrypi;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  armv7l-hf-multiplatform-crossSystem = {
-    crossSystem = rec {
-      config = "arm-linux-gnueabihf";
-      bigEndian = false;
-      arch = "armv7-a";
-      float = "hard";
-      fpu = "vfpv3-d16";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.armv7l-hf-multiplatform;
-      openssl.system = "linux-generic32";
-      inherit (platform) gcc;
-    };
-  };
-
-  aarch64-multiplatform-crossSystem = {
-    crossSystem = rec {
-      config = "aarch64-linux-gnu";
-      bigEndian = false;
-      arch = "aarch64";
-      withTLS = true;
-      libc = "glibc";
-      platform = pkgsNoParams.platforms.aarch64-multiplatform;
-      inherit (platform) gcc;
-    };
-  };
+  inherit (lib.systems.examples)
+    sheevaplug raspberryPi armv7l-hf-multiplatform
+    aarch64-multiplatform scaleway-c1 pogoplug4;
 
   selectedCrossSystem =
-    if toolsArch == "armv5tel" then sheevaplugCrossSystem else
-    if toolsArch == "armv6l" then raspberrypiCrossSystem else
-    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else
-    if toolsArch == "aarch64" then aarch64-multiplatform-crossSystem else null;
+    if toolsArch == "armv5tel" then sheevaplug else
+    if toolsArch == "scaleway" then scaleway-c1 else
+    if toolsArch == "pogoplug4" then pogoplug4 else
+    if toolsArch == "armv6l" then raspberryPi else
+    if toolsArch == "armv7l" then armv7l-hf-multiplatform else
+    if toolsArch == "aarch64" then aarch64-multiplatform else null;
 
-  pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
+  pkgs = pkgsFun ({ inherit system; crossSystem = selectedCrossSystem; });
 
-  inherit (pkgs.buildPackages) stdenv nukeReferences cpio binutilsCross;
-
-  glibc = pkgs.buildPackages.libcCross;
+  glibc = pkgs.libcCross;
   bash = pkgs.bash;
   findutils = pkgs.findutils;
   diffutils = pkgs.diffutils;
@@ -126,11 +74,14 @@ rec {
 
   build =
 
-    stdenv.mkDerivation {
+    pkgs.stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools-cross";
       crossConfig = pkgs.hostPlatform.config;
 
-      buildInputs = [nukeReferences cpio binutilsCross];
+      nativeBuildInputs = [
+        pkgs.buildPackages.nukeReferences
+        pkgs.buildPackages.cpio
+      ];
 
       buildCommand = ''
         set -x
@@ -221,8 +172,7 @@ rec {
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
         cp -d ${isl}/lib/libisl*.so* $out/lib
-        # Also this is needed since bzip2 uses a custom build system
-        # for native builds but autoconf (via a patch) for cross builds
+
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
@@ -262,7 +212,7 @@ rec {
       allowedReferences = [];
     };
 
-  dist = stdenv.mkDerivation {
+  dist = pkgs.stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools-cross";
 
     buildCommand = ''
@@ -278,4 +228,6 @@ rec {
     armv6l = buildFor "armv6l";
     armv7l = buildFor "armv7l";
     aarch64 = buildFor "aarch64";
+    scaleway = buildFor "scaleway";
+    pogoplug4 = buildFor "pogoplug4";
 }

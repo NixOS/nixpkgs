@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, hostPlatform, fetchurl
 , bzip2
 , gdbm
 , fetchpatch
@@ -15,6 +15,7 @@
 , expat
 , libffi
 , CF, configd, coreutils
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -68,7 +69,7 @@ let
 
       ./glibc-2.25-enosys.patch
 
-    ] ++ optionals stdenv.isCygwin [
+    ] ++ optionals hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
       ./2.6.2-ssl-threads.patch
@@ -109,7 +110,7 @@ let
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs4"
-  ] ++ optionals stdenv.isCygwin [
+  ] ++ optionals hostPlatform.isCygwin [
     "--with-system-ffi"
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
@@ -117,14 +118,14 @@ let
     "--disable-toolbox-glue"
   ];
 
-  postConfigure = if stdenv.isCygwin then ''
+  postConfigure = if hostPlatform.isCygwin then ''
     sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
   '' else null;
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
-    ++ optionals stdenv.isCygwin [ expat libffi ]
+    ++ optionals hostPlatform.isCygwin [ expat libffi ]
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin [ CF configd ];
@@ -150,7 +151,7 @@ in stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
 
-    setupHook = ./setup-hook.sh;
+    setupHook = python-setup-hook sitePackages;
 
     postPatch = optionalString (x11Support && (tix != null)) ''
           substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
@@ -189,6 +190,8 @@ in stdenv.mkDerivation {
         find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
+      '' + optionalString hostPlatform.isCygwin ''
+        cp libpython2.7.dll.a $out/lib
       '';
 
     passthru = let

@@ -1,12 +1,12 @@
 {
-  kdeApp, lib, extra-cmake-modules, kdoctools, shared_mime_info,
+  mkDerivation, lib, extra-cmake-modules, kdoctools, shared_mime_info,
   exiv2, kactivities, karchive, kbookmarks, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kguiaddons, kdnssd, kiconthemes, ki18n, kio, khtml,
   kdelibs4support, kpty, libmtp, libssh, openexr, ilmbase, openslp, phonon,
   qtsvg, samba, solid
 }:
 
-kdeApp {
+mkDerivation {
   name = "kio-extras";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];

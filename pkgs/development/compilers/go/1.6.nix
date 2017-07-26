@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, go_bootstrap, runCommand
+{ stdenv, lib, fetchurl, tzdata, iana-etc, go_bootstrap, runCommand
 , perl, which, pkgconfig, patch, fetchpatch
 , pcre
 , Security, Foundation, bash }:
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
     # Remove the timezone naming test
     sed -i '/TestLoadFixed/areturn' src/time/time_test.go
 
-    sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
-    sed -i 's,/etc/services,${iana_etc}/etc/services,' src/net/port_unix.go
+    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
+    sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + lib.optionalString stdenv.isDarwin ''
@@ -113,6 +113,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-tools-1.5.patch
     ./creds-test.patch
+    ./fix-systime-1.6.patch
+
+    # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
+    # actually works on old versions too.
+    (fetchpatch {
+      url    = "https://github.com/golang/go/commit/91563ced5897faf729a34be7081568efcfedda31.patch";
+      sha256 = "1ny5l3f8a9dpjjrnjnsplb66308a0x13sa0wwr4j6yrkc8j4qxqi";
+    })
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

@@ -8,9 +8,12 @@ attrs @
 , md5 ? ""
 , ...
 }:
+if md5 != "" then
+  throw "fetchnuget does not support md5 anymore, please use sha256"
+else
   buildDotnetPackage ({
     src = fetchurl {
-      inherit url sha256 md5;
+      inherit url sha256;
       name = "${baseName}.${version}.zip";
     };
 

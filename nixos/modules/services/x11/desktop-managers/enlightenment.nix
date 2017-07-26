@@ -20,7 +20,6 @@ in
 
     services.xserver.desktopManager.enlightenment.enable = mkOption {
       default = false;
-      example = true;
       description = "Enable the Enlightenment desktop environment.";
     };
 
@@ -65,7 +64,7 @@ in
     security.wrappers.e_freqset.source = "${e.enlightenment.out}/bin/e_freqset";
 
     environment.etc = singleton
-      { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+      { source = xcfg.xkbDir;
         target = "X11/xkb";
       };
 

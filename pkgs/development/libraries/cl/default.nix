@@ -1,19 +1,19 @@
-{stdenv, fetchurl, SDL, mesa, rebar, erlang, opencl-headers, ocl-icd }:
+{stdenv, fetchFromGitHub, SDL, mesa, rebar, erlang, opencl-headers, ocl-icd }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.2.3";
   name = "cl-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/tonyrog/cl/archive/${name}.tar.gz";
-    sha256 = "03jv280h9gqqqkm0mmkjr53srd2mzhvyy1biss77wpjrzq2z12c8";
+  src = fetchFromGitHub {
+    owner = "tonyrog";
+    repo = "cl";
+    rev = "cl-${version}";
+    sha256 = "1dk0k03z0ipxvrnn0kihph135hriw96jpnd31lbq44k6ckh6bm03";
   };
 
   buildInputs = [ erlang rebar opencl-headers ocl-icd ];
-  #propagatedBuildInputs = [ SDL mesa ];
-
+  
   buildPhase = ''
-    sed 's/git/"${version}"/' -i src/cl.app.src
     rebar compile
   '';
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     cp -ruv c_src doc ebin include priv src $DIR
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/tonyrog/cl;
     description = "OpenCL binding for Erlang";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

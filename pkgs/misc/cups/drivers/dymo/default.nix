@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cups ];
+  patches = [ ./fix-includes.patch ];
+
   makeFlags = [ "cupsfilterdir=$(out)/lib/cups/filter" "cupsmodeldir=$(out)/share/cups/model" ];
 
   meta = {

@@ -1,19 +1,21 @@
-{ stdenv, acl, attr, autoreconfHook, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk
-, lib, libaio, libcap, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, su
+{ stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk
+, lib, libaio, libcap, libtool, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, quota, su
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2016-08-26";
+  name = "xfstests-2017-07-16";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "21eb9d303cff056753a3104602ff674d468af52e";
-    sha256 = "175nfdjfakxij7cmajjv2ycsiv4hkmx7b94nsylqrg51drx3jkji";
+    rev = "c3893c2dc623a07b1ace8e72ee4beb29f8bfae15";
+    sha256 = "1p42dakry4r2366hdgj4i1wcnjs4qk0bfmyr70r1n7s7ykvnvnrl";
   };
 
-  buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
+  nativeBuildInputs = [ autoconf automake libtool ];
+  buildInputs = [ acl attr gawk libaio libuuid libxfs openssl perl ];
 
   hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
 
   patchPhase = ''
     # Patch the destination directory
@@ -22,6 +24,14 @@ stdenv.mkDerivation {
     # Don't canonicalize path to mkfs (in util-linux) - otherwise e.g. mkfs.ext4 isn't found
     sed -i common/config -e 's|^export MKFS_PROG=.*|export MKFS_PROG=mkfs|'
 
+    # Move the Linux-specific test output files to the correct place, or else it will
+    # try to move them at runtime. Also nuke all the irix crap.
+    for f in tests/*/*.out.linux; do
+      mv $f $(echo $f | sed -e 's/\.linux$//')
+    done
+    rm -f tests/*/*.out.irix
+
+    # Fix up lots of impure paths
     for f in common/* tools/* tests/*/*; do
       sed -i $f -e 's|/bin/bash|${bash}/bin/bash|'
       sed -i $f -e 's|/bin/true|true|'
@@ -46,6 +56,8 @@ stdenv.mkDerivation {
     export MAKE=$(type -P make)
     export SED=$(type -P sed)
     export SORT=$(type -P sort)
+
+    make configure
   '';
 
   postInstall = ''
@@ -74,13 +86,13 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc quota utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 
   meta = with stdenv.lib; {
     description = "Torture test suite for filesystems";
-    homepage = "http://oss.sgi.com/cgi-bin/gitweb.cgi?p=xfs/cmds/xfstests.git";
+    homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

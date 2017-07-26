@@ -10,18 +10,17 @@
 # google-gflags is required to run tests
 assert runTests -> google-gflags != null;
 
-let
-  version = "1.10.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ceres-solver-${version}";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "http://ceres-solver.org/ceres-solver-${version}.tar.gz";
-    sha256 = "20bb5db05c3e3e14a4062e2cf2b0742d2653359549ecded3e0653104ef3deb17";
+    sha256 = "15f8mwhcy9f5qggcc9dqwl5y687ykvmlidr686aqdq0ia7azwnvl";
   };
 
-  buildInputs = [ cmake glog ]
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ glog ]
     ++ stdenv.lib.optional (google-gflags != null) google-gflags;
 
   inherit eigen;
@@ -38,8 +37,7 @@ stdenv.mkDerivation {
     description = "C++ library for modeling and solving large, complicated optimization problems";
     license = licenses.bsd3;
     homepage = "http://ceres-solver.org";
-    maintainers = with stdenv.lib.maintainers; [ giogadi ];
-    inherit version;
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with maintainers; [ giogadi ];
+    platforms = platforms.unix;
   };
 }

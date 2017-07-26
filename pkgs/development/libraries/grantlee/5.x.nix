@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = http://gitorious.org/grantlee;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     inherit (qtbase.meta) platforms;
   };
 }

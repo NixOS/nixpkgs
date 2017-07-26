@@ -35,7 +35,8 @@ in
               description = ''
                 The name of the node which is used as an identifier when communicating
                 with the remote nodes in the mesh. If null then the hostname of the system
-                is used.
+                is used to derive a name (note that tinc may replace non-alphanumeric characters in
+                hostnames by underscores).
               '';
             };
 
@@ -78,7 +79,15 @@ in
               default = null;
               type = types.nullOr types.str;
               description = ''
-                The ip adress to bind to.
+                The ip address to listen on for incoming connections.
+              '';
+            };
+
+            bindToAddress = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              description = ''
+                The ip address to bind to (both listen on and send packets from).
               '';
             };
 
@@ -130,7 +139,8 @@ in
               Name = ${if data.name == null then "$HOST" else data.name}
               DeviceType = ${data.interfaceType}
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
-              ${optionalString (data.listenAddress != null) "BindToAddress = ${data.listenAddress}"}
+              ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
+              ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
               Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}
@@ -183,6 +193,19 @@ in
         '';
       })
     );
+
+    environment.systemPackages = let
+      cli-wrappers = pkgs.stdenv.mkDerivation {
+        name = "tinc-cli-wrappers";
+        buildInputs = [ pkgs.makeWrapper ];
+        buildCommand = ''
+          mkdir -p $out/bin
+          ${concatStringsSep "\n" (mapAttrsToList (network: data: ''
+              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" --add-flags "--pidfile=/run/tinc.${network}.pid"
+            '') cfg.networks)}
+        '';
+      };
+    in [ cli-wrappers ];
 
     users.extraUsers = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({

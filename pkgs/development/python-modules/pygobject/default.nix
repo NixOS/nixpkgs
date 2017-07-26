@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, python, mkPythonDerivation, pkgconfig, glib }:
+{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib }:
 
-mkPythonDerivation rec {
+buildPythonPackage rec {
   name = "pygobject-${version}";
   version = "2.28.6";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/2.28/${name}.tar.xz";

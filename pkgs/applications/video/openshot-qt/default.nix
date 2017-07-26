@@ -1,48 +1,44 @@
-{stdenv, fetchurl, fetchFromGitHub, callPackage, makeWrapper, doxygen
-, ffmpeg, python3Packages, qt55}:
+{ stdenv, fetchFromGitHub
+, doxygen, python3Packages, libopenshot
+, wrapGAppsHook, gtk3 }:
 
-with stdenv.lib;
-
-let
-  libopenshot = callPackage ./libopenshot.nix {};
-in
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   name = "openshot-qt-${version}";
-  version = "2.1.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "1cyr5m1n6qcb9bzkhh3v6ka91a6x9c50dl5j0ilrc8vj0mb43g8c";
+    sha256 = "10j3p10q66m9nhzcd8315q1yiqscidkjbm474mllw7c281vacvzw";
   };
 
-  buildInputs = [doxygen python3Packages.python makeWrapper ffmpeg];
+  nativeBuildInputs = [ doxygen wrapGAppsHook ];
 
-  propagatedBuildInputs = [
-    qt55.qtbase
-    qt55.qtmultimedia
-    libopenshot
-  ];
+  buildInputs = [ gtk3 ];
 
-  installPhase = ''
-    mkdir -p $(toPythonPath $out)
-    cp -r src/* $(toPythonPath $out)
-    mkdir -p $out/bin
-    echo "#/usr/bin/env sh" >$out/bin/openshot-qt
-    echo "exec ${python3Packages.python.interpreter} $(toPythonPath $out)/launch.py" >>$out/bin/openshot-qt
-    chmod +x $out/bin/openshot-qt
-    wrapProgram $out/bin/openshot-qt \
-      --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${libopenshot}):$(toPythonPath ${python3Packages.pyqt5}):$(toPythonPath ${python3Packages.sip}):$(toPythonPath ${python3Packages.httplib2}):$(toPythonPath ${python3Packages.pyzmq}):$PYTHONPATH"
+  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5 sip httplib2 pyzmq ];
+
+
+  preConfigure = ''
+    # tries to create caching directories during install
+    export HOME=$(mktemp -d)
   '';
 
   doCheck = false;
 
-  meta = {
-    homepage = "http://openshot.org/";
+  meta = with stdenv.lib; {
+    homepage = http://openshot.org/;
     description = "Free, open-source video editor";
-    license = licenses.gpl3Plus;
-    maintainers = [];
-    platforms = platforms.linux;
+    longDescription = ''
+      OpenShot Video Editor is a free, open-source video editor for Linux.
+      OpenShot can take your videos, photos, and music files and help you
+      create the film you have always dreamed of. Easily add sub-titles,
+      transitions, and effects, and then export your film to DVD, YouTube,
+      Vimeo, Xbox 360, and many other common formats.
+    '';
+    license = with licenses; gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; linux;
   };
 }

@@ -178,10 +178,10 @@ in
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
-        "services".source = pkgs.iana_etc + "/etc/services";
+        "services".source = pkgs.iana-etc + "/etc/services";
 
         # /etc/protocols: IP protocol numbers.
-        "protocols".source  = pkgs.iana_etc + "/etc/protocols";
+        "protocols".source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/rpc: RPC program numbers.
         "rpc".source = pkgs.glibc.out + "/etc/rpc";
@@ -222,13 +222,13 @@ in
             '' + cfg.extraResolvconfConf + ''
             '';
 
-      } // (optionalAttrs config.services.resolved.enable (
-        if dnsmasqResolve then {
-          "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        } else {
-          "resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-        }
-      ));
+      } // optionalAttrs config.services.resolved.enable {
+        # symlink the static version of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
+      } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      };
 
       networking.proxy.envVars =
         optionalAttrs (cfg.proxy.default != null) {

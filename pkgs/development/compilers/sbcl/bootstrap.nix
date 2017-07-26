@@ -8,14 +8,19 @@ let
       sha256 = "006pr88053wclvbjfjdypnbiw8wymbzdzi7a6kbkpdfn4zf5943j";
     };
     x86_64-linux = rec {
-      version = "1.2.15";
+      version = "1.3.16";
       system = "x86-64-linux";
-      sha256 = "1bpbfz9x2w73hy2kh8p0kd4m1p6pin90h2zycq52r3bbz8yv47aw";
+      sha256 = "0sq2dylwwyqfwkbdvcgqwz3vay9v895zpb0fyzsiwy31d1x9pr2s";
     };
     i686-linux = rec {
       version = "1.2.7";
       system = "x86-linux";
       sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
+    };
+    aarch64-linux = rec {
+      version = "1.3.16";
+      system = "arm64-linux";
+      sha256 = "0q1brz9c49xgdljzfx8rpxxnlwhadxkcy5kg0mcd9wnxygind1cl";
     };
     armv7l-linux = rec {
       version = "1.2.14";

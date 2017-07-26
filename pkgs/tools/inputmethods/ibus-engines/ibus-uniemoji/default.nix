@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with python3Packages; [ pyxdg python-Levenshtein ];
 
+  nativeBuildInputs = [ python3Packages.wrapPython ];
+
+  postFixup = ''
+    buildPythonPath $out
+    patchPythonScript $out/share/ibus-uniemoji/uniemoji.py
+  '';
+
   makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc"
                 "PYTHON=${python3Packages.python.interpreter}"
               ];

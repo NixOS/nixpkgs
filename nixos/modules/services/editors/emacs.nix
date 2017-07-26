@@ -21,7 +21,6 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Whether to enable a user service for the Emacs daemon. Use <literal>emacsclient</literal> to connect to the
         daemon. If <literal>true</literal>, <varname>services.emacs.install</varname> is
@@ -32,7 +31,6 @@ in {
     install = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         Whether to install a user service for the Emacs daemon. Once
         the service is started, use emacsclient to connect to the
@@ -57,7 +55,6 @@ in {
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      example = true;
       description = ''
         When enabled, configures emacsclient to be the default editor
         using the EDITOR environment variable.

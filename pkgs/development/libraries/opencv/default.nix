@@ -5,11 +5,12 @@
 , enableJPEG ? true, libjpeg
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
-, enableEXR ? true, openexr, ilmbase
+, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K ? true, jasper
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all
 , enableEigen ? false, eigen
+, darwin
 }:
 
 let
@@ -34,6 +35,11 @@ stdenv.mkDerivation rec {
       ./no-build-info.patch
     ];
 
+  # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
+  postPatch = ''
+    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+  '';
+
   outputs = [ "out" "dev" ];
 
   buildInputs =
@@ -48,6 +54,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa QTKit ])
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -76,11 +83,11 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric flosse];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

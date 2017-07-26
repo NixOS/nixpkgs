@@ -1,33 +1,26 @@
-{ fetchurl, stdenv, lib }:
+{ fetchurl, stdenv, lib
+, buildPlatform, hostPlatform
+}:
 
-assert !stdenv.isLinux || stdenv ? cross; # TODO: improve on cross
+assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
-  name = "libiconv-1.14";
+  name = "libiconv-${version}";
+  version = "1.15";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${name}.tar.gz";
-    sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
+    sha256 = "0y1ij745r4p48mxq84rax40p10ln7fc7m243p8k8sia519i3dxfc";
   };
 
-  patches = lib.optionals stdenv.isCygwin [
-    ./libiconv-1.14-reloc.patch
-    ./libiconv-1.14-wchar.patch
-  ];
-
   postPatch =
-    lib.optionalString ((stdenv ? cross && stdenv.cross.libc == "msvcrt") || stdenv.cc.nativeLibc)
+    lib.optionalString ((hostPlatform != buildPlatform && hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       '';
 
   configureFlags =
-  # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
-  # (Windows' linker would need to be used somehow to produce an actual
-  # DLL.)  Thus, build the static library too, and this is what Gettext
-  # will actually use.
-    lib.optional stdenv.isCygwin "--enable-static"
-    ++ lib.optional stdenv.isFreeBSD "--with-pic";
+    lib.optional stdenv.isFreeBSD "--with-pic";
 
   crossAttrs = {
     # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).

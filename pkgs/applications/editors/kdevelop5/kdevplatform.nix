@@ -1,30 +1,34 @@
-{ stdenv, fetchurl, cmake, gettext, pkgconfig, extra-cmake-modules, makeQtWrapper
-, boost, subversion, apr, aprutil
+{ stdenv, fetchurl, fetchpatch, cmake, gettext, pkgconfig, extra-cmake-modules
+, boost, subversion, apr, aprutil, kwindowsystem
 , qtscript, qtwebkit, grantlee, karchive, kconfig, kcoreaddons, kguiaddons, kiconthemes, ki18n
 , kitemmodels, kitemviews, kio, kparts, sonnet, kcmutils, knewstuff, knotifications
 , knotifyconfig, ktexteditor, threadweaver, kdeclarative, libkomparediff2 }:
 
 let
   pname = "kdevplatform";
-  version = "5.0.3";
-  dirVersion = "5.0.3";
+  version = "5.1.1";
 
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  
+
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/${dirVersion}/src/${name}.tar.xz";
-    sha256 = "643d1145e1948af221f9ae148d0a10809f3d89af4b97ff0d6c4d571004f46bd4";
+    url = "mirror://kde/stable/kdevelop/${version}/src/${name}.tar.xz";
+    sha256 = "3159440512b1373c1a4b35f401ba1f81217de9578372b45137af141eeda6e726";
   };
 
-  patches = [ ./kdevplatform-projectconfigskeleton.patch ];
+  patches = [
+    (fetchpatch {
+      name = "kdevplatform-project-selection.patch";
+      url = "https://cgit.kde.org/kdevplatform.git/patch/?id=da4c0fdfcf21dc2a8f48a2b1402213a32effd47a";
+      sha256 = "16ws8l6dciy2civjnsaj03ml2bzvg4a9g7gd4iyx4hprw65zrcxm";
+    })
+  ];
 
-  nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules makeQtWrapper ];
+  nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules ];
 
-  propagatedBuildInputs = [ ];
   buildInputs = [
-    boost subversion apr aprutil
+    boost subversion apr aprutil kwindowsystem
     qtscript qtwebkit grantlee karchive kconfig kcoreaddons kguiaddons kiconthemes
     ki18n kitemmodels kitemviews kio kparts sonnet kcmutils knewstuff
     knotifications knotifyconfig ktexteditor threadweaver kdeclarative

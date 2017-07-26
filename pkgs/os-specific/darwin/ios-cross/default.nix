@@ -6,6 +6,9 @@
 , stdenv
 , coreutils
 , gnugrep
+, buildPackages
+, hostPlatform
+, targetPlatform
 }:
 
 /* As of this writing, known-good prefix/arch/simulator triples:
@@ -15,21 +18,26 @@
  * x86_64-apple-darwin14  | x86_64 | true
  */
 
-{ prefix, arch, simulator ? false }: let
+let
+
+  prefix = targetPlatform.config;
+  inherit (targetPlatform) arch;
+  simulator = targetPlatform.isiPhoneSimulator or false;
+
   sdkType = if simulator then "Simulator" else "OS";
 
   sdkVer = "10.2";
 
   sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${sdkVer}.sdk";
 
-  /* TODO: Properly integrate with gcc-cross-wrapper */
-  wrapper = import ../../../build-support/cc-wrapper {
-    inherit stdenv coreutils gnugrep;
+in (import ../../../build-support/cc-wrapper {
+    inherit stdenv coreutils gnugrep runCommand buildPackages;
     nativeTools = false;
     nativeLibc = false;
     inherit binutils;
     libc = runCommand "empty-libc" {} "mkdir -p $out/{lib,include}";
-    cc = clang;
+    inherit (clang) cc;
+    inherit hostPlatform targetPlatform;
     extraBuildCommands = ''
       if ! [ -d ${sdk} ]; then
           echo "You must have ${sdkVer} of the iPhone${sdkType} sdk installed at ${sdk}" >&2
@@ -43,27 +51,6 @@
       # Purposefully overwrite libc-ldflags-before, cctools ld doesn't know dynamic-linker and cc-wrapper doesn't do cross-compilation well enough to adjust
       echo "-arch ${arch} -L${sdk}/usr/lib ${lib.optionalString simulator "-L${sdk}/usr/lib/system "}-i${if simulator then "os_simulator" else "phoneos"}_version_min 7.0.0" > $out/nix-support/libc-ldflags-before
     '';
-  };
-in {
-  cc = runCommand "${prefix}-cc" { passthru = { inherit sdkType sdkVer sdk; }; } ''
-    mkdir -p $out/bin
-    ln -sv ${wrapper}/bin/clang $out/bin/${prefix}-cc
-    mkdir -p $out/nix-support
-    echo ${llvm} > $out/nix-support/propagated-native-build-inputs
-    cat > $out/nix-support/setup-hook <<EOF
-    if test "\$dontSetConfigureCross" != "1"; then
-        configureFlags="\$configureFlags --host=${prefix}"
-    fi
-    EOF
-    fixupPhase
-  '';
-
-  binutils = runCommand "${prefix}-binutils" {} ''
-    mkdir -p $out/bin
-    ln -sv ${wrapper}/bin/ld $out/bin/${prefix}-ld
-    for prog in ar nm ranlib; do
-      ln -s ${binutils}/bin/$prog $out/bin/${prefix}-$prog
-    done
-    fixupPhase
-  '';
-}
+  }) // {
+    inherit sdkType sdkVer sdk;
+  }

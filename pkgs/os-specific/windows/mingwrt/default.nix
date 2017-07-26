@@ -1,4 +1,4 @@
-{stdenv, fetchurl, binutilsCross ? null, gccCross ? null, onlyHeaders ? false}:
+{stdenv, fetchurl, binutils ? null, gccCross ? null, onlyHeaders ? false}:
 
 let
   name = "mingwrt-3.20";
@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
     cp -R include $out
   '';
 } else {
-  buildInputs = [ gccCross binutilsCross ];
+  buildInputs = [ gccCross binutils ];
 
   crossConfig = gccCross.crossConfig;
 

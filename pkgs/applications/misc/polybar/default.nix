@@ -21,11 +21,11 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     name = "polybar-${version}";
-    version = "3.0.4";
+    version = "3.0.5";
     src = fetchgit {
       url = "https://github.com/jaagr/polybar";
-      rev = "1f31870d43f5cd87a5529a55b1d2d3e64105e0af";
-      sha256 = "1nhj4npqhs6zy161931sbdi52gz6163lik0wri9wr122sjf90jas";
+      rev = "4e2e2a7a5e0fe81669031ade0f60e1d379b6516d";
+      sha256 = "1iiks9q13pbkgbjhdns18a5zgr6d40ydcm4qn168m73fs6ivf1vn";
     };
 
     meta = with stdenv.lib; {

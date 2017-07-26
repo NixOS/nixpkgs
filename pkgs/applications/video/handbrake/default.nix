@@ -8,87 +8,100 @@
 # making licenses more clear and reducing compile time/install size.
 #
 # Only tested on Linux
-#
-# TODO: package and use libappindicator
 
-{ stdenv, config, fetchurl,
-  python2, pkgconfig, yasm,
-  autoconf, automake, libtool, m4,
-  libass, libsamplerate, fribidi, libxml2, bzip2,
-  libogg, libtheora, libvorbis, libdvdcss, a52dec, fdk_aac,
+{ stdenv, lib, fetchFromGitHub,
+  python2, pkgconfig, yasm, harfbuzz, zlib,
+  autoconf, automake, cmake, libtool, m4, jansson,
+  libass, libiconv, libsamplerate, fribidi, libxml2, bzip2,
+  libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec, fdk_aac,
   lame, ffmpeg, libdvdread, libdvdnav, libbluray,
   mp4v2, mpeg2dec, x264, x265, libmkv,
   fontconfig, freetype, hicolor_icon_theme,
   glib, gtk3, intltool, libnotify,
   gst_all_1, dbus_glib, udev, libgudev, libvpx,
-  wrapGAppsHook,
-  useGtk ? true
+  useGtk ? true, wrapGAppsHook ? null, libappindicator-gtk3 ? null
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.10.5";
+  version = "1.0.7";
   name = "handbrake-${version}";
 
-  buildInputsX = stdenv.lib.optionals useGtk [
-    glib gtk3 intltool libnotify
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus_glib udev
-    libgudev
-    wrapGAppsHook
-  ];
-
-  nativeBuildInputs = [ python2 pkgconfig yasm autoconf automake libtool m4 ];
-  buildInputs = [
-    fribidi fontconfig freetype hicolor_icon_theme
-    libass libsamplerate libxml2 bzip2
-    libogg libtheora libvorbis libdvdcss a52dec libmkv fdk_aac
-    lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
-  ] ++ buildInputsX;
-
-  src = fetchurl {
-    url = "http://download.handbrake.fr/releases/${version}/HandBrake-${version}.tar.bz2";
-    sha256 = "1w720y3bplkz187wgvy4a4xm0vpppg45mlni55l6yi8v2bfk14pv";
+  src = fetchFromGitHub {
+    owner  = "HandBrake";
+    repo   = "HandBrake";
+    rev    = "${version}";
+    sha256 = "1pdrvicq40s8n23n6k8k097kkjs3ah5wbz1mvxnfy3h2mh5rwk57";
   };
 
+  nativeBuildInputs = [
+    cmake python2 pkgconfig yasm autoconf automake libtool m4
+  ] ++ (lib.optionals useGtk [
+    intltool wrapGAppsHook
+  ]);
+
+  buildInputs = [
+    fribidi fontconfig freetype jansson zlib
+    libass libiconv libsamplerate libxml2 bzip2
+    libogg libopus libtheora libvorbis libdvdcss a52dec libmkv fdk_aac
+    lame ffmpeg libdvdread libdvdnav libbluray mp4v2 mpeg2dec x264 x265 libvpx
+  ] ++ (lib.optionals useGtk [
+    glib gtk3 libappindicator-gtk3 libnotify
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus_glib udev
+    libgudev
+  ]);
+
+  dontUseCmakeConfigure = true;
+
+  enableParallelBuilding = true;
+
   preConfigure = ''
-    # Fake wget to prevent downloads
-    mkdir wget
-    echo "#!/bin/sh" > wget/wget
-    echo "echo ===== Not fetching \$*" >> wget/wget
-    echo "exit 1" >> wget/wget
-    chmod +x wget/wget
-    export PATH=$PATH:$PWD/wget
+    patchShebangs scripts
+
+    echo 'TAG=${version}' > version.txt
+
+    # `configure` errors out when trying to read the current year which is too low
+    substituteInPlace make/configure.py \
+      --replace developer release \
+      --replace 'repo.date.strftime("%Y-%m-%d %H:%M:%S")' '""'
+
+    substituteInPlace libhb/module.defs \
+      --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
 
     # Force using nixpkgs dependencies
     sed -i '/MODULES += contrib/d' make/include/main.defs
     sed -i '/PKG_CONFIG_PATH=/d' gtk/module.rules
-
-    patch -p1 -R < ${./handbrake-0.10.3-nolibav.patch}
   '';
 
   configureFlags = [
+    "--disable-df-fetch"
+    "--disable-df-verify"
     "--enable-fdk-aac"
     (if useGtk then "--disable-gtk-update-checks" else "--disable-gtk")
+  ];
+
+  NIX_LDFLAGS = [
+    "-lx265"
   ];
 
   preBuild = ''
     cd build
   '';
 
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ x265 ];
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}")
+  # icon-theme.cache belongs in the icon theme, not in individual packages
+  postInstall = ''
+    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://handbrake.fr/;
     description = "A tool for ripping DVDs into video files";
     longDescription = ''
       Handbrake is a versatile transcoding DVD ripper. This package
       provides the cli HandbrakeCLI and the GTK+ version ghb.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.wmertens ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ wmertens ];
     # Not tested on anything else
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

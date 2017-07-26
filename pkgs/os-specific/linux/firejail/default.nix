@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.44.8";
+    version="0.9.44.10";
     name="${baseName}-${version}";
-    hash="0w87n5qzvylbjipaf45sw65gg4rpqcbi32zw9cs1jbfvf4bikzmr";
-    url="https://netix.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.44.8.tar.xz";
-    sha256="0w87n5qzvylbjipaf45sw65gg4rpqcbi32zw9cs1jbfvf4bikzmr";
+    hash="19wln3h54wcscqgcmkm8sprdh7vrn5k91rr0hagv055y1i52c7mj";
+    url="https://netix.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.44.10.tar.xz";
+    sha256="19wln3h54wcscqgcmkm8sprdh7vrn5k91rr0hagv055y1i52c7mj";
   };
   buildInputs = [
     which
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   preBuild = ''
-    sed -e "s@/etc/@$out/etc/@g" -i Makefile
+    sed -e "s@/etc/@$out/etc/@g" -e "/chmod u+s/d" -i Makefile
   '';
 
   meta = {

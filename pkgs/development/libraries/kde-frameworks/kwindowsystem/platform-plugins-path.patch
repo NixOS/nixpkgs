@@ -1,0 +1,22 @@
+Index: kwindowsystem-5.32.0/src/pluginwrapper.cpp
+===================================================================
+--- kwindowsystem-5.32.0.orig/src/pluginwrapper.cpp
++++ kwindowsystem-5.32.0/src/pluginwrapper.cpp
+@@ -37,14 +37,9 @@ Q_GLOBAL_STATIC(KWindowSystemPluginWrapp
+ static QStringList pluginCandidates()
+ {
+     QStringList ret;
+-    foreach (const QString &path, QCoreApplication::libraryPaths()) {
+-        QDir pluginDir(path + QLatin1Literal("/kf5/org.kde.kwindowsystem.platforms"));
+-        if (!pluginDir.exists()) {
+-            continue;
+-        }
+-        foreach (const QString &entry, pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot)) {
+-            ret << pluginDir.absoluteFilePath(entry);
+-        }
++    QDir pluginDir(QLatin1String(NIXPKGS_QT_PLUGIN_PATH) + QLatin1Literal("/kf5/org.kde.kwindowsystem.platforms"));
++    foreach (const QString &entry, pluginDir.entryList(QDir::Files | QDir::NoDotAndDotDot)) {
++        ret << pluginDir.absoluteFilePath(entry);
+     }
+     return ret;
+ }

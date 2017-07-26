@@ -1,36 +1,38 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, makeWrapper
-, libxml2, gnutls, devicemapper, perl, python2
+, libxml2, gnutls, devicemapper, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
-, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
+, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs
+, curl, libiconv, gmp, xen, zfs, parted
 }:
+
+with stdenv.lib;
+
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.0.0";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "0php6wxjcilpir0miwg06yd2ha25zi9fv2apvvgv5c8k1svjd7cx";
+    sha256 = "05mm4xdw6g960rwvc9189nhxpm1vrilnmpl4h4m1lha11pivlqr9";
   };
 
   patches = [ ./build-on-bsd.patch ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
-    libxml2 gnutls perl python2 readline
-    gettext libtasn1 libgcrypt yajl
+    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
-    libnl numad numactl xen zfs
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isLinux [
+    libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
+    libapparmor libcap_ng numactl xen attr parted
+  ] ++ optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
+  preConfigure = optionalString stdenv.isLinux ''
     PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
     substituteInPlace configure \
       --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
@@ -48,13 +50,18 @@ stdenv.mkDerivation rec {
     "--with-test"
     "--with-esx"
     "--with-remote"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
+    "--with-attr"
+    "--with-apparmor"
+    "--with-secdriver-apparmor"
     "--with-numad"
     "--with-macvtap"
     "--with-virtualport"
-    "--with-init-script=redhat"
+    "--with-init-script=systemd+redhat"
+    "--with-storage-disk"
+  ] ++ optionals (stdenv.isLinux && zfs != null) [
     "--with-storage-zfs"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
 
@@ -66,17 +73,21 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i 's/ON_SHUTDOWN=suspend/ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}/' $out/libexec/libvirt-guests.sh
     substituteInPlace $out/libexec/libvirt-guests.sh \
-      --replace "$out/bin" "${gettext}/bin"
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+      --replace "$out/bin" "${gettext}/bin" \
+      --replace "lock/subsys" "lock"
+    sed -e "/gettext\.sh/a \\\n# Added in nixpkgs:\ngettext() { \"${gettext}/bin/gettext\" \"\$@\"; }" \
+        -i "$out/libexec/libvirt-guests.sh"
+  '' + optionalString stdenv.isLinux ''
+    rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ iptables iproute pmutils numad numactl ]}
+      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
   '';
 
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://libvirt.org/;
     repositories.git = git://libvirt.org/libvirt.git;
     description = ''

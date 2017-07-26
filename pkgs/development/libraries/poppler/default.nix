@@ -1,16 +1,17 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, withData ? false, poppler_data
+, withData ? true, poppler_data
 , qt4Support ? false, qt4 ? null
 , qt5Support ? false, qtbase ? null
 , introspectionSupport ? false, gobjectIntrospection ? null
 , utils ? false
 , minimal ? false, suffix ? "glib"
+, hostPlatform
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.50.0";
-  sha256 = "0dmwnh59m75vhii6dw63x8l0qa0ha733pb8bdqzr7lw9nwc37jf9";
+  version = "0.56.0";
+  sha256 = "0wviayidfv2ix2ql0d4nl9r1ia6qi5kc1nybd9vjx27dk7gvm7c6";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs.postPatch =
     # there are tests using `strXXX_s` functions that are missing apparently
-    stdenv.lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+    stdenv.lib.optionalString (hostPlatform.libc or null == "msvcrt")
       "sed '/^SUBDIRS =/s/ test / /' -i Makefile.in";
 
   meta = with lib; {

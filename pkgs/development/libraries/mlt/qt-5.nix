@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     ladspa-sdk
   ];
 
+  outputs = [ "out" "dev" ];
+
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
@@ -31,6 +33,16 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
+
+    # Remove an unnecessary reference to movit.dev.
+    s=${movit.dev}/include
+    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
+    sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
+
+    # Remove an unnecessary reference to movit.dev.
+    s=${qtbase.dev}/include
+    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
+    sed -i $out/lib/mlt/libmltqt.so -e "s|$s|$t|g"
   '';
 
   passthru = {

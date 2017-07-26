@@ -48,6 +48,7 @@ in stdenv.mkDerivation (rec {
   configureFlags = [
     "CC=${stdenv.cc}/bin/cc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--datadir=$doc/share/doc/ghc"
   ] ++ stdenv.lib.optional (! enableIntegerSimple) [
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
@@ -74,6 +75,8 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
+  outputs = [ "out" "doc" ];
+
   passthru = {
     inherit bootPkgs;
   } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
@@ -98,26 +101,26 @@ in stdenv.mkDerivation (rec {
   '';
 
   configureFlags = [
-    "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutilsCross}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutilsCross}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutilsCross}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
+    "CC=${stdenv.cc}/bin/${cross.config}-cc"
+    "LD=${stdenv.cc}/bin/${cross.config}-ld"
+    "AR=${stdenv.cc}/bin/${cross.config}-ar"
+    "NM=${stdenv.cc}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.cc}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
+  buildInputs = commonBuildInputs;
 
-  dontSetConfigureCross = true;
+  configurePlatforms = [];
 
   passthru = {
     inherit bootPkgs cross;
 
-    cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
+    cc = "${stdenv.cc}/bin/${cross.config}-cc";
 
-    ld = "${stdenv.binutilsCross}/bin/${cross.config}-ld";
+    ld = "${stdenv.cc}/bin/${cross.config}-ld";
   };
 })

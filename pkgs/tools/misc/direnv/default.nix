@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, go, bash }:
+{ stdenv, fetchFromGitHub, go, bash, writeText}:
 
 stdenv.mkDerivation rec {
   name = "direnv-${version}";
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     make install DESTDIR=$out
+    mkdir -p $out/share/fish/vendor_conf.d
+    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
   '';
 
   meta = with stdenv.lib; {

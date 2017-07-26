@@ -82,6 +82,17 @@ let
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
       ''}
 
+      # Copy secrets if needed.
+      ${optionalString (!config.boot.loader.supportsInitrdSecrets)
+          (concatStringsSep "\n" (mapAttrsToList (dest: source:
+             let source' = if source == null then dest else source; in
+               ''
+                  mkdir -p $(dirname "$out/secrets/${dest}")
+                  cp -a ${source'} "$out/secrets/${dest}"
+                ''
+          ) config.boot.initrd.secrets))
+       }
+
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
@@ -124,7 +135,7 @@ let
       $out/bin/ash -c 'echo hello world' | grep "hello world"
       export LD_LIBRARY_PATH=$out/lib
       $out/bin/mount --help 2>&1 | grep -q "BusyBox"
-      $out/bin/blkid --help 2>&1 | grep -q 'libblkid'
+      $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
@@ -156,7 +167,7 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
-            --replace /bin/sh ${extraUtils}/bin/sh \
+            --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
             --replace /usr/bin/readlink ${extraUtils}/bin/readlink \
             --replace /usr/bin/basename ${extraUtils}/bin/basename \
             --replace ${udev}/bin/udevadm ${extraUtils}/bin/udevadm
@@ -241,6 +252,52 @@ let
         }
       ];
   };
+
+  # Script to add secret files to the initrd at bootloader update time
+  initialRamdiskSecretAppender =
+    pkgs.writeScriptBin "append-initrd-secrets"
+      ''
+        #!${pkgs.bash}/bin/bash -e
+        function usage {
+          echo "USAGE: $0 INITRD_FILE" >&2
+          echo "Appends this configuration's secrets to INITRD_FILE" >&2
+        }
+
+        if [ $# -ne 1 ]; then
+          usage
+          exit 1
+        fi
+
+        if [ "$1"x = "--helpx" ]; then
+          usage
+          exit 0
+        fi
+
+        ${lib.optionalString (config.boot.initrd.secrets == {})
+            "exit 0"}
+
+        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+
+        function cleanup {
+          if [ -n "$tmp" -a -d "$tmp" ]; then
+            rm -fR "$tmp"
+          fi
+        }
+        trap cleanup EXIT
+
+        tmp=$(mktemp -d initrd-secrets.XXXXXXXXXX)
+
+        ${lib.concatStringsSep "\n" (mapAttrsToList (dest: source:
+            let source' = if source == null then dest else toString source; in
+              ''
+                mkdir -p $(dirname "$tmp/${dest}")
+                cp -a ${source'} "$tmp/${dest}"
+              ''
+          ) config.boot.initrd.secrets)
+         }
+
+        (cd "$tmp" && find . | cpio -H newc -o) | gzip >>"$1"
+      '';
 
 in
 
@@ -370,12 +427,43 @@ in
       example = "xz";
     };
 
+    boot.initrd.secrets = mkOption
+      { internal = true;
+        default = {};
+        type = types.attrsOf (types.nullOr types.path);
+        description =
+          ''
+            Secrets to append to the initrd. The attribute name is the
+            path the secret should have inside the initrd, the value
+            is the path it should be copied from (or null for the same
+            path inside and out).
+          '';
+        example = literalExample
+          ''
+            { "/etc/dropbear/dropbear_rsa_host_key" =
+                ./secret-dropbear-key;
+            }
+          '';
+      };
+
     boot.initrd.supportedFilesystems = mkOption {
       default = [ ];
       example = [ "btrfs" ];
       type = types.listOf types.str;
       description = "Names of supported filesystem types in the initial ramdisk.";
     };
+
+    boot.loader.supportsInitrdSecrets = mkOption
+      { internal = true;
+        default = false;
+        type = types.bool;
+        description =
+          ''
+            Whether the bootloader setup runs append-initrd-secrets.
+            If not, any needed secrets must be copied into the initrd
+            and thus added to the store.
+          '';
+      };
 
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
@@ -404,9 +492,8 @@ in
       }
     ];
 
-    system.build.bootStage1 = bootStage1;
-    system.build.initialRamdisk = initialRamdisk;
-    system.build.extraUtils = extraUtils;
+    system.build =
+      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "TMPFS")

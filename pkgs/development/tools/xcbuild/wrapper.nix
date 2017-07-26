@@ -50,10 +50,10 @@ stdenv.mkDerivation {
     ln -s ${xcbuild}/Library/Xcode/Specifications $out/Library/Xcode/Specifications
 
     mkdir -p $out/Platforms/
-    ln -s ${platform} $out/Platforms/
+    ln -s ${platform} $out/Platforms/nixpkgs.platform
 
     mkdir -p $out/Toolchains/
-    ln -s ${toolchain} $out/Toolchains/
+    ln -s ${toolchain} $out/Toolchains/nixpkgs.xctoolchain
 
     wrapProgram $out/bin/xcodebuild \
       --add-flags "-xcconfig ${xcconfig}" \

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nasm, perl, python, libuuid, mtools, makeWrapper }:
+{ stdenv, fetchFromGitHub, fetchurl, nasm, perl, python, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "syslinux-2015-11-09";
@@ -10,7 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "0wk3r5ki4lc334f9jpml07wpl8d0bnxi9h1l4h4fyf9a0d7n4kmw";
   };
 
-  patches = [ ./perl-deps.patch ];
+  patches = [
+    ./perl-deps.patch
+    (fetchurl {
+      # ldlinux.elf: Not enough room for program headers, try linking with -N
+      name = "not-enough-room.patch";
+      url = "https://anonscm.debian.org/cgit/collab-maint/syslinux.git/plain/"
+          + "debian/patches/0014_fix_ftbfs_no_dynamic_linker.patch?id=a556ad7";
+      sha256 = "0ijqjsjmnphmvsx0z6ppnajsfv6xh6crshy44i2a5klxw4nlvrsw";
+    })
+  ];
 
   nativeBuildInputs = [ nasm perl python ];
   buildInputs = [ libuuid makeWrapper ];

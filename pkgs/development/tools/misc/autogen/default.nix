@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "autogen-${version}";
-  version = "5.18.7";
+  version = "5.18.12";
 
   src = fetchurl {
-    url = "mirror://gnu/autogen/autogen-${version}.tar.xz";
-    sha256 = "01d4m8ckww12sy50vgyxlnz83z9dxqpyqp153cscncc9w6jq19d7";
+    url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.xz";
+    sha256 = "1n5zq4872sakvz9c7ncsdcfp0z8rsybsxvbmhkpbd19ii0pacfxy";
   };
 
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];

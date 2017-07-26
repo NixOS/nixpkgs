@@ -16,7 +16,6 @@
 
 <section><title>Installing a split package</title>
   <para>When installing a package via <varname>systemPackages</varname> or <command>nix-env</command> you have several options:</para>
-  <warning><para>Currently <command>nix-env</command> almost always installs all outputs until https://github.com/NixOS/nix/pull/815 gets merged.</para></warning>
   <itemizedlist>
     <listitem><para>You can install particular outputs explicitly, as each is available in the Nix language as an attribute of the package.  The <varname>outputs</varname> attribute contains a list of output names.</para></listitem>
     <listitem><para>You can let it use the default outputs.  These are handled by <varname>meta.outputsToInstall</varname> attribute that contains a list of output names.</para>

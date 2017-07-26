@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
 
     description = "A library for reading and editing the meta-data of several popular audio formats";
     inherit (cmake.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

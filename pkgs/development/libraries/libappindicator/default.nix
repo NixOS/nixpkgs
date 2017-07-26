@@ -27,12 +27,17 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf ];
 
+  propagatedBuildInputs =
+    if gtkVersion == "2"
+    then [ gtk2 libdbusmenu-gtk2 ]
+    else [ gtk3 libdbusmenu-gtk3 ];
+
   buildInputs = [
     glib dbus_glib
     python pygobject2 pygtk gobjectIntrospection vala_0_23
   ] ++ (if gtkVersion == "2"
-    then [ gtk2 libindicator-gtk2 libdbusmenu-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
-    else [ gtk3 libindicator-gtk3 libdbusmenu-gtk3 ]);
+    then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
+    else [ libindicator-gtk3 ]);
 
   postPatch = ''
     substituteInPlace configure.ac \

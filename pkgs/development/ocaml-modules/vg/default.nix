@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg
 , uchar, result, gg, uutf, otfm, js_of_ocaml,
   pdfBackend ? true, # depends on uutf and otfm
   htmlcBackend ? true # depends on js_of_ocaml
 }:
+
+with lib;
 
 let
   inherit (stdenv.lib) optionals versionAtLeast;
@@ -10,7 +12,6 @@ let
   pname = "vg";
   version = "0.9.0";
   webpage = "http://erratique.ch/software/${pname}";
-  sob = b: if b then "true" else "false";
 in
 
 assert versionAtLeast ocaml.version "4.02.0";
@@ -35,13 +36,14 @@ stdenv.mkDerivation rec {
   unpackCmd = "tar xjf $src";
 
   buildPhase = topkg.buildPhase
-  + " --with-uutf ${sob pdfBackend} --with-otfm ${sob pdfBackend}"
-  + " --with-js_of_ocaml ${sob htmlcBackend}"
-  + " --with-cairo2 false";
+    + " --with-uutf ${boolToString pdfBackend}"
+    + " --with-otfm ${boolToString pdfBackend}"
+    + " --with-js_of_ocaml ${boolToString htmlcBackend}"
+    + " --with-cairo2 false";
 
   inherit (topkg) installPhase;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Declarative 2D vector graphics for OCaml";
     longDescription = ''
     Vg is an OCaml module for declarative 2D vector graphics. In Vg, images

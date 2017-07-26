@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ setupHook perl pkgconfig gettext ];
 
-  patches = [ ./2.0-immodules.cache.patch ];
+  patches = [ ./2.0-immodules.cache.patch ./gtk2-theme-paths.patch ];
 
   propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk_pixbuf atk ]

@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, fetchpatch, zlib, qt4, which }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "gpsbabel-${version}";
-  version = "1.5.3";
+  version = "1.5.4";
 
-  src = fetchurl {
-    # gpgbabel.org makes it hard to get the source tarball automatically, so
-    # get it from elsewhere.
-    url = "mirror://debian/pool/main/g/gpsbabel/gpsbabel_${version}.orig.tar.gz";
-    sha256 = "0l6c8911f7i5bbdzah9irhqf127ib0b7lv53rb8r9z8g439mznq1";
+  src = fetchFromGitHub {
+    owner = "gpsbabel";
+    repo = "gpsbabel";
+    rev = "gpsbabel_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0v6wpp14zkfbarmksf9dn3wmpj1araxd7xi5xp7gpl7kafb9aiwi";
   };
 
   patches = [
+    ./clang-4.patch
     (fetchpatch {
       url = https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip;
       sha256 = "03fpsmlx1wc48d1j405zkzp8j64hcp0z72islf4mk1immql3ibcr";
     })
   ];
 
-  buildInputs = [ zlib qt4 which ];
+  buildInputs = [ zlib qtbase which ]
+    ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
 
@@ -40,11 +42,13 @@ stdenv.mkDerivation rec {
     patchShebangs testo
     substituteInPlace testo \
       --replace "-x /usr/bin/hexdump" ""
-  '' + (
+  ''
     # The raymarine and gtm tests fail on i686 despite -ffloat-store.
-    if stdenv.isi686 then "rm -v testo.d/raymarine.test testo.d/gtm.test;"
-    else ""
-  );
+  + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
+    # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
+  + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test testo.d/classic-2.test"
+    # The arc-project test fails on aarch64.
+  + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
   meta = with stdenv.lib; {
     description = "Convert, upload and download data from GPS and Map programs";

@@ -5,6 +5,10 @@
 
 let
   withSpotify = config.clementine.spotify or false;
+  withIpod = config.clementine.ipod or false;
+  withMTP = config.clementine.mtp or true;
+  withCD = config.clementine.cd or true;
+  withCloud = config.clementine.cloud or true;
 
   version = "1.2.3";
 
@@ -30,21 +34,19 @@ let
     gst-plugins-base
     gstreamer
     gvfs
-    libcdio
-    libgpod
     liblastfm
-    libmtp
-    libplist
     pkgconfig
     protobuf
     qca2
     qjson
     qt4
-    sparsehash
     sqlite
     taglib
-    usbmuxd
-  ];
+  ]
+  ++ stdenv.lib.optionals (withIpod) [libgpod libplist usbmuxd]
+  ++ stdenv.lib.optionals (withMTP) [libmtp]
+  ++ stdenv.lib.optionals (withCD) [libcdio]
+  ++ stdenv.lib.optionals (withCloud) [sparsehash];
 
   free = stdenv.mkDerivation {
     name = "clementine-free-${version}";

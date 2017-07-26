@@ -43,11 +43,11 @@ let
 
 
   # These lists are taken from the Makefile.
-  scintilla_tgz  = "scintilla367.tgz";
+  scintilla_tgz  = "scintilla373.tgz";
   tre_zip        = "cdce45e8dd7a3b36954022b4a4d3570e1ac5a4f8.zip";
   scinterm_zip   = "scinterm_1.8.zip";
-  scintillua_zip = "scintillua_3.6.7-1.zip";
-  lua_tgz        = "lua-5.3.3.tar.gz";
+  scintillua_zip = "33298b6cbce3.zip";
+  lua_tgz        = "lua-5.3.4.tar.gz";
   lpeg_tgz       = "lpeg-1.0.0.tar.gz";
   lfs_zip        = "v_1_6_3.zip";
   lspawn_zip     = "lspawn_1.5.zip";
@@ -60,7 +60,8 @@ let
 
   scinterm_url   = "http://foicica.com/scinterm/download/" + scinterm_zip;
   tre_url        = "https://github.com/laurikari/tre/archive/" + tre_zip;
-  scintillua_url = "http://foicica.com/scintillua/download/" + scintillua_zip;
+  #scintillua_url = "http://foicica.com/scintillua/download/" + scintillua_zip;
+  scintillua_url = "http://foicica.com/hg/scintillua/archive/" + scintillua_zip;
   gtdialog_url   = "http://foicica.com/gtdialog/download/" + gtdialog_zip;
   lspawn_url     = "http://foicica.com/lspawn/download/" + lspawn_zip;
 
@@ -75,11 +76,11 @@ let
   termkey_url    = "http://www.leonerd.org.uk/code/libtermkey/" + termkey_tgz;
 
 
-  get_scintilla   = get_url scintilla_url   "0rh1xgd06qcnj4l0vi8g4i94vi63s76366b8hhqky3iqdjgwsxpi";
+  get_scintilla   = get_url scintilla_url   "0rkczxzj6bqxks4jcbxbyrarjhfjh95nwxxiqprfid1kaamgkfm2";
   get_tre         = get_url tre_url         "0mw8npwk5nnhc33352j4akannhpx77kqvfam8jdq1n4yf8js1gi7";
   get_scinterm    = get_url scinterm_url    "02ax6cjpxylfz7iqp1cjmsl323in066a38yklmsyzdl3w7761nxi";
-  get_scintillua  = get_url scintillua_url  "0fhyjrkfj2cvxnql65687nx1d0sfyg5lbrxmylyzhnfh4s4jnwmq";
-  get_lua         = get_url lua_url         "18mcfbbmjyp8f2l9yy7n6dzk066nq6man0kpwly4bppphilc04si";
+  get_scintillua  = get_url scintillua_url  "1kx113dpjby1p9jcsqlnlzwj01z94f9szw4b38077qav3bj4lk6g";
+  get_lua         = get_url lua_url         "0320a8dg3aci4hxla380dx1ifkw8gj4gbw5c4dz41g1kh98sm0gn";
   get_lpeg        = get_url lpeg_url        "13mz18s359wlkwm9d9iqlyyrrwjc6iqfpa99ai0icam2b3khl68h";
   get_lfs         = get_url_zip lfs_url     "1hxcnqj53540ysyw8fzax7f09pl98b8f55s712gsglcdxp2g2pri";
   get_lspawn      = get_url lspawn_url      "09c6v9irblay2kv1n7i59pyj9g4xb43c6rfa7ba5m353lymcwwqi";
@@ -87,7 +88,7 @@ let
   get_libluajit   = get_url libluajit_url   "1nhvcdjpqrhd5qbihdm3bxpw84irfvnw2vmfqnsy253ay3dxzrgy";
   get_gtdialog    = get_url gtdialog_url    "0nvcldyhj8abr8jny9pbyfjwg8qfp9f2h508vjmrvr5c5fqdbbm0";
   get_cdk         = get_url cdk_url         "0j74l874y33i26y5kjg3pf1vswyjif8k93pqhi0iqykpbxfsg382";
-  get_bombay      = get_url_zip bombay_url  "05fnh1imxdb4sb076fzqywqszp31whdbkzmpkqxc8q2r1m5vj3hg"
+  get_bombay      = get_url_zip bombay_url  "0illabngrrxidkprgz268wgjqknrds34nhm6hav95xc1nmsdr6jj"
     + "mv tip.zip bombay.zip\n";
   get_termkey     = get_url termkey_url     "12gkrv1ldwk945qbpprnyawh0jz7rmqh18fyndbxiajyxmj97538";
 
@@ -108,7 +109,7 @@ let
     + get_termkey;
 in
 stdenv.mkDerivation rec {
-  version = "9.0";
+  version = "9.3";
   name = "textadept-${version}";
 
   buildInputs = [
@@ -118,7 +119,7 @@ stdenv.mkDerivation rec {
   src = fetchhg {
     url = http://foicica.com/hg/textadept;
     rev = "textadept_${version}";
-    sha256 = "1fkxblf2db4i0kbfww94xwps7nbn88qc4fwghrm4dcszcq32jlfi";
+    sha256 = "18x79pazm86agn1khdxfnf87la6kli3xasi7dcjx7l6yyz19y14d";
   };
 
   preConfigure = ''

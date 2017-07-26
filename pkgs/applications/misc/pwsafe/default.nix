@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, wxGTK, libuuid, xercesc, zip , libXt, libXtst
-, libXi, xextproto, gettext, perl, pkgconfig, libyubikey, ykpers
+, libXi, xextproto, gettext, perl, pkgconfig, libyubikey, yubikey-personalization
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   makefile = "Makefile.linux";
-  makeFlags = "YBPERS_LIBPATH=${ykpers}/lib";
+  makeFlags = "YBPERS_LIBPATH=${yubikey-personalization}/lib";
 
   buildFlags = "unicoderelease";
   buildInputs = [ wxGTK libuuid gettext perl zip
                   xercesc libXt libXtst libXi xextproto
-                  pkgconfig libyubikey ykpers ];
+                  pkgconfig libyubikey yubikey-personalization ];
 
   postPatch = ''
     # Fix perl scripts used during the build.

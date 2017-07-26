@@ -40,13 +40,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A CAS for polynomial computations";
-    maintainers = with maintainers;
-      [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
+    platforms = subtractLists platforms.i686 platforms.linux;
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
     homepage = "http://www.singular.uni-kl.de/index.php";
     downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";

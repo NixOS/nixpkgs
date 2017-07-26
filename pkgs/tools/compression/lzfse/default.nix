@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lzfse-${version}";
-  version = "2016-06-21";
+  version = "2017-03-08";
 
   src = fetchFromGitHub {
     owner = "lzfse";
     repo = "lzfse";
-    rev = "45912281e3945a09c6ebfa8c6629f6906a99fc29";
-    sha256 = "1wbh3x874fjn548g1hw4bm7lkk60vlvy8ph0wsjkzcx8873hwj7h";
+    rev = "88e2d27";
+    sha256 = "1mfh6y6vpvxsdwmqmfbkqkwvxc0pz2dqqc72c6fk9sbsrxxaghd5";
   };
 
   makeFlags = [ "INSTALL_PREFIX=$(out)" ];

@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     description = "Efficient Scheme compiler";
     homepage    = http://www-sop.inria.fr/indes/fp/Bigloo/;

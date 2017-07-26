@@ -14,15 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "1i8bwi83qcqvi8zrkjn4mp2v8v7y11fd520wpg2jgy5hqyz34chg";
   };
 
-  buildInputs = optionals (stdenv.isDarwin) [ pkgs.makeWrapper ];
+  buildInputs = [ pkgs.makeWrapper ];
 
   preBuild = ''
     makeFlagsArray+=(prefix="$out")
   '';
 
-  postInstall = optional (stdenv.isDarwin) ''
+  postInstall = ''
     wrapProgram $out/bin/git-flow \
-      --set FLAGS_GETOPT_CMD ${pkgs.getopt}/bin/getopt
+      --set FLAGS_GETOPT_CMD ${pkgs.getopt}/bin/getopt \
+      --suffix PATH : ${pkgs.git}/bin
   '';
 
   meta = with stdenv.lib; {

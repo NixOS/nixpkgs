@@ -79,10 +79,11 @@
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term><varname>emacs24Macport</varname></term>
+            <term><varname>emacsMacport</varname></term>
+            <term><varname>emacs25Macport</varname></term>
             <listitem>
               <para>
-                Emacs 24 with the "Mac port" patches, providing a more
+                Emacs 25 with the "Mac port" patches, providing a more
                 native look and feel under OS X.
               </para>
             </listitem>

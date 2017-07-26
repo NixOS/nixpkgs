@@ -1,0 +1,41 @@
+From bcc92d75df0274b9593ebd097fcae60494e3bffc Mon Sep 17 00:00:00 2001
+From: Asiri Rathnayake <asiri.rathnayake@arm.com>
+Date: Thu, 26 Jan 2017 10:40:17 +0000
+Subject: [PATCH] Fix chromium build (libcxx)
+
+Remove the reference to pthread_mach_thread_np() in libcxx headers.
+
+git-svn-id: https://llvm.org/svn/llvm-project/libcxx/trunk@293167 91177308-0d34-0410-b5e6-96231b3b80d8
+---
+ include/__threading_support | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/include/__threading_support b/include/__threading_support
+index 13ab769..dfe7fe1 100644
+--- a/include/__threading_support
++++ b/include/__threading_support
+@@ -149,11 +149,6 @@ int __libcpp_execute_once(__libcpp_exec_once_flag *flag,
+                           void (*init_routine)(void));
+ 
+ // Thread id
+-#if defined(__APPLE__) && !defined(__arm__)
+-_LIBCPP_THREAD_ABI_VISIBILITY
+-mach_port_t __libcpp_thread_get_port();
+-#endif
+-
+ _LIBCPP_THREAD_ABI_VISIBILITY
+ bool __libcpp_thread_id_equal(__libcpp_thread_id t1, __libcpp_thread_id t2);
+ 
+@@ -297,12 +292,6 @@ int __libcpp_execute_once(__libcpp_exec_once_flag *flag,
+ }
+ 
+ // Thread id
+-#if defined(__APPLE__) && !defined(__arm__)
+-mach_port_t __libcpp_thread_get_port() {
+-    return pthread_mach_thread_np(pthread_self());
+-}
+-#endif
+-
+ // Returns non-zero if the thread ids are equal, otherwise 0
+ bool __libcpp_thread_id_equal(__libcpp_thread_id t1, __libcpp_thread_id t2)
+ {

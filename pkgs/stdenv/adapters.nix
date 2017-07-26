@@ -56,12 +56,34 @@ rec {
 
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
-  makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv // {
+  makeStdenvCross = { stdenv
+                    , cc
+                    , buildPlatform, hostPlatform, targetPlatform
+                    } @ overrideArgs: let
+    stdenv = overrideArgs.stdenv.override {
+      inherit
+        buildPlatform hostPlatform targetPlatform
+        cc;
 
+      allowedRequisites = null;
+
+      # Overrides are surely not valid as packages built with this run on a
+      # different platform.
+      overrides = _: _: {};
+    };
+  in stdenv // {
     mkDerivation =
       { name ? "", buildInputs ? [], nativeBuildInputs ? []
       , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
-      , selfNativeBuildInput ? false, ...
+      , # Disabling the tests by default when cross compiling, as usually the
+        # tests rely on being able to run produced binaries.
+        doCheck ? false
+      , configureFlags ? []
+      , # Target is not included by default because most programs don't care.
+        # Including it then would cause needless massive rebuilds.
+        configurePlatforms   ? args.crossAttrs.configurePlatforms   or [ "build" "host" ]
+      , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
+      , ...
       } @ args:
 
       let
@@ -84,16 +106,24 @@ rec {
         nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
       in
         stdenv.mkDerivation (args // {
-          name = name + "-" + cross.config;
+          name = name + "-" + hostPlatform.config;
           nativeBuildInputs = nativeBuildInputs
             ++ nativeInputsFromBuildInputs
-            ++ [ gccCross binutilsCross ]
             ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
-            ++ stdenv.lib.optional (cross.config  == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (cross.config  == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
+            ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
+            ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
+
+          inherit doCheck;
+
+          # This parameter is sometimes a string and sometimes a list, yuck
+          configureFlags = let inherit (stdenv.lib) optional elem; in
+            (if stdenv.lib.isString configureFlags then [configureFlags] else configureFlags)
+            ++ optional (elem "build"  configurePlatforms) "--build=${buildPlatform.config}"
+            ++ optional (elem "host"   configurePlatforms) "--host=${hostPlatform.config}"
+            ++ optional (elem "target" configurePlatforms) "--target=${targetPlatform.config}";
 
           # Cross-linking dynamic libraries, every buildInput should
           # be propagated because ld needs the -rpath-link to find
@@ -103,12 +133,8 @@ rec {
           propagatedBuildInputs = propagatedBuildInputs ++ buildInputs;
           propagatedNativeBuildInputs = propagatedNativeBuildInputs;
 
-          crossConfig = cross.config;
+          crossConfig = hostPlatform.config;
         } // args.crossAttrs or {});
-
-    inherit gccCross binutilsCross;
-    ccCross = gccCross;
-
   };
 
 

@@ -13,7 +13,8 @@ appleDerivation {
       --replace "#include <msgtracer_client.h>" ''$'#include <asl.h>\nstatic void msgtracer_log_with_keys(...) { };'
 
     substituteInPlace Definitions.h \
-      --replace "#include <System/pthread_machdep.h>" ""
+      --replace "#include <System/pthread_machdep.h>" "" \
+      --replace 'void * const, void * const' 'void * const, void *'
 
     # getspecific_direct is more efficient, but this should be equivalent...
     substituteInPlace Zone.h \

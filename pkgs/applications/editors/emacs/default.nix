@@ -4,8 +4,8 @@
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
-, withGTK3 ? true, gtk3 ? null
-, withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
+, withGTK3 ? true, gtk3 ? null, gsettings_desktop_schemas ? null
+, withXwidgets ? false, webkitgtk24x-gtk3 ? null, wrapGAppsHook ? null, glib_networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
@@ -16,7 +16,7 @@ assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
 assert withGTK3 -> !withGTK2 && gtk3 != null;
-assert withXwidgets -> withGTK3 && webkitgtk24x != null;
+assert withXwidgets -> withGTK3 && webkitgtk24x-gtk3 != null;
 
 let
   toolkit =
@@ -26,38 +26,19 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "25.1";
+  version = "25.2";
   versionModifier = "";
 
   src = fetchurl {
-    url = "mirror://gnu//emacs/${name}.tar.xz";
-    sha256 = "0cwgyiyymnx4xdg99dm2drfxcyhy2jmyf0rkr9fwj9mwwf77kwhr";
+    url = "mirror://gnu/emacs/${name}.tar.xz";
+    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
   };
 
-  patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch) ++ [
-    ## Fixes a segfault in emacs 25.1
-    ## http://lists.gnu.org/archive/html/emacs-devel/2016-10/msg00917.html
-    ## https://debbugs.gnu.org/cgi/bugreport.cgi?bug=24358
-    (fetchurl {
-      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=9afea93ed536fb9110ac62b413604cf4c4302199;
-      sha256 = "0pshhq8wlh98m9hm8xd3g7gy3ms0l44dq6vgzkg67ydlccziqz40"; })
-    (fetchurl {
-      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=71ca4f6a43bad06192cbc4bb8c7a2d69c179b7b0;
-      sha256 = "0h76wrrqyrky441immprskx5x7200zl7ajf7hyg4da22q7sr09qa"; })
-    (fetchurl {
-      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=1047496722a58ef5b736dae64d32adeb58c5055c;
-      sha256 = "0hk9pi3f2zj266qj8armzpl0z8rfjg0m9ss4k09mgg1hyz80wdvv"; })
-    (fetchurl {
-      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=96ac0c3ebce825e60595794f99e703ec8302e240;
-      sha256 = "1q2hqkjvj9z46b5ik56lv9wiibz09mvg2q3pn8fnpa04ki3zbh4x"; })
-    (fetchurl {
-      url = http://git.savannah.gnu.org/cgit/emacs.git/patch/?id=43986d16fb6ad78a627250e14570ea70bdb1f23a;
-      sha256 = "1wlyy04qahvls7bdrcxaazh9k27gksk7if1q58h83f7h6g9xxkzj";
-    })
-  ];
+  patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch);
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ lib.optionals srcRepo [ autoconf automake texinfo ];
+    ++ lib.optionals srcRepo [ autoconf automake texinfo ]
+    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
@@ -66,9 +47,9 @@ stdenv.mkDerivation rec {
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
     ++ lib.optional (withX && withGTK2) gtk2
-    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings_desktop_schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals withXwidgets [ webkitgtk24x wrapGAppsHook glib_networking ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib_networking ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 

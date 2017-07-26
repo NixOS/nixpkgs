@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = [ ./nix_share_path.patch ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = gnome3.maintainers;
   };
 }

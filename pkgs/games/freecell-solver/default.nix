@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, cmake, perl, gmp, libtap, perlPackages }:
+{ stdenv, fetchurl, pkgconfig, cmake
+, perl, gmp, libtap, gperf
+, perlPackages, python3Packages }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "freecell-solver-${version}";
-  version = "3.26.0";
+  version = "4.8.0";
 
   src = fetchurl {
-    url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.bz2";
-    sha256 = "0pm6xk4fmwgzva70qxb0pqymdfvpasnvqiwwmm8hpx7g37y11wqk";
+    url = "http://fc-solve.shlomifish.org/downloads/fc-solve/${name}.tar.xz";
+    sha256 = "0274l1p71ps222i62whqfkg80fcc8m4w2hmpbrbbd5gh8kfpman3";
   };
 
-  buildInputs = [ pkgconfig cmake perl gmp libtap
+  buildInputs = [ pkgconfig cmake perl gmp libtap gperf
     perlPackages.TemplateToolkit perlPackages.StringShellQuote
-    perlPackages.GamesSolitaireVerify ];
+    perlPackages.GamesSolitaireVerify perlPackages.TaskFreecellSolverTesting
+    python3Packages.python python3Packages.random2 ];
 
   meta = {
     description = "A FreeCell automatic solver";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec{
     homepage = http://fc-solve.shlomifish.org/;
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

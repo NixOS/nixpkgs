@@ -20,14 +20,38 @@ rec {
   traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
 
   # strict trace functions (traced structure is fully evaluated and printed)
+
+  /* `builtins.trace`, but the value is `builtins.deepSeq`ed first. */
   traceSeq = x: y: trace (builtins.deepSeq x x) y;
+
+  /* Like `traceSeq`, but only down to depth n.
+   * This is very useful because lots of `traceSeq` usages
+   * lead to an infinite recursion.
+   */
+  traceSeqN = depth: x: y: with lib;
+    let snip = v: if      isList  v then noQuotes "[…]" v
+                  else if isAttrs v then noQuotes "{…}" v
+                  else v;
+        noQuotes = str: v: { __pretty = const str; val = v; };
+        modify = n: fn: v: if (n == 0) then fn v
+                      else if isList  v then map (modify (n - 1) fn) v
+                      else if isAttrs v then mapAttrs
+                        (const (modify (n - 1) fn)) v
+                      else v;
+    in trace (generators.toPretty { allowPrettyValues = true; }
+               (modify depth snip x)) y;
+
+  /* `traceSeq`, but the same value is traced and returned */
   traceValSeq = v: traceVal (builtins.deepSeq v v);
+  /* `traceValSeq` but with fixed depth */
+  traceValSeqN = depth: v: traceSeqN depth v v;
+
 
   # this can help debug your code as well - designed to not produce thousands of lines
-  traceShowVal = x : trace (showVal x) x;
+  traceShowVal = x: trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
-  attrNamesToStr = a : lib.concatStringsSep "; " (map (x : "${x}=") (attrNames a));
-  showVal = x :
+  attrNamesToStr = a: lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a));
+  showVal = x:
       if isAttrs x then
           if x ? outPath then "x is a derivation, name ${if x ? name then x.name else "<no name>"}, { ${attrNamesToStr x} }"
           else "x is attr set { ${attrNamesToStr x} }"
@@ -43,9 +67,9 @@ rec {
 
   # trace the arguments passed to function and its result
   # maybe rewrite these functions in a traceCallXml like style. Then one function is enough
-  traceCall  = n : f : a : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
-  traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
-  traceCall3 = n : f : a : b : c : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
+  traceCall  = n: f: a: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a));
+  traceCall2 = n: f: a: b: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
+  traceCall3 = n: f: a: b: c: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
   # FIXME: rename this?
   traceValIfNot = c: x:
@@ -71,7 +95,7 @@ rec {
 
   # create a test assuming that list elements are true
   # usage: { testX = allTrue [ true ]; }
-  testAllTrue = expr : { inherit expr; expected = map (x: true) expr; };
+  testAllTrue = expr: { inherit expr; expected = map (x: true) expr; };
 
   strict = v:
     trace "Warning: strict is deprecated and will be removed in the next release"

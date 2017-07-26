@@ -13,10 +13,9 @@ buildEnv {
     cat >"$out/bin/qt.conf" <<EOF
     [Paths]
     Prefix = $out
-    Plugins = lib/qt5/plugins
-    Imports = lib/qt5/imports
-    Qml2Imports = lib/qt5/qml
-    Documentation = share/doc/qt5
+    Plugins = $qtPluginPrefix
+    Qml2Imports = $qtQmlPrefix
+    Documentation = $qtDocPrefix
     EOF
   '';
 }

@@ -1,10 +1,10 @@
 { stdenv, fetchgit, mlton }:
 stdenv.mkDerivation {
-  name = "redprl-2016-09-22";
+  name = "redprl-2017-03-28";
   src = fetchgit {
     url = "https://github.com/RedPRL/sml-redprl.git";
-    rev = "3215faf0d494f4ac14d6e10172329a161df192c4";
-    sha256 = "0pcq4q9xy34j7ziwbly4qxccpkcrl92r9y11bv6hdkbzwm1g2a77";
+    rev = "bdf027de732e4a8d10f9f954389dfff0c822f18b";
+    sha256 = "0cihwnd78d3ksxp6mppifm7xpi3fsii5mixvicajy87ggw8z305c";
     fetchSubmodules = true;
   };
   buildInputs = [ mlton ];

@@ -24,8 +24,8 @@ let
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "libvterm";
-      rev = "11682793d84668057c5aedc3d7f8071bb54eaf2c";
-      sha256 = "0pd90yx6xsagrqjipi26sxri1l4wdnx23ziad1zbxnqx9njxa7g3";
+      rev = "5a748f97fbf27003e141002b58933a99f3addf8d";
+      sha256 = "1fnd57f5n9h7z50a4vj7g96k6ndsdknjqsibgnxi9ndhyz244qbx";
     };
 
     buildInputs = [ perl ];
@@ -53,18 +53,24 @@ let
   rubyWrapper = ''--suffix PATH : \"${rubyEnv}/bin\" '' +
                 ''--suffix GEM_HOME : \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
 
+  pluginPythonPackages = if configure == null then [] else builtins.concatLists
+    (map ({ pythonDependencies ? [], ...}: pythonDependencies)
+         (vimUtils.requiredPlugins configure));
   pythonEnv = pythonPackages.python.buildEnv.override {
     extraLibs = (
         if withPyGUI
           then [ pythonPackages.neovim_gui ]
           else [ pythonPackages.neovim ]
-      ) ++ extraPythonPackages;
+      ) ++ extraPythonPackages ++ pluginPythonPackages;
     ignoreCollisions = true;
   };
   pythonWrapper = ''--cmd \"let g:python_host_prog='$out/bin/nvim-python'\" '';
 
+  pluginPython3Packages = if configure == null then [] else builtins.concatLists
+    (map ({ python3Dependencies ? [], ...}: python3Dependencies)
+         (vimUtils.requiredPlugins configure));
   python3Env = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages;
+    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages ++ pluginPython3Packages;
     ignoreCollisions = true;
   };
   python3Wrapper = ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '';
@@ -75,13 +81,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.7";
+    version = "0.2.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "0bk0raxlb1xsqyw9pmqmxvcq5szqhimidrasnvzrci84gld8cwz4";
+      sha256 = "0fhjkgjwqqmzbfn9wk10l2vq9v74zkriz5j12b1rx0gdwzlfybn8";
     };
 
     enableParallelBuilding = true;

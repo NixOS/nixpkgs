@@ -1,4 +1,4 @@
-{ callPackage }:
+{ lib, callPackage, fetchurl, fetchpatch }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -6,38 +6,64 @@ in
 {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "375.26";
-    sha256_32bit = "0yv19rkz2wzzj0fygfjb1mh21iy769kff3yg2kzk8bsiwnmcyybw";
-    sha256_64bit = "1kqy9ayja3g5znj2hzx8pklz8qi0b0l9da7c3ldg3hlxf31v4hjg";
-    settingsSha256 = "1s8zf5cfhx8m05fvws0gh1q0wy5zyyg2j510zlwp4hk35y7dic5y";
-    persistencedSha256 = "15r6rbzyk4yaqkpkqs8j00zc7jbhgp8naskv93dwjyw0lnj0wgky";
+    version = "375.66";
+    sha256_32bit = "0k7ib5ah3c2apzgzxlq75l48zm8901mbwj7slv18k3rhk8j0w8i9";
+    sha256_64bit = "1h01s8brpz42jwc24dsflm4psd3zsy26ds98h0adgwx51dbpzqsr";
+    settingsSha256 = "0bpdayyqw4cpgl7bgddfz6w5j8y3wsgr89p5vxnzgk9g0vgqxh5h";
+    persistencedSha256 = "113rllf9l26z546jjfijpxllp17qcpawblzxvsqc6rbzbkmvcdwi";
   };
 
   beta = generic {
-    version = "378.09";
-    sha256_32bit = "0a1vwvsqi89pn29c9aii53xq8292dxf68sr8lxzx4bpqjqmsbapy";
-    sha256_64bit = "018qqg9zlpwd2cad99vbn18rnrrkrqybs7q65h8dmxirkx4pcvh8";
-    settingsSha256 = "1fjkpqmzdzk46p1chzxqvbj3cpqcwwx4qmv33yjq7z2a5zab9z8v";
-    persistencedSha256 = "1svaa5a0zz0r8qy6pg9lnhy5zmffvw0h120h46qqd01pkb4yv5lc";
+    version = "381.22";
+    sha256_32bit = "024x3c6hrivg2bkbzv1xd0585hvpa2kbn1y2gwvca7c73kpdczbv";
+    sha256_64bit = "13fj9ndy5rmh410d0vi2b0crfl7rbsm6rn7cwms0frdzkyhshghs";
+    settingsSha256 = "1gls187zfd201b29qfvwvqvl5gvp5wl9lq966vd28crwqh174jrh";
+    persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
   };
 
   legacy_340 = generic {
-    version = "340.101";
-    sha256_32bit = "0qmhkvxj6h63sayys9gldpafw5skpv8nsm2gxxb3pxcv7nfdlpjz";
-    sha256_64bit = "02k8j0xzxp2y4vay0kf982q382ny1i4g1kai93f2h5sak6sq3kyj";
-    settingsSha256 = "1mavbhff24n0jn154af152fp04njd505scdlxdm850h1ycb2i3g9";
-    persistencedSha256 = "1396bmmg9b1z805dzljgi2f219ji84wfnnifdbk32dpd5mrywjk0";
+    version = "340.102";
+    sha256_32bit = "0a484i37j00d0rc60q0bp6fd2wfrx2c4r32di9w5svqgmrfkvcb1";
+    sha256_64bit = "0nnz51d48a5fpnnmlz1znjp937k3nshdq46fw1qm8h00dkrd55ib";
+    settingsSha256 = "0nm5c06b09p6wsxpyfaqrzsnal3p1047lk6p4p2a0vksb7id9598";
+    persistencedSha256 = "1jwmggbph9zd8fj4syihldp2a5bxff7q1i2l9c55xz8cvk0rx08i";
     useGLVND = false;
+
+    patches = [
+      (fetchpatch {
+        name = "kernel-4.10.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/nvidia-340xx/trunk/4.10.0_kernel.patch?id=53fb1df89;
+        sha256 = "171hb57m968qdjcr3h8ppfzhrchf573f39rdja86a1qq1gmrv7pa";
+      })
+      # from https://git.archlinux.org/svntogit/packages.git/plain/trunk/fs52243.patch?h=packages/nvidia-340xx
+      # with datestamps removed
+      ./fs52243.patch
+    ];
   };
 
   legacy_304 = generic {
-    version = "304.134";
-    sha256_32bit = "178wx0a2pmdnaypa9pq6jh0ii0i8ykz1sh1liad9zfriy4d8kxw4";
-    sha256_64bit = "0pydw7nr4d2dply38kwvjbghsbilbp2q0mas4nfq5ad050d2c550";
-    settingsSha256 = "0q92xw4fr9p5nbhj1plynm50d32881861daxfwrisywszqijhmlf";
+    version = "304.135";
+    sha256_32bit = "14qdl39wird04sqba94dcb77i63igmxxav62ndr4qyyavn8s3c2w";
+    sha256_64bit = "125mianhvq591np7y5jjrv9vmpbvixnkicr49ni48mcr0yjnjqkh";
+    settingsSha256 = "1y7swikdngq4nlwzkrq20yfah9zr31n1a5i6nw37awnp8xjilhzm";
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
+
+    prePatch = let
+      debPatches = fetchurl {
+        url = "mirror://debian/pool/non-free/n/nvidia-graphics-drivers-legacy-304xx/"
+            + "nvidia-graphics-drivers-legacy-304xx_304.135-2.debian.tar.xz";
+        sha256 = "0mhji0ssn7075q5a650idigs48kzf11pzj2ca2n07rwxg3vj6pdr";
+      };
+      prefix = "debian/module/debian/patches";
+      applyPatches = pnames: if pnames == [] then null else
+        ''
+          tar xf '${debPatches}'
+          sed 's|^\([+-]\{3\} [ab]\)/|\1/kernel/|' -i ${prefix}/*.patch
+          patches="$patches ${lib.concatMapStringsSep " " (pname: "${prefix}/${pname}.patch") pnames}"
+        '';
+    in applyPatches [ "fix-typos" "drm-driver-legacy" "deprecated-cpu-events" "disable-mtrr" ];
   };
 
   legacy_173 = callPackage ./legacy173.nix { };

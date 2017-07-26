@@ -52,6 +52,7 @@ in rec {
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
+        nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
@@ -72,6 +73,12 @@ in rec {
         (all nixos.tests.ecryptfs)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
+        (all nixos.tests.keymap.azerty)
+        (all nixos.tests.keymap.colemak)
+        (all nixos.tests.keymap.dvorak)
+        (all nixos.tests.keymap.dvp)
+        (all nixos.tests.keymap.neo)
+        (all nixos.tests.keymap.qwertz)
         (all nixos.tests.plasma5)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
@@ -92,8 +99,9 @@ in rec {
         (all nixos.tests.openssh)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
-        (all nixos.tests.sddm)
+        (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
+        (all nixos.tests.slim)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 

@@ -42,6 +42,6 @@ stdenv.mkDerivation {
     homepage = http://wordnet.princeton.edu/;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

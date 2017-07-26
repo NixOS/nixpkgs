@@ -34,7 +34,7 @@ let
         cap=$(sed -nr 's/.*#%#\s+capabilities\s*=\s*(.+)/\1/p' $file)
 
         wrapProgram $file \
-          --set PATH "/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/bin" \
+          --set PATH "/run/wrappers/bin:/run/current-system/sw/bin" \
           --set MUNIN_LIBDIR "${pkgs.munin}/lib" \
           --set MUNIN_PLUGSTATE "/var/run/munin"
 
@@ -184,7 +184,7 @@ in
 
         mkdir -p /etc/munin/plugins
         rm -rf /etc/munin/plugins/*
-        PATH="/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/bin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
+        PATH="/run/wrappers/bin:/run/current-system/sw/bin" ${pkgs.munin}/sbin/munin-node-configure --shell --families contrib,auto,manual --config ${nodeConf} --libdir=${muninPlugins} --servicedir=/etc/munin/plugins 2>/dev/null | ${pkgs.bash}/bin/bash
       '';
       serviceConfig = {
         ExecStart = "${pkgs.munin}/sbin/munin-node --config ${nodeConf} --servicedir /etc/munin/plugins/";
@@ -193,14 +193,26 @@ in
 
   }) (mkIf cronCfg.enable {
 
-    services.cron.systemCronJobs = [
-      "*/5 * * * * munin ${pkgs.munin}/bin/munin-cron --config ${muninConf}"
-    ];
+    systemd.timers.munin-cron = {
+      description = "batch Munin master programs";
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = "*:0/5";
+    };
+
+    systemd.services.munin-cron = {
+      description = "batch Munin master programs";
+      unitConfig.Documentation = "man:munin-cron(8)";
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = "munin";
+        ExecStart = "${pkgs.munin}/bin/munin-cron --config ${muninConf}";
+      };
+    };
 
     system.activationScripts.munin-cron = stringAfter [ "users" "groups" ] ''
       mkdir -p /var/{run,log,www,lib}/munin
       chown -R munin:munin /var/{run,log,www,lib}/munin
     '';
-
   })];
 }

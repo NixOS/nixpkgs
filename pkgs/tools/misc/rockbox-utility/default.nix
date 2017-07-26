@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libusb1, qt5 }:
+{ stdenv, fetchurl, pkgconfig, libusb1
+, qtbase, qttools, makeWrapper, qmake
+, withEspeak ? false, espeak ? null }:
 
 stdenv.mkDerivation  rec {
   name = "rockbox-utility-${version}";
@@ -9,15 +11,25 @@ stdenv.mkDerivation  rec {
     sha256 = "0k3ycga3b0jnj13whwiip2l0gx32l50pnbh7kfima87nq65aaa5w";
   };
 
-  buildInputs = [ libusb1 ] ++ (with qt5; [ qtbase qttools ]);
-  nativeBuildInputs = [ qt5.qmakeHook ];
+  buildInputs = [ libusb1 qtbase qttools ]
+    ++ stdenv.lib.optional withEspeak espeak;
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
 
   preConfigure = ''
     cd rbutil/rbutilqt
   '';
 
   installPhase = ''
-    install -Dm755 RockboxUtility $out/bin/RockboxUtility
+    runHook preInstall
+
+    install -Dm755 RockboxUtility $out/bin/rockboxutility
+    ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
+    wrapProgram $out/bin/rockboxutility \
+    ${stdenv.lib.optionalString withEspeak ''
+      --prefix PATH : ${espeak}/bin
+    ''}
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, mkPythonDerivation, python, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
+{ stdenv, fetchurl, buildPythonPackage, python, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
 
-mkPythonDerivation rec {
+buildPythonPackage rec {
   major = "3.22";
   minor = "0";
   name = "pygobject-${major}.${minor}";
+  format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${major}/${name}.tar.xz";

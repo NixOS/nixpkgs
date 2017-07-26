@@ -87,38 +87,6 @@ if ! test -e "$mountPoint"; then
     exit 1
 fi
 
-
-# Mount some stuff in the target root directory.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run $mountPoint/home
-mkdir -m 01777 -p $mountPoint/tmp
-mkdir -m 0755 -p $mountPoint/tmp/root
-mkdir -m 0755 -p $mountPoint/var
-mkdir -m 0700 -p $mountPoint/root
-mount --rbind /dev $mountPoint/dev
-mount --rbind /proc $mountPoint/proc
-mount --rbind /sys $mountPoint/sys
-mount --rbind / $mountPoint/tmp/root
-mount -t tmpfs -o "mode=0755" none $mountPoint/run
-rm -rf $mountPoint/var/run
-ln -s /run $mountPoint/var/run
-for f in /etc/resolv.conf /etc/hosts; do rm -f $mountPoint/$f; [ -f "$f" ] && cp -Lf $f $mountPoint/etc/; done
-for f in /etc/passwd /etc/group;      do touch $mountPoint/$f; [ -f "$f" ] && mount --rbind -o ro $f $mountPoint/$f; done
-
-cp -Lf "@cacert@" "$mountPoint/tmp/ca-cert.crt"
-export SSL_CERT_FILE=/tmp/ca-cert.crt
-# For Nix 1.7
-export CURL_CA_BUNDLE=/tmp/ca-cert.crt
-
-if [ -n "$runChroot" ]; then
-    if ! [ -L $mountPoint/nix/var/nix/profiles/system ]; then
-        echo "$0: installation not finished; cannot chroot into installation directory"
-        exit 1
-    fi
-    ln -s /nix/var/nix/profiles/system $mountPoint/run/current-system
-    exec chroot $mountPoint "${chrootCommand[@]}"
-fi
-
-
 # Get the path of the NixOS configuration file.
 if test -z "$NIXOS_CONFIG"; then
     NIXOS_CONFIG=/etc/nixos/configuration.nix
@@ -130,120 +98,59 @@ if [ ! -e "$mountPoint/$NIXOS_CONFIG" ] && [ -z "$closure" ]; then
 fi
 
 
-# Create the necessary Nix directories on the target device, if they
-# don't already exist.
-mkdir -m 0755 -p \
-    $mountPoint/nix/var/nix/gcroots \
-    $mountPoint/nix/var/nix/temproots \
-    $mountPoint/nix/var/nix/userpool \
-    $mountPoint/nix/var/nix/profiles \
-    $mountPoint/nix/var/nix/db \
-    $mountPoint/nix/var/log/nix/drvs
-
-mkdir -m 1775 -p $mountPoint/nix/store
-chown @root_uid@:@nixbld_gid@ $mountPoint/nix/store
-
-
-# There is no daemon in the chroot.
-unset NIX_REMOTE
-
-
-# We don't have locale-archive in the chroot, so clear $LANG.
-export LANG=
-export LC_ALL=
-export LC_TIME=
-
-
 # Builds will use users that are members of this group
 extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 
-
 # Inherit binary caches from the host
+# TODO: will this still work with Nix 1.12 now that it has no perl? Probably not... 
 binary_caches="$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')"
 extraBuildFlags+=(--option "binary-caches" "$binary_caches")
 
+nixpkgs="$(readlink -f "$(nix-instantiate --find-file nixpkgs)")"
+export NIX_PATH="nixpkgs=$nixpkgs:nixos-config=$mountPoint/$NIXOS_CONFIG"
+unset NIXOS_CONFIG
 
-# Copy Nix to the Nix store on the target device, unless it's already there.
-if ! NIX_DB_DIR=$mountPoint/nix/var/nix/db nix-store --check-validity @nix@ 2> /dev/null; then
-    echo "copying Nix to $mountPoint...."
-    for i in $(@perl@/bin/perl @pathsFromGraph@ @nixClosure@); do
-        echo "  $i"
-        chattr -R -i $mountPoint/$i 2> /dev/null || true # clear immutable bit
-        @rsync@/bin/rsync -a $i $mountPoint/nix/store/
-    done
-
-    # Register the paths in the Nix closure as valid.  This is necessary
-    # to prevent them from being deleted the first time we install
-    # something.  (I.e., Nix will see that, e.g., the glibc path is not
-    # valid, delete it to get it out of the way, but as a result nothing
-    # will work anymore.)
-    chroot $mountPoint @nix@/bin/nix-store --register-validity < @nixClosure@
-fi
+# TODO: do I need to set NIX_SUBSTITUTERS here or is the --option binary-caches above enough?
 
 
-# Create the required /bin/sh symlink; otherwise lots of things
-# (notably the system() function) won't work.
-mkdir -m 0755 -p $mountPoint/bin
-# !!! assuming that @shell@ is in the closure
-ln -sf @shell@ $mountPoint/bin/sh
+# A place to drop temporary closures
+trap "rm -rf $tmpdir" EXIT
+tmpdir="$(mktemp -d)"
 
+# Build a closure (on the host; we then copy it into the guest)
+function closure() {
+    nix-build "${extraBuildFlags[@]}" --no-out-link -E "with import <nixpkgs> {}; runCommand \"closure\" { exportReferencesGraph = [ \"x\" (buildEnv { name = \"env\"; paths = [ ($1) stdenv ]; }) ]; } \"cp x \$out\""
+}
 
-# Build hooks likely won't function correctly in the minimal chroot; just disable them.
-unset NIX_BUILD_HOOK
-
-# Make the build below copy paths from the CD if possible.  Note that
-# /tmp/root in the chroot is the root of the CD.
-export NIX_OTHER_STORES=/tmp/root/nix:$NIX_OTHER_STORES
-
-p=@nix@/libexec/nix/substituters
-export NIX_SUBSTITUTERS=$p/copy-from-other-stores.pl:$p/download-from-binary-cache.pl
-
+system_closure="$tmpdir/system.closure"
 
 if [ -z "$closure" ]; then
-    # Get the absolute path to the NixOS/Nixpkgs sources.
-    nixpkgs="$(readlink -f $(nix-instantiate --find-file nixpkgs))"
-
-    nixEnvAction="-f <nixpkgs/nixos> --set -A system"
+    expr="(import <nixpkgs/nixos> {}).system"
+    system_root="$(nix-build -E "$expr")"
+    system_closure="$(closure "$expr")"
 else
-    nixpkgs=""
-    nixEnvAction="--set $closure"
+    system_root=$closure
+    # Create a temporary file ending in .closure (so nixos-prepare-root knows to --import it) to transport the store closure
+    # to the filesytem we're preparing. Also delete it on exit!
+    nix-store --export $(nix-store -qR $closure) > $system_closure
 fi
 
-# Build the specified Nix expression in the target store and install
-# it into the system configuration profile.
-echo "building the system configuration..."
-NIX_PATH="nixpkgs=/tmp/root/$nixpkgs:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
-    chroot $mountPoint @nix@/bin/nix-env \
-    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system $nixEnvAction
+channel_root="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
+channel_closure="$tmpdir/channel.closure"
+nix-store --export $channel_root > $channel_closure
 
+# Populate the target root directory with the basics
+@prepare_root@/bin/nixos-prepare-root "$mountPoint" "$channel_root" "$system_root" @nixClosure@ "$system_closure" "$channel_closure"
 
-# Copy the NixOS/Nixpkgs sources to the target as the initial contents
-# of the NixOS channel.
-mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles
-mkdir -m 1777 -p $mountPoint/nix/var/nix/profiles/per-user
-mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
-srcs=$(nix-env "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")
-if [ -z "$noChannelCopy" ] && [ -n "$srcs" ]; then
-    echo "copying NixOS/Nixpkgs sources..."
-    chroot $mountPoint @nix@/bin/nix-env \
-        "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
-fi
-mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
-ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
+# nixos-prepare-root doesn't currently do anything with file ownership, so we set it up here instead
+chown @root_uid@:@nixbld_gid@ $mountPoint/nix/store
 
-
-# Get rid of the /etc bind mounts.
-for f in /etc/passwd /etc/group; do [ -f "$f" ] && umount $mountPoint/$f; done
-
+mount --rbind /dev $mountPoint/dev
+mount --rbind /proc $mountPoint/proc
+mount --rbind /sys $mountPoint/sys
 
 # Grub needs an mtab.
 ln -sfn /proc/mounts $mountPoint/etc/mtab
-
-
-# Mark the target as a NixOS installation, otherwise
-# switch-to-configuration will chicken out.
-touch $mountPoint/etc/NIXOS
-
 
 # Switch to the new system configuration.  This will install Grub with
 # a menu default pointing at the kernel/initrd/etc of the new

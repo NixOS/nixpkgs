@@ -26,6 +26,6 @@ python27Packages.buildPythonApplication rec {
     description = "Qt remote GUI for WeeChat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ramkromberg ];
-    platform = with platforms; linux;
+    platforms = with platforms; linux;
   };
 }

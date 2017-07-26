@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "tokei-${version}";
-  version = "4.0.0";
-  src = fetchurl {
-    url = "https://github.com/Aaronepower/tokei/archive/${version}.tar.gz";
-    sha256 = "1c7z3dgxr76dq6cvan3hgqlkcv61gmg6fkv6b98viymh4fy9if68";
+  version = "6.0.0";
+
+  src = fetchFromGitHub {
+    owner = "Aaronepower";
+    repo = "tokei";
+    rev = "v${version}";
+    sha256 = "1j8k2i25c989mf15jwy4a4vazjc7x7pm8zywycg8xvv4ik1im7m7";
   };
 
-  depsSha256 = "0v4gplk7mkkik9vr1lqsr0yl1kqkqh14ncw95yb9iv7hcxvmcqn3";
+  depsSha256 = "184x6lwma3lawr2dcc7ivkp1j049af9w040dyzca6i56i2s9998p";
 
   installPhase = ''
     mkdir -p $out/bin

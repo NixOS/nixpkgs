@@ -1,4 +1,5 @@
 { stdenv, fetchurl, fetchpatch, substituteAll
+, hostPlatform
 , libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
@@ -6,7 +7,8 @@
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , flashplayerFix ? false, gdk_pixbuf
-, gtkStyle ? false, libgnomeui, gtk2, GConf, gnome_vfs
+, gtkStyle ? true, gtk2
+, gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
 , examples ? false
@@ -54,6 +56,12 @@ stdenv.mkDerivation rec {
     # there might be more references, but this is the only one I could find
     substituteInPlace tools/macdeployqt/tests/tst_deployment_mac.cpp \
       --replace /usr/lib/libstdc++.6.dylib "${stdenv.cc}/lib/libstdc++.6.dylib"
+  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp \
+      --replace 'optionalHeight > 0' 'optionalHeight != NULL'
+
+    substituteInPlace ./tools/linguist/linguist/messagemodel.cpp \
+      --replace 'm->comment()) >= 0' 'm->comment()) != NULL'
   '';
 
   patches =
@@ -61,20 +69,21 @@ stdenv.mkDerivation rec {
       ./libressl.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        cups = if cups != null then cups.out else null;
+        cups = if cups != null then stdenv.lib.getLib cups else null;
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
       })
-    ] ++ stdenv.lib.optional gtkStyle (substituteAll {
+    ] ++ stdenv.lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
-        gconf = GConf.out;
         gtk = gtk2.out;
+      } // stdenv.lib.optionalAttrs gnomeStyle {
+        gconf = GConf.out;
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
-      })
+      }))
     ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         gtk = gtk2.out;
@@ -174,9 +183,7 @@ stdenv.mkDerivation rec {
       rm -rf $out/tests
     '';
 
-  crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-  in {
+  crossAttrs = {
     # I've not tried any case other than i686-pc-mingw32.
     # -nomake tools:   it fails linking some asian language symbols
     # -no-svg: it fails to build on mingw64
@@ -186,14 +193,14 @@ stdenv.mkDerivation rec {
       -no-svg
       -make qmake -make libs -nomake tools
       -nomake demos -nomake examples -nomake docs
-    '' + optionalString isMingw " -xplatform win32-g++-4.6";
+    '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
-        -e 's/ gcc/ ${stdenv.cross.config}-gcc/' \
-        -e 's/ ar/ ${stdenv.cross.config}-ar/' \
-        -e 's/ strip/ ${stdenv.cross.config}-strip/' \
-        -e 's/ windres/ ${stdenv.cross.config}-windres/' \
+      sed -i -e 's/ g++/ ${stdenv.cc.prefix}g++/' \
+        -e 's/ gcc/ ${stdenv.cc.prefix}gcc/' \
+        -e 's/ ar/ ${stdenv.cc.prefix}ar/' \
+        -e 's/ strip/ ${stdenv.cc.prefix}strip/' \
+        -e 's/ windres/ ${stdenv.cc.prefix}windres/' \
         mkspecs/win32-g++/qmake.conf
     '';
 
@@ -201,9 +208,9 @@ stdenv.mkDerivation rec {
     postInstall = ''
       cp bin/qmake* $out/bin
     '';
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     dontStrip = true;
-  } // optionalAttrs isMingw {
+  } // optionalAttrs hostPlatform.isMinGW {
     propagatedBuildInputs = [ ];
   };
 
@@ -211,7 +218,7 @@ stdenv.mkDerivation rec {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
+    maintainers = with maintainers; [ lovek323 phreedom sander ];
     platforms   = platforms.unix;
   };
 }

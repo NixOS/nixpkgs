@@ -18,7 +18,7 @@ still shows most of the available features is in `./gwenview.nix`.
 # Updates
 
 1. Update the URL in `./fetch.sh`.
-2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/desktops/kde-5/applications`
+2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/applications/kde`
    from the top of the Nixpkgs tree.
 3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
@@ -27,9 +27,7 @@ still shows most of the available features is in `./gwenview.nix`.
 
 {
   stdenv, lib, libsForQt5, fetchurl, recurseIntoAttrs,
-  kdeDerivation, plasma5,
-  attica, phonon,
-  debug ? false,
+  plasma5, attica, phonon,
 }:
 
 let
@@ -42,14 +40,15 @@ let
   packages = self: with self;
     let
       callPackage = self.newScope {
-        kdeApp = import ./build-support/application.nix {
-          inherit lib kdeDerivation;
-          inherit debug srcs;
+        mkDerivation = import ./build-support/application.nix {
+          inherit lib;
+          inherit srcs;
+          mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
         };
       };
     in {
       kdelibs = callPackage ./kdelibs { inherit attica phonon; };
-      akonadi = callPackage ./akonadi.nix {};
+      akonadi = callPackage ./akonadi {};
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
       ark = callPackage ./ark/default.nix {};
@@ -59,9 +58,11 @@ let
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       gwenview = callPackage ./gwenview.nix {};
+      k3b = callPackage ./k3b.nix {};
       kate = callPackage ./kate.nix {};
       kdenlive = callPackage ./kdenlive.nix {};
       kcalc = callPackage ./kcalc.nix {};
+      kcachegrind = callPackage ./kcachegrind.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
       kcontacts = callPackage ./kcontacts.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
@@ -74,9 +75,12 @@ let
       kio-extras = callPackage ./kio-extras.nix {};
       kmime = callPackage ./kmime.nix {};
       kmix = callPackage ./kmix.nix {};
+      kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
+      krfb = callPackage ./krfb.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
+      libkcddb = callPackage ./libkcddb.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkipi = callPackage ./libkipi.nix {};

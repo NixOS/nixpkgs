@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out/bin/" "$out/share/applications"
     cp data/dropbox.desktop "$out/share/applications"
+    cp -a data/icons "$out/share/icons"
+    find "$out/share/icons" -type f \! -name '*.png' -delete
     substitute "dropbox.in" "$out/bin/dropbox" \
       --replace '@PACKAGE_VERSION@' ${version} \
       --replace '@DESKTOP_FILE_DIR@' "$out/share/applications" \

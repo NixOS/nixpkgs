@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, makeWrapper , flex, bison, ncurses, buddy, tecla
-, libsigsegv, gmpxx, cvc4, cln
+, libsigsegv, gmpxx, cln
 }:
 
 let
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip cvc4 cln
+    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper unzip cln
   ];
 
   hardeningDisable = [ "stackprotector" ] ++
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
       TECLA_LIBS="-ltecla -lncursesw"
       LIBS="-lcln"
       CFLAGS="-O3" CXXFLAGS="-O3"
+      --without-cvc4    # Our version is too new for Maude to cope.
     )
   '';
 
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
       rewriting logic computation.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

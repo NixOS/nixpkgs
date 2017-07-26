@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
+    cp ./attrib/gatttool $out/bin/gatttool
     mkdir -p $test/test
     cp -a test $test
     pushd $test/test
@@ -73,6 +74,10 @@ stdenv.mkDerivation rec {
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
     ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
+
+    # Add extra configuration
+    mkdir $out/etc/bluetooth
+    ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
   '';
 
   enableParallelBuilding = true;

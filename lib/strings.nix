@@ -33,7 +33,7 @@ rec {
        concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
        => "1-foo2-bar"
   */
-  concatImapStrings = f: list: concatStrings (lib.imap f list);
+  concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
   /* Place an element between each element of a list
 
@@ -70,7 +70,7 @@ rec {
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
        => "6-3-2"
   */
-  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap f list);
+  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap1 f list);
 
   /* Construct a Unix-style search path consisting of each `subDir"
      directory of the given list of packages.
@@ -126,8 +126,8 @@ rec {
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
 
-  /* Dependening on the boolean `cond', return either the given string
-     or the empty string. Useful to contatenate against a bigger string.
+  /* Depending on the boolean `cond', return either the given string
+     or the empty string. Useful to concatenate against a bigger string.
 
      Example:
        optionalString true "some-string"
@@ -291,7 +291,7 @@ rec {
 
       recurse = index: startAt:
         let cutUntil = i: [(substring startAt (i - startAt) s)]; in
-        if index < lastSearch then
+        if index <= lastSearch then
           if startWithSep index then
             let restartAt = index + sepLen; in
             cutUntil index ++ recurse restartAt restartAt
@@ -438,8 +438,13 @@ rec {
        => true
        isStorePath pkgs.python
        => true
+       isStorePath [] || isStorePath 42 || isStorePath {} || …
+       => false
   */
-  isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == builtins.storeDir;
+  isStorePath = x:
+       builtins.isString x
+    && builtins.substring 0 1 (toString x) == "/"
+    && dirOf (builtins.toPath x) == builtins.storeDir;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
@@ -476,10 +481,8 @@ rec {
   readPathsFromFile = rootPath: file:
     let
       root = toString rootPath;
-      lines =
-        builtins.map (lib.removeSuffix "\n")
-        (lib.splitString "\n" (builtins.readFile file));
-      removeComments = lib.filter (line: !(lib.hasPrefix "#" line));
+      lines = lib.splitString "\n" (builtins.readFile file);
+      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
       absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
     in

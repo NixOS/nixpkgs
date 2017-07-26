@@ -35,6 +35,7 @@ let
   udevRules = pkgs.runCommand "udev-rules"
     { preferLocalBuild = true;
       allowSubstitutes = false;
+      packages = unique (map toString cfg.packages);
     }
     ''
       mkdir -p $out
@@ -45,7 +46,7 @@ let
       echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
 
       # Add the udev rules from other packages.
-      for i in ${toString cfg.packages}; do
+      for i in $packages; do
         echo "Adding rules for package $i"
         for j in $i/{etc,lib}/udev/rules.d/*; do
           echo "Copying $j to $out/$(basename $j)"
@@ -132,10 +133,11 @@ let
   hwdbBin = pkgs.runCommand "hwdb.bin"
     { preferLocalBuild = true;
       allowSubstitutes = false;
+      packages = unique (map toString ([udev] ++ cfg.packages));
     }
     ''
       mkdir -p etc/udev/hwdb.d
-      for i in ${toString ([udev] ++ cfg.packages)}; do
+      for i in $packages; do
         echo "Adding hwdb files for package $i"
         for j in $i/{etc,lib}/udev/hwdb.d/*; do
           ln -s $j etc/udev/hwdb.d/$(basename $j)

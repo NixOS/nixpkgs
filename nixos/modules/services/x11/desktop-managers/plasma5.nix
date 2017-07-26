@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeWrapper kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
 
 in
 
@@ -30,24 +30,12 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = ''
-          KDE packages that need to be installed system-wide.
-        '';
-      };
-
     };
 
   };
 
 
   config = mkMerge [
-    (mkIf (cfg.extraPackages != []) {
-      environment.systemPackages = [ (kdeWrapper cfg.extraPackages) ];
-    })
-
     (mkIf (xcfg.enable && cfg.enable) {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -64,8 +52,8 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${plasma5.plasma-workspace.out}/lib/libexec/kcheckpass";
-        "start_kdeinit".source = "${pkgs.kinit.out}/lib/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
+        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
@@ -139,10 +127,14 @@ in
           plasma-workspace
           plasma-workspace-wallpapers
 
+          dolphin
           dolphin-plugins
           ffmpegthumbs
           kdegraphics-thumbnailers
+          khelpcenter
           kio-extras
+          konsole
+          oxygen
           print-manager
 
           breeze-icons
@@ -163,20 +155,10 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      services.xserver.desktopManager.plasma5.extraPackages =
-        with kdeApplications; with plasma5;
-        [
-          khelpcenter
-          oxygen
-
-          dolphin
-          konsole
-        ];
-
       environment.pathsToLink = [ "/share" ];
 
       environment.etc = singleton {
-        source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        source = xcfg.xkbDir;
         target = "X11/xkb";
       };
 
@@ -208,11 +190,6 @@ in
 
       services.xserver.displayManager.sddm = {
         theme = "breeze";
-        themes = [
-          pkgs.extra-cmake-modules # for the setup-hook
-          plasma5.plasma-workspace
-          pkgs.breeze-icons
-        ];
       };
 
       security.pam.services.kde = { allowNullPassword = true; };
@@ -224,11 +201,6 @@ in
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
-
-      # use kimpanel as the default IBus panel
-      i18n.inputMethod.ibus.panel =
-        lib.mkDefault
-        "${plasma5.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
 
     })
   ];

@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   name    = "grc-${version}";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner  = "garabik";
     repo   = "grc";
     rev    = "v${version}";
-    sha256 = "1c2ndnbyznb608h3s99fbcyh4qb1ccipxm15lyszrrks0w2llbah";
+    sha256 = "10h65qmv2cymixzfsckfcn6f01xsjzfq1x303rv01nibniwbq5z9";
   };
 
   buildInputs = with python3Packages; [ wrapPython makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     ./install.sh "$out" "$out"
 
     for f in $out/bin/* ; do
@@ -25,13 +27,15 @@ stdenv.mkDerivation rec {
       wrapProgram $f \
         --prefix PATH : $out/bin
     done
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Yet another colouriser for beautifying your logfiles or output of commands";
     homepage    = http://korpus.juls.savba.sk/~garabik/software/grc.html;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 AndersonTorres ];
+    maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -1,15 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "iosevka-${version}";
-  version = "1.4.2";
+  version = "1.13.1";
 
-  src = fetchFromGitHub {
-    owner  = "be5invis";
-    repo   = "Iosevka";
-    rev    = "v${version}";
-    sha256 = "1h1lmvjpjk0238bhdhnv2c149s98qpbndc8rxzlk6bhmxcy6rwsk";
+  buildInputs = [ unzip ];
+
+  src = fetchurl {
+    url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/iosevka-pack-${version}.zip";
+    sha256 = "05nnzbhv0sidbzzamz10nlh3j974m95p3dmd66165y4wxyhs989i";
   };
+
+  sourceRoot = ".";
 
   installPhase = ''
     fontdir=$out/share/fonts/iosevka

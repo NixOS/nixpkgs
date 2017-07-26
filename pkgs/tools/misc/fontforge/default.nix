@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, lib
 , autoconf, automake, gnum4, libtool, perl, gnulib, uthash, pkgconfig, gettext
 , python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, pango
+, withSpiro ? false, libspiro
 , withGTK ? false, gtk2
 , withPython ? true
 , Carbon ? null, Cocoa ? null
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     autoconf automake gnum4 libtool perl pkgconfig gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
+    ++ lib.optionals withSpiro [libspiro]
     ++ lib.optionals withGTK [ gtk2 pango ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
@@ -57,6 +59,7 @@ stdenv.mkDerivation rec {
     description = "A font editor";
     homepage = http://fontforge.github.io;
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.bsd3;
   };
 }
 

@@ -1,6 +1,7 @@
 { pkgs }:
 
 rec {
+  makePackageSet = pkgs.callPackage ./make-package-set.nix {};
 
   overrideCabal = drv: f: (drv.override (args: args // {
     mkDerivation = drv: (args.mkDerivation drv).override f;
@@ -37,6 +38,9 @@ rec {
 
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
   addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
+
+  addSetupDepend = drv: x: addSetupDepends drv [x];
+  addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
 
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
@@ -76,13 +80,19 @@ rec {
     fixupPhase = ":";
   });
 
+  linkWithGold = drv : appendConfigureFlag drv
+    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
+
   # link executables statically against haskell libs to reduce closure size
   justStaticExecutables = drv: overrideCabal drv (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  });
+  } // (if pkgs.stdenv.isDarwin then {
+    configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
+  } else {})
+  );
 
   buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
@@ -97,5 +107,8 @@ rec {
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+
+  overrideSrc = drv: { src, version ? drv.version }:
+    overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
 }

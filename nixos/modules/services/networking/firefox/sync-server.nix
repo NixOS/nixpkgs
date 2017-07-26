@@ -19,7 +19,7 @@ let
     [syncserver]
     public_url = ${cfg.publicUrl}
     ${optionalString (cfg.sqlUri != "") "sqluri = ${cfg.sqlUri}"}
-    allow_new_users = ${if cfg.allowNewUsers then "true" else "false"}
+    allow_new_users = ${boolToString cfg.allowNewUsers}
 
     [browserid]
     backend = tokenserver.verifiers.LocalVerifier
@@ -33,7 +33,6 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        example = true;
         description = ''
           Whether to enable a Firefox Sync Server, this give the opportunity to
           Firefox users to store all synchronized data on their own server. To use this
@@ -78,7 +77,6 @@ in
       allowNewUsers = mkOption {
         type = types.bool;
         default = true;
-        example = false;
         description = ''
           Whether to allow new-user signups on the server. Only request by
           existing accounts will be honored.

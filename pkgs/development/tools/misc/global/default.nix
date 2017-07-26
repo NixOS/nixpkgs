@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "global-${version}";
-  version = "6.5.6";
+  version = "6.5.7";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "018m536k5y6lks1a6gqn3bsp7r8zk017znqj9kva1nm8d7x9lbqj";
+    sha256 = "0cnd7a7d1pl46yk15q6mnr9i9w3xi8pxgchw4ia9njgr4jjqzh6r";
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];
@@ -34,8 +34,10 @@ stdenv.mkDerivation rec {
     cp -v *.el "$out/share/emacs/site-lisp"
 
     wrapProgram $out/bin/gtags \
+      --prefix GTAGSCONF : "$out/share/gtags/gtags.conf" \
       --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
     wrapProgram $out/bin/global \
+      --prefix GTAGSCONF : "$out/share/gtags/gtags.conf" \
       --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
   '';
 

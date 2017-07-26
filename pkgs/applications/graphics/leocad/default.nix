@@ -3,22 +3,22 @@ To use aditional parts libraries
 set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
-{ stdenv, fetchsvn, qt4, qmake4Hook, zlib }:
+{ stdenv, fetchFromGitHub, qt4, qmake4Hook, zlib }:
 
 stdenv.mkDerivation rec {
   name = "leocad-${version}";
-  version = "0.81";
+  version = "17.02";
 
-  src = fetchsvn {
-    url = "http://svn.leocad.org/tags/${name}";
-    sha256 = "1190gb437ls51hhfiwa79fq131026kywpy3j3k4fkdgfr8a9v3q8";
+  src = fetchFromGitHub {
+    owner = "leozide";
+    repo = "leocad";
+    rev = "v${version}";
+    sha256 = "0d7l2il6r4swnmrmaf1bsrgpjgai5xwhwk2mkpcsddnk59790mmc";
   };
 
-  buildInputs = [ qt4 qmake4Hook zlib ];
-
+  nativeBuildInputs = [ qmake4Hook ];
+  buildInputs = [ qt4 zlib ];
   postPatch = ''
-    sed '1i#include <cmath>' -i common/camera.cpp
-    substituteInPlace common/camera.cpp --replace "isnan(" "std::isnan("
     export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
 

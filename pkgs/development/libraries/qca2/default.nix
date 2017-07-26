@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Qt Cryptographic Architecture";
     license = "LGPL";
     homepage = http://delta.affinix.com/qca;
-    maintainers = [ maintainers.sander maintainers.urkud ];
+    maintainers = [ maintainers.sander ];
     platforms = platforms.linux;
   };
 }

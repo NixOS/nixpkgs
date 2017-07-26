@@ -36,7 +36,7 @@ in {
     };
   };
 
-  elasticsearch_analisys_lemmagen = esPlugin rec {
+  elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
     pluginName = "elasticsearch-analysis-lemmagen";
     version = "0.1";
@@ -94,10 +94,10 @@ in {
   elasticsearch_kopf = esPlugin rec {
     name = "elasticsearch-kopf-${version}";
     pluginName = "elasticsearch-kopf";
-    version = "1.5.7";
+    version = "2.1.1";
     src = fetchurl {
       url = "https://github.com/lmenezes/elasticsearch-kopf/archive/v${version}.zip";
-      sha256 = "0mq6jmjb4ldi03m431kzr7ly0bf7mdim7s5dx4wplb85gyhscns1";
+      sha256 = "1nwwd92g0jxhfpkxb1a9z5a62naa1y7hvlx400dm6mwwav3mrf4v";
     };
     meta = {
       homepage = https://github.com/lmenezes/elasticsearch-kopf;

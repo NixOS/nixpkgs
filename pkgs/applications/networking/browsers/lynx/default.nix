@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, ncurses, gzip
+{ stdenv, buildPackages
+, fetchurl, pkgconfig, ncurses, gzip
 , sslSupport ? true, openssl ? null
+, buildPlatform, hostPlatform
 }:
 
 assert sslSupport -> openssl != null;
@@ -13,14 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1cqm1i7d209brkrpzaqqf2x951ra3l67dw8x9yg10vz7rpr9441a";
   };
 
-  configureFlags = []
-    ++ stdenv.lib.optionals sslSupport [ "--with-ssl=${openssl.dev}" ];
+  configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
-  buildInputs = [ ncurses gzip ];
+  nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
 
-  crossAttrs = {
-    configureFlags = configureFlags ++ [ "--enable-widec" ];
-  };
+  buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
 
   meta = with stdenv.lib; {
     homepage = http://lynx.isc.org/;

@@ -3,14 +3,14 @@
 , glib_networking }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.3";
+  version = "1.5.1";
   name = "corebird-${version}";
 
   src = fetchFromGitHub {
     owner = "baedert";
     repo = "corebird";
     rev = version;
-    sha256 = "09k0jrhjqrmpvyz5pf1g7wkidflkhpvw5869a95vnhfxjd45kzs3";
+    sha256 = "1qajb4xms3vsfm5sg91z9ka0nrzgfi0fjgjxqm7snhkfgxlkph7w";
   };
 
   preConfigure = ''
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automake autoconf libtool pkgconfig wrapGAppsHook ];
 
   buildInputs = [
-    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest gnome3.dconf glib_networking
-  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav ]);
+    gtk3 json_glib sqlite libsoup gettext vala_0_32 gnome3.rest gnome3.dconf gnome3.gspell glib_networking
+  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good (gst-plugins-bad.override { gtkSupport = true; }) gst-libav ]);
 
   meta = {
     description = "Native Gtk+ Twitter client for the Linux desktop";

@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.libusb.info;
     description = "User-space USB library";
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

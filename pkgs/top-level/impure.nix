@@ -22,6 +22,7 @@ in
   # with unnamed parameters allowed by ...
   system ? localSystem.system
 , platform ? localSystem.platform
+, crossSystem ? null
 
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
@@ -61,7 +62,7 @@ in
 assert args ? localSystem -> !(args ? system || args ? platform);
 
 import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
-  inherit config overlays;
+  inherit config overlays crossSystem;
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.
   localSystem = { system = builtins.currentSystem; } // localSystem;

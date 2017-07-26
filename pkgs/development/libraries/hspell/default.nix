@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Hebrew spell checker";
     homepage = http://hspell.ivrix.org.il/;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
 # Note that I don't speak hebrew, so I can only fix compile problems
   };
 }

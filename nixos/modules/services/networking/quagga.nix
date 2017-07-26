@@ -104,7 +104,6 @@ in
         enable = mkOption {
           type = types.bool;
           default = any isEnabled services;
-          example = true;
           description = ''
             Whether to enable the Zebra routing manager.
 

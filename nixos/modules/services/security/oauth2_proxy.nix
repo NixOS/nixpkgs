@@ -10,9 +10,6 @@ let
   #   repeatedArgs (arg: "--arg=${arg}") args
   repeatedArgs = concatMapStringsSep " ";
 
-  # 'toString' doesn't quite do what we want for bools.
-  fromBool = x: if x then "true" else "false";
-
   # oauth2_proxy provides many options that are only relevant if you are using
   # a certain provider. This set maps from provider name to a function that
   # takes the configuration and returns a string that can be inserted into the
@@ -24,21 +21,20 @@ let
     '';
 
     github = cfg: ''
-      $(optionalString (!isNull cfg.github.org) "--github-org=${cfg.github.org}") \
-      $(optionalString (!isNull cfg.github.team) "--github-org=${cfg.github.team}") \
+      ${optionalString (!isNull cfg.github.org) "--github-org=${cfg.github.org}"} \
+      ${optionalString (!isNull cfg.github.team) "--github-org=${cfg.github.team}"} \
     '';
 
     google = cfg: ''
       --google-admin-email=${cfg.google.adminEmail} \
       --google-service-account=${cfg.google.serviceAccountJSON} \
-      $(repeatedArgs (group: "--google-group=${group}") cfg.google.groups) \
+      ${repeatedArgs (group: "--google-group=${group}") cfg.google.groups} \
     '';
   };
 
   authenticatedEmailsFile = pkgs.writeText "authenticated-emails" cfg.email.addresses;
 
-  getProviderOptions = cfg: provider:
-    if providerSpecificOptions ? provider then providerSpecificOptions.provider cfg else "";
+  getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: "") cfg;
 
   mkCommandLine = cfg: ''
     --provider='${cfg.provider}' \
@@ -49,24 +45,24 @@ let
     --client-secret='${cfg.clientSecret}' \
     ${optionalString (!isNull cfg.cookie.domain) "--cookie-domain='${cfg.cookie.domain}'"} \
     --cookie-expire='${cfg.cookie.expire}' \
-    --cookie-httponly=${fromBool cfg.cookie.httpOnly} \
+    --cookie-httponly=${boolToString cfg.cookie.httpOnly} \
     --cookie-name='${cfg.cookie.name}' \
     --cookie-secret='${cfg.cookie.secret}' \
-    --cookie-secure=${fromBool cfg.cookie.secure} \
+    --cookie-secure=${boolToString cfg.cookie.secure} \
     ${optionalString (!isNull cfg.cookie.refresh) "--cookie-refresh='${cfg.cookie.refresh}'"} \
     ${optionalString (!isNull cfg.customTemplatesDir) "--custom-templates-dir='${cfg.customTemplatesDir}'"} \
     ${repeatedArgs (x: "--email-domain='${x}'") cfg.email.domains} \
     --http-address='${cfg.httpAddress}' \
-    ${optionalString (!isNull cfg.htpasswd.file) "--htpasswd-file='${cfg.htpasswd.file}' --display-htpasswd-form=${fromBool cfg.htpasswd.displayForm}"} \
+    ${optionalString (!isNull cfg.htpasswd.file) "--htpasswd-file='${cfg.htpasswd.file}' --display-htpasswd-form=${boolToString cfg.htpasswd.displayForm}"} \
     ${optionalString (!isNull cfg.loginURL) "--login-url='${cfg.loginURL}'"} \
-    --pass-access-token=${fromBool cfg.passAccessToken} \
-    --pass-basic-auth=${fromBool cfg.passBasicAuth} \
-    --pass-host-header=${fromBool cfg.passHostHeader} \
+    --pass-access-token=${boolToString cfg.passAccessToken} \
+    --pass-basic-auth=${boolToString cfg.passBasicAuth} \
+    --pass-host-header=${boolToString cfg.passHostHeader} \
     --proxy-prefix='${cfg.proxyPrefix}' \
     ${optionalString (!isNull cfg.profileURL) "--profile-url='${cfg.profileURL}'"} \
     ${optionalString (!isNull cfg.redeemURL) "--redeem-url='${cfg.redeemURL}'"} \
     ${optionalString (!isNull cfg.redirectURL) "--redirect-url='${cfg.redirectURL}'"} \
-    --request-logging=${fromBool cfg.requestLogging} \
+    --request-logging=${boolToString cfg.requestLogging} \
     ${optionalString (!isNull cfg.scope) "--scope='${cfg.scope}'"} \
     ${repeatedArgs (x: "--skip-auth-regex='${x}'") cfg.skipAuthRegexes} \
     ${optionalString (!isNull cfg.signatureKey) "--signature-key='${cfg.signatureKey}'"} \

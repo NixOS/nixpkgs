@@ -1,5 +1,7 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null }:
+, libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
+, hostPlatform
+}:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -7,11 +9,12 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-2.0.13";
+  name = "guile-${version}";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
+    sha256 = "05dmvhd1y135x7w5qfw4my42cfp6l8bbhjfxvchcc1cbdvzri0f1";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -30,16 +33,10 @@
   # A native Guile 2.0 is needed to cross-build Guile.
   selfNativeBuildInput = true;
 
-  # Guile 2.0.11 repeatable fails with 8-core parallel building because
-  # libguile/vm-i-system.i is not created in time
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ./clang.patch
-    (fetchpatch {
-      # Fixes stability issues with 00-repl-server.test
-      url = "http://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
-      sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
-    })
+  patches = [
+    ./eai_system.patch
   ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
@@ -49,7 +46,7 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  configureFlags = [ "--with-libreadline-prefix" ]
+  configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
     ++ stdenv.lib.optionals stdenv.isSunOS [
       # Make sure the right <gmp.h> is found, and not the incompatible
       # /usr/include/mp.h from OpenSolaris.  See
@@ -58,7 +55,6 @@
       "--with-libgmp-prefix=${gmp.dev}"
 
       # Same for these (?).
-      "--with-libreadline-prefix=${readline.dev}"
       "--with-libunistring-prefix=${libunistring}"
 
       # See below.
@@ -71,7 +67,7 @@
     # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-    sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
+    sed -i "$out/lib/pkgconfig/guile-2.2.pc"    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
@@ -83,10 +79,10 @@
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
 
-  setupHook = ./setup-hook-2.0.sh;
+  setupHook = ./setup-hook-2.2.sh;
 
   crossAttrs.preConfigure =
-    stdenv.lib.optionalString (stdenv.cross.config == "i586-pc-gnu")
+    stdenv.lib.optionalString (hostPlatform.isHurd)
        # On GNU, libgc depends on libpthread, but the cross linker doesn't
        # know where to find libpthread, which leads to erroneous test failures
        # in `configure', where `-pthread' and `-lpthread' aren't explicitly
@@ -98,7 +94,7 @@
     description = "Embeddable Scheme implementation";
     homepage    = http://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 ];
+    maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
     platforms   = stdenv.lib.platforms.all;
 
     longDescription = ''
@@ -113,10 +109,3 @@
   };
 })
 
-//
-
-(stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  # Work around <http://bugs.gnu.org/14201>.
-  SHELL = "/bin/sh";
-  CONFIG_SHELL = "/bin/sh";
-})

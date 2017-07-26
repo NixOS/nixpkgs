@@ -2,16 +2,19 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-facebook-2015-08-27";
+  name = "bitlbee-facebook-${version}";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
-    rev = "094a11b542e2cd8fac4f00fe01870ecd1cb4c062";
+    rev = "v${version}";
     owner = "jgeboski";
     repo = "bitlbee-facebook";
-    sha256 = "1dvbl1z6fl3wswvqbs82vkqlggk24dyi8w7cmm5jh1fmaznmwqrl";
+    sha256 = "08ibjqqcrmq1a5nmj8z93rjrdabi0yy2a70p31xalnfrh200m24c";
   };
 
-  buildInputs = [ bitlbee autoconf automake libtool pkgconfig glib json_glib ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
+
+  buildInputs = [ bitlbee glib json_glib ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee

@@ -57,4 +57,6 @@ in
       serviceConfig.Group = "radicale";
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ aneeshusa ];
 }

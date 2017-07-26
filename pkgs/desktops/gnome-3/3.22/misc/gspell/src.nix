@@ -1,10 +1,10 @@
 fetchurl: rec {
-  major = "1.0";
-  minor = "3";
+  major = "1.2";
+  minor = "1";
   name = "gspell-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gspell/${major}/${name}.tar.xz";
-    sha256 = "1m8v4rqaxjsblccc3nnirkbkzgqm90vfpzp3x08lkqriqvk0anfr";
+    sha256 = "18zisdrq14my2iq6iv3lhqfn9jg98bqwbzcdidp7hfk915gkw74z";
   };
 }

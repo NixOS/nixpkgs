@@ -11,7 +11,6 @@ in {
       description = "Enable unclutter-xfixes to hide your mouse cursor when inactive.";
       type = types.bool;
       default = false;
-      example = true;
     };
 
     package = mkOption {
@@ -44,7 +43,8 @@ in {
   config = mkIf cfg.enable {
     systemd.user.services.unclutter-xfixes = {
       description = "unclutter-xfixes";
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           --timeout ${toString cfg.timeout} \

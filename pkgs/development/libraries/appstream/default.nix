@@ -1,24 +1,32 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext, intltool
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, intltool
 , xmlto, docbook_xsl, docbook_xml_dtd_45
 , glib, xapian, libxml2, libyaml, gobjectIntrospection
+, pcre, itstool
 }:
 
-stdenv.mkDerivation {
-  name = "appstream-0.9.5";
+stdenv.mkDerivation rec {
+  name = "appstream-${version}";
+  version = "0.10.6";
 
-  src = fetchurl {
-    url = "https://github.com/ximion/appstream/archive/APPSTREAM_0_8_0.tar.gz";
-    sha256 = "16a3b38avrwyl1pp8jdgfjv6cd5mccbmk4asni92l40y5r0xfycr";
+  src = fetchFromGitHub {
+    owner = "ximion";
+    repo = "appstream";
+    rev = "APPSTREAM_0_10_6";
+    sha256 = "1fg7zxx2qhkyj7fmcpwbf80b72d16kyi8dadi111kf00sgzfbiyy";
   };
 
   nativeBuildInputs = [
     cmake pkgconfig gettext intltool
     xmlto docbook_xsl docbook_xml_dtd_45
-    gobjectIntrospection
+    gobjectIntrospection itstool
   ];
 
-  buildInputs = [ glib xapian libxml2 libyaml ];
+  buildInputs = [ pcre glib xapian libxml2 libyaml ];
 
+  cmakeFlags = ''
+    -DSTEMMING=off
+    '';
+      
   meta = with stdenv.lib; {
     description = "Software metadata handling library";
     homepage    = "http://www.freedesktop.org/wiki/Distributions/AppStream/Software/";

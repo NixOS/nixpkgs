@@ -16,7 +16,6 @@ in
     services.ihaskell = {
       enable = mkOption {
         default = false;
-        example = true;
         description = "Autostart an IHaskell notebook service.";
       };
 

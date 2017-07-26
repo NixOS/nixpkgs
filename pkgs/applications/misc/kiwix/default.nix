@@ -104,6 +104,7 @@ stdenv.mkDerivation rec {
     description = "An offline reader for Web content";
     homepage = http://kiwix.org;
     license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ robbinch ];
   };
 }

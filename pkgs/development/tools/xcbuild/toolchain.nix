@@ -1,6 +1,7 @@
-{stdenv, writeText, toolchainName, xcbuild
+{stdenv, writeText, toolchainName, xcbuild, fetchurl
 , llvm, cctools, gcc, bootstrap_cmds, binutils
-, yacc, flex, m4, unifdef, gperf, indent, ctags, makeWrapper}:
+, yacc, flex, m4, unifdef, gperf, indent, ctags, makeWrapper
+, xib2nib}:
 
 let
 
@@ -8,15 +9,20 @@ let
     Identifier = toolchainName;
   };
 
+  # We could pull this out of developer_cmds but it adds an annoying loop if we want to bootstrap and
+  # this is just a tiny script so I'm not going to bother
+  mkdep-darwin-src = fetchurl {
+    url        = "https://opensource.apple.com/source/developer_cmds/developer_cmds-63/mkdep/mkdep.sh";
+    sha256     = "0n4wpqfslfjs5zbys5yri8pfi2awyhlmknsf6laa5jzqbzq9x541";
+    executable = true;
+  };
 in
 
 stdenv.mkDerivation {
   name = "nixpkgs.xctoolchain";
   buildInputs = [ xcbuild makeWrapper ];
 
-  propagatedBuildInputs = [ llvm gcc yacc flex m4 unifdef gperf indent ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ cctools bootstrap_cmds binutils ];
-  ## cctools should build on Linux but it doesn't currentl
+  ## cctools should build on Linux but it doesn't currently
 
   buildCommand = ''
     mkdir -p $out
@@ -58,8 +64,6 @@ stdenv.mkDerivation {
     ln -s ${unifdef}/bin/unifdefall
 
     ln -s ${gperf}/bin/gperf
-    ln -s ${gcc}/bin/gcov
-    ln -s ${gcc}/bin/mkdep
     ln -s ${indent}/bin/indent
     ln -s ${ctags}/bin/ctags
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -86,7 +90,17 @@ stdenv.mkDerivation {
     ln -s ${cctools}/bin/pagestuff
     ln -s ${cctools}/bin/ranlib
     ln -s ${cctools}/bin/redo_prebinding
-  '';
+
+    ln -s ${xib2nib}/bin/ibtool
+  '' +
+    # No point including the entire gcc closure if we don't already have it
+    (if stdenv.cc.isClang then ''
+      ln -s ${stdenv.cc.cc.llvm}/bin/llvm-cov gcov
+      ln -s ${mkdep-darwin-src}               mkdep
+    '' else ''
+      ln -s ${gcc}/bin/gcov
+      ln -s ${gcc}/bin/mkdep
+    '');
 }
 
 # other commands in /bin/

@@ -122,6 +122,8 @@ rec {
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
+        cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
+
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils.out}/bin/$i $out/bin

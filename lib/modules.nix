@@ -98,7 +98,7 @@ rec {
   /* Close a set of modules under the ‘imports’ relation. */
   closeModules = modules: args:
     let
-      toClosureList = file: parentKey: imap (n: x:
+      toClosureList = file: parentKey: imap1 (n: x:
         if isAttrs x || isFunction x then
           let key = "${parentKey}:anon-${toString n}"; in
           unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
@@ -114,7 +114,7 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let metaSet = if m ? meta 
+    let metaSet = if m ? meta
       then { meta = m.meta; }
       else {};
     in
@@ -423,7 +423,7 @@ rec {
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
   /* Sort a list of properties.  The sort priority of a property is
-     1000 by default, but can be overriden by wrapping the property
+     1000 by default, but can be overridden by wrapping the property
      using mkOrder. */
   sortProperties = defs:
     let
@@ -595,7 +595,7 @@ rec {
        functionality
 
      This show a warning if any a.b.c or d.e.f is set, and set the value of
-     x.y.z to the result of the merge function 
+     x.y.z to the result of the merge function
   */
   mkMergedOptionModule = from: to: mergeFn:
     { config, options, ... }:
@@ -611,12 +611,12 @@ rec {
           let val = getAttrFromPath f config;
               opt = getAttrFromPath f options;
           in
-          optionalString 
+          optionalString
             (val != "_mkMergedOptionModule")
             "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
         ) from);
       } // setAttrByPath to (mkMerge
-             (optional 
+             (optional
                (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from)
                (mergeFn config)));
     };

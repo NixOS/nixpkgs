@@ -2,12 +2,14 @@ diff --git a/Makefile.PL b/Makefile.PL
 index 55c485c..8501c02 100644
 --- a/Makefile.PL
 +++ b/Makefile.PL
-@@ -116,12 +116,7 @@ if ($^O eq 'MSWin32' || $IS_W32API)
+@@ -124,14 +124,7 @@ if ($^O eq 'MSWin32' || $IS_W32API)
  # Look for available libs
  our @libdirs = qw
  {
 -  -L/usr/lib
+-  -L/usr/lib/i386-linux-gnu
 -  -L/usr/X11R6/lib
+-  -L/opt/X11/lib
 -  -L/usr/local/lib
 -  -L/usr/openwin/lib
 -  -L/opt/csw/lib

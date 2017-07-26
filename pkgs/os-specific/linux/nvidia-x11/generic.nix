@@ -6,9 +6,12 @@
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
+
+, prePatch ? ""
+, patches ? []
 }:
 
-{ stdenv, callPackage, callPackage_i686, buildEnv, fetchurl
+{ stdenv, callPackage, callPackage_i686, fetchurl, fetchpatch
 , kernel ? null, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -32,16 +35,18 @@ let
     src =
       if stdenv.system == "i686-linux" then
         fetchurl {
-          url = "http://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
+          url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
           sha256 = sha256_32bit;
         }
       else if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = "http://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
+          url = "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
+    patches = if libsOnly then null else patches;
+    inherit prePatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv) system;
 
@@ -66,7 +71,7 @@ let
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };
-      persistenced = if persistencedSha256 == null then null else callPackage (import ./persistenced.nix self persistencedSha256) { };
+      persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
     };
 
     meta = with stdenv.lib; {

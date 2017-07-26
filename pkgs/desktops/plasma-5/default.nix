@@ -25,19 +25,80 @@ existing packages here and modify it as necessary.
 */
 
 {
-  libsForQt5, kdeDerivation, lib, fetchurl,
+  libsForQt5, lib, fetchurl,
   gconf,
   debug ? false,
 }:
 
 let
+  srcs = import ./srcs.nix {
+    inherit fetchurl;
+    mirror = "mirror://kde";
+  };
+
+  mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
+
   packages = self: with self;
     let
+
+      propagate = out:
+        let setupHook = { writeScript }:
+              writeScript "setup-hook" ''
+                if [ "$hookName" != postHook ]; then
+                    postHooks+=("source @dev@/nix-support/setup-hook")
+                else
+                    # Propagate $${out} output
+                    propagatedUserEnvPkgs="$propagatedUserEnvPkgs @${out}@"
+
+                    if [ -z "$outputDev" ]; then
+                        echo "error: \$outputDev is unset!" >&2
+                        exit 1
+                    fi
+
+                    # Propagate $dev so that this setup hook is propagated
+                    # But only if there is a separate $dev output
+                    if [ "$outputDev" != out ]; then
+                        if [ -n "$crossConfig" ]; then
+                          propagatedBuildInputs="$propagatedBuildInputs @dev@"
+                        else
+                          propagatedNativeBuildInputs="$propagatedNativeBuildInputs @dev@"
+                        fi
+                    fi
+                fi
+              '';
+        in callPackage setupHook {};
+
+      propagateBin = propagate "bin";
+
       callPackage = self.newScope {
-        plasmaPackage = import ./build-support/package.nix {
-          inherit kdeDerivation lib fetchurl;
-        };
+        mkDerivation = args:
+          let
+            inherit (args) name;
+            sname = args.sname or name;
+            inherit (srcs."${sname}") src version;
+
+            outputs = args.outputs or [ "out" ];
+            hasBin = lib.elem "bin" outputs;
+            hasDev = lib.elem "dev" outputs;
+
+            defaultSetupHook = if hasBin && hasDev then propagateBin else null;
+            setupHook = args.setupHook or defaultSetupHook;
+
+            meta = {
+              license = with lib.licenses; [
+                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+              ];
+              platforms = lib.platforms.linux;
+              maintainers = with lib.maintainers; [ ttuegel ];
+              homepage = "http://www.kde.org";
+            } // (args.meta or {});
+          in
+          mkDerivation (args // {
+            name = "${name}-${version}";
+            inherit meta outputs setupHook src;
+          });
       };
+
     in {
       bluedevil = callPackage ./bluedevil.nix {};
       breeze-gtk = callPackage ./breeze-gtk.nix {};
@@ -62,7 +123,7 @@ let
       kwayland-integration = callPackage ./kwayland-integration.nix {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
-      libkscreen = callPackage ./libkscreen.nix {};
+      libkscreen = callPackage ./libkscreen {};
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};

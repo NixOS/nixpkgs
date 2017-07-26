@@ -11,11 +11,11 @@ with lib;
 let
   inherit (python2Packages) python cython buildPythonApplication;
 in buildPythonApplication rec {
-  name = "xpra-0.17.6";
+  name = "xpra-2.0.2";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "1z7v58m45g10icpv22qg4dipafcfsdqkxqz73z3rwsb6r0kdyrpj";
+    sha256 = "09hzgbsj9v5qyh41rbz968ipi7016jk66b60vm6piryna9kbnha3";
   };
 
   buildInputs = [

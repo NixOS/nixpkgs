@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Qt4 library for QR-codes";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
     inherit (qt4.meta) platforms;
   };
 }

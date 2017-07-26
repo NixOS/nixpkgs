@@ -5,71 +5,74 @@ with lib;
 let
   cfg = config.services.pumpio;
   dataDir = "/var/lib/pump.io";
+  runDir = "/run/pump.io";
   user = "pumpio";
 
+  optionalSet = condition: value: if condition then value else {};
+
+  configScript = ./pump.io-configure.js;
   configOptions = {
-    driver = if cfg.driver == "disk" then null else cfg.driver;
-    params = ({ } //
-    (if cfg.driver == "disk" then {
-      dir = dataDir;
-     } else { }) //
-    (if cfg.driver == "mongodb" || cfg.driver == "redis" then {
-       host = cfg.dbHost;
-       port = cfg.dbPort;
-       dbname = cfg.dbName;
-       dbuser = cfg.dbUser;
-       dbpass = cfg.dbPassword;
-     } else { }) //
-    (if cfg.driver == "memcached" then {
-       host = cfg.dbHost;
-       port = cfg.dbPort;
-     } else { }) //
-     cfg.driverParams);
+    outputFile = "${runDir}/config.json";
+    config =
+      (optionalSet (cfg.driver != "disk") {
+        driver = cfg.driver;
+      }) //
+      {
+        params = (optionalSet (cfg.driver == "disk") { dir = dataDir; }) //
+                 (optionalSet (cfg.driver == "mongodb" || cfg.driver == "redis") {
+                   host = cfg.dbHost;
+                   port = cfg.dbPort;
+                   dbname = cfg.dbName;
+                   dbuser = cfg.dbUser;
+                   dbpass = cfg.dbPassword;
+                 }) //
+                 (optionalSet (cfg.driver == "memcached") {
+                   host = cfg.dbHost;
+                   port = cfg.dbPort;
+                 }) // cfg.driverParams;
+        secret = cfg.secret;
 
-    secret = cfg.secret;
+        address = cfg.address;
+        port = cfg.port;
 
-    address = cfg.address;
-    port = cfg.port;
+        noweb = false;
+        urlPort = cfg.urlPort;
+        hostname = cfg.hostname;
+        favicon = cfg.favicon;
 
-    noweb = false;
-    urlPort = cfg.urlPort;
-    hostname = cfg.hostname;
-    favicon = cfg.favicon;
+        site = cfg.site;
+        owner = cfg.owner;
+        ownerURL = cfg.ownerURL;
 
-    site = cfg.site;
-    owner = cfg.owner;
-    ownerURL = cfg.ownerURL;
+        key = cfg.sslKey;
+        cert = cfg.sslCert;
+        bounce = false;
 
-    key = cfg.sslKey;
-    cert = cfg.sslCert;
-    bounce = false;
+        spamhost = cfg.spamHost;
+        spamclientid = cfg.spamClientId;
+        spamclientsecret = cfg.spamClientSecret;
 
-    spamhost = cfg.spamHost;
-    spamclientid = cfg.spamClientId;
-    spamclientsecret = cfg.spamClientSecret;
+        requireEmail = cfg.requireEmail;
+        smtpserver = cfg.smtpHost;
+        smtpport = cfg.smtpPort;
+        smtpuser = cfg.smtpUser;
+        smtppass = cfg.smtpPassword;
+        smtpusessl = cfg.smtpUseSSL;
+        smtpfrom = cfg.smtpFrom;
 
-    requireEmail = cfg.requireEmail;
-    smtpserver = cfg.smtpHost;
-    smtpport = cfg.smtpPort;
-    smtpuser = cfg.smtpUser;
-    smtppass = cfg.smtpPassword;
-    smtpusessl = cfg.smtpUseSSL;
-    smtpfrom = cfg.smtpFrom;
+        nologger = false;
+        enableUploads = cfg.enableUploads;
+        datadir = dataDir;
+        debugClient = false;
+        firehose = cfg.firehose;
+        disableRegistration = cfg.disableRegistration;
 
-    nologger = false;
-    uploaddir =  "${dataDir}/uploads";
-    debugClient = false;
-    firehose = cfg.firehose;
-    disableRegistration = cfg.disableRegistration;
-  } //
-  (if cfg.port < 1024 then {
-    serverUser = user;  # have pump.io listen then drop privileges
-   } else { }) //
-  cfg.extraConfig;
-
-in
-
-{
+        inherit (cfg) secretFile dbPasswordFile smtpPasswordFile spamClientSecretFile;
+      } //
+      (optionalSet (cfg.port < 1024) {
+        serverUser = user;  # have pump.io listen then drop privileges
+      }) // cfg.extraConfig;
+}; in {
   options = {
 
     services.pumpio = {
@@ -77,11 +80,22 @@ in
       enable = mkEnableOption "Pump.io social streams server";
 
       secret = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         example = "my dog has fleas";
         description = ''
           A session-generating secret, server-wide password.  Warning:
           this is stored in cleartext in the Nix store!
+        '';
+      };
+
+      secretFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/pump.io-secret";
+        description = ''
+          A file containing the session-generating secret,
+          server-wide password.
         '';
       };
 
@@ -125,7 +139,7 @@ in
 
       hostname = mkOption {
         type = types.nullOr types.str;
-        default = null;
+        default = "localhost";
         description = ''
           The hostname of the server, used for generating
           URLs. Defaults to "localhost" which doesn't do much for you.
@@ -149,6 +163,15 @@ in
         description = ''
           Local filesystem path to the favicon.ico file to use. This
           will be served as "/favicon.ico" by the server.
+        '';
+      };
+
+      enableUploads = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If you want to disable file uploads, set this to false. Uploaded files will be stored
+          in ${dataDir}/uploads.
         '';
       };
 
@@ -253,6 +276,15 @@ in
         '';
       };
 
+      dbPasswordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/pump.io-dbpassword";
+        description = ''
+          A file containing the password corresponding to dbUser.
+        '';
+      };
+
       smtpHost = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -290,6 +322,17 @@ in
           cleartext in the Nix store!
         '';
       };
+
+      smtpPasswordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/pump.io-smtppassword";
+        description = ''
+          A file containing the password used to connect to SMTP
+          server. Might not be necessary for some servers.
+        '';
+      };
+
 
       smtpUseSSL = mkOption {
         type = types.bool;
@@ -332,24 +375,55 @@ in
           stored in cleartext in the Nix store!
         '';
       };
+      spamClientSecretFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/pump.io-spamclientsecret";
+        description = ''
+          A file containing the OAuth key for the spam server.
+        '';
+      };
     };
 
   };
 
   config = mkIf cfg.enable {
+    warnings = let warn = k: optional (cfg.${k} != null)
+                 "config.services.pumpio.${k} is insecure. Use ${k}File instead.";
+               in concatMap warn [ "secret" "dbPassword" "smtpPassword" "spamClientSecret" ];
+
+    assertions = [
+      { assertion = !(isNull cfg.secret && isNull cfg.secretFile);
+        message = "pump.io needs a secretFile configured";
+      }
+    ];
+
     systemd.services."pump.io" =
-      { description = "pump.io social network stream server";
+      { description = "Pump.io - stream server that does most of what people really want from a social network";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${pkgs.pumpio}/bin/pump -c /etc/pump.io.json";
-        serviceConfig.User = if cfg.port < 1024 then "root" else user;
-        serviceConfig.Group = user;
-      };
 
-      environment.etc."pump.io.json" = {
-        mode = "0440";
-        gid = config.ids.gids.pumpio;
-        text = builtins.toJSON configOptions;
+        preStart = ''
+          mkdir -p ${dataDir}/uploads
+          mkdir -p ${runDir}
+          chown pumpio:pumpio ${dataDir}/uploads ${runDir}
+          chmod 770 ${dataDir}/uploads ${runDir}
+
+          ${pkgs.nodejs}/bin/node ${configScript} <<EOF
+          ${builtins.toJSON configOptions}
+          EOF
+
+          chgrp pumpio ${configOptions.outputFile}
+          chmod 640 ${configOptions.outputFile}
+        '';
+
+        serviceConfig = {
+          ExecStart = "${pkgs.pumpio}/bin/pump -c ${configOptions.outputFile}";
+          PermissionsStartOnly = true;
+          User = if cfg.port < 1024 then "root" else user;
+          Group = user;
+        };
+        environment = { NODE_ENV = "production"; };
       };
 
       users.extraGroups.pumpio.gid = config.ids.gids.pumpio;

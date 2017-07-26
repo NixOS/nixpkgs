@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, gnugrep
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.1.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    sha256 = "1d46hs6pyq55izcmnk7hzvbl8iyxh7bp7qchc7rl8ay396ax2sd5";
+    sha256 = "1rnxfhcmg8zsagyf70hiwm32mam60hq58pzgy7jn8c3iwv24mpz5";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -24,6 +24,15 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
+  preInstall = ''
+    substituteInPlace programs/zstdgrep \
+      --replace "=grep" "=${gnugrep}/bin/grep" \
+      --replace "=zstdcat" "=$out/bin/zstdcat"
+
+    substituteInPlace programs/zstdless \
+      --replace "zstdcat" "$out/bin/zstdcat"
+  '';
+
   meta = with stdenv.lib; {
     description = "Zstandard real-time compression algorithm";
     longDescription = ''
@@ -40,6 +49,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus bsd2 ];
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nckx ];
+    maintainers = with maintainers; [ nckx orivej ];
   };
 }

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, alt-ergo, why3 }:
+, ltl2ba, coq, alt-ergo, why3, autoconf
+}:
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
@@ -8,20 +9,20 @@ in
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20160501";
-  slang   = "Aluminium";
+  version = "20170501";
+  slang   = "Phosphorus";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "02z4d1lg2cs4hgbjx74crfrabv39dyhdrq5lvhv0q3hx5c8w7p90";
+    sha256 = "16bccacms3n4rfpsxdxpdf24bk0hwrnzdpa2pbr6s847li73hkv1";
   };
 
   why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.34.tar.gz";
-    sha256 = "1335bhq9v3h46m8aba2c5myi9ghm87q41in0m15xvdrwq5big1jg";
+    url    = "http://why.lri.fr/download/why-2.37.tar.gz";
+    sha256 = "00xr8aq6zwln0ccfs1ng610j70r6ia6wqdyaqs9iqibqfa1scr3m";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ autoconf makeWrapper ];
 
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib alt-ergo ltl2ba ocamlgraph
@@ -29,7 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
 
-  enableParallelBuilding = true;
+  # Experimentally, the build segfaults with high core counts
+  enableParallelBuilding = false;
 
   unpackPhase = ''
     tar xf $src
@@ -39,7 +41,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     cd frama*
     ./configure --prefix=$out
-    make -j$NIX_BUILD_CORES
+    # It is not parallel safe
+    make
     make install
     cd ../why*
     FRAMAC=$out/bin/frama-c ./configure --prefix=$out

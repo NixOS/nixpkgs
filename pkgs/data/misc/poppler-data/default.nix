@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Encoding files for Poppler, a PDF rendering library";
     platforms = platforms.all;
     license = licenses.free; # more free licenses combined
-    maintainers = with maintainers; [ urkud ];
+    maintainers = with maintainers; [ ];
   };
 }

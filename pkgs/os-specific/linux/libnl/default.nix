@@ -1,25 +1,26 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig }:
 
-let version = "3.2.29"; in
+let version = "3.3.0"; in
 stdenv.mkDerivation {
   name = "libnl-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0y8fcb1bfbdvxgckq5p6l4jzx0kvv3g11svy6d5v3i6zy9kkq8wh";
-    rev = "libnl3_2_29";
     repo = "libnl";
     owner = "thom311";
+    rev = "libnl${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "1796kyq2lkhz2802v9kp32vlxf8ynlyqgyw9nhmry3qh5d0ahcsv";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
 
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
 
-  meta = {
+  meta = with lib; {
     inherit version;
     homepage = "http://www.infradead.org/~tgr/libnl/";
-    description = "Linux NetLink interface library";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Linux Netlink interface library suite";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.linux;
   };
 }

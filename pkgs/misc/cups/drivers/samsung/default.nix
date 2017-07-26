@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, cups, libusb, ghostscript }:
+{ stdenv, fetchurl, glibc, cups, libusb, libxml2, ghostscript }:
 
 let
 
@@ -18,9 +18,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     cups
     libusb
+    libxml2
   ];
-
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
   installPhase = ''
 
@@ -69,16 +68,15 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+    for bin in "$out/bin/"*; do
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$bin"
+      patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$bin"
+    done
 
-  for bin in $out/bin/*; do
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$bin"
-    patchelf --set-rpath "$out/lib:${cups.out}/lib" "$bin"
-  done
+    patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$out/lib/libscmssc.so"
+    patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
-  patchelf --set-rpath "$out/lib:${cups.out}/lib" "$out/lib/libscmssc.so"
-
-  ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
-
+    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
   '';
 
   # all binaries are already stripped

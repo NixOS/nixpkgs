@@ -1,19 +1,25 @@
-{ stdenv, fetchurl
-, unzip }:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
 
   name = "cimg-${version}";
-  version = "1.7.0";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "http://cimg.eu/files/CImg_${version}.zip";
-    sha256 = "06j3n7gvgxzvprqwf56nnca195y38dcbdlszrxyn5p9w9al437zj";
+    sha256 = "07g81jn25y2wksg9ycf9a7f5bfpcdl3xbrkp1xy3czl043a00y7s";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
-  builder = ./builder.sh;
+  installPhase = ''
+    install -dm 755 $out/include/CImg/plugins $doc/share/doc/cimg/examples
+
+    install -m 644 CImg.h $out/include/
+    cp -dr --no-preserve=ownership examples/* $doc/share/doc/cimg/examples/
+    cp -dr --no-preserve=ownership plugins/* $out/include/CImg/plugins/
+    cp README.txt $doc/share/doc/cimg/
+  '';
 
   outputs = [ "out" "doc" ];
 

@@ -38,7 +38,7 @@ in
         Specification of the time at which awstats will get updated.
         (in the format described by <citerefentry>
           <refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>)
+          <manvolnum>7</manvolnum></citerefentry>)
       '';
     };
 

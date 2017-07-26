@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=03&showall=1";
     hydraPlatforms = [];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu urkud ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.linux;
   };
 }

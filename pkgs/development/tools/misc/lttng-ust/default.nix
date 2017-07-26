@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, liburcu }:
+{ stdenv, fetchurl, liburcu, python }:
 
 # NOTE:
 #   ./configure ...
 #   [...]
 #   LTTng-UST will be built with the following options:
-#   
+#
 #   Java support (JNI): Disabled
 #   sdt.h integration:  Disabled
 #   [...]
@@ -13,14 +13,18 @@
 
 stdenv.mkDerivation rec {
   name = "lttng-ust-${version}";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${name}.tar.bz2";
-    sha256 = "1bsxxaqhkh9bwr1ll5acb41hvis2lhkl00h5ra2wdps27y31lm2d";
+    sha256 = "196snxrs1p205jz566rwxh7dqzsa3k16c7vm6k7i3gdvrmkx54dq";
   };
 
-  buildInputs = [ liburcu ];
+  buildInputs = [ liburcu python ];
+
+  preConfigure = ''
+    patchShebangs .
+  '';
 
   meta = with stdenv.lib; {
     description = "LTTng Userspace Tracer libraries";

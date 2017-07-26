@@ -1,5 +1,7 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, gcc5, openssl, libpng, lua5, pkgconfig, libidn, expat }:
+, openssl, libpng, lua5, pkgconfig, libidn, expat
+, gcc5 # TODO(@Dridus) remove this at next hash break
+}:
 
 stdenv.mkDerivation rec {
   name = "podofo-0.9.5";
@@ -10,14 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng libidn expat ];
-  nativeBuildInputs = [ cmake gcc5 pkgconfig ];
-  buildInputs = [ lua5 stdenv.cc.libc ];
 
-  crossAttrs = {
-    propagatedBuildInputs = [ zlib.crossDrv freetype.crossDrv libjpeg.crossDrv
-      libtiff.crossDrv fontconfig.crossDrv openssl.crossDrv libpng.crossDrv
-      lua5.crossDrv stdenv.ccCross.libc ];
-  };
+  # TODO(@Dridus) remove the ++ ghc5 at next hash break
+  nativeBuildInputs = [ cmake pkgconfig ] ++ stdenv.lib.optional stdenv.isLinux gcc5;
+
+  # TODO(@Dridus) remove the ++ libc at next hash break
+  buildInputs = [ lua5 ] ++ stdenv.lib.optional stdenv.isLinux stdenv.cc.libc;
 
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://podofo.sourceforge.net;
     description = "A library to work with the PDF file format";
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

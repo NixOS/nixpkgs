@@ -17,6 +17,17 @@ in
 
           This conflicts with the standard networking firewall, so make sure to
           disable it before using nftables.
+
+          Note that if you have Docker enabled you will not be able to use
+          nftables without intervention. Docker uses iptables internally to
+          setup NAT for containers. This module disables the ip_tables kernel
+          module, however Docker automatically loads the module. Please see [1]
+          for more information.
+
+          There are other programs that use iptables internally too, such as
+          libvirt.
+
+          [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
         '';
     };
     networking.nftables.ruleset = mkOption {

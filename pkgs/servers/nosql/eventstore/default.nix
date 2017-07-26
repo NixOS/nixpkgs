@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib/eventstore/clusternode}
     cp -r bin/clusternode/* $out/lib/eventstore/clusternode/
     cat > $out/bin/clusternode << EOF
-    #!/bin/sh
+    #!${stdenv.shell}
     exec ${mono}/bin/mono $out/lib/eventstore/clusternode/EventStore.ClusterNode.exe "\$@"
     EOF
     chmod +x $out/bin/clusternode

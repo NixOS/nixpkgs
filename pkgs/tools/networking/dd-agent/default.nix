@@ -15,11 +15,12 @@ let
 
     propagatedBuildInputs = with pythonPackages; [
       six
-      requests2
+      requests
       websocket_client
       ipaddress
       backports_ssl_match_hostname
       docker_pycreds
+      uptime
     ];
 
     # due to flake8
@@ -41,13 +42,13 @@ in stdenv.mkDerivation rec {
     python
     unzip
     makeWrapper
-    pythonPackages.requests2
+    pythonPackages.requests
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
     pythonPackages.simplejson
     pythonPackages.pyyaml
-    pythonPackages.pymongo
+    pythonPackages.pymongo_2_9_1
     pythonPackages.python-etcd
     pythonPackages.consul
     docker_1_10
@@ -62,6 +63,9 @@ in stdenv.mkDerivation rec {
     ln -s $out/agent/agent.py $out/bin/dd-agent
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
+
+    # Move out default conf.d so that /etc/dd-agent/conf.d is used
+    mv $out/agent/conf.d $out/agent/conf.d-system
 
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash

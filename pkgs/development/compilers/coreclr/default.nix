@@ -102,5 +102,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ obadz ];
     license = stdenv.lib.licenses.mit;
+    broken = true; # CoreCLR has proven to be very difficult to package. PRs welcome if someone wants to shave that yak.
   };
 }

@@ -9,6 +9,7 @@
 , enableLibsndfile ? true, libsndfile ? null
 # amrnb and amrwb are unfree, disabled by default
 , enableAMR ? false, amrnb ? null, amrwb ? null
+, enableLibpulseaudio ? true, libpulseaudio ? null
 }:
 
 with stdenv.lib;
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
     optional enableFLAC flac ++
     optional enablePNG libpng ++
     optional enableLibsndfile libsndfile ++
-    optionals enableAMR [ amrnb amrwb ];
+    optionals enableAMR [ amrnb amrwb ] ++
+    optional enableLibpulseaudio libpulseaudio;
 
   meta = {
     description = "Sample Rate Converter for audio";

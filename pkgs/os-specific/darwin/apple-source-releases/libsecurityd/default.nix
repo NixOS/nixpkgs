@@ -1,4 +1,4 @@
-{ appleDerivation, bootstrap_cmds, libsecurity_cdsa_client, libsecurity_cdsa_utilities, libsecurity_utilities, osx_private_sdk }:
+{ appleDerivation, bootstrap_cmds, libsecurity_cdsa_client, libsecurity_cdsa_utilities, libsecurity_utilities }:
 appleDerivation {
   buildInputs = [
     libsecurity_cdsa_utilities

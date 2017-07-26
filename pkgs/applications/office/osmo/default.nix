@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libxml2, gettext, libical, libnotify
-, libarchive, gtkspell2, webkitgtk2, libgringotts }:
+{ stdenv, fetchurl, pkgconfig, gtk3, libxml2, gettext, libical, libnotify
+, libarchive, gtkspell3, webkitgtk, libgringotts, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "osmo-${version}";
-  version = "0.2.14";
+  version = "0.4.0-1";
 
   src = fetchurl {
     url = "mirror://sourceforge/osmo-pim/${name}.tar.gz";
-    sha256 = "0vaayrmyiqn010gr11drmhkkg8fkxdmla3gwj9v3zvp5x44kab05";
+    sha256 = "fb454718e071c44bd360ce3e56cb29926cbf44a0d06ec738fa9b40fe3cbf8a33";
   };
 
-  buildInputs = [ pkgconfig gtk2 libxml2 gettext libical libnotify libarchive
-    gtkspell2 webkitgtk2 libgringotts ];
+  nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];
+  buildInputs = [ gtk3 libxml2 libical libnotify libarchive
+    gtkspell3 webkitgtk libgringotts ];
 
   meta = with stdenv.lib; {
     description = "A handy personal organizer";

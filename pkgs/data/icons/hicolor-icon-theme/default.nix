@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Default fallback theme used by implementations of the icon theme specification";
     homepage = http://icon-theme.freedesktop.org/releases/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

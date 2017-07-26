@@ -4,16 +4,20 @@
 
 stdenv.mkDerivation rec {
   name = "brotli-${version}";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "0wjypkzhbv30x30j2z8ba45r6nm4k98hsa4i42kqx03vzarsr2l4";
+    sha256 = "1wapq5hzflbmrcqgz92iv79rm893bskh03kvqgnn33dzbz3slavs";
   };
 
   buildInputs = [ cmake ];
+
+  # This breaks on Darwin because our cmake hook tries to make a build folder
+  # and the wonderful bazel BUILD file is already there (yay case-insensitivty?)
+  prePatch = "rm BUILD";
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

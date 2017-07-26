@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "Decoder for many camera raw picture formats";
     license = stdenv.lib.licenses.free;
     platforms = with stdenv.lib.platforms; allBut cygwin;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

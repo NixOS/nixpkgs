@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libusb ];
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     description = "A library to talk to FTDI chips using libusb";
     homepage = http://www.intra2net.com/en/developer/libftdi/;

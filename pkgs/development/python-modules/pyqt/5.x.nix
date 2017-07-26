@@ -1,11 +1,12 @@
 { lib, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
-, lndir, makeWrapper, qmakeHook }:
+, lndir, makeWrapper, qmake }:
 
 let
   version = "5.8.1";
-  inherit (pythonPackages) mkPythonDerivation python dbus-python sip;
-in mkPythonDerivation {
+  inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+in buildPythonPackage {
   name = "PyQt-${version}";
+  format = "other";
 
   meta = with lib; {
     description = "Python bindings for Qt5";
@@ -20,9 +21,10 @@ in mkPythonDerivation {
     sha256 = "0biak7l574i2gc8lj1s45skajbxsmmx66nlvs6xaakzkc6r293qy";
   };
 
+  nativeBuildInputs = [ pkgconfig makeWrapper qmake ];
+
   buildInputs = [
-    pkgconfig makeWrapper lndir
-    qtbase qtsvg qtwebkit qtwebengine dbus_libs qmakeHook
+    lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
   ];
 
   propagatedBuildInputs = [ sip ];

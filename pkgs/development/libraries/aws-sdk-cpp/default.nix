@@ -14,18 +14,19 @@ let
         else throw "Unsupported system!";
 in stdenv.mkDerivation rec {
   name = "aws-sdk-cpp-${version}";
-  version = "1.0.60";
+  version = "1.0.153";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0k6jv70l4xhkf2rna6zaxkxgd7xh7cc1ghzska637h5d2v6h8nzk";
+    sha256 = "0mglg9a6klmsam8r9va7y5x2s8xylhljwcg93sr8152rvhxnjv08";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
   outputs = [ "out" "dev" ];
+  separateDebugInfo = stdenv.isLinux;
 
   buildInputs = [ cmake curl ];
 
@@ -43,6 +44,11 @@ in stdenv.mkDerivation rec {
       for i in testing-resources aws-cpp-sdk-*; do
         export ${loaderVar}=$(pwd)/$i:''${${loaderVar}}
       done
+    '';
+
+  preConfigure =
+    ''
+      rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     '';
 
   NIX_LDFLAGS = lib.concatStringsSep " " (

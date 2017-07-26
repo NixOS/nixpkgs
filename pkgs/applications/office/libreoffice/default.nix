@@ -22,7 +22,7 @@ let
   primary-src = import ./default-primary-src.nix { inherit fetchurl; };
 in
 
-with { inherit (primary-src) major minor subdir version; };
+let inherit (primary-src) major minor subdir version; in
 
 let
   lib = stdenv.lib;
@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1ld1zj2f0cbyr0fkibsiazyrb4qkshc9yqkfmq7b64hhp9zsa8a3";
+      sha256 = "1r386qkfmlq7p1zly4xl0s0shp1d3rq9hwm1403ap22qpgrcgqyb";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0zqs9g6hqjv5z0yzi0ag4ii158249c70ppqhg1v60haip40xan6z";
+      sha256 = "03n2lj6zhjg585zq9z458mj29dshni25p1v959a2z1xa3jzwfjfz";
     };
 
   };
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   # It also seems not to mention libdl explicitly in some places.
   NIX_LDFLAGS = "-lcups -ldl";
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead 
+  # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
 
@@ -71,6 +71,8 @@ in stdenv.mkDerivation rec {
   # It's their system.
   configureScript = "./autogen.sh";
   dontUseCmakeConfigure = true;
+
+  patches = [ ./xdg-open.patch ];
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
@@ -156,7 +158,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
 
-    for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
+    for a in sbase scalc sdraw smath swriter simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
       wrapProgram "$out/bin/$a" \
          --prefix XDG_DATA_DIRS : \
@@ -187,6 +189,7 @@ in stdenv.mkDerivation rec {
     "--disable-report-builder"
     "--enable-python=system"
     "--enable-dbus"
+    "--enable-release-build"
     (lib.enableFeature kdeIntegration "kde4")
     "--with-package-format=installed"
     "--enable-epm"

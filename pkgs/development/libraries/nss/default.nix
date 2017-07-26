@@ -9,14 +9,16 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.28.3";
+  version = "3.31";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_28_3_RTM/src/${name}.tar.gz";
-    sha256 = "1wrx2ig6yvgywjs25hzy4szgml21hwhd7ds0ghyfybhkiq7lyg6x";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_31_RTM/src/${name}.tar.gz";
+    sha256 = "0pd643a8ns7q5az5ai3ascrw666i2kbfiyy1c9hlhw9jd8jn21g9";
   };
 
-  buildInputs = [ nspr perl zlib sqlite ];
+  buildInputs = [ perl zlib sqlite ];
+
+  propagatedBuildInputs = [ nspr ];
 
   prePatch = ''
     xz -d < ${nssPEM} | patch -p1

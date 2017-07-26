@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig
+{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig
 , harfbuzz, icu, lpeg, luaexpat, luazlib, luafilesystem
 , fontconfig, lua, libiconv
 }:
@@ -26,7 +26,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
-  buildInputs = [ harfbuzz icu lua lpeg luaexpat luazlib luafilesystem fontconfig libiconv ];
+  buildInputs = [ harfbuzz icu lua lpeg luaexpat luazlib luafilesystem fontconfig libiconv ]
+  ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+  ;
+
+  preConfigure = optionalString stdenv.isDarwin ''
+    sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
+  '';
+
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework AppKit";
 
   LUA_PATH = luaPath;
   LUA_CPATH = luaCPath;
@@ -36,6 +44,9 @@ stdenv.mkDerivation rec {
       --set LUA_PATH "${luaPath};" \
       --set LUA_CPATH "${luaCPath};" \
   '';
+
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
   meta = {
     description = "A typesetting system";
@@ -49,8 +60,8 @@ stdenv.mkDerivation rec {
       technologies and borrowing some ideas from graphical systems
       such as InDesign.
     '';
-    homepage = "http://www.sile-typesetter.org";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    homepage = http://www.sile-typesetter.org;
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

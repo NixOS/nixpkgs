@@ -9,7 +9,7 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
-  sddm = pkgs.sddm.override { inherit (cfg) themes; };
+  inherit (pkgs) sddm;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
@@ -37,8 +37,8 @@ let
 
     [Theme]
     Current=${cfg.theme}
-    ThemeDir=${sddm}/share/sddm/themes
-    FacesDir=${sddm}/share/sddm/faces
+    ThemeDir=/run/current-system/sw/share/sddm/themes
+    FacesDir=/run/current-system/sw/share/sddm/faces
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -59,7 +59,7 @@ let
     [Autologin]
     User=${cfg.autoLogin.user}
     Session=${defaultSessionName}.desktop
-    Relogin=${if cfg.autoLogin.relogin then "true" else "false"}
+    Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
@@ -69,7 +69,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "none") ("+" + wm);
 
 in
 {
@@ -102,14 +102,6 @@ in
         default = "";
         description = ''
           Greeter theme to use.
-        '';
-      };
-
-      themes = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = ''
-          Extra packages providing themes.
         '';
       };
 
@@ -204,7 +196,15 @@ in
     services.xserver.displayManager.job = {
       logsXsession = true;
 
-      execCmd = "exec ${sddm}/bin/sddm";
+      environment = {
+        # Load themes from system environment
+        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+
+        XDG_DATA_DIRS = "/run/current-system/sw/share";
+      };
+
+      execCmd = "exec /run/current-system/sw/bin/sddm";
     };
 
     security.pam.services = {
@@ -253,7 +253,8 @@ in
 
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
-    services.dbus.packages = [ sddm.unwrapped ];
+    environment.systemPackages = [ sddm ];
+    services.dbus.packages = [ sddm ];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

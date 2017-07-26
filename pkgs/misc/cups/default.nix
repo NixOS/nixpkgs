@@ -9,17 +9,16 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cups-${version}";
-  version = "2.1.4";
+  version = "2.2.2";
 
   passthru = { inherit version; };
 
   src = fetchurl {
-    url = "https://github.com/apple/cups/releases/download/release-${version}/cups-${version}-source.tar.gz";
-    sha256 = "13bjxw256wd1nff22vj2z25mdhllj2h6d9xypsg55b40661zs52b";
+    url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    sha256 = "1xp4ji4rz3xffsz6w6nd60ajxvvihn02pkyp2l4smhqxbmyvp2gm";
   };
 
-  # FIXME: the cups libraries contains some $out/share strings so can't be split.
-  outputs = [ "out" "dev" "man" ]; # TODO: above
+  outputs = [ "out" "lib" "dev" "man" ];
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
@@ -30,6 +29,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   configureFlags = [
+    # Put just lib/* and locale into $lib; this didn't work directly.
+    # lib/cups is moved back to $out in postInstall.
+    # Beware: some parts of cups probably don't fully respect these.
+    "--prefix=$(lib)"
+    "--datadir=$(out)/share"
+    "--localedir=$(lib)/share/locale"
+
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-systemd=\${out}/lib/systemd/system"
@@ -46,6 +52,11 @@ stdenv.mkDerivation rec {
     "--with-bundledir=$out"
     "--disable-launchd"
   ];
+
+  # XXX: Hackery until https://github.com/NixOS/nixpkgs/issues/24693
+  preBuild = if stdenv.isDarwin then ''
+    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+  '' else null;
 
   installFlags =
     [ # Don't try to write in /var at build time.
@@ -68,14 +79,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+      moveToOutput lib/cups "$out"
+
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
 
-      mkdir $dev/bin
-      mv $out/bin/cups-config $dev/bin/
+      # Some outputs in cups-config were unexpanded and some even wrong.
+      moveToOutput bin/cups-config "$dev"
+      sed -e "/^cups_serverbin=/s|\$(lib)|$out|" \
+          -e "s|\$(out)|$out|" \
+          -e "s|\$(lib)|$lib|" \
+          -i "$dev/bin/cups-config"
 
       # Rename systemd files provided by CUPS
-      for f in $out/lib/systemd/system/*; do
+      for f in "$out"/lib/systemd/system/*; do
         substituteInPlace "$f" \
           --replace "org.cups.cupsd" "cups" \
           --replace "org.cups." ""
@@ -88,7 +105,7 @@ stdenv.mkDerivation rec {
       done
     '' + optionalString stdenv.isLinux ''
       # Use xdg-open when on Linux
-      substituteInPlace $out/share/applications/cups.desktop \
+      substituteInPlace "$out"/share/applications/cups.desktop \
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
@@ -96,7 +113,7 @@ stdenv.mkDerivation rec {
     homepage = https://cups.org/;
     description = "A standards-based printing system for UNIX";
     license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
-    maintainers = with maintainers; [ urkud jgeerds ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ jgeerds ];
+    platforms = platforms.unix;
   };
 }

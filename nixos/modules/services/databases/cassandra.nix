@@ -21,8 +21,8 @@ let
   cassandraConf = ''
     cluster_name: ${cfg.clusterName}
     num_tokens: 256
-    auto_bootstrap: ${if cfg.autoBootstrap then "true" else "false"}
-    hinted_handoff_enabled: ${if cfg.hintedHandOff then "true" else "false"}
+    auto_bootstrap: ${boolToString cfg.autoBootstrap}
+    hinted_handoff_enabled: ${boolToString cfg.hintedHandOff}
     hinted_handoff_throttle_in_kb: ${builtins.toString cfg.hintedHandOffThrottle}
     max_hints_delivery_threads: 2
     max_hint_window_in_ms: 10800000 # 3 hours
@@ -62,7 +62,7 @@ let
     rpc_keepalive: true
     rpc_server_type: sync
     thrift_framed_transport_size_in_mb: 15
-    incremental_backups: ${if cfg.incrementalBackups then "true" else "false"}
+    incremental_backups: ${boolToString cfg.incrementalBackups}
     snapshot_before_compaction: false
     auto_snapshot: true
     column_index_size_in_kb: 64
@@ -89,7 +89,7 @@ let
       truststore: ${cfg.trustStorePath}
       truststore_password: ${cfg.trustStorePassword}
     client_encryption_options:
-      enabled: ${if cfg.clientEncryption then "true" else "false"}
+      enabled: ${boolToString cfg.clientEncryption}
       keystore: ${cfg.keyStorePath}
       keystore_password: ${cfg.keyStorePassword}
     internode_compression: all
@@ -310,7 +310,6 @@ in {
     autoBootstrap = mkOption {
       description = "It makes new (non-seed) nodes automatically migrate the right data to themselves.";
       default = true;
-      example = true;
       type = types.bool;
     };
     streamingSocketTimoutInMS = mkOption {

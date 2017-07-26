@@ -6,7 +6,7 @@ GNOME_FTP=ftp.gnome.org/pub/GNOME/sources
 
 # projects that don't follow the GNOME major versioning, or that we don't want to
 # programmatically update
-NO_GNOME_MAJOR='gtkhtml gdm'
+NO_GNOME_MAJOR="ghex gtkhtml gdm"
 
 usage() {
   echo "Usage: $0 gnome_dir <show project>|<update project>|<update-all> [major.minor]" >&2

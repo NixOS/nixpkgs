@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub }:
 
-let version = "1.05"; in
+let version = "1.07"; in
 stdenv.mkDerivation {
   name = "yadm-${version}";
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner  = "TheLocehiliosan";
     repo   = "yadm";
     rev    = "${version}";
-    sha256 = "11bqgz28qzgb3iz8xvda9z0mh5r1a9m032pqm772ypiixsfz8hdd";
+    sha256 = "0kkxrvw17pmrx1dq0dq53jb9pm545firakrxc48znfw54n2036fw";
   };
 
   buildCommand = ''

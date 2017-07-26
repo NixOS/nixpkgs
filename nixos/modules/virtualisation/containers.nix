@@ -274,7 +274,6 @@ let
       };
       isReadOnly = mkOption {
         default = true;
-        example = true;
         type = types.bool;
         description = "Determine whether the mounted path will be accessed in read-only mode.";
       };

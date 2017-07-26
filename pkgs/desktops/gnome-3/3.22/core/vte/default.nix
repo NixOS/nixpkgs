@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  configureFlags = [ "--enable-introspection" ];
+  configureFlags = [ "--enable-introspection" "--disable-Bsymbolic" ];
 
   enableParallelBuilding = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2;
     maintainers = with maintainers; [ astsmtl antono lethalman ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
 

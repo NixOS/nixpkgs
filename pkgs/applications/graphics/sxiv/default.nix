@@ -1,13 +1,15 @@
-{ stdenv, fetchFromGitHub, libX11, imlib2, giflib, libexif }:
+{ stdenv, fetchFromGitHub, libX11, imlib2, giflib, libexif, conf ? null }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "sxiv-${version}";
-  version = "v1.3.2";
-  #https://github.com/muennich/sxiv/archive/v1.3.2.zip
+  version = "1.3.2";
+
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "sxiv";
-    rev = version;
+    rev = "v${version}";
     sha256 = "1f4gz1qjhb44bbb3q5fqk439zyipkwnr19zhg89yq2pgmzzzqr2h";
   };
 
@@ -16,12 +18,16 @@ stdenv.mkDerivation rec {
       --replace /usr/local $out
   '';
 
+  configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
+  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+
   buildInputs = [ libX11 imlib2 giflib libexif ];
+
   meta = {
     description = "Simple X Image Viewer";
     homepage = "https://github.com/muennich/sxiv";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ jfrankenau fuuzetsu ];
   };
 }

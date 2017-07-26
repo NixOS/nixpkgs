@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "asn1c-${version}";
-  version = "0.9.27";
+  version = "0.9.28";
 
   src = fetchurl {
     url = "http://lionet.info/soft/asn1c-${version}.tar.gz";
-    sha256 = "17nvn2kzvlryasr9dzqg6gs27b9lvqpval0k31pb64bjqbhn8pq2";
+    sha256 = "1fc64g45ykmv73kdndr4zdm4wxhimhrir4rxnygxvwkych5l81w0";
   };
 
   outputs = [ "out" "doc" "man" ];

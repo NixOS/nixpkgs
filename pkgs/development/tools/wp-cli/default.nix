@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, php }:
 
 let
-  version = "1.1.0";
+  version = "1.2.1";
 
   bin  = "bin/wp";
   ini  = "etc/php/wp-cli.ini";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "08b2lzc8fa9f5xldbdza6x3lg6jsp3wfwpyy187gxqw5pmqp11xc";
+    sha256 = "1ds9nhm0akajwykblg0s131vki02k3rpf72a851r3wjw2qv116wz";
   };
 
   buildCommand = ''

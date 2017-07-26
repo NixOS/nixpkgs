@@ -3,13 +3,12 @@
 let
   inherit (python2Packages) python cython;
 in stdenv.mkDerivation rec {
-  name = "libplist-1.12";
+  name = "libplist-${version}";
+  version = "2.0.0";
 
-  nativeBuildInputs = [ pkgconfig swig2 python cython  ];
+  nativeBuildInputs = [ pkgconfig swig2 python cython ];
 
-  #patches = [ ./swig.patch ];
-
-  propagatedBuildInputs = [ libxml2 glib ];
+  propagatedBuildInputs = [ glib ];
 
   passthru.swig = swig2;
 
@@ -21,19 +20,12 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.libimobiledevice.org/downloads/${name}.tar.bz2";
-    sha256 = "1gj4nv0bvdm5y2sqm2vj2rn44k67ahw3mh6q614qq4nyngfdxzqf";
+    sha256 = "00pnh9zf3iwdji2faccns7vagbmbrwbj9a8zp9s53a6rqaa9czis";
   };
 
   meta = {
     homepage = http://github.com/JonathanBeck/libplist;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    knownVulnerabilities = [
-      "CVE-2017-5209: base64decode function in base64.c allows attackers to obtain sensitive information from process memory or cause a denial of service"
-      "CVE-2017-5545: attackers to obtain sensitive information from process memory or cause a denial of service"
-      "CVE-2017-5834: A heap-buffer overflow in parse_dict_node"
-      "CVE-2017-5835: A memory allocation error leading to DoS"
-      "CVE-2017-5836: A type inconsistency in bplist.c"
-    ];
+    maintainers = [ ];
   };
 }

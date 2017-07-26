@@ -1,0 +1,31 @@
+diff --git a/libobs/CMakeLists.txt b/libobs/CMakeLists.txt
+index cd2b80e1..7d829cdb 100644
+--- a/libobs/CMakeLists.txt
++++ b/libobs/CMakeLists.txt
+@@ -15,6 +15,7 @@ if(UNIX)
+ 	find_package(DBus QUIET)
+ 	if (NOT APPLE)
+ 		find_package(X11_XCB REQUIRED)
++		find_package(XCB REQUIRED)
+ 	endif()
+ else()
+ 	set(HAVE_DBUS "0")
+@@ -161,12 +162,15 @@ elseif(UNIX)
+ 	endif()
+ 
+ 	include_directories(
+-		${X11_XCB_INCLUDE_DIRS})
++		${X11_XCB_INCLUDE_DIRS}
++		${XCB_INCLUDE_DIRS})
+ 	add_definitions(
+-		${X11_XCB_DEFINITIONS})
++		${X11_XCB_DEFINITIONS}
++		${XCB_DEFINITIONS})
+ 	set(libobs_PLATFORM_DEPS
+ 		${libobs_PLATFORM_DEPS}
+-		${X11_XCB_LIBRARIES})
++		${X11_XCB_LIBRARIES}
++		${XCB_LIBRARIES})
+ 
+ 	if(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+ 		# use the sysinfo compatibility library on bsd

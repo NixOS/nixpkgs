@@ -2,7 +2,8 @@
 
 , xlibs, libXcursor, libXScrnSaver, libXrandr, libXtst
 , fontconfig, freetype, harfbuzz, icu, dbus
-, zlib, libjpeg, libpng, libtiff
+, zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
+, jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsaLib
 , libcap
 , pciutils
@@ -11,7 +12,7 @@
 , coreutils
 , pkgconfig, python2
 
-, stdenv # lib.optional, needsPax
+, lib, stdenv # lib.optional, needsPax
 }:
 
 qtSubmodule {
@@ -41,26 +42,38 @@ qtSubmodule {
     sed -i -e 's,/cert.pem,/certs/ca-bundle.crt,' src/3rdparty/chromium/third_party/boringssl/src/crypto/x509/x509_def.c
 
     configureFlags+="\
-        -plugindir $out/lib/qt5/plugins \
-        -importdir $out/lib/qt5/imports \
-        -qmldir $out/lib/qt5/qml \
-        -docdir $out/share/doc/qt5"
+        -plugindir $out/$qtPluginPrefix \
+        -qmldir $out/$qtQmlPrefix \
+        -docdir $out/$qtDocPrefix"
   '';
   propagatedBuildInputs = [
-    dbus zlib alsaLib
-
     # Image formats
-    libjpeg libpng libtiff
+    libjpeg libpng libtiff libwebp
+
+    # Video formats
+    srtp libvpx
+
+    # Audio formats
+    libopus
 
     # Text rendering
-    fontconfig freetype harfbuzz icu
+    harfbuzz icu
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
+    dbus zlib minizip snappy nss protobuf jsoncpp libevent
+
+    # Audio formats
+    alsaLib
+
+    # Text rendering
+    fontconfig freetype
+
+    libcap
+    pciutils
 
     # X11 libs
     xlibs.xrandr libXScrnSaver libXcursor libXrandr xlibs.libpciaccess libXtst
     xlibs.libXcomposite
-
-    libcap
-    pciutils
   ];
   patches = [
     ./chromium-clang-update-py.patch

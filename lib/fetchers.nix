@@ -1,4 +1,4 @@
-# snippets that can be shared by mutliple fetchers (pkgs/build-support)
+# snippets that can be shared by multiple fetchers (pkgs/build-support)
 {
 
   proxyImpureEnvVars = [

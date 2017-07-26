@@ -57,8 +57,15 @@ releaseTools.sourceTarball rec {
     fi
 
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval --strict --show-trace lib/tests.nix)"
-    if test "$res" != "[ ]"; then
+    if
+        # `set -e` doesn't work inside here, so need to && instead :(
+        res="$(nix-instantiate --eval --strict lib/tests/misc.nix)" \
+        && [[ "$res" == "[ ]" ]] \
+        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix)" \
+        && [[ "$res" == "[ ]" ]]
+    then
+        true
+    else
         echo "regression tests for lib failed, got: $res"
         exit 1
     fi

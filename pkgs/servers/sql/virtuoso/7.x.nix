@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://virtuoso.openlinksw.com/dataspace/dav/wiki/Main/;
     #configure: The current version [...] can only be built on 64bit platforms
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.urkud ];
+    maintainers = [ ];
   };
 }

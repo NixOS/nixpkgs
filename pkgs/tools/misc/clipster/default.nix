@@ -1,19 +1,20 @@
 {fetchFromGitHub , stdenv, makeWrapper, python3, gtk3, libwnck3 }:
 
 stdenv.mkDerivation  rec {
-  name = "clipster-unstable-${version}";
-  version = "2017-02-17";
+  name = "clipster-${version}";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
-    rev = "8c4732d7c26ddec6faac295d3ddb2278c6ed5647";
-    sha256 = "00ki3srdjh96ghan1z4zd8w5cahgvnpa8hccnxmn0im1xrgpkh3b";
+    rev = "${version}";
+    sha256 = "0y0igi5r5x2gxglm0aarn2mhdfn6whakm6359i3h0wkn6qw1p1l2";
   };
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck3 makeWrapper ];
+  buildInputs =  [ pythonEnv gtk3 libwnck3 ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster
@@ -46,6 +47,6 @@ stdenv.mkDerivation  rec {
     license = licenses.agpl3;
     homepage = https://github.com/mrichar1/clipster;
     platforms = platforms.linux;
-    maintainers = [maintainers.magnetophon];
+    maintainers = [ maintainers.magnetophon ];
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, cmake, qtbase, qttools }:
+{ mkDerivation, lib, fetchgit, cmake, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "speedcrunch-${version}";
   version = "0.12.0";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = http://speedcrunch.org;
     license     = licenses.gpl2Plus;
     description = "A fast power user calculator";
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
       full keyboard-friendly and more than 15 built-in math function.
     '';
     maintainers = with maintainers; [ gebner ];
-    platforms = platforms.all;
+    inherit (qtbase.meta) platforms;
+    # works with qt 5.6 and qt 5.8
+    broken = builtins.compareVersions qtbase.version "5.7.0" == 0;
   };
-
 }

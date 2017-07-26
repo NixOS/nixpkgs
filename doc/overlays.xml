@@ -34,7 +34,7 @@ first one present is considered, and all the rest are ignored:
 
   <listitem>
 
-    <para>In the directory <filename>~/.nixpkgs/overlays/</filename>.</para>
+    <para>In the directory <filename>~/.config/nixpkgs/overlays/</filename>.</para>
   </listitem>
 
 </orderedlist>
@@ -50,7 +50,7 @@ the same recipe. In the case where overlays are loaded from a directory, they ar
 alphabetical order.</para>
 
 <para>To install an overlay using the last option, you can clone the overlay's repository and add
-a symbolic link to it in <filename>~/.nixpkgs/overlays/</filename> directory.</para>
+a symbolic link to it in <filename>~/.config/nixpkgs/overlays/</filename> directory.</para>
 
 </section>
 
@@ -78,7 +78,7 @@ self: super:
 <para>The first argument, usually named <varname>self</varname>, corresponds to the final package
 set. You should use this set for the dependencies of all packages specified in your
 overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
-from <varname>self</varname>, as well as the overriden dependencies used in the
+from <varname>self</varname>, as well as the overridden dependencies used in the
 <varname>boost</varname> override.</para>
 
 <para>The second argument, usually named <varname>super</varname>,

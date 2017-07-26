@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia, qttools, qtconnectivity
-, yacc, flex, zlib, config, qmakeHook, makeQtWrapper
+, yacc, flex, zlib, config, qmake, makeWrapper
 }:
 stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/V${version}.tar.gz";
     sha256 = "0fiz2pj155cd357kph50lc6rjyzwp045glfv4y68qls9j7m9ayaf";
   };
-  qtInputs = [
-    qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools yacc flex zlib
+  buildInputs = [
+    qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools zlib
     qtconnectivity
   ];
-  nativeBuildInputs = [ makeQtWrapper qmakeHook ] ++ qtInputs;
+  nativeBuildInputs = [ flex makeWrapper qmake yacc ];
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp src/GoldenCheetah $out/bin
-    wrapQtProgram $out/bin/GoldenCheetah --set LD_LIBRARY_PATH "${zlib.out}/lib"
+    wrapProgram $out/bin/GoldenCheetah --set LD_LIBRARY_PATH "${zlib.out}/lib"
+
+    runHook postInstall
   '';
   meta = {
     description = "Performance software for cyclists, runners and triathletes";

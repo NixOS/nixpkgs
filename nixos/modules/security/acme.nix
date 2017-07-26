@@ -13,10 +13,16 @@ let
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
-          will be created automatically if it doesn't exist.
+          will be created below the webroot if it doesn't exist.
           <literal>http://example.org/.well-known/acme-challenge/</literal> must also
           be available (notice unencrypted HTTP).
         '';
+      };
+
+      domain = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Domain to fetch certificate for (defaults to the entry name)";
       };
 
       email = mkOption {
@@ -40,7 +46,10 @@ let
       allowKeysForGroup = mkOption {
         type = types.bool;
         default = false;
-        description = "Give read permissions to the specified group to read SSL private certificates.";
+        description = ''
+          Give read permissions to the specified group
+          (<option>security.acme.group</option>) to read SSL private certificates.
+        '';
       };
 
       postRun = mkOption {
@@ -59,21 +68,24 @@ let
           "cert.der" "cert.pem" "chain.pem" "external.sh"
           "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json"
         ]);
-        default = [ "fullchain.pem" "key.pem" "account_key.json" ];
+        default = [ "fullchain.pem" "full.pem" "key.pem" "account_key.json" ];
         description = ''
           Plugins to enable. With default settings simp_le will
-          store public certificate bundle in <filename>fullchain.pem</filename>
-          and private key in <filename>key.pem</filename> in its state directory.
+          store public certificate bundle in <filename>fullchain.pem</filename>,
+          private key in <filename>key.pem</filename> and those two previous
+          files combined in <filename>full.pem</filename> in its state directory.
         '';
       };
 
       extraDomains = mkOption {
         type = types.attrsOf (types.nullOr types.str);
         default = {};
-        example = {
-          "example.org" = "/srv/http/nginx";
-          "mydomain.org" = null;
-        };
+        example = literalExample ''
+          {
+            "example.org" = "/srv/http/nginx";
+            "mydomain.org" = null;
+          }
+        '';
         description = ''
           Extra domain names for which certificates are to be issued, with their
           own server roots if needed.
@@ -110,7 +122,7 @@ in
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -133,17 +145,19 @@ in
         description = ''
           Attribute set of certificates to get signed and renewed.
         '';
-        example = {
-          "example.com" = {
-            webroot = "/var/www/challenges/";
-            email = "foo@example.com";
-            extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
-          };
-          "bar.example.com" = {
-            webroot = "/var/www/challenges/";
-            email = "bar@example.com";
-          };
-        };
+        example = literalExample ''
+          {
+            "example.com" = {
+              webroot = "/var/www/challenges/";
+              email = "foo@example.com";
+              extraDomains = { "www.example.com" = null; "foo.example.com" = "/var/www/foo/"; };
+            };
+            "bar.example.com" = {
+              webroot = "/var/www/challenges/";
+              email = "bar@example.com";
+            };
+          }
+        '';
       };
     };
   };
@@ -157,9 +171,10 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
+                domain = if data.domain != null then data.domain else cert;
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
@@ -178,12 +193,15 @@ in
                   path = [ pkgs.simp_le ];
                   preStart = ''
                     mkdir -p '${cfg.directory}'
-                    chown '${data.user}:${data.group}' '${cfg.directory}'
+                    chown 'root:root' '${cfg.directory}'
+                    chmod 755 '${cfg.directory}'
                     if [ ! -d '${cpath}' ]; then
                       mkdir '${cpath}'
                     fi
                     chmod ${rights} '${cpath}'
                     chown -R '${data.user}:${data.group}' '${cpath}'
+                    mkdir -p '${data.webroot}/.well-known/acme-challenge'
+                    chown -R '${data.user}:${data.group}' '${data.webroot}/.well-known/acme-challenge'
                   '';
                   script = ''
                     cd '${cpath}'
@@ -228,6 +246,9 @@ in
                       mv $workdir/server.key ${cpath}/key.pem
                       mv $workdir/server.crt ${cpath}/fullchain.pem
 
+                      # Create full.pem for e.g. lighttpd (same format as "simp_le ... -f full.pem" creates)
+                      cat "${cpath}/key.pem" "${cpath}/fullchain.pem" > "${cpath}/full.pem"
+
                       # Clean up working directory
                       rm $workdir/server.csr
                       rm $workdir/server.pass.key
@@ -237,6 +258,8 @@ in
                       chown '${data.user}:${data.group}' '${cpath}/key.pem'
                       chmod ${rights} '${cpath}/fullchain.pem'
                       chown '${data.user}:${data.group}' '${cpath}/fullchain.pem'
+                      chmod ${rights} '${cpath}/full.pem'
+                      chown '${data.user}:${data.group}' '${cpath}/full.pem'
                     '';
                   serviceConfig = {
                     Type = "oneshot";
@@ -265,15 +288,14 @@ in
                 )
               );
           servicesAttr = listToAttrs services;
-          nginxAttr = {
-            nginx = {
-              after = [ "acme-selfsigned-certificates.target" ];
-              wants = [ "acme-selfsigned-certificates.target" "acme-certificates.target" ];
-            };
+          injectServiceDep = {
+            after = [ "acme-selfsigned-certificates.target" ];
+            wants = [ "acme-selfsigned-certificates.target" "acme-certificates.target" ];
           };
         in
           servicesAttr //
-          (if config.services.nginx.enable then nginxAttr else {});
+          (if config.services.nginx.enable then { nginx = injectServiceDep; } else {}) //
+          (if config.services.lighttpd.enable then { lighttpd = injectServiceDep; } else {});
 
       systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")

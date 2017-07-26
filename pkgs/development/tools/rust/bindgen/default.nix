@@ -1,33 +1,36 @@
-{ stdenv, fetchFromGitHub, rustPlatform, llvmPackages }:
-
-with rustPlatform;
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, llvmPackages }:
 
 # Future work: Automatically communicate NIX_CFLAGS_COMPILE to bindgen's tests and the bindgen executable itself.
 
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
-  version = "0.19.1";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
-    owner = "Yamakaky";
+    owner = "servo";
     repo = "rust-bindgen";
-    rev = "${version}";
-    sha256 = "0pv1vcgp455hys8hb0yj4vrh2k01zysayswkasxq4hca8s2p7qj9";
+    rev = "v${version}";
+    sha256 = "1w1vbfhmcrcl0vacxkivmavjp51cvpyq5lk75n9zs80q5x38ypna";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ llvmPackages.clang-unwrapped ];
 
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.clang-unwrapped}/lib"
   '';
 
-  depsSha256 = "0rlmdiqjg9ha9yzhcy33abvhrck6sphczc2gbab9zhfa95gxprv8";
+  postInstall = ''
+    wrapProgram $out/bin/bindgen --set LIBCLANG_PATH "${llvmPackages.clang-unwrapped}/lib"
+  '';
+
+  depsSha256 = "0s1x4ygjwc14fbl2amz5g6n7lq07zy8b00mvwfw6vi6k4bq1g59i";
 
   doCheck = false; # A test fails because it can't find standard headers in NixOS
 
   meta = with stdenv.lib; {
     description = "C binding generator";
-    homepage = https://github.com/Yamakaky/rust-bindgen;
+    homepage = https://github.com/servo/rust-bindgen;
     license = with licenses; [ bsd3 ];
     maintainers = [ maintainers.ralith ];
   };

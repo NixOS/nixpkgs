@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   postInstall = ''
-    sed -e '/Cflags:/s@''${prefix}@@' -i "$out"/share/pkgconfig/eigen3.pc
+    sed -e '/Cflags:/s@''${prefix}/@@' -i "$out"/share/pkgconfig/eigen3.pc
   '';
   
   meta = with stdenv.lib; {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     license = licenses.lgpl3Plus;
     homepage = http://eigen.tuxfamily.org ;
     platforms = platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ sander urkud raskin ];
+    maintainers = with stdenv.lib.maintainers; [ sander raskin ];
     inherit version;
   };
 }

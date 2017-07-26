@@ -1,29 +1,39 @@
-{ stdenv, requireFile, libelf, gcc, glibc, patchelf, unzip, rpmextract, libaio }:
+{ stdenv, requireFile, libelf, gcc, glibc, patchelf, unzip, rpmextract, libaio
+, odbcSupport ? false, unixODBC
+}:
 
-let requireSource = version: part: hash: (requireFile rec {
-  name = "oracle-instantclient12.1-${part}-${version}.x86_64.rpm";
-  message = ''
-    This Nix expression requires that ${name} already
-    be part of the store. Download the file
-    manually at
+assert odbcSupport -> unixODBC != null;
 
-    http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
+let optional = stdenv.lib.optional;
+    optionalString  = stdenv.lib.optionalString;
+    requireSource = version: part: hash: (requireFile rec {
+      name = "oracle-instantclient12.1-${part}-${version}.x86_64.rpm";
+      message = ''
+        This Nix expression requires that ${name} already
+        be part of the store. Download the file
+        manually at
 
-    and add it to the Nix store with the following command:
+        http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
 
-    nix-prefetch-url file://${name} ${hash} --type sha256
-'';
-  url = "http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html";
-  sha256 = hash;
-}); in stdenv.mkDerivation rec {
+        and add it to the Nix store using either:
+          nix-store --add-fixed sha256 ${name}
+        or
+          nix-prefetch-url --type sha256 file:///path/to/${name}
+      '';
+      url = "http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html";
+      sha256 = hash;
+    });
+in stdenv.mkDerivation rec {
   version = "12.1.0.2.0-1";
   name = "oracle-instantclient-${version}";
 
   srcBase = (requireSource version "basic" "f0e51e247cc3f210b950fd939ab1f696de9ca678d1eb179ba49ac73acb9a20ed");
   srcDevel = (requireSource version "devel" "13b638882f07d6cfc06c85dc6b9eb5cac37064d3d594194b6b09d33483a08296");
   srcSqlplus = (requireSource version "sqlplus" "16d87w1lii0ag47c8srnr7v4wfm9q4hy6gka8m3v6gp9cc065vam");
+  srcOdbc = optionalString odbcSupport (requireSource version "odbc" "d3aa1a4957a2f15ced05921dab551ba823aa7925d8fcb58d5b3a7f624e4df063");
 
-  buildInputs = [ glibc patchelf rpmextract ];
+  buildInputs = [ glibc patchelf rpmextract ] ++
+    optional odbcSupport unixODBC;
 
   buildCommand = ''
     mkdir -p "${name}"
@@ -31,6 +41,9 @@ let requireSource = version: part: hash: (requireFile rec {
     ${rpmextract}/bin/rpmextract "${srcBase}"
     ${rpmextract}/bin/rpmextract "${srcDevel}"
     ${rpmextract}/bin/rpmextract "${srcSqlplus}"
+    ${optionalString odbcSupport ''
+        ${rpmextract}/bin/rpmextract "${srcOdbc}"
+    ''}
 
     mkdir -p "$out/"{bin,include,lib,"share/${name}/demo/"}
     mv "usr/share/oracle/12.1/client64/demo/"* "$out/share/${name}/demo/"
@@ -43,6 +56,13 @@ let requireSource = version: part: hash: (requireFile rec {
       test -f $lib || continue
       chmod +x $lib
       patchelf --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
+               $lib
+    done
+
+    for lib in $out/lib/libsqora*; do
+      test -f $lib || continue
+      chmod +x $lib
+      patchelf --force-rpath --set-rpath "$out/lib:${unixODBC}/lib" \
                $lib
     done
 

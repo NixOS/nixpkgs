@@ -29,6 +29,17 @@
 
 with import ./lib.nix { inherit pkgs; };
 
+# All of the overrides in this set should look like:
+#
+#   foo = ... something involving super.foo ...
+#
+# but that means that we add `foo` attribute even if there is no `super.foo`! So if
+# you want to use this configuration for a package set that only contains a subset of
+# the packages that have overrides defined here, you'll end up with a set that contains
+# a bunch of attributes that trigger an evaluation error.
+#
+# To avoid this, we use `intersectAttrs` here so we never add packages that are not present
+# in the parent package set (`super`).
 self: super: builtins.intersectAttrs super {
 
   # Apply NixOS-specific patches.
@@ -115,14 +126,11 @@ self: super: builtins.intersectAttrs super {
   glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
   gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
-  gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
-  gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
+  gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
 
   # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
-  webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
-  webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
+  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
@@ -190,9 +198,6 @@ self: super: builtins.intersectAttrs super {
   # Nix-specific workaround
   xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
 
-  # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
-  liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
-
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
@@ -216,20 +221,21 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general-darwin = overrideCabal (super.llvm-general.override { llvm-config = pkgs.llvm_35; }) (drv: {
-      preConfigure = ''
-        sed -i llvm-general.cabal \
-            -e 's,extra-libraries: stdc++,extra-libraries: c++,'
-      '';
-      configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
-      librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
-    });
-
-  # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
   llvm-general =
-    if pkgs.stdenv.isDarwin
-    then self.llvm-general-darwin
-    else super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+    # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
+    let base = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+    in if !pkgs.stdenv.isDarwin then base else overrideCabal base (
+      drv: {
+        preConfigure = ''
+          sed -i llvm-general.cabal \
+              -e 's,extra-libraries: stdc++,extra-libraries: c++,'
+        '';
+        configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
+        librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
+      }
+    );
+
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_4; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -423,12 +429,8 @@ self: super: builtins.intersectAttrs super {
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
-  # requires webkitgtk API version 3 (webkitgtk 2.4 is the latest webkit supporting that version)
-  gi-javascriptcore = super.gi-javascriptcore.override { webkitgtk = pkgs.webkitgtk24x; };
-  gi-webkit = super.gi-webkit.override { webkit = pkgs.webkitgtk24x; };
-
   # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_12; };
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
@@ -449,4 +451,20 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/intero:$PATH"
     '';
   });
+
+  # loc and loc-test depend on each other for testing. Break that infinite cycle:
+  loc-test = super.loc-test.override { loc = dontCheck self.loc; };
+
+  # The test suites try to run the "fixpoint" and "liquid" executables built just
+  # before and fail because the library search paths aren't configured properly.
+  # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
+  liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
+  liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
+
+  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
+  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
+
+  # Without this override, the builds lacks pkg-config.
+  opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+
 }

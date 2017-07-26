@@ -2,16 +2,17 @@
 
 buildGoPackage rec {
   name = "vndr-${version}";
-  version = "20161110-${lib.strings.substring 0 7 rev}";
-  rev = "cf8678fba5591fbacc4dafab1a22d64f6c603c20";
+  version = "20170511-${lib.strings.substring 0 7 rev}";
+  rev = "0cb33a0eb64c8ca73b8e2939a3430b22fbb8d3e3";
 
   goPackagePath = "github.com/LK4D4/vndr";
+  excludedPackages = "test";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "LK4D4";
     repo = "vndr";
-    sha256 = "1fbrpdpfir05hqj1dr8rxw8hnjkhl0xbzncxkva56508vyyzbxcs";
+    sha256 = "02vdr59xn79hffayfcxg29nf62rdc33a60i104fgj746kcswgy5n";
   };
 
   meta = {

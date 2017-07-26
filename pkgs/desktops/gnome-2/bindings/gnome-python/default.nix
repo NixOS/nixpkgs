@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://pygtk.org/";
     description = "Python wrapper for GNOME libraries";
     platforms = platforms.linux;
-    licenses = licenses.lgpl2;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ qknight ];
   };
 }

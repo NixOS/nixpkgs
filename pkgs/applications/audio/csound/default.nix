@@ -1,36 +1,48 @@
-{ stdenv, fetchurl, cmake, libsndfile, flex, bison
+{ stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
 , alsaLib ? null
 , libpulseaudio ? null
+, libjack2 ? null
+, liblo ? null
+, ladspa-sdk ? null
+, fluidsynth ? null
+# , gmm ? null  # opcodes don't build with gmm 5.1
+, eigen ? null
+, curl ? null
 , tcltk ? null
-
-# maybe csound can be compiled with support for those, see configure output
-# , ladspa ? null
-# , fluidsynth ? null
-# , jack ? null
-# , gmm ? null
-# , wiiuse ? null
+, fltk ? null
 }:
 
-stdenv.mkDerivation {
-  name = "csound-6.04";
+stdenv.mkDerivation rec {
+  name = "csound-${version}";
+  version = "6.09.0";
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
-  src = fetchurl {
-    url = mirror://sourceforge/csound/Csound6.04.tar.gz;
-    sha256 = "1030w38lxdwjz1irr32m9cl0paqmgr02lab2m7f7j1yihwxj1w0g";
+  src = fetchFromGitHub {
+    owner = "csound";
+    repo = "csound";
+    rev = version;
+    sha256 = "1vfb0mab89psfwidadjrn5mbzq3bhjbyrrmyp98yp0xm6a8cssih";
   };
 
-  buildInputs = [ cmake libsndfile flex bison alsaLib libpulseaudio tcltk ];
+  cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
+    ++ stdenv.lib.optional (libjack2 != null) "-DJACK_HEADER=${libjack2}/include/jack/jack.h";
 
-  meta = {
+  nativeBuildInputs = [ cmake flex bison gettext ];
+  buildInputs = [ libsndfile libsamplerate boost ]
+    ++ builtins.filter (optional: optional != null) [
+      alsaLib libpulseaudio libjack2
+      liblo ladspa-sdk fluidsynth eigen
+      curl tcltk fltk ];
+
+  meta = with stdenv.lib; {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
     homepage = http://www.csounds.com/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = [maintainers.marcweber];
+    platforms = platforms.linux;
   };
 }
 

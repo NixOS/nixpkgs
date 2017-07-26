@@ -237,13 +237,13 @@ in
               # arguments to $(tahoe start). The node directory must come first,
               # and arguments which alter Twisted's behavior come afterwards.
               ExecStart = ''
-                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+                ${settings.package}/bin/tahoe start ${lib.escapeShellArg nodedir} -n -l- --pidfile=${lib.escapeShellArg pidfile}
               '';
             };
             preStart = ''
-              if [ \! -d ${nodedir} ]; then
+              if [ ! -d ${lib.escapeShellArg nodedir} ]; then
                 mkdir -p /var/db/tahoe-lafs
-                tahoe create-introducer ${nodedir}
+                tahoe create-introducer "${lib.escapeShellArg nodedir}
               fi
 
               # Tahoe has created a predefined tahoe.cfg which we must now
@@ -252,7 +252,7 @@ in
               # we must do this on every prestart. Fixes welcome.
               # rm ${nodedir}/tahoe.cfg
               # ln -s /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
-              cp /etc/tahoe-lafs/introducer-${node}.cfg ${nodedir}/tahoe.cfg
+              cp /etc/tahoe-lafs/introducer-"${node}".cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.introducers (node: _:
@@ -290,14 +290,14 @@ in
                 shares.total = ${toString settings.client.shares.total}
 
                 [storage]
-                enabled = ${if settings.storage.enable then "true" else "false"}
+                enabled = ${boolToString settings.storage.enable}
                 reserved_space = ${settings.storage.reservedSpace}
 
                 [helper]
-                enabled = ${if settings.helper.enable then "true" else "false"}
+                enabled = ${boolToString settings.helper.enable}
 
                 [sftpd]
-                enabled = ${if settings.sftpd.enable then "true" else "false"}
+                enabled = ${boolToString settings.sftpd.enable}
                 ${optionalString (settings.sftpd.port != null)
                   "port = ${toString settings.sftpd.port}"}
                 ${optionalString (settings.sftpd.hostPublicKeyFile != null)
@@ -337,13 +337,13 @@ in
               # arguments to $(tahoe start). The node directory must come first,
               # and arguments which alter Twisted's behavior come afterwards.
               ExecStart = ''
-                ${settings.package}/bin/tahoe start ${nodedir} -n -l- --pidfile=${pidfile}
+                ${settings.package}/bin/tahoe start ${lib.escapeShellArg nodedir} -n -l- --pidfile=${lib.escapeShellArg pidfile}
               '';
             };
             preStart = ''
-              if [ \! -d ${nodedir} ]; then
+              if [ ! -d ${lib.escapeShellArg nodedir} ]; then
                 mkdir -p /var/db/tahoe-lafs
-                tahoe create-node --hostname=localhost ${nodedir}
+                tahoe create-node --hostname=localhost ${lib.escapeShellArg nodedir}
               fi
 
               # Tahoe has created a predefined tahoe.cfg which we must now
@@ -351,8 +351,8 @@ in
               # XXX I thought that a symlink would work here, but it doesn't, so
               # we must do this on every prestart. Fixes welcome.
               # rm ${nodedir}/tahoe.cfg
-              # ln -s /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
-              cp /etc/tahoe-lafs/${node}.cfg ${nodedir}/tahoe.cfg
+              # ln -s /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg ${nodedir}/tahoe.cfg
+              cp /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
             '';
           });
         users.extraUsers = flip mapAttrs' cfg.nodes (node: _:

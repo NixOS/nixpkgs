@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "go2nix-${version}";
-  version = "1.1.1";
+  version = "1.2.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/kamilchm/go2nix";
@@ -12,10 +12,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "kamilchm";
     repo = "go2nix";
-    sha256 = "1idxgn9yf8shw4mq4d7rhf8fvb2s1lli4r4ck0h8ddf1s9q8p63s";
+    sha256 = "0fr9aa50yvchfhv6h6zqblx8ynxk41i2hmv87b344zr2rz6rms72";
   };
 
   goDeps = ./deps.nix;
+
+  outputs = [ "bin" "out" "man" ];
 
   buildInputs = [ go-bindata goimports makeWrapper ];
   preBuild = ''go generate ./...'';
@@ -24,6 +26,9 @@ buildGoPackage rec {
     wrapProgram $bin/bin/go2nix \
       --prefix PATH : ${nix-prefetch-git}/bin \
       --prefix PATH : ${git}/bin
+
+    mkdir -p $man/share/man/man1
+    cp $src/go2nix.1 $man/share/man/man1
   '';
 
   allowGoReference = true;

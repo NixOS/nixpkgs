@@ -1,7 +1,7 @@
-diff -rupN libguestfs-1.29.5/src/Makefile.am libguestfs-1.29.5-new/src/Makefile.am
---- libguestfs-1.29.5/src/Makefile.am	2014-11-05 16:43:08.000000000 +0100
-+++ libguestfs-1.29.5-new/src/Makefile.am	2014-11-05 20:07:45.760730596 +0100
-@@ -167,8 +167,7 @@ libguestfs_la_LIBADD = \
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -168,8 +168,7 @@ libguestfs_la_LIBADD = \
  # Force libtool to name the library 'libguestfs.so.0.$(MAX_PROC_NR).0'.
  # Include the version script to limit which symbols are exported.
  libguestfs_la_LDFLAGS = \

@@ -45,7 +45,7 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) glib gtk2 webkitgtk214x gtk3 gtkmm3 libcanberra_gtk2
+  inherit (pkgs) glib gtk2 webkitgtk216x gtk3 gtkmm3 libcanberra_gtk2
     clutter clutter-gst clutter_gtk cogl gtkvnc;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
@@ -56,7 +56,7 @@ let
   gtkmm = gtkmm3;
   vala = pkgs.vala_0_32;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
-  webkitgtk = webkitgtk214x;
+  webkitgtk = webkitgtk216x;
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -76,7 +76,7 @@ let
   dconf-editor = callPackage ./core/dconf-editor { };
 
   # empathy = callPackage ./core/empathy {
-  #   webkitgtk = webkitgtk24x;
+  #   webkitgtk = webkitgtk24x-gtk3;
   #   clutter-gst = pkgs.clutter-gst;
   # };
 
@@ -212,6 +212,10 @@ let
     inherit gnome3;
   };
 
+  networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override {
+    inherit gnome3;
+  };
+
   networkmanager_l2tp = pkgs.networkmanager_l2tp.override {
     inherit gnome3;
   };
@@ -253,7 +257,7 @@ let
 
   bijiben = callPackage ./apps/bijiben {
     # https://bugzilla.gnome.org/show_bug.cgi?id=728293
-    webkitgtk = pkgs.webkitgtk24x;
+    webkitgtk = pkgs.webkitgtk24x-gtk3;
   };
 
   cheese = callPackage ./apps/cheese { };
@@ -263,6 +267,8 @@ let
   file-roller = callPackage ./apps/file-roller { };
 
   gedit = callPackage ./apps/gedit { };
+
+  ghex = callPackage ./apps/ghex { };
 
   glade = callPackage ./apps/glade { };
 
@@ -359,7 +365,7 @@ let
 
   geary = callPackage ./misc/geary {
     # https://bugzilla.gnome.org/show_bug.cgi?id=728002
-    webkitgtk = pkgs.webkitgtk24x;
+    webkitgtk = pkgs.webkitgtk24x-gtk3;
   };
 
   gfbgraph = callPackage ./misc/gfbgraph { };

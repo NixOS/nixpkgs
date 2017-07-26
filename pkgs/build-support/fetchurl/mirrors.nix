@@ -141,9 +141,11 @@ rec {
     http://bitlbee.intergenia.de/
   ];
 
-  # ImageMagick mirrors, see http://www.imagemagick.org/script/download.php.
+  # ImageMagick mirrors, see https://www.imagemagick.org/script/mirror.php
   imagemagick = [
-    http://www.imagemagick.org/download/
+    https://www.imagemagick.org/download/
+    https://mirror.checkdomain.de/imagemagick/
+    https://ftp.nluug.nl/ImageMagick/
     ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/ # also contains older versions removed from most mirrors
     http://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
     ftp://ftp.imagemagick.org/pub/ImageMagick/

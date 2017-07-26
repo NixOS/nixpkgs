@@ -33,13 +33,15 @@ with stdenv.lib;
   DEBUG_KERNEL y
   DYNAMIC_DEBUG y
   BACKTRACE_SELF_TEST n
-  CPU_NOTIFIER_ERROR_INJECT? n
   DEBUG_DEVRES n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
-  RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  ${optionalString (versionOlder version "4.4") ''
+    CPU_NOTIFIER_ERROR_INJECT? n
+  ''}
 
   ${optionalString (versionOlder version "4.11") ''
     TIMER_STATS y
@@ -90,12 +92,24 @@ with stdenv.lib;
   # module, so that the initrd gets a good I/O scheduler.
   IOSCHED_CFQ y
   BLK_CGROUP y # required by CFQ
+  IOSCHED_DEADLINE y
+  ${optionalString (versionAtLeast version "4.11") ''
+    MQ_IOSCHED_DEADLINE y
+  ''}
+  ${optionalString (versionAtLeast version "4.12") ''
+    MQ_IOSCHED_KYBER y
+    IOSCHED_BFQ m
+  ''}
 
   # Enable NUMA.
   NUMA? y
 
   # Disable some expensive (?) features.
   PM_TRACE_RTC n
+
+  # Enable initrd support.
+  BLK_DEV_RAM y
+  BLK_DEV_INITRD y
 
   # Enable various subsystems.
   ACCESSIBILITY y # Accessibility support
@@ -116,6 +130,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "3.13") ''
     IPV6_PRIVACY y
   ''}
+  NETFILTER y
   NETFILTER_ADVANCED y
   IP_ROUTE_VERBOSE y
   IP_MROUTE_MULTIPLE_TABLES y
@@ -205,8 +220,12 @@ with stdenv.lib;
   SND_DYNAMIC_MINORS y
   SND_AC97_POWER_SAVE y # AC97 Power-Saving Mode
   SND_HDA_INPUT_BEEP y # Support digital beep via input layer
+  SND_HDA_RECONFIG y # Support reconfiguration of jack functions
+  SND_HDA_PATCH_LOADER y # Support configuring jack functions via fw mechanism at boot
   SND_USB_CAIAQ_INPUT y
-  PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ${optionalString (versionOlder version "4.12") ''
+    PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
+  ''}
 
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
@@ -228,7 +247,9 @@ with stdenv.lib;
   FANOTIFY y
   TMPFS y
   TMPFS_POSIX_ACL y
-  FS_ENCRYPTION? m
+  ${optionalString (versionAtLeast version "4.9") ''
+    FS_ENCRYPTION? m
+  ''}
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
@@ -281,7 +302,9 @@ with stdenv.lib;
   CIFS_UPCALL y
   CIFS_ACL y
   CIFS_DFS_UPCALL y
-  CIFS_SMB2 y
+  ${optionalString (versionOlder version "4.13") ''
+    CIFS_SMB2 y
+  ''}
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
@@ -308,7 +331,9 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
-  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ${optionalString (versionOlder version "4.11") ''
+    DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+  ''}
 
   # Security related features.
   RANDOMIZE_BASE? y
@@ -456,7 +481,13 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  UPROBE_EVENT y
+
+  ${if versionOlder version "4.11" then ''
+    UPROBE_EVENT? y
+  '' else ''
+    UPROBE_EVENTS? y
+  ''}
+
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
     BPF_EVENTS y
@@ -478,10 +509,12 @@ with stdenv.lib;
     KVM_APIC_ARCHITECTURE y
   ''}
   KVM_ASYNC_PF y
-  ${optionalString (versionAtLeast version "4.0") ''
+  ${optionalString ((versionAtLeast version "4.0") && (versionOlder version "4.12")) ''
     KVM_COMPAT? y
   ''}
-  KVM_DEVICE_ASSIGNMENT? y
+  ${optionalString (versionOlder version "4.12") ''
+    KVM_DEVICE_ASSIGNMENT? y
+  ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}
@@ -490,27 +523,29 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.13") ''
     KVM_VFIO y
   ''}
-  XEN? y
-  XEN_DOM0? y
-  ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
-    PCI_XEN? y
-    HVC_XEN? y
-    HVC_XEN_FRONTEND? y
-    XEN_SYS_HYPERVISOR? y
-    SWIOTLB_XEN? y
-    XEN_BACKEND? y
-    XEN_BALLOON? y
-    XEN_BALLOON_MEMORY_HOTPLUG? y
-    XEN_EFI? y
-    XEN_HAVE_PVMMU? y
-    XEN_MCE_LOG? y
-    XEN_PVH? y
-    XEN_PVHVM? y
-    XEN_SAVE_RESTORE? y
-    XEN_SCRUB_PAGES? y
-    XEN_SELFBALLOONING? y
-    XEN_STUB? y
-    XEN_TMEM? y
+  ${optionalString (stdenv.isx86_64 || stdenv.isi686) ''
+    XEN? y
+    XEN_DOM0? y
+    ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
+      PCI_XEN? y
+      HVC_XEN? y
+      HVC_XEN_FRONTEND? y
+      XEN_SYS_HYPERVISOR? y
+      SWIOTLB_XEN? y
+      XEN_BACKEND? y
+      XEN_BALLOON? y
+      XEN_BALLOON_MEMORY_HOTPLUG? y
+      XEN_EFI? y
+      XEN_HAVE_PVMMU? y
+      XEN_MCE_LOG? y
+      XEN_PVH? y
+      XEN_PVHVM? y
+      XEN_SAVE_RESTORE? y
+      XEN_SCRUB_PAGES? y
+      XEN_SELFBALLOONING? y
+      XEN_STUB? y
+      XEN_TMEM? y
+    ''}
   ''}
   KSM y
   ${optionalString (!stdenv.is64bit) ''
@@ -568,6 +603,55 @@ with stdenv.lib;
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
   FW_LOADER_USER_HELPER_FALLBACK? n
+
+  # Disable various self-test modules that have no use in a production system
+  ${optionalString (versionOlder version "4.4") ''
+    ARM_KPROBES_TEST? n
+  ''}
+
+  ASYNC_RAID6_TEST? n
+  ATOMIC64_SELFTEST? n
+  BACKTRACE_SELF_TEST? n
+  CRC32_SELFTEST? n
+  CRYPTO_TEST? n
+  GLOB_SELFTEST? n
+  INTERVAL_TREE_TEST? n
+  LNET_SELFTEST? n
+  LOCK_TORTURE_TEST? n
+  MTD_TESTS? n
+  NOTIFIER_ERROR_INJECTION? n
+  PERCPU_TEST? n
+  RBTREE_TEST? n
+  RCU_TORTURE_TEST? n
+  TEST_BPF? n
+  TEST_FIRMWARE? n
+  TEST_HEXDUMP? n
+  TEST_KSTRTOX? n
+  TEST_LIST_SORT? n
+  TEST_LKM? n
+  TEST_PRINTF? n
+  TEST_RHASHTABLE? n
+  TEST_STATIC_KEYS? n
+  TEST_STRING_HELPERS? n
+  TEST_UDELAY? n
+  TEST_USER_COPY? n
+  XZ_DEC_TEST? n
+
+  ${optionalString (versionOlder version "4.4") ''
+    EFI_TEST? n
+    RCU_PERF_TEST? n
+    TEST_ASYNC_DRIVER_PROBE? n
+    TEST_BITMAP? n
+    TEST_HASH? n
+    TEST_UUID? n
+  ''}
+
+  ${optionalString (versionAtLeast version "4.11") ''
+    DRM_DEBUG_MM_SELFTEST? n
+    TEST_PARMAN? n
+    TEST_SORT? n
+    WW_MUTEX_SELFTEST? n
+  ''}
 
   # ChromiumOS support
   ${optionalString (features.chromiumos or false) ''

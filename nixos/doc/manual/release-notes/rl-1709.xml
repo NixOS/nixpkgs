@@ -11,9 +11,35 @@ has the following highlights: </para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>
+      The user handling now keeps track of deallocated UIDs/GIDs. When a user
+      or group is revived, this allows it to be allocated the UID/GID it had before.
+      A consequence is that UIDs and GIDs are no longer reused.
+    </para>
   </listitem>
-
+  <listitem>
+    <para>
+      The module option <option>services.xserver.xrandrHeads</option> now
+      causes the first head specified in this list to be set as the primary
+      head. Apart from that, it's now possible to also set additional options
+      by using an attribute set, for example:
+<programlisting>
+{ services.xserver.xrandrHeads = [
+    "HDMI-0"
+    {
+      output = &quot;DVI-0&quot;;
+      primary = true;
+      monitorConfig = ''
+        Option &quot;Rotate&quot; &quot;right&quot;
+      '';
+    }
+  ];
+}
+</programlisting>
+      This will set the <literal>DVI-0</literal> output to be the primary head,
+      even though <literal>HDMI-0</literal> is the first head in the list.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>
@@ -31,10 +57,80 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      <literal>aiccu</literal> package was removed. This is due to SixXS
+      <link xlink:href="https://www.sixxs.net/main/"> sunsetting</link> its IPv6 tunnel.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Top-level <literal>idea</literal> package collection was renamed.
+      All JetBrains IDEs are now at <literal>jetbrains</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>flexget</literal>'s state database cannot be upgraded to its
+      new internal format, requiring removal of any existing
+      <literal>db-config.sqlite</literal> which will be automatically recreated.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The ipfs package now doesn't ignore the <literal>dataDir</literal> option anymore. If you've ever set this option to anything other than the default you'll have to either unset it (so the default gets used) or migrate the old data manually with
+<programlisting>
+dataDir=&lt;valueOfDataDir&gt;
+mv /var/lib/ipfs/.ipfs/* $dataDir
+rmdir /var/lib/ipfs/.ipfs
+</programlisting>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The following changes apply if the <literal>stateVersion</literal> is changed to 17.09 or higher.
+      For <literal>stateVersion = "17.03</literal> or lower the old behavior is preserved.
+    </para>
+    <para>
+      The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
+    </para>
+    <para>
+      The <literal>postgres</literal> superuser name has changed from <literal>root</literal> to <literal>postgres</literal> to more closely follow what other Linux distributions are doing.
+    </para>
+    <para>
+      The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
+    </para>
+    <para>
+      The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>caddy</literal> service was previously using an extra
+      <literal>.caddy</literal> in the data directory specified with the
+      <literal>dataDir</literal> option. The contents of the
+      <literal>.caddy</literal> directory are now expected to be in the
+      <literal>dataDir</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>ssh-agent</literal> user service is not started by default
+      anymore. Use <literal>programs.ssh.startAgent</literal> to enable it if
+      needed. There is also a new <literal>programs.gnupg.agent</literal>
+      module that creates a <literal>gpg-agent</literal> user service. It can
+      also serve as a SSH agent if <literal>enableSSHSupport</literal> is set.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>services.tinc.networks.&lt;name&gt;.listenAddress</literal>
+      option had a misleading name that did not correspond to its behavior. It
+      now correctly defines the ip to listen for incoming connections on. To
+      keep the previous behaviour, use
+      <literal>services.tinc.networks.&lt;name&gt;.bindToAddress</literal>
+      instead. Refer to the description of the options for more details.
     </para>
   </listitem>
 </itemizedlist>
-
 
 <para>Other notable improvements:</para>
 
@@ -47,6 +143,18 @@ following incompatible changes:</para>
       disabledModules</link>, allowing another to take it's place.  This can be
       used to import a set of modules from another channel while keeping the
       rest of the system on a stable release.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Updated to FreeType 2.7.1, including a new TrueType engine.
+      The new engine replaces the Infinality engine which was the default in
+      NixOS. The default font rendering settings are now provided by
+      fontconfig-penultimate, replacing fontconfig-ultimate; the new defaults
+      are less invasive and provide rendering that is more consistent with
+      other systems and hopefully with each font designer's intent. Some
+      system-wide configuration has been removed from the Fontconfig NixOS
+      module where user Fontconfig settings are available.
     </para>
   </listitem>
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "inconsolata-lgc-${version}";
-  version = "git-2015-04-18";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "MihailJP";
     repo = "Inconsolata-LGC";
-    rev = "30bbc1bd82502bf76f1cc5553f17388da2ba20e7";
-    sha256 = "02af2gpksdxdp7zfh5qhgfqzc6gvah9v4ph818irwhs9gcq8833c";
+    rev = "8adfef7a7316fcd2e9a5857054c7cdb2babeb35d";
+    sha256 = "0dqjj3mlc28s8ljnph6l086b4j9r5dly4fldq59crycwys72zzai";
   };
 
   buildInputs = [ fontforge ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Fork of Inconsolata font, with proper support of Cyrillic and Greek";
     longDescription = ''
       Inconsolata is one of the most suitable font for programmers created by Raph
@@ -50,11 +50,9 @@ stdenv.mkDerivation rec {
     '';
 
     # See `License.txt' for details.
-    license = stdenv.lib.licenses.ofl;
+    license = licenses.ofl;
     homepage = https://github.com/MihailJP/Inconsolata-LGC;
-    maintainers = [
-      stdenv.lib.maintainers.avnik
-    ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ avnik rht ];
+    platforms = platforms.linux;
   };
 }

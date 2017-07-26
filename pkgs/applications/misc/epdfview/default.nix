@@ -1,14 +1,16 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
-  name = "epdfview-0.1.8";
+  name = "epdfview-${version}";
+  version = "0.1.8";
 
   src = fetchurl {
-    url = "http://trac.emma-soft.com/epdfview/chrome/site/releases/${name}.tar.bz2";
-    sha256 = "1w7qybh8ssl4dffi5qfajq8mndw7ipsd92vkim03nywxgjp4i1ll";
+    url = "mirror://debian/pool/main/e/epdfview/epdfview_${version}.orig.tar.gz";
+    sha256 = "0ibyb60a0b4n34bsjgvhdw8yf24463ky0hpmf6a2jjqsbm5g4v64";
   };
 
-  buildInputs = [ pkgconfig gtk2 poppler ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 poppler ];
 
   hardeningDisable = [ "format" ];
 
@@ -24,16 +26,16 @@ stdenv.mkDerivation rec {
               })
             ];
 
-  meta = {
-    homepage = http://trac.emma-soft.com/epdfview/;
+  meta = with stdenv.lib; {
+    homepage = https://packages.debian.org/wheezy/epdfview;
     description = "A lightweight PDF document viewer using Poppler and GTK+";
     longDescription = ''
         ePDFView is a free lightweight PDF document viewer using Poppler and
         GTK+ libraries. The aim of ePDFView is to make a simple PDF document
         viewer, in the lines of Evince but without using the Gnome libraries.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.astsmtl ];
+    platforms = platforms.linux;
   };
 }

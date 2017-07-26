@@ -10,7 +10,7 @@ let
   version = "2.92";
 in
 
-with { inherit (stdenv.lib) optional optionals optionalString; };
+let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;

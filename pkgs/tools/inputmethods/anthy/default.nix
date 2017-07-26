@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
-    homepace    = http://sourceforge.jp/projects/anthy/;
+    homepage    = http://sourceforge.jp/projects/anthy/;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ericsagnes ];
     platforms   = platforms.linux;

@@ -35,6 +35,19 @@ in {
       description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
     };
   };
+  internal-logs = glPlugin rec {
+    name = "graylog-internal-logs-${version}";
+    pluginName = "graylog-plugin-internal-logs";
+    version = "1.0.0";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1abl7wwr59k9vvr2fmrlrx4ipsjjl8xryqy19fy5irxhpwp93ixl";
+    };
+    meta = {
+      homepage = "https://github.com/graylog-labs/graylog-plugin-internal-logs";
+      description = "Graylog plugin to record internal logs of Graylog efficiently instead of sending them over the network";
+    };
+  };
   ipanonymizer = glPlugin rec {
     name = "graylog-ipanonymizer-${version}";
     pluginName = "graylog-plugin-ipanonymizer";
@@ -59,6 +72,19 @@ in {
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-jabber";
       description = "Jabber Alarmcallback Plugin for Graylog";
+    };
+  };
+  mongodb-profiler = glPlugin rec {
+    name = "graylog-mongodb-profiler-${version}";
+    pluginName = "graylog-plugin-mongodb-profiler";
+    version = "2.0.1";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1hadxyawdz234lal3dq5cy3zppl7ixxviw96iallyav83xyi23i8";
+    };
+    meta = {
+      homepage = "https://github.com/graylog-labs/graylog-plugin-mongodb-profiler";
+      description = "Graylog input plugin that reads MongoDB profiler data";
     };
   };
   netflow = glPlugin rec {
@@ -103,10 +129,10 @@ in {
   threatintel = glPlugin rec {
     name = "graylog-threatintel-${version}";
     pluginName = "graylog-plugin-threatintel";
-    version = "0.9.2";
+    version = "0.10.0";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0d2cjcgjwfqp6b756n68zbslm1pq1z9dhn6iiskmv6jdpkffjw3l";
+      sha256 = "0clg0vy8aipw122rfqww1lnjriazlnnh77pqiy5vnmv6ycjw0y4i";
     };
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-threatintel";

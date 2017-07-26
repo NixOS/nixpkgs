@@ -1,17 +1,17 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, tzdata
+, curl, Cocoa, Foundation, cf-private, libobjc, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.3.3";
+  name = "R-3.4.1";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0v7wpj89b0i3ad3fi1wak5c93hywmbxv8sdnixhq8l17782nidss";
+    sha256 = "0y7wlfk3cn1dxn2mpnxwvsk31s0599crbsyah8srm5pa2mfi7c82";
   };
 
   buildInputs = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install-info" "install-pdf" ];
 
   doCheck = true;
-  preCheck = "bin/Rscript -e 'sessionInfo()'";
+  preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 

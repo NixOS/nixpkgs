@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.7.18";
+  version = "2.8.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1l9krc7hqhqrm5bwp999bpykkcq4958qwvx8v0l5mxcxw8k7fkab";
+    sha256 = "04jswalydzwm16iismbq1h2shj17iq9sqm0mz8p98sh3dwkacvn1";
   };
 
   propagatedBuildInputs = with python2Packages; [
@@ -14,23 +14,23 @@ python2Packages.buildPythonApplication rec {
     ecdsa
     jsonrpclib
     pbkdf2
-    protobuf3_0
-    pyasn1
-    pyasn1-modules
+    protobuf3_2
+    pyaes
     pycrypto
     pyqt4
+    pysocks
     qrcode
     requests
-    slowaes
     tlslite
 
     # plugins
-    trezor
     keepkey
+    trezor
+
     # TODO plugins
-    # matplotlib
-    # btchip
     # amodem
+    # btchip
+    # matplotlib
   ];
 
   preBuild = ''
@@ -43,8 +43,11 @@ python2Packages.buildPythonApplication rec {
   postInstall = ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
-    mv $out/lib/python2.7/site-packages/nix/store/*/share $out
+    mv $out/lib/python2.7/site-packages/nix/store"/"*/share $out
     rm -rf $out/lib/python2.7/site-packages/nix
+
+    substituteInPlace $out/share/applications/electrum.desktop \
+      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
   '';
 
   doInstallCheck = true;

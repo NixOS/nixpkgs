@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, qmakeHook
+{ stdenv, fetchFromGitHub, pkgconfig, qmake
 , python, qtbase, qttools, zlib }:
 
 let
 #  qtEnv = with qt5; env "qt-${qtbase.version}" [ qtbase qttools ];
 in stdenv.mkDerivation rec {
   name = "tiled-${version}";
-  version = "0.17.0";
+  version = "1.0.1";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/bjorn/tiled/archive/v${version}.tar.gz";
-    sha256 = "0c9gykxmq0sk0yyfdq81g9psd922scqzn5asskjydj84d80f5z7p";
+  src = fetchFromGitHub {
+    owner = "bjorn";
+    repo = "tiled";
+    rev = "v${version}";
+    sha256 = "062ja3j84v5s4qslp01gqif8c6i1klkkxpxyyrrvjhxmbyn6nmgd";
   };
 
-  nativeBuildInputs = [ pkgconfig qmakeHook ];
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [ python qtbase qttools ];
 
   enableParallelBuilding = true;
@@ -26,6 +27,6 @@ in stdenv.mkDerivation rec {
       gpl2Plus	# all the rest
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    maintainers = [ maintainers.nckx ];
   };
 }

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "gzdoom-${version}";
-  version = "2.3.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "1ys7wl4ygvm2lm49qjpql6c5i8gydmbg4f436bcpkywf5srr6xrd";
+    sha256 = "02287xvlk4a07ssm9y9h5vfsvdssshz13n5bbz13pfcani5d9flv";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      src/sound/music_fluidsynth_mididevice.cpp
+      src/sound/mididevices/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''
@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/coelckers/gzdoom";
     description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
-    # Doom source license, MAME license
-    license = licenses.unfreeRedistributable;
+    license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lassulus ];
   };

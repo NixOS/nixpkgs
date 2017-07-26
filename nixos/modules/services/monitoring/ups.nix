@@ -80,7 +80,7 @@ let
     };
 
     config = {
-      directives = mkHeader ([
+      directives = mkOrder 10 ([
         "driver = ${config.driver}"
         "port = ${config.port}"
         ''desc = "${config.description}"''

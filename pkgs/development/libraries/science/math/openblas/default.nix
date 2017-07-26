@@ -98,6 +98,7 @@ stdenv.mkDerivation {
       ''PREFIX="''$(out)"''
       "NUM_THREADS=64"
       "INTERFACE64=${if blas64 then "1" else "0"}"
+      "NO_STATIC=1"
     ]
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 

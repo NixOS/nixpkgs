@@ -33,6 +33,6 @@ in stdenv.mkDerivation rec {
     description = "Library used by gtkpod to access the contents of an ipod";
     license = "LGPL";
     platforms = stdenv.lib.platforms.gnu;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ ];
   };
 }

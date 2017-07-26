@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libcdio, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
-, lame, flac, eject, mkcue
+, lame, flac, eject, mkcue, glyr
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
@@ -19,46 +19,31 @@ in
     configurePhase = ''
       sed -i "s|^[[:blank:]]*prefix *=.*$|prefix = $out|g ;
               s|^[[:blank:]]*etcdir *=.*$|etcdir = $out/etc|g ;
-	      s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
-	  "Makefile";
+              s|^[[:blank:]]*INSTALL *=.*$|INSTALL = install -c|g" \
+        "Makefile";
 
       # We use `cd-paranoia' from GNU libcdio, which contains a hyphen
       # in its name, unlike Xiph's cdparanoia.
       sed -i "s|^[[:blank:]]*CDPARANOIA=.*$|CDPARANOIA=cd-paranoia|g ;
               s|^[[:blank:]]*DEFAULT_CDROMREADERS=.*$|DEFAULT_CDROMREADERS=\"cd-paranoia cdda2wav\"|g" \
-           "abcde"
+        "abcde"
 
-      substituteInPlace "abcde"					\
-	--replace "/etc/abcde.conf" "$out/etc/abcde.conf"
+      substituteInPlace "abcde" \
+        --replace "/etc/abcde.conf" "$out/etc/abcde.conf"
 
     '';
 
-    # no ELFs in this package, only scripts
-    dontStrip = true;
-    dontPatchELF = true;
-
     buildInputs = [ makeWrapper ];
+
+    propagatedBuildInputs = [ perl DigestSHA MusicBrainz MusicBrainzDiscID ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 
-    postInstall = ''
-    #   substituteInPlace "$out/bin/cddb-tool" \
-    #      --replace '#!/bin/sh' '#!${bash}/bin/sh'
-    #   substituteInPlace "$out/bin/abcde" \
-    #      --replace '#!/bin/bash' '#!${bash}/bin/bash'
-
-      # generic fixup script should be doing this, but it ignores this file for some reason
-      substituteInPlace "$out/bin/abcde-musicbrainz-tool" \
-         --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
-
-      wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac ]}
-
-      wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
-        "${wget}/bin"
-
-      wrapProgram "$out/bin/abcde-musicbrainz-tool" --prefix PATH ":" \
-        "${wget}/bin"
+    postFixup = ''
+      for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
+        wrapProgram "$out/bin/$cmd" --prefix PATH ":" \
+          ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac glyr ]}
+      done
     '';
 
     meta = {
