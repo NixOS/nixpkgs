@@ -19,6 +19,7 @@ self: super: {
   # GHCJS package set. We provide a dummy version here to fix potential
   # evaluation errors.
   ghcjs-base = null;
+  ghcjs-prim = null;
 
   # Some packages need a non-core version of Cabal.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
