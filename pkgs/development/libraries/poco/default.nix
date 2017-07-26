@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib pcre expat sqlite openssl unixODBC libmysql ];
 
   cmakeFlags = [
-    "-DMYSQL_INCLUDE_DIR=${libmysql.dev}/include/mysql"
+    "-DMYSQL_INCLUDE_DIR=${libmysql}/include/mysql"
     "-DPOCO_UNBUNDLED=ON"
   ];
 
