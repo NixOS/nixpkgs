@@ -158,6 +158,10 @@ in {
     };
   };
 
+  augeas = callPackage ../development/python-modules/augeas {
+    inherit (pkgs) augeas;
+  };
+
   ansicolor = buildPythonPackage rec {
     name = "ansicolor-${version}";
     version = "0.2.4";
