@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
-  version = "5.4.63";
+  version = "5.4.64";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "maim";
     rev = "v${version}";
-    sha256 = "16jl62hzrq1kciqwr9s3bxgcf9yz42kiwc5abkay1yd0vfcx200i";
+    sha256 = "16ipqs4s5hn7a7380n8w1ijj26d9n356bqwl1h8z5i1skbj4w7hj";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

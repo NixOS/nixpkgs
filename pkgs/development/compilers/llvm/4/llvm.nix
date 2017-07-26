@@ -116,11 +116,11 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM.${shlib}" "$lib"
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
+    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
+    substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
     install_name_tool -id $lib/lib/libLLVM.dylib $lib/lib/libLLVM.dylib
     install_name_tool -change @rpath/libLLVM.dylib $lib/lib/libLLVM.dylib $out/bin/llvm-config

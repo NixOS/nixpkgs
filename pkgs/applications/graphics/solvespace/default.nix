@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/solvespace.desktop \
+      --replace /usr/bin/ $out/bin/ \
+  '';
+
   meta = {
     description = "A parametric 3d CAD program";
     license = stdenv.lib.licenses.gpl3;

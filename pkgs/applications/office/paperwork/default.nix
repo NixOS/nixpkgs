@@ -1,19 +1,19 @@
 { lib, python3Packages, fetchFromGitHub, gtk3, cairo
 , aspellDicts, buildEnv
 , gnome3, hicolor_icon_theme
-, xvfb_run, dbus
+, xvfb_run, dbus, libnotify
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "paperwork-${version}";
   # Don't forget to also update paperwork-backend when updating this!
-  version = "1.0.6.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     repo = "paperwork";
     owner = "jflesch";
     rev = version;
-    sha256 = "1v1lxyi4crdik4jlwjds9n6lzw4m4l4f9n5azlinv8wb477qpv6h";
+    sha256 = "1cb9wnhhpm3dyxjrkyl9bbva56xx85vlwlb7z07m1icflcln14x5";
   };
 
   # Patch out a few paths that assume that we're using the FHS:
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   }}/lib/aspell";
 
   checkInputs = [ xvfb_run dbus.daemon ];
-  buildInputs = [ gnome3.defaultIconTheme hicolor_icon_theme ];
+  buildInputs = [ gnome3.defaultIconTheme hicolor_icon_theme libnotify ];
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not
   # only need to run a virtual X server + dbus but also have a large enough
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    paperwork-backend pypillowfight gtk3 cairo
+    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil
   ];
 
   makeWrapperArgs = [

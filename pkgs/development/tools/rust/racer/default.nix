@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -p target/release/racer $out/bin/
-    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustPlatform.rust.rustc.src}/src"
+    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustPlatform.rustcSrc}"
   '';
 
   meta = with stdenv.lib; {

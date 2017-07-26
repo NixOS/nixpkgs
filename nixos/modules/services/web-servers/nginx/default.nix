@@ -65,6 +65,7 @@ let
         gzip_proxied any;
         gzip_comp_level 9;
         gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_vary on;
       ''}
 
       ${optionalString (cfg.recommendedProxySettings) ''
@@ -123,45 +124,49 @@ let
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
       let
-        serverName = vhost.serverName;
         ssl = vhost.enableSSL || vhost.forceSSL;
-        port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
-        listenString = toString port + optionalString ssl " ssl http2"
-          + optionalString vhost.default " default_server";
-        acmeLocation = optionalString vhost.enableACME (''
+        defaultPort = if ssl then 443 else 80;
+
+        listenString = { addr, port, ... }:
+          "listen ${addr}:${toString (if port != null then port else defaultPort)} "
+          + optionalString ssl "ssl http2 "
+          + optionalString vhost.default "default_server"
+          + ";";
+
+        redirectListenString = { addr, ... }:
+          "listen ${addr}:80 ${optionalString vhost.default "default_server"};";
+
+        acmeLocation = ''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             root ${vhost.acmeRoot};
             auth_basic off;
           }
-        '' + (optionalString (vhost.acmeFallbackHost != null) ''
-          location @acme-fallback {
-            auth_basic off;
-            proxy_pass http://${vhost.acmeFallbackHost};
-          }
-        ''));
+          ${optionalString (vhost.acmeFallbackHost != null) ''
+            location @acme-fallback {
+              auth_basic off;
+              proxy_pass http://${vhost.acmeFallbackHost};
+            }
+          ''}
+        '';
+
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            listen 80 ${optionalString vhost.default "default_server"};
-            ${optionalString enableIPv6
-              ''listen [::]:80 ${optionalString vhost.default "default_server"};''
-            }
+            ${concatMapStringsSep "\n" redirectListenString vhost.listen}
 
-            server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+            server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+            ${optionalString vhost.enableACME acmeLocation}
             location / {
-              return 301 https://$host${optionalString (port != 443) ":${toString port}"}$request_uri;
+              return 301 https://$host$request_uri;
             }
           }
         ''}
 
         server {
-          listen ${listenString};
-          ${optionalString enableIPv6 "listen [::]:${listenString};"}
-
-          server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-          ${acmeLocation}
+          ${concatMapStringsSep "\n" listenString vhost.listen}
+          server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString vhost.enableACME acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
@@ -380,7 +385,7 @@ in
 
       virtualHosts = mkOption {
         type = types.attrsOf (types.submodule (import ./vhost-options.nix {
-          inherit lib;
+          inherit config lib;
         }));
         default = {
           localhost = {};

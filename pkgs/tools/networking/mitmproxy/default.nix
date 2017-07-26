@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchpatch, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   baseName = "mitmproxy";
@@ -15,9 +15,9 @@ python3Packages.buildPythonPackage rec {
   patches = [
     # Bump pyopenssl dependency
     # https://github.com/mitmproxy/mitmproxy/pull/2252
-    (fetchurl {
+    (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/mitmproxy/mitmproxy/pull/2252.patch";
-      sha256 = "0s3a6lf0wjnxi1r70qlhh0siaxhk5j2cysnv4xfkji3f2v7hhri4";
+      sha256 = "1smld21df79249qbh412w8gi2agcf4zjhxnlawy19yjl1fk2h67c";
     })
   ];
 

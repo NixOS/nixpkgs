@@ -698,33 +698,6 @@ rm /nix/var/nix/manifests/*
 rm /nix/var/nix/channel-cache/*
 ```
 
-### How to use the Haste Haskell-to-Javascript transpiler
-
-Open a shell with `haste-compiler` and `haste-cabal-install` (you don't actually need
-`node`, but it can be useful to test stuff):
-```shell
-nix-shell \
-  -p "haskellPackages.ghcWithPackages (self: with self; [haste-cabal-install haste-compiler])" \
-  -p nodejs
-```
-You may not need the following step but if `haste-boot` fails to compile all the
-packages it needs, this might do the trick
-```shell
-haste-cabal update
-```
-`haste-boot` builds a set of core libraries so that they can be used from Javascript
-transpiled programs:
-```shell
-haste-boot
-```
-Transpile and run a "Hello world" program:
-```
-$ echo 'module Main where main = putStrLn "Hello world"' > hello-world.hs
-$ hastec --onexec hello-world.hs
-$ node hello-world.js
-Hello world
-```
-
 ### Builds on Darwin fail with `math.h` not found
 
 Users of GHC on Darwin have occasionally reported that builds fail, because the
@@ -912,14 +885,14 @@ nix-build -A haskell.packages.integer-simple.ghc802.scientific
   - The *Journey into the Haskell NG infrastructure* series of postings
     describe the new Haskell infrastructure in great detail:
 
-      - [Part 1](http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015591.html)
+      - [Part 1](https://nixos.org/nix-dev/2015-January/015591.html)
         explains the differences between the old and the new code and gives
         instructions how to migrate to the new setup.
 
-      - [Part 2](http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015608.html)
+      - [Part 2](https://nixos.org/nix-dev/2015-January/015608.html)
         looks in-depth at how to tweak and configure your setup by means of
         overrides.
 
-      - [Part 3](http://lists.science.uu.nl/pipermail/nix-dev/2015-April/016912.html)
+      - [Part 3](https://nixos.org/nix-dev/2015-April/016912.html)
         describes the infrastructure that keeps the Haskell package set in Nixpkgs
         up-to-date.

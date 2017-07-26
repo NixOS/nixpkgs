@@ -1,45 +1,47 @@
-{ fetchurl, fetchpatch, stdenv, autoreconfHook, gettext, gdbm, pam, readline
-, ncurses, gnutls, sasl, fribidi, gss, mysql, guile_2_0, texinfo
-, gnum4, dejagnu, nettools, python, pkgconfig
-}:
- 
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, pkgconfig
+, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
+, python, gss, mysql }:
+
 let
   p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
 in stdenv.mkDerivation rec {
-  name = "mailutils-3.2";
+  name = "${project}-${version}";
+  project = "mailutils";
+  version = "3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/mailutils/${name}.tar.bz2";
-    sha256 = "0c06yj5hgqibi24ib9sx865kq6i1h18wn201g6iwcfbpi2a7psdm";
+    url = "mirror://gnu/${project}/${name}.tar.xz";
+    sha256 = "0zh7xn8yvnw9zkc7gi5290i34viwxp1rn0g1q9nyvmckkvk59lwn";
   };
-
-  patches = [
-    ./path-to-cat.patch
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=afbb33cf9ff";
-      excludes = [ "NEWS" ];
-      sha256 = "0yzkfx3j1zkkb43fhchjqphw4xznbclj39bjzjggv32gppy6d1db";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook gettext pkgconfig
   ] ++ stdenv.lib.optional doCheck dejagnu;
   buildInputs = [
-    gdbm pam readline ncurses python
-    gnutls mysql.connector-c guile_2_0 texinfo gnum4 sasl fribidi gss nettools
+    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
+    gss mysql.connector-c python
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=afbb33cf9ff";
+      excludes = [ "NEWS" ];
+      sha256 = "0yzkfx3j1zkkb43fhchjqphw4xznbclj39bjzjggv32gppy6d1db";
+    })
+    ./fix-build-mb-len-max.patch
+    ./fix-test-ali-awk.patch
+    ./path-to-cat.patch
   ];
 
   doCheck = true;
   enableParallelBuilding = true;
+  hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "--with-gsasl"
     "--with-gssapi"
+    "--with-gsasl"
     "--with-mysql"
   ];
-
-  hardeningDisable = [ "format" ];
 
   readmsg-tests = stdenv.lib.optionals doCheck [
     (fetchurl { url = "${p}/hdr.at"; sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98"; })
@@ -57,8 +59,6 @@ in stdenv.mkDerivation rec {
     sed -i -e 's:mysql/mysql.h:mysql.h:' \
            -e 's:mysql/errmsg.h:errmsg.h:' \
       sql/mysql.c
-    sed -i '/<stdio.h>/a \
-      #include <limits.h>' frm/frm.h
   '';
 
   NIX_CFLAGS_COMPILE = "-L${mysql.connector-c}/lib/mariadb -I${mysql.connector-c}/include/mariadb";
@@ -110,7 +110,7 @@ in stdenv.mkDerivation rec {
       gpl3Plus /* tools */
     ];
 
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ orivej vrthra ];
 
     homepage = http://www.gnu.org/software/mailutils/;
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   patches = [ ./automake.patch ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "bindnow" ];
 
   prePatch = ''
       newPath=$(echo "${ddccontrol-db}/share/ddccontrol-db" | sed "s/\\//\\\\\\//g")

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, fetchFromGitHub
 , coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
 , makeWrapper
 
@@ -12,7 +12,17 @@ assert x11Support -> xclip != null
                   && xdotool != null
                   && dmenu != null;
 
-stdenv.mkDerivation rec {
+let
+  plugins = map (p: (fetchFromGitHub {
+    owner  = "roddhjav";
+    repo   = "pass-${p.name}";
+    inherit (p) rev sha256;
+  })) [
+    { name = "import"; rev = "491935bd275f29ceac2b876b3a288011d1ce31e7"; sha256 = "02mbh05ab8h7kc30hz718d1d1vkjz43b96c7p0xnd92610d2q66q"; }
+    { name = "update"; rev = "cf576c9036fd18efb9ed29e0e9f811207b556fde"; sha256 = "1hhbrg6a2walrvla6q4cd3pgrqbcrf9brzjkb748735shxfn52hd"; }
+  ];
+
+in stdenv.mkDerivation rec {
   version = "1.7.1";
   name    = "password-store-${version}";
 
@@ -29,6 +39,13 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
 
   postInstall = ''
+    # plugins
+    ${stdenv.lib.concatStringsSep "\n" (map (plugin: ''
+      pushd ${plugin}
+      PREFIX=$out make install
+      popd
+    '') plugins)}
+
     # Install Emacs Mode. NOTE: We can't install the necessary
     # dependencies (s.el and f.el) here. The user has to do this
     # himself.

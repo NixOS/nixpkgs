@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.10.00";
+  version = "6.10.02";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "1rxqcpqf1b3sxig5xbh3mkvarhg9lgj2f0gv0j48klfw8kgfwlsp";
+    sha256 = "1ryp9397xpbnxha6s222c10pa50lf2qf5s35n31lc29s90p8s9kc";
   };
 
   buildInputs = [ cmake pcre pkgconfig python2 zlib libxml2 lzma gsl ]

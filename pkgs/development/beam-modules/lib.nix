@@ -56,4 +56,26 @@ rec {
         mkDerivation = pkgs.makeOverridable builder;
       };
 
+  /* Uses generic-builder to evaluate provided drv containing Elixir version
+  specific data.
+
+  drv: package containing version-specific args;
+  builder: generic builder for all Erlang versions;
+  args: arguments merged into version-specific args, used mostly to customize
+        dependencies;
+
+  Arguments passed to the generic-builder are overridable.
+
+  Please note that "mkDerivation" defined here is the one called from 1.2.nix
+  and similar files.
+  */
+  callLFE = drv: args:
+    let
+      inherit (stdenv.lib) versionAtLeast;
+      builder = callPackage ../interpreters/lfe/generic-builder.nix args;
+    in
+      callPackage drv {
+        mkDerivation = pkgs.makeOverridable builder;
+      };
+
 }

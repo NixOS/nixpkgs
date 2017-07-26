@@ -1,5 +1,3 @@
-Fix absolute path to `cat'.
-
 diff --git a/mh/show.c b/mh/show.c
 index a43afe10c..6985386ec 100644
 --- a/mh/show.c
