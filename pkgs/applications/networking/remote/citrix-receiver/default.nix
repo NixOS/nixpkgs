@@ -20,9 +20,11 @@
 , fontconfig
 , gtk_engines
 , alsaLib
+, libidn
+, zlib
 }:
 
-let versionRec = { major = "13"; minor = "4"; patch = "0"; };
+let versionRec = { major = "13"; minor = "6"; patch = "0"; };
 in stdenv.mkDerivation rec {
   name = "citrix-receiver-${version}";
   version = with versionRec; "${major}.${minor}.${patch}";
@@ -31,11 +33,11 @@ in stdenv.mkDerivation rec {
   prefixWithBitness = if stdenv.is64bit then "linuxx64" else "linuxx86";
 
   src = with versionRec; requireFile rec {
-    name = "${prefixWithBitness}-${version}.10109380.tar.gz";
+    name = "${prefixWithBitness}-${version}.10243651.tar.gz";
     sha256 =
       if stdenv.is64bit
-      then "133brs0sq6d0mgr19rc6ig1n9ahm3ryi23v5nrgqfh0hgxqcrrjb"
-      else "0r7jfl5yqv1s2npy8l9gsn0gbb82f6raa092ppkc8xy5pni5sh7l";
+      then "6e423be41d5bb8186bcca3fbb4ede54dc3f00b8d2aeb216ae4aabffef9310d34"
+      else "0ba3eba208b37844904d540b3011075ed5cecf429a0ab6c6cd52f2d0fd841ad2";
     message = ''
       In order to use Citrix Receiver, you need to comply with the Citrix EULA and download
       the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
@@ -83,6 +85,8 @@ in stdenv.mkDerivation rec {
     freetype
     fontconfig
     alsaLib
+    libidn
+    zlib
     stdenv.cc.cc # Fixes: Can not load [..]/opt/citrix-icaclient/lib/ctxh264_fb.so:(null)
   ];
 
