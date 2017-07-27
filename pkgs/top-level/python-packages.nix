@@ -9343,13 +9343,6 @@ in {
     gdal = self.gdal;
   };
 
-  # TODO: Django 1.10 will be maintained until the end of the year. Therefore,
-  # it will be dropped before 17.09.
-  # https://github.com/NixOS/nixpkgs/issues/25375#issuecomment-298522597
-  django_1_10 = callPackage ../development/python-modules/django/1_10.nix {
-    gdal = self.gdal;
-  };
-
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.18";
