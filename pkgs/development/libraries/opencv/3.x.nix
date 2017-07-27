@@ -132,13 +132,14 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableOpenblas openblas
-    ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
+    ++ lib.optionals enableCuda [ cudatoolkit ]
     ++ lib.optional enableContrib protobuf3_1
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkgconfig unzip ]
+    ++ lib.optional enableCuda gcc5;
 
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
