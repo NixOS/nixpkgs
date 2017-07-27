@@ -169,7 +169,8 @@ in
         serviceConfig = {
           Type = "simple";
           PIDFile = "/run/tinc.${network}.pid";
-          Restart = "on-failure";
+          Restart = "always";
+          RestartSec = "3";
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
