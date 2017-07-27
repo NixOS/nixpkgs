@@ -8241,15 +8241,16 @@ in {
 
   pypolicyd-spf = buildPythonPackage rec {
     name = "pypolicyd-spf-${version}";
-    majorVersion = "1.3";
-    version = "${majorVersion}.2";
+    majorVersion = "2.0";
+    version = "${majorVersion}.1";
+    disabled = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${name}.tar.gz";
-      sha256 = "0ri9bdwn1k8xlyfhrgzns7wjvp5h08dq5fnxcq6mphy94rmc8x3i";
+      sha256 = "09yi8y7pij5vzzrkc9sdw01x8w5n758d0qg7wv5hxd1l6if8c94i";
     };
 
-    propagatedBuildInputs = with self; [ pyspf pydns ipaddr ];
+    propagatedBuildInputs = with self; [ pyspf ];
 
     preBuild = ''
       substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
