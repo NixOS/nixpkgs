@@ -3,30 +3,52 @@
 let
   makeBigExe = stdenv: prefix: rec {
 
+    count = 500;
+
     sillyLibs = lib.genList (i: stdenv.mkDerivation rec {
       name = "${prefix}-fluff-${toString i}";
       unpackPhase = ''
         src=$PWD
-        echo 'int asdf${toString i}(void) { return ${toString i}; }' > ${name}.c
+        cat << 'EOF' > ${name}.c
+        unsigned int asdf_${toString i}(void) {
+          return ${toString i};
+        }
+        EOF
       '';
       buildPhase = ''
-        $CC -shared ${name}.c -o lib${name}.dylib -Wl,-install_name,$out/lib/lib${name}.dylib
+        $CC -std=c99 -shared ${name}.c -o lib${name}.dylib -Wl,-install_name,$out/lib/lib${name}.dylib
       '';
       installPhase = ''
         mkdir -p "$out/lib"
         mv lib${name}.dylib "$out/lib"
       '';
-    }) 500
-    ;
+    }) count;
 
     finalExe = stdenv.mkDerivation rec {
       name = "${prefix}-final-asdf";
       unpackPhase = ''
         src=$PWD
-        echo 'int main(int argc, char **argv) { return argc; }' > main.c;
+        cat << 'EOF' > main.cxx
+
+        #include <assert.h>
+
+        ${toString (lib.genList (i: "extern unsigned int asdf_${toString i}(void); ") count)}
+
+        unsigned int (*funs[])(void) = {
+          ${toString (lib.genList (i: "asdf_${toString i},") count)}
+        };
+
+        int main(int argc, char **argv) {
+          unsigned int i = 0;
+          for (auto f : funs) {
+            assert(f() == i++);
+          }
+          return 0;
+        }
+        EOF
       '';
       buildPhase = ''
-        $CC main.c ${toString (map (x: "-l${x.name}") sillyLibs)} -o asdf
+        $CC -std=c++11 main.cxx ${toString (map (x: "-l${x.name}") sillyLibs)} -o asdf
       '';
       buildInputs = sillyLibs;
       installPhase = ''
