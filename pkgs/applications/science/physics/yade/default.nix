@@ -4,7 +4,7 @@ mpfr, suitesparse, glib, pcre } :
 
 let 
 
-  pythonPackages = python27Packages;
+    pythonPackages = python27Packages;
 
     minieigen = pythonPackages.buildPythonPackage rec {
       name = "minieigen";
@@ -18,7 +18,7 @@ let
 
       buildInputs = [ unzip pythonPackages.boost boost eigen3_3 ];
 
-      patchPhase = ''
+      postPatch = ''
         sed -i "s/^.*libraries=libraries.//g" setup.py 
       '';
 
@@ -56,7 +56,8 @@ in
       boost
       cgal
       loki
-      python27Full
+      python27
+      python27.tkinter
       python27Packages.numpy
       eigen3_3
       bzip2
@@ -89,11 +90,12 @@ in
       matplotlib
     ];
 
-    src = fetchurl
-    {
-      url = "https://launchpad.net/yade/trunk/yade-1.00.0/+download/yade-2017.01a.tar.gz";
-      sha512 = "0133afa759a6061db99b2e0f4b1081122fc6ddda13a0163389ec2f51c95e658dc148ffd43d19d908c7bfb6af2f01d1f614c1f3bba411fbf5b289898a5dd284a9";
-    };
+    src = fetchFromGitHub {
+      owner = "yade";
+      repo = "trunk";
+      rev = "d75e86de325527b28a1a3b7e79d4572319dc2bc4";
+      sha256 = "0njipn8gfprvi6qr31qdrzdzm7qww12qysk1r4yjz5341jar9i72";
+      };
 
     patches = [ ./cmake.patch ];
 
