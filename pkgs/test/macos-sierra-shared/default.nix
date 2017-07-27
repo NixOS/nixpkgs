@@ -30,7 +30,8 @@ let
         src=$PWD
         cat << 'EOF' > main.cxx
 
-        #include <assert.h>
+        #include <cstdlib>
+        #include <iostream>
 
         ${toString (lib.genList (i: "extern \"C\" unsigned int asdf_${toString i}(void); ") count)}
 
@@ -39,11 +40,15 @@ let
         };
 
         int main(int argc, char **argv) {
+          bool ret;
           unsigned int i = 0;
           for (auto f : funs) {
-            assert(f() == i++);
+            if (f() != i++) {
+              std::cerr << "Failed to get expected response from function #" << i << std::endl;
+              return EXIT_FAILURE;
+            }
           }
-          return 0;
+          return EXIT_SUCCESS;
         }
         EOF
       '';
