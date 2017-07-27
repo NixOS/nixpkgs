@@ -101,7 +101,7 @@ let
         address = mkOption {
           type = types.str;
           description = ''
-            IPv${toString v} address of the interface.  Leave empty to configure the
+            IPv${toString v} address of the interface. Leave empty to configure the
             interface using DHCP.
           '';
         };
@@ -115,6 +115,40 @@ let
         };
       };
     };
+
+  routeOpts = v:
+  { options = {
+      address = mkOption {
+        type = types.str;
+        description = "IPv${toString v} address of the network.";
+      };
+
+      prefixLength = mkOption {
+        type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+        description = ''
+          Subnet mask of the network, specified as the number of
+          bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
+        '';
+      };
+
+      nextHop = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "IPv${toString v} address of the next hop.";
+      };
+
+      options = mkOption {
+        type = types.str;
+        default = "";
+        example = "mtu 1492 window 524288";
+        description = ''
+          Other route options. See the symbol <literal>OPTION</literal>
+          in the <literal>ip-route(8)</literal> manual page for the details.
+        '';
+      };
+
+    };
+  };
 
   gatewayCoerce = address: { inherit address; };
 
@@ -196,6 +230,30 @@ let
         type = with types; listOf (submodule (addrOpts 6));
         description = ''
           List of IPv6 addresses that will be statically assigned to the interface.
+        '';
+      };
+
+      ipv4Routes = mkOption {
+        default = [];
+        example = [
+          { address = "10.0.0.0"; prefixLength = 16; }
+          { address = "192.168.2.0"; prefixLength = 24; nextHop = "192.168.1.1"; }
+        ];
+        type = with types; listOf (submodule (routeOpts 4));
+        description = ''
+          List of extra IPv4 static routes that will be assigned to the interface.
+        '';
+      };
+
+      ipv6Routes = mkOption {
+        default = [];
+        example = [
+          { address = "fdfd:b3f0::"; prefixLength = 48; }
+          { address = "2001:1470:fffd:2098::"; prefixLength = 64; nextHop = "fdfd:b3f0::1"; }
+        ];
+        type = with types; listOf (submodule (routeOpts 6));
+        description = ''
+          List of extra IPv6 static routes that will be assigned to the interface.
         '';
       };
 
@@ -1089,6 +1147,9 @@ in
           '' + optionalString (i.mtu != null) ''
             echo "setting MTU to ${toString i.mtu}..."
             ip link set "${i.name}" mtu "${toString i.mtu}"
+          '' + ''
+            echo -n "bringing up interface... "
+            ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
           '';
       })));
 

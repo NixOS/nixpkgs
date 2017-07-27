@@ -185,33 +185,57 @@ let
             path = [ pkgs.iproute ];
             script =
               ''
-                # FIXME: shouldn't this be done in network-link?
-                echo "bringing up interface..."
-                ip link set "${i.name}" up
-
                 state="/run/nixos/network/addresses/${i.name}"
-
                 mkdir -p $(dirname "$state")
 
-              '' + flip concatMapStrings (ips) (ip:
-                let
-                  address = "${ip.address}/${toString ip.prefixLength}";
-                in
-                ''
-                  echo "${address}" >> $state
-                  if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
-                    echo "added ip ${address}"
-                  elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                    echo "failed to add ${address}"
-                    exit 1
-                  fi
-                '');
+                ${flip concatMapStrings ips (ip:
+                  let
+                    cidr = "${ip.address}/${toString ip.prefixLength}";
+                  in
+                  ''
+                    echo "${cidr}" >> $state
+                    echo -n "adding address ${cidr}... "
+                    if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
+                      echo "done"
+                    elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                      echo "failed"
+                      exit 1
+                    fi
+                  ''
+                )}
+
+                state="/run/nixos/network/routes/${i.name}"
+                mkdir -p $(dirname "$state")
+
+                ${flip concatMapStrings (i.ipv4Routes ++ i.ipv6Routes) (route:
+                  let
+                    cidr = "${route.address}/${toString route.prefixLength}";
+                    nextHop = optionalString (route.nextHop != null) ''via "${route.nextHop}"'';
+                  in
+                  ''
+                     echo "${cidr}" >> $state
+                     echo -n "adding route ${cidr}... "
+                     if out=$(ip route add "${cidr}" ${route.options} ${nextHop} dev "${i.name}" 2>&1); then
+                       echo "done"
+                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
+                       echo "failed"
+                       exit 1
+                     fi
+                  ''
+                )}
+              '';
             preStop = ''
+              state="/run/nixos/network/routes/${i.name}"
+              while read cidr; do
+                echo -n "deleting route $cidr... "
+                ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+              done < "$state"
+              rm -f "$state"
+
               state="/run/nixos/network/addresses/${i.name}"
-              while read address; do
-                echo -n "deleting $address..."
-                ip addr del "$address" dev "${i.name}" >/dev/null 2>&1 || echo -n " Failed"
-                echo ""
+              while read cidr; do
+                echo -n "deleting address $cidr... "
+                ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
               done < "$state"
               rm -f "$state"
             '';
