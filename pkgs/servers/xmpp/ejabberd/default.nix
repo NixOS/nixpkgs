@@ -23,12 +23,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "17.01";
+  version = "17.07";
   name = "ejabberd-${version}";
 
   src = fetchurl {
     url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
-    sha256 = "02y9f1zxqvqrhapfay3avkys0llpyjsag6rpz5vfig01zqjqzyky";
+    sha256 = "1p8ppp2czjgnq8xnhyksd82npvvx99fwr0g3rrq1wvnwh2vgb8km";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0flybfhq6qv1ihsjfg9p7191bffip7gpizg29wdbf1x6qgxhpz5r";
+    outputHash = "1q9yzccn4zf5i4hibq1r0i34q4986a93ph4792l1ph07aiisc8p7";
   };
 
   configureFlags =
