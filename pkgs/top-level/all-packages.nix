@@ -12796,11 +12796,9 @@ with pkgs;
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
-  inherit (callPackage ../os-specific/linux/zfs {
+  zfs = callPackage ../os-specific/linux/zfs {
     configFile = "user";
-  }) zfsStable zfsUnstable;
-
-  zfs = zfsStable;
+  };
 
   ### DATA
 
