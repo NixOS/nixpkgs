@@ -2,7 +2,7 @@
 boost, cgal, loki, pythonFull, eigen3_3, bzip2, zlib, openblas, vtk, gmp, gts, metis,
 mpfr, suitesparse, glib, pcre } :
 
-let 
+let
 
     pythonPackages = python27Packages;
 
@@ -52,7 +52,7 @@ in
       python2Packages.wrapPython
     ];
 
-    buildInputs = [ 
+    buildInputs = [
       boost
       cgal
       loki
