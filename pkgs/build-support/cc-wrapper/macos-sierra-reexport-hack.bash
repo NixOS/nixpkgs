@@ -74,18 +74,26 @@ else
 
     mkdir -p "$out/lib"
 
+    PATH="$PATH:@out@/bin"
+
+    symbolBloatObject=$outputNameLibless-symbol-hack.o
+    if [[ ! -e $symbolBloatObject ]]; then
+        printf '.private_extern _______child_hack_foo\nchild_hack_foo:\n' \
+            | @binPrefix@as -- -o $symbolBloatObject
+    fi
+
     # first half of libs
-    @ldWrapper@ -macosx_version_min 10.10 -arch x86_64 -dylib \
+    @binPrefix@ld -macosx_version_min 10.10 -arch x86_64 -dylib \
       -o "$out/lib/lib${children[0]}.dylib" \
       -install_name "$out/lib/lib${children[0]}.dylib" \
-      "${childrenLookup[@]}" \
+      "${childrenLookup[@]}" "$symbolBloatObject" \
       "${childrenLink[@]:0:$((${#childrenLink[@]} / 2 ))}"
 
     # second half of libs
-    @ldWrapper@ -macosx_version_min 10.10 -arch x86_64 -dylib \
+    @binPrefix@ld -macosx_version_min 10.10 -arch x86_64 -dylib \
       -o "$out/lib/lib${children[1]}.dylib" \
       -install_name "$out/lib/lib${children[1]}.dylib" \
-      "${childrenLookup[@]}" \
+      "${childrenLookup[@]}" "$symbolBloatObject" \
       "${childrenLink[@]:$((${#childrenLink[@]} / 2 ))}"
 
     allArgs+=("-L$out/lib" "-l${children[0]}" "-l${children[1]}")

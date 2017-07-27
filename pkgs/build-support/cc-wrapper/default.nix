@@ -299,10 +299,11 @@ stdenv.mkDerivation {
     '' + (if !useMacosReexportHack then ''
       wrap ${prefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${prefix}ld}
     '' else ''
-      export ldWrapper="$out/bin/${prefix}ld" innerLd="${prefix}ld-reexport-delegate"
-      wrap "$innerLd" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${prefix}ld}
-      wrap "${prefix}ld" ${./ld-wrapper.sh} "$out/bin/$innerLd"
-      unset ldWrapper
+      export binPrefix=${prefix}
+      ldInner="${prefix}ld-reexport-delegate"
+      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${prefix}ld}
+      wrap "${prefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
+      unset ldInner
     '') + ''
 
       if [ -e ${binutils_bin}/bin/${prefix}ld.gold ]; then
