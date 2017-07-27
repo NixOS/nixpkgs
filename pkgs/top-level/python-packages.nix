@@ -18810,14 +18810,16 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-1.9.6";
+    name = "PyICU-1.9.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "0l151zhhyiazzdz8skpxgrw1x4nqa9pq2cwni6d97anmg97i7hn5";
+      sha256 = "0qavhngmn7c90fz25a8a2k50wd5gzp3vwwjq8v2pkf2hq4fcs9yv";
     };
 
-    buildInputs = [ pkgs.icu ];
+    buildInputs = [ pkgs.icu self.pytest ];
+
+    propagatedBuildInputs = [ self.six ];
 
     meta = {
       homepage = https://pypi.python.org/pypi/PyICU/;
