@@ -17885,6 +17885,8 @@ with pkgs;
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
 
+  yade = callPackage ../applications/science/physics/yade {};
+
   ### SCIENCE/PROGRAMMING
 
   dafny = dotnetPackages.Dafny;
