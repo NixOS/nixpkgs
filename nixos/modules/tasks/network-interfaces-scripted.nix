@@ -251,6 +251,13 @@ let
                 ${i}
               '')}" > /run/${n}.interfaces
 
+              ${optionalString config.virtualisation.libvirtd.enable ''
+                  # Enslave dynamically added interfaces which may be lost on nixos-rebuild
+                  for dom in $(${pkgs.libvirt}/bin/virsh list --name); do
+                    ${pkgs.libvirt}/bin/virsh dumpxml "$dom" | ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge']"  -v "concat('ip link set ',target/@dev,' master ',source/@bridge)" | ${pkgs.bash}/bin/bash
+                  done
+                ''}
+
               # Enable stp on the interface
               ${optionalString v.rstp ''
                 echo 2 >/sys/class/net/${n}/bridge/stp_state
