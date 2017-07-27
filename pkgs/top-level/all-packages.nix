@@ -3292,6 +3292,8 @@ with pkgs;
 
   nasty = callPackage ../tools/security/nasty { };
 
+  nawk = callPackage ../tools/text/nawk { };
+
   nbd = callPackage ../tools/networking/nbd { };
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
