@@ -874,4 +874,7 @@ self: super: {
   # https://github.com/diagrams/diagrams-solve/issues/4
   diagrams-solve = dontCheck super.diagrams-solve;
 
+  # Needs a newer version of ghc-events.
+  threadscope = super.threadscope.override { ghc-events = self.ghc-events_0_6_0; };
+
 }
