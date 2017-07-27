@@ -702,12 +702,6 @@ self: super: {
   # broken test suite
   servant-server = dontCheck super.servant-server;
 
-  # Fix build for latest versions of servant and servant-client.
-  servant-client_0_11 = super.servant-client_0_11.overrideScope (self: super: {
-    servant-server = self.servant-server_0_11;
-    servant = self.servant_0_11;
-  });
-
   # build servant docs from the repository
   servant =
     let
@@ -865,9 +859,6 @@ self: super: {
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
-  # Needs a newer version of hsyslog than lts-8.x provides.
-  logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5_0_1; };
-
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
 
@@ -876,5 +867,14 @@ self: super: {
 
   # Needs a newer version of ghc-events.
   threadscope = super.threadscope.override { ghc-events = self.ghc-events_0_6_0; };
+
+  # version 1.3.1.2 does not compile: syb >=0.1.0.2 && <0.7
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+
+  # test suite does not compile with recent versions of QuickCheck
+  integer-logarithms = dontCheck (super.integer-logarithms);
+
+  # https://github.com/vincenthz/hs-tls/issues/247
+  tls = dontCheck super.tls;
 
 }
