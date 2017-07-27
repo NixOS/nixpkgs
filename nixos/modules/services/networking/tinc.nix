@@ -141,7 +141,6 @@ in
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
               ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
               ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
-              Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}
             '';
