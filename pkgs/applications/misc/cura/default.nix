@@ -2,20 +2,20 @@
 
 mkDerivation rec {
   name = "cura-${version}";
-  version = "2.4.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
     rev = version;
-    sha256 = "04iglmjg9rzmlfrll6g7bcckkla327938xh8qmbdfrh215aivdlp";
+    sha256 = "03rsw6nafg3y9if2dlnzsj6c9x3x7cv6gs4a1w84jaq4p1f8fcsd";
   };
 
   buildInputs = [ qtbase ];
   propagatedBuildInputs = with python3.pkgs; [ uranium zeroconf pyserial ];
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
 
-  cmakeFlags = [ "-DCMAKE_MODULE_PATH=${python3.pkgs.uranium}/share/cmake-${cmake.majorVersion}/Modules" ];
+  cmakeFlags = [ "-DURANIUM_DIR=${python3.pkgs.uranium.src}" ];
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt
