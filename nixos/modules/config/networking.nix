@@ -199,6 +199,9 @@ in
 
   config = {
 
+    warnings = optional (cfg.extraHosts != "")
+      "networking.extraHosts is deprecated, please use networking.hosts instead";
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana-etc + "/etc/services";
