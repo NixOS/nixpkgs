@@ -1331,6 +1331,10 @@ with pkgs;
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
 
+  citra = libsForQt5.callPackage ../misc/emulators/citra {
+    boost = boost163;
+  };
+
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   colord = callPackage ../tools/misc/colord { };
