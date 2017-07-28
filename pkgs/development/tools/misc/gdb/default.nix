@@ -11,6 +11,8 @@
 
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
+
+, setupDebugInfoDirs
 }:
 
 let
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./debug-info-from-env.patch ];
 
-  nativeBuildInputs = [ pkgconfig texinfo perl ]
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
     # TODO(@Ericson2314) not sure if should be host or target
     ++ stdenv.lib.optional targetPlatform.isHurd mig;
 
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional targetPlatform.isHurd hurd
     ++ stdenv.lib.optional doCheck dejagnu;
+
+  propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   enableParallelBuilding = true;
 
