@@ -2085,6 +2085,8 @@ in {
     };
   };
 
+  html5-parser = callPackage ../development/python-modules/html5-parser {};
+
   httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = buildPythonPackage rec {
