@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz }:
+{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -10,12 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "1hiv1yqig3292dwqhrwsxwk3qjalxp5fpl8yphwbfwh8ng3zl4ll";
   };
 
+  patches = ./debug-info-from-env.patch;
+
   hardeningDisable = [ "format" ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ];
   buildInputs = [ zlib bzip2 xz ];
+
+  propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   configureFlags =
     [ "--program-prefix=eu-" # prevent collisions with binutils
