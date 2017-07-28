@@ -989,6 +989,8 @@ with pkgs;
 
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
+  ephemeralpg = callPackage ../applications/misc/ephemeralpg {};
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facter = callPackage ../tools/system/facter {
