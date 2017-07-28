@@ -136,6 +136,8 @@ in {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  email_validator = callPackage ../development/python-modules/email-validator { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -5315,25 +5317,7 @@ in {
     };
   };
 
-  dns = buildPythonPackage rec {
-    name = "dnspython-${version}";
-    version = "1.14.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython/${name}.zip";
-      sha256 = "1p1i46fyhxfic8mfh3gfckpn2pn7282xqabhihiqymrp4sa8ni91";
-    };
-
-    # needs networking for some tests
-    doCheck = false;
-
-    meta = {
-      description = "A DNS toolkit for Python 3.x";
-      homepage = http://www.dnspython.org;
-      # BSD-like, check http://www.dnspython.org/LICENSE for details
-      license = licenses.free;
-    };
-  };
+  dns = callPackage ../development/python-modules/dns { };
 
   docker = callPackage ../development/python-modules/docker.nix {};
 
@@ -5970,22 +5954,7 @@ in {
     };
   };
 
-  faker = buildPythonPackage rec {
-    name = "faker-0.0.4";
-    disabled = isPy3k;
-    src = pkgs.fetchurl {
-      url = mirror://pypi/F/Faker/Faker-0.0.4.tar.gz;
-      sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
-    };
-    buildInputs = with self; [ nose ];
-    meta = {
-      description = "A Python library for generating fake user data";
-      homepage    = http://pypi.python.org/pypi/Faker;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  faker = callPackage ../development/python-modules/faker { };
 
   fake_factory = buildPythonPackage rec {
     name = "fake-factory-${version}";
@@ -15961,30 +15930,7 @@ in {
     '';
   };
 
-  FormEncode = buildPythonPackage rec {
-    name = "FormEncode-${version}";
-    version = "1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/FormEncode/${name}.zip";
-      sha256 = "0y5gywq0l79l85ylr55p4xy0h921zgmfw6zmrvlh83aa4j074xg6";
-    };
-
-    buildInputs = with self; [
-      dns pycountry nose
-    ];
-
-    preCheck = ''
-      # two tests require dns resolving
-      sed -i 's/test_cyrillic_email/noop/' formencode/tests/test_email.py
-      sed -i 's/test_unicode_ascii_subgroup/noop/' formencode/tests/test_email.py
-    '';
-
-    meta = with stdenv.lib; {
-      description = "FormEncode validates and converts nested structures";
-      homepage = "http://formencode.org";
-    };
-  };
+  FormEncode = callPackage ../development/python-modules/FormEncode { };
 
   pycountry = buildPythonPackage rec {
     name = "pycountry-${version}";
@@ -21768,14 +21714,23 @@ in {
   };
 
   sqlobject = buildPythonPackage rec {
-    version = "3.0.0";
-    name = "sqlobject-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLObject/SQLObject-${version}.tar.gz";
-      sha256 = "15g3g7f4yiyplqf54px1dsnmrw3jb7xwx97z8qzgp9ijmm5vpr8r";
+    pname = "SQLObject";
+    version = "3.3.0";
+    name = "${pname}-${version}";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0p2dxrxh7xrv5yys09v5z95d0z40w22aq3xc01ghdidd7hr79xy9";
     };
 
-    propagatedBuildInputs = with self; [ pydispatcher FormEncode ];
+    checkInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [
+      FormEncode
+      PasteDeploy
+      paste
+      pydispatcher
+    ];
 
     meta = {
       description = "Object Relational Manager for providing an object interface to your database";
@@ -24108,6 +24063,8 @@ in {
   };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
+
+  ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umalqurra = buildPythonPackage rec {
     name = "umalqurra-${version}";
