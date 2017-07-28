@@ -142,4 +142,6 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
+  installOutputs = drv: outputs: overrideCabal drv
+    (drv: { outputsToInstall = outputs; });
 }
