@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.90.2";
+        version = "11.91.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.90.2.tar";
-          sha256 = "1hid8srj64nwbxcjvdma1xy07bh0v8ndhhsi3nmx9vdi3167khz6";
+          url = "https://elpa.gnu.org/packages/auctex-11.91.0.tar";
+          sha256 = "1yh182mxgngjmwpkyv2n9km3vyq95bqfq8mnly3dbv78nwk7f2l3";
         };
         packageRequires = [];
         meta = {
@@ -930,10 +930,10 @@
     hydra = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "hydra";
-        version = "0.13.5";
+        version = "0.14.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/hydra-0.13.5.tar";
-          sha256 = "0vq1pjyq6ddbikbh0vzdigbs0zlldgwad0192s7v9npg8qlwi668";
+          url = "https://elpa.gnu.org/packages/hydra-0.14.0.tar";
+          sha256 = "1r2vl2cpzqzayfzc0bijigxc7c0mkgcv96g4p65gnw99jk8d78kb";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1023,10 +1023,10 @@
     js2-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "js2-mode";
-        version = "20170116";
+        version = "20170721";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/js2-mode-20170116.tar";
-          sha256 = "1z4k7710yz1fbm2w8m17q81yyp8sxllld0zmgfnc336iqrc07hmk";
+          url = "https://elpa.gnu.org/packages/js2-mode-20170721.tar";
+          sha256 = "02w2hgk8qbmwkksqf1dmslpr3xn9zjp3srl3qh8730w8r8s8czni";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1446,10 +1446,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170717";
+        version = "20170724";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170717.tar";
-          sha256 = "0jrkfclwlbfcdkf56awnmvyw5vb9qwbfyyf2z4ilwx29zps9mxnh";
+          url = "https://elpa.gnu.org/packages/org-20170724.tar";
+          sha256 = "1f1szds6642427hrzagxgkr05z66sf57n5l2acvmpgw4z358ms0n";
         };
         packageRequires = [];
         meta = {
@@ -1785,10 +1785,10 @@
       }) {};
     sokoban = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "sokoban";
-        version = "1.4.2";
+        version = "1.4.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/sokoban-1.4.2.tar";
-          sha256 = "0sciv7rl1p1ar1jris1py2slrd8kr4q6a4plmb0jq6lv9dlqyvc6";
+          url = "https://elpa.gnu.org/packages/sokoban-1.4.4.tar";
+          sha256 = "0lz0qxgs71yh23iayv50rb6qgqvgbz2bg2sgfxcps8wag643ns20";
         };
         packageRequires = [];
         meta = {
@@ -2198,10 +2198,10 @@
     yasnippet = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "yasnippet";
-        version = "0.11.0";
+        version = "0.12.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/yasnippet-0.11.0.tar";
-          sha256 = "1m0hchhianl69sb1iqa8av513qvz6krjg4b5ppwfx1sjlai9xj2y";
+          url = "https://elpa.gnu.org/packages/yasnippet-0.12.1.tar";
+          sha256 = "01q1hn3w8w63s7cvr9bq6l5n4nyirnk8qfba60ajp3j6ndi2964n";
         };
         packageRequires = [ cl-lib ];
         meta = {

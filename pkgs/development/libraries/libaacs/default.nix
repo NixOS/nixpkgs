@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "libaacs-${version}";
-  version  = "0.8.1";
+  version  = "0.9.0";
 
   src = fetchurl {
     url = "http://get.videolan.org/libaacs/${version}/${name}.tar.bz2";
-    sha256 = "1s5v075hnbs57995r6lljm79wgrip3gnyf55a0y7bja75jh49hwm";
+    sha256 = "1kms92i0c7i1yl659kqjf19lm8172pnpik5lsxp19xphr74vvq27";
   };
 
   buildInputs = [ libgcrypt libgpgerror ];

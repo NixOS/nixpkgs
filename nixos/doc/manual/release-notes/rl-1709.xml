@@ -157,6 +157,12 @@ rmdir /var/lib/ipfs/.ipfs
       module where user Fontconfig settings are available.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      ZFS/SPL have been updated to 0.7.0, <literal>zfsUnstable, splUnstable</literal>
+      have therefore been removed.
+    </para>
+  </listitem>
 
 </itemizedlist>
 

@@ -92,6 +92,7 @@
 "github:mhinz/vim-startify"
 "github:michaeljsmith/vim-indent-object"
 "github:mileszs/ack.vim"
+"github:mindriot101/vim-yapf"
 "github:mkasa/lushtags"
 "github:mpickering/hlint-refactor-vim"
 "github:nathanaelkane/vim-indent-guides"

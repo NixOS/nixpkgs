@@ -750,6 +750,7 @@ rec {
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
+    , extraDebs ? []
     , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
@@ -760,7 +761,7 @@ rec {
     in
       (fillDiskWithDebs {
         inherit name fullName size postInstall QEMU_OPTS memSize;
-        debs = import expr {inherit fetchurl;};
+        debs = import expr {inherit fetchurl;} ++ extraDebs;
       }) // {inherit expr;};
 
 
@@ -1954,22 +1955,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.8-jessie-i386";
-      fullName = "Debian 8.8 Jessie (i386)";
+      name = "debian-8.9-jessie-i386";
+      fullName = "Debian 8.9 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "79dbf81e9698913c577333f47f5a56be78529fba265ec492880e8c369c478b58";
+        sha256 = "3c78bdf3b693f2f37737c52d6a7718b3a545956f2a853da79f04a2d15541e811";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.8-jessie-amd64";
-      fullName = "Debian 8.8 Jessie (amd64)";
+      name = "debian-8.9-jessie-amd64";
+      fullName = "Debian 8.9 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "845fc80c9934d8c0f78ada6455c81c331a3359ef15c4c036b47e742fb1bb99c6";
+        sha256 = "0605589ae7a63c690f37bd2567dc12e02a2eb279d9dc200a7310072ad3593e53";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

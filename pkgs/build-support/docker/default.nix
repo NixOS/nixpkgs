@@ -6,6 +6,7 @@
   findutils,
   go,
   jshon,
+  jq,
   lib,
   pkgs,
   pigz,
@@ -408,7 +409,7 @@ rec {
                   contents runAsRoot diskSize extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
-        buildInputs = [ jshon pigz coreutils findutils ];
+        buildInputs = [ jshon pigz coreutils findutils jq ];
         # Image name and tag must be lowercase
         imageName = lib.toLower name;
         imageTag = lib.toLower tag;
@@ -435,6 +436,9 @@ rec {
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
+          # Do not import the base image configuration and manifest
+          rm -f image/*.json
+          rm -f image/manifest.json
 
           if [[ -z "$fromImageName" ]]; then
             fromImageName=$(jshon -k < image/repositories|head -n1)
@@ -493,6 +497,17 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
+        # Create image configuration file (used by registry v2) by using
+        # the configuration of the last layer
+        SHA_ARRAY=$(find ./ -name layer.tar | xargs sha256sum | cut -d" " -f1 | xargs -I{} echo -n '"sha256:{}" ' | sed 's/" "/","/g' | awk '{ print "["$1"]" }')
+        jq ". + {\"rootfs\": {\"diff_ids\": $SHA_ARRAY, \"type\": \"layers\"}}" image/$layerID/json > config.json
+        CONFIG_SHA=$(sha256sum config.json | cut -d ' ' -f1)
+        mv config.json image/$CONFIG_SHA.json
+
+        # Create image manifest
+        LAYER_PATHS=$(find image/ -name layer.tar -printf '"%P" ' | sed 's/" "/","/g')
+        jq -n "[{\"Config\":\"$CONFIG_SHA.json\",\"RepoTags\":[\"$imageName:$imageTag\"],\"Layers\":[$LAYER_PATHS]}]" > image/manifest.json
+
         # Store the json under the name image/repositories.
         jshon -n object \
           -n object -s "$layerID" -i "$imageTag" \
@@ -502,7 +517,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 -c . | pigz -nT > $out
+        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'./':: -c . | pigz -nT > $out
 
         echo "Finished."
       '';

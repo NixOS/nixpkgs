@@ -12,22 +12,17 @@ let
 
     m33-fio = buildPlugin rec {
       name = "M33-Fio-${version}";
-      version = "1.17";
+      version = "1.20";
 
       src = fetchFromGitHub {
         owner = "donovan6000";
         repo = "M33-Fio";
         rev = "V${version}";
-        sha256 = "19r860hqax09a79s9bl181ab7jsgx0pa8fvnr62lbgkwhis7m8mh";
+        sha256 = "1ng7lzlkqsjcr1w7wgzwsqkkvcvpajcj2cwqlffh95916sw8n767";
       };
 
       patches = [
         ./m33-fio-one-library.patch
-        # Fix incompatibility with new OctoPrint
-        (fetchpatch {
-          url = "https://github.com/foosel/M33-Fio/commit/bdf2422dee3fb8e53b33f087f734956c3b209d72.patch";
-          sha256 = "0jm415sx6d3m0z4gfhbnxlasg08zf3f3mslaj4amn9wbvsik9s5d";
-        })
       ];
 
       postPatch = ''
@@ -69,13 +64,13 @@ let
 
     stlviewer = buildPlugin rec {
       name = "OctoPrint-STLViewer-${version}";
-      version = "0.3.0";
+      version = "0.4.1";
 
       src = fetchFromGitHub {
         owner = "jneilliii";
         repo = "OctoPrint-STLViewer";
         rev = "v${version}";
-        sha256 = "1a6sa8pw9ay7x27pfwr3nzb22x3jaw0c9vwyz4mrj76zkiw6svfi";
+        sha256 = "1f64s37g2d79g76v0vjnjrc2jp2gwrsnfgx7w3n0hkf1lz1pjkm0";
       };
 
       meta = with stdenv.lib; {
