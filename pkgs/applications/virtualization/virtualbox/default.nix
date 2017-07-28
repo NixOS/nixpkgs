@@ -18,10 +18,11 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  extpack = "1952ikz4xsjgdd0pzdx1riwaingyhkxp0ind31yzqc4d0hp8l6b5";
-  extpackRev = "117012";
-  main = "0q5vjsih4ndn1b0s9l1ppxng6dljld5bin5nqfrhvgr2ldlv2bgf";
-  version = "5.1.24";
+  # Manually sha256sum the extensionPack file, must be hex!
+  extpack = "14f152228495a715f526eb74134d43c960919cc534d2bc67cfe34a63e6cf7721";
+  extpackRev = "117224";
+  main = "1af8h3d3sdpcxcp5g75qfq10z81l7m8gk0sz8zqix8c1wqsm0wdm";
+  version = "5.1.26";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {

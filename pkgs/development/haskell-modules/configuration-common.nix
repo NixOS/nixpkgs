@@ -594,10 +594,10 @@ self: super: {
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
       make -C $lispdir
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+      mkdir -p $data/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $data/share/emacs/site-lisp/
     '';
   });
 
@@ -702,12 +702,6 @@ self: super: {
   # broken test suite
   servant-server = dontCheck super.servant-server;
 
-  # Fix build for latest versions of servant and servant-client.
-  servant-client_0_11 = super.servant-client_0_11.overrideScope (self: super: {
-    servant-server = self.servant-server_0_11;
-    servant = self.servant_0_11;
-  });
-
   # build servant docs from the repository
   servant =
     let
@@ -728,7 +722,7 @@ self: super: {
       };
     in overrideCabal super.servant (old: {
       postInstall = old.postInstall or "" + ''
-        ln -s ${docs} $out/share/doc/servant
+        ln -s ${docs} $doc/share/doc/servant
       '';
     });
 
@@ -865,13 +859,22 @@ self: super: {
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
-  # Needs a newer version of hsyslog than lts-8.x provides.
-  logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5_0_1; };
-
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
 
   # https://github.com/diagrams/diagrams-solve/issues/4
   diagrams-solve = dontCheck super.diagrams-solve;
+
+  # Needs a newer version of ghc-events.
+  threadscope = super.threadscope.override { ghc-events = self.ghc-events_0_6_0; };
+
+  # version 1.3.1.2 does not compile: syb >=0.1.0.2 && <0.7
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+
+  # test suite does not compile with recent versions of QuickCheck
+  integer-logarithms = dontCheck (super.integer-logarithms);
+
+  # https://github.com/vincenthz/hs-tls/issues/247
+  tls = dontCheck super.tls;
 
 }

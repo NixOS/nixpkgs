@@ -243,7 +243,7 @@ in
             preStart = ''
               if [ ! -d ${lib.escapeShellArg nodedir} ]; then
                 mkdir -p /var/db/tahoe-lafs
-                tahoe create-introducer "${lib.escapeShellArg nodedir}
+                tahoe create-introducer ${lib.escapeShellArg nodedir}
               fi
 
               # Tahoe has created a predefined tahoe.cfg which we must now
