@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
   };
 
+  patches = [ ./debug-info-from-env.patch ];
+
   nativeBuildInputs = [ pkgconfig texinfo perl ]
     # TODO(@Ericson2314) not sure if should be host or target
     ++ stdenv.lib.optional targetPlatform.isHurd mig;
