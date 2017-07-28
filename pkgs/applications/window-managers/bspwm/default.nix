@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];
 
-  PREFIX = "$out";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A tiling window manager based on binary space partitioning";
