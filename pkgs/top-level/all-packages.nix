@@ -722,6 +722,8 @@ with pkgs;
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
+  bubblewrap = callPackage ../tools/admin/bubblewrap { };
+
   borgbackup = callPackage ../tools/backup/borg {
     python3Packages = python34Packages;
   };
