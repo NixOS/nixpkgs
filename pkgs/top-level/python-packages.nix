@@ -621,24 +621,7 @@ in {
 
   chai = callPackage ../development/python-modules/chai { };
 
-  chainmap = buildPythonPackage rec {
-    name = "chainmap-1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/chainmap/${name}.tar.gz";
-      sha256 = "09h5gq43w516fqswlca0nhmd2q3v8hxq15z4wqrznfwix6ya6pa0";
-    };
-
-    # Requires tox
-    doCheck = false;
-
-    meta = {
-      description = "Backport/clone of ChainMap";
-      homepage = "https://bitbucket.org/jeunice/chainmap";
-      license = licenses.psfl;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  chainmap = callPackage ../development/python-modules/chainmap { };
 
   arelle = callPackage ../development/python-modules/arelle {
     gui = true;
