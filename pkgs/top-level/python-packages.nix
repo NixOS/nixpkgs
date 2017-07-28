@@ -543,22 +543,7 @@ in {
   };
 
 
-  amqplib = buildPythonPackage rec {
-    name = "amqplib-0.6.1";
-
-    src = pkgs.fetchurl {
-      url = "http://py-amqplib.googlecode.com/files/${name}.tgz";
-      sha256 = "0f2618b74d95cd360a6d46a309a3fb1c37d881a237e269ac195a69a34e0e2f62";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/py-amqplib/;
-      description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
-    };
-  };
+  amqplib = callPackage ../development/python-modules/amqplib {};
 
   ansible  = self.ansible2;
   ansible2 = self.ansible_2_3;
@@ -567,26 +552,7 @@ in {
   ansible_2_2 = callPackage ../development/python-modules/ansible/2.2.nix {};
   ansible_2_3 = callPackage ../development/python-modules/ansible/2.3.nix {};
 
-  apipkg = buildPythonPackage rec {
-    name = "apipkg-1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/apipkg/${name}.tar.gz";
-      sha256 = "2e38399dbe842891fe85392601aab8f40a8f4cc5a9053c326de35a1cc0297ac6";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Namespace control and lazy-import mechanism";
-      homepage = "http://bitbucket.org/hpk42/apipkg";
-      license = licenses.mit;
-    };
-  };
+  apipkg = callPackage ../development/python-modules/apipkg {};
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
@@ -622,42 +588,9 @@ in {
     };
   };
 
-  apsw = buildPythonPackage rec {
-    name = "apsw-3.7.6.2-r1";
-    disabled = isPyPy;
+  apsw = callPackage ../development/python-modules/apsw {};
 
-    src = pkgs.fetchurl {
-      url = "http://apsw.googlecode.com/files/${name}.zip";
-      sha256 = "cb121b2bce052609570a2f6def914c0aa526ede07b7096dddb78624d77f013eb";
-    };
-
-    buildInputs = with self; [ pkgs.sqlite ];
-
-    # python: double free or corruption (fasttop): 0x0000000002fd4660 ***
-    doCheck = false;
-
-    meta = {
-      description = "A Python wrapper for the SQLite embedded relational database engine";
-      homepage = http://code.google.com/p/apsw/;
-    };
-  };
-
-  astor = buildPythonPackage rec {
-    name = "astor-${version}";
-    version = "0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/astor/${name}.tar.gz";
-      sha256 = "1fdafq5hkis1fxqlmhw0sn44zp2ar46nxhbc22cvwg7hsd8z5gsa";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Library for reading, writing and rewriting python AST";
-      homepage = https://github.com/berkerpeksag/astor;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nixy ];
-    };
-  };
+  astor = callPackage ../development/python-modules/astor {};
 
   asyncio = if (pythonAtLeast "3.3") then buildPythonPackage rec {
     name = "asyncio-${version}";
@@ -676,91 +609,19 @@ in {
     };
   } else null;
 
-  funcsigs = buildPythonPackage rec {
-    name = "funcsigs-1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/funcsigs/${name}.tar.gz";
-      sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
-    };
-
-    buildInputs = with self; [
-      unittest2
-    ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
-      homepage = "https://github.com/aliles/funcsigs";
-      maintainers = with maintainers; [ garbas ];
-      license = licenses.asl20;
-    };
-  };
+  funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
 
-  args = buildPythonPackage rec {
-    name = "args-0.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/args/${name}.tar.gz";
-      sha256 = "a785b8d837625e9b61c39108532d95b85274acd679693b71ebb5156848fcf814";
-    };
-
-    meta = {
-      description = "Command Arguments for Humans";
-      homepage = "https://github.com/kennethreitz/args";
-    };
-  };
+  args = callPackage ../development/python-modules/args { };
 
   argcomplete = callPackage ../development/python-modules/argcomplete { };
 
-  area53 = buildPythonPackage (rec {
-    name = "Area53-0.94";
+  area53 = callPackage ../development/python-modules/area53 { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/A/Area53/${name}.tar.gz";
-      sha256 = "0v9b7f8b6v21y410anx5sr52k2ac8jrzdf19q6m6p0zsdsf9vr42";
-    };
+  chai = callPackage ../development/python-modules/chai { };
 
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ self.boto ];
-
-  });
-
-  chai = buildPythonPackage rec {
-    name = "chai-${version}";
-    version = "1.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/chai/${name}.tar.gz";
-      sha256 = "016kf3irrclpkpvcm7q0gmkfibq7jgy30a9v73pp42bq9h9a32bl";
-    };
-
-    meta = {
-      description = "Mocking, stubbing and spying framework for python";
-    };
-  };
-
-  chainmap = buildPythonPackage rec {
-    name = "chainmap-1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/chainmap/${name}.tar.gz";
-      sha256 = "09h5gq43w516fqswlca0nhmd2q3v8hxq15z4wqrznfwix6ya6pa0";
-    };
-
-    # Requires tox
-    doCheck = false;
-
-    meta = {
-      description = "Backport/clone of ChainMap";
-      homepage = "https://bitbucket.org/jeunice/chainmap";
-      license = licenses.psfl;
-      maintainers = with maintainers; [ abbradar ];
-    };
-  };
+  chainmap = callPackage ../development/python-modules/chainmap { };
 
   arelle = callPackage ../development/python-modules/arelle {
     gui = true;
@@ -789,27 +650,7 @@ in {
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
- asn1ate = buildPythonPackage rec {
-  pname = "asn1ate";
-  date = "20160810";
-  name = "${pname}-unstable-${date}";
-
-  src = pkgs.fetchFromGitHub {
-    sha256 = "04pddr1mh2v9qq8fg60czwvjny5qwh4nyxszr3qc4bipiiv2xk9w";
-    rev = "c56104e8912400135509b584d84423ee05a5af6b";
-    owner = "kimgr";
-    repo = pname;
-  };
-
-  propagatedBuildInputs = with self; [ pyparsing ];
-
-  meta = with stdenv.lib; {
-    description = "Python library for translating ASN.1 into other forms";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
-  };
-};
+  asn1ate = callPackage ../development/python-modules/asn1ate { };
 
   atomiclong = buildPythonPackage rec {
     version = "0.1.1";
