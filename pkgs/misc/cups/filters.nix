@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "0g6jmbzgvsq4dq6jaczr6fslpv3692v8yvvmqgw08sb3aly7kgd3";
+    sha256 = "1kcndzpbbcaxafnz1wa6acy3p3r5likfqmf057i5q0q6i176lz5k";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
