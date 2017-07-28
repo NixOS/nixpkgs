@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "590ac12b7671";
-    sha256 = "02f3nmvbidm2f32v6kvc1ljmslysgk0ab2lpg91szy0agmmj5xja";
+    rev = "9a3e51f348fe";
+    sha256 = "09g4vi52rv0r3jzcm0bsgp4ngqq6iapfbxfh0l7qj36qnajp4vm6";
   };
 
   buildInputs = [ lua5 makeWrapper libidn openssl ];
