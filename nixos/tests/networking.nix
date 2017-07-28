@@ -533,6 +533,69 @@ let
           $client->succeed("! ip route get fd00:1234:5678:1::1 | grep -q ':[a-f0-9]*ff:fe[a-f0-9]*:'");
         '';
     };
+    routes = {
+      name = "routes";
+      machine = {
+        networking.useDHCP = false;
+        networking.interfaces."eth0" = {
+          ip4 = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          ip6 = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
+          ipv6Routes = [
+            { address = "fdfd:b3f0::"; prefixLength = 48; }
+            { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
+          ];
+          ipv4Routes = [
+            { address = "10.0.0.0"; prefixLength = 16; options = { mtu = "1500"; }; }
+            { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
+          ];
+        };
+        virtualisation.vlans = [ ];
+      };
+
+      testScript = ''
+        my $targetIPv4Table = <<'END';
+        10.0.0.0/16 scope link mtu 1500 
+        192.168.1.0/24 proto kernel scope link src 192.168.1.2 
+        192.168.2.0/24 via 192.168.1.1 
+        END
+
+        my $targetIPv6Table = <<'END';
+        2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium
+        2001:1470:fffd:2098::/64 via fdfd:b3f0::1 metric 1024 pref medium
+        fdfd:b3f0::/48 metric 1024 pref medium
+        END
+
+        $machine->start;
+        $machine->waitForUnit("network.target");
+
+        # test routing tables
+        my $ipv4Table = $machine->succeed("ip -4 route list dev eth0 | head -n3");
+        my $ipv6Table = $machine->succeed("ip -6 route list dev eth0 | head -n3");
+        "$ipv4Table" eq "$targetIPv4Table" or die(
+          "The IPv4 routing table does not match the expected one:\n",
+          "Result:\n", "$ipv4Table\n",
+          "Expected:\n", "$targetIPv4Table\n"
+        );
+        "$ipv6Table" eq "$targetIPv6Table" or die(
+          "The IPv6 routing table does not match the expected one:\n",
+          "Result:\n", "$ipv6Table\n",
+          "Expected:\n", "$targetIPv6Table\n"
+        );
+
+        # test clean-up of the tables
+        $machine->succeed("systemctl stop network-addresses-eth0");
+        my $ipv4Residue = $machine->succeed("ip -4 route list dev eth0 | head -n-3");
+        my $ipv6Residue = $machine->succeed("ip -6 route list dev eth0 | head -n-3");
+        $ipv4Residue eq "" or die(
+          "The IPv4 routing table has not been properly cleaned:\n",
+          "$ipv4Residue\n"
+        );
+        $ipv6Residue eq "" or die(
+          "The IPv6 routing table has not been properly cleaned:\n",
+          "$ipv6Residue\n"
+        );
+      '';
+    };
   };
 
 in mapAttrs (const (attrs: makeTest (attrs // {

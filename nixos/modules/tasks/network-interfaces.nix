@@ -131,16 +131,16 @@ let
         '';
       };
 
-      nextHop = mkOption {
+      via = mkOption {
         type = types.nullOr types.str;
         default = null;
         description = "IPv${toString v} address of the next hop.";
       };
 
       options = mkOption {
-        type = types.str;
-        default = "";
-        example = "mtu 1492 window 524288";
+        type = types.attrsOf types.str;
+        default = { };
+        example = { mtu = "1492"; window = "524288"; };
         description = ''
           Other route options. See the symbol <literal>OPTION</literal>
           in the <literal>ip-route(8)</literal> manual page for the details.
@@ -237,7 +237,7 @@ let
         default = [];
         example = [
           { address = "10.0.0.0"; prefixLength = 16; }
-          { address = "192.168.2.0"; prefixLength = 24; nextHop = "192.168.1.1"; }
+          { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
         ];
         type = with types; listOf (submodule (routeOpts 4));
         description = ''
@@ -249,7 +249,7 @@ let
         default = [];
         example = [
           { address = "fdfd:b3f0::"; prefixLength = 48; }
-          { address = "2001:1470:fffd:2098::"; prefixLength = 64; nextHop = "fdfd:b3f0::1"; }
+          { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
         ];
         type = with types; listOf (submodule (routeOpts 6));
         description = ''

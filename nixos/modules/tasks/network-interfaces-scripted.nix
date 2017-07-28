@@ -210,12 +210,13 @@ let
                 ${flip concatMapStrings (i.ipv4Routes ++ i.ipv6Routes) (route:
                   let
                     cidr = "${route.address}/${toString route.prefixLength}";
-                    nextHop = optionalString (route.nextHop != null) ''via "${route.nextHop}"'';
+                    via = optionalString (route.via != null) ''via "${route.via}"'';
+                    options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
                   in
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${route.options} ${nextHop} dev "${i.name}" 2>&1); then
+                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
                        echo "failed"
