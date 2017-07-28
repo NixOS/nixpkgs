@@ -619,19 +619,7 @@ in {
 
   area53 = callPackage ../development/python-modules/area53 { };
 
-  chai = buildPythonPackage rec {
-    name = "chai-${version}";
-    version = "1.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/chai/${name}.tar.gz";
-      sha256 = "016kf3irrclpkpvcm7q0gmkfibq7jgy30a9v73pp42bq9h9a32bl";
-    };
-
-    meta = {
-      description = "Mocking, stubbing and spying framework for python";
-    };
-  };
+  chai = callPackage ../development/python-modules/chai { };
 
   chainmap = buildPythonPackage rec {
     name = "chainmap-1.0.2";
