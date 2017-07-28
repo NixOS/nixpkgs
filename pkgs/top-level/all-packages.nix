@@ -4805,6 +4805,8 @@ with pkgs;
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
+
   xfstests = callPackage ../tools/misc/xfstests { };
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
