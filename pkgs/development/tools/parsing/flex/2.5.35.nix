@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, m4 }:
+{ stdenv, fetchurl, autoreconfHook, bison, m4 }:
 
 stdenv.mkDerivation {
   name = "flex-2.5.35";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0wh06nix8bd4w1aq4k2fbbkdq5i30a9lxz3xczf3ff28yy0kfwzm";
   };
 
-  buildInputs = [ bison ];
+  buildInputs = [ bison autoreconfHook ];
 
   propagatedNativeBuildInputs = [ m4 ];
 
