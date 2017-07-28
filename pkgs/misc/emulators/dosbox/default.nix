@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, SDL, makeDesktopItem, mesa }:
+{ stdenv, fetchurl, fetchsvn, SDL, SDL_net, SDL_sound, libpng, makeDesktopItem, mesa, autoreconfHook }:
 
-stdenv.mkDerivation rec { 
-  name = "dosbox-0.74";
+let revision = "4024";
+in stdenv.mkDerivation rec {
+  name = "dosbox-0.74-${revision}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/dosbox/${name}.tar.gz";
-    sha256 = "01cfjc5bs08m4w79nbxyv7rnvzq2yckmgrbq36njn06lw8b4kxqk";
+  src = fetchsvn {
+    url = "https://dosbox.svn.sourceforge.net/svnroot/dosbox/dosbox/trunk";
+    rev = revision;
+    sha256 = "16s6xwmz7992l0kg6cj9aqk21cc0p6c0dn0x0sx5iadbbll7ma6p";
   };
 
   patches =
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ SDL mesa ];
+  buildInputs = [ SDL SDL_net SDL_sound libpng mesa autoreconfHook ];
 
   desktopItem = makeDesktopItem {
     name = "dosbox";
