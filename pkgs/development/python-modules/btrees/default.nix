@@ -5,7 +5,8 @@ buildPythonPackage rec {
   version = "4.4.1";
   name = "${pname}-${version}";
 
-  propagatedBuildInputs = [ persistent zope_interface transaction ];
+  buildInputs = [ transaction ];
+  propagatedBuildInputs = [ persistent zope_interface ];
 
   src = fetchPypi {
     inherit pname version;

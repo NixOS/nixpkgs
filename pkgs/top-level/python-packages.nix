@@ -24995,23 +24995,7 @@ EOF
   zconfig = callPackage ../development/python-modules/zconfig { };
 
 
-  zc_lockfile = buildPythonPackage rec {
-    name = "zc.lockfile-${version}";
-    version = "1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zc.lockfile/${name}.tar.gz";
-      sha256 = "96bb2aa0438f3e29a31e4702316f832ec1482837daef729a92e28c202d8fba5c";
-    };
-
-    meta = {
-      description = "Inter-process locks";
-      homepage =  http://www.python.org/pypi/zc.lockfile;
-      license = licenses.zpt20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zdaemon = buildPythonPackage rec {
     name = "zdaemon-${version}";
@@ -25113,40 +25097,11 @@ EOF
     };
   };
 
-  zodbpickle = self.buildPythonPackage rec {
-    name = "zodbpickle-0.5.2";
-    disabled = isPyPy; # https://github.com/zopefoundation/zodbpickle/issues/10
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zodbpickle/${name}.tar.gz";
-      sha256 = "f65c00fbc13523fced63de6cc11747aa1a6343aeb2895c89838ed55a5ab12cca";
-    };
-
-    # fails..
-    doCheck = false;
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/zodbpickle;
-    };
-  };
+  zodbpickle = callPackage ../development/python-modules/zodbpickle {};
 
   BTrees = callPackage ../development/python-modules/btrees {};
 
-  persistent = self.buildPythonPackage rec {
-    name = "persistent-4.0.8";
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/persistent/${name}.tar.gz";
-      sha256 = "678902217c5370d33694c6dc95b89e1e6284b4dc41f04c056326194a3f6f3e22";
-    };
-
-    meta = {
-      description = "Automatic persistence for Python objects";
-      homepage = http://www.zope.org/Products/ZODB;
-    };
-  };
+  persistent = callPackage ../development/python-modules/persistent {};
 
   xdot = buildPythonPackage rec {
     name = "xdot-0.7";
