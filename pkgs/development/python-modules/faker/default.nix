@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "0.7.17";
+  version = "0.7.18";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n4achwr6dcf67n983ls5cbp5ic3jrwsbl92rzjlzb1xvz1s1js9";
+    sha256 = "310b20f3c497a777622920dca314d90f774028d49c7ee7ccfa96ca4b9d9bf429";
   };
 
   checkInputs = [
