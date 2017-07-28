@@ -11339,6 +11339,23 @@ in {
     };
   };
 
+  flask_0_10_1 = buildPythonPackage {
+    name = "flask-0.10.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flask/Flask-0.10.1.tar.gz";
+      sha256 = "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc";
+    };
+
+    propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
+
+    meta = {
+      homepage = http://flask.pocoo.org/;
+      description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
+      license = licenses.bsd3;
+    };
+  };
+
   flask_assets = buildPythonPackage rec {
     name = "Flask-Assets-${version}";
     version = "0.12";
@@ -13953,7 +13970,7 @@ in {
       sha256 = "c9ca6fdfe6a6fb187a3d54ddf9b1518196348e8f20537f0a14ca81a264ffafa2";
     };
 
-    propagatedBuildInputs = [ self.msgpack self.requests2 self.flask self.gevent self.pyzmq ];
+    propagatedBuildInputs = [ self.msgpack self.requests2 self.flask_0_10_1 self.gevent self.pyzmq ];
     buildInputs = [ self.mock self.unittest2 ];
 
     meta = {
