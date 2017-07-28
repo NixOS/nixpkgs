@@ -1,9 +1,9 @@
-{ callPackage, glib, libsndfile, zlib, bzip2, lzma, libsamplerate }:
+{ callPackage, glib, libsndfile, zlib, bzip2, lzma, libsamplerate, intltool }:
 let pkg = import ./base.nix {
-  version = "3.0.5";
+  version = "3.1.0";
   pkgName = "libmirage";
-  pkgSha256 = "01wfxlyviank7k3p27grl1r40rzm744rr80zr9lcjk3y8i5g8ni2";
+  pkgSha256 = "0qvkvnvxqx8hqzcqzh7sqjzgbc1nrd91lzv33lr8c6fgaq8cqzmn";
 };
 in callPackage pkg {
-  buildInputs = [ glib libsndfile zlib bzip2 lzma libsamplerate ];
+  buildInputs = [ glib libsndfile zlib bzip2 lzma libsamplerate intltool ];
 }

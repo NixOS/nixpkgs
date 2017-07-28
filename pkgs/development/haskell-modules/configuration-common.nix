@@ -15,10 +15,17 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # This used to be a core package provided by GHC, but then the compiler
+  # dropped it. We define the name here to make sure that old packages which
+  # depend on this library still evaluate (even though they won't compile
+  # successfully with recent versions of the compiler).
+  bin-package-db = null;
+
   # Some Hackage packages reference this attribute, which exists only in the
   # GHCJS package set. We provide a dummy version here to fix potential
   # evaluation errors.
   ghcjs-base = null;
+  ghcjs-prim = null;
 
   # Some packages need a non-core version of Cabal.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
@@ -587,10 +594,10 @@ self: super: {
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
       make -C $lispdir
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+      mkdir -p $data/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $data/share/emacs/site-lisp/
     '';
   });
 
@@ -664,11 +671,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # Haste stuff
-  haste-Cabal         = markBroken (self.callPackage ../tools/haskell/haste/haste-Cabal.nix {});
-  haste-cabal-install = markBroken (self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; });
-  haste-compiler      = markBroken (self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; });
-
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc { inherit (pkgs) cabal-install cabal2nix; };
 
@@ -679,14 +681,6 @@ self: super: {
     if pkgs.stdenv.isDarwin
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
-
-  # The stack people don't bother making their own code compile in an LTS-based
-  # environment: https://github.com/commercialhaskell/stack/issues/3001.
-  stack = super.stack.overrideScope (self: super: {
-    store-core = self.store-core_0_3;
-    store = self.store_0_3_1;
-    hpack = self.hpack_0_17_1;
-  });
 
   # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
   intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
@@ -708,12 +702,6 @@ self: super: {
   # broken test suite
   servant-server = dontCheck super.servant-server;
 
-  # Fix build for latest versions of servant and servant-client.
-  servant-client_0_11 = super.servant-client_0_11.overrideScope (self: super: {
-    servant-server = self.servant-server_0_11;
-    servant = self.servant_0_11;
-  });
-
   # build servant docs from the repository
   servant =
     let
@@ -734,7 +722,7 @@ self: super: {
       };
     in overrideCabal super.servant (old: {
       postInstall = old.postInstall or "" + ''
-        ln -s ${docs} $out/share/doc/servant
+        ln -s ${docs} $doc/share/doc/servant
       '';
     });
 
@@ -871,10 +859,22 @@ self: super: {
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
-  # Needs a newer version of hsyslog than lts-8.x provides.
-  logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5_0_1; };
-
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
+
+  # https://github.com/diagrams/diagrams-solve/issues/4
+  diagrams-solve = dontCheck super.diagrams-solve;
+
+  # Needs a newer version of ghc-events.
+  threadscope = super.threadscope.override { ghc-events = self.ghc-events_0_6_0; };
+
+  # version 1.3.1.2 does not compile: syb >=0.1.0.2 && <0.7
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+
+  # test suite does not compile with recent versions of QuickCheck
+  integer-logarithms = dontCheck (super.integer-logarithms);
+
+  # https://github.com/vincenthz/hs-tls/issues/247
+  tls = dontCheck super.tls;
 
 }

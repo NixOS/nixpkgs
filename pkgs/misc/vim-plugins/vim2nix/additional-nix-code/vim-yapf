@@ -1,0 +1,4 @@
+    buildPhase = ''
+      substituteInPlace ftplugin/python_yapf.vim \
+        --replace '"yapf"' '"${pkgs.yapf}/bin/yapf"'
+    '';

@@ -4,21 +4,29 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "alacritty-unstable-${version}";
-  version = "2017-01-07";
-
-  depsSha256 = "138bfnrg3j49vl6j2daf1jyyng5r6d088qhsqikhyyqzjx1ih0v2";
+  name = "alacritty-unstable-2017-07-25";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
-    rev = "f4b10a1dbb991861a84c5085a0ee4384d2377448";
-    sha256 = "044l5s1w2g5krngr1v4lfxv7smh6wzy9zrabnihnpf1bsg6q73nb";
+    rev = "49c73f6d55e5a681a0e0f836cd3e9fe6af30788f";
+    sha256 = "0h5hrb2g0fpc6xn94hmvxjj21cqbj4vgqkznvd64jl84qbyh1xjl";
   };
 
-  nativeBuildInputs = [
-    cmake gcc pkgconfig freetype expat gperf
-    libX11 libXcursor libXxf86vm libXi
+  depsSha256 = "1pbb0swgpsbd6x3avxz6fv3q31dg801li47jibz721a4n9c0rssx";
+
+  buildInputs = [
+    cmake
+    makeWrapper
+    freetype
+    fontconfig
+    xclip
+    pkgconfig
+    expat
+    libX11
+    libXcursor
+    libXxf86vm
+    libXi
   ];
 
   doCheck = true;

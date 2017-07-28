@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.zookeeper;
-  
+
   zookeeperConfig = ''
     dataDir=${cfg.dataDir}
     clientPort=${toString cfg.port}
@@ -49,7 +49,7 @@ in {
       default = 1;
       type = types.int;
     };
- 
+
     extraConf = mkOption {
       description = "Extra configuration for Zookeeper.";
       type = types.lines;
@@ -119,7 +119,7 @@ in {
         ExecStart = ''
           ${pkgs.jre}/bin/java \
             -cp "${pkgs.zookeeper}/lib/*:${pkgs.zookeeper}/${pkgs.zookeeper.name}.jar:${configDir}" \
-            ${toString cfg.extraCmdLineOptions} \
+            ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \
             ${optionalString cfg.preferIPv4 "-Djava.net.preferIPv4Stack=true"} \
             org.apache.zookeeper.server.quorum.QuorumPeerMain \

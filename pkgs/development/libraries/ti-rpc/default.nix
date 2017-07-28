@@ -1,11 +1,11 @@
 { fetchurl, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-1.0.1";
+  name = "libtirpc-1.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "17mqrdgsgp9m92pmq7bvr119svdg753prqqxmg4cnz5y657rfmji";
+    sha256 = "1xchbxy0xql7yl7z4n1icj8r7dmly46i22fvm00vdjq64zlmqg3j";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

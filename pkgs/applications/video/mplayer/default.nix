@@ -10,6 +10,7 @@
 , vdpauSupport ? false, libvdpau ? null
 , cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
 , dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
+, dvdreadSupport ? true, libdvdread ? null
 , bluraySupport ? true, libbluray ? null
 , amrSupport ? false, amrnb ? null, amrwb ? null
 , cacaSupport ? true, libcaca ? null
@@ -39,6 +40,7 @@ assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
 assert cddaSupport -> cdparanoia != null;
 assert dvdnavSupport -> libdvdnav != null;
+assert dvdreadSupport -> libdvdread != null;
 assert bluraySupport -> libbluray != null;
 assert amrSupport -> (amrnb != null && amrwb != null);
 assert cacaSupport -> libcaca != null;
@@ -110,6 +112,7 @@ stdenv.mkDerivation rec {
     ++ optional cacaSupport libcaca
     ++ optional xineramaSupport libXinerama
     ++ optional dvdnavSupport libdvdnav
+    ++ optional dvdreadSupport libdvdread
     ++ optional bluraySupport libbluray
     ++ optional cddaSupport cdparanoia
     ++ optional jackaudioSupport libjack2

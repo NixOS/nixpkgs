@@ -17,9 +17,10 @@ runHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+
+    eval "local -a dummy=(\"\${$var[@]}\")"
     local hook
-    for hook in "_callImplicitHook 0 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
         _eval "$hook" "$@"
     done
     return 0
@@ -33,9 +34,9 @@ runOneHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
-    local -n var
+    eval "local -a dummy=(\"\${$var[@]}\")"
     local hook
-    for hook in "_callImplicitHook 1 $hookName" "${var[@]}"; do
+    for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
         if _eval "$hook" "$@"; then
             return 0
         fi
@@ -215,11 +216,6 @@ isScript() {
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
 
-# printf unfortunately will print a trailing newline regardless
-printLines() {
-    [[ $# -gt 0 ]] || return 0
-    printf '%s\n' "$@"
-}
 
 ######################################################################
 # Initialisation.
@@ -305,12 +301,9 @@ findInputs() {
     fi
 
     if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        local fd pkgNext
-        exec {fd}<"$pkg/nix-support/$propagatedBuildInputsFile"
-        while IFS= read -r -u $fd pkgNext; do
-            findInputs "$pkgNext" $var $propagatedBuildInputsFile
+        for i in $(cat "$pkg/nix-support/$propagatedBuildInputsFile"); do
+            findInputs "$i" $var $propagatedBuildInputsFile
         done
-        exec {fd}<&-
     fi
 }
 
@@ -802,17 +795,17 @@ fixupPhase() {
         fi
         if [ -n "$propagated" ]; then
             mkdir -p "${!outputDev}/nix-support"
-            printLines $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
+            echo "$propagated" > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     else
         if [ -n "$propagatedBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
-            printLines $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
+            echo "$propagatedBuildInputs" > "${!outputDev}/nix-support/propagated-build-inputs"
         fi
 
         if [ -n "$propagatedNativeBuildInputs" ]; then
             mkdir -p "${!outputDev}/nix-support"
-            printLines $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
+            echo "$propagatedNativeBuildInputs" > "${!outputDev}/nix-support/propagated-native-build-inputs"
         fi
     fi
 
@@ -825,7 +818,7 @@ fixupPhase() {
 
     if [ -n "$propagatedUserEnvPkgs" ]; then
         mkdir -p "${!outputBin}/nix-support"
-        printLines $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        echo "$propagatedUserEnvPkgs" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup

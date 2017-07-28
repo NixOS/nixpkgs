@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A module for powering off hybrid GPUs";
     platforms = platforms.linux;
-    homepage = https://github.com/Bumblebee-Project/bbswitch;
+    homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
   };
 }
