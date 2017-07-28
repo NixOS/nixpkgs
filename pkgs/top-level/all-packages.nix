@@ -18537,6 +18537,7 @@ with pkgs;
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
   dosbox = callPackage ../misc/emulators/dosbox { };
+  dosbox-unstable = callPackage ../misc/emulators/dosbox/unstable.nix { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
