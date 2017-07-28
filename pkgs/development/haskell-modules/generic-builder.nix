@@ -238,7 +238,7 @@ stdenv.mkDerivation ({
 
     echo "Build with ${ghc}."
     export PATH="${ghc}/bin:$PATH"
-    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour.bin}/bin:$PATH"}
+    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${stdenv.lib.getBin hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir

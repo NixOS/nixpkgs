@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x8m4rp2v7ydnrz6z9g8x7z3x3d3pxhv2pixy7i7hkbqbdsp7kal";
   };
 
-  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
+  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 (stdenv.lib.getBin hscolour) ];
 
   patches = [ ./relocation.patch ];
 
