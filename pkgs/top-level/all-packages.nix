@@ -5062,9 +5062,6 @@ with pkgs;
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
   zfstools = callPackage ../tools/filesystems/zfstools { };
-  zfstoolsUnstable = zfstools.override {
-    zfs = zfsUnstable;
-  };
 
   zile = callPackage ../applications/editors/zile { };
 
