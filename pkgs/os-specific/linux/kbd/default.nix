@@ -1,15 +1,12 @@
-{ stdenv, fetchurl, autoreconfHook,
-  gzip, bzip2, pkgconfig, flex, check,
-  pam, coreutils
-}:
+{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, flex, check, pam }:
 
 stdenv.mkDerivation rec {
   name = "kbd-${version}";
-  version = "2.0.4";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${name}.tar.xz";
-    sha256 = "124swm93dm4ca0pifgkrand3r9gvj3019d4zkfxsj9djpvv0mnaz";
+    sha256 = "0ppv953gn2zylcagr4z6zg5y2x93dxrml29plypg6xgbq3hrv2bs";
   };
 
   configureFlags = [
@@ -18,7 +15,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
-  patches = [ ./search-paths.patch ];
+  patches = [ ./console-fix.patch ./search-paths.patch ];
 
   postPatch =
     ''
@@ -36,12 +33,6 @@ stdenv.mkDerivation rec {
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';
-
-  postInstall = ''
-    substituteInPlace $out/bin/unicode_{start,stop} \
-      --replace /usr/bin/tty ${coreutils}/bin/tty
-  '';
-
 
   buildInputs = [ check pam ];
   nativeBuildInputs = [ autoreconfHook pkgconfig flex ];

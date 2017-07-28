@@ -1,71 +1,77 @@
---- a/src/libkeymap/analyze.l
-+++ b/src/libkeymap/analyze.l
-@@ -101,6 +101,9 @@ stack_pop(struct lk_ctx *ctx, void *scan
+diff -ru3 kbd-2.0.3-old/src/libkeymap/analyze.l kbd-2.0.3/src/libkeymap/analyze.l
+--- kbd-2.0.3-old/src/libkeymap/analyze.l	2016-07-03 02:31:28.258958092 +0300
++++ kbd-2.0.3/src/libkeymap/analyze.l	2016-07-03 02:44:53.042592223 +0300
+@@ -99,6 +99,9 @@
  static const char *const include_dirpath0[] = { "", 0 };
  static const char *const include_dirpath1[] = { "", "../include/", "../../include/", 0 };
  static const char *const include_dirpath3[] = {
-+ 	"/etc/kbd/" KEYMAPDIR "/include/",
-+ 	"/etc/kbd/" KEYMAPDIR "/i386/include/",
-+ 	"/etc/kbd/" KEYMAPDIR "/mac/include/",
++	"/etc/kbd/" KEYMAPDIR "/include/",
++	"/etc/kbd/" KEYMAPDIR "/i386/include/",
++	"/etc/kbd/" KEYMAPDIR "/mac/include/",
  	DATADIR "/" KEYMAPDIR "/include/",
  	DATADIR "/" KEYMAPDIR "/i386/include/",
  	DATADIR "/" KEYMAPDIR "/mac/include/", 0
---- a/src/loadkeys.c
-+++ b/src/loadkeys.c
-@@ -27,7 +27,7 @@
+diff -ru3 kbd-2.0.3-old/src/loadkeys.c kbd-2.0.3/src/loadkeys.c
+--- kbd-2.0.3-old/src/loadkeys.c	2016-07-03 02:31:28.260958091 +0300
++++ kbd-2.0.3/src/loadkeys.c	2016-07-03 02:34:34.123871103 +0300
+@@ -26,7 +26,7 @@
  #include "keymap.h"
  
- static const char *progname         = NULL;
+ static const char *progname = NULL;
 -static const char *const dirpath1[] = { "", DATADIR "/" KEYMAPDIR "/**", KERNDIR "/", 0 };
 +static const char *const dirpath1[] = { "", "/etc/kbd/" KEYMAPDIR "/**", DATADIR "/" KEYMAPDIR "/**", 0 };
  static const char *const suffixes[] = { "", ".kmap", ".map", 0 };
  
- static void __attribute__((noreturn))
---- a/src/loadunimap.c
-+++ b/src/loadunimap.c
-@@ -30,7 +30,7 @@
+ static void __attribute__ ((noreturn))
+diff -ru3 kbd-2.0.3-old/src/loadunimap.c kbd-2.0.3/src/loadunimap.c
+--- kbd-2.0.3-old/src/loadunimap.c	2016-07-03 02:31:28.259958091 +0300
++++ kbd-2.0.3/src/loadunimap.c	2016-07-03 02:33:06.803911971 +0300
+@@ -28,7 +28,7 @@
  extern char *progname;
  extern int force;
  
--static const char *const unidirpath[]  = { "", DATADIR "/" UNIMAPDIR "/", 0 };
-+static const char *const unidirpath[]  = { "", "/etc/kbd/" UNIMAPDIR "/", DATADIR "/" UNIMAPDIR "/", 0 };
+-static const char *const unidirpath[] = { "", DATADIR "/" UNIMAPDIR "/", 0 };
++static const char *const unidirpath[] = { "", "/etc/kbd/" UNIMAPDIR "/", DATADIR "/" UNIMAPDIR "/", 0 };
  static const char *const unisuffixes[] = { "", ".uni", ".sfm", 0 };
  
  #ifdef MAIN
---- a/src/mapscrn.c
-+++ b/src/mapscrn.c
-@@ -27,7 +27,7 @@ void loadnewmap(int fd, char *mfil);
- static int ctoi(char *);
+diff -ru3 kbd-2.0.3-old/src/mapscrn.c kbd-2.0.3/src/mapscrn.c
+--- kbd-2.0.3-old/src/mapscrn.c	2016-07-03 02:31:28.260958091 +0300
++++ kbd-2.0.3/src/mapscrn.c	2016-07-03 02:33:21.119905270 +0300
+@@ -25,7 +25,7 @@
+ static int ctoi (char *);
  
  /* search for the map file in these directories (with trailing /) */
--static const char *const mapdirpath[]  = { "", DATADIR "/" TRANSDIR "/", 0 };
-+static const char *const mapdirpath[]  = { "", "/etc/kbd/" TRANSDIR "/", DATADIR "/" TRANSDIR "/", 0 };
+-static const char *const mapdirpath[] = { "", DATADIR "/" TRANSDIR "/", 0 };
++static const char *const mapdirpath[] = { "", "/etc/kbd/" TRANSDIR "/", DATADIR "/" TRANSDIR "/", 0 };
  static const char *const mapsuffixes[] = { "", ".trans", "_to_uni.trans", ".acm", 0 };
  
  #ifdef MAIN
---- a/src/resizecons.c
-+++ b/src/resizecons.c
-@@ -101,7 +101,7 @@ static int vga_get_fontheight(void);
+diff -ru3 kbd-2.0.3-old/src/resizecons.c kbd-2.0.3/src/resizecons.c
+--- kbd-2.0.3-old/src/resizecons.c	2016-07-03 02:31:28.260958091 +0300
++++ kbd-2.0.3/src/resizecons.c	2016-07-03 02:33:32.253900060 +0300
+@@ -100,7 +100,7 @@
  static void vga_set_cursor(int, int);
  static void vga_set_verticaldisplayend_lowbyte(int);
  
--const char *const dirpath[]  = { "", DATADIR "/" VIDEOMODEDIR "/", 0 };
-+const char *const dirpath[]  = { "", "/etc/kbd/" VIDEOMODEDIR "/", DATADIR "/" VIDEOMODEDIR "/", 0};
+-const char *const dirpath[] = { "", DATADIR "/" VIDEOMODEDIR "/", 0};
++const char *const dirpath[] = { "", "/etc/kbd/" VIDEOMODEDIR "/", DATADIR "/" VIDEOMODEDIR "/", 0};
  const char *const suffixes[] = { "", 0 };
  
- int main(int argc, char **argv)
---- a/src/setfont.c
-+++ b/src/setfont.c
-@@ -53,10 +53,10 @@ int force   = 0;
- int debug   = 0;
+ int
+diff -ru3 kbd-2.0.3-old/src/setfont.c kbd-2.0.3/src/setfont.c
+--- kbd-2.0.3-old/src/setfont.c	2016-07-03 02:31:28.260958091 +0300
++++ kbd-2.0.3/src/setfont.c	2016-07-03 02:33:54.315889734 +0300
+@@ -51,10 +51,10 @@
+ int debug = 0;
  
  /* search for the font in these directories (with trailing /) */
--const char *const fontdirpath[]  = { "", DATADIR "/" FONTDIR "/", 0 };
-+const char *const fontdirpath[]  = { "", "/etc/kbd/" FONTDIR "/", DATADIR "/" FONTDIR "/", 0 };
+-const char *const fontdirpath[] = { "", DATADIR "/" FONTDIR "/", 0 };
++const char *const fontdirpath[] = { "", "/etc/kbd/" FONTDIR "/", DATADIR "/" FONTDIR "/", 0 };
  const char *const fontsuffixes[] = { "", ".psfu", ".psf", ".cp", ".fnt", 0 };
  /* hide partial fonts a bit - loading a single one is a bad idea */
--const char *const partfontdirpath[]  = { "", DATADIR "/" FONTDIR "/" PARTIALDIR "/", 0 };
-+const char *const partfontdirpath[]  = { "", "/etc/kbd/" FONTDIR "/" PARTIALDIR "/", DATADIR "/" FONTDIR "/" PARTIALDIR "/", 0 };
+-const char *const partfontdirpath[] = { "", DATADIR "/" FONTDIR "/" PARTIALDIR "/", 0 };
++const char *const partfontdirpath[] = { "", "/etc/kbd/" FONTDIR "/" PARTIALDIR "/", DATADIR "/" FONTDIR "/" PARTIALDIR "/", 0 };
  const char *const partfontsuffixes[] = { "", 0 };
  
  static inline int
