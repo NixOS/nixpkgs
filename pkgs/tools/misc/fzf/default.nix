@@ -39,7 +39,15 @@ buildGoPackage rec {
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
-    cp -R $src/shell $out/share/shell
+
+    cp -R $src/shell $bin/share/fzf
+    cat <<SCRIPT > $bin/bin/fzf-share
+    #!/bin/sh
+    # Run this script to find the fzf shared folder where all the shell
+    # integration scripts are living.
+    echo $bin/share/fzf
+    SCRIPT
+    chmod +x $bin/bin/fzf-share
   '';
 
   meta = with stdenv.lib; {
