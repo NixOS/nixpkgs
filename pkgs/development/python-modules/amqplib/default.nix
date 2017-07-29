@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchurl }:
 
 buildPythonPackage rec {
   pname = "amqplib";
   version = "0.6.1";
   name = "${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f2618b74d95cd360a6d46a309a3fb1c37d881a237e269ac195a69a34e0e2f62";
+  src = fetchurl {
+    url = https://github.com/barryp/py-amqplib/archive/0.6.1.tar.gz;
+    sha256 = "04nsn68wz9m24rvbssirkyighazbn20j60wjmi0r7jcpcf00sb3s";
   };
 
   # error: invalid command 'test'
