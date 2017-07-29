@@ -5625,9 +5625,7 @@ with pkgs;
     inherit (haskellPackages) idris;
   };
 
-  intercal = callPackage ../development/compilers/intercal {
-    flex = flex_2_6_1; # Works with 2.5.35 too, but not 2.6.3
-  };
+  intercal = callPackage ../development/compilers/intercal { };
 
   irony-server = callPackage ../development/tools/irony-server/default.nix {
     # The repository of irony to use -- must match the version of the employed emacs
