@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, unzip, makeWrapper, perl, ImageExifTool, JSON
-, coreutils, zip, imagemagick, pngcrush, lcms2, fbida
-}:
+{ stdenv, fetchurl, unzip, makeWrapper, perl, ImageExifTool
+, CpanelJSONXS, coreutils, zip, imagemagick, pngcrush, lcms2, fbida }:
 
 # TODO: add optional dependencies (snippet from fgallery source):
 #
@@ -11,14 +10,14 @@
 #   fatal("cannot run \"facedetect\" (see http://www.thregr.org/~wavexx/hacks/facedetect/)");
 
 stdenv.mkDerivation rec {
-  name = "fgallery-1.8";
+  name = "fgallery-1.8.2";
 
   src = fetchurl {
     url = "http://www.thregr.org/~wavexx/software/fgallery/releases/${name}.zip";
-    sha256 = "1n237sk7fm4yrpn69qaz9fwbjl6i94y664q7d16bhngrcil3bq1d";
+    sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
   };
 
-  buildInputs = [ unzip makeWrapper perl ImageExifTool JSON ];
+  buildInputs = [ unzip makeWrapper perl ImageExifTool CpanelJSONXS ];
 
   installPhase = ''
     mkdir -p "$out/bin"
