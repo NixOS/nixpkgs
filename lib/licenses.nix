@@ -1,6 +1,5 @@
+{ lib }:
 let
-
-  lib = import ./default.nix;
 
   spdx = lic: lic // {
     url = "http://spdx.org/licenses/${lic.spdxId}";
@@ -419,7 +418,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
     fullName = "Notion modified LGPL";
   };
-  
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";

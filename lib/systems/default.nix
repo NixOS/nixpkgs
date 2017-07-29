@@ -1,11 +1,12 @@
-let inherit (import ../attrsets.nix) mapAttrs; in
+{ lib }:
+  let inherit (lib.attrsets) mapAttrs; in
 
 rec {
-  doubles = import ./doubles.nix;
-  parse = import ./parse.nix;
-  inspect = import ./inspect.nix;
-  platforms = import ./platforms.nix;
-  examples = import ./examples.nix;
+  doubles = import ./doubles.nix { inherit lib; };
+  parse = import ./parse.nix { inherit lib; };
+  inspect = import ./inspect.nix { inherit lib; };
+  platforms = import ./platforms.nix { inherit lib; };
+  examples = import ./examples.nix { inherit lib; };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
