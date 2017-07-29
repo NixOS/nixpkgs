@@ -16,6 +16,18 @@
 
 with rustPlatform;
 
+let
+  rpathLibs = [
+    expat
+    freetype
+    fontconfig
+    libX11
+    libXcursor
+    libXxf86vm
+    libXi
+  ];
+in
+
 buildRustPackage rec {
   name = "alacritty-unstable-2017-07-25";
 
@@ -31,25 +43,19 @@ buildRustPackage rec {
   buildInputs = [
     cmake
     makeWrapper
-    freetype
-    fontconfig
     xclip
     pkgconfig
-    expat
-    libX11
-    libXcursor
-    libXxf86vm
-    libXi
-  ];
+  ] ++ rpathLibs;
 
   installPhase = ''
     mkdir -p $out/bin
     for f in $(find target/release -maxdepth 1 -type f); do
       cp $f $out/bin
     done;
-    wrapProgram $out/bin/alacritty --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath buildInputs}"
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
   '';
 
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     description = "GPU-accelerated terminal emulator";
