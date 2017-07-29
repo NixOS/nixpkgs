@@ -38,8 +38,10 @@ stdenv.mkDerivation rec {
     '';
 
   postInstall = ''
-    substituteInPlace $out/bin/unicode_{start,stop} \
-      --replace /usr/bin/tty ${coreutils}/bin/tty
+    for i in $out/bin/unicode_{start,stop}; do
+      substituteInPlace "$i" \
+        --replace /usr/bin/tty ${coreutils}/bin/tty
+    done
   '';
 
 
