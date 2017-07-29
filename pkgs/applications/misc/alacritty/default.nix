@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, gcc, pkgconfig,
-  freetype, expat, gperf, libX11, libXcursor, libXxf86vm, libXi }:
+{ stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  makeWrapper,
+  expat,
+  pkgconfig,
+  freetype,
+  fontconfig,
+  libX11,
+  gperf,
+  libXcursor,
+  libXxf86vm,
+  libXi,
+  xclip }:
 
 with rustPlatform;
 
@@ -29,21 +42,20 @@ buildRustPackage rec {
     libXi
   ];
 
-  doCheck = true;
+  installPhase = ''
+    mkdir -p $out/bin
+    for f in $(find target/release -maxdepth 1 -type f); do
+      cp $f $out/bin
+    done;
+    wrapProgram $out/bin/alacritty --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath buildInputs}"
+  '';
+
 
   meta = with stdenv.lib; {
-    description = "GPU accelerated terminal emulator";
-    longDescription = ''
-      Alacritty is focused on simplicity and performance.
-      The performance goal means it should be faster than any
-      other terminal emulator available. The simplicity goal
-      means that it doesn't have many features like tabs or
-      scroll back as in other terminals. Instead, it is
-      expected that users of Alacritty make use of a terminal
-      multiplexer such as tmux.
-    '';
+    description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
-    license = licenses.asl20;
-    maintainer = [ maintainers.exi ];
+    license = with licenses; [ asl20 ];
+    maintainers = with maintainers; [ mic92 ];
+    platforms = platforms.all;
   };
 }

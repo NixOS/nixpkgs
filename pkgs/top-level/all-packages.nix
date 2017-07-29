@@ -417,7 +417,6 @@ with pkgs;
 
   alacritty = callPackage ../applications/misc/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
-    rustPlatform = (makeRustPlatform rustNightly);
   };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
