@@ -47,7 +47,7 @@ buildRustPackage rec {
     for f in $(find target/release -maxdepth 1 -type f); do
       cp $f $out/bin
     done;
-    wrapProgram $out/bin/alacritty --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath buildInputs}"
+    patchelf --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" $out/bin/alacritty
   '';
 
 
