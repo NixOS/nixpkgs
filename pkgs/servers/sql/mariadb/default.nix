@@ -15,13 +15,26 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.6";
+  version = "10.2.7";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1rd2b1b6s87ymr5qhlggr4q4ljazv82ih0msgrbz1rfn81pcg1f3";
+    sha256 = "1g60fskf8w633icjjjj08a7h4ha6vaczyczlm4was9c3qjxs2nr2";
     name   = "mariadb-${version}.tar.gz";
   };
+
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [
+    ncurses openssl zlib pcre jemalloc
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/MariaDB/server/commit/7fc75c420a47fd29a399468b920641ebb43fa75c.patch";
+      sha256 = "0rgppcycw4gjkayz8fn4412dkplghpfzs3bq8ib1jqb9xzi3zvww";
+    })
+  ];
 
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
@@ -29,12 +42,6 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  buildInputs = [
-    ncurses openssl zlib pcre jemalloc
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
