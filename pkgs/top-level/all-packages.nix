@@ -11936,9 +11936,7 @@ with pkgs;
     inherit (perlPackages) SGMLSpm;
   };
 
-  iptables = callPackage ../os-specific/linux/iptables {
-    flex = flex_2_5_35;
-  };
+  iptables = callPackage ../os-specific/linux/iptables { };
 
   iptstate = callPackage ../os-specific/linux/iptstate { } ;
 
