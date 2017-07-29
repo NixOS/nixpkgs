@@ -1,36 +1,81 @@
-{ fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, sasl, fribidi, gss , mysql, guile, texinfo,
-  gnum4, dejagnu, nettools }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, dejagnu, gettext, libtool, pkgconfig
+, gdbm, pam, readline, ncurses, gnutls, guile, texinfo, gnum4, sasl, fribidi, nettools
+, gss, mysql }:
 
+let
+  p = "https://raw.githubusercontent.com/gentoo/gentoo/9c921e89d51876fd876f250324893fd90c019326/net-mail/mailutils/files";
+in
 stdenv.mkDerivation rec {
-  name = "mailutils-2.2";
+  name = "${project}-${version}";
+  project = "mailutils";
+  version = "3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/mailutils/${name}.tar.bz2";
-    sha256 = "0szbqa12zqzldqyw97lxqax3ja2adis83i7brdfsxmrfw68iaf65";
+    url = "mirror://gnu/${project}/${name}.tar.xz";
+    sha256 = "0zh7xn8yvnw9zkc7gi5290i34viwxp1rn0g1q9nyvmckkvk59lwn";
   };
 
-  hardeningDisable = [ "format" ];
-
-  patches = [ ./path-to-cat.patch ./no-gets.patch ./scm_c_string.patch ];
-
-  postPatch = ''
-    sed -i -e '/chown root:mail/d' \
-           -e 's/chmod [24]755/chmod 0755/' \
-      */Makefile{,.in,.am}
-  '';
-
-  configureFlags = [
-    "--with-gsasl"
-    "--with-gssapi=${gss}"
+  nativeBuildInputs = [
+    autoreconfHook gettext libtool pkgconfig
+  ] ++ stdenv.lib.optional doCheck dejagnu;
+  buildInputs = [
+    gdbm pam readline ncurses gnutls guile texinfo gnum4 sasl fribidi nettools
+    gss mysql.lib
   ];
 
-  buildInputs =
-   [ gettext gdbm libtool pam readline ncurses
-     gnutls mysql.lib guile texinfo gnum4 sasl fribidi gss nettools ]
-   ++ stdenv.lib.optional doCheck dejagnu;
+  patches = [
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=afbb33cf9ff";
+      excludes = [ "NEWS" ];
+      sha256 = "0yzkfx3j1zkkb43fhchjqphw4xznbclj39bjzjggv32gppy6d1db";
+    })
+    ./fix-build-mb-len-max.patch
+    ./fix-test-ali-awk.patch
+    ./path-to-cat.patch
+  ];
 
   doCheck = true;
+  enableParallelBuilding = true;
+  hardeningDisable = [ "format" ];
+
+  configureFlags = [
+    "--with-gssapi"
+    "--with-gsasl"
+    "--with-mysql"
+  ];
+
+  readmsg-tests = stdenv.lib.optionals doCheck [
+    (fetchurl { url = "${p}/hdr.at"; sha256 = "0phpkqyhs26chn63wjns6ydx9468ng3ssbjbfhcvza8h78jlsd98"; })
+    (fetchurl { url = "${p}/nohdr.at"; sha256 = "1vkbkfkbqj6ml62s1am8i286hxwnpsmbhbnq0i2i0j1i7iwkk4b7"; })
+    (fetchurl { url = "${p}/twomsg.at"; sha256 = "15m29rg2xxa17xhx6jp4s2vwa9d4khw8092vpygqbwlhw68alk9g"; })
+    (fetchurl { url = "${p}/weed.at"; sha256 = "1101xakhc99f5gb9cs3mmydn43ayli7b270pzbvh7f9rbvh0d0nh"; })
+  ];
+
+  postPatch = ''
+    sed -e '/AM_GNU_GETTEXT_VERSION/s/0.18/0.19/' -i configure.ac
+    sed -i -e '/chown root:mail/d' \
+           -e 's/chmod [24]755/chmod 0755/' \
+      */Makefile{.in,.am}
+  '';
+
+  preCheck = ''
+    # Add missing files.
+    cp ${builtins.toString readmsg-tests} readmsg/tests/
+    for f in hdr.at nohdr.at twomsg.at weed.at; do
+      mv readmsg/tests/*-$f readmsg/tests/$f
+    done
+    # Disable comsat tests that fail without tty in the sandbox.
+    tty -s || echo > comsat/tests/testsuite.at
+    # Disable lmtp tests that require root spool.
+    echo > maidag/tests/lmtp.at
+    # Disable mda tests that require /etc/passwd to contain root.
+    grep -qo '^root:' /etc/passwd || echo > maidag/tests/mda.at
+    # Provide libraries for mhn.
+    export LD_LIBRARY_PATH=$(pwd)/lib/.libs
+  '';
+  postCheck = ''
+    unset LD_LIBRARY_PATH
+  '';
 
   meta = with stdenv.lib; {
     description = "Rich and powerful protocol-independent mail framework";
@@ -60,7 +105,7 @@ stdenv.mkDerivation rec {
       gpl3Plus /* tools */
     ];
 
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ orivej vrthra ];
 
     homepage = http://www.gnu.org/software/mailutils/;
 

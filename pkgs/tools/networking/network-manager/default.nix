@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
        --replace /usr/bin/ping6 ${inetutils}/bin/ping
     substituteInPlace src/devices/nm-arping-manager.c \
        --replace '("arping", NULL, NULL);' '("arping", "${iputils}/bin/arping", NULL);'
-    substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe ${kmod}/bin/modprobe
     substituteInPlace data/84-nm-drivers.rules \
       --replace /bin/sh ${stdenv.shell}
     substituteInPlace data/85-nm-unmanaged.rules \
@@ -43,6 +42,8 @@ stdenv.mkDerivation rec {
       --replace /bin/kill ${coreutils}/bin/kill
     substituteInPlace clients/common/nm-vpn-helpers.c \
       --subst-var-by openconnect ${openconnect}
+    substituteInPlace src/nm-core-utils.c \
+      --subst-var-by modprobeBinPath ${kmod}/bin/modprobe
     # to enable link-local connections
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/NetworkManager/NetworkManager/commit/4e8eddd100bbc8429806a70620c90b72cfd29cb1.patch";
     })
     ./openconnect_helper_path.patch
+    ./modprobe.patch
   ];
 
   buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-topicons-plus-${version}";
-  version = "v20";
+  version = "20";
 
   src = fetchFromGitHub {
     owner = "phocean";

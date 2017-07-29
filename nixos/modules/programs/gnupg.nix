@@ -77,7 +77,7 @@ in
 
     systemd.packages = [ pkgs.gnupg ];
 
-    environment.interactiveShellInit = ''
+    environment.extraInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.
       export GPG_TTY=$(tty)
 

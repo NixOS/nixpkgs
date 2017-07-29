@@ -54,13 +54,13 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   name = "OctoPrint-${version}";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "foosel";
     repo = "OctoPrint";
     rev = version;
-    sha256 = "0wyrxi754xa111b88fqvaw2s5ib2a925dlrgym5mn93i027m50wk";
+    sha256 = "06l8khbq3waaaa4cqpv6056w1ziylkfgzlb28v30i1h234rlkknq";
   };
 
   # We need old Tornado
@@ -69,7 +69,7 @@ in pythonPackages.buildPythonApplication rec {
     semantic-version flask_principal werkzeug flaskbabel tornado
     psutil pyserial flask_login netaddr markdown sockjs-tornado
     pylru pyyaml sarge feedparser netifaces click websocket_client
-    scandir chainmap future
+    scandir chainmap future dateutil
   ];
 
   buildInputs = with pythonPackages; [ nose mock ddt ];
@@ -90,6 +90,7 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,werkzeug>=[^"]*,werkzeug,g' \
       -e 's,psutil>=[^"]*,psutil,g' \
       -e 's,requests>=[^"]*,requests,g' \
+      -e 's,future>=[^"]*,future,g' \
       setup.py
   '';
 

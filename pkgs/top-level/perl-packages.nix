@@ -2859,16 +2859,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.044";
+    name = "CryptX-0.050";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "15e5e6bd7b90af24c7e730751fec7b10d8e22ef4380d527bda242dee7dd20443";
+      sha256 = "c1de040779d9f5482d0a2f17a9a5aa6b069c7c58c07fbe26ab62bc689a5c9161";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
       description = "Crypto toolkit";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -10755,10 +10754,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlCritic = buildPerlModule rec {
-    name = "Perl-Critic-1.128";
+    name = "Perl-Critic-1.130";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
-      sha256 = "83ce563da0a950946367323214b6db30d72db7d006dce24c2a00a9ec13ddb9b4";
+      sha256 = "0662e8f02dd78e39ee9d5b01bdf5376a7cc70ce2b0edc9ca015be35e6cb61df6";
     };
     buildInputs = [ ModuleBuild TestDeep ];
     propagatedBuildInputs = [ BKeywords ConfigTiny EmailAddress ExceptionClass FileHomeDir FileWhich IOString ListMoreUtils ModulePluggable PPI PPIxRegexp PPIxUtilities PerlTidy PodSpell Readonly StringFormat TaskWeaken ];
@@ -15011,16 +15010,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   UnicodeCaseFold = buildPerlModule rec {
-    name = "Unicode-CaseFold-1.00";
+    name = "Unicode-CaseFold-1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
-      sha256 = "c489b5a440e84b0554e866d3fe4077fa1956eeed473e203588e0c24acce1f016";
+      sha256 = "418a212808f9d0b8bb330ac905096d2dd364976753d4c71534dab9836a63194d";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       homepage = http://metacpan.org/release/Unicode-CaseFold;
       description = "Unicode case-folding for case-insensitive lookups";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ stdenv.lib.maintainers.rycee ];
     };
   };
 

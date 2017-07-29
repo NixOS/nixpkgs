@@ -16,7 +16,7 @@ let
   # Add man output without introducing extra dependencies.
   overrideManOutput = drv:
     let drv-manpages = drv.override { enableManpages = true; }; in
-    drv // { man = drv-manpages.man; outputs = drv.outputs ++ ["man"]; };
+    drv // { man = drv-manpages.man; /*outputs = drv.outputs ++ ["man"];*/ };
 
   llvm = callPackage ./llvm.nix {
     inherit compiler-rt_src stdenv;

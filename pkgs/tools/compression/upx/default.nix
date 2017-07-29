@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchFromGitHub, ucl, zlib, perl}:
+{ stdenv, fetchurl, fetchFromGitHub, ucl, zlib, perl }:
 
 stdenv.mkDerivation rec {
   name = "upx-${version}";
@@ -8,21 +8,25 @@ stdenv.mkDerivation rec {
     sha256 = "08anybdliqsbsl6x835iwzljahnm9i7v26icdjkcv33xmk6p5vw1";
   };
 
+  CXXFLAGS = "-Wno-unused-command-line-argument";
+
   buildInputs = [ ucl zlib perl ];
 
-  preConfigure = "
+  preConfigure = ''
     export UPX_UCLDIR=${ucl}
-    cd src
-  ";
+  '';
 
-  makeFlags = [ "CHECK_WHITESPACE=true" ];
+  makeFlags = [ "-C" "src" "CHECK_WHITESPACE=true" ];
 
-  installPhase = "mkdir -p $out/bin ; cp upx.out $out/bin/upx";
+  installPhase = ''
+    mkdir -p $out/bin
+    cp src/upx.out $out/bin/upx
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://upx.github.io/;
     description = "The Ultimate Packer for eXecutables";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

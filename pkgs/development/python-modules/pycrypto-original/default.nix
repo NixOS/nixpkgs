@@ -30,8 +30,8 @@ buildPythonPackage rec {
     homepage = "http://www.pycrypto.org/";
     description = "Python Cryptography Toolkit";
     platforms = stdenv.lib.platforms.unix;
-    knownVulnerabilities = [
-      "Unmaintained for several years"
-    ];
+    # knownVulnerabilities = [
+    #   "Unmaintained for several years"
+    # ];
   };
 }

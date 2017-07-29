@@ -26,7 +26,15 @@ with lib;
 
     fonts.fontconfig.enable = false;
 
-    nixpkgs.config.packageOverrides = pkgs:
-      { dbus = pkgs.dbus.override { x11Support = false; }; };
+    nixpkgs.config.packageOverrides = pkgs: {
+      dbus = pkgs.dbus.override { x11Support = false; };
+      networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override { withGnome = false; };
+      networkmanager_l2tp = pkgs.networkmanager_l2tp.override { withGnome = false; };
+      networkmanager_openconnect = pkgs.networkmanager_openconnect.override { withGnome = false; };
+      networkmanager_openvpn = pkgs.networkmanager_openvpn.override { withGnome = false; };
+      networkmanager_pptp = pkgs.networkmanager_pptp.override { withGnome = false; };
+      networkmanager_vpnc = pkgs.networkmanager_vpnc.override { withGnome = false; };
+      pinentry = pkgs.pinentry.override { gtk2 = null; qt4 = null; };
+    };
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, cmdliner, result, uchar }:
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-fmt-0.8.2";
+  name = "ocaml${ocaml.version}-fmt-0.8.4";
 
   src = fetchurl {
-    url = http://erratique.ch/software/fmt/releases/fmt-0.8.2.tbz;
-    sha256 = "020qz74cm65bzrywf6kylm93gr5x1ayl6hfmxaql995f6whb388i";
+    url = http://erratique.ch/software/fmt/releases/fmt-0.8.4.tbz;
+    sha256 = "1qilsbisqqhmn8b1ar9lvjbgz8vf4gmqwqjnnjzgld2a3gmh8qvv";
   };
 
   unpackCmd = "tar xjf $src";

@@ -7,13 +7,13 @@ else
 stdenv.mkDerivation rec {
   pname = "libarcus";
   name = "${pname}-${version}";
-  version = "2.4.0";
+  version = "2.6.1";
   
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "07lf5d42pnx0h9lgldplfdj142rbcsxx23njdblnq04di7a4937h";
+    sha256 = "1arh0gkwcjv0j3arh1w04gbwkn5glrs7gbli0b1ak7dalnicmn7c";
   };
   
   propagatedBuildInputs = [ sip protobuf ];

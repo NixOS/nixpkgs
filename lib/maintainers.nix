@@ -75,6 +75,7 @@
   berdario = "Dario Bertini <berdario@gmail.com>";
   bergey = "Daniel Bergey <bergey@teallabs.org>";
   bhipple = "Benjamin Hipple <bhipple@protonmail.com>";
+  binarin = "Alexey Lebedeff <binarin@binarin.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
   bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
@@ -172,6 +173,7 @@
   ekleog = "Leo Gaspard <leo@gaspard.io>";
   elasticdog = "Aaron Bull Schaefer <aaron@elasticdog.com>";
   eleanor = "Dejan Lukan <dejan@proteansec.com>";
+  elijahcaine = "Elijah Caine <elijahcainemv@gmail.com>";
   elitak = "Eric Litak <elitak@gmail.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
   eperuffo = "Emanuele Peruffo <info@emanueleperuffo.com>";
@@ -219,6 +221,7 @@
   goodrone = "Andrew Trachenko <goodrone@gmail.com>";
   gpyh = "Yacine Hmito <yacine.hmito@gmail.com>";
   grahamc = "Graham Christensen <graham@grahamc.com>";
+  grburst = "Julius Elias <grburst@openmailbox.org>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   guillaumekoenig = "Guillaume Koenig <guillaume.edward.koenig@gmail.com>";
@@ -230,6 +233,7 @@
   hectorj = "Hector Jusforgues <hector.jusforgues+nixos@gmail.com>";
   heel = "Sergii Paryzhskyi <parizhskiy@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
+  hhm = "hhm <heehooman+nixpkgs@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
   hodapp = "Chris Hodapp <hodapp87@gmail.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
@@ -245,7 +249,7 @@
   jammerful = "jammerful <jammerful@gmail.com>";
   jansol = "Jan Solanti <jan.solanti@paivola.fi>";
   javaguirre = "Javier Aguirre <contacto@javaguirre.net>";
-  jb55 = "William Casarin <bill@casarin.me>";
+  jb55 = "William Casarin <jb55@jb55.com>";
   jbedo = "Justin Bedő <cu@cua0.org>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jdagilliland = "Jason Gilliland <jdagilliland@gmail.com>";
@@ -288,6 +292,7 @@
   kierdavis = "Kier Davis <kierdavis@gmail.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   knedlsepp = "Josef Kemetmüller <josef.kemetmueller@gmail.com>";
+  konimex = "Muhammad Herdiansyah <herdiansyah@openmailbox.org>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
   kragniz = "Louis Taylor <louis@kragniz.eu>";
@@ -385,7 +390,7 @@
   nand0p = "Fernando Jose Pando <nando@hex7.com>";
   Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
-  nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
+  nckx = "Tobias Geerinckx-Rice <github@tobias.gr>";
   ndowens = "Nathan Owens <ndowens04@gmail.com>";
   neeasade = "Nathan Isom <nathanisom27@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
@@ -410,6 +415,7 @@
   okasu = "Okasu <oka.sux@gmail.com>";
   olcai = "Erik Timan <dev@timan.info>";
   olejorgenb = "Ole Jørgen Brønner <olejorgenb@yahoo.no>";
+  olynch = "Owen Lynch <owen@olynch.me>";
   orbekk = "KJ Ørbekk <kjetil.orbekk@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   orivej = "Orivej Desh <orivej@gmx.fr>";
@@ -562,6 +568,7 @@
   tohl = "Tomas Hlavaty <tom@logand.com>";
   tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
+  tomsmeets = "Tom Smeets <tom@tsmeets.nl>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
   trevorj = "Trevor Joynson <nix@trevor.joynson.io>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
@@ -576,6 +583,7 @@
   utdemir = "Utku Demir <me@utdemir.com>";
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012
   uwap = "uwap <me@uwap.name>";
+  vaibhavsagar = "Vaibhav Sagar <vaibhavsagar@gmail.com>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vanzef = "Ivan Solyankin <vanzef@gmail.com>";
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";
@@ -595,6 +603,7 @@
   volth = "Jaroslavas Pocepko <jaroslavas@volth.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
   vrthra = "Rahul Gopinath <rahul@gopinath.org>";
+  vyp = "vyp <elisp.vim@gmail.com>";
   wedens = "wedens <kirill.wedens@gmail.com>";
   willtim = "Tim Philip Williams <tim.williams.public@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";

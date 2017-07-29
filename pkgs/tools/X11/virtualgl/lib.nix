@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "virtualgl-lib-${version}";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
-    sha256 = "0n9ngwji9k0hqy81ridndf7z4lwq5dzmqw66r6vxfz15aw0jwd6s";
+    sha256 = "0f1jp7r4vajiksbiq08hkxd5bjj0jxlw7dy5750s52djg1v3hhsg";
   };
 
   cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so" ];

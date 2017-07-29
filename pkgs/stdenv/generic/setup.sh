@@ -17,7 +17,9 @@ runHook() {
     shift
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
+
     eval "local -a dummy=(\"\${$var[@]}\")"
+    local hook
     for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
         _eval "$hook" "$@"
     done
@@ -33,6 +35,7 @@ runOneHook() {
     local var="$hookName"
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
     eval "local -a dummy=(\"\${$var[@]}\")"
+    local hook
     for hook in "_callImplicitHook 1 $hookName" "${dummy[@]}"; do
         if _eval "$hook" "$@"; then
             return 0
@@ -192,6 +195,7 @@ _addRpathPrefix() {
 # Return success if the specified file is an ELF object.
 isELF() {
     local fn="$1"
+    local fd
     local magic
     exec {fd}< "$fn"
     read -n 4 -u $fd magic
@@ -203,6 +207,7 @@ isELF() {
 # "#!").
 isScript() {
     local fn="$1"
+    local fd
     local magic
     if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"

@@ -39,8 +39,8 @@ self: super: {
   # cabal-install can use the native Cabal library.
   cabal-install = super.cabal-install.override { Cabal = null; };
 
-  # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  # jailbreak-cabal doesn't seem to work right with the native Cabal version.
+  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
@@ -59,12 +59,8 @@ self: super: {
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
 
-  # Older, LTS-8-based versions don't compile.
-  vector = super.vector_0_12_0_1;
-  primitive = self.primitive_0_6_2_0;
-  syb = self.syb_0_7;
-
   # Work around overly restrictive constraints on the version of 'base'.
-  doctest = doJailbreak super.doctest;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+  hashable = doJailbreak super.hashable;
 
 }

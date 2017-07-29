@@ -3,14 +3,22 @@
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
-  version = "2016.12.19.00";
+  version = "2017.07.24.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "1q5nh84sxkdi4x0gwr0x7bgk33pq6071vxz5vnjkznwywhgw2hnn";
+    sha256 = "1cmqrm9yjxrw4xr1kcgzl0s7vcvp125wcgb0cz7whssgj11mf169";
   };
+
+  patches = [
+    # Fix compilation
+    (fetchpatch {
+      url = "https://github.com/facebook/folly/commit/9fc87c83d93f092859823ec32289ed1b6abeb683.patch";
+      sha256 = "0ix0grqlzm16hwa4rjbajjck8kr9lksh6c3gn7p3ihbbchsmlhvl";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook python pkgconfig ];
   buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];

@@ -38,6 +38,9 @@ rec {
   ethabi = callPackage ./ethabi.nix { };
   ethrun = callPackage ./ethrun.nix { };
   seth = callPackage ./seth.nix { };
+  dapp = callPackage ./dapp.nix { };
+
+  hsevm = (pkgs.haskellPackages.callPackage ./hsevm.nix {});
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };

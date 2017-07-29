@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "multi-ghc-travis-${version}";
-  version = "git-2017-05-24";
+  version = "git-2017-07-27";
 
   buildInputs = [ ghc ];
 
   src = fetchFromGitHub {
     owner = "hvr";
     repo = "multi-ghc-travis";
-    rev = "c1dcbcbcd3eadcc63adeac65d63497885b422a44";
-    sha256 = "12xss8wgsqs2fghrfl4h6g5wli6wn274zmdsq5zdcib2m7da5yw2";
+    rev = "f21804164cf646d682d7da668a625cdbd8baf05a";
+    sha256 = "07l3qzlc2hl7g5wbgqh8ld8ynl004i6m7p903667gbhs7sw03nbl";
   };
 
   installPhase = ''
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hvr/multi-ghc-travis";
     license = licenses.bsd3;
     platforms = ghc.meta.platforms;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 peti ];
   };
 }

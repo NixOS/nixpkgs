@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.6.0.201511291145";
+    version = "2.7.0.201705171641";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "1vllci75qcd28b6hn2jz29l6cabxx9ql5i6l9cwq9rxp49dhc96b";
+      sha256 = "07k029nw5ibxpjc0siy06ihylbqrxllf59yz8c544gra8lc079c9";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.6.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "0mgq0ylfa7srjf7azyx0kbahlsjf0sdpazqphzx4f0bfn1l328s4";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "0wbm8zfjh7gxrw5sy9m3siddiazh5czgxp7zyzxwzkdqyqzqs70h";
     };
 
     meta = with stdenv.lib; {
@@ -194,12 +194,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "7.3.0.201612142232";
+    version = "8.0.0.201707161819";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/7.3.0/net.sf.eclipsecs-updatesite_${version}.zip";
-      sha256 = "1mbiszwnakfmjx5mnh9h2rrp9jzizkmz89p8z4spq2m9kwy1lkqj";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/8.0.0/net.sf.eclipsecs-updatesite_${version}.zip";
+      sha256 = "1p07xcf71qc99sh73vqm9xxxgi819m58frv0cpvsn06y6ljr0aj2";
     };
 
     meta = with stdenv.lib; {
