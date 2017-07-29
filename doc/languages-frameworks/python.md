@@ -423,7 +423,7 @@ and in this case the `python35` interpreter is automatically used.
 ### Interpreters
 
 Versions 2.7, 3.3, 3.4, 3.5 and 3.6 of the CPython interpreter are available as
-respectively `python27`, `python33`, `python34`, `python35` and `python36`. The PyPy interpreter
+respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
 The Nix expressions for the interpreters can be found in
@@ -469,7 +469,6 @@ sets are
 
 * `pkgs.python26Packages`
 * `pkgs.python27Packages`
-* `pkgs.python33Packages`
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
@@ -622,7 +621,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 ```nix
 with import <nixpkgs> {};
 
-(python33.withPackages (ps: [ps.numpy ps.requests])).env
+(python36.withPackages (ps: [ps.numpy ps.requests])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
