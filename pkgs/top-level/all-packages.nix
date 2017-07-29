@@ -997,6 +997,8 @@ with pkgs;
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
+  facedetect = callPackage ../tools/graphics/facedetect { };
+
   facter = callPackage ../tools/system/facter {
     boost = boost160;
   };
