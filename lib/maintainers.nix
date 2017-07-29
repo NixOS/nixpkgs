@@ -407,6 +407,7 @@
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";
   nslqqq = "Nikita Mikhailov <nslqqq@gmail.com>";
   nthorne = "Niklas Thörne <notrupertthorne@gmail.com>";
+  nyarly = "Judson Lester <nyarly@gmail.com>";
   obadz = "obadz <obadz-nixos@obadz.com>";
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
   odi = "Oliver Dunkl <oliver.dunkl@gmail.com>";

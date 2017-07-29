@@ -15,9 +15,12 @@ let
     election-port=${toString cfg.zkElectionPort}
     cleanup-period-ms=${toString cfg.zkCleanupPeriod}
     servers-spec=${concatStringsSep "," cfg.zkServersSpec}
-    auto-manage-instances=${lib.boolToString cfg.autoManageInstances}
+    auto-manage-instances=${toString cfg.autoManageInstances}
     ${cfg.extraConf}
   '';
+  # NB: toString rather than lib.boolToString on cfg.autoManageInstances is intended.
+  # Exhibitor tests if it's an integer not equal to 0, so the empty string (toString false)
+  # will operate in the same fashion as a 0.
   configDir = pkgs.writeTextDir "exhibitor.properties" exhibitorConfig;
   cliOptionsCommon = {
     configtype = cfg.configType;

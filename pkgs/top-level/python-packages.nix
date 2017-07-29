@@ -1867,33 +1867,7 @@ in {
     };
   };
 
-  cycler = buildPythonPackage rec {
-    name = "cycler-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cycler/${name}.tar.gz";
-      sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
-    };
-
-    buildInputs = with self; [ coverage nose ];
-    propagatedBuildInputs = with self; [ six ];
-
-    checkPhase = ''
-      ${python.interpreter} run_tests.py
-    '';
-
-    # Tests were not included in release.
-    # https://github.com/matplotlib/cycler/issues/31
-    doCheck = false;
-
-    meta = {
-      description = "Composable style cycles";
-      homepage = http://github.com/matplotlib/cycler;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  cycler = callPackage ../development/python-modules/cycler { };
 
   datadog = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -2137,55 +2111,7 @@ in {
     };
   };
 
-  blaze = buildPythonPackage rec {
-    name = "blaze-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
-      sha256 = "07zrrxkmdqk84xvdmp29859zcfzlpx5pz6g62l28nqp6n6a7yq9a";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [
-      contextlib2
-      cytoolz
-      dask
-      datashape
-      flask
-      flask-cors
-      h5py
-      multipledispatch
-      numba
-      numpy
-      odo
-      pandas
-      psutil
-      pymongo
-      pyyaml
-      requests
-      sqlalchemy
-      tables
-      toolz
-    ];
-
-    # Failing test
-    # ERROR collecting blaze/tests/test_interactive.py
-    # E   networkx.exception.NetworkXNoPath: node <class 'list'> not
-    # reachable from <class 'dask.array.core.Array'>
-    doCheck = false;
-
-    checkPhase = ''
-      py.test blaze/tests
-    '';
-
-    meta = {
-      homepage = https://github.com/ContinuumIO/blaze;
-      description = "Allows Python users a familiar interface to query data living in other data storage systems";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  blaze = callPackage ../development/python-modules/blaze { };
 
   # Needed for FlexGet 1.2.337 and calibre 2.76.0
   html5lib_0_9999999 = self.html5lib.override rec {
@@ -3586,50 +3512,7 @@ in {
     };
   };
 
-  cython = buildPythonPackage rec {
-    name = "Cython-${version}";
-    version = "0.25.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "01h3lrf6d98j07iakifi81qjszh6faa37ibx7ylva1vsqbwx2hgi";
-    };
-
-    # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
-    # result is "3L" instead of "3", so let's fix it in-place.
-    #
-    # Upstream issue: https://github.com/cython/cython/issues/1548
-    postPatch = optionalString ((stdenv.isi686 || stdenv.isArm) && !isPy3k) ''
-      sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
-        tests/run/cpdef_enums.pyx
-    '';
-
-    buildInputs = with self; [ pkgs.glibcLocales pkgs.pkgconfig pkgs.gdb ];
-    # For testing
-    nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
-
-    LC_ALL = "en_US.UTF-8";
-
-    # cython's testsuite is not working very well with libc++
-    # We are however optimistic about things outside of testsuite still working
-    checkPhase = ''
-      export HOME="$NIX_BUILD_TOP"
-      ${python.interpreter} runtests.py \
-        ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
-    '';
-
-    # Disable tests temporarily
-    # https://github.com/cython/cython/issues/1676
-    doCheck = false;
-
-    meta = {
-      description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
-      platforms = platforms.all;
-      homepage = http://cython.org;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  cython = callPackage ../development/python-modules/Cython { };
 
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
@@ -21793,31 +21676,7 @@ in {
     };
   };
 
-  sounddevice = buildPythonPackage rec {
-    name = "sounddevice-${version}";
-    version = "0.3.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sounddevice/${name}.tar.gz";
-      sha256 = "4ef39be2d13069fbad8c69ac259e018d96ce55c23b529a7e0be9bd9a76e2e8da";
-    };
-
-    propagatedBuildInputs = with self; [ cffi numpy pkgs.portaudio ];
-
-    # No tests included nor upstream available.
-    doCheck = false;
-
-    prePatch = ''
-      substituteInPlace sounddevice.py --replace "'portaudio'" "'${pkgs.portaudio}/lib/libportaudio.so.2'"
-    '';
-
-    meta = {
-      description = "Play and Record Sound with Python";
-      homepage = http://python-sounddevice.rtfd.org/;
-      license = with licenses; [ mit ];
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
