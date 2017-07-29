@@ -1,4 +1,6 @@
-let lib = import ./default.nix;
+{ lib }:
+
+let
 
 inherit (builtins) trace attrNamesToStr isAttrs isFunction isList isInt
         isString isBool head substring attrNames;

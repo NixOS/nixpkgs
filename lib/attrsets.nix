@@ -1,11 +1,11 @@
+{ lib }:
 # Operations on attribute sets.
 
 let
   inherit (builtins) head tail length;
-  inherit (import ./trivial.nix) and or;
-  inherit (import ./default.nix) fold;
-  inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
+  inherit (lib.trivial) and or;
+  inherit (lib.strings) concatStringsSep;
+  inherit (lib.lists) fold concatMap concatLists all deepSeqList;
 in
 
 rec {

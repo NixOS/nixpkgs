@@ -1,8 +1,7 @@
 /* Some functions for manipulating meta attributes, as well as the
    name attribute. */
 
-let lib = import ./default.nix;
-in
+{ lib }:
 
 rec {
 

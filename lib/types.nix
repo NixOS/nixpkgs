@@ -1,15 +1,16 @@
 # Definitions related to run-time type checking.  Used in particular
 # to type-check NixOS configurations.
+{ lib }:
+with lib.lists;
+with lib.attrsets;
+with lib.options;
+with lib.trivial;
+with lib.strings;
+let
 
-with import ./lists.nix;
-with import ./attrsets.nix;
-with import ./options.nix;
-with import ./trivial.nix;
-with import ./strings.nix;
-let inherit (import ./modules.nix) mergeDefinitions filterOverrides; in
-
+  inherit (lib.modules) mergeDefinitions filterOverrides;
+  outer_types =
 rec {
-
   isType = type: x: (x._type or "") == type;
 
   setType = typeName: value: value // {
@@ -95,7 +96,6 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
-
     unspecified = mkOptionType {
       name = "unspecified";
     };
@@ -291,7 +291,7 @@ rec {
     submodule = opts:
       let
         opts' = toList opts;
-        inherit (import ./modules.nix) evalModules;
+        inherit (lib.modules) evalModules;
       in
       mkOptionType rec {
         name = "submodule";
@@ -395,5 +395,6 @@ rec {
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
   };
+};
 
-}
+in outer_types // outer_types.types
