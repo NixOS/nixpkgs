@@ -61,7 +61,7 @@ let
 
   copyIfBundledByPath = { bundledByPath ? false, ...}@main:
   (if bundledByPath then
-      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/"
+      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
     else ""
   );
 
@@ -109,11 +109,10 @@ let
     meta = { platforms = ruby.meta.platforms; } // meta;
 
     passthru = rec {
-      inherit ruby bundler gems mainGem confFiles envPaths;
+      inherit ruby bundler gems confFiles envPaths;
 
-      wrappedRuby =
-      stdenv.mkDerivation {
-        name = "wrapped-ruby-${pname}";
+      wrappedRuby = stdenv.mkDerivation {
+        name = "wrapped-ruby-${pname'}";
         nativeBuildInputs = [ makeWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
@@ -137,7 +136,7 @@ let
           require 'bundler/setup'
         '';
         in stdenv.mkDerivation {
-          name = "${pname}-interactive-environment";
+          name = "${pname'}-interactive-environment";
           nativeBuildInputs = [ wrappedRuby basicEnv ];
           shellHook = ''
             export OLD_IRBRC=$IRBRC
