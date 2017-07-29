@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   name = "EventStore-${version}";
-  version = "3.5.0";
+  version = "3.9.4";
   src = fetchFromGitHub {
     owner  = "EventStore";
     repo   = "EventStore";
     rev    = "oss-v${version}";
-    sha256 = "0dp5914hxwdzw62q49wavqfqkw3jy0dvml09y7gh8frnbiajcxq9";
+    sha256 = "1mi0qzxpc8342dikx039qgy3wqyskk67c8awbsx7x3ljxkifi807";
   };
 
   buildPhase = ''
