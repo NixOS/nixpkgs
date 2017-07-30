@@ -4236,7 +4236,7 @@ with pkgs;
 
   siege = callPackage ../tools/networking/siege {};
 
-  sigil = libsForQt56.callPackage ../applications/editors/sigil { };
+  sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
