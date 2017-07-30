@@ -64,6 +64,10 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
 
+  patches = [
+    ./no-ldconfig.patch
+  ];
+
   postPatch = ''
     # Determinism
     substituteInPlace "Lib/py_compile.py" --replace "source_stats['mtime']" "(1 if 'DETERMINISTIC_BUILD' in os.environ else source_stats['mtime'])"
