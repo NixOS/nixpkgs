@@ -1,6 +1,6 @@
 { lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, libiconv
-, tpmSupport ? false, trousers, which, nettools, libunistring
+, tpmSupport ? false, trousers, which, nettools, libunistring, darwin
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ lzo lzip libtasn1 libidn p11_kit zlib gmp autogen libunistring ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile
     ++ buildInputs;
