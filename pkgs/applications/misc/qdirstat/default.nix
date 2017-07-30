@@ -3,7 +3,7 @@
 
 let
   version = "1.4";
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "qdirstat-${version}";
 
   src = fetchFromGitHub {
@@ -30,10 +30,10 @@ in stdenv.mkDerivation {
         --replace /usr/share $out/share
     done
 
-    for i in src/MainWindow.cpp src/FileSizeStatsWindow.cpp                          
-    do                                    
+    for i in src/MainWindow.cpp src/FileSizeStatsWindow.cpp
+    do
       substituteInPlace $i \
-        --replace /usr/bin/xdg-open ${xdg_utils}/bin/xdg-open                        
+        --replace /usr/bin/xdg-open ${xdg_utils}/bin/xdg-open
     done
     for i in src/Cleanup.cpp src/cleanup-config-page.ui
     do
