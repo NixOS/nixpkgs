@@ -1,10 +1,12 @@
 { stdenv, fetchurl, bison, m4 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "flex-2.5.35";
 
   src = fetchurl {
-    url = mirror://sourceforge/flex/flex-2.5.35.tar.bz2;
+    # Deleted from original SourceForge and GitHub only provides generated file.
+    # Note: binary cache still seems to serve it, too.
+    url = "http://downloads.openwrt.org/sources/${name}.tar.bz2";
     sha256 = "0ysff249mwhq0053bw3hxh58djc0gy7vjan2z1krrf9n5d5vvv0b";
   };
 
