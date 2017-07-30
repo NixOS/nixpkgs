@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://srecord.sourceforge.net/;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
